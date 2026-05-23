@@ -1,0 +1,22 @@
+# Maven
+target/
+ECHO is on.
+# Backups
+backups/
+*.zip
+ECHO is on.
+# IDE
+.idea/
+*.iml
+.vscode/
+ECHO is on.
+# Environment 
+.env
+ECHO is on.
+# Logs
+logs/
+*.log
+ECHO is on.
+# OS
+.DS_Store
+Thumbs.db
