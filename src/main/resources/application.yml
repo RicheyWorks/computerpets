@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: enterprisepet-backend
+  datasource:
+    url: jdbc:h2:mem:enterprisepet
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+# Security
+# License master key: 32 random bytes, standard base64 (RFC 4648).
+# Generate a production key with: openssl rand -base64 32
+# Override via environment variable LICENSE_SECRET_KEY in any non-dev environment.
+license:
+  secret-key: "${LICENSE_SECRET_KEY:w4xwnrFYITMEO6LTCLqgy+r/pcgfHHDVM47OMaRs6LQ=}"
+
+steam:
+  api-key: "YOUR_STEAM_WEB_API_KEY"
+
+ethereum:
+  rpc-url: "https://eth-mainnet.g.alchemy.com/v2/YOUR_ALCHEMY_KEY"
+
+microsoft:
+  # "consumers" for personal Microsoft accounts, or a tenant GUID for AAD.
+  tenant: "consumers"
+  collections-url: "https://collections.mp.microsoft.com/v6.0/collections/query"
+  market: "US"
+  # dev-mode bypasses the real Microsoft Collections API and grants ownership for any
+  # non-blank request. NEVER enable outside local development.
+  dev-mode: ${MICROSOFT_DEV_MODE:false}
+
+# JWT auth — short-lived bearer token issued alongside the encrypted license.
+# secret-key is REQUIRED; no default. Generate with: openssl rand -base64 48
+jwt:
+  secret-key: "${JWT_SECRET_KEY:}"
+  issuer: "enterprisepet-backend"
+  ttl-minutes: 30
+
+# Pet bundle delivery
+# base-url points at the CDN that serves the .zip files (S3, CloudFront, R2, etc.).
+# signing-key signs short-lived download URLs (HMAC-SHA256). REQUIRED — no default;
+# the app refuses to start without it. Generate with: openssl rand -base64 48
+bundle:
+  base-url: "${BUNDLE_BASE_URL:https://cdn.enterprisepet.example/bundles}"
+  signing-key: "${BUNDLE_SIGNING_KEY:}"
