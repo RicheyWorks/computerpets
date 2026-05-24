@@ -71,7 +71,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         log.info("Rate limit exceeded clientId={} rule={} retryAfter={}s",
             clientId(req), rule.bucketKey, retryAfterSeconds);
 
-        res.setStatus(HttpServletResponse.SC_TOO_MANY_REQUESTS);
+        res.setStatus(429);
         res.setHeader(HttpHeaders.RETRY_AFTER, String.valueOf(retryAfterSeconds));
         res.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
         res.getWriter().write(String.format(

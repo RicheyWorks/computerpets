@@ -25,9 +25,12 @@ public class LicenseService {
     private static final Logger log = LoggerFactory.getLogger(LicenseService.class);
 
     /**
-     * The base64 master key that ships in application.yml. Convenient for `dev`,
-     * dangerous in production — anyone with read access to the repo can decrypt
-     * licenses. We detect it at startup and log a loud warning.
+     * The previously committed default key (still present in git history).
+     * Using this key outside of tests is extremely dangerous because anyone
+     * with access to the repository can decrypt all issued licenses.
+     *
+     * The application now refuses to start if this key is detected (except
+     * when the 'test' profile is active).
      */
     private static final String COMMITTED_DEFAULT_KEY = "w4xwnrFYITMEO6LTCLqgy+r/pcgfHHDVM47OMaRs6LQ=";
 
@@ -71,11 +74,20 @@ public class LicenseService {
         this.masterKey = decoded;
 
         if (COMMITTED_DEFAULT_KEY.equals(masterKeyBase64)) {
-            log.warn("====================================================================");
-            log.warn(" USING THE DEFAULT LICENSE KEY COMMITTED TO application.yml.");
-            log.warn(" This key is public — anyone with the repo can decrypt licenses.");
-            log.warn(" Override LICENSE_SECRET_KEY before any non-development deploy.");
-            log.warn("====================================================================");
+            // Check if we are running under a test profile
+            String profiles = System.getProperty("spring.profiles.active", "");
+            boolean isTest = profiles.toLowerCase().contains("test");
+
+            if (isTest) {
+                log.warn("Using the committed default LICENSE_SECRET_KEY because 'test' profile is active. " +
+                         "This should only happen in automated tests.");
+            } else {
+                throw new IllegalStateException(
+                    "license.secret-key is using the committed default value from application.yml. " +
+                    "This key is publicly known and extremely dangerous to use outside of tests. " +
+                    "Set LICENSE_SECRET_KEY to a real base64-encoded 32-byte random value " +
+                    "(generate with: openssl rand -base64 32).");
+            }
         }
     }
 
@@ -138,7 +150,7 @@ public class LicenseService {
     }
 
     private byte[] encrypt(byte[] plaintext, byte[] key, byte[] iv) throws Exception {
-        GCMBlockCipher cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
+        GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
         AEADParameters params = new AEADParameters(new KeyParameter(key), GCM_TAG_LENGTH * 8, iv);
         cipher.init(true, params);
 
@@ -149,7 +161,7 @@ public class LicenseService {
     }
 
     private byte[] decrypt(byte[] ciphertext, byte[] key, byte[] iv) throws Exception {
-        GCMBlockCipher cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
+        GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
         AEADParameters params = new AEADParameters(new KeyParameter(key), GCM_TAG_LENGTH * 8, iv);
         cipher.init(false, params);
 

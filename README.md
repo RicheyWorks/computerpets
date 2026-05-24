@@ -1,174 +1,169 @@
-# EnterprisePet Backend v1.0
+# ComputerPets
 
-**Secure Java backend for premium desktop pets — Steam, Ethereum NFTs, and Microsoft Store**
+**A secure backend for GPU-accelerated premium desktop pets with pluggable ownership verification.**
+
+[![Java](https://img.shields.io/badge/Java-21-blue?style=flat-square)](https://adoptium.net/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-green?style=flat-square)](https://spring.io/projects/spring-boot)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+
+---
+
+## Overview
+
+**ComputerPets** is a modern desktop pet platform featuring high-quality, GPU-accelerated virtual companions. This repository contains the **enterprise-grade backend service** responsible for ownership verification, license issuance, and secure asset delivery.
+
+The vision is to deliver premium, always-on desktop pets that feel alive — powered by GPU rendering on the client and protected by a robust, cryptographically secure backend on the server.
+
+This backend enables users to prove ownership of pets through multiple platforms (Steam, Ethereum NFTs, Microsoft Store, and future providers) and receive time-limited, tamper-proof licenses without ever exposing master keys to the client application.
+
+**Key goals:**
+- Enterprise-level security and architecture
+- Easy extensibility for new ownership platforms
+- Clean separation between client and server responsibilities
+- Production-ready foundations from day one
+
+---
+
+## Features
+
+- **Pluggable Ownership Verification** — Add support for new platforms by implementing the `OwnershipProvider` interface (currently supports Steam, Ethereum NFTs via Web3j, and Microsoft Store).
+- **Strong Cryptographic Licensing** — AES-256-GCM encrypted licenses and HMAC-signed short-lived CDN URLs.
+- **Stateless & Scalable** — Designed for horizontal scaling with minimal server-side state.
+- **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
+- **Rate Limiting** — Built-in per-IP protection using Bucket4j.
+- **Rich Pet Catalog** — 20 pets across four rarity tiers (Common, Uncommon, Rare, Legendary).
+- **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
+
+**Planned / Vision:**
+- GPU-accelerated desktop client (PyQt6 / modern rendering)
+- Real Steam Web API and improved NFT verification
+- Persistent license store and revocation support
+- Hardware binding and advanced anti-piracy measures
+
+---
 
 ## Architecture
 
-- Plugin-based ownership verification (Steam, Ethereum NFT, Microsoft Store; add new platforms by dropping in a `@Service` that implements `OwnershipProvider`).
-- AES-GCM encrypted license bundles (never trust the desktop client).
-- JWT-authenticated client→backend channel; bundle download requires a fresh bearer issued by `/api/verify/{provider}`.
-- Per-IP rate limiting on verification and download endpoints (Bucket4j).
-- HMAC-signed, short-lived CDN download URLs.
-- Web3j for on-chain NFT verification.
+The backend is built as a **modular monolith** using Spring Boot 3.3 and Java 21. It follows a plugin-based architecture centered around the `OwnershipProvider` SPI, making it trivial to add new storefronts and wallet types.
 
-## Quick Start
+Core responsibilities include:
+- Verifying ownership across multiple platforms
+- Issuing cryptographically sealed licenses
+- Authorizing short-lived bundle downloads
+- Protecting sensitive endpoints with JWT and rate limiting
 
-```bash
-# 1. Generate required secrets:
-export LICENSE_SECRET_KEY=$(openssl rand -base64 32)
-export BUNDLE_SIGNING_KEY=$(openssl rand -base64 48)
-export JWT_SECRET_KEY=$(openssl rand -base64 48)
+For a complete view of the system design (including component diagrams, data flows, deployment architecture, and technology decisions), see the dedicated architecture document:
 
-# 2. (Optional for local dev) bypass Microsoft live verification:
-export MICROSOFT_DEV_MODE=true
+> **[📖 Architecture Documentation](docs/ARCHITECTURE.md)**
 
-# 3. Run
-./mvnw spring-boot:run
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Java 21** (Temurin or other OpenJDK distribution recommended)
+- **Maven 3.9+**
+- A modern terminal (PowerShell, bash, etc.)
+
+### Quick Start
+
+1. **Generate required secrets** (the application will not start without them):
+
+   **PowerShell (Windows)**
+   ```powershell
+   $env:LICENSE_SECRET_KEY   = [Convert]::ToBase64String((1..32   | ForEach-Object { Get-Random -Maximum 256 }))
+   $env:JWT_SECRET_KEY       = [Convert]::ToBase64String((1..48   | ForEach-Object { Get-Random -Maximum 256 }))
+   $env:BUNDLE_SIGNING_KEY   = [Convert]::ToBase64String((1..48   | ForEach-Object { Get-Random -Maximum 256 }))
+   $env:MICROSOFT_DEV_MODE   = "true"   # Development only
+   ```
+
+2. **Run the application**
+
+   ```bash
+   mvn spring-boot:run
+   ```
+
+   Or use the convenience script on Windows:
+   ```powershell
+   .\build.ps1
+   ```
+
+3. **Verify the server is running**
+
+   ```powershell
+   Invoke-RestMethod http://localhost:8080/api/verify/providers
+   ```
+
+For full instructions (including IDE setup, troubleshooting, and environment variable management), see the [Setup Guide](docs/SETUP.md).
+
+---
+
+## Documentation
+
+All detailed documentation is located in the `docs/` directory:
+
+- **[Documentation Index](docs/README.md)** — Overview of all available docs
+- **[Architecture](docs/ARCHITECTURE.md)** — Comprehensive system design, diagrams, and recommendations (**recommended starting point**)
+- **[Setup Guide](docs/SETUP.md)** — How to build, configure, and run the project locally
+- **[Contributing Guide](docs/CONTRIBUTING.md)** — Development workflow and contribution process
+
+---
+
+## Project Structure
+
+```
+ComputerPets/
+├── .github/                      # GitHub templates (issues & PRs)
+├── docs/                         # Project documentation
+│   ├── ARCHITECTURE.md           # Full system architecture (living document)
+│   ├── SETUP.md                  # Local development guide
+│   └── CONTRIBUTING.md
+├── src/main/java/com/enterprisepet/
+│   ├── controller/               # REST API controllers
+│   ├── provider/                 # OwnershipProvider SPI + registry
+│   │   ├── steam/
+│   │   ├── nft/
+│   │   └── microsoft/
+│   ├── license/                  # AES-GCM license issuance & validation
+│   ├── security/                 # JWT authentication
+│   ├── bundle/                   # CDN download URL signing
+│   ├── pet/                      # Pet catalog and types
+│   ├── config/                   # Security, rate limiting, exception handling
+│   └── EnterprisePetBackendApplication.java
+├── src/main/resources/
+│   └── application.yml
+├── pom.xml
+├── build.ps1                     # Windows build helper
+├── LICENSE
+└── README.md
 ```
 
-The app refuses to start if `BUNDLE_SIGNING_KEY` or `JWT_SECRET_KEY` is missing or
-obviously a placeholder.
+---
 
-## API Endpoints
+## Contributing
 
-Verification is plugin-based: each storefront/wallet implements `OwnershipProvider`
-and is reachable at `POST /api/verify/{provider}`. New platforms drop in as a
-single `@Service` class — no controller changes required.
+Contributions are welcome and appreciated! Whether you're fixing bugs, adding new providers, improving documentation, or suggesting architectural improvements, your help makes the project better.
 
-### List registered providers
-```http
-GET /api/verify/providers
-→ [{ "key": "steam", "displayName": "Steam" },
-   { "key": "nft", "displayName": "Ethereum NFT" },
-   { "key": "microsoft", "displayName": "Microsoft Store" }]
-```
+Please read the contribution guidelines before getting started:
 
-### Verify Steam Ownership + Get License
-```http
-POST /api/verify/steam
-{
-  "steamId": "76561198xxxxxxxxx",
-  "appId": "YOUR_STEAM_APP_ID",
-  "petType": "red_panda"
-}
-```
+- [Contributing Guide](CONTRIBUTING.md) (root)
+- [Detailed Contributing Guidelines](docs/CONTRIBUTING.md)
 
-### Verify Ethereum NFT Ownership + Get License
-```http
-POST /api/verify/nft
-{
-  "walletAddress": "0xYourWallet...",
-  "contractAddress": "0xYourNFTContract...",
-  "tokenId": "12345",
-  "petType": "red_panda"
-}
-```
+We especially value:
+- Real implementations for the Steam and Microsoft providers
+- Improvements to NFT ownership verification
+- Tests and CI/CD enhancements
+- Documentation and architecture refinements
 
-### Verify Microsoft Store Entitlement + Get License
-```http
-POST /api/verify/microsoft
-{
-  "xstsToken": "<XSTS bearer token>",
-  "userHash":  "<Xbox Live user hash>",
-  "storeProductId": "9NXXXXXXXXXX",
-  "microsoftAccountId": "optional",
-  "petType": "red_panda"
-}
-```
+---
 
-The Microsoft provider calls `collections.mp.microsoft.com/v6.0/collections/query`
-and grants ownership iff the response contains the requested product ID with an
-active fulfillment. Set `MICROSOFT_DEV_MODE=true` to bypass this in local dev.
+## License
 
-### Verify response shape
-```jsonc
-{
-  "status": "success",
-  "provider": "steam",
-  "license": {                       // encrypted, opaque to client
-    "ciphertext": "...",
-    "iv": "...",
-    "expiresAt": "..."
-  },
-  "auth": {                          // short-lived JWT for /api/download/**
-    "token": "eyJhbGciOiJIUzI1...",
-    "tokenType": "Bearer",
-    "expiresInSeconds": 1800,
-    "expiresAt": "..."
-  },
-  "pet": { "key": "red_panda", "displayName": "Red Panda" },
-  "message": "Steam ownership verified. License issued."
-}
-```
+This project is licensed under the **MIT License**.
 
-### Download a pet bundle (requires JWT)
-```http
-POST /api/download/{petKey}
-Authorization: Bearer <auth.token from /api/verify>
-Content-Type: application/json
+See the [LICENSE](LICENSE) file for details.
 
-{
-  "ciphertext": "<from license.ciphertext>",
-  "iv":         "<from license.iv>"
-}
-→ { "petKey": "red_panda", "downloadUrl": "https://cdn.../red_panda.zip?sig=...",
-    "expiresAt": "...", "ttlSeconds": 900, ... }
-```
-The server verifies, in order: (1) the JWT signature and expiry; (2) the
-encrypted license's AES-GCM auth tag; (3) that the license was issued for the
-requested pet; (4) that the JWT's `sub` and `pet` claims match the license. It
-then returns an HMAC-signed CDN URL valid for 15 minutes.
+---
 
-| Status | Meaning |
-|---|---|
-| 401 | Missing/invalid JWT, **or** license missing/expired/tampered |
-| 403 | Token and license disagree, or were issued for a different pet |
-| 429 | Rate limit exceeded — see `Retry-After` header |
-
-## Rate limits
-
-| Path prefix         | Capacity   | Window     |
-|---------------------|-----------:|------------|
-| `/api/verify/**`    | 10 reqs    | per minute |
-| `/api/download/**`  | 30 reqs    | per minute |
-
-Buckets are per-client-IP (trusting `X-Forwarded-For` when present — set
-appropriately in a reverse-proxied deploy). Overflow returns
-`429 Too Many Requests` with a `Retry-After` header and an RFC 7807
-`application/problem+json` body.
-
-## Adding a new platform (plugin)
-1. Create a `@Service` that implements `com.enterprisepet.provider.OwnershipProvider`.
-2. Return a stable lowercase `key()` (e.g. `"itch"`, `"epic"`, `"gumroad"`).
-3. Parse your fields out of the request `Map` and return
-   `VerificationResult.granted(ownerId)` or `denied(reason)`.
-
-Spring auto-discovers it; `ProviderRegistry` indexes it on startup and
-`POST /api/verify/{your-key}` starts working immediately.
-
-## Security Notes
-
-- Never store master encryption key in client.
-- Desktop client should re-verify periodically (recommended: every 60–120 min).
-- Required secrets must be set via env (`LICENSE_SECRET_KEY`, `BUNDLE_SIGNING_KEY`,
-  `JWT_SECRET_KEY`) — startup fails otherwise.
-- For multi-instance deploys, replace the in-memory rate-limit store with
-  `bucket4j-redis` so the limit is shared across replicas.
-- Use in production with:
-  - Real Steam Web API key (currently the Steam check is a stub — see
-    `AUDIT.md`).
-  - Alchemy / Infura RPC and tighter NFT response parsing (also in
-    `AUDIT.md`).
-  - PostgreSQL for issued-license tracking + revocation.
-  - WAF in front of the rate limiter for L7 abuse signals.
-
-## Next Steps
-
-- Real Steam Web API JSON parsing (replace stub).
-- Tighten NFT ownership decode (use `FunctionReturnDecoder` instead of substring match).
-- Add hardware-fingerprint binding (`hwid` in license payload + download check).
-- Persist issued licenses in Postgres for revocation/audit.
-- Deploy to Railway / Render / AWS.
-- Connect to PyQt6 frontend.
-
-See `AUDIT.md` for the full punch list.
+*Built with security, extensibility, and a love for cute digital creatures.* 🐾

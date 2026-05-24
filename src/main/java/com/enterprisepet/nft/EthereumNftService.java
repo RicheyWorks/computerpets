@@ -6,11 +6,14 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -23,6 +26,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@ConditionalOnProperty(
+    name = "ownership.providers.nft.enabled",
+    havingValue = "true",
+    matchIfMissing = true
+)
 public class EthereumNftService implements OwnershipProvider {
 
     private static final Logger log = LoggerFactory.getLogger(EthereumNftService.class);
@@ -79,9 +87,18 @@ public class EthereumNftService implements OwnershipProvider {
                 return false;
             }
 
-            // Parse the returned address and compare (case-insensitive)
-            String owner = response.getValue();
-            return owner != null && owner.toLowerCase().contains(walletAddress.toLowerCase().substring(2));
+            // Properly decode the ABI response instead of using fragile string matching
+            List<Type> decoded = FunctionReturnDecoder.decode(
+                response.getValue(),
+                function.getOutputParameters()
+            );
+
+            if (decoded.isEmpty()) {
+                return false;
+            }
+
+            Address ownerAddress = (Address) decoded.get(0);
+            return walletAddress.equalsIgnoreCase(ownerAddress.getValue());
 
         } catch (Exception e) {
             log.warn("NFT verification failed: {}", e.getMessage());
