@@ -8,6 +8,7 @@ import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,11 @@ import java.util.Map;
  * production.
  */
 @Service
+@ConditionalOnProperty(
+    name = "ownership.providers.microsoft.enabled",
+    havingValue = "true",
+    matchIfMissing = true
+)
 public class MicrosoftStoreService implements OwnershipProvider {
 
     private static final Logger log = LoggerFactory.getLogger(MicrosoftStoreService.class);
@@ -56,12 +62,22 @@ public class MicrosoftStoreService implements OwnershipProvider {
     private RestClient restClient;
     private final ObjectMapper json = new ObjectMapper();
 
+    // Default constructor for Spring
+    public MicrosoftStoreService() {}
+
+    // Package-private constructor for testing (allows injecting mocked RestClient)
+    MicrosoftStoreService(RestClient restClient) {
+        this.restClient = restClient;
+    }
+
     @PostConstruct
     void init() {
-        this.restClient = RestClient.builder()
-            .baseUrl(collectionsUrl)
-            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .build();
+        if (this.restClient == null) {
+            this.restClient = RestClient.builder()
+                .baseUrl(collectionsUrl)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+        }
         if (devMode) {
             log.warn("===================================================================");
             log.warn(" MicrosoftStoreService is in DEV MODE. All ownership checks return");
@@ -171,7 +187,7 @@ public class MicrosoftStoreService implements OwnershipProvider {
             JsonNode v = node.path(n);
             if (!v.isMissingNode() && !v.isNull()) return v;
         }
-        return node.missingNode();
+        return com.fasterxml.jackson.databind.node.MissingNode.getInstance();
     }
 
     /** How long we'll wait for a Microsoft response before giving up. */
