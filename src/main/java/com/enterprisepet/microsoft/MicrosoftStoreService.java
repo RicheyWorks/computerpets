@@ -4,6 +4,8 @@ import com.enterprisepet.provider.OwnershipProvider;
 import com.enterprisepet.provider.VerificationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -119,7 +121,10 @@ public class MicrosoftStoreService implements OwnershipProvider {
      *
      * <p>The response field names (camelCase {@code productId} vs PascalCase
      * {@code ProductId}) vary between Microsoft Store endpoints — we accept either.
+     * Protected by Resilience4j circuit breaker + retry (Phase 2.3).
      */
+    @CircuitBreaker(name = "microsoft", fallbackMethod = "ownsProductFallback")
+    @Retry(name = "microsoft")
     public boolean ownsProduct(String xstsToken, String userHash, String productId) {
         if (devMode) {
             log.warn("DEV MODE: granting Microsoft Store ownership without verification for productId={}",
@@ -152,6 +157,12 @@ public class MicrosoftStoreService implements OwnershipProvider {
                 productId, e.getMessage());
             return false;
         }
+    }
+
+    @SuppressWarnings("unused")
+    private boolean ownsProductFallback(String xstsToken, String userHash, String productId, Exception e) {
+        log.warn("Microsoft circuit breaker open or retries exhausted for productId={}: {}", productId, e.getMessage());
+        return false;
     }
 
     /**

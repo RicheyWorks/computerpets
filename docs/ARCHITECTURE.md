@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-05-23                                 |
+| **Last Updated** | 2026-05-24                                 |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -529,7 +529,7 @@ All four **Immediate (P0)** items required before any public or production expos
 
 The backend is now in a much safer state for internal development and limited testing. 
 
-**Phase 1 work has begun**: Spring Boot Actuator + proper health/readiness/liveness probes have been added as the first concrete step of the Production Readiness Foundations phase.
+**Phase 1 completed (May 2026)**: All foundations delivered — observability (Actuator + custom health + MDC + RFC7807 errors), persistence (JPA + Flyway + revocation), containerization + GHCR CI, and rich OpenAPI with 25+ centralized examples. The service is now ready for Phase 2 hardening.
 
 ---
 
@@ -541,13 +541,13 @@ A detailed and actively maintained roadmap is available in a dedicated document:
 
 The roadmap is organized into five clear phases with concrete, prioritized work items:
 
-- **Phase 1:** Production Readiness Foundations *(current focus)*
-- **Phase 2:** Security & Reliability Hardening
+- **Phase 1:** Production Readiness Foundations *(completed May 2026)*
+- **Phase 2:** Security & Reliability Hardening *(current focus)*
 - **Phase 3:** Scalability & Operational Maturity
 - **Phase 4:** Client & Ecosystem Integration
 - **Phase 5:** Long-term Architecture Evolution
 
-**Status:** Phase 1 work has begun (Spring Boot Actuator + health/readiness/liveness probes added).
+**Status:** Phase 1 complete. All listed items (observability, persistence, CI/CD/containers, API contracts) delivered. Starting Phase 2. See [ROADMAP.md](ROADMAP.md) for the authoritative checklist.
 
 - **1.1 Observability Baseline**
   - Add Spring Boot Actuator + Prometheus metrics

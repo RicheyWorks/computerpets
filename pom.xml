@@ -41,6 +41,16 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        <!-- Flyway for database migrations (Phase 1.2) -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
+
         <!-- Database -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -100,6 +110,13 @@
             <version>8.10.1</version>
         </dependency>
 
+        <!-- Resilience4j (Phase 2.3) — circuit breakers, retries, bulkheads for external providers (Steam, NFT, Microsoft) -->
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot3</artifactId>
+            <version>2.2.0</version>
+        </dependency>
+
         <!-- Dev tools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -119,11 +136,18 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- WireMock for HTTP-level integration testing of external providers -->
+        <!-- OpenAPI Documentation (Phase 1.4) -->
         <dependency>
-            <groupId>org.wiremock</groupId>
-            <artifactId>wiremock</artifactId>
-            <version>3.5.4</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+        <!-- Classic WireMock standalone (bundles Jetty) — required for VerifyControllerIntegrationTest which uses the old package + WireMockServer directly -->
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8-standalone</artifactId>
+            <version>2.35.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

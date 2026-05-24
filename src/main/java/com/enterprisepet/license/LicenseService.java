@@ -8,6 +8,7 @@ import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,18 @@ import java.util.UUID;
 
 @Service
 public class LicenseService {
+
+    private final LicenseRepository licenseRepository;
+
+    @Autowired
+    public LicenseService(LicenseRepository licenseRepository) {
+        this.licenseRepository = licenseRepository;
+    }
+
+    /** Test constructor — skips key initialization and @PostConstruct validation. */
+    LicenseService(LicenseRepository licenseRepository, boolean forTest) {
+        this.licenseRepository = licenseRepository;
+    }
 
     private static final Logger log = LoggerFactory.getLogger(LicenseService.class);
 
@@ -95,7 +108,14 @@ public class LicenseService {
      * Issues an encrypted, time-limited license bundle.
      * This is what the Python client will decrypt at runtime.
      */
-    public EncryptedLicense issueLicense(String ownerId, String petType, int daysValid) {
+    public EncryptedLicense issueLicense(String ownerId, String petType, String provider, int daysValid) {
+        return issueLicense(ownerId, petType, provider, daysValid, null);
+    }
+
+    /**
+     * Full version supporting optional hardware ID binding (Phase 2.2).
+     */
+    public EncryptedLicense issueLicense(String ownerId, String petType, String provider, int daysValid, String hwid) {
         try {
             byte[] iv = new byte[GCM_IV_LENGTH];
             secureRandom.nextBytes(iv);
@@ -103,15 +123,23 @@ public class LicenseService {
             Instant issuedAt = Instant.now();
             Instant validUntil = issuedAt.plusSeconds(daysValid * 86400L);
 
-            // Use Jackson so embedded quotes/newlines in ownerId or petType can't break the JSON.
+            String jti = UUID.randomUUID().toString();
+
             String payload = json.writeValueAsString(new LicensePayload(
-                UUID.randomUUID().toString(),
-                ownerId, petType,
-                validUntil.toString(), issuedAt.toString()
+                jti, ownerId, petType,
+                validUntil.toString(), issuedAt.toString(),
+                (hwid != null && !hwid.isBlank()) ? hwid : null
             ));
 
             byte[] plaintext = payload.getBytes(StandardCharsets.UTF_8);
             byte[] ciphertext = encrypt(plaintext, masterKey, iv);
+
+            IssuedLicense issued = new IssuedLicense(ownerId, petType, provider, issuedAt, validUntil);
+            issued.setJti(jti);
+            if (hwid != null && !hwid.isBlank()) {
+                issued.setHwid(hwid);
+            }
+            licenseRepository.save(issued);
 
             return new EncryptedLicense(
                 Base64.getEncoder().encodeToString(ciphertext),
@@ -142,11 +170,51 @@ public class LicenseService {
             Instant validUntil = Instant.parse(payload.validUntil());
             if (validUntil.isBefore(Instant.now())) return Optional.empty();
 
+            // Check revocation status from database (Phase 1.2)
+            if (licenseRepository.findByJti(payload.jti())
+                    .map(IssuedLicense::isRevoked)
+                    .orElse(true)) {  // If not found in DB, treat as revoked/invalid
+                return Optional.empty();
+            }
+
             return Optional.of(payload);
         } catch (Exception e) {
             // Tampered ciphertext, bad base64, expired/malformed timestamp, etc.
             return Optional.empty();
         }
+    }
+
+    /**
+     * Revokes a previously issued license by its jti.
+     * Returns true if the license existed and was newly revoked.
+     * Idempotent: calling twice returns false on the second call.
+     */
+    public boolean revoke(String jti) {
+        if (jti == null || jti.isBlank()) return false;
+        return licenseRepository.findByJti(jti)
+            .map(lic -> {
+                if (lic.isRevoked()) {
+                    log.info("License already revoked jti={}", jti);
+                    return false;
+                }
+                lic.setRevokedAt(Instant.now());
+                licenseRepository.save(lic);
+                log.info("License revoked jti={}", jti);
+                return true;
+            })
+            .orElse(false);
+    }
+
+    /**
+     * Records that a download occurred for the given license (updates lastUsedAt).
+     * Used for audit / future rate-limiting of downloads per license.
+     */
+    public void recordDownload(String jti) {
+        if (jti == null || jti.isBlank()) return;
+        licenseRepository.findByJti(jti).ifPresent(lic -> {
+            lic.setLastUsedAt(Instant.now());
+            licenseRepository.save(lic);
+        });
     }
 
     private byte[] encrypt(byte[] plaintext, byte[] key, byte[] iv) throws Exception {
@@ -181,8 +249,14 @@ public class LicenseService {
         String owner,
         String pet,
         String validUntil,
-        String issuedAt
-    ) {}
+        String issuedAt,
+        String hwid   // optional hardware binding (Phase 2.2) — may be null
+    ) {
+        /** Convenience constructor for code paths that do not yet supply hwid (backward compat). */
+        public LicensePayload(String jti, String owner, String pet, String validUntil, String issuedAt) {
+            this(jti, owner, pet, validUntil, issuedAt, null);
+        }
+    }
 
     public record EncryptedLicense(String ciphertext, String iv, String expiresAt) {}
 }

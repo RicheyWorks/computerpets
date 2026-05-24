@@ -1,0 +1,42 @@
+# Build artifacts
+target/
+!target/*.jar
+
+# IDE and OS files
+.idea/
+*.iml
+*.swp
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation (not needed in image)
+docs/
+*.md
+LICENSE
+CONTRIBUTING.md
+ROADMAP.md
+
+# Test resources (not needed at runtime)
+src/test/
+
+# Docker itself
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# CI files
+.github/
+
+# Environment and secrets
+.env
+.env.*
+*.env
+
+# Maven wrapper (we'll use the Maven image or system mvn in CI)
+mvnw
+mvnw.cmd
+.mvn/
