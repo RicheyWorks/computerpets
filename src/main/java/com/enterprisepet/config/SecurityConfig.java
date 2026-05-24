@@ -30,6 +30,8 @@ public class SecurityConfig {
                                  "/api/verify/**",
                                  "/api/pets/**",
                                  "/actuator/health").permitAll()
+                // Admin operations use a separate pre-shared key (X-Admin-Key) — handled inside the controller.
+                .requestMatchers("/api/admin/**").permitAll()
                 // Bundle download requires a freshly-issued JWT from /api/verify/{provider}.
                 .requestMatchers("/api/download/**").authenticated()
                 .anyRequest().authenticated()

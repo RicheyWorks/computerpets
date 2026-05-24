@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: computerpets-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SERVER_PORT=8080
+      # Database
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/computerpets
+      - SPRING_DATASOURCE_USERNAME=computerpets
+      - SPRING_DATASOURCE_PASSWORD=password
+      # Secrets (load from .env file in real usage)
+      - LICENSE_SECRET_KEY=${LICENSE_SECRET_KEY:-dev-license-key-change-me}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-dev-jwt-key-change-me}
+      - BUNDLE_SIGNING_KEY=${BUNDLE_SIGNING_KEY:-dev-bundle-key-change-me}
+      - ADMIN_API_KEY=${ADMIN_API_KEY:-dev-admin-key-must-be-overridden}
+      # Steam (optional - can be disabled via ownership.providers)
+      - STEAM_API_KEY=${STEAM_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - computerpets-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: computerpets-db
+    environment:
+      POSTGRES_DB: computerpets
+      POSTGRES_USER: computerpets
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U computerpets -d computerpets"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - computerpets-net
+
+  # Optional: WireMock for mocking external providers during development/testing
+  wiremock:
+    image: wiremock/wiremock:3.5.4
+    container_name: computerpets-wiremock
+    ports:
+      - "9567:8080"
+    volumes:
+      - ./wiremock:/home/wiremock
+    command: --verbose
+    profiles:
+      - testing
+    networks:
+      - computerpets-net
+
+volumes:
+  postgres_data:
+
+networks:
+  computerpets-net:
+    driver: bridge

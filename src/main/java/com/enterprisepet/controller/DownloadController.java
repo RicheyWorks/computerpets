@@ -1,10 +1,18 @@
 package com.enterprisepet.controller;
 
 import com.enterprisepet.bundle.PetBundleService;
+import com.enterprisepet.dto.DownloadResponse;
+import com.enterprisepet.dto.ErrorResponse;
 import com.enterprisepet.license.LicenseService;
 import com.enterprisepet.license.LicenseService.LicensePayload;
 import com.enterprisepet.pet.PetCatalog;
 import com.enterprisepet.pet.PetType;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +36,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/download")
+@Tag(name = "Download", description = "Secure pet bundle download endpoints")
 public class DownloadController {
 
     private final LicenseService licenseService;
@@ -51,6 +60,34 @@ public class DownloadController {
      * 401:     license missing / expired / tampered (Spring Security handles missing JWT separately)
      * 403:     JWT and license disagree, or either was issued for a different pet
      */
+    @Operation(
+        summary = "Download pet bundle",
+        description = "Validates the encrypted license + JWT and returns a short-lived signed CDN URL for the pet assets.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                description = "Encrypted license payload (ciphertext + iv) obtained from a prior successful /api/verify response",
+                required = true,
+                content = @Content(mediaType = "application/json",
+                        examples = @ExampleObject(ref = "Download Request"))
+        ),
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Signed download URL generated successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = DownloadResponse.class),
+                            examples = @ExampleObject(ref = "Download URL Response"))),
+            @ApiResponse(responseCode = "400", description = "Unknown pet key",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(ref = "Unknown Pet Type"))),
+            @ApiResponse(responseCode = "401", description = "License invalid, expired, or tampered",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(ref = "Download License Invalid"))),
+            @ApiResponse(responseCode = "403", description = "License/pet or JWT/license mismatch (defense-in-depth)",
+                    content = @Content(mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(ref = "Download Pet Mismatch"),
+                                    @ExampleObject(ref = "Download Auth Mismatch")
+                            }))
+        }
+    )
     @PostMapping("/{petKey}")
     public ResponseEntity<?> download(@PathVariable("petKey") String petKey,
                                       @RequestBody Map<String, String> body) {
@@ -82,6 +119,17 @@ public class DownloadController {
             ));
         }
 
+        // Phase 2.2: if the license was bound to a hardware ID, require the client to prove it again
+        String suppliedHwid = body.get("hwid");
+        if (license.hwid() != null && !license.hwid().isBlank()) {
+            if (suppliedHwid == null || !suppliedHwid.equals(license.hwid())) {
+                return ResponseEntity.status(403).body(Map.of(
+                    "error", "hardware binding mismatch",
+                    "hint", "This license is bound to a specific device"
+                ));
+            }
+        }
+
         // Defense in depth: the JWT principal must agree with the license.
         Map<String, Object> principal = currentPrincipal();
         if (principal != null) {
@@ -98,7 +146,9 @@ public class DownloadController {
             }
         }
 
-        var manifest = bundleService.manifestFor(pet, license.owner());
+        // Phase 2.1: record usage + bind signed URL to this specific jti
+        licenseService.recordDownload(license.jti());
+        var manifest = bundleService.manifestFor(pet, license.owner(), license.jti());
         return ResponseEntity.ok(manifest.body());
     }
 

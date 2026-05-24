@@ -1,5 +1,12 @@
 package com.enterprisepet.pet;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/pets")
+@Tag(name = "Pets", description = "Pet catalog discovery endpoints")
 public class PetController {
 
     private final PetCatalog catalog;
@@ -26,6 +34,16 @@ public class PetController {
      * GET /api/pets — full catalog of pet types.
      * GET /api/pets?rarity=RARE — filter to a single rarity (case-insensitive).
      */
+    @Operation(summary = "List all pets", description = "Returns the full pet catalog, optionally filtered by rarity.",
+            responses = {
+                @ApiResponse(responseCode = "200", description = "List of pets",
+                        content = @Content(mediaType = "application/json",
+                                examples = @ExampleObject(ref = "Pets List"),
+                                array = @ArraySchema(schema = @Schema(implementation = com.enterprisepet.dto.PetInfo.class)))),
+                @ApiResponse(responseCode = "400", description = "Invalid rarity parameter",
+                        content = @Content(mediaType = "application/json",
+                                examples = @ExampleObject(ref = "Validation Error")))
+            })
     @GetMapping
     public ResponseEntity<?> list(@RequestParam(value = "rarity", required = false) String rarity) {
         List<PetType> pets;
@@ -47,6 +65,10 @@ public class PetController {
     }
 
     /** GET /api/pets/by-rarity — catalog grouped by rarity (COMMON → LEGENDARY). */
+    @Operation(summary = "Get pets grouped by rarity",
+            responses = @ApiResponse(responseCode = "200", description = "Pets grouped by rarity",
+                    content = @Content(mediaType = "application/json",
+                            examples = @ExampleObject(ref = "Pets Grouped By Rarity"))))
     @GetMapping("/by-rarity")
     public ResponseEntity<Map<String, List<Map<String, Object>>>> byRarity() {
         Map<String, List<Map<String, Object>>> body = new LinkedHashMap<>();
@@ -57,6 +79,15 @@ public class PetController {
     }
 
     /** GET /api/pets/{key} — single pet type by wire-format key. */
+    @Operation(summary = "Get pet by key", description = "Returns a single pet type or 404 if not found.",
+            responses = {
+                @ApiResponse(responseCode = "200", description = "Pet found",
+                        content = @Content(mediaType = "application/json",
+                                examples = @ExampleObject(ref = "Pet Detail"))),
+                @ApiResponse(responseCode = "404", description = "Pet not found",
+                        content = @Content(mediaType = "application/json",
+                                examples = @ExampleObject(ref = "Pet Not Found")))
+            })
     @GetMapping("/{key}")
     public ResponseEntity<?> get(@PathVariable("key") String key) {
         return catalog.find(key)

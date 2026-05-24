@@ -4,6 +4,8 @@ import com.enterprisepet.provider.OwnershipProvider;
 import com.enterprisepet.provider.VerificationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.annotation.PostConstruct;
@@ -30,7 +32,8 @@ public class SteamService implements OwnershipProvider {
     private RestClient restClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String STEAM_API_BASE = "https://api.steampowered.com";
+    @Value("${steam.api-base-url:https://api.steampowered.com}")
+    private String steamApiBaseUrl;
 
     // Default constructor for Spring
     public SteamService() {}
@@ -50,7 +53,7 @@ public class SteamService implements OwnershipProvider {
     void init() {
         if (this.restClient == null) {
             this.restClient = RestClient.builder()
-                    .baseUrl(STEAM_API_BASE)
+                    .baseUrl(steamApiBaseUrl)
                     .build();
         }
         // Note: We intentionally do NOT overwrite steamApiKey here if it was set via constructor.
@@ -74,7 +77,10 @@ public class SteamService implements OwnershipProvider {
 
     /**
      * Checks if a Steam user owns your specific AppID using the official Steam Web API.
+     * Protected by Resilience4j circuit breaker + retry (Phase 2.3).
      */
+    @CircuitBreaker(name = "steam", fallbackMethod = "ownsAppFallback")
+    @Retry(name = "steam")
     public boolean ownsApp(String steamId, String appId) {
         log.info("Checking Steam ownership steamId={} appId={}", steamId, appId);
 
@@ -96,6 +102,13 @@ public class SteamService implements OwnershipProvider {
             log.warn("Steam API call failed for steamId={} appId={}: {}", steamId, appId, e.getMessage());
             return false;
         }
+    }
+
+    @SuppressWarnings("unused")
+    private boolean ownsAppFallback(String steamId, String appId, Exception e) {
+        log.warn("Steam circuit breaker open or max retries exceeded for steamId={} appId={}: {}",
+                steamId, appId, e.getMessage());
+        return false;  // Safe default: deny
     }
 
     private boolean responseContainsApp(String json, String appId) {

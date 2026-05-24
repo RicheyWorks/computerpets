@@ -2,6 +2,8 @@ package com.enterprisepet.nft;
 
 import com.enterprisepet.provider.OwnershipProvider;
 import com.enterprisepet.provider.VerificationResult;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +69,10 @@ public class EthereumNftService implements OwnershipProvider {
 
     /**
      * Verifies on-chain that walletAddress owns the specific tokenId of the NFT contract.
+     * Protected by Resilience4j circuit breaker + retry (Phase 2.3) around the RPC call.
      */
+    @CircuitBreaker(name = "nft", fallbackMethod = "ownsTokenFallback")
+    @Retry(name = "nft")
     public boolean ownsToken(String walletAddress, String contractAddress, String tokenId) {
         try {
             Function function = new Function(
@@ -104,5 +109,12 @@ public class EthereumNftService implements OwnershipProvider {
             log.warn("NFT verification failed: {}", e.getMessage());
             return false;
         }
+    }
+
+    @SuppressWarnings("unused")
+    private boolean ownsTokenFallback(String walletAddress, String contractAddress, String tokenId, Exception e) {
+        log.warn("NFT (Ethereum) circuit breaker open or retries exhausted for contract={} tokenId={}: {}",
+                contractAddress, tokenId, e.getMessage());
+        return false;
     }
 }

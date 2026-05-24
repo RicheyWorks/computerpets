@@ -73,10 +73,18 @@ public class PetBundleService {
     /**
      * Returns a manifest describing where to fetch the pet bundle and how long the URL
      * stays valid. Callers should already have validated the license.
+     *
+     * <p>When {@code jti} is supplied the signature includes it: {@code petKey|owner|jti|exp}.
+     * This binds the short-lived signed URL to a specific license instance (Phase 2.1 jti hardening).
      */
-    public BundleManifest manifestFor(PetType pet, String owner) {
+    public BundleManifest manifestFor(PetType pet, String owner, String jti) {
         Instant expiresAt = Instant.now().plus(DOWNLOAD_URL_TTL);
-        String token = sign(pet.key() + "|" + owner + "|" + expiresAt.getEpochSecond());
+
+        String toSign = (jti == null || jti.isBlank())
+            ? pet.key() + "|" + owner + "|" + expiresAt.getEpochSecond()
+            : pet.key() + "|" + owner + "|" + jti + "|" + expiresAt.getEpochSecond();
+
+        String token = sign(toSign);
 
         String url = String.format(
             "%s/%s.zip?owner=%s&exp=%d&sig=%s",
@@ -94,8 +102,16 @@ public class PetBundleService {
         manifest.put("downloadUrl", url);
         manifest.put("expiresAt", expiresAt.toString());
         manifest.put("ttlSeconds", DOWNLOAD_URL_TTL.toSeconds());
+        if (jti != null) {
+            manifest.put("jti", jti); // helpful for clients that want to correlate
+        }
 
         return new BundleManifest(pet.key(), url, expiresAt.toString(), manifest);
+    }
+
+    /** Backward-compatible overload (jti omitted). */
+    public BundleManifest manifestFor(PetType pet, String owner) {
+        return manifestFor(pet, owner, null);
     }
 
     private String sign(String input) {
