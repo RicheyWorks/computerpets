@@ -237,10 +237,143 @@ class DownloadControllerIntegrationTest {
         assertThat(dlResp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
     }
 
-    /** Helper: pull the jti out of an issued encrypted license by decrypting (for revoke test). */
+    @Test
+    @DisplayName("POST /api/download/{pet} returns 401 when no Authorization header")
+    void download_fails_noAuthHeader() {
+        var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
+
+        // No Authorization header at all
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(
+            licenseBody(enc.ciphertext(), enc.iv(), null),
+            new HttpHeaders() // no auth
+        );
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity(
+            "/api/download/" + validPet, req, Map.class);
+
+        // Security returns 401 or 403 for unauthenticated request to authenticated path
+        assertThat(resp.getStatusCode()).isIn(HttpStatus.UNAUTHORIZED, HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    @DisplayName("POST /api/download/{pet} returns 403 when license is for a different pet than requested path")
+    void download_fails_licensePetMismatch() {
+        // License issued for red_panda
+        var enc = licenseService.issueLicense(validOwner, "red_panda", validProvider, 1, null);
+        var issuedJwt = jwtService.issue(validOwner, "red_panda", validProvider);
+
+        // Request cat
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(
+            licenseBody(enc.ciphertext(), enc.iv(), null),
+            authHeaders(issuedJwt.token())
+        );
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity(
+            "/api/download/cat", req, Map.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(String.valueOf(resp.getBody().get("error"))).contains("license is not valid for the requested pet");
+    }
+
+    @Test
+    @DisplayName("POST /api/download/{pet} succeeds even if hwid is supplied in body when license is not hwid-bound")
+    void download_success_hwidSuppliedButLicenseNotBound() {
+        // License with no hwid
+        var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
+        var issuedJwt = jwtService.issue(validOwner, validPet, validProvider);
+
+        // Supply hwid anyway - should be ignored
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(
+            licenseBody(enc.ciphertext(), enc.iv(), "some-device"),
+            authHeaders(issuedJwt.token())
+        );
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity(
+            "/api/download/" + validPet, req, Map.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    // --- Admin direct edge cases (beyond the revoke-inside-download test) ---
+
+    @Test
+    @DisplayName("POST /api/admin/revoke returns 401 when X-Admin-Key header is missing")
+    void admin_revoke_missingKey() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of("jti", "anything"), headers);
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity("/api/admin/revoke", req, Map.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(String.valueOf(resp.getBody().get("error"))).contains("invalid or missing admin key");
+    }
+
+    @Test
+    @DisplayName("POST /api/admin/revoke returns 401 when X-Admin-Key is wrong")
+    void admin_revoke_wrongKey() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Admin-Key", "wrong-key-123");
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of("jti", "anything"), headers);
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity("/api/admin/revoke", req, Map.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    @DisplayName("POST /api/admin/revoke returns 400 when jti is missing from body")
+    void admin_revoke_missingJti() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Admin-Key", adminKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of(), headers); // no jti
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity("/api/admin/revoke", req, Map.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(String.valueOf(resp.getBody().get("error"))).contains("jti is required");
+    }
+
+    @Test
+    @DisplayName("POST /api/admin/revoke returns 404 for nonexistent jti")
+    void admin_revoke_nonexistentJti() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Admin-Key", adminKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, String>> req = new HttpEntity<>(Map.of("jti", "does-not-exist-uuid"), headers);
+
+        ResponseEntity<Map> resp = restTemplate.postForEntity("/api/admin/revoke", req, Map.class);
+
+        assertThat(resp.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(String.valueOf(resp.getBody().get("reason"))).contains("not found or already revoked");
+    }
+
+    @Test
+    @DisplayName("POST /api/admin/revoke is idempotent: second revoke of same jti returns 404")
+    void admin_revoke_idempotent() {
+        var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
+        String jti = extractJtiFromLicense(enc);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Admin-Key", adminKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // First revoke
+        HttpEntity<Map<String, String>> req1 = new HttpEntity<>(Map.of("jti", jti), headers);
+        ResponseEntity<Map> r1 = restTemplate.postForEntity("/api/admin/revoke", req1, Map.class);
+        assertThat(r1.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(r1.getBody().get("revoked")).isEqualTo(true);
+
+        // Second revoke
+        HttpEntity<Map<String, String>> req2 = new HttpEntity<>(Map.of("jti", jti), headers);
+        ResponseEntity<Map> r2 = restTemplate.postForEntity("/api/admin/revoke", req2, Map.class);
+        assertThat(r2.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    /** Helper: pull the jti out of an issued encrypted license (for revoke tests). */
     private String extractJtiFromLicense(LicenseService.EncryptedLicense enc) {
-        // We don't have a public decrypt in the test scope, so we re-issue and capture via reflection isn't nice.
-        // Instead, just use the LicenseService.validate path which we know works.
         var payload = licenseService.validate(enc.ciphertext(), enc.iv());
         return payload.map(LicensePayload::jti).orElseThrow();
     }
