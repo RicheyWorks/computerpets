@@ -5,15 +5,18 @@ import { Meter } from "@/components/ui/progress";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
 import {
   applyBath,
+  applyCall,
   applyClean,
-  applyFeed,
+  applyHide,
   applyMedicine,
+  applyFeed,
   applyPlay,
   applyPraise,
   applyRest,
   decayStats,
   moodWord,
   normalizeCare,
+  pickMess,
   stageOf,
   type CareStats,
 } from "@/lib/pets/care";
@@ -259,6 +262,32 @@ export function DeskStage({
     note(`${displayName}: ${trait.line}`);
   }
 
+  function hide() {
+    if (busy) return;
+    acted.current = true;
+    const next = applyHide(statsRef.current);
+    setStats(next);
+    saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+    say("I went where the ribbon goes.");
+    note(`${displayName} hid.`);
+  }
+
+  function callBack() {
+    if (busy) return;
+    acted.current = true;
+    const next = applyCall(statsRef.current);
+    setStats(next);
+    saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+    say("You called. I brought the whole tail.");
+    issue("wander");
+    note(`${displayName} came back.`);
+  }
+
+  const night = (() => {
+    const h = new Date().getHours();
+    return h >= 21 || h < 6;
+  })();
+
   return (
     <section className="relative isolate h-[calc(100dvh-4rem)] min-h-[520px] w-full overflow-hidden bg-elevated sm:h-[calc(100dvh-4.5rem)]">
       <img
@@ -266,8 +295,8 @@ export function DeskStage({
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-[center_70%]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/15 to-bg/30" />
-      <div className="desk-lamp pointer-events-none absolute inset-0" />
+      <div className={`absolute inset-0 bg-gradient-to-t from-bg via-bg/15 to-bg/30 ${night ? "brightness-[0.72]" : ""}`} />
+      <div className={`desk-lamp pointer-events-none absolute inset-0 ${night ? "opacity-40" : ""}`} />
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
         <span className="desk-mote" style={{ left: "18%", bottom: "30%" }} />
         <span className="desk-mote" style={{ left: "42%", bottom: "38%", animationDelay: "1.4s" }} />
@@ -284,11 +313,30 @@ export function DeskStage({
         fps={kind.fps}
         once={kind.once}
         gait={trait}
+        hidden={stats.hidden}
+        unwell={stats.sick}
         onArrived={() => {
           if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat") issue("idle");
         }}
         onTap={() => void talk()}
       />
+
+      {stats.mess.map((pile) => (
+        <button
+          key={pile.id}
+          type="button"
+          aria-label="Clean a mess"
+          className="absolute z-10 h-3.5 w-5 rounded-full bg-[#5a4a34]/80 shadow-sm"
+          style={{ left: `${pile.x}%`, bottom: "19%" }}
+          onClick={() => {
+            const next = pickMess(statsRef.current, pile.id);
+            setStats(next);
+            saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+            say("The blotter is honest again.");
+            note(`${displayName}'s desk was picked up.`);
+          }}
+        />
+      ))}
 
       <aside className="absolute left-3 top-3 z-20 max-w-[min(100%-1.5rem,22rem)] rounded-[var(--radius-lg)] border border-border bg-bg/80 p-3 backdrop-blur-sm sm:left-5 sm:top-5 sm:p-5">
         <label className="block">
@@ -358,6 +406,15 @@ export function DeskStage({
             <Button disabled={busy} onClick={special}>
               {trait.verb}
             </Button>
+            {stats.hidden ? (
+              <Button variant="secondary" disabled={busy} onClick={callBack}>
+                Call back
+              </Button>
+            ) : (
+              <Button variant="ghost" disabled={busy} onClick={hide}>
+                Hide
+              </Button>
+            )}
           </div>
           <form
             className="flex min-w-0 flex-1 gap-2"

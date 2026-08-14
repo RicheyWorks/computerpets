@@ -1,4 +1,5 @@
 import { livingByKey } from "@/lib/pets/living";
+import { normalizeCare } from "@/lib/pets/care";
 import { mindPreset } from "./catalog";
 import { assertSafeMindUrl, mindTimeout, sanitizeModel } from "./safe-url";
 import type { MindBinding, MindContext, MindReply } from "./types";
@@ -171,17 +172,12 @@ async function custom(ctx: MindContext, binding: MindBinding): Promise<MindReply
 
 export function localMind(ctx: MindContext): MindReply {
   const kind = livingByKey(ctx.species);
-  const stats = {
+  const stats = normalizeCare({
     hunger: ctx.hunger,
     mood: ctx.mood,
     energy: ctx.energy,
     hygiene: ctx.hygiene ?? 80,
-    health: 90,
-    bond: 40,
-    sick: false,
-    bornAt: Date.now(),
-    lastTick: Date.now(),
-  };
+  });
   return { text: kind.fallbackLine(ctx.message, stats), source: "local" };
 }
 

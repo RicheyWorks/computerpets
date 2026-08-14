@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { portraitSrc } from "@/lib/pets/catalog";
+import { HouseFloor } from "@/components/desk/house-floor";
 import { traitFor } from "@/lib/pets/traits";
 
 export const Route = createFileRoute("/meet")({
@@ -50,6 +51,8 @@ export function MeetPage() {
           </div>
         </div>
       </section>
+
+      <HouseFloor />
 
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
         <div className="flex items-end justify-between gap-4">
