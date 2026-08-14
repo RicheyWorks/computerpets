@@ -29,6 +29,22 @@ export function isRestingHour(key: string, hour = new Date().getHours()) {
   return hour >= start || hour < end;
 }
 
+export type DayPart = "dawn" | "day" | "dusk" | "night";
+
+export function dayPart(hour = new Date().getHours()): DayPart {
+  if (hour >= 5 && hour < 8) return "dawn";
+  if (hour >= 8 && hour < 17) return "day";
+  if (hour >= 17 && hour < 21) return "dusk";
+  return "night";
+}
+
+export function dayPartLabel(part: DayPart) {
+  if (part === "dawn") return "Dawn";
+  if (part === "dusk") return "Dusk";
+  if (part === "night") return "Night";
+  return "Day";
+}
+
 export const HIDE_LINE: Record<string, string> = {
   red_panda: "I went where the ribbon goes.",
   cat: "The ledge is closed.",
