@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Meter } from "@/components/ui/progress";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
+import { BlotterMarks, DayWash, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import {
   applyBath,
   applyCall,
@@ -305,14 +306,14 @@ export function DeskStage({
   }
 
   function dropTreat() {
-    dropTreatAt(18 + Math.random() * 62);
+    dropTreatAt(randomTreatX());
   }
 
   function startChase() {
     if (busy || stats.hidden || leaving) return;
     acted.current = true;
     unlockDeskAudio();
-    setMark({ kind: "lure", x: 16 + Math.random() * 68 });
+    setMark({ kind: "lure", x: randomLureX() });
     say(trait.special === "bug" ? "There. A bug." : "A ribbon. Catch it.");
     issue("seek");
   }
@@ -329,7 +330,6 @@ export function DeskStage({
   }
 
   const part = dayPart();
-  const night = part === "night";
 
   return (
     <section className="relative isolate h-[calc(100dvh-4rem)] min-h-[520px] w-full overflow-hidden bg-elevated sm:h-[calc(100dvh-4.5rem)]">
@@ -338,8 +338,7 @@ export function DeskStage({
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-[center_70%]"
       />
-      <div className={`absolute inset-0 bg-gradient-to-t from-bg via-bg/15 to-bg/30 ${night ? "brightness-[0.68]" : part === "dusk" ? "brightness-[0.82] saturate-[0.9]" : part === "dawn" ? "brightness-[0.9] saturate-50" : ""}`} />
-      <div className={`desk-lamp pointer-events-none absolute inset-0 ${night ? "opacity-35" : part === "dusk" ? "opacity-70" : ""}`} />
+      <DayWash />
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
         <span className="desk-mote" style={{ left: "18%", bottom: "30%" }} />
         <span className="desk-mote" style={{ left: "42%", bottom: "38%", animationDelay: "1.4s" }} />
@@ -347,14 +346,11 @@ export function DeskStage({
         <span className="desk-mote" style={{ left: "78%", bottom: "34%", animationDelay: "0.7s" }} />
       </div>
 
-      <button
-        type="button"
-        aria-label="Drop a treat on the blotter"
-        className="absolute inset-0 z-[1] cursor-pointer bg-transparent"
-        onClick={(e) => {
-          const box = e.currentTarget.getBoundingClientRect();
-          dropTreatAt(((e.clientX - box.left) / box.width) * 100);
-        }}
+      <BlotterMarks
+        mark={mark}
+        hidden={stats.hidden}
+        onDropTreat={dropTreatAt}
+        onCatchLure={catchLure}
       />
 
       <LivingPet
@@ -403,26 +399,6 @@ export function DeskStage({
         }}
         onTap={() => void talk()}
       />
-
-      {mark?.kind === "treat" && !stats.hidden ? (
-        <span
-          aria-hidden
-          className="desk-treat pointer-events-none absolute z-10"
-          style={{ left: `${mark.x}%`, bottom: "19.5%" }}
-        />
-      ) : null}
-      {mark?.kind === "lure" && !stats.hidden ? (
-        <button
-          type="button"
-          aria-label="Catch the lure"
-          className="desk-lure absolute z-10"
-          style={{ left: `${mark.x}%`, bottom: "28%" }}
-          onClick={(e) => {
-            e.stopPropagation();
-            catchLure();
-          }}
-        />
-      ) : null}
 
       {stats.mess.map((pile) => (
         <button

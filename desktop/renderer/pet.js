@@ -31,6 +31,8 @@ const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
 const dustRoot = document.getElementById("dust");
 const messRoot = document.getElementById("mess");
+const treatEl = document.getElementById("treat");
+const lureEl = document.getElementById("lure");
 const hud = document.getElementById("hud");
 const hudName = document.getElementById("hud-name");
 const hudVital = document.getElementById("hud-vital");
@@ -70,6 +72,8 @@ const sim = {
 let speechUntil = 0;
 let clickable = false;
 let hudUntil = 0;
+let mark = null;
+let leaving = false;
 
 function persist() {
   if (kind && life) window.PetLife.save(kind.key, life);
@@ -210,9 +214,24 @@ function puff(x, n = 4) {
   if (sim.dust.length > 18) sim.dust.splice(0, sim.dust.length - 18);
 }
 
+function placeMark(kind, x) {
+  mark = { kind, x };
+  const el = kind === "treat" ? treatEl : lureEl;
+  const other = kind === "treat" ? lureEl : treatEl;
+  other.classList.remove("show");
+  el.classList.add("show");
+  el.style.transform = `translate3d(${x}px, 0, 0)`;
+}
+
+function clearMark() {
+  mark = null;
+  treatEl.classList.remove("show");
+  lureEl.classList.remove("show");
+}
+
 function applyCommand() {
   if (sim.dragging || !trait) return;
-  if (life?.hidden) {
+  if (life?.hidden && sim.cmd !== "enter") {
     sim.anim = "sit";
     sim.target = null;
     return;
@@ -242,6 +261,34 @@ function applyCommand() {
     sim.walkAge = 0;
     return;
   }
+  if (sim.cmd === "seek" && mark) {
+    leaving = false;
+    sim.target = clamp(mark.x - BASE * 0.4, PAD, max);
+    sim.facing = sim.target >= sim.x ? 1 : -1;
+    sim.anim = "walk";
+    sim.frame = 0;
+    sim.walkAge = 0;
+    return;
+  }
+  if (sim.cmd === "leave") {
+    leaving = true;
+    sim.target = sim.x + BASE / 2 < width / 2 ? -BASE - 24 : width + 12;
+    sim.facing = sim.target >= sim.x ? 1 : -1;
+    sim.anim = "walk";
+    sim.frame = 0;
+    sim.walkAge = 0;
+    return;
+  }
+  if (sim.cmd === "enter") {
+    leaving = false;
+    sim.x = Math.random() < 0.5 ? -BASE : max + BASE;
+    sim.target = clamp(80 + Math.random() * Math.max(40, max - 80), PAD, max);
+    sim.facing = sim.target >= sim.x ? 1 : -1;
+    sim.anim = "walk";
+    sim.frame = 0;
+    sim.walkAge = 0;
+    return;
+  }
   if (sim.cmd === "play") {
     sim.hop = 1;
     sim.anim = "play";
@@ -264,15 +311,45 @@ function applyCommand() {
 function handle(cmd) {
   if (!life || !trait || !kind) return;
   tickLife();
+  if (cmd === "play") {
+    if (life.hidden) return;
+    const width = window.innerWidth;
+    placeMark("lure", 80 + Math.random() * Math.max(80, width - 200));
+    say(trait.special === "bug" ? "There. A bug." : "A ribbon. Catch it.");
+    issue("seek");
+    hudUntil = performance.now() + 5000;
+    return;
+  }
+  if (cmd === "snack") {
+    if (life.hidden) return;
+    const width = window.innerWidth;
+    placeMark("treat", 80 + Math.random() * Math.max(80, width - 200));
+    issue("seek");
+    hudUntil = performance.now() + 4000;
+    return;
+  }
+  if (cmd === "hide") {
+    if (life.hidden) return;
+    say(pick(trait.extra.hide || ["I went where the ribbon goes."]));
+    leaving = true;
+    issue("leave");
+    hudUntil = performance.now() + 5000;
+    return;
+  }
   const result = window.PetLife.act(life, trait, cmd);
   persist();
   if (cmd === "talk") {
     void askMind(result);
     return;
   }
+  if (cmd === "call") {
+    leaving = false;
+    pet.classList.remove("hidden");
+    issue("enter");
+  }
   const text = lineFrom(result);
   say(text);
-  if (result.cmd) issue(result.cmd);
+  if (result.cmd && cmd !== "call") issue(result.cmd);
   paintHud();
   paintMess();
   if (result.notify === "ribbon") window.desk?.notify(kind.name, `${kind.name} hid a ribbon.`);
@@ -393,10 +470,33 @@ function tick(now) {
       if ((dir === 1 && sim.x >= sim.target) || (dir === -1 && sim.x <= sim.target)) {
         sim.x = sim.target;
         sim.target = null;
-        sim.anim = "idle";
-        sim.frame = 0;
-        sim.land = 0.7;
-        issue("idle");
+        if (sim.cmd === "leave") {
+          life.hidden = true;
+          persist();
+          leaving = false;
+          issue("idle");
+          paintHud();
+        } else if (sim.cmd === "seek" && mark) {
+          const kindMark = mark.kind;
+          clearMark();
+          if (kindMark === "treat") {
+            const result = window.PetLife.act(life, trait, "snack");
+            persist();
+            say(lineFrom(result) || "A small treaty.");
+            issue("eat");
+          } else {
+            const result = window.PetLife.act(life, trait, "play");
+            persist();
+            say(lineFrom(result) || pick(kind.lines.play));
+            issue("play");
+          }
+          paintHud();
+        } else {
+          sim.anim = "idle";
+          sim.frame = 0;
+          sim.land = 0.7;
+          issue("idle");
+        }
       }
     } else if ((sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
       sim.facing = sim.cursorX >= sim.x + BASE / 2 ? 1 : -1;
@@ -408,7 +508,7 @@ function tick(now) {
         sim.anim = "walk";
       }
     }
-    sim.x = clamp(sim.x, PAD, maxX);
+    if (!leaving) sim.x = clamp(sim.x, PAD, maxX);
 
     const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
     if (fps > 0) {
@@ -519,6 +619,16 @@ window.addEventListener("pointercancel", () => {
 pet.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   window.desk?.openMenu(e.clientX, e.clientY);
+});
+lureEl.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (!mark || mark.kind !== "lure" || !life || !trait || !kind) return;
+  clearMark();
+  const result = window.PetLife.act(life, trait, "play");
+  persist();
+  say("You caught it first. I still win.");
+  issue("play");
+  paintHud();
 });
 window.addEventListener("resize", () => {
   sim.x = clamp(sim.x, PAD, Math.max(PAD, window.innerWidth - BASE - PAD));
