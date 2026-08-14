@@ -22,6 +22,9 @@ import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { describeBinding } from "@/lib/ai/settings";
+import { traitFor } from "@/lib/pets/traits";
+import { applySpecial } from "@/lib/pets/specials";
+import { appendJournal, loadJournal, type JournalEntry } from "@/lib/pets/journal";
 
 function loadLocal(key: string): CareStats {
   try {
@@ -53,12 +56,14 @@ export function DeskStage({
   onSelectKind?: (key: string) => void;
 }) {
   const displayName = name ?? kind.name;
+  const trait = traitFor(kind.key);
   const mind = useMindBinding(kind.key);
   const mindSettings = useMindSettings();
   const [stats, setStats] = useState<CareStats>(() => normalizeCare(null));
   const [speech, setSpeech] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
+  const [journal, setJournal] = useState<JournalEntry[]>([]);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
   const speechUntil = useRef(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -81,6 +86,17 @@ export function DeskStage({
   const issue = useCallback((cmd: PetCommand) => {
     setOrder((o) => ({ cmd, id: o.id + 1 }));
   }, []);
+
+  useEffect(() => {
+    setJournal(loadJournal());
+  }, [kind.key]);
+
+  const note = useCallback(
+    (text: string) => {
+      setJournal(appendJournal({ name: displayName, species: kind.key, text }));
+    },
+    [displayName, kind.key],
+  );
 
   useEffect(() => {
     kind.preload();
@@ -119,16 +135,16 @@ export function DeskStage({
       if (busy) return;
       const live = statsRef.current;
       const roll = Math.random();
-      if (roll < 0.4) issue("wander");
-      else if (roll < 0.62) issue(live.energy < 35 ? "sleep" : "sit");
-      else if (roll < 0.8) issue("idle");
+      if (roll < trait.wander) issue("wander");
+      else if (roll < trait.wander + 0.22) issue(live.energy < 35 ? "sleep" : "sit");
+      else if (roll < trait.wander + 0.4) issue("idle");
       else {
         say(kind.ambientLine(live));
         issue("talk");
       }
     }, 5600);
     return () => window.clearInterval(id);
-  }, [busy, issue, say, kind]);
+  }, [busy, issue, say, kind, trait.wander]);
 
   async function playVoice(src?: string, text?: string) {
     if (src) {
@@ -213,6 +229,15 @@ export function DeskStage({
       else if (action === "bath") say("Water. Then dignity.");
       else if (action === "medicine") say("Bitter. I will invoice you in kindness.");
       else say(kind.fallbackLine("good", stats));
+      note(
+        action === "feed"
+          ? `${displayName} ate.`
+          : action === "play"
+            ? `${displayName} played.`
+            : action === "rest"
+              ? `${displayName} slept.`
+              : `${displayName} was tended.`,
+      );
       if (action === "play") issue("play");
       else if (action === "rest") issue("sleep");
       else if (action === "feed") issue("eat");
@@ -220,6 +245,18 @@ export function DeskStage({
     } finally {
       setBusy(false);
     }
+  }
+
+  function special() {
+    if (busy) return;
+    acted.current = true;
+    unlockDeskAudio();
+    const next = applySpecial(statsRef.current, trait);
+    setStats(next.stats);
+    saveLocal(kind.localKey, { ...next.stats, lastTick: Date.now() });
+    say(trait.line);
+    issue(next.cmd);
+    note(`${displayName}: ${trait.line}`);
   }
 
   return (
@@ -246,6 +283,7 @@ export function DeskStage({
         sprites={kind.sprites}
         fps={kind.fps}
         once={kind.once}
+        gait={trait}
         onArrived={() => {
           if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat") issue("idle");
         }}
@@ -275,6 +313,13 @@ export function DeskStage({
         <p className="mt-1 text-[11px] text-subtle" suppressHydrationWarning>
           {describeBinding(mind)}
         </p>
+        <ul className="mt-3 hidden space-y-1 sm:block">
+          {journal.slice(0, 3).map((entry) => (
+            <li key={`${entry.at}-${entry.text}`} className="truncate text-[11px] text-subtle">
+              {entry.text}
+            </li>
+          ))}
+        </ul>
         <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-3 sm:grid-cols-4">
           <Meter label="Hunger" value={stats.hunger} />
           <Meter label="Mood" value={stats.mood} />
@@ -309,6 +354,9 @@ export function DeskStage({
             </Button>
             <Button variant="ghost" disabled={busy} onClick={() => void care("praise")}>
               Praise
+            </Button>
+            <Button disabled={busy} onClick={special}>
+              {trait.verb}
             </Button>
           </div>
           <form

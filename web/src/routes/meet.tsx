@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { portraitSrc } from "@/lib/pets/catalog";
+import { traitFor } from "@/lib/pets/traits";
 
 export const Route = createFileRoute("/meet")({
   component: MeetPage,
@@ -80,6 +81,7 @@ export function MeetPage() {
                 <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{kind.speciesLabel}</p>
                 <p className="font-display text-2xl leading-none">{kind.name}</p>
                 <p className="text-sm text-muted">{kind.tagline}</p>
+                <p className="text-xs text-subtle">{traitFor(kind.key).verb}</p>
               </div>
             </Link>
           ))}

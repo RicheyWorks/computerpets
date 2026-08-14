@@ -7,6 +7,7 @@ import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/liv
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
+import { traitFor } from "@/lib/pets/traits";
 import { cn } from "@/lib/utils";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
@@ -150,6 +151,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         sprites={kind.sprites}
         fps={kind.fps}
         once={kind.once}
+        gait={traitFor(kind.key)}
         onArrived={() => {
           if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat") issue("idle");
         }}

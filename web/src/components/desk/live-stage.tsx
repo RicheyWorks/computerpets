@@ -11,6 +11,7 @@ import {
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
+import { traitFor } from "@/lib/pets/traits";
 import { Button } from "@/components/ui/button";
 
 function isStandalone() {
@@ -174,6 +175,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         sprites={kind.sprites}
         fps={kind.fps}
         once={kind.once}
+        gait={traitFor(kind.key)}
         onArrived={() => {
           if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat") issue("idle");
         }}
