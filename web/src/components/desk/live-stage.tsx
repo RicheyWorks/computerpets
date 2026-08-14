@@ -9,8 +9,10 @@ import {
   applySnack,
   bondTitle,
   loadCare,
+  leaveGift,
   maybeBondLine,
   normalizeCare,
+  pickGift,
   saveCare,
   stageOf,
   type CareStats,
@@ -26,7 +28,9 @@ import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
+import { applySpecial } from "@/lib/pets/specials";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
+import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { Button } from "@/components/ui/button";
 
 function isStandalone() {
@@ -246,6 +250,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
       <BlotterMarks
         mark={mark}
         hidden={stats.hidden}
+        treatShape={treatFor(kind.key).shape}
         onDropTreat={dropTreatAt}
         onCatchLure={catchLure}
         onFlee={fleeLure}
@@ -299,6 +304,22 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         onTap={() => void talk()}
       />
 
+      {stats.gifts.map((gift) => (
+        <button
+          key={gift.id}
+          type="button"
+          aria-label="Pick up a gift"
+          className="desk-gift absolute z-10"
+          style={{ left: `${gift.x}%`, bottom: "20%" }}
+          onClick={() => {
+            const prev = statsRef.current;
+            const next = pickGift(prev, gift.id);
+            setStats(next);
+            say(GIFT_LINE[kind.key] ?? "I left this.");
+          }}
+        />
+      ))}
+
       <aside className="absolute left-4 right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-6 sm:right-auto sm:max-w-sm">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
           On this device · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)} · {stageOf(stats)}
@@ -336,7 +357,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
             Feed
           </Button>
           <Button className="h-12" variant="secondary" disabled={busy || stats.hidden} onClick={() => dropTreatAt(randomTreatX())}>
-            Treat
+            {treatFor(kind.key).verb}
           </Button>
           <Button className="h-12" variant="secondary" disabled={busy || stats.hidden} onClick={startChase}>
             Play
@@ -365,8 +386,10 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
           )}
           <Button className="h-12" variant="ghost" disabled={busy} onClick={() => {
             acted.current = true;
+            const next = applySpecial(statsRef.current, trait);
+            setStats(leaveGift(next.stats));
             say(trait.line);
-            issue("play");
+            issue(next.cmd);
           }}>
             {trait.verb}
           </Button>

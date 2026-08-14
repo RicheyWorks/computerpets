@@ -99,6 +99,60 @@
     transform: translateX(-50%);
   }
 
+  .desk-treat-bamboo {
+    width: 16px;
+    height: 5px;
+    border-radius: 2px;
+    background: var(--color-uncommon);
+  }
+
+  .desk-treat-seed {
+    width: 7px;
+    height: 9px;
+    border-radius: 40% 40% 50% 50%;
+    background: var(--color-legendary);
+  }
+
+  .desk-treat-leaf {
+    width: 12px;
+    height: 8px;
+    border-radius: 0 70% 40% 70%;
+    background: var(--color-uncommon);
+  }
+
+  .desk-treat-flake {
+    width: 11px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--color-rare);
+  }
+
+  .desk-treat-pebble {
+    width: 9px;
+    height: 7px;
+    border-radius: 40%;
+    background: var(--color-muted);
+  }
+
+  .desk-treat-ember {
+    width: 8px;
+    height: 8px;
+    border-radius: 40% 40% 40% 10%;
+    background: var(--color-legendary);
+    box-shadow: 0 0 8px rgb(176 137 104 / 0.55);
+  }
+
+  .desk-gift {
+    width: 11px;
+    height: 11px;
+    border: 0;
+    padding: 0;
+    border-radius: 2px;
+    background: var(--color-primary);
+    transform: translateX(-50%) rotate(12deg);
+    box-shadow: 0 0 0 1px rgb(12 11 10 / 0.35);
+  }
+
   .desk-lure {
     width: 14px;
     height: 22px;

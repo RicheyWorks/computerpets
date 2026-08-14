@@ -3,13 +3,15 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
-import { applyFeed, applyHide, applyPlay, applySnack, bondTitle, loadCare, maybeBondLine, normalizeCare, saveCare, stageOf, type CareStats } from "@/lib/pets/care";
+import { applyFeed, applyHide, applyPlay, applySnack, bondTitle, loadCare, leaveGift, maybeBondLine, normalizeCare, pickGift, saveCare, stageOf, type CareStats } from "@/lib/pets/care";
 import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
+import { applySpecial } from "@/lib/pets/specials";
+import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { cn } from "@/lib/utils";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
@@ -217,6 +219,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
       <BlotterMarks
         mark={mark}
         hidden={stats.hidden}
+        treatShape={treatFor(kind.key).shape}
         onDropTreat={dropTreatAt}
         onCatchLure={catchLure}
         onFlee={fleeLure}
@@ -270,6 +273,24 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         onTap={() => void talk()}
       />
 
+      {stats.gifts.map((gift) => (
+        <button
+          key={gift.id}
+          type="button"
+          aria-label="Pick up a gift"
+          className="desk-gift absolute z-10"
+          style={{ left: `${gift.x}%`, bottom: "20%" }}
+          onClick={() => {
+            const prev = statsRef.current;
+            const next = pickGift(prev, gift.id);
+            setStats(next);
+            say(GIFT_LINE[kind.key] ?? "I left this.");
+            const line = maybeBondLine(prev.bond, next.bond);
+            if (line) window.setTimeout(() => say(line), 900);
+          }}
+        />
+      ))}
+
       <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,22rem)] sm:left-8 sm:top-24">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
           Living demo · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)} · {stageOf(stats)}
@@ -281,10 +302,21 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
             Feed
           </Button>
           <Button size="sm" variant="secondary" disabled={busy || stats.hidden} onClick={() => dropTreatAt(randomTreatX())}>
-            Treat
+            {treatFor(kind.key).verb}
           </Button>
           <Button size="sm" variant="secondary" disabled={busy || stats.hidden} onClick={startChase}>
             Play
+          </Button>
+          <Button size="sm" disabled={busy} onClick={() => {
+            acted.current = true;
+            unlockDeskAudio();
+            const next = applySpecial(statsRef.current, trait);
+            const gifted = leaveGift(next.stats);
+            setStats(gifted);
+            say(trait.line);
+            issue(next.cmd);
+          }}>
+            {trait.verb}
           </Button>
           <Button size="sm" variant="ghost" disabled={busy} onClick={() => void talk()}>
             Talk

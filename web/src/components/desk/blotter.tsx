@@ -31,12 +31,14 @@ export function DayWash() {
 export function BlotterMarks({
   mark,
   hidden,
+  treatShape,
   onDropTreat,
   onCatchLure,
   onFlee,
 }: {
   mark: BlotterMark | null;
   hidden?: boolean;
+  treatShape?: string;
   onDropTreat: (x: number) => void;
   onCatchLure: () => void;
   onFlee?: (x: number) => void;
@@ -60,7 +62,7 @@ export function BlotterMarks({
       {mark?.kind === "treat" && !hidden ? (
         <span
           aria-hidden
-          className="desk-treat pointer-events-none absolute z-10"
+          className={`desk-treat desk-treat-${treatShape ?? "crumb"} pointer-events-none absolute z-10`}
           style={{ left: `${mark.x}%`, bottom: "19.5%" }}
         />
       ) : null}

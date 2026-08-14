@@ -31,6 +31,7 @@ const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
 const dustRoot = document.getElementById("dust");
 const messRoot = document.getElementById("mess");
+const giftRoot = document.getElementById("gifts");
 const treatEl = document.getElementById("treat");
 const lureEl = document.getElementById("lure");
 const hud = document.getElementById("hud");
@@ -154,6 +155,31 @@ function paintMess() {
     });
     messRoot.appendChild(el);
   }
+  paintGifts();
+}
+
+function paintGifts() {
+  if (!life || !giftRoot) return;
+  const width = window.innerWidth;
+  giftRoot.replaceChildren();
+  for (const g of life.gifts || []) {
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = "gift-dot";
+    el.dataset.hit = "1";
+    el.style.transform = `translate3d(${g.x * (width - 40)}px, 0, 0)`;
+    el.addEventListener("click", (e) => {
+      e.stopPropagation();
+      life.gifts = (life.gifts || []).filter((x) => x.id !== g.id);
+      life.mood = Math.min(100, life.mood + 6);
+      life.bond = Math.min(100, life.bond + 2);
+      persist();
+      say("I left this.");
+      paintGifts();
+      paintHud();
+    });
+    giftRoot.appendChild(el);
+  }
 }
 
 function maybeNotify() {
@@ -215,15 +241,39 @@ function puff(x, n = 4) {
   if (sim.dust.length > 18) sim.dust.splice(0, sim.dust.length - 18);
 }
 
-function placeMark(kind, x, hops = 0) {
-  mark = { kind, x, hops };
-  const el = kind === "treat" ? treatEl : lureEl;
-  const other = kind === "treat" ? lureEl : treatEl;
+const TREAT_SHAPE = {
+  red_panda: "bamboo",
+  cat: "crumb",
+  dog: "crumb",
+  rabbit: "leaf",
+  hamster: "seed",
+  guinea_pig: "leaf",
+  turtle: "leaf",
+  goldfish: "flake",
+  budgie: "seed",
+  fox: "crumb",
+  penguin: "pebble",
+  parrot: "seed",
+  ferret: "crumb",
+  hedgehog: "crumb",
+  chinchilla: "seed",
+  axolotl: "flake",
+  toucan: "leaf",
+  iguana: "leaf",
+  dragon: "ember",
+  phoenix: "ember",
+};
+
+function placeMark(kindName, x, hops = 0) {
+  mark = { kind: kindName, x, hops };
+  const el = kindName === "treat" ? treatEl : lureEl;
+  const other = kindName === "treat" ? lureEl : treatEl;
   other.classList.remove("show");
   el.classList.add("show");
   el.style.transform = `translate3d(${x}px, 0, 0)`;
+  if (kindName === "treat") treatEl.dataset.shape = TREAT_SHAPE[kind?.key] || "crumb";
   window.clearTimeout(lureTimer);
-  if (kind === "lure" && hops === 0) {
+  if (kindName === "lure" && hops === 0) {
     lureTimer = window.setTimeout(() => {
       if (!mark || mark.kind !== "lure" || mark.hops > 0) return;
       const width = window.innerWidth;

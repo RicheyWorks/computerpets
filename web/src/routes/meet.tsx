@@ -34,7 +34,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Walk them, feed them, chase a ribbon. They remember if you were gone. Hatchlings are small.
+            Each one has a treat of their own. The devoted leave gifts on the blotter.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
