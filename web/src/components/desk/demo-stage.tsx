@@ -10,6 +10,7 @@ import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
+import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { applySpecial } from "@/lib/pets/specials";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { cn } from "@/lib/utils";
@@ -61,7 +62,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
     setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;
-      say(returnLine(rememberVisit(kind.key)) ?? kind.greetLine(), 5200);
+      say(returnLine(rememberVisit(kind.key)) ?? weatherLine(kind.key, weatherOf()) ?? kind.greetLine(), 5200);
       issue("talk");
     }, 500);
     return () => window.clearTimeout(t);
@@ -78,6 +79,11 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
       if (statsRef.current.hunger < 26) {
         say(kind.ambientLine(statsRef.current));
         issue("wander");
+        return;
+      }
+      const skyMood = weatherIdle(kind.key, weatherOf());
+      if (skyMood && Math.random() < 0.45) {
+        issue(skyMood);
         return;
       }
       if (isRestingHour(kind.key) && statsRef.current.energy < 88) {
@@ -293,7 +299,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
 
       <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,22rem)] sm:left-8 sm:top-24">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          Living demo · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)} · {stageOf(stats)}
+          Living demo · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {bondTitle(stats.bond)} · {stageOf(stats)}
         </p>
         <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>

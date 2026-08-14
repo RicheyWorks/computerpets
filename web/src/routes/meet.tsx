@@ -34,7 +34,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Each one has a treat of their own. The devoted leave gifts on the blotter.
+            The house keeps weather. Rain, wind, or heat — they sit or swim accordingly.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>

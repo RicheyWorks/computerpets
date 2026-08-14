@@ -32,6 +32,7 @@ const bubbleText = document.getElementById("bubble-text");
 const dustRoot = document.getElementById("dust");
 const messRoot = document.getElementById("mess");
 const giftRoot = document.getElementById("gifts");
+const weatherRoot = document.getElementById("weather");
 const treatEl = document.getElementById("treat");
 const lureEl = document.getElementById("lure");
 const hud = document.getElementById("hud");
@@ -77,6 +78,48 @@ let mark = null;
 let leaving = false;
 let lureTimer = 0;
 
+function skyOf() {
+  const n = new Date();
+  const day = Math.floor(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) / 86400000);
+  const r = ((day * 9301 + 49297) % 233280) / 233280;
+  if (r < 0.4) return "clear";
+  if (r < 0.62) return "rain";
+  if (r < 0.82) return "wind";
+  return "heat";
+}
+
+function skyLabel(w) {
+  if (w === "rain") return "Rain";
+  if (w === "wind") return "Wind";
+  if (w === "heat") return "Heat";
+  return "Clear";
+}
+
+function paintWeather() {
+  if (!weatherRoot) return;
+  const w = skyOf();
+  weatherRoot.className = `weather weather-${w}`;
+  weatherRoot.replaceChildren();
+  if (w === "rain") {
+    for (let i = 0; i < 16; i++) {
+      const s = document.createElement("span");
+      s.className = "wx-rain";
+      s.style.left = `${4 + i * 6}%`;
+      s.style.animationDelay = `${(i % 6) * 0.16}s`;
+      weatherRoot.appendChild(s);
+    }
+  }
+  if (w === "wind") {
+    for (let i = 0; i < 7; i++) {
+      const s = document.createElement("span");
+      s.className = "wx-gust";
+      s.style.top = `${16 + i * 10}%`;
+      s.style.animationDelay = `${i * 0.35}s`;
+      weatherRoot.appendChild(s);
+    }
+  }
+}
+
 function persist() {
   if (kind && life) window.PetLife.save(kind.key, life);
 }
@@ -116,7 +159,7 @@ function lineFrom(result) {
 function paintHud() {
   if (!life || !kind) return;
   hudName.textContent = `${kind.name} · ${life.stage}`;
-  hudVital.textContent = window.PetLife.vitals(life);
+  hudVital.textContent = `${window.PetLife.vitals(life)} · ${skyLabel(skyOf())}${life.gifts?.length ? ` · ${life.gifts.length} gift${life.gifts.length > 1 ? "s" : ""}` : ""}`;
   barHunger.style.setProperty("--w", `${life.hunger}%`);
   barMood.style.setProperty("--w", `${life.mood}%`);
   barEnergy.style.setProperty("--w", `${life.energy}%`);
@@ -727,6 +770,15 @@ setInterval(() => {
     issue("sleep");
     return;
   }
+  const sky = skyOf();
+  if (sky === "rain" && Math.random() < 0.4 && !["goldfish", "axolotl", "penguin"].includes(kind.key)) {
+    issue("sit");
+    return;
+  }
+  if (sky === "heat" && Math.random() < 0.35 && ["iguana", "turtle", "cat", "dragon"].includes(kind.key)) {
+    issue("sit");
+    return;
+  }
   const roll = Math.random();
   if (roll < (trait?.wander ?? 0.45)) issue("wander");
   else if (roll < 0.7) issue(life.energy < 35 ? "sleep" : "sit");
@@ -752,6 +804,7 @@ fetch("roster.json")
       /* ignore */
     }
     switchTo(start);
+    paintWeather();
     requestAnimationFrame(tick);
   })
   .catch(() => {

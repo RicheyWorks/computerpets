@@ -30,6 +30,7 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
+import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { Button } from "@/components/ui/button";
 
@@ -94,7 +95,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
     setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;
-      say(returnLine(rememberVisit(kind.key)) ?? kind.greetLine(), 5000);
+      say(returnLine(rememberVisit(kind.key)) ?? weatherLine(kind.key, weatherOf()) ?? kind.greetLine(), 5000);
       issue("talk");
     }, 450);
     return () => window.clearTimeout(t);
@@ -111,6 +112,11 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
       if (statsRef.current.hunger < 26) {
         say(kind.ambientLine(statsRef.current));
         issue("wander");
+        return;
+      }
+      const skyMood = weatherIdle(kind.key, weatherOf());
+      if (skyMood && Math.random() < 0.45) {
+        issue(skyMood);
         return;
       }
       if (isRestingHour(kind.key) && statsRef.current.energy < 88) {
@@ -322,7 +328,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
 
       <aside className="absolute left-4 right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-6 sm:right-auto sm:max-w-sm">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          On this device · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)} · {stageOf(stats)}
+          On this device · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {bondTitle(stats.bond)} · {stageOf(stats)}
         </p>
         <h1 className="mt-1 font-display text-4xl leading-none">{kind.name}</h1>
         <p className="mt-2 text-sm text-muted">{kind.tagline}</p>

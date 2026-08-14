@@ -36,6 +36,7 @@ import { applySpecial } from "@/lib/pets/specials";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { appendJournal, loadJournal, type JournalEntry } from "@/lib/pets/journal";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, returnLine } from "@/lib/pets/hours";
+import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 
 function loadLocal(key: string): CareStats {
   try {
@@ -133,7 +134,7 @@ export function DeskStage({
     const t = window.setTimeout(() => {
       if (acted.current) return;
       const away = Date.now() - saved.lastTick;
-      say(returnLine(away) ?? kind.greetLine(), 5200);
+      say(returnLine(away) ?? weatherLine(kind.key, weatherOf()) ?? kind.greetLine(), 5200);
       issue("talk");
     }, 700);
     return () => window.clearTimeout(t);
@@ -164,6 +165,15 @@ export function DeskStage({
       if (live.hunger < 26) {
         say(kind.ambientLine(live));
         issue("wander");
+        return;
+      }
+      const skyMood = weatherIdle(kind.key, weatherOf());
+      if (skyMood && Math.random() < 0.45) {
+        if (Math.random() < 0.4) {
+          const line = weatherLine(kind.key, weatherOf());
+          if (line) say(line);
+        }
+        issue(skyMood);
         return;
       }
       if (isRestingHour(kind.key) && live.energy < 88) {
@@ -492,7 +502,9 @@ export function DeskStage({
         <h1 className="mt-2 font-display text-2xl leading-none sm:text-3xl">{displayName}</h1>
         <p className="mt-2 hidden text-sm text-muted sm:block">{kind.blurb}</p>
         <p className="mt-1 text-xs text-subtle sm:mt-2">
-          {busy ? "Listening" : `${moodWord(stats)} · ${bondTitle(stats.bond)} · ${stageOf(stats)} · ${dayPartLabel(part)}`}
+          {busy
+            ? "Listening"
+            : `${moodWord(stats)} · ${bondTitle(stats.bond)} · ${stageOf(stats)} · ${dayPartLabel(part)} · ${weatherLabel(weatherOf())}${stats.gifts.length ? ` · ${stats.gifts.length} gift${stats.gifts.length > 1 ? "s" : ""}` : ""}`}
         </p>
         <p className="mt-1 text-[11px] text-subtle" suppressHydrationWarning>
           {describeBinding(mind)}
