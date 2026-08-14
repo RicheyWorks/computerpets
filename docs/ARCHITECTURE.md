@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-05-24                                 |
+| **Last Updated** | 2026-08-14                                 |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -261,12 +261,12 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 | Component                  | Responsibility                                      | Technology | Key Files                                      | Dependencies                     |
 |----------------------------|-----------------------------------------------------|------------|------------------------------------------------|----------------------------------|
 | `OwnershipProvider`        | Contract for any ownership source                   | Java interface | `provider/OwnershipProvider.java`              | —                                |
-| `VerificationResult`       | Success/failure + stable owner identifier           | Java record | `provider/VerificationResult.java`             | —                                |
+| `VerificationResult`       | Success/failure + owner id + optional `petKey` hint | Java record | `provider/VerificationResult.java`             | —                                |
 | `ProviderRegistry`         | Spring-driven collection + key-based lookup         | Spring @Service | `provider/ProviderRegistry.java`               | `List<OwnershipProvider>` (DI)   |
 
 **Current implementations:**
 - `steam/SteamService` – real Steam Web API integration + conditional registration.
-- `nft/EthereumNftService` – Web3j `eth_call` to `ownerOf(uint256)`; crude substring parsing of response.
+- `nft/EthereumNftService` – Web3j `eth_call` to ERC-721 `ownerOf` / ERC-1155 `balanceOf` with address validation, official collection allowlist, token→pet binding, optional `personal_sign`, and timed-out RPC.
 - `microsoft/MicrosoftStoreService` – RestClient to Microsoft Collections API with XBL3.0 auth; dev-mode bypass flag.
 
 ### 4.3 Core Domain Services
@@ -487,7 +487,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 
 ### Current Weaknesses & Gaps (from code + AUDIT.md)
 - ~~**P0**: Steam and Microsoft providers are no-op stubs**~~ → Partially addressed. Steam now uses the real Web API. Microsoft still supports a `dev-mode` flag (useful for local development). Provider toggles via `ownership.providers.*.enabled` were added for fine-grained control.
-- ~~**P0**: NFT ownership check uses fragile `String.contains(substring(2))` parsing**~~ → **Completed**. Now uses proper `FunctionReturnDecoder` + exact address comparison.
+- ~~**P0**: NFT ownership check uses fragile `String.contains(substring(2))` parsing**~~ → **Completed**, then hardened (Aug 2026): `FunctionReturnDecoder`, checksum-insensitive address compare, official collection allowlist, token→pet binding, ERC-1155, optional `personal_sign`.
 - No persistence → impossible to revoke a license or detect replays beyond the 365-day expiry.
 - Rate-limit buckets and provider state are in-memory only.
 - `X-Forwarded-For` is trusted unconditionally (spoofing risk if not behind a trusted proxy).
@@ -523,7 +523,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 All four **Immediate (P0)** items required before any public or production exposure have been completed:
 
 - Steam provider now calls the real Web API + provider toggles (`ownership.providers.*.enabled`).
-- NFT ownership verification uses proper ABI decoding + unit tests.
+- NFT ownership verification uses proper ABI decoding, an official collection allowlist, token→pet binding, ERC-721/1155, and unit tests.
 - Default `LICENSE_SECRET_KEY` now fails hard outside of test environments.
 - Basic unit + integration tests exist for all three providers.
 

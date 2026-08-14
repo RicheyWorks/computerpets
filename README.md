@@ -32,11 +32,12 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
 - **Rate Limiting** — Built-in per-IP protection using Bucket4j.
 - **Rich Pet Catalog** — 20 pets across four rarity tiers (Common, Uncommon, Rare, Legendary).
+- **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
 - **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
 
 **Planned / Vision:**
 - GPU-accelerated desktop client (PyQt6 / modern rendering)
-- Real Steam Web API and improved NFT verification
+- A live ComputerPets collection address in `ethereum.collections`
 - Persistent license store and revocation support
 - Hardware binding and advanced anti-piracy measures
 
@@ -152,7 +153,7 @@ Please read the contribution guidelines before getting started:
 
 We especially value:
 - Real implementations for the Steam and Microsoft providers
-- Improvements to NFT ownership verification
+- A deployed ComputerPets collection wired into `ethereum.collections`
 - Tests and CI/CD enhancements
 - Documentation and architecture refinements
 

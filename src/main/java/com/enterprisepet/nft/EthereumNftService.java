@@ -5,9 +5,9 @@ import com.enterprisepet.provider.VerificationResult;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import jakarta.annotation.PostConstruct;
+import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
@@ -26,7 +26,17 @@ import org.web3j.protocol.http.HttpService;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 
+/**
+ * On-chain NFT ownership provider (ERC-721 {@code ownerOf} / ERC-1155 {@code balanceOf}).
+ *
+ * <p>Input is validated before any RPC call: well-formed addresses, non-negative
+ * token ids, optional {@code personal_sign} proof, and (by default) an official
+ * collection allowlist with optional token → pet bindings.
+ */
 @Service
 @ConditionalOnProperty(
     name = "ownership.providers.nft.enabled",
@@ -37,16 +47,52 @@ public class EthereumNftService implements OwnershipProvider {
 
     private static final Logger log = LoggerFactory.getLogger(EthereumNftService.class);
 
-    @Value("${ethereum.rpc-url:https://eth-mainnet.g.alchemy.com/v2/YOUR_KEY}")
-    private String rpcUrl;
+    /** eth_call {@code from} — never the claimant; some nodes reject empty-balance senders. */
+    private static final String ZERO_ADDRESS = "0x0000000000000000000000000000000000000000";
 
+    private static final Pattern DECIMAL_TOKEN_ID = Pattern.compile("\\d{1,78}");
+
+    private final EthereumProperties props;
+    private final NftCatalog catalog;
     private Web3j web3j;
+
+    public EthereumNftService(EthereumProperties props, NftCatalog catalog) {
+        this.props = props;
+        this.catalog = catalog;
+    }
+
+    /** Unit-test constructor: inject a mocked Web3j, no allowlist. */
+    EthereumNftService(Web3j web3j) {
+        this.props = EthereumProperties.unrestricted();
+        this.catalog = new NftCatalog(this.props);
+        this.web3j = web3j;
+    }
+
+    /** Unit-test constructor with full policy control. */
+    EthereumNftService(EthereumProperties props, NftCatalog catalog, Web3j web3j) {
+        this.props = props;
+        this.catalog = catalog;
+        this.web3j = web3j;
+    }
 
     @PostConstruct
     void init() {
-        // rpcUrl is field-injected by Spring AFTER the constructor returns,
-        // so the Web3j client must be built here, not in the constructor.
-        this.web3j = Web3j.build(new HttpService(rpcUrl));
+        if (this.web3j != null) {
+            return;
+        }
+        int timeout = Math.max(500, props.getRequestTimeoutMs());
+        OkHttpClient http = new OkHttpClient.Builder()
+                .connectTimeout(timeout, TimeUnit.MILLISECONDS)
+                .readTimeout(timeout, TimeUnit.MILLISECONDS)
+                .writeTimeout(timeout, TimeUnit.MILLISECONDS)
+                .build();
+        this.web3j = Web3j.build(new HttpService(props.getRpcUrl(), http));
+        if (props.isPlaceholderRpc()) {
+            log.warn("Ethereum RPC URL is a placeholder — NFT ownership checks will be denied until ETHEREUM_RPC_URL is set");
+        }
+        if (catalog.allowlistRequired() && catalog.isEmpty()) {
+            log.warn("ethereum.allowlist-required=true but no collections are configured — NFT verify will deny until ethereum.collections is set");
+        }
     }
 
     @Override public String key()         { return "nft"; }
@@ -54,59 +100,87 @@ public class EthereumNftService implements OwnershipProvider {
 
     @Override
     public VerificationResult verify(Map<String, String> request) {
-        String wallet   = request.get("walletAddress");
-        String contract = request.get("contractAddress");
-        String tokenId  = request.get("tokenId");
-        if (wallet == null || wallet.isBlank()
-            || contract == null || contract.isBlank()
-            || tokenId == null || tokenId.isBlank()) {
+        String rawWallet   = request.get("walletAddress");
+        String rawContract = request.get("contractAddress");
+        String rawToken    = request.get("tokenId");
+        if (isBlank(rawWallet) || isBlank(rawContract) || isBlank(rawToken)) {
             return VerificationResult.denied("walletAddress, contractAddress, and tokenId are required");
         }
-        return ownsToken(wallet, contract, tokenId)
-            ? VerificationResult.granted(wallet)
-            : VerificationResult.denied("NFT ownership not verified on-chain");
+
+        Optional<String> wallet = EthereumAddress.normalize(rawWallet);
+        if (wallet.isEmpty()) {
+            return VerificationResult.denied("walletAddress is not a valid Ethereum address");
+        }
+        Optional<String> contract = EthereumAddress.normalize(rawContract);
+        if (contract.isEmpty()) {
+            return VerificationResult.denied("contractAddress is not a valid Ethereum address");
+        }
+        Optional<BigInteger> tokenId = parseTokenId(rawToken);
+        if (tokenId.isEmpty()) {
+            return VerificationResult.denied("tokenId must be a non-negative decimal integer");
+        }
+
+        VerificationResult signature = checkSignature(request, wallet.get());
+        if (signature != null) {
+            return signature;
+        }
+
+        Optional<EthereumProperties.CollectionSpec> collection = catalog.find(contract.get());
+        if (catalog.allowlistRequired() && collection.isEmpty()) {
+            if (catalog.isEmpty()) {
+                return VerificationResult.denied("no official NFT collections configured");
+            }
+            return VerificationResult.denied("contractAddress is not an official ComputerPets collection");
+        }
+
+        String mappedPet = null;
+        if (collection.isPresent() && collection.get().hasTokenMap()) {
+            Optional<String> pet = collection.get().petKeyFor(rawToken.trim());
+            if (pet.isEmpty()) {
+                return VerificationResult.denied("tokenId is not a ComputerPets entitlement on this collection");
+            }
+            mappedPet = pet.get();
+            String requested = request.get("petType");
+            if (!isBlank(requested) && !mappedPet.equalsIgnoreCase(requested.trim())) {
+                return VerificationResult.denied(
+                        "tokenId is bound to petType '" + mappedPet + "', not '" + requested.trim() + "'");
+            }
+        }
+
+        if (!ownsToken(wallet.get(), contract.get(), tokenId.get().toString())) {
+            return VerificationResult.denied("NFT ownership not verified on-chain");
+        }
+
+        return mappedPet == null
+                ? VerificationResult.granted(wallet.get())
+                : VerificationResult.granted(wallet.get(), mappedPet);
     }
 
     /**
-     * Verifies on-chain that walletAddress owns the specific tokenId of the NFT contract.
-     * Protected by Resilience4j circuit breaker + retry (Phase 2.3) around the RPC call.
+     * Verifies on-chain that {@code walletAddress} owns {@code tokenId} of {@code contractAddress}.
+     * Standard is taken from the official catalog, or {@link NftStandard#AUTO} for unknown contracts.
+     * Protected by Resilience4j circuit breaker + retry around the RPC call.
      */
     @CircuitBreaker(name = "nft", fallbackMethod = "ownsTokenFallback")
     @Retry(name = "nft")
     public boolean ownsToken(String walletAddress, String contractAddress, String tokenId) {
+        Optional<String> wallet = EthereumAddress.normalize(walletAddress);
+        Optional<String> contract = EthereumAddress.normalize(contractAddress);
+        Optional<BigInteger> id = parseTokenId(tokenId);
+        if (wallet.isEmpty() || contract.isEmpty() || id.isEmpty()) {
+            return false;
+        }
+        if (props.isPlaceholderRpc()) {
+            log.warn("NFT verification skipped: Ethereum RPC URL is not configured");
+            return false;
+        }
+        NftStandard standard = catalog.find(contract.get())
+                .map(EthereumProperties.CollectionSpec::getStandard)
+                .orElse(NftStandard.AUTO);
         try {
-            Function function = new Function(
-                "ownerOf",
-                List.of(new Uint256(new BigInteger(tokenId))),
-                List.of(new TypeReference<Address>() {})
-            );
-
-            String encodedFunction = FunctionEncoder.encode(function);
-            Transaction transaction = Transaction.createEthCallTransaction(
-                walletAddress, contractAddress, encodedFunction
-            );
-
-            EthCall response = web3j.ethCall(transaction, DefaultBlockParameterName.LATEST).send();
-
-            if (response.hasError()) {
-                return false;
-            }
-
-            // Properly decode the ABI response instead of using fragile string matching
-            List<Type> decoded = FunctionReturnDecoder.decode(
-                response.getValue(),
-                function.getOutputParameters()
-            );
-
-            if (decoded.isEmpty()) {
-                return false;
-            }
-
-            Address ownerAddress = (Address) decoded.get(0);
-            return walletAddress.equalsIgnoreCase(ownerAddress.getValue());
-
+            return checkOnChain(wallet.get(), contract.get(), id.get(), standard);
         } catch (Exception e) {
-            log.warn("NFT verification failed: {}", e.getMessage());
+            log.warn("NFT verification failed contract={} tokenId={}: {}", contract.get(), id.get(), e.getMessage());
             return false;
         }
     }
@@ -116,5 +190,88 @@ public class EthereumNftService implements OwnershipProvider {
         log.warn("NFT (Ethereum) circuit breaker open or retries exhausted for contract={} tokenId={}: {}",
                 contractAddress, tokenId, e.getMessage());
         return false;
+    }
+
+    private boolean checkOnChain(String wallet, String contract, BigInteger tokenId, NftStandard standard)
+            throws Exception {
+        return switch (standard) {
+            case ERC721 -> ownerOf(wallet, contract, tokenId);
+            case ERC1155 -> balanceOf(wallet, contract, tokenId);
+            case AUTO -> ownerOf(wallet, contract, tokenId) || balanceOf(wallet, contract, tokenId);
+        };
+    }
+
+    private boolean ownerOf(String wallet, String contract, BigInteger tokenId) throws Exception {
+        Function function = new Function(
+                "ownerOf",
+                List.of(new Uint256(tokenId)),
+                List.of(new TypeReference<Address>() {})
+        );
+        Optional<List<Type>> decoded = ethCall(contract, function);
+        if (decoded.isEmpty() || decoded.get().isEmpty()) {
+            return false;
+        }
+        Address owner = (Address) decoded.get().get(0);
+        return EthereumAddress.equalsNormalized(wallet, owner.getValue());
+    }
+
+    private boolean balanceOf(String wallet, String contract, BigInteger tokenId) throws Exception {
+        Function function = new Function(
+                "balanceOf",
+                List.of(new Address(wallet), new Uint256(tokenId)),
+                List.of(new TypeReference<Uint256>() {})
+        );
+        Optional<List<Type>> decoded = ethCall(contract, function);
+        if (decoded.isEmpty() || decoded.get().isEmpty()) {
+            return false;
+        }
+        Uint256 balance = (Uint256) decoded.get().get(0);
+        return balance.getValue().signum() > 0;
+    }
+
+    private Optional<List<Type>> ethCall(String contract, Function function) throws Exception {
+        String encoded = FunctionEncoder.encode(function);
+        Transaction tx = Transaction.createEthCallTransaction(ZERO_ADDRESS, contract, encoded);
+        EthCall response = web3j.ethCall(tx, DefaultBlockParameterName.LATEST).send();
+        if (response.hasError() || response.getValue() == null || response.getValue().isBlank()) {
+            return Optional.empty();
+        }
+        return Optional.of(FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters()));
+    }
+
+    /**
+     * @return a denied result when the signature policy fails; {@code null} when the check
+     *         is skipped or the recovered signer matches {@code wallet}
+     */
+    private VerificationResult checkSignature(Map<String, String> request, String wallet) {
+        String signature = request.get("signature");
+        String message = request.get("message");
+        boolean provided = !isBlank(signature) || !isBlank(message);
+        if (!props.isRequireSignature() && !provided) {
+            return null;
+        }
+        if (isBlank(signature) || isBlank(message)) {
+            return VerificationResult.denied("message and signature are required to prove wallet control");
+        }
+        Optional<String> signer = WalletSignature.recoverAddress(message, signature);
+        if (signer.isEmpty() || !EthereumAddress.equalsNormalized(wallet, signer.get())) {
+            return VerificationResult.denied("wallet signature does not match walletAddress");
+        }
+        return null;
+    }
+
+    static Optional<BigInteger> parseTokenId(String raw) {
+        if (raw == null) {
+            return Optional.empty();
+        }
+        String t = raw.trim();
+        if (!DECIMAL_TOKEN_ID.matcher(t).matches()) {
+            return Optional.empty();
+        }
+        return Optional.of(new BigInteger(t));
+    }
+
+    private static boolean isBlank(String s) {
+        return s == null || s.isBlank();
     }
 }
