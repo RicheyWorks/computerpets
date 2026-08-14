@@ -72,19 +72,22 @@ For a complete view of the system design (including component diagrams, data flo
 - **Node 22+** (living desk)
 - A modern terminal (PowerShell, bash, etc.)
 
-### Desktop companion (Windows)
+### Desktop companion (Windows and Mac)
 
-Rui on the real desktop, always on top, no browser chrome.
+All twenty on the real desktop — transparent overlay, tray / menu bar.
 
-```powershell
+```bash
 cd desktop
 npm install
 npm start
 ```
 
-Or from the repo root: `.\desktop.ps1`
+Windows: `.\desktop.ps1`  
+Mac: `sh desktop.sh`
 
-See [desktop/README.md](desktop/README.md).
+Package with `npm run dist:win` or `npm run dist:mac`. See [desktop/README.md](desktop/README.md).
+
+Phones and tablets: open the living desk **Live** page and Add to Home Screen.
 
 ### Living desk in the browser
 

@@ -118,6 +118,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Dog (Pip) wakes on the living desk
 - [x] Browser ad demos (`/meet`, `/demo/rui`, `/demo/miso`, `/demo/pip`)
 - [x] Full catalog awake — all twenty species have living browser demos
+- [x] Windows/Mac desktop overlay for all twenty + phone/tablet Live companion
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit

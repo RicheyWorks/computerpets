@@ -10,7 +10,7 @@ export const Route = createFileRoute("/meet")({
       { title: "Meet the house — ComputerPets" },
       {
         name: "description",
-        content: "Browser demos of the living desk. Rui, Miso, and Pip walk, talk, and wait.",
+        content: "Twenty living companions for Windows, Mac, tablets, and phones.",
       },
     ],
   }),
@@ -36,6 +36,9 @@ export function MeetPage() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
+              <Link to="/live">Phone and tablet</Link>
+            </Button>
+            <Button asChild variant="secondary">
               <Link to="/demo/$slug" params={{ slug: "rui" }}>
                 Watch Rui
               </Link>
@@ -84,16 +87,39 @@ export function MeetPage() {
       </section>
 
       <section className="border-t border-border">
-        <div className="mx-auto flex max-w-5xl flex-col gap-6 px-5 py-14 sm:flex-row sm:items-end sm:justify-between sm:px-8">
-          <div className="max-w-md space-y-3">
-            <h2 className="font-display text-3xl">Share a room, not a screenshot.</h2>
-            <p className="text-sm text-muted">
-              Each demo is a live page. Send any of them. They will be on the blotter when it opens.
-            </p>
+        <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Every screen</p>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl">Windows, Mac, tablets, phones.</h2>
+          <div className="mt-8 grid gap-5 md:grid-cols-3">
+            <article className="rounded-[var(--radius-lg)] border border-border bg-surface p-5">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
+              <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
+              <p className="mt-2 text-sm text-muted">
+                Transparent overlay. They walk the real screen, sit on the taskbar, live in the tray. All twenty.
+              </p>
+              <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
+            </article>
+            <article className="rounded-[var(--radius-lg)] border border-border bg-surface p-5">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
+              <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
+              <p className="mt-2 text-sm text-muted">
+                Open Live, then Add to Home Screen. Fullscreen companion, big targets, all twenty in the picker.
+              </p>
+              <p className="mt-3">
+                <Link to="/live" className="text-sm text-fg">
+                  Open Live
+                </Link>
+              </p>
+            </article>
+            <article className="rounded-[var(--radius-lg)] border border-border bg-surface p-5">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Browser</p>
+              <h3 className="mt-2 font-display text-2xl">Share a demo</h3>
+              <p className="mt-2 text-sm text-muted">
+                Every animal has a live page. Send the link. They will be on the blotter when it opens.
+              </p>
+              <p className="mt-3 font-mono text-xs text-subtle">/demo/ember</p>
+            </article>
           </div>
-          <Button asChild variant="secondary">
-            <Link to="/">Open the desk</Link>
-          </Button>
         </div>
       </section>
     </main>

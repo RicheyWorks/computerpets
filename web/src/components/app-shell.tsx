@@ -4,11 +4,12 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/meet", label: "Meet" },
-  { to: "/", label: "Desk" },
-  { to: "/collection", label: "Kennel" },
-  { to: "/hatch", label: "Hatchery" },
-  { to: "/catalog", label: "Catalog" },
+  { to: "/meet", label: "Meet", hideOnPhone: false },
+  { to: "/live", label: "Live", hideOnPhone: false },
+  { to: "/", label: "Desk", hideOnPhone: false },
+  { to: "/collection", label: "Kennel", hideOnPhone: true },
+  { to: "/hatch", label: "Hatchery", hideOnPhone: true },
+  { to: "/catalog", label: "Catalog", hideOnPhone: true },
 ] as const;
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -17,13 +18,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const desk = pathname === "/";
   const demo = pathname.startsWith("/demo/");
   const meet = pathname === "/meet";
+  const live = pathname === "/live";
 
   return (
-    <div className={cn("bg-bg text-fg", desk || demo ? "h-dvh overflow-hidden" : "min-h-dvh")}>
+    <div className={cn("bg-bg text-fg", desk || demo || live ? "h-dvh overflow-hidden" : "min-h-dvh")}>
       <header
         className={cn(
           "z-30 border-b border-border/80",
-          desk || demo || meet
+          desk || demo || meet || live
             ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
             : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
@@ -44,6 +46,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   to={item.to}
                   className={cn(
                     "rounded-[var(--radius-sm)] px-3 py-2 text-sm no-underline transition-colors duration-150",
+                    item.hideOnPhone ? "hidden sm:inline-flex" : "",
                     active ? "bg-elevated text-fg" : "text-muted hover:text-fg",
                   )}
                 >
@@ -73,8 +76,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      {desk || demo ? (
-        <div className={demo ? "h-dvh" : "h-dvh pt-16"}>{children}</div>
+      {desk || demo || live ? (
+        <div className={demo || live ? "h-dvh" : "h-dvh pt-16"}>{children}</div>
       ) : meet ? (
         <div>{children}</div>
       ) : (

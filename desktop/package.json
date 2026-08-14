@@ -1,12 +1,14 @@
 {
   "name": "computerpets-desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "Rui lives on the Windows desktop.",
+  "description": "Living desk companions for Windows and Mac.",
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "dist": "electron-builder --win nsis"
+    "dist": "electron-builder --win --mac",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
   },
   "devDependencies": {
     "electron": "^35.7.5",
@@ -18,7 +20,12 @@
     "directories": { "output": "dist" },
     "files": ["main.cjs", "preload.cjs", "renderer/**"],
     "win": {
-      "target": "nsis",
+      "target": ["nsis", "portable"],
+      "icon": "renderer/icon.png"
+    },
+    "mac": {
+      "target": ["dmg", "zip"],
+      "category": "public.app-category.entertainment",
       "icon": "renderer/icon.png"
     },
     "nsis": {
