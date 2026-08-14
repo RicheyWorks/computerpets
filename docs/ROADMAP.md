@@ -128,6 +128,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Treat/chase/hide on desk, demos, Live, Meet, and Windows overlay
 - [x] Fleeing lure + bond titles (New→Soul) on every screen
 - [x] Return greetings + hatchling/elder scale on desk, demos, Live, Windows
+- [x] Species treats + gifts + demo specials on every screen
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit

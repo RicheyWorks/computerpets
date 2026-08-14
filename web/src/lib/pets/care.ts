@@ -10,6 +10,7 @@ export type CareStats = {
   sick: boolean;
   hidden: boolean;
   mess: MessPile[];
+  gifts: MessPile[];
   bornAt: number;
   lastTick: number;
 };
@@ -34,6 +35,7 @@ export function blankCare(now = Date.now()): CareStats {
     sick: false,
     hidden: false,
     mess: [],
+    gifts: [],
     bornAt: now,
     lastTick: now,
   };
@@ -52,6 +54,7 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
     sick: Boolean(raw.sick),
     hidden: Boolean(raw.hidden),
     mess: Array.isArray(raw.mess) ? raw.mess.slice(0, 6) : [],
+    gifts: Array.isArray(raw.gifts) ? raw.gifts.slice(0, 3) : [],
     bornAt: raw.bornAt ?? now,
     lastTick: raw.lastTick ?? now,
   };
@@ -84,6 +87,9 @@ export function decayStats(stats: Partial<CareStats>, lastTick: number, now = Da
   if (next.sick && next.health > 64 && next.hygiene > 40) next.sick = false;
   if (next.hygiene < 42 && next.mess.length < 5 && Math.random() < Math.min(0.35, dt / 120000)) {
     next.mess = [...next.mess, { id: now + next.mess.length, x: 12 + Math.random() * 76 }];
+  }
+  if (next.bond >= 25 && next.gifts.length < 2 && Math.random() < Math.min(0.2, dt / 180000)) {
+    next.gifts = [...next.gifts, { id: now + 17 + next.gifts.length, x: 14 + Math.random() * 72 }];
   }
   return next;
 }
@@ -181,6 +187,25 @@ export function applyCall(stats: Partial<CareStats>): CareStats {
 export function applyHide(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
   return { ...s, hidden: true };
+}
+
+export function pickGift(stats: Partial<CareStats>, id: number): CareStats {
+  const s = normalizeCare(stats);
+  return {
+    ...s,
+    gifts: s.gifts.filter((g) => g.id !== id),
+    mood: clampStat(s.mood + 6),
+    bond: clampStat(s.bond + 2),
+  };
+}
+
+export function leaveGift(stats: Partial<CareStats>): CareStats {
+  const s = normalizeCare(stats);
+  if (s.bond < 25 || s.gifts.length >= 2) return s;
+  return {
+    ...s,
+    gifts: [...s.gifts, { id: Date.now(), x: 16 + Math.random() * 68 }],
+  };
 }
 
 export function pickMess(stats: Partial<CareStats>, id: number): CareStats {

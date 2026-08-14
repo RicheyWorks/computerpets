@@ -21,6 +21,8 @@ import {
   moodWord,
   normalizeCare,
   pickMess,
+  pickGift,
+  leaveGift,
   stageOf,
   type CareStats,
 } from "@/lib/pets/care";
@@ -31,6 +33,7 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
+import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { appendJournal, loadJournal, type JournalEntry } from "@/lib/pets/journal";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, returnLine } from "@/lib/pets/hours";
 
@@ -292,6 +295,13 @@ export function DeskStage({
     issue(next.cmd);
     note(`${displayName}: ${trait.line}`);
     speakBond(statsRef.current, next.stats);
+    if (next.stats.bond >= 25) {
+      const gifted = leaveGift(next.stats);
+      if (gifted.gifts.length > next.stats.gifts.length) {
+        setStats(gifted);
+        saveLocal(kind.localKey, { ...gifted, lastTick: Date.now() });
+      }
+    }
   }
 
   function hide() {
@@ -374,6 +384,7 @@ export function DeskStage({
       <BlotterMarks
         mark={mark}
         hidden={stats.hidden}
+        treatShape={treatFor(kind.key).shape}
         onDropTreat={dropTreatAt}
         onCatchLure={catchLure}
         onFlee={fleeLure}
@@ -429,6 +440,23 @@ export function DeskStage({
         onTap={() => void talk()}
       />
 
+      {stats.gifts.map((gift) => (
+        <button
+          key={gift.id}
+          type="button"
+          aria-label="Pick up a gift"
+          className="desk-gift absolute z-10"
+          style={{ left: `${gift.x}%`, bottom: "20%" }}
+          onClick={() => {
+            const next = pickGift(statsRef.current, gift.id);
+            setStats(next);
+            saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+            say(GIFT_LINE[kind.key] ?? "I left this.");
+            note(`${displayName} left a gift.`);
+            speakBond(statsRef.current, next);
+          }}
+        />
+      ))}
       {stats.mess.map((pile) => (
         <button
           key={pile.id}
@@ -491,7 +519,7 @@ export function DeskStage({
               Feed
             </Button>
             <Button disabled={busy || stats.hidden} onClick={dropTreat}>
-              Treat
+              {treatFor(kind.key).verb}
             </Button>
             <Button variant="secondary" disabled={busy || stats.hidden} onClick={startChase}>
               Play

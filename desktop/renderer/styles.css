@@ -60,6 +60,64 @@ body {
   opacity: 1;
 }
 
+#treat.show[data-shape="bamboo"] {
+  width: 16px;
+  height: 5px;
+  border-radius: 2px;
+  background: #8fa08a;
+}
+
+#treat.show[data-shape="seed"] {
+  width: 7px;
+  height: 9px;
+  border-radius: 40% 40% 50% 50%;
+}
+
+#treat.show[data-shape="leaf"] {
+  width: 12px;
+  height: 8px;
+  border-radius: 0 70% 40% 70%;
+  background: #8fa08a;
+}
+
+#treat.show[data-shape="flake"] {
+  width: 11px;
+  height: 4px;
+  border-radius: 2px;
+  background: #8a97a6;
+}
+
+#treat.show[data-shape="pebble"] {
+  width: 9px;
+  height: 7px;
+  border-radius: 40%;
+  background: #9a9288;
+}
+
+#treat.show[data-shape="ember"] {
+  box-shadow: 0 0 8px rgb(176 137 104 / 0.55);
+}
+
+#gifts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gift-dot {
+  position: absolute;
+  left: 0;
+  bottom: 16px;
+  width: 11px;
+  height: 11px;
+  border: 0;
+  padding: 0;
+  border-radius: 2px;
+  background: #d8cfc0;
+  pointer-events: auto;
+  transform: rotate(12deg);
+}
+
 #lure.show {
   width: 14px;
   height: 22px;

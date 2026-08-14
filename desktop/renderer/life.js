@@ -37,6 +37,7 @@
       asleep: false,
       stage: "hatchling",
       mess: [],
+      gifts: [],
       ribbon: 0,
       lives: 1,
       startledUntil: 0,
@@ -48,7 +49,7 @@
       const raw = localStorage.getItem(`${STORE}.${key}`);
       if (!raw) return blank();
       const data = JSON.parse(raw);
-      return { ...blank(), ...data, v: 2, mess: Array.isArray(data.mess) ? data.mess : [] };
+      return { ...blank(), ...data, v: 2, mess: Array.isArray(data.mess) ? data.mess : [], gifts: Array.isArray(data.gifts) ? data.gifts : [] };
     } catch {
       return blank();
     }
@@ -120,6 +121,10 @@
 
     if (life.hygiene < 28 && life.mess.length < 4 && Math.random() < hours * trait.messy * 1.6) {
       life.mess.push({ id: `${now}-${Math.random().toString(36).slice(2, 7)}`, x: 0.2 + Math.random() * 0.6, age: now });
+    }
+    if (life.bond >= 50 && (!life.gifts || life.gifts.length < 2) && Math.random() < hours * 0.35) {
+      if (!life.gifts) life.gifts = [];
+      life.gifts.push({ id: `g-${now}`, x: 0.18 + Math.random() * 0.64 });
     }
 
     const neglected = life.hunger < 8 && life.mood < 18 && ageDays(life, now) > 0.2;
@@ -234,6 +239,9 @@
       bondUp(life, 2);
       return { life, line: pick(extra.call || ["You called."]), cmd: "talk", notify: null };
     }
+    if (action === "gift") {
+      return { life, line: "I left this.", cmd: "talk", notify: null };
+    }
     if (action === "special") {
       return runSpecial(life, trait, now);
     }
@@ -254,6 +262,7 @@
       case "ribbon":
         life.ribbon += 1;
         life.mood = clamp(life.mood + 8);
+        if (life.bond >= 50 && life.gifts.length < 2) life.gifts.push({ id: `g-${now}`, x: 0.4 + Math.random() * 0.2 });
         return { life, line: pick(extra.special), cmd: "play", notify: life.ribbon === 1 ? "ribbon" : null };
       case "follow":
         life.mood = clamp(life.mood + 4);
