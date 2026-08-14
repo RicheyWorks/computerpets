@@ -1,12 +1,10 @@
 import { useMemo, useSyncExternalStore } from "react";
-import { bindingFor, loadMindSettings } from "./settings";
+import { DEFAULT_MIND, bindingFor, loadMindSettings } from "./settings";
 import type { MindSettings } from "./types";
 
-let cached = loadMindSettings();
 const listeners = new Set<() => void>();
 
 function emit() {
-  cached = loadMindSettings();
   listeners.forEach((fn) => fn());
 }
 
@@ -26,8 +24,8 @@ export function useMindSettings(): MindSettings {
       listeners.add(fn);
       return () => listeners.delete(fn);
     },
-    () => cached,
-    () => cached,
+    loadMindSettings,
+    () => DEFAULT_MIND,
   );
 }
 

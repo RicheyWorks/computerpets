@@ -19,7 +19,40 @@ let lastVitals = { vital: "Settled", hunger: 80, sick: false, hidden: false, mes
 
 function loadRoster() {
   const file = path.join(__dirname, "renderer", "roster.json");
-  roster = JSON.parse(fs.readFileSync(file, "utf8"));
+  try {
+    const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
+    roster = Array.isArray(parsed) ? parsed.filter((r) => r && r.key && r.name) : [];
+  } catch {
+    roster = [];
+  }
+}
+
+function mindFile() {
+  return path.join(app.getPath("userData"), "mind.json");
+}
+
+function readMind() {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(mindFile(), "utf8"));
+    if (!parsed || typeof parsed !== "object") return { default: { plugin: "local" }, voice: "browser", pets: {} };
+    return parsed;
+  } catch {
+    return { default: { plugin: "local" }, voice: "browser", pets: {} };
+  }
+}
+
+function writeMind(data) {
+  if (!data || typeof data !== "object") return;
+  const next = {
+    default: data.default && typeof data.default === "object" ? data.default : { plugin: "local" },
+    voice: typeof data.voice === "string" ? data.voice : "browser",
+    pets: data.pets && typeof data.pets === "object" ? data.pets : {},
+  };
+  try {
+    fs.writeFileSync(mindFile(), JSON.stringify(next));
+  } catch {
+    /* ignore */
+  }
 }
 
 function iconImage() {
@@ -113,6 +146,7 @@ function openSettings() {
     title: "Minds — ComputerPets",
     autoHideMenuBar: true,
     webPreferences: {
+      preload: path.join(__dirname, "preload.cjs"),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true,
@@ -184,6 +218,8 @@ function popupPetMenu(x, y) {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
+    { label: "Minds…", click: () => openSettings() },
+    { type: "separator" },
     { label: `Hide ${currentName()}`, click: () => win?.hide() },
     { label: "Quit", click: () => app.quit() },
   ]).popup({ window: win, x: Math.round(x), y: Math.round(y) });
@@ -226,11 +262,13 @@ ipcMain.on("switch-pet", (_e, key) => {
   refreshMenus();
 });
 
+let lastVitalsSig = "";
+
 ipcMain.on("notify", (_e, payload) => {
   if (!Notification.isSupported()) return;
   const note = new Notification({
-    title: payload?.title || currentName(),
-    body: payload?.body || "",
+    title: String(payload?.title || currentName()).slice(0, 60),
+    body: String(payload?.body || "").slice(0, 160),
     silent: true,
     icon: iconImage(),
   });
@@ -240,8 +278,19 @@ ipcMain.on("notify", (_e, payload) => {
 ipcMain.on("vitals", (_e, payload) => {
   if (!payload) return;
   lastVitals = { ...lastVitals, ...payload };
-  if (payload.key) currentKey = payload.key;
+  if (typeof payload.key === "string" && roster.some((r) => r.key === payload.key)) currentKey = payload.key;
+  const sig = `${currentKey}|${lastVitals.vital}|${lastVitals.stage}|${lastVitals.mess}|${lastVitals.bond}|${lastVitals.sick}|${lastVitals.hidden}`;
+  if (sig === lastVitalsSig) return;
+  lastVitalsSig = sig;
   refreshMenus();
+});
+
+ipcMain.on("mind-get", (e) => {
+  e.returnValue = readMind();
+});
+
+ipcMain.on("mind-set", (_e, data) => {
+  writeMind(data);
 });
 
 app.on("window-all-closed", () => {

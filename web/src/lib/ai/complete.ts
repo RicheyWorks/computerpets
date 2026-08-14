@@ -1,5 +1,6 @@
 import { livingByKey } from "@/lib/pets/living";
 import { mindPreset } from "./catalog";
+import { assertSafeMindUrl, mindTimeout, sanitizeModel } from "./safe-url";
 import type { MindBinding, MindContext, MindReply } from "./types";
 
 function userTurn(ctx: MindContext) {
@@ -21,21 +22,29 @@ async function readJson(res: Response) {
   return (await res.json()) as Record<string, unknown>;
 }
 
+function endpoint(binding: MindBinding, presetId: string, suffix = "") {
+  const preset = mindPreset(presetId);
+  const base = assertSafeMindUrl(binding.baseUrl || preset.defaultBaseUrl, {
+    presetId,
+    kind: preset.kind,
+  });
+  return `${base}${suffix}`;
+}
+
 async function openaiCompat(ctx: MindContext, binding: MindBinding, presetId: string): Promise<MindReply> {
   const preset = mindPreset(presetId);
-  const base = (binding.baseUrl || preset.defaultBaseUrl || "").replace(/\/$/, "");
-  const model = binding.model || preset.defaultModel || "gpt-4.1-mini";
-  const headers: Record<string, string> = {
-    "Content-Type": "application/json",
-    ...(binding.apiKey ? { Authorization: `Bearer ${binding.apiKey}` } : {}),
-  };
+  const model = sanitizeModel(binding.model, preset.defaultModel || "gpt-4.1-mini");
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  if (binding.apiKey) headers.Authorization = `Bearer ${binding.apiKey}`;
   if (presetId === "openrouter") {
     headers["HTTP-Referer"] = "https://computerpets.local";
     headers["X-Title"] = "ComputerPets";
   }
-  const res = await fetch(`${base}/chat/completions`, {
+  const res = await fetch(endpoint(binding, presetId, "/chat/completions"), {
     method: "POST",
     headers,
+    redirect: "error",
+    signal: mindTimeout(),
     body: JSON.stringify({
       model,
       max_tokens: 80,
@@ -56,16 +65,17 @@ async function openaiCompat(ctx: MindContext, binding: MindBinding, presetId: st
 
 async function anthropic(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
   const preset = mindPreset("anthropic");
-  const base = (binding.baseUrl || preset.defaultBaseUrl || "").replace(/\/$/, "");
-  const res = await fetch(`${base}/v1/messages`, {
+  const res = await fetch(endpoint(binding, "anthropic", "/v1/messages"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "x-api-key": binding.apiKey || "",
       "anthropic-version": "2023-06-01",
     },
+    redirect: "error",
+    signal: mindTimeout(),
     body: JSON.stringify({
-      model: binding.model || preset.defaultModel,
+      model: sanitizeModel(binding.model, preset.defaultModel || "claude-sonnet-4-5"),
       max_tokens: 80,
       temperature: 0.9,
       system: ctx.systemPrompt,
@@ -82,12 +92,13 @@ async function anthropic(ctx: MindContext, binding: MindBinding): Promise<MindRe
 
 async function ollama(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
   const preset = mindPreset("ollama");
-  const base = (binding.baseUrl || preset.defaultBaseUrl || "").replace(/\/$/, "");
-  const res = await fetch(`${base}/api/chat`, {
+  const res = await fetch(endpoint(binding, "ollama", "/api/chat"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    redirect: "error",
+    signal: mindTimeout(),
     body: JSON.stringify({
-      model: binding.model || preset.defaultModel,
+      model: sanitizeModel(binding.model, preset.defaultModel || "llama3.2"),
       stream: false,
       messages: [
         { role: "system", content: ctx.systemPrompt },
@@ -105,12 +116,17 @@ async function ollama(ctx: MindContext, binding: MindBinding): Promise<MindReply
 
 async function gemini(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
   const preset = mindPreset("google");
-  const base = (binding.baseUrl || preset.defaultBaseUrl || "").replace(/\/$/, "");
-  const model = binding.model || preset.defaultModel || "gemini-2.5-flash";
-  const url = `${base}/models/${model}:generateContent?key=${encodeURIComponent(binding.apiKey || "")}`;
+  const model = sanitizeModel(binding.model, preset.defaultModel || "gemini-2.5-flash");
+  const base = endpoint(binding, "google");
+  const url = `${base}/models/${model}:generateContent`;
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(binding.apiKey ? { "x-goog-api-key": binding.apiKey } : {}),
+    },
+    redirect: "error",
+    signal: mindTimeout(),
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: ctx.systemPrompt }] },
       contents: [{ role: "user", parts: [{ text: userTurn(ctx) }] }],
@@ -126,13 +142,15 @@ async function gemini(ctx: MindContext, binding: MindBinding): Promise<MindReply
 }
 
 async function custom(ctx: MindContext, binding: MindBinding): Promise<MindReply> {
-  const url = binding.baseUrl || mindPreset("custom").defaultBaseUrl || "";
+  const url = endpoint(binding, "custom");
   const res = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       ...(binding.apiKey ? { Authorization: `Bearer ${binding.apiKey}` } : {}),
     },
+    redirect: "error",
+    signal: mindTimeout(),
     body: JSON.stringify({
       name: ctx.name,
       species: ctx.species,

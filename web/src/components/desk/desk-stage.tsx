@@ -272,7 +272,9 @@ export function DeskStage({
         <p className="mt-1 text-xs text-subtle sm:mt-2">
           {busy ? "Listening" : `${moodWord(stats)} · ${stageOf(stats)} · bond ${stats.bond}`}
         </p>
-        <p className="mt-1 text-[11px] text-subtle">{describeBinding(mind)}</p>
+        <p className="mt-1 text-[11px] text-subtle" suppressHydrationWarning>
+          {describeBinding(mind)}
+        </p>
         <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-3 sm:grid-cols-4">
           <Meter label="Hunger" value={stats.hunger} />
           <Meter label="Mood" value={stats.mood} />

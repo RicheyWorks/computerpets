@@ -18,6 +18,13 @@
   ];
 
   function load() {
+    if (window.desk?.mindGet) {
+      try {
+        return window.desk.mindGet() || { default: { plugin: "local" }, voice: "browser", pets: {} };
+      } catch {
+        /* fall through */
+      }
+    }
     try {
       const raw = JSON.parse(localStorage.getItem(KEY) || "null");
       return raw || { default: { plugin: "local" }, voice: "browser", pets: {} };
@@ -27,7 +34,27 @@
   }
 
   function save(next) {
-    localStorage.setItem(KEY, JSON.stringify(next));
+    if (window.desk?.mindSet) window.desk.mindSet(next);
+    try {
+      localStorage.setItem(KEY, JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+  }
+
+  function safeUrl(raw, id) {
+    try {
+      const url = new URL(String(raw || ""));
+      if (url.username || url.password) return "";
+      const host = url.hostname.replace(/^\[|\]$/g, "");
+      const local = host === "127.0.0.1" || host === "localhost" || host === "::1";
+      if (local) return id === "ollama" || id === "lmstudio" || id === "custom" ? url.toString().replace(/\/$/, "") : "";
+      if (url.protocol !== "https:") return "";
+      if (/^(10|127|0)\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[0-1])\./.test(host)) return "";
+      return url.toString().replace(/\/$/, "");
+    } catch {
+      return "";
+    }
   }
 
   function preset(id) {
@@ -55,10 +82,11 @@
   async function run(ctx) {
     const bind = binding(ctx.species);
     const p = preset(bind.plugin);
-    const base = (bind.baseUrl || p.base || "").replace(/\/$/, "");
+    const base = safeUrl(bind.baseUrl || p.base || "", p.id);
     const model = bind.model || p.model;
     const key = bind.apiKey || "";
     if (p.kind === "local") return { text: ctx.fallback, source: "local" };
+    if (!base && p.kind !== "local") return { text: ctx.fallback, source: "local" };
     try {
       if (p.kind === "openai") {
         const res = await fetch(`${base}/chat/completions`, {
