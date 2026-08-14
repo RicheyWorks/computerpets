@@ -3,7 +3,7 @@ import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pet
 import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound } from "@/lib/pets/desk-audio";
 
-export type PetCommand = PetAnim | "wander" | "none";
+export type PetCommand = PetAnim | "wander" | "leave" | "enter" | "seek" | "none";
 
 type Gait = {
   walk: number;
@@ -24,6 +24,7 @@ type LivingPetProps = {
   startX?: number;
   hidden?: boolean;
   unwell?: boolean;
+  seekX?: number;
   onArrived?: () => void;
   onTap?: () => void;
 };
@@ -78,6 +79,7 @@ export function LivingPet({
   startX = 120,
   hidden = false,
   unwell = false,
+  seekX,
   onArrived,
   onTap,
 }: LivingPetProps) {
@@ -112,7 +114,9 @@ export function LivingPet({
   const fpsRef = useRef(fps);
   const onceRef = useRef(once);
   const gaitRef = useRef(gait);
-  gaitRef.current = gait;
+  const seekRef = useRef(seekX);
+  seekRef.current = seekX;
+  const leaveRef = useRef(false);
   spritesRef.current = sprites;
   fpsRef.current = fps;
   onceRef.current = once;
@@ -155,7 +159,44 @@ export function LivingPet({
         const span = Math.max(48, max - PAD);
         let next = PAD + Math.random() * span;
         if (Math.abs(next - s.x) < 50) next = clamp(s.x + (s.facing * 90 || 90), PAD, max);
+        leaveRef.current = false;
         s.target = next;
+        s.facing = s.target >= s.x ? 1 : -1;
+        s.anim = "walk";
+        s.frame = 0;
+        s.walkAge = 0;
+        return;
+      }
+      if (cmd === "seek") {
+        const box = stage();
+        const width = box?.width ?? 400;
+        const max = width - SPRITE - PAD;
+        const px = ((seekRef.current ?? 50) / 100) * width - SPRITE * 0.45;
+        leaveRef.current = false;
+        s.target = clamp(px, PAD, Math.max(PAD, max));
+        s.facing = s.target >= s.x ? 1 : -1;
+        s.anim = "walk";
+        s.frame = 0;
+        s.walkAge = 0;
+        return;
+      }
+      if (cmd === "leave") {
+        const box = stage();
+        const width = box?.width ?? 800;
+        leaveRef.current = true;
+        s.target = s.x + SPRITE / 2 < width / 2 ? -SPRITE - 24 : width + 12;
+        s.facing = s.target >= s.x ? 1 : -1;
+        s.anim = "walk";
+        s.frame = 0;
+        s.walkAge = 0;
+        return;
+      }
+      if (cmd === "enter") {
+        const box = stage();
+        const max = (box?.width ?? 400) - SPRITE - PAD;
+        leaveRef.current = false;
+        s.x = Math.random() < 0.5 ? -SPRITE : max + SPRITE;
+        s.target = clamp(80 + Math.random() * Math.max(40, max - 80), PAD, max);
         s.facing = s.target >= s.x ? 1 : -1;
         s.anim = "walk";
         s.frame = 0;
@@ -229,7 +270,7 @@ export function LivingPet({
         ) {
           s.facing = s.cursorX >= s.x + SPRITE / 2 ? 1 : -1;
         }
-        s.x = clamp(s.x, PAD, maxX);
+        s.x = leaveRef.current ? s.x : clamp(s.x, PAD, maxX);
 
         const fpsNow = reduced ? 0 : fpsRef.current[s.anim];
         if (fpsNow > 0) {
