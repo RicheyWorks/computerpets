@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { dayPart } from "@/lib/pets/hours";
+import { weatherOf } from "@/lib/pets/weather";
 
 export type BlotterMark = { kind: "treat" | "lure"; x: number; hops?: number };
 
@@ -24,7 +25,22 @@ export function DayWash() {
           night ? "opacity-35" : part === "dusk" ? "opacity-70" : ""
         }`}
       />
+      <WeatherLayer />
     </>
+  );
+}
+
+export function WeatherLayer() {
+  const sky = weatherOf();
+  if (sky === "clear") return null;
+  return (
+    <div className={`desk-weather desk-weather-${sky}`} aria-hidden>
+      {sky === "rain"
+        ? Array.from({ length: 18 }, (_, i) => <span key={i} className="desk-rain" style={{ left: `${4 + i * 5.4}%`, animationDelay: `${(i % 7) * 0.18}s` }} />)
+        : sky === "wind"
+          ? Array.from({ length: 8 }, (_, i) => <span key={i} className="desk-gust" style={{ top: `${18 + i * 8}%`, animationDelay: `${i * 0.4}s` }} />)
+        : null}
+    </div>
   );
 }
 

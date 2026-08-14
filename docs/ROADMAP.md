@@ -129,6 +129,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Fleeing lure + bond titles (New→Soul) on every screen
 - [x] Return greetings + hatchling/elder scale on desk, demos, Live, Windows
 - [x] Species treats + gifts + demo specials on every screen
+- [x] Daily weather (rain/wind/heat) they sit or swim in, all platforms
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit
