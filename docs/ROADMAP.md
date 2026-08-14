@@ -112,7 +112,9 @@ All critical items required before any public or limited production exposure hav
 
 **Goal:** Deliver a complete, usable platform for the desktop client.
 
-- Finalize and publish the PyQt6 client contract (license format, hwid, decryption)
+- [x] Living desk browser client (`web/`) — Rui the red panda walks, eats, plays, sleeps, talks
+- Remaining catalog species, one at a time (Cat next)
+- Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit
 

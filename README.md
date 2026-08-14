@@ -10,7 +10,9 @@
 
 ## Overview
 
-**ComputerPets** is a modern desktop pet platform featuring high-quality, GPU-accelerated virtual companions. This repository contains the **enterprise-grade backend service** responsible for ownership verification, license issuance, and secure asset delivery.
+**ComputerPets** is a modern desktop pet platform featuring high-quality, GPU-accelerated virtual companions. This repository contains the **enterprise-grade backend service** responsible for ownership verification, license issuance, and secure asset delivery, plus a **living desk** browser client.
+
+The vision is to deliver premium, always-on desktop pets that feel alive — powered by GPU rendering on the client and protected by a robust, cryptographically secure backend on the server.
 
 The vision is to deliver premium, always-on desktop pets that feel alive — powered by GPU rendering on the client and protected by a robust, cryptographically secure backend on the server.
 
@@ -32,11 +34,13 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
 - **Rate Limiting** — Built-in per-IP protection using Bucket4j.
 - **Rich Pet Catalog** — 20 pets across four rarity tiers (Common, Uncommon, Rare, Legendary).
+- **Living desk (Rui)** — The red panda walks, eats, pounces, sleeps, and talks in `web/`. Other species wake one at a time.
 - **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
 - **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
 
 **Planned / Vision:**
-- GPU-accelerated desktop client (PyQt6 / modern rendering)
+- Remaining catalog species living on the desk (Cat next)
+- GPU-accelerated native desktop client (PyQt6 / modern rendering)
 - A live ComputerPets collection address in `ethereum.collections`
 - Persistent license store and revocation support
 - Hardware binding and advanced anti-piracy measures
@@ -65,9 +69,22 @@ For a complete view of the system design (including component diagrams, data flo
 
 - **Java 21** (Temurin or other OpenJDK distribution recommended)
 - **Maven 3.9+**
+- **Node 22+** (living desk)
 - A modern terminal (PowerShell, bash, etc.)
 
-### Quick Start
+### Living desk (Rui)
+
+Requires **Node 22+**.
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+See [web/README.md](web/README.md).
+
+### Backend
 
 1. **Generate required secrets** (the application will not start without them):
 
@@ -115,6 +132,7 @@ All detailed documentation is located in the `docs/` directory:
 
 ```
 ComputerPets/
+├── web/                          # Living desk (Rui first)
 ├── .github/                      # GitHub templates (issues & PRs)
 ├── docs/                         # Project documentation
 │   ├── ARCHITECTURE.md           # Full system architecture (living document)
