@@ -114,7 +114,8 @@ All critical items required before any public or limited production exposure hav
 
 - [x] Living desk browser client (`web/`) — Rui the red panda walks, eats, plays, sleeps, talks
 - [x] Native Windows overlay (`desktop/`) — Rui lives on the actual desktop
-- Remaining catalog species, one at a time (Cat next)
+- [x] Cat (Miso) wakes on the living desk
+- Remaining catalog species, one at a time (Dog next)
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit

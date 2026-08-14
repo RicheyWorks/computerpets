@@ -11,23 +11,16 @@ import {
   moodWord,
   type CareStats,
 } from "@/lib/pets/care";
-import {
-  ambientLine,
-  careLine,
-  greetLine,
-  preloadRedPandaSprites,
-  RED_PANDA_NAME,
-} from "@/lib/pets/red-panda";
+import { LIVING_KINDS, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
-
-const LOCAL_KEY = "computerpets.desk.red_panda.v1";
+import { cn } from "@/lib/utils";
 
 type Saved = CareStats & { lastTick: number };
 
-function loadLocal(): Saved {
+function loadLocal(key: string): Saved {
   try {
-    const raw = localStorage.getItem(LOCAL_KEY);
+    const raw = localStorage.getItem(key);
     if (raw) return JSON.parse(raw) as Saved;
   } catch {
     /* ignore */
@@ -35,21 +28,26 @@ function loadLocal(): Saved {
   return { hunger: 76, mood: 72, energy: 80, lastTick: Date.now() };
 }
 
-function saveLocal(s: Saved) {
+function saveLocal(key: string, s: Saved) {
   try {
-    localStorage.setItem(LOCAL_KEY, JSON.stringify(s));
+    localStorage.setItem(key, JSON.stringify(s));
   } catch {
     /* ignore */
   }
 }
 
 export function DeskStage({
-  name = RED_PANDA_NAME,
+  kind,
+  name,
   onCare,
+  onSelectKind,
 }: {
+  kind: LivingKind;
   name?: string;
   onCare?: (action: "feed" | "play" | "rest") => Promise<CareStats | void>;
+  onSelectKind?: (key: string) => void;
 }) {
+  const displayName = name ?? kind.name;
   const [stats, setStats] = useState<CareStats>({ hunger: 76, mood: 72, energy: 80 });
   const [speech, setSpeech] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
@@ -78,18 +76,19 @@ export function DeskStage({
   }, []);
 
   useEffect(() => {
-    preloadRedPandaSprites();
-    const saved = loadLocal();
+    kind.preload();
+    const saved = loadLocal(kind.localKey);
     const live = decayStats(saved, saved.lastTick);
     setStats(live);
-    saveLocal({ ...live, lastTick: Date.now() });
+    saveLocal(kind.localKey, { ...live, lastTick: Date.now() });
+    acted.current = false;
     const t = window.setTimeout(() => {
       if (acted.current) return;
-      say(greetLine(), 5000);
+      say(kind.greetLine(), 5000);
       issue("talk");
     }, 700);
     return () => window.clearTimeout(t);
-  }, [issue, say]);
+  }, [kind, issue, say]);
 
   useEffect(() => {
     if (!speech && order.cmd === "talk") issue("sit");
@@ -99,12 +98,12 @@ export function DeskStage({
     const id = window.setInterval(() => {
       setStats((prev) => {
         const next = decayStats(prev, Date.now() - 15_000, Date.now());
-        saveLocal({ ...next, lastTick: Date.now() });
+        saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
         return next;
       });
     }, 15_000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [kind.localKey]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -117,12 +116,12 @@ export function DeskStage({
       else if (roll < 0.62) issue(live.energy < 35 ? "sleep" : "sit");
       else if (roll < 0.8) issue("idle");
       else {
-        say(ambientLine(live));
+        say(kind.ambientLine(live));
         issue("talk");
       }
     }, 5600);
     return () => window.clearInterval(id);
-  }, [busy, issue, say]);
+  }, [busy, issue, say, kind]);
 
   async function playVoice(src?: string, text?: string) {
     if (src) {
@@ -139,8 +138,8 @@ export function DeskStage({
     if (text && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.rate = 0.92;
-      u.pitch = 1.15;
+      u.rate = kind.key === "cat" ? 0.86 : 0.92;
+      u.pitch = kind.key === "cat" ? 0.95 : 1.15;
       window.speechSynthesis.speak(u);
     }
   }
@@ -158,14 +157,15 @@ export function DeskStage({
           hunger: stats.hunger,
           mood: stats.mood,
           energy: stats.energy,
-          name,
+          name: displayName,
+          species: kind.key,
           speak: true,
         },
       });
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));
       await playVoice(res.audio, res.text);
     } catch {
-      const line = message ? "I heard a rustle. Try again in a moment." : ambientLine(stats);
+      const line = message ? kind.listenLine() : kind.ambientLine(stats);
       say(line);
     } finally {
       setBusy(false);
@@ -181,10 +181,10 @@ export function DeskStage({
       const remote = await onCare?.(action);
       setStats((prev) => {
         const next = remote ?? (action === "feed" ? applyFeed(prev) : action === "play" ? applyPlay(prev) : applyRest(prev));
-        saveLocal({ ...next, lastTick: Date.now() });
+        saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
         return next;
       });
-      say(careLine(action));
+      say(kind.careLine(action));
       if (action === "play") issue("play");
       else if (action === "rest") issue("sleep");
       else issue("eat");
@@ -210,9 +210,13 @@ export function DeskStage({
       </div>
 
       <LivingPet
+        key={kind.key}
         command={order.cmd}
         orderId={order.id}
         speech={speech}
+        sprites={kind.sprites}
+        fps={kind.fps}
+        once={kind.once}
         onArrived={() => {
           if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat") issue("idle");
         }}
@@ -220,11 +224,23 @@ export function DeskStage({
       />
 
       <aside className="absolute left-3 top-3 z-20 max-w-[min(100%-1.5rem,22rem)] rounded-[var(--radius-lg)] border border-border bg-bg/80 p-3 backdrop-blur-sm sm:left-5 sm:top-5 sm:p-5">
-        <p className="text-xs uppercase tracking-[0.18em] text-subtle">First to wake</p>
-        <h1 className="mt-1 font-display text-2xl leading-none sm:text-3xl">{name}</h1>
-        <p className="mt-2 hidden text-sm text-muted sm:block">
-          Red Panda. Lives on the blotter. Drag, tap to talk, or send a word.
-        </p>
+        <div className="flex flex-wrap gap-1">
+          {LIVING_KINDS.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              onClick={() => onSelectKind?.(item.key)}
+              className={cn(
+                "rounded-[var(--radius-sm)] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em]",
+                item.key === kind.key ? "bg-elevated text-fg" : "text-subtle hover:text-fg",
+              )}
+            >
+              {item.name}
+            </button>
+          ))}
+        </div>
+        <h1 className="mt-2 font-display text-2xl leading-none sm:text-3xl">{displayName}</h1>
+        <p className="mt-2 hidden text-sm text-muted sm:block">{kind.blurb}</p>
         <p className="mt-1 text-xs text-subtle sm:mt-2">{busy ? "Listening" : moodWord(stats)}</p>
         <div className="mt-2 grid grid-cols-3 gap-2 sm:mt-3">
           <Meter label="Hunger" value={stats.hunger} />
@@ -263,18 +279,15 @@ export function DeskStage({
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               maxLength={200}
-              placeholder="Say something to Rui"
+              placeholder={`Say something to ${displayName}`}
               className="h-11 min-w-0 flex-1 rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm text-fg outline-none placeholder:text-subtle focus:ring-2 focus:ring-primary/30"
             />
             <Button type="submit" variant="secondary" disabled={busy || !draft.trim()}>
               Send
             </Button>
           </form>
-          <Link
-            to="/catalog"
-            className="hidden text-xs text-muted no-underline hover:text-fg sm:inline"
-          >
-            Next: Cat
+          <Link to="/catalog" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
+            {kind.nextHint}
           </Link>
         </div>
       </div>

@@ -1,11 +1,7 @@
 import { useEffect, useRef } from "react";
+import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pets/red-panda";
+import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound } from "@/lib/pets/desk-audio";
-import {
-  ANIM_FPS,
-  ONCE_ANIMS,
-  RED_PANDA_SPRITES,
-  type PetAnim,
-} from "@/lib/pets/red-panda";
 
 export type PetCommand = PetAnim | "wander" | "none";
 
@@ -13,6 +9,9 @@ type LivingPetProps = {
   command: PetCommand;
   orderId: number;
   speech: string | null;
+  sprites?: SpritePack;
+  fps?: Record<PetAnim, number>;
+  once?: ReadonlySet<PetAnim>;
   onArrived?: () => void;
   onTap?: () => void;
 };
@@ -56,7 +55,16 @@ function walkSpeed(remaining: number, age: number) {
   return WALK_SPEED * Math.max(0.3, accel * decel);
 }
 
-export function LivingPet({ command, orderId, speech, onArrived, onTap }: LivingPetProps) {
+export function LivingPet({
+  command,
+  orderId,
+  speech,
+  sprites = RED_PANDA_SPRITES,
+  fps = ANIM_FPS,
+  once = ONCE_ANIMS,
+  onArrived,
+  onTap,
+}: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
@@ -84,6 +92,12 @@ export function LivingPet({ command, orderId, speech, onArrived, onTap }: Living
   const lastOrder = useRef(-1);
   const arrivedRef = useRef(onArrived);
   const tapRef = useRef(onTap);
+  const spritesRef = useRef(sprites);
+  const fpsRef = useRef(fps);
+  const onceRef = useRef(once);
+  spritesRef.current = sprites;
+  fpsRef.current = fps;
+  onceRef.current = once;
   cmdRef.current = command;
   orderRef.current = orderId;
   arrivedRef.current = onArrived;
@@ -199,17 +213,17 @@ export function LivingPet({ command, orderId, speech, onArrived, onTap }: Living
         }
         s.x = clamp(s.x, PAD, maxX);
 
-        const fps = reduced ? 0 : ANIM_FPS[s.anim];
-        if (fps > 0) {
+        const fpsNow = reduced ? 0 : fpsRef.current[s.anim];
+        if (fpsNow > 0) {
           s.acc += dt;
-          const step = 1 / fps;
+          const step = 1 / fpsNow;
           while (s.acc >= step) {
             s.acc -= step;
-            const frames = RED_PANDA_SPRITES[s.anim];
+            const frames = spritesRef.current[s.anim];
             const len = frames.length;
             if (s.anim === "sit") {
               s.frame = Math.min(len - 1, s.frame + 1);
-            } else if (ONCE_ANIMS.has(s.anim)) {
+            } else if (onceRef.current.has(s.anim)) {
               if (s.frame + 1 >= len) {
                 s.anim = "idle";
                 s.frame = 0;
@@ -233,7 +247,7 @@ export function LivingPet({ command, orderId, speech, onArrived, onTap }: Living
       }
       s.dust = s.dust.filter((d) => d.life > 0);
 
-      const frames = RED_PANDA_SPRITES[s.anim];
+      const frames = spritesRef.current[s.anim];
       const src = frames[Math.min(s.frame, frames.length - 1)]!;
       const hopPx = s.hop > 0 ? Math.sin(s.hop * Math.PI) * 26 : 0;
       const y = floorY(height) + hopPx;
@@ -356,7 +370,7 @@ export function LivingPet({ command, orderId, speech, onArrived, onTap }: Living
       <img
         ref={imgRef}
         data-pet
-        src={RED_PANDA_SPRITES.idle[0]}
+        src={sprites.idle[0]}
         alt=""
         draggable={false}
         className="pointer-events-auto absolute bottom-0 left-0 h-44 w-44 cursor-grab object-contain object-bottom active:cursor-grabbing select-none touch-none"

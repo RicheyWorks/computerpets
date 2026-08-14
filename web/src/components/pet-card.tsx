@@ -4,6 +4,7 @@ import { Meter } from "@/components/ui/progress";
 import { findSpecies, portraitSrc, rarityLabel, type Rarity } from "@/lib/pets/catalog";
 import type { CompanionView } from "@/lib/pets/actions";
 import { bondScore, moodWord } from "@/lib/pets/care";
+import { isLivingSpecies } from "@/lib/pets/living";
 import { cn } from "@/lib/utils";
 
 const TONE: Record<Rarity, "common" | "uncommon" | "rare" | "legendary"> = {
@@ -91,8 +92,9 @@ export function SpeciesCard({
     <>
       <div className="relative aspect-square overflow-hidden bg-elevated">
         <PetPortrait speciesKey={speciesKey} alt={name} />
-        <div className="absolute left-3 top-3">
+        <div className="absolute left-3 top-3 flex gap-2">
           <RarityBadge rarity={rarity} />
+          {isLivingSpecies(speciesKey) ? <Badge>Awake</Badge> : null}
         </div>
       </div>
       <div className="space-y-1.5 p-4">
@@ -106,6 +108,7 @@ export function SpeciesCard({
     return (
       <Link
         to={to}
+        search={isLivingSpecies(speciesKey) ? { pet: speciesKey } : undefined}
         className="block overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface no-underline transition-colors duration-200 hover:border-border-strong"
       >
         {inner}
