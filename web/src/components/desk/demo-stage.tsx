@@ -2,14 +2,14 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
-import { applyFeed, applyPlay, applyRest, type CareStats } from "@/lib/pets/care";
+import { applyFeed, applyPlay, applyRest, normalizeCare, type CareStats } from "@/lib/pets/care";
 import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { cn } from "@/lib/utils";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
-  const [stats, setStats] = useState<CareStats>({ hunger: 78, mood: 80, energy: 82 });
+  const [stats, setStats] = useState<CareStats>(() => normalizeCare({ hunger: 78, mood: 80, energy: 82 }));
   const [speech, setSpeech] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });

@@ -1,6 +1,18 @@
 # Desktop companion — Windows and Mac
 
-All twenty pets live on the real desktop. Transparent overlay, always on top, click-through except on the animal. Tray / menu-bar lists the whole house.
+All twenty pets live on the real desktop as a Tamagotchi-grade overlay. Unique hunger clocks, night cycles, mess, illness, age, and a special move each.
+
+## Care
+
+Right-click the pet or use the tray / menu bar:
+
+- Feed, snack, play, rest, talk
+- Clean (click droppings on the floor too)
+- Bath, medicine, praise
+- Call back if they hide
+- Special — species trick (ribbon, thump, wheek, steal, rebirth…)
+
+They grow: hatchling → grown (day 1) → elder (day 7). Neglect them and they vanish until you call. Phoenix can burn out and come back kinder.
 
 ## Run
 
@@ -10,21 +22,14 @@ npm install
 npm start
 ```
 
-Windows: `..\desktop.ps1` from the repo root.  
-Mac / Linux: `sh ../desktop.sh`
+Windows: `..\desktop.ps1`  
+Mac: `sh ../desktop.sh`
 
-- Drag them
-- Click to talk
-- Right-click for Feed / Play / Rest / Talk / switch companion
-- Tray (Windows) or menu bar (Mac) has the same menu
+Windows toasts use the tray identity `works.richey.computerpets.desk`. The overlay tracks the work area across DPI and monitor changes.
 
 ## Package
 
 ```bash
-npm run dist:win    # Windows installer + portable exe
-npm run dist:mac    # Mac dmg + zip (run on a Mac)
+npm run dist:win
+npm run dist:mac
 ```
-
-Installers land in `desktop/dist`.
-
-Phones and tablets use the web Live companion (`/live`) — Add to Home Screen.

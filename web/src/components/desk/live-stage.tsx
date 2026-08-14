@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
-import { applyFeed, applyPlay, applyRest, type CareStats } from "@/lib/pets/care";
+import { applyFeed, applyPlay, applyRest, normalizeCare, type CareStats } from "@/lib/pets/care";
 import {
   LIVING_KINDS,
   livingByKey,
@@ -22,7 +22,7 @@ function isStandalone() {
 
 export function LiveStage({ initial }: { initial?: LivingKind }) {
   const [kind, setKind] = useState(initial ?? LIVING_KINDS[0]!);
-  const [stats, setStats] = useState<CareStats>({ hunger: 78, mood: 80, energy: 82 });
+  const [stats, setStats] = useState<CareStats>(() => normalizeCare({ hunger: 78, mood: 80, energy: 82 }));
   const [speech, setSpeech] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });

@@ -6,7 +6,7 @@ body {
   overflow: hidden;
   background: transparent;
   user-select: none;
-  font-family: "Segoe UI", "Figtree", system-ui, sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
 #stage {
@@ -26,12 +26,21 @@ body {
   pointer-events: auto;
   cursor: grab;
   transform-origin: center bottom;
-  will-change: transform;
+  will-change: transform, filter;
   -webkit-user-drag: none;
 }
 
 #pet:active {
   cursor: grabbing;
+}
+
+#pet.sick {
+  filter: saturate(0.7) brightness(0.92);
+}
+
+#pet.hidden {
+  opacity: 0.2;
+  filter: blur(1px);
 }
 
 #shadow {
@@ -74,12 +83,90 @@ body {
   box-shadow: 0 10px 28px rgb(0 0 0 / 0.28);
 }
 
-#dust span {
+#dust span,
+.mess-dot {
   position: absolute;
   left: 0;
   bottom: 0;
   border-radius: 999px;
-  background: rgb(216 207 192 / 0.5);
   pointer-events: none;
+}
+
+#dust span {
+  background: rgb(216 207 192 / 0.5);
   opacity: 0;
+}
+
+.mess-dot {
+  width: 14px;
+  height: 10px;
+  background: rgb(90 74 52 / 0.72);
+  pointer-events: auto;
+  cursor: pointer;
+  box-shadow: 0 1px 0 rgb(12 11 10 / 0.35);
+}
+
+#hud {
+  position: absolute;
+  left: 0;
+  bottom: 178px;
+  width: 168px;
+  padding: 6px 8px 8px;
+  border-radius: 10px;
+  border: 1px solid #2a2621;
+  background: rgb(12 11 10 / 0.78);
+  color: #f2ece3;
+  pointer-events: auto;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+#hud.show,
+#hud:hover,
+#stage:hover #hud {
+  opacity: 1;
+}
+
+#hud-name {
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: -0.02em;
+}
+
+#hud-vital {
+  margin: 1px 0 6px;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9a9288;
+}
+
+.bars {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3px;
+}
+
+.bars i {
+  display: block;
+  height: 3px;
+  border-radius: 99px;
+  background: #3d3831;
+  position: relative;
+  overflow: hidden;
+}
+
+.bars i::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--w, 50%);
+  background: #d8cfc0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #bubble,
+  #hud {
+    transition: none;
+  }
 }
