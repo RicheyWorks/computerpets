@@ -34,7 +34,7 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
 - **Rate Limiting** — Built-in per-IP protection using Bucket4j.
 - **Rich Pet Catalog** — 20 pets across four rarity tiers (Common, Uncommon, Rare, Legendary).
-- **Living desk (Rui)** — The red panda walks, eats, pounces, sleeps, and talks in `web/`. Other species wake one at a time.
+- **Living desk (Rui)** — Browser companion in `web/`. Native Windows overlay in `desktop/` — he walks your actual screen.
 - **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
 - **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
 
@@ -72,7 +72,21 @@ For a complete view of the system design (including component diagrams, data flo
 - **Node 22+** (living desk)
 - A modern terminal (PowerShell, bash, etc.)
 
-### Living desk (Rui)
+### Desktop companion (Windows)
+
+Rui on the real desktop, always on top, no browser chrome.
+
+```powershell
+cd desktop
+npm install
+npm start
+```
+
+Or from the repo root: `.\desktop.ps1`
+
+See [desktop/README.md](desktop/README.md).
+
+### Living desk in the browser
 
 Requires **Node 22+**.
 
@@ -132,7 +146,8 @@ All detailed documentation is located in the `docs/` directory:
 
 ```
 ComputerPets/
-├── web/                          # Living desk (Rui first)
+├── desktop/                      # Native Windows overlay (Rui on the desktop)
+├── web/                          # Living desk in the browser
 ├── .github/                      # GitHub templates (issues & PRs)
 ├── docs/                         # Project documentation
 │   ├── ARCHITECTURE.md           # Full system architecture (living document)
