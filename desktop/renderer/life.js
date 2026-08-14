@@ -175,7 +175,7 @@
       return { life, line: "A small treaty.", cmd: "eat", notify: null };
     }
     if (action === "play") {
-      if (life.energy < 12) return { life, line: pick(trait.extra?.sick ? [] : []) || "The paws vote no.", cmd: "sit", notify: null };
+      if (life.energy < 12) return { life, line: "The paws vote no.", cmd: "sit", notify: null };
       if (trait.startle && Math.random() < 0.18) {
         life.startledUntil = now + 4000;
         life.mood = clamp(life.mood - 3);

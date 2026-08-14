@@ -10,8 +10,8 @@ import type { MindBinding, VoiceKind } from "@/lib/ai/types";
 const binding = z.object({
   plugin: z.string().trim().min(1).max(32).default("local"),
   model: z.string().trim().max(80).optional(),
-  baseUrl: z.string().trim().max(200).optional(),
-  apiKey: z.string().trim().max(200).optional(),
+  baseUrl: z.string().trim().max(240).optional(),
+  apiKey: z.string().trim().max(400).optional(),
 });
 
 const input = z.object({

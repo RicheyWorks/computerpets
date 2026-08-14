@@ -1,4 +1,4 @@
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { MIND_PRESETS, VOICE_PRESETS, mindPreset } from "@/lib/ai/catalog";
@@ -21,6 +21,9 @@ export const Route = createFileRoute("/mind")({
 function MindPage() {
   const live = useMindSettings();
   const [draft, setDraft] = useState<MindSettings>(live);
+  useEffect(() => {
+    setDraft(live);
+  }, [live]);
   const [petKey, setPetKey] = useState(LIVING_KINDS[0]!.key);
   const [testLine, setTestLine] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);

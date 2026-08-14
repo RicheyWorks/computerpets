@@ -116,15 +116,14 @@ body {
   border: 1px solid #2a2621;
   background: rgb(12 11 10 / 0.78);
   color: #f2ece3;
-  pointer-events: auto;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 160ms ease;
 }
 
-#hud.show,
-#hud:hover,
-#stage:hover #hud {
+#hud.show {
   opacity: 1;
+  pointer-events: auto;
 }
 
 #hud-name {

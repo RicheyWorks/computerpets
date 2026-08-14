@@ -6,6 +6,8 @@ contextBridge.exposeInMainWorld("desk", {
   switchPet: (key) => ipcRenderer.send("switch-pet", key),
   notify: (title, body) => ipcRenderer.send("notify", { title, body }),
   vitals: (payload) => ipcRenderer.send("vitals", payload),
+  mindGet: () => ipcRenderer.sendSync("mind-get"),
+  mindSet: (data) => ipcRenderer.send("mind-set", data),
   onCommand: (fn) => {
     const wrapped = (_e, cmd) => fn(cmd);
     ipcRenderer.on("command", wrapped);
