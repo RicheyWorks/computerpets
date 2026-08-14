@@ -105,10 +105,12 @@ export function SpeciesCard({
   );
 
   if (to) {
+    const demoSlug = to.startsWith("/demo/") ? to.slice("/demo/".length) : null;
     return (
       <Link
-        to={to}
-        search={isLivingSpecies(speciesKey) ? { pet: speciesKey } : undefined}
+        to={demoSlug ? "/demo/$slug" : (to as "/")}
+        params={demoSlug ? { slug: demoSlug } : undefined}
+        search={demoSlug ? undefined : isLivingSpecies(speciesKey) ? { pet: speciesKey } : undefined}
         className="block overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface no-underline transition-colors duration-200 hover:border-border-strong"
       >
         {inner}

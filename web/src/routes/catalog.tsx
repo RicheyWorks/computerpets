@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SpeciesCard } from "@/components/pet-card";
 import { SPECIES, type Rarity } from "@/lib/pets/catalog";
-import { isLivingSpecies } from "@/lib/pets/living";
+import { isLivingSpecies, livingByKey } from "@/lib/pets/living";
 
 export const Route = createFileRoute("/catalog")({ component: Catalog });
 
@@ -32,7 +32,7 @@ function Catalog() {
                   name={s.displayName}
                   rarity={s.rarity}
                   blurb={s.blurb}
-                  to={isLivingSpecies(s.key) ? "/" : undefined}
+                  to={isLivingSpecies(s.key) ? `/demo/${livingByKey(s.key).slug}` : undefined}
                 />
               ))}
             </div>

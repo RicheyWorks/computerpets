@@ -30,3 +30,8 @@ web/
 ## Backend
 
 Ownership, licenses, and NFT verify stay in the Java service at the repo root (`mvn spring-boot:run`). This folder is the living client.
+
+## Advertising demos
+
+- `/meet` — house landing
+- `/demo/rui` `/demo/miso` `/demo/pip` — live shareable pets

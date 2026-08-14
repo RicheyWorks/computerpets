@@ -13,6 +13,19 @@ import {
   preloadCatSprites,
 } from "./cat";
 import {
+  DOG_KEY,
+  DOG_NAME,
+  DOG_SPRITES,
+  DOG_SYSTEM_PROMPT,
+  DOG_VOICE,
+  dogAmbient,
+  dogCare,
+  dogFallback,
+  dogGreet,
+  dogListen,
+  preloadDogSprites,
+} from "./dog";
+import {
   ambientLine,
   ANIM_FPS,
   careLine,
@@ -34,9 +47,11 @@ export type SpritePack = Record<PetAnim, readonly string[]>;
 
 export type LivingKind = {
   key: string;
+  slug: string;
   name: string;
   speciesLabel: string;
   blurb: string;
+  tagline: string;
   nextHint: string;
   localKey: string;
   voice: string;
@@ -52,7 +67,7 @@ export type LivingKind = {
   preload: () => void;
 };
 
-const CAT_FPS: Record<PetAnim, number> = {
+const PHOTO_FPS: Record<PetAnim, number> = {
   idle: 2.8,
   walk: 6.4,
   sit: 2.2,
@@ -64,10 +79,12 @@ const CAT_FPS: Record<PetAnim, number> = {
 
 export const RED_PANDA_KIND: LivingKind = {
   key: RED_PANDA_KEY,
+  slug: "rui",
   name: RED_PANDA_NAME,
   speciesLabel: "Red Panda",
   blurb: "Lives on the blotter. Drag, tap to talk, or send a word.",
-  nextHint: "Next: Dog",
+  tagline: "The house default. Climbs bookshelves and steals ribbon.",
+  nextHint: "Next: Rabbit",
   localKey: "computerpets.desk.red_panda.v1",
   voice: RED_PANDA_VOICE,
   systemPrompt: SYSTEM_PROMPT,
@@ -93,15 +110,17 @@ export const RED_PANDA_KIND: LivingKind = {
 
 export const CAT_KIND: LivingKind = {
   key: CAT_KEY,
+  slug: "miso",
   name: CAT_NAME,
   speciesLabel: "Cat",
   blurb: "Judges from the ledge. Drag, tap to talk, or send a word.",
-  nextHint: "Next: Dog",
+  tagline: "Judges your code reviews from a sun-warmed cushion.",
+  nextHint: "Next: Rabbit",
   localKey: "computerpets.desk.cat.v1",
   voice: CAT_VOICE,
   systemPrompt: CAT_SYSTEM_PROMPT,
   sprites: CAT_SPRITES,
-  fps: CAT_FPS,
+  fps: PHOTO_FPS,
   once: ONCE_ANIMS,
   greetLine: catGreet,
   ambientLine: catAmbient,
@@ -111,10 +130,36 @@ export const CAT_KIND: LivingKind = {
   preload: preloadCatSprites,
 };
 
-export const LIVING_KINDS: LivingKind[] = [RED_PANDA_KIND, CAT_KIND];
+export const DOG_KIND: LivingKind = {
+  key: DOG_KEY,
+  slug: "pip",
+  name: DOG_NAME,
+  speciesLabel: "Dog",
+  blurb: "Follows the cursor. Drag, tap to talk, or send a word.",
+  tagline: "Follows the cursor. Believes every compile is a walk.",
+  nextHint: "Next: Rabbit",
+  localKey: "computerpets.desk.dog.v1",
+  voice: DOG_VOICE,
+  systemPrompt: DOG_SYSTEM_PROMPT,
+  sprites: DOG_SPRITES,
+  fps: PHOTO_FPS,
+  once: ONCE_ANIMS,
+  greetLine: dogGreet,
+  ambientLine: dogAmbient,
+  careLine: dogCare,
+  listenLine: dogListen,
+  fallbackLine: dogFallback,
+  preload: preloadDogSprites,
+};
+
+export const LIVING_KINDS: LivingKind[] = [RED_PANDA_KIND, CAT_KIND, DOG_KIND];
 
 export function livingByKey(key: string | undefined | null) {
   return LIVING_KINDS.find((k) => k.key === key) ?? RED_PANDA_KIND;
+}
+
+export function livingBySlug(slug: string | undefined | null) {
+  return LIVING_KINDS.find((k) => k.slug === slug) ?? null;
 }
 
 export function isLivingSpecies(key: string) {
