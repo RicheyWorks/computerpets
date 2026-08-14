@@ -154,6 +154,16 @@ export function applyMedicine(stats: Partial<CareStats>): CareStats {
   };
 }
 
+export function applySnack(stats: Partial<CareStats>): CareStats {
+  const s = normalizeCare(stats);
+  return {
+    ...s,
+    hunger: clampStat(s.hunger + 12),
+    mood: clampStat(s.mood + 5),
+    bond: clampStat(s.bond + 1),
+  };
+}
+
 export function applyPraise(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
   return {

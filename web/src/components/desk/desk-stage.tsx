@@ -13,6 +13,7 @@ import {
   applyPlay,
   applyPraise,
   applyRest,
+  applySnack,
   decayStats,
   moodWord,
   normalizeCare,
@@ -28,6 +29,7 @@ import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { appendJournal, loadJournal, type JournalEntry } from "@/lib/pets/journal";
+import { HIDE_LINE, SNACK_LINE, isRestingHour } from "@/lib/pets/hours";
 
 function loadLocal(key: string): CareStats {
   try {
@@ -67,6 +69,8 @@ export function DeskStage({
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [journal, setJournal] = useState<JournalEntry[]>([]);
+  const [crumb, setCrumb] = useState<number | null>(null);
+  const [leaving, setLeaving] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
   const speechUntil = useRef(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -108,6 +112,8 @@ export function DeskStage({
     setStats(live);
     saveLocal(kind.localKey, { ...live, lastTick: Date.now() });
     acted.current = false;
+    setLeaving(false);
+    setCrumb(null);
     const t = window.setTimeout(() => {
       if (acted.current) return;
       say(kind.greetLine(), 5000);
@@ -137,6 +143,11 @@ export function DeskStage({
       if (performance.now() < speechUntil.current) return;
       if (busy) return;
       const live = statsRef.current;
+      if (live.hidden) return;
+      if (isRestingHour(kind.key) && live.energy < 88) {
+        issue("sleep");
+        return;
+      }
       const roll = Math.random();
       if (roll < trait.wander) issue("wander");
       else if (roll < trait.wander + 0.22) issue(live.energy < 35 ? "sleep" : "sit");
@@ -263,24 +274,32 @@ export function DeskStage({
   }
 
   function hide() {
-    if (busy) return;
+    if (busy || stats.hidden) return;
     acted.current = true;
-    const next = applyHide(statsRef.current);
-    setStats(next);
-    saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
-    say("I went where the ribbon goes.");
-    note(`${displayName} hid.`);
+    say(HIDE_LINE[kind.key] ?? "I went where the ribbon goes.");
+    setLeaving(true);
+    issue("leave");
+    note(`${displayName} slipped off the blotter.`);
   }
 
   function callBack() {
     if (busy) return;
     acted.current = true;
+    setLeaving(false);
     const next = applyCall(statsRef.current);
     setStats(next);
     saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
     say("You called. I brought the whole tail.");
-    issue("wander");
+    issue("enter");
     note(`${displayName} came back.`);
+  }
+
+  function dropTreat() {
+    if (busy || stats.hidden) return;
+    acted.current = true;
+    unlockDeskAudio();
+    setCrumb(18 + Math.random() * 62);
+    issue("seek");
   }
 
   const night = (() => {
@@ -315,11 +334,39 @@ export function DeskStage({
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
+        seekX={crumb ?? undefined}
         onArrived={() => {
-          if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat") issue("idle");
+          if (order.cmd === "leave") {
+            const next = applyHide(statsRef.current);
+            setStats(next);
+            setLeaving(false);
+            saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+            return;
+          }
+          if (order.cmd === "seek" && crumb != null) {
+            const next = applySnack(statsRef.current);
+            setStats(next);
+            saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+            setCrumb(null);
+            say(SNACK_LINE[kind.key] ?? "A small treaty.");
+            note(`${displayName} found the treat.`);
+            issue("eat");
+            return;
+          }
+          if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat" || order.cmd === "enter") {
+            issue("idle");
+          }
         }}
         onTap={() => void talk()}
       />
+
+      {crumb != null && !stats.hidden ? (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute z-10 h-2.5 w-2.5 rounded-full bg-[#c4a574] shadow-sm"
+          style={{ left: `${crumb}%`, bottom: "19.5%" }}
+        />
+      ) : null}
 
       {stats.mess.map((pile) => (
         <button
@@ -379,8 +426,11 @@ export function DeskStage({
       <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-border bg-bg/85 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm sm:p-4">
         <div className="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center">
           <div className="grid grid-cols-4 gap-2 sm:flex sm:flex-wrap">
-            <Button disabled={busy} onClick={() => void care("feed")}>
+            <Button variant="secondary" disabled={busy} onClick={() => void care("feed")}>
               Feed
+            </Button>
+            <Button disabled={busy || stats.hidden} onClick={dropTreat}>
+              Treat
             </Button>
             <Button variant="secondary" disabled={busy} onClick={() => void care("play")}>
               Play
@@ -406,7 +456,7 @@ export function DeskStage({
             <Button disabled={busy} onClick={special}>
               {trait.verb}
             </Button>
-            {stats.hidden ? (
+            {stats.hidden || leaving ? (
               <Button variant="secondary" disabled={busy} onClick={callBack}>
                 Call back
               </Button>
