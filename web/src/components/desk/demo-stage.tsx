@@ -6,9 +6,12 @@ import { applyFeed, applyPlay, applyRest, normalizeCare, type CareStats } from "
 import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
+import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { cn } from "@/lib/utils";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
+  const mind = useMindBinding(kind.key);
+  const mindSettings = useMindSettings();
   const [stats, setStats] = useState<CareStats>(() => normalizeCare({ hunger: 78, mood: 80, energy: 82 }));
   const [speech, setSpeech] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -99,9 +102,12 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
           hunger: stats.hunger,
           mood: stats.mood,
           energy: stats.energy,
+          hygiene: stats.hygiene,
           name: kind.name,
           species: kind.key,
-          speak: true,
+          speak: mindSettings.voice !== "none",
+          mind,
+          voice: mindSettings.voice,
         },
       });
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));

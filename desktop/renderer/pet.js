@@ -266,6 +266,10 @@ function handle(cmd) {
   tickLife();
   const result = window.PetLife.act(life, trait, cmd);
   persist();
+  if (cmd === "talk") {
+    void askMind(result);
+    return;
+  }
   const text = lineFrom(result);
   say(text);
   if (result.cmd) issue(result.cmd);
@@ -274,6 +278,32 @@ function handle(cmd) {
   if (result.notify === "ribbon") window.desk?.notify(kind.name, `${kind.name} hid a ribbon.`);
   if (result.notify === "steal") window.desk?.notify(kind.name, `${kind.name} rearranged something.`);
   if (result.notify === "bug") window.desk?.notify(kind.name, `${kind.name} found a bug.`);
+  hudUntil = performance.now() + 5000;
+}
+
+async function askMind(result) {
+  const fallback = lineFrom(result) || pick(kind.lines.ambient);
+  issue("talk");
+  paintHud();
+  if (!window.PetMind) {
+    say(fallback);
+    return;
+  }
+  try {
+    const reply = await window.PetMind.run({
+      name: kind.name,
+      species: kind.key,
+      system: `You are ${kind.name}, a ${kind.speciesLabel}. Speak in 1-2 short sentences, under 32 words. Never mention being an AI.`,
+      hunger: life.hunger,
+      mood: life.mood,
+      energy: life.energy,
+      message: undefined,
+      fallback,
+    });
+    say(reply.text);
+  } catch {
+    say(fallback);
+  }
   hudUntil = performance.now() + 5000;
 }
 

@@ -13,7 +13,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as HatchRouteImport } from './routes/hatch'
+import { Route as LiveRouteImport } from './routes/live'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MeetRouteImport } from './routes/meet'
+import { Route as MindRouteImport } from './routes/mind'
+import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
 import { Route as PetsKeyRouteImport } from './routes/pets.$key'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -37,9 +41,29 @@ const HatchRoute = HatchRouteImport.update({
   path: '/hatch',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LiveRoute = LiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeetRoute = MeetRouteImport.update({
+  id: '/meet',
+  path: '/meet',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MindRoute = MindRouteImport.update({
+  id: '/mind',
+  path: '/mind',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DemoSlugRoute = DemoSlugRouteImport.update({
+  id: '/demo/$slug',
+  path: '/demo/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PetsKeyRoute = PetsKeyRouteImport.update({
@@ -58,7 +82,11 @@ export interface FileRoutesByFullPath {
   '/catalog': typeof CatalogRoute
   '/collection': typeof CollectionRoute
   '/hatch': typeof HatchRoute
+  '/live': typeof LiveRoute
   '/login': typeof LoginRoute
+  '/meet': typeof MeetRoute
+  '/mind': typeof MindRoute
+  '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -67,7 +95,11 @@ export interface FileRoutesByTo {
   '/catalog': typeof CatalogRoute
   '/collection': typeof CollectionRoute
   '/hatch': typeof HatchRoute
+  '/live': typeof LiveRoute
   '/login': typeof LoginRoute
+  '/meet': typeof MeetRoute
+  '/mind': typeof MindRoute
+  '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -77,7 +109,11 @@ export interface FileRoutesById {
   '/catalog': typeof CatalogRoute
   '/collection': typeof CollectionRoute
   '/hatch': typeof HatchRoute
+  '/live': typeof LiveRoute
   '/login': typeof LoginRoute
+  '/meet': typeof MeetRoute
+  '/mind': typeof MindRoute
+  '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
 }
@@ -88,7 +124,11 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/collection'
     | '/hatch'
+    | '/live'
     | '/login'
+    | '/meet'
+    | '/mind'
+    | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
   fileRoutesByTo: FileRoutesByTo
@@ -97,7 +137,11 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/collection'
     | '/hatch'
+    | '/live'
     | '/login'
+    | '/meet'
+    | '/mind'
+    | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
   id:
@@ -106,7 +150,11 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/collection'
     | '/hatch'
+    | '/live'
     | '/login'
+    | '/meet'
+    | '/mind'
+    | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
   fileRoutesById: FileRoutesById
@@ -116,7 +164,11 @@ export interface RootRouteChildren {
   CatalogRoute: typeof CatalogRoute
   CollectionRoute: typeof CollectionRoute
   HatchRoute: typeof HatchRoute
+  LiveRoute: typeof LiveRoute
   LoginRoute: typeof LoginRoute
+  MeetRoute: typeof MeetRoute
+  MindRoute: typeof MindRoute
+  DemoSlugRoute: typeof DemoSlugRoute
   PetsKeyRoute: typeof PetsKeyRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -151,11 +203,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/live': {
+      id: '/live'
+      path: '/live'
+      fullPath: '/live'
+      preLoaderRoute: typeof LiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meet': {
+      id: '/meet'
+      path: '/meet'
+      fullPath: '/meet'
+      preLoaderRoute: typeof MeetRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mind': {
+      id: '/mind'
+      path: '/mind'
+      fullPath: '/mind'
+      preLoaderRoute: typeof MindRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/demo/$slug': {
+      id: '/demo/$slug'
+      path: '/demo/$slug'
+      fullPath: '/demo/$slug'
+      preLoaderRoute: typeof DemoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pets/$key': {
@@ -180,7 +260,11 @@ const rootRouteChildren: RootRouteChildren = {
   CatalogRoute: CatalogRoute,
   CollectionRoute: CollectionRoute,
   HatchRoute: HatchRoute,
+  LiveRoute: LiveRoute,
   LoginRoute: LoginRoute,
+  MeetRoute: MeetRoute,
+  MindRoute: MindRoute,
+  DemoSlugRoute: DemoSlugRoute,
   PetsKeyRoute: PetsKeyRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

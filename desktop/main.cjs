@@ -8,6 +8,8 @@ app.commandLine.appendSwitch("disable-renderer-backgrounding");
 
 /** @type {BrowserWindow | null} */
 let win = null;
+/** @type {BrowserWindow | null} */
+let settingsWin = null;
 /** @type {Tray | null} */
 let tray = null;
 /** @type {{ key: string, name: string, speciesLabel: string }[]} */
@@ -73,6 +75,7 @@ function trayTemplate() {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
+    { label: "Minds…", click: () => openSettings() },
     {
       label: "Show",
       click: () => {
@@ -96,6 +99,29 @@ function fitWorkArea() {
   const area = screen.getPrimaryDisplay().workArea;
   win.setBounds({ x: area.x, y: area.y, width: area.width, height: area.height });
   win.setAlwaysOnTop(true, "screen-saver");
+}
+
+function openSettings() {
+  if (settingsWin) {
+    settingsWin.show();
+    settingsWin.focus();
+    return;
+  }
+  settingsWin = new BrowserWindow({
+    width: 420,
+    height: 560,
+    title: "Minds — ComputerPets",
+    autoHideMenuBar: true,
+    webPreferences: {
+      contextIsolation: true,
+      nodeIntegration: false,
+      sandbox: true,
+    },
+  });
+  settingsWin.loadFile(path.join(__dirname, "renderer", "settings.html"));
+  settingsWin.on("closed", () => {
+    settingsWin = null;
+  });
 }
 
 function createWindow() {

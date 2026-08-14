@@ -20,6 +20,8 @@ import {
 import { LIVING_KINDS, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
+import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
+import { describeBinding } from "@/lib/ai/settings";
 
 function loadLocal(key: string): CareStats {
   try {
@@ -51,6 +53,8 @@ export function DeskStage({
   onSelectKind?: (key: string) => void;
 }) {
   const displayName = name ?? kind.name;
+  const mind = useMindBinding(kind.key);
+  const mindSettings = useMindSettings();
   const [stats, setStats] = useState<CareStats>(() => normalizeCare(null));
   const [speech, setSpeech] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
@@ -160,9 +164,12 @@ export function DeskStage({
           hunger: stats.hunger,
           mood: stats.mood,
           energy: stats.energy,
+          hygiene: stats.hygiene,
           name: displayName,
           species: kind.key,
-          speak: true,
+          speak: mindSettings.voice !== "none",
+          mind,
+          voice: mindSettings.voice,
         },
       });
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));
@@ -265,6 +272,7 @@ export function DeskStage({
         <p className="mt-1 text-xs text-subtle sm:mt-2">
           {busy ? "Listening" : `${moodWord(stats)} · ${stageOf(stats)} · bond ${stats.bond}`}
         </p>
+        <p className="mt-1 text-[11px] text-subtle">{describeBinding(mind)}</p>
         <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-3 sm:grid-cols-4">
           <Meter label="Hunger" value={stats.hunger} />
           <Meter label="Mood" value={stats.mood} />

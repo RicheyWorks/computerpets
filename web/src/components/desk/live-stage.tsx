@@ -10,6 +10,7 @@ import {
 } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
+import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { Button } from "@/components/ui/button";
 
 function isStandalone() {
@@ -22,6 +23,8 @@ function isStandalone() {
 
 export function LiveStage({ initial }: { initial?: LivingKind }) {
   const [kind, setKind] = useState(initial ?? LIVING_KINDS[0]!);
+  const mind = useMindBinding(kind.key);
+  const mindSettings = useMindSettings();
   const [stats, setStats] = useState<CareStats>(() => normalizeCare({ hunger: 78, mood: 80, energy: 82 }));
   const [speech, setSpeech] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -117,9 +120,12 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
           hunger: stats.hunger,
           mood: stats.mood,
           energy: stats.energy,
+          hygiene: stats.hygiene,
           name: kind.name,
           species: kind.key,
-          speak: true,
+          speak: mindSettings.voice !== "none",
+          mind,
+          voice: mindSettings.voice,
         },
       });
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));

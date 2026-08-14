@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; media-src 'none'"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https: http://127.0.0.1:* http://localhost:*; media-src 'none'"
     />
     <title>ComputerPets</title>
     <link rel="stylesheet" href="styles.css" />
@@ -29,6 +29,7 @@
     </div>
     <script src="traits.js"></script>
     <script src="life.js"></script>
+    <script src="mind.js"></script>
     <script src="pet.js"></script>
   </body>
 </html>
