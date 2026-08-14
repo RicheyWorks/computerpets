@@ -32,7 +32,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Browser demos for the house. Walk them, feed them, let them talk. The kennel still waits.
+            Browser demos for every companion in the house. Walk them, feed them, let them talk.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
@@ -51,14 +51,14 @@ export function MeetPage() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Awake</p>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Three living demos.</h2>
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Twenty living demos.</h2>
           </div>
           <Link to="/catalog" className="hidden text-sm text-muted no-underline hover:text-fg sm:inline">
             Full catalog
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {LIVING_KINDS.map((kind) => (
             <Link
               key={kind.key}
@@ -88,11 +88,11 @@ export function MeetPage() {
           <div className="max-w-md space-y-3">
             <h2 className="font-display text-3xl">Share a room, not a screenshot.</h2>
             <p className="text-sm text-muted">
-              Each demo is a live page. Send Rui, Miso, or Pip. They will be on the blotter when it opens.
+              Each demo is a live page. Send any of them. They will be on the blotter when it opens.
             </p>
           </div>
           <Button asChild variant="secondary">
-            <Link to="/catalog">Seventeen still sleeping</Link>
+            <Link to="/">Open the desk</Link>
           </Button>
         </div>
       </section>

@@ -14,7 +14,6 @@ import {
 import { LIVING_KINDS, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
-import { cn } from "@/lib/utils";
 
 type Saved = CareStats & { lastTick: number };
 
@@ -224,21 +223,20 @@ export function DeskStage({
       />
 
       <aside className="absolute left-3 top-3 z-20 max-w-[min(100%-1.5rem,22rem)] rounded-[var(--radius-lg)] border border-border bg-bg/80 p-3 backdrop-blur-sm sm:left-5 sm:top-5 sm:p-5">
-        <div className="flex flex-wrap gap-1">
-          {LIVING_KINDS.map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              onClick={() => onSelectKind?.(item.key)}
-              className={cn(
-                "rounded-[var(--radius-sm)] px-2.5 py-1 text-[11px] uppercase tracking-[0.14em]",
-                item.key === kind.key ? "bg-elevated text-fg" : "text-subtle hover:text-fg",
-              )}
-            >
-              {item.name}
-            </button>
-          ))}
-        </div>
+        <label className="block">
+          <span className="sr-only">Companion</span>
+          <select
+            value={kind.key}
+            onChange={(e) => onSelectKind?.(e.target.value)}
+            className="h-9 w-full rounded-[var(--radius-sm)] border border-border bg-elevated px-2 text-sm text-fg outline-none focus:ring-2 focus:ring-primary/30"
+          >
+            {LIVING_KINDS.map((item) => (
+              <option key={item.key} value={item.key}>
+                {item.name} — {item.speciesLabel}
+              </option>
+            ))}
+          </select>
+        </label>
         <h1 className="mt-2 font-display text-2xl leading-none sm:text-3xl">{displayName}</h1>
         <p className="mt-2 hidden text-sm text-muted sm:block">{kind.blurb}</p>
         <p className="mt-1 text-xs text-subtle sm:mt-2">{busy ? "Listening" : moodWord(stats)}</p>
@@ -286,8 +284,8 @@ export function DeskStage({
               Send
             </Button>
           </form>
-          <Link to="/catalog" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
-            {kind.nextHint}
+          <Link to="/meet" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
+            The house
           </Link>
         </div>
       </div>

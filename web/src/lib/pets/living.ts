@@ -1,45 +1,7 @@
 import type { CareStats } from "./care";
-import {
-  CAT_KEY,
-  CAT_NAME,
-  CAT_SPRITES,
-  CAT_SYSTEM_PROMPT,
-  CAT_VOICE,
-  catAmbient,
-  catCare,
-  catFallback,
-  catGreet,
-  catListen,
-  preloadCatSprites,
-} from "./cat";
-import {
-  DOG_KEY,
-  DOG_NAME,
-  DOG_SPRITES,
-  DOG_SYSTEM_PROMPT,
-  DOG_VOICE,
-  dogAmbient,
-  dogCare,
-  dogFallback,
-  dogGreet,
-  dogListen,
-  preloadDogSprites,
-} from "./dog";
-import {
-  ambientLine,
-  ANIM_FPS,
-  careLine,
-  greetLine,
-  listenLine,
-  ONCE_ANIMS,
-  preloadRedPandaSprites,
-  RED_PANDA_KEY,
-  RED_PANDA_NAME,
-  RED_PANDA_SPRITES,
-  RED_PANDA_VOICE,
-  SYSTEM_PROMPT,
-  type PetAnim,
-} from "./red-panda";
+import { bondScore } from "./care";
+import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "./red-panda";
+import { ROSTER, type RosterDef } from "./roster";
 
 export type { PetAnim };
 
@@ -77,82 +39,80 @@ const PHOTO_FPS: Record<PetAnim, number> = {
   play: 6.6,
 };
 
-export const RED_PANDA_KIND: LivingKind = {
-  key: RED_PANDA_KEY,
-  slug: "rui",
-  name: RED_PANDA_NAME,
-  speciesLabel: "Red Panda",
-  blurb: "Lives on the blotter. Drag, tap to talk, or send a word.",
-  tagline: "The house default. Climbs bookshelves and steals ribbon.",
-  nextHint: "Next: Rabbit",
-  localKey: "computerpets.desk.red_panda.v1",
-  voice: RED_PANDA_VOICE,
-  systemPrompt: SYSTEM_PROMPT,
-  sprites: RED_PANDA_SPRITES,
-  fps: ANIM_FPS,
-  once: ONCE_ANIMS,
-  greetLine,
-  ambientLine,
-  careLine,
-  listenLine,
-  fallbackLine: (message, stats) => {
-    if (!message) return ambientLine(stats);
-    const q = message.toLowerCase();
-    if (q.includes("name")) return "Rui. It fits in a mouth and on a collar.";
-    if (q.includes("food") || q.includes("eat") || q.includes("hungry"))
-      return "Something rust-colored and polite. I am not proud.";
-    if (q.includes("sleep") || q.includes("tired")) return "The tail knows what to do.";
-    if (q.includes("love") || q.includes("good")) return "I heard that. I will store it in the left ear.";
-    return listenLine();
-  },
-  preload: preloadRedPandaSprites,
-};
+function pick(lines: string[]) {
+  return lines[Math.floor(Math.random() * lines.length)] ?? lines[0]!;
+}
 
-export const CAT_KIND: LivingKind = {
-  key: CAT_KEY,
-  slug: "miso",
-  name: CAT_NAME,
-  speciesLabel: "Cat",
-  blurb: "Judges from the ledge. Drag, tap to talk, or send a word.",
-  tagline: "Judges your code reviews from a sun-warmed cushion.",
-  nextHint: "Next: Rabbit",
-  localKey: "computerpets.desk.cat.v1",
-  voice: CAT_VOICE,
-  systemPrompt: CAT_SYSTEM_PROMPT,
-  sprites: CAT_SPRITES,
-  fps: PHOTO_FPS,
-  once: ONCE_ANIMS,
-  greetLine: catGreet,
-  ambientLine: catAmbient,
-  careLine: catCare,
-  listenLine: catListen,
-  fallbackLine: catFallback,
-  preload: preloadCatSprites,
-};
+function generatedPack(key: string): SpritePack {
+  const frame = (anim: PetAnim, count: number) =>
+    Array.from({ length: count }, (_, i) => `/sprites/${key}/${anim}/${i + 1}.png`);
+  return {
+    idle: frame("idle", 4),
+    walk: frame("walk", 6),
+    sit: frame("sit", 4),
+    sleep: frame("sleep", 4),
+    talk: frame("talk", 4),
+    eat: frame("eat", 4),
+    play: frame("play", 4),
+  };
+}
 
-export const DOG_KIND: LivingKind = {
-  key: DOG_KEY,
-  slug: "pip",
-  name: DOG_NAME,
-  speciesLabel: "Dog",
-  blurb: "Follows the cursor. Drag, tap to talk, or send a word.",
-  tagline: "Follows the cursor. Believes every compile is a walk.",
-  nextHint: "Next: Rabbit",
-  localKey: "computerpets.desk.dog.v1",
-  voice: DOG_VOICE,
-  systemPrompt: DOG_SYSTEM_PROMPT,
-  sprites: DOG_SPRITES,
-  fps: PHOTO_FPS,
-  once: ONCE_ANIMS,
-  greetLine: dogGreet,
-  ambientLine: dogAmbient,
-  careLine: dogCare,
-  listenLine: dogListen,
-  fallbackLine: dogFallback,
-  preload: preloadDogSprites,
-};
+function kindFrom(def: RosterDef): LivingKind {
+  const sprites = def.key === "red_panda" ? RED_PANDA_SPRITES : generatedPack(def.key);
+  const lines = def.lines;
+  return {
+    key: def.key,
+    slug: def.slug,
+    name: def.name,
+    speciesLabel: def.speciesLabel,
+    blurb: def.blurb,
+    tagline: def.tagline,
+    nextHint: "The house",
+    localKey: `computerpets.desk.${def.key}.v1`,
+    voice: def.voice,
+    systemPrompt: def.systemPrompt,
+    sprites,
+    fps: def.key === "red_panda" ? ANIM_FPS : PHOTO_FPS,
+    once: ONCE_ANIMS,
+    greetLine: () => pick(lines.greet),
+    ambientLine: (stats) => {
+      if (stats.hunger < 28) return pick(lines.hungry);
+      if (stats.energy < 28) return pick(lines.tired);
+      if (bondScore(stats) < 35) return lines.neglected;
+      return pick(lines.ambient);
+    },
+    careLine: (action) => pick(action === "feed" ? lines.feed : action === "play" ? lines.play : lines.rest),
+    listenLine: () => pick(lines.listen),
+    fallbackLine: (message, stats) => {
+      if (!message) {
+        if (stats.hunger < 28) return pick(lines.hungry);
+        if (stats.energy < 28) return pick(lines.tired);
+        return pick(lines.ambient);
+      }
+      const q = message.toLowerCase();
+      if (q.includes("name")) return lines.named;
+      if (q.includes("food") || q.includes("eat") || q.includes("hungry")) return lines.foodTalk;
+      if (q.includes("sleep") || q.includes("tired")) return lines.sleepTalk;
+      if (q.includes("love") || q.includes("good")) return lines.loveTalk;
+      return pick(lines.listen);
+    },
+    preload: () => {
+      if (typeof window === "undefined") return;
+      for (const frames of Object.values(sprites)) {
+        for (const src of frames) {
+          const img = new Image();
+          img.src = src;
+        }
+      }
+    },
+  };
+}
 
-export const LIVING_KINDS: LivingKind[] = [RED_PANDA_KIND, CAT_KIND, DOG_KIND];
+export const LIVING_KINDS: LivingKind[] = ROSTER.map(kindFrom);
+
+export const RED_PANDA_KIND = LIVING_KINDS[0]!;
+export const CAT_KIND = LIVING_KINDS[1]!;
+export const DOG_KIND = LIVING_KINDS[2]!;
 
 export function livingByKey(key: string | undefined | null) {
   return LIVING_KINDS.find((k) => k.key === key) ?? RED_PANDA_KIND;
@@ -175,7 +135,7 @@ export function loadActiveKindKey() {
   } catch {
     /* ignore */
   }
-  return RED_PANDA_KEY;
+  return "red_panda";
 }
 
 export function saveActiveKindKey(key: string) {
