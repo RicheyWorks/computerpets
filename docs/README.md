@@ -59,6 +59,7 @@ New to the project? Follow this recommended path:
 |----------|-------------|
 | **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **Start here** for a complete understanding. |
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
+| **[Living desk](../web/README.md)** | Browser companion. Rui the red panda is first to wake. |
 | **[Setup & Installation Guide](SETUP.md)** | Detailed instructions for building and running the project locally. Includes prerequisites, secret generation, environment configuration, and troubleshooting. |
 | **[Contributing Guidelines](CONTRIBUTING.md)** | How to contribute to the project, including development setup, code style, pull request process, and documentation update expectations. |
 
