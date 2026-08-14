@@ -167,7 +167,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         </div>
       </aside>
 
-      <nav className="absolute right-4 top-20 z-20 flex flex-col gap-1 sm:right-8 sm:top-24">
+      <nav className="absolute right-4 top-20 z-20 flex max-h-[46dvh] flex-col gap-0.5 overflow-y-auto sm:right-8 sm:top-24">
         {LIVING_KINDS.map((item) => (
           <Link
             key={item.slug}

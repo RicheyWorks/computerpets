@@ -34,4 +34,4 @@ Ownership, licenses, and NFT verify stay in the Java service at the repo root (`
 ## Advertising demos
 
 - `/meet` — house landing
-- `/demo/rui` `/demo/miso` `/demo/pip` — live shareable pets
+- `/demo/{slug}` — live shareable demo for every species (rui, miso, pip, thimble, … ember)
