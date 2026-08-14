@@ -1,0 +1,29 @@
+{
+  "name": "computerpets-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Rui lives on the Windows desktop.",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^35.7.5",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "works.richey.computerpets.desk",
+    "productName": "ComputerPets",
+    "directories": { "output": "dist" },
+    "files": ["main.cjs", "preload.cjs", "renderer/**"],
+    "win": {
+      "target": "nsis",
+      "icon": "renderer/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false
+    }
+  }
+}

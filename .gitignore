@@ -26,3 +26,7 @@ web/node_modules/
 web/.vercel/
 web/.tanstack/
 web/dist/
+
+# Desktop companion
+desktop/node_modules/
+desktop/dist/

@@ -113,6 +113,7 @@ All critical items required before any public or limited production exposure hav
 **Goal:** Deliver a complete, usable platform for the desktop client.
 
 - [x] Living desk browser client (`web/`) — Rui the red panda walks, eats, plays, sleeps, talks
+- [x] Native Windows overlay (`desktop/`) — Rui lives on the actual desktop
 - Remaining catalog species, one at a time (Cat next)
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
