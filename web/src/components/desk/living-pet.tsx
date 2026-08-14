@@ -5,6 +5,14 @@ import { playDeskSound } from "@/lib/pets/desk-audio";
 
 export type PetCommand = PetAnim | "wander" | "none";
 
+type Gait = {
+  walk: number;
+  hop: number;
+  scale: number;
+  perch?: boolean;
+  aquatic?: boolean;
+};
+
 type LivingPetProps = {
   command: PetCommand;
   orderId: number;
@@ -12,6 +20,7 @@ type LivingPetProps = {
   sprites?: SpritePack;
   fps?: Record<PetAnim, number>;
   once?: ReadonlySet<PetAnim>;
+  gait?: Gait;
   onArrived?: () => void;
   onTap?: () => void;
 };
@@ -49,10 +58,10 @@ function floorY(h: number) {
   return h * 0.27;
 }
 
-function walkSpeed(remaining: number, age: number) {
+function walkSpeed(remaining: number, age: number, base: number) {
   const accel = Math.min(1, age / 0.28);
   const decel = remaining < 56 ? remaining / 56 : 1;
-  return WALK_SPEED * Math.max(0.3, accel * decel);
+  return base * Math.max(0.3, accel * decel);
 }
 
 export function LivingPet({
@@ -62,6 +71,7 @@ export function LivingPet({
   sprites = RED_PANDA_SPRITES,
   fps = ANIM_FPS,
   once = ONCE_ANIMS,
+  gait,
   onArrived,
   onTap,
 }: LivingPetProps) {
@@ -95,6 +105,8 @@ export function LivingPet({
   const spritesRef = useRef(sprites);
   const fpsRef = useRef(fps);
   const onceRef = useRef(once);
+  const gaitRef = useRef(gait);
+  gaitRef.current = gait;
   spritesRef.current = sprites;
   fpsRef.current = fps;
   onceRef.current = once;
@@ -189,7 +201,7 @@ export function LivingPet({
           const dir = s.target >= s.x ? 1 : -1;
           s.facing = dir;
           s.walkAge += dt;
-          s.x += dir * walkSpeed(remaining, s.walkAge) * dt;
+          s.x += dir * walkSpeed(remaining, s.walkAge, gaitRef.current?.walk ?? WALK_SPEED) * dt;
           s.stepAcc += dt;
           if (s.stepAcc > 0.22) {
             s.stepAcc = 0;
@@ -249,8 +261,12 @@ export function LivingPet({
 
       const frames = spritesRef.current[s.anim];
       const src = frames[Math.min(s.frame, frames.length - 1)]!;
-      const hopPx = s.hop > 0 ? Math.sin(s.hop * Math.PI) * 26 : 0;
-      const y = floorY(height) + hopPx;
+      const gaitNow = gaitRef.current;
+      const hopPx = s.hop > 0 ? Math.sin(s.hop * Math.PI) * (gaitNow?.hop ?? 26) : 0;
+      const water = gaitNow?.aquatic ? Math.sin(now * 0.004) * 6 : 0;
+      const perch = gaitNow?.perch ? 18 : 0;
+      const scale = gaitNow?.scale ?? 1;
+      const y = floorY(height) + hopPx + water + perch;
       const breathe =
         s.anim === "idle" || s.anim === "sit" || s.anim === "sleep"
           ? 1 + Math.sin(now * (s.anim === "sleep" ? 0.0032 : 0.0046)) * (s.anim === "sleep" ? 0.03 : 0.016)
@@ -262,7 +278,7 @@ export function LivingPet({
         if (imgRef.current.src !== new URL(src, window.location.origin).href) {
           imgRef.current.src = src;
         }
-        imgRef.current.style.transform = `translate3d(${s.x}px, ${-y}px, 0) scale(${s.facing * squat}, ${stretch})`;
+        imgRef.current.style.transform = `translate3d(${s.x}px, ${-y}px, 0) scale(${s.facing * squat * scale}, ${stretch * scale})`;
       }
       if (shadowRef.current) {
         const shrink = 1 - hopPx / 90;
