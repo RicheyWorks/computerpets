@@ -79,6 +79,14 @@ All critical items required before any public or limited production exposure hav
 - **Admin Tooling (new)**
   - [x] `POST /api/admin/revoke` — revokes any license by jti using the existing persistence layer. Protected by `X-Admin-Key` header.
 
+- **2.5 NFT entitlement hardening (Aug 2026)**
+  - [x] Reject malformed wallets (`0x`, short hex) instead of substring-matching ABI words
+  - [x] Official collection allowlist (`ethereum.collections`) so a random ERC-721 cannot mint a pet license
+  - [x] Optional `tokenId → petType` binding; mismatch is a 403
+  - [x] ERC-1155 `balanceOf` + `AUTO` fallback
+  - [x] Optional `personal_sign` proof of wallet control
+  - [x] RPC timeouts, placeholder-RPC health indicator, `GET /api/verify/nft/collections`
+
 ---
 
 ## Phase 3: Scalability & Operational Maturity
@@ -130,6 +138,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-05-24 (Phase 2.3 resilience foundation started)
+**Last Updated:** 2026-08-14 (Phase 2.5 NFT entitlement hardening)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

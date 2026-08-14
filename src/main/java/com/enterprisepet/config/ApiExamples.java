@@ -26,8 +26,10 @@ public final class ApiExamples {
         {
           "walletAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
           "contractAddress": "0x1234567890123456789012345678901234567890",
-          "tokenId": "12345",
-          "petType": "red_panda"
+          "tokenId": "1",
+          "petType": "dragon",
+          "message": "ComputerPets verify nft 1",
+          "signature": "0x…"
         }
         """;
 
