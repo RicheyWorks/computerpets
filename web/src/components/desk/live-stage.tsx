@@ -8,8 +8,11 @@ import {
   applyRest,
   applySnack,
   bondTitle,
+  loadCare,
   maybeBondLine,
   normalizeCare,
+  saveCare,
+  stageOf,
   type CareStats,
 } from "@/lib/pets/care";
 import {
@@ -23,7 +26,7 @@ import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
-import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour } from "@/lib/pets/hours";
+import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { Button } from "@/components/ui/button";
 
 function isStandalone() {
@@ -54,6 +57,10 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
   statsRef.current = stats;
   markRef.current = mark;
 
+  useEffect(() => {
+    saveCare(kind.localKey, stats);
+  }, [kind.localKey, stats]);
+
   const say = useCallback((text: string, hold = 4200) => {
     setSpeech(text);
     speechUntil.current = performance.now() + hold;
@@ -79,9 +86,11 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
     acted.current = false;
     setMark(null);
     setLeaving(false);
+    const live = loadCare(kind.localKey, { hunger: 78, mood: 80, energy: 82 });
+    setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;
-      say(kind.greetLine(), 5000);
+      say(returnLine(rememberVisit(kind.key)) ?? kind.greetLine(), 5000);
       issue("talk");
     }, 450);
     return () => window.clearTimeout(t);
@@ -222,6 +231,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
     const next = livingByKey(key);
     setKind(next);
     saveActiveKindKey(next.key);
+    setStats(loadCare(next.localKey, { hunger: 78, mood: 80, energy: 82 }));
   }
 
   return (
@@ -252,6 +262,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
+        stage={stageOf(stats)}
         seekX={mark?.x}
         onArrived={() => {
           if (order.cmd === "leave") {
@@ -290,7 +301,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
 
       <aside className="absolute left-4 right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-6 sm:right-auto sm:max-w-sm">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          On this device · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)}
+          On this device · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)} · {stageOf(stats)}
         </p>
         <h1 className="mt-1 font-display text-4xl leading-none">{kind.name}</h1>
         <p className="mt-2 text-sm text-muted">{kind.tagline}</p>

@@ -32,7 +32,7 @@ import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { appendJournal, loadJournal, type JournalEntry } from "@/lib/pets/journal";
-import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour } from "@/lib/pets/hours";
+import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, returnLine } from "@/lib/pets/hours";
 
 function loadLocal(key: string): CareStats {
   try {
@@ -129,7 +129,8 @@ export function DeskStage({
     setMark(null);
     const t = window.setTimeout(() => {
       if (acted.current) return;
-      say(kind.greetLine(), 5000);
+      const away = Date.now() - saved.lastTick;
+      say(returnLine(away) ?? kind.greetLine(), 5200);
       issue("talk");
     }, 700);
     return () => window.clearTimeout(t);
@@ -389,6 +390,7 @@ export function DeskStage({
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
+        stage={stageOf(stats)}
         seekX={mark?.x}
         onArrived={() => {
           if (order.cmd === "leave") {

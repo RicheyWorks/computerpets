@@ -3,13 +3,13 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
-import { applyFeed, applyHide, applyPlay, applySnack, bondTitle, maybeBondLine, normalizeCare, type CareStats } from "@/lib/pets/care";
+import { applyFeed, applyHide, applyPlay, applySnack, bondTitle, loadCare, maybeBondLine, normalizeCare, saveCare, stageOf, type CareStats } from "@/lib/pets/care";
 import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
-import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour } from "@/lib/pets/hours";
+import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { cn } from "@/lib/utils";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
@@ -29,6 +29,10 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
   const acted = useRef(false);
   statsRef.current = stats;
   markRef.current = mark;
+
+  useEffect(() => {
+    saveCare(kind.localKey, stats);
+  }, [kind.localKey, stats]);
 
   const say = useCallback((text: string, hold = 4200) => {
     setSpeech(text);
@@ -51,9 +55,11 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
     acted.current = false;
     setMark(null);
     setLeaving(false);
+    const live = loadCare(kind.localKey, { hunger: 78, mood: 80, energy: 82 });
+    setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;
-      say(kind.greetLine(), 5200);
+      say(returnLine(rememberVisit(kind.key)) ?? kind.greetLine(), 5200);
       issue("talk");
     }, 500);
     return () => window.clearTimeout(t);
@@ -227,6 +233,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
+        stage={stageOf(stats)}
         seekX={mark?.x}
         onArrived={() => {
           if (order.cmd === "leave") {
@@ -265,7 +272,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
 
       <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,22rem)] sm:left-8 sm:top-24">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          Living demo · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)}
+          Living demo · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)} · {stageOf(stats)}
         </p>
         <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>

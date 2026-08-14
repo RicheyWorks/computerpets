@@ -239,3 +239,21 @@ export function maybeBondLine(prev: number, next: number) {
   const title = crossedBond(prev, next);
   return title ? (BOND_LINE[title] ?? null) : null;
 }
+
+export function loadCare(key: string, fallback?: Partial<CareStats>): CareStats {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) return normalizeCare(JSON.parse(raw) as Partial<CareStats>);
+  } catch {
+    /* ignore */
+  }
+  return normalizeCare(fallback ?? null);
+}
+
+export function saveCare(key: string, stats: CareStats) {
+  try {
+    localStorage.setItem(key, JSON.stringify({ ...stats, lastTick: Date.now() }));
+  } catch {
+    /* ignore */
+  }
+}
