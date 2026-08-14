@@ -306,18 +306,42 @@
     }
   }
 
+  function bondTitle(bond) {
+    if (bond >= 100) return "Soul";
+    if (bond >= 75) return "Devoted";
+    if (bond >= 50) return "Friend";
+    if (bond >= 25) return "Known";
+    return "New";
+  }
+
+  function crossedBond(prev, next) {
+    const marks = [25, 50, 75, 100];
+    for (const m of marks) {
+      if (prev < m && next >= m) return bondTitle(m);
+    }
+    return null;
+  }
+
+  const BOND_LINE = {
+    Known: "I know your hands now.",
+    Friend: "We are past the first week.",
+    Devoted: "I would wait by the door.",
+    Soul: "The blotter is ours.",
+  };
+
   function vitals(life) {
-    if (life.hidden) return "Away";
-    if (life.sick) return "Unwell";
-    if (life.asleep) return "Asleep";
-    if (life.hunger < 22) return "Hungry";
-    if (life.hygiene < 24) return "Unkempt";
-    if (life.energy < 20) return "Tired";
-    if (life.bond >= 80) return "Devoted";
-    if (life.mood >= 80) return "Bright";
-    if (life.stage === "hatchling") return "Hatchling";
-    if (life.stage === "elder") return "Elder";
-    return "Settled";
+    let word = "Settled";
+    if (life.hidden) word = "Away";
+    else if (life.sick) word = "Unwell";
+    else if (life.asleep) word = "Asleep";
+    else if (life.hunger < 22) word = "Hungry";
+    else if (life.hygiene < 24) word = "Unkempt";
+    else if (life.energy < 20) word = "Tired";
+    else if (life.bond >= 80) word = "Devoted";
+    else if (life.mood >= 80) word = "Bright";
+    else if (life.stage === "hatchling") word = "Hatchling";
+    else if (life.stage === "elder") word = "Elder";
+    return `${word} · ${bondTitle(life.bond)}`;
   }
 
   function alerts(life, name, now = Date.now()) {
@@ -329,5 +353,5 @@
     return null;
   }
 
-  window.PetLife = { load, save, decay, act, vitals, alerts, ageDays, sizeScale, night, blank, hourNow };
+  window.PetLife = { load, save, decay, act, vitals, alerts, ageDays, sizeScale, night, blank, hourNow, bondTitle, crossedBond, BOND_LINE };
 })();

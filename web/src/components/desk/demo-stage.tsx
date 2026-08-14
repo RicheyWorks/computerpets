@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
-import { applyFeed, applyHide, applyPlay, applySnack, normalizeCare, type CareStats } from "@/lib/pets/care";
+import { applyFeed, applyHide, applyPlay, applySnack, bondTitle, maybeBondLine, normalizeCare, type CareStats } from "@/lib/pets/care";
 import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
@@ -67,6 +67,11 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
     const id = window.setInterval(() => {
       if (document.hidden || busy || statsRef.current.hidden) return;
       if (performance.now() < speechUntil.current) return;
+      if (statsRef.current.hunger < 26) {
+        say(kind.ambientLine(statsRef.current));
+        issue("wander");
+        return;
+      }
       if (isRestingHour(kind.key) && statsRef.current.energy < 88) {
         issue("sleep");
         return;
@@ -152,10 +157,20 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
 
   function catchLure() {
     if (!mark || mark.kind !== "lure") return;
-    setStats(applyPlay(statsRef.current));
+    const prev = statsRef.current;
+    const next = applyPlay(prev);
+    setStats(next);
     setMark(null);
     say("You caught it first. I still win.");
+    const line = maybeBondLine(prev.bond, next.bond);
+    if (line) window.setTimeout(() => say(line), 900);
     issue("play");
+  }
+
+  function fleeLure(x: number) {
+    if (stats.hidden || leaving) return;
+    setMark({ kind: "lure", x, hops: 1 });
+    issue("seek");
   }
 
   function hide() {
@@ -198,6 +213,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         hidden={stats.hidden}
         onDropTreat={dropTreatAt}
         onCatchLure={catchLure}
+        onFlee={fleeLure}
       />
 
       <LivingPet
@@ -222,12 +238,20 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
             const caught = markRef.current;
             setMark(null);
             if (caught.kind === "treat") {
-              setStats((s) => applySnack(s));
+              const prev = statsRef.current;
+              const next = applySnack(prev);
+              setStats(next);
               say(SNACK_LINE[kind.key] ?? "A small treaty.");
+              const line = maybeBondLine(prev.bond, next.bond);
+              if (line) window.setTimeout(() => say(line), 900);
               issue("eat");
             } else {
-              setStats((s) => applyPlay(s));
+              const prev = statsRef.current;
+              const next = applyPlay(prev);
+              setStats(next);
               say(kind.careLine("play"));
+              const line = maybeBondLine(prev.bond, next.bond);
+              if (line) window.setTimeout(() => say(line), 900);
               issue("play");
             }
             return;
@@ -241,7 +265,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
 
       <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,22rem)] sm:left-8 sm:top-24">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          Living demo · {dayPartLabel(dayPart())}
+          Living demo · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)}
         </p>
         <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>

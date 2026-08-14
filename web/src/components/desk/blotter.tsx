@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { dayPart } from "@/lib/pets/hours";
 
-export type BlotterMark = { kind: "treat" | "lure"; x: number };
+export type BlotterMark = { kind: "treat" | "lure"; x: number; hops?: number };
 
 export function DayWash() {
   const part = dayPart();
@@ -32,12 +33,19 @@ export function BlotterMarks({
   hidden,
   onDropTreat,
   onCatchLure,
+  onFlee,
 }: {
   mark: BlotterMark | null;
   hidden?: boolean;
   onDropTreat: (x: number) => void;
   onCatchLure: () => void;
+  onFlee?: (x: number) => void;
 }) {
+  useEffect(() => {
+    if (!onFlee || hidden || mark?.kind !== "lure" || (mark.hops ?? 0) > 0) return;
+    const id = window.setTimeout(() => onFlee(randomLureX()), 2200);
+    return () => window.clearTimeout(id);
+  }, [hidden, mark, onFlee]);
   return (
     <>
       <button
