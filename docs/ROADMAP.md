@@ -124,6 +124,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Browser desk specials + house journal; species gaits on every screen
 - [x] Desk hide/mess/night + living Meet house floor
 - [x] Treat drop, walk-off hide, species sleep clocks
+- [x] Click-to-treat, play chase lure, dawn/day/dusk/night
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit

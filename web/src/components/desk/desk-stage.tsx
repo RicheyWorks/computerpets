@@ -29,7 +29,7 @@ import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { appendJournal, loadJournal, type JournalEntry } from "@/lib/pets/journal";
-import { HIDE_LINE, SNACK_LINE, isRestingHour } from "@/lib/pets/hours";
+import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour } from "@/lib/pets/hours";
 
 function loadLocal(key: string): CareStats {
   try {
@@ -69,14 +69,16 @@ export function DeskStage({
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [journal, setJournal] = useState<JournalEntry[]>([]);
-  const [crumb, setCrumb] = useState<number | null>(null);
+  const [mark, setMark] = useState<{ kind: "treat" | "lure"; x: number } | null>(null);
   const [leaving, setLeaving] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
   const speechUntil = useRef(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const statsRef = useRef(stats);
+  const markRef = useRef(mark);
   const acted = useRef(false);
   statsRef.current = stats;
+  markRef.current = mark;
 
   const say = useCallback((text: string, hold = 4200) => {
     setSpeech(text);
@@ -113,7 +115,7 @@ export function DeskStage({
     saveLocal(kind.localKey, { ...live, lastTick: Date.now() });
     acted.current = false;
     setLeaving(false);
-    setCrumb(null);
+    setMark(null);
     const t = window.setTimeout(() => {
       if (acted.current) return;
       say(kind.greetLine(), 5000);
@@ -294,18 +296,40 @@ export function DeskStage({
     note(`${displayName} came back.`);
   }
 
-  function dropTreat() {
-    if (busy || stats.hidden) return;
+  function dropTreatAt(x: number) {
+    if (busy || stats.hidden || leaving) return;
     acted.current = true;
     unlockDeskAudio();
-    setCrumb(18 + Math.random() * 62);
+    setMark({ kind: "treat", x: Math.max(8, Math.min(90, x)) });
     issue("seek");
   }
 
-  const night = (() => {
-    const h = new Date().getHours();
-    return h >= 21 || h < 6;
-  })();
+  function dropTreat() {
+    dropTreatAt(18 + Math.random() * 62);
+  }
+
+  function startChase() {
+    if (busy || stats.hidden || leaving) return;
+    acted.current = true;
+    unlockDeskAudio();
+    setMark({ kind: "lure", x: 16 + Math.random() * 68 });
+    say(trait.special === "bug" ? "There. A bug." : "A ribbon. Catch it.");
+    issue("seek");
+  }
+
+  function catchLure() {
+    if (!mark || mark.kind !== "lure") return;
+    const next = applyPlay(statsRef.current);
+    setStats(next);
+    saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+    setMark(null);
+    say("You caught it first. I still win.");
+    note(`${displayName} played. You helped.`);
+    issue("play");
+  }
+
+  const part = dayPart();
+  const night = part === "night";
 
   return (
     <section className="relative isolate h-[calc(100dvh-4rem)] min-h-[520px] w-full overflow-hidden bg-elevated sm:h-[calc(100dvh-4.5rem)]">
@@ -314,14 +338,24 @@ export function DeskStage({
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-[center_70%]"
       />
-      <div className={`absolute inset-0 bg-gradient-to-t from-bg via-bg/15 to-bg/30 ${night ? "brightness-[0.72]" : ""}`} />
-      <div className={`desk-lamp pointer-events-none absolute inset-0 ${night ? "opacity-40" : ""}`} />
+      <div className={`absolute inset-0 bg-gradient-to-t from-bg via-bg/15 to-bg/30 ${night ? "brightness-[0.68]" : part === "dusk" ? "brightness-[0.82] saturate-[0.9]" : part === "dawn" ? "brightness-[0.9] saturate-50" : ""}`} />
+      <div className={`desk-lamp pointer-events-none absolute inset-0 ${night ? "opacity-35" : part === "dusk" ? "opacity-70" : ""}`} />
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
         <span className="desk-mote" style={{ left: "18%", bottom: "30%" }} />
         <span className="desk-mote" style={{ left: "42%", bottom: "38%", animationDelay: "1.4s" }} />
         <span className="desk-mote" style={{ left: "61%", bottom: "28%", animationDelay: "2.6s" }} />
         <span className="desk-mote" style={{ left: "78%", bottom: "34%", animationDelay: "0.7s" }} />
       </div>
+
+      <button
+        type="button"
+        aria-label="Drop a treat on the blotter"
+        className="absolute inset-0 z-[1] cursor-pointer bg-transparent"
+        onClick={(e) => {
+          const box = e.currentTarget.getBoundingClientRect();
+          dropTreatAt(((e.clientX - box.left) / box.width) * 100);
+        }}
+      />
 
       <LivingPet
         key={kind.key}
@@ -334,7 +368,7 @@ export function DeskStage({
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
-        seekX={crumb ?? undefined}
+        seekX={mark?.x}
         onArrived={() => {
           if (order.cmd === "leave") {
             const next = applyHide(statsRef.current);
@@ -343,14 +377,24 @@ export function DeskStage({
             saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
             return;
           }
-          if (order.cmd === "seek" && crumb != null) {
-            const next = applySnack(statsRef.current);
-            setStats(next);
-            saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
-            setCrumb(null);
-            say(SNACK_LINE[kind.key] ?? "A small treaty.");
-            note(`${displayName} found the treat.`);
-            issue("eat");
+          if (order.cmd === "seek" && markRef.current) {
+            const caught = markRef.current;
+            setMark(null);
+            if (caught.kind === "treat") {
+              const next = applySnack(statsRef.current);
+              setStats(next);
+              saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+              say(SNACK_LINE[kind.key] ?? "A small treaty.");
+              note(`${displayName} found the treat.`);
+              issue("eat");
+            } else {
+              const next = applyPlay(statsRef.current);
+              setStats(next);
+              saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+              say(kind.careLine("play"));
+              note(`${displayName} caught the ${caught.kind === "lure" ? "lure" : "treat"}.`);
+              issue("play");
+            }
             return;
           }
           if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat" || order.cmd === "enter") {
@@ -360,11 +404,23 @@ export function DeskStage({
         onTap={() => void talk()}
       />
 
-      {crumb != null && !stats.hidden ? (
+      {mark?.kind === "treat" && !stats.hidden ? (
         <span
           aria-hidden
-          className="pointer-events-none absolute z-10 h-2.5 w-2.5 rounded-full bg-[#c4a574] shadow-sm"
-          style={{ left: `${crumb}%`, bottom: "19.5%" }}
+          className="desk-treat pointer-events-none absolute z-10"
+          style={{ left: `${mark.x}%`, bottom: "19.5%" }}
+        />
+      ) : null}
+      {mark?.kind === "lure" && !stats.hidden ? (
+        <button
+          type="button"
+          aria-label="Catch the lure"
+          className="desk-lure absolute z-10"
+          style={{ left: `${mark.x}%`, bottom: "28%" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            catchLure();
+          }}
         />
       ) : null}
 
@@ -403,7 +459,7 @@ export function DeskStage({
         <h1 className="mt-2 font-display text-2xl leading-none sm:text-3xl">{displayName}</h1>
         <p className="mt-2 hidden text-sm text-muted sm:block">{kind.blurb}</p>
         <p className="mt-1 text-xs text-subtle sm:mt-2">
-          {busy ? "Listening" : `${moodWord(stats)} · ${stageOf(stats)} · bond ${stats.bond}`}
+          {busy ? "Listening" : `${moodWord(stats)} · ${stageOf(stats)} · bond ${stats.bond} · ${dayPartLabel(part)}`}
         </p>
         <p className="mt-1 text-[11px] text-subtle" suppressHydrationWarning>
           {describeBinding(mind)}
@@ -432,7 +488,7 @@ export function DeskStage({
             <Button disabled={busy || stats.hidden} onClick={dropTreat}>
               Treat
             </Button>
-            <Button variant="secondary" disabled={busy} onClick={() => void care("play")}>
+            <Button variant="secondary" disabled={busy || stats.hidden} onClick={startChase}>
               Play
             </Button>
             <Button variant="secondary" disabled={busy} onClick={() => void care("rest")}>
