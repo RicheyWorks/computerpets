@@ -4,6 +4,7 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/utils";
 
 const NAV = [
+  { to: "/meet", label: "Meet" },
   { to: "/", label: "Desk" },
   { to: "/collection", label: "Kennel" },
   { to: "/hatch", label: "Hatchery" },
@@ -14,19 +15,21 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { isPending } = useCurrentUserState();
   const desk = pathname === "/";
+  const demo = pathname.startsWith("/demo/");
+  const meet = pathname === "/meet";
 
   return (
-    <div className={cn("bg-bg text-fg", desk ? "h-dvh overflow-hidden" : "min-h-dvh")}>
+    <div className={cn("bg-bg text-fg", desk || demo ? "h-dvh overflow-hidden" : "min-h-dvh")}>
       <header
         className={cn(
           "z-30 border-b border-border/80",
-          desk
+          desk || demo || meet
             ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
             : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-          <Link to="/" className="flex items-baseline gap-2 no-underline">
+          <Link to="/meet" className="flex items-baseline gap-2 no-underline">
             <span className="font-display text-lg tracking-tight text-fg">ComputerPets</span>
             <span className="hidden text-[11px] uppercase tracking-[0.18em] text-subtle sm:inline">
               Living desk
@@ -70,8 +73,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      {desk ? (
-        <div className="h-dvh pt-16">{children}</div>
+      {desk || demo ? (
+        <div className={demo ? "h-dvh" : "h-dvh pt-16"}>{children}</div>
+      ) : meet ? (
+        <div>{children}</div>
       ) : (
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</div>
       )}
