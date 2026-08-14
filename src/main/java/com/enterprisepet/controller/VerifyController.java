@@ -1,7 +1,7 @@
 package com.enterprisepet.controller;
 
-import com.enterprisepet.dto.VerifySuccessResponse;
 import com.enterprisepet.license.LicenseService;
+import com.enterprisepet.nft.NftCatalog;
 import com.enterprisepet.pet.PetCatalog;
 import com.enterprisepet.pet.PetType;
 import com.enterprisepet.provider.OwnershipProvider;
@@ -34,15 +34,18 @@ public class VerifyController {
     private final LicenseService licenseService;
     private final JwtService jwtService;
     private final PetCatalog petCatalog;
+    private final NftCatalog nftCatalog;
 
     public VerifyController(ProviderRegistry providers,
                             LicenseService licenseService,
                             JwtService jwtService,
-                            PetCatalog petCatalog) {
+                            PetCatalog petCatalog,
+                            NftCatalog nftCatalog) {
         this.providers = providers;
         this.licenseService = licenseService;
         this.jwtService = jwtService;
         this.petCatalog = petCatalog;
+        this.nftCatalog = nftCatalog;
     }
 
     /**
@@ -62,6 +65,17 @@ public class VerifyController {
     }
 
     /**
+     * GET /api/verify/nft/collections — official ComputerPets NFT contracts
+     * and any tokenId → pet bindings the client should present.
+     */
+    @Operation(summary = "List official NFT collections",
+            description = "Returns allowlisted ComputerPets collections and token-to-pet bindings.")
+    @GetMapping("/nft/collections")
+    public ResponseEntity<List<Map<String, Object>>> nftCollections() {
+        return ResponseEntity.ok(nftCatalog.listPublic());
+    }
+
+    /**
      * POST /api/verify/{provider} — generic provider-driven verification.
      * The body is a flat map of provider-specific fields plus an optional {@code petType}.
      * Returns a sealed license + pet info on success.
@@ -72,7 +86,7 @@ public class VerifyController {
         responses = {
             @ApiResponse(responseCode = "200", description = "Ownership verified successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = VerifySuccessResponse.class),
+                            schema = @Schema(implementation = com.enterprisepet.dto.VerifySuccessResponse.class),
                             examples = @ExampleObject(ref = "Success Response"))),
             @ApiResponse(responseCode = "400", description = "Unknown petType or invalid request",
                     content = @Content(mediaType = "application/json",
@@ -112,9 +126,6 @@ public class VerifyController {
         }
         OwnershipProvider provider = providerOpt.get();
 
-        ResolvedPet pet = resolvePet(request.getOrDefault("petType", DEFAULT_PET_KEY));
-        if (pet.error != null) return pet.error;
-
         VerificationResult result;
         try {
             result = provider.verify(request);
@@ -132,6 +143,13 @@ public class VerifyController {
                 "provider", provider.key()
             ));
         }
+
+        String requestedPet = request.get("petType");
+        String petKey = result.petKey() != null && !result.petKey().isBlank()
+                ? result.petKey()
+                : (requestedPet == null || requestedPet.isBlank() ? DEFAULT_PET_KEY : requestedPet.trim());
+        ResolvedPet pet = resolvePet(petKey);
+        if (pet.error != null) return pet.error;
 
         String hwid = request.get("hwid");
         var license = licenseService.issueLicense(result.ownerId(), pet.type.key(), provider.key(), LICENSE_DAYS, hwid);
@@ -153,7 +171,7 @@ public class VerifyController {
         if (found.isPresent()) return new ResolvedPet(found.get(), null);
         return new ResolvedPet(null, ResponseEntity.status(400).body(Map.of(
             "error", "unknown petType",
-            "received", petKey,
+            "received", petKey == null ? "" : petKey,
             "validKeys", petCatalog.validKeysCsv()
         )));
     }
