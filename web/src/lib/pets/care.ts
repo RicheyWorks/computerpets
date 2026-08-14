@@ -1,3 +1,5 @@
+export type MessPile = { id: number; x: number };
+
 export type CareStats = {
   hunger: number;
   mood: number;
@@ -6,6 +8,8 @@ export type CareStats = {
   health: number;
   bond: number;
   sick: boolean;
+  hidden: boolean;
+  mess: MessPile[];
   bornAt: number;
   lastTick: number;
 };
@@ -28,6 +32,8 @@ export function blankCare(now = Date.now()): CareStats {
     health: 92,
     bond: 18,
     sick: false,
+    hidden: false,
+    mess: [],
     bornAt: now,
     lastTick: now,
   };
@@ -44,6 +50,8 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
     health: clampStat(raw.health ?? base.health),
     bond: clampStat(raw.bond ?? base.bond),
     sick: Boolean(raw.sick),
+    hidden: Boolean(raw.hidden),
+    mess: Array.isArray(raw.mess) ? raw.mess.slice(0, 6) : [],
     bornAt: raw.bornAt ?? now,
     lastTick: raw.lastTick ?? now,
   };
@@ -74,6 +82,9 @@ export function decayStats(stats: Partial<CareStats>, lastTick: number, now = Da
   }
   if (!next.sick && next.health < 32) next.sick = true;
   if (next.sick && next.health > 64 && next.hygiene > 40) next.sick = false;
+  if (next.hygiene < 42 && next.mess.length < 5 && Math.random() < Math.min(0.35, dt / 120000)) {
+    next.mess = [...next.mess, { id: now + next.mess.length, x: 12 + Math.random() * 76 }];
+  }
   return next;
 }
 
@@ -117,6 +128,7 @@ export function applyClean(stats: Partial<CareStats>): CareStats {
     hygiene: clampStat(s.hygiene + 38),
     mood: clampStat(s.mood + 8),
     bond: clampStat(s.bond + 2),
+    mess: [],
   };
 }
 
@@ -151,6 +163,26 @@ export function applyPraise(stats: Partial<CareStats>): CareStats {
   };
 }
 
+export function applyCall(stats: Partial<CareStats>): CareStats {
+  const s = normalizeCare(stats);
+  return { ...s, hidden: false, mood: clampStat(s.mood + 4), bond: clampStat(s.bond + 1) };
+}
+
+export function applyHide(stats: Partial<CareStats>): CareStats {
+  const s = normalizeCare(stats);
+  return { ...s, hidden: true };
+}
+
+export function pickMess(stats: Partial<CareStats>, id: number): CareStats {
+  const s = normalizeCare(stats);
+  return {
+    ...s,
+    mess: s.mess.filter((m) => m.id !== id),
+    hygiene: clampStat(s.hygiene + 8),
+    mood: clampStat(s.mood + 3),
+  };
+}
+
 export function bondScore(stats: Partial<CareStats>) {
   const s = normalizeCare(stats);
   return clampStat(s.hunger * 0.22 + s.mood * 0.28 + s.energy * 0.16 + s.hygiene * 0.14 + s.bond * 0.2);
@@ -159,6 +191,7 @@ export function bondScore(stats: Partial<CareStats>) {
 export function moodWord(stats: Partial<CareStats>) {
   const s = normalizeCare(stats);
   if (s.sick) return "Unwell";
+  if (s.hidden) return "Hiding";
   if (s.hunger < 22) return "Hungry";
   if (s.hygiene < 24) return "Unkempt";
   if (s.energy < 20) return "Tired";

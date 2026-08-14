@@ -21,6 +21,9 @@ type LivingPetProps = {
   fps?: Record<PetAnim, number>;
   once?: ReadonlySet<PetAnim>;
   gait?: Gait;
+  startX?: number;
+  hidden?: boolean;
+  unwell?: boolean;
   onArrived?: () => void;
   onTap?: () => void;
 };
@@ -72,6 +75,9 @@ export function LivingPet({
   fps = ANIM_FPS,
   once = ONCE_ANIMS,
   gait,
+  startX = 120,
+  hidden = false,
+  unwell = false,
   onArrived,
   onTap,
 }: LivingPetProps) {
@@ -81,7 +87,7 @@ export function LivingPet({
   const shadowRef = useRef<HTMLDivElement>(null);
   const dustRef = useRef<HTMLDivElement>(null);
   const sim = useRef<Sim>({
-    x: 120,
+    x: startX,
     facing: 1,
     anim: "idle",
     frame: 0,
@@ -390,7 +396,14 @@ export function LivingPet({
         alt=""
         draggable={false}
         className="pointer-events-auto absolute bottom-0 left-0 h-44 w-44 cursor-grab object-contain object-bottom active:cursor-grabbing select-none touch-none"
-        style={{ willChange: "transform", transformOrigin: "center bottom" }}
+        style={{
+          willChange: "transform",
+          transformOrigin: "center bottom",
+          opacity: hidden ? 0 : 1,
+          filter: unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+          pointerEvents: hidden ? "none" : "auto",
+          transition: "opacity 280ms ease, filter 280ms ease",
+        }}
       />
     </div>
   );
