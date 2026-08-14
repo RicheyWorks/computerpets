@@ -1,54 +1,25 @@
-const SPRITES = {
-  idle: ["sprites/red_panda/idle/1.png", "sprites/red_panda/idle/2.png", "sprites/red_panda/idle/3.png", "sprites/red_panda/idle/4.png"],
-  walk: [
-    "sprites/red_panda/walk/1.png",
-    "sprites/red_panda/walk/2.png",
-    "sprites/red_panda/walk/3.png",
-    "sprites/red_panda/walk/4.png",
-    "sprites/red_panda/walk/5.png",
-    "sprites/red_panda/walk/6.png",
-  ],
-  sit: ["sprites/red_panda/sit/1.png", "sprites/red_panda/sit/2.png"],
-  sleep: [
-    "sprites/red_panda/sleep/1.png",
-    "sprites/red_panda/sleep/2.png",
-    "sprites/red_panda/sleep/3.png",
-    "sprites/red_panda/sleep/4.png",
-  ],
-  talk: ["sprites/red_panda/talk/1.png", "sprites/red_panda/talk/2.png", "sprites/red_panda/talk/3.png", "sprites/red_panda/talk/4.png"],
-  eat: ["sprites/red_panda/eat/1.png", "sprites/red_panda/eat/2.png", "sprites/red_panda/eat/3.png", "sprites/red_panda/eat/4.png"],
-  play: ["sprites/red_panda/play/1.png", "sprites/red_panda/play/2.png", "sprites/red_panda/play/3.png", "sprites/red_panda/play/4.png"],
-};
-
-const FPS = { idle: 3.2, walk: 7.5, sit: 2.4, sleep: 2, talk: 5.5, eat: 4.4, play: 7.2 };
-const ONCE = new Set(["eat", "play"]);
 const SPRITE = 176;
 const PAD = 16;
 const WALK_SPEED = 98;
-const STORE = "computerpets.desktop.rui.v1";
+const STORE_KIND = "computerpets.desktop.kind.v1";
+const STORE_STATS = "computerpets.desktop.stats.v1";
 
-const LINES = {
-  ambient: [
-    "There is a beetle. No — it is your cursor.",
-    "I put a ribbon somewhere safer. You will find it.",
-    "If you turn a page, I will count the rustle.",
-    "Do not startle. I am being extremely still.",
-    "Your hand is a weather system. I am tracking it.",
-    "I climbed the taskbar. The view is smug.",
-    "This window has no blotter. I forgive it.",
-  ],
-  greet: [
-    "You came back. The desk was almost lonely.",
-    "I saved you a corner of the screen.",
-    "Hello. I have been practicing sitting.",
-  ],
-  feed: ["Bamboo-adjacent. I accept this treaty.", "One more bite. For science.", "Warm. I will remember this kindness."],
-  play: ["Catch the ribbon. I invented this game.", "I win. The rules are private.", "Again. The desktop is a very fine arena."],
-  rest: ["I will just close one eye.", "Wake me if the lamp goes out.", "The tail is a pillow. This is known."],
-  hungry: ["The icons are not edible. I checked.", "A small snack would improve my philosophy."],
-  tired: ["My paws have opinions about walking.", "A sit. Then perhaps a second sit."],
-  listen: ["I am listening. Use small words. Or large ones.", "Say that again, closer to my ear tufts."],
-};
+const FPS = { idle: 2.8, walk: 6.4, sit: 2.2, sleep: 1.8, talk: 4.6, eat: 3.8, play: 6.6 };
+const ONCE = new Set(["eat", "play"]);
+
+function pack(key) {
+  const n = (anim, count) =>
+    Array.from({ length: count }, (_, i) => `sprites/${key}/${anim}/${i + 1}.png`);
+  return {
+    idle: n("idle", 4),
+    walk: n("walk", 6),
+    sit: n("sit", key === "red_panda" ? 2 : 4),
+    sleep: n("sleep", 4),
+    talk: n("talk", 4),
+    eat: n("eat", 4),
+    play: n("play", 4),
+  };
+}
 
 function pick(list) {
   return list[Math.floor(Math.random() * list.length)] ?? list[0];
@@ -64,12 +35,10 @@ const bubbleText = document.getElementById("bubble-text");
 const dustRoot = document.getElementById("dust");
 for (let i = 0; i < 12; i++) dustRoot.appendChild(document.createElement("span"));
 
-for (const frames of Object.values(SPRITES)) {
-  for (const src of frames) {
-    const img = new Image();
-    img.src = src;
-  }
-}
+/** @type {{ key: string, name: string, speciesLabel: string, lines: any }[]} */
+let roster = [];
+/** @type {{ key: string, name: string, lines: any, sprites: ReturnType<typeof pack> } | null} */
+let kind = null;
 
 const sim = {
   x: 80,
@@ -93,19 +62,22 @@ const sim = {
 };
 
 let stats = { hunger: 76, mood: 72, energy: 80, lastTick: Date.now() };
-try {
-  const raw = localStorage.getItem(STORE);
-  if (raw) stats = { ...stats, ...JSON.parse(raw) };
-} catch {
-  /* ignore */
-}
-
 let speechUntil = 0;
 let clickable = false;
 
+function loadStats() {
+  try {
+    const raw = localStorage.getItem(`${STORE_STATS}.${kind?.key ?? "red_panda"}`);
+    if (raw) stats = { ...stats, ...JSON.parse(raw) };
+    else stats = { hunger: 76, mood: 72, energy: 80, lastTick: Date.now() };
+  } catch {
+    stats = { hunger: 76, mood: 72, energy: 80, lastTick: Date.now() };
+  }
+}
+
 function save() {
   try {
-    localStorage.setItem(STORE, JSON.stringify({ ...stats, lastTick: Date.now() }));
+    localStorage.setItem(`${STORE_STATS}.${kind.key}`, JSON.stringify({ ...stats, lastTick: Date.now() }));
   } catch {
     /* ignore */
   }
@@ -128,8 +100,8 @@ function say(text, hold = 4200) {
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.92;
-    u.pitch = 1.15;
+    u.rate = 0.94;
+    u.pitch = 1.05;
     window.speechSynthesis.speak(u);
   }
 }
@@ -140,12 +112,13 @@ function issue(cmd) {
 }
 
 function ambientLine() {
-  if (stats.hunger < 28) return pick(LINES.hungry);
-  if (stats.energy < 28) return pick(LINES.tired);
-  return pick(LINES.ambient);
+  const lines = kind.lines;
+  if (stats.hunger < 28) return pick(lines.hungry);
+  if (stats.energy < 28) return pick(lines.tired);
+  return pick(lines.ambient);
 }
 
-function playSound(kind) {
+function playSound(kindName) {
   try {
     const Ctor = window.AudioContext || window.webkitAudioContext;
     if (!Ctor) return;
@@ -161,14 +134,14 @@ function playSound(kind) {
     gain.connect(ac.destination);
     const j = 0.92 + Math.random() * 0.16;
     let end = now + 0.1;
-    if (kind === "step") {
+    if (kindName === "step") {
       osc.type = "triangle";
       osc.frequency.setValueAtTime(140 * j, now);
       filter.frequency.setValueAtTime(420, now);
       gain.gain.setValueAtTime(0.03, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       end = now + 0.08;
-    } else if (kind === "hop") {
+    } else if (kindName === "hop") {
       osc.type = "sine";
       osc.frequency.setValueAtTime(320 * j, now);
       osc.frequency.exponentialRampToValueAtTime(180, now + 0.16);
@@ -176,7 +149,7 @@ function playSound(kind) {
       gain.gain.setValueAtTime(0.045, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
       end = now + 0.2;
-    } else if (kind === "munch") {
+    } else if (kindName === "munch") {
       osc.type = "square";
       osc.frequency.setValueAtTime(90 * j, now);
       filter.frequency.setValueAtTime(280, now);
@@ -250,12 +223,13 @@ function applyCommand() {
 
 function handle(cmd) {
   decay();
+  const lines = kind.lines;
   if (cmd === "feed") {
     stats.hunger = clamp(stats.hunger + 28, 0, 100);
     stats.mood = clamp(stats.mood + 6, 0, 100);
     stats.energy = clamp(stats.energy - 6, 0, 100);
     save();
-    say(pick(LINES.feed));
+    say(pick(lines.feed));
     issue("eat");
     return;
   }
@@ -264,7 +238,7 @@ function handle(cmd) {
     stats.mood = clamp(stats.mood + 26, 0, 100);
     stats.energy = clamp(stats.energy - 14, 0, 100);
     save();
-    say(pick(LINES.play));
+    say(pick(lines.play));
     issue("play");
     return;
   }
@@ -273,7 +247,7 @@ function handle(cmd) {
     stats.mood = clamp(stats.mood + 4, 0, 100);
     stats.energy = clamp(stats.energy + 34, 0, 100);
     save();
-    say(pick(LINES.rest));
+    say(pick(lines.rest));
     issue("sleep");
     return;
   }
@@ -295,10 +269,35 @@ function setClickable(next) {
   window.desk?.setClickable(next);
 }
 
-let last = performance.now();
+function switchTo(key) {
+  const next = roster.find((r) => r.key === key) ?? roster[0];
+  kind = { ...next, sprites: pack(next.key) };
+  try {
+    localStorage.setItem(STORE_KIND, next.key);
+  } catch {
+    /* ignore */
+  }
+  loadStats();
+  sim.anim = "idle";
+  sim.frame = 0;
+  sim.target = null;
+  say(pick(next.lines.greet), 5000);
+  issue("talk");
+  for (const frames of Object.values(kind.sprites)) {
+    for (const src of frames) {
+      const img = new Image();
+      img.src = src;
+    }
+  }
+}
+
 function tick(now) {
-  const dt = Math.min(0.1, (now - last) / 1000);
-  last = now;
+  const dt = Math.min(0.1, (now - tick.last) / 1000);
+  tick.last = now;
+  if (!kind) {
+    requestAnimationFrame(tick);
+    return;
+  }
   const width = window.innerWidth;
   const maxX = Math.max(PAD, width - SPRITE - PAD);
 
@@ -347,7 +346,7 @@ function tick(now) {
       const step = 1 / fps;
       while (sim.acc >= step) {
         sim.acc -= step;
-        const frames = SPRITES[sim.anim];
+        const frames = kind.sprites[sim.anim];
         const len = frames.length;
         if (sim.anim === "sit") sim.frame = Math.min(len - 1, sim.frame + 1);
         else if (ONCE.has(sim.anim)) {
@@ -372,7 +371,7 @@ function tick(now) {
   }
   sim.dust = sim.dust.filter((d) => d.life > 0);
 
-  const frames = SPRITES[sim.anim];
+  const frames = kind.sprites[sim.anim];
   const src = frames[Math.min(sim.frame, frames.length - 1)];
   if (!pet.src.endsWith(src.replace(/^\.\//, ""))) pet.src = src;
 
@@ -406,6 +405,7 @@ function tick(now) {
 
   requestAnimationFrame(tick);
 }
+tick.last = performance.now();
 
 pet.addEventListener("pointerdown", (e) => {
   if (e.button === 2) return;
@@ -439,20 +439,20 @@ window.addEventListener("pointerup", (e) => {
     issue("idle");
   }
 });
+window.addEventListener("pointercancel", () => {
+  sim.dragging = false;
+  sim.pointerStart = null;
+});
 pet.addEventListener("contextmenu", (e) => {
   e.preventDefault();
   window.desk?.openMenu(e.clientX, e.clientY);
 });
 
 window.desk?.onCommand((cmd) => handle(cmd));
+window.desk?.onSwitch((key) => switchTo(key));
 
-decay();
-setTimeout(() => {
-  say(pick(LINES.greet), 5000);
-  issue("talk");
-}, 600);
 setInterval(() => {
-  if (document.hidden) return;
+  if (document.hidden || !kind) return;
   if (performance.now() < speechUntil) return;
   const roll = Math.random();
   if (roll < 0.42) issue("wander");
@@ -463,7 +463,20 @@ setInterval(() => {
     issue("talk");
   }
 }, 5600);
-setInterval(decay, 30_000);
+setInterval(() => {
+  if (kind) decay();
+}, 30_000);
 
-pet.src = SPRITES.idle[0];
-requestAnimationFrame(tick);
+fetch("roster.json")
+  .then((r) => r.json())
+  .then((data) => {
+    roster = data;
+    let start = "red_panda";
+    try {
+      start = localStorage.getItem(STORE_KIND) || start;
+    } catch {
+      /* ignore */
+    }
+    switchTo(start);
+    requestAnimationFrame(tick);
+  });

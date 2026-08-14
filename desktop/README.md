@@ -1,31 +1,30 @@
-# Desktop companion
+# Desktop companion — Windows and Mac
 
-Rui lives on the Windows desktop — not in a browser tab. Transparent overlay, always on top, click-through except on the panda. He walks the taskbar, talks, eats, and sleeps.
+All twenty pets live on the real desktop. Transparent overlay, always on top, click-through except on the animal. Tray / menu-bar lists the whole house.
 
-## Run (Windows)
+## Run
 
-```powershell
-cd C:\Users\730ri\projects\ComputerPets
-git pull
+```bash
 cd desktop
 npm install
 npm start
 ```
 
-Close the browser tab if you still have `web` running. This window has no chrome. Look at the bottom of your screen.
+Windows: `..\desktop.ps1` from the repo root.  
+Mac / Linux: `sh ../desktop.sh`
 
-- Drag Rui
-- Click him to talk
-- Right-click for Feed / Play / Rest / Talk / Quit
-- Tray icon (hidden in the overflow) also has the menu
+- Drag them
+- Click to talk
+- Right-click for Feed / Play / Rest / Talk / switch companion
+- Tray (Windows) or menu bar (Mac) has the same menu
 
-Quit from the tray or the right-click menu. Hiding him keeps the tray.
+## Package
 
-## Package an installer (optional)
-
-```powershell
-cd desktop
-npm run dist
+```bash
+npm run dist:win    # Windows installer + portable exe
+npm run dist:mac    # Mac dmg + zip (run on a Mac)
 ```
 
-The installer lands in `desktop\dist`.
+Installers land in `desktop/dist`.
+
+Phones and tablets use the web Live companion (`/live`) — Add to Home Screen.

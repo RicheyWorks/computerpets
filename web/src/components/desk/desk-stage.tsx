@@ -247,7 +247,7 @@ export function DeskStage({
         </div>
       </aside>
 
-      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-border bg-bg/85 p-3 backdrop-blur-sm sm:p-4">
+      <div className="absolute bottom-0 left-0 right-0 z-20 border-t border-border bg-bg/85 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur-sm sm:p-4">
         <div className="mx-auto flex max-w-4xl flex-col gap-3 sm:flex-row sm:items-center">
           <div className="grid grid-cols-4 gap-2 sm:flex sm:flex-wrap">
             <Button disabled={busy} onClick={() => void care("feed")}>
