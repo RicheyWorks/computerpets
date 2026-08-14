@@ -9,7 +9,7 @@ const NAV = [
   { to: "/", label: "Desk", hideOnPhone: false },
   { to: "/collection", label: "Kennel", hideOnPhone: true },
   { to: "/hatch", label: "Hatchery", hideOnPhone: true },
-  { to: "/catalog", label: "Catalog", hideOnPhone: true },
+  { to: "/mind", label: "Minds", hideOnPhone: true },
 ] as const;
 
 export function AppShell({ children }: { children: React.ReactNode }) {
