@@ -6,7 +6,8 @@ All twenty pets live on the real desktop as a Tamagotchi-grade overlay. Unique h
 
 Right-click the pet or use the tray / menu bar:
 
-- Feed, snack, play, rest, talk
+- Feed, treat, play (chase a ribbon), rest, talk
+- Hide — they walk off the screen. Call back — they walk in.
 - Clean (click droppings on the floor too)
 - Bath, medicine, praise
 - Call back if they hide

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
+import { DayWash } from "@/components/desk/blotter";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { traitFor } from "@/lib/pets/traits";
 
@@ -56,7 +57,7 @@ export function HouseFloor() {
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-[center_72%]"
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-bg/80 via-transparent to-bg/25" />
+      <DayWash />
       {KEYS.map((key, i) => (
         <Guest key={key} species={key} startX={STARTS[i] ?? 80} />
       ))}

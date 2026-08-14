@@ -79,11 +79,13 @@ function companionMenu() {
 function careMenu() {
   return [
     { label: "Feed", click: () => win?.webContents.send("command", "feed") },
-    { label: "Snack", click: () => win?.webContents.send("command", "snack") },
+    { label: "Treat", click: () => win?.webContents.send("command", "snack") },
     { label: "Play", click: () => win?.webContents.send("command", "play") },
     { label: "Rest", click: () => win?.webContents.send("command", "rest") },
     { label: "Talk", click: () => win?.webContents.send("command", "talk") },
     { type: "separator" },
+    { label: "Hide", click: () => win?.webContents.send("command", "hide") },
+    { label: "Call back", click: () => win?.webContents.send("command", "call") },
     { label: "Clean", click: () => win?.webContents.send("command", "clean") },
     { label: "Bath", click: () => win?.webContents.send("command", "bath") },
     { label: "Medicine", click: () => win?.webContents.send("command", "medicine") },

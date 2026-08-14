@@ -100,7 +100,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
               <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
               <p className="mt-2 text-sm text-muted">
-                Transparent overlay. They walk the real screen, sit on the taskbar, live in the tray. All twenty.
+                Transparent overlay. Treat, chase, hide. They walk the real screen. All twenty.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
             </article>
@@ -108,7 +108,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
-                Open Live, then Add to Home Screen. Fullscreen companion, big targets, all twenty in the picker.
+                Open Live, then Add to Home Screen. Tap the blotter for a treat. Chase the ribbon. All twenty.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">
@@ -120,7 +120,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Browser</p>
               <h3 className="mt-2 font-display text-2xl">Share a demo</h3>
               <p className="mt-2 text-sm text-muted">
-                Every animal has a live page. Send the link. They will be on the blotter when it opens.
+                Every animal has a live page. Click the blotter. Send the link. They will be walking when it opens.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">/demo/ember</p>
             </article>
