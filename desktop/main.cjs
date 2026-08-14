@@ -1,6 +1,10 @@
-const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen } = require("electron");
+const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, Notification, powerMonitor } = require("electron");
 const fs = require("fs");
 const path = require("path");
+
+app.setAppUserModelId("works.richey.computerpets.desk");
+app.commandLine.appendSwitch("enable-transparent-visuals");
+app.commandLine.appendSwitch("disable-renderer-backgrounding");
 
 /** @type {BrowserWindow | null} */
 let win = null;
@@ -9,6 +13,7 @@ let tray = null;
 /** @type {{ key: string, name: string, speciesLabel: string }[]} */
 let roster = [];
 let currentKey = "red_panda";
+let lastVitals = { vital: "Settled", hunger: 80, sick: false, hidden: false, mess: 0, bond: 0, stage: "grown" };
 
 function loadRoster() {
   const file = path.join(__dirname, "renderer", "roster.json");
@@ -36,16 +41,37 @@ function companionMenu() {
   }));
 }
 
-function trayTemplate() {
+function careMenu() {
   return [
-    { label: currentName(), enabled: false },
-    { type: "separator" },
-    { label: "Companions", submenu: companionMenu() },
-    { type: "separator" },
     { label: "Feed", click: () => win?.webContents.send("command", "feed") },
+    { label: "Snack", click: () => win?.webContents.send("command", "snack") },
     { label: "Play", click: () => win?.webContents.send("command", "play") },
     { label: "Rest", click: () => win?.webContents.send("command", "rest") },
     { label: "Talk", click: () => win?.webContents.send("command", "talk") },
+    { type: "separator" },
+    { label: "Clean", click: () => win?.webContents.send("command", "clean") },
+    { label: "Bath", click: () => win?.webContents.send("command", "bath") },
+    { label: "Medicine", click: () => win?.webContents.send("command", "medicine") },
+    { label: "Praise", click: () => win?.webContents.send("command", "praise") },
+    { label: "Call back", click: () => win?.webContents.send("command", "call") },
+    { label: "Special", click: () => win?.webContents.send("command", "special") },
+  ];
+}
+
+function statusLabel() {
+  const bits = [currentName(), lastVitals.stage, lastVitals.vital];
+  if (lastVitals.mess) bits.push(`mess ${lastVitals.mess}`);
+  if (lastVitals.bond) bits.push(`bond ${lastVitals.bond}`);
+  return bits.join(" · ");
+}
+
+function trayTemplate() {
+  return [
+    { label: statusLabel(), enabled: false },
+    { type: "separator" },
+    { label: "Companions", submenu: companionMenu() },
+    { type: "separator" },
+    ...careMenu(),
     { type: "separator" },
     {
       label: "Show",
@@ -62,7 +88,14 @@ function trayTemplate() {
 
 function refreshMenus() {
   tray?.setContextMenu(Menu.buildFromTemplate(trayTemplate()));
-  tray?.setToolTip(`${currentName()} — ComputerPets`);
+  tray?.setToolTip(statusLabel() + " — ComputerPets");
+}
+
+function fitWorkArea() {
+  if (!win) return;
+  const area = screen.getPrimaryDisplay().workArea;
+  win.setBounds({ x: area.x, y: area.y, width: area.width, height: area.height });
+  win.setAlwaysOnTop(true, "screen-saver");
 }
 
 function createWindow() {
@@ -95,6 +128,7 @@ function createWindow() {
   win.setAlwaysOnTop(true, "screen-saver");
   win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   win.setIgnoreMouseEvents(true, { forward: true });
+  win.setMenuBarVisibility(false);
   win.loadFile(path.join(__dirname, "renderer", "index.html"));
   win.once("ready-to-show", () => win?.showInactive());
   win.on("closed", () => {
@@ -118,19 +152,16 @@ function createTray() {
 function popupPetMenu(x, y) {
   if (!win) return;
   Menu.buildFromTemplate([
+    { label: statusLabel(), enabled: false },
+    { type: "separator" },
     { label: "Companions", submenu: companionMenu() },
     { type: "separator" },
-    { label: "Feed", click: () => win?.webContents.send("command", "feed") },
-    { label: "Play", click: () => win?.webContents.send("command", "play") },
-    { label: "Rest", click: () => win?.webContents.send("command", "rest") },
-    { label: "Talk", click: () => win?.webContents.send("command", "talk") },
+    ...careMenu(),
     { type: "separator" },
     { label: `Hide ${currentName()}`, click: () => win?.hide() },
     { label: "Quit", click: () => app.quit() },
   ]).popup({ window: win, x: Math.round(x), y: Math.round(y) });
 }
-
-app.commandLine.appendSwitch("enable-transparent-visuals");
 
 const gotLock = app.requestSingleInstanceLock();
 if (!gotLock) {
@@ -145,6 +176,12 @@ if (!gotLock) {
     if (process.platform === "darwin") app.dock?.hide();
     createWindow();
     createTray();
+    screen.on("display-metrics-changed", fitWorkArea);
+    screen.on("display-added", fitWorkArea);
+    screen.on("display-removed", fitWorkArea);
+    powerMonitor.on("suspend", () => win?.webContents.send("command", "rest"));
+    powerMonitor.on("resume", fitWorkArea);
+    powerMonitor.on("lock-screen", () => win?.webContents.send("command", "rest"));
   });
 }
 
@@ -160,6 +197,24 @@ ipcMain.on("switch-pet", (_e, key) => {
   if (!roster.some((r) => r.key === key)) return;
   currentKey = key;
   win?.webContents.send("switch", key);
+  refreshMenus();
+});
+
+ipcMain.on("notify", (_e, payload) => {
+  if (!Notification.isSupported()) return;
+  const note = new Notification({
+    title: payload?.title || currentName(),
+    body: payload?.body || "",
+    silent: true,
+    icon: iconImage(),
+  });
+  note.show();
+});
+
+ipcMain.on("vitals", (_e, payload) => {
+  if (!payload) return;
+  lastVitals = { ...lastVitals, ...payload };
+  if (payload.key) currentKey = payload.key;
   refreshMenus();
 });
 

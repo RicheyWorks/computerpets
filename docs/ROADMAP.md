@@ -119,6 +119,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Browser ad demos (`/meet`, `/demo/rui`, `/demo/miso`, `/demo/pip`)
 - [x] Full catalog awake — all twenty species have living browser demos
 - [x] Windows/Mac desktop overlay for all twenty + phone/tablet Live companion
+- [x] Per-species life sim — hunger clocks, mess, illness, age, specials, Windows hardening
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit

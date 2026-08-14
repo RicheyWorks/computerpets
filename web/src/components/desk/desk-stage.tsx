@@ -4,32 +4,36 @@ import { Button } from "@/components/ui/button";
 import { Meter } from "@/components/ui/progress";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
 import {
+  applyBath,
+  applyClean,
   applyFeed,
+  applyMedicine,
   applyPlay,
+  applyPraise,
   applyRest,
   decayStats,
   moodWord,
+  normalizeCare,
+  stageOf,
   type CareStats,
 } from "@/lib/pets/care";
 import { LIVING_KINDS, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 
-type Saved = CareStats & { lastTick: number };
-
-function loadLocal(key: string): Saved {
+function loadLocal(key: string): CareStats {
   try {
     const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw) as Saved;
+    if (raw) return normalizeCare(JSON.parse(raw) as Partial<CareStats>);
   } catch {
     /* ignore */
   }
-  return { hunger: 76, mood: 72, energy: 80, lastTick: Date.now() };
+  return normalizeCare(null);
 }
 
-function saveLocal(key: string, s: Saved) {
+function saveLocal(key: string, s: CareStats) {
   try {
-    localStorage.setItem(key, JSON.stringify(s));
+    localStorage.setItem(key, JSON.stringify({ ...s, lastTick: Date.now() }));
   } catch {
     /* ignore */
   }
@@ -47,7 +51,7 @@ export function DeskStage({
   onSelectKind?: (key: string) => void;
 }) {
   const displayName = name ?? kind.name;
-  const [stats, setStats] = useState<CareStats>({ hunger: 76, mood: 72, energy: 80 });
+  const [stats, setStats] = useState<CareStats>(() => normalizeCare(null));
   const [speech, setSpeech] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
@@ -171,22 +175,41 @@ export function DeskStage({
     }
   }
 
-  async function care(action: "feed" | "play" | "rest") {
+  async function care(action: "feed" | "play" | "rest" | "clean" | "bath" | "medicine" | "praise") {
     if (busy) return;
     acted.current = true;
     unlockDeskAudio();
     setBusy(true);
     try {
-      const remote = await onCare?.(action);
+      const remote = action === "feed" || action === "play" || action === "rest" ? await onCare?.(action) : undefined;
       setStats((prev) => {
-        const next = remote ?? (action === "feed" ? applyFeed(prev) : action === "play" ? applyPlay(prev) : applyRest(prev));
+        const next =
+          remote ??
+          (action === "feed"
+            ? applyFeed(prev)
+            : action === "play"
+              ? applyPlay(prev)
+              : action === "rest"
+                ? applyRest(prev)
+                : action === "clean"
+                  ? applyClean(prev)
+                  : action === "bath"
+                    ? applyBath(prev)
+                    : action === "medicine"
+                      ? applyMedicine(prev)
+                      : applyPraise(prev));
         saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
         return next;
       });
-      say(kind.careLine(action));
+      if (action === "feed" || action === "play" || action === "rest") say(kind.careLine(action));
+      else if (action === "clean") say("The blotter is honest again.");
+      else if (action === "bath") say("Water. Then dignity.");
+      else if (action === "medicine") say("Bitter. I will invoice you in kindness.");
+      else say(kind.fallbackLine("good", stats));
       if (action === "play") issue("play");
       else if (action === "rest") issue("sleep");
-      else issue("eat");
+      else if (action === "feed") issue("eat");
+      else issue("sit");
     } finally {
       setBusy(false);
     }
@@ -239,11 +262,14 @@ export function DeskStage({
         </label>
         <h1 className="mt-2 font-display text-2xl leading-none sm:text-3xl">{displayName}</h1>
         <p className="mt-2 hidden text-sm text-muted sm:block">{kind.blurb}</p>
-        <p className="mt-1 text-xs text-subtle sm:mt-2">{busy ? "Listening" : moodWord(stats)}</p>
-        <div className="mt-2 grid grid-cols-3 gap-2 sm:mt-3">
+        <p className="mt-1 text-xs text-subtle sm:mt-2">
+          {busy ? "Listening" : `${moodWord(stats)} · ${stageOf(stats)} · bond ${stats.bond}`}
+        </p>
+        <div className="mt-2 grid grid-cols-2 gap-2 sm:mt-3 sm:grid-cols-4">
           <Meter label="Hunger" value={stats.hunger} />
           <Meter label="Mood" value={stats.mood} />
           <Meter label="Energy" value={stats.energy} />
+          <Meter label="Hygiene" value={stats.hygiene} />
         </div>
       </aside>
 
@@ -261,6 +287,18 @@ export function DeskStage({
             </Button>
             <Button variant="ghost" disabled={busy} onClick={() => void talk()}>
               Talk
+            </Button>
+            <Button variant="secondary" disabled={busy} onClick={() => void care("clean")}>
+              Clean
+            </Button>
+            <Button variant="secondary" disabled={busy} onClick={() => void care("bath")}>
+              Bath
+            </Button>
+            <Button variant="secondary" disabled={busy} onClick={() => void care("medicine")}>
+              Medicine
+            </Button>
+            <Button variant="ghost" disabled={busy} onClick={() => void care("praise")}>
+              Praise
             </Button>
           </div>
           <form

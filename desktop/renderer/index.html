@@ -11,11 +11,24 @@
   </head>
   <body>
     <div id="stage">
+      <div id="mess"></div>
       <div id="shadow"></div>
       <div id="dust"></div>
       <div id="bubble"><p id="bubble-text">&nbsp;</p></div>
       <img id="pet" data-hit alt="" draggable="false" />
+      <div id="hud" data-hit>
+        <p id="hud-name">—</p>
+        <p id="hud-vital">Settled</p>
+        <div class="bars">
+          <i id="bar-hunger"></i>
+          <i id="bar-mood"></i>
+          <i id="bar-energy"></i>
+          <i id="bar-hygiene"></i>
+        </div>
+      </div>
     </div>
+    <script src="traits.js"></script>
+    <script src="life.js"></script>
     <script src="pet.js"></script>
   </body>
 </html>

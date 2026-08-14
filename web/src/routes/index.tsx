@@ -6,6 +6,7 @@ import { DeskStage } from "@/components/desk/desk-stage";
 import { SignedIn, SignedOut } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { careForPet, getSanctuary } from "@/lib/pets/actions";
+import { normalizeCare } from "@/lib/pets/care";
 import {
   isLivingSpecies,
   livingByKey,
@@ -106,7 +107,7 @@ function KeeperDesk({
         petId
           ? async (action) => {
               const next = await careForPet({ data: { petId, action } });
-              return { hunger: next.hunger, mood: next.mood, energy: next.energy };
+              return normalizeCare(next);
             }
           : undefined
       }

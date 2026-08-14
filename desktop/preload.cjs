@@ -4,6 +4,8 @@ contextBridge.exposeInMainWorld("desk", {
   setClickable: (clickable) => ipcRenderer.send("set-clickable", !!clickable),
   openMenu: (x, y) => ipcRenderer.send("pet-menu", { x, y }),
   switchPet: (key) => ipcRenderer.send("switch-pet", key),
+  notify: (title, body) => ipcRenderer.send("notify", { title, body }),
+  vitals: (payload) => ipcRenderer.send("vitals", payload),
   onCommand: (fn) => {
     const wrapped = (_e, cmd) => fn(cmd);
     ipcRenderer.on("command", wrapped);

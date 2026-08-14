@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { livingByKey } from "./living";
+import { normalizeCare } from "./care";
 
 const input = z.object({
   message: z.string().trim().max(200).optional(),
@@ -47,7 +48,7 @@ export const converseWithPet = createServerFn({ method: "POST" })
   .validator((raw: unknown) => input.parse(raw))
   .handler(async ({ data }): Promise<TalkResult> => {
     const kind = livingByKey(data.species);
-    const stats = { hunger: data.hunger, mood: data.mood, energy: data.energy };
+    const stats = normalizeCare({ hunger: data.hunger, mood: data.mood, energy: data.energy });
     const apiKey = process.env.XAI_API_KEY;
     let text = kind.fallbackLine(data.message, stats);
     let source: TalkResult["source"] = "local";
