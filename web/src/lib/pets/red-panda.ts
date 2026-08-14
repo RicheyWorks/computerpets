@@ -124,10 +124,6 @@ export function listenLine() {
   return pick(LISTEN);
 }
 
-export function isLivingSpecies(key: string) {
-  return key === RED_PANDA_KEY;
-}
-
 export function preloadRedPandaSprites() {
   if (typeof window === "undefined") return;
   for (const frames of Object.values(RED_PANDA_SPRITES)) {

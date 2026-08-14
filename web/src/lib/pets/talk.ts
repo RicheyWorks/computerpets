@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { ambientLine, listenLine, RED_PANDA_VOICE, SYSTEM_PROMPT } from "./red-panda";
+import { livingByKey } from "./living";
 
 const input = z.object({
   message: z.string().trim().max(200).optional(),
@@ -8,6 +8,7 @@ const input = z.object({
   mood: z.number().min(0).max(100),
   energy: z.number().min(0).max(100),
   name: z.string().trim().min(1).max(24).default("Rui"),
+  species: z.string().trim().min(1).max(32).default("red_panda"),
   speak: z.boolean().optional(),
 });
 
@@ -17,17 +18,7 @@ export type TalkResult = {
   source: "local" | "grok";
 };
 
-function localFallback(message: string | undefined, stats: { hunger: number; mood: number; energy: number }) {
-  if (!message) return ambientLine(stats);
-  const q = message.toLowerCase();
-  if (q.includes("name")) return "Rui. It fits in a mouth and on a collar.";
-  if (q.includes("food") || q.includes("eat") || q.includes("hungry")) return "Something rust-colored and polite. I am not proud.";
-  if (q.includes("sleep") || q.includes("tired")) return "The tail knows what to do.";
-  if (q.includes("love") || q.includes("good")) return "I heard that. I will store it in the left ear.";
-  return listenLine();
-}
-
-async function maybeSpeak(text: string): Promise<string | undefined> {
+async function maybeSpeak(text: string, voice: string): Promise<string | undefined> {
   const apiKey = process.env.XAI_API_KEY;
   if (!apiKey) return undefined;
   try {
@@ -39,7 +30,7 @@ async function maybeSpeak(text: string): Promise<string | undefined> {
       },
       body: JSON.stringify({
         text: text.slice(0, 220),
-        voice_id: RED_PANDA_VOICE,
+        voice_id: voice,
         language: "en",
       }),
     });
@@ -55,9 +46,10 @@ async function maybeSpeak(text: string): Promise<string | undefined> {
 export const converseWithPet = createServerFn({ method: "POST" })
   .validator((raw: unknown) => input.parse(raw))
   .handler(async ({ data }): Promise<TalkResult> => {
+    const kind = livingByKey(data.species);
     const stats = { hunger: data.hunger, mood: data.mood, energy: data.energy };
     const apiKey = process.env.XAI_API_KEY;
-    let text = localFallback(data.message, stats);
+    let text = kind.fallbackLine(data.message, stats);
     let source: TalkResult["source"] = "local";
 
     if (apiKey && data.message) {
@@ -73,7 +65,7 @@ export const converseWithPet = createServerFn({ method: "POST" })
             max_tokens: 80,
             temperature: 0.9,
             messages: [
-              { role: "system", content: SYSTEM_PROMPT },
+              { role: "system", content: kind.systemPrompt },
               {
                 role: "user",
                 content: `Your name is ${data.name}. Hunger ${data.hunger}/100, mood ${data.mood}/100, energy ${data.energy}/100. The keeper says: ${data.message}`,
@@ -94,6 +86,6 @@ export const converseWithPet = createServerFn({ method: "POST" })
       }
     }
 
-    const audio = data.speak === false ? undefined : await maybeSpeak(text);
+    const audio = data.speak === false ? undefined : await maybeSpeak(text, kind.voice);
     return { text, audio, source };
   });
