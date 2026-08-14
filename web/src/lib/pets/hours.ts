@@ -90,3 +90,29 @@ export const SNACK_LINE: Record<string, string> = {
   dragon: "Tribute. Modest.",
   phoenix: "Warm. Good.",
 };
+
+
+export function returnLine(awayMs: number, hour = new Date().getHours()) {
+  const hours = awayMs / 3_600_000;
+  if (hours < 0.4) return null;
+  if (hours >= 20) {
+    if (hour >= 5 && hour < 11) return "You were gone a night. I kept the blotter.";
+    return "A long absence. I counted the dust.";
+  }
+  if (hours >= 6) return "Hours. I sat in most of them.";
+  if (hours >= 1) return "You were elsewhere. I practiced waiting.";
+  return "Back. I noticed.";
+}
+
+export function rememberVisit(key: string) {
+  const store = `computerpets.seen.${key}`;
+  let away = 0;
+  try {
+    const last = Number(localStorage.getItem(store) || 0);
+    if (last > 0) away = Date.now() - last;
+    localStorage.setItem(store, String(Date.now()));
+  } catch {
+    /* ignore */
+  }
+  return away;
+}

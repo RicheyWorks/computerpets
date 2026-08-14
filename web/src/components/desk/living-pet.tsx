@@ -24,6 +24,7 @@ type LivingPetProps = {
   startX?: number;
   hidden?: boolean;
   unwell?: boolean;
+  stage?: "hatchling" | "grown" | "elder";
   seekX?: number;
   onArrived?: () => void;
   onTap?: () => void;
@@ -79,6 +80,7 @@ export function LivingPet({
   startX = 120,
   hidden = false,
   unwell = false,
+  stage = "grown",
   seekX,
   onArrived,
   onTap,
@@ -114,6 +116,9 @@ export function LivingPet({
   const fpsRef = useRef(fps);
   const onceRef = useRef(once);
   const gaitRef = useRef(gait);
+  const stageRef = useRef(stage);
+  gaitRef.current = gait;
+  stageRef.current = stage;
   const seekRef = useRef(seekX);
   seekRef.current = seekX;
   const leaveRef = useRef(false);
@@ -248,7 +253,7 @@ export function LivingPet({
           const dir = s.target >= s.x ? 1 : -1;
           s.facing = dir;
           s.walkAge += dt;
-          s.x += dir * walkSpeed(remaining, s.walkAge, gaitRef.current?.walk ?? WALK_SPEED) * dt;
+          s.x += dir * walkSpeed(remaining, s.walkAge, (gaitRef.current?.walk ?? WALK_SPEED) * (stageRef.current === "hatchling" ? 0.88 : stageRef.current === "elder" ? 0.78 : 1)) * dt;
           s.stepAcc += dt;
           if (s.stepAcc > 0.22) {
             s.stepAcc = 0;
@@ -312,7 +317,9 @@ export function LivingPet({
       const hopPx = s.hop > 0 ? Math.sin(s.hop * Math.PI) * (gaitNow?.hop ?? 26) : 0;
       const water = gaitNow?.aquatic ? Math.sin(now * 0.004) * 6 : 0;
       const perch = gaitNow?.perch ? 18 : 0;
-      const scale = gaitNow?.scale ?? 1;
+      const stageNow = stageRef.current;
+      const ageScale = stageNow === "hatchling" ? 0.82 : stageNow === "elder" ? 1.08 : 1;
+      const scale = (gaitNow?.scale ?? 1) * ageScale;
       const y = floorY(height) + hopPx + water + perch;
       const breathe =
         s.anim === "idle" || s.anim === "sit" || s.anim === "sleep"

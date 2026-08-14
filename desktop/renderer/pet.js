@@ -419,6 +419,7 @@ function switchTo(key) {
     /* ignore */
   }
   life = window.PetLife.load(next.key);
+  const away = Date.now() - (life.lastTick || Date.now());
   window.PetLife.decay(life, trait);
   persist();
   sim.anim = "idle";
@@ -426,7 +427,16 @@ function switchTo(key) {
   sim.target = null;
   pet.classList.toggle("sick", !!life.sick);
   pet.classList.toggle("hidden", !!life.hidden);
-  say(life.hidden ? pick(trait.extra.hide) : pick(next.lines.greet), 5000);
+  const back = away > 24 * 60 * 1000
+    ? away >= 20 * 3600000
+      ? "You were gone a night. I kept the desk."
+      : away >= 6 * 3600000
+        ? "Hours. I sat in most of them."
+        : away >= 3600000
+          ? "You were elsewhere. I practiced waiting."
+          : "Back. I noticed."
+    : null;
+  say(life.hidden ? pick(trait.extra.hide) : back || pick(next.lines.greet), 5000);
   if (!life.hidden) issue("talk");
   paintHud();
   paintMess();
