@@ -212,3 +212,30 @@ export function moodWord(stats: Partial<CareStats>) {
   if (score >= 30) return "Restless";
   return "Neglected";
 }
+
+export function bondTitle(bond: number) {
+  if (bond >= 100) return "Soul";
+  if (bond >= 75) return "Devoted";
+  if (bond >= 50) return "Friend";
+  if (bond >= 25) return "Known";
+  return "New";
+}
+
+export function crossedBond(prev: number, next: number) {
+  for (const mark of [25, 50, 75, 100]) {
+    if (prev < mark && next >= mark) return bondTitle(mark);
+  }
+  return null;
+}
+
+export const BOND_LINE: Record<string, string> = {
+  Known: "I know your hands now.",
+  Friend: "We are past the first week.",
+  Devoted: "I would wait by the door.",
+  Soul: "The blotter is ours.",
+};
+
+export function maybeBondLine(prev: number, next: number) {
+  const title = crossedBond(prev, next);
+  return title ? (BOND_LINE[title] ?? null) : null;
+}

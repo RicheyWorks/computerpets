@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Meter } from "@/components/ui/progress";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
-import { BlotterMarks, DayWash, randomLureX, randomTreatX } from "@/components/desk/blotter";
+import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import {
   applyBath,
   applyCall,
@@ -15,7 +15,9 @@ import {
   applyPraise,
   applyRest,
   applySnack,
+  bondTitle,
   decayStats,
+  maybeBondLine,
   moodWord,
   normalizeCare,
   pickMess,
@@ -70,7 +72,7 @@ export function DeskStage({
   const [draft, setDraft] = useState("");
   const [busy, setBusy] = useState(false);
   const [journal, setJournal] = useState<JournalEntry[]>([]);
-  const [mark, setMark] = useState<{ kind: "treat" | "lure"; x: number } | null>(null);
+  const [mark, setMark] = useState<BlotterMark | null>(null);
   const [leaving, setLeaving] = useState(false);
   const [order, setOrder] = useState<{ cmd: PetCommand; id: number }>({ cmd: "wander", id: 1 });
   const speechUntil = useRef(0);
@@ -80,6 +82,14 @@ export function DeskStage({
   const acted = useRef(false);
   statsRef.current = stats;
   markRef.current = mark;
+
+  function speakBond(prev: CareStats, next: CareStats) {
+    const line = maybeBondLine(prev.bond, next.bond);
+    if (line) {
+      window.setTimeout(() => say(line), 900);
+      note(`${displayName} is ${bondTitle(next.bond)}.`);
+    }
+  }
 
   const say = useCallback((text: string, hold = 4200) => {
     setSpeech(text);
@@ -147,6 +157,11 @@ export function DeskStage({
       if (busy) return;
       const live = statsRef.current;
       if (live.hidden) return;
+      if (live.hunger < 26) {
+        say(kind.ambientLine(live));
+        issue("wander");
+        return;
+      }
       if (isRestingHour(kind.key) && live.energy < 88) {
         issue("sleep");
         return;
@@ -239,6 +254,7 @@ export function DeskStage({
                       ? applyMedicine(prev)
                       : applyPraise(prev));
         saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+        speakBond(prev, next);
         return next;
       });
       if (action === "feed" || action === "play" || action === "rest") say(kind.careLine(action));
@@ -274,6 +290,7 @@ export function DeskStage({
     say(trait.line);
     issue(next.cmd);
     note(`${displayName}: ${trait.line}`);
+    speakBond(statsRef.current, next.stats);
   }
 
   function hide() {
@@ -326,7 +343,14 @@ export function DeskStage({
     setMark(null);
     say("You caught it first. I still win.");
     note(`${displayName} played. You helped.`);
+    speakBond(statsRef.current, next);
     issue("play");
+  }
+
+  function fleeLure(x: number) {
+    if (stats.hidden || leaving) return;
+    setMark({ kind: "lure", x, hops: 1 });
+    issue("seek");
   }
 
   const part = dayPart();
@@ -351,6 +375,7 @@ export function DeskStage({
         hidden={stats.hidden}
         onDropTreat={dropTreatAt}
         onCatchLure={catchLure}
+        onFlee={fleeLure}
       />
 
       <LivingPet
@@ -382,13 +407,15 @@ export function DeskStage({
               saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
               say(SNACK_LINE[kind.key] ?? "A small treaty.");
               note(`${displayName} found the treat.`);
+              speakBond(statsRef.current, next);
               issue("eat");
             } else {
               const next = applyPlay(statsRef.current);
               setStats(next);
               saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
               say(kind.careLine("play"));
-              note(`${displayName} caught the ${caught.kind === "lure" ? "lure" : "treat"}.`);
+              note(`${displayName} caught the lure.`);
+              speakBond(statsRef.current, next);
               issue("play");
             }
             return;
@@ -435,7 +462,7 @@ export function DeskStage({
         <h1 className="mt-2 font-display text-2xl leading-none sm:text-3xl">{displayName}</h1>
         <p className="mt-2 hidden text-sm text-muted sm:block">{kind.blurb}</p>
         <p className="mt-1 text-xs text-subtle sm:mt-2">
-          {busy ? "Listening" : `${moodWord(stats)} · ${stageOf(stats)} · bond ${stats.bond} · ${dayPartLabel(part)}`}
+          {busy ? "Listening" : `${moodWord(stats)} · ${bondTitle(stats.bond)} · ${stageOf(stats)} · ${dayPartLabel(part)}`}
         </p>
         <p className="mt-1 text-[11px] text-subtle" suppressHydrationWarning>
           {describeBinding(mind)}

@@ -34,7 +34,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Browser demos for every companion in the house. Walk them, feed them, let them talk.
+            Walk them, feed them, chase a ribbon. Bond grows from New to Soul.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>

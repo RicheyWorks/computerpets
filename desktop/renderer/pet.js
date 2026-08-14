@@ -74,6 +74,7 @@ let clickable = false;
 let hudUntil = 0;
 let mark = null;
 let leaving = false;
+let lureTimer = 0;
 
 function persist() {
   if (kind && life) window.PetLife.save(kind.key, life);
@@ -214,17 +215,27 @@ function puff(x, n = 4) {
   if (sim.dust.length > 18) sim.dust.splice(0, sim.dust.length - 18);
 }
 
-function placeMark(kind, x) {
-  mark = { kind, x };
+function placeMark(kind, x, hops = 0) {
+  mark = { kind, x, hops };
   const el = kind === "treat" ? treatEl : lureEl;
   const other = kind === "treat" ? lureEl : treatEl;
   other.classList.remove("show");
   el.classList.add("show");
   el.style.transform = `translate3d(${x}px, 0, 0)`;
+  window.clearTimeout(lureTimer);
+  if (kind === "lure" && hops === 0) {
+    lureTimer = window.setTimeout(() => {
+      if (!mark || mark.kind !== "lure" || mark.hops > 0) return;
+      const width = window.innerWidth;
+      placeMark("lure", 80 + Math.random() * Math.max(80, width - 200), 1);
+      issue("seek");
+    }, 2200);
+  }
 }
 
 function clearMark() {
   mark = null;
+  window.clearTimeout(lureTimer);
   treatEl.classList.remove("show");
   lureEl.classList.remove("show");
 }
@@ -480,14 +491,20 @@ function tick(now) {
           const kindMark = mark.kind;
           clearMark();
           if (kindMark === "treat") {
+            const prevBond = life.bond;
             const result = window.PetLife.act(life, trait, "snack");
             persist();
             say(lineFrom(result) || "A small treaty.");
+            const title = window.PetLife.crossedBond(prevBond, life.bond);
+            if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
             issue("eat");
           } else {
+            const prevBond = life.bond;
             const result = window.PetLife.act(life, trait, "play");
             persist();
             say(lineFrom(result) || pick(kind.lines.play));
+            const title = window.PetLife.crossedBond(prevBond, life.bond);
+            if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
             issue("play");
           }
           paintHud();

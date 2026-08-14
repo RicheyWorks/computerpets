@@ -7,6 +7,8 @@ import {
   applyPlay,
   applyRest,
   applySnack,
+  bondTitle,
+  maybeBondLine,
   normalizeCare,
   type CareStats,
 } from "@/lib/pets/care";
@@ -93,6 +95,11 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
     const id = window.setInterval(() => {
       if (document.hidden || busy || statsRef.current.hidden) return;
       if (performance.now() < speechUntil.current) return;
+      if (statsRef.current.hunger < 26) {
+        say(kind.ambientLine(statsRef.current));
+        issue("wander");
+        return;
+      }
       if (isRestingHour(kind.key) && statsRef.current.energy < 88) {
         issue("sleep");
         return;
@@ -178,10 +185,20 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
 
   function catchLure() {
     if (!mark || mark.kind !== "lure") return;
-    setStats(applyPlay(statsRef.current));
+    const prev = statsRef.current;
+    const next = applyPlay(prev);
+    setStats(next);
     setMark(null);
     say("You caught it first. I still win.");
+    const line = maybeBondLine(prev.bond, next.bond);
+    if (line) window.setTimeout(() => say(line), 900);
     issue("play");
+  }
+
+  function fleeLure(x: number) {
+    if (stats.hidden || leaving) return;
+    setMark({ kind: "lure", x, hops: 1 });
+    issue("seek");
   }
 
   function hide() {
@@ -221,6 +238,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         hidden={stats.hidden}
         onDropTreat={dropTreatAt}
         onCatchLure={catchLure}
+        onFlee={fleeLure}
       />
 
       <LivingPet
@@ -245,12 +263,20 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
             const caught = markRef.current;
             setMark(null);
             if (caught.kind === "treat") {
-              setStats((s) => applySnack(s));
+              const prev = statsRef.current;
+              const next = applySnack(prev);
+              setStats(next);
               say(SNACK_LINE[kind.key] ?? "A small treaty.");
+              const line = maybeBondLine(prev.bond, next.bond);
+              if (line) window.setTimeout(() => say(line), 900);
               issue("eat");
             } else {
-              setStats((s) => applyPlay(s));
+              const prev = statsRef.current;
+              const next = applyPlay(prev);
+              setStats(next);
               say(kind.careLine("play"));
+              const line = maybeBondLine(prev.bond, next.bond);
+              if (line) window.setTimeout(() => say(line), 900);
               issue("play");
             }
             return;
@@ -264,7 +290,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
 
       <aside className="absolute left-4 right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-6 sm:right-auto sm:max-w-sm">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          On this device · {dayPartLabel(dayPart())}
+          On this device · {dayPartLabel(dayPart())} · {bondTitle(stats.bond)}
         </p>
         <h1 className="mt-1 font-display text-4xl leading-none">{kind.name}</h1>
         <p className="mt-2 text-sm text-muted">{kind.tagline}</p>
