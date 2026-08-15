@@ -26,6 +26,7 @@ function clamp(n, a, b) {
 }
 
 const pet = document.getElementById("pet");
+const guestEl = document.getElementById("guest");
 const shadow = document.getElementById("shadow");
 const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
@@ -539,6 +540,10 @@ function switchTo(key) {
       img.src = src;
     }
   }
+  if (guestEl) guestEl.classList.remove("show");
+  visit = null;
+  window.clearTimeout(startVisit.timer);
+  startVisit.timer = window.setTimeout(startVisit, 7500);
 }
 
 function tick(now) {
@@ -696,9 +701,91 @@ function tick(now) {
     el.style.transform = `translate3d(${d.x}px, ${d.y}px, 0)`;
   }
 
+  tickVisit(dt, now, width);
+
   requestAnimationFrame(tick);
 }
 tick.last = performance.now();
+
+const VISIT_LINE = {
+  red_panda: "I came for the ribbon. I'll put it back. Maybe.",
+  cat: "I inspected the blotter. It will do.",
+  dog: "I brought the whole tail. Then I took it home.",
+  rabbit: "A short visit. The greens here are theoretical.",
+  hamster: "I mapped the crumbs. Officially.",
+  guinea_pig: "Wheek. That is the entire review.",
+  turtle: "I arrived. I will leave in due course.",
+  goldfish: "I drifted through. That counts.",
+  budgie: "A note: your house is loud. I approve.",
+  fox: "I found this desk first. Then I left it.",
+  penguin: "A pebble of a visit.",
+  parrot: "I came to quote the furniture.",
+  ferret: "I borrowed a dongle. I'll return a better one.",
+  hedgehog: "A quiet walk-through.",
+  chinchilla: "The dust here is a scandal. I took a sample.",
+  axolotl: "I grew a little more present. Then less.",
+  toucan: "The bill approves of this blotter.",
+  iguana: "I blinked at your lamp. Then I left.",
+  dragon: "A courtesy inspection of the hoard.",
+  phoenix: "I warmed the corner. You're welcome.",
+};
+
+let visit = null;
+
+function pickVisitorKind() {
+  if (!roster.length || !kind) return null;
+  const n = new Date();
+  const day = Math.floor(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) / 86400000);
+  const others = roster.filter((r) => r.key !== kind.key);
+  return others[Math.abs(day + kind.key.length) % others.length] ?? null;
+}
+
+function startVisit() {
+  const g = pickVisitorKind();
+  if (!g || !guestEl) return;
+  const sprites = pack(g.key);
+  visit = {
+    key: g.key,
+    name: g.name,
+    sprites,
+    x: window.innerWidth + 10,
+    target: Math.max(80, window.innerWidth * 0.52),
+    facing: -1,
+    frame: 0,
+    acc: 0,
+    born: performance.now(),
+    said: false,
+  };
+  guestEl.classList.add("show");
+  guestEl.src = sprites.walk[0];
+}
+
+function tickVisit(dt, now, width) {
+  if (!visit || !guestEl) return;
+  const age = now - visit.born;
+  if (age > 18000) {
+    guestEl.classList.remove("show");
+    visit = null;
+    return;
+  }
+  if (age > 13500) visit.target = -140;
+  const remaining = Math.abs(visit.target - visit.x);
+  if (remaining > 2) {
+    visit.facing = visit.target >= visit.x ? 1 : -1;
+    visit.x += visit.facing * 86 * dt;
+    visit.acc += dt;
+    if (visit.acc > 1 / 6.4) {
+      visit.acc = 0;
+      visit.frame = (visit.frame + 1) % visit.sprites.walk.length;
+    }
+    guestEl.src = visit.sprites.walk[visit.frame];
+  } else if (!visit.said && age > 2200) {
+    visit.said = true;
+    say(VISIT_LINE[visit.key] || "I came. I left.");
+    guestEl.src = visit.sprites.idle[0];
+  }
+  guestEl.style.transform = `translate3d(${visit.x}px, 0, 0) scale(${visit.facing}, 1)`;
+}
 
 pet.addEventListener("pointerdown", (e) => {
   if (e.button === 2) return;

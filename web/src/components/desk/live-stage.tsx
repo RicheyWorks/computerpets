@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
+import { HouseVisit } from "@/components/desk/house-visit";
+import { todaysVisitor } from "@/lib/pets/visitor";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import {
   applyFeed,
@@ -309,6 +311,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         }}
         onTap={() => void talk()}
       />
+      <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
 
       {stats.gifts.map((gift) => (
         <button
@@ -328,7 +331,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
 
       <aside className="absolute left-4 right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-6 sm:right-auto sm:max-w-sm">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          On this device · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {bondTitle(stats.bond)} · {stageOf(stats)}
+          On this device · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {todaysVisitor(kind.key).name} may call
         </p>
         <h1 className="mt-1 font-display text-4xl leading-none">{kind.name}</h1>
         <p className="mt-2 text-sm text-muted">{kind.tagline}</p>

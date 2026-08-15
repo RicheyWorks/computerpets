@@ -75,6 +75,24 @@ body {
   cursor: grabbing;
 }
 
+#guest {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+  object-position: bottom;
+  pointer-events: none;
+  opacity: 0;
+  transform-origin: center bottom;
+  will-change: transform;
+}
+
+#guest.show {
+  opacity: 1;
+}
+
 #pet.sick {
   filter: saturate(0.7) brightness(0.92);
 }

@@ -34,7 +34,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            The house keeps weather. Rain, wind, or heat — they sit or swim accordingly.
+            Someone from the house visits. They walk through, say one thing, and leave.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
