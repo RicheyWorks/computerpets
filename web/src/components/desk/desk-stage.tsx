@@ -35,6 +35,7 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
+import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { appendJournal, loadJournal, type JournalEntry } from "@/lib/pets/journal";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, returnLine } from "@/lib/pets/hours";
@@ -413,6 +414,7 @@ export function DeskStage({
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
+        dull={isBlue(stats, kind.key)}
         stage={stageOf(stats)}
         seekX={mark?.x}
         onArrived={() => {
@@ -458,7 +460,7 @@ export function DeskStage({
           key={gift.id}
           type="button"
           aria-label="Pick up a gift"
-          className="desk-gift absolute z-10"
+          className={`${gift.kind === "shed" ? "desk-shed" : "desk-gift"} absolute z-10`}
           style={{ left: `${gift.x}%`, bottom: "20%" }}
           onClick={() => {
             const next = pickGift(statsRef.current, gift.id);
@@ -507,7 +509,7 @@ export function DeskStage({
         <p className="mt-1 text-xs text-subtle sm:mt-2">
           {busy
             ? "Listening"
-            : `${moodWord(stats)} · ${bondTitle(stats.bond)} · ${stageOf(stats)} · ${dayPartLabel(part)} · ${weatherLabel(weatherOf())}${stats.gifts.length ? ` · ${stats.gifts.length} gift${stats.gifts.length > 1 ? "s" : ""}` : ""} · ${todaysVisitor(kind.key).name} may call`}
+            : `${isBlue(stats, kind.key) ? "Blue" : moodWord(stats)} · ${bondTitle(stats.bond)} · ${stageOf(stats)} · ${dayPartLabel(part)} · ${weatherLabel(weatherOf())}${stats.gifts.length ? ` · ${stats.gifts.length} gift${stats.gifts.length > 1 ? "s" : ""}` : ""} · ${todaysVisitor(kind.key).name} may call`}
         </p>
         <p className="mt-1 text-[11px] text-subtle" suppressHydrationWarning>
           {describeBinding(mind)}
@@ -560,6 +562,28 @@ export function DeskStage({
             <Button disabled={busy} onClick={special}>
               {trait.verb}
             </Button>
+            {isSnake(kind.key) ? (
+              <Button
+                variant="secondary"
+                disabled={busy}
+                onClick={() => {
+                  if (!isBlue(statsRef.current, kind.key)) {
+                    say(shedWaitLine(kind.key));
+                    issue("sit");
+                    return;
+                  }
+                  const next = applyShed(statsRef.current);
+                  setStats(next);
+                  saveLocal(kind.localKey, { ...next, lastTick: Date.now() });
+                  say(shedLine(kind.key));
+                  note(`${displayName} shed.`);
+                  speakBond(statsRef.current, next);
+                  issue("sit");
+                }}
+              >
+                Shed
+              </Button>
+            ) : null}
             {stats.hidden || leaving ? (
               <Button variant="secondary" disabled={busy} onClick={callBack}>
                 Call back

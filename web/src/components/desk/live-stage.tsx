@@ -31,6 +31,7 @@ import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
+import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
@@ -275,6 +276,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
+        dull={isBlue(stats, kind.key)}
         stage={stageOf(stats)}
         seekX={mark?.x}
         onArrived={() => {
@@ -318,7 +320,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
           key={gift.id}
           type="button"
           aria-label="Pick up a gift"
-          className="desk-gift absolute z-10"
+          className={`${gift.kind === "shed" ? "desk-shed" : "desk-gift"} absolute z-10`}
           style={{ left: `${gift.x}%`, bottom: "20%" }}
           onClick={() => {
             const prev = statsRef.current;
@@ -331,7 +333,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
 
       <aside className="absolute left-4 right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-6 sm:right-auto sm:max-w-sm">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          On this device · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {todaysVisitor(kind.key).name} may call
+          On this device · {isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {todaysVisitor(kind.key).name} may call
         </p>
         <h1 className="mt-1 font-display text-4xl leading-none">{kind.name}</h1>
         <p className="mt-2 text-sm text-muted">{kind.tagline}</p>
@@ -402,6 +404,21 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
           }}>
             {trait.verb}
           </Button>
+          {isSnake(kind.key) ? (
+            <Button className="h-12" variant="secondary" disabled={busy} onClick={() => {
+              acted.current = true;
+              if (!isBlue(statsRef.current, kind.key)) {
+                say(shedWaitLine(kind.key));
+                issue("sit");
+                return;
+              }
+              setStats(applyShed(statsRef.current));
+              say(shedLine(kind.key));
+              issue("sit");
+            }}>
+              Shed
+            </Button>
+          ) : null}
         </div>
       </div>
     </section>

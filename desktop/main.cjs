@@ -92,6 +92,7 @@ function careMenu() {
     { label: "Praise", click: () => win?.webContents.send("command", "praise") },
     { label: "Call back", click: () => win?.webContents.send("command", "call") },
     { label: "Special", click: () => win?.webContents.send("command", "special") },
+    { label: "Shed", click: () => win?.webContents.send("command", "shed") },
   ];
 }
 

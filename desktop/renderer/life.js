@@ -1,6 +1,15 @@
 (function () {
   const STORE = "computerpets.desktop.life.v2";
 
+  const SHEDDERS = new Set([
+    "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",
+    "garter", "boa", "milk_snake", "rosy_boa", "carpet_python",
+  ]);
+
+  function isBlue(life, key, now = Date.now()) {
+    return SHEDDERS.has(key) && now - (life.shedAt || 0) >= 8 * 60 * 60 * 1000;
+  }
+
   function clamp(n, a = 0, b = 100) {
     return Math.max(a, Math.min(b, Math.round(n)));
   }
@@ -41,6 +50,7 @@
       ribbon: 0,
       lives: 1,
       startledUntil: 0,
+      shedAt: 0,
     };
   }
 
@@ -178,6 +188,17 @@
       life.weight = clamp(life.weight + 1);
       bondUp(life, 1);
       return { life, line: "A small treaty.", cmd: "eat", notify: null };
+    }
+    if (action === "shed") {
+      const due = now - (life.shedAt || 0) >= 8 * 60 * 60 * 1000;
+      if (!due) return { life, line: pick(extra.shedWait || ["The coat is still good."]), cmd: "sit", notify: null };
+      life.hygiene = clamp(life.hygiene + 28);
+      life.mood = clamp(life.mood + 12);
+      life.health = clamp(life.health + 8);
+      life.shedAt = now;
+      if (life.gifts.length < 3) life.gifts.push({ id: `shed-${now}`, x: 0.2 + Math.random() * 0.55, kind: "shed" });
+      bondUp(life, 3);
+      return { life, line: pick(extra.shed || ["I left a copy."]), cmd: "sit", notify: "shed" };
     }
     if (action === "play") {
       if (life.energy < 12) return { life, line: "The paws vote no.", cmd: "sit", notify: null };
@@ -361,6 +382,7 @@
     if (life.hidden) word = "Away";
     else if (life.sick) word = "Unwell";
     else if (life.asleep) word = "Asleep";
+    else if (life.blue) word = "Blue";
     else if (life.hunger < 22) word = "Hungry";
     else if (life.hygiene < 24) word = "Unkempt";
     else if (life.energy < 20) word = "Tired";
@@ -380,5 +402,5 @@
     return null;
   }
 
-  window.PetLife = { load, save, decay, act, vitals, alerts, ageDays, sizeScale, night, blank, hourNow, bondTitle, crossedBond, BOND_LINE };
+  window.PetLife = { load, save, decay, act, vitals, alerts, ageDays, sizeScale, night, blank, hourNow, bondTitle, crossedBond, BOND_LINE, isBlue, SHEDDERS };
 })();

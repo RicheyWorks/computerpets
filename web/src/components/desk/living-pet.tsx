@@ -24,6 +24,7 @@ type LivingPetProps = {
   startX?: number;
   hidden?: boolean;
   unwell?: boolean;
+  dull?: boolean;
   stage?: "hatchling" | "grown" | "elder";
   seekX?: number;
   onArrived?: () => void;
@@ -80,6 +81,7 @@ export function LivingPet({
   startX = 120,
   hidden = false,
   unwell = false,
+  dull = false,
   stage = "grown",
   seekX,
   onArrived,
@@ -448,7 +450,7 @@ export function LivingPet({
           willChange: "transform",
           transformOrigin: "center bottom",
           opacity: hidden ? 0 : 1,
-          filter: unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+          filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
           pointerEvents: hidden ? "none" : "auto",
           transition: "opacity 280ms ease, filter 280ms ease",
         }}

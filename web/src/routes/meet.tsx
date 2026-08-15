@@ -34,7 +34,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Ten snakes joined the house. Coil, thread, play dead. Same desk.
+            Snakes go blue, then shed. The old coat stays on the blotter.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
