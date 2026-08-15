@@ -14,6 +14,7 @@ import { traitFor } from "@/lib/pets/traits";
 import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { applySpecial } from "@/lib/pets/specials";
+import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { cn } from "@/lib/utils";
 
@@ -244,6 +245,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         gait={trait}
         hidden={stats.hidden}
         unwell={stats.sick}
+        dull={isBlue(stats, kind.key)}
         stage={stageOf(stats)}
         seekX={mark?.x}
         onArrived={() => {
@@ -287,7 +289,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
           key={gift.id}
           type="button"
           aria-label="Pick up a gift"
-          className="desk-gift absolute z-10"
+          className={`${gift.kind === "shed" ? "desk-shed" : "desk-gift"} absolute z-10`}
           style={{ left: `${gift.x}%`, bottom: "20%" }}
           onClick={() => {
             const prev = statsRef.current;
@@ -302,7 +304,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
 
       <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,22rem)] sm:left-8 sm:top-24">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          Living demo · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {todaysVisitor(kind.key).name} may call
+          Living demo · {isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {todaysVisitor(kind.key).name} may call
         </p>
         <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
@@ -327,6 +329,23 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
           }}>
             {trait.verb}
           </Button>
+          {isSnake(kind.key) ? (
+            <Button size="sm" variant="secondary" disabled={busy} onClick={() => {
+              acted.current = true;
+              unlockDeskAudio();
+              if (!isBlue(statsRef.current, kind.key)) {
+                say(shedWaitLine(kind.key));
+                issue("sit");
+                return;
+              }
+              const next = applyShed(statsRef.current);
+              setStats(next);
+              say(shedLine(kind.key));
+              issue("sit");
+            }}>
+              Shed
+            </Button>
+          ) : null}
           <Button size="sm" variant="ghost" disabled={busy} onClick={() => void talk()}>
             Talk
           </Button>

@@ -1,4 +1,4 @@
-export type MessPile = { id: number; x: number };
+export type MessPile = { id: number; x: number; kind?: "gift" | "shed" };
 
 export type CareStats = {
   hunger: number;
@@ -13,6 +13,7 @@ export type CareStats = {
   gifts: MessPile[];
   bornAt: number;
   lastTick: number;
+  shedAt: number;
 };
 
 const HUNGER_PER_MS = 100 / (6 * 60 * 60 * 1000);
@@ -38,6 +39,7 @@ export function blankCare(now = Date.now()): CareStats {
     gifts: [],
     bornAt: now,
     lastTick: now,
+    shedAt: 0,
   };
 }
 
@@ -57,6 +59,7 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
     gifts: Array.isArray(raw.gifts) ? raw.gifts.slice(0, 3) : [],
     bornAt: raw.bornAt ?? now,
     lastTick: raw.lastTick ?? now,
+    shedAt: typeof raw.shedAt === "number" ? raw.shedAt : 0,
   };
 }
 

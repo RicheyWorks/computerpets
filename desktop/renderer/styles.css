@@ -97,6 +97,10 @@ body {
   filter: saturate(0.7) brightness(0.92);
 }
 
+#pet.blue {
+  filter: saturate(0.4) brightness(0.8) contrast(0.92);
+}
+
 #pet.hidden {
   opacity: 0;
   pointer-events: none;
@@ -175,6 +179,20 @@ body {
   background: #d8cfc0;
   pointer-events: auto;
   transform: rotate(12deg);
+}
+
+.shed-dot {
+  position: absolute;
+  left: 0;
+  bottom: 16px;
+  width: 26px;
+  height: 7px;
+  border: 0;
+  padding: 0;
+  border-radius: 40%;
+  background: rgb(216 207 192 / 0.75);
+  pointer-events: auto;
+  transform: rotate(-14deg);
 }
 
 #lure.show {

@@ -531,3 +531,37 @@ window.PET_TRAITS = {
     },
   },
 };
+
+(function () {
+  const shed = {
+    ball_python: ["I left a copy. The better bun stayed."],
+    corn_snake: ["An old sentence. I am the new one."],
+    kingsnake: ["The bands were due for a reprint."],
+    green_tree_python: ["Emerald, revised. The old loop is on the blotter."],
+    hognose: ["I died out of my coat. Reviews were better."],
+    garter: ["Three new lines. The old route is discarded."],
+    boa: ["I kept the river. I left the bank."],
+    milk_snake: ["A rumor I no longer need."],
+    rosy_boa: ["The pink is new. The corner may keep the rest."],
+    carpet_python: ["A legend I outgrew. Keep the map."],
+  };
+  const wait = {
+    ball_python: ["The bun is still honest. Later."],
+    corn_snake: ["This coat is mid-sentence."],
+    kingsnake: ["The bands are still in session."],
+    green_tree_python: ["The loop is not finished being green."],
+    hognose: ["I am using this death. Not the coat."],
+    garter: ["The patrol is still in this uniform."],
+    boa: ["This river has not reached the sea."],
+    milk_snake: ["The costume still fits the rumor."],
+    rosy_boa: ["The stone is not ready to change."],
+    carpet_python: ["The map is current."],
+  };
+  for (const key of Object.keys(shed)) {
+    const t = window.PET_TRAITS[key];
+    if (t && t.extra) {
+      t.extra.shed = shed[key];
+      t.extra.shedWait = wait[key];
+    }
+  }
+})();

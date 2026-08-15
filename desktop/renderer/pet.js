@@ -160,7 +160,7 @@ function lineFrom(result) {
 function paintHud() {
   if (!life || !kind) return;
   hudName.textContent = `${kind.name} · ${life.stage}`;
-  hudVital.textContent = `${window.PetLife.vitals(life)} · ${skyLabel(skyOf())}${life.gifts?.length ? ` · ${life.gifts.length} gift${life.gifts.length > 1 ? "s" : ""}` : ""}`;
+  hudVital.textContent = `${window.PetLife.vitals({ ...life, blue: window.PetLife.isBlue(life, kind.key) })} · ${skyLabel(skyOf())}${life.gifts?.length ? ` · ${life.gifts.length} gift${life.gifts.length > 1 ? "s" : ""}` : ""}`;
   barHunger.style.setProperty("--w", `${life.hunger}%`);
   barMood.style.setProperty("--w", `${life.mood}%`);
   barEnergy.style.setProperty("--w", `${life.energy}%`);
@@ -209,7 +209,7 @@ function paintGifts() {
   for (const g of life.gifts || []) {
     const el = document.createElement("button");
     el.type = "button";
-    el.className = "gift-dot";
+    el.className = g.kind === "shed" ? "shed-dot" : "gift-dot";
     el.dataset.hit = "1";
     el.style.transform = `translate3d(${g.x * (width - 40)}px, 0, 0)`;
     el.addEventListener("click", (e) => {
@@ -530,6 +530,7 @@ function switchTo(key) {
   sim.frame = 0;
   sim.target = null;
   pet.classList.toggle("sick", !!life.sick);
+  pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
   const back = away > 24 * 60 * 1000
     ? away >= 20 * 3600000
@@ -569,6 +570,7 @@ function tick(now) {
 
   if (now > speechUntil) bubble.classList.remove("open");
   pet.classList.toggle("sick", !!life.sick);
+  pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
 
   if (sim.hop > 0) {

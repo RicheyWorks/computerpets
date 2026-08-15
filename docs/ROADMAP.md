@@ -132,6 +132,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Daily weather (rain/wind/heat) they sit or swim in, all platforms
 - [x] Daily house visitor walks through desk, demos, Live, Meet, Windows
 - [x] Ten named snakes on desk, demos, Live, Meet, and Windows overlay
+- [x] Snakes go blue and shed; old coat stays on the blotter, all platforms
 - Finalize and publish the native client contract (license format, hwid, decryption)
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
 - Build internal admin tools for revocation and audit
