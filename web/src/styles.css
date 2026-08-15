@@ -179,6 +179,13 @@
     box-shadow: 0 0 8px rgb(176 137 104 / 0.55);
   }
 
+  .desk-treat-egg {
+    width: 8px;
+    height: 10px;
+    border-radius: 50% 50% 45% 45%;
+    background: var(--color-primary);
+  }
+
   .desk-gift {
     width: 11px;
     height: 11px;

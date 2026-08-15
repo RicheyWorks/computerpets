@@ -27,6 +27,19 @@ export function weatherLine(key: string, w: Weather) {
   }
   if (w === "heat") {
     if (key === "iguana" || key === "turtle" || key === "dragon" || key === "cat") return "This patch of warmth is reserved.";
+    if (
+      key === "ball_python" ||
+      key === "corn_snake" ||
+      key === "kingsnake" ||
+      key === "green_tree_python" ||
+      key === "hognose" ||
+      key === "garter" ||
+      key === "boa" ||
+      key === "milk_snake" ||
+      key === "rosy_boa" ||
+      key === "carpet_python"
+    )
+      return "Heat. I was waiting for this clause.";
     return "The lamp is working overtime.";
   }
   return null;
@@ -37,7 +50,7 @@ export function weatherIdle(key: string, w: Weather): "wander" | "sit" | "sleep"
     if (key === "goldfish" || key === "axolotl" || key === "penguin") return "wander";
     return "sit";
   }
-  if (w === "heat" && (key === "iguana" || key === "turtle" || key === "cat" || key === "dragon")) return "sit";
+  if (w === "heat" && (key === "iguana" || key === "turtle" || key === "cat" || key === "dragon" || key.includes("snake") || key.includes("boa") || key.includes("python") || key === "hognose" || key === "garter")) return "sit";
   if (w === "wind" && (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix")) return "wander";
   return null;
 }

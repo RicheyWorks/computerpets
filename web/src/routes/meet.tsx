@@ -12,7 +12,7 @@ export const Route = createFileRoute("/meet")({
       { title: "Meet the house — ComputerPets" },
       {
         name: "description",
-        content: "Twenty living companions for Windows, Mac, tablets, and phones.",
+        content: "Thirty living companions — including ten snakes — for Windows, Mac, tablets, and phones.",
       },
     ],
   }),
@@ -34,7 +34,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Someone from the house visits. They walk through, say one thing, and leave.
+            Ten snakes joined the house. Coil, thread, play dead. Same desk.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
@@ -58,7 +58,7 @@ export function MeetPage() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Awake</p>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Twenty living demos.</h2>
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Thirty living demos.</h2>
           </div>
           <Link to="/catalog" className="hidden text-sm text-muted no-underline hover:text-fg sm:inline">
             Full catalog

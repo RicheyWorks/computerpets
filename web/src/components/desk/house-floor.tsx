@@ -5,7 +5,7 @@ import { LIVING_KINDS } from "@/lib/pets/living";
 import { traitFor } from "@/lib/pets/traits";
 import { todaysVisitor } from "@/lib/pets/visitor";
 
-const KEYS = ["red_panda", "cat", "dog", "guinea_pig"] as const;
+const KEYS = ["red_panda", "ball_python", "corn_snake", "green_tree_python"] as const;
 const STARTS = [36, 210, 390, 560];
 
 function Guest({ species, startX }: { species: string; startX: number }) {

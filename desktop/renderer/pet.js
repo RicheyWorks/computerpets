@@ -306,6 +306,16 @@ const TREAT_SHAPE = {
   iguana: "leaf",
   dragon: "ember",
   phoenix: "ember",
+  ball_python: "crumb",
+  corn_snake: "crumb",
+  kingsnake: "pebble",
+  green_tree_python: "ember",
+  hognose: "crumb",
+  garter: "flake",
+  boa: "crumb",
+  milk_snake: "pebble",
+  rosy_boa: "crumb",
+  carpet_python: "crumb",
 };
 
 function placeMark(kindName, x, hops = 0) {
@@ -728,6 +738,16 @@ const VISIT_LINE = {
   iguana: "I blinked at your lamp. Then I left.",
   dragon: "A courtesy inspection of the hoard.",
   phoenix: "I warmed the corner. You're welcome.",
+  ball_python: "I came as a bun. I will leave as a bun.",
+  corn_snake: "I threaded through. Your gap is fine.",
+  kingsnake: "I inspected. You may keep the desk.",
+  green_tree_python: "I hung on your lamp. Briefly.",
+  hognose: "I died on your blotter. I got over it.",
+  garter: "I patrolled. The moss is adequate.",
+  boa: "I held the edge. Then I let go.",
+  milk_snake: "I was a rumor. Then I was lunch-minded.",
+  rosy_boa: "I borrowed the warm corner. I left it pink.",
+  carpet_python: "I charted your shelf. You may land.",
 };
 
 let visit = null;

@@ -1,3 +1,5 @@
+import { SNAKE_ROSTER } from "./snakes";
+
 export type RosterLines = {
   greet: string[];
   ambient: string[];
@@ -573,4 +575,5 @@ export const ROSTER: RosterDef[] = [
       loveTalk: "I will bring that back with me.",
     },
   },
+  ...SNAKE_ROSTER,
 ];

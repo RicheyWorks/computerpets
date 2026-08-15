@@ -310,6 +310,24 @@
         life.mood = clamp(life.mood + 6);
         life.energy = clamp(life.energy + 4);
         return { life, line: pick(extra.special), cmd: "sit", notify: null };
+      case "coil":
+      case "drape":
+      case "hold":
+      case "nest":
+        life.energy = clamp(life.energy + 8);
+        life.mood = clamp(life.mood + 6);
+        return { life, line: pick(extra.special), cmd: "sit", notify: null };
+      case "playdead":
+        life.energy = clamp(life.energy + 10);
+        return { life, line: pick(extra.special), cmd: "sit", notify: null };
+      case "slither":
+      case "patrol":
+      case "chart":
+        return { life, line: pick(extra.special), cmd: "wander", notify: null };
+      case "mimic":
+      case "inspect":
+        life.mood = clamp(life.mood + 8);
+        return { life, line: pick(extra.special), cmd: "talk", notify: null };
       default:
         return { life, line: pick(extra.special || ["..."]), cmd: "idle", notify: null };
     }

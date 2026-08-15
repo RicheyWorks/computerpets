@@ -56,6 +56,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   iguana: T(20, 4, 1.06, 0.06, {}, "bask", "Bask", "I blinked. Minutes will not record it."),
   dragon: T(74, 22, 1.18, 0.24, {}, "hoard", "Keep watch", "I could be larger. I choose this."),
   phoenix: T(86, 24, 1.12, 0.3, { perch: true }, "reborn", "Ember", "I came back softer."),
+  ball_python: T(36, 4, 0.92, 0.14, {}, "coil", "Coil", "I made a bun. I am the bun."),
+  corn_snake: T(88, 8, 0.84, 0.55, { nocturnal: true }, "slither", "Thread", "I found a gap. I am the gap's problem."),
+  kingsnake: T(74, 8, 0.88, 0.32, {}, "inspect", "Inspect", "I am the law of this drawer."),
+  green_tree_python: T(28, 6, 0.9, 0.1, { perch: true, nocturnal: true }, "drape", "Drape", "I folded in half. That is sitting."),
+  hognose: T(70, 10, 0.78, 0.38, {}, "playdead", "Play dead", "I died. I got over it."),
+  garter: T(110, 10, 0.68, 0.7, {}, "patrol", "Patrol", "I do not lounge. I pause."),
+  boa: T(42, 5, 1.08, 0.16, {}, "hold", "Hold", "I could be tighter. I choose this."),
+  milk_snake: T(80, 8, 0.82, 0.4, { nocturnal: true }, "mimic", "Mimic", "I am not who I look like. Hello."),
+  rosy_boa: T(34, 4, 0.8, 0.12, {}, "nest", "Nest", "I am a blush that learned to crawl."),
+  carpet_python: T(64, 8, 1.04, 0.28, { perch: true }, "chart", "Chart", "This pattern is a map. I am the country."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;
