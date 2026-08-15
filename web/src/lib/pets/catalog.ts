@@ -31,6 +31,16 @@ export const SPECIES: Species[] = [
   { key: "iguana", displayName: "Iguana", rarity: "RARE", temperament: "Still", habitat: "South wall", blurb: "A living ornament. Moves once per meeting." },
   { key: "dragon", displayName: "Dragon", rarity: "LEGENDARY", temperament: "Proud", habitat: "Mantel", blurb: "Small enough for a desk. Large enough for the room." },
   { key: "phoenix", displayName: "Phoenix", rarity: "LEGENDARY", temperament: "Unhurried", habitat: "Hearth ash", blurb: "Burns down and comes back kinder. The house relic." },
+  { key: "ball_python", displayName: "Ball Python", rarity: "COMMON", temperament: "Shy", habitat: "Inkwell coil", blurb: "Makes a bun of herself and guards the inkwell." },
+  { key: "corn_snake", displayName: "Corn Snake", rarity: "COMMON", temperament: "Curious", habitat: "Pencil tray", blurb: "Threads the blotter like a sentence you meant to finish." },
+  { key: "kingsnake", displayName: "California Kingsnake", rarity: "UNCOMMON", temperament: "Bold", habitat: "Ruler drawer", blurb: "Wears the house in bands. Inspects other snakes for sport." },
+  { key: "green_tree_python", displayName: "Green Tree Python", rarity: "RARE", temperament: "Still", habitat: "Lamp arm", blurb: "Sleeps in a saddle on the lamp arm. Emerald on purpose." },
+  { key: "hognose", displayName: "Western Hognose", rarity: "UNCOMMON", temperament: "Dramatic", habitat: "Eraser dish", blurb: "Plays dead when the compile fails. Then gets hungry." },
+  { key: "garter", displayName: "Common Garter", rarity: "COMMON", temperament: "Busy", habitat: "Moss cup", blurb: "Patrols the moss cup. Small, striped, always on a route." },
+  { key: "boa", displayName: "Boa Constrictor", rarity: "RARE", temperament: "Steady", habitat: "Blotter river", blurb: "Holds the blotter the way a river holds a stone." },
+  { key: "milk_snake", displayName: "Pueblo Milk Snake", rarity: "UNCOMMON", temperament: "Witty", habitat: "Stamp box", blurb: "Wears a warning she does not mean. Then asks for an egg." },
+  { key: "rosy_boa", displayName: "Rosy Boa", rarity: "UNCOMMON", temperament: "Gentle", habitat: "Warm corner", blurb: "Nests in the warm corner and refuses to hurry." },
+  { key: "carpet_python", displayName: "Jungle Carpet Python", rarity: "RARE", temperament: "Keen", habitat: "Map shelf", blurb: "Yellow and black cartography. Claims the shelf as a jungle." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

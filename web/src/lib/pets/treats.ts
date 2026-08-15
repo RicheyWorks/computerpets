@@ -1,4 +1,4 @@
-export type TreatShape = "bamboo" | "crumb" | "seed" | "leaf" | "flake" | "pebble" | "ember";
+export type TreatShape = "bamboo" | "crumb" | "seed" | "leaf" | "flake" | "pebble" | "ember" | "egg";
 
 const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   red_panda: { shape: "bamboo", verb: "Bamboo" },
@@ -21,6 +21,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   iguana: { shape: "leaf", verb: "Green" },
   dragon: { shape: "ember", verb: "Tribute" },
   phoenix: { shape: "ember", verb: "Ember" },
+  ball_python: { shape: "crumb", verb: "Mouse" },
+  corn_snake: { shape: "crumb", verb: "Pinkie" },
+  kingsnake: { shape: "egg", verb: "Egg" },
+  green_tree_python: { shape: "ember", verb: "Warmth" },
+  hognose: { shape: "crumb", verb: "Toad" },
+  garter: { shape: "flake", verb: "Worm" },
+  boa: { shape: "crumb", verb: "Tribute" },
+  milk_snake: { shape: "egg", verb: "Egg" },
+  rosy_boa: { shape: "crumb", verb: "Mouse" },
+  carpet_python: { shape: "crumb", verb: "Morsel" },
 };
 
 export function treatFor(key: string) {
@@ -48,4 +58,14 @@ export const GIFT_LINE: Record<string, string> = {
   iguana: "Sun, compressed.",
   dragon: "A coin from the smaller hoard.",
   phoenix: "Ash that still glows.",
+  ball_python: "A shed I was finished with.",
+  corn_snake: "A pencil I was not using.",
+  kingsnake: "A ruler. Straight, as required.",
+  green_tree_python: "A loop of shed. Emerald still.",
+  hognose: "A death scene, unused.",
+  garter: "A moss sample. Official.",
+  boa: "A weight I was not using.",
+  milk_snake: "A stamp. Red, on purpose.",
+  rosy_boa: "A warm pebble from the corner.",
+  carpet_python: "A scrap of map. Accurate.",
 };

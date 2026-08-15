@@ -1,6 +1,6 @@
 # Desktop companion — Windows and Mac
 
-All twenty pets live on the real desktop as a Tamagotchi-grade overlay. Unique hunger clocks, night cycles, mess, illness, age, and a special move each.
+All thirty pets live on the real desktop as a Tamagotchi-grade overlay — including ten snakes. Unique hunger clocks, night cycles, mess, illness, age, and a special move each.
 
 ## Care
 
@@ -11,7 +11,7 @@ Right-click the pet or use the tray / menu bar:
 - Clean (click droppings on the floor too)
 - Bath, medicine, praise
 - Call back if they hide
-- Special — species trick (ribbon, thump, wheek, steal, rebirth…)
+- Special — species trick (coil, play dead, drape, thread, steal ribbon…)
 
 They grow: hatchling → grown (day 1) → elder (day 7). Neglect them and they vanish until you call. Phoenix can burn out and come back kinder.
 

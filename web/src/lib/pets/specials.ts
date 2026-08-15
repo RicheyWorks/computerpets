@@ -15,6 +15,9 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
       return { stats: next, cmd: "wander" };
     case "thump":
     case "loop":
+    case "slither":
+    case "patrol":
+    case "chart":
       return { stats: next, cmd: "wander" };
     case "wheek":
     case "echo":
@@ -22,6 +25,8 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "bug":
     case "bill":
     case "reborn":
+    case "mimic":
+    case "inspect":
       next.mood = clampStat(next.mood + 8);
       return { stats: next, cmd: "talk" };
     case "still":
@@ -30,8 +35,15 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "sun":
     case "hoard":
     case "ritual":
+    case "coil":
+    case "drape":
+    case "hold":
+    case "nest":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
+      return { stats: next, cmd: "sit" };
+    case "playdead":
+      next.energy = clampStat(next.energy + 10);
       return { stats: next, cmd: "sit" };
     case "bath":
       next.hygiene = clampStat(next.hygiene + 40);

@@ -20,6 +20,16 @@ const REST: Record<string, [number, number]> = {
   iguana: [20, 8],
   dragon: [1, 8],
   phoenix: [23, 6],
+  ball_python: [8, 17],
+  corn_snake: [9, 18],
+  kingsnake: [21, 6],
+  green_tree_python: [8, 17],
+  hognose: [20, 7],
+  garter: [21, 6],
+  boa: [22, 7],
+  milk_snake: [9, 18],
+  rosy_boa: [21, 7],
+  carpet_python: [8, 17],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -66,6 +76,16 @@ export const HIDE_LINE: Record<string, string> = {
   iguana: "I am a stone now.",
   dragon: "The hoard is attended. From elsewhere.",
   phoenix: "Ash-side. I will be back.",
+  ball_python: "I went inside the bun.",
+  corn_snake: "I took the pencil canyon.",
+  kingsnake: "The drawer is closed. By me.",
+  green_tree_python: "Above you. Still green.",
+  hognose: "I died backstage.",
+  garter: "Mid-route. Do not wait.",
+  boa: "Under the river of blotter.",
+  milk_snake: "Behind a rumor.",
+  rosy_boa: "The corner kept me.",
+  carpet_python: "Off the legend. Still on the shelf.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -89,6 +109,16 @@ export const SNACK_LINE: Record<string, string> = {
   iguana: "I blinked at it. Then I ate.",
   dragon: "Tribute. Modest.",
   phoenix: "Warm. Good.",
+  ball_python: "I will sit on the thought of it.",
+  corn_snake: "Pinkie diplomacy. Accepted.",
+  kingsnake: "Tribute in bands of flavor.",
+  green_tree_python: "Warmth first. Then the treaty.",
+  hognose: "I will eat this after my scene.",
+  garter: "Worm treaty. Signed in three copies.",
+  boa: "Tribute. I will take my time.",
+  milk_snake: "An egg of a treaty.",
+  rosy_boa: "A mouse of manners.",
+  carpet_python: "A morsel for the cartographer.",
 };
 
 
