@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { Meter } from "@/components/ui/progress";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
+import { HouseVisit } from "@/components/desk/house-visit";
+import { todaysVisitor } from "@/lib/pets/visitor";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import {
   applyBath,
@@ -449,6 +451,7 @@ export function DeskStage({
         }}
         onTap={() => void talk()}
       />
+      <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
 
       {stats.gifts.map((gift) => (
         <button
@@ -504,7 +507,7 @@ export function DeskStage({
         <p className="mt-1 text-xs text-subtle sm:mt-2">
           {busy
             ? "Listening"
-            : `${moodWord(stats)} · ${bondTitle(stats.bond)} · ${stageOf(stats)} · ${dayPartLabel(part)} · ${weatherLabel(weatherOf())}${stats.gifts.length ? ` · ${stats.gifts.length} gift${stats.gifts.length > 1 ? "s" : ""}` : ""}`}
+            : `${moodWord(stats)} · ${bondTitle(stats.bond)} · ${stageOf(stats)} · ${dayPartLabel(part)} · ${weatherLabel(weatherOf())}${stats.gifts.length ? ` · ${stats.gifts.length} gift${stats.gifts.length > 1 ? "s" : ""}` : ""} · ${todaysVisitor(kind.key).name} may call`}
         </p>
         <p className="mt-1 text-[11px] text-subtle" suppressHydrationWarning>
           {describeBinding(mind)}

@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
+import { HouseVisit } from "@/components/desk/house-visit";
+import { todaysVisitor } from "@/lib/pets/visitor";
 import { applyFeed, applyHide, applyPlay, applySnack, bondTitle, loadCare, leaveGift, maybeBondLine, normalizeCare, pickGift, saveCare, stageOf, type CareStats } from "@/lib/pets/care";
 import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
@@ -278,6 +280,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         }}
         onTap={() => void talk()}
       />
+      <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
 
       {stats.gifts.map((gift) => (
         <button
@@ -299,7 +302,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
 
       <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,22rem)] sm:left-8 sm:top-24">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          Living demo · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {bondTitle(stats.bond)} · {stageOf(stats)}
+          Living demo · {dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {todaysVisitor(kind.key).name} may call
         </p>
         <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>

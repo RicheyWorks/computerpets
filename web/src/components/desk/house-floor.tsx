@@ -3,6 +3,7 @@ import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
 import { DayWash } from "@/components/desk/blotter";
 import { LIVING_KINDS } from "@/lib/pets/living";
 import { traitFor } from "@/lib/pets/traits";
+import { todaysVisitor } from "@/lib/pets/visitor";
 
 const KEYS = ["red_panda", "cat", "dog", "guinea_pig"] as const;
 const STARTS = [36, 210, 390, 560];
@@ -62,7 +63,7 @@ export function HouseFloor() {
         <Guest key={key} species={key} startX={STARTS[i] ?? 80} />
       ))}
       <p className="absolute bottom-4 left-5 text-[11px] uppercase tracking-[0.18em] text-subtle">
-        The blotter, shared
+        Today {todaysVisitor("red_panda").name} is calling
       </p>
     </section>
   );
