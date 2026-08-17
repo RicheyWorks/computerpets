@@ -113,6 +113,8 @@ class DownloadControllerIntegrationTest {
         assertThat(resp.getBody().get("downloadUrl")).isNotNull();
         assertThat(resp.getBody().get("jti")).isNotNull(); // Phase 2.1 binding
         assertThat(resp.getBody().get("expiresAt")).isNotNull();
+        String downloadUrl = String.valueOf(resp.getBody().get("downloadUrl"));
+        assertThat(downloadUrl).contains("jti=" + resp.getBody().get("jti"));
     }
 
     @Test

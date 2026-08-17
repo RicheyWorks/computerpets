@@ -54,20 +54,25 @@ public class DownloadController {
     /**
      * POST /api/download/{petKey}
      * Headers: Authorization: Bearer &lt;jwt from /api/verify&gt;
-     * Body:    { "ciphertext": "...", "iv": "..." }   (EncryptedLicense fields)
-     * 200:     { "petKey": ..., "downloadUrl": ..., "expiresAt": ..., ... }
+     * Body:    { "ciphertext": "...", "iv": "...", "hwid": "..." }   (hwid only if the license is bound)
+     * 200:     { "petKey": ..., "downloadUrl": ..., "expiresAt": ..., "jti": ..., ... }
      * 400:     unknown petKey
-     * 401:     license missing / expired / tampered (Spring Security handles missing JWT separately)
-     * 403:     JWT and license disagree, or either was issued for a different pet
+     * 401:     license missing / expired / tampered / revoked (Spring Security handles missing JWT separately)
+     * 403:     JWT and license disagree, pet mismatch, or hardware binding mismatch
      */
     @Operation(
         summary = "Download pet bundle",
-        description = "Validates the encrypted license + JWT and returns a short-lived signed CDN URL for the pet assets.",
+        description = "Validates the encrypted license + JWT (and hwid when the license is device-bound) " +
+                "and returns a short-lived signed CDN URL. See docs/CLIENT-CONTRACT.md.",
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                description = "Encrypted license payload (ciphertext + iv) obtained from a prior successful /api/verify response",
+                description = "Encrypted license (ciphertext + iv) from /api/verify. Include hwid when the license is bound.",
                 required = true,
                 content = @Content(mediaType = "application/json",
-                        examples = @ExampleObject(ref = "Download Request"))
+                        schema = @Schema(implementation = com.enterprisepet.dto.DownloadRequest.class),
+                        examples = {
+                                @ExampleObject(ref = "Download Request"),
+                                @ExampleObject(ref = "Download Request With Hwid")
+                        })
         ),
         responses = {
             @ApiResponse(responseCode = "200", description = "Signed download URL generated successfully",
@@ -77,14 +82,15 @@ public class DownloadController {
             @ApiResponse(responseCode = "400", description = "Unknown pet key",
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(ref = "Unknown Pet Type"))),
-            @ApiResponse(responseCode = "401", description = "License invalid, expired, or tampered",
+            @ApiResponse(responseCode = "401", description = "License invalid, expired, tampered, or revoked",
                     content = @Content(mediaType = "application/json",
                             examples = @ExampleObject(ref = "Download License Invalid"))),
-            @ApiResponse(responseCode = "403", description = "License/pet or JWT/license mismatch (defense-in-depth)",
+            @ApiResponse(responseCode = "403", description = "License/pet, JWT/license, or hardware binding mismatch",
                     content = @Content(mediaType = "application/json",
                             examples = {
                                     @ExampleObject(ref = "Download Pet Mismatch"),
-                                    @ExampleObject(ref = "Download Auth Mismatch")
+                                    @ExampleObject(ref = "Download Auth Mismatch"),
+                                    @ExampleObject(ref = "Download Hwid Mismatch")
                             }))
         }
     )

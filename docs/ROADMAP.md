@@ -134,9 +134,9 @@ All critical items required before any public or limited production exposure hav
 - [x] Daily house visitor walks through desk, demos, Live, Meet, Windows
 - [x] Ten named snakes on desk, demos, Live, Meet, and Windows overlay
 - [x] Snakes go blue and shed; old coat stays on the blotter, all platforms
-- Finalize and publish the native client contract (license format, hwid, decryption)
+- [x] Native client contract published (`docs/CLIENT-CONTRACT.md`) — license AES-256-GCM format, hwid rules, JWT, signed download URL
 - Add more ownership providers (Epic, Itch.io, Solana, etc.)
-- Build internal admin tools for revocation and audit
+- Richer admin UI for revocation and audit (`POST /api/admin/revoke` already ships)
 
 ---
 
@@ -160,6 +160,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (backend catalog matches the 30-species living desk)
+**Last Updated:** 2026-08-17 (native client contract published)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

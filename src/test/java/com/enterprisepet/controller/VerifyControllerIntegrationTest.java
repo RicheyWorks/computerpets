@@ -2,6 +2,7 @@ package com.enterprisepet.controller;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -76,7 +77,14 @@ class VerifyControllerIntegrationTest {
     }
 
     @AfterEach
-    void tearDown() {
+    void resetStubs() {
+        if (wireMockServer != null) {
+            wireMockServer.resetAll();
+        }
+    }
+
+    @AfterAll
+    static void stopWireMock() {
         if (wireMockServer != null) {
             wireMockServer.stop();
         }
@@ -105,5 +113,26 @@ class VerifyControllerIntegrationTest {
         assertThat(response.getBody().get("provider")).isEqualTo("steam");
         assertThat(response.getBody().get("license")).isNotNull();
         assertThat(response.getBody().get("auth")).isNotNull();
+    }
+
+    @Test
+    @DisplayName("POST /api/verify/steam returns 400 when hwid exceeds 128 characters")
+    void verifySteam_hwidTooLong_returns400() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, String> body = Map.of(
+                "steamId", "76561198000000000",
+                "appId", "123456",
+                "petType", "red_panda",
+                "hwid", "x".repeat(129)
+        );
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(
+                "/api/verify/steam", new HttpEntity<>(body, headers), Map.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody().get("error")).isEqualTo("hwid too long");
+        assertThat(response.getBody().get("maxLength")).isEqualTo(128);
     }
 }

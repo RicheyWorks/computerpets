@@ -82,15 +82,19 @@ public class VerifyController {
      */
     @Operation(
         summary = "Verify ownership and issue license",
-        description = "Verifies ownership via the selected provider and returns an encrypted license + short-lived JWT.",
+        description = "Verifies ownership via the selected provider and returns an encrypted license + short-lived JWT. " +
+                "Optional body field `hwid` (max 128 chars) binds the license to a device; see docs/CLIENT-CONTRACT.md.",
         responses = {
             @ApiResponse(responseCode = "200", description = "Ownership verified successfully",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = com.enterprisepet.dto.VerifySuccessResponse.class),
                             examples = @ExampleObject(ref = "Success Response"))),
-            @ApiResponse(responseCode = "400", description = "Unknown petType or invalid request",
+            @ApiResponse(responseCode = "400", description = "Unknown petType, hwid too long, or invalid request",
                     content = @Content(mediaType = "application/json",
-                            examples = @ExampleObject(ref = "Unknown Pet Type"))),
+                            examples = {
+                                    @ExampleObject(ref = "Unknown Pet Type"),
+                                    @ExampleObject(ref = "Hwid Too Long")
+                            })),
             @ApiResponse(responseCode = "403", description = "Ownership verification failed",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = com.enterprisepet.dto.ErrorResponse.class),
@@ -108,6 +112,7 @@ public class VerifyController {
                 content = @Content(mediaType = "application/json",
                         examples = {
                                 @ExampleObject(ref = "Steam Verification"),
+                                @ExampleObject(ref = "Steam Verification With Hwid"),
                                 @ExampleObject(ref = "NFT Verification"),
                                 @ExampleObject(ref = "Microsoft Verification")
                         })
@@ -152,6 +157,12 @@ public class VerifyController {
         if (pet.error != null) return pet.error;
 
         String hwid = request.get("hwid");
+        if (hwid != null && hwid.length() > 128) {
+            return ResponseEntity.status(400).body(Map.of(
+                "error", "hwid too long",
+                "maxLength", 128
+            ));
+        }
         var license = licenseService.issueLicense(result.ownerId(), pet.type.key(), provider.key(), LICENSE_DAYS, hwid);
         var auth = jwtService.issue(result.ownerId(), pet.type.key(), provider.key());
 
