@@ -95,7 +95,7 @@ All critical items required before any public or limited production exposure hav
 
 - **3.1 Distributed State**
   - [x] Redis-backed rate limiting (replace in-memory Bucket4j)
-  - Distributed revocation / jti blacklist
+  - [x] Distributed revocation / jti blacklist
 
 - **3.2 Observability Maturity**
   - Distributed tracing (Micrometer + OpenTelemetry)
@@ -163,6 +163,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (Redis rate limiting)
+**Last Updated:** 2026-08-17 (Redis jti deny-list)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
