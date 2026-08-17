@@ -1,0 +1,148 @@
+"""Species-true idle acts — same map as web ``ethogram.ts`` and Electron ``ethogram.js``."""
+
+from __future__ import annotations
+
+import math
+import random
+from typing import TypedDict
+
+from .species import SNAKE_KEYS
+
+
+class IdleAct(TypedDict, total=False):
+    name: str
+    motion: str
+    hold: float
+    weight: float
+    anim: str
+
+
+def _a(name: str, motion: str, hold: float, weight: float, anim: str | None = None) -> IdleAct:
+    act: IdleAct = {"name": name, "motion": motion, "hold": hold, "weight": weight}
+    if anim:
+        act["anim"] = anim
+    return act
+
+
+_PREEN: tuple[IdleAct, ...] = (
+    _a("preen", "groom", 1.4, 3, "sit"),
+    _a("hop_step", "hop", 0.5, 2, "play"),
+    _a("wings", "pulse", 0.7, 1, "play"),
+)
+
+ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
+    "dog": (_a("scratch", "scratch", 1.2, 3, "sit"), _a("shake", "shake", 0.7, 2), _a("yawn", "yawn", 1.1, 2), _a("circle_sit", "circle", 1.6, 2, "sit")),
+    "cat": (_a("groom", "groom", 1.6, 3, "sit"), _a("scratch", "scratch", 1.1, 2, "sit"), _a("yawn", "yawn", 1.2, 2), _a("stretch", "stretch", 1.4, 2, "sit"), _a("claim", "sit_hold", 2.2, 1, "sit")),
+    "fox": (_a("stretch", "stretch", 1.3, 2, "sit"), _a("yawn", "yawn", 1.1, 2), _a("pounce", "hop", 0.7, 2, "play")),
+    "red_panda": (_a("groom", "groom", 1.5, 3, "sit"), _a("scratch", "scratch", 1.1, 2, "sit"), _a("steal_dart", "dart", 1.2, 2), _a("wash", "groom", 1.3, 2, "sit")),
+    "rabbit": (_a("face_wash", "groom", 1.2, 3, "sit"), _a("freeze", "freeze", 1.4, 2), _a("flop", "sit_hold", 2.4, 2, "sit"), _a("binky", "hop", 0.6, 1, "play")),
+    "hamster": (_a("nibble", "eat", 1.1, 3, "eat"), _a("groom", "groom", 1.2, 2, "sit"), _a("freeze", "freeze", 1.0, 2), _a("burst", "dart", 0.9, 2)),
+    "guinea_pig": (_a("wheek", "talk", 0.8, 1, "talk"), _a("popcorn", "hop", 0.45, 2, "play"), _a("freeze", "freeze", 1.2, 2), _a("groom", "groom", 1.3, 3, "sit")),
+    "ferret": (_a("warble", "hop", 0.7, 3, "play"), _a("tunnel", "sit_hold", 1.4, 2, "sit"), _a("dook", "talk", 0.7, 1, "talk")),
+    "hedgehog": (_a("snuffle", "wiggle", 1.0, 3), _a("curl", "sit_hold", 1.8, 2, "sit"), _a("unroll", "stretch", 1.2, 2)),
+    "chinchilla": (_a("dust_shake", "shake", 0.9, 3, "sit"), _a("hop", "hop", 0.55, 2, "play"), _a("groom", "groom", 1.2, 2, "sit")),
+    "turtle": (_a("bask", "sit_hold", 3.2, 3, "sit"), _a("blink", "freeze", 1.6, 2)),
+    "iguana": (_a("bask", "sit_hold", 3.0, 3, "sit"), _a("head_bob", "bob", 1.4, 2), _a("still", "freeze", 2.0, 2)),
+    "dragon": (_a("watch", "sit_hold", 2.4, 3, "sit"), _a("huff", "pulse", 0.8, 2), _a("bask", "sit_hold", 2.8, 2, "sit")),
+    "axolotl": (_a("gill", "bob", 1.4, 3), _a("still", "freeze", 2.0, 2), _a("gulp", "gulp", 0.7, 1)),
+    "budgie": _PREEN,
+    "parrot": _PREEN,
+    "toucan": _PREEN,
+    "phoenix": _PREEN,
+    "penguin": (_a("preen", "groom", 1.4, 3, "sit"), _a("nod", "nod", 0.7, 2, "sit"), _a("huddle", "sit_hold", 2.0, 2, "sit")),
+    "goldfish": (_a("gulp", "gulp", 0.6, 2), _a("flare", "pulse", 0.7, 2)),
+    "ball_python": (_a("tongue", "tongue", 0.7, 4), _a("coil", "sit_hold", 2.8, 3, "sit"), _a("hide_head", "sit_hold", 1.6, 2, "sit"), _a("gape", "gape", 1.2, 1)),
+    "corn_snake": (_a("tongue", "tongue", 0.7, 4), _a("explore", "freeze", 1.2, 2), _a("slither", "dart", 1.0, 2)),
+    "kingsnake": (_a("tongue", "tongue", 0.7, 4), _a("inspect", "freeze", 1.4, 3), _a("still", "sit_hold", 1.8, 2, "sit")),
+    "green_tree_python": (_a("tongue", "tongue", 0.7, 4), _a("drape", "sit_hold", 2.6, 3, "sit")),
+    "hognose": (_a("tongue", "tongue", 0.7, 4), _a("flatten", "sit_hold", 1.4, 2, "sit"), _a("playdead", "sit_hold", 1.8, 1, "sit"), _a("gape", "gape", 1.1, 1)),
+    "garter": (_a("tongue", "tongue", 0.7, 4), _a("patrol", "wiggle", 0.8, 2), _a("dart", "dart", 0.9, 2)),
+    "boa": (_a("tongue", "tongue", 0.7, 3), _a("hold", "sit_hold", 3.0, 3, "sit")),
+    "milk_snake": (_a("tongue", "tongue", 0.7, 4), _a("mimic", "freeze", 1.6, 2)),
+    "rosy_boa": (_a("tongue", "tongue", 0.7, 3), _a("nest", "sit_hold", 2.6, 3, "sit")),
+    "carpet_python": (_a("tongue", "tongue", 0.7, 4), _a("drape", "sit_hold", 2.2, 3, "sit")),
+}
+
+TONGUE_KEYS = SNAKE_KEYS
+SCRATCH_KEYS = ("dog", "cat", "red_panda")
+
+
+def acts_for(key: str | None) -> tuple[IdleAct, ...]:
+    if not key:
+        return ()
+    return ETHOGRAM.get(key, ())
+
+
+def pick_act(key: str | None) -> IdleAct | None:
+    acts = acts_for(key)
+    if not acts:
+        return None
+    roll = random.random() * sum(a["weight"] for a in acts)
+    for act in acts:
+        roll -= act["weight"]
+        if roll <= 0:
+            return act
+    return acts[-1]
+
+
+def next_act_wait(wander: float, nocturnal: bool = False, night: bool = False) -> float:
+    wait = 20.0 - max(0.0, min(1.0, wander)) * 12.0
+    if wander < 0.18:
+        wait += 8.0
+    if nocturnal and night:
+        wait *= 0.7
+    if nocturnal and not night:
+        wait *= 1.22
+    return max(8.0, wait) * (0.85 + random.random() * 0.35)
+
+
+def after_settle_wait(wander: float) -> float:
+    late = wander < 0.18
+    return (6.0 if late else 3.0) + random.random() * (5.0 if late else 4.0)
+
+
+def tongue_flick(t: float, hold: float) -> float:
+    if t < 0 or t > hold:
+        return 0.0
+    cycle = 0.22
+    n = math.floor(t / cycle)
+    if n >= 3:
+        return 0.0
+    u = (t % cycle) / cycle
+    return 1.0 - u / 0.55 if u < 0.55 else 0.0
+
+
+def act_pose(motion: str | None, t: float, hold: float) -> dict[str, float]:
+    u = max(0.0, min(1.0, t / hold)) if hold > 0 else 1.0
+    pose = {"dx": 0.0, "dy": 0.0, "rot": 0.0, "stretch": 1.0, "squat": 1.0}
+    if motion == "scratch":
+        pose["dx"] = math.sin(t * 28) * 2.2
+        pose["rot"] = math.sin(t * 28) * 3.2
+    elif motion == "shake":
+        pose["dx"] = math.sin(t * 40) * 3.4
+    elif motion == "yawn":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.08
+        pose["squat"] = 2.0 - pose["stretch"]
+    elif motion == "groom":
+        pose["dy"] = math.sin(t * 10) * 3.0
+        pose["stretch"] = 1.0 + math.sin(t * 10) * 0.02
+    elif motion == "stretch":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.1
+        pose["squat"] = 1.0 - math.sin(u * math.pi) * 0.05
+    elif motion == "wiggle":
+        pose["dx"] = math.sin(t * 16) * 2.0
+    elif motion == "bob":
+        pose["dy"] = math.sin(t * 8) * 4.0
+    elif motion == "pulse":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi * 2) * 0.05
+        pose["squat"] = 2.0 - pose["stretch"]
+    elif motion == "gape":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.07
+        pose["squat"] = 2.0 - pose["stretch"]
+    elif motion == "gulp":
+        pose["dy"] = math.sin(u * math.pi) * 5.0
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.04
+    elif motion == "nod":
+        pose["dy"] = -math.sin(u * math.pi) * 6.0
+        pose["stretch"] = 1.0 - math.sin(u * math.pi) * 0.04
+    return pose
