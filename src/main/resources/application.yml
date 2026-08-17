@@ -134,6 +134,21 @@ admin:
   api-key: "${ADMIN_API_KEY:}"
 
 # -----------------------------------------------------------------------------
+# Rate limiting (Phase 3.1)
+# -----------------------------------------------------------------------------
+# Default store is Redis so every app replica shares the same per-IP buckets
+# (10/min verify, 30/min download). If Redis is down the filter fail-closes
+# with HTTP 503 + Retry-After — it does not silently lift the limit.
+# Set RATE_LIMIT_BACKEND=memory only for tests or a single local process.
+rate-limit:
+  backend: ${RATE_LIMIT_BACKEND:redis}
+  fail-closed-retry-after-seconds: ${RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER:5}
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    timeout: ${REDIS_TIMEOUT:200ms}
+
+# -----------------------------------------------------------------------------
 # Observability (Phase 1)
 # -----------------------------------------------------------------------------
 management:

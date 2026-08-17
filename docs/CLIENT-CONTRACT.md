@@ -28,9 +28,11 @@ caller recently passed verify. The signed URL is a 15-minute fetch ticket.
 Discovery endpoints (`/api/verify/**`, `/api/pets/**`) are unauthenticated.
 `POST /api/download/**` requires `Authorization: Bearer <jwt>`.
 
-Rate limits (per client IP, in-memory): **10/min** on `/api/verify/`,
-**30/min** on `/api/download/`. Exceeding them returns **429** with
-`Retry-After` and `application/problem+json`.
+Rate limits (per client IP, Redis-backed, shared across app instances):
+**10/min** on `/api/verify/`, **30/min** on `/api/download/`. Exceeding
+them returns **429** with `Retry-After` and `application/problem+json`.
+If Redis is unreachable the server fail-closes with **503** (same media
+type and `Retry-After`) instead of lifting the limit.
 
 ---
 

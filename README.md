@@ -32,7 +32,7 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Strong Cryptographic Licensing** — AES-256-GCM encrypted licenses and HMAC-signed short-lived CDN URLs.
 - **Stateless & Scalable** — Designed for horizontal scaling with minimal server-side state.
 - **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
-- **Rate Limiting** — Built-in per-IP protection using Bucket4j.
+- **Rate Limiting** — Per-IP Bucket4j token buckets in Redis (10/min verify, 30/min download), shared across replicas. Redis-down fail-closes with 503.
 - **Rich Pet Catalog** — 30 pets across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes.
 - **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`.
 - **License ledger** — House `/admin` plus `GET /api/admin/licenses` for jti/owner lookup, audit stamps, and revoke (`X-Admin-Key`).
