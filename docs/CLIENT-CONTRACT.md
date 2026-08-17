@@ -106,6 +106,10 @@ decrypt — you can POST the opaque `ciphertext` + `iv` back unchanged.
 
 `ciphertext` = `Base64( AES-GCM-ciphertext ‖ 16-byte tag )`.
 
+Server construction uses BouncyCastle 1.78+ factory methods
+(`GCMBlockCipher.newInstance(AESEngine.newInstance())`). That is
+construction only — IV, tag, AAD, and encoding are unchanged.
+
 Any AES-GCM implementation that accepts a 12-byte IV and a 128-bit tag
 (OpenSSL, libsodium, WebCrypto, `javax.crypto` `AES/GCM/NoPadding`) can
 decrypt this. Tampering with ciphertext, IV, or tag fails authentication.
