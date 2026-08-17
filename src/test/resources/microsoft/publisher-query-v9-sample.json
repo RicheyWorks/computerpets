@@ -1,0 +1,48 @@
+{
+    "continuationToken": "{\"checkSatisfactionIndex\":2}",
+    "items": [
+        {
+            "acquiredDate": "2021-08-30T21:53:08.2565331+00:00",
+            "acquisitionType": "Single",
+            "endDate": "2021-08-31T21:53:07.4374279+00:00",
+            "id": "1046015f83a8478397064c915224e5d3",
+            "modifiedDate": "2021-08-30T21:53:08.2589804+00:00",
+            "productId": "9N30KZZF4BR9",
+            "productKind": "Durable",
+            "quantity": 1,
+            "satisfiedByProductIds": [],
+            "skuId": "0010",
+            "startDate": "2021-08-30T21:53:07.4374279+00:00",
+            "status": "Active",
+            "tags": [],
+            "transactionId": "995ec667-8114-4ab9-9f11-597a8419a775",
+            "trialData": {
+                "isInTrialPeriod": false,
+                "isTrial": false
+            }
+        },
+        {
+            "acquiredDate": "2021-08-30T19:55:44.7994325+00:00",
+            "acquisitionType": "Single",
+            "endDate": "9999-12-31T23:59:59.9999999+00:00",
+            "id": "27662ad4749342608ec09130b76601f9",
+            "modifiedDate": "2021-08-30T19:55:44.8043849+00:00",
+            "productId": "9MXL21XPWWWK",
+            "productKind": "Game",
+            "quantity": 1,
+            "satisfiedByProductIds": [],
+            "skuId": "0010",
+            "startDate": "2021-08-30T19:40:44.7994325+00:00",
+            "status": "Active",
+            "tags": [
+                "4c584d39-3132-3058-c050-5757574b8500"
+            ],
+            "transactionId": "8d5ed958-6c72-4812-87fc-57b105d3d197",
+            "trialData": {
+                "isInTrialPeriod": true,
+                "isTrial": true,
+                "trialTimeRemaining": "09:43:52.8580690"
+            }
+        }
+    ]
+}
