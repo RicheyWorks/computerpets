@@ -25,6 +25,11 @@ services:
       - ETHEREUM_RPC_URL=${ETHEREUM_RPC_URL:-}
       - ITCH_API_KEY=${ITCH_API_KEY:-}
       - ITCH_GAME_ID=${ITCH_GAME_ID:-}
+      - EPIC_CLIENT_ID=${EPIC_CLIENT_ID:-}
+      - EPIC_CLIENT_SECRET=${EPIC_CLIENT_SECRET:-}
+      - EPIC_DEPLOYMENT_ID=${EPIC_DEPLOYMENT_ID:-}
+      - EPIC_SANDBOX_ID=${EPIC_SANDBOX_ID:-}
+      - EPIC_CATALOG_ITEM_ID=${EPIC_CATALOG_ITEM_ID:-}
     depends_on:
       postgres:
         condition: service_healthy

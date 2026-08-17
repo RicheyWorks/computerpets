@@ -153,6 +153,11 @@ When the client is developed, it will be located in a separate directory (likely
 | `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only) |
 | `ITCH_API_KEY`            | No       | placeholder | itch.io developer API key for download-key receipt verify |
 | `ITCH_GAME_ID`            | No       | empty   | Optional official itch.io game id allowlist (do not invent one) |
+| `EPIC_CLIENT_ID`          | No       | placeholder | EOS Trusted Server client id (Developer Portal) |
+| `EPIC_CLIENT_SECRET`      | No       | placeholder | EOS Trusted Server client secret |
+| `EPIC_DEPLOYMENT_ID`      | No       | placeholder | Deployment id required by the Ecommerce APIs |
+| `EPIC_SANDBOX_ID`         | No       | empty   | Optional official Epic sandbox allowlist (do not invent one) |
+| `EPIC_CATALOG_ITEM_ID`    | No       | empty   | Optional official catalog item allowlist (do not invent one) |
 | `BUNDLE_BASE_URL`         | No       | CDN placeholder | Base URL used when generating signed download links |
 
 ---
@@ -171,6 +176,8 @@ ownership:
     nft:
       enabled: true
     itch:
+      enabled: true
+    epic:
       enabled: true
 ```
 
@@ -193,6 +200,8 @@ ownership:
     nft:
       enabled: true
     itch:
+      enabled: false
+    epic:
       enabled: false
 ```
 
@@ -218,6 +227,48 @@ itch:
 
 `POST /api/verify/itch` expects `gameId` and `downloadKey` (the receipt
 from the buyer's download URL).
+
+### Epic Games Store
+
+Epic verify uses the documented EOS Auth + Ecom Web APIs:
+
+1. `POST https://api.epicgames.dev/epic/oauth/v2/token` with
+   `grant_type=client_credentials` and HTTP Basic `clientId:clientSecret`.
+   Ecommerce calls require `deployment_id`.
+2. `GET https://api.epicgames.dev/epic/ecom/v3/platforms/{platform}/identities/{accountId}/ownership?nsCatalogItemId={sandboxId:catalogItemId}`
+   with the client-credentials access token.
+
+A placeholder or blank `EPIC_CLIENT_ID` / `EPIC_CLIENT_SECRET` /
+`EPIC_DEPLOYMENT_ID` fails closed (ownership denied), the same way a
+missing Steam Web API key does. Live values come from the Epic Developer
+Portal: create a **Trusted Server** client, enable the **Ecom** feature
+on its client policy, and use that client's credentials. There is no
+public "always owns" path and no invented ComputerPets sandbox — leave
+`EPIC_SANDBOX_ID` / `EPIC_CATALOG_ITEM_ID` empty until a store page exists.
+
+| Variable               | Purpose                                                         |
+|------------------------|-----------------------------------------------------------------|
+| `EPIC_CLIENT_ID`       | Trusted Server client id from the Developer Portal              |
+| `EPIC_CLIENT_SECRET`   | Trusted Server client secret                                    |
+| `EPIC_DEPLOYMENT_ID`   | Deployment id (required by the Ecommerce APIs)                  |
+| `EPIC_SANDBOX_ID`      | Optional sandbox allowlist; when set, `sandboxId` must match    |
+| `EPIC_CATALOG_ITEM_ID` | Optional catalog-item allowlist; when set, `catalogItemId` must match |
+
+```yaml
+epic:
+  client-id: ${EPIC_CLIENT_ID}
+  client-secret: ${EPIC_CLIENT_SECRET}
+  deployment-id: ${EPIC_DEPLOYMENT_ID}
+  api-base-url: https://api.epicgames.dev
+  sandbox-id: ${EPIC_SANDBOX_ID:}
+  catalog-item-id: ${EPIC_CATALOG_ITEM_ID:}
+```
+
+`POST /api/verify/epic` expects `accountId` (32-char Epic Account ID),
+`sandboxId`, and `catalogItemId`. `platform` defaults to `EPIC`.
+
+See [Auth Web APIs](https://dev.epicgames.com/docs/web-api-ref/authentication)
+and [Ecom Web APIs](https://dev.epicgames.com/docs/web-api-ref/ecom-web-apis).
 
 ### Ethereum / NFT
 
