@@ -17,10 +17,12 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
 
+import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -109,7 +111,16 @@ public class MicrosoftStoreService implements OwnershipProvider {
     @PostConstruct
     void init() {
         if (this.restClient == null) {
+            // publisherQuery is a JSON POST; HTTP/1.1 avoids JDK HttpClient h2c
+            // RST_STREAM against HTTP/1 stubs (and matches the Learn examples).
+            HttpClient httpClient = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .connectTimeout(MS_TIMEOUT)
+                    .build();
+            JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+            requestFactory.setReadTimeout(MS_TIMEOUT);
             this.restClient = ObservedRestClients.builder(observationRegistry)
+                .requestFactory(requestFactory)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT)
                 .build();
@@ -304,6 +315,5 @@ public class MicrosoftStoreService implements OwnershipProvider {
     }
 
     /** How long we'll wait for a Microsoft response before giving up. */
-    @SuppressWarnings("unused")
     private static final Duration MS_TIMEOUT = Duration.ofSeconds(10);
 }

@@ -100,8 +100,7 @@ class MicrosoftVerifyIntegrationTest {
                 .withHeader("Authorization", equalTo("XBL3.0 x=123456789012345;test-xsts-token"))
                 .withHeader("User-Agent", equalTo("ComputerPets/1.0"))
                 .withRequestBody(matchingJsonPath("$.productSkuIds[0].productId", equalTo(PRODUCT_ID)))
-                .withRequestBody(matchingJsonPath("$.validityType", equalTo("Valid")))
-                .withRequestBody(matchingJsonPath("$", containing("productSkuIds"))));
+                .withRequestBody(matchingJsonPath("$.validityType", equalTo("Valid"))));
         assertThat(wireMockServer.findAll(postRequestedFor(urlPathEqualTo("/v9.0/collections/publisherQuery"))))
                 .allSatisfy(logged -> {
                     String body = logged.getBodyAsString();
