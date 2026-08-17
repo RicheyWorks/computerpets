@@ -346,7 +346,14 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
               Learn the den
             </Link>
           </p>
-        ) : null}
+        ) : (
+          <p className="mt-2 text-xs text-subtle">
+            {kind.speciesLabel} ·{" "}
+            <Link to="/study" className="text-fg no-underline">
+              Learn the study
+            </Link>
+          </p>
+        )}
         {!installed ? (
           <p className="mt-3 text-xs text-subtle">Add to Home Screen. Tap the blotter for a treat.</p>
         ) : null}

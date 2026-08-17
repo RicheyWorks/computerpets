@@ -65,6 +65,10 @@ export function HouseFloor() {
       ))}
       <p className="absolute bottom-4 left-5 text-[11px] uppercase tracking-[0.18em] text-subtle">
         Today {todaysVisitor("red_panda").name} is calling ·{" "}
+        <Link to="/study" className="text-fg no-underline hover:text-primary">
+          The study
+        </Link>
+        {" · "}
         <Link to="/snakes" className="text-fg no-underline hover:text-primary">
           The den
         </Link>

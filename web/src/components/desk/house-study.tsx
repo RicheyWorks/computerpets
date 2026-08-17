@@ -1,7 +1,7 @@
 import { LivingBlotter, GuideRail } from "@/components/desk/blotter-guests";
-import { SNAKE_KEYS } from "@/lib/pets/snakes";
+import { HOUSE_KEYS } from "@/lib/pets/house-guide";
 
-export function SnakeDen({
+export function HouseStudy({
   selectedKey,
   onSelect,
 }: {
@@ -10,20 +10,20 @@ export function SnakeDen({
 }) {
   return (
     <LivingBlotter
-      keys={SNAKE_KEYS}
+      keys={HOUSE_KEYS}
       selectedKey={selectedKey}
       onSelect={onSelect}
-      caption="They crawl and stay. Tap a snake — or a name — for the plaque."
+      caption="They walk and stay. Tap a guest — or a name — for the plaque."
     />
   );
 }
 
-export function SnakeRail({
+export function StudyRail({
   selectedKey,
   onSelect,
 }: {
   selectedKey: string;
   onSelect: (key: string) => void;
 }) {
-  return <GuideRail keys={SNAKE_KEYS} selectedKey={selectedKey} onSelect={onSelect} />;
+  return <GuideRail keys={HOUSE_KEYS} selectedKey={selectedKey} onSelect={onSelect} />;
 }
