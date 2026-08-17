@@ -16,12 +16,12 @@ const EXPECTED = [
   ["maidenhair", "vein", "Adiantum capillus-veneris"],
   ["ginkgo", "fan", "Ginkgo biloba"],
   ["oak", "mast", "Quercus alba"],
-  ["redwood", "spire", "Sequoia sempervirens"],
   ["water_lily", "pad", "Nymphaea odorata"],
-  ["duckweed", "speck", "Lemna minor"],
-  ["venus_flytrap", "snap", "Dionaea muscipula"],
   ["orchid", "moth", "Phalaenopsis amabilis"],
   ["saguaro", "arm", "Carnegiea gigantea"],
+  ["venus_flytrap", "snap", "Dionaea muscipula"],
+  ["pitcher", "well", "Sarracenia purpurea"],
+  ["sundew", "dew", "Drosera rotundifolia"],
 ];
 
 function quotedKeys(src) {
@@ -54,16 +54,23 @@ test("the important mix-ups are actually taught", () => {
   const moss = guideSrc.slice(guideSrc.indexOf('"moss"'), guideSrc.indexOf('"maidenhair"'));
   const fern = guideSrc.slice(guideSrc.indexOf('"maidenhair"'), guideSrc.indexOf('"ginkgo"'));
   const ginkgo = guideSrc.slice(guideSrc.indexOf('"ginkgo"'), guideSrc.indexOf('"oak"'));
-  const duckweed = guideSrc.slice(guideSrc.indexOf('"duckweed"'), guideSrc.indexOf('"venus_flytrap"'));
-  const flytrap = guideSrc.slice(guideSrc.indexOf('"venus_flytrap"'), guideSrc.indexOf('"orchid"'));
-  const saguaro = guideSrc.slice(guideSrc.indexOf('"saguaro"'));
+  const flytrap = guideSrc.slice(guideSrc.indexOf('"venus_flytrap"'), guideSrc.indexOf('"pitcher"'));
+  const pitcher = guideSrc.slice(guideSrc.indexOf('"pitcher"'), guideSrc.indexOf('"sundew"'));
+  const sundew = guideSrc.slice(guideSrc.indexOf('"sundew"'));
+  const saguaro = guideSrc.slice(guideSrc.indexOf('"saguaro"'), guideSrc.indexOf('"venus_flytrap"'));
   assert.match(moss, /no flower/i);
   assert.match(moss, /not a lichen/i);
   assert.match(fern, /not a flowering plant/i);
   assert.match(ginkgo, /not a flowering plant/i);
-  assert.match(duckweed, /flower the size of a pin/i);
   assert.match(flytrap, /not a monster/i);
   assert.match(flytrap, /two hairs/i);
+  assert.match(flytrap, /snap/i);
+  assert.match(pitcher, /well/i);
+  assert.match(pitcher, /drown/i);
+  assert.match(pitcher, /not a flytrap/i);
+  assert.match(sundew, /glue/i);
+  assert.match(sundew, /curl/i);
+  assert.match(sundew, /not a flytrap/i);
   assert.match(saguaro, /not a tree/i);
   assert.match(saguaro, /cactus/i);
 });

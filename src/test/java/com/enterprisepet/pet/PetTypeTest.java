@@ -62,12 +62,12 @@ class PetTypeTest {
             new ExpectedSpecies("maidenhair", "Maidenhair Fern", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("ginkgo", "Ginkgo", PetType.Rarity.RARE),
             new ExpectedSpecies("oak", "White Oak", PetType.Rarity.COMMON),
-            new ExpectedSpecies("redwood", "Coast Redwood", PetType.Rarity.RARE),
             new ExpectedSpecies("water_lily", "Fragrant Water Lily", PetType.Rarity.UNCOMMON),
-            new ExpectedSpecies("duckweed", "Common Duckweed", PetType.Rarity.COMMON),
-            new ExpectedSpecies("venus_flytrap", "Venus Flytrap", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("orchid", "Moth Orchid", PetType.Rarity.RARE),
-            new ExpectedSpecies("saguaro", "Saguaro", PetType.Rarity.RARE)
+            new ExpectedSpecies("saguaro", "Saguaro", PetType.Rarity.RARE),
+            new ExpectedSpecies("venus_flytrap", "Venus Flytrap", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("pitcher", "Purple Pitcher Plant", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("sundew", "Round-leaved Sundew", PetType.Rarity.UNCOMMON)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(
@@ -81,8 +81,8 @@ class PetTypeTest {
     );
 
     private static final List<String> GARDEN_KEYS = List.of(
-            "moss", "maidenhair", "ginkgo", "oak", "redwood",
-            "water_lily", "duckweed", "venus_flytrap", "orchid", "saguaro"
+            "moss", "maidenhair", "ginkgo", "oak", "water_lily",
+            "orchid", "saguaro", "venus_flytrap", "pitcher", "sundew"
     );
 
     @Test
@@ -134,9 +134,9 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(18L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(17L);
-        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(13L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(17L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(19L);
+        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(12L);
         assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(2L);
     }
 
@@ -170,7 +170,8 @@ class PetTypeTest {
         assertThat(PetType.MOSS.displayName()).isEqualTo("Sheet Moss");
         assertThat(PetType.VENUS_FLYTRAP.displayName()).isEqualTo("Venus Flytrap");
         assertThat(PetType.SAGUARO.rarity()).isEqualTo(PetType.Rarity.RARE);
-        assertThat(PetType.DUCKWEED.rarity()).isEqualTo(PetType.Rarity.COMMON);
+        assertThat(PetType.PITCHER.displayName()).isEqualTo("Purple Pitcher Plant");
+        assertThat(PetType.SUNDEW.rarity()).isEqualTo(PetType.Rarity.UNCOMMON);
     }
 
     private record ExpectedSpecies(String key, String displayName, PetType.Rarity rarity) {}

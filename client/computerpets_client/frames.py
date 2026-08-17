@@ -6,7 +6,7 @@ Not photographed assets and not a shader engine.
 Snakes crawl (S-curve / coil). The tide swims; hermit and horseshoe walk
 the damp floor. The garden sits and leans. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
-bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, and so on.
+bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, pitcher well, sundew, and so on.
 No invented species.
 """
 
@@ -169,12 +169,12 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "fern",
         "fan",
         "seedling",
-        "spire",
         "pad",
-        "speck",
         "trap",
         "orchid",
         "cactus",
+        "pitcher",
+        "sundew",
     ):
         _draw_plant(p, species, anim, i, sit, eat, sleep)
         return
@@ -728,15 +728,6 @@ def _draw_plant(
             p.setBrush(QBrush(ring))
             p.drawEllipse(QRectF(16, 18, 10, 8))
         return
-    if sil == "spire":
-        p.setBrush(QBrush(belly))
-        p.setPen(QPen(accent, 1.1))
-        p.drawRoundedRect(QRectF(-8, 8, 16, 28), 5, 5)
-        p.setBrush(QBrush(body))
-        for k, y in enumerate((-28, -12, 4)):
-            w = 18 - k * 3
-            p.drawEllipse(QRectF(-w / 2, y, w, 18))
-        return
     if sil == "pad":
         p.setBrush(QBrush(body))
         p.setPen(QPen(accent, 1.1))
@@ -755,14 +746,6 @@ def _draw_plant(
                 p.restore()
             p.setBrush(QBrush(ear))
             p.drawEllipse(QRectF(-6, -12, 12, 12))
-        return
-    if sil == "speck":
-        p.setBrush(QBrush(body))
-        p.setPen(QPen(accent, 0.8))
-        spots = ((-18, 4, 14), (2, -2, 12), (16, 8, 10), (-6, 14, 11), (10, 16, 9), (-22, 16, 8))
-        extra = ((22, -6, 8), (-28, -4, 7)) if anim in ("play", "walk") or eat else ()
-        for x, y, w in spots + extra:
-            p.drawEllipse(QRectF(x, y, w, w * 0.7))
         return
     if sil == "trap":
         p.setBrush(QBrush(body))
@@ -800,6 +783,55 @@ def _draw_plant(
         p.drawEllipse(QRectF(-10, -36, 20, 16))
         p.setBrush(QBrush(body))
         p.drawEllipse(QRectF(-5, -22, 10, 8))
+        return
+    if sil == "pitcher":
+        # Sarracenia purpurea — squat veined wells, not a flytrap cup.
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-16, 16, 32, 12))
+        for ang, dx, dy in ((-28, -18, 2), (0, 0, -4), (26, 16, 4)):
+            p.save()
+            p.translate(dx, dy)
+            p.rotate(ang + lean * 0.2)
+            well = QPainterPath()
+            well.moveTo(-8, 18)
+            well.quadTo(-14, 0, -6, -16)
+            well.quadTo(0, -22, 8, -14)
+            well.quadTo(12, 2, 8, 18)
+            well.closeSubpath()
+            p.setBrush(QBrush(body))
+            p.setPen(QPen(accent, 1.1))
+            p.drawPath(well)
+            p.setPen(QPen(ring, 1.0))
+            p.drawLine(-4, 8, -2, -8)
+            p.drawLine(2, 8, 4, -6)
+            p.setBrush(QBrush(belly))
+            p.setPen(Qt.PenStyle.NoPen)
+            p.drawEllipse(QRectF(-5, -12, 10, 6))
+            p.restore()
+        return
+    if sil == "sundew":
+        # Drosera rotundifolia — round pads, tentacles, dew. Not a flytrap.
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-10, 16, 20, 10))
+        curl = 0.55 if anim in ("play", "eat") else 1.0
+        for ang, length in ((-50, 26), (-18, 30), (16, 28), (48, 24)):
+            p.save()
+            p.rotate(ang + lean * 0.25)
+            p.setPen(QPen(body, 1.6))
+            p.drawLine(0, 16, 0, 16 - length)
+            p.setBrush(QBrush(belly))
+            p.setPen(QPen(accent, 0.8))
+            pad_w = 14 * curl
+            p.drawEllipse(QRectF(-pad_w / 2, 16 - length - 8, pad_w, 12 * curl))
+            p.setBrush(QBrush(ring))
+            p.setPen(Qt.PenStyle.NoPen)
+            for t in range(6):
+                a = t * (math.pi * 2 / 6)
+                r = 7 * curl
+                p.drawEllipse(QRectF(math.cos(a) * r - 1.6, 16 - length - 2 + math.sin(a) * r * 0.6, 3.2, 3.2))
+            p.restore()
         return
     # Cactus — ribs, spines, a young column. Not a tree.
     p.setBrush(QBrush(body))

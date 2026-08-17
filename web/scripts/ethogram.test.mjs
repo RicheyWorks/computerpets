@@ -41,12 +41,12 @@ const GARDEN = [
   "maidenhair",
   "ginkgo",
   "oak",
-  "redwood",
   "water_lily",
-  "duckweed",
-  "venus_flytrap",
   "orchid",
   "saguaro",
+  "venus_flytrap",
+  "pitcher",
+  "sundew",
 ];
 const HOUSE = [
   "red_panda",
@@ -95,6 +95,9 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
+  assert.ok(names("venus_flytrap").includes("snap"));
+  assert.ok(names("pitcher").includes("still"));
+  assert.ok(names("sundew").includes("curl"));
   for (const key of E.SCRATCH_KEYS) {
     assert.ok(names(key).includes("scratch"), `${key} scratches`);
   }

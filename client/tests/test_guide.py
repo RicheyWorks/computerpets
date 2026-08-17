@@ -85,12 +85,12 @@ GARDEN_EXPECTED = [
     ("maidenhair", "vein", "Adiantum capillus-veneris"),
     ("ginkgo", "fan", "Ginkgo biloba"),
     ("oak", "mast", "Quercus alba"),
-    ("redwood", "spire", "Sequoia sempervirens"),
     ("water_lily", "pad", "Nymphaea odorata"),
-    ("duckweed", "speck", "Lemna minor"),
-    ("venus_flytrap", "snap", "Dionaea muscipula"),
     ("orchid", "moth", "Phalaenopsis amabilis"),
     ("saguaro", "arm", "Carnegiea gigantea"),
+    ("venus_flytrap", "snap", "Dionaea muscipula"),
+    ("pitcher", "well", "Sarracenia purpurea"),
+    ("sundew", "dew", "Drosera rotundifolia"),
 ]
 
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
@@ -215,16 +215,23 @@ def test_the_important_garden_mixups_are_actually_taught():
     moss = _taught(plaque_for("moss"))
     fern = _taught(plaque_for("maidenhair"))
     ginkgo = _taught(plaque_for("ginkgo"))
-    duckweed = _taught(plaque_for("duckweed"))
     flytrap = _taught(plaque_for("venus_flytrap"))
+    pitcher = _taught(plaque_for("pitcher"))
+    sundew = _taught(plaque_for("sundew"))
     saguaro = _taught(plaque_for("saguaro"))
     assert re.search(r"no flower", moss, re.I)
     assert re.search(r"not a lichen", moss, re.I)
     assert re.search(r"not a flowering plant", fern, re.I)
     assert re.search(r"not a flowering plant", ginkgo, re.I)
-    assert re.search(r"flower the size of a pin", duckweed, re.I)
     assert re.search(r"not a monster", flytrap, re.I)
     assert re.search(r"two hairs", flytrap, re.I)
+    assert re.search(r"snap", flytrap, re.I)
+    assert re.search(r"well", pitcher, re.I)
+    assert re.search(r"drown", pitcher, re.I)
+    assert re.search(r"not a flytrap", pitcher, re.I)
+    assert re.search(r"glue", sundew, re.I)
+    assert re.search(r"curl", sundew, re.I)
+    assert re.search(r"not a flytrap", sundew, re.I)
     assert re.search(r"not a tree", saguaro, re.I)
     assert re.search(r"cactus", saguaro, re.I)
 

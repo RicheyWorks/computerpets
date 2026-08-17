@@ -349,12 +349,12 @@ const TREAT_SHAPE = {
   maidenhair: "flake",
   ginkgo: "leaf",
   oak: "leaf",
-  redwood: "flake",
   water_lily: "flake",
-  duckweed: "flake",
-  venus_flytrap: "crumb",
   orchid: "flake",
   saguaro: "pebble",
+  venus_flytrap: "crumb",
+  pitcher: "crumb",
+  sundew: "crumb",
 };
 
 function placeMark(kindName, x, hops = 0) {
@@ -1016,12 +1016,12 @@ const VISIT_LINE = {
   maidenhair: "I unfurled. Then I folded.",
   ginkgo: "I golded. Then I left the autumn.",
   oak: "I dropped one. Then I was small again.",
-  redwood: "I rose an inch. Then I kept the pot.",
   water_lily: "I opened. Then I closed.",
-  duckweed: "I divided through. That counts.",
-  venus_flytrap: "I did not snap. Then I left the cup.",
   orchid: "I bloomed. Then I was bark again.",
   saguaro: "I stored a visit. Then I sat.",
+  venus_flytrap: "I did not snap. Then I left the cup.",
+  pitcher: "I kept the well. Then I left the rain.",
+  sundew: "I glittered. Then I uncurled.",
 };
 
 let visit = null;

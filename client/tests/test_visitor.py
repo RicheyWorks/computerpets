@@ -12,7 +12,7 @@ def test_visitor_identity_matches_house_formula():
     assert todays_visitor("red_panda", now).key == "chinchilla"
     assert todays_visitor("ball_python", now).key == "axolotl"
     assert todays_visitor("red_panda", datetime(2026, 1, 1)).key == "cuttlefish"
-    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "orchid"
+    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "pitcher"
 
 
 def test_visitor_is_never_the_host():

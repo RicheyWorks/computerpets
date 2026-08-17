@@ -75,12 +75,12 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "maidenhair": (_a("unfurl", "unfurl", 1.8, 4, "sit"), _a("lean", "lean", 1.4, 2), _a("nod", "nod", 0.9, 1, "sit")),
     "ginkgo": (_a("lean", "lean", 1.6, 3), _a("nod", "nod", 1.0, 2, "sit"), _a("still", "freeze", 2.0, 2)),
     "oak": (_a("lean", "lean", 1.6, 3), _a("nod", "nod", 1.1, 2, "sit"), _a("still", "freeze", 2.2, 2)),
-    "redwood": (_a("lean", "lean", 1.8, 3), _a("nod", "nod", 1.0, 2, "sit"), _a("still", "freeze", 2.4, 2)),
     "water_lily": (_a("open", "open", 1.8, 4, "sit"), _a("nod", "nod", 1.0, 2, "sit"), _a("lean", "lean", 1.2, 1)),
-    "duckweed": (_a("divide", "divide", 1.2, 4), _a("nod", "nod", 0.8, 2), _a("lean", "lean", 1.0, 1)),
-    "venus_flytrap": (_a("snap", "snap", 0.7, 2, "play"), _a("lean", "lean", 1.4, 3), _a("nod", "nod", 1.0, 2, "sit")),
     "orchid": (_a("unfurl", "unfurl", 1.6, 2, "sit"), _a("lean", "lean", 1.4, 3), _a("nod", "nod", 0.9, 2, "sit")),
     "saguaro": (_a("still", "freeze", 2.8, 4), _a("lean", "lean", 1.6, 2), _a("nod", "nod", 1.2, 1, "sit")),
+    "venus_flytrap": (_a("snap", "snap", 0.7, 2, "play"), _a("lean", "lean", 1.4, 3), _a("nod", "nod", 1.0, 2, "sit")),
+    "pitcher": (_a("still", "freeze", 3.2, 5), _a("lean", "lean", 1.6, 2), _a("nod", "nod", 1.0, 1, "sit")),
+    "sundew": (_a("curl", "curl", 2.0, 4, "sit"), _a("lean", "lean", 1.4, 2), _a("nod", "nod", 0.9, 1, "sit")),
 }
 
 TONGUE_KEYS = SNAKE_KEYS
@@ -178,7 +178,8 @@ def act_pose(motion: str | None, t: float, hold: float) -> dict[str, float]:
     elif motion == "open":
         pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.1
         pose["squat"] = 2.0 - pose["stretch"]
-    elif motion == "divide":
-        pose["dx"] = math.sin(u * math.pi * 2) * 3.0
-        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.04
+    elif motion == "curl":
+        pose["rot"] = math.sin(u * math.pi) * 6.0
+        pose["stretch"] = 1.0 - math.sin(u * math.pi) * 0.08
+        pose["squat"] = 2.0 - pose["stretch"]
     return pose

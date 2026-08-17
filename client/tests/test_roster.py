@@ -62,12 +62,12 @@ WEB_CATALOG = (
     "maidenhair",
     "ginkgo",
     "oak",
-    "redwood",
     "water_lily",
-    "duckweed",
-    "venus_flytrap",
     "orchid",
     "saguaro",
+    "venus_flytrap",
+    "pitcher",
+    "sundew",
 )
 
 WEB_SNAKES = (
@@ -104,12 +104,12 @@ WEB_GARDEN = (
     "maidenhair",
     "ginkgo",
     "oak",
-    "redwood",
     "water_lily",
-    "duckweed",
-    "venus_flytrap",
     "orchid",
     "saguaro",
+    "venus_flytrap",
+    "pitcher",
+    "sundew",
 )
 
 
@@ -174,12 +174,15 @@ def test_ten_garden_guests_are_present_and_honest():
         assert spec.treat_shape in TREAT_SHAPES
         assert spec.walk < 20
     assert SPECIES["water_lily"].aquatic is True
-    assert SPECIES["duckweed"].aquatic is True
-    for key in ("moss", "maidenhair", "ginkgo", "oak", "redwood", "venus_flytrap", "orchid", "saguaro"):
+    for key in ("moss", "maidenhair", "ginkgo", "oak", "orchid", "saguaro", "venus_flytrap", "pitcher", "sundew"):
         assert SPECIES[key].aquatic is False
     assert SPECIES["moss"].slug == "felt"
     assert SPECIES["saguaro"].name == "Arm"
     assert SPECIES["venus_flytrap"].silhouette == "trap"
+    assert SPECIES["pitcher"].silhouette == "pitcher"
+    assert SPECIES["sundew"].silhouette == "sundew"
+    assert SPECIES["pitcher"].name == "Well"
+    assert SPECIES["sundew"].name == "Dew"
 
 
 def test_every_kind_has_house_voice_and_care_treat():

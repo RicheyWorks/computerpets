@@ -55,12 +55,12 @@ export const SPECIES: Species[] = [
   { key: "maidenhair", displayName: "Maidenhair Fern", rarity: "UNCOMMON", temperament: "Shy", habitat: "Damp saucer", blurb: "Unfurls black-stemmed fans. Not a flowering plant." },
   { key: "ginkgo", displayName: "Ginkgo", rarity: "RARE", temperament: "Ancient", habitat: "Lamp gold", blurb: "Fan leaves. Gold in the autumn of the desk. Not a flowering plant." },
   { key: "oak", displayName: "White Oak", rarity: "COMMON", temperament: "Steady", habitat: "Acorn dish", blurb: "A white oak seedling. Drops an acorn when the compile is kind." },
-  { key: "redwood", displayName: "Coast Redwood", rarity: "RARE", temperament: "Tall", habitat: "Pencil pot", blurb: "A coast redwood seedling. Rises. Fog would help." },
   { key: "water_lily", displayName: "Fragrant Water Lily", rarity: "UNCOMMON", temperament: "Serene", habitat: "Ink dish", blurb: "Floats the ink dish. Opens when the lamp is kind." },
-  { key: "duckweed", displayName: "Common Duckweed", rarity: "COMMON", temperament: "Busy", habitat: "Glass film", blurb: "A film of specks. Divides. A flower the size of a pin." },
-  { key: "venus_flytrap", displayName: "Venus Flytrap", rarity: "UNCOMMON", temperament: "Watchful", habitat: "Wetland cup", blurb: "A wetland plant. Not a monster. Snaps when the hairs agree." },
   { key: "orchid", displayName: "Moth Orchid", rarity: "RARE", temperament: "Showy", habitat: "Bark mount", blurb: "Phalaenopsis. Roots in the air. Blooms like a moth that stayed." },
   { key: "saguaro", displayName: "Saguaro", rarity: "RARE", temperament: "Still", habitat: "Sand tray", blurb: "Stores the rain. A cactus, not a tree with opinions." },
+  { key: "venus_flytrap", displayName: "Venus Flytrap", rarity: "UNCOMMON", temperament: "Watchful", habitat: "Wetland cup", blurb: "A wetland plant. Not a monster. Snaps when the hairs agree." },
+  { key: "pitcher", displayName: "Purple Pitcher Plant", rarity: "UNCOMMON", temperament: "Patient", habitat: "Bog cup", blurb: "A leaf that became a well. Drowns. Not a flytrap with a cup glued on." },
+  { key: "sundew", displayName: "Round-leaved Sundew", rarity: "UNCOMMON", temperament: "Slow", habitat: "Peat saucer", blurb: "Tentacles, mucilage, a slow curl. Glue. Not a flytrap." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

@@ -55,12 +55,12 @@ public enum PetType {
     MAIDENHAIR       ("maidenhair",        "Maidenhair Fern",      Rarity.UNCOMMON),
     GINKGO           ("ginkgo",            "Ginkgo",               Rarity.RARE),
     OAK              ("oak",               "White Oak",            Rarity.COMMON),
-    REDWOOD          ("redwood",           "Coast Redwood",        Rarity.RARE),
     WATER_LILY       ("water_lily",        "Fragrant Water Lily",  Rarity.UNCOMMON),
-    DUCKWEED         ("duckweed",          "Common Duckweed",      Rarity.COMMON),
-    VENUS_FLYTRAP    ("venus_flytrap",     "Venus Flytrap",        Rarity.UNCOMMON),
     ORCHID           ("orchid",            "Moth Orchid",          Rarity.RARE),
-    SAGUARO          ("saguaro",           "Saguaro",              Rarity.RARE);
+    SAGUARO          ("saguaro",           "Saguaro",              Rarity.RARE),
+    VENUS_FLYTRAP    ("venus_flytrap",     "Venus Flytrap",        Rarity.UNCOMMON),
+    PITCHER          ("pitcher",           "Purple Pitcher Plant", Rarity.UNCOMMON),
+    SUNDEW           ("sundew",            "Round-leaved Sundew",  Rarity.UNCOMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

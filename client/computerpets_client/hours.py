@@ -62,12 +62,12 @@ REST: dict[str, tuple[int, int]] = {
     "maidenhair": (20, 7),
     "ginkgo": (19, 6),
     "oak": (20, 6),
-    "redwood": (21, 6),
     "water_lily": (20, 6),
-    "duckweed": (22, 5),
-    "venus_flytrap": (21, 6),
     "orchid": (19, 6),
     "saguaro": (8, 17),
+    "venus_flytrap": (21, 6),
+    "pitcher": (21, 6),
+    "sundew": (20, 6),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -119,12 +119,12 @@ HIDE_LINE: dict[str, str] = {
     "maidenhair": "Inside the coil.",
     "ginkgo": "Behind a gold.",
     "oak": "Inside the dish.",
-    "redwood": "Inside the pot.",
     "water_lily": "Under the pad.",
-    "duckweed": "A lower film.",
-    "venus_flytrap": "Inside the cup.",
     "orchid": "Behind a closed moth.",
     "saguaro": "Inside the store.",
+    "venus_flytrap": "Inside the cup.",
+    "pitcher": "Inside the well.",
+    "sundew": "Behind a glitter.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -172,12 +172,12 @@ SNACK_LINE: dict[str, str] = {
     "maidenhair": "Mist of a treaty.",
     "ginkgo": "A leaf of a treaty.",
     "oak": "Water of a treaty.",
-    "redwood": "Fog of a treaty.",
     "water_lily": "Silt of a treaty.",
-    "duckweed": "A speck of a treaty.",
-    "venus_flytrap": "A fly of a treaty.",
     "orchid": "Mist of a treaty.",
     "saguaro": "Rain of a treaty.",
+    "venus_flytrap": "A fly of a treaty.",
+    "pitcher": "A midge of a treaty.",
+    "sundew": "A gnat of a treaty.",
 }
 
 

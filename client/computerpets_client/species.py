@@ -65,12 +65,12 @@ GARDEN_KEYS: tuple[str, ...] = (
     "maidenhair",
     "ginkgo",
     "oak",
-    "redwood",
     "water_lily",
-    "duckweed",
-    "venus_flytrap",
     "orchid",
     "saguaro",
+    "venus_flytrap",
+    "pitcher",
+    "sundew",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS
@@ -1376,33 +1376,6 @@ MAST = _kind(
     hungry=("A seedling should not be this hollow.", "A drink would restore the lobes."),
 )
 
-SPIRE = _kind(
-    key="redwood",
-    slug="spire",
-    name="Spire",
-    label="Coast Redwood",
-    treat="Fog",
-    treat_shape="flake",
-    silhouette="spire",
-    walk=6,
-    palette=Palette(
-        body=(40, 72, 40),
-        belly=(120, 72, 48),
-        ear=(88, 48, 32),
-        ear_inner=(168, 120, 72),
-        nose=(56, 32, 20),
-        ring=(140, 72, 44),
-        accent=(32, 24, 16),
-    ),
-    greet=("I rose an inch. You may look.", "The pot kept my spire.", "Hello from a height I agreed to."),
-    ambient=("I could be the tallest. I choose this pot.", "Needles. I renew them in a quiet spiral.", "Fog is a weather I remember."),
-    feed=("Fog of a treaty.", "I will take this without leaving the pot.", "Accepted. The rise notes it."),
-    treat_lines=("Fog of a treaty.",),
-    hide=("Inside the pot.",),
-    call=("I rose an inch. You may look.",),
-    hungry=("A spire should not be this thin.", "A fog would keep the needles bright."),
-)
-
 PAD = _kind(
     key="water_lily",
     slug="pad",
@@ -1429,34 +1402,6 @@ PAD = _kind(
     hide=("Under the pad.",),
     call=("I opened. That was hello.",),
     hungry=("A pad should not hang empty.", "A silt would restore the open."),
-)
-
-SPECK = _kind(
-    key="duckweed",
-    slug="speck",
-    name="Speck",
-    label="Common Duckweed",
-    treat="Speck",
-    treat_shape="flake",
-    silhouette="speck",
-    walk=16,
-    aquatic=True,
-    palette=Palette(
-        body=(88, 168, 64),
-        belly=(168, 212, 96),
-        ear=(64, 132, 48),
-        ear_inner=(196, 228, 120),
-        nose=(48, 88, 36),
-        ring=(120, 188, 72),
-        accent=(40, 80, 32),
-    ),
-    greet=("I divided. That was hello.", "The glass is full of a person. Several.", "You came back. I was already more."),
-    ambient=("A flower the size of a pin. I keep it.", "I do not commute. I become more of the film.", "I am the smallest guest who still flowers."),
-    feed=("A speck of a treaty.", "I will take this and become two.", "Bright. Like a divide that stayed."),
-    treat_lines=("A speck of a treaty.",),
-    hide=("A lower film.",),
-    call=("I divided. That was hello.",),
-    hungry=("The glass is empty of specks of food.", "A flake would complete the divide."),
 )
 
 SNAP = _kind(
@@ -1540,6 +1485,60 @@ ARM = _kind(
     hungry=("A store should not be this empty.", "A rain would restore the ribs."),
 )
 
+WELL = _kind(
+    key="pitcher",
+    slug="well",
+    name="Well",
+    label="Purple Pitcher Plant",
+    treat="Midge",
+    treat_shape="crumb",
+    silhouette="pitcher",
+    walk=6,
+    palette=Palette(
+        body=(120, 48, 56),
+        belly=(176, 72, 72),
+        ear=(56, 88, 48),
+        ear_inner=(216, 140, 120),
+        nose=(40, 32, 28),
+        ring=(88, 36, 40),
+        accent=(32, 24, 20),
+    ),
+    greet=("I did not chase. The well was enough.", "The cup kept my pitchers.", "You may look. I am a leaf that learned a hole."),
+    ambient=("Rain sits in me. That is the whole method.", "I do not snap. I wait.", "The lamp is a sun. The cup is a bog."),
+    feed=("A midge of a treaty.", "I will take this without closing.", "Accepted. The well records it."),
+    treat_lines=("A midge of a treaty.",),
+    hide=("Inside the well.",),
+    call=("I did not chase. The well was enough.",),
+    hungry=("A well should not be this empty.", "A midge would restore the wait."),
+)
+
+DEW = _kind(
+    key="sundew",
+    slug="dew",
+    name="Dew",
+    label="Round-leaved Sundew",
+    treat="Gnat",
+    treat_shape="crumb",
+    silhouette="sundew",
+    walk=8,
+    palette=Palette(
+        body=(72, 120, 48),
+        belly=(196, 64, 48),
+        ear=(48, 88, 36),
+        ear_inner=(232, 196, 88),
+        nose=(40, 56, 28),
+        ring=(176, 48, 40),
+        accent=(28, 40, 20),
+    ),
+    greet=("I glittered. That was hello.", "The saucer kept my tentacles.", "You may look. I am glue, not a door."),
+    ambient=("A drop on each hair. I keep them.", "I do not snap. I curl, later.", "The lamp is a sun. The dew is the lunch."),
+    feed=("A gnat of a treaty.", "I will take this after the curl.", "Accepted. The dew records it."),
+    treat_lines=("A gnat of a treaty.",),
+    hide=("Behind a glitter.",),
+    call=("I glittered. That was hello.",),
+    hungry=("A dew should not be this dry.", "A gnat would restore the glitter."),
+)
+
 ATLAS = _kind(
     key="carpet_python",
     slug="atlas",
@@ -1615,12 +1614,12 @@ _ALL: tuple[Species, ...] = (
     VEIN,
     FAN,
     MAST,
-    SPIRE,
     PAD,
-    SPECK,
-    SNAP,
     MOTH,
     ARM,
+    SNAP,
+    WELL,
+    DEW,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

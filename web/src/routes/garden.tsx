@@ -38,7 +38,7 @@ export function GardenPage() {
           </h1>
           <p className="mt-5 max-w-lg text-base text-muted sm:text-lg">
             Ten plants live on this blotter. Watch the lean. Read the plaque. Leave knowing a moss
-            has no flower, and a saguaro is not a tree.
+            has no flower, a saguaro is not a tree, and three plants hunt: snap, pitfall, glue.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>

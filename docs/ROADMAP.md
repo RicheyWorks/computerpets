@@ -135,7 +135,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Daily house visitor walks through desk, demos, Live, Meet, Windows
 - [x] Ten named snakes on desk, demos, Live, Meet, and Windows overlay
 - [x] Tide den at `/sea` — ten marine animals on the blotter; plaques teach (jelly and star are not fish; a horseshoe crab is not a crab)
-- [x] Garden den at `/garden` — ten plants on the blotter; plaques teach (moss has no flower; a saguaro is not a tree)
+- [x] Garden den at `/garden` — ten plants on the blotter; plaques teach (moss has no flower; a saguaro is not a tree; three hunt: snap, pitfall, glue)
 - [x] Snakes go blue and shed; old coat stays on the blotter, all platforms
 - [x] Native client contract published (`docs/CLIENT-CONTRACT.md`) — license AES-256-GCM format, hwid rules, JWT, signed download URL
 - [x] Bundle artifact catalog — optional version / platform / sha256 on the signed manifest (`bundle.catalog`; empty until a zip is published)

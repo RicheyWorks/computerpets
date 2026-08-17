@@ -67,20 +67,20 @@ TRAITS: dict[str, SpeciesTrait] = {
     "maidenhair": SpeciesTrait("unfurl", "Unfurl", "I unfurled an inch. Hello."),
     "ginkgo": SpeciesTrait("gold", "Gold", "I have been gold before. Hello."),
     "oak": SpeciesTrait("drop", "Drop", "I agreed to be small."),
-    "redwood": SpeciesTrait("rise", "Rise", "I rose an inch. You may look."),
     "water_lily": SpeciesTrait("open", "Open", "I opened. That was hello."),
-    "duckweed": SpeciesTrait("divide", "Divide", "I divided. That was hello."),
-    "venus_flytrap": SpeciesTrait("snap", "Snap", "I did not snap. That is hello."),
     "orchid": SpeciesTrait("bloom", "Bloom", "I bloomed. You may look."),
     "saguaro": SpeciesTrait("store", "Store", "I have not moved. That is hello."),
+    "venus_flytrap": SpeciesTrait("snap", "Snap", "I did not snap. That is hello."),
+    "pitcher": SpeciesTrait("drown", "Drown", "I did not chase. The well was enough."),
+    "sundew": SpeciesTrait("glue", "Glue", "I glittered. That was hello."),
 }
 
 FALLBACK_TRAIT = TRAITS["red_panda"]
 
 _PLAY = frozenset({"ribbon", "steal", "trade", "snap"})
-_WANDER = frozenset({"thump", "loop", "slither", "patrol", "chart", "rise", "pulse", "soar", "drop", "divide"})
+_WANDER = frozenset({"thump", "loop", "slither", "patrol", "chart", "rise", "pulse", "soar", "drop"})
 _TALK = frozenset({"wheek", "echo", "quote", "bug", "bill", "reborn", "mimic", "inspect", "flush", "gape", "bloom"})
-_SIT = frozenset({"still", "bask", "curl", "sun", "hoard", "ritual", "coil", "drape", "hold", "nest", "ink", "cling", "hitch", "molt", "carpet", "unfurl", "gold", "open", "store"})
+_SIT = frozenset({"still", "bask", "curl", "sun", "hoard", "ritual", "coil", "drape", "hold", "nest", "ink", "cling", "hitch", "molt", "carpet", "unfurl", "gold", "open", "store", "drown", "glue"})
 
 
 def trait_for(key: str) -> SpeciesTrait:

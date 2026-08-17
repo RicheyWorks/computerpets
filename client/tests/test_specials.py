@@ -50,12 +50,12 @@ HOUSE_TRAITS = {
     "maidenhair": ("unfurl", "Unfurl", "I unfurled an inch. Hello."),
     "ginkgo": ("gold", "Gold", "I have been gold before. Hello."),
     "oak": ("drop", "Drop", "I agreed to be small."),
-    "redwood": ("rise", "Rise", "I rose an inch. You may look."),
     "water_lily": ("open", "Open", "I opened. That was hello."),
-    "duckweed": ("divide", "Divide", "I divided. That was hello."),
-    "venus_flytrap": ("snap", "Snap", "I did not snap. That is hello."),
     "orchid": ("bloom", "Bloom", "I bloomed. You may look."),
     "saguaro": ("store", "Store", "I have not moved. That is hello."),
+    "venus_flytrap": ("snap", "Snap", "I did not snap. That is hello."),
+    "pitcher": ("drown", "Drown", "I did not chase. The well was enough."),
+    "sundew": ("glue", "Glue", "I glittered. That was hello."),
 }
 
 
