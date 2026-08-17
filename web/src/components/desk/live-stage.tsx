@@ -31,7 +31,9 @@ import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
+import { Link } from "@tanstack/react-router";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
+import { guideFor } from "@/lib/pets/snake-guide";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
@@ -337,6 +339,14 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         </p>
         <h1 className="mt-1 font-display text-4xl leading-none">{kind.name}</h1>
         <p className="mt-2 text-sm text-muted">{kind.tagline}</p>
+        {isSnake(kind.key) ? (
+          <p className="mt-2 text-xs text-subtle">
+            {guideFor(kind.key)?.species} ·{" "}
+            <Link to="/snakes" className="text-fg no-underline">
+              Learn the den
+            </Link>
+          </p>
+        ) : null}
         {!installed ? (
           <p className="mt-3 text-xs text-subtle">Add to Home Screen. Tap the blotter for a treat.</p>
         ) : null}

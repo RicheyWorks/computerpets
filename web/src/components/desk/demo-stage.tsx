@@ -16,6 +16,7 @@ import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/we
 import { applySpecial } from "@/lib/pets/specials";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
+import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { cn } from "@/lib/utils";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
@@ -308,6 +309,9 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         </p>
         <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
+        {isSnake(kind.key) ? (
+          <SpeciesPlaque speciesKey={kind.key} compact className="mt-4 max-w-sm" showDemoLink={false} />
+        ) : null}
         <div className="mt-5 flex flex-wrap gap-2">
           <Button size="sm" disabled={busy || stats.hidden} onClick={feed}>
             Feed
@@ -393,6 +397,11 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
           <Button asChild variant="secondary">
             <Link to="/meet">All demos</Link>
           </Button>
+          {isSnake(kind.key) ? (
+            <Button asChild variant="secondary">
+              <Link to="/snakes">The den</Link>
+            </Button>
+          ) : null}
         </div>
       </div>
     </section>
