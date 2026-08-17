@@ -31,6 +31,33 @@ def test_offscreen_check_constructs_window():
     assert "30 living kinds" in result.stdout
     assert "species plaque" in result.stdout
     assert "shader engine" in result.stdout
+    assert any(sky in result.stdout for sky in ("Clear", "Rain", "Wind", "Heat"))
+    assert "may call" in result.stdout
+
+
+def test_desk_day_has_weather_visitor_and_shed_coat():
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+    from computerpets_client.weather import weather_label
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow()
+    window.show()
+    assert window.weather.sky in ("clear", "rain", "wind", "heat")
+    assert weather_label(window.weather.sky) in window.vital_label.text()
+    assert window.guest.species.key != window.species.key
+    assert "may call" in window.vital_label.text()
+    window._pick_key("ball_python")
+    assert window.shed_btn.isVisible()
+    assert window.pet.dull
+    window._shed()
+    assert len(window.coats) == 1
+    assert window.coats[0].coat.kind == "shed"
+    assert not window.pet.dull
+    window.close()
+    del app
 
 
 def test_frames_paint_for_every_catalog_key():
