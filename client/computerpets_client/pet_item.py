@@ -118,6 +118,11 @@ class LivingPetItem(QGraphicsObject):
         return base
 
     def issue(self, cmd: str, target: float | None = None) -> None:
+        # play / talk are house verbs; the wood already has wander and sit.
+        if cmd == "play":
+            cmd = "wander"
+        elif cmd == "talk":
+            cmd = "sit"
         self.cmd = cmd
         self.target = target
         self.once_done = False
