@@ -103,6 +103,8 @@ $env:MICROSOFT_DEV_MODE = "true"
 
 Never set this with `SPRING_PROFILES_ACTIVE=prod`. `ProductionProfileGuard` refuses to start.
 
+Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; the live Store ID is still a publish-time config, not invented here.
+
 ---
 
 ### 5. Spring profiles

@@ -120,10 +120,11 @@ ethereum:
 microsoft:
   # "consumers" for personal Microsoft accounts, or a tenant GUID for AAD.
   tenant: "consumers"
-  collections-url: "https://collections.mp.microsoft.com/v6.0/collections/query"
-  market: "US"
+  # Collections Query v9 publisherQuery. Override in tests (WireMock) or a sandbox.
+  collections-url: "https://collections.mp.microsoft.com/v9.0/collections/publisherQuery"
   # dev-mode bypasses the real Microsoft Collections API and grants ownership for any
-  # non-blank request. NEVER enable outside local development.
+  # non-blank request. NEVER enable outside local development. ProductionProfileGuard
+  # refuses this flag when spring.profiles.active=prod.
   dev-mode: ${MICROSOFT_DEV_MODE:false}
 
 # JWT auth — short-lived bearer token issued alongside the encrypted license.
