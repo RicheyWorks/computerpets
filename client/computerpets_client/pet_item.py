@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import random
 
 from PyQt6.QtCore import QRectF, Qt
@@ -33,10 +34,10 @@ class LivingPetItem(QGraphicsObject):
         self.cmd = "wander"
         self.target: float | None = None
         self.once_done = False
+        self._bob_t = 0.0
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
-        self._floor_y = 318.0
-        self.setPos(220, self._floor_y)
+        self.setPos(220, self._floor_y())
 
     def boundingRect(self) -> QRectF:
         return QRectF(0, 0, SIZE, SIZE)
@@ -51,10 +52,25 @@ class LivingPetItem(QGraphicsObject):
         painter.drawPixmap(0, 0, pix)
         painter.restore()
 
+    def _floor_y(self) -> float:
+        y = 318.0
+        if self.species.perch:
+            y -= 18.0
+        return y
+
     def set_species(self, species: Species) -> None:
         self.species = species
         self.frames = frames_for(species)
+        self.setPos(self.x(), self._floor_y())
         self.update()
+
+    def _speed(self, kind: str) -> float:
+        base = max(18.0, self.species.walk)
+        if kind == "hide":
+            return base * 1.6
+        if kind == "seek":
+            return base * 1.4
+        return base
 
     def issue(self, cmd: str, target: float | None = None) -> None:
         self.cmd = cmd
@@ -96,15 +112,19 @@ class LivingPetItem(QGraphicsObject):
         left = 80.0
         right = max(left + 40.0, width - SIZE - 80.0)
         x = self.x()
+        self._bob_t += dt
+        y = self._floor_y()
+        if self.species.aquatic:
+            y += math.sin(self._bob_t * 2.4) * 5
 
         if self.cmd == "hide":
             self.anim = "walk"
             self.facing = -1
-            x -= 180 * dt
+            x -= self._speed("hide") * dt
             if x <= -SIZE:
                 x = -SIZE
                 self.anim = "idle"
-            self.setPos(x, self._floor_y)
+            self.setPos(x, y)
             self.update()
             return
 
@@ -112,33 +132,33 @@ class LivingPetItem(QGraphicsObject):
             self.anim = "walk"
             self.facing = 1
             if x < left:
-                x = min(left, x + 200 * dt) if x > -SIZE else -SIZE + 200 * dt
+                x = min(left, x + self._speed("hide") * dt) if x > -SIZE else -SIZE + self._speed("hide") * dt
                 if x < -SIZE + 4:
                     x = -SIZE + 8
-            x += 180 * dt
+            x += self._speed("hide") * dt
             if x >= 200:
                 x = 200
                 self.cmd = "wander"
                 self.anim = "idle"
-            self.setPos(x, self._floor_y)
+            self.setPos(x, y)
             self.update()
             return
 
         if self.cmd == "seek" and self.target is not None:
             self.anim = "walk"
             self.facing = 1 if self.target > x else -1
-            x += self.facing * 160 * dt
+            x += self.facing * self._speed("seek") * dt
             if abs(x - self.target) < 12:
                 self.cmd = "eat"
                 self.anim = "eat"
                 self.frame = 0
                 self.target = None
-            self.setPos(max(left, min(right, x)), self._floor_y)
+            self.setPos(max(left, min(right, x)), y)
             self.update()
             return
 
         if self.cmd == "eat":
-            self.setPos(x, self._floor_y)
+            self.setPos(x, y)
             self.update()
             return
 
@@ -157,12 +177,12 @@ class LivingPetItem(QGraphicsObject):
             if self.target is not None:
                 self.anim = "walk"
                 self.facing = 1 if self.target > x else -1
-                x += self.facing * 110 * dt
+                x += self.facing * self._speed("wander") * dt
                 if abs(x - self.target) < 8:
                     self.target = None
                     self.cmd = "idle"
                     self.anim = "idle"
-            self.setPos(max(left, min(right, x)), self._floor_y)
+            self.setPos(max(left, min(right, x)), y)
             self.update()
             return
 
@@ -171,4 +191,5 @@ class LivingPetItem(QGraphicsObject):
                 self.cmd = "wander"
                 self.target = None
             self.anim = "sit" if self.cmd == "sit" else "idle"
+            self.setPos(x, y)
             self.update()

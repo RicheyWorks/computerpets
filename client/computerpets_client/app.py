@@ -29,7 +29,16 @@ from .life import CareState, ambient_line, apply_call, apply_feed, apply_hide, a
 from .license.session import create_license_session
 from .paths import default_user_data_dir
 from .pet_item import LivingPetItem, TreatItem
-from .species import DEFAULT_SPECIES_KEY, SPECIES, Species, species_by_key
+from .rail import SpeciesRail
+from .species import (
+    CATALOG_KEYS,
+    DEFAULT_SPECIES_KEY,
+    SPECIES,
+    Species,
+    next_species_key,
+    prev_species_key,
+    species_by_key,
+)
 from .unlock_dialog import UnlockDialog
 
 SCENE_W = 960
@@ -87,16 +96,29 @@ class DeskWindow(QMainWindow):
         self.treat_btn = QPushButton(self.species.treat)
         self.hide_btn = QPushButton("Hide")
         self.unlock_btn = QPushButton("Unlock…")
+        self.prev_btn = QPushButton("◀")
+        self.next_btn = QPushButton("▶")
+        self.prev_btn.setFixedWidth(36)
+        self.next_btn.setFixedWidth(36)
+        self.prev_btn.setToolTip("Previous companion")
+        self.next_btn.setToolTip("Next companion")
         self.kind_box = QComboBox()
-        for key, spec in SPECIES.items():
-            self.kind_box.addItem(f"{spec.name} · {spec.label}", key)
+        for key in CATALOG_KEYS:
+            spec = SPECIES[key]
+            gait = "crawl" if spec.gait == "crawl" else "walk"
+            self.kind_box.addItem(f"{spec.name} · {spec.label} ({gait})", key)
         self.kind_box.setCurrentIndex(0)
+        self.rail = SpeciesRail()
+        self.rail.set_active(self.species.key)
 
         self.feed_btn.clicked.connect(self._feed)
         self.treat_btn.clicked.connect(self._treat)
         self.hide_btn.clicked.connect(self._hide_or_call)
         self.unlock_btn.clicked.connect(self._unlock)
         self.kind_box.currentIndexChanged.connect(self._change_kind)
+        self.rail.picked.connect(self._pick_key)
+        self.prev_btn.clicked.connect(self._cycle_prev)
+        self.next_btn.clicked.connect(self._cycle_next)
 
         self.license_label = QLabel()
         self.license_label.setStyleSheet("color: #9a9288;")
@@ -107,7 +129,9 @@ class DeskWindow(QMainWindow):
         bar.addWidget(self.feed_btn)
         bar.addWidget(self.treat_btn)
         bar.addWidget(self.hide_btn)
-        bar.addWidget(self.kind_box)
+        bar.addWidget(self.prev_btn)
+        bar.addWidget(self.kind_box, 1)
+        bar.addWidget(self.next_btn)
         bar.addStretch()
         bar.addWidget(self.unlock_btn)
 
@@ -115,6 +139,7 @@ class DeskWindow(QMainWindow):
         layout = QVBoxLayout(root)
         layout.setContentsMargins(10, 10, 10, 8)
         layout.addLayout(bar)
+        layout.addWidget(self.rail)
         layout.addWidget(self.license_label)
         layout.addWidget(self.view, 1)
         layout.addWidget(self.vital_label)
@@ -169,10 +194,32 @@ class DeskWindow(QMainWindow):
         self.hide_btn.setText("Call back" if s.hidden else "Hide")
         self.treat_btn.setText(self.species.treat)
 
+    def _pick_key(self, key: str) -> None:
+        idx = self.kind_box.findData(key)
+        if idx >= 0 and idx != self.kind_box.currentIndex():
+            self.kind_box.setCurrentIndex(idx)
+            return
+        self._apply_kind(key)
+
+    def _cycle_prev(self) -> None:
+        self._pick_key(prev_species_key(self.species.key))
+
+    def _cycle_next(self) -> None:
+        self._pick_key(next_species_key(self.species.key))
+
     def _change_kind(self) -> None:
-        key = self.kind_box.currentData()
+        self._apply_kind(self.kind_box.currentData())
+
+    def _apply_kind(self, key: str | None) -> None:
         self.species = species_by_key(key)
         self.pet.set_species(self.species)
+        self.rail.set_active(self.species.key)
+        idx = self.kind_box.findData(self.species.key)
+        if idx >= 0 and idx != self.kind_box.currentIndex():
+            blocked = self.kind_box.blockSignals(True)
+            self.kind_box.setCurrentIndex(idx)
+            self.kind_box.blockSignals(blocked)
+        self._say(self.species.greet[0] if self.species.greet else "Hello.")
         self._refresh_vitals()
 
     def _feed(self) -> None:
@@ -259,7 +306,7 @@ def main(argv: list[str] | None = None) -> int:
         if window.pet is None or window.scene.items() == []:
             print("check failed: no living pet on the blotter", file=sys.stderr)
             return 1
-        print(f"ok: {window.species.name} on the blotter")
+        print(f"ok: {window.species.name} on the blotter ({len(CATALOG_KEYS)} living kinds)")
         print(window.renderer_label)
         QTimer.singleShot(250, app.quit)
     return app.exec()

@@ -1,8 +1,53 @@
-"""First-cut living kinds. Rui is required; Miso and Pip reuse the same painter."""
+"""Living kinds on the PyQt blotter.
+
+Keys, names, treats, and house voice match the backend ``PetType`` catalog
+and the web / Electron roster. Snakes crawl; the others walk. This is not a
+new bestiary — it is the same thirty, painted here.
+"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+
+
+# Wire keys in PetType / web catalog order.
+HOUSE_KEYS: tuple[str, ...] = (
+    "red_panda",
+    "cat",
+    "dog",
+    "rabbit",
+    "hamster",
+    "guinea_pig",
+    "turtle",
+    "goldfish",
+    "budgie",
+    "fox",
+    "penguin",
+    "parrot",
+    "ferret",
+    "hedgehog",
+    "chinchilla",
+    "axolotl",
+    "toucan",
+    "iguana",
+    "dragon",
+    "phoenix",
+)
+
+SNAKE_KEYS: tuple[str, ...] = (
+    "ball_python",
+    "corn_snake",
+    "kingsnake",
+    "green_tree_python",
+    "hognose",
+    "garter",
+    "boa",
+    "milk_snake",
+    "rosy_boa",
+    "carpet_python",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS
 
 
 @dataclass(frozen=True)
@@ -34,9 +79,68 @@ class Species:
     call: tuple[str, ...]
     hungry: tuple[str, ...]
     fps: dict[str, float] = field(default_factory=dict)
+    gait: str = "walk"
+    walk: float = 98.0
+    perch: bool = False
+    aquatic: bool = False
+    pattern: str = "plain"
 
 
-RUI = Species(
+def _fps(walk: float, *, crawl: bool = False) -> dict[str, float]:
+    walk_fps = 5.0 if crawl else min(8.6, max(3.4, walk / 16.0))
+    return {"idle": 2.8, "walk": walk_fps, "sit": 2.2, "eat": 3.8, "sleep": 1.8}
+
+
+def _kind(
+    *,
+    key: str,
+    slug: str,
+    name: str,
+    label: str,
+    treat: str,
+    treat_shape: str,
+    silhouette: str,
+    palette: Palette,
+    greet: tuple[str, ...],
+    ambient: tuple[str, ...],
+    feed: tuple[str, ...],
+    treat_lines: tuple[str, ...],
+    hide: tuple[str, ...],
+    call: tuple[str, ...],
+    hungry: tuple[str, ...],
+    walk: float,
+    gait: str = "walk",
+    perch: bool = False,
+    aquatic: bool = False,
+    pattern: str = "plain",
+    fps: dict[str, float] | None = None,
+) -> Species:
+    return Species(
+        key=key,
+        slug=slug,
+        name=name,
+        label=label,
+        treat=treat,
+        treat_shape=treat_shape,
+        silhouette=silhouette,
+        palette=palette,
+        greet=greet,
+        ambient=ambient,
+        feed=feed,
+        treat_lines=treat_lines,
+        hide=hide,
+        call=call,
+        hungry=hungry,
+        fps=fps or _fps(walk, crawl=gait == "crawl"),
+        gait=gait,
+        walk=walk,
+        perch=perch,
+        aquatic=aquatic,
+        pattern=pattern,
+    )
+
+
+RUI = _kind(
     key="red_panda",
     slug="rui",
     name="Rui",
@@ -44,6 +148,7 @@ RUI = Species(
     treat="Bamboo",
     treat_shape="bamboo",
     silhouette="panda",
+    walk=98,
     palette=Palette(
         body=(196, 92, 58),
         belly=(236, 214, 186),
@@ -69,14 +174,14 @@ RUI = Species(
         "One more bite. For science.",
         "Warm. I will remember this kindness.",
     ),
-    treat_lines=("A small treaty.", "Bamboo. Official.", "I will remember this kindness."),
+    treat_lines=("A small treaty. Bamboo-adjacent.", "Bamboo. Official.", "I will remember this kindness."),
     hide=("I went where the ribbon goes.", "The drawer is closed. By me."),
-    call=("You found me. The blotter is still mine.", "I walked back. The lamp approved."),
+    call=("You called. I brought the whole tail.", "You found me. The blotter is still mine."),
     hungry=("The books are not edible. I checked.", "A small snack would improve my philosophy."),
     fps={"idle": 3.2, "walk": 7.5, "sit": 2.4, "eat": 4.4, "sleep": 2.0},
 )
 
-MISO = Species(
+MISO = _kind(
     key="cat",
     slug="miso",
     name="Miso",
@@ -84,6 +189,7 @@ MISO = Species(
     treat="Crumbs",
     treat_shape="crumb",
     silhouette="cat",
+    walk=68,
     palette=Palette(
         body=(196, 168, 132),
         belly=(236, 224, 208),
@@ -93,17 +199,17 @@ MISO = Species(
         ring=(120, 88, 64),
         accent=(88, 64, 48),
     ),
-    greet=("You may sit. Not there. There.", "I noticed you. That is the whole announcement."),
+    greet=("You may sit. Not there. There.", "I noticed you. That is the whole announcement.", "The sun moved. You may stay anyway."),
     ambient=("I was using that sun.", "Your cursor is loud.", "The ledge is correct."),
     feed=("Acceptable. Barely.", "I will allow this treaty."),
-    treat_lines=("A crumb. Considered.", "I will not thank you twice."),
+    treat_lines=("I allow this crumb.", "A crumb. Considered.", "I will not thank you twice."),
     hide=("The ledge is closed.", "I waited by the door that is not here."),
-    call=("You may look. I was never gone.", "The sun moved. You may stay anyway."),
+    call=("I returned. The sun moved.", "You may look. I was never gone."),
     hungry=("The books are not food. I checked, once.",),
     fps={"idle": 2.8, "walk": 6.4, "sit": 2.2, "eat": 3.8, "sleep": 1.8},
 )
 
-PIP = Species(
+PIP = _kind(
     key="dog",
     slug="pip",
     name="Pip",
@@ -111,6 +217,7 @@ PIP = Species(
     treat="Biscuit",
     treat_shape="crumb",
     silhouette="dog",
+    walk=122,
     palette=Palette(
         body=(184, 132, 80),
         belly=(232, 208, 168),
@@ -123,14 +230,804 @@ PIP = Species(
     greet=("You came back. I kept the rug warm.", "Hello. I brought the whole heart."),
     ambient=("The cursor moved. I have prepared a walk.", "I will follow. You do not have to ask."),
     feed=("This is a treaty. I accept all of it.", "Warm. I will stay closer."),
-    treat_lines=("A biscuit. Lawful.", "One more. For the walk later."),
-    hide=("I waited by the door that is not here.", "Gone. Softly. I can wait."),
-    call=("You came back. I kept the rug warm.", "I have been practicing sitting still."),
+    treat_lines=("For me? I have prepared a sit.", "A biscuit. Lawful.", "One more. For the walk later."),
+    hide=("I will be under the desk. Call if you walk.", "I waited by the door that is not here."),
+    call=("You called. I was already coming.", "You came back. I kept the rug warm."),
     hungry=("I have considered the keyboard. It is not food. Sadly.",),
     fps={"idle": 2.8, "walk": 6.8, "sit": 2.2, "eat": 3.8, "sleep": 1.8},
 )
 
-SPECIES: dict[str, Species] = {s.key: s for s in (RUI, MISO, PIP)}
+THIMBLE = _kind(
+    key="rabbit",
+    slug="thimble",
+    name="Thimble",
+    label="Rabbit",
+    treat="Greens",
+    treat_shape="leaf",
+    silhouette="rabbit",
+    walk=136,
+    palette=Palette(
+        body=(214, 196, 176),
+        belly=(244, 236, 224),
+        ear=(196, 168, 148),
+        ear_inner=(232, 196, 188),
+        nose=(120, 80, 80),
+        ring=(236, 228, 216),
+        accent=(140, 112, 88),
+    ),
+    greet=("I came out. Do not make it loud.", "The warren says hello. Quietly.", "I thumped once. It was a greeting."),
+    ambient=("A red line appeared. I have opinions.", "The chair is a thundercloud.", "If you type softly, I will stay."),
+    feed=("Green. I accept the treaty.", "One leaf more. Then I vanish.", "This is a very brave snack."),
+    treat_lines=("A green thing. Correct.", "One leaf more. Then I vanish."),
+    hide=("Under the chair. Thump if you need me.", "Gone. Softly."),
+    call=("I came out. Do not make it loud.",),
+    hungry=("I checked the paper. It is not clover.", "A small green thing would help my courage."),
+)
+
+CLIP = _kind(
+    key="hamster",
+    slug="clip",
+    name="Clip",
+    label="Hamster",
+    treat="Seed",
+    treat_shape="seed",
+    silhouette="hamster",
+    walk=148,
+    palette=Palette(
+        body=(212, 156, 88),
+        belly=(236, 208, 160),
+        ear=(180, 120, 72),
+        ear_inner=(232, 196, 160),
+        nose=(72, 44, 32),
+        ring=(196, 140, 80),
+        accent=(128, 80, 40),
+    ),
+    greet=("I clocked you in.", "The drawer was productive. You may look.", "Hello. I have inventoried the clips."),
+    ambient=("This paperclip is now mine. Officially.", "The night shift does not nap. It pauses.", "I ran the wheel. The wheel agreed."),
+    feed=("Seed diplomacy accepted.", "I will cheek this for later. Later is a place.", "Warm. Logged."),
+    treat_lines=("It fits. Officially.", "Seed diplomacy accepted."),
+    hide=("The pouch is a room.", "The drawer is closed."),
+    call=("I clocked back in.",),
+    hungry=("The clips are not food. I keep checking.", "A seed would improve the night numbers."),
+)
+
+WHEE = _kind(
+    key="guinea_pig",
+    slug="whee",
+    name="Whee",
+    label="Guinea Pig",
+    treat="Haybit",
+    treat_shape="leaf",
+    silhouette="guinea",
+    walk=84,
+    palette=Palette(
+        body=(176, 124, 80),
+        belly=(232, 216, 192),
+        ear=(148, 100, 68),
+        ear_inner=(220, 180, 148),
+        nose=(64, 40, 32),
+        ring=(220, 200, 168),
+        accent=(112, 72, 44),
+    ),
+    greet=("Wheek. That means you.", "I saved you a leaf. It is the good one.", "Hello. The bowl was almost a party."),
+    ambient=("Someone deployed. I have celebrated already.", "Salad is a language. I am fluent.", "Sit nearer. The bowl allows it."),
+    feed=("This is correct foreign policy.", "One more leaf. For morale.", "Crunch. Treaty signed."),
+    treat_lines=("Wheek, but smaller.", "This is correct foreign policy."),
+    hide=("Hay-side. Quiet.", "The hay closed."),
+    call=("Wheek. That means you.",),
+    hungry=("The bowl is a sad empty country.", "A leaf would restore the alliance."),
+)
+
+INK = _kind(
+    key="turtle",
+    slug="ink",
+    name="Ink",
+    label="Turtle",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="turtle",
+    walk=26,
+    palette=Palette(
+        body=(72, 104, 68),
+        belly=(196, 176, 120),
+        ear=(56, 80, 52),
+        ear_inner=(160, 148, 96),
+        nose=(40, 36, 28),
+        ring=(48, 72, 44),
+        accent=(40, 56, 36),
+    ),
+    greet=("I have been here. That is the greeting.", "You returned. I did not leave.", "Hello. Take the long way."),
+    ambient=("This framework is temporary. I am not.", "I moved. You missed it. That is fine.", "Hurry is a weather. It passes."),
+    feed=("I accept this at turtle speed.", "One leaf. I will finish it this afternoon.", "Warm. I will consider it thoroughly."),
+    treat_lines=("I will arrive at the crumb in due course.", "One leaf. I will finish it this afternoon."),
+    hide=("I am still here. You will not notice.", "Withdrawn."),
+    call=("I have been here. That is the greeting.",),
+    hungry=("I can wait. I would rather not wait hungry.", "A slow snack would match the hour."),
+)
+
+COIN = _kind(
+    key="goldfish",
+    slug="coin",
+    name="Coin",
+    label="Goldfish",
+    treat="Flake",
+    treat_shape="flake",
+    silhouette="fish",
+    walk=52,
+    aquatic=True,
+    palette=Palette(
+        body=(232, 140, 48),
+        belly=(248, 208, 120),
+        ear=(196, 88, 32),
+        ear_inner=(255, 220, 140),
+        nose=(160, 64, 28),
+        ring=(255, 196, 88),
+        accent=(176, 72, 24),
+    ),
+    greet=("Oh. You. I was just thinking that.", "The bowl is full of hello.", "I circled back. That is how I arrive."),
+    ambient=("I had a thought. I still have it.", "The surface is a sky I can touch.", "Around again. The view improved."),
+    feed=("Flakes. A festival.", "I will eat this and then remember eating this.", "Bright. Like a second sun."),
+    treat_lines=("It drifted. I followed.", "Flakes. A festival."),
+    hide=("Behind the glass. Loop later.", "Behind the glass."),
+    call=("Oh. You. I was just thinking that.",),
+    hungry=("The thought of food is also a circle.", "A flake would complete the lap."),
+)
+
+ECHO = _kind(
+    key="budgie",
+    slug="echo",
+    name="Echo",
+    label="Budgie",
+    treat="Seed",
+    treat_shape="seed",
+    silhouette="bird",
+    walk=92,
+    perch=True,
+    palette=Palette(
+        body=(88, 168, 92),
+        belly=(232, 228, 160),
+        ear=(56, 120, 64),
+        ear_inner=(196, 220, 120),
+        nose=(48, 88, 56),
+        ring=(240, 220, 80),
+        accent=(40, 96, 52),
+    ),
+    greet=("Hello hello. I practiced that.", "You. You. That is the good word.", "I saved your last sentence. It was fine."),
+    ambient=("Build failed. But musically.", "I can say blotter. Blotter.", "Type something I can steal."),
+    feed=("Seed. Seed. Treaty.", "I will husk this politely.", "Crunch. Encore."),
+    treat_lines=("Seed. The only review that matters.", "Seed. Seed. Treaty."),
+    hide=("Cage-corner. Soft.", "Shade down."),
+    call=("Hello hello. I practiced that.",),
+    hungry=("I said snack. I will say snack again.", "A seed would improve my diction."),
+)
+
+RUE = _kind(
+    key="fox",
+    slug="rue",
+    name="Rue",
+    label="Fox",
+    treat="Morsel",
+    treat_shape="crumb",
+    silhouette="fox",
+    walk=112,
+    palette=Palette(
+        body=(196, 92, 40),
+        belly=(244, 228, 200),
+        ear=(40, 28, 24),
+        ear_inner=(232, 180, 140),
+        nose=(28, 20, 16),
+        ring=(248, 244, 236),
+        accent=(120, 48, 24),
+    ),
+    greet=("I found you first.", "The closet missed you. I did not.", "Hello. I already know why you are here."),
+    ambient=("There is a bug in the left pocket. You knew.", "I rearranged the secrets by smell.", "Your cursor is lying. Poorly."),
+    feed=("I accept this bribe. Transparently.", "One more. For the investigation.", "Warm. I am not bought. I am rented."),
+    treat_lines=("I found it first.", "I accept this bribe. Transparently."),
+    hide=("The left pocket. Obviously.", "You will not find this den."),
+    call=("I found you first.",),
+    hungry=("I can hunt a snack or a bug. Prefer snack.", "A bite would keep me from editing you."),
+)
+
+PECK = _kind(
+    key="penguin",
+    slug="peck",
+    name="Peck",
+    label="Penguin",
+    treat="Pebble",
+    treat_shape="pebble",
+    silhouette="penguin",
+    walk=58,
+    palette=Palette(
+        body=(56, 72, 96),
+        belly=(244, 240, 232),
+        ear=(36, 48, 64),
+        ear_inner=(200, 208, 216),
+        nose=(40, 36, 32),
+        ring=(232, 228, 220),
+        accent=(28, 36, 48),
+    ),
+    greet=("You are recognized. Welcome back.", "I have prepared a small ceremony.", "Hello. Shoes by the door, if you please."),
+    ambient=("The tile is correctly cold.", "We will do this in the proper order.", "A bow is not optional. It is brief."),
+    feed=("This offering is in order.", "I will take it in courses. There is one course.", "Acceptable. Noted in the minutes."),
+    treat_lines=("A pebble of food. Accepted.", "This offering is in order."),
+    hide=("A small bow, then away.", "Session adjourned."),
+    call=("You are recognized.",),
+    hungry=("The larder is behind schedule.", "A formal snack would restore protocol."),
+)
+
+QUILL = _kind(
+    key="parrot",
+    slug="quill",
+    name="Quill",
+    label="Parrot",
+    treat="Nut",
+    treat_shape="seed",
+    silhouette="parrot",
+    walk=88,
+    perch=True,
+    palette=Palette(
+        body=(196, 48, 40),
+        belly=(232, 196, 64),
+        ear=(32, 72, 140),
+        ear_inner=(255, 220, 96),
+        nose=(48, 36, 28),
+        ring=(40, 96, 168),
+        accent=(128, 24, 24),
+    ),
+    greet=("Enter, keeper. The stand is lit.", "I have been rehearsing your last subject line.", "Hello. Bring me a better verb."),
+    ambient=("Fix typo. A masterpiece.", "I will say it from the chest.", "The hats are my chorus."),
+    feed=("An offering for the lead.", "I bow. Then I eat. Order matters.", "Crunch. Intermission."),
+    treat_lines=("Crunch. Noted.", "An offering for the lead."),
+    hide=("I left a note. It says 'brb'.", "Curtain."),
+    call=("Enter, keeper.",),
+    hungry=("The understudy ate. I did not.", "A seed would save the second act."),
+)
+
+WICK = _kind(
+    key="ferret",
+    slug="wick",
+    name="Wick",
+    label="Ferret",
+    treat="Nibble",
+    treat_shape="crumb",
+    silhouette="ferret",
+    walk=156,
+    palette=Palette(
+        body=(168, 132, 88),
+        belly=(232, 216, 184),
+        ear=(48, 36, 28),
+        ear_inner=(200, 168, 128),
+        nose=(32, 24, 20),
+        ring=(40, 32, 28),
+        accent=(88, 64, 40),
+    ),
+    greet=("I put your dongle somewhere better.", "You found me. I was not hiding. I was working.", "Hello. Do not inventory yet."),
+    ambient=("This cable wanted to be a noodle. I helped.", "I returned the cap. To a new country.", "I can hear USB from here."),
+    feed=("Bribery accepted. I still have the adapter.", "One more. For the tunnel fund.", "Warm. I will not steal the bowl. Today."),
+    treat_lines=("Mine. Also that other bit.", "Bribery accepted. I still have the adapter."),
+    hide=("I took the dongle with me.", "Relocated."),
+    call=("You found me. I was working.",),
+    hungry=("I chewed a thought. It was not food.", "A snack would pause the heist."),
+)
+
+BURR = _kind(
+    key="hedgehog",
+    slug="burr",
+    name="Burr",
+    label="Hedgehog",
+    treat="Bug",
+    treat_shape="crumb",
+    silhouette="hedgehog",
+    walk=48,
+    palette=Palette(
+        body=(120, 88, 64),
+        belly=(232, 212, 184),
+        ear=(168, 140, 112),
+        ear_inner=(220, 188, 160),
+        nose=(40, 28, 24),
+        ring=(88, 68, 48),
+        accent=(64, 48, 36),
+    ),
+    greet=("I saw you. I am deciding.", "The basket allows a small hello.", "I uncurled one quill. That is plenty."),
+    ambient=("Waiting is a kindness I notice.", "The yarn smells like patience.", "I am a hill. Hills do not rush."),
+    feed=("I accept this from a careful hand.", "One more. Then I consider trust.", "Warm. I will not roll away."),
+    treat_lines=("A quiet nibble.", "I accept this from a careful hand."),
+    hide=("A polite curl, offstage.", "Ball. Official."),
+    call=("I uncurled one quill.",),
+    hungry=("I can curl around an empty middle. I prefer not to.", "A worm of fruit would help."),
+)
+
+FLOSS = _kind(
+    key="chinchilla",
+    slug="floss",
+    name="Floss",
+    label="Chinchilla",
+    treat="Rosehip",
+    treat_shape="seed",
+    silhouette="chinchilla",
+    walk=118,
+    palette=Palette(
+        body=(188, 196, 204),
+        belly=(236, 236, 232),
+        ear=(160, 168, 176),
+        ear_inner=(220, 216, 208),
+        nose=(72, 64, 60),
+        ring=(216, 220, 224),
+        accent=(120, 128, 136),
+    ),
+    greet=("I inspected the desk. It may stay.", "Hello. Do not shed on me. I will shed on you.", "The bath is ready. You are almost ready."),
+    ambient=("That crumb is a scandal.", "I rolled. I am new.", "Soft is a discipline."),
+    feed=("This is clean enough to eat.", "One more. Then I wash the idea of it.", "Acceptable. I will not get it on the fur. Much."),
+    treat_lines=("That crumb was a scandal. Now it is gone.", "This is clean enough to eat."),
+    hide=("Dust-side.", "The bath is closed."),
+    call=("I inspected the desk. It may stay.",),
+    hungry=("Hunger is messy. Let us resolve it.", "A tidy snack, please."),
+)
+
+BLOOM = _kind(
+    key="axolotl",
+    slug="bloom",
+    name="Bloom",
+    label="Axolotl",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="axolotl",
+    walk=34,
+    aquatic=True,
+    palette=Palette(
+        body=(236, 176, 188),
+        belly=(248, 220, 224),
+        ear=(232, 140, 160),
+        ear_inner=(255, 200, 208),
+        nose=(196, 120, 132),
+        ring=(220, 120, 148),
+        accent=(176, 88, 108),
+    ),
+    greet=("I was already looking at the door.", "The glass says hello with a ripple.", "You came back. I grew a little more calm."),
+    ambient=("I am thinking one pink thought.", "The fronds are listening too.", "Time is wet here. It stretches."),
+    feed=("A pellet. A small moon.", "I will eat this like a ceremony.", "Sunk. Accepted."),
+    treat_lines=("I grew a little more fed.", "A pellet. A small moon."),
+    hide=("I receded. Calmly.", "Behind the fronds."),
+    call=("I was already looking at the door.",),
+    hungry=("The water is empty of moons.", "A pellet would complete the stare."),
+)
+
+KEEL = _kind(
+    key="toucan",
+    slug="keel",
+    name="Keel",
+    label="Toucan",
+    treat="Fruit",
+    treat_shape="leaf",
+    silhouette="toucan",
+    walk=80,
+    perch=True,
+    palette=Palette(
+        body=(28, 28, 32),
+        belly=(244, 220, 72),
+        ear=(20, 20, 24),
+        ear_inner=(80, 168, 88),
+        nose=(232, 72, 48),
+        ring=(48, 140, 196),
+        accent=(20, 20, 22),
+    ),
+    greet=("I arrived. You noticed the bill. Correct.", "The shelf is a balcony. Applaud.", "Hello from above you. On purpose."),
+    ambient=("This perch has opinions about your posture.", "I can carry a whole afternoon in here.", "Color is a duty. I am on duty."),
+    feed=("Fruit. A sensible tribute.", "I will bill this into smaller truths.", "Bright. Like me."),
+    treat_lines=("The bill approves.", "Fruit. A sensible tribute."),
+    hide=("The perch is vacant. Briefly.", "Above you. On purpose."),
+    call=("I arrived. You noticed the bill.",),
+    hungry=("The bill is empty. Tragic architecture.", "A fruit would restore the skyline."),
+)
+
+SOL = _kind(
+    key="iguana",
+    slug="sol",
+    name="Sol",
+    label="Iguana",
+    treat="Green",
+    treat_shape="leaf",
+    silhouette="iguana",
+    walk=20,
+    palette=Palette(
+        body=(72, 148, 72),
+        belly=(168, 196, 88),
+        ear=(48, 112, 56),
+        ear_inner=(140, 180, 80),
+        nose=(40, 72, 40),
+        ring=(56, 120, 56),
+        accent=(36, 80, 40),
+    ),
+    greet=("I have not moved. That is hello.", "The wall kept your place.", "You may sit in my sun. Briefly."),
+    ambient=("The meeting is long. I am longer.", "I blinked. Minutes will not record it.", "Heat is a philosophy."),
+    feed=("Greens. I will finish them this hour.", "One leaf. Monumental.", "Warm. Like the wall."),
+    treat_lines=("I blinked at it. Then I ate.", "One leaf. Monumental."),
+    hide=("I am a stone now.", "Ornament mode."),
+    call=("I have not moved. That is hello.",),
+    hungry=("Stillness burns calories. Slowly. Still.", "A leaf would justify the hour."),
+)
+
+VESPER = _kind(
+    key="dragon",
+    slug="vesper",
+    name="Vesper",
+    label="Dragon",
+    treat="Tribute",
+    treat_shape="ember",
+    silhouette="dragon",
+    walk=74,
+    palette=Palette(
+        body=(88, 48, 56),
+        belly=(196, 120, 72),
+        ear=(48, 28, 32),
+        ear_inner=(220, 140, 72),
+        nose=(28, 16, 18),
+        ring=(196, 88, 48),
+        accent=(48, 24, 28),
+    ),
+    greet=("You may approach the mantel.", "I allowed the room to keep you.", "Hello. Mind the tail. It is policy."),
+    ambient=("This desk is a province. I am reasonable.", "I could be larger. I choose this.", "I hoard quiet, not gold. Mostly quiet."),
+    feed=("Tribute. Adequate.", "One more coal of a snack.", "Warm. I will not singe the plate."),
+    treat_lines=("Tribute. Modest.", "Tribute. Adequate."),
+    hide=("The hoard is attended. From elsewhere.", "The stone keeps me."),
+    call=("You may approach the mantel.",),
+    hungry=("A dragon should not be hollow. It is undignified.", "A morsel would restore the province."),
+)
+
+EMBER = _kind(
+    key="phoenix",
+    slug="ember",
+    name="Ember",
+    label="Phoenix",
+    treat="Ember",
+    treat_shape="ember",
+    silhouette="phoenix",
+    walk=86,
+    perch=True,
+    palette=Palette(
+        body=(196, 72, 36),
+        belly=(248, 196, 80),
+        ear=(140, 40, 24),
+        ear_inner=(255, 220, 120),
+        nose=(80, 32, 20),
+        ring=(255, 168, 48),
+        accent=(120, 32, 20),
+    ),
+    greet=("I have been here before. So have you.", "The hearth kept a place.", "Hello. I came back softer."),
+    ambient=("Ash is a kind of memory.", "I do not rush the flame. It knows.", "If I go, I will not stay gone."),
+    feed=("This is a small sun. I accept.", "One more. For the next life.", "Warm. I recognize it."),
+    treat_lines=("Warm. Good.", "This is a small sun. I accept."),
+    hide=("Ash-side. I will be back.", "In the ash."),
+    call=("I have been here before. So have you.",),
+    hungry=("Even relics get hollow.", "A spark of food would help the next morning."),
+)
+
+NORI = _kind(
+    key="ball_python",
+    slug="nori",
+    name="Nori",
+    label="Ball Python",
+    treat="Mouse",
+    treat_shape="crumb",
+    silhouette="snake",
+    gait="crawl",
+    walk=36,
+    pattern="blotch",
+    palette=Palette(
+        body=(72, 48, 32),
+        belly=(212, 188, 140),
+        ear=(168, 124, 64),
+        ear_inner=(196, 156, 88),
+        nose=(40, 28, 20),
+        ring=(196, 156, 72),
+        accent=(48, 32, 20),
+    ),
+    greet=("I was a ball. I am slightly less of one.", "You may look. I am still mostly bun.", "Hello. The inkwell kept my heat."),
+    ambient=("I am deciding whether to be long.", "The blotter is a very fine hide if you coil.", "I put my head in. That is the whole plan."),
+    feed=("A quiet mouse of a treaty.", "I will take this slowly. That is the point.", "Warm. I will sit on the thought of it."),
+    treat_lines=("I will sit on the thought of it.", "A quiet mouse of a treaty."),
+    hide=("I went inside the bun.",),
+    call=("I was a ball. I am slightly less of one.",),
+    hungry=("A ball should not be hollow.", "A small supper would improve the bun."),
+)
+
+SAFFRON = _kind(
+    key="corn_snake",
+    slug="saffron",
+    name="Saffron",
+    label="Corn Snake",
+    treat="Pinkie",
+    treat_shape="crumb",
+    silhouette="snake",
+    gait="crawl",
+    walk=88,
+    pattern="saddle",
+    palette=Palette(
+        body=(216, 112, 40),
+        belly=(244, 220, 168),
+        ear=(40, 28, 24),
+        ear_inner=(232, 180, 96),
+        nose=(48, 28, 20),
+        ring=(48, 32, 24),
+        accent=(160, 64, 24),
+    ),
+    greet=("I found a new route. It is your sleeve.", "Hello. I was in the pencils.", "You came back. I had almost finished the tray."),
+    ambient=("There is a gap. I am the gap's problem.", "Orange is a useful color for being found.", "I mapped the blotter in S-curves."),
+    feed=("Pinkie diplomacy. Accepted.", "One more. For the next tunnel.", "Warm. I will write this down with my body."),
+    treat_lines=("Pinkie diplomacy. Accepted.",),
+    hide=("I took the pencil canyon.",),
+    call=("I found a new route. It is your sleeve.",),
+    hungry=("I have considered an eraser. It is not food.", "A small supper would finish the sentence."),
+)
+
+BANDIT = _kind(
+    key="kingsnake",
+    slug="bandit",
+    name="Bandit",
+    label="California Kingsnake",
+    treat="Egg",
+    treat_shape="egg",
+    silhouette="snake",
+    gait="crawl",
+    walk=74,
+    pattern="bands",
+    palette=Palette(
+        body=(24, 24, 26),
+        belly=(236, 232, 224),
+        ear=(244, 244, 240),
+        ear_inner=(220, 220, 216),
+        nose=(16, 16, 18),
+        ring=(244, 244, 240),
+        accent=(16, 16, 18),
+    ),
+    greet=("I inspected the drawer. You may enter.", "Bands present. Hello.", "I have counted the stripes. They are correct."),
+    ambient=("I am the law of this drawer.", "Your other pets are noted. I am still king.", "A straight line is a kind of kindness."),
+    feed=("Tribute in bands of flavor.", "One more. For the crown I do not wear.", "Accepted. The drawer records it."),
+    treat_lines=("Tribute in bands of flavor.",),
+    hide=("The drawer is closed. By me.",),
+    call=("I inspected the drawer. You may enter.",),
+    hungry=("A king should not rattle.", "A supper would restore the bands."),
+)
+
+JADE = _kind(
+    key="green_tree_python",
+    slug="jade",
+    name="Jade",
+    label="Green Tree Python",
+    treat="Warmth",
+    treat_shape="ember",
+    silhouette="snake",
+    gait="crawl",
+    walk=28,
+    perch=True,
+    pattern="plain",
+    palette=Palette(
+        body=(40, 148, 72),
+        belly=(168, 212, 88),
+        ear=(24, 96, 48),
+        ear_inner=(120, 196, 96),
+        nose=(20, 64, 36),
+        ring=(28, 120, 56),
+        accent=(16, 72, 36),
+    ),
+    greet=("I am the jewelry. You may look.", "The lamp kept my loop.", "Hello from the correct height."),
+    ambient=("I folded in half. That is sitting.", "Green is a decision I renew.", "Do not adjust the arm. I am using it."),
+    feed=("Warmth first. Then the treaty.", "I will take this without leaving the perch.", "Accepted. The loop remains."),
+    treat_lines=("Warmth first. Then the treaty.",),
+    hide=("Above you. Still green.",),
+    call=("I am the jewelry. You may look.",),
+    hungry=("Emeralds get hollow too.", "A supper that can travel upward."),
+)
+
+BLUFF = _kind(
+    key="hognose",
+    slug="bluff",
+    name="Bluff",
+    label="Western Hognose",
+    treat="Toad",
+    treat_shape="crumb",
+    silhouette="snake",
+    gait="crawl",
+    walk=70,
+    pattern="blotch",
+    palette=Palette(
+        body=(188, 148, 88),
+        belly=(232, 212, 168),
+        ear=(120, 88, 48),
+        ear_inner=(212, 180, 120),
+        nose=(96, 64, 40),
+        ring=(96, 68, 40),
+        accent=(80, 56, 32),
+    ),
+    greet=("I died when you left. I got over it.", "The snout arrived first. Hello.", "I flipped. It was a greeting. Mostly."),
+    ambient=("That sound deserved a death.", "I am fine. I was acting.", "If I hiss, it is punctuation."),
+    feed=("Toad-shaped diplomacy.", "I will eat this after my scene.", "Warm. The death is postponed."),
+    treat_lines=("I will eat this after my scene.", "Toad-shaped diplomacy."),
+    hide=("I died backstage.",),
+    call=("I died when you left. I got over it.",),
+    hungry=("A corpse should not be this empty.", "A toad of a snack would revive me."),
+)
+
+STRIPE = _kind(
+    key="garter",
+    slug="stripe",
+    name="Stripe",
+    label="Common Garter",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="snake",
+    gait="crawl",
+    walk=110,
+    pattern="stripe",
+    palette=Palette(
+        body=(48, 56, 40),
+        belly=(196, 188, 120),
+        ear=(232, 204, 64),
+        ear_inner=(244, 220, 96),
+        nose=(32, 36, 24),
+        ring=(232, 204, 64),
+        accent=(28, 32, 20),
+    ),
+    greet=("I was mid-patrol. You may join.", "The moss kept my three lines.", "Hello. I have already been around once."),
+    ambient=("There is a worm-shaped thought in the cup.", "I do not lounge. I pause.", "Yellow means I am going somewhere."),
+    feed=("Worm treaty. Signed in three copies.", "One more. For the next lap.", "Damp. Correct."),
+    treat_lines=("Worm treaty. Signed in three copies.",),
+    hide=("Mid-route. Do not wait.",),
+    call=("I was mid-patrol. You may join.",),
+    hungry=("The patrol runs on worms.", "A small supper would keep the lines bright."),
+)
+
+LULA = _kind(
+    key="boa",
+    slug="lula",
+    name="Lula",
+    label="Boa Constrictor",
+    treat="Tribute",
+    treat_shape="crumb",
+    silhouette="snake",
+    gait="crawl",
+    walk=42,
+    pattern="saddle",
+    palette=Palette(
+        body=(176, 132, 80),
+        belly=(228, 200, 152),
+        ear=(120, 64, 40),
+        ear_inner=(196, 148, 88),
+        nose=(48, 32, 24),
+        ring=(128, 64, 40),
+        accent=(88, 52, 32),
+    ),
+    greet=("I saved you a length of blotter.", "Hello. Mind the coil. It is affectionate.", "I have been holding the desk for you."),
+    ambient=("I could be tighter. I choose this.", "The wood likes my weight.", "I do not rush a squeeze. I do not squeeze you."),
+    feed=("Tribute. I will take my time.", "One more. For the river.", "Warm. I will keep it."),
+    treat_lines=("Tribute. I will take my time.",),
+    hide=("Under the river of blotter.",),
+    call=("I saved you a length of blotter.",),
+    hungry=("A river should not run empty.", "A supper would restore the current."),
+)
+
+CORAL = _kind(
+    key="milk_snake",
+    slug="coral",
+    name="Coral",
+    label="Pueblo Milk Snake",
+    treat="Egg",
+    treat_shape="egg",
+    silhouette="snake",
+    gait="crawl",
+    walk=80,
+    pattern="tricolor",
+    palette=Palette(
+        body=(196, 40, 40),
+        belly=(244, 228, 196),
+        ear=(24, 24, 26),
+        ear_inner=(236, 220, 176),
+        nose=(20, 16, 16),
+        ring=(24, 24, 26),
+        accent=(236, 220, 176),
+    ),
+    greet=("I am not who I look like. Hello.", "The box kept my reds.", "You flinched. Then you stayed. Correct."),
+    ambient=("Red, black, pale. A sentence.", "I borrow a rumor. I return it kinder.", "I could be dangerous. I am lunch-minded."),
+    feed=("An egg of a treaty.", "One more. For the costume.", "Warm. I will not correct you twice."),
+    treat_lines=("An egg of a treaty.",),
+    hide=("Behind a rumor.",),
+    call=("I am not who I look like. Hello.",),
+    hungry=("A costume should not be this empty.", "An egg would complete the act."),
+)
+
+BLUSH = _kind(
+    key="rosy_boa",
+    slug="blush",
+    name="Blush",
+    label="Rosy Boa",
+    treat="Mouse",
+    treat_shape="crumb",
+    silhouette="snake",
+    gait="crawl",
+    walk=34,
+    pattern="stripe",
+    palette=Palette(
+        body=(216, 168, 140),
+        belly=(236, 212, 188),
+        ear=(176, 88, 80),
+        ear_inner=(228, 160, 140),
+        nose=(120, 72, 64),
+        ring=(176, 88, 80),
+        accent=(140, 72, 64),
+    ),
+    greet=("I kept the corner pink.", "Hello. I moved an inch for you.", "The stone was almost me."),
+    ambient=("I am a blush that learned to crawl.", "Hurry is a weather I decline.", "The corner is the correct temperature."),
+    feed=("A mouse of manners.", "One more. Then I will be a stone again.", "Warm. Like the corner."),
+    treat_lines=("A mouse of manners.",),
+    hide=("The corner kept me.",),
+    call=("I kept the corner pink.",),
+    hungry=("Even stones get a hollow.", "A supper would restore the pink."),
+)
+
+ATLAS = _kind(
+    key="carpet_python",
+    slug="atlas",
+    name="Atlas",
+    label="Jungle Carpet Python",
+    treat="Morsel",
+    treat_shape="crumb",
+    silhouette="snake",
+    gait="crawl",
+    walk=64,
+    perch=True,
+    pattern="map",
+    palette=Palette(
+        body=(24, 24, 22),
+        belly=(232, 196, 64),
+        ear=(232, 196, 64),
+        ear_inner=(248, 220, 96),
+        nose=(16, 16, 14),
+        ring=(232, 196, 64),
+        accent=(16, 16, 14),
+    ),
+    greet=("I have charted the shelf. You may land.", "Hello. Follow the yellow.", "I left you a path. It is me."),
+    ambient=("This pattern is a map. I am the country.", "The shelf is a canopy if you believe.", "I prefer edges. Edges know things."),
+    feed=("A morsel for the cartographer.", "One more. For the next ridge.", "Warm. Logged on the hide."),
+    treat_lines=("A morsel for the cartographer.",),
+    hide=("Off the legend. Still on the shelf.",),
+    call=("I have charted the shelf. You may land.",),
+    hungry=("A map should not be blank in the middle.", "A supper would ink the next line."),
+)
+
+_ALL: tuple[Species, ...] = (
+    RUI,
+    MISO,
+    PIP,
+    THIMBLE,
+    CLIP,
+    WHEE,
+    INK,
+    COIN,
+    ECHO,
+    RUE,
+    PECK,
+    QUILL,
+    WICK,
+    BURR,
+    FLOSS,
+    BLOOM,
+    KEEL,
+    SOL,
+    VESPER,
+    EMBER,
+    NORI,
+    SAFFRON,
+    BANDIT,
+    JADE,
+    BLUFF,
+    STRIPE,
+    LULA,
+    CORAL,
+    BLUSH,
+    ATLAS,
+)
+
+SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
 DEFAULT_SPECIES_KEY = "red_panda"
 
 
@@ -138,3 +1035,19 @@ def species_by_key(key: str | None) -> Species:
     if key and key in SPECIES:
         return SPECIES[key]
     return RUI
+
+
+def is_snake(key: str) -> bool:
+    return key in SNAKE_KEYS
+
+
+def next_species_key(key: str) -> str:
+    if key not in CATALOG_KEYS:
+        return DEFAULT_SPECIES_KEY
+    return CATALOG_KEYS[(CATALOG_KEYS.index(key) + 1) % len(CATALOG_KEYS)]
+
+
+def prev_species_key(key: str) -> str:
+    if key not in CATALOG_KEYS:
+        return DEFAULT_SPECIES_KEY
+    return CATALOG_KEYS[(CATALOG_KEYS.index(key) - 1) % len(CATALOG_KEYS)]
