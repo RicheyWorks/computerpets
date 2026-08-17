@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (Redis jti deny-list)           |
+| **Last Updated** | 2026-08-17 (Micrometer + OpenTelemetry tracing) |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -219,6 +219,7 @@ flowchart TB
     subgraph "Secret Management &amp; Observability"
         Secrets[Vault / AWS Secrets Manager<br/>/ K8s ExternalSecrets]
         MON[Prometheus + Grafana<br/>or cloud equivalent]
+        TRACE[OTLP collector<br/>Tempo / Jaeger / Grafana]
         LOGS[Centralized Logging<br/>Loki / ELK / CloudWatch Logs]
     end
 
@@ -234,7 +235,7 @@ flowchart TB
     App1 & App2 & AppN -->|generate signed 15-min URLs| CDN
     DC -->|direct high-bandwidth download| CDN
 
-    App1 & App2 & AppN --> MON & LOGS
+    App1 & App2 & AppN --> MON & TRACE & LOGS
     Postgres & Redis --> MON
 ```
 
@@ -294,6 +295,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 - **`RevocationIndex`**: Shared jti deny-list on the same Redis (`RedisRevocationIndex`, keys `revoked:jti:{jti}`). `InMemoryRevocationIndex` when `rate-limit.backend=memory`. Not a second ledger.
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
 - **`EnterprisePetBackendApplication`**: Standard `@SpringBootApplication`.
+- **Observability (Phase 3.2)**: Micrometer Observation + `micrometer-tracing-bridge-otel`. HTTP server spans on `/api/verify/**` and `/api/download/**`; RestClient client spans for Steam/Itch/Epic/Microsoft; `eth_call` spans for NFT. Business timers `enterprisepet.verify` (provider + outcome) and `enterprisepet.download`. OTLP/HTTP export only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. Prometheus remains `/actuator/prometheus`.
 - **Config**: `application.yml` with heavy use of env-var overrides and `@PostConstruct` guard clauses that refuse to start on missing/weak/placeholder secrets.
 
 ### 4.5 Data & Persistence (Scaffolded, Not Yet Used)
@@ -409,6 +411,8 @@ sequenceDiagram
 | Steam Integration        | Spring RestClient + Steam Web API       | —           | `SteamService` calls `IPlayerService/GetOwnedGames` via RestClient. steam-condenser was unused and has been removed. |
 | Build                    | Maven + Spring Boot Maven Plugin        | —           | Universal, works in restricted environments; explicit Java 21 compiler config. |
 | Config & Secrets         | Spring @Value + env overrides + @PostConstruct guards | — | Fail-fast on missing/placeholder keys; supports 12-factor deployment. |
+| Metrics                  | Micrometer + Prometheus registry                      | BOM | `/actuator/prometheus` scrape. `enterprisepet.verify` timer tagged `provider`/`outcome` for success rate and latency. |
+| Tracing                  | Micrometer Tracing + OpenTelemetry + OTLP/HTTP        | BOM | `micrometer-tracing-bridge-otel` + `opentelemetry-exporter-otlp`. Export off unless `OTEL_EXPORTER_OTLP_ENDPOINT` is set. |
 
 **Notable absences (intentional or future):** No Spring Cloud / service mesh yet (single service), no reactive stack (blocking I/O is acceptable for low-volume verification calls), no ORM entities yet.
 
@@ -538,7 +542,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 - **Easy wins**: New providers, richer `PetType` metadata, additional claims in licenses.
 - **Medium**: Dynamic pet catalog backed by DB, subscription/entitlement types. Admin revocation UI and API now ship (`/admin` + `/api/admin/*`).
 - **Structural**: Extract a true "License Domain Service" if more rules (concurrent use, transfer, gifting) appear. Introduce typed request DTOs per provider (sealed interfaces) while keeping the registry generic.
-- **Observability**: Add Micrometer + tracing; structured logging of (redacted) verification events.
+- **Observability**: Micrometer tracing (OpenTelemetry / OTLP) and `enterprisepet.verify` / `enterprisepet.download` business meters are in place. Structured logging includes `traceId` / `spanId` / `correlationId`.
 - **Deployment**: Dockerfile, Kubernetes manifests, proper Spring profiles (`dev`, `prod`), Flyway migrations once entities exist.
 
 ---
@@ -627,8 +631,9 @@ Goal: Prepare for horizontal scaling and real production traffic.
   - Implement soft deletion + audit logging for licenses
 
 - **3.3 Advanced Observability**
-  - Distributed tracing (Micrometer + Zipkin / Jaeger / Tempo)
-  - Custom metrics for verification success rate, latency per provider, license issuance rate
+  - [x] Distributed tracing (Micrometer + OpenTelemetry / OTLP — Tempo, Jaeger, or any collector)
+  - [x] Custom metrics for verification success rate and latency per provider (`enterprisepet.verify`)
+  - License issuance rate (still open)
 
 - **3.4 Environment & Deployment Strategy**
   - Proper Spring profiles (`dev`, `staging`, `prod`)

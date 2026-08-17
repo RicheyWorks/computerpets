@@ -140,6 +140,28 @@ export RATE_LIMIT_BACKEND=memory
 
 Do not use `memory` when more than one app instance is serving traffic; buckets would not be shared.
 
+### Distributed tracing (optional)
+
+Verify, download, and outbound Steam / Itch / Epic / Microsoft / NFT calls emit Micrometer observations (spans + timers). Export is **off** until a collector URL is set. Prometheus at `/actuator/prometheus` is unchanged.
+
+```bash
+# Jaeger all-in-one (OTLP/HTTP on 4318, UI on 16686)
+docker run --rm -p 4318:4318 -p 16686:16686 jaegertracing/all-in-one:latest
+
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+# then start the backend as usual
+```
+
+`OTEL_EXPORTER_OTLP_ENDPOINT` is the OpenTelemetry base URL; the app appends `/v1/traces`. After a `POST /api/verify/{provider}` you should see `http.server.requests`, `enterprisepet.verify`, and a client/`eth_call` child span in the collector.
+
+Business metrics (same observations):
+
+| Meter | Tags | Use |
+|-------|------|-----|
+| `enterprisepet.verify` | `provider`, `outcome` (`success` / `denied` / `error`) | Latency per provider; success rate = `success` / all |
+| `enterprisepet.download` | `pet` | Download latency |
+| `enterprisepet.provider.call` | `provider`, `operation` | NFT `eth_call` latency |
+
 ### Verifying the Backend
 
 Once the server is running, test it with:
@@ -180,6 +202,9 @@ When the client is developed, it will be located in a separate directory (likely
 | `REDIS_TIMEOUT`           | No       | 200ms | Lettuce command/connect timeout for the rate-limit store |
 | `RATE_LIMIT_BACKEND`      | No       | redis | `redis` (default, shared) or `memory` (tests / single local process only) |
 | `RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER` | No | 5 | `Retry-After` seconds when Redis is down (HTTP 503) |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | No | empty | OTLP/HTTP collector **base** URL (e.g. `http://localhost:4318`). Empty = no export; the app starts without a collector. |
+| `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | No | empty | Full traces URL if you already have `/v1/traces`. Overrides the base URL when set. |
+| `TRACING_SAMPLING_PROBABILITY` | No | 1.0 | Micrometer sampling rate (`0.0`–`1.0`). |
 
 ---
 

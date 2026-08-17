@@ -87,7 +87,7 @@ The long-term vision for ComputerPets includes:
 - Additional ownership providers (Solana, etc.)
 
 Already shipped: Steam Web API + NFT allowlist + Itch.io download-key verify + Epic Games Store Ecom v3,
-JPA persistence and revocation, optional hwid, and the [client contract](CLIENT-CONTRACT.md).
+JPA persistence and revocation, optional hwid, Micrometer + OpenTelemetry tracing, and the [client contract](CLIENT-CONTRACT.md).
 
 Current status and detailed future plans are documented in the **[Roadmap](ROADMAP.md)**
 and **[Architecture](ARCHITECTURE.md)**.

@@ -1,14 +1,17 @@
 package com.enterprisepet.steam;
 
+import com.enterprisepet.observability.ObservedRestClients;
 import com.enterprisepet.provider.OwnershipProvider;
 import com.enterprisepet.provider.VerificationResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import io.micrometer.observation.ObservationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,9 @@ public class SteamService implements OwnershipProvider {
     private RestClient restClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Autowired
+    private ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
+
     @Value("${steam.api-base-url:https://api.steampowered.com}")
     private String steamApiBaseUrl;
 
@@ -52,7 +58,7 @@ public class SteamService implements OwnershipProvider {
     @PostConstruct
     void init() {
         if (this.restClient == null) {
-            this.restClient = RestClient.builder()
+            this.restClient = ObservedRestClients.builder(observationRegistry)
                     .baseUrl(steamApiBaseUrl)
                     .build();
         }

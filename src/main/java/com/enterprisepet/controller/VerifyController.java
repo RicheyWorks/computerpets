@@ -2,6 +2,7 @@ package com.enterprisepet.controller;
 
 import com.enterprisepet.license.LicenseService;
 import com.enterprisepet.nft.NftCatalog;
+import com.enterprisepet.observability.VerificationTelemetry;
 import com.enterprisepet.pet.PetCatalog;
 import com.enterprisepet.pet.PetType;
 import com.enterprisepet.provider.OwnershipProvider;
@@ -35,17 +36,20 @@ public class VerifyController {
     private final JwtService jwtService;
     private final PetCatalog petCatalog;
     private final NftCatalog nftCatalog;
+    private final VerificationTelemetry telemetry;
 
     public VerifyController(ProviderRegistry providers,
                             LicenseService licenseService,
                             JwtService jwtService,
                             PetCatalog petCatalog,
-                            NftCatalog nftCatalog) {
+                            NftCatalog nftCatalog,
+                            VerificationTelemetry telemetry) {
         this.providers = providers;
         this.licenseService = licenseService;
         this.jwtService = jwtService;
         this.petCatalog = petCatalog;
         this.nftCatalog = nftCatalog;
+        this.telemetry = telemetry;
     }
 
     /**
@@ -135,7 +139,7 @@ public class VerifyController {
 
         VerificationResult result;
         try {
-            result = provider.verify(request);
+            result = telemetry.verify(provider.key(), () -> provider.verify(request));
         } catch (Exception e) {
             return ResponseEntity.status(502).body(Map.of(
                 "error", "provider call failed",
