@@ -33,7 +33,7 @@ public class JwtService {
 
     /** Custom claim name for the pet key the JWT was issued for. */
     public static final String CLAIM_PET = "pet";
-    /** Custom claim name for the ownership provider (steam, nft, microsoft, …). */
+    /** Custom claim name for the ownership provider (steam, nft, microsoft, itch, …). */
     public static final String CLAIM_PROVIDER = "prv";
 
     @Value("${jwt.secret-key:}")

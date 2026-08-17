@@ -3,7 +3,7 @@ package com.enterprisepet.provider;
 import java.util.Map;
 
 /**
- * A pluggable ownership-verification source: Steam, an Ethereum NFT, Microsoft Store, etc.
+ * A pluggable ownership-verification source: Steam, an Ethereum NFT, Microsoft Store, Itch.io, etc.
  *
  * <p>Implementations are Spring beans and are auto-discovered by {@link ProviderRegistry}.
  * Each provider declares a stable wire-format {@link #key()} (e.g. "steam") that clients

@@ -16,7 +16,7 @@ The vision is to deliver premium, always-on desktop pets that feel alive — pow
 
 The vision is to deliver premium, always-on desktop pets that feel alive — powered by GPU rendering on the client and protected by a robust, cryptographically secure backend on the server.
 
-This backend enables users to prove ownership of pets through multiple platforms (Steam, Ethereum NFTs, Microsoft Store, and future providers) and receive time-limited, tamper-proof licenses without ever exposing master keys to the client application.
+This backend enables users to prove ownership of pets through multiple platforms (Steam, Ethereum NFTs, Microsoft Store, Itch.io, and future providers) and receive time-limited, tamper-proof licenses without ever exposing master keys to the client application.
 
 **Key goals:**
 - Enterprise-level security and architecture
@@ -28,7 +28,7 @@ This backend enables users to prove ownership of pets through multiple platforms
 
 ## Features
 
-- **Pluggable Ownership Verification** — Add support for new platforms by implementing the `OwnershipProvider` interface (currently supports Steam, Ethereum NFTs via Web3j, and Microsoft Store).
+- **Pluggable Ownership Verification** — Add support for new platforms by implementing the `OwnershipProvider` interface (currently supports Steam, Ethereum NFTs via Web3j, Microsoft Store, and Itch.io).
 - **Strong Cryptographic Licensing** — AES-256-GCM encrypted licenses and HMAC-signed short-lived CDN URLs.
 - **Stateless & Scalable** — Designed for horizontal scaling with minimal server-side state.
 - **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
@@ -164,7 +164,8 @@ ComputerPets/
 │   ├── provider/                 # OwnershipProvider SPI + registry
 │   │   ├── steam/
 │   │   ├── nft/
-│   │   └── microsoft/
+│   │   ├── microsoft/
+│   │   └── itch/
 │   ├── license/                  # AES-GCM license issuance & validation
 │   ├── security/                 # JWT authentication
 │   ├── bundle/                   # CDN download URL signing

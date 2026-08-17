@@ -18,7 +18,7 @@ public class IssuedLicense {
     private String pet;    // Pet key (e.g., "red_panda")
 
     @Column(nullable = false)
-    private String provider; // e.g., "steam", "nft", "microsoft"
+    private String provider; // e.g., "steam", "nft", "microsoft", "itch"
 
     @Column(nullable = false)
     private Instant issuedAt;

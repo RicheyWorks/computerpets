@@ -151,6 +151,8 @@ When the client is developed, it will be located in a separate directory (likely
 | `JWT_SECRET_KEY`          | Yes      | —       | JWT signing key (base64) |
 | `BUNDLE_SIGNING_KEY`      | Yes      | —       | CDN URL signing key (base64) |
 | `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only) |
+| `ITCH_API_KEY`            | No       | placeholder | itch.io developer API key for download-key receipt verify |
+| `ITCH_GAME_ID`            | No       | empty   | Optional official itch.io game id allowlist (do not invent one) |
 | `BUNDLE_BASE_URL`         | No       | CDN placeholder | Base URL used when generating signed download links |
 
 ---
@@ -167,6 +169,8 @@ ownership:
     microsoft:
       enabled: true
     nft:
+      enabled: true
+    itch:
       enabled: true
 ```
 
@@ -188,7 +192,32 @@ ownership:
       enabled: false
     nft:
       enabled: true
+    itch:
+      enabled: false
 ```
+
+### Itch.io
+
+Itch verify calls the official download-key receipt API
+(`GET https://api.itch.io/games/{gameId}/download_keys`) with a developer
+API key. A placeholder or blank `ITCH_API_KEY` fails closed (ownership
+denied), the same way a missing Steam Web API key does. Do not invent a
+live ComputerPets game id — leave `ITCH_GAME_ID` empty until a page exists.
+
+| Variable        | Purpose                                              |
+|-----------------|------------------------------------------------------|
+| `ITCH_API_KEY`  | Developer API key from https://itch.io/user/settings/api-keys |
+| `ITCH_GAME_ID`  | Optional numeric game id; when set, `gameId` must match |
+
+```yaml
+itch:
+  api-key: ${ITCH_API_KEY}
+  api-base-url: https://api.itch.io
+  game-id: ${ITCH_GAME_ID:}
+```
+
+`POST /api/verify/itch` expects `gameId` and `downloadKey` (the receipt
+from the buyer's download URL).
 
 ### Ethereum / NFT
 

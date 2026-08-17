@@ -45,6 +45,14 @@ steam:
   # Base URL for Steam Web API. Override in tests with WireMock or in different environments.
   api-base-url: "https://api.steampowered.com"
 
+# itch.io developer API key (https://itch.io/user/settings/api-keys).
+# Placeholder is rejected at verify time — never treated as a valid receipt.
+# Do not invent a live ComputerPets game id; leave game-id empty until one exists.
+itch:
+  api-key: "${ITCH_API_KEY:YOUR_ITCH_API_KEY}"
+  api-base-url: "https://api.itch.io"
+  game-id: "${ITCH_GAME_ID:}"
+
 # -----------------------------------------------------------------------------
 # Ownership Provider Configuration
 # -----------------------------------------------------------------------------
@@ -62,6 +70,8 @@ ownership:
     microsoft:
       enabled: true
     nft:
+      enabled: true
+    itch:
       enabled: true
 
 ethereum:
@@ -135,7 +145,7 @@ springdoc:
   packages-to-scan: com.enterprisepet
 
 # -----------------------------------------------------------------------------
-# Resilience4j (Phase 2.3) — defaults for the three ownership providers
+# Resilience4j (Phase 2.3) — defaults for the ownership providers
 # -----------------------------------------------------------------------------
 resilience4j:
   circuitbreaker:
@@ -158,6 +168,12 @@ resilience4j:
         failureRateThreshold: 60
         waitDurationInOpenState: 20s
         permittedNumberOfCallsInHalfOpenState: 2
+      itch:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30s
+        permittedNumberOfCallsInHalfOpenState: 3
   retry:
     instances:
       steam:
@@ -169,3 +185,6 @@ resilience4j:
       nft:
         maxAttempts: 2
         waitDuration: 300ms
+      itch:
+        maxAttempts: 3
+        waitDuration: 500ms
