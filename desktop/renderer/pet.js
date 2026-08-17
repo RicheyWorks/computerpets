@@ -27,6 +27,7 @@ function clamp(n, a, b) {
 
 const pet = document.getElementById("pet");
 const guestEl = document.getElementById("guest");
+const tongueEl = document.getElementById("tongue");
 const shadow = document.getElementById("shadow");
 const bubble = document.getElementById("bubble");
 const bubbleText = document.getElementById("bubble-text");
@@ -82,6 +83,12 @@ const sim = {
   shift: 0,
   shiftAge: 0,
   arrivedPending: false,
+  act: null,
+  actMotion: null,
+  actT: 0,
+  actHold: 0,
+  actWait: 10 + Math.random() * 8,
+  actWalk: false,
 };
 
 let speechUntil = 0;
@@ -369,7 +376,12 @@ function applyCommand() {
     return;
   }
   if (sim.order === sim.lastOrder || sim.cmd === "none") return;
+  if (sim.act && (sim.cmd === "wander" || sim.cmd === "idle")) {
+    sim.lastOrder = sim.order;
+    return;
+  }
   sim.lastOrder = sim.order;
+  clearAct();
   const width = window.innerWidth;
   const max = Math.max(PAD, width - BASE - PAD);
   sim.poseHold = 0;
@@ -565,6 +577,43 @@ function aimAt(next) {
   sim.frame = 0;
 }
 
+function clearAct() {
+  sim.act = null;
+  sim.actMotion = null;
+  sim.actT = 0;
+  sim.actHold = 0;
+  sim.actWalk = false;
+}
+
+function startAct(act) {
+  if (!act) return;
+  sim.act = act.name;
+  sim.actMotion = act.motion;
+  sim.actT = 0;
+  sim.actHold = act.hold;
+  sim.target = null;
+  sim.waypoints = [];
+  if (act.anim) {
+    sim.anim = act.anim;
+    sim.frame = 0;
+    sim.acc = 0;
+  }
+  if (act.motion === "hop") {
+    sim.hop = 1;
+    sim.anim = "play";
+    sim.frame = 0;
+    playSound("hop");
+  }
+  if (act.anim === "talk") playSound("chirp");
+  if (act.anim === "eat") playSound("munch");
+  if (act.motion === "dart" || act.motion === "circle") {
+    const max = Math.max(PAD, window.innerWidth - BASE - PAD);
+    const dist = act.motion === "circle" ? 36 : 44 + Math.random() * 28;
+    sim.actWalk = true;
+    aimAt(clamp(sim.x + sim.facing * dist, PAD, max));
+  }
+}
+
 function setClickable(next) {
   if (next === clickable) return;
   clickable = next;
@@ -595,6 +644,8 @@ function switchTo(key) {
   sim.poseHold = 0;
   sim.pendingPose = null;
   sim.arrivedPending = false;
+  clearAct();
+  sim.actWait = 10 + Math.random() * 8;
   pet.classList.toggle("sick", !!life.sick);
   pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
@@ -725,7 +776,13 @@ function tick(now) {
       }
       if ((dir === 1 && sim.x >= sim.target) || (dir === -1 && sim.x <= sim.target)) {
         sim.x = sim.target;
-        if (sim.waypoints.length) {
+        if (sim.actWalk) {
+          sim.target = null;
+          sim.actWalk = false;
+          sim.anim = sim.actMotion === "circle" ? "sit" : "idle";
+          sim.frame = 0;
+          sim.land = 0.4;
+        } else if (sim.waypoints.length) {
           sim.target = null;
           sim.pause = window.PetGait.wanderPauseS();
           sim.anim = "idle";
@@ -751,9 +808,10 @@ function tick(now) {
           sim.anim = "idle";
           sim.frame = 0;
           sim.arrivedPending = true;
+          sim.actWait = window.PetEthogram.afterSettleWait(trait?.wander ?? 0.45);
         }
       }
-    } else if ((sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
+    } else if (!sim.act && (sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
       sim.facing = sim.cursorX >= sim.x + BASE / 2 ? 1 : -1;
     }
     if (trait.clingy && sim.cursorX != null && !life.hidden && !life.asleep && Math.random() < dt * 0.35) {
@@ -763,7 +821,35 @@ function tick(now) {
         aimAt(follow);
       }
     }
-    if ((sim.anim === "idle" || sim.anim === "sit") && sim.shiftAge <= 0 && Math.random() < dt * 0.45) {
+    if (sim.act) {
+      sim.actT += dt;
+      if (sim.actMotion === "stretch" && sim.actHold > 0 && sim.actT / sim.actHold > 0.55 && sim.anim === "sit") {
+        sim.anim = "idle";
+      }
+      if (sim.actT >= sim.actHold && !sim.actWalk) {
+        clearAct();
+        sim.anim = "idle";
+        sim.frame = 0;
+      }
+    } else if (
+      !leaving &&
+      sim.target == null &&
+      sim.turnHold <= 0 &&
+      sim.pause <= 0 &&
+      sim.settle <= 0 &&
+      (sim.anim === "idle" || sim.anim === "sit") &&
+      !life.hidden &&
+      !life.asleep
+    ) {
+      sim.actWait -= dt;
+      if (sim.actWait <= 0) {
+        const hour = new Date().getHours();
+        const night = hour < 5 || hour >= 21;
+        startAct(window.PetEthogram.pickAct(kind?.key));
+        sim.actWait = window.PetEthogram.nextActWait(trait?.wander ?? 0.45, !!trait?.nocturnal, night);
+      }
+    }
+    if ((sim.anim === "idle" || sim.anim === "sit") && sim.shiftAge <= 0 && sim.actMotion !== "freeze" && Math.random() < dt * 0.45) {
       sim.shift = (1 + Math.random() * 2) * (Math.random() < 0.5 ? 1 : -1);
       sim.shiftAge = 0.85;
     }
@@ -824,19 +910,26 @@ function tick(now) {
     sim.anim === "idle" || sim.anim === "sit" || sim.anim === "sleep"
       ? 1 + Math.sin(now * (sim.anim === "sleep" ? 0.0032 : 0.0046)) * (sim.anim === "sleep" ? G.BREATHE_SLEEP : G.BREATHE_IDLE)
       : 1;
-  const stretch = sim.hop > 0 ? 1 + Math.sin(sim.hop * Math.PI) * 0.09 : sim.land > 0 ? 1 - Math.sin(sim.land * Math.PI) * 0.08 : breathe;
-  const squat = 2 - stretch;
+  const pose = sim.act ? window.PetEthogram.actPose(sim.actMotion, sim.actT, sim.actHold) : { dx: 0, dy: 0, rot: 0, stretch: 1, squat: 1 };
+  const stretch = sim.hop > 0 ? 1 + Math.sin(sim.hop * Math.PI) * 0.09 : sim.land > 0 ? 1 - Math.sin(sim.land * Math.PI) * 0.08 : sim.act ? breathe * pose.stretch : breathe;
+  const squat = sim.act && pose.squat !== 1 ? pose.squat : 2 - stretch;
   const sway = sim.anim === "walk" && p.crawl ? Math.sin(sim.walkAge * 5.5) * G.SWAY_PX : 0;
   const shiftX = sim.shiftAge > 0 ? sim.shift * Math.sin((1 - sim.shiftAge / 0.85) * Math.PI) : 0;
   const settleX = sim.settle > 0 ? G.settleOffset(sim.settle, sim.settleDir, sim.overshoot) : 0;
-  const drawX = sim.x + sway + shiftX + settleX;
-  pet.style.transform = `translate3d(${drawX}px, ${-hopPx - walkBob - water - perch}px, 0) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
+  const drawX = sim.x + sway + shiftX + settleX + pose.dx;
+  const lift = hopPx + walkBob + water + perch + pose.dy;
+  pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));
   const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
-  bubble.style.transform = `translate3d(${bx}px, ${-hopPx - walkBob - water - perch - 10}px, 0)`;
-  hud.style.transform = `translate3d(${clamp(drawX + 4, 8, width - 180)}px, ${-hopPx - walkBob - water - perch}px, 0)`;
+  bubble.style.transform = `translate3d(${bx}px, ${-lift - 10}px, 0)`;
+  hud.style.transform = `translate3d(${clamp(drawX + 4, 8, width - 180)}px, ${-lift}px, 0)`;
+  if (tongueEl) {
+    const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
+    tongueEl.style.opacity = String(flick);
+    tongueEl.style.transform = `translate3d(${drawX + BASE * 0.5 + sim.facing * 36 - 2}px, ${-(lift + 48)}px, 0) scale(${sim.facing}, 1)`;
+  }
 
   const nodes = dustRoot.children;
   for (let i = 0; i < nodes.length; i++) {

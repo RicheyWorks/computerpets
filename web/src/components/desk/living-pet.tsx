@@ -3,6 +3,16 @@ import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pet
 import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound } from "@/lib/pets/desk-audio";
 import {
+  actPose,
+  afterSettleWait,
+  nextActWait,
+  pickAct,
+  tongueFlick,
+  type ActMotion,
+} from "@/lib/pets/ethogram";
+import { dayPart } from "@/lib/pets/hours";
+import { traitFor } from "@/lib/pets/traits";
+import {
   BREATHE_IDLE,
   BREATHE_SLEEP,
   HIGH_HOP,
@@ -84,6 +94,12 @@ type Sim = {
   shiftAge: number;
   arrivedPending: boolean;
   leaving: boolean;
+  act: string | null;
+  actMotion: ActMotion | null;
+  actT: number;
+  actHold: number;
+  actWait: number;
+  actWalk: boolean;
 };
 
 const WALK_SPEED = 98;
@@ -122,6 +138,7 @@ export function LivingPet({
   const bubbleRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
   const dustRef = useRef<HTMLDivElement>(null);
+  const tongueRef = useRef<SVGSVGElement>(null);
   const sim = useRef<Sim>({
     x: startX,
     facing: 1,
@@ -151,6 +168,12 @@ export function LivingPet({
     shiftAge: 0,
     arrivedPending: false,
     leaving: false,
+    act: null,
+    actMotion: null,
+    actT: 0,
+    actHold: 0,
+    actWait: 10 + Math.random() * 8,
+    actWalk: false,
   });
   const cmdRef = useRef(command);
   const orderRef = useRef(orderId);
@@ -256,12 +279,55 @@ export function LivingPet({
       s.anim = "idle";
       s.frame = 0;
       s.arrivedPending = true;
+      s.actWait = afterSettleWait(traitFor(kindRef.current ?? "red_panda").wander);
+    };
+
+    const clearAct = () => {
+      s.act = null;
+      s.actMotion = null;
+      s.actT = 0;
+      s.actHold = 0;
+      s.actWalk = false;
+    };
+
+    const startAct = (act: NonNullable<ReturnType<typeof pickAct>>) => {
+      s.act = act.name;
+      s.actMotion = act.motion;
+      s.actT = 0;
+      s.actHold = act.hold;
+      s.target = null;
+      s.waypoints = [];
+      if (act.anim) {
+        s.anim = act.anim;
+        s.frame = 0;
+        s.acc = 0;
+      }
+      if (act.motion === "hop") {
+        s.hop = 1;
+        s.anim = "play";
+        s.frame = 0;
+        playDeskSound("hop");
+      }
+      if (act.anim === "talk") playDeskSound("chirp");
+      if (act.anim === "eat") playDeskSound("munch");
+      if (act.motion === "dart" || act.motion === "circle") {
+        const box = stageBox();
+        const max = Math.max(PAD, (box?.width ?? 400) - SPRITE - PAD);
+        const dist = act.motion === "circle" ? 36 : 44 + Math.random() * 28;
+        s.actWalk = true;
+        aimAt(clamp(s.x + s.facing * dist, PAD, max));
+      }
     };
 
     const applyCommand = (cmd: PetCommand, order: number) => {
       if (s.dragging) return;
       if (order === lastOrder.current || cmd === "none") return;
+      if (s.act && (cmd === "wander" || cmd === "idle")) {
+        lastOrder.current = order;
+        return;
+      }
       lastOrder.current = order;
+      clearAct();
       s.poseHold = 0;
       s.pendingPose = null;
       if (cmd === "wander") {
@@ -411,7 +477,13 @@ export function LivingPet({
           }
           if ((dir === 1 && s.x >= s.target) || (dir === -1 && s.x <= s.target)) {
             s.x = s.target;
-            if (s.waypoints.length) {
+            if (s.actWalk) {
+              s.target = null;
+              s.actWalk = false;
+              s.anim = s.actMotion === "circle" ? "sit" : "idle";
+              s.frame = 0;
+              s.land = 0.4;
+            } else if (s.waypoints.length) {
               s.target = null;
               s.pause = wanderPauseS();
               s.anim = "idle";
@@ -421,6 +493,7 @@ export function LivingPet({
             }
           }
         } else if (
+          !s.act &&
           (s.anim === "idle" || s.anim === "sit") &&
           s.cursorX != null &&
           Math.abs(s.cursorX - (s.x + SPRITE / 2)) > 36
@@ -429,7 +502,41 @@ export function LivingPet({
         }
         s.x = s.leaving ? s.x : clamp(s.x, PAD, maxX);
 
-        if ((s.anim === "idle" || s.anim === "sit") && s.shiftAge <= 0 && !reduced && Math.random() < dt * 0.45) {
+        if (s.act) {
+          s.actT += dt;
+          if (s.actMotion === "stretch" && s.actHold > 0 && s.actT / s.actHold > 0.55 && s.anim === "sit") {
+            s.anim = "idle";
+          }
+          if (s.actT >= s.actHold && !s.actWalk) {
+            clearAct();
+            s.anim = "idle";
+            s.frame = 0;
+          }
+        } else if (
+          !reduced &&
+          !s.leaving &&
+          s.target == null &&
+          s.turnHold <= 0 &&
+          s.pause <= 0 &&
+          s.settle <= 0 &&
+          (s.anim === "idle" || s.anim === "sit")
+        ) {
+          s.actWait -= dt;
+          if (s.actWait <= 0) {
+            const next = pickAct(kindRef.current);
+            const trait = traitFor(kindRef.current ?? "red_panda");
+            if (next) startAct(next);
+            s.actWait = nextActWait(trait.wander, trait.nocturnal, dayPart() === "night");
+          }
+        }
+
+        if (
+          (s.anim === "idle" || s.anim === "sit") &&
+          s.shiftAge <= 0 &&
+          !reduced &&
+          s.actMotion !== "freeze" &&
+          Math.random() < dt * 0.45
+        ) {
           s.shift = (1 + Math.random() * 2) * (Math.random() < 0.5 ? 1 : -1);
           s.shiftAge = 0.85;
         }
@@ -449,7 +556,7 @@ export function LivingPet({
               if (s.frame + 1 >= len) {
                 s.anim = "idle";
                 s.frame = 0;
-                arrivedRef.current?.();
+                if (!s.act) arrivedRef.current?.();
               } else {
                 s.frame += 1;
                 if (s.anim === "eat" && s.frame === 1) playDeskSound("munch");
@@ -493,18 +600,27 @@ export function LivingPet({
         s.anim === "idle" || s.anim === "sit" || s.anim === "sleep"
           ? 1 + Math.sin(now * (s.anim === "sleep" ? 0.0032 : 0.0046)) * (s.anim === "sleep" ? BREATHE_SLEEP : BREATHE_IDLE)
           : 1;
-      const stretch = s.hop > 0 ? 1 + Math.sin(s.hop * Math.PI) * 0.09 : s.land > 0 ? 1 - Math.sin(s.land * Math.PI) * 0.08 : breathe;
-      const squat = 2 - stretch;
+      const pose = !reduced && s.act ? actPose(s.actMotion, s.actT, s.actHold) : { dx: 0, dy: 0, rot: 0, stretch: 1, squat: 1 };
+      const stretch =
+        s.hop > 0
+          ? 1 + Math.sin(s.hop * Math.PI) * 0.09
+          : s.land > 0
+            ? 1 - Math.sin(s.land * Math.PI) * 0.08
+            : s.act
+              ? breathe * pose.stretch
+              : breathe;
+      const squat = s.act && pose.squat !== 1 ? pose.squat : 2 - stretch;
       const sway = s.anim === "walk" && p.crawl && !reduced ? Math.sin(s.walkAge * 5.5) * SWAY_PX : 0;
       const shiftX = s.shiftAge > 0 && !reduced ? s.shift * Math.sin((1 - s.shiftAge / 0.85) * Math.PI) : 0;
       const settleX = s.settle > 0 && !reduced ? settleOffset(s.settle, s.settleDir, s.overshoot) : 0;
-      const drawX = s.x + sway + shiftX + settleX;
+      const drawX = s.x + sway + shiftX + settleX + pose.dx;
+      const drawY = y + pose.dy;
 
       if (imgRef.current) {
         if (imgRef.current.src !== new URL(src, window.location.origin).href) {
           imgRef.current.src = src;
         }
-        imgRef.current.style.transform = `translate3d(${drawX}px, ${-y}px, 0) scale(${s.facing * squat * scale}, ${stretch * scale})`;
+        imgRef.current.style.transform = `translate3d(${drawX}px, ${-drawY}px, 0) rotate(${pose.rot}deg) scale(${s.facing * squat * scale}, ${stretch * scale})`;
       }
       if (shadowRef.current) {
         const shrink = 1 - hopPx / 90;
@@ -513,7 +629,12 @@ export function LivingPet({
       }
       if (bubbleRef.current) {
         const bx = clamp(drawX + SPRITE * 0.5 - BUBBLE_W * 0.5, 10, Math.max(10, width - BUBBLE_W - 10));
-        bubbleRef.current.style.transform = `translate3d(${bx}px, ${-y - 18}px, 0)`;
+        bubbleRef.current.style.transform = `translate3d(${bx}px, ${-drawY - 18}px, 0)`;
+      }
+      if (tongueRef.current) {
+        const flick = p.crawl && s.actMotion === "tongue" && !reduced ? tongueFlick(s.actT, s.actHold) : 0;
+        tongueRef.current.style.opacity = String(flick);
+        tongueRef.current.style.transform = `translate3d(${drawX + SPRITE * 0.5 + s.facing * 36 - 2}px, ${-(drawY + 48)}px, 0) scale(${s.facing}, 1)`;
       }
       if (dustRef.current) {
         const nodes = dustRef.current.children;
@@ -609,6 +730,23 @@ export function LivingPet({
           {speech ?? "\u00a0"}
         </p>
       </div>
+      <svg
+        ref={tongueRef}
+        className="pointer-events-none absolute bottom-0 left-0 overflow-visible"
+        width="36"
+        height="20"
+        viewBox="0 0 36 20"
+        aria-hidden
+        style={{ opacity: 0, willChange: "transform, opacity", transformOrigin: "2px 10px" }}
+      >
+        <path
+          d="M2 10 L16 10 M16 10 L28 5 M16 10 L28 15"
+          fill="none"
+          stroke="rgba(214,92,108,0.94)"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+      </svg>
       <img
         ref={imgRef}
         data-pet

@@ -6,7 +6,7 @@
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
-    "test": "node --test license/*.test.cjs renderer/gait.test.cjs",
+    "test": "node --test license/*.test.cjs renderer/*.test.cjs",
     "dist": "electron-builder --win --mac",
     "dist:win": "electron-builder --win",
     "dist:mac": "electron-builder --mac"

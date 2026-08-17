@@ -10,6 +10,7 @@ from PyQt6.QtGui import QBrush, QColor, QCursor, QPainter, QPen
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsObject, QGraphicsPixmapItem
 
 from .frames import SIZE, frames_for, paint_treat
+from .ethogram import act_pose, after_settle_wait, next_act_wait, pick_act, tongue_flick
 from .gait import (
     BREATHE_IDLE,
     BREATHE_SLEEP,
@@ -22,6 +23,7 @@ from .gait import (
     walk_speed,
     wander_pause_s,
 )
+from .hours import day_part
 from .life import CareState, MessPile
 from .shed import Coat
 from .species import Species
@@ -119,6 +121,13 @@ class LivingPetItem(QGraphicsObject):
         self.shift_age = 0.0
         self._display_dx = 0.0
         self._logic_x = 220.0
+        self.act: str | None = None
+        self.act_motion: str | None = None
+        self.act_t = 0.0
+        self.act_hold = 0.0
+        self.act_wait = 10.0 + random.random() * 8.0
+        self.act_walk = False
+        self._tongue = 0.0
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
@@ -146,10 +155,23 @@ class LivingPetItem(QGraphicsObject):
         if self.facing < 0:
             painter.translate(SIZE, 0)
             painter.scale(-1, 1)
+        pose = act_pose(self.act_motion, self.act_t, self.act_hold) if self.act else None
+        stretch = breathe * (pose["stretch"] if pose else 1.0)
         painter.translate(0, SIZE)
-        painter.scale(1, breathe)
+        painter.scale(1, stretch)
         painter.translate(0, -SIZE)
+        if pose and pose["rot"]:
+            painter.translate(SIZE / 2, SIZE)
+            painter.rotate(pose["rot"])
+            painter.translate(-SIZE / 2, -SIZE)
         painter.drawPixmap(0, 0, pix)
+        if self._tongue > 0.02 and self.species.gait == "crawl":
+            painter.setPen(QPen(QColor(214, 92, 108, int(240 * self._tongue)), 1.7))
+            snout_x = SIZE * 0.5 + 36
+            snout_y = SIZE - 48
+            painter.drawLine(int(snout_x), int(snout_y), int(snout_x + 14), int(snout_y))
+            painter.drawLine(int(snout_x + 14), int(snout_y), int(snout_x + 26), int(snout_y - 5))
+            painter.drawLine(int(snout_x + 14), int(snout_y), int(snout_x + 26), int(snout_y + 5))
         if self.dull:
             painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceAtop)
             painter.fillRect(QRectF(0, 0, SIZE, SIZE), QColor(90, 120, 150, 95))
@@ -220,6 +242,36 @@ class LivingPetItem(QGraphicsObject):
         self.overshoot = overshoot_px(crawl=self._crawl(), walk=self.species.walk)
         self.anim = "idle"
         self.frame = 0
+        self.act_wait = after_settle_wait(self._wander_rate())
+
+    def _wander_rate(self) -> float:
+        return max(0.06, min(0.8, self.species.walk / 200.0))
+
+    def _clear_act(self) -> None:
+        self.act = None
+        self.act_motion = None
+        self.act_t = 0.0
+        self.act_hold = 0.0
+        self.act_walk = False
+        self._tongue = 0.0
+
+    def _start_act(self, act: dict | None) -> None:
+        if not act:
+            return
+        self.act = act["name"]
+        self.act_motion = act["motion"]
+        self.act_t = 0.0
+        self.act_hold = float(act["hold"])
+        self.target = None
+        self.waypoints = []
+        if act.get("anim"):
+            self.anim = act["anim"]
+            self.frame = 0
+            self.acc = 0.0
+        if act["motion"] in ("dart", "circle"):
+            dist = 36.0 if act["motion"] == "circle" else 44.0 + random.random() * 28.0
+            self.act_walk = True
+            self._aim_at(self._logic_x + self.facing * dist)
 
     def issue(self, cmd: str, target: float | None = None) -> None:
         # play / talk are house verbs; the wood already has wander and sit.
@@ -227,6 +279,9 @@ class LivingPetItem(QGraphicsObject):
             cmd = "wander"
         elif cmd == "talk":
             cmd = "sit"
+        if self.act and cmd in ("wander", "idle"):
+            return
+        self._clear_act()
         self.cmd = cmd
         self.target = target
         self.once_done = False
@@ -255,9 +310,10 @@ class LivingPetItem(QGraphicsObject):
         shift = self.shift * math.sin((1.0 - self.shift_age / 0.85) * math.pi) if self.shift_age > 0 else 0.0
         settle = settle_offset(self.settle, self.settle_dir, self.overshoot) if self.settle > 0 else 0.0
         perch_step = abs(math.sin(self.walk_age * 8.0)) * 7.0 if self.anim == "walk" and self.species.perch and not self._crawl() else 0.0
+        pose = act_pose(self.act_motion, self.act_t, self.act_hold) if self.act else {"dx": 0.0, "dy": 0.0}
         self._logic_x = x
-        self._display_dx = sway + shift + settle
-        self.setPos(x + self._display_dx, y - perch_step)
+        self._display_dx = sway + shift + settle + pose["dx"]
+        self.setPos(x + self._display_dx, y - perch_step - pose["dy"])
         self.update()
 
     def advance_pet(self, dt: float, care: CareState, width: float) -> None:
@@ -316,7 +372,22 @@ class LivingPetItem(QGraphicsObject):
             if self.pause == 0 and self.waypoints:
                 self._aim_at(self.waypoints.pop(0))
 
-        if (self.anim in ("idle", "sit")) and self.shift_age <= 0 and random.random() < dt * 0.45:
+        if self.act:
+            self.act_t += dt
+            self._tongue = tongue_flick(self.act_t, self.act_hold) if self.act_motion == "tongue" else 0.0
+            if self.act_motion == "stretch" and self.act_hold > 0 and self.act_t / self.act_hold > 0.55 and self.anim == "sit":
+                self.anim = "idle"
+            if self.act_t >= self.act_hold and not self.act_walk:
+                self._clear_act()
+                self.anim = "idle"
+                self.frame = 0
+        elif self.target is None and self.turn_hold <= 0 and self.pause <= 0 and self.settle <= 0 and self.anim in ("idle", "sit"):
+            self.act_wait -= dt
+            if self.act_wait <= 0:
+                self._start_act(pick_act(self.species.key))
+                self.act_wait = next_act_wait(self._wander_rate(), False, day_part() == "night")
+
+        if (self.anim in ("idle", "sit")) and self.shift_age <= 0 and self.act_motion != "freeze" and random.random() < dt * 0.45:
             self.shift = (1.0 + random.random() * 2.0) * (1 if random.random() < 0.5 else -1)
             self.shift_age = 0.85
         if self.shift_age > 0:
@@ -372,6 +443,9 @@ class LivingPetItem(QGraphicsObject):
             return
 
         if self.cmd == "wander":
+            if self.act:
+                self._place(max(left, min(right, x)), y)
+                return
             if self.target is None and self.pause <= 0 and self.turn_hold <= 0 and self.settle <= 0:
                 if random.random() < dt * 0.12:
                     roll = random.random()
@@ -405,7 +479,12 @@ class LivingPetItem(QGraphicsObject):
                 x += direction * self._speed("wander", remaining) * dt
                 if (direction == 1 and x >= self.target) or (direction == -1 and x <= self.target):
                     x = self.target
-                    if self.waypoints:
+                    if self.act_walk:
+                        self.target = None
+                        self.act_walk = False
+                        self.anim = "sit" if self.act_motion == "circle" else "idle"
+                        self.frame = 0
+                    elif self.waypoints:
                         self.target = None
                         self.pause = wander_pause_s()
                         self.anim = "idle"
@@ -417,6 +496,9 @@ class LivingPetItem(QGraphicsObject):
             return
 
         if self.cmd in ("idle", "sit", "sleep"):
+            if self.act:
+                self._place(x, y)
+                return
             if random.random() < dt * 0.18:
                 self.cmd = "wander"
                 self.target = None
