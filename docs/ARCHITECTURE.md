@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (Epic Games Store provider)     |
+| **Last Updated** | 2026-08-17 (admin license ledger)          |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -331,6 +331,13 @@ This two-phase (verify → download) + dual-artifact (license + JWT) design prev
 - Use of a stolen license without a matching fresh JWT.
 - Use of a JWT issued for pet A to obtain pet B.
 
+#### 4.3 Admin lookup, audit, and revoke
+1. Operator opens the house `/admin` ledger (not in the public nav) and supplies `ADMIN_API_KEY` plus the license-service base URL. The key is sent as `X-Admin-Key` and kept in `sessionStorage` for the tab only.
+2. `GET /api/admin/licenses` (optional `owner`) and `GET /api/admin/licenses/{jti}` return persisted audit fields: owner, pet, provider, issued, last used, revoked.
+3. `POST /api/admin/revoke` `{ "jti" }` sets `revokedAt`. Subsequent `LicenseService.validate()` and `/api/download` fail closed.
+
+All three routes are `permitAll` at the Spring Security layer; the controller rejects a missing or wrong key with 401. CORS is enabled only for `/api/admin/**` so the living desk can call a separate origin.
+
 ### Sequence Diagram – Happy Path End-to-End
 
 ```mermaid
@@ -523,7 +530,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 
 ### Extensibility & Future Refactoring Areas
 - **Easy wins**: New providers, richer `PetType` metadata, additional claims in licenses.
-- **Medium**: Dynamic pet catalog backed by DB, subscription/entitlement types, admin revocation UI or API.
+- **Medium**: Dynamic pet catalog backed by DB, subscription/entitlement types. Admin revocation UI and API now ship (`/admin` + `/api/admin/*`).
 - **Structural**: Extract a true "License Domain Service" if more rules (concurrent use, transfer, gifting) appear. Introduce typed request DTOs per provider (sealed interfaces) while keeping the registry generic.
 - **Observability**: Add Micrometer + tracing; structured logging of (redacted) verification events.
 - **Deployment**: Dockerfile, Kubernetes manifests, proper Spring profiles (`dev`, `prod`), Flyway migrations once entities exist.
@@ -635,7 +642,8 @@ Goal: Deliver a complete, usable platform.
   - Solana, etc. (blocked until a live collection address exists)
 
 - **4.3 Admin & Operations Tools**
-  - Internal admin API or UI for revocation, license inspection, and audit queries (protected by strong auth)
+  - [x] `POST /api/admin/revoke`, `GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}` — same `X-Admin-Key` / `ADMIN_API_KEY` gate
+  - [x] House `/admin` ledger in `web/` for jti/owner lookup, audit stamps, and revoke (not in the public nav)
 
 #### Phase 5: Long-term Architecture Evolution
 Goal: Prepare for growth and complexity.

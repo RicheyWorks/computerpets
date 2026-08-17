@@ -29,6 +29,8 @@ web/
 
 Ownership, licenses, and NFT verify stay in the Java service at the repo root (`mvn spring-boot:run`). This folder is the living client.
 
+Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-Key` against that service to look up and revoke licenses.
+
 ## Advertising demos
 
 - `/meet` — house landing

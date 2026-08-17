@@ -56,13 +56,14 @@ mvn -v
 
 ### 3. Configure Required Environment Variables
 
-The backend requires three cryptographic secrets to start. These must be set as environment variables.
+The backend requires four secrets to start. These must be set as environment variables.
 
 | Variable                | Length     | Purpose                                      |
 |-------------------------|------------|----------------------------------------------|
 | `LICENSE_SECRET_KEY`    | 32 bytes   | Master AES-256-GCM key for encrypting licenses |
 | `JWT_SECRET_KEY`        | 48+ bytes  | Signing key for short-lived JWT tokens       |
 | `BUNDLE_SIGNING_KEY`    | 48+ bytes  | HMAC key for signing temporary download URLs |
+| `ADMIN_API_KEY`         | 32+ bytes  | Pre-shared key for `/api/admin/*` and the house `/admin` ledger (`X-Admin-Key`) |
 
 #### Generate Secrets (PowerShell - Windows)
 
@@ -70,11 +71,13 @@ The backend requires three cryptographic secrets to start. These must be set as 
 $env:LICENSE_SECRET_KEY   = [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
 $env:JWT_SECRET_KEY       = [Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Maximum 256 }))
 $env:BUNDLE_SIGNING_KEY   = [Convert]::ToBase64String((1..48 | ForEach-Object { Get-Random -Maximum 256 }))
+$env:ADMIN_API_KEY        = [Convert]::ToBase64String((1..32 | ForEach-Object { Get-Random -Maximum 256 }))
 
 Write-Host "Copy these values to your environment:"
 Write-Host "LICENSE_SECRET_KEY=$env:LICENSE_SECRET_KEY"
 Write-Host "JWT_SECRET_KEY=$env:JWT_SECRET_KEY"
 Write-Host "BUNDLE_SIGNING_KEY=$env:BUNDLE_SIGNING_KEY"
+Write-Host "ADMIN_API_KEY=$env:ADMIN_API_KEY"
 ```
 
 #### Generate Secrets (macOS / Linux)
@@ -83,6 +86,7 @@ Write-Host "BUNDLE_SIGNING_KEY=$env:BUNDLE_SIGNING_KEY"
 export LICENSE_SECRET_KEY=$(openssl rand -base64 32)
 export JWT_SECRET_KEY=$(openssl rand -base64 48)
 export BUNDLE_SIGNING_KEY=$(openssl rand -base64 48)
+export ADMIN_API_KEY=$(openssl rand -base64 32)
 ```
 
 **Important**: The application will refuse to start if these variables are missing or contain obvious placeholder values.
@@ -125,6 +129,8 @@ java -jar target\enterprise-pet-backend-1.0.0-SNAPSHOT.jar
 
 The backend will start on **http://localhost:8080** by default.
 
+The living desk ledger is `/admin` (not in the house nav). Point it at this origin and paste `ADMIN_API_KEY` — the page sends `X-Admin-Key` on every lookup and revoke.
+
 ### Verifying the Backend
 
 Once the server is running, test it with:
@@ -150,6 +156,7 @@ When the client is developed, it will be located in a separate directory (likely
 | `LICENSE_SECRET_KEY`      | Yes      | —       | AES-256 master encryption key (base64) |
 | `JWT_SECRET_KEY`          | Yes      | —       | JWT signing key (base64) |
 | `BUNDLE_SIGNING_KEY`      | Yes      | —       | CDN URL signing key (base64) |
+| `ADMIN_API_KEY`           | Yes      | —       | Admin API + `/admin` ledger (`X-Admin-Key` header) |
 | `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only) |
 | `ITCH_API_KEY`            | No       | placeholder | itch.io developer API key for download-key receipt verify |
 | `ITCH_GAME_ID`            | No       | empty   | Optional official itch.io game id allowlist (do not invent one) |

@@ -1,5 +1,6 @@
 package com.enterprisepet.controller;
 
+import com.enterprisepet.dto.LicenseAuditResponse;
 import com.enterprisepet.license.LicenseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,10 +14,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Minimal internal admin endpoints.
+ * Internal admin endpoints for license lookup, audit, and revocation.
  *
  * <p>Protected by a strong pre-shared admin key (X-Admin-Key header).
  * This is intentionally simple for Phase 2; in production you would typically
@@ -24,7 +28,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/admin")
-@Tag(name = "Admin", description = "Internal administration operations (revocation, etc.)")
+@Tag(name = "Admin", description = "Internal administration operations (revocation, audit)")
 public class AdminController {
 
     private static final Logger log = LoggerFactory.getLogger(AdminController.class);
@@ -73,13 +77,8 @@ public class AdminController {
     public ResponseEntity<?> revoke(@RequestHeader(value = "X-Admin-Key", required = false) String providedKey,
                                     @RequestBody Map<String, String> body) {
 
-        if (providedKey == null || !providedKey.equals(adminApiKey)) {
-            log.warn("Admin revoke attempt with invalid or missing X-Admin-Key");
-            return ResponseEntity.status(401).body(Map.of(
-                "error", "invalid or missing admin key",
-                "hint", "Supply X-Admin-Key header with the configured admin secret"
-            ));
-        }
+        ResponseEntity<?> denied = rejectUnlessAdmin(providedKey);
+        if (denied != null) return denied;
 
         String jti = body.get("jti");
         if (jti == null || jti.isBlank()) {
@@ -103,5 +102,66 @@ public class AdminController {
             "revoked", true,
             "jti", jti
         ));
+    }
+
+    @Operation(
+        summary = "Look up one issued license",
+        description = "Returns audit fields for a license by jti. Requires X-Admin-Key header.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "License audit row"),
+            @ApiResponse(responseCode = "401", description = "Missing or invalid admin key"),
+            @ApiResponse(responseCode = "404", description = "License not found")
+        }
+    )
+    @GetMapping("/licenses/{jti}")
+    public ResponseEntity<?> getByJti(@RequestHeader(value = "X-Admin-Key", required = false) String providedKey,
+                                      @PathVariable String jti) {
+        ResponseEntity<?> denied = rejectUnlessAdmin(providedKey);
+        if (denied != null) return denied;
+
+        return licenseService.findIssued(jti)
+            .<ResponseEntity<?>>map(lic -> ResponseEntity.ok(LicenseAuditResponse.from(lic)))
+            .orElseGet(() -> ResponseEntity.status(404).body(Map.of(
+                "error", "license not found",
+                "jti", jti
+            )));
+    }
+
+    @Operation(
+        summary = "List issued licenses",
+        description = "Returns the newest licenses, optionally filtered by exact owner. Capped at 50. Requires X-Admin-Key header.",
+        responses = {
+            @ApiResponse(responseCode = "200", description = "License audit rows"),
+            @ApiResponse(responseCode = "401", description = "Missing or invalid admin key")
+        }
+    )
+    @GetMapping("/licenses")
+    public ResponseEntity<?> list(@RequestHeader(value = "X-Admin-Key", required = false) String providedKey,
+                                  @RequestParam(required = false) String owner) {
+        ResponseEntity<?> denied = rejectUnlessAdmin(providedKey);
+        if (denied != null) return denied;
+
+        List<LicenseAuditResponse> rows = (owner != null && !owner.isBlank())
+            ? licenseService.findByOwner(owner).stream().map(LicenseAuditResponse::from).toList()
+            : licenseService.listRecent().stream().map(LicenseAuditResponse::from).toList();
+        return ResponseEntity.ok(rows);
+    }
+
+    private ResponseEntity<?> rejectUnlessAdmin(String providedKey) {
+        if (!adminKeyValid(providedKey)) {
+            log.warn("Admin request with invalid or missing X-Admin-Key");
+            return ResponseEntity.status(401).body(Map.of(
+                "error", "invalid or missing admin key",
+                "hint", "Supply X-Admin-Key header with the configured admin secret"
+            ));
+        }
+        return null;
+    }
+
+    private boolean adminKeyValid(String providedKey) {
+        if (providedKey == null || adminApiKey == null) return false;
+        byte[] expected = adminApiKey.getBytes(StandardCharsets.UTF_8);
+        byte[] actual = providedKey.getBytes(StandardCharsets.UTF_8);
+        return MessageDigest.isEqual(expected, actual);
     }
 }

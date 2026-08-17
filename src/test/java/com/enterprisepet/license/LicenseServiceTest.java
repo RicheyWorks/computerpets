@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,6 +72,22 @@ class LicenseServiceTest {
         ArgumentCaptor<IssuedLicense> captor = ArgumentCaptor.forClass(IssuedLicense.class);
         verify(licenseRepository).save(captor.capture());
         assertThat(captor.getValue().getLastUsedAt()).isNotNull();
+    }
+
+    @Test
+    void findIssued_returnsEmpty_whenBlank() {
+        assertThat(licenseService.findIssued("  ")).isEmpty();
+        verify(licenseRepository, never()).findByJti(any());
+    }
+
+    @Test
+    void findByOwner_trims_andDelegates() {
+        IssuedLicense lic = new IssuedLicense("owner1", "cat", "steam", Instant.now(), Instant.now().plusSeconds(3600));
+        when(licenseRepository.findTop50ByOwnerOrderByIssuedAtDesc("owner1")).thenReturn(List.of(lic));
+
+        assertThat(licenseService.findByOwner("  owner1  ")).containsExactly(lic);
+        assertThat(licenseService.findByOwner("")).isEmpty();
+        verify(licenseRepository, never()).findTop50ByOwnerOrderByIssuedAtDesc("");
     }
 
     @Test

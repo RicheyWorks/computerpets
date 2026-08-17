@@ -138,7 +138,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Itch.io ownership provider (download-key receipt verify via `ITCH_API_KEY`)
 - [x] Epic Games Store ownership provider (EOS Auth client_credentials + Ecom v3 ownership)
 - Add more ownership providers (Solana, etc.) — Solana stays blocked until a live collection address exists
-- Richer admin UI for revocation and audit (`POST /api/admin/revoke` already ships)
+- [x] Richer admin UI for revocation and audit (`GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}`, house `/admin` ledger; `POST /api/admin/revoke` already shipped)
 
 ---
 
@@ -162,6 +162,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (Epic Games Store ownership provider)
+**Last Updated:** 2026-08-17 (admin license ledger)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

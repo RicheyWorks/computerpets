@@ -18,6 +18,7 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -204,6 +205,29 @@ public class LicenseService {
                 return true;
             })
             .orElse(false);
+    }
+
+    /**
+     * Looks up a persisted license by jti for admin audit. Does not decrypt.
+     */
+    public Optional<IssuedLicense> findIssued(String jti) {
+        if (jti == null || jti.isBlank()) return Optional.empty();
+        return licenseRepository.findByJti(jti.trim());
+    }
+
+    /**
+     * Recent licenses for one owner (newest first, capped).
+     */
+    public List<IssuedLicense> findByOwner(String owner) {
+        if (owner == null || owner.isBlank()) return List.of();
+        return licenseRepository.findTop50ByOwnerOrderByIssuedAtDesc(owner.trim());
+    }
+
+    /**
+     * Newest issued licenses across all owners (capped).
+     */
+    public List<IssuedLicense> listRecent() {
+        return licenseRepository.findTop50ByOrderByIssuedAtDesc();
     }
 
     /**

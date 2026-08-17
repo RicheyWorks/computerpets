@@ -35,6 +35,7 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Rate Limiting** — Built-in per-IP protection using Bucket4j.
 - **Rich Pet Catalog** — 30 pets across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes.
 - **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`.
+- **License ledger** — House `/admin` plus `GET /api/admin/licenses` for jti/owner lookup, audit stamps, and revoke (`X-Admin-Key`).
 - **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
 - **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
 
