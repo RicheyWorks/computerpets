@@ -33,6 +33,10 @@ def test_offscreen_check_constructs_window():
     assert "shader engine" in result.stdout
     assert any(sky in result.stdout for sky in ("Clear", "Rain", "Wind", "Heat"))
     assert "may call" in result.stdout
+    assert any(part in result.stdout for part in ("Dawn", "Day", "Dusk", "Night"))
+    assert "14:00" in result.stdout
+    assert "Day" in result.stdout
+    assert "awake" in result.stdout or "resting" in result.stdout
 
 
 def test_desk_day_has_weather_visitor_and_shed_coat():
@@ -40,6 +44,7 @@ def test_desk_day_has_weather_visitor_and_shed_coat():
     from PyQt6.QtWidgets import QApplication
 
     from computerpets_client.app import DeskWindow
+    from computerpets_client.hours import day_part_label
     from computerpets_client.weather import weather_label
 
     app = QApplication.instance() or QApplication([])
@@ -47,6 +52,8 @@ def test_desk_day_has_weather_visitor_and_shed_coat():
     window.show()
     assert window.weather.sky in ("clear", "rain", "wind", "heat")
     assert weather_label(window.weather.sky) in window.vital_label.text()
+    assert window.hours.part in ("dawn", "day", "dusk", "night")
+    assert day_part_label(window.hours.part) in window.vital_label.text()
     assert window.guest.species.key != window.species.key
     assert "may call" in window.vital_label.text()
     window._pick_key("ball_python")
@@ -56,6 +63,40 @@ def test_desk_day_has_weather_visitor_and_shed_coat():
     assert len(window.coats) == 1
     assert window.coats[0].coat.kind == "shed"
     assert not window.pet.dull
+    window.close()
+    del app
+
+
+def test_return_line_after_a_real_absence(tmp_path):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    import json
+    import time
+
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+
+    app = QApplication.instance() or QApplication([])
+    ago = int(time.time() * 1000) - 2 * 3_600_000
+    (tmp_path / "seen.json").write_text(json.dumps({"red_panda": ago}), encoding="utf-8")
+    window = DeskWindow(user_data_dir=tmp_path)
+    window.show()
+    assert window.care.last_line == "You were elsewhere. I practiced waiting."
+    window.close()
+    del app
+
+
+def test_resting_guest_sits_on_greet(tmp_path, monkeypatch):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+
+    app = QApplication.instance() or QApplication([])
+    monkeypatch.setattr("computerpets_client.app.is_resting_hour", lambda key, hour=None: True)
+    window = DeskWindow(user_data_dir=tmp_path)
+    window.show()
+    assert window.pet.cmd == "sit"
     window.close()
     del app
 

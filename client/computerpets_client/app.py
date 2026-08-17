@@ -26,8 +26,16 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from .blotter import DeskBackground, WeatherLayer, attach_gpu_viewport
+from .blotter import DayWash, DeskBackground, WeatherLayer, attach_gpu_viewport
 from .guide import plaque_for
+from .hours import (
+    CHECK_HOUR,
+    day_part,
+    day_part_label,
+    is_resting_hour,
+    remember_visit,
+    return_line,
+)
 from .life import CareState, ambient_line, apply_call, apply_feed, apply_hide, apply_treat, decay
 from .license.session import create_license_session
 from .paths import default_user_data_dir
@@ -79,9 +87,10 @@ class BlotterView(QGraphicsView):
 
 
 class DeskWindow(QMainWindow):
-    def __init__(self, session: dict[str, Any] | None = None):
+    def __init__(self, session: dict[str, Any] | None = None, user_data_dir: Any = None):
         super().__init__()
-        self.session = session or create_license_session(user_data_dir=default_user_data_dir())
+        self._user_data_dir = user_data_dir if user_data_dir is not None else default_user_data_dir()
+        self.session = session or create_license_session(user_data_dir=self._user_data_dir)
         self.species: Species = species_by_key(DEFAULT_SPECIES_KEY)
         self.care = CareState()
         self.treat: TreatItem | None = None
@@ -91,12 +100,15 @@ class DeskWindow(QMainWindow):
         self._visit_phase = "wait"
         self._weather_acc = 0.0
         self.sky = weather_of()
+        self.part = day_part()
 
         self.setWindowTitle("ComputerPets — blotter")
         self.resize(1000, 860)
 
         self.scene = QGraphicsScene(0, 0, SCENE_W, SCENE_H, self)
         self.scene.addItem(DeskBackground(SCENE_W, SCENE_H))
+        self.hours = DayWash(SCENE_W, SCENE_H, self.part)
+        self.scene.addItem(self.hours)
         self.weather = WeatherLayer(SCENE_W, SCENE_H, self.sky)
         self.scene.addItem(self.weather)
         self.pet = LivingPetItem(self.species)
@@ -198,6 +210,10 @@ class DeskWindow(QMainWindow):
         self._refresh_vitals()
         self._reset_visit()
 
+    def closeEvent(self, event) -> None:
+        remember_visit(self.species.key, user_data_dir=self._user_data_dir)
+        super().closeEvent(event)
+
     def _say(self, text: str, hold_ms: float = 4200) -> None:
         if not text:
             return
@@ -207,10 +223,15 @@ class DeskWindow(QMainWindow):
         self.care.last_line = text
 
     def _greet(self) -> None:
-        line = weather_line(self.species.key, self.sky)
+        away = remember_visit(self.species.key, user_data_dir=self._user_data_dir)
+        line = return_line(away)
+        if not line:
+            line = weather_line(self.species.key, self.sky)
         if not line:
             line = self.species.greet[0] if self.species.greet else "Hello."
         self._say(line, 5200)
+        if is_resting_hour(self.species.key) and self.care.energy < 88:
+            self.pet.issue("sit")
 
     def _reset_visit(self) -> None:
         self._visit_ms = 0.0
@@ -253,8 +274,11 @@ class DeskWindow(QMainWindow):
         s = self.care
         blue = is_blue(s, self.species.key)
         self.pet.set_dull(blue)
+        self.part = day_part()
+        self.hours.set_part(self.part)
         self.vital_label.setText(
-            f"{self.species.name} · {s.vitals(blue=blue)} · {weather_label(self.sky)} · "
+            f"{self.species.name} · {s.vitals(blue=blue)} · {day_part_label(self.part)} · "
+            f"{weather_label(self.sky)} · "
             f"{visit_caption(self.species.key)}   "
             f"hunger {s.hunger}   mood {s.mood}   energy {s.energy}"
         )
@@ -384,6 +408,9 @@ class DeskWindow(QMainWindow):
                 if line:
                     self._say(line, 3600)
             self.pet.issue(mood)
+            return
+        if is_resting_hour(self.species.key) and self.care.energy < 88:
+            self.pet.issue("sit")
 
     def _unlock(self) -> None:
         dialog = UnlockDialog(self.session, self)
@@ -453,6 +480,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ok: species plaque for {guide.name} ({guide.latin})")
         print(f"ok: {weather_label(window.sky)} on the blotter")
         print(f"ok: {visit_caption(window.species.key)}")
+        print(f"ok: {day_part_label(day_part())} on the blotter")
+        fixture_part = day_part_label(day_part(CHECK_HOUR))
+        resting = is_resting_hour(window.species.key, CHECK_HOUR)
+        rest_word = "resting" if resting else "awake"
+        print(f"ok: fixture {CHECK_HOUR}:00 is {fixture_part}; {window.species.name} {rest_word}")
         print(window.renderer_label)
         QTimer.singleShot(250, app.quit)
     return app.exec()

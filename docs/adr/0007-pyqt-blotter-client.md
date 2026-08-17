@@ -35,7 +35,9 @@ A new **`client/`** tree is the first PyQt6 blotter client:
   feed, treat, hide / call back, and shed for the ten snakes.
 - Daily weather, today’s visitor, and snake shed are **ports** of
   `web/src/lib/pets/weather.ts`, `visitor.ts`, and `shed.ts` — not a
-  third house clock and not a rewrite of `desktop/`.
+  third house clock and not a rewrite of `desktop/`. The blotter now
+  keeps house hours from `hours.ts` (dawn / day / dusk / night, and
+  the thirty rest windows) on the same wood.
 - The Electron overlay remains a contract client. `desktop/` is not
   rewritten.
 

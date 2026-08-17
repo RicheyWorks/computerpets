@@ -129,8 +129,8 @@ class LivingPetItem(QGraphicsObject):
             self.anim = "walk"
             self.frame = 0
             self.acc = 0.0
-        elif cmd == "sit":
-            self.anim = "sit"
+        elif cmd in ("sit", "sleep"):
+            self.anim = cmd
 
     def advance_pet(self, dt: float, care: CareState, width: float) -> None:
         if care.hidden and self.cmd not in ("hide", "enter"):
@@ -231,10 +231,15 @@ class LivingPetItem(QGraphicsObject):
             self.update()
             return
 
-        if self.cmd in ("idle", "sit"):
+        if self.cmd in ("idle", "sit", "sleep"):
             if random.random() < dt * 0.18:
                 self.cmd = "wander"
                 self.target = None
-            self.anim = "sit" if self.cmd == "sit" else "idle"
+            if self.cmd == "sit":
+                self.anim = "sit"
+            elif self.cmd == "sleep":
+                self.anim = "sleep"
+            else:
+                self.anim = "idle"
             self.setPos(x, y)
             self.update()
