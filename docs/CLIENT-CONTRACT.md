@@ -290,5 +290,7 @@ The zip **contents** are not specified here — only the URL and signature.
 - One-time or IP-bound download URLs (jti is in the MAC; replay within 15 minutes is still possible)
 - Client-side JWT verification (optional; download already checks it)
 
-Admin revocation (`POST /api/admin/revoke` with `X-Admin-Key`) is an
-operator API, not part of the client handshake.
+Admin revocation (`POST /api/admin/revoke` with `X-Admin-Key`) and license
+audit (`GET /api/admin/licenses`, `GET /api/admin/licenses/{jti}`) are
+operator APIs, not part of the client handshake. The house `/admin` page
+uses the same header.
