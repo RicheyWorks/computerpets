@@ -4,9 +4,10 @@ const G = require("./gait.js");
 
 test("walkSpeed ease-out is not linear", () => {
   const base = 100;
-  const near = G.walkSpeed(14, 1, base);
-  const linearNear = (14 / 56) * base;
+  const near = G.walkSpeed(24, 1, base);
+  const linearNear = (24 / 56) * base;
   assert.equal(G.walkSpeed(56, 1, base), base);
+  assert.ok(near > 30);
   assert.ok(near < linearNear - 1);
 });
 

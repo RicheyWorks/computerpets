@@ -10,9 +10,10 @@ from computerpets_client.gait import (
 
 def test_walk_speed_ease_out_is_not_linear():
     base = 100.0
-    near = walk_speed(14, 1, base)
-    linear_near = (14 / 56) * base
+    near = walk_speed(24, 1, base)
+    linear_near = (24 / 56) * base
     assert walk_speed(56, 1, base) == base
+    assert near > 30
     assert near < linear_near - 1
 
 

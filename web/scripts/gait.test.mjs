@@ -25,12 +25,13 @@ test("living desk dropped the linear rail", () => {
 
 test("walkSpeed ease-out is not linear", () => {
   const base = 100;
-  const near = G.walkSpeed(14, 1, base);
+  const near = G.walkSpeed(24, 1, base);
   const mid = G.walkSpeed(28, 1, base);
   const far = G.walkSpeed(56, 1, base);
   assert.equal(far, base);
   assert.ok(Math.abs(mid - 50) < 0.01);
-  assert.ok(near < (14 / 56) * base - 1, "smoothstep is slower than linear in the last yards");
+  assert.ok(near < (24 / 56) * base - 1, "smoothstep is slower than linear in the last yards");
+  assert.ok(near > 30);
   assert.ok(G.walkSpeed(56, 0, base) < G.walkSpeed(56, 0.2, base));
   assert.ok(G.walkSpeed(56, 0.2, base) < G.walkSpeed(56, 0.4, base));
 });
