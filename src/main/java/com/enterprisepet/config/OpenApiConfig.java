@@ -29,7 +29,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("ComputerPets Backend API")
                         .description("Secure backend for premium desktop virtual pets. " +
-                                "Handles ownership verification across Steam, Ethereum NFTs, Microsoft Store, and Itch.io, " +
+                                "Handles ownership verification across Steam, Ethereum NFTs, Microsoft Store, Itch.io, and Epic Games Store, " +
                                 "and issues encrypted licenses for asset downloads.")
                         .version("1.0.0")
                         .contact(new Contact()
@@ -45,6 +45,7 @@ public class OpenApiConfig {
                         .addExamples("NFT Verification", ApiExamples.nftVerificationRequest())
                         .addExamples("Microsoft Verification", ApiExamples.microsoftVerificationRequest())
                         .addExamples("Itch Verification", ApiExamples.itchVerificationRequest())
+                        .addExamples("Epic Verification", ApiExamples.epicVerificationRequest())
                         .addExamples("Success Response", ApiExamples.verifySuccessResponse())
                         .addExamples("Ownership Denied", ApiExamples.verifyErrorResponse())
                         .addExamples("Download URL Response", ApiExamples.downloadSuccessResponse())

@@ -73,7 +73,7 @@ We follow modern Java and Spring Boot best practices. Please follow these guidel
 
 - Never log or expose secret values
 - Fail closed on any validation error
-- Validate all external input, especially from third-party providers (Steam, Microsoft, blockchain)
+- Validate all external input, especially from third-party providers (Steam, Microsoft, itch.io, Epic, blockchain)
 
 ### Example of Preferred Style
 

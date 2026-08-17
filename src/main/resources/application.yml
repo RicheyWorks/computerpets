@@ -53,6 +53,18 @@ itch:
   api-base-url: "https://api.itch.io"
   game-id: "${ITCH_GAME_ID:}"
 
+# Epic Games Store / EOS Ecom Web API (https://dev.epicgames.com/docs/web-api-ref/ecom-web-apis).
+# Placeholders are rejected at verify time — never treated as owned.
+# Requires a Developer Portal Trusted Server client with the Ecom feature.
+# Do not invent a live ComputerPets sandbox or catalog item id.
+epic:
+  client-id: "${EPIC_CLIENT_ID:YOUR_EPIC_CLIENT_ID}"
+  client-secret: "${EPIC_CLIENT_SECRET:YOUR_EPIC_CLIENT_SECRET}"
+  deployment-id: "${EPIC_DEPLOYMENT_ID:YOUR_EPIC_DEPLOYMENT_ID}"
+  api-base-url: "https://api.epicgames.dev"
+  sandbox-id: "${EPIC_SANDBOX_ID:}"
+  catalog-item-id: "${EPIC_CATALOG_ITEM_ID:}"
+
 # -----------------------------------------------------------------------------
 # Ownership Provider Configuration
 # -----------------------------------------------------------------------------
@@ -72,6 +84,8 @@ ownership:
     nft:
       enabled: true
     itch:
+      enabled: true
+    epic:
       enabled: true
 
 ethereum:
@@ -174,6 +188,12 @@ resilience4j:
         failureRateThreshold: 50
         waitDurationInOpenState: 30s
         permittedNumberOfCallsInHalfOpenState: 3
+      epic:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30s
+        permittedNumberOfCallsInHalfOpenState: 3
   retry:
     instances:
       steam:
@@ -186,5 +206,8 @@ resilience4j:
         maxAttempts: 2
         waitDuration: 300ms
       itch:
+        maxAttempts: 3
+        waitDuration: 500ms
+      epic:
         maxAttempts: 3
         waitDuration: 500ms

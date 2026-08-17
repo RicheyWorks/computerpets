@@ -2,7 +2,7 @@
 
 Welcome to the **ComputerPets** documentation hub.
 
-This repository contains the backend service for a secure, extensible platform that enables premium desktop virtual pets through verified ownership across multiple platforms (Steam, Ethereum NFTs, Microsoft Store, and Itch.io).
+This repository contains the backend service for a secure, extensible platform that enables premium desktop virtual pets through verified ownership across multiple platforms (Steam, Ethereum NFTs, Microsoft Store, Itch.io, and Epic Games Store).
 
 The documentation in this folder is designed to help you understand the system architecture, get the project running locally, and contribute effectively.
 
@@ -84,9 +84,9 @@ The long-term vision for ComputerPets includes:
 
 - A GPU-accelerated desktop client (planned PyQt6 application)
 - A live ComputerPets collection address in `ethereum.collections`
-- Additional ownership providers (Epic, Solana, etc.)
+- Additional ownership providers (Solana, etc.)
 
-Already shipped: Steam Web API + NFT allowlist + Itch.io download-key verify,
+Already shipped: Steam Web API + NFT allowlist + Itch.io download-key verify + Epic Games Store Ecom v3,
 JPA persistence and revocation, optional hwid, and the [client contract](CLIENT-CONTRACT.md).
 
 Current status and detailed future plans are documented in the **[Roadmap](ROADMAP.md)**

@@ -68,7 +68,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Enforced at download time when the license was originally issued with a device binding
 
 - **2.3 Resilience Patterns**
-  - [x] Circuit breakers + retries (Resilience4j) added for Steam, Microsoft, and NFT providers (with per-provider configuration in application.yml)
+  - [x] Circuit breakers + retries (Resilience4j) added for Steam, Microsoft, NFT, Itch, and Epic providers (with per-provider configuration in application.yml)
   - Timeouts and graceful degradation (in progress — fallbacks currently deny safely)
 
 - **2.4 Secret Management**
@@ -136,7 +136,8 @@ All critical items required before any public or limited production exposure hav
 - [x] Snakes go blue and shed; old coat stays on the blotter, all platforms
 - [x] Native client contract published (`docs/CLIENT-CONTRACT.md`) — license AES-256-GCM format, hwid rules, JWT, signed download URL
 - [x] Itch.io ownership provider (download-key receipt verify via `ITCH_API_KEY`)
-- Add more ownership providers (Epic, Solana, etc.)
+- [x] Epic Games Store ownership provider (EOS Auth client_credentials + Ecom v3 ownership)
+- Add more ownership providers (Solana, etc.) — Solana stays blocked until a live collection address exists
 - Richer admin UI for revocation and audit (`POST /api/admin/revoke` already ships)
 
 ---
@@ -161,6 +162,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (Itch.io ownership provider)
+**Last Updated:** 2026-08-17 (Epic Games Store ownership provider)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
