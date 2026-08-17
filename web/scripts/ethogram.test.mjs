@@ -24,6 +24,18 @@ const SNAKES = [
   "rosy_boa",
   "carpet_python",
 ];
+const SEA = [
+  "octopus",
+  "cuttlefish",
+  "nautilus",
+  "moon_jelly",
+  "sea_star",
+  "hermit_crab",
+  "horseshoe_crab",
+  "seahorse",
+  "manta",
+  "moray",
+];
 const HOUSE = [
   "red_panda",
   "cat",
@@ -52,7 +64,7 @@ function names(key) {
 }
 
 test("every living kind has an ethogram, and snakes never scratch", () => {
-  for (const key of [...HOUSE, ...SNAKES]) {
+  for (const key of [...HOUSE, ...SNAKES, ...SEA]) {
     assert.ok(E.actsFor(key).length > 0, key);
   }
   for (const key of SNAKES) {
@@ -60,6 +72,11 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
     assert.ok(acts.includes("tongue"), `${key} flicks`);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("yawn"), false, `${key} does not mammal-yawn`);
+  }
+  for (const key of SEA) {
+    const acts = names(key);
+    assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
+    assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
   for (const key of E.SCRATCH_KEYS) {
     assert.ok(names(key).includes("scratch"), `${key} scratches`);

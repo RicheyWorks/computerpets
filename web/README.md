@@ -1,6 +1,6 @@
 # Living desk
 
-Browser companion for ComputerPets. The full house of **30** species is awake — Rui and the original nineteen, plus ten named snakes. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue.
+Browser companion for ComputerPets. The full house of **40** species is awake — Rui and the original nineteen, plus ten named snakes and a tide of ten sea creatures. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue. The tide den at `/sea` teaches the marine guests.
 
 ## Run
 
@@ -34,4 +34,6 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 ## Advertising demos
 
 - `/meet` — house landing
-- `/demo/{slug}` — live shareable demo for every species (rui, miso, pip, thimble, … ember)
+- `/snakes` — the snake den
+- `/sea` — the tide den
+- `/demo/{slug}` — live shareable demo for every species (rui, miso, pip, thimble, … ember, cup)

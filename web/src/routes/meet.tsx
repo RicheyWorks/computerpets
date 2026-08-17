@@ -12,7 +12,7 @@ export const Route = createFileRoute("/meet")({
       { title: "Meet the house — ComputerPets" },
       {
         name: "description",
-        content: "Thirty living companions — including ten snakes — for Windows, Mac, tablets, and phones.",
+        content: "Forty living companions — including ten snakes and a tide of ten sea creatures — for Windows, Mac, tablets, and phones.",
       },
     ],
   }),
@@ -35,8 +35,8 @@ export function MeetPage() {
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
             Snakes go blue, then shed. The old coat stays on the blotter. The den is where you learn
-            the ten species — they crawl, and they stay. The study is where the rest of the house
-            walks.
+            the ten snakes. The tide is where you learn the ten sea creatures. The study is where
+            the rest of the house walks.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
@@ -44,6 +44,9 @@ export function MeetPage() {
             </Button>
             <Button asChild variant="secondary">
               <Link to="/snakes">The snake den</Link>
+            </Button>
+            <Button asChild variant="secondary">
+              <Link to="/sea">The tide</Link>
             </Button>
             <Button asChild variant="secondary">
               <Link to="/live">Phone and tablet</Link>
@@ -66,9 +69,10 @@ export function MeetPage() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Awake</p>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Thirty living demos.</h2>
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Forty living demos.</h2>
             <p className="mt-2 max-w-md text-sm text-muted">
-              The study is a field guide that walks. The ten snakes keep their own den.
+              The study is a field guide that walks. The ten snakes keep their own den. The tide
+              keeps the sea.
             </p>
           </div>
           <div className="hidden flex-col items-end gap-1 sm:flex">
@@ -77,6 +81,9 @@ export function MeetPage() {
             </Link>
             <Link to="/snakes" className="text-sm text-muted no-underline hover:text-fg">
               The snake den
+            </Link>
+            <Link to="/sea" className="text-sm text-muted no-underline hover:text-fg">
+              The tide
             </Link>
             <Link to="/catalog" className="text-sm text-muted no-underline hover:text-fg">
               Full catalog
@@ -119,7 +126,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
               <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
               <p className="mt-2 text-sm text-muted">
-                Transparent overlay. Treat, chase, hide. They walk the real screen. All thirty.
+                Transparent overlay. Treat, chase, hide. They walk the real screen. All forty.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
             </article>
@@ -127,7 +134,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
-                Open Live, then Add to Home Screen. Tap the blotter for a treat. Chase the ribbon. All thirty.
+                Open Live, then Add to Home Screen. Tap the blotter for a treat. Chase the ribbon. All forty.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">

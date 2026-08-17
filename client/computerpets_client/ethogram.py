@@ -61,6 +61,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "milk_snake": (_a("tongue", "tongue", 0.7, 4), _a("mimic", "freeze", 1.6, 2)),
     "rosy_boa": (_a("tongue", "tongue", 0.7, 3), _a("nest", "sit_hold", 2.6, 3, "sit")),
     "carpet_python": (_a("tongue", "tongue", 0.7, 4), _a("drape", "sit_hold", 2.2, 3, "sit")),
+    "octopus": (_a("hide", "sit_hold", 2.0, 3, "sit"), _a("jet", "dart", 0.8, 2), _a("taste", "wiggle", 1.0, 2)),
+    "cuttlefish": (_a("flush", "pulse", 0.9, 3), _a("hover", "bob", 1.4, 2)),
+    "nautilus": (_a("rise", "bob", 1.6, 3), _a("still", "freeze", 2.0, 2)),
+    "moon_jelly": (_a("pulse", "pulse", 1.2, 4), _a("drift", "bob", 1.6, 2)),
+    "sea_star": (_a("cling", "sit_hold", 2.8, 4, "sit"), _a("still", "freeze", 2.2, 2)),
+    "hermit_crab": (_a("inspect", "freeze", 1.2, 3), _a("shuffle", "wiggle", 0.9, 2)),
+    "horseshoe_crab": (_a("plow", "wiggle", 1.0, 2), _a("still", "freeze", 2.0, 3)),
+    "seahorse": (_a("hitch", "sit_hold", 2.4, 3, "sit"), _a("hover", "bob", 1.4, 2)),
+    "manta": (_a("soar", "pulse", 1.4, 3), _a("glide", "bob", 1.8, 2)),
+    "moray": (_a("gape", "gape", 1.2, 3), _a("hide", "sit_hold", 2.2, 3, "sit"), _a("dart", "dart", 0.8, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

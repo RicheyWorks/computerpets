@@ -31,6 +31,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   milk_snake: { shape: "egg", verb: "Egg" },
   rosy_boa: { shape: "crumb", verb: "Mouse" },
   carpet_python: { shape: "crumb", verb: "Morsel" },
+  octopus: { shape: "crumb", verb: "Crab" },
+  cuttlefish: { shape: "crumb", verb: "Shrimp" },
+  nautilus: { shape: "crumb", verb: "Morsel" },
+  moon_jelly: { shape: "flake", verb: "Plankton" },
+  sea_star: { shape: "pebble", verb: "Clam" },
+  hermit_crab: { shape: "crumb", verb: "Scrap" },
+  horseshoe_crab: { shape: "flake", verb: "Worm" },
+  seahorse: { shape: "flake", verb: "Brine" },
+  manta: { shape: "flake", verb: "Plankton" },
+  moray: { shape: "crumb", verb: "Fish" },
 };
 
 export function treatFor(key: string) {
@@ -68,4 +78,14 @@ export const GIFT_LINE: Record<string, string> = {
   milk_snake: "A stamp. Red, on purpose.",
   rosy_boa: "A warm pebble from the corner.",
   carpet_python: "A scrap of map. Accurate.",
+  octopus: "A lid I was finished with.",
+  cuttlefish: "A stripe I was not using.",
+  nautilus: "A chamber of quiet.",
+  moon_jelly: "A pulse that lasted.",
+  sea_star: "A damp I trusted.",
+  hermit_crab: "A lid that did not fit.",
+  horseshoe_crab: "A page from the molt.",
+  seahorse: "A hitch I was not using.",
+  manta: "A barrel, unused.",
+  moray: "A crevice I outgrew.",
 };

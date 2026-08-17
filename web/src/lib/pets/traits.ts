@@ -66,6 +66,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   milk_snake: T(80, 8, 0.82, 0.4, { nocturnal: true }, "mimic", "Mimic", "I am not who I look like. Hello."),
   rosy_boa: T(34, 4, 0.8, 0.12, {}, "nest", "Nest", "I am a blush that learned to crawl."),
   carpet_python: T(64, 8, 1.04, 0.28, { perch: true }, "chart", "Chart", "This pattern is a map. I am the country."),
+  octopus: T(48, 10, 0.88, 0.35, { aquatic: true }, "ink", "Ink", "I jet. Then I am a cup again."),
+  cuttlefish: T(40, 4, 0.9, 0.45, { aquatic: true }, "flush", "Flush", "I changed for you. Then I changed back."),
+  nautilus: T(36, 8, 0.95, 0.28, { aquatic: true }, "rise", "Rise", "I have been rising. You may wait."),
+  moon_jelly: T(28, 2, 0.82, 0.7, { aquatic: true }, "pulse", "Pulse", "I pulsed. That was hello."),
+  sea_star: T(14, 2, 0.7, 0.06, { aquatic: true }, "cling", "Cling", "I have not moved. That is hello."),
+  hermit_crab: T(56, 8, 0.72, 0.4, {}, "trade", "Trade", "This shell is temporary. Hello."),
+  horseshoe_crab: T(32, 4, 0.86, 0.18, {}, "molt", "Molt", "I am not a crab. Hello."),
+  seahorse: T(24, 2, 0.68, 0.22, { aquatic: true }, "hitch", "Hitch", "I hitched. You may look."),
+  manta: T(44, 3, 1.16, 0.5, { aquatic: true }, "soar", "Soar", "I saved you a length of sky."),
+  moray: T(70, 6, 1.02, 0.08, { aquatic: true }, "gape", "Gape", "The gape is air. Not a threat. Mostly."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

@@ -41,6 +41,16 @@ export const SPECIES: Species[] = [
   { key: "milk_snake", displayName: "Pueblo Milk Snake", rarity: "UNCOMMON", temperament: "Witty", habitat: "Stamp box", blurb: "Wears a warning she does not mean. Then asks for an egg." },
   { key: "rosy_boa", displayName: "Rosy Boa", rarity: "UNCOMMON", temperament: "Gentle", habitat: "Warm corner", blurb: "Nests in the warm corner and refuses to hurry." },
   { key: "carpet_python", displayName: "Jungle Carpet Python", rarity: "RARE", temperament: "Keen", habitat: "Map shelf", blurb: "Yellow and black cartography. Claims the shelf as a jungle." },
+  { key: "octopus", displayName: "Common Octopus", rarity: "UNCOMMON", temperament: "Clever", habitat: "Teacup hide", blurb: "Tastes the blotter with an arm, then hides in a cup." },
+  { key: "cuttlefish", displayName: "Common Cuttlefish", rarity: "UNCOMMON", temperament: "Flicker", habitat: "Lamp ripple", blurb: "Chromatophores rewrite the blotter. W-arms, then a hover." },
+  { key: "nautilus", displayName: "Chambered Nautilus", rarity: "RARE", temperament: "Ancient", habitat: "Paperweight", blurb: "Rises by gas and memory. Tentacle fringe, then a hover." },
+  { key: "moon_jelly", displayName: "Moon Jelly", rarity: "COMMON", temperament: "Vacant", habitat: "Glass of water", blurb: "No brain. Four moons in the bell. Still a guest." },
+  { key: "sea_star", displayName: "Ochre Sea Star", rarity: "COMMON", temperament: "Still", habitat: "Damp blotter", blurb: "Everts a stomach and calls it lunch. Not a fish." },
+  { key: "hermit_crab", displayName: "Common Hermit", rarity: "COMMON", temperament: "Fussy", habitat: "Stamp lid", blurb: "Tries the inkwell cap, the stamp box, your thimble." },
+  { key: "horseshoe_crab", displayName: "Atlantic Horseshoe Crab", rarity: "UNCOMMON", temperament: "Patient", habitat: "Sand tray", blurb: "Book-gills, a telson, blue blood. A living fossil on the sand." },
+  { key: "seahorse", displayName: "Lined Seahorse", rarity: "UNCOMMON", temperament: "Upright", habitat: "Pencil hitch", blurb: "Hovers like a question mark. Tail-wraps the pencil. Broods." },
+  { key: "manta", displayName: "Reef Manta", rarity: "RARE", temperament: "Soaring", habitat: "Sky of the bowl", blurb: "Filters the lamp-light. Barrels when the compile is kind." },
+  { key: "moray", displayName: "Green Moray", rarity: "RARE", temperament: "Watchful", habitat: "Book crevice", blurb: "Hides in a crevice. The mouth is not a yawn." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

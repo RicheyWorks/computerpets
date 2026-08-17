@@ -335,6 +335,16 @@ const TREAT_SHAPE = {
   milk_snake: "pebble",
   rosy_boa: "crumb",
   carpet_python: "crumb",
+  octopus: "crumb",
+  cuttlefish: "crumb",
+  nautilus: "crumb",
+  moon_jelly: "flake",
+  sea_star: "pebble",
+  hermit_crab: "crumb",
+  horseshoe_crab: "flake",
+  seahorse: "flake",
+  manta: "flake",
+  moray: "crumb",
 };
 
 function placeMark(kindName, x, hops = 0) {
@@ -982,6 +992,16 @@ const VISIT_LINE = {
   milk_snake: "I was a rumor. Then I was lunch-minded.",
   rosy_boa: "I borrowed the warm corner. I left it pink.",
   carpet_python: "I charted your shelf. You may land.",
+  octopus: "I tasted the rim. Then I was a cup again.",
+  cuttlefish: "I flushed. Then I left the weather.",
+  nautilus: "I rose through. The house can wait.",
+  moon_jelly: "I pulsed through. That counts.",
+  sea_star: "I clung. Then I unclung. Slowly.",
+  hermit_crab: "I measured the lids. None were free.",
+  horseshoe_crab: "I walked the sand. I am not a crab.",
+  seahorse: "I hitched your pencil. Briefly.",
+  manta: "I soared the bowl. You may keep the sky.",
+  moray: "I was the door. Then I was gone.",
 };
 
 let visit = null;

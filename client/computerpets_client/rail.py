@@ -1,11 +1,11 @@
-"""Study-style species rail: all thirty living keys, house then snakes."""
+"""Study-style species rail: all forty living keys, house then snakes then tide."""
 
 from __future__ import annotations
 
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QPushButton, QScrollArea, QWidget
 
-from .species import CATALOG_KEYS, HOUSE_KEYS, SNAKE_KEYS, SPECIES, Species
+from .species import CATALOG_KEYS, HOUSE_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, Species
 
 
 class SpeciesRail(QWidget):
@@ -26,6 +26,9 @@ class SpeciesRail(QWidget):
             row.addWidget(self._chip(SPECIES[key]))
         row.addWidget(self._label("Den"))
         for key in SNAKE_KEYS:
+            row.addWidget(self._chip(SPECIES[key]))
+        row.addWidget(self._label("Tide"))
+        for key in SEA_KEYS:
             row.addWidget(self._chip(SPECIES[key]))
         row.addStretch()
 

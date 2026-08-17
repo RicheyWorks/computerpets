@@ -1,8 +1,8 @@
 """Living kinds on the PyQt blotter.
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
-and the web / Electron roster. Snakes crawl; the others walk. This is not a
-new bestiary — it is the same thirty, painted here.
+and the web / Electron roster. Snakes crawl; the tide swims; the others walk.
+This is not a new bestiary — it is the same forty, painted here.
 """
 
 from __future__ import annotations
@@ -47,7 +47,20 @@ SNAKE_KEYS: tuple[str, ...] = (
     "carpet_python",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS
+SEA_KEYS: tuple[str, ...] = (
+    "octopus",
+    "cuttlefish",
+    "nautilus",
+    "moon_jelly",
+    "sea_star",
+    "hermit_crab",
+    "horseshoe_crab",
+    "seahorse",
+    "manta",
+    "moray",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS
 
 
 @dataclass(frozen=True)
@@ -964,6 +977,284 @@ BLUSH = _kind(
     hungry=("Even stones get a hollow.", "A supper would restore the pink."),
 )
 
+CUP = _kind(
+    key="octopus",
+    slug="cup",
+    name="Cup",
+    label="Common Octopus",
+    treat="Crab",
+    treat_shape="crumb",
+    silhouette="octopus",
+    walk=48,
+    aquatic=True,
+    palette=Palette(
+        body=(72, 56, 72),
+        belly=(168, 120, 112),
+        ear=(48, 36, 48),
+        ear_inner=(196, 148, 132),
+        nose=(40, 28, 32),
+        ring=(120, 72, 80),
+        accent=(40, 28, 36),
+    ),
+    greet=("I tasted the rim. You may look.", "The cup kept me. Hello.", "Eight hellos. I will use one."),
+    ambient=("This wood has a flavor. Neutral. Acceptable.", "I jet, then I crawl. The crawl is the office.", "I put an arm in. That is research."),
+    feed=("A crab of a treaty.", "I will take this by touch first.", "Warm. I will pocket it in a sucker."),
+    treat_lines=("A crab of a treaty.",),
+    hide=("I went inside the cup.",),
+    call=("I tasted the rim. You may look.",),
+    hungry=("A hide should not be this empty.", "A small supper would improve the arms."),
+)
+
+SEPIA = _kind(
+    key="cuttlefish",
+    slug="sepia",
+    name="Sepia",
+    label="Common Cuttlefish",
+    treat="Shrimp",
+    treat_shape="crumb",
+    silhouette="cuttle",
+    walk=40,
+    aquatic=True,
+    palette=Palette(
+        body=(196, 148, 72),
+        belly=(232, 208, 152),
+        ear=(88, 56, 40),
+        ear_inner=(248, 220, 160),
+        nose=(64, 40, 28),
+        ring=(72, 120, 140),
+        accent=(120, 72, 40),
+    ),
+    greet=("I changed for you. Then I changed back.", "The W arrived first. Hello.", "I hovered. That is the greeting."),
+    ambient=("The lamp is a weather I can wear.", "I wrote a stripe. I erased it.", "W-arms mean I am considering."),
+    feed=("A shrimp of a treaty.", "One more. For the next flush.", "Warm. Logged on the skin."),
+    treat_lines=("A shrimp of a treaty.",),
+    hide=("Behind a flush.",),
+    call=("I changed for you. Then I changed back.",),
+    hungry=("A costume should not be this empty.", "A shrimp would restore the weather."),
+)
+
+CHAMBER = _kind(
+    key="nautilus",
+    slug="chamber",
+    name="Chamber",
+    label="Chambered Nautilus",
+    treat="Morsel",
+    treat_shape="crumb",
+    silhouette="nautilus",
+    walk=36,
+    aquatic=True,
+    palette=Palette(
+        body=(196, 164, 112),
+        belly=(244, 232, 208),
+        ear=(72, 88, 120),
+        ear_inner=(220, 200, 168),
+        nose=(48, 40, 32),
+        ring=(232, 220, 196),
+        accent=(120, 88, 56),
+    ),
+    greet=("I have been rising. You may wait.", "The shell kept the older air.", "Hello from a room I built myself."),
+    ambient=("This chamber is occupied. The next one remembers.", "I jet. Then I consider the jet.", "I am a fossil who refused the ending."),
+    feed=("Tribute for the older office.", "One more. For the next chamber.", "Accepted. The gas will adjust."),
+    treat_lines=("Tribute for the older office.",),
+    hide=("In the older room.",),
+    call=("I have been rising. You may wait.",),
+    hungry=("A relic should not be hollow in the wrong way.", "A morsel would restore the rise."),
+)
+
+BELL = _kind(
+    key="moon_jelly",
+    slug="bell",
+    name="Bell",
+    label="Moon Jelly",
+    treat="Plankton",
+    treat_shape="flake",
+    silhouette="jelly",
+    walk=28,
+    aquatic=True,
+    palette=Palette(
+        body=(200, 216, 228),
+        belly=(236, 244, 248),
+        ear=(176, 196, 216),
+        ear_inner=(248, 220, 160),
+        nose=(160, 176, 196),
+        ring=(232, 196, 88),
+        accent=(140, 160, 184),
+    ),
+    greet=("I pulsed. That was hello.", "The glass is full of a person.", "You came back. I was already arriving."),
+    ambient=("I do not think the thought. I am the thought.", "Four moons. I keep them.", "Drift is a kind of work."),
+    feed=("A drift of food. Accepted.", "I will take this without a plan.", "Bright. Like a pulse that stayed."),
+    treat_lines=("A drift of food. Accepted.",),
+    hide=("A lower drift.",),
+    call=("I pulsed. That was hello.",),
+    hungry=("The glass is empty of moons of food.", "A flake would complete the pulse."),
+)
+
+OCHRE = _kind(
+    key="sea_star",
+    slug="ochre",
+    name="Ochre",
+    label="Ochre Sea Star",
+    treat="Clam",
+    treat_shape="pebble",
+    silhouette="star",
+    walk=14,
+    aquatic=True,
+    palette=Palette(
+        body=(196, 108, 48),
+        belly=(232, 176, 112),
+        ear=(140, 72, 32),
+        ear_inner=(220, 148, 80),
+        nose=(88, 48, 28),
+        ring=(120, 64, 32),
+        accent=(96, 52, 24),
+    ),
+    greet=("I have not moved. That is hello.", "The blotter kept my five.", "You may look. I am clinging."),
+    ambient=("Tube feet. Thousands. One opinion.", "I will eat this thought from the outside.", "Hurry is a weather I decline."),
+    feed=("I will finish this this afternoon.", "One more. Then I will be a star again.", "Damp. Correct."),
+    treat_lines=("I will finish this this afternoon.",),
+    hide=("I am still here. You will not notice.",),
+    call=("I have not moved. That is hello.",),
+    hungry=("Five arms and a hollow middle.", "A clam of a snack would restore the ochre."),
+)
+
+TENANT = _kind(
+    key="hermit_crab",
+    slug="tenant",
+    name="Tenant",
+    label="Common Hermit",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="hermit",
+    walk=56,
+    palette=Palette(
+        body=(176, 92, 56),
+        belly=(220, 168, 120),
+        ear=(88, 64, 48),
+        ear_inner=(200, 140, 96),
+        nose=(48, 32, 24),
+        ring=(148, 124, 88),
+        accent=(96, 52, 32),
+    ),
+    greet=("I inspected the lid. You may keep the desk.", "This shell is temporary. Hello.", "I have measured your thimble. Not yet."),
+    ambient=("There is a vacancy in the stamp box.", "I walk the floor. The sea can wait.", "A better house would improve my philosophy."),
+    feed=("Scrap diplomacy. Accepted.", "One more. For the moving fund.", "Damp. The lid records it."),
+    treat_lines=("Scrap diplomacy. Accepted.",),
+    hide=("The lid is closed. By me.",),
+    call=("I inspected the lid. You may keep the desk.",),
+    hungry=("A tenant should not rattle.", "A scrap would restore the lease."),
+)
+
+LEDGER = _kind(
+    key="horseshoe_crab",
+    slug="ledger",
+    name="Ledger",
+    label="Atlantic Horseshoe Crab",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="horseshoe",
+    walk=32,
+    palette=Palette(
+        body=(72, 64, 48),
+        belly=(196, 176, 120),
+        ear=(48, 40, 32),
+        ear_inner=(168, 148, 96),
+        nose=(32, 28, 20),
+        ring=(40, 36, 28),
+        accent=(36, 32, 24),
+    ),
+    greet=("I am not a crab. Hello.", "The tray kept my book.", "You may look. The telson is not a sting."),
+    ambient=("Book-gills. I read the water with them.", "Blue blood. I do not boast. I mention.", "I walked before your crabs had a name."),
+    feed=("A worm of a treaty.", "One more. For the next molt.", "Accepted. The ledger records it."),
+    treat_lines=("A worm of a treaty.",),
+    hide=("Under the tray.",),
+    call=("I am not a crab. Hello.",),
+    hungry=("A fossil should not be this empty.", "A worm would restore the pages."),
+)
+
+ANCHOR = _kind(
+    key="seahorse",
+    slug="anchor",
+    name="Anchor",
+    label="Lined Seahorse",
+    treat="Brine",
+    treat_shape="flake",
+    silhouette="seahorse",
+    walk=24,
+    aquatic=True,
+    palette=Palette(
+        body=(88, 108, 72),
+        belly=(196, 188, 120),
+        ear=(64, 80, 52),
+        ear_inner=(220, 208, 140),
+        nose=(48, 56, 36),
+        ring=(168, 156, 88),
+        accent=(48, 64, 40),
+    ),
+    greet=("I hitched. You may look.", "The pencil kept my question mark.", "Hello from the correct posture."),
+    ambient=("I do not swim so much as insist on vertical.", "The tail is a hand that found a stem.", "Lines down the side. I renew them."),
+    feed=("A brine of a treaty.", "I will take this without leaving the hitch.", "Accepted. The pouch notes it."),
+    treat_lines=("A brine of a treaty.",),
+    hide=("Hitched. Do not jostle.",),
+    call=("I hitched. You may look.",),
+    hungry=("A question mark should not be hollow.", "A brine would keep the lines bright."),
+)
+
+KITE = _kind(
+    key="manta",
+    slug="kite",
+    name="Kite",
+    label="Reef Manta",
+    treat="Plankton",
+    treat_shape="flake",
+    silhouette="manta",
+    walk=44,
+    aquatic=True,
+    palette=Palette(
+        body=(40, 56, 80),
+        belly=(236, 232, 224),
+        ear=(28, 36, 52),
+        ear_inner=(200, 208, 216),
+        nose=(24, 28, 36),
+        ring=(24, 24, 28),
+        accent=(20, 28, 40),
+    ),
+    greet=("I saved you a length of sky.", "Hello. Mind the wings. They are affectionate.", "I have been soaring the bowl for you."),
+    ambient=("I could be larger. I choose this.", "The lamp is a plankton I approve.", "A barrel is a bow if you believe."),
+    feed=("A filter of a treaty.", "One more drift. For the next soar.", "Warm. I will keep the current."),
+    treat_lines=("A filter of a treaty.",),
+    hide=("Above the bowl. Still a kite.",),
+    call=("I saved you a length of sky.",),
+    hungry=("A kite should not hang empty.", "A drift of food would restore the soar."),
+)
+
+DOOR = _kind(
+    key="moray",
+    slug="door",
+    name="Door",
+    label="Green Moray",
+    treat="Fish",
+    treat_shape="crumb",
+    silhouette="moray",
+    walk=70,
+    aquatic=True,
+    palette=Palette(
+        body=(48, 88, 56),
+        belly=(140, 168, 88),
+        ear=(32, 64, 40),
+        ear_inner=(120, 148, 72),
+        nose=(24, 40, 28),
+        ring=(32, 56, 36),
+        accent=(24, 48, 32),
+    ),
+    greet=("I was already in the door. Hello.", "The gape is air. Not a threat. Mostly.", "You flinched. Then you stayed. Correct."),
+    ambient=("I am a ribbon that chose a wall.", "The books make an excellent reef.", "I dart, then I am a door again."),
+    feed=("A fish of a treaty.", "I will take this without leaving the jamb.", "Accepted. The crevice records it."),
+    treat_lines=("A fish of a treaty.",),
+    hide=("Inside the jamb.",),
+    call=("I was already in the door. Hello.",),
+    hungry=("A door should not be this empty.", "A fish would restore the watch."),
+)
+
 ATLAS = _kind(
     key="carpet_python",
     slug="atlas",
@@ -1025,6 +1316,16 @@ _ALL: tuple[Species, ...] = (
     CORAL,
     BLUSH,
     ATLAS,
+    CUP,
+    SEPIA,
+    CHAMBER,
+    BELL,
+    OCHRE,
+    TENANT,
+    LEDGER,
+    ANCHOR,
+    KITE,
+    DOOR,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -1039,6 +1340,10 @@ def species_by_key(key: str | None) -> Species:
 
 def is_snake(key: str) -> bool:
     return key in SNAKE_KEYS
+
+
+def is_sea(key: str) -> bool:
+    return key in SEA_KEYS
 
 
 def next_species_key(key: str) -> str:

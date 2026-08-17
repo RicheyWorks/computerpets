@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-thirty REST windows, same return lines. Do not invent rest hours or copy.
+forty REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -48,6 +48,16 @@ REST: dict[str, tuple[int, int]] = {
     "milk_snake": (9, 18),
     "rosy_boa": (21, 7),
     "carpet_python": (8, 17),
+    "octopus": (8, 17),
+    "cuttlefish": (8, 17),
+    "nautilus": (8, 18),
+    "moon_jelly": (23, 5),
+    "sea_star": (21, 6),
+    "hermit_crab": (8, 18),
+    "horseshoe_crab": (8, 18),
+    "seahorse": (20, 6),
+    "manta": (21, 6),
+    "moray": (8, 17),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -85,6 +95,16 @@ HIDE_LINE: dict[str, str] = {
     "milk_snake": "Behind a rumor.",
     "rosy_boa": "The corner kept me.",
     "carpet_python": "Off the legend. Still on the shelf.",
+    "octopus": "I went inside the cup.",
+    "cuttlefish": "Behind a flush.",
+    "nautilus": "In the older room.",
+    "moon_jelly": "A lower drift.",
+    "sea_star": "I am still here. You will not notice.",
+    "hermit_crab": "The lid is closed. By me.",
+    "horseshoe_crab": "Under the tray.",
+    "seahorse": "Hitched. Do not jostle.",
+    "manta": "Above the bowl. Still a kite.",
+    "moray": "Inside the jamb.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -118,6 +138,16 @@ SNACK_LINE: dict[str, str] = {
     "milk_snake": "An egg of a treaty.",
     "rosy_boa": "A mouse of manners.",
     "carpet_python": "A morsel for the cartographer.",
+    "octopus": "A crab of a treaty.",
+    "cuttlefish": "A shrimp of a treaty.",
+    "nautilus": "Tribute for the older office.",
+    "moon_jelly": "A drift of food. Accepted.",
+    "sea_star": "I will finish this this afternoon.",
+    "hermit_crab": "Scrap diplomacy. Accepted.",
+    "horseshoe_crab": "A worm of a treaty.",
+    "seahorse": "A brine of a treaty.",
+    "manta": "A filter of a treaty.",
+    "moray": "A fish of a treaty.",
 }
 
 
