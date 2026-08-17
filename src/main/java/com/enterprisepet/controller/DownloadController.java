@@ -1,6 +1,7 @@
 package com.enterprisepet.controller;
 
 import com.enterprisepet.bundle.PetBundleService;
+import com.enterprisepet.dto.DownloadRequest;
 import com.enterprisepet.dto.DownloadResponse;
 import com.enterprisepet.dto.ErrorResponse;
 import com.enterprisepet.license.LicenseService;
@@ -58,7 +59,8 @@ public class DownloadController {
     /**
      * POST /api/download/{petKey}
      * Headers: Authorization: Bearer &lt;jwt from /api/verify&gt;
-     * Body:    { "ciphertext": "...", "iv": "...", "hwid": "..." }   (hwid only if the license is bound)
+     * Body:    { "ciphertext": "...", "iv": "...", "hwid": "...", "platform": "win" }
+     *          (hwid only if the license is bound; platform optional)
      * 200:     { "petKey": ..., "downloadUrl": ..., "expiresAt": ..., "jti": ..., ... }
      * 400:     unknown petKey
      * 401:     license missing / expired / tampered / revoked (Spring Security handles missing JWT separately)
@@ -72,7 +74,7 @@ public class DownloadController {
                 description = "Encrypted license (ciphertext + iv) from /api/verify. Include hwid when the license is bound.",
                 required = true,
                 content = @Content(mediaType = "application/json",
-                        schema = @Schema(implementation = com.enterprisepet.dto.DownloadRequest.class),
+                        schema = @Schema(implementation = DownloadRequest.class),
                         examples = {
                                 @ExampleObject(ref = "Download Request"),
                                 @ExampleObject(ref = "Download Request With Hwid")
@@ -100,11 +102,12 @@ public class DownloadController {
     )
     @PostMapping("/{petKey}")
     public ResponseEntity<?> download(@PathVariable("petKey") String petKey,
-                                      @RequestBody Map<String, String> body) {
-        return telemetry.download(petKey, () -> executeDownload(petKey, body));
+                                      @RequestParam(value = "platform", required = false) String platform,
+                                      @RequestBody DownloadRequest body) {
+        return telemetry.download(petKey, () -> executeDownload(petKey, body, platform));
     }
 
-    private ResponseEntity<?> executeDownload(String petKey, Map<String, String> body) {
+    private ResponseEntity<?> executeDownload(String petKey, DownloadRequest body, String queryPlatform) {
         Optional<PetType> petOpt = petCatalog.find(petKey);
         if (petOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(
@@ -116,7 +119,7 @@ public class DownloadController {
         PetType pet = petOpt.get();
 
         Optional<LicensePayload> licenseOpt = licenseService.validate(
-            body.get("ciphertext"), body.get("iv")
+            body.ciphertext(), body.iv()
         );
         if (licenseOpt.isEmpty()) {
             return ResponseEntity.status(401).body(Map.of(
@@ -134,7 +137,7 @@ public class DownloadController {
         }
 
         // Phase 2.2: if the license was bound to a hardware ID, require the client to prove it again
-        String suppliedHwid = body.get("hwid");
+        String suppliedHwid = body.hwid();
         if (license.hwid() != null && !license.hwid().isBlank()) {
             if (suppliedHwid == null || !suppliedHwid.equals(license.hwid())) {
                 return ResponseEntity.status(403).body(Map.of(
@@ -162,7 +165,8 @@ public class DownloadController {
 
         // Phase 2.1: record usage + bind signed URL to this specific jti
         licenseService.recordDownload(license.jti());
-        var manifest = bundleService.manifestFor(pet, license.owner(), license.jti());
+        String platform = firstNonBlank(body.platform(), queryPlatform);
+        var manifest = bundleService.manifestFor(pet, license.owner(), license.jti(), platform);
         return ResponseEntity.ok(manifest.body());
     }
 
@@ -173,5 +177,15 @@ public class DownloadController {
         if (auth == null || !auth.isAuthenticated()) return null;
         Object principal = auth.getPrincipal();
         return principal instanceof Map<?, ?> m ? (Map<String, Object>) m : null;
+    }
+
+    private static String firstNonBlank(String a, String b) {
+        if (a != null && !a.isBlank()) {
+            return a;
+        }
+        if (b != null && !b.isBlank()) {
+            return b;
+        }
+        return null;
     }
 }

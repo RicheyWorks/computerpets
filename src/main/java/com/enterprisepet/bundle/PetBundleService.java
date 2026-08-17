@@ -15,15 +15,21 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Builds a signed, short-lived download URL for a pet bundle.
  *
  * <p>In production the actual {@code .zip} would live on S3 / CloudFront / R2 and the URL
  * would be a presigned download. Here we emit a stable URL pattern plus an HMAC-SHA256
- * token over {@code petKey|owner|expiry}, which an edge worker (or this same backend's
+ * token over {@code petKey|owner|jti|exp}, which an edge worker (or this same backend's
  * download proxy) can verify before serving bytes. This keeps the master key off the
  * client and bounds replay to {@link #DOWNLOAD_URL_TTL}.
+ *
+ * <p>When {@link BundleCatalog} has a matching row the manifest also carries
+ * {@code version}, {@code platform}, and {@code sha256}. Those fields are omitted
+ * when the catalog is empty or no row matches — this service does not invent a hash.
+ * The HMAC always signs the pet catalog key, never the object filename.
  */
 @Service
 public class PetBundleService {
@@ -49,7 +55,13 @@ public class PetBundleService {
     @Value("${bundle.signing-key}")
     private String signingKey;
 
+    private final BundleCatalog catalog;
+
     private SecretKeySpec signingKeySpec;
+
+    public PetBundleService(BundleCatalog catalog) {
+        this.catalog = catalog == null ? BundleCatalog.empty() : catalog;
+    }
 
     @PostConstruct
     void init() {
@@ -78,6 +90,14 @@ public class PetBundleService {
      * This binds the short-lived signed URL to a specific license instance (Phase 2.1 jti hardening).
      */
     public BundleManifest manifestFor(PetType pet, String owner, String jti) {
+        return manifestFor(pet, owner, jti, null);
+    }
+
+    /**
+     * @param platform client-requested platform ({@code win}/{@code mac}/{@code linux}/{@code any});
+     *                 blank or unknown falls through to {@code bundle.default-platform}
+     */
+    public BundleManifest manifestFor(PetType pet, String owner, String jti, String platform) {
         Instant expiresAt = Instant.now().plus(DOWNLOAD_URL_TTL);
 
         String toSign = (jti == null || jti.isBlank())
@@ -86,21 +106,24 @@ public class PetBundleService {
 
         String token = sign(toSign);
 
+        Optional<BundleCatalog.Artifact> artifact = catalog.resolve(pet.key(), platform);
+        String objectKey = artifact.map(BundleCatalog.Artifact::path).orElse(pet.key() + ".zip");
+
         // jti must appear on the URL when it is in the MAC, otherwise an edge
         // worker cannot reconstruct petKey|owner|jti|exp from query params.
         String url = (jti == null || jti.isBlank())
             ? String.format(
-                "%s/%s.zip?owner=%s&exp=%d&sig=%s",
+                "%s/%s?owner=%s&exp=%d&sig=%s",
                 stripTrailingSlash(bundleBaseUrl),
-                pet.key(),
+                objectKey,
                 urlEncode(owner),
                 expiresAt.getEpochSecond(),
                 token
             )
             : String.format(
-                "%s/%s.zip?owner=%s&jti=%s&exp=%d&sig=%s",
+                "%s/%s?owner=%s&jti=%s&exp=%d&sig=%s",
                 stripTrailingSlash(bundleBaseUrl),
-                pet.key(),
+                objectKey,
                 urlEncode(owner),
                 urlEncode(jti),
                 expiresAt.getEpochSecond(),
@@ -117,13 +140,19 @@ public class PetBundleService {
         if (jti != null) {
             manifest.put("jti", jti); // helpful for clients that want to correlate
         }
+        artifact.ifPresent(a -> {
+            manifest.put("version", a.version());
+            manifest.put("platform", a.platform());
+            manifest.put("sha256", a.sha256());
+            manifest.put("filename", a.path());
+        });
 
         return new BundleManifest(pet.key(), url, expiresAt.toString(), manifest);
     }
 
     /** Backward-compatible overload (jti omitted). */
     public BundleManifest manifestFor(PetType pet, String owner) {
-        return manifestFor(pet, owner, null);
+        return manifestFor(pet, owner, null, null);
     }
 
     private String sign(String input) {

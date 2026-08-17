@@ -120,6 +120,9 @@ class DownloadControllerIntegrationTest {
         assertThat(resp.getBody().get("expiresAt")).isNotNull();
         String downloadUrl = String.valueOf(resp.getBody().get("downloadUrl"));
         assertThat(downloadUrl).contains("jti=" + resp.getBody().get("jti"));
+        assertThat(downloadUrl).contains("/red_panda.zip?");
+        // Empty bundle.catalog: signed URL only — no invented hash.
+        assertThat(resp.getBody()).doesNotContainKeys("sha256", "version", "platform", "filename");
     }
 
     @Test

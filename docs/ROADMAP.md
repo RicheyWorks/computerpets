@@ -136,6 +136,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Ten named snakes on desk, demos, Live, Meet, and Windows overlay
 - [x] Snakes go blue and shed; old coat stays on the blotter, all platforms
 - [x] Native client contract published (`docs/CLIENT-CONTRACT.md`) — license AES-256-GCM format, hwid rules, JWT, signed download URL
+- [x] Bundle artifact catalog — optional version / platform / sha256 on the signed manifest (`bundle.catalog`; empty until a zip is published)
 - [x] Electron overlay first contract slice (`desktop/license/`) — Steam verify, AES-256-GCM decrypt, hwid bind, signed download (no invented NFT address)
 - [x] PyQt6 blotter client (`client/`) — living Rui, Qt OpenGL viewport (not a custom shader engine), same contract unlock, feed / treat / hide
 - [x] Itch.io ownership provider (download-key receipt verify via `ITCH_API_KEY`)

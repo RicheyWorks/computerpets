@@ -23,10 +23,15 @@ class PetBundleServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new PetBundleService();
-        ReflectionTestUtils.setField(service, "bundleBaseUrl", BASE_URL);
-        ReflectionTestUtils.setField(service, "signingKey", SIGNING_KEY);
-        service.init();
+        service = serviceWith(BundleCatalog.empty());
+    }
+
+    private static PetBundleService serviceWith(BundleCatalog catalog) {
+        PetBundleService s = new PetBundleService(catalog);
+        ReflectionTestUtils.setField(s, "bundleBaseUrl", BASE_URL);
+        ReflectionTestUtils.setField(s, "signingKey", SIGNING_KEY);
+        s.init();
+        return s;
     }
 
     @Test
@@ -46,6 +51,7 @@ class PetBundleServiceTest {
         String sig = queryParam(uri.getRawQuery(), "sig");
         String expected = hmac("red_panda|steam:owner|jti-123|" + exp);
         assertThat(sig).isEqualTo(expected);
+        assertThat(manifest.body()).doesNotContainKeys("sha256", "version", "platform", "filename");
     }
 
     @Test
@@ -60,6 +66,55 @@ class PetBundleServiceTest {
         String exp = queryParam(uri.getRawQuery(), "exp");
         String sig = queryParam(uri.getRawQuery(), "sig");
         assertThat(sig).isEqualTo(hmac("cat|owner1|" + exp));
+        assertThat(manifest.body()).doesNotContainKeys("sha256", "version", "platform", "filename");
+    }
+
+    @Test
+    @DisplayName("catalog row adds version/platform/sha256 and uses the catalog path; HMAC still signs petKey")
+    void manifestFor_catalogRow_usesPathAndKeepsPetKeyInMac() throws Exception {
+        // Test fixture hash — not a published zip.
+        String testSha = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+        BundleProperties props = new BundleProperties();
+        BundleProperties.CatalogEntry entry = new BundleProperties.CatalogEntry();
+        entry.setPetKey("red_panda");
+        entry.setVersion("1.0.0");
+        entry.setPlatform("win");
+        entry.setSha256(testSha);
+        entry.setPath("red_panda-win-1.0.0.zip");
+        props.setCatalog(java.util.List.of(entry));
+
+        PetBundleService cataloged = serviceWith(new BundleCatalog(props));
+        var manifest = cataloged.manifestFor(PetType.RED_PANDA, "steam:owner", "jti-123", "win");
+
+        URI uri = URI.create(manifest.downloadUrl());
+        assertThat(uri.getPath()).isEqualTo("/bundles/red_panda-win-1.0.0.zip");
+        assertThat(manifest.body().get("version")).isEqualTo("1.0.0");
+        assertThat(manifest.body().get("platform")).isEqualTo("win");
+        assertThat(manifest.body().get("sha256")).isEqualTo(testSha);
+        assertThat(manifest.body().get("filename")).isEqualTo("red_panda-win-1.0.0.zip");
+
+        String exp = queryParam(uri.getRawQuery(), "exp");
+        String sig = queryParam(uri.getRawQuery(), "sig");
+        assertThat(sig).isEqualTo(hmac("red_panda|steam:owner|jti-123|" + exp));
+    }
+
+    @Test
+    @DisplayName("no matching catalog platform keeps {petKey}.zip and does not claim sha256")
+    void manifestFor_noMatchingPlatform_omitsHash() {
+        String testSha = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef";
+        BundleProperties props = new BundleProperties();
+        BundleProperties.CatalogEntry entry = new BundleProperties.CatalogEntry();
+        entry.setPetKey("red_panda");
+        entry.setVersion("1.0.0");
+        entry.setPlatform("win");
+        entry.setSha256(testSha);
+        props.setCatalog(java.util.List.of(entry));
+
+        PetBundleService cataloged = serviceWith(new BundleCatalog(props));
+        var manifest = cataloged.manifestFor(PetType.RED_PANDA, "owner", "jti-1", "mac");
+
+        assertThat(manifest.downloadUrl()).contains("/red_panda.zip?");
+        assertThat(manifest.body()).doesNotContainKeys("sha256", "version", "platform", "filename");
     }
 
     private static String queryParam(String query, String name) {

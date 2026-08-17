@@ -17,6 +17,7 @@ bundle zip layouts, NFT collection addresses, or a hardware-fingerprint algorith
 
 ```
 GET  /api/verify/providers
+GET  /api/bundles/{petKey}      →  catalog rows (may be empty)
 POST /api/verify/{provider}     →  encrypted license + JWT
 POST /api/download/{petKey}     →  signed CDN URL  (Bearer JWT required)
 GET  {downloadUrl}              →  pet .zip bytes (CDN / edge, not this service)
@@ -25,7 +26,7 @@ GET  {downloadUrl}              →  pet .zip bytes (CDN / edge, not this servic
 The encrypted license is the durable entitlement. The JWT only proves the
 caller recently passed verify. The signed URL is a 15-minute fetch ticket.
 
-Discovery endpoints (`/api/verify/**`, `/api/pets/**`) are unauthenticated.
+Discovery endpoints (`/api/verify/**`, `/api/pets/**`, `/api/bundles/**`) are unauthenticated.
 `POST /api/download/**` requires `Authorization: Bearer <jwt>`.
 
 Rate limits (per client IP, Redis-backed, shared across app instances):
@@ -231,11 +232,15 @@ Body:
 {
   "ciphertext": "<from verify license.ciphertext>",
   "iv": "<from verify license.iv>",
-  "hwid": "<same string as verify, only if the license is bound>"
+  "hwid": "<same string as verify, only if the license is bound>",
+  "platform": "win"
 }
 ```
 
 `{petKey}` must be the licensed pet (and the JWT `pet` claim).
+`platform` is optional: `win`, `mac`, `linux`, or `any`. Query
+`?platform=` is accepted the same way. Unsupported or omitted values
+use `bundle.default-platform` (default `win`).
 
 **200** — signed manifest (this is `PetBundleService.BundleManifest.body`):
 
@@ -250,6 +255,19 @@ Body:
   "jti": "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"
 }
 ```
+
+When `bundle.catalog` has a row for that pet and platform, the same
+object also carries `version`, `platform`, `sha256`, and `filename`
+(the object key). Those fields are **absent** when the catalog is empty
+or no row matches. `sha256` is never invented.
+
+`GET /api/bundles/{petKey}` (unauthenticated, like `/api/pets`) lists
+the configured rows. Unknown pet → **404**. Known pet with nothing
+published → `{ "artifacts": [] }`.
+
+Unknown `petKey` values, placeholder / short / non-hex `sha256`, and
+duplicate `petKey`+`platform` rows fail process startup. The house
+prefers a refused boot over a typo that ships.
 
 A successful download sets `IssuedLicense.lastUsedAt`. That is audit only;
 the URL is **not** one-time-use.
@@ -282,21 +300,27 @@ URL shape when the license has a `jti` (always true for licenses issued
 by this backend):
 
 ```
-{bundle.base-url}/{petKey}.zip?owner={url-encoded}&jti={url-encoded}&exp={epoch}&sig={sig}
+{bundle.base-url}/{object-key}?owner={url-encoded}&jti={url-encoded}&exp={epoch}&sig={sig}
 ```
+
+`object-key` is the catalog `path` when a row matches, otherwise
+`{petKey}.zip`. The HMAC still signs the pet catalog key (`red_panda`),
+not the filename.
 
 `owner` and `jti` are `application/x-www-form-urlencoded`
 (`URLEncoder`, UTF-8). `jti` is in the query string so an edge verifier
 can rebuild the exact MAC input.
 
 Default `bundle.base-url` is `https://cdn.enterprisepet.example/bundles`.
-The zip **contents** are not specified here — only the URL and signature.
+The zip **contents** are not specified here — only the URL, signature,
+and optional catalog metadata.
 
 ---
 
 ## 8. What this contract does not include
 
 - An overlay protocol or asset pack layout (the PyQt blotter in `client/` and the Electron overlay in `desktop/` implement this handshake; they do not add endpoints)
+- Zip **contents** or an update protocol (`bundle.catalog` names version, platform, and sha256 when a row is configured; it does not describe what is inside the zip)
 - A live NFT collection address (`ethereum.collections` stays empty until one is deployed)
 - A prescribed HWID recipe (MAC, disk serial, …)
 - One-time or IP-bound download URLs (jti is in the MAC; replay within 15 minutes is still possible)

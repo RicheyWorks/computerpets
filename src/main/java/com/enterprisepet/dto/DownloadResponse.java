@@ -24,5 +24,26 @@ public record DownloadResponse(
 
         @Schema(description = "License jti bound into the HMAC (present for licenses issued by this backend)",
                 example = "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80")
-        String jti
+        String jti,
+
+        @Schema(description = "Catalog version when a bundle.catalog row matches; omitted otherwise",
+                example = "1.0.0",
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String version,
+
+        @Schema(description = "Catalog platform when a row matches (win, mac, linux, any)",
+                example = "win",
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String platform,
+
+        @Schema(description = "Lowercase hex sha256 of the zip, only when a catalog row matches. "
+                + "Never invented for an unpublished artifact.",
+                example = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String sha256,
+
+        @Schema(description = "Object key under bundle.base-url when a catalog row matches",
+                example = "red_panda-win-1.0.0.zip",
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String filename
 ) {}
