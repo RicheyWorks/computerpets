@@ -33,10 +33,13 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 // Public discovery / verification — clients call these BEFORE they have a JWT.
+                // Liveness/readiness must stay anonymous: Kubernetes probes send no JWT.
                 .requestMatchers("/api/public/**",
                                  "/api/verify/**",
                                  "/api/pets/**",
-                                 "/actuator/health").permitAll()
+                                 "/actuator/health",
+                                 "/actuator/health/liveness",
+                                 "/actuator/health/readiness").permitAll()
                 // Admin operations use a separate pre-shared key (X-Admin-Key) — handled inside the controller.
                 .requestMatchers("/api/admin/**").permitAll()
                 // Bundle download requires a freshly-issued JWT from /api/verify/{provider}.

@@ -100,6 +100,34 @@ For local testing without real Microsoft authentication:
 $env:MICROSOFT_DEV_MODE = "true"
 ```
 
+Never set this with `SPRING_PROFILES_ACTIVE=prod`. `ProductionProfileGuard` refuses to start.
+
+---
+
+### 5. Spring profiles
+
+| Profile | Activate | Database | Redis | `microsoft.dev-mode` | `show-sql` / H2 console |
+|---------|----------|----------|-------|----------------------|-------------------------|
+| *(none)* | `mvn spring-boot:run`, tests | H2 in `application.yml` | Redis default; tests overlay `memory` | env, default false | on |
+| `dev` | `SPRING_PROFILES_ACTIVE=dev` (docker-compose) | H2 unless `SPRING_DATASOURCE_*` is set (compose sets Postgres) | Redis default; `RATE_LIMIT_BACKEND=memory` allowed | env, default false | on |
+| `staging` | `SPRING_PROFILES_ACTIVE=staging` | Postgres required (`SPRING_DATASOURCE_URL` / user / password) | `rate-limit.backend=redis` | false in the file (env can still override) | off |
+| `prod` | `SPRING_PROFILES_ACTIVE=prod` | Postgres required | Redis required | **false**, fail-hard if env turns it on | off |
+
+Same YAML + environment-variable style as `application.yml`. There is no second config format.
+
+```bash
+# Local, explicit dev profile (still H2 unless you set SPRING_DATASOURCE_*)
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+
+# Production shape — will not start without Postgres URL, Redis, and real secrets
+export SPRING_PROFILES_ACTIVE=prod
+export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/computerpets
+export SPRING_DATASOURCE_USERNAME=computerpets
+export SPRING_DATASOURCE_PASSWORD=...
+```
+
+`prod` also rejects `RATE_LIMIT_BACKEND=memory` and `jdbc:h2:` URLs even if you set them in the environment.
+
 ---
 
 ## Running the Project
@@ -205,6 +233,37 @@ When the client is developed, it will be located in a separate directory (likely
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | No | empty | OTLP/HTTP collector **base** URL (e.g. `http://localhost:4318`). Empty = no export; the app starts without a collector. |
 | `OTEL_EXPORTER_OTLP_TRACES_ENDPOINT` | No | empty | Full traces URL if you already have `/v1/traces`. Overrides the base URL when set. |
 | `TRACING_SAMPLING_PROBABILITY` | No | 1.0 | Micrometer sampling rate (`0.0`–`1.0`). |
+| `SPRING_PROFILES_ACTIVE` | No | *(none)* | `dev` / `staging` / `prod`. `prod` is the fail-hard production shape. |
+| `SPRING_DATASOURCE_URL` | `staging` / `prod` | H2 in default/`dev` | Postgres JDBC URL. Required when those profiles are active. |
+| `SPRING_DATASOURCE_USERNAME` | `staging` / `prod` | `sa` (H2) | Postgres user. |
+| `SPRING_DATASOURCE_PASSWORD` | `staging` / `prod` | empty (H2) | Postgres password. |
+
+---
+
+## Kubernetes
+
+Manifests live in `deploy/k8s/` (Kustomize, not Helm). They run the same
+stack as compose: app + Postgres 16 + Redis 7, with
+`SPRING_PROFILES_ACTIVE=prod` and the existing Actuator probes.
+
+```bash
+# 1. Put real keys in deploy/k8s/secret.yaml (see table above)
+# 2. Apply
+kubectl apply -k deploy/k8s
+```
+
+Required Secret keys: `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`,
+`BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`, plus Postgres username/password.
+Redis has no password setting in the app — only `REDIS_HOST` /
+`REDIS_PORT` on the ConfigMap.
+
+Blue/green is two Deployments (`computerpets-blue` live,
+`computerpets-green` at 0 replicas) and a Service selector
+`color=blue`. Flip the selector after green is Ready. Full commands
+are in [deploy/k8s/README.md](../deploy/k8s/README.md).
+
+Optional `ingress.yaml` is not in the kustomization; apply it only if
+you have an Ingress controller.
 
 ---
 
@@ -352,7 +411,7 @@ ethereum:
 
 ### Application Fails to Start
 **Problem**: Errors about missing `JWT_SECRET_KEY` or `BUNDLE_SIGNING_KEY`  
-**Solution**: Set the three required environment variables before running the application.
+**Solution**: Set the four required environment variables (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) before running the application.
 
 ### Using the Default License Key
 **Problem**: Application refuses to start with message about the committed default key  

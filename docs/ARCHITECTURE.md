@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (Micrometer + OpenTelemetry tracing) |
+| **Last Updated** | 2026-08-17 (Spring profiles + Kubernetes manifests) |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -154,19 +154,18 @@ The diagram shows the plugin boundary clearly: adding a new platform (Gumroad, S
 
 ## 3. Deployment Architecture
 
-### Current Deployment Model (Development / Single Instance)
-The service is currently designed and run as a single Spring Boot executable JAR:
+### Current Deployment Model
+The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile` image:
 
 - One JVM process listening on port 8080 (configurable via `server.port`).
-- In-memory H2 database (`jdbc:h2:mem:enterprisepet`, `ddl-auto=create-drop`).
-- Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503.
+- Spring profiles (`dev` / `staging` / `prod`) overlay the same `application.yml` keys. Default and `dev` keep H2 unless `SPRING_DATASOURCE_*` is set (`docker-compose.yml` already points `dev` at Postgres). `staging` and `prod` require Postgres and have no H2 fallback.
+- Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`.
 - Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` remains the ledger; Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked license). HTTP download may still 503 from the rate-limit filter.
-- All three critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`) loaded from environment variables with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values.
-- No `Dockerfile`, no Kubernetes manifests, and no CI image-building pipeline exist in the repository today.
-- External dependencies (Alchemy, Microsoft Collections, Steam Web API, future CDN) are called directly over the public internet with no circuit breakers or retries configured.
-- The desktop client (PyQt6 or similar) talks directly to this single backend instance.
-
-This model is excellent for local development, fast feedback loops, and early integration testing with the desktop client. It is **not** suitable for production or any multi-user deployment.
+- Critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, `ADMIN_API_KEY`) loaded from environment variables with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values.
+- `ProductionProfileGuard` (`@Profile("prod")`) refuses Microsoft Store `dev-mode`, an in-memory rate-limit store, and an H2 JDBC URL even when environment variables try to override `application-prod.yml`.
+- `Dockerfile` + GitHub Actions GHCR publish + `deploy/k8s/` (Deployment/Service, in-cluster Postgres/Redis scaffolding, optional Ingress). Blue/green is two Deployments and a Service `color` selector — not a service mesh.
+- External dependencies (Alchemy, Microsoft Collections, Steam Web API, itch.io, Epic, future CDN) are called directly; Resilience4j circuit breakers wrap the providers.
+- The living desk (`web/`) and Electron overlay (`desktop/`) talk to this backend.
 
 ### Recommended Production Topology
 For any non-trivial user base or multi-region deployment, the following production architecture is strongly recommended:
@@ -244,13 +243,12 @@ flowchart TB
 - **Resilience & Zero-Downtime** — Multiple replicas + readiness probes + external durable stores allow rolling updates and node failures without losing the ability to validate existing licenses (they are cryptographically self-contained).
 - **Security Boundaries** — Only the backend pods ever receive the master AES key and signing keys. The CDN, load balancers, and clients never see them.
 - **Current Gaps** (must be closed before production):
-  - No `Dockerfile` or multi-stage build.
-  - No Kubernetes manifests, Helm chart, or Kustomize overlays.
-  - No CI pipeline that produces and signs a container image.
-  - Actuator is not enabled in `pom.xml` (the security config already allows `/actuator/health`, but the dependency and endpoints are missing).
-  - No liveness/readiness probe implementations beyond the default.
-  - No Terraform/Pulumi/Crossplane definitions for the surrounding infrastructure (Postgres, Redis, secrets, CDN, WAF).
-  - Secrets are still accepted via plain environment variables (acceptable only behind a proper secrets operator).
+  - ~~No `Dockerfile` or multi-stage build.~~
+  - ~~No Kubernetes manifests, Helm chart, or Kustomize overlays.~~ Manifests in `deploy/k8s/` (not Helm). In-cluster Postgres/Redis are compose-equivalent scaffolding, not a managed HA pair.
+  - CI publishes the image to GHCR; image signing is still open.
+  - ~~Actuator is not enabled.~~ Probes are `/actuator/health/liveness` and `/readiness` (permitted without a JWT).
+  - No Terraform/Pulumi/Crossplane definitions for the surrounding infrastructure (managed Postgres, Redis, secrets, CDN, WAF).
+  - Secrets are still accepted via plain environment variables / a Kubernetes `Secret` (acceptable only behind a proper secrets operator).
 
 This deployment view directly addresses the multi-instance and rate-limiting concerns already called out in the README and `AUDIT.md`.
 
@@ -296,7 +294,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
 - **`EnterprisePetBackendApplication`**: Standard `@SpringBootApplication`.
 - **Observability (Phase 3.2)**: Micrometer Observation + `micrometer-tracing-bridge-otel`. HTTP server spans on `/api/verify/**` and `/api/download/**`; RestClient client spans for Steam/Itch/Epic/Microsoft; `eth_call` spans for NFT. Business timers `enterprisepet.verify` (provider + outcome) and `enterprisepet.download`. OTLP/HTTP export only when `OTEL_EXPORTER_OTLP_ENDPOINT` is set. Prometheus remains `/actuator/prometheus`.
-- **Config**: `application.yml` with heavy use of env-var overrides and `@PostConstruct` guard clauses that refuse to start on missing/weak/placeholder secrets.
+- **Config**: `application.yml` plus `application-dev.yml` / `application-staging.yml` / `application-prod.yml` (same YAML + env-var style). `@PostConstruct` guards refuse missing/weak/placeholder secrets. `ProductionProfileGuard` fail-hards the prod profile.
 
 ### 4.5 Data & Persistence (Scaffolded, Not Yet Used)
 - Spring Data JPA + Hibernate configured for H2 (dev) / PostgreSQL (prod).
@@ -428,6 +426,7 @@ ComputerPets/
 ├── BUILD-REVIEW.md
 ├── ARCHITECTURE.md          # this document
 ├── build.ps1
+├── deploy/k8s/              # Kubernetes manifests (prod profile, blue/green)
 ├── src/
 │   ├── main/
 │   │   ├── java/com/enterprisepet/
@@ -436,6 +435,7 @@ ComputerPets/
 │   │   │   │   └── PetBundleService.java
 │   │   │   ├── config/
 │   │   │   │   ├── GlobalExceptionHandler.java
+│   │   │   │   ├── ProductionProfileGuard.java
 │   │   │   │   ├── RateLimitingFilter.java
 │   │   │   │   └── SecurityConfig.java
 │   │   │   ├── controller/
@@ -470,7 +470,10 @@ ComputerPets/
 │   │   │   │   └── SteamService.java
 │   │   │   └── service/                 # intentionally empty – future home for higher-level facades
 │   │   └── resources/
-│   │       └── application.yml          # all env-driven config + strong startup validation
+│   │       ├── application.yml          # shared env-driven config + startup validation
+│   │       ├── application-dev.yml
+│   │       ├── application-staging.yml
+│   │       └── application-prod.yml     # Postgres + Redis; ProductionProfileGuard
 │   └── test/java/                       # currently empty – high priority gap
 └── (target/ ignored)
 ```
@@ -482,7 +485,7 @@ ComputerPets/
 - `config/` – cross-cutting filters and handlers live together.
 - Package naming (`com.enterprisepet`) is stable even if marketing name is "ComputerPets".
 
-No resources other than `application.yml`; static assets and actual pet bundles live outside this service.
+Profile overlays live next to `application.yml`. Static assets and pet bundles live outside this service. Kubernetes manifests are in `deploy/k8s/`.
 
 ---
 
@@ -497,7 +500,7 @@ No resources other than `application.yml`; static assets and actual pet bundles 
 | **Redis Bucket4j + Lettuce (`rate-limit.backend=redis`)** | Shared per-IP verify/download buckets across replicas; idle keys expire after the refill window. | Redis is now a runtime dependency. Unreachable Redis fail-closes (503) instead of lifting the limit. `memory` is tests / single-process only. |
 | **No DTOs / OpenAPI for the verify body** (`Map<String,String>`) | Maximum flexibility for wildly different provider payloads; fast to iterate. | Poor discoverability, no compile-time safety, harder to generate client SDKs. |
 | **Synchronous external calls during verify** | Simple code, easy to understand and debug. | Latency and partial failure modes (one provider slow → whole request slow). No circuit breaker today. |
-| **H2 + create-drop + show-sql in default profile** | Excellent local developer experience. | Easy to accidentally run against real data; production config must be explicit. |
+| **H2 + show-sql in default/`dev`; Postgres + Redis + no Microsoft dev-mode in `staging`/`prod`** | Local `mvn` and tests stay fast; `prod` is an explicit fail-hard shape. | Forgetting `SPRING_PROFILES_ACTIVE=prod` on a cluster would still boot the H2 default — the k8s ConfigMap sets `prod`. |
 | **Startup-time secret validation + placeholder rejection** | Prevents the classic "I deployed with the example key" disaster. | Slightly more complex `@PostConstruct` logic in three places. |
 | **Encrypted license payload is JSON (via Jackson)** | Future-proof; easy to add fields (`hwid`, `features`, `revokedAt`) without breaking wire format. | Slightly larger ciphertext than a compact binary format. |
 
@@ -543,7 +546,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 - **Medium**: Dynamic pet catalog backed by DB, subscription/entitlement types. Admin revocation UI and API now ship (`/admin` + `/api/admin/*`).
 - **Structural**: Extract a true "License Domain Service" if more rules (concurrent use, transfer, gifting) appear. Introduce typed request DTOs per provider (sealed interfaces) while keeping the registry generic.
 - **Observability**: Micrometer tracing (OpenTelemetry / OTLP) and `enterprisepet.verify` / `enterprisepet.download` business meters are in place. Structured logging includes `traceId` / `spanId` / `correlationId`.
-- **Deployment**: Dockerfile, Kubernetes manifests, proper Spring profiles (`dev`, `prod`), Flyway migrations once entities exist.
+- **Deployment**: Dockerfile, `deploy/k8s/` manifests, Spring profiles (`dev` / `staging` / `prod`). Flyway migrations already ship with the license ledger.
 
 ---
 
@@ -636,9 +639,9 @@ Goal: Prepare for horizontal scaling and real production traffic.
   - License issuance rate (still open)
 
 - **3.4 Environment & Deployment Strategy**
-  - Proper Spring profiles (`dev`, `staging`, `prod`)
-  - Kubernetes manifests or Helm charts (or equivalent)
-  - Blue/green or canary deployment strategy
+  - [x] Proper Spring profiles (`dev`, `staging`, `prod`)
+  - [x] Kubernetes manifests (`deploy/k8s/`, Kustomize — not Helm)
+  - [x] Blue/green: `computerpets-blue` / `computerpets-green` + Service `color` selector
 
 #### Phase 4: Client & Ecosystem Integration
 Goal: Deliver a complete, usable platform.

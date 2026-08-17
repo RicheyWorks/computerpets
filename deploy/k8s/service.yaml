@@ -1,0 +1,14 @@
+# Flip spec.selector.color to green after computerpets-green is Ready.
+apiVersion: v1
+kind: Service
+metadata:
+  name: computerpets
+  namespace: computerpets
+spec:
+  selector:
+    app: computerpets
+    color: blue
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http

@@ -1,0 +1,52 @@
+# No AUTH — RateLimitConfiguration only reads host/port/timeout, same as compose.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: computerpets-redis
+  namespace: computerpets
+  labels:
+    app: computerpets-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: computerpets-redis
+  template:
+    metadata:
+      labels:
+        app: computerpets-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+              name: redis
+          readinessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            periodSeconds: 5
+            timeoutSeconds: 3
+          livenessProbe:
+            exec:
+              command: ["redis-cli", "ping"]
+            periodSeconds: 15
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: computerpets-redis
+  namespace: computerpets
+spec:
+  selector:
+    app: computerpets-redis
+  ports:
+    - port: 6379
+      targetPort: redis

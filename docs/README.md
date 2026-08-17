@@ -62,7 +62,7 @@ New to the project? Follow this recommended path:
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
 | **[Mind plugins](MIND.md)** | Plug any AI into the pets — OpenAI-compatible, Claude, Gemini, Ollama, custom webhook. |
 | **[Desktop companion](../desktop/README.md)** | Native overlay — all thirty pets, plus the first client-contract unlock slice. |
-| **[Setup & Installation Guide](SETUP.md)** | Detailed instructions for building and running the project locally. Includes prerequisites, secret generation, environment configuration, and troubleshooting. |
+| **[Setup & Installation Guide](SETUP.md)** | Build and run locally. Secrets, `dev`/`staging`/`prod` profiles, and `deploy/k8s/`. |
 | **[Contributing Guidelines](CONTRIBUTING.md)** | How to contribute to the project, including development setup, code style, pull request process, and documentation update expectations. |
 
 ---
@@ -87,7 +87,8 @@ The long-term vision for ComputerPets includes:
 - Additional ownership providers (Solana, etc.)
 
 Already shipped: Steam Web API + NFT allowlist + Itch.io download-key verify + Epic Games Store Ecom v3,
-JPA persistence and revocation, optional hwid, Micrometer + OpenTelemetry tracing, and the [client contract](CLIENT-CONTRACT.md).
+JPA persistence and revocation, optional hwid, Micrometer + OpenTelemetry tracing,
+`dev`/`staging`/`prod` profiles + `deploy/k8s/`, and the [client contract](CLIENT-CONTRACT.md).
 
 Current status and detailed future plans are documented in the **[Roadmap](ROADMAP.md)**
 and **[Architecture](ARCHITECTURE.md)**.
