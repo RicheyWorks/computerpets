@@ -216,6 +216,17 @@ body {
   }
 }
 
+#tongue {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0;
+  overflow: visible;
+  transform-origin: 2px 10px;
+  will-change: transform, opacity;
+}
+
 #shadow {
   position: absolute;
   left: 0;

@@ -54,6 +54,7 @@ export function BlotterGuest({
       fps={kind.fps}
       once={kind.once}
       gait={{ ...trait, scale: trait.scale * (selected ? 0.86 : 0.74) }}
+      kind={kind.key}
       startX={startX}
       onArrived={() => {
         if (order.cmd === "wander" || order.cmd === "enter") {

@@ -39,6 +39,7 @@ function Guest({ species, startX }: { species: string; startX: number }) {
       fps={kind.fps}
       once={kind.once}
       gait={{ ...trait, scale: trait.scale * 0.78 }}
+      kind={kind.key}
       startX={startX}
       onArrived={() => {
         if (order.cmd === "wander") setOrder((o) => ({ cmd: "idle", id: o.id + 1 }));

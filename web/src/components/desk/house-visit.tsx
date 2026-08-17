@@ -58,6 +58,7 @@ export function HouseVisit({ hostKey, hidden }: { hostKey: string; hidden?: bool
       fps={guest.fps}
       once={guest.once}
       gait={{ ...trait, scale: trait.scale * 0.72 }}
+      kind={guest.key}
       startX={startX}
       stage="grown"
       onArrived={() => {
