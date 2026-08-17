@@ -1,92 +1,77 @@
 # Build review — EnterprisePetBackend (current `src/`)
 
-The sandbox has no Maven and the proxy blocks every Apache / Maven Central / Adoptium endpoint, so `mvn package` could not actually be executed here. Instead, this is a line-level static review of all 6 Java files against the dependencies declared in `pom.xml`.
-
-**Bottom line:** `mvn package` should **succeed** with the current source — there are no syntax errors and every `import` resolves against the declared deps. There are, however, two runtime bugs and one config-loading bug that will bite on first start.
+Historical sandbox review of an early tree (six Java files, no Maven in that
+environment). Several findings are **already fixed on current `main`**. This
+file keeps the still-true notes and strikes the ones that are no longer true.
 
 A `build.ps1` script is included in the workspace; run it to perform the actual build.
 
 ---
 
-## Will it compile? (Per file)
+## Will it compile?
 
-| File | Imports resolve? | Notes |
-|---|---|---|
-| `EnterprisePetBackendApplication.java` | yes | Stock Spring Boot entrypoint. |
-| `config/SecurityConfig.java` | yes | Spring Security 6 (Boot 3.3.5) lambda DSL — correct shape. `csrf.disable()`, `authorizeHttpRequests`, `requestMatchers`, `SessionCreationPolicy.STATELESS` all valid. |
-| `controller/VerifyController.java` | yes | Uses `Map<String,String>` request bodies — no DTO classes required. |
-| `license/LicenseService.java` | yes | All BC and JDK imports resolve. **Two deprecation warnings expected** (see below), not errors. |
-| `nft/EthereumNftService.java` | yes | web3j 4.12.0 API is correct. |
-| `steam/SteamService.java` | yes | Uses `RestTemplate`; the `steam-condenser` dep is declared but unused. |
+Yes. The tree is a full Spring Boot 3.3 / Java 21 service (controllers,
+`JwtService`, JPA `IssuedLicense`, Flyway, OpenAPI, tests). `mvn -B test`
+is the current check, not a six-file static pass.
 
-Expected compiler output: success with 2 deprecation warnings.
+Expected compiler output: success. BouncyCastle may still emit the two
+deprecation warnings below.
 
-## Bugs the build will not catch
+## Bugs that were real — now fixed
 
-These compile cleanly but break at runtime — flagging because you asked me to keep going on the build:
+### 1. `application (1).yml` won't be loaded — **fixed**
 
-### 1. `application (1).yml` won't be loaded
-
-Spring Boot's resource resolver looks for `application.yml`, `application.yaml`, or `application.properties` on the classpath. A file literally named `application (1).yml` is treated as an arbitrary unrelated resource and **ignored**. Consequences:
-
-- `@Value("${license.secret-key}")` in `LicenseService` → throws `IllegalArgumentException: Could not resolve placeholder` at app startup.
-- `@Value("${steam.api-key}")` in `SteamService` → same.
-- `@Value("${ethereum.rpc-url:...}")` in `EthereumNftService` survives because it has a default.
-
-**Fix:** rename `src/main/resources/application (1).yml` → `application.yml`.
+Spring Boot loads `application.yml`. The resource is correctly named
+`src/main/resources/application.yml`. There is no `application (1).yml`.
 
 ### 2. `EthereumNftService` Web3j client / constructor — **fixed**
 
-The original bug was building `Web3j` in a no-arg constructor against a field-injected `@Value` `rpcUrl` that was still null. That path is gone:
+`EthereumConfig` builds `Web3j` from bound `EthereumProperties`. See the
+original write-up in git history if you need the old failure mode.
 
-- `EthereumConfig` exposes a `Web3j` `@Bean` built from already-bound `EthereumProperties.getRpcUrl()`.
-- `HttpService` is never constructed with a null/blank URL (`EthereumConfig.httpService` rejects those).
-- `EthereumNftService` constructor-injects that client (`@Autowired` so Spring does not look for a no-arg constructor — extra test constructors would otherwise break context startup).
-- AUTO no longer treats a foreign `ownerOf` address as a positive ERC-1155 `balanceOf`.
+### 3. Placeholder license master-key / underscore crash — **fixed**
 
-### 3. The placeholder license master-key crashes at first issuance
-
-```yaml
-license:
-  secret-key: "CHANGE_THIS_TO_A_32_BYTE_BASE64_KEY_IN_PRODUCTION_1234567890AB=="
-```
-
-`Base64.getDecoder()` is the standard (RFC 4648 §4) decoder, which **rejects `_`**. The placeholder string contains underscores, so the very first call to `issueLicense(...)` throws `IllegalArgumentException: Illegal base64 character 5f` — even before the AES key-length check (which would also fail; a valid base64-encoded AES-256 key is a 44-char string ending in `=`, decoding to 32 bytes).
-
-**Fix:** replace with a real 32-byte key, e.g. produced by `openssl rand -base64 32` and pasted in as the secret.
+`LICENSE_SECRET_KEY` has **no default** in `application.yml`. Startup
+fail-hards if the key is missing, not valid Base64, not 32 bytes, or equal
+to the old committed default (except the `test` profile). There is no
+underscore placeholder string left for `Base64.getDecoder()` to reject.
 
 ## Things that compile but are dead weight
 
-- `com.github.koraktor:steam-condenser:1.3.1` — not imported anywhere; `SteamService` uses `RestTemplate` instead. Safe to remove from `pom.xml`.
-- `jjwt-api/impl/jackson` (3 deps) — no JWT code on disk; the `JwtService` and `JwtAuthenticationFilter` classes only exist in the `EnterprisePetBackend-FullFlex+` zips. Either pull the JWT classes in or drop the deps.
-- `spring-boot-starter-data-jpa`, `postgresql`, `h2` — included, but there are no `@Entity`/`@Repository` classes on disk yet. JPA will spin up empty against H2 at startup; harmless but slow.
+- `com.github.koraktor:steam-condenser:1.3.1` — still declared; `SteamService`
+  uses `RestTemplate`. Safe to remove from `pom.xml`.
+- `jjwt-api/impl/jackson` — **in use**. `JwtService` + `JwtAuthenticationFilter`
+  are on disk and required for `/api/download/**`.
+- `spring-boot-starter-data-jpa`, `postgresql`, `h2` — **in use**.
+  `IssuedLicense` + `LicenseRepository` persist issuance, revocation, `hwid`,
+  and `lastUsedAt`. Flyway owns the schema (`ddl-auto=validate`).
 
-## Deprecation warnings the compiler will emit
+## Deprecation warnings the compiler may emit
 
 ```
-LicenseService.java:54: warning: [deprecation] AESEngine() in AESEngine has been deprecated
-LicenseService.java:54: warning: [deprecation] GCMBlockCipher(BlockCipher) in GCMBlockCipher has been deprecated
+LicenseService.java: warning: [deprecation] AESEngine() in AESEngine has been deprecated
+LicenseService.java: warning: [deprecation] GCMBlockCipher(BlockCipher) in GCMBlockCipher has been deprecated
 ```
 
-BouncyCastle 1.78+ moved to factory methods:
+BouncyCastle 1.78+ factory methods:
 
 ```java
-// old (deprecated):
-GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
-
-// new:
 GCMBlockCipher cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
 ```
 
-Won't break the build, just emits warnings.
+Won't break the build, just emits warnings. Wire format is unchanged
+(AES-256-GCM, 12-byte IV, 128-bit tag appended). See
+[docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
 
 ## How to actually run the build
 
 1. Install JDK 21 (Temurin/Adoptium recommended) and Maven 3.9+.
-2. From `C:\Users\730ri\projects\ComputerPets`, run:
+2. Set `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, and
+   `ADMIN_API_KEY` (see [docs/SETUP.md](docs/SETUP.md)).
+3. From the repo root:
 
 ```powershell
 .\build.ps1
 ```
 
-The script verifies your JDK/Maven versions, runs `mvn -B -DskipTests package`, and prints the location of the resulting fat JAR. It does **not** fix any of the bugs above — those are listed for you to address.
+Or: `mvn -B test`.

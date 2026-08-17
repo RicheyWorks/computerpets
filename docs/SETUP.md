@@ -243,15 +243,12 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
 **Problem**: `mvn` uses the wrong Java version  
 **Solution**: Set `JAVA_HOME` correctly and restart your terminal.
 
-### Stale Configuration File Warning
-**Problem**: Warning about `application (1).yml`  
-**Solution**: Delete the duplicate file `src/main/resources/application (1).yml`.
-
 ---
 
 ## Next Steps
 
 - Read the [Architecture Documentation](ARCHITECTURE.md) for a deep understanding of the system design.
+- Implement a native client against the [Client contract](CLIENT-CONTRACT.md) (license decrypt, hwid, download).
 - Explore the API examples in the main [README.md](../README.md).
 - Review the [Contributing Guidelines](CONTRIBUTING.md) if you plan to contribute.
 

@@ -86,14 +86,26 @@ public class PetBundleService {
 
         String token = sign(toSign);
 
-        String url = String.format(
-            "%s/%s.zip?owner=%s&exp=%d&sig=%s",
-            stripTrailingSlash(bundleBaseUrl),
-            pet.key(),
-            urlEncode(owner),
-            expiresAt.getEpochSecond(),
-            token
-        );
+        // jti must appear on the URL when it is in the MAC, otherwise an edge
+        // worker cannot reconstruct petKey|owner|jti|exp from query params.
+        String url = (jti == null || jti.isBlank())
+            ? String.format(
+                "%s/%s.zip?owner=%s&exp=%d&sig=%s",
+                stripTrailingSlash(bundleBaseUrl),
+                pet.key(),
+                urlEncode(owner),
+                expiresAt.getEpochSecond(),
+                token
+            )
+            : String.format(
+                "%s/%s.zip?owner=%s&jti=%s&exp=%d&sig=%s",
+                stripTrailingSlash(bundleBaseUrl),
+                pet.key(),
+                urlEncode(owner),
+                urlEncode(jti),
+                expiresAt.getEpochSecond(),
+                token
+            );
 
         Map<String, Object> manifest = new LinkedHashMap<>();
         manifest.put("petKey", pet.key());

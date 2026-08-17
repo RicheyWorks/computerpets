@@ -58,6 +58,7 @@ New to the project? Follow this recommended path:
 | Document | Description |
 |----------|-------------|
 | **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **Start here** for a complete understanding. |
+| **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
 | **[Mind plugins](MIND.md)** | Plug any AI into the pets — OpenAI-compatible, Claude, Gemini, Ollama, custom webhook. |
 | **[Desktop companion](../desktop/README.md)** | Native Windows overlay — Rui on the real desktop. |
@@ -82,12 +83,14 @@ A dedicated `API.md` document may be added in the future as the API matures.
 The long-term vision for ComputerPets includes:
 
 - A GPU-accelerated desktop client (planned PyQt6 application)
-- Full implementation of real Steam Web API and improved NFT verification
-- Persistent license storage and revocation support
-- Hardware binding and advanced security features
+- A live ComputerPets collection address in `ethereum.collections`
 - Additional ownership providers (Epic, Itch.io, etc.)
 
-Current status and detailed future plans are documented in the **[Architecture](ARCHITECTURE.md)** document, particularly in the Recommendations and Deployment sections.
+Already shipped: Steam Web API + NFT allowlist, JPA persistence and revocation,
+optional hwid, and the [client contract](CLIENT-CONTRACT.md).
+
+Current status and detailed future plans are documented in the **[Roadmap](ROADMAP.md)**
+and **[Architecture](ARCHITECTURE.md)**.
 
 ---
 
