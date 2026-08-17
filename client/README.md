@@ -1,6 +1,6 @@
 # ComputerPets — PyQt blotter client
 
-A first real PyQt6 desk: **all thirty living companions** from the house catalog live on a wooden blotter — the original twenty who walk, and the ten snakes who crawl. Tap a guest (or a name on the rail) and a **species plaque** teaches the house the way `/study` and `/snakes` do: a tell, one mix-up, the latin, and the house voice. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
+A first real PyQt6 desk: **all thirty living companions** from the house catalog live on a wooden blotter — the original twenty who walk, and the ten snakes who crawl. A day here has the same **weather** they sit or swim in, **today’s house visitor** walking through, and snakes that go **blue and shed** (the old coat stays on the wood). Tap a guest (or a name on the rail) and a **species plaque** teaches the house the way `/study` and `/snakes` do: a tell, one mix-up, the latin, and the house voice. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
 
 This is **not** a custom GPU shader engine. Drawing uses Qt’s GPU-backed scene: `QGraphicsView` with a `QOpenGLWidget` viewport (Qt RHI / OpenGL compositing). If the platform cannot create an OpenGL surface, the scene falls back to Qt software raster and says so in the status bar.
 
@@ -32,13 +32,15 @@ Headless smoke (CI / no display):
 QT_QPA_PLATFORM=offscreen python -m computerpets_client --check
 ```
 
-`--check` opens the window (offscreen), confirms a living pet and a species plaque are on the blotter, prints the renderer line and the thirty-kind count, and exits.
+`--check` opens the window (offscreen), confirms a living pet and a species plaque are on the blotter, prints the day’s weather, who may call, the renderer line, and the thirty-kind count, and exits.
 
 ## Meet the house
 
 The **species rail** (house, then den) and the combo / prev-next cycle are the same thirty wire keys as `PetType` and the Electron overlay roster. Tap a name or cycle — they greet in their own voice. Tap the guest on the wood and they say the lesson. Snakes crawl; the others walk. Palettes and tells come from the existing house catalog (Rui’s rust, Bandit’s black-and-white bands, Keel’s bill, Bluff’s upturned snout). No invented species.
 
 The **plaque** under the blotter is the classroom. Same copy as the web field guides: Coral’s red-touches-black, Nori balls vs Lula holds, Bandit no red; red panda not a bear, axolotl kept its gills. You do not leave the window.
+
+The sky, the caller, and the shed are ports of `web/src/lib/pets/weather.ts`, `visitor.ts`, and `shed.ts` — not a third house clock. Rain / wind / heat only. Today’s visitor is `todaysVisitor`. The ten snakes go blue after eight hours and leave a cream coat on the blotter.
 
 Pets walk (or crawl) without a license — same as the overlay.
 
@@ -51,6 +53,7 @@ The verbs that already exist on the Electron desk and fit this cut. Treat uses t
 | **Feed** | Hunger up, eat animation, a house line |
 | **Treat** (species verb) | A snack drops on the blotter; they walk or crawl to it |
 | **Hide** / **Call back** | Leaves the blotter; call brings them in |
+| **Shed** (snakes) | When they are blue, the old coat stays on the wood |
 
 ## Unlock (client contract)
 
@@ -92,14 +95,17 @@ client/
 │   ├── app.py              # window + entry
 │   ├── blotter.py          # wood/blotter scene + OpenGL viewport
 │   ├── frames.py           # procedural frames (walk + snake crawl)
-│   ├── life.py             # feed / treat / hide
+│   ├── life.py             # feed / treat / hide / shed stats
+│   ├── weather.py          # port of web weather.ts (clear / rain / wind / heat)
+│   ├── visitor.py          # port of web visitor.ts (todaysVisitor)
+│   ├── shed.py             # port of web shed.ts (blue, coat on the wood)
 │   ├── rail.py             # study-style species rail (30 keys)
 │   ├── species.py          # house catalog — same keys as PetType
 │   ├── guide.py            # field notes — same copy as /study and /snakes
 │   ├── plaque.py           # paper card on the blotter
 │   ├── license/            # port of desktop/license/ (no Qt)
 │   └── unlock_dialog.py
-├── tests/                  # decrypt, hwid, signed URL, mocked unlock, care, roster, plaques
+├── tests/                  # decrypt, unlock, care, roster, plaques, weather, visitor, shed
 ├── pyproject.toml
 └── README.md
 ```

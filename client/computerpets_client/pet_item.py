@@ -6,11 +6,12 @@ import math
 import random
 
 from PyQt6.QtCore import QRectF, Qt, pyqtSignal
-from PyQt6.QtGui import QCursor, QPainter
+from PyQt6.QtGui import QBrush, QColor, QCursor, QPainter, QPen
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsObject, QGraphicsPixmapItem
 
 from .frames import SIZE, frames_for, paint_treat
 from .life import CareState
+from .shed import Coat
 from .species import Species
 
 
@@ -20,6 +21,27 @@ class TreatItem(QGraphicsPixmapItem):
         self.setPos(x, y)
         self.setZValue(2)
         self.setTransformationMode(Qt.TransformationMode.SmoothTransformation)
+
+
+class ShedCoatItem(QGraphicsObject):
+    """Old coat on the wood — same cream loop as the web / Electron blotter."""
+
+    def __init__(self, coat: Coat, scene_width: float = 960):
+        super().__init__()
+        self.coat = coat
+        x = 80 + (scene_width - 160) * (coat.x / 100.0)
+        self.setPos(x, 412)
+        self.setZValue(2)
+        self.setRotation(-14)
+        self.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+
+    def boundingRect(self) -> QRectF:
+        return QRectF(0, 0, 26, 7)
+
+    def paint(self, painter: QPainter, option, widget=None) -> None:  # noqa: ARG002
+        painter.setPen(QPen(QColor(12, 11, 10, 64), 1))
+        painter.setBrush(QBrush(QColor(216, 207, 192, 190)))
+        painter.drawRoundedRect(QRectF(0, 0, 26, 7), 3, 3)
 
 
 class LivingPetItem(QGraphicsObject):
@@ -39,6 +61,7 @@ class LivingPetItem(QGraphicsObject):
         self.target: float | None = None
         self.once_done = False
         self._bob_t = 0.0
+        self.dull = False
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
@@ -63,7 +86,16 @@ class LivingPetItem(QGraphicsObject):
             painter.translate(SIZE, 0)
             painter.scale(-1, 1)
         painter.drawPixmap(0, 0, pix)
+        if self.dull:
+            painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceAtop)
+            painter.fillRect(QRectF(0, 0, SIZE, SIZE), QColor(90, 120, 150, 95))
         painter.restore()
+
+    def set_dull(self, dull: bool) -> None:
+        if self.dull == dull:
+            return
+        self.dull = dull
+        self.update()
 
     def _floor_y(self) -> float:
         y = 318.0

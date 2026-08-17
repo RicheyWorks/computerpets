@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import os
+import random
 import sys
+from dataclasses import replace
 from typing import Any
 
 from PyQt6.QtCore import QRectF, Qt, QTimer
@@ -24,24 +26,37 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from .blotter import DeskBackground, attach_gpu_viewport
+from .blotter import DeskBackground, WeatherLayer, attach_gpu_viewport
 from .guide import plaque_for
 from .life import CareState, ambient_line, apply_call, apply_feed, apply_hide, apply_treat, decay
 from .license.session import create_license_session
 from .paths import default_user_data_dir
-from .pet_item import LivingPetItem, TreatItem
+from .pet_item import LivingPetItem, ShedCoatItem, TreatItem
 from .plaque import SpeciesPlaque
 from .rail import SpeciesRail
+from .shed import apply_shed, is_blue
 from .species import (
     CATALOG_KEYS,
     DEFAULT_SPECIES_KEY,
     SPECIES,
     Species,
+    is_snake,
     next_species_key,
     prev_species_key,
     species_by_key,
 )
 from .unlock_dialog import UnlockDialog
+from .visitor import (
+    VISIT_GONE_MS,
+    VISIT_LEAVE_MS,
+    VISIT_TALK_MS,
+    VISIT_WAIT_MS,
+    VISIT_WANDER_MS,
+    todays_visitor,
+    visit_caption,
+    visit_line,
+)
+from .weather import weather_idle, weather_label, weather_line, weather_of
 
 SCENE_W = 960
 SCENE_H = 540
@@ -70,16 +85,29 @@ class DeskWindow(QMainWindow):
         self.species: Species = species_by_key(DEFAULT_SPECIES_KEY)
         self.care = CareState()
         self.treat: TreatItem | None = None
+        self.coats: list[ShedCoatItem] = []
         self._speech_ms = 0.0
+        self._visit_ms = 0.0
+        self._visit_phase = "wait"
+        self._weather_acc = 0.0
+        self.sky = weather_of()
 
         self.setWindowTitle("ComputerPets — blotter")
         self.resize(1000, 860)
 
         self.scene = QGraphicsScene(0, 0, SCENE_W, SCENE_H, self)
         self.scene.addItem(DeskBackground(SCENE_W, SCENE_H))
+        self.weather = WeatherLayer(SCENE_W, SCENE_H, self.sky)
+        self.scene.addItem(self.weather)
         self.pet = LivingPetItem(self.species)
         self.pet.tapped.connect(self._tap_guest)
         self.scene.addItem(self.pet)
+        self.guest = LivingPetItem(todays_visitor(self.species.key))
+        self.guest.setScale(0.72)
+        self.guest.setZValue(3)
+        self.guest.tapped.connect(self._tap_visitor)
+        self.guest.setVisible(False)
+        self.scene.addItem(self.guest)
 
         self.bubble = QGraphicsTextItem()
         self.bubble.setDefaultTextColor(QColor(242, 236, 227))
@@ -98,6 +126,7 @@ class DeskWindow(QMainWindow):
         self.feed_btn = QPushButton("Feed")
         self.treat_btn = QPushButton(self.species.treat)
         self.hide_btn = QPushButton("Hide")
+        self.shed_btn = QPushButton("Shed")
         self.unlock_btn = QPushButton("Unlock…")
         self.prev_btn = QPushButton("◀")
         self.next_btn = QPushButton("▶")
@@ -119,6 +148,7 @@ class DeskWindow(QMainWindow):
         self.feed_btn.clicked.connect(self._feed)
         self.treat_btn.clicked.connect(self._treat)
         self.hide_btn.clicked.connect(self._hide_or_call)
+        self.shed_btn.clicked.connect(self._shed)
         self.unlock_btn.clicked.connect(self._unlock)
         self.kind_box.currentIndexChanged.connect(self._change_kind)
         self.rail.picked.connect(self._pick_key)
@@ -134,6 +164,7 @@ class DeskWindow(QMainWindow):
         bar.addWidget(self.feed_btn)
         bar.addWidget(self.treat_btn)
         bar.addWidget(self.hide_btn)
+        bar.addWidget(self.shed_btn)
         bar.addWidget(self.prev_btn)
         bar.addWidget(self.kind_box, 1)
         bar.addWidget(self.next_btn)
@@ -162,9 +193,10 @@ class DeskWindow(QMainWindow):
         self._last_ms = 0.0
         self._ambient_acc = 0.0
 
-        self._say(self.species.greet[0] if self.species.greet else "Hello.")
+        self._greet()
         self._refresh_license()
         self._refresh_vitals()
+        self._reset_visit()
 
     def _say(self, text: str, hold_ms: float = 4200) -> None:
         if not text:
@@ -173,6 +205,32 @@ class DeskWindow(QMainWindow):
         self.bubble.setVisible(True)
         self._speech_ms = hold_ms
         self.care.last_line = text
+
+    def _greet(self) -> None:
+        line = weather_line(self.species.key, self.sky)
+        if not line:
+            line = self.species.greet[0] if self.species.greet else "Hello."
+        self._say(line, 5200)
+
+    def _reset_visit(self) -> None:
+        self._visit_ms = 0.0
+        self._visit_phase = "wait"
+        guest = todays_visitor(self.species.key)
+        self.guest.set_species(guest)
+        self.guest.setVisible(False)
+        self.guest.setPos(SCENE_W + 8, self.guest._floor_y())
+        self.guest.issue("idle")
+
+    def _sync_coats(self) -> None:
+        for item in self.coats:
+            self.scene.removeItem(item)
+        self.coats = []
+        for gift in self.care.gifts:
+            if gift.kind != "shed":
+                continue
+            item = ShedCoatItem(gift, SCENE_W)
+            self.scene.addItem(item)
+            self.coats.append(item)
 
     def _refresh_license(self) -> None:
         status = self.session["status"]()
@@ -193,12 +251,17 @@ class DeskWindow(QMainWindow):
 
     def _refresh_vitals(self) -> None:
         s = self.care
+        blue = is_blue(s, self.species.key)
+        self.pet.set_dull(blue)
         self.vital_label.setText(
-            f"{self.species.name} · {s.vitals()}   "
+            f"{self.species.name} · {s.vitals(blue=blue)} · {weather_label(self.sky)} · "
+            f"{visit_caption(self.species.key)}   "
             f"hunger {s.hunger}   mood {s.mood}   energy {s.energy}"
         )
         self.hide_btn.setText("Call back" if s.hidden else "Hide")
         self.treat_btn.setText(self.species.treat)
+        self.shed_btn.setVisible(is_snake(self.species.key))
+        self.guest.setVisible(self._visit_phase not in ("wait", "gone") and not s.hidden)
 
     def _pick_key(self, key: str) -> None:
         idx = self.kind_box.findData(key)
@@ -226,7 +289,10 @@ class DeskWindow(QMainWindow):
             blocked = self.kind_box.blockSignals(True)
             self.kind_box.setCurrentIndex(idx)
             self.kind_box.blockSignals(blocked)
-        self._say(self.species.greet[0] if self.species.greet else "Hello.")
+        self.care = replace(self.care, shed_at=0, gifts=[])
+        self._sync_coats()
+        self._reset_visit()
+        self._greet()
         self._refresh_vitals()
 
     def _feed(self) -> None:
@@ -266,6 +332,59 @@ class DeskWindow(QMainWindow):
             self.plaque.set_key(self.species.key)
             self._say(guide.lesson, 5200)
 
+    def _tap_visitor(self) -> None:
+        guest = todays_visitor(self.species.key)
+        self._say(visit_line(guest.key), 4200)
+        self.guest.issue("sit")
+
+    def _shed(self) -> None:
+        result = apply_shed(self.care, self.species)
+        self.care = result.state
+        self.pet.issue(result.cmd)
+        self._say(result.line)
+        self._sync_coats()
+        self._refresh_vitals()
+
+    def _advance_visit(self, dt_ms: float) -> None:
+        if self.care.hidden:
+            self.guest.setVisible(False)
+            return
+        if self._visit_phase == "gone":
+            return
+        self._visit_ms += dt_ms
+        elapsed = self._visit_ms
+        if self._visit_phase == "wait" and elapsed >= VISIT_WAIT_MS:
+            self._visit_phase = "in"
+            self.guest.setVisible(True)
+            self.guest.setPos(SCENE_W + 8, self.guest._floor_y())
+            self.guest.issue("seek", SCENE_W * 0.52)
+        elif self._visit_phase == "in" and elapsed >= VISIT_WAIT_MS + VISIT_TALK_MS:
+            self._visit_phase = "talk"
+            self.guest.issue("sit")
+            self._say(visit_line(self.guest.species.key), 4200)
+        elif self._visit_phase == "talk" and elapsed >= VISIT_WAIT_MS + VISIT_WANDER_MS:
+            self._visit_phase = "wander"
+            self.guest.issue("wander")
+        elif self._visit_phase == "wander" and elapsed >= VISIT_WAIT_MS + VISIT_LEAVE_MS:
+            self._visit_phase = "leave"
+            self.guest.issue("hide")
+        elif elapsed >= VISIT_WAIT_MS + VISIT_GONE_MS:
+            self._visit_phase = "gone"
+            self.guest.setVisible(False)
+        if self.guest.isVisible():
+            self.guest.advance_pet(dt_ms / 1000.0, CareState(), SCENE_W)
+
+    def _maybe_weather_idle(self) -> None:
+        if self.care.hidden or self.bubble.isVisible():
+            return
+        mood = weather_idle(self.species.key, self.sky)
+        if mood and random.random() < 0.45:
+            if random.random() < 0.4:
+                line = weather_line(self.species.key, self.sky)
+                if line:
+                    self._say(line, 3600)
+            self.pet.issue(mood)
+
     def _unlock(self) -> None:
         dialog = UnlockDialog(self.session, self)
         dialog.exec()
@@ -275,6 +394,8 @@ class DeskWindow(QMainWindow):
         dt = self.timer.interval() / 1000.0
         self.care = decay(self.care, self.timer.interval())
         self.pet.advance_pet(dt, self.care, SCENE_W)
+        self.weather.advance_weather(dt)
+        self._advance_visit(self.timer.interval())
         if self.treat is not None and self.pet.cmd == "eat":
             self.scene.removeItem(self.treat)
             self.treat = None
@@ -286,6 +407,10 @@ class DeskWindow(QMainWindow):
         if self._ambient_acc > 18000 and not self.bubble.isVisible() and not self.care.hidden:
             self._ambient_acc = 0
             self._say(ambient_line(self.care, self.species), 3600)
+        self._weather_acc += self.timer.interval()
+        if self._weather_acc > 5600:
+            self._weather_acc = 0
+            self._maybe_weather_idle()
         self._refresh_vitals()
 
 
@@ -326,6 +451,8 @@ def main(argv: list[str] | None = None) -> int:
             print("check failed: no species plaque on the blotter", file=sys.stderr)
             return 1
         print(f"ok: species plaque for {guide.name} ({guide.latin})")
+        print(f"ok: {weather_label(window.sky)} on the blotter")
+        print(f"ok: {visit_caption(window.species.key)}")
         print(window.renderer_label)
         QTimer.singleShot(250, app.quit)
     return app.exec()

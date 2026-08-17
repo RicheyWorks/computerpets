@@ -32,7 +32,10 @@ A new **`client/`** tree is the first PyQt6 blotter client:
   signed download. Same wire format. Fail closed. No “always licensed”
   stub.
 - Care verbs that already exist on the Electron desk and fit this cut:
-  feed, treat, hide / call back.
+  feed, treat, hide / call back, and shed for the ten snakes.
+- Daily weather, today’s visitor, and snake shed are **ports** of
+  `web/src/lib/pets/weather.ts`, `visitor.ts`, and `shed.ts` — not a
+  third house clock and not a rewrite of `desktop/`.
 - The Electron overlay remains a contract client. `desktop/` is not
   rewritten.
 
