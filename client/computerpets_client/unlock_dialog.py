@@ -6,6 +6,7 @@ from typing import Any, Callable
 
 from PyQt6.QtCore import QObject, QThread, pyqtSignal
 from PyQt6.QtWidgets import (
+    QComboBox,
     QDialog,
     QDialogButtonBox,
     QFormLayout,
@@ -18,7 +19,7 @@ from PyQt6.QtWidgets import (
 )
 
 from .license.errors import LicenseError
-from .species import SPECIES
+from .species import CATALOG_KEYS, SPECIES
 
 
 class UnlockWorker(QObject):
@@ -61,9 +62,17 @@ class UnlockDialog(QDialog):
         self.steam_id.setPlaceholderText("76561198000000000")
         self.app_id = QLineEdit((status.get("fields") or {}).get("appId") or "")
         self.app_id.setPlaceholderText("123456")
-        self.pet_type = QLineEdit((status.get("fields") or {}).get("petType") or "red_panda")
-        known = ", ".join(SPECIES)
-        self.pet_type.setPlaceholderText(known)
+        self.pet_type = QComboBox()
+        self.pet_type.setEditable(True)
+        for key in CATALOG_KEYS:
+            spec = SPECIES[key]
+            self.pet_type.addItem(f"{key} — {spec.name} · {spec.label}", key)
+        current = (status.get("fields") or {}).get("petType") or "red_panda"
+        idx = self.pet_type.findData(current)
+        if idx >= 0:
+            self.pet_type.setCurrentIndex(idx)
+        else:
+            self.pet_type.setEditText(str(current))
 
         form = QFormLayout()
         form.addRow("Backend URL", self.backend)
@@ -117,6 +126,15 @@ class UnlockDialog(QDialog):
             err = status.get("error")
             self.err.setText(err["message"] if err else "")
 
+    def _pet_key(self) -> str:
+        data = self.pet_type.currentData()
+        if isinstance(data, str) and data.strip():
+            return data.strip()
+        text = self.pet_type.currentText().strip()
+        if " — " in text:
+            text = text.split(" — ", 1)[0].strip()
+        return text or "red_panda"
+
     def _unlock(self) -> None:
         self.err.setText("")
         self.ok.setText("Talking to the backend…")
@@ -125,7 +143,7 @@ class UnlockDialog(QDialog):
             "provider": "steam",
             "steamId": self.steam_id.text().strip(),
             "appId": self.app_id.text().strip(),
-            "petType": self.pet_type.text().strip() or "red_panda",
+            "petType": self._pet_key(),
         }
         self._thread = QThread(self)
         self._worker = UnlockWorker(self.session, fields)
