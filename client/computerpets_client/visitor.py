@@ -60,6 +60,16 @@ VISIT_LINES: dict[str, str] = {
     "seahorse": "I hitched your pencil. Briefly.",
     "manta": "I soared the bowl. You may keep the sky.",
     "moray": "I was the door. Then I was gone.",
+    "moss": "I carpeted. Then I was the page again.",
+    "maidenhair": "I unfurled. Then I folded.",
+    "ginkgo": "I golded. Then I left the autumn.",
+    "oak": "I dropped one. Then I was small again.",
+    "redwood": "I rose an inch. Then I kept the pot.",
+    "water_lily": "I opened. Then I closed.",
+    "duckweed": "I divided through. That counts.",
+    "venus_flytrap": "I did not snap. Then I left the cup.",
+    "orchid": "I bloomed. Then I was bark again.",
+    "saguaro": "I stored a visit. Then I sat.",
 }
 
 

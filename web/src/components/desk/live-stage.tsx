@@ -32,8 +32,10 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { Link } from "@tanstack/react-router";
+import { isGarden } from "@/lib/pets/garden";
 import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
+import { gardenGuideFor } from "@/lib/pets/garden-guide";
 import { seaGuideFor } from "@/lib/pets/sea-guide";
 import { guideFor } from "@/lib/pets/snake-guide";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
@@ -354,6 +356,13 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
             {seaGuideFor(kind.key)?.species ?? kind.speciesLabel} ·{" "}
             <Link to="/sea" className="text-fg no-underline">
               Learn the tide
+            </Link>
+          </p>
+        ) : isGarden(kind.key) ? (
+          <p className="mt-2 text-xs text-subtle">
+            {gardenGuideFor(kind.key)?.species ?? kind.speciesLabel} ·{" "}
+            <Link to="/garden" className="text-fg no-underline">
+              Learn the garden
             </Link>
           </p>
         ) : (

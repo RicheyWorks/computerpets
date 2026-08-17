@@ -1,6 +1,6 @@
 # Desktop companion — Windows and Mac
 
-All forty pets live on the real desktop as a Tamagotchi-grade overlay — including ten snakes and a tide of ten sea creatures. They turn, ease, and settle on the work-area floor, then do what that animal does — scratch, preen, bask, or flick a tongue. Unique hunger clocks, night cycles, mess, illness, age, and a special move each. The tide den at `/sea` is where the marine guests are taught.
+All fifty living kinds live on the real desktop as a Tamagotchi-grade overlay — including ten snakes, a tide of ten sea creatures, and a garden of ten plants. They turn, ease, and settle on the work-area floor, then do what that animal does — scratch, preen, bask, flick a tongue, or lean to the lamp. Unique hunger clocks, night cycles, mess, illness, age, and a special move each. The tide den at `/sea` is where the marine guests are taught. The garden den at `/garden` is ten plants on the blotter; plaques teach.
 
 ## Care
 

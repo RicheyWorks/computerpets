@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CollectionRouteImport } from './routes/collection'
+import { Route as GardenRouteImport } from './routes/garden'
 import { Route as HatchRouteImport } from './routes/hatch'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as LoginRouteImport } from './routes/login'
@@ -43,6 +44,11 @@ const CatalogRoute = CatalogRouteImport.update({
 const CollectionRoute = CollectionRouteImport.update({
   id: '/collection',
   path: '/collection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GardenRoute = GardenRouteImport.update({
+  id: '/garden',
+  path: '/garden',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HatchRoute = HatchRouteImport.update({
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/catalog': typeof CatalogRoute
   '/collection': typeof CollectionRoute
+  '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
   '/live': typeof LiveRoute
   '/login': typeof LoginRoute
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/catalog': typeof CatalogRoute
   '/collection': typeof CollectionRoute
+  '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
   '/live': typeof LiveRoute
   '/login': typeof LoginRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/catalog': typeof CatalogRoute
   '/collection': typeof CollectionRoute
+  '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
   '/live': typeof LiveRoute
   '/login': typeof LoginRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalog'
     | '/collection'
+    | '/garden'
     | '/hatch'
     | '/live'
     | '/login'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalog'
     | '/collection'
+    | '/garden'
     | '/hatch'
     | '/live'
     | '/login'
@@ -194,6 +205,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/catalog'
     | '/collection'
+    | '/garden'
     | '/hatch'
     | '/live'
     | '/login'
@@ -212,6 +224,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   CatalogRoute: typeof CatalogRoute
   CollectionRoute: typeof CollectionRoute
+  GardenRoute: typeof GardenRoute
   HatchRoute: typeof HatchRoute
   LiveRoute: typeof LiveRoute
   LoginRoute: typeof LoginRoute
@@ -253,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/collection'
       fullPath: '/collection'
       preLoaderRoute: typeof CollectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garden': {
+      id: '/garden'
+      path: '/garden'
+      fullPath: '/garden'
+      preLoaderRoute: typeof GardenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/hatch': {
@@ -340,6 +360,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   CatalogRoute: CatalogRoute,
   CollectionRoute: CollectionRoute,
+  GardenRoute: GardenRoute,
   HatchRoute: HatchRoute,
   LiveRoute: LiveRoute,
   LoginRoute: LoginRoute,

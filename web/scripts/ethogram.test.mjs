@@ -36,6 +36,18 @@ const SEA = [
   "manta",
   "moray",
 ];
+const GARDEN = [
+  "moss",
+  "maidenhair",
+  "ginkgo",
+  "oak",
+  "redwood",
+  "water_lily",
+  "duckweed",
+  "venus_flytrap",
+  "orchid",
+  "saguaro",
+];
 const HOUSE = [
   "red_panda",
   "cat",
@@ -64,7 +76,7 @@ function names(key) {
 }
 
 test("every living kind has an ethogram, and snakes never scratch", () => {
-  for (const key of [...HOUSE, ...SNAKES, ...SEA]) {
+  for (const key of [...HOUSE, ...SNAKES, ...SEA, ...GARDEN]) {
     assert.ok(E.actsFor(key).length > 0, key);
   }
   for (const key of SNAKES) {
@@ -74,6 +86,11 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
     assert.equal(acts.includes("yawn"), false, `${key} does not mammal-yawn`);
   }
   for (const key of SEA) {
+    const acts = names(key);
+    assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
+    assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
+  }
+  for (const key of GARDEN) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);

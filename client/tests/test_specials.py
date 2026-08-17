@@ -46,6 +46,16 @@ HOUSE_TRAITS = {
     "seahorse": ("hitch", "Hitch", "I hitched. You may look."),
     "manta": ("soar", "Soar", "I saved you a length of sky."),
     "moray": ("gape", "Gape", "The gape is air. Not a threat. Mostly."),
+    "moss": ("carpet", "Carpet", "I was already the page. Hello."),
+    "maidenhair": ("unfurl", "Unfurl", "I unfurled an inch. Hello."),
+    "ginkgo": ("gold", "Gold", "I have been gold before. Hello."),
+    "oak": ("drop", "Drop", "I agreed to be small."),
+    "redwood": ("rise", "Rise", "I rose an inch. You may look."),
+    "water_lily": ("open", "Open", "I opened. That was hello."),
+    "duckweed": ("divide", "Divide", "I divided. That was hello."),
+    "venus_flytrap": ("snap", "Snap", "I did not snap. That is hello."),
+    "orchid": ("bloom", "Bloom", "I bloomed. You may look."),
+    "saguaro": ("store", "Store", "I have not moved. That is hello."),
 }
 
 

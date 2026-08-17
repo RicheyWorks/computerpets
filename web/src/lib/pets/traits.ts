@@ -76,6 +76,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   seahorse: T(24, 2, 0.68, 0.22, { aquatic: true }, "hitch", "Hitch", "I hitched. You may look."),
   manta: T(44, 3, 1.16, 0.5, { aquatic: true }, "soar", "Soar", "I saved you a length of sky."),
   moray: T(70, 6, 1.02, 0.08, { aquatic: true }, "gape", "Gape", "The gape is air. Not a threat. Mostly."),
+  moss: T(6, 0, 0.55, 0.04, {}, "carpet", "Carpet", "I was already the page. Hello."),
+  maidenhair: T(8, 0, 0.72, 0.06, {}, "unfurl", "Unfurl", "I unfurled an inch. Hello."),
+  ginkgo: T(10, 0, 0.85, 0.08, {}, "gold", "Gold", "I have been gold before. Hello."),
+  oak: T(8, 0, 0.78, 0.05, {}, "drop", "Drop", "I agreed to be small."),
+  redwood: T(6, 0, 1.2, 0.04, {}, "rise", "Rise", "I rose an inch. You may look."),
+  water_lily: T(12, 0, 0.88, 0.15, { aquatic: true }, "open", "Open", "I opened. That was hello."),
+  duckweed: T(16, 0, 0.42, 0.25, { aquatic: true }, "divide", "Divide", "I divided. That was hello."),
+  venus_flytrap: T(8, 14, 0.68, 0.06, {}, "snap", "Snap", "I did not snap. That is hello."),
+  orchid: T(8, 0, 0.9, 0.06, {}, "bloom", "Bloom", "I bloomed. You may look."),
+  saguaro: T(4, 0, 1.05, 0.03, {}, "store", "Store", "I have not moved. That is hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

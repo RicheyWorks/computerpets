@@ -52,6 +52,9 @@ export function StudyPage() {
               <Link to="/sea">The tide</Link>
             </Button>
             <Button asChild variant="secondary">
+              <Link to="/garden">The garden</Link>
+            </Button>
+            <Button asChild variant="secondary">
               <Link to="/meet">The house</Link>
             </Button>
           </div>
@@ -70,7 +73,7 @@ export function StudyPage() {
             <p className="mt-2 text-sm text-muted">
               Five walk at a time. The rest cycle onto the wood. Treat, hide, and talk still live on
               each companion&apos;s demo and on the desk. The ten snakes keep their own den. The
-              tide keeps the sea.
+              tide keeps the sea. The garden keeps the plants.
             </p>
             <p className="mt-4">
               <Link to="/" search={{ pet: selected }} className="text-sm text-fg">

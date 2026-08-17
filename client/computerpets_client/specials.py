@@ -1,7 +1,7 @@
 """Species specials the living desk already knows.
 
 Port of ``web/src/lib/pets/specials.ts`` plus the special / verb / line
-from ``traits.ts``. Same forty keys, same house copy. Do not invent a
+from ``traits.ts``. Same fifty keys, same house copy. Do not invent a
 new trick.
 """
 
@@ -63,14 +63,24 @@ TRAITS: dict[str, SpeciesTrait] = {
     "seahorse": SpeciesTrait("hitch", "Hitch", "I hitched. You may look."),
     "manta": SpeciesTrait("soar", "Soar", "I saved you a length of sky."),
     "moray": SpeciesTrait("gape", "Gape", "The gape is air. Not a threat. Mostly."),
+    "moss": SpeciesTrait("carpet", "Carpet", "I was already the page. Hello."),
+    "maidenhair": SpeciesTrait("unfurl", "Unfurl", "I unfurled an inch. Hello."),
+    "ginkgo": SpeciesTrait("gold", "Gold", "I have been gold before. Hello."),
+    "oak": SpeciesTrait("drop", "Drop", "I agreed to be small."),
+    "redwood": SpeciesTrait("rise", "Rise", "I rose an inch. You may look."),
+    "water_lily": SpeciesTrait("open", "Open", "I opened. That was hello."),
+    "duckweed": SpeciesTrait("divide", "Divide", "I divided. That was hello."),
+    "venus_flytrap": SpeciesTrait("snap", "Snap", "I did not snap. That is hello."),
+    "orchid": SpeciesTrait("bloom", "Bloom", "I bloomed. You may look."),
+    "saguaro": SpeciesTrait("store", "Store", "I have not moved. That is hello."),
 }
 
 FALLBACK_TRAIT = TRAITS["red_panda"]
 
-_PLAY = frozenset({"ribbon", "steal", "trade"})
-_WANDER = frozenset({"thump", "loop", "slither", "patrol", "chart", "rise", "pulse", "soar"})
-_TALK = frozenset({"wheek", "echo", "quote", "bug", "bill", "reborn", "mimic", "inspect", "flush", "gape"})
-_SIT = frozenset({"still", "bask", "curl", "sun", "hoard", "ritual", "coil", "drape", "hold", "nest", "ink", "cling", "hitch", "molt"})
+_PLAY = frozenset({"ribbon", "steal", "trade", "snap"})
+_WANDER = frozenset({"thump", "loop", "slither", "patrol", "chart", "rise", "pulse", "soar", "drop", "divide"})
+_TALK = frozenset({"wheek", "echo", "quote", "bug", "bill", "reborn", "mimic", "inspect", "flush", "gape", "bloom"})
+_SIT = frozenset({"still", "bask", "curl", "sun", "hoard", "ritual", "coil", "drape", "hold", "nest", "ink", "cling", "hitch", "molt", "carpet", "unfurl", "gold", "open", "store"})
 
 
 def trait_for(key: str) -> SpeciesTrait:
