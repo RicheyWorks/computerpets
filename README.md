@@ -41,8 +41,10 @@ This backend enables users to prove ownership of pets through multiple platforms
 **Planned / Vision:**
 - GPU-accelerated native desktop client (PyQt6 / modern rendering)
 - A live ComputerPets collection address in `ethereum.collections`
-- Persistent license store and revocation support
-- Hardware binding and advanced anti-piracy measures
+
+Already shipped (not vision): JPA license persistence + revocation, optional
+`hwid` binding, fail-hard `LICENSE_SECRET_KEY`, and the native client contract
+in [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
 
 ---
 
@@ -139,6 +141,7 @@ All detailed documentation is located in the `docs/` directory:
 
 - **[Documentation Index](docs/README.md)** — Overview of all available docs
 - **[Architecture](docs/ARCHITECTURE.md)** — Comprehensive system design, diagrams, and recommendations (**recommended starting point**)
+- **[Client contract](docs/CLIENT-CONTRACT.md)** — License decrypt, hwid, JWT, and signed download URL
 - **[Setup Guide](docs/SETUP.md)** — How to build, configure, and run the project locally
 - **[Contributing Guide](docs/CONTRIBUTING.md)** — Development workflow and contribution process
 
@@ -153,6 +156,7 @@ ComputerPets/
 ├── .github/                      # GitHub templates (issues & PRs)
 ├── docs/                         # Project documentation
 │   ├── ARCHITECTURE.md           # Full system architecture (living document)
+│   ├── CLIENT-CONTRACT.md        # Native client: decrypt, hwid, download
 │   ├── SETUP.md                  # Local development guide
 │   └── CONTRIBUTING.md
 ├── src/main/java/com/enterprisepet/

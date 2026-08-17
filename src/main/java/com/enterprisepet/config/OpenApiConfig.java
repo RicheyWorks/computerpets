@@ -41,6 +41,7 @@ public class OpenApiConfig {
                 .servers(List.of(localServer))
                 .components(new Components()
                         .addExamples("Steam Verification", ApiExamples.steamVerificationRequest())
+                        .addExamples("Steam Verification With Hwid", ApiExamples.steamVerificationRequestWithHwid())
                         .addExamples("NFT Verification", ApiExamples.nftVerificationRequest())
                         .addExamples("Microsoft Verification", ApiExamples.microsoftVerificationRequest())
                         .addExamples("Success Response", ApiExamples.verifySuccessResponse())
@@ -59,9 +60,12 @@ public class OpenApiConfig {
 
                         // Download examples
                         .addExamples("Download Request", ApiExamples.downloadRequest())
+                        .addExamples("Download Request With Hwid", ApiExamples.downloadRequestWithHwid())
                         .addExamples("Download License Invalid", ApiExamples.downloadLicenseInvalidError())
                         .addExamples("Download Pet Mismatch", ApiExamples.downloadPetMismatchError())
                         .addExamples("Download Auth Mismatch", ApiExamples.downloadAuthMismatchError())
+                        .addExamples("Download Hwid Mismatch", ApiExamples.downloadHwidMismatchError())
+                        .addExamples("Hwid Too Long", ApiExamples.hwidTooLongError())
 
                         // Additional error variants
                         .addExamples("Unknown Pet Type", ApiExamples.unknownPetTypeError())

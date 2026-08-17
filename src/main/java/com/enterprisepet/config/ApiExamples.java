@@ -22,6 +22,15 @@ public final class ApiExamples {
         }
         """;
 
+    public static final String VERIFY_STEAM_REQUEST_WITH_HWID = """
+        {
+          "steamId": "76561198000000000",
+          "appId": "123456",
+          "petType": "red_panda",
+          "hwid": "device-abc-123"
+        }
+        """;
+
     public static final String VERIFY_NFT_REQUEST = """
         {
           "walletAddress": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
@@ -46,6 +55,14 @@ public final class ApiExamples {
         {
           "ciphertext": "base64ciphertext...",
           "iv": "base64iv..."
+        }
+        """;
+
+    public static final String DOWNLOAD_REQUEST_WITH_HWID = """
+        {
+          "ciphertext": "base64ciphertext...",
+          "iv": "base64iv...",
+          "hwid": "device-abc-123"
         }
         """;
 
@@ -86,9 +103,10 @@ public final class ApiExamples {
           "petKey": "red_panda",
           "displayName": "Red Panda",
           "rarity": "COMMON",
-          "downloadUrl": "https://cdn.example.com/bundles/red_panda.zip?owner=...&exp=...&sig=...",
+          "downloadUrl": "https://cdn.example.com/bundles/red_panda.zip?owner=...&jti=...&exp=...&sig=...",
           "expiresAt": "2026-05-23T12:15:00Z",
-          "ttlSeconds": 900
+          "ttlSeconds": 900,
+          "jti": "3f2a0c1e-9b44-4d1a-8c2e-7a1b0d5e6f80"
         }
         """;
 
@@ -115,6 +133,20 @@ public final class ApiExamples {
           "tokenPet": "red_panda",
           "licenseOwner": "76561198000000000",
           "licensePet": "cat"
+        }
+        """;
+
+    public static final String DOWNLOAD_HWID_MISMATCH_ERROR = """
+        {
+          "error": "hardware binding mismatch",
+          "hint": "This license is bound to a specific device"
+        }
+        """;
+
+    public static final String HWID_TOO_LONG_ERROR = """
+        {
+          "error": "hwid too long",
+          "maxLength": 128
         }
         """;
 
@@ -163,6 +195,13 @@ public final class ApiExamples {
                 .summary("Verify ownership via Steam")
                 .description("Example request body for verifying Steam game ownership")
                 .value(VERIFY_STEAM_REQUEST);
+    }
+
+    public static Example steamVerificationRequestWithHwid() {
+        return new Example()
+                .summary("Verify via Steam with hardware binding")
+                .description("Same as Steam verify, plus optional hwid (max 128 chars) stored in the license")
+                .value(VERIFY_STEAM_REQUEST_WITH_HWID);
     }
 
     public static Example nftVerificationRequest() {
@@ -405,6 +444,27 @@ public final class ApiExamples {
                 .summary("Download request (encrypted license)")
                 .description("POST body for /api/download/{petKey} — the encrypted license fields received from /api/verify")
                 .value(DOWNLOAD_REQUEST);
+    }
+
+    public static Example downloadRequestWithHwid() {
+        return new Example()
+                .summary("Download request with hwid")
+                .description("Required when the license was issued with a non-blank hwid; compared with exact string equality")
+                .value(DOWNLOAD_REQUEST_WITH_HWID);
+    }
+
+    public static Example downloadHwidMismatchError() {
+        return new Example()
+                .summary("Hardware binding mismatch")
+                .description("Returned when the license is hwid-bound and the download body omits hwid or sends a different value")
+                .value(DOWNLOAD_HWID_MISMATCH_ERROR);
+    }
+
+    public static Example hwidTooLongError() {
+        return new Example()
+                .summary("hwid exceeds 128 characters")
+                .description("Returned by /api/verify when hwid is longer than the IssuedLicense column")
+                .value(HWID_TOO_LONG_ERROR);
     }
 
     public static Example downloadLicenseInvalidError() {
