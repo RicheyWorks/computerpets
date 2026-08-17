@@ -33,12 +33,6 @@ public class EpicHealthIndicator implements HealthIndicator {
         this.deploymentId = null;
     }
 
-    EpicHealthIndicator(String clientId, String clientSecret, String deploymentId) {
-        this.clientId = clientId;
-        this.clientSecret = clientSecret;
-        this.deploymentId = deploymentId;
-    }
-
     @Override
     public Health health() {
         if (EpicService.isUnconfiguredClientId(clientId)
