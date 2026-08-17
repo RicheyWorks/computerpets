@@ -17,6 +17,7 @@ To run the Spring Boot backend, you will need the following:
 | **Java JDK**      | 21 (LTS)                     | Temurin, Oracle JDK, or Amazon Corretto |
 | **Apache Maven**  | 3.9 or newer                 | Used to build and run the project |
 | **Git**           | Latest stable                | Required to clone the repository |
+| **Redis**         | 7.x                          | Shared rate-limit store. `docker compose` starts it. Local `mvn spring-boot:run` needs Redis on `localhost:6379` or `RATE_LIMIT_BACKEND=memory`. |
 | **Terminal**      | PowerShell, Bash, or Zsh     | Windows PowerShell is fully supported |
 
 **Optional but Recommended Tools:**
@@ -131,6 +132,14 @@ The backend will start on **http://localhost:8080** by default.
 
 The living desk ledger is `/admin` (not in the house nav). Point it at this origin and paste `ADMIN_API_KEY` — the page sends `X-Admin-Key` on every lookup and revoke.
 
+Rate limits are Redis-backed (10/min on `/api/verify/`, 30/min on `/api/download/`, per client IP). `docker compose up` starts Redis and points the app at it (`REDIS_HOST=redis`). A local Maven run expects Redis on `localhost:6379`. If Redis is down, those routes return **503** with `Retry-After` and `application/problem+json` — the limit is not lifted. For a single-process local run without Redis:
+
+```bash
+export RATE_LIMIT_BACKEND=memory
+```
+
+Do not use `memory` when more than one app instance is serving traffic; buckets would not be shared.
+
 ### Verifying the Backend
 
 Once the server is running, test it with:
@@ -166,6 +175,11 @@ When the client is developed, it will be located in a separate directory (likely
 | `EPIC_SANDBOX_ID`         | No       | empty   | Optional official Epic sandbox allowlist (do not invent one) |
 | `EPIC_CATALOG_ITEM_ID`    | No       | empty   | Optional official catalog item allowlist (do not invent one) |
 | `BUNDLE_BASE_URL`         | No       | CDN placeholder | Base URL used when generating signed download links |
+| `REDIS_HOST`              | No       | localhost | Redis hostname for shared verify/download rate limits |
+| `REDIS_PORT`              | No       | 6379 | Redis port |
+| `REDIS_TIMEOUT`           | No       | 200ms | Lettuce command/connect timeout for the rate-limit store |
+| `RATE_LIMIT_BACKEND`      | No       | redis | `redis` (default, shared) or `memory` (tests / single local process only) |
+| `RATE_LIMIT_FAIL_CLOSED_RETRY_AFTER` | No | 5 | `Retry-After` seconds when Redis is down (HTTP 503) |
 
 ---
 
@@ -318,6 +332,10 @@ ethereum:
 ### Using the Default License Key
 **Problem**: Application refuses to start with message about the committed default key  
 **Solution**: You **must** generate and provide your own random 32-byte key via the `LICENSE_SECRET_KEY` environment variable. The previously committed default key is no longer accepted outside of automated tests.
+
+### Rate limiter returns 503
+**Problem**: `/api/verify/**` or `/api/download/**` returns 503 with `Rate limiter unavailable`  
+**Solution**: Redis is the default store and the filter fail-closes when it cannot be reached. Start Redis (`docker compose up redis` or a local `redis-server`) and set `REDIS_HOST` / `REDIS_PORT`, or set `RATE_LIMIT_BACKEND=memory` for a single local process.
 
 ### Port Already in Use
 **Problem**: Port 8080 is occupied  

@@ -96,11 +96,20 @@
             <version>1.78.1</version>
         </dependency>
 
-        <!-- Rate limiting (in-memory; for multi-instance deploys, swap for a Redis-backed store) -->
+        <!-- Rate limiting: Bucket4j token buckets, Redis-backed via Lettuce so replicas share limits -->
         <dependency>
             <groupId>com.bucket4j</groupId>
             <artifactId>bucket4j-core</artifactId>
             <version>8.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bucket4j</groupId>
+            <artifactId>bucket4j-redis</artifactId>
+            <version>8.10.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.lettuce</groupId>
+            <artifactId>lettuce-core</artifactId>
         </dependency>
 
         <!-- Resilience4j (Phase 2.3) — circuit breakers, retries, bulkheads for external providers (Steam, NFT, Microsoft) -->
@@ -141,6 +150,12 @@
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8-standalone</artifactId>
             <version>2.35.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

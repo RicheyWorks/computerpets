@@ -94,7 +94,7 @@ All critical items required before any public or limited production exposure hav
 **Goal:** Prepare the service for horizontal scaling and production traffic.
 
 - **3.1 Distributed State**
-  - Redis-backed rate limiting (replace in-memory Bucket4j)
+  - [x] Redis-backed rate limiting (replace in-memory Bucket4j)
   - Distributed revocation / jti blacklist
 
 - **3.2 Observability Maturity**
@@ -163,6 +163,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (desktop license unlock)
+**Last Updated:** 2026-08-17 (Redis rate limiting)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
