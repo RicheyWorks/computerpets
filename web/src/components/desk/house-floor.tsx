@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
 import { DayWash } from "@/components/desk/blotter";
 import { LIVING_KINDS } from "@/lib/pets/living";
@@ -63,7 +64,10 @@ export function HouseFloor() {
         <Guest key={key} species={key} startX={STARTS[i] ?? 80} />
       ))}
       <p className="absolute bottom-4 left-5 text-[11px] uppercase tracking-[0.18em] text-subtle">
-        Today {todaysVisitor("red_panda").name} is calling
+        Today {todaysVisitor("red_panda").name} is calling ·{" "}
+        <Link to="/snakes" className="text-fg no-underline hover:text-primary">
+          The den
+        </Link>
       </p>
     </section>
   );

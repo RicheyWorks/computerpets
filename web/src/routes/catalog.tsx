@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SpeciesCard } from "@/components/pet-card";
 import { SPECIES, type Rarity } from "@/lib/pets/catalog";
 import { isLivingSpecies, livingByKey } from "@/lib/pets/living";
@@ -15,7 +15,13 @@ function Catalog() {
         <h1 className="font-display text-4xl">The thirty.</h1>
         <p className="text-sm text-muted">
           Wire keys match the ComputerPets backend. What you hatch here is the
-          same species the license service already knows.
+          same species the license service already knows. Ten of them are snakes —
+          the den is where you learn the types, not just the names.
+        </p>
+        <p>
+          <Link to="/snakes" className="text-sm text-fg">
+            Open the snake den
+          </Link>
         </p>
       </header>
 
