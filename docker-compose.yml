@@ -30,7 +30,7 @@ services:
       - EPIC_DEPLOYMENT_ID=${EPIC_DEPLOYMENT_ID:-}
       - EPIC_SANDBOX_ID=${EPIC_SANDBOX_ID:-}
       - EPIC_CATALOG_ITEM_ID=${EPIC_CATALOG_ITEM_ID:-}
-      # Shared rate-limit store (10/min verify, 30/min download per client IP)
+      # Shared rate-limit store + jti deny-list (10/min verify, 30/min download per client IP)
       - RATE_LIMIT_BACKEND=redis
       - REDIS_HOST=redis
       - REDIS_PORT=6379

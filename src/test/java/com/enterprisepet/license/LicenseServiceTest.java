@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 /**
@@ -45,6 +46,35 @@ class LicenseServiceTest {
         ArgumentCaptor<IssuedLicense> captor = ArgumentCaptor.forClass(IssuedLicense.class);
         verify(licenseRepository).save(captor.capture());
         assertThat(captor.getValue().getRevokedAt()).isNotNull();
+    }
+
+    @Test
+    void revoke_writesDenyList_afterPostgresSave() {
+        RevocationIndex index = mock(RevocationIndex.class);
+        licenseService = new LicenseService(licenseRepository, index, true);
+
+        IssuedLicense lic = new IssuedLicense("owner1", "red_panda", "steam", Instant.now(), Instant.now().plusSeconds(3600));
+        lic.setJti("test-jti-123");
+        when(licenseRepository.findByJti("test-jti-123")).thenReturn(Optional.of(lic));
+
+        assertThat(licenseService.revoke("test-jti-123")).isTrue();
+        verify(licenseRepository).save(any(IssuedLicense.class));
+        verify(index).deny(eq("test-jti-123"), any());
+    }
+
+    @Test
+    void revoke_stillSucceeds_whenDenyListWriteFails() {
+        RevocationIndex index = mock(RevocationIndex.class);
+        licenseService = new LicenseService(licenseRepository, index, true);
+
+        IssuedLicense lic = new IssuedLicense("owner1", "red_panda", "steam", Instant.now(), Instant.now().plusSeconds(3600));
+        lic.setJti("test-jti-123");
+        when(licenseRepository.findByJti("test-jti-123")).thenReturn(Optional.of(lic));
+        doThrow(new RevocationIndexUnavailableException("down", new RuntimeException("boom")))
+            .when(index).deny(any(), any());
+
+        assertThat(licenseService.revoke("test-jti-123")).isTrue();
+        verify(licenseRepository).save(any(IssuedLicense.class));
     }
 
     @Test

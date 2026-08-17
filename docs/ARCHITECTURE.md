@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (Redis rate limiting)           |
+| **Last Updated** | 2026-08-17 (Redis jti deny-list)           |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -160,6 +160,7 @@ The service is currently designed and run as a single Spring Boot executable JAR
 - One JVM process listening on port 8080 (configurable via `server.port`).
 - In-memory H2 database (`jdbc:h2:mem:enterprisepet`, `ddl-auto=create-drop`).
 - Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503.
+- Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` remains the ledger; Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked license). HTTP download may still 503 from the rate-limit filter.
 - All three critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`) loaded from environment variables with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values.
 - No `Dockerfile`, no Kubernetes manifests, and no CI image-building pipeline exist in the repository today.
 - External dependencies (Alchemy, Microsoft Collections, Steam Web API, future CDN) are called directly over the public internet with no circuit breakers or retries configured.
@@ -174,7 +175,7 @@ For any non-trivial user base or multi-region deployment, the following producti
 - **PostgreSQL** (managed service or self-hosted with HA) as the durable store for issued licenses (`jti`, owner, pet, timestamps, revocation status) once the JPA layer is implemented. This enables revocation, audit, and "licenses per owner" policies.
 - **Redis** (or Redis-compatible store) for:
   - Distributed token-bucket rate limits (`bucket4j-redis` or equivalent).
-  - Short-lived revocation lists / jti blacklists (so a revoked license is rejected within seconds across all replicas).
+  - Shared jti deny-list (`revoked:jti:{jti}`, TTL ≥ remaining license life + 1h skew) so a revoked license is rejected immediately across all replicas. Postgres remains the ledger.
   - Optional short-TTL caching of expensive external provider responses (e.g., recent NFT ownership checks).
 - **External secret management** (HashiCorp Vault, AWS Secrets Manager, Azure Key Vault, or Kubernetes `ExternalSecrets` operator) instead of plain environment variables for the three long-lived cryptographic keys. Secrets should be rotated on a schedule and never appear in logs or container specs.
 - **CDN / Object Storage** (Amazon CloudFront + S3, Cloudflare R2, Google Cloud CDN, etc.) as the authoritative source for the actual pet `.zip` bundles. The backend only generates short-lived HMAC-signed URLs; it never serves the binary assets itself.
@@ -226,7 +227,7 @@ flowchart TB
     LB --> App1 & App2 & AppN
 
     App1 & App2 & AppN -->|JPA / JDBC| Postgres
-    App1 & App2 & AppN -->|Bucket4j + Lettuce| Redis
+    App1 & App2 & AppN -->|Bucket4j + Lettuce + jti deny-list| Redis
     App1 & App2 & AppN -->|ownerOf, collections/query, GetOwnedGames| ETH & MS & STEAM
     App1 & App2 & AppN -. "init + periodic rotation" .-> Secrets
 
@@ -282,7 +283,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 ### 4.3 Core Domain Services
 | Component             | Responsibility                                                                 | Technology                  | Key Files                              | Dependencies                     |
 |-----------------------|--------------------------------------------------------------------------------|-----------------------------|----------------------------------------|----------------------------------|
-| `LicenseService`      | Issue & validate AES-256-GCM encrypted JSON license payloads (jti, owner, pet, timestamps) | BouncyCastle GCMBlockCipher + Jackson | `license/LicenseService.java`          | Spring @Value, ObjectMapper, SecureRandom |
+| `LicenseService`      | Issue & validate AES-256-GCM encrypted JSON license payloads (jti, owner, pet, timestamps); revoke writes Postgres then the shared deny-list | BouncyCastle GCMBlockCipher + Jackson | `license/LicenseService.java`          | `LicenseRepository`, `RevocationIndex`, Spring @Value, ObjectMapper, SecureRandom |
 | `JwtService`          | Issue short-lived (default 30 min) HS256 JWTs carrying owner/pet/provider claims; parse & validate | JJWT 0.12 + Spring @Value   | `security/JwtService.java`             | SecretKey from config            |
 | `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, expiry) | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`         | Signing key from config          |
 | `PetCatalog` / `PetType` | Static catalog of 30 pets across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
@@ -290,6 +291,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 ### 4.4 Cross-Cutting & Infrastructure
 - **`SecurityConfig`** + **`JwtAuthenticationFilter`**: Stateless JWT auth (permitAll on verify/pets, authenticated on download). Filter populates `SecurityContext` with a `Map` principal for claim access.
 - **`RateLimitingFilter`**: Token-bucket per-IP (10/min verify, 30/min download) using Bucket4j on Redis (`LettuceBasedProxyManager`). Respects `X-Forwarded-For`. Redis-down → 503 fail-closed.
+- **`RevocationIndex`**: Shared jti deny-list on the same Redis (`RedisRevocationIndex`, keys `revoked:jti:{jti}`). `InMemoryRevocationIndex` when `rate-limit.backend=memory`. Not a second ledger.
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
 - **`EnterprisePetBackendApplication`**: Standard `@SpringBootApplication`.
 - **Config**: `application.yml` with heavy use of env-var overrides and `@PostConstruct` guard clauses that refuse to start on missing/weak/placeholder secrets.
@@ -321,7 +323,7 @@ Rate limiting and basic validation occur before provider dispatch. Provider exce
 2. `JwtAuthenticationFilter` (if present) populates the security context.
 3. `DownloadController`:
    - Validates pet exists.
-   - Calls `LicenseService.validate(ciphertext, iv)` → decrypts, checks expiry and authenticity via GCM tag.
+   - Calls `LicenseService.validate(ciphertext, iv)` → decrypts, checks expiry and authenticity via GCM tag, then the Redis deny-list, then the Postgres ledger.
    - Compares `license.pet` against path variable.
    - If JWT present in context, performs claim cross-check: `jwt.sub == license.owner && jwt.pet == license.pet`.
 4. On success, `PetBundleService.manifestFor(...)` signs `petKey|owner|exp` with HMAC-SHA256 and returns a CDN URL containing the signature as a query parameter.
@@ -334,7 +336,7 @@ This two-phase (verify → download) + dual-artifact (license + JWT) design prev
 #### 4.3 Admin lookup, audit, and revoke
 1. Operator opens the house `/admin` ledger (not in the public nav) and supplies `ADMIN_API_KEY` plus the license-service base URL. The key is sent as `X-Admin-Key` and kept in `sessionStorage` for the tab only.
 2. `GET /api/admin/licenses` (optional `owner`) and `GET /api/admin/licenses/{jti}` return persisted audit fields: owner, pet, provider, issued, last used, revoked.
-3. `POST /api/admin/revoke` `{ "jti" }` sets `revokedAt`. Subsequent `LicenseService.validate()` and `/api/download` fail closed.
+3. `POST /api/admin/revoke` `{ "jti" }` sets `revokedAt` in Postgres, then writes the jti to the shared Redis deny-list (TTL ≥ remaining license life + 1h). Subsequent `LicenseService.validate()` and `/api/download` fail closed (same 401). A replica that has not seen the row still denies via Redis.
 
 All three routes are `permitAll` at the Spring Security layer; the controller rejects a missing or wrong key with 401. CORS is enabled only for `/api/admin/**` so the living desk can call a separate origin.
 
@@ -437,7 +439,10 @@ ComputerPets/
 │   │   │   │   ├── PetController.java
 │   │   │   │   └── VerifyController.java
 │   │   │   ├── license/
-│   │   │   │   └── LicenseService.java
+│   │   │   │   ├── LicenseService.java
+│   │   │   │   ├── RevocationIndex.java
+│   │   │   │   ├── RedisRevocationIndex.java
+│   │   │   │   └── InMemoryRevocationIndex.java
 │   │   │   ├── microsoft/
 │   │   │   │   └── MicrosoftStoreService.java
 │   │   │   ├── itch/
@@ -510,16 +515,17 @@ Many of these decisions are explicitly called out as intentional in the code com
 - ~~**P0**: Steam and Microsoft providers are no-op stubs**~~ → Partially addressed. Steam now uses the real Web API. Microsoft still supports a `dev-mode` flag (useful for local development). Provider toggles via `ownership.providers.*.enabled` were added for fine-grained control.
 - ~~**P0**: NFT ownership check uses fragile `String.contains(substring(2))` parsing**~~ → **Completed**, then hardened (Aug 2026): `FunctionReturnDecoder`, checksum-insensitive address compare, official collection allowlist, token→pet binding, ERC-1155, optional `personal_sign`.
 - No persistence → impossible to revoke a license or detect replays beyond the 365-day expiry.
-- ~~Rate-limit buckets are in-memory only~~ → Redis-backed Bucket4j (Lettuce). Distributed jti blacklist is still open.
+- ~~Rate-limit buckets are in-memory only~~ → Redis-backed Bucket4j (Lettuce).
+- ~~Distributed jti blacklist~~ → Redis `RevocationIndex` (deny-list after Postgres revoke). Redis-down validate falls back to the ledger.
 - `X-Forwarded-For` is trusted unconditionally (spoofing risk if not behind a trusted proxy).
 - No authentication or rate limiting on some discovery endpoints in practice (all routes under `/api/verify` and `/api/pets` are public).
 - ~~**No tests, no contract tests against the external providers**~~ → **Basic unit tests added** for Steam, Microsoft, NFT, Itch, and Epic. Integration-style HTTP mocking is in place for Steam, Microsoft, Itch, and Epic.
 - ~~Default license key present in `application.yml`**~~ → **Completed**. The application now fails fast at startup if the committed default key is used (except under the 'test' profile). The fallback default was removed from `application.yml`.
 
 ### Scalability Outlook
-- **Horizontal**: Excellent for the verification tier (stateless). Replicas share rate-limit buckets via Redis; license state is already in Postgres.
+- **Horizontal**: Excellent for the verification tier (stateless). Replicas share rate-limit buckets and the jti deny-list via Redis; the license ledger is Postgres.
 - **Download tier**: Handled by CDN; the backend only does lightweight signature generation.
-- **Future scaling knobs**: Distributed jti blacklist on Redis, caching for repeated ownership checks (with short TTLs).
+- **Future scaling knobs**: Caching for repeated ownership checks (with short TTLs).
 - **Throughput**: Verification calls are low-volume by nature (human + desktop app cadence); the service is not designed for high-frequency trading-style traffic.
 
 ### Security Considerations
@@ -614,7 +620,7 @@ Goal: Prepare for horizontal scaling and real production traffic.
 
 - **3.1 Distributed Rate Limiting & State**
   - [x] Replace in-memory Bucket4j with Redis-backed rate limiting
-  - Move short-lived revocation / jti blacklists to Redis
+  - [x] Move short-lived revocation / jti blacklists to Redis
 
 - **3.2 Database & Persistence Maturity**
   - Add read replicas strategy and connection pooling tuning
