@@ -1,15 +1,16 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same forty, taught here. Snakes keep the den
-facts; the tide keeps the sea facts; the twenty keep the study facts.
+This is not a new bestiary — the same fifty, taught here. Snakes keep the den
+facts; the tide keeps the sea facts; the garden keeps the plant facts; the
+twenty keep the study facts.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import CATALOG_KEYS, HOUSE_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_sea, is_snake
+from .species import CATALOG_KEYS, GARDEN_KEYS, HOUSE_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_garden, is_sea, is_snake
 
 
 @dataclass(frozen=True)
@@ -429,7 +430,100 @@ SEA_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE
+GARDEN_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "moss",
+        "Hypnum cupressiforme",
+        "A sheet of green scales, no flower, no true root — only rhizoids that cling. Cypress-moss: the felt of woods and walls. She carpets. She leans to the lamp. The blotter is a forest floor she agreed to.",
+        "Not a flowering plant. Not a lichen — those are a fungus with an alga, a different kingdom. Felt is Hypnum cupressiforme, a moss, Plantae, and the carpet is the whole identification. She does not bloom. She does not commute.",
+        "Sheet moss. I have no flower. The carpet is the tell.",
+        "blotter felt",
+        "patient",
+    ),
+    _entry(
+        "maidenhair",
+        "Adiantum capillus-veneris",
+        "Black wiry stems, fanlets of pale green, a fiddlehead that unfurls like a sentence. Maidenhair: the Venus-hair fern of damp stone. She does not flower. The saucer is a cliff she borrowed.",
+        "Not a flowering plant. Not a palm with smaller opinions. Vein is a fern — spores, not petals — Adiantum capillus-veneris, and the black stem is the tell. Sol is a lizard who basks. Vein unfurls and stays.",
+        "Maidenhair fern. I unfurl. I do not flower.",
+        "damp saucer",
+        "shy",
+    ),
+    _entry(
+        "ginkgo",
+        "Ginkgo biloba",
+        "Fan leaves with a notch, veins that do not net, gold when the desk turns autumn. A living fossil. He is not a flowering plant. The lamp is a season he wears.",
+        "Not a maple with a better publicist — those have palmate leaves and flowers. Not an oak. Fan is Ginkgo biloba, the last of his line, and the fan is the whole identification. The gold is a season, not a mood.",
+        "Ginkgo. I gold. The fan is the tell.",
+        "lamp gold",
+        "ancient",
+    ),
+    _entry(
+        "oak",
+        "Quercus alba",
+        "A white oak who agreed to be a seedling: lobed leaves, pale bark starting, an acorn he may drop. A tree on a blotter. The dish is a forest he has not outgrown.",
+        "Not a maple — those bleed sweet and keep a different leaf. Not Fan. Fan is a ginkgo and a living fossil; Mast is Quercus alba, the white oak of the eastern door, and the lobe is the tell. The acorn is a letter, not a toy.",
+        "White oak. I drop. I agreed to be small.",
+        "acorn dish",
+        "steady",
+    ),
+    _entry(
+        "water_lily",
+        "Nymphaea odorata",
+        "A round pad with a slit, a white bloom that opens for the lamp and closes for the night. Fragrant water lily. She floats. The ink dish is a pond she agreed to.",
+        "Not a lotus — those hold the leaf above the water and keep a different center. Pad is Nymphaea odorata, the fragrant one, and the open is the tell. Coin stayed in the bowl. Pad is the floor of the dish.",
+        "Fragrant water lily. I open. The pad is the floor.",
+        "ink dish",
+        "serene",
+    ),
+    _entry(
+        "orchid",
+        "Phalaenopsis amabilis",
+        "Thick aerial roots, a spray of white moths that are flowers, a stem that will not sit in dirt like a rumor. Moth orchid. She blooms. The bark is a tree she borrowed.",
+        "Not a moth. The moth is the flower's joke — Phalaenopsis, the moth-like one, amabilis. Not a lily. Pad floats; Moth hangs her roots in the air. The bloom is the tell. The dirt is optional.",
+        "Moth orchid. I bloom. The roots are in the air.",
+        "bark mount",
+        "showy",
+    ),
+    _entry(
+        "saguaro",
+        "Carnegiea gigantea",
+        "A young column of ribs and spines, green, storing rain, an arm that has not arrived. Saguaro: a cactus of the Sonoran door. He sits the tray. He is not a tree with opinions.",
+        "Not a tree. Trees keep wood and a different thirst; Arm is Carnegiea gigantea, a cactus, and the store is the species. Not a succulent of the windowsill rumor with no spines. He works the night. The day is for sitting.",
+        "Saguaro. I store. I am a cactus, not a tree.",
+        "sand tray",
+        "still",
+    ),
+    _entry(
+        "venus_flytrap",
+        "Dionaea muscipula",
+        "A rosette of hinged leaves, teeth like a polite fence, two hairs that must agree. Venus flytrap: a wetland plant of poor soil. She snaps. She is not a monster. The cup is a bog.",
+        "Not a monster. Not Well — Well drowns, a leaf that became a pitfall. Not Dew — Dew glues and curls. Snap is Dionaea muscipula, the Carolina door, and two hairs are the law. Three hunts. Three plants.",
+        "Venus flytrap. Two hairs, then the trap. I snap. I am a plant.",
+        "wetland cup",
+        "watchful",
+    ),
+    _entry(
+        "pitcher",
+        "Sarracenia purpurea",
+        "Short wine-purple pitchers, heavy veins, a hood that does not close, rain sitting in the well. Purple pitcher plant of northern bogs. He drowns. The leaf became a hole. The cup is a bog.",
+        "Not a flytrap with a cup glued on. Snap hinges; Well is Sarracenia purpurea, a passive pitfall, and the water is the method. Not Dew. Dew glitters and curls. He does not chase. The well is enough.",
+        "Purple pitcher plant. A leaf that became a well. I drown.",
+        "bog cup",
+        "patient",
+    ),
+    _entry(
+        "sundew",
+        "Drosera rotundifolia",
+        "Round pads on thin stalks, red tentacles, a drop of glue on each hair, a curl that takes its time. Round-leaved sundew of peat and light. She glues. She is not a door.",
+        "Not a flytrap. Snap slams; Dew is Drosera rotundifolia, mucilage and a slow curl. Not Well. Well is a pitfall that waits with water. Three hunts on this blotter: snap, drown, glue.",
+        "Round-leaved sundew. Tentacles, then a curl. I glue.",
+        "peat saucer",
+        "slow",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -452,6 +546,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="den", label="All ten in the den", verb="crawl")
     if is_sea(key):
         return Classroom(room="tide", label="All ten in the tide", verb="swim")
+    if is_garden(key):
+        return Classroom(room="garden", label="All ten in the garden", verb="grow")
     return Classroom(room="house", label="The rest of the house", verb="walk")
 
 
@@ -467,6 +563,10 @@ def sea_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in SEA_GUIDE)
 
 
+def garden_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in GARDEN_GUIDE)
+
+
 def house_guide_complete() -> bool:
     return len(HOUSE_GUIDE) == len(HOUSE_KEYS) and all(k in _BY_KEY for k in HOUSE_KEYS)
 
@@ -479,11 +579,16 @@ def sea_guide_complete() -> bool:
     return len(SEA_GUIDE) == len(SEA_KEYS) and all(k in _BY_KEY for k in SEA_KEYS)
 
 
+def garden_guide_complete() -> bool:
+    return len(GARDEN_GUIDE) == len(GARDEN_KEYS) and all(k in _BY_KEY for k in GARDEN_KEYS)
+
+
 def guide_complete() -> bool:
     return (
         house_guide_complete()
         and snake_guide_complete()
         and sea_guide_complete()
+        and garden_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
     )

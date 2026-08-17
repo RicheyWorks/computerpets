@@ -41,6 +41,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   seahorse: { shape: "flake", verb: "Brine" },
   manta: { shape: "flake", verb: "Plankton" },
   moray: { shape: "crumb", verb: "Fish" },
+  moss: { shape: "flake", verb: "Dew" },
+  maidenhair: { shape: "flake", verb: "Mist" },
+  ginkgo: { shape: "leaf", verb: "Leaf" },
+  oak: { shape: "leaf", verb: "Water" },
+  water_lily: { shape: "flake", verb: "Silt" },
+  orchid: { shape: "flake", verb: "Mist" },
+  saguaro: { shape: "pebble", verb: "Rain" },
+  venus_flytrap: { shape: "crumb", verb: "Fly" },
+  pitcher: { shape: "crumb", verb: "Midge" },
+  sundew: { shape: "crumb", verb: "Gnat" },
 };
 
 export function treatFor(key: string) {
@@ -88,4 +98,14 @@ export const GIFT_LINE: Record<string, string> = {
   seahorse: "A hitch I was not using.",
   manta: "A barrel, unused.",
   moray: "A crevice I outgrew.",
+  moss: "A square of green I was finished with.",
+  maidenhair: "A fan I had already opened.",
+  ginkgo: "A gold leaf I was not using.",
+  oak: "An acorn I was finished considering.",
+  water_lily: "A pad I was not using.",
+  orchid: "A moth I was finished being.",
+  saguaro: "A rain I stored twice.",
+  venus_flytrap: "A snap I did not need.",
+  pitcher: "A well I was finished holding.",
+  sundew: "A drop I was finished glittering.",
 };

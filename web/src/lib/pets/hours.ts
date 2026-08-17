@@ -40,6 +40,16 @@ const REST: Record<string, [number, number]> = {
   seahorse: [20, 6],
   manta: [21, 6],
   moray: [8, 17],
+  moss: [20, 6],
+  maidenhair: [20, 7],
+  ginkgo: [19, 6],
+  oak: [20, 6],
+  water_lily: [20, 6],
+  orchid: [19, 6],
+  saguaro: [8, 17],
+  venus_flytrap: [21, 6],
+  pitcher: [21, 6],
+  sundew: [20, 6],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -106,6 +116,16 @@ export const HIDE_LINE: Record<string, string> = {
   seahorse: "Hitched. Do not jostle.",
   manta: "Above the bowl. Still a kite.",
   moray: "Inside the jamb.",
+  moss: "Under the felt.",
+  maidenhair: "Inside the coil.",
+  ginkgo: "Behind a gold.",
+  oak: "Inside the dish.",
+  water_lily: "Under the pad.",
+  orchid: "Behind a closed moth.",
+  saguaro: "Inside the store.",
+  venus_flytrap: "Inside the cup.",
+  pitcher: "Inside the well.",
+  sundew: "Behind a glitter.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -149,6 +169,16 @@ export const SNACK_LINE: Record<string, string> = {
   seahorse: "A brine of a treaty.",
   manta: "A filter of a treaty.",
   moray: "A fish of a treaty.",
+  moss: "Dew of a treaty.",
+  maidenhair: "Mist of a treaty.",
+  ginkgo: "A leaf of a treaty.",
+  oak: "Water of a treaty.",
+  water_lily: "Silt of a treaty.",
+  orchid: "Mist of a treaty.",
+  saguaro: "Rain of a treaty.",
+  venus_flytrap: "A fly of a treaty.",
+  pitcher: "A midge of a treaty.",
+  sundew: "A gnat of a treaty.",
 };
 
 

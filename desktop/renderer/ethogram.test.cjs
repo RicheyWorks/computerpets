@@ -21,7 +21,7 @@ test("only the scratching mammals list scratch", () => {
   assert.deepEqual(E.SCRATCH_KEYS, ["dog", "cat", "red_panda"]);
   assert.equal(E.actsFor("fox").some((a) => a.name === "scratch"), false);
   assert.equal(E.actsFor("iguana").some((a) => a.name === "scratch"), false);
-  for (const key of ["octopus", "moon_jelly", "horseshoe_crab", "moray"]) {
+  for (const key of ["octopus", "moon_jelly", "horseshoe_crab", "moray", "moss", "venus_flytrap", "saguaro"]) {
     const names = E.actsFor(key).map((a) => a.name);
     assert.ok(names.length > 0, key);
     assert.equal(names.includes("scratch"), false, key);

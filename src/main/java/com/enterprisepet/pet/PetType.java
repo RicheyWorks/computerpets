@@ -50,7 +50,17 @@ public enum PetType {
     HORSESHOE_CRAB   ("horseshoe_crab",    "Atlantic Horseshoe Crab", Rarity.UNCOMMON),
     SEAHORSE         ("seahorse",          "Lined Seahorse",       Rarity.UNCOMMON),
     MANTA            ("manta",             "Reef Manta",           Rarity.RARE),
-    MORAY            ("moray",             "Green Moray",          Rarity.RARE);
+    MORAY            ("moray",             "Green Moray",          Rarity.RARE),
+    MOSS             ("moss",              "Sheet Moss",           Rarity.COMMON),
+    MAIDENHAIR       ("maidenhair",        "Maidenhair Fern",      Rarity.UNCOMMON),
+    GINKGO           ("ginkgo",            "Ginkgo",               Rarity.RARE),
+    OAK              ("oak",               "White Oak",            Rarity.COMMON),
+    WATER_LILY       ("water_lily",        "Fragrant Water Lily",  Rarity.UNCOMMON),
+    ORCHID           ("orchid",            "Moth Orchid",          Rarity.RARE),
+    SAGUARO          ("saguaro",           "Saguaro",              Rarity.RARE),
+    VENUS_FLYTRAP    ("venus_flytrap",     "Venus Flytrap",        Rarity.UNCOMMON),
+    PITCHER          ("pitcher",           "Purple Pitcher Plant", Rarity.UNCOMMON),
+    SUNDEW           ("sundew",            "Round-leaved Sundew",  Rarity.UNCOMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

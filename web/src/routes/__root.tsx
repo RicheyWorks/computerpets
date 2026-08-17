@@ -14,7 +14,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: APP_NAME },
-      { name: "description", content: "Forty living desk companions, including ten snakes and a tide of ten sea creatures. They walk, talk, and wait in the browser." },
+      { name: "description", content: "Fifty living desk companions, including ten snakes, a tide of ten sea creatures, and a garden of ten plants. They walk, talk, and wait in the browser." },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "theme-color", content: "#0c0b0a" },
       { name: "twitter:card", content: "summary_large_image" },
