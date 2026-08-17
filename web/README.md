@@ -1,8 +1,6 @@
 # Living desk
 
-Browser companion for ComputerPets. **Rui**, the red panda, is the first species awake: he walks the study, eats, pounces, sleeps, and talks.
-
-The other nineteen catalog pets still use still portraits until they are brought to life the same way.
+Browser companion for ComputerPets. The full house of **30** species is awake — Rui and the original nineteen, plus ten named snakes. They walk the study, eat, play, sleep, and talk.
 
 ## Run
 

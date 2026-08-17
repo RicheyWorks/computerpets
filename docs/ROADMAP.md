@@ -117,8 +117,9 @@ All critical items required before any public or limited production exposure hav
 - [x] Cat (Miso) wakes on the living desk
 - [x] Dog (Pip) wakes on the living desk
 - [x] Browser ad demos (`/meet`, `/demo/rui`, `/demo/miso`, `/demo/pip`)
-- [x] Full catalog awake — all twenty species have living browser demos
-- [x] Windows/Mac desktop overlay for all twenty + phone/tablet Live companion
+- [x] Full catalog awake — all thirty species have living browser demos
+- [x] Windows/Mac desktop overlay for all thirty + phone/tablet Live companion
+- [x] Backend `PetType` catalog matches the living desk (ten snakes licensed)
 - [x] Per-species life sim — hunger clocks, mess, illness, age, specials, Windows hardening
 - [x] Mind plugin bus — 14 AI backends, per-pet assignment, custom webhook
 - [x] Browser desk specials + house journal; species gaits on every screen
@@ -159,6 +160,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-14 (Phase 2.5 NFT entitlement hardening)
+**Last Updated:** 2026-08-17 (backend catalog matches the 30-species living desk)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

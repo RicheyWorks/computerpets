@@ -30,7 +30,17 @@ public enum PetType {
     TOUCAN    ("toucan",     "Toucan",      Rarity.RARE),
     IGUANA    ("iguana",     "Iguana",      Rarity.RARE),
     DRAGON    ("dragon",     "Dragon",      Rarity.LEGENDARY),
-    PHOENIX   ("phoenix",    "Phoenix",     Rarity.LEGENDARY);
+    PHOENIX   ("phoenix",    "Phoenix",     Rarity.LEGENDARY),
+    BALL_PYTHON      ("ball_python",       "Ball Python",          Rarity.COMMON),
+    CORN_SNAKE       ("corn_snake",        "Corn Snake",           Rarity.COMMON),
+    KINGSNAKE        ("kingsnake",         "California Kingsnake", Rarity.UNCOMMON),
+    GREEN_TREE_PYTHON("green_tree_python", "Green Tree Python",    Rarity.RARE),
+    HOGNOSE          ("hognose",           "Western Hognose",      Rarity.UNCOMMON),
+    GARTER           ("garter",            "Common Garter",        Rarity.COMMON),
+    BOA              ("boa",               "Boa Constrictor",      Rarity.RARE),
+    MILK_SNAKE       ("milk_snake",        "Pueblo Milk Snake",    Rarity.UNCOMMON),
+    ROSY_BOA         ("rosy_boa",          "Rosy Boa",             Rarity.UNCOMMON),
+    CARPET_PYTHON    ("carpet_python",     "Jungle Carpet Python", Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

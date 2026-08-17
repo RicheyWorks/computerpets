@@ -122,7 +122,7 @@ public final class ApiExamples {
         {
           "error": "unknown petType",
           "received": "unicorn",
-          "validKeys": "red_panda, cat, dog, rabbit, ..., phoenix"
+          "validKeys": "red_panda, cat, dog, rabbit, ..., carpet_python"
         }
         """;
 
@@ -222,8 +222,18 @@ public final class ApiExamples {
           { "key": "axolotl",     "displayName": "Axolotl",     "rarity": "RARE" },
           { "key": "toucan",      "displayName": "Toucan",      "rarity": "RARE" },
           { "key": "iguana",      "displayName": "Iguana",      "rarity": "RARE" },
-          { "key": "dragon",      "displayName": "Dragon",      "rarity": "LEGENDARY" },
-          { "key": "phoenix",     "displayName": "Phoenix",     "rarity": "LEGENDARY" }
+          { "key": "dragon",            "displayName": "Dragon",                "rarity": "LEGENDARY" },
+          { "key": "phoenix",           "displayName": "Phoenix",               "rarity": "LEGENDARY" },
+          { "key": "ball_python",       "displayName": "Ball Python",           "rarity": "COMMON" },
+          { "key": "corn_snake",        "displayName": "Corn Snake",            "rarity": "COMMON" },
+          { "key": "kingsnake",         "displayName": "California Kingsnake",  "rarity": "UNCOMMON" },
+          { "key": "green_tree_python", "displayName": "Green Tree Python",     "rarity": "RARE" },
+          { "key": "hognose",           "displayName": "Western Hognose",       "rarity": "UNCOMMON" },
+          { "key": "garter",            "displayName": "Common Garter",         "rarity": "COMMON" },
+          { "key": "boa",               "displayName": "Boa Constrictor",       "rarity": "RARE" },
+          { "key": "milk_snake",        "displayName": "Pueblo Milk Snake",     "rarity": "UNCOMMON" },
+          { "key": "rosy_boa",          "displayName": "Rosy Boa",              "rarity": "UNCOMMON" },
+          { "key": "carpet_python",     "displayName": "Jungle Carpet Python",  "rarity": "RARE" }
         ]
         """;
 
@@ -265,7 +275,7 @@ public final class ApiExamples {
         {
           "error": "unknown pet type",
           "key": "unicorn",
-          "validKeys": "red_panda, cat, dog, rabbit, ..., phoenix"
+          "validKeys": "red_panda, cat, dog, rabbit, ..., carpet_python"
         }
         """;
 

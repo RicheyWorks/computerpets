@@ -12,7 +12,7 @@ function Catalog() {
     <main className="space-y-10">
       <header className="max-w-xl space-y-3">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Catalog</p>
-        <h1 className="font-display text-4xl">The twenty.</h1>
+        <h1 className="font-display text-4xl">The thirty.</h1>
         <p className="text-sm text-muted">
           Wire keys match the ComputerPets backend. What you hatch here is the
           same species the license service already knows.
