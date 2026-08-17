@@ -5,8 +5,8 @@ from __future__ import annotations
 import math
 import random
 
-from PyQt6.QtCore import QRectF, Qt
-from PyQt6.QtGui import QPainter
+from PyQt6.QtCore import QRectF, Qt, pyqtSignal
+from PyQt6.QtGui import QCursor, QPainter
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsObject, QGraphicsPixmapItem
 
 from .frames import SIZE, frames_for, paint_treat
@@ -23,6 +23,10 @@ class TreatItem(QGraphicsPixmapItem):
 
 
 class LivingPetItem(QGraphicsObject):
+    """Tap the guest to hear the house voice and keep the plaque on them."""
+
+    tapped = pyqtSignal()
+
     def __init__(self, species: Species):
         super().__init__()
         self.species = species
@@ -37,7 +41,16 @@ class LivingPetItem(QGraphicsObject):
         self._bob_t = 0.0
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
+        self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         self.setPos(220, self._floor_y())
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.tapped.emit()
+            event.accept()
+            return
+        super().mousePressEvent(event)
 
     def boundingRect(self) -> QRectF:
         return QRectF(0, 0, SIZE, SIZE)

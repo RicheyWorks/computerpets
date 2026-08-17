@@ -1,6 +1,6 @@
 # ComputerPets — PyQt blotter client
 
-A first real PyQt6 desk: **all thirty living companions** from the house catalog live on a wooden blotter — the original twenty who walk, and the ten snakes who crawl. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
+A first real PyQt6 desk: **all thirty living companions** from the house catalog live on a wooden blotter — the original twenty who walk, and the ten snakes who crawl. Tap a guest (or a name on the rail) and a **species plaque** teaches the house the way `/study` and `/snakes` do: a tell, one mix-up, the latin, and the house voice. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
 
 This is **not** a custom GPU shader engine. Drawing uses Qt’s GPU-backed scene: `QGraphicsView` with a `QOpenGLWidget` viewport (Qt RHI / OpenGL compositing). If the platform cannot create an OpenGL surface, the scene falls back to Qt software raster and says so in the status bar.
 
@@ -32,11 +32,13 @@ Headless smoke (CI / no display):
 QT_QPA_PLATFORM=offscreen python -m computerpets_client --check
 ```
 
-`--check` opens the window (offscreen), confirms a living pet is on the blotter, prints the renderer line and the thirty-kind count, and exits.
+`--check` opens the window (offscreen), confirms a living pet and a species plaque are on the blotter, prints the renderer line and the thirty-kind count, and exits.
 
 ## Meet the house
 
-The **species rail** (house, then den) and the combo / prev-next cycle are the same thirty wire keys as `PetType` and the Electron overlay roster. Tap a name or cycle — they greet in their own voice. Snakes crawl; the others walk. Palettes and tells come from the existing house catalog (Rui’s rust, Bandit’s black-and-white bands, Keel’s bill, Bluff’s upturned snout). No invented species.
+The **species rail** (house, then den) and the combo / prev-next cycle are the same thirty wire keys as `PetType` and the Electron overlay roster. Tap a name or cycle — they greet in their own voice. Tap the guest on the wood and they say the lesson. Snakes crawl; the others walk. Palettes and tells come from the existing house catalog (Rui’s rust, Bandit’s black-and-white bands, Keel’s bill, Bluff’s upturned snout). No invented species.
+
+The **plaque** under the blotter is the classroom. Same copy as the web field guides: Coral’s red-touches-black, Nori balls vs Lula holds, Bandit no red; red panda not a bear, axolotl kept its gills. You do not leave the window.
 
 Pets walk (or crawl) without a license — same as the overlay.
 
@@ -93,9 +95,11 @@ client/
 │   ├── life.py             # feed / treat / hide
 │   ├── rail.py             # study-style species rail (30 keys)
 │   ├── species.py          # house catalog — same keys as PetType
+│   ├── guide.py            # field notes — same copy as /study and /snakes
+│   ├── plaque.py           # paper card on the blotter
 │   ├── license/            # port of desktop/license/ (no Qt)
 │   └── unlock_dialog.py
-├── tests/                  # decrypt, hwid, signed URL, mocked unlock, care, roster
+├── tests/                  # decrypt, hwid, signed URL, mocked unlock, care, roster, plaques
 ├── pyproject.toml
 └── README.md
 ```
