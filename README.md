@@ -37,7 +37,7 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Tracing & business metrics** — Micrometer + OpenTelemetry spans on verify, download, and provider calls. OTLP export via `OTEL_EXPORTER_OTLP_ENDPOINT` (off by default). Prometheus scrape is unchanged.
 - **Profiles & deploy** — `dev` / `staging` / `prod` Spring profiles (same YAML + env style). `prod` fail-hards H2, in-memory rate limits, and Microsoft Store dev-mode. Kubernetes manifests in `deploy/k8s/` (blue/green Service selector).
 - **Rich Pet Catalog** — 30 pets across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes.
-- **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`. A PyQt6 blotter lives in `client/` (all thirty, plaques, house hours, daily weather / visitor / shed, Qt OpenGL viewport, same license contract).
+- **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`. A PyQt6 blotter lives in `client/` (all thirty, plaques, house hours, daily weather / visitor / shed, play and the thirty specials, Qt OpenGL viewport, same license contract).
 - **License ledger** — House `/admin` plus `GET /api/admin/licenses` for jti/owner lookup, audit stamps, and revoke (`X-Admin-Key`).
 - **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
 - **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
@@ -95,7 +95,7 @@ Package with `npm run dist:win` or `npm run dist:mac`. Unlock (Steam verify → 
 
 ### PyQt blotter
 
-GPU-toolkit desk — Qt OpenGL viewport, not a custom shader engine. All thirty live here with plaques, house hours, the house weather, today’s visitor, and snake sheds; unlock uses the same contract.
+GPU-toolkit desk — Qt OpenGL viewport, not a custom shader engine. All thirty live here with plaques, house hours, the house weather, today’s visitor, snake sheds, play, and the house specials; unlock uses the same contract.
 
 ```bash
 cd client
@@ -175,7 +175,7 @@ All detailed documentation is located in the `docs/` directory:
 ```
 ComputerPets/
 ├── desktop/                      # Native overlay — all thirty on the real desktop
-├── client/                       # PyQt6 blotter — thirty + plaques + hours/weather/visitor/shed
+├── client/                       # PyQt6 blotter — thirty + plaques + hours/weather/visitor/shed + play/specials
 ├── web/                          # Living desk in the browser
 ├── .github/                      # GitHub templates (issues & PRs)
 ├── deploy/k8s/                   # Kubernetes manifests (prod profile, blue/green)

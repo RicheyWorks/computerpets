@@ -31,13 +31,15 @@ A new **`client/`** tree is the first PyQt6 blotter client:
   (32-byte key, no KDF, 12-byte IV, 16-byte tag appended) → hwid →
   signed download. Same wire format. Fail closed. No “always licensed”
   stub.
-- Care verbs that already exist on the Electron desk and fit this cut:
-  feed, treat, hide / call back, and shed for the ten snakes.
+- Care verbs that already exist on the living desk and fit this cut:
+  feed, treat, play, hide / call back, shed for the ten snakes, and
+  the thirty species specials (Steal ribbon, Heel, Play dead, …).
 - Daily weather, today’s visitor, and snake shed are **ports** of
   `web/src/lib/pets/weather.ts`, `visitor.ts`, and `shed.ts` — not a
   third house clock and not a rewrite of `desktop/`. The blotter now
   keeps house hours from `hours.ts` (dawn / day / dusk / night, and
-  the thirty rest windows) on the same wood.
+  the thirty rest windows) on the same wood. Play and the thirty
+  specials are ports of `specials.ts` and `traits.ts`.
 - The Electron overlay remains a contract client. `desktop/` is not
   rewritten.
 

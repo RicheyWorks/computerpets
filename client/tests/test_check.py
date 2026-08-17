@@ -37,6 +37,33 @@ def test_offscreen_check_constructs_window():
     assert "14:00" in result.stdout
     assert "Day" in result.stdout
     assert "awake" in result.stdout or "resting" in result.stdout
+    assert "Steal ribbon" in result.stdout
+
+
+def test_desk_has_play_and_the_house_special():
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow()
+    window.show()
+    assert window.play_btn is not None
+    assert window.play_btn.text() == "Play"
+    assert window.special_btn is not None
+    assert window.species.key == "red_panda"
+    assert window.special_btn.text() == "Steal ribbon"
+    window._play()
+    assert window.pet.cmd in ("play", "wander")
+    assert window.care.last_line
+    window._pick_key("hognose")
+    assert window.special_btn.text() == "Play dead"
+    window._special()
+    assert window.pet.cmd == "sit"
+    assert window.care.last_line == "I died. I got over it."
+    window.close()
+    del app
 
 
 def test_desk_day_has_weather_visitor_and_shed_coat():

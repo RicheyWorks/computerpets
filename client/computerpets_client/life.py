@@ -1,4 +1,4 @@
-"""Care verbs that already exist on the Electron desk: feed, treat, hide, shed."""
+"""Care verbs that already exist on the living desk: feed, treat, play, hide, shed."""
 
 from __future__ import annotations
 
@@ -85,6 +85,23 @@ def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
         anim="eat",
     )
     return CareResult(next_state, next_state.last_line, "eat", "seek")
+
+
+def apply_play(state: CareState, species: Species | None = None) -> CareResult:
+    kind = species or species_by_key(None)
+    if state.hidden:
+        return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
+    line = pick_line(kind.ambient) or pick_line(kind.greet)
+    next_state = replace(
+        state,
+        hunger=clamp(state.hunger - 8),
+        mood=clamp(state.mood + 26),
+        energy=clamp(state.energy - 14),
+        bond=clamp(state.bond + 3),
+        last_line=line,
+        anim="walk",
+    )
+    return CareResult(next_state, next_state.last_line, "walk", "play")
 
 
 def apply_hide(state: CareState, species: Species | None = None) -> CareResult:

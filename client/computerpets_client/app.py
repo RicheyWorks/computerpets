@@ -36,13 +36,23 @@ from .hours import (
     remember_visit,
     return_line,
 )
-from .life import CareState, ambient_line, apply_call, apply_feed, apply_hide, apply_treat, decay
+from .life import (
+    CareState,
+    ambient_line,
+    apply_call,
+    apply_feed,
+    apply_hide,
+    apply_play,
+    apply_treat,
+    decay,
+)
 from .license.session import create_license_session
 from .paths import default_user_data_dir
 from .pet_item import LivingPetItem, ShedCoatItem, TreatItem
 from .plaque import SpeciesPlaque
 from .rail import SpeciesRail
 from .shed import apply_shed, is_blue
+from .specials import apply_special, trait_for
 from .species import (
     CATALOG_KEYS,
     DEFAULT_SPECIES_KEY,
@@ -138,6 +148,8 @@ class DeskWindow(QMainWindow):
         self.feed_btn = QPushButton("Feed")
         self.treat_btn = QPushButton(self.species.treat)
         self.hide_btn = QPushButton("Hide")
+        self.play_btn = QPushButton("Play")
+        self.special_btn = QPushButton(trait_for(self.species.key).verb)
         self.shed_btn = QPushButton("Shed")
         self.unlock_btn = QPushButton("Unlock…")
         self.prev_btn = QPushButton("◀")
@@ -160,6 +172,8 @@ class DeskWindow(QMainWindow):
         self.feed_btn.clicked.connect(self._feed)
         self.treat_btn.clicked.connect(self._treat)
         self.hide_btn.clicked.connect(self._hide_or_call)
+        self.play_btn.clicked.connect(self._play)
+        self.special_btn.clicked.connect(self._special)
         self.shed_btn.clicked.connect(self._shed)
         self.unlock_btn.clicked.connect(self._unlock)
         self.kind_box.currentIndexChanged.connect(self._change_kind)
@@ -176,6 +190,8 @@ class DeskWindow(QMainWindow):
         bar.addWidget(self.feed_btn)
         bar.addWidget(self.treat_btn)
         bar.addWidget(self.hide_btn)
+        bar.addWidget(self.play_btn)
+        bar.addWidget(self.special_btn)
         bar.addWidget(self.shed_btn)
         bar.addWidget(self.prev_btn)
         bar.addWidget(self.kind_box, 1)
@@ -284,6 +300,7 @@ class DeskWindow(QMainWindow):
         )
         self.hide_btn.setText("Call back" if s.hidden else "Hide")
         self.treat_btn.setText(self.species.treat)
+        self.special_btn.setText(trait_for(self.species.key).verb)
         self.shed_btn.setVisible(is_snake(self.species.key))
         self.guest.setVisible(self._visit_phase not in ("wait", "gone") and not s.hidden)
 
@@ -336,6 +353,20 @@ class DeskWindow(QMainWindow):
             self.treat = TreatItem(self.species.treat_shape, tx, 400)
             self.scene.addItem(self.treat)
             self.pet.issue("seek", tx - 40)
+        self._say(result.line)
+        self._refresh_vitals()
+
+    def _play(self) -> None:
+        result = apply_play(self.care, self.species)
+        self.care = result.state
+        self.pet.issue(result.cmd)
+        self._say(result.line)
+        self._refresh_vitals()
+
+    def _special(self) -> None:
+        result = apply_special(self.care, self.species)
+        self.care = result.state
+        self.pet.issue(result.cmd)
         self._say(result.line)
         self._refresh_vitals()
 
@@ -485,6 +516,7 @@ def main(argv: list[str] | None = None) -> int:
         resting = is_resting_hour(window.species.key, CHECK_HOUR)
         rest_word = "resting" if resting else "awake"
         print(f"ok: fixture {CHECK_HOUR}:00 is {fixture_part}; {window.species.name} {rest_word}")
+        print(f"ok: {trait_for(window.species.key).verb}")
         print(window.renderer_label)
         QTimer.singleShot(250, app.quit)
     return app.exec()
