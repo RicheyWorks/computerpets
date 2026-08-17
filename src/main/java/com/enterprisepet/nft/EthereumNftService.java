@@ -4,10 +4,9 @@ import com.enterprisepet.provider.OwnershipProvider;
 import com.enterprisepet.provider.VerificationResult;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
-import jakarta.annotation.PostConstruct;
-import okhttp3.OkHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
@@ -21,13 +20,12 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.request.Transaction;
 import org.web3j.protocol.core.methods.response.EthCall;
-import org.web3j.protocol.http.HttpService;
 
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 /**
@@ -54,45 +52,32 @@ public class EthereumNftService implements OwnershipProvider {
 
     private final EthereumProperties props;
     private final NftCatalog catalog;
-    private Web3j web3j;
+    private final Web3j web3j;
 
-    public EthereumNftService(EthereumProperties props, NftCatalog catalog) {
+    /**
+     * Production constructor. {@code @Autowired} is required because package-private
+     * test constructors also exist — without it Spring looks for a no-arg constructor
+     * and the application context fails to start.
+     *
+     * <p>{@code web3j} is a {@link EthereumConfig} bean built from the already-bound
+     * {@code ethereum.rpc-url}; it is never constructed against a null field.
+     */
+    @Autowired
+    public EthereumNftService(EthereumProperties props, NftCatalog catalog, Web3j web3j) {
         this.props = props;
         this.catalog = catalog;
-    }
-
-    /** Unit-test constructor: inject a mocked Web3j, no allowlist. */
-    EthereumNftService(Web3j web3j) {
-        this.props = EthereumProperties.unrestricted();
-        this.catalog = new NftCatalog(this.props);
-        this.web3j = web3j;
-    }
-
-    /** Unit-test constructor with full policy control. */
-    EthereumNftService(EthereumProperties props, NftCatalog catalog, Web3j web3j) {
-        this.props = props;
-        this.catalog = catalog;
-        this.web3j = web3j;
-    }
-
-    @PostConstruct
-    void init() {
-        if (this.web3j != null) {
-            return;
-        }
-        int timeout = Math.max(500, props.getRequestTimeoutMs());
-        OkHttpClient http = new OkHttpClient.Builder()
-                .connectTimeout(timeout, TimeUnit.MILLISECONDS)
-                .readTimeout(timeout, TimeUnit.MILLISECONDS)
-                .writeTimeout(timeout, TimeUnit.MILLISECONDS)
-                .build();
-        this.web3j = Web3j.build(new HttpService(props.getRpcUrl(), http));
+        this.web3j = Objects.requireNonNull(web3j, "web3j");
         if (props.isPlaceholderRpc()) {
             log.warn("Ethereum RPC URL is a placeholder — NFT ownership checks will be denied until ETHEREUM_RPC_URL is set");
         }
         if (catalog.allowlistRequired() && catalog.isEmpty()) {
             log.warn("ethereum.allowlist-required=true but no collections are configured — NFT verify will deny until ethereum.collections is set");
         }
+    }
+
+    /** Unit-test constructor: inject a mocked Web3j, no allowlist. */
+    EthereumNftService(Web3j web3j) {
+        this(EthereumProperties.unrestricted(), new NftCatalog(EthereumProperties.unrestricted()), web3j);
     }
 
     @Override public String key()         { return "nft"; }
@@ -197,22 +182,43 @@ public class EthereumNftService implements OwnershipProvider {
         return switch (standard) {
             case ERC721 -> ownerOf(wallet, contract, tokenId);
             case ERC1155 -> balanceOf(wallet, contract, tokenId);
-            case AUTO -> ownerOf(wallet, contract, tokenId) || balanceOf(wallet, contract, tokenId);
+            // A successful ownerOf (any address) is definitive. Falling through to
+            // balanceOf would decode that address as a non-zero uint256 and grant
+            // ownership to a wallet that does not own the token.
+            case AUTO -> {
+                Optional<Boolean> erc721 = ownerOfIfPresent(wallet, contract, tokenId);
+                if (erc721.isPresent()) {
+                    yield erc721.get();
+                }
+                yield balanceOf(wallet, contract, tokenId);
+            }
         };
     }
 
+    /**
+     * @return empty when ownerOf did not decode (typical ERC-1155 revert);
+     *         otherwise whether {@code wallet} is the returned owner
+     */
+    private Optional<Boolean> ownerOfIfPresent(String wallet, String contract, BigInteger tokenId)
+            throws Exception {
+        Optional<List<Type>> decoded = ethCall(contract, ownerOfFunction(tokenId));
+        if (decoded.isEmpty() || decoded.get().isEmpty()) {
+            return Optional.empty();
+        }
+        Address owner = (Address) decoded.get().get(0);
+        return Optional.of(EthereumAddress.equalsNormalized(wallet, owner.getValue()));
+    }
+
     private boolean ownerOf(String wallet, String contract, BigInteger tokenId) throws Exception {
-        Function function = new Function(
+        return ownerOfIfPresent(wallet, contract, tokenId).orElse(false);
+    }
+
+    private static Function ownerOfFunction(BigInteger tokenId) {
+        return new Function(
                 "ownerOf",
                 List.of(new Uint256(tokenId)),
                 List.of(new TypeReference<Address>() {})
         );
-        Optional<List<Type>> decoded = ethCall(contract, function);
-        if (decoded.isEmpty() || decoded.get().isEmpty()) {
-            return false;
-        }
-        Address owner = (Address) decoded.get().get(0);
-        return EthereumAddress.equalsNormalized(wallet, owner.getValue());
     }
 
     private boolean balanceOf(String wallet, String contract, BigInteger tokenId) throws Exception {

@@ -112,6 +112,14 @@ class EthereumNftServiceTest {
     }
 
     @Test
+    @DisplayName("AUTO does not treat a foreign ownerOf address as a positive ERC-1155 balance")
+    void ownsToken_autoForeignOwner_doesNotTreatAddressAsBalance() throws Exception {
+        stubEthCall(NOT_OWNER_RESPONSE);
+
+        assertThat(unrestricted.ownsToken(WALLET, CONTRACT, TOKEN_ID)).isFalse();
+    }
+
+    @Test
     @DisplayName("ownsToken returns false on RPC error")
     void ownsToken_onRpcError_returnsFalse() throws Exception {
         @SuppressWarnings("unchecked")
