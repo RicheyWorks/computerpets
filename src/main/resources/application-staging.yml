@@ -1,0 +1,21 @@
+# Shared-cluster shape without the prod fail-hard guard.
+# Missing SPRING_DATASOURCE_* fails startup (no H2 fallback).
+# MICROSOFT_DEV_MODE in the environment can still override the false below;
+# that is intentional — staging is not prod.
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  h2:
+    console:
+      enabled: false
+  jpa:
+    show-sql: false
+
+microsoft:
+  dev-mode: false
+
+rate-limit:
+  backend: redis

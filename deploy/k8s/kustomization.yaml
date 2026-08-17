@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: computerpets
+resources:
+  - namespace.yaml
+  - secret.yaml
+  - configmap.yaml
+  - postgres.yaml
+  - redis.yaml
+  - deployment-blue.yaml
+  - deployment-green.yaml
+  - service.yaml
+# ingress.yaml is optional (needs a controller). Apply it separately.
+images:
+  - name: ghcr.io/richeyworks/computerpets
+    newTag: main

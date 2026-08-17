@@ -1,0 +1,21 @@
+# Fail-hard production shape. Same keys as staging; ProductionProfileGuard
+# then refuses to start if env overrides turn Microsoft dev-mode on, switch
+# the rate-limit store to memory, or point the datasource at H2.
+# Missing SPRING_DATASOURCE_* fails placeholder resolution before the guard.
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  h2:
+    console:
+      enabled: false
+  jpa:
+    show-sql: false
+
+microsoft:
+  dev-mode: false
+
+rate-limit:
+  backend: redis

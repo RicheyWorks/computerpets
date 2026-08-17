@@ -102,9 +102,9 @@ All critical items required before any public or limited production exposure hav
   - [x] Custom business metrics (verification success rate, latency per provider)
 
 - **3.3 Deployment & Environments**
-  - Proper Spring profiles (`dev` / `staging` / `prod`)
-  - Kubernetes manifests or Helm charts
-  - Blue/green or canary deployments
+  - [x] Proper Spring profiles (`dev` / `staging` / `prod`)
+  - [x] Kubernetes manifests (`deploy/k8s/`, not Helm)
+  - [x] Blue/green via two Deployments + Service `color` selector (no mesh)
 
 ---
 
@@ -163,6 +163,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (Micrometer + OpenTelemetry tracing)
+**Last Updated:** 2026-08-17 (Spring profiles + Kubernetes manifests)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

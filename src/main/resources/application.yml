@@ -1,3 +1,8 @@
+# Shared defaults. Profile overlays (same YAML + env style, no second format):
+#   application-dev.yml      — local / docker-compose (H2 unless SPRING_DATASOURCE_* is set)
+#   application-staging.yml  — Postgres + Redis; microsoft.dev-mode off in the file
+#   application-prod.yml     — same shape, plus ProductionProfileGuard fail-hard
+# Activate with SPRING_PROFILES_ACTIVE. Tests and bare `mvn spring-boot:run` use this file only.
 server:
   port: 8080
 
