@@ -34,16 +34,16 @@ class PetBundleServiceTest {
     void manifestFor_includesJtiInUrlAndSignature() throws Exception {
         var manifest = service.manifestFor(PetType.RED_PANDA, "steam:owner", "jti-123");
 
-        URI uri = URI.create(manifest.downloadUrl());
+        String url = manifest.downloadUrl();
+        URI uri = URI.create(url);
         assertThat(uri.getPath()).isEqualTo("/bundles/red_panda.zip");
-        assertThat(uri.getQuery()).contains("owner=steam%3Aowner");
-        assertThat(uri.getQuery()).contains("jti=jti-123");
-        assertThat(uri.getQuery()).contains("exp=");
-        assertThat(uri.getQuery()).contains("sig=");
+        // URLEncoder uses application/x-www-form-urlencoded (`:` → %3A)
+        assertThat(url).contains("owner=steam%3Aowner");
+        assertThat(url).contains("jti=jti-123");
         assertThat(manifest.body().get("jti")).isEqualTo("jti-123");
 
-        String exp = queryParam(uri.getQuery(), "exp");
-        String sig = queryParam(uri.getQuery(), "sig");
+        String exp = queryParam(uri.getRawQuery(), "exp");
+        String sig = queryParam(uri.getRawQuery(), "sig");
         String expected = hmac("red_panda|steam:owner|jti-123|" + exp);
         assertThat(sig).isEqualTo(expected);
     }
@@ -54,11 +54,11 @@ class PetBundleServiceTest {
         var manifest = service.manifestFor(PetType.CAT, "owner1");
 
         URI uri = URI.create(manifest.downloadUrl());
-        assertThat(uri.getQuery()).doesNotContain("jti=");
+        assertThat(uri.getRawQuery()).doesNotContain("jti=");
         assertThat(manifest.body()).doesNotContainKey("jti");
 
-        String exp = queryParam(uri.getQuery(), "exp");
-        String sig = queryParam(uri.getQuery(), "sig");
+        String exp = queryParam(uri.getRawQuery(), "exp");
+        String sig = queryParam(uri.getRawQuery(), "sig");
         assertThat(sig).isEqualTo(hmac("cat|owner1|" + exp));
     }
 
