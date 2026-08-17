@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (bundle catalog: version, platform, sha256) |
+| **Last Updated** | 2026-08-17 (typed verify request records) |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -264,7 +264,7 @@ This deployment view directly addresses the multi-instance and rate-limiting con
 | `PetController`        | Public read-only catalog browsing (list, filter by rarity, detail)             | Spring Web          | `controller/PetController.java`                | `PetCatalog`                          |
 | `BundleController`     | Public artifact catalog for a pet (`GET /api/bundles/{petKey}`)                | Spring Web          | `bundle/BundleController.java`                 | `BundleCatalog`, `PetCatalog`         |
 
-All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` for consistent error shapes. No DTOs; `Map<String, String>` used for the generic verify body to keep the SPI flexible.
+All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` for consistent error shapes. The verify wire body and `OwnershipProvider.verify` SPI stay a flat `Map<String, String>`; each provider parses that map into an immutable `*VerifyRequest` record (Steam, Itch, Epic, NFT, Microsoft).
 
 ### 4.2 Provider SPI (Extension Point)
 | Component                  | Responsibility                                      | Technology | Key Files                                      | Dependencies                     |
@@ -274,7 +274,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 | `ProviderRegistry`         | Spring-driven collection + key-based lookup         | Spring @Service | `provider/ProviderRegistry.java`               | `List<OwnershipProvider>` (DI)   |
 
 **Current implementations:**
-- `steam/SteamService` – real Steam Web API integration + conditional registration.
+- `steam/SteamService` – real Steam Web API integration + `SteamVerifyRequest.from(map)` + conditional registration.
 - `nft/EthereumNftService` – Web3j `eth_call` to ERC-721 `ownerOf` / ERC-1155 `balanceOf` with address validation, official collection allowlist, token→pet binding, optional `personal_sign`, and timed-out RPC.
 - `microsoft/MicrosoftStoreService` – RestClient to Microsoft Collections v9 `publisherQuery` (XBL3.0 or Bearer; optional `Signature`). Prod still refuses `microsoft.dev-mode`. The live Store ID is a publish-time config, not invented here.
 - `itch/ItchService` – itch.io download-key receipt verify (`GET /games/{id}/download_keys`) with developer API key, optional `itch.game-id` allowlist, circuit breaker.
@@ -443,20 +443,25 @@ ComputerPets/
 │   │   │   ├── controller/
 │   │   │   │   ├── DownloadController.java
 │   │   │   │   ├── PetController.java
-│   │   │   │   └── VerifyController.java
+│   │   │   │   ├── VerifyController.java
+│   │   │   │   └── VerifyEnvelope.java
 │   │   │   ├── license/
 │   │   │   │   ├── LicenseService.java
 │   │   │   │   ├── RevocationIndex.java
 │   │   │   │   ├── RedisRevocationIndex.java
 │   │   │   │   └── InMemoryRevocationIndex.java
 │   │   │   ├── microsoft/
-│   │   │   │   └── MicrosoftStoreService.java
+│   │   │   │   ├── MicrosoftStoreService.java
+│   │   │   │   └── MicrosoftVerifyRequest.java
 │   │   │   ├── itch/
-│   │   │   │   └── ItchService.java
+│   │   │   │   ├── ItchService.java
+│   │   │   │   └── ItchVerifyRequest.java
 │   │   │   ├── epic/
-│   │   │   │   └── EpicService.java
+│   │   │   │   ├── EpicService.java
+│   │   │   │   └── EpicVerifyRequest.java
 │   │   │   ├── nft/
-│   │   │   │   └── EthereumNftService.java
+│   │   │   │   ├── EthereumNftService.java
+│   │   │   │   └── NftVerifyRequest.java
 │   │   │   ├── pet/
 │   │   │   │   ├── PetCatalog.java
 │   │   │   │   ├── PetController.java   # duplicated? no, separate from controller/
@@ -469,7 +474,8 @@ ComputerPets/
 │   │   │   │   ├── JwtAuthenticationFilter.java
 │   │   │   │   └── JwtService.java
 │   │   │   ├── steam/
-│   │   │   │   └── SteamService.java
+│   │   │   │   ├── SteamService.java
+│   │   │   │   └── SteamVerifyRequest.java
 │   │   │   └── service/                 # intentionally empty – future home for higher-level facades
 │   │   └── resources/
 │   │       ├── application.yml          # shared env-driven config + startup validation
@@ -502,7 +508,7 @@ Numbered records of the decisions that are already true on `main` live in [`docs
 | **Two-phase download (encrypted license + short JWT)** with explicit claim cross-check in `DownloadController` | Strong defense-in-depth against token replay and cross-pet attacks. | Extra round-trip and client complexity; JWT is only useful for the download handshake. |
 | **HMAC-signed URLs rather than direct S3 presigned URLs or serving bytes** | Decouples storage backend; allows custom edge logic (IP binding, one-time use, logging) without changing the Java service. | Requires a verifier at the CDN/edge or a lightweight proxy; signature is replayable for 15 min from any IP today. |
 | **Redis Bucket4j + Lettuce (`rate-limit.backend=redis`)** | Shared per-IP verify/download buckets across replicas; idle keys expire after the refill window. | Redis is now a runtime dependency. Unreachable Redis fail-closes (503) instead of lifting the limit. `memory` is tests / single-process only. |
-| **No DTOs / OpenAPI for the verify body** (`Map<String,String>`) | Maximum flexibility for wildly different provider payloads; fast to iterate. | Poor discoverability, no compile-time safety, harder to generate client SDKs. |
+| **Flat Map verify body + provider-owned records** (`OwnershipProvider.verify(Map)` then `XxxVerifyRequest.from(map)`) | One `POST /{provider}` and a drop-in SPI; each service reads typed fields instead of scattered `request.get`. | Wire/OpenAPI still describe a generic string map; records are an internal parse, not a new JSON shape. |
 | **Synchronous external calls during verify** | Simple code, easy to understand and debug. | Latency and partial failure modes (one provider slow → whole request slow). No circuit breaker today. |
 | **H2 + show-sql in default/`dev`; Postgres + Redis + no Microsoft dev-mode in `staging`/`prod`** | Local `mvn` and tests stay fast; `prod` is an explicit fail-hard shape. | Forgetting `SPRING_PROFILES_ACTIVE=prod` on a cluster would still boot the H2 default — the k8s ConfigMap sets `prod`. |
 | **Startup-time secret validation + placeholder rejection** | Prevents the classic "I deployed with the example key" disaster. | Slightly more complex `@PostConstruct` logic in three places. |
@@ -548,7 +554,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 ### Extensibility & Future Refactoring Areas
 - **Easy wins**: New providers, richer `PetType` metadata, additional claims in licenses.
 - **Medium**: Dynamic pet catalog backed by DB, subscription/entitlement types. Admin revocation UI and API now ship (`/admin` + `/api/admin/*`).
-- **Structural**: Extract a true "License Domain Service" if more rules (concurrent use, transfer, gifting) appear. Introduce typed request DTOs per provider (sealed interfaces) while keeping the registry generic.
+- **Structural**: Extract a true "License Domain Service" if more rules (concurrent use, transfer, gifting) appear. Providers already parse typed `*VerifyRequest` records from the Map SPI; a generic `OwnershipProvider<R>` is still optional later.
 - **Observability**: Micrometer tracing (OpenTelemetry / OTLP) and `enterprisepet.verify` / `enterprisepet.download` business meters are in place. Structured logging includes `traceId` / `spanId` / `correlationId`.
 - **Deployment**: Dockerfile, `deploy/k8s/` manifests, Spring profiles (`dev` / `staging` / `prod`). Flyway migrations already ship with the license ledger.
 

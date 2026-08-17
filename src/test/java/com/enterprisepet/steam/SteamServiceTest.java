@@ -360,6 +360,15 @@ class SteamServiceTest {
     }
 
     @Test
+    @DisplayName("verify(null) denies with the same required-field message")
+    void verify_nullRequest_returnsDenied() {
+        VerificationResult result = service.verify(null);
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("steamId and appId are required");
+    }
+
+    @Test
     @DisplayName("verify returns granted when user owns the game")
     void verify_userOwnsGame_returnsGranted() {
         String json = """

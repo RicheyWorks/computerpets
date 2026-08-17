@@ -155,14 +155,15 @@ public class VerifyController {
             ));
         }
 
-        String requestedPet = request.get("petType");
+        VerifyEnvelope envelope = VerifyEnvelope.from(request);
+        String requestedPet = envelope.petType();
         String petKey = result.petKey() != null && !result.petKey().isBlank()
                 ? result.petKey()
-                : (requestedPet == null || requestedPet.isBlank() ? DEFAULT_PET_KEY : requestedPet.trim());
+                : (requestedPet == null ? DEFAULT_PET_KEY : requestedPet);
         ResolvedPet pet = resolvePet(petKey);
         if (pet.error != null) return pet.error;
 
-        String hwid = request.get("hwid");
+        String hwid = envelope.hwid();
         if (hwid != null && hwid.length() > 128) {
             return ResponseEntity.status(400).body(Map.of(
                 "error", "hwid too long",

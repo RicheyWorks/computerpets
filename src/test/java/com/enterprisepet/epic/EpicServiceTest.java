@@ -341,6 +341,15 @@ class EpicServiceTest {
     }
 
     @Test
+    @DisplayName("verify(null) denies with the same required-field message")
+    void verify_nullRequest_returnsDenied() {
+        VerificationResult result = service.verify(null);
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("accountId, sandboxId, and catalogItemId are required");
+    }
+
+    @Test
     @DisplayName("verify returns denied when accountId is not a 32-char hex Epic Account ID")
     void verify_invalidAccountId_returnsDenied() {
         VerificationResult result = service.verify(Map.of(
