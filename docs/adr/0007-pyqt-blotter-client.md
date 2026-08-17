@@ -32,8 +32,9 @@ A new **`client/`** tree is the first PyQt6 blotter client:
   signed download. Same wire format. Fail closed. No “always licensed”
   stub.
 - Care verbs that already exist on the living desk and fit this cut:
-  feed, treat, play, hide / call back, shed for the ten snakes, and
-  the thirty species specials (Steal ribbon, Heel, Play dead, …).
+  feed, treat, play, hide / call back, clean, medicine, shed for the
+  ten snakes, and the thirty species specials (Steal ribbon, Heel,
+  Play dead, …). The blotter can go unkempt; the guest can go unwell.
 - Daily weather, today’s visitor, and snake shed are **ports** of
   `web/src/lib/pets/weather.ts`, `visitor.ts`, and `shed.ts` — not a
   third house clock and not a rewrite of `desktop/`. The blotter now

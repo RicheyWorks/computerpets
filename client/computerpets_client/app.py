@@ -40,15 +40,18 @@ from .life import (
     CareState,
     ambient_line,
     apply_call,
+    apply_clean,
     apply_feed,
     apply_hide,
+    apply_medicine,
     apply_play,
     apply_treat,
     decay,
+    pick_mess,
 )
 from .license.session import create_license_session
 from .paths import default_user_data_dir
-from .pet_item import LivingPetItem, ShedCoatItem, TreatItem
+from .pet_item import LivingPetItem, MessPileItem, ShedCoatItem, TreatItem
 from .plaque import SpeciesPlaque
 from .rail import SpeciesRail
 from .shed import apply_shed, is_blue
@@ -105,6 +108,7 @@ class DeskWindow(QMainWindow):
         self.care = CareState()
         self.treat: TreatItem | None = None
         self.coats: list[ShedCoatItem] = []
+        self.piles: list[MessPileItem] = []
         self._speech_ms = 0.0
         self._visit_ms = 0.0
         self._visit_phase = "wait"
@@ -149,6 +153,9 @@ class DeskWindow(QMainWindow):
         self.treat_btn = QPushButton(self.species.treat)
         self.hide_btn = QPushButton("Hide")
         self.play_btn = QPushButton("Play")
+        self.clean_btn = QPushButton("Clean")
+        self.medicine_btn = QPushButton("Medicine")
+        self.medicine_btn.setVisible(False)
         self.special_btn = QPushButton(trait_for(self.species.key).verb)
         self.shed_btn = QPushButton("Shed")
         self.unlock_btn = QPushButton("Unlock…")
@@ -173,6 +180,8 @@ class DeskWindow(QMainWindow):
         self.treat_btn.clicked.connect(self._treat)
         self.hide_btn.clicked.connect(self._hide_or_call)
         self.play_btn.clicked.connect(self._play)
+        self.clean_btn.clicked.connect(self._clean)
+        self.medicine_btn.clicked.connect(self._medicine)
         self.special_btn.clicked.connect(self._special)
         self.shed_btn.clicked.connect(self._shed)
         self.unlock_btn.clicked.connect(self._unlock)
@@ -191,6 +200,8 @@ class DeskWindow(QMainWindow):
         bar.addWidget(self.treat_btn)
         bar.addWidget(self.hide_btn)
         bar.addWidget(self.play_btn)
+        bar.addWidget(self.clean_btn)
+        bar.addWidget(self.medicine_btn)
         bar.addWidget(self.special_btn)
         bar.addWidget(self.shed_btn)
         bar.addWidget(self.prev_btn)
@@ -269,6 +280,18 @@ class DeskWindow(QMainWindow):
             self.scene.addItem(item)
             self.coats.append(item)
 
+    def _sync_mess(self) -> None:
+        for item in self.piles:
+            self.scene.removeItem(item)
+        self.piles = []
+        for pile in self.care.mess:
+            if pile.kind != "mess":
+                continue
+            item = MessPileItem(pile, SCENE_W)
+            item.tapped.connect(self._pick_mess)
+            self.scene.addItem(item)
+            self.piles.append(item)
+
     def _refresh_license(self) -> None:
         status = self.session["status"]()
         if status.get("unlocked") and status.get("license"):
@@ -290,6 +313,7 @@ class DeskWindow(QMainWindow):
         s = self.care
         blue = is_blue(s, self.species.key)
         self.pet.set_dull(blue)
+        self.pet.set_unwell(s.sick)
         self.part = day_part()
         self.hours.set_part(self.part)
         self.vital_label.setText(
@@ -302,6 +326,7 @@ class DeskWindow(QMainWindow):
         self.treat_btn.setText(self.species.treat)
         self.special_btn.setText(trait_for(self.species.key).verb)
         self.shed_btn.setVisible(is_snake(self.species.key))
+        self.medicine_btn.setVisible(s.sick)
         self.guest.setVisible(self._visit_phase not in ("wait", "gone") and not s.hidden)
 
     def _pick_key(self, key: str) -> None:
@@ -332,6 +357,7 @@ class DeskWindow(QMainWindow):
             self.kind_box.blockSignals(blocked)
         self.care = replace(self.care, shed_at=0, gifts=[])
         self._sync_coats()
+        self._sync_mess()
         self._reset_visit()
         self._greet()
         self._refresh_vitals()
@@ -361,6 +387,28 @@ class DeskWindow(QMainWindow):
         self.care = result.state
         self.pet.issue(result.cmd)
         self._say(result.line)
+        self._refresh_vitals()
+
+    def _clean(self) -> None:
+        result = apply_clean(self.care, self.species)
+        self.care = result.state
+        self.pet.issue(result.cmd)
+        self._say(result.line)
+        self._sync_mess()
+        self._refresh_vitals()
+
+    def _medicine(self) -> None:
+        result = apply_medicine(self.care, self.species)
+        self.care = result.state
+        self.pet.issue(result.cmd)
+        self._say(result.line)
+        self._refresh_vitals()
+
+    def _pick_mess(self, pile_id: int) -> None:
+        result = pick_mess(self.care, pile_id)
+        self.care = result.state
+        self._say(result.line)
+        self._sync_mess()
         self._refresh_vitals()
 
     def _special(self) -> None:
@@ -450,7 +498,10 @@ class DeskWindow(QMainWindow):
 
     def _tick(self) -> None:
         dt = self.timer.interval() / 1000.0
+        before_mess = len(self.care.mess)
         self.care = decay(self.care, self.timer.interval())
+        if len(self.care.mess) != before_mess:
+            self._sync_mess()
         self.pet.advance_pet(dt, self.care, SCENE_W)
         self.weather.advance_weather(dt)
         self._advance_visit(self.timer.interval())
@@ -517,6 +568,8 @@ def main(argv: list[str] | None = None) -> int:
         rest_word = "resting" if resting else "awake"
         print(f"ok: fixture {CHECK_HOUR}:00 is {fixture_part}; {window.species.name} {rest_word}")
         print(f"ok: {trait_for(window.species.key).verb}")
+        well = "unwell" if window.care.sick else "well"
+        print(f"ok: {window.species.name} is {well}")
         print(window.renderer_label)
         QTimer.singleShot(250, app.quit)
     return app.exec()

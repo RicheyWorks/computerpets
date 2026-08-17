@@ -10,7 +10,7 @@ from PyQt6.QtGui import QBrush, QColor, QCursor, QPainter, QPen
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsObject, QGraphicsPixmapItem
 
 from .frames import SIZE, frames_for, paint_treat
-from .life import CareState
+from .life import CareState, MessPile
 from .shed import Coat
 from .species import Species
 
@@ -44,6 +44,36 @@ class ShedCoatItem(QGraphicsObject):
         painter.drawRoundedRect(QRectF(0, 0, 26, 7), 3, 3)
 
 
+class MessPileItem(QGraphicsObject):
+    """Ink smudge on the blotter — darker and rounder than a shed coat. Tap to pick it up."""
+
+    tapped = pyqtSignal(int)
+
+    def __init__(self, pile: MessPile, scene_width: float = 960):
+        super().__init__()
+        self.pile = pile
+        x = 80 + (scene_width - 160) * (pile.x / 100.0)
+        self.setPos(x, 420)
+        self.setZValue(2)
+        self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+    def boundingRect(self) -> QRectF:
+        return QRectF(0, 0, 20, 14)
+
+    def paint(self, painter: QPainter, option, widget=None) -> None:  # noqa: ARG002
+        painter.setPen(QPen(QColor(12, 11, 10, 80), 1))
+        painter.setBrush(QBrush(QColor(90, 74, 52, 204)))
+        painter.drawEllipse(QRectF(1, 3, 18, 9))
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.tapped.emit(self.pile.id)
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
+
 class LivingPetItem(QGraphicsObject):
     """Tap the guest to hear the house voice and keep the plaque on them."""
 
@@ -62,6 +92,7 @@ class LivingPetItem(QGraphicsObject):
         self.once_done = False
         self._bob_t = 0.0
         self.dull = False
+        self.unwell = False
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
@@ -89,12 +120,21 @@ class LivingPetItem(QGraphicsObject):
         if self.dull:
             painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceAtop)
             painter.fillRect(QRectF(0, 0, SIZE, SIZE), QColor(90, 120, 150, 95))
+        elif self.unwell:
+            painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceAtop)
+            painter.fillRect(QRectF(0, 0, SIZE, SIZE), QColor(62, 54, 42, 72))
         painter.restore()
 
     def set_dull(self, dull: bool) -> None:
         if self.dull == dull:
             return
         self.dull = dull
+        self.update()
+
+    def set_unwell(self, unwell: bool) -> None:
+        if self.unwell == unwell:
+            return
+        self.unwell = unwell
         self.update()
 
     def _floor_y(self) -> float:

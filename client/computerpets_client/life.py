@@ -1,8 +1,9 @@
-"""Care verbs that already exist on the living desk: feed, treat, play, hide, shed."""
+"""Care verbs that already exist on the living desk: feed, treat, play, hide, clean, medicine, shed."""
 
 from __future__ import annotations
 
 import random
+import time
 from dataclasses import dataclass, field, replace
 from typing import TYPE_CHECKING
 
@@ -11,6 +12,18 @@ from .species import Species, species_by_key
 
 if TYPE_CHECKING:
     from .shed import Coat
+
+# House rates from web/src/lib/pets/care.ts — per millisecond.
+HUNGER_PER_MS = 100 / (6 * 60 * 60 * 1000)
+MOOD_PER_MS = 100 / (12 * 60 * 60 * 1000)
+ENERGY_PER_MS = 100 / (9 * 60 * 60 * 1000)
+HYGIENE_PER_MS = 100 / (14 * 60 * 60 * 1000)
+HEALTH_DOWN_PER_MS = (6 / (10 * 60 * 60 * 1000)) * 100
+HEALTH_UP_PER_MS = (2 / (10 * 60 * 60 * 1000)) * 100
+
+# Same two lines the web blotter says for clean / medicine.
+CLEAN_LINE = "The blotter is honest again."
+MEDICINE_LINE = "Bitter. I will invoice you in kindness."
 
 
 def clamp(n: float, lo: float = 0, hi: float = 100) -> int:
@@ -21,6 +34,15 @@ def pick_line(lines: tuple[str, ...]) -> str:
     return random.choice(lines) if lines else ""
 
 
+@dataclass(frozen=True)
+class MessPile:
+    """An ink smudge on the wood. Same shape as the house MessPile / Coat."""
+
+    id: int
+    x: float
+    kind: str = "mess"
+
+
 @dataclass
 class CareState:
     hunger: int = 78
@@ -29,20 +51,26 @@ class CareState:
     hygiene: int = 86
     health: int = 92
     bond: int = 18
+    sick: bool = False
     hidden: bool = False
     last_line: str = ""
     anim: str = "idle"
     shed_at: int = 0
     gifts: list[Coat] = field(default_factory=list)
+    mess: list[MessPile] = field(default_factory=list)
 
     def vitals(self, *, blue: bool = False) -> str:
         if self.hidden:
             return "Hidden"
         if blue:
             return "Blue"
-        if self.hunger < 28:
+        if self.sick:
+            return "Unwell"
+        if self.hunger < 22:
             return "Hungry"
-        if self.energy < 28:
+        if self.hygiene < 24:
+            return "Unkempt"
+        if self.energy < 20:
             return "Tired"
         if self.mood < 32:
             return "Moody"
@@ -125,16 +153,78 @@ def apply_call(state: CareState, species: Species | None = None) -> CareResult:
     return CareResult(next_state, next_state.last_line, "walk", "enter")
 
 
-def decay(state: CareState, dt_ms: float) -> CareState:
+def apply_clean(state: CareState, species: Species | None = None) -> CareResult:
+    next_state = replace(
+        state,
+        hygiene=clamp(state.hygiene + 38),
+        mood=clamp(state.mood + 8),
+        bond=clamp(state.bond + 2),
+        mess=[],
+        last_line=CLEAN_LINE,
+        anim="sit",
+    )
+    return CareResult(next_state, CLEAN_LINE, "sit", "sit")
+
+
+def apply_medicine(state: CareState, species: Species | None = None) -> CareResult:
+    next_state = replace(
+        state,
+        sick=False,
+        health=clamp(state.health + 28),
+        mood=clamp(state.mood - 2),
+        bond=clamp(state.bond + 3),
+        last_line=MEDICINE_LINE,
+        anim="sit",
+    )
+    return CareResult(next_state, MEDICINE_LINE, "sit", "sit")
+
+
+def pick_mess(state: CareState, pile_id: int) -> CareResult:
+    next_state = replace(
+        state,
+        mess=[pile for pile in state.mess if pile.id != pile_id],
+        hygiene=clamp(state.hygiene + 8),
+        mood=clamp(state.mood + 3),
+        last_line=CLEAN_LINE,
+        anim="sit",
+    )
+    return CareResult(next_state, CLEAN_LINE, "sit", "sit")
+
+
+def decay(
+    state: CareState,
+    dt_ms: float,
+    *,
+    rng: random.Random | None = None,
+    now: int | None = None,
+) -> CareState:
     if state.hidden:
         return state
-    hours = max(0.0, dt_ms) / (60 * 60 * 1000)
-    return replace(
+    dt = max(0.0, dt_ms)
+    mood_rate = MOOD_PER_MS * (1.3 if state.sick else 1)
+    next_state = replace(
         state,
-        hunger=clamp(state.hunger - hours * (100 / 6)),
-        mood=clamp(state.mood - hours * (100 / 12)),
-        energy=clamp(state.energy - hours * (100 / 9)),
+        hunger=clamp(state.hunger - dt * HUNGER_PER_MS),
+        mood=clamp(state.mood - dt * mood_rate),
+        energy=clamp(state.energy - dt * ENERGY_PER_MS),
+        hygiene=clamp(state.hygiene - dt * HYGIENE_PER_MS),
     )
+    if next_state.hunger < 18 or next_state.hygiene < 18:
+        next_state = replace(next_state, health=clamp(state.health - dt * HEALTH_DOWN_PER_MS))
+    else:
+        next_state = replace(next_state, health=clamp(state.health + dt * HEALTH_UP_PER_MS))
+    sick = next_state.sick
+    if not sick and next_state.health < 32:
+        sick = True
+    if sick and next_state.health > 64 and next_state.hygiene > 40:
+        sick = False
+    piles = list(next_state.mess)
+    roll = rng.random() if rng is not None else random.random()
+    if next_state.hygiene < 42 and len(piles) < 5 and roll < min(0.35, dt / 120000):
+        stamp = now if now is not None else int(time.time() * 1000)
+        x = 12 + (rng.random() if rng is not None else random.random()) * 76
+        piles.append(MessPile(id=stamp + len(piles), x=x, kind="mess"))
+    return replace(next_state, sick=sick, mess=piles)
 
 
 def ambient_line(state: CareState, species: Species) -> str:
