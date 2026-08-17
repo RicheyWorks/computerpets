@@ -135,6 +135,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Ten named snakes on desk, demos, Live, Meet, and Windows overlay
 - [x] Snakes go blue and shed; old coat stays on the blotter, all platforms
 - [x] Native client contract published (`docs/CLIENT-CONTRACT.md`) — license AES-256-GCM format, hwid rules, JWT, signed download URL
+- [x] Electron overlay first contract slice (`desktop/license/`) — Steam verify, AES-256-GCM decrypt, hwid bind, signed download (no PyQt, no invented NFT address)
 - [x] Itch.io ownership provider (download-key receipt verify via `ITCH_API_KEY`)
 - [x] Epic Games Store ownership provider (EOS Auth client_credentials + Ecom v3 ownership)
 - Add more ownership providers (Solana, etc.) — Solana stays blocked until a live collection address exists
@@ -162,6 +163,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (admin license ledger)
+**Last Updated:** 2026-08-17 (desktop license unlock)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

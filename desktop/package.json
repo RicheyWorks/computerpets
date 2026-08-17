@@ -6,6 +6,7 @@
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
+    "test": "node --test license/*.test.cjs",
     "dist": "electron-builder --win --mac",
     "dist:win": "electron-builder --win",
     "dist:mac": "electron-builder --mac"
@@ -18,7 +19,14 @@
     "appId": "works.richey.computerpets.desk",
     "productName": "ComputerPets",
     "directories": { "output": "dist" },
-    "files": ["main.cjs", "preload.cjs", "renderer/**"],
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "license/**/*.cjs",
+      "!license/**/*.test.cjs",
+      "!license/contract-test-double.cjs",
+      "renderer/**"
+    ],
     "win": {
       "target": ["nsis", "portable"],
       "icon": "renderer/icon.png"

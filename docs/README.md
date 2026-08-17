@@ -61,7 +61,7 @@ New to the project? Follow this recommended path:
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
 | **[Mind plugins](MIND.md)** | Plug any AI into the pets — OpenAI-compatible, Claude, Gemini, Ollama, custom webhook. |
-| **[Desktop companion](../desktop/README.md)** | Native Windows overlay — Rui on the real desktop. |
+| **[Desktop companion](../desktop/README.md)** | Native overlay — all thirty pets, plus the first client-contract unlock slice. |
 | **[Setup & Installation Guide](SETUP.md)** | Detailed instructions for building and running the project locally. Includes prerequisites, secret generation, environment configuration, and troubleshooting. |
 | **[Contributing Guidelines](CONTRIBUTING.md)** | How to contribute to the project, including development setup, code style, pull request process, and documentation update expectations. |
 
