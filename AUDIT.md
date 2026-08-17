@@ -88,7 +88,8 @@ default, or return a clearer error message.
 `jti` (JWT-style ID), so revocation is impossible and the download
 endpoint can't detect replays. Add a `jti` (UUID) at issuance time and
 consider a small Redis set of revoked IDs that `LicenseService.validate`
-consults.
+consults. **Done (2026-08-17):** `RevocationIndex` on the same Redis as
+rate limits; Postgres remains the ledger.
 
 ### 9. README claims features that aren't in the code
 The README says:

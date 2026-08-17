@@ -2,6 +2,7 @@ package com.enterprisepet.controller;
 
 import com.enterprisepet.license.LicenseService;
 import com.enterprisepet.license.LicenseService.LicensePayload;
+import com.enterprisepet.license.RevocationIndex;
 import com.enterprisepet.security.JwtService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.http.*;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
+import java.time.Duration;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +37,9 @@ class DownloadControllerIntegrationTest {
 
     @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private RevocationIndex revocationIndex;
 
     private static String licenseKey;
     private static String jwtKey;
@@ -237,6 +242,28 @@ class DownloadControllerIntegrationTest {
             "/api/download/" + validPet, dlReq, Map.class);
 
         assertThat(dlResp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    @DisplayName("POST /api/download/{pet} returns 401 when jti is on the shared deny-list even if Postgres is not yet revoked")
+    void download_fails_whenDenyListHasJti_beforeDbRowIsVisible() {
+        var enc = licenseService.issueLicense(validOwner, validPet, validProvider, 1, null);
+        var issuedJwt = jwtService.issue(validOwner, validPet, validProvider);
+        String jti = extractJtiFromLicense(enc);
+
+        // Simulate a replica that has the Redis deny but has not seen revokedAt.
+        revocationIndex.deny(jti, Duration.ofHours(1));
+
+        HttpEntity<Map<String, String>> dlReq = new HttpEntity<>(
+            licenseBody(enc.ciphertext(), enc.iv(), null),
+            authHeaders(issuedJwt.token())
+        );
+
+        ResponseEntity<Map> dlResp = restTemplate.postForEntity(
+            "/api/download/" + validPet, dlReq, Map.class);
+
+        assertThat(dlResp.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(String.valueOf(dlResp.getBody().get("error"))).contains("license missing, expired, or tampered");
     }
 
     @Test

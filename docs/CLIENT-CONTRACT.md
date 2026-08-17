@@ -152,8 +152,18 @@ Example:
 ```
 
 Server-side `LicenseService.validate` also rejects the license when
-`validUntil` is in the past, the `jti` is missing from the database, or
-`revokedAt` is set. A client decrypting locally only learns the payload;
+`validUntil` is in the past, the `jti` is on the shared Redis deny-list,
+the `jti` is missing from the database, or `revokedAt` is set.
+
+Check order after decrypt + expiry: **Redis deny-list, then Postgres**.
+Redis is a fast replica-wide deny (`revoked:jti:{jti}`); Postgres
+`IssuedLicense.revokedAt` is the ledger. A replica that has not seen the
+row still returns the same 401. If Redis is unreachable, validate falls
+back to Postgres — it does not accept a revoked license. (HTTP
+`/api/download` may still 503 from the rate-limit filter when Redis is
+down.)
+
+A client decrypting locally only learns the payload;
 **revocation is enforced on `/api/download`**, not by decrypt alone.
 
 ---

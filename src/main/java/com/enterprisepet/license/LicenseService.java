@@ -15,26 +15,41 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class LicenseService {
 
+    /**
+     * Extra Redis TTL beyond {@code expiresAt} so clock skew cannot drop a
+     * deny-list key while the encrypted payload is still inside {@code validUntil}.
+     */
+    static final Duration DENY_TTL_SKEW = Duration.ofHours(1);
+
     private final LicenseRepository licenseRepository;
+    private final RevocationIndex revocationIndex;
 
     @Autowired
-    public LicenseService(LicenseRepository licenseRepository) {
+    public LicenseService(LicenseRepository licenseRepository, RevocationIndex revocationIndex) {
         this.licenseRepository = licenseRepository;
+        this.revocationIndex = Objects.requireNonNull(revocationIndex, "revocationIndex");
     }
 
     /** Test constructor — skips key initialization and @PostConstruct validation. */
     LicenseService(LicenseRepository licenseRepository, boolean forTest) {
-        this.licenseRepository = licenseRepository;
+        this(licenseRepository, new InMemoryRevocationIndex());
+    }
+
+    /** Test constructor with an explicit deny-list (shared Redis or a test double). */
+    LicenseService(LicenseRepository licenseRepository, RevocationIndex revocationIndex, boolean forTest) {
+        this(licenseRepository, revocationIndex);
     }
 
     private static final Logger log = LoggerFactory.getLogger(LicenseService.class);
@@ -159,6 +174,19 @@ public class LicenseService {
      *
      * <p>AES-GCM authentication means tampering with the ciphertext, IV, or tag will
      * cause {@code doFinal} to throw — we treat that as an invalid license.
+     *
+     * <p>Revocation check order (after decrypt + expiry):
+     * <ol>
+     *   <li>Shared {@link RevocationIndex} (Redis) — deny immediately if the
+     *       {@code jti} is listed. A replica that has not seen the Postgres
+     *       {@code revokedAt} row still rejects.</li>
+     *   <li>Postgres ledger — missing {@code jti} or {@code revokedAt} set
+     *       denies. Always consulted when the index misses or is down, so Redis
+     *       cannot silently resurrect a revoked license.</li>
+     * </ol>
+     * If Redis is unreachable, this method does <em>not</em> fail the download:
+     * it falls back to the ledger. (HTTP {@code /api/download} may still 503
+     * from the rate-limit filter when {@code rate-limit.backend=redis}.)
      */
     public Optional<LicensePayload> validate(String ciphertextB64, String ivB64) {
         if (ciphertextB64 == null || ivB64 == null) return Optional.empty();
@@ -172,10 +200,14 @@ public class LicenseService {
             Instant validUntil = Instant.parse(payload.validUntil());
             if (validUntil.isBefore(Instant.now())) return Optional.empty();
 
-            // Check revocation status from database (Phase 1.2)
+            if (deniedByIndex(payload.jti())) {
+                return Optional.empty();
+            }
+
+            // Postgres is the ledger (Phase 1.2). Unknown jti is treated as invalid.
             if (licenseRepository.findByJti(payload.jti())
                     .map(IssuedLicense::isRevoked)
-                    .orElse(true)) {  // If not found in DB, treat as revoked/invalid
+                    .orElse(true)) {
                 return Optional.empty();
             }
 
@@ -190,21 +222,55 @@ public class LicenseService {
      * Revokes a previously issued license by its jti.
      * Returns true if the license existed and was newly revoked.
      * Idempotent: calling twice returns false on the second call.
+     *
+     * <p>Order: persist {@code revokedAt} in Postgres (ledger), then write the
+     * {@code jti} to the shared deny-list with TTL ≥ remaining license life.
+     * A Redis write failure is logged; revoke still succeeds.
      */
     public boolean revoke(String jti) {
         if (jti == null || jti.isBlank()) return false;
         return licenseRepository.findByJti(jti)
             .map(lic -> {
-                if (lic.isRevoked()) {
+                boolean newlyRevoked = !lic.isRevoked();
+                if (newlyRevoked) {
+                    lic.setRevokedAt(Instant.now());
+                    licenseRepository.save(lic);
+                    log.info("License revoked jti={}", jti);
+                } else {
                     log.info("License already revoked jti={}", jti);
-                    return false;
                 }
-                lic.setRevokedAt(Instant.now());
-                licenseRepository.save(lic);
-                log.info("License revoked jti={}", jti);
-                return true;
+                // Heal the deny-list even on a repeat revoke (Redis was down the first time).
+                publishDenial(lic);
+                return newlyRevoked;
             })
             .orElse(false);
+    }
+
+    private boolean deniedByIndex(String jti) {
+        try {
+            return revocationIndex.isDenied(jti);
+        } catch (RevocationIndexUnavailableException e) {
+            log.warn("Revocation index unavailable; falling back to Postgres ledger for jti={}", jti);
+            return false;
+        }
+    }
+
+    private void publishDenial(IssuedLicense lic) {
+        try {
+            revocationIndex.deny(lic.getJti(), denyTtl(lic));
+        } catch (RevocationIndexUnavailableException e) {
+            log.warn("Revocation index write failed after Postgres revoke jti={}; replicas will deny via the ledger",
+                lic.getJti());
+        }
+    }
+
+    static Duration denyTtl(IssuedLicense lic) {
+        Instant expires = lic.getExpiresAt();
+        Instant now = Instant.now();
+        Duration remaining = (expires != null && expires.isAfter(now))
+            ? Duration.between(now, expires)
+            : Duration.ZERO;
+        return remaining.plus(DENY_TTL_SKEW);
     }
 
     /**
