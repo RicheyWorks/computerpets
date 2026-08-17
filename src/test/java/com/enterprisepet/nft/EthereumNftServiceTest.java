@@ -104,11 +104,22 @@ class EthereumNftServiceTest {
     @Test
     @DisplayName("ownsToken returns false when wallet does not own the token")
     void ownsToken_whenDoesNotOwn_returnsFalse() throws Exception {
-        stubEthCall(NOT_OWNER_RESPONSE);
+        // AUTO: ownerOf returns a different address. A second stub (zero balance)
+        // would be used only if ownerOf failed to decode — it must not treat the
+        // owner address as an ERC-1155 balance.
+        stubEthCall(NOT_OWNER_RESPONSE, BALANCE_ZERO);
 
         boolean result = unrestricted.ownsToken(WALLET, CONTRACT, TOKEN_ID);
 
         assertThat(result).isFalse();
+    }
+
+    @Test
+    @DisplayName("AUTO does not treat a foreign ownerOf address as a positive ERC-1155 balance")
+    void ownsToken_autoForeignOwner_doesNotTreatAddressAsBalance() throws Exception {
+        stubEthCall(NOT_OWNER_RESPONSE);
+
+        assertThat(unrestricted.ownsToken(WALLET, CONTRACT, TOKEN_ID)).isFalse();
     }
 
     @Test
@@ -284,13 +295,22 @@ class EthereumNftServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void stubEthCall(String hex) throws Exception {
-        EthCall call = mock(EthCall.class);
-        when(call.hasError()).thenReturn(false);
-        when(call.getValue()).thenReturn(hex);
-
+    private void stubEthCall(String... hexes) throws Exception {
         Request request = mock(Request.class);
-        when(request.send()).thenReturn(call);
+        EthCall[] calls = new EthCall[hexes.length];
+        for (int i = 0; i < hexes.length; i++) {
+            EthCall call = mock(EthCall.class);
+            when(call.hasError()).thenReturn(false);
+            when(call.getValue()).thenReturn(hexes[i]);
+            calls[i] = call;
+        }
+        if (calls.length == 1) {
+            when(request.send()).thenReturn(calls[0]);
+        } else {
+            EthCall[] rest = new EthCall[calls.length - 1];
+            System.arraycopy(calls, 1, rest, 0, rest.length);
+            when(request.send()).thenReturn(calls[0], rest);
+        }
         when(web3j.ethCall(any(), any())).thenReturn(request);
     }
 }
