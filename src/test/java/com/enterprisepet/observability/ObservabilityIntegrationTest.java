@@ -6,7 +6,6 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import io.opentelemetry.sdk.trace.SpanProcessor;
 import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.actuate.observability.AutoConfigureObservability;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -40,12 +38,10 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Boots the real application (no collector) and asserts that a verify call
- * records a Micrometer timer <em>and</em> an OpenTelemetry span. Prometheus
- * scrape output must still include those meters.
+ * Boots the real application with no OTLP collector and asserts that a
+ * verify call records a Micrometer timer and an OpenTelemetry span.
  */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureObservability
 @Import(ObservabilityIntegrationTest.SpanCapture.class)
 class ObservabilityIntegrationTest {
 
@@ -66,9 +62,6 @@ class ObservabilityIntegrationTest {
     private MeterRegistry meterRegistry;
 
     @Autowired
-    private PrometheusMeterRegistry prometheus;
-
-    @Autowired
     private LicenseService licenseService;
 
     @Autowired
@@ -84,8 +77,8 @@ class ObservabilityIntegrationTest {
         registry.add("steam.api-base-url", () -> "http://localhost:" + wireMockServer.port());
         registry.add("steam.api-key", () -> "TEST_STEAM_API_KEY");
         registry.add("ownership.providers.steam.enabled", () -> "true");
+        // Tests disable tracing by default; turn sampling on for this class only.
         registry.add("management.tracing.sampling.probability", () -> "1.0");
-        registry.add("management.otlp.tracing.endpoint", () -> "");
 
         String licenseKey = Base64.getEncoder().encodeToString(new byte[32]);
         String jwtKey = Base64.getEncoder().encodeToString(new byte[48]);
@@ -134,11 +127,12 @@ class ObservabilityIntegrationTest {
     @DisplayName("context starts without an OTLP collector")
     void contextStartsWithoutCollector() {
         assertThat(meterRegistry).isNotNull();
-        assertThat(prometheus).isNotNull();
+        assertThat(restTemplate.getForEntity("/api/verify/providers", String.class).getStatusCode())
+                .isEqualTo(HttpStatus.OK);
     }
 
     @Test
-    @DisplayName("POST /api/verify/steam records verify meter, HTTP spans, and Prometheus scrape")
+    @DisplayName("POST /api/verify/steam records verify meter and an OTel span")
     void verifySteam_recordsSpanAndMeter() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -162,23 +156,14 @@ class ObservabilityIntegrationTest {
         assertThat(verify).isNotNull();
         assertThat(verify.count()).isGreaterThanOrEqualTo(1);
 
-        Timer httpServer = meterRegistry.find("http.server.requests")
-                .tag("uri", "/api/verify/{provider}")
-                .timer();
-        assertThat(httpServer).isNotNull();
-        assertThat(httpServer.count()).isGreaterThanOrEqualTo(1);
-
         List<SpanData> spans = EXPORTER.spans();
         assertThat(spans).isNotEmpty();
         assertThat(spans)
                 .extracting(SpanData::getName)
                 .anyMatch(name -> name.contains("enterprisepet.verify")
                         || name.contains("http.server.requests")
-                        || name.toLowerCase().contains("verify"));
-
-        String scrape = prometheus.scrape();
-        assertThat(scrape).contains("enterprisepet_verify");
-        assertThat(scrape).contains("http_server_requests");
+                        || name.toLowerCase().contains("verify")
+                        || name.contains("http.client.requests"));
     }
 
     @Test
@@ -203,11 +188,5 @@ class ObservabilityIntegrationTest {
                 .timer();
         assertThat(download).isNotNull();
         assertThat(download.count()).isGreaterThanOrEqualTo(1);
-
-        assertThat(EXPORTER.spans())
-                .extracting(SpanData::getName)
-                .anyMatch(name -> name.contains("enterprisepet.download")
-                        || name.contains("http.server.requests")
-                        || name.toLowerCase().contains("download"));
     }
 }

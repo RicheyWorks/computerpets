@@ -6,31 +6,36 @@ import io.opentelemetry.sdk.trace.data.SpanData;
 import io.opentelemetry.sdk.trace.export.SpanExporter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import java.time.Duration;
 import java.util.Collection;
 
 /**
- * Replaces Boot 3.3's default {@code localhost:4318} OTLP exporter so a
- * collector is not required to start. When
- * {@code management.otlp.tracing.endpoint} is set (mapped from
- * {@code OTEL_EXPORTER_OTLP_ENDPOINT}), spans are exported over OTLP/HTTP.
+ * Registers the OTLP/HTTP span exporter only when a collector URL is set.
+ * Boot 3.3's {@code OtlpTracingAutoConfiguration} is excluded because it
+ * always dials {@code localhost:4318}; this bean is a no-op otherwise so
+ * local/dev starts without a collector.
+ *
+ * <p>Resolution order: {@code OTEL_EXPORTER_OTLP_TRACES_ENDPOINT},
+ * {@code OTEL_EXPORTER_OTLP_ENDPOINT}, then
+ * {@code management.otlp.tracing.endpoint}. The property is not bound in
+ * {@code application.yml} so an empty default cannot trip Boot's
+ * {@code @ConditionalOnProperty} if that auto-config is re-imported in tests.
  */
 @Configuration
 public class OtlpSpanExporterConfiguration {
 
     private static final Logger log = LoggerFactory.getLogger(OtlpSpanExporterConfiguration.class);
 
-    /**
-     * Bean name must match Spring Boot's {@code otlpHttpSpanExporter} so the
-     * auto-config default (always-on localhost:4318) is not also created.
-     */
-    @Bean(name = "otlpHttpSpanExporter")
-    SpanExporter otlpHttpSpanExporter(
-            @Value("${management.otlp.tracing.endpoint:}") String endpoint) {
+    @Bean
+    SpanExporter otlpSpanExporter(Environment env) {
+        String endpoint = firstConfigured(env,
+                "OTEL_EXPORTER_OTLP_TRACES_ENDPOINT",
+                "OTEL_EXPORTER_OTLP_ENDPOINT",
+                "management.otlp.tracing.endpoint");
         if (!OtlpEndpoints.isConfigured(endpoint)) {
             log.info("OTLP export disabled (set OTEL_EXPORTER_OTLP_ENDPOINT to enable)");
             return NoopSpanExporter.INSTANCE;
@@ -41,6 +46,16 @@ public class OtlpSpanExporterConfiguration {
                 .setEndpoint(tracesUrl)
                 .setTimeout(Duration.ofSeconds(10))
                 .build();
+    }
+
+    private static String firstConfigured(Environment env, String... keys) {
+        for (String key : keys) {
+            String value = env.getProperty(key);
+            if (OtlpEndpoints.isConfigured(value)) {
+                return value;
+            }
+        }
+        return "";
     }
 
     /**

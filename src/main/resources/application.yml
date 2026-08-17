@@ -4,6 +4,10 @@ server:
 spring:
   application:
     name: enterprisepet-backend
+  autoconfigure:
+    # Boot 3.3's OTLP auto-config always dials localhost:4318. We register our
+    # own SpanExporter that is a no-op unless OTEL_EXPORTER_OTLP_ENDPOINT is set.
+    exclude: org.springframework.boot.actuate.autoconfigure.tracing.otlp.OtlpTracingAutoConfiguration
   datasource:
     url: jdbc:h2:mem:enterprisepet
     driver-class-name: org.h2.Driver
@@ -177,9 +181,6 @@ management:
   tracing:
     sampling:
       probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
-  otlp:
-    tracing:
-      endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:${OTEL_EXPORTER_OTLP_ENDPOINT:}}
   metrics:
     distribution:
       percentiles-histogram:
