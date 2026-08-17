@@ -8,6 +8,10 @@ contextBridge.exposeInMainWorld("desk", {
   vitals: (payload) => ipcRenderer.send("vitals", payload),
   mindGet: () => ipcRenderer.sendSync("mind-get"),
   mindSet: (data) => ipcRenderer.send("mind-set", data),
+  licenseStatus: () => ipcRenderer.invoke("license-status"),
+  licenseUnlock: (input) => ipcRenderer.invoke("license-unlock", input),
+  licenseDownload: () => ipcRenderer.invoke("license-download"),
+  licenseClear: () => ipcRenderer.invoke("license-clear"),
   onCommand: (fn) => {
     const wrapped = (_e, cmd) => fn(cmd);
     ipcRenderer.on("command", wrapped);
