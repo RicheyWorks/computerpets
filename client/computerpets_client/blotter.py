@@ -10,7 +10,9 @@ import os
 
 from PyQt6.QtCore import QRectF, Qt
 from PyQt6.QtGui import QBrush, QColor, QLinearGradient, QPainter, QPainterPath, QPen
-from PyQt6.QtWidgets import QGraphicsRectItem, QGraphicsView, QWidget
+from PyQt6.QtWidgets import QGraphicsObject, QGraphicsRectItem, QGraphicsView, QWidget
+
+from .weather import Weather, weather_of
 
 
 RENDERER_HONEST = (
@@ -124,3 +126,64 @@ class DeskBackground(QGraphicsRectItem):
         painter.drawEllipse(QRectF(rect.width() - 280, 188, 28, 18))
         painter.setBrush(QBrush(QColor(80, 48, 36)))
         painter.drawRect(QRectF(rect.width() - 274, 168, 6, 24))
+
+
+class WeatherLayer(QGraphicsObject):
+    """Rain, wind, or heat wash — same four skies as the web / Electron desk."""
+
+    def __init__(self, width: float = 960, height: float = 540, sky: Weather | None = None):
+        super().__init__()
+        self._width = width
+        self._height = height
+        self.sky: Weather = sky if sky is not None else weather_of()
+        self._t = 0.0
+        self.setZValue(1)
+        self.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+
+    def boundingRect(self) -> QRectF:
+        return QRectF(0, 0, self._width, self._height)
+
+    def set_sky(self, sky: Weather) -> None:
+        if sky == self.sky:
+            return
+        self.sky = sky
+        self.update()
+
+    def advance_weather(self, dt: float) -> None:
+        if self.sky in ("rain", "wind"):
+            self._t += dt
+            self.update()
+
+    def paint(self, painter: QPainter, option, widget: QWidget | None = None) -> None:  # noqa: ARG002
+        if self.sky == "clear":
+            return
+        painter.setPen(Qt.PenStyle.NoPen)
+        if self.sky == "heat":
+            wash = QLinearGradient(self._width * 0.7, 0, self._width * 0.2, self._height * 0.7)
+            wash.setColorAt(0, QColor(176, 137, 104, 36))
+            wash.setColorAt(1, QColor(176, 137, 104, 0))
+            painter.setBrush(QBrush(wash))
+            painter.drawRect(self.boundingRect())
+            return
+        if self.sky == "rain":
+            dim = QLinearGradient(0, 0, 0, self._height)
+            dim.setColorAt(0, QColor(12, 11, 10, 0))
+            dim.setColorAt(1, QColor(12, 11, 10, 30))
+            painter.setBrush(QBrush(dim))
+            painter.drawRect(self.boundingRect())
+            painter.setPen(QPen(QColor(216, 207, 192, 72), 1))
+            for i in range(16):
+                x = 4 + i * (self._width * 0.06)
+                delay = (i % 6) * 0.16
+                phase = (self._t + delay) % 0.85
+                y = -0.12 * self._height + (phase / 0.85) * (self._height * 1.3)
+                drift = 10 * (phase / 0.85)
+                painter.drawLine(int(x + drift), int(y), int(x + drift), int(y + self._height * 0.18))
+            return
+        painter.setPen(QPen(QColor(216, 207, 192, 46), 1))
+        for i in range(7):
+            y = 16 + i * (self._height * 0.10)
+            delay = i * 0.35
+            phase = (self._t + delay) % 3.2
+            x = -0.12 * self._width + (phase / 3.2) * (self._width * 1.2)
+            painter.drawLine(int(x), int(y), int(x + self._width * 0.24), int(y))
