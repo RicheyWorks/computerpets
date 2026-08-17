@@ -8,10 +8,10 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (Spring profiles + Kubernetes manifests) |
+| **Last Updated** | 2026-08-17 (ADRs under `docs/adr/`) |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
-| **Related**      | [docs/README.md](README.md) (documentation index) |
+| **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
 
 ---
 
@@ -489,6 +489,8 @@ Profile overlays live next to `application.yml`. Static assets and pet bundles l
 
 ---
 
+Numbered records of the decisions that are already true on `main` live in [`docs/adr/`](adr/README.md). This table is the short form; the ADRs are the why.
+
 ## 8. Key Design Decisions & Tradeoffs
 
 | Decision                              | Rationale                                                                 | Tradeoff / Risk |
@@ -672,7 +674,7 @@ Goal: Prepare for growth and complexity.
 ### Documentation & Process (Ongoing)
 
 - Keep `README.md` and this `ARCHITECTURE.md` in sync after every significant change
-- Introduce Architecture Decision Records (ADRs) under `docs/adr/`
+- Keep [Architecture Decision Records](adr/README.md) current when a decision on `main` changes (`docs/adr/`)
 - Perform lightweight threat modeling for every new provider
 - Establish a regular security & architecture review cadence (quarterly)
 
@@ -694,7 +696,7 @@ Goal: Prepare for growth and complexity.
 
 ### Documentation & Process
 - Keep `README.md` and this `ARCHITECTURE.md` synchronized after every significant change.
-- Add architecture decision records (ADRs) under `docs/adr/` for future non-obvious choices.
+- When a non-obvious choice lands on `main`, add or supersede an ADR under [`docs/adr/`](adr/README.md). Do not invent APIs, collection addresses, or storefronts.
 - Establish a lightweight threat-modeling practice for each new provider.
 
 ---

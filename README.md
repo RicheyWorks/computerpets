@@ -147,6 +147,7 @@ All detailed documentation is located in the `docs/` directory:
 
 - **[Documentation Index](docs/README.md)** — Overview of all available docs
 - **[Architecture](docs/ARCHITECTURE.md)** — Comprehensive system design, diagrams, and recommendations (**recommended starting point**)
+- **[Architecture Decision Records](docs/adr/README.md)** — Why the code looks the way it does (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron contract, profiles)
 - **[Client contract](docs/CLIENT-CONTRACT.md)** — License decrypt, hwid, JWT, and signed download URL
 - **[Setup Guide](docs/SETUP.md)** — How to build, configure, and run the project locally (profiles + `deploy/k8s/`)
 - **[Contributing Guide](docs/CONTRIBUTING.md)** — Development workflow and contribution process

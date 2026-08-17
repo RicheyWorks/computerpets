@@ -40,7 +40,7 @@ For a deep technical understanding, start with the Architecture documentation.
 New to the project? Follow this recommended path:
 
 1. **Understand the System**  
-   Read the **[Architecture](ARCHITECTURE.md)** document to learn about the design, components, and security model.
+   Read the **[Architecture](ARCHITECTURE.md)** document, then the **[Architecture Decision Records](adr/README.md)** for the choices the code already made.
 
 2. **Set Up Your Environment**  
    Follow the **[Setup & Installation Guide](SETUP.md)** to install prerequisites, generate required secrets, and run the backend locally.
@@ -58,6 +58,7 @@ New to the project? Follow this recommended path:
 | Document | Description |
 |----------|-------------|
 | **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **Start here** for a complete understanding. |
+| **[Architecture Decision Records](adr/README.md)** | Numbered records of decisions already true on `main` (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron contract, profiles + k8s). Not a wishlist. |
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
 | **[Mind plugins](MIND.md)** | Plug any AI into the pets — OpenAI-compatible, Claude, Gemini, Ollama, custom webhook. |
@@ -88,7 +89,8 @@ The long-term vision for ComputerPets includes:
 
 Already shipped: Steam Web API + NFT allowlist + Itch.io download-key verify + Epic Games Store Ecom v3,
 JPA persistence and revocation, optional hwid, Micrometer + OpenTelemetry tracing,
-`dev`/`staging`/`prod` profiles + `deploy/k8s/`, and the [client contract](CLIENT-CONTRACT.md).
+`dev`/`staging`/`prod` profiles + `deploy/k8s/`, the [client contract](CLIENT-CONTRACT.md),
+and [ADRs](adr/README.md) for those decisions.
 
 Current status and detailed future plans are documented in the **[Roadmap](ROADMAP.md)**
 and **[Architecture](ARCHITECTURE.md)**.
