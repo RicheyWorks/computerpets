@@ -34,6 +34,8 @@ services:
       - RATE_LIMIT_BACKEND=redis
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      # OTLP/HTTP traces — empty means no export; local compose starts without a collector
+      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_EXPORTER_OTLP_ENDPOINT:-}
     depends_on:
       postgres:
         condition: service_healthy

@@ -150,8 +150,13 @@ rate-limit:
     timeout: ${REDIS_TIMEOUT:200ms}
 
 # -----------------------------------------------------------------------------
-# Observability (Phase 1)
+# Observability (Phase 1 + 3.2)
 # -----------------------------------------------------------------------------
+# Tracing uses Micrometer Observation + the OpenTelemetry bridge (Spring Boot 3.3).
+# Spans are always created in-process. OTLP export is OFF unless
+# OTEL_EXPORTER_OTLP_ENDPOINT (base URL, e.g. http://localhost:4318) or
+# OTEL_EXPORTER_OTLP_TRACES_ENDPOINT (full /v1/traces URL) is set.
+# Local/dev starts without a collector.
 management:
   endpoints:
     web:
@@ -165,6 +170,26 @@ management:
   health:
     defaults:
       enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING_PROBABILITY:1.0}
+  otlp:
+    tracing:
+      endpoint: ${OTEL_EXPORTER_OTLP_TRACES_ENDPOINT:${OTEL_EXPORTER_OTLP_ENDPOINT:}}
+  metrics:
+    distribution:
+      percentiles-histogram:
+        enterprisepet.verify: true
+        enterprisepet.download: true
+        http.server.requests: true
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-},%X{correlationId:-}]"
 
 # OpenAPI / Swagger UI
 springdoc:

@@ -1,6 +1,11 @@
 package com.enterprisepet.nft;
 
+import com.enterprisepet.observability.VerificationTelemetry;
 import com.enterprisepet.provider.VerificationResult;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.observation.DefaultMeterObservationHandler;
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import io.micrometer.observation.ObservationRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,6 +94,25 @@ class EthereumNftServiceTest {
         boolean result = unrestricted.ownsToken(WALLET, CONTRACT, TOKEN_ID);
 
         assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("ownsToken records a provider-call meter for the eth_call")
+    void ownsToken_recordsProviderCallMeter() throws Exception {
+        SimpleMeterRegistry meters = new SimpleMeterRegistry();
+        ObservationRegistry observations = ObservationRegistry.create();
+        observations.observationConfig().observationHandler(new DefaultMeterObservationHandler(meters));
+        unrestricted.setObservationRegistry(observations);
+        stubEthCall(OWNER_RESPONSE);
+
+        assertThat(unrestricted.ownsToken(WALLET, CONTRACT, TOKEN_ID)).isTrue();
+
+        Timer timer = meters.find(VerificationTelemetry.PROVIDER_CALL)
+                .tag("provider", "nft")
+                .tag("operation", "eth_call")
+                .timer();
+        assertThat(timer).isNotNull();
+        assertThat(timer.count()).isGreaterThanOrEqualTo(1);
     }
 
     @Test
