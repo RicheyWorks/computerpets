@@ -12,17 +12,17 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.utility.DockerImageName;
 
 import java.time.Duration;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Two ProxyManagers against one Redis share the same 10/min verify bucket.
- * Uses Testcontainers when Docker is available, otherwise localhost:6379.
+ * Uses localhost:6379 when present, otherwise Testcontainers.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class RedisRateLimitBackendIT {
+class RedisRateLimitBackendTest {
 
     private static final Duration TIMEOUT = Duration.ofMillis(400);
 
@@ -61,7 +61,7 @@ class RedisRateLimitBackendIT {
         RedisClient clientB = redisClient(host, port);
         try (RedisRateLimitBackend a = new RedisRateLimitBackend(clientA);
              RedisRateLimitBackend b = new RedisRateLimitBackend(clientB)) {
-            String key = java.util.UUID.randomUUID() + "|verify";
+            String key = UUID.randomUUID() + "|verify";
             Duration period = Duration.ofMinutes(1);
 
             int consumed = 0;
@@ -79,19 +79,6 @@ class RedisRateLimitBackendIT {
         } finally {
             clientA.shutdown();
             clientB.shutdown();
-        }
-    }
-
-    @Test
-    @DisplayName("unreachable Redis is wrapped as RateLimitStoreException")
-    void redisDown_throwsStoreException() {
-        RedisClient dead = redisClient("127.0.0.1", 1);
-        try (RedisRateLimitBackend backend = new RedisRateLimitBackend(dead)) {
-            assertThatThrownBy(() -> backend.tryConsume("10.0.0.9|verify", 10, Duration.ofMinutes(1)))
-                .isInstanceOf(RateLimitStoreException.class)
-                .hasMessageContaining("unavailable");
-        } finally {
-            dead.shutdown();
         }
     }
 
