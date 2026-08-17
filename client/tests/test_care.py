@@ -1,4 +1,16 @@
-from computerpets_client.life import CareState, apply_call, apply_feed, apply_hide, apply_play, apply_treat
+from computerpets_client.life import (
+    CareState,
+    MessPile,
+    apply_call,
+    apply_clean,
+    apply_feed,
+    apply_hide,
+    apply_medicine,
+    apply_play,
+    apply_treat,
+    decay,
+    pick_mess,
+)
 from computerpets_client.species import NORI, RUI, species_by_key
 
 
@@ -69,3 +81,73 @@ def test_snake_treat_uses_house_line():
     assert result.cmd == "seek"
     assert result.line
     assert nori.treat == "Mouse"
+
+
+def test_clean_clears_mess_and_raises_hygiene():
+    before = CareState(
+        hygiene=40,
+        mood=50,
+        bond=10,
+        mess=[MessPile(id=1, x=20), MessPile(id=2, x=40)],
+    )
+    result = apply_clean(before, RUI)
+    assert result.state.mess == []
+    assert result.state.hygiene == 78
+    assert result.state.mood == 58
+    assert result.state.bond == 12
+    assert result.line == "The blotter is honest again."
+    assert result.cmd == "sit"
+
+
+def test_medicine_clears_sick_and_raises_health():
+    before = CareState(sick=True, health=40, mood=50, bond=10)
+    result = apply_medicine(before, RUI)
+    assert result.state.sick is False
+    assert result.state.health == 68
+    assert result.state.mood == 48
+    assert result.state.bond == 13
+    assert result.line == "Bitter. I will invoice you in kindness."
+    assert result.cmd == "sit"
+
+
+def test_pick_mess_removes_one_pile():
+    before = CareState(
+        hygiene=40,
+        mood=50,
+        mess=[MessPile(id=1, x=20), MessPile(id=2, x=40)],
+    )
+    result = pick_mess(before, 1)
+    assert [pile.id for pile in result.state.mess] == [2]
+    assert result.state.hygiene == 48
+    assert result.state.mood == 53
+
+
+def test_decay_low_hygiene_adds_a_mess():
+    class Sure:
+        def random(self):
+            return 0.0
+
+    before = CareState(hygiene=20, hunger=50, mess=[])
+    next_state = decay(before, 120_000, rng=Sure(), now=1_700)
+    assert len(next_state.mess) == 1
+    pile = next_state.mess[0]
+    assert pile.kind == "mess"
+    assert pile.id == 1_700
+    assert 12 <= pile.x <= 88
+
+
+def test_decay_low_health_sets_sick():
+    next_state = decay(CareState(health=30, hunger=50, hygiene=50), 0)
+    assert next_state.sick is True
+
+
+def test_decay_clears_sick_when_health_and_hygiene_recover():
+    next_state = decay(CareState(sick=True, health=70, hygiene=50, hunger=50), 0)
+    assert next_state.sick is False
+
+
+def test_vitals_name_unwell_and_unkempt():
+    assert CareState(sick=True).vitals() == "Unwell"
+    assert CareState(hygiene=20).vitals() == "Unkempt"
+    assert CareState(sick=True).vitals(blue=True) == "Blue"
+    assert CareState(hidden=True, sick=True).vitals() == "Hidden"

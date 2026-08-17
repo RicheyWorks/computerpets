@@ -38,6 +38,7 @@ def test_offscreen_check_constructs_window():
     assert "Day" in result.stdout
     assert "awake" in result.stdout or "resting" in result.stdout
     assert "Steal ribbon" in result.stdout
+    assert "is well" in result.stdout
 
 
 def test_desk_has_play_and_the_house_special():
@@ -90,6 +91,55 @@ def test_desk_day_has_weather_visitor_and_shed_coat():
     assert len(window.coats) == 1
     assert window.coats[0].coat.kind == "shed"
     assert not window.pet.dull
+    window.close()
+    del app
+
+
+def test_desk_clean_clears_a_seeded_mess():
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from dataclasses import replace
+
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+    from computerpets_client.life import MessPile
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow()
+    window.show()
+    window.care = replace(window.care, mess=[MessPile(id=1, x=30)], hygiene=20)
+    window._sync_mess()
+    assert len(window.piles) == 1
+    assert window.piles[0].pile.kind == "mess"
+    window._clean()
+    assert window.piles == []
+    assert window.care.mess == []
+    assert window.care.hygiene > 20
+    window.close()
+    del app
+
+
+def test_desk_medicine_clears_unwell():
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from dataclasses import replace
+
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow()
+    window.show()
+    window.care = replace(window.care, sick=True, health=40)
+    window._refresh_vitals()
+    assert "Unwell" in window.vital_label.text()
+    assert window.medicine_btn.isVisible()
+    assert window.pet.unwell
+    window._medicine()
+    assert window.care.sick is False
+    assert "Unwell" not in window.vital_label.text()
+    assert not window.medicine_btn.isVisible()
+    assert not window.pet.unwell
     window.close()
     del app
 
