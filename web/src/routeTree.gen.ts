@@ -18,6 +18,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as MeetRouteImport } from './routes/meet'
 import { Route as MindRouteImport } from './routes/mind'
 import { Route as SnakesRouteImport } from './routes/snakes'
+import { Route as StudyRouteImport } from './routes/study'
 import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
 import { Route as PetsKeyRouteImport } from './routes/pets.$key'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -67,6 +68,11 @@ const SnakesRoute = SnakesRouteImport.update({
   path: '/snakes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StudyRoute = StudyRouteImport.update({
+  id: '/study',
+  path: '/study',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoSlugRoute = DemoSlugRouteImport.update({
   id: '/demo/$slug',
   path: '/demo/$slug',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
   '/snakes': typeof SnakesRoute
+  '/study': typeof StudyRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByTo {
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
   '/snakes': typeof SnakesRoute
+  '/study': typeof StudyRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -122,6 +130,7 @@ export interface FileRoutesById {
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
   '/snakes': typeof SnakesRoute
+  '/study': typeof StudyRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -138,6 +147,7 @@ export interface FileRouteTypes {
     | '/meet'
     | '/mind'
     | '/snakes'
+    | '/study'
     | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
@@ -152,6 +162,7 @@ export interface FileRouteTypes {
     | '/meet'
     | '/mind'
     | '/snakes'
+    | '/study'
     | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
@@ -166,6 +177,7 @@ export interface FileRouteTypes {
     | '/meet'
     | '/mind'
     | '/snakes'
+    | '/study'
     | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
@@ -181,6 +193,7 @@ export interface RootRouteChildren {
   MeetRoute: typeof MeetRoute
   MindRoute: typeof MindRoute
   SnakesRoute: typeof SnakesRoute
+  StudyRoute: typeof StudyRoute
   DemoSlugRoute: typeof DemoSlugRoute
   PetsKeyRoute: typeof PetsKeyRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -251,6 +264,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SnakesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/study': {
+      id: '/study'
+      path: '/study'
+      fullPath: '/study'
+      preLoaderRoute: typeof StudyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/$slug': {
       id: '/demo/$slug'
       path: '/demo/$slug'
@@ -285,6 +305,7 @@ const rootRouteChildren: RootRouteChildren = {
   MeetRoute: MeetRoute,
   MindRoute: MindRoute,
   SnakesRoute: SnakesRoute,
+  StudyRoute: StudyRoute,
   DemoSlugRoute: DemoSlugRoute,
   PetsKeyRoute: PetsKeyRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,

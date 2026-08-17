@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { guideFor } from "@/lib/pets/snake-guide";
+import { classroomFor, plaqueFor } from "@/lib/pets/plaques";
 import { cn } from "@/lib/utils";
 
 export function SpeciesPlaque({
@@ -14,7 +14,8 @@ export function SpeciesPlaque({
   showDemoLink?: boolean;
   className?: string;
 }) {
-  const guide = guideFor(speciesKey);
+  const guide = plaqueFor(speciesKey);
+  const classroom = classroomFor(speciesKey);
   const [open, setOpen] = useState(!compact);
   useEffect(() => {
     setOpen(!compact);
@@ -57,13 +58,13 @@ export function SpeciesPlaque({
             params={{ slug: guide.slug }}
             className="text-sm text-fg no-underline hover:text-primary"
           >
-            Watch {guide.name} crawl
+            Watch {guide.name} {classroom.verb}
           </Link>
         </p>
       ) : (
         <p className="mt-3">
-          <Link to="/snakes" className="text-sm text-fg no-underline hover:text-primary">
-            All ten in the den
+          <Link to={classroom.to} className="text-sm text-fg no-underline hover:text-primary">
+            {classroom.label}
           </Link>
         </p>
       )}

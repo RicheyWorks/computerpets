@@ -1,26 +1,25 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { SnakeDen, SnakeRail } from "@/components/desk/snake-den";
+import { HouseStudy, StudyRail } from "@/components/desk/house-study";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
-import { SNAKE_GUIDE } from "@/lib/pets/snake-guide";
-import { SNAKE_KEYS } from "@/lib/pets/snakes";
+import { HOUSE_GUIDE, HOUSE_KEYS } from "@/lib/pets/house-guide";
 
-export const Route = createFileRoute("/snakes")({
-  component: SnakesPage,
+export const Route = createFileRoute("/study")({
+  component: StudyPage,
   head: () => ({
     meta: [
-      { title: "The snake den — ComputerPets" },
+      { title: "The study — ComputerPets" },
       {
         name: "description",
-        content: "Ten living snakes on the blotter. Learn the species by watching them crawl.",
+        content: "Twenty living companions on the blotter. Learn the species by watching them walk.",
       },
     ],
   }),
 });
 
-export function SnakesPage() {
-  const [selected, setSelected] = useState(SNAKE_KEYS[0]!);
+export function StudyPage() {
+  const [selected, setSelected] = useState(HOUSE_KEYS[0]!);
 
   return (
     <main className="bg-bg text-fg">
@@ -32,22 +31,22 @@ export function SnakesPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/55 to-bg/30" />
         <div className="relative mx-auto flex min-h-[58dvh] max-w-5xl flex-col justify-end px-5 pb-12 pt-28 sm:px-8">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-subtle">The den</p>
+          <p className="text-[11px] uppercase tracking-[0.22em] text-subtle">The study</p>
           <h1 className="mt-3 max-w-2xl font-display text-5xl leading-[0.95] sm:text-7xl">
-            They crawl. They stay. You learn the species.
+            They walk. They stay. You learn the house.
           </h1>
           <p className="mt-5 max-w-lg text-base text-muted sm:text-lg">
-            Ten snakes live on this blotter. Watch the gait. Read the plaque. Leave knowing a ball
-            python from a boa, and a milk snake from the rhyme that is not her cousin.
+            Twenty companions live on this blotter. Watch the gait. Read the plaque. Leave knowing a
+            red panda from a raccoon, and an axolotl from a fish.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
-              <Link to="/demo/$slug" params={{ slug: "nori" }}>
-                Watch Nori
+              <Link to="/demo/$slug" params={{ slug: "rui" }}>
+                Watch Rui
               </Link>
             </Button>
             <Button asChild variant="secondary">
-              <Link to="/study">The study</Link>
+              <Link to="/snakes">The snake den</Link>
             </Button>
             <Button asChild variant="secondary">
               <Link to="/meet">The house</Link>
@@ -56,18 +55,18 @@ export function SnakesPage() {
         </div>
       </section>
 
-      <SnakeDen selectedKey={selected} onSelect={setSelected} />
+      <HouseStudy selectedKey={selected} onSelect={setSelected} />
 
       <section className="mx-auto max-w-5xl space-y-6 px-5 py-10 sm:px-8">
-        <SnakeRail selectedKey={selected} onSelect={setSelected} />
+        <StudyRail selectedKey={selected} onSelect={setSelected} />
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
           <SpeciesPlaque speciesKey={selected} />
           <aside className="rounded-[var(--radius-lg)] border border-border bg-surface p-5">
-            <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">How to use the den</p>
+            <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">How to use the study</p>
             <p className="mt-2 font-display text-2xl">Watch, then tap.</p>
             <p className="mt-2 text-sm text-muted">
-              Five crawl at a time. The rest cycle onto the wood. Treat, hide, talk, and shed still
-              live on each snake&apos;s demo and on the desk.
+              Five walk at a time. The rest cycle onto the wood. Treat, hide, and talk still live on
+              each companion&apos;s demo and on the desk. The ten snakes keep their own den.
             </p>
             <p className="mt-4">
               <Link to="/" search={{ pet: selected }} className="text-sm text-fg">
@@ -81,13 +80,13 @@ export function SnakesPage() {
       <section className="border-t border-border">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
           <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Field notes</p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl">All ten, told apart.</h2>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl">All twenty, told apart.</h2>
           <p className="mt-3 max-w-xl text-sm text-muted">
             A short tell, one mix-up, and the corner of the house they already keep. Open a demo if
             you want them to stay on your screen.
           </p>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
-            {SNAKE_GUIDE.map((guide) => (
+            {HOUSE_GUIDE.map((guide) => (
               <article
                 key={guide.key}
                 className="rounded-[var(--radius-lg)] border border-border bg-surface p-5"

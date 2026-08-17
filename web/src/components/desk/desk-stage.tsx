@@ -507,9 +507,7 @@ export function DeskStage({
         </label>
         <h1 className="mt-2 font-display text-2xl leading-none sm:text-3xl">{displayName}</h1>
         <p className="mt-2 hidden text-sm text-muted sm:block">{kind.blurb}</p>
-        {isSnake(kind.key) ? (
-          <SpeciesPlaque speciesKey={kind.key} compact className="mt-3 hidden sm:block" showDemoLink={false} />
-        ) : null}
+        <SpeciesPlaque speciesKey={kind.key} compact className="mt-3 hidden sm:block" showDemoLink={false} />
         <p className="mt-1 text-xs text-subtle sm:mt-2">
           {busy
             ? "Listening"
@@ -626,7 +624,11 @@ export function DeskStage({
             <Link to="/snakes" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
               The den
             </Link>
-          ) : null}
+          ) : (
+            <Link to="/study" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
+              The study
+            </Link>
+          )}
         </div>
       </div>
     </section>
