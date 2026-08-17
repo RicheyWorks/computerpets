@@ -59,6 +59,15 @@ public final class ApiExamples {
         }
         """;
 
+    public static final String VERIFY_EPIC_REQUEST = """
+        {
+          "accountId": "9626f441055349ce8cb7d7d5a483eaa2",
+          "sandboxId": "example",
+          "catalogItemId": "0123456789abcdef0123456789abcdef",
+          "petType": "red_panda"
+        }
+        """;
+
     public static final String DOWNLOAD_REQUEST = """
         {
           "ciphertext": "base64ciphertext...",
@@ -233,6 +242,13 @@ public final class ApiExamples {
                 .value(VERIFY_ITCH_REQUEST);
     }
 
+    public static Example epicVerificationRequest() {
+        return new Example()
+                .summary("Verify ownership via Epic Games Store")
+                .description("Example request body for verifying EOS Ecom catalog-item ownership")
+                .value(VERIFY_EPIC_REQUEST);
+    }
+
     public static Example verifySuccessResponse() {
         return new Example()
                 .summary("Successful ownership verification")
@@ -361,15 +377,16 @@ public final class ApiExamples {
           { "key": "steam", "displayName": "Steam" },
           { "key": "nft", "displayName": "Ethereum NFT" },
           { "key": "microsoft", "displayName": "Microsoft Store" },
-          { "key": "itch", "displayName": "Itch.io" }
+          { "key": "itch", "displayName": "Itch.io" },
+          { "key": "epic", "displayName": "Epic Games Store" }
         ]
         """;
 
     public static final String UNKNOWN_PROVIDER_ERROR = """
         {
           "error": "unknown provider",
-          "provider": "epic",
-          "validProviders": "steam, nft, microsoft, itch"
+          "provider": "gumroad",
+          "validProviders": "steam, nft, microsoft, itch, epic"
         }
         """;
 

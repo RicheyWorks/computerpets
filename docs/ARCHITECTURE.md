@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (Itch.io provider)              |
+| **Last Updated** | 2026-08-17 (Epic Games Store provider)     |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -50,7 +50,7 @@ Keeping this document accurate reduces onboarding friction and prevents architec
 
 ## 1. Executive Summary
 
-EnterprisePet Backend is a secure, stateless Spring Boot 3.3 Java 21 REST service that serves as the trust anchor for a premium "desktop pets" digital collectibles platform. It enables users to prove ownership of entitlements across heterogeneous platforms (Steam game ownership, Ethereum ERC-721 NFTs, Microsoft Store products, and itch.io download-key receipts) and, in return, receive cryptographically sealed time-limited licenses plus short-lived JWTs that authorize the download of platform-specific pet asset bundles from an external CDN.
+EnterprisePet Backend is a secure, stateless Spring Boot 3.3 Java 21 REST service that serves as the trust anchor for a premium "desktop pets" digital collectibles platform. It enables users to prove ownership of entitlements across heterogeneous platforms (Steam game ownership, Ethereum ERC-721 NFTs, Microsoft Store products, itch.io download-key receipts, and Epic Games Store catalog items) and, in return, receive cryptographically sealed time-limited licenses plus short-lived JWTs that authorize the download of platform-specific pet asset bundles from an external CDN.
 
 The architecture deliberately keeps the master AES-256-GCM encryption key and signing material server-side only. The desktop client (out of scope for this repository; referenced as a future PyQt6/Python application) never holds long-term secrets and cannot forge valid licenses. A clean plugin SPI (`OwnershipProvider`) allows new storefronts or wallet types to be added with a single `@Service` class and no changes to controllers or security configuration. Rate limiting, defense-in-depth validation on download, and startup-time secret validation are first-class concerns.
 
@@ -66,7 +66,7 @@ The system is currently a modular monolith with scaffolding for persistence (JPA
   - Presentation (thin `@RestController`s)
   - Application / orchestration (controllers + services)
   - Domain / core services (`LicenseService`, `PetBundleService`, `JwtService`)
-  - Infrastructure / pluggable providers (Steam, NFT, Microsoft, Itch)
+  - Infrastructure / pluggable providers (Steam, NFT, Microsoft, Itch, Epic)
   - Cross-cutting concerns (security filter chain, rate limiting, exception mapping)
 - **Stateless** by design: no HTTP sessions, no server-side conversation state. Entitlement is proven via sealed artifacts (encrypted license + JWT claims).
 - **Client-server** with an untrusted or semi-trusted client (desktop app) that holds opaque tokens only.
@@ -77,7 +77,7 @@ The system is currently a modular monolith with scaffolding for persistence (JPA
 - **LicenseService** is the cryptographic source of truth for entitlements (AES-GCM).
 - **JwtService + JwtAuthenticationFilter** protect the download phase only.
 - **PetBundleService** authorizes access to external storage without serving bytes itself.
-- External dependencies are called synchronously during verification (Web3 RPC, Microsoft Collections API, Steam Web API, and itch.io API).
+- External dependencies are called synchronously during verification (Web3 RPC, Microsoft Collections API, Steam Web API, itch.io API, and EOS Auth + Ecom).
 
 ```mermaid
 graph TD
@@ -103,6 +103,7 @@ graph TD
         N[EthereumNftService<br/>web3j]
         M[MicrosoftStoreService<br/>RestClient + dev-mode]
         I[ItchService<br/>download-key receipt]
+        E[EpicService<br/>OAuth + Ecom v3]
     end
 
     subgraph "External Systems"
@@ -110,6 +111,7 @@ graph TD
         ETH[Alchemy / Infura<br/>Ethereum RPC]
         MS[Microsoft Collections API]
         ITCH[itch.io API<br/>api.itch.io]
+        EPIC[EOS Auth + Ecom<br/>api.epicgames.dev]
         CDN[(CDN / S3 / R2<br/>Pet .zip bundles)]
     end
 
@@ -125,10 +127,12 @@ graph TD
     PROV --> N
     PROV --> M
     PROV --> I
+    PROV --> E
     N -->|ownerOf eth_call| ETH
     M -->|XBL3.0 collections/query| MS
     S -->|GetOwnedGames| STEAM
     I -->|download_keys| ITCH
+    E -->|client_credentials + ownership| EPIC
 
     API --> LS
     API --> JS
@@ -144,7 +148,7 @@ graph TD
     API --> EX
 ```
 
-The diagram shows the plugin boundary clearly: adding a new platform (Epic, Itch, Gumroad, Solana, etc.) requires only a new class implementing `OwnershipProvider` annotated `@Service`.
+The diagram shows the plugin boundary clearly: adding a new platform (Gumroad, Solana, etc.) requires only a new class implementing `OwnershipProvider` annotated `@Service`.
 
 ---
 
@@ -273,6 +277,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 - `nft/EthereumNftService` – Web3j `eth_call` to ERC-721 `ownerOf` / ERC-1155 `balanceOf` with address validation, official collection allowlist, token→pet binding, optional `personal_sign`, and timed-out RPC.
 - `microsoft/MicrosoftStoreService` – RestClient to Microsoft Collections API with XBL3.0 auth; dev-mode bypass flag.
 - `itch/ItchService` – itch.io download-key receipt verify (`GET /games/{id}/download_keys`) with developer API key, optional `itch.game-id` allowlist, circuit breaker.
+- `epic/EpicService` – EOS Auth `client_credentials` token exchange + Ecom v3 ownership (`GET /epic/ecom/v3/platforms/{platform}/identities/{accountId}/ownership`) with fail-closed Developer Portal secrets, optional sandbox/catalog-item allowlist, circuit breaker.
 
 ### 4.3 Core Domain Services
 | Component             | Responsibility                                                                 | Technology                  | Key Files                              | Dependencies                     |
@@ -430,6 +435,8 @@ ComputerPets/
 │   │   │   │   └── MicrosoftStoreService.java
 │   │   │   ├── itch/
 │   │   │   │   └── ItchService.java
+│   │   │   ├── epic/
+│   │   │   │   └── EpicService.java
 │   │   │   ├── nft/
 │   │   │   │   └── EthereumNftService.java
 │   │   │   ├── pet/
@@ -499,7 +506,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 - Rate-limit buckets and provider state are in-memory only.
 - `X-Forwarded-For` is trusted unconditionally (spoofing risk if not behind a trusted proxy).
 - No authentication or rate limiting on some discovery endpoints in practice (all routes under `/api/verify` and `/api/pets` are public).
-- ~~**No tests, no contract tests against the external providers**~~ → **Basic unit tests added** for all three providers (`SteamServiceTest`, `MicrosoftStoreServiceTest`, `EthereumNftServiceTest`). Integration-style HTTP mocking is in place for Steam and Microsoft.
+- ~~**No tests, no contract tests against the external providers**~~ → **Basic unit tests added** for Steam, Microsoft, NFT, Itch, and Epic. Integration-style HTTP mocking is in place for Steam, Microsoft, Itch, and Epic.
 - ~~Default license key present in `application.yml`**~~ → **Completed**. The application now fails fast at startup if the committed default key is used (except under the 'test' profile). The fallback default was removed from `application.yml`.
 
 ### Scalability Outlook
@@ -624,7 +631,8 @@ Goal: Deliver a complete, usable platform.
 
 - **4.2 Additional Ownership Providers**
   - [x] Itch.io download-key receipt verify (`ItchService`)
-  - Epic Games, Solana, etc. (following the established `OwnershipProvider` pattern)
+  - [x] Epic Games Store ownership (`EpicService` — Auth client_credentials + Ecom v3)
+  - Solana, etc. (blocked until a live collection address exists)
 
 - **4.3 Admin & Operations Tools**
   - Internal admin API or UI for revocation, license inspection, and audit queries (protected by strong auth)

@@ -115,7 +115,8 @@ public class VerifyController {
                                 @ExampleObject(ref = "Steam Verification With Hwid"),
                                 @ExampleObject(ref = "NFT Verification"),
                                 @ExampleObject(ref = "Microsoft Verification"),
-                                @ExampleObject(ref = "Itch Verification")
+                                @ExampleObject(ref = "Itch Verification"),
+                                @ExampleObject(ref = "Epic Verification")
                         })
         )
     )

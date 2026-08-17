@@ -39,7 +39,7 @@ Rate limits (per client IP, in-memory): **10/min** on `/api/verify/`,
 `POST /api/verify/{provider}`
 
 `{provider}` is one of the keys from `GET /api/verify/providers`
-(currently `steam`, `nft`, `microsoft`, `itch`).
+(currently `steam`, `nft`, `microsoft`, `itch`, `epic`).
 
 Body is a flat JSON object of strings. Provider-specific fields plus:
 
@@ -50,6 +50,12 @@ Body is a flat JSON object of strings. Provider-specific fields plus:
 
 Itch.io (`itch`) also requires `gameId` (numeric) and `downloadKey` (the
 purchase receipt). A placeholder `ITCH_API_KEY` fails closed.
+
+Epic Games Store (`epic`) requires `accountId` (32-char Epic Account ID),
+`sandboxId`, and `catalogItemId`. The server exchanges
+`EPIC_CLIENT_ID` / `EPIC_CLIENT_SECRET` / `EPIC_DEPLOYMENT_ID` for a
+client-credentials token, then calls Ecom v3 ownership. Placeholders
+fail closed. Do not invent a live sandbox or catalog item id.
 
 **200** — ownership verified, license issued (365 days):
 
@@ -124,7 +130,7 @@ Jackson serialization of `LicenseService.LicensePayload`:
 | Field | Type | Notes |
 |-------|------|--------|
 | `jti` | string | UUID issued at verify. Primary key for revocation. |
-| `owner` | string | Provider owner id (SteamID, wallet, Microsoft hash, `itch:{userId}`, …). |
+| `owner` | string | Provider owner id (SteamID, wallet, Microsoft hash, `itch:{userId}`, `epic:{accountId}`, …). |
 | `pet` | string | Catalog key the license is valid for. |
 | `validUntil` | string | ISO-8601 instant (`Instant.toString()`). |
 | `issuedAt` | string | ISO-8601 instant. |
@@ -164,7 +170,7 @@ Authorization: Bearer <auth.token>
 | Issuer (`iss`) | `enterprisepet-backend` (`jwt.issuer`) |
 | Subject (`sub`) | owner id |
 | `pet` | pet catalog key |
-| `prv` | provider key (`steam`, `nft`, `microsoft`, `itch`) |
+| `prv` | provider key (`steam`, `nft`, `microsoft`, `itch`, `epic`) |
 | `iat` / `exp` | issued-at / expiry |
 | Default TTL | 30 minutes (`jwt.ttl-minutes`) |
 
