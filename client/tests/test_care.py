@@ -1,5 +1,5 @@
 from computerpets_client.life import CareState, apply_call, apply_feed, apply_hide, apply_treat
-from computerpets_client.species import RUI
+from computerpets_client.species import NORI, RUI, species_by_key
 
 
 def test_feed_raises_hunger_and_plays_eat():
@@ -33,3 +33,12 @@ def test_feed_while_hidden_does_not_feed():
     result = apply_feed(hidden, RUI)
     assert result.state.hunger == 40
     assert result.state.hidden is True
+
+
+def test_snake_treat_uses_house_line():
+    nori = species_by_key("ball_python")
+    assert nori is NORI
+    result = apply_treat(CareState(), nori)
+    assert result.cmd == "seek"
+    assert result.line
+    assert nori.treat == "Mouse"

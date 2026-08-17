@@ -1,6 +1,6 @@
 # ComputerPets — PyQt blotter client
 
-A first real PyQt6 desk: **Rui** (red panda) lives on a wooden blotter. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
+A first real PyQt6 desk: **all thirty living companions** from the house catalog live on a wooden blotter — the original twenty who walk, and the ten snakes who crawl. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
 
 This is **not** a custom GPU shader engine. Drawing uses Qt’s GPU-backed scene: `QGraphicsView` with a `QOpenGLWidget` viewport (Qt RHI / OpenGL compositing). If the platform cannot create an OpenGL surface, the scene falls back to Qt software raster and says so in the status bar.
 
@@ -32,19 +32,23 @@ Headless smoke (CI / no display):
 QT_QPA_PLATFORM=offscreen python -m computerpets_client --check
 ```
 
-`--check` opens the window (offscreen), confirms a living pet is on the blotter, prints the renderer line, and exits.
+`--check` opens the window (offscreen), confirms a living pet is on the blotter, prints the renderer line and the thirty-kind count, and exits.
+
+## Meet the house
+
+The **species rail** (house, then den) and the combo / prev-next cycle are the same thirty wire keys as `PetType` and the Electron overlay roster. Tap a name or cycle — they greet in their own voice. Snakes crawl; the others walk. Palettes and tells come from the existing house catalog (Rui’s rust, Bandit’s black-and-white bands, Keel’s bill, Bluff’s upturned snout). No invented species.
+
+Pets walk (or crawl) without a license — same as the overlay.
 
 ## Care
 
-The verbs that already exist on the Electron desk and fit this first cut:
+The verbs that already exist on the Electron desk and fit this cut. Treat uses the species snack the overlay already has (Bamboo, Crumbs, Pinkie, Egg, …):
 
 | Button | What happens |
 |--------|----------------|
-| **Feed** | Hunger up, eat animation, a Rui line |
-| **Bamboo** (treat) | A snack drops on the blotter; Rui walks to it |
-| **Hide** / **Call back** | Walks off the blotter; call walks them in |
-
-Miso (cat) and Pip (dog) reuse the same painter with a different silhouette — cheap extras, not a full thirty-species port.
+| **Feed** | Hunger up, eat animation, a house line |
+| **Treat** (species verb) | A snack drops on the blotter; they walk or crawl to it |
+| **Hide** / **Call back** | Leaves the blotter; call brings them in |
 
 ## Unlock (client contract)
 
@@ -85,11 +89,13 @@ client/
 ├── computerpets_client/
 │   ├── app.py              # window + entry
 │   ├── blotter.py          # wood/blotter scene + OpenGL viewport
-│   ├── frames.py           # procedural Rui / Miso / Pip frames
+│   ├── frames.py           # procedural frames (walk + snake crawl)
 │   ├── life.py             # feed / treat / hide
+│   ├── rail.py             # study-style species rail (30 keys)
+│   ├── species.py          # house catalog — same keys as PetType
 │   ├── license/            # port of desktop/license/ (no Qt)
 │   └── unlock_dialog.py
-├── tests/                  # decrypt, hwid, signed URL, mocked unlock, care
+├── tests/                  # decrypt, hwid, signed URL, mocked unlock, care, roster
 ├── pyproject.toml
 └── README.md
 ```

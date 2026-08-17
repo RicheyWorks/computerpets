@@ -20,8 +20,9 @@ would be a lie if it only blitted CPU pixmaps.
 
 A new **`client/`** tree is the first PyQt6 blotter client:
 
-- `python -m computerpets_client` opens a window with a living pet
-  (Rui / `red_panda`; Miso and Pip reuse the same painter).
+- `python -m computerpets_client` opens a window with a living pet.
+  Every catalog key the backend `PetType` / web roster already has can
+  appear (picker, cycle, or house voice). Snakes crawl; the others walk.
 - Drawing is **Qt-accelerated**: `QGraphicsView` + `QOpenGLWidget`
   viewport (Qt RHI / OpenGL compositing). If OpenGL cannot attach, the
   scene falls back to Qt software raster and says so. This is **not** a

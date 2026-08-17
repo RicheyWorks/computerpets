@@ -2,9 +2,15 @@
 
 Drawn with QPainter into pixmaps, then composited by the GPU-backed scene.
 Not photographed assets and not a shader engine.
+
+Snakes crawl (S-curve / coil). The others walk, with silhouette tells from
+the house catalog — rust panda, cream cat, corgi, bun, tuxedo, bill-first,
+and so on. No invented species.
 """
 
 from __future__ import annotations
+
+import math
 
 from PyQt6.QtCore import QPointF, QRectF, Qt
 from PyQt6.QtGui import QBrush, QColor, QLinearGradient, QPainter, QPainterPath, QPen, QPixmap
@@ -56,6 +62,43 @@ def paint_treat(shape: str) -> QPixmap:
         p.setPen(QPen(QColor(88, 120, 48), 1.2))
         p.drawLine(14, 8, 14, 18)
         p.drawLine(22, 8, 22, 18)
+    elif shape == "seed":
+        p.setBrush(QBrush(QColor(196, 148, 64)))
+        p.setPen(QPen(QColor(120, 80, 32), 1.1))
+        p.drawEllipse(QRectF(8, 10, 8, 8))
+        p.drawEllipse(QRectF(16, 8, 7, 9))
+        p.drawEllipse(QRectF(22, 11, 6, 7))
+    elif shape == "leaf":
+        p.setBrush(QBrush(QColor(88, 156, 72)))
+        p.setPen(QPen(QColor(40, 88, 40), 1.2))
+        path = QPainterPath()
+        path.moveTo(8, 16)
+        path.quadTo(18, 2, 30, 12)
+        path.quadTo(20, 24, 8, 16)
+        p.drawPath(path)
+        p.setPen(QPen(QColor(40, 88, 40), 1))
+        p.drawLine(10, 16, 26, 12)
+    elif shape == "flake":
+        p.setBrush(QBrush(QColor(232, 148, 64)))
+        p.setPen(QPen(QColor(160, 80, 28), 1.1))
+        p.drawPolygon(
+            [QPointF(18, 6), QPointF(26, 12), QPointF(22, 22), QPointF(12, 20), QPointF(10, 10)]
+        )
+    elif shape == "pebble":
+        p.setBrush(QBrush(QColor(148, 152, 160)))
+        p.setPen(QPen(QColor(88, 92, 100), 1.2))
+        p.drawEllipse(QRectF(10, 8, 16, 12))
+    elif shape == "ember":
+        p.setBrush(QBrush(QColor(232, 120, 48)))
+        p.setPen(QPen(QColor(160, 48, 20), 1.1))
+        p.drawEllipse(QRectF(10, 8, 16, 12))
+        p.setBrush(QBrush(QColor(255, 208, 96, 180)))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(14, 10, 8, 6))
+    elif shape == "egg":
+        p.setBrush(QBrush(QColor(244, 236, 216)))
+        p.setPen(QPen(QColor(176, 160, 128), 1.2))
+        p.drawEllipse(QRectF(12, 6, 12, 16))
     else:
         p.setBrush(QBrush(QColor(196, 148, 88)))
         p.setPen(QPen(QColor(120, 80, 40), 1.2))
@@ -64,14 +107,8 @@ def paint_treat(shape: str) -> QPixmap:
     return pix
 
 
-def _draw_pet(p: QPainter, species: Species, anim: str, i: int, _n: int) -> None:
-    pal = species.palette
-    bob = 0.0
-    lean = 0.0
-    sit = 0.0
-    eat = 0.0
-    sleep = 0.0
-    stride = 0.0
+def _pose(anim: str, i: int) -> tuple[float, float, float, float, float, float]:
+    bob = lean = sit = eat = sleep = stride = 0.0
     if anim == "idle":
         bob = (-1, 0, 1, 0)[i] * 2.2
     elif anim == "walk":
@@ -89,17 +126,45 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, _n: int) -> None
         sit = 18
         sleep = 1
         bob = (0, 1, 0, 1)[i]
+    return bob, lean, sit, eat, sleep, stride
 
+
+def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
+    bob, lean, sit, eat, sleep, stride = _pose(anim, i)
+    if species.aquatic and anim in ("idle", "walk"):
+        bob += math.sin((i / max(1, n)) * math.pi * 2) * 3
     cx, cy = 88.0, 118.0 + bob + sit * 0.15
     p.translate(cx + lean, cy)
-    if sleep:
+    if sleep and species.gait != "crawl":
         p.rotate(-18)
 
-    # Shadow
     p.setPen(Qt.PenStyle.NoPen)
     p.setBrush(QBrush(QColor(20, 14, 10, 50)))
     p.drawEllipse(QRectF(-38, 38 - sit * 0.2, 76, 14))
 
+    if species.gait == "crawl" or species.silhouette == "snake":
+        _draw_snake(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    if species.silhouette in ("fish", "axolotl"):
+        _draw_aquatic(p, species, anim, i, eat, sleep)
+        return
+    if species.silhouette in ("bird", "parrot", "toucan", "phoenix", "penguin"):
+        _draw_bird(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    _draw_quad(p, species, anim, i, sit, eat, sleep, stride)
+
+
+def _draw_quad(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    pal = species.palette
     body = _color(pal.body)
     belly = _color(pal.belly)
     ear = _color(pal.ear)
@@ -107,60 +172,136 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, _n: int) -> None
     nose = _color(pal.nose)
     ring = _color(pal.ring)
     accent = _color(pal.accent)
+    sil = species.silhouette
 
-    # Tail
+    long_body = sil in ("ferret", "dragon", "iguana")
+    small = sil in ("hamster", "guinea", "hedgehog", "chinchilla", "rabbit")
+    bw = 86 if long_body else 64 if small else 72
+    bh = 40 if long_body else 46 if small else 52
+    ox = -bw / 2
+
     tail = QPainterPath()
-    if species.silhouette == "cat":
+    if sil == "cat":
         tail.moveTo(40, 8)
         tail.cubicTo(62, -18 - stride * 6, 48, -40, 28, -36)
-    elif species.silhouette == "dog":
+    elif sil in ("dog", "fox"):
         tail.moveTo(38, 10)
         tail.cubicTo(56, 4, 58, -8 - stride * 4, 50, -16)
+    elif sil == "rabbit":
+        tail.moveTo(28, 12)
+        tail.cubicTo(40, 8, 42, 16, 34, 20)
+    elif sil in ("hamster", "guinea"):
+        tail.moveTo(24, 10)
+        tail.cubicTo(30, 8, 32, 12, 28, 14)
+    elif sil == "ferret":
+        tail.moveTo(48, 6)
+        tail.cubicTo(68, 0, 74, 10, 62, 16)
+    elif sil == "dragon":
+        tail.moveTo(44, 8)
+        tail.cubicTo(72, 0, 80, 22, 58, 18)
+    elif sil == "iguana":
+        tail.moveTo(40, 8)
+        tail.cubicTo(70, 4, 78, 16, 64, 14)
+    elif sil == "turtle":
+        tail.moveTo(28, 10)
+        tail.cubicTo(36, 12, 38, 16, 32, 16)
     else:
         tail.moveTo(36, 10)
         tail.cubicTo(70, 8, 78, 36, 58, 44)
     p.setBrush(QBrush(body))
     p.setPen(QPen(accent, 1.2))
     p.drawPath(tail)
-    if species.silhouette == "panda":
+    if sil == "panda":
         p.setBrush(QBrush(ring))
         p.setPen(Qt.PenStyle.NoPen)
         p.drawEllipse(QRectF(48, 18, 10, 8))
         p.drawEllipse(QRectF(60, 28, 9, 7))
+    if sil == "fox":
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(46, -18, 10, 8))
+    if sil == "rabbit":
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(28, 12, 12, 10))
 
-    # Hind / fore legs
-    p.setBrush(QBrush(ear if species.silhouette != "dog" else accent))
+    if sil == "dragon":
+        p.setBrush(QBrush(accent))
+        p.setPen(QPen(accent, 1))
+        wing = QPainterPath()
+        wing.moveTo(4, -8)
+        wing.cubicTo(28, -36 - stride * 4, 48, -18, 18, 4)
+        p.drawPath(wing)
+
+    p.setBrush(QBrush(ear if sil not in ("dog", "fox") else accent))
     p.setPen(Qt.PenStyle.NoPen)
-    hind = 6 * stride
-    fore = -6 * stride
-    p.drawRoundedRect(QRectF(-22, 22, 12, 20 + (0 if anim != "walk" else abs(hind))), 4, 4)
-    p.drawRoundedRect(QRectF(8, 22, 12, 20 + (0 if anim != "walk" else abs(fore))), 4, 4)
-    p.drawRoundedRect(QRectF(-8, 24, 11, 16), 4, 4)
-    p.drawRoundedRect(QRectF(18, 24, 11, 16), 4, 4)
+    if sil != "turtle":
+        hind = 6 * stride
+        fore = -6 * stride
+        lift = 0 if anim != "walk" else abs(hind)
+        p.drawRoundedRect(QRectF(ox + 8, 22, 11, 18 + lift), 4, 4)
+        p.drawRoundedRect(QRectF(ox + bw - 28, 22, 11, 18 + (0 if anim != "walk" else abs(fore))), 4, 4)
+        p.drawRoundedRect(QRectF(ox + 22, 24, 10, 15), 4, 4)
+        p.drawRoundedRect(QRectF(ox + bw - 16, 24, 10, 15), 4, 4)
+    else:
+        p.setBrush(QBrush(accent))
+        p.drawEllipse(QRectF(-22, 20, 14, 10))
+        p.drawEllipse(QRectF(8, 20, 14, 10))
 
-    # Body
-    p.setBrush(QBrush(body))
-    p.setPen(QPen(accent, 1.1))
-    p.drawRoundedRect(QRectF(-36, -18, 72, 52 - sit * 0.35), 28, 24)
-    p.setPen(Qt.PenStyle.NoPen)
-    p.setBrush(QBrush(belly))
-    p.drawEllipse(QRectF(-18, -4, 36, 30 - sit * 0.2))
+    if sil == "turtle":
+        p.setBrush(QBrush(accent))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-34, -16, 68, 46 - sit * 0.2))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-26, -10, 52, 34 - sit * 0.15))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-8, -2, 16, 12))
+    else:
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(ox, -18, bw, bh - sit * 0.35), 28, 24)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-18, -4, 36, 28 - sit * 0.2))
+        if sil == "hedgehog" and sit < 16:
+            p.setBrush(QBrush(ring))
+            for dx in range(-22, 24, 7):
+                p.drawEllipse(QRectF(dx, -22, 8, 10))
+        if sil == "iguana":
+            p.setBrush(QBrush(accent))
+            for dx in range(-16, 22, 6):
+                p.drawPolygon([QPointF(dx, -20), QPointF(dx + 3, -30), QPointF(dx + 6, -20)])
 
-    # Head
-    hx, hy = -2.0, -36.0 + eat * 0.4
-    if species.silhouette == "cat":
-        # Pointed ears
+    hx, hy = (-8.0 if long_body else -2.0), -36.0 + eat * 0.4
+    if sil == "turtle":
+        hx, hy = -28.0, -6.0 + eat * 0.3
+    if sil == "cat":
         p.setBrush(QBrush(ear))
         p.drawPolygon([QPointF(hx - 22, hy - 2), QPointF(hx - 8, hy - 28), QPointF(hx + 2, hy - 6)])
         p.drawPolygon([QPointF(hx + 22, hy - 2), QPointF(hx + 8, hy - 28), QPointF(hx - 2, hy - 6)])
         p.setBrush(QBrush(ear_inner))
         p.drawPolygon([QPointF(hx - 16, hy - 4), QPointF(hx - 8, hy - 20), QPointF(hx - 4, hy - 6)])
         p.drawPolygon([QPointF(hx + 16, hy - 4), QPointF(hx + 8, hy - 20), QPointF(hx + 4, hy - 6)])
-    elif species.silhouette == "dog":
+    elif sil in ("dog",):
         p.setBrush(QBrush(ear))
         p.drawRoundedRect(QRectF(hx - 30, hy - 6, 16, 28), 7, 7)
         p.drawRoundedRect(QRectF(hx + 14, hy - 6, 16, 28), 7, 7)
-    else:
+    elif sil in ("fox", "rabbit"):
+        p.setBrush(QBrush(ear))
+        p.drawPolygon([QPointF(hx - 18, hy), QPointF(hx - 10, hy - (34 if sil == "rabbit" else 26)), QPointF(hx - 2, hy - 4)])
+        p.drawPolygon([QPointF(hx + 18, hy), QPointF(hx + 10, hy - (34 if sil == "rabbit" else 26)), QPointF(hx + 2, hy - 4)])
+        p.setBrush(QBrush(ear_inner))
+        p.drawPolygon([QPointF(hx - 14, hy - 2), QPointF(hx - 10, hy - (24 if sil == "rabbit" else 16)), QPointF(hx - 6, hy - 4)])
+        p.drawPolygon([QPointF(hx + 14, hy - 2), QPointF(hx + 10, hy - (24 if sil == "rabbit" else 16)), QPointF(hx + 6, hy - 4)])
+    elif sil == "chinchilla":
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(hx - 32, hy - 18, 20, 26))
+        p.drawEllipse(QRectF(hx + 12, hy - 18, 20, 26))
+        p.setBrush(QBrush(ear_inner))
+        p.drawEllipse(QRectF(hx - 26, hy - 10, 10, 14))
+        p.drawEllipse(QRectF(hx + 16, hy - 10, 10, 14))
+    elif sil != "turtle":
         p.setBrush(QBrush(ear))
         p.drawEllipse(QRectF(hx - 30, hy - 22, 22, 22))
         p.drawEllipse(QRectF(hx + 8, hy - 22, 22, 22))
@@ -168,16 +309,255 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, _n: int) -> None
         p.drawEllipse(QRectF(hx - 24, hy - 16, 12, 12))
         p.drawEllipse(QRectF(hx + 12, hy - 16, 12, 12))
 
-    p.setBrush(QBrush(body if species.silhouette != "panda" else belly))
+    head_fill = belly if sil == "panda" else body
+    p.setBrush(QBrush(head_fill))
     p.setPen(QPen(accent, 1.1))
-    p.drawEllipse(QRectF(hx - 28, hy - 16, 56, 48))
-    if species.silhouette == "panda":
+    hw = 48 if sil == "turtle" else 56
+    p.drawEllipse(QRectF(hx - hw / 2, hy - 16, hw, 44 if sil != "turtle" else 32))
+    if sil == "panda":
         p.setPen(Qt.PenStyle.NoPen)
         p.setBrush(QBrush(body))
         p.drawEllipse(QRectF(hx - 26, hy + 2, 18, 16))
         p.drawEllipse(QRectF(hx + 8, hy + 2, 18, 16))
+    if sil == "hamster":
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(hx - 26, hy + 10, 16, 14))
+        p.drawEllipse(QRectF(hx + 10, hy + 10, 16, 14))
+    if sil == "dragon":
+        p.setBrush(QBrush(accent))
+        p.drawPolygon([QPointF(hx - 10, hy - 14), QPointF(hx - 4, hy - 28), QPointF(hx + 2, hy - 12)])
+        p.drawPolygon([QPointF(hx + 6, hy - 12), QPointF(hx + 12, hy - 26), QPointF(hx + 16, hy - 10)])
 
-    # Face
+    _draw_face(p, hx, hy, nose, sleep, anim, i, sil == "dog")
+    if eat:
+        p.setBrush(QBrush(QColor(40, 24, 20)))
+        p.drawEllipse(QRectF(hx - 6, hy + 20, 12, 5 + eat * 0.15))
+    _top_light(p, hx, hy)
+
+
+def _draw_bird(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    nose = _color(pal.nose)
+    ring = _color(pal.ring)
+    sil = species.silhouette
+    upright = sil == "penguin"
+
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.1))
+    if upright:
+        p.drawRoundedRect(QRectF(-22, -28, 44, 62 - sit * 0.2), 20, 18)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-14, -10, 28, 36))
+        p.setBrush(QBrush(accent))
+        p.drawEllipse(QRectF(-28, 4, 16, 10))
+        p.drawEllipse(QRectF(12, 4, 16, 10))
+        p.setBrush(QBrush(QColor(232, 156, 64)))
+        p.drawEllipse(QRectF(-12, 30, 10, 6))
+        p.drawEllipse(QRectF(2, 30, 10, 6))
+    else:
+        p.drawEllipse(QRectF(-28, -16, 56, 42 - sit * 0.2))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-14, -4, 28, 24))
+        wing = QPainterPath()
+        wing.moveTo(-4, 0)
+        wing.cubicTo(18, -8 - stride * 5, 36, 8, 10, 16)
+        p.setBrush(QBrush(ring if sil == "parrot" else accent))
+        p.drawPath(wing)
+        if sil == "phoenix":
+            flame = QPainterPath()
+            flame.moveTo(24, 4)
+            flame.cubicTo(48, -10, 56, 20, 30, 18)
+            p.setBrush(QBrush(_color(pal.ring)))
+            p.drawPath(flame)
+
+    hx, hy = (-2.0, -38.0 + eat * 0.3) if not upright else (0.0, -40.0 + eat * 0.2)
+    p.setBrush(QBrush(body if sil != "toucan" else _color(pal.body)))
+    p.setPen(QPen(accent, 1.1))
+    p.drawEllipse(QRectF(hx - 18, hy - 10, 36, 32))
+
+    p.setPen(Qt.PenStyle.NoPen)
+    if sil == "toucan":
+        p.setBrush(QBrush(_color(pal.nose)))
+        bill = QPainterPath()
+        bill.moveTo(hx + 10, hy + 6)
+        bill.quadTo(hx + 48, hy - 8, hx + 52, hy + 10)
+        bill.quadTo(hx + 40, hy + 22, hx + 8, hy + 14)
+        p.drawPath(bill)
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(hx + 16, hy + 2, 14, 8))
+    elif sil == "parrot":
+        p.setBrush(QBrush(QColor(48, 36, 28)))
+        p.drawEllipse(QRectF(hx + 8, hy + 6, 18, 12))
+        p.setBrush(QBrush(QColor(32, 24, 20)))
+        p.drawEllipse(QRectF(hx + 18, hy + 10, 10, 6))
+    elif sil == "penguin":
+        p.setBrush(QBrush(QColor(40, 36, 32)))
+        p.drawEllipse(QRectF(hx - 4, hy + 10, 8, 6))
+    else:
+        p.setBrush(QBrush(QColor(48, 40, 32)))
+        p.drawEllipse(QRectF(hx + 6, hy + 8, 14, 8))
+
+    _draw_face(p, hx, hy, nose, sleep, anim, i, False)
+    if eat:
+        p.setBrush(QBrush(QColor(40, 24, 20)))
+        p.drawEllipse(QRectF(hx - 4, hy + 16, 10, 4))
+    _top_light(p, hx, hy)
+
+
+def _draw_aquatic(p: QPainter, species: Species, anim: str, i: int, eat: float, sleep: float) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    nose = _color(pal.nose)
+    wave = math.sin(i * 0.9) * 6
+
+    if species.silhouette == "fish":
+        tail = QPainterPath()
+        tail.moveTo(28, 0)
+        tail.lineTo(52, -16 + wave)
+        tail.lineTo(48, 16 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(_color(pal.ring)))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-32, -18, 64, 36))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-16, -4, 28, 16))
+        hx, hy = -18.0, -4.0 + eat * 0.2
+        _draw_face(p, hx, hy, nose, sleep, anim, i, False)
+        return
+
+    # Axolotl — salamander who kept the gills.
+    p.setBrush(QBrush(_color(pal.ear)))
+    p.setPen(Qt.PenStyle.NoPen)
+    for k, ang in enumerate((-50, -20, 15)):
+        p.save()
+        p.translate(-22, -10)
+        p.rotate(ang + wave * 0.3)
+        p.drawEllipse(QRectF(-4, -18 - k, 10, 22))
+        p.restore()
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.1))
+    p.drawRoundedRect(QRectF(-28, -10, 64, 24), 12, 10)
+    p.setPen(Qt.PenStyle.NoPen)
+    p.setBrush(QBrush(belly))
+    p.drawEllipse(QRectF(-10, -2, 28, 14))
+    p.setBrush(QBrush(body))
+    p.drawEllipse(QRectF(-36, -16, 28, 24))
+    _draw_face(p, -24, -10, nose, sleep, anim, i, False)
+    p.setBrush(QBrush(accent))
+    p.drawEllipse(QRectF(28, -2, 16, 8))
+
+
+def _draw_snake(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    third = _color(pal.ear)
+    nose = _color(pal.nose)
+    coiled = anim in ("sit", "sleep") or (species.key == "ball_python" and anim == "idle" and i % 2 == 0)
+    if species.key == "green_tree_python" and anim in ("sit", "idle", "sleep"):
+        coiled = True
+    n = 9
+    pts: list[tuple[float, float]] = []
+    if coiled:
+        for k in range(n):
+            ang = k * 0.82 + i * 0.08
+            r = 10 + k * 3.6
+            pts.append((math.cos(ang) * r, math.sin(ang) * r + 6))
+    else:
+        phase = i * 0.7 + stride * 0.4
+        for k in range(n):
+            t = k / (n - 1)
+            x = -46 + t * 92
+            y = math.sin(t * math.pi * 2.2 + phase) * (9 if species.walk > 60 else 6)
+            pts.append((x, y))
+
+    for k, (x, y) in enumerate(pts):
+        t = k / (n - 1)
+        fill = _snake_fill(species.pattern, k, body, belly, ring, third, accent)
+        p.setPen(QPen(accent, 0.8))
+        p.setBrush(QBrush(fill))
+        w = 16 + (1 - t) * 6
+        h = 12 + (1 - t) * 3
+        p.drawEllipse(QRectF(x - w / 2, y - h / 2, w, h))
+
+    hx, hy = pts[0]
+    if eat:
+        hy += eat * 0.25
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.1))
+    p.drawEllipse(QRectF(hx - 14, hy - 11, 26, 22))
+    if species.key == "hognose":
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(hx - 20, hy - 2, 12, 8))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(hx - 22, hy - 6, 8, 7))
+    _draw_face(p, hx - 2, hy - 6, nose, sleep, anim, i, False)
+    if eat:
+        p.setBrush(QBrush(QColor(40, 24, 20)))
+        p.drawEllipse(QRectF(hx - 8, hy + 6, 10, 4))
+
+
+def _snake_fill(
+    pattern: str,
+    k: int,
+    body: QColor,
+    belly: QColor,
+    ring: QColor,
+    third: QColor,
+    accent: QColor,
+) -> QColor:
+    if pattern == "bands":
+        return ring if k % 2 == 0 else body
+    if pattern == "tricolor":
+        return (body, ring, third)[k % 3]
+    if pattern == "stripe":
+        return ring if k % 3 == 1 else body
+    if pattern in ("blotch", "saddle", "map"):
+        return ring if k % 3 == 0 else body
+    return body if k % 2 == 0 else belly
+
+
+def _draw_face(
+    p: QPainter,
+    hx: float,
+    hy: float,
+    nose: QColor,
+    sleep: float,
+    anim: str,
+    i: int,
+    dog_nose: bool,
+) -> None:
     p.setPen(Qt.PenStyle.NoPen)
     if sleep:
         p.setPen(QPen(nose, 2.2))
@@ -198,18 +578,14 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, _n: int) -> None
             p.setBrush(QBrush(QColor(250, 246, 236)))
             p.drawEllipse(QRectF(hx - 11, hy + 3, 3, 3))
             p.drawEllipse(QRectF(hx + 7, hy + 3, 3, 3))
-
     p.setBrush(QBrush(nose))
-    if species.silhouette == "dog":
+    if dog_nose:
         p.drawEllipse(QRectF(hx - 7, hy + 12, 14, 10))
     else:
         p.drawEllipse(QRectF(hx - 5, hy + 12, 10, 8))
 
-    if eat:
-        p.setBrush(QBrush(QColor(40, 24, 20)))
-        p.drawEllipse(QRectF(hx - 6, hy + 20, 12, 5 + eat * 0.15))
 
-    # Soft top light
+def _top_light(p: QPainter, hx: float, hy: float) -> None:
     grad = QLinearGradient(QPointF(-20, -50), QPointF(20, 10))
     grad.setColorAt(0, QColor(255, 236, 210, 40))
     grad.setColorAt(1, QColor(255, 236, 210, 0))
