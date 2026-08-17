@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17                                 |
+| **Last Updated** | 2026-08-17 (Itch.io provider)              |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -50,7 +50,7 @@ Keeping this document accurate reduces onboarding friction and prevents architec
 
 ## 1. Executive Summary
 
-EnterprisePet Backend is a secure, stateless Spring Boot 3.3 Java 21 REST service that serves as the trust anchor for a premium "desktop pets" digital collectibles platform. It enables users to prove ownership of entitlements across heterogeneous platforms (Steam game ownership, Ethereum ERC-721 NFTs, and Microsoft Store products) and, in return, receive cryptographically sealed time-limited licenses plus short-lived JWTs that authorize the download of platform-specific pet asset bundles from an external CDN.
+EnterprisePet Backend is a secure, stateless Spring Boot 3.3 Java 21 REST service that serves as the trust anchor for a premium "desktop pets" digital collectibles platform. It enables users to prove ownership of entitlements across heterogeneous platforms (Steam game ownership, Ethereum ERC-721 NFTs, Microsoft Store products, and itch.io download-key receipts) and, in return, receive cryptographically sealed time-limited licenses plus short-lived JWTs that authorize the download of platform-specific pet asset bundles from an external CDN.
 
 The architecture deliberately keeps the master AES-256-GCM encryption key and signing material server-side only. The desktop client (out of scope for this repository; referenced as a future PyQt6/Python application) never holds long-term secrets and cannot forge valid licenses. A clean plugin SPI (`OwnershipProvider`) allows new storefronts or wallet types to be added with a single `@Service` class and no changes to controllers or security configuration. Rate limiting, defense-in-depth validation on download, and startup-time secret validation are first-class concerns.
 
@@ -66,7 +66,7 @@ The system is currently a modular monolith with scaffolding for persistence (JPA
   - Presentation (thin `@RestController`s)
   - Application / orchestration (controllers + services)
   - Domain / core services (`LicenseService`, `PetBundleService`, `JwtService`)
-  - Infrastructure / pluggable providers (Steam, NFT, Microsoft)
+  - Infrastructure / pluggable providers (Steam, NFT, Microsoft, Itch)
   - Cross-cutting concerns (security filter chain, rate limiting, exception mapping)
 - **Stateless** by design: no HTTP sessions, no server-side conversation state. Entitlement is proven via sealed artifacts (encrypted license + JWT claims).
 - **Client-server** with an untrusted or semi-trusted client (desktop app) that holds opaque tokens only.
@@ -77,7 +77,7 @@ The system is currently a modular monolith with scaffolding for persistence (JPA
 - **LicenseService** is the cryptographic source of truth for entitlements (AES-GCM).
 - **JwtService + JwtAuthenticationFilter** protect the download phase only.
 - **PetBundleService** authorizes access to external storage without serving bytes itself.
-- External dependencies are called synchronously during verification (Web3 RPC, Microsoft Collections API, and Steam Web API).
+- External dependencies are called synchronously during verification (Web3 RPC, Microsoft Collections API, Steam Web API, and itch.io API).
 
 ```mermaid
 graph TD
@@ -102,12 +102,14 @@ graph TD
         S[SteamService<br/>(real API)]
         N[EthereumNftService<br/>web3j]
         M[MicrosoftStoreService<br/>RestClient + dev-mode]
+        I[ItchService<br/>download-key receipt]
     end
 
     subgraph "External Systems"
-        STEAM[Steam Web API<br/>(planned)]
+        STEAM[Steam Web API]
         ETH[Alchemy / Infura<br/>Ethereum RPC]
         MS[Microsoft Collections API]
+        ITCH[itch.io API<br/>api.itch.io]
         CDN[(CDN / S3 / R2<br/>Pet .zip bundles)]
     end
 
@@ -122,9 +124,11 @@ graph TD
     PROV --> S
     PROV --> N
     PROV --> M
+    PROV --> I
     N -->|ownerOf eth_call| ETH
     M -->|XBL3.0 collections/query| MS
-    S -->|future GetOwnedGames| STEAM
+    S -->|GetOwnedGames| STEAM
+    I -->|download_keys| ITCH
 
     API --> LS
     API --> JS
@@ -268,6 +272,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 - `steam/SteamService` – real Steam Web API integration + conditional registration.
 - `nft/EthereumNftService` – Web3j `eth_call` to ERC-721 `ownerOf` / ERC-1155 `balanceOf` with address validation, official collection allowlist, token→pet binding, optional `personal_sign`, and timed-out RPC.
 - `microsoft/MicrosoftStoreService` – RestClient to Microsoft Collections API with XBL3.0 auth; dev-mode bypass flag.
+- `itch/ItchService` – itch.io download-key receipt verify (`GET /games/{id}/download_keys`) with developer API key, optional `itch.game-id` allowlist, circuit breaker.
 
 ### 4.3 Core Domain Services
 | Component             | Responsibility                                                                 | Technology                  | Key Files                              | Dependencies                     |
@@ -423,6 +428,8 @@ ComputerPets/
 │   │   │   │   └── LicenseService.java
 │   │   │   ├── microsoft/
 │   │   │   │   └── MicrosoftStoreService.java
+│   │   │   ├── itch/
+│   │   │   │   └── ItchService.java
 │   │   │   ├── nft/
 │   │   │   │   └── EthereumNftService.java
 │   │   │   ├── pet/
@@ -616,7 +623,8 @@ Goal: Deliver a complete, usable platform.
   - Define bundle format and update process
 
 - **4.2 Additional Ownership Providers**
-  - Epic Games, Itch.io, Solana, etc. (following the established `OwnershipProvider` pattern)
+  - [x] Itch.io download-key receipt verify (`ItchService`)
+  - Epic Games, Solana, etc. (following the established `OwnershipProvider` pattern)
 
 - **4.3 Admin & Operations Tools**
   - Internal admin API or UI for revocation, license inspection, and audit queries (protected by strong auth)

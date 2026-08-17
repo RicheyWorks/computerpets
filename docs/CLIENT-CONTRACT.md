@@ -39,7 +39,7 @@ Rate limits (per client IP, in-memory): **10/min** on `/api/verify/`,
 `POST /api/verify/{provider}`
 
 `{provider}` is one of the keys from `GET /api/verify/providers`
-(currently `steam`, `nft`, `microsoft`).
+(currently `steam`, `nft`, `microsoft`, `itch`).
 
 Body is a flat JSON object of strings. Provider-specific fields plus:
 
@@ -47,6 +47,9 @@ Body is a flat JSON object of strings. Provider-specific fields plus:
 |-------|----------|---------|
 | `petType` | no | Catalog key (e.g. `red_panda`). Default `red_panda` if omitted/blank **and** the provider does not return its own pet key. |
 | `hwid` | no | Opaque device binding. See [§5](#5-hardware-id-hwid). |
+
+Itch.io (`itch`) also requires `gameId` (numeric) and `downloadKey` (the
+purchase receipt). A placeholder `ITCH_API_KEY` fails closed.
 
 **200** — ownership verified, license issued (365 days):
 
@@ -121,7 +124,7 @@ Jackson serialization of `LicenseService.LicensePayload`:
 | Field | Type | Notes |
 |-------|------|--------|
 | `jti` | string | UUID issued at verify. Primary key for revocation. |
-| `owner` | string | Provider owner id (SteamID, wallet, Microsoft hash, …). |
+| `owner` | string | Provider owner id (SteamID, wallet, Microsoft hash, `itch:{userId}`, …). |
 | `pet` | string | Catalog key the license is valid for. |
 | `validUntil` | string | ISO-8601 instant (`Instant.toString()`). |
 | `issuedAt` | string | ISO-8601 instant. |
@@ -161,7 +164,7 @@ Authorization: Bearer <auth.token>
 | Issuer (`iss`) | `enterprisepet-backend` (`jwt.issuer`) |
 | Subject (`sub`) | owner id |
 | `pet` | pet catalog key |
-| `prv` | provider key (`steam`, `nft`, `microsoft`) |
+| `prv` | provider key (`steam`, `nft`, `microsoft`, `itch`) |
 | `iat` / `exp` | issued-at / expiry |
 | Default TTL | 30 minutes (`jwt.ttl-minutes`) |
 
