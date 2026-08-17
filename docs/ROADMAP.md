@@ -70,6 +70,7 @@ All critical items required before any public or limited production exposure hav
 - **2.3 Resilience Patterns**
   - [x] Circuit breakers + retries (Resilience4j) added for Steam, Microsoft, NFT, Itch, and Epic providers (with per-provider configuration in application.yml)
   - Timeouts and graceful degradation (in progress — fallbacks currently deny safely)
+  - [x] Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; live Store ID is still a publish-time config, not invented here.
 
 - **2.4 Secret Management**
   - All critical secrets already use the same strict fail-hard placeholder pattern (LICENSE_SECRET_KEY, JWT_*, BUNDLE_*, new ADMIN_API_KEY)

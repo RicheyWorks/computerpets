@@ -15,29 +15,45 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 
+import java.net.http.HttpClient;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Verifies that a Microsoft account owns a Microsoft Store product.
  *
- * <p>Real flow: client obtains an XSTS token via the Xbox Live auth chain, sends it
- * (plus its {@code userHash}) here, and we POST a collections query to
- * {@code collections.mp.microsoft.com}. We accept ownership iff the response contains
- * the requested {@code productId} with an active fulfillment state.
+ * <p>Real flow: the client obtains an XSTS token via the Xbox Live auth chain
+ * (or a Bearer token for Entra / User Store ID) and POSTs it here. We call
+ * Collections Query v9 {@code publisherQuery} and grant only when {@code items}
+ * contains the requested {@code productId} with status {@code Active}
+ * (or {@code ActiveSubscription} if it still appears).
  *
- * <p>Authorization header format Microsoft requires:
- * <pre>Authorization: XBL3.0 x=&lt;userHash&gt;;&lt;xstsToken&gt;</pre>
+ * <p>Authorization: existing client XSTS shape
+ * {@code XBL3.0 x=<userHash>;<xstsToken>}, or a Bearer token if the client
+ * already sends one. When the request includes {@code signature}, it is
+ * forwarded as the {@code Signature} header (required by Microsoft for
+ * X-token auth).
  *
  * <p>For local development without a real XSTS token, set
- * {@code microsoft.dev-mode=true} to bypass the network call and grant ownership for
- * any non-blank input. A loud warning is logged so this never silently leaks into
- * production.
+ * {@code microsoft.dev-mode=true} to bypass the network call and grant
+ * ownership for any non-blank input. A loud warning is logged so this never
+ * silently leaks into production. {@code ProductionProfileGuard} refuses that
+ * flag on the {@code prod} profile.
+ *
+ * @see <a href="https://learn.microsoft.com/en-us/gaming/gdk/docs/store/commerce/service-to-service/microsoft-store-apis/xstore-v9-query-for-products">
+ * Collections v9 publisherQuery</a>
  */
 @Service
 @ConditionalOnProperty(
@@ -49,17 +65,23 @@ public class MicrosoftStoreService implements OwnershipProvider {
 
     private static final Logger log = LoggerFactory.getLogger(MicrosoftStoreService.class);
 
+    static final String DEFAULT_COLLECTIONS_URL =
+            "https://collections.mp.microsoft.com/v9.0/collections/publisherQuery";
+
+    static final String USER_AGENT = "ComputerPets/1.0";
+
     /** Statuses Microsoft returns for an item the user actually owns. */
     private static final List<String> ACTIVE_STATUSES = List.of("Active", "ActiveSubscription");
+
+    /** Rejected the same way Steam/Itch/Epic reject leftover documentation values. */
+    private static final Set<String> PLACEHOLDER_PRODUCT_IDS = Set.of(
+            "CHANGE_ME", "PLACEHOLDER", "0000");
 
     @Value("${microsoft.tenant:consumers}")
     private String tenant;
 
-    @Value("${microsoft.collections-url:https://collections.mp.microsoft.com/v6.0/collections/query}")
+    @Value("${microsoft.collections-url:" + DEFAULT_COLLECTIONS_URL + "}")
     private String collectionsUrl;
-
-    @Value("${microsoft.market:US}")
-    private String market;
 
     @Value("${microsoft.dev-mode:false}")
     private boolean devMode;
@@ -70,20 +92,37 @@ public class MicrosoftStoreService implements OwnershipProvider {
     @Autowired
     private ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
 
-    // Default constructor for Spring
     public MicrosoftStoreService() {}
 
-    // Package-private constructor for testing (allows injecting mocked RestClient)
     MicrosoftStoreService(RestClient restClient) {
+        this(restClient, false, DEFAULT_COLLECTIONS_URL);
+    }
+
+    MicrosoftStoreService(RestClient restClient, boolean devMode) {
+        this(restClient, devMode, DEFAULT_COLLECTIONS_URL);
+    }
+
+    MicrosoftStoreService(RestClient restClient, boolean devMode, String collectionsUrl) {
         this.restClient = restClient;
+        this.devMode = devMode;
+        this.collectionsUrl = collectionsUrl;
     }
 
     @PostConstruct
     void init() {
         if (this.restClient == null) {
+            // publisherQuery is a JSON POST; HTTP/1.1 avoids JDK HttpClient h2c
+            // RST_STREAM against HTTP/1 stubs (and matches the Learn examples).
+            HttpClient httpClient = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_1_1)
+                    .connectTimeout(MS_TIMEOUT)
+                    .build();
+            JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+            requestFactory.setReadTimeout(MS_TIMEOUT);
             this.restClient = ObservedRestClients.builder(observationRegistry)
-                .baseUrl(collectionsUrl)
+                .requestFactory(requestFactory)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT)
                 .build();
         }
         if (devMode) {
@@ -92,8 +131,8 @@ public class MicrosoftStoreService implements OwnershipProvider {
             log.warn(" true. NEVER enable microsoft.dev-mode=true outside development.");
             log.warn("===================================================================");
         } else {
-            log.info("MicrosoftStoreService ready. tenant={} market={} collectionsUrl={}",
-                tenant, market, collectionsUrl);
+            log.info("MicrosoftStoreService ready. tenant={} collectionsUrl={}",
+                tenant, collectionsUrl);
         }
     }
 
@@ -102,28 +141,28 @@ public class MicrosoftStoreService implements OwnershipProvider {
 
     @Override
     public VerificationResult verify(Map<String, String> request) {
-        String xstsToken = request.get("xstsToken");
-        String productId = request.get("storeProductId");
-        String userHash  = request.getOrDefault("userHash", "");
-        String accountId = request.getOrDefault("microsoftAccountId", "");
-
-        if (xstsToken == null || xstsToken.isBlank()
-            || productId == null || productId.isBlank()) {
+        MicrosoftVerifyRequest typed = MicrosoftVerifyRequest.from(request);
+        if (typed.xstsToken() == null || typed.storeProductId() == null) {
             return VerificationResult.denied("xstsToken and storeProductId are required");
         }
+        if (isPlaceholderProductId(typed.storeProductId())) {
+            return VerificationResult.denied("storeProductId looks like a placeholder");
+        }
 
+        String accountId = typed.microsoftAccountId() == null ? "" : typed.microsoftAccountId();
+        String userHash = typed.userHash() == null ? "" : typed.userHash();
         String ownerId = !accountId.isBlank() ? accountId
                        : !userHash.isBlank()  ? "ms:" + userHash
-                       : "ms:" + productId;
+                       : "ms:" + typed.storeProductId();
 
-        return ownsProduct(xstsToken, userHash, productId)
+        return ownsProduct(typed)
             ? VerificationResult.granted(ownerId)
             : VerificationResult.denied("Microsoft Store entitlement not found");
     }
 
     /**
-     * Checks whether the bearer of the XSTS token has a Microsoft Store entitlement for
-     * the given product ID. In dev mode this short-circuits to {@code true}.
+     * Checks whether the bearer of the token has a Microsoft Store entitlement
+     * for the given product ID. In dev mode this short-circuits to {@code true}.
      *
      * <p>The response field names (camelCase {@code productId} vs PascalCase
      * {@code ProductId}) vary between Microsoft Store endpoints — we accept either.
@@ -131,43 +170,64 @@ public class MicrosoftStoreService implements OwnershipProvider {
      */
     @CircuitBreaker(name = "microsoft", fallbackMethod = "ownsProductFallback")
     @Retry(name = "microsoft")
-    public boolean ownsProduct(String xstsToken, String userHash, String productId) {
+    public boolean ownsProduct(MicrosoftVerifyRequest request) {
+        if (request == null || request.storeProductId() == null) {
+            return false;
+        }
         if (devMode) {
             log.warn("DEV MODE: granting Microsoft Store ownership without verification for productId={}",
-                productId);
+                request.storeProductId());
             return true;
         }
+        if (isPlaceholderProductId(request.storeProductId())) {
+            log.warn("Microsoft Store product id looks like a placeholder — denying without calling Collections");
+            return false;
+        }
         try {
-            String authValue = "XBL3.0 x=" + (userHash == null || userHash.isBlank() ? "-" : userHash)
-                + ";" + xstsToken;
+            Map<String, Object> body = publisherQueryBody(request);
 
-            Map<String, Object> body = Map.of(
-                "Beneficiaries", List.of(Map.of(
-                    "Identitytype", "xuid",
-                    "IdentityValue", userHash == null ? "" : userHash,
-                    "LocalTicketReference", "ticket1"
-                )),
-                "Market", market,
-                "ProductSkuIds", List.of(Map.of("ProductId", productId))
-            );
+            var spec = restClient.post()
+                .uri(collectionsUrl)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.USER_AGENT, USER_AGENT)
+                .header(HttpHeaders.AUTHORIZATION, authorizationHeader(request));
+            if (request.hasSignature()) {
+                spec = spec.header("Signature", request.signature());
+            }
 
-            String responseBody = restClient.post()
-                .header(HttpHeaders.AUTHORIZATION, authValue)
+            String responseBody = spec
                 .body(body)
                 .retrieve()
                 .body(String.class);
 
-            return responseContainsActiveProduct(responseBody, productId);
+            return responseContainsActiveProduct(responseBody, request.storeProductId());
+        } catch (RestClientResponseException e) {
+            if (e.getStatusCode().value() == HttpStatus.TOO_MANY_REQUESTS.value()) {
+                log.warn("Microsoft Store rate-limited (429) productId={} — 100 queries / 5 min / user",
+                    request.storeProductId());
+            } else {
+                log.warn("Microsoft Store verification failed productId={} status={} error={}",
+                    request.storeProductId(), e.getStatusCode().value(), e.getMessage());
+            }
+            return false;
         } catch (Exception e) {
             log.warn("Microsoft Store verification failed productId={} error={}",
-                productId, e.getMessage());
+                request.storeProductId(), e.getMessage());
             return false;
         }
     }
 
+    /** Convenience wrapper used by older call sites and focused unit tests. */
+    public boolean ownsProduct(String xstsToken, String userHash, String productId) {
+        return ownsProduct(new MicrosoftVerifyRequest(
+                xstsToken, productId, userHash, null, null, null, null));
+    }
+
     @SuppressWarnings("unused")
-    private boolean ownsProductFallback(String xstsToken, String userHash, String productId, Exception e) {
-        log.warn("Microsoft circuit breaker open or retries exhausted for productId={}: {}", productId, e.getMessage());
+    private boolean ownsProductFallback(MicrosoftVerifyRequest request, Exception e) {
+        String productId = request == null ? "?" : request.storeProductId();
+        log.warn("Microsoft circuit breaker open or retries exhausted for productId={}: {}",
+            productId, e.getMessage());
         return false;
     }
 
@@ -187,7 +247,7 @@ public class MicrosoftStoreService implements OwnershipProvider {
                 String returnedProductId = firstNonMissing(item, "productId", "ProductId").asText("");
                 if (!productId.equalsIgnoreCase(returnedProductId)) continue;
 
-                String status = firstNonMissing(item, "status", "Status").asText("Active");
+                String status = firstNonMissing(item, "status", "Status").asText("");
                 if (ACTIVE_STATUSES.stream().anyMatch(s -> s.equalsIgnoreCase(status))) {
                     return true;
                 }
@@ -199,6 +259,53 @@ public class MicrosoftStoreService implements OwnershipProvider {
         }
     }
 
+    static boolean isPlaceholderProductId(String productId) {
+        if (productId == null || productId.isBlank()) {
+            return true;
+        }
+        return PLACEHOLDER_PRODUCT_IDS.contains(productId.trim().toUpperCase(Locale.ROOT));
+    }
+
+    static String authorizationHeader(MicrosoftVerifyRequest request) {
+        String token = request.xstsToken() == null ? "" : request.xstsToken().trim();
+        if (startsWithIgnoreCase(token, "Bearer ") || startsWithIgnoreCase(token, "XBL3.0 ")) {
+            return token;
+        }
+        String hash = request.userHash() == null || request.userHash().isBlank()
+                ? "-"
+                : request.userHash();
+        return "XBL3.0 x=" + hash + ";" + token;
+    }
+
+    Map<String, Object> publisherQueryBody(MicrosoftVerifyRequest request) {
+        Map<String, Object> sku = new LinkedHashMap<>();
+        sku.put("productId", request.storeProductId());
+        if (request.hasSkuId()) {
+            sku.put("skuId", request.skuId());
+        }
+
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("maxPageSize", 100);
+        body.put("excludeDuplicates", true);
+        body.put("validityType", "Valid");
+        body.put("productSkuIds", List.of(sku));
+
+        if (request.hasUserStoreIdentity()) {
+            Map<String, Object> beneficiary = new LinkedHashMap<>();
+            beneficiary.put("identityType", "b2b");
+            beneficiary.put("identityValue", request.userStoreId());
+            beneficiary.put("localTicketReference", "");
+            List<Map<String, Object>> beneficiaries = new ArrayList<>();
+            beneficiaries.add(beneficiary);
+            body.put("beneficiaries", beneficiaries);
+        }
+        return body;
+    }
+
+    private static boolean startsWithIgnoreCase(String value, String prefix) {
+        return value.regionMatches(true, 0, prefix, 0, prefix.length());
+    }
+
     private static JsonNode firstNonMissing(JsonNode node, String... names) {
         for (String n : names) {
             JsonNode v = node.path(n);
@@ -208,6 +315,5 @@ public class MicrosoftStoreService implements OwnershipProvider {
     }
 
     /** How long we'll wait for a Microsoft response before giving up. */
-    @SuppressWarnings("unused")
     private static final Duration MS_TIMEOUT = Duration.ofSeconds(10);
 }
