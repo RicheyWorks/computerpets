@@ -44,6 +44,7 @@ def test_desk_day_has_weather_visitor_and_shed_coat():
 
     app = QApplication.instance() or QApplication([])
     window = DeskWindow()
+    window.show()
     assert window.weather.sky in ("clear", "rain", "wind", "heat")
     assert weather_label(window.weather.sky) in window.vital_label.text()
     assert window.guest.species.key != window.species.key
