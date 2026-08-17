@@ -32,16 +32,16 @@ class RedisRateLimitBackendIT {
 
     @BeforeAll
     void startRedis() {
+        if (localRedisUp("127.0.0.1", 6379)) {
+            host = "127.0.0.1";
+            port = 6379;
+            return;
+        }
         if (dockerAvailable()) {
             redis = new GenericContainer<>(DockerImageName.parse("redis:7-alpine")).withExposedPorts(6379);
             redis.start();
             host = redis.getHost();
             port = redis.getMappedPort(6379);
-            return;
-        }
-        if (localRedisUp("127.0.0.1", 6379)) {
-            host = "127.0.0.1";
-            port = 6379;
             return;
         }
         assumeTrue(false, "Redis is required (Docker or localhost:6379)");
@@ -61,7 +61,7 @@ class RedisRateLimitBackendIT {
         RedisClient clientB = redisClient(host, port);
         try (RedisRateLimitBackend a = new RedisRateLimitBackend(clientA);
              RedisRateLimitBackend b = new RedisRateLimitBackend(clientB)) {
-            String key = "203.0.113.50|verify";
+            String key = java.util.UUID.randomUUID() + "|verify";
             Duration period = Duration.ofMinutes(1);
 
             int consumed = 0;

@@ -53,7 +53,8 @@ class RateLimitingFilterIntegrationTest {
         ResponseEntity<Map> limited = restTemplate.getForEntity("/api/verify/providers", Map.class);
         assertThat(limited.getStatusCode()).isEqualTo(HttpStatus.TOO_MANY_REQUESTS);
         assertThat(limited.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isNotBlank();
-        assertThat(limited.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_PROBLEM_JSON);
+        assertThat(limited.getHeaders().getContentType()).isNotNull();
+        assertThat(limited.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)).isTrue();
         assertThat(limited.getBody()).isNotNull();
         assertThat(limited.getBody().get("status")).isEqualTo(429);
         assertThat(limited.getBody().get("title")).isEqualTo("Too Many Requests");

@@ -95,10 +95,11 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         res.setStatus(status);
         res.setHeader(HttpHeaders.RETRY_AFTER, String.valueOf(retryAfterSeconds));
         res.setContentType(MediaType.APPLICATION_PROBLEM_JSON_VALUE);
-        res.getWriter().write(
+        res.getWriter().write(String.format(
             "{\"type\":\"about:blank\",\"title\":\"%s\",\"status\":%d,"
                 + "\"detail\":\"%s\","
-                + "\"retryAfterSeconds\":%d}".formatted(title, status, detail, retryAfterSeconds));
+                + "\"retryAfterSeconds\":%d}",
+            title, status, detail, retryAfterSeconds));
     }
 
     private static Rule ruleFor(String path) {

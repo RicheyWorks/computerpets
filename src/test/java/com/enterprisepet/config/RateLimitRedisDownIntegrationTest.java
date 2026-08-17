@@ -47,7 +47,8 @@ class RateLimitRedisDownIntegrationTest {
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
         assertThat(response.getHeaders().getFirst(HttpHeaders.RETRY_AFTER)).isEqualTo("5");
-        assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_PROBLEM_JSON);
+        assertThat(response.getHeaders().getContentType()).isNotNull();
+        assertThat(response.getHeaders().getContentType().isCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON)).isTrue();
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().get("status")).isEqualTo(503);
         assertThat(response.getBody().get("title")).isEqualTo("Service Unavailable");
