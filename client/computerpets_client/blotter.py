@@ -12,6 +12,7 @@ from PyQt6.QtCore import QRectF, Qt
 from PyQt6.QtGui import QBrush, QColor, QLinearGradient, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import QGraphicsObject, QGraphicsRectItem, QGraphicsView, QWidget
 
+from .hours import DayPart, day_part
 from .weather import Weather, weather_of
 
 
@@ -126,6 +127,65 @@ class DeskBackground(QGraphicsRectItem):
         painter.drawEllipse(QRectF(rect.width() - 280, 188, 28, 18))
         painter.setBrush(QBrush(QColor(80, 48, 36)))
         painter.drawRect(QRectF(rect.width() - 274, 168, 6, 24))
+
+
+class DayWash(QGraphicsObject):
+    """Dawn / day / dusk / night on the wood — house palette, not a weather type."""
+
+    def __init__(self, width: float = 960, height: float = 540, part: DayPart | None = None):
+        super().__init__()
+        self._width = width
+        self._height = height
+        self.part: DayPart = part if part is not None else day_part()
+        self.setZValue(0)
+        self.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+
+    def boundingRect(self) -> QRectF:
+        return QRectF(0, 0, self._width, self._height)
+
+    def set_part(self, part: DayPart) -> None:
+        if part == self.part:
+            return
+        self.part = part
+        self.update()
+
+    def paint(self, painter: QPainter, option, widget: QWidget | None = None) -> None:  # noqa: ARG002
+        if self.part == "day":
+            return
+        painter.setPen(Qt.PenStyle.NoPen)
+        # House ink / lamp / window-light — same palette as the wood, not a new sky.
+        if self.part == "dawn":
+            wash = QLinearGradient(0, self._height, 0, 0)
+            wash.setColorAt(0, QColor(12, 11, 10, 28))
+            wash.setColorAt(0.45, QColor(176, 196, 210, 18))
+            wash.setColorAt(1, QColor(176, 196, 210, 36))
+            painter.setBrush(QBrush(wash))
+            painter.drawRect(self.boundingRect())
+            return
+        if self.part == "dusk":
+            wash = QLinearGradient(0, self._height, 0, 0)
+            wash.setColorAt(0, QColor(12, 11, 10, 40))
+            wash.setColorAt(0.5, QColor(176, 137, 104, 22))
+            wash.setColorAt(1, QColor(176, 137, 104, 38))
+            painter.setBrush(QBrush(wash))
+            painter.drawRect(self.boundingRect())
+            lamp = QLinearGradient(self._width * 0.78, self._height * 0.18, self._width * 0.4, self._height * 0.7)
+            lamp.setColorAt(0, QColor(176, 137, 104, 46))
+            lamp.setColorAt(1, QColor(176, 137, 104, 0))
+            painter.setBrush(QBrush(lamp))
+            painter.drawRect(self.boundingRect())
+            return
+        dim = QLinearGradient(0, self._height, 0, 0)
+        dim.setColorAt(0, QColor(12, 11, 10, 82))
+        dim.setColorAt(0.55, QColor(12, 11, 10, 48))
+        dim.setColorAt(1, QColor(12, 11, 10, 36))
+        painter.setBrush(QBrush(dim))
+        painter.drawRect(self.boundingRect())
+        lamp = QLinearGradient(self._width * 0.78, self._height * 0.18, self._width * 0.35, self._height * 0.75)
+        lamp.setColorAt(0, QColor(176, 137, 104, 32))
+        lamp.setColorAt(1, QColor(176, 137, 104, 0))
+        painter.setBrush(QBrush(lamp))
+        painter.drawRect(self.boundingRect())
 
 
 class WeatherLayer(QGraphicsObject):

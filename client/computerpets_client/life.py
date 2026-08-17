@@ -6,6 +6,7 @@ import random
 from dataclasses import dataclass, field, replace
 from typing import TYPE_CHECKING
 
+from .hours import hide_line, snack_line
 from .species import Species, species_by_key
 
 if TYPE_CHECKING:
@@ -59,7 +60,7 @@ class CareResult:
 def apply_feed(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
     if state.hidden:
-        return CareResult(state, pick_line(kind.hide), "idle", "idle")
+        return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
     next_state = replace(
         state,
         hunger=clamp(state.hunger + 30),
@@ -74,12 +75,13 @@ def apply_feed(state: CareState, species: Species | None = None) -> CareResult:
 def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
     if state.hidden:
-        return CareResult(state, pick_line(kind.hide), "idle", "idle")
+        return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
+    line = snack_line(kind.key, pick_line(kind.treat_lines))
     next_state = replace(
         state,
         hunger=clamp(state.hunger + 12),
         mood=clamp(state.mood + 5),
-        last_line=pick_line(kind.treat_lines),
+        last_line=line,
         anim="eat",
     )
     return CareResult(next_state, next_state.last_line, "eat", "seek")
@@ -87,9 +89,10 @@ def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
 
 def apply_hide(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
+    line = hide_line(kind.key, pick_line(kind.hide))
     if state.hidden:
-        return CareResult(state, pick_line(kind.hide), "idle", "idle")
-    next_state = replace(state, hidden=True, last_line=pick_line(kind.hide), anim="walk")
+        return CareResult(state, line, "idle", "idle")
+    next_state = replace(state, hidden=True, last_line=line, anim="walk")
     return CareResult(next_state, next_state.last_line, "walk", "hide")
 
 
@@ -119,7 +122,7 @@ def decay(state: CareState, dt_ms: float) -> CareState:
 
 def ambient_line(state: CareState, species: Species) -> str:
     if state.hidden:
-        return pick_line(species.hide)
+        return hide_line(species.key, pick_line(species.hide))
     if state.hunger < 28:
         return pick_line(species.hungry)
     return pick_line(species.ambient)
