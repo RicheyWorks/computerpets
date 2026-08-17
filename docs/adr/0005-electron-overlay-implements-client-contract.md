@@ -1,6 +1,6 @@
 # 0005. Electron overlay implements the client contract; PyQt remains vision
 
-- **Status:** Accepted
+- **Status:** Superseded by [0007](0007-pyqt-blotter-client.md) for the “PyQt remains vision” clause. The Electron overlay is still a contract client.
 - **Date:** 2026-08-17
 - **Code:** `desktop/license/`; [CLIENT-CONTRACT.md](../CLIENT-CONTRACT.md); `desktop/README.md`
 
@@ -33,8 +33,9 @@ Steam is the first unlock shape in the tray UI (`steamId`, `appId`,
 `petType`, `hwid`). The HTTP client will call any registered provider
 key; the settings form does not add NFT or Solana fields.
 
-PyQt6 remains **vision** (roadmap / docs copy). It is not a second
-implementation in this tree.
+PyQt6 was **vision** when this ADR landed. [0007](0007-pyqt-blotter-client.md)
+adds `client/` as a second implementation of the same contract. This ADR
+still governs the Electron overlay.
 
 Overlay pets already walk on the desk without a license. Unlock is
 fail-closed: missing backend, bad ciphertext, expiry, revoked `jti`,
@@ -48,7 +49,7 @@ or hwid mismatch do not stub “always licensed.”
 - Local decrypt requires provisioning `LICENSE_SECRET_KEY` into the
   overlay process ([0002](0002-aes-gcm-license-and-short-jwt.md)). The
   living-desk web app does not get that key.
-- A future PyQt client would implement the same contract; it would not
-  replace these rules. Until it exists, do not document PyQt-only APIs.
+- A PyQt client must implement the same contract; it does not replace
+  these rules. See [0007](0007-pyqt-blotter-client.md).
 - Do not invent a live NFT collection address or a Solana provider to
   make the overlay look complete ([0004](0004-empty-nft-allowlist.md)).
