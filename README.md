@@ -33,13 +33,12 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Stateless & Scalable** — Designed for horizontal scaling with minimal server-side state.
 - **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
 - **Rate Limiting** — Built-in per-IP protection using Bucket4j.
-- **Rich Pet Catalog** — 20 pets across four rarity tiers (Common, Uncommon, Rare, Legendary).
-- **Living desk (Rui)** — Browser companion in `web/`. Native Windows overlay in `desktop/` — he walks your actual screen.
+- **Rich Pet Catalog** — 30 pets across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes.
+- **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`.
 - **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
 - **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
 
 **Planned / Vision:**
-- Remaining catalog species living on the desk (Cat next)
 - GPU-accelerated native desktop client (PyQt6 / modern rendering)
 - A live ComputerPets collection address in `ethereum.collections`
 - Persistent license store and revocation support
@@ -74,7 +73,7 @@ For a complete view of the system design (including component diagrams, data flo
 
 ### Desktop companion (Windows and Mac)
 
-All twenty on the real desktop — transparent overlay, tray / menu bar.
+All thirty on the real desktop — transparent overlay, tray / menu bar.
 
 ```bash
 cd desktop
@@ -149,7 +148,7 @@ All detailed documentation is located in the `docs/` directory:
 
 ```
 ComputerPets/
-├── desktop/                      # Native Windows overlay (Rui on the desktop)
+├── desktop/                      # Native overlay — all thirty on the real desktop
 ├── web/                          # Living desk in the browser
 ├── .github/                      # GitHub templates (issues & PRs)
 ├── docs/                         # Project documentation

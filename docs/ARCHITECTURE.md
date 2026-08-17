@@ -275,7 +275,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 | `LicenseService`      | Issue & validate AES-256-GCM encrypted JSON license payloads (jti, owner, pet, timestamps) | BouncyCastle GCMBlockCipher + Jackson | `license/LicenseService.java`          | Spring @Value, ObjectMapper, SecureRandom |
 | `JwtService`          | Issue short-lived (default 30 min) HS256 JWTs carrying owner/pet/provider claims; parse & validate | JJWT 0.12 + Spring @Value   | `security/JwtService.java`             | SecretKey from config            |
 | `PetBundleService`    | Generate 15-minute HMAC-SHA256 signed CDN download URLs bound to (petKey, owner, expiry) | javax.crypto.Mac + Spring   | `bundle/PetBundleService.java`         | Signing key from config          |
-| `PetCatalog` / `PetType` | Static catalog of 20 pets across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
+| `PetCatalog` / `PetType` | Static catalog of 30 pets across 4 rarity tiers; lookup + grouping utilities   | Java enum + Spring @Service | `pet/PetType.java`, `pet/PetCatalog.java` | —                                |
 
 ### 4.4 Cross-Cutting & Infrastructure
 - **`SecurityConfig`** + **`JwtAuthenticationFilter`**: Stateless JWT auth (permitAll on verify/pets, authenticated on download). Filter populates `SecurityContext` with a `Map` principal for claim access.
