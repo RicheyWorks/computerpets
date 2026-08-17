@@ -171,7 +171,7 @@ public final class ApiExamples {
         {
           "error": "unknown petType",
           "received": "unicorn",
-          "validKeys": "red_panda, cat, dog, rabbit, ..., carpet_python"
+          "validKeys": "red_panda, cat, dog, rabbit, ..., moray"
         }
         """;
 
@@ -303,7 +303,11 @@ public final class ApiExamples {
           { "key": "boa",               "displayName": "Boa Constrictor",       "rarity": "RARE" },
           { "key": "milk_snake",        "displayName": "Pueblo Milk Snake",     "rarity": "UNCOMMON" },
           { "key": "rosy_boa",          "displayName": "Rosy Boa",              "rarity": "UNCOMMON" },
-          { "key": "carpet_python",     "displayName": "Jungle Carpet Python",  "rarity": "RARE" }
+          { "key": "carpet_python",     "displayName": "Jungle Carpet Python",  "rarity": "RARE" },
+          { "key": "octopus",           "displayName": "Common Octopus",        "rarity": "UNCOMMON" },
+          { "key": "moon_jelly",        "displayName": "Moon Jelly",            "rarity": "COMMON" },
+          { "key": "horseshoe_crab",    "displayName": "Atlantic Horseshoe Crab", "rarity": "UNCOMMON" },
+          { "key": "moray",             "displayName": "Green Moray",           "rarity": "RARE" }
         ]
         """;
 
@@ -345,7 +349,7 @@ public final class ApiExamples {
         {
           "error": "unknown pet type",
           "key": "unicorn",
-          "validKeys": "red_panda, cat, dog, rabbit, ..., carpet_python"
+          "validKeys": "red_panda, cat, dog, rabbit, ..., moray"
         }
         """;
 

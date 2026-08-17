@@ -36,7 +36,7 @@ def test_civil_hour_maps_to_house_day_parts():
 
 def test_every_rest_window_including_overnight_and_the_cats_nap():
     assert set(REST) == set(CATALOG_KEYS)
-    assert len(REST) == 30
+    assert len(REST) == len(CATALOG_KEYS)
     for key, (start, end) in REST.items():
         if start < end:
             assert is_resting_hour(key, start)

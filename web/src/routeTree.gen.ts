@@ -18,6 +18,7 @@ import { Route as LiveRouteImport } from './routes/live'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MeetRouteImport } from './routes/meet'
 import { Route as MindRouteImport } from './routes/mind'
+import { Route as SeaRouteImport } from './routes/sea'
 import { Route as SnakesRouteImport } from './routes/snakes'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
@@ -69,6 +70,11 @@ const MindRoute = MindRouteImport.update({
   path: '/mind',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SeaRoute = SeaRouteImport.update({
+  id: '/sea',
+  path: '/sea',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SnakesRoute = SnakesRouteImport.update({
   id: '/snakes',
   path: '/snakes',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
+  '/sea': typeof SeaRoute
   '/snakes': typeof SnakesRoute
   '/study': typeof StudyRoute
   '/demo/$slug': typeof DemoSlugRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
+  '/sea': typeof SeaRoute
   '/snakes': typeof SnakesRoute
   '/study': typeof StudyRoute
   '/demo/$slug': typeof DemoSlugRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
+  '/sea': typeof SeaRoute
   '/snakes': typeof SnakesRoute
   '/study': typeof StudyRoute
   '/demo/$slug': typeof DemoSlugRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/meet'
     | '/mind'
+    | '/sea'
     | '/snakes'
     | '/study'
     | '/demo/$slug'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/meet'
     | '/mind'
+    | '/sea'
     | '/snakes'
     | '/study'
     | '/demo/$slug'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/meet'
     | '/mind'
+    | '/sea'
     | '/snakes'
     | '/study'
     | '/demo/$slug'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   MeetRoute: typeof MeetRoute
   MindRoute: typeof MindRoute
+  SeaRoute: typeof SeaRoute
   SnakesRoute: typeof SnakesRoute
   StudyRoute: typeof StudyRoute
   DemoSlugRoute: typeof DemoSlugRoute
@@ -277,6 +290,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MindRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sea': {
+      id: '/sea'
+      path: '/sea'
+      fullPath: '/sea'
+      preLoaderRoute: typeof SeaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/snakes': {
       id: '/snakes'
       path: '/snakes'
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   MeetRoute: MeetRoute,
   MindRoute: MindRoute,
+  SeaRoute: SeaRoute,
   SnakesRoute: SnakesRoute,
   StudyRoute: StudyRoute,
   DemoSlugRoute: DemoSlugRoute,

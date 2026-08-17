@@ -1,15 +1,15 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same thirty, taught here. Snakes keep the den
-facts; the twenty keep the study facts.
+This is not a new bestiary — the same forty, taught here. Snakes keep the den
+facts; the tide keeps the sea facts; the twenty keep the study facts.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import CATALOG_KEYS, HOUSE_KEYS, SNAKE_KEYS, SPECIES, is_snake
+from .species import CATALOG_KEYS, HOUSE_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_sea, is_snake
 
 
 @dataclass(frozen=True)
@@ -336,7 +336,100 @@ SNAKE_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE
+SEA_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "octopus",
+        "Octopus vulgaris",
+        "Eight arms, no bones, a bag of a body that can become a cup. Skin that tastes. Pupils like slits. When the room is too much, she jets, then crawls, then is the teacup.",
+        "Not a squid — those keep a pen and two long clubs. Not a cuttlefish. Sepia hovers and flushes; Cup leaves an arm on the problem and hides in crockery. The ink is a door, not a mood.",
+        "Common octopus. I taste with the arms. The cup is the tell.",
+        "teacup hide",
+        "clever",
+    ),
+    _entry(
+        "cuttlefish",
+        "Sepia officinalis",
+        "A W of arms, a fin like a ruffle around the mantle, and a skin that rewrites itself. The cuttlebone is a private buoyancy. He hovers. Then he is another weather.",
+        "Not an octopus. Cup crawls and hides; Sepia stays in the water column and changes the sentence. Not a squid. The W-arms and the ripple-fin are the whole identification. The ink is a name he keeps.",
+        "Common cuttlefish. I flush. The W is the greeting.",
+        "lamp ripple",
+        "flicker",
+    ),
+    _entry(
+        "nautilus",
+        "Nautilus pompilius",
+        "A coiled shell of chambers, nacre on the inside, a hood, and a fringe of tentacles without suckers. He jets. He rises by gas. The eye is a pinhole. The fossil refused to finish.",
+        "Not an ammonite — those ended. Not a snail with a better publicist. Chamber is a cephalopod who kept the shell the others abandoned. Coin is a fish in a bowl. Chamber is a room that swims.",
+        "Chambered nautilus. I rise. The rooms are the tell.",
+        "paperweight",
+        "ancient",
+    ),
+    _entry(
+        "moon_jelly",
+        "Aurelia aurita",
+        "A saucer of a bell, four horseshoe moons in the jelly, a fringe of short tentacles. She pulses. She drifts. There is no brain to argue with. Not a fish. The water is the rest of her.",
+        "Not a fish — no bones, no face that plans. Not a Portuguese man o' war, which is a colony and a rumor. Bell is Aurelia, the moon one, and the four moons in the bell are the whole identification.",
+        "Moon jelly. I pulse. I am not a fish.",
+        "glass of water",
+        "vacant",
+    ),
+    _entry(
+        "sea_star",
+        "Pisaster ochraceus",
+        "Five stout arms, ochre to rust, a center that is also a mouth. Tube feet in grooves. She clings. She can evert a stomach and call it lunch. Not a fish. The star is the animal.",
+        "Not a fish, though the house once said starfish and was wrong. Not a brittle star — those are long, fast, and break on purpose. Ochre is the ochre sea star of the Pacific door. She stays.",
+        "Ochre sea star. I cling. I am not a fish.",
+        "damp blotter",
+        "still",
+    ),
+    _entry(
+        "hermit_crab",
+        "Pagurus bernhardus",
+        "A soft abdomen shopping for architecture. The European common hermit: right claw larger, walking legs, a borrowed whelk or, on this desk, a stamp lid. He measures. He trades. He walks the damp floor.",
+        "Not a true crab — those grow their own roof. Ledger is the other not-crab, older, and he does not shop. Tenant is Pagurus bernhardus, intertidal, and the house is a lease he carries. Coin stayed in the bowl.",
+        "Common hermit. I trade the lid. The abdomen is the tenant.",
+        "stamp lid",
+        "fussy",
+    ),
+    _entry(
+        "horseshoe_crab",
+        "Limulus polyphemus",
+        "A helmet of a carapace, book-gills, a telson that is a rudder and not a sting, and blood that runs blue. He walks the sand. He molts the whole lid. He is not a crab. He is older than the word.",
+        "Not a crab. Crabs are the short-tailed cousins with a fold; Ledger is a chelicerate — kin to spiders, if you must — who kept the sea. Not Tenant. Tenant shops. Ledger is the book. The telson does not sting.",
+        "Horseshoe crab. I am not a crab. The book-gills are the tell.",
+        "sand tray",
+        "patient",
+    ),
+    _entry(
+        "seahorse",
+        "Hippocampus erectus",
+        "A horse of a head on a plated body, a tail that wraps, a crown of spines. He hovers upright. The male keeps the brood. Lined: pale rings on a brown-olive hide. The pencil is a stem.",
+        "Not a pipefish with a better posture — those stay long and horizontal. Not a fish who forgot to lie down. Anchor is the lined seahorse, Hippocampus erectus, and the hitch is the whole identification. He does not gallop.",
+        "Lined seahorse. I hitch. The tail is a hand.",
+        "pencil hitch",
+        "upright",
+    ),
+    _entry(
+        "manta",
+        "Mobula alfredi",
+        "Wings that became fins, a filter of a mouth, cephalic lobes like a polite mustache. She soars. She barrels. The reef manta is the smaller vast one — spots on the belly, a kite that stayed in the water.",
+        "Not a stingray. Those keep a tail with an argument; Kite's tail is a polite ribbon. Not the giant manta of the open rumor — Mobula birostris. She is alfredi, the reef one, and the bowl is a sky she agreed to.",
+        "Reef manta. I soar. The wings are the tell.",
+        "sky of the bowl",
+        "soaring",
+    ),
+    _entry(
+        "moray",
+        "Gymnothorax funebris",
+        "A green ribbon of muscle in a crevice. The gape is how she breathes — a second set of jaws waits further in. No pectoral fins. The books make a reef. She darts, then is a door again.",
+        "Not an eel of the river rumor, and not a snake. Lula holds; Door hides. The yawn is a mammal story she declined. Green moray: uniform olive, a face like a hinge, and the crevice is the species.",
+        "Green moray. The gape is breath. I am the door.",
+        "book crevice",
+        "watchful",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -357,6 +450,8 @@ def plaque_by_slug(slug: str | None) -> FieldGuide | None:
 def classroom_for(key: str) -> Classroom:
     if is_snake(key):
         return Classroom(room="den", label="All ten in the den", verb="crawl")
+    if is_sea(key):
+        return Classroom(room="tide", label="All ten in the tide", verb="swim")
     return Classroom(room="house", label="The rest of the house", verb="walk")
 
 
@@ -368,6 +463,10 @@ def snake_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in SNAKE_GUIDE)
 
 
+def sea_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in SEA_GUIDE)
+
+
 def house_guide_complete() -> bool:
     return len(HOUSE_GUIDE) == len(HOUSE_KEYS) and all(k in _BY_KEY for k in HOUSE_KEYS)
 
@@ -376,10 +475,15 @@ def snake_guide_complete() -> bool:
     return len(SNAKE_GUIDE) == len(SNAKE_KEYS) and all(k in _BY_KEY for k in SNAKE_KEYS)
 
 
+def sea_guide_complete() -> bool:
+    return len(SEA_GUIDE) == len(SEA_KEYS) and all(k in _BY_KEY for k in SEA_KEYS)
+
+
 def guide_complete() -> bool:
     return (
         house_guide_complete()
         and snake_guide_complete()
+        and sea_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
     )

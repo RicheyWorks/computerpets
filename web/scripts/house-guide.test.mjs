@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const rosterSrc = readFileSync(join(root, "src/lib/pets/roster.ts"), "utf8");
 const snakesSrc = readFileSync(join(root, "src/lib/pets/snakes.ts"), "utf8");
+const seaSrc = readFileSync(join(root, "src/lib/pets/sea.ts"), "utf8");
 const guideSrc = readFileSync(join(root, "src/lib/pets/house-guide.ts"), "utf8");
 const studySrc = readFileSync(join(root, "src/routes/study.tsx"), "utf8");
 const denSrc = readFileSync(join(root, "src/routes/snakes.tsx"), "utf8");
@@ -47,15 +48,19 @@ function sliceEntry(src, key, nextKey) {
   return src.slice(start, end);
 }
 
-test("the study lists the same twenty living pets as the roster, and none of the snakes", () => {
+test("the study lists the same twenty living pets as the roster, and none of the snakes or the tide", () => {
   const rosterKeys = quotedKeys(rosterSrc);
   const snakeKeys = quotedKeys(snakesSrc);
-  const houseKeys = rosterKeys.filter((key) => !snakeKeys.includes(key));
+  const seaKeys = quotedKeys(seaSrc);
+  const houseKeys = rosterKeys.filter((key) => !snakeKeys.includes(key) && !seaKeys.includes(key));
   const guideKeys = [...guideSrc.matchAll(/entry\(\s*"([a-z_]+)"/g)].map((m) => m[1]);
   assert.deepEqual(houseKeys, EXPECTED.map(([key]) => key));
   assert.deepEqual(guideKeys, houseKeys);
   assert.equal(guideKeys.length, 20);
   for (const key of snakeKeys) {
+    assert.equal(guideKeys.includes(key), false);
+  }
+  for (const key of seaKeys) {
     assert.equal(guideKeys.includes(key), false);
   }
 });

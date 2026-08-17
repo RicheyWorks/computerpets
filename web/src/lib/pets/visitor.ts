@@ -37,6 +37,16 @@ const LINES: Record<string, string> = {
   milk_snake: "I was a rumor. Then I was lunch-minded.",
   rosy_boa: "I borrowed the warm corner. I left it pink.",
   carpet_python: "I charted your shelf. You may land.",
+  octopus: "I tasted the rim. Then I was a cup again.",
+  cuttlefish: "I flushed. Then I left the weather.",
+  nautilus: "I rose through. The house can wait.",
+  moon_jelly: "I pulsed through. That counts.",
+  sea_star: "I clung. Then I unclung. Slowly.",
+  hermit_crab: "I measured the lids. None were free.",
+  horseshoe_crab: "I walked the sand. I am not a crab.",
+  seahorse: "I hitched your pencil. Briefly.",
+  manta: "I soared the bowl. You may keep the sky.",
+  moray: "I was the door. Then I was gone.",
 };
 
 export function visitLine(guestKey: string) {

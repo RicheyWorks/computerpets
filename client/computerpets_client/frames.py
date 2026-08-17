@@ -3,9 +3,10 @@
 Drawn with QPainter into pixmaps, then composited by the GPU-backed scene.
 Not photographed assets and not a shader engine.
 
-Snakes crawl (S-curve / coil). The others walk, with silhouette tells from
-the house catalog — rust panda, cream cat, corgi, bun, tuxedo, bill-first,
-and so on. No invented species.
+Snakes crawl (S-curve / coil). The tide swims; hermit and horseshoe walk
+the damp floor. The others walk, with silhouette tells from the house
+catalog — rust panda, cream cat, corgi, bun, tuxedo, bill-first, and so
+on. No invented species.
 """
 
 from __future__ import annotations
@@ -145,8 +146,22 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
     if species.gait == "crawl" or species.silhouette == "snake":
         _draw_snake(p, species, anim, i, sit, eat, sleep, stride)
         return
-    if species.silhouette in ("fish", "axolotl"):
+    if species.silhouette in (
+        "fish",
+        "axolotl",
+        "octopus",
+        "cuttle",
+        "nautilus",
+        "jelly",
+        "star",
+        "seahorse",
+        "manta",
+        "moray",
+    ):
         _draw_aquatic(p, species, anim, i, eat, sleep)
+        return
+    if species.silhouette in ("hermit", "horseshoe"):
+        _draw_tide_walker(p, species, anim, i, sit, eat, sleep, stride)
         return
     if species.silhouette in ("bird", "parrot", "toucan", "phoenix", "penguin"):
         _draw_bird(p, species, anim, i, sit, eat, sleep, stride)
@@ -445,6 +460,115 @@ def _draw_aquatic(p: QPainter, species: Species, anim: str, i: int, eat: float, 
         _draw_face(p, hx, hy, nose, sleep, anim, i, False)
         return
 
+    sil = species.silhouette
+    if sil == "octopus":
+        p.setPen(QPen(accent, 1.1))
+        p.setBrush(QBrush(body))
+        for k, ang in enumerate((-70, -40, -10, 20, 50, 80, 110, 140)):
+            p.save()
+            p.rotate(ang + wave * 0.4)
+            p.drawEllipse(QRectF(8, -5, 28 + (k % 3), 8))
+            p.restore()
+        p.drawEllipse(QRectF(-22, -18, 40, 32))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-10, -6, 20, 14))
+        _draw_face(p, -8, -10, nose, sleep, anim, i, False)
+        return
+    if sil == "cuttle":
+        fin = QPainterPath()
+        fin.addEllipse(QRectF(-36, -22 + wave * 0.2, 72, 44))
+        p.setBrush(QBrush(_color(pal.ring)))
+        p.setPen(QPen(accent, 1.0))
+        p.drawPath(fin)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-28, -14, 56, 28))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, -2, 24, 12))
+        _draw_face(p, -16, -6, nose, sleep, anim, i, False)
+        return
+    if sil == "nautilus":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.2))
+        p.drawEllipse(QRectF(-8, -28, 48, 48))
+        p.setPen(QPen(_color(pal.ring), 1.4))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawEllipse(QRectF(4, -16, 22, 22))
+        p.setBrush(QBrush(belly))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-28, -10, 28, 20))
+        _draw_face(p, -20, -6, nose, sleep, anim, i, False)
+        return
+    if sil == "jelly":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-28, -24 + wave * 0.3, 56, 36))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(_color(pal.ring)))
+        p.drawEllipse(QRectF(-10, -10, 8, 8))
+        p.drawEllipse(QRectF(2, -10, 8, 8))
+        p.drawEllipse(QRectF(-10, 0, 8, 8))
+        p.drawEllipse(QRectF(2, 0, 8, 8))
+        p.setPen(QPen(accent, 1.0))
+        for k in range(-3, 4):
+            p.drawLine(k * 6, 10, k * 6, 22 + abs(k))
+        return
+    if sil == "star":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        for ang in range(0, 360, 72):
+            p.save()
+            p.rotate(ang)
+            p.drawEllipse(QRectF(-8, -28, 16, 32))
+            p.restore()
+        p.drawEllipse(QRectF(-12, -12, 24, 24))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, -6, 12, 12))
+        return
+    if sil == "seahorse":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-8, -28, 20, 18))
+        p.drawRoundedRect(QRectF(-4, -14, 14, 28), 6, 6)
+        tail = QPainterPath()
+        tail.moveTo(4, 12)
+        tail.cubicTo(18, 16, 16, 28 + wave * 0.3, 2, 26)
+        p.drawPath(tail)
+        _draw_face(p, -2, -24, nose, sleep, anim, i, False)
+        return
+    if sil == "manta":
+        wing = QPainterPath()
+        wing.moveTo(-8, 0)
+        wing.quadTo(-56, -8 + wave, -8, 10)
+        wing.quadTo(56, -8 - wave, 8, 10)
+        wing.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(wing)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-16, -4, 32, 12))
+        _draw_face(p, -6, -6, nose, sleep, anim, i, False)
+        return
+    if sil == "moray":
+        phase = i * 0.5
+        pts = [(-40 + t * 80, math.sin(t * 3 + phase) * 6) for t in (n / 7 for n in range(8))]
+        for k, (x, y) in enumerate(pts):
+            t = k / 7
+            p.setBrush(QBrush(body if k % 2 == 0 else belly))
+            p.setPen(QPen(accent, 0.8))
+            p.drawEllipse(QRectF(x - 10, y - 7, 18 - t * 4, 14 - t * 2))
+        hx, hy = pts[0]
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(hx - 12, hy - 10, 24, 18))
+        if anim == "talk" or eat:
+            p.setBrush(QBrush(QColor(40, 24, 20)))
+            p.drawEllipse(QRectF(hx - 8, hy + 2, 12, 5))
+        _draw_face(p, hx - 2, hy - 6, nose, sleep, anim, i, False)
+        return
+
     # Axolotl — salamander who kept the gills.
     p.setBrush(QBrush(_color(pal.ear)))
     p.setPen(Qt.PenStyle.NoPen)
@@ -465,6 +589,53 @@ def _draw_aquatic(p: QPainter, species: Species, anim: str, i: int, eat: float, 
     _draw_face(p, -24, -10, nose, sleep, anim, i, False)
     p.setBrush(QBrush(accent))
     p.drawEllipse(QRectF(28, -2, 16, 8))
+
+
+def _draw_tide_walker(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    nose = _color(pal.nose)
+    lift = 2 + stride * 3 - sit * 4
+    if species.silhouette == "hermit":
+        p.setBrush(QBrush(_color(pal.ring)))
+        p.setPen(QPen(accent, 1.2))
+        p.drawEllipse(QRectF(-6, -22 + sit, 36, 32))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-28, -8 + sit, 28, 18))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-22, -2 + sit, 14, 8))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-18, 8 + sit - lift, 8, 6))
+        p.drawEllipse(QRectF(-8, 10 + sit + lift * 0.4, 8, 6))
+        _draw_face(p, -20, -6 + sit, nose, sleep, anim, i, False)
+        return
+    # Horseshoe — helmet, book-gills, telson. Not a crab.
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.2))
+    p.drawEllipse(QRectF(-28, -18 + sit, 52, 36))
+    p.setPen(Qt.PenStyle.NoPen)
+    p.setBrush(QBrush(belly))
+    p.drawEllipse(QRectF(-14, -4 + sit, 24, 14))
+    p.setBrush(QBrush(accent))
+    p.drawPolygon(
+        [QPointF(20, 4 + sit), QPointF(46, 8 + sit), QPointF(20, 12 + sit)]
+    )
+    _draw_face(p, -10, -8 + sit, nose, sleep, anim, i, False)
+    if eat:
+        p.setBrush(QBrush(QColor(40, 24, 20)))
+        p.drawEllipse(QRectF(-8, 4 + sit, 8, 4))
 
 
 def _draw_snake(

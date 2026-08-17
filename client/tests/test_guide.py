@@ -13,6 +13,7 @@ from pathlib import Path
 from computerpets_client.guide import (
     FIELD_GUIDE,
     HOUSE_GUIDE,
+    SEA_GUIDE,
     SNAKE_GUIDE,
     classroom_for,
     guide_complete,
@@ -20,10 +21,12 @@ from computerpets_client.guide import (
     house_guide_keys,
     plaque_by_slug,
     plaque_for,
+    sea_guide_complete,
+    sea_guide_keys,
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import CATALOG_KEYS, HOUSE_KEYS, SNAKE_KEYS, SPECIES
+from computerpets_client.species import CATALOG_KEYS, HOUSE_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -61,6 +64,19 @@ SNAKE_EXPECTED = [
     ("carpet_python", "atlas", "Morelia spilota cheynei"),
 ]
 
+SEA_EXPECTED = [
+    ("octopus", "cup", "Octopus vulgaris"),
+    ("cuttlefish", "sepia", "Sepia officinalis"),
+    ("nautilus", "chamber", "Nautilus pompilius"),
+    ("moon_jelly", "bell", "Aurelia aurita"),
+    ("sea_star", "ochre", "Pisaster ochraceus"),
+    ("hermit_crab", "tenant", "Pagurus bernhardus"),
+    ("horseshoe_crab", "ledger", "Limulus polyphemus"),
+    ("seahorse", "anchor", "Hippocampus erectus"),
+    ("manta", "kite", "Mobula alfredi"),
+    ("moray", "door", "Gymnothorax funebris"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -72,11 +88,14 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert guide_complete()
     assert house_guide_complete()
     assert snake_guide_complete()
+    assert sea_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
-    assert len(FIELD_GUIDE) == 30
+    assert sea_guide_keys() == SEA_KEYS
+    assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
+    assert len(SEA_GUIDE) == 10
     for key in CATALOG_KEYS:
         guide = plaque_for(key)
         assert guide is not None, key
@@ -95,7 +114,8 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
 def test_house_and_den_list_the_same_keys_as_the_roster():
     assert [g.key for g in HOUSE_GUIDE] == [key for key, _, _ in HOUSE_EXPECTED]
     assert [g.key for g in SNAKE_GUIDE] == [key for key, _, _ in SNAKE_EXPECTED]
-    for key, slug, latin in HOUSE_EXPECTED + SNAKE_EXPECTED:
+    assert [g.key for g in SEA_GUIDE] == [key for key, _, _ in SEA_EXPECTED]
+    for key, slug, latin in HOUSE_EXPECTED + SNAKE_EXPECTED + SEA_EXPECTED:
         guide = plaque_for(key)
         assert guide is not None
         assert guide.slug == slug
@@ -108,6 +128,10 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     for key in HOUSE_KEYS:
         assert classroom_for(key).room == "house"
         assert classroom_for(key).verb == "walk"
+    for key in SEA_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "tide"
+        assert classroom_for(key).verb == "swim"
 
 
 def test_the_important_house_mixups_are_actually_taught():
@@ -151,6 +175,18 @@ def test_the_important_den_mixups_are_actually_taught():
     assert re.search(r"no red", king, re.I)
 
 
+def test_the_important_tide_mixups_are_actually_taught():
+    jelly = _taught(plaque_for("moon_jelly"))
+    star = _taught(plaque_for("sea_star"))
+    horseshoe = _taught(plaque_for("horseshoe_crab"))
+    moray = _taught(plaque_for("moray"))
+    assert re.search(r"not a fish", jelly, re.I)
+    assert re.search(r"not a fish", star, re.I)
+    assert re.search(r"not a crab", horseshoe, re.I)
+    assert re.search(r"book-gills", horseshoe, re.I)
+    assert re.search(r"gape is breath", moray, re.I)
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -160,8 +196,10 @@ def _slice_entry(src: str, key: str, next_key: str | None) -> str:
 def test_pyqt_guide_copy_matches_the_web_field_notes():
     house_src = (WEB_PETS / "house-guide.ts").read_text(encoding="utf-8")
     snake_src = (WEB_PETS / "snake-guide.ts").read_text(encoding="utf-8")
+    sea_src = (WEB_PETS / "sea-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
+    sea_keys = [key for key, _, _ in SEA_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -173,6 +211,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(SNAKE_EXPECTED):
         nxt = snake_keys[index + 1] if index + 1 < len(snake_keys) else None
         chunk = _slice_entry(snake_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(SEA_EXPECTED):
+        nxt = sea_keys[index + 1] if index + 1 < len(sea_keys) else None
+        chunk = _slice_entry(sea_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk
@@ -197,6 +243,10 @@ def test_plaque_widget_teaches_the_selected_species():
     assert card.guide().key == "milk_snake"
     assert "red against black" in card.mixup.text().lower()
     assert "crawl" in card.classroom.text().lower()
+    card.set_key("horseshoe_crab")
+    assert card.guide().key == "horseshoe_crab"
+    assert "not a crab" in card.mixup.text().lower()
+    assert "swim" in card.classroom.text().lower()
     del app
 
 

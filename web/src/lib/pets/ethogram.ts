@@ -116,6 +116,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   milk_snake: [A("tongue", "tongue", 0.7, 4), A("mimic", "freeze", 1.6, 2)],
   rosy_boa: [A("tongue", "tongue", 0.7, 3), A("nest", "sit_hold", 2.6, 3, "sit")],
   carpet_python: [A("tongue", "tongue", 0.7, 4), A("drape", "sit_hold", 2.2, 3, "sit")],
+  octopus: [A("hide", "sit_hold", 2.0, 3, "sit"), A("jet", "dart", 0.8, 2), A("taste", "wiggle", 1.0, 2)],
+  cuttlefish: [A("flush", "pulse", 0.9, 3), A("hover", "bob", 1.4, 2)],
+  nautilus: [A("rise", "bob", 1.6, 3), A("still", "freeze", 2.0, 2)],
+  moon_jelly: [A("pulse", "pulse", 1.2, 4), A("drift", "bob", 1.6, 2)],
+  sea_star: [A("cling", "sit_hold", 2.8, 4, "sit"), A("still", "freeze", 2.2, 2)],
+  hermit_crab: [A("inspect", "freeze", 1.2, 3), A("shuffle", "wiggle", 0.9, 2)],
+  horseshoe_crab: [A("plow", "wiggle", 1.0, 2), A("still", "freeze", 2.0, 3)],
+  seahorse: [A("hitch", "sit_hold", 2.4, 3, "sit"), A("hover", "bob", 1.4, 2)],
+  manta: [A("soar", "pulse", 1.4, 3), A("glide", "bob", 1.8, 2)],
+  moray: [A("gape", "gape", 1.2, 3), A("hide", "sit_hold", 2.2, 3, "sit"), A("dart", "dart", 0.8, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;
