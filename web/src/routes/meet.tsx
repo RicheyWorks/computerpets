@@ -35,10 +35,14 @@ export function MeetPage() {
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
             Snakes go blue, then shed. The old coat stays on the blotter. The den is where you learn
-            the ten species — they crawl, and they stay.
+            the ten species — they crawl, and they stay. The study is where the rest of the house
+            walks.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild>
+              <Link to="/study">The study</Link>
+            </Button>
+            <Button asChild variant="secondary">
               <Link to="/snakes">The snake den</Link>
             </Button>
             <Button asChild variant="secondary">
@@ -64,11 +68,14 @@ export function MeetPage() {
             <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Awake</p>
             <h2 className="mt-2 font-display text-3xl sm:text-4xl">Thirty living demos.</h2>
             <p className="mt-2 max-w-md text-sm text-muted">
-              The ten snakes also keep a den — a field guide that crawls.
+              The study is a field guide that walks. The ten snakes keep their own den.
             </p>
           </div>
           <div className="hidden flex-col items-end gap-1 sm:flex">
-            <Link to="/snakes" className="text-sm text-fg no-underline hover:text-primary">
+            <Link to="/study" className="text-sm text-fg no-underline hover:text-primary">
+              The study
+            </Link>
+            <Link to="/snakes" className="text-sm text-muted no-underline hover:text-fg">
               The snake den
             </Link>
             <Link to="/catalog" className="text-sm text-muted no-underline hover:text-fg">

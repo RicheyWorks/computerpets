@@ -309,9 +309,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         </p>
         <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
-        {isSnake(kind.key) ? (
-          <SpeciesPlaque speciesKey={kind.key} compact className="mt-4 max-w-sm" showDemoLink={false} />
-        ) : null}
+        <SpeciesPlaque speciesKey={kind.key} compact className="mt-4 max-w-sm" showDemoLink={false} />
         <div className="mt-5 flex flex-wrap gap-2">
           <Button size="sm" disabled={busy || stats.hidden} onClick={feed}>
             Feed
@@ -401,7 +399,11 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
             <Button asChild variant="secondary">
               <Link to="/snakes">The den</Link>
             </Button>
-          ) : null}
+          ) : (
+            <Button asChild variant="secondary">
+              <Link to="/study">The study</Link>
+            </Button>
+          )}
         </div>
       </div>
     </section>
