@@ -35,6 +35,7 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Rate Limiting** — Per-IP Bucket4j token buckets in Redis (10/min verify, 30/min download), shared across replicas. Redis-down fail-closes with 503.
 - **Revocation deny-list** — Revoke persists `revokedAt` in Postgres, then writes the `jti` to Redis so every replica rejects immediately (same 401). Redis-down validate falls back to the ledger.
 - **Tracing & business metrics** — Micrometer + OpenTelemetry spans on verify, download, and provider calls. OTLP export via `OTEL_EXPORTER_OTLP_ENDPOINT` (off by default). Prometheus scrape is unchanged.
+- **Profiles & deploy** — `dev` / `staging` / `prod` Spring profiles (same YAML + env style). `prod` fail-hards H2, in-memory rate limits, and Microsoft Store dev-mode. Kubernetes manifests in `deploy/k8s/` (blue/green Service selector).
 - **Rich Pet Catalog** — 30 pets across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes.
 - **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`.
 - **License ledger** — House `/admin` plus `GET /api/admin/licenses` for jti/owner lookup, audit stamps, and revoke (`X-Admin-Key`).
@@ -121,6 +122,8 @@ See [web/README.md](web/README.md).
 
    ```bash
    mvn spring-boot:run
+   # or, explicit local profile (H2 unless SPRING_DATASOURCE_* is set):
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
    ```
 
    Or use the convenience script on Windows:
@@ -145,7 +148,7 @@ All detailed documentation is located in the `docs/` directory:
 - **[Documentation Index](docs/README.md)** — Overview of all available docs
 - **[Architecture](docs/ARCHITECTURE.md)** — Comprehensive system design, diagrams, and recommendations (**recommended starting point**)
 - **[Client contract](docs/CLIENT-CONTRACT.md)** — License decrypt, hwid, JWT, and signed download URL
-- **[Setup Guide](docs/SETUP.md)** — How to build, configure, and run the project locally
+- **[Setup Guide](docs/SETUP.md)** — How to build, configure, and run the project locally (profiles + `deploy/k8s/`)
 - **[Contributing Guide](docs/CONTRIBUTING.md)** — Development workflow and contribution process
 
 ---
@@ -157,10 +160,11 @@ ComputerPets/
 ├── desktop/                      # Native overlay — all thirty on the real desktop
 ├── web/                          # Living desk in the browser
 ├── .github/                      # GitHub templates (issues & PRs)
+├── deploy/k8s/                   # Kubernetes manifests (prod profile, blue/green)
 ├── docs/                         # Project documentation
 │   ├── ARCHITECTURE.md           # Full system architecture (living document)
 │   ├── CLIENT-CONTRACT.md        # Native client: decrypt, hwid, download
-│   ├── SETUP.md                  # Local development guide
+│   ├── SETUP.md                  # Local development + profiles + k8s
 │   └── CONTRIBUTING.md
 ├── src/main/java/com/enterprisepet/
 │   ├── controller/               # REST API controllers
@@ -177,7 +181,10 @@ ComputerPets/
 │   ├── config/                   # Security, rate limiting, exception handling
 │   └── EnterprisePetBackendApplication.java
 ├── src/main/resources/
-│   └── application.yml
+│   ├── application.yml
+│   ├── application-dev.yml
+│   ├── application-staging.yml
+│   └── application-prod.yml
 ├── pom.xml
 ├── build.ps1                     # Windows build helper
 ├── LICENSE

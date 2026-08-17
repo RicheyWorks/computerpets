@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: computerpets-config
+  namespace: computerpets
+data:
+  SPRING_PROFILES_ACTIVE: prod
+  SPRING_DATASOURCE_URL: jdbc:postgresql://computerpets-postgres:5432/computerpets
+  REDIS_HOST: computerpets-redis
+  REDIS_PORT: "6379"
+  RATE_LIMIT_BACKEND: redis
+  MICROSOFT_DEV_MODE: "false"
+  SERVER_PORT: "8080"

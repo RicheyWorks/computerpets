@@ -1,0 +1,70 @@
+# Idle color. Scale up, wait Ready, then patch the Service selector to color=green.
+# See deploy/k8s/README.md. Same probes, secrets, and prod profile as blue.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: computerpets-green
+  namespace: computerpets
+  labels:
+    app: computerpets
+    color: green
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      app: computerpets
+      color: green
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: computerpets
+        color: green
+    spec:
+      initContainers:
+        - name: wait-postgres
+          image: postgres:16-alpine
+          command: ["sh", "-c", "until pg_isready -h computerpets-postgres -U computerpets -d computerpets; do sleep 2; done"]
+        - name: wait-redis
+          image: redis:7-alpine
+          command: ["sh", "-c", "until redis-cli -h computerpets-redis ping; do sleep 2; done"]
+      containers:
+        - name: computerpets
+          image: ghcr.io/richeyworks/computerpets:main
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          envFrom:
+            - configMapRef:
+                name: computerpets-config
+            - secretRef:
+                name: computerpets-secrets
+          startupProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 5
+            failureThreshold: 24
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            periodSeconds: 10
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              memory: 1Gi
