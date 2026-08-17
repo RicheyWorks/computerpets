@@ -56,7 +56,7 @@ npm start
 npm test
 ```
 
-\* If the default origin is down, unlock fails closed (unreachable backend). Do not invent a live NFT collection address; this slice does not add Solana or a PyQt client.
+\* If the default origin is down, unlock fails closed (unreachable backend). Do not invent a live NFT collection address; this overlay does not add Solana. The PyQt blotter is a separate tree (`client/`) and speaks the same contract.
 
 ## Package
 

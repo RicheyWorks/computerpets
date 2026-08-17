@@ -58,11 +58,12 @@ New to the project? Follow this recommended path:
 | Document | Description |
 |----------|-------------|
 | **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **Start here** for a complete understanding. |
-| **[Architecture Decision Records](adr/README.md)** | Numbered records of decisions already true on `main` (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron contract, profiles + k8s). Not a wishlist. |
+| **[Architecture Decision Records](adr/README.md)** | Numbered records of decisions already true on `main` (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron + PyQt contract clients, profiles + k8s). Not a wishlist. |
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
 | **[Mind plugins](MIND.md)** | Plug any AI into the pets — OpenAI-compatible, Claude, Gemini, Ollama, custom webhook. |
 | **[Desktop companion](../desktop/README.md)** | Native overlay — all thirty pets, plus the first client-contract unlock slice. |
+| **[PyQt blotter](../client/README.md)** | First PyQt6 desk — living Rui, Qt OpenGL viewport, same contract unlock. |
 | **[Setup & Installation Guide](SETUP.md)** | Build and run locally. Secrets, `dev`/`staging`/`prod` profiles, and `deploy/k8s/`. |
 | **[Contributing Guidelines](CONTRIBUTING.md)** | How to contribute to the project, including development setup, code style, pull request process, and documentation update expectations. |
 
@@ -83,13 +84,14 @@ A dedicated `API.md` document may be added in the future as the API matures.
 
 The long-term vision for ComputerPets includes:
 
-- A GPU-accelerated desktop client (planned PyQt6 application)
+- A custom GPU shader engine (the PyQt client uses Qt’s OpenGL-backed scene)
 - A live ComputerPets collection address in `ethereum.collections`
 - Additional ownership providers (Solana, etc.)
 
 Already shipped: Steam Web API + NFT allowlist + Itch.io download-key verify + Epic Games Store Ecom v3,
 JPA persistence and revocation, optional hwid, Micrometer + OpenTelemetry tracing,
 `dev`/`staging`/`prod` profiles + `deploy/k8s/`, the [client contract](CLIENT-CONTRACT.md),
+the [PyQt blotter](../client/README.md) first slice,
 and [ADRs](adr/README.md) for those decisions.
 
 Current status and detailed future plans are documented in the **[Roadmap](ROADMAP.md)**

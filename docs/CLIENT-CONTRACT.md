@@ -296,7 +296,7 @@ The zip **contents** are not specified here — only the URL and signature.
 
 ## 8. What this contract does not include
 
-- A GPU / PyQt client, overlay protocol, or asset pack layout
+- An overlay protocol or asset pack layout (the PyQt blotter in `client/` and the Electron overlay in `desktop/` implement this handshake; they do not add endpoints)
 - A live NFT collection address (`ethereum.collections` stays empty until one is deployed)
 - A prescribed HWID recipe (MAC, disk serial, …)
 - One-time or IP-bound download URLs (jti is in the MAC; replay within 15 minutes is still possible)

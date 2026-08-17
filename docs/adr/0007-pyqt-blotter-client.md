@@ -1,0 +1,52 @@
+# 0007. PyQt6 blotter client implements the same contract; Electron overlay stays
+
+- **Status:** Accepted
+- **Date:** 2026-08-17
+- **Code:** `client/`; [CLIENT-CONTRACT.md](../CLIENT-CONTRACT.md); `client/README.md`
+- **Supersedes:** the “PyQt remains vision” clause of [0005](0005-electron-overlay-implements-client-contract.md)
+
+## Context
+
+[0005](0005-electron-overlay-implements-client-contract.md) made the Electron
+overlay (`desktop/license/`) the first native client of the published
+handshake. Architecture copy still described a future PyQt6/GPU app.
+A second toolkit was not required to prove the contract — but the
+roadmap still asked for a real start on that desk, not another README.
+
+The living-desk PNGs are not in this repository. A custom shader engine
+would be a lie if it only blitted CPU pixmaps.
+
+## Decision
+
+A new **`client/`** tree is the first PyQt6 blotter client:
+
+- `python -m computerpets_client` opens a window with a living pet
+  (Rui / `red_panda`; Miso and Pip reuse the same painter).
+- Drawing is **Qt-accelerated**: `QGraphicsView` + `QOpenGLWidget`
+  viewport (Qt RHI / OpenGL compositing). If OpenGL cannot attach, the
+  scene falls back to Qt software raster and says so. This is **not** a
+  custom shader engine.
+- Unlock is a port of `desktop/license/`: verify → AES-256-GCM decrypt
+  (32-byte key, no KDF, 12-byte IV, 16-byte tag appended) → hwid →
+  signed download. Same wire format. Fail closed. No “always licensed”
+  stub.
+- Care verbs that already exist on the Electron desk and fit this cut:
+  feed, treat, hide / call back.
+- The Electron overlay remains a contract client. `desktop/` is not
+  rewritten.
+
+Pets walk without a license (same as the overlay). Unlock talks to a
+running backend. Tests use a clearly named contract test double.
+
+Do not invent a live NFT collection address or a Solana provider.
+
+## Consequences
+
+- Contract changes must update `docs/CLIENT-CONTRACT.md`,
+  `desktop/license/`, and `client/computerpets_client/license/` together.
+- Local decrypt still requires provisioning `LICENSE_SECRET_KEY` into
+  the client process ([0002](0002-aes-gcm-license-and-short-jwt.md)).
+- A later custom GPU renderer can replace the Qt viewport without
+  changing the handshake.
+- `/study`, `/snakes`, and the Electron overlay are out of scope for
+  this tree.

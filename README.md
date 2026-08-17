@@ -37,18 +37,19 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Tracing & business metrics** — Micrometer + OpenTelemetry spans on verify, download, and provider calls. OTLP export via `OTEL_EXPORTER_OTLP_ENDPOINT` (off by default). Prometheus scrape is unchanged.
 - **Profiles & deploy** — `dev` / `staging` / `prod` Spring profiles (same YAML + env style). `prod` fail-hards H2, in-memory rate limits, and Microsoft Store dev-mode. Kubernetes manifests in `deploy/k8s/` (blue/green Service selector).
 - **Rich Pet Catalog** — 30 pets across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes.
-- **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`.
+- **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`. A first PyQt6 blotter lives in `client/` (Rui, Qt OpenGL viewport, same license contract).
 - **License ledger** — House `/admin` plus `GET /api/admin/licenses` for jti/owner lookup, audit stamps, and revoke (`X-Admin-Key`).
 - **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
 - **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
 
 **Planned / Vision:**
-- GPU-accelerated native desktop client (PyQt6 / modern rendering)
+- A custom GPU shader engine (the PyQt blotter uses Qt’s OpenGL-backed scene today)
 - A live ComputerPets collection address in `ethereum.collections`
 
 Already shipped (not vision): JPA license persistence + revocation, optional
-`hwid` binding, fail-hard `LICENSE_SECRET_KEY`, and the native client contract
-in [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
+`hwid` binding, fail-hard `LICENSE_SECRET_KEY`, the native client contract
+in [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md), and the PyQt blotter
+in [client/README.md](client/README.md).
 
 ---
 
@@ -91,6 +92,21 @@ Windows: `.\desktop.ps1`
 Mac: `sh desktop.sh`
 
 Package with `npm run dist:win` or `npm run dist:mac`. Unlock (Steam verify → license decrypt → hwid → signed download) is documented in [desktop/README.md](desktop/README.md).
+
+### PyQt blotter
+
+First GPU-toolkit desk — Qt OpenGL viewport, not a custom shader engine. Rui walks; unlock uses the same contract.
+
+```bash
+cd client
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8080
+export LICENSE_SECRET_KEY=   # same value as the backend
+python -m computerpets_client
+```
+
+See [client/README.md](client/README.md).
 
 Phones and tablets: open the living desk **Live** page and Add to Home Screen.
 
@@ -147,7 +163,7 @@ All detailed documentation is located in the `docs/` directory:
 
 - **[Documentation Index](docs/README.md)** — Overview of all available docs
 - **[Architecture](docs/ARCHITECTURE.md)** — Comprehensive system design, diagrams, and recommendations (**recommended starting point**)
-- **[Architecture Decision Records](docs/adr/README.md)** — Why the code looks the way it does (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron contract, profiles)
+- **[Architecture Decision Records](docs/adr/README.md)** — Why the code looks the way it does (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron + PyQt contract clients, profiles)
 - **[Client contract](docs/CLIENT-CONTRACT.md)** — License decrypt, hwid, JWT, and signed download URL
 - **[Setup Guide](docs/SETUP.md)** — How to build, configure, and run the project locally (profiles + `deploy/k8s/`)
 - **[Contributing Guide](docs/CONTRIBUTING.md)** — Development workflow and contribution process
@@ -159,6 +175,7 @@ All detailed documentation is located in the `docs/` directory:
 ```
 ComputerPets/
 ├── desktop/                      # Native overlay — all thirty on the real desktop
+├── client/                       # PyQt6 blotter — Rui + contract unlock
 ├── web/                          # Living desk in the browser
 ├── .github/                      # GitHub templates (issues & PRs)
 ├── deploy/k8s/                   # Kubernetes manifests (prod profile, blue/green)
