@@ -25,10 +25,12 @@ from PyQt6.QtWidgets import (
 )
 
 from .blotter import DeskBackground, attach_gpu_viewport
+from .guide import plaque_for
 from .life import CareState, ambient_line, apply_call, apply_feed, apply_hide, apply_treat, decay
 from .license.session import create_license_session
 from .paths import default_user_data_dir
 from .pet_item import LivingPetItem, TreatItem
+from .plaque import SpeciesPlaque
 from .rail import SpeciesRail
 from .species import (
     CATALOG_KEYS,
@@ -71,11 +73,12 @@ class DeskWindow(QMainWindow):
         self._speech_ms = 0.0
 
         self.setWindowTitle("ComputerPets — blotter")
-        self.resize(1000, 720)
+        self.resize(1000, 860)
 
         self.scene = QGraphicsScene(0, 0, SCENE_W, SCENE_H, self)
         self.scene.addItem(DeskBackground(SCENE_W, SCENE_H))
         self.pet = LivingPetItem(self.species)
+        self.pet.tapped.connect(self._tap_guest)
         self.scene.addItem(self.pet)
 
         self.bubble = QGraphicsTextItem()
@@ -110,6 +113,8 @@ class DeskWindow(QMainWindow):
         self.kind_box.setCurrentIndex(0)
         self.rail = SpeciesRail()
         self.rail.set_active(self.species.key)
+        self.plaque = SpeciesPlaque()
+        self.plaque.set_key(self.species.key)
 
         self.feed_btn.clicked.connect(self._feed)
         self.treat_btn.clicked.connect(self._treat)
@@ -142,6 +147,7 @@ class DeskWindow(QMainWindow):
         layout.addWidget(self.rail)
         layout.addWidget(self.license_label)
         layout.addWidget(self.view, 1)
+        layout.addWidget(self.plaque)
         layout.addWidget(self.vital_label)
         self.setCentralWidget(root)
 
@@ -214,6 +220,7 @@ class DeskWindow(QMainWindow):
         self.species = species_by_key(key)
         self.pet.set_species(self.species)
         self.rail.set_active(self.species.key)
+        self.plaque.set_key(self.species.key)
         idx = self.kind_box.findData(self.species.key)
         if idx >= 0 and idx != self.kind_box.currentIndex():
             blocked = self.kind_box.blockSignals(True)
@@ -251,6 +258,13 @@ class DeskWindow(QMainWindow):
         self.pet.issue(result.cmd)
         self._say(result.line)
         self._refresh_vitals()
+
+    def _tap_guest(self) -> None:
+        """Same as the web blotter: tap the guest, the plaque teaches, they say the lesson."""
+        guide = plaque_for(self.species.key)
+        if guide:
+            self.plaque.set_key(self.species.key)
+            self._say(guide.lesson, 5200)
 
     def _unlock(self) -> None:
         dialog = UnlockDialog(self.session, self)
@@ -307,6 +321,11 @@ def main(argv: list[str] | None = None) -> int:
             print("check failed: no living pet on the blotter", file=sys.stderr)
             return 1
         print(f"ok: {window.species.name} on the blotter ({len(CATALOG_KEYS)} living kinds)")
+        guide = plaque_for(window.species.key)
+        if window.plaque.guide() is None or guide is None:
+            print("check failed: no species plaque on the blotter", file=sys.stderr)
+            return 1
+        print(f"ok: species plaque for {guide.name} ({guide.latin})")
         print(window.renderer_label)
         QTimer.singleShot(250, app.quit)
     return app.exec()
