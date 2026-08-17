@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (ADRs under `docs/adr/`) |
+| **Last Updated** | 2026-08-17 (PyQt blotter `client/` + ADR 0007) |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -649,7 +649,8 @@ Goal: Prepare for horizontal scaling and real production traffic.
 Goal: Deliver a complete, usable platform.
 
 - **4.1 Desktop Client Contract**
-  - Finalize and publish the exact license format, decryption expectations, and hwid requirements for the PyQt6 client
+  - [x] Publish the license format, decrypt, hwid, and download rules (`docs/CLIENT-CONTRACT.md`)
+  - [x] Electron overlay (`desktop/license/`) and PyQt blotter (`client/`) implement that handshake
   - Define bundle format and update process
 
 - **4.2 Additional Ownership Providers**

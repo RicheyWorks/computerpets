@@ -30,3 +30,9 @@ web/dist/
 # Desktop companion
 desktop/node_modules/
 desktop/dist/
+
+# PyQt blotter client
+client/.venv/
+client/**/__pycache__/
+client/*.egg-info/
+client/.pytest_cache/

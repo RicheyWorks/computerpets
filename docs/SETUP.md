@@ -2,7 +2,7 @@
 
 This guide provides step-by-step instructions for setting up and running the **ComputerPets** project locally.
 
-> **Note**: This repository currently contains **only the backend service**. The desktop client application is planned for future development and is not yet included in this repository.
+> **Note**: This repository contains the backend, the living desk (`web/`), the Electron overlay (`desktop/`), and a first PyQt6 blotter client (`client/`).
 
 ---
 
@@ -24,14 +24,15 @@ To run the Spring Boot backend, you will need the following:
 - IDE: IntelliJ IDEA, Visual Studio Code (with Java Extension Pack), or Eclipse
 - OpenSSL (for generating secrets on non-Windows systems)
 
-### Desktop Client Requirements (Planned)
+### PyQt blotter client (`client/`)
 
-The GPU-accelerated desktop client is not yet implemented. When it is added, the following will be required:
+The first PyQt6 desk is in `client/`. It uses Qt’s GPU-backed scene (`QGraphicsView` + `QOpenGLWidget`), not a custom shader engine.
 
 - **Python** — 3.11 or newer (3.12+ recommended)
-- **PyQt6** — For building the desktop user interface
-- **GPU Drivers** — Modern NVIDIA or AMD drivers with Vulkan / OpenGL support
-- **Additional Python packages** — PyOpenGL, requests, and other dependencies (to be defined when the client is developed)
+- **PyQt6** and **cryptography** — `pip install -e ".[dev]"` from `client/`
+- **GPU Drivers** — optional; without a usable OpenGL surface the scene falls back to Qt software raster and says so
+
+See [client/README.md](../client/README.md). The Electron overlay remains in `desktop/`.
 
 ---
 
@@ -200,11 +201,21 @@ curl http://localhost:8080/api/verify/providers
 
 You should receive a JSON response listing the available ownership providers.
 
-### Running the Desktop Client
+### Running the PyQt blotter client
 
-The desktop client (PyQt6 + GPU-accelerated rendering) is **not yet available** in this repository.
+```bash
+cd client
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e ".[dev]"
+export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8080
+export LICENSE_SECRET_KEY=   # same value as the backend process
+python -m computerpets_client
+```
 
-When the client is developed, it will be located in a separate directory (likely `client/` or `desktop/`). Instructions for installing Python dependencies and launching the client will be added to this guide at that time.
+Unlock is fail-closed against [CLIENT-CONTRACT.md](CLIENT-CONTRACT.md). Details: [client/README.md](../client/README.md).
+
+The Electron overlay is still `cd desktop && npm start`.
 
 ---
 

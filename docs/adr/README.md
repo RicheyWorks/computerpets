@@ -7,7 +7,7 @@ choice a new engineer will trip over if they only read the living desk or a
 stale paragraph in `ARCHITECTURE.md`.
 
 ADRs are not a wishlist. Do not file one for Solana, a live NFT collection
-address, a PyQt client, or an API that is not on `main`.
+address, or an API that is not on `main`.
 
 | Field | Value |
 |-------|--------|
@@ -23,8 +23,9 @@ address, a PyQt client, or an API that is not on `main`.
 | [0002](0002-aes-gcm-license-and-short-jwt.md) | AES-256-GCM licenses plus a short JWT | Accepted |
 | [0003](0003-redis-rate-limit-and-jti-denylist.md) | Redis for shared rate limits and the jti deny-list; Postgres is the revoke ledger | Accepted |
 | [0004](0004-empty-nft-allowlist.md) | Official NFT allowlist stays empty until a collection exists | Accepted |
-| [0005](0005-electron-overlay-implements-client-contract.md) | Electron overlay implements the client contract; PyQt remains vision | Accepted |
+| [0005](0005-electron-overlay-implements-client-contract.md) | Electron overlay implements the client contract (PyQt-vision clause superseded by 0007) | Superseded (in part) |
 | [0006](0006-spring-profiles-and-kubernetes-manifests.md) | Spring `dev` / `staging` / `prod` profiles and Kubernetes manifests (not Helm) | Accepted |
+| [0007](0007-pyqt-blotter-client.md) | PyQt6 blotter client implements the same contract; Electron overlay stays | Accepted |
 
 ## How to add one
 
