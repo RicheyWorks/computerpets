@@ -51,6 +51,14 @@ public final class ApiExamples {
         }
         """;
 
+    public static final String VERIFY_ITCH_REQUEST = """
+        {
+          "gameId": "3",
+          "downloadKey": "YWKse5jeAeuZ8w3a5qO2b2PId1sChw2B9b637w6z",
+          "petType": "red_panda"
+        }
+        """;
+
     public static final String DOWNLOAD_REQUEST = """
         {
           "ciphertext": "base64ciphertext...",
@@ -218,6 +226,13 @@ public final class ApiExamples {
                 .value(VERIFY_MICROSOFT_REQUEST);
     }
 
+    public static Example itchVerificationRequest() {
+        return new Example()
+                .summary("Verify ownership via Itch.io")
+                .description("Example request body for verifying an itch.io download-key receipt")
+                .value(VERIFY_ITCH_REQUEST);
+    }
+
     public static Example verifySuccessResponse() {
         return new Example()
                 .summary("Successful ownership verification")
@@ -345,7 +360,8 @@ public final class ApiExamples {
         [
           { "key": "steam", "displayName": "Steam" },
           { "key": "nft", "displayName": "Ethereum NFT" },
-          { "key": "microsoft", "displayName": "Microsoft Store" }
+          { "key": "microsoft", "displayName": "Microsoft Store" },
+          { "key": "itch", "displayName": "Itch.io" }
         ]
         """;
 
@@ -353,7 +369,7 @@ public final class ApiExamples {
         {
           "error": "unknown provider",
           "provider": "epic",
-          "validProviders": "steam, nft, microsoft"
+          "validProviders": "steam, nft, microsoft, itch"
         }
         """;
 
