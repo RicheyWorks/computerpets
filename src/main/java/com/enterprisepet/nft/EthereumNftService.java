@@ -94,27 +94,25 @@ public class EthereumNftService implements OwnershipProvider {
 
     @Override
     public VerificationResult verify(Map<String, String> request) {
-        String rawWallet   = request.get("walletAddress");
-        String rawContract = request.get("contractAddress");
-        String rawToken    = request.get("tokenId");
-        if (isBlank(rawWallet) || isBlank(rawContract) || isBlank(rawToken)) {
+        NftVerifyRequest typed = NftVerifyRequest.from(request);
+        if (typed.walletAddress() == null || typed.contractAddress() == null || typed.tokenId() == null) {
             return VerificationResult.denied("walletAddress, contractAddress, and tokenId are required");
         }
 
-        Optional<String> wallet = EthereumAddress.normalize(rawWallet);
+        Optional<String> wallet = EthereumAddress.normalize(typed.walletAddress());
         if (wallet.isEmpty()) {
             return VerificationResult.denied("walletAddress is not a valid Ethereum address");
         }
-        Optional<String> contract = EthereumAddress.normalize(rawContract);
+        Optional<String> contract = EthereumAddress.normalize(typed.contractAddress());
         if (contract.isEmpty()) {
             return VerificationResult.denied("contractAddress is not a valid Ethereum address");
         }
-        Optional<BigInteger> tokenId = parseTokenId(rawToken);
+        Optional<BigInteger> tokenId = parseTokenId(typed.tokenId());
         if (tokenId.isEmpty()) {
             return VerificationResult.denied("tokenId must be a non-negative decimal integer");
         }
 
-        VerificationResult signature = checkSignature(request, wallet.get());
+        VerificationResult signature = checkSignature(typed, wallet.get());
         if (signature != null) {
             return signature;
         }
@@ -129,15 +127,15 @@ public class EthereumNftService implements OwnershipProvider {
 
         String mappedPet = null;
         if (collection.isPresent() && collection.get().hasTokenMap()) {
-            Optional<String> pet = collection.get().petKeyFor(rawToken.trim());
+            Optional<String> pet = collection.get().petKeyFor(typed.tokenId());
             if (pet.isEmpty()) {
                 return VerificationResult.denied("tokenId is not a ComputerPets entitlement on this collection");
             }
             mappedPet = pet.get();
-            String requested = request.get("petType");
-            if (!isBlank(requested) && !mappedPet.equalsIgnoreCase(requested.trim())) {
+            String requested = typed.petType();
+            if (requested != null && !mappedPet.equalsIgnoreCase(requested)) {
                 return VerificationResult.denied(
-                        "tokenId is bound to petType '" + mappedPet + "', not '" + requested.trim() + "'");
+                        "tokenId is bound to petType '" + mappedPet + "', not '" + requested + "'");
             }
         }
 
@@ -262,17 +260,15 @@ public class EthereumNftService implements OwnershipProvider {
      * @return a denied result when the signature policy fails; {@code null} when the check
      *         is skipped or the recovered signer matches {@code wallet}
      */
-    private VerificationResult checkSignature(Map<String, String> request, String wallet) {
-        String signature = request.get("signature");
-        String message = request.get("message");
-        boolean provided = !isBlank(signature) || !isBlank(message);
+    private VerificationResult checkSignature(NftVerifyRequest request, String wallet) {
+        boolean provided = request.hasSignature() || request.hasMessage();
         if (!props.isRequireSignature() && !provided) {
             return null;
         }
-        if (isBlank(signature) || isBlank(message)) {
+        if (!request.hasSignature() || !request.hasMessage()) {
             return VerificationResult.denied("message and signature are required to prove wallet control");
         }
-        Optional<String> signer = WalletSignature.recoverAddress(message, signature);
+        Optional<String> signer = WalletSignature.recoverAddress(request.message(), request.signature());
         if (signer.isEmpty() || !EthereumAddress.equalsNormalized(wallet, signer.get())) {
             return VerificationResult.denied("wallet signature does not match walletAddress");
         }
@@ -288,9 +284,5 @@ public class EthereumNftService implements OwnershipProvider {
             return Optional.empty();
         }
         return Optional.of(new BigInteger(t));
-    }
-
-    private static boolean isBlank(String s) {
-        return s == null || s.isBlank();
     }
 }

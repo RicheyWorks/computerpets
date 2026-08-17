@@ -145,34 +145,35 @@ public class EpicService implements OwnershipProvider {
 
     @Override
     public VerificationResult verify(Map<String, String> request) {
-        String accountId = request.get("accountId");
-        String sandboxId = request.get("sandboxId");
-        String catalogItemId = request.get("catalogItemId");
-        String platform = request.getOrDefault("platform", DEFAULT_PLATFORM);
+        EpicVerifyRequest typed = EpicVerifyRequest.from(request);
+        String accountId = typed.accountId();
+        String sandboxId = typed.sandboxId();
+        String catalogItemId = typed.catalogItemId();
+        String platform = typed.platform() == null ? DEFAULT_PLATFORM : typed.platform();
 
-        if (isBlank(accountId) || isBlank(sandboxId) || isBlank(catalogItemId)) {
+        if (accountId == null || sandboxId == null || catalogItemId == null) {
             return VerificationResult.denied("accountId, sandboxId, and catalogItemId are required");
         }
-        if (!ACCOUNT_ID.matcher(accountId.trim()).matches()) {
+        if (!ACCOUNT_ID.matcher(accountId).matches()) {
             return VerificationResult.denied("accountId must be a 32-character Epic Account ID");
         }
-        if (!CATALOG_TOKEN.matcher(sandboxId.trim()).matches()) {
+        if (!CATALOG_TOKEN.matcher(sandboxId).matches()) {
             return VerificationResult.denied("sandboxId is not a valid Epic sandbox id");
         }
-        if (!CATALOG_TOKEN.matcher(catalogItemId.trim()).matches()) {
+        if (!CATALOG_TOKEN.matcher(catalogItemId).matches()) {
             return VerificationResult.denied("catalogItemId is not a valid Epic catalog item id");
         }
-        if (isBlank(platform) || !PLATFORM.matcher(platform.trim()).matches()) {
+        if (!PLATFORM.matcher(platform).matches()) {
             return VerificationResult.denied("platform must be a letter-only Epic platform code (default EPIC)");
         }
-        if (!isBlank(configuredSandboxId) && !configuredSandboxId.trim().equals(sandboxId.trim())) {
+        if (!isBlank(configuredSandboxId) && !configuredSandboxId.trim().equals(sandboxId)) {
             return VerificationResult.denied("sandboxId is not an official ComputerPets Epic sandbox");
         }
-        if (!isBlank(configuredCatalogItemId) && !configuredCatalogItemId.trim().equals(catalogItemId.trim())) {
+        if (!isBlank(configuredCatalogItemId) && !configuredCatalogItemId.trim().equals(catalogItemId)) {
             return VerificationResult.denied("catalogItemId is not an official ComputerPets Epic catalog item");
         }
 
-        return ownsCatalogItem(accountId.trim(), sandboxId.trim(), catalogItemId.trim(), platform.trim())
+        return ownsCatalogItem(accountId, sandboxId, catalogItemId, platform)
                 .map(VerificationResult::granted)
                 .orElseGet(() -> VerificationResult.denied("Epic Games Store ownership not found"));
     }
