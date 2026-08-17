@@ -30,8 +30,14 @@ services:
       - EPIC_DEPLOYMENT_ID=${EPIC_DEPLOYMENT_ID:-}
       - EPIC_SANDBOX_ID=${EPIC_SANDBOX_ID:-}
       - EPIC_CATALOG_ITEM_ID=${EPIC_CATALOG_ITEM_ID:-}
+      # Shared rate-limit store (10/min verify, 30/min download per client IP)
+      - RATE_LIMIT_BACKEND=redis
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
@@ -58,6 +64,20 @@ services:
       test: ["CMD-SHELL", "pg_isready -U computerpets -d computerpets"]
       interval: 10s
       timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - computerpets-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: computerpets-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
       retries: 5
     restart: unless-stopped
     networks:

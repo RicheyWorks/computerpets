@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-17 (admin license ledger)          |
+| **Last Updated** | 2026-08-17 (Redis rate limiting)           |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -93,7 +93,7 @@ graph TD
         JS[JwtService + Filter]
         BS[PetBundleService<br/>HMAC-SHA256]
         CAT[PetCatalog<br/>static enum]
-        RL[RateLimitingFilter<br/>Bucket4j in-mem]
+        RL[RateLimitingFilter<br/>Bucket4j + Redis]
         SEC[SecurityConfig<br/>stateless JWT]
         EX[GlobalExceptionHandler<br/>RFC 7807]
     end
@@ -159,7 +159,7 @@ The service is currently designed and run as a single Spring Boot executable JAR
 
 - One JVM process listening on port 8080 (configurable via `server.port`).
 - In-memory H2 database (`jdbc:h2:mem:enterprisepet`, `ddl-auto=create-drop`).
-- In-process `ConcurrentHashMap`-backed Bucket4j rate limiter (per-JVM only).
+- Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503.
 - All three critical secrets (`LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`) loaded from environment variables with strict `@PostConstruct` startup validation that refuses to run on missing or placeholder values.
 - No `Dockerfile`, no Kubernetes manifests, and no CI image-building pipeline exist in the repository today.
 - External dependencies (Alchemy, Microsoft Collections, Steam Web API, future CDN) are called directly over the public internet with no circuit breakers or retries configured.
@@ -226,7 +226,7 @@ flowchart TB
     LB --> App1 & App2 & AppN
 
     App1 & App2 & AppN -->|JPA / JDBC| Postgres
-    App1 & App2 & AppN -->|Bucket4j + Redisson| Redis
+    App1 & App2 & AppN -->|Bucket4j + Lettuce| Redis
     App1 & App2 & AppN -->|ownerOf, collections/query, GetOwnedGames| ETH & MS & STEAM
     App1 & App2 & AppN -. "init + periodic rotation" .-> Secrets
 
@@ -238,7 +238,7 @@ flowchart TB
 ```
 
 ### Key Deployment Characteristics & Gaps
-- **Scalability** — Backend replicas scale independently of storage. The CDN tier absorbs virtually all download traffic. Adding replicas is safe once rate limiting and (future) license state are moved to Redis/Postgres.
+- **Scalability** — Backend replicas scale independently of storage. The CDN tier absorbs virtually all download traffic. Rate-limit buckets are shared in Redis; issued licenses live in Postgres.
 - **Resilience & Zero-Downtime** — Multiple replicas + readiness probes + external durable stores allow rolling updates and node failures without losing the ability to validate existing licenses (they are cryptographically self-contained).
 - **Security Boundaries** — Only the backend pods ever receive the master AES key and signing keys. The CDN, load balancers, and clients never see them.
 - **Current Gaps** (must be closed before production):
@@ -289,7 +289,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 
 ### 4.4 Cross-Cutting & Infrastructure
 - **`SecurityConfig`** + **`JwtAuthenticationFilter`**: Stateless JWT auth (permitAll on verify/pets, authenticated on download). Filter populates `SecurityContext` with a `Map` principal for claim access.
-- **`RateLimitingFilter`**: Token-bucket per-IP (10/min verify, 30/min download) using Bucket4j in-memory `ConcurrentHashMap`. Respects `X-Forwarded-For`.
+- **`RateLimitingFilter`**: Token-bucket per-IP (10/min verify, 30/min download) using Bucket4j on Redis (`LettuceBasedProxyManager`). Respects `X-Forwarded-For`. Redis-down → 503 fail-closed.
 - **`GlobalExceptionHandler`** (`@RestControllerAdvice`): Maps common Spring exceptions + catch-all to RFC 7807 `ProblemDetail`.
 - **`EnterprisePetBackendApplication`**: Standard `@SpringBootApplication`.
 - **Config**: `application.yml` with heavy use of env-var overrides and `@PostConstruct` guard clauses that refuse to start on missing/weak/placeholder secrets.
@@ -402,7 +402,7 @@ sequenceDiagram
 | Cryptography (Licenses)  | BouncyCastle (bcprov-jdk18on)           | 1.78.1      | Portable, explicit AES-GCM with AEAD; avoids JDK provider differences. |
 | Blockchain               | web3j core                              | 4.12.0      | Standard Java Ethereum client; supports `eth_call` for read-only ownership proofs without a full node. |
 | External HTTP            | Spring RestClient (new in 3.x) + Jackson| —           | Modern, fluent, no RestTemplate boilerplate. |
-| Rate Limiting            | Bucket4j                                | 8.10.1      | Pure Java token bucket with zero external deps for the core; trivial to swap `bucket4j-redis` later. |
+| Rate Limiting            | Bucket4j + Lettuce Redis                | 8.10.1      | Same token-bucket math as the in-memory store; `bucket4j-redis` CAS so replicas share 10/min verify and 30/min download. Fail-closes with 503 if Redis is down. |
 | Persistence (scaffolded) | Spring Data JPA + Hibernate + H2 / Postgres | —        | Standard; H2 for fast local dev, Postgres for production durability/audit. Currently unused. |
 | Steam Integration        | Spring RestClient + Steam Web API       | —           | `SteamService` calls `IPlayerService/GetOwnedGames` via RestClient. steam-condenser was unused and has been removed. |
 | Build                    | Maven + Spring Boot Maven Plugin        | —           | Universal, works in restricted environments; explicit Java 21 compiler config. |
@@ -485,7 +485,7 @@ No resources other than `application.yml`; static assets and actual pet bundles 
 | **Stateless crypto licenses instead of server-side sessions or DB rows** | Simple horizontal scaling; client carries the proof; server only needs the master key. | Revocation, usage analytics, and "one active license per owner" policies require future persistence layer. |
 | **Two-phase download (encrypted license + short JWT)** with explicit claim cross-check in `DownloadController` | Strong defense-in-depth against token replay and cross-pet attacks. | Extra round-trip and client complexity; JWT is only useful for the download handshake. |
 | **HMAC-signed URLs rather than direct S3 presigned URLs or serving bytes** | Decouples storage backend; allows custom edge logic (IP binding, one-time use, logging) without changing the Java service. | Requires a verifier at the CDN/edge or a lightweight proxy; signature is replayable for 15 min from any IP today. |
-| **In-memory Bucket4j + `ConcurrentHashMap`** | Zero external dependencies for MVP; trivial to reason about. | Not shared across replicas; unbounded growth of map keys over time (no automatic eviction policy beyond Bucket4j's internal). |
+| **Redis Bucket4j + Lettuce (`rate-limit.backend=redis`)** | Shared per-IP verify/download buckets across replicas; idle keys expire after the refill window. | Redis is now a runtime dependency. Unreachable Redis fail-closes (503) instead of lifting the limit. `memory` is tests / single-process only. |
 | **No DTOs / OpenAPI for the verify body** (`Map<String,String>`) | Maximum flexibility for wildly different provider payloads; fast to iterate. | Poor discoverability, no compile-time safety, harder to generate client SDKs. |
 | **Synchronous external calls during verify** | Simple code, easy to understand and debug. | Latency and partial failure modes (one provider slow → whole request slow). No circuit breaker today. |
 | **H2 + create-drop + show-sql in default profile** | Excellent local developer experience. | Easy to accidentally run against real data; production config must be explicit. |
@@ -510,16 +510,16 @@ Many of these decisions are explicitly called out as intentional in the code com
 - ~~**P0**: Steam and Microsoft providers are no-op stubs**~~ → Partially addressed. Steam now uses the real Web API. Microsoft still supports a `dev-mode` flag (useful for local development). Provider toggles via `ownership.providers.*.enabled` were added for fine-grained control.
 - ~~**P0**: NFT ownership check uses fragile `String.contains(substring(2))` parsing**~~ → **Completed**, then hardened (Aug 2026): `FunctionReturnDecoder`, checksum-insensitive address compare, official collection allowlist, token→pet binding, ERC-1155, optional `personal_sign`.
 - No persistence → impossible to revoke a license or detect replays beyond the 365-day expiry.
-- Rate-limit buckets and provider state are in-memory only.
+- ~~Rate-limit buckets are in-memory only~~ → Redis-backed Bucket4j (Lettuce). Distributed jti blacklist is still open.
 - `X-Forwarded-For` is trusted unconditionally (spoofing risk if not behind a trusted proxy).
 - No authentication or rate limiting on some discovery endpoints in practice (all routes under `/api/verify` and `/api/pets` are public).
 - ~~**No tests, no contract tests against the external providers**~~ → **Basic unit tests added** for Steam, Microsoft, NFT, Itch, and Epic. Integration-style HTTP mocking is in place for Steam, Microsoft, Itch, and Epic.
 - ~~Default license key present in `application.yml`**~~ → **Completed**. The application now fails fast at startup if the committed default key is used (except under the 'test' profile). The fallback default was removed from `application.yml`.
 
 ### Scalability Outlook
-- **Horizontal**: Excellent for the verification tier (stateless). Add more replicas behind a load balancer; the main blocker is rate-limit state.
+- **Horizontal**: Excellent for the verification tier (stateless). Replicas share rate-limit buckets via Redis; license state is already in Postgres.
 - **Download tier**: Handled by CDN; the backend only does lightweight signature generation.
-- **Future scaling knobs**: Replace Bucket4j store with Redis, persist licenses to Postgres (or a dedicated license service), add caching for repeated ownership checks (with short TTLs).
+- **Future scaling knobs**: Distributed jti blacklist on Redis, caching for repeated ownership checks (with short TTLs).
 - **Throughput**: Verification calls are low-volume by nature (human + desktop app cadence); the service is not designed for high-frequency trading-style traffic.
 
 ### Security Considerations
@@ -613,7 +613,7 @@ Goal: Significantly reduce blast radius and improve defense-in-depth.
 Goal: Prepare for horizontal scaling and real production traffic.
 
 - **3.1 Distributed Rate Limiting & State**
-  - Replace in-memory Bucket4j with Redis-backed rate limiting
+  - [x] Replace in-memory Bucket4j with Redis-backed rate limiting
   - Move short-lived revocation / jti blacklists to Redis
 
 - **3.2 Database & Persistence Maturity**
