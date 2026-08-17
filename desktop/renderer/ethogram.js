@@ -48,6 +48,16 @@
     seahorse: [A("hitch", "sit_hold", 2.4, 3, "sit"), A("hover", "bob", 1.4, 2)],
     manta: [A("soar", "pulse", 1.4, 3), A("glide", "bob", 1.8, 2)],
     moray: [A("gape", "gape", 1.2, 3), A("hide", "sit_hold", 2.2, 3, "sit"), A("dart", "dart", 0.8, 2)],
+    moss: [A("lean", "lean", 1.8, 3), A("nod", "nod", 1.0, 2, "sit"), A("still", "freeze", 2.4, 2)],
+    maidenhair: [A("unfurl", "unfurl", 1.8, 4, "sit"), A("lean", "lean", 1.4, 2), A("nod", "nod", 0.9, 1, "sit")],
+    ginkgo: [A("lean", "lean", 1.6, 3), A("nod", "nod", 1.0, 2, "sit"), A("still", "freeze", 2.0, 2)],
+    oak: [A("lean", "lean", 1.6, 3), A("nod", "nod", 1.1, 2, "sit"), A("still", "freeze", 2.2, 2)],
+    water_lily: [A("open", "open", 1.8, 4, "sit"), A("nod", "nod", 1.0, 2, "sit"), A("lean", "lean", 1.2, 1)],
+    orchid: [A("unfurl", "unfurl", 1.6, 2, "sit"), A("lean", "lean", 1.4, 3), A("nod", "nod", 0.9, 2, "sit")],
+    saguaro: [A("still", "freeze", 2.8, 4), A("lean", "lean", 1.6, 2), A("nod", "nod", 1.2, 1, "sit")],
+    venus_flytrap: [A("snap", "snap", 0.7, 2, "play"), A("lean", "lean", 1.4, 3), A("nod", "nod", 1.0, 2, "sit")],
+    pitcher: [A("still", "freeze", 3.2, 5), A("lean", "lean", 1.6, 2), A("nod", "nod", 1.0, 1, "sit")],
+    sundew: [A("curl", "curl", 2.0, 4, "sit"), A("lean", "lean", 1.4, 2), A("nod", "nod", 0.9, 1, "sit")],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",
@@ -120,9 +130,26 @@
     } else if (motion === "gulp") {
       pose.dy = Math.sin(u * Math.PI) * 5;
       pose.stretch = 1 + Math.sin(u * Math.PI) * 0.04;
-    } else if (motion === "nod") {
+    }     else if (motion === "nod") {
       pose.dy = -Math.sin(u * Math.PI) * 6;
       pose.stretch = 1 - Math.sin(u * Math.PI) * 0.04;
+    } else if (motion === "lean") {
+      pose.rot = Math.sin(u * Math.PI) * 8;
+      pose.dx = Math.sin(u * Math.PI) * 4;
+    } else if (motion === "unfurl") {
+      pose.stretch = 0.88 + Math.sin(u * Math.PI) * 0.16;
+      pose.squat = 2 - pose.stretch;
+    } else if (motion === "snap") {
+      pose.stretch = 1 - Math.sin(u * Math.PI) * 0.12;
+      pose.squat = 2 - pose.stretch;
+      pose.dy = Math.sin(u * Math.PI) * 3;
+    } else if (motion === "open") {
+      pose.stretch = 1 + Math.sin(u * Math.PI) * 0.1;
+      pose.squat = 2 - pose.stretch;
+    } else if (motion === "curl") {
+      pose.rot = Math.sin(u * Math.PI) * 6;
+      pose.stretch = 1 - Math.sin(u * Math.PI) * 0.08;
+      pose.squat = 2 - pose.stretch;
     }
     return pose;
   }

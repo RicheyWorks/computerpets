@@ -47,6 +47,16 @@ const LINES: Record<string, string> = {
   seahorse: "I hitched your pencil. Briefly.",
   manta: "I soared the bowl. You may keep the sky.",
   moray: "I was the door. Then I was gone.",
+  moss: "I carpeted. Then I was the page again.",
+  maidenhair: "I unfurled. Then I folded.",
+  ginkgo: "I golded. Then I left the autumn.",
+  oak: "I dropped one. Then I was small again.",
+  water_lily: "I opened. Then I closed.",
+  orchid: "I bloomed. Then I was bark again.",
+  saguaro: "I stored a visit. Then I sat.",
+  venus_flytrap: "I did not snap. Then I left the cup.",
+  pitcher: "I kept the well. Then I left the rain.",
+  sundew: "I glittered. Then I uncurled.",
 };
 
 export function visitLine(guestKey: string) {

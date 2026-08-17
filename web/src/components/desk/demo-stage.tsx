@@ -14,6 +14,7 @@ import { traitFor } from "@/lib/pets/traits";
 import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { applySpecial } from "@/lib/pets/specials";
+import { isGarden } from "@/lib/pets/garden";
 import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
@@ -404,6 +405,10 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
           ) : isSea(kind.key) ? (
             <Button asChild variant="secondary">
               <Link to="/sea">The tide</Link>
+            </Button>
+          ) : isGarden(kind.key) ? (
+            <Button asChild variant="secondary">
+              <Link to="/garden">The garden</Link>
             </Button>
           ) : (
             <Button asChild variant="secondary">

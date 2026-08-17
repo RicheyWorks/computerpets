@@ -71,6 +71,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "seahorse": (_a("hitch", "sit_hold", 2.4, 3, "sit"), _a("hover", "bob", 1.4, 2)),
     "manta": (_a("soar", "pulse", 1.4, 3), _a("glide", "bob", 1.8, 2)),
     "moray": (_a("gape", "gape", 1.2, 3), _a("hide", "sit_hold", 2.2, 3, "sit"), _a("dart", "dart", 0.8, 2)),
+    "moss": (_a("lean", "lean", 1.8, 3), _a("nod", "nod", 1.0, 2, "sit"), _a("still", "freeze", 2.4, 2)),
+    "maidenhair": (_a("unfurl", "unfurl", 1.8, 4, "sit"), _a("lean", "lean", 1.4, 2), _a("nod", "nod", 0.9, 1, "sit")),
+    "ginkgo": (_a("lean", "lean", 1.6, 3), _a("nod", "nod", 1.0, 2, "sit"), _a("still", "freeze", 2.0, 2)),
+    "oak": (_a("lean", "lean", 1.6, 3), _a("nod", "nod", 1.1, 2, "sit"), _a("still", "freeze", 2.2, 2)),
+    "water_lily": (_a("open", "open", 1.8, 4, "sit"), _a("nod", "nod", 1.0, 2, "sit"), _a("lean", "lean", 1.2, 1)),
+    "orchid": (_a("unfurl", "unfurl", 1.6, 2, "sit"), _a("lean", "lean", 1.4, 3), _a("nod", "nod", 0.9, 2, "sit")),
+    "saguaro": (_a("still", "freeze", 2.8, 4), _a("lean", "lean", 1.6, 2), _a("nod", "nod", 1.2, 1, "sit")),
+    "venus_flytrap": (_a("snap", "snap", 0.7, 2, "play"), _a("lean", "lean", 1.4, 3), _a("nod", "nod", 1.0, 2, "sit")),
+    "pitcher": (_a("still", "freeze", 3.2, 5), _a("lean", "lean", 1.6, 2), _a("nod", "nod", 1.0, 1, "sit")),
+    "sundew": (_a("curl", "curl", 2.0, 4, "sit"), _a("lean", "lean", 1.4, 2), _a("nod", "nod", 0.9, 1, "sit")),
 }
 
 TONGUE_KEYS = SNAKE_KEYS
@@ -155,4 +165,21 @@ def act_pose(motion: str | None, t: float, hold: float) -> dict[str, float]:
     elif motion == "nod":
         pose["dy"] = -math.sin(u * math.pi) * 6.0
         pose["stretch"] = 1.0 - math.sin(u * math.pi) * 0.04
+    elif motion == "lean":
+        pose["rot"] = math.sin(u * math.pi) * 8.0
+        pose["dx"] = math.sin(u * math.pi) * 4.0
+    elif motion == "unfurl":
+        pose["stretch"] = 0.88 + math.sin(u * math.pi) * 0.16
+        pose["squat"] = 2.0 - pose["stretch"]
+    elif motion == "snap":
+        pose["stretch"] = 1.0 - math.sin(u * math.pi) * 0.12
+        pose["squat"] = 2.0 - pose["stretch"]
+        pose["dy"] = math.sin(u * math.pi) * 3.0
+    elif motion == "open":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.1
+        pose["squat"] = 2.0 - pose["stretch"]
+    elif motion == "curl":
+        pose["rot"] = math.sin(u * math.pi) * 6.0
+        pose["stretch"] = 1.0 - math.sin(u * math.pi) * 0.08
+        pose["squat"] = 2.0 - pose["stretch"]
     return pose

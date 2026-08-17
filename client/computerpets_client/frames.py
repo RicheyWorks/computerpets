@@ -4,9 +4,10 @@ Drawn with QPainter into pixmaps, then composited by the GPU-backed scene.
 Not photographed assets and not a shader engine.
 
 Snakes crawl (S-curve / coil). The tide swims; hermit and horseshoe walk
-the damp floor. The others walk, with silhouette tells from the house
-catalog — rust panda, cream cat, corgi, bun, tuxedo, bill-first, and so
-on. No invented species.
+the damp floor. The garden sits and leans. The others walk, with
+silhouette tells from the house catalog — rust panda, cream cat, corgi,
+bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, pitcher well, sundew, and so on.
+No invented species.
 """
 
 from __future__ import annotations
@@ -162,6 +163,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         return
     if species.silhouette in ("hermit", "horseshoe"):
         _draw_tide_walker(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    if species.silhouette in (
+        "moss",
+        "fern",
+        "fan",
+        "seedling",
+        "pad",
+        "trap",
+        "orchid",
+        "cactus",
+        "pitcher",
+        "sundew",
+    ):
+        _draw_plant(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in ("bird", "parrot", "toucan", "phoenix", "penguin"):
         _draw_bird(p, species, anim, i, sit, eat, sleep, stride)
@@ -636,6 +651,203 @@ def _draw_tide_walker(
     if eat:
         p.setBrush(QBrush(QColor(40, 24, 20)))
         p.drawEllipse(QRectF(-8, 4 + sit, 8, 4))
+
+
+def _draw_plant(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    ear = _color(pal.ear)
+    lean = math.sin(i * 0.7) * (4 if anim in ("idle", "walk") else 1)
+    p.rotate(lean)
+    sil = species.silhouette
+
+    if sil == "moss":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-40, 8, 80, 22))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        for k, (x, y, w) in enumerate(((-28, 4, 22), (-8, 0, 26), (12, 6, 20), (-16, 12, 18))):
+            p.drawEllipse(QRectF(x, y, w, 12 + k % 3))
+        return
+    if sil == "fern":
+        p.setPen(QPen(ear, 2.2))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawLine(0, 28, 0, -8)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 0.8))
+        for k in range(-4, 5):
+            p.save()
+            p.translate(0, 18 - abs(k) * 5)
+            p.rotate(k * 18 + lean * 0.4)
+            p.drawEllipse(QRectF(2, -5, 22, 9))
+            p.restore()
+        return
+    if sil == "fan":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        for ang in (-40, -12, 16, 44):
+            p.save()
+            p.rotate(ang + lean * 0.3)
+            fan = QPainterPath()
+            fan.moveTo(0, 18)
+            fan.quadTo(-18, -8, 0, -22)
+            fan.quadTo(18, -8, 0, 18)
+            p.drawPath(fan)
+            p.restore()
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-6, 14, 12, 10))
+        return
+    if sil == "seedling":
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-5, 4, 10, 28), 4, 4)
+        p.setBrush(QBrush(body))
+        lobe = QPainterPath()
+        lobe.moveTo(0, 8)
+        lobe.quadTo(-28, -6, -8, -22)
+        lobe.quadTo(4, -8, 0, 8)
+        p.drawPath(lobe)
+        lobe2 = QPainterPath()
+        lobe2.moveTo(0, 8)
+        lobe2.quadTo(28, -4, 10, -20)
+        lobe2.quadTo(-2, -6, 0, 8)
+        p.drawPath(lobe2)
+        if anim == "play" or eat:
+            p.setBrush(QBrush(ring))
+            p.drawEllipse(QRectF(16, 18, 10, 8))
+        return
+    if sil == "pad":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-34, -6, 68, 28))
+        p.setPen(QPen(accent, 1.0))
+        p.drawLine(-2, 8, 28, 4)
+        open_bloom = anim in ("idle", "play", "talk") or eat
+        if open_bloom:
+            p.setBrush(QBrush(belly))
+            p.setPen(QPen(ring, 1.0))
+            for ang in range(0, 360, 45):
+                p.save()
+                p.translate(0, -6)
+                p.rotate(ang)
+                p.drawEllipse(QRectF(-5, -22, 10, 20))
+                p.restore()
+            p.setBrush(QBrush(ear))
+            p.drawEllipse(QRectF(-6, -12, 12, 12))
+        return
+    if sil == "trap":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-10, 10, 20, 16))
+        snap = anim == "play" or eat
+        gap = 4 if snap else 14
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-22, -gap - 6, 20, 18))
+        p.drawEllipse(QRectF(2, -gap - 6, 20, 18))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-20, -gap, 16, 12))
+        p.drawEllipse(QRectF(4, -gap, 16, 12))
+        p.setPen(QPen(accent, 1.2))
+        for t in range(-3, 4):
+            p.drawLine(-12 + t * 3, -gap - 8, -12 + t * 3, -gap - 14)
+            p.drawLine(12 + t * 3, -gap - 8, 12 + t * 3, -gap - 14)
+        return
+    if sil == "orchid":
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.0))
+        root = QPainterPath()
+        root.moveTo(-8, 20)
+        root.cubicTo(-28, 8, -24, -8, -10, -4)
+        p.drawPath(root)
+        root2 = QPainterPath()
+        root2.moveTo(6, 22)
+        root2.cubicTo(24, 10, 20, -6, 8, 0)
+        p.drawPath(root2)
+        p.setBrush(QBrush(body))
+        p.drawRoundedRect(QRectF(-6, -4, 12, 32), 5, 5)
+        p.setBrush(QBrush(belly))
+        p.setPen(QPen(ring, 1.0))
+        p.drawEllipse(QRectF(-16, -28, 32, 22))
+        p.drawEllipse(QRectF(-10, -36, 20, 16))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-5, -22, 10, 8))
+        return
+    if sil == "pitcher":
+        # Sarracenia purpurea — squat veined wells, not a flytrap cup.
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-16, 16, 32, 12))
+        for ang, dx, dy in ((-28, -18, 2), (0, 0, -4), (26, 16, 4)):
+            p.save()
+            p.translate(dx, dy)
+            p.rotate(ang + lean * 0.2)
+            well = QPainterPath()
+            well.moveTo(-8, 18)
+            well.quadTo(-14, 0, -6, -16)
+            well.quadTo(0, -22, 8, -14)
+            well.quadTo(12, 2, 8, 18)
+            well.closeSubpath()
+            p.setBrush(QBrush(body))
+            p.setPen(QPen(accent, 1.1))
+            p.drawPath(well)
+            p.setPen(QPen(ring, 1.0))
+            p.drawLine(-4, 8, -2, -8)
+            p.drawLine(2, 8, 4, -6)
+            p.setBrush(QBrush(belly))
+            p.setPen(Qt.PenStyle.NoPen)
+            p.drawEllipse(QRectF(-5, -12, 10, 6))
+            p.restore()
+        return
+    if sil == "sundew":
+        # Drosera rotundifolia — round pads, tentacles, dew. Not a flytrap.
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-10, 16, 20, 10))
+        curl = 0.55 if anim in ("play", "eat") else 1.0
+        for ang, length in ((-50, 26), (-18, 30), (16, 28), (48, 24)):
+            p.save()
+            p.rotate(ang + lean * 0.25)
+            p.setPen(QPen(body, 1.6))
+            p.drawLine(0, 16, 0, 16 - length)
+            p.setBrush(QBrush(belly))
+            p.setPen(QPen(accent, 0.8))
+            pad_w = 14 * curl
+            p.drawEllipse(QRectF(-pad_w / 2, 16 - length - 8, pad_w, 12 * curl))
+            p.setBrush(QBrush(ring))
+            p.setPen(Qt.PenStyle.NoPen)
+            for t in range(6):
+                a = t * (math.pi * 2 / 6)
+                r = 7 * curl
+                p.drawEllipse(QRectF(math.cos(a) * r - 1.6, 16 - length - 2 + math.sin(a) * r * 0.6, 3.2, 3.2))
+            p.restore()
+        return
+    # Cactus — ribs, spines, a young column. Not a tree.
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.2))
+    p.drawRoundedRect(QRectF(-14, -28, 28, 60), 12, 12)
+    p.setPen(QPen(ring, 1.0))
+    p.drawLine(-4, -20, -4, 24)
+    p.drawLine(4, -20, 4, 24)
+    p.setPen(QPen(accent, 1.1))
+    for y in range(-18, 26, 8):
+        p.drawLine(-14, y, -20, y - 3)
+        p.drawLine(14, y, 20, y - 3)
+    if sleep:
+        p.setBrush(QBrush(QColor(24, 16, 14)))
+        p.drawEllipse(QRectF(-6, -8, 5, 3))
+        p.drawEllipse(QRectF(2, -8, 5, 3))
 
 
 def _draw_snake(

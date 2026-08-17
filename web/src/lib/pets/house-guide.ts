@@ -1,3 +1,4 @@
+import { GARDEN_KEYS } from "./garden";
 import { ROSTER } from "./roster";
 import { SEA_KEYS } from "./sea";
 import { SNAKE_KEYS } from "./snakes";
@@ -20,6 +21,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   if (!roster) throw new Error(`house guide is missing roster for ${key}`);
   if (SNAKE_KEYS.includes(key)) throw new Error(`house guide does not file snakes: ${key}`);
   if (SEA_KEYS.includes(key)) throw new Error(`house guide does not file the tide: ${key}`);
+  if (GARDEN_KEYS.includes(key)) throw new Error(`house guide does not file the garden: ${key}`);
   return {
     key,
     slug: roster.slug,
@@ -199,6 +201,6 @@ export function houseGuideKeys() {
 
 /** The living roster minus snakes and the tide, and the guide, must name the same twenty. */
 export function houseGuideComplete() {
-  const living = ROSTER.filter((r) => !SNAKE_KEYS.includes(r.key) && !SEA_KEYS.includes(r.key)).map((r) => r.key);
+  const living = ROSTER.filter((r) => !SNAKE_KEYS.includes(r.key) && !SEA_KEYS.includes(r.key) && !GARDEN_KEYS.includes(r.key)).map((r) => r.key);
   return living.length === HOUSE_GUIDE.length && living.every((key) => BY_KEY[key]);
 }

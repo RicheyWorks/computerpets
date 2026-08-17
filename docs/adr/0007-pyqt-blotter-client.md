@@ -23,7 +23,8 @@ A new **`client/`** tree is the first PyQt6 blotter client:
 - `python -m computerpets_client` opens a window with a living pet.
   Every catalog key the backend `PetType` / web roster already has can
   appear (picker, cycle, or house voice). Snakes crawl; the tide swims;
-  hermit and horseshoe walk the damp floor; the others walk.
+  hermit and horseshoe walk the damp floor; the garden sits and leans;
+  the others walk.
 - Drawing is **Qt-accelerated**: `QGraphicsView` + `QOpenGLWidget`
   viewport (Qt RHI / OpenGL compositing). If OpenGL cannot attach, the
   scene falls back to Qt software raster and says so. This is **not** a
@@ -34,13 +35,13 @@ A new **`client/`** tree is the first PyQt6 blotter client:
   stub.
 - Care verbs that already exist on the living desk and fit this cut:
   feed, treat, play, hide / call back, clean, medicine, shed for the
-  ten snakes, the ten tide guests, and the forty species specials (Steal ribbon, Heel,
-  Play dead, Ink, …). The blotter can go unkempt; the guest can go unwell.
+  ten snakes, the ten tide guests, the ten garden plants, and the fifty species specials (Steal ribbon, Heel,
+  Play dead, Ink, Carpet, …). The blotter can go unkempt; the guest can go unwell.
 - Daily weather, today’s visitor, and snake shed are **ports** of
   `web/src/lib/pets/weather.ts`, `visitor.ts`, and `shed.ts` — not a
   third house clock and not a rewrite of `desktop/`. The blotter now
   keeps house hours from `hours.ts` (dawn / day / dusk / night, and
-  the forty rest windows) on the same wood. Play and the forty
+  the fifty rest windows) on the same wood. Play and the fifty
   specials are ports of `specials.ts` and `traits.ts`.
 - The Electron overlay remains a contract client. `desktop/` is not
   rewritten.

@@ -171,7 +171,7 @@ public final class ApiExamples {
         {
           "error": "unknown petType",
           "received": "unicorn",
-          "validKeys": "red_panda, cat, dog, rabbit, ..., moray"
+          "validKeys": "red_panda, cat, dog, rabbit, ..., saguaro"
         }
         """;
 
@@ -307,7 +307,9 @@ public final class ApiExamples {
           { "key": "octopus",           "displayName": "Common Octopus",        "rarity": "UNCOMMON" },
           { "key": "moon_jelly",        "displayName": "Moon Jelly",            "rarity": "COMMON" },
           { "key": "horseshoe_crab",    "displayName": "Atlantic Horseshoe Crab", "rarity": "UNCOMMON" },
-          { "key": "moray",             "displayName": "Green Moray",           "rarity": "RARE" }
+          { "key": "moray",             "displayName": "Green Moray",           "rarity": "RARE" },
+          { "key": "moss",              "displayName": "Sheet Moss",            "rarity": "COMMON" },
+          { "key": "saguaro",           "displayName": "Saguaro",               "rarity": "RARE" }
         ]
         """;
 
@@ -349,7 +351,7 @@ public final class ApiExamples {
         {
           "error": "unknown pet type",
           "key": "unicorn",
-          "validKeys": "red_panda, cat, dog, rabbit, ..., moray"
+          "validKeys": "red_panda, cat, dog, rabbit, ..., saguaro"
         }
         """;
 
