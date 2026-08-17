@@ -35,20 +35,14 @@ Spring Boot's resource resolver looks for `application.yml`, `application.yaml`,
 
 **Fix:** rename `src/main/resources/application (1).yml` → `application.yml`.
 
-### 2. `EthereumNftService` initializes web3j before `@Value` injection
+### 2. `EthereumNftService` Web3j client / constructor — **fixed**
 
-```java
-@Value("${ethereum.rpc-url:...}")
-private String rpcUrl;        // field-injected by Spring AFTER constructor runs
+The original bug was building `Web3j` in a no-arg constructor against a field-injected `@Value` `rpcUrl` that was still null. That path is gone:
 
-public EthereumNftService() {
-    this.web3j = Web3j.build(new HttpService(rpcUrl));   // rpcUrl is null here
-}
-```
-
-Spring sets `rpcUrl` *after* the no-arg constructor returns. At construction time `rpcUrl == null`, so `HttpService` is built against null. The web3j client will not point at the intended RPC.
-
-**Fix:** either constructor-inject `@Value` as a parameter, or move the `Web3j.build(...)` call into an `@PostConstruct` method.
+- `EthereumConfig` exposes a `Web3j` `@Bean` built from already-bound `EthereumProperties.getRpcUrl()`.
+- `HttpService` is never constructed with a null/blank URL (`EthereumConfig.httpService` rejects those).
+- `EthereumNftService` constructor-injects that client (`@Autowired` so Spring does not look for a no-arg constructor — extra test constructors would otherwise break context startup).
+- AUTO no longer treats a foreign `ownerOf` address as a positive ERC-1155 `balanceOf`.
 
 ### 3. The placeholder license master-key crashes at first issuance
 
