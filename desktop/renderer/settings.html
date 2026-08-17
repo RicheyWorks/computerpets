@@ -2,17 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>Minds — ComputerPets</title>
+    <title>House — ComputerPets</title>
     <style>
       :root { color-scheme: dark; }
-      body { margin: 0; font: 14px/1.45 "Segoe UI", system-ui, sans-serif; background: #161412; color: #f2ece3; }
+      body { margin: 0; font: 14px/1.45 "Segoe UI", system-ui, sans-serif; background: #161412; color: #f2ece3; overflow-y: auto; }
       main { padding: 20px 22px 28px; }
       h1 { font-size: 28px; font-weight: 500; margin: 0 0 6px; letter-spacing: -0.03em; }
+      h2 { font-size: 18px; font-weight: 500; margin: 28px 0 6px; }
       p.lead { color: #9a9288; margin: 0 0 18px; }
       label { display: block; margin: 12px 0 6px; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #9a9288; }
       select, input { width: 100%; box-sizing: border-box; height: 40px; border: 1px solid #2a2621; background: #1f1c19; color: #f2ece3; border-radius: 8px; padding: 0 10px; }
       button { margin-top: 16px; height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: #c4a574; color: #161412; font-weight: 600; }
+      button.ghost { background: transparent; color: #c4a574; border: 1px solid #2a2621; margin-left: 8px; }
       .ok { margin-top: 12px; color: #9a9288; font-size: 13px; }
+      .err { margin-top: 12px; color: #d9a08a; font-size: 13px; }
+      hr { border: 0; border-top: 1px solid #2a2621; margin: 28px 0 0; }
     </style>
   </head>
   <body>
@@ -29,6 +33,26 @@
       <input id="key" type="password" autocomplete="off" />
       <button id="save" type="button">Save house default</button>
       <p class="ok" id="ok"></p>
+      <hr />
+      <h2>Unlock</h2>
+      <p class="lead">Prove Steam ownership against the house backend. The desk pets still live here either way — this is the published license contract, not a second overlay.</p>
+      <label>Backend URL</label>
+      <input id="backend" placeholder="http://127.0.0.1:8080" />
+      <label>Provider</label>
+      <select id="provider"><option value="steam">Steam</option></select>
+      <label>Steam ID</label>
+      <input id="steamId" placeholder="76561198000000000" autocomplete="off" />
+      <label>App ID</label>
+      <input id="appId" placeholder="123456" autocomplete="off" />
+      <label>Pet</label>
+      <select id="petType"></select>
+      <div>
+        <button id="unlock" type="button">Unlock</button>
+        <button id="redownload" class="ghost" type="button">Signed download</button>
+        <button id="lock" class="ghost" type="button">Clear</button>
+      </div>
+      <p class="ok" id="licenseOk"></p>
+      <p class="err" id="licenseErr"></p>
     </main>
     <script src="mind.js"></script>
     <script>
@@ -61,6 +85,91 @@
         s.default = { plugin: plugin.value, model: model.value, baseUrl: base.value, apiKey: key.value };
         window.PetMind.save(s);
         document.getElementById("ok").textContent = "Saved. Talk to them again.";
+      });
+
+      const backend = document.getElementById("backend");
+      const steamId = document.getElementById("steamId");
+      const appId = document.getElementById("appId");
+      const petType = document.getElementById("petType");
+      const licenseOk = document.getElementById("licenseOk");
+      const licenseErr = document.getElementById("licenseErr");
+
+      fetch("roster.json")
+        .then((r) => r.json())
+        .then((roster) => {
+          (Array.isArray(roster) ? roster : []).forEach((row) => {
+            if (!row || !row.key) return;
+            const o = document.createElement("option");
+            o.value = row.key;
+            o.textContent = row.name ? `${row.name} — ${row.key}` : row.key;
+            petType.appendChild(o);
+          });
+          if (!petType.value) petType.value = "red_panda";
+        })
+        .catch(() => {
+          const o = document.createElement("option");
+          o.value = "red_panda";
+          o.textContent = "red_panda";
+          petType.appendChild(o);
+        });
+
+      function showLicense(status) {
+        if (!status) return;
+        if (status.backendUrl && !backend.value) backend.value = status.backendUrl;
+        if (status.fields) {
+          if (status.fields.steamId) steamId.value = status.fields.steamId;
+          if (status.fields.appId) appId.value = status.fields.appId;
+          if (status.fields.petType) petType.value = status.fields.petType;
+        }
+        licenseErr.textContent = status.ok === false && status.error ? status.error.message : status.error ? status.error.message : "";
+        if (status.unlocked && status.license) {
+          const bits = [status.license.pet, status.license.jti, "until " + status.license.validUntil];
+          licenseOk.textContent = "Unlocked — " + bits.join(" · ");
+          if (status.lastDownload && status.lastDownload.downloadUrl) {
+            licenseOk.textContent += status.lastDownload.bundle && status.lastDownload.bundle.ok
+              ? ". Bundle fetched."
+              : ". Signed URL issued.";
+          }
+        } else {
+          licenseOk.textContent = "Locked. Pets on the desk still work.";
+        }
+      }
+
+      if (window.desk?.licenseStatus) {
+        window.desk.licenseStatus().then(showLicense);
+      }
+
+      document.getElementById("unlock").addEventListener("click", async () => {
+        if (!window.desk?.licenseUnlock) {
+          licenseErr.textContent = "Unlock is only available in the desktop app.";
+          return;
+        }
+        licenseErr.textContent = "";
+        licenseOk.textContent = "Talking to the backend…";
+        const status = await window.desk.licenseUnlock({
+          backendUrl: backend.value,
+          provider: "steam",
+          steamId: steamId.value,
+          appId: appId.value,
+          petType: petType.value || "red_panda",
+        });
+        showLicense(status);
+      });
+
+      document.getElementById("redownload").addEventListener("click", async () => {
+        if (!window.desk?.licenseDownload) return;
+        licenseErr.textContent = "";
+        const status = await window.desk.licenseDownload();
+        if (status.ok === false) {
+          licenseErr.textContent = status.error ? status.error.message : "Download failed.";
+          return;
+        }
+        showLicense(await window.desk.licenseStatus());
+      });
+
+      document.getElementById("lock").addEventListener("click", async () => {
+        if (!window.desk?.licenseClear) return;
+        showLicense(await window.desk.licenseClear());
       });
     </script>
   </body>

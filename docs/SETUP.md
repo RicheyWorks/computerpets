@@ -335,7 +335,7 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
 ## Next Steps
 
 - Read the [Architecture Documentation](ARCHITECTURE.md) for a deep understanding of the system design.
-- Implement a native client against the [Client contract](CLIENT-CONTRACT.md) (license decrypt, hwid, download).
+- The Electron overlay in `desktop/` implements the first [Client contract](CLIENT-CONTRACT.md) slice (Steam verify, license decrypt, hwid, signed download). See `desktop/README.md`.
 - Explore the API examples in the main [README.md](../README.md).
 - Review the [Contributing Guidelines](CONTRIBUTING.md) if you plan to contribute.
 

@@ -87,7 +87,7 @@ npm start
 Windows: `.\desktop.ps1`  
 Mac: `sh desktop.sh`
 
-Package with `npm run dist:win` or `npm run dist:mac`. See [desktop/README.md](desktop/README.md).
+Package with `npm run dist:win` or `npm run dist:mac`. Unlock (Steam verify → license decrypt → hwid → signed download) is documented in [desktop/README.md](desktop/README.md).
 
 Phones and tablets: open the living desk **Live** page and Add to Home Screen.
 

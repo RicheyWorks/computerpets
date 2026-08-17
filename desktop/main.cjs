@@ -1,10 +1,37 @@
 const { app, BrowserWindow, Tray, Menu, ipcMain, nativeImage, screen, Notification, powerMonitor } = require("electron");
 const fs = require("fs");
 const path = require("path");
+const { createLicenseSession } = require("./license/session.cjs");
+const { LicenseError } = require("./license/errors.cjs");
 
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
 app.commandLine.appendSwitch("disable-renderer-backgrounding");
+
+/** @type {ReturnType<typeof createLicenseSession> | null} */
+let licenseSession = null;
+
+function getLicenseSession() {
+  if (!licenseSession) {
+    licenseSession = createLicenseSession({
+      userDataDir: app.getPath("userData"),
+      env: process.env,
+    });
+  }
+  return licenseSession;
+}
+
+function licenseIpc(fn) {
+  return async (_e, ...args) => {
+    try {
+      const result = await fn(...args);
+      return result && typeof result === "object" ? { ok: true, ...result } : { ok: true, result };
+    } catch (err) {
+      const code = err instanceof LicenseError ? err.code : "denied";
+      return { ok: false, unlocked: false, error: { code, message: err.message || String(err) } };
+    }
+  };
+}
 
 /** @type {BrowserWindow | null} */
 let win = null;
@@ -111,6 +138,7 @@ function trayTemplate() {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
+    { label: "Unlock…", click: () => openSettings() },
     { label: "Minds…", click: () => openSettings() },
     {
       label: "Show",
@@ -144,9 +172,9 @@ function openSettings() {
     return;
   }
   settingsWin = new BrowserWindow({
-    width: 420,
-    height: 560,
-    title: "Minds — ComputerPets",
+    width: 440,
+    height: 740,
+    title: "House — ComputerPets",
     autoHideMenuBar: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
@@ -221,6 +249,7 @@ function popupPetMenu(x, y) {
     { type: "separator" },
     ...careMenu(),
     { type: "separator" },
+    { label: "Unlock…", click: () => openSettings() },
     { label: "Minds…", click: () => openSettings() },
     { type: "separator" },
     { label: `Hide ${currentName()}`, click: () => win?.hide() },
@@ -295,6 +324,11 @@ ipcMain.on("mind-get", (e) => {
 ipcMain.on("mind-set", (_e, data) => {
   writeMind(data);
 });
+
+ipcMain.handle("license-status", licenseIpc(() => getLicenseSession().status()));
+ipcMain.handle("license-unlock", licenseIpc((input) => getLicenseSession().unlock(input || {})));
+ipcMain.handle("license-download", licenseIpc(() => getLicenseSession().download()));
+ipcMain.handle("license-clear", licenseIpc(() => getLicenseSession().clear()));
 
 app.on("window-all-closed", () => {
   app.quit();
