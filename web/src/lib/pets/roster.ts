@@ -1,3 +1,4 @@
+import { SEA_ROSTER } from "./sea";
 import { SNAKE_ROSTER } from "./snakes";
 
 export type RosterLines = {
@@ -576,4 +577,5 @@ export const ROSTER: RosterDef[] = [
     },
   },
   ...SNAKE_ROSTER,
+  ...SEA_ROSTER,
 ];

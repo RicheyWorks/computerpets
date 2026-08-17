@@ -19,16 +19,19 @@ class PetCatalogTest {
     }
 
     @Test
-    @DisplayName("list returns all 30 house species in declaration order")
+    @DisplayName("list returns the full house catalog in declaration order")
     void list_returnsFullHouse() {
         List<PetType> pets = catalog.list();
-        assertThat(pets).hasSize(30);
+        assertThat(pets).hasSize(PetType.values().length);
         assertThat(pets.getFirst()).isEqualTo(PetType.RED_PANDA);
-        assertThat(pets.getLast()).isEqualTo(PetType.CARPET_PYTHON);
+        assertThat(pets.getLast()).isEqualTo(PetType.MORAY);
         assertThat(pets).contains(
                 PetType.BALL_PYTHON,
                 PetType.GREEN_TREE_PYTHON,
-                PetType.CARPET_PYTHON
+                PetType.CARPET_PYTHON,
+                PetType.OCTOPUS,
+                PetType.HORSESHOE_CRAB,
+                PetType.MANTA
         );
     }
 
@@ -45,14 +48,14 @@ class PetCatalogTest {
     @DisplayName("listByRarity includes the new snake rarities")
     void listByRarity_includesSnakes() {
         assertThat(catalog.listByRarity(PetType.Rarity.COMMON))
-                .hasSize(12)
-                .contains(PetType.BALL_PYTHON, PetType.CORN_SNAKE, PetType.GARTER);
+                .hasSize(15)
+                .contains(PetType.BALL_PYTHON, PetType.CORN_SNAKE, PetType.GARTER, PetType.MOON_JELLY, PetType.HERMIT_CRAB);
         assertThat(catalog.listByRarity(PetType.Rarity.UNCOMMON))
-                .hasSize(10)
-                .contains(PetType.KINGSNAKE, PetType.HOGNOSE, PetType.MILK_SNAKE, PetType.ROSY_BOA);
+                .hasSize(14)
+                .contains(PetType.KINGSNAKE, PetType.HOGNOSE, PetType.OCTOPUS, PetType.HORSESHOE_CRAB);
         assertThat(catalog.listByRarity(PetType.Rarity.RARE))
-                .hasSize(6)
-                .contains(PetType.GREEN_TREE_PYTHON, PetType.BOA, PetType.CARPET_PYTHON);
+                .hasSize(9)
+                .contains(PetType.GREEN_TREE_PYTHON, PetType.BOA, PetType.NAUTILUS, PetType.MANTA, PetType.MORAY);
         assertThat(catalog.listByRarity(PetType.Rarity.LEGENDARY)).hasSize(2);
     }
 
@@ -66,9 +69,9 @@ class PetCatalogTest {
                 PetType.Rarity.RARE,
                 PetType.Rarity.LEGENDARY
         );
-        assertThat(grouped.get(PetType.Rarity.COMMON)).hasSize(12);
-        assertThat(grouped.get(PetType.Rarity.UNCOMMON)).hasSize(10);
-        assertThat(grouped.get(PetType.Rarity.RARE)).hasSize(6);
+        assertThat(grouped.get(PetType.Rarity.COMMON)).hasSize(15);
+        assertThat(grouped.get(PetType.Rarity.UNCOMMON)).hasSize(14);
+        assertThat(grouped.get(PetType.Rarity.RARE)).hasSize(9);
         assertThat(grouped.get(PetType.Rarity.LEGENDARY)).hasSize(2);
     }
 
@@ -79,7 +82,9 @@ class PetCatalogTest {
         assertThat(csv).startsWith("red_panda,");
         assertThat(csv).contains("ball_python");
         assertThat(csv).contains("green_tree_python");
-        assertThat(csv).endsWith("carpet_python");
-        assertThat(csv.split(", ")).hasSize(30);
+        assertThat(csv).contains("octopus");
+        assertThat(csv).contains("horseshoe_crab");
+        assertThat(csv).endsWith("moray");
+        assertThat(csv.split(", ")).hasSize(PetType.values().length);
     }
 }

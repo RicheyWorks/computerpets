@@ -36,12 +36,22 @@ HOUSE_TRAITS = {
     "milk_snake": ("mimic", "Mimic", "I am not who I look like. Hello."),
     "rosy_boa": ("nest", "Nest", "I am a blush that learned to crawl."),
     "carpet_python": ("chart", "Chart", "This pattern is a map. I am the country."),
+    "octopus": ("ink", "Ink", "I jet. Then I am a cup again."),
+    "cuttlefish": ("flush", "Flush", "I changed for you. Then I changed back."),
+    "nautilus": ("rise", "Rise", "I have been rising. You may wait."),
+    "moon_jelly": ("pulse", "Pulse", "I pulsed. That was hello."),
+    "sea_star": ("cling", "Cling", "I have not moved. That is hello."),
+    "hermit_crab": ("trade", "Trade", "This shell is temporary. Hello."),
+    "horseshoe_crab": ("molt", "Molt", "I am not a crab. Hello."),
+    "seahorse": ("hitch", "Hitch", "I hitched. You may look."),
+    "manta": ("soar", "Soar", "I saved you a length of sky."),
+    "moray": ("gape", "Gape", "The gape is air. Not a threat. Mostly."),
 }
 
 
 def test_every_catalog_key_has_the_house_special():
     assert set(TRAITS) == set(CATALOG_KEYS)
-    assert len(TRAITS) == 30
+    assert len(TRAITS) == len(CATALOG_KEYS)
     for key in CATALOG_KEYS:
         trait = trait_for(key)
         special, verb, line = HOUSE_TRAITS[key]

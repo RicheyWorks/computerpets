@@ -1,6 +1,6 @@
 # ComputerPets — PyQt blotter client
 
-A first real PyQt6 desk: **all thirty living companions** from the house catalog live on a wooden blotter — the original twenty who walk, and the ten snakes who crawl. A day here keeps the same **house hours** (dawn / day / dusk / night, and each species’ rest window), the same **weather** they sit or swim in, **today’s house visitor** walking through, and snakes that go **blue and shed** (the old coat stays on the wood). The blotter can go **unkempt** and the guest **unwell**, the way the web desk already does — ink smudges, a dull wash, **Clean** and **Medicine**. **Play** and each species’ **special** (Steal ribbon, Heel, Play dead, Coil, …) teach the house the way the web desk already does. Tap a guest (or a name on the rail) and a **species plaque** teaches the house the way `/study` and `/snakes` do: a tell, one mix-up, the latin, and the house voice. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
+A first real PyQt6 desk: **all forty living companions** from the house catalog live on a wooden blotter — the original twenty who walk, the ten snakes who crawl, and a tide of ten sea creatures. The tide den at `/sea` is the classroom for the marine guests. A day here keeps the same **house hours** (dawn / day / dusk / night, and each species’ rest window), the same **weather** they sit or swim in, **today’s house visitor** walking through, and snakes that go **blue and shed** (the old coat stays on the wood). The blotter can go **unkempt** and the guest **unwell**, the way the web desk already does — ink smudges, a dull wash, **Clean** and **Medicine**. **Play** and each species’ **special** (Steal ribbon, Heel, Play dead, Coil, …) teach the house the way the web desk already does. Tap a guest (or a name on the rail) and a **species plaque** teaches the house the way `/study` and `/snakes` do: a tell, one mix-up, the latin, and the house voice. Unlock talks to a running house backend using the published [client contract](../docs/CLIENT-CONTRACT.md). The Electron overlay in `desktop/` is unchanged and still implements that same contract.
 
 This is **not** a custom GPU shader engine. Drawing uses Qt’s GPU-backed scene: `QGraphicsView` with a `QOpenGLWidget` viewport (Qt RHI / OpenGL compositing). If the platform cannot create an OpenGL surface, the scene falls back to Qt software raster and says so in the status bar.
 
@@ -32,15 +32,15 @@ Headless smoke (CI / no display):
 QT_QPA_PLATFORM=offscreen python -m computerpets_client --check
 ```
 
-`--check` opens the window (offscreen), confirms a living pet and a species plaque are on the blotter, prints the day’s weather, the day part, whether the default guest is resting at a fixture hour, who may call, the default guest’s special verb, whether they are well, the renderer line, and the thirty-kind count, and exits.
+`--check` opens the window (offscreen), confirms a living pet and a species plaque are on the blotter, prints the day’s weather, the day part, whether the default guest is resting at a fixture hour, who may call, the default guest’s special verb, whether they are well, the renderer line, and the forty-kind count, and exits.
 
 ## Meet the house
 
-The **species rail** (house, then den) and the combo / prev-next cycle are the same thirty wire keys as `PetType` and the Electron overlay roster. Tap a name or cycle — they greet in their own voice. Tap the guest on the wood and they say the lesson. Snakes crawl; the others walk. Palettes and tells come from the existing house catalog (Rui’s rust, Bandit’s black-and-white bands, Keel’s bill, Bluff’s upturned snout). No invented species.
+The **species rail** (house, then den, then tide) and the combo / prev-next cycle are the same forty wire keys as `PetType` and the Electron overlay roster. Tap a name or cycle — they greet in their own voice. Tap the guest on the wood and they say the lesson. Snakes crawl; the tide swims (hermit and horseshoe walk the damp floor); the others walk. Palettes and tells come from the existing house catalog (Rui’s rust, Bandit’s black-and-white bands, Cup’s arms, Ledger’s book-gills). No invented species.
 
-The **plaque** under the blotter is the classroom. Same copy as the web field guides: Coral’s red-touches-black, Nori balls vs Lula holds, Bandit no red; red panda not a bear, axolotl kept its gills. You do not leave the window.
+The **plaque** under the blotter is the classroom. Same copy as the web field guides: Coral’s red-touches-black, Nori balls vs Lula holds, Bandit no red; a moon jelly is not a fish; a horseshoe crab is not a crab; the moray’s gape is breath. You do not leave the window.
 
-The clock, the sky, the caller, the shed, and the specials are ports of `web/src/lib/pets/hours.ts`, `weather.ts`, `visitor.ts`, `shed.ts`, and `specials.ts` / `traits.ts` — not a third house. Hours is the clock; weather is the sky. Both can show. Rain / wind / heat only. Today’s visitor is `todaysVisitor`. The ten snakes go blue after eight hours and leave a cream coat on the blotter. Mess, illness, clean, and medicine are the same science as `care.ts`. Play and the thirty verbs are the ones the living desk already knows.
+The clock, the sky, the caller, the shed, and the specials are ports of `web/src/lib/pets/hours.ts`, `weather.ts`, `visitor.ts`, `shed.ts`, and `specials.ts` / `traits.ts` — not a third house. Hours is the clock; weather is the sky. Both can show. Rain / wind / heat only. Today’s visitor is `todaysVisitor`. The ten snakes go blue after eight hours and leave a cream coat on the blotter. Mess, illness, clean, and medicine are the same science as `care.ts`. Play and the forty verbs are the ones the living desk already knows.
 
 Pets walk (or crawl) without a license — same as the overlay.
 
@@ -98,16 +98,16 @@ client/
 ├── computerpets_client/
 │   ├── app.py              # window + entry
 │   ├── blotter.py          # wood/blotter scene + OpenGL viewport
-│   ├── frames.py           # procedural frames (walk + snake crawl)
+│   ├── frames.py           # procedural frames (walk + snake crawl + tide)
 │   ├── life.py             # feed / treat / play / hide / clean / medicine / shed stats
 │   ├── hours.py            # port of web hours.ts (dawn / day / dusk / night, REST)
 │   ├── weather.py          # port of web weather.ts (clear / rain / wind / heat)
 │   ├── visitor.py          # port of web visitor.ts (todaysVisitor)
 │   ├── shed.py             # port of web shed.ts (blue, coat on the wood)
 │   ├── specials.py         # port of web specials.ts + traits special / verb / line
-│   ├── rail.py             # study-style species rail (30 keys)
+│   ├── rail.py             # study-style species rail (40 keys)
 │   ├── species.py          # house catalog — same keys as PetType
-│   ├── guide.py            # field notes — same copy as /study and /snakes
+│   ├── guide.py            # field notes — same copy as /study, /snakes, and /sea
 │   ├── plaque.py           # paper card on the blotter
 │   ├── license/            # port of desktop/license/ (no Qt)
 │   └── unlock_dialog.py

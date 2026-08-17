@@ -40,7 +40,17 @@ public enum PetType {
     BOA              ("boa",               "Boa Constrictor",      Rarity.RARE),
     MILK_SNAKE       ("milk_snake",        "Pueblo Milk Snake",    Rarity.UNCOMMON),
     ROSY_BOA         ("rosy_boa",          "Rosy Boa",             Rarity.UNCOMMON),
-    CARPET_PYTHON    ("carpet_python",     "Jungle Carpet Python", Rarity.RARE);
+    CARPET_PYTHON    ("carpet_python",     "Jungle Carpet Python", Rarity.RARE),
+    OCTOPUS          ("octopus",           "Common Octopus",       Rarity.UNCOMMON),
+    CUTTLEFISH       ("cuttlefish",        "Common Cuttlefish",    Rarity.UNCOMMON),
+    NAUTILUS         ("nautilus",          "Chambered Nautilus",   Rarity.RARE),
+    MOON_JELLY       ("moon_jelly",        "Moon Jelly",           Rarity.COMMON),
+    SEA_STAR         ("sea_star",          "Ochre Sea Star",       Rarity.COMMON),
+    HERMIT_CRAB      ("hermit_crab",       "Common Hermit",        Rarity.COMMON),
+    HORSESHOE_CRAB   ("horseshoe_crab",    "Atlantic Horseshoe Crab", Rarity.UNCOMMON),
+    SEAHORSE         ("seahorse",          "Lined Seahorse",       Rarity.UNCOMMON),
+    MANTA            ("manta",             "Reef Manta",           Rarity.RARE),
+    MORAY            ("moray",             "Green Moray",          Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

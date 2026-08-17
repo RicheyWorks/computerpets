@@ -35,6 +35,7 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
+import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
@@ -624,6 +625,10 @@ export function DeskStage({
           {isSnake(kind.key) ? (
             <Link to="/snakes" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
               The den
+            </Link>
+          ) : isSea(kind.key) ? (
+            <Link to="/sea" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
+              The tide
             </Link>
           ) : (
             <Link to="/study" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
