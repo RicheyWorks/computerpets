@@ -70,6 +70,18 @@ const sim = {
   order: 0,
   cmd: "wander",
   bob: 0,
+  turnHold: 0,
+  pendingFacing: null,
+  waypoints: [],
+  pause: 0,
+  settle: 0,
+  settleDir: 1,
+  overshoot: 0,
+  poseHold: 0,
+  pendingPose: null,
+  shift: 0,
+  shiftAge: 0,
+  arrivedPending: false,
 };
 
 let speechUntil = 0;
@@ -360,64 +372,73 @@ function applyCommand() {
   sim.lastOrder = sim.order;
   const width = window.innerWidth;
   const max = Math.max(PAD, width - BASE - PAD);
+  sim.poseHold = 0;
+  sim.pendingPose = null;
   if (sim.cmd === "wander") {
     if (trait.wander < 0.1 && Math.random() > trait.wander * 8) {
       sim.anim = "sit";
       sim.target = null;
       return;
     }
+    const p = gaitProfile();
     let next = PAD + Math.random() * Math.max(48, max - PAD);
     if (trait.clingy && sim.cursorX != null) next = clamp(sim.cursorX - BASE / 2, PAD, max);
     if (Math.abs(next - sim.x) < 50) next = clamp(sim.x + sim.facing * 120, PAD, max);
-    sim.target = next;
-    sim.facing = sim.target >= sim.x ? 1 : -1;
-    sim.anim = "walk";
-    sim.frame = 0;
-    sim.walkAge = 0;
+    sim.waypoints = [];
+    const twoBeat = Math.random() < (p.low || p.crawl ? 0.7 : 0.42);
+    if (twoBeat) {
+      let second = PAD + Math.random() * Math.max(48, max - PAD);
+      if (Math.abs(second - next) < 40) second = clamp(next + sim.facing * 80, PAD, max);
+      sim.waypoints = [second];
+    }
+    aimAt(next);
     return;
   }
   if (sim.cmd === "seek" && mark) {
     leaving = false;
-    sim.target = clamp(mark.x - BASE * 0.4, PAD, max);
-    sim.facing = sim.target >= sim.x ? 1 : -1;
-    sim.anim = "walk";
-    sim.frame = 0;
-    sim.walkAge = 0;
+    sim.waypoints = [];
+    aimAt(clamp(mark.x - BASE * 0.4, PAD, max));
     return;
   }
   if (sim.cmd === "leave") {
     leaving = true;
-    sim.target = sim.x + BASE / 2 < width / 2 ? -BASE - 24 : width + 12;
-    sim.facing = sim.target >= sim.x ? 1 : -1;
-    sim.anim = "walk";
-    sim.frame = 0;
-    sim.walkAge = 0;
+    sim.waypoints = [];
+    aimAt(sim.x + BASE / 2 < width / 2 ? -BASE - 24 : width + 12);
     return;
   }
   if (sim.cmd === "enter") {
     leaving = false;
+    sim.waypoints = [];
     sim.x = Math.random() < 0.5 ? -BASE : max + BASE;
-    sim.target = clamp(80 + Math.random() * Math.max(40, max - 80), PAD, max);
-    sim.facing = sim.target >= sim.x ? 1 : -1;
-    sim.anim = "walk";
-    sim.frame = 0;
-    sim.walkAge = 0;
+    aimAt(clamp(80 + Math.random() * Math.max(40, max - 80), PAD, max));
     return;
   }
   if (sim.cmd === "play") {
     sim.hop = 1;
     sim.anim = "play";
     sim.target = null;
+    sim.waypoints = [];
+    sim.turnHold = 0;
+    sim.pendingFacing = null;
     sim.frame = 0;
     sim.acc = 0;
     playSound("hop");
     return;
   }
   if (["eat", "talk", "idle", "sit", "sleep"].includes(sim.cmd)) {
-    sim.anim = sim.cmd;
     sim.target = null;
+    sim.waypoints = [];
+    sim.turnHold = 0;
+    sim.pendingFacing = null;
     sim.frame = 0;
     sim.acc = 0;
+    if (sim.cmd === "sit" || sim.cmd === "sleep") {
+      sim.poseHold = window.PetGait.POSE_HOLD_S;
+      sim.pendingPose = sim.cmd;
+      sim.anim = "idle";
+    } else {
+      sim.anim = sim.cmd;
+    }
     if (sim.cmd === "eat") playSound("munch");
     if (sim.cmd === "talk") playSound("chirp");
   }
@@ -499,12 +520,49 @@ async function askMind(result) {
   hudUntil = performance.now() + 5000;
 }
 
+function gaitProfile() {
+  const G = window.PetGait;
+  const walk = trait?.walk ?? 98;
+  const hop = trait?.hop ?? 20;
+  const crawl = G.isCrawlKey(kind?.key);
+  return {
+    walk,
+    hop,
+    perch: !!trait?.perch,
+    aquatic: !!trait?.aquatic,
+    crawl,
+    low: G.isLowWalk(hop, walk),
+    high: G.isHighWalk(walk),
+  };
+}
+
 function walkSpeed(remaining, age) {
   const base = trait?.walk ?? 98;
-  const accel = Math.min(1, age / 0.28);
-  const decel = remaining < 56 ? remaining / 56 : 1;
   const startled = life && Date.now() < life.startledUntil ? 1.55 : 1;
-  return base * Math.max(0.3, accel * decel) * startled;
+  return window.PetGait.walkSpeed(remaining, age, base) * startled;
+}
+
+function aimAt(next) {
+  const G = window.PetGait;
+  const p = gaitProfile();
+  sim.target = next;
+  sim.walkAge = 0;
+  sim.pause = 0;
+  sim.settle = 0;
+  sim.arrivedPending = false;
+  const desired = next >= sim.x ? 1 : -1;
+  if (desired !== sim.facing) {
+    sim.turnHold = G.turnHoldS({ crawl: p.crawl, hop: p.hop, walk: p.walk });
+    sim.pendingFacing = desired;
+    sim.anim = "idle";
+    sim.frame = 0;
+    return;
+  }
+  sim.turnHold = 0;
+  sim.pendingFacing = null;
+  sim.facing = desired;
+  sim.anim = "walk";
+  sim.frame = 0;
 }
 
 function setClickable(next) {
@@ -529,6 +587,14 @@ function switchTo(key) {
   sim.anim = "idle";
   sim.frame = 0;
   sim.target = null;
+  sim.turnHold = 0;
+  sim.pendingFacing = null;
+  sim.waypoints = [];
+  sim.pause = 0;
+  sim.settle = 0;
+  sim.poseHold = 0;
+  sim.pendingPose = null;
+  sim.arrivedPending = false;
   pet.classList.toggle("sick", !!life.sick);
   pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
@@ -581,58 +647,110 @@ function tick(now) {
       puff(sim.x, 5);
     }
   }
-  if (sim.land > 0) sim.land = Math.max(0, sim.land - dt * 3.4);
+  if (sim.land > 0) sim.land = Math.max(0, sim.land - dt * window.PetGait.LAND_DECAY);
+  if (sim.settle > 0) {
+    sim.settle = Math.max(0, sim.settle - dt / window.PetGait.SETTLE_S);
+    if (sim.settle === 0 && sim.arrivedPending) {
+      sim.arrivedPending = false;
+      if (sim.cmd === "leave") {
+        life.hidden = true;
+        persist();
+        leaving = false;
+        issue("idle");
+        paintHud();
+      } else if (sim.cmd === "seek" && mark) {
+        const kindMark = mark.kind;
+        clearMark();
+        if (kindMark === "treat") {
+          const prevBond = life.bond;
+          const result = window.PetLife.act(life, trait, "snack");
+          persist();
+          say(lineFrom(result) || "A small treaty.");
+          const title = window.PetLife.crossedBond(prevBond, life.bond);
+          if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
+          issue("eat");
+        } else {
+          const prevBond = life.bond;
+          const result = window.PetLife.act(life, trait, "play");
+          persist();
+          say(lineFrom(result) || pick(kind.lines.play));
+          const title = window.PetLife.crossedBond(prevBond, life.bond);
+          if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
+          issue("play");
+        }
+        paintHud();
+      } else {
+        issue("idle");
+      }
+    }
+  }
   sim.bob += dt * (trait.aquatic ? 2.4 : 1.2);
 
   if (!sim.dragging) {
     applyCommand();
-    if (sim.anim === "walk" && sim.target != null) {
+    const p = gaitProfile();
+    if (sim.poseHold > 0) {
+      sim.poseHold = Math.max(0, sim.poseHold - dt);
+      if (sim.poseHold === 0 && sim.pendingPose) {
+        sim.anim = sim.pendingPose;
+        sim.pendingPose = null;
+        sim.frame = 0;
+        sim.acc = 0;
+      }
+    }
+    if (sim.turnHold > 0) {
+      sim.turnHold = Math.max(0, sim.turnHold - dt);
+      if (sim.turnHold === 0 && sim.pendingFacing) {
+        sim.facing = sim.pendingFacing;
+        sim.pendingFacing = null;
+        sim.anim = "walk";
+        sim.frame = 0;
+        sim.walkAge = 0;
+      }
+    } else if (sim.pause > 0) {
+      sim.pause = Math.max(0, sim.pause - dt);
+      sim.anim = "idle";
+      if (sim.pause === 0 && sim.waypoints.length) aimAt(sim.waypoints.shift());
+    } else if (sim.anim === "walk" && sim.target != null && sim.turnHold <= 0) {
       const remaining = Math.abs(sim.target - sim.x);
       const dir = sim.target >= sim.x ? 1 : -1;
-      sim.facing = dir;
       sim.walkAge += dt;
       sim.x += dir * walkSpeed(remaining, sim.walkAge) * dt;
       sim.stepAcc += dt;
-      if (sim.stepAcc > 0.22) {
+      const stepEvery = p.high ? window.PetGait.STEP_S_QUICK : p.crawl ? 0.32 : window.PetGait.STEP_S;
+      if (sim.stepAcc > stepEvery) {
         sim.stepAcc = 0;
         playSound("step");
         if (Math.random() < 0.45) puff(sim.x, 2);
       }
       if ((dir === 1 && sim.x >= sim.target) || (dir === -1 && sim.x <= sim.target)) {
         sim.x = sim.target;
-        sim.target = null;
-        if (sim.cmd === "leave") {
+        if (sim.waypoints.length) {
+          sim.target = null;
+          sim.pause = window.PetGait.wanderPauseS();
+          sim.anim = "idle";
+          sim.frame = 0;
+        } else if (sim.cmd === "leave") {
+          sim.target = null;
+          sim.anim = "idle";
+          sim.frame = 0;
+          sim.arrivedPending = true;
+          sim.settle = 0;
           life.hidden = true;
           persist();
           leaving = false;
           issue("idle");
           paintHud();
-        } else if (sim.cmd === "seek" && mark) {
-          const kindMark = mark.kind;
-          clearMark();
-          if (kindMark === "treat") {
-            const prevBond = life.bond;
-            const result = window.PetLife.act(life, trait, "snack");
-            persist();
-            say(lineFrom(result) || "A small treaty.");
-            const title = window.PetLife.crossedBond(prevBond, life.bond);
-            if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
-            issue("eat");
-          } else {
-            const prevBond = life.bond;
-            const result = window.PetLife.act(life, trait, "play");
-            persist();
-            say(lineFrom(result) || pick(kind.lines.play));
-            const title = window.PetLife.crossedBond(prevBond, life.bond);
-            if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
-            issue("play");
-          }
-          paintHud();
+          sim.arrivedPending = false;
         } else {
+          sim.target = null;
+          sim.settle = 1;
+          sim.settleDir = dir;
+          sim.overshoot = window.PetGait.overshootPx({ crawl: p.crawl, hop: p.hop, walk: p.walk });
+          sim.land = 1;
           sim.anim = "idle";
           sim.frame = 0;
-          sim.land = 0.7;
-          issue("idle");
+          sim.arrivedPending = true;
         }
       }
     } else if ((sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
@@ -641,10 +759,15 @@ function tick(now) {
     if (trait.clingy && sim.cursorX != null && !life.hidden && !life.asleep && Math.random() < dt * 0.35) {
       const follow = clamp(sim.cursorX - BASE / 2, PAD, maxX);
       if (Math.abs(follow - sim.x) > 80) {
-        sim.target = follow;
-        sim.anim = "walk";
+        sim.waypoints = [];
+        aimAt(follow);
       }
     }
+    if ((sim.anim === "idle" || sim.anim === "sit") && sim.shiftAge <= 0 && Math.random() < dt * 0.45) {
+      sim.shift = (1 + Math.random() * 2) * (Math.random() < 0.5 ? 1 : -1);
+      sim.shiftAge = 0.85;
+    }
+    if (sim.shiftAge > 0) sim.shiftAge = Math.max(0, sim.shiftAge - dt);
     if (!leaving) sim.x = clamp(sim.x, PAD, maxX);
 
     const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
@@ -682,22 +805,38 @@ function tick(now) {
   const src = frames[Math.min(sim.frame, frames.length - 1)];
   if (pet.getAttribute("src") !== src) pet.src = src;
 
+  const G = window.PetGait;
+  const p = gaitProfile();
   const hopPx = sim.hop > 0 ? Math.sin(sim.hop * Math.PI) * (trait.hop || 20) : 0;
+  const walkBob =
+    sim.anim === "walk"
+      ? p.crawl
+        ? 0
+        : p.perch
+          ? Math.abs(Math.sin(sim.walkAge * 8)) * G.PERCH_STEP_PX
+          : (trait.hop || 0) > G.HIGH_HOP
+            ? Math.abs(Math.sin(sim.walkAge * 10)) * G.WALK_HOP_PX
+            : 0
+      : 0;
   const water = trait.aquatic ? Math.sin(sim.bob) * 6 : 0;
   const perch = trait.perch ? 18 : 0;
   const breathe =
     sim.anim === "idle" || sim.anim === "sit" || sim.anim === "sleep"
-      ? 1 + Math.sin(now * (sim.anim === "sleep" ? 0.0032 : 0.0046)) * (sim.anim === "sleep" ? 0.03 : 0.016)
+      ? 1 + Math.sin(now * (sim.anim === "sleep" ? 0.0032 : 0.0046)) * (sim.anim === "sleep" ? G.BREATHE_SLEEP : G.BREATHE_IDLE)
       : 1;
   const stretch = sim.hop > 0 ? 1 + Math.sin(sim.hop * Math.PI) * 0.09 : sim.land > 0 ? 1 - Math.sin(sim.land * Math.PI) * 0.08 : breathe;
   const squat = 2 - stretch;
-  pet.style.transform = `translate3d(${sim.x}px, ${-hopPx - water - perch}px, 0) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
+  const sway = sim.anim === "walk" && p.crawl ? Math.sin(sim.walkAge * 5.5) * G.SWAY_PX : 0;
+  const shiftX = sim.shiftAge > 0 ? sim.shift * Math.sin((1 - sim.shiftAge / 0.85) * Math.PI) : 0;
+  const settleX = sim.settle > 0 ? G.settleOffset(sim.settle, sim.settleDir, sim.overshoot) : 0;
+  const drawX = sim.x + sway + shiftX + settleX;
+  pet.style.transform = `translate3d(${drawX}px, ${-hopPx - walkBob - water - perch}px, 0) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
   const shrink = 1 - hopPx / 90;
-  shadow.style.transform = `translate3d(${sim.x + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
+  shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));
-  const bx = clamp(sim.x + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
-  bubble.style.transform = `translate3d(${bx}px, ${-hopPx - water - perch - 10}px, 0)`;
-  hud.style.transform = `translate3d(${clamp(sim.x + 4, 8, width - 180)}px, ${-hopPx - water - perch}px, 0)`;
+  const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
+  bubble.style.transform = `translate3d(${bx}px, ${-hopPx - walkBob - water - perch - 10}px, 0)`;
+  hud.style.transform = `translate3d(${clamp(drawX + 4, 8, width - 180)}px, ${-hopPx - walkBob - water - perch}px, 0)`;
 
   const nodes = dustRoot.children;
   for (let i = 0; i < nodes.length; i++) {

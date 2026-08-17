@@ -413,6 +413,7 @@ export function DeskStage({
         fps={kind.fps}
         once={kind.once}
         gait={trait}
+        kind={kind.key}
         hidden={stats.hidden}
         unwell={stats.sick}
         dull={isBlue(stats, kind.key)}

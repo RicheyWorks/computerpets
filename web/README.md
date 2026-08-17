@@ -1,6 +1,6 @@
 # Living desk
 
-Browser companion for ComputerPets. The full house of **30** species is awake — Rui and the original nineteen, plus ten named snakes. They walk the study, eat, play, sleep, and talk.
+Browser companion for ComputerPets. The full house of **30** species is awake — Rui and the original nineteen, plus ten named snakes. They turn before they cross the blotter, ease to a stop, and breathe between orders.
 
 ## Run
 

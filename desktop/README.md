@@ -1,6 +1,6 @@
 # Desktop companion — Windows and Mac
 
-All thirty pets live on the real desktop as a Tamagotchi-grade overlay — including ten snakes. Unique hunger clocks, night cycles, mess, illness, age, and a special move each.
+All thirty pets live on the real desktop as a Tamagotchi-grade overlay — including ten snakes. They turn, ease, and settle on the work-area floor; unique hunger clocks, night cycles, mess, illness, age, and a special move each.
 
 ## Care
 

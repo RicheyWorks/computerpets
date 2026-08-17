@@ -276,6 +276,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
         fps={kind.fps}
         once={kind.once}
         gait={trait}
+        kind={kind.key}
         hidden={stats.hidden}
         unwell={stats.sick}
         dull={isBlue(stats, kind.key)}

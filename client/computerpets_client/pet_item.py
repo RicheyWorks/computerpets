@@ -10,6 +10,18 @@ from PyQt6.QtGui import QBrush, QColor, QCursor, QPainter, QPen
 from PyQt6.QtWidgets import QGraphicsItem, QGraphicsObject, QGraphicsPixmapItem
 
 from .frames import SIZE, frames_for, paint_treat
+from .gait import (
+    BREATHE_IDLE,
+    BREATHE_SLEEP,
+    POSE_HOLD_S,
+    SETTLE_S,
+    SWAY_PX,
+    overshoot_px,
+    settle_offset,
+    turn_hold_s,
+    walk_speed,
+    wander_pause_s,
+)
 from .life import CareState, MessPile
 from .shed import Coat
 from .species import Species
@@ -93,6 +105,20 @@ class LivingPetItem(QGraphicsObject):
         self._bob_t = 0.0
         self.dull = False
         self.unwell = False
+        self.walk_age = 0.0
+        self.turn_hold = 0.0
+        self.pending_facing: int | None = None
+        self.waypoints: list[float] = []
+        self.pause = 0.0
+        self.settle = 0.0
+        self.settle_dir = 1
+        self.overshoot = 0.0
+        self.pose_hold = 0.0
+        self.pending_pose: str | None = None
+        self.shift = 0.0
+        self.shift_age = 0.0
+        self._display_dx = 0.0
+        self._logic_x = 220.0
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
@@ -113,9 +139,16 @@ class LivingPetItem(QGraphicsObject):
         pack = self.frames.get(self.anim) or self.frames["idle"]
         pix = pack[self.frame % len(pack)]
         painter.save()
+        breathe = 1.0
+        if self.anim in ("idle", "sit", "sleep"):
+            amp = BREATHE_SLEEP if self.anim == "sleep" else BREATHE_IDLE
+            breathe = 1.0 + math.sin(self._bob_t * 4.6) * amp
         if self.facing < 0:
             painter.translate(SIZE, 0)
             painter.scale(-1, 1)
+        painter.translate(0, SIZE)
+        painter.scale(1, breathe)
+        painter.translate(0, -SIZE)
         painter.drawPixmap(0, 0, pix)
         if self.dull:
             painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceAtop)
@@ -146,16 +179,47 @@ class LivingPetItem(QGraphicsObject):
     def set_species(self, species: Species) -> None:
         self.species = species
         self.frames = frames_for(species)
-        self.setPos(self.x(), self._floor_y())
+        self._logic_x = self.x() - self._display_dx
+        self.setPos(self._logic_x, self._floor_y())
+        self._display_dx = 0.0
         self.update()
 
-    def _speed(self, kind: str) -> float:
+    def _crawl(self) -> bool:
+        return self.species.gait == "crawl"
+
+    def _speed(self, kind: str, remaining: float | None = None) -> float:
         base = max(18.0, self.species.walk)
         if kind == "hide":
-            return base * 1.6
-        if kind == "seek":
-            return base * 1.4
-        return base
+            base *= 1.6
+        elif kind == "seek":
+            base *= 1.4
+        return walk_speed(999.0 if remaining is None else remaining, self.walk_age, base)
+
+    def _aim_at(self, next_x: float) -> None:
+        self.target = next_x
+        self.walk_age = 0.0
+        self.pause = 0.0
+        self.settle = 0.0
+        desired = 1 if next_x >= self._logic_x else -1
+        if desired != self.facing:
+            self.turn_hold = turn_hold_s(crawl=self._crawl(), walk=self.species.walk)
+            self.pending_facing = desired
+            self.anim = "idle"
+            self.frame = 0
+            return
+        self.turn_hold = 0.0
+        self.pending_facing = None
+        self.facing = desired
+        self.anim = "walk"
+        self.frame = 0
+
+    def _begin_settle(self, direction: int) -> None:
+        self.target = None
+        self.settle = 1.0
+        self.settle_dir = direction
+        self.overshoot = overshoot_px(crawl=self._crawl(), walk=self.species.walk)
+        self.anim = "idle"
+        self.frame = 0
 
     def issue(self, cmd: str, target: float | None = None) -> None:
         # play / talk are house verbs; the wood already has wander and sit.
@@ -166,6 +230,9 @@ class LivingPetItem(QGraphicsObject):
         self.cmd = cmd
         self.target = target
         self.once_done = False
+        self.waypoints = []
+        self.pose_hold = 0.0
+        self.pending_pose = None
         if cmd == "eat":
             self.anim = "eat"
             self.frame = 0
@@ -174,12 +241,28 @@ class LivingPetItem(QGraphicsObject):
             self.anim = "walk"
             self.frame = 0
             self.acc = 0.0
+            self.walk_age = 0.0
+            if target is not None:
+                self._aim_at(target)
         elif cmd in ("sit", "sleep"):
-            self.anim = cmd
+            self.pose_hold = POSE_HOLD_S
+            self.pending_pose = cmd
+            self.anim = "idle"
+            self.frame = 0
+
+    def _place(self, x: float, y: float) -> None:
+        sway = math.sin(self.walk_age * 5.5) * SWAY_PX if self.anim == "walk" and self._crawl() else 0.0
+        shift = self.shift * math.sin((1.0 - self.shift_age / 0.85) * math.pi) if self.shift_age > 0 else 0.0
+        settle = settle_offset(self.settle, self.settle_dir, self.overshoot) if self.settle > 0 else 0.0
+        perch_step = abs(math.sin(self.walk_age * 8.0)) * 7.0 if self.anim == "walk" and self.species.perch and not self._crawl() else 0.0
+        self._logic_x = x
+        self._display_dx = sway + shift + settle
+        self.setPos(x + self._display_dx, y - perch_step)
+        self.update()
 
     def advance_pet(self, dt: float, care: CareState, width: float) -> None:
         if care.hidden and self.cmd not in ("hide", "enter"):
-            if self.x() > -SIZE:
+            if self._logic_x > -SIZE:
                 self.cmd = "hide"
             else:
                 return
@@ -201,26 +284,59 @@ class LivingPetItem(QGraphicsObject):
 
         left = 80.0
         right = max(left + 40.0, width - SIZE - 80.0)
-        x = self.x()
+        x = self._logic_x
         self._bob_t += dt
         y = self._floor_y()
         if self.species.aquatic:
             y += math.sin(self._bob_t * 2.4) * 5
 
+        if self.pose_hold > 0:
+            self.pose_hold = max(0.0, self.pose_hold - dt)
+            if self.pose_hold == 0 and self.pending_pose:
+                self.anim = self.pending_pose
+                self.pending_pose = None
+                self.frame = 0
+                self.acc = 0.0
+
+        if self.settle > 0:
+            self.settle = max(0.0, self.settle - dt / SETTLE_S)
+
+        if self.turn_hold > 0:
+            self.turn_hold = max(0.0, self.turn_hold - dt)
+            if self.turn_hold == 0 and self.pending_facing is not None:
+                self.facing = self.pending_facing
+                self.pending_facing = None
+                self.anim = "walk"
+                self.frame = 0
+                self.walk_age = 0.0
+
+        if self.pause > 0:
+            self.pause = max(0.0, self.pause - dt)
+            self.anim = "idle"
+            if self.pause == 0 and self.waypoints:
+                self._aim_at(self.waypoints.pop(0))
+
+        if (self.anim in ("idle", "sit")) and self.shift_age <= 0 and random.random() < dt * 0.45:
+            self.shift = (1.0 + random.random() * 2.0) * (1 if random.random() < 0.5 else -1)
+            self.shift_age = 0.85
+        if self.shift_age > 0:
+            self.shift_age = max(0.0, self.shift_age - dt)
+
         if self.cmd == "hide":
             self.anim = "walk"
             self.facing = -1
+            self.walk_age += dt
             x -= self._speed("hide") * dt
             if x <= -SIZE:
                 x = -SIZE
                 self.anim = "idle"
-            self.setPos(x, y)
-            self.update()
+            self._place(x, y)
             return
 
         if self.cmd == "enter":
             self.anim = "walk"
             self.facing = 1
+            self.walk_age += dt
             if x < left:
                 x = min(left, x + self._speed("hide") * dt) if x > -SIZE else -SIZE + self._speed("hide") * dt
                 if x < -SIZE + 4:
@@ -230,61 +346,85 @@ class LivingPetItem(QGraphicsObject):
                 x = 200
                 self.cmd = "wander"
                 self.anim = "idle"
-            self.setPos(x, y)
-            self.update()
+                self.walk_age = 0.0
+            self._place(x, y)
             return
 
         if self.cmd == "seek" and self.target is not None:
-            self.anim = "walk"
-            self.facing = 1 if self.target > x else -1
-            x += self.facing * self._speed("seek") * dt
-            if abs(x - self.target) < 12:
-                self.cmd = "eat"
-                self.anim = "eat"
-                self.frame = 0
-                self.target = None
-            self.setPos(max(left, min(right, x)), y)
-            self.update()
+            if self.turn_hold <= 0:
+                self.anim = "walk"
+                self.walk_age += dt
+                remaining = abs(self.target - x)
+                direction = 1 if self.target >= x else -1
+                x += direction * self._speed("seek", remaining) * dt
+                if (direction == 1 and x >= self.target) or (direction == -1 and x <= self.target):
+                    x = self.target
+                    self.cmd = "eat"
+                    self.anim = "eat"
+                    self.frame = 0
+                    self.target = None
+                    self.walk_age = 0.0
+            self._place(max(left, min(right, x)), y)
             return
 
         if self.cmd == "eat":
-            self.setPos(x, y)
-            self.update()
+            self._place(x, y)
             return
 
         if self.cmd == "wander":
-            if self.target is None or random.random() < dt * 0.12:
-                if random.random() < 0.35:
-                    self.cmd = "idle"
-                    self.anim = "idle"
-                    self.target = None
-                elif random.random() < 0.2:
-                    self.cmd = "sit"
-                    self.anim = "sit"
-                    self.target = None
-                else:
-                    self.target = left + random.random() * (right - left)
-            if self.target is not None:
+            if self.target is None and self.pause <= 0 and self.turn_hold <= 0 and self.settle <= 0:
+                if random.random() < dt * 0.12:
+                    roll = random.random()
+                    if roll < 0.35:
+                        self.cmd = "idle"
+                        self.pose_hold = 0.0
+                        self.anim = "idle"
+                        self.target = None
+                    elif roll < 0.55:
+                        self.cmd = "sit"
+                        self.pose_hold = POSE_HOLD_S
+                        self.pending_pose = "sit"
+                        self.anim = "idle"
+                        self.target = None
+                    else:
+                        nxt = left + random.random() * (right - left)
+                        self.waypoints = []
+                        crawl = self._crawl()
+                        low = self.species.walk < 40
+                        if random.random() < (0.7 if crawl or low else 0.42):
+                            second = left + random.random() * (right - left)
+                            if abs(second - nxt) < 40:
+                                second = max(left, min(right, nxt + self.facing * 80))
+                            self.waypoints = [second]
+                        self._aim_at(nxt)
+            if self.target is not None and self.turn_hold <= 0 and self.pause <= 0:
                 self.anim = "walk"
-                self.facing = 1 if self.target > x else -1
-                x += self.facing * self._speed("wander") * dt
-                if abs(x - self.target) < 8:
-                    self.target = None
-                    self.cmd = "idle"
-                    self.anim = "idle"
-            self.setPos(max(left, min(right, x)), y)
-            self.update()
+                self.walk_age += dt
+                remaining = abs(self.target - x)
+                direction = 1 if self.target >= x else -1
+                x += direction * self._speed("wander", remaining) * dt
+                if (direction == 1 and x >= self.target) or (direction == -1 and x <= self.target):
+                    x = self.target
+                    if self.waypoints:
+                        self.target = None
+                        self.pause = wander_pause_s()
+                        self.anim = "idle"
+                        self.frame = 0
+                    else:
+                        self._begin_settle(direction)
+                        self.cmd = "idle"
+            self._place(max(left, min(right, x)), y)
             return
 
         if self.cmd in ("idle", "sit", "sleep"):
             if random.random() < dt * 0.18:
                 self.cmd = "wander"
                 self.target = None
-            if self.cmd == "sit":
-                self.anim = "sit"
-            elif self.cmd == "sleep":
-                self.anim = "sleep"
-            else:
-                self.anim = "idle"
-            self.setPos(x, y)
-            self.update()
+            elif self.pose_hold <= 0:
+                if self.cmd == "sit":
+                    self.anim = "sit"
+                elif self.cmd == "sleep":
+                    self.anim = "sleep"
+                else:
+                    self.anim = "idle"
+            self._place(x, y)
