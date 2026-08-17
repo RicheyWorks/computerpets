@@ -1,4 +1,4 @@
-from computerpets_client.life import CareState, apply_call, apply_feed, apply_hide, apply_treat
+from computerpets_client.life import CareState, apply_call, apply_feed, apply_hide, apply_play, apply_treat
 from computerpets_client.species import NORI, RUI, species_by_key
 
 
@@ -8,6 +8,33 @@ def test_feed_raises_hunger_and_plays_eat():
     assert result.anim == "eat"
     assert result.cmd == "eat"
     assert result.line
+
+
+def test_play_uses_the_house_deltas():
+    before = CareState(hunger=50, mood=50, energy=50, bond=10)
+    result = apply_play(before, RUI)
+    assert result.state.hunger == 42
+    assert result.state.mood == 76
+    assert result.state.energy == 36
+    assert result.state.bond == 13
+    assert result.cmd == "play"
+    assert result.line
+
+
+def test_play_clamps_like_the_other_care_verbs():
+    result = apply_play(CareState(hunger=5, mood=90, energy=10, bond=99), RUI)
+    assert result.state.hunger == 0
+    assert result.state.mood == 100
+    assert result.state.energy == 0
+    assert result.state.bond == 100
+
+
+def test_play_while_hidden_does_not_play():
+    hidden = apply_hide(CareState(hunger=50, mood=50, energy=50, bond=10), RUI).state
+    result = apply_play(hidden, RUI)
+    assert result.state.hunger == 50
+    assert result.state.hidden is True
+    assert result.cmd == "idle"
 
 
 def test_treat_is_a_smaller_snack():
