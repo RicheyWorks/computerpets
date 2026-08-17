@@ -71,13 +71,12 @@ public class SteamService implements OwnershipProvider {
 
     @Override
     public VerificationResult verify(Map<String, String> request) {
-        String steamId = request.get("steamId");
-        String appId   = request.get("appId");
-        if (steamId == null || steamId.isBlank() || appId == null || appId.isBlank()) {
+        SteamVerifyRequest typed = SteamVerifyRequest.from(request);
+        if (typed.steamId() == null || typed.appId() == null) {
             return VerificationResult.denied("steamId and appId are required");
         }
-        return ownsApp(steamId, appId)
-            ? VerificationResult.granted(steamId)
+        return ownsApp(typed.steamId(), typed.appId())
+            ? VerificationResult.granted(typed.steamId())
             : VerificationResult.denied("Steam ownership not found");
     }
 

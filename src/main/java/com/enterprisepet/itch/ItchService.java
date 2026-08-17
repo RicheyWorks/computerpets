@@ -101,19 +101,18 @@ public class ItchService implements OwnershipProvider {
 
     @Override
     public VerificationResult verify(Map<String, String> request) {
-        String gameId = request.get("gameId");
-        String downloadKey = request.get("downloadKey");
-        if (isBlank(gameId) || isBlank(downloadKey)) {
+        ItchVerifyRequest typed = ItchVerifyRequest.from(request);
+        if (typed.gameId() == null || typed.downloadKey() == null) {
             return VerificationResult.denied("gameId and downloadKey are required");
         }
-        if (!NUMERIC_GAME_ID.matcher(gameId.trim()).matches()) {
+        if (!NUMERIC_GAME_ID.matcher(typed.gameId()).matches()) {
             return VerificationResult.denied("gameId must be a numeric itch.io game id");
         }
-        if (!isBlank(configuredGameId) && !configuredGameId.trim().equals(gameId.trim())) {
+        if (!isBlank(configuredGameId) && !configuredGameId.trim().equals(typed.gameId())) {
             return VerificationResult.denied("gameId is not an official ComputerPets itch.io game");
         }
 
-        return ownsReceipt(gameId.trim(), downloadKey.trim())
+        return ownsReceipt(typed.gameId(), typed.downloadKey())
                 .map(VerificationResult::granted)
                 .orElseGet(() -> VerificationResult.denied("Itch.io ownership not found"));
     }
