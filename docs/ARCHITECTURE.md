@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-14                                 |
+| **Last Updated** | 2026-08-17                                 |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index) |
@@ -387,7 +387,7 @@ sequenceDiagram
 | External HTTP            | Spring RestClient (new in 3.x) + Jackson| —           | Modern, fluent, no RestTemplate boilerplate. |
 | Rate Limiting            | Bucket4j                                | 8.10.1      | Pure Java token bucket with zero external deps for the core; trivial to swap `bucket4j-redis` later. |
 | Persistence (scaffolded) | Spring Data JPA + Hibernate + H2 / Postgres | —        | Standard; H2 for fast local dev, Postgres for production durability/audit. Currently unused. |
-| Steam Integration        | steam-condenser                         | 1.3.1       | Declared but unused; lightweight Steam Web API client (real usage planned). |
+| Steam Integration        | Spring RestClient + Steam Web API       | —           | `SteamService` calls `IPlayerService/GetOwnedGames` via RestClient. steam-condenser was unused and has been removed. |
 | Build                    | Maven + Spring Boot Maven Plugin        | —           | Universal, works in restricted environments; explicit Java 21 compiler config. |
 | Config & Secrets         | Spring @Value + env overrides + @PostConstruct guards | — | Fail-fast on missing/placeholder keys; supports 12-factor deployment. |
 
