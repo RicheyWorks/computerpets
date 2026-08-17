@@ -5,6 +5,7 @@ import com.enterprisepet.dto.DownloadResponse;
 import com.enterprisepet.dto.ErrorResponse;
 import com.enterprisepet.license.LicenseService;
 import com.enterprisepet.license.LicenseService.LicensePayload;
+import com.enterprisepet.observability.VerificationTelemetry;
 import com.enterprisepet.pet.PetCatalog;
 import com.enterprisepet.pet.PetType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,13 +43,16 @@ public class DownloadController {
     private final LicenseService licenseService;
     private final PetBundleService bundleService;
     private final PetCatalog petCatalog;
+    private final VerificationTelemetry telemetry;
 
     public DownloadController(LicenseService licenseService,
                               PetBundleService bundleService,
-                              PetCatalog petCatalog) {
+                              PetCatalog petCatalog,
+                              VerificationTelemetry telemetry) {
         this.licenseService = licenseService;
         this.bundleService = bundleService;
         this.petCatalog = petCatalog;
+        this.telemetry = telemetry;
     }
 
     /**
@@ -97,6 +101,10 @@ public class DownloadController {
     @PostMapping("/{petKey}")
     public ResponseEntity<?> download(@PathVariable("petKey") String petKey,
                                       @RequestBody Map<String, String> body) {
+        return telemetry.download(petKey, () -> executeDownload(petKey, body));
+    }
+
+    private ResponseEntity<?> executeDownload(String petKey, Map<String, String> body) {
         Optional<PetType> petOpt = petCatalog.find(petKey);
         if (petOpt.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of(

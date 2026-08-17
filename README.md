@@ -34,6 +34,7 @@ This backend enables users to prove ownership of pets through multiple platforms
 - **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
 - **Rate Limiting** — Per-IP Bucket4j token buckets in Redis (10/min verify, 30/min download), shared across replicas. Redis-down fail-closes with 503.
 - **Revocation deny-list** — Revoke persists `revokedAt` in Postgres, then writes the `jti` to Redis so every replica rejects immediately (same 401). Redis-down validate falls back to the ledger.
+- **Tracing & business metrics** — Micrometer + OpenTelemetry spans on verify, download, and provider calls. OTLP export via `OTEL_EXPORTER_OTLP_ENDPOINT` (off by default). Prometheus scrape is unchanged.
 - **Rich Pet Catalog** — 30 pets across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes.
 - **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`.
 - **License ledger** — House `/admin` plus `GET /api/admin/licenses` for jti/owner lookup, audit stamps, and revoke (`X-Admin-Key`).

@@ -98,8 +98,8 @@ All critical items required before any public or limited production exposure hav
   - [x] Distributed revocation / jti blacklist
 
 - **3.2 Observability Maturity**
-  - Distributed tracing (Micrometer + OpenTelemetry)
-  - Custom business metrics (verification success rate, latency per provider)
+  - [x] Distributed tracing (Micrometer + OpenTelemetry)
+  - [x] Custom business metrics (verification success rate, latency per provider)
 
 - **3.3 Deployment & Environments**
   - Proper Spring profiles (`dev` / `staging` / `prod`)
@@ -163,6 +163,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (Redis jti deny-list)
+**Last Updated:** 2026-08-17 (Micrometer + OpenTelemetry tracing)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

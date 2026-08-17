@@ -1,9 +1,11 @@
 package com.enterprisepet.nft;
 
+import com.enterprisepet.observability.VerificationTelemetry;
 import com.enterprisepet.provider.OwnershipProvider;
 import com.enterprisepet.provider.VerificationResult;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import io.micrometer.observation.ObservationRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,9 @@ public class EthereumNftService implements OwnershipProvider {
     private final NftCatalog catalog;
     private final Web3j web3j;
 
+    @Autowired
+    private ObservationRegistry observationRegistry = ObservationRegistry.NOOP;
+
     /**
      * Production constructor. {@code @Autowired} is required because package-private
      * test constructors also exist — without it Spring looks for a no-arg constructor
@@ -78,6 +83,10 @@ public class EthereumNftService implements OwnershipProvider {
     /** Unit-test constructor: inject a mocked Web3j, no allowlist. */
     EthereumNftService(Web3j web3j) {
         this(EthereumProperties.unrestricted(), new NftCatalog(EthereumProperties.unrestricted()), web3j);
+    }
+
+    void setObservationRegistry(ObservationRegistry observationRegistry) {
+        this.observationRegistry = observationRegistry == null ? ObservationRegistry.NOOP : observationRegistry;
     }
 
     @Override public String key()         { return "nft"; }
@@ -236,13 +245,17 @@ public class EthereumNftService implements OwnershipProvider {
     }
 
     private Optional<List<Type>> ethCall(String contract, Function function) throws Exception {
-        String encoded = FunctionEncoder.encode(function);
-        Transaction tx = Transaction.createEthCallTransaction(ZERO_ADDRESS, contract, encoded);
-        EthCall response = web3j.ethCall(tx, DefaultBlockParameterName.LATEST).send();
-        if (response.hasError() || response.getValue() == null || response.getValue().isBlank()) {
-            return Optional.empty();
-        }
-        return Optional.of(FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters()));
+        return VerificationTelemetry.observeProviderCall(
+                observationRegistry, "nft", "eth_call", () -> {
+                    String encoded = FunctionEncoder.encode(function);
+                    Transaction tx = Transaction.createEthCallTransaction(ZERO_ADDRESS, contract, encoded);
+                    EthCall response = web3j.ethCall(tx, DefaultBlockParameterName.LATEST).send();
+                    if (response.hasError() || response.getValue() == null || response.getValue().isBlank()) {
+                        return Optional.empty();
+                    }
+                    return Optional.of(FunctionReturnDecoder.decode(
+                            response.getValue(), function.getOutputParameters()));
+                });
     }
 
     /**
