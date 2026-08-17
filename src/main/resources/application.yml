@@ -137,6 +137,21 @@ jwt:
 bundle:
   base-url: "${BUNDLE_BASE_URL:https://cdn.enterprisepet.example/bundles}"
   signing-key: "${BUNDLE_SIGNING_KEY:}"
+  # Platform used when POST /api/download omits `platform` (or sends an
+  # unsupported value). win | mac | linux | any
+  default-platform: win
+  # Artifact catalog. Empty = signed {petKey}.zip, no version/sha256 claim.
+  # That is the right default until a zip is published. Unknown petKey,
+  # placeholder sha256, or a duplicate petKey+platform fail startup.
+  # Do not invent hashes for files that do not exist.
+  catalog: []
+  # Example only — the sha256 below is test/example data, not a live object:
+  # catalog:
+  #   - petKey: red_panda
+  #     version: "1.0.0"
+  #     platform: win
+  #     sha256: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+  #     path: red_panda-win-1.0.0.zip
 
 # Admin API key for /api/admin/* endpoints (Phase 2 internal tooling).
 # Must be a strong random value. Generate: openssl rand -base64 32

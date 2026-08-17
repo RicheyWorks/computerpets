@@ -13,5 +13,11 @@ public record DownloadRequest(
 
         @Schema(description = "Opaque hardware id; required and must match when the license was issued with hwid",
                 example = "device-abc-123")
-        String hwid
+        String hwid,
+
+        @Schema(description = "Optional artifact platform: win, mac, linux, or any. "
+                + "When omitted or unsupported, bundle.default-platform is used (default win).",
+                example = "win",
+                requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+        String platform
 ) {}
