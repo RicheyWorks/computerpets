@@ -104,10 +104,7 @@ class EthereumNftServiceTest {
     @Test
     @DisplayName("ownsToken returns false when wallet does not own the token")
     void ownsToken_whenDoesNotOwn_returnsFalse() throws Exception {
-        // AUTO: ownerOf returns a different address. A second stub (zero balance)
-        // would be used only if ownerOf failed to decode — it must not treat the
-        // owner address as an ERC-1155 balance.
-        stubEthCall(NOT_OWNER_RESPONSE, BALANCE_ZERO);
+        stubEthCall(NOT_OWNER_RESPONSE);
 
         boolean result = unrestricted.ownsToken(WALLET, CONTRACT, TOKEN_ID);
 
@@ -295,22 +292,13 @@ class EthereumNftServiceTest {
     }
 
     @SuppressWarnings("unchecked")
-    private void stubEthCall(String... hexes) throws Exception {
+    private void stubEthCall(String hex) throws Exception {
+        EthCall call = mock(EthCall.class);
+        when(call.hasError()).thenReturn(false);
+        when(call.getValue()).thenReturn(hex);
+
         Request request = mock(Request.class);
-        EthCall[] calls = new EthCall[hexes.length];
-        for (int i = 0; i < hexes.length; i++) {
-            EthCall call = mock(EthCall.class);
-            when(call.hasError()).thenReturn(false);
-            when(call.getValue()).thenReturn(hexes[i]);
-            calls[i] = call;
-        }
-        if (calls.length == 1) {
-            when(request.send()).thenReturn(calls[0]);
-        } else {
-            EthCall[] rest = new EthCall[calls.length - 1];
-            System.arraycopy(calls, 1, rest, 0, rest.length);
-            when(request.send()).thenReturn(calls[0], rest);
-        }
+        when(request.send()).thenReturn(call);
         when(web3j.ethCall(any(), any())).thenReturn(request);
     }
 }
