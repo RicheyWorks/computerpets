@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.modes.GCMBlockCipher;
+import org.bouncycastle.crypto.modes.GCMModeCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.slf4j.Logger;
@@ -218,7 +219,7 @@ public class LicenseService {
     }
 
     private byte[] encrypt(byte[] plaintext, byte[] key, byte[] iv) throws Exception {
-        GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
+        GCMModeCipher cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
         AEADParameters params = new AEADParameters(new KeyParameter(key), GCM_TAG_LENGTH * 8, iv);
         cipher.init(true, params);
 
@@ -229,7 +230,7 @@ public class LicenseService {
     }
 
     private byte[] decrypt(byte[] ciphertext, byte[] key, byte[] iv) throws Exception {
-        GCMBlockCipher cipher = new GCMBlockCipher(new AESEngine());
+        GCMModeCipher cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
         AEADParameters params = new AEADParameters(new KeyParameter(key), GCM_TAG_LENGTH * 8, iv);
         cipher.init(false, params);
 

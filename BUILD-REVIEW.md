@@ -14,8 +14,8 @@ Yes. The tree is a full Spring Boot 3.3 / Java 21 service (controllers,
 `JwtService`, JPA `IssuedLicense`, Flyway, OpenAPI, tests). `mvn -B test`
 is the current check, not a six-file static pass.
 
-Expected compiler output: success. BouncyCastle may still emit the two
-deprecation warnings below.
+Expected compiler output: success. No BouncyCastle deprecation warnings
+from `LicenseService` (factory methods, BC 1.78+).
 
 ## Bugs that were real — now fixed
 
@@ -36,32 +36,29 @@ fail-hards if the key is missing, not valid Base64, not 32 bytes, or equal
 to the old committed default (except the `test` profile). There is no
 underscore placeholder string left for `Base64.getDecoder()` to reject.
 
-## Things that compile but are dead weight
+### 4. Unused `steam-condenser` dependency — **fixed**
 
-- `com.github.koraktor:steam-condenser:1.3.1` — still declared; `SteamService`
-  uses `RestTemplate`. Safe to remove from `pom.xml`.
-- `jjwt-api/impl/jackson` — **in use**. `JwtService` + `JwtAuthenticationFilter`
-  are on disk and required for `/api/download/**`.
-- `spring-boot-starter-data-jpa`, `postgresql`, `h2` — **in use**.
-  `IssuedLicense` + `LicenseRepository` persist issuance, revocation, `hwid`,
-  and `lastUsedAt`. Flyway owns the schema (`ddl-auto=validate`).
+`com.github.koraktor:steam-condenser:1.3.1` is no longer in `pom.xml`.
+`SteamService` talks to the Steam Web API with Spring `RestClient`.
 
-## Deprecation warnings the compiler may emit
+### 5. BouncyCastle deprecated constructors — **fixed**
 
-```
-LicenseService.java: warning: [deprecation] AESEngine() in AESEngine has been deprecated
-LicenseService.java: warning: [deprecation] GCMBlockCipher(BlockCipher) in GCMBlockCipher has been deprecated
-```
-
-BouncyCastle 1.78+ factory methods:
+`LicenseService` constructs AES-GCM with the 1.78+ factory methods:
 
 ```java
-GCMBlockCipher cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
+GCMModeCipher cipher = GCMBlockCipher.newInstance(AESEngine.newInstance());
 ```
 
-Won't break the build, just emits warnings. Wire format is unchanged
-(AES-256-GCM, 12-byte IV, 128-bit tag appended). See
-[docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
+Wire format is unchanged (AES-256-GCM, 12-byte IV, 128-bit tag appended,
+no AAD). See [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
+
+## Things that compile and are in use
+
+- `jjwt-api/impl/jackson` — `JwtService` + `JwtAuthenticationFilter`
+  are on disk and required for `/api/download/**`.
+- `spring-boot-starter-data-jpa`, `postgresql`, `h2` —
+  `IssuedLicense` + `LicenseRepository` persist issuance, revocation, `hwid`,
+  and `lastUsedAt`. Flyway owns the schema (`ddl-auto=validate`).
 
 ## How to actually run the build
 
