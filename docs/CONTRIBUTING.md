@@ -128,11 +128,12 @@ Add real Steam Web API integration
 If your changes affect architecture, setup, or public behavior, please update the relevant documentation:
 
 - `docs/ARCHITECTURE.md` (especially for structural changes)
+- `docs/adr/` — add or supersede an Architecture Decision Record when the change is a non-obvious choice already true in the code (see [docs/adr/README.md](adr/README.md))
 - `docs/SETUP.md`
 - `README.md`
 - Code comments and Javadocs
 
-When making architectural changes, remember to update the **"Last Updated"** date at the top of `docs/ARCHITECTURE.md`.
+When making architectural changes, remember to update the **"Last Updated"** date at the top of `docs/ARCHITECTURE.md`. Do not invent APIs, NFT collection addresses, or storefronts in ADRs.
 
 ### 4. Test Your Changes
 

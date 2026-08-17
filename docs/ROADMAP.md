@@ -157,12 +157,12 @@ All critical items required before any public or limited production exposure hav
 ## Documentation & Process (Ongoing)
 
 - Keep `README.md`, `ARCHITECTURE.md`, and this roadmap in sync
-- Introduce Architecture Decision Records (ADRs) under `docs/adr/`
+- [x] Architecture Decision Records under [`docs/adr/`](adr/README.md) — decisions already true on `main`, not a wishlist
 - Perform lightweight threat modeling for every new provider
 - Conduct regular architecture and security reviews
 
 ---
 
-**Last Updated:** 2026-08-17 (Spring profiles + Kubernetes manifests)
+**Last Updated:** 2026-08-17 (ADRs under `docs/adr/`)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
