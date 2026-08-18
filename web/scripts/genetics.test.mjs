@@ -71,6 +71,8 @@ test("dog × oyster fails; same key succeeds; offspring key stays", () => {
   assert.equal(gleam.ok, false);
   const bee = G.canPair("honeybee", "mantis");
   assert.equal(bee.ok, false);
+  const kit = G.canPair("dog", "dog", { a: { stage: "hatchling" } });
+  assert.equal(kit.ok, false);
 });
 
 test("yeast / lichen / knot have a defined path that still mints one record", () => {

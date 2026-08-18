@@ -883,7 +883,16 @@ export function nestPath(speciesKey: string, parentCount: 1 | 2): NestPath {
 export type PairOk = { ok: true; path: NestPath };
 export type PairNo = { ok: false; reason: string };
 
-export function canPair(parentAKey: string, parentBKey: string | null | undefined): PairOk | PairNo {
+export type PairSeat = { stage?: "hatchling" | "grown" | "elder" };
+
+export function canPair(
+  parentAKey: string,
+  parentBKey: string | null | undefined,
+  seats?: { a?: PairSeat; b?: PairSeat },
+): PairOk | PairNo {
+  if (seats?.a?.stage === "hatchling" || seats?.b?.stage === "hatchling") {
+    return { ok: false, reason: "A hatchling cannot pair. Grown and elder may." };
+  }
   const solo = parentAKey === "yeast" || parentAKey === "lichen" || parentAKey === "nexus";
   if (!parentBKey) {
     if (!solo) {
@@ -919,6 +928,31 @@ export function rollBrood(
 
 export function guestCallName(key: string) {
   return HOUSE_NAME[key] ?? key;
+}
+
+const WENT_STILL = new Set(["turtle", "iguana", "dragon", "goldfish", "axolotl"]);
+const COOLED = new Set(["umbral", "nimbus", "silica"]);
+
+/** Species-true verb. House voice: they left, they wilted, they dried, they spent. */
+export function departVerb(speciesKey: string): string {
+  if (speciesKey === "yeast") return "went sour";
+  if (speciesKey === "lichen") return "the pact thinned";
+  if (speciesKey === "cyst") return "opened";
+  if (COOLED.has(speciesKey)) return "cooled";
+  if (speciesKey === "luna") return "spent";
+  const guild = guildOf(speciesKey);
+  if (guild === "garden") return "wilted";
+  if (guild === "cellar") return "dried";
+  if (guild === "hive") return "spent";
+  if (guild === "far") return "went dark";
+  if (guild === "snakes" || guild === "sea" || WENT_STILL.has(speciesKey)) return "went still";
+  return "left";
+}
+
+export function departLine(name: string, speciesKey: string): string {
+  const verb = departVerb(speciesKey);
+  if (verb.startsWith("the ")) return `${name}: ${verb}.`;
+  return `${name} ${verb}.`;
 }
 
 /** Keeper-local extinction: last living of a kind is gone, and no clutch waits. */

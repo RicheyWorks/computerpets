@@ -65,7 +65,12 @@ function NestPage() {
   const a = pets?.find((p) => p.id === seatA) ?? null;
   const b = pets?.find((p) => p.id === seatB) ?? null;
 
-  const verdict = a ? canPair(a.species_key, b?.species_key ?? null) : null;
+  const verdict = a
+    ? canPair(a.species_key, b?.species_key ?? null, {
+        a: { stage: a.stage },
+        b: b ? { stage: b.stage } : undefined,
+      })
+    : null;
   const speciesKey = a?.species_key ?? "dog";
 
   useEffect(() => {
@@ -149,6 +154,11 @@ function NestPage() {
   }
 
   function seat(id: string) {
+    const guest = pets?.find((p) => p.id === id);
+    if (guest && guest.stage === "hatchling") {
+      toast.message("A hatchling cannot pair. Grown and elder may.");
+      return;
+    }
     if (seatA === id) {
       setSeatA(seatB);
       setSeatB(null);
@@ -185,8 +195,8 @@ function NestPage() {
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">The nest</p>
         <h1 className="font-display text-4xl">Two of a kind.</h1>
         <p className="text-sm text-muted">
-          A square on the blotter. A clutch, or a rise. A line, or not. The hatchery
-          draw remains.
+          A square on the blotter. A clutch, or a rise. Grown and elder may sit.
+          A hatchling waits. Neglect can close a line. The nest still keeps one.
         </p>
         <p className="flex flex-wrap gap-4 text-sm">
           <Link to="/hatch" className="text-fg">
@@ -206,7 +216,7 @@ function NestPage() {
               <p className="font-display text-5xl tabular-nums">{ember ?? "—"}</p>
             </div>
             <p className="max-w-[12rem] text-right text-xs text-muted">
-              {path ? `${path.word} · ${path.cost} ember` : "Seat two you already keep."}
+              {path ? `${path.word} · ${path.cost} ember` : "Seat two grown guests you already keep."}
             </p>
           </div>
 
@@ -395,7 +405,7 @@ function NestPage() {
                     </div>
                     <div className="min-w-0">
                       <p className="truncate font-display text-lg leading-tight">{pet.name}</p>
-                      <p className="truncate text-xs text-muted">{pheno}</p>
+                      <p className="truncate text-xs text-muted">{pet.stage} · {pheno}</p>
                       <p className="font-mono text-[10px] text-subtle">
                         {formatDiploid(pet.genes.eyes ?? ["A", "A"])} · {formatDiploid(pet.genes.band ?? ["B", "B"])}
                         {formatDiploid(pet.genes.mask ?? ["m", "m"])} · {formatDiploid(pet.genes.aura ?? ["s", "s"])}
@@ -427,7 +437,7 @@ function SeatCard({
       {pet ? (
         <>
           <p className="mt-2 font-display text-xl leading-none">{pet.name}</p>
-          <p className="mt-1 text-xs text-muted">{phenotypeLine(phenotypeOf(pet.genes, pet.species_key))}</p>
+          <p className="mt-1 text-xs text-muted">{pet.stage} · {phenotypeLine(phenotypeOf(pet.genes, pet.species_key))}</p>
         </>
       ) : (
         <p className="mt-2 text-sm text-muted">{empty}</p>
