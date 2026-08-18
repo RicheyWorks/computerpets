@@ -60,7 +60,17 @@ public enum PetType {
     SAGUARO          ("saguaro",           "Saguaro",              Rarity.RARE),
     VENUS_FLYTRAP    ("venus_flytrap",     "Venus Flytrap",        Rarity.UNCOMMON),
     PITCHER          ("pitcher",           "Purple Pitcher Plant", Rarity.UNCOMMON),
-    SUNDEW           ("sundew",            "Round-leaved Sundew",  Rarity.UNCOMMON);
+    SUNDEW           ("sundew",            "Round-leaved Sundew",  Rarity.UNCOMMON),
+    HONEYBEE         ("honeybee",          "Western Honey Bee",    Rarity.COMMON),
+    MONARCH          ("monarch",           "Monarch",              Rarity.UNCOMMON),
+    LUNA             ("luna",              "Luna Moth",            Rarity.RARE),
+    FIREFLY          ("firefly",           "Common Eastern Firefly", Rarity.UNCOMMON),
+    DARNER           ("darner",            "Common Green Darner",  Rarity.UNCOMMON),
+    STICK            ("stick",             "Common Walkingstick",  Rarity.COMMON),
+    CARPENTER_ANT    ("carpenter_ant",     "Black Carpenter Ant",  Rarity.COMMON),
+    LADYBIRD         ("ladybird",          "Seven-spot Ladybird",  Rarity.COMMON),
+    MANTIS           ("mantis",            "Chinese Mantis",       Rarity.UNCOMMON),
+    CICADA           ("cicada",            "Periodical Cicada",    Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

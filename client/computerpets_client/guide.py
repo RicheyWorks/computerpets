@@ -1,16 +1,16 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same fifty, taught here. Snakes keep the den
+This is not a new bestiary — the same sixty, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
-twenty keep the study facts.
+hive keeps the insect facts; the twenty keep the study facts.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import CATALOG_KEYS, GARDEN_KEYS, HOUSE_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_garden, is_sea, is_snake
+from .species import CATALOG_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_garden, is_insect, is_sea, is_snake
 
 
 @dataclass(frozen=True)
@@ -523,7 +523,100 @@ GARDEN_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE
+INSECT_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "honeybee",
+        "Apis mellifera",
+        "Gold bands, a pollen basket, a waggle that points. Western honey bee. She dances. The dance is a map — direction, distance, a flower she will not waste. The wax dish is a meadow she agreed to.",
+        "Not a fly. Not a wasp with a thinner waist and a worse temper. Comb is Apis mellifera, a bee, Insecta, and the waggle is the whole identification. She does not guess. She maps.",
+        "Honey bee. A dance that is a map.",
+        "wax dish",
+        "busy",
+    ),
+    _entry(
+        "monarch",
+        "Danaus plexippus",
+        "Orange panes, black veins, white spots on the rim. Monarch. She ate milkweed as a caterpillar. The orange is a warning she earned — bitter, honest, not a costume. The cup is a prairie she has not outgrown.",
+        "Not a viceroy with a borrowed coat. Not Milk the snake — Coral wears a warning she does not mean. Milk the butterfly means it. Danaus plexippus, and the milkweed is the law. The orange is not a mood.",
+        "Monarch. Milkweed first. The orange is a warning she earned.",
+        "milkweed cup",
+        "steadfast",
+    ),
+    _entry(
+        "luna",
+        "Actias luna",
+        "Lime-green wings, long tails, eyespots like a polite moon. Luna moth. The adult has no mouth. One week. She does not eat. The lamp is a dusk she agreed to.",
+        "Not a monarch with extra tails. Milk keeps orange and a warning; Ghost is Actias luna, pale, tailed, and finished with food. Not a luna of the rumor with a sip. She has no mouth. The week is the species.",
+        "Luna moth. The adult has no mouth. One week. She does not eat.",
+        "lamp dusk",
+        "brief",
+    ),
+    _entry(
+        "firefly",
+        "Photinus pyralis",
+        "Soft elytra, a lamp in the tail, a flash that is a sentence. Common eastern firefly. She is a beetle. The dusk is a grammar she keeps. The blotter is a meadow after dark.",
+        "Not a fly. Flies keep two wings and no lamp; Spark is Photinus pyralis, a beetle, Lampyridae, and the flash is the tell. Not a glowworm of the rumor with no wings. She lifts. She speaks in light.",
+        "Firefly. A language of light. Beetle, not a fly.",
+        "ink dusk",
+        "signaling",
+    ),
+    _entry(
+        "darner",
+        "Anax junius",
+        "A green needle, a bull's-eye on the forehead, wings that do not fold flat. Common green darner. She hawks. The nymph is a different animal in the water. The lamp is a sky she agreed to.",
+        "Not a damselfly — those rest with wings together and keep a thinner needle. Not the nymph. The nymph hunted in a cup; Dart is Anax junius, the adult, aerial, and the hawk is the tell. She does not commute to the pond.",
+        "Green darner. The nymph is a different animal in the water.",
+        "lamp air",
+        "hunting",
+    ),
+    _entry(
+        "stick",
+        "Diapheromera femorata",
+        "A brown twig with joints, thread legs, a freeze that works. Common walkingstick. She is furniture until she walks. The pencil tray is a forest she borrowed.",
+        "Not a twig. Not a millipede — those keep many legs and a different kingdom. Twig is Diapheromera femorata, a phasmid, Insecta, and the freeze is the whole identification. She does not hurry. She is the pencil until she isn't.",
+        "Walkingstick. Furniture until it walks.",
+        "pencil tray",
+        "still",
+    ),
+    _entry(
+        "carpenter_ant",
+        "Camponotus pennsylvanicus",
+        "A black column, a heart-shaped head, a scent road she will not waste. Black carpenter ant. She nests in wood. She does not eat the house. The grain is a city she agreed to.",
+        "Not a termite. Termites eat the beam; Column is Camponotus pennsylvanicus, and the nest is a room in wood already kind. Not a pavement ant with smaller opinions. The trail is the tell. She does not dine on the desk.",
+        "Carpenter ant. A scent road. She does not eat the house; she nests in it.",
+        "wood grain",
+        "orderly",
+    ),
+    _entry(
+        "ladybird",
+        "Coccinella septempunctata",
+        "Red elytra, seven black spots, a bead that hunts. Seven-spot ladybird. She eats aphids. She is a beetle. The dish is a leaf she agreed to.",
+        "Not a luck charm. Not a fly with a better publicist. Seven is Coccinella septempunctata, a beetle, and the count is the species. Not Spark — Spark flashes; Seven hunts. Aphids. Seven spots. A beetle.",
+        "Ladybird. Seven spots. She eats aphids. A beetle.",
+        "leaf dish",
+        "tidy",
+    ),
+    _entry(
+        "mantis",
+        "Tenodera sinensis",
+        "A long green hinge, raptorial arms folded, a face that turns. Chinese mantis — the common desk one. She hunts. The prayer is a trap. The stem is a perch she borrowed.",
+        "Not a plant. Snap, Well, and Dew hunt on the garden blotter and remain plants. Fold is Tenodera sinensis, an insect, and the fold is the tell. Not a leaf with opinions. The prayer is a trap she earned.",
+        "Chinese mantis. The prayer is a trap. An insect that hunts — not a plant.",
+        "blotter stem",
+        "watchful",
+    ),
+    _entry(
+        "cicada",
+        "Magicicada septendecim",
+        "Red eyes, a black body, a song written underground. Periodical cicada. Seventeen years in the dark. Then she emerges. Then she sings. The inkstone is a door she agreed to.",
+        "Not a fly. Not a locust of the rumor — locusts are grasshoppers who travel. Brood is Magicicada septendecim, a cicada, and the wait is the species. She sits. Then a burst. Seventeen years. Then a song.",
+        "Periodical cicada. Seventeen years underground, then a song.",
+        "inkstone",
+        "patient",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -548,6 +641,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="tide", label="All ten in the tide", verb="swim")
     if is_garden(key):
         return Classroom(room="garden", label="All ten in the garden", verb="grow")
+    if is_insect(key):
+        return Classroom(room="hive", label="All ten in the hive", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
 
 
@@ -567,6 +662,10 @@ def garden_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in GARDEN_GUIDE)
 
 
+def insect_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in INSECT_GUIDE)
+
+
 def house_guide_complete() -> bool:
     return len(HOUSE_GUIDE) == len(HOUSE_KEYS) and all(k in _BY_KEY for k in HOUSE_KEYS)
 
@@ -583,12 +682,17 @@ def garden_guide_complete() -> bool:
     return len(GARDEN_GUIDE) == len(GARDEN_KEYS) and all(k in _BY_KEY for k in GARDEN_KEYS)
 
 
+def insect_guide_complete() -> bool:
+    return len(INSECT_GUIDE) == len(INSECT_KEYS) and all(k in _BY_KEY for k in INSECT_KEYS)
+
+
 def guide_complete() -> bool:
     return (
         house_guide_complete()
         and snake_guide_complete()
         and sea_guide_complete()
         and garden_guide_complete()
+        and insect_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
     )

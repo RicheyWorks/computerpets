@@ -50,6 +50,16 @@ const REST: Record<string, [number, number]> = {
   venus_flytrap: [21, 6],
   pitcher: [21, 6],
   sundew: [20, 6],
+  honeybee: [20, 6],
+  monarch: [20, 6],
+  luna: [8, 18],
+  firefly: [8, 18],
+  darner: [21, 6],
+  stick: [21, 6],
+  carpenter_ant: [8, 18],
+  ladybird: [20, 6],
+  mantis: [20, 6],
+  cicada: [21, 6],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -126,6 +136,16 @@ export const HIDE_LINE: Record<string, string> = {
   venus_flytrap: "Inside the cup.",
   pitcher: "Inside the well.",
   sundew: "Behind a glitter.",
+  honeybee: "Inside the comb.",
+  monarch: "Inside the cup.",
+  luna: "Behind a dusk.",
+  firefly: "Behind a flash.",
+  darner: "Above the lamp.",
+  stick: "Among the pencils.",
+  carpenter_ant: "Inside the grain.",
+  ladybird: "Under a leaf.",
+  mantis: "Behind a fold.",
+  cicada: "Under the stone.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -179,6 +199,16 @@ export const SNACK_LINE: Record<string, string> = {
   venus_flytrap: "A fly of a treaty.",
   pitcher: "A midge of a treaty.",
   sundew: "A gnat of a treaty.",
+  honeybee: "Nectar of a treaty.",
+  monarch: "Milkweed of a treaty.",
+  luna: "Nothing of a treaty. I decline the bite.",
+  firefly: "A midge of a treaty.",
+  darner: "A mosquito of a treaty.",
+  stick: "A leaf of a treaty.",
+  carpenter_ant: "Honeydew of a treaty.",
+  ladybird: "An aphid of a treaty.",
+  mantis: "A fly of a treaty.",
+  cicada: "Sap of a treaty.",
 };
 
 

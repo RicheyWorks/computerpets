@@ -118,9 +118,9 @@ All critical items required before any public or limited production exposure hav
 - [x] Cat (Miso) wakes on the living desk
 - [x] Dog (Pip) wakes on the living desk
 - [x] Browser ad demos (`/meet`, `/demo/rui`, `/demo/miso`, `/demo/pip`)
-- [x] Full catalog awake — all fifty living kinds have living browser demos
-- [x] Windows/Mac desktop overlay for all fifty + phone/tablet Live companion
-- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, and a garden of ten plants licensed)
+- [x] Full catalog awake — all sixty living kinds have living browser demos
+- [x] Windows/Mac desktop overlay for all sixty + phone/tablet Live companion
+- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, a garden of ten plants, and a hive of ten insects licensed)
 - [x] Per-species life sim — hunger clocks, mess, illness, age, specials, Windows hardening
 - [x] Mind plugin bus — 14 AI backends, per-pet assignment, custom webhook
 - [x] Browser desk specials + house journal; species gaits on every screen

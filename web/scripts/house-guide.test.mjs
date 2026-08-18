@@ -9,6 +9,7 @@ const rosterSrc = readFileSync(join(root, "src/lib/pets/roster.ts"), "utf8");
 const snakesSrc = readFileSync(join(root, "src/lib/pets/snakes.ts"), "utf8");
 const seaSrc = readFileSync(join(root, "src/lib/pets/sea.ts"), "utf8");
 const gardenSrc = readFileSync(join(root, "src/lib/pets/garden.ts"), "utf8");
+const insectSrc = readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8");
 const guideSrc = readFileSync(join(root, "src/lib/pets/house-guide.ts"), "utf8");
 const studySrc = readFileSync(join(root, "src/routes/study.tsx"), "utf8");
 const denSrc = readFileSync(join(root, "src/routes/snakes.tsx"), "utf8");
@@ -54,7 +55,8 @@ test("the study lists the same twenty living pets as the roster, and none of the
   const snakeKeys = quotedKeys(snakesSrc);
   const seaKeys = quotedKeys(seaSrc);
   const gardenKeys = quotedKeys(gardenSrc);
-  const houseKeys = rosterKeys.filter((key) => !snakeKeys.includes(key) && !seaKeys.includes(key) && !gardenKeys.includes(key));
+  const insectKeys = quotedKeys(insectSrc);
+  const houseKeys = rosterKeys.filter((key) => !snakeKeys.includes(key) && !seaKeys.includes(key) && !gardenKeys.includes(key) && !insectKeys.includes(key));
   const guideKeys = [...guideSrc.matchAll(/entry\(\s*"([a-z_]+)"/g)].map((m) => m[1]);
   assert.deepEqual(houseKeys, EXPECTED.map(([key]) => key));
   assert.deepEqual(guideKeys, houseKeys);
@@ -66,6 +68,9 @@ test("the study lists the same twenty living pets as the roster, and none of the
     assert.equal(guideKeys.includes(key), false);
   }
   for (const key of gardenKeys) {
+    assert.equal(guideKeys.includes(key), false);
+  }
+  for (const key of insectKeys) {
     assert.equal(guideKeys.includes(key), false);
   }
 });

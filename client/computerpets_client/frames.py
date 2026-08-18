@@ -4,7 +4,8 @@ Drawn with QPainter into pixmaps, then composited by the GPU-backed scene.
 Not photographed assets and not a shader engine.
 
 Snakes crawl (S-curve / coil). The tide swims; hermit and horseshoe walk
-the damp floor. The garden sits and leans. The others walk, with
+the damp floor. The garden sits and leans. The hive stays — bee, butterfly, luna, firefly
+beetle, darner, stick, ant, ladybird, mantis, cicada. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
 bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, pitcher well, sundew, and so on.
 No invented species.
@@ -177,6 +178,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "sundew",
     ):
         _draw_plant(p, species, anim, i, sit, eat, sleep)
+        return
+    if species.silhouette in (
+        "bee",
+        "butterfly",
+        "luna",
+        "firefly",
+        "darner",
+        "stick",
+        "ant",
+        "ladybird",
+        "mantis",
+        "cicada",
+    ):
+        _draw_insect(p, species, anim, i, sit, eat, sleep, stride)
         return
     if species.silhouette in ("bird", "parrot", "toucan", "phoenix", "penguin"):
         _draw_bird(p, species, anim, i, sit, eat, sleep, stride)
@@ -848,6 +863,196 @@ def _draw_plant(
         p.setBrush(QBrush(QColor(24, 16, 14)))
         p.drawEllipse(QRectF(-6, -8, 5, 3))
         p.drawEllipse(QRectF(2, -8, 5, 3))
+
+
+def _draw_insect(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    ear = _color(pal.ear)
+    sil = species.silhouette
+    buzz = math.sin(i * 1.2) * (6 if anim == "walk" else 2 if anim == "idle" else 0)
+    lift = 8 if anim == "play" else 4 if anim == "walk" else 0
+    p.translate(0, sit * 0.15 - lift)
+    if sleep:
+        p.rotate(-12)
+
+    if sil == "bee":
+        p.setBrush(QBrush(QColor(220, 228, 236, 140)))
+        p.setPen(QPen(QColor(180, 188, 196, 160), 1.0))
+        p.drawEllipse(QRectF(-22, -18 + buzz, 18, 14))
+        p.drawEllipse(QRectF(4, -18 - buzz, 18, 14))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-16, -8, 32, 22))
+        p.setPen(QPen(ear, 1.4))
+        p.drawLine(-8, -6, -8, 12)
+        p.drawLine(0, -6, 0, 12)
+        p.drawLine(8, -6, 8, 12)
+        p.setBrush(QBrush(ear))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-22, -4, 12, 10))
+        p.setPen(QPen(ear, 1.2))
+        p.drawLine(-20, -4, -28, -16)
+        p.drawLine(-16, -4, -22, -18)
+        return
+    if sil == "butterfly":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        open_w = 1.0 if anim in ("walk", "play", "idle") else 0.45
+        for side in (-1, 1):
+            wing = QPainterPath()
+            wing.moveTo(0, 0)
+            wing.quadTo(side * 28 * open_w, -22, side * 36 * open_w, 2)
+            wing.quadTo(side * 22 * open_w, 16, 0, 4)
+            p.drawPath(wing)
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-28 * open_w, -16, 6, 6))
+        p.drawEllipse(QRectF(22 * open_w, -16, 6, 6))
+        p.setBrush(QBrush(ear))
+        p.drawRoundedRect(QRectF(-3, -10, 6, 22), 2, 2)
+        return
+    if sil == "luna":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        open_w = 0.9 if anim != "sleep" else 0.5
+        for side in (-1, 1):
+            wing = QPainterPath()
+            wing.moveTo(0, 2)
+            wing.quadTo(side * 26 * open_w, -24, side * 20 * open_w, 6)
+            wing.quadTo(side * 18 * open_w, 22, side * 8 * open_w, 28)
+            wing.quadTo(side * 4 * open_w, 10, 0, 2)
+            p.drawPath(wing)
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-16, -8, 8, 8))
+        p.drawEllipse(QRectF(8, -8, 8, 8))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-4, -6, 8, 12))
+        if eat:
+            p.setPen(QPen(accent, 1.0))
+            p.drawLine(-2, 4, 2, 4)
+        return
+    if sil == "firefly":
+        p.setBrush(QBrush(QColor(40, 36, 28)))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-14, -10, 28, 18))
+        p.setBrush(QBrush(body))
+        p.drawRoundedRect(QRectF(-12, -8, 24, 10), 4, 4)
+        glow = 180 if anim in ("idle", "play", "talk") or i % 2 == 0 else 70
+        p.setBrush(QBrush(QColor(255, 220, 64, glow)))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-8, 4, 16, 12))
+        p.setBrush(QBrush(QColor(220, 228, 236, 90)))
+        p.drawEllipse(QRectF(-18, -16 + buzz * 0.4, 14, 10))
+        p.drawEllipse(QRectF(4, -16 - buzz * 0.4, 14, 10))
+        return
+    if sil == "darner":
+        p.setBrush(QBrush(QColor(200, 220, 232, 120)))
+        p.setPen(QPen(QColor(160, 180, 196, 140), 0.8))
+        p.drawEllipse(QRectF(-36, -10 + buzz, 32, 8))
+        p.drawEllipse(QRectF(4, -10 - buzz, 32, 8))
+        p.drawEllipse(QRectF(-36, -2, 32, 8))
+        p.drawEllipse(QRectF(4, -2, 32, 8))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-6, -16, 12, 40), 5, 5)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, -22, 16, 12))
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-3, -20, 6, 6))
+        return
+    if sil == "stick":
+        p.setPen(QPen(body, 3.2))
+        p.drawLine(-2, -28, 4, 30)
+        p.setPen(QPen(accent, 1.4))
+        p.drawLine(-2, -8, -18, -4)
+        p.drawLine(2, -4, 20, 0)
+        p.drawLine(-1, 8, -16, 16)
+        p.drawLine(3, 12, 18, 20)
+        p.setBrush(QBrush(ear))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -32, 8, 8))
+        return
+    if sil == "ant":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-22, -6, 14, 12))
+        p.drawEllipse(QRectF(-8, -8, 16, 14))
+        p.drawEllipse(QRectF(8, -6, 16, 12))
+        p.setPen(QPen(accent, 1.2))
+        p.drawLine(-4, 4, -16, int(16 + stride * 4))
+        p.drawLine(0, 6, 4, int(18 - stride * 4))
+        p.drawLine(10, 4, 22, int(16 + stride * 4))
+        p.drawLine(-18, -4, -28, -14)
+        p.drawLine(-16, -2, -26, -16)
+        return
+    if sil == "ladybird":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-18, -12, 36, 28))
+        p.setPen(QPen(ear, 1.2))
+        p.drawLine(0, -10, 0, 14)
+        p.setBrush(QBrush(ear))
+        p.setPen(Qt.PenStyle.NoPen)
+        for x, y in ((-8, -4), (8, -4), (-10, 6), (10, 6), (0, 2), (-6, 12), (6, 12)):
+            p.drawEllipse(QRectF(x - 2.4, y - 2.4, 4.8, 4.8))
+        p.drawEllipse(QRectF(-8, -16, 16, 10))
+        return
+    if sil == "mantis":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-5, -8, 10, 28), 4, 4)
+        p.drawEllipse(QRectF(-8, -20, 16, 14))
+        folded = anim != "play"
+        p.setPen(QPen(body, 2.4))
+        if folded:
+            p.drawLine(-4, -4, -16, 8)
+            p.drawLine(-16, 8, -8, 16)
+            p.drawLine(4, -4, 16, 8)
+            p.drawLine(16, 8, 8, 16)
+        else:
+            p.drawLine(-4, -4, -24, -8)
+            p.drawLine(4, -4, 24, -8)
+        p.setPen(QPen(accent, 1.4))
+        p.drawLine(-2, 16, -14, 28)
+        p.drawLine(2, 16, 14, 28)
+        return
+    # Cicada — broad roof wings, red eyes, a sit that waits.
+    p.setBrush(QBrush(QColor(40, 36, 32, 160)))
+    p.setPen(QPen(accent, 1.0))
+    roof = QPainterPath()
+    roof.moveTo(-6, -8)
+    roof.quadTo(-28, 4, -8, 22)
+    roof.quadTo(0, 8, -6, -8)
+    p.drawPath(roof)
+    roof2 = QPainterPath()
+    roof2.moveTo(6, -8)
+    roof2.quadTo(28, 4, 8, 22)
+    roof2.quadTo(0, 8, 6, -8)
+    p.drawPath(roof2)
+    p.setBrush(QBrush(body))
+    p.drawEllipse(QRectF(-10, -6, 20, 22))
+    p.setBrush(QBrush(ear))
+    p.setPen(Qt.PenStyle.NoPen)
+    p.drawEllipse(QRectF(-10, -10, 8, 8))
+    p.drawEllipse(QRectF(2, -10, 8, 8))
+    if anim == "play":
+        p.setPen(QPen(ring, 1.2))
+        p.drawLine(-4, 4, 4, 4)
 
 
 def _draw_snake(

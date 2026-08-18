@@ -51,6 +51,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   venus_flytrap: { shape: "crumb", verb: "Fly" },
   pitcher: { shape: "crumb", verb: "Midge" },
   sundew: { shape: "crumb", verb: "Gnat" },
+  honeybee: { shape: "flake", verb: "Nectar" },
+  monarch: { shape: "leaf", verb: "Milkweed" },
+  luna: { shape: "flake", verb: "Dusk" },
+  firefly: { shape: "crumb", verb: "Midge" },
+  darner: { shape: "crumb", verb: "Mosquito" },
+  stick: { shape: "leaf", verb: "Leaf" },
+  carpenter_ant: { shape: "flake", verb: "Honeydew" },
+  ladybird: { shape: "crumb", verb: "Aphid" },
+  mantis: { shape: "crumb", verb: "Fly" },
+  cicada: { shape: "flake", verb: "Sap" },
 };
 
 export function treatFor(key: string) {
@@ -108,4 +118,14 @@ export const GIFT_LINE: Record<string, string> = {
   venus_flytrap: "A snap I did not need.",
   pitcher: "A well I was finished holding.",
   sundew: "A drop I was finished glittering.",
+  honeybee: "A dance I was not using.",
+  monarch: "An orange I was finished wearing.",
+  luna: "A dusk I was not eating.",
+  firefly: "A flash I was finished saying.",
+  darner: "A hawk I was not using.",
+  stick: "A freeze I was finished holding.",
+  carpenter_ant: "A road I was finished walking.",
+  ladybird: "A count I was finished keeping.",
+  mantis: "A fold I did not need.",
+  cicada: "A year I was finished waiting.",
 };

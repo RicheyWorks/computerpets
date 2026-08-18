@@ -61,6 +61,16 @@ export const SPECIES: Species[] = [
   { key: "venus_flytrap", displayName: "Venus Flytrap", rarity: "UNCOMMON", temperament: "Watchful", habitat: "Wetland cup", blurb: "A wetland plant. Not a monster. Snaps when the hairs agree." },
   { key: "pitcher", displayName: "Purple Pitcher Plant", rarity: "UNCOMMON", temperament: "Patient", habitat: "Bog cup", blurb: "A leaf that became a well. Drowns. Not a flytrap with a cup glued on." },
   { key: "sundew", displayName: "Round-leaved Sundew", rarity: "UNCOMMON", temperament: "Slow", habitat: "Peat saucer", blurb: "Tentacles, mucilage, a slow curl. Glue. Not a flytrap." },
+  { key: "honeybee", displayName: "Western Honey Bee", rarity: "COMMON", temperament: "Busy", habitat: "Wax dish", blurb: "Waggles the blotter. The dance is a map, not a mood." },
+  { key: "monarch", displayName: "Monarch", rarity: "UNCOMMON", temperament: "Steadfast", habitat: "Milkweed cup", blurb: "Milkweed first. The orange is a warning she earned." },
+  { key: "luna", displayName: "Luna Moth", rarity: "RARE", temperament: "Brief", habitat: "Lamp dusk", blurb: "The adult has no mouth. One week. She does not eat." },
+  { key: "firefly", displayName: "Common Eastern Firefly", rarity: "UNCOMMON", temperament: "Signaling", habitat: "Ink dusk", blurb: "A beetle, not a fly. The flash is a sentence." },
+  { key: "darner", displayName: "Common Green Darner", rarity: "UNCOMMON", temperament: "Hunting", habitat: "Lamp air", blurb: "The nymph is a different animal in the water. The adult hawks the lamp." },
+  { key: "stick", displayName: "Common Walkingstick", rarity: "COMMON", temperament: "Still", habitat: "Pencil tray", blurb: "A stick that agreed to be an insect. Freezes first." },
+  { key: "carpenter_ant", displayName: "Black Carpenter Ant", rarity: "COMMON", temperament: "Orderly", habitat: "Wood grain", blurb: "She does not eat the house. She nests in it." },
+  { key: "ladybird", displayName: "Seven-spot Ladybird", rarity: "COMMON", temperament: "Tidy", habitat: "Leaf dish", blurb: "Seven spots. She eats aphids. A beetle, not a rumor." },
+  { key: "mantis", displayName: "Chinese Mantis", rarity: "UNCOMMON", temperament: "Watchful", habitat: "Blotter stem", blurb: "An insect that hunts. She is not a plant." },
+  { key: "cicada", displayName: "Periodical Cicada", rarity: "RARE", temperament: "Patient", habitat: "Inkstone", blurb: "Seventeen years underground. Then she sings." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

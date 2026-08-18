@@ -355,6 +355,16 @@ const TREAT_SHAPE = {
   venus_flytrap: "crumb",
   pitcher: "crumb",
   sundew: "crumb",
+  honeybee: "flake",
+  monarch: "leaf",
+  luna: "flake",
+  firefly: "crumb",
+  darner: "crumb",
+  stick: "leaf",
+  carpenter_ant: "flake",
+  ladybird: "crumb",
+  mantis: "crumb",
+  cicada: "flake",
 };
 
 function placeMark(kindName, x, hops = 0) {
@@ -1022,6 +1032,16 @@ const VISIT_LINE = {
   venus_flytrap: "I did not snap. Then I left the cup.",
   pitcher: "I kept the well. Then I left the rain.",
   sundew: "I glittered. Then I uncurled.",
+  honeybee: "I danced. Then I left the map.",
+  monarch: "I kept the orange. Then I left the cup.",
+  luna: "I drifted. I did not eat.",
+  firefly: "I flashed. Then I left the grammar.",
+  darner: "I hawed. Then I was air again.",
+  stick: "I froze. Then I was a pencil again.",
+  carpenter_ant: "I laid a road. Then I left the grain.",
+  ladybird: "I counted. Then I left the seven.",
+  mantis: "I folded. Then I left the stem.",
+  cicada: "I sat. Then I left the years.",
 };
 
 let visit = null;

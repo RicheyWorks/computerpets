@@ -33,9 +33,11 @@ import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { Link } from "@tanstack/react-router";
 import { isGarden } from "@/lib/pets/garden";
+import { isInsect } from "@/lib/pets/insects";
 import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { gardenGuideFor } from "@/lib/pets/garden-guide";
+import { insectGuideFor } from "@/lib/pets/insect-guide";
 import { seaGuideFor } from "@/lib/pets/sea-guide";
 import { guideFor } from "@/lib/pets/snake-guide";
 import { HIDE_LINE, SNACK_LINE, dayPart, dayPartLabel, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
@@ -363,6 +365,13 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
             {gardenGuideFor(kind.key)?.species ?? kind.speciesLabel} ·{" "}
             <Link to="/garden" className="text-fg no-underline">
               Learn the garden
+            </Link>
+          </p>
+        ) : isInsect(kind.key) ? (
+          <p className="mt-2 text-xs text-subtle">
+            {insectGuideFor(kind.key)?.species ?? kind.speciesLabel} ·{" "}
+            <Link to="/hive" className="text-fg no-underline">
+              Learn the hive
             </Link>
           </p>
         ) : (
