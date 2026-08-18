@@ -994,9 +994,9 @@ def _draw_insect(
         p.drawEllipse(QRectF(-8, -8, 16, 14))
         p.drawEllipse(QRectF(8, -6, 16, 12))
         p.setPen(QPen(accent, 1.2))
-        p.drawLine(-4, 4, -16, 16 + stride * 4)
-        p.drawLine(0, 6, 4, 18 - stride * 4)
-        p.drawLine(10, 4, 22, 16 + stride * 4)
+        p.drawLine(-4, 4, -16, int(16 + stride * 4))
+        p.drawLine(0, 6, 4, int(18 - stride * 4))
+        p.drawLine(10, 4, 22, int(16 + stride * 4))
         p.drawLine(-18, -4, -28, -14)
         p.drawLine(-16, -2, -26, -16)
         return
