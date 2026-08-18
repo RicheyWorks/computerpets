@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { guestsIn, ROOMS, type RoomId } from "@/lib/pets/rooms";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,9 @@ export function DenCabinet({
   className?: string;
 }) {
   const [open, setOpen] = useState<RoomId | null>(currentRoom ?? null);
+  useEffect(() => {
+    setOpen(currentRoom ?? null);
+  }, [currentRoom]);
   const shown = drawers ? open : null;
 
   return (
