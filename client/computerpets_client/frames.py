@@ -5,7 +5,9 @@ Not photographed assets and not a shader engine.
 
 Snakes crawl (S-curve / coil). The tide swims; hermit and horseshoe walk
 the damp floor. The garden sits and leans. The hive stays — bee, butterfly, luna, firefly
-beetle, darner, stick, ant, ladybird, mantis, cicada. The others walk, with
+beetle, darner, stick, ant, ladybird, mantis, cicada. The cellar sits —
+shelf, amanita, morel, chanterelle, bracket, mane, puffball, sulfur shelf,
+yeast jar, lichen shrub. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
 bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, pitcher well, sundew, and so on.
 No invented species.
@@ -192,6 +194,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "cicada",
     ):
         _draw_insect(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    if species.silhouette in (
+        "shelf",
+        "amanita",
+        "morel",
+        "chanterelle",
+        "bracket",
+        "mane",
+        "puffball",
+        "sulfur",
+        "yeast",
+        "lichen",
+    ):
+        _draw_fungus(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in ("bird", "parrot", "toucan", "phoenix", "penguin"):
         _draw_bird(p, species, anim, i, sit, eat, sleep, stride)
@@ -1053,6 +1069,169 @@ def _draw_insect(
     if anim == "play":
         p.setPen(QPen(ring, 1.2))
         p.drawLine(-4, 4, 4, 4)
+
+
+def _draw_fungus(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    ear = _color(pal.ear)
+    sil = species.silhouette
+    lean = math.sin(i * 0.9) * (4 if anim in ("idle", "walk") else 1)
+    flush = 8 if anim in ("play", "talk") else 0
+    p.translate(lean, sit * 0.12)
+    if sleep:
+        p.rotate(-10)
+    if sil == "shelf":
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.2))
+        p.drawRoundedRect(QRectF(-10, 16, 22, 8), 3, 3)
+        p.setBrush(QBrush(body))
+        for ox, oy, w in ((-16, 4, 22), (0, -2, 28), (12, 6, 20)):
+            fan = QPainterPath()
+            fan.moveTo(ox - w / 2, oy + 8)
+            fan.quadTo(ox - w / 3, oy - 8, ox, oy - 10)
+            fan.quadTo(ox + w / 2, oy - 2, ox + w / 2, oy + 6)
+            fan.quadTo(ox, oy + 10, ox - w / 2, oy + 8)
+            p.drawPath(fan)
+        return
+    if sil == "amanita":
+        p.setBrush(QBrush(belly))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-12, 16, 24, 10))
+        p.drawRoundedRect(QRectF(-6, -4, 12, 24), 5, 5)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-26, -22, 52, 26))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        for x, y in ((-12, -14), (8, -16), (-4, -8), (14, -10), (0, -18)):
+            p.drawEllipse(QRectF(x, y, 6, 5))
+        p.setPen(QPen(belly, 2.0))
+        p.drawLine(-10, 6, 10, 6)
+        return
+    if sil == "morel":
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-6, 6, 12, 20), 4, 4)
+        cone = QPainterPath()
+        cone.moveTo(-4, -28)
+        cone.lineTo(10, -20)
+        cone.lineTo(14, 4)
+        cone.lineTo(-14, 4)
+        cone.lineTo(-12, -18)
+        cone.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.drawPath(cone)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        for x, y in ((-4, -16), (4, -12), (-6, -4), (6, -2), (0, -8)):
+            p.drawEllipse(QRectF(x, y, 6, 5))
+        return
+    if sil == "chanterelle":
+        p.setBrush(QBrush(belly))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-5, 4, 10, 18), 4, 4)
+        vase = QPainterPath()
+        vase.moveTo(-6, 6)
+        vase.quadTo(-22, -6, -8, -22)
+        vase.quadTo(0, -28, 8, -22)
+        vase.quadTo(22, -6, 6, 6)
+        p.setBrush(QBrush(body))
+        p.drawPath(vase)
+        p.setPen(QPen(ring, 1.0))
+        p.drawLine(0, 6, -14, -8)
+        p.drawLine(0, 6, 14, -8)
+        p.drawLine(-4, 4, -8, -18)
+        p.drawLine(4, 4, 8, -18)
+        return
+    if sil == "bracket":
+        p.setPen(Qt.PenStyle.NoPen)
+        for k, (ox, oy, w, h, fill) in enumerate(
+            (
+                (-8, 6, 36, 14, ear),
+                (2, 0, 32, 12, body),
+                (8, -6, 28, 10, ring),
+            )
+        ):
+            p.setBrush(QBrush(fill))
+            p.drawEllipse(QRectF(ox - w / 2, oy - h / 2, w, h))
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 8, 22, 7))
+        return
+    if sil == "mane":
+        p.setBrush(QBrush(belly))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-12, -12, 24, 14))
+        p.setPen(QPen(body, 2.4))
+        for x, L in ((-14, 22), (-8, 28), (-2, 32), (4, 30), (10, 24), (16, 18)):
+            p.drawLine(x, 0, x + (1 if x >= 0 else -1), L)
+        return
+    if sil == "puffball":
+        puff = 6 if anim == "play" else 0
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-22 - puff / 2, -18 - puff / 2, 44 + puff, 40 + puff))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        for x, y in ((-8, -6), (8, -8), (0, 6), (-12, 4)):
+            p.drawEllipse(QRectF(x, y, 5, 4))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-4, -16, 8, 6))
+        if anim == "play":
+            p.setBrush(QBrush(QColor(220, 212, 196, 120)))
+            p.drawEllipse(QRectF(-10, -36, 12, 10))
+            p.drawEllipse(QRectF(4, -40, 10, 8))
+        return
+    if sil == "sulfur":
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-8, 16, 20, 8), 3, 3)
+        p.setBrush(QBrush(body))
+        for oy, w in ((10, 20), (0, 28), (-10, 32), (-20, 24)):
+            fan = QPainterPath()
+            fan.moveTo(-w / 2, oy + 8)
+            fan.quadTo(-w / 3, oy - 4, 0, oy - 6)
+            fan.quadTo(w / 2, oy, w / 2, oy + 6)
+            fan.quadTo(0, oy + 10, -w / 2, oy + 8)
+            p.drawPath(fan)
+        return
+    if sil == "yeast":
+        rise = 6 if anim in ("walk", "play") else 2 if anim == "idle" else 0
+        p.setBrush(QBrush(QColor(196, 208, 212, 90)))
+        p.setPen(QPen(ear, 1.2))
+        p.drawRoundedRect(QRectF(-16, -10 - rise, 32, 36 + rise), 4, 4)
+        p.setBrush(QBrush(body))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-12, 2, 24, 18))
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-13, -6 - rise, 26, 12))
+        p.drawEllipse(QRectF(-6, 6, 5, 6))
+        p.drawEllipse(QRectF(4, 10, 4, 5))
+        return
+    # Lichen — branching shrub, not a cap.
+    p.setPen(QPen(body, 2.4))
+    p.drawLine(0, 16, 0, -20)
+    p.drawLine(0, 4, -16, -10)
+    p.drawLine(0, 0, 16, -12)
+    p.drawLine(-8, -4, -18, -18)
+    p.drawLine(8, -6, 18, -20)
+    p.setBrush(QBrush(belly))
+    p.setPen(Qt.PenStyle.NoPen)
+    for x, y in ((-16, -10), (16, -12), (-18, -18), (18, -20), (0, -20), (8, -8)):
+        p.drawEllipse(QRectF(x - 3, y - 3, 6, 6))
+    p.setBrush(QBrush(ear))
+    p.drawEllipse(QRectF(-8, 14, 16, 8))
+    _ = flush
 
 
 def _draw_snake(

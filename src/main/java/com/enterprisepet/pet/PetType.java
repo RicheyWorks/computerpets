@@ -70,7 +70,17 @@ public enum PetType {
     CARPENTER_ANT    ("carpenter_ant",     "Black Carpenter Ant",  Rarity.COMMON),
     LADYBIRD         ("ladybird",          "Seven-spot Ladybird",  Rarity.COMMON),
     MANTIS           ("mantis",            "Chinese Mantis",       Rarity.UNCOMMON),
-    CICADA           ("cicada",            "Periodical Cicada",    Rarity.RARE);
+    CICADA           ("cicada",            "Periodical Cicada",    Rarity.RARE),
+    OYSTER           ("oyster",            "Oyster Mushroom",      Rarity.COMMON),
+    FLY_AGARIC       ("fly_agaric",        "Fly Agaric",           Rarity.UNCOMMON),
+    MOREL            ("morel",             "American Morel",       Rarity.RARE),
+    CHANTERELLE      ("chanterelle",       "Golden Chanterelle",   Rarity.UNCOMMON),
+    TURKEY_TAIL      ("turkey_tail",       "Turkey Tail",          Rarity.COMMON),
+    LIONS_MANE       ("lions_mane",        "Lion's Mane",          Rarity.UNCOMMON),
+    PUFFBALL         ("puffball",          "Common Puffball",      Rarity.COMMON),
+    CHICKEN_OF_WOODS ("chicken_of_woods",  "Chicken of the Woods", Rarity.UNCOMMON),
+    YEAST            ("yeast",             "Baker's Yeast",        Rarity.COMMON),
+    LICHEN           ("lichen",            "Reindeer Lichen",      Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

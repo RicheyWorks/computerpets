@@ -3,12 +3,14 @@
 from computerpets_client.life import CareState, apply_feed, apply_hide, apply_treat
 from computerpets_client.species import (
     CATALOG_KEYS,
+    FUNGI_KEYS,
     GARDEN_KEYS,
     HOUSE_KEYS,
     INSECT_KEYS,
     SEA_KEYS,
     SNAKE_KEYS,
     SPECIES,
+    is_fungus,
     is_garden,
     is_insect,
     is_sea,
@@ -18,7 +20,7 @@ from computerpets_client.species import (
     species_by_key,
 )
 
-# Same sixty wire keys as PetType / web/src/lib/pets/catalog.ts.
+# Same seventy wire keys as PetType / web/src/lib/pets/catalog.ts.
 WEB_CATALOG = (
     "red_panda",
     "cat",
@@ -80,6 +82,16 @@ WEB_CATALOG = (
     "ladybird",
     "mantis",
     "cicada",
+    "oyster",
+    "fly_agaric",
+    "morel",
+    "chanterelle",
+    "turkey_tail",
+    "lions_mane",
+    "puffball",
+    "chicken_of_woods",
+    "yeast",
+    "lichen",
 )
 
 WEB_SNAKES = (
@@ -137,6 +149,19 @@ WEB_INSECTS = (
     "cicada",
 )
 
+WEB_FUNGI = (
+    "oyster",
+    "fly_agaric",
+    "morel",
+    "chanterelle",
+    "turkey_tail",
+    "lions_mane",
+    "puffball",
+    "chicken_of_woods",
+    "yeast",
+    "lichen",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -146,11 +171,13 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(SEA_KEYS) == 10
     assert len(GARDEN_KEYS) == 10
     assert len(INSECT_KEYS) == 10
+    assert len(FUNGI_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
     assert set(GARDEN_KEYS) == set(WEB_GARDEN)
     assert set(INSECT_KEYS) == set(WEB_INSECTS)
+    assert set(FUNGI_KEYS) == set(WEB_FUNGI)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -171,6 +198,7 @@ def test_walkers_walk_and_are_not_snakes():
         assert not is_sea(key)
         assert not is_garden(key)
         assert not is_insect(key)
+        assert not is_fungus(key)
         assert spec.gait == "walk"
         assert spec.silhouette != "snake"
 
@@ -221,6 +249,7 @@ def test_ten_hive_guests_are_present_and_honest():
         assert not is_snake(key)
         assert not is_sea(key)
         assert not is_garden(key)
+        assert not is_fungus(key)
         assert spec.treat
         assert spec.treat_shape in TREAT_SHAPES
         assert spec.aquatic is False
@@ -232,6 +261,44 @@ def test_ten_hive_guests_are_present_and_honest():
     assert SPECIES["luna"].walk < 20
     assert SPECIES["honeybee"].walk > 100
     assert SPECIES["darner"].walk > 140
+
+
+def test_ten_cellar_guests_are_present_and_honest():
+    assert FUNGI_KEYS == WEB_FUNGI
+    for key in FUNGI_KEYS:
+        spec = SPECIES[key]
+        assert is_fungus(key)
+        assert not is_snake(key)
+        assert not is_sea(key)
+        assert not is_garden(key)
+        assert not is_insect(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.aquatic is False
+        assert spec.walk < 20
+    assert SPECIES["oyster"].slug == "frill"
+    assert SPECIES["oyster"].name == "Frill"
+    assert SPECIES["fly_agaric"].name == "Cap"
+    assert SPECIES["morel"].name == "Lattice"
+    assert SPECIES["chanterelle"].name == "Horn"
+    assert SPECIES["turkey_tail"].name == "Ring"
+    assert SPECIES["lions_mane"].name == "Mane"
+    assert SPECIES["puffball"].name == "Puff"
+    assert SPECIES["chicken_of_woods"].name == "Flame"
+    assert SPECIES["yeast"].name == "Starter"
+    assert SPECIES["lichen"].name == "Pact"
+    assert SPECIES["oyster"].silhouette == "shelf"
+    assert SPECIES["fly_agaric"].silhouette == "amanita"
+    assert SPECIES["morel"].silhouette == "morel"
+    assert SPECIES["chanterelle"].silhouette == "chanterelle"
+    assert SPECIES["turkey_tail"].silhouette == "bracket"
+    assert SPECIES["lions_mane"].silhouette == "mane"
+    assert SPECIES["puffball"].silhouette == "puffball"
+    assert SPECIES["chicken_of_woods"].silhouette == "sulfur"
+    assert SPECIES["yeast"].silhouette == "yeast"
+    assert SPECIES["lichen"].silhouette == "lichen"
+    assert SPECIES["puffball"].walk > SPECIES["yeast"].walk
+    assert SPECIES["lichen"].walk <= 4
 
 
 def test_every_kind_has_house_voice_and_care_treat():
@@ -258,8 +325,9 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("moray") == "moss"
     assert next_species_key("saguaro") == "venus_flytrap"
     assert next_species_key("sundew") == "honeybee"
-    assert next_species_key("cicada") == "red_panda"
-    assert prev_species_key("red_panda") == "cicada"
+    assert next_species_key("cicada") == "oyster"
+    assert next_species_key("lichen") == "red_panda"
+    assert prev_species_key("red_panda") == "lichen"
     assert prev_species_key("honeybee") == "sundew"
     assert prev_species_key("ball_python") == "phoenix"
     assert prev_species_key("octopus") == "carpet_python"

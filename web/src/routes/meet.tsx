@@ -55,6 +55,9 @@ export function MeetPage() {
               <Link to="/hive">The hive</Link>
             </Button>
             <Button asChild variant="secondary">
+              <Link to="/cellar">The cellar</Link>
+            </Button>
+            <Button asChild variant="secondary">
               <Link to="/live">Phone and tablet</Link>
             </Button>
             <Button asChild variant="secondary">
@@ -75,10 +78,11 @@ export function MeetPage() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Awake</p>
-            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Sixty living demos.</h2>
+            <h2 className="mt-2 font-display text-3xl sm:text-4xl">Seventy living demos.</h2>
             <p className="mt-2 max-w-md text-sm text-muted">
               The study is a field guide that walks. The ten snakes keep their own den. The tide
-              keeps the sea. The garden keeps the plants. The hive keeps the insects.
+              keeps the sea. The garden keeps the plants. The hive keeps the insects. The cellar
+              keeps the fungi.
             </p>
           </div>
           <div className="hidden flex-col items-end gap-1 sm:flex">
@@ -96,6 +100,9 @@ export function MeetPage() {
             </Link>
             <Link to="/hive" className="text-sm text-muted no-underline hover:text-fg">
               The hive
+            </Link>
+            <Link to="/cellar" className="text-sm text-muted no-underline hover:text-fg">
+              The cellar
             </Link>
             <Link to="/catalog" className="text-sm text-muted no-underline hover:text-fg">
               Full catalog
@@ -138,7 +145,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
               <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
               <p className="mt-2 text-sm text-muted">
-                Transparent overlay. Treat, chase, hide. They walk the real screen. All sixty.
+                Transparent overlay. Treat, chase, hide. They walk the real screen. All seventy.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
             </article>
@@ -146,7 +153,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
-                Open Live, then Add to Home Screen. Tap the blotter for a treat. Chase the ribbon. All sixty.
+                Open Live, then Add to Home Screen. Tap the blotter for a treat. Chase the ribbon. All seventy.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">

@@ -66,6 +66,16 @@ HOUSE_TRAITS = {
     "ladybird": ("count", "Count", "I counted. Hello."),
     "mantis": ("fold", "Fold", "I did not strike. That is hello."),
     "cicada": ("emerge", "Emerge", "I emerged. You may wait."),
+    "oyster": ("fruit", "Fruit", "I fruited. That was hello."),
+    "fly_agaric": ("warn", "Warn", "I am a warning. Hello."),
+    "morel": ("pit", "Pit", "I am hollow. Hello."),
+    "chanterelle": ("ridge", "Ridge", "The ridges fork. Hello."),
+    "turkey_tail": ("zone", "Zone", "I zoned. Hello."),
+    "lions_mane": ("tooth", "Tooth", "I grew teeth. Hello."),
+    "puffball": ("spore", "Puff", "I puffed. That was hello."),
+    "chicken_of_woods": ("shelf", "Shelf", "I shelved. Hello."),
+    "yeast": ("rise", "Rise", "I rose. That was hello."),
+    "lichen": ("share", "Share", "We are two. Hello."),
 }
 
 

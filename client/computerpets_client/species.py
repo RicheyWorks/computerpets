@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same sixty, painted here.
+the others walk. This is not a new bestiary — it is the same seventy, painted here.
 """
 
 from __future__ import annotations
@@ -86,7 +86,20 @@ INSECT_KEYS: tuple[str, ...] = (
     "cicada",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS
+FUNGI_KEYS: tuple[str, ...] = (
+    "oyster",
+    "fly_agaric",
+    "morel",
+    "chanterelle",
+    "turkey_tail",
+    "lions_mane",
+    "puffball",
+    "chicken_of_woods",
+    "yeast",
+    "lichen",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + FUNGI_KEYS
 
 
 @dataclass(frozen=True)
@@ -1825,6 +1838,276 @@ BROOD = _kind(
     hungry=("A wait should not be this empty.", "A sap would restore the song."),
 )
 
+FRILL = _kind(
+    key="oyster",
+    slug="frill",
+    name="Frill",
+    label="Oyster Mushroom",
+    treat="Wood",
+    treat_shape="leaf",
+    silhouette="shelf",
+    walk=8,
+    palette=Palette(
+        body=(232, 220, 196),
+        belly=(196, 180, 148),
+        ear=(88, 64, 40),
+        ear_inner=(244, 236, 220),
+        nose=(72, 52, 32),
+        ring=(212, 196, 164),
+        accent=(64, 48, 28),
+    ),
+    greet=("I fruited. That was hello.", "The shelf kept my layers.", "You may look. I eat what has finished."),
+    ambient=("A shelf. I keep it polite.", "I do not make sugar. I take the wood apart.", "I lean. Then I am a bracket again."),
+    feed=("Wood of a treaty.", "I will take this without leaving the grain.", "Accepted. The shelf records it."),
+    treat_lines=("Wood of a treaty.",),
+    hide=("Inside the shelf.",),
+    call=("I fruited. That was hello.",),
+    hungry=("A shelf should not be this pale.", "A wood would restore the frill."),
+)
+
+CAP = _kind(
+    key="fly_agaric",
+    slug="cap",
+    name="Cap",
+    label="Fly Agaric",
+    treat="Duff",
+    treat_shape="flake",
+    silhouette="amanita",
+    walk=6,
+    palette=Palette(
+        body=(196, 36, 32),
+        belly=(248, 244, 236),
+        ear=(236, 228, 210),
+        ear_inner=(255, 248, 236),
+        nose=(88, 32, 28),
+        ring=(248, 244, 236),
+        accent=(120, 24, 20),
+    ),
+    greet=("I am a warning. Hello.", "The cup kept my red.", "You may look. Do not take me home."),
+    ambient=("White gills. A skirt. A volva at the base.", "I do not photosynthesize. I trade with roots.", "The red is not a mood. It is the tell."),
+    feed=("Duff of a treaty.", "I will sit with this and keep the warning.", "Accepted. The spots record it."),
+    treat_lines=("Duff of a treaty.",),
+    hide=("Inside the cup.",),
+    call=("I am a warning. Hello.",),
+    hungry=("A warning should not be this thin.", "A duff would restore the red."),
+)
+
+LATTICE = _kind(
+    key="morel",
+    slug="lattice",
+    name="Lattice",
+    label="American Morel",
+    treat="Duff",
+    treat_shape="flake",
+    silhouette="morel",
+    walk=6,
+    palette=Palette(
+        body=(156, 112, 64),
+        belly=(88, 60, 36),
+        ear=(212, 188, 140),
+        ear_inner=(232, 212, 168),
+        nose=(72, 48, 28),
+        ring=(88, 60, 36),
+        accent=(64, 44, 24),
+    ),
+    greet=("I am hollow. Hello.", "The mold kept my pits.", "You may look. Cut me and I am a room."),
+    ambient=("A honeycomb that grew. I keep the rooms.", "I am not a brain on a stem. I am empty on purpose.", "A pit is a sentence I have already written."),
+    feed=("Duff of a treaty.", "I will take this without leaving the mold.", "Accepted. The pits record it."),
+    treat_lines=("Duff of a treaty.",),
+    hide=("Inside a pit.",),
+    call=("I am hollow. Hello.",),
+    hungry=("A lattice should not be this thin.", "A duff would restore the pits."),
+)
+
+HORN = _kind(
+    key="chanterelle",
+    slug="horn",
+    name="Horn",
+    label="Golden Chanterelle",
+    treat="Duff",
+    treat_shape="flake",
+    silhouette="chanterelle",
+    walk=8,
+    palette=Palette(
+        body=(232, 168, 48),
+        belly=(236, 196, 96),
+        ear=(196, 132, 36),
+        ear_inner=(248, 220, 140),
+        nose=(160, 96, 24),
+        ring=(196, 132, 36),
+        accent=(140, 80, 20),
+    ),
+    greet=("The ridges fork. Hello.", "The rim kept my gold.", "You may look. I do not glow."),
+    ambient=("False gills. They fork and run down the stem.", "I smell of apricot. That is the office.", "I am not the lantern that waits on wood."),
+    feed=("Duff of a treaty.", "I will take this without leaving the rim.", "Accepted. The ridges record it."),
+    treat_lines=("Duff of a treaty.",),
+    hide=("Behind a ridge.",),
+    call=("The ridges fork. Hello.",),
+    hungry=("A horn should not be this pale.", "A duff would restore the gold."),
+)
+
+RING = _kind(
+    key="turkey_tail",
+    slug="ring",
+    name="Ring",
+    label="Turkey Tail",
+    treat="Wood",
+    treat_shape="leaf",
+    silhouette="bracket",
+    walk=4,
+    palette=Palette(
+        body=(168, 140, 72),
+        belly=(244, 236, 220),
+        ear=(72, 56, 40),
+        ear_inner=(196, 92, 48),
+        nose=(56, 44, 32),
+        ring=(88, 120, 72),
+        accent=(48, 36, 24),
+    ),
+    greet=("I zoned. Hello.", "The grain kept my rings.", "You may look. I am a bracket."),
+    ambient=("Pores, not gills. Turn me over.", "I am not a turkey. I am a thin fan of years.", "A zone is a season I kept."),
+    feed=("Wood of a treaty.", "I will take this without leaving the grain.", "Accepted. The zones record it."),
+    treat_lines=("Wood of a treaty.",),
+    hide=("Under a zone.",),
+    call=("I zoned. Hello.",),
+    hungry=("A ring should not be this pale.", "A wood would restore the zones."),
+)
+
+MANE = _kind(
+    key="lions_mane",
+    slug="mane",
+    name="Mane",
+    label="Lion's Mane",
+    treat="Wood",
+    treat_shape="leaf",
+    silhouette="mane",
+    walk=6,
+    palette=Palette(
+        body=(248, 244, 232),
+        belly=(228, 220, 200),
+        ear=(212, 200, 176),
+        ear_inner=(255, 252, 244),
+        nose=(180, 168, 144),
+        ring=(236, 228, 208),
+        accent=(160, 148, 124),
+    ),
+    greet=("I grew teeth. Hello.", "The wound kept my beard.", "You may look. I am not a lion."),
+    ambient=("Teeth, not gills. I hang them.", "I fruit from a wound. That is the office.", "A beard is a sentence I have not finished."),
+    feed=("Wood of a treaty.", "I will take this without leaving the wound.", "Accepted. The teeth record it."),
+    treat_lines=("Wood of a treaty.",),
+    hide=("Inside the beard.",),
+    call=("I grew teeth. Hello.",),
+    hungry=("A mane should not be this thin.", "A wood would restore the teeth."),
+)
+
+PUFF = _kind(
+    key="puffball",
+    slug="puff",
+    name="Puff",
+    label="Common Puffball",
+    treat="Duff",
+    treat_shape="flake",
+    silhouette="puffball",
+    walk=10,
+    palette=Palette(
+        body=(236, 228, 208),
+        belly=(212, 196, 168),
+        ear=(88, 72, 52),
+        ear_inner=(248, 240, 224),
+        nose=(72, 56, 40),
+        ring=(212, 196, 168),
+        accent=(64, 52, 36),
+    ),
+    greet=("I puffed. That was hello.", "The dish kept my pearl.", "You may look. Cut me. I am a room of dust."),
+    ambient=("A puff, then a cloud. I keep the grammar.", "A young Amanita can look like me if you do not cut.", "I sit. Then a burst. Then I sit."),
+    feed=("Duff of a treaty.", "I will take this and keep the pore.", "Accepted. The cloud records it."),
+    treat_lines=("Duff of a treaty.",),
+    hide=("Inside the pearl.",),
+    call=("I puffed. That was hello.",),
+    hungry=("A puff should not be this empty.", "A duff would restore the cloud."),
+)
+
+FLAME = _kind(
+    key="chicken_of_woods",
+    slug="flame",
+    name="Flame",
+    label="Chicken of the Woods",
+    treat="Oak",
+    treat_shape="leaf",
+    silhouette="sulfur",
+    walk=6,
+    palette=Palette(
+        body=(236, 148, 40),
+        belly=(255, 208, 80),
+        ear=(88, 60, 32),
+        ear_inner=(255, 220, 120),
+        nose=(160, 80, 24),
+        ring=(255, 196, 64),
+        accent=(140, 64, 20),
+    ),
+    greet=("I shelved. Hello.", "The oak kept my sulfur.", "You may look. I am not a chicken."),
+    ambient=("Sulfur shelves. I keep them on oak.", "I am a bracket. The name is a rumor of supper.", "I lean. Then I am a flame again."),
+    feed=("Oak of a treaty.", "I will take this without leaving the shelf.", "Accepted. The sulfur records it."),
+    treat_lines=("Oak of a treaty.",),
+    hide=("Inside the oak.",),
+    call=("I shelved. Hello.",),
+    hungry=("A flame should not be this pale.", "An oak would restore the sulfur."),
+)
+
+STARTER = _kind(
+    key="yeast",
+    slug="starter",
+    name="Starter",
+    label="Baker's Yeast",
+    treat="Dough",
+    treat_shape="crumb",
+    silhouette="yeast",
+    walk=4,
+    palette=Palette(
+        body=(212, 168, 96),
+        belly=(248, 236, 196),
+        ear=(196, 208, 212),
+        ear_inner=(255, 248, 220),
+        nose=(160, 120, 64),
+        ring=(248, 236, 196),
+        accent=(120, 88, 48),
+    ),
+    greet=("I rose. That was hello.", "The crock kept my foam.", "You may look. I am the bread's other guest."),
+    ambient=("I do not walk. I rise.", "You cannot see me until the loaf admits it.", "The house already knows bread. I am why."),
+    feed=("Dough of a treaty.", "I will take this and rise in place.", "Accepted. The foam records it."),
+    treat_lines=("Dough of a treaty.",),
+    hide=("Inside the crock.",),
+    call=("I rose. That was hello.",),
+    hungry=("A rise should not be this flat.", "A dough would restore the foam."),
+)
+
+PACT = _kind(
+    key="lichen",
+    slug="pact",
+    name="Pact",
+    label="Reindeer Lichen",
+    treat="Dew",
+    treat_shape="flake",
+    silhouette="lichen",
+    walk=2,
+    palette=Palette(
+        body=(196, 204, 176),
+        belly=(168, 184, 148),
+        ear=(148, 140, 112),
+        ear_inner=(220, 224, 200),
+        nose=(120, 116, 88),
+        ring=(168, 184, 148),
+        accent=(96, 92, 68),
+    ),
+    greet=("We are two. Hello.", "The stone kept our shrub.", "You may look. I am not one creature."),
+    ambient=("A fungus and a partner. We keep the treaty.", "I do not photosynthesize alone. The partner does that work.", "I sit. The share is the whole identification."),
+    feed=("Dew of a treaty.", "We will take this without leaving the stone.", "Accepted. The pact records it."),
+    treat_lines=("Dew of a treaty.",),
+    hide=("On the stone.",),
+    call=("We are two. Hello.",),
+    hungry=("A pact should not be this pale.", "A dew would restore the shrub."),
+)
+
 ATLAS = _kind(
     key="carpet_python",
     slug="atlas",
@@ -1916,6 +2199,16 @@ _ALL: tuple[Species, ...] = (
     SEVEN,
     FOLD,
     BROOD,
+    FRILL,
+    CAP,
+    LATTICE,
+    HORN,
+    RING,
+    MANE,
+    PUFF,
+    FLAME,
+    STARTER,
+    PACT,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -1942,6 +2235,10 @@ def is_garden(key: str) -> bool:
 
 def is_insect(key: str) -> bool:
     return key in INSECT_KEYS
+
+
+def is_fungus(key: str) -> bool:
+    return key in FUNGI_KEYS
 
 
 def next_species_key(key: str) -> str:

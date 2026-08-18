@@ -77,7 +77,17 @@ class PetTypeTest {
             new ExpectedSpecies("carpenter_ant", "Black Carpenter Ant", PetType.Rarity.COMMON),
             new ExpectedSpecies("ladybird", "Seven-spot Ladybird", PetType.Rarity.COMMON),
             new ExpectedSpecies("mantis", "Chinese Mantis", PetType.Rarity.UNCOMMON),
-            new ExpectedSpecies("cicada", "Periodical Cicada", PetType.Rarity.RARE)
+            new ExpectedSpecies("cicada", "Periodical Cicada", PetType.Rarity.RARE),
+            new ExpectedSpecies("oyster", "Oyster Mushroom", PetType.Rarity.COMMON),
+            new ExpectedSpecies("fly_agaric", "Fly Agaric", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("morel", "American Morel", PetType.Rarity.RARE),
+            new ExpectedSpecies("chanterelle", "Golden Chanterelle", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("turkey_tail", "Turkey Tail", PetType.Rarity.COMMON),
+            new ExpectedSpecies("lions_mane", "Lion's Mane", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("puffball", "Common Puffball", PetType.Rarity.COMMON),
+            new ExpectedSpecies("chicken_of_woods", "Chicken of the Woods", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("yeast", "Baker's Yeast", PetType.Rarity.COMMON),
+            new ExpectedSpecies("lichen", "Reindeer Lichen", PetType.Rarity.RARE)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(
@@ -100,11 +110,16 @@ class PetTypeTest {
             "stick", "carpenter_ant", "ladybird", "mantis", "cicada"
     );
 
+    private static final List<String> FUNGI_KEYS = List.of(
+            "oyster", "fly_agaric", "morel", "chanterelle", "turkey_tail",
+            "lions_mane", "puffball", "chicken_of_woods", "yeast", "lichen"
+    );
+
     @Test
     @DisplayName("catalog matches the living-desk web catalog, including the tide")
     void catalog_matchesWebHouse() {
         assertThat(PetType.values()).hasSize(WEB_CATALOG.size());
-        assertThat(WEB_CATALOG).hasSize(60);
+        assertThat(WEB_CATALOG).hasSize(70);
 
         Set<String> backendKeys = Arrays.stream(PetType.values())
                 .map(PetType::key)
@@ -149,9 +164,9 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(21L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(23L);
-        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(14L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(25L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(27L);
+        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(16L);
         assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(2L);
     }
 
@@ -181,6 +196,9 @@ class PetTypeTest {
         for (String key : INSECT_KEYS) {
             assertThat(PetType.fromKey(key)).isPresent();
         }
+        for (String key : FUNGI_KEYS) {
+            assertThat(PetType.fromKey(key)).isPresent();
+        }
         assertThat(PetType.OCTOPUS.displayName()).isEqualTo("Common Octopus");
         assertThat(PetType.HORSESHOE_CRAB.displayName()).isEqualTo("Atlantic Horseshoe Crab");
         assertThat(PetType.MANTA.rarity()).isEqualTo(PetType.Rarity.RARE);
@@ -196,6 +214,16 @@ class PetTypeTest {
         assertThat(PetType.CARPENTER_ANT.key()).isEqualTo("carpenter_ant");
         assertThat(PetType.CICADA.displayName()).isEqualTo("Periodical Cicada");
         assertThat(PetType.MANTIS.rarity()).isEqualTo(PetType.Rarity.UNCOMMON);
+        assertThat(PetType.OYSTER.displayName()).isEqualTo("Oyster Mushroom");
+        assertThat(PetType.FLY_AGARIC.key()).isEqualTo("fly_agaric");
+        assertThat(PetType.MOREL.rarity()).isEqualTo(PetType.Rarity.RARE);
+        assertThat(PetType.CHANTERELLE.displayName()).isEqualTo("Golden Chanterelle");
+        assertThat(PetType.TURKEY_TAIL.displayName()).isEqualTo("Turkey Tail");
+        assertThat(PetType.LIONS_MANE.key()).isEqualTo("lions_mane");
+        assertThat(PetType.PUFFBALL.rarity()).isEqualTo(PetType.Rarity.COMMON);
+        assertThat(PetType.CHICKEN_OF_WOODS.displayName()).isEqualTo("Chicken of the Woods");
+        assertThat(PetType.YEAST.displayName()).isEqualTo("Baker's Yeast");
+        assertThat(PetType.LICHEN.rarity()).isEqualTo(PetType.Rarity.RARE);
     }
 
     private record ExpectedSpecies(String key, String displayName, PetType.Rarity rarity) {}

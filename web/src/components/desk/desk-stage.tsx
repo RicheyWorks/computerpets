@@ -35,6 +35,7 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
+import { isFungus } from "@/lib/pets/fungi";
 import { isGarden } from "@/lib/pets/garden";
 import { isInsect } from "@/lib/pets/insects";
 import { isSea } from "@/lib/pets/sea";
@@ -639,6 +640,10 @@ export function DeskStage({
           ) : isInsect(kind.key) ? (
             <Link to="/hive" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
               The hive
+            </Link>
+          ) : isFungus(kind.key) ? (
+            <Link to="/cellar" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
+              The cellar
             </Link>
           ) : (
             <Link to="/study" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
