@@ -5,6 +5,7 @@ import { findSpecies, portraitSrc, rarityLabel, type Rarity } from "@/lib/pets/c
 import type { CompanionView } from "@/lib/pets/actions";
 import { bondScore, moodWord } from "@/lib/pets/care";
 import { isLivingSpecies } from "@/lib/pets/living";
+import { lookHint } from "@/lib/pets/nest";
 import { cn } from "@/lib/utils";
 
 const TONE: Record<Rarity, "common" | "uncommon" | "rare" | "legendary"> = {
@@ -66,9 +67,12 @@ export function PetCard({ pet }: { pet: CompanionView }) {
             <p className="font-display text-lg leading-tight text-fg">{pet.name}</p>
             <p className="mt-0.5 font-mono text-[11px] text-subtle">{pet.token_id}</p>
           </div>
-          <p className="text-xs text-muted">{pet.stage} · {moodWord(pet)}</p>
+          <p className="text-xs text-muted">
+            {pet.stage} · {pet.origin === "nest" ? "from the nest" : "drawn"}
+          </p>
         </div>
-        <p className="text-sm text-muted">{species?.temperament}</p>
+        <p className="text-sm text-muted">The kennel guest is a room. {lookHint(pet)}.</p>
+        <p className="text-xs text-subtle">{species?.temperament} · {moodWord(pet)}</p>
         <Meter label="Bond" value={score} />
       </div>
     </Link>
