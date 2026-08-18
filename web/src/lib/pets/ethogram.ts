@@ -25,7 +25,12 @@ export type ActMotion =
   | "unfurl"
   | "snap"
   | "open"
-  | "curl";
+  | "curl"
+  | "waggle"
+  | "flash"
+  | "fold"
+  | "trail"
+  | "emerge";
 
 export type IdleAct = {
   name: string;
@@ -141,6 +146,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   venus_flytrap: [A("snap", "snap", 0.7, 2, "play"), A("lean", "lean", 1.4, 3), A("nod", "nod", 1.0, 2, "sit")],
   pitcher: [A("still", "freeze", 3.2, 5), A("lean", "lean", 1.6, 2), A("nod", "nod", 1.0, 1, "sit")],
   sundew: [A("curl", "curl", 2.0, 4, "sit"), A("lean", "lean", 1.4, 2), A("nod", "nod", 0.9, 1, "sit")],
+  honeybee: [A("waggle", "waggle", 1.2, 4), A("dart", "dart", 0.8, 2), A("still", "freeze", 1.4, 1)],
+  monarch: [A("flutter", "pulse", 1.0, 3), A("migrate", "dart", 1.2, 2), A("still", "freeze", 1.8, 2)],
+  luna: [A("still", "freeze", 2.6, 5), A("drift", "bob", 1.6, 2), A("refuse", "freeze", 1.8, 1)],
+  firefly: [A("flash", "flash", 0.8, 4), A("lift", "hop", 0.55, 2, "play"), A("still", "freeze", 1.6, 2)],
+  darner: [A("hawk", "dart", 0.9, 4), A("hover", "bob", 1.4, 2), A("still", "freeze", 1.2, 1)],
+  stick: [A("freeze", "freeze", 3.0, 6), A("still", "sit_hold", 2.4, 2, "sit"), A("walk", "wiggle", 0.8, 1)],
+  carpenter_ant: [A("trail", "trail", 1.0, 4), A("dart", "dart", 0.8, 2), A("still", "freeze", 1.2, 1)],
+  ladybird: [A("count", "nod", 1.0, 3, "sit"), A("hunt", "dart", 0.8, 2), A("still", "freeze", 1.6, 2)],
+  mantis: [A("fold", "fold", 2.0, 4, "sit"), A("strike", "snap", 0.6, 1, "play"), A("still", "freeze", 2.0, 2)],
+  cicada: [A("still", "sit_hold", 2.8, 5, "sit"), A("emerge", "emerge", 1.8, 1, "sit"), A("burst", "dart", 0.7, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;
@@ -234,6 +249,24 @@ export function actPose(motion: ActMotion | null | undefined, t: number, hold: n
     pose.rot = Math.sin(u * Math.PI) * 6;
     pose.stretch = 1 - Math.sin(u * Math.PI) * 0.08;
     pose.squat = 2 - pose.stretch;
+  } else if (motion === "waggle") {
+    pose.dx = Math.sin(t * 22) * 3.2;
+    pose.rot = Math.sin(t * 22) * 10;
+  } else if (motion === "flash") {
+    pose.stretch = 1 + Math.sin(u * Math.PI * 2) * 0.07;
+    pose.squat = 2 - pose.stretch;
+    pose.dy = -Math.sin(u * Math.PI) * 5;
+  } else if (motion === "fold") {
+    pose.stretch = 1 - Math.sin(u * Math.PI) * 0.06;
+    pose.squat = 2 - pose.stretch;
+    pose.dy = Math.sin(u * Math.PI) * 2;
+  } else if (motion === "trail") {
+    pose.dx = Math.sin(t * 14) * 2.4;
+    pose.dy = Math.sin(t * 28) * 1.2;
+  } else if (motion === "emerge") {
+    pose.stretch = 0.9 + Math.sin(u * Math.PI) * 0.18;
+    pose.squat = 2 - pose.stretch;
+    pose.dy = -Math.sin(u * Math.PI) * 4;
   }
   return pose;
 }

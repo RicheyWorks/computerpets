@@ -55,6 +55,9 @@ export function GardenPage() {
             <Button asChild variant="secondary">
               <Link to="/sea">The tide</Link>
             </Button>
+            <Button asChild variant="secondary">
+              <Link to="/hive">The hive</Link>
+            </Button>
           </div>
         </div>
       </section>

@@ -36,6 +36,7 @@ import { describeBinding } from "@/lib/ai/settings";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { isGarden } from "@/lib/pets/garden";
+import { isInsect } from "@/lib/pets/insects";
 import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
@@ -634,6 +635,10 @@ export function DeskStage({
           ) : isGarden(kind.key) ? (
             <Link to="/garden" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
               The garden
+            </Link>
+          ) : isInsect(kind.key) ? (
+            <Link to="/hive" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">
+              The hive
             </Link>
           ) : (
             <Link to="/study" className="hidden text-xs text-muted no-underline hover:text-fg sm:inline">

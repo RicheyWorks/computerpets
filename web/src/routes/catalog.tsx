@@ -12,13 +12,13 @@ function Catalog() {
     <main className="space-y-10">
       <header className="max-w-xl space-y-3">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Catalog</p>
-        <h1 className="font-display text-4xl">The fifty.</h1>
+        <h1 className="font-display text-4xl">The sixty.</h1>
         <p className="text-sm text-muted">
           Wire keys match the ComputerPets backend. What you hatch here is the
           same species the license service already knows. The study is where you
           learn the twenty who walk. The den is where you learn the ten snakes.
           The tide is where you learn the ten sea creatures. The garden is where
-          you learn the ten plants.
+          you learn the ten plants. The hive is where you learn the ten insects.
         </p>
         <p className="flex flex-wrap gap-4">
           <Link to="/study" className="text-sm text-fg">
@@ -32,6 +32,9 @@ function Catalog() {
           </Link>
           <Link to="/garden" className="text-sm text-fg">
             Open the garden
+          </Link>
+          <Link to="/hive" className="text-sm text-fg">
+            Open the hive
           </Link>
         </p>
       </header>

@@ -5,10 +5,12 @@ from computerpets_client.species import (
     CATALOG_KEYS,
     GARDEN_KEYS,
     HOUSE_KEYS,
+    INSECT_KEYS,
     SEA_KEYS,
     SNAKE_KEYS,
     SPECIES,
     is_garden,
+    is_insect,
     is_sea,
     is_snake,
     next_species_key,
@@ -16,7 +18,7 @@ from computerpets_client.species import (
     species_by_key,
 )
 
-# Same fifty wire keys as PetType / web/src/lib/pets/catalog.ts.
+# Same sixty wire keys as PetType / web/src/lib/pets/catalog.ts.
 WEB_CATALOG = (
     "red_panda",
     "cat",
@@ -68,6 +70,16 @@ WEB_CATALOG = (
     "venus_flytrap",
     "pitcher",
     "sundew",
+    "honeybee",
+    "monarch",
+    "luna",
+    "firefly",
+    "darner",
+    "stick",
+    "carpenter_ant",
+    "ladybird",
+    "mantis",
+    "cicada",
 )
 
 WEB_SNAKES = (
@@ -112,6 +124,19 @@ WEB_GARDEN = (
     "sundew",
 )
 
+WEB_INSECTS = (
+    "honeybee",
+    "monarch",
+    "luna",
+    "firefly",
+    "darner",
+    "stick",
+    "carpenter_ant",
+    "ladybird",
+    "mantis",
+    "cicada",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -120,10 +145,12 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(SNAKE_KEYS) == 10
     assert len(SEA_KEYS) == 10
     assert len(GARDEN_KEYS) == 10
+    assert len(INSECT_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
     assert set(GARDEN_KEYS) == set(WEB_GARDEN)
+    assert set(INSECT_KEYS) == set(WEB_INSECTS)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -143,6 +170,7 @@ def test_walkers_walk_and_are_not_snakes():
         assert not is_snake(key)
         assert not is_sea(key)
         assert not is_garden(key)
+        assert not is_insect(key)
         assert spec.gait == "walk"
         assert spec.silhouette != "snake"
 
@@ -185,6 +213,27 @@ def test_ten_garden_guests_are_present_and_honest():
     assert SPECIES["sundew"].name == "Dew"
 
 
+def test_ten_hive_guests_are_present_and_honest():
+    assert INSECT_KEYS == WEB_INSECTS
+    for key in INSECT_KEYS:
+        spec = SPECIES[key]
+        assert is_insect(key)
+        assert not is_snake(key)
+        assert not is_sea(key)
+        assert not is_garden(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.aquatic is False
+    assert SPECIES["honeybee"].slug == "comb"
+    assert SPECIES["luna"].name == "Ghost"
+    assert SPECIES["firefly"].silhouette == "firefly"
+    assert SPECIES["stick"].silhouette == "stick"
+    assert SPECIES["cicada"].name == "Brood"
+    assert SPECIES["luna"].walk < 20
+    assert SPECIES["honeybee"].walk > 100
+    assert SPECIES["darner"].walk > 140
+
+
 def test_every_kind_has_house_voice_and_care_treat():
     for key in CATALOG_KEYS:
         spec = species_by_key(key)
@@ -208,8 +257,10 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("carpet_python") == "octopus"
     assert next_species_key("moray") == "moss"
     assert next_species_key("saguaro") == "venus_flytrap"
-    assert next_species_key("sundew") == "red_panda"
-    assert prev_species_key("red_panda") == "sundew"
+    assert next_species_key("sundew") == "honeybee"
+    assert next_species_key("cicada") == "red_panda"
+    assert prev_species_key("red_panda") == "cicada"
+    assert prev_species_key("honeybee") == "sundew"
     assert prev_species_key("ball_python") == "phoenix"
     assert prev_species_key("octopus") == "carpet_python"
     assert prev_species_key("moss") == "moray"

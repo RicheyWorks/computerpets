@@ -55,6 +55,9 @@ export function SeaPage() {
             <Button asChild variant="secondary">
               <Link to="/garden">The garden</Link>
             </Button>
+            <Button asChild variant="secondary">
+              <Link to="/hive">The hive</Link>
+            </Button>
           </div>
         </div>
       </section>

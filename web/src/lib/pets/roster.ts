@@ -1,4 +1,5 @@
 import { GARDEN_ROSTER } from "./garden";
+import { INSECT_ROSTER } from "./insects";
 import { SEA_ROSTER } from "./sea";
 import { SNAKE_ROSTER } from "./snakes";
 
@@ -580,4 +581,5 @@ export const ROSTER: RosterDef[] = [
   ...SNAKE_ROSTER,
   ...SEA_ROSTER,
   ...GARDEN_ROSTER,
+  ...INSECT_ROSTER,
 ];

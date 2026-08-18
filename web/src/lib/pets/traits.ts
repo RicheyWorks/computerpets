@@ -86,6 +86,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   venus_flytrap: T(8, 14, 0.68, 0.06, {}, "snap", "Snap", "I did not snap. That is hello."),
   pitcher: T(6, 0, 0.82, 0.03, {}, "drown", "Drown", "I did not chase. The well was enough."),
   sundew: T(8, 0, 0.55, 0.05, {}, "glue", "Glue", "I glittered. That was hello."),
+  honeybee: T(140, 18, 0.58, 0.62, { perch: true }, "waggle", "Waggle", "I danced. That was hello."),
+  monarch: T(88, 16, 0.82, 0.38, { perch: true }, "migrate", "Migrate", "I kept the orange. Hello."),
+  luna: T(14, 6, 0.92, 0.1, { nocturnal: true, perch: true }, "still", "Moon", "I arrived without a mouth. Hello."),
+  firefly: T(86, 28, 0.52, 0.4, { nocturnal: true }, "flash", "Flash", "I flashed. That was hello."),
+  darner: T(156, 20, 0.84, 0.58, {}, "hawk", "Hawk", "I hawed the lamp. Hello."),
+  stick: T(16, 2, 0.78, 0.05, {}, "freeze", "Freeze", "I have not moved. That is hello."),
+  carpenter_ant: T(128, 10, 0.48, 0.68, { nocturnal: true }, "trail", "Trail", "I laid a road. Hello."),
+  ladybird: T(78, 14, 0.5, 0.32, {}, "count", "Count", "I counted. Hello."),
+  mantis: T(42, 8, 0.8, 0.12, {}, "fold", "Fold", "I did not strike. That is hello."),
+  cicada: T(22, 8, 0.7, 0.08, {}, "emerge", "Emerge", "I emerged. You may wait."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

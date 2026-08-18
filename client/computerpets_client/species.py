@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same fifty, painted here.
+the others walk. This is not a new bestiary — it is the same sixty, painted here.
 """
 
 from __future__ import annotations
@@ -73,7 +73,20 @@ GARDEN_KEYS: tuple[str, ...] = (
     "sundew",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS
+INSECT_KEYS: tuple[str, ...] = (
+    "honeybee",
+    "monarch",
+    "luna",
+    "firefly",
+    "darner",
+    "stick",
+    "carpenter_ant",
+    "ladybird",
+    "mantis",
+    "cicada",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS
 
 
 @dataclass(frozen=True)
@@ -1539,6 +1552,279 @@ DEW = _kind(
     hungry=("A dew should not be this dry.", "A gnat would restore the glitter."),
 )
 
+COMB = _kind(
+    key="honeybee",
+    slug="comb",
+    name="Comb",
+    label="Western Honey Bee",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="bee",
+    walk=140,
+    perch=True,
+    palette=Palette(
+        body=(232, 176, 48),
+        belly=(248, 220, 96),
+        ear=(32, 28, 24),
+        ear_inner=(252, 236, 168),
+        nose=(24, 20, 16),
+        ring=(40, 36, 32),
+        accent=(28, 24, 20),
+    ),
+    greet=("I danced. That was hello.", "The dish kept my gold.", "You may look. The map is still warm."),
+    ambient=("A waggle is a sentence with a direction.", "I do not guess. I dance the miles.", "Your lamp is a sun I approve."),
+    feed=("Nectar of a treaty.", "I will take this and tell the others.", "Accepted. The dance records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("Inside the comb.",),
+    call=("I danced. That was hello.",),
+    hungry=("A map should not be this empty.", "A nectar would restore the dance."),
+)
+
+MILK = _kind(
+    key="monarch",
+    slug="milk",
+    name="Milk",
+    label="Monarch",
+    treat="Milkweed",
+    treat_shape="leaf",
+    silhouette="butterfly",
+    walk=88,
+    perch=True,
+    palette=Palette(
+        body=(216, 96, 32),
+        belly=(248, 196, 72),
+        ear=(24, 20, 18),
+        ear_inner=(252, 228, 176),
+        nose=(20, 16, 14),
+        ring=(248, 248, 244),
+        accent=(16, 14, 12),
+    ),
+    greet=("I kept the orange. Hello.", "The cup kept my milkweed.", "You may look. The warning is earned."),
+    ambient=("Milkweed first. Then the color.", "I do not pretend to be safe.", "A migrate is a sentence I have not finished."),
+    feed=("Milkweed of a treaty.", "I will take this without leaving the cup.", "Accepted. The orange records it."),
+    treat_lines=("Milkweed of a treaty.",),
+    hide=("Inside the cup.",),
+    call=("I kept the orange. Hello.",),
+    hungry=("A warning should not be this thin.", "A milkweed would restore the orange."),
+)
+
+GHOST = _kind(
+    key="luna",
+    slug="ghost",
+    name="Ghost",
+    label="Luna Moth",
+    treat="Dusk",
+    treat_shape="flake",
+    silhouette="luna",
+    walk=14,
+    perch=True,
+    palette=Palette(
+        body=(168, 216, 140),
+        belly=(220, 236, 196),
+        ear=(88, 120, 72),
+        ear_inner=(244, 248, 220),
+        nose=(64, 80, 48),
+        ring=(232, 196, 88),
+        accent=(48, 64, 40),
+    ),
+    greet=("I arrived without a mouth. Hello.", "The lamp kept my green.", "You may look. I will not stay long."),
+    ambient=("I do not eat. The week is the whole meal.", "Tails like a rumor of a moon.", "A mouth is a rumor I declined."),
+    feed=("Nothing of a treaty. I decline the bite.", "I will sit with this and not take it.", "Accepted as dusk. Not as food."),
+    treat_lines=("Nothing of a treaty. I decline the bite.",),
+    hide=("Behind a dusk.",),
+    call=("I arrived without a mouth. Hello.",),
+    hungry=("I am not hungry. I am a week.", "A dusk would restore the green. Not a bite."),
+)
+
+SPARK = _kind(
+    key="firefly",
+    slug="spark",
+    name="Spark",
+    label="Common Eastern Firefly",
+    treat="Midge",
+    treat_shape="crumb",
+    silhouette="firefly",
+    walk=86,
+    palette=Palette(
+        body=(48, 44, 36),
+        belly=(232, 216, 72),
+        ear=(32, 28, 24),
+        ear_inner=(255, 236, 120),
+        nose=(20, 18, 14),
+        ring=(255, 220, 64),
+        accent=(16, 14, 12),
+    ),
+    greet=("I flashed. That was hello.", "The dusk kept my lamp.", "You may look. I am a beetle."),
+    ambient=("A language of light. I keep the grammar.", "I am not a fly. The elytra are the tell.", "The blotter is a meadow after dark."),
+    feed=("A midge of a treaty.", "I will take this without leaving the dusk.", "Accepted. The lamp records it."),
+    treat_lines=("A midge of a treaty.",),
+    hide=("Behind a flash.",),
+    call=("I flashed. That was hello.",),
+    hungry=("A lamp should not be this empty.", "A midge would restore the flash."),
+)
+
+DART = _kind(
+    key="darner",
+    slug="dart",
+    name="Dart",
+    label="Common Green Darner",
+    treat="Mosquito",
+    treat_shape="crumb",
+    silhouette="darner",
+    walk=156,
+    palette=Palette(
+        body=(56, 140, 72),
+        belly=(196, 80, 56),
+        ear=(32, 48, 36),
+        ear_inner=(220, 236, 176),
+        nose=(24, 32, 24),
+        ring=(232, 196, 64),
+        accent=(20, 28, 20),
+    ),
+    greet=("I hawed the lamp. Hello.", "The air kept my green.", "You may look. I am not the nymph."),
+    ambient=("The nymph is a different animal. She lived in water.", "I hunt on the wing. The blotter is a sky.", "I dart. Then I am a needle again."),
+    feed=("A mosquito of a treaty.", "I will take this without landing long.", "Accepted. The hawk records it."),
+    treat_lines=("A mosquito of a treaty.",),
+    hide=("Above the lamp.",),
+    call=("I hawed the lamp. Hello.",),
+    hungry=("A hawk should not hang empty.", "A mosquito would restore the hunt."),
+)
+
+TWIG = _kind(
+    key="stick",
+    slug="twig",
+    name="Twig",
+    label="Common Walkingstick",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="stick",
+    walk=16,
+    palette=Palette(
+        body=(120, 92, 52),
+        belly=(168, 140, 88),
+        ear=(80, 60, 36),
+        ear_inner=(196, 168, 112),
+        nose=(56, 40, 24),
+        ring=(148, 116, 68),
+        accent=(48, 36, 20),
+    ),
+    greet=("I have not moved. That is hello.", "The tray kept my twig.", "You may look. I am furniture until I walk."),
+    ambient=("A freeze is a kind of work.", "I am a pencil that learned legs.", "Hurry is a weather I decline."),
+    feed=("A leaf of a treaty.", "I will take this without leaving the freeze.", "Accepted. The tray records it."),
+    treat_lines=("A leaf of a treaty.",),
+    hide=("Among the pencils.",),
+    call=("I have not moved. That is hello.",),
+    hungry=("A stick should not be this hollow.", "A leaf would restore the freeze."),
+)
+
+COLUMN = _kind(
+    key="carpenter_ant",
+    slug="column",
+    name="Column",
+    label="Black Carpenter Ant",
+    treat="Honeydew",
+    treat_shape="flake",
+    silhouette="ant",
+    walk=128,
+    palette=Palette(
+        body=(28, 24, 22),
+        belly=(48, 40, 36),
+        ear=(16, 14, 12),
+        ear_inner=(72, 60, 52),
+        nose=(12, 10, 8),
+        ring=(64, 52, 44),
+        accent=(12, 10, 8),
+    ),
+    greet=("I laid a road. Hello.", "The grain kept my column.", "You may look. I do not eat the house."),
+    ambient=("A scent road. I keep it honest.", "I nest in wood. I do not dine on it.", "I trail. Then I am a comma again."),
+    feed=("Honeydew of a treaty.", "I will take this and mark the road.", "Accepted. The column records it."),
+    treat_lines=("Honeydew of a treaty.",),
+    hide=("Inside the grain.",),
+    call=("I laid a road. Hello.",),
+    hungry=("A column should not rattle.", "A honeydew would restore the road."),
+)
+
+SEVEN = _kind(
+    key="ladybird",
+    slug="seven",
+    name="Seven",
+    label="Seven-spot Ladybird",
+    treat="Aphid",
+    treat_shape="crumb",
+    silhouette="ladybird",
+    walk=78,
+    palette=Palette(
+        body=(196, 40, 36),
+        belly=(248, 232, 220),
+        ear=(20, 16, 14),
+        ear_inner=(252, 244, 232),
+        nose=(16, 12, 10),
+        ring=(16, 14, 12),
+        accent=(12, 10, 8),
+    ),
+    greet=("I counted. Hello.", "The dish kept my seven.", "You may look. I am a beetle."),
+    ambient=("Seven. I keep them.", "I eat aphids. That is the whole office.", "I am not a rumor of luck. I am a beetle."),
+    feed=("An aphid of a treaty.", "I will take this after the count.", "Accepted. The spots record it."),
+    treat_lines=("An aphid of a treaty.",),
+    hide=("Under a leaf.",),
+    call=("I counted. Hello.",),
+    hungry=("A count should not be this empty.", "An aphid would restore the seven."),
+)
+
+FOLD = _kind(
+    key="mantis",
+    slug="fold",
+    name="Fold",
+    label="Chinese Mantis",
+    treat="Fly",
+    treat_shape="crumb",
+    silhouette="mantis",
+    walk=42,
+    palette=Palette(
+        body=(88, 140, 56),
+        belly=(168, 196, 112),
+        ear=(56, 88, 40),
+        ear_inner=(220, 232, 168),
+        nose=(40, 56, 28),
+        ring=(120, 156, 72),
+        accent=(32, 48, 24),
+    ),
+    greet=("I did not strike. That is hello.", "The stem kept my fold.", "You may look. I am not a plant."),
+    ambient=("The prayer is a trap. I keep it polite.", "I hunt like Snap. I am not Snap.", "The lamp is a sun. The stem is a perch."),
+    feed=("A fly of a treaty.", "I will take this after the fold.", "Accepted. The trap records it."),
+    treat_lines=("A fly of a treaty.",),
+    hide=("Behind a fold.",),
+    call=("I did not strike. That is hello.",),
+    hungry=("A trap should not be this empty.", "A fly would restore the watch."),
+)
+
+BROOD = _kind(
+    key="cicada",
+    slug="brood",
+    name="Brood",
+    label="Periodical Cicada",
+    treat="Sap",
+    treat_shape="flake",
+    silhouette="cicada",
+    walk=22,
+    palette=Palette(
+        body=(32, 28, 26),
+        belly=(72, 56, 48),
+        ear=(176, 40, 36),
+        ear_inner=(232, 196, 88),
+        nose=(20, 16, 14),
+        ring=(196, 48, 40),
+        accent=(16, 12, 10),
+    ),
+    greet=("I emerged. You may wait.", "The stone kept my years.", "Hello from a room I built underground."),
+    ambient=("Seventeen. I used all of them.", "I sit. Then a burst. Then I sit.", "A song is a sentence I have been writing in the dark."),
+    feed=("Sap of a treaty.", "One more. For the next song.", "Accepted. The years will adjust."),
+    treat_lines=("Sap of a treaty.",),
+    hide=("Under the stone.",),
+    call=("I emerged. You may wait.",),
+    hungry=("A wait should not be this empty.", "A sap would restore the song."),
+)
+
 ATLAS = _kind(
     key="carpet_python",
     slug="atlas",
@@ -1620,6 +1906,16 @@ _ALL: tuple[Species, ...] = (
     SNAP,
     WELL,
     DEW,
+    COMB,
+    MILK,
+    GHOST,
+    SPARK,
+    DART,
+    TWIG,
+    COLUMN,
+    SEVEN,
+    FOLD,
+    BROOD,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -1642,6 +1938,10 @@ def is_sea(key: str) -> bool:
 
 def is_garden(key: str) -> bool:
     return key in GARDEN_KEYS
+
+
+def is_insect(key: str) -> bool:
+    return key in INSECT_KEYS
 
 
 def next_species_key(key: str) -> str:

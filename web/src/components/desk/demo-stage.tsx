@@ -15,6 +15,7 @@ import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVi
 import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { applySpecial } from "@/lib/pets/specials";
 import { isGarden } from "@/lib/pets/garden";
+import { isInsect } from "@/lib/pets/insects";
 import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
@@ -409,6 +410,10 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
           ) : isGarden(kind.key) ? (
             <Button asChild variant="secondary">
               <Link to="/garden">The garden</Link>
+            </Button>
+          ) : isInsect(kind.key) ? (
+            <Button asChild variant="secondary">
+              <Link to="/hive">The hive</Link>
             </Button>
           ) : (
             <Button asChild variant="secondary">
