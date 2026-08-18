@@ -2,6 +2,8 @@
 
 This guide provides step-by-step instructions for setting up and running the **ComputerPets** project locally.
 
+To sit with the house first, start at the root [README](../README.md). This page is the Java backend.
+
 > **Note**: This repository contains the backend, the living desk (`web/`), the Electron overlay (`desktop/`), and a first PyQt6 blotter client (`client/`).
 
 ---
@@ -41,8 +43,8 @@ See [client/README.md](../client/README.md). The Electron overlay remains in `de
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd ComputerPets
+git clone https://github.com/RicheyWorks/computerpets
+cd computerpets
 ```
 
 ### 2. Install Backend Prerequisites
@@ -452,7 +454,7 @@ mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
 
 - Read the [Architecture Documentation](ARCHITECTURE.md) for a deep understanding of the system design.
 - The Electron overlay in `desktop/` implements the first [Client contract](CLIENT-CONTRACT.md) slice (Steam verify, license decrypt, hwid, signed download). See `desktop/README.md`.
-- Explore the API examples in the main [README.md](../README.md).
+- Sit with the house from the root [README](../README.md).
 - Review the [Contributing Guidelines](CONTRIBUTING.md) if you plan to contribute.
 
 If you run into issues not covered here, feel free to open an issue on the project repository.
