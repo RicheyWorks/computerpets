@@ -2,7 +2,7 @@
 
 A living ecology. A natural-history house. Eighty guests walk the blotter.
 
-Keep them so a line does not go quiet. The nest is a square. Neglect can close a line.
+Keep them so a line does not go quiet. The nest is a room. The square sits on the paper. Neglect can close a line.
 
 ```bash
 git clone https://github.com/RicheyWorks/computerpets
@@ -33,7 +33,7 @@ Walk the dens. Each room teaches its guests.
 
 Sign in. The hatch is a room. The draw lands you with the guest. The kennel is `/collection`. The kennel guest is a room.
 
-Pair two you already keep at `/nest`. The nest is a Punnett square. County-fair phenotypes sit on the rail.
+Pair two you already keep at `/nest`. The nest is a room. The square sits on the paper.
 
 Feed them. Clean the blotter. Give medicine. Stay gone and a line can leave. The nest still keeps one.
 
