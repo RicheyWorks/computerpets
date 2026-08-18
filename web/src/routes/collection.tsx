@@ -5,7 +5,7 @@ import { PetCard } from "@/components/pet-card";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getSanctuary, type CompanionView } from "@/lib/pets/actions";
-import { extinctLines, fairHouse } from "@/lib/pets/nest";
+import { departLine, extinctLines, fairHouse } from "@/lib/pets/nest";
 
 export const Route = createFileRoute("/collection")({ component: Collection });
 
@@ -13,6 +13,7 @@ function Collection() {
   const { user, isPending } = useCurrentUserState();
   const [pets, setPets] = useState<CompanionView[] | null>(null);
   const [gone, setGone] = useState<string[]>([]);
+  const [left, setLeft] = useState<string[]>([]);
   const [ribbons, setRibbons] = useState<string[]>([]);
 
   useEffect(() => {
@@ -20,6 +21,7 @@ function Collection() {
     void getSanctuary()
       .then((d) => {
         setPets(d.pets);
+        setLeft(d.departed.map((p) => p.farewell ?? departLine(p.name, p.species_key)));
         const once = new Set([...d.pets, ...d.departed].map((p) => p.species_key));
         setGone(
           extinctLines(
@@ -60,7 +62,7 @@ function Collection() {
           <h1 className="font-display text-4xl">Held tokens</h1>
           <p className="max-w-xl text-sm text-muted">
             Every hatch is a unique token: species, rarity, eyes, mark, aura.
-            The nest is how a line is kept, or not.
+            Neglect can close a line. The nest still keeps one.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -81,7 +83,7 @@ function Collection() {
         </div>
       ) : pets.length === 0 ? (
         <div className="rounded-[var(--radius-xl)] border border-border bg-surface p-8">
-          <p className="font-display text-2xl">No companions yet.</p>
+          <p className="font-display text-2xl">The kennel is quiet.</p>
           <p className="mt-2 text-sm text-muted">The hatchery is open. The nest waits.</p>
         </div>
       ) : (
@@ -98,6 +100,10 @@ function Collection() {
             <li key={line}>{line}</li>
           ))}
         </ul>
+      ) : null}
+
+      {left.length > 0 ? (
+        <p className="text-sm text-muted">{left.join(" ")}</p>
       ) : null}
 
       {gone.length > 0 ? (

@@ -16,6 +16,8 @@ export {
   NEST_COST_CLUTCH,
   NEST_COST_SINGLE,
   canPair,
+  departLine,
+  departVerb,
   extinctLines,
   guestCallName,
   nestPath,
@@ -25,6 +27,7 @@ export {
   type NestVerb,
   type PairNo,
   type PairOk,
+  type PairSeat,
 } from "./genetics";
 
 const DIMINUTIVE = ["kit", "small", "new", "young", "second"];
