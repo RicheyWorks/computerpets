@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
-import { Button } from "@/components/ui/button";
+import { CompanionRoom } from "@/components/desk/companion-room";
 import { PetPortrait } from "@/components/pet-card";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
@@ -19,6 +19,7 @@ import {
   punnettMono,
   watchLocusId,
 } from "@/lib/pets/genetics";
+import { livingByKey, RED_PANDA_KIND } from "@/lib/pets/living";
 import { canPair, duePhrase, extinctLines, fairHouse, nestPath } from "@/lib/pets/nest";
 
 export const Route = createFileRoute("/nest")({
@@ -28,7 +29,7 @@ export const Route = createFileRoute("/nest")({
       { title: "The nest — ComputerPets" },
       {
         name: "description",
-        content: "Two of a kind. A square. A clutch. A line, or not.",
+        content: "The nest is a room. The square sits on the paper.",
       },
     ],
   }),
@@ -65,6 +66,8 @@ function NestPage() {
 
   const a = pets?.find((p) => p.id === seatA) ?? null;
   const b = pets?.find((p) => p.id === seatB) ?? null;
+  const walker = a ?? b;
+  const kind = walker ? livingByKey(walker.species_key) : RED_PANDA_KIND;
 
   const verdict = a
     ? canPair(a.species_key, b?.species_key ?? null, {
@@ -129,7 +132,7 @@ function NestPage() {
     );
   }, [pets, departed, clutches]);
 
-  if (isPending) return <div className="h-64 animate-pulse rounded-[var(--radius-xl)] bg-surface" />;
+  if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;
 
   async function pair() {
@@ -192,238 +195,245 @@ function NestPage() {
   }
 
   const path = a ? nestPath(a.species_key, b ? 2 : 1) : null;
+  const splitter =
+    a && (a.species_key === "yeast" || a.species_key === "lichen" || a.species_key === "nexus");
 
   return (
-    <main className="space-y-10">
+    <>
       <Toaster theme="dark" position="bottom-center" />
-      <header className="max-w-xl space-y-3">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">The nest</p>
-        <h1 className="font-display text-4xl">Two of a kind.</h1>
-        <p className="text-sm text-muted">
-          A square on the blotter. A clutch, or a rise. Grown and elder may sit.
-          A hatchling waits. Neglect can close a line. The nest still keeps one.
-        </p>
-        <p className="flex flex-wrap gap-4 text-sm">
-          <Link to="/hatch" className="text-fg">
-            The hatchery
-          </Link>
-          <Link to="/collection" className="text-fg">
-            The kennel
-          </Link>
-        </p>
-      </header>
-
-      <section className="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-        <div className="space-y-5 rounded-[var(--radius-xl)] border border-border bg-surface p-6">
-          <div className="flex items-end justify-between gap-4">
-            <div>
-              <p className="text-xs text-subtle">Ember on hand</p>
-              <p className="font-display text-5xl tabular-nums">{ember ?? "—"}</p>
-            </div>
-            <p className="max-w-[12rem] text-right text-xs text-muted">
-              {path ? `${path.word} · ${path.cost} ember` : "Seat two grown guests you already keep."}
-            </p>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <SeatCard pet={a} label="This one" empty="Choose a guest." />
-            <SeatCard
-              pet={b}
-              label="And this one"
-              empty={
-                a && (a.species_key === "yeast" || a.species_key === "lichen" || a.species_key === "nexus")
-                  ? "Or leave the chair empty."
-                  : "Another of the same kind."
-              }
-            />
-          </div>
-
-          {path ? <p className="text-sm text-muted">{path.plaque}</p> : null}
-
-          {verdict && !verdict.ok ? <p className="text-sm text-muted">{verdict.reason}</p> : null}
-
-          {a && (b || verdict?.ok) ? (
-            <form
-              className="flex flex-col gap-2 sm:flex-row"
-              onSubmit={(e) => {
-                e.preventDefault();
-                void pair();
-              }}
-            >
-              <input
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                maxLength={24}
-                placeholder="A house name, or leave it"
-                className="h-11 flex-1 rounded-[var(--radius-sm)] border border-border bg-elevated px-3 text-sm text-fg outline-none focus:ring-2 focus:ring-primary/30"
-              />
-              <Button type="submit" disabled={busy || !verdict?.ok || ember === null}>
-                {busy ? "Pairing…" : path?.word ?? "Pair"}
-              </Button>
-            </form>
-          ) : null}
-        </div>
-
-        <div className="space-y-4">
-          {square?.kind === "mono" ? (
-            <PunnettCard
-              title={square.locus.label}
-              rows={square.mono.rowGametes}
-              cols={square.mono.colGametes}
-              cells={square.mono.cells.map((row) => row.map((c) => c.label))}
-              geno={square.mono.genotypeRatio}
-              pheno={square.mono.phenotypeRatio}
-              watch={watch}
-              watches={lociFor(speciesKey).map((l) => l.id).concat(isDihybridMark(a!.genes, b!.genes) ? ["mark"] : [])}
-              onWatch={setWatch}
-            />
-          ) : square?.kind === "di" ? (
-            <PunnettCard
-              title="Mark"
-              rows={square.di.rowGametes}
-              cols={square.di.colGametes}
-              cells={square.di.cells.map((row) => row.map((c) => c.mark))}
-              geno={square.di.genotypeRatio}
-              pheno={square.di.phenotypeRatio}
-              watch={watch}
-              watches={["mark", ...lociFor(speciesKey).map((l) => l.id)]}
-              onWatch={setWatch}
-            />
-          ) : (
-            <aside className="rounded-[var(--radius-xl)] border border-border bg-surface p-6">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">The square</p>
-              <p className="mt-2 font-display text-2xl">Seat a pair.</p>
-              <p className="mt-2 text-sm text-muted">
-                Then the blotter shows the cross. Recessives hide. They can come back.
-              </p>
-            </aside>
-          )}
-
-          {a && hw[0] ? (
-            <aside className="rounded-[var(--radius-xl)] border border-border bg-surface p-5">
-              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">This blotter</p>
-              <p className="mt-2 text-sm text-muted">{hw[0].note}</p>
-              <ul className="mt-3 space-y-1 font-mono text-[11px] text-subtle">
-                {hw.slice(0, 3).map((report) => (
-                  <li key={report.locus}>
-                    {report.locus}
-                    {Object.entries(report.freq)
-                      .filter(([, v]) => v > 0)
-                      .map(([k, v]) => ` · ${k} ${v.toFixed(2)}`)
-                      .join("")}
-                  </li>
-                ))}
-              </ul>
-            </aside>
-          ) : null}
-        </div>
-      </section>
-
-      {clutches.length > 0 ? (
-        <section className="space-y-3">
-          <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Waiting</p>
-          <ul className="space-y-2">
-            {clutches.map((c) => {
-              const species = findSpecies(c.species_key);
-              return (
-                <li key={c.id} className="rounded-[var(--radius-lg)] border border-border bg-surface px-4 py-3 text-sm text-muted">
-                  A wait. {c.count} {c.verb}
-                  {species ? ` of ${species.displayName}` : ""}. {duePhrase(c.due_at)}.
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ) : null}
-
-      {extinct.length > 0 ? (
-        <p className="text-sm text-muted">{extinct.map((e) => e.line).join(" ")}</p>
-      ) : null}
-
-      <section className="space-y-5">
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">The rail</p>
-          <h2 className="mt-2 font-display text-3xl">What this house has shown.</h2>
-          <p className="mt-2 max-w-xl text-sm text-muted">
-            Same species, every look the nest has thrown. Ghosts are still in the catalog draw.
+      <CompanionRoom
+        kind={kind}
+        name={walker?.name}
+        stage={walker?.stage}
+        guestKey={walker ? `nest-${walker.id}` : "nest"}
+        persistLocal={false}
+        detail="Nest"
+        extraMarks={[
+          {
+            label: busy ? "Pairing…" : path?.word ?? "Pair",
+            onClick: () => void pair(),
+            disabled: busy || !verdict?.ok || ember === null,
+          },
+        ]}
+        line={
+          <p className="mt-3 max-w-sm text-sm text-muted">
+            The nest is a room. Two of a kind. Grown and elder may sit. A hatchling waits. Neglect can
+            close a line.{" "}
+            <Link to="/hatch" className="text-fg no-underline hover:text-primary">
+              Or draw at the hatchery.
+            </Link>
           </p>
-        </div>
-        {fair.length === 0 ? (
-          <p className="text-sm text-muted">The kennel is empty. The hatchery can still bring a bird.</p>
-        ) : (
-          <div className="space-y-6">
-            {fair.map((row) => (
-              <article key={row.key} className="rounded-[var(--radius-xl)] border border-border bg-surface p-5">
-                <h3 className="font-display text-2xl">{row.name}</h3>
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {row.held.map((h) => (
-                    <li
-                      key={h.look}
-                      className="rounded-[var(--radius-sm)] border border-border bg-elevated px-3 py-1 text-xs text-fg"
-                    >
-                      {h.look}
-                      {h.count > 1 ? ` · ${h.count}` : ""}
-                    </li>
-                  ))}
-                  {row.ghosts.map((g) => (
-                    <li
-                      key={g}
-                      className="rounded-[var(--radius-sm)] border border-dashed border-border px-3 py-1 text-xs text-subtle"
-                    >
-                      {g}
+        }
+        aside={
+          <div className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+            <article className="paper-card rounded-[var(--radius-lg)] border p-4">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Ember on hand</p>
+              <p className="mt-2 font-display text-4xl tabular-nums">{ember ?? "—"}</p>
+              <p className="mt-3 text-sm text-muted">
+                {path ? `${path.word} · ${path.cost} ember` : "Seat two grown guests you already keep."}
+              </p>
+              {path ? <p className="mt-2 text-xs text-subtle">{path.plaque}</p> : null}
+              {verdict && !verdict.ok ? <p className="mt-2 text-sm text-muted">{verdict.reason}</p> : null}
+              <div className="mt-4 grid gap-2">
+                <SeatCard pet={a} label="This one" empty="Choose a guest." />
+                <SeatCard
+                  pet={b}
+                  label="And this one"
+                  empty={splitter ? "Or leave the chair empty." : "Another of the same kind."}
+                />
+              </div>
+              {a && (b || verdict?.ok) ? (
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  maxLength={24}
+                  placeholder="A house name, or leave it"
+                  className="mt-3 h-10 w-full rounded-[var(--radius-sm)] border border-border bg-bg/70 px-3 text-sm text-fg outline-none focus:ring-2 focus:ring-primary/30"
+                />
+              ) : null}
+            </article>
+
+            {square?.kind === "mono" ? (
+              <PunnettCard
+                title={square.locus.label}
+                rows={square.mono.rowGametes}
+                cols={square.mono.colGametes}
+                cells={square.mono.cells.map((row) => row.map((c) => c.label))}
+                geno={square.mono.genotypeRatio}
+                pheno={square.mono.phenotypeRatio}
+                watch={watch}
+                watches={lociFor(speciesKey)
+                  .map((l) => l.id)
+                  .concat(isDihybridMark(a!.genes, b!.genes) ? ["mark"] : [])}
+                onWatch={setWatch}
+              />
+            ) : square?.kind === "di" ? (
+              <PunnettCard
+                title="Mark"
+                rows={square.di.rowGametes}
+                cols={square.di.colGametes}
+                cells={square.di.cells.map((row) => row.map((c) => c.mark))}
+                geno={square.di.genotypeRatio}
+                pheno={square.di.phenotypeRatio}
+                watch={watch}
+                watches={["mark", ...lociFor(speciesKey).map((l) => l.id)]}
+                onWatch={setWatch}
+              />
+            ) : (
+              <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">The square</p>
+                <p className="mt-2 font-display text-2xl">Seat a pair.</p>
+                <p className="mt-2 text-sm text-muted">
+                  Then the blotter shows the cross. Recessives hide. They can come back.
+                </p>
+              </aside>
+            )}
+
+            {a && hw[0] ? (
+              <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">This blotter</p>
+                <p className="mt-2 text-sm text-muted">{hw[0].note}</p>
+                <ul className="mt-3 space-y-1 font-mono text-[11px] text-subtle">
+                  {hw.slice(0, 3).map((report) => (
+                    <li key={report.locus}>
+                      {report.locus}
+                      {Object.entries(report.freq)
+                        .filter(([, v]) => v > 0)
+                        .map(([k, v]) => ` · ${k} ${v.toFixed(2)}`)
+                        .join("")}
                     </li>
                   ))}
                 </ul>
-                {row.ribbons.map((r) => (
-                  <p key={r.kind} className="mt-3 text-sm text-muted">
-                    {r.line}
-                  </p>
-                ))}
-              </article>
-            ))}
-          </div>
-        )}
-      </section>
+              </aside>
+            ) : null}
 
-      <section className="space-y-3">
-        <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">The house</p>
-        {pets === null ? (
-          <div className="h-24 animate-pulse rounded-[var(--radius-xl)] bg-surface" />
-        ) : pets.length === 0 ? (
-          <p className="text-sm text-muted">No one to pair. Hatch first.</p>
-        ) : (
-          <ul className="grid gap-2 sm:grid-cols-2">
-            {pets.map((pet) => {
-              const selected = pet.id === seatA || pet.id === seatB;
-              const pheno = phenotypeLine(phenotypeOf(pet.genes, pet.species_key));
-              return (
-                <li key={pet.id}>
-                  <button
-                    type="button"
-                    onClick={() => seat(pet.id)}
-                    className={`flex w-full items-center gap-3 rounded-[var(--radius-lg)] border px-3 py-2 text-left transition-colors ${
-                      selected ? "border-border-strong bg-elevated" : "border-border bg-surface hover:border-border-strong"
-                    }`}
-                  >
-                    <div className="size-12 overflow-hidden rounded-[var(--radius-sm)] bg-elevated">
-                      <PetPortrait speciesKey={pet.species_key} alt={pet.name} />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="truncate font-display text-lg leading-tight">{pet.name}</p>
-                      <p className="truncate text-xs text-muted">{pet.stage} · {pheno}</p>
-                      <p className="font-mono text-[10px] text-subtle">
-                        {formatDiploid(pet.genes.eyes ?? ["A", "A"])} · {formatDiploid(pet.genes.band ?? ["B", "B"])}
-                        {formatDiploid(pet.genes.mask ?? ["m", "m"])} · {formatDiploid(pet.genes.aura ?? ["s", "s"])}
-                      </p>
-                    </div>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
-    </main>
+            {clutches.length > 0 ? (
+              <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
+                <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Waiting</p>
+                <ul className="mt-2 space-y-2">
+                  {clutches.map((c) => {
+                    const species = findSpecies(c.species_key);
+                    return (
+                      <li key={c.id} className="text-sm text-muted">
+                        A wait. {c.count} {c.verb}
+                        {species ? ` of ${species.displayName}` : ""}. {duePhrase(c.due_at)}.
+                      </li>
+                    );
+                  })}
+                </ul>
+              </aside>
+            ) : null}
+
+            {extinct.length > 0 ? (
+              <p className="text-sm text-muted">{extinct.map((e) => e.line).join(" ")}</p>
+            ) : null}
+
+            <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">The house</p>
+              {pets === null ? (
+                <div className="mt-3 h-16 animate-pulse rounded-[var(--radius-sm)] bg-bg/50" />
+              ) : pets.length === 0 ? (
+                <p className="mt-2 text-sm text-muted">No one to pair. Hatch first.</p>
+              ) : (
+                <ul className="mt-3 space-y-2">
+                  {pets.map((pet) => {
+                    const selected = pet.id === seatA || pet.id === seatB;
+                    const pheno = phenotypeLine(phenotypeOf(pet.genes, pet.species_key));
+                    return (
+                      <li key={pet.id}>
+                        <button
+                          type="button"
+                          onClick={() => seat(pet.id)}
+                          className={`flex w-full items-center gap-3 rounded-[var(--radius-sm)] border px-2 py-2 text-left ${
+                            selected ? "border-border-strong bg-bg/70" : "border-border bg-bg/40 hover:border-border-strong"
+                          }`}
+                        >
+                          <div className="size-10 overflow-hidden rounded-[var(--radius-sm)] bg-bg/70">
+                            <PetPortrait speciesKey={pet.species_key} alt={pet.name} />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="truncate font-display text-base leading-tight">{pet.name}</p>
+                            <p className="truncate text-xs text-muted">
+                              {pet.stage} · {pheno}
+                            </p>
+                            <p className="font-mono text-[10px] text-subtle">
+                              {formatDiploid(pet.genes.eyes ?? ["A", "A"])} · {formatDiploid(pet.genes.band ?? ["B", "B"])}
+                              {formatDiploid(pet.genes.mask ?? ["m", "m"])} · {formatDiploid(pet.genes.aura ?? ["s", "s"])}
+                            </p>
+                          </div>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </aside>
+
+            <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">The rail</p>
+              <p className="mt-2 font-display text-2xl">What this house has shown.</p>
+              <p className="mt-2 text-sm text-muted">
+                Same species, every look the nest has thrown. Ghosts are still in the catalog draw.
+              </p>
+              {fair.length === 0 ? (
+                <p className="mt-3 text-sm text-muted">The kennel is empty. The hatchery can still bring a bird.</p>
+              ) : (
+                <div className="mt-3 space-y-4">
+                  {fair.map((row) => (
+                    <article key={row.key}>
+                      <h3 className="font-display text-xl">{row.name}</h3>
+                      <ul className="mt-2 flex flex-wrap gap-1.5">
+                        {row.held.map((h) => (
+                          <li
+                            key={h.look}
+                            className="rounded-[var(--radius-sm)] border border-border bg-bg/50 px-2 py-0.5 text-[11px] text-fg"
+                          >
+                            {h.look}
+                            {h.count > 1 ? ` · ${h.count}` : ""}
+                          </li>
+                        ))}
+                        {row.ghosts.map((g) => (
+                          <li
+                            key={g}
+                            className="rounded-[var(--radius-sm)] border border-dashed border-border px-2 py-0.5 text-[11px] text-subtle"
+                          >
+                            {g}
+                          </li>
+                        ))}
+                      </ul>
+                      {row.ribbons.map((r) => (
+                        <p key={r.kind} className="mt-2 text-sm text-muted">
+                          {r.line}
+                        </p>
+                      ))}
+                    </article>
+                  ))}
+                </div>
+              )}
+            </aside>
+          </div>
+        }
+        footer={
+          <p>
+            <Link to="/hatch" className="text-fg no-underline hover:text-primary">
+              The hatchery
+            </Link>
+            {" · "}
+            <Link to="/collection" className="text-muted no-underline hover:text-fg">
+              The kennel
+            </Link>
+            {" · "}
+            <Link to="/catalog" className="text-muted no-underline hover:text-fg">
+              The shelf
+            </Link>
+            {" · "}
+            <Link to="/meet" className="text-muted no-underline hover:text-fg">
+              The house
+            </Link>
+          </p>
+        }
+      />
+    </>
   );
 }
 
@@ -437,12 +447,14 @@ function SeatCard({
   empty: string;
 }) {
   return (
-    <div className="rounded-[var(--radius-lg)] border border-border bg-elevated p-3">
+    <div className="rounded-[var(--radius-sm)] border border-border bg-bg/40 p-3">
       <p className="text-[11px] uppercase tracking-[0.14em] text-subtle">{label}</p>
       {pet ? (
         <>
           <p className="mt-2 font-display text-xl leading-none">{pet.name}</p>
-          <p className="mt-1 text-xs text-muted">{pet.stage} · {phenotypeLine(phenotypeOf(pet.genes, pet.species_key))}</p>
+          <p className="mt-1 text-xs text-muted">
+            {pet.stage} · {phenotypeLine(phenotypeOf(pet.genes, pet.species_key))}
+          </p>
         </>
       ) : (
         <p className="mt-2 text-sm text-muted">{empty}</p>
@@ -474,7 +486,7 @@ function PunnettCard({
 }) {
   const unique = [...new Set(watches)];
   return (
-    <aside className="rounded-[var(--radius-xl)] border border-border bg-surface p-5">
+    <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
           <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">The square</p>
@@ -487,7 +499,7 @@ function PunnettCard({
               type="button"
               onClick={() => onWatch(id)}
               className={`rounded-[var(--radius-sm)] px-2 py-1 text-[11px] uppercase tracking-[0.12em] ${
-                watch === id ? "bg-elevated text-fg" : "text-subtle hover:text-fg"
+                watch === id ? "bg-bg/70 text-fg" : "text-subtle hover:text-fg"
               }`}
             >
               {id}
@@ -512,7 +524,7 @@ function PunnettCard({
               <tr key={`r-${i}`}>
                 <th className="p-1 text-subtle">{rows[i]}</th>
                 {row.map((cell, j) => (
-                  <td key={`${i}-${j}`} className="border border-border bg-elevated p-2 text-fg">
+                  <td key={`${i}-${j}`} className="border border-border bg-bg/50 p-2 text-fg">
                     {cell}
                   </td>
                 ))}
