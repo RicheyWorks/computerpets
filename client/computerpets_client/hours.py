@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-seventy REST windows, same return lines. Do not invent rest hours or copy.
+eighty REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -88,6 +88,16 @@ REST: dict[str, tuple[int, int]] = {
     "chicken_of_woods": (21, 6),
     "yeast": (23, 5),
     "lichen": (20, 6),
+    "photovore": (20, 6),
+    "choir": (21, 6),
+    "nimbus": (23, 5),
+    "silica": (20, 7),
+    "terminator": (10, 17),
+    "nexus": (21, 6),
+    "halovore": (20, 6),
+    "magneton": (22, 6),
+    "umbral": (8, 18),
+    "cyst": (20, 8),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -165,6 +175,16 @@ HIDE_LINE: dict[str, str] = {
     "chicken_of_woods": "Inside the oak.",
     "yeast": "Inside the crock.",
     "lichen": "On the stone.",
+    "photovore": "Inside the glass.",
+    "choir": "Inside a note.",
+    "nimbus": "Inside the bowl.",
+    "silica": "Inside a facet.",
+    "terminator": "On the rim.",
+    "nexus": "Inside the count.",
+    "halovore": "Inside the frost.",
+    "magneton": "On the line.",
+    "umbral": "Inside the shadow.",
+    "cyst": "Inside the seal.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -238,6 +258,16 @@ SNACK_LINE: dict[str, str] = {
     "chicken_of_woods": "Oak of a treaty.",
     "yeast": "Dough of a treaty.",
     "lichen": "Dew of a treaty.",
+    "photovore": "Light of a treaty.",
+    "choir": "Tone of a treaty.",
+    "nimbus": "Gas of a treaty.",
+    "silica": "Silica of a treaty.",
+    "terminator": "Rim of a treaty.",
+    "nexus": "Count of a treaty.",
+    "halovore": "Salt of a treaty.",
+    "magneton": "North of a treaty.",
+    "umbral": "Cool of a treaty.",
+    "cyst": "Damp of a treaty.",
 }
 
 

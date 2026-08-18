@@ -61,6 +61,9 @@ export function StudyPage() {
               <Link to="/cellar">The cellar</Link>
             </Button>
             <Button asChild variant="secondary">
+              <Link to="/far">The far den</Link>
+            </Button>
+            <Button asChild variant="secondary">
               <Link to="/meet">The house</Link>
             </Button>
           </div>

@@ -61,6 +61,9 @@ export function CellarPage() {
             <Button asChild variant="secondary">
               <Link to="/hive">The hive</Link>
             </Button>
+            <Button asChild variant="secondary">
+              <Link to="/far">The far den</Link>
+            </Button>
           </div>
         </div>
       </section>

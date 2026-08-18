@@ -11,6 +11,7 @@ const NAV = [
   { to: "/garden", label: "Garden", hideOnPhone: false },
   { to: "/hive", label: "Hive", hideOnPhone: false },
   { to: "/cellar", label: "Cellar", hideOnPhone: false },
+  { to: "/far", label: "Far", hideOnPhone: false },
   { to: "/live", label: "Live", hideOnPhone: false },
   { to: "/", label: "Desk", hideOnPhone: false },
   { to: "/collection", label: "Kennel", hideOnPhone: true },
@@ -29,6 +30,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const garden = pathname === "/garden";
   const hive = pathname === "/hive";
   const cellar = pathname === "/cellar";
+  const far = pathname === "/far";
   const study = pathname === "/study";
   const live = pathname === "/live";
 
@@ -37,7 +39,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header
         className={cn(
           "z-30 border-b border-border/80",
-          desk || demo || meet || den || tide || garden || hive || cellar || study || live
+          desk || demo || meet || den || tide || garden || hive || cellar || far || study || live
             ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
             : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
@@ -90,7 +92,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </header>
       {desk || demo || live ? (
         <div className={demo || live ? "h-dvh" : "h-dvh pt-16"}>{children}</div>
-      ) : meet || den || tide || garden || hive || cellar || study ? (
+      ) : meet || den || tide || garden || hive || cellar || far || study ? (
         <div>{children}</div>
       ) : (
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</div>

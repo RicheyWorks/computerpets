@@ -7,10 +7,11 @@ Snakes crawl (S-curve / coil). The tide swims; hermit and horseshoe walk
 the damp floor. The garden sits and leans. The hive stays — bee, butterfly, luna, firefly
 beetle, darner, stick, ant, ladybird, mantis, cicada. The cellar sits —
 shelf, amanita, morel, chanterelle, bracket, mane, puffball, sulfur shelf,
-yeast jar, lichen shrub. The others walk, with
+yeast jar, lichen shrub. The far den stays — gleam, choir, nimbus, shard,
+dusk, knot, brine, beacon, hush, cyst. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
 bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, pitcher well, sundew, and so on.
-No invented species.
+Earth guests stay honest; the far ten are coined xenobiology.
 """
 
 from __future__ import annotations
@@ -208,6 +209,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "lichen",
     ):
         _draw_fungus(p, species, anim, i, sit, eat, sleep)
+        return
+    if species.silhouette in (
+        "gleam",
+        "choir",
+        "nimbus",
+        "shard",
+        "dusk",
+        "knot",
+        "brine",
+        "beacon",
+        "hush",
+        "cyst",
+    ):
+        _draw_far(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in ("bird", "parrot", "toucan", "phoenix", "penguin"):
         _draw_bird(p, species, anim, i, sit, eat, sleep, stride)
@@ -1232,6 +1247,182 @@ def _draw_fungus(
     p.setBrush(QBrush(ear))
     p.drawEllipse(QRectF(-8, 14, 16, 8))
     _ = flush
+
+
+def _draw_far(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    ear = _color(pal.ear)
+    sil = species.silhouette
+    lean = math.sin(i * 0.9) * (4 if anim in ("idle", "walk") else 1)
+    p.translate(lean, sit * 0.12)
+    if sleep:
+        p.rotate(-10)
+    if sil == "gleam":
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(QColor(ear.red(), ear.green(), ear.blue(), 70)))
+        p.drawEllipse(QRectF(-22, -28, 44, 52))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-14, -18, 28, 40))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -10, 12, 18))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-3, -22, 6, 5))
+        return
+    if sil == "choir":
+        p.setPen(QPen(accent, 1.0))
+        for k, (oy, w, fill) in enumerate(
+            ((-16, 28, body), (-6, 24, belly), (4, 22, ring), (14, 18, ear))
+        ):
+            p.setBrush(QBrush(fill))
+            p.drawEllipse(QRectF(-w / 2, oy, w, 8))
+        return
+    if sil == "nimbus":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-24, -20, 48, 32))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-16, -16, 22, 18))
+        p.setPen(QPen(ear, 2.0))
+        p.drawLine(-10, 10, -12, 28)
+        p.drawLine(0, 12, 2, 32)
+        p.drawLine(10, 10, 14, 26)
+        return
+    if sil == "shard":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        crystal = QPainterPath()
+        crystal.moveTo(-4, -26)
+        crystal.lineTo(14, -12)
+        crystal.lineTo(8, 8)
+        crystal.lineTo(-10, 4)
+        crystal.closeSubpath()
+        p.drawPath(crystal)
+        side = QPainterPath()
+        side.moveTo(-16, -6)
+        side.lineTo(-4, -26)
+        side.lineTo(-10, 4)
+        side.lineTo(-20, 10)
+        side.closeSubpath()
+        p.setBrush(QBrush(belly))
+        p.drawPath(side)
+        return
+    if sil == "dusk":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        dark = QPainterPath()
+        dark.moveTo(-4, -22)
+        dark.lineTo(8, -6)
+        dark.lineTo(6, 18)
+        dark.lineTo(-8, 14)
+        dark.closeSubpath()
+        p.drawPath(dark)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        lit = QPainterPath()
+        lit.moveTo(-4, -22)
+        lit.lineTo(2, -16)
+        lit.lineTo(4, 12)
+        lit.lineTo(-8, 14)
+        lit.closeSubpath()
+        p.drawPath(lit)
+        p.setPen(QPen(ear, 2.0))
+        p.drawLine(-6, 14, -12, 24)
+        p.drawLine(2, 16, 8, 24)
+        return
+    if sil == "knot":
+        p.setPen(QPen(belly, 1.2))
+        for a, b in ((-12, -10), (8, -14), (14, 4), (0, 12), (-14, 6), (4, -2)):
+            p.drawLine(-2, 0, a, b)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        for x, y in ((-12, -10), (8, -14), (14, 4), (0, 12), (-14, 6), (4, -2)):
+            p.drawEllipse(QRectF(x - 5, y - 5, 10, 10))
+        return
+    if sil == "brine":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        salt = QPainterPath()
+        salt.moveTo(-8, -18)
+        salt.lineTo(12, -14)
+        salt.lineTo(16, 4)
+        salt.lineTo(4, 16)
+        salt.lineTo(-14, 8)
+        salt.closeSubpath()
+        p.drawPath(salt)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        for x, y in ((-8, 6), (8, 4), (0, 12), (12, -6)):
+            p.drawEllipse(QRectF(x, y, 6, 5))
+        return
+    if sil == "beacon":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        needle = QPainterPath()
+        needle.moveTo(-28, -4)
+        needle.lineTo(0, -8)
+        needle.lineTo(30, 0)
+        needle.lineTo(0, 8)
+        needle.closeSubpath()
+        p.drawPath(needle)
+        p.setBrush(QBrush(ear))
+        tip = QPainterPath()
+        tip.moveTo(8, -6)
+        tip.lineTo(30, 0)
+        tip.lineTo(8, 6)
+        p.drawPath(tip)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, -4, 8, 8))
+        return
+    if sil == "hush":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-22, -16, 44, 36))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-14, -12, 20, 16))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(4, 0, 16, 12))
+        return
+    # Cyst — sealed seed, opens a little on play. Not a yeast jar.
+    open_amt = 8 if anim == "play" else 0
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.1))
+    top = QPainterPath()
+    top.moveTo(-14, -6 - open_amt / 2)
+    top.lineTo(0, -20 - open_amt)
+    top.lineTo(14, -6 - open_amt / 2)
+    top.lineTo(8, 2)
+    top.lineTo(-8, 2)
+    top.closeSubpath()
+    p.drawPath(top)
+    bot = QPainterPath()
+    bot.moveTo(-12, 2)
+    bot.lineTo(12, 2)
+    bot.lineTo(10, 16 + open_amt / 2)
+    bot.lineTo(0, 20 + open_amt)
+    bot.lineTo(-10, 16 + open_amt / 2)
+    bot.closeSubpath()
+    p.drawPath(bot)
+    if anim == "play":
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -2, 12, 8))
+    _ = eat
 
 
 def _draw_snake(

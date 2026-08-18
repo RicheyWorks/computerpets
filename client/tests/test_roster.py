@@ -3,6 +3,7 @@
 from computerpets_client.life import CareState, apply_feed, apply_hide, apply_treat
 from computerpets_client.species import (
     CATALOG_KEYS,
+    FAR_KEYS,
     FUNGI_KEYS,
     GARDEN_KEYS,
     HOUSE_KEYS,
@@ -10,6 +11,7 @@ from computerpets_client.species import (
     SEA_KEYS,
     SNAKE_KEYS,
     SPECIES,
+    is_far,
     is_fungus,
     is_garden,
     is_insect,
@@ -20,7 +22,7 @@ from computerpets_client.species import (
     species_by_key,
 )
 
-# Same seventy wire keys as PetType / web/src/lib/pets/catalog.ts.
+# Same eighty wire keys as PetType / web/src/lib/pets/catalog.ts.
 WEB_CATALOG = (
     "red_panda",
     "cat",
@@ -92,6 +94,16 @@ WEB_CATALOG = (
     "chicken_of_woods",
     "yeast",
     "lichen",
+    "photovore",
+    "choir",
+    "nimbus",
+    "silica",
+    "terminator",
+    "nexus",
+    "halovore",
+    "magneton",
+    "umbral",
+    "cyst",
 )
 
 WEB_SNAKES = (
@@ -162,6 +174,19 @@ WEB_FUNGI = (
     "lichen",
 )
 
+WEB_FAR = (
+    "photovore",
+    "choir",
+    "nimbus",
+    "silica",
+    "terminator",
+    "nexus",
+    "halovore",
+    "magneton",
+    "umbral",
+    "cyst",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -172,12 +197,14 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(GARDEN_KEYS) == 10
     assert len(INSECT_KEYS) == 10
     assert len(FUNGI_KEYS) == 10
+    assert len(FAR_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
     assert set(GARDEN_KEYS) == set(WEB_GARDEN)
     assert set(INSECT_KEYS) == set(WEB_INSECTS)
     assert set(FUNGI_KEYS) == set(WEB_FUNGI)
+    assert set(FAR_KEYS) == set(WEB_FAR)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -199,6 +226,7 @@ def test_walkers_walk_and_are_not_snakes():
         assert not is_garden(key)
         assert not is_insect(key)
         assert not is_fungus(key)
+        assert not is_far(key)
         assert spec.gait == "walk"
         assert spec.silhouette != "snake"
 
@@ -301,6 +329,46 @@ def test_ten_cellar_guests_are_present_and_honest():
     assert SPECIES["lichen"].walk <= 4
 
 
+def test_ten_far_guests_are_present_and_honest():
+    assert FAR_KEYS == WEB_FAR
+    for key in FAR_KEYS:
+        spec = SPECIES[key]
+        assert is_far(key)
+        assert not is_snake(key)
+        assert not is_sea(key)
+        assert not is_garden(key)
+        assert not is_insect(key)
+        assert not is_fungus(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+    assert SPECIES["photovore"].slug == "gleam"
+    assert SPECIES["photovore"].name == "Gleam"
+    assert SPECIES["photovore"].aquatic is True
+    assert SPECIES["nimbus"].aquatic is True
+    assert SPECIES["nimbus"].name == "Drift"
+    assert SPECIES["silica"].name == "Shard"
+    assert SPECIES["terminator"].name == "Dusk"
+    assert SPECIES["nexus"].name == "Knot"
+    assert SPECIES["halovore"].name == "Brine"
+    assert SPECIES["magneton"].name == "Beacon"
+    assert SPECIES["umbral"].name == "Hush"
+    assert SPECIES["cyst"].name == "Arca"
+    assert SPECIES["photovore"].silhouette == "gleam"
+    assert SPECIES["choir"].silhouette == "choir"
+    assert SPECIES["nimbus"].silhouette == "nimbus"
+    assert SPECIES["silica"].silhouette == "shard"
+    assert SPECIES["terminator"].silhouette == "dusk"
+    assert SPECIES["nexus"].silhouette == "knot"
+    assert SPECIES["halovore"].silhouette == "brine"
+    assert SPECIES["magneton"].silhouette == "beacon"
+    assert SPECIES["umbral"].silhouette == "hush"
+    assert SPECIES["cyst"].silhouette == "cyst"
+    assert SPECIES["silica"].walk < 10
+    assert SPECIES["umbral"].walk < 10
+    assert SPECIES["cyst"].walk <= 2
+    assert SPECIES["magneton"].walk > 100
+
+
 def test_every_kind_has_house_voice_and_care_treat():
     for key in CATALOG_KEYS:
         spec = species_by_key(key)
@@ -326,8 +394,9 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("saguaro") == "venus_flytrap"
     assert next_species_key("sundew") == "honeybee"
     assert next_species_key("cicada") == "oyster"
-    assert next_species_key("lichen") == "red_panda"
-    assert prev_species_key("red_panda") == "lichen"
+    assert next_species_key("lichen") == "photovore"
+    assert next_species_key("cyst") == "red_panda"
+    assert prev_species_key("red_panda") == "cyst"
     assert prev_species_key("honeybee") == "sundew"
     assert prev_species_key("ball_python") == "phoenix"
     assert prev_species_key("octopus") == "carpet_python"

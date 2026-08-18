@@ -71,6 +71,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   chicken_of_woods: { shape: "leaf", verb: "Oak" },
   yeast: { shape: "crumb", verb: "Dough" },
   lichen: { shape: "flake", verb: "Dew" },
+  photovore: { shape: "flake", verb: "Light" },
+  choir: { shape: "flake", verb: "Tone" },
+  nimbus: { shape: "flake", verb: "Gas" },
+  silica: { shape: "pebble", verb: "Silica" },
+  terminator: { shape: "ember", verb: "Rim" },
+  nexus: { shape: "crumb", verb: "Count" },
+  halovore: { shape: "flake", verb: "Salt" },
+  magneton: { shape: "pebble", verb: "North" },
+  umbral: { shape: "flake", verb: "Cool" },
+  cyst: { shape: "crumb", verb: "Damp" },
 };
 
 export function treatFor(key: string) {
@@ -148,4 +158,14 @@ export const GIFT_LINE: Record<string, string> = {
   chicken_of_woods: "A sulfur I was not using.",
   yeast: "A rise I was finished holding.",
   lichen: "A share I was finished keeping.",
+  photovore: "A wavelength I was finished drinking.",
+  choir: "A note I was not using.",
+  nimbus: "A cold I was finished floating.",
+  silica: "A facet I was finished shedding.",
+  terminator: "A rim I was not using.",
+  nexus: "A count I was finished keeping.",
+  halovore: "A frost I was finished leaving.",
+  magneton: "A north I was not using.",
+  umbral: "A cool I was finished eating.",
+  cyst: "A wait I was finished holding.",
 };

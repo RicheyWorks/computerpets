@@ -70,6 +70,16 @@ const REST: Record<string, [number, number]> = {
   chicken_of_woods: [21, 6],
   yeast: [23, 5],
   lichen: [20, 6],
+  photovore: [20, 6],
+  choir: [21, 6],
+  nimbus: [23, 5],
+  silica: [20, 7],
+  terminator: [10, 17],
+  nexus: [21, 6],
+  halovore: [20, 6],
+  magneton: [22, 6],
+  umbral: [8, 18],
+  cyst: [20, 8],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -166,6 +176,16 @@ export const HIDE_LINE: Record<string, string> = {
   chicken_of_woods: "Inside the oak.",
   yeast: "Inside the crock.",
   lichen: "On the stone.",
+  photovore: "Inside the glass.",
+  choir: "Inside a note.",
+  nimbus: "Inside the bowl.",
+  silica: "Inside a facet.",
+  terminator: "On the rim.",
+  nexus: "Inside the count.",
+  halovore: "Inside the frost.",
+  magneton: "On the line.",
+  umbral: "Inside the shadow.",
+  cyst: "Inside the seal.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -239,6 +259,16 @@ export const SNACK_LINE: Record<string, string> = {
   chicken_of_woods: "Oak of a treaty.",
   yeast: "Dough of a treaty.",
   lichen: "Dew of a treaty.",
+  photovore: "Light of a treaty.",
+  choir: "Tone of a treaty.",
+  nimbus: "Gas of a treaty.",
+  silica: "Silica of a treaty.",
+  terminator: "Rim of a treaty.",
+  nexus: "Count of a treaty.",
+  halovore: "Salt of a treaty.",
+  magneton: "North of a treaty.",
+  umbral: "Cool of a treaty.",
+  cyst: "Damp of a treaty.",
 };
 
 

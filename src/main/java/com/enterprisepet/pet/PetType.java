@@ -80,7 +80,17 @@ public enum PetType {
     PUFFBALL         ("puffball",          "Common Puffball",      Rarity.COMMON),
     CHICKEN_OF_WOODS ("chicken_of_woods",  "Chicken of the Woods", Rarity.UNCOMMON),
     YEAST            ("yeast",             "Baker's Yeast",        Rarity.COMMON),
-    LICHEN           ("lichen",            "Reindeer Lichen",      Rarity.RARE);
+    LICHEN           ("lichen",            "Reindeer Lichen",      Rarity.RARE),
+    PHOTOVORE        ("photovore",         "Lamp-drinker",         Rarity.COMMON),
+    CHOIR            ("choir",             "Chord Body",           Rarity.UNCOMMON),
+    NIMBUS           ("nimbus",            "Methane Floater",      Rarity.COMMON),
+    SILICA           ("silica",            "Living Crystal",       Rarity.UNCOMMON),
+    TERMINATOR       ("terminator",        "Twilight Walker",      Rarity.RARE),
+    NEXUS            ("nexus",             "Walking Colony",       Rarity.RARE),
+    HALOVORE         ("halovore",          "Salt-drinker",         Rarity.UNCOMMON),
+    MAGNETON         ("magneton",          "Field Swimmer",        Rarity.UNCOMMON),
+    UMBRAL           ("umbral",            "Heat Shadow",          Rarity.UNCOMMON),
+    CYST             ("cyst",              "Traveling Cyst",       Rarity.LEGENDARY);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

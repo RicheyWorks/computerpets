@@ -118,9 +118,9 @@ All critical items required before any public or limited production exposure hav
 - [x] Cat (Miso) wakes on the living desk
 - [x] Dog (Pip) wakes on the living desk
 - [x] Browser ad demos (`/meet`, `/demo/rui`, `/demo/miso`, `/demo/pip`)
-- [x] Full catalog awake — all seventy living kinds have living browser demos
-- [x] Windows/Mac desktop overlay for all seventy + phone/tablet Live companion
-- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects, and a cellar of ten fungi licensed)
+- [x] Full catalog awake — all eighty living kinds have living browser demos
+- [x] Windows/Mac desktop overlay for all eighty + phone/tablet Live companion
+- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects, a cellar of ten fungi, and a far den of ten xenobiology guests licensed)
 - [x] Per-species life sim — hunger clocks, mess, illness, age, specials, Windows hardening
 - [x] Mind plugin bus — 14 AI backends, per-pet assignment, custom webhook
 - [x] Browser desk specials + house journal; species gaits on every screen
@@ -136,6 +136,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Ten named snakes on desk, demos, Live, Meet, and Windows overlay
 - [x] Tide den at `/sea` — ten marine animals on the blotter; plaques teach (jelly and star are not fish; a horseshoe crab is not a crab)
 - [x] Garden den at `/garden` — ten plants on the blotter; plaques teach (moss has no flower; a saguaro is not a tree; three hunt: snap, pitfall, glue)
+- [x] Far den at `/far` — ten guests that never evolved here; plaques teach
 - [x] Snakes go blue and shed; old coat stays on the blotter, all platforms
 - [x] Native client contract published (`docs/CLIENT-CONTRACT.md`) — license AES-256-GCM format, hwid rules, JWT, signed download URL
 - [x] Bundle artifact catalog — optional version / platform / sha256 on the signed manifest (`bundle.catalog`; empty until a zip is published)
@@ -168,6 +169,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-17 (ADRs under `docs/adr/`)
+**Last Updated:** 2026-08-18 (far den: ten xenobiology guests)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

@@ -78,6 +78,16 @@
     chicken_of_woods: [A("lean", "lean", 1.6, 3), A("flush", "flush", 1.2, 2), A("still", "freeze", 2.2, 2)],
     yeast: [A("rise", "rise", 1.6, 5), A("still", "freeze", 2.0, 2), A("foam", "bob", 1.2, 1)],
     lichen: [A("share-still", "share", 2.8, 5, "sit"), A("still", "freeze", 2.4, 3), A("lean", "lean", 1.4, 1)],
+    photovore: [A("drink-light", "drink", 1.4, 5), A("still", "freeze", 1.8, 2), A("hover", "bob", 1.2, 1)],
+    choir: [A("chord-pulse", "chord", 1.6, 5), A("still", "freeze", 2.0, 2), A("overtone", "pulse", 1.2, 1)],
+    nimbus: [A("float", "float", 1.8, 5), A("still", "freeze", 2.0, 2), A("hover", "bob", 1.4, 1)],
+    silica: [A("facet", "facet", 2.2, 5, "sit"), A("still", "freeze", 2.4, 3), A("shed", "freeze", 1.6, 1)],
+    terminator: [A("edge-walk", "edge", 1.4, 5), A("still", "freeze", 1.8, 2), A("rim", "trail", 1.0, 1)],
+    nexus: [A("count-ripple", "ripple", 1.6, 5), A("still", "freeze", 2.0, 2), A("name", "pulse", 1.2, 1)],
+    halovore: [A("frost", "frost", 1.8, 5, "sit"), A("still", "freeze", 2.2, 3), A("waste", "freeze", 1.4, 1)],
+    magneton: [A("align", "align", 1.2, 5), A("still", "freeze", 1.6, 2), A("north", "stretch", 1.0, 1)],
+    umbral: [A("dim", "dim", 2.4, 5, "sit"), A("still", "freeze", 2.6, 3), A("cool", "share", 1.8, 1)],
+    cyst: [A("wake", "wake", 1.8, 4, "sit"), A("wait", "sit_hold", 3.2, 5, "sit"), A("still", "freeze", 2.8, 3)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",
@@ -203,6 +213,40 @@
     } else if (motion === "share") {
       pose.dx = Math.sin(u * Math.PI) * 1.2;
       pose.rot = Math.sin(u * Math.PI) * 2;
+    } else if (motion === "drink") {
+      pose.dy = -Math.sin(u * Math.PI) * 6;
+      pose.stretch = 1 + Math.sin(u * Math.PI) * 0.07;
+      pose.squat = 2 - pose.stretch;
+    } else if (motion === "chord") {
+      pose.stretch = 1 + Math.sin(u * Math.PI * 3) * 0.06;
+      pose.squat = 2 - pose.stretch;
+      pose.dx = Math.sin(t * 10) * 1.4;
+    } else if (motion === "float") {
+      pose.dy = Math.sin(t * 6) * 5;
+      pose.dx = Math.sin(t * 3) * 2;
+    } else if (motion === "facet") {
+      pose.rot = Math.sin(u * Math.PI) * 4;
+      pose.stretch = 1 + Math.sin(u * Math.PI) * 0.05;
+    } else if (motion === "edge") {
+      pose.dx = Math.sin(t * 12) * 3.2;
+      pose.dy = Math.sin(t * 24) * 0.8;
+    } else if (motion === "ripple") {
+      pose.stretch = 1 + Math.sin(u * Math.PI * 3) * 0.05;
+      pose.dx = Math.sin(u * Math.PI * 2) * 2.4;
+    } else if (motion === "frost") {
+      pose.stretch = 1 - Math.sin(u * Math.PI) * 0.04;
+      pose.squat = 2 - pose.stretch;
+      pose.dy = Math.sin(u * Math.PI) * 2;
+    } else if (motion === "align") {
+      pose.stretch = 1 + Math.sin(u * Math.PI) * 0.1;
+      pose.dx = Math.sin(u * Math.PI) * 6;
+    } else if (motion === "dim") {
+      pose.dy = Math.sin(u * Math.PI) * 2;
+      pose.rot = Math.sin(u * Math.PI) * 2;
+    } else if (motion === "wake") {
+      pose.stretch = 0.88 + Math.sin(u * Math.PI) * 0.2;
+      pose.squat = 2 - pose.stretch;
+      pose.dy = -Math.sin(u * Math.PI) * 5;
     }
     return pose;
   }
