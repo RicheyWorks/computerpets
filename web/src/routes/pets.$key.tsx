@@ -9,12 +9,14 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import {
   careForPet,
   getSanctuary,
+  releasePet,
   renamePet,
   setActivePet,
   type CompanionView,
 } from "@/lib/pets/actions";
 import { findSpecies } from "@/lib/pets/catalog";
 import { bondScore, moodWord } from "@/lib/pets/care";
+import { formatDiploid } from "@/lib/pets/genetics";
 
 export const Route = createFileRoute("/pets/$key")({ component: PetDetail });
 
@@ -89,10 +91,14 @@ function PetDetail() {
             <Meta label="Species" value={species?.displayName ?? pet.species_key} />
             <Meta label="Temperament" value={species?.temperament ?? "—"} />
             <Meta label="Habitat" value={species?.habitat ?? "—"} />
-            <Meta label="Eyes" value={pet.eyes} />
-            <Meta label="Mark" value={pet.mark} />
-            <Meta label="Aura" value={pet.aura} />
+            <Meta label="Eyes" value={`${pet.eyes} · ${formatDiploid(pet.genes.eyes ?? ["A", "A"])}`} />
+            <Meta label="Mark" value={`${pet.mark} · ${formatDiploid(pet.genes.band ?? ["B", "B"])}${formatDiploid(pet.genes.mask ?? ["m", "m"])}`} />
+            <Meta label="Aura" value={`${pet.aura} · ${formatDiploid(pet.genes.aura ?? ["s", "s"])}`} />
           </dl>
+          <p className="text-sm text-muted">
+            A hatchling from the nest starts fresh. The square is how a look
+            hid, and how it can return.
+          </p>
 
           <div className="grid gap-3 sm:grid-cols-3">
             <Meter label="Hunger" value={pet.hunger} />
@@ -126,6 +132,25 @@ function PetDetail() {
                 Place on desk
               </Button>
             ) : null}
+            <Button asChild variant="ghost">
+              <Link to="/nest">Pair at the nest</Link>
+            </Button>
+            <Button
+              variant="ghost"
+              disabled={busy}
+              onClick={() => {
+                if (!window.confirm("Let this one go? The line may end here.")) return;
+                setBusy(true);
+                void releasePet({ data: { petId } })
+                  .then(() => {
+                    toast.success("Gone from this house.");
+                    setPet(null);
+                  })
+                  .finally(() => setBusy(false));
+              }}
+            >
+              Let go
+            </Button>
           </div>
 
           <form
