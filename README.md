@@ -1,118 +1,17 @@
 # ComputerPets
 
-**A secure backend for GPU-accelerated premium desktop pets with pluggable ownership verification.**
+A living ecology. A natural-history house. Eighty guests walk the blotter.
 
-[![Java](https://img.shields.io/badge/Java-21-blue?style=flat-square)](https://adoptium.net/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3-green?style=flat-square)](https://spring.io/projects/spring-boot)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
-
----
-
-## Overview
-
-**ComputerPets** is a modern desktop pet platform featuring high-quality, GPU-accelerated virtual companions. This repository contains the **enterprise-grade backend service** responsible for ownership verification, license issuance, and secure asset delivery, plus a **living desk** browser client.
-
-The vision is to deliver premium, always-on desktop pets that feel alive — powered by GPU rendering on the client and protected by a robust, cryptographically secure backend on the server.
-
-The vision is to deliver premium, always-on desktop pets that feel alive — powered by GPU rendering on the client and protected by a robust, cryptographically secure backend on the server.
-
-This backend enables users to prove ownership of pets through multiple platforms (Steam, Ethereum NFTs, Microsoft Store, Itch.io, Epic Games Store, and future providers) and receive time-limited, tamper-proof licenses without ever exposing master keys to the client application.
-
-**Key goals:**
-- Enterprise-level security and architecture
-- Easy extensibility for new ownership platforms
-- Clean separation between client and server responsibilities
-- Production-ready foundations from day one
-
----
-
-## Features
-
-- **Pluggable Ownership Verification** — Add support for new platforms by implementing the `OwnershipProvider` interface (currently supports Steam, Ethereum NFTs via Web3j, Microsoft Store, Itch.io, and Epic Games Store).
-- **Strong Cryptographic Licensing** — AES-256-GCM encrypted licenses and HMAC-signed short-lived CDN URLs.
-- **Stateless & Scalable** — Designed for horizontal scaling with minimal server-side state.
-- **Defense-in-Depth Security** — Dual validation using both encrypted licenses and short-lived JWTs on every download.
-- **Rate Limiting** — Per-IP Bucket4j token buckets in Redis (10/min verify, 30/min download), shared across replicas. Redis-down fail-closes with 503.
-- **Revocation deny-list** — Revoke persists `revokedAt` in Postgres, then writes the `jti` to Redis so every replica rejects immediately (same 401). Redis-down validate falls back to the ledger.
-- **Tracing & business metrics** — Micrometer + OpenTelemetry spans on verify, download, and provider calls. OTLP export via `OTEL_EXPORTER_OTLP_ENDPOINT` (off by default). Prometheus scrape is unchanged.
-- **Profiles & deploy** — `dev` / `staging` / `prod` Spring profiles (same YAML + env style). `prod` fail-hards H2, in-memory rate limits, and Microsoft Store dev-mode. Kubernetes manifests in `deploy/k8s/` (blue/green Service selector).
-- **Rich Pet Catalog** — 80 living kinds across four rarity tiers (Common, Uncommon, Rare, Legendary), including ten named snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects, a cellar of ten fungi, and a far den of ten guests that never evolved here.
-- **Living desk** — The full house walks in `web/` and on the native overlay in `desktop/`. They turn, ease, settle, then do what that animal does. A PyQt6 blotter lives in `client/` (all eighty, plaques, house hours, daily weather / visitor / shed, mess / illness / clean / medicine, play and the eighty specials, Qt OpenGL viewport, same license contract). The tide den at `/sea` teaches the marine guests. The garden den at `/garden` teaches the ten plants. The hive den at `/hive` is ten insects on the blotter; plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach. The nest at `/nest` is a square. Neglect can close a line. The nest still keeps one. The hatchery draw remains.
-- **License ledger** — House `/admin` plus `GET /api/admin/licenses` for jti/owner lookup, audit stamps, and revoke (`X-Admin-Key`).
-- **Official NFT entitlements** — Allowlisted ERC-721 / ERC-1155 collections, token-to-pet bindings, address validation, optional personal_sign. A random mainnet NFT cannot mint a Dragon license.
-- **Clean Architecture** — Modular monolith with clear package boundaries and strong separation of concerns.
-
-**Planned / Vision:**
-- A custom GPU shader engine (the PyQt blotter uses Qt’s OpenGL-backed scene today)
-- A live ComputerPets collection address in `ethereum.collections`
-
-Already shipped (not vision): JPA license persistence + revocation, optional
-`hwid` binding, fail-hard `LICENSE_SECRET_KEY`, the native client contract
-in [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md), and the PyQt blotter
-in [client/README.md](client/README.md).
-
----
-
-## Architecture
-
-The backend is built as a **modular monolith** using Spring Boot 3.3 and Java 21. It follows a plugin-based architecture centered around the `OwnershipProvider` SPI, making it trivial to add new storefronts and wallet types.
-
-Core responsibilities include:
-- Verifying ownership across multiple platforms
-- Issuing cryptographically sealed licenses
-- Authorizing short-lived bundle downloads
-- Protecting sensitive endpoints with JWT and rate limiting
-
-For a complete view of the system design (including component diagrams, data flows, deployment architecture, and technology decisions), see the dedicated architecture document:
-
-> **[📖 Architecture Documentation](docs/ARCHITECTURE.md)**
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- **Java 21** (Temurin or other OpenJDK distribution recommended)
-- **Maven 3.9+**
-- **Node 22+** (living desk)
-- A modern terminal (PowerShell, bash, etc.)
-
-### Desktop companion (Windows and Mac)
-
-All eighty on the real desktop — transparent overlay, tray / menu bar.
+Keep them so a line does not go quiet. The nest is a square. Neglect can close a line.
 
 ```bash
-cd desktop
-npm install
-npm start
+git clone https://github.com/RicheyWorks/computerpets
+cd computerpets
 ```
 
-Windows: `.\desktop.ps1`  
-Mac: `sh desktop.sh`
+## How to sit with the house
 
-Package with `npm run dist:win` or `npm run dist:mac`. Unlock (Steam verify → license decrypt → hwid → signed download) is documented in [desktop/README.md](desktop/README.md).
-
-### PyQt blotter
-
-GPU-toolkit desk — Qt OpenGL viewport, not a custom shader engine. All eighty live here with plaques, house hours, the house weather, today’s visitor, snake sheds, a day that can go unkempt and unwell, play, and the house specials; unlock uses the same contract. The tide den teaches the ten sea creatures. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach.
-
-```bash
-cd client
-python3 -m venv .venv && source .venv/bin/activate
-pip install -e ".[dev]"
-export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8080
-export LICENSE_SECRET_KEY=   # same value as the backend
-python -m computerpets_client
-```
-
-See [client/README.md](client/README.md).
-
-Phones and tablets: open the living desk **Live** page and Add to Home Screen.
-
-### Living desk in the browser
-
-Requires **Node 22+**.
+The living desk in `web/` is the first path. You need **Node 22+**.
 
 ```bash
 cd web
@@ -120,113 +19,86 @@ npm install
 npm run dev
 ```
 
-See [web/README.md](web/README.md).
+Vite listens on `0.0.0.0:8080`. Open [http://localhost:8080](http://localhost:8080) or [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
-### Backend
+Guests get Rui immediately. Sign in when you want to hatch, nest, and care.
 
-1. **Generate required secrets** (the application will not start without them):
+The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/cellar`, `/far`. On a phone, open **Live** and Add to Home Screen.
 
-   **PowerShell (Windows)**
-   ```powershell
-   $env:LICENSE_SECRET_KEY   = [Convert]::ToBase64String((1..32   | ForEach-Object { Get-Random -Maximum 256 }))
-   $env:JWT_SECRET_KEY       = [Convert]::ToBase64String((1..48   | ForEach-Object { Get-Random -Maximum 256 }))
-   $env:BUNDLE_SIGNING_KEY   = [Convert]::ToBase64String((1..48   | ForEach-Object { Get-Random -Maximum 256 }))
-   $env:MICROSOFT_DEV_MODE   = "true"   # Development only
-   ```
+Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from local lines.
 
-2. **Run the application**
+## What you can do
 
-   ```bash
-   mvn spring-boot:run
-   # or, explicit local profile (H2 unless SPRING_DATASOURCE_* is set):
-   mvn spring-boot:run -Dspring-boot.run.profiles=dev
-   ```
+Walk the dens. Each room teaches its guests.
 
-   Or use the convenience script on Windows:
-   ```powershell
-   .\build.ps1
-   ```
+Sign in. Draw from the catalog at `/hatch`. The kennel is `/collection`.
 
-3. **Verify the server is running**
+Pair two you already keep at `/nest`. The nest is a Punnett square. County-fair phenotypes sit on the rail.
 
-   ```powershell
-   Invoke-RestMethod http://localhost:8080/api/verify/providers
-   ```
+Feed them. Clean the blotter. Give medicine. Stay gone and a line can leave. The nest still keeps one.
 
-For full instructions (including IDE setup, troubleshooting, and environment variable management), see the [Setup Guide](docs/SETUP.md).
+Share one guest at `/demo/{slug}` — rui, cup, felt, comb, frill, gleam, and the rest of the house.
 
----
+`/admin` is for operators. It is not in the house nav.
 
-## Documentation
+## Also on your machine
 
-All detailed documentation is located in the `docs/` directory:
+### Desktop overlay (`desktop/`)
 
-- **[Documentation Index](docs/README.md)** — Overview of all available docs
-- **[Architecture](docs/ARCHITECTURE.md)** — Comprehensive system design, diagrams, and recommendations (**recommended starting point**)
-- **[Architecture Decision Records](docs/adr/README.md)** — Why the code looks the way it does (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron + PyQt contract clients, profiles)
-- **[Client contract](docs/CLIENT-CONTRACT.md)** — License decrypt, hwid, JWT, and signed download URL
-- **[Setup Guide](docs/SETUP.md)** — How to build, configure, and run the project locally (profiles + `deploy/k8s/`)
-- **[Contributing Guide](docs/CONTRIBUTING.md)** — Development workflow and contribution process
+Windows and Mac. Pets walk without a license.
 
----
-
-## Project Structure
-
-```
-ComputerPets/
-├── desktop/                      # Native overlay — all eighty on the real desktop
-├── client/                       # PyQt6 blotter — eighty + plaques + hours/weather/visitor/shed + mess/illness + play/specials
-├── web/                          # Living desk in the browser
-├── .github/                      # GitHub templates (issues & PRs)
-├── deploy/k8s/                   # Kubernetes manifests (prod profile, blue/green)
-├── docs/                         # Project documentation
-│   ├── ARCHITECTURE.md           # Full system architecture (living document)
-│   ├── CLIENT-CONTRACT.md        # Native client: decrypt, hwid, download
-│   ├── SETUP.md                  # Local development + profiles + k8s
-│   └── CONTRIBUTING.md
-├── src/main/java/com/enterprisepet/
-│   ├── controller/               # REST API controllers
-│   ├── provider/                 # OwnershipProvider SPI + registry
-│   │   ├── steam/
-│   │   ├── nft/
-│   │   ├── microsoft/
-│   │   ├── itch/
-│   │   └── epic/
-│   ├── license/                  # AES-GCM license issuance & validation
-│   ├── security/                 # JWT authentication
-│   ├── bundle/                   # CDN download URL signing
-│   ├── pet/                      # Pet catalog and types
-│   ├── config/                   # Security, rate limiting, exception handling
-│   └── EnterprisePetBackendApplication.java
-├── src/main/resources/
-│   ├── application.yml
-│   ├── application-dev.yml
-│   ├── application-staging.yml
-│   └── application-prod.yml
-├── pom.xml
-├── build.ps1                     # Windows build helper
-├── LICENSE
-└── README.md
+```bash
+cd desktop
+npm install
+npm start
 ```
 
----
+From the repo root: Windows `.\desktop.ps1`, Mac `sh desktop.sh`.
 
-## Contributing
+Right-click or use the tray: feed, play, rest, clean, medicine, hide, special.
 
-Contributions are welcome and appreciated! Whether you're fixing bugs, adding new providers, improving documentation, or suggesting architectural improvements, your help makes the project better.
+More in [desktop/README.md](desktop/README.md).
 
-Please read the contribution guidelines before getting started:
+### PyQt blotter (`client/`)
 
-- [Contributing Guide](CONTRIBUTING.md) (root)
-- [Detailed Contributing Guidelines](docs/CONTRIBUTING.md)
+Python 3.11+ (3.12 recommended). Pets walk without a license. Unlock is optional and fail-closed.
 
-We especially value:
-- Real implementations for the Steam and Microsoft providers
-- A deployed ComputerPets collection wired into `ethereum.collections`
-- Tests and CI/CD enhancements
-- Documentation and architecture refinements
+```bash
+cd client
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+python -m computerpets_client
+```
 
----
+More in [client/README.md](client/README.md).
+
+## Unlock / backend (optional)
+
+You do not need Java to watch the blotter or walk the dens.
+
+The service at the repo root is only for ownership verify, license unlock, and the admin ledger. Java 21, Maven 3.9+. It needs `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, and `ADMIN_API_KEY`. Local run can use `RATE_LIMIT_BACKEND=memory` if Redis is not up.
+
+The desk already uses port 8080. If you start the backend too, move it. Operators: [docs/SETUP.md](docs/SETUP.md). The unlock wire is [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
+
+## Features
+
+- Eighty living kinds across the house, the dens, the tide, the garden, the hive, the cellar, and the far den
+- A living desk in the browser, a native overlay, and a PyQt blotter
+- A nest that is a square. Neglect can close a line
+- Optional ownership verify. Fail-closed. Empty allowlists stay empty
+
+## Docs
+
+- [Living desk](web/README.md)
+- [Desktop overlay](desktop/README.md)
+- [PyQt blotter](client/README.md)
+- [Setup](docs/SETUP.md) — Java backend, secrets, profiles
+- [Client contract](docs/CLIENT-CONTRACT.md)
+- [Documentation index](docs/README.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [ADRs](docs/adr/README.md)
+- [Contributing](CONTRIBUTING.md)
 
 ## License
 
@@ -234,6 +106,4 @@ This project is licensed under the **MIT License**.
 
 See the [LICENSE](LICENSE) file for details.
 
----
-
-*Built with security, extensibility, and a love for cute digital creatures.* 🐾
+Do not invent a public host, an NFT collection address, or a live Steam / Itch / Epic / Microsoft store ID. Those are not in this repo yet.
