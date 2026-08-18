@@ -7,11 +7,13 @@ export function DenCabinet({
   currentRoom,
   currentKey,
   drawers = false,
+  onSelectKind,
   className,
 }: {
   currentRoom?: RoomId;
   currentKey?: string;
   drawers?: boolean;
+  onSelectKind?: (key: string) => void;
   className?: string;
 }) {
   const [open, setOpen] = useState<RoomId | null>(currentRoom ?? null);
@@ -55,13 +57,23 @@ export function DenCabinet({
         <ul className="den-cabinet-drawer">
           {guestsIn(shown).map((kind) => (
             <li key={kind.key}>
-              <Link
-                to="/demo/$slug"
-                params={{ slug: kind.slug }}
-                className={cn("den-cabinet-guest", kind.key === currentKey && "is-here")}
-              >
-                {kind.name}
-              </Link>
+              {onSelectKind ? (
+                <button
+                  type="button"
+                  className={cn("den-cabinet-guest", kind.key === currentKey && "is-here")}
+                  onClick={() => onSelectKind(kind.key)}
+                >
+                  {kind.name}
+                </button>
+              ) : (
+                <Link
+                  to="/demo/$slug"
+                  params={{ slug: kind.slug }}
+                  className={cn("den-cabinet-guest", kind.key === currentKey && "is-here")}
+                >
+                  {kind.name}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
