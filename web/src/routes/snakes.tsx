@@ -56,6 +56,9 @@ export function SnakesPage() {
               <Link to="/garden">The garden</Link>
             </Button>
             <Button asChild variant="secondary">
+              <Link to="/hive">The hive</Link>
+            </Button>
+            <Button asChild variant="secondary">
               <Link to="/meet">The house</Link>
             </Button>
           </div>

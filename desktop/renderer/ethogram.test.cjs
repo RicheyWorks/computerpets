@@ -28,3 +28,21 @@ test("only the scratching mammals list scratch", () => {
     assert.equal(names.includes("tongue"), false, key);
   }
 });
+
+test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
+  const insects = [
+    "honeybee", "monarch", "luna", "firefly", "darner",
+    "stick", "carpenter_ant", "ladybird", "mantis", "cicada",
+  ];
+  for (const key of insects) {
+    const names = E.actsFor(key).map((a) => a.name);
+    assert.ok(names.length > 0, key);
+    assert.equal(names.includes("scratch"), false, key);
+    assert.equal(names.includes("tongue"), false, key);
+    assert.equal(names.includes("eat"), false, key);
+  }
+  assert.ok(E.actsFor("honeybee").some((a) => a.name === "waggle"));
+  assert.ok(E.actsFor("firefly").some((a) => a.name === "flash"));
+  assert.ok(E.actsFor("luna").some((a) => a.name === "still"));
+  assert.ok(E.actsFor("cicada").some((a) => a.name === "emerge"));
+});

@@ -1,6 +1,6 @@
 # Desktop companion — Windows and Mac
 
-All fifty living kinds live on the real desktop as a Tamagotchi-grade overlay — including ten snakes, a tide of ten sea creatures, and a garden of ten plants. They turn, ease, and settle on the work-area floor, then do what that animal does — scratch, preen, bask, flick a tongue, or lean to the lamp. Unique hunger clocks, night cycles, mess, illness, age, and a special move each. The tide den at `/sea` is where the marine guests are taught. The garden den at `/garden` is ten plants on the blotter; plaques teach.
+All sixty living kinds live on the real desktop as a Tamagotchi-grade overlay — including ten snakes, a tide of ten sea creatures, a garden of ten plants, and a hive of ten insects. They turn, ease, and settle on the work-area floor, then do what that animal does — scratch, preen, bask, flick a tongue, lean to the lamp, or waggle. Unique hunger clocks, night cycles, mess, illness, age, and a special move each. The tide den at `/sea` is where the marine guests are taught. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. A firefly is a beetle. A luna does not eat. A cicada waits seventeen years.
 
 ## Care
 

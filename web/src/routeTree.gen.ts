@@ -15,6 +15,7 @@ import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as HatchRouteImport } from './routes/hatch'
+import { Route as HiveRouteImport } from './routes/hive'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MeetRouteImport } from './routes/meet'
@@ -54,6 +55,11 @@ const GardenRoute = GardenRouteImport.update({
 const HatchRoute = HatchRouteImport.update({
   id: '/hatch',
   path: '/hatch',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HiveRoute = HiveRouteImport.update({
+  id: '/hive',
+  path: '/hive',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LiveRoute = LiveRouteImport.update({
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/collection': typeof CollectionRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
+  '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
@@ -132,6 +139,7 @@ export interface FileRoutesByTo {
   '/collection': typeof CollectionRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
+  '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/collection': typeof CollectionRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
+  '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/collection'
     | '/garden'
     | '/hatch'
+    | '/hive'
     | '/live'
     | '/login'
     | '/meet'
@@ -189,6 +199,7 @@ export interface FileRouteTypes {
     | '/collection'
     | '/garden'
     | '/hatch'
+    | '/hive'
     | '/live'
     | '/login'
     | '/meet'
@@ -207,6 +218,7 @@ export interface FileRouteTypes {
     | '/collection'
     | '/garden'
     | '/hatch'
+    | '/hive'
     | '/live'
     | '/login'
     | '/meet'
@@ -226,6 +238,7 @@ export interface RootRouteChildren {
   CollectionRoute: typeof CollectionRoute
   GardenRoute: typeof GardenRoute
   HatchRoute: typeof HatchRoute
+  HiveRoute: typeof HiveRoute
   LiveRoute: typeof LiveRoute
   LoginRoute: typeof LoginRoute
   MeetRoute: typeof MeetRoute
@@ -280,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/hatch'
       fullPath: '/hatch'
       preLoaderRoute: typeof HatchRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hive': {
+      id: '/hive'
+      path: '/hive'
+      fullPath: '/hive'
+      preLoaderRoute: typeof HiveRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/live': {
@@ -362,6 +382,7 @@ const rootRouteChildren: RootRouteChildren = {
   CollectionRoute: CollectionRoute,
   GardenRoute: GardenRoute,
   HatchRoute: HatchRoute,
+  HiveRoute: HiveRoute,
   LiveRoute: LiveRoute,
   LoginRoute: LoginRoute,
   MeetRoute: MeetRoute,

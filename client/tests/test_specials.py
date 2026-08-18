@@ -56,6 +56,16 @@ HOUSE_TRAITS = {
     "venus_flytrap": ("snap", "Snap", "I did not snap. That is hello."),
     "pitcher": ("drown", "Drown", "I did not chase. The well was enough."),
     "sundew": ("glue", "Glue", "I glittered. That was hello."),
+    "honeybee": ("waggle", "Waggle", "I danced. That was hello."),
+    "monarch": ("migrate", "Migrate", "I kept the orange. Hello."),
+    "luna": ("still", "Moon", "I arrived without a mouth. Hello."),
+    "firefly": ("flash", "Flash", "I flashed. That was hello."),
+    "darner": ("hawk", "Hawk", "I hawed the lamp. Hello."),
+    "stick": ("freeze", "Freeze", "I have not moved. That is hello."),
+    "carpenter_ant": ("trail", "Trail", "I laid a road. Hello."),
+    "ladybird": ("count", "Count", "I counted. Hello."),
+    "mantis": ("fold", "Fold", "I did not strike. That is hello."),
+    "cicada": ("emerge", "Emerge", "I emerged. You may wait."),
 }
 
 
