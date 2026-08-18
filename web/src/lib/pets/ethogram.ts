@@ -30,7 +30,11 @@ export type ActMotion =
   | "flash"
   | "fold"
   | "trail"
-  | "emerge";
+  | "emerge"
+  | "puff"
+  | "flush"
+  | "rise"
+  | "share";
 
 export type IdleAct = {
   name: string;
@@ -156,6 +160,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   ladybird: [A("count", "nod", 1.0, 3, "sit"), A("hunt", "dart", 0.8, 2), A("still", "freeze", 1.6, 2)],
   mantis: [A("fold", "fold", 2.0, 4, "sit"), A("strike", "snap", 0.6, 1, "play"), A("still", "freeze", 2.0, 2)],
   cicada: [A("still", "sit_hold", 2.8, 5, "sit"), A("emerge", "emerge", 1.8, 1, "sit"), A("burst", "dart", 0.7, 2)],
+  oyster: [A("lean", "lean", 1.8, 4), A("flush", "flush", 1.2, 2), A("still", "freeze", 2.2, 2)],
+  fly_agaric: [A("lean", "lean", 1.6, 3), A("flush", "flush", 1.4, 3), A("still", "freeze", 2.0, 2)],
+  morel: [A("lean", "lean", 1.6, 3), A("still", "sit_hold", 2.4, 3, "sit"), A("still_hold", "freeze", 2.0, 2)],
+  chanterelle: [A("lean", "lean", 1.6, 3), A("flush", "flush", 1.2, 2), A("still", "freeze", 2.0, 2)],
+  turkey_tail: [A("lean", "lean", 1.6, 3), A("still", "freeze", 2.4, 3), A("zone", "lean", 1.4, 2)],
+  lions_mane: [A("lean", "lean", 1.6, 3), A("still", "freeze", 2.2, 3), A("beard", "sit_hold", 2.0, 2, "sit")],
+  puffball: [A("puff", "puff", 0.8, 4, "play"), A("still", "freeze", 2.0, 3), A("lean", "lean", 1.4, 1)],
+  chicken_of_woods: [A("lean", "lean", 1.6, 3), A("flush", "flush", 1.2, 2), A("still", "freeze", 2.2, 2)],
+  yeast: [A("rise", "rise", 1.6, 5), A("still", "freeze", 2.0, 2), A("foam", "bob", 1.2, 1)],
+  lichen: [A("share-still", "share", 2.8, 5, "sit"), A("still", "freeze", 2.4, 3), A("lean", "lean", 1.4, 1)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;
@@ -267,6 +281,21 @@ export function actPose(motion: ActMotion | null | undefined, t: number, hold: n
     pose.stretch = 0.9 + Math.sin(u * Math.PI) * 0.18;
     pose.squat = 2 - pose.stretch;
     pose.dy = -Math.sin(u * Math.PI) * 4;
+  } else if (motion === "puff") {
+    pose.stretch = 1 + Math.sin(u * Math.PI) * 0.14;
+    pose.squat = 2 - pose.stretch;
+    pose.dy = -Math.sin(u * Math.PI) * 6;
+  } else if (motion === "flush") {
+    pose.stretch = 1 + Math.sin(u * Math.PI * 2) * 0.06;
+    pose.squat = 2 - pose.stretch;
+    pose.rot = Math.sin(u * Math.PI) * 3;
+  } else if (motion === "rise") {
+    pose.dy = -Math.sin(u * Math.PI) * 8;
+    pose.stretch = 1 + Math.sin(u * Math.PI) * 0.08;
+    pose.squat = 2 - pose.stretch;
+  } else if (motion === "share") {
+    pose.dx = Math.sin(u * Math.PI) * 1.2;
+    pose.rot = Math.sin(u * Math.PI) * 2;
   }
   return pose;
 }

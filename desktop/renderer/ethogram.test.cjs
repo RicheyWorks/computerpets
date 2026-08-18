@@ -46,3 +46,20 @@ test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   assert.ok(E.actsFor("luna").some((a) => a.name === "still"));
   assert.ok(E.actsFor("cicada").some((a) => a.name === "emerge"));
 });
+
+test("fungi keys never schedule scratch or tongue", () => {
+  const fungi = [
+    "oyster", "fly_agaric", "morel", "chanterelle", "turkey_tail",
+    "lions_mane", "puffball", "chicken_of_woods", "yeast", "lichen",
+  ];
+  for (const key of fungi) {
+    const names = E.actsFor(key).map((a) => a.name);
+    assert.ok(names.length > 0, key);
+    assert.equal(names.includes("scratch"), false, key);
+    assert.equal(names.includes("tongue"), false, key);
+    assert.equal(names.includes("waggle"), false, key);
+  }
+  assert.ok(E.actsFor("puffball").some((a) => a.name === "puff"));
+  assert.ok(E.actsFor("yeast").some((a) => a.name === "rise"));
+  assert.ok(E.actsFor("lichen").some((a) => a.name === "share-still"));
+});

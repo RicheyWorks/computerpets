@@ -67,6 +67,16 @@ const LINES: Record<string, string> = {
   ladybird: "I counted. Then I left the seven.",
   mantis: "I folded. Then I left the stem.",
   cicada: "I sat. Then I left the years.",
+  oyster: "I fruited. Then I left the wood.",
+  fly_agaric: "I warned. Then I left the cup.",
+  morel: "I sat hollow. Then I left the mold.",
+  chanterelle: "I forked. Then I left the rim.",
+  turkey_tail: "I zoned. Then I left the grain.",
+  lions_mane: "I hung teeth. Then I left the wound.",
+  puffball: "I puffed. Then I left the cloud.",
+  chicken_of_woods: "I shelved. Then I left the oak.",
+  yeast: "I rose. Then I left the crock.",
+  lichen: "We sat. Then we left the share.",
 };
 
 export function visitLine(guestKey: string) {
