@@ -10,9 +10,9 @@ function Login() {
       <div className="w-full space-y-6 rounded-[var(--radius-xl)] border border-border bg-surface p-6 sm:p-8">
         <div className="space-y-2">
           <p className="text-[11px] uppercase tracking-[0.18em] text-subtle">Keeper desk</p>
-          <h1 className="font-display text-3xl">Sign in to hatch</h1>
+          <h1 className="font-display text-3xl">Sit, hatch, nest</h1>
           <p className="text-sm text-muted">
-            Your kennel, ember, and on-desk companion stay bound to this account.
+            Sign in to sit with the house. Hatch, nest, and keep a kennel.
           </p>
         </div>
         {authEnabled ? (

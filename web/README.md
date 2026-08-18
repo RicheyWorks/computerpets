@@ -2,7 +2,7 @@
 
 New keepers start at the root [README](../README.md).
 
-Browser companion for ComputerPets. The full house of **80** living kinds is awake — Rui and the original nineteen, plus ten named snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects, a cellar of ten fungi, and a far den of ten guests that never evolved here. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue, a plant leans to the lamp, a bee waggles, a fungus leans or puffs. The tide den at `/sea` teaches the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach. The nest at `/nest` is a square. Neglect can close a line. The nest still keeps one. The hatch is a room. The draw lands you with the guest.
+Browser companion for ComputerPets. The full house of **80** living kinds is awake — Rui and the original nineteen, plus ten named snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects, a cellar of ten fungi, and a far den of ten guests that never evolved here. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue, a plant leans to the lamp, a bee waggles, a fungus leans or puffs. The tide den at `/sea` teaches the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach. The nest is a room. The square sits on the paper. Neglect can close a line. The nest still keeps one. The hatch is a room. The draw lands you with the guest.
 
 ## Run
 
@@ -42,5 +42,5 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 - `/hive` — the hive den
 - `/cellar` — the cellar den
 - `/far` — the far den
-- `/nest` — pair two you already keep; a Punnett square; a clutch
+- `/nest` — a room. The square sits on the paper.
 - `/demo/{slug}` — a room. The guest is already walking. Every species (rui, miso, pip, thimble, … ember, cup, felt, comb, frill, gleam).
