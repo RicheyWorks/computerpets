@@ -59,7 +59,7 @@ function Collection() {
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div className="space-y-2">
           <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Kennel</p>
-          <h1 className="font-display text-4xl">Held tokens</h1>
+          <h1 className="font-display text-4xl">The guests you keep.</h1>
           <p className="max-w-xl text-sm text-muted">
             The kennel guest is a room. Neglect can close a line. The nest still
             keeps one.

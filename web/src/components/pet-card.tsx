@@ -65,7 +65,7 @@ export function PetCard({ pet }: { pet: CompanionView }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="font-display text-lg leading-tight text-fg">{pet.name}</p>
-            <p className="mt-0.5 font-mono text-[11px] text-subtle">{pet.token_id}</p>
+            <p className="mt-0.5 text-[11px] text-subtle">{species?.displayName ?? pet.species_key}</p>
           </div>
           <p className="text-xs text-muted">
             {pet.stage} · {pet.origin === "nest" ? "from the nest" : "drawn"}
