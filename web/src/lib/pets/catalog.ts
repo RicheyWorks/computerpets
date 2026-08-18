@@ -111,6 +111,7 @@ export const HATCH_COST: Record<Rarity, number> = {
   LEGENDARY: 32,
 };
 
+/** Shown looks. Diploid loci and dominance live in genetics.ts. */
 export const TRAIT_POOLS = {
   eyes: ["amber", "ink", "frost", "ember"],
   mark: ["plain", "masked", "banded", "starred"],

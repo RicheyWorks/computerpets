@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
 import { RarityBadge } from "@/components/pet-card";
@@ -49,7 +49,13 @@ function Hatchery() {
         <h1 className="font-display text-4xl">Draw from the house catalog.</h1>
         <p className="text-sm text-muted">
           Weighted toward common companions. Legendaries are scarce on purpose.
-          Cost is taken after the roll.
+          Cost is taken after the roll. A new bird can bring an allele the nest
+          has lost.
+        </p>
+        <p>
+          <Link to="/nest" className="text-sm text-fg">
+            Or pair two you already keep.
+          </Link>
         </p>
       </header>
 
