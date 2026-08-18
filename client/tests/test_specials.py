@@ -76,6 +76,16 @@ HOUSE_TRAITS = {
     "chicken_of_woods": ("shelf", "Shelf", "I shelved. Hello."),
     "yeast": ("rise", "Rise", "I rose. That was hello."),
     "lichen": ("share", "Share", "We are two. Hello."),
+    "photovore": ("drink", "Drink", "I drank. That was hello."),
+    "choir": ("chord", "Chord", "I sounded. That was hello."),
+    "nimbus": ("float", "Float", "I floated. That was hello."),
+    "silica": ("facet", "Facet", "I faceted. Hello."),
+    "terminator": ("edge", "Edge", "I kept the rim. Hello."),
+    "nexus": ("count", "Count", "We counted. Hello."),
+    "halovore": ("frost", "Frost", "I frosted. Hello."),
+    "magneton": ("align", "Align", "I aligned. Hello."),
+    "umbral": ("dim", "Dim", "I dimmed. Hello."),
+    "cyst": ("wake", "Wake", "I waited. That was hello."),
 }
 
 

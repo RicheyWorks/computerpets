@@ -63,3 +63,26 @@ test("fungi keys never schedule scratch or tongue", () => {
   assert.ok(E.actsFor("yeast").some((a) => a.name === "rise"));
   assert.ok(E.actsFor("lichen").some((a) => a.name === "share-still"));
 });
+
+test("far keys never schedule scratch or tongue", () => {
+  const far = [
+    "photovore", "choir", "nimbus", "silica", "terminator",
+    "nexus", "halovore", "magneton", "umbral", "cyst",
+  ];
+  for (const key of far) {
+    const names = E.actsFor(key).map((a) => a.name);
+    assert.ok(names.length > 0, key);
+    assert.equal(names.includes("scratch"), false, key);
+    assert.equal(names.includes("tongue"), false, key);
+  }
+  assert.ok(E.actsFor("photovore").some((a) => a.name === "drink-light"));
+  assert.ok(E.actsFor("choir").some((a) => a.name === "chord-pulse"));
+  assert.ok(E.actsFor("nimbus").some((a) => a.name === "float"));
+  assert.ok(E.actsFor("silica").some((a) => a.name === "facet"));
+  assert.ok(E.actsFor("terminator").some((a) => a.name === "edge-walk"));
+  assert.ok(E.actsFor("nexus").some((a) => a.name === "count-ripple"));
+  assert.ok(E.actsFor("halovore").some((a) => a.name === "frost"));
+  assert.ok(E.actsFor("magneton").some((a) => a.name === "align"));
+  assert.ok(E.actsFor("umbral").some((a) => a.name === "dim"));
+  assert.ok(E.actsFor("cyst").some((a) => a.name === "wake"));
+});

@@ -106,6 +106,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   chicken_of_woods: T(6, 0, 0.86, 0.04, {}, "shelf", "Shelf", "I shelved. Hello."),
   yeast: T(4, 2, 0.48, 0.08, {}, "rise", "Rise", "I rose. That was hello."),
   lichen: T(2, 0, 0.66, 0.02, {}, "share", "Share", "We are two. Hello."),
+  photovore: T(36, 4, 0.62, 0.35, { aquatic: true }, "drink", "Drink", "I drank. That was hello."),
+  choir: T(18, 2, 0.78, 0.16, {}, "chord", "Chord", "I sounded. That was hello."),
+  nimbus: T(28, 2, 0.84, 0.55, { aquatic: true }, "float", "Float", "I floated. That was hello."),
+  silica: T(4, 0, 0.7, 0.03, {}, "facet", "Facet", "I faceted. Hello."),
+  terminator: T(42, 4, 0.68, 0.22, { clingy: true }, "edge", "Edge", "I kept the rim. Hello."),
+  nexus: T(24, 4, 0.86, 0.2, {}, "count", "Count", "We counted. Hello."),
+  halovore: T(16, 2, 0.72, 0.1, {}, "frost", "Frost", "I frosted. Hello."),
+  magneton: T(132, 6, 0.74, 0.48, {}, "align", "Align", "I aligned. Hello."),
+  umbral: T(6, 0, 0.76, 0.04, { nocturnal: true }, "dim", "Dim", "I dimmed. Hello."),
+  cyst: T(2, 0, 0.58, 0.02, {}, "wake", "Wake", "I waited. That was hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

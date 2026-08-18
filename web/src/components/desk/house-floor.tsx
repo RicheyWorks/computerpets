@@ -89,6 +89,10 @@ export function HouseFloor() {
         <Link to="/cellar" className="text-fg no-underline hover:text-primary">
           The cellar
         </Link>
+        {" · "}
+        <Link to="/far" className="text-fg no-underline hover:text-primary">
+          The far den
+        </Link>
       </p>
     </section>
   );

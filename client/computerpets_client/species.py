@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same seventy, painted here.
+the others walk. This is not a new bestiary — it is the same eighty, painted here.
 """
 
 from __future__ import annotations
@@ -99,7 +99,20 @@ FUNGI_KEYS: tuple[str, ...] = (
     "lichen",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + FUNGI_KEYS
+FAR_KEYS: tuple[str, ...] = (
+    "photovore",
+    "choir",
+    "nimbus",
+    "silica",
+    "terminator",
+    "nexus",
+    "halovore",
+    "magneton",
+    "umbral",
+    "cyst",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + FUNGI_KEYS + FAR_KEYS
 
 
 @dataclass(frozen=True)
@@ -2138,6 +2151,278 @@ ATLAS = _kind(
     hungry=("A map should not be blank in the middle.", "A supper would ink the next line."),
 )
 
+GLEAM = _kind(
+    key="photovore",
+    slug="gleam",
+    name="Gleam",
+    label="Lamp-drinker",
+    treat="Light",
+    treat_shape="flake",
+    silhouette="gleam",
+    walk=36,
+    aquatic=True,
+    palette=Palette(
+        body=(236, 228, 196),
+        belly=(255, 244, 180),
+        ear=(255, 220, 120),
+        ear_inner=(255, 255, 236),
+        nose=(196, 168, 72),
+        ring=(255, 220, 140),
+        accent=(160, 120, 48),
+    ),
+    greet=("I drank. That was hello.", "The glass kept my thirst.", "You may look. I have no mouth."),
+    ambient=("Hunger is a wavelength. I keep it polite.", "I do not eat. I drink the lamp.", "I hover. Then I drink again."),
+    feed=("Light of a treaty.", "I will take this without leaving the glass.", "Accepted. The thirst records it."),
+    treat_lines=("Light of a treaty.",),
+    hide=("Inside the glass.",),
+    call=("I drank. That was hello.",),
+    hungry=("A thirst should not be this dim.", "A lamp would restore the drink."),
+)
+
+CHOIR = _kind(
+    key="choir",
+    slug="choir",
+    name="Choir",
+    label="Chord Body",
+    treat="Tone",
+    treat_shape="flake",
+    silhouette="choir",
+    walk=18,
+    palette=Palette(
+        body=(196, 168, 220),
+        belly=(236, 220, 244),
+        ear=(168, 188, 236),
+        ear_inner=(244, 236, 252),
+        nose=(120, 96, 148),
+        ring=(220, 196, 168),
+        accent=(88, 72, 120),
+    ),
+    greet=("I sounded. That was hello.", "The air kept my chord.", "You may look. I am one animal."),
+    ambient=("One body. Many notes. I keep the grammar.", "I am not a whale. I am not a room of people.", "An overtone is a sentence I have not finished."),
+    feed=("Tone of a treaty.", "I will take this without leaving the air.", "Accepted. The chord records it."),
+    treat_lines=("Tone of a treaty.",),
+    hide=("Inside a note.",),
+    call=("I sounded. That was hello.",),
+    hungry=("A chord should not be this thin.", "A tone would restore the notes."),
+)
+
+DRIFT = _kind(
+    key="nimbus",
+    slug="drift",
+    name="Drift",
+    label="Methane Floater",
+    treat="Gas",
+    treat_shape="flake",
+    silhouette="nimbus",
+    walk=28,
+    aquatic=True,
+    palette=Palette(
+        body=(196, 212, 220),
+        belly=(168, 196, 208),
+        ear=(148, 176, 188),
+        ear_inner=(220, 228, 232),
+        nose=(88, 112, 124),
+        ring=(168, 196, 208),
+        accent=(72, 96, 108),
+    ),
+    greet=("I floated. That was hello.", "The bowl kept my cold.", "You may look. I am not a bell."),
+    ambient=("The air is the water. I keep that office.", "I am not a jellyfish. Bell is Aurelia. I am gas.", "I hover. Then I am a nimbus again."),
+    feed=("Gas of a treaty.", "I will take this without leaving the bowl.", "Accepted. The cold records it."),
+    treat_lines=("Gas of a treaty.",),
+    hide=("Inside the bowl.",),
+    call=("I floated. That was hello.",),
+    hungry=("A nimbus should not be this thin.", "A gas would restore the float."),
+)
+
+SHARD = _kind(
+    key="silica",
+    slug="shard",
+    name="Shard",
+    label="Living Crystal",
+    treat="Silica",
+    treat_shape="pebble",
+    silhouette="shard",
+    walk=4,
+    palette=Palette(
+        body=(196, 212, 220),
+        belly=(220, 228, 236),
+        ear=(148, 172, 188),
+        ear_inner=(244, 248, 252),
+        nose=(88, 108, 124),
+        ring=(168, 188, 204),
+        accent=(72, 88, 104),
+    ),
+    greet=("I faceted. Hello.", "The stone kept my edge.", "You may look. I am not quartz."),
+    ambient=("A mineral that chose to live. I keep the grammar.", "I shed a crystal like a leaf. I am not a plant.", "I sit. Then a facet. Then I sit."),
+    feed=("Silica of a treaty.", "I will take this without leaving the stone.", "Accepted. The facet records it."),
+    treat_lines=("Silica of a treaty.",),
+    hide=("Inside a facet.",),
+    call=("I faceted. Hello.",),
+    hungry=("A crystal should not be this dull.", "A silica would restore the facet."),
+)
+
+DUSK = _kind(
+    key="terminator",
+    slug="dusk",
+    name="Dusk",
+    label="Twilight Walker",
+    treat="Rim",
+    treat_shape="ember",
+    silhouette="dusk",
+    walk=42,
+    palette=Palette(
+        body=(48, 40, 36),
+        belly=(236, 188, 96),
+        ear=(255, 220, 140),
+        ear_inner=(248, 228, 168),
+        nose=(28, 24, 22),
+        ring=(236, 188, 96),
+        accent=(20, 16, 14),
+    ),
+    greet=("I kept the rim. Hello.", "The edge kept my country.", "You may look. I do not claim a sun."),
+    ambient=("Noon kills. Night starves. The rim is the country.", "I am not a cat. Miso keeps the sun-patch. I keep the belt.", "I creep. Then I am a rim again."),
+    feed=("Rim of a treaty.", "I will take this without leaving the edge.", "Accepted. The belt records it."),
+    treat_lines=("Rim of a treaty.",),
+    hide=("On the rim.",),
+    call=("I kept the rim. Hello.",),
+    hungry=("A rim should not be this thin.", "A dusk would restore the belt."),
+)
+
+KNOT = _kind(
+    key="nexus",
+    slug="knot",
+    name="Knot",
+    label="Walking Colony",
+    treat="Count",
+    treat_shape="crumb",
+    silhouette="knot",
+    walk=24,
+    palette=Palette(
+        body=(168, 140, 196),
+        belly=(212, 196, 228),
+        ear=(120, 96, 148),
+        ear_inner=(244, 236, 252),
+        nose=(72, 56, 96),
+        ring=(196, 176, 220),
+        accent=(56, 40, 80),
+    ),
+    greet=("We counted. Hello.", "The weight kept our walk.", "You may look. We are one guest."),
+    ambient=("Many animals. One name. We keep the treaty.", "We are not a siphonophore of Earth. That is only the rhyme.", "We walk. Then we count. Then we walk."),
+    feed=("Count of a treaty.", "We will take this without leaving the weight.", "Accepted. The name records it."),
+    treat_lines=("Count of a treaty.",),
+    hide=("Inside the count.",),
+    call=("We counted. Hello.",),
+    hungry=("A colony should not be this thin.", "A count would restore the walk."),
+)
+
+BRINE = _kind(
+    key="halovore",
+    slug="brine",
+    name="Brine",
+    label="Salt-drinker",
+    treat="Salt",
+    treat_shape="flake",
+    silhouette="brine",
+    walk=16,
+    palette=Palette(
+        body=(148, 176, 188),
+        belly=(220, 228, 232),
+        ear=(244, 248, 252),
+        ear_inner=(236, 244, 248),
+        nose=(88, 120, 132),
+        ring=(196, 212, 220),
+        accent=(64, 88, 100),
+    ),
+    greet=("I frosted. Hello.", "The dish kept my salt.", "You may look. I am not a crab."),
+    ambient=("Water is optional. Brine is the blood.", "I am not Ledger. Ledger is a horseshoe. I drink salt.", "I sit. Then a frost. Then I sit."),
+    feed=("Salt of a treaty.", "I will take this and leave a frost.", "Accepted. The dish records it."),
+    treat_lines=("Salt of a treaty.",),
+    hide=("Inside the frost.",),
+    call=("I frosted. Hello.",),
+    hungry=("A brine should not be this thin.", "A salt would restore the frost."),
+)
+
+BEACON = _kind(
+    key="magneton",
+    slug="beacon",
+    name="Beacon",
+    label="Field Swimmer",
+    treat="North",
+    treat_shape="pebble",
+    silhouette="beacon",
+    walk=132,
+    palette=Palette(
+        body=(140, 156, 176),
+        belly=(244, 236, 196),
+        ear=(196, 64, 56),
+        ear_inner=(72, 96, 148),
+        nose=(40, 48, 64),
+        ring=(196, 64, 56),
+        accent=(32, 40, 56),
+    ),
+    greet=("I aligned. Hello.", "The line kept my north.", "You may look. I am not a compass."),
+    ambient=("North is food. I keep that office.", "I am not a manta. Kite is the reef. I swim a field.", "I dart. Then I am a needle again."),
+    feed=("North of a treaty.", "I will take this along the axis.", "Accepted. The line records it."),
+    treat_lines=("North of a treaty.",),
+    hide=("On the line.",),
+    call=("I aligned. Hello.",),
+    hungry=("A field should not be this empty.", "A north would restore the swim."),
+)
+
+HUSH = _kind(
+    key="umbral",
+    slug="hush",
+    name="Hush",
+    label="Heat Shadow",
+    treat="Cool",
+    treat_shape="flake",
+    silhouette="hush",
+    walk=6,
+    palette=Palette(
+        body=(40, 36, 48),
+        belly=(72, 80, 96),
+        ear=(56, 64, 80),
+        ear_inner=(120, 140, 156),
+        nose=(20, 18, 24),
+        ring=(72, 80, 96),
+        accent=(16, 14, 20),
+    ),
+    greet=("I dimmed. Hello.", "The shadow kept my cool.", "You may look. I am not a moth."),
+    ambient=("The lamp is loud. The cool is lunch.", "Moth is an orchid. I am a shadow that eats heat.", "I sit. Then I dim. Then I sit."),
+    feed=("Cool of a treaty.", "I will take this without leaving the shadow.", "Accepted. The dim records it."),
+    treat_lines=("Cool of a treaty.",),
+    hide=("Inside the shadow.",),
+    call=("I dimmed. Hello.",),
+    hungry=("A shadow should not be this warm.", "A cool would restore the dim."),
+)
+
+ARCA = _kind(
+    key="cyst",
+    slug="arca",
+    name="Arca",
+    label="Traveling Cyst",
+    treat="Damp",
+    treat_shape="crumb",
+    silhouette="cyst",
+    walk=2,
+    palette=Palette(
+        body=(148, 120, 80),
+        belly=(212, 188, 140),
+        ear=(88, 68, 44),
+        ear_inner=(236, 212, 160),
+        nose=(64, 48, 32),
+        ring=(180, 148, 100),
+        accent=(48, 36, 24),
+    ),
+    greet=("I waited. That was hello.", "The blotter kept my seal.", "You may look. I am not Brood."),
+    ambient=("Most of a life is the wait.", "Brood is a cicada. I am a cyst. We both wait. That is the rhyme.", "I sit. Then, if the lamp and the damp agree, I wake."),
+    feed=("Damp of a treaty.", "I will take this and keep the seal.", "Accepted. The wait records it."),
+    treat_lines=("Damp of a treaty.",),
+    hide=("Inside the seal.",),
+    call=("I waited. That was hello.",),
+    hungry=("A wait should not be this dry.", "A damp would restore the seal."),
+)
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -2209,6 +2494,16 @@ _ALL: tuple[Species, ...] = (
     FLAME,
     STARTER,
     PACT,
+    GLEAM,
+    CHOIR,
+    DRIFT,
+    SHARD,
+    DUSK,
+    KNOT,
+    BRINE,
+    BEACON,
+    HUSH,
+    ARCA,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -2239,6 +2534,10 @@ def is_insect(key: str) -> bool:
 
 def is_fungus(key: str) -> bool:
     return key in FUNGI_KEYS
+
+
+def is_far(key: str) -> bool:
+    return key in FAR_KEYS
 
 
 def next_species_key(key: str) -> str:

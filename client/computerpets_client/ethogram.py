@@ -101,6 +101,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "chicken_of_woods": (_a("lean", "lean", 1.6, 3), _a("flush", "flush", 1.2, 2), _a("still", "freeze", 2.2, 2)),
     "yeast": (_a("rise", "rise", 1.6, 5), _a("still", "freeze", 2.0, 2), _a("foam", "bob", 1.2, 1)),
     "lichen": (_a("share-still", "share", 2.8, 5, "sit"), _a("still", "freeze", 2.4, 3), _a("lean", "lean", 1.4, 1)),
+    "photovore": (_a("drink-light", "drink", 1.4, 5), _a("still", "freeze", 1.8, 2), _a("hover", "bob", 1.2, 1)),
+    "choir": (_a("chord-pulse", "chord", 1.6, 5), _a("still", "freeze", 2.0, 2), _a("overtone", "pulse", 1.2, 1)),
+    "nimbus": (_a("float", "float", 1.8, 5), _a("still", "freeze", 2.0, 2), _a("hover", "bob", 1.4, 1)),
+    "silica": (_a("facet", "facet", 2.2, 5, "sit"), _a("still", "freeze", 2.4, 3), _a("shed", "freeze", 1.6, 1)),
+    "terminator": (_a("edge-walk", "edge", 1.4, 5), _a("still", "freeze", 1.8, 2), _a("rim", "trail", 1.0, 1)),
+    "nexus": (_a("count-ripple", "ripple", 1.6, 5), _a("still", "freeze", 2.0, 2), _a("name", "pulse", 1.2, 1)),
+    "halovore": (_a("frost", "frost", 1.8, 5, "sit"), _a("still", "freeze", 2.2, 3), _a("waste", "freeze", 1.4, 1)),
+    "magneton": (_a("align", "align", 1.2, 5), _a("still", "freeze", 1.6, 2), _a("north", "stretch", 1.0, 1)),
+    "umbral": (_a("dim", "dim", 2.4, 5, "sit"), _a("still", "freeze", 2.6, 3), _a("cool", "share", 1.8, 1)),
+    "cyst": (_a("wake", "wake", 1.8, 4, "sit"), _a("wait", "sit_hold", 3.2, 5, "sit"), _a("still", "freeze", 2.8, 3)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS
@@ -235,4 +245,38 @@ def act_pose(motion: str | None, t: float, hold: float) -> dict[str, float]:
     elif motion == "share":
         pose["dx"] = math.sin(u * math.pi) * 1.2
         pose["rot"] = math.sin(u * math.pi) * 2.0
+    elif motion == "drink":
+        pose["dy"] = -math.sin(u * math.pi) * 6.0
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.07
+        pose["squat"] = 2.0 - pose["stretch"]
+    elif motion == "chord":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi * 3) * 0.06
+        pose["squat"] = 2.0 - pose["stretch"]
+        pose["dx"] = math.sin(t * 10) * 1.4
+    elif motion == "float":
+        pose["dy"] = math.sin(t * 6) * 5.0
+        pose["dx"] = math.sin(t * 3) * 2.0
+    elif motion == "facet":
+        pose["rot"] = math.sin(u * math.pi) * 4.0
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.05
+    elif motion == "edge":
+        pose["dx"] = math.sin(t * 12) * 3.2
+        pose["dy"] = math.sin(t * 24) * 0.8
+    elif motion == "ripple":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi * 3) * 0.05
+        pose["dx"] = math.sin(u * math.pi * 2) * 2.4
+    elif motion == "frost":
+        pose["stretch"] = 1.0 - math.sin(u * math.pi) * 0.04
+        pose["squat"] = 2.0 - pose["stretch"]
+        pose["dy"] = math.sin(u * math.pi) * 2.0
+    elif motion == "align":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.1
+        pose["dx"] = math.sin(u * math.pi) * 6.0
+    elif motion == "dim":
+        pose["dy"] = math.sin(u * math.pi) * 2.0
+        pose["rot"] = math.sin(u * math.pi) * 2.0
+    elif motion == "wake":
+        pose["stretch"] = 0.88 + math.sin(u * math.pi) * 0.2
+        pose["squat"] = 2.0 - pose["stretch"]
+        pose["dy"] = -math.sin(u * math.pi) * 5.0
     return pose

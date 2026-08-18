@@ -90,6 +90,16 @@ VISIT_LINES: dict[str, str] = {
     "chicken_of_woods": "I shelved. Then I left the oak.",
     "yeast": "I rose. Then I left the crock.",
     "lichen": "We sat. Then we left the share.",
+    "photovore": "I drank. Then I left the glass.",
+    "choir": "I sounded. Then I left the air.",
+    "nimbus": "I floated. Then I left the bowl.",
+    "silica": "I faceted. Then I left the stone.",
+    "terminator": "I kept the rim. Then I left the belt.",
+    "nexus": "We counted. Then we left the name.",
+    "halovore": "I frosted. Then I left the dish.",
+    "magneton": "I aligned. Then I left the line.",
+    "umbral": "I dimmed. Then I left the cool.",
+    "cyst": "I waited. Then I left the seal.",
 }
 
 
