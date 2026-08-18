@@ -43,9 +43,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header
         className={cn(
           "z-30 border-b border-border/80",
-          demo || kennelGuest || hatchery || nest
+          demo || kennelGuest || hatchery || nest || desk
             ? "absolute inset-x-0 top-0 border-transparent bg-transparent"
-            : desk || meet || den || tide || garden || hive || cellar || far || study || live
+            : meet || den || tide || garden || hive || cellar || far || study || live
               ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
               : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
@@ -98,7 +98,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
       {desk || demo || live || kennelGuest || hatchery || nest ? (
-        <div className={demo || live || kennelGuest || hatchery || nest ? "h-dvh" : "h-dvh pt-16"}>{children}</div>
+        <div className="h-dvh">{children}</div>
       ) : meet || den || tide || garden || hive || cellar || far || study ? (
         <div>{children}</div>
       ) : (

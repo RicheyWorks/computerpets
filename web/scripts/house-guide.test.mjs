@@ -136,11 +136,12 @@ test("the den stays the snake classroom", () => {
 test("plaques appear on desk and demo for any living kind", () => {
   assert.match(plaqueSrc, /plaqueFor/);
   assert.match(plaqueSrc, /classroomFor/);
-  assert.match(deskSrc, /SpeciesPlaque/);
+  assert.match(deskSrc, /CompanionRoom/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(roomSrc, /SpeciesPlaque/);
+  assert.match(roomSrc, /paper/);
   assert.doesNotMatch(
-    deskSrc.slice(deskSrc.indexOf("<SpeciesPlaque"), deskSrc.indexOf("<SpeciesPlaque") + 200),
+    roomSrc.slice(roomSrc.indexOf("<SpeciesPlaque"), roomSrc.indexOf("<SpeciesPlaque") + 200),
     /isSnake/,
   );
 });
