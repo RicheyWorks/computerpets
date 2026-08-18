@@ -1,12 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { BlotterMarks, DayWash, type BlotterMark, randomLureX, randomTreatX } from "@/components/desk/blotter";
+import { BlotterCare } from "@/components/desk/blotter-care";
+import { DenCabinet } from "@/components/desk/den-cabinet";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
 import { HouseVisit } from "@/components/desk/house-visit";
+import { DeskGrain, RoomWash } from "@/components/desk/room-wash";
 import { todaysVisitor } from "@/lib/pets/visitor";
-import { applyFeed, applyHide, applyPlay, applySnack, bondTitle, loadCare, leaveGift, maybeBondLine, normalizeCare, pickGift, saveCare, stageOf, type CareStats } from "@/lib/pets/care";
-import { LIVING_KINDS, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
+import { applyFeed, applyHide, applyPlay, applySnack, loadCare, leaveGift, maybeBondLine, normalizeCare, pickGift, saveCare, stageOf, type CareStats } from "@/lib/pets/care";
+import { saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
@@ -14,15 +16,10 @@ import { traitFor } from "@/lib/pets/traits";
 import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { applySpecial } from "@/lib/pets/specials";
-import { isFar } from "@/lib/pets/far";
-import { isFungus } from "@/lib/pets/fungi";
-import { isGarden } from "@/lib/pets/garden";
-import { isInsect } from "@/lib/pets/insects";
-import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
-import { cn } from "@/lib/utils";
+import { roomOf } from "@/lib/pets/rooms";
 
 export function DemoStage({ kind }: { kind: LivingKind }) {
   const mind = useMindBinding(kind.key);
@@ -222,14 +219,23 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
     issue("eat");
   }
 
+  const room = roomOf(kind.key);
+  const gait = useMemo(() => ({ ...trait, scale: trait.scale * 1.24 }), [trait]);
+  const hour = isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart());
+  const sky = weatherLabel(weatherOf());
+  const caller = todaysVisitor(kind.key).name;
+  const busyOrHidden = busy || stats.hidden;
+
   return (
     <section className="relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated">
       <img
         src="/habitat.jpg"
         alt=""
-        className="absolute inset-0 h-full w-full object-cover object-[center_68%]"
+        className="absolute inset-0 h-full w-full object-cover object-[center_72%]"
       />
       <DayWash />
+      <RoomWash room={room.id} />
+      <DeskGrain />
 
       <BlotterMarks
         mark={mark}
@@ -248,7 +254,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         sprites={kind.sprites}
         fps={kind.fps}
         once={kind.once}
-        gait={trait}
+        gait={gait}
         kind={kind.key}
         hidden={stats.hidden}
         unwell={stats.sick}
@@ -309,128 +315,89 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
         />
       ))}
 
-      <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,22rem)] sm:left-8 sm:top-24">
+      <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] sm:left-8 sm:top-24">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
-          Living demo · {isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart())} · {weatherLabel(weatherOf())} · {todaysVisitor(kind.key).name} may call
+          {hour} · {sky} · {caller} may call
         </p>
-        <h1 className="mt-2 font-display text-4xl leading-none sm:text-5xl">{kind.name}</h1>
+        <h1 className="mt-2 font-display text-5xl leading-none sm:text-6xl">{kind.name}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
-        <SpeciesPlaque speciesKey={kind.key} compact className="mt-4 max-w-sm" showDemoLink={false} />
-        <div className="mt-5 flex flex-wrap gap-2">
-          <Button size="sm" disabled={busy || stats.hidden} onClick={feed}>
-            Feed
-          </Button>
-          <Button size="sm" variant="secondary" disabled={busy || stats.hidden} onClick={() => dropTreatAt(randomTreatX())}>
-            {treatFor(kind.key).verb}
-          </Button>
-          <Button size="sm" variant="secondary" disabled={busy || stats.hidden} onClick={startChase}>
-            Play
-          </Button>
-          <Button size="sm" disabled={busy} onClick={() => {
-            acted.current = true;
-            unlockDeskAudio();
-            const next = applySpecial(statsRef.current, trait);
-            const gifted = leaveGift(next.stats);
-            setStats(gifted);
-            say(trait.line);
-            issue(next.cmd);
-          }}>
-            {trait.verb}
-          </Button>
-          {isSnake(kind.key) ? (
-            <Button size="sm" variant="secondary" disabled={busy} onClick={() => {
-              acted.current = true;
-              unlockDeskAudio();
-              if (!isBlue(statsRef.current, kind.key)) {
-                say(shedWaitLine(kind.key));
-                issue("sit");
-                return;
-              }
-              const next = applyShed(statsRef.current);
-              setStats(next);
-              say(shedLine(kind.key));
-              issue("sit");
-            }}>
-              Shed
-            </Button>
-          ) : null}
-          <Button size="sm" variant="ghost" disabled={busy} onClick={() => void talk()}>
-            Talk
-          </Button>
-          {stats.hidden || leaving ? (
-            <Button size="sm" variant="secondary" disabled={busy} onClick={callBack}>
-              Call back
-            </Button>
-          ) : (
-            <Button size="sm" variant="ghost" disabled={busy} onClick={hide}>
-              Hide
-            </Button>
-          )}
-        </div>
+        <SpeciesPlaque speciesKey={kind.key} compact paper className="mt-5 max-w-sm" showDemoLink={false} />
       </aside>
 
-      <nav className="absolute right-4 top-20 z-20 flex max-h-[46dvh] flex-col gap-0.5 overflow-y-auto sm:right-8 sm:top-24">
-        {LIVING_KINDS.map((item) => (
-          <Link
-            key={item.slug}
-            to="/demo/$slug"
-            params={{ slug: item.slug }}
-            className={cn(
-              "rounded-[var(--radius-sm)] px-3 py-1.5 text-right text-sm no-underline",
-              item.key === kind.key ? "bg-bg/70 text-fg" : "text-muted hover:text-fg",
-            )}
-          >
-            {item.name}
-          </Link>
-        ))}
-      </nav>
+      <div className="absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24">
+        <DenCabinet currentRoom={room.id} currentKey={kind.key} drawers />
+      </div>
 
-      <div className="absolute bottom-0 left-0 right-0 z-20 flex flex-col gap-3 border-t border-border/80 bg-bg/80 px-4 py-3 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:px-8">
-        <p className="text-sm text-muted">Click the blotter. Chase the ribbon. Same house on phones and Windows.</p>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild>
-            <Link to="/" search={{ pet: kind.key }} onClick={() => saveActiveKindKey(kind.key)}>
-              Open the desk
-            </Link>
-          </Button>
-          <Button asChild variant="secondary">
-            <Link to="/live" search={{ pet: kind.key }}>
-              Phone and tablet
-            </Link>
-          </Button>
-          <Button asChild variant="secondary">
-            <Link to="/meet">All demos</Link>
-          </Button>
-          {isSnake(kind.key) ? (
-            <Button asChild variant="secondary">
-              <Link to="/snakes">The den</Link>
-            </Button>
-          ) : isSea(kind.key) ? (
-            <Button asChild variant="secondary">
-              <Link to="/sea">The tide</Link>
-            </Button>
-          ) : isGarden(kind.key) ? (
-            <Button asChild variant="secondary">
-              <Link to="/garden">The garden</Link>
-            </Button>
-          ) : isInsect(kind.key) ? (
-            <Button asChild variant="secondary">
-              <Link to="/hive">The hive</Link>
-            </Button>
-          ) : isFungus(kind.key) ? (
-            <Button asChild variant="secondary">
-              <Link to="/cellar">The cellar</Link>
-            </Button>
-          ) : isFar(kind.key) ? (
-            <Button asChild variant="secondary">
-              <Link to="/far">The far den</Link>
-            </Button>
-          ) : (
-            <Button asChild variant="secondary">
-              <Link to="/study">The study</Link>
-            </Button>
-          )}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8">
+        <div className="pointer-events-auto">
+          <BlotterCare
+            marks={[
+              { label: "Feed", onClick: feed, disabled: busyOrHidden },
+              { label: treatFor(kind.key).verb, onClick: () => dropTreatAt(randomTreatX()), disabled: busyOrHidden },
+              { label: "Play", onClick: startChase, disabled: busyOrHidden },
+              {
+                label: trait.verb,
+                disabled: busy,
+                onClick: () => {
+                  acted.current = true;
+                  unlockDeskAudio();
+                  const next = applySpecial(statsRef.current, trait);
+                  const gifted = leaveGift(next.stats);
+                  setStats(gifted);
+                  say(trait.line);
+                  issue(next.cmd);
+                },
+              },
+              ...(isSnake(kind.key)
+                ? [
+                    {
+                      label: "Shed",
+                      disabled: busy,
+                      onClick: () => {
+                        acted.current = true;
+                        unlockDeskAudio();
+                        if (!isBlue(statsRef.current, kind.key)) {
+                          say(shedWaitLine(kind.key));
+                          issue("sit");
+                          return;
+                        }
+                        const next = applyShed(statsRef.current);
+                        setStats(next);
+                        say(shedLine(kind.key));
+                        issue("sit");
+                      },
+                    },
+                  ]
+                : []),
+              { label: "Talk", onClick: () => void talk(), disabled: busy },
+              stats.hidden || leaving
+                ? { label: "Call back", onClick: callBack, disabled: busy }
+                : { label: "Hide", onClick: hide, disabled: busy },
+            ]}
+          />
         </div>
+        <p className="pointer-events-auto text-center text-[11px] uppercase tracking-[0.16em] text-subtle">
+          <Link
+            to="/"
+            search={{ pet: kind.key }}
+            onClick={() => saveActiveKindKey(kind.key)}
+            className="text-fg no-underline hover:text-primary"
+          >
+            Open the desk
+          </Link>
+          {" · "}
+          <Link to="/live" search={{ pet: kind.key }} className="text-muted no-underline hover:text-fg">
+            Phone
+          </Link>
+          {" · "}
+          <Link to={room.path} className="text-muted no-underline hover:text-fg">
+            {room.kicker}
+          </Link>
+          {" · "}
+          <Link to="/meet" className="text-muted no-underline hover:text-fg">
+            The house
+          </Link>
+        </p>
       </div>
     </section>
   );

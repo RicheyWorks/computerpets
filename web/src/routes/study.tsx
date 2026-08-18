@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { HouseStudy, StudyRail } from "@/components/desk/house-study";
+import { RoomHero } from "@/components/desk/room-hero";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { HOUSE_GUIDE, HOUSE_KEYS } from "@/lib/pets/house-guide";
 
@@ -23,52 +23,11 @@ export function StudyPage() {
 
   return (
     <main className="bg-bg text-fg">
-      <section className="relative isolate min-h-[58dvh] overflow-hidden">
-        <img
-          src="/habitat.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[center_62%]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/55 to-bg/30" />
-        <div className="relative mx-auto flex min-h-[58dvh] max-w-5xl flex-col justify-end px-5 pb-12 pt-28 sm:px-8">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-subtle">The study</p>
-          <h1 className="mt-3 max-w-2xl font-display text-5xl leading-[0.95] sm:text-7xl">
-            They walk. They stay. You learn the house.
-          </h1>
-          <p className="mt-5 max-w-lg text-base text-muted sm:text-lg">
-            Twenty companions live on this blotter. Watch the gait. Read the plaque. Leave knowing a
-            red panda from a raccoon, and an axolotl from a fish.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild>
-              <Link to="/demo/$slug" params={{ slug: "rui" }}>
-                Watch Rui
-              </Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/snakes">The snake den</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/sea">The tide</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/garden">The garden</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/hive">The hive</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/cellar">The cellar</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/far">The far den</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/meet">The house</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <RoomHero
+        room="house"
+        headline="They walk. They stay. You learn the house."
+        line="Twenty companions live on this blotter. Watch the gait. Read the plaque. Leave knowing a red panda from a raccoon, and an axolotl from a fish."
+      />
 
       <HouseStudy selectedKey={selected} onSelect={setSelected} />
 
@@ -81,8 +40,11 @@ export function StudyPage() {
             <p className="mt-2 font-display text-2xl">Watch, then tap.</p>
             <p className="mt-2 text-sm text-muted">
               Five walk at a time. The rest cycle onto the wood. Treat, hide, and talk still live on
-              each companion&apos;s demo and on the desk. The ten snakes keep their own den. The
-              tide keeps the sea. The garden keeps the plants.
+              each companion&apos;s demo and on the desk. The ten snakes keep{" "}
+              <Link to="/snakes" className="text-fg no-underline hover:text-primary">
+                their own den
+              </Link>
+              . The tide keeps the sea. The garden keeps the plants.
             </p>
             <p className="mt-4">
               <Link to="/" search={{ pet: selected }} className="text-sm text-fg">

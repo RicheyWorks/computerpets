@@ -1,0 +1,33 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const meetSrc = readFileSync(join(root, "src/routes/meet.tsx"), "utf8");
+const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
+const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
+const rosterSrc = readFileSync(join(root, "src/lib/pets/roster.ts"), "utf8");
+const seaSrc = readFileSync(join(root, "src/lib/pets/sea.ts"), "utf8");
+
+test("meet no longer says Fifty", () => {
+  assert.doesNotMatch(meetSrc, /Fifty/);
+  assert.doesNotMatch(meetSrc, /fifty/);
+  assert.match(meetSrc, /Eighty guests walk the blotter/);
+  assert.match(meetSrc, /Watch Rui/);
+  assert.match(meetSrc, /HouseFloor/);
+  assert.match(meetSrc, /DenCabinet/);
+});
+
+test("demo still mounts a known slug — rui and cup", () => {
+  assert.match(rosterSrc, /slug:\s*"rui"/);
+  assert.match(seaSrc, /slug:\s*"cup"/);
+  assert.match(demoPageSrc, /livingBySlug/);
+  assert.match(demoPageSrc, /DemoStage/);
+  assert.match(demoPageSrc, /createFileRoute\("\/demo\/\$slug"\)/);
+  assert.match(demoSrc, /LivingPet/);
+  assert.match(demoSrc, /SpeciesPlaque/);
+  assert.match(demoSrc, /kind=\{kind\.key\}/);
+  assert.doesNotMatch(demoSrc, /LIVING_KINDS\.map/);
+});

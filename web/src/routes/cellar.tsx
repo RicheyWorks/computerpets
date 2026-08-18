@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { CellarDen, CellarRail } from "@/components/desk/cellar-den";
+import { RoomHero } from "@/components/desk/room-hero";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { FUNGI_GUIDE } from "@/lib/pets/fungi-guide";
 import { FUNGI_KEYS } from "@/lib/pets/fungi";
@@ -24,49 +24,11 @@ export function CellarPage() {
 
   return (
     <main className="bg-bg text-fg">
-      <section className="relative isolate min-h-[58dvh] overflow-hidden">
-        <img
-          src="/habitat.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[center_62%]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/55 to-bg/30" />
-        <div className="relative mx-auto flex min-h-[58dvh] max-w-5xl flex-col justify-end px-5 pb-12 pt-28 sm:px-8">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-subtle">The cellar</p>
-          <h1 className="mt-3 max-w-2xl font-display text-5xl leading-[0.95] sm:text-7xl">
-            They stay. The plaque teaches.
-          </h1>
-          <p className="mt-5 max-w-lg text-base text-muted sm:text-lg">
-            Ten fungi live on this blotter. Watch the lean. Read the plaque. Leave knowing a
-            mushroom is not a plant, a puff is a cloud, and a lichen is two kingdoms in one guest.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild>
-              <Link to="/demo/$slug" params={{ slug: "frill" }}>
-                Watch Frill
-              </Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/study">The study</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/snakes">The snake den</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/sea">The tide</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/garden">The garden</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/hive">The hive</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/far">The far den</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <RoomHero
+        room="cellar"
+        headline="They stay. The plaque teaches."
+        line="Ten fungi live on this blotter. Watch the lean. Read the plaque. Leave knowing a mushroom is not a plant, a puff is a cloud, and a lichen is two kingdoms in one guest."
+      />
 
       <CellarDen selectedKey={selected} onSelect={setSelected} />
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { GardenDen, GardenRail } from "@/components/desk/garden-den";
+import { RoomHero } from "@/components/desk/room-hero";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { GARDEN_GUIDE } from "@/lib/pets/garden-guide";
 import { GARDEN_KEYS } from "@/lib/pets/garden";
@@ -24,49 +24,11 @@ export function GardenPage() {
 
   return (
     <main className="bg-bg text-fg">
-      <section className="relative isolate min-h-[58dvh] overflow-hidden">
-        <img
-          src="/habitat.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[center_62%]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/55 to-bg/30" />
-        <div className="relative mx-auto flex min-h-[58dvh] max-w-5xl flex-col justify-end px-5 pb-12 pt-28 sm:px-8">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-subtle">The garden</p>
-          <h1 className="mt-3 max-w-2xl font-display text-5xl leading-[0.95] sm:text-7xl">
-            They sit. They grow. You learn the species.
-          </h1>
-          <p className="mt-5 max-w-lg text-base text-muted sm:text-lg">
-            Ten plants live on this blotter. Watch the lean. Read the plaque. Leave knowing a moss
-            has no flower, a saguaro is not a tree, and three plants hunt: snap, pitfall, glue.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild>
-              <Link to="/demo/$slug" params={{ slug: "felt" }}>
-                Watch Felt
-              </Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/study">The study</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/snakes">The snake den</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/sea">The tide</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/hive">The hive</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/cellar">The cellar</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/far">The far den</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <RoomHero
+        room="garden"
+        headline="They sit. They grow. You learn the species."
+        line="Ten plants live on this blotter. Watch the lean. Read the plaque. Leave knowing a moss has no flower, a saguaro is not a tree, and three plants hunt: snap, pitfall, glue."
+      />
 
       <GardenDen selectedKey={selected} onSelect={setSelected} />
 

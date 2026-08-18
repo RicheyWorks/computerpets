@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
 import { HiveDen, HiveRail } from "@/components/desk/hive-den";
+import { RoomHero } from "@/components/desk/room-hero";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { INSECT_GUIDE } from "@/lib/pets/insect-guide";
 import { INSECT_KEYS } from "@/lib/pets/insects";
@@ -24,50 +24,11 @@ export function HivePage() {
 
   return (
     <main className="bg-bg text-fg">
-      <section className="relative isolate min-h-[58dvh] overflow-hidden">
-        <img
-          src="/habitat.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[center_62%]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/55 to-bg/30" />
-        <div className="relative mx-auto flex min-h-[58dvh] max-w-5xl flex-col justify-end px-5 pb-12 pt-28 sm:px-8">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-subtle">The hive</p>
-          <h1 className="mt-3 max-w-2xl font-display text-5xl leading-[0.95] sm:text-7xl">
-            They stay. The plaque teaches.
-          </h1>
-          <p className="mt-5 max-w-lg text-base text-muted sm:text-lg">
-            Ten insects live on this blotter. Watch the waggle. Read the plaque. Leave knowing a
-            firefly is a beetle, a luna does not eat, and a cicada waited seventeen years for this
-            song.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild>
-              <Link to="/demo/$slug" params={{ slug: "comb" }}>
-                Watch Comb
-              </Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/study">The study</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/snakes">The snake den</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/sea">The tide</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/garden">The garden</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/cellar">The cellar</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/far">The far den</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <RoomHero
+        room="hive"
+        headline="They stay. The plaque teaches."
+        line="Ten insects live on this blotter. Watch the waggle. Read the plaque. Leave knowing a firefly is a beetle, a luna does not eat, and a cicada waited seventeen years for this song."
+      />
 
       <HiveDen selectedKey={selected} onSelect={setSelected} />
 

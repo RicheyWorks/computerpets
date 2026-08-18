@@ -4,20 +4,20 @@ import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { to: "/meet", label: "Meet", hideOnPhone: false },
-  { to: "/study", label: "Study", hideOnPhone: false },
-  { to: "/snakes", label: "Den", hideOnPhone: false },
-  { to: "/sea", label: "Tide", hideOnPhone: false },
-  { to: "/garden", label: "Garden", hideOnPhone: false },
-  { to: "/hive", label: "Hive", hideOnPhone: false },
-  { to: "/cellar", label: "Cellar", hideOnPhone: false },
-  { to: "/far", label: "Far", hideOnPhone: false },
-  { to: "/live", label: "Live", hideOnPhone: false },
-  { to: "/", label: "Desk", hideOnPhone: false },
-  { to: "/collection", label: "Kennel", hideOnPhone: true },
-  { to: "/hatch", label: "Hatchery", hideOnPhone: true },
-  { to: "/nest", label: "Nest", hideOnPhone: true },
-  { to: "/mind", label: "Minds", hideOnPhone: true },
+  { to: "/meet", label: "Meet", hideOnPhone: false, hideOnDemo: false },
+  { to: "/study", label: "Study", hideOnPhone: false, hideOnDemo: true },
+  { to: "/snakes", label: "Den", hideOnPhone: false, hideOnDemo: true },
+  { to: "/sea", label: "Tide", hideOnPhone: false, hideOnDemo: true },
+  { to: "/garden", label: "Garden", hideOnPhone: false, hideOnDemo: true },
+  { to: "/hive", label: "Hive", hideOnPhone: false, hideOnDemo: true },
+  { to: "/cellar", label: "Cellar", hideOnPhone: false, hideOnDemo: true },
+  { to: "/far", label: "Far", hideOnPhone: false, hideOnDemo: true },
+  { to: "/live", label: "Live", hideOnPhone: false, hideOnDemo: false },
+  { to: "/", label: "Desk", hideOnPhone: false, hideOnDemo: false },
+  { to: "/collection", label: "Kennel", hideOnPhone: true, hideOnDemo: true },
+  { to: "/hatch", label: "Hatchery", hideOnPhone: true, hideOnDemo: true },
+  { to: "/nest", label: "Nest", hideOnPhone: true, hideOnDemo: true },
+  { to: "/mind", label: "Minds", hideOnPhone: true, hideOnDemo: true },
 ] as const;
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -40,9 +40,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header
         className={cn(
           "z-30 border-b border-border/80",
-          desk || demo || meet || den || tide || garden || hive || cellar || far || study || live
-            ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
-            : "sticky top-0 bg-bg/90 backdrop-blur-sm",
+          demo
+            ? "absolute inset-x-0 top-0 border-transparent bg-transparent"
+            : desk || meet || den || tide || garden || hive || cellar || far || study || live
+              ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
+              : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
@@ -54,6 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </Link>
           <nav className="flex items-center gap-1 overflow-x-auto">
             {NAV.map((item) => {
+              if (demo && item.hideOnDemo) return null;
               const active = pathname === item.to;
               return (
                 <Link
