@@ -12,7 +12,7 @@ import {
   type NestPath,
 } from "./genetics";
 
-export { lookHint, originPhrase, wearLine, type HouseSeat, type OriginPhrase } from "./pedigree";
+export { lookHint, originPhrase, wearLine, duePhrase, type HouseSeat, type OriginPhrase } from "./pedigree";
 
 export {
   NEST_COST_CLUTCH,
@@ -33,20 +33,6 @@ export {
 } from "./genetics";
 
 const DIMINUTIVE = ["kit", "small", "new", "young", "second"];
-
-/** A wait in house voice. Not an ISO dump. */
-export function duePhrase(dueAt: string | number | Date, now = Date.now()): string {
-  const due =
-    typeof dueAt === "number" ? dueAt : dueAt instanceof Date ? dueAt.getTime() : Date.parse(dueAt);
-  if (Number.isNaN(due)) return "due in a while";
-  const ms = due - now;
-  if (ms <= 0) return "due now";
-  if (ms < 45 * 60 * 1000) return "due this hour";
-  if (ms < 18 * 60 * 60 * 1000) return "due today";
-  if (ms < 42 * 60 * 60 * 1000) return "due tomorrow";
-  if (ms < 7 * 24 * 60 * 60 * 1000) return "due in a few days";
-  return "due in a while";
-}
 
 export function houseOffspringName(
   speciesKey: string,

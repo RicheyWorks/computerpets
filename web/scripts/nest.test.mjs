@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const G = await import(join(root, "src/lib/pets/genetics.ts"));
-const nestLib = await import(join(root, "src/lib/pets/nest.ts"));
+const nestLib = await import(join(root, "src/lib/pets/pedigree.ts"));
 const nestPage = readFileSync(join(root, "src/routes/nest.tsx"), "utf8");
 const hatchPage = readFileSync(join(root, "src/routes/hatch.tsx"), "utf8");
 const shell = readFileSync(join(root, "src/components/app-shell.tsx"), "utf8");
