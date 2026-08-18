@@ -31,7 +31,7 @@ Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answ
 
 Walk the dens. Each room teaches its guests.
 
-Sign in. Draw from the catalog at `/hatch`. The kennel is `/collection`.
+Sign in. Draw from the catalog at `/hatch`. The kennel is `/collection`. The kennel guest is a room.
 
 Pair two you already keep at `/nest`. The nest is a Punnett square. County-fair phenotypes sit on the rail.
 

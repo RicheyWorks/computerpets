@@ -12,6 +12,8 @@ import {
   type NestPath,
 } from "./genetics";
 
+export { lookHint, originPhrase, wearLine, type HouseSeat, type OriginPhrase } from "./pedigree";
+
 export {
   NEST_COST_CLUTCH,
   NEST_COST_SINGLE,

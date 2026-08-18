@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel.
+Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel. The kennel guest is a room.
 
 Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS). Without it, Rui still answers from local lines and the browser speech synthesizer.
 
