@@ -43,4 +43,4 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 - `/cellar` — the cellar den
 - `/far` — the far den
 - `/nest` — pair two you already keep; a Punnett square; a clutch
-- `/demo/{slug}` — live shareable demo for every species (rui, miso, pip, thimble, … ember, cup, felt, comb, frill, gleam)
+- `/demo/{slug}` — a room. The guest is already walking. Every species (rui, miso, pip, thimble, … ember, cup, felt, comb, frill, gleam).

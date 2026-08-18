@@ -37,7 +37,7 @@ Pair two you already keep at `/nest`. The nest is a Punnett square. County-fair 
 
 Feed them. Clean the blotter. Give medicine. Stay gone and a line can leave. The nest still keeps one.
 
-Share one guest at `/demo/{slug}` — rui, cup, felt, comb, frill, gleam, and the rest of the house.
+Share one guest at `/demo/{slug}` — rui, cup, felt, comb, frill, gleam, and the rest of the house. The demo is a room. The guest is already walking.
 
 `/admin` is for operators. It is not in the house nav.
 

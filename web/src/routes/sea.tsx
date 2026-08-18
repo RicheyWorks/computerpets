@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { RoomHero } from "@/components/desk/room-hero";
 import { SeaDen, SeaRail } from "@/components/desk/sea-den";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { SEA_GUIDE } from "@/lib/pets/sea-guide";
@@ -24,49 +24,11 @@ export function SeaPage() {
 
   return (
     <main className="bg-bg text-fg">
-      <section className="relative isolate min-h-[58dvh] overflow-hidden">
-        <img
-          src="/habitat.jpg"
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[center_62%]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-bg via-bg/55 to-bg/30" />
-        <div className="relative mx-auto flex min-h-[58dvh] max-w-5xl flex-col justify-end px-5 pb-12 pt-28 sm:px-8">
-          <p className="text-[11px] uppercase tracking-[0.22em] text-subtle">The tide</p>
-          <h1 className="mt-3 max-w-2xl font-display text-5xl leading-[0.95] sm:text-7xl">
-            They swim. They stay. You learn the species.
-          </h1>
-          <p className="mt-5 max-w-lg text-base text-muted sm:text-lg">
-            Ten marine animals live on this blotter. Watch the gait. Read the plaque. Leave knowing a
-            moon jelly is not a fish, and a horseshoe crab is not a crab.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Button asChild>
-              <Link to="/demo/$slug" params={{ slug: "cup" }}>
-                Watch Cup
-              </Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/study">The study</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/snakes">The snake den</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/garden">The garden</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/hive">The hive</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/cellar">The cellar</Link>
-            </Button>
-            <Button asChild variant="secondary">
-              <Link to="/far">The far den</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
+      <RoomHero
+        room="tide"
+        headline="They swim. They stay. You learn the species."
+        line="Ten marine animals live on this blotter. Watch the gait. Read the plaque. Leave knowing a moon jelly is not a fish, and a horseshoe crab is not a crab."
+      />
 
       <SeaDen selectedKey={selected} onSelect={setSelected} />
 
