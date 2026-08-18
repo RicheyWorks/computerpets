@@ -62,6 +62,9 @@ export function HivePage() {
             <Button asChild variant="secondary">
               <Link to="/cellar">The cellar</Link>
             </Button>
+            <Button asChild variant="secondary">
+              <Link to="/far">The far den</Link>
+            </Button>
           </div>
         </div>
       </section>

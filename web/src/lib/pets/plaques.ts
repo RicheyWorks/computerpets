@@ -1,3 +1,5 @@
+import { farGuideFor, type FarGuide } from "./far-guide";
+import { isFar } from "./far";
 import { fungiGuideFor, type FungiGuide } from "./fungi-guide";
 import { isFungus } from "./fungi";
 import { gardenGuideFor, type GardenGuide } from "./garden-guide";
@@ -10,10 +12,10 @@ import { isSea } from "./sea";
 import { isSnake } from "./shed";
 import { guideFor, type SnakeGuide } from "./snake-guide";
 
-export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | FungiGuide;
+export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | FungiGuide | FarGuide;
 
 export function plaqueFor(key: string | undefined | null): FieldGuide | null {
-  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? fungiGuideFor(key) ?? houseGuideFor(key);
+  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? houseGuideFor(key);
 }
 
 export function classroomFor(key: string) {
@@ -31,6 +33,9 @@ export function classroomFor(key: string) {
   }
   if (isFungus(key)) {
     return { to: "/cellar" as const, label: "All ten in the cellar", verb: "stay" };
+  }
+  if (isFar(key)) {
+    return { to: "/far" as const, label: "All ten in the far den", verb: "stay" };
   }
   return { to: "/study" as const, label: "The rest of the house", verb: "walk" };
 }

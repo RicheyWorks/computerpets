@@ -19,6 +19,8 @@ from computerpets_client.guide import (
     SEA_GUIDE,
     SNAKE_GUIDE,
     classroom_for,
+    far_guide_complete,
+    far_guide_keys,
     fungi_guide_complete,
     fungi_guide_keys,
     garden_guide_complete,
@@ -35,7 +37,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import CATALOG_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
+from computerpets_client.species import CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -125,6 +127,19 @@ FUNGI_EXPECTED = [
     ("lichen", "pact", "Cladonia rangiferina"),
 ]
 
+FAR_EXPECTED = [
+    ("photovore", "gleam", "Lucivora sitim"),
+    ("choir", "choir", "Harmonia plexus"),
+    ("nimbus", "drift", "Nimbus methanei"),
+    ("silica", "shard", "Silica crescit"),
+    ("terminator", "dusk", "Limitor cursor"),
+    ("nexus", "knot", "Nexus colonis"),
+    ("halovore", "brine", "Halovora brina"),
+    ("magneton", "beacon", "Magneton natare"),
+    ("umbral", "hush", "Umbralentis quietis"),
+    ("cyst", "arca", "Arca vagans"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -140,12 +155,14 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert garden_guide_complete()
     assert insect_guide_complete()
     assert fungi_guide_complete()
+    assert far_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
     assert garden_guide_keys() == GARDEN_KEYS
     assert insect_guide_keys() == INSECT_KEYS
     assert fungi_guide_keys() == FUNGI_KEYS
+    assert far_guide_keys() == FAR_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -203,6 +220,16 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     for key in FUNGI_KEYS:
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "cellar"
+        assert classroom_for(key).verb == "stay"
+    for key, slug, latin in FAR_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in FAR_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "far"
         assert classroom_for(key).verb == "stay"
 
 
@@ -354,6 +381,47 @@ def test_the_important_cellar_mixups_are_actually_taught():
     assert re.search(r"not one creature", lichen, re.I)
     assert re.search(r"partner", lichen, re.I)
     assert re.search(r"two kingdoms", lichen, re.I)
+
+
+def test_the_important_far_mixups_are_actually_taught():
+    gleam = _taught(plaque_for("photovore"))
+    choir = _taught(plaque_for("choir"))
+    drift = _taught(plaque_for("nimbus"))
+    shard = _taught(plaque_for("silica"))
+    dusk = _taught(plaque_for("terminator"))
+    knot = _taught(plaque_for("nexus"))
+    brine = _taught(plaque_for("halovore"))
+    beacon = _taught(plaque_for("magneton"))
+    hush = _taught(plaque_for("umbral"))
+    arca = _taught(plaque_for("cyst"))
+    assert re.search(r"wavelength", gleam, re.I)
+    assert re.search(r"not a firefly", gleam, re.I)
+    assert re.search(r"Spark", gleam)
+    assert re.search(r"one animal", choir, re.I)
+    assert re.search(r"not a whale", choir, re.I)
+    assert re.search(r"air is the water", drift, re.I)
+    assert re.search(r"not a jellyfish", drift, re.I)
+    assert re.search(r"Bell", drift)
+    assert re.search(r"mineral", shard, re.I)
+    assert re.search(r"not quartz", shard, re.I)
+    assert re.search(r"not a plant", shard, re.I)
+    assert re.search(r"rim is the country", dusk, re.I)
+    assert re.search(r"not a cat", dusk, re.I)
+    assert re.search(r"many animals", knot, re.I)
+    assert re.search(r"one name", knot, re.I)
+    assert re.search(r"siphonophore", knot, re.I)
+    assert re.search(r"water is optional", brine, re.I)
+    assert re.search(r"not a crab", brine, re.I)
+    assert re.search(r"Ledger", brine)
+    assert re.search(r"north is food", beacon, re.I)
+    assert re.search(r"not a compass", beacon, re.I)
+    assert re.search(r"Kite", beacon)
+    assert re.search(r"cool is lunch", hush, re.I)
+    assert re.search(r"not a moth", hush, re.I)
+    assert re.search(r"orchid", hush, re.I)
+    assert re.search(r"wait", arca, re.I)
+    assert re.search(r"not Brood", arca, re.I)
+    assert re.search(r"cicada", arca, re.I)
 
 
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:

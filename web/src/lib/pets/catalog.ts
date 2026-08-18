@@ -81,6 +81,16 @@ export const SPECIES: Species[] = [
   { key: "chicken_of_woods", displayName: "Chicken of the Woods", rarity: "UNCOMMON", temperament: "Sulfur", habitat: "Oak shelf", blurb: "Sulfur shelves on oak. Not a chicken." },
   { key: "yeast", displayName: "Baker's Yeast", rarity: "COMMON", temperament: "Busy", habitat: "Bread crock", blurb: "A fungus you cannot see until the bread. The house already knows bread." },
   { key: "lichen", displayName: "Reindeer Lichen", rarity: "RARE", temperament: "Shared", habitat: "Lamp stone", blurb: "Not one creature. A fungus and a partner. Two kingdoms in one guest." },
+  { key: "photovore", displayName: "Lamp-drinker", rarity: "COMMON", temperament: "Thirsty", habitat: "Lamp glass", blurb: "Drinks lamp-light. No mouth. Hunger is a wavelength." },
+  { key: "choir", displayName: "Chord Body", rarity: "UNCOMMON", temperament: "Harmonic", habitat: "Blotter air", blurb: "A body that is a chord. One animal, many notes." },
+  { key: "nimbus", displayName: "Methane Floater", rarity: "COMMON", temperament: "Vacant", habitat: "Cold bowl", blurb: "A cold-gas floater from a methane sea. The air is the water." },
+  { key: "silica", displayName: "Living Crystal", rarity: "UNCOMMON", temperament: "Patient", habitat: "Inkstone", blurb: "Grows by faceting. A mineral that chose to live." },
+  { key: "terminator", displayName: "Twilight Walker", rarity: "RARE", temperament: "Rim-bound", habitat: "Lamp-edge", blurb: "Lives only on the twilight belt. Noon kills. Night starves." },
+  { key: "nexus", displayName: "Walking Colony", rarity: "RARE", temperament: "Many", habitat: "Paperweight", blurb: "A colony that walks as one guest. Many animals, one name." },
+  { key: "halovore", displayName: "Salt-drinker", rarity: "UNCOMMON", temperament: "Dry", habitat: "Salt dish", blurb: "Drinks salt. Leaves a frost of waste. Water is optional." },
+  { key: "magneton", displayName: "Field Swimmer", rarity: "UNCOMMON", temperament: "Aligned", habitat: "Ruler line", blurb: "Swims magnetic fields the way a fish swims current. North is food." },
+  { key: "umbral", displayName: "Heat Shadow", rarity: "UNCOMMON", temperament: "Quiet", habitat: "Lamp shadow", blurb: "Feeds on waste heat and shadow. The lamp is loud. The cool is lunch." },
+  { key: "cyst", displayName: "Traveling Cyst", rarity: "LEGENDARY", temperament: "Waiting", habitat: "Damp blotter", blurb: "A traveling cyst. Most of a life is the wait." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(
