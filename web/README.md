@@ -1,6 +1,6 @@
 # Living desk
 
-Browser companion for ComputerPets. The full house of **60** living kinds is awake — Rui and the original nineteen, plus ten named snakes, a tide of ten sea creatures, a garden of ten plants, and a hive of ten insects. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue, a plant leans to the lamp, a bee waggles. The tide den at `/sea` teaches the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. A firefly is a beetle. A luna does not eat. A cicada waits seventeen years.
+Browser companion for ComputerPets. The full house of **70** living kinds is awake — Rui and the original nineteen, plus ten named snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects, and a cellar of ten fungi. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue, a plant leans to the lamp, a bee waggles, a fungus leans or puffs. The tide den at `/sea` teaches the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. A mushroom is not a plant. A lichen is not one creature.
 
 ## Run
 
@@ -38,4 +38,5 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 - `/sea` — the tide den
 - `/garden` — the garden den
 - `/hive` — the hive den
-- `/demo/{slug}` — live shareable demo for every species (rui, miso, pip, thimble, … ember, cup, felt, comb)
+- `/cellar` — the cellar den
+- `/demo/{slug}` — live shareable demo for every species (rui, miso, pip, thimble, … ember, cup, felt, comb, frill)

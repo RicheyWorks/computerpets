@@ -61,6 +61,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   ladybird: { shape: "crumb", verb: "Aphid" },
   mantis: { shape: "crumb", verb: "Fly" },
   cicada: { shape: "flake", verb: "Sap" },
+  oyster: { shape: "leaf", verb: "Wood" },
+  fly_agaric: { shape: "flake", verb: "Duff" },
+  morel: { shape: "flake", verb: "Duff" },
+  chanterelle: { shape: "flake", verb: "Duff" },
+  turkey_tail: { shape: "leaf", verb: "Wood" },
+  lions_mane: { shape: "leaf", verb: "Wood" },
+  puffball: { shape: "flake", verb: "Duff" },
+  chicken_of_woods: { shape: "leaf", verb: "Oak" },
+  yeast: { shape: "crumb", verb: "Dough" },
+  lichen: { shape: "flake", verb: "Dew" },
 };
 
 export function treatFor(key: string) {
@@ -128,4 +138,14 @@ export const GIFT_LINE: Record<string, string> = {
   ladybird: "A count I was finished keeping.",
   mantis: "A fold I did not need.",
   cicada: "A year I was finished waiting.",
+  oyster: "A shelf I was finished holding.",
+  fly_agaric: "A warning I was not using.",
+  morel: "A pit I was finished keeping.",
+  chanterelle: "A ridge I was not using.",
+  turkey_tail: "A zone I was finished wearing.",
+  lions_mane: "A tooth I was finished hanging.",
+  puffball: "A cloud I was finished saying.",
+  chicken_of_woods: "A sulfur I was not using.",
+  yeast: "A rise I was finished holding.",
+  lichen: "A share I was finished keeping.",
 };

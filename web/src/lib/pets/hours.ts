@@ -60,6 +60,16 @@ const REST: Record<string, [number, number]> = {
   ladybird: [20, 6],
   mantis: [20, 6],
   cicada: [21, 6],
+  oyster: [20, 6],
+  fly_agaric: [21, 6],
+  morel: [20, 7],
+  chanterelle: [20, 6],
+  turkey_tail: [21, 6],
+  lions_mane: [20, 6],
+  puffball: [20, 6],
+  chicken_of_woods: [21, 6],
+  yeast: [23, 5],
+  lichen: [20, 6],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -146,6 +156,16 @@ export const HIDE_LINE: Record<string, string> = {
   ladybird: "Under a leaf.",
   mantis: "Behind a fold.",
   cicada: "Under the stone.",
+  oyster: "Inside the shelf.",
+  fly_agaric: "Inside the cup.",
+  morel: "Inside a pit.",
+  chanterelle: "Behind a ridge.",
+  turkey_tail: "Under a zone.",
+  lions_mane: "Inside the beard.",
+  puffball: "Inside the pearl.",
+  chicken_of_woods: "Inside the oak.",
+  yeast: "Inside the crock.",
+  lichen: "On the stone.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -209,6 +229,16 @@ export const SNACK_LINE: Record<string, string> = {
   ladybird: "An aphid of a treaty.",
   mantis: "A fly of a treaty.",
   cicada: "Sap of a treaty.",
+  oyster: "Wood of a treaty.",
+  fly_agaric: "Duff of a treaty.",
+  morel: "Duff of a treaty.",
+  chanterelle: "Duff of a treaty.",
+  turkey_tail: "Wood of a treaty.",
+  lions_mane: "Wood of a treaty.",
+  puffball: "Duff of a treaty.",
+  chicken_of_woods: "Oak of a treaty.",
+  yeast: "Dough of a treaty.",
+  lichen: "Dew of a treaty.",
 };
 
 

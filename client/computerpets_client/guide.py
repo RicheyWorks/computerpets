@@ -1,16 +1,17 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same sixty, taught here. Snakes keep the den
+This is not a new bestiary — the same seventy, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
-hive keeps the insect facts; the twenty keep the study facts.
+hive keeps the insect facts; the cellar keeps the fungus facts; the twenty
+keep the study facts.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import CATALOG_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_garden, is_insect, is_sea, is_snake
+from .species import CATALOG_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_fungus, is_garden, is_insect, is_sea, is_snake
 
 
 @dataclass(frozen=True)
@@ -616,7 +617,100 @@ INSECT_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE
+FUNGI_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "oyster",
+        "Pleurotus ostreatus",
+        "Cream shelves stacked like plates, a short lateral stem, gills that run down. Oyster mushroom. She fruits on dead wood. She eats what has finished. The shelf is a log she agreed to.",
+        "Not a plant. Plants keep chlorophyll and a different kingdom; Frill is Pleurotus ostreatus, a fungus, and the shelf is the tell. Not a turkey tail — those keep pores and zones. She decomposes. She does not photosynthesize.",
+        "Oyster mushroom. A shelf that eats the dead wood.",
+        "dead-wood shelf",
+        "quiet",
+    ),
+    _entry(
+        "fly_agaric",
+        "Amanita muscaria",
+        "A red cap with white warts, white gills, a skirt on the stem, a volva at the base like a cup she has not left. Fly agaric. She is mycorrhizal. She trades with roots. The cup is a moss she agreed to.",
+        "Not lunch. The red is a warning, not a costume. Cap is Amanita muscaria: white gills, a skirt, a volva. Not a puffball — cut a young one and an Amanita can hide inside a pearl. A warning. Not a meal.",
+        "Fly agaric. White gills, a skirt, a volva. A warning, not lunch.",
+        "moss cup",
+        "plain",
+    ),
+    _entry(
+        "morel",
+        "Morchella americana",
+        "A tan cone of pits, a honeycomb that is a room, hollow from cap to stem. American morel. She is a lattice. The mold is a spring she agreed to.",
+        "Not a false morel. Those keep a wrinkled brain and are stuffed, not hollow. Lattice is Morchella americana: cut her and she is a room. Not a recolored amanita. The pits are the species.",
+        "American morel. A hollow honeycomb. Not a false morel.",
+        "leaf mold",
+        "seasonal",
+    ),
+    _entry(
+        "chanterelle",
+        "Cantharellus cibarius",
+        "A gold vase, ridges that fork and run down the stem, an apricot she will not waste. Golden chanterelle. False gills. The rim is a moss she agreed to.",
+        "Not the jack-o’-lantern. Omphalotus glows on wood and keeps true gills that do not fork; Horn is Cantharellus cibarius, and the fork is the tell. The lantern is not a guest here. Learn her on the plaque. Do not take the twin home.",
+        "Golden chanterelle. False gills that fork. Not the jack-o’-lantern.",
+        "moss rim",
+        "fragrant",
+    ),
+    _entry(
+        "turkey_tail",
+        "Trametes versicolor",
+        "Thin fans, color in zones, a white pore face if you turn her over. Turkey tail. A bracket. Not a turkey. The grain is a log she agreed to.",
+        "Not a turkey. Not an oyster — Frill keeps gills; Ring is Trametes versicolor, pores not gills, and the zones are the years. Turn her over. The pore is the identification.",
+        "Turkey tail. Thin, zoned, pores not gills. A bracket, not a turkey.",
+        "wood grain",
+        "zoned",
+    ),
+    _entry(
+        "lions_mane",
+        "Hericium erinaceus",
+        "A white cascade of teeth, no cap, no gills, a beard on a wound in the wood. Lion's mane. She hangs. The wound is a door she agreed to.",
+        "Not a lion. Not a puffball. Mane is Hericium erinaceus: teeth, not gills. A beard, not a shelf. She fruits from a wound. That is the whole office.",
+        "Lion's mane. Teeth, not gills. A beard on a wound in the wood.",
+        "wound in wood",
+        "bearded",
+    ),
+    _entry(
+        "puffball",
+        "Lycoperdon perlatum",
+        "A pearly globe with tiny warts, a pore at the top, a puff then a cloud. Common puffball. She sits. Then she bursts. The dish is a meadow she agreed to.",
+        "Not a young Amanita. Cut a puffball and it is a room of white; cut a button Amanita and you find gills and a volva hiding. Puff is Lycoperdon perlatum. The cut is the law. Cap taught the warning. Puff teaches the check.",
+        "Common puffball. A puff, then a cloud. Cut a young one.",
+        "duff dish",
+        "brief",
+    ),
+    _entry(
+        "chicken_of_woods",
+        "Laetiporus sulphureus",
+        "Overlapping sulfur-orange shelves, a soft edge, no gills, oak underneath. Chicken of the woods. She is a bracket. The oak is a host she agreed to.",
+        "Not a chicken. The name is a rumor of supper. Flame is Laetiporus sulphureus, sulfur shelves on oak, and the layer is the tell. Not Frill — Frill is cream and eats finished wood. Flame keeps the sulfur.",
+        "Chicken of the woods. Sulfur shelves on oak. Not a chicken.",
+        "oak shelf",
+        "sulfur",
+    ),
+    _entry(
+        "yeast",
+        "Saccharomyces cerevisiae",
+        "A jar, a foam, a few cells that rise. Baker's yeast. You cannot see her until the bread. The house already knows bread. The crock is a loaf she agreed to.",
+        "Not a plant. Not a mushroom with a cap glued on. Starter is Saccharomyces cerevisiae, a fungus, and the rise is the species. She barely walks. She rises in place. The loaf is the identification.",
+        "Baker's yeast. A fungus you cannot see until the bread.",
+        "bread crock",
+        "busy",
+    ),
+    _entry(
+        "lichen",
+        "Cladonia rangiferina",
+        "A pale branching shrub on stone, no cap, no gills, a guest that is already a treaty. Reindeer lichen. She sits. The stone is a tundra she agreed to.",
+        "Not one creature. Not a moss — Felt is a plant; Pact is a fungus and a partner, alga or cyanobacterium, two kingdoms in one guest. Ledger taught not a crab. Pact teaches not one. The share is the tell.",
+        "Reindeer lichen. Not one creature. A fungus and a partner.",
+        "lamp stone",
+        "shared",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + FUNGI_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -643,6 +737,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="garden", label="All ten in the garden", verb="grow")
     if is_insect(key):
         return Classroom(room="hive", label="All ten in the hive", verb="stay")
+    if is_fungus(key):
+        return Classroom(room="cellar", label="All ten in the cellar", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
 
 
@@ -666,6 +762,10 @@ def insect_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in INSECT_GUIDE)
 
 
+def fungi_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in FUNGI_GUIDE)
+
+
 def house_guide_complete() -> bool:
     return len(HOUSE_GUIDE) == len(HOUSE_KEYS) and all(k in _BY_KEY for k in HOUSE_KEYS)
 
@@ -686,6 +786,10 @@ def insect_guide_complete() -> bool:
     return len(INSECT_GUIDE) == len(INSECT_KEYS) and all(k in _BY_KEY for k in INSECT_KEYS)
 
 
+def fungi_guide_complete() -> bool:
+    return len(FUNGI_GUIDE) == len(FUNGI_KEYS) and all(k in _BY_KEY for k in FUNGI_KEYS)
+
+
 def guide_complete() -> bool:
     return (
         house_guide_complete()
@@ -693,6 +797,7 @@ def guide_complete() -> bool:
         and sea_guide_complete()
         and garden_guide_complete()
         and insect_guide_complete()
+        and fungi_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
     )

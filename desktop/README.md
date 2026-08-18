@@ -1,6 +1,6 @@
 # Desktop companion — Windows and Mac
 
-All sixty living kinds live on the real desktop as a Tamagotchi-grade overlay — including ten snakes, a tide of ten sea creatures, a garden of ten plants, and a hive of ten insects. They turn, ease, and settle on the work-area floor, then do what that animal does — scratch, preen, bask, flick a tongue, lean to the lamp, or waggle. Unique hunger clocks, night cycles, mess, illness, age, and a special move each. The tide den at `/sea` is where the marine guests are taught. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. A firefly is a beetle. A luna does not eat. A cicada waits seventeen years.
+All seventy living kinds live on the real desktop as a Tamagotchi-grade overlay — including ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects, and a cellar of ten fungi. They turn, ease, and settle on the work-area floor, then do what that animal does — scratch, preen, bask, flick a tongue, lean to the lamp, waggle, or puff. Unique hunger clocks, night cycles, mess, illness, age, and a special move each. The tide den at `/sea` is where the marine guests are taught. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` is ten insects on the blotter; plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. A mushroom is not a plant. A lichen is not one creature.
 
 ## Care
 

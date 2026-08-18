@@ -71,6 +71,16 @@ export const SPECIES: Species[] = [
   { key: "ladybird", displayName: "Seven-spot Ladybird", rarity: "COMMON", temperament: "Tidy", habitat: "Leaf dish", blurb: "Seven spots. She eats aphids. A beetle, not a rumor." },
   { key: "mantis", displayName: "Chinese Mantis", rarity: "UNCOMMON", temperament: "Watchful", habitat: "Blotter stem", blurb: "An insect that hunts. She is not a plant." },
   { key: "cicada", displayName: "Periodical Cicada", rarity: "RARE", temperament: "Patient", habitat: "Inkstone", blurb: "Seventeen years underground. Then she sings." },
+  { key: "oyster", displayName: "Oyster Mushroom", rarity: "COMMON", temperament: "Quiet", habitat: "Dead-wood shelf", blurb: "A shelf that eats the dead wood. A decomposer, not a plant." },
+  { key: "fly_agaric", displayName: "Fly Agaric", rarity: "UNCOMMON", temperament: "Plain", habitat: "Moss cup", blurb: "White gills, a skirt, a volva. A warning, not lunch." },
+  { key: "morel", displayName: "American Morel", rarity: "RARE", temperament: "Seasonal", habitat: "Leaf mold", blurb: "A hollow honeycomb. Not a false morel." },
+  { key: "chanterelle", displayName: "Golden Chanterelle", rarity: "UNCOMMON", temperament: "Fragrant", habitat: "Moss rim", blurb: "False gills that fork. Not the jack-o’-lantern." },
+  { key: "turkey_tail", displayName: "Turkey Tail", rarity: "COMMON", temperament: "Zoned", habitat: "Wood grain", blurb: "Thin, zoned, pores not gills. A bracket, not a turkey." },
+  { key: "lions_mane", displayName: "Lion's Mane", rarity: "UNCOMMON", temperament: "Bearded", habitat: "Wound in wood", blurb: "Teeth, not gills. A beard on a wound in the wood." },
+  { key: "puffball", displayName: "Common Puffball", rarity: "COMMON", temperament: "Brief", habitat: "Duff dish", blurb: "A puff, then a cloud. Cut a young one. An Amanita can hide." },
+  { key: "chicken_of_woods", displayName: "Chicken of the Woods", rarity: "UNCOMMON", temperament: "Sulfur", habitat: "Oak shelf", blurb: "Sulfur shelves on oak. Not a chicken." },
+  { key: "yeast", displayName: "Baker's Yeast", rarity: "COMMON", temperament: "Busy", habitat: "Bread crock", blurb: "A fungus you cannot see until the bread. The house already knows bread." },
+  { key: "lichen", displayName: "Reindeer Lichen", rarity: "RARE", temperament: "Shared", habitat: "Lamp stone", blurb: "Not one creature. A fungus and a partner. Two kingdoms in one guest." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

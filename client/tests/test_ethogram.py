@@ -4,7 +4,7 @@ from computerpets_client.ethogram import (
     acts_for,
     pick_act,
 )
-from computerpets_client.species import CATALOG_KEYS, GARDEN_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS
+from computerpets_client.species import CATALOG_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS
 
 
 def test_every_catalog_kind_has_acts():
@@ -55,3 +55,14 @@ def test_only_scratching_mammals_scratch():
     assert "snap" in [a["name"] for a in acts_for("venus_flytrap")]
     assert "still" in [a["name"] for a in acts_for("pitcher")]
     assert "curl" in [a["name"] for a in acts_for("sundew")]
+    for key in FUNGI_KEYS:
+        names = [a["name"] for a in acts_for(key)]
+        assert "scratch" not in names, key
+        assert "tongue" not in names, key
+        assert "waggle" not in names, key
+        assert "yawn" not in names, key
+    assert "puff" in [a["name"] for a in acts_for("puffball")]
+    assert "rise" in [a["name"] for a in acts_for("yeast")]
+    assert "share-still" in [a["name"] for a in acts_for("lichen")]
+    assert "lean" in [a["name"] for a in acts_for("oyster")]
+    assert "flush" in [a["name"] for a in acts_for("fly_agaric")]

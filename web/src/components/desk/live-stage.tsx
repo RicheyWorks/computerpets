@@ -32,10 +32,12 @@ import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { applySpecial } from "@/lib/pets/specials";
 import { Link } from "@tanstack/react-router";
+import { isFungus } from "@/lib/pets/fungi";
 import { isGarden } from "@/lib/pets/garden";
 import { isInsect } from "@/lib/pets/insects";
 import { isSea } from "@/lib/pets/sea";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
+import { fungiGuideFor } from "@/lib/pets/fungi-guide";
 import { gardenGuideFor } from "@/lib/pets/garden-guide";
 import { insectGuideFor } from "@/lib/pets/insect-guide";
 import { seaGuideFor } from "@/lib/pets/sea-guide";
@@ -372,6 +374,13 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
             {insectGuideFor(kind.key)?.species ?? kind.speciesLabel} ·{" "}
             <Link to="/hive" className="text-fg no-underline">
               Learn the hive
+            </Link>
+          </p>
+        ) : isFungus(kind.key) ? (
+          <p className="mt-2 text-xs text-subtle">
+            {fungiGuideFor(kind.key)?.species ?? kind.speciesLabel} ·{" "}
+            <Link to="/cellar" className="text-fg no-underline">
+              Learn the cellar
             </Link>
           </p>
         ) : (

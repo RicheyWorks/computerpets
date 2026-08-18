@@ -12,12 +12,15 @@ from pathlib import Path
 
 from computerpets_client.guide import (
     FIELD_GUIDE,
+    FUNGI_GUIDE,
     GARDEN_GUIDE,
     HOUSE_GUIDE,
     INSECT_GUIDE,
     SEA_GUIDE,
     SNAKE_GUIDE,
     classroom_for,
+    fungi_guide_complete,
+    fungi_guide_keys,
     garden_guide_complete,
     garden_guide_keys,
     insect_guide_complete,
@@ -32,7 +35,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import CATALOG_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
+from computerpets_client.species import CATALOG_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -109,6 +112,19 @@ INSECT_EXPECTED = [
     ("cicada", "brood", "Magicicada septendecim"),
 ]
 
+FUNGI_EXPECTED = [
+    ("oyster", "frill", "Pleurotus ostreatus"),
+    ("fly_agaric", "cap", "Amanita muscaria"),
+    ("morel", "lattice", "Morchella americana"),
+    ("chanterelle", "horn", "Cantharellus cibarius"),
+    ("turkey_tail", "ring", "Trametes versicolor"),
+    ("lions_mane", "mane", "Hericium erinaceus"),
+    ("puffball", "puff", "Lycoperdon perlatum"),
+    ("chicken_of_woods", "flame", "Laetiporus sulphureus"),
+    ("yeast", "starter", "Saccharomyces cerevisiae"),
+    ("lichen", "pact", "Cladonia rangiferina"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -123,17 +139,20 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert sea_guide_complete()
     assert garden_guide_complete()
     assert insect_guide_complete()
+    assert fungi_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
     assert garden_guide_keys() == GARDEN_KEYS
     assert insect_guide_keys() == INSECT_KEYS
+    assert fungi_guide_keys() == FUNGI_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
     assert len(SEA_GUIDE) == 10
     assert len(GARDEN_GUIDE) == 10
     assert len(INSECT_GUIDE) == 10
+    assert len(FUNGI_GUIDE) == 10
     for key in CATALOG_KEYS:
         guide = plaque_for(key)
         assert guide is not None, key
@@ -155,7 +174,8 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     assert [g.key for g in SEA_GUIDE] == [key for key, _, _ in SEA_EXPECTED]
     assert [g.key for g in GARDEN_GUIDE] == [key for key, _, _ in GARDEN_EXPECTED]
     assert [g.key for g in INSECT_GUIDE] == [key for key, _, _ in INSECT_EXPECTED]
-    for key, slug, latin in HOUSE_EXPECTED + SNAKE_EXPECTED + SEA_EXPECTED + GARDEN_EXPECTED + INSECT_EXPECTED:
+    assert [g.key for g in FUNGI_GUIDE] == [key for key, _, _ in FUNGI_EXPECTED]
+    for key, slug, latin in HOUSE_EXPECTED + SNAKE_EXPECTED + SEA_EXPECTED + GARDEN_EXPECTED + INSECT_EXPECTED + FUNGI_EXPECTED:
         guide = plaque_for(key)
         assert guide is not None
         assert guide.slug == slug
@@ -179,6 +199,10 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     for key in INSECT_KEYS:
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "hive"
+        assert classroom_for(key).verb == "stay"
+    for key in FUNGI_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "cellar"
         assert classroom_for(key).verb == "stay"
 
 
@@ -295,6 +319,43 @@ def test_the_important_hive_mixups_are_actually_taught():
     assert re.search(r"song", cicada, re.I)
 
 
+def test_the_important_cellar_mixups_are_actually_taught():
+    oyster = _taught(plaque_for("oyster"))
+    agaric = _taught(plaque_for("fly_agaric"))
+    morel = _taught(plaque_for("morel"))
+    chant = _taught(plaque_for("chanterelle"))
+    turkey = _taught(plaque_for("turkey_tail"))
+    mane = _taught(plaque_for("lions_mane"))
+    puff = _taught(plaque_for("puffball"))
+    chicken = _taught(plaque_for("chicken_of_woods"))
+    yeast = _taught(plaque_for("yeast"))
+    lichen = _taught(plaque_for("lichen"))
+    assert re.search(r"dead wood", oyster, re.I)
+    assert re.search(r"not a plant", oyster, re.I)
+    assert re.search(r"warning", agaric, re.I)
+    assert re.search(r"volva", agaric, re.I)
+    assert re.search(r"not lunch", agaric, re.I)
+    assert re.search(r"hollow", morel, re.I)
+    assert re.search(r"false morel", morel, re.I)
+    assert re.search(r"fork", chant, re.I)
+    assert re.search(r"jack-o", chant, re.I)
+    assert re.search(r"Omphalotus", chant)
+    assert re.search(r"pores not gills", turkey, re.I)
+    assert re.search(r"not a turkey", turkey, re.I)
+    assert re.search(r"teeth", mane, re.I)
+    assert re.search(r"not gills", mane, re.I)
+    assert re.search(r"puff", puff, re.I)
+    assert re.search(r"Amanita", puff)
+    assert re.search(r"cut", puff, re.I)
+    assert re.search(r"sulfur", chicken, re.I)
+    assert re.search(r"not a chicken", chicken, re.I)
+    assert re.search(r"bread", yeast, re.I)
+    assert re.search(r"fungus", yeast, re.I)
+    assert re.search(r"not one creature", lichen, re.I)
+    assert re.search(r"partner", lichen, re.I)
+    assert re.search(r"two kingdoms", lichen, re.I)
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -307,11 +368,13 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     sea_src = (WEB_PETS / "sea-guide.ts").read_text(encoding="utf-8")
     garden_src = (WEB_PETS / "garden-guide.ts").read_text(encoding="utf-8")
     insect_src = (WEB_PETS / "insect-guide.ts").read_text(encoding="utf-8")
+    fungi_src = (WEB_PETS / "fungi-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
     garden_keys = [key for key, _, _ in GARDEN_EXPECTED]
     insect_keys = [key for key, _, _ in INSECT_EXPECTED]
+    fungi_keys = [key for key, _, _ in FUNGI_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -352,6 +415,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
         assert guide.tell in chunk
         assert guide.mixup in chunk
         assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(FUNGI_EXPECTED):
+        nxt = fungi_keys[index + 1] if index + 1 < len(fungi_keys) else None
+        chunk = _slice_entry(fungi_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
 
 
 def test_plaque_widget_teaches_the_selected_species():
@@ -382,6 +453,10 @@ def test_plaque_widget_teaches_the_selected_species():
     card.set_key("firefly")
     assert card.guide().key == "firefly"
     assert "not a fly" in card.mixup.text().lower()
+    assert "stay" in card.classroom.text().lower()
+    card.set_key("lichen")
+    assert card.guide().key == "lichen"
+    assert "not one creature" in card.mixup.text().lower()
     assert "stay" in card.classroom.text().lower()
     del app
 

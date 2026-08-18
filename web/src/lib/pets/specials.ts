@@ -41,6 +41,7 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "bloom":
     case "flash":
     case "count":
+    case "warn":
       next.mood = clampStat(next.mood + 8);
       return { stats: next, cmd: "talk" };
     case "still":
@@ -66,11 +67,19 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "glue":
     case "freeze":
     case "fold":
+    case "fruit":
+    case "pit":
+    case "ridge":
+    case "zone":
+    case "tooth":
+    case "shelf":
+    case "share":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
       return { stats: next, cmd: "sit" };
     case "trade":
     case "snap":
+    case "spore":
       next.mood = clampStat(next.mood + 8);
       return { stats: next, cmd: "play" };
     case "playdead":

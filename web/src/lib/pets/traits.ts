@@ -96,6 +96,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   ladybird: T(78, 14, 0.5, 0.32, {}, "count", "Count", "I counted. Hello."),
   mantis: T(42, 8, 0.8, 0.12, {}, "fold", "Fold", "I did not strike. That is hello."),
   cicada: T(22, 8, 0.7, 0.08, {}, "emerge", "Emerge", "I emerged. You may wait."),
+  oyster: T(8, 0, 0.72, 0.05, {}, "fruit", "Fruit", "I fruited. That was hello."),
+  fly_agaric: T(6, 0, 0.78, 0.04, {}, "warn", "Warn", "I am a warning. Hello."),
+  morel: T(6, 0, 0.7, 0.04, {}, "pit", "Pit", "I am hollow. Hello."),
+  chanterelle: T(8, 0, 0.68, 0.05, {}, "ridge", "Ridge", "The ridges fork. Hello."),
+  turkey_tail: T(4, 0, 0.58, 0.03, {}, "zone", "Zone", "I zoned. Hello."),
+  lions_mane: T(6, 0, 0.8, 0.04, {}, "tooth", "Tooth", "I grew teeth. Hello."),
+  puffball: T(10, 8, 0.64, 0.12, {}, "spore", "Puff", "I puffed. That was hello."),
+  chicken_of_woods: T(6, 0, 0.86, 0.04, {}, "shelf", "Shelf", "I shelved. Hello."),
+  yeast: T(4, 2, 0.48, 0.08, {}, "rise", "Rise", "I rose. That was hello."),
+  lichen: T(2, 0, 0.66, 0.02, {}, "share", "Share", "We are two. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

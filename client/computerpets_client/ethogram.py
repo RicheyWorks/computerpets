@@ -91,6 +91,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "ladybird": (_a("count", "nod", 1.0, 3, "sit"), _a("hunt", "dart", 0.8, 2), _a("still", "freeze", 1.6, 2)),
     "mantis": (_a("fold", "fold", 2.0, 4, "sit"), _a("strike", "snap", 0.6, 1, "play"), _a("still", "freeze", 2.0, 2)),
     "cicada": (_a("still", "sit_hold", 2.8, 5, "sit"), _a("emerge", "emerge", 1.8, 1, "sit"), _a("burst", "dart", 0.7, 2)),
+    "oyster": (_a("lean", "lean", 1.8, 4), _a("flush", "flush", 1.2, 2), _a("still", "freeze", 2.2, 2)),
+    "fly_agaric": (_a("lean", "lean", 1.6, 3), _a("flush", "flush", 1.4, 3), _a("still", "freeze", 2.0, 2)),
+    "morel": (_a("lean", "lean", 1.6, 3), _a("still", "sit_hold", 2.4, 3, "sit"), _a("still_hold", "freeze", 2.0, 2)),
+    "chanterelle": (_a("lean", "lean", 1.6, 3), _a("flush", "flush", 1.2, 2), _a("still", "freeze", 2.0, 2)),
+    "turkey_tail": (_a("lean", "lean", 1.6, 3), _a("still", "freeze", 2.4, 3), _a("zone", "lean", 1.4, 2)),
+    "lions_mane": (_a("lean", "lean", 1.6, 3), _a("still", "freeze", 2.2, 3), _a("beard", "sit_hold", 2.0, 2, "sit")),
+    "puffball": (_a("puff", "puff", 0.8, 4, "play"), _a("still", "freeze", 2.0, 3), _a("lean", "lean", 1.4, 1)),
+    "chicken_of_woods": (_a("lean", "lean", 1.6, 3), _a("flush", "flush", 1.2, 2), _a("still", "freeze", 2.2, 2)),
+    "yeast": (_a("rise", "rise", 1.6, 5), _a("still", "freeze", 2.0, 2), _a("foam", "bob", 1.2, 1)),
+    "lichen": (_a("share-still", "share", 2.8, 5, "sit"), _a("still", "freeze", 2.4, 3), _a("lean", "lean", 1.4, 1)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS
@@ -210,4 +220,19 @@ def act_pose(motion: str | None, t: float, hold: float) -> dict[str, float]:
         pose["stretch"] = 0.9 + math.sin(u * math.pi) * 0.18
         pose["squat"] = 2.0 - pose["stretch"]
         pose["dy"] = -math.sin(u * math.pi) * 4.0
+    elif motion == "puff":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.14
+        pose["squat"] = 2.0 - pose["stretch"]
+        pose["dy"] = -math.sin(u * math.pi) * 6.0
+    elif motion == "flush":
+        pose["stretch"] = 1.0 + math.sin(u * math.pi * 2) * 0.06
+        pose["squat"] = 2.0 - pose["stretch"]
+        pose["rot"] = math.sin(u * math.pi) * 3.0
+    elif motion == "rise":
+        pose["dy"] = -math.sin(u * math.pi) * 8.0
+        pose["stretch"] = 1.0 + math.sin(u * math.pi) * 0.08
+        pose["squat"] = 2.0 - pose["stretch"]
+    elif motion == "share":
+        pose["dx"] = math.sin(u * math.pi) * 1.2
+        pose["rot"] = math.sin(u * math.pi) * 2.0
     return pose
