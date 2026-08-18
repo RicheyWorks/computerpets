@@ -61,8 +61,8 @@ function Collection() {
           <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Kennel</p>
           <h1 className="font-display text-4xl">Held tokens</h1>
           <p className="max-w-xl text-sm text-muted">
-            Every hatch is a unique token: species, rarity, eyes, mark, aura.
-            Neglect can close a line. The nest still keeps one.
+            The kennel guest is a room. Neglect can close a line. The nest still
+            keeps one.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

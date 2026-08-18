@@ -16,6 +16,7 @@ const denSrc = readFileSync(join(root, "src/routes/snakes.tsx"), "utf8");
 const plaqueSrc = readFileSync(join(root, "src/components/desk/species-plaque.tsx"), "utf8");
 const deskSrc = readFileSync(join(root, "src/components/desk/desk-stage.tsx"), "utf8");
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
+const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 
 const EXPECTED = [
   ["red_panda", "rui", "Ailurus fulgens"],
@@ -136,7 +137,8 @@ test("plaques appear on desk and demo for any living kind", () => {
   assert.match(plaqueSrc, /plaqueFor/);
   assert.match(plaqueSrc, /classroomFor/);
   assert.match(deskSrc, /SpeciesPlaque/);
-  assert.match(demoSrc, /SpeciesPlaque/);
+  assert.match(demoSrc, /CompanionRoom/);
+  assert.match(roomSrc, /SpeciesPlaque/);
   assert.doesNotMatch(
     deskSrc.slice(deskSrc.indexOf("<SpeciesPlaque"), deskSrc.indexOf("<SpeciesPlaque") + 200),
     /isSnake/,
