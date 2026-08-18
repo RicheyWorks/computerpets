@@ -337,9 +337,14 @@
   }
 
   .den-cabinet-guest {
+    font-family: inherit;
     font-size: 0.82rem;
     color: var(--color-muted);
     text-decoration: none;
+    background: none;
+    border: 0;
+    padding: 0.1rem 0;
+    cursor: pointer;
   }
 
   .den-cabinet-guest:hover,
@@ -380,6 +385,20 @@
 
   .blotter-ink:disabled {
     opacity: 0.35;
+  }
+
+  .blotter-care-phone {
+    gap: 0.35rem 0.45rem;
+  }
+
+  .blotter-care-phone .blotter-ink {
+    font-size: 1.12rem;
+    padding: 0.55rem 0.35rem;
+    min-height: 2.75rem;
+  }
+
+  .blotter-care-phone .blotter-care-dot {
+    margin: 0 0.2rem;
   }
 }
 

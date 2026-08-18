@@ -8,11 +8,13 @@ import { HouseVisit } from "@/components/desk/house-visit";
 import { DeskGrain, RoomWash } from "@/components/desk/room-wash";
 import { todaysVisitor } from "@/lib/pets/visitor";
 import {
+  applyBath,
   applyClean,
   applyFeed,
   applyHide,
   applyMedicine,
   applyPlay,
+  applyPraise,
   applyRest,
   applySnack,
   loadCare,
@@ -20,6 +22,7 @@ import {
   maybeBondLine,
   normalizeCare,
   pickGift,
+  pickMess,
   saveCare,
   stageOf,
   type CareStats,
@@ -36,8 +39,11 @@ import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/we
 import { applySpecial } from "@/lib/pets/specials";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
+import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { roomOf } from "@/lib/pets/rooms";
+
+type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
 function mergePersist(local: CareStats, remote: CareStats): CareStats {
   return {
@@ -60,6 +66,10 @@ export function CompanionRoom({
   guestKey,
   persistLocal = true,
   onCare,
+  onSelectKind,
+  typedTalk = false,
+  journal = false,
+  phone = false,
   line,
   detail,
   extraCare,
@@ -74,9 +84,13 @@ export function CompanionRoom({
   guestKey?: string;
   persistLocal?: boolean;
   onCare?: (action: SanctuaryCare) => Promise<CareStats | void>;
+  onSelectKind?: (key: string) => void;
+  typedTalk?: boolean;
+  journal?: boolean;
+  phone?: boolean;
   line?: ReactNode;
   detail?: string;
-  extraCare?: { label: string; action: "rest" | "clean" | "medicine" }[];
+  extraCare?: { label: string; action: DeskCare }[];
   extraMarks?: CareMark[];
   aside?: ReactNode;
   footer?: ReactNode;
@@ -91,6 +105,8 @@ export function CompanionRoom({
       : normalizeCare(seed ?? { hunger: 78, mood: 80, energy: 82 }),
   );
   const [speech, setSpeech] = useState<string | null>(null);
+  const [draft, setDraft] = useState("");
+  const [latestNote, setLatestNote] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [mark, setMark] = useState<BlotterMark | null>(null);
   const [leaving, setLeaving] = useState(false);
@@ -107,6 +123,24 @@ export function CompanionRoom({
   useEffect(() => {
     if (persistLocal) saveCare(kind.localKey, stats);
   }, [kind.localKey, persistLocal, stats]);
+
+  useEffect(() => {
+    if (!journal) {
+      setLatestNote(null);
+      return;
+    }
+    const mine = loadJournal().find((entry) => entry.species === kind.key);
+    setLatestNote(mine?.text ?? null);
+  }, [journal, kind.key]);
+
+  const note = useCallback(
+    (text: string) => {
+      if (!journal) return;
+      const next = appendJournal({ name: displayName, species: kind.key, text });
+      setLatestNote(next[0]?.text ?? text);
+    },
+    [displayName, journal, kind.key],
+  );
 
   const say = useCallback((text: string, hold = 4200) => {
     setSpeech(text);
@@ -213,7 +247,7 @@ export function CompanionRoom({
     }
   }
 
-  async function talk() {
+  async function talk(message?: string) {
     if (busy) return;
     acted.current = true;
     unlockDeskAudio();
@@ -222,6 +256,7 @@ export function CompanionRoom({
     try {
       const res = await converseWithPet({
         data: {
+          message,
           hunger: stats.hunger,
           mood: stats.mood,
           energy: stats.energy,
@@ -236,7 +271,7 @@ export function CompanionRoom({
       say(res.text, Math.min(9000, 2200 + res.text.length * 55));
       await playVoice(res.audio, res.text);
     } catch {
-      say(kind.ambientLine(stats));
+      say(message ? kind.listenLine() : kind.ambientLine(stats));
     } finally {
       setBusy(false);
     }
@@ -291,6 +326,7 @@ export function CompanionRoom({
     say(HIDE_LINE[kind.key] ?? "I went where the ribbon goes.");
     setLeaving(true);
     issue("leave");
+    note(`${displayName} slipped off the blotter.`);
   }
 
   function callBack() {
@@ -300,6 +336,7 @@ export function CompanionRoom({
     setStats((s) => ({ ...s, hidden: false }));
     say("You called. I brought the whole tail.");
     issue("enter");
+    note(`${displayName} came back.`);
   }
 
   async function feed() {
@@ -316,29 +353,46 @@ export function CompanionRoom({
       setStats(applyFeed);
     }
     say(kind.careLine("feed"));
+    note(`${displayName} ate.`);
     issue("eat");
   }
 
-  async function tend(action: "rest" | "clean" | "medicine") {
+  async function tend(action: DeskCare) {
     if (busy) return;
     acted.current = true;
     unlockDeskAudio();
-    if (onCare) {
+    const persistable = action === "rest" || action === "clean" || action === "medicine";
+    if (onCare && persistable) {
       try {
         await persist(action);
       } catch {
         return;
       }
     } else {
-      setStats(action === "rest" ? applyRest : action === "clean" ? applyClean : applyMedicine);
+      setStats(
+        action === "rest"
+          ? applyRest
+          : action === "clean"
+            ? applyClean
+            : action === "medicine"
+              ? applyMedicine
+              : action === "bath"
+                ? applyBath
+                : applyPraise,
+      );
     }
     say(
       action === "rest"
         ? kind.careLine("rest")
         : action === "clean"
           ? "The blotter is honest again."
-          : "Bitter. I will invoice you in kindness.",
+          : action === "bath"
+            ? "Water. Then dignity."
+            : action === "medicine"
+              ? "Bitter. I will invoice you in kindness."
+              : kind.fallbackLine("good", stats),
     );
+    note(action === "rest" ? `${displayName} slept.` : `${displayName} was tended.`);
     issue(action === "rest" ? "sleep" : "sit");
   }
 
@@ -399,6 +453,7 @@ export function CompanionRoom({
               const next = applySnack(prev);
               setStats(next);
               say(SNACK_LINE[kind.key] ?? "A small treaty.");
+              note(`${displayName} found the treat.`);
               const bond = maybeBondLine(prev.bond, next.bond);
               if (bond) window.setTimeout(() => say(bond), 900);
               issue("eat");
@@ -408,6 +463,7 @@ export function CompanionRoom({
                 setMark(null);
                 setStats(next);
                 say(kind.careLine("play"));
+                note(`${displayName} played.`);
                 const bond = maybeBondLine(prev.bond, next.bond);
                 if (bond) window.setTimeout(() => say(bond), 900);
                 issue("play");
@@ -442,13 +498,35 @@ export function CompanionRoom({
             const next = pickGift(prev, gift.id);
             setStats(next);
             say(GIFT_LINE[kind.key] ?? "I left this.");
+            note(`${displayName} left a gift.`);
             const bond = maybeBondLine(prev.bond, next.bond);
             if (bond) window.setTimeout(() => say(bond), 900);
           }}
         />
       ))}
+      {stats.mess.map((pile) => (
+        <button
+          key={pile.id}
+          type="button"
+          aria-label="Clean a mess"
+          className="absolute z-10 h-3.5 w-5 rounded-full bg-[#5a4a34]/80 shadow-sm"
+          style={{ left: `${pile.x}%`, bottom: "19%" }}
+          onClick={() => {
+            const next = pickMess(statsRef.current, pile.id);
+            setStats(next);
+            say("The blotter is honest again.");
+            note(`${displayName}'s desk was picked up.`);
+          }}
+        />
+      ))}
 
-      <aside className="absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] sm:left-8 sm:top-24">
+      <aside
+        className={
+          phone
+            ? "absolute left-4 right-20 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-8 sm:right-auto sm:max-w-[min(100%-2rem,20rem)]"
+            : "absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] sm:left-8 sm:top-24"
+        }
+      >
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
           {hour} · {sky} · {caller} may call
           {detail ? ` · ${detail}` : ""}
@@ -456,17 +534,31 @@ export function CompanionRoom({
         <h1 className="mt-2 font-display text-5xl leading-none sm:text-6xl">{displayName}</h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
         {line}
+        {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
         <SpeciesPlaque speciesKey={kind.key} compact paper className="mt-5 max-w-sm" showDemoLink={false} />
         {aside}
       </aside>
 
-      <div className="absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24">
-        <DenCabinet currentRoom={room.id} currentKey={kind.key} drawers />
+      <div
+        className={
+          phone
+            ? "absolute right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right sm:right-8"
+            : "absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24"
+        }
+      >
+        <DenCabinet currentRoom={room.id} currentKey={kind.key} drawers onSelectKind={onSelectKind} />
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8">
+      <div
+        className={
+          phone
+            ? "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-16 sm:px-8"
+            : "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8"
+        }
+      >
         <div className="pointer-events-auto">
           <BlotterCare
+            className={phone ? "blotter-care-phone" : undefined}
             marks={[
               { label: "Feed", onClick: () => void feed(), disabled: busyOrHidden },
               { label: treatFor(kind.key).verb, onClick: () => dropTreatAt(randomTreatX()), disabled: busyOrHidden },
@@ -481,6 +573,7 @@ export function CompanionRoom({
                   const gifted = leaveGift(next.stats);
                   setStats(gifted);
                   say(trait.line);
+                  note(`${displayName}: ${trait.line}`);
                   issue(next.cmd);
                 },
               },
@@ -500,6 +593,7 @@ export function CompanionRoom({
                         const next = applyShed(statsRef.current);
                         setStats(next);
                         say(shedLine(kind.key));
+                        note(`${displayName} shed.`);
                         issue("sit");
                       },
                     },
@@ -518,6 +612,33 @@ export function CompanionRoom({
             ]}
           />
         </div>
+        {typedTalk ? (
+          <form
+            className="pointer-events-auto flex w-full max-w-md items-center gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const msg = draft.trim();
+              if (!msg) return;
+              setDraft("");
+              void talk(msg);
+            }}
+          >
+            <input
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              maxLength={200}
+              placeholder={`Say something to ${displayName}`}
+              className="h-10 min-w-0 flex-1 rounded-[var(--radius-sm)] border border-border/60 bg-bg/40 px-3 text-sm text-fg outline-none placeholder:text-subtle focus:ring-2 focus:ring-primary/30"
+            />
+            <button
+              type="submit"
+              className="blotter-ink text-[11px] uppercase tracking-[0.16em]"
+              disabled={busy || !draft.trim()}
+            >
+              Send
+            </button>
+          </form>
+        ) : null}
         <div className="pointer-events-auto text-center text-[11px] uppercase tracking-[0.16em] text-subtle">
           {footer ?? (
             <p>
