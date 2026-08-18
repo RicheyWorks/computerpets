@@ -6,11 +6,13 @@ import { cn } from "@/lib/utils";
 export function SpeciesPlaque({
   speciesKey,
   compact = false,
+  paper = false,
   showDemoLink = true,
   className,
 }: {
   speciesKey: string;
   compact?: boolean;
+  paper?: boolean;
   showDemoLink?: boolean;
   className?: string;
 }) {
@@ -26,6 +28,7 @@ export function SpeciesPlaque({
     <article
       className={cn(
         "rounded-[var(--radius-lg)] border border-border bg-bg/80 p-4 backdrop-blur-sm",
+        paper && "paper-card backdrop-blur-none",
         className,
       )}
     >
@@ -41,6 +44,15 @@ export function SpeciesPlaque({
           <p className="mt-3 text-xs text-subtle">
             {guide.habitat} · {guide.temperament}
           </p>
+          {compact ? (
+            <button
+              type="button"
+              className="mt-3 text-left text-xs text-subtle underline-offset-2 hover:text-fg hover:underline"
+              onClick={() => setOpen(false)}
+            >
+              Fold the card
+            </button>
+          ) : null}
         </>
       ) : (
         <button
