@@ -63,11 +63,124 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
   };
 }
 
-export function stageOf(stats: CareStats, now = Date.now()) {
+export type LifeStage = "hatchling" | "grown" | "elder";
+
+export function stageOf(stats: CareStats, now = Date.now()): LifeStage {
   const days = Math.max(0, (now - stats.bornAt) / 86400000);
   if (days < 1) return "hatchling";
   if (days < 7) return "grown";
   return "elder";
+}
+
+/** Health at this value has reached the floor. A stretch here, then they leave. */
+export const HEALTH_FLOOR = 0;
+/** Keep-alive window once health is spent. Care in this stretch still saves them. */
+export const FLOOR_STRETCH_MS = 6 * 60 * 60 * 1000;
+/** Ghost’s adult span. After this from hatch, she spends. */
+export const LUNA_SPAN_MS = 7 * 24 * 60 * 60 * 1000;
+
+export function adultLuna(speciesKey: string, stats: Partial<CareStats>, now = Date.now()) {
+  return speciesKey === "luna" && stageOf(normalizeCare(stats, now), now) !== "hatchling";
+}
+
+export function applyFeedFor(speciesKey: string, stats: Partial<CareStats>, now = Date.now()): CareStats {
+  const s = normalizeCare(stats, now);
+  if (adultLuna(speciesKey, s, now)) return s;
+  return applyFeed(s);
+}
+
+/** A guest at the floor who is still in the stretch can be lifted by care. */
+export function liftFromFloor(stats: CareStats): CareStats {
+  if (stats.health > HEALTH_FLOOR) return stats;
+  return { ...stats, health: 12 };
+}
+
+export type SanctuaryCare = "feed" | "play" | "rest" | "clean" | "medicine";
+
+export function applySanctuaryCare(
+  action: SanctuaryCare,
+  speciesKey: string,
+  stats: Partial<CareStats>,
+  now = Date.now(),
+): { stats: CareStats; note?: string } {
+  const s = normalizeCare(stats, now);
+  if (action === "feed") {
+    if (adultLuna(speciesKey, s, now)) {
+      return { stats: s, note: "Ghost does not eat. The week is the species." };
+    }
+    return { stats: liftFromFloor(applyFeed(s)) };
+  }
+  if (action === "play") return { stats: applyPlay(s) };
+  if (action === "rest") return { stats: liftFromFloor(applyRest(s)) };
+  if (action === "clean") return { stats: liftFromFloor(applyClean(s)) };
+  return { stats: liftFromFloor(applyMedicine(s)) };
+}
+
+export type SanctuaryTick = {
+  stats: CareStats;
+  floorSince: number | null;
+  departedAt: number | null;
+  verb: string | null;
+};
+
+function decayForSpecies(speciesKey: string, stats: CareStats, lastTick: number, now: number): CareStats {
+  if (adultLuna(speciesKey, stats, now)) {
+    const pinned = { ...stats, hunger: Math.max(stats.hunger, 50) };
+    const live = decayStats(pinned, lastTick, now);
+    return { ...live, hunger: stats.hunger };
+  }
+  return decayStats(stats, lastTick, now);
+}
+
+function floorHitAt(prior: CareStats, lastTick: number, now: number, speciesKey: string): number {
+  if (prior.health <= HEALTH_FLOOR) return lastTick;
+  const live = decayForSpecies(speciesKey, prior, lastTick, now);
+  if (live.health > HEALTH_FLOOR) return now;
+  const dropped = prior.health - live.health;
+  if (dropped <= 0) return now;
+  const fraction = Math.min(1, prior.health / dropped);
+  return lastTick + (now - lastTick) * fraction;
+}
+
+/**
+ * Tick a sanctuary companion. Persist the result (health, hygiene, floor_since,
+ * departed_at). Health at the floor for FLOOR_STRETCH_MS, or Ghost’s week, and they leave.
+ */
+export function tickSanctuary(
+  speciesKey: string,
+  stats: Partial<CareStats>,
+  lastTick: number,
+  floorSince: number | null,
+  now = Date.now(),
+): SanctuaryTick {
+  const prior = normalizeCare(stats, now);
+  const live = decayForSpecies(speciesKey, prior, lastTick, now);
+
+  if (speciesKey === "luna" && now - prior.bornAt >= LUNA_SPAN_MS) {
+    return {
+      stats: live,
+      floorSince,
+      departedAt: prior.bornAt + LUNA_SPAN_MS,
+      verb: "spent",
+    };
+  }
+
+  let nextFloor = floorSince;
+  if (live.health <= HEALTH_FLOOR) {
+    if (nextFloor == null) nextFloor = floorHitAt(prior, lastTick, now, speciesKey);
+    if (now - nextFloor >= FLOOR_STRETCH_MS) {
+      return {
+        stats: live,
+        floorSince: nextFloor,
+        departedAt: nextFloor + FLOOR_STRETCH_MS,
+        verb: speciesKey === "luna" ? "spent" : "gone",
+      };
+    }
+  } else {
+    nextFloor = null;
+  }
+
+  return { stats: live, floorSince: nextFloor, departedAt: null, verb: null };
 }
 
 export function decayStats(stats: Partial<CareStats>, lastTick: number, now = Date.now()): CareStats {

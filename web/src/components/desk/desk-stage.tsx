@@ -12,7 +12,7 @@ import {
   applyClean,
   applyHide,
   applyMedicine,
-  applyFeed,
+  applyFeedFor,
   applyPlay,
   applyPraise,
   applyRest,
@@ -73,7 +73,7 @@ export function DeskStage({
 }: {
   kind: LivingKind;
   name?: string;
-  onCare?: (action: "feed" | "play" | "rest") => Promise<CareStats | void>;
+  onCare?: (action: "feed" | "play" | "rest" | "clean" | "medicine") => Promise<CareStats | void>;
   onSelectKind?: (key: string) => void;
 }) {
   const displayName = name ?? kind.name;
@@ -259,12 +259,15 @@ export function DeskStage({
     unlockDeskAudio();
     setBusy(true);
     try {
-      const remote = action === "feed" || action === "play" || action === "rest" ? await onCare?.(action) : undefined;
+      const remote =
+        action === "feed" || action === "play" || action === "rest" || action === "clean" || action === "medicine"
+          ? await onCare?.(action)
+          : undefined;
       setStats((prev) => {
         const next =
           remote ??
           (action === "feed"
-            ? applyFeed(prev)
+            ? applyFeedFor(kind.key, prev)
             : action === "play"
               ? applyPlay(prev)
               : action === "rest"

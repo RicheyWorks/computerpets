@@ -3,7 +3,14 @@ import { z } from "zod";
 import { authMiddleware } from "@/lib/auth/middleware";
 import { getSql } from "@/lib/db";
 import { HATCH_COST, SPECIES, findSpecies, mintTokenId, pickSpecies, pickWeightedRarity } from "./catalog";
-import { applyFeed, applyPlay, applyRest, decayStats, type CareStats } from "./care";
+import {
+  applySanctuaryCare,
+  stageOf,
+  tickSanctuary,
+  type CareStats,
+  type LifeStage,
+  type SanctuaryCare,
+} from "./care";
 import {
   genotypeFromPhenotype,
   isLegalGenotype,
@@ -13,7 +20,7 @@ import {
   stringifyGenotype,
   type Genotype,
 } from "./genetics";
-import { canPair, houseOffspringName, rollBrood, type NestVerb } from "./nest";
+import { canPair, departLine, houseOffspringName, rollBrood, type NestVerb } from "./nest";
 
 export type CompanionRow = {
   id: string;
@@ -25,6 +32,9 @@ export type CompanionRow = {
   hunger: number;
   mood: number;
   energy: number;
+  health?: number | null;
+  hygiene?: number | null;
+  floor_since?: string | null;
   eyes: string;
   mark: string;
   aura: string;
@@ -42,8 +52,14 @@ export type CompanionView = CompanionRow & {
   hunger: number;
   mood: number;
   energy: number;
+  health: number;
+  hygiene: number;
   genes: Genotype;
   departed: boolean;
+  stage: LifeStage;
+  bornAt: number;
+  note?: string;
+  farewell?: string | null;
 };
 
 export type ClutchRow = {
@@ -87,31 +103,112 @@ function genesOf(row: CompanionRow): Genotype {
   );
 }
 
-function hydrate(row: CompanionRow, now = Date.now()): CompanionView {
-  const last = Date.parse(asIso(row.last_tick));
-  const live = decayStats(
-    { hunger: Number(row.hunger), mood: Number(row.mood), energy: Number(row.energy) },
-    Number.isNaN(last) ? now : last,
-    now,
-  );
+function asMs(value: unknown, fallback: number) {
+  if (value == null) return fallback;
+  const n = value instanceof Date ? value.getTime() : Date.parse(asIso(value));
+  return Number.isNaN(n) ? fallback : n;
+}
+
+function careSeed(row: CompanionRow, now: number): CareStats {
+  const born = asMs(row.hatched_at, now);
+  return {
+    hunger: Number(row.hunger),
+    mood: Number(row.mood),
+    energy: Number(row.energy),
+    hygiene: row.hygiene == null ? 86 : Number(row.hygiene),
+    health: row.health == null ? 92 : Number(row.health),
+    bond: 18,
+    sick: false,
+    hidden: false,
+    mess: [],
+    gifts: [],
+    bornAt: born,
+    lastTick: asMs(row.last_tick, now),
+    shedAt: 0,
+  };
+}
+
+function floorSinceMs(row: CompanionRow): number | null {
+  if (!row.floor_since) return null;
+  const n = asMs(row.floor_since, Number.NaN);
+  return Number.isNaN(n) ? null : n;
+}
+
+function viewOf(row: CompanionRow, stats: CareStats, extras: { departedAt?: string | null; note?: string; farewell?: string | null } = {}): CompanionView {
   const genes = genesOf(row);
   const pheno = phenotypeOf(genes, row.species_key);
+  const departedAt = extras.departedAt ?? (row.departed_at ? asIso(row.departed_at) : null);
   return {
     ...row,
     last_tick: asIso(row.last_tick),
     hatched_at: asIso(row.hatched_at),
-    departed_at: row.departed_at ? asIso(row.departed_at) : null,
-    hunger: live.hunger,
-    mood: live.mood,
-    energy: live.energy,
-    is_active: Boolean(row.is_active),
+    departed_at: departedAt,
+    floor_since: row.floor_since ? asIso(row.floor_since) : null,
+    hunger: stats.hunger,
+    mood: stats.mood,
+    energy: stats.energy,
+    health: stats.health,
+    hygiene: stats.hygiene,
+    is_active: departedAt ? false : Boolean(row.is_active),
     eyes: pheno.eyes,
     mark: pheno.mark,
     aura: pheno.aura,
     genes,
-    departed: Boolean(row.departed_at),
+    departed: Boolean(departedAt),
     origin: row.origin ?? "hatch",
+    stage: stageOf(stats),
+    bornAt: stats.bornAt,
+    note: extras.note,
+    farewell: extras.farewell ?? (departedAt ? departLine(row.name, row.species_key) : null),
   };
+}
+
+function hydrate(row: CompanionRow, now = Date.now()): CompanionView {
+  if (row.departed_at) return viewOf(row, careSeed(row, now));
+  const last = asMs(row.last_tick, now);
+  const tick = tickSanctuary(row.species_key, careSeed(row, now), last, floorSinceMs(row), now);
+  return viewOf(
+    { ...row, floor_since: tick.floorSince ? new Date(tick.floorSince).toISOString() : null },
+    tick.stats,
+    {
+      departedAt: tick.departedAt ? new Date(tick.departedAt).toISOString() : null,
+      farewell: tick.verb ? departLine(row.name, row.species_key) : null,
+    },
+  );
+}
+
+async function persistTick(userId: string, id: string, tick: ReturnType<typeof tickSanctuary>, now: number) {
+  const sql = await getSql();
+  const s = tick.stats;
+  const floorSince = tick.floorSince ? new Date(tick.floorSince).toISOString() : null;
+  if (tick.departedAt) {
+    const gone = new Date(tick.departedAt).toISOString();
+    await sql`
+      update companion_pets
+      set hunger = ${s.hunger},
+          mood = ${s.mood},
+          energy = ${s.energy},
+          hygiene = ${s.hygiene},
+          health = ${s.health},
+          last_tick = ${new Date(now).toISOString()},
+          floor_since = ${floorSince},
+          departed_at = ${gone},
+          is_active = false
+      where id = ${id} and user_id = ${userId} and departed_at is null
+    `;
+    return;
+  }
+  await sql`
+    update companion_pets
+    set hunger = ${s.hunger},
+        mood = ${s.mood},
+        energy = ${s.energy},
+        hygiene = ${s.hygiene},
+        health = ${s.health},
+        last_tick = ${new Date(now).toISOString()},
+        floor_since = ${floorSince}
+    where id = ${id} and user_id = ${userId} and departed_at is null
+  `;
 }
 
 async function ensureKeeper(userId: string) {
@@ -142,11 +239,11 @@ async function mintCompanion(opts: {
   await sql`
     insert into companion_pets (
       id, user_id, species_key, name, token_id, rarity,
-      hunger, mood, energy, eyes, mark, aura, is_active,
+      hunger, mood, energy, health, hygiene, eyes, mark, aura, is_active,
       genotype, origin, parent_a, parent_b
     ) values (
       ${id}, ${opts.userId}, ${opts.speciesKey}, ${opts.name}, ${tokenId}, ${opts.rarity},
-      78, 74, 80, ${pheno.eyes}, ${pheno.mark}, ${pheno.aura}, ${opts.makeActive},
+      78, 74, 80, 92, 86, ${pheno.eyes}, ${pheno.mark}, ${pheno.aura}, ${opts.makeActive},
       ${stringifyGenotype(opts.genotype)}, ${opts.origin}, ${opts.parentA ?? null}, ${opts.parentB ?? null}
     )
   `;
@@ -241,7 +338,27 @@ export const getSanctuary = createServerFn({ method: "GET" })
       where user_id = ${context.userId} and resolved_at is null
       order by due_at asc
     `;
-    const views = pets.map((p) => hydrate(p));
+    const now = Date.now();
+    const views: CompanionView[] = [];
+    for (const p of pets) {
+      if (p.departed_at) {
+        views.push(hydrate(p, now));
+        continue;
+      }
+      const last = asMs(p.last_tick, now);
+      const tick = tickSanctuary(p.species_key, careSeed(p, now), last, floorSinceMs(p), now);
+      await persistTick(context.userId, p.id, tick, now);
+      views.push(
+        viewOf(
+          { ...p, floor_since: tick.floorSince ? new Date(tick.floorSince).toISOString() : null },
+          tick.stats,
+          {
+            departedAt: tick.departedAt ? new Date(tick.departedAt).toISOString() : null,
+            farewell: tick.verb ? departLine(p.name, p.species_key) : null,
+          },
+        ),
+      );
+    }
     return {
       ember: Number(keepers[0]?.ember ?? 12),
       hatches: Number(keepers[0]?.hatches ?? 0),
@@ -307,7 +424,12 @@ export const pairNest = createServerFn({ method: "POST" })
     `;
     const parentA = aRows[0];
     if (!parentA) throw new Error("The first guest is not in this house.");
+    const now = Date.now();
+    const tickA = tickSanctuary(parentA.species_key, careSeed(parentA, now), asMs(parentA.last_tick, now), floorSinceMs(parentA), now);
+    await persistTick(context.userId, parentA.id, tickA, now);
+    if (tickA.departedAt) throw new Error("The first guest has left this house.");
     let parentB: CompanionRow | null = null;
+    let stageB: LifeStage | undefined;
     if (data.parentB) {
       if (data.parentB === data.parentA) throw new Error("Pair two, or let a starter split. Not one guest twice.");
       const bRows = await sql<CompanionRow>`
@@ -316,8 +438,15 @@ export const pairNest = createServerFn({ method: "POST" })
       `;
       parentB = bRows[0] ?? null;
       if (!parentB) throw new Error("The second guest is not in this house.");
+      const tickB = tickSanctuary(parentB.species_key, careSeed(parentB, now), asMs(parentB.last_tick, now), floorSinceMs(parentB), now);
+      await persistTick(context.userId, parentB.id, tickB, now);
+      if (tickB.departedAt) throw new Error("The second guest has left this house.");
+      stageB = stageOf(tickB.stats, now);
     }
-    const verdict = canPair(parentA.species_key, parentB?.species_key ?? null);
+    const verdict = canPair(parentA.species_key, parentB?.species_key ?? null, {
+      a: { stage: stageOf(tickA.stats, now) },
+      b: stageB ? { stage: stageB } : undefined,
+    });
     if (!verdict.ok) throw new Error(verdict.reason);
     const path = verdict.path;
     const keepers = await sql<{ ember: number }>`
@@ -409,7 +538,7 @@ export const releasePet = createServerFn({ method: "POST" })
 
 const careInput = z.object({
   petId: z.string().min(1),
-  action: z.enum(["feed", "play", "rest"]),
+  action: z.enum(["feed", "play", "rest", "clean", "medicine"]),
 });
 
 export const careForPet = createServerFn({ method: "POST" })
@@ -423,21 +552,28 @@ export const careForPet = createServerFn({ method: "POST" })
     const row = rows[0];
     if (!row) throw new Error("Companion not found.");
 
-    const live = hydrate(row);
-    const next: CareStats =
-      data.action === "feed"
-        ? applyFeed(live)
-        : data.action === "play"
-          ? applyPlay(live)
-          : applyRest(live);
+    const now = Date.now();
+    const last = asMs(row.last_tick, now);
+    const tick = tickSanctuary(row.species_key, careSeed(row, now), last, floorSinceMs(row), now);
+    if (tick.departedAt) {
+      await persistTick(context.userId, row.id, tick, now);
+      throw new Error(departLine(row.name, row.species_key));
+    }
+
+    const cared = applySanctuaryCare(data.action as SanctuaryCare, row.species_key, tick.stats, now);
+    const next = cared.stats;
+    const floorSince = next.health > 0 ? null : tick.floorSince;
 
     await sql`
       update companion_pets
       set hunger = ${next.hunger},
           mood = ${next.mood},
           energy = ${next.energy},
-          last_tick = now()
-      where id = ${data.petId} and user_id = ${context.userId}
+          hygiene = ${next.hygiene},
+          health = ${next.health},
+          last_tick = ${new Date(now).toISOString()},
+          floor_since = ${floorSince ? new Date(floorSince).toISOString() : null}
+      where id = ${data.petId} and user_id = ${context.userId} and departed_at is null
     `;
     await sql`
       update pet_keepers set ember = ember + 1 where user_id = ${context.userId}
@@ -446,7 +582,7 @@ export const careForPet = createServerFn({ method: "POST" })
     const updated = await sql<CompanionRow>`
       select * from companion_pets where id = ${data.petId} and user_id = ${context.userId}
     `;
-    return hydrate(updated[0]!);
+    return viewOf(updated[0]!, next, { note: cared.note });
   });
 
 const selectInput = z.object({ petId: z.string().min(1) });

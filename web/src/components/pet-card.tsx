@@ -66,7 +66,7 @@ export function PetCard({ pet }: { pet: CompanionView }) {
             <p className="font-display text-lg leading-tight text-fg">{pet.name}</p>
             <p className="mt-0.5 font-mono text-[11px] text-subtle">{pet.token_id}</p>
           </div>
-          <p className="text-xs text-muted">{moodWord(pet)}</p>
+          <p className="text-xs text-muted">{pet.stage} · {moodWord(pet)}</p>
         </div>
         <p className="text-sm text-muted">{species?.temperament}</p>
         <Meter label="Bond" value={score} />

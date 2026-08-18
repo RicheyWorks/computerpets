@@ -10,6 +10,7 @@ const nestPage = readFileSync(join(root, "src/routes/nest.tsx"), "utf8");
 const hatchPage = readFileSync(join(root, "src/routes/hatch.tsx"), "utf8");
 const shell = readFileSync(join(root, "src/components/app-shell.tsx"), "utf8");
 const migration = readFileSync(join(root, "migrations/0003_nest.sql"), "utf8");
+const quiet = readFileSync(join(root, "migrations/0004_quiet_end.sql"), "utf8");
 
 test("nest cost is honest and smaller than a legendary draw", () => {
   assert.equal(G.NEST_COST_SINGLE, 3);
@@ -40,4 +41,7 @@ test("the nest page is a blotter card, not a sim dump", () => {
   assert.match(shell, /to: "\/nest"/);
   assert.match(migration, /companion_clutches/);
   assert.match(migration, /genotype/);
+  assert.match(quiet, /floor_since/);
+  assert.match(nestPage, /Grown and elder may sit/);
+  assert.match(nestPage, /Neglect can close a line/);
 });

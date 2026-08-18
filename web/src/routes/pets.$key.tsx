@@ -15,8 +15,9 @@ import {
   type CompanionView,
 } from "@/lib/pets/actions";
 import { findSpecies } from "@/lib/pets/catalog";
-import { bondScore, moodWord } from "@/lib/pets/care";
+import { adultLuna, bondScore, moodWord } from "@/lib/pets/care";
 import { formatDiploid } from "@/lib/pets/genetics";
+import { departLine } from "@/lib/pets/nest";
 
 export const Route = createFileRoute("/pets/$key")({ component: PetDetail });
 
@@ -31,7 +32,7 @@ function PetDetail() {
     if (!user) return;
     void getSanctuary()
       .then((d) => {
-        const found = d.pets.find((p) => p.id === key) ?? null;
+        const found = d.pets.find((p) => p.id === key) ?? d.departed.find((p) => p.id === key) ?? null;
         setPet(found);
         setName(found?.name ?? "");
       })
@@ -55,11 +56,14 @@ function PetDetail() {
 
   const species = findSpecies(pet.species_key);
   const petId = pet.id;
+  const gone = pet.departed;
 
-  async function act(action: "feed" | "play" | "rest") {
+  async function act(action: "feed" | "play" | "rest" | "clean" | "medicine") {
     setBusy(true);
     try {
-      setPet(await careForPet({ data: { petId, action } }));
+      const next = await careForPet({ data: { petId, action } });
+      setPet(next);
+      if (next.note) toast.message(next.note);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Care failed");
     } finally {
@@ -85,6 +89,9 @@ function PetDetail() {
             <h1 className="font-display text-4xl">{pet.name}</h1>
             <p className="font-mono text-xs text-subtle">{pet.token_id}</p>
             <p className="text-sm text-muted">{species?.blurb}</p>
+            {gone ? (
+              <p className="text-sm text-muted">{pet.farewell ?? departLine(pet.name, pet.species_key)}</p>
+            ) : null}
           </div>
 
           <dl className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-3">
@@ -94,22 +101,32 @@ function PetDetail() {
             <Meta label="Eyes" value={`${pet.eyes} · ${formatDiploid(pet.genes.eyes ?? ["A", "A"])}`} />
             <Meta label="Mark" value={`${pet.mark} · ${formatDiploid(pet.genes.band ?? ["B", "B"])}${formatDiploid(pet.genes.mask ?? ["m", "m"])}`} />
             <Meta label="Aura" value={`${pet.aura} · ${formatDiploid(pet.genes.aura ?? ["s", "s"])}`} />
+            <Meta label="Stage" value={pet.stage} />
           </dl>
           <p className="text-sm text-muted">
             A hatchling from the nest starts fresh. The square is how a look
             hid, and how it can return.
           </p>
 
+          {gone ? null : (
           <div className="grid gap-3 sm:grid-cols-3">
             <Meter label="Hunger" value={pet.hunger} />
             <Meter label="Mood" value={pet.mood} />
             <Meter label="Energy" value={pet.energy} />
+            <Meter label="Hygiene" value={pet.hygiene} />
+            <Meter label="Health" value={pet.health} />
           </div>
+          )}
+          {gone ? null : (
           <p className="text-sm text-muted">
-            {moodWord(pet)} · bond {bondScore(pet)}
+            {pet.stage} · {moodWord(pet)} · bond {bondScore(pet)}
+            {adultLuna(pet.species_key, pet) ? " · Ghost does not eat." : ""}
           </p>
+          )}
 
           <div className="flex flex-wrap gap-2">
+            {gone ? null : (
+              <>
             <Button disabled={busy} onClick={() => void act("feed")}>
               Feed
             </Button>
@@ -119,7 +136,15 @@ function PetDetail() {
             <Button variant="secondary" disabled={busy} onClick={() => void act("rest")}>
               Rest
             </Button>
-            {!pet.is_active ? (
+            <Button variant="secondary" disabled={busy} onClick={() => void act("clean")}>
+              Clean
+            </Button>
+            <Button variant="secondary" disabled={busy} onClick={() => void act("medicine")}>
+              Medicine
+            </Button>
+              </>
+            )}
+            {gone ? null : !pet.is_active ? (
               <Button
                 variant="ghost"
                 disabled={busy}
@@ -132,6 +157,8 @@ function PetDetail() {
                 Place on desk
               </Button>
             ) : null}
+            {gone ? null : (
+              <>
             <Button asChild variant="ghost">
               <Link to="/nest">Pair at the nest</Link>
             </Button>
@@ -151,8 +178,15 @@ function PetDetail() {
             >
               Let go
             </Button>
+              </>
+            )}
           </div>
 
+          {gone ? (
+            <Button asChild variant="secondary">
+              <Link to="/collection">Back to kennel</Link>
+            </Button>
+          ) : (
           <form
             className="flex flex-col gap-2 sm:flex-row"
             onSubmit={(e) => {
@@ -173,6 +207,7 @@ function PetDetail() {
               Rename
             </Button>
           </form>
+          )}
         </section>
       </div>
     </main>
