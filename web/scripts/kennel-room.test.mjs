@@ -87,7 +87,9 @@ test("kennel cards hint the room without walking sprites", () => {
   assert.match(cardSrc, /lookHint/);
   assert.match(cardSrc, /pet\.stage/);
   assert.doesNotMatch(cardSrc, /LivingPet/);
+  assert.doesNotMatch(cardSrc, /pet\.token_id/);
   assert.match(kennelSrc, /The kennel guest is a room/);
+  assert.doesNotMatch(kennelSrc, /Held tokens/);
 });
 
 test("meet and demo stay the public door", () => {

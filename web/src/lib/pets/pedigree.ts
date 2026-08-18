@@ -41,6 +41,20 @@ export function lookHint(guest: { eyes: string; mark: string; aura: string }): s
   return `${guest.eyes} eyes · ${guest.mark} · ${guest.aura}`;
 }
 
+/** A wait in house voice. Not an ISO dump. */
+export function duePhrase(dueAt: string | number | Date, now = Date.now()): string {
+  const due =
+    typeof dueAt === "number" ? dueAt : dueAt instanceof Date ? dueAt.getTime() : Date.parse(dueAt);
+  if (Number.isNaN(due)) return "due in a while";
+  const ms = due - now;
+  if (ms <= 0) return "due now";
+  if (ms < 45 * 60 * 1000) return "due this hour";
+  if (ms < 18 * 60 * 60 * 1000) return "due today";
+  if (ms < 42 * 60 * 60 * 1000) return "due tomorrow";
+  if (ms < 7 * 24 * 60 * 60 * 1000) return "due in a few days";
+  return "due in a while";
+}
+
 /**
  * Pedigree in house voice. Nest names who they came from when those seats
  * are known. Hatch is a draw — parent ids are ignored.

@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
-import { Button } from "@/components/ui/button";
-import { RarityBadge } from "@/components/pet-card";
+import { CompanionRoom } from "@/components/desk/companion-room";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { getSanctuary, hatchPet } from "@/lib/pets/actions";
-import { HATCH_COST, RARITY_WEIGHT, type Rarity } from "@/lib/pets/catalog";
+import { RED_PANDA_KIND } from "@/lib/pets/living";
 
-export const Route = createFileRoute("/hatch")({ component: Hatchery });
-
-const TIERS: Rarity[] = ["COMMON", "UNCOMMON", "RARE", "LEGENDARY"];
+export const Route = createFileRoute("/hatch")({
+  component: Hatchery,
+  head: () => ({
+    meta: [
+      { title: "The hatchery — ComputerPets" },
+      {
+        name: "description",
+        content: "The hatch is a room. The draw lands you with the guest.",
+      },
+    ],
+  }),
+});
 
 function Hatchery() {
   const { user, isPending } = useCurrentUserState();
@@ -25,72 +33,76 @@ function Hatchery() {
       .catch(() => setEmber(0));
   }, [user]);
 
-  if (isPending) return <div className="h-64 animate-pulse rounded-[var(--radius-xl)] bg-surface" />;
+  if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;
 
-  async function hatch() {
+  async function draw() {
+    if (busy) return;
     setBusy(true);
     try {
       const pet = await hatchPet();
-      toast.success(`${pet.name} hatched · ${pet.token_id}`);
+      toast.success(`${pet.name} is walking. The draw landed.`);
       await navigate({ to: "/pets/$key", params: { key: pet.id } });
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Hatch failed");
+      toast.error(err instanceof Error ? err.message : "The draw failed.");
     } finally {
       setBusy(false);
     }
   }
 
   return (
-    <main className="space-y-8">
+    <>
       <Toaster theme="dark" position="bottom-center" />
-      <header className="max-w-xl space-y-3">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Hatchery</p>
-        <h1 className="font-display text-4xl">Draw from the house catalog.</h1>
-        <p className="text-sm text-muted">
-          Weighted toward common companions. Legendaries are scarce on purpose.
-          Cost is taken after the roll. A new bird can bring an allele the nest
-          has lost.
-        </p>
-        <p>
-          <Link to="/nest" className="text-sm text-fg">
-            Or pair two you already keep.
-          </Link>
-        </p>
-      </header>
-
-      <section className="grid gap-6 lg:grid-cols-[1fr_0.8fr]">
-        <div className="space-y-5 rounded-[var(--radius-xl)] border border-border bg-surface p-6">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className="text-xs text-subtle">Ember on hand</p>
-              <p className="font-display text-5xl tabular-nums">{ember ?? "—"}</p>
-            </div>
-            <Button size="lg" disabled={busy || ember === null} onClick={() => void hatch()}>
-              {busy ? "Hatching…" : "Hatch"}
-            </Button>
-          </div>
-          <p className="text-sm text-muted">
-            First hatch is cheap enough: twelve ember to start, commons cost four.
+      <CompanionRoom
+        kind={RED_PANDA_KIND}
+        guestKey="hatchery"
+        persistLocal={false}
+        detail="Hatchery"
+        extraMarks={[
+          {
+            label: busy ? "Drawing…" : "Draw",
+            onClick: () => void draw(),
+            disabled: busy || ember === null,
+          },
+        ]}
+        line={
+          <p className="mt-3 max-w-sm text-sm text-muted">
+            The hatch is a room. The draw is the act.{" "}
+            <Link to="/nest" className="text-fg no-underline hover:text-primary">
+              Or pair two you already keep.
+            </Link>
           </p>
-        </div>
-        <ul className="space-y-3">
-          {TIERS.map((rarity) => (
-            <li
-              key={rarity}
-              className="flex items-center justify-between rounded-[var(--radius-lg)] border border-border bg-surface px-4 py-3"
-            >
-              <div className="flex items-center gap-3">
-                <RarityBadge rarity={rarity} />
-                <span className="text-sm text-muted">{RARITY_WEIGHT[rarity]}% draw</span>
-              </div>
-              <span className="font-mono text-sm tabular-nums text-fg/80">
-                {HATCH_COST[rarity]} ember
-              </span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </main>
+        }
+        aside={
+          <article className="paper-card mt-5 max-w-sm rounded-[var(--radius-lg)] border p-4">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Ember on hand</p>
+            <p className="mt-2 font-display text-4xl tabular-nums">{ember ?? "—"}</p>
+            <p className="mt-3 text-sm text-muted">
+              Twelve ember to start. Commons cost four. Cost is taken after the draw.
+            </p>
+            <p className="mt-2 text-xs text-subtle">Commons come often. Legendaries are scarce on purpose.</p>
+          </article>
+        }
+        footer={
+          <p>
+            <Link to="/collection" className="text-fg no-underline hover:text-primary">
+              The kennel
+            </Link>
+            {" · "}
+            <Link to="/nest" className="text-muted no-underline hover:text-fg">
+              Pair at the nest
+            </Link>
+            {" · "}
+            <Link to="/catalog" className="text-muted no-underline hover:text-fg">
+              The shelf
+            </Link>
+            {" · "}
+            <Link to="/meet" className="text-muted no-underline hover:text-fg">
+              The house
+            </Link>
+          </p>
+        }
+      />
+    </>
   );
 }

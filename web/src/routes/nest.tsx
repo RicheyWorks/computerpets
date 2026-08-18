@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { toast, Toaster } from "sonner";
 import { Button } from "@/components/ui/button";
 import { PetPortrait } from "@/components/pet-card";
@@ -19,7 +19,7 @@ import {
   punnettMono,
   watchLocusId,
 } from "@/lib/pets/genetics";
-import { canPair, extinctLines, fairHouse, nestPath } from "@/lib/pets/nest";
+import { canPair, duePhrase, extinctLines, fairHouse, nestPath } from "@/lib/pets/nest";
 
 export const Route = createFileRoute("/nest")({
   component: NestPage,
@@ -36,6 +36,7 @@ export const Route = createFileRoute("/nest")({
 
 function NestPage() {
   const { user, isPending } = useCurrentUserState();
+  const navigate = useNavigate();
   const [ember, setEmber] = useState<number | null>(null);
   const [pets, setPets] = useState<CompanionView[] | null>(null);
   const [departed, setDeparted] = useState<CompanionView[]>([]);
@@ -139,10 +140,14 @@ function NestPage() {
         data: { parentA: a.id, parentB: b?.id ?? null, name: name.trim() || undefined },
       });
       if (result.waiting) {
-        toast.success(`${result.word} is waiting · ${result.plaque}`);
+        toast.success(`${result.word} is waiting. ${duePhrase(result.due_at ?? "")}`);
       } else {
         const first = result.pets[0];
         toast.success(first ? `${first.name} · ${result.word}` : result.word);
+        if (first) {
+          await navigate({ to: "/pets/$key", params: { key: first.id } });
+          return;
+        }
       }
       setName("");
       await reload();
@@ -322,8 +327,8 @@ function NestPage() {
               const species = findSpecies(c.species_key);
               return (
                 <li key={c.id} className="rounded-[var(--radius-lg)] border border-border bg-surface px-4 py-3 text-sm text-muted">
-                  {c.count} {c.verb}
-                  {species ? ` of ${species.displayName}` : ""} · due {new Date(c.due_at).toLocaleString()}
+                  A wait. {c.count} {c.verb}
+                  {species ? ` of ${species.displayName}` : ""}. {duePhrase(c.due_at)}.
                 </li>
               );
             })}

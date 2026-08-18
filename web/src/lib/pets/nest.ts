@@ -12,7 +12,7 @@ import {
   type NestPath,
 } from "./genetics";
 
-export { lookHint, originPhrase, wearLine, type HouseSeat, type OriginPhrase } from "./pedigree";
+export { lookHint, originPhrase, wearLine, duePhrase, type HouseSeat, type OriginPhrase } from "./pedigree";
 
 export {
   NEST_COST_CLUTCH,
