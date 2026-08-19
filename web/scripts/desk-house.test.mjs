@@ -43,6 +43,7 @@ test("live is the phone of the same house", () => {
 });
 
 test("keeper persist and typed talk stay on the desk", () => {
+  assert.match(indexSrc, /sitDeskGuest/);
   assert.match(indexSrc, /careForPet/);
   assert.match(indexSrc, /onCare=/);
   assert.match(deskSrc, /onCare=\{onCare\}/);

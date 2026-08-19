@@ -7,6 +7,7 @@ import { SignedIn, SignedOut } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
 import { careForPet, getSanctuary } from "@/lib/pets/actions";
 import { normalizeCare } from "@/lib/pets/care";
+import { sitDeskGuest } from "@/lib/pets/desk";
 import {
   isLivingSpecies,
   livingByKey,
@@ -89,7 +90,7 @@ function KeeperDesk({
     setPetId(null);
     void getSanctuary()
       .then((data) => {
-        const mine = data.pets.find((p) => p.species_key === kind.key);
+        const mine = sitDeskGuest(data.pets, kind.key);
         if (mine) {
           setName(mine.name);
           setPetId(mine.id);
