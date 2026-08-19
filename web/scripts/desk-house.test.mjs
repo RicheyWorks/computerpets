@@ -55,6 +55,20 @@ test("keeper persist and typed talk stay on the desk", () => {
   assert.match(deskSrc, /label: "Praise"/);
 });
 
+test("the desk keeps time; a demo does not write the desk key", () => {
+  assert.match(roomSrc, /tickCare/);
+  assert.match(roomSrc, /loadCare\(kind\.localKey, seed \?\? \{ hunger: 78, mood: 80, energy: 82 \}, kind\.key\)/);
+  assert.match(roomSrc, /if \(!persistLocal\) return;/);
+  assert.match(roomSrc, /applyFeedFor/);
+  assert.match(roomSrc, /setInterval/);
+  assert.match(deskSrc, /CompanionRoom/);
+  assert.match(liveSrc, /CompanionRoom/);
+  assert.doesNotMatch(deskSrc, /persistLocal=\{false\}/);
+  assert.doesNotMatch(liveSrc, /persistLocal=\{false\}/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
+  assert.doesNotMatch(demoSrc, /persistLocal=\{true\}/);
+});
+
 test("hatch, nest, kennel, and kennel-guest rooms stay", () => {
   assert.match(hatchSrc, /persistLocal=\{false\}/);
   assert.match(nestSrc, /persistLocal=\{false\}/);
@@ -65,6 +79,7 @@ test("hatch, nest, kennel, and kennel-guest rooms stay", () => {
   assert.match(petSrc, /onCare=\{persistCare\}/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
 });
 
 test("meet still says Watch Rui and Eighty", () => {

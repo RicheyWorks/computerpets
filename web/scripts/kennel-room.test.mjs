@@ -124,6 +124,7 @@ test("meet and demo stay the public door", () => {
   assert.match(meetSrc, /Eighty guests walk the blotter/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.doesNotMatch(demoSrc, /LIVING_KINDS\.map/);
   assert.doesNotMatch(roomSrc, /LIVING_KINDS\.map/);
 });

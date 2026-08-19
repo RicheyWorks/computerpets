@@ -138,6 +138,7 @@ test("plaques appear on desk and demo for any living kind", () => {
   assert.match(plaqueSrc, /classroomFor/);
   assert.match(deskSrc, /CompanionRoom/);
   assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(roomSrc, /SpeciesPlaque/);
   assert.match(roomSrc, /paper/);
   assert.doesNotMatch(

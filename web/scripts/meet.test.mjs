@@ -28,6 +28,7 @@ test("demo still mounts a known slug — rui and cup", () => {
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoPageSrc, /createFileRoute\("\/demo\/\$slug"\)/);
   assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(roomSrc, /LivingPet/);
   assert.match(roomSrc, /SpeciesPlaque/);
   assert.match(roomSrc, /kind=\{kind\.key\}/);

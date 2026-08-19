@@ -132,6 +132,12 @@ function decayForSpecies(speciesKey: string, stats: CareStats, lastTick: number,
   return decayStats(stats, lastTick, now);
 }
 
+/** Age a locally kept guest from lastTick. Same clocks as sanctuary; Luna's hunger stays pinned. */
+export function tickCare(speciesKey: string, stats: Partial<CareStats>, now = Date.now()): CareStats {
+  const prior = normalizeCare(stats, now);
+  return decayForSpecies(speciesKey, prior, prior.lastTick, now);
+}
+
 function floorHitAt(prior: CareStats, lastTick: number, now: number, speciesKey: string): number {
   if (prior.health <= HEALTH_FLOOR) return lastTick;
   const live = decayForSpecies(speciesKey, prior, lastTick, now);
@@ -381,19 +387,27 @@ export function maybeBondLine(prev: number, next: number) {
   return title ? (BOND_LINE[title] ?? null) : null;
 }
 
-export function loadCare(key: string, fallback?: Partial<CareStats>): CareStats {
+export function loadCare(
+  key: string,
+  fallback?: Partial<CareStats>,
+  speciesKey?: string,
+  now = Date.now(),
+): CareStats {
   try {
     const raw = localStorage.getItem(key);
-    if (raw) return normalizeCare(JSON.parse(raw) as Partial<CareStats>);
+    if (raw) {
+      const saved = normalizeCare(JSON.parse(raw) as Partial<CareStats>, now);
+      return speciesKey ? tickCare(speciesKey, saved, now) : decayStats(saved, saved.lastTick, now);
+    }
   } catch {
     /* ignore */
   }
-  return normalizeCare(fallback ?? null);
+  return normalizeCare(fallback ?? null, now);
 }
 
 export function saveCare(key: string, stats: CareStats) {
   try {
-    localStorage.setItem(key, JSON.stringify({ ...stats, lastTick: Date.now() }));
+    localStorage.setItem(key, JSON.stringify(stats));
   } catch {
     /* ignore */
   }
