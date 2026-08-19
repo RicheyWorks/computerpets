@@ -22,6 +22,7 @@ import {
   stringifyGenotype,
   type Genotype,
 } from "./genetics";
+import { hatchDueClutches, isClutchDue, parseBrood } from "./clutch";
 import { canPair, departLine, houseOffspringName, rollBrood, type NestVerb } from "./nest";
 
 export type CompanionRow = {
@@ -98,7 +99,12 @@ export type ClutchView = {
 };
 
 function asIso(value: unknown) {
-  if (value instanceof Date) return value.toISOString();
+  if (value instanceof Date) {
+    const n = value.getTime();
+    if (Number.isNaN(n)) return "";
+    return value.toISOString();
+  }
+  if (value == null) return "";
   return String(value);
 }
 
@@ -270,61 +276,54 @@ async function mintCompanion(opts: {
   return { view: hydrate(created[0]!), species };
 }
 
-type BroodJson = { genotype: Genotype; name: string };
-
 async function resolveDueClutches(userId: string, now = Date.now()) {
   const sql = await getSql();
-  const pending = await sql<ClutchRow>`
-    select * from companion_clutches
-    where user_id = ${userId} and resolved_at is null
-  `;
-  const minted: CompanionView[] = [];
-  for (const clutch of pending) {
-    if (Date.parse(asIso(clutch.due_at)) > now) continue;
-    let brood: BroodJson[] = [];
-    try {
-      brood = JSON.parse(clutch.brood) as BroodJson[];
-    } catch {
-      brood = [];
-    }
-    const living = await sql<{ id: string }>`
-      select id from companion_pets
-      where user_id = ${userId} and departed_at is null
-      limit 1
-    `;
-    let makeActive = living.length === 0;
-    const species = findSpecies(clutch.species_key);
-    for (const child of brood) {
-      const row = await mintCompanion({
-        userId,
-        speciesKey: clutch.species_key,
-        name: child.name,
-        rarity: species?.rarity ?? "COMMON",
-        genotype: child.genotype,
-        origin: "nest",
-        parentA: clutch.parent_a,
-        parentB: clutch.parent_b,
-        makeActive,
-      });
-      minted.push(row.view);
-      makeActive = false;
-    }
-    await sql`
-      update companion_clutches set resolved_at = now()
-      where id = ${clutch.id} and user_id = ${userId}
-    `;
-  }
-  return minted;
+  return hatchDueClutches(
+    userId,
+    {
+      listOpen: (uid) =>
+        sql<ClutchRow>`
+          select * from companion_clutches
+          where user_id = ${uid} and resolved_at is null
+        `,
+      claim: async (id, uid) => {
+        const rows = await sql<ClutchRow>`
+          update companion_clutches
+          set resolved_at = now()
+          where id = ${id} and user_id = ${uid} and resolved_at is null
+          returning *
+        `;
+        return rows[0] ?? null;
+      },
+      livingInHouse: async (uid) => {
+        const living = await sql<{ id: string }>`
+          select id from companion_pets
+          where user_id = ${uid} and departed_at is null
+          limit 1
+        `;
+        return living.length > 0;
+      },
+      mintNestChild: async (opts) => {
+        const species = findSpecies(opts.speciesKey);
+        const row = await mintCompanion({
+          userId: opts.userId,
+          speciesKey: opts.speciesKey,
+          name: opts.name,
+          rarity: species?.rarity ?? "COMMON",
+          genotype: opts.genotype,
+          origin: "nest",
+          parentA: opts.parentA,
+          parentB: opts.parentB,
+          makeActive: opts.makeActive,
+        });
+        return row.view;
+      },
+    },
+    now,
+  );
 }
 
 function clutchView(row: ClutchRow, now = Date.now()): ClutchView {
-  let count = 1;
-  try {
-    const brood = JSON.parse(row.brood) as unknown[];
-    count = Array.isArray(brood) ? brood.length : 1;
-  } catch {
-    count = 1;
-  }
   return {
     id: row.id,
     species_key: row.species_key,
@@ -332,8 +331,8 @@ function clutchView(row: ClutchRow, now = Date.now()): ClutchView {
     parent_a: row.parent_a,
     parent_b: row.parent_b,
     due_at: asIso(row.due_at),
-    waiting: Date.parse(asIso(row.due_at)) > now,
-    count,
+    waiting: !isClutchDue(row.due_at, now),
+    count: parseBrood(row.brood).length,
   };
 }
 
