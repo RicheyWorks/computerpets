@@ -1,13 +1,27 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { toast, Toaster } from "sonner";
+import { CompanionRoom } from "@/components/desk/companion-room";
 import { PetCard } from "@/components/pet-card";
 import { RedirectToSignIn } from "@/lib/auth/gates";
 import { useCurrentUserState } from "@/lib/auth/use-current-user";
-import { getSanctuary, type CompanionView } from "@/lib/pets/actions";
+import { careForPet, getSanctuary, type CompanionView } from "@/lib/pets/actions";
+import { normalizeCare, type SanctuaryCare } from "@/lib/pets/care";
+import { livingByKey, RED_PANDA_KIND } from "@/lib/pets/living";
 import { departLine, extinctLines, fairHouse } from "@/lib/pets/nest";
 
-export const Route = createFileRoute("/collection")({ component: Collection });
+export const Route = createFileRoute("/collection")({
+  component: Collection,
+  head: () => ({
+    meta: [
+      { title: "The kennel — ComputerPets" },
+      {
+        name: "description",
+        content: "The kennel is a room. The cards stay paper.",
+      },
+    ],
+  }),
+});
 
 function Collection() {
   const { user, isPending } = useCurrentUserState();
@@ -51,67 +65,126 @@ function Collection() {
       .catch(() => setPets([]));
   }, [user]);
 
-  if (isPending) return <div className="h-64 animate-pulse rounded-[var(--radius-xl)] bg-surface" />;
+  if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;
+  if (pets === null) return <div className="h-dvh animate-pulse bg-surface" />;
+
+  const walker = pets.find((p) => p.is_active) ?? pets[0] ?? null;
+  const kind = walker ? livingByKey(walker.species_key) : RED_PANDA_KIND;
+  const walkerId = walker?.id;
+
+  async function persistCare(action: SanctuaryCare) {
+    if (!walkerId) return;
+    const next = await careForPet({ data: { petId: walkerId, action } });
+    setPets((prev) => prev?.map((p) => (p.id === next.id ? next : p)) ?? prev);
+    if (next.note) toast.message(next.note);
+    return normalizeCare({
+      hunger: next.hunger,
+      mood: next.mood,
+      energy: next.energy,
+      hygiene: next.hygiene,
+      health: next.health,
+      bornAt: next.bornAt,
+    });
+  }
 
   return (
-    <main className="space-y-8">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div className="space-y-2">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Kennel</p>
-          <h1 className="font-display text-4xl">The guests you keep.</h1>
-          <p className="max-w-xl text-sm text-muted">
-            The kennel guest is a room. Neglect can close a line. The nest still
-            keeps one.
+    <>
+      <Toaster theme="dark" position="bottom-center" />
+      <CompanionRoom
+        kind={kind}
+        name={walker?.name}
+        stage={walker?.stage}
+        guestKey={walker ? `kennel-${walker.id}` : "kennel"}
+        persistLocal={false}
+        seed={
+          walker
+            ? {
+                hunger: walker.hunger,
+                mood: walker.mood,
+                energy: walker.energy,
+                hygiene: walker.hygiene,
+                health: walker.health,
+                bornAt: walker.bornAt,
+              }
+            : undefined
+        }
+        onCare={walker ? persistCare : undefined}
+        detail="Kennel"
+        extraCare={
+          walker
+            ? [
+                { label: "Rest", action: "rest" },
+                { label: "Clean", action: "clean" },
+                { label: "Medicine", action: "medicine" },
+              ]
+            : undefined
+        }
+        line={
+          <p className="mt-3 max-w-sm text-sm text-muted">
+            The kennel is a room. The cards stay paper. Neglect can close a line.{" "}
+            <Link to="/hatch" className="text-fg no-underline hover:text-primary">
+              The hatchery is open.
+            </Link>
           </p>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <Button asChild variant="secondary">
-            <Link to="/nest">The nest</Link>
-          </Button>
-          <Button asChild variant="secondary">
-            <Link to="/hatch">Hatch another</Link>
-          </Button>
-        </div>
-      </header>
+        }
+        aside={
+          <div className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+            <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Kennel</p>
+              <h2 className="mt-1 font-display text-2xl">The guests you keep.</h2>
+              {pets.length === 0 ? (
+                <p className="mt-3 text-sm text-muted">
+                  The kennel is quiet. The hatchery is open. The nest waits.
+                </p>
+              ) : (
+                <ul className="mt-3 space-y-3">
+                  {pets.map((pet) => (
+                    <li key={pet.id}>
+                      <PetCard pet={pet} />
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </aside>
 
-      {pets === null ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-80 animate-pulse rounded-[var(--radius-xl)] bg-surface" />
-          ))}
-        </div>
-      ) : pets.length === 0 ? (
-        <div className="rounded-[var(--radius-xl)] border border-border bg-surface p-8">
-          <p className="font-display text-2xl">The kennel is quiet.</p>
-          <p className="mt-2 text-sm text-muted">The hatchery is open. The nest waits.</p>
-        </div>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {pets.map((pet) => (
-            <PetCard key={pet.id} pet={pet} />
-          ))}
-        </div>
-      )}
+            {ribbons.length > 0 ? (
+              <ul className="space-y-1 text-sm text-muted">
+                {ribbons.map((line) => (
+                  <li key={line}>{line}</li>
+                ))}
+              </ul>
+            ) : null}
 
-      {ribbons.length > 0 ? (
-        <ul className="space-y-1 text-sm text-muted">
-          {ribbons.map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ul>
-      ) : null}
+            {left.length > 0 ? <p className="text-sm text-muted">{left.join(" ")}</p> : null}
 
-      {left.length > 0 ? (
-        <p className="text-sm text-muted">{left.join(" ")}</p>
-      ) : null}
-
-      {gone.length > 0 ? (
-        <p className="text-sm text-muted">
-          {gone.join(" ")} The catalog still teaches the species. A draw can
-          bring a line home.
-        </p>
-      ) : null}
-    </main>
+            {gone.length > 0 ? (
+              <p className="text-sm text-muted">
+                {gone.join(" ")} The catalog still teaches the species. A draw can bring a line home.
+              </p>
+            ) : null}
+          </div>
+        }
+        footer={
+          <p>
+            <Link to="/hatch" className="text-fg no-underline hover:text-primary">
+              The hatchery
+            </Link>
+            {" · "}
+            <Link to="/nest" className="text-muted no-underline hover:text-fg">
+              Pair at the nest
+            </Link>
+            {" · "}
+            <Link to="/catalog" className="text-muted no-underline hover:text-fg">
+              The shelf
+            </Link>
+            {" · "}
+            <Link to="/meet" className="text-muted no-underline hover:text-fg">
+              The house
+            </Link>
+          </p>
+        }
+      />
+    </>
   );
 }

@@ -13,6 +13,10 @@ const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8"
 const meetSrc = readFileSync(join(root, "src/routes/meet.tsx"), "utf8");
 const cardSrc = readFileSync(join(root, "src/components/pet-card.tsx"), "utf8");
 const kennelSrc = readFileSync(join(root, "src/routes/collection.tsx"), "utf8");
+const hatchSrc = readFileSync(join(root, "src/routes/hatch.tsx"), "utf8");
+const nestSrc = readFileSync(join(root, "src/routes/nest.tsx"), "utf8");
+const deskSrc = readFileSync(join(root, "src/components/desk/desk-stage.tsx"), "utf8");
+const shellSrc = readFileSync(join(root, "src/components/app-shell.tsx"), "utf8");
 
 const genes = {
   eyes: ["A", "a"],
@@ -81,15 +85,38 @@ test("departed page does not mount a walking pet", () => {
   assert.doesNotMatch(petSrc, /<LivingPet/);
 });
 
-test("kennel cards hint the room without walking sprites", () => {
+test("the kennel is a room with one walker", () => {
+  assert.match(kennelSrc, /CompanionRoom/);
+  assert.match(kennelSrc, /persistLocal=\{false\}/);
+  assert.match(kennelSrc, /guestKey=\{walker \? `kennel-\$\{walker\.id\}` : "kennel"\}/);
+  assert.match(kennelSrc, /The kennel is a room/);
+  assert.match(kennelSrc, /The cards stay paper/);
+  assert.match(kennelSrc, /The guests you keep/);
+  assert.match(kennelSrc, /The hatchery is open/);
+  assert.doesNotMatch(kennelSrc, /Held tokens/);
+  assert.doesNotMatch(kennelSrc, /LivingPet/);
+  assert.doesNotMatch(kennelSrc, /pets\.map\(\(pet\) => \(\s*<LivingPet/);
+  assert.doesNotMatch(kennelSrc, /token_id/);
+});
+
+test("care on the kennel walker persists only that living guest", () => {
+  assert.match(kennelSrc, /onCare=\{walker \? persistCare : undefined\}/);
+  assert.match(kennelSrc, /careForPet/);
+  assert.match(kennelSrc, /petId: walkerId/);
+  assert.match(kennelSrc, /is_active/);
+  assert.match(kennelSrc, /RED_PANDA_KIND/);
+  assert.match(kennelSrc, /livingByKey/);
+});
+
+test("kennel cards stay paper and still open the guest room", () => {
   assert.match(cardSrc, /The kennel guest is a room/);
   assert.match(cardSrc, /from the nest/);
   assert.match(cardSrc, /lookHint/);
   assert.match(cardSrc, /pet\.stage/);
+  assert.match(cardSrc, /to="\/pets\/\$key"/);
   assert.doesNotMatch(cardSrc, /LivingPet/);
   assert.doesNotMatch(cardSrc, /pet\.token_id/);
-  assert.match(kennelSrc, /The kennel guest is a room/);
-  assert.doesNotMatch(kennelSrc, /Held tokens/);
+  assert.match(kennelSrc, /<PetCard pet=\{pet\} \/>/);
 });
 
 test("meet and demo stay the public door", () => {
@@ -99,4 +126,11 @@ test("meet and demo stay the public door", () => {
   assert.match(demoSrc, /CompanionRoom/);
   assert.doesNotMatch(demoSrc, /LIVING_KINDS\.map/);
   assert.doesNotMatch(roomSrc, /LIVING_KINDS\.map/);
+});
+
+test("hatch, nest, and desk stay on the same blotter", () => {
+  assert.match(hatchSrc, /persistLocal=\{false\}/);
+  assert.match(nestSrc, /persistLocal=\{false\}/);
+  assert.match(deskSrc, /CompanionRoom/);
+  assert.match(shellSrc, /pathname === "\/collection"/);
 });
