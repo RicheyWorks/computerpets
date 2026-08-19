@@ -36,7 +36,7 @@ function Catalog() {
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Shelf</p>
             <h2 className="mt-1 font-display text-2xl">The eighty.</h2>
             <p className="mt-2 text-sm text-muted">
-              On their shelves. By den, not by rarity. They will be walking when the page opens.
+              Eighty guests, on their shelves. By den, not by rarity. They will be walking when the page opens.
             </p>
           </aside>
 
