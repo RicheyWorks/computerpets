@@ -12,10 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.web3j.crypto.ECKeyPair;
+import org.web3j.crypto.Keys;
+import org.web3j.crypto.Sign;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.Request;
 import org.web3j.protocol.core.methods.response.EthCall;
+import org.web3j.utils.Numeric;
 
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +28,8 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,29 +59,16 @@ class EthereumNftServiceTest {
     }
 
     @Test
-    @DisplayName("verify denies everything when the allowlist is required but empty")
-    void verify_emptyAllowlist_denied() {
-        EthereumProperties props = new EthereumProperties();
-        props.setAllowlistRequired(true);
-        props.setRpcUrl("http://127.0.0.1:8545");
-        EthereumNftService service = new EthereumNftService(props, new NftCatalog(props), web3j);
-
-        VerificationResult result = service.verify(Map.of(
-                "walletAddress", WALLET,
-                "contractAddress", CONTRACT,
-                "tokenId", "1"
-        ));
-
-        assertThat(result.verified()).isFalse();
-        assertThat(result.reason()).contains("no official NFT collections");
+    @DisplayName("house default requires personal_sign")
+    void productionDefault_requireSignature_isTrue() {
+        assertThat(new EthereumProperties().isRequireSignature()).isTrue();
+        assertThat(EthereumProperties.unrestricted().isRequireSignature()).isFalse();
     }
 
     @Test
-    @DisplayName("verify requires personal_sign when configured")
-    void verify_requireSignature_missing_denied() {
-        EthereumProperties props = EthereumProperties.unrestricted();
-        props.setRequireSignature(true);
-        EthereumNftService service = new EthereumNftService(props, new NftCatalog(props), web3j);
+    @DisplayName("verify denies an unsigned keeper before eth_call")
+    void verify_missingSignature_deniedWithoutEthCall() {
+        EthereumNftService service = houseService(allowlistedGenesis(NftStandard.ERC721, Map.of()));
 
         VerificationResult result = service.verify(Map.of(
                 "walletAddress", WALLET,
@@ -84,6 +78,45 @@ class EthereumNftServiceTest {
 
         assertThat(result.verified()).isFalse();
         assertThat(result.reason()).contains("signature");
+
+        VerificationResult messageOnly = service.verify(Map.of(
+                "walletAddress", WALLET,
+                "contractAddress", CONTRACT,
+                "tokenId", TOKEN_ID,
+                "message", "ComputerPets verify nft 1"
+        ));
+        assertThat(messageOnly.verified()).isFalse();
+        assertThat(messageOnly.reason()).contains("signature");
+        verify(web3j, never()).ethCall(any(), any());
+    }
+
+    @Test
+    @DisplayName("verify denies a signature that does not recover to the wallet")
+    void verify_badSignature_deniedWithoutEthCall() throws Exception {
+        SignedKeeper keeper = SignedKeeper.generate();
+        EthereumNftService service = houseService(allowlistedGenesis(NftStandard.ERC721, Map.of()));
+
+        Map<String, String> request = signedRequest(keeper, CONTRACT, TOKEN_ID);
+        request.put("signature", "0x" + "ab".repeat(65));
+
+        VerificationResult result = service.verify(request);
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("signature");
+        verify(web3j, never()).ethCall(any(), any());
+    }
+
+    @Test
+    @DisplayName("verify denies everything when the allowlist is required but empty")
+    void verify_emptyAllowlist_denied() throws Exception {
+        SignedKeeper keeper = SignedKeeper.generate();
+        EthereumNftService service = houseService();
+
+        VerificationResult result = service.verify(signedRequest(keeper, CONTRACT, "1"));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("no official NFT collections");
+        verify(web3j, never()).ethCall(any(), any());
     }
 
     @Test
@@ -214,65 +247,61 @@ class EthereumNftServiceTest {
 
     @Test
     @DisplayName("verify denies unknown contracts when the allowlist is required")
-    void verify_unknownContract_deniedWhenAllowlisted() {
-        EthereumNftService locked = serviceWith(allowlistedGenesis(NftStandard.ERC721, Map.of()));
+    void verify_unknownContract_deniedWhenAllowlisted() throws Exception {
+        SignedKeeper keeper = SignedKeeper.generate();
+        EthereumNftService locked = houseService(allowlistedGenesis(NftStandard.ERC721, Map.of()));
 
-        VerificationResult result = locked.verify(Map.of(
-                "walletAddress", WALLET,
-                "contractAddress", "0x9999999999999999999999999999999999999999",
-                "tokenId", "1"
-        ));
+        VerificationResult result = locked.verify(signedRequest(
+                keeper, "0x9999999999999999999999999999999999999999", "1"));
 
         assertThat(result.verified()).isFalse();
         assertThat(result.reason()).contains("official");
+        verify(web3j, never()).ethCall(any(), any());
     }
 
     @Test
     @DisplayName("verify denies an unmapped token on a collection that binds token → pet")
-    void verify_unmappedToken_denied() {
-        EthereumNftService locked = serviceWith(allowlistedGenesis(NftStandard.ERC721, Map.of("1", "dragon")));
+    void verify_unmappedToken_denied() throws Exception {
+        SignedKeeper keeper = SignedKeeper.generate();
+        EthereumNftService locked = houseService(allowlistedGenesis(NftStandard.ERC721, Map.of("1", "dragon")));
 
-        VerificationResult result = locked.verify(Map.of(
-                "walletAddress", WALLET,
-                "contractAddress", CONTRACT,
-                "tokenId", "99",
-                "petType", "dragon"
-        ));
+        Map<String, String> request = signedRequest(keeper, CONTRACT, "99");
+        request.put("petType", "dragon");
+
+        VerificationResult result = locked.verify(request);
 
         assertThat(result.verified()).isFalse();
         assertThat(result.reason()).contains("not a ComputerPets entitlement");
+        verify(web3j, never()).ethCall(any(), any());
     }
 
     @Test
     @DisplayName("verify denies a petType that does not match the token binding")
-    void verify_petMismatch_denied() {
-        EthereumNftService locked = serviceWith(allowlistedGenesis(NftStandard.ERC721, Map.of("1", "dragon")));
+    void verify_petMismatch_denied() throws Exception {
+        SignedKeeper keeper = SignedKeeper.generate();
+        EthereumNftService locked = houseService(allowlistedGenesis(NftStandard.ERC721, Map.of("1", "dragon")));
 
-        VerificationResult result = locked.verify(Map.of(
-                "walletAddress", WALLET,
-                "contractAddress", CONTRACT,
-                "tokenId", "1",
-                "petType", "red_panda"
-        ));
+        Map<String, String> request = signedRequest(keeper, CONTRACT, "1");
+        request.put("petType", "red_panda");
+
+        VerificationResult result = locked.verify(request);
 
         assertThat(result.verified()).isFalse();
         assertThat(result.reason()).contains("bound to petType");
+        verify(web3j, never()).ethCall(any(), any());
     }
 
     @Test
-    @DisplayName("verify grants the mapped pet when the wallet owns the bound token")
+    @DisplayName("verify grants the mapped pet when a signed keeper owns the bound token")
     void verify_mappedToken_grantsBoundPet() throws Exception {
-        EthereumNftService locked = serviceWith(allowlistedGenesis(NftStandard.ERC721, Map.of("1", "dragon")));
-        stubEthCall(OWNER_RESPONSE);
+        SignedKeeper keeper = SignedKeeper.generate();
+        EthereumNftService locked = houseService(allowlistedGenesis(NftStandard.ERC721, Map.of("1", "dragon")));
+        stubEthCall(keeper.ownerOfResponse());
 
-        VerificationResult result = locked.verify(Map.of(
-                "walletAddress", WALLET,
-                "contractAddress", CONTRACT,
-                "tokenId", "1"
-        ));
+        VerificationResult result = locked.verify(signedRequest(keeper, CONTRACT, "1"));
 
         assertThat(result.verified()).isTrue();
-        assertThat(result.ownerId()).isEqualTo(WALLET.toLowerCase());
+        assertThat(result.ownerId()).isEqualTo(keeper.wallet.toLowerCase());
         assertThat(result.petKey()).isEqualTo("dragon");
     }
 
@@ -305,13 +334,65 @@ class EthereumNftServiceTest {
         assertThat(service.ownsToken(WALLET, CONTRACT, TOKEN_ID)).isFalse();
     }
 
-    private EthereumNftService serviceWith(EthereumProperties.CollectionSpec spec) {
+    /** House door: allowlist required, personal_sign required (production default). */
+    private EthereumNftService houseService() {
+        return houseService(null);
+    }
+
+    private EthereumNftService houseService(EthereumProperties.CollectionSpec spec) {
         EthereumProperties props = new EthereumProperties();
         props.setAllowlistRequired(true);
-        props.setRequireSignature(false);
         props.setRpcUrl("http://127.0.0.1:8545");
-        props.setCollections(List.of(spec));
+        if (spec != null) {
+            props.setCollections(List.of(spec));
+        }
         return new EthereumNftService(props, new NftCatalog(props), web3j);
+    }
+
+    /** Isolated ownsToken helper — same allowlist fixture, no verify grant path. */
+    private EthereumNftService serviceWith(EthereumProperties.CollectionSpec spec) {
+        return houseService(spec);
+    }
+
+    private static Map<String, String> signedRequest(SignedKeeper keeper, String contract, String tokenId) {
+        Map<String, String> request = new LinkedHashMap<>();
+        request.put("walletAddress", keeper.wallet);
+        request.put("contractAddress", contract);
+        request.put("tokenId", tokenId);
+        request.put("message", keeper.message);
+        request.put("signature", keeper.signature);
+        return request;
+    }
+
+    private static final class SignedKeeper {
+        final String wallet;
+        final String message;
+        final String signature;
+
+        private SignedKeeper(String wallet, String message, String signature) {
+            this.wallet = wallet;
+            this.message = message;
+            this.signature = signature;
+        }
+
+        static SignedKeeper generate() throws Exception {
+            ECKeyPair keys = Keys.createEcKeyPair();
+            String wallet = "0x" + Keys.getAddress(keys);
+            String message = "ComputerPets verify nft 1";
+            Sign.SignatureData sig = Sign.signPrefixedMessage(
+                    message.getBytes(StandardCharsets.UTF_8), keys);
+            byte[] packed = new byte[65];
+            System.arraycopy(sig.getR(), 0, packed, 0, 32);
+            System.arraycopy(sig.getS(), 0, packed, 32, 32);
+            packed[64] = sig.getV()[0];
+            return new SignedKeeper(wallet, message, Numeric.toHexString(packed));
+        }
+
+        String ownerOfResponse() {
+            String hex = wallet.startsWith("0x") ? wallet.substring(2) : wallet;
+            hex = hex.toLowerCase();
+            return "0x" + "0".repeat(64 - hex.length()) + hex;
+        }
     }
 
     private static EthereumProperties.CollectionSpec allowlistedGenesis(

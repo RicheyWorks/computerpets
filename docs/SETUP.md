@@ -453,7 +453,8 @@ and [Ecom Web APIs](https://dev.epicgames.com/docs/web-api-ref/ecom-web-apis).
 
 NFT verify is allowlisted by default. Until `ethereum.collections` lists a live
 contract, `POST /api/verify/nft` returns 403 (`no official NFT collections configured`).
-See [NFT.md](NFT.md) for the full contract.
+A named wallet is not enough: `personal_sign` must prove the keeper holds the keys
+(`ethereum.require-signature: true`). See [NFT.md](NFT.md) for the full contract.
 
 | Variable            | Purpose                                      |
 |---------------------|----------------------------------------------|
@@ -463,7 +464,7 @@ See [NFT.md](NFT.md) for the full contract.
 ethereum:
   rpc-url: ${ETHEREUM_RPC_URL}
   allowlist-required: true
-  require-signature: false
+  require-signature: true
   collections:
     - address: "0xYourOfficialComputerPetsContract"
       standard: ERC721

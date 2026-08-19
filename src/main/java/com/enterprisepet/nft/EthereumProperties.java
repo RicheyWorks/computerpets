@@ -32,9 +32,11 @@ public class EthereumProperties {
 
     /**
      * When {@code true}, the request must include a {@code personal_sign}
-     * signature proving control of {@code walletAddress}.
+     * signature proving control of {@code walletAddress}. Naming a wallet
+     * does not sit you here. Production default is {@code true} (fail closed,
+     * like the empty Steam and Store doors).
      */
-    private boolean requireSignature = false;
+    private boolean requireSignature = true;
 
     private List<CollectionSpec> collections = new ArrayList<>();
 
@@ -86,7 +88,11 @@ public class EthereumProperties {
         return u.contains("YOUR_KEY") || u.contains("YOUR_ALCHEMY") || u.contains("YOUR-KEY");
     }
 
-    /** Test helper: accept any contract, no signature, local RPC. */
+    /**
+     * Test helper: accept any contract, no signature, local RPC.
+     * Isolated {@code ownsToken} RPC checks only — house {@code verify}
+     * uses the signed door.
+     */
     static EthereumProperties unrestricted() {
         EthereumProperties p = new EthereumProperties();
         p.setAllowlistRequired(false);

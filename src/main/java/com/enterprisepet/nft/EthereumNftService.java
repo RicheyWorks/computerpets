@@ -34,8 +34,12 @@ import java.util.regex.Pattern;
  * On-chain NFT ownership provider (ERC-721 {@code ownerOf} / ERC-1155 {@code balanceOf}).
  *
  * <p>Input is validated before any RPC call: well-formed addresses, non-negative
- * token ids, optional {@code personal_sign} proof, and (by default) an official
- * collection allowlist with optional token → pet bindings.
+ * token ids, {@code personal_sign} proof that the requester holds
+ * {@code walletAddress}, and (by default) an official collection allowlist
+ * with optional token → pet bindings. Naming a wallet is not enough — the
+ * keeper must sign. Production {@code ethereum.require-signature} is true
+ * (fail closed). An empty official allowlist still denies (ADR 0004). Do
+ * not invent a live collection address.
  */
 @Service
 @ConditionalOnProperty(
@@ -257,6 +261,12 @@ public class EthereumNftService implements OwnershipProvider {
     }
 
     /**
+     * House door: {@code personal_sign} must recover to {@code wallet}.
+     * Production {@code ethereum.require-signature} is true, so a request
+     * without message+signature is denied here — before the allowlist and
+     * before {@code eth_call}. {@link EthereumProperties#unrestricted()}
+     * leaves the flag off for isolated {@code ownsToken} tests.
+     *
      * @return a denied result when the signature policy fails; {@code null} when the check
      *         is skipped or the recovered signer matches {@code wallet}
      */
