@@ -46,6 +46,7 @@ import { roomOf } from "@/lib/pets/rooms";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
+/** Desk local save keeps its own line; sanctuary meters overlay. Guest rooms take the remote line. */
 function mergePersist(local: CareStats, remote: CareStats): CareStats {
   return {
     ...local,
@@ -273,8 +274,9 @@ export function CompanionRoom({
     try {
       const remote = await onCare(action);
       if (remote) {
-        setStats((prev) => mergePersist(prev, remote));
-        return remote;
+        const next = persistLocal ? mergePersist(statsRef.current, remote) : normalizeCare(remote);
+        setStats(next);
+        return next;
       }
       return statsRef.current;
     } finally {
@@ -625,11 +627,20 @@ export function CompanionRoom({
                           issue("sit");
                           return;
                         }
-                        const next = applyShed(statsRef.current);
-                        setStats(next);
-                        say(shedLine(kind.key));
-                        note(`${displayName} shed.`);
-                        issue("sit");
+                        void (async () => {
+                          if (onCare && !persistLocal) {
+                            try {
+                              await persist("shed");
+                            } catch {
+                              return;
+                            }
+                          } else {
+                            setStats(applyShed(statsRef.current));
+                          }
+                          say(shedLine(kind.key));
+                          note(`${displayName} shed.`);
+                          issue("sit");
+                        })();
                       },
                     },
                   ]

@@ -63,6 +63,88 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
   };
 }
 
+/** The living line the meters do not already keep on companion_pets. */
+export type CareLine = {
+  bond: number;
+  sick: boolean;
+  hidden: boolean;
+  mess: MessPile[];
+  gifts: MessPile[];
+  shedAt: number;
+};
+
+const NEW_LINE: CareLine = {
+  bond: 18,
+  sick: false,
+  hidden: false,
+  mess: [],
+  gifts: [],
+  shedAt: 0,
+};
+
+export function packLine(stats: Pick<CareStats, keyof CareLine>): string {
+  const line: CareLine = {
+    bond: clampStat(stats.bond),
+    sick: Boolean(stats.sick),
+    hidden: Boolean(stats.hidden),
+    mess: Array.isArray(stats.mess) ? stats.mess.slice(0, 6) : [],
+    gifts: Array.isArray(stats.gifts) ? stats.gifts.slice(0, 3) : [],
+    shedAt: typeof stats.shedAt === "number" ? stats.shedAt : 0,
+  };
+  return JSON.stringify(line);
+}
+
+export function unpackLine(raw: unknown): CareLine {
+  if (raw == null || raw === "") return { ...NEW_LINE };
+  let parsed: unknown = raw;
+  if (typeof raw === "string") {
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      return { ...NEW_LINE };
+    }
+  }
+  if (!parsed || typeof parsed !== "object") return { ...NEW_LINE };
+  const o = parsed as Partial<CareLine>;
+  return {
+    bond: clampStat(typeof o.bond === "number" ? o.bond : NEW_LINE.bond),
+    sick: Boolean(o.sick),
+    hidden: Boolean(o.hidden),
+    mess: Array.isArray(o.mess) ? o.mess.slice(0, 6) : [],
+    gifts: Array.isArray(o.gifts) ? o.gifts.slice(0, 3) : [],
+    shedAt: typeof o.shedAt === "number" ? o.shedAt : 0,
+  };
+}
+
+export type CompanionCareRow = {
+  hunger: number;
+  mood: number;
+  energy: number;
+  health?: number | null;
+  hygiene?: number | null;
+  bornAt: number;
+  lastTick: number;
+  line?: unknown;
+};
+
+/** Hydrate a sanctuary row. A missing line is New / empty blotter — they never had one. */
+export function seedCareFromRow(row: CompanionCareRow, now = Date.now()): CareStats {
+  const line = unpackLine(row.line);
+  return normalizeCare(
+    {
+      hunger: Number(row.hunger),
+      mood: Number(row.mood),
+      energy: Number(row.energy),
+      hygiene: row.hygiene == null ? 86 : Number(row.hygiene),
+      health: row.health == null ? 92 : Number(row.health),
+      bornAt: row.bornAt,
+      lastTick: row.lastTick,
+      ...line,
+    },
+    now,
+  );
+}
+
 export type LifeStage = "hatchling" | "grown" | "elder";
 
 export function stageOf(stats: CareStats, now = Date.now()): LifeStage {
@@ -95,7 +177,23 @@ export function liftFromFloor(stats: CareStats): CareStats {
   return { ...stats, health: 12 };
 }
 
-export type SanctuaryCare = "feed" | "play" | "rest" | "clean" | "medicine";
+export type SanctuaryCare = "feed" | "play" | "rest" | "clean" | "medicine" | "shed";
+
+const SHED_DUE_MS = 8 * 60 * 60 * 1000;
+
+export function applyShed(stats: Partial<CareStats>, now = Date.now()): CareStats {
+  const s = normalizeCare(stats, now);
+  const gifts = s.gifts.length >= 3 ? s.gifts : [...s.gifts, { id: now, x: 18 + Math.random() * 64, kind: "shed" as const }];
+  return {
+    ...s,
+    hygiene: clampStat(s.hygiene + 28),
+    mood: clampStat(s.mood + 12),
+    health: clampStat(s.health + 8),
+    bond: clampStat(s.bond + 3),
+    shedAt: now,
+    gifts,
+  };
+}
 
 export function applySanctuaryCare(
   action: SanctuaryCare,
@@ -113,6 +211,10 @@ export function applySanctuaryCare(
   if (action === "play") return { stats: applyPlay(s) };
   if (action === "rest") return { stats: liftFromFloor(applyRest(s)) };
   if (action === "clean") return { stats: liftFromFloor(applyClean(s)) };
+  if (action === "shed") {
+    if (now - s.shedAt < SHED_DUE_MS) return { stats: s };
+    return { stats: applyShed(s, now) };
+  }
   return { stats: liftFromFloor(applyMedicine(s)) };
 }
 
@@ -149,7 +251,7 @@ function floorHitAt(prior: CareStats, lastTick: number, now: number, speciesKey:
 }
 
 /**
- * Tick a sanctuary companion. Persist the result (health, hygiene, floor_since,
+ * Tick a sanctuary companion. Persist the result (meters, line, floor_since,
  * departed_at). Health at the floor for FLOOR_STRETCH_MS, or Ghost’s week, and they leave.
  */
 export function tickSanctuary(

@@ -106,6 +106,10 @@ test("care on the kennel walker persists only that living guest", () => {
   assert.match(kennelSrc, /is_active/);
   assert.match(kennelSrc, /RED_PANDA_KIND/);
   assert.match(kennelSrc, /livingByKey/);
+  assert.match(kennelSrc, /seed=\{walker \? normalizeCare\(walker\) : undefined\}/);
+  assert.match(kennelSrc, /return normalizeCare\(next\)/);
+  assert.match(petSrc, /seed=\{normalizeCare\(pet\)\}/);
+  assert.match(petSrc, /return normalizeCare\(next\)/);
 });
 
 test("kennel cards stay paper and still open the guest room", () => {

@@ -78,14 +78,7 @@ function Collection() {
     const next = await careForPet({ data: { petId: walkerId, action } });
     setPets((prev) => prev?.map((p) => (p.id === next.id ? next : p)) ?? prev);
     if (next.note) toast.message(next.note);
-    return normalizeCare({
-      hunger: next.hunger,
-      mood: next.mood,
-      energy: next.energy,
-      hygiene: next.hygiene,
-      health: next.health,
-      bornAt: next.bornAt,
-    });
+    return normalizeCare(next);
   }
 
   return (
@@ -97,18 +90,7 @@ function Collection() {
         stage={walker?.stage}
         guestKey={walker ? `kennel-${walker.id}` : "kennel"}
         persistLocal={false}
-        seed={
-          walker
-            ? {
-                hunger: walker.hunger,
-                mood: walker.mood,
-                energy: walker.energy,
-                hygiene: walker.hygiene,
-                health: walker.health,
-                bornAt: walker.bornAt,
-              }
-            : undefined
-        }
+        seed={walker ? normalizeCare(walker) : undefined}
         onCare={walker ? persistCare : undefined}
         detail="Kennel"
         extraCare={
