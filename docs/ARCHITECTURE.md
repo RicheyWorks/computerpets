@@ -276,7 +276,7 @@ All controllers return `ResponseEntity<?>` and rely on `GlobalExceptionHandler` 
 **Current implementations:**
 - `steam/SteamService` – real Steam Web API integration + `SteamVerifyRequest.from(map)` + conditional registration.
 - `nft/EthereumNftService` – Web3j `eth_call` to ERC-721 `ownerOf` / ERC-1155 `balanceOf` with address validation, official collection allowlist, token→pet binding, optional `personal_sign`, and timed-out RPC.
-- `microsoft/MicrosoftStoreService` – RestClient to Microsoft Collections v9 `publisherQuery` (XBL3.0 or Bearer; optional `Signature`). Prod still refuses `microsoft.dev-mode`. The live Store ID is a publish-time config, not invented here.
+- `microsoft/MicrosoftStoreService` – RestClient to Microsoft Collections v9 `publisherQuery` (XBL3.0 or Bearer; optional `Signature`). The house only opens when `storeProductId` is on `microsoft.product-id` / `MICROSOFT_PRODUCT_ID` (empty fails closed). Prod still refuses `microsoft.dev-mode`. Do not invent a live Store ID.
 - `itch/ItchService` – itch.io download-key receipt verify (`GET /games/{id}/download_keys`) with developer API key, optional `itch.game-id` allowlist, circuit breaker.
 - `epic/EpicService` – EOS Auth `client_credentials` token exchange + Ecom v3 ownership (`GET /epic/ecom/v3/platforms/{platform}/identities/{accountId}/ownership`) with fail-closed Developer Portal secrets, optional sandbox/catalog-item allowlist, circuit breaker.
 
@@ -529,7 +529,7 @@ Many of these decisions are explicitly called out as intentional in the code com
 - External storage (CDN) keeps the Java process from becoming a bandwidth bottleneck.
 
 ### Current Weaknesses & Gaps (from code + AUDIT.md)
-- ~~**P0**: Steam and Microsoft providers are no-op stubs**~~ → Steam uses the Web API. Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; live Store ID is still a publish-time config, not invented here. Provider toggles via `ownership.providers.*.enabled` were added for fine-grained control.
+- ~~**P0**: Steam and Microsoft providers are no-op stubs**~~ → Steam uses the Web API and hangs `steam.app-id`. Microsoft Store verify uses Collections v9 `publisherQuery` and hangs `microsoft.product-id` (empty fails closed). Prod still refuses dev-mode. Do not invent a live Store ID. Provider toggles via `ownership.providers.*.enabled` were added for fine-grained control.
 - ~~**P0**: NFT ownership check uses fragile `String.contains(substring(2))` parsing**~~ → **Completed**, then hardened (Aug 2026): `FunctionReturnDecoder`, checksum-insensitive address compare, official collection allowlist, token→pet binding, ERC-1155, optional `personal_sign`.
 - No persistence → impossible to revoke a license or detect replays beyond the 365-day expiry.
 - ~~Rate-limit buckets are in-memory only~~ → Redis-backed Bucket4j (Lettuce).

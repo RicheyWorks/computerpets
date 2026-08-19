@@ -60,11 +60,13 @@ a Redis password the app cannot read.
 
 Optional provider env (add to the Secret or ConfigMap if you have real
 values — do not invent a collection address, itch game id, or Epic
-sandbox): `STEAM_API_KEY`, `STEAM_APP_ID`, `ETHEREUM_RPC_URL`, `ITCH_API_KEY`,
+sandbox): `STEAM_API_KEY`, `STEAM_APP_ID`, `MICROSOFT_PRODUCT_ID`,
+`ETHEREUM_RPC_URL`, `ITCH_API_KEY`,
 `ITCH_GAME_ID`, `EPIC_CLIENT_ID`, `EPIC_CLIENT_SECRET`,
 `EPIC_DEPLOYMENT_ID`, `EPIC_SANDBOX_ID`, `EPIC_CATALOG_ITEM_ID`,
-`OTEL_EXPORTER_OTLP_ENDPOINT`. Do not invent a live Steam AppID; leave
-`STEAM_APP_ID` empty until a ComputerPets door exists.
+`OTEL_EXPORTER_OTLP_ENDPOINT`. Do not invent a live Steam AppID or
+Microsoft Store product id; leave `STEAM_APP_ID` and
+`MICROSOFT_PRODUCT_ID` empty until a ComputerPets door exists.
 
 ## Image
 

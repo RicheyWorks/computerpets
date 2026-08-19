@@ -105,7 +105,9 @@ $env:MICROSOFT_DEV_MODE = "true"
 
 Never set this with `SPRING_PROFILES_ACTIVE=prod`. `ProductionProfileGuard` refuses to start.
 
-Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses dev-mode; the live Store ID is still a publish-time config, not invented here.
+Microsoft Store verify uses Collections v9 `publisherQuery`; prod still refuses
+dev-mode. The house door is `MICROSOFT_PRODUCT_ID` — empty fails closed. Do not
+invent a live Store id.
 
 ---
 
@@ -231,7 +233,8 @@ The Electron overlay is still `cd desktop && npm start`.
 | `JWT_SECRET_KEY`          | Yes      | —       | JWT signing key (base64) |
 | `BUNDLE_SIGNING_KEY`      | Yes      | —       | CDN URL signing key (base64) |
 | `ADMIN_API_KEY`           | Yes      | —       | Admin API + `/admin` ledger (`X-Admin-Key` header) |
-| `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only) |
+| `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only). House door still applies. |
+| `MICROSOFT_PRODUCT_ID`    | No       | empty   | House Microsoft Store product id / comma allowlist. Empty fails closed (do not invent one) |
 | `STEAM_API_KEY`           | No       | placeholder | Steam Web API key; placeholder or blank fails closed |
 | `STEAM_APP_ID`            | No       | empty   | House Steam AppID / comma allowlist. Empty fails closed (do not invent one) |
 | `ITCH_API_KEY`            | No       | placeholder | itch.io developer API key for download-key receipt verify |
@@ -352,6 +355,34 @@ steam:
 
 `POST /api/verify/steam` still expects `steamId` and `appId`. A foreign
 `appId` is denied before Steam is asked.
+
+### Microsoft Store
+
+Microsoft Store verify asks Collections v9 `publisherQuery` whether the
+keeper owns the product they named. The house only opens when that
+`storeProductId` is on `MICROSOFT_PRODUCT_ID` (one door, or a comma
+allowlist) and Collections says they own it. An empty
+`MICROSOFT_PRODUCT_ID` fails closed — owning any Microsoft Store
+product does not sit you here. Do not invent a live ComputerPets Store
+id; leave the door empty until one exists. `MICROSOFT_DEV_MODE` is a
+local bypass only; the house door still applies, and prod still refuses it.
+
+| Variable               | Purpose                                                         |
+|------------------------|-----------------------------------------------------------------|
+| `MICROSOFT_PRODUCT_ID` | House Store product id / comma allowlist; empty fails closed    |
+| `MICROSOFT_DEV_MODE`   | Local bypass of Collections; never on prod                      |
+
+```yaml
+microsoft:
+  tenant: consumers
+  collections-url: https://collections.mp.microsoft.com/v9.0/collections/publisherQuery
+  product-id: ${MICROSOFT_PRODUCT_ID:}
+  dev-mode: ${MICROSOFT_DEV_MODE:false}
+```
+
+`POST /api/verify/microsoft` still expects `xstsToken` and
+`storeProductId`. A foreign `storeProductId` is denied before
+Collections is asked.
 
 ### Itch.io
 

@@ -26,13 +26,21 @@ import java.net.http.HttpClient;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * Verifies that a Microsoft account owns a Microsoft Store product.
+ * Asks Microsoft whether a keeper owns a house Store product.
+ *
+ * <p>The client may name a {@code storeProductId}. The house only opens when
+ * that id is on the configured door ({@code microsoft.product-id} / allowlist)
+ * and Collections says they own it. An empty door fails closed — owning any
+ * Microsoft Store product does not sit you here. Do not invent a live
+ * ComputerPets Store id; leave {@code microsoft.product-id} empty until one
+ * exists.
  *
  * <p>Real flow: the client obtains an XSTS token via the Xbox Live auth chain
  * (or a Bearer token for Entra / User Store ID) and POSTs it here. We call
@@ -47,9 +55,9 @@ import java.util.Set;
  * X-token auth).
  *
  * <p>For local development without a real XSTS token, set
- * {@code microsoft.dev-mode=true} to bypass the network call and grant
- * ownership for any non-blank input. A loud warning is logged so this never
- * silently leaks into production. {@code ProductionProfileGuard} refuses that
+ * {@code microsoft.dev-mode=true} to bypass the network call. The house
+ * door still applies. A loud warning is logged so this never silently
+ * leaks into production. {@code ProductionProfileGuard} refuses that
  * flag on the {@code prod} profile.
  *
  * @see <a href="https://learn.microsoft.com/en-us/gaming/gdk/docs/store/commerce/service-to-service/microsoft-store-apis/xstore-v9-query-for-products">
@@ -83,6 +91,13 @@ public class MicrosoftStoreService implements OwnershipProvider {
     @Value("${microsoft.collections-url:" + DEFAULT_COLLECTIONS_URL + "}")
     private String collectionsUrl;
 
+    /**
+     * House Microsoft Store door. Empty, or a single product id, or a
+     * comma/whitespace allowlist. Empty fails closed.
+     */
+    @Value("${microsoft.product-id:}")
+    private String configuredProductId;
+
     @Value("${microsoft.dev-mode:false}")
     private boolean devMode;
 
@@ -103,9 +118,15 @@ public class MicrosoftStoreService implements OwnershipProvider {
     }
 
     MicrosoftStoreService(RestClient restClient, boolean devMode, String collectionsUrl) {
+        this(restClient, devMode, collectionsUrl, "");
+    }
+
+    MicrosoftStoreService(RestClient restClient, boolean devMode, String collectionsUrl,
+                          String configuredProductId) {
         this.restClient = restClient;
         this.devMode = devMode;
         this.collectionsUrl = collectionsUrl;
+        this.configuredProductId = configuredProductId;
     }
 
     @PostConstruct
@@ -127,8 +148,9 @@ public class MicrosoftStoreService implements OwnershipProvider {
         }
         if (devMode) {
             log.warn("===================================================================");
-            log.warn(" MicrosoftStoreService is in DEV MODE. All ownership checks return");
-            log.warn(" true. NEVER enable microsoft.dev-mode=true outside development.");
+            log.warn(" MicrosoftStoreService is in DEV MODE. Collections is not asked.");
+            log.warn(" The house door still applies. NEVER enable microsoft.dev-mode=true");
+            log.warn(" outside development.");
             log.warn("===================================================================");
         } else {
             log.info("MicrosoftStoreService ready. tenant={} collectionsUrl={}",
@@ -148,6 +170,13 @@ public class MicrosoftStoreService implements OwnershipProvider {
         if (isPlaceholderProductId(typed.storeProductId())) {
             return VerificationResult.denied("storeProductId looks like a placeholder");
         }
+        Set<String> houseProductIds = houseProductIds();
+        if (houseProductIds.isEmpty()) {
+            return VerificationResult.denied("the Microsoft Store door is not hung yet");
+        }
+        if (!isHouseProduct(typed.storeProductId(), houseProductIds)) {
+            return VerificationResult.denied("storeProductId is not a house Microsoft Store door");
+        }
 
         String accountId = typed.microsoftAccountId() == null ? "" : typed.microsoftAccountId();
         String userHash = typed.userHash() == null ? "" : typed.userHash();
@@ -161,8 +190,9 @@ public class MicrosoftStoreService implements OwnershipProvider {
     }
 
     /**
-     * Checks whether the bearer of the token has a Microsoft Store entitlement
-     * for the given product ID. In dev mode this short-circuits to {@code true}.
+     * Asks Collections whether the bearer owns {@code storeProductId}.
+     * The house door is {@link #verify}; this only hears Microsoft.
+     * In dev mode this short-circuits to {@code true}.
      *
      * <p>The response field names (camelCase {@code productId} vs PascalCase
      * {@code ProductId}) vary between Microsoft Store endpoints — we accept either.
@@ -257,6 +287,37 @@ public class MicrosoftStoreService implements OwnershipProvider {
             log.warn("Could not parse Microsoft Store response: {}", e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * Configured house product ids from {@code microsoft.product-id} (single
+     * or comma/whitespace allowlist). Empty means the door is not hung.
+     */
+    Set<String> houseProductIds() {
+        LinkedHashSet<String> ids = new LinkedHashSet<>();
+        addProductIds(ids, configuredProductId);
+        return Set.copyOf(ids);
+    }
+
+    private static void addProductIds(Set<String> dest, String raw) {
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        for (String part : raw.split("[,\\s]+")) {
+            if (!part.isBlank()) {
+                dest.add(part.trim());
+            }
+        }
+    }
+
+    /** Collections matches product ids without regard to case. */
+    private static boolean isHouseProduct(String productId, Set<String> houseProductIds) {
+        for (String house : houseProductIds) {
+            if (house.equalsIgnoreCase(productId)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static boolean isPlaceholderProductId(String productId) {
