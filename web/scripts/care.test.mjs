@@ -139,6 +139,49 @@ test("species-true depart verbs stay quiet", () => {
   assert.match(G.departLine("Pact", "lichen"), /pact thinned/);
 });
 
+test("the desk ages from lastTick; saveCare keeps the window", () => {
+  const hours = 3 * 3600 * 1000;
+  const then = now - hours;
+  const prior = guest({ hunger: 78, lastTick: then }, then);
+  const live = C.tickCare("dog", prior, now);
+  assert.equal(live.hunger, 28);
+  assert.ok(live.mood < prior.mood);
+  assert.ok(live.energy < prior.energy);
+  assert.ok(live.hygiene < prior.hygiene);
+  assert.equal(live.lastTick, now);
+
+  const mem = new Map();
+  globalThis.localStorage = {
+    getItem: (k) => (mem.has(k) ? mem.get(k) : null),
+    setItem: (k, v) => {
+      mem.set(k, String(v));
+    },
+    removeItem: (k) => {
+      mem.delete(k);
+    },
+    clear: () => mem.clear(),
+  };
+
+  C.saveCare("computerpets.desk.dog.v1", prior);
+  const stored = JSON.parse(mem.get("computerpets.desk.dog.v1"));
+  assert.equal(stored.lastTick, then);
+  assert.equal(stored.hunger, 78);
+
+  const loaded = C.loadCare("computerpets.desk.dog.v1", undefined, "dog", now);
+  assert.equal(loaded.hunger, 28);
+  assert.equal(loaded.lastTick, now);
+});
+
+test("adult Luna still does not eat, and a desk tick does not empty her", () => {
+  const grownBorn = now - 2 * DAY;
+  const adult = guest({ hunger: 40, lastTick: now - 3 * 3600 * 1000 }, grownBorn);
+  assert.equal(C.adultLuna("luna", adult, now), true);
+  assert.equal(C.applyFeedFor("luna", adult, now).hunger, 40);
+  const aged = C.tickCare("luna", adult, now);
+  assert.equal(aged.hunger, 40);
+  assert.ok(aged.mood < adult.mood);
+});
+
 test("sanctuary persists health and the floor stretch; kennel and nest show the stage", () => {
   assert.match(migration, /health/);
   assert.match(migration, /hygiene/);
