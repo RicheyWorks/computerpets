@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { z } from "zod";
 import { LiveStage } from "@/components/desk/live-stage";
-import { livingByKey, livingBySlug } from "@/lib/pets/living";
+import { sitLiveKind } from "@/lib/pets/live";
+import { LIVING_KINDS } from "@/lib/pets/living";
 
 const searchSchema = z.object({
-  pet: z.string().optional(),
+  pet: z.union([z.string(), z.array(z.string())]).optional(),
 });
 
 export const Route = createFileRoute("/live")({
@@ -25,6 +26,6 @@ export const Route = createFileRoute("/live")({
 
 function LivePage() {
   const { pet } = Route.useSearch();
-  const kind = pet ? (livingBySlug(pet) ?? livingByKey(pet)) : undefined;
+  const kind = sitLiveKind(pet, LIVING_KINDS);
   return <LiveStage initial={kind} />;
 }

@@ -18,7 +18,11 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
 
   useEffect(() => {
     setInstalled(isStandalone());
-    if (!initial) setKind(livingByKey(loadActiveKindKey()));
+    if (initial) {
+      setKind(initial);
+      return;
+    }
+    setKind(livingByKey(loadActiveKindKey()));
   }, [initial]);
 
   const room = roomOf(kind.key);
