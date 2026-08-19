@@ -27,6 +27,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const demo = pathname.startsWith("/demo/");
   const kennelGuest = pathname.startsWith("/pets/");
   const kennel = pathname === "/collection";
+  const shelf = pathname === "/catalog";
   const hatchery = pathname === "/hatch";
   const nest = pathname === "/nest";
   const meet = pathname === "/meet";
@@ -40,11 +41,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const live = pathname === "/live";
 
   return (
-    <div className={cn("bg-bg text-fg", desk || demo || live || kennelGuest || kennel || hatchery || nest ? "h-dvh overflow-hidden" : "min-h-dvh")}>
+    <div className={cn("bg-bg text-fg", desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? "h-dvh overflow-hidden" : "min-h-dvh")}>
       <header
         className={cn(
           "z-30 border-b border-border/80",
-          demo || kennelGuest || kennel || hatchery || nest || desk
+          demo || kennelGuest || kennel || shelf || hatchery || nest || desk
             ? "absolute inset-x-0 top-0 border-transparent bg-transparent"
             : meet || den || tide || garden || hive || cellar || far || study || live
               ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
@@ -98,7 +99,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      {desk || demo || live || kennelGuest || kennel || hatchery || nest ? (
+      {desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? (
         <div className="h-dvh">{children}</div>
       ) : meet || den || tide || garden || hive || cellar || far || study ? (
         <div>{children}</div>
