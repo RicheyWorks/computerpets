@@ -17,8 +17,19 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
+/**
+ * Asks Steam whether a keeper owns a house AppID.
+ *
+ * <p>The client may name an {@code appId}. The house only opens when that
+ * AppID is on the configured door ({@code steam.app-id} / allowlist) and
+ * Steam says they own it. An empty door fails closed — owning any Steam
+ * game does not sit you here. Do not invent a live ComputerPets AppID;
+ * leave {@code steam.app-id} empty until one exists.
+ */
 @Service
 @ConditionalOnProperty(
     name = "ownership.providers.steam.enabled",
@@ -31,6 +42,13 @@ public class SteamService implements OwnershipProvider {
 
     @Value("${steam.api-key}")
     private String steamApiKey;
+
+    /**
+     * House Steam door. Empty, or a single AppID, or a comma/whitespace
+     * allowlist. Empty fails closed.
+     */
+    @Value("${steam.app-id:}")
+    private String configuredAppId;
 
     private RestClient restClient;
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -51,8 +69,13 @@ public class SteamService implements OwnershipProvider {
 
     // Package-private constructor for testing (full control over RestClient + API key)
     SteamService(RestClient restClient, String steamApiKey) {
+        this(restClient, steamApiKey, "");
+    }
+
+    SteamService(RestClient restClient, String steamApiKey, String configuredAppId) {
         this.restClient = restClient;
         this.steamApiKey = steamApiKey;
+        this.configuredAppId = configuredAppId;
     }
 
     @PostConstruct
@@ -75,13 +98,21 @@ public class SteamService implements OwnershipProvider {
         if (typed.steamId() == null || typed.appId() == null) {
             return VerificationResult.denied("steamId and appId are required");
         }
+        Set<String> houseAppIds = houseAppIds();
+        if (houseAppIds.isEmpty()) {
+            return VerificationResult.denied("the Steam door is not hung yet");
+        }
+        if (!houseAppIds.contains(typed.appId())) {
+            return VerificationResult.denied("appId is not a house Steam door");
+        }
         return ownsApp(typed.steamId(), typed.appId())
             ? VerificationResult.granted(typed.steamId())
             : VerificationResult.denied("Steam ownership not found");
     }
 
     /**
-     * Checks if a Steam user owns your specific AppID using the official Steam Web API.
+     * Asks Steam whether {@code steamId} owns {@code appId}.
+     * The house door is {@link #verify}; this only hears Steam.
      * Protected by Resilience4j circuit breaker + retry (Phase 2.3).
      */
     @CircuitBreaker(name = "steam", fallbackMethod = "ownsAppFallback")
@@ -137,6 +168,27 @@ public class SteamService implements OwnershipProvider {
         } catch (Exception e) {
             log.warn("Failed to parse Steam API response: {}", e.getMessage());
             return false;
+        }
+    }
+
+    /**
+     * Configured house AppIDs from {@code steam.app-id} (single or
+     * comma/whitespace allowlist). Empty means the door is not hung.
+     */
+    Set<String> houseAppIds() {
+        LinkedHashSet<String> ids = new LinkedHashSet<>();
+        addAppIds(ids, configuredAppId);
+        return Set.copyOf(ids);
+    }
+
+    private static void addAppIds(Set<String> dest, String raw) {
+        if (raw == null || raw.isBlank()) {
+            return;
+        }
+        for (String part : raw.split("[,\\s]+")) {
+            if (!part.isBlank()) {
+                dest.add(part.trim());
+            }
         }
     }
 }

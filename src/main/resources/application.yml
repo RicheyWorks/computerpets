@@ -53,6 +53,10 @@ steam:
   api-key: "YOUR_STEAM_WEB_API_KEY"
   # Base URL for Steam Web API. Override in tests with WireMock or in different environments.
   api-base-url: "https://api.steampowered.com"
+  # Do not invent a live ComputerPets AppID; leave app-id empty until one exists.
+  # Empty fails closed — owning any Steam game does not open the house.
+  # Comma or whitespace makes an allowlist when more than one door is real.
+  app-id: "${STEAM_APP_ID:}"
 
 # itch.io developer API key (https://itch.io/user/settings/api-keys).
 # Placeholder is rejected at verify time — never treated as a valid receipt.

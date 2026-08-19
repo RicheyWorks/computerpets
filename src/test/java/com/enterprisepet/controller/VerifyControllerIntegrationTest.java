@@ -41,6 +41,8 @@ class VerifyControllerIntegrationTest {
         registry.add("steam.api-base-url", () -> "http://localhost:" + wireMockServer.port());
         // Provide a dummy API key so the service doesn't reject the request
         registry.add("steam.api-key", () -> "TEST_STEAM_API_KEY");
+        // Test door only — not a live ComputerPets AppID.
+        registry.add("steam.app-id", () -> "123456");
         // Enable the Steam provider
         registry.add("ownership.providers.steam.enabled", () -> "true");
 
