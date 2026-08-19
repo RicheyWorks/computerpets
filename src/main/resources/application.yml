@@ -126,8 +126,12 @@ microsoft:
   tenant: "consumers"
   # Collections Query v9 publisherQuery. Override in tests (WireMock) or a sandbox.
   collections-url: "https://collections.mp.microsoft.com/v9.0/collections/publisherQuery"
-  # dev-mode bypasses the real Microsoft Collections API and grants ownership for any
-  # non-blank request. NEVER enable outside local development. ProductionProfileGuard
+  # Do not invent a live ComputerPets Store product id; leave product-id empty until one exists.
+  # Empty fails closed — owning any Microsoft Store product does not open the house.
+  # Comma or whitespace makes an allowlist when more than one door is real.
+  product-id: "${MICROSOFT_PRODUCT_ID:}"
+  # dev-mode bypasses the real Microsoft Collections API. The house door still applies.
+  # NEVER enable outside local development. ProductionProfileGuard
   # refuses this flag when spring.profiles.active=prod.
   dev-mode: ${MICROSOFT_DEV_MODE:false}
 

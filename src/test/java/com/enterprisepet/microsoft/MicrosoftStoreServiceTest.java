@@ -47,7 +47,9 @@ class MicrosoftStoreServiceTest {
     void setUp() {
         RestClient.Builder builder = RestClient.builder();
         mockServer = MockRestServiceServer.bindTo(builder).build();
-        service = new MicrosoftStoreService(builder.build(), false);
+        // House door is the test product. A foreign client product must not open it.
+        service = new MicrosoftStoreService(
+                builder.build(), false, MicrosoftStoreService.DEFAULT_COLLECTIONS_URL, PRODUCT_ID);
     }
 
     @Test
@@ -200,11 +202,64 @@ class MicrosoftStoreServiceTest {
     }
 
     @Test
+    @DisplayName("verify denies a foreign product even when Collections would say they own it")
+    void verify_unlistedProductId_deniedEvenWhenCollectionsWouldOwnIt() {
+        VerificationResult result = service.verify(Map.of(
+                "xstsToken", XSTS,
+                "storeProductId", OTHER_PRODUCT_ID
+        ));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("house Microsoft Store door");
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("verify denies when the house Microsoft Store door is empty")
+    void verify_emptyAllowlist_returnsDenied() {
+        MicrosoftStoreService emptyDoor = new MicrosoftStoreService(
+                RestClient.builder().build(), false);
+
+        VerificationResult result = emptyDoor.verify(Map.of(
+                "xstsToken", XSTS,
+                "storeProductId", PRODUCT_ID
+        ));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("Microsoft Store door is not hung yet");
+    }
+
+    @Test
+    @DisplayName("verify grants when a listed house product is owned")
+    void verify_listedAllowlistProduct_collectionsOwns_grants() throws Exception {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer local = MockRestServiceServer.bindTo(builder).build();
+        MicrosoftStoreService listed = new MicrosoftStoreService(
+                builder.build(), false, MicrosoftStoreService.DEFAULT_COLLECTIONS_URL,
+                OTHER_PRODUCT_ID + "," + PRODUCT_ID);
+
+        local.expect(requestTo(org.hamcrest.Matchers.containsString("/v9.0/collections/publisherQuery")))
+                .andRespond(withSuccess(readFixture(), MediaType.APPLICATION_JSON));
+
+        VerificationResult result = listed.verify(Map.of(
+                "xstsToken", XSTS,
+                "userHash", USER_HASH,
+                "storeProductId", PRODUCT_ID,
+                "microsoftAccountId", "ms-account-1"
+        ));
+
+        assertThat(result.verified()).isTrue();
+        assertThat(result.ownerId()).isEqualTo("ms-account-1");
+        local.verify();
+    }
+
+    @Test
     @DisplayName("dev-mode still grants without calling Collections")
     void verify_devMode_grantsWithoutNetwork() {
         RestClient.Builder builder = RestClient.builder();
         MockRestServiceServer local = MockRestServiceServer.bindTo(builder).build();
-        MicrosoftStoreService dev = new MicrosoftStoreService(builder.build(), true);
+        MicrosoftStoreService dev = new MicrosoftStoreService(
+                builder.build(), true, MicrosoftStoreService.DEFAULT_COLLECTIONS_URL, PRODUCT_ID);
 
         VerificationResult result = dev.verify(Map.of(
                 "xstsToken", XSTS,
@@ -308,7 +363,7 @@ class MicrosoftStoreServiceTest {
     }
 
     @Test
-    @DisplayName("verify grants when Collections returns an Active matching item")
+    @DisplayName("verify grants when Collections says they own the house product")
     void verify_activeProduct_grants() throws Exception {
         expectPublisherQuery(request -> { }, readFixture());
 

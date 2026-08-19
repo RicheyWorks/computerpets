@@ -48,6 +48,8 @@ class MicrosoftVerifyIntegrationTest {
         registry.add("microsoft.collections-url",
                 () -> "http://localhost:" + wireMockServer.port() + "/v9.0/collections/publisherQuery");
         registry.add("microsoft.dev-mode", () -> "false");
+        // Test door only — not a live ComputerPets Store id.
+        registry.add("microsoft.product-id", () -> PRODUCT_ID);
         registry.add("ownership.providers.microsoft.enabled", () -> "true");
 
         String licenseKey = java.util.Base64.getEncoder().encodeToString(new byte[32]);
@@ -76,7 +78,7 @@ class MicrosoftVerifyIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /api/verify/microsoft grants when publisherQuery returns Active product")
+    @DisplayName("POST /api/verify/microsoft grants when Collections owns the house product")
     void verifyMicrosoft_activeProduct_returnsGranted() {
         stubPublisherQuery(200, """
                 { "items": [ { "productId": "9N30KZZF4BR9", "status": "Active" } ] }
@@ -132,6 +134,20 @@ class MicrosoftVerifyIntegrationTest {
         assertThat(response.getBody().get("error")).isEqualTo("Microsoft Store entitlement not found");
         wireMockServer.verify(postRequestedFor(urlPathEqualTo("/v9.0/collections/publisherQuery"))
                 .withHeader("Signature", equalTo("xtoken-sig")));
+    }
+
+    @Test
+    @DisplayName("POST /api/verify/microsoft denies a foreign product without calling Collections")
+    void verifyMicrosoft_unlistedProduct_returns403_withoutNetwork() {
+        ResponseEntity<Map> response = postVerify(Map.of(
+                "xstsToken", "test-xsts-token",
+                "storeProductId", "9MXL21XPWWWK",
+                "petType", "red_panda"
+        ));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+        assertThat(response.getBody().get("error")).asString().contains("house Microsoft Store door");
+        wireMockServer.verify(0, postRequestedFor(urlPathEqualTo("/v9.0/collections/publisherQuery")));
     }
 
     @Test

@@ -24,6 +24,7 @@ services:
       # Steam (optional - can be disabled via ownership.providers)
       - STEAM_API_KEY=${STEAM_API_KEY:-}
       - STEAM_APP_ID=${STEAM_APP_ID:-}
+      - MICROSOFT_PRODUCT_ID=${MICROSOFT_PRODUCT_ID:-}
       - ETHEREUM_RPC_URL=${ETHEREUM_RPC_URL:-}
       - ITCH_API_KEY=${ITCH_API_KEY:-}
       - ITCH_GAME_ID=${ITCH_GAME_ID:-}
