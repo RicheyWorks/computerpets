@@ -92,7 +92,7 @@ test("kennel setActivePet still marks one; live search-param stays a kind", () =
   assert.match(actionsSrc, /set is_active = true/);
   assert.match(petSrc, /setActivePet\(\{ data: \{ petId: pet\.id \} \}\)/);
   assert.match(kennelSrc, /pets\.find\(\(p\) => p\.is_active\)/);
-  assert.match(livePageSrc, /sitLiveKind\(pet\)/);
+  assert.match(livePageSrc, /sitLiveKind\(pet, LIVING_KINDS\)/);
   assert.doesNotMatch(livePageSrc, /sitDeskGuest/);
   assert.doesNotMatch(liveSrc, /sitDeskGuest/);
 });

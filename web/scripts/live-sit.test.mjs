@@ -6,7 +6,6 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const L = await import(join(root, "src/lib/pets/live.ts"));
-const living = await import(join(root, "src/lib/pets/living.ts"));
 
 const livePageSrc = readFileSync(join(root, "src/routes/live.tsx"), "utf8");
 const liveSrc = readFileSync(join(root, "src/components/desk/live-stage.tsx"), "utf8");
@@ -22,36 +21,46 @@ const speciesSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
 const careSrc = readFileSync(join(root, "src/lib/pets/care.ts"), "utf8");
 const C = await import(join(root, "src/lib/pets/care.ts"));
 
+const house = [
+  { key: "red_panda", slug: "rui" },
+  { key: "dog", slug: "pip" },
+  { key: "octopus", slug: "cup" },
+];
+
+function sit(pet) {
+  return L.sitLiveKind(pet, house);
+}
+
 test("?pet=cup sits Cup; a key and a slug sit that kind", () => {
-  assert.equal(L.sitLiveKind("cup")?.key, "octopus");
-  assert.equal(L.sitLiveKind("cup")?.slug, "cup");
-  assert.equal(L.sitLiveKind("octopus")?.key, "octopus");
-  assert.equal(L.sitLiveKind("rui")?.key, "red_panda");
-  assert.equal(L.sitLiveKind("red_panda")?.key, "red_panda");
-  assert.equal(L.sitLiveKind("dog")?.key, "dog");
-  assert.equal(L.sitLiveKind("pip")?.key, "dog");
-  assert.match(livePageSrc, /sitLiveKind\(pet\)/);
+  assert.equal(sit("cup")?.key, "octopus");
+  assert.equal(sit("cup")?.slug, "cup");
+  assert.equal(sit("octopus")?.key, "octopus");
+  assert.equal(sit("rui")?.key, "red_panda");
+  assert.equal(sit("red_panda")?.key, "red_panda");
+  assert.equal(sit("dog")?.key, "dog");
+  assert.equal(sit("pip")?.key, "dog");
+  assert.match(livePageSrc, /sitLiveKind\(pet, LIVING_KINDS\)/);
   assert.match(livePageSrc, /z\.union\(\[z\.string\(\), z\.array\(z\.string\(\)\)\]\)/);
 });
 
 test("an array-shaped pet sits the first real kind, not silent Rui", () => {
-  assert.equal(L.sitLiveKind(["cup", "dog"])?.key, "octopus");
-  assert.equal(L.sitLiveKind(["ghost", "cup"])?.key, "octopus");
-  assert.equal(L.sitLiveKind(["", "dog"])?.key, "dog");
-  assert.equal(L.sitLiveKind(["nope", "also-nope"]), undefined);
-  assert.notEqual(L.sitLiveKind(["ghost", "cup"])?.key, living.RED_PANDA_KIND.key);
+  assert.equal(sit(["cup", "dog"])?.key, "octopus");
+  assert.equal(sit(["ghost", "cup"])?.key, "octopus");
+  assert.equal(sit(["", "dog"])?.key, "dog");
+  assert.equal(sit(["nope", "also-nope"]), undefined);
+  assert.notEqual(sit(["ghost", "cup"])?.key, "red_panda");
 });
 
 test("an unknown name is not a Rui ask; no one asked stays unset", () => {
-  assert.equal(L.sitLiveKind("ghost"), undefined);
-  assert.equal(L.sitLiveKind("not-a-guest"), undefined);
-  assert.equal(L.sitLiveKind(""), undefined);
-  assert.equal(L.sitLiveKind("   "), undefined);
-  assert.equal(L.sitLiveKind(undefined), undefined);
-  assert.equal(L.sitLiveKind(null), undefined);
-  assert.equal(L.sitLiveKind([]), undefined);
-  assert.notEqual(L.sitLiveKind("ghost"), living.RED_PANDA_KIND);
-  assert.equal(L.sitLiveKind("rui")?.key, "red_panda");
+  assert.equal(sit("ghost"), undefined);
+  assert.equal(sit("not-a-guest"), undefined);
+  assert.equal(sit(""), undefined);
+  assert.equal(sit("   "), undefined);
+  assert.equal(sit(undefined), undefined);
+  assert.equal(sit(null), undefined);
+  assert.equal(sit([]), undefined);
+  assert.notEqual(sit("ghost")?.key, "red_panda");
+  assert.equal(sit("rui")?.key, "red_panda");
   assert.match(liveSrc, /if \(initial\) \{\s*setKind\(initial\)/s);
   assert.match(liveSrc, /livingByKey\(loadActiveKindKey\(\)\)/);
 });
