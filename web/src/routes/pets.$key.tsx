@@ -44,10 +44,9 @@ function PetDetail() {
       .catch(() => setPet(null));
   }, [user, key]);
 
-  if (isPending || pet === undefined) {
-    return <div className="h-dvh animate-pulse bg-surface" />;
-  }
+  if (isPending) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!user) return <RedirectToSignIn />;
+  if (pet === undefined) return <div className="h-dvh animate-pulse bg-surface" />;
   if (!pet) {
     return (
       <main className="mx-auto max-w-lg space-y-3 px-6 py-20">

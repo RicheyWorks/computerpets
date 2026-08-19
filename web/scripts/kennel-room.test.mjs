@@ -39,6 +39,23 @@ test("living pet page mounts the blotter room", () => {
   assert.match(roomSrc, /kind=\{kind\.key\}/);
 });
 
+test("signed-out guest is a door, not a stuck pulse", () => {
+  const pendingAt = petSrc.search(/if \(isPending\)/);
+  const doorAt = petSrc.indexOf("if (!user) return <RedirectToSignIn");
+  const loadPulseAt = petSrc.search(/if \(pet === undefined\)/);
+  assert.doesNotMatch(petSrc, /isPending \|\| pet === undefined/);
+  assert.ok(pendingAt >= 0, "auth pending still pulses");
+  assert.ok(doorAt > pendingAt, "the door opens after pending, not after a forever load");
+  assert.ok(loadPulseAt > doorAt, "a keeper may still pulse while the guest loads");
+  assert.match(petSrc, /RedirectToSignIn/);
+  assert.match(petSrc, /getSanctuary/);
+  assert.match(petSrc, /CompanionRoom/);
+  assert.match(petSrc, /persistLocal=\{false\}/);
+  assert.match(petSrc, /onCare=\{persistCare\}/);
+  assert.match(petSrc, /Token not in this kennel/);
+  assert.match(petSrc, /if \(gone\)/);
+});
+
 test("nest origin shows a parent line when parent ids are present", () => {
   const phrase = nest.originPhrase(
     { origin: "nest", parent_a: "a", parent_b: "b", ...looks },
