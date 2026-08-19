@@ -86,11 +86,11 @@ test("a place on the wood keeps the walk to the mark", () => {
 test("CompanionRoom still eats after a seek, hides after a leave, and picks mess by hand", () => {
   const arrived = roomSrc.slice(roomSrc.indexOf("onArrived="), roomSrc.indexOf("onTap="));
   assert.match(roomSrc, /command=\{order\.cmd\}/);
-  assert.match(arrived, /order\.cmd === "seek"/);
-  assert.match(arrived, /caught\.kind === "treat"/);
+  assert.match(arrived, /playClaim\("arrive"/);
+  assert.match(arrived, /act === "snack"/);
   assert.match(arrived, /applySnack/);
   assert.match(arrived, /issue\("eat"\)/);
-  assert.match(arrived, /order\.cmd === "leave"/);
+  assert.match(arrived, /act === "hide"/);
   assert.match(arrived, /applyHide/);
   assert.doesNotMatch(arrived, /pickMess/);
   assert.doesNotMatch(arrived, /pickGift/);
