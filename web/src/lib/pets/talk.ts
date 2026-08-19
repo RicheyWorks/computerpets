@@ -1,11 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { optionalAuthMiddleware } from "@/lib/auth/middleware";
 import { livingByKey } from "./living";
 import { normalizeCare } from "./care";
-import { mindPreset } from "@/lib/ai/catalog";
 import { runMind } from "@/lib/ai/complete";
 import { speakWithPlugin } from "@/lib/ai/voice";
-import type { MindBinding, VoiceKind } from "@/lib/ai/types";
+import { bindTalkSpend } from "./talk-spend";
 
 const binding = z.object({
   plugin: z.string().trim().min(1).max(32).default("local"),
@@ -33,16 +33,10 @@ export type TalkResult = {
   source: string;
 };
 
-function resolveKey(mind: MindBinding): string | undefined {
-  if (mind.apiKey) return mind.apiKey;
-  const envName = mindPreset(mind.plugin).envKey;
-  if (!envName) return undefined;
-  return process.env[envName];
-}
-
 export const converseWithPet = createServerFn({ method: "POST" })
+  .middleware([optionalAuthMiddleware])
   .validator((raw: unknown) => input.parse(raw))
-  .handler(async ({ data }): Promise<TalkResult> => {
+  .handler(async ({ data, context }): Promise<TalkResult> => {
     const kind = livingByKey(data.species);
     const stats = normalizeCare({
       hunger: data.hunger,
@@ -50,8 +44,11 @@ export const converseWithPet = createServerFn({ method: "POST" })
       energy: data.energy,
       hygiene: data.hygiene,
     });
-    const mind: MindBinding = data.mind ?? { plugin: process.env.XAI_API_KEY ? "xai" : "local" };
-    const withKey: MindBinding = { ...mind, apiKey: resolveKey(mind) };
+    const spend = bindTalkSpend({
+      mind: data.mind,
+      voice: data.voice,
+      signedIn: Boolean(context.userId),
+    });
 
     const reply = await runMind(
       {
@@ -65,13 +62,10 @@ export const converseWithPet = createServerFn({ method: "POST" })
         hygiene: stats.hygiene,
         message: data.message,
       },
-      withKey,
+      spend.mind,
     );
 
-    const voice: VoiceKind = data.voice ?? "browser";
-    const voiceKey =
-      voice === "xai" ? process.env.XAI_API_KEY ?? withKey.apiKey : voice === "openai" ? process.env.OPENAI_API_KEY ?? withKey.apiKey : undefined;
     const audio =
-      data.speak === false ? undefined : await speakWithPlugin(reply.text, voice, kind.voice, voiceKey);
+      data.speak === false ? undefined : await speakWithPlugin(reply.text, spend.voice, kind.voice, spend.voiceKey);
     return { text: reply.text, audio, source: reply.source };
   });
