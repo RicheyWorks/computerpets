@@ -20,7 +20,7 @@ import { getRequest } from "@tanstack/react-start/server";
  * arrive). Every cross-site / same-site *scripted* request is rejected.
  * Together with `__Host-` cookies and Better Auth's `trustedOrigins`, this
  * closes the sibling-tenant attack surface. Enforced at the `authMiddleware`
- * chokepoint (see `middleware.ts`).
+ * and `optionalAuthMiddleware` chokepoints (see `middleware.ts`).
  */
 export class CrossSiteRequestError extends Error {
   readonly status = 403;

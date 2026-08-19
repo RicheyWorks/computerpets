@@ -14,7 +14,7 @@ npm run dev
 
 Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel. The kennel is a room. The cards stay paper. The shelf is a room. The eighty sit by den, not by rarity.
 
-Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS). Without it, Rui still answers from local lines and the browser speech synthesizer.
+Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS) for a signed-in keeper. A guest still hears house lines. Without a house key, Rui still answers from local lines and the browser speech synthesizer.
 
 ## Layout
 

@@ -94,3 +94,17 @@ export async function requireUserId(bearerToken?: string): Promise<string> {
   if (!user) throw new UnauthorizedError();
   return user.id;
 }
+
+/**
+ * Same keeper resolution as `requireUserId`, but unsigned stays unsigned.
+ * Talk uses this so a guest still gets house lines without spending a key.
+ * Auth disabled + a real database → no keeper (fail closed on house keys).
+ */
+export async function peekUserId(bearerToken?: string): Promise<string | undefined> {
+  if (!authConfigured) {
+    if (databaseConfigured) return undefined;
+    return DEV_USER_ID;
+  }
+  const user = await getSessionUser(bearerToken);
+  return user?.id;
+}
