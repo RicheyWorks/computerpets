@@ -92,15 +92,18 @@ export function SpeciesCard({
 }) {
   const inner = (
     <>
-      <div className="relative aspect-square overflow-hidden bg-elevated">
-        <PetPortrait speciesKey={speciesKey} alt={name} />
-        <div className="absolute left-3 top-3 flex gap-2">
-          <RarityBadge rarity={rarity} />
-          {isLivingSpecies(speciesKey) ? <Badge>Awake</Badge> : null}
-        </div>
+      <div className="relative size-20 shrink-0 overflow-hidden bg-elevated">
+        <PetPortrait
+          speciesKey={speciesKey}
+          alt={name}
+          className="transition-transform duration-400 ease-out group-hover:scale-[1.03]"
+        />
       </div>
-      <div className="space-y-1.5 p-4">
-        <p className="font-display text-lg leading-tight">{name}</p>
+      <div className="min-w-0 flex-1 space-y-1 py-2 pr-3">
+        <div className="flex items-start justify-between gap-2">
+          <p className="truncate font-display text-lg leading-tight">{name}</p>
+          <RarityBadge rarity={rarity} />
+        </div>
         <p className="text-sm text-muted">{blurb}</p>
       </div>
     </>
@@ -113,7 +116,7 @@ export function SpeciesCard({
         to={demoSlug ? "/demo/$slug" : (to as "/")}
         params={demoSlug ? { slug: demoSlug } : undefined}
         search={demoSlug ? undefined : isLivingSpecies(speciesKey) ? { pet: speciesKey } : undefined}
-        className="block overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface no-underline transition-colors duration-200 hover:border-border-strong"
+        className="group flex gap-3 overflow-hidden rounded-[var(--radius-sm)] border border-border bg-bg/40 no-underline transition-colors duration-200 hover:border-border-strong"
       >
         {inner}
       </Link>
@@ -121,7 +124,7 @@ export function SpeciesCard({
   }
 
   return (
-    <article className="overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface">
+    <article className="flex gap-3 overflow-hidden rounded-[var(--radius-sm)] border border-border bg-bg/40">
       {inner}
     </article>
   );

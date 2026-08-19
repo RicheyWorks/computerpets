@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel. The kennel is a room. The cards stay paper.
+Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel. The kennel is a room. The cards stay paper. The shelf is a room. The eighty sit by den, not by rarity.
 
 Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS). Without it, Rui still answers from local lines and the browser speech synthesizer.
 
@@ -35,6 +35,7 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 
 ## Advertising demos
 
+- `/catalog` — a room. The eighty sit by den, not by rarity.
 - `/meet` — house landing
 - `/snakes` — the snake den
 - `/sea` — the tide den
