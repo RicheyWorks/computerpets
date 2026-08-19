@@ -232,6 +232,8 @@ The Electron overlay is still `cd desktop && npm start`.
 | `BUNDLE_SIGNING_KEY`      | Yes      | —       | CDN URL signing key (base64) |
 | `ADMIN_API_KEY`           | Yes      | —       | Admin API + `/admin` ledger (`X-Admin-Key` header) |
 | `MICROSOFT_DEV_MODE`      | No       | false   | Bypasses real Microsoft verification (development only) |
+| `STEAM_API_KEY`           | No       | placeholder | Steam Web API key; placeholder or blank fails closed |
+| `STEAM_APP_ID`            | No       | empty   | House Steam AppID / comma allowlist. Empty fails closed (do not invent one) |
 | `ITCH_API_KEY`            | No       | placeholder | itch.io developer API key for download-key receipt verify |
 | `ITCH_GAME_ID`            | No       | empty   | Optional official itch.io game id allowlist (do not invent one) |
 | `EPIC_CLIENT_ID`          | No       | placeholder | EOS Trusted Server client id (Developer Portal) |
@@ -325,6 +327,31 @@ ownership:
     epic:
       enabled: false
 ```
+
+### Steam
+
+Steam verify asks `IPlayerService/GetOwnedGames` whether the keeper owns
+the AppID they named. The house only opens when that AppID is on
+`STEAM_APP_ID` (one door, or a comma allowlist) and Steam says they own
+it. A placeholder or blank `STEAM_API_KEY` fails closed. An empty
+`STEAM_APP_ID` also fails closed — owning any Steam game does not sit
+you here. Do not invent a live ComputerPets AppID; leave the door empty
+until one exists.
+
+| Variable        | Purpose                                              |
+|-----------------|------------------------------------------------------|
+| `STEAM_API_KEY` | Steam Web API key                                    |
+| `STEAM_APP_ID`  | House AppID / comma allowlist; empty fails closed    |
+
+```yaml
+steam:
+  api-key: "YOUR_STEAM_WEB_API_KEY"
+  api-base-url: https://api.steampowered.com
+  app-id: ${STEAM_APP_ID:}
+```
+
+`POST /api/verify/steam` still expects `steamId` and `appId`. A foreign
+`appId` is denied before Steam is asked.
 
 ### Itch.io
 
