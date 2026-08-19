@@ -46,31 +46,29 @@ export function PetCard({ pet }: { pet: CompanionView }) {
     <Link
       to="/pets/$key"
       params={{ key: pet.id }}
-      className="group block overflow-hidden rounded-[var(--radius-xl)] border border-border bg-surface no-underline transition-colors duration-200 hover:border-border-strong"
+      className="group flex gap-3 overflow-hidden rounded-[var(--radius-sm)] border border-border bg-bg/40 no-underline transition-colors duration-200 hover:border-border-strong"
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-elevated">
+      <div className="relative size-20 shrink-0 overflow-hidden bg-elevated">
         <PetPortrait
           speciesKey={pet.species_key}
           alt={pet.name}
           className="transition-transform duration-400 ease-out group-hover:scale-[1.03]"
         />
-        <div className="absolute left-3 top-3 flex gap-2">
-          <RarityBadge rarity={pet.rarity} />
-          {pet.is_active ? (
-            <Badge>On desk</Badge>
-          ) : null}
-        </div>
       </div>
-      <div className="space-y-3 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="font-display text-lg leading-tight text-fg">{pet.name}</p>
+      <div className="min-w-0 flex-1 space-y-1 py-2 pr-3">
+        <div className="flex items-start justify-between gap-2">
+          <div className="min-w-0">
+            <p className="truncate font-display text-lg leading-tight text-fg">{pet.name}</p>
             <p className="mt-0.5 text-[11px] text-subtle">{species?.displayName ?? pet.species_key}</p>
           </div>
-          <p className="text-xs text-muted">
-            {pet.stage} · {pet.origin === "nest" ? "from the nest" : "drawn"}
-          </p>
+          <div className="flex shrink-0 flex-col items-end gap-1">
+            <RarityBadge rarity={pet.rarity} />
+            {pet.is_active ? <Badge>On desk</Badge> : null}
+          </div>
         </div>
+        <p className="text-xs text-muted">
+          {pet.stage} · {pet.origin === "nest" ? "from the nest" : "drawn"}
+        </p>
         <p className="text-sm text-muted">The kennel guest is a room. {lookHint(pet)}.</p>
         <p className="text-xs text-subtle">{species?.temperament} · {moodWord(pet)}</p>
         <Meter label="Bond" value={score} />

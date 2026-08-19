@@ -31,7 +31,7 @@ Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answ
 
 Walk the dens. Each room teaches its guests.
 
-Sign in. The hatch is a room. The draw lands you with the guest. The kennel is `/collection`. The kennel guest is a room.
+Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper.
 
 Pair two you already keep at `/nest`. The nest is a room. The square sits on the paper.
 

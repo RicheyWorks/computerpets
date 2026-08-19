@@ -14,6 +14,7 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
 const meetSrc = readFileSync(join(root, "src/routes/meet.tsx"), "utf8");
 const petSrc = readFileSync(join(root, "src/routes/pets.$key.tsx"), "utf8");
+const kennelSrc = readFileSync(join(root, "src/routes/collection.tsx"), "utf8");
 
 test("nest page mounts the blotter room and does not persist a stray companion", () => {
   assert.match(nestSrc, /CompanionRoom/);
@@ -57,13 +58,15 @@ test("login is a door, not a shop", () => {
   assert.match(loginSrc, /Sit, hatch, nest/);
 });
 
-test("meet, demo, hatch, and kennel-guest rooms stay", () => {
+test("meet, demo, hatch, kennel, and kennel-guest rooms stay", () => {
   assert.match(meetSrc, /Watch Rui/);
   assert.match(meetSrc, /Eighty guests walk the blotter/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(hatchSrc, /CompanionRoom/);
   assert.match(hatchSrc, /persistLocal=\{false\}/);
+  assert.match(kennelSrc, /CompanionRoom/);
+  assert.match(kennelSrc, /persistLocal=\{false\}/);
   assert.match(petSrc, /CompanionRoom/);
   assert.match(petSrc, /onCare=\{persistCare\}/);
 });
