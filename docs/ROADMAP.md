@@ -85,7 +85,7 @@ All critical items required before any public or limited production exposure hav
   - [x] Official collection allowlist (`ethereum.collections`) so a random ERC-721 cannot mint a pet license
   - [x] Optional `tokenId → petType` binding; mismatch is a 403
   - [x] ERC-1155 `balanceOf` + `AUTO` fallback
-  - [x] Optional `personal_sign` proof of wallet control
+  - [x] Required `personal_sign` proof of wallet control (fail closed)
   - [x] RPC timeouts, placeholder-RPC health indicator, `GET /api/verify/nft/collections`
 
 ---
