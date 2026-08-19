@@ -76,6 +76,7 @@ class ObservabilityIntegrationTest {
 
         registry.add("steam.api-base-url", () -> "http://localhost:" + wireMockServer.port());
         registry.add("steam.api-key", () -> "TEST_STEAM_API_KEY");
+        registry.add("steam.app-id", () -> "123456");
         registry.add("ownership.providers.steam.enabled", () -> "true");
         // Tests disable tracing by default; turn sampling on for this class only.
         registry.add("management.tracing.sampling.probability", () -> "1.0");

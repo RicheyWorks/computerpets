@@ -42,9 +42,8 @@ class SteamServiceTest {
         mockServer = MockRestServiceServer.bindTo(builder).build();
         RestClient restClient = builder.build();
 
-        // Use the test constructor that accepts both RestClient and API key.
-        // This avoids reflection entirely for the happy path.
-        service = new SteamService(restClient, VALID_API_KEY);
+        // House door is the test AppID. A foreign client AppID must not open it.
+        service = new SteamService(restClient, VALID_API_KEY, APP_ID);
     }
 
     // ====================== ownsApp Tests ======================
@@ -369,7 +368,75 @@ class SteamServiceTest {
     }
 
     @Test
-    @DisplayName("verify returns granted when user owns the game")
+    @DisplayName("verify denies a foreign AppID even when Steam would say they own it")
+    void verify_unlistedAppId_deniedEvenWhenSteamWouldOwnIt() {
+        VerificationResult result = service.verify(Map.of(
+                "steamId", STEAM_ID,
+                "appId", "999999"
+        ));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("house Steam door");
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("verify denies when the house Steam door is empty")
+    void verify_emptyAllowlist_returnsDenied() {
+        SteamService emptyDoor = new SteamService(
+                RestClient.builder().build(), VALID_API_KEY, "");
+
+        VerificationResult result = emptyDoor.verify(Map.of(
+                "steamId", STEAM_ID,
+                "appId", APP_ID
+        ));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).contains("Steam door is not hung yet");
+    }
+
+    @Test
+    @DisplayName("verify denies when the API key is missing even if the AppID is a house door")
+    void verify_missingApiKey_returnsDenied() {
+        SteamService noKey = new SteamService(
+                RestClient.builder().build(), "", APP_ID);
+
+        VerificationResult result = noKey.verify(Map.of(
+                "steamId", STEAM_ID,
+                "appId", APP_ID
+        ));
+
+        assertThat(result.verified()).isFalse();
+        assertThat(result.reason()).isEqualTo("Steam ownership not found");
+    }
+
+    @Test
+    @DisplayName("verify grants when a listed house AppID is owned")
+    void verify_listedAllowlistAppId_userOwnsGame_returnsGranted() {
+        SteamService allowlist = new SteamService(restClient, VALID_API_KEY, "111111,123456");
+        String json = """
+            {
+              "response": {
+                "games": [ {"appid": 123456} ]
+              }
+            }
+            """;
+
+        mockServer.expect(requestTo(org.hamcrest.Matchers.containsString("/GetOwnedGames")))
+                  .andRespond(withSuccess(json, MediaType.APPLICATION_JSON));
+
+        VerificationResult result = allowlist.verify(Map.of(
+                "steamId", STEAM_ID,
+                "appId", APP_ID
+        ));
+
+        assertThat(result.verified()).isTrue();
+        assertThat(result.ownerId()).isEqualTo(STEAM_ID);
+        mockServer.verify();
+    }
+
+    @Test
+    @DisplayName("verify returns granted when user owns the house AppID")
     void verify_userOwnsGame_returnsGranted() {
         String json = """
             {
