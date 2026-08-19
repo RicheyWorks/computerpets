@@ -32,17 +32,24 @@ function lureSeek() {
 }
 
 test("one lure chase finishes play once; catch then arrive does not double", () => {
+  const sameTick = P.playHop(lureSeek(), "catch");
+  assert.equal(sameTick.act, "play");
+  assert.equal(sameTick.applyPlay, 1);
+  assert.equal(sameTick.issuePlay, 1);
+  assert.equal(P.playClaim("arrive", { taken: true, cmd: "seek", mark: null }), "none");
+  assert.equal(P.playClaim("arrive", { taken: true, cmd: "seek", mark: "lure" }), "none");
+
   const local = P.playChase(["catch", "arrive"], lureSeek());
-  assert.deepEqual(local.acts, ["play", "none"]);
+  assert.deepEqual(local.acts, ["play", "idle"]);
   assert.equal(local.applyPlay, 1);
   assert.equal(local.persistPlay, 0);
   assert.equal(local.issuePlay, 1);
   assert.equal(local.taken, true);
   assert.equal(local.mark, null);
-  assert.equal(local.cmd, "play");
+  assert.equal(local.cmd, "idle");
 
   const remote = P.playChase(["catch", "arrive"], lureSeek(), true);
-  assert.deepEqual(remote.acts, ["play", "none"]);
+  assert.deepEqual(remote.acts, ["play", "idle"]);
   assert.equal(remote.applyPlay, 0);
   assert.equal(remote.persistPlay, 1);
   assert.equal(remote.issuePlay, 1);
