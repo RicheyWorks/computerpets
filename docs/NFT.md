@@ -1,8 +1,9 @@
 # NFT ownership
 
-ComputerPets treats an official NFT as a license entitlement. `POST /api/verify/nft`
-proves on-chain ownership, then issues the same AES-GCM license + JWT the Steam
-and Microsoft providers issue.
+A named wallet is not a keeper. `POST /api/verify/nft` asks for a
+`personal_sign` from the one who holds the keys, then proves on-chain
+ownership, then issues the same AES-GCM license + JWT the Steam and
+Microsoft doors issue.
 
 ## What was wrong before
 
@@ -28,9 +29,12 @@ The original check decoded `ownerOf` (good) but would still:
 5. Standard is per collection: `ERC721` (`ownerOf`), `ERC1155` (`balanceOf > 0`),
    or `AUTO` (try both). Unlisted contracts (only when the allowlist is off)
    use `AUTO`.
-6. Optional `message` + `signature` (`personal_sign`). Recovered signer must
-   match `walletAddress`. Set `ethereum.require-signature: true` to make this
-   mandatory.
+6. `message` + `signature` (`personal_sign`) are required. The recovered
+   signer must match `walletAddress`. Naming a wallet is not enough — the
+   keeper must prove they hold the keys. Production
+   `ethereum.require-signature` is true (fail closed, like the empty Steam
+   and Store doors). `EthereumProperties.unrestricted()` is a test helper
+   for isolated `ownsToken` checks only.
 
 ## Configure
 
@@ -39,7 +43,7 @@ ethereum:
   rpc-url: ${ETHEREUM_RPC_URL}
   request-timeout-ms: 4000
   allowlist-required: true
-  require-signature: false
+  require-signature: true
   collections:
     - address: "0xYourOfficialComputerPetsContract"
       standard: ERC721

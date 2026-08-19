@@ -109,7 +109,9 @@ ethereum:
   # license for a random CryptoKitty.
   request-timeout-ms: 4000
   allowlist-required: true
-  require-signature: false
+  # Naming a wallet is not enough. personal_sign must prove the keeper
+  # holds the keys. Fail closed — like the empty Steam and Store doors.
+  require-signature: true
   collections: []
   # Example once a collection is live:
   # collections:
