@@ -10,7 +10,7 @@ import { todaysVisitor } from "@/lib/pets/visitor";
 import {
   applyBath,
   applyClean,
-  applyFeed,
+  applyFeedFor,
   applyHide,
   applyMedicine,
   applyPlay,
@@ -25,6 +25,7 @@ import {
   pickMess,
   saveCare,
   stageOf,
+  tickCare,
   type CareStats,
   type LifeStage,
   type SanctuaryCare,
@@ -101,7 +102,7 @@ export function CompanionRoom({
   const trait = traitFor(kind.key);
   const [stats, setStats] = useState<CareStats>(() =>
     persistLocal
-      ? loadCare(kind.localKey, seed ?? { hunger: 78, mood: 80, energy: 82 })
+      ? loadCare(kind.localKey, seed ?? { hunger: 78, mood: 80, energy: 82 }, kind.key)
       : normalizeCare(seed ?? { hunger: 78, mood: 80, energy: 82 }),
   );
   const [speech, setSpeech] = useState<string | null>(null);
@@ -123,6 +124,40 @@ export function CompanionRoom({
   useEffect(() => {
     if (persistLocal) saveCare(kind.localKey, stats);
   }, [kind.localKey, persistLocal, stats]);
+
+  useEffect(() => {
+    if (!persistLocal) return;
+    function age() {
+      setStats((s) => {
+        const live = tickCare(kind.key, s);
+        if (
+          live.hunger === s.hunger &&
+          live.mood === s.mood &&
+          live.energy === s.energy &&
+          live.hygiene === s.hygiene &&
+          live.health === s.health &&
+          live.sick === s.sick &&
+          live.mess === s.mess &&
+          live.gifts === s.gifts
+        ) {
+          return s;
+        }
+        return live;
+      });
+    }
+    const id = window.setInterval(() => {
+      if (document.hidden) return;
+      age();
+    }, 20_000);
+    function onVis() {
+      if (!document.hidden) age();
+    }
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      window.clearInterval(id);
+      document.removeEventListener("visibilitychange", onVis);
+    };
+  }, [kind.key, persistLocal]);
 
   useEffect(() => {
     if (!journal) {
@@ -164,7 +199,7 @@ export function CompanionRoom({
     setMark(null);
     setLeaving(false);
     const live = persistLocal
-      ? loadCare(kind.localKey, seed ?? { hunger: 78, mood: 80, energy: 82 })
+      ? loadCare(kind.localKey, seed ?? { hunger: 78, mood: 80, energy: 82 }, kind.key)
       : normalizeCare(seed ?? { hunger: 78, mood: 80, energy: 82 });
     setStats(live);
     const t = window.setTimeout(() => {
@@ -350,7 +385,7 @@ export function CompanionRoom({
         return;
       }
     } else {
-      setStats(applyFeed);
+      setStats((s) => applyFeedFor(kind.key, s));
     }
     say(kind.careLine("feed"));
     note(`${displayName} ate.`);

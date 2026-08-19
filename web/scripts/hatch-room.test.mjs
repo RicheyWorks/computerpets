@@ -82,6 +82,7 @@ test("meet, demo, and kennel-guest rooms stay", () => {
   assert.match(meetSrc, /Eighty guests walk the blotter/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(petSrc, /CompanionRoom/);
   assert.match(petSrc, /onCare=\{persistCare\}/);
 });
