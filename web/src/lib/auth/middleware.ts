@@ -44,3 +44,23 @@ export const authMiddleware = createMiddleware({ type: "function" })
     const userId = await requireUserId(context.bearerToken);
     return next({ context: { userId } });
   });
+
+/**
+ * Same bearer + same-site gate as `authMiddleware`, but a missing session is
+ * not an error. `context.userId` is set when a keeper is present. Use this
+ * when the function must still answer a guest (talk) without spending house
+ * secrets.
+ */
+export const optionalAuthMiddleware = createMiddleware({ type: "function" })
+  .client(async ({ next }) => {
+    const { getBearerToken } = await import("./client");
+    return next({ sendContext: { bearerToken: getBearerToken() ?? undefined } });
+  })
+  .server(async ({ next, context }) => {
+    // ONLY import `*.server` modules here — same dual-module rule as above.
+    const { assertSameSiteRequest } = await import("./isolation.server");
+    const { peekUserId } = await import("./verify.server");
+    assertSameSiteRequest();
+    const userId = await peekUserId(context.bearerToken);
+    return next({ context: { userId } });
+  });
