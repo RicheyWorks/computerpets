@@ -133,4 +133,5 @@ test("hatch, nest, and desk stay on the same blotter", () => {
   assert.match(nestSrc, /persistLocal=\{false\}/);
   assert.match(deskSrc, /CompanionRoom/);
   assert.match(shellSrc, /pathname === "\/collection"/);
+  assert.match(shellSrc, /pathname === "\/catalog"/);
 });

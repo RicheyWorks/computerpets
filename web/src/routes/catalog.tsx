@@ -1,72 +1,98 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { CompanionRoom } from "@/components/desk/companion-room";
 import { SpeciesCard } from "@/components/pet-card";
-import { SPECIES, type Rarity } from "@/lib/pets/catalog";
-import { isLivingSpecies, livingByKey } from "@/lib/pets/living";
+import { findSpecies } from "@/lib/pets/catalog";
+import { RED_PANDA_KIND } from "@/lib/pets/living";
+import { guestsIn, ROOMS } from "@/lib/pets/rooms";
 
-export const Route = createFileRoute("/catalog")({ component: Catalog });
-
-const ORDER: Rarity[] = ["LEGENDARY", "RARE", "UNCOMMON", "COMMON"];
+export const Route = createFileRoute("/catalog")({
+  component: Catalog,
+  head: () => ({
+    meta: [
+      { title: "The shelf — ComputerPets" },
+      {
+        name: "description",
+        content: "The shelf is a room. The eighty sit by den, not by rarity.",
+      },
+    ],
+  }),
+});
 
 function Catalog() {
   return (
-    <main className="space-y-10">
-      <header className="max-w-xl space-y-3">
-        <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Catalog</p>
-        <h1 className="font-display text-4xl">The eighty.</h1>
-        <p className="text-sm text-muted">
-          Eighty guests, on their shelves. Open a room, or pick a name. They
-          will be walking when the page opens. The study is where you learn the
-          twenty who walk. The den is where you learn the ten snakes. The tide
-          is where you learn the ten sea creatures. The garden is where you
-          learn the ten plants. The hive is where you learn the ten insects. The
-          cellar is where you learn the ten fungi. The far den is where you
-          learn the ten guests that never evolved here.
+    <CompanionRoom
+      kind={RED_PANDA_KIND}
+      guestKey="shelf"
+      persistLocal={false}
+      detail="Shelf"
+      line={
+        <p className="mt-3 max-w-sm text-sm text-muted">
+          The shelf is a room. The eighty sit by den, not by rarity. Open a room, or pick a name.
         </p>
-        <p className="flex flex-wrap gap-4">
-          <Link to="/study" className="text-sm text-fg">
-            Open the study
-          </Link>
-          <Link to="/snakes" className="text-sm text-fg">
-            Open the snake den
-          </Link>
-          <Link to="/sea" className="text-sm text-fg">
-            Open the tide
-          </Link>
-          <Link to="/garden" className="text-sm text-fg">
-            Open the garden
-          </Link>
-          <Link to="/hive" className="text-sm text-fg">
-            Open the hive
-          </Link>
-          <Link to="/cellar" className="text-sm text-fg">
-            Open the cellar
-          </Link>
-          <Link to="/far" className="text-sm text-fg">
-            Open the far den
-          </Link>
-        </p>
-      </header>
+      }
+      aside={
+        <div className="mt-5 max-h-[calc(100dvh-16rem)] max-w-sm space-y-3 overflow-y-auto pr-1">
+          <aside className="paper-card rounded-[var(--radius-lg)] border p-4">
+            <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Shelf</p>
+            <h2 className="mt-1 font-display text-2xl">The eighty.</h2>
+            <p className="mt-2 text-sm text-muted">
+              On their shelves. By den, not by rarity. They will be walking when the page opens.
+            </p>
+          </aside>
 
-      {ORDER.map((rarity) => {
-        const group = SPECIES.filter((s) => s.rarity === rarity);
-        return (
-          <section key={rarity} className="space-y-4">
-            <h2 className="text-xs uppercase tracking-[0.18em] text-subtle">{rarity}</h2>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {group.map((s) => (
-                <SpeciesCard
-                  key={s.key}
-                  speciesKey={s.key}
-                  name={s.displayName}
-                  rarity={s.rarity}
-                  blurb={s.blurb}
-                  to={isLivingSpecies(s.key) ? `/demo/${livingByKey(s.key).slug}` : undefined}
-                />
-              ))}
-            </div>
-          </section>
-        );
-      })}
-    </main>
+          {ROOMS.map((room) => (
+            <aside key={room.id} className="paper-card rounded-[var(--radius-lg)] border p-4">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{room.kicker}</p>
+              <h2 className="mt-1 font-display text-2xl">{room.label}</h2>
+              <p className="mt-1 text-sm text-muted">{room.line}</p>
+              <p className="mt-2">
+                <Link to={room.path} className="text-sm text-fg no-underline hover:text-primary">
+                  Open the room
+                </Link>
+              </p>
+              <ul className="mt-3 space-y-3">
+                {guestsIn(room).map((kind) => {
+                  const species = findSpecies(kind.key);
+                  return (
+                    <li key={kind.key}>
+                      <SpeciesCard
+                        speciesKey={kind.key}
+                        name={kind.name}
+                        rarity={species?.rarity ?? "COMMON"}
+                        blurb={kind.tagline}
+                        to={`/demo/${kind.slug}`}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </aside>
+          ))}
+        </div>
+      }
+      footer={
+        <p>
+          <Link to="/meet" className="text-fg no-underline hover:text-primary">
+            The house
+          </Link>
+          {" · "}
+          <Link to="/study" className="text-muted no-underline hover:text-fg">
+            The study
+          </Link>
+          {" · "}
+          <Link to="/snakes" className="text-muted no-underline hover:text-fg">
+            The den
+          </Link>
+          {" · "}
+          <Link to="/far" className="text-muted no-underline hover:text-fg">
+            The far den
+          </Link>
+          {" · "}
+          <Link to="/collection" className="text-muted no-underline hover:text-fg">
+            The kennel
+          </Link>
+        </p>
+      }
+    />
   );
 }

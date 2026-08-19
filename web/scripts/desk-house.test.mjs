@@ -13,6 +13,7 @@ const hatchSrc = readFileSync(join(root, "src/routes/hatch.tsx"), "utf8");
 const nestSrc = readFileSync(join(root, "src/routes/nest.tsx"), "utf8");
 const petSrc = readFileSync(join(root, "src/routes/pets.$key.tsx"), "utf8");
 const kennelSrc = readFileSync(join(root, "src/routes/collection.tsx"), "utf8");
+const catalogSrc = readFileSync(join(root, "src/routes/catalog.tsx"), "utf8");
 const meetSrc = readFileSync(join(root, "src/routes/meet.tsx"), "utf8");
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
@@ -59,6 +60,8 @@ test("hatch, nest, kennel, and kennel-guest rooms stay", () => {
   assert.match(nestSrc, /persistLocal=\{false\}/);
   assert.match(kennelSrc, /CompanionRoom/);
   assert.match(kennelSrc, /persistLocal=\{false\}/);
+  assert.match(catalogSrc, /CompanionRoom/);
+  assert.match(catalogSrc, /persistLocal=\{false\}/);
   assert.match(petSrc, /onCare=\{persistCare\}/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
