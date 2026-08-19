@@ -1,5 +1,4 @@
-import { mindPreset } from "@/lib/ai/catalog";
-import type { MindBinding, VoiceKind } from "@/lib/ai/types";
+import type { MindBinding, VoiceKind } from "../ai/types";
 
 export type TalkSpendInput = {
   mind?: MindBinding;
@@ -14,6 +13,20 @@ export type TalkSpend = {
 };
 
 type EnvMap = Record<string, string | undefined>;
+
+/** Plugin → house env name. Matches `MIND_PRESETS` `envKey`. */
+const HOUSE_ENV: Record<string, string> = {
+  xai: "XAI_API_KEY",
+  openai: "OPENAI_API_KEY",
+  anthropic: "ANTHROPIC_API_KEY",
+  google: "GEMINI_API_KEY",
+  groq: "GROQ_API_KEY",
+  openrouter: "OPENROUTER_API_KEY",
+  together: "TOGETHER_API_KEY",
+  fireworks: "FIREWORKS_API_KEY",
+  deepseek: "DEEPSEEK_API_KEY",
+  mistral: "MISTRAL_API_KEY",
+};
 
 function quietVoice(voice: VoiceKind | undefined): VoiceKind {
   if (voice === "none") return "none";
@@ -39,8 +52,8 @@ export function bindTalkSpend(input: TalkSpendInput, env: EnvMap = process.env):
 
   const asked = input.mind;
   const plugin = asked?.plugin?.trim() || (env.XAI_API_KEY ? "xai" : "local");
-  const preset = mindPreset(plugin);
-  const houseKey = preset.envKey ? env[preset.envKey] : undefined;
+  const envName = HOUSE_ENV[plugin];
+  const houseKey = envName ? env[envName] : undefined;
   const voice = input.voice ?? "browser";
   const voiceKey =
     voice === "xai" ? env.XAI_API_KEY : voice === "openai" ? env.OPENAI_API_KEY : undefined;

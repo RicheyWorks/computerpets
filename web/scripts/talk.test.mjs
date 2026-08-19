@@ -7,10 +7,10 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const T = await import(join(root, "src/lib/pets/talk-spend.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
-const catalog = await import(join(root, "src/lib/pets/catalog.ts"));
 
 const talkSrc = readFileSync(join(root, "src/lib/pets/talk.ts"), "utf8");
 const spendSrc = readFileSync(join(root, "src/lib/pets/talk-spend.ts"), "utf8");
+const speciesSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const deskSrc = readFileSync(join(root, "src/components/desk/desk-stage.tsx"), "utf8");
 const liveSrc = readFileSync(join(root, "src/components/desk/live-stage.tsx"), "utf8");
@@ -131,7 +131,7 @@ test("adult Luna still does not eat; sanctuary and desk time stay", () => {
   };
   assert.equal(C.adultLuna("luna", adult, now), true);
   assert.equal(C.applyFeedFor("luna", adult, now).hunger, 40);
-  assert.equal(catalog.SPECIES.length, 80);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 80);
   assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(hatchSrc, /persistLocal=\{false\}/);
   assert.match(nestSrc, /persistLocal=\{false\}/);
