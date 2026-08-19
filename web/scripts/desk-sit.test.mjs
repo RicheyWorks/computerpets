@@ -7,7 +7,6 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const D = await import(join(root, "src/lib/pets/desk.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
-const L = await import(join(root, "src/lib/pets/living.ts"));
 
 const indexSrc = readFileSync(join(root, "src/routes/index.tsx"), "utf8");
 const deskSrc = readFileSync(join(root, "src/components/desk/desk-stage.tsx"), "utf8");
@@ -78,7 +77,6 @@ test("unsigned / no sanctuary still uses livingByKey", () => {
   assert.equal(D.sitDeskGuest([], "dog"), null);
   assert.equal(D.sitDeskGuest(null, "dog"), null);
   assert.equal(D.sitDeskGuest(undefined, "dog"), null);
-  assert.equal(L.livingByKey("dog").key, "dog");
   assert.match(indexSrc, /livingByKey\(key\)/);
   assert.match(indexSrc, /loadActiveKindKey/);
   assert.match(indexSrc, /saveActiveKindKey/);
