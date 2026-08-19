@@ -12,6 +12,7 @@ import {
 } from "@/lib/pets/ethogram";
 import { dayPart } from "@/lib/pets/hours";
 import { traitFor } from "@/lib/pets/traits";
+import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
 import {
   BREATHE_IDLE,
   BREATHE_SLEEP,
@@ -260,7 +261,7 @@ export function LivingPet({
     };
 
     const finishArrive = () => {
-      if (s.leaving) {
+      if (arriveFinish(s.leaving) === "now") {
         s.x = s.target ?? s.x;
         s.target = null;
         s.anim = "idle";
@@ -425,7 +426,7 @@ export function LivingPet({
         }
       }
       if (s.land > 0) s.land = Math.max(0, s.land - dt * LAND_DECAY);
-      if (s.settle > 0) {
+      if (s.settle > 0 && !s.dragging) {
         s.settle = Math.max(0, s.settle - dt / SETTLE_S);
         if (s.settle === 0 && s.arrivedPending) {
           s.arrivedPending = false;
@@ -477,13 +478,14 @@ export function LivingPet({
           }
           if ((dir === 1 && s.x >= s.target) || (dir === -1 && s.x <= s.target)) {
             s.x = s.target;
-            if (s.actWalk) {
+            const land = walkLand(s.actWalk, s.waypoints.length);
+            if (land === "act") {
               s.target = null;
               s.actWalk = false;
               s.anim = s.actMotion === "circle" ? "sit" : "idle";
               s.frame = 0;
               s.land = 0.4;
-            } else if (s.waypoints.length) {
+            } else if (land === "pause") {
               s.target = null;
               s.pause = wanderPauseS();
               s.anim = "idle";
@@ -683,13 +685,21 @@ export function LivingPet({
       const start = s.pointerStart;
       s.dragging = false;
       s.pointerStart = null;
-      if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) < 8) {
+      const dx = start ? e.clientX - start.x : 0;
+      const dy = start ? e.clientY - start.y : 0;
+      const lift = pointerUp(dx, dy);
+      if (lift.kind === "tap") {
         tapRef.current?.();
+        return;
+      }
+      s.land = 0.55;
+      puff(s.x, 4, 3);
+      s.arrivedPending = false;
+      s.settle = 0;
+      if (afterPlace(s.target != null) === "resume" && s.target != null) {
+        aimAt(s.target);
       } else {
         s.anim = "idle";
-        s.land = 0.55;
-        puff(s.x, 4, 3);
-        arrivedRef.current?.();
       }
     };
 
