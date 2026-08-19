@@ -1,5 +1,7 @@
 import { SNAKE_KEYS } from "./snakes";
-import { clampStat, normalizeCare, type CareStats } from "./care";
+import { normalizeCare, type CareStats } from "./care";
+
+export { applyShed } from "./care";
 
 const DUE_MS = 8 * 60 * 60 * 1000;
 
@@ -12,20 +14,6 @@ export function isBlue(stats: Partial<CareStats>, key: string, now = Date.now())
   const s = normalizeCare(stats, now);
   const last = s.shedAt ?? 0;
   return now - last >= DUE_MS;
-}
-
-export function applyShed(stats: Partial<CareStats>, now = Date.now()): CareStats {
-  const s = normalizeCare(stats, now);
-  const gifts = s.gifts.length >= 3 ? s.gifts : [...s.gifts, { id: now, x: 18 + Math.random() * 64, kind: "shed" as const }];
-  return {
-    ...s,
-    hygiene: clampStat(s.hygiene + 28),
-    mood: clampStat(s.mood + 12),
-    health: clampStat(s.health + 8),
-    bond: clampStat(s.bond + 3),
-    shedAt: now,
-    gifts,
-  };
 }
 
 const LINES: Record<string, string> = {
