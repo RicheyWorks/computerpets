@@ -30,6 +30,7 @@ test("hatch page mounts the blotter room with a house walker", () => {
   assert.doesNotMatch(hatchSrc, /careForPet/);
   assert.doesNotMatch(hatchSrc, /RARITY_WEIGHT/);
   assert.match(shellSrc, /pathname === "\/hatch"/);
+  assert.match(shellSrc, /pathname === "\/collection"/);
 });
 
 test("hatch toast and copy do not print token_id", () => {
@@ -42,7 +43,9 @@ test("hatch toast and copy do not print token_id", () => {
 test("kennel is a kennel, not held tokens", () => {
   assert.doesNotMatch(kennelSrc, /Held tokens/);
   assert.match(kennelSrc, /The guests you keep/);
-  assert.match(kennelSrc, /The kennel guest is a room/);
+  assert.match(kennelSrc, /The kennel is a room/);
+  assert.match(kennelSrc, /CompanionRoom/);
+  assert.match(kennelSrc, /persistLocal=\{false\}/);
   assert.doesNotMatch(cardSrc, /pet\.token_id/);
   assert.match(cardSrc, /lookHint/);
   assert.match(cardSrc, /from the nest/);
