@@ -30,6 +30,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 class SteamServiceTest {
 
     private SteamService service;
+    private RestClient restClient;
     private MockRestServiceServer mockServer;
 
     private static final String VALID_API_KEY = "FAKE_STEAM_API_KEY_123";
@@ -40,7 +41,7 @@ class SteamServiceTest {
     void setUp() {
         RestClient.Builder builder = RestClient.builder();
         mockServer = MockRestServiceServer.bindTo(builder).build();
-        RestClient restClient = builder.build();
+        restClient = builder.build();
 
         // House door is the test AppID. A foreign client AppID must not open it.
         service = new SteamService(restClient, VALID_API_KEY, APP_ID);
