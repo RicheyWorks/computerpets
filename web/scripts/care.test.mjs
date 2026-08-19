@@ -13,7 +13,9 @@ const nestSrc = readFileSync(join(root, "src/routes/nest.tsx"), "utf8");
 const kennelSrc = readFileSync(join(root, "src/routes/collection.tsx"), "utf8");
 const petSrc = readFileSync(join(root, "src/routes/pets.$key.tsx"), "utf8");
 const cardSrc = readFileSync(join(root, "src/components/pet-card.tsx"), "utf8");
+const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const migration = readFileSync(join(root, "migrations/0004_quiet_end.sql"), "utf8");
+const lineMigration = readFileSync(join(root, "migrations/0005_line.sql"), "utf8");
 
 const DAY = 86400000;
 const now = 1_700_000_000_000;
@@ -24,6 +26,19 @@ function guest(over = {}, born = now) {
     ...over,
     bornAt: born,
     lastTick: over.lastTick ?? born,
+  };
+}
+
+function rowOf(stats, line = C.packLine(stats)) {
+  return {
+    hunger: stats.hunger,
+    mood: stats.mood,
+    energy: stats.energy,
+    health: stats.health,
+    hygiene: stats.hygiene,
+    bornAt: stats.bornAt,
+    lastTick: stats.lastTick,
+    line,
   };
 }
 
@@ -203,4 +218,92 @@ test("sanctuary persists health and the floor stretch; kennel and nest show the 
   assert.doesNotMatch(nestSrc, /skull/i);
   assert.doesNotMatch(kennelSrc, /\+50 XP/);
   assert.doesNotMatch(petSrc, /game over/i);
+});
+
+test("a missing sanctuary line hydrates as New / empty blotter", () => {
+  const seed = C.seedCareFromRow(
+    { hunger: 78, mood: 74, energy: 80, health: 92, hygiene: 86, bornAt: now, lastTick: now, line: null },
+    now,
+  );
+  assert.equal(seed.bond, 18);
+  assert.equal(seed.sick, false);
+  assert.deepEqual(seed.mess, []);
+  assert.deepEqual(seed.gifts, []);
+  assert.equal(seed.shedAt, 0);
+});
+
+test("bond raised by care is still there after persist + hydrate", () => {
+  const seed = C.seedCareFromRow(
+    { hunger: 78, mood: 74, energy: 80, health: 92, hygiene: 86, bornAt: now, lastTick: now },
+    now,
+  );
+  const fed = C.applySanctuaryCare("feed", "dog", seed, now).stats;
+  const played = C.applySanctuaryCare("play", "dog", fed, now).stats;
+  assert.ok(played.bond > seed.bond);
+  const reloaded = C.seedCareFromRow(rowOf(played), now);
+  assert.equal(reloaded.bond, played.bond);
+  assert.equal(reloaded.hunger, played.hunger);
+  assert.equal(reloaded.mood, played.mood);
+});
+
+test("mess, gifts, sick, and shedAt survive persist + hydrate", () => {
+  const lived = guest({
+    bond: 40,
+    sick: true,
+    mess: [{ id: 1, x: 22 }],
+    gifts: [{ id: 2, x: 40, kind: "shed" }],
+    shedAt: now - 1000,
+  });
+  const reloaded = C.seedCareFromRow(rowOf(lived), now);
+  assert.equal(reloaded.sick, true);
+  assert.equal(reloaded.bond, 40);
+  assert.equal(reloaded.mess.length, 1);
+  assert.equal(reloaded.gifts[0]?.kind, "shed");
+  assert.equal(reloaded.shedAt, now - 1000);
+});
+
+test("a tick that adds mess or flips sick is not wiped on the next read", () => {
+  const prior = guest({ health: 20, hygiene: 10, hunger: 8, mess: [], sick: false, lastTick: now });
+  const later = now + 3 * 60 * 1000;
+  const orig = Math.random;
+  Math.random = () => 0;
+  const tick = C.tickSanctuary("dog", prior, now, null, later);
+  Math.random = orig;
+  assert.equal(tick.stats.sick, true);
+  assert.ok(tick.stats.mess.length >= 1);
+  const again = C.seedCareFromRow(rowOf(tick.stats), later);
+  assert.equal(again.sick, true);
+  assert.equal(again.mess.length, tick.stats.mess.length);
+  const reread = C.tickSanctuary("dog", again, later, tick.floorSince, later);
+  assert.equal(reread.stats.sick, true);
+  assert.equal(reread.stats.mess.length, tick.stats.mess.length);
+});
+
+test("a shed clock survives persist + hydrate so a snake can leave the hatch coat", () => {
+  const snake = guest({ shedAt: 0 });
+  const shed = C.applySanctuaryCare("shed", "ball_python", snake, now).stats;
+  assert.equal(shed.shedAt, now);
+  const reloaded = C.seedCareFromRow(rowOf(shed), now);
+  assert.equal(reloaded.shedAt, now);
+  const tooSoon = C.applySanctuaryCare("shed", "ball_python", reloaded, now + 60_000).stats;
+  assert.equal(tooSoon.shedAt, now);
+});
+
+test("the sanctuary writes the line; kennel guest rooms seed it", () => {
+  assert.match(lineMigration, /companion_pets add column if not exists line/);
+  assert.match(actionsSrc, /seedCareFromRow/);
+  assert.match(actionsSrc, /packLine/);
+  assert.match(actionsSrc, /line = \$\{line\}/);
+  assert.match(actionsSrc, /bond: stats\.bond/);
+  assert.match(actionsSrc, /shedAt: stats\.shedAt/);
+  assert.match(actionsSrc, /"shed"/);
+  assert.match(petSrc, /seed=\{normalizeCare\(pet\)\}/);
+  assert.match(petSrc, /return normalizeCare\(next\)/);
+  assert.match(kennelSrc, /seed=\{walker \? normalizeCare\(walker\) : undefined\}/);
+  assert.match(kennelSrc, /return normalizeCare\(next\)/);
+  assert.match(roomSrc, /persistLocal \? mergePersist\(statsRef\.current, remote\) : normalizeCare\(remote\)/);
+  assert.match(roomSrc, /onCare && !persistLocal/);
+  assert.match(roomSrc, /persist\("shed"\)/);
+  assert.doesNotMatch(actionsSrc, /bond: 18,/);
+  assert.doesNotMatch(actionsSrc, /shedAt: 0,/);
 });

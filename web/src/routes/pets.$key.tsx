@@ -70,14 +70,7 @@ function PetDetail() {
       const next = await careForPet({ data: { petId, action } });
       setPet(next);
       if (next.note) toast.message(next.note);
-      return normalizeCare({
-        hunger: next.hunger,
-        mood: next.mood,
-        energy: next.energy,
-        hygiene: next.hygiene,
-        health: next.health,
-        bornAt: next.bornAt,
-      });
+      return normalizeCare(next);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Care failed");
       try {
@@ -130,14 +123,7 @@ function PetDetail() {
         stage={pet.stage}
         guestKey={pet.id}
         persistLocal={false}
-        seed={{
-          hunger: pet.hunger,
-          mood: pet.mood,
-          energy: pet.energy,
-          hygiene: pet.hygiene,
-          health: pet.health,
-          bornAt: pet.bornAt,
-        }}
+        seed={normalizeCare(pet)}
         onCare={persistCare}
         detail={`${pet.stage} · ${moodWord(pet)} · Health ${pet.health}`}
         extraCare={[

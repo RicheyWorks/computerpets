@@ -5,6 +5,8 @@ import { getSql } from "@/lib/db";
 import { HATCH_COST, SPECIES, findSpecies, mintTokenId, pickSpecies, pickWeightedRarity } from "./catalog";
 import {
   applySanctuaryCare,
+  packLine,
+  seedCareFromRow,
   stageOf,
   tickSanctuary,
   type CareStats,
@@ -46,6 +48,7 @@ export type CompanionRow = {
   origin?: string | null;
   parent_a?: string | null;
   parent_b?: string | null;
+  line?: string | null;
 };
 
 export type CompanionView = CompanionRow & {
@@ -54,6 +57,13 @@ export type CompanionView = CompanionRow & {
   energy: number;
   health: number;
   hygiene: number;
+  bond: number;
+  sick: boolean;
+  hidden: boolean;
+  mess: CareStats["mess"];
+  gifts: CareStats["gifts"];
+  shedAt: number;
+  lastTick: number;
   genes: Genotype;
   departed: boolean;
   stage: LifeStage;
@@ -110,22 +120,19 @@ function asMs(value: unknown, fallback: number) {
 }
 
 function careSeed(row: CompanionRow, now: number): CareStats {
-  const born = asMs(row.hatched_at, now);
-  return {
-    hunger: Number(row.hunger),
-    mood: Number(row.mood),
-    energy: Number(row.energy),
-    hygiene: row.hygiene == null ? 86 : Number(row.hygiene),
-    health: row.health == null ? 92 : Number(row.health),
-    bond: 18,
-    sick: false,
-    hidden: false,
-    mess: [],
-    gifts: [],
-    bornAt: born,
-    lastTick: asMs(row.last_tick, now),
-    shedAt: 0,
-  };
+  return seedCareFromRow(
+    {
+      hunger: row.hunger,
+      mood: row.mood,
+      energy: row.energy,
+      health: row.health,
+      hygiene: row.hygiene,
+      bornAt: asMs(row.hatched_at, now),
+      lastTick: asMs(row.last_tick, now),
+      line: row.line,
+    },
+    now,
+  );
 }
 
 function floorSinceMs(row: CompanionRow): number | null {
@@ -149,6 +156,13 @@ function viewOf(row: CompanionRow, stats: CareStats, extras: { departedAt?: stri
     energy: stats.energy,
     health: stats.health,
     hygiene: stats.hygiene,
+    bond: stats.bond,
+    sick: stats.sick,
+    hidden: stats.hidden,
+    mess: stats.mess,
+    gifts: stats.gifts,
+    shedAt: stats.shedAt,
+    lastTick: stats.lastTick,
     is_active: departedAt ? false : Boolean(row.is_active),
     eyes: pheno.eyes,
     mark: pheno.mark,
@@ -180,6 +194,7 @@ function hydrate(row: CompanionRow, now = Date.now()): CompanionView {
 async function persistTick(userId: string, id: string, tick: ReturnType<typeof tickSanctuary>, now: number) {
   const sql = await getSql();
   const s = tick.stats;
+  const line = packLine(s);
   const floorSince = tick.floorSince ? new Date(tick.floorSince).toISOString() : null;
   if (tick.departedAt) {
     const gone = new Date(tick.departedAt).toISOString();
@@ -192,6 +207,7 @@ async function persistTick(userId: string, id: string, tick: ReturnType<typeof t
           health = ${s.health},
           last_tick = ${new Date(now).toISOString()},
           floor_since = ${floorSince},
+          line = ${line},
           departed_at = ${gone},
           is_active = false
       where id = ${id} and user_id = ${userId} and departed_at is null
@@ -206,7 +222,8 @@ async function persistTick(userId: string, id: string, tick: ReturnType<typeof t
         hygiene = ${s.hygiene},
         health = ${s.health},
         last_tick = ${new Date(now).toISOString()},
-        floor_since = ${floorSince}
+        floor_since = ${floorSince},
+        line = ${line}
     where id = ${id} and user_id = ${userId} and departed_at is null
   `;
 }
@@ -538,7 +555,7 @@ export const releasePet = createServerFn({ method: "POST" })
 
 const careInput = z.object({
   petId: z.string().min(1),
-  action: z.enum(["feed", "play", "rest", "clean", "medicine"]),
+  action: z.enum(["feed", "play", "rest", "clean", "medicine", "shed"]),
 });
 
 export const careForPet = createServerFn({ method: "POST" })
@@ -563,6 +580,7 @@ export const careForPet = createServerFn({ method: "POST" })
     const cared = applySanctuaryCare(data.action as SanctuaryCare, row.species_key, tick.stats, now);
     const next = cared.stats;
     const floorSince = next.health > 0 ? null : tick.floorSince;
+    const line = packLine(next);
 
     await sql`
       update companion_pets
@@ -572,7 +590,8 @@ export const careForPet = createServerFn({ method: "POST" })
           hygiene = ${next.hygiene},
           health = ${next.health},
           last_tick = ${new Date(now).toISOString()},
-          floor_since = ${floorSince ? new Date(floorSince).toISOString() : null}
+          floor_since = ${floorSince ? new Date(floorSince).toISOString() : null},
+          line = ${line}
       where id = ${data.petId} and user_id = ${context.userId} and departed_at is null
     `;
     await sql`
