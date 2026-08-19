@@ -43,6 +43,7 @@ import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { roomOf } from "@/lib/pets/rooms";
+import { playClaim } from "@/lib/pets/play";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -117,6 +118,7 @@ export function CompanionRoom({
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const statsRef = useRef(stats);
   const markRef = useRef(mark);
+  const takenRef = useRef(false);
   const acted = useRef(false);
   statsRef.current = stats;
   markRef.current = mark;
@@ -197,6 +199,7 @@ export function CompanionRoom({
   useEffect(() => {
     kind.preload();
     acted.current = false;
+    takenRef.current = false;
     setMark(null);
     setLeaving(false);
     const live = persistLocal
@@ -318,6 +321,7 @@ export function CompanionRoom({
     if (busy || stats.hidden || leaving) return;
     acted.current = true;
     unlockDeskAudio();
+    takenRef.current = false;
     setMark({ kind: "treat", x: Math.max(8, Math.min(90, x)) });
     issue("seek");
   }
@@ -326,13 +330,22 @@ export function CompanionRoom({
     if (busy || stats.hidden || leaving) return;
     acted.current = true;
     unlockDeskAudio();
+    takenRef.current = false;
     setMark({ kind: "lure", x: randomLureX() });
     say(trait.special === "bug" ? "There. A bug." : "A ribbon. Catch it.");
     issue("seek");
   }
 
   async function catchLure() {
-    if (!mark || mark.kind !== "lure") return;
+    const act = playClaim("catch", {
+      taken: takenRef.current,
+      cmd: order.cmd,
+      mark: markRef.current?.kind ?? null,
+    });
+    if (act !== "play") return;
+    takenRef.current = true;
+    markRef.current = null;
+    setMark(null);
     const prev = statsRef.current;
     if (onCare) {
       try {
@@ -343,8 +356,8 @@ export function CompanionRoom({
     } else {
       setStats(applyPlay(prev));
     }
-    setMark(null);
     say("You caught it first. I still win.");
+    note(`${displayName} played.`);
     const next = statsRef.current;
     const lineBond = maybeBondLine(prev.bond, next.bond);
     if (lineBond) window.setTimeout(() => say(lineBond), 900);
@@ -477,45 +490,51 @@ export function CompanionRoom({
         stage={age}
         seekX={mark?.x}
         onArrived={() => {
-          if (order.cmd === "leave") {
+          const act = playClaim("arrive", {
+            taken: takenRef.current,
+            cmd: order.cmd,
+            mark: markRef.current?.kind ?? null,
+          });
+          if (act === "hide") {
             setStats((s) => applyHide(s));
             setLeaving(false);
             return;
           }
-          if (order.cmd === "seek" && markRef.current) {
-            const caught = markRef.current;
-            if (caught.kind === "treat") {
-              setMark(null);
-              const prev = statsRef.current;
-              const next = applySnack(prev);
+          if (act === "snack") {
+            setMark(null);
+            const prev = statsRef.current;
+            const next = applySnack(prev);
+            setStats(next);
+            say(SNACK_LINE[kind.key] ?? "A small treaty.");
+            note(`${displayName} found the treat.`);
+            const bond = maybeBondLine(prev.bond, next.bond);
+            if (bond) window.setTimeout(() => say(bond), 900);
+            issue("eat");
+            return;
+          }
+          if (act === "play") {
+            takenRef.current = true;
+            markRef.current = null;
+            setMark(null);
+            const prev = statsRef.current;
+            const finishPlay = (next: CareStats) => {
               setStats(next);
-              say(SNACK_LINE[kind.key] ?? "A small treaty.");
-              note(`${displayName} found the treat.`);
+              say(kind.careLine("play"));
+              note(`${displayName} played.`);
               const bond = maybeBondLine(prev.bond, next.bond);
               if (bond) window.setTimeout(() => say(bond), 900);
-              issue("eat");
+              issue("play");
+            };
+            if (onCare) {
+              void persist("play")
+                .then((remote) => finishPlay(remote ?? applyPlay(prev)))
+                .catch(() => undefined);
             } else {
-              const prev = statsRef.current;
-              const finishPlay = (next: CareStats) => {
-                setMark(null);
-                setStats(next);
-                say(kind.careLine("play"));
-                note(`${displayName} played.`);
-                const bond = maybeBondLine(prev.bond, next.bond);
-                if (bond) window.setTimeout(() => say(bond), 900);
-                issue("play");
-              };
-              if (onCare) {
-                void persist("play")
-                  .then((remote) => finishPlay(remote ?? applyPlay(prev)))
-                  .catch(() => undefined);
-              } else {
-                finishPlay(applyPlay(prev));
-              }
+              finishPlay(applyPlay(prev));
             }
             return;
           }
-          if (order.cmd === "wander" || order.cmd === "play" || order.cmd === "eat" || order.cmd === "enter") {
+          if (act === "idle") {
             issue("idle");
           }
         }}
