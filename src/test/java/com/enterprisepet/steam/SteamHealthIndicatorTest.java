@@ -9,24 +9,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Unit tests for the custom Steam health indicator (Phase 1 observability).
  * Uses the package-private test constructor for full testability (no reflection).
+ * An unhung Steam door does not take the house down.
  */
 class SteamHealthIndicatorTest {
 
     @Test
-    void health_down_whenNoKeyConfigured() {
+    void health_up_whenNoKeyConfigured() {
         SteamHealthIndicator indicator = new SteamHealthIndicator();
         Health health = indicator.health();
 
-        assertThat(health.getStatus()).isEqualTo(Status.DOWN);
-        assertThat(health.getDetails().get("reason")).isEqualTo("Steam API key is not configured");
+        assertThat(health.getStatus()).isEqualTo(Status.UP);
+        assertThat(health.getDetails().get("reason")).isEqualTo("Steam door is not hung yet");
     }
 
     @Test
-    void health_down_whenPlaceholderKey() {
+    void health_up_whenPlaceholderKey() {
         SteamHealthIndicator indicator = new SteamHealthIndicator("YOUR_STEAM_WEB_API_KEY");
         Health health = indicator.health();
 
-        assertThat(health.getStatus()).isEqualTo(Status.DOWN);
+        assertThat(health.getStatus()).isEqualTo(Status.UP);
         assertThat(health.getDetails()).containsKey("reason");
     }
 
@@ -36,6 +37,6 @@ class SteamHealthIndicatorTest {
         Health health = indicator.health();
 
         assertThat(health.getStatus()).isEqualTo(Status.UP);
-        assertThat(health.getDetails().get("status")).isEqualTo("Steam API key is configured");
+        assertThat(health.getDetails().get("status")).isEqualTo("Steam door is hung");
     }
 }

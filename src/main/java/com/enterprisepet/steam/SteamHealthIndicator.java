@@ -23,13 +23,13 @@ public class SteamHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         if (steamApiKey == null || steamApiKey.isBlank() || "YOUR_STEAM_WEB_API_KEY".equals(steamApiKey)) {
-            return Health.down()
-                    .withDetail("reason", "Steam API key is not configured")
+            return Health.up()
+                    .withDetail("reason", "Steam door is not hung yet")
                     .build();
         }
 
         return Health.up()
-                .withDetail("status", "Steam API key is configured")
+                .withDetail("status", "Steam door is hung")
                 .build();
     }
 }

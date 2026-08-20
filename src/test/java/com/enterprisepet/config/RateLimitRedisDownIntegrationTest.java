@@ -41,6 +41,17 @@ class RateLimitRedisDownIntegrationTest {
     }
 
     @Test
+    @DisplayName("liveness stays the process is up when Redis is down")
+    void redisDown_livenessStaysUp() {
+        ResponseEntity<String> liveness = restTemplate.getForEntity(
+            "/actuator/health/liveness", String.class);
+
+        assertThat(liveness.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(liveness.getBody()).contains("UP");
+        assertThat(liveness.getBody()).doesNotContain("DOWN");
+    }
+
+    @Test
     @DisplayName("Redis down does not lift the limit — verify returns 503 problem+json")
     void redisDown_verifyIs503() {
         ResponseEntity<Map> response = restTemplate.getForEntity("/api/verify/providers", Map.class);

@@ -38,12 +38,12 @@ public class EpicHealthIndicator implements HealthIndicator {
         if (EpicService.isUnconfiguredClientId(clientId)
                 || EpicService.isUnconfiguredClientSecret(clientSecret)
                 || EpicService.isUnconfiguredDeploymentId(deploymentId)) {
-            return Health.down()
-                    .withDetail("reason", "Epic Games client credentials are not configured")
+            return Health.up()
+                    .withDetail("reason", "Epic door is not hung yet")
                     .build();
         }
         return Health.up()
-                .withDetail("status", "Epic Games client credentials are configured")
+                .withDetail("status", "Epic door is hung")
                 .build();
     }
 }

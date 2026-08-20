@@ -30,13 +30,13 @@ public class NftHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         if (props.isPlaceholderRpc()) {
-            return Health.down()
-                    .withDetail("reason", "Ethereum RPC URL is not configured")
+            return Health.up()
+                    .withDetail("reason", "Ethereum door is not hung yet")
                     .withDetail("collections", catalog.size())
                     .build();
         }
         return Health.up()
-                .withDetail("status", "Ethereum RPC is configured")
+                .withDetail("status", "Ethereum door is hung")
                 .withDetail("collections", catalog.size())
                 .withDetail("allowlistRequired", catalog.allowlistRequired())
                 .build();
