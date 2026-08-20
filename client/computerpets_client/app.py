@@ -28,6 +28,7 @@ from PyQt6.QtWidgets import (
 
 from .blotter import DayWash, DeskBackground, WeatherLayer, attach_gpu_viewport
 from .guide import plaque_for
+from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
     CHECK_HOUR,
     day_part,
@@ -47,6 +48,7 @@ from .life import (
     apply_play,
     apply_treat,
     decay,
+    keep_hive,
     load_care,
     pick_mess,
     save_care,
@@ -107,7 +109,7 @@ class DeskWindow(QMainWindow):
         self._user_data_dir = user_data_dir if user_data_dir is not None else default_user_data_dir()
         self.session = session or create_license_session(user_data_dir=self._user_data_dir)
         self.species: Species = species_by_key(DEFAULT_SPECIES_KEY)
-        self.care = load_care(user_data_dir=self._user_data_dir)
+        self.care = keep_hive(load_care(user_data_dir=self._user_data_dir), species_by_key(DEFAULT_SPECIES_KEY))
         self.treat: TreatItem | None = None
         self.coats: list[ShedCoatItem] = []
         self.piles: list[MessPileItem] = []
@@ -319,12 +321,18 @@ class DeskWindow(QMainWindow):
     def _refresh_vitals(self) -> None:
         s = self.care
         blue = is_blue(s, self.species.key)
-        self.pet.set_dull(blue)
+        hive = colony_of(s, s.hidden) if is_hive_place(self.species.key) else None
+        self.pet.set_dull(blue or bool(hive and hive.quiet))
         self.pet.set_unwell(s.sick)
         self.part = day_part()
         self.hours.set_part(self.part)
+        vital = (
+            f"{colony_word(hive)} · Brood · {hive.brood} · Stores · {hive.stores}"
+            if hive
+            else s.vitals(blue=blue)
+        )
         self.vital_label.setText(
-            f"{self.species.name} · {s.vitals(blue=blue)} · {day_part_label(self.part)} · "
+            f"{self.species.name} · {vital} · {day_part_label(self.part)} · "
             f"{weather_label(self.sky)} · "
             f"{visit_caption(self.species.key)}   "
             f"hunger {s.hunger}   mood {s.mood}   energy {s.energy}"
@@ -362,7 +370,7 @@ class DeskWindow(QMainWindow):
             blocked = self.kind_box.blockSignals(True)
             self.kind_box.setCurrentIndex(idx)
             self.kind_box.blockSignals(blocked)
-        self.care = replace(self.care, shed_at=0, gifts=[])
+        self.care = keep_hive(replace(self.care, shed_at=0, gifts=[]), self.species)
         self._keep_care()
         self._sync_coats()
         self._sync_mess()
@@ -516,7 +524,7 @@ class DeskWindow(QMainWindow):
     def _tick(self) -> None:
         dt = self.timer.interval() / 1000.0
         before_mess = len(self.care.mess)
-        self.care = decay(self.care, self.timer.interval())
+        self.care = keep_hive(decay(self.care, self.timer.interval()), self.species)
         if len(self.care.mess) != before_mess:
             self._sync_mess()
         self.pet.advance_pet(dt, self.care, SCENE_W)

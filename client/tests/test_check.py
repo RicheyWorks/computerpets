@@ -145,6 +145,39 @@ def test_desk_medicine_clears_unwell(tmp_path):
     del app
 
 
+def test_desk_stamps_wax_and_can_go_quieter(tmp_path):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from dataclasses import replace
+
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow(user_data_dir=tmp_path)
+    window.show()
+    window._pick_key("honeycomb")
+    assert window.species.key == "honeycomb"
+    assert window.species.name == "Wax"
+    assert window.care.brood == 7 or window.care.health >= 80
+    assert window.care.stores == window.care.hunger
+    assert "Brood" in window.vital_label.text()
+    assert "Stores" in window.vital_label.text()
+    window._feed()
+    assert window.care.stores == window.care.hunger
+    assert window.care.stores > 70
+    window.care = replace(window.care, hunger=8, health=0, brood=0, stores=8)
+    window._refresh_vitals()
+    assert "The line went quieter." in window.vital_label.text()
+    assert window.pet.dull
+    window._pick_key("red_panda")
+    assert window.care.brood is None
+    assert window.care.stores is None
+    assert "quieter" not in window.vital_label.text()
+    window.close()
+    del app
+
+
 def test_desk_keeps_care_across_a_relaunch(tmp_path):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from dataclasses import replace
