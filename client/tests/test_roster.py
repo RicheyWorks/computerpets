@@ -20,6 +20,7 @@ from computerpets_client.species import (
     SHORE_KEYS,
     MEADOW_KEYS,
     CANOPY_KEYS,
+    REEF_KEYS,
     STONE_KEYS,
     WOOD_KEYS,
     SPECIES,
@@ -29,6 +30,7 @@ from computerpets_client.species import (
     is_log,
     is_meadow,
     is_canopy,
+    is_reef,
     is_shore,
     is_far,
     is_fungus,
@@ -248,6 +250,16 @@ WEB_CATALOG = (
     "tarsier",
     "potto",
     "koala",
+    "brain_coral",
+    "anemone",
+    "clownfish",
+    "parrotfish",
+    "cleaner_shrimp",
+    "sea_cucumber",
+    "lionfish",
+    "giant_clam",
+    "eagle_ray",
+    "grouper",
 )
 
 WEB_SNAKES = (
@@ -487,6 +499,19 @@ WEB_CANOPY = (
     "koala",
 )
 
+WEB_REEF = (
+    "brain_coral",
+    "anemone",
+    "clownfish",
+    "parrotfish",
+    "cleaner_shrimp",
+    "sea_cucumber",
+    "lionfish",
+    "giant_clam",
+    "eagle_ray",
+    "grouper",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -510,6 +535,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(SHORE_KEYS) == 10
     assert len(MEADOW_KEYS) == 10
     assert len(CANOPY_KEYS) == 10
+    assert len(REEF_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -529,6 +555,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(SHORE_KEYS) == set(WEB_SHORE)
     assert set(MEADOW_KEYS) == set(WEB_MEADOW)
     assert set(CANOPY_KEYS) == set(WEB_CANOPY)
+    assert set(REEF_KEYS) == set(WEB_REEF)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -1155,6 +1182,42 @@ def test_ten_canopy_guests_are_present_and_honest():
     assert SPECIES["hummingbird"].name == "Sip"
 
 
+def test_ten_reef_guests_are_present_and_honest():
+    assert REEF_KEYS == WEB_REEF
+    for key in WEB_REEF:
+        spec = SPECIES[key]
+        assert is_reef(key)
+        assert not is_sea(key)
+        assert not is_shore(key)
+        assert not is_canopy(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.aquatic is True
+        assert spec.silhouette != "manta"
+        assert spec.silhouette != "moray"
+        assert spec.silhouette != "jelly"
+        assert spec.silhouette != "fish"
+    assert SPECIES["brain_coral"].slug == "ridge"
+    assert SPECIES["brain_coral"].name == "Ridge"
+    assert SPECIES["anemone"].name == "Wreath"
+    assert SPECIES["clownfish"].name == "Paint"
+    assert SPECIES["parrotfish"].name == "Scrape"
+    assert SPECIES["cleaner_shrimp"].name == "Scrub"
+    assert SPECIES["sea_cucumber"].name == "Tube"
+    assert SPECIES["lionfish"].name == "Veil"
+    assert SPECIES["lionfish"].slug == "veil"
+    assert SPECIES["giant_clam"].name == "Gate"
+    assert SPECIES["eagle_ray"].name == "Soar"
+    assert SPECIES["grouper"].name == "Hide"
+    assert SPECIES["lions_mane"].name == "Mane"
+    assert SPECIES["lions_mane"].slug == "mane"
+    assert SPECIES["manta"].name == "Kite"
+    assert SPECIES["moray"].name == "Door"
+    assert SPECIES["goldfish"].name == "Coin"
+    assert SPECIES["moon_jelly"].name == "Pulse"
+    assert SPECIES["ginkgo"].name == "Fan"
+
+
 def test_ten_creek_guests_are_present_and_honest():
     assert CREEK_KEYS == WEB_CREEK
     for key in WEB_CREEK:
@@ -1230,8 +1293,10 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("amphipod") == "fiddler_crab"
     assert next_species_key("lugworm") == "field_cricket"
     assert next_species_key("robber_fly") == "sloth"
-    assert next_species_key("koala") == "red_panda"
-    assert prev_species_key("red_panda") == "koala"
+    assert next_species_key("koala") == "brain_coral"
+    assert next_species_key("grouper") == "red_panda"
+    assert prev_species_key("red_panda") == "grouper"
+    assert prev_species_key("brain_coral") == "koala"
     assert prev_species_key("sloth") == "robber_fly"
     assert prev_species_key("field_cricket") == "lugworm"
     assert prev_species_key("house_centipede") == "american_eel"

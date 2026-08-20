@@ -211,6 +211,16 @@ export const SPECIES: Species[] = [
   { key: "tarsier", displayName: "Philippine Tarsier", rarity: "RARE", temperament: "Looking", habitat: "Branch hollow", blurb: "The eyes are the face. Not Heart." },
   { key: "potto", displayName: "Potto", rarity: "UNCOMMON", temperament: "Still", habitat: "Vine rail", blurb: "A slow cousin. Not a loris. Not Twig. Not Fold. Not Hang." },
   { key: "koala", displayName: "Koala", rarity: "UNCOMMON", temperament: "Chewing", habitat: "Gum perch", blurb: "A marsupial. Not a bear. Not Coal. Not Burr." },
+  { key: "brain_coral", displayName: "Boulder Brain Coral", rarity: "UNCOMMON", temperament: "Ridged", habitat: "Boulder dish", blurb: "A coral is an animal. Not a plant. Not Fan. Not Bloom. Not Hold. Not Coral." },
+  { key: "anemone", displayName: "Magnificent Sea Anemone", rarity: "UNCOMMON", temperament: "Wreathed", habitat: "Column dish", blurb: "A wreath of tentacles. Not Pulse. Not Snap." },
+  { key: "clownfish", displayName: "Ocellaris Clownfish", rarity: "COMMON", temperament: "Painted", habitat: "Wreath cup", blurb: "She lives in the wreath. Not Stripe. Not Coin." },
+  { key: "parrotfish", displayName: "Stoplight Parrotfish", rarity: "UNCOMMON", temperament: "Rasping", habitat: "Rock plate", blurb: "She rasps the rock. Not Quill. Not Beak." },
+  { key: "cleaner_shrimp", displayName: "Pacific Cleaner Shrimp", rarity: "COMMON", temperament: "Waiting", habitat: "Station dish", blurb: "A station, not a hunt. Not Tenant. Not Pinch." },
+  { key: "sea_cucumber", displayName: "Pineapple Sea Cucumber", rarity: "COMMON", temperament: "Soft", habitat: "Sand well", blurb: "Soft. Not a worm. Not Heap. Not Cast." },
+  { key: "lionfish", displayName: "Red Lionfish", rarity: "UNCOMMON", temperament: "Veiled", habitat: "Reef ledge", blurb: "The fins are a veil. Not Mane. Not Fan. Not Spine. Not Spike." },
+  { key: "giant_clam", displayName: "Giant Clam", rarity: "RARE", temperament: "Gated", habitat: "Mantle dish", blurb: "A door of a shell. Not Chamber. Not Cone." },
+  { key: "eagle_ray", displayName: "Spotted Eagle Ray", rarity: "RARE", temperament: "Soaring", habitat: "Reef sky", blurb: "A ray of the reef. Not Kite. Not a bird." },
+  { key: "grouper", displayName: "Nassau Grouper", rarity: "UNCOMMON", temperament: "Hiding", habitat: "Hole dish", blurb: "A fish of a hole. Not Door. Not Lance." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

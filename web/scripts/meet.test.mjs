@@ -16,7 +16,7 @@ test("meet says two hundred, not Fifty", () => {
   assert.doesNotMatch(meetSrc, /\bFifty\b/);
   assert.doesNotMatch(meetSrc, /One hundred seventy/);
   assert.match(meetSrc, /Two hundred guests walk the blotter/);
-  assert.match(meetSrc, /Two hundred, on their shelves/);
+  assert.match(meetSrc, /Two hundred ten, on their shelves/);
   assert.match(meetSrc, /Watch Rui/);
   assert.match(meetSrc, /HouseFloor/);
   assert.match(meetSrc, /DenCabinet/);

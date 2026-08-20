@@ -231,6 +231,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "tarsier": (_a("gaze", "nod", 1.4, 5, "sit"), _a("leap", "hop", 0.5, 3, "play"), _a("still", "freeze", 1.6, 2)),
     "potto": (_a("still", "freeze", 2.6, 5), _a("cling", "sit_hold", 2.2, 3, "sit"), _a("walk", "wiggle", 1.0, 1)),
     "koala": (_a("chew", "eat", 1.6, 5, "eat"), _a("cling", "sit_hold", 2.4, 3, "sit"), _a("still", "freeze", 2.0, 2)),
+    "brain_coral": (_a("ridge", "sit_hold", 2.6, 5, "sit"), _a("polyp", "pulse", 1.4, 3), _a("still", "freeze", 2.2, 2)),
+    "anemone": (_a("wreath", "pulse", 1.6, 5), _a("open", "open", 1.8, 3, "sit"), _a("still", "freeze", 2.0, 2)),
+    "clownfish": (_a("dart", "dart", 0.6, 5), _a("nestle", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.4, 2)),
+    "parrotfish": (_a("scrape", "nod", 1.2, 5), _a("swim", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "cleaner_shrimp": (_a("wave", "pulse", 0.8, 5), _a("wait", "sit_hold", 2.0, 3, "sit"), _a("still", "freeze", 1.6, 2)),
+    "sea_cucumber": (_a("crawl", "wiggle", 1.4, 5), _a("still", "sit_hold", 2.2, 3, "sit"), _a("freeze", "freeze", 1.8, 2)),
+    "lionfish": (_a("veil", "pulse", 1.4, 5), _a("hover", "bob", 1.6, 3), _a("still", "freeze", 1.8, 2)),
+    "giant_clam": (_a("open", "open", 1.8, 5, "sit"), _a("mantle", "sit_hold", 2.4, 4, "sit"), _a("still", "freeze", 2.2, 2)),
+    "eagle_ray": (_a("soar", "pulse", 1.4, 5), _a("glide", "bob", 1.8, 3), _a("still", "freeze", 1.6, 2)),
+    "grouper": (_a("hide", "sit_hold", 2.4, 5, "sit"), _a("gape", "gape", 1.0, 3), _a("still", "freeze", 1.8, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS
