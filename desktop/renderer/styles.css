@@ -101,6 +101,10 @@ body {
   filter: saturate(0.4) brightness(0.8) contrast(0.92);
 }
 
+#pet.dull {
+  filter: saturate(0.42) brightness(0.82) contrast(0.92);
+}
+
 #pet.hidden {
   opacity: 0;
   pointer-events: none;
