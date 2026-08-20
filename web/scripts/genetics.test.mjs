@@ -104,6 +104,21 @@ test("yeast / lichen / knot have a defined path that still mints one record", ()
   assert.equal(knot.ok, true);
   assert.equal(knot.path.verb, "bud");
   assert.equal(G.rollBrood("nexus", rise[0].genotype, null, knot.path).length, 1);
+
+  const wax = G.canPair("honeycomb", null);
+  assert.equal(wax.ok, true);
+  assert.equal(wax.path.verb, "brood");
+  assert.equal(G.rollBrood("honeycomb", rise[0].genotype, null, wax.path).length, 1);
+
+  const keep = G.canPair("honey_queen", null);
+  assert.equal(keep.ok, true);
+  assert.equal(keep.path.verb, "egg");
+
+  const drone = G.canPair("honey_drone", null);
+  assert.equal(drone.ok, false);
+  const twoDrones = G.canPair("honey_drone", "honey_drone");
+  assert.equal(twoDrones.ok, false);
+  assert.equal(G.departVerb("honeycomb"), "went quiet");
 });
 
 test("Hardy–Weinberg: known house reports p, q, expected vs observed; empty does not crash", () => {
