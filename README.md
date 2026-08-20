@@ -1,6 +1,6 @@
 # ComputerPets
 
-A living ecology. A natural-history house. One hundred twenty guests walk the blotter.
+A living ecology. A natural-history house. One hundred thirty guests walk the blotter.
 
 Keep them so a line does not go quiet. The nest is a room. The square sits on the paper. Neglect can close a line.
 
@@ -83,7 +83,7 @@ The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at
 
 ## Features
 
-- One hundred twenty living kinds across the house, the dens, the tide, the garden, the hive, the pond, the roost, the cellar, the well, and the far den
+- One hundred thirty living kinds across the house, the dens, the tide, the garden, the hive, the pond, the roost, the corner, the cellar, the well, and the far den
 - A living desk in the browser, a native overlay, and a PyQt blotter
 - A nest that is a square. Neglect can close a line
 - Optional ownership verify. Fail-closed. Empty allowlists stay empty

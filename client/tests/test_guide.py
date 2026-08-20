@@ -677,6 +677,9 @@ def test_the_important_roost_mixups_are_actually_taught():
     assert re.search(r"not a flicker", pileated, re.I)
     assert re.search(r"not a bee", hummingbird, re.I)
     assert re.search(r"Thrum", hummingbird)
+
+
+def test_the_important_corner_mixups_are_actually_taught():
     orb = _taught(plaque_for("orb_weaver"))
     jumper = _taught(plaque_for("jumping_spider"))
     wolf = _taught(plaque_for("wolf_spider"))
@@ -692,7 +695,7 @@ def test_the_important_roost_mixups_are_actually_taught():
     assert re.search(r"web is a trap", orb, re.I)
     assert re.search(r"not a wolf spider", jumper, re.I)
     assert re.search(r"Prowl", jumper)
-    assert re.search(r"not Leap", wolf)
+    assert re.search(r"not Leap", wolf, re.I)
     assert re.search(r"No snare", wolf)
     assert re.search(r"not a wolf spider", tarantula, re.I)
     assert re.search(r"Urticating hair", tarantula)
