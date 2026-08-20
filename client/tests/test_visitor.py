@@ -9,10 +9,10 @@ from computerpets_client.weather import civil_day_number
 
 def test_visitor_identity_matches_house_formula():
     now = datetime(2026, 8, 17)
-    assert todays_visitor("red_panda", now).key == "kingsnake"
-    assert todays_visitor("ball_python", now).key == "hognose"
-    assert todays_visitor("red_panda", datetime(2026, 1, 1)).key == "barn_owl"
-    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "dragon"
+    assert todays_visitor("red_panda", now).key == "turkey_tail"
+    assert todays_visitor("ball_python", now).key == "puffball"
+    assert todays_visitor("red_panda", datetime(2026, 1, 1)).key == "axolotl"
+    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "orb_weaver"
 
 
 def test_visitor_is_never_the_host():
@@ -35,6 +35,6 @@ def test_visitor_uses_catalog_order_minus_host():
 def test_visit_line_is_the_house_copy():
     assert visit_line("axolotl") == "I grew a little more present. Then less."
     assert visit_line("ball_python") == "I came as a bun. I will leave as a bun."
-    assert visit_caption("red_panda", datetime(2026, 8, 17)) == "Bandit may call"
+    assert visit_caption("red_panda", datetime(2026, 8, 17)) == "Ring may call"
     assert visit_line("horseshoe_crab") == "I walked the sand. I am not a crab."
     assert visit_line("not_a_pet") == "I came. I saw the lamp. I left."

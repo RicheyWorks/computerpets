@@ -948,7 +948,7 @@ def test_ten_log_guests_are_present_and_honest():
     assert not SPECIES["pillbug"].aquatic
     assert SPECIES["amphipod"].aquatic is True
     assert SPECIES["sundew"].name == "Dew"
-    assert SPECIES["honeycomb"].name == "Comb"
+    assert SPECIES["honeybee"].name == "Comb"
     assert SPECIES["orb_weaver"].name == "Loom"
     assert SPECIES["leech"].name == "Latch"
     assert SPECIES["caecilian"].name == "Slip"
