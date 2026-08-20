@@ -14,7 +14,7 @@ export const Route = createFileRoute("/hive")({
       { title: "The hive den — ComputerPets" },
       {
         name: "description",
-        content: "Bees walk. Comb sits. The hive is a place. Learn the species by watching them stay.",
+        content: "The comb sits. Comb, Keep, and Hum keep it. The hive keeps a line. Neglect can go quiet.",
       },
     ],
   }),
@@ -27,8 +27,8 @@ export function HivePage() {
     <main className="bg-bg text-fg">
       <RoomHero
         room="hive"
-        headline="The bees walk. The comb sits."
-        line="The hive keeps bees and comb. Watch Comb waggle. Sit with Wax. Read the plaque. Leave knowing a bumblebee is not a honey bee, a carpenter bee does not keep honey the honey-bee way, a drone is not a worker, and the queen is not a second Comb."
+        headline="The comb sits. The line stays."
+        line="Wax is the nest. Comb, Keep, and Hum sit on it. Brood in some cells. Stores in others. Neglect can go quiet. The nest still keeps one. Read the plaque. Leave knowing a bumblebee is not a honey bee, a carpenter bee does not keep honey the honey-bee way, a drone is not a worker, and the queen is not a second Comb."
       />
 
       <HiveDen selectedKey={selected} onSelect={setSelected} />
@@ -41,8 +41,9 @@ export function HivePage() {
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">How to use the hive</p>
             <p className="mt-2 font-display text-2xl">Watch, then tap.</p>
             <p className="mt-2 text-sm text-muted">
-              Five sit at a time. The rest cycle onto the wood. Treat, hide, and talk still live on
-              each guest&apos;s demo and on the desk. The bees walk. The comb sits. It is not a shop.
+              The comb sits. Comb, Keep, and Hum keep it. The rest cycle onto the wood. Nectar
+              fills the stores. Tend the brood. Neglect can go quiet. Treat, hide, and talk still
+              live on each guest&apos;s demo and on the desk. It is not a shop.
             </p>
             <p className="mt-4">
               <Link to="/" search={{ pet: selected }} className="text-sm text-fg">

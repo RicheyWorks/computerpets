@@ -14,6 +14,10 @@ export type CareStats = {
   bornAt: number;
   lastTick: number;
   shedAt: number;
+  /** Hive line. Brood cells on Wax. Other guests leave these unset. */
+  brood?: number;
+  /** Hive line. Nectar stores on Wax. Other guests leave these unset. */
+  stores?: number;
 };
 
 const HUNGER_PER_MS = 100 / (6 * 60 * 60 * 1000);
@@ -60,6 +64,8 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
     bornAt: raw.bornAt ?? now,
     lastTick: raw.lastTick ?? now,
     shedAt: typeof raw.shedAt === "number" ? raw.shedAt : 0,
+    brood: typeof raw.brood === "number" ? raw.brood : undefined,
+    stores: typeof raw.stores === "number" ? raw.stores : undefined,
   };
 }
 
@@ -71,6 +77,8 @@ export type CareLine = {
   mess: MessPile[];
   gifts: MessPile[];
   shedAt: number;
+  brood?: number;
+  stores?: number;
 };
 
 const NEW_LINE: CareLine = {
@@ -91,6 +99,8 @@ export function packLine(stats: Pick<CareStats, keyof CareLine>): string {
     gifts: Array.isArray(stats.gifts) ? stats.gifts.slice(0, 3) : [],
     shedAt: typeof stats.shedAt === "number" ? stats.shedAt : 0,
   };
+  if (typeof stats.brood === "number") line.brood = Math.max(0, Math.min(8, Math.round(stats.brood)));
+  if (typeof stats.stores === "number") line.stores = clampStat(stats.stores);
   return JSON.stringify(line);
 }
 
@@ -113,6 +123,8 @@ export function unpackLine(raw: unknown): CareLine {
     mess: Array.isArray(o.mess) ? o.mess.slice(0, 6) : [],
     gifts: Array.isArray(o.gifts) ? o.gifts.slice(0, 3) : [],
     shedAt: typeof o.shedAt === "number" ? o.shedAt : 0,
+    brood: typeof o.brood === "number" ? Math.max(0, Math.min(8, Math.round(o.brood))) : undefined,
+    stores: typeof o.stores === "number" ? clampStat(o.stores) : undefined,
   };
 }
 
@@ -165,10 +177,20 @@ export function adultLuna(speciesKey: string, stats: Partial<CareStats>, now = D
   return speciesKey === "luna" && stageOf(normalizeCare(stats, now), now) !== "hatchling";
 }
 
+/** Hunger is stores. Health is brood. Same meters, hive names on the line. */
+function stampHiveLine(stats: CareStats): CareStats {
+  return {
+    ...stats,
+    brood: Math.max(0, Math.min(8, Math.round(stats.health / 12.5))),
+    stores: clampStat(stats.hunger),
+  };
+}
+
 export function applyFeedFor(speciesKey: string, stats: Partial<CareStats>, now = Date.now()): CareStats {
   const s = normalizeCare(stats, now);
   if (adultLuna(speciesKey, s, now)) return s;
-  return applyFeed(s);
+  const fed = applyFeed(s);
+  return speciesKey === "honeycomb" ? stampHiveLine(fed) : fed;
 }
 
 /** A guest at the floor who is still in the stretch can be lifted by care. */
@@ -206,16 +228,27 @@ export function applySanctuaryCare(
     if (adultLuna(speciesKey, s, now)) {
       return { stats: s, note: "Ghost does not eat. The week is the species." };
     }
-    return { stats: liftFromFloor(applyFeed(s)) };
+    const fed = liftFromFloor(applyFeed(s));
+    return { stats: speciesKey === "honeycomb" ? stampHiveLine(fed) : fed };
   }
-  if (action === "play") return { stats: applyPlay(s) };
-  if (action === "rest") return { stats: liftFromFloor(applyRest(s)) };
-  if (action === "clean") return { stats: liftFromFloor(applyClean(s)) };
+  if (action === "play") {
+    const played = applyPlay(s);
+    return { stats: speciesKey === "honeycomb" ? stampHiveLine(played) : played };
+  }
+  if (action === "rest") {
+    const rested = liftFromFloor(applyRest(s));
+    return { stats: speciesKey === "honeycomb" ? stampHiveLine(rested) : rested };
+  }
+  if (action === "clean") {
+    const cleaned = liftFromFloor(applyClean(s));
+    return { stats: speciesKey === "honeycomb" ? stampHiveLine(cleaned) : cleaned };
+  }
   if (action === "shed") {
     if (now - s.shedAt < SHED_DUE_MS) return { stats: s };
     return { stats: applyShed(s, now) };
   }
-  return { stats: liftFromFloor(applyMedicine(s)) };
+  const healed = liftFromFloor(applyMedicine(s));
+  return { stats: speciesKey === "honeycomb" ? stampHiveLine(healed) : healed };
 }
 
 export type SanctuaryTick = {
@@ -231,7 +264,8 @@ function decayForSpecies(speciesKey: string, stats: CareStats, lastTick: number,
     const live = decayStats(pinned, lastTick, now);
     return { ...live, hunger: stats.hunger };
   }
-  return decayStats(stats, lastTick, now);
+  const live = decayStats(stats, lastTick, now);
+  return speciesKey === "honeycomb" ? stampHiveLine(live) : live;
 }
 
 /** Age a locally kept guest from lastTick. Same clocks as sanctuary; Luna's hunger stays pinned. */
