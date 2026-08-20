@@ -63,7 +63,7 @@ test("hatch, nest, kennel, desk, live, meet, and demo stay", () => {
   assert.match(deskSrc, /CompanionRoom/);
   assert.match(liveSrc, /CompanionRoom/);
   assert.match(meetSrc, /Watch Rui/);
-  assert.match(meetSrc, /Eighty/);
+  assert.match(meetSrc, /Ninety/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);
