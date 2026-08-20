@@ -300,6 +300,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   acorn_weevil: [A("drill", "sit_hold", 2.0, 5, "sit"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.8, 2)],
   click_beetle: [A("click", "pulse", 0.7, 5), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
   robber_fly: [A("hunt", "dart", 0.6, 5), A("perch", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.4, 2)],
+  sloth: [A("hang", "sit_hold", 2.6, 5, "sit"), A("reach", "stretch", 1.6, 3, "sit"), A("still", "freeze", 2.2, 2)],
+  lemur: [A("sun", "sit_hold", 2.2, 5, "sit"), A("flag", "pulse", 0.8, 3), A("walk", "wiggle", 1.0, 2)],
+  gibbon: [A("swing", "pulse", 1.2, 5), A("song", "talk", 0.8, 3, "talk"), A("still", "freeze", 1.6, 2)],
+  kinkajou: [A("wrap", "sit_hold", 2.0, 5, "sit"), A("lick", "eat", 1.2, 3, "eat"), A("still", "freeze", 1.6, 2)],
+  colugo: [A("sail", "pulse", 1.4, 5), A("cling", "sit_hold", 2.2, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  flying_squirrel: [A("glide", "pulse", 1.2, 5), A("hop", "hop", 0.5, 3, "play"), A("still", "freeze", 1.6, 2)],
+  howler: [A("boom", "talk", 0.9, 5, "talk"), A("sit", "sit_hold", 2.2, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  tarsier: [A("gaze", "nod", 1.4, 5, "sit"), A("leap", "hop", 0.5, 3, "play"), A("still", "freeze", 1.6, 2)],
+  potto: [A("still", "freeze", 2.6, 5), A("cling", "sit_hold", 2.2, 3, "sit"), A("walk", "wiggle", 1.0, 1)],
+  koala: [A("chew", "eat", 1.6, 5, "eat"), A("cling", "sit_hold", 2.4, 3, "sit"), A("still", "freeze", 2.0, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

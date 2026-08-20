@@ -89,7 +89,7 @@ test("catalog is a shelf, not a prospectus", () => {
 
 test("meet, demo, and kennel-guest rooms stay", () => {
   assert.match(meetSrc, /Watch Rui/);
-  assert.match(meetSrc, /One hundred ninety guests walk the blotter/);
+  assert.match(meetSrc, /Two hundred guests walk the blotter/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);

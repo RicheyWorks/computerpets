@@ -4,7 +4,7 @@ from computerpets_client.ethogram import (
     acts_for,
     pick_act,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, WELL_KEYS, WOOD_KEYS, STONE_KEYS
+from computerpets_client.species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, WELL_KEYS, WOOD_KEYS, STONE_KEYS
 
 
 def test_every_catalog_kind_has_acts():
@@ -230,3 +230,17 @@ def test_only_scratching_mammals_scratch():
     assert "drill" in [a["name"] for a in acts_for("acorn_weevil")]
     assert "click" in [a["name"] for a in acts_for("click_beetle")]
     assert "hunt" in [a["name"] for a in acts_for("robber_fly")]
+    for key in CANOPY_KEYS:
+        names = [a["name"] for a in acts_for(key)]
+        assert "scratch" not in names, key
+        assert "tongue" not in names, key
+    assert "hang" in [a["name"] for a in acts_for("sloth")]
+    assert "sun" in [a["name"] for a in acts_for("lemur")]
+    assert "swing" in [a["name"] for a in acts_for("gibbon")]
+    assert "wrap" in [a["name"] for a in acts_for("kinkajou")]
+    assert "sail" in [a["name"] for a in acts_for("colugo")]
+    assert "glide" in [a["name"] for a in acts_for("flying_squirrel")]
+    assert "boom" in [a["name"] for a in acts_for("howler")]
+    assert "gaze" in [a["name"] for a in acts_for("tarsier")]
+    assert "still" in [a["name"] for a in acts_for("potto")]
+    assert "chew" in [a["name"] for a in acts_for("koala")]

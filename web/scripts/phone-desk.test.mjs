@@ -210,5 +210,5 @@ test("the living guest learns the phone sit; the tablet leftover stays", () => {
   assert.match(liveSrc, /homeSit/);
   assert.match(liveSrc, /Add to Home Screen/);
   assert.doesNotMatch(deskJs, /TAP_PX_PHONE|isPhone|phoneOrient|homeSit/);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 190);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 200);
 });

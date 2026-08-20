@@ -180,7 +180,7 @@ test("the nest room still waits; sanctuary, talk keeper, desk time, and rooms st
   assert.match(careSrc, /packLine/);
   assert.match(actionsSrc, /seedCareFromRow/);
   assert.match(actionsSrc, /packLine/);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 190);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 200);
   const grownBorn = now - 2 * 86400000;
   const adult = { ...Care.blankCare(grownBorn), hunger: 40, bornAt: grownBorn, lastTick: now };
   assert.equal(Care.adultLuna("luna", adult, now), true);

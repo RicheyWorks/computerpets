@@ -43,6 +43,9 @@ from computerpets_client.guide import (
     MEADOW_GUIDE,
     meadow_guide_complete,
     meadow_guide_keys,
+    CANOPY_GUIDE,
+    canopy_guide_complete,
+    canopy_guide_keys,
     STONE_GUIDE,
     stone_guide_complete,
     stone_guide_keys,
@@ -68,7 +71,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -314,6 +317,19 @@ MEADOW_EXPECTED = [
     ("robber_fly", "rob", "Efferia aestuans"),
 ]
 
+CANOPY_EXPECTED = [
+    ("sloth", "hang", "Choloepus didactylus"),
+    ("lemur", "sun", "Lemur catta"),
+    ("gibbon", "swing", "Hylobates lar"),
+    ("kinkajou", "wrist", "Potos flavus"),
+    ("colugo", "sail", "Galeopterus variegatus"),
+    ("flying_squirrel", "glide", "Glaucomys volans"),
+    ("howler", "boom", "Alouatta palliata"),
+    ("tarsier", "gaze", "Carlito syrichta"),
+    ("potto", "still", "Perodicticus potto"),
+    ("koala", "gum", "Phascolarctos cinereus"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -341,6 +357,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert log_guide_complete()
     assert shore_guide_complete()
     assert meadow_guide_complete()
+    assert canopy_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -359,6 +376,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert log_guide_keys() == LOG_KEYS
     assert shore_guide_keys() == SHORE_KEYS
     assert meadow_guide_keys() == MEADOW_KEYS
+    assert canopy_guide_keys() == CANOPY_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -547,6 +565,17 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert classroom_for(key).room == "meadow"
         assert classroom_for(key).verb == "stay"
         assert classroom_for(key).label == "All ten in the meadow"
+    for key, slug, latin in CANOPY_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in CANOPY_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "canopy"
+        assert classroom_for(key).verb == "stay"
+        assert classroom_for(key).label == "All ten in the canopy"
 
 
 def test_the_important_house_mixups_are_actually_taught():
@@ -1142,6 +1171,51 @@ def test_the_important_meadow_mixups_are_actually_taught():
     assert re.search(r"not Sip", robber, re.I)
 
 
+def test_the_important_canopy_mixups_are_actually_taught():
+    sloth = _taught(plaque_for("sloth"))
+    lemur = _taught(plaque_for("lemur"))
+    gibbon = _taught(plaque_for("gibbon"))
+    kinkajou = _taught(plaque_for("kinkajou"))
+    colugo = _taught(plaque_for("colugo"))
+    flyer = _taught(plaque_for("flying_squirrel"))
+    howler = _taught(plaque_for("howler"))
+    tarsier = _taught(plaque_for("tarsier"))
+    potto = _taught(plaque_for("potto"))
+    koala = _taught(plaque_for("koala"))
+    assert re.search(r"not lazy", sloth, re.I)
+    assert re.search(r"not Rui", sloth, re.I)
+    assert re.search(r"not a red panda", sloth, re.I)
+    assert re.search(r"not Stripe", lemur, re.I)
+    assert re.search(r"not Ring", lemur, re.I)
+    assert re.search(r"not a raccoon", lemur, re.I)
+    assert re.search(r"not a monkey", gibbon, re.I)
+    assert re.search(r"not Quill", gibbon, re.I)
+    assert re.search(r"not Sip", kinkajou, re.I)
+    assert re.search(r"not Comb", kinkajou, re.I)
+    assert re.search(r"not Rue", kinkajou, re.I)
+    assert re.search(r"not a ferret", kinkajou, re.I)
+    assert re.search(r"not a lemur", colugo, re.I)
+    assert re.search(r"not Glide", colugo, re.I)
+    assert re.search(r"not Cape", colugo, re.I)
+    assert re.search(r"not a bird", flyer, re.I)
+    assert re.search(r"not Kite", flyer, re.I)
+    assert re.search(r"not a wing", flyer, re.I)
+    assert re.search(r"not Vee", howler, re.I)
+    assert re.search(r"not Swing", howler, re.I)
+    assert re.search(r"not a gibbon", howler, re.I)
+    assert re.search(r"not Heart", tarsier, re.I)
+    assert re.search(r"not an owl", tarsier, re.I)
+    assert re.search(r"not a loris", potto, re.I)
+    assert re.search(r"not Twig", potto, re.I)
+    assert re.search(r"not Fold", potto, re.I)
+    assert re.search(r"not Hang", potto, re.I)
+    assert re.search(r"not a sloth", potto, re.I)
+    assert re.search(r"not a bear", koala, re.I)
+    assert re.search(r"not Coal", koala, re.I)
+    assert re.search(r"not Burr", koala, re.I)
+    assert re.search(r"marsupial", koala, re.I)
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -1166,6 +1240,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     log_src = (WEB_PETS / "log-guide.ts").read_text(encoding="utf-8")
     shore_src = (WEB_PETS / "shore-guide.ts").read_text(encoding="utf-8")
     meadow_src = (WEB_PETS / "meadow-guide.ts").read_text(encoding="utf-8")
+    canopy_src = (WEB_PETS / "canopy-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -1183,6 +1258,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     log_keys = [key for key, _, _ in LOG_EXPECTED]
     shore_keys = [key for key, _, _ in SHORE_EXPECTED]
     meadow_keys = [key for key, _, _ in MEADOW_EXPECTED]
+    canopy_keys = [key for key, _, _ in CANOPY_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -1314,6 +1390,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(MEADOW_EXPECTED):
         nxt = meadow_keys[index + 1] if index + 1 < len(meadow_keys) else None
         chunk = _slice_entry(meadow_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(CANOPY_EXPECTED):
+        nxt = canopy_keys[index + 1] if index + 1 < len(canopy_keys) else None
+        chunk = _slice_entry(canopy_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk

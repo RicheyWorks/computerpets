@@ -142,7 +142,7 @@ test("kennel cards stay paper and still open the guest room", () => {
 
 test("meet and demo stay the public door", () => {
   assert.match(meetSrc, /Watch Rui/);
-  assert.match(meetSrc, /One hundred ninety guests walk the blotter/);
+  assert.match(meetSrc, /Two hundred guests walk the blotter/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);
