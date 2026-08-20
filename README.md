@@ -1,6 +1,6 @@
 # ComputerPets
 
-A living ecology. A natural-history house. Eighty guests walk the blotter.
+A living ecology. A natural-history house. Ninety guests walk the blotter.
 
 Keep them so a line does not go quiet. The nest is a room. The square sits on the paper. Neglect can close a line.
 
@@ -31,7 +31,7 @@ Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answ
 
 Walk the dens. Each room teaches its guests.
 
-Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The eighty sit by den, not by rarity.
+Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The ninety sit by den, not by rarity.
 
 Pair two you already keep at `/nest`. The nest is a room. The square sits on the paper.
 

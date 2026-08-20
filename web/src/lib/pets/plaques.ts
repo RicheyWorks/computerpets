@@ -1,3 +1,5 @@
+import { beeGuideFor, type BeeGuide } from "./bee-guide";
+import { isBee } from "./bees";
 import { farGuideFor, type FarGuide } from "./far-guide";
 import { isFar } from "./far";
 import { fungiGuideFor, type FungiGuide } from "./fungi-guide";
@@ -12,10 +14,10 @@ import { isSea } from "./sea";
 import { isSnake } from "./shed";
 import { guideFor, type SnakeGuide } from "./snake-guide";
 
-export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | FungiGuide | FarGuide;
+export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | BeeGuide | FungiGuide | FarGuide;
 
 export function plaqueFor(key: string | undefined | null): FieldGuide | null {
-  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? houseGuideFor(key);
+  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? beeGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? houseGuideFor(key);
 }
 
 export function classroomFor(key: string) {
@@ -28,8 +30,8 @@ export function classroomFor(key: string) {
   if (isGarden(key)) {
     return { to: "/garden" as const, label: "All ten in the garden", verb: "grow" };
   }
-  if (isInsect(key)) {
-    return { to: "/hive" as const, label: "All ten in the hive", verb: "stay" };
+  if (isInsect(key) || isBee(key)) {
+    return { to: "/hive" as const, label: isBee(key) ? "The hive. Bees and comb." : "All ten in the hive", verb: "stay" };
   }
   if (isFungus(key)) {
     return { to: "/cellar" as const, label: "All ten in the cellar", verb: "stay" };

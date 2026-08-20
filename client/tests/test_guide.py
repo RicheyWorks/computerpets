@@ -11,6 +11,7 @@ import re
 from pathlib import Path
 
 from computerpets_client.guide import (
+    BEE_GUIDE,
     FIELD_GUIDE,
     FUNGI_GUIDE,
     GARDEN_GUIDE,
@@ -18,6 +19,8 @@ from computerpets_client.guide import (
     INSECT_GUIDE,
     SEA_GUIDE,
     SNAKE_GUIDE,
+    bee_guide_complete,
+    bee_guide_keys,
     classroom_for,
     far_guide_complete,
     far_guide_keys,
@@ -37,7 +40,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -114,6 +117,19 @@ INSECT_EXPECTED = [
     ("cicada", "brood", "Magicicada septendecim"),
 ]
 
+BEE_EXPECTED = [
+    ("bumblebee", "thrum", "Bombus impatiens"),
+    ("carpenter_bee", "auger", "Xylocopa virginica"),
+    ("mason_bee", "mortar", "Osmia lignaria"),
+    ("leafcutter", "disc", "Megachile rotundata"),
+    ("stingless", "pot", "Melipona beecheii"),
+    ("sweat_bee", "sheen", "Agapostemon virescens"),
+    ("mining_bee", "bank", "Andrena vicina"),
+    ("honey_drone", "hum", "Apis mellifera"),
+    ("honey_queen", "keep", "Apis mellifera"),
+    ("honeycomb", "wax", "Apis mellifera nest"),
+]
+
 FUNGI_EXPECTED = [
     ("oyster", "frill", "Pleurotus ostreatus"),
     ("fly_agaric", "cap", "Amanita muscaria"),
@@ -154,6 +170,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert sea_guide_complete()
     assert garden_guide_complete()
     assert insect_guide_complete()
+    assert bee_guide_complete()
     assert fungi_guide_complete()
     assert far_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
@@ -161,6 +178,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert sea_guide_keys() == SEA_KEYS
     assert garden_guide_keys() == GARDEN_KEYS
     assert insect_guide_keys() == INSECT_KEYS
+    assert bee_guide_keys() == BEE_KEYS
     assert fungi_guide_keys() == FUNGI_KEYS
     assert far_guide_keys() == FAR_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
@@ -169,6 +187,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert len(SEA_GUIDE) == 10
     assert len(GARDEN_GUIDE) == 10
     assert len(INSECT_GUIDE) == 10
+    assert len(BEE_GUIDE) == 10
     assert len(FUNGI_GUIDE) == 10
     for key in CATALOG_KEYS:
         guide = plaque_for(key)
@@ -191,8 +210,9 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     assert [g.key for g in SEA_GUIDE] == [key for key, _, _ in SEA_EXPECTED]
     assert [g.key for g in GARDEN_GUIDE] == [key for key, _, _ in GARDEN_EXPECTED]
     assert [g.key for g in INSECT_GUIDE] == [key for key, _, _ in INSECT_EXPECTED]
+    assert [g.key for g in BEE_GUIDE] == [key for key, _, _ in BEE_EXPECTED]
     assert [g.key for g in FUNGI_GUIDE] == [key for key, _, _ in FUNGI_EXPECTED]
-    for key, slug, latin in HOUSE_EXPECTED + SNAKE_EXPECTED + SEA_EXPECTED + GARDEN_EXPECTED + INSECT_EXPECTED + FUNGI_EXPECTED:
+    for key, slug, latin in HOUSE_EXPECTED + SNAKE_EXPECTED + SEA_EXPECTED + GARDEN_EXPECTED + INSECT_EXPECTED + BEE_EXPECTED + FUNGI_EXPECTED:
         guide = plaque_for(key)
         assert guide is not None
         assert guide.slug == slug
@@ -217,6 +237,11 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "hive"
         assert classroom_for(key).verb == "stay"
+    for key in BEE_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "hive"
+        assert classroom_for(key).verb == "stay"
+        assert classroom_for(key).label == "The hive. Bees and comb."
     for key in FUNGI_KEYS:
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "cellar"
@@ -346,6 +371,20 @@ def test_the_important_hive_mixups_are_actually_taught():
     assert re.search(r"song", cicada, re.I)
 
 
+def test_the_important_bee_mixups_are_actually_taught():
+    thrum = _taught(plaque_for("bumblebee"))
+    auger = _taught(plaque_for("carpenter_bee"))
+    hum = _taught(plaque_for("honey_drone"))
+    keep = _taught(plaque_for("honey_queen"))
+    wax = _taught(plaque_for("honeycomb"))
+    assert re.search(r"not a honey bee", thrum, re.I)
+    assert re.search(r"does not keep honey the honey-bee way", auger, re.I)
+    assert re.search(r"drone is not a worker", hum, re.I)
+    assert re.search(r"not a second Comb", keep, re.I)
+    assert re.search(r"many bees, one", wax, re.I)
+    assert re.search(r"not a shop", wax, re.I)
+
+
 def test_the_important_cellar_mixups_are_actually_taught():
     oyster = _taught(plaque_for("oyster"))
     agaric = _taught(plaque_for("fly_agaric"))
@@ -436,12 +475,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     sea_src = (WEB_PETS / "sea-guide.ts").read_text(encoding="utf-8")
     garden_src = (WEB_PETS / "garden-guide.ts").read_text(encoding="utf-8")
     insect_src = (WEB_PETS / "insect-guide.ts").read_text(encoding="utf-8")
+    bee_src = (WEB_PETS / "bee-guide.ts").read_text(encoding="utf-8")
     fungi_src = (WEB_PETS / "fungi-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
     garden_keys = [key for key, _, _ in GARDEN_EXPECTED]
     insect_keys = [key for key, _, _ in INSECT_EXPECTED]
+    bee_keys = [key for key, _, _ in BEE_EXPECTED]
     fungi_keys = [key for key, _, _ in FUNGI_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
@@ -478,6 +519,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(INSECT_EXPECTED):
         nxt = insect_keys[index + 1] if index + 1 < len(insect_keys) else None
         chunk = _slice_entry(insect_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(BEE_EXPECTED):
+        nxt = bee_keys[index + 1] if index + 1 < len(bee_keys) else None
+        chunk = _slice_entry(bee_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk

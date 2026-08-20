@@ -159,6 +159,16 @@ const INSECTS = new Set([
   "ladybird",
   "mantis",
   "cicada",
+  "bumblebee",
+  "carpenter_bee",
+  "mason_bee",
+  "leafcutter",
+  "stingless",
+  "sweat_bee",
+  "mining_bee",
+  "honey_drone",
+  "honey_queen",
+  "honeycomb",
 ]);
 const SEA = new Set([
   "octopus",
@@ -741,6 +751,13 @@ const INSECT_CLUTCH = new Set([
   "ladybird",
   "mantis",
   "cicada",
+  "bumblebee",
+  "carpenter_bee",
+  "mason_bee",
+  "leafcutter",
+  "stingless",
+  "sweat_bee",
+  "mining_bee",
 ]);
 
 const HOUSE_NAME: Record<string, string> = {
@@ -755,6 +772,16 @@ const HOUSE_NAME: Record<string, string> = {
   photovore: "Gleam",
   honeybee: "Comb",
   moss: "Felt",
+  bumblebee: "Thrum",
+  carpenter_bee: "Auger",
+  mason_bee: "Mortar",
+  leafcutter: "Disc",
+  stingless: "Pot",
+  sweat_bee: "Sheen",
+  mining_bee: "Bank",
+  honey_drone: "Hum",
+  honey_queen: "Keep",
+  honeycomb: "Wax",
 };
 
 export function nestPath(speciesKey: string, parentCount: 1 | 2): NestPath {
@@ -785,6 +812,28 @@ export function nestPath(speciesKey: string, parentCount: 1 | 2): NestPath {
       verb: "bud",
       word: "a bud",
       plaque: "Knot is a colony. A bud walks away with the name. Many animals, one guest.",
+      parents: parentCount,
+      count: 1,
+      waitMs: 0,
+      cost: NEST_COST_SINGLE,
+    };
+  }
+  if (speciesKey === "honeycomb") {
+    return {
+      verb: "brood",
+      word: "a brood",
+      plaque: "Wax is the nest. Many bees, one line. Neglect can go quiet.",
+      parents: parentCount,
+      count: 1,
+      waitMs: 0,
+      cost: NEST_COST_SINGLE,
+    };
+  }
+  if (speciesKey === "honey_queen") {
+    return {
+      verb: "egg",
+      word: "an egg",
+      plaque: "Keep lays. Comb forages. The queen is not a second Comb.",
       parents: parentCount,
       count: 1,
       waitMs: 0,
@@ -893,7 +942,15 @@ export function canPair(
   if (seats?.a?.stage === "hatchling" || seats?.b?.stage === "hatchling") {
     return { ok: false, reason: "A hatchling cannot pair. Grown and elder may." };
   }
-  const solo = parentAKey === "yeast" || parentAKey === "lichen" || parentAKey === "nexus";
+  if (parentAKey === "honey_drone" || parentBKey === "honey_drone") {
+    return { ok: false, reason: "A drone does not keep a nest." };
+  }
+  const solo =
+    parentAKey === "yeast" ||
+    parentAKey === "lichen" ||
+    parentAKey === "nexus" ||
+    parentAKey === "honeycomb" ||
+    parentAKey === "honey_queen";
   if (!parentBKey) {
     if (!solo) {
       return { ok: false, reason: "The nest wants two of a kind — unless a starter splits, a pact shares, or a colony buds." };
@@ -940,6 +997,7 @@ export function departVerb(speciesKey: string): string {
   if (speciesKey === "cyst") return "opened";
   if (COOLED.has(speciesKey)) return "cooled";
   if (speciesKey === "luna") return "spent";
+  if (speciesKey === "honeycomb") return "went quiet";
   const guild = guildOf(speciesKey);
   if (guild === "garden") return "wilted";
   if (guild === "cellar") return "dried";

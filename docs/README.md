@@ -62,8 +62,8 @@ New to the project? Follow this recommended path:
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
 | **[Mind plugins](MIND.md)** | Plug any AI into the pets — OpenAI-compatible, Claude, Gemini, Ollama, custom webhook. |
-| **[Desktop companion](../desktop/README.md)** | Native overlay — all eighty living kinds, plus the first client-contract unlock slice. |
-| **[PyQt blotter](../client/README.md)** | PyQt6 desk — all eighty, plaques, house weather / visitor / shed, mess / illness, Qt OpenGL viewport, same contract unlock. |
+| **[Desktop companion](../desktop/README.md)** | Native overlay — all ninety living kinds, plus the first client-contract unlock slice. |
+| **[PyQt blotter](../client/README.md)** | PyQt6 desk — all ninety, plaques, house weather / visitor / shed, mess / illness, Qt OpenGL viewport, same contract unlock. |
 | **[Setup & Installation Guide](SETUP.md)** | Build and run locally. Secrets, `dev`/`staging`/`prod` profiles, and `deploy/k8s/`. |
 | **[Contributing Guidelines](CONTRIBUTING.md)** | How to contribute to the project, including development setup, code style, pull request process, and documentation update expectations. |
 

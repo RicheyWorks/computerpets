@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { HiveDen, HiveRail } from "@/components/desk/hive-den";
 import { RoomHero } from "@/components/desk/room-hero";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
+import { BEE_GUIDE } from "@/lib/pets/bee-guide";
 import { INSECT_GUIDE } from "@/lib/pets/insect-guide";
 import { INSECT_KEYS } from "@/lib/pets/insects";
 
@@ -13,7 +14,7 @@ export const Route = createFileRoute("/hive")({
       { title: "The hive den — ComputerPets" },
       {
         name: "description",
-        content: "Ten living insects on the blotter. Learn the species by watching them stay.",
+        content: "Bees walk. Comb sits. The hive is a place. Learn the species by watching them stay.",
       },
     ],
   }),
@@ -26,8 +27,8 @@ export function HivePage() {
     <main className="bg-bg text-fg">
       <RoomHero
         room="hive"
-        headline="They stay. The plaque teaches."
-        line="Ten insects live on this blotter. Watch the waggle. Read the plaque. Leave knowing a firefly is a beetle, a luna does not eat, and a cicada waited seventeen years for this song."
+        headline="The bees walk. The comb sits."
+        line="The hive keeps bees and comb. Watch Comb waggle. Sit with Wax. Read the plaque. Leave knowing a bumblebee is not a honey bee, a carpenter bee does not keep honey the honey-bee way, a drone is not a worker, and the queen is not a second Comb."
       />
 
       <HiveDen selectedKey={selected} onSelect={setSelected} />
@@ -41,7 +42,7 @@ export function HivePage() {
             <p className="mt-2 font-display text-2xl">Watch, then tap.</p>
             <p className="mt-2 text-sm text-muted">
               Five sit at a time. The rest cycle onto the wood. Treat, hide, and talk still live on
-              each guest&apos;s demo and on the desk. They stay. They do not commute.
+              each guest&apos;s demo and on the desk. The bees walk. The comb sits. It is not a shop.
             </p>
             <p className="mt-4">
               <Link to="/" search={{ pet: selected }} className="text-sm text-fg">
@@ -55,13 +56,46 @@ export function HivePage() {
       <section className="border-t border-border">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
           <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Field notes</p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl">All ten, told apart.</h2>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl">The insects, told apart.</h2>
           <p className="mt-3 max-w-xl text-sm text-muted">
             A short tell, one mix-up, and the corner of the house they already keep. Open a demo if
             you want them to stay on your screen.
           </p>
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {INSECT_GUIDE.map((guide) => (
+              <article
+                key={guide.key}
+                className="rounded-[var(--radius-lg)] border border-border bg-surface p-5"
+              >
+                <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">{guide.species}</p>
+                <h3 className="mt-2 font-display text-2xl leading-none">{guide.name}</h3>
+                <p className="mt-1 font-mono text-[11px] italic text-subtle">{guide.latin}</p>
+                <p className="mt-3 text-sm leading-snug text-fg">{guide.tell}</p>
+                <p className="mt-3 text-[11px] uppercase tracking-[0.16em] text-subtle">A common mix-up</p>
+                <p className="mt-1 text-sm leading-snug text-muted">{guide.mixup}</p>
+                <p className="mt-3 text-xs text-subtle">
+                  {guide.habitat} · {guide.temperament}
+                </p>
+                <p className="mt-4">
+                  <Link
+                    to="/demo/$slug"
+                    params={{ slug: guide.slug }}
+                    className="text-sm text-fg no-underline hover:text-primary"
+                  >
+                    /demo/{guide.slug}
+                  </Link>
+                </p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-16 text-[11px] uppercase tracking-[0.2em] text-subtle">Bees and comb</p>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl">Not ten copies of Comb.</h2>
+          <p className="mt-3 max-w-xl text-sm text-muted">
+            Comb stays Comb. These ten are other bees, a drone, a queen, and the nest as a place.
+            A colony is many bees, one nest. Neglect can go quiet.
+          </p>
+          <div className="mt-10 grid gap-5 md:grid-cols-2">
+            {BEE_GUIDE.map((guide) => (
               <article
                 key={guide.key}
                 className="rounded-[var(--radius-lg)] border border-border bg-surface p-5"

@@ -27,6 +27,10 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "hawk":
     case "trail":
     case "emerge":
+    case "thrum":
+    case "bore":
+    case "shine":
+    case "hum":
     case "float":
     case "edge":
     case "align":
@@ -71,6 +75,12 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "glue":
     case "freeze":
     case "fold":
+    case "seal":
+    case "cut":
+    case "pot":
+    case "dig":
+    case "lay":
+    case "hold":
     case "fruit":
     case "pit":
     case "ridge":

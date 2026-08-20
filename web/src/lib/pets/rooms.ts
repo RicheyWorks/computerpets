@@ -1,3 +1,4 @@
+import { BEE_KEYS, isBee } from "./bees";
 import { FAR_KEYS, isFar } from "./far";
 import { FUNGI_KEYS, isFungus } from "./fungi";
 import { GARDEN_KEYS, isGarden } from "./garden";
@@ -71,8 +72,8 @@ export const ROOMS: readonly Room[] = [
     path: "/hive",
     watchSlug: "comb",
     watchName: "Comb",
-    keys: INSECT_KEYS,
-    line: "Ten insects. The plaque teaches.",
+    keys: [...INSECT_KEYS, ...BEE_KEYS],
+    line: "The bees walk. The comb sits. The plaque teaches.",
   },
   {
     id: "cellar",
@@ -107,7 +108,7 @@ export function roomOf(key: string | undefined | null): Room {
   if (isSnake(key)) return BY_ID.snakes;
   if (isSea(key)) return BY_ID.tide;
   if (isGarden(key)) return BY_ID.garden;
-  if (isInsect(key)) return BY_ID.hive;
+  if (isInsect(key) || isBee(key)) return BY_ID.hive;
   if (isFungus(key)) return BY_ID.cellar;
   if (isFar(key)) return BY_ID.far;
   return BY_ID.house;
