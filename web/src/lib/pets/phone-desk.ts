@@ -16,7 +16,7 @@ import {
   type TabletLift,
   type TabletSafe,
   type TabletSit,
-} from "@/lib/pets/tablet-desk";
+} from "./tablet-desk.ts";
 
 export { HOLD_MS, TAP_PX, TAP_PX_LINUX, TAP_PX_MAC, TAP_PX_TABLET, isPhone, isTablet, readSit };
 
