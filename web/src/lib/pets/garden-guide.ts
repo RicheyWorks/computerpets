@@ -64,14 +64,14 @@ export const GARDEN_GUIDE: GardenGuide[] = [
     "water_lily",
     "Nymphaea odorata",
     "A round pad with a slit, a white bloom that opens for the lamp and closes for the night. Fragrant water lily. She floats. The ink dish is a pond she agreed to.",
-    "Not a lotus — those hold the leaf above the water and keep a different center. Pad is Nymphaea odorata, the fragrant one, and the open is the tell. Coin stayed in the bowl. Pad is the floor of the dish.",
+    "Not a lotus — those hold the leaf above the water and keep a different center. Disk is Nymphaea odorata, the fragrant one, and the open is the tell. Coin stayed in the bowl. Disk is the floor of the dish.",
     "Fragrant water lily. I open. The pad is the floor.",
   ),
   entry(
     "orchid",
     "Phalaenopsis amabilis",
     "Thick aerial roots, a spray of white moths that are flowers, a stem that will not sit in dirt like a rumor. Moth orchid. She blooms. The bark is a tree she borrowed.",
-    "Not a moth. The moth is the flower's joke — Phalaenopsis, the moth-like one, amabilis. Not a lily. Pad floats; Moth hangs her roots in the air. The bloom is the tell. The dirt is optional.",
+    "Not a moth. The moth is the flower's joke — Phalaenopsis, the moth-like one, amabilis. Not a lily. Disk floats; Moth hangs her roots in the air. The bloom is the tell. The dirt is optional.",
     "Moth orchid. I bloom. The roots are in the air.",
   ),
   entry(

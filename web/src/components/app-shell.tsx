@@ -14,6 +14,7 @@ const NAV = [
   { to: "/roost", label: "Roost", hideOnPhone: false, hideOnDemo: true },
   { to: "/corner", label: "Corner", hideOnPhone: false, hideOnDemo: true },
   { to: "/wood", label: "Wood", hideOnPhone: false, hideOnDemo: true },
+  { to: "/stone", label: "Stone", hideOnPhone: false, hideOnDemo: true },
   { to: "/cellar", label: "Cellar", hideOnPhone: false, hideOnDemo: true },
   { to: "/well", label: "Well", hideOnPhone: false, hideOnDemo: true },
   { to: "/far", label: "Far", hideOnPhone: false, hideOnDemo: true },
@@ -44,6 +45,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const roost = pathname === "/roost";
   const corner = pathname === "/corner";
   const wood = pathname === "/wood";
+  const stone = pathname === "/stone";
   const cellar = pathname === "/cellar";
   const well = pathname === "/well";
   const far = pathname === "/far";
@@ -57,7 +59,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           "z-30 border-b border-border/80",
           demo || kennelGuest || kennel || shelf || hatchery || nest || desk
             ? "absolute inset-x-0 top-0 border-transparent bg-transparent"
-            : meet || den || tide || garden || hive || pond || roost || corner || wood || cellar || well || far || study || live
+            : meet || den || tide || garden || hive || pond || roost || corner || wood || stone || cellar || well || far || study || live
               ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
               : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}

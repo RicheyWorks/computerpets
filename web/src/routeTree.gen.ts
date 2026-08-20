@@ -30,6 +30,7 @@ import { Route as SeaRouteImport } from './routes/sea'
 import { Route as SnakesRouteImport } from './routes/snakes'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as WellRouteImport } from './routes/well'
+import { Route as StoneRouteImport } from './routes/stone'
 import { Route as WoodRouteImport } from './routes/wood'
 import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
 import { Route as PetsKeyRouteImport } from './routes/pets.$key'
@@ -130,6 +131,11 @@ const SnakesRoute = SnakesRouteImport.update({
   path: '/snakes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const StoneRoute = StoneRouteImport.update({
+  id: '/stone',
+  path: '/stone',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StudyRoute = StudyRouteImport.update({
   id: '/study',
   path: '/study',
@@ -181,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/roost': typeof RoostRoute
   '/sea': typeof SeaRoute
   '/snakes': typeof SnakesRoute
+  '/stone': typeof StoneRoute
   '/study': typeof StudyRoute
   '/well': typeof WellRoute
   '/wood': typeof WoodRoute
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/roost': typeof RoostRoute
   '/sea': typeof SeaRoute
   '/snakes': typeof SnakesRoute
+  '/stone': typeof StoneRoute
   '/study': typeof StudyRoute
   '/well': typeof WellRoute
   '/wood': typeof WoodRoute
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   '/roost': typeof RoostRoute
   '/sea': typeof SeaRoute
   '/snakes': typeof SnakesRoute
+  '/stone': typeof StoneRoute
   '/study': typeof StudyRoute
   '/well': typeof WellRoute
   '/wood': typeof WoodRoute
@@ -265,6 +274,7 @@ export interface FileRouteTypes {
     | '/roost'
     | '/sea'
     | '/snakes'
+    | '/stone'
     | '/study'
     | '/well'
     | '/wood'
@@ -292,6 +302,7 @@ export interface FileRouteTypes {
     | '/roost'
     | '/sea'
     | '/snakes'
+    | '/stone'
     | '/study'
     | '/well'
     | '/wood'
@@ -319,6 +330,7 @@ export interface FileRouteTypes {
     | '/roost'
     | '/sea'
     | '/snakes'
+    | '/stone'
     | '/study'
     | '/well'
     | '/wood'
@@ -347,6 +359,7 @@ export interface RootRouteChildren {
   RoostRoute: typeof RoostRoute
   SeaRoute: typeof SeaRoute
   SnakesRoute: typeof SnakesRoute
+  StoneRoute: typeof StoneRoute
   StudyRoute: typeof StudyRoute
   WellRoute: typeof WellRoute
   WoodRoute: typeof WoodRoute
@@ -490,6 +503,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SnakesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/stone': {
+      id: '/stone'
+      path: '/stone'
+      fullPath: '/stone'
+      preLoaderRoute: typeof StoneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/study': {
       id: '/study'
       path: '/study'
@@ -555,6 +575,7 @@ const rootRouteChildren: RootRouteChildren = {
   RoostRoute: RoostRoute,
   SeaRoute: SeaRoute,
   SnakesRoute: SnakesRoute,
+  StoneRoute: StoneRoute,
   StudyRoute: StudyRoute,
   WellRoute: WellRoute,
   WoodRoute: WoodRoute,

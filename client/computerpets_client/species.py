@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred and forty, painted here.
+the others walk. This is not a new bestiary — it is the same hundred and fifty, painted here.
 """
 
 from __future__ import annotations
@@ -190,7 +190,20 @@ WOOD_KEYS: tuple[str, ...] = (
     "black_bear",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS
+STONE_KEYS: tuple[str, ...] = (
+    "gecko",
+    "anole",
+    "skink",
+    "chameleon",
+    "horned_lizard",
+    "alligator",
+    "crocodile",
+    "snapper",
+    "box_turtle",
+    "tuatara",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS
 
 
 @dataclass(frozen=True)
@@ -1493,10 +1506,10 @@ MAST = _kind(
     hungry=("A seedling should not be this hollow.", "A drink would restore the lobes."),
 )
 
-PAD = _kind(
+DISK = _kind(
     key="water_lily",
-    slug="pad",
-    name="Pad",
+    slug="disk",
+    name="Disk",
     label="Fragrant Water Lily",
     treat="Silt",
     treat_shape="flake",
@@ -4154,6 +4167,282 @@ COAL = _kind(
     hungry=("A bear should not be this empty.", "A berry would restore the forage."),
 )
 
+GECKO = _kind(
+    key="gecko",
+    slug="pad",
+    name="Pad",
+    label="Mediterranean House Gecko",
+    treat="Moth",
+    treat_shape="crumb",
+    silhouette="gecko",
+    walk=88,
+    perch=True,
+    palette=Palette(
+        body=(212, 188, 164),
+        belly=(236, 220, 200),
+        ear=(196, 148, 132),
+        ear_inner=(220, 180, 160),
+        nose=(40, 28, 20),
+        ring=(196, 148, 132),
+        accent=(120, 88, 72),
+    ),
+    greet=("I climbed. Hello.", "The plaster kept my pads.", "You may look. I am not a salamander."),
+    ambient=("Toe pads. A night voice. I keep the office.", "I am not Dapple. Dapple is a salamander of the mold. I am a gecko of the wall.", "Your papers are a plaster I have already claimed.", "I climb. Then I chirp. Then I climb."),
+    feed=("Moth of a treaty.", "I will take this without leaving the plaster.", "Accepted. The pads record it."),
+    treat_lines=("Moth of a treaty.",),
+    hide=("On the plaster.",),
+    call=("I climbed. Hello.",),
+    hungry=("A gecko should not be this empty.", "A moth would restore the climb."),
+)
+
+WINK = _kind(
+    key="anole",
+    slug="wink",
+    name="Wink",
+    label="Green Anole",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="anole",
+    walk=86,
+    palette=Palette(
+        body=(72, 148, 72),
+        belly=(168, 196, 120),
+        ear=(220, 96, 112),
+        ear_inner=(236, 160, 168),
+        nose=(24, 20, 16),
+        ring=(220, 96, 112),
+        accent=(40, 80, 40),
+    ),
+    greet=("I flashed. Hello.", "The post kept my green.", "You may look. I am not a chameleon."),
+    ambient=("A dewlap. She can go brown. I keep the office.", "I am not Shift. Shift is a chameleon with tong feet. I am an anole. The pink is a sentence.", "Your papers are a vine I have already claimed.", "I sit. Then I flash. Then I sit."),
+    feed=("Cricket of a treaty.", "I will take this without leaving the post.", "Accepted. The dewlap records it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("On the post.",),
+    call=("I flashed. Hello.",),
+    hungry=("An anole should not be this empty.", "A cricket would restore the flash."),
+)
+
+DASH = _kind(
+    key="skink",
+    slug="dash",
+    name="Dash",
+    label="Five-lined Skink",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="skink",
+    walk=104,
+    palette=Palette(
+        body=(120, 80, 44),
+        belly=(228, 212, 176),
+        ear=(56, 120, 188),
+        ear_inner=(168, 196, 220),
+        nose=(36, 24, 16),
+        ring=(56, 120, 188),
+        accent=(72, 48, 28),
+    ),
+    greet=("I dashed. Hello.", "The crack kept my lines.", "You may look. I am not a snake."),
+    ambient=("A blue tail when young. Legs. I keep the office.", "I am not Sash. Sash is a garter who patrols. I am a skink. I walk. I do not slither the den way.", "Your papers are a crack I have already claimed.", "I dash. Then I sit. Then I dash."),
+    feed=("Cricket of a treaty.", "I will take this and return to the crack.", "Accepted. The lines record it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Inside the crack.",),
+    call=("I dashed. Hello.",),
+    hungry=("A skink should not be this empty.", "A cricket would restore the dash."),
+)
+
+SHIFT = _kind(
+    key="chameleon",
+    slug="shift",
+    name="Shift",
+    label="Veiled Chameleon",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="chameleon",
+    walk=18,
+    perch=True,
+    palette=Palette(
+        body=(88, 140, 64),
+        belly=(156, 188, 88),
+        ear=(72, 112, 52),
+        ear_inner=(200, 220, 160),
+        nose=(20, 16, 12),
+        ring=(232, 228, 196),
+        accent=(48, 80, 36),
+    ),
+    greet=("I shifted. Hello.", "The perch kept my casque.", "You may look. I am not Wink."),
+    ambient=("Tong feet. Independent eyes. I keep the office.", "I am not Wink. Wink is an anole with a dewlap. I am not Sol. Sol is an iguana of the wall. I walk slow.", "Your papers are a branch I have already claimed.", "I walk. Then I aim. Then I walk."),
+    feed=("Cricket of a treaty.", "I will take this with a tongue and stay.", "Accepted. The eyes record it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("On the perch.",),
+    call=("I shifted. Hello.",),
+    hungry=("A chameleon should not be this empty.", "A cricket would restore the tongue."),
+)
+
+SPIKE = _kind(
+    key="horned_lizard",
+    slug="spike",
+    name="Spike",
+    label="Texas Horned Lizard",
+    treat="Ant",
+    treat_shape="crumb",
+    silhouette="horned",
+    walk=34,
+    palette=Palette(
+        body=(176, 132, 80),
+        belly=(220, 196, 156),
+        ear=(92, 64, 36),
+        ear_inner=(196, 160, 112),
+        nose=(28, 20, 14),
+        ring=(92, 64, 36),
+        accent=(140, 88, 48),
+    ),
+    greet=("I sat the crown. Hello.", "The tray kept my horns.", "You may look. I am not a toad."),
+    ambient=("A crown of horns. She can squirt blood. I keep the office.", "I am not Pebble. Pebble is a toad. I am not Horn. Horn is a chanterelle. I am a lizard of the sand.", "Your papers are a sand I have already claimed.", "I sit. Then I crown. Then I sit."),
+    feed=("Ant of a treaty.", "I will take this without leaving the tray.", "Accepted. The crown records it."),
+    treat_lines=("Ant of a treaty.",),
+    hide=("Under the sand.",),
+    call=("I sat the crown. Hello.",),
+    hungry=("A horned lizard should not be this empty.", "An ant would restore the crown."),
+)
+
+LEVEE = _kind(
+    key="alligator",
+    slug="levee",
+    name="Levee",
+    label="American Alligator",
+    treat="Fish",
+    treat_shape="crumb",
+    silhouette="alligator",
+    walk=26,
+    aquatic=True,
+    palette=Palette(
+        body=(56, 80, 48),
+        belly=(168, 172, 120),
+        ear=(28, 36, 24),
+        ear_inner=(120, 132, 88),
+        nose=(28, 36, 24),
+        ring=(28, 36, 24),
+        accent=(36, 48, 32),
+    ),
+    greet=("I sat the bank. Hello.", "The dish kept my U.", "You may look. I am not a crocodile."),
+    ambient=("A U-snout. Teeth hide on the close. I keep the grammar.", "I am not Jaw. Jaw is a crocodile. The fourth tooth is his. Mine hide. I sit the bank.", "Your papers are a bank I have already claimed.", "I sit. Then I bask. Then I sit."),
+    feed=("Fish of a treaty.", "I will take this without leaving the bank.", "Accepted. The U records it."),
+    treat_lines=("Fish of a treaty.",),
+    hide=("On the bank.",),
+    call=("I sat the bank. Hello.",),
+    hungry=("An alligator should not be this empty.", "A fish would restore the sit."),
+)
+
+JAW = _kind(
+    key="crocodile",
+    slug="jaw",
+    name="Jaw",
+    label="American Crocodile",
+    treat="Fish",
+    treat_shape="crumb",
+    silhouette="crocodile",
+    walk=30,
+    aquatic=True,
+    palette=Palette(
+        body=(88, 100, 80),
+        belly=(196, 196, 168),
+        ear=(32, 36, 28),
+        ear_inner=(160, 164, 132),
+        nose=(32, 36, 28),
+        ring=(236, 228, 216),
+        accent=(48, 56, 40),
+    ),
+    greet=("I showed. Hello.", "The dish kept my V.", "You may look. I am not an alligator."),
+    ambient=("A V-snout. Fourth tooth shows. I keep the grammar.", "I am not Levee. Levee is an alligator. Her teeth hide. Mine keep office. I am a crocodile.", "Your papers are a brackish I have already claimed.", "I sit. Then I show. Then I sit."),
+    feed=("Fish of a treaty.", "I will take this without leaving the dish.", "Accepted. The tooth records it."),
+    treat_lines=("Fish of a treaty.",),
+    hide=("Inside the dish.",),
+    call=("I showed. Hello.",),
+    hungry=("A crocodile should not be this empty.", "A fish would restore the show."),
+)
+
+BEAK = _kind(
+    key="snapper",
+    slug="beak",
+    name="Beak",
+    label="Common Snapping Turtle",
+    treat="Fish",
+    treat_shape="crumb",
+    silhouette="snapper",
+    walk=28,
+    aquatic=True,
+    palette=Palette(
+        body=(88, 72, 48),
+        belly=(156, 140, 100),
+        ear=(48, 36, 24),
+        ear_inner=(120, 100, 72),
+        nose=(48, 36, 24),
+        ring=(56, 44, 28),
+        accent=(40, 32, 24),
+    ),
+    greet=("I snapped. Hello.", "The bowl kept my beak.", "You may look. I am not Ink."),
+    ambient=("A beak. A long tail. I keep the office.", "I am not Ink. Ink is a Reeves's turtle of the dish. I am not a tortoise. I snap. I keep the mud.", "Your papers are a mud I have already claimed.", "I sit. Then I snap. Then I sit."),
+    feed=("Fish of a treaty.", "I will take this and keep the beak.", "Accepted. The hook records it."),
+    treat_lines=("Fish of a treaty.",),
+    hide=("Inside the mud.",),
+    call=("I snapped. Hello.",),
+    hungry=("A snapper should not be this empty.", "A fish would restore the snap."),
+)
+
+LID = _kind(
+    key="box_turtle",
+    slug="lid",
+    name="Lid",
+    label="Eastern Box Turtle",
+    treat="Worm",
+    treat_shape="crumb",
+    silhouette="box",
+    walk=20,
+    palette=Palette(
+        body=(72, 96, 52),
+        belly=(196, 140, 56),
+        ear=(64, 80, 44),
+        ear_inner=(180, 160, 88),
+        nose=(20, 16, 12),
+        ring=(48, 40, 28),
+        accent=(48, 40, 28),
+    ),
+    greet=("I shut. Hello.", "The dish kept my hinge.", "You may look. I am not Ink."),
+    ambient=("A hinged plastron. She shuts. I keep the office.", "I am not Ink. Ink is a Reeves's turtle. I am not Hinge. Hinge is a mussel. I am a box turtle. I close.", "Your papers are a leaf I have already claimed.", "I walk. Then I shut. Then I walk."),
+    feed=("Worm of a treaty.", "I will take this and shut after.", "Accepted. The lid records it."),
+    treat_lines=("Worm of a treaty.",),
+    hide=("Under the leaf.",),
+    call=("I shut. Hello.",),
+    hungry=("A box turtle should not be this empty.", "A worm would restore the walk."),
+)
+
+PEAK = _kind(
+    key="tuatara",
+    slug="peak",
+    name="Peak",
+    label="Tuatara",
+    treat="Insect",
+    treat_shape="crumb",
+    silhouette="tuatara",
+    walk=14,
+    palette=Palette(
+        body=(108, 116, 88),
+        belly=(168, 172, 140),
+        ear=(72, 80, 56),
+        ear_inner=(196, 180, 88),
+        nose=(28, 24, 16),
+        ring=(196, 180, 88),
+        accent=(72, 80, 56),
+    ),
+    greet=("I kept still. Hello.", "The burrow kept my crest.", "You may look. I am not a lizard."),
+    ambient=("A tuatara. A third eye. I keep the grammar. I am my own order.", "I am not Sol. Sol is an iguana, a lizard of the wall. I am Sphenodon. The still is the species.", "Your papers are a stone I have already claimed.", "I sit. Then I am still. Then I sit."),
+    feed=("Insect of a treaty.", "I will take this without leaving the burrow.", "Accepted. The crest records it."),
+    treat_lines=("Insect of a treaty.",),
+    hide=("Inside the burrow.",),
+    call=("I kept still. Hello.",),
+    hungry=("A tuatara should not be this empty.", "An insect would restore the still."),
+)
+
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -4199,7 +4488,7 @@ _ALL: tuple[Species, ...] = (
     VEIN,
     FAN,
     MAST,
-    PAD,
+    DISK,
     MOTH,
     ARM,
     SNAP,
@@ -4295,6 +4584,16 @@ _ALL: tuple[Species, ...] = (
     DAM,
     SPINE,
     COAL,
+    GECKO,
+    WINK,
+    DASH,
+    SHIFT,
+    SPIKE,
+    LEVEE,
+    JAW,
+    BEAK,
+    LID,
+    PEAK,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -4353,6 +4652,10 @@ def is_corner(key: str) -> bool:
 
 def is_wood(key: str) -> bool:
     return key in WOOD_KEYS
+
+
+def is_stone(key: str) -> bool:
+    return key in STONE_KEYS
 
 
 def next_species_key(key: str) -> str:

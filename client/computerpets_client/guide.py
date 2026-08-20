@@ -1,10 +1,10 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred and forty, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred and fifty, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
-the arachnid facts; the wood keeps the wild mammal facts; the cellar keeps
+the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
 the xenobiology facts; the twenty keep the study facts.
 """
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_well, is_wood
+from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_stone, is_well, is_wood
 
 
 @dataclass(frozen=True)
@@ -474,7 +474,7 @@ GARDEN_GUIDE: tuple[FieldGuide, ...] = (
         "water_lily",
         "Nymphaea odorata",
         "A round pad with a slit, a white bloom that opens for the lamp and closes for the night. Fragrant water lily. She floats. The ink dish is a pond she agreed to.",
-        "Not a lotus — those hold the leaf above the water and keep a different center. Pad is Nymphaea odorata, the fragrant one, and the open is the tell. Coin stayed in the bowl. Pad is the floor of the dish.",
+        "Not a lotus — those hold the leaf above the water and keep a different center. Disk is Nymphaea odorata, the fragrant one, and the open is the tell. Coin stayed in the bowl. Disk is the floor of the dish.",
         "Fragrant water lily. I open. The pad is the floor.",
         "ink dish",
         "serene",
@@ -483,7 +483,7 @@ GARDEN_GUIDE: tuple[FieldGuide, ...] = (
         "orchid",
         "Phalaenopsis amabilis",
         "Thick aerial roots, a spray of white moths that are flowers, a stem that will not sit in dirt like a rumor. Moth orchid. She blooms. The bark is a tree she borrowed.",
-        "Not a moth. The moth is the flower's joke — Phalaenopsis, the moth-like one, amabilis. Not a lily. Pad floats; Moth hangs her roots in the air. The bloom is the tell. The dirt is optional.",
+        "Not a moth. The moth is the flower's joke — Phalaenopsis, the moth-like one, amabilis. Not a lily. Disk floats; Moth hangs her roots in the air. The bloom is the tell. The dirt is optional.",
         "Moth orchid. I bloom. The roots are in the air.",
         "bark mount",
         "showy",
@@ -1363,7 +1363,101 @@ WOOD_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE
+
+STONE_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "gecko",
+        "Hemidactylus turcicus",
+        "Toe pads like small lamps, a pale night body, a chirp that is a voice. Mediterranean house gecko. She climbs. Then she sits the plaster. The wall is a stone she agreed to.",
+        "Not a salamander. Dapple is Ambystoma maculatum, wet coins on black, a vernal guest of the mold. Pad is Hemidactylus turcicus, and the pads are the tell. A gecko is not a salamander. The climb is the species.",
+        "Mediterranean house gecko. Toe pads. A night voice. Not a salamander. Not Dapple.",
+        "lamp plaster",
+        "climbing",
+    ),
+    _entry(
+        "anole",
+        "Anolis carolinensis",
+        "Green that can go brown, a pink dewlap she flashes like a sentence. Green anole. She sits. Then she flashes. The vine is a post she agreed to.",
+        "Not a chameleon. Shift is Chamaeleo calyptratus, tong feet, independent eyes, a casque. Wink is Anolis carolinensis, and the dewlap is the tell. An anole is not a chameleon. The pink is the species.",
+        "Green anole. A dewlap. She can go brown. Not a chameleon. Not Shift.",
+        "vine post",
+        "flashing",
+    ),
+    _entry(
+        "skink",
+        "Plestiodon fasciatus",
+        "Five pale lines, a blue tail when young, short legs that still walk. Five-lined skink. She dashes. Then she sits the crack. The stone is a route she agreed to.",
+        "Not a snake. Sash is a garden garter who patrols and sheds the den way, blue then a coat. Dash is Plestiodon fasciatus, and the legs are the tell. A skink is not a snake. The dash is the species.",
+        "Five-lined skink. A blue tail when young. Not a snake. Not Sash.",
+        "stone crack",
+        "quick",
+    ),
+    _entry(
+        "chameleon",
+        "Chamaeleo calyptratus",
+        "A casque, tong feet that hold a branch, eyes that keep two offices. Veiled chameleon. She walks slow. Then she aims. The perch is a branch she agreed to.",
+        "Not Wink — Wink is an anole with a dewlap she flashes. Not Sol — Sol is an iguana of the south wall, Iguana iguana. Shift is Chamaeleo calyptratus, and the eyes are the tell. A chameleon is not an anole. She is not an iguana. The slow is the species.",
+        "Veiled chameleon. Tong feet, independent eyes. Not Wink. Not Sol.",
+        "branch perch",
+        "slow",
+    ),
+    _entry(
+        "horned_lizard",
+        "Phrynosoma cornutum",
+        "A flattened body, a crown of horns, a threat that can be blood from the eye. Texas horned lizard. She sits. Then she crowns. The tray is a sand she agreed to.",
+        "Not a toad. Pebble is Anaxyrus americanus, warty, dry, parotoids. Not Horn — Horn is a chanterelle, Cantharellus, false gills that fork. Spike is Phrynosoma cornutum, and the crown is the tell. A horned lizard is not a toad. She is not a mushroom. The horns are the species.",
+        "Texas horned lizard. A crown of horns. She can squirt blood. Not a toad. Not Pebble.",
+        "sand tray",
+        "crowned",
+    ),
+    _entry(
+        "alligator",
+        "Alligator mississippiensis",
+        "A broad U-snout, teeth that hide when the mouth closes, a sit on the bank. American alligator. She sits. Then she basks. The dish is a bank she agreed to.",
+        "Not a crocodile. Jaw is Crocodylus acutus, a V-snout, a fourth tooth that shows. Levee is Alligator mississippiensis, and the hidden teeth are the tell. An alligator is not a crocodile. The U is the species.",
+        "American alligator. A U-snout. Teeth hide on the close. Not a crocodile. Not Jaw.",
+        "bank dish",
+        "banked",
+    ),
+    _entry(
+        "crocodile",
+        "Crocodylus acutus",
+        "A narrower V-snout, a fourth tooth that keeps office when the mouth shuts. American crocodile. She sits. Then she shows. The dish is a brackish she agreed to.",
+        "Not an alligator. Levee is Alligator mississippiensis, a U-snout, teeth that hide. Jaw is Crocodylus acutus, and the fourth tooth is the tell. A crocodile is not an alligator. The V is the species.",
+        "American crocodile. A V-snout. Fourth tooth shows. Not an alligator. Not Levee.",
+        "brackish dish",
+        "showing",
+    ),
+    _entry(
+        "snapper",
+        "Chelydra serpentina",
+        "A hooked beak, a long saw of a tail, a rugged carapace she keeps in mud. Common snapping turtle. She sits. Then she snaps. The bowl is a mud she agreed to.",
+        "Not Ink — Ink is a Reeves's turtle, Mauremys reevesii, a patient dish guest of the study. Not a tortoise. A tortoise is a land office, no snap of a beak in mud. Beak is Chelydra serpentina, and the hook is the tell. A snapper is not a Reeves's turtle. The tail is the species.",
+        "Common snapping turtle. A beak, a long tail. Not Ink. Not a tortoise.",
+        "mud bowl",
+        "hooked",
+    ),
+    _entry(
+        "box_turtle",
+        "Terrapene carolina",
+        "A high dome, a hinged plastron she can shut until she is a box. Eastern box turtle. She walks. Then she shuts. The dish is a leaf she agreed to.",
+        "Not Ink — Ink is a Reeves's turtle who stays open and patient. Not Hinge — Hinge is a mussel, Elliptio, two valves that filter a river. Lid is Terrapene carolina, and the plastron is the tell. A box turtle is not a Reeves's turtle. She is not a mussel. The shut is the species.",
+        "Eastern box turtle. A hinged plastron. She shuts. Not Ink. Not Hinge.",
+        "leaf dish",
+        "shutting",
+    ),
+    _entry(
+        "tuatara",
+        "Sphenodon punctatus",
+        "A crest of spines, a third eye on the peak of the head, a still that is not laziness. Tuatara. She sits. Then she is still. The burrow is a stone she agreed to. She is her own order.",
+        "Not a lizard. Sol is an iguana, Iguana iguana, a lizard of the wall. Peak is Sphenodon punctatus, Rhynchocephalia, and the third eye is the tell. A tuatara is not a lizard. She is her own order. The still is the species.",
+        "Tuatara. A third eye. Not a lizard. Not Sol. She is her own order.",
+        "stone burrow",
+        "still",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1404,6 +1498,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="corner", label="All ten in the corner", verb="stay")
     if is_wood(key):
         return Classroom(room="wood", label="All ten in the wood", verb="stay")
+    if is_stone(key):
+        return Classroom(room="stone", label="All ten in the stone", verb="stay")
     if is_well(key):
         return Classroom(room="well", label="All ten in the well", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
@@ -1455,6 +1551,10 @@ def corner_guide_keys() -> tuple[str, ...]:
 
 def wood_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in WOOD_GUIDE)
+
+
+def stone_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in STONE_GUIDE)
 
 
 def well_guide_keys() -> tuple[str, ...]:
@@ -1509,6 +1609,10 @@ def wood_guide_complete() -> bool:
     return len(WOOD_GUIDE) == len(WOOD_KEYS) and all(k in _BY_KEY for k in WOOD_KEYS)
 
 
+def stone_guide_complete() -> bool:
+    return len(STONE_GUIDE) == len(STONE_KEYS) and all(k in _BY_KEY for k in STONE_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -1527,6 +1631,7 @@ def guide_complete() -> bool:
         and roost_guide_complete()
         and corner_guide_complete()
         and wood_guide_complete()
+        and stone_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)

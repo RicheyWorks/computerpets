@@ -151,6 +151,16 @@ export const SPECIES: Species[] = [
   { key: "beaver", displayName: "North American Beaver", rarity: "UNCOMMON", temperament: "Building", habitat: "Lodge cup", blurb: "Teeth that fell. A lodge. Not a muskrat rumor." },
   { key: "porcupine", displayName: "North American Porcupine", rarity: "UNCOMMON", temperament: "Bristled", habitat: "Pine post", blurb: "Quills that can leave. Not Burr. Not Quill." },
   { key: "black_bear", displayName: "American Black Bear", rarity: "RARE", temperament: "Sure", habitat: "Oak denside", blurb: "Not a red panda. Not Rui. She is a bear." },
+  { key: "gecko", displayName: "Mediterranean House Gecko", rarity: "COMMON", temperament: "Climbing", habitat: "Lamp plaster", blurb: "Toe pads. A night voice. Not a salamander. Not Dapple." },
+  { key: "anole", displayName: "Green Anole", rarity: "COMMON", temperament: "Flashing", habitat: "Vine post", blurb: "A dewlap. She can go brown. Not a chameleon. Not Shift." },
+  { key: "skink", displayName: "Five-lined Skink", rarity: "COMMON", temperament: "Quick", habitat: "Stone crack", blurb: "A blue tail when young. Not a snake. Not Sash." },
+  { key: "chameleon", displayName: "Veiled Chameleon", rarity: "UNCOMMON", temperament: "Slow", habitat: "Branch perch", blurb: "Tong feet, independent eyes. Not Wink. Not Sol." },
+  { key: "horned_lizard", displayName: "Texas Horned Lizard", rarity: "UNCOMMON", temperament: "Crowned", habitat: "Sand tray", blurb: "A crown of horns. She can squirt blood. Not a toad. Not Pebble." },
+  { key: "alligator", displayName: "American Alligator", rarity: "UNCOMMON", temperament: "Banked", habitat: "Bank dish", blurb: "A U-snout. Teeth hide on the close. Not a crocodile. Not Jaw." },
+  { key: "crocodile", displayName: "American Crocodile", rarity: "RARE", temperament: "Showing", habitat: "Brackish dish", blurb: "A V-snout. Fourth tooth shows. Not an alligator. Not Levee." },
+  { key: "snapper", displayName: "Common Snapping Turtle", rarity: "COMMON", temperament: "Hooked", habitat: "Mud bowl", blurb: "A beak, a long tail. Not Ink. Not a tortoise." },
+  { key: "box_turtle", displayName: "Eastern Box Turtle", rarity: "COMMON", temperament: "Shutting", habitat: "Leaf dish", blurb: "A hinged plastron. She shuts. Not Ink. Not Hinge the mussel." },
+  { key: "tuatara", displayName: "Tuatara", rarity: "RARE", temperament: "Still", habitat: "Stone burrow", blurb: "A tuatara. A third eye. Not a lizard. Not Sol. She is her own order." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(
