@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred ten, painted here.
+the others walk. This is not a new bestiary — it is the same hundred and twenty, painted here.
 """
 
 from __future__ import annotations
@@ -151,7 +151,20 @@ WELL_KEYS: tuple[str, ...] = (
     "haloarchaea",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS
+ROOST_KEYS: tuple[str, ...] = (
+    "crow",
+    "raven",
+    "barn_owl",
+    "red_tail",
+    "chickadee",
+    "robin",
+    "mallard",
+    "canada_goose",
+    "pileated",
+    "hummingbird",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS
 
 
 @dataclass(frozen=True)
@@ -3292,6 +3305,284 @@ ROSE = _kind(
     hungry=("An archaeon should not be this pale.", "A salt would restore the blush."),
 )
 
+SOOT = _kind(
+    key="crow",
+    slug="soot",
+    name="Soot",
+    label="American Crow",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="crow",
+    walk=90,
+    perch=True,
+    palette=Palette(
+        body=(28, 28, 32),
+        belly=(56, 56, 64),
+        ear=(20, 20, 22),
+        ear_inner=(56, 56, 64),
+        nose=(20, 20, 22),
+        ring=(236, 196, 48),
+        accent=(20, 20, 22),
+    ),
+    greet=("I cawed. That was hello.", "The ledge kept my soot.", "You may look. I am not a raven."),
+    ambient=("Fan tail. A caw. I keep the grammar.", "I am not Wedge. Wedge is a wedge and a croak. I fan.", "I hop. Then I caw. Then I hop."),
+    feed=("Scrap of a treaty.", "I will take this and hide a piece.", "Accepted. The caw records it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("On the ledge.",),
+    call=("I cawed. That was hello.",),
+    hungry=("A crow should not be this empty.", "A scrap would restore the caw."),
+)
+
+WEDGE = _kind(
+    key="raven",
+    slug="wedge",
+    name="Wedge",
+    label="Common Raven",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="raven",
+    walk=82,
+    perch=True,
+    palette=Palette(
+        body=(20, 20, 24),
+        belly=(48, 48, 56),
+        ear=(16, 16, 18),
+        ear_inner=(48, 48, 56),
+        nose=(16, 16, 18),
+        ring=(220, 180, 40),
+        accent=(16, 16, 18),
+    ),
+    greet=("I croaked. Hello.", "The rafter kept my wedge.", "You may look. I am not a crow."),
+    ambient=("Wedge tail. A croak. I keep the office.", "I am not Soot. Soot fans and caws. I wedge.", "I hop. Then I croak. Then I hop."),
+    feed=("Scrap of a treaty.", "I will take this and keep a thought.", "Accepted. The croak records it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("On the rafter.",),
+    call=("I croaked. Hello.",),
+    hungry=("A raven should not be this empty.", "A scrap would restore the croak."),
+)
+
+HEART = _kind(
+    key="barn_owl",
+    slug="heart",
+    name="Heart",
+    label="Barn Owl",
+    treat="Vole",
+    treat_shape="crumb",
+    silhouette="barn_owl",
+    walk=70,
+    perch=True,
+    palette=Palette(
+        body=(180, 156, 120),
+        belly=(232, 220, 196),
+        ear=(140, 96, 64),
+        ear_inner=(244, 236, 220),
+        nose=(140, 96, 64),
+        ring=(244, 236, 220),
+        accent=(140, 96, 64),
+    ),
+    greet=("I hissed. Hello.", "The beam kept my heart.", "You may look. I am not a hawk."),
+    ambient=("A heart face. Silent wings. I keep the night.", "I am not Hook. Hook soars in the day. I hunt the dark.", "I sit. Then I turn. Then I sit."),
+    feed=("Vole of a treaty.", "I will take this without a sound.", "Accepted. The heart records it."),
+    treat_lines=("Vole of a treaty.",),
+    hide=("Inside the beam.",),
+    call=("I hissed. Hello.",),
+    hungry=("An owl should not be this empty.", "A vole would restore the hunt."),
+)
+
+HOOK = _kind(
+    key="red_tail",
+    slug="hook",
+    name="Hook",
+    label="Red-tailed Hawk",
+    treat="Vole",
+    treat_shape="crumb",
+    silhouette="red_tail",
+    walk=110,
+    perch=True,
+    palette=Palette(
+        body=(132, 88, 52),
+        belly=(220, 196, 160),
+        ear=(176, 72, 40),
+        ear_inner=(196, 96, 48),
+        nose=(48, 36, 28),
+        ring=(176, 72, 40),
+        accent=(176, 72, 40),
+    ),
+    greet=("I soared. Hello.", "The post kept my hook.", "You may look. I am not an owl."),
+    ambient=("A rusty tail. A hooked bill. I keep the sky.", "I am not Heart. Heart is a barn face. I soar.", "I fly. Then I stoop. Then I fly."),
+    feed=("Vole of a treaty.", "I will take this and return to the air.", "Accepted. The hook records it."),
+    treat_lines=("Vole of a treaty.",),
+    hide=("Above the post.",),
+    call=("I soared. Hello.",),
+    hungry=("A hawk should not be this empty.", "A vole would restore the stoop."),
+)
+
+DEE = _kind(
+    key="chickadee",
+    slug="dee",
+    name="Dee",
+    label="Black-capped Chickadee",
+    treat="Seed",
+    treat_shape="seed",
+    silhouette="chickadee",
+    walk=110,
+    perch=True,
+    palette=Palette(
+        body=(188, 168, 120),
+        belly=(244, 240, 232),
+        ear=(24, 24, 28),
+        ear_inner=(244, 240, 232),
+        nose=(40, 36, 32),
+        ring=(24, 24, 28),
+        accent=(24, 24, 28),
+    ),
+    greet=("Dee-dee. Hello.", "The cup kept my cap.", "You may look. I am not a sparrow."),
+    ambient=("A black cap. White cheeks. I keep the name I say.", "A sparrow rumor has no cap like this. I am Poecile.", "I hop. Then I dee. Then I hop."),
+    feed=("Seed of a treaty.", "I will take this and hide one.", "Accepted. The cap records it."),
+    treat_lines=("Seed of a treaty.",),
+    hide=("Inside the cup.",),
+    call=("Dee-dee. Hello.",),
+    hungry=("A chickadee should not be this empty.", "A seed would restore the dee."),
+)
+
+BRICK = _kind(
+    key="robin",
+    slug="brick",
+    name="Brick",
+    label="American Robin",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="robin",
+    walk=85,
+    perch=True,
+    palette=Palette(
+        body=(56, 56, 60),
+        belly=(176, 64, 48),
+        ear=(56, 56, 60),
+        ear_inner=(236, 220, 196),
+        nose=(40, 32, 24),
+        ring=(176, 64, 48),
+        accent=(176, 64, 48),
+    ),
+    greet=("I hopped. Hello.", "The rim kept my brick.", "You may look. I am not the European one."),
+    ambient=("A brick breast. A dark head. I hop the lawn.", "The European robin is a chat with an orange face. I am Turdus. A thrush.", "I hop. Then I pull. Then I hop."),
+    feed=("Worm of a treaty.", "I will take this and hop again.", "Accepted. The brick records it."),
+    treat_lines=("Worm of a treaty.",),
+    hide=("On the rim.",),
+    call=("I hopped. Hello.",),
+    hungry=("A robin should not be this empty.", "A worm would restore the hop."),
+)
+
+DRAKE = _kind(
+    key="mallard",
+    slug="drake",
+    name="Drake",
+    label="Mallard",
+    treat="Seed",
+    treat_shape="seed",
+    silhouette="mallard",
+    walk=62,
+    palette=Palette(
+        body=(148, 148, 140),
+        belly=(220, 220, 212),
+        ear=(32, 92, 56),
+        ear_inner=(232, 188, 48),
+        nose=(232, 188, 48),
+        ring=(32, 92, 56),
+        accent=(176, 72, 40),
+    ),
+    greet=("I dabbled. Hello.", "The dish kept my green.", "You may look. I am not a goose."),
+    ambient=("A green head. A yellow bill. I keep the dabble.", "I am not Vee. Vee is a V and a honk. I dabble.", "I walk. Then I dabble. Then I walk."),
+    feed=("Seed of a treaty.", "I will take this and tip.", "Accepted. The green records it."),
+    treat_lines=("Seed of a treaty.",),
+    hide=("Inside the dish.",),
+    call=("I dabbled. Hello.",),
+    hungry=("A mallard should not be this empty.", "A seed would restore the dabble."),
+)
+
+VEE = _kind(
+    key="canada_goose",
+    slug="vee",
+    name="Vee",
+    label="Canada Goose",
+    treat="Grass",
+    treat_shape="leaf",
+    silhouette="canada_goose",
+    walk=70,
+    palette=Palette(
+        body=(120, 88, 56),
+        belly=(196, 180, 148),
+        ear=(24, 24, 28),
+        ear_inner=(240, 236, 228),
+        nose=(24, 24, 28),
+        ring=(240, 236, 228),
+        accent=(24, 24, 28),
+    ),
+    greet=("I honked. Hello.", "The green kept my V.", "You may look. I am not a duck."),
+    ambient=("A black head. A white chinstrap. I keep the V.", "I am not Drake. Drake dabbles and wears a green head. I honk.", "I walk. Then I honk. Then I walk."),
+    feed=("Grass of a treaty.", "I will take this and keep the V.", "Accepted. The honk records it."),
+    treat_lines=("Grass of a treaty.",),
+    hide=("On the green.",),
+    call=("I honked. Hello.",),
+    hungry=("A goose should not be this empty.", "A grass would restore the honk."),
+)
+
+DRUM = _kind(
+    key="pileated",
+    slug="drum",
+    name="Drum",
+    label="Pileated Woodpecker",
+    treat="Ant",
+    treat_shape="crumb",
+    silhouette="pileated",
+    walk=76,
+    perch=True,
+    palette=Palette(
+        body=(24, 24, 28),
+        belly=(236, 232, 224),
+        ear=(196, 40, 40),
+        ear_inner=(236, 232, 224),
+        nose=(32, 28, 24),
+        ring=(196, 40, 40),
+        accent=(196, 40, 40),
+    ),
+    greet=("I drummed. Hello.", "The post kept my crest.", "You may look. I am not a flicker."),
+    ambient=("A red crest. A long bill. I keep a rectangle.", "A flicker makes a rounder hole and a smaller drum. I am Dryocopus.", "I hop. Then I drum. Then I hop."),
+    feed=("Ant of a treaty.", "I will take this from the gallery.", "Accepted. The drum records it."),
+    treat_lines=("Ant of a treaty.",),
+    hide=("Inside the post.",),
+    call=("I drummed. Hello.",),
+    hungry=("A woodpecker should not be this empty.", "An ant would restore the drum."),
+)
+
+SIP = _kind(
+    key="hummingbird",
+    slug="sip",
+    name="Sip",
+    label="Ruby-throated Hummingbird",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="hummingbird",
+    walk=150,
+    perch=True,
+    palette=Palette(
+        body=(48, 140, 80),
+        belly=(236, 228, 196),
+        ear=(176, 32, 48),
+        ear_inner=(176, 32, 48),
+        nose=(40, 36, 28),
+        ring=(176, 32, 48),
+        accent=(48, 140, 80),
+    ),
+    greet=("I hovered. Hello.", "The cup kept my ruby.", "You may look. I am not a bee."),
+    ambient=("A needle bill. A hover. I keep the sip.", "I am not Thrum. Thrum is a bumblebee. I am a bird.", "I dart. Then I hover. Then I dart."),
+    feed=("Nectar of a treaty.", "I will take this and hang in the air.", "Accepted. The ruby records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("On the cup.",),
+    call=("I hovered. Hello.",),
+    hungry=("A hummingbird should not be this empty.", "A nectar would restore the hover."),
+)
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -3403,6 +3694,16 @@ _ALL: tuple[Species, ...] = (
     TRUMPET,
     ROD,
     ROSE,
+    SOOT,
+    WEDGE,
+    HEART,
+    HOOK,
+    DEE,
+    BRICK,
+    DRAKE,
+    VEE,
+    DRUM,
+    SIP,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -3449,6 +3750,10 @@ def is_pond(key: str) -> bool:
 
 def is_well(key: str) -> bool:
     return key in WELL_KEYS
+
+
+def is_roost(key: str) -> bool:
+    return key in ROOST_KEYS
 
 
 def next_species_key(key: str) -> str:

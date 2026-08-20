@@ -107,7 +107,11 @@ class PetCatalogTest {
         assertThat(csv).contains("frog");
         assertThat(csv).contains("caecilian");
         assertThat(csv).contains("stickleback");
-        assertThat(csv).endsWith("stickleback");
+        assertThat(csv).contains("paramecium");
+        assertThat(csv).contains("haloarchaea");
+        assertThat(csv).contains("crow");
+        assertThat(csv).contains("hummingbird");
+        assertThat(csv).endsWith("hummingbird");
         assertThat(csv.split(", ")).hasSize(PetType.values().length);
     }
 }

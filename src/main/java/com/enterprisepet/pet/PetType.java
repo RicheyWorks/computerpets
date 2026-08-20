@@ -120,7 +120,17 @@ public enum PetType {
     CHLAMYDOMONAS    ("chlamydomonas",     "Chlamydomonas",           Rarity.COMMON),
     STENTOR          ("stentor",           "Blue Stentor",            Rarity.UNCOMMON),
     COLI             ("coli",              "Escherichia coli",        Rarity.COMMON),
-    HALOARCHAEA      ("haloarchaea",       "Halobacterium",           Rarity.RARE);
+    HALOARCHAEA      ("haloarchaea",       "Halobacterium",           Rarity.RARE),
+    CROW             ("crow",              "American Crow",        Rarity.COMMON),
+    RAVEN            ("raven",             "Common Raven",         Rarity.UNCOMMON),
+    BARN_OWL         ("barn_owl",          "Barn Owl",             Rarity.UNCOMMON),
+    RED_TAIL         ("red_tail",          "Red-tailed Hawk",      Rarity.UNCOMMON),
+    CHICKADEE        ("chickadee",         "Black-capped Chickadee", Rarity.COMMON),
+    ROBIN            ("robin",             "American Robin",       Rarity.COMMON),
+    MALLARD          ("mallard",           "Mallard",              Rarity.COMMON),
+    CANADA_GOOSE     ("canada_goose",      "Canada Goose",         Rarity.COMMON),
+    PILEATED         ("pileated",          "Pileated Woodpecker",  Rarity.RARE),
+    HUMMINGBIRD      ("hummingbird",       "Ruby-throated Hummingbird", Rarity.UNCOMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

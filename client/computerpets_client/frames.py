@@ -252,6 +252,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         _draw_pond(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in (
+        "crow",
+        "raven",
+        "barn_owl",
+        "red_tail",
+        "chickadee",
+        "robin",
+        "mallard",
+        "canada_goose",
+        "pileated",
+        "hummingbird",
+    ):
+        _draw_roost(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    if species.silhouette in (
         "paramecium",
         "amoeba",
         "euglena",
@@ -2071,3 +2085,218 @@ def _top_light(p: QPainter, hx: float, hy: float) -> None:
     p.setBrush(QBrush(grad))
     p.setPen(Qt.PenStyle.NoPen)
     p.drawEllipse(QRectF(hx - 20, hy - 14, 40, 22))
+
+
+def _draw_roost(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    nose = _color(pal.nose)
+    sil = species.silhouette
+    wave = math.sin(i * 0.9) * 5
+    p.translate(0, sit * 0.12)
+    if sleep:
+        p.rotate(-10)
+    wing = 4 + stride * 8 + (6 if anim == "play" else 0)
+    if sil == "hummingbird":
+        wing = 10 + abs(math.sin(i * 2.2)) * 8
+
+    if sil == "crow":
+        fan = QPainterPath()
+        fan.moveTo(8, 4)
+        fan.lineTo(22, 2 + wave * 0.2)
+        fan.lineTo(26, 14)
+        fan.lineTo(10, 12)
+        fan.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(fan)
+        p.drawEllipse(QRectF(-22, -10, 40, 26))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, 0, 18, 10))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-28, -20, 22, 20))
+        _draw_face(p, -20, -12, nose, sleep, anim, i, False)
+        return
+
+    if sil == "raven":
+        wedge = QPainterPath()
+        wedge.moveTo(10, 2)
+        wedge.lineTo(34, -6 + wave * 0.2)
+        wedge.lineTo(32, 10)
+        wedge.lineTo(10, 10)
+        wedge.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(wedge)
+        p.drawEllipse(QRectF(-24, -12, 44, 28))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, 0, 18, 10))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-30, -22, 24, 22))
+        bill = QPainterPath()
+        bill.moveTo(-28, -8)
+        bill.lineTo(-42, -2)
+        bill.lineTo(-28, -2)
+        p.setBrush(QBrush(accent))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawPath(bill)
+        _draw_face(p, -22, -12, nose, sleep, anim, i, False)
+        return
+
+    if sil == "barn_owl":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-20, -8, 40, 26))
+        wingp = QPainterPath()
+        wingp.moveTo(4, 0)
+        wingp.cubicTo(18, -8 - wing, 32, 6, 10, 12)
+        p.drawPath(wingp)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        heart = QPainterPath()
+        heart.moveTo(-2, -8)
+        heart.cubicTo(-22, -28, -28, -4, -2, 10)
+        heart.cubicTo(24, -4, 18, -28, -2, -8)
+        p.drawPath(heart)
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-16, -18, 12, 14))
+        p.drawEllipse(QRectF(-2, -16, 12, 14))
+        _draw_face(p, -10, -12, nose, sleep, anim, i, False)
+        return
+
+    if sil == "red_tail":
+        rust = QPainterPath()
+        rust.moveTo(8, 2)
+        rust.lineTo(30, -8 + wave * 0.3)
+        rust.lineTo(32, 8)
+        rust.lineTo(10, 10)
+        rust.closeSubpath()
+        p.setBrush(QBrush(ring))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(rust)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-22, -12, 40, 26))
+        soar = QPainterPath()
+        soar.moveTo(0, 0)
+        soar.cubicTo(20, -14 - wing, 40, 4, 12, 12)
+        p.drawPath(soar)
+        hook = QPainterPath()
+        hook.moveTo(-20, -6)
+        hook.quadTo(-34, 0, -22, 4)
+        p.setBrush(QBrush(nose))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawPath(hook)
+        _draw_face(p, -16, -10, nose, sleep, anim, i, False)
+        return
+
+    if sil == "chickadee":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-16, -6, 28, 18))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, 0, 14, 8))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-16, -16, 16, 10))
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-14, -10, 10, 8))
+        _draw_face(p, -10, -8, nose, sleep, anim, i, False)
+        return
+
+    if sil == "robin":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-18, -8, 34, 22))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, 2, 18, 10))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-20, -18, 18, 16))
+        _draw_face(p, -14, -10, nose, sleep, anim, i, False)
+        return
+
+    if sil == "mallard":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-20, -8, 42, 24))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 2, 18, 10))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-26, -16, 20, 16))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-32, -6, 14, 6))
+        _draw_face(p, -18, -10, accent, sleep, anim, i, False)
+        return
+
+    if sil == "canada_goose":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-22, -8, 48, 26))
+        neck = QPainterPath()
+        neck.moveTo(-16, -6)
+        neck.quadTo(-28, -28, -18, -30)
+        p.setPen(QPen(accent, 6))
+        p.drawPath(neck)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(accent))
+        p.drawEllipse(QRectF(-26, -36, 16, 14))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-24, -26, 12, 6))
+        _draw_face(p, -20, -30, nose, sleep, anim, i, False)
+        return
+
+    if sil == "pileated":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-20, -8, 38, 22))
+        crest = QPainterPath()
+        crest.moveTo(-16, -16)
+        crest.lineTo(-8, -30)
+        crest.lineTo(-2, -16)
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawPath(crest)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-16, -12, 10, 6))
+        bill = QPainterPath()
+        bill.moveTo(-20, -6)
+        bill.lineTo(-40, -2)
+        bill.lineTo(-20, 0)
+        p.setBrush(QBrush(nose))
+        p.drawPath(bill)
+        _draw_face(p, -16, -10, ring, sleep, anim, i, False)
+        return
+
+    # hummingbird — needle bill, hover, not a bee
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 0.9))
+    p.drawEllipse(QRectF(-10, -6, 18, 12))
+    wingp = QPainterPath()
+    wingp.moveTo(0, -2)
+    wingp.cubicTo(10, -16 - wing, 22, -2, 6, 4)
+    p.drawPath(wingp)
+    p.setPen(Qt.PenStyle.NoPen)
+    p.setBrush(QBrush(ring))
+    p.drawEllipse(QRectF(-8, 0, 8, 6))
+    p.setBrush(QBrush(nose))
+    p.drawEllipse(QRectF(-22, -2, 14, 3))
+    _draw_face(p, -8, -4, nose, sleep, anim, i, False)
+    _ = eat
+

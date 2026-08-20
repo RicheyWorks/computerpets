@@ -111,6 +111,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   stentor: { shape: "flake", verb: "Bacteria" },
   coli: { shape: "crumb", verb: "Broth" },
   haloarchaea: { shape: "flake", verb: "Salt" },
+  crow: { shape: "crumb", verb: "Scrap" },
+  raven: { shape: "crumb", verb: "Scrap" },
+  barn_owl: { shape: "crumb", verb: "Vole" },
+  red_tail: { shape: "crumb", verb: "Vole" },
+  chickadee: { shape: "seed", verb: "Seed" },
+  robin: { shape: "flake", verb: "Worm" },
+  mallard: { shape: "seed", verb: "Seed" },
+  canada_goose: { shape: "leaf", verb: "Grass" },
+  pileated: { shape: "crumb", verb: "Ant" },
+  hummingbird: { shape: "flake", verb: "Nectar" },
 };
 
 export function treatFor(key: string) {
@@ -228,4 +238,14 @@ export const GIFT_LINE: Record<string, string> = {
   stentor: "A horn I was finished opening.",
   coli: "A divide I was finished keeping.",
   haloarchaea: "A blush I was finished wearing.",
+  crow: "A scrap I was finished hiding.",
+  raven: "A thought I was finished keeping.",
+  barn_owl: "A vole I was finished taking.",
+  red_tail: "A vole I was finished stooping for.",
+  chickadee: "A seed I was finished hiding.",
+  robin: "A worm I was finished pulling.",
+  mallard: "A seed I was finished tipping for.",
+  canada_goose: "A grass I was finished keeping.",
+  pileated: "An ant I was finished drumming for.",
+  hummingbird: "A nectar I was finished sipping.",
 };

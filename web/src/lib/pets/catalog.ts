@@ -121,6 +121,16 @@ export const SPECIES: Species[] = [
   { key: "stentor", displayName: "Blue Stentor", rarity: "UNCOMMON", temperament: "Trumpet", habitat: "Trumpet rim", blurb: "A trumpet. Not a worm. Not Slip. Not Latch." },
   { key: "coli", displayName: "Escherichia coli", rarity: "COMMON", temperament: "Dividing", habitat: "Broth cup", blurb: "A rod. A bacterium. Not a fungus. Not Starter." },
   { key: "haloarchaea", displayName: "Halobacterium", rarity: "RARE", temperament: "Pink", habitat: "Salt pan", blurb: "An archaeon. Pink salt. Not a bacterium. Not Brine." },
+  { key: "crow", displayName: "American Crow", rarity: "COMMON", temperament: "Keen", habitat: "Chimney ledge", blurb: "Fan tail. A caw. Not a raven. Not Quill." },
+  { key: "raven", displayName: "Common Raven", rarity: "UNCOMMON", temperament: "Grave", habitat: "High rafter", blurb: "Wedge tail, a croak. Not a crow. Not Quill." },
+  { key: "barn_owl", displayName: "Barn Owl", rarity: "UNCOMMON", temperament: "Still", habitat: "Beam hollow", blurb: "Heart face. A hiss, not a hoot. Not a hawk." },
+  { key: "red_tail", displayName: "Red-tailed Hawk", rarity: "UNCOMMON", temperament: "Watchful", habitat: "Lamp post", blurb: "A rusty fan. A soar. Not an owl. Not Heart." },
+  { key: "chickadee", displayName: "Black-capped Chickadee", rarity: "COMMON", temperament: "Busy", habitat: "Twig cup", blurb: "Black cap. Dee-dee. Not a sparrow rumor." },
+  { key: "robin", displayName: "American Robin", rarity: "COMMON", temperament: "Bright", habitat: "Nest rim", blurb: "A brick breast. A hop on the lawn. Not the European robin." },
+  { key: "mallard", displayName: "Mallard", rarity: "COMMON", temperament: "Easy", habitat: "Ink dish", blurb: "Green head. A dabble. Not a goose. Not Coin." },
+  { key: "canada_goose", displayName: "Canada Goose", rarity: "COMMON", temperament: "Sure", habitat: "Blotter green", blurb: "A V. A honk. Not a duck. Not Drake." },
+  { key: "pileated", displayName: "Pileated Woodpecker", rarity: "RARE", temperament: "Loud", habitat: "Dead-wood post", blurb: "A rectangular hole. A red crest. Not a flicker." },
+  { key: "hummingbird", displayName: "Ruby-throated Hummingbird", rarity: "UNCOMMON", temperament: "Quick", habitat: "Nectar cup", blurb: "A needle bill. A hover. Not a bee. Not Thrum." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

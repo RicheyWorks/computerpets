@@ -4,6 +4,7 @@ import { FUNGI_KEYS } from "./fungi";
 import { GARDEN_KEYS } from "./garden";
 import { INSECT_KEYS } from "./insects";
 import { POND_KEYS } from "./pond";
+import { ROOST_KEYS } from "./roost";
 import { ROSTER } from "./roster";
 import { SEA_KEYS } from "./sea";
 import { SNAKE_KEYS } from "./snakes";
@@ -33,6 +34,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   if (FUNGI_KEYS.includes(key)) throw new Error(`house guide does not file the cellar: ${key}`);
   if (FAR_KEYS.includes(key)) throw new Error(`house guide does not file the far den: ${key}`);
   if (POND_KEYS.includes(key)) throw new Error(`house guide does not file the pond: ${key}`);
+  if (ROOST_KEYS.includes(key)) throw new Error(`house guide does not file the roost: ${key}`);
   if (WELL_KEYS.includes(key)) throw new Error(`house guide does not file the well: ${key}`);
   return {
     key,

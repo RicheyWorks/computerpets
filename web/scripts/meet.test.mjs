@@ -15,7 +15,7 @@ const seaSrc = readFileSync(join(root, "src/lib/pets/sea.ts"), "utf8");
 test("meet no longer says Fifty", () => {
   assert.doesNotMatch(meetSrc, /Fifty/);
   assert.doesNotMatch(meetSrc, /fifty/);
-  assert.match(meetSrc, /One hundred ten guests walk the blotter/);
+  assert.match(meetSrc, /One hundred twenty guests walk the blotter/);
   assert.match(meetSrc, /Watch Rui/);
   assert.match(meetSrc, /HouseFloor/);
   assert.match(meetSrc, /DenCabinet/);

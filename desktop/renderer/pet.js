@@ -405,6 +405,16 @@ const TREAT_SHAPE = {
   stentor: "flake",
   coli: "crumb",
   haloarchaea: "flake",
+  crow: "crumb",
+  raven: "crumb",
+  barn_owl: "crumb",
+  red_tail: "crumb",
+  chickadee: "seed",
+  robin: "flake",
+  mallard: "seed",
+  canada_goose: "leaf",
+  pileated: "crumb",
+  hummingbird: "flake",
 };
 
 function placeMark(kindName, x, hops = 0) {
@@ -1122,6 +1132,16 @@ const VISIT_LINE = {
   stentor: "I opened. Then I left the horn.",
   coli: "I tumbled. Then I left the broth.",
   haloarchaea: "I blushed. Then I left the pan.",
+  crow: "I cawed. Then I left the ledge.",
+  raven: "I croaked. Then I left the rafter.",
+  barn_owl: "I hissed. Then I left the beam.",
+  red_tail: "I soared. Then I left the post.",
+  chickadee: "I deeed. Then I left the cup.",
+  robin: "I hopped. Then I left the rim.",
+  mallard: "I dabbled. Then I left the dish.",
+  canada_goose: "I honked. Then I left the green.",
+  pileated: "I drummed. Then I left the post.",
+  hummingbird: "I hovered. Then I left the cup.",
 };
 
 let visit = null;

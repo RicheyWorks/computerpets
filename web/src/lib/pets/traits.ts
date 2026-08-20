@@ -146,6 +146,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   stentor: T(12, 0, 0.72, 0.1, { aquatic: true }, "trumpet", "Trumpet", "I opened. Hello."),
   coli: T(90, 4, 0.42, 0.55, {}, "tumble", "Tumble", "I tumbled. Hello."),
   haloarchaea: T(28, 2, 0.5, 0.2, {}, "blush", "Blush", "I blushed. Hello."),
+  crow: T(90, 22, 0.86, 0.48, { perch: true }, "caw", "Caw", "I cawed. That was hello."),
+  raven: T(82, 18, 1.08, 0.36, { perch: true }, "kronk", "Croak", "I croaked. Hello."),
+  barn_owl: T(70, 16, 0.92, 0.28, { nocturnal: true, perch: true }, "hiss", "Hiss", "I hissed. Hello."),
+  red_tail: T(110, 14, 1.06, 0.55, { perch: true }, "soar", "Soar", "I soared. Hello."),
+  chickadee: T(110, 28, 0.52, 0.55, { perch: true }, "dee", "Dee", "Dee-dee. Hello."),
+  robin: T(85, 30, 0.72, 0.42, { perch: true }, "run", "Hop", "I hopped. Hello."),
+  mallard: T(62, 10, 0.88, 0.32, {}, "dabble", "Dabble", "I dabbled. Hello."),
+  canada_goose: T(70, 8, 1.16, 0.28, {}, "honk", "Honk", "I honked. Hello."),
+  pileated: T(76, 20, 1.0, 0.34, { perch: true }, "drum", "Drum", "I drummed. Hello."),
+  hummingbird: T(150, 30, 0.42, 0.7, { perch: true }, "hover", "Hover", "I hovered. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;
