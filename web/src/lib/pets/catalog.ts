@@ -131,6 +131,16 @@ export const SPECIES: Species[] = [
   { key: "canada_goose", displayName: "Canada Goose", rarity: "COMMON", temperament: "Sure", habitat: "Blotter green", blurb: "A V. A honk. Not a duck. Not Drake." },
   { key: "pileated", displayName: "Pileated Woodpecker", rarity: "RARE", temperament: "Loud", habitat: "Dead-wood post", blurb: "A rectangular hole. A red crest. Not a flicker." },
   { key: "hummingbird", displayName: "Ruby-throated Hummingbird", rarity: "UNCOMMON", temperament: "Quick", habitat: "Nectar cup", blurb: "A needle bill. A hover. Not a bee. Not Thrum." },
+  { key: "orb_weaver", displayName: "European Garden Spider", rarity: "COMMON", temperament: "Still", habitat: "Lamp web", blurb: "A cross on the abdomen. A web she built. Not an insect. Not Stem." },
+  { key: "jumping_spider", displayName: "Bold Jumper", rarity: "COMMON", temperament: "Keen", habitat: "Blotter edge", blurb: "Big front eyes. A leap. She stalks. Not a wolf spider." },
+  { key: "wolf_spider", displayName: "Wetland Wolf Spider", rarity: "UNCOMMON", temperament: "Sure", habitat: "Leaf litter", blurb: "She carries the brood. No snare. Not Leap." },
+  { key: "tarantula", displayName: "Desert Blonde", rarity: "RARE", temperament: "Quiet", habitat: "Silk burrow", blurb: "Blonde hair. A kick, not a rumor of fangs first. Not a wolf spider." },
+  { key: "widow", displayName: "Southern Black Widow", rarity: "UNCOMMON", temperament: "Plain", habitat: "Dark corner", blurb: "A red hourglass. She is not every dark spider." },
+  { key: "harvestman", displayName: "Common Harvestman", rarity: "COMMON", temperament: "Busy", habitat: "Blotter stem", blurb: "Two eyes. One body, not two. Not a spider. Not Loom." },
+  { key: "scorpion", displayName: "Striped Bark Scorpion", rarity: "UNCOMMON", temperament: "Watchful", habitat: "Bark tray", blurb: "A metasoma, a sting. Not a spider. Not Whip." },
+  { key: "vinegaroon", displayName: "Giant Vinegaroon", rarity: "RARE", temperament: "Armed", habitat: "Sand tray", blurb: "A whip. Acetic acid. No sting. Not a scorpion. Not Barb." },
+  { key: "tick", displayName: "Black-legged Tick", rarity: "COMMON", temperament: "Patient", habitat: "Blotter hem", blurb: "Eight legs. A mite. Not an insect. Not Comb." },
+  { key: "solifuge", displayName: "Windscorpion", rarity: "UNCOMMON", temperament: "Quick", habitat: "Dry dish", blurb: "Huge chelicerae. A run. Not a spider. Not a scorpion." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

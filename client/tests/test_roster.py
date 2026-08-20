@@ -12,10 +12,12 @@ from computerpets_client.species import (
     POND_KEYS,
     SEA_KEYS,
     SNAKE_KEYS,
+    CORNER_KEYS,
     ROOST_KEYS,
     WELL_KEYS,
     SPECIES,
     is_bee,
+    is_corner,
     is_far,
     is_fungus,
     is_garden,
@@ -152,6 +154,16 @@ WEB_CATALOG = (
     "canada_goose",
     "pileated",
     "hummingbird",
+    "orb_weaver",
+    "jumping_spider",
+    "wolf_spider",
+    "tarantula",
+    "widow",
+    "harvestman",
+    "scorpion",
+    "vinegaroon",
+    "tick",
+    "solifuge",
 )
 
 WEB_SNAKES = (
@@ -287,6 +299,19 @@ WEB_ROOST = (
     "hummingbird",
 )
 
+WEB_CORNER = (
+    "orb_weaver",
+    "jumping_spider",
+    "wolf_spider",
+    "tarantula",
+    "widow",
+    "harvestman",
+    "scorpion",
+    "vinegaroon",
+    "tick",
+    "solifuge",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -302,6 +327,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(POND_KEYS) == 10
     assert len(WELL_KEYS) == 10
     assert len(ROOST_KEYS) == 10
+    assert len(CORNER_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -313,6 +339,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(POND_KEYS) == set(WEB_POND)
     assert set(WELL_KEYS) == set(WEB_WELL)
     assert set(ROOST_KEYS) == set(WEB_ROOST)
+    assert set(CORNER_KEYS) == set(WEB_CORNER)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -658,6 +685,44 @@ def test_ten_roost_guests_are_present_and_honest():
     assert SPECIES["moss"].walk < 20
 
 
+def test_ten_corner_guests_are_present_and_honest():
+    assert CORNER_KEYS == WEB_CORNER
+    for key in WEB_CORNER:
+        spec = SPECIES[key]
+        assert is_corner(key)
+        assert not is_insect(key)
+        assert not is_bee(key)
+        assert not is_pond(key)
+        assert not is_roost(key)
+        assert not is_well(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.silhouette != "axolotl"
+        assert spec.silhouette != "honeybee"
+        assert spec.gait == "walk"
+    assert SPECIES["orb_weaver"].slug == "loom"
+    assert SPECIES["orb_weaver"].name == "Loom"
+    assert SPECIES["jumping_spider"].name == "Leap"
+    assert SPECIES["wolf_spider"].name == "Prowl"
+    assert SPECIES["tarantula"].name == "Velvet"
+    assert SPECIES["widow"].name == "Hour"
+    assert SPECIES["harvestman"].name == "Stem"
+    assert SPECIES["harvestman"].silhouette == "harvestman"
+    assert SPECIES["scorpion"].name == "Barb"
+    assert SPECIES["vinegaroon"].name == "Whip"
+    assert SPECIES["tick"].name == "Clasp"
+    assert SPECIES["solifuge"].name == "Gale"
+    assert SPECIES["orb_weaver"].perch is True
+    assert SPECIES["widow"].perch is True
+    assert SPECIES["jumping_spider"].walk >= 70
+    assert SPECIES["solifuge"].walk >= 100
+    assert SPECIES["tick"].walk < 20
+    assert SPECIES["axolotl"].name == "Bloom"
+    assert SPECIES["honeybee"].name == "Comb"
+    assert SPECIES["crayfish"].name == "Pinch"
+    assert SPECIES["horseshoe_crab"].name == "Ledger"
+
+
 def test_every_kind_has_house_voice_and_care_treat():
     for key in CATALOG_KEYS:
         spec = species_by_key(key)
@@ -689,8 +754,9 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("stickleback") == "paramecium"
     assert next_species_key("haloarchaea") == "crow"
     assert prev_species_key("crow") == "haloarchaea"
-    assert next_species_key("hummingbird") == "red_panda"
-    assert prev_species_key("red_panda") == "hummingbird"
+    assert next_species_key("hummingbird") == "orb_weaver"
+    assert next_species_key("solifuge") == "red_panda"
+    assert prev_species_key("red_panda") == "solifuge"
     assert prev_species_key("paramecium") == "stickleback"
     assert prev_species_key("honeybee") == "sundew"
     assert prev_species_key("ball_python") == "phoenix"

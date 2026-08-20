@@ -121,6 +121,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   canada_goose: { shape: "leaf", verb: "Grass" },
   pileated: { shape: "crumb", verb: "Ant" },
   hummingbird: { shape: "flake", verb: "Nectar" },
+  orb_weaver: { shape: "crumb", verb: "Fly" },
+  jumping_spider: { shape: "crumb", verb: "Fly" },
+  wolf_spider: { shape: "crumb", verb: "Cricket" },
+  tarantula: { shape: "crumb", verb: "Cricket" },
+  widow: { shape: "crumb", verb: "Fly" },
+  harvestman: { shape: "crumb", verb: "Mite" },
+  scorpion: { shape: "crumb", verb: "Cricket" },
+  vinegaroon: { shape: "crumb", verb: "Cricket" },
+  tick: { shape: "flake", verb: "Sip" },
+  solifuge: { shape: "crumb", verb: "Cricket" },
 };
 
 export function treatFor(key: string) {
@@ -248,4 +258,14 @@ export const GIFT_LINE: Record<string, string> = {
   canada_goose: "A grass I was finished keeping.",
   pileated: "An ant I was finished drumming for.",
   hummingbird: "A nectar I was finished sipping.",
+  orb_weaver: "A fly I was finished wrapping.",
+  jumping_spider: "A fly I was finished leaping for.",
+  wolf_spider: "A cricket I was finished carrying past.",
+  tarantula: "A cricket I was finished taking.",
+  widow: "A fly I was finished hanging for.",
+  harvestman: "A mite I was finished walking to.",
+  scorpion: "A cricket I was finished raising for.",
+  vinegaroon: "A cricket I was finished whipping for.",
+  tick: "A sip I was finished waiting for.",
+  solifuge: "A cricket I was finished running to.",
 };

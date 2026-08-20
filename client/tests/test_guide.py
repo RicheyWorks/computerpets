@@ -28,6 +28,9 @@ from computerpets_client.guide import (
     pond_guide_keys,
     roost_guide_complete,
     roost_guide_keys,
+    CORNER_GUIDE,
+    corner_guide_complete,
+    corner_guide_keys,
     WELL_GUIDE,
     well_guide_complete,
     well_guide_keys,
@@ -47,7 +50,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -202,6 +205,19 @@ ROOST_EXPECTED = [
     ("hummingbird", "sip", "Archilochus colubris"),
 ]
 
+CORNER_EXPECTED = [
+    ("orb_weaver", "loom", "Araneus diadematus"),
+    ("jumping_spider", "leap", "Phidippus audax"),
+    ("wolf_spider", "prowl", "Tigrosa helluo"),
+    ("tarantula", "velvet", "Aphonopelma chalcodes"),
+    ("widow", "hour", "Latrodectus mactans"),
+    ("harvestman", "stem", "Phalangium opilio"),
+    ("scorpion", "barb", "Centruroides vittatus"),
+    ("vinegaroon", "whip", "Mastigoproctus giganteus"),
+    ("tick", "clasp", "Ixodes scapularis"),
+    ("solifuge", "gale", "Eremobates"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -222,6 +238,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert pond_guide_complete()
     assert well_guide_complete()
     assert roost_guide_complete()
+    assert corner_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -233,6 +250,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert pond_guide_keys() == POND_KEYS
     assert well_guide_keys() == WELL_KEYS
     assert roost_guide_keys() == ROOST_KEYS
+    assert corner_guide_keys() == CORNER_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -259,6 +277,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
 
 def test_house_and_den_list_the_same_keys_as_the_roster():
     assert [g.key for g in HOUSE_GUIDE] == [key for key, _, _ in HOUSE_EXPECTED]
+    assert [g.key for g in CORNER_GUIDE] == [key for key, _, _ in CORNER_EXPECTED]
     assert [g.key for g in SNAKE_GUIDE] == [key for key, _, _ in SNAKE_EXPECTED]
     assert [g.key for g in SEA_GUIDE] == [key for key, _, _ in SEA_EXPECTED]
     assert [g.key for g in GARDEN_GUIDE] == [key for key, _, _ in GARDEN_EXPECTED]
@@ -339,6 +358,17 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "roost"
         assert classroom_for(key).verb == "stay"
+    for key, slug, latin in CORNER_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in CORNER_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "corner"
+        assert classroom_for(key).verb == "stay"
+        assert classroom_for(key).label == "All ten in the corner"
 
 
 def test_the_important_house_mixups_are_actually_taught():
@@ -647,6 +677,41 @@ def test_the_important_roost_mixups_are_actually_taught():
     assert re.search(r"not a flicker", pileated, re.I)
     assert re.search(r"not a bee", hummingbird, re.I)
     assert re.search(r"Thrum", hummingbird)
+    orb = _taught(plaque_for("orb_weaver"))
+    jumper = _taught(plaque_for("jumping_spider"))
+    wolf = _taught(plaque_for("wolf_spider"))
+    tarantula = _taught(plaque_for("tarantula"))
+    widow = _taught(plaque_for("widow"))
+    harvestman = _taught(plaque_for("harvestman"))
+    scorpion = _taught(plaque_for("scorpion"))
+    vinegaroon = _taught(plaque_for("vinegaroon"))
+    tick = _taught(plaque_for("tick"))
+    solifuge = _taught(plaque_for("solifuge"))
+    assert re.search(r"not an insect", orb, re.I)
+    assert re.search(r"Stem", orb)
+    assert re.search(r"web is a trap", orb, re.I)
+    assert re.search(r"not a wolf spider", jumper, re.I)
+    assert re.search(r"Prowl", jumper)
+    assert re.search(r"not Leap", wolf)
+    assert re.search(r"No snare", wolf)
+    assert re.search(r"not a wolf spider", tarantula, re.I)
+    assert re.search(r"Urticating hair", tarantula)
+    assert re.search(r"not every dark spider", widow, re.I)
+    assert re.search(r"hourglass", widow, re.I)
+    assert re.search(r"not a spider", harvestman, re.I)
+    assert re.search(r"Not Loom", harvestman)
+    assert re.search(r"Two eyes", harvestman)
+    assert re.search(r"not a spider", scorpion, re.I)
+    assert re.search(r"Not Whip", scorpion)
+    assert re.search(r"not a scorpion", vinegaroon, re.I)
+    assert re.search(r"Not Barb", vinegaroon)
+    assert re.search(r"no sting", vinegaroon, re.I)
+    assert re.search(r"not an insect", tick, re.I)
+    assert re.search(r"Comb", tick)
+    assert re.search(r"mite", tick, re.I)
+    assert re.search(r"not a spider", solifuge, re.I)
+    assert re.search(r"not a scorpion", solifuge, re.I)
+    assert re.search(r"camel spider is not a spider", solifuge, re.I)
 
 
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
@@ -666,6 +731,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     pond_src = (WEB_PETS / "pond-guide.ts").read_text(encoding="utf-8")
     well_src = (WEB_PETS / "well-guide.ts").read_text(encoding="utf-8")
     roost_src = (WEB_PETS / "roost-guide.ts").read_text(encoding="utf-8")
+    corner_src = (WEB_PETS / "corner-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -676,6 +742,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     pond_keys = [key for key, _, _ in POND_EXPECTED]
     well_keys = [key for key, _, _ in WELL_EXPECTED]
     roost_keys = [key for key, _, _ in ROOST_EXPECTED]
+    corner_keys = [key for key, _, _ in CORNER_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -751,6 +818,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(ROOST_EXPECTED):
         nxt = roost_keys[index + 1] if index + 1 < len(roost_keys) else None
         chunk = _slice_entry(roost_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(CORNER_EXPECTED):
+        nxt = corner_keys[index + 1] if index + 1 < len(corner_keys) else None
+        chunk = _slice_entry(corner_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk
