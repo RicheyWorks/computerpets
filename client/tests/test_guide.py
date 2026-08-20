@@ -26,6 +26,8 @@ from computerpets_client.guide import (
     far_guide_keys,
     pond_guide_complete,
     pond_guide_keys,
+    roost_guide_complete,
+    roost_guide_keys,
     WELL_GUIDE,
     well_guide_complete,
     well_guide_keys,
@@ -45,7 +47,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -187,6 +189,19 @@ WELL_EXPECTED = [
     ("haloarchaea", "rose", "Halobacterium salinarum"),
 ]
 
+ROOST_EXPECTED = [
+    ("crow", "soot", "Corvus brachyrhynchos"),
+    ("raven", "wedge", "Corvus corax"),
+    ("barn_owl", "heart", "Tyto alba"),
+    ("red_tail", "hook", "Buteo jamaicensis"),
+    ("chickadee", "dee", "Poecile atricapillus"),
+    ("robin", "brick", "Turdus migratorius"),
+    ("mallard", "drake", "Anas platyrhynchos"),
+    ("canada_goose", "vee", "Branta canadensis"),
+    ("pileated", "drum", "Dryocopus pileatus"),
+    ("hummingbird", "sip", "Archilochus colubris"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -206,6 +221,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert far_guide_complete()
     assert pond_guide_complete()
     assert well_guide_complete()
+    assert roost_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -216,6 +232,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert far_guide_keys() == FAR_KEYS
     assert pond_guide_keys() == POND_KEYS
     assert well_guide_keys() == WELL_KEYS
+    assert roost_guide_keys() == ROOST_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -311,6 +328,16 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     for key in WELL_KEYS:
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "well"
+        assert classroom_for(key).verb == "stay"
+    for key, slug, latin in ROOST_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in ROOST_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "roost"
         assert classroom_for(key).verb == "stay"
 
 
@@ -589,6 +616,39 @@ def test_the_important_well_mixups_are_actually_taught():
     assert plaque_for("stentor").name == "Bell"
 
 
+def test_the_important_roost_mixups_are_actually_taught():
+    crow = _taught(plaque_for("crow"))
+    raven = _taught(plaque_for("raven"))
+    owl = _taught(plaque_for("barn_owl"))
+    hawk = _taught(plaque_for("red_tail"))
+    chickadee = _taught(plaque_for("chickadee"))
+    robin = _taught(plaque_for("robin"))
+    mallard = _taught(plaque_for("mallard"))
+    goose = _taught(plaque_for("canada_goose"))
+    pileated = _taught(plaque_for("pileated"))
+    hummingbird = _taught(plaque_for("hummingbird"))
+    assert re.search(r"not a raven", crow, re.I)
+    assert re.search(r"Wedge", crow)
+    assert re.search(r"Quill", crow)
+    assert re.search(r"not a crow", raven, re.I)
+    assert re.search(r"Soot", raven)
+    assert re.search(r"not a hawk", owl, re.I)
+    assert re.search(r"Hook", owl)
+    assert re.search(r"not an owl", hawk, re.I)
+    assert re.search(r"Heart", hawk)
+    assert re.search(r"Felt", hawk)
+    assert re.search(r"sparrow", chickadee, re.I)
+    assert re.search(r"European", robin)
+    assert re.search(r"not a goose", mallard, re.I)
+    assert re.search(r"Vee", mallard)
+    assert re.search(r"Coin", mallard)
+    assert re.search(r"not a duck", goose, re.I)
+    assert re.search(r"Drake", goose)
+    assert re.search(r"not a flicker", pileated, re.I)
+    assert re.search(r"not a bee", hummingbird, re.I)
+    assert re.search(r"Thrum", hummingbird)
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -605,6 +665,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     fungi_src = (WEB_PETS / "fungi-guide.ts").read_text(encoding="utf-8")
     pond_src = (WEB_PETS / "pond-guide.ts").read_text(encoding="utf-8")
     well_src = (WEB_PETS / "well-guide.ts").read_text(encoding="utf-8")
+    roost_src = (WEB_PETS / "roost-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -614,6 +675,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     fungi_keys = [key for key, _, _ in FUNGI_EXPECTED]
     pond_keys = [key for key, _, _ in POND_EXPECTED]
     well_keys = [key for key, _, _ in WELL_EXPECTED]
+    roost_keys = [key for key, _, _ in ROOST_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -681,6 +743,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(WELL_EXPECTED):
         nxt = well_keys[index + 1] if index + 1 < len(well_keys) else None
         chunk = _slice_entry(well_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(ROOST_EXPECTED):
+        nxt = roost_keys[index + 1] if index + 1 < len(roost_keys) else None
+        chunk = _slice_entry(roost_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk

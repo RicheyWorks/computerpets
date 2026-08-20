@@ -1,9 +1,9 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred ten, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred and twenty, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
-hive keeps the insect facts; the pond keeps the Animalia facts; the cellar keeps
+hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
 the xenobiology facts; the twenty keep the study facts.
 """
@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_pond, is_sea, is_snake, is_well
+from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_well
 
 
 @dataclass(frozen=True)
@@ -1083,7 +1083,100 @@ WELL_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE
+ROOST_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "crow",
+        "Corvus brachyrhynchos",
+        "A fan of a tail, a square-cut end, a caw that stays in the neighborhood. American crow. She hops. Then she caws. The ledge is a chimney she agreed to.",
+        "Not a raven. Wedge is larger, with a wedge tail and a croak; Soot is Corvus brachyrhynchos, and the fan is the tell. A crow is not a raven. Not Quill — Quill is the scarlet macaw. The fan is the species.",
+        "American crow. Fan tail. A caw. Not a raven.",
+        "chimney ledge",
+        "keen",
+    ),
+    _entry(
+        "raven",
+        "Corvus corax",
+        "A wedge of a tail, a thicker bill, a croak that carries farther than a caw. Common raven. She hops. Then she croaks. The rafter is a height she agreed to.",
+        "Not a crow. Soot fans and caws; Wedge is Corvus corax, and the wedge is the tell. A raven is not a crow. Not Quill — Quill quotes from a macaw chest. The croak is the species.",
+        "Common raven. Wedge tail. A croak. Not a crow. Not Quill.",
+        "high rafter",
+        "grave",
+    ),
+    _entry(
+        "barn_owl",
+        "Tyto alba",
+        "A heart of a face, pale disks, a hiss instead of a hoot. Barn owl. She sits. Then she turns. The beam is a hollow she agreed to.",
+        "Not a hawk. Hook soars in the day with a rusty fan; Heart is Tyto alba, and the face is the tell. A barn owl is not a hawk. She does not hoot. The heart is the species.",
+        "Barn owl. Heart face. Not a hawk.",
+        "beam hollow",
+        "still",
+    ),
+    _entry(
+        "red_tail",
+        "Buteo jamaicensis",
+        "A rusty fan of a tail, a hooked bill, a soar that uses the lamp-lift. Red-tailed hawk. She flies. Then she stoops. The post is a sky she agreed to.",
+        "Not an owl. Heart is a barn face of the night; Hook is Buteo jamaicensis, and the rusty fan is the tell. A hawk is not an owl. Not Heart. She does not sit like Felt. The soar is the species.",
+        "Red-tailed hawk. A rusty fan. Not an owl. Not Heart.",
+        "lamp post",
+        "watchful",
+    ),
+    _entry(
+        "chickadee",
+        "Poecile atricapillus",
+        "A black cap, white cheeks, a name she says: dee-dee. Black-capped chickadee. She hops. Then she dees. The cup is a twig she agreed to.",
+        "Not a sparrow rumor. Sparrows wear streaks and a different office; Dee is Poecile atricapillus, and the cap is the tell. A chickadee is not a sparrow. The name is the species.",
+        "Black-capped chickadee. Black cap. Not a sparrow rumor.",
+        "twig cup",
+        "busy",
+    ),
+    _entry(
+        "robin",
+        "Turdus migratorius",
+        "A brick breast, a dark head, a hop on the lawn that pulls a worm. American robin. A thrush. She hops. Then she pulls. The rim is a nest she agreed to.",
+        "Not the European robin. That one is a chat with an orange face; Brick is Turdus migratorius, and the brick is the tell. An American robin is not Erithacus. The hop is the species.",
+        "American robin. A brick breast. Not the European robin.",
+        "nest rim",
+        "bright",
+    ),
+    _entry(
+        "mallard",
+        "Anas platyrhynchos",
+        "A green head, a yellow bill, a speculum of blue, a dabble that tips. Mallard. She walks. Then she dabbles. The dish is an ink she agreed to.",
+        "Not a goose. Vee wears a chinstrap and keeps a V; Drake is Anas platyrhynchos, and the green is the tell. A mallard is not a goose. Not Coin — Coin is a goldfish who loops. Drake walks. Drake flies.",
+        "Mallard. Green head. Not a goose. Not Coin.",
+        "ink dish",
+        "easy",
+    ),
+    _entry(
+        "canada_goose",
+        "Branta canadensis",
+        "A black head, a white chinstrap, a honk that writes a V on the sky. Canada goose. She walks. Then she honks. The green is a blotter she agreed to.",
+        "Not a duck. Drake dabbles and wears a green head; Vee is Branta canadensis, and the V is the tell. A Canada goose is not a duck. Not Drake. The honk is the species.",
+        "Canada goose. A V. Not a duck. Not Drake.",
+        "blotter green",
+        "sure",
+    ),
+    _entry(
+        "pileated",
+        "Dryocopus pileatus",
+        "A red crest, a long bill, a rectangular hole in the dead wood. Pileated woodpecker. She hops. Then she drums. The post is a gallery she agreed to.",
+        "Not a flicker. Flickers keep a rounder hole and a smaller drum; Drum is Dryocopus pileatus, and the rectangle is the tell. A pileated is not a flicker. The hole is the species.",
+        "Pileated woodpecker. A rectangular hole. Not a flicker.",
+        "dead-wood post",
+        "loud",
+    ),
+    _entry(
+        "hummingbird",
+        "Archilochus colubris",
+        "A needle bill, a ruby throat, a hover that is not a waggle. Ruby-throated hummingbird. She darts. Then she hovers. The cup is a nectar she agreed to.",
+        "Not a bee. Thrum is a bumblebee with pollen pants; Sip is Archilochus colubris, and the hover is the tell. A hummingbird is not a bee. Not Thrum. The needle is the species.",
+        "Ruby-throated hummingbird. A hover. Not a bee. Not Thrum.",
+        "nectar cup",
+        "quick",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1118,6 +1211,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="far", label="All ten in the far den", verb="stay")
     if is_pond(key):
         return Classroom(room="pond", label="All ten in the pond", verb="stay")
+    if is_roost(key):
+        return Classroom(room="roost", label="All ten in the roost", verb="stay")
     if is_well(key):
         return Classroom(room="well", label="All ten in the well", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
@@ -1157,6 +1252,10 @@ def far_guide_keys() -> tuple[str, ...]:
 
 def pond_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in POND_GUIDE)
+
+
+def roost_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in ROOST_GUIDE)
 
 
 def well_guide_keys() -> tuple[str, ...]:
@@ -1199,6 +1298,10 @@ def pond_guide_complete() -> bool:
     return len(POND_GUIDE) == len(POND_KEYS) and all(k in _BY_KEY for k in POND_KEYS)
 
 
+def roost_guide_complete() -> bool:
+    return len(ROOST_GUIDE) == len(ROOST_KEYS) and all(k in _BY_KEY for k in ROOST_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -1214,6 +1317,7 @@ def guide_complete() -> bool:
         and fungi_guide_complete()
         and far_guide_complete()
         and pond_guide_complete()
+        and roost_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)

@@ -116,6 +116,16 @@ HOUSE_TRAITS = {
     "stentor": ("trumpet", "Trumpet", "I opened. Hello."),
     "coli": ("tumble", "Tumble", "I tumbled. Hello."),
     "haloarchaea": ("blush", "Blush", "I blushed. Hello."),
+    "crow": ("caw", "Caw", "I cawed. That was hello."),
+    "raven": ("kronk", "Croak", "I croaked. Hello."),
+    "barn_owl": ("hiss", "Hiss", "I hissed. Hello."),
+    "red_tail": ("soar", "Soar", "I soared. Hello."),
+    "chickadee": ("dee", "Dee", "Dee-dee. Hello."),
+    "robin": ("run", "Hop", "I hopped. Hello."),
+    "mallard": ("dabble", "Dabble", "I dabbled. Hello."),
+    "canada_goose": ("honk", "Honk", "I honked. Hello."),
+    "pileated": ("drum", "Drum", "I drummed. Hello."),
+    "hummingbird": ("hover", "Hover", "I hovered. Hello."),
 }
 
 

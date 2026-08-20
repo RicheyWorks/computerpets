@@ -122,7 +122,7 @@ export const GUILD_EXTRA: Record<string, LocusDef> = {
   far: GLOW,
 };
 
-export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "cellar" | "well" | "far";
+export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "roost" | "cellar" | "well" | "far";
 
 const GARDEN = new Set([
   "moss",
@@ -218,6 +218,18 @@ const WELL = new Set([
   "coli",
   "haloarchaea",
 ]);
+const ROOST = new Set([
+  "crow",
+  "raven",
+  "barn_owl",
+  "red_tail",
+  "chickadee",
+  "robin",
+  "mallard",
+  "canada_goose",
+  "pileated",
+  "hummingbird",
+]);
 const SNAKES = new Set([
   "ball_python",
   "corn_snake",
@@ -239,6 +251,7 @@ export function guildOf(key: string): GuildId {
   if (FUNGI.has(key)) return "cellar";
   if (FAR.has(key)) return "far";
   if (POND.has(key)) return "pond";
+  if (ROOST.has(key)) return "roost";
   if (WELL.has(key)) return "well";
   return "house";
 }
@@ -816,6 +829,16 @@ const HOUSE_NAME: Record<string, string> = {
   stentor: "Bell",
   coli: "Rod",
   haloarchaea: "Rose",
+  crow: "Soot",
+  raven: "Wedge",
+  barn_owl: "Heart",
+  red_tail: "Hook",
+  chickadee: "Dee",
+  robin: "Brick",
+  mallard: "Drake",
+  canada_goose: "Vee",
+  pileated: "Drum",
+  hummingbird: "Sip",
   honeybee: "Comb",
   moss: "Felt",
   bumblebee: "Thrum",

@@ -141,6 +141,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "stentor": (_a("trumpet", "open", 1.6, 5, "sit"), _a("contract", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.8, 2)),
     "coli": (_a("tumble", "dart", 0.7, 5), _a("run", "wiggle", 0.9, 3), _a("still", "freeze", 1.2, 2)),
     "haloarchaea": (_a("blush", "frost", 1.8, 5, "sit"), _a("still", "freeze", 2.2, 3), _a("pink", "flush", 1.4, 1)),
+    "crow": (_a("caw", "talk", 0.8, 4, "talk"), _a("hop_step", "hop", 0.5, 3, "play"), _a("preen", "groom", 1.4, 2, "sit")),
+    "raven": (_a("kronk", "talk", 0.9, 4, "talk"), _a("hop_step", "hop", 0.55, 3, "play"), _a("preen", "groom", 1.4, 2, "sit")),
+    "barn_owl": (_a("hiss", "talk", 0.8, 3, "talk"), _a("swivel", "nod", 1.2, 3, "sit"), _a("preen", "groom", 1.6, 2, "sit")),
+    "red_tail": (_a("soar", "pulse", 1.4, 4), _a("stoop", "dart", 0.8, 3), _a("still", "freeze", 1.6, 2)),
+    "chickadee": (_a("dee", "talk", 0.7, 4, "talk"), _a("hop_step", "hop", 0.45, 3, "play"), _a("preen", "groom", 1.2, 2, "sit")),
+    "robin": (_a("hop", "hop", 0.5, 4, "play"), _a("pull", "nod", 1.0, 3, "sit"), _a("preen", "groom", 1.3, 2, "sit")),
+    "mallard": (_a("dabble", "eat", 1.2, 4, "eat"), _a("waddle", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "canada_goose": (_a("honk", "talk", 0.8, 4, "talk"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.8, 2)),
+    "pileated": (_a("drum", "snap", 0.7, 4, "play"), _a("hop_step", "hop", 0.5, 3, "play"), _a("preen", "groom", 1.4, 2, "sit")),
+    "hummingbird": (_a("hover", "bob", 1.2, 5), _a("dart", "dart", 0.7, 3), _a("sip", "eat", 0.8, 2, "eat")),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

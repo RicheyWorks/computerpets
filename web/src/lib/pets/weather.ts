@@ -18,11 +18,11 @@ export function weatherLabel(w: Weather) {
 
 export function weatherLine(key: string, w: Weather) {
   if (w === "rain") {
-    if (key === "goldfish" || key === "axolotl" || key === "turtle" || key === "penguin") return "Proper weather. At last.";
+    if (key === "goldfish" || key === "axolotl" || key === "turtle" || key === "penguin" || key === "mallard" || key === "canada_goose") return "Proper weather. At last.";
     return "The blotter is honest about rain.";
   }
   if (w === "wind") {
-    if (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix") return "The air has opinions.";
+    if (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix" || key === "crow" || key === "raven" || key === "red_tail" || key === "chickadee" || key === "hummingbird") return "The air has opinions.";
     return "Something moved that was not me.";
   }
   if (w === "heat") {
@@ -47,10 +47,10 @@ export function weatherLine(key: string, w: Weather) {
 
 export function weatherIdle(key: string, w: Weather): "wander" | "sit" | "sleep" | null {
   if (w === "rain") {
-    if (key === "goldfish" || key === "axolotl" || key === "penguin") return "wander";
+    if (key === "goldfish" || key === "axolotl" || key === "penguin" || key === "mallard" || key === "canada_goose") return "wander";
     return "sit";
   }
   if (w === "heat" && (key === "iguana" || key === "turtle" || key === "cat" || key === "dragon" || key.includes("snake") || key.includes("boa") || key.includes("python") || key === "hognose" || key === "garter")) return "sit";
-  if (w === "wind" && (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix")) return "wander";
+  if (w === "wind" && (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix" || key === "crow" || key === "raven" || key === "red_tail" || key === "chickadee" || key === "hummingbird" || key === "pileated" || key === "robin")) return "wander";
   return null;
 }

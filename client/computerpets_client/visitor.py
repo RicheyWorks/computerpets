@@ -130,6 +130,16 @@ VISIT_LINES: dict[str, str] = {
     "stentor": "I opened. Then I left the horn.",
     "coli": "I tumbled. Then I left the broth.",
     "haloarchaea": "I blushed. Then I left the pan.",
+    "crow": "I cawed. Then I left the ledge.",
+    "raven": "I croaked. Then I left the rafter.",
+    "barn_owl": "I hissed. Then I left the beam.",
+    "red_tail": "I soared. Then I left the post.",
+    "chickadee": "I dee'd. Then I left the twig.",
+    "robin": "I hopped. Then I left the lawn.",
+    "mallard": "I dabbled. Then I left the dish.",
+    "canada_goose": "I honked. Then I left the V.",
+    "pileated": "I drummed. Then I left the hole.",
+    "hummingbird": "I hovered. Then I left the cup.",
 }
 
 
