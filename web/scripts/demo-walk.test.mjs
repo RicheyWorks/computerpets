@@ -15,8 +15,10 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const extraSrc = readFileSync(join(root, "src/components/desk/mac-desk-extra.tsx"), "utf8");
 const markSrc = readFileSync(join(root, "src/components/desk/linux-desk-extra.tsx"), "utf8");
 const sitSrc = readFileSync(join(root, "src/components/desk/tablet-desk-sit.tsx"), "utf8");
+const phoneSitSrc = readFileSync(join(root, "src/components/desk/phone-desk-sit.tsx"), "utf8");
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
 const T = await import(join(root, "src/lib/pets/tablet-desk.ts"));
+const H = await import(join(root, "src/lib/pets/phone-desk.ts"));
 
 function lureSeek() {
   return { taken: false, cmd: "seek", mark: "lure" };
@@ -35,6 +37,7 @@ test("the demo is a room; the guest is already walking", () => {
   assert.match(demoSrc, /MacDeskExtra/);
   assert.match(demoSrc, /LinuxDeskExtra/);
   assert.match(demoSrc, /TabletDeskSit/);
+  assert.match(demoSrc, /PhoneDeskSit/);
   assert.match(roomSrc, /LivingPet/);
   assert.match(roomSrc, /dropTreatAt/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents|overlay/);
@@ -201,6 +204,58 @@ test("the demo room shows the tablet sit the way it shows the Windows, Mac, and 
   assert.match(livingSrc, /onTend/);
   assert.match(livingSrc, /followHover/);
   const lift = onUpSrc();
+  assert.match(lift, /tabletLift/);
+  assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents/);
+});
+
+test("the demo room shows the phone sit the way it shows the desk and tablet walks", () => {
+  assert.equal(H.isPhone("iPhone"), true);
+  assert.equal(H.isPhone("iPad"), false);
+  assert.equal(H.isPhone("darwin"), false);
+  assert.equal(H.tapPxFor("iPhone"), H.TAP_PX_PHONE);
+  assert.equal(H.tapPxFor("iPad"), T.TAP_PX_TABLET);
+  assert.equal(H.tapPxFor("darwin"), D.TAP_PX_MAC);
+  assert.equal(H.tapPxFor("linux"), D.TAP_PX_LINUX);
+  assert.equal(H.tapPxFor("win32"), D.TAP_PX);
+  assert.ok(H.TAP_PX_PHONE < T.TAP_PX_TABLET);
+  assert.ok(H.TAP_PX_PHONE > D.TAP_PX);
+  assert.equal(H.phoneLift(H.HOLD_MS, 2, 1), "tend");
+  assert.equal(H.phoneLift(80, 2, 1), "tap");
+  assert.equal(H.phoneLift(H.HOLD_MS, 24, 0), "place");
+  assert.equal(H.phoneOrient(390, 844), "blotter");
+  assert.equal(H.phoneOrient(844, 390), "sit");
+  assert.equal(H.followHover("iPhone"), false);
+  assert.equal(H.overlayChrome("iPhone").type, "sit");
+  assert.equal(H.overlayChrome("iPhone").extra, false);
+  assert.equal(H.sitClick("iPhone"), "care");
+  assert.equal(T.sitClick("iPhone"), "none");
+  assert.equal(T.tabletOrient(1024, 768), "blotter");
+  assert.equal(D.extraClick("darwin"), "menu");
+  assert.equal(D.extraClick("linux"), "menu");
+  assert.equal(D.extraClick("win32"), "toggle");
+
+  const tap = A.pointerUp(9, 0, H.tapPxFor("iPhone"));
+  assert.equal(tap.kind, "tap");
+  const place = A.pointerUp(16, 0, H.tapPxFor("iPhone"));
+  assert.equal(place.kind, "place");
+  assert.equal(place.arrive, false);
+
+  assert.match(demoSrc, /PhoneDeskSit/);
+  assert.match(demoSrc, /TabletDeskSit/);
+  assert.match(phoneSitSrc, /data-phone-sit/);
+  assert.match(phoneSitSrc, /CARE_VERBS/);
+  assert.match(phoneSitSrc, /the sit/);
+  assert.doesNotMatch(phoneSitSrc, /Unlock|Minds/);
+  for (const verb of D.careVerbs()) {
+    assert.ok(D.CARE_VERBS.includes(verb));
+  }
+
+  assert.match(livingSrc, /isPhone/);
+  assert.match(livingSrc, /tabletLift/);
+  assert.match(livingSrc, /onTend/);
+  assert.match(livingSrc, /followHover/);
+  const lift = onUpSrc();
+  assert.match(lift, /isPhone/);
   assert.match(lift, /tabletLift/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents/);
 });

@@ -14,7 +14,8 @@ import { dayPart } from "@/lib/pets/hours";
 import { traitFor } from "@/lib/pets/traits";
 import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
 import { carePointer } from "@/lib/pets/mac-desk";
-import { followHover, HOLD_MS, isTablet, readSit, tabletLift, tapPxFor } from "@/lib/pets/tablet-desk";
+import { HOLD_MS, isPhone, isTablet, readSit, tabletLift } from "@/lib/pets/tablet-desk";
+import { followHover, tapPxFor } from "@/lib/pets/phone-desk";
 import {
   BREATHE_IDLE,
   BREATHE_SLEEP,
@@ -66,7 +67,7 @@ type LivingPetProps = {
   seekX?: number;
   onArrived?: () => void;
   onTap?: () => void;
-  /** A long-press tends. A tablet has no right-click. */
+  /** A long-press tends. A tablet has no right-click. A phone has no right-click. */
   onTend?: () => void;
 };
 
@@ -702,7 +703,7 @@ export function LivingPet({
       holdAt = performance.now();
       tended = false;
       clearHold();
-      if (isTablet(sit)) {
+      if (isTablet(sit) || isPhone(sit)) {
         holdTimer = window.setTimeout(() => {
           if (!s.dragging || !s.pointerStart) return;
           tendNow();
@@ -742,7 +743,7 @@ export function LivingPet({
       const sit = sitOf();
       const slop = tapPxFor(navigator.platform, sit);
       const heldMs = holdAt ? performance.now() - holdAt : 0;
-      const kind = isTablet(sit) ? tabletLift(heldMs, dx, dy, slop) : pointerUp(dx, dy, slop).kind;
+      const kind = isTablet(sit) || isPhone(sit) ? tabletLift(heldMs, dx, dy, slop) : pointerUp(dx, dy, slop).kind;
       if (kind === "tend") {
         tendRef.current?.();
         return;
