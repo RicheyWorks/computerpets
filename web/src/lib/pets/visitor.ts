@@ -197,6 +197,16 @@ const LINES: Record<string, string> = {
   acorn_weevil: "I sat the acorn. Then I left the cup.",
   click_beetle: "I clicked. Then I left the bark.",
   robber_fly: "I hunted. Then I left the perch.",
+  sloth: "I hung. Then I left the bough.",
+  lemur: "I sat the sun. Then I left the troop.",
+  gibbon: "I sang. Then I left the swing.",
+  kinkajou: "I wrapped. Then I left the nectar.",
+  colugo: "I sailed. Then I left the trunk.",
+  flying_squirrel: "I glided. Then I left the oak.",
+  howler: "I howled. Then I left the crown.",
+  tarsier: "I looked. Then I left the branch.",
+  potto: "I kept still. Then I left the vine.",
+  koala: "I chewed. Then I left the gum.",
 };
 
 export function visitLine(guestKey: string) {

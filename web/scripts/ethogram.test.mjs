@@ -226,6 +226,18 @@ const MEADOW = [
   "click_beetle",
   "robber_fly",
 ];
+const CANOPY = [
+  "sloth",
+  "lemur",
+  "gibbon",
+  "kinkajou",
+  "colugo",
+  "flying_squirrel",
+  "howler",
+  "tarsier",
+  "potto",
+  "koala",
+];
 const WELL = [
   "paramecium",
   "amoeba",
@@ -412,6 +424,15 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.ok(names("field_cricket").includes("chirp"));
   assert.ok(names("grasshopper").includes("vault"));
   assert.ok(names("click_beetle").includes("click"));
+  for (const key of CANOPY) {
+    const acts = names(key);
+    assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
+    assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
+  }
+  assert.ok(names("sloth").includes("hang"));
+  assert.ok(names("lemur").includes("sun"));
+  assert.ok(names("gibbon").includes("swing"));
+  assert.ok(names("koala").includes("chew"));
   for (const key of WELL) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);

@@ -191,6 +191,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   acorn_weevil: { shape: "crumb", verb: "Acorn" },
   click_beetle: { shape: "crumb", verb: "Scrap" },
   robber_fly: { shape: "crumb", verb: "Prey" },
+  sloth: { shape: "leaf", verb: "Leaf" },
+  lemur: { shape: "leaf", verb: "Fruit" },
+  gibbon: { shape: "leaf", verb: "Fruit" },
+  kinkajou: { shape: "flake", verb: "Nectar" },
+  colugo: { shape: "leaf", verb: "Leaf" },
+  flying_squirrel: { shape: "seed", verb: "Nut" },
+  howler: { shape: "leaf", verb: "Leaf" },
+  tarsier: { shape: "crumb", verb: "Insect" },
+  potto: { shape: "flake", verb: "Gum" },
+  koala: { shape: "leaf", verb: "Gum" },
 };
 
 export function treatFor(key: string) {
@@ -388,4 +398,14 @@ export const GIFT_LINE: Record<string, string> = {
   acorn_weevil: "An acorn I was finished drilling.",
   click_beetle: "A scrap I was finished clicking for.",
   robber_fly: "A prey I was finished hunting.",
+  sloth: "A leaf I was finished hanging for.",
+  lemur: "A fruit I was finished sunning for.",
+  gibbon: "A fruit I was finished swinging for.",
+  kinkajou: "A nectar I was finished wrapping for.",
+  colugo: "A leaf I was finished sailing for.",
+  flying_squirrel: "A nut I was finished gliding for.",
+  howler: "A leaf I was finished howling for.",
+  tarsier: "An insect I was finished looking for.",
+  potto: "A gum I was finished stilling for.",
+  koala: "A gum I was finished chewing.",
 };

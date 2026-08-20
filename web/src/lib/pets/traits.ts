@@ -226,6 +226,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   acorn_weevil: T(18, 2, 0.46, 0.08, {}, "snout", "Snout", "I sat the acorn. Hello."),
   click_beetle: T(64, 20, 0.62, 0.28, { nocturnal: true }, "click", "Click", "I clicked. Hello."),
   robber_fly: T(110, 12, 0.78, 0.48, {}, "rob", "Rob", "I hunted. Hello."),
+  sloth: T(12, 2, 0.92, 0.04, { perch: true }, "hang", "Hang", "I hung. Hello."),
+  lemur: T(88, 14, 0.78, 0.42, {}, "sun", "Sun", "I sat the sun. Hello."),
+  gibbon: T(118, 18, 0.86, 0.48, { perch: true }, "swing", "Swing", "I sang. Hello."),
+  kinkajou: T(76, 10, 0.7, 0.28, { nocturnal: true, perch: true }, "wrist", "Wrist", "I wrapped. Hello."),
+  colugo: T(54, 6, 0.88, 0.16, { nocturnal: true, perch: true }, "sail", "Sail", "I sailed. Hello."),
+  flying_squirrel: T(102, 22, 0.58, 0.52, { nocturnal: true, perch: true }, "glide", "Glide", "I glided. Hello."),
+  howler: T(42, 6, 1.04, 0.14, { perch: true }, "boom", "Boom", "I howled. Hello."),
+  tarsier: T(96, 28, 0.48, 0.36, { nocturnal: true, perch: true }, "gaze", "Gaze", "I looked. Hello."),
+  potto: T(18, 2, 0.62, 0.06, { nocturnal: true, perch: true }, "still", "Still", "I kept still. Hello."),
+  koala: T(22, 3, 0.84, 0.08, { perch: true }, "gum", "Gum", "I chewed. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

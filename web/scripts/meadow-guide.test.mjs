@@ -137,7 +137,7 @@ test("the catalog and living roster include the ten meadow keys", () => {
   assert.doesNotMatch(meadowSrc, /name:\s*"Leap"/);
   assert.doesNotMatch(meadowSrc, /name:\s*"Hop"/);
   assert.doesNotMatch(guideSrc, /Wikipedia/i);
-  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 190);
+  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 200);
 });
 
 test("rooms.ts only adds a meadow room", () => {

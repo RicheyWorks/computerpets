@@ -196,6 +196,16 @@ HOUSE_TRAITS = {
     "acorn_weevil": ("snout", "Snout", "I sat the acorn. Hello."),
     "click_beetle": ("click", "Click", "I clicked. Hello."),
     "robber_fly": ("rob", "Rob", "I hunted. Hello."),
+    "sloth": ("hang", "Hang", "I hung. Hello."),
+    "lemur": ("sun", "Sun", "I sat the sun. Hello."),
+    "gibbon": ("swing", "Swing", "I sang. Hello."),
+    "kinkajou": ("wrist", "Wrist", "I wrapped. Hello."),
+    "colugo": ("sail", "Sail", "I sailed. Hello."),
+    "flying_squirrel": ("glide", "Glide", "I glided. Hello."),
+    "howler": ("boom", "Boom", "I howled. Hello."),
+    "tarsier": ("gaze", "Gaze", "I looked. Hello."),
+    "potto": ("still", "Still", "I kept still. Hello."),
+    "koala": ("gum", "Gum", "I chewed. Hello."),
 }
 
 

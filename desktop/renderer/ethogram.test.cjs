@@ -107,3 +107,21 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   assert.ok(E.actsFor("grasshopper").some((a) => a.name === "vault"));
   assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
 });
+
+test("canopy keys never schedule scratch or a snake tongue", () => {
+  const canopy = [
+    "sloth", "lemur", "gibbon", "kinkajou", "colugo",
+    "flying_squirrel", "howler", "tarsier", "potto", "koala",
+  ];
+  for (const key of canopy) {
+    const names = E.actsFor(key).map((a) => a.name);
+    assert.ok(names.length > 0, key);
+    assert.equal(names.includes("scratch"), false, key);
+    assert.equal(names.includes("tongue"), false, key);
+  }
+  assert.ok(E.actsFor("sloth").some((a) => a.name === "hang"));
+  assert.ok(E.actsFor("lemur").some((a) => a.name === "sun"));
+  assert.ok(E.actsFor("gibbon").some((a) => a.name === "swing"));
+  assert.ok(E.actsFor("flying_squirrel").some((a) => a.name === "glide"));
+  assert.ok(E.actsFor("koala").some((a) => a.name === "chew"));
+});

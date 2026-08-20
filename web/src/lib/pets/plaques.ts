@@ -31,13 +31,15 @@ import { shoreGuideFor, type ShoreGuide } from "./shore-guide";
 import { isShore } from "./shore";
 import { stoneGuideFor, type StoneGuide } from "./stone-guide";
 import { isStone } from "./stone";
+import { canopyGuideFor, type CanopyGuide } from "./canopy-guide";
+import { isCanopy } from "./canopy";
 import { woodGuideFor, type WoodGuide } from "./wood-guide";
 import { isWood } from "./wood";
 
-export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | BeeGuide | FungiGuide | FarGuide | PondGuide | RoostGuide | WellGuide | CornerGuide | WoodGuide | StoneGuide | CreekGuide | LogGuide | ShoreGuide | MeadowGuide;
+export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | BeeGuide | FungiGuide | FarGuide | PondGuide | RoostGuide | WellGuide | CornerGuide | WoodGuide | CanopyGuide | StoneGuide | CreekGuide | LogGuide | ShoreGuide | MeadowGuide;
 
 export function plaqueFor(key: string | undefined | null): FieldGuide | null {
-  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? beeGuideFor(key) ?? pondGuideFor(key) ?? roostGuideFor(key) ?? cornerGuideFor(key) ?? woodGuideFor(key) ?? stoneGuideFor(key) ?? creekGuideFor(key) ?? logGuideFor(key) ?? shoreGuideFor(key) ?? meadowGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? wellGuideFor(key) ?? houseGuideFor(key);
+  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? beeGuideFor(key) ?? pondGuideFor(key) ?? roostGuideFor(key) ?? cornerGuideFor(key) ?? woodGuideFor(key) ?? canopyGuideFor(key) ?? stoneGuideFor(key) ?? creekGuideFor(key) ?? logGuideFor(key) ?? shoreGuideFor(key) ?? meadowGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? wellGuideFor(key) ?? houseGuideFor(key);
 }
 
 export function classroomFor(key: string) {
@@ -64,6 +66,9 @@ export function classroomFor(key: string) {
   }
   if (isWood(key)) {
     return { to: "/wood" as const, label: "All ten in the wood", verb: "stay" };
+  }
+  if (isCanopy(key)) {
+    return { to: "/canopy" as const, label: "All ten in the canopy", verb: "stay" };
   }
   if (isStone(key)) {
     return { to: "/stone" as const, label: "All ten in the stone", verb: "stay" };

@@ -19,6 +19,7 @@ from computerpets_client.species import (
     LOG_KEYS,
     SHORE_KEYS,
     MEADOW_KEYS,
+    CANOPY_KEYS,
     STONE_KEYS,
     WOOD_KEYS,
     SPECIES,
@@ -27,6 +28,7 @@ from computerpets_client.species import (
     is_creek,
     is_log,
     is_meadow,
+    is_canopy,
     is_shore,
     is_far,
     is_fungus,
@@ -236,6 +238,16 @@ WEB_CATALOG = (
     "acorn_weevil",
     "click_beetle",
     "robber_fly",
+    "sloth",
+    "lemur",
+    "gibbon",
+    "kinkajou",
+    "colugo",
+    "flying_squirrel",
+    "howler",
+    "tarsier",
+    "potto",
+    "koala",
 )
 
 WEB_SNAKES = (
@@ -462,6 +474,19 @@ WEB_MEADOW = (
     "robber_fly",
 )
 
+WEB_CANOPY = (
+    "sloth",
+    "lemur",
+    "gibbon",
+    "kinkajou",
+    "colugo",
+    "flying_squirrel",
+    "howler",
+    "tarsier",
+    "potto",
+    "koala",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -484,6 +509,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(LOG_KEYS) == 10
     assert len(SHORE_KEYS) == 10
     assert len(MEADOW_KEYS) == 10
+    assert len(CANOPY_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -502,6 +528,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(LOG_KEYS) == set(WEB_LOG)
     assert set(SHORE_KEYS) == set(WEB_SHORE)
     assert set(MEADOW_KEYS) == set(WEB_MEADOW)
+    assert set(CANOPY_KEYS) == set(WEB_CANOPY)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -1093,6 +1120,41 @@ def test_ten_meadow_guests_are_present_and_honest():
     assert SPECIES["hummingbird"].name == "Sip"
 
 
+def test_ten_canopy_guests_are_present_and_honest():
+    assert CANOPY_KEYS == WEB_CANOPY
+    for key in WEB_CANOPY:
+        spec = SPECIES[key]
+        assert is_canopy(key)
+        assert not is_wood(key)
+        assert not is_meadow(key)
+        assert not is_shore(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.silhouette != "bear"
+        assert spec.silhouette != "opossum"
+    assert SPECIES["sloth"].slug == "hang"
+    assert SPECIES["sloth"].name == "Hang"
+    assert SPECIES["lemur"].name == "Sun"
+    assert SPECIES["lemur"].slug == "sun"
+    assert SPECIES["gibbon"].name == "Swing"
+    assert SPECIES["kinkajou"].name == "Wrist"
+    assert SPECIES["colugo"].name == "Sail"
+    assert SPECIES["flying_squirrel"].name == "Glide"
+    assert SPECIES["howler"].name == "Boom"
+    assert SPECIES["tarsier"].name == "Gaze"
+    assert SPECIES["potto"].name == "Still"
+    assert SPECIES["koala"].name == "Gum"
+    assert SPECIES["gibbon"].walk > SPECIES["sloth"].walk
+    assert SPECIES["red_panda"].name == "Rui"
+    assert SPECIES["skunk"].name == "Stripe"
+    assert SPECIES["turkey_tail"].name == "Ring"
+    assert SPECIES["hognose"].name == "Bluff"
+    assert SPECIES["opossum"].name == "Grin"
+    assert SPECIES["black_bear"].name == "Coal"
+    assert SPECIES["parrot"].name == "Quill"
+    assert SPECIES["hummingbird"].name == "Sip"
+
+
 def test_ten_creek_guests_are_present_and_honest():
     assert CREEK_KEYS == WEB_CREEK
     for key in WEB_CREEK:
@@ -1167,8 +1229,10 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("american_eel") == "house_centipede"
     assert next_species_key("amphipod") == "fiddler_crab"
     assert next_species_key("lugworm") == "field_cricket"
-    assert next_species_key("robber_fly") == "red_panda"
-    assert prev_species_key("red_panda") == "robber_fly"
+    assert next_species_key("robber_fly") == "sloth"
+    assert next_species_key("koala") == "red_panda"
+    assert prev_species_key("red_panda") == "koala"
+    assert prev_species_key("sloth") == "robber_fly"
     assert prev_species_key("field_cricket") == "lugworm"
     assert prev_species_key("house_centipede") == "american_eel"
     assert prev_species_key("fiddler_crab") == "amphipod"

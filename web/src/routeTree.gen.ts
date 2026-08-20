@@ -22,6 +22,7 @@ import { Route as HiveRouteImport } from './routes/hive'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as LogRouteImport } from './routes/log'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as CanopyRouteImport } from './routes/canopy'
 import { Route as MeadowRouteImport } from './routes/meadow'
 import { Route as ShoreRouteImport } from './routes/shore'
 import { Route as MeetRouteImport } from './routes/meet'
@@ -103,6 +104,11 @@ const LiveRoute = LiveRouteImport.update({
 const LogRoute = LogRouteImport.update({
   id: '/log',
   path: '/log',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CanopyRoute = CanopyRouteImport.update({
+  id: '/canopy',
+  path: '/canopy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeadowRoute = MeadowRouteImport.update({
@@ -205,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/log': typeof LogRoute
+  '/canopy': typeof CanopyRoute
   '/meadow': typeof MeadowRoute
   '/shore': typeof ShoreRoute
   '/login': typeof LoginRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/log': typeof LogRoute
+  '/canopy': typeof CanopyRoute
   '/meadow': typeof MeadowRoute
   '/shore': typeof ShoreRoute
   '/login': typeof LoginRoute
@@ -270,6 +278,7 @@ export interface FileRoutesById {
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
   '/log': typeof LogRoute
+  '/canopy': typeof CanopyRoute
   '/meadow': typeof MeadowRoute
   '/shore': typeof ShoreRoute
   '/login': typeof LoginRoute
@@ -304,6 +313,7 @@ export interface FileRouteTypes {
     | '/hive'
     | '/live'
     | '/log'
+    | '/canopy'
     | '/meadow'
     | '/shore'
     | '/login'
@@ -336,6 +346,7 @@ export interface FileRouteTypes {
     | '/hive'
     | '/live'
     | '/log'
+    | '/canopy'
     | '/meadow'
     | '/shore'
     | '/login'
@@ -368,6 +379,7 @@ export interface FileRouteTypes {
     | '/hive'
     | '/live'
     | '/log'
+    | '/canopy'
     | '/meadow'
     | '/shore'
     | '/login'
@@ -401,6 +413,7 @@ export interface RootRouteChildren {
   HiveRoute: typeof HiveRoute
   LiveRoute: typeof LiveRoute
   LogRoute: typeof LogRoute
+  CanopyRoute: typeof CanopyRoute
   MeadowRoute: typeof MeadowRoute
   ShoreRoute: typeof ShoreRoute
   LoginRoute: typeof LoginRoute
@@ -511,6 +524,13 @@ declare module '@tanstack/react-router' {
       path: '/log'
       fullPath: '/log'
       preLoaderRoute: typeof LogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/canopy': {
+      id: '/canopy'
+      path: '/canopy'
+      fullPath: '/canopy'
+      preLoaderRoute: typeof CanopyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meadow': {
@@ -649,6 +669,7 @@ const rootRouteChildren: RootRouteChildren = {
   HiveRoute: HiveRoute,
   LiveRoute: LiveRoute,
   LogRoute: LogRoute,
+  CanopyRoute: CanopyRoute,
   MeadowRoute: MeadowRoute,
   ShoreRoute: ShoreRoute,
   LoginRoute: LoginRoute,

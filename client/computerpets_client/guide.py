@@ -1,10 +1,10 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred and ninety, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
-the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
+the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
 the xenobiology facts; the twenty keep the study facts.
 """
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_log, is_meadow, is_pond, is_roost, is_sea, is_shore, is_snake, is_stone, is_well, is_wood
+from .species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_canopy, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_log, is_meadow, is_pond, is_roost, is_sea, is_shore, is_snake, is_stone, is_well, is_wood
 
 
 @dataclass(frozen=True)
@@ -1831,7 +1831,100 @@ MEADOW_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE
+CANOPY_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "sloth",
+        "Choloepus didactylus",
+        "Two toes, a hang that is a kind of walk, a face that is not lazy. Linnaeus's two-toed sloth. She hangs. Then she reaches. The hook is a bough she agreed to.",
+        "Not lazy. The hang is the work. Not Rui — Rui is Ailurus fulgens, a scarf of a tail, ribbon-minded. Hang is Choloepus didactylus, and the two toes are the tell. A sloth is not a red panda. The hang is the species.",
+        "Linnaeus's two-toed sloth. She hangs. She is not lazy. Not Rui.",
+        "bough hook",
+        "hanging",
+    ),
+    _entry(
+        "lemur",
+        "Lemur catta",
+        "A ringed tail held up like a flag, a sit that faces the sun, a troop that keeps the ledge. Ring-tailed lemur. She sits. Then she flags. The ledge is a sun she agreed to.",
+        "Not Stripe — Stripe is Mephitis, a skunk of the duff, a warning she wears. Not Ring — Ring is Trametes versicolor, a turkey tail, pores not gills. Not a raccoon. Wash rinses; Sun is Lemur catta, and the flag of a tail is the tell. A lemur is not a raccoon.",
+        "Ring-tailed lemur. The tail is a flag. Not Stripe. Not Ring.",
+        "sun ledge",
+        "flagged",
+    ),
+    _entry(
+        "gibbon",
+        "Hylobates lar",
+        "Long arms, a song that carries, a swing that is a walk through air. Lar gibbon. She swings. Then she sings. The arm is a lamp she agreed to.",
+        "Not a monkey rumor. A gibbon is an ape. The song and the swing are the office. Not Quill — Quill is a macaw who quotes the hat stand. Swing is Hylobates lar, and the brachiation is the tell. A gibbon is not a monkey. A macaw is not a gibbon.",
+        "Lar gibbon. A song and a swing. Not a monkey rumor. Not Quill.",
+        "lamp arm",
+        "singing",
+    ),
+    _entry(
+        "kinkajou",
+        "Potos flavus",
+        "A prehensile tail, a night sip of nectar, a wrap that is a kind of sit. Kinkajou. She wraps. Then she sips. The cup is a night she agreed to.",
+        "Not Sip — Sip is a hummingbird with a needle bill. Not Comb — Comb is a honey bee who waggles a map. Not Rue — Rue is a fox of the closet. Not Wick — Wick is a ferret who steals dongles. Wrist is Potos flavus, and the tail that holds is the tell. A kinkajou is not a ferret.",
+        "Kinkajou. A prehensile tail. Nectar at night. Not Sip. Not Comb. Not Rue.",
+        "nectar cup",
+        "wrapping",
+    ),
+    _entry(
+        "colugo",
+        "Galeopterus variegatus",
+        "A skin from the chin to the tail, a cling, then a sail between trunks. Sunda colugo. She clings. Then she sails. The trunk is a night she agreed to.",
+        "Not a lemur. Sun is Lemur catta of the ledge; Sail is Galeopterus, and the patagium is the tell. Not Glide — Glide is a flying squirrel, a rodent with a smaller fold. Not Cape — Cape is a bat, hands that fly. A colugo is not a lemur. She is not a flying squirrel. She is not a bat.",
+        "Sunda colugo. A skin that sails. Not a lemur. Not Glide. Not Cape.",
+        "trunk sail",
+        "sailing",
+    ),
+    _entry(
+        "flying_squirrel",
+        "Glaucomys volans",
+        "A fold of skin, a hop, then a glide that is not a flight. Southern flying squirrel. She hops. Then she glides. The fold is an oak she agreed to.",
+        "Not a bird. Not Kite — Kite is a manta of the bowl, a filter of lamp-light. Not Cache — Cache is Sciurus, a gray squirrel who buries a thought and walks. Glide is Glaucomys volans, and the skin is the tell. A flying squirrel is not a bird. A skin is not a wing.",
+        "Southern flying squirrel. A skin, not a wing. Not Kite. Not a bird.",
+        "oak fold",
+        "gliding",
+    ),
+    _entry(
+        "howler",
+        "Alouatta palliata",
+        "A mantle, a sit in the crown, a howl that is the whole room. Mantled howler. She sits. Then she booms. The crown is a perch she agreed to.",
+        "Not Vee — Vee is a Canada goose, a V, a honk of the blotter. Not Swing — Swing is a gibbon who sings and swings; Boom is Alouatta palliata, and the hyoid is the tell. A howler is not a gibbon. The howl is the species.",
+        "Mantled howler. The howl is the tell. Not Vee. Not Swing.",
+        "crown perch",
+        "howling",
+    ),
+    _entry(
+        "tarsier",
+        "Carlito syrichta",
+        "Eyes that fill the face, a leap from a hollow, a look that does not blink first. Philippine tarsier. She looks. Then she leaps. The hollow is a night she agreed to.",
+        "Not Heart — Heart is a barn owl, a heart of feathers, a hiss not a hoot. Gaze is Carlito syrichta, and the eyes are the tell. A tarsier is not an owl. The look is the species.",
+        "Philippine tarsier. The eyes are the face. Not Heart.",
+        "branch hollow",
+        "looking",
+    ),
+    _entry(
+        "potto",
+        "Perodicticus potto",
+        "A slow grip, a still that is a kind of hunt, a cousin of the loris who is not a loris. Potto. She grips. Then she stills. The rail is a vine she agreed to.",
+        "Not a loris. Not Twig — Twig is a walkingstick who freezes. Not Fold — Fold is a mantis who waits to strike. Not Hang — Hang is a two-toed sloth of the hook. Still is Perodicticus potto, and the grip is the tell. A potto is not a sloth. She is not a loris.",
+        "Potto. A slow cousin. Not a loris. Not Twig. Not Fold. Not Hang.",
+        "vine rail",
+        "still",
+    ),
+    _entry(
+        "koala",
+        "Phascolarctos cinereus",
+        "A pouch, a chew of gum leaves, a sit that can look like a bear and is not. Koala. A marsupial. She sits. Then she chews. The perch is a gum she agreed to.",
+        "Not a bear. Not Coal — Coal is Ursus americanus, a black bear of the denside. Not Burr — Burr is a hedgehog who curls. Gum is Phascolarctos cinereus, and the pouch is the tell. A koala is not a bear. She is a marsupial. The chew is the species.",
+        "Koala. A marsupial. Not a bear. Not Coal. Not Burr.",
+        "gum perch",
+        "chewing",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE + CANOPY_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1872,6 +1965,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="corner", label="All ten in the corner", verb="stay")
     if is_wood(key):
         return Classroom(room="wood", label="All ten in the wood", verb="stay")
+    if is_canopy(key):
+        return Classroom(room="canopy", label="All ten in the canopy", verb="stay")
     if is_stone(key):
         return Classroom(room="stone", label="All ten in the stone", verb="stay")
     if is_creek(key):
@@ -1955,6 +2050,10 @@ def meadow_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in MEADOW_GUIDE)
 
 
+def canopy_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in CANOPY_GUIDE)
+
+
 def well_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in WELL_GUIDE)
 
@@ -2027,6 +2126,10 @@ def meadow_guide_complete() -> bool:
     return len(MEADOW_GUIDE) == len(MEADOW_KEYS) and all(k in _BY_KEY for k in MEADOW_KEYS)
 
 
+def canopy_guide_complete() -> bool:
+    return len(CANOPY_GUIDE) == len(CANOPY_KEYS) and all(k in _BY_KEY for k in CANOPY_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -2049,6 +2152,8 @@ def guide_complete() -> bool:
         and creek_guide_complete()
         and log_guide_complete()
         and shore_guide_complete()
+        and meadow_guide_complete()
+        and canopy_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)

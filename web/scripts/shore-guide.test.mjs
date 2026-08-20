@@ -136,7 +136,7 @@ test("the catalog and living roster include the ten shore keys", () => {
   assert.doesNotMatch(shoreSrc, /name:\s*"Cast"/);
   assert.doesNotMatch(shoreSrc, /name:\s*"Lid"/);
   assert.doesNotMatch(guideSrc, /Wikipedia/i);
-  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 190);
+  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 200);
 });
 
 test("rooms.ts only adds a shore room", () => {
