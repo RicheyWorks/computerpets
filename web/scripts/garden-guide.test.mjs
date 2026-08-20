@@ -16,7 +16,7 @@ const EXPECTED = [
   ["maidenhair", "vein", "Adiantum capillus-veneris"],
   ["ginkgo", "fan", "Ginkgo biloba"],
   ["oak", "mast", "Quercus alba"],
-  ["water_lily", "pad", "Nymphaea odorata"],
+  ["water_lily", "disk", "Nymphaea odorata"],
   ["orchid", "moth", "Phalaenopsis amabilis"],
   ["saguaro", "arm", "Carnegiea gigantea"],
   ["venus_flytrap", "snap", "Dionaea muscipula"],

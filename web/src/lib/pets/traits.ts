@@ -176,6 +176,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   beaver: T(42, 4, 0.96, 0.16, { aquatic: true }, "lodge", "Lodge", "I gnawed. Hello."),
   porcupine: T(36, 4, 0.86, 0.1, { nocturnal: true }, "bristle", "Bristle", "I bristled. Hello."),
   black_bear: T(58, 8, 1.22, 0.18, {}, "forage", "Forage", "I foraged. Hello."),
+  gecko: T(88, 8, 0.48, 0.32, { nocturnal: true, clingy: true }, "climb", "Climb", "I climbed. Hello."),
+  anole: T(86, 12, 0.52, 0.38, {}, "dewlap", "Flash", "I flashed. Hello."),
+  skink: T(104, 10, 0.55, 0.48, {}, "dash", "Dash", "I dashed. Hello."),
+  chameleon: T(18, 2, 0.72, 0.06, { perch: true }, "shift", "Shift", "I shifted. Hello."),
+  horned_lizard: T(34, 4, 0.62, 0.1, {}, "squirt", "Squirt", "I sat the crown. Hello."),
+  alligator: T(26, 2, 1.18, 0.08, { aquatic: true }, "levee", "Bank", "I sat the bank. Hello."),
+  crocodile: T(30, 2, 1.16, 0.1, { aquatic: true }, "show", "Show", "I showed. Hello."),
+  snapper: T(28, 3, 0.88, 0.1, { aquatic: true }, "snap", "Snap", "I snapped. Hello."),
+  box_turtle: T(20, 2, 0.78, 0.06, {}, "shut", "Shut", "I shut. Hello."),
+  tuatara: T(14, 2, 0.82, 0.04, { nocturnal: true }, "crest", "Still", "I kept still. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

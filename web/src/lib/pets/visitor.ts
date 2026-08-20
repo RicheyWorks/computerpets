@@ -147,6 +147,16 @@ const LINES: Record<string, string> = {
   beaver: "I gnawed. Then I left the lodge.",
   porcupine: "I bristled. Then I left the post.",
   black_bear: "I foraged. Then I left the denside.",
+  gecko: "I climbed. Then I left the plaster.",
+  anole: "I flashed. Then I left the post.",
+  skink: "I dashed. Then I left the crack.",
+  chameleon: "I shifted. Then I left the perch.",
+  horned_lizard: "I sat the crown. Then I left the sand.",
+  alligator: "I sat the bank. Then I left the dish.",
+  crocodile: "I showed. Then I left the dish.",
+  snapper: "I snapped. Then I left the mud.",
+  box_turtle: "I shut. Then I left the leaf.",
+  tuatara: "I kept still. Then I left the burrow.",
 };
 
 export function visitLine(guestKey: string) {

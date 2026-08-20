@@ -141,6 +141,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   beaver: { shape: "leaf", verb: "Bark" },
   porcupine: { shape: "leaf", verb: "Bark" },
   black_bear: { shape: "leaf", verb: "Berry" },
+  gecko: { shape: "crumb", verb: "Moth" },
+  anole: { shape: "crumb", verb: "Cricket" },
+  skink: { shape: "crumb", verb: "Cricket" },
+  chameleon: { shape: "crumb", verb: "Cricket" },
+  horned_lizard: { shape: "crumb", verb: "Ant" },
+  alligator: { shape: "crumb", verb: "Fish" },
+  crocodile: { shape: "crumb", verb: "Fish" },
+  snapper: { shape: "crumb", verb: "Fish" },
+  box_turtle: { shape: "crumb", verb: "Worm" },
+  tuatara: { shape: "crumb", verb: "Insect" },
 };
 
 export function treatFor(key: string) {
@@ -288,4 +298,14 @@ export const GIFT_LINE: Record<string, string> = {
   beaver: "A lodge I was finished holding.",
   porcupine: "A quill I was finished keeping.",
   black_bear: "A berry I was finished foraging.",
+  gecko: "A moth I was finished climbing for.",
+  anole: "A cricket I was finished flashing for.",
+  skink: "A cricket I was finished dashing for.",
+  chameleon: "A cricket I was finished aiming for.",
+  horned_lizard: "An ant I was finished crowning for.",
+  alligator: "A fish I was finished sitting for.",
+  crocodile: "A fish I was finished showing for.",
+  snapper: "A fish I was finished snapping for.",
+  box_turtle: "A worm I was finished shutting after.",
+  tuatara: "An insect I was finished keeping still for.",
 };

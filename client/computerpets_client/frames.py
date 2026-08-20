@@ -13,7 +13,9 @@ salamander, caecilian, crayfish, snail, mussel, leech, stickleback. The roost st
 crow, raven, barn owl, hawk, chickadee, robin, mallard, goose, pileated, hummingbird.
 The corner stays — orb weaver, jumper, wolf spider, tarantula, widow, harvestman,
 scorpion, vinegaroon, tick, solifuge. The wood stays — deer, bat, squirrel,
-otter, raccoon, skunk, opossum, beaver, porcupine, black bear. The well stays —
+otter, raccoon, skunk, opossum, beaver, porcupine, black bear. The stone stays —
+gecko, anole, skink, chameleon, horned lizard, alligator, crocodile, snapper,
+box turtle, tuatara. The well stays —
 paramecium, amoeba, euglena, volvox, diatom, kelp, chlamydomonas, stentor, coli,
 haloarchaea. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
@@ -296,6 +298,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "bear",
     ):
         _draw_wood(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    if species.silhouette in (
+        "gecko",
+        "anole",
+        "skink",
+        "chameleon",
+        "horned",
+        "alligator",
+        "crocodile",
+        "snapper",
+        "box",
+        "tuatara",
+    ):
+        _draw_stone(p, species, anim, i, sit, eat, sleep, stride)
         return
     if species.silhouette in (
         "paramecium",
@@ -2852,6 +2868,239 @@ def _draw_wood(
         _draw_face(p, -20, -12, nose, sleep, anim, i, False)
         return
 
+    if sil == "gecko":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-18, -6, 40, 16 - sit * 0.08), 10, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 0, 20, 8))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-30, -12, 18, 14))
+        p.setBrush(QBrush(ring))
+        for sx, sy in ((-10, 10), (6, 12), (16, 8), (-18, 8)):
+            p.drawEllipse(QRectF(sx, sy - (0 if still else abs(stride) * 2), 8, 5))
+            p.drawEllipse(QRectF(sx + 5, sy + 2, 6, 4))
+        tail = QPainterPath()
+        tail.moveTo(20, 0)
+        tail.cubicTo(34, 4 + wave, 40, 8, 36, 12)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawPath(tail)
+        _draw_face(p, -24, -8, nose, sleep, anim, i, False)
+        return
+
+    if sil == "anole":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-14, -4, 32, 14 - sit * 0.08), 8, 7)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, 2, 16, 7))
+        p.setBrush(QBrush(ring))
+        dew = QPainterPath()
+        dew.moveTo(-10, 4)
+        dew.lineTo(-2, 4 + 10 + abs(wave))
+        dew.lineTo(-14, 6)
+        dew.closeSubpath()
+        p.drawPath(dew)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-26, -10, 16, 12))
+        tail = QPainterPath()
+        tail.moveTo(16, 0)
+        tail.cubicTo(30, -4, 36, 2, 32, 6)
+        p.drawPath(tail)
+        _draw_face(p, -20, -6, nose, sleep, anim, i, False)
+        return
+
+    if sil == "skink":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-16, -4, 36, 14), 10, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, 2, 18, 7))
+        p.setPen(QPen(belly, 1.1))
+        p.drawLine(QPointF(-12, -2), QPointF(14, -2))
+        p.drawLine(QPointF(-12, 2), QPointF(14, 2))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-28, -8, 14, 10))
+        p.setBrush(QBrush(ear))
+        tail = QPainterPath()
+        tail.moveTo(18, 0)
+        tail.cubicTo(34, 2 + wave, 42, 6, 38, 10)
+        p.drawPath(tail)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-8, 10, 6, 4))
+        p.drawEllipse(QRectF(6, 10, 6, 4))
+        _draw_face(p, -22, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "chameleon":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-12, -4, 30, 16 - sit * 0.06), 10, 9)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-2, 4, 16, 8))
+        casque = QPainterPath()
+        casque.moveTo(-8, -6)
+        casque.lineTo(0, -22)
+        casque.lineTo(8, -4)
+        casque.closeSubpath()
+        p.setBrush(QBrush(ear))
+        p.drawPath(casque)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-26, -8, 16, 12))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-28, -8, 8, 8))
+        p.drawEllipse(QRectF(-16, -2, 7, 7))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-26, -6, 3, 3))
+        p.drawEllipse(QRectF(-14, 0, 3, 3))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-8, 12, 10, 6))
+        p.drawEllipse(QRectF(8, 12, 10, 6))
+        tail = QPainterPath()
+        tail.moveTo(16, 2)
+        tail.cubicTo(28, -8, 24, -16, 18, -8)
+        p.drawPath(tail)
+        return
+
+    if sil == "horned":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-22, -6, 48, 22 - sit * 0.08))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, 2, 24, 10))
+        p.setBrush(QBrush(ear))
+        for hx, hy in ((-16, -16), (-6, -22), (4, -22), (14, -16)):
+            p.drawPolygon([QPointF(hx, hy + 12), QPointF(hx + 3, hy), QPointF(hx + 6, hy + 12)])
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-30, -8, 16, 12))
+        _draw_face(p, -24, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "alligator":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-10, -4, 44, 18 - sit * 0.1), 10, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(0, 4, 24, 8))
+        p.setBrush(QBrush(body))
+        p.drawRoundedRect(QRectF(-42, -4, 36, 14), 10, 8)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-38, 0, 22, 8))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-40, -2, 4, 3))
+        p.drawEllipse(QRectF(-32, -4, 3, 3))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-6, 12, 8, 5))
+        p.drawEllipse(QRectF(12, 12, 8, 5))
+        tail = QPainterPath()
+        tail.moveTo(30, 2)
+        tail.cubicTo(46, 4, 54, 10, 48, 14)
+        p.drawPath(tail)
+        return
+
+    if sil == "crocodile":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-8, -4, 40, 16 - sit * 0.1), 9, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(0, 4, 20, 7))
+        snout = QPainterPath()
+        snout.moveTo(-8, -2)
+        snout.lineTo(-48, 2)
+        snout.lineTo(-44, 10)
+        snout.lineTo(-4, 8)
+        snout.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.drawPath(snout)
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-36, 8, 3, 4))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-44, 0, 3, 2))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-4, 12, 8, 5))
+        p.drawEllipse(QRectF(12, 12, 8, 5))
+        tail = QPainterPath()
+        tail.moveTo(28, 2)
+        tail.cubicTo(44, 2, 52, 8, 46, 12)
+        p.drawPath(tail)
+        return
+
+    if sil == "snapper":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-18, -10, 40, 26 - sit * 0.1))
+        p.setPen(QPen(ear, 2.0))
+        p.drawLine(QPointF(-6, -8), QPointF(12, -10))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-32, -4, 18, 12))
+        beak = QPainterPath()
+        beak.moveTo(-32, 0)
+        beak.lineTo(-42, 6)
+        beak.lineTo(-28, 8)
+        beak.closeSubpath()
+        p.setBrush(QBrush(nose))
+        p.drawPath(beak)
+        tail = QPainterPath()
+        tail.moveTo(20, 4)
+        tail.cubicTo(36, 8, 48, 16, 40, 18)
+        p.setBrush(QBrush(accent))
+        p.drawPath(tail)
+        _draw_face(p, -24, -2, nose, sleep, anim, i, False)
+        return
+
+    if sil == "box":
+        shut = still or anim == "sit" or sleep > 0
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-18, -12, 38, 28 - sit * 0.12))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, -8, 12, 8))
+        p.drawEllipse(QRectF(4, -6, 10, 7))
+        if not shut:
+            p.setBrush(QBrush(ear))
+            p.drawEllipse(QRectF(-28, 0, 14, 10))
+            _draw_face(p, -22, 2, nose, sleep, anim, i, False)
+            p.setBrush(QBrush(ear))
+            p.drawEllipse(QRectF(-8, 14, 6, 4))
+            p.drawEllipse(QRectF(8, 14, 6, 4))
+        else:
+            p.setBrush(QBrush(ring))
+            p.drawEllipse(QRectF(-14, 12, 30, 8))
+        return
+
+    if sil == "tuatara":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-14, -4, 36, 16 - sit * 0.06), 10, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-2, 4, 18, 7))
+        p.setBrush(QBrush(ear))
+        for x in (-6, 2, 10, 18):
+            p.drawPolygon([QPointF(x, -2), QPointF(x + 2, -16), QPointF(x + 4, -2)])
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-28, -8, 16, 12))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-16, -12, 5, 4))
+        tail = QPainterPath()
+        tail.moveTo(20, 2)
+        tail.cubicTo(34, 4, 40, 8, 36, 12)
+        p.setBrush(QBrush(body))
+        p.drawPath(tail)
+        _draw_face(p, -22, -4, nose, sleep, anim, i, False)
+        return
+
     p.setBrush(QBrush(body))
     p.setPen(QPen(accent, 1.2))
     p.drawRoundedRect(QRectF(-26, -12, 52, 28 - sit * 0.15), 18, 16)
@@ -2872,4 +3121,17 @@ def _draw_wood(
     p.setBrush(QBrush(ring))
     p.drawEllipse(QRectF(-32, -8, 16, 10))
     _draw_face(p, -24, -16, nose, sleep, anim, i, True)
+
+
+def _draw_stone(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    _draw_wood(p, species, anim, i, sit, eat, sleep, stride)
 

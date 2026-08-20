@@ -146,6 +146,16 @@ HOUSE_TRAITS = {
     "beaver": ("lodge", "Lodge", "I gnawed. Hello."),
     "porcupine": ("bristle", "Bristle", "I bristled. Hello."),
     "black_bear": ("forage", "Forage", "I foraged. Hello."),
+    "gecko": ("climb", "Climb", "I climbed. Hello."),
+    "anole": ("dewlap", "Flash", "I flashed. Hello."),
+    "skink": ("dash", "Dash", "I dashed. Hello."),
+    "chameleon": ("shift", "Shift", "I shifted. Hello."),
+    "horned_lizard": ("squirt", "Squirt", "I sat the crown. Hello."),
+    "alligator": ("levee", "Bank", "I sat the bank. Hello."),
+    "crocodile": ("show", "Show", "I showed. Hello."),
+    "snapper": ("snap", "Snap", "I snapped. Hello."),
+    "box_turtle": ("shut", "Shut", "I shut. Hello."),
+    "tuatara": ("crest", "Still", "I kept still. Hello."),
 }
 
 

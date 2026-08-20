@@ -122,7 +122,7 @@ export const GUILD_EXTRA: Record<string, LocusDef> = {
   far: GLOW,
 };
 
-export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "cellar" | "well" | "far";
+export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "stone" | "cellar" | "well" | "far";
 
 const GARDEN = new Set([
   "moss",
@@ -254,6 +254,18 @@ const WOOD = new Set([
   "porcupine",
   "black_bear",
 ]);
+const STONE = new Set([
+  "gecko",
+  "anole",
+  "skink",
+  "chameleon",
+  "horned_lizard",
+  "alligator",
+  "crocodile",
+  "snapper",
+  "box_turtle",
+  "tuatara",
+]);
 const SNAKES = new Set([
   "ball_python",
   "corn_snake",
@@ -278,6 +290,7 @@ export function guildOf(key: string): GuildId {
   if (ROOST.has(key)) return "roost";
   if (CORNER.has(key)) return "corner";
   if (WOOD.has(key)) return "wood";
+  if (STONE.has(key)) return "stone";
   if (WELL.has(key)) return "well";
   return "house";
 }
