@@ -44,6 +44,7 @@ import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
+import { isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -73,6 +74,7 @@ export function CompanionRoom({
   typedTalk = false,
   journal = false,
   phone = false,
+  tablet = false,
   line,
   detail,
   extraCare,
@@ -91,6 +93,7 @@ export function CompanionRoom({
   typedTalk?: boolean;
   journal?: boolean;
   phone?: boolean;
+  tablet?: boolean;
   line?: ReactNode;
   detail?: string;
   extraCare?: { label: string; action: DeskCare }[];
@@ -123,6 +126,26 @@ export function CompanionRoom({
   statsRef.current = stats;
   markRef.current = mark;
   const resetKey = guestKey ?? kind.key;
+  const careRef = useRef<HTMLDivElement>(null);
+  const [autoTablet, setAutoTablet] = useState(false);
+  const [orient, setOrient] = useState<TabletOrient>("blotter");
+  const [tending, setTending] = useState(false);
+  const pad = tablet || (!phone && autoTablet);
+
+  useEffect(() => {
+    function measure() {
+      const sit = readSit(window);
+      if (!phone && !tablet) setAutoTablet(isTablet(sit));
+      setOrient(tabletOrient(window.innerWidth, window.innerHeight));
+    }
+    measure();
+    window.addEventListener("resize", measure);
+    window.addEventListener("orientationchange", measure);
+    return () => {
+      window.removeEventListener("resize", measure);
+      window.removeEventListener("orientationchange", measure);
+    };
+  }, [phone, tablet]);
 
   useEffect(() => {
     if (persistLocal) saveCare(kind.localKey, stats);
@@ -455,7 +478,12 @@ export function CompanionRoom({
   const age = stage ?? stageOf(stats);
 
   return (
-    <section className="relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated">
+    <section
+      className="relative isolate h-dvh min-h-[520px] w-full overflow-hidden bg-elevated"
+      data-tablet-floor={pad ? "" : undefined}
+      data-tablet-orient={pad ? orient : undefined}
+      data-tablet-tending={pad && tending ? "" : undefined}
+    >
       <img
         src="/habitat.jpg"
         alt=""
@@ -539,6 +567,11 @@ export function CompanionRoom({
           }
         }}
         onTap={() => void talk()}
+        onTend={() => {
+          setTending(true);
+          careRef.current?.querySelector("button")?.focus();
+          window.setTimeout(() => setTending(false), 1600);
+        }}
       />
       <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
 
@@ -580,7 +613,11 @@ export function CompanionRoom({
         className={
           phone
             ? "absolute left-4 right-20 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-8 sm:right-auto sm:max-w-[min(100%-2rem,20rem)]"
-            : "absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] sm:left-8 sm:top-24"
+            : pad
+              ? orient === "sit"
+                ? "absolute left-4 right-16 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
+                : "absolute left-[max(1.5rem,env(safe-area-inset-left))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
+              : "absolute left-4 top-20 z-20 max-w-[min(100%-2rem,20rem)] sm:left-8 sm:top-24"
         }
       >
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
@@ -599,7 +636,9 @@ export function CompanionRoom({
         className={
           phone
             ? "absolute right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right sm:right-8"
-            : "absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24"
+            : pad
+              ? "absolute right-[max(1rem,env(safe-area-inset-right))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right"
+              : "absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24"
         }
       >
         <DenCabinet currentRoom={room.id} currentKey={kind.key} drawers onSelectKind={onSelectKind} />
@@ -609,12 +648,14 @@ export function CompanionRoom({
         className={
           phone
             ? "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-16 sm:px-8"
-            : "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8"
+            : pad
+              ? "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-[max(1rem,env(safe-area-inset-left))] pe-[max(1rem,env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-16"
+              : "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8"
         }
       >
-        <div className="pointer-events-auto">
+        <div className="pointer-events-auto" ref={careRef}>
           <BlotterCare
-            className={phone ? "blotter-care-phone" : undefined}
+            className={phone ? "blotter-care-phone" : pad ? "blotter-care-tablet" : undefined}
             marks={[
               { label: "Feed", onClick: () => void feed(), disabled: busyOrHidden },
               { label: treatFor(kind.key).verb, onClick: () => dropTreatAt(randomTreatX()), disabled: busyOrHidden },

@@ -13,7 +13,8 @@ import {
 import { dayPart } from "@/lib/pets/hours";
 import { traitFor } from "@/lib/pets/traits";
 import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
-import { carePointer, tapPxFor } from "@/lib/pets/mac-desk";
+import { carePointer } from "@/lib/pets/mac-desk";
+import { followHover, HOLD_MS, isTablet, readSit, tabletLift, tapPxFor } from "@/lib/pets/tablet-desk";
 import {
   BREATHE_IDLE,
   BREATHE_SLEEP,
@@ -65,6 +66,8 @@ type LivingPetProps = {
   seekX?: number;
   onArrived?: () => void;
   onTap?: () => void;
+  /** A long-press tends. A tablet has no right-click. */
+  onTend?: () => void;
 };
 
 type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
@@ -137,6 +140,7 @@ export function LivingPet({
   seekX,
   onArrived,
   onTap,
+  onTend,
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -185,6 +189,7 @@ export function LivingPet({
   const lastOrder = useRef(-1);
   const arrivedRef = useRef(onArrived);
   const tapRef = useRef(onTap);
+  const tendRef = useRef(onTend);
   const spritesRef = useRef(sprites);
   const fpsRef = useRef(fps);
   const onceRef = useRef(once);
@@ -205,6 +210,7 @@ export function LivingPet({
   orderRef.current = orderId;
   arrivedRef.current = onArrived;
   tapRef.current = onTap;
+  tendRef.current = onTend;
 
   useEffect(() => {
     const root = wrapRef.current;
@@ -504,6 +510,7 @@ export function LivingPet({
           !s.act &&
           (s.anim === "idle" || s.anim === "sit") &&
           s.cursorX != null &&
+          followHover(readSit(window)) &&
           Math.abs(s.cursorX - (s.x + SPRITE / 2)) > 36
         ) {
           s.facing = s.cursorX >= s.x + SPRITE / 2 ? 1 : -1;
@@ -668,34 +675,79 @@ export function LivingPet({
 
     raf = requestAnimationFrame(tick);
 
+    const sitOf = () => readSit(window);
+    let holdTimer = 0;
+    let holdAt = 0;
+    let tended = false;
+    const clearHold = () => {
+      if (holdTimer) window.clearTimeout(holdTimer);
+      holdTimer = 0;
+    };
+    const tendNow = () => {
+      tended = true;
+      s.dragging = false;
+      s.pointerStart = null;
+      clearHold();
+      tendRef.current?.();
+    };
+
     const onDown = (e: PointerEvent) => {
       const t = e.target as HTMLElement;
       if (!t.closest("[data-pet]")) return;
       if (carePointer(e)) return;
+      const sit = sitOf();
       s.dragging = true;
       s.pointerStart = { x: e.clientX, y: e.clientY };
       s.dragDx = e.clientX - s.x;
+      holdAt = performance.now();
+      tended = false;
+      clearHold();
+      if (isTablet(sit)) {
+        holdTimer = window.setTimeout(() => {
+          if (!s.dragging || !s.pointerStart) return;
+          tendNow();
+        }, HOLD_MS);
+      }
       (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
     };
     const onMove = (e: PointerEvent) => {
       const box = stageBox();
-      s.cursorX = e.clientX - (box?.left ?? 0);
-      if (!s.dragging) return;
+      const sit = sitOf();
+      const slop = tapPxFor(navigator.platform, sit);
+      if (followHover(sit) || s.dragging) {
+        s.cursorX = e.clientX - (box?.left ?? 0);
+      }
+      if (!s.dragging || tended) return;
+      if (s.pointerStart && Math.hypot(e.clientX - s.pointerStart.x, e.clientY - s.pointerStart.y) >= slop) {
+        clearHold();
+      }
       const maxX = Math.max(PAD, (box?.width ?? 800) - SPRITE - PAD);
       s.x = clamp(e.clientX - s.dragDx, PAD, maxX);
-      if (s.pointerStart && Math.abs(e.clientX - s.pointerStart.x) > 10) {
+      if (s.pointerStart && Math.abs(e.clientX - s.pointerStart.x) > slop) {
         s.facing = e.clientX >= s.pointerStart.x ? 1 : -1;
       }
     };
     const onUp = (e: PointerEvent) => {
+      clearHold();
+      if (tended) {
+        tended = false;
+        return;
+      }
       if (!s.dragging) return;
       const start = s.pointerStart;
       s.dragging = false;
       s.pointerStart = null;
       const dx = start ? e.clientX - start.x : 0;
       const dy = start ? e.clientY - start.y : 0;
-      const lift = pointerUp(dx, dy, tapPxFor(navigator.platform));
-      if (lift.kind === "tap") {
+      const sit = sitOf();
+      const slop = tapPxFor(navigator.platform, sit);
+      const heldMs = holdAt ? performance.now() - holdAt : 0;
+      const kind = isTablet(sit) ? tabletLift(heldMs, dx, dy, slop) : pointerUp(dx, dy, slop).kind;
+      if (kind === "tend") {
+        tendRef.current?.();
+        return;
+      }
+      if (kind === "tap") {
         tapRef.current?.();
         return;
       }
@@ -709,16 +761,22 @@ export function LivingPet({
         s.anim = "idle";
       }
     };
+    const onMenu = (e: Event) => {
+      if ((e.target as HTMLElement)?.closest?.("[data-pet]")) e.preventDefault();
+    };
 
     root.addEventListener("pointerdown", onDown);
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
+    root.addEventListener("contextmenu", onMenu);
 
     return () => {
       cancelAnimationFrame(raf);
+      clearHold();
       root.removeEventListener("pointerdown", onDown);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
+      root.removeEventListener("contextmenu", onMenu);
     };
   }, []);
 

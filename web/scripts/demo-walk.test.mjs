@@ -14,7 +14,9 @@ const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"),
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
 const extraSrc = readFileSync(join(root, "src/components/desk/mac-desk-extra.tsx"), "utf8");
 const markSrc = readFileSync(join(root, "src/components/desk/linux-desk-extra.tsx"), "utf8");
+const sitSrc = readFileSync(join(root, "src/components/desk/tablet-desk-sit.tsx"), "utf8");
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
+const T = await import(join(root, "src/lib/pets/tablet-desk.ts"));
 
 function lureSeek() {
   return { taken: false, cmd: "seek", mark: "lure" };
@@ -32,6 +34,7 @@ test("the demo is a room; the guest is already walking", () => {
   assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(demoSrc, /MacDeskExtra/);
   assert.match(demoSrc, /LinuxDeskExtra/);
+  assert.match(demoSrc, /TabletDeskSit/);
   assert.match(roomSrc, /LivingPet/);
   assert.match(roomSrc, /dropTreatAt/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents|overlay/);
@@ -155,5 +158,49 @@ test("the demo room shows the Linux walk the way it shows the Windows and Mac wa
 
   assert.match(livingSrc, /tapPxFor/);
   assert.match(livingSrc, /carePointer/);
+  assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents/);
+});
+
+test("the demo room shows the tablet sit the way it shows the Windows, Mac, and Linux walks", () => {
+  assert.equal(T.isTablet("iPad"), true);
+  assert.equal(T.isTablet("iPhone"), false);
+  assert.equal(T.isTablet("darwin"), false);
+  assert.equal(T.tapPxFor("iPad"), T.TAP_PX_TABLET);
+  assert.equal(T.tapPxFor("darwin"), D.TAP_PX_MAC);
+  assert.equal(T.tapPxFor("linux"), D.TAP_PX_LINUX);
+  assert.equal(T.tapPxFor("win32"), D.TAP_PX);
+  assert.equal(T.tabletLift(T.HOLD_MS, 2, 1), "tend");
+  assert.equal(T.tabletLift(80, 2, 1), "tap");
+  assert.equal(T.tabletLift(T.HOLD_MS, 40, 0), "place");
+  assert.equal(T.tabletOrient(1024, 768), "blotter");
+  assert.equal(T.tabletOrient(768, 1024), "sit");
+  assert.equal(T.followHover("iPad"), false);
+  assert.equal(T.overlayChrome("iPad").type, "sit");
+  assert.equal(T.overlayChrome("iPad").extra, false);
+  assert.equal(T.sitClick("iPad"), "care");
+  assert.equal(D.extraClick("darwin"), "menu");
+  assert.equal(D.extraClick("linux"), "menu");
+  assert.equal(D.extraClick("win32"), "toggle");
+
+  const tap = A.pointerUp(9, 0, T.tapPxFor("iPad"));
+  assert.equal(tap.kind, "tap");
+  const place = A.pointerUp(24, 0, T.tapPxFor("iPad"));
+  assert.equal(place.kind, "place");
+  assert.equal(place.arrive, false);
+
+  assert.match(demoSrc, /TabletDeskSit/);
+  assert.match(sitSrc, /data-tablet-sit/);
+  assert.match(sitSrc, /CARE_VERBS/);
+  assert.match(sitSrc, /the sit/);
+  assert.doesNotMatch(sitSrc, /Unlock|Minds/);
+  for (const verb of D.careVerbs()) {
+    assert.ok(D.CARE_VERBS.includes(verb));
+  }
+
+  assert.match(livingSrc, /tabletLift/);
+  assert.match(livingSrc, /onTend/);
+  assert.match(livingSrc, /followHover/);
+  const lift = onUpSrc();
+  assert.match(lift, /tabletLift/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents/);
 });
