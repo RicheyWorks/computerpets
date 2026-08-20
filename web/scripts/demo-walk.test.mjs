@@ -13,6 +13,7 @@ const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
 const extraSrc = readFileSync(join(root, "src/components/desk/mac-desk-extra.tsx"), "utf8");
+const markSrc = readFileSync(join(root, "src/components/desk/linux-desk-extra.tsx"), "utf8");
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
 
 function lureSeek() {
@@ -30,6 +31,7 @@ test("the demo is a room; the guest is already walking", () => {
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(demoSrc, /MacDeskExtra/);
+  assert.match(demoSrc, /LinuxDeskExtra/);
   assert.match(roomSrc, /LivingPet/);
   assert.match(roomSrc, /dropTreatAt/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents|overlay/);
@@ -114,5 +116,44 @@ test("the demo room shows the Mac walk the way it shows the Windows walk", () =>
   assert.match(livingSrc, /navigator\.platform/);
   const lift = onUpSrc();
   assert.match(lift, /tapPxFor/);
+  assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents/);
+});
+
+test("the demo room shows the Linux walk the way it shows the Windows and Mac walks", () => {
+  assert.equal(D.extraClick("linux"), "menu");
+  assert.equal(D.extraClick("Linux x86_64"), "menu");
+  assert.equal(D.extraClick("win32"), "toggle");
+  assert.equal(D.tapPxFor("linux"), D.TAP_PX_LINUX);
+  assert.equal(D.tapPxFor("Linux x86_64"), D.TAP_PX_LINUX);
+  assert.equal(D.firstClick("linux"), "accept");
+  assert.equal(D.spacesWalk("linux"), true);
+  assert.equal(D.followCursorDisplay("linux"), true);
+  assert.equal(D.hitForward("linux"), true);
+  assert.equal(D.hitForward("win32"), false);
+  assert.equal(D.overlayChrome("linux").type, "toolbar");
+  assert.equal(D.overlayChrome("linux").acceptFirstMouse, true);
+  assert.equal(D.overlayChrome("linux").focusable, false);
+  assert.equal(D.overlayChrome("darwin").type, "panel");
+  assert.equal(D.overlayChrome("win32").type, null);
+  assert.equal(D.cursorHits({ x: 12, y: 8 }, [{ x: 10, y: 6, width: 20, height: 12 }]), true);
+  assert.equal(D.carePointer({ button: 2 }), true);
+
+  const tap = A.pointerUp(9, 0, D.tapPxFor("linux"));
+  assert.equal(tap.kind, "tap");
+  const place = A.pointerUp(10, 0, D.tapPxFor("linux"));
+  assert.equal(place.kind, "place");
+  assert.equal(place.arrive, false);
+
+  assert.match(demoSrc, /LinuxDeskExtra/);
+  assert.match(markSrc, /data-linux-mark/);
+  assert.match(markSrc, /CARE_VERBS/);
+  assert.match(markSrc, /the mark/);
+  assert.doesNotMatch(markSrc, /Unlock|Minds/);
+  for (const verb of D.careVerbs()) {
+    assert.ok(D.CARE_VERBS.includes(verb));
+  }
+
+  assert.match(livingSrc, /tapPxFor/);
+  assert.match(livingSrc, /carePointer/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents/);
 });
