@@ -153,7 +153,7 @@ test("rooms.ts only adds a meadow room", () => {
   assert.match(roomsSrc, /watchSlug:\s*"wave"/);
   assert.match(roomsSrc, /watchSlug:\s*"cup"/);
   const bleed = shellSrc.slice(shellSrc.indexOf("{desk || demo"), shellSrc.indexOf("mx-auto max-w-6xl px-4 py-8"));
-  assert.match(bleed, /shore \|\| meadow/);
+  assert.match(bleed, /shore \|\| reef \|\| meadow/);
 });
 
 test("the hive, garden, roost, shore, and sea files stay as they were", () => {

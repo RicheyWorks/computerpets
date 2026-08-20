@@ -147,7 +147,7 @@ test("rooms.ts only adds a reef room", () => {
   assert.match(roomsSrc, /Ten of the reef\. A coral is not a plant\. An anemone is not a jelly\./);
   assert.match(roomsSrc, /isReef/);
   assert.match(roomsSrc, /id:\s*"shore"/);
-  assert.match(roomsSrc, /id:\s*"sea"/);
+  assert.match(roomsSrc, /id:\s*"tide"/);
   assert.match(roomsSrc, /watchSlug:\s*"wave"/);
   assert.match(roomsSrc, /watchSlug:\s*"cup"/);
   const bleed = shellSrc.slice(shellSrc.indexOf("{desk || demo"), shellSrc.indexOf("mx-auto max-w-6xl px-4 py-8"));
