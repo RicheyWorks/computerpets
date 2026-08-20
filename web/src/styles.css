@@ -449,6 +449,52 @@
   .blotter-care-phone .blotter-care-dot {
     margin: 0 0.2rem;
   }
+
+  .blotter-care-tablet {
+    gap: 0.4rem 0.55rem;
+  }
+
+  .blotter-care-tablet .blotter-ink {
+    font-size: 1.08rem;
+    padding: 0.65rem 0.55rem;
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+
+  .blotter-care-tablet .blotter-care-dot {
+    margin: 0 0.25rem;
+  }
+
+  [data-tablet-orient="sit"] .blotter-care-tablet {
+    max-width: 22rem;
+    justify-content: center;
+  }
+
+  [data-tablet-tending] .blotter-care-tablet .blotter-ink {
+    color: var(--color-fg);
+  }
+
+  [data-tablet-floor] {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  @media (orientation: landscape) {
+    [data-tablet-sit] .tablet-sit-rail {
+      max-width: min(100%, 42rem);
+    }
+  }
+
+  @media (orientation: portrait) {
+    [data-tablet-sit] .tablet-sit-rail {
+      max-width: min(100%, 22rem);
+    }
+  }
+
+  @media (hover: none) {
+    .blotter-ink:hover {
+      color: rgb(242 236 227 / 0.78);
+    }
+  }
 }
 
 @keyframes desk-mote {
