@@ -86,3 +86,24 @@ test("far keys never schedule scratch or tongue", () => {
   assert.ok(E.actsFor("umbral").some((a) => a.name === "dim"));
   assert.ok(E.actsFor("cyst").some((a) => a.name === "wake"));
 });
+
+test("shore and meadow keys never schedule scratch or a snake tongue", () => {
+  const shore = [
+    "fiddler_crab", "ghost_crab", "limpet", "barnacle", "chiton",
+    "periwinkle", "sand_dollar", "sea_urchin", "knobbed_whelk", "lugworm",
+  ];
+  const meadow = [
+    "field_cricket", "katydid", "grasshopper", "swallowtail", "jewelwing",
+    "lacewing", "earwig", "acorn_weevil", "click_beetle", "robber_fly",
+  ];
+  for (const key of [...shore, ...meadow]) {
+    const names = E.actsFor(key).map((a) => a.name);
+    assert.ok(names.length > 0, key);
+    assert.equal(names.includes("scratch"), false, key);
+    assert.equal(names.includes("tongue"), false, key);
+  }
+  assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "wave"));
+  assert.ok(E.actsFor("field_cricket").some((a) => a.name === "chirp"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "vault"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
+});

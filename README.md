@@ -83,7 +83,7 @@ The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at
 
 ## Features
 
-- One hundred thirty living kinds across the house, the dens, the tide, the garden, the hive, the pond, the roost, the corner, the cellar, the well, and the far den
+- One hundred ninety living kinds across the house, the dens, the tide, the garden, the hive, the pond, the roost, the corner, the wood, the stone, the creek, the log, the shore, the meadow, the cellar, the well, and the far den
 - A living desk in the browser, a native overlay, and a PyQt blotter
 - A nest that is a square. Neglect can close a line
 - Optional ownership verify. Fail-closed. Empty allowlists stay empty
