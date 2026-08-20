@@ -9,6 +9,7 @@ import { ROOST_ROSTER } from "./roost";
 import { SEA_ROSTER } from "./sea";
 import { SNAKE_ROSTER } from "./snakes";
 import { WELL_ROSTER } from "./well";
+import { WOOD_ROSTER } from "./wood";
 
 export type RosterLines = {
   greet: string[];
@@ -596,4 +597,5 @@ export const ROSTER: RosterDef[] = [
   ...WELL_ROSTER,
   ...ROOST_ROSTER,
   ...CORNER_ROSTER,
+  ...WOOD_ROSTER,
 ];

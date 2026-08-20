@@ -131,6 +131,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   vinegaroon: { shape: "crumb", verb: "Cricket" },
   tick: { shape: "flake", verb: "Sip" },
   solifuge: { shape: "crumb", verb: "Cricket" },
+  deer: { shape: "leaf", verb: "Browse" },
+  bat: { shape: "crumb", verb: "Beetle" },
+  squirrel: { shape: "seed", verb: "Acorn" },
+  otter: { shape: "crumb", verb: "Fish" },
+  raccoon: { shape: "crumb", verb: "Scrap" },
+  skunk: { shape: "crumb", verb: "Grub" },
+  opossum: { shape: "crumb", verb: "Scrap" },
+  beaver: { shape: "leaf", verb: "Bark" },
+  porcupine: { shape: "leaf", verb: "Bark" },
+  black_bear: { shape: "leaf", verb: "Berry" },
 };
 
 export function treatFor(key: string) {
@@ -268,4 +278,14 @@ export const GIFT_LINE: Record<string, string> = {
   vinegaroon: "A cricket I was finished whipping for.",
   tick: "A sip I was finished waiting for.",
   solifuge: "A cricket I was finished running to.",
+  deer: "A flag I was finished keeping.",
+  bat: "A hang I was finished holding.",
+  squirrel: "A thought I was finished hiding.",
+  otter: "A slide I was finished keeping.",
+  raccoon: "A rinse I was finished holding.",
+  skunk: "A warning I was not using.",
+  opossum: "A still I was finished keeping.",
+  beaver: "A lodge I was finished holding.",
+  porcupine: "A quill I was finished keeping.",
+  black_bear: "A berry I was finished foraging.",
 };

@@ -138,6 +138,16 @@
     vinegaroon: [A("whip", "snap", 0.8, 3, "play"), A("walk", "wiggle", 1.0, 4), A("still", "freeze", 1.8, 2)],
     tick: [A("clasp", "sit_hold", 2.6, 5, "sit"), A("still", "freeze", 2.4, 3), A("wait", "nod", 1.8, 1)],
     solifuge: [A("run", "dart", 0.6, 5), A("bite", "snap", 0.7, 3, "play"), A("still", "freeze", 1.4, 2)],
+    deer: [A("flag", "pulse", 0.8, 4), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+    bat: [A("hang", "sit_hold", 2.2, 5, "sit"), A("flutter", "pulse", 1.0, 3), A("still", "freeze", 1.6, 2)],
+    squirrel: [A("bury", "nod", 1.2, 4, "sit"), A("hop", "hop", 0.5, 3, "play"), A("chatter", "talk", 0.7, 2, "talk")],
+    otter: [A("slide", "wiggle", 1.2, 5), A("swim", "bob", 1.4, 3), A("groom", "groom", 1.2, 2, "sit")],
+    raccoon: [A("rinse", "groom", 1.4, 5, "sit"), A("rummage", "nod", 1.0, 3, "sit"), A("still", "freeze", 1.6, 2)],
+    skunk: [A("stamp", "nod", 0.8, 4, "sit"), A("raise", "pulse", 1.0, 3), A("still", "freeze", 1.8, 2)],
+    opossum: [A("playdead", "sit_hold", 2.2, 5, "sit"), A("grin", "gape", 1.0, 2), A("walk", "wiggle", 1.0, 2)],
+    beaver: [A("gnaw", "eat", 1.4, 5, "eat"), A("slap", "snap", 0.7, 2, "play"), A("sit", "sit_hold", 2.0, 3, "sit")],
+    porcupine: [A("bristle", "puff", 1.4, 5, "sit"), A("climb", "wiggle", 1.0, 2), A("still", "freeze", 2.0, 3)],
+    black_bear: [A("forage", "eat", 1.4, 4, "eat"), A("sit", "sit_hold", 2.2, 4, "sit"), A("huff", "pulse", 0.8, 2)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",

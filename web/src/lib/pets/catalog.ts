@@ -141,6 +141,16 @@ export const SPECIES: Species[] = [
   { key: "vinegaroon", displayName: "Giant Vinegaroon", rarity: "RARE", temperament: "Armed", habitat: "Sand tray", blurb: "A whip. Acetic acid. No sting. Not a scorpion. Not Barb." },
   { key: "tick", displayName: "Black-legged Tick", rarity: "COMMON", temperament: "Patient", habitat: "Blotter hem", blurb: "Eight legs. A mite. Not an insect. Not Comb." },
   { key: "solifuge", displayName: "Windscorpion", rarity: "UNCOMMON", temperament: "Quick", habitat: "Dry dish", blurb: "Huge chelicerae. A run. Not a spider. Not a scorpion." },
+  { key: "deer", displayName: "White-tailed Deer", rarity: "COMMON", temperament: "Flagged", habitat: "Oak edge", blurb: "A flag of a tail. She walks. Not a moose rumor." },
+  { key: "bat", displayName: "Big Brown Bat", rarity: "UNCOMMON", temperament: "Hanging", habitat: "Rafter fold", blurb: "Wings of a hand. Not a bird. Not Sip. Not Peck." },
+  { key: "squirrel", displayName: "Eastern Gray Squirrel", rarity: "COMMON", temperament: "Busy", habitat: "Oak dish", blurb: "She hides a thought. Not a chipmunk rumor." },
+  { key: "otter", displayName: "North American River Otter", rarity: "UNCOMMON", temperament: "Sliding", habitat: "Ink dish", blurb: "A slide in water. Not Slip. Not a weasel rumor only." },
+  { key: "raccoon", displayName: "Raccoon", rarity: "COMMON", temperament: "Washing", habitat: "Wash bowl", blurb: "She washes. Not Bandit the kingsnake. Not Rui." },
+  { key: "skunk", displayName: "Striped Skunk", rarity: "COMMON", temperament: "Warning", habitat: "Duff dish", blurb: "A warning she wears. Not a polecat rumor. Not Wick." },
+  { key: "opossum", displayName: "Virginia Opossum", rarity: "COMMON", temperament: "Still", habitat: "Rafter hem", blurb: "She plays dead. A marsupial. Not a cat. Not Vesper." },
+  { key: "beaver", displayName: "North American Beaver", rarity: "UNCOMMON", temperament: "Building", habitat: "Lodge cup", blurb: "Teeth that fell. A lodge. Not a muskrat rumor." },
+  { key: "porcupine", displayName: "North American Porcupine", rarity: "UNCOMMON", temperament: "Bristled", habitat: "Pine post", blurb: "Quills that can leave. Not Burr. Not Quill." },
+  { key: "black_bear", displayName: "American Black Bear", rarity: "RARE", temperament: "Sure", habitat: "Oak denside", blurb: "Not a red panda. Not Rui. She is a bear." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

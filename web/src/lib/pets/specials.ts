@@ -42,6 +42,10 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "prowl":
     case "stem":
     case "gale":
+    case "flag":
+    case "cache":
+    case "slide":
+    case "forage":
     case "cilia":
     case "reach":
     case "spot":
@@ -126,6 +130,10 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "web":
     case "hour":
     case "clasp":
+    case "hang":
+    case "rinse":
+    case "lodge":
+    case "bristle":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
       return { stats: next, cmd: "sit" };

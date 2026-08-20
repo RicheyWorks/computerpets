@@ -140,7 +140,17 @@ public enum PetType {
     SCORPION         ("scorpion",          "Striped Bark Scorpion",  Rarity.UNCOMMON),
     VINEGAROON       ("vinegaroon",        "Giant Vinegaroon",       Rarity.RARE),
     TICK             ("tick",              "Black-legged Tick",      Rarity.COMMON),
-    SOLIFUGE         ("solifuge",          "Windscorpion",           Rarity.UNCOMMON);
+    SOLIFUGE         ("solifuge",          "Windscorpion",           Rarity.UNCOMMON),
+    DEER             ("deer",              "White-tailed Deer",      Rarity.COMMON),
+    BAT              ("bat",               "Big Brown Bat",          Rarity.UNCOMMON),
+    SQUIRREL         ("squirrel",          "Eastern Gray Squirrel",  Rarity.COMMON),
+    OTTER            ("otter",             "North American River Otter", Rarity.UNCOMMON),
+    RACCOON          ("raccoon",           "Raccoon",                Rarity.COMMON),
+    SKUNK            ("skunk",             "Striped Skunk",          Rarity.COMMON),
+    OPOSSUM          ("opossum",           "Virginia Opossum",       Rarity.COMMON),
+    BEAVER           ("beaver",            "North American Beaver",  Rarity.UNCOMMON),
+    PORCUPINE        ("porcupine",         "North American Porcupine", Rarity.UNCOMMON),
+    BLACK_BEAR       ("black_bear",        "American Black Bear",    Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

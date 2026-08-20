@@ -15,6 +15,7 @@ from computerpets_client.species import (
     CORNER_KEYS,
     ROOST_KEYS,
     WELL_KEYS,
+    WOOD_KEYS,
     SPECIES,
     is_bee,
     is_corner,
@@ -27,6 +28,7 @@ from computerpets_client.species import (
     is_sea,
     is_snake,
     is_well,
+    is_wood,
     next_species_key,
     prev_species_key,
     species_by_key,
@@ -164,6 +166,16 @@ WEB_CATALOG = (
     "vinegaroon",
     "tick",
     "solifuge",
+    "deer",
+    "bat",
+    "squirrel",
+    "otter",
+    "raccoon",
+    "skunk",
+    "opossum",
+    "beaver",
+    "porcupine",
+    "black_bear",
 )
 
 WEB_SNAKES = (
@@ -312,6 +324,19 @@ WEB_CORNER = (
     "solifuge",
 )
 
+WEB_WOOD = (
+    "deer",
+    "bat",
+    "squirrel",
+    "otter",
+    "raccoon",
+    "skunk",
+    "opossum",
+    "beaver",
+    "porcupine",
+    "black_bear",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -328,6 +353,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(WELL_KEYS) == 10
     assert len(ROOST_KEYS) == 10
     assert len(CORNER_KEYS) == 10
+    assert len(WOOD_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -340,6 +366,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(WELL_KEYS) == set(WEB_WELL)
     assert set(ROOST_KEYS) == set(WEB_ROOST)
     assert set(CORNER_KEYS) == set(WEB_CORNER)
+    assert set(WOOD_KEYS) == set(WEB_WOOD)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -717,6 +744,48 @@ def test_ten_corner_guests_are_present_and_honest():
     assert SPECIES["jumping_spider"].walk >= 70
     assert SPECIES["solifuge"].walk >= 100
     assert SPECIES["tick"].walk < 20
+
+
+def test_ten_wood_guests_are_present_and_honest():
+    assert WOOD_KEYS == WEB_WOOD
+    for key in WEB_WOOD:
+        spec = SPECIES[key]
+        assert is_wood(key)
+        assert not is_corner(key)
+        assert not is_pond(key)
+        assert not is_roost(key)
+        assert not is_well(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.silhouette != "axolotl"
+        assert spec.silhouette != "honeybee"
+        assert spec.gait == "walk"
+    assert SPECIES["deer"].slug == "rack"
+    assert SPECIES["deer"].name == "Rack"
+    assert SPECIES["bat"].name == "Cape"
+    assert SPECIES["bat"].silhouette == "bat"
+    assert SPECIES["bat"].perch is True
+    assert SPECIES["squirrel"].name == "Cache"
+    assert SPECIES["otter"].name == "Slick"
+    assert SPECIES["otter"].aquatic is True
+    assert SPECIES["raccoon"].name == "Wash"
+    assert SPECIES["skunk"].name == "Stripe"
+    assert SPECIES["skunk"].slug == "stripe"
+    assert SPECIES["opossum"].name == "Grin"
+    assert SPECIES["beaver"].name == "Dam"
+    assert SPECIES["beaver"].aquatic is True
+    assert SPECIES["porcupine"].name == "Spine"
+    assert SPECIES["black_bear"].name == "Coal"
+    assert SPECIES["black_bear"].silhouette == "bear"
+    assert SPECIES["deer"].walk >= 80
+    assert SPECIES["bat"].walk >= 100
+    assert SPECIES["garter"].slug == "sash"
+    assert SPECIES["garter"].name == "Sash"
+    assert SPECIES["red_panda"].name == "Rui"
+    assert SPECIES["hedgehog"].name == "Burr"
+    assert SPECIES["parrot"].name == "Quill"
+    assert SPECIES["kingsnake"].name == "Bandit"
+    assert SPECIES["caecilian"].name == "Slip"
     assert SPECIES["axolotl"].name == "Bloom"
     assert SPECIES["honeybee"].name == "Comb"
     assert SPECIES["crayfish"].name == "Pinch"
@@ -755,8 +824,10 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("haloarchaea") == "crow"
     assert prev_species_key("crow") == "haloarchaea"
     assert next_species_key("hummingbird") == "orb_weaver"
-    assert next_species_key("solifuge") == "red_panda"
-    assert prev_species_key("red_panda") == "solifuge"
+    assert next_species_key("solifuge") == "deer"
+    assert next_species_key("black_bear") == "red_panda"
+    assert prev_species_key("red_panda") == "black_bear"
+    assert prev_species_key("deer") == "solifuge"
     assert prev_species_key("paramecium") == "stickleback"
     assert prev_species_key("honeybee") == "sundew"
     assert prev_species_key("ball_python") == "phoenix"

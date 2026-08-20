@@ -136,6 +136,16 @@ HOUSE_TRAITS = {
     "vinegaroon": ("spray", "Spray", "I whipped. Hello."),
     "tick": ("clasp", "Clasp", "I clasped. Hello."),
     "solifuge": ("gale", "Gale", "I ran. Hello."),
+    "deer": ("flag", "Flag", "I flagged. That was hello."),
+    "bat": ("hang", "Hang", "I hung. Hello."),
+    "squirrel": ("cache", "Cache", "I hid a thought. Hello."),
+    "otter": ("slide", "Slide", "I slid. That was hello."),
+    "raccoon": ("rinse", "Wash", "I washed. Hello."),
+    "skunk": ("warn", "Warn", "I stamped. Hello."),
+    "opossum": ("playdead", "Play dead", "I went still. Hello."),
+    "beaver": ("lodge", "Lodge", "I gnawed. Hello."),
+    "porcupine": ("bristle", "Bristle", "I bristled. Hello."),
+    "black_bear": ("forage", "Forage", "I foraged. Hello."),
 }
 
 

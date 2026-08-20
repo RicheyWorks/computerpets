@@ -15,7 +15,7 @@ const EXPECTED = [
   ["kingsnake", "bandit", "Lampropeltis californiae"],
   ["green_tree_python", "jade", "Morelia viridis"],
   ["hognose", "bluff", "Heterodon nasicus"],
-  ["garter", "stripe", "Thamnophis sirtalis"],
+  ["garter", "sash", "Thamnophis sirtalis"],
   ["boa", "lula", "Boa constrictor"],
   ["milk_snake", "coral", "Lampropeltis gentilis"],
   ["rosy_boa", "blush", "Lichanura trivirgata"],

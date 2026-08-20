@@ -161,6 +161,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "vinegaroon": (_a("whip", "snap", 0.8, 3, "play"), _a("walk", "wiggle", 1.0, 4), _a("still", "freeze", 1.8, 2)),
     "tick": (_a("clasp", "sit_hold", 2.6, 5, "sit"), _a("still", "freeze", 2.4, 3), _a("wait", "nod", 1.8, 1)),
     "solifuge": (_a("run", "dart", 0.6, 5), _a("bite", "snap", 0.7, 3, "play"), _a("still", "freeze", 1.4, 2)),
+    "deer": (_a("flag", "pulse", 0.8, 4), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "bat": (_a("hang", "sit_hold", 2.2, 5, "sit"), _a("flutter", "pulse", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "squirrel": (_a("bury", "nod", 1.2, 4, "sit"), _a("hop", "hop", 0.5, 3, "play"), _a("chatter", "talk", 0.7, 2, "talk")),
+    "otter": (_a("slide", "wiggle", 1.2, 5), _a("swim", "bob", 1.4, 3), _a("groom", "groom", 1.2, 2, "sit")),
+    "raccoon": (_a("rinse", "groom", 1.4, 5, "sit"), _a("rummage", "nod", 1.0, 3, "sit"), _a("still", "freeze", 1.6, 2)),
+    "skunk": (_a("stamp", "nod", 0.8, 4, "sit"), _a("raise", "pulse", 1.0, 3), _a("still", "freeze", 1.8, 2)),
+    "opossum": (_a("playdead", "sit_hold", 2.2, 5, "sit"), _a("grin", "gape", 1.0, 2), _a("walk", "wiggle", 1.0, 2)),
+    "beaver": (_a("gnaw", "eat", 1.4, 5, "eat"), _a("slap", "snap", 0.7, 2, "play"), _a("sit", "sit_hold", 2.0, 3, "sit")),
+    "porcupine": (_a("bristle", "puff", 1.4, 5, "sit"), _a("climb", "wiggle", 1.0, 2), _a("still", "freeze", 2.0, 3)),
+    "black_bear": (_a("forage", "eat", 1.4, 4, "eat"), _a("sit", "sit_hold", 2.2, 4, "sit"), _a("huff", "pulse", 0.8, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS
