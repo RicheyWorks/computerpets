@@ -5,7 +5,7 @@ Not photographed assets and not a shader engine.
 
 Snakes crawl (S-curve / coil). The tide swims; hermit and horseshoe walk
 the damp floor. The garden sits and leans. The hive stays — bee, butterfly, luna, firefly
-beetle, darner, stick, ant, ladybird, mantis, cicada. The cellar sits —
+beetle, darner, stick, ant, ladybird, mantis, cicada, then bees and comb. The cellar sits —
 shelf, amanita, morel, chanterelle, bracket, mane, puffball, sulfur shelf,
 yeast jar, lichen shrub. The far den stays — gleam, choir, nimbus, shard,
 dusk, knot, brine, beacon, hush, cyst. The others walk, with
@@ -193,6 +193,16 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "ladybird",
         "mantis",
         "cicada",
+        "bumble",
+        "carpenter",
+        "mason",
+        "leafcutter",
+        "stingless",
+        "sweat",
+        "mining",
+        "drone",
+        "queen",
+        "comb",
     ):
         _draw_insect(p, species, anim, i, sit, eat, sleep, stride)
         return
@@ -1061,6 +1071,64 @@ def _draw_insect(
         p.setPen(QPen(accent, 1.4))
         p.drawLine(-2, 16, -14, 28)
         p.drawLine(2, 16, 14, 28)
+        return
+    if sil in ("bumble", "carpenter", "mason", "leafcutter", "stingless", "sweat", "mining", "drone", "queen"):
+        scale = 1.18 if sil == "drone" else 1.28 if sil == "queen" else 1.12 if sil == "bumble" else 0.86 if sil == "stingless" else 0.9 if sil == "sweat" else 1.0
+        p.scale(scale, 1.15 if sil == "queen" else scale)
+        p.setBrush(QBrush(QColor(220, 228, 236, 140)))
+        p.setPen(QPen(QColor(180, 188, 196, 160), 1.0))
+        p.drawEllipse(QRectF(-22, -18 + buzz, 18, 14))
+        p.drawEllipse(QRectF(4, -18 - buzz, 18, 14))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        abdomen = QRectF(-14, -6, 36 if sil == "queen" else 30, 20 if sil != "queen" else 26)
+        if sil == "carpenter":
+            p.setBrush(QBrush(ear))
+            p.drawEllipse(QRectF(-8, -8, 20, 16))
+            p.setBrush(QBrush(body))
+            p.drawEllipse(QRectF(6, -6, 22, 18))
+        else:
+            p.drawEllipse(abdomen)
+        if sil not in ("drone", "queen", "carpenter"):
+            p.setPen(QPen(ear, 1.4))
+            p.drawLine(-6, -4, -6, 12)
+            p.drawLine(2, -4, 2, 12)
+            p.drawLine(10, -4, 10, 12)
+        if sil == "drone":
+            p.setBrush(QBrush(ear))
+            p.setPen(Qt.PenStyle.NoPen)
+            p.drawEllipse(QRectF(-20, -10, 14, 12))
+            p.drawEllipse(QRectF(-8, -10, 14, 12))
+        else:
+            p.setBrush(QBrush(ear))
+            p.setPen(Qt.PenStyle.NoPen)
+            p.drawEllipse(QRectF(-22, -4, 12, 10))
+        if sil == "leafcutter":
+            p.setBrush(QBrush(ring))
+            p.drawEllipse(QRectF(-4, 8, 16, 8))
+        p.setPen(QPen(ear, 1.2))
+        p.drawLine(-20, -4, -28, -16)
+        p.drawLine(-16, -4, -22, -18)
+        return
+    if sil == "comb":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        for col, row in ((-18, -8), (0, -8), (18, -8), (-9, 6), (9, 6), (0, 20)):
+            hexp = QPainterPath()
+            for n in range(6):
+                ang = math.radians(60 * n - 30)
+                x = col + math.cos(ang) * 10
+                y = row + math.sin(ang) * 10 + sit * 0.04
+                if n == 0:
+                    hexp.moveTo(x, y)
+                else:
+                    hexp.lineTo(x, y)
+            hexp.closeSubpath()
+            p.drawPath(hexp)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -4, 8, 8))
+        p.drawEllipse(QRectF(8, 10, 7, 7))
         return
     # Cicada — broad roof wings, red eyes, a sit that waits.
     p.setBrush(QBrush(QColor(40, 36, 32, 160)))

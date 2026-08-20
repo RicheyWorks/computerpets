@@ -118,7 +118,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
               <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
               <p className="mt-2 text-sm text-muted">
-                Transparent overlay. Treat, chase, hide. They walk the real screen. All eighty.
+                Transparent overlay. Treat, chase, hide. They walk the real screen. All ninety.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
             </article>
@@ -127,7 +127,7 @@ export function MeetPage() {
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
                 Open Live, then Add to Home Screen. Tap the blotter for a treat. Chase the ribbon. All
-                eighty.
+                ninety.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">

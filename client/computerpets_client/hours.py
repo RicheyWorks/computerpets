@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-eighty REST windows, same return lines. Do not invent rest hours or copy.
+ninety REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -78,6 +78,16 @@ REST: dict[str, tuple[int, int]] = {
     "ladybird": (20, 6),
     "mantis": (20, 6),
     "cicada": (21, 6),
+    "bumblebee": (20, 6),
+    "carpenter_bee": (20, 6),
+    "mason_bee": (20, 6),
+    "leafcutter": (20, 6),
+    "stingless": (20, 6),
+    "sweat_bee": (20, 6),
+    "mining_bee": (20, 6),
+    "honey_drone": (20, 6),
+    "honey_queen": (21, 6),
+    "honeycomb": (21, 6),
     "oyster": (20, 6),
     "fly_agaric": (21, 6),
     "morel": (20, 7),
@@ -165,6 +175,16 @@ HIDE_LINE: dict[str, str] = {
     "ladybird": "Under a leaf.",
     "mantis": "Behind a fold.",
     "cicada": "Under the stone.",
+    "bumblebee": "Inside the cup.",
+    "carpenter_bee": "Inside the gallery.",
+    "mason_bee": "Inside a cell.",
+    "leafcutter": "Inside the tube.",
+    "stingless": "Inside a pot.",
+    "sweat_bee": "Behind the rim.",
+    "mining_bee": "Inside the bank.",
+    "honey_drone": "Inside the dish.",
+    "honey_queen": "On the heart.",
+    "honeycomb": "Inside a cell.",
     "oyster": "Inside the shelf.",
     "fly_agaric": "Inside the cup.",
     "morel": "Inside a pit.",
@@ -248,6 +268,16 @@ SNACK_LINE: dict[str, str] = {
     "ladybird": "An aphid of a treaty.",
     "mantis": "A fly of a treaty.",
     "cicada": "Sap of a treaty.",
+    "bumblebee": "Nectar of a treaty.",
+    "carpenter_bee": "Nectar of a treaty.",
+    "mason_bee": "Pollen of a treaty.",
+    "leafcutter": "Pollen of a treaty.",
+    "stingless": "Nectar of a treaty.",
+    "sweat_bee": "Nectar of a treaty.",
+    "mining_bee": "Pollen of a treaty.",
+    "honey_drone": "Nectar a worker already carried.",
+    "honey_queen": "Jelly of a treaty.",
+    "honeycomb": "Nectar of a store. I do not bite.",
     "oyster": "Wood of a treaty.",
     "fly_agaric": "Duff of a treaty.",
     "morel": "Duff of a treaty.",

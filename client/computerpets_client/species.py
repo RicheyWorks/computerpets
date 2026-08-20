@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same eighty, painted here.
+the others walk. This is not a new bestiary — it is the same ninety, painted here.
 """
 
 from __future__ import annotations
@@ -86,6 +86,19 @@ INSECT_KEYS: tuple[str, ...] = (
     "cicada",
 )
 
+BEE_KEYS: tuple[str, ...] = (
+    "bumblebee",
+    "carpenter_bee",
+    "mason_bee",
+    "leafcutter",
+    "stingless",
+    "sweat_bee",
+    "mining_bee",
+    "honey_drone",
+    "honey_queen",
+    "honeycomb",
+)
+
 FUNGI_KEYS: tuple[str, ...] = (
     "oyster",
     "fly_agaric",
@@ -112,7 +125,7 @@ FAR_KEYS: tuple[str, ...] = (
     "cyst",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + FUNGI_KEYS + FAR_KEYS
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS
 
 
 @dataclass(frozen=True)
@@ -1851,6 +1864,282 @@ BROOD = _kind(
     hungry=("A wait should not be this empty.", "A sap would restore the song."),
 )
 
+THRUM = _kind(
+    key="bumblebee",
+    slug="thrum",
+    name="Thrum",
+    label="Common Eastern Bumble Bee",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="bumble",
+    walk=96,
+    perch=True,
+    palette=Palette(
+        body=(232, 188, 48),
+        belly=(40, 32, 28),
+        ear=(28, 24, 20),
+        ear_inner=(248, 220, 96),
+        nose=(24, 20, 16),
+        ring=(40, 36, 32),
+        accent=(20, 16, 14),
+    ),
+    greet=("I thrummed. That was hello.", "The cup kept my fur.", "You may look. I am not Comb."),
+    ambient=("A bumblebee is not a honey bee. I keep a smaller nest.", "I do not dance a map. I forage and I go home.", "Your papers are a meadow I have already claimed."),
+    feed=("Nectar of a treaty.", "I will take this without leaving the cup.", "Accepted. The fur records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("Inside the cup.",),
+    call=("I thrummed. That was hello.",),
+    hungry=("A thrum should not be this empty.", "A nectar would restore the fur."),
+)
+
+AUGER = _kind(
+    key="carpenter_bee",
+    slug="auger",
+    name="Auger",
+    label="Eastern Carpenter Bee",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="carpenter",
+    walk=88,
+    perch=True,
+    palette=Palette(
+        body=(28, 24, 22),
+        belly=(232, 196, 72),
+        ear=(20, 16, 14),
+        ear_inner=(248, 220, 120),
+        nose=(16, 12, 10),
+        ring=(48, 40, 32),
+        accent=(16, 12, 10),
+    ),
+    greet=("I bored. Hello.", "The tray kept my hole.", "You may look. I do not keep a comb."),
+    ambient=("I nest in wood. I do not store honey the honey-bee way.", "A shiny back. A hole. That is the office.", "I am not Comb. Comb keeps a dish. I keep a gallery."),
+    feed=("Nectar of a treaty.", "I will take this and return to the hole.", "Accepted. The grain records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("Inside the gallery.",),
+    call=("I bored. Hello.",),
+    hungry=("A gallery should not be this empty.", "A nectar would restore the bore."),
+)
+
+MORTAR = _kind(
+    key="mason_bee",
+    slug="mortar",
+    name="Mortar",
+    label="Blue Orchard Mason Bee",
+    treat="Pollen",
+    treat_shape="flake",
+    silhouette="mason",
+    walk=72,
+    palette=Palette(
+        body=(48, 56, 88),
+        belly=(28, 32, 48),
+        ear=(20, 22, 36),
+        ear_inner=(160, 168, 196),
+        nose=(16, 16, 24),
+        ring=(72, 80, 112),
+        accent=(20, 22, 36),
+    ),
+    greet=("I sealed a cell. Hello.", "The stone kept my mud.", "You may look. I work alone."),
+    ambient=("Mud cells. I keep them honest.", "I am not Comb. I do not keep a colony on the blotter.", "A cell is a sentence I have already written."),
+    feed=("Pollen of a treaty.", "I will take this and seal the next cell.", "Accepted. The mud records it."),
+    treat_lines=("Pollen of a treaty.",),
+    hide=("Inside a cell.",),
+    call=("I sealed a cell. Hello.",),
+    hungry=("A cell should not be this empty.", "A pollen would restore the seal."),
+)
+
+DISC = _kind(
+    key="leafcutter",
+    slug="disc",
+    name="Disc",
+    label="Alfalfa Leafcutter Bee",
+    treat="Pollen",
+    treat_shape="flake",
+    silhouette="leafcutter",
+    walk=76,
+    palette=Palette(
+        body=(72, 64, 40),
+        belly=(196, 168, 72),
+        ear=(40, 36, 24),
+        ear_inner=(220, 196, 96),
+        nose=(28, 24, 16),
+        ring=(88, 120, 56),
+        accent=(40, 36, 24),
+    ),
+    greet=("I cut a circle. Hello.", "The dish kept my disc.", "You may look. I work alone."),
+    ambient=("A disc of leaf. I line a cell with it.", "I am not Comb. I do not dance a map.", "A circle is a sentence I have already cut."),
+    feed=("Pollen of a treaty.", "I will take this and cut another disc.", "Accepted. The circle records it."),
+    treat_lines=("Pollen of a treaty.",),
+    hide=("Inside the tube.",),
+    call=("I cut a circle. Hello.",),
+    hungry=("A disc should not be this empty.", "A pollen would restore the cut."),
+)
+
+POT = _kind(
+    key="stingless",
+    slug="pot",
+    name="Pot",
+    label="Maya Stingless Bee",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="stingless",
+    walk=84,
+    perch=True,
+    palette=Palette(
+        body=(56, 40, 28),
+        belly=(196, 148, 64),
+        ear=(32, 24, 18),
+        ear_inner=(232, 196, 96),
+        nose=(24, 18, 14),
+        ring=(88, 64, 40),
+        accent=(24, 18, 14),
+    ),
+    greet=("I filled a pot. Hello.", "The wax kept my store.", "You may look. I do not sting."),
+    ambient=("Pots, not comb. That is the office.", "I am not Comb. Comb keeps hexagons. I keep pots.", "A pot is a sentence I have already sealed."),
+    feed=("Nectar of a treaty.", "I will take this and pot it.", "Accepted. The pot records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("Inside a pot.",),
+    call=("I filled a pot. Hello.",),
+    hungry=("A pot should not be this empty.", "A nectar would restore the store."),
+)
+
+SHEEN = _kind(
+    key="sweat_bee",
+    slug="sheen",
+    name="Sheen",
+    label="Bicolored Sweat Bee",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="sweat",
+    walk=90,
+    palette=Palette(
+        body=(48, 148, 88),
+        belly=(32, 36, 40),
+        ear=(20, 64, 40),
+        ear_inner=(180, 232, 168),
+        nose=(16, 24, 18),
+        ring=(232, 220, 96),
+        accent=(16, 48, 32),
+    ),
+    greet=("I shone. Hello.", "The rim kept my green.", "You may look. I am not Comb."),
+    ambient=("A sheen. I keep it polite.", "I am often solitary. I do not keep Comb's dish.", "Sweat is a mineral I will take. Nectar is the meal."),
+    feed=("Nectar of a treaty.", "I will take this without leaving the rim.", "Accepted. The sheen records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("Behind the rim.",),
+    call=("I shone. Hello.",),
+    hungry=("A sheen should not be this dull.", "A nectar would restore the green."),
+)
+
+BANK = _kind(
+    key="mining_bee",
+    slug="bank",
+    name="Bank",
+    label="Neighborly Mining Bee",
+    treat="Pollen",
+    treat_shape="flake",
+    silhouette="mining",
+    walk=68,
+    palette=Palette(
+        body=(132, 96, 56),
+        belly=(232, 216, 176),
+        ear=(72, 52, 32),
+        ear_inner=(236, 220, 168),
+        nose=(48, 36, 24),
+        ring=(88, 64, 40),
+        accent=(48, 36, 24),
+    ),
+    greet=("I dug. Hello.", "The tray kept my bank.", "You may look. I work alone."),
+    ambient=("A hole in the ground. I keep it honest.", "I am not Comb. I do not keep a dish of wax.", "A tunnel is a sentence I have already dug."),
+    feed=("Pollen of a treaty.", "I will take this and return to the bank.", "Accepted. The sand records it."),
+    treat_lines=("Pollen of a treaty.",),
+    hide=("Inside the bank.",),
+    call=("I dug. Hello.",),
+    hungry=("A bank should not be this empty.", "A pollen would restore the dig."),
+)
+
+HUM = _kind(
+    key="honey_drone",
+    slug="hum",
+    name="Hum",
+    label="Western Honey Bee (drone)",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="drone",
+    walk=70,
+    perch=True,
+    palette=Palette(
+        body=(216, 164, 40),
+        belly=(248, 212, 88),
+        ear=(32, 28, 24),
+        ear_inner=(252, 236, 168),
+        nose=(24, 20, 16),
+        ring=(40, 36, 32),
+        accent=(28, 24, 20),
+    ),
+    greet=("I hummed. That was hello.", "The dish kept my hum.", "You may look. I am not Comb."),
+    ambient=("A drone is not a worker. I do not forage.", "No sting. No pollen basket. The workers feed me.", "Comb dances. I hum. That is the caste."),
+    feed=("Nectar of a treaty. A worker brought it.", "I will take this. I did not fetch it.", "Accepted. The hum records it."),
+    treat_lines=("Nectar a worker already carried.",),
+    hide=("Inside the dish.",),
+    call=("I hummed. That was hello.",),
+    hungry=("A drone should not be this empty.", "A nectar would restore the hum. A worker would bring it."),
+)
+
+KEEP = _kind(
+    key="honey_queen",
+    slug="keep",
+    name="Keep",
+    label="Western Honey Bee (queen)",
+    treat="Jelly",
+    treat_shape="flake",
+    silhouette="queen",
+    walk=28,
+    perch=True,
+    palette=Palette(
+        body=(196, 148, 36),
+        belly=(248, 212, 88),
+        ear=(32, 28, 24),
+        ear_inner=(252, 228, 140),
+        nose=(24, 20, 16),
+        ring=(40, 36, 32),
+        accent=(28, 24, 20),
+    ),
+    greet=("I stayed. That was hello.", "The heart kept my line.", "You may look. I am not Comb."),
+    ambient=("The queen is not a second Comb. Comb forages. I lay.", "I do not dance a map. The workers do that office.", "A line is a sentence I have already written in wax."),
+    feed=("Jelly of a treaty.", "I will take this. I do not fetch it.", "Accepted. The line records it."),
+    treat_lines=("Jelly of a treaty.",),
+    hide=("On the heart.",),
+    call=("I stayed. That was hello.",),
+    hungry=("A keep should not be this empty.", "A jelly would restore the line."),
+)
+
+WAX = _kind(
+    key="honeycomb",
+    slug="wax",
+    name="Wax",
+    label="Honeycomb",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="comb",
+    walk=2,
+    gait="sit",
+    palette=Palette(
+        body=(232, 188, 72),
+        belly=(196, 140, 40),
+        ear=(160, 108, 32),
+        ear_inner=(252, 220, 120),
+        nose=(88, 56, 24),
+        ring=(248, 216, 96),
+        accent=(72, 48, 20),
+    ),
+    greet=("I sat. That was hello.", "The dish kept the line.", "You may look. I am the nest."),
+    ambient=("Many bees. One nest. I keep the treaty.", "I do not walk. I hold. Comb walks. Keep lays. Hum hums.", "Neglect can go quiet. I will say so if it does."),
+    feed=("Nectar of a store.", "I will take this into a cell. I do not bite.", "Accepted. The comb records it."),
+    treat_lines=("Nectar of a store. I do not bite.",),
+    hide=("Inside a cell.",),
+    call=("I sat. That was hello.",),
+    hungry=("A nest should not be this empty.", "A nectar would restore the store."),
+)
+
 FRILL = _kind(
     key="oyster",
     slug="frill",
@@ -2484,6 +2773,16 @@ _ALL: tuple[Species, ...] = (
     SEVEN,
     FOLD,
     BROOD,
+    THRUM,
+    AUGER,
+    MORTAR,
+    DISC,
+    POT,
+    SHEEN,
+    BANK,
+    HUM,
+    KEEP,
+    WAX,
     FRILL,
     CAP,
     LATTICE,
@@ -2530,6 +2829,10 @@ def is_garden(key: str) -> bool:
 
 def is_insect(key: str) -> bool:
     return key in INSECT_KEYS
+
+
+def is_bee(key: str) -> bool:
+    return key in BEE_KEYS
 
 
 def is_fungus(key: str) -> bool:

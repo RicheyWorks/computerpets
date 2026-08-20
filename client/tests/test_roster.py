@@ -7,10 +7,12 @@ from computerpets_client.species import (
     FUNGI_KEYS,
     GARDEN_KEYS,
     HOUSE_KEYS,
+    BEE_KEYS,
     INSECT_KEYS,
     SEA_KEYS,
     SNAKE_KEYS,
     SPECIES,
+    is_bee,
     is_far,
     is_fungus,
     is_garden,
@@ -22,7 +24,7 @@ from computerpets_client.species import (
     species_by_key,
 )
 
-# Same eighty wire keys as PetType / web/src/lib/pets/catalog.ts.
+# Same ninety wire keys as PetType / web/src/lib/pets/catalog.ts.
 WEB_CATALOG = (
     "red_panda",
     "cat",
@@ -84,6 +86,16 @@ WEB_CATALOG = (
     "ladybird",
     "mantis",
     "cicada",
+    "bumblebee",
+    "carpenter_bee",
+    "mason_bee",
+    "leafcutter",
+    "stingless",
+    "sweat_bee",
+    "mining_bee",
+    "honey_drone",
+    "honey_queen",
+    "honeycomb",
     "oyster",
     "fly_agaric",
     "morel",
@@ -161,6 +173,19 @@ WEB_INSECTS = (
     "cicada",
 )
 
+WEB_BEES = (
+    "bumblebee",
+    "carpenter_bee",
+    "mason_bee",
+    "leafcutter",
+    "stingless",
+    "sweat_bee",
+    "mining_bee",
+    "honey_drone",
+    "honey_queen",
+    "honeycomb",
+)
+
 WEB_FUNGI = (
     "oyster",
     "fly_agaric",
@@ -196,6 +221,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(SEA_KEYS) == 10
     assert len(GARDEN_KEYS) == 10
     assert len(INSECT_KEYS) == 10
+    assert len(BEE_KEYS) == 10
     assert len(FUNGI_KEYS) == 10
     assert len(FAR_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
@@ -203,6 +229,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(SEA_KEYS) == set(WEB_SEA)
     assert set(GARDEN_KEYS) == set(WEB_GARDEN)
     assert set(INSECT_KEYS) == set(WEB_INSECTS)
+    assert set(BEE_KEYS) == set(WEB_BEES)
     assert set(FUNGI_KEYS) == set(WEB_FUNGI)
     assert set(FAR_KEYS) == set(WEB_FAR)
 
@@ -225,6 +252,7 @@ def test_walkers_walk_and_are_not_snakes():
         assert not is_sea(key)
         assert not is_garden(key)
         assert not is_insect(key)
+        assert not is_bee(key)
         assert not is_fungus(key)
         assert not is_far(key)
         assert spec.gait == "walk"
@@ -281,6 +309,7 @@ def test_ten_hive_guests_are_present_and_honest():
         assert spec.treat
         assert spec.treat_shape in TREAT_SHAPES
         assert spec.aquatic is False
+        assert not is_bee(key)
     assert SPECIES["honeybee"].slug == "comb"
     assert SPECIES["luna"].name == "Ghost"
     assert SPECIES["firefly"].silhouette == "firefly"
@@ -289,6 +318,37 @@ def test_ten_hive_guests_are_present_and_honest():
     assert SPECIES["luna"].walk < 20
     assert SPECIES["honeybee"].walk > 100
     assert SPECIES["darner"].walk > 140
+
+
+def test_ten_hive_bees_are_present_and_honest():
+    assert BEE_KEYS == WEB_BEES
+    for key in BEE_KEYS:
+        spec = SPECIES[key]
+        assert is_bee(key)
+        assert not is_insect(key)
+        assert not is_snake(key)
+        assert not is_sea(key)
+        assert not is_garden(key)
+        assert not is_fungus(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.aquatic is False
+    assert SPECIES["bumblebee"].slug == "thrum"
+    assert SPECIES["bumblebee"].name == "Thrum"
+    assert SPECIES["carpenter_bee"].name == "Auger"
+    assert SPECIES["mason_bee"].name == "Mortar"
+    assert SPECIES["leafcutter"].name == "Disc"
+    assert SPECIES["stingless"].name == "Pot"
+    assert SPECIES["sweat_bee"].name == "Sheen"
+    assert SPECIES["mining_bee"].name == "Bank"
+    assert SPECIES["honey_drone"].name == "Hum"
+    assert SPECIES["honey_queen"].name == "Keep"
+    assert SPECIES["honeycomb"].name == "Wax"
+    assert SPECIES["honeycomb"].slug == "wax"
+    assert SPECIES["honeycomb"].silhouette == "comb"
+    assert SPECIES["honeycomb"].walk < 10
+    assert SPECIES["honey_queen"].walk < SPECIES["honeybee"].walk
+    assert SPECIES["honeybee"].slug == "comb"
 
 
 def test_ten_cellar_guests_are_present_and_honest():
@@ -300,6 +360,7 @@ def test_ten_cellar_guests_are_present_and_honest():
         assert not is_sea(key)
         assert not is_garden(key)
         assert not is_insect(key)
+        assert not is_bee(key)
         assert spec.treat
         assert spec.treat_shape in TREAT_SHAPES
         assert spec.aquatic is False
@@ -338,6 +399,7 @@ def test_ten_far_guests_are_present_and_honest():
         assert not is_sea(key)
         assert not is_garden(key)
         assert not is_insect(key)
+        assert not is_bee(key)
         assert not is_fungus(key)
         assert spec.treat
         assert spec.treat_shape in TREAT_SHAPES
@@ -393,7 +455,8 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("moray") == "moss"
     assert next_species_key("saguaro") == "venus_flytrap"
     assert next_species_key("sundew") == "honeybee"
-    assert next_species_key("cicada") == "oyster"
+    assert next_species_key("cicada") == "bumblebee"
+    assert next_species_key("honeycomb") == "oyster"
     assert next_species_key("lichen") == "photovore"
     assert next_species_key("cyst") == "red_panda"
     assert prev_species_key("red_panda") == "cyst"

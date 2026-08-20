@@ -78,6 +78,16 @@ class PetTypeTest {
             new ExpectedSpecies("ladybird", "Seven-spot Ladybird", PetType.Rarity.COMMON),
             new ExpectedSpecies("mantis", "Chinese Mantis", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("cicada", "Periodical Cicada", PetType.Rarity.RARE),
+            new ExpectedSpecies("bumblebee", "Common Eastern Bumble Bee", PetType.Rarity.COMMON),
+            new ExpectedSpecies("carpenter_bee", "Eastern Carpenter Bee", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("mason_bee", "Blue Orchard Mason Bee", PetType.Rarity.COMMON),
+            new ExpectedSpecies("leafcutter", "Alfalfa Leafcutter Bee", PetType.Rarity.COMMON),
+            new ExpectedSpecies("stingless", "Maya Stingless Bee", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("sweat_bee", "Bicolored Sweat Bee", PetType.Rarity.COMMON),
+            new ExpectedSpecies("mining_bee", "Neighborly Mining Bee", PetType.Rarity.COMMON),
+            new ExpectedSpecies("honey_drone", "Western Honey Bee (drone)", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("honey_queen", "Western Honey Bee (queen)", PetType.Rarity.RARE),
+            new ExpectedSpecies("honeycomb", "Honeycomb", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("oyster", "Oyster Mushroom", PetType.Rarity.COMMON),
             new ExpectedSpecies("fly_agaric", "Fly Agaric", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("morel", "American Morel", PetType.Rarity.RARE),
@@ -120,6 +130,11 @@ class PetTypeTest {
             "stick", "carpenter_ant", "ladybird", "mantis", "cicada"
     );
 
+    private static final List<String> BEE_KEYS = List.of(
+            "bumblebee", "carpenter_bee", "mason_bee", "leafcutter", "stingless",
+            "sweat_bee", "mining_bee", "honey_drone", "honey_queen", "honeycomb"
+    );
+
     private static final List<String> FUNGI_KEYS = List.of(
             "oyster", "fly_agaric", "morel", "chanterelle", "turkey_tail",
             "lions_mane", "puffball", "chicken_of_woods", "yeast", "lichen"
@@ -134,7 +149,7 @@ class PetTypeTest {
     @DisplayName("catalog matches the living-desk web catalog, including the tide")
     void catalog_matchesWebHouse() {
         assertThat(PetType.values()).hasSize(WEB_CATALOG.size());
-        assertThat(WEB_CATALOG).hasSize(80);
+        assertThat(WEB_CATALOG).hasSize(90);
 
         Set<String> backendKeys = Arrays.stream(PetType.values())
                 .map(PetType::key)
@@ -179,9 +194,9 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(27L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(32L);
-        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(18L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(32L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(36L);
+        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(19L);
         assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(3L);
     }
 
@@ -211,6 +226,9 @@ class PetTypeTest {
         for (String key : INSECT_KEYS) {
             assertThat(PetType.fromKey(key)).isPresent();
         }
+        for (String key : BEE_KEYS) {
+            assertThat(PetType.fromKey(key)).isPresent();
+        }
         for (String key : FUNGI_KEYS) {
             assertThat(PetType.fromKey(key)).isPresent();
         }
@@ -231,6 +249,12 @@ class PetTypeTest {
         assertThat(PetType.FIREFLY.displayName()).isEqualTo("Common Eastern Firefly");
         assertThat(PetType.CARPENTER_ANT.key()).isEqualTo("carpenter_ant");
         assertThat(PetType.CICADA.displayName()).isEqualTo("Periodical Cicada");
+        assertThat(PetType.BUMBLEBEE.displayName()).isEqualTo("Common Eastern Bumble Bee");
+        assertThat(PetType.CARPENTER_BEE.key()).isEqualTo("carpenter_bee");
+        assertThat(PetType.MASON_BEE.rarity()).isEqualTo(PetType.Rarity.COMMON);
+        assertThat(PetType.HONEY_DRONE.displayName()).isEqualTo("Western Honey Bee (drone)");
+        assertThat(PetType.HONEY_QUEEN.rarity()).isEqualTo(PetType.Rarity.RARE);
+        assertThat(PetType.HONEYCOMB.displayName()).isEqualTo("Honeycomb");
         assertThat(PetType.MANTIS.rarity()).isEqualTo(PetType.Rarity.UNCOMMON);
         assertThat(PetType.OYSTER.displayName()).isEqualTo("Oyster Mushroom");
         assertThat(PetType.FLY_AGARIC.key()).isEqualTo("fly_agaric");

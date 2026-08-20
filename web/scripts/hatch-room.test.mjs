@@ -64,7 +64,7 @@ test("nest pair with an immediate child navigates to the guest room", () => {
 test("catalog is a shelf, not a prospectus", () => {
   assert.match(catalogSrc, /CompanionRoom/);
   assert.match(catalogSrc, /persistLocal=\{false\}/);
-  assert.match(catalogSrc, /The eighty/);
+  assert.match(catalogSrc, /The ninety/);
   assert.match(catalogSrc, /on their shelves/);
   assert.match(catalogSrc, /The shelf is a room/);
   assert.doesNotMatch(catalogSrc, /license service/);

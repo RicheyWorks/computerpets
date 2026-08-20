@@ -29,6 +29,8 @@ test("species-true verbs: seed, spore, clutch, brood, egg, wait", () => {
   assert.equal(G.nestPath("seahorse", 2).verb, "brood");
   assert.ok(G.nestPath("seahorse", 2).waitMs > 0);
   assert.equal(G.nestPath("luna", 2).verb, "egg");
+  assert.equal(G.nestPath("honeycomb", 1).verb, "brood");
+  assert.equal(G.nestPath("honey_queen", 1).verb, "egg");
   assert.equal(G.nestPath("cyst", 2).verb, "wait");
   assert.ok(G.nestPath("cyst", 2).waitMs >= 24 * 60 * 60 * 1000);
 });

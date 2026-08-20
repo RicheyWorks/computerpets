@@ -60,6 +60,18 @@ const INSECTS = [
   "mantis",
   "cicada",
 ];
+const BEES = [
+  "bumblebee",
+  "carpenter_bee",
+  "mason_bee",
+  "leafcutter",
+  "stingless",
+  "sweat_bee",
+  "mining_bee",
+  "honey_drone",
+  "honey_queen",
+  "honeycomb",
+];
 const FUNGI = [
   "oyster",
   "fly_agaric",
@@ -112,7 +124,7 @@ function names(key) {
 }
 
 test("every living kind has an ethogram, and snakes never scratch", () => {
-  for (const key of [...HOUSE, ...SNAKES, ...SEA, ...GARDEN, ...INSECTS, ...FUNGI, ...FAR]) {
+  for (const key of [...HOUSE, ...SNAKES, ...SEA, ...GARDEN, ...INSECTS, ...BEES, ...FUNGI, ...FAR]) {
     assert.ok(E.actsFor(key).length > 0, key);
   }
   for (const key of SNAKES) {
@@ -137,6 +149,17 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
     assert.equal(acts.includes("eat"), false, `${key} does not nibble like a mammal`);
   }
+  for (const key of BEES) {
+    const acts = names(key);
+    assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
+    assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
+    assert.equal(acts.includes("eat"), false, `${key} does not nibble like a mammal`);
+    assert.equal(acts.includes("waggle"), false, `${key} is not Comb`);
+  }
+  assert.ok(names("honeycomb").includes("hold"));
+  assert.ok(names("honey_drone").includes("hum"));
+  assert.ok(names("honey_queen").includes("lay"));
+  assert.ok(names("bumblebee").includes("thrum"));
   for (const key of FUNGI) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);

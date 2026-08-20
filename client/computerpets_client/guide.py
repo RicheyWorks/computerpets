@@ -1,7 +1,7 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same eighty, taught here. Snakes keep the den
+This is not a new bestiary — the same ninety, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the cellar keeps the fungus facts; the far den
 keeps the xenobiology facts; the twenty keep the study facts.
@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_far, is_fungus, is_garden, is_insect, is_sea, is_snake
+from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_sea, is_snake
 
 
 @dataclass(frozen=True)
@@ -617,6 +617,99 @@ INSECT_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
+BEE_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "bumblebee",
+        "Bombus impatiens",
+        "A round furred body, a louder wing, pollen in the fur. Common eastern bumble bee. She keeps a smaller nest. The moss cup is a meadow she agreed to.",
+        "Not Comb. Comb is Apis mellifera, a honey bee with a waggle and a dish of wax. Thrum is Bombus impatiens. A bumblebee is not a honey bee. The fur is the tell. The nest is small.",
+        "Bumblebee. Not a honey bee. She keeps a smaller nest.",
+        "moss cup",
+        "steady",
+    ),
+    _entry(
+        "carpenter_bee",
+        "Xylocopa virginica",
+        "A furred thorax, a bare shining abdomen, a hole in wood. Eastern carpenter bee. She nests in a gallery. The pencil tray is a beam she agreed to.",
+        "Not Comb. Comb keeps honey in hex cells. Auger is Xylocopa virginica. A carpenter bee does not keep honey the honey-bee way. She drinks. She does not store. The hole is the office.",
+        "Carpenter bee. She nests in wood. No honey the honey-bee way.",
+        "pencil tray",
+        "boring",
+    ),
+    _entry(
+        "mason_bee",
+        "Osmia lignaria",
+        "A blue-black abdomen, mud on the mandibles, cells in a reed. Blue orchard mason. She works alone. The inkstone is a wall she agreed to.",
+        "Not a hive bee. Not Comb with a colony. Mortar is Osmia lignaria, solitary, and the mud is the tell. One bee. One nest. No queen over workers.",
+        "Mason bee. Solitary. Mud cells. Not a hive.",
+        "inkstone rim",
+        "solitary",
+    ),
+    _entry(
+        "leafcutter",
+        "Megachile rotundata",
+        "A disc of leaf in the mandibles, pollen under the abdomen. Alfalfa leafcutter. She lines a tube. The leaf dish is a nest she agreed to.",
+        "Not Comb. Comb maps a flower. Disc is Megachile rotundata. The disc is the wall. The pollen rides the abdomen, not a hind-leg basket Comb would know. Solitary.",
+        "Leafcutter. A disc of leaf. A solitary cell.",
+        "leaf dish",
+        "precise",
+    ),
+    _entry(
+        "stingless",
+        "Melipona beecheii",
+        "A small dark body, wax-and-resin pots, no sting. Maya stingless bee. She keeps a colony. The pot is the store.",
+        "Not Comb's hex comb. Comb is Apis. Pot is Melipona beecheii. Pots, not comb. No sting. A different hive. Do not file her as a honey bee with the sting filed off.",
+        "Stingless bee. Pots, not comb. She does not sting.",
+        "wax pot",
+        "gentle",
+    ),
+    _entry(
+        "sweat_bee",
+        "Agapostemon virescens",
+        "A metallic green thorax, a banded abdomen, a small bright hover. Bicolored sweat bee. She is often solitary. The lamp rim is a meadow she agreed to.",
+        "Not Comb. Not a honey bee that learned to shine. Sheen is Agapostemon virescens. Metallic. Often alone. No dish of wax. Sweat is a mineral she will take. Nectar is the meal.",
+        "Sweat bee. Metallic. Often solitary. Not Comb.",
+        "lamp rim",
+        "bright",
+    ),
+    _entry(
+        "mining_bee",
+        "Andrena vicina",
+        "A brown-and-cream miner, a hole in the ground, a neighbor on the bank. Neighborly mining bee. Each bee her own burrow. The sand tray is a bank she agreed to.",
+        "Not a hive. Neighbors may share a bank. Each hole is hers. Bank is Andrena vicina. Not Comb. Not a colony on the blotter. The ground is the nest.",
+        "Mining bee. A ground nest. Not a hive.",
+        "sand tray",
+        "burrowing",
+    ),
+    _entry(
+        "honey_drone",
+        "Apis mellifera",
+        "Larger than Comb. Eyes that meet. No pollen basket. No sting. Western honey bee drone. He hums. The workers feed him.",
+        "A drone is not a worker. He is not Comb. Comb forages and dances. Hum is the same species, a different caste. He does not work the flower. He does not keep a nest.",
+        "Drone. Not a worker. No sting. No pollen basket.",
+        "wax dish",
+        "idle",
+    ),
+    _entry(
+        "honey_queen",
+        "Apis mellifera",
+        "Longer than Comb. The abdomen is the work. She walks the comb. Western honey bee queen. She lays. The workers bring jelly.",
+        "The queen is not a second Comb. Comb forages. Keep lays. One queen. Same species, a different office. She does not dance a map. She does not leave for flowers.",
+        "Queen. Not a second Comb. She lays. She does not forage.",
+        "wax heart",
+        "laid",
+    ),
+    _entry(
+        "honeycomb",
+        "Apis mellifera nest",
+        "Hex cells. Brood in some. Stores in others. Honeycomb. The nest as a place. Wax sits. The bees walk on it.",
+        "Not Comb the bee. Comb is one guest. Wax is the nest. Many bees, one comb. A colony is many bees, one nest. The line can stay or go quiet if neglected. It is not a shop.",
+        "Honeycomb. Many bees, one nest. The line can go quiet.",
+        "wax dish",
+        "shared",
+    ),
+)
+
 FUNGI_GUIDE: tuple[FieldGuide, ...] = (
     _entry(
         "oyster",
@@ -803,7 +896,7 @@ FAR_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + FUNGI_GUIDE + FAR_GUIDE
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -830,6 +923,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="garden", label="All ten in the garden", verb="grow")
     if is_insect(key):
         return Classroom(room="hive", label="All ten in the hive", verb="stay")
+    if is_bee(key):
+        return Classroom(room="hive", label="The hive. Bees and comb.", verb="stay")
     if is_fungus(key):
         return Classroom(room="cellar", label="All ten in the cellar", verb="stay")
     if is_far(key):
@@ -855,6 +950,10 @@ def garden_guide_keys() -> tuple[str, ...]:
 
 def insect_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in INSECT_GUIDE)
+
+
+def bee_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in BEE_GUIDE)
 
 
 def fungi_guide_keys() -> tuple[str, ...]:
@@ -885,6 +984,10 @@ def insect_guide_complete() -> bool:
     return len(INSECT_GUIDE) == len(INSECT_KEYS) and all(k in _BY_KEY for k in INSECT_KEYS)
 
 
+def bee_guide_complete() -> bool:
+    return len(BEE_GUIDE) == len(BEE_KEYS) and all(k in _BY_KEY for k in BEE_KEYS)
+
+
 def fungi_guide_complete() -> bool:
     return len(FUNGI_GUIDE) == len(FUNGI_KEYS) and all(k in _BY_KEY for k in FUNGI_KEYS)
 
@@ -900,6 +1003,7 @@ def guide_complete() -> bool:
         and sea_guide_complete()
         and garden_guide_complete()
         and insect_guide_complete()
+        and bee_guide_complete()
         and fungi_guide_complete()
         and far_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)

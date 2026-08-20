@@ -45,6 +45,7 @@ export function houseOffspringName(
   if (path.verb === "split") return `${base}'s rise`.slice(0, 24);
   if (path.verb === "share") return `${base}'s share`.slice(0, 24);
   if (path.verb === "bud") return `${base}'s bud`.slice(0, 24);
+  if (path.verb === "brood") return `${base}'s brood`.slice(0, 24);
   const bit = DIMINUTIVE[Math.floor(rand() * DIMINUTIVE.length)] ?? "kit";
   return `${base} ${bit}`.slice(0, 24);
 }

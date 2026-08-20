@@ -1,3 +1,4 @@
+import { BEE_KEYS } from "./bees";
 import { FAR_KEYS } from "./far";
 import { FUNGI_KEYS } from "./fungi";
 import { GARDEN_KEYS } from "./garden";
@@ -26,6 +27,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   if (SEA_KEYS.includes(key)) throw new Error(`house guide does not file the tide: ${key}`);
   if (GARDEN_KEYS.includes(key)) throw new Error(`house guide does not file the garden: ${key}`);
   if (INSECT_KEYS.includes(key)) throw new Error(`house guide does not file the hive: ${key}`);
+  if (BEE_KEYS.includes(key)) throw new Error(`house guide does not file the hive: ${key}`);
   if (FUNGI_KEYS.includes(key)) throw new Error(`house guide does not file the cellar: ${key}`);
   if (FAR_KEYS.includes(key)) throw new Error(`house guide does not file the far den: ${key}`);
   return {
@@ -207,6 +209,6 @@ export function houseGuideKeys() {
 
 /** The living roster minus snakes and the tide, and the guide, must name the same twenty. */
 export function houseGuideComplete() {
-  const living = ROSTER.filter((r) => !SNAKE_KEYS.includes(r.key) && !SEA_KEYS.includes(r.key) && !GARDEN_KEYS.includes(r.key) && !INSECT_KEYS.includes(r.key) && !FUNGI_KEYS.includes(r.key) && !FAR_KEYS.includes(r.key)).map((r) => r.key);
+  const living = ROSTER.filter((r) => !SNAKE_KEYS.includes(r.key) && !SEA_KEYS.includes(r.key) && !GARDEN_KEYS.includes(r.key) && !INSECT_KEYS.includes(r.key) && !BEE_KEYS.includes(r.key) && !FUNGI_KEYS.includes(r.key) && !FAR_KEYS.includes(r.key)).map((r) => r.key);
   return living.length === HOUSE_GUIDE.length && living.every((key) => BY_KEY[key]);
 }
