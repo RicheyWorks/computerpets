@@ -100,6 +100,10 @@ function Catalog() {
             The wood
           </Link>
           {" · "}
+          <Link to="/canopy" className="text-muted no-underline hover:text-fg">
+            The canopy
+          </Link>
+          {" · "}
           <Link to="/stone" className="text-muted no-underline hover:text-fg">
             The stone
           </Link>

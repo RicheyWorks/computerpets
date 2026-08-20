@@ -43,7 +43,6 @@ from computerpets_client.guide import (
     MEADOW_GUIDE,
     meadow_guide_complete,
     meadow_guide_keys,
-    CANOPY_GUIDE,
     canopy_guide_complete,
     canopy_guide_keys,
     STONE_GUIDE,
