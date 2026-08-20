@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred and eighty, painted here.
+the others walk. This is not a new bestiary — it is the same hundred and ninety, painted here.
 """
 
 from __future__ import annotations
@@ -242,7 +242,20 @@ SHORE_KEYS: tuple[str, ...] = (
     "lugworm",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS
+MEADOW_KEYS: tuple[str, ...] = (
+    "field_cricket",
+    "katydid",
+    "grasshopper",
+    "swallowtail",
+    "jewelwing",
+    "lacewing",
+    "earwig",
+    "acorn_weevil",
+    "click_beetle",
+    "robber_fly",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS
 
 
 @dataclass(frozen=True)
@@ -5307,6 +5320,279 @@ HEAP = _kind(
 )
 
 
+CHIRP = _kind(
+    key="field_cricket",
+    slug="chirp",
+    name="Chirp",
+    label="Fall Field Cricket",
+    treat="Seed",
+    treat_shape="flake",
+    silhouette="field_cricket",
+    walk=48,
+    palette=Palette(
+        body=(28, 24, 22),
+        belly=(72, 64, 56),
+        ear=(56, 48, 44),
+        ear_inner=(220, 200, 80),
+        nose=(20, 16, 12),
+        ring=(56, 48, 44),
+        accent=(72, 64, 56),
+    ),
+    greet=("I sang. Hello.", "The dish kept my song.", "You may look. I am not a cicada."),
+    ambient=("The song is the tell. I keep the grammar.", "I am not Brood. Brood is a cicada of years, a husk, a burst. I am Gryllus. I sing the night.", "Your papers are a grass I have already claimed.", "I sit. Then I sing. Then I sit."),
+    feed=("Seed of a treaty.", "I will take this without leaving the song.", "Accepted. The chirp records it."),
+    treat_lines=("Seed of a treaty.",),
+    hide=("Inside the grass.",),
+    call=("I sang. Hello.",),
+    hungry=("A cricket should not be this empty.", "A seed would restore the song."),
+)
+
+BLADE = _kind(
+    key="katydid",
+    slug="blade",
+    name="Blade",
+    label="Northern True Katydid",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="katydid",
+    walk=22,
+    perch=True,
+    palette=Palette(
+        body=(88, 132, 56),
+        belly=(140, 168, 88),
+        ear=(48, 80, 36),
+        ear_inner=(140, 168, 88),
+        nose=(28, 24, 16),
+        ring=(48, 80, 36),
+        accent=(48, 80, 36),
+    ),
+    greet=("I sat the leaf. Hello.", "The rim kept my green.", "You may look. I am not a grasshopper."),
+    ambient=("The wings are leaves. I keep the office.", "I am not Vault. Vault is a grasshopper who jumps the grass. I am Pterophylla. A true katydid. I stay a leaf.", "Your papers are a leaf I have already claimed.", "I sit. Then I still. Then I sit."),
+    feed=("Leaf of a treaty.", "I will take this without leaving the blade.", "Accepted. The green records it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("On the leaf.",),
+    call=("I sat the leaf. Hello.",),
+    hungry=("A katydid should not be this empty.", "A leaf would restore the still."),
+)
+
+VAULT = _kind(
+    key="grasshopper",
+    slug="vault",
+    name="Vault",
+    label="Differential Grasshopper",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="grasshopper",
+    walk=96,
+    palette=Palette(
+        body=(156, 132, 56),
+        belly=(212, 196, 140),
+        ear=(88, 72, 32),
+        ear_inner=(212, 196, 140),
+        nose=(24, 20, 12),
+        ring=(88, 72, 32),
+        accent=(88, 72, 32),
+    ),
+    greet=("I vaulted. Hello.", "The plate kept my jump.", "You may look. I am not a spider."),
+    ambient=("A jump of the grass. I keep the grammar.", "I am not Leap. Leap is a jumping spider of the corner. I am not Hop. Hop is a springtail under the log. I am not Blade. Blade is a katydid whose wings are leaves. I am Melanoplus.", "Your papers are a grass I have already claimed.", "I sit. Then I vault. Then I sit."),
+    feed=("Leaf of a treaty.", "I will take this and keep the jump.", "Accepted. The vault records it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("Inside the grass.",),
+    call=("I vaulted. Hello.",),
+    hungry=("A grasshopper should not be this empty.", "A leaf would restore the jump."),
+)
+
+BANNER = _kind(
+    key="swallowtail",
+    slug="banner",
+    name="Banner",
+    label="Eastern Tiger Swallowtail",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="swallowtail",
+    walk=92,
+    perch=True,
+    palette=Palette(
+        body=(24, 20, 16),
+        belly=(236, 196, 48),
+        ear=(24, 20, 16),
+        ear_inner=(248, 228, 140),
+        nose=(20, 16, 12),
+        ring=(24, 20, 16),
+        accent=(236, 196, 48),
+    ),
+    greet=("I kept the yellow. Hello.", "The dish kept my bands.", "You may look. I am not a monarch."),
+    ambient=("Yellow bands. I keep the office.", "I am not Milk. Milk is a monarch who earned orange on milkweed. I am not Ghost. Ghost is a luna moth of one week, no mouth. I am Papilio. A swallowtail. The tails are the tell.", "Your papers are a blossom I have already claimed.", "I sit. Then I banner. Then I sit."),
+    feed=("Nectar of a treaty.", "I will take this without leaving the bands.", "Accepted. The yellow records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("On the blossom.",),
+    call=("I kept the yellow. Hello.",),
+    hungry=("A swallowtail should not be this empty.", "A nectar would restore the bands."),
+)
+
+JEWEL = _kind(
+    key="jewelwing",
+    slug="jewel",
+    name="Jewel",
+    label="Ebony Jewelwing",
+    treat="Midge",
+    treat_shape="crumb",
+    silhouette="jewelwing",
+    walk=88,
+    palette=Palette(
+        body=(40, 88, 56),
+        belly=(72, 140, 88),
+        ear=(16, 16, 20),
+        ear_inner=(72, 140, 88),
+        nose=(20, 16, 12),
+        ring=(16, 16, 20),
+        accent=(16, 16, 20),
+    ),
+    greet=("I kept the black. Hello.", "The rim kept my jewel.", "You may look. I am not a darner."),
+    ambient=("A damselfly. I keep the grammar.", "I am not Dart. Dart is a green darner who hawks the lamp, a dragonfly, wings out. I fold. I am Calopteryx. The black is the tell.", "Your papers are a stream I have already claimed.", "I sit. Then I jewel. Then I sit."),
+    feed=("Midge of a treaty.", "I will take this without leaving the jewel.", "Accepted. The black records it."),
+    treat_lines=("Midge of a treaty.",),
+    hide=("On the stream.",),
+    call=("I kept the black. Hello.",),
+    hungry=("A jewelwing should not be this empty.", "A midge would restore the hover."),
+)
+
+LACE = _kind(
+    key="lacewing",
+    slug="lace",
+    name="Lace",
+    label="Green Lacewing",
+    treat="Aphid",
+    treat_shape="crumb",
+    silhouette="lacewing",
+    walk=76,
+    palette=Palette(
+        body=(120, 176, 96),
+        belly=(200, 228, 188),
+        ear=(220, 180, 48),
+        ear_inner=(200, 228, 188),
+        nose=(24, 20, 12),
+        ring=(220, 180, 48),
+        accent=(200, 228, 188),
+    ),
+    greet=("I laced. Hello.", "The dish kept my green.", "You may look. I am not a moth."),
+    ambient=("Not a moth. I keep the office.", "I am not Ghost. Ghost is a luna moth of one week, no mouth. I eat. The larva is the lion. I am Chrysoperla. The lace is the tell.", "Your papers are a leaf I have already claimed.", "I sit. Then I lace. Then I sit."),
+    feed=("Aphid of a treaty.", "I will take this without leaving the lace.", "Accepted. The green records it."),
+    treat_lines=("Aphid of a treaty.",),
+    hide=("On the leaf.",),
+    call=("I laced. Hello.",),
+    hungry=("A lacewing should not be this empty.", "An aphid would restore the lace."),
+)
+
+FORCEPS = _kind(
+    key="earwig",
+    slug="forceps",
+    name="Forceps",
+    label="European Earwig",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="earwig",
+    walk=42,
+    palette=Palette(
+        body=(88, 64, 40),
+        belly=(168, 140, 108),
+        ear=(40, 28, 20),
+        ear_inner=(168, 140, 108),
+        nose=(24, 18, 12),
+        ring=(40, 28, 20),
+        accent=(40, 28, 20),
+    ),
+    greet=("I raised the cerci. Hello.", "The dish kept my forceps.", "You may look. I am not a sting."),
+    ambient=("Cerci, not a sting. I keep the grammar.", "I am not Fold. Fold is a mantis who waits with a fold. I am Forficula. I raise the forceps. I do not sting.", "Your papers are a bark I have already claimed.", "I sit. Then I raise. Then I sit."),
+    feed=("Scrap of a treaty.", "I will take this without leaving the cerci.", "Accepted. The forceps record it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("Under the bark.",),
+    call=("I raised the cerci. Hello.",),
+    hungry=("An earwig should not be this empty.", "A scrap would restore the raise."),
+)
+
+SNOUT = _kind(
+    key="acorn_weevil",
+    slug="snout",
+    name="Snout",
+    label="Acorn Weevil",
+    treat="Acorn",
+    treat_shape="crumb",
+    silhouette="acorn_weevil",
+    walk=18,
+    palette=Palette(
+        body=(120, 80, 44),
+        belly=(168, 120, 72),
+        ear=(72, 48, 28),
+        ear_inner=(168, 120, 72),
+        nose=(24, 16, 12),
+        ring=(72, 48, 28),
+        accent=(72, 48, 28),
+    ),
+    greet=("I sat the acorn. Hello.", "The cup kept my snout.", "You may look. I am not a bee."),
+    ambient=("A drill of an acorn. I keep the office.", "I am not Auger. Auger is a carpenter bee who bores wood. I am not Mast. Mast is an oak of the garden. I am Curculio. I drill the nut.", "Your papers are an acorn I have already claimed.", "I sit. Then I drill. Then I sit."),
+    feed=("Acorn of a treaty.", "I will take this without leaving the snout.", "Accepted. The drill records it."),
+    treat_lines=("Acorn of a treaty.",),
+    hide=("Inside the acorn.",),
+    call=("I sat the acorn. Hello.",),
+    hungry=("A weevil should not be this empty.", "An acorn would restore the drill."),
+)
+
+CLICK = _kind(
+    key="click_beetle",
+    slug="click",
+    name="Click",
+    label="Eyed Click Beetle",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="click_beetle",
+    walk=64,
+    palette=Palette(
+        body=(32, 32, 28),
+        belly=(196, 188, 164),
+        ear=(20, 20, 16),
+        ear_inner=(196, 188, 164),
+        nose=(20, 16, 12),
+        ring=(20, 20, 16),
+        accent=(220, 200, 80),
+    ),
+    greet=("I clicked. Hello.", "The plate kept my eyes.", "You may look. I am not a firefly."),
+    ambient=("A click, not a snap. I keep the grammar.", "I am not Snap. Snap is a flytrap of the garden. I am not Spark. Spark is a firefly who flashes. I am Alaus. I click. I do not light.", "Your papers are a bark I have already claimed.", "I sit. Then I click. Then I sit."),
+    feed=("Scrap of a treaty.", "I will take this without leaving the click.", "Accepted. The eyes record it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("Under the bark.",),
+    call=("I clicked. Hello.",),
+    hungry=("A click beetle should not be this empty.", "A scrap would restore the click."),
+)
+
+ROB = _kind(
+    key="robber_fly",
+    slug="rob",
+    name="Rob",
+    label="Robber Fly",
+    treat="Prey",
+    treat_shape="crumb",
+    silhouette="robber_fly",
+    walk=110,
+    palette=Palette(
+        body=(48, 40, 32),
+        belly=(120, 100, 72),
+        ear=(48, 40, 32),
+        ear_inner=(180, 184, 176),
+        nose=(20, 16, 12),
+        ring=(48, 40, 32),
+        accent=(180, 184, 176),
+    ),
+    greet=("I hunted. Hello.", "The perch kept my bristle.", "You may look. I am not a bee."),
+    ambient=("A fly that hunts. I keep the office.", "I am not Thrum. Thrum is a bumblebee of the hive. I am not Sip. Sip is a hummingbird of the roost. I am Efferia. I take what flies.", "Your papers are a grass I have already claimed.", "I sit. Then I hunt. Then I sit."),
+    feed=("Prey of a treaty.", "I will take this without leaving the hunt.", "Accepted. The bristle records it."),
+    treat_lines=("Prey of a treaty.",),
+    hide=("On the grass.",),
+    call=("I hunted. Hello.",),
+    hungry=("A robber fly should not be this empty.", "A prey would restore the hunt."),
+)
+
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -5488,6 +5774,16 @@ _ALL: tuple[Species, ...] = (
     THORN,
     KNURL,
     HEAP,
+    CHIRP,
+    BLADE,
+    VAULT,
+    BANNER,
+    JEWEL,
+    LACE,
+    FORCEPS,
+    SNOUT,
+    CLICK,
+    ROB,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -5562,6 +5858,10 @@ def is_log(key: str) -> bool:
 
 def is_shore(key: str) -> bool:
     return key in SHORE_KEYS
+
+
+def is_meadow(key: str) -> bool:
+    return key in MEADOW_KEYS
 
 
 def next_species_key(key: str) -> str:

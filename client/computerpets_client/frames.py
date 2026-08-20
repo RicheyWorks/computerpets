@@ -361,6 +361,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         _draw_shore(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in (
+        "field_cricket",
+        "katydid",
+        "grasshopper",
+        "swallowtail",
+        "jewelwing",
+        "lacewing",
+        "earwig",
+        "acorn_weevil",
+        "click_beetle",
+        "robber_fly",
+    ):
+        _draw_meadow(p, species, anim, i, sit, eat, sleep)
+        return
+    if species.silhouette in (
         "paramecium",
         "amoeba",
         "euglena",
@@ -3818,5 +3832,252 @@ def _draw_shore(
         p.drawEllipse(QRectF(6, 14, 16, 8))
     hx, hy = pts[0]
     _draw_face(p, hx - 2, hy, nose, sleep, anim, i, False)
+
+
+def _draw_meadow(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    nose = _color(pal.nose)
+    ear = _color(pal.ear)
+    wave = math.sin(i * 1.15)
+    sil = species.silhouette
+
+    if sil == "field_cricket":
+        lift = 4 if anim in ("talk", "play") else 0
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-16, -6, 28, 16))
+        p.drawEllipse(QRectF(6, -8, 14, 12))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        wing = QPainterPath()
+        wing.moveTo(-2, -2 - lift)
+        wing.lineTo(-18, -14 - lift)
+        wing.lineTo(0, 4)
+        wing.closeSubpath()
+        p.setBrush(QBrush(accent))
+        p.setPen(QPen(ring, 0.8))
+        p.drawPath(wing)
+        p.setPen(QPen(ear, 1.2))
+        p.drawLine(QPointF(-12, 6), QPointF(-24, 14))
+        p.drawLine(QPointF(8, 6), QPointF(16, 14))
+        p.drawLine(QPointF(-16, 2), QPointF(-28, 0))
+        _draw_face(p, 12, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "katydid":
+        leaf = QPainterPath()
+        leaf.moveTo(-4, -2)
+        leaf.lineTo(-26, -16)
+        leaf.lineTo(-20, 10)
+        leaf.lineTo(0, 6)
+        leaf.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawPath(leaf)
+        leaf2 = QPainterPath()
+        leaf2.moveTo(4, -2)
+        leaf2.lineTo(26, -14)
+        leaf2.lineTo(20, 10)
+        leaf2.lineTo(2, 6)
+        leaf2.closeSubpath()
+        p.drawPath(leaf2)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -2, 18, 12))
+        _draw_face(p, 10, 0, nose, sleep, anim, i, False)
+        return
+
+    if sil == "grasshopper":
+        hop = -10 if anim in ("walk", "play") else 0
+        p.translate(0, hop)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-12, -6, 26, 14))
+        p.drawEllipse(QRectF(8, -8, 14, 10))
+        p.setPen(QPen(ring, 2.0))
+        p.drawLine(QPointF(-8, 2), QPointF(-4, -16))
+        p.drawLine(QPointF(-4, -16), QPointF(10, 8))
+        p.setPen(QPen(ring, 1.2))
+        p.drawLine(QPointF(-10, 0), QPointF(8, 0))
+        _draw_face(p, 14, -2, nose, sleep, anim, i, False)
+        return
+
+    if sil == "swallowtail":
+        hover = -4 if anim in ("walk", "play", "idle") else 0
+        p.translate(0, hover)
+        gold = QPainterPath()
+        gold.moveTo(-2, 0)
+        gold.lineTo(-28, -8)
+        gold.lineTo(-24, 16)
+        gold.lineTo(0, 4)
+        gold.closeSubpath()
+        p.setBrush(QBrush(belly))
+        p.setPen(QPen(body, 1.0))
+        p.drawPath(gold)
+        gold2 = QPainterPath()
+        gold2.moveTo(2, 0)
+        gold2.lineTo(28, -8)
+        gold2.lineTo(24, 16)
+        gold2.lineTo(0, 4)
+        gold2.closeSubpath()
+        p.drawPath(gold2)
+        p.setPen(QPen(body, 2.2))
+        p.drawLine(QPointF(-16, 2), QPointF(-8, 2))
+        p.drawLine(QPointF(8, 2), QPointF(16, 2))
+        tail = QPainterPath()
+        tail.moveTo(-22, 14)
+        tail.lineTo(-28, 26)
+        tail.lineTo(-18, 16)
+        tail.closeSubpath()
+        p.setBrush(QBrush(belly))
+        p.drawPath(tail)
+        tail2 = QPainterPath()
+        tail2.moveTo(22, 14)
+        tail2.lineTo(28, 26)
+        tail2.lineTo(18, 16)
+        tail2.closeSubpath()
+        p.drawPath(tail2)
+        p.setBrush(QBrush(body))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-4, -6, 8, 16))
+        _draw_face(p, 0, -8, nose, sleep, anim, i, False)
+        return
+
+    if sil == "jewelwing":
+        hover = -3 if anim in ("walk", "play", "idle") else 0
+        p.translate(0, hover)
+        p.setBrush(QBrush(accent))
+        p.setPen(QPen(ring, 0.8))
+        wing = QPainterPath()
+        wing.moveTo(-2, 0)
+        wing.lineTo(-28, -4)
+        wing.lineTo(-26, 10)
+        wing.lineTo(0, 4)
+        wing.closeSubpath()
+        p.drawPath(wing)
+        wing2 = QPainterPath()
+        wing2.moveTo(2, 0)
+        wing2.lineTo(28, -4)
+        wing2.lineTo(26, 10)
+        wing2.lineTo(0, 4)
+        wing2.closeSubpath()
+        p.drawPath(wing2)
+        p.setBrush(QBrush(body))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-4, -12, 8, 26))
+        _draw_face(p, 0, -12, nose, sleep, anim, i, False)
+        return
+
+    if sil == "lacewing":
+        hover = -3 if anim in ("walk", "play", "idle") else 0
+        p.translate(0, hover)
+        p.setBrush(QBrush(belly))
+        p.setPen(QPen(body, 0.7))
+        lace = QPainterPath()
+        lace.moveTo(-2, 0)
+        lace.lineTo(-24, -10)
+        lace.lineTo(-20, 14)
+        lace.lineTo(0, 4)
+        lace.closeSubpath()
+        p.drawPath(lace)
+        lace2 = QPainterPath()
+        lace2.moveTo(2, 0)
+        lace2.lineTo(24, -10)
+        lace2.lineTo(20, 14)
+        lace2.lineTo(0, 4)
+        lace2.closeSubpath()
+        p.drawPath(lace2)
+        p.setBrush(QBrush(body))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-4, -8, 8, 18))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-8, -12, 5, 5))
+        p.drawEllipse(QRectF(3, -12, 5, 5))
+        _draw_face(p, 0, -6, nose, sleep, anim, i, False)
+        return
+
+    if sil == "earwig":
+        lift = 8 if anim in ("talk", "play") else 4
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-8, -12, 16, 26))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-5, -4, 10, 14))
+        p.setPen(QPen(ring, 2.2))
+        p.drawLine(QPointF(-4, 12), QPointF(-10, 12 + lift))
+        p.drawLine(QPointF(4, 12), QPointF(10, 12 + lift))
+        p.drawLine(QPointF(-10, 12 + lift), QPointF(-6, 18 + lift))
+        p.drawLine(QPointF(10, 12 + lift), QPointF(6, 18 + lift))
+        _draw_face(p, 0, -10, nose, sleep, anim, i, False)
+        return
+
+    if sil == "acorn_weevil":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-10, -6, 20, 16))
+        p.setPen(QPen(ring, 2.4))
+        p.drawLine(QPointF(8, 0), QPointF(26, -4))
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(24, -6, 6, 5))
+        _draw_face(p, 4, 0, nose, sleep, anim, i, False)
+        return
+
+    if sil == "click_beetle":
+        flip = -8 if anim in ("play", "walk") else 0
+        p.translate(0, flip)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-12, -14, 24, 30))
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-10, -8, 8, 8))
+        p.drawEllipse(QRectF(2, -8, 8, 8))
+        p.setBrush(QBrush(_color(pal.accent)))
+        p.drawEllipse(QRectF(-8, -6, 3, 3))
+        p.drawEllipse(QRectF(5, -6, 3, 3))
+        _draw_face(p, 0, -14, nose, sleep, anim, i, False)
+        return
+
+    # robber fly
+    hover = -4 if anim in ("walk", "play") else 0
+    p.translate(0, hover)
+    p.setBrush(QBrush(belly))
+    p.setPen(QPen(body, 0.7))
+    wing = QPainterPath()
+    wing.moveTo(-4, 0)
+    wing.lineTo(-22, -6)
+    wing.lineTo(-16, 10)
+    wing.lineTo(0, 2)
+    wing.closeSubpath()
+    p.drawPath(wing)
+    wing2 = QPainterPath()
+    wing2.moveTo(4, 0)
+    wing2.lineTo(22, -6)
+    wing2.lineTo(16, 10)
+    wing2.lineTo(0, 2)
+    wing2.closeSubpath()
+    p.drawPath(wing2)
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 0.8))
+    p.drawEllipse(QRectF(-8, -8, 16, 22))
+    p.drawEllipse(QRectF(-8, -16, 16, 10))
+    p.setPen(QPen(ear, 1.4))
+    p.drawLine(QPointF(-6, -10), QPointF(-14, -18))
+    p.drawLine(QPointF(6, -10), QPointF(14, -18))
+    _draw_face(p, 0, -12, nose, sleep, anim, i, False)
 
 

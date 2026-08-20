@@ -216,6 +216,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   sea_urchin: T(22, 2, 0.64, 0.1, { aquatic: true }, "thorn", "Spine", "I sat the spines. Hello."),
   knobbed_whelk: T(20, 2, 0.72, 0.08, {}, "knurl", "Hunt", "I hunted. Hello."),
   lugworm: T(14, 0, 0.6, 0.06, { nocturnal: true }, "heap", "Heap", "I heaped. Hello."),
+  field_cricket: T(48, 8, 0.52, 0.22, { nocturnal: true }, "chirp", "Chirp", "I sang. Hello."),
+  katydid: T(22, 4, 0.72, 0.08, { nocturnal: true, perch: true }, "blade", "Still", "I sat the leaf. Hello."),
+  grasshopper: T(96, 32, 0.68, 0.42, {}, "vault", "Vault", "I vaulted. Hello."),
+  swallowtail: T(92, 16, 0.84, 0.4, { perch: true }, "banner", "Banner", "I kept the yellow. Hello."),
+  jewelwing: T(88, 14, 0.7, 0.38, {}, "jewel", "Jewel", "I kept the black. Hello."),
+  lacewing: T(76, 12, 0.5, 0.3, { nocturnal: true }, "lace", "Lace", "I laced. Hello."),
+  earwig: T(42, 4, 0.48, 0.18, { nocturnal: true }, "forceps", "Forceps", "I raised the cerci. Hello."),
+  acorn_weevil: T(18, 2, 0.46, 0.08, {}, "snout", "Snout", "I sat the acorn. Hello."),
+  click_beetle: T(64, 20, 0.62, 0.28, { nocturnal: true }, "click", "Click", "I clicked. Hello."),
+  robber_fly: T(110, 12, 0.78, 0.48, {}, "rob", "Rob", "I hunted. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

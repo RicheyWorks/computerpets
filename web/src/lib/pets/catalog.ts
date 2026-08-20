@@ -191,6 +191,16 @@ export const SPECIES: Species[] = [
   { key: "sea_urchin", displayName: "Purple Sea Urchin", rarity: "UNCOMMON", temperament: "Spined", habitat: "Tide pool", blurb: "Spines. Not Burr. Not Spine. Not Token." },
   { key: "knobbed_whelk", displayName: "Knobbed Whelk", rarity: "UNCOMMON", temperament: "Hunting", habitat: "Wrack dish", blurb: "A predator snail. The knobs are the tell. Not Spire. Not Horn." },
   { key: "lugworm", displayName: "Lugworm", rarity: "COMMON", temperament: "Heaping", habitat: "Wet sand", blurb: "A worm of the castings. Not Cast. Not Latch." },
+  { key: "field_cricket", displayName: "Fall Field Cricket", rarity: "COMMON", temperament: "Singing", habitat: "Grass dish", blurb: "The song is the tell. Not Brood. A cricket is not a cicada." },
+  { key: "katydid", displayName: "Northern True Katydid", rarity: "UNCOMMON", temperament: "Leafed", habitat: "Leaf rim", blurb: "She is not a grasshopper. The wings are leaves. Not Vault." },
+  { key: "grasshopper", displayName: "Differential Grasshopper", rarity: "COMMON", temperament: "Vaulting", habitat: "Grass plate", blurb: "A jump of the grass. Not Leap. Not Hop. Not Blade." },
+  { key: "swallowtail", displayName: "Eastern Tiger Swallowtail", rarity: "UNCOMMON", temperament: "Banded", habitat: "Blossom dish", blurb: "Yellow bands. Not Milk. Not Ghost. A swallowtail is not a monarch." },
+  { key: "jewelwing", displayName: "Ebony Jewelwing", rarity: "UNCOMMON", temperament: "Jeweled", habitat: "Stream rim", blurb: "A damselfly. Black wings. Not Dart. A damselfly is not a darner." },
+  { key: "lacewing", displayName: "Green Lacewing", rarity: "COMMON", temperament: "Laced", habitat: "Leaf dish", blurb: "Not a moth. The larva is the lion. Not Ghost." },
+  { key: "earwig", displayName: "European Earwig", rarity: "COMMON", temperament: "Cerci", habitat: "Bark dish", blurb: "Cerci, not a sting. Not Fold. An earwig is not a beetle with a sting." },
+  { key: "acorn_weevil", displayName: "Acorn Weevil", rarity: "UNCOMMON", temperament: "Drilling", habitat: "Acorn cup", blurb: "A drill of an acorn. Not Auger. Not Mast. A weevil is not a bee." },
+  { key: "click_beetle", displayName: "Eyed Click Beetle", rarity: "UNCOMMON", temperament: "Clicking", habitat: "Bark plate", blurb: "A click, not a snap. Not Snap. Not Spark. A click beetle is not a firefly." },
+  { key: "robber_fly", displayName: "Robber Fly", rarity: "UNCOMMON", temperament: "Hunting", habitat: "Grass perch", blurb: "A fly that hunts. Not a bee. Not Thrum. Not Sip." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

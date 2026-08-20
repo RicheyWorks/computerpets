@@ -227,14 +227,14 @@ test("the hive den is a living comb, not only ten sprites", () => {
   assert.doesNotMatch(pageSrc, /\/pond/);
 });
 
-test("other dens stay; catalog is one hundred eighty; Comb stays Comb", () => {
+test("other dens stay; catalog is one hundred ninety; Comb stays Comb", () => {
   assert.match(gardenSrc, /LivingBlotter/);
   assert.match(cellarSrc, /LivingBlotter/);
   assert.match(farSrc, /LivingBlotter/);
   assert.match(seaSrc, /LivingBlotter/);
   assert.doesNotMatch(gardenSrc, /combSeats/);
   assert.doesNotMatch(cellarSrc, /combSeats/);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 180);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 190);
   assert.match(insectSrc, /slug:\s*"comb"/);
   assert.match(beeSrc, /slug:\s*"wax"/);
   assert.doesNotMatch(beeSrc, /key:\s*"honeybee"/);

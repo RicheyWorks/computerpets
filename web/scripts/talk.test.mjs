@@ -131,7 +131,7 @@ test("adult Luna still does not eat; sanctuary and desk time stay", () => {
   };
   assert.equal(C.adultLuna("luna", adult, now), true);
   assert.equal(C.applyFeedFor("luna", adult, now).hunger, 40);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 180);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 190);
   assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(hatchSrc, /persistLocal=\{false\}/);
   assert.match(nestSrc, /persistLocal=\{false\}/);

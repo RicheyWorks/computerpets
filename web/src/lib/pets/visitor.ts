@@ -187,6 +187,16 @@ const LINES: Record<string, string> = {
   sea_urchin: "I sat the spines. Then I left the pool.",
   knobbed_whelk: "I hunted. Then I left the wrack.",
   lugworm: "I heaped. Then I left the sand.",
+  field_cricket: "I sang. Then I left the grass.",
+  katydid: "I sat the leaf. Then I left the rim.",
+  grasshopper: "I vaulted. Then I left the grass.",
+  swallowtail: "I kept the yellow. Then I left the blossom.",
+  jewelwing: "I kept the black. Then I left the stream.",
+  lacewing: "I laced. Then I left the leaf.",
+  earwig: "I raised the cerci. Then I left the bark.",
+  acorn_weevil: "I sat the acorn. Then I left the cup.",
+  click_beetle: "I clicked. Then I left the bark.",
+  robber_fly: "I hunted. Then I left the perch.",
 };
 
 export function visitLine(guestKey: string) {
