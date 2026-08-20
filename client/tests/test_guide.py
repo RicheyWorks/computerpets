@@ -26,6 +26,9 @@ from computerpets_client.guide import (
     far_guide_keys,
     pond_guide_complete,
     pond_guide_keys,
+    WELL_GUIDE,
+    well_guide_complete,
+    well_guide_keys,
     fungi_guide_complete,
     fungi_guide_keys,
     garden_guide_complete,
@@ -42,7 +45,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -84,7 +87,7 @@ SEA_EXPECTED = [
     ("octopus", "cup", "Octopus vulgaris"),
     ("cuttlefish", "sepia", "Sepia officinalis"),
     ("nautilus", "chamber", "Nautilus pompilius"),
-    ("moon_jelly", "bell", "Aurelia aurita"),
+    ("moon_jelly", "pulse", "Aurelia aurita"),
     ("sea_star", "ochre", "Pisaster ochraceus"),
     ("hermit_crab", "tenant", "Pagurus bernhardus"),
     ("horseshoe_crab", "ledger", "Limulus polyphemus"),
@@ -171,6 +174,19 @@ POND_EXPECTED = [
     ("stickleback", "prickle", "Gasterosteus aculeatus"),
 ]
 
+WELL_EXPECTED = [
+    ("paramecium", "boot", "Paramecium caudatum"),
+    ("amoeba", "reach", "Amoeba proteus"),
+    ("euglena", "spot", "Euglena gracilis"),
+    ("volvox", "orb", "Volvox aureus"),
+    ("diatom", "pane", "Navicula"),
+    ("kelp", "hold", "Macrocystis pyrifera"),
+    ("chlamydomonas", "spin", "Chlamydomonas reinhardtii"),
+    ("stentor", "bell", "Stentor coeruleus"),
+    ("coli", "rod", "Escherichia coli"),
+    ("haloarchaea", "rose", "Halobacterium salinarum"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -189,6 +205,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert fungi_guide_complete()
     assert far_guide_complete()
     assert pond_guide_complete()
+    assert well_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -198,6 +215,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert fungi_guide_keys() == FUNGI_KEYS
     assert far_guide_keys() == FAR_KEYS
     assert pond_guide_keys() == POND_KEYS
+    assert well_guide_keys() == WELL_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -206,6 +224,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert len(INSECT_GUIDE) == 10
     assert len(BEE_GUIDE) == 10
     assert len(FUNGI_GUIDE) == 10
+    assert len(WELL_GUIDE) == 10
     for key in CATALOG_KEYS:
         guide = plaque_for(key)
         assert guide is not None, key
@@ -282,6 +301,16 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     for key in POND_KEYS:
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "pond"
+        assert classroom_for(key).verb == "stay"
+    for key, slug, latin in WELL_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in WELL_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "well"
         assert classroom_for(key).verb == "stay"
 
 
@@ -467,7 +496,7 @@ def test_the_important_far_mixups_are_actually_taught():
     assert re.search(r"not a whale", choir, re.I)
     assert re.search(r"air is the water", drift, re.I)
     assert re.search(r"not a jellyfish", drift, re.I)
-    assert re.search(r"Bell", drift)
+    assert re.search(r"Pulse", drift)
     assert re.search(r"mineral", shard, re.I)
     assert re.search(r"not quartz", shard, re.I)
     assert re.search(r"not a plant", shard, re.I)
@@ -524,6 +553,42 @@ def test_the_important_pond_mixups_are_actually_taught():
     assert re.search(r"Coin", stickleback)
 
 
+def test_the_important_well_mixups_are_actually_taught():
+    paramecium = _taught(plaque_for("paramecium"))
+    amoeba = _taught(plaque_for("amoeba"))
+    euglena = _taught(plaque_for("euglena"))
+    volvox = _taught(plaque_for("volvox"))
+    diatom = _taught(plaque_for("diatom"))
+    kelp = _taught(plaque_for("kelp"))
+    chlamydomonas = _taught(plaque_for("chlamydomonas"))
+    stentor = _taught(plaque_for("stentor"))
+    coli = _taught(plaque_for("coli"))
+    haloarchaea = _taught(plaque_for("haloarchaea"))
+    assert re.search(r"not an animal", paramecium, re.I)
+    assert re.search(r"Reed", paramecium)
+    assert re.search(r"not a blob", amoeba, re.I)
+    assert re.search(r"not a plant", euglena, re.I)
+    assert re.search(r"Felt", euglena)
+    assert re.search(r"not one creature", volvox, re.I)
+    assert re.search(r"Pact", volvox)
+    assert re.search(r"not Gleam", diatom, re.I)
+    assert re.search(r"far den", diatom, re.I)
+    assert re.search(r"not Felt", kelp, re.I)
+    assert re.search(r"not a garden plant", kelp, re.I)
+    assert re.search(r"not a land plant", chlamydomonas, re.I)
+    assert re.search(r"Mast", chlamydomonas)
+    assert re.search(r"not a worm", stentor, re.I)
+    assert re.search(r"Slip", stentor)
+    assert re.search(r"Latch", stentor)
+    assert re.search(r"not a fungus", coli, re.I)
+    assert re.search(r"Starter", coli)
+    assert re.search(r"not a bacterium", haloarchaea, re.I)
+    assert re.search(r"Brine", haloarchaea)
+    assert plaque_for("moon_jelly").name == "Pulse"
+    assert plaque_for("moon_jelly").slug == "pulse"
+    assert plaque_for("stentor").name == "Bell"
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -539,6 +604,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     bee_src = (WEB_PETS / "bee-guide.ts").read_text(encoding="utf-8")
     fungi_src = (WEB_PETS / "fungi-guide.ts").read_text(encoding="utf-8")
     pond_src = (WEB_PETS / "pond-guide.ts").read_text(encoding="utf-8")
+    well_src = (WEB_PETS / "well-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -547,6 +613,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     bee_keys = [key for key, _, _ in BEE_EXPECTED]
     fungi_keys = [key for key, _, _ in FUNGI_EXPECTED]
     pond_keys = [key for key, _, _ in POND_EXPECTED]
+    well_keys = [key for key, _, _ in WELL_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -611,6 +678,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
         assert guide.tell in chunk
         assert guide.mixup in chunk
         assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(WELL_EXPECTED):
+        nxt = well_keys[index + 1] if index + 1 < len(well_keys) else None
+        chunk = _slice_entry(well_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
 
 
 def test_plaque_widget_teaches_the_selected_species():
@@ -649,6 +724,10 @@ def test_plaque_widget_teaches_the_selected_species():
     card.set_key("frog")
     assert card.guide().key == "frog"
     assert "not a toad" in card.mixup.text().lower()
+    assert "stay" in card.classroom.text().lower()
+    card.set_key("paramecium")
+    assert card.guide().key == "paramecium"
+    assert "not an animal" in card.mixup.text().lower()
     assert "stay" in card.classroom.text().lower()
     del app
 

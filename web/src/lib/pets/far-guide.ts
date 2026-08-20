@@ -50,7 +50,7 @@ export const FAR_GUIDE: FarGuide[] = [
     "nimbus",
     "Nimbus methanei",
     "A cold-gas sack from a methane sea, trailing streamers of weather, not tentacles. Methane floater. She hovers. The bowl is a sea she agreed to breathe.",
-    "Not a jellyfish. Bell is Aurelia, a moon jelly of Earth; Drift is Nimbus methanei, and the air is the water. A sack of cold. Not a bell.",
+    "Not a jellyfish. Pulse is Aurelia, a moon jelly of Earth; Drift is Nimbus methanei, and the air is the water. A sack of cold. Not a bell.",
     "Methane floater. The air is the water.",
   ),
   entry(

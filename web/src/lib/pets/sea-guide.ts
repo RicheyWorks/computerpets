@@ -57,7 +57,7 @@ export const SEA_GUIDE: SeaGuide[] = [
     "moon_jelly",
     "Aurelia aurita",
     "A saucer of a bell, four horseshoe moons in the jelly, a fringe of short tentacles. She pulses. She drifts. There is no brain to argue with. Not a fish. The water is the rest of her.",
-    "Not a fish — no bones, no face that plans. Not a Portuguese man o' war, which is a colony and a rumor. Bell is Aurelia, the moon one, and the four moons in the bell are the whole identification.",
+    "Not a fish — no bones, no face that plans. Not a Portuguese man o' war, which is a colony and a rumor. Pulse is Aurelia, the moon one, and the four moons in the bell are the whole identification.",
     "Moon jelly. I pulse. I am not a fish.",
   ),
   entry(

@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred, painted here.
+the others walk. This is not a new bestiary — it is the same hundred ten, painted here.
 """
 
 from __future__ import annotations
@@ -138,7 +138,20 @@ POND_KEYS: tuple[str, ...] = (
     "stickleback",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS
+WELL_KEYS: tuple[str, ...] = (
+    "paramecium",
+    "amoeba",
+    "euglena",
+    "volvox",
+    "diatom",
+    "kelp",
+    "chlamydomonas",
+    "stentor",
+    "coli",
+    "haloarchaea",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS
 
 
 @dataclass(frozen=True)
@@ -1139,10 +1152,10 @@ CHAMBER = _kind(
     hungry=("A relic should not be hollow in the wrong way.", "A morsel would restore the rise."),
 )
 
-BELL = _kind(
+PULSE = _kind(
     key="moon_jelly",
-    slug="bell",
-    name="Bell",
+    slug="pulse",
+    name="Pulse",
     label="Moon Jelly",
     treat="Plankton",
     treat_shape="flake",
@@ -2528,7 +2541,7 @@ DRIFT = _kind(
         accent=(72, 96, 108),
     ),
     greet=("I floated. That was hello.", "The bowl kept my cold.", "You may look. I am not a bell."),
-    ambient=("The air is the water. I keep that office.", "I am not a jellyfish. Bell is Aurelia. I am gas.", "I hover. Then I am a nimbus again."),
+    ambient=("The air is the water. I keep that office.", "I am not a jellyfish. Pulse is Aurelia. I am gas.", "I hover. Then I am a nimbus again."),
     feed=("Gas of a treaty.", "I will take this without leaving the bowl.", "Accepted. The cold records it."),
     treat_lines=("Gas of a treaty.",),
     hide=("Inside the bowl.",),
@@ -3002,6 +3015,283 @@ PRICKLE = _kind(
     hungry=("A stickleback should not be this empty.", "A flake would restore the flare."),
 )
 
+BOOT = _kind(
+    key="paramecium",
+    slug="boot",
+    name="Boot",
+    label="Slipper Paramecium",
+    treat="Bacteria",
+    treat_shape="flake",
+    silhouette="paramecium",
+    walk=48,
+    aquatic=True,
+    palette=Palette(
+        body=(168, 156, 132),
+        belly=(196, 188, 164),
+        ear=(120, 108, 88),
+        ear_inner=(212, 204, 180),
+        nose=(40, 36, 28),
+        ring=(120, 108, 88),
+        accent=(212, 204, 180),
+    ),
+    greet=("I rowed. That was hello.", "The drop kept my slipper.", "You may look. I am not an animal."),
+    ambient=("A slipper. Cilia. I keep the grammar.", "Reed is a frog. I am a cell. A paramecium is not an animal.", "I row. Then I turn. Then I row."),
+    feed=("Bacteria of a treaty.", "I will take this without leaving the drop.", "Accepted. The cilia record it."),
+    treat_lines=("Bacteria of a treaty.",),
+    hide=("Inside the drop.",),
+    call=("I rowed. That was hello.",),
+    hungry=("A paramecium should not be this empty.", "A bacterium would restore the row."),
+)
+
+REACH = _kind(
+    key="amoeba",
+    slug="reach",
+    name="Reach",
+    label="Proteus Amoeba",
+    treat="Prey",
+    treat_shape="crumb",
+    silhouette="amoeba",
+    walk=16,
+    aquatic=True,
+    palette=Palette(
+        body=(140, 148, 156),
+        belly=(196, 204, 208),
+        ear=(72, 80, 88),
+        ear_inner=(196, 204, 208),
+        nose=(72, 80, 88),
+        ring=(72, 80, 88),
+        accent=(72, 80, 88),
+    ),
+    greet=("I reached. Hello.", "The film kept my foot.", "You may look. The foot is the office."),
+    ambient=("A blob is a slander. I have an office. I put a foot there.", "I am not Reed. I am not a cell without a plan.", "I reach. Then I am that reach."),
+    feed=("Prey of a treaty.", "I will take this by surrounding it.", "Accepted. The foot records it."),
+    treat_lines=("Prey of a treaty.",),
+    hide=("Inside the film.",),
+    call=("I reached. Hello.",),
+    hungry=("An amoeba should not be this empty.", "A prey would restore the reach."),
+)
+
+SPOT = _kind(
+    key="euglena",
+    slug="spot",
+    name="Spot",
+    label="Euglena",
+    treat="Light",
+    treat_shape="flake",
+    silhouette="euglena",
+    walk=40,
+    aquatic=True,
+    palette=Palette(
+        body=(72, 140, 64),
+        belly=(168, 196, 120),
+        ear=(188, 48, 40),
+        ear_inner=(168, 196, 120),
+        nose=(28, 40, 24),
+        ring=(188, 48, 40),
+        accent=(188, 48, 40),
+    ),
+    greet=("I kept the red. Hello.", "The drop kept my spot.", "You may look. I am not a plant."),
+    ambient=("An eyespot. I drink light. I also eat. That is the office.", "Felt is moss. I am a flagellate. A euglena is not a plant.", "I swim. Then I drink. Then I swim."),
+    feed=("Light of a treaty.", "I will take this and also the bite.", "Accepted. The spot records it."),
+    treat_lines=("Light of a treaty.",),
+    hide=("Inside the red.",),
+    call=("I kept the red. Hello.",),
+    hungry=("A euglena should not be this dim.", "A lamp would restore the drink."),
+)
+
+ORB = _kind(
+    key="volvox",
+    slug="orb",
+    name="Orb",
+    label="Golden Volvox",
+    treat="Light",
+    treat_shape="flake",
+    silhouette="volvox",
+    walk=22,
+    aquatic=True,
+    palette=Palette(
+        body=(56, 120, 72),
+        belly=(196, 220, 140),
+        ear=(32, 64, 40),
+        ear_inner=(120, 176, 88),
+        nose=(32, 64, 40),
+        ring=(120, 176, 88),
+        accent=(196, 220, 140),
+    ),
+    greet=("We rolled. Hello.", "The bowl kept our sphere.", "You may look. We are not one."),
+    ambient=("A colony. Daughter rooms. We keep the grammar.", "Pact is fungus and a partner. We are many algae who agreed to be a ball.", "We roll. Then we are daughters again."),
+    feed=("Light of a treaty.", "We will take this without leaving the bowl.", "Accepted. The sphere records it."),
+    treat_lines=("Light of a treaty.",),
+    hide=("Inside the sphere.",),
+    call=("We rolled. Hello.",),
+    hungry=("A colony should not be this dim.", "A lamp would restore the roll."),
+)
+
+PANE = _kind(
+    key="diatom",
+    slug="pane",
+    name="Pane",
+    label="Navicula",
+    treat="Silica",
+    treat_shape="pebble",
+    silhouette="diatom",
+    walk=8,
+    aquatic=True,
+    palette=Palette(
+        body=(180, 188, 176),
+        belly=(212, 216, 208),
+        ear=(88, 100, 96),
+        ear_inner=(212, 216, 208),
+        nose=(48, 56, 52),
+        ring=(88, 100, 96),
+        accent=(48, 56, 52),
+    ),
+    greet=("I grew the pane. Hello.", "The dish kept my glass.", "You may look. I built this house."),
+    ambient=("A boat of silica. I grew the rooms.", "Gleam drinks lamp-light and has no mouth. Shard is far-den crystal. I am a diatom of Earth.", "I sit. Then I glide. Then I sit."),
+    feed=("Silica of a treaty.", "I will take this and add a pane.", "Accepted. The house records it."),
+    treat_lines=("Silica of a treaty.",),
+    hide=("Inside the pane.",),
+    call=("I grew the pane. Hello.",),
+    hungry=("A diatom should not be this empty.", "A silica would restore the house."),
+)
+
+HOLDFAST = _kind(
+    key="kelp",
+    slug="hold",
+    name="Hold",
+    label="Giant Kelp",
+    treat="Light",
+    treat_shape="flake",
+    silhouette="kelp",
+    walk=4,
+    palette=Palette(
+        body=(88, 120, 56),
+        belly=(196, 188, 120),
+        ear=(72, 52, 28),
+        ear_inner=(120, 88, 40),
+        nose=(72, 52, 28),
+        ring=(120, 88, 40),
+        accent=(72, 52, 28),
+    ),
+    greet=("I held. Hello.", "The cold kept my blades.", "You may look. I am not a plant of land."),
+    ambient=("A holdfast. Not a root. Bladders. A forest that is brown algae.", "Felt is moss of the blotter. I am Macrocystis. A kelp is not a garden plant.", "I sway. Then I hold. Then I sway."),
+    feed=("Light of a treaty.", "I will take this without leaving the hold.", "Accepted. The blades record it."),
+    treat_lines=("Light of a treaty.",),
+    hide=("Inside the hold.",),
+    call=("I held. Hello.",),
+    hungry=("A kelp should not be this dim.", "A lamp would restore the blades."),
+)
+
+SPIN = _kind(
+    key="chlamydomonas",
+    slug="spin",
+    name="Spin",
+    label="Chlamydomonas",
+    treat="Light",
+    treat_shape="flake",
+    silhouette="chlamydomonas",
+    walk=56,
+    aquatic=True,
+    palette=Palette(
+        body=(64, 140, 72),
+        belly=(40, 96, 48),
+        ear=(48, 88, 52),
+        ear_inner=(40, 96, 48),
+        nose=(28, 40, 24),
+        ring=(48, 88, 52),
+        accent=(48, 88, 52),
+    ),
+    greet=("I spun. Hello.", "The plate kept my two.", "You may look. I am not a land plant."),
+    ambient=("Two flagella. A cup of chloroplast. I keep the grammar.", "Mast is an oak of the garden. I am a green alga of a drop.", "I spin. Then I drink. Then I spin."),
+    feed=("Light of a treaty.", "I will take this and return to the spin.", "Accepted. The two record it."),
+    treat_lines=("Light of a treaty.",),
+    hide=("Inside the plate.",),
+    call=("I spun. Hello.",),
+    hungry=("A chlamydomonas should not be this dim.", "A lamp would restore the spin."),
+)
+
+TRUMPET = _kind(
+    key="stentor",
+    slug="bell",
+    name="Bell",
+    label="Blue Stentor",
+    treat="Bacteria",
+    treat_shape="flake",
+    silhouette="stentor",
+    walk=12,
+    aquatic=True,
+    palette=Palette(
+        body=(56, 92, 120),
+        belly=(120, 168, 180),
+        ear=(40, 64, 80),
+        ear_inner=(196, 220, 224),
+        nose=(40, 64, 80),
+        ring=(120, 168, 180),
+        accent=(196, 220, 224),
+    ),
+    greet=("I opened. Hello.", "The rim kept my horn.", "You may look. I am not a worm."),
+    ambient=("A trumpet. Blue-green. I contract to a dot.", "Slip is a caecilian. Latch is a leech. I am a ciliate who sits as a horn.", "I open. Then I contract. Then I open."),
+    feed=("Bacteria of a treaty.", "I will take this at the mouth of the horn.", "Accepted. The trumpet records it."),
+    treat_lines=("Bacteria of a treaty.",),
+    hide=("Inside the horn.",),
+    call=("I opened. Hello.",),
+    hungry=("A stentor should not be this empty.", "A bacterium would restore the horn."),
+)
+
+ROD = _kind(
+    key="coli",
+    slug="rod",
+    name="Rod",
+    label="Escherichia coli",
+    treat="Broth",
+    treat_shape="crumb",
+    silhouette="coli",
+    walk=90,
+    palette=Palette(
+        body=(156, 164, 120),
+        belly=(196, 200, 168),
+        ear=(120, 128, 88),
+        ear_inner=(196, 200, 168),
+        nose=(40, 44, 32),
+        ring=(120, 128, 88),
+        accent=(196, 200, 168),
+    ),
+    greet=("I tumbled. Hello.", "The cup kept my rod.", "You may look. I am not a fungus."),
+    ambient=("A rod. Flagella. A bacterium of the plate.", "Starter is yeast. I am Escherichia. A bacterium is not a fungus.", "I run. Then I tumble. Then I run."),
+    feed=("Broth of a treaty.", "I will take this and divide.", "Accepted. The rod records it."),
+    treat_lines=("Broth of a treaty.",),
+    hide=("Inside the cup.",),
+    call=("I tumbled. Hello.",),
+    hungry=("A bacterium should not be this empty.", "A broth would restore the run."),
+)
+
+ROSE = _kind(
+    key="haloarchaea",
+    slug="rose",
+    name="Rose",
+    label="Halobacterium",
+    treat="Salt",
+    treat_shape="flake",
+    silhouette="haloarchaea",
+    walk=28,
+    palette=Palette(
+        body=(188, 72, 88),
+        belly=(232, 180, 188),
+        ear=(88, 32, 40),
+        ear_inner=(232, 180, 188),
+        nose=(88, 32, 40),
+        ring=(88, 32, 40),
+        accent=(232, 180, 188),
+    ),
+    greet=("I blushed. Hello.", "The pan kept my pink.", "You may look. I am not a bacterium."),
+    ambient=("Pink salt. Bacteriorhodopsin. An archaeon of Earth.", "Rod is a bacterium. Brine drinks salt from far. I am Halobacterium. An archaeon is not a bacterium.", "I sit. Then I blush. Then I sit."),
+    feed=("Salt of a treaty.", "I will take this and keep the pink.", "Accepted. The blush records it."),
+    treat_lines=("Salt of a treaty.",),
+    hide=("Inside the pan.",),
+    call=("I blushed. Hello.",),
+    hungry=("An archaeon should not be this pale.", "A salt would restore the blush."),
+)
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -3036,7 +3326,7 @@ _ALL: tuple[Species, ...] = (
     CUP,
     SEPIA,
     CHAMBER,
-    BELL,
+    PULSE,
     OCHRE,
     TENANT,
     LEDGER,
@@ -3103,6 +3393,16 @@ _ALL: tuple[Species, ...] = (
     HINGE,
     LATCH,
     PRICKLE,
+    BOOT,
+    REACH,
+    SPOT,
+    ORB,
+    PANE,
+    HOLDFAST,
+    SPIN,
+    TRUMPET,
+    ROD,
+    ROSE,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -3145,6 +3445,10 @@ def is_far(key: str) -> bool:
 
 def is_pond(key: str) -> bool:
     return key in POND_KEYS
+
+
+def is_well(key: str) -> bool:
+    return key in WELL_KEYS
 
 
 def next_species_key(key: str) -> str:

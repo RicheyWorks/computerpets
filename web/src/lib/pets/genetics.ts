@@ -122,7 +122,7 @@ export const GUILD_EXTRA: Record<string, LocusDef> = {
   far: GLOW,
 };
 
-export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "cellar" | "far";
+export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "cellar" | "well" | "far";
 
 const GARDEN = new Set([
   "moss",
@@ -206,6 +206,18 @@ const POND = new Set([
   "leech",
   "stickleback",
 ]);
+const WELL = new Set([
+  "paramecium",
+  "amoeba",
+  "euglena",
+  "volvox",
+  "diatom",
+  "kelp",
+  "chlamydomonas",
+  "stentor",
+  "coli",
+  "haloarchaea",
+]);
 const SNAKES = new Set([
   "ball_python",
   "corn_snake",
@@ -227,6 +239,7 @@ export function guildOf(key: string): GuildId {
   if (FUNGI.has(key)) return "cellar";
   if (FAR.has(key)) return "far";
   if (POND.has(key)) return "pond";
+  if (WELL.has(key)) return "well";
   return "house";
 }
 
@@ -235,7 +248,7 @@ export function extraLocusFor(key: string): LocusDef | null {
   if (guild === "garden") return FRUIT;
   if (guild === "cellar") return SPORE;
   if (guild === "hive") return DUST;
-  if (guild === "sea" || guild === "far" || guild === "pond") return GLOW;
+  if (guild === "sea" || guild === "far" || guild === "pond" || guild === "well") return GLOW;
   return null;
 }
 
@@ -793,6 +806,16 @@ const HOUSE_NAME: Record<string, string> = {
   mussel: "Hinge",
   leech: "Latch",
   stickleback: "Prickle",
+  paramecium: "Boot",
+  amoeba: "Reach",
+  euglena: "Spot",
+  volvox: "Orb",
+  diatom: "Pane",
+  kelp: "Hold",
+  chlamydomonas: "Spin",
+  stentor: "Bell",
+  coli: "Rod",
+  haloarchaea: "Rose",
   honeybee: "Comb",
   moss: "Felt",
   bumblebee: "Thrum",
@@ -1026,7 +1049,7 @@ export function departVerb(speciesKey: string): string {
   if (guild === "cellar") return "dried";
   if (guild === "hive") return "spent";
   if (guild === "far") return "went dark";
-  if (guild === "snakes" || guild === "sea" || guild === "pond" || WENT_STILL.has(speciesKey)) return "went still";
+  if (guild === "snakes" || guild === "sea" || guild === "pond" || guild === "well" || WENT_STILL.has(speciesKey)) return "went still";
   return "left";
 }
 

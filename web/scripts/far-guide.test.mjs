@@ -68,7 +68,7 @@ test("the important mix-ups are actually taught", () => {
   assert.match(choir, /not a whale/i);
   assert.match(drift, /air is the water/i);
   assert.match(drift, /not a jellyfish/i);
-  assert.match(drift, /Bell/);
+  assert.match(drift, /Pulse/);
   assert.match(shard, /mineral/i);
   assert.match(shard, /not quartz/i);
   assert.match(shard, /not a plant/i);

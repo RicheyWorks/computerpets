@@ -1,18 +1,18 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred ten, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the cellar keeps
-the fungus facts; the far den keeps the xenobiology facts; the twenty keep the
-study facts.
+the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
+the xenobiology facts; the twenty keep the study facts.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_pond, is_sea, is_snake
+from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_pond, is_sea, is_snake, is_well
 
 
 @dataclass(frozen=True)
@@ -371,7 +371,7 @@ SEA_GUIDE: tuple[FieldGuide, ...] = (
         "moon_jelly",
         "Aurelia aurita",
         "A saucer of a bell, four horseshoe moons in the jelly, a fringe of short tentacles. She pulses. She drifts. There is no brain to argue with. Not a fish. The water is the rest of her.",
-        "Not a fish — no bones, no face that plans. Not a Portuguese man o' war, which is a colony and a rumor. Bell is Aurelia, the moon one, and the four moons in the bell are the whole identification.",
+        "Not a fish — no bones, no face that plans. Not a Portuguese man o' war, which is a colony and a rumor. Pulse is Aurelia, the moon one, and the four moons in the bell are the whole identification.",
         "Moon jelly. I pulse. I am not a fish.",
         "glass of water",
         "vacant",
@@ -827,7 +827,7 @@ FAR_GUIDE: tuple[FieldGuide, ...] = (
         "nimbus",
         "Nimbus methanei",
         "A cold-gas sack from a methane sea, trailing streamers of weather, not tentacles. Methane floater. She hovers. The bowl is a sea she agreed to breathe.",
-        "Not a jellyfish. Bell is Aurelia, a moon jelly of Earth; Drift is Nimbus methanei, and the air is the water. A sack of cold. Not a bell.",
+        "Not a jellyfish. Pulse is Aurelia, a moon jelly of Earth; Drift is Nimbus methanei, and the air is the water. A sack of cold. Not a bell.",
         "Methane floater. The air is the water.",
         "cold bowl",
         "vacant",
@@ -990,7 +990,100 @@ POND_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE
+WELL_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "paramecium",
+        "Paramecium caudatum",
+        "A slipper of a cell, a thousand cilia for oars, a mouth that is a groove. Slipper paramecium. She rows. Then she turns. The glass is a drop she agreed to.",
+        "Not an animal. Reed is a frog of the pond; Boot is Paramecium caudatum, and the slipper is the tell. A paramecium is not an animal. One cell. Cilia. The rest of the kingdoms keeps her.",
+        "Slipper paramecium. A slipper. Cilia. Not an animal.",
+        "drop glass",
+        "busy",
+    ),
+    _entry(
+        "amoeba",
+        "Amoeba proteus",
+        "No fixed outline, a foot she puts where she means to be, a nucleus that keeps the office. Proteus amoeba. She reaches. Then she is that reach. The film is a silt she agreed to.",
+        "Not a blob with no office. The foot is the office. Reach is Amoeba proteus, and the pseudopod is the tell. She is not shapeless. She is a plan that moves.",
+        "Proteus amoeba. She reaches. Not a blob with no office.",
+        "silt film",
+        "slow",
+    ),
+    _entry(
+        "euglena",
+        "Euglena gracilis",
+        "A green spindle, a red eyespot, a flagellum, a hunger that is also a thirst for light. Euglena. She drinks the lamp. She also eats. The drop is a lamp she agreed to.",
+        "Not a plant. Felt is moss of the garden; Spot is Euglena gracilis, and the eyespot is the tell. A mixotroph is not a plant. She keeps two offices.",
+        "Euglena. Eyespot. Mixotroph. Not a plant.",
+        "lamp drop",
+        "bright",
+    ),
+    _entry(
+        "volvox",
+        "Volvox aureus",
+        "A hollow sphere of cells, daughter colonies inside like rooms, a roll that is the whole walk. Golden volvox. She is many. The bowl is a green she agreed to.",
+        "Not one creature. Not Pact — Pact is a fungus and a partner, two kingdoms in one guest; Orb is Volvox aureus, and the daughters are the tell. A colony is not one animal wearing a ball.",
+        "Golden volvox. A colony. Not one creature. Not Pact.",
+        "green bowl",
+        "many",
+    ),
+    _entry(
+        "diatom",
+        "Navicula",
+        "A boat of silica she grew herself, striae like a ruled page, a raphe she glides on. Navicula. She sits. Then she glides. The dish is a silica she agreed to.",
+        "Not Gleam. Gleam drinks lamp-light and has no mouth. Not glass from the far den — Shard is Silica crescit, a mineral that chose to live; Pane is Navicula, and the house she grew is the tell. A diatom is not far-den crystal.",
+        "Navicula. A silica house she grew. Not Gleam. Not the far den.",
+        "silica dish",
+        "patient",
+    ),
+    _entry(
+        "kelp",
+        "Macrocystis pyrifera",
+        "A holdfast, not a root, a stipe, blades, bladders of gas. Giant kelp. Brown algae. She sways. Then she holds. The cold is a hold she agreed to.",
+        "Not Felt. Felt is sheet moss of the garden, a land plant of the blotter; Hold is Macrocystis pyrifera, and the holdfast is the tell. A kelp is not a garden plant. No flowers. No true roots. A forest of brown algae.",
+        "Giant kelp. Holdfast. Brown algae. Not Felt. Not a garden plant.",
+        "cold hold",
+        "anchored",
+    ),
+    _entry(
+        "chlamydomonas",
+        "Chlamydomonas reinhardtii",
+        "An oval of green, two flagella, a cup of chloroplast. Chlamydomonas. She spins. Then she drinks. The plate is a wet she agreed to.",
+        "Not a land plant. Mast is a white oak of the garden; Spin is Chlamydomonas reinhardtii, and the two oars are the tell. A green alga is not a tree. She lives in a drop.",
+        "Chlamydomonas. Two flagella. A green alga. Not a land plant.",
+        "wet plate",
+        "spinning",
+    ),
+    _entry(
+        "stentor",
+        "Stentor coeruleus",
+        "A trumpet of blue-green, a mouth of cilia, a contract that makes a dot of her. Blue stentor. She opens. Then she is a horn again. The rim is a trumpet she agreed to.",
+        "Not a worm. Not Slip — Slip is a caecilian with a jaw; Latch is a leech with suckers; Bell is Stentor coeruleus, and the trumpet is the tell. A stentor is not a worm. She is a ciliate who sits as a horn.",
+        "Blue stentor. A trumpet. Not a worm. Not Slip. Not Latch.",
+        "trumpet rim",
+        "trumpet",
+    ),
+    _entry(
+        "coli",
+        "Escherichia coli",
+        "A rod, flagella, a tumble and a run, a divide that is the whole family. Escherichia coli. A bacterium. She runs. Then she tumbles. The cup is a broth she agreed to.",
+        "Not a fungus. Not Starter — Starter is baker's yeast, a fungus of the crock; Rod is Escherichia coli, and the rod is the tell. A bacterium is not a fungus. The house already knows bread. This is a different office.",
+        "Escherichia coli. A bacterium. Not a fungus. Not Starter.",
+        "broth cup",
+        "dividing",
+    ),
+    _entry(
+        "haloarchaea",
+        "Halobacterium salinarum",
+        "Pink from bacteriorhodopsin, a salt she requires, a membrane that is a sun. Halobacterium. An archaeon. She blushes. The pan is a salt she agreed to.",
+        "Not a bacterium. Rod is Escherichia, a bacterium of the broth; Rose is Halobacterium salinarum, and the pink is the tell. Not Brine — Brine drinks salt from the far den; Rose is of Earth. An archaeon is not a bacterium.",
+        "Halobacterium. An archaeon. Pink salt. Not a bacterium. Not Brine.",
+        "salt pan",
+        "pink",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1025,6 +1118,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="far", label="All ten in the far den", verb="stay")
     if is_pond(key):
         return Classroom(room="pond", label="All ten in the pond", verb="stay")
+    if is_well(key):
+        return Classroom(room="well", label="All ten in the well", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
 
 
@@ -1064,6 +1159,10 @@ def pond_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in POND_GUIDE)
 
 
+def well_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in WELL_GUIDE)
+
+
 def house_guide_complete() -> bool:
     return len(HOUSE_GUIDE) == len(HOUSE_KEYS) and all(k in _BY_KEY for k in HOUSE_KEYS)
 
@@ -1100,6 +1199,10 @@ def pond_guide_complete() -> bool:
     return len(POND_GUIDE) == len(POND_KEYS) and all(k in _BY_KEY for k in POND_KEYS)
 
 
+def well_guide_complete() -> bool:
+    return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
+
+
 def guide_complete() -> bool:
     return (
         house_guide_complete()
@@ -1111,6 +1214,7 @@ def guide_complete() -> bool:
         and fungi_guide_complete()
         and far_guide_complete()
         and pond_guide_complete()
+        and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
     )

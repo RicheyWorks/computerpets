@@ -12,6 +12,7 @@ from computerpets_client.species import (
     POND_KEYS,
     SEA_KEYS,
     SNAKE_KEYS,
+    WELL_KEYS,
     SPECIES,
     is_bee,
     is_far,
@@ -21,6 +22,7 @@ from computerpets_client.species import (
     is_pond,
     is_sea,
     is_snake,
+    is_well,
     next_species_key,
     prev_species_key,
     species_by_key,
@@ -128,6 +130,16 @@ WEB_CATALOG = (
     "mussel",
     "leech",
     "stickleback",
+    "paramecium",
+    "amoeba",
+    "euglena",
+    "volvox",
+    "diatom",
+    "kelp",
+    "chlamydomonas",
+    "stentor",
+    "coli",
+    "haloarchaea",
 )
 
 WEB_SNAKES = (
@@ -237,6 +249,19 @@ WEB_POND = (
     "stickleback",
 )
 
+WEB_WELL = (
+    "paramecium",
+    "amoeba",
+    "euglena",
+    "volvox",
+    "diatom",
+    "kelp",
+    "chlamydomonas",
+    "stentor",
+    "coli",
+    "haloarchaea",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -250,6 +275,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(FUNGI_KEYS) == 10
     assert len(FAR_KEYS) == 10
     assert len(POND_KEYS) == 10
+    assert len(WELL_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -259,6 +285,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(FUNGI_KEYS) == set(WEB_FUNGI)
     assert set(FAR_KEYS) == set(WEB_FAR)
     assert set(POND_KEYS) == set(WEB_POND)
+    assert set(WELL_KEYS) == set(WEB_WELL)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -283,6 +310,7 @@ def test_walkers_walk_and_are_not_snakes():
         assert not is_fungus(key)
         assert not is_far(key)
         assert not is_pond(key)
+        assert not is_well(key)
         assert spec.gait == "walk"
         assert spec.silhouette != "snake"
 
@@ -430,6 +458,7 @@ def test_ten_far_guests_are_present_and_honest():
         assert not is_bee(key)
         assert not is_fungus(key)
         assert not is_pond(key)
+        assert not is_well(key)
         assert spec.treat
         assert spec.treat_shape in TREAT_SHAPES
     assert SPECIES["photovore"].slug == "gleam"
@@ -472,6 +501,7 @@ def test_ten_pond_guests_are_present_and_honest():
         assert not is_bee(key)
         assert not is_fungus(key)
         assert not is_far(key)
+        assert not is_well(key)
         assert spec.treat
         assert spec.treat_shape in TREAT_SHAPES
         assert spec.silhouette != "axolotl"
@@ -506,6 +536,70 @@ def test_ten_pond_guests_are_present_and_honest():
     assert SPECIES["frog"].walk > SPECIES["toad"].walk
 
 
+def test_ten_well_guests_are_present_and_honest():
+    assert WELL_KEYS == WEB_WELL
+    for key in WELL_KEYS:
+        spec = SPECIES[key]
+        assert is_well(key)
+        assert not is_snake(key)
+        assert not is_sea(key)
+        assert not is_garden(key)
+        assert not is_insect(key)
+        assert not is_bee(key)
+        assert not is_fungus(key)
+        assert not is_far(key)
+        assert not is_pond(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.silhouette != "axolotl"
+        assert spec.name != "Starter"
+        assert spec.name != "Pact"
+        assert spec.name != "Brine"
+        assert spec.name != "Bloom"
+    assert SPECIES["paramecium"].slug == "boot"
+    assert SPECIES["paramecium"].name == "Boot"
+    assert SPECIES["amoeba"].name == "Reach"
+    assert SPECIES["euglena"].name == "Spot"
+    assert SPECIES["volvox"].name == "Orb"
+    assert SPECIES["diatom"].name == "Pane"
+    assert SPECIES["kelp"].name == "Hold"
+    assert SPECIES["chlamydomonas"].name == "Spin"
+    assert SPECIES["stentor"].name == "Bell"
+    assert SPECIES["stentor"].slug == "bell"
+    assert SPECIES["coli"].name == "Rod"
+    assert SPECIES["haloarchaea"].name == "Rose"
+    assert SPECIES["moon_jelly"].name == "Pulse"
+    assert SPECIES["moon_jelly"].slug == "pulse"
+    assert SPECIES["pitcher"].name == "Well"
+    assert SPECIES["yeast"].name == "Starter"
+    assert SPECIES["lichen"].name == "Pact"
+    assert SPECIES["halovore"].name == "Brine"
+    assert SPECIES["axolotl"].name == "Bloom"
+    assert SPECIES["paramecium"].aquatic is True
+    assert SPECIES["amoeba"].aquatic is True
+    assert SPECIES["euglena"].aquatic is True
+    assert SPECIES["volvox"].aquatic is True
+    assert SPECIES["diatom"].aquatic is True
+    assert SPECIES["kelp"].aquatic is False
+    assert SPECIES["chlamydomonas"].aquatic is True
+    assert SPECIES["stentor"].aquatic is True
+    assert SPECIES["coli"].aquatic is False
+    assert SPECIES["haloarchaea"].aquatic is False
+    assert SPECIES["paramecium"].silhouette == "paramecium"
+    assert SPECIES["amoeba"].silhouette == "amoeba"
+    assert SPECIES["euglena"].silhouette == "euglena"
+    assert SPECIES["volvox"].silhouette == "volvox"
+    assert SPECIES["diatom"].silhouette == "diatom"
+    assert SPECIES["kelp"].silhouette == "kelp"
+    assert SPECIES["chlamydomonas"].silhouette == "chlamydomonas"
+    assert SPECIES["stentor"].silhouette == "stentor"
+    assert SPECIES["coli"].silhouette == "coli"
+    assert SPECIES["haloarchaea"].silhouette == "haloarchaea"
+    assert SPECIES["diatom"].walk < 10
+    assert SPECIES["kelp"].walk < 10
+    assert SPECIES["coli"].walk > SPECIES["paramecium"].walk
+
+
 def test_every_kind_has_house_voice_and_care_treat():
     for key in CATALOG_KEYS:
         spec = species_by_key(key)
@@ -534,8 +628,10 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("honeycomb") == "oyster"
     assert next_species_key("lichen") == "photovore"
     assert next_species_key("cyst") == "frog"
-    assert next_species_key("stickleback") == "red_panda"
-    assert prev_species_key("red_panda") == "stickleback"
+    assert next_species_key("stickleback") == "paramecium"
+    assert next_species_key("haloarchaea") == "red_panda"
+    assert prev_species_key("red_panda") == "haloarchaea"
+    assert prev_species_key("paramecium") == "stickleback"
     assert prev_species_key("honeybee") == "sundew"
     assert prev_species_key("ball_python") == "phoenix"
     assert prev_species_key("octopus") == "carpet_python"

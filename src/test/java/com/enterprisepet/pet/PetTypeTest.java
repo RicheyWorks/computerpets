@@ -117,7 +117,17 @@ class PetTypeTest {
             new ExpectedSpecies("pond_snail", "Great Pond Snail", PetType.Rarity.COMMON),
             new ExpectedSpecies("mussel", "Eastern Elliptio", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("leech", "Horse Leech", PetType.Rarity.UNCOMMON),
-            new ExpectedSpecies("stickleback", "Three-spined Stickleback", PetType.Rarity.COMMON)
+            new ExpectedSpecies("stickleback", "Three-spined Stickleback", PetType.Rarity.COMMON),
+            new ExpectedSpecies("paramecium", "Slipper Paramecium", PetType.Rarity.COMMON),
+            new ExpectedSpecies("amoeba", "Proteus Amoeba", PetType.Rarity.COMMON),
+            new ExpectedSpecies("euglena", "Euglena", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("volvox", "Golden Volvox", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("diatom", "Navicula", PetType.Rarity.COMMON),
+            new ExpectedSpecies("kelp", "Giant Kelp", PetType.Rarity.RARE),
+            new ExpectedSpecies("chlamydomonas", "Chlamydomonas", PetType.Rarity.COMMON),
+            new ExpectedSpecies("stentor", "Blue Stentor", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("coli", "Escherichia coli", PetType.Rarity.COMMON),
+            new ExpectedSpecies("haloarchaea", "Halobacterium", PetType.Rarity.RARE)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(
@@ -160,11 +170,16 @@ class PetTypeTest {
             "crayfish", "pond_snail", "mussel", "leech", "stickleback"
     );
 
+    private static final List<String> WELL_KEYS = List.of(
+            "paramecium", "amoeba", "euglena", "volvox", "diatom",
+            "kelp", "chlamydomonas", "stentor", "coli", "haloarchaea"
+    );
+
     @Test
     @DisplayName("catalog matches the living-desk web catalog, including the tide")
     void catalog_matchesWebHouse() {
         assertThat(PetType.values()).hasSize(WEB_CATALOG.size());
-        assertThat(WEB_CATALOG).hasSize(100);
+        assertThat(WEB_CATALOG).hasSize(110);
 
         Set<String> backendKeys = Arrays.stream(PetType.values())
                 .map(PetType::key)
@@ -209,9 +224,9 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(37L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(40L);
-        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(20L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(42L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(43L);
+        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(22L);
         assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(3L);
     }
 
@@ -251,6 +266,9 @@ class PetTypeTest {
             assertThat(PetType.fromKey(key)).isPresent();
         }
         for (String key : POND_KEYS) {
+            assertThat(PetType.fromKey(key)).isPresent();
+        }
+        for (String key : WELL_KEYS) {
             assertThat(PetType.fromKey(key)).isPresent();
         }
         assertThat(PetType.OCTOPUS.displayName()).isEqualTo("Common Octopus");
@@ -300,6 +318,16 @@ class PetTypeTest {
         assertThat(PetType.MUSSEL.displayName()).isEqualTo("Eastern Elliptio");
         assertThat(PetType.LEECH.rarity()).isEqualTo(PetType.Rarity.UNCOMMON);
         assertThat(PetType.STICKLEBACK.displayName()).isEqualTo("Three-spined Stickleback");
+        assertThat(PetType.PARAMECIUM.displayName()).isEqualTo("Slipper Paramecium");
+        assertThat(PetType.AMOEBA.displayName()).isEqualTo("Proteus Amoeba");
+        assertThat(PetType.EUGLENA.key()).isEqualTo("euglena");
+        assertThat(PetType.VOLVOX.displayName()).isEqualTo("Golden Volvox");
+        assertThat(PetType.DIATOM.displayName()).isEqualTo("Navicula");
+        assertThat(PetType.KELP.rarity()).isEqualTo(PetType.Rarity.RARE);
+        assertThat(PetType.CHLAMYDOMONAS.displayName()).isEqualTo("Chlamydomonas");
+        assertThat(PetType.STENTOR.displayName()).isEqualTo("Blue Stentor");
+        assertThat(PetType.COLI.displayName()).isEqualTo("Escherichia coli");
+        assertThat(PetType.HALOARCHAEA.rarity()).isEqualTo(PetType.Rarity.RARE);
     }
 
     private record ExpectedSpecies(String key, String displayName, PetType.Rarity rarity) {}
