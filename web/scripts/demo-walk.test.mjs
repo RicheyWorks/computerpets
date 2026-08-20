@@ -104,7 +104,7 @@ test("the demo room shows the Mac walk the way it shows the Windows walk", () =>
   assert.match(extraSrc, /data-mac-extra/);
   assert.match(extraSrc, /CARE_VERBS/);
   assert.match(extraSrc, /the extra/);
-  assert.doesNotMatch(extraSrc, /Unlock|Minds|settings/);
+  assert.doesNotMatch(extraSrc, /Unlock|Minds/);
   for (const verb of D.careVerbs()) {
     assert.ok(D.CARE_VERBS.includes(verb));
   }

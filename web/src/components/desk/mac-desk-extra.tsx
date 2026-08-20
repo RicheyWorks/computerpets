@@ -1,6 +1,6 @@
 import { CARE_VERBS } from "@/lib/pets/mac-desk";
 
-/** The extra on the Mac desk. Care lives here. It is not a settings panel. */
+/** The extra on the Mac desk. Care lives here. It is not a shop. */
 export function MacDeskExtra({ name }: { name: string }) {
   return (
     <header
