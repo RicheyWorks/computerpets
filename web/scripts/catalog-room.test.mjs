@@ -24,7 +24,7 @@ test("the shelf is a room with one house walker", () => {
   assert.match(catalogSrc, /persistLocal=\{false\}/);
   assert.match(catalogSrc, /guestKey="shelf"/);
   assert.match(catalogSrc, /The shelf is a room/);
-  assert.match(catalogSrc, /The hundred sit by den, not by rarity/);
+  assert.match(catalogSrc, /The hundred ten sit by den, not by rarity/);
   assert.match(catalogSrc, /The hundred/);
   assert.match(catalogSrc, /on their shelves/i);
   assert.doesNotMatch(catalogSrc, /onCare/);
