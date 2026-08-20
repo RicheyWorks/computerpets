@@ -105,9 +105,9 @@ client/
 │   ├── visitor.py          # port of web visitor.ts (todaysVisitor)
 │   ├── shed.py             # port of web shed.ts (blue, coat on the wood)
 │   ├── specials.py         # port of web specials.ts + traits special / verb / line
-│   ├── rail.py             # study-style species rail (50 keys)
+│   ├── rail.py             # study-style species rail (one hundred ninety keys)
 │   ├── species.py          # house catalog — same keys as PetType
-│   ├── guide.py            # field notes — same copy as /study, /snakes, /sea, /garden, and /shore
+│   ├── guide.py            # field notes — same copy as /study, /snakes, /sea, /garden, /shore, and /meadow
 │   ├── plaque.py           # paper card on the blotter
 │   ├── license/            # port of desktop/license/ (no Qt)
 │   └── unlock_dialog.py

@@ -25,6 +25,7 @@ const cornerSrc = readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8");
 const woodSrc = readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8");
 const shoreSrc = readFileSync(join(root, "src/lib/pets/shore.ts"), "utf8");
 const shoreDenSrc = readFileSync(join(root, "src/components/desk/shore-den.tsx"), "utf8");
+const shellSrc = readFileSync(join(root, "src/components/app-shell.tsx"), "utf8");
 
 const EXPECTED = [
   ["field_cricket", "chirp", "Gryllus pennsylvanicus"],
@@ -151,6 +152,8 @@ test("rooms.ts only adds a meadow room", () => {
   assert.match(roomsSrc, /watchSlug:\s*"comb"/);
   assert.match(roomsSrc, /watchSlug:\s*"wave"/);
   assert.match(roomsSrc, /watchSlug:\s*"cup"/);
+  const bleed = shellSrc.slice(shellSrc.indexOf("{desk || demo"), shellSrc.indexOf("mx-auto max-w-6xl px-4 py-8"));
+  assert.match(bleed, /shore \|\| meadow/);
 });
 
 test("the hive, garden, roost, shore, and sea files stay as they were", () => {
