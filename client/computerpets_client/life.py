@@ -9,6 +9,7 @@ from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from .hive import colony_of, colony_word, is_hive_place, stamp_colony
 from .hours import hide_line, snack_line
 from .paths import default_user_data_dir
 from .species import Species, species_by_key
@@ -39,6 +40,20 @@ def pick_line(lines: tuple[str, ...]) -> str:
     return random.choice(lines) if lines else ""
 
 
+def keep_hive(state: CareState, species: Species | None = None, key: str | None = None) -> CareState:
+    """Hunger is stores. Health is brood. Other guests leave the cells unnamed."""
+    guest = key or (species.key if species is not None else None)
+    if is_hive_place(guest):
+        named = stamp_colony(state)
+        return replace(state, brood=named["brood"], stores=named["stores"])
+    if guest is not None:
+        return replace(state, brood=None, stores=None)
+    if state.brood is not None or state.stores is not None:
+        named = stamp_colony(state)
+        return replace(state, brood=named["brood"], stores=named["stores"])
+    return state
+
+
 @dataclass(frozen=True)
 class MessPile:
     """An ink smudge on the wood. Same shape as the house MessPile / Coat."""
@@ -64,8 +79,14 @@ class CareState:
     last_tick: int = 0
     gifts: list[Coat] = field(default_factory=list)
     mess: list[MessPile] = field(default_factory=list)
+    brood: int | None = None
+    stores: int | None = None
 
-    def vitals(self, *, blue: bool = False) -> str:
+    def vitals(self, *, blue: bool = False, key: str | None = None) -> str:
+        if key and is_hive_place(key):
+            hive = colony_of(self, self.hidden)
+            if hive.quiet:
+                return colony_word(hive)
         if self.hidden:
             return "Hidden"
         if blue:
@@ -95,13 +116,16 @@ def apply_feed(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
     if state.hidden:
         return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
-    next_state = replace(
-        state,
-        hunger=clamp(state.hunger + 30),
-        mood=clamp(state.mood + 6),
-        energy=clamp(state.energy - 5),
-        last_line=pick_line(kind.feed),
-        anim="eat",
+    next_state = keep_hive(
+        replace(
+            state,
+            hunger=clamp(state.hunger + 30),
+            mood=clamp(state.mood + 6),
+            energy=clamp(state.energy - 5),
+            last_line=pick_line(kind.feed),
+            anim="eat",
+        ),
+        kind,
     )
     return CareResult(next_state, next_state.last_line, "eat", "eat")
 
@@ -111,12 +135,15 @@ def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
     if state.hidden:
         return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
     line = snack_line(kind.key, pick_line(kind.treat_lines))
-    next_state = replace(
-        state,
-        hunger=clamp(state.hunger + 12),
-        mood=clamp(state.mood + 5),
-        last_line=line,
-        anim="eat",
+    next_state = keep_hive(
+        replace(
+            state,
+            hunger=clamp(state.hunger + 12),
+            mood=clamp(state.mood + 5),
+            last_line=line,
+            anim="eat",
+        ),
+        kind,
     )
     return CareResult(next_state, next_state.last_line, "eat", "seek")
 
@@ -126,14 +153,17 @@ def apply_play(state: CareState, species: Species | None = None) -> CareResult:
     if state.hidden:
         return CareResult(state, hide_line(kind.key, pick_line(kind.hide)), "idle", "idle")
     line = pick_line(kind.ambient) or pick_line(kind.greet)
-    next_state = replace(
-        state,
-        hunger=clamp(state.hunger - 8),
-        mood=clamp(state.mood + 26),
-        energy=clamp(state.energy - 14),
-        bond=clamp(state.bond + 3),
-        last_line=line,
-        anim="walk",
+    next_state = keep_hive(
+        replace(
+            state,
+            hunger=clamp(state.hunger - 8),
+            mood=clamp(state.mood + 26),
+            energy=clamp(state.energy - 14),
+            bond=clamp(state.bond + 3),
+            last_line=line,
+            anim="walk",
+        ),
+        kind,
     )
     return CareResult(next_state, next_state.last_line, "walk", "play")
 
@@ -142,57 +172,68 @@ def apply_hide(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
     line = hide_line(kind.key, pick_line(kind.hide))
     if state.hidden:
-        return CareResult(state, line, "idle", "idle")
-    next_state = replace(state, hidden=True, last_line=line, anim="walk")
+        return CareResult(keep_hive(state, kind), line, "idle", "idle")
+    next_state = keep_hive(replace(state, hidden=True, last_line=line, anim="walk"), kind)
     return CareResult(next_state, next_state.last_line, "walk", "hide")
 
 
 def apply_call(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
-    next_state = replace(
-        state,
-        hidden=False,
-        mood=clamp(state.mood + 4),
-        last_line=pick_line(kind.call),
-        anim="walk",
+    next_state = keep_hive(
+        replace(
+            state,
+            hidden=False,
+            mood=clamp(state.mood + 4),
+            last_line=pick_line(kind.call),
+            anim="walk",
+        ),
+        kind,
     )
     return CareResult(next_state, next_state.last_line, "walk", "enter")
 
 
 def apply_clean(state: CareState, species: Species | None = None) -> CareResult:
-    next_state = replace(
-        state,
-        hygiene=clamp(state.hygiene + 38),
-        mood=clamp(state.mood + 8),
-        bond=clamp(state.bond + 2),
-        mess=[],
-        last_line=CLEAN_LINE,
-        anim="sit",
+    next_state = keep_hive(
+        replace(
+            state,
+            hygiene=clamp(state.hygiene + 38),
+            mood=clamp(state.mood + 8),
+            bond=clamp(state.bond + 2),
+            mess=[],
+            last_line=CLEAN_LINE,
+            anim="sit",
+        ),
+        species,
     )
     return CareResult(next_state, CLEAN_LINE, "sit", "sit")
 
 
 def apply_medicine(state: CareState, species: Species | None = None) -> CareResult:
-    next_state = replace(
-        state,
-        sick=False,
-        health=clamp(state.health + 28),
-        mood=clamp(state.mood - 2),
-        bond=clamp(state.bond + 3),
-        last_line=MEDICINE_LINE,
-        anim="sit",
+    next_state = keep_hive(
+        replace(
+            state,
+            sick=False,
+            health=clamp(state.health + 28),
+            mood=clamp(state.mood - 2),
+            bond=clamp(state.bond + 3),
+            last_line=MEDICINE_LINE,
+            anim="sit",
+        ),
+        species,
     )
     return CareResult(next_state, MEDICINE_LINE, "sit", "sit")
 
 
 def pick_mess(state: CareState, pile_id: int) -> CareResult:
-    next_state = replace(
-        state,
-        mess=[pile for pile in state.mess if pile.id != pile_id],
-        hygiene=clamp(state.hygiene + 8),
-        mood=clamp(state.mood + 3),
-        last_line=CLEAN_LINE,
-        anim="sit",
+    next_state = keep_hive(
+        replace(
+            state,
+            mess=[pile for pile in state.mess if pile.id != pile_id],
+            hygiene=clamp(state.hygiene + 8),
+            mood=clamp(state.mood + 3),
+            last_line=CLEAN_LINE,
+            anim="sit",
+        )
     )
     return CareResult(next_state, CLEAN_LINE, "sit", "sit")
 
@@ -230,7 +271,8 @@ def decay(
     if next_state.hygiene < 42 and len(piles) < 5 and roll < min(0.35, dt / 120000):
         x = 12 + (rng.random() if rng is not None else random.random()) * 76
         piles.append(MessPile(id=stamp + len(piles), x=x, kind="mess"))
-    return replace(next_state, sick=sick, mess=piles, last_tick=stamp)
+    aged = replace(next_state, sick=sick, mess=piles, last_tick=stamp)
+    return keep_hive(aged)
 
 
 def ambient_line(state: CareState, species: Species) -> str:
@@ -246,7 +288,7 @@ def _now_ms() -> int:
 
 
 def pack_care(state: CareState) -> dict[str, object]:
-    return {
+    packed: dict[str, object] = {
         "v": CARE_VERSION,
         "hunger": int(state.hunger),
         "mood": int(state.mood),
@@ -266,6 +308,11 @@ def pack_care(state: CareState) -> dict[str, object]:
             for gift in state.gifts
         ],
     }
+    if state.brood is not None:
+        packed["brood"] = max(0, min(8, int(state.brood)))
+    if state.stores is not None:
+        packed["stores"] = clamp(int(state.stores))
+    return packed
 
 
 def unpack_care(raw: object) -> CareState | None:
@@ -289,6 +336,8 @@ def unpack_care(raw: object) -> CareState | None:
                 if not isinstance(item, dict):
                     continue
                 gifts.append(Coat(id=int(item["id"]), x=float(item["x"]), kind=str(item.get("kind") or "shed")))
+        brood_raw = raw.get("brood")
+        stores_raw = raw.get("stores")
         return CareState(
             hunger=clamp(int(raw.get("hunger", 78))),
             mood=clamp(int(raw.get("mood", 74))),
@@ -304,6 +353,8 @@ def unpack_care(raw: object) -> CareState | None:
             last_tick=int(raw.get("last_tick") or 0),
             mess=mess,
             gifts=gifts,
+            brood=max(0, min(8, int(brood_raw))) if isinstance(brood_raw, (int, float)) else None,
+            stores=clamp(int(stores_raw)) if isinstance(stores_raw, (int, float)) else None,
         )
     except (TypeError, ValueError, KeyError, OverflowError):
         return None

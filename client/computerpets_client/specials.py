@@ -10,7 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 
 from .hours import hide_line
-from .life import CareResult, CareState, clamp, pick_line
+from .life import CareResult, CareState, clamp, keep_hive, pick_line
 from .species import Species, species_by_key
 
 
@@ -290,5 +290,5 @@ def apply_special(state: CareState, species: Species | None = None) -> CareResul
         cmd = "idle"
 
     anim = "walk" if cmd in ("play", "wander") else "sit" if cmd in ("talk", "sit") else "idle"
-    next_state = replace(next_state, last_line=trait.line, anim=anim)
+    next_state = keep_hive(replace(next_state, last_line=trait.line, anim=anim), kind)
     return CareResult(next_state, trait.line, anim, cmd)

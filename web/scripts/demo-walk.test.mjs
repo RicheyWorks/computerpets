@@ -8,6 +8,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const A = await import(join(root, "src/lib/pets/arrive.ts"));
 const P = await import(join(root, "src/lib/pets/play.ts"));
 const D = await import(join(root, "src/lib/pets/mac-desk.ts"));
+const Hive = await import(join(root, "src/lib/pets/hive.ts"));
+const C = await import(join(root, "src/lib/pets/care.ts"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
@@ -49,7 +51,7 @@ test("the demo room walks to the treat", () => {
   assert.match(roomSrc, /issue\("seek"\)/);
   const arrived = roomSrc.slice(roomSrc.indexOf("onArrived="), roomSrc.indexOf("onTap="));
   assert.match(arrived, /act === "snack"/);
-  assert.match(arrived, /applySnack/);
+  assert.match(arrived, /applySnackFor/);
   assert.match(arrived, /issue\("eat"\)/);
   assert.match(livingSrc, /cmd === "seek"/);
   assert.match(livingSrc, /walkLand/);
@@ -87,6 +89,24 @@ test("a drag on the demo living pet does not arrive", () => {
   assert.doesNotMatch(lift, /arrivedRef/);
   assert.match(livingSrc, /walkLand/);
   assert.match(livingSrc, /finishArrive/);
+});
+
+test("the demo is the same house: Wax keeps brood and stores, and can go quieter", () => {
+  const now = 1_700_000_000_000;
+  const seed = Hive.stampColony({ ...C.blankCare(now), hunger: 40, health: 50 });
+  const snack = C.applySnackFor("honeycomb", seed, now);
+  assert.equal(snack.stores, snack.hunger);
+  assert.ok(snack.stores > seed.stores);
+  const empty = Hive.colonyOf({ hunger: 8, health: 0, brood: 0, stores: 8 });
+  assert.equal(empty.quiet, true);
+  assert.equal(Hive.colonyWord(empty), "The line went quieter.");
+  assert.match(roomSrc, /colonyWord/);
+  assert.match(roomSrc, /Brood/);
+  assert.match(roomSrc, /Stores/);
+  assert.match(roomSrc, /hive && hive\.quiet/);
+  assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
+  assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents|overlay/);
 });
 
 test("the demo room shows the Mac walk the way it shows the Windows walk", () => {

@@ -428,6 +428,14 @@ export function applySnack(stats: Partial<CareStats>): CareStats {
   };
 }
 
+/** A treat on the blotter. Hunger is stores on Wax. Ghost declines the bite. */
+export function applySnackFor(speciesKey: string, stats: Partial<CareStats>, now = Date.now()): CareStats {
+  const s = normalizeCare(stats, now);
+  if (adultLuna(speciesKey, s, now)) return s;
+  const fed = applySnack(s);
+  return speciesKey === "honeycomb" ? stampHiveLine(fed) : fed;
+}
+
 export function applyPraise(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
   return {
