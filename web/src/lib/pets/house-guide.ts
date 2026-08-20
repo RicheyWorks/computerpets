@@ -12,6 +12,7 @@ import { SNAKE_KEYS } from "./snakes";
 import { WELL_KEYS } from "./well";
 import { CREEK_KEYS } from "./creek";
 import { LOG_KEYS } from "./log";
+import { MEADOW_KEYS } from "./meadow";
 import { SHORE_KEYS } from "./shore";
 import { STONE_KEYS } from "./stone";
 import { WOOD_KEYS } from "./wood";
@@ -48,6 +49,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   if (CREEK_KEYS.includes(key)) throw new Error(`house guide does not file the creek: ${key}`);
   if (LOG_KEYS.includes(key)) throw new Error(`house guide does not file the log: ${key}`);
   if (SHORE_KEYS.includes(key)) throw new Error(`house guide does not file the shore: ${key}`);
+  if (MEADOW_KEYS.includes(key)) throw new Error(`house guide does not file the meadow: ${key}`);
   return {
     key,
     slug: roster.slug,
@@ -227,6 +229,6 @@ export function houseGuideKeys() {
 
 /** The living roster minus snakes and the tide, and the guide, must name the same twenty. */
 export function houseGuideComplete() {
-  const living = ROSTER.filter((r) => !SNAKE_KEYS.includes(r.key) && !SEA_KEYS.includes(r.key) && !GARDEN_KEYS.includes(r.key) && !INSECT_KEYS.includes(r.key) && !BEE_KEYS.includes(r.key) && !FUNGI_KEYS.includes(r.key) && !FAR_KEYS.includes(r.key) && !POND_KEYS.includes(r.key) && !WELL_KEYS.includes(r.key) && !ROOST_KEYS.includes(r.key) && !CORNER_KEYS.includes(r.key) && !WOOD_KEYS.includes(r.key) && !STONE_KEYS.includes(r.key) && !CREEK_KEYS.includes(r.key) && !LOG_KEYS.includes(r.key) && !SHORE_KEYS.includes(r.key)).map((r) => r.key);
+  const living = ROSTER.filter((r) => !SNAKE_KEYS.includes(r.key) && !SEA_KEYS.includes(r.key) && !GARDEN_KEYS.includes(r.key) && !INSECT_KEYS.includes(r.key) && !BEE_KEYS.includes(r.key) && !FUNGI_KEYS.includes(r.key) && !FAR_KEYS.includes(r.key) && !POND_KEYS.includes(r.key) && !WELL_KEYS.includes(r.key) && !ROOST_KEYS.includes(r.key) && !CORNER_KEYS.includes(r.key) && !WOOD_KEYS.includes(r.key) && !STONE_KEYS.includes(r.key) && !CREEK_KEYS.includes(r.key) && !LOG_KEYS.includes(r.key) && !SHORE_KEYS.includes(r.key) && !MEADOW_KEYS.includes(r.key)).map((r) => r.key);
   return living.length === HOUSE_GUIDE.length && living.every((key) => BY_KEY[key]);
 }

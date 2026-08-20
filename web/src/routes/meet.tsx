@@ -16,7 +16,7 @@ export const Route = createFileRoute("/meet")({
       {
         name: "description",
         content:
-          "One hundred eighty living companions walk the blotter. The nest is a square; neglect can close a line.",
+          "One hundred ninety living companions walk the blotter. The nest is a square; neglect can close a line.",
       },
     ],
   }),
@@ -42,7 +42,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            One hundred eighty guests walk the blotter. The nest is a square; neglect can close a line.
+            One hundred ninety guests walk the blotter. The nest is a square; neglect can close a line.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
             <Button asChild>
@@ -118,7 +118,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
               <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
               <p className="mt-2 text-sm text-muted">
-                Transparent overlay. Treat, chase, hide. They walk the real screen. All one hundred eighty.
+                Transparent overlay. Treat, chase, hide. They walk the real screen. All one hundred ninety.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
             </article>
@@ -127,7 +127,7 @@ export function MeetPage() {
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
                 On a tablet a tap talks. A drag is a carry. A long-press tends. On a phone they sit the
-                tall blotter the same way. Open Live, then Add to Home Screen. All one hundred eighty.
+                tall blotter the same way. Open Live, then Add to Home Screen. All one hundred ninety.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">
