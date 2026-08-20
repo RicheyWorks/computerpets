@@ -1,4 +1,4 @@
-import { isRestingHour } from "./hours";
+import { isRestingHour } from "./hours.ts";
 
 export type MessPile = { id: number; x: number; kind?: "gift" | "shed" };
 
