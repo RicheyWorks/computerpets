@@ -290,6 +290,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   sea_urchin: [A("walk", "wiggle", 1.2, 5), A("spine", "pulse", 1.0, 3), A("still", "freeze", 1.8, 2)],
   knobbed_whelk: [A("hunt", "wiggle", 1.2, 5), A("sit", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.8, 2)],
   lugworm: [A("heap", "nod", 1.4, 5, "sit"), A("cast", "wiggle", 1.2, 3), A("still", "freeze", 1.8, 2)],
+  field_cricket: [A("chirp", "talk", 0.8, 5, "talk"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+  katydid: [A("still", "sit_hold", 2.4, 5, "sit"), A("blade", "freeze", 2.0, 3), A("walk", "wiggle", 0.9, 1)],
+  grasshopper: [A("vault", "hop", 0.55, 5, "play"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+  swallowtail: [A("banner", "pulse", 1.0, 4), A("flutter", "bob", 1.2, 3), A("still", "freeze", 1.8, 2)],
+  jewelwing: [A("jewel", "pulse", 1.2, 4), A("hover", "bob", 1.4, 3), A("still", "freeze", 1.6, 2)],
+  lacewing: [A("lace", "pulse", 1.0, 4), A("hover", "bob", 1.2, 3), A("still", "freeze", 1.6, 2)],
+  earwig: [A("raise", "sit_hold", 1.8, 5, "sit"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+  acorn_weevil: [A("drill", "sit_hold", 2.0, 5, "sit"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.8, 2)],
+  click_beetle: [A("click", "pulse", 0.7, 5), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+  robber_fly: [A("hunt", "dart", 0.6, 5), A("perch", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.4, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

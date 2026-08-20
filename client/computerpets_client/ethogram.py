@@ -211,6 +211,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "sea_urchin": (_a("walk", "wiggle", 1.2, 5), _a("spine", "pulse", 1.0, 3), _a("still", "freeze", 1.8, 2)),
     "knobbed_whelk": (_a("hunt", "wiggle", 1.2, 5), _a("sit", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.8, 2)),
     "lugworm": (_a("heap", "nod", 1.4, 5, "sit"), _a("cast", "wiggle", 1.2, 3), _a("still", "freeze", 1.8, 2)),
+    "field_cricket": (_a("chirp", "talk", 0.8, 5, "talk"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "katydid": (_a("still", "sit_hold", 2.4, 5, "sit"), _a("blade", "freeze", 2.0, 3), _a("walk", "wiggle", 0.9, 1)),
+    "grasshopper": (_a("vault", "hop", 0.55, 5, "play"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "swallowtail": (_a("banner", "pulse", 1.0, 4), _a("flutter", "bob", 1.2, 3), _a("still", "freeze", 1.8, 2)),
+    "jewelwing": (_a("jewel", "pulse", 1.2, 4), _a("hover", "bob", 1.4, 3), _a("still", "freeze", 1.6, 2)),
+    "lacewing": (_a("lace", "pulse", 1.0, 4), _a("hover", "bob", 1.2, 3), _a("still", "freeze", 1.6, 2)),
+    "earwig": (_a("raise", "sit_hold", 1.8, 5, "sit"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "acorn_weevil": (_a("drill", "sit_hold", 2.0, 5, "sit"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.8, 2)),
+    "click_beetle": (_a("click", "pulse", 0.7, 5), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "robber_fly": (_a("hunt", "dart", 0.6, 5), _a("perch", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.4, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

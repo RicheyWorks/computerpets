@@ -186,6 +186,16 @@ HOUSE_TRAITS = {
     "sea_urchin": ("thorn", "Spine", "I sat the spines. Hello."),
     "knobbed_whelk": ("knurl", "Hunt", "I hunted. Hello."),
     "lugworm": ("heap", "Heap", "I heaped. Hello."),
+    "field_cricket": ("chirp", "Chirp", "I sang. Hello."),
+    "katydid": ("blade", "Still", "I sat the leaf. Hello."),
+    "grasshopper": ("vault", "Vault", "I vaulted. Hello."),
+    "swallowtail": ("banner", "Banner", "I kept the yellow. Hello."),
+    "jewelwing": ("jewel", "Jewel", "I kept the black. Hello."),
+    "lacewing": ("lace", "Lace", "I laced. Hello."),
+    "earwig": ("forceps", "Forceps", "I raised the cerci. Hello."),
+    "acorn_weevil": ("snout", "Snout", "I sat the acorn. Hello."),
+    "click_beetle": ("click", "Click", "I clicked. Hello."),
+    "robber_fly": ("rob", "Rob", "I hunted. Hello."),
 }
 
 

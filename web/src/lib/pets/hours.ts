@@ -180,6 +180,16 @@ const REST: Record<string, [number, number]> = {
   sea_urchin: [8, 18],
   knobbed_whelk: [8, 18],
   lugworm: [8, 17],
+  field_cricket: [8, 17],
+  katydid: [8, 17],
+  grasshopper: [22, 7],
+  swallowtail: [22, 7],
+  jewelwing: [22, 7],
+  lacewing: [8, 17],
+  earwig: [8, 17],
+  acorn_weevil: [22, 7],
+  click_beetle: [8, 17],
+  robber_fly: [22, 7],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -386,6 +396,16 @@ export const HIDE_LINE: Record<string, string> = {
   sea_urchin: "Inside the pool.",
   knobbed_whelk: "Inside the wrack.",
   lugworm: "Inside the sand.",
+  field_cricket: "Inside the grass.",
+  katydid: "On the leaf.",
+  grasshopper: "Inside the grass.",
+  swallowtail: "On the blossom.",
+  jewelwing: "On the stream.",
+  lacewing: "On the leaf.",
+  earwig: "Under the bark.",
+  acorn_weevil: "Inside the acorn.",
+  click_beetle: "Under the bark.",
+  robber_fly: "On the grass.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -569,6 +589,16 @@ export const SNACK_LINE: Record<string, string> = {
   sea_urchin: "Kelp of a treaty.",
   knobbed_whelk: "Clam of a treaty.",
   lugworm: "Silt of a treaty.",
+  field_cricket: "Seed of a treaty.",
+  katydid: "Leaf of a treaty.",
+  grasshopper: "Leaf of a treaty.",
+  swallowtail: "Nectar of a treaty.",
+  jewelwing: "Midge of a treaty.",
+  lacewing: "Aphid of a treaty.",
+  earwig: "Scrap of a treaty.",
+  acorn_weevil: "Acorn of a treaty.",
+  click_beetle: "Scrap of a treaty.",
+  robber_fly: "Prey of a treaty.",
 };
 
 

@@ -190,7 +190,17 @@ public enum PetType {
     SAND_DOLLAR      ("sand_dollar",       "Common Sand Dollar",     Rarity.COMMON),
     SEA_URCHIN       ("sea_urchin",        "Purple Sea Urchin",      Rarity.UNCOMMON),
     KNOBBED_WHELK    ("knobbed_whelk",     "Knobbed Whelk",          Rarity.UNCOMMON),
-    LUGWORM          ("lugworm",           "Lugworm",                Rarity.COMMON);
+    LUGWORM          ("lugworm",           "Lugworm",                Rarity.COMMON),
+    FIELD_CRICKET    ("field_cricket",     "Fall Field Cricket",     Rarity.COMMON),
+    KATYDID          ("katydid",           "Northern True Katydid",  Rarity.UNCOMMON),
+    GRASSHOPPER      ("grasshopper",       "Differential Grasshopper", Rarity.COMMON),
+    SWALLOWTAIL      ("swallowtail",       "Eastern Tiger Swallowtail", Rarity.UNCOMMON),
+    JEWELWING        ("jewelwing",         "Ebony Jewelwing",        Rarity.UNCOMMON),
+    LACEWING         ("lacewing",          "Green Lacewing",         Rarity.COMMON),
+    EARWIG           ("earwig",            "European Earwig",        Rarity.COMMON),
+    ACORN_WEEVIL     ("acorn_weevil",      "Acorn Weevil",           Rarity.UNCOMMON),
+    CLICK_BEETLE     ("click_beetle",      "Eyed Click Beetle",      Rarity.UNCOMMON),
+    ROBBER_FLY       ("robber_fly",        "Robber Fly",             Rarity.UNCOMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

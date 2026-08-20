@@ -181,6 +181,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   sea_urchin: { shape: "leaf", verb: "Kelp" },
   knobbed_whelk: { shape: "crumb", verb: "Clam" },
   lugworm: { shape: "pebble", verb: "Silt" },
+  field_cricket: { shape: "flake", verb: "Seed" },
+  katydid: { shape: "leaf", verb: "Leaf" },
+  grasshopper: { shape: "leaf", verb: "Leaf" },
+  swallowtail: { shape: "flake", verb: "Nectar" },
+  jewelwing: { shape: "crumb", verb: "Midge" },
+  lacewing: { shape: "crumb", verb: "Aphid" },
+  earwig: { shape: "crumb", verb: "Scrap" },
+  acorn_weevil: { shape: "crumb", verb: "Acorn" },
+  click_beetle: { shape: "crumb", verb: "Scrap" },
+  robber_fly: { shape: "crumb", verb: "Prey" },
 };
 
 export function treatFor(key: string) {
@@ -368,4 +378,14 @@ export const GIFT_LINE: Record<string, string> = {
   sea_urchin: "A kelp I was finished walking for.",
   knobbed_whelk: "A clam I was finished hunting.",
   lugworm: "A silt I was finished heaping from.",
+  field_cricket: "A seed I was finished singing for.",
+  katydid: "A leaf I was finished stilling on.",
+  grasshopper: "A leaf I was finished vaulting for.",
+  swallowtail: "A nectar I was finished banding for.",
+  jewelwing: "A midge I was finished hovering for.",
+  lacewing: "An aphid I was finished lacing after.",
+  earwig: "A scrap I was finished raising for.",
+  acorn_weevil: "An acorn I was finished drilling.",
+  click_beetle: "A scrap I was finished clicking for.",
+  robber_fly: "A prey I was finished hunting.",
 };
