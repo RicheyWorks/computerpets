@@ -15,6 +15,8 @@ const denSrc = readFileSync(join(root, "src/components/desk/hive-den.tsx"), "utf
 const pageSrc = readFileSync(join(root, "src/routes/hive.tsx"), "utf8");
 const careSrc = readFileSync(join(root, "src/lib/pets/care.ts"), "utf8");
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
+const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
+const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
 const gardenSrc = readFileSync(join(root, "src/components/desk/garden-den.tsx"), "utf8");
 const cellarSrc = readFileSync(join(root, "src/components/desk/cellar-den.tsx"), "utf8");
 const farSrc = readFileSync(join(root, "src/components/desk/far-den.tsx"), "utf8");
@@ -114,6 +116,18 @@ test("packLine / seedCareFromRow keep brood and stores on the same line", () => 
   assert.equal(derived.brood, 4);
 });
 
+test("a snack on the blotter stamps stores the way nectar does", () => {
+  const seed = H.stampColony({ ...C.blankCare(now), hunger: 40, health: 50 });
+  const snack = C.applySnackFor("honeycomb", seed, now);
+  assert.ok(snack.stores > seed.stores);
+  assert.equal(snack.stores, snack.hunger);
+  assert.ok(typeof snack.brood === "number");
+  const rui = C.applySnackFor("red_panda", seed, now);
+  assert.equal(rui.brood, seed.brood);
+  assert.equal(rui.stores, seed.stores);
+  assert.ok(rui.hunger > seed.hunger);
+});
+
 test("nectar fills stores; a tick stamps the colony; neglect can go quiet", () => {
   const seed = H.stampColony({ ...C.blankCare(now), hunger: 40, health: 50 });
   const fed = C.applySanctuaryCare("feed", "honeycomb", seed, now).stats;
@@ -204,6 +218,18 @@ test("the nest still keeps one; Wax still broods alone", async () => {
   const second = await Clutch.hatchDueClutches("keeper", occupied, nowMs);
   assert.equal(second.length, 1);
   assert.equal(second[0].makeActive, false);
+});
+
+test("the desk and the demo show the same hive sit", () => {
+  assert.match(roomSrc, /applySnackFor/);
+  assert.match(roomSrc, /colonyOf/);
+  assert.match(roomSrc, /colonyWord/);
+  assert.match(roomSrc, /stampColony/);
+  assert.match(roomSrc, /liveDeskCare/);
+  assert.match(roomSrc, /hive && hive\.quiet/);
+  assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /persistLocal=\{false\}/);
+  assert.match(careSrc, /applySnackFor/);
 });
 
 test("the hive den is a living comb, not only ten sprites", () => {

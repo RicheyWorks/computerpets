@@ -16,7 +16,7 @@ import {
   applyPlay,
   applyPraise,
   applyRest,
-  applySnack,
+  applySnackFor,
   loadCare,
   leaveGift,
   maybeBondLine,
@@ -44,10 +44,17 @@ import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
+import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
 import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
+
+function liveDeskCare(kind: LivingKind, persistLocal: boolean, seed?: Partial<CareStats>): CareStats {
+  const fallback = seed ?? { hunger: 78, mood: 80, energy: 82 };
+  const live = persistLocal ? loadCare(kind.localKey, fallback, kind.key) : normalizeCare(fallback);
+  return isHivePlace(kind.key) ? stampColony(live) : live;
+}
 
 /** Desk local save keeps its own line; sanctuary meters overlay. Guest rooms take the remote line. */
 function mergePersist(local: CareStats, remote: CareStats): CareStats {
@@ -106,11 +113,7 @@ export function CompanionRoom({
   const mind = useMindBinding(kind.key);
   const mindSettings = useMindSettings();
   const trait = traitFor(kind.key);
-  const [stats, setStats] = useState<CareStats>(() =>
-    persistLocal
-      ? loadCare(kind.localKey, seed ?? { hunger: 78, mood: 80, energy: 82 }, kind.key)
-      : normalizeCare(seed ?? { hunger: 78, mood: 80, energy: 82 }),
-  );
+  const [stats, setStats] = useState<CareStats>(() => liveDeskCare(kind, persistLocal, seed));
   const [speech, setSpeech] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [latestNote, setLatestNote] = useState<string | null>(null);
@@ -233,9 +236,7 @@ export function CompanionRoom({
     takenRef.current = false;
     setMark(null);
     setLeaving(false);
-    const live = persistLocal
-      ? loadCare(kind.localKey, seed ?? { hunger: 78, mood: 80, energy: 82 }, kind.key)
-      : normalizeCare(seed ?? { hunger: 78, mood: 80, energy: 82 });
+    const live = liveDeskCare(kind, persistLocal, seed);
     setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;
@@ -479,6 +480,7 @@ export function CompanionRoom({
 
   const room = roomOf(kind.key);
   const gait = useMemo(() => ({ ...trait, scale: trait.scale * 1.24 }), [trait]);
+  const hive = isHivePlace(kind.key) ? colonyOf(stats, stats.hidden) : null;
   const hour = isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart());
   const sky = weatherLabel(weatherOf());
   const caller = todaysVisitor(kind.key).name;
@@ -525,7 +527,7 @@ export function CompanionRoom({
         kind={kind.key}
         hidden={stats.hidden}
         unwell={stats.sick}
-        dull={isBlue(stats, kind.key)}
+        dull={isBlue(stats, kind.key) || !!(hive && hive.quiet)}
         stage={age}
         seekX={mark?.x}
         onArrived={() => {
@@ -542,7 +544,7 @@ export function CompanionRoom({
           if (act === "snack") {
             setMark(null);
             const prev = statsRef.current;
-            const next = applySnack(prev);
+            const next = applySnackFor(kind.key, prev);
             setStats(next);
             say(SNACK_LINE[kind.key] ?? "A small treaty.");
             note(`${displayName} found the treat.`);
@@ -634,6 +636,7 @@ export function CompanionRoom({
         }
       >
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">
+          {hive ? `${colonyWord(hive)} · Brood · ${hive.brood} · Stores · ${hive.stores} · ` : ""}
           {hour} · {sky} · {caller} may call
           {detail ? ` · ${detail}` : ""}
         </p>

@@ -58,7 +58,8 @@ test("keeper persist and typed talk stay on the desk", () => {
 
 test("the desk keeps time; a demo does not write the desk key", () => {
   assert.match(roomSrc, /tickCare/);
-  assert.match(roomSrc, /loadCare\(kind\.localKey, seed \?\? \{ hunger: 78, mood: 80, energy: 82 \}, kind\.key\)/);
+  assert.match(roomSrc, /liveDeskCare/);
+  assert.match(roomSrc, /loadCare\(kind\.localKey, fallback, kind\.key\)/);
   assert.match(roomSrc, /if \(!persistLocal\) return;/);
   assert.match(roomSrc, /applyFeedFor/);
   assert.match(roomSrc, /setInterval/);
