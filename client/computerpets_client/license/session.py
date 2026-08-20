@@ -14,7 +14,7 @@ from .http_client import FetchImpl, create_license_client, normalize_backend_url
 from .hwid import assert_hwid, resolve_hwid
 
 STORE_NAME = "license.json"
-DEFAULT_BACKEND = "http://127.0.0.1:8080"
+DEFAULT_BACKEND = "http://127.0.0.1:8081"
 
 
 def default_backend_url(env: dict[str, str] | None = None) -> str:

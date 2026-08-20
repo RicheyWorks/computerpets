@@ -163,7 +163,7 @@ mvn clean package -DskipTests
 java -jar target\enterprise-pet-backend-1.0.0-SNAPSHOT.jar
 ```
 
-The backend will start on **http://localhost:8080** by default.
+The backend will start on **http://localhost:8081** by default. The desk keeps 8080. They do not share a door.
 
 The living desk ledger is `/admin` (not in the house nav). Point it at this origin and paste `ADMIN_API_KEY` — the page sends `X-Admin-Key` on every lookup and revoke.
 
@@ -202,7 +202,7 @@ Business metrics (same observations):
 Once the server is running, test it with:
 
 ```bash
-curl http://localhost:8080/api/verify/providers
+curl http://localhost:8081/api/verify/providers
 ```
 
 You should receive a JSON response listing the available ownership providers.
@@ -214,7 +214,7 @@ cd client
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
-export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8080
+export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8081
 export LICENSE_SECRET_KEY=   # same value as the backend process
 python -m computerpets_client
 ```
@@ -497,10 +497,10 @@ ethereum:
 **Solution**: Redis is the default store and the filter fail-closes when it cannot be reached. Start Redis (`docker compose up redis` or a local `redis-server`) and set `REDIS_HOST` / `REDIS_PORT`, or set `RATE_LIMIT_BACKEND=memory` for a single local process.
 
 ### Port Already in Use
-**Problem**: Port 8080 is occupied  
-**Solution**: Start the application with a different port:
+**Problem**: Port 8081 is occupied  
+**Solution**: The desk already sits at 8080. Pick another door for Java:
 ```bash
-mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8081"
+mvn spring-boot:run -Dspring-boot.run.arguments="--server.port=8082"
 ```
 
 ### Maven Cannot Find Java

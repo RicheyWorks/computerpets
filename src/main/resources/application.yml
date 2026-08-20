@@ -3,8 +3,10 @@
 #   application-staging.yml  — Postgres + Redis; microsoft.dev-mode off in the file
 #   application-prod.yml     — same shape, plus ProductionProfileGuard fail-hard
 # Activate with SPRING_PROFILES_ACTIVE. Tests and bare `mvn spring-boot:run` use this file only.
+# The desk keeps 8080 (live-preview contract). Java sits at 8081 so a keeper
+# can sit at both doors. They do not share one.
 server:
-  port: 8080
+  port: 8081
 
 spring:
   application:

@@ -7,11 +7,11 @@ services:
       dockerfile: Dockerfile
     container_name: computerpets-backend
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       # application-dev.yml: show-sql + H2 console; compose overrides the DB to Postgres.
       - SPRING_PROFILES_ACTIVE=dev
-      - SERVER_PORT=8080
+      - SERVER_PORT=8081
       # Database (wins over the H2 default in application.yml / application-dev.yml)
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/computerpets
       - SPRING_DATASOURCE_USERNAME=computerpets
@@ -46,7 +46,7 @@ services:
         condition: service_healthy
     healthcheck:
       # The process is up. Unhung optional doors do not restart the house.
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health/liveness"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health/liveness"]
       interval: 30s
       timeout: 5s
       retries: 3

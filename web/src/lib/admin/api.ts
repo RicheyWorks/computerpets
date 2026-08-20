@@ -42,7 +42,8 @@ export function clearAdminSession() {
 }
 
 export function defaultApiBase(): string {
-  return "http://localhost:8080";
+  // Java house door. The desk keeps 8080.
+  return "http://localhost:8081";
 }
 
 function headers(adminKey: string): HeadersInit {

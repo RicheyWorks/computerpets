@@ -18,7 +18,7 @@ python3 -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 
-export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8080
+export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8081
 export LICENSE_SECRET_KEY=         # same 32-byte standard Base64 key as the backend
 
 python -m computerpets_client
@@ -72,7 +72,7 @@ Bad ciphertext, an expired payload, a revoked `jti`, a hardware mismatch, or a m
 
 | Variable | Required | Meaning |
 |----------|----------|---------|
-| `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8080` if unset. |
+| `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
 | `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the backend uses. Needed to decrypt the issued license locally. |
 | `BUNDLE_SIGNING_KEY` | no | If set, the client also checks the CDN URL HMAC. Download still works without it — the backend already signed the URL. |
 | `COMPUTERPETS_CLIENT_HOME` | no | Override the user-data directory (`license.json`, `hwid.txt`, last-seen). |

@@ -57,7 +57,7 @@ class UnlockDialog(QDialog):
         )
         lead.setWordWrap(True)
 
-        self.backend = QLineEdit(status.get("backendUrl") or "http://127.0.0.1:8080")
+        self.backend = QLineEdit(status.get("backendUrl") or "http://127.0.0.1:8081")
         self.steam_id = QLineEdit((status.get("fields") or {}).get("steamId") or "")
         self.steam_id.setPlaceholderText("76561198000000000")
         self.app_id = QLineEdit((status.get("fields") or {}).get("appId") or "")
