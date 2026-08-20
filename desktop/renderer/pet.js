@@ -819,6 +819,10 @@ function setClickable(next) {
   window.desk?.setClickable(next);
 }
 
+function liftTapPx() {
+  return window.PetDesk?.tapPx(window.desk?.platform) ?? window.PetArrive.TAP_PX;
+}
+
 function switchTo(key) {
   const next = roster.find((r) => r.key === key) ?? roster[0];
   kind = { ...next, sprites: pack(next.key) };
@@ -1325,6 +1329,7 @@ function tickVisit(dt, now, width) {
 
 pet.addEventListener("pointerdown", (e) => {
   if (e.button === 2) return;
+  if (window.PetDesk?.carePointer(e)) return;
   sim.dragging = true;
   sim.pointerStart = { x: e.clientX, y: e.clientY };
   sim.dragDx = e.clientX - sim.x;
@@ -1349,7 +1354,7 @@ window.addEventListener("pointerup", (e) => {
   sim.pointerStart = null;
   const dx = start ? e.clientX - start.x : 0;
   const dy = start ? e.clientY - start.y : 0;
-  const lift = window.PetArrive.pointerUp(dx, dy);
+  const lift = window.PetArrive.pointerUp(dx, dy, liftTapPx());
   if (lift.kind === "tap") {
     handle("talk");
     return;

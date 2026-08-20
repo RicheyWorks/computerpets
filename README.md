@@ -55,7 +55,7 @@ npm start
 
 From the repo root: Windows `.\desktop.ps1`, Mac `sh desktop.sh`.
 
-Right-click or use the tray: feed, play, rest, clean, medicine, hide, special.
+Right-click or use the tray: feed, play, rest, clean, medicine, hide, special. On a Mac the extra sits in the menu bar.
 
 More in [desktop/README.md](desktop/README.md).
 

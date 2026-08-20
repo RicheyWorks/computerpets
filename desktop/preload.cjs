@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("desk", {
+  platform: process.platform,
   setClickable: (clickable) => ipcRenderer.send("set-clickable", !!clickable),
   openMenu: (x, y) => ipcRenderer.send("pet-menu", { x, y }),
   switchPet: (key) => ipcRenderer.send("switch-pet", key),

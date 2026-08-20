@@ -13,6 +13,7 @@ import {
 import { dayPart } from "@/lib/pets/hours";
 import { traitFor } from "@/lib/pets/traits";
 import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
+import { carePointer, tapPxFor } from "@/lib/pets/mac-desk";
 import {
   BREATHE_IDLE,
   BREATHE_SLEEP,
@@ -670,6 +671,7 @@ export function LivingPet({
     const onDown = (e: PointerEvent) => {
       const t = e.target as HTMLElement;
       if (!t.closest("[data-pet]")) return;
+      if (carePointer(e)) return;
       s.dragging = true;
       s.pointerStart = { x: e.clientX, y: e.clientY };
       s.dragDx = e.clientX - s.x;
@@ -692,7 +694,7 @@ export function LivingPet({
       s.pointerStart = null;
       const dx = start ? e.clientX - start.x : 0;
       const dy = start ? e.clientY - start.y : 0;
-      const lift = pointerUp(dx, dy);
+      const lift = pointerUp(dx, dy, tapPxFor(navigator.platform));
       if (lift.kind === "tap") {
         tapRef.current?.();
         return;
