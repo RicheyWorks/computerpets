@@ -1,13 +1,18 @@
 from computerpets_client.life import (
+    BATH_LINE,
     CARE_NAME,
     CareState,
     MessPile,
+    PRAISE_LINE,
+    apply_bath,
     apply_call,
     apply_clean,
     apply_feed,
     apply_hide,
     apply_medicine,
     apply_play,
+    apply_praise,
+    apply_rest,
     apply_treat,
     decay,
     load_care,
@@ -183,6 +188,43 @@ def test_rotten_care_file_fails_closed(tmp_path):
     state = load_care(user_data_dir=tmp_path, now=1_700)
     assert state.hunger == 78
     assert state.mood == 74
+
+
+def test_rest_bath_praise_match_the_desk():
+    rested = apply_rest(CareState(hunger=50, mood=50, energy=40, bond=10), RUI)
+    assert rested.state.hunger == 47
+    assert rested.state.mood == 54
+    assert rested.state.energy == 74
+    assert rested.state.bond == 11
+    assert rested.cmd == "sit"
+    bathed = apply_bath(CareState(hygiene=40, mood=50, energy=50, bond=10), RUI)
+    assert bathed.state.hygiene == 88
+    assert bathed.state.mood == 56
+    assert bathed.state.energy == 44
+    assert bathed.state.bond == 12
+    assert bathed.line == BATH_LINE
+    praised = apply_praise(CareState(mood=50, bond=10), RUI)
+    assert praised.state.mood == 62
+    assert praised.state.bond == 12
+    assert praised.line == PRAISE_LINE
+
+
+def test_night_slows_hunger_and_hidden_still_ages():
+    day = 1_700_000_000_000
+    three = 3 * 3_600_000
+    awake = decay(CareState(hunger=78, energy=40, last_tick=day), three, now=day, resting=False)
+    assert awake.hunger == 28
+    asleep = decay(CareState(hunger=78, energy=40, last_tick=day), three, now=day, resting=True)
+    assert asleep.hunger == 56
+    assert asleep.energy > 40
+    hidden = decay(
+        CareState(hunger=78, hidden=True, last_tick=day),
+        three,
+        now=day,
+        resting=True,
+    )
+    assert hidden.hunger == 28
+    assert hidden.hidden is True
 
 
 def test_unpack_care_rejects_a_foreign_line():

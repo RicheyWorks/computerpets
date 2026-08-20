@@ -40,6 +40,8 @@ test("the demo is a room; the guest is already walking", () => {
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);
+  assert.match(demoSrc, /liveTick/);
+  assert.match(demoSrc, /DESK_TEND/);
   assert.match(demoSrc, /MacDeskExtra/);
   assert.match(demoSrc, /LinuxDeskExtra/);
   assert.match(demoSrc, /TabletDeskSit/);
@@ -109,6 +111,25 @@ test("the demo is the same house: Bandit and Coral drop an egg, the way the blot
   assert.match(overlayStyleSrc, /data-shape="egg"/);
   assert.doesNotMatch(overlayPetSrc, /kingsnake: "pebble"/);
   assert.doesNotMatch(overlayPetSrc, /milk_snake: "pebble"/);
+});
+
+test("the demo is the same house: night ticks, tend sits, and the kept guest is not written", () => {
+  const night = new Date(2023, 10, 14, 23, 0, 0).getTime();
+  const then = night - 3 * 3600 * 1000;
+  const prior = { ...C.blankCare(then), hunger: 78, energy: 40, lastTick: then };
+  const live = C.tickCare("dog", prior, night);
+  assert.equal(live.hunger, 56);
+  assert.ok(live.energy > prior.energy);
+  assert.deepEqual(
+    C.DESK_TEND.map((m) => m.label),
+    ["Rest", "Clean", "Bath", "Medicine", "Praise"],
+  );
+  assert.match(demoSrc, /persistLocal=\{false\}/);
+  assert.match(demoSrc, /liveTick/);
+  assert.match(demoSrc, /extraCare=\{\[\.\.\.DESK_TEND\]\}/);
+  assert.match(roomSrc, /!persistLocal && !liveTick/);
+  assert.match(roomSrc, /persistLocal \? rememberVisit\(kind\.key\) : 0/);
+  assert.doesNotMatch(demoSrc, /saveCare|localStorage/);
 });
 
 test("the demo is the same house: Wax keeps brood and stores, and can go quieter", () => {

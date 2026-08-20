@@ -26,6 +26,58 @@ test("every overlay guest keeps their own snack line, not a small treaty", () =>
   assert.match(webHours, /honeycomb: "Nectar of a store\. I do not bite\."/);
 });
 
+test("the overlay keeps the same night as the desk for every guest", () => {
+  assert.equal(Object.keys(H.REST).length, 210);
+  assert.deepEqual(Object.keys(H.REST).sort(), [...CATALOG].sort());
+  assert.equal(H.isRestingHour("dog", 22), true);
+  assert.equal(H.isRestingHour("dog", 14), false);
+  assert.equal(H.isRestingHour("goldfish", 23), true);
+  assert.equal(H.isRestingHour("goldfish", 0), true);
+  assert.equal(H.isRestingHour("goldfish", 5), false);
+  assert.equal(H.isRestingHour("ferret", 10), true);
+  assert.equal(H.isRestingHour("ferret", 2), false);
+  assert.match(webHours, /goldfish: \[23, 5\]/);
+  assert.match(webHours, /ferret: \[10, 17\]/);
+  assert.match(lifeSrc, /hours\.isRestingHour/);
+});
+
+test("illness and mess tick the house way, and save keeps the clock", () => {
+  require("./hours.js");
+  const trait = { extra: {}, hungerH: 6, energyH: 9, hygieneH: 14, hardy: 0.8, social: 1, messy: 0.9, sleepStart: 0, sleepEnd: 4 };
+  const day = new Date(2023, 10, 14, 14, 0, 0).getTime();
+  const sick = Life.decay({ ...Life.blank(day), health: 20, hygiene: 50, lastTick: day }, trait, day, "dog");
+  assert.equal(sick.life.sick, true);
+  const orig = Math.random;
+  Math.random = () => 0;
+  const mess = Life.decay({ ...Life.blank(day), hygiene: 20, mess: [], lastTick: day - 180000 }, trait, day, "dog");
+  Math.random = orig;
+  assert.equal(mess.life.mess.length, 1);
+  assert.ok(mess.life.hygiene < 42);
+
+  const night = new Date(2023, 10, 14, 23, 0, 0).getTime();
+  const then = night - 3 * 3600 * 1000;
+  const slept = Life.decay({ ...Life.blank(then), hunger: 78, energy: 40, lastTick: then }, trait, night, "dog");
+  assert.ok(slept.life.hunger > 28);
+  assert.ok(slept.life.energy > 40);
+  assert.equal(slept.life.asleep, true);
+
+  const mem = new Map();
+  globalThis.localStorage = {
+    getItem: (k) => (mem.has(k) ? mem.get(k) : null),
+    setItem: (k, v) => mem.set(k, String(v)),
+    removeItem: (k) => mem.delete(k),
+    clear: () => mem.clear(),
+  };
+  const kept = { ...Life.blank(then), hunger: 78, lastTick: then, key: "dog" };
+  Life.save("dog", kept);
+  const stored = JSON.parse(mem.get("computerpets.desktop.life.v2.dog"));
+  assert.equal(stored.lastTick, then);
+  assert.equal(stored.hunger, 78);
+  assert.match(lifeSrc, /JSON\.stringify\(life\)/);
+  assert.doesNotMatch(lifeSrc, /lastTick: Date\.now\(\)/);
+  assert.match(petSrc, /if \(document\.hidden\) return;/);
+});
+
 test("the overlay snack branch says the guest's line", () => {
   const trait = { extra: {} };
   const dog = Life.act(Life.blank(), trait, "snack", Date.now(), "dog");

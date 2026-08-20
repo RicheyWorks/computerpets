@@ -1,4 +1,19 @@
+import { isRestingHour } from "./hours.ts";
+
 export type MessPile = { id: number; x: number; kind?: "gift" | "shed" };
+
+/** Overlay already recovers this fast at night. The desk and blotter keep the same sit. */
+export const NIGHT_HUNGER = 0.45;
+export const NIGHT_ENERGY_PER_MS = 18 / 3_600_000;
+
+/** Tend rail the living desk already keeps. /demo uses the same marks. */
+export const DESK_TEND = [
+  { label: "Rest", action: "rest" as const },
+  { label: "Clean", action: "clean" as const },
+  { label: "Bath", action: "bath" as const },
+  { label: "Medicine", action: "medicine" as const },
+  { label: "Praise", action: "praise" as const },
+];
 
 export type CareStats = {
   hunger: number;
@@ -259,12 +274,13 @@ export type SanctuaryTick = {
 };
 
 function decayForSpecies(speciesKey: string, stats: CareStats, lastTick: number, now: number): CareStats {
+  const resting = isRestingHour(speciesKey, new Date(now).getHours());
   if (adultLuna(speciesKey, stats, now)) {
     const pinned = { ...stats, hunger: Math.max(stats.hunger, 50) };
-    const live = decayStats(pinned, lastTick, now);
+    const live = decayStats(pinned, lastTick, now, resting);
     return { ...live, hunger: stats.hunger };
   }
-  const live = decayStats(stats, lastTick, now);
+  const live = decayStats(stats, lastTick, now, resting);
   return speciesKey === "honeycomb" ? stampHiveLine(live) : live;
 }
 
@@ -325,14 +341,15 @@ export function tickSanctuary(
   return { stats: live, floorSince: nextFloor, departedAt: null, verb: null };
 }
 
-export function decayStats(stats: Partial<CareStats>, lastTick: number, now = Date.now()): CareStats {
+export function decayStats(stats: Partial<CareStats>, lastTick: number, now = Date.now(), resting = false): CareStats {
   const s = normalizeCare(stats, now);
   const dt = Math.max(0, now - lastTick);
+  const asleep = resting && !s.hidden && !s.sick;
   const next: CareStats = {
     ...s,
-    hunger: clampStat(s.hunger - dt * HUNGER_PER_MS),
+    hunger: clampStat(s.hunger - dt * HUNGER_PER_MS * (asleep ? NIGHT_HUNGER : 1)),
     mood: clampStat(s.mood - dt * MOOD_PER_MS * (s.sick ? 1.3 : 1)),
-    energy: clampStat(s.energy - dt * ENERGY_PER_MS),
+    energy: asleep ? clampStat(s.energy + dt * NIGHT_ENERGY_PER_MS) : clampStat(s.energy - dt * ENERGY_PER_MS),
     hygiene: clampStat(s.hygiene - dt * HYGIENE_PER_MS),
     lastTick: now,
   };

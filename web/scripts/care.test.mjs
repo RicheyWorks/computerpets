@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const C = await import(join(root, "src/lib/pets/care.ts"));
+const Hours = await import(join(root, "src/lib/pets/hours.ts"));
 const G = await import(join(root, "src/lib/pets/genetics.ts"));
 
 const actionsSrc = readFileSync(join(root, "src/lib/pets/actions.ts"), "utf8");
@@ -155,15 +156,16 @@ test("species-true depart verbs stay quiet", () => {
 });
 
 test("the desk ages from lastTick; saveCare keeps the window", () => {
+  const day = new Date(2023, 10, 14, 14, 0, 0).getTime();
   const hours = 3 * 3600 * 1000;
-  const then = now - hours;
+  const then = day - hours;
   const prior = guest({ hunger: 78, lastTick: then }, then);
-  const live = C.tickCare("dog", prior, now);
+  const live = C.tickCare("dog", prior, day);
   assert.equal(live.hunger, 28);
   assert.ok(live.mood < prior.mood);
   assert.ok(live.energy < prior.energy);
   assert.ok(live.hygiene < prior.hygiene);
-  assert.equal(live.lastTick, now);
+  assert.equal(live.lastTick, day);
 
   const mem = new Map();
   globalThis.localStorage = {
@@ -182,9 +184,23 @@ test("the desk ages from lastTick; saveCare keeps the window", () => {
   assert.equal(stored.lastTick, then);
   assert.equal(stored.hunger, 78);
 
-  const loaded = C.loadCare("computerpets.desk.dog.v1", undefined, "dog", now);
+  const loaded = C.loadCare("computerpets.desk.dog.v1", undefined, "dog", day);
   assert.equal(loaded.hunger, 28);
-  assert.equal(loaded.lastTick, now);
+  assert.equal(loaded.lastTick, day);
+});
+
+test("night slows hunger and restores energy the way the overlay already does", () => {
+  const night = new Date(2023, 10, 14, 23, 0, 0).getTime();
+  const then = night - 3 * 3600 * 1000;
+  const prior = guest({ hunger: 78, energy: 40, lastTick: then }, then);
+  const live = C.tickCare("dog", prior, night);
+  assert.equal(live.hunger, 56);
+  assert.ok(live.energy > prior.energy);
+  assert.equal(C.DESK_TEND.map((m) => m.action).join(" "), "rest clean bath medicine praise");
+  assert.deepEqual(Hours.restWindow("goldfish"), [23, 5]);
+  assert.deepEqual(Hours.restWindow("ferret"), [10, 17]);
+  assert.equal(Hours.isRestingHour("dog", 23), true);
+  assert.equal(Hours.isRestingHour("dog", 14), false);
 });
 
 test("adult Luna still does not eat, and a desk tick does not empty her", () => {

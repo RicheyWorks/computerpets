@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { CompanionRoom } from "@/components/desk/companion-room";
-import type { CareStats, SanctuaryCare } from "@/lib/pets/care";
+import { DESK_TEND, type CareStats, type SanctuaryCare } from "@/lib/pets/care";
 import type { LivingKind } from "@/lib/pets/living";
 import { roomOf } from "@/lib/pets/rooms";
 
@@ -24,13 +24,7 @@ export function DeskStage({
       onSelectKind={onSelectKind}
       typedTalk
       journal
-      extraCare={[
-        { label: "Rest", action: "rest" },
-        { label: "Clean", action: "clean" },
-        { label: "Bath", action: "bath" },
-        { label: "Medicine", action: "medicine" },
-        { label: "Praise", action: "praise" },
-      ]}
+      extraCare={[...DESK_TEND]}
       footer={
         <p>
           <Link to="/meet" className="text-fg no-underline hover:text-primary">

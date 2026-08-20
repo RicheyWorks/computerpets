@@ -40,12 +40,15 @@ from .hours import (
 from .life import (
     CareState,
     ambient_line,
+    apply_bath,
     apply_call,
     apply_clean,
     apply_feed,
     apply_hide,
     apply_medicine,
     apply_play,
+    apply_praise,
+    apply_rest,
     apply_treat,
     decay,
     keep_hive,
@@ -109,7 +112,10 @@ class DeskWindow(QMainWindow):
         self._user_data_dir = user_data_dir if user_data_dir is not None else default_user_data_dir()
         self.session = session or create_license_session(user_data_dir=self._user_data_dir)
         self.species: Species = species_by_key(DEFAULT_SPECIES_KEY)
-        self.care = keep_hive(load_care(user_data_dir=self._user_data_dir), species_by_key(DEFAULT_SPECIES_KEY))
+        self.care = keep_hive(
+            load_care(user_data_dir=self._user_data_dir, key=DEFAULT_SPECIES_KEY),
+            species_by_key(DEFAULT_SPECIES_KEY),
+        )
         self.treat: TreatItem | None = None
         self.coats: list[ShedCoatItem] = []
         self.piles: list[MessPileItem] = []
@@ -158,9 +164,12 @@ class DeskWindow(QMainWindow):
         self.treat_btn = QPushButton(self.species.treat)
         self.hide_btn = QPushButton("Hide")
         self.play_btn = QPushButton("Play")
+        self.rest_btn = QPushButton("Rest")
         self.clean_btn = QPushButton("Clean")
+        self.bath_btn = QPushButton("Bath")
         self.medicine_btn = QPushButton("Medicine")
         self.medicine_btn.setVisible(False)
+        self.praise_btn = QPushButton("Praise")
         self.special_btn = QPushButton(trait_for(self.species.key).verb)
         self.shed_btn = QPushButton("Shed")
         self.unlock_btn = QPushButton("Unlock…")
@@ -185,8 +194,11 @@ class DeskWindow(QMainWindow):
         self.treat_btn.clicked.connect(self._treat)
         self.hide_btn.clicked.connect(self._hide_or_call)
         self.play_btn.clicked.connect(self._play)
+        self.rest_btn.clicked.connect(self._rest)
         self.clean_btn.clicked.connect(self._clean)
+        self.bath_btn.clicked.connect(self._bath)
         self.medicine_btn.clicked.connect(self._medicine)
+        self.praise_btn.clicked.connect(self._praise)
         self.special_btn.clicked.connect(self._special)
         self.shed_btn.clicked.connect(self._shed)
         self.unlock_btn.clicked.connect(self._unlock)
@@ -205,8 +217,11 @@ class DeskWindow(QMainWindow):
         bar.addWidget(self.treat_btn)
         bar.addWidget(self.hide_btn)
         bar.addWidget(self.play_btn)
+        bar.addWidget(self.rest_btn)
         bar.addWidget(self.clean_btn)
+        bar.addWidget(self.bath_btn)
         bar.addWidget(self.medicine_btn)
+        bar.addWidget(self.praise_btn)
         bar.addWidget(self.special_btn)
         bar.addWidget(self.shed_btn)
         bar.addWidget(self.prev_btn)
@@ -408,6 +423,22 @@ class DeskWindow(QMainWindow):
         self._keep_care()
         self._refresh_vitals()
 
+    def _apply_care(self, result) -> None:
+        self.care = result.state
+        self.pet.issue(result.cmd)
+        self._say(result.line)
+        self._keep_care()
+        self._refresh_vitals()
+
+    def _rest(self) -> None:
+        self._apply_care(apply_rest(self.care, self.species))
+
+    def _bath(self) -> None:
+        self._apply_care(apply_bath(self.care, self.species))
+
+    def _praise(self) -> None:
+        self._apply_care(apply_praise(self.care, self.species))
+
     def _clean(self) -> None:
         result = apply_clean(self.care, self.species)
         self.care = result.state
@@ -524,7 +555,7 @@ class DeskWindow(QMainWindow):
     def _tick(self) -> None:
         dt = self.timer.interval() / 1000.0
         before_mess = len(self.care.mess)
-        self.care = keep_hive(decay(self.care, self.timer.interval()), self.species)
+        self.care = keep_hive(decay(self.care, self.timer.interval(), key=self.species.key), self.species)
         if len(self.care.mess) != before_mess:
             self._sync_mess()
         self.pet.advance_pet(dt, self.care, SCENE_W)
