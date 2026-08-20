@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { CompanionRoom } from "@/components/desk/companion-room";
 import { livingByKey, loadActiveKindKey, RED_PANDA_KIND, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { roomOf } from "@/lib/pets/rooms";
+import { isTablet, readSit } from "@/lib/pets/tablet-desk";
 
 function isStandalone() {
   if (typeof window === "undefined") return false;
@@ -15,9 +16,11 @@ function isStandalone() {
 export function LiveStage({ initial }: { initial?: LivingKind }) {
   const [kind, setKind] = useState(initial ?? RED_PANDA_KIND);
   const [installed, setInstalled] = useState(true);
+  const [pad, setPad] = useState(false);
 
   useEffect(() => {
     setInstalled(isStandalone());
+    setPad(isTablet(readSit(window)));
     if (initial) {
       setKind(initial);
       return;
@@ -37,7 +40,8 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
     <CompanionRoom
       kind={kind}
       onSelectKind={select}
-      phone
+      phone={!pad}
+      tablet={pad}
       detail="On this device"
       extraCare={[{ label: "Rest", action: "rest" }]}
       line={
