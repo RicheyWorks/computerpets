@@ -24,7 +24,7 @@ class PetCatalogTest {
         List<PetType> pets = catalog.list();
         assertThat(pets).hasSize(PetType.values().length);
         assertThat(pets.getFirst()).isEqualTo(PetType.RED_PANDA);
-        assertThat(pets.getLast()).isEqualTo(PetType.CYST);
+        assertThat(pets.getLast()).isEqualTo(PetType.STICKLEBACK);
         assertThat(pets).contains(
                 PetType.BALL_PYTHON,
                 PetType.GREEN_TREE_PYTHON,
@@ -42,7 +42,9 @@ class PetCatalogTest {
                 PetType.OYSTER,
                 PetType.LICHEN,
                 PetType.PHOTOVORE,
-                PetType.CYST
+                PetType.CYST,
+                PetType.FROG,
+                PetType.STICKLEBACK
         );
     }
 
@@ -59,14 +61,14 @@ class PetCatalogTest {
     @DisplayName("listByRarity includes the new snake rarities")
     void listByRarity_includesSnakes() {
         assertThat(catalog.listByRarity(PetType.Rarity.COMMON))
-                .hasSize(27)
-                .contains(PetType.BALL_PYTHON, PetType.CORN_SNAKE, PetType.GARTER, PetType.MOON_JELLY, PetType.HERMIT_CRAB, PetType.MOSS, PetType.OAK, PetType.HONEYBEE, PetType.STICK, PetType.LADYBIRD, PetType.OYSTER, PetType.YEAST, PetType.PHOTOVORE, PetType.NIMBUS);
+                .hasSize(37)
+                .contains(PetType.BALL_PYTHON, PetType.CORN_SNAKE, PetType.GARTER, PetType.MOON_JELLY, PetType.HERMIT_CRAB, PetType.MOSS, PetType.OAK, PetType.HONEYBEE, PetType.STICK, PetType.LADYBIRD, PetType.OYSTER, PetType.YEAST, PetType.PHOTOVORE, PetType.NIMBUS, PetType.FROG, PetType.TOAD, PetType.CRAYFISH, PetType.STICKLEBACK);
         assertThat(catalog.listByRarity(PetType.Rarity.UNCOMMON))
-                .hasSize(32)
-                .contains(PetType.KINGSNAKE, PetType.HOGNOSE, PetType.OCTOPUS, PetType.HORSESHOE_CRAB, PetType.MAIDENHAIR, PetType.WATER_LILY, PetType.VENUS_FLYTRAP, PetType.PITCHER, PetType.SUNDEW, PetType.MONARCH, PetType.FIREFLY, PetType.MANTIS, PetType.FLY_AGARIC, PetType.CHANTERELLE, PetType.CHOIR, PetType.HALOVORE);
+                .hasSize(40)
+                .contains(PetType.KINGSNAKE, PetType.HOGNOSE, PetType.OCTOPUS, PetType.HORSESHOE_CRAB, PetType.MAIDENHAIR, PetType.WATER_LILY, PetType.VENUS_FLYTRAP, PetType.PITCHER, PetType.SUNDEW, PetType.MONARCH, PetType.FIREFLY, PetType.MANTIS, PetType.FLY_AGARIC, PetType.CHANTERELLE, PetType.CHOIR, PetType.HALOVORE, PetType.NEWT, PetType.MUSSEL, PetType.LEECH);
         assertThat(catalog.listByRarity(PetType.Rarity.RARE))
-                .hasSize(18)
-                .contains(PetType.GREEN_TREE_PYTHON, PetType.BOA, PetType.NAUTILUS, PetType.MANTA, PetType.MORAY, PetType.GINKGO, PetType.ORCHID, PetType.SAGUARO, PetType.LUNA, PetType.CICADA, PetType.MOREL, PetType.LICHEN, PetType.TERMINATOR, PetType.NEXUS);
+                .hasSize(20)
+                .contains(PetType.GREEN_TREE_PYTHON, PetType.BOA, PetType.NAUTILUS, PetType.MANTA, PetType.MORAY, PetType.GINKGO, PetType.ORCHID, PetType.SAGUARO, PetType.LUNA, PetType.CICADA, PetType.MOREL, PetType.LICHEN, PetType.TERMINATOR, PetType.NEXUS, PetType.CAECILIAN);
         assertThat(catalog.listByRarity(PetType.Rarity.LEGENDARY)).hasSize(3).contains(PetType.CYST);
     }
 
@@ -80,9 +82,9 @@ class PetCatalogTest {
                 PetType.Rarity.RARE,
                 PetType.Rarity.LEGENDARY
         );
-        assertThat(grouped.get(PetType.Rarity.COMMON)).hasSize(27);
-        assertThat(grouped.get(PetType.Rarity.UNCOMMON)).hasSize(32);
-        assertThat(grouped.get(PetType.Rarity.RARE)).hasSize(18);
+        assertThat(grouped.get(PetType.Rarity.COMMON)).hasSize(37);
+        assertThat(grouped.get(PetType.Rarity.UNCOMMON)).hasSize(40);
+        assertThat(grouped.get(PetType.Rarity.RARE)).hasSize(20);
         assertThat(grouped.get(PetType.Rarity.LEGENDARY)).hasSize(3);
     }
 
@@ -102,7 +104,10 @@ class PetCatalogTest {
         assertThat(csv).contains("lichen");
         assertThat(csv).contains("photovore");
         assertThat(csv).contains("cyst");
-        assertThat(csv).endsWith("cyst");
+        assertThat(csv).contains("frog");
+        assertThat(csv).contains("caecilian");
+        assertThat(csv).contains("stickleback");
+        assertThat(csv).endsWith("stickleback");
         assertThat(csv.split(", ")).hasSize(PetType.values().length);
     }
 }

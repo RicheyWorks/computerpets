@@ -3,6 +3,7 @@ import { FAR_ROSTER } from "./far";
 import { FUNGI_ROSTER } from "./fungi";
 import { GARDEN_ROSTER } from "./garden";
 import { INSECT_ROSTER } from "./insects";
+import { POND_ROSTER } from "./pond";
 import { SEA_ROSTER } from "./sea";
 import { SNAKE_ROSTER } from "./snakes";
 
@@ -588,4 +589,5 @@ export const ROSTER: RosterDef[] = [
   ...BEE_ROSTER,
   ...FUNGI_ROSTER,
   ...FAR_ROSTER,
+  ...POND_ROSTER,
 ];

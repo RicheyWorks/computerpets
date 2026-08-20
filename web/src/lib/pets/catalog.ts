@@ -101,6 +101,16 @@ export const SPECIES: Species[] = [
   { key: "magneton", displayName: "Field Swimmer", rarity: "UNCOMMON", temperament: "Aligned", habitat: "Ruler line", blurb: "Swims magnetic fields the way a fish swims current. North is food." },
   { key: "umbral", displayName: "Heat Shadow", rarity: "UNCOMMON", temperament: "Quiet", habitat: "Lamp shadow", blurb: "Feeds on waste heat and shadow. The lamp is loud. The cool is lunch." },
   { key: "cyst", displayName: "Traveling Cyst", rarity: "LEGENDARY", temperament: "Waiting", habitat: "Damp blotter", blurb: "A traveling cyst. Most of a life is the wait." },
+  { key: "frog", displayName: "Green Frog", rarity: "COMMON", temperament: "Ready", habitat: "Reed cup", blurb: "Long legs. Damp skin. A jump, then a sit. Not a toad." },
+  { key: "toad", displayName: "American Toad", rarity: "COMMON", temperament: "Plain", habitat: "Leaf dish", blurb: "Warty, dry, a short hop. Parotoids. Not a frog." },
+  { key: "newt", displayName: "Eastern Newt", rarity: "UNCOMMON", temperament: "Bright", habitat: "Moss saucer", blurb: "Smooth, spotted, a tail that is not a lizard's. An eft first." },
+  { key: "salamander", displayName: "Spotted Salamander", rarity: "UNCOMMON", temperament: "Hidden", habitat: "Leaf mold", blurb: "Yellow coins on black. A vernal guest. Not a lizard. Not Eft." },
+  { key: "caecilian", displayName: "Rio Caecilian", rarity: "RARE", temperament: "Slick", habitat: "Silt tray", blurb: "Rings, a jaw, small eyes. An amphibian. Not a worm." },
+  { key: "crayfish", displayName: "Common Crayfish", rarity: "COMMON", temperament: "Armed", habitat: "Pebble tray", blurb: "Ten legs. Two claws. A crustacean. Not an insect." },
+  { key: "pond_snail", displayName: "Great Pond Snail", rarity: "COMMON", temperament: "Slow", habitat: "Glass rim", blurb: "A spiral house she grew. A lung. She rasps. Not an insect." },
+  { key: "mussel", displayName: "Eastern Elliptio", rarity: "UNCOMMON", temperament: "Filtering", habitat: "Silt dish", blurb: "Two valves. A foot. She filters. Not a sea guest. Not lunch." },
+  { key: "leech", displayName: "Horse Leech", rarity: "UNCOMMON", temperament: "Sure", habitat: "Damp blotter", blurb: "Segments, suckers, a swim. She hunts worms. Not a worm you dig." },
+  { key: "stickleback", displayName: "Three-spined Stickleback", rarity: "COMMON", temperament: "Keen", habitat: "Weed bowl", blurb: "Three spines. A nest of glue. Not Coin. A pond fish." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

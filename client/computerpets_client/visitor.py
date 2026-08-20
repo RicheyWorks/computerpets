@@ -110,6 +110,16 @@ VISIT_LINES: dict[str, str] = {
     "magneton": "I aligned. Then I left the line.",
     "umbral": "I dimmed. Then I left the cool.",
     "cyst": "I waited. Then I left the seal.",
+    "frog": "I jumped. Then I left the bank.",
+    "toad": "I hopped. Then I left the leaf.",
+    "newt": "I kept the orange. Then I left the moss.",
+    "salamander": "I hid. Then I left the mold.",
+    "caecilian": "I slipped. Then I left the silt.",
+    "crayfish": "I pinched. Then I left the pebble.",
+    "pond_snail": "I rasped. Then I left the rim.",
+    "mussel": "I filtered. Then I left the silt.",
+    "leech": "I latched. Then I left the damp.",
+    "stickleback": "I flared. Then I left the nest.",
 }
 
 

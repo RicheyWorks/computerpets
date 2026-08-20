@@ -83,7 +83,7 @@ test("hatch, nest, kennel, and kennel-guest rooms stay", () => {
   assert.match(demoSrc, /persistLocal=\{false\}/);
 });
 
-test("meet still says Watch Rui and Ninety", () => {
+test("meet still says Watch Rui and one hundred", () => {
   assert.match(meetSrc, /Watch Rui/);
-  assert.match(meetSrc, /Ninety/);
+  assert.match(meetSrc, /One hundred/);
 });

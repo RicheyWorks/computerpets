@@ -121,6 +121,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "magneton": (_a("align", "align", 1.2, 5), _a("still", "freeze", 1.6, 2), _a("north", "stretch", 1.0, 1)),
     "umbral": (_a("dim", "dim", 2.4, 5, "sit"), _a("still", "freeze", 2.6, 3), _a("cool", "share", 1.8, 1)),
     "cyst": (_a("wake", "wake", 1.8, 4, "sit"), _a("wait", "sit_hold", 3.2, 5, "sit"), _a("still", "freeze", 2.8, 3)),
+    "frog": (_a("hop", "hop", 0.55, 4, "play"), _a("croak", "talk", 0.8, 3, "talk"), _a("still", "freeze", 1.6, 2)),
+    "toad": (_a("hop", "hop", 0.5, 3, "play"), _a("puff", "puff", 1.2, 4, "sit"), _a("still", "freeze", 1.8, 2)),
+    "newt": (_a("walk", "wiggle", 1.0, 4), _a("still", "freeze", 1.6, 2), _a("dart", "dart", 0.8, 2)),
+    "salamander": (_a("hide", "sit_hold", 2.2, 5, "sit"), _a("still", "freeze", 2.0, 3), _a("walk", "wiggle", 0.9, 1)),
+    "caecilian": (_a("slip", "wiggle", 1.2, 5), _a("ring", "sit_hold", 2.0, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "crayfish": (_a("pinch", "snap", 0.7, 4, "play"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "pond_snail": (_a("rasp", "nod", 1.4, 5, "sit"), _a("still", "sit_hold", 2.4, 3, "sit"), _a("lean", "lean", 1.2, 1)),
+    "mussel": (_a("siphon", "open", 1.8, 5, "sit"), _a("still", "sit_hold", 2.8, 4, "sit"), _a("filter", "freeze", 2.2, 2)),
+    "leech": (_a("latch", "sit_hold", 1.8, 4, "sit"), _a("swim", "wiggle", 1.2, 3), _a("still", "freeze", 1.6, 2)),
+    "stickleback": (_a("flare", "pulse", 1.0, 4), _a("dart", "dart", 0.8, 3), _a("still", "freeze", 1.4, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

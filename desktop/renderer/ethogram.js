@@ -98,6 +98,16 @@
     magneton: [A("align", "align", 1.2, 5), A("still", "freeze", 1.6, 2), A("north", "stretch", 1.0, 1)],
     umbral: [A("dim", "dim", 2.4, 5, "sit"), A("still", "freeze", 2.6, 3), A("cool", "share", 1.8, 1)],
     cyst: [A("wake", "wake", 1.8, 4, "sit"), A("wait", "sit_hold", 3.2, 5, "sit"), A("still", "freeze", 2.8, 3)],
+    frog: [A("hop", "hop", 0.55, 4, "play"), A("croak", "talk", 0.8, 3, "talk"), A("still", "freeze", 1.6, 2)],
+    toad: [A("hop", "hop", 0.5, 3, "play"), A("puff", "puff", 1.2, 4, "sit"), A("still", "freeze", 1.8, 2)],
+    newt: [A("walk", "wiggle", 1.0, 4), A("still", "freeze", 1.6, 2), A("dart", "dart", 0.8, 2)],
+    salamander: [A("hide", "sit_hold", 2.2, 5, "sit"), A("still", "freeze", 2.0, 3), A("walk", "wiggle", 0.9, 1)],
+    caecilian: [A("slip", "wiggle", 1.2, 5), A("ring", "sit_hold", 2.0, 3, "sit"), A("still", "freeze", 1.8, 2)],
+    crayfish: [A("pinch", "snap", 0.7, 4, "play"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+    pond_snail: [A("rasp", "nod", 1.4, 5, "sit"), A("still", "sit_hold", 2.4, 3, "sit"), A("lean", "lean", 1.2, 1)],
+    mussel: [A("siphon", "open", 1.8, 5, "sit"), A("still", "sit_hold", 2.8, 4, "sit"), A("filter", "freeze", 2.2, 2)],
+    leech: [A("latch", "sit_hold", 1.8, 4, "sit"), A("swim", "wiggle", 1.2, 3), A("still", "freeze", 1.6, 2)],
+    stickleback: [A("flare", "pulse", 1.0, 4), A("dart", "dart", 0.8, 3), A("still", "freeze", 1.4, 2)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",

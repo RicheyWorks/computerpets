@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same ninety, painted here.
+the others walk. This is not a new bestiary — it is the same hundred, painted here.
 """
 
 from __future__ import annotations
@@ -125,7 +125,20 @@ FAR_KEYS: tuple[str, ...] = (
     "cyst",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS
+POND_KEYS: tuple[str, ...] = (
+    "frog",
+    "toad",
+    "newt",
+    "salamander",
+    "caecilian",
+    "crayfish",
+    "pond_snail",
+    "mussel",
+    "leech",
+    "stickleback",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS
 
 
 @dataclass(frozen=True)
@@ -2712,6 +2725,283 @@ ARCA = _kind(
     hungry=("A wait should not be this dry.", "A damp would restore the seal."),
 )
 
+REED = _kind(
+    key="frog",
+    slug="reed",
+    name="Reed",
+    label="Green Frog",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="frog",
+    walk=88,
+    palette=Palette(
+        body=(72, 140, 80),
+        belly=(196, 220, 168),
+        ear=(32, 64, 40),
+        ear_inner=(168, 200, 140),
+        nose=(28, 28, 24),
+        ring=(48, 88, 56),
+        accent=(32, 64, 40),
+    ),
+    greet=("I jumped. That was hello.", "The cup kept my green.", "You may look. I am not a toad."),
+    ambient=("Long legs. Damp skin. I keep the grammar.", "I am not Pebble. Pebble is dry and warty. I sit wet.", "I hop. Then I sit. Then I hop."),
+    feed=("Cricket of a treaty.", "I will take this without leaving the cup.", "Accepted. The jump records it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Inside the cup.",),
+    call=("I jumped. That was hello.",),
+    hungry=("A frog should not be this empty.", "A cricket would restore the jump."),
+)
+
+PEBBLE = _kind(
+    key="toad",
+    slug="pebble",
+    name="Pebble",
+    label="American Toad",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="toad",
+    walk=54,
+    palette=Palette(
+        body=(140, 100, 64),
+        belly=(212, 188, 148),
+        ear=(96, 68, 44),
+        ear_inner=(188, 160, 120),
+        nose=(28, 24, 20),
+        ring=(96, 68, 44),
+        accent=(96, 68, 44),
+    ),
+    greet=("I hopped. Hello.", "The dish kept my warts.", "You may look. I am not a frog."),
+    ambient=("Dry skin. Short hops. The glands are the tell.", "I am not Reed. Reed is damp and long-legged. I sit dry.", "I hop. Then I puff. Then I sit."),
+    feed=("Cricket of a treaty.", "I will take this without leaving the dish.", "Accepted. The warts record it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Under a leaf.",),
+    call=("I hopped. Hello.",),
+    hungry=("A toad should not be this empty.", "A cricket would restore the hop."),
+)
+
+EFT = _kind(
+    key="newt",
+    slug="eft",
+    name="Eft",
+    label="Eastern Newt",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="newt",
+    walk=62,
+    aquatic=True,
+    palette=Palette(
+        body=(220, 92, 48),
+        belly=(236, 212, 160),
+        ear=(188, 72, 40),
+        ear_inner=(244, 160, 88),
+        nose=(28, 20, 16),
+        ring=(236, 212, 160),
+        accent=(188, 72, 40),
+    ),
+    greet=("I kept the orange. Hello.", "The saucer kept my spots.", "You may look. I am not a lizard."),
+    ambient=("A newt is not a lizard. The skin is wet. The tail is the tell.", "Sol is an iguana. I am a salamander who walked as an eft.", "I walk. Then I am orange again."),
+    feed=("Worm of a treaty.", "I will take this without leaving the saucer.", "Accepted. The spots record it."),
+    treat_lines=("Worm of a treaty.",),
+    hide=("Inside the saucer.",),
+    call=("I kept the orange. Hello.",),
+    hungry=("A newt should not be this thin.", "A worm would restore the orange."),
+)
+
+DAPPLE = _kind(
+    key="salamander",
+    slug="dapple",
+    name="Dapple",
+    label="Spotted Salamander",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="salamander",
+    walk=48,
+    palette=Palette(
+        body=(28, 28, 32),
+        belly=(48, 44, 40),
+        ear=(232, 196, 56),
+        ear_inner=(232, 196, 56),
+        nose=(16, 16, 14),
+        ring=(232, 196, 56),
+        accent=(16, 16, 14),
+    ),
+    greet=("I waited under the leaf. Hello.", "The mold kept my coins.", "You may look. I am not a lizard."),
+    ambient=("Yellow coins on black. I keep them.", "I am not Eft. Eft walked orange. I hide until the pool.", "I sit. Then I hide. Then I sit."),
+    feed=("Worm of a treaty.", "I will take this without leaving the mold.", "Accepted. The coins record it."),
+    treat_lines=("Worm of a treaty.",),
+    hide=("Under the leaf.",),
+    call=("I waited under the leaf. Hello.",),
+    hungry=("A salamander should not be this empty.", "A worm would restore the coins."),
+)
+
+SLIP = _kind(
+    key="caecilian",
+    slug="slip",
+    name="Slip",
+    label="Rio Caecilian",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="caecilian",
+    walk=44,
+    aquatic=True,
+    palette=Palette(
+        body=(88, 96, 100),
+        belly=(64, 72, 76),
+        ear=(48, 52, 56),
+        ear_inner=(140, 148, 152),
+        nose=(20, 20, 18),
+        ring=(64, 72, 76),
+        accent=(48, 52, 56),
+    ),
+    greet=("I am not a worm. Hello.", "The tray kept my rings.", "You may look. I have a jaw."),
+    ambient=("Rings. A jaw. Eyes that barely keep office.", "I am an amphibian. Latch is a leech. I am not Latch.", "I slip. Then I am a ring again."),
+    feed=("Worm of a treaty.", "I will take this without leaving the silt.", "Accepted. The rings record it."),
+    treat_lines=("Worm of a treaty.",),
+    hide=("Inside the silt.",),
+    call=("I am not a worm. Hello.",),
+    hungry=("A caecilian should not be this empty.", "A worm would restore the slip."),
+)
+
+PINCH = _kind(
+    key="crayfish",
+    slug="pinch",
+    name="Pinch",
+    label="Common Crayfish",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="crayfish",
+    walk=70,
+    aquatic=True,
+    palette=Palette(
+        body=(180, 64, 48),
+        belly=(220, 180, 140),
+        ear=(156, 48, 36),
+        ear_inner=(220, 180, 140),
+        nose=(28, 16, 12),
+        ring=(156, 48, 36),
+        accent=(156, 48, 36),
+    ),
+    greet=("I pinched. That was hello.", "The tray kept my claws.", "You may look. I am not an insect."),
+    ambient=("Ten legs. Two claws. I keep the grammar.", "I am not Comb. Comb is a bee. I am a crustacean.", "I walk. Then I pinch. Then I walk."),
+    feed=("Scrap of a treaty.", "I will take this and hold it.", "Accepted. The claws record it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("Under a pebble.",),
+    call=("I pinched. That was hello.",),
+    hungry=("A crayfish should not be this empty.", "A scrap would restore the pinch."),
+)
+
+WHORL = _kind(
+    key="pond_snail",
+    slug="whorl",
+    name="Whorl",
+    label="Great Pond Snail",
+    treat="Algae",
+    treat_shape="flake",
+    silhouette="snail",
+    walk=10,
+    aquatic=True,
+    palette=Palette(
+        body=(120, 108, 72),
+        belly=(148, 132, 88),
+        ear=(88, 76, 48),
+        ear_inner=(212, 196, 148),
+        nose=(72, 64, 48),
+        ring=(212, 196, 148),
+        accent=(88, 76, 48),
+    ),
+    greet=("I rasped. Hello.", "The rim kept my spiral.", "You may look. I grew this house."),
+    ambient=("A spiral. I keep adding rooms.", "I am not Tenant. Tenant borrows a shell. I grew mine.", "I sit. Then I rasp. Then I sit."),
+    feed=("Algae of a treaty.", "I will take this without leaving the rim.", "Accepted. The spiral records it."),
+    treat_lines=("Algae of a treaty.",),
+    hide=("On the rim.",),
+    call=("I rasped. Hello.",),
+    hungry=("A snail should not be this empty.", "An algae would restore the rasp."),
+)
+
+HINGE = _kind(
+    key="mussel",
+    slug="hinge",
+    name="Hinge",
+    label="Eastern Elliptio",
+    treat="Silt",
+    treat_shape="flake",
+    silhouette="mussel",
+    walk=4,
+    aquatic=True,
+    palette=Palette(
+        body=(72, 56, 44),
+        belly=(196, 180, 148),
+        ear=(56, 44, 36),
+        ear_inner=(168, 156, 132),
+        nose=(40, 32, 28),
+        ring=(196, 180, 148),
+        accent=(56, 44, 36),
+    ),
+    greet=("I filtered. Hello.", "The dish kept my hinge.", "You may look. I am not the tide."),
+    ambient=("Two valves. A foot. I keep the grammar.", "Ochre is a sea star. I am a river mussel. I filter.", "I sit. Then I siphon. Then I sit."),
+    feed=("Silt of a treaty.", "I will take this without leaving the dish.", "Accepted. The hinge records it."),
+    treat_lines=("Silt of a treaty.",),
+    hide=("Inside the dish.",),
+    call=("I filtered. Hello.",),
+    hungry=("A mussel should not be this empty.", "A silt would restore the filter."),
+)
+
+LATCH = _kind(
+    key="leech",
+    slug="latch",
+    name="Latch",
+    label="Horse Leech",
+    treat="Worm",
+    treat_shape="flake",
+    silhouette="leech",
+    walk=36,
+    aquatic=True,
+    palette=Palette(
+        body=(80, 72, 48),
+        belly=(56, 52, 36),
+        ear=(48, 40, 32),
+        ear_inner=(120, 108, 72),
+        nose=(48, 40, 32),
+        ring=(56, 52, 36),
+        accent=(48, 40, 32),
+    ),
+    greet=("I latched. Hello.", "The blotter kept my segments.", "You may look. I am not a worm."),
+    ambient=("A leech is not a worm you dig. Suckers. A swim.", "I am not Slip. Slip is a caecilian. I hunt worms. I do not drink you.", "I swim. Then I latch. Then I sit."),
+    feed=("Worm of a treaty.", "I will take this and keep the latch.", "Accepted. The segments record it."),
+    treat_lines=("Worm of a treaty.",),
+    hide=("On the blotter.",),
+    call=("I latched. Hello.",),
+    hungry=("A leech should not be this empty.", "A worm would restore the latch."),
+)
+
+PRICKLE = _kind(
+    key="stickleback",
+    slug="prickle",
+    name="Prickle",
+    label="Three-spined Stickleback",
+    treat="Flake",
+    treat_shape="flake",
+    silhouette="stickleback",
+    walk=80,
+    aquatic=True,
+    palette=Palette(
+        body=(120, 148, 128),
+        belly=(196, 212, 188),
+        ear=(72, 100, 84),
+        ear_inner=(196, 212, 188),
+        nose=(20, 24, 20),
+        ring=(72, 100, 84),
+        accent=(40, 48, 40),
+    ),
+    greet=("I flared. Hello.", "The bowl kept my spines.", "You may look. I am not Coin."),
+    ambient=("Three spines. A nest of glue. I keep the office.", "Coin is a goldfish. I build. I do not circle one thought.", "I dart. Then I flare. Then I dart."),
+    feed=("Flake of a treaty.", "I will take this and return to the nest.", "Accepted. The spines record it."),
+    treat_lines=("Flake of a treaty.",),
+    hide=("Inside the weed.",),
+    call=("I flared. Hello.",),
+    hungry=("A stickleback should not be this empty.", "A flake would restore the flare."),
+)
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -2803,6 +3093,16 @@ _ALL: tuple[Species, ...] = (
     BEACON,
     HUSH,
     ARCA,
+    REED,
+    PEBBLE,
+    EFT,
+    DAPPLE,
+    SLIP,
+    PINCH,
+    WHORL,
+    HINGE,
+    LATCH,
+    PRICKLE,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -2841,6 +3141,10 @@ def is_fungus(key: str) -> bool:
 
 def is_far(key: str) -> bool:
     return key in FAR_KEYS
+
+
+def is_pond(key: str) -> bool:
+    return key in POND_KEYS
 
 
 def next_species_key(key: str) -> str:

@@ -100,7 +100,17 @@ public enum PetType {
     HALOVORE         ("halovore",          "Salt-drinker",         Rarity.UNCOMMON),
     MAGNETON         ("magneton",          "Field Swimmer",        Rarity.UNCOMMON),
     UMBRAL           ("umbral",            "Heat Shadow",          Rarity.UNCOMMON),
-    CYST             ("cyst",              "Traveling Cyst",       Rarity.LEGENDARY);
+    CYST             ("cyst",              "Traveling Cyst",       Rarity.LEGENDARY),
+    FROG             ("frog",              "Green Frog",           Rarity.COMMON),
+    TOAD             ("toad",              "American Toad",        Rarity.COMMON),
+    NEWT             ("newt",              "Eastern Newt",         Rarity.UNCOMMON),
+    SALAMANDER       ("salamander",        "Spotted Salamander",   Rarity.UNCOMMON),
+    CAECILIAN        ("caecilian",         "Rio Caecilian",        Rarity.RARE),
+    CRAYFISH         ("crayfish",          "Common Crayfish",      Rarity.COMMON),
+    POND_SNAIL       ("pond_snail",        "Great Pond Snail",     Rarity.COMMON),
+    MUSSEL           ("mussel",            "Eastern Elliptio",     Rarity.UNCOMMON),
+    LEECH            ("leech",             "Horse Leech",          Rarity.UNCOMMON),
+    STICKLEBACK      ("stickleback",       "Three-spined Stickleback", Rarity.COMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

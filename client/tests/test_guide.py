@@ -24,6 +24,8 @@ from computerpets_client.guide import (
     classroom_for,
     far_guide_complete,
     far_guide_keys,
+    pond_guide_complete,
+    pond_guide_keys,
     fungi_guide_complete,
     fungi_guide_keys,
     garden_guide_complete,
@@ -40,7 +42,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -156,6 +158,19 @@ FAR_EXPECTED = [
     ("cyst", "arca", "Arca vagans"),
 ]
 
+POND_EXPECTED = [
+    ("frog", "reed", "Lithobates clamitans"),
+    ("toad", "pebble", "Anaxyrus americanus"),
+    ("newt", "eft", "Notophthalmus viridescens"),
+    ("salamander", "dapple", "Ambystoma maculatum"),
+    ("caecilian", "slip", "Typhlonectes natans"),
+    ("crayfish", "pinch", "Cambarus bartonii"),
+    ("pond_snail", "whorl", "Lymnaea stagnalis"),
+    ("mussel", "hinge", "Elliptio complanata"),
+    ("leech", "latch", "Haemopis sanguisuga"),
+    ("stickleback", "prickle", "Gasterosteus aculeatus"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -173,6 +188,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert bee_guide_complete()
     assert fungi_guide_complete()
     assert far_guide_complete()
+    assert pond_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -181,6 +197,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert bee_guide_keys() == BEE_KEYS
     assert fungi_guide_keys() == FUNGI_KEYS
     assert far_guide_keys() == FAR_KEYS
+    assert pond_guide_keys() == POND_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -255,6 +272,16 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
     for key in FAR_KEYS:
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "far"
+        assert classroom_for(key).verb == "stay"
+    for key, slug, latin in POND_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in POND_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "pond"
         assert classroom_for(key).verb == "stay"
 
 
@@ -463,6 +490,40 @@ def test_the_important_far_mixups_are_actually_taught():
     assert re.search(r"cicada", arca, re.I)
 
 
+def test_the_important_pond_mixups_are_actually_taught():
+    frog = _taught(plaque_for("frog"))
+    toad = _taught(plaque_for("toad"))
+    newt = _taught(plaque_for("newt"))
+    salamander = _taught(plaque_for("salamander"))
+    caecilian = _taught(plaque_for("caecilian"))
+    crayfish = _taught(plaque_for("crayfish"))
+    snail = _taught(plaque_for("pond_snail"))
+    mussel = _taught(plaque_for("mussel"))
+    leech = _taught(plaque_for("leech"))
+    stickleback = _taught(plaque_for("stickleback"))
+    assert re.search(r"not a toad", frog, re.I)
+    assert re.search(r"Pebble", frog)
+    assert re.search(r"not a frog", toad, re.I)
+    assert re.search(r"Reed", toad)
+    assert re.search(r"not a lizard", newt, re.I)
+    assert re.search(r"Sol", newt)
+    assert re.search(r"not a lizard", salamander, re.I)
+    assert re.search(r"not Eft", salamander, re.I)
+    assert re.search(r"not a worm", caecilian, re.I)
+    assert re.search(r"Latch", caecilian)
+    assert re.search(r"not an insect", crayfish, re.I)
+    assert re.search(r"Comb", crayfish)
+    assert re.search(r"not an insect", snail, re.I)
+    assert re.search(r"Tenant", snail)
+    assert re.search(r"not a sea guest", mussel, re.I)
+    assert re.search(r"Ochre", mussel)
+    assert re.search(r"not a worm", leech, re.I)
+    assert re.search(r"Slip", leech)
+    assert re.search(r"blood rumor", leech, re.I)
+    assert re.search(r"not a goldfish", stickleback, re.I)
+    assert re.search(r"Coin", stickleback)
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -477,6 +538,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     insect_src = (WEB_PETS / "insect-guide.ts").read_text(encoding="utf-8")
     bee_src = (WEB_PETS / "bee-guide.ts").read_text(encoding="utf-8")
     fungi_src = (WEB_PETS / "fungi-guide.ts").read_text(encoding="utf-8")
+    pond_src = (WEB_PETS / "pond-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -484,6 +546,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     insect_keys = [key for key, _, _ in INSECT_EXPECTED]
     bee_keys = [key for key, _, _ in BEE_EXPECTED]
     fungi_keys = [key for key, _, _ in FUNGI_EXPECTED]
+    pond_keys = [key for key, _, _ in POND_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -540,6 +603,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
         assert guide.tell in chunk
         assert guide.mixup in chunk
         assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(POND_EXPECTED):
+        nxt = pond_keys[index + 1] if index + 1 < len(pond_keys) else None
+        chunk = _slice_entry(pond_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
 
 
 def test_plaque_widget_teaches_the_selected_species():
@@ -574,6 +645,10 @@ def test_plaque_widget_teaches_the_selected_species():
     card.set_key("lichen")
     assert card.guide().key == "lichen"
     assert "not one creature" in card.mixup.text().lower()
+    assert "stay" in card.classroom.text().lower()
+    card.set_key("frog")
+    assert card.guide().key == "frog"
+    assert "not a toad" in card.mixup.text().lower()
     assert "stay" in card.classroom.text().lower()
     del app
 
