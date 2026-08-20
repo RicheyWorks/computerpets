@@ -1,5 +1,22 @@
-(function () {
+(function (root) {
   const STORE = "computerpets.desktop.life.v2";
+  const Hours = () => root.PetHours;
+  const Hive = () => root.PetHive;
+
+  function snackLine(key, existing) {
+    const hours = Hours();
+    if (hours && hours.snackLine) return hours.snackLine(key, existing);
+    return existing || "A small treaty.";
+  }
+
+  function stampHive(life, key) {
+    const hive = Hive();
+    if (!hive || !hive.isHivePlace(key)) return life;
+    const stamped = hive.stampColony(life);
+    life.brood = stamped.brood;
+    life.stores = stamped.stores;
+    return life;
+  }
 
   const SHEDDERS = new Set([
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",
@@ -57,11 +74,18 @@
   function load(key) {
     try {
       const raw = localStorage.getItem(`${STORE}.${key}`);
-      if (!raw) return blank();
+      if (!raw) {
+        const fresh = blank();
+        fresh.key = key;
+        return stampHive(fresh, key);
+      }
       const data = JSON.parse(raw);
-      return { ...blank(), ...data, v: 2, mess: Array.isArray(data.mess) ? data.mess : [], gifts: Array.isArray(data.gifts) ? data.gifts : [] };
+      const life = { ...blank(), ...data, v: 2, key, mess: Array.isArray(data.mess) ? data.mess : [], gifts: Array.isArray(data.gifts) ? data.gifts : [] };
+      return stampHive(life, key);
     } catch {
-      return blank();
+      const fresh = blank();
+      fresh.key = key;
+      return stampHive(fresh, key);
     }
   }
 
@@ -93,11 +117,12 @@
     return inWindow(h, trait.sleepStart, trait.sleepEnd);
   }
 
-  function decay(life, trait, now = Date.now()) {
+  function decay(life, trait, now = Date.now(), key) {
     const dt = Math.max(0, now - (life.lastTick || now));
     const hours = dt / 3600000;
     if (hours <= 0) {
       life.stage = stageOf(life, now);
+      stampHive(life, key);
       return life;
     }
     const hatch = life.stage === "hatchling" ? 1.35 : life.stage === "elder" ? 0.85 : 1;
@@ -156,6 +181,7 @@
     const grew = nextStage !== life.stage;
     life.stage = nextStage;
     life.lastTick = now;
+    stampHive(life, key);
     return { life, grew, asleep };
   }
 
@@ -163,7 +189,7 @@
     life.bond = clamp(life.bond + n);
   }
 
-  function act(life, trait, action, now = Date.now()) {
+  function actBody(life, trait, action, now = Date.now(), key) {
     const extra = trait.extra || {};
     if (life.hidden && action !== "call" && action !== "talk") {
       return { life, line: pick(extra.hide || ["..."]), cmd: "idle", notify: null };
@@ -187,7 +213,7 @@
       life.mood = clamp(life.mood + 3);
       life.weight = clamp(life.weight + 1);
       bondUp(life, 1);
-      return { life, line: "A small treaty.", cmd: "eat", notify: null };
+      return { life, line: snackLine(key), cmd: "eat", notify: null };
     }
     if (action === "shed") {
       const due = now - (life.shedAt || 0) >= 8 * 60 * 60 * 1000;
@@ -274,6 +300,12 @@
       return { life, line: null, cmd: "talk", notify: null, useRoster: "ambient" };
     }
     return { life, line: null, cmd: "idle", notify: null };
+  }
+
+  function act(life, trait, action, now = Date.now(), key) {
+    const result = actBody(life, trait, action, now, key);
+    stampHive(result.life, key);
+    return result;
   }
 
   function runSpecial(life, trait, now) {
@@ -377,7 +409,12 @@
     Soul: "The blotter is ours.",
   };
 
-  function vitals(life) {
+  function vitals(life, key) {
+    const hive = Hive();
+    if (hive && hive.isHivePlace(key || life.key)) {
+      const colony = hive.colonyOf(life, life.hidden);
+      if (colony.quiet) return `${hive.colonyWord(colony)} · ${bondTitle(life.bond)}`;
+    }
     let word = "Settled";
     if (life.hidden) word = "Away";
     else if (life.sick) word = "Unwell";
@@ -402,5 +439,26 @@
     return null;
   }
 
-  window.PetLife = { load, save, decay, act, vitals, alerts, ageDays, sizeScale, night, blank, hourNow, bondTitle, crossedBond, BOND_LINE, isBlue, SHEDDERS };
-})();
+  const api = {
+    load,
+    save,
+    decay,
+    act,
+    vitals,
+    alerts,
+    ageDays,
+    sizeScale,
+    night,
+    blank,
+    hourNow,
+    bondTitle,
+    crossedBond,
+    BOND_LINE,
+    isBlue,
+    SHEDDERS,
+    snackLine,
+    stampHive,
+  };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  root.PetLife = api;
+})(typeof window !== "undefined" ? window : globalThis);

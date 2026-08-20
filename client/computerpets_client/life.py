@@ -2,12 +2,15 @@
 
 from __future__ import annotations
 
+import json
 import random
 import time
 from dataclasses import dataclass, field, replace
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from .hours import hide_line, snack_line
+from .paths import default_user_data_dir
 from .species import Species, species_by_key
 
 if TYPE_CHECKING:
@@ -24,6 +27,8 @@ HEALTH_UP_PER_MS = (2 / (10 * 60 * 60 * 1000)) * 100
 # Same two lines the web blotter says for clean / medicine.
 CLEAN_LINE = "The blotter is honest again."
 MEDICINE_LINE = "Bitter. I will invoice you in kindness."
+CARE_NAME = "care.json"
+CARE_VERSION = 1
 
 
 def clamp(n: float, lo: float = 0, hi: float = 100) -> int:
@@ -56,6 +61,7 @@ class CareState:
     last_line: str = ""
     anim: str = "idle"
     shed_at: int = 0
+    last_tick: int = 0
     gifts: list[Coat] = field(default_factory=list)
     mess: list[MessPile] = field(default_factory=list)
 
@@ -220,11 +226,11 @@ def decay(
         sick = False
     piles = list(next_state.mess)
     roll = rng.random() if rng is not None else random.random()
+    stamp = now if now is not None else int(time.time() * 1000)
     if next_state.hygiene < 42 and len(piles) < 5 and roll < min(0.35, dt / 120000):
-        stamp = now if now is not None else int(time.time() * 1000)
         x = 12 + (rng.random() if rng is not None else random.random()) * 76
         piles.append(MessPile(id=stamp + len(piles), x=x, kind="mess"))
-    return replace(next_state, sick=sick, mess=piles)
+    return replace(next_state, sick=sick, mess=piles, last_tick=stamp)
 
 
 def ambient_line(state: CareState, species: Species) -> str:
@@ -233,3 +239,113 @@ def ambient_line(state: CareState, species: Species) -> str:
     if state.hunger < 28:
         return pick_line(species.hungry)
     return pick_line(species.ambient)
+
+
+def _now_ms() -> int:
+    return int(time.time() * 1000)
+
+
+def pack_care(state: CareState) -> dict[str, object]:
+    return {
+        "v": CARE_VERSION,
+        "hunger": int(state.hunger),
+        "mood": int(state.mood),
+        "energy": int(state.energy),
+        "hygiene": int(state.hygiene),
+        "health": int(state.health),
+        "bond": int(state.bond),
+        "sick": bool(state.sick),
+        "hidden": bool(state.hidden),
+        "last_line": str(state.last_line),
+        "anim": str(state.anim),
+        "shed_at": int(state.shed_at),
+        "last_tick": int(state.last_tick),
+        "mess": [{"id": int(pile.id), "x": float(pile.x), "kind": str(pile.kind)} for pile in state.mess],
+        "gifts": [
+            {"id": int(gift.id), "x": float(gift.x), "kind": str(getattr(gift, "kind", "shed"))}
+            for gift in state.gifts
+        ],
+    }
+
+
+def unpack_care(raw: object) -> CareState | None:
+    """Rebuild CareState from a packed line. Fail closed: bad shape is no line."""
+    if not isinstance(raw, dict) or raw.get("v") != CARE_VERSION:
+        return None
+    try:
+        from .shed import Coat
+
+        mess_raw = raw.get("mess")
+        mess: list[MessPile] = []
+        if isinstance(mess_raw, list):
+            for item in mess_raw[:6]:
+                if not isinstance(item, dict):
+                    continue
+                mess.append(MessPile(id=int(item["id"]), x=float(item["x"]), kind=str(item.get("kind") or "mess")))
+        gifts_raw = raw.get("gifts")
+        gifts: list[Coat] = []
+        if isinstance(gifts_raw, list):
+            for item in gifts_raw[:3]:
+                if not isinstance(item, dict):
+                    continue
+                gifts.append(Coat(id=int(item["id"]), x=float(item["x"]), kind=str(item.get("kind") or "shed")))
+        return CareState(
+            hunger=clamp(int(raw.get("hunger", 78))),
+            mood=clamp(int(raw.get("mood", 74))),
+            energy=clamp(int(raw.get("energy", 80))),
+            hygiene=clamp(int(raw.get("hygiene", 86))),
+            health=clamp(int(raw.get("health", 92))),
+            bond=clamp(int(raw.get("bond", 18))),
+            sick=bool(raw.get("sick")),
+            hidden=bool(raw.get("hidden")),
+            last_line=str(raw.get("last_line") or ""),
+            anim=str(raw.get("anim") or "idle"),
+            shed_at=int(raw.get("shed_at") or 0),
+            last_tick=int(raw.get("last_tick") or 0),
+            mess=mess,
+            gifts=gifts,
+        )
+    except (TypeError, ValueError, KeyError, OverflowError):
+        return None
+
+
+def save_care(
+    state: CareState,
+    *,
+    user_data_dir: Path | str | None = None,
+    now: int | None = None,
+) -> None:
+    """Write the blotter line. Local. Fail closed."""
+    stamp = now if now is not None else _now_ms()
+    root = Path(user_data_dir) if user_data_dir is not None else default_user_data_dir()
+    path = root / CARE_NAME
+    try:
+        packed = pack_care(replace(state, last_tick=stamp))
+        root.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(packed), encoding="utf-8")
+    except (OSError, TypeError, ValueError):
+        return
+
+
+def load_care(
+    *,
+    user_data_dir: Path | str | None = None,
+    now: int | None = None,
+) -> CareState:
+    """Read the blotter line and age it. Missing or rotten file is a new sit."""
+    stamp = now if now is not None else _now_ms()
+    root = Path(user_data_dir) if user_data_dir is not None else default_user_data_dir()
+    path = root / CARE_NAME
+    try:
+        if not path.is_file():
+            return CareState(last_tick=stamp)
+        parsed = json.loads(path.read_text(encoding="utf-8"))
+        state = unpack_care(parsed)
+        if state is None:
+            return CareState(last_tick=stamp)
+        last = state.last_tick or stamp
+        elapsed = max(0, stamp - last)
+        aged = decay(state, elapsed, now=stamp) if elapsed else state
+        return replace(aged, last_tick=stamp)
+    except (OSError, json.JSONDecodeError, TypeError, ValueError):
+        return CareState(last_tick=stamp)

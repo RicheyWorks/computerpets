@@ -47,7 +47,9 @@ from .life import (
     apply_play,
     apply_treat,
     decay,
+    load_care,
     pick_mess,
+    save_care,
 )
 from .license.session import create_license_session
 from .paths import default_user_data_dir
@@ -105,7 +107,7 @@ class DeskWindow(QMainWindow):
         self._user_data_dir = user_data_dir if user_data_dir is not None else default_user_data_dir()
         self.session = session or create_license_session(user_data_dir=self._user_data_dir)
         self.species: Species = species_by_key(DEFAULT_SPECIES_KEY)
-        self.care = CareState()
+        self.care = load_care(user_data_dir=self._user_data_dir)
         self.treat: TreatItem | None = None
         self.coats: list[ShedCoatItem] = []
         self.piles: list[MessPileItem] = []
@@ -113,6 +115,7 @@ class DeskWindow(QMainWindow):
         self._visit_ms = 0.0
         self._visit_phase = "wait"
         self._weather_acc = 0.0
+        self._care_acc = 0.0
         self.sky = weather_of()
         self.part = day_part()
 
@@ -239,7 +242,11 @@ class DeskWindow(QMainWindow):
 
     def closeEvent(self, event) -> None:
         remember_visit(self.species.key, user_data_dir=self._user_data_dir)
+        self._keep_care()
         super().closeEvent(event)
+
+    def _keep_care(self) -> None:
+        save_care(self.care, user_data_dir=self._user_data_dir)
 
     def _say(self, text: str, hold_ms: float = 4200) -> None:
         if not text:
@@ -356,6 +363,7 @@ class DeskWindow(QMainWindow):
             self.kind_box.setCurrentIndex(idx)
             self.kind_box.blockSignals(blocked)
         self.care = replace(self.care, shed_at=0, gifts=[])
+        self._keep_care()
         self._sync_coats()
         self._sync_mess()
         self._reset_visit()
@@ -367,6 +375,7 @@ class DeskWindow(QMainWindow):
         self.care = result.state
         self.pet.issue(result.cmd)
         self._say(result.line)
+        self._keep_care()
         self._refresh_vitals()
 
     def _treat(self) -> None:
@@ -380,6 +389,7 @@ class DeskWindow(QMainWindow):
             self.scene.addItem(self.treat)
             self.pet.issue("seek", tx - 40)
         self._say(result.line)
+        self._keep_care()
         self._refresh_vitals()
 
     def _play(self) -> None:
@@ -387,6 +397,7 @@ class DeskWindow(QMainWindow):
         self.care = result.state
         self.pet.issue(result.cmd)
         self._say(result.line)
+        self._keep_care()
         self._refresh_vitals()
 
     def _clean(self) -> None:
@@ -395,6 +406,7 @@ class DeskWindow(QMainWindow):
         self.pet.issue(result.cmd)
         self._say(result.line)
         self._sync_mess()
+        self._keep_care()
         self._refresh_vitals()
 
     def _medicine(self) -> None:
@@ -402,6 +414,7 @@ class DeskWindow(QMainWindow):
         self.care = result.state
         self.pet.issue(result.cmd)
         self._say(result.line)
+        self._keep_care()
         self._refresh_vitals()
 
     def _pick_mess(self, pile_id: int) -> None:
@@ -409,6 +422,7 @@ class DeskWindow(QMainWindow):
         self.care = result.state
         self._say(result.line)
         self._sync_mess()
+        self._keep_care()
         self._refresh_vitals()
 
     def _special(self) -> None:
@@ -416,6 +430,7 @@ class DeskWindow(QMainWindow):
         self.care = result.state
         self.pet.issue(result.cmd)
         self._say(result.line)
+        self._keep_care()
         self._refresh_vitals()
 
     def _hide_or_call(self) -> None:
@@ -426,6 +441,7 @@ class DeskWindow(QMainWindow):
         self.care = result.state
         self.pet.issue(result.cmd)
         self._say(result.line)
+        self._keep_care()
         self._refresh_vitals()
 
     def _tap_guest(self) -> None:
@@ -446,6 +462,7 @@ class DeskWindow(QMainWindow):
         self.pet.issue(result.cmd)
         self._say(result.line)
         self._sync_coats()
+        self._keep_care()
         self._refresh_vitals()
 
     def _advance_visit(self, dt_ms: float) -> None:
@@ -513,6 +530,10 @@ class DeskWindow(QMainWindow):
             if self._speech_ms <= 0:
                 self.bubble.setVisible(False)
         self._ambient_acc += self.timer.interval()
+        self._care_acc += self.timer.interval()
+        if self._care_acc > 5000:
+            self._care_acc = 0
+            self._keep_care()
         if self._ambient_acc > 18000 and not self.bubble.isVisible() and not self.care.hidden:
             self._ambient_acc = 0
             self._say(ambient_line(self.care, self.species), 3600)

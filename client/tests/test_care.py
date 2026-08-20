@@ -1,4 +1,5 @@
 from computerpets_client.life import (
+    CARE_NAME,
     CareState,
     MessPile,
     apply_call,
@@ -9,7 +10,11 @@ from computerpets_client.life import (
     apply_play,
     apply_treat,
     decay,
+    load_care,
+    pack_care,
     pick_mess,
+    save_care,
+    unpack_care,
 )
 from computerpets_client.species import NORI, RUI, species_by_key
 
@@ -151,3 +156,41 @@ def test_vitals_name_unwell_and_unkempt():
     assert CareState(hygiene=20).vitals() == "Unkempt"
     assert CareState(sick=True).vitals(blue=True) == "Blue"
     assert CareState(hidden=True, sick=True).vitals() == "Hidden"
+
+
+def test_care_survives_a_relaunch(tmp_path):
+    now = 1_700_000_000_000
+    before = CareState(hunger=40, mood=50, bond=22, last_tick=now)
+    save_care(before, user_data_dir=tmp_path, now=now)
+    assert (tmp_path / CARE_NAME).is_file()
+    later = load_care(user_data_dir=tmp_path, now=now)
+    assert later.hunger == 40
+    assert later.mood == 50
+    assert later.bond == 22
+
+
+def test_care_ticks_hunger_while_the_blotter_is_away(tmp_path):
+    now = 1_700_000_000_000
+    save_care(CareState(hunger=78, last_tick=now), user_data_dir=tmp_path, now=now)
+    later = now + 6 * 3_600_000
+    aged = load_care(user_data_dir=tmp_path, now=later)
+    assert aged.hunger < 78
+    assert aged.last_tick == later
+
+
+def test_rotten_care_file_fails_closed(tmp_path):
+    (tmp_path / CARE_NAME).write_text("{not json", encoding="utf-8")
+    state = load_care(user_data_dir=tmp_path, now=1_700)
+    assert state.hunger == 78
+    assert state.mood == 74
+
+
+def test_unpack_care_rejects_a_foreign_line():
+    assert unpack_care(None) is None
+    assert unpack_care({"v": 2, "hunger": 10}) is None
+    assert unpack_care({"v": 1, "hunger": "full"}) is None
+    packed = pack_care(CareState(hunger=33, last_tick=9))
+    restored = unpack_care(packed)
+    assert restored is not None
+    assert restored.hunger == 33
+    assert restored.last_tick == 9

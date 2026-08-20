@@ -17,7 +17,7 @@ Right-click the pet or use the tray / the extra / the mark:
 - Call back if they hide
 - Special — species trick (coil, play dead, drape, thread, steal ribbon…)
 
-They grow: hatchling → grown (day 1) → elder (day 7). Neglect them and they vanish until you call. Phoenix can burn out and come back kinder.
+They grow: hatchling → grown (day 1) → elder (day 7). Neglect them and they vanish until you call. Phoenix can burn out and come back kinder. Comb keeps brood and stores. Neglect can go quiet.
 
 ## Run
 
