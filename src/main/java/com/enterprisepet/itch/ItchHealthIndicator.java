@@ -27,12 +27,12 @@ public class ItchHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         if (ItchService.isUnconfiguredApiKey(apiKey)) {
-            return Health.down()
-                    .withDetail("reason", "Itch.io API key is not configured")
+            return Health.up()
+                    .withDetail("reason", "Itch door is not hung yet")
                     .build();
         }
         return Health.up()
-                .withDetail("status", "Itch.io API key is configured")
+                .withDetail("status", "Itch door is hung")
                 .build();
     }
 }

@@ -60,8 +60,8 @@ export ETHEREUM_RPC_URL="https://eth-mainnet.g.alchemy.com/v2/<key>"
 `GET /api/verify/nft/collections` returns the public allowlist so a client can
 build a picker without hardcoding addresses.
 
-`/actuator/health` includes an `nft` indicator: down while the RPC URL is still
-the `YOUR_ALCHEMY_KEY` placeholder.
+An unhung Ethereum door (placeholder RPC, empty official list) does not mark
+the house DOWN. Public `/actuator/health` does not speak the rooms.
 
 ## Request
 
