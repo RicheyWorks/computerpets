@@ -121,7 +121,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </header>
       {desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? (
         <div className="h-dvh">{children}</div>
-      ) : meet || den || tide || garden || hive || pond || roost || corner || wood || stone || creek || log || cellar || well || far || study ? (
+      ) : meet || den || tide || garden || hive || pond || roost || corner || wood || stone || creek || log || shore || meadow || cellar || well || far || study ? (
         <div>{children}</div>
       ) : (
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</div>
