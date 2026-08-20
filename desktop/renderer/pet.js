@@ -95,6 +95,7 @@ let speechUntil = 0;
 let clickable = false;
 let hudUntil = 0;
 let mark = null;
+let taken = false;
 let leaving = false;
 let lureTimer = 0;
 
@@ -457,8 +458,9 @@ const TREAT_SHAPE = {
   american_eel: "crumb",
 };
 
-function placeMark(kindName, x, hops = 0) {
-  mark = { kind: kindName, x, hops };
+function placeMark(kindName, x, hops = 0, meal) {
+  taken = false;
+  mark = { kind: kindName, x, hops, meal: kindName === "treat" ? meal || "snack" : undefined };
   const el = kindName === "treat" ? treatEl : lureEl;
   const other = kindName === "treat" ? lureEl : treatEl;
   other.classList.remove("show");
@@ -490,7 +492,7 @@ function applyCommand() {
     sim.target = null;
     return;
   }
-  if (life?.asleep && sim.cmd !== "talk" && sim.cmd !== "play" && sim.cmd !== "eat") {
+  if (life?.asleep && sim.cmd !== "talk" && sim.cmd !== "play" && sim.cmd !== "eat" && sim.cmd !== "seek" && sim.cmd !== "leave" && sim.cmd !== "enter") {
     sim.anim = "sleep";
     sim.target = null;
     return;
@@ -588,10 +590,10 @@ function handle(cmd) {
     hudUntil = performance.now() + 5000;
     return;
   }
-  if (cmd === "snack") {
+  if (cmd === "snack" || cmd === "feed") {
     if (life.hidden) return;
     const width = window.innerWidth;
-    placeMark("treat", 80 + Math.random() * Math.max(80, width - 200));
+    placeMark("treat", 80 + Math.random() * Math.max(80, width - 200), 0, cmd === "feed" ? "feed" : "snack");
     issue("seek");
     hudUntil = performance.now() + 4000;
     return;
@@ -697,6 +699,73 @@ function aimAt(next) {
   sim.frame = 0;
 }
 
+function chaseOf() {
+  return { taken, cmd: sim.cmd, mark: mark?.kind ?? null };
+}
+
+function applyArrive(via) {
+  if (!life || !trait || !kind) return;
+  const hop = window.PetPlay.playHop(chaseOf(), via);
+  taken = hop.next.taken;
+  if (hop.act === "hide") {
+    life.hidden = true;
+    persist();
+    leaving = false;
+    issue("idle");
+    paintHud();
+    return;
+  }
+  if (hop.act === "snack") {
+    const care = mark?.meal === "feed" ? "feed" : "snack";
+    clearMark();
+    const prevBond = life.bond;
+    const result = window.PetLife.act(life, trait, care);
+    persist();
+    say(lineFrom(result) || "A small treaty.");
+    const title = window.PetLife.crossedBond(prevBond, life.bond);
+    if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
+    if (hop.issueEat) issue("eat");
+    paintHud();
+    return;
+  }
+  if (hop.act === "play") {
+    clearMark();
+    const prevBond = life.bond;
+    const result = window.PetLife.act(life, trait, "play");
+    persist();
+    say(lineFrom(result) || pick(kind.lines.play));
+    const title = window.PetLife.crossedBond(prevBond, life.bond);
+    if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
+    if (hop.issuePlay) issue("play");
+    paintHud();
+    return;
+  }
+  if (hop.act === "idle") issue("idle");
+}
+
+function finishArrive() {
+  if (window.PetArrive.arriveFinish(leaving) === "now") {
+    sim.x = sim.target ?? sim.x;
+    sim.target = null;
+    sim.anim = "idle";
+    sim.frame = 0;
+    applyArrive("arrive");
+    return;
+  }
+  const p = gaitProfile();
+  const dir = sim.target != null && sim.target >= sim.x ? 1 : sim.facing;
+  sim.x = sim.target ?? sim.x;
+  sim.target = null;
+  sim.settle = 1;
+  sim.settleDir = dir;
+  sim.overshoot = window.PetGait.overshootPx({ crawl: p.crawl, hop: p.hop, walk: p.walk });
+  sim.land = 1;
+  sim.anim = "idle";
+  sim.frame = 0;
+  sim.arrivedPending = true;
+  sim.actWait = window.PetEthogram.afterSettleWait(trait?.wander ?? 0.45);
+}
+
 function clearAct() {
   sim.act = null;
   sim.actMotion = null;
@@ -764,6 +833,7 @@ function switchTo(key) {
   sim.poseHold = 0;
   sim.pendingPose = null;
   sim.arrivedPending = false;
+  taken = false;
   clearAct();
   sim.actWait = 10 + Math.random() * 8;
   pet.classList.toggle("sick", !!life.sick);
@@ -819,40 +889,11 @@ function tick(now) {
     }
   }
   if (sim.land > 0) sim.land = Math.max(0, sim.land - dt * window.PetGait.LAND_DECAY);
-  if (sim.settle > 0) {
+  if (sim.settle > 0 && !sim.dragging) {
     sim.settle = Math.max(0, sim.settle - dt / window.PetGait.SETTLE_S);
     if (sim.settle === 0 && sim.arrivedPending) {
       sim.arrivedPending = false;
-      if (sim.cmd === "leave") {
-        life.hidden = true;
-        persist();
-        leaving = false;
-        issue("idle");
-        paintHud();
-      } else if (sim.cmd === "seek" && mark) {
-        const kindMark = mark.kind;
-        clearMark();
-        if (kindMark === "treat") {
-          const prevBond = life.bond;
-          const result = window.PetLife.act(life, trait, "snack");
-          persist();
-          say(lineFrom(result) || "A small treaty.");
-          const title = window.PetLife.crossedBond(prevBond, life.bond);
-          if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
-          issue("eat");
-        } else {
-          const prevBond = life.bond;
-          const result = window.PetLife.act(life, trait, "play");
-          persist();
-          say(lineFrom(result) || pick(kind.lines.play));
-          const title = window.PetLife.crossedBond(prevBond, life.bond);
-          if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
-          issue("play");
-        }
-        paintHud();
-      } else {
-        issue("idle");
-      }
+      applyArrive("arrive");
     }
   }
   sim.bob += dt * (trait.aquatic ? 2.4 : 1.2);
@@ -896,39 +937,20 @@ function tick(now) {
       }
       if ((dir === 1 && sim.x >= sim.target) || (dir === -1 && sim.x <= sim.target)) {
         sim.x = sim.target;
-        if (sim.actWalk) {
+        const land = window.PetArrive.walkLand(sim.actWalk, sim.waypoints.length);
+        if (land === "act") {
           sim.target = null;
           sim.actWalk = false;
           sim.anim = sim.actMotion === "circle" ? "sit" : "idle";
           sim.frame = 0;
           sim.land = 0.4;
-        } else if (sim.waypoints.length) {
+        } else if (land === "pause") {
           sim.target = null;
           sim.pause = window.PetGait.wanderPauseS();
           sim.anim = "idle";
           sim.frame = 0;
-        } else if (sim.cmd === "leave") {
-          sim.target = null;
-          sim.anim = "idle";
-          sim.frame = 0;
-          sim.arrivedPending = true;
-          sim.settle = 0;
-          life.hidden = true;
-          persist();
-          leaving = false;
-          issue("idle");
-          paintHud();
-          sim.arrivedPending = false;
         } else {
-          sim.target = null;
-          sim.settle = 1;
-          sim.settleDir = dir;
-          sim.overshoot = window.PetGait.overshootPx({ crawl: p.crawl, hop: p.hop, walk: p.walk });
-          sim.land = 1;
-          sim.anim = "idle";
-          sim.frame = 0;
-          sim.arrivedPending = true;
-          sim.actWait = window.PetEthogram.afterSettleWait(trait?.wander ?? 0.45);
+          finishArrive();
         }
       }
     } else if (!sim.act && (sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
@@ -1305,12 +1327,21 @@ window.addEventListener("pointerup", (e) => {
   const start = sim.pointerStart;
   sim.dragging = false;
   sim.pointerStart = null;
-  if (start && Math.hypot(e.clientX - start.x, e.clientY - start.y) < 8) handle("talk");
-  else {
+  const dx = start ? e.clientX - start.x : 0;
+  const dy = start ? e.clientY - start.y : 0;
+  const lift = window.PetArrive.pointerUp(dx, dy);
+  if (lift.kind === "tap") {
+    handle("talk");
+    return;
+  }
+  sim.land = 0.55;
+  puff(sim.x, 3);
+  sim.arrivedPending = false;
+  sim.settle = 0;
+  if (window.PetArrive.afterPlace(sim.target != null) === "resume" && sim.target != null) {
+    aimAt(sim.target);
+  } else {
     sim.anim = "idle";
-    sim.land = 0.55;
-    puff(sim.x, 3);
-    issue("idle");
   }
 });
 window.addEventListener("pointercancel", () => {
@@ -1324,11 +1355,14 @@ pet.addEventListener("contextmenu", (e) => {
 lureEl.addEventListener("click", (e) => {
   e.stopPropagation();
   if (!mark || mark.kind !== "lure" || !life || !trait || !kind) return;
+  const hop = window.PetPlay.playHop(chaseOf(), "catch");
+  if (hop.act !== "play") return;
+  taken = hop.next.taken;
   clearMark();
   const result = window.PetLife.act(life, trait, "play");
   persist();
   say("You caught it first. I still win.");
-  issue("play");
+  if (hop.issuePlay) issue("play");
   paintHud();
 });
 window.addEventListener("resize", () => {

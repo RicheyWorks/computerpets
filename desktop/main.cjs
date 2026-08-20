@@ -117,7 +117,6 @@ function careMenu() {
     { label: "Bath", click: () => win?.webContents.send("command", "bath") },
     { label: "Medicine", click: () => win?.webContents.send("command", "medicine") },
     { label: "Praise", click: () => win?.webContents.send("command", "praise") },
-    { label: "Call back", click: () => win?.webContents.send("command", "call") },
     { label: "Special", click: () => win?.webContents.send("command", "special") },
     { label: "Shed", click: () => win?.webContents.send("command", "shed") },
   ];
@@ -147,7 +146,7 @@ function trayTemplate() {
         win?.setAlwaysOnTop(true, "screen-saver");
       },
     },
-    { label: "Hide", click: () => win?.hide() },
+    { label: "Hide the window", click: () => win?.hide() },
     { type: "separator" },
     { label: "Quit", click: () => app.quit() },
   ];
@@ -252,7 +251,7 @@ function popupPetMenu(x, y) {
     { label: "Unlock…", click: () => openSettings() },
     { label: "Minds…", click: () => openSettings() },
     { type: "separator" },
-    { label: `Hide ${currentName()}`, click: () => win?.hide() },
+    { label: "Hide the window", click: () => win?.hide() },
     { label: "Quit", click: () => app.quit() },
   ]).popup({ window: win, x: Math.round(x), y: Math.round(y) });
 }
