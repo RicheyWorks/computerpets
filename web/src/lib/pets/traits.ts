@@ -166,6 +166,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   vinegaroon: T(44, 4, 0.86, 0.16, { nocturnal: true }, "spray", "Spray", "I whipped. Hello."),
   tick: T(8, 0, 0.38, 0.04, { clingy: true }, "clasp", "Clasp", "I clasped. Hello."),
   solifuge: T(140, 12, 0.68, 0.62, { nocturnal: true }, "gale", "Gale", "I ran. Hello."),
+  deer: T(110, 8, 1.12, 0.38, {}, "flag", "Flag", "I flagged. That was hello."),
+  bat: T(130, 22, 0.56, 0.48, { nocturnal: true, perch: true }, "hang", "Hang", "I hung. Hello."),
+  squirrel: T(128, 28, 0.7, 0.62, {}, "cache", "Cache", "I hid a thought. Hello."),
+  otter: T(96, 12, 0.88, 0.55, { aquatic: true }, "slide", "Slide", "I slid. That was hello."),
+  raccoon: T(88, 14, 0.92, 0.36, { nocturnal: true }, "rinse", "Wash", "I washed. Hello."),
+  skunk: T(64, 8, 0.78, 0.22, { nocturnal: true }, "warn", "Warn", "I stamped. Hello."),
+  opossum: T(72, 10, 0.84, 0.28, { nocturnal: true }, "playdead", "Play dead", "I went still. Hello."),
+  beaver: T(42, 4, 0.96, 0.16, { aquatic: true }, "lodge", "Lodge", "I gnawed. Hello."),
+  porcupine: T(36, 4, 0.86, 0.1, { nocturnal: true }, "bristle", "Bristle", "I bristled. Hello."),
+  black_bear: T(58, 8, 1.22, 0.18, {}, "forage", "Forage", "I foraged. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

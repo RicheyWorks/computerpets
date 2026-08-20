@@ -130,6 +130,16 @@ const REST: Record<string, [number, number]> = {
   vinegaroon: [8, 18],
   tick: [22, 6],
   solifuge: [8, 18],
+  deer: [10, 16],
+  bat: [8, 18],
+  squirrel: [19, 6],
+  otter: [22, 6],
+  raccoon: [8, 17],
+  skunk: [8, 18],
+  opossum: [8, 18],
+  beaver: [8, 17],
+  porcupine: [8, 18],
+  black_bear: [22, 7],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -286,6 +296,16 @@ export const HIDE_LINE: Record<string, string> = {
   vinegaroon: "Under the sand.",
   tick: "On the hem.",
   solifuge: "Inside the dish.",
+  deer: "On the edge.",
+  bat: "Inside the fold.",
+  squirrel: "Inside the dish.",
+  otter: "Inside the dish.",
+  raccoon: "Inside the bowl.",
+  skunk: "Under the duff.",
+  opossum: "On the hem.",
+  beaver: "Inside the lodge.",
+  porcupine: "On the post.",
+  black_bear: "Inside the denside.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -419,6 +439,16 @@ export const SNACK_LINE: Record<string, string> = {
   vinegaroon: "Cricket of a treaty.",
   tick: "Sip of a treaty.",
   solifuge: "Cricket of a treaty.",
+  deer: "Browse of a treaty.",
+  bat: "Beetle of a treaty.",
+  squirrel: "Acorn of a treaty.",
+  otter: "Fish of a treaty.",
+  raccoon: "Scrap of a treaty.",
+  skunk: "Grub of a treaty.",
+  opossum: "Scrap of a treaty.",
+  beaver: "Bark of a treaty.",
+  porcupine: "Bark of a treaty.",
+  black_bear: "Berry of a treaty.",
 };
 
 

@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred and thirty, painted here.
+the others walk. This is not a new bestiary — it is the same hundred and forty, painted here.
 """
 
 from __future__ import annotations
@@ -177,7 +177,20 @@ CORNER_KEYS: tuple[str, ...] = (
     "solifuge",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS
+WOOD_KEYS: tuple[str, ...] = (
+    "deer",
+    "bat",
+    "squirrel",
+    "otter",
+    "raccoon",
+    "skunk",
+    "opossum",
+    "beaver",
+    "porcupine",
+    "black_bear",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS
 
 
 @dataclass(frozen=True)
@@ -980,8 +993,8 @@ BLUFF = _kind(
 
 STRIPE = _kind(
     key="garter",
-    slug="stripe",
-    name="Stripe",
+    slug="sash",
+    name="Sash",
     label="Common Garter",
     treat="Worm",
     treat_shape="flake",
@@ -3868,6 +3881,279 @@ GALE = _kind(
     hungry=("A windscorpion should not be this empty.", "A cricket would restore the run."),
 )
 
+RACK = _kind(
+    key="deer",
+    slug="rack",
+    name="Rack",
+    label="White-tailed Deer",
+    treat="Browse",
+    treat_shape="leaf",
+    silhouette="deer",
+    walk=110,
+    palette=Palette(
+        body=(176, 132, 80),
+        belly=(244, 236, 220),
+        ear=(120, 84, 48),
+        ear_inner=(232, 212, 184),
+        nose=(36, 28, 22),
+        ring=(248, 246, 240),
+        accent=(88, 60, 36),
+    ),
+    greet=("I flagged. That was hello.", "The edge kept my white.", "You may look. I am not a moose."),
+    ambient=("A flag of a tail. I keep the grammar.", "I am not a moose rumor. I am a deer who walks the oak.", "Your papers are an edge I have already claimed.", "I walk. Then I flag. Then I walk."),
+    feed=("Browse of a treaty.", "I will take this without leaving the edge.", "Accepted. The flag records it."),
+    treat_lines=("Browse of a treaty.",),
+    hide=("On the edge.",),
+    call=("I flagged. That was hello.",),
+    hungry=("A deer should not be this empty.", "A browse would restore the flag."),
+)
+
+CAPE = _kind(
+    key="bat",
+    slug="cape",
+    name="Cape",
+    label="Big Brown Bat",
+    treat="Beetle",
+    treat_shape="crumb",
+    silhouette="bat",
+    walk=130,
+    perch=True,
+    palette=Palette(
+        body=(92, 68, 44),
+        belly=(168, 140, 108),
+        ear=(72, 52, 36),
+        ear_inner=(196, 148, 132),
+        nose=(40, 28, 22),
+        ring=(56, 40, 28),
+        accent=(48, 36, 24),
+    ),
+    greet=("I hung. Hello.", "The fold kept my hands.", "You may look. I am not a bird."),
+    ambient=("Wings of a hand. I keep the office.", "I am not Sip. Sip is a hummingbird. I am not Peck. Peck is a penguin. I am a bat.", "Your papers are a fold I have already claimed.", "I hang. Then I fly. Then I hang."),
+    feed=("Beetle of a treaty.", "I will take this and return to the fold.", "Accepted. The hands record it."),
+    treat_lines=("Beetle of a treaty.",),
+    hide=("Inside the fold.",),
+    call=("I hung. Hello.",),
+    hungry=("A bat should not be this empty.", "A beetle would restore the hang."),
+)
+
+CACHE = _kind(
+    key="squirrel",
+    slug="cache",
+    name="Cache",
+    label="Eastern Gray Squirrel",
+    treat="Acorn",
+    treat_shape="seed",
+    silhouette="squirrel",
+    walk=128,
+    palette=Palette(
+        body=(148, 148, 148),
+        belly=(232, 228, 220),
+        ear=(88, 84, 80),
+        ear_inner=(212, 200, 184),
+        nose=(40, 36, 32),
+        ring=(196, 192, 184),
+        accent=(72, 68, 64),
+    ),
+    greet=("I hid a thought. Hello.", "The dish kept my gray.", "You may look. I am not a chipmunk."),
+    ambient=("A cache is a thought I bury. I keep the office.", "I am not a chipmunk rumor. No racing stripes. I am a squirrel of the oak.", "Your papers are a dish I have already claimed.", "I hop. Then I bury. Then I hop."),
+    feed=("Acorn of a treaty.", "I will take this and hide a second thought.", "Accepted. The cache records it."),
+    treat_lines=("Acorn of a treaty.",),
+    hide=("Inside the dish.",),
+    call=("I hid a thought. Hello.",),
+    hungry=("A squirrel should not be this empty.", "An acorn would restore the bury."),
+)
+
+SLICK = _kind(
+    key="otter",
+    slug="slick",
+    name="Slick",
+    label="North American River Otter",
+    treat="Fish",
+    treat_shape="crumb",
+    silhouette="otter",
+    walk=96,
+    aquatic=True,
+    palette=Palette(
+        body=(72, 56, 44),
+        belly=(196, 168, 132),
+        ear=(48, 36, 28),
+        ear_inner=(168, 140, 108),
+        nose=(28, 20, 16),
+        ring=(120, 96, 72),
+        accent=(40, 32, 24),
+    ),
+    greet=("I slid. That was hello.", "The dish kept my slick.", "You may look. I am not Slip."),
+    ambient=("A slide in water. I keep the grammar.", "I am not Slip. Slip is a caecilian. I am not a weasel rumor only. I am an otter.", "Your papers are a dish I have already claimed.", "I swim. Then I slide. Then I swim."),
+    feed=("Fish of a treaty.", "I will take this and return to the slide.", "Accepted. The slick records it."),
+    treat_lines=("Fish of a treaty.",),
+    hide=("Inside the dish.",),
+    call=("I slid. That was hello.",),
+    hungry=("An otter should not be this empty.", "A fish would restore the slide."),
+)
+
+WASH = _kind(
+    key="raccoon",
+    slug="wash",
+    name="Wash",
+    label="Raccoon",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="raccoon",
+    walk=88,
+    palette=Palette(
+        body=(132, 124, 112),
+        belly=(220, 212, 196),
+        ear=(36, 32, 28),
+        ear_inner=(244, 240, 232),
+        nose=(28, 24, 20),
+        ring=(48, 44, 40),
+        accent=(24, 20, 18),
+    ),
+    greet=("I washed. Hello.", "The bowl kept my mask.", "You may look. I am not Bandit."),
+    ambient=("She washes. I keep the office.", "I am not Bandit. Bandit is a kingsnake. I am not Rui. Rui is a red panda. I am a raccoon.", "Your papers are a bowl I have already claimed.", "I sit. Then I rinse. Then I sit."),
+    feed=("Scrap of a treaty.", "I will take this and wash it first.", "Accepted. The rinse records it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("Inside the bowl.",),
+    call=("I washed. Hello.",),
+    hungry=("A raccoon should not be this empty.", "A scrap would restore the rinse."),
+)
+
+STRIPES = _kind(
+    key="skunk",
+    slug="stripe",
+    name="Stripe",
+    label="Striped Skunk",
+    treat="Grub",
+    treat_shape="crumb",
+    silhouette="skunk",
+    walk=64,
+    palette=Palette(
+        body=(28, 24, 22),
+        belly=(48, 44, 40),
+        ear=(20, 16, 14),
+        ear_inner=(244, 244, 240),
+        nose=(16, 12, 10),
+        ring=(248, 248, 244),
+        accent=(16, 14, 12),
+    ),
+    greet=("I stamped. Hello.", "The dish kept my warning.", "You may look. I am not Wick."),
+    ambient=("A warning she wears. I keep the office.", "I am not a polecat rumor. I am not Wick. Wick is a ferret. I am a skunk.", "Your papers are a duff I have already claimed.", "I walk. Then I raise. Then I walk."),
+    feed=("Grub of a treaty.", "I will take this without raising.", "Accepted. The warning records it."),
+    treat_lines=("Grub of a treaty.",),
+    hide=("Under the duff.",),
+    call=("I stamped. Hello.",),
+    hungry=("A skunk should not be this empty.", "A grub would restore the stamp."),
+)
+
+GRIN = _kind(
+    key="opossum",
+    slug="grin",
+    name="Grin",
+    label="Virginia Opossum",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="opossum",
+    walk=72,
+    palette=Palette(
+        body=(156, 148, 140),
+        belly=(236, 228, 216),
+        ear=(200, 148, 148),
+        ear_inner=(244, 220, 220),
+        nose=(232, 160, 168),
+        ring=(248, 244, 236),
+        accent=(88, 80, 72),
+    ),
+    greet=("I went still. Hello.", "The hem kept my grin.", "You may look. I am not a cat."),
+    ambient=("She plays dead. I keep the grammar. A marsupial.", "I am not Miso. Miso is a cat. I am not Vesper. Vesper is a dragon. I am an opossum.", "Your papers are a hem I have already claimed.", "I walk. Then I go still. Then I walk."),
+    feed=("Scrap of a treaty.", "I will take this without leaving the hem.", "Accepted. The grin records it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("On the hem.",),
+    call=("I went still. Hello.",),
+    hungry=("An opossum should not be this empty.", "A scrap would restore the walk."),
+)
+
+DAM = _kind(
+    key="beaver",
+    slug="dam",
+    name="Dam",
+    label="North American Beaver",
+    treat="Bark",
+    treat_shape="leaf",
+    silhouette="beaver",
+    walk=42,
+    aquatic=True,
+    palette=Palette(
+        body=(88, 60, 40),
+        belly=(168, 132, 96),
+        ear=(56, 40, 28),
+        ear_inner=(140, 108, 80),
+        nose=(28, 20, 16),
+        ring=(40, 28, 20),
+        accent=(36, 24, 16),
+    ),
+    greet=("I gnawed. Hello.", "The cup kept my lodge.", "You may look. I am not a muskrat."),
+    ambient=("Teeth that fell. A lodge. I keep the office.", "I am not a muskrat rumor. I am a beaver. The tail is a paddle, not a rumor.", "Your papers are a cup I have already claimed.", "I sit. Then I gnaw. Then I sit."),
+    feed=("Bark of a treaty.", "I will take this and return to the lodge.", "Accepted. The teeth record it."),
+    treat_lines=("Bark of a treaty.",),
+    hide=("Inside the lodge.",),
+    call=("I gnawed. Hello.",),
+    hungry=("A beaver should not be this empty.", "A bark would restore the gnaw."),
+)
+
+SPINE = _kind(
+    key="porcupine",
+    slug="spine",
+    name="Spine",
+    label="North American Porcupine",
+    treat="Bark",
+    treat_shape="leaf",
+    silhouette="porcupine",
+    walk=36,
+    palette=Palette(
+        body=(72, 56, 40),
+        belly=(168, 148, 120),
+        ear=(48, 36, 24),
+        ear_inner=(196, 172, 140),
+        nose=(32, 24, 18),
+        ring=(212, 196, 168),
+        accent=(48, 36, 24),
+    ),
+    greet=("I bristled. Hello.", "The post kept my quills.", "You may look. I do not throw."),
+    ambient=("Quills that can leave. I do not throw them. I keep the office.", "I am not Burr. Burr is a hedgehog. I am not Quill. Quill is a macaw. I am a porcupine.", "Your papers are a post I have already claimed.", "I walk. Then I bristle. Then I walk."),
+    feed=("Bark of a treaty.", "I will take this without leaving the post.", "Accepted. The quills record it."),
+    treat_lines=("Bark of a treaty.",),
+    hide=("On the post.",),
+    call=("I bristled. Hello.",),
+    hungry=("A porcupine should not be this empty.", "A bark would restore the bristle."),
+)
+
+COAL = _kind(
+    key="black_bear",
+    slug="coal",
+    name="Coal",
+    label="American Black Bear",
+    treat="Berry",
+    treat_shape="leaf",
+    silhouette="bear",
+    walk=58,
+    palette=Palette(
+        body=(28, 24, 22),
+        belly=(56, 44, 36),
+        ear=(20, 16, 14),
+        ear_inner=(72, 52, 40),
+        nose=(16, 12, 10),
+        ring=(120, 88, 64),
+        accent=(16, 12, 10),
+    ),
+    greet=("I foraged. Hello.", "The denside kept my coal.", "You may look. I am a bear."),
+    ambient=("I am not a red panda. I am not Rui. I am a bear.", "Rui keeps ribbon and a scarf of a tail. I keep the denside. The size is the tell.", "Your papers are an oak I have already claimed.", "I walk. Then I sit. Then I walk."),
+    feed=("Berry of a treaty.", "I will take this without leaving the denside.", "Accepted. The coal records it."),
+    treat_lines=("Berry of a treaty.",),
+    hide=("Inside the denside.",),
+    call=("I foraged. Hello.",),
+    hungry=("A bear should not be this empty.", "A berry would restore the forage."),
+)
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -3999,6 +4285,16 @@ _ALL: tuple[Species, ...] = (
     WHIP,
     CLASP,
     GALE,
+    RACK,
+    CAPE,
+    CACHE,
+    SLICK,
+    WASH,
+    STRIPES,
+    GRIN,
+    DAM,
+    SPINE,
+    COAL,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -4053,6 +4349,10 @@ def is_roost(key: str) -> bool:
 
 def is_corner(key: str) -> bool:
     return key in CORNER_KEYS
+
+
+def is_wood(key: str) -> bool:
+    return key in WOOD_KEYS
 
 
 def next_species_key(key: str) -> str:
