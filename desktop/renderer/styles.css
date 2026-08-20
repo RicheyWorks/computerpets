@@ -166,6 +166,13 @@ body {
   box-shadow: 0 0 8px rgb(176 137 104 / 0.55);
 }
 
+#treat.show[data-shape="egg"] {
+  width: 8px;
+  height: 10px;
+  border-radius: 50% 50% 45% 45%;
+  background: #e8dcc8;
+}
+
 #gifts {
   position: absolute;
   inset: 0;

@@ -7,7 +7,9 @@ const E = require("./ethogram.js");
 const roster = JSON.parse(readFileSync(join(__dirname, "roster.json"), "utf8"));
 const traitsSrc = readFileSync(join(__dirname, "traits.js"), "utf8");
 const petSrc = readFileSync(join(__dirname, "pet.js"), "utf8");
+const styleSrc = readFileSync(join(__dirname, "styles.css"), "utf8");
 const catalogSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "catalog.ts"), "utf8");
+const treatsSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "treats.ts"), "utf8");
 
 const CATALOG = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
 const SHORE = [
@@ -128,4 +130,26 @@ test("treat shapes and visit lines cover bees, shore, meadow, canopy, and reef",
   assert.match(petSrc, /koala: "I chewed\. Then I left the gum\."/);
   assert.match(petSrc, /brain_coral: "I sat the rock\. Then I left the boulder\."/);
   assert.match(petSrc, /grouper: "I sat the hole\. Then I left the dish\."/);
+});
+
+test("the overlay drops the same treat the desk already drops, including the egg", () => {
+  const webShapes = Object.fromEntries(
+    [...treatsSrc.matchAll(/^\s{2}([a-z0-9_]+): \{ shape: "([a-z]+)"/gm)].map((m) => [m[1], m[2]]),
+  );
+  const overlayStart = petSrc.indexOf("const TREAT_SHAPE = {");
+  const overlaySlice = petSrc.slice(overlayStart, petSrc.indexOf("};", overlayStart));
+  const overlayShapes = Object.fromEntries(
+    [...overlaySlice.matchAll(/^\s{2}([a-z0-9_]+): "([a-z]+)"/gm)].map((m) => [m[1], m[2]]),
+  );
+  assert.equal(Object.keys(overlayShapes).length, 210);
+  assert.equal(Object.keys(webShapes).length, 210);
+  for (const key of CATALOG) {
+    assert.equal(overlayShapes[key], webShapes[key], key);
+  }
+  assert.equal(overlayShapes.kingsnake, "egg");
+  assert.equal(overlayShapes.milk_snake, "egg");
+  assert.match(styleSrc, /data-shape="egg"/);
+  assert.match(styleSrc, /border-radius: 50% 50% 45% 45%/);
+  assert.doesNotMatch(petSrc, /kingsnake: "pebble"/);
+  assert.doesNotMatch(petSrc, /milk_snake: "pebble"/);
 });

@@ -10,10 +10,14 @@ const P = await import(join(root, "src/lib/pets/play.ts"));
 const D = await import(join(root, "src/lib/pets/mac-desk.ts"));
 const Hive = await import(join(root, "src/lib/pets/hive.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
+const Treats = await import(join(root, "src/lib/pets/treats.ts"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
+const treatsSrc = readFileSync(join(root, "src/lib/pets/treats.ts"), "utf8");
+const overlayPetSrc = readFileSync(join(root, "../desktop/renderer/pet.js"), "utf8");
+const overlayStyleSrc = readFileSync(join(root, "../desktop/renderer/styles.css"), "utf8");
 const extraSrc = readFileSync(join(root, "src/components/desk/mac-desk-extra.tsx"), "utf8");
 const markSrc = readFileSync(join(root, "src/components/desk/linux-desk-extra.tsx"), "utf8");
 const sitSrc = readFileSync(join(root, "src/components/desk/tablet-desk-sit.tsx"), "utf8");
@@ -89,6 +93,22 @@ test("a drag on the demo living pet does not arrive", () => {
   assert.doesNotMatch(lift, /arrivedRef/);
   assert.match(livingSrc, /walkLand/);
   assert.match(livingSrc, /finishArrive/);
+});
+
+test("the demo is the same house: Bandit and Coral drop an egg, the way the blotter already does", () => {
+  assert.equal(Treats.treatFor("kingsnake").shape, "egg");
+  assert.equal(Treats.treatFor("kingsnake").verb, "Egg");
+  assert.equal(Treats.treatFor("milk_snake").shape, "egg");
+  assert.equal(Treats.treatFor("milk_snake").verb, "Egg");
+  assert.match(treatsSrc, /kingsnake: \{ shape: "egg"/);
+  assert.match(treatsSrc, /milk_snake: \{ shape: "egg"/);
+  assert.match(roomSrc, /treatShape=\{treatFor\(kind\.key\)\.shape\}/);
+  assert.match(demoSrc, /CompanionRoom/);
+  assert.match(overlayPetSrc, /kingsnake: "egg"/);
+  assert.match(overlayPetSrc, /milk_snake: "egg"/);
+  assert.match(overlayStyleSrc, /data-shape="egg"/);
+  assert.doesNotMatch(overlayPetSrc, /kingsnake: "pebble"/);
+  assert.doesNotMatch(overlayPetSrc, /milk_snake: "pebble"/);
 });
 
 test("the demo is the same house: Wax keeps brood and stores, and can go quieter", () => {
