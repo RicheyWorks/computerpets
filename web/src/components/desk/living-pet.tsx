@@ -55,6 +55,8 @@ type LivingPetProps = {
   gait?: Gait;
   kind?: string;
   startX?: number;
+  /** Extra rise off the floor. Bees sit on Wax with this. */
+  lift?: number;
   hidden?: boolean;
   unwell?: boolean;
   dull?: boolean;
@@ -126,6 +128,7 @@ export function LivingPet({
   gait,
   kind,
   startX = 120,
+  lift = 0,
   hidden = false,
   unwell = false,
   dull = false,
@@ -187,9 +190,11 @@ export function LivingPet({
   const gaitRef = useRef(gait);
   const stageRef = useRef(stage);
   const kindRef = useRef(kind);
+  const liftRef = useRef(lift);
   gaitRef.current = gait;
   stageRef.current = stage;
   kindRef.current = kind;
+  liftRef.current = lift;
   const seekRef = useRef(seekX);
   seekRef.current = seekX;
   spritesRef.current = sprites;
@@ -597,7 +602,7 @@ export function LivingPet({
       const stageNow = stageRef.current;
       const ageScale = stageNow === "hatchling" ? 0.82 : stageNow === "elder" ? 1.08 : 1;
       const scale = (gaitNow?.scale ?? 1) * ageScale;
-      const y = floorY(height) + hopPx + walkBob + water + perch;
+      const y = floorY(height) + hopPx + walkBob + water + perch + liftRef.current;
       const breathe =
         s.anim === "idle" || s.anim === "sit" || s.anim === "sleep"
           ? 1 + Math.sin(now * (s.anim === "sleep" ? 0.0032 : 0.0046)) * (s.anim === "sleep" ? BREATHE_SLEEP : BREATHE_IDLE)
