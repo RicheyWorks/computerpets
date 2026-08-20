@@ -2,14 +2,15 @@
   "name": "computerpets-desktop",
   "version": "0.2.0",
   "private": true,
-  "description": "Living desk companions for Windows and Mac.",
+  "description": "Living desk companions for Windows, Mac, and Linux.",
   "main": "main.cjs",
   "scripts": {
     "start": "electron .",
     "test": "node --test license/*.test.cjs renderer/*.test.cjs",
-    "dist": "electron-builder --win --mac",
+    "dist": "electron-builder --win --mac --linux",
     "dist:win": "electron-builder --win",
-    "dist:mac": "electron-builder --mac"
+    "dist:mac": "electron-builder --mac",
+    "dist:linux": "electron-builder --linux"
   },
   "devDependencies": {
     "electron": "^35.7.5",
@@ -34,6 +35,11 @@
     "mac": {
       "target": ["dmg", "zip"],
       "category": "public.app-category.entertainment",
+      "icon": "renderer/icon.png"
+    },
+    "linux": {
+      "target": ["AppImage"],
+      "category": "Game",
       "icon": "renderer/icon.png"
     },
     "nsis": {

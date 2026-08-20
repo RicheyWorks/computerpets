@@ -242,7 +242,7 @@ function createWindow() {
     fullscreenable: false,
     skipTaskbar: true,
     alwaysOnTop: true,
-    focusable: true,
+    focusable: chrome.focusable,
     show: false,
     ...(chrome.type ? { type: chrome.type } : {}),
     acceptFirstMouse: chrome.acceptFirstMouse,
@@ -267,7 +267,7 @@ function createWindow() {
   });
 }
 
-/** On a Mac the extra is a menu-bar mark. A click opens care. */
+/** On a Mac the extra is a menu-bar mark. On Linux the mark sits in the panel. A click opens care. */
 function createTray() {
   const icon = iconImage().resize({ width: 16, height: 16 });
   if (Desk.extraIconTemplate(process.platform)) icon.setTemplateImage(true);
@@ -317,6 +317,7 @@ if (!gotLock) {
     if (process.platform === "darwin") app.dock?.hide();
     createWindow();
     createTray();
+    startHitForward();
     screen.on("display-metrics-changed", fitWorkArea);
     screen.on("display-added", fitWorkArea);
     screen.on("display-removed", fitWorkArea);
@@ -326,7 +327,33 @@ if (!gotLock) {
   });
 }
 
+let hitRects = [];
+let hitPoll = null;
+let wantClickable = false;
+
+/** The compositor does not forward a hover. The mark watches the cursor. */
+function startHitForward() {
+  if (!Desk.hitForward(process.platform) || hitPoll) return;
+  hitPoll = setInterval(() => {
+    if (!win || win.isDestroyed()) return;
+    const area = floorOf();
+    const bounds = win.getBounds();
+    if (Desk.followCursorDisplay(process.platform) && !Desk.sameArea(area, bounds)) {
+      fitWorkArea();
+    }
+    const cursor = screen.getCursorScreenPoint();
+    const over = Desk.cursorHits({ x: cursor.x - bounds.x, y: cursor.y - bounds.y }, hitRects);
+    win.setIgnoreMouseEvents(!(wantClickable || over));
+  }, 50);
+}
+
+ipcMain.on("set-hits", (_e, rects) => {
+  hitRects = Array.isArray(rects) ? rects : [];
+});
+
 ipcMain.on("set-clickable", (_e, clickable) => {
+  wantClickable = !!clickable;
+  if (Desk.hitForward(process.platform)) return;
   win?.setIgnoreMouseEvents(!clickable, { forward: true });
 });
 

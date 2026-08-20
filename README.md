@@ -45,7 +45,7 @@ Share one guest at `/demo/{slug}` — rui, cup, felt, comb, frill, gleam, boot, 
 
 ### Desktop overlay (`desktop/`)
 
-Windows and Mac. Pets walk without a license.
+Windows, Mac, and Linux. Pets walk without a license.
 
 ```bash
 cd desktop
@@ -53,9 +53,9 @@ npm install
 npm start
 ```
 
-From the repo root: Windows `.\desktop.ps1`, Mac `sh desktop.sh`.
+From the repo root: Windows `.\desktop.ps1`, Mac and Linux `sh desktop.sh`.
 
-Right-click or use the tray: feed, play, rest, clean, medicine, hide, special. On a Mac the extra sits in the menu bar.
+Right-click or use the tray: feed, play, rest, clean, medicine, hide, special. On a Mac the extra sits in the menu bar. On Linux the mark sits in the panel.
 
 More in [desktop/README.md](desktop/README.md).
 

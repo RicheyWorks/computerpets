@@ -819,6 +819,25 @@ function setClickable(next) {
   window.desk?.setClickable(next);
 }
 
+function hitRects() {
+  return [...document.querySelectorAll("[data-hit]")].flatMap((el) => {
+    const style = getComputedStyle(el);
+    if (style.pointerEvents === "none" || style.visibility === "hidden" || style.display === "none") return [];
+    const r = el.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) return [];
+    return [{ x: r.x, y: r.y, width: r.width, height: r.height }];
+  });
+}
+
+function reportHits() {
+  if (!window.PetDesk?.hitForward(window.desk?.platform)) return;
+  const now = performance.now();
+  if (now - reportHits.at < 80) return;
+  reportHits.at = now;
+  window.desk?.setHits(hitRects());
+}
+reportHits.at = 0;
+
 function liftTapPx() {
   return window.PetDesk?.tapPx(window.desk?.platform) ?? window.PetArrive.TAP_PX;
 }
@@ -1102,6 +1121,7 @@ function tick(now) {
   }
 
   tickVisit(dt, now, width);
+  reportHits();
 
   requestAnimationFrame(tick);
 }

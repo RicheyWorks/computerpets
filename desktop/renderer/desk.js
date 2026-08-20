@@ -1,7 +1,8 @@
-/** How the extra sits. Mac opens the menu. Windows toggles the window. */
+/** How the extra sits. Mac opens the menu. Linux opens the mark. Windows toggles the window. */
 (function (root) {
   const TAP_PX = 8;
   const TAP_PX_MAC = 12;
+  const TAP_PX_LINUX = 10;
 
   const CARE_VERBS = [
     "Feed",
@@ -23,24 +24,30 @@
     return platform === "darwin" || /^Mac/i.test(String(platform || ""));
   }
 
-  /** A click on the Mac extra opens care. A click on the Windows tray toggles the window. */
+  function isLinux(platform) {
+    return platform === "linux" || /^Linux/i.test(String(platform || ""));
+  }
+
+  /** A click on the Mac extra or the Linux mark opens care. A click on the Windows tray toggles the window. */
   function extraClick(platform) {
-    return isMac(platform) ? "menu" : "toggle";
+    return isMac(platform) || isLinux(platform) ? "menu" : "toggle";
   }
 
-  /** A Mac trackpad jitters. The tap is still a tap. */
+  /** A Mac trackpad jitters. A Linux pad jitters less. The tap is still a tap. */
   function tapPx(platform) {
-    return isMac(platform) ? TAP_PX_MAC : TAP_PX;
+    if (isMac(platform)) return TAP_PX_MAC;
+    if (isLinux(platform)) return TAP_PX_LINUX;
+    return TAP_PX;
   }
 
-  /** First click on a Mac is a sit, not a focus. */
+  /** First click on a Mac or a Linux desk is a sit, not a focus. */
   function firstClick(platform) {
-    return isMac(platform) ? "accept" : "focus";
+    return isMac(platform) || isLinux(platform) ? "accept" : "focus";
   }
 
-  /** They walk every Space. Mission Control does not keep a card. */
+  /** They walk every Space. They walk every workspace. */
   function spacesWalk(platform) {
-    return isMac(platform);
+    return isMac(platform) || isLinux(platform);
   }
 
   function extraIconTemplate(platform) {
@@ -51,26 +58,64 @@
     return isMac(platform);
   }
 
-  /** The Mac floor follows the desk under the cursor. Windows stays the primary blotter. */
+  /** The Mac and Linux floors follow the desk under the cursor. Windows stays the primary blotter. */
   function followCursorDisplay(platform) {
-    return isMac(platform);
+    return isMac(platform) || isLinux(platform);
   }
 
   function overlayChrome(platform) {
-    if (!isMac(platform)) {
+    if (isMac(platform)) {
       return {
-        type: null,
-        acceptFirstMouse: false,
+        type: "panel",
+        acceptFirstMouse: true,
+        hiddenInMissionControl: true,
+        hideDock: true,
+        focusable: true,
+      };
+    }
+    if (isLinux(platform)) {
+      return {
+        type: "toolbar",
+        acceptFirstMouse: true,
         hiddenInMissionControl: false,
         hideDock: false,
+        focusable: false,
       };
     }
     return {
-      type: "panel",
-      acceptFirstMouse: true,
-      hiddenInMissionControl: true,
-      hideDock: true,
+      type: null,
+      acceptFirstMouse: false,
+      hiddenInMissionControl: false,
+      hideDock: false,
+      focusable: true,
     };
+  }
+
+  /** Mutter and KWin do not forward a hover through an ignored floor. The mark watches the cursor. */
+  function hitForward(platform) {
+    return isLinux(platform);
+  }
+
+  function cursorHits(point, rects) {
+    if (!point || !Array.isArray(rects)) return false;
+    return rects.some((r) => {
+      if (!r) return false;
+      const w = Number(r.width) || 0;
+      const h = Number(r.height) || 0;
+      if (w < 2 || h < 2) return false;
+      return point.x >= r.x && point.x < r.x + w && point.y >= r.y && point.y < r.y + h;
+    });
+  }
+
+  function sameArea(a, b) {
+    return !!(
+      a &&
+      b &&
+      a.x === b.x &&
+      a.y === b.y &&
+      a.width === b.width &&
+      a.height === b.height
+    );
   }
 
   function hideWindowLabel() {
@@ -89,7 +134,9 @@
   const api = {
     TAP_PX,
     TAP_PX_MAC,
+    TAP_PX_LINUX,
     isMac,
+    isLinux,
     extraClick,
     tapPx,
     firstClick,
@@ -98,6 +145,9 @@
     appMenu,
     followCursorDisplay,
     overlayChrome,
+    hitForward,
+    cursorHits,
+    sameArea,
     hideWindowLabel,
     careVerbs,
     carePointer,

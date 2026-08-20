@@ -13,7 +13,7 @@ test("Mac extra click opens care; Windows tray still toggles", () => {
   assert.equal(D.extraClick("darwin"), "menu");
   assert.equal(D.extraClick("MacIntel"), "menu");
   assert.equal(D.extraClick("win32"), "toggle");
-  assert.equal(D.extraClick("linux"), "toggle");
+  assert.equal(D.extraClick("linux"), "menu");
   assert.match(mainSrc, /extraClick/);
   assert.match(mainSrc, /popUpContextMenu/);
   assert.match(mainSrc, /win\.isVisible\(\)/);
@@ -72,6 +72,53 @@ test("a Mac tap talks; a drag is still a carry; control-click tends", () => {
   assert.match(petSrc, /carePointer/);
   assert.match(htmlSrc, /desk\.js/);
   assert.match(preloadSrc, /platform:\s*process\.platform/);
+});
+
+test("the Linux mark sits in the panel; a click opens care; first click is a sit", () => {
+  assert.equal(D.isLinux("linux"), true);
+  assert.equal(D.isLinux("Linux x86_64"), true);
+  assert.equal(D.isLinux("win32"), false);
+  assert.equal(D.isLinux("darwin"), false);
+  assert.equal(D.extraClick("linux"), "menu");
+  assert.equal(D.extraClick("Linux x86_64"), "menu");
+  assert.equal(D.extraClick("win32"), "toggle");
+  assert.equal(D.firstClick("linux"), "accept");
+  assert.equal(D.spacesWalk("linux"), true);
+  assert.equal(D.followCursorDisplay("linux"), true);
+  assert.equal(D.extraIconTemplate("linux"), false);
+  assert.equal(D.appMenu("linux"), false);
+  assert.equal(D.tapPx("linux"), D.TAP_PX_LINUX);
+  assert.equal(D.tapPx("Linux x86_64"), 10);
+  assert.equal(D.hitForward("linux"), true);
+  assert.equal(D.hitForward("win32"), false);
+  assert.equal(D.hitForward("darwin"), false);
+
+  const linux = D.overlayChrome("linux");
+  assert.equal(linux.type, "toolbar");
+  assert.equal(linux.acceptFirstMouse, true);
+  assert.equal(linux.focusable, false);
+  assert.equal(linux.hideDock, false);
+  assert.equal(linux.hiddenInMissionControl, false);
+
+  const win = D.overlayChrome("win32");
+  assert.equal(win.type, null);
+  assert.equal(win.focusable, true);
+  const mac = D.overlayChrome("darwin");
+  assert.equal(mac.type, "panel");
+  assert.equal(mac.focusable, true);
+
+  assert.equal(D.cursorHits({ x: 12, y: 8 }, [{ x: 10, y: 6, width: 20, height: 12 }]), true);
+  assert.equal(D.cursorHits({ x: 4, y: 8 }, [{ x: 10, y: 6, width: 20, height: 12 }]), false);
+  assert.equal(D.cursorHits({ x: 12, y: 8 }, [{ x: 10, y: 6, width: 1, height: 12 }]), false);
+  assert.equal(D.sameArea({ x: 0, y: 24, width: 800, height: 600 }, { x: 0, y: 24, width: 800, height: 600 }), true);
+  assert.equal(D.sameArea({ x: 0, y: 24, width: 800, height: 600 }, { x: 1920, y: 24, width: 800, height: 600 }), false);
+
+  assert.match(mainSrc, /hitForward/);
+  assert.match(mainSrc, /cursorHits/);
+  assert.match(mainSrc, /set-hits/);
+  assert.match(mainSrc, /focusable: chrome\.focusable/);
+  assert.match(petSrc, /setHits|hitRects/);
+  assert.match(preloadSrc, /setHits/);
 });
 
 test("the extra keeps the house verbs; hide-the-guest is not hide-the-window", () => {
