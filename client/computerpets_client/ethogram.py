@@ -151,6 +151,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "canada_goose": (_a("honk", "talk", 0.8, 4, "talk"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.8, 2)),
     "pileated": (_a("drum", "snap", 0.7, 4, "play"), _a("hop_step", "hop", 0.5, 3, "play"), _a("preen", "groom", 1.4, 2, "sit")),
     "hummingbird": (_a("hover", "bob", 1.2, 5), _a("dart", "dart", 0.7, 3), _a("sip", "eat", 0.8, 2, "eat")),
+    "orb_weaver": (_a("sit_web", "sit_hold", 2.4, 5, "sit"), _a("still", "freeze", 2.0, 3), _a("wrap", "nod", 1.2, 1)),
+    "jumping_spider": (_a("leap", "hop", 0.5, 5, "play"), _a("look", "nod", 1.0, 3, "sit"), _a("still", "freeze", 1.4, 2)),
+    "wolf_spider": (_a("prowl", "wiggle", 1.0, 4), _a("carry", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.6, 2)),
+    "tarantula": (_a("flick", "snap", 0.8, 3, "play"), _a("walk", "wiggle", 1.2, 3), _a("still", "sit_hold", 2.2, 3, "sit")),
+    "widow": (_a("hang", "sit_hold", 2.4, 5, "sit"), _a("still", "freeze", 2.2, 3), _a("hour", "nod", 1.4, 1)),
+    "harvestman": (_a("walk", "wiggle", 1.0, 5), _a("stem", "nod", 1.2, 3), _a("still", "freeze", 1.6, 2)),
+    "scorpion": (_a("sting", "snap", 0.7, 3, "play"), _a("walk", "wiggle", 1.0, 4), _a("still", "freeze", 1.8, 2)),
+    "vinegaroon": (_a("whip", "snap", 0.8, 3, "play"), _a("walk", "wiggle", 1.0, 4), _a("still", "freeze", 1.8, 2)),
+    "tick": (_a("clasp", "sit_hold", 2.6, 5, "sit"), _a("still", "freeze", 2.4, 3), _a("wait", "nod", 1.8, 1)),
+    "solifuge": (_a("run", "dart", 0.6, 5), _a("bite", "snap", 0.7, 3, "play"), _a("still", "freeze", 1.4, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

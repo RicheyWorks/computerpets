@@ -1,4 +1,5 @@
 import { BEE_KEYS, isBee } from "./bees";
+import { CORNER_KEYS, isCorner } from "./corner";
 import { FAR_KEYS, isFar } from "./far";
 import { FUNGI_KEYS, isFungus } from "./fungi";
 import { GARDEN_KEYS, isGarden } from "./garden";
@@ -12,9 +13,9 @@ import { isSnake } from "./shed";
 import { SNAKE_KEYS } from "./snakes";
 import { WELL_KEYS, isWell } from "./well";
 
-export type RoomId = "house" | "snakes" | "tide" | "garden" | "hive" | "pond" | "roost" | "cellar" | "well" | "far";
+export type RoomId = "house" | "snakes" | "tide" | "garden" | "hive" | "pond" | "roost" | "corner" | "cellar" | "well" | "far";
 
-export type RoomPath = "/study" | "/snakes" | "/sea" | "/garden" | "/hive" | "/pond" | "/roost" | "/cellar" | "/well" | "/far";
+export type RoomPath = "/study" | "/snakes" | "/sea" | "/garden" | "/hive" | "/pond" | "/roost" | "/corner" | "/cellar" | "/well" | "/far";
 
 export type Room = {
   id: RoomId;
@@ -99,6 +100,16 @@ export const ROOMS: readonly Room[] = [
     line: "Ten birds. A crow is not a raven.",
   },
   {
+    id: "corner",
+    label: "Corner",
+    kicker: "The corner",
+    path: "/corner",
+    watchSlug: "loom",
+    watchName: "Loom",
+    keys: CORNER_KEYS,
+    line: "Ten guests of the corner. A harvestman is not a spider.",
+  },
+  {
     id: "cellar",
     label: "Cellar",
     kicker: "The cellar",
@@ -144,6 +155,7 @@ export function roomOf(key: string | undefined | null): Room {
   if (isInsect(key) || isBee(key)) return BY_ID.hive;
   if (isPond(key)) return BY_ID.pond;
   if (isRoost(key)) return BY_ID.roost;
+  if (isCorner(key)) return BY_ID.corner;
   if (isFungus(key)) return BY_ID.cellar;
   if (isWell(key)) return BY_ID.well;
   if (isFar(key)) return BY_ID.far;

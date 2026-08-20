@@ -38,6 +38,10 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "flare":
     case "run":
     case "hover":
+    case "leap":
+    case "prowl":
+    case "stem":
+    case "gale":
     case "cilia":
     case "reach":
     case "spot":
@@ -119,6 +123,9 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "holdfast":
     case "trumpet":
     case "blush":
+    case "web":
+    case "hour":
+    case "clasp":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
       return { stats: next, cmd: "sit" };
@@ -128,6 +135,9 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "pinch":
     case "dabble":
     case "drum":
+    case "flick":
+    case "sting":
+    case "spray":
       next.mood = clampStat(next.mood + 8);
       return { stats: next, cmd: "play" };
     case "playdead":

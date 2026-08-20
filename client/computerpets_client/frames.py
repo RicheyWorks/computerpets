@@ -9,7 +9,10 @@ beetle, darner, stick, ant, ladybird, mantis, cicada, then bees and comb. The ce
 shelf, amanita, morel, chanterelle, bracket, mane, puffball, sulfur shelf,
 yeast jar, lichen shrub. The far den stays — gleam, choir, nimbus, shard,
 dusk, knot, brine, beacon, hush, cyst. The pond stays — frog, toad, newt,
-salamander, caecilian, crayfish, snail, mussel, leech, stickleback. The well stays —
+salamander, caecilian, crayfish, snail, mussel, leech, stickleback. The roost stays —
+crow, raven, barn owl, hawk, chickadee, robin, mallard, goose, pileated, hummingbird.
+The corner stays — orb weaver, jumper, wolf spider, tarantula, widow, harvestman,
+scorpion, vinegaroon, tick, solifuge. The well stays —
 paramecium, amoeba, euglena, volvox, diatom, kelp, chlamydomonas, stentor, coli,
 haloarchaea. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
@@ -264,6 +267,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "hummingbird",
     ):
         _draw_roost(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    if species.silhouette in (
+        "orb_weaver",
+        "jumping_spider",
+        "wolf_spider",
+        "tarantula",
+        "widow",
+        "harvestman",
+        "scorpion",
+        "vinegaroon",
+        "tick",
+        "solifuge",
+    ):
+        _draw_corner(p, species, anim, i, sit, eat, sleep, stride)
         return
     if species.silhouette in (
         "paramecium",
@@ -2298,5 +2315,226 @@ def _draw_roost(
     p.setBrush(QBrush(nose))
     p.drawEllipse(QRectF(-22, -2, 14, 3))
     _draw_face(p, -8, -4, nose, sleep, anim, i, False)
+    _ = eat
+
+
+def _draw_corner(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+    stride: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    nose = _color(pal.nose)
+    sil = species.silhouette
+    wave = math.sin(i * 0.9) * 4
+    hop = stride * 6 if sil == "jumping_spider" else stride * 2
+    p.translate(0, sit * 0.1 - hop)
+    if sleep:
+        p.rotate(-8)
+
+    def legs(cx: float, cy: float, spread: float, length: float, thin: bool = False) -> None:
+        p.setPen(QPen(accent if thin else body, 1.0 if thin else 1.4))
+        for n, ang in enumerate((-70, -40, -12, 18, 162, 192, 220, 250)):
+            rad = math.radians(ang + wave * 0.4)
+            reach = length + (2 if n % 2 else 0)
+            p.drawLine(QPointF(cx, cy), QPointF(cx + math.cos(rad) * reach * spread, cy + math.sin(rad) * reach * 0.55))
+
+    if sil == "orb_weaver":
+        p.setPen(QPen(ring, 0.7))
+        for ang in range(0, 180, 30):
+            rad = math.radians(ang)
+            p.drawLine(QPointF(-18 * math.cos(rad), -16 * math.sin(rad)), QPointF(18 * math.cos(rad), 16 * math.sin(rad)))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawEllipse(QRectF(-14, -12, 28, 24))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-10, -8, 16, 14))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, -2, 10, 8))
+        p.setPen(QPen(ring, 1.2))
+        p.drawLine(-2, -4, 6, 4)
+        p.drawLine(6, -4, -2, 4)
+        legs(-2, 0, 1.0, 22)
+        _draw_face(p, -8, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "jumping_spider":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-12, -8, 22, 16))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, -2, 10, 8))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-10, -10, 7, 8))
+        p.drawEllipse(QRectF(-3, -10, 7, 8))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-8, -8, 3, 3))
+        p.drawEllipse(QRectF(-1, -8, 3, 3))
+        legs(-2, 2, 0.72, 16)
+        _ = eat
+        return
+
+    if sil == "wolf_spider":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-16, -8, 28, 16))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, -2, 14, 8))
+        p.setBrush(QBrush(ring))
+        for ox in (-4, 2, 8):
+            p.drawEllipse(QRectF(ox, -10, 5, 5))
+        legs(-2, 2, 1.05, 20)
+        _draw_face(p, -12, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "tarantula":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.3))
+        p.drawEllipse(QRectF(-18, -10, 32, 20))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, -2, 16, 10))
+        p.setPen(QPen(ring, 1.1))
+        for ox, oy in ((-10, -8), (4, -10), (12, -4), (-4, 6)):
+            p.drawLine(ox, oy, ox + 4, oy - 5)
+        legs(0, 2, 1.15, 24)
+        _draw_face(p, -12, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "widow":
+        p.setPen(QPen(accent, 0.8))
+        p.drawLine(0, -22, 0, -8)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-10, -8, 18, 16))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        glass = QPainterPath()
+        glass.moveTo(0, -2)
+        glass.lineTo(-4, 4)
+        glass.lineTo(0, 8)
+        glass.lineTo(4, 4)
+        glass.closeSubpath()
+        p.drawPath(glass)
+        legs(-2, 0, 0.85, 18, thin=True)
+        _draw_face(p, -8, -4, ring, sleep, anim, i, False)
+        return
+
+    if sil == "harvestman":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-8, -6, 16, 12))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-2, -8, 4, 4))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-3, -8, 2, 2))
+        p.drawEllipse(QRectF(1, -8, 2, 2))
+        p.setPen(QPen(accent, 1.0))
+        for ang in (-75, -45, -15, 15, 165, 195, 225, 255):
+            rad = math.radians(ang + wave * 0.3)
+            p.drawLine(QPointF(0, 0), QPointF(math.cos(rad) * 30, math.sin(rad) * 16))
+        return
+
+    if sil == "scorpion":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-14, -8, 26, 16))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, -2, 12, 8))
+        claw = QPainterPath()
+        claw.moveTo(-10, 2)
+        claw.lineTo(-24, -6)
+        claw.lineTo(-18, 4)
+        claw.closeSubpath()
+        p.setBrush(QBrush(accent))
+        p.drawPath(claw)
+        claw2 = QPainterPath()
+        claw2.moveTo(-8, 6)
+        claw2.lineTo(-22, 12)
+        claw2.lineTo(-12, 8)
+        claw2.closeSubpath()
+        p.drawPath(claw2)
+        tail = QPainterPath()
+        tail.moveTo(10, 0)
+        tail.quadTo(22, -10 + wave, 18, -22)
+        p.setPen(QPen(body, 3.2))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawPath(tail)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(16, -26, 6, 6))
+        _draw_face(p, -10, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "vinegaroon":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-16, -8, 28, 18))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 0, 14, 8))
+        palps = QPainterPath()
+        palps.moveTo(-12, 2)
+        palps.lineTo(-26, -4)
+        palps.lineTo(-20, 8)
+        palps.closeSubpath()
+        p.setBrush(QBrush(accent))
+        p.drawPath(palps)
+        p.setPen(QPen(nose, 1.4))
+        whip = QPainterPath()
+        whip.moveTo(10, 0)
+        whip.quadTo(28, -8 + wave, 40, -4)
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawPath(whip)
+        _draw_face(p, -10, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "tick":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-10, -8, 18, 14))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, -4, 10, 8))
+        legs(-2, 2, 0.55, 12, thin=True)
+        _draw_face(p, -6, -2, nose, sleep, anim, i, False)
+        return
+
+    # solifuge — huge chelicerae, a run, not a spider, not a scorpion
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.1))
+    p.drawEllipse(QRectF(-14, -8, 26, 16))
+    p.setPen(Qt.PenStyle.NoPen)
+    p.setBrush(QBrush(belly))
+    p.drawEllipse(QRectF(-4, -2, 12, 8))
+    jaw = QPainterPath()
+    jaw.moveTo(-12, -2)
+    jaw.lineTo(-26, -8)
+    jaw.lineTo(-22, 2)
+    jaw.closeSubpath()
+    p.setBrush(QBrush(nose))
+    p.drawPath(jaw)
+    jaw2 = QPainterPath()
+    jaw2.moveTo(-12, 4)
+    jaw2.lineTo(-24, 10)
+    jaw2.lineTo(-18, 2)
+    jaw2.closeSubpath()
+    p.drawPath(jaw2)
+    legs(0, 2, 1.1, 22)
+    _draw_face(p, -8, -4, ring, sleep, anim, i, False)
     _ = eat
 

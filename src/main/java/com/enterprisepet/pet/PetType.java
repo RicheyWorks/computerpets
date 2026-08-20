@@ -130,7 +130,17 @@ public enum PetType {
     MALLARD          ("mallard",           "Mallard",              Rarity.COMMON),
     CANADA_GOOSE     ("canada_goose",      "Canada Goose",         Rarity.COMMON),
     PILEATED         ("pileated",          "Pileated Woodpecker",  Rarity.RARE),
-    HUMMINGBIRD      ("hummingbird",       "Ruby-throated Hummingbird", Rarity.UNCOMMON);
+    HUMMINGBIRD      ("hummingbird",       "Ruby-throated Hummingbird", Rarity.UNCOMMON),
+    ORB_WEAVER       ("orb_weaver",        "European Garden Spider", Rarity.COMMON),
+    JUMPING_SPIDER   ("jumping_spider",    "Bold Jumper",            Rarity.COMMON),
+    WOLF_SPIDER      ("wolf_spider",       "Wetland Wolf Spider",    Rarity.UNCOMMON),
+    TARANTULA        ("tarantula",         "Desert Blonde",          Rarity.RARE),
+    WIDOW            ("widow",             "Southern Black Widow",   Rarity.UNCOMMON),
+    HARVESTMAN       ("harvestman",        "Common Harvestman",      Rarity.COMMON),
+    SCORPION         ("scorpion",          "Striped Bark Scorpion",  Rarity.UNCOMMON),
+    VINEGAROON       ("vinegaroon",        "Giant Vinegaroon",       Rarity.RARE),
+    TICK             ("tick",              "Black-legged Tick",      Rarity.COMMON),
+    SOLIFUGE         ("solifuge",          "Windscorpion",           Rarity.UNCOMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

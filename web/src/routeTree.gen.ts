@@ -14,6 +14,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CatalogRouteImport } from './routes/catalog'
 import { Route as CellarRouteImport } from './routes/cellar'
 import { Route as CollectionRouteImport } from './routes/collection'
+import { Route as CornerRouteImport } from './routes/corner'
 import { Route as FarRouteImport } from './routes/far'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as HatchRouteImport } from './routes/hatch'
@@ -56,6 +57,11 @@ const CellarRoute = CellarRouteImport.update({
 const CollectionRoute = CollectionRouteImport.update({
   id: '/collection',
   path: '/collection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CornerRoute = CornerRouteImport.update({
+  id: '/corner',
+  path: '/corner',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FarRoute = FarRouteImport.update({
@@ -155,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/catalog': typeof CatalogRoute
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
+  '/corner': typeof CornerRoute
   '/far': typeof FarRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
@@ -180,6 +187,7 @@ export interface FileRoutesByTo {
   '/catalog': typeof CatalogRoute
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
+  '/corner': typeof CornerRoute
   '/far': typeof FarRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
@@ -206,6 +214,7 @@ export interface FileRoutesById {
   '/catalog': typeof CatalogRoute
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
+  '/corner': typeof CornerRoute
   '/far': typeof FarRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
@@ -233,6 +242,7 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/cellar'
     | '/collection'
+    | '/corner'
     | '/far'
     | '/garden'
     | '/hatch'
@@ -258,6 +268,7 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/cellar'
     | '/collection'
+    | '/corner'
     | '/far'
     | '/garden'
     | '/hatch'
@@ -283,6 +294,7 @@ export interface FileRouteTypes {
     | '/catalog'
     | '/cellar'
     | '/collection'
+    | '/corner'
     | '/far'
     | '/garden'
     | '/hatch'
@@ -309,6 +321,7 @@ export interface RootRouteChildren {
   CatalogRoute: typeof CatalogRoute
   CellarRoute: typeof CellarRoute
   CollectionRoute: typeof CollectionRoute
+  CornerRoute: typeof CornerRoute
   FarRoute: typeof FarRoute
   GardenRoute: typeof GardenRoute
   HatchRoute: typeof HatchRoute
@@ -364,6 +377,13 @@ declare module '@tanstack/react-router' {
       path: '/collection'
       fullPath: '/collection'
       preLoaderRoute: typeof CollectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/corner': {
+      id: '/corner'
+      path: '/corner'
+      fullPath: '/corner'
+      preLoaderRoute: typeof CornerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/far': {
@@ -501,6 +521,7 @@ const rootRouteChildren: RootRouteChildren = {
   CatalogRoute: CatalogRoute,
   CellarRoute: CellarRoute,
   CollectionRoute: CollectionRoute,
+  CornerRoute: CornerRoute,
   FarRoute: FarRoute,
   GardenRoute: GardenRoute,
   HatchRoute: HatchRoute,

@@ -128,6 +128,16 @@
     canada_goose: [A("honk", "talk", 0.8, 4, "talk"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.8, 2)],
     pileated: [A("drum", "snap", 0.7, 4, "play"), A("hop_step", "hop", 0.5, 3, "play"), A("preen", "groom", 1.4, 2, "sit")],
     hummingbird: [A("hover", "bob", 1.2, 5), A("dart", "dart", 0.7, 3), A("sip", "eat", 0.8, 2, "eat")],
+    orb_weaver: [A("sit_web", "sit_hold", 2.4, 5, "sit"), A("still", "freeze", 2.0, 3), A("wrap", "nod", 1.2, 1)],
+    jumping_spider: [A("leap", "hop", 0.5, 5, "play"), A("look", "nod", 1.0, 3, "sit"), A("still", "freeze", 1.4, 2)],
+    wolf_spider: [A("prowl", "wiggle", 1.0, 4), A("carry", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.6, 2)],
+    tarantula: [A("flick", "snap", 0.8, 3, "play"), A("walk", "wiggle", 1.2, 3), A("still", "sit_hold", 2.2, 3, "sit")],
+    widow: [A("hang", "sit_hold", 2.4, 5, "sit"), A("still", "freeze", 2.2, 3), A("hour", "nod", 1.4, 1)],
+    harvestman: [A("walk", "wiggle", 1.0, 5), A("stem", "nod", 1.2, 3), A("still", "freeze", 1.6, 2)],
+    scorpion: [A("sting", "snap", 0.7, 3, "play"), A("walk", "wiggle", 1.0, 4), A("still", "freeze", 1.8, 2)],
+    vinegaroon: [A("whip", "snap", 0.8, 3, "play"), A("walk", "wiggle", 1.0, 4), A("still", "freeze", 1.8, 2)],
+    tick: [A("clasp", "sit_hold", 2.6, 5, "sit"), A("still", "freeze", 2.4, 3), A("wait", "nod", 1.8, 1)],
+    solifuge: [A("run", "dart", 0.6, 5), A("bite", "snap", 0.7, 3, "play"), A("still", "freeze", 1.4, 2)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",

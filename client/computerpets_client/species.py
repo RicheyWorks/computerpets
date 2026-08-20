@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred and twenty, painted here.
+the others walk. This is not a new bestiary — it is the same hundred and thirty, painted here.
 """
 
 from __future__ import annotations
@@ -164,7 +164,20 @@ ROOST_KEYS: tuple[str, ...] = (
     "hummingbird",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS
+CORNER_KEYS: tuple[str, ...] = (
+    "orb_weaver",
+    "jumping_spider",
+    "wolf_spider",
+    "tarantula",
+    "widow",
+    "harvestman",
+    "scorpion",
+    "vinegaroon",
+    "tick",
+    "solifuge",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS
 
 
 @dataclass(frozen=True)
@@ -3583,6 +3596,278 @@ SIP = _kind(
     hungry=("A hummingbird should not be this empty.", "A nectar would restore the hover."),
 )
 
+LOOM = _kind(
+    key="orb_weaver",
+    slug="loom",
+    name="Loom",
+    label="European Garden Spider",
+    treat="Fly",
+    treat_shape="crumb",
+    silhouette="orb_weaver",
+    walk=18,
+    perch=True,
+    palette=Palette(
+        body=(140, 92, 52),
+        belly=(228, 208, 168),
+        ear=(88, 56, 32),
+        ear_inner=(236, 228, 196),
+        nose=(20, 16, 12),
+        ring=(236, 228, 196),
+        accent=(220, 220, 216),
+    ),
+    greet=("I sat the web. Hello.", "The lamp kept my cross.", "You may look. I built this trap."),
+    ambient=("A web is a trap I built. I keep the office.", "I am not Stem. Stem has one body and two eyes. I have two, and eight legs that wait.", "I sit. Then I wait. Then I sit."),
+    feed=("Fly of a treaty.", "I will take this without leaving the silk.", "Accepted. The cross records it."),
+    treat_lines=("Fly of a treaty.",),
+    hide=("On the web.",),
+    call=("I sat the web. Hello.",),
+    hungry=("A spider should not be this empty.", "A fly would restore the wait."),
+)
+
+LEAP = _kind(
+    key="jumping_spider",
+    slug="leap",
+    name="Leap",
+    label="Bold Jumper",
+    treat="Fly",
+    treat_shape="crumb",
+    silhouette="jumping_spider",
+    walk=88,
+    palette=Palette(
+        body=(28, 28, 32),
+        belly=(48, 140, 88),
+        ear=(20, 20, 22),
+        ear_inner=(236, 220, 80),
+        nose=(20, 20, 22),
+        ring=(236, 220, 80),
+        accent=(72, 88, 96),
+    ),
+    greet=("I leapt. That was hello.", "The edge kept my eyes.", "You may look. I am not a wolf."),
+    ambient=("Big front eyes. I stalk. Then I leap.", "I am not Prowl. Prowl carries the brood and does not snare. I hunt by looking.", "I leap. Then I look. Then I leap."),
+    feed=("Fly of a treaty.", "I will take this and jump again.", "Accepted. The eyes record it."),
+    treat_lines=("Fly of a treaty.",),
+    hide=("On the edge.",),
+    call=("I leapt. That was hello.",),
+    hungry=("A jumper should not be this empty.", "A fly would restore the leap."),
+)
+
+PROWL = _kind(
+    key="wolf_spider",
+    slug="prowl",
+    name="Prowl",
+    label="Wetland Wolf Spider",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="wolf_spider",
+    walk=72,
+    palette=Palette(
+        body=(88, 56, 36),
+        belly=(168, 124, 80),
+        ear=(56, 36, 24),
+        ear_inner=(196, 148, 88),
+        nose=(20, 16, 12),
+        ring=(236, 196, 48),
+        accent=(196, 148, 88),
+    ),
+    greet=("I prowled. Hello.", "The litter kept my brood.", "You may look. I do not snare."),
+    ambient=("No snare web. I hunt on the floor. The brood rides.", "I am not Leap. Leap stalks and jumps. I carry.", "I walk. Then I wait. Then I walk."),
+    feed=("Cricket of a treaty.", "I will take this and keep the brood.", "Accepted. The walk records it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Under the litter.",),
+    call=("I prowled. Hello.",),
+    hungry=("A wolf spider should not be this empty.", "A cricket would restore the walk."),
+)
+
+VELVET = _kind(
+    key="tarantula",
+    slug="velvet",
+    name="Velvet",
+    label="Desert Blonde",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="tarantula",
+    walk=36,
+    palette=Palette(
+        body=(196, 156, 88),
+        belly=(88, 64, 36),
+        ear=(88, 64, 36),
+        ear_inner=(228, 196, 132),
+        nose=(20, 16, 12),
+        ring=(228, 196, 132),
+        accent=(228, 196, 132),
+    ),
+    greet=("I sat the silk. Hello.", "The burrow kept my blonde.", "You may look. The hair is the office."),
+    ambient=("Urticating hair. I kick it first. The fangs are not the greeting.", "I am not Prowl. Prowl carries a brood on the floor. I keep a burrow.", "I walk. Then I sit. Then I walk."),
+    feed=("Cricket of a treaty.", "I will take this without leaving the silk.", "Accepted. The hair records it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Inside the silk.",),
+    call=("I sat the silk. Hello.",),
+    hungry=("A tarantula should not be this empty.", "A cricket would restore the walk."),
+)
+
+HOUR = _kind(
+    key="widow",
+    slug="hour",
+    name="Hour",
+    label="Southern Black Widow",
+    treat="Fly",
+    treat_shape="crumb",
+    silhouette="widow",
+    walk=22,
+    perch=True,
+    palette=Palette(
+        body=(16, 16, 18),
+        belly=(188, 32, 40),
+        ear=(16, 16, 18),
+        ear_inner=(188, 32, 40),
+        nose=(16, 16, 18),
+        ring=(188, 32, 40),
+        accent=(48, 48, 52),
+    ),
+    greet=("I hung. Hello.", "The corner kept my glass.", "You may look. I am not every dark spider."),
+    ambient=("A red hourglass. I keep that office. The rest is rumor.", "A dark spider is not Hour. The glass is the tell.", "I sit. Then I hang. Then I sit."),
+    feed=("Fly of a treaty.", "I will take this without leaving the dark.", "Accepted. The glass records it."),
+    treat_lines=("Fly of a treaty.",),
+    hide=("Inside the corner.",),
+    call=("I hung. Hello.",),
+    hungry=("A widow should not be this empty.", "A fly would restore the hang."),
+)
+
+STEM = _kind(
+    key="harvestman",
+    slug="stem",
+    name="Stem",
+    label="Common Harvestman",
+    treat="Mite",
+    treat_shape="crumb",
+    silhouette="harvestman",
+    walk=64,
+    palette=Palette(
+        body=(156, 124, 72),
+        belly=(196, 168, 112),
+        ear=(88, 68, 40),
+        ear_inner=(196, 168, 112),
+        nose=(28, 24, 18),
+        ring=(28, 24, 18),
+        accent=(88, 68, 40),
+    ),
+    greet=("I walked the stem. Hello.", "The stem kept my one body.", "You may look. I am not a spider."),
+    ambient=("Two eyes. One body, not two. I keep the grammar.", "I am not Loom. Loom built a web. I have no silk for a trap.", "I walk. Then I walk. Then I sit."),
+    feed=("Mite of a treaty.", "I will take this and keep walking.", "Accepted. The stem records it."),
+    treat_lines=("Mite of a treaty.",),
+    hide=("On the stem.",),
+    call=("I walked the stem. Hello.",),
+    hungry=("A harvestman should not be this empty.", "A mite would restore the walk."),
+)
+
+BARB = _kind(
+    key="scorpion",
+    slug="barb",
+    name="Barb",
+    label="Striped Bark Scorpion",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="scorpion",
+    walk=48,
+    palette=Palette(
+        body=(168, 132, 72),
+        belly=(196, 168, 112),
+        ear=(72, 52, 32),
+        ear_inner=(168, 132, 72),
+        nose=(20, 16, 12),
+        ring=(72, 52, 32),
+        accent=(48, 36, 24),
+    ),
+    greet=("I raised the tail. Hello.", "The bark kept my stripes.", "You may look. I am not a spider."),
+    ambient=("A metasoma. A sting. I keep that office.", "I am not Whip. Whip has a flagellum and acetic acid. I have a barb.", "I walk. Then I raise. Then I walk."),
+    feed=("Cricket of a treaty.", "I will take this and keep the tail.", "Accepted. The sting records it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Under the bark.",),
+    call=("I raised the tail. Hello.",),
+    hungry=("A scorpion should not be this empty.", "A cricket would restore the raise."),
+)
+
+WHIP = _kind(
+    key="vinegaroon",
+    slug="whip",
+    name="Whip",
+    label="Giant Vinegaroon",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="vinegaroon",
+    walk=44,
+    palette=Palette(
+        body=(72, 52, 36),
+        belly=(168, 140, 96),
+        ear=(40, 32, 24),
+        ear_inner=(168, 140, 96),
+        nose=(20, 16, 12),
+        ring=(40, 32, 24),
+        accent=(40, 32, 24),
+    ),
+    greet=("I whipped. Hello.", "The sand kept my acid.", "You may look. I do not sting."),
+    ambient=("A whip. Acetic acid. No barb.", "I am not Barb. Barb is a scorpion with a sting. I spray vinegar.", "I walk. Then I whip. Then I walk."),
+    feed=("Cricket of a treaty.", "I will take this and keep the whip.", "Accepted. The acid records it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Under the sand.",),
+    call=("I whipped. Hello.",),
+    hungry=("A vinegaroon should not be this empty.", "A cricket would restore the whip."),
+)
+
+CLASP = _kind(
+    key="tick",
+    slug="clasp",
+    name="Clasp",
+    label="Black-legged Tick",
+    treat="Sip",
+    treat_shape="flake",
+    silhouette="tick",
+    walk=8,
+    palette=Palette(
+        body=(88, 40, 32),
+        belly=(168, 96, 80),
+        ear=(40, 20, 16),
+        ear_inner=(168, 96, 80),
+        nose=(20, 12, 10),
+        ring=(40, 20, 16),
+        accent=(40, 20, 16),
+    ),
+    greet=("I clasped. Hello.", "The hem kept my eight.", "You may look. I am not an insect."),
+    ambient=("Eight legs. A mite. I keep the grammar.", "I am not Comb. Comb is a bee with six legs. I wait.", "I sit. Then I clasp. Then I sit."),
+    feed=("Sip of a treaty.", "I will take this and keep the clasp.", "Accepted. The wait records it."),
+    treat_lines=("Sip of a treaty.",),
+    hide=("On the hem.",),
+    call=("I clasped. Hello.",),
+    hungry=("A tick should not be this empty.", "A sip would restore the wait."),
+)
+
+GALE = _kind(
+    key="solifuge",
+    slug="gale",
+    name="Gale",
+    label="Windscorpion",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="solifuge",
+    walk=140,
+    palette=Palette(
+        body=(188, 148, 88),
+        belly=(220, 188, 120),
+        ear=(72, 52, 32),
+        ear_inner=(188, 148, 88),
+        nose=(40, 28, 20),
+        ring=(40, 28, 20),
+        accent=(72, 52, 32),
+    ),
+    greet=("I ran. Hello.", "The dish kept my jaws.", "You may look. I am not a spider."),
+    ambient=("Huge chelicerae. No silk. No sting. I keep the run.", "I am not Loom. Loom is a spider with a web. I am not Barb. Barb stings.", "I run. Then I bite. Then I run."),
+    feed=("Cricket of a treaty.", "I will take this and run again.", "Accepted. The jaws record it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Inside the dish.",),
+    call=("I ran. Hello.",),
+    hungry=("A windscorpion should not be this empty.", "A cricket would restore the run."),
+)
+
 _ALL: tuple[Species, ...] = (
     RUI,
     MISO,
@@ -3704,6 +3989,16 @@ _ALL: tuple[Species, ...] = (
     VEE,
     DRUM,
     SIP,
+    LOOM,
+    LEAP,
+    PROWL,
+    VELVET,
+    HOUR,
+    STEM,
+    BARB,
+    WHIP,
+    CLASP,
+    GALE,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -3754,6 +4049,10 @@ def is_well(key: str) -> bool:
 
 def is_roost(key: str) -> bool:
     return key in ROOST_KEYS
+
+
+def is_corner(key: str) -> bool:
+    return key in CORNER_KEYS
 
 
 def next_species_key(key: str) -> str:

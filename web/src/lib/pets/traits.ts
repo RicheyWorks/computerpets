@@ -156,6 +156,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   canada_goose: T(70, 8, 1.16, 0.28, {}, "honk", "Honk", "I honked. Hello."),
   pileated: T(76, 20, 1.0, 0.34, { perch: true }, "drum", "Drum", "I drummed. Hello."),
   hummingbird: T(150, 30, 0.42, 0.7, { perch: true }, "hover", "Hover", "I hovered. Hello."),
+  orb_weaver: T(18, 2, 0.62, 0.08, { perch: true }, "web", "Loom", "I sat the web. Hello."),
+  jumping_spider: T(88, 36, 0.48, 0.55, {}, "leap", "Leap", "I leapt. That was hello."),
+  wolf_spider: T(72, 10, 0.7, 0.32, { nocturnal: true }, "prowl", "Prowl", "I prowled. Hello."),
+  tarantula: T(36, 4, 0.92, 0.14, { nocturnal: true }, "flick", "Flick", "I sat the silk. Hello."),
+  widow: T(22, 2, 0.52, 0.08, { nocturnal: true, perch: true }, "hour", "Hour", "I hung. Hello."),
+  harvestman: T(64, 6, 0.58, 0.42, { nocturnal: true }, "stem", "Stem", "I walked the stem. Hello."),
+  scorpion: T(48, 6, 0.74, 0.18, { nocturnal: true }, "sting", "Sting", "I raised the tail. Hello."),
+  vinegaroon: T(44, 4, 0.86, 0.16, { nocturnal: true }, "spray", "Spray", "I whipped. Hello."),
+  tick: T(8, 0, 0.38, 0.04, { clingy: true }, "clasp", "Clasp", "I clasped. Hello."),
+  solifuge: T(140, 12, 0.68, 0.62, { nocturnal: true }, "gale", "Gale", "I ran. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

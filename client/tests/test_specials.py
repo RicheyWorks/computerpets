@@ -126,6 +126,16 @@ HOUSE_TRAITS = {
     "canada_goose": ("honk", "Honk", "I honked. Hello."),
     "pileated": ("drum", "Drum", "I drummed. Hello."),
     "hummingbird": ("hover", "Hover", "I hovered. Hello."),
+    "orb_weaver": ("web", "Loom", "I sat the web. Hello."),
+    "jumping_spider": ("leap", "Leap", "I leapt. That was hello."),
+    "wolf_spider": ("prowl", "Prowl", "I prowled. Hello."),
+    "tarantula": ("flick", "Flick", "I sat the silk. Hello."),
+    "widow": ("hour", "Hour", "I hung. Hello."),
+    "harvestman": ("stem", "Stem", "I walked the stem. Hello."),
+    "scorpion": ("sting", "Sting", "I raised the tail. Hello."),
+    "vinegaroon": ("spray", "Spray", "I whipped. Hello."),
+    "tick": ("clasp", "Clasp", "I clasped. Hello."),
+    "solifuge": ("gale", "Gale", "I ran. Hello."),
 }
 
 
