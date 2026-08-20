@@ -122,7 +122,7 @@ export const GUILD_EXTRA: Record<string, LocusDef> = {
   far: GLOW,
 };
 
-export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "stone" | "cellar" | "well" | "far";
+export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "stone" | "creek" | "cellar" | "well" | "far";
 
 const GARDEN = new Set([
   "moss",
@@ -266,6 +266,18 @@ const STONE = new Set([
   "box_turtle",
   "tuatara",
 ]);
+const CREEK = new Set([
+  "bass",
+  "brook_trout",
+  "catfish",
+  "bluegill",
+  "perch",
+  "pike",
+  "walleye",
+  "paddlefish",
+  "lamprey",
+  "american_eel",
+]);
 const SNAKES = new Set([
   "ball_python",
   "corn_snake",
@@ -291,6 +303,7 @@ export function guildOf(key: string): GuildId {
   if (CORNER.has(key)) return "corner";
   if (WOOD.has(key)) return "wood";
   if (STONE.has(key)) return "stone";
+  if (CREEK.has(key)) return "creek";
   if (WELL.has(key)) return "well";
   return "house";
 }
@@ -300,7 +313,7 @@ export function extraLocusFor(key: string): LocusDef | null {
   if (guild === "garden") return FRUIT;
   if (guild === "cellar") return SPORE;
   if (guild === "hive") return DUST;
-  if (guild === "sea" || guild === "far" || guild === "pond" || guild === "well") return GLOW;
+  if (guild === "sea" || guild === "far" || guild === "pond" || guild === "well" || guild === "creek") return GLOW;
   return null;
 }
 

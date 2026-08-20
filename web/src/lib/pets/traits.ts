@@ -186,6 +186,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   snapper: T(28, 3, 0.88, 0.1, { aquatic: true }, "snap", "Snap", "I snapped. Hello."),
   box_turtle: T(20, 2, 0.78, 0.06, {}, "shut", "Shut", "I shut. Hello."),
   tuatara: T(14, 2, 0.82, 0.04, { nocturnal: true }, "crest", "Still", "I kept still. Hello."),
+  bass: T(72, 4, 0.92, 0.28, { aquatic: true }, "lunge", "Lunge", "I lunged. Hello."),
+  brook_trout: T(86, 6, 0.7, 0.48, { aquatic: true }, "speck", "Speck", "I rose. Hello."),
+  catfish: T(38, 2, 0.88, 0.18, { aquatic: true, nocturnal: true }, "whisk", "Whisk", "I whisked. Hello."),
+  bluegill: T(64, 4, 0.58, 0.36, { aquatic: true }, "penny", "Penny", "I flared the flap. Hello."),
+  perch: T(68, 4, 0.66, 0.38, { aquatic: true }, "bar", "Bar", "I kept the bars. Hello."),
+  pike: T(48, 2, 1.08, 0.12, { aquatic: true }, "lance", "Lance", "I waited. Hello."),
+  walleye: T(54, 3, 0.82, 0.22, { aquatic: true, nocturnal: true }, "night", "Night", "I hunted dusk. Hello."),
+  paddlefish: T(26, 0, 1.14, 0.1, { aquatic: true }, "spoon", "Filter", "I filtered. Hello."),
+  lamprey: T(22, 0, 0.72, 0.08, { aquatic: true }, "round", "Disk", "I sat the disk. Hello."),
+  american_eel: T(58, 2, 0.86, 0.32, { aquatic: true, nocturnal: true }, "silver", "Silver", "I swam. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

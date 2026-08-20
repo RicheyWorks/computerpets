@@ -21,15 +21,17 @@ import { isSnake } from "./shed";
 import { guideFor, type SnakeGuide } from "./snake-guide";
 import { wellGuideFor, type WellGuide } from "./well-guide";
 import { isWell } from "./well";
+import { creekGuideFor, type CreekGuide } from "./creek-guide";
+import { isCreek } from "./creek";
 import { stoneGuideFor, type StoneGuide } from "./stone-guide";
 import { isStone } from "./stone";
 import { woodGuideFor, type WoodGuide } from "./wood-guide";
 import { isWood } from "./wood";
 
-export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | BeeGuide | FungiGuide | FarGuide | PondGuide | RoostGuide | WellGuide | CornerGuide | WoodGuide | StoneGuide;
+export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | BeeGuide | FungiGuide | FarGuide | PondGuide | RoostGuide | WellGuide | CornerGuide | WoodGuide | StoneGuide | CreekGuide;
 
 export function plaqueFor(key: string | undefined | null): FieldGuide | null {
-  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? beeGuideFor(key) ?? pondGuideFor(key) ?? roostGuideFor(key) ?? cornerGuideFor(key) ?? woodGuideFor(key) ?? stoneGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? wellGuideFor(key) ?? houseGuideFor(key);
+  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? beeGuideFor(key) ?? pondGuideFor(key) ?? roostGuideFor(key) ?? cornerGuideFor(key) ?? woodGuideFor(key) ?? stoneGuideFor(key) ?? creekGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? wellGuideFor(key) ?? houseGuideFor(key);
 }
 
 export function classroomFor(key: string) {
@@ -59,6 +61,9 @@ export function classroomFor(key: string) {
   }
   if (isStone(key)) {
     return { to: "/stone" as const, label: "All ten in the stone", verb: "stay" };
+  }
+  if (isCreek(key)) {
+    return { to: "/creek" as const, label: "All ten in the creek", verb: "swim" };
   }
   if (isFungus(key)) {
     return { to: "/cellar" as const, label: "All ten in the cellar", verb: "stay" };

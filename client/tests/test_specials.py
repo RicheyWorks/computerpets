@@ -156,6 +156,16 @@ HOUSE_TRAITS = {
     "snapper": ("snap", "Snap", "I snapped. Hello."),
     "box_turtle": ("shut", "Shut", "I shut. Hello."),
     "tuatara": ("crest", "Still", "I kept still. Hello."),
+    "bass": ("lunge", "Lunge", "I lunged. Hello."),
+    "brook_trout": ("speck", "Speck", "I rose. Hello."),
+    "catfish": ("whisk", "Whisk", "I whisked. Hello."),
+    "bluegill": ("penny", "Penny", "I flared the flap. Hello."),
+    "perch": ("bar", "Bar", "I kept the bars. Hello."),
+    "pike": ("lance", "Lance", "I waited. Hello."),
+    "walleye": ("night", "Night", "I hunted dusk. Hello."),
+    "paddlefish": ("spoon", "Filter", "I filtered. Hello."),
+    "lamprey": ("round", "Disk", "I sat the disk. Hello."),
+    "american_eel": ("silver", "Silver", "I swam. Hello."),
 }
 
 

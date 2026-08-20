@@ -161,6 +161,16 @@ export const SPECIES: Species[] = [
   { key: "snapper", displayName: "Common Snapping Turtle", rarity: "COMMON", temperament: "Hooked", habitat: "Mud bowl", blurb: "A beak, a long tail. Not Ink. Not a tortoise." },
   { key: "box_turtle", displayName: "Eastern Box Turtle", rarity: "COMMON", temperament: "Shutting", habitat: "Leaf dish", blurb: "A hinged plastron. She shuts. Not Ink. Not Hinge the mussel." },
   { key: "tuatara", displayName: "Tuatara", rarity: "RARE", temperament: "Still", habitat: "Stone burrow", blurb: "A tuatara. A third eye. Not a lizard. Not Sol. She is her own order." },
+  { key: "bass", displayName: "Largemouth Bass", rarity: "COMMON", temperament: "Lunging", habitat: "Weed edge", blurb: "A wide mouth. Not a trout. Not Speck." },
+  { key: "brook_trout", displayName: "Brook Trout", rarity: "UNCOMMON", temperament: "Speckled", habitat: "Riffle cup", blurb: "A char. Worm marks on the back. Not a bass. Not a rainbow rumor." },
+  { key: "catfish", displayName: "Channel Catfish", rarity: "COMMON", temperament: "Whiskered", habitat: "Mud run", blurb: "Barbels. Not a shark. Not a rumor of the sea." },
+  { key: "bluegill", displayName: "Bluegill", rarity: "COMMON", temperament: "Sunning", habitat: "Dock shade", blurb: "A dark ear flap. A sunfish. Not Coin the goldfish." },
+  { key: "perch", displayName: "Yellow Perch", rarity: "COMMON", temperament: "Barred", habitat: "Weed rail", blurb: "Bars down the side. Not a walleye. Not Night." },
+  { key: "pike", displayName: "Northern Pike", rarity: "UNCOMMON", temperament: "Waiting", habitat: "Reed ambush", blurb: "A duckbill. Not a muskellunge rumor she has to argue." },
+  { key: "walleye", displayName: "Walleye", rarity: "UNCOMMON", temperament: "Dusk", habitat: "Dusk run", blurb: "A tapetum. She hunts dusk. Not a perch. Not Bar." },
+  { key: "paddlefish", displayName: "American Paddlefish", rarity: "RARE", temperament: "Filtering", habitat: "Current dish", blurb: "A paddle. Filter. Not a shark. Not Whisk." },
+  { key: "lamprey", displayName: "Sea Lamprey", rarity: "UNCOMMON", temperament: "Attaching", habitat: "Stone disk", blurb: "A disk mouth. No jaws. Not an eel. Not Silver. Not a moray." },
+  { key: "american_eel", displayName: "American Eel", rarity: "RARE", temperament: "Going", habitat: "Bank hole", blurb: "She goes to the Sargasso. Not a lamprey. Not Round. Not a moray of the tide." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

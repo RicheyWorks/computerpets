@@ -15,7 +15,8 @@ The corner stays — orb weaver, jumper, wolf spider, tarantula, widow, harvestm
 scorpion, vinegaroon, tick, solifuge. The wood stays — deer, bat, squirrel,
 otter, raccoon, skunk, opossum, beaver, porcupine, black bear. The stone stays —
 gecko, anole, skink, chameleon, horned lizard, alligator, crocodile, snapper,
-box turtle, tuatara. The well stays —
+box turtle, tuatara. The creek stays — bass, brook trout, catfish, bluegill,
+perch, pike, walleye, paddlefish, lamprey, American eel. The well stays —
 paramecium, amoeba, euglena, volvox, diatom, kelp, chlamydomonas, stentor, coli,
 haloarchaea. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
@@ -312,6 +313,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "tuatara",
     ):
         _draw_stone(p, species, anim, i, sit, eat, sleep, stride)
+        return
+    if species.silhouette in (
+        "bass",
+        "brook_trout",
+        "catfish",
+        "bluegill",
+        "perch",
+        "pike",
+        "walleye",
+        "paddlefish",
+        "lamprey",
+        "american_eel",
+    ):
+        _draw_creek(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in (
         "paramecium",
@@ -3134,4 +3149,260 @@ def _draw_stone(
     stride: float,
 ) -> None:
     _draw_wood(p, species, anim, i, sit, eat, sleep, stride)
+
+
+def _draw_creek(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    nose = _color(pal.nose)
+    ear = _color(pal.ear)
+    wave = math.sin(i * 1.15)
+    sil = species.silhouette
+    still = anim in ("sit", "sleep") or sleep > 0
+
+    if sil == "bass":
+        gape = 8 + (6 if anim == "eat" or anim == "play" else 0)
+        tail = QPainterPath()
+        tail.moveTo(22, -2)
+        tail.lineTo(42, -14 + wave)
+        tail.lineTo(40, 14 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.drawEllipse(QRectF(-24, -14, 48, 28 - sit * 0.08))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 0, 22, 12))
+        p.setPen(QPen(ring, 2.2))
+        p.drawLine(QPointF(-16, 2), QPointF(16, 2))
+        mouth = QPainterPath()
+        mouth.moveTo(-24, -2)
+        mouth.lineTo(-24 - gape, 6)
+        mouth.lineTo(-22, 10)
+        mouth.closeSubpath()
+        p.setBrush(QBrush(accent))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawPath(mouth)
+        _draw_face(p, -16, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "brook_trout":
+        tail = QPainterPath()
+        tail.moveTo(22, 0)
+        tail.lineTo(40, -12 + wave)
+        tail.lineTo(38, 12 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.drawEllipse(QRectF(-22, -12, 44, 24))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 0, 20, 10))
+        p.setPen(QPen(ring, 1.4))
+        p.drawLine(QPointF(-10, -6), QPointF(-2, -2))
+        p.drawLine(QPointF(0, -4), QPointF(8, 0))
+        p.drawLine(QPointF(8, 2), QPointF(16, 6))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-4, 2, 4, 4))
+        p.drawEllipse(QRectF(6, -2, 4, 4))
+        p.setBrush(QBrush(_color(pal.ear_inner)))
+        fin = QPainterPath()
+        fin.moveTo(-4, -12)
+        fin.lineTo(4, -22)
+        fin.lineTo(8, -10)
+        fin.closeSubpath()
+        p.drawPath(fin)
+        _draw_face(p, -14, -2, nose, sleep, anim, i, False)
+        return
+
+    if sil == "catfish":
+        tail = QPainterPath()
+        tail.moveTo(22, -2)
+        tail.lineTo(40, -14 + wave)
+        tail.lineTo(34, 0)
+        tail.lineTo(40, 14 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.drawEllipse(QRectF(-20, -12, 44, 24))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, 2, 20, 10))
+        p.setPen(QPen(ring, 1.6))
+        p.drawLine(QPointF(-16, 6), QPointF(-34, 16))
+        p.drawLine(QPointF(-14, 8), QPointF(-30, 20))
+        p.drawLine(QPointF(-18, 2), QPointF(-36, 10))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-2, 0, 4, 3))
+        p.drawEllipse(QRectF(8, 4, 4, 3))
+        _draw_face(p, -14, -2, nose, sleep, anim, i, False)
+        return
+
+    if sil == "bluegill":
+        tail = QPainterPath()
+        tail.moveTo(16, 0)
+        tail.lineTo(30, -14 + wave)
+        tail.lineTo(28, 14 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.drawEllipse(QRectF(-18, -16, 36, 32 - sit * 0.08))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, 2, 16, 12))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-12, -2, 10, 10))
+        _draw_face(p, -12, -6, nose, sleep, anim, i, False)
+        return
+
+    if sil == "perch":
+        tail = QPainterPath()
+        tail.moveTo(22, 0)
+        tail.lineTo(40, -12 + wave)
+        tail.lineTo(38, 12 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.drawEllipse(QRectF(-22, -12, 44, 24))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 0, 20, 10))
+        p.setPen(QPen(ring, 2.4))
+        p.drawLine(QPointF(-8, -10), QPointF(-6, 12))
+        p.drawLine(QPointF(2, -10), QPointF(4, 12))
+        p.drawLine(QPointF(12, -8), QPointF(14, 10))
+        _draw_face(p, -14, -2, nose, sleep, anim, i, False)
+        return
+
+    if sil == "pike":
+        tail = QPainterPath()
+        tail.moveTo(34, 0)
+        tail.lineTo(56, -10 + wave)
+        tail.lineTo(54, 12 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.drawRoundedRect(QRectF(-10, -10, 48, 20 - sit * 0.06), 10, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(0, 0, 28, 10))
+        bill = QPainterPath()
+        bill.moveTo(-10, -4)
+        bill.lineTo(-48, 2)
+        bill.lineTo(-44, 8)
+        bill.lineTo(-8, 6)
+        bill.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.drawPath(bill)
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(4, -4, 5, 3))
+        p.drawEllipse(QRectF(16, 2, 5, 3))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-40, 0, 3, 3))
+        return
+
+    if sil == "walleye":
+        tail = QPainterPath()
+        tail.moveTo(22, 0)
+        tail.lineTo(40, -12 + wave)
+        tail.lineTo(38, 12 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(tail)
+        p.drawEllipse(QRectF(-22, -12, 44, 24))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 0, 20, 10))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-18, -6, 9, 9))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-16, -4, 5, 5))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-14, -2, 2, 2))
+        return
+
+    if sil == "paddlefish":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-8, -14, 44, 28 - sit * 0.08))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(4, 0, 22, 12))
+        paddle = QPainterPath()
+        paddle.moveTo(-8, -6)
+        paddle.lineTo(-52, -10)
+        paddle.lineTo(-56, 0)
+        paddle.lineTo(-50, 10)
+        paddle.lineTo(-6, 6)
+        paddle.closeSubpath()
+        p.setBrush(QBrush(ear))
+        p.drawPath(paddle)
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-10, -2, 10 + (4 if not still else 0), 8))
+        tail = QPainterPath()
+        tail.moveTo(32, 0)
+        tail.lineTo(50, -10 + wave)
+        tail.lineTo(48, 12 - wave)
+        tail.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.drawPath(tail)
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-16, -4, 3, 3))
+        return
+
+    if sil == "lamprey":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawRoundedRect(QRectF(-6, -10, 36, 20), 10, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(ring))
+        for t in range(4):
+            p.drawEllipse(QRectF(2 + t * 7, -6, 10, 12))
+        disk = 16 + (4 if still or anim == "sit" else 0)
+        p.setBrush(QBrush(ear))
+        p.setPen(QPen(accent, 1.1))
+        p.drawEllipse(QRectF(-28, -disk / 2, disk, disk))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-22, -6, 10, 10))
+        p.setBrush(QBrush(ring))
+        for ang in range(0, 360, 40):
+            rad = math.radians(ang)
+            p.drawEllipse(QRectF(-17 + math.cos(rad) * 6, -1 + math.sin(rad) * 6, 3, 3))
+        return
+
+    # american_eel — a true ribbon, jaws, not a disk
+    phase = i * 0.55
+    pts = [(-34 + t * 8, math.sin(t * 0.7 + phase) * 6) for t in range(10)]
+    for k, (x, y) in enumerate(pts[:-1]):
+        t = k / 9
+        p.setBrush(QBrush(body if k % 2 == 0 else ring))
+        p.setPen(QPen(accent, 0.8))
+        p.drawEllipse(QRectF(x - 8, y - 5, 16 - t * 6, 10))
+    hx, hy = pts[0]
+    p.setBrush(QBrush(body))
+    p.drawEllipse(QRectF(hx - 10, hy - 6, 16, 12))
+    p.setBrush(QBrush(belly))
+    p.drawEllipse(QRectF(hx - 6, hy, 8, 5))
+    _draw_face(p, hx - 4, hy - 2, nose, sleep, anim, i, False)
 

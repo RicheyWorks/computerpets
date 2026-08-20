@@ -9,6 +9,7 @@ import { ROOST_ROSTER } from "./roost";
 import { SEA_ROSTER } from "./sea";
 import { SNAKE_ROSTER } from "./snakes";
 import { WELL_ROSTER } from "./well";
+import { CREEK_ROSTER } from "./creek";
 import { STONE_ROSTER } from "./stone";
 import { WOOD_ROSTER } from "./wood";
 
@@ -600,4 +601,5 @@ export const ROSTER: RosterDef[] = [
   ...CORNER_ROSTER,
   ...WOOD_ROSTER,
   ...STONE_ROSTER,
+  ...CREEK_ROSTER,
 ];

@@ -160,7 +160,17 @@ public enum PetType {
     CROCODILE        ("crocodile",         "American Crocodile",     Rarity.RARE),
     SNAPPER          ("snapper",           "Common Snapping Turtle", Rarity.COMMON),
     BOX_TURTLE       ("box_turtle",        "Eastern Box Turtle",     Rarity.COMMON),
-    TUATARA          ("tuatara",           "Tuatara",                Rarity.RARE);
+    TUATARA          ("tuatara",           "Tuatara",                Rarity.RARE),
+    BASS             ("bass",              "Largemouth Bass",        Rarity.COMMON),
+    BROOK_TROUT      ("brook_trout",       "Brook Trout",            Rarity.UNCOMMON),
+    CATFISH          ("catfish",           "Channel Catfish",        Rarity.COMMON),
+    BLUEGILL         ("bluegill",          "Bluegill",               Rarity.COMMON),
+    PERCH            ("perch",             "Yellow Perch",           Rarity.COMMON),
+    PIKE             ("pike",              "Northern Pike",          Rarity.UNCOMMON),
+    WALLEYE          ("walleye",           "Walleye",                Rarity.UNCOMMON),
+    PADDLEFISH       ("paddlefish",        "American Paddlefish",    Rarity.RARE),
+    LAMPREY          ("lamprey",           "Sea Lamprey",            Rarity.UNCOMMON),
+    AMERICAN_EEL     ("american_eel",      "American Eel",           Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

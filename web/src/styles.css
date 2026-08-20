@@ -297,6 +297,13 @@
     mix-blend-mode: multiply;
   }
 
+  .room-wash-creek {
+    background:
+      linear-gradient(180deg, rgb(24 48 52 / 0.26), rgb(20 40 44 / 0.12) 46%, rgb(12 20 22 / 0.32)),
+      radial-gradient(55% 40% at 28% 74%, rgb(72 132 120 / 0.14), transparent 70%);
+    mix-blend-mode: multiply;
+  }
+
   .room-wash-cellar {
     background:
       radial-gradient(80% 70% at 50% 100%, rgb(18 22 16 / 0.5), transparent 74%),

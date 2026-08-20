@@ -181,6 +181,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "snapper": (_a("snap", "snap", 0.6, 5, "play"), _a("sit", "sit_hold", 2.0, 3, "sit"), _a("still", "freeze", 1.8, 2)),
     "box_turtle": (_a("shut", "sit_hold", 2.2, 5, "sit"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.8, 2)),
     "tuatara": (_a("still", "freeze", 2.6, 5), _a("crest", "sit_hold", 2.2, 3, "sit"), _a("watch", "nod", 1.6, 2)),
+    "bass": (_a("lunge", "dart", 0.6, 5), _a("sit", "sit_hold", 2.0, 3, "sit"), _a("gape", "gape", 0.8, 2)),
+    "brook_trout": (_a("dart", "dart", 0.5, 5), _a("rise", "bob", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "catfish": (_a("whisk", "wiggle", 1.2, 5), _a("sit", "sit_hold", 2.0, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "bluegill": (_a("flare", "pulse", 0.8, 5), _a("sit", "sit_hold", 1.8, 3, "sit"), _a("dart", "dart", 0.6, 2)),
+    "perch": (_a("bar", "pulse", 0.8, 4), _a("dart", "dart", 0.6, 4), _a("still", "freeze", 1.6, 2)),
+    "pike": (_a("wait", "sit_hold", 2.4, 5, "sit"), _a("lance", "dart", 0.5, 3), _a("still", "freeze", 2.0, 2)),
+    "walleye": (_a("hunt", "dart", 0.8, 5), _a("glow", "pulse", 1.2, 3), _a("still", "freeze", 1.8, 2)),
+    "paddlefish": (_a("filter", "sit_hold", 2.4, 5, "sit"), _a("paddle", "bob", 1.6, 3), _a("still", "freeze", 2.0, 2)),
+    "lamprey": (_a("disk", "sit_hold", 2.2, 5, "sit"), _a("cling", "freeze", 2.0, 3), _a("still", "freeze", 1.8, 2)),
+    "american_eel": (_a("swim", "wiggle", 1.4, 5), _a("silver", "pulse", 1.0, 3), _a("still", "freeze", 1.6, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

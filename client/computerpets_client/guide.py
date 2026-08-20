@@ -1,10 +1,10 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred and fifty, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred and sixty, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
-the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the cellar keeps
+the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
 the xenobiology facts; the twenty keep the study facts.
 """
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_stone, is_well, is_wood
+from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_stone, is_well, is_wood
 
 
 @dataclass(frozen=True)
@@ -1457,7 +1457,101 @@ STONE_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE
+
+CREEK_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "bass",
+        "Micropterus salmoides",
+        "A wide gape, a dark stripe along the side, a sit in the weed until the lunge. Largemouth bass. She sits. Then she lunges. The edge is a weed she agreed to.",
+        "Not a trout. Speck is Salvelinus fontinalis, a char, worm marks on the back; Lunge is Micropterus salmoides, and the mouth is the tell. A bass is not a trout. The gape is the species.",
+        "Largemouth bass. A wide mouth. Not a trout. Not Speck.",
+        "weed edge",
+        "lunging",
+    ),
+    _entry(
+        "brook_trout",
+        "Salvelinus fontinalis",
+        "Worm marks on the back, red spots with blue halos, fins edged in white. Brook trout. A char. She darts. Then she rises. The cup is a riffle she agreed to.",
+        "Not a bass. Lunge is Micropterus, a wide mouth, a sit then a lunge. Not a rainbow rumor — those wear a pink stripe and keep a different office. Speck is Salvelinus fontinalis, and the worm marks are the tell. A brook trout is a char. The speck is the species.",
+        "Brook trout. A char. Worm marks. Not a bass. Not a rainbow rumor.",
+        "riffle cup",
+        "speckled",
+    ),
+    _entry(
+        "catfish",
+        "Ictalurus punctatus",
+        "Barbels around the mouth, spots on a forked-tail body, a walk of the mud. Channel catfish. She sits. Then she whisks. The run is a mud she agreed to.",
+        "Not a shark. A shark is a rumor of the sea; Whisk is Ictalurus punctatus, and the barbels are the tell. Not Spoon — Spoon filters with a paddle. A catfish is not a shark. The whisk is the species.",
+        "Channel catfish. Barbels. Not a shark. Not a rumor of the sea.",
+        "mud run",
+        "whiskered",
+    ),
+    _entry(
+        "bluegill",
+        "Lepomis macrochirus",
+        "A dark ear flap like a penny, a compressed sunfish body, an orange belly when the compile is kind. Bluegill. She sits the shade. Then she flares. The dock is a shade she agreed to.",
+        "Not Coin. Coin is a goldfish who loops one thought in a brass bowl; Penny is Lepomis macrochirus, and the flap is the tell. A bluegill is a sunfish. She does not loop. The penny is the species.",
+        "Bluegill. A dark ear flap. A sunfish. Not Coin the goldfish.",
+        "dock shade",
+        "sunning",
+    ),
+    _entry(
+        "perch",
+        "Perca flavescens",
+        "Yellow gold, dark bars down the side, a spiny first dorsal. Yellow perch. She darts. Then she keeps the bars. The rail is a weed she agreed to.",
+        "Not a walleye. Night is Sander vitreus, a tapetum, a dusk hunt; Bar is Perca flavescens, and the bars are the tell. A perch is not a walleye. The gold is the species.",
+        "Yellow perch. Bars down the side. Not a walleye. Not Night.",
+        "weed rail",
+        "barred",
+    ),
+    _entry(
+        "pike",
+        "Esox lucius",
+        "A duckbill of a snout, light spots on a long green body, a wait in the reed. Northern pike. She sits. Then she lances. The reed is an ambush she agreed to.",
+        "Not a muskellunge rumor she has to argue. A muskellunge wears dark bars on light and keeps a different argument; Lance is Esox lucius, and the duckbill is the tell. A pike is not a muskellunge. The wait is the species.",
+        "Northern pike. A duckbill. Not a muskellunge rumor she has to argue.",
+        "reed ambush",
+        "waiting",
+    ),
+    _entry(
+        "walleye",
+        "Sander vitreus",
+        "A milky eye with a tapetum, an olive-gold body, a hunt when the lamp leans. Walleye. She sits. Then she hunts dusk. The run is a dusk she agreed to.",
+        "Not a perch. Bar is Perca flavescens, bars down the side, a day gold; Night is Sander vitreus, and the tapetum is the tell. A walleye is not a perch. The dusk is the species.",
+        "Walleye. A tapetum. She hunts dusk. Not a perch. Not Bar.",
+        "dusk run",
+        "dusk",
+    ),
+    _entry(
+        "paddlefish",
+        "Polyodon spathula",
+        "A paddle of a rostrum, a vast filter of a mouth, a body that looks like a shark rumor and is not. American paddlefish. She sits. Then she filters. The dish is a current she agreed to.",
+        "Not a shark. Not Whisk — Whisk is a catfish with barbels who tastes mud. Spoon is Polyodon spathula, and the paddle is the tell. A paddlefish filters. She does not hunt the shark way. The sieve is the species.",
+        "American paddlefish. A paddle. Filter. Not a shark. Not Whisk.",
+        "current dish",
+        "filtering",
+    ),
+    _entry(
+        "lamprey",
+        "Petromyzon marinus",
+        "A disk of a mouth, no jaws, a stout body that is not a ribbon. Sea lamprey, in fresh water to spawn. She sits. Then she clings. The stone is a disk she agreed to.",
+        "Not an eel. Silver is Anguilla rostrata, jaws, a continuous fin, a going to the Sargasso. Not Door — Door is a moray of the tide, a gape that is breath. Round is Petromyzon marinus, and the disk is the tell. A lamprey is not an eel. She is a disk, not a ribbon.",
+        "Sea lamprey. A disk mouth. No jaws. Not an eel. Not Silver. Not a moray.",
+        "stone disk",
+        "attaching",
+    ),
+    _entry(
+        "american_eel",
+        "Anguilla rostrata",
+        "A true eel, jaws, a continuous fin, a silver that is a going. American eel. She swims. Then she silvers. The hole is a bank she agreed to. She goes to the Sargasso.",
+        "Not a lamprey. Round is Petromyzon, a disk, no jaws, here to spawn. Not a moray of the tide — Door keeps a crevice and a gape that is breath. Silver is Anguilla rostrata, and the Sargasso is the tell. An American eel is not a lamprey. The going is the species.",
+        "American eel. She goes to the Sargasso. Not a lamprey. Not Round. Not a moray of the tide.",
+        "bank hole",
+        "going",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1500,6 +1594,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="wood", label="All ten in the wood", verb="stay")
     if is_stone(key):
         return Classroom(room="stone", label="All ten in the stone", verb="stay")
+    if is_creek(key):
+        return Classroom(room="creek", label="All ten in the creek", verb="swim")
     if is_well(key):
         return Classroom(room="well", label="All ten in the well", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
@@ -1555,6 +1651,10 @@ def wood_guide_keys() -> tuple[str, ...]:
 
 def stone_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in STONE_GUIDE)
+
+
+def creek_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in CREEK_GUIDE)
 
 
 def well_guide_keys() -> tuple[str, ...]:
@@ -1613,6 +1713,10 @@ def stone_guide_complete() -> bool:
     return len(STONE_GUIDE) == len(STONE_KEYS) and all(k in _BY_KEY for k in STONE_KEYS)
 
 
+def creek_guide_complete() -> bool:
+    return len(CREEK_GUIDE) == len(CREEK_KEYS) and all(k in _BY_KEY for k in CREEK_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -1632,6 +1736,7 @@ def guide_complete() -> bool:
         and corner_guide_complete()
         and wood_guide_complete()
         and stone_guide_complete()
+        and creek_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
