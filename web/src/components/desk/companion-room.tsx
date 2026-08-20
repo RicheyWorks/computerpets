@@ -77,6 +77,7 @@ export function CompanionRoom({
   seed,
   guestKey,
   persistLocal = true,
+  liveTick = false,
   onCare,
   onSelectKind,
   typedTalk = false,
@@ -96,6 +97,8 @@ export function CompanionRoom({
   seed?: Partial<CareStats>;
   guestKey?: string;
   persistLocal?: boolean;
+  /** Age in memory without writing the kept guest. /demo uses this. */
+  liveTick?: boolean;
   onCare?: (action: SanctuaryCare) => Promise<CareStats | void>;
   onSelectKind?: (key: string) => void;
   typedTalk?: boolean;
@@ -163,7 +166,7 @@ export function CompanionRoom({
   }, [kind.localKey, persistLocal, stats]);
 
   useEffect(() => {
-    if (!persistLocal) return;
+    if (!persistLocal && !liveTick) return;
     function age() {
       setStats((s) => {
         const live = tickCare(kind.key, s);
@@ -194,7 +197,7 @@ export function CompanionRoom({
       window.clearInterval(id);
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, [kind.key, persistLocal]);
+  }, [kind.key, persistLocal, liveTick]);
 
   useEffect(() => {
     if (!journal) {
@@ -240,7 +243,12 @@ export function CompanionRoom({
     setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;
-      say(returnLine(rememberVisit(kind.key)) ?? weatherLine(kind.key, weatherOf()) ?? kind.greetLine(), 5200);
+      say(
+        returnLine(persistLocal ? rememberVisit(kind.key) : 0) ??
+          weatherLine(kind.key, weatherOf()) ??
+          kind.greetLine(),
+        5200,
+      );
       issue("talk");
     }, 500);
     return () => window.clearTimeout(t);

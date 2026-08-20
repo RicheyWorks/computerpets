@@ -212,8 +212,13 @@ const REST: Record<string, [number, number]> = {
   grouper: [20, 6],
 };
 
+/** House rest window. Overlay and blotter keep this same night. */
+export function restWindow(key: string): [number, number] {
+  return REST[key] ?? [22, 7];
+}
+
 export function isRestingHour(key: string, hour = new Date().getHours()) {
-  const [start, end] = REST[key] ?? [22, 7];
+  const [start, end] = restWindow(key);
   if (start === end) return false;
   if (start < end) return hour >= start && hour < end;
   return hour >= start || hour < end;

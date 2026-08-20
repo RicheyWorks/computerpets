@@ -1520,8 +1520,7 @@ window.addEventListener("resize", () => {
   paintMess();
 });
 document.addEventListener("visibilitychange", () => {
-  if (document.hidden) persist();
-  else tickLife();
+  tickLife();
 });
 
 window.desk?.onCommand((cmd) => handle(cmd));
@@ -1555,6 +1554,7 @@ setInterval(() => {
   }
 }, 5600);
 setInterval(() => {
+  if (document.hidden) return;
   if (kind) tickLife();
 }, 20_000);
 

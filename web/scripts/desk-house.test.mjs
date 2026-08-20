@@ -52,15 +52,15 @@ test("keeper persist and typed talk stay on the desk", () => {
   assert.match(roomSrc, /applyBath/);
   assert.match(roomSrc, /applyPraise/);
   assert.match(roomSrc, /pickMess/);
-  assert.match(deskSrc, /label: "Bath"/);
-  assert.match(deskSrc, /label: "Praise"/);
+  assert.match(deskSrc, /DESK_TEND/);
+  assert.match(deskSrc, /extraCare=\{\[\.\.\.DESK_TEND\]\}/);
 });
 
 test("the desk keeps time; a demo does not write the desk key", () => {
   assert.match(roomSrc, /tickCare/);
   assert.match(roomSrc, /liveDeskCare/);
   assert.match(roomSrc, /loadCare\(kind\.localKey, fallback, kind\.key\)/);
-  assert.match(roomSrc, /if \(!persistLocal\) return;/);
+  assert.match(roomSrc, /if \(!persistLocal && !liveTick\) return;/);
   assert.match(roomSrc, /applyFeedFor/);
   assert.match(roomSrc, /setInterval/);
   assert.match(deskSrc, /CompanionRoom/);

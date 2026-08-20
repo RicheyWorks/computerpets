@@ -1,4 +1,4 @@
-"""Care verbs that already exist on the living desk: feed, treat, play, hide, clean, medicine, shed."""
+"""Care verbs that already exist on the living desk: feed, treat, play, hide, clean, bath, praise, rest, medicine, shed."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from .hive import colony_of, colony_word, is_hive_place, stamp_colony
-from .hours import hide_line, snack_line
+from .hours import hide_line, is_resting_hour, snack_line
 from .paths import default_user_data_dir
 from .species import Species, species_by_key
 
@@ -24,10 +24,14 @@ ENERGY_PER_MS = 100 / (9 * 60 * 60 * 1000)
 HYGIENE_PER_MS = 100 / (14 * 60 * 60 * 1000)
 HEALTH_DOWN_PER_MS = (6 / (10 * 60 * 60 * 1000)) * 100
 HEALTH_UP_PER_MS = (2 / (10 * 60 * 60 * 1000)) * 100
+NIGHT_HUNGER = 0.45
+NIGHT_ENERGY_PER_MS = 18 / 3_600_000
 
-# Same two lines the web blotter says for clean / medicine.
+# Same lines the web blotter says for clean / medicine / bath / praise.
 CLEAN_LINE = "The blotter is honest again."
 MEDICINE_LINE = "Bitter. I will invoice you in kindness."
+BATH_LINE = "Water. Then dignity."
+PRAISE_LINE = "I heard that."
 CARE_NAME = "care.json"
 CARE_VERSION = 1
 
@@ -224,6 +228,54 @@ def apply_medicine(state: CareState, species: Species | None = None) -> CareResu
     return CareResult(next_state, MEDICINE_LINE, "sit", "sit")
 
 
+def apply_rest(state: CareState, species: Species | None = None) -> CareResult:
+    kind = species or species_by_key(None)
+    line = pick_line(kind.ambient) or "I sat."
+    next_state = keep_hive(
+        replace(
+            state,
+            hunger=clamp(state.hunger - 3),
+            mood=clamp(state.mood + 4),
+            energy=clamp(state.energy + 34),
+            bond=clamp(state.bond + 1),
+            last_line=line,
+            anim="sit",
+        ),
+        kind,
+    )
+    return CareResult(next_state, next_state.last_line, "sit", "sit")
+
+
+def apply_bath(state: CareState, species: Species | None = None) -> CareResult:
+    next_state = keep_hive(
+        replace(
+            state,
+            hygiene=clamp(state.hygiene + 48),
+            mood=clamp(state.mood + 6),
+            energy=clamp(state.energy - 6),
+            bond=clamp(state.bond + 2),
+            last_line=BATH_LINE,
+            anim="sit",
+        ),
+        species,
+    )
+    return CareResult(next_state, BATH_LINE, "sit", "sit")
+
+
+def apply_praise(state: CareState, species: Species | None = None) -> CareResult:
+    next_state = keep_hive(
+        replace(
+            state,
+            mood=clamp(state.mood + 12),
+            bond=clamp(state.bond + 2),
+            last_line=PRAISE_LINE,
+            anim="sit",
+        ),
+        species,
+    )
+    return CareResult(next_state, PRAISE_LINE, "sit", "sit")
+
+
 def pick_mess(state: CareState, pile_id: int) -> CareResult:
     next_state = keep_hive(
         replace(
@@ -244,16 +296,21 @@ def decay(
     *,
     rng: random.Random | None = None,
     now: int | None = None,
+    key: str | None = None,
+    resting: bool | None = None,
 ) -> CareState:
-    if state.hidden:
-        return state
+    stamp = now if now is not None else int(time.time() * 1000)
+    asleep = resting
+    if asleep is None and key:
+        asleep = is_resting_hour(key, _hour_of(stamp))
+    asleep = bool(asleep) and not state.hidden and not state.sick
     dt = max(0.0, dt_ms)
     mood_rate = MOOD_PER_MS * (1.3 if state.sick else 1)
     next_state = replace(
         state,
-        hunger=clamp(state.hunger - dt * HUNGER_PER_MS),
+        hunger=clamp(state.hunger - dt * HUNGER_PER_MS * (NIGHT_HUNGER if asleep else 1)),
         mood=clamp(state.mood - dt * mood_rate),
-        energy=clamp(state.energy - dt * ENERGY_PER_MS),
+        energy=clamp(state.energy + dt * NIGHT_ENERGY_PER_MS if asleep else state.energy - dt * ENERGY_PER_MS),
         hygiene=clamp(state.hygiene - dt * HYGIENE_PER_MS),
     )
     if next_state.hunger < 18 or next_state.hygiene < 18:
@@ -267,7 +324,6 @@ def decay(
         sick = False
     piles = list(next_state.mess)
     roll = rng.random() if rng is not None else random.random()
-    stamp = now if now is not None else int(time.time() * 1000)
     if next_state.hygiene < 42 and len(piles) < 5 and roll < min(0.35, dt / 120000):
         x = 12 + (rng.random() if rng is not None else random.random()) * 76
         piles.append(MessPile(id=stamp + len(piles), x=x, kind="mess"))
@@ -285,6 +341,10 @@ def ambient_line(state: CareState, species: Species) -> str:
 
 def _now_ms() -> int:
     return int(time.time() * 1000)
+
+
+def _hour_of(stamp_ms: int) -> int:
+    return time.localtime(stamp_ms / 1000.0).tm_hour
 
 
 def pack_care(state: CareState) -> dict[str, object]:
@@ -382,6 +442,7 @@ def load_care(
     *,
     user_data_dir: Path | str | None = None,
     now: int | None = None,
+    key: str | None = None,
 ) -> CareState:
     """Read the blotter line and age it. Missing or rotten file is a new sit."""
     stamp = now if now is not None else _now_ms()
@@ -396,7 +457,7 @@ def load_care(
             return CareState(last_tick=stamp)
         last = state.last_tick or stamp
         elapsed = max(0, stamp - last)
-        aged = decay(state, elapsed, now=stamp) if elapsed else state
+        aged = decay(state, elapsed, now=stamp, key=key) if elapsed else state
         return replace(aged, last_tick=stamp)
     except (OSError, json.JSONDecodeError, TypeError, ValueError):
         return CareState(last_tick=stamp)

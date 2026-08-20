@@ -91,7 +91,7 @@
 
   function save(key, life) {
     try {
-      localStorage.setItem(`${STORE}.${key}`, JSON.stringify({ ...life, lastTick: Date.now() }));
+      localStorage.setItem(`${STORE}.${key}`, JSON.stringify(life));
     } catch {
       /* ignore */
     }
@@ -113,7 +113,9 @@
     return (trait.size || 1) * stage;
   }
 
-  function night(trait, h = hourNow()) {
+  function night(trait, h = hourNow(), key) {
+    const hours = Hours();
+    if (hours && hours.isRestingHour && key) return hours.isRestingHour(key, Math.floor(h));
     return inWindow(h, trait.sleepStart, trait.sleepEnd);
   }
 
@@ -121,12 +123,15 @@
     const dt = Math.max(0, now - (life.lastTick || now));
     const hours = dt / 3600000;
     if (hours <= 0) {
+      if (!life.sick && life.health < 32) life.sick = true;
+      if (life.sick && life.health > 64 && life.hygiene > 40) life.sick = false;
       life.stage = stageOf(life, now);
       stampHive(life, key);
-      return life;
+      return { life, grew: false, asleep: !!life.asleep };
     }
     const hatch = life.stage === "hatchling" ? 1.35 : life.stage === "elder" ? 0.85 : 1;
-    const asleep = night(trait) && !life.hidden;
+    const when = new Date(now);
+    const asleep = night(trait, when.getHours() + when.getMinutes() / 60, key) && !life.hidden;
     life.asleep = asleep && !life.sick;
     const hungerRate = 100 / (trait.hungerH * hatch);
     const energyRate = 100 / (trait.energyH);
@@ -145,16 +150,14 @@
       life.health = clamp(life.health + hours * 3);
     }
 
-    if (!life.sick && life.health < 32 && Math.random() < hours * (0.55 - trait.hardy * 0.3)) {
-      life.sick = true;
-    }
-    if (life.sick && life.health > 62 && life.hygiene > 40) life.sick = false;
+    if (!life.sick && life.health < 32) life.sick = true;
+    if (life.sick && life.health > 64 && life.hygiene > 40) life.sick = false;
 
     if (trait.special === "regrow" && life.health < 90) {
       life.health = clamp(life.health + hours * 6);
     }
 
-    if (life.hygiene < 28 && life.mess.length < 4 && Math.random() < hours * trait.messy * 1.6) {
+    if (life.hygiene < 42 && life.mess.length < 5 && Math.random() < Math.min(0.35, dt / 120000)) {
       life.mess.push({ id: `${now}-${Math.random().toString(36).slice(2, 7)}`, x: 0.2 + Math.random() * 0.6, age: now });
     }
     if (life.bond >= 50 && (!life.gifts || life.gifts.length < 2) && Math.random() < hours * 0.35) {
