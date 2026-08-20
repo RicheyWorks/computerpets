@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const { createLicenseSession } = require("./license/session.cjs");
 const { LicenseError } = require("./license/errors.cjs");
+const Desk = require("./renderer/desk.js");
 
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
@@ -152,16 +153,52 @@ function trayTemplate() {
   ];
 }
 
+function macAppMenu() {
+  return [
+    { role: "appMenu" },
+    { label: "Care", submenu: careMenu() },
+    { label: "Companions", submenu: companionMenu() },
+    {
+      label: "Window",
+      submenu: [
+        {
+          label: "Show",
+          click: () => {
+            win?.showInactive();
+            win?.setAlwaysOnTop(true, "screen-saver");
+          },
+        },
+        { role: "hide" },
+        { role: "minimize" },
+      ],
+    },
+  ];
+}
+
 function refreshMenus() {
   tray?.setContextMenu(Menu.buildFromTemplate(trayTemplate()));
   tray?.setToolTip(statusLabel() + " — ComputerPets");
+  if (Desk.appMenu(process.platform)) {
+    Menu.setApplicationMenu(Menu.buildFromTemplate(macAppMenu()));
+  }
+}
+
+/** The Mac floor sits under the menu bar and above the dock, on the desk under the cursor. */
+function floorOf() {
+  if (Desk.followCursorDisplay(process.platform)) {
+    return screen.getDisplayNearestPoint(screen.getCursorScreenPoint()).workArea;
+  }
+  return screen.getPrimaryDisplay().workArea;
 }
 
 function fitWorkArea() {
   if (!win) return;
-  const area = screen.getPrimaryDisplay().workArea;
+  const area = floorOf();
   win.setBounds({ x: area.x, y: area.y, width: area.width, height: area.height });
   win.setAlwaysOnTop(true, "screen-saver");
+  if (Desk.spacesWalk(process.platform)) {
+    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+  }
 }
 
 function openSettings() {
@@ -189,7 +226,8 @@ function openSettings() {
 }
 
 function createWindow() {
-  const area = screen.getPrimaryDisplay().workArea;
+  const area = floorOf();
+  const chrome = Desk.overlayChrome(process.platform);
   win = new BrowserWindow({
     x: area.x,
     y: area.y,
@@ -206,6 +244,9 @@ function createWindow() {
     alwaysOnTop: true,
     focusable: true,
     show: false,
+    ...(chrome.type ? { type: chrome.type } : {}),
+    acceptFirstMouse: chrome.acceptFirstMouse,
+    hiddenInMissionControl: chrome.hiddenInMissionControl,
     webPreferences: {
       preload: path.join(__dirname, "preload.cjs"),
       contextIsolation: true,
@@ -226,10 +267,17 @@ function createWindow() {
   });
 }
 
+/** On a Mac the extra is a menu-bar mark. A click opens care. */
 function createTray() {
-  tray = new Tray(iconImage().resize({ width: 16, height: 16 }));
+  const icon = iconImage().resize({ width: 16, height: 16 });
+  if (Desk.extraIconTemplate(process.platform)) icon.setTemplateImage(true);
+  tray = new Tray(icon);
   refreshMenus();
   tray.on("click", () => {
+    if (Desk.extraClick(process.platform) === "menu") {
+      tray.popUpContextMenu();
+      return;
+    }
     if (!win) return;
     if (win.isVisible()) win.hide();
     else {

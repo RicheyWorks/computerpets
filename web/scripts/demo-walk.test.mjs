@@ -7,10 +7,12 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const A = await import(join(root, "src/lib/pets/arrive.ts"));
 const P = await import(join(root, "src/lib/pets/play.ts"));
+const D = await import(join(root, "src/lib/pets/mac-desk.ts"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
+const extraSrc = readFileSync(join(root, "src/components/desk/mac-desk-extra.tsx"), "utf8");
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
 
 function lureSeek() {
@@ -27,6 +29,7 @@ test("the demo is a room; the guest is already walking", () => {
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);
+  assert.match(demoSrc, /MacDeskExtra/);
   assert.match(roomSrc, /LivingPet/);
   assert.match(roomSrc, /dropTreatAt/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents|overlay/);
@@ -76,4 +79,40 @@ test("a drag on the demo living pet does not arrive", () => {
   assert.doesNotMatch(lift, /arrivedRef/);
   assert.match(livingSrc, /walkLand/);
   assert.match(livingSrc, /finishArrive/);
+});
+
+test("the demo room shows the Mac walk the way it shows the Windows walk", () => {
+  assert.equal(D.extraClick("darwin"), "menu");
+  assert.equal(D.extraClick("win32"), "toggle");
+  assert.equal(D.tapPxFor("darwin"), D.TAP_PX_MAC);
+  assert.equal(D.tapPxFor("MacIntel"), D.TAP_PX_MAC);
+  assert.equal(D.tapPxFor("Win32"), D.TAP_PX);
+  assert.equal(D.firstClick("darwin"), "accept");
+  assert.equal(D.spacesWalk("darwin"), true);
+  assert.equal(D.followCursorDisplay("darwin"), true);
+  assert.equal(D.overlayChrome("darwin").type, "panel");
+  assert.equal(D.overlayChrome("darwin").acceptFirstMouse, true);
+  assert.equal(D.carePointer({ button: 0, ctrlKey: true }), true);
+
+  const tap = A.pointerUp(9, 0, D.tapPxFor("darwin"));
+  assert.equal(tap.kind, "tap");
+  const place = A.pointerUp(12, 0, D.tapPxFor("darwin"));
+  assert.equal(place.kind, "place");
+  assert.equal(place.arrive, false);
+
+  assert.match(demoSrc, /MacDeskExtra/);
+  assert.match(extraSrc, /data-mac-extra/);
+  assert.match(extraSrc, /CARE_VERBS/);
+  assert.match(extraSrc, /the extra/);
+  assert.doesNotMatch(extraSrc, /Unlock|Minds|settings/);
+  for (const verb of D.careVerbs()) {
+    assert.ok(D.CARE_VERBS.includes(verb));
+  }
+
+  assert.match(livingSrc, /tapPxFor/);
+  assert.match(livingSrc, /carePointer/);
+  assert.match(livingSrc, /navigator\.platform/);
+  const lift = onUpSrc();
+  assert.match(lift, /tapPxFor/);
+  assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents/);
 });

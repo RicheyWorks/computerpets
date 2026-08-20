@@ -2,9 +2,11 @@
 
 All one hundred sixty living kinds live on the real desktop as a Tamagotchi-grade overlay — including ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects plus ten bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of ten wild mammals, a stone of ten more reptiles, a creek of ten more fish, a cellar of ten fungi, a well of ten leftovers, and a far den of ten guests that never evolved here. They turn, ease, and settle on the work-area floor, then do what that animal does — scratch, preen, bask, flick a tongue, lean to the lamp, waggle, hop, or puff. Unique hunger clocks, night cycles, mess, illness, age, and a special move each. The tide den at `/sea` is where the marine guests are taught. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` keeps bees and comb; plaques teach. The pond den at `/pond` is ten Animalia on the blotter; plaques teach. The roost den at `/roost` is ten birds on the blotter; plaques teach. The corner at `/corner` is ten arachnids and their neighbors on the blotter; plaques teach. A harvestman is not a spider. The wood at `/wood` is ten wild mammals on the blotter; plaques teach. The stone at `/stone` is ten more reptiles on the blotter; plaques teach. A tuatara is not a lizard. An alligator is not a crocodile. A bat is not a bird. A porcupine is not Burr. The creek at `/creek` is ten more freshwater fish on the blotter; plaques teach. A bass is not a trout. A lamprey is not an eel. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The well at `/well` is ten leftovers on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach.
 
+On a Mac the extra sits in the menu bar. A click opens care. It does not hide the desk. The floor sits under the menu bar and above the dock. They walk every Space. A tap talks. A drag is a carry. Control-click tends. First click is a sit.
+
 ## Care
 
-Right-click the pet or use the tray / menu bar:
+Right-click the pet or use the tray / the extra:
 
 - Feed, treat (species snack), play (chase a ribbon), rest, talk
 - Hide — they walk off the screen. Call back — they walk in.
@@ -26,7 +28,7 @@ npm start
 Windows: `..\desktop.ps1`  
 Mac: `sh ../desktop.sh`
 
-Windows toasts use the tray identity `works.richey.computerpets.desk`. The overlay tracks the work area across DPI and monitor changes.
+Windows toasts use the tray identity `works.richey.computerpets.desk`. The overlay tracks the work area across DPI and monitor changes. On a Mac the extra is a template mark, the overlay is a panel, and the floor follows the desk under the cursor.
 
 ## Unlock (client contract)
 
@@ -34,7 +36,7 @@ The overlay pets already live on the desk without a license. Unlock talks to a r
 
 There is no “always licensed” stub. Bad ciphertext, an expired payload, a revoked `jti`, a hardware mismatch, or a missing backend all fail closed.
 
-Tray / House window → **Unlock…**. Steam is the first real provider shape (`steamId`, `appId`, `petType`, `hwid`).
+Tray / Extra / House window → **Unlock…**. Steam is the first real provider shape (`steamId`, `appId`, `petType`, `hwid`).
 
 | Variable | Required | Meaning |
 |----------|----------|---------|
