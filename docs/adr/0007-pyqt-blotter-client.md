@@ -35,13 +35,13 @@ A new **`client/`** tree is the first PyQt6 blotter client:
   stub.
 - Care verbs that already exist on the living desk and fit this cut:
   feed, treat, play, hide / call back, clean, medicine, shed for the
-  ten snakes, the ten tide guests, the ten garden plants, the ten hive insects, the ten pond Animalia, the ten roost birds, the ten corner guests, the ten wood mammals, the ten canopy mammals, the ten stone reptiles, the ten creek fish, the ten log guests, the ten shore guests, the ten meadow insects, the ten cellar fungi, the ten well leftovers, the ten far guests, and the two hundred species specials (Steal ribbon, Heel,
+  ten snakes, the ten tide guests, the ten garden plants, the ten hive insects, the ten pond Animalia, the ten roost birds, the ten corner guests, the ten wood mammals, the ten canopy mammals, the ten stone reptiles, the ten creek fish, the ten log guests, the ten shore guests, the ten reef guests, the ten meadow insects, the ten cellar fungi, the ten well leftovers, the ten far guests, and the two hundred ten species specials (Steal ribbon, Heel,
   Play dead, Ink, Carpet, Waggle, Drink, …). The blotter can go unkempt; the guest can go unwell.
 - Daily weather, today’s visitor, and snake shed are **ports** of
   `web/src/lib/pets/weather.ts`, `visitor.ts`, and `shed.ts` — not a
   third house clock and not a rewrite of `desktop/`. The blotter now
   keeps house hours from `hours.ts` (dawn / day / dusk / night, and
-  the two hundred rest windows) on the same wood. Play and the two hundred
+  the two hundred ten rest windows) on the same wood. Play and the two hundred ten
   specials are ports of `specials.ts` and `traits.ts`.
 - The Electron overlay remains a contract client. `desktop/` is not
   rewritten.

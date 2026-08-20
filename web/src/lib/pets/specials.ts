@@ -188,6 +188,13 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "wrist":
     case "gaze":
     case "gum":
+    case "wreath":
+    case "paint":
+    case "scrape":
+    case "scrub":
+    case "tube":
+    case "veil":
+    case "gate":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
       return { stats: next, cmd: "sit" };

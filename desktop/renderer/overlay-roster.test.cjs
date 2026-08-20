@@ -58,6 +58,18 @@ const CANOPY = [
   "potto",
   "koala",
 ];
+const REEF = [
+  "brain_coral",
+  "anemone",
+  "clownfish",
+  "parrotfish",
+  "cleaner_shrimp",
+  "sea_cucumber",
+  "lionfish",
+  "giant_clam",
+  "eagle_ray",
+  "grouper",
+];
 
 function objectKeys(src, marker) {
   const start = src.indexOf(marker);
@@ -65,9 +77,9 @@ function objectKeys(src, marker) {
   return [...slice.matchAll(/^\s{2}([a-z0-9_]+):\s/gm)].map((m) => m[1]);
 }
 
-test("the overlay roster is the same two hundred as the catalog", () => {
+test("the overlay roster is the same two hundred ten as the catalog", () => {
   const keys = roster.map((r) => r.key);
-  assert.equal(keys.length, 200);
+  assert.equal(keys.length, 210);
   assert.deepEqual(keys.sort(), [...CATALOG].sort());
 });
 
@@ -82,8 +94,8 @@ test("every overlay guest keeps their own life traits, not Rui's clock", () => {
   assert.doesNotMatch(traitsSrc.slice(traitsSrc.indexOf("fiddler_crab:")), /special: "ribbon"/);
 });
 
-test("shore, meadow, and canopy keep their own idle acts on the overlay", () => {
-  for (const key of [...SHORE, ...MEADOW, ...CANOPY]) {
+test("shore, meadow, canopy, and reef keep their own idle acts on the overlay", () => {
+  for (const key of [...SHORE, ...MEADOW, ...CANOPY, ...REEF]) {
     const names = E.actsFor(key).map((a) => a.name);
     assert.ok(names.length > 0, key);
     assert.equal(names.includes("scratch"), false, key);
@@ -93,12 +105,14 @@ test("shore, meadow, and canopy keep their own idle acts on the overlay", () => 
   assert.ok(E.actsFor("grasshopper").some((a) => a.name === "vault"));
   assert.ok(E.actsFor("sloth").some((a) => a.name === "hang"));
   assert.ok(E.actsFor("koala").some((a) => a.name === "chew"));
+  assert.ok(E.actsFor("brain_coral").some((a) => a.name === "ridge"));
+  assert.ok(E.actsFor("grouper").some((a) => a.name === "hide"));
 });
 
-test("treat shapes and visit lines cover bees, shore, meadow, and canopy", () => {
+test("treat shapes and visit lines cover bees, shore, meadow, canopy, and reef", () => {
   const treatKeys = objectKeys(petSrc, "const TREAT_SHAPE = {");
   const visitKeys = objectKeys(petSrc, "const VISIT_LINE = {");
-  for (const key of [...BEES, ...SHORE, ...MEADOW, ...CANOPY]) {
+  for (const key of [...BEES, ...SHORE, ...MEADOW, ...CANOPY, ...REEF]) {
     assert.ok(treatKeys.includes(key), `treat ${key}`);
     assert.ok(visitKeys.includes(key), `visit ${key}`);
   }
@@ -106,9 +120,12 @@ test("treat shapes and visit lines cover bees, shore, meadow, and canopy", () =>
   assert.match(petSrc, /field_cricket: "flake"/);
   assert.match(petSrc, /sloth: "leaf"/);
   assert.match(petSrc, /koala: "leaf"/);
+  assert.match(petSrc, /brain_coral: "flake"/);
   assert.match(petSrc, /honeycomb: "I sat\. Then the line went quieter\."/);
   assert.match(petSrc, /fiddler_crab: "I waved\. Then I left the marsh\."/);
   assert.match(petSrc, /field_cricket: "I sang\. Then I left the grass\."/);
   assert.match(petSrc, /sloth: "I hung\. Then I left the bough\."/);
   assert.match(petSrc, /koala: "I chewed\. Then I left the gum\."/);
+  assert.match(petSrc, /brain_coral: "I sat the rock\. Then I left the boulder\."/);
+  assert.match(petSrc, /grouper: "I sat the hole\. Then I left the dish\."/);
 });

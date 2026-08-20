@@ -125,3 +125,21 @@ test("canopy keys never schedule scratch or a snake tongue", () => {
   assert.ok(E.actsFor("flying_squirrel").some((a) => a.name === "glide"));
   assert.ok(E.actsFor("koala").some((a) => a.name === "chew"));
 });
+
+test("reef keys never schedule scratch or a snake tongue", () => {
+  const reef = [
+    "brain_coral", "anemone", "clownfish", "parrotfish", "cleaner_shrimp",
+    "sea_cucumber", "lionfish", "giant_clam", "eagle_ray", "grouper",
+  ];
+  for (const key of reef) {
+    const names = E.actsFor(key).map((a) => a.name);
+    assert.ok(names.length > 0, key);
+    assert.equal(names.includes("scratch"), false, key);
+    assert.equal(names.includes("tongue"), false, key);
+  }
+  assert.ok(E.actsFor("brain_coral").some((a) => a.name === "ridge"));
+  assert.ok(E.actsFor("anemone").some((a) => a.name === "wreath"));
+  assert.ok(E.actsFor("clownfish").some((a) => a.name === "dart"));
+  assert.ok(E.actsFor("parrotfish").some((a) => a.name === "scrape"));
+  assert.ok(E.actsFor("grouper").some((a) => a.name === "hide"));
+});
