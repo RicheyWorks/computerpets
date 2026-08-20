@@ -1,7 +1,7 @@
 # Kubernetes manifests
 
 Plain manifests (not Helm). They match how the app runs today: Spring Boot
-on 8080, Postgres for the license ledger, Redis for shared rate limits and
+on 8081, Postgres for the license ledger, Redis for shared rate limits and
 the jti deny-list, fail-hard secrets, and the Actuator probes already in
 `application.yml`.
 
