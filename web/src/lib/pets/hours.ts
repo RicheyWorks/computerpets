@@ -120,6 +120,16 @@ const REST: Record<string, [number, number]> = {
   canada_goose: [21, 6],
   pileated: [19, 6],
   hummingbird: [19, 6],
+  orb_weaver: [20, 6],
+  jumping_spider: [19, 6],
+  wolf_spider: [8, 18],
+  tarantula: [8, 18],
+  widow: [8, 18],
+  harvestman: [8, 18],
+  scorpion: [8, 18],
+  vinegaroon: [8, 18],
+  tick: [22, 6],
+  solifuge: [8, 18],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -266,6 +276,16 @@ export const HIDE_LINE: Record<string, string> = {
   canada_goose: "On the green.",
   pileated: "Inside the post.",
   hummingbird: "On the cup.",
+  orb_weaver: "On the web.",
+  jumping_spider: "On the edge.",
+  wolf_spider: "Under the litter.",
+  tarantula: "Inside the silk.",
+  widow: "Inside the corner.",
+  harvestman: "On the stem.",
+  scorpion: "Under the bark.",
+  vinegaroon: "Under the sand.",
+  tick: "On the hem.",
+  solifuge: "Inside the dish.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -389,6 +409,16 @@ export const SNACK_LINE: Record<string, string> = {
   canada_goose: "Grass of a treaty.",
   pileated: "Ant of a treaty.",
   hummingbird: "Nectar of a treaty.",
+  orb_weaver: "Fly of a treaty.",
+  jumping_spider: "Fly of a treaty.",
+  wolf_spider: "Cricket of a treaty.",
+  tarantula: "Cricket of a treaty.",
+  widow: "Fly of a treaty.",
+  harvestman: "Mite of a treaty.",
+  scorpion: "Cricket of a treaty.",
+  vinegaroon: "Cricket of a treaty.",
+  tick: "Sip of a treaty.",
+  solifuge: "Cricket of a treaty.",
 };
 
 

@@ -122,7 +122,7 @@ export const GUILD_EXTRA: Record<string, LocusDef> = {
   far: GLOW,
 };
 
-export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "roost" | "cellar" | "well" | "far";
+export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "roost" | "corner" | "cellar" | "well" | "far";
 
 const GARDEN = new Set([
   "moss",
@@ -230,6 +230,18 @@ const ROOST = new Set([
   "pileated",
   "hummingbird",
 ]);
+const CORNER = new Set([
+  "orb_weaver",
+  "jumping_spider",
+  "wolf_spider",
+  "tarantula",
+  "widow",
+  "harvestman",
+  "scorpion",
+  "vinegaroon",
+  "tick",
+  "solifuge",
+]);
 const SNAKES = new Set([
   "ball_python",
   "corn_snake",
@@ -252,6 +264,7 @@ export function guildOf(key: string): GuildId {
   if (FAR.has(key)) return "far";
   if (POND.has(key)) return "pond";
   if (ROOST.has(key)) return "roost";
+  if (CORNER.has(key)) return "corner";
   if (WELL.has(key)) return "well";
   return "house";
 }
@@ -839,6 +852,16 @@ const HOUSE_NAME: Record<string, string> = {
   canada_goose: "Vee",
   pileated: "Drum",
   hummingbird: "Sip",
+  orb_weaver: "Loom",
+  jumping_spider: "Leap",
+  wolf_spider: "Prowl",
+  tarantula: "Velvet",
+  widow: "Hour",
+  harvestman: "Stem",
+  scorpion: "Barb",
+  vinegaroon: "Whip",
+  tick: "Clasp",
+  solifuge: "Gale",
   honeybee: "Comb",
   moss: "Felt",
   bumblebee: "Thrum",

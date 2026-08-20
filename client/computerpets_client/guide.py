@@ -1,9 +1,10 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred and twenty, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred and thirty, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
-hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the cellar keeps
+hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
+the arachnid facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
 the xenobiology facts; the twenty keep the study facts.
 """
@@ -12,7 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_well
+from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, SPECIES, is_bee, is_corner, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_well
 
 
 @dataclass(frozen=True)
@@ -1176,7 +1177,100 @@ ROOST_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE
+CORNER_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "orb_weaver",
+        "Araneus diadematus",
+        "A round abdomen with a pale cross, eight legs, a web she spun herself. European garden spider. She sits. Then she waits. The lamp is a corner she agreed to.",
+        "Not an insect. Comb is a bee with six legs; Loom is Araneus diadematus, and the web is the tell. Not Stem — Stem is a harvestman with one body and two eyes. A web is a trap she built. Not an insect.",
+        "European garden spider. A web she built. Not an insect. Not Stem.",
+        "lamp web",
+        "still",
+    ),
+    _entry(
+        "jumping_spider",
+        "Phidippus audax",
+        "Huge front eyes, a compact body, a leap that is a hunt. Bold jumper. She stalks. Then she leaps. The edge is a lookout she agreed to.",
+        "Not a wolf spider. Prowl carries the brood and does not snare; Leap is Phidippus audax, and the front eyes are the tell. She stalks. She does not wait in a web. Not Prowl.",
+        "Bold jumper. Big front eyes. A leap. Not a wolf spider.",
+        "blotter edge",
+        "keen",
+    ),
+    _entry(
+        "wolf_spider",
+        "Tigrosa helluo",
+        "A ground hunter, a brood she carries on her back, no snare web. Wetland wolf spider. She walks. Then she waits. The litter is a floor she agreed to.",
+        "Not Leap. Leap stalks with big front eyes and jumps; Prowl is Tigrosa helluo, and the brood is the tell. No snare web. A wolf spider is not a jumper. Not Leap.",
+        "Wetland wolf spider. She carries the brood. No snare. Not Leap.",
+        "leaf litter",
+        "sure",
+    ),
+    _entry(
+        "tarantula",
+        "Aphonopelma chalcodes",
+        "Blonde urticating hair, a stout walk, a silk burrow. Desert blonde. She kicks the hair first. The fangs are not the greeting. The burrow is a silk she agreed to.",
+        "Not a wolf spider. Prowl hunts the floor and carries a brood; Velvet is Aphonopelma chalcodes, and the blonde hair is the tell. Urticating hair, not a rumor of fangs first. Not a wolf spider.",
+        "Desert blonde. Urticating hair first. Not a wolf spider.",
+        "silk burrow",
+        "quiet",
+    ),
+    _entry(
+        "widow",
+        "Latrodectus mactans",
+        "Shiny black, a red hourglass on the underside, a hang in the dark. Southern black widow. She sits. Then she hangs. The corner is a dark she agreed to.",
+        "Not every dark spider. A black spider is not Hour; Hour is Latrodectus mactans, and the hourglass is the tell. She is not every dark spider. The glass is the species.",
+        "Southern black widow. Hourglass. She is not every dark spider.",
+        "dark corner",
+        "plain",
+    ),
+    _entry(
+        "harvestman",
+        "Phalangium opilio",
+        "One oval body, not two. Two eyes on a turret. Long thin legs. A harvestman. She walks the stem. She has no silk for a trap. The stem is a walk she agreed to.",
+        "Not a spider. Loom has two body parts and a web; Stem is Phalangium opilio, and the one body is the tell. A harvestman is not a spider. Not Loom. Two eyes. One body.",
+        "A harvestman. Two eyes. One body. Not a spider. Not Loom.",
+        "blotter stem",
+        "busy",
+    ),
+    _entry(
+        "scorpion",
+        "Centruroides vittatus",
+        "Pincers, a segmented metasoma, a sting at the end. Striped bark scorpion. She walks. Then she raises. The bark is a night she agreed to.",
+        "Not a spider. Not Whip. Whip is a vinegaroon with a flagellum and acetic acid; Barb is Centruroides vittatus, and the sting is the tell. A scorpion is not a spider. Not Whip.",
+        "Striped bark scorpion. A metasoma, a sting. Not a spider. Not Whip.",
+        "bark tray",
+        "watchful",
+    ),
+    _entry(
+        "vinegaroon",
+        "Mastigoproctus giganteus",
+        "Bulky pedipalps, a long thin whip, acetic acid, no sting. Giant vinegaroon. She walks. Then she sprays. The sand is a night she agreed to.",
+        "Not a scorpion. Barb has a metasoma and a sting; Whip is Mastigoproctus giganteus, and the acid is the tell. A vinegaroon is not a scorpion. A whip. No sting. Not Barb.",
+        "Giant vinegaroon. A whip, acetic acid, no sting. Not a scorpion. Not Barb.",
+        "sand tray",
+        "armed",
+    ),
+    _entry(
+        "tick",
+        "Ixodes scapularis",
+        "Eight short legs, a flattened body, a wait on the hem. Black-legged tick. A mite. She sits. Then she clasps. The hem is a wait she agreed to.",
+        "Not an insect. Comb is a bee with six legs; Clasp is Ixodes scapularis, and the eight legs are the tell. A tick is not an insect. A mite. Not Comb.",
+        "Black-legged tick. Eight legs. A mite. Not an insect. Not Comb.",
+        "blotter hem",
+        "patient",
+    ),
+    _entry(
+        "solifuge",
+        "Eremobates",
+        "Huge chelicerae, long legs, a run, no silk, no sting. Windscorpion. A camel spider is not a spider. She runs. Then she bites. The dish is a dry she agreed to.",
+        "Not a spider. Not a scorpion. Loom spins a web; Barb raises a sting; Gale is Eremobates, and the jaws are the tell. A camel spider is not a spider. Not Loom. Not Barb.",
+        "Windscorpion. Huge chelicerae. Not a spider. Not a scorpion.",
+        "dry dish",
+        "quick",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1213,6 +1307,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="pond", label="All ten in the pond", verb="stay")
     if is_roost(key):
         return Classroom(room="roost", label="All ten in the roost", verb="stay")
+    if is_corner(key):
+        return Classroom(room="corner", label="All ten in the corner", verb="stay")
     if is_well(key):
         return Classroom(room="well", label="All ten in the well", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
@@ -1256,6 +1352,10 @@ def pond_guide_keys() -> tuple[str, ...]:
 
 def roost_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in ROOST_GUIDE)
+
+
+def corner_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in CORNER_GUIDE)
 
 
 def well_guide_keys() -> tuple[str, ...]:
@@ -1302,6 +1402,10 @@ def roost_guide_complete() -> bool:
     return len(ROOST_GUIDE) == len(ROOST_KEYS) and all(k in _BY_KEY for k in ROOST_KEYS)
 
 
+def corner_guide_complete() -> bool:
+    return len(CORNER_GUIDE) == len(CORNER_KEYS) and all(k in _BY_KEY for k in CORNER_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -1318,6 +1422,7 @@ def guide_complete() -> bool:
         and far_guide_complete()
         and pond_guide_complete()
         and roost_guide_complete()
+        and corner_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
