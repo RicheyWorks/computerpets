@@ -108,6 +108,18 @@ const POND = [
   "leech",
   "stickleback",
 ];
+const ROOST = [
+  "crow",
+  "raven",
+  "barn_owl",
+  "red_tail",
+  "chickadee",
+  "robin",
+  "mallard",
+  "canada_goose",
+  "pileated",
+  "hummingbird",
+];
 const HOUSE = [
   "red_panda",
   "cat",
@@ -136,7 +148,7 @@ function names(key) {
 }
 
 test("every living kind has an ethogram, and snakes never scratch", () => {
-  for (const key of [...HOUSE, ...SNAKES, ...SEA, ...GARDEN, ...INSECTS, ...BEES, ...FUNGI, ...FAR, ...POND]) {
+  for (const key of [...HOUSE, ...SNAKES, ...SEA, ...GARDEN, ...INSECTS, ...BEES, ...FUNGI, ...FAR, ...POND, ...ROOST]) {
     assert.ok(E.actsFor(key).length > 0, key);
   }
   for (const key of SNAKES) {
@@ -214,6 +226,21 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.ok(names("mussel").includes("siphon"));
   assert.ok(names("leech").includes("latch"));
   assert.ok(names("stickleback").includes("flare"));
+  for (const key of ROOST) {
+    const acts = names(key);
+    assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
+    assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
+  }
+  assert.ok(names("crow").includes("caw"));
+  assert.ok(names("raven").includes("kronk"));
+  assert.ok(names("barn_owl").includes("hiss"));
+  assert.ok(names("red_tail").includes("soar"));
+  assert.ok(names("chickadee").includes("dee"));
+  assert.ok(names("robin").includes("hop"));
+  assert.ok(names("mallard").includes("dabble"));
+  assert.ok(names("canada_goose").includes("honk"));
+  assert.ok(names("pileated").includes("drum"));
+  assert.ok(names("hummingbird").includes("hover"));
   assert.ok(names("honeybee").includes("waggle"));
   assert.ok(names("firefly").includes("flash"));
   assert.ok(names("stick").includes("freeze"));

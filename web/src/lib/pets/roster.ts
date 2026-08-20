@@ -4,6 +4,7 @@ import { FUNGI_ROSTER } from "./fungi";
 import { GARDEN_ROSTER } from "./garden";
 import { INSECT_ROSTER } from "./insects";
 import { POND_ROSTER } from "./pond";
+import { ROOST_ROSTER } from "./roost";
 import { SEA_ROSTER } from "./sea";
 import { SNAKE_ROSTER } from "./snakes";
 import { WELL_ROSTER } from "./well";
@@ -592,4 +593,5 @@ export const ROSTER: RosterDef[] = [
   ...FAR_ROSTER,
   ...POND_ROSTER,
   ...WELL_ROSTER,
+  ...ROOST_ROSTER,
 ];
