@@ -91,6 +91,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   magneton: { shape: "pebble", verb: "North" },
   umbral: { shape: "flake", verb: "Cool" },
   cyst: { shape: "crumb", verb: "Damp" },
+  frog: { shape: "crumb", verb: "Cricket" },
+  toad: { shape: "crumb", verb: "Cricket" },
+  newt: { shape: "flake", verb: "Worm" },
+  salamander: { shape: "flake", verb: "Worm" },
+  caecilian: { shape: "flake", verb: "Worm" },
+  crayfish: { shape: "crumb", verb: "Scrap" },
+  pond_snail: { shape: "flake", verb: "Algae" },
+  mussel: { shape: "flake", verb: "Silt" },
+  leech: { shape: "flake", verb: "Worm" },
+  stickleback: { shape: "flake", verb: "Flake" },
 };
 
 export function treatFor(key: string) {
@@ -188,4 +198,14 @@ export const GIFT_LINE: Record<string, string> = {
   magneton: "A north I was not using.",
   umbral: "A cool I was finished eating.",
   cyst: "A wait I was finished holding.",
+  frog: "A hop I was finished keeping.",
+  toad: "A puff I was not using.",
+  newt: "An orange I was finished wearing.",
+  salamander: "A coin I was finished hiding.",
+  caecilian: "A ring I was not using.",
+  crayfish: "A claw I was finished holding.",
+  pond_snail: "A room I was finished growing.",
+  mussel: "A silt I was finished filtering.",
+  leech: "A latch I was finished keeping.",
+  stickleback: "A spine I was not using.",
 };

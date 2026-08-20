@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-ninety REST windows, same return lines. Do not invent rest hours or copy.
+hundred REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -108,6 +108,16 @@ REST: dict[str, tuple[int, int]] = {
     "magneton": (22, 6),
     "umbral": (8, 18),
     "cyst": (20, 8),
+    "frog": (22, 6),
+    "toad": (21, 7),
+    "newt": (22, 7),
+    "salamander": (8, 18),
+    "caecilian": (21, 7),
+    "crayfish": (22, 6),
+    "pond_snail": (23, 6),
+    "mussel": (22, 7),
+    "leech": (9, 17),
+    "stickleback": (21, 6),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -205,6 +215,16 @@ HIDE_LINE: dict[str, str] = {
     "magneton": "On the line.",
     "umbral": "Inside the shadow.",
     "cyst": "Inside the seal.",
+    "frog": "Inside the cup.",
+    "toad": "Under a leaf.",
+    "newt": "Inside the saucer.",
+    "salamander": "Under the leaf.",
+    "caecilian": "Inside the silt.",
+    "crayfish": "Under a pebble.",
+    "pond_snail": "On the rim.",
+    "mussel": "Inside the dish.",
+    "leech": "On the blotter.",
+    "stickleback": "Inside the weed.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -298,6 +318,16 @@ SNACK_LINE: dict[str, str] = {
     "magneton": "North of a treaty.",
     "umbral": "Cool of a treaty.",
     "cyst": "Damp of a treaty.",
+    "frog": "Cricket of a treaty.",
+    "toad": "Cricket of a treaty.",
+    "newt": "Worm of a treaty.",
+    "salamander": "Worm of a treaty.",
+    "caecilian": "Worm of a treaty.",
+    "crayfish": "Scrap of a treaty.",
+    "pond_snail": "Algae of a treaty.",
+    "mussel": "Silt of a treaty.",
+    "leech": "Worm of a treaty.",
+    "stickleback": "Flake of a treaty.",
 }
 
 

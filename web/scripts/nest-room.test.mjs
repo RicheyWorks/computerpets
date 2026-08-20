@@ -61,7 +61,7 @@ test("login is a door, not a shop", () => {
 
 test("meet, demo, hatch, kennel, and kennel-guest rooms stay", () => {
   assert.match(meetSrc, /Watch Rui/);
-  assert.match(meetSrc, /Ninety guests walk the blotter/);
+  assert.match(meetSrc, /One hundred guests walk the blotter/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);

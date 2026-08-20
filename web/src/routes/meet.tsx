@@ -16,7 +16,7 @@ export const Route = createFileRoute("/meet")({
       {
         name: "description",
         content:
-          "Ninety living companions walk the blotter. The nest is a square; neglect can close a line.",
+          "One hundred living companions walk the blotter. The nest is a square; neglect can close a line.",
       },
     ],
   }),
@@ -42,7 +42,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Ninety guests walk the blotter. The nest is a square; neglect can close a line.
+            One hundred guests walk the blotter. The nest is a square; neglect can close a line.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
             <Button asChild>
@@ -60,7 +60,7 @@ export function MeetPage() {
 
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">The catalog</p>
-        <h2 className="mt-2 font-display text-3xl sm:text-4xl">Ninety, on their shelves.</h2>
+        <h2 className="mt-2 font-display text-3xl sm:text-4xl">One hundred, on their shelves.</h2>
         <p className="mt-2 max-w-md text-sm text-muted">
           Open a room. Or pick a name. They will be walking when the page opens.
         </p>
@@ -118,7 +118,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
               <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
               <p className="mt-2 text-sm text-muted">
-                Transparent overlay. Treat, chase, hide. They walk the real screen. All ninety.
+                Transparent overlay. Treat, chase, hide. They walk the real screen. All one hundred.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
             </article>
@@ -127,7 +127,7 @@ export function MeetPage() {
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
                 Open Live, then Add to Home Screen. Tap the blotter for a treat. Chase the ribbon. All
-                ninety.
+                one hundred.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">

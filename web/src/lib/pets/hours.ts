@@ -90,6 +90,16 @@ const REST: Record<string, [number, number]> = {
   magneton: [22, 6],
   umbral: [8, 18],
   cyst: [20, 8],
+  frog: [22, 6],
+  toad: [21, 7],
+  newt: [22, 7],
+  salamander: [8, 18],
+  caecilian: [21, 7],
+  crayfish: [22, 6],
+  pond_snail: [23, 6],
+  mussel: [22, 7],
+  leech: [9, 17],
+  stickleback: [21, 6],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -206,6 +216,16 @@ export const HIDE_LINE: Record<string, string> = {
   magneton: "On the line.",
   umbral: "Inside the shadow.",
   cyst: "Inside the seal.",
+  frog: "Inside the cup.",
+  toad: "Under a leaf.",
+  newt: "Inside the saucer.",
+  salamander: "Under the leaf.",
+  caecilian: "Inside the silt.",
+  crayfish: "Under a pebble.",
+  pond_snail: "On the rim.",
+  mussel: "Inside the dish.",
+  leech: "On the blotter.",
+  stickleback: "Inside the weed.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -299,6 +319,16 @@ export const SNACK_LINE: Record<string, string> = {
   magneton: "North of a treaty.",
   umbral: "Cool of a treaty.",
   cyst: "Damp of a treaty.",
+  frog: "Cricket of a treaty.",
+  toad: "Cricket of a treaty.",
+  newt: "Worm of a treaty.",
+  salamander: "Worm of a treaty.",
+  caecilian: "Worm of a treaty.",
+  crayfish: "Scrap of a treaty.",
+  pond_snail: "Algae of a treaty.",
+  mussel: "Silt of a treaty.",
+  leech: "Worm of a treaty.",
+  stickleback: "Flake of a treaty.",
 };
 
 

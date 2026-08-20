@@ -10,6 +10,7 @@ const NAV = [
   { to: "/sea", label: "Tide", hideOnPhone: false, hideOnDemo: true },
   { to: "/garden", label: "Garden", hideOnPhone: false, hideOnDemo: true },
   { to: "/hive", label: "Hive", hideOnPhone: false, hideOnDemo: true },
+  { to: "/pond", label: "Pond", hideOnPhone: false, hideOnDemo: true },
   { to: "/cellar", label: "Cellar", hideOnPhone: false, hideOnDemo: true },
   { to: "/far", label: "Far", hideOnPhone: false, hideOnDemo: true },
   { to: "/live", label: "Live", hideOnPhone: false, hideOnDemo: false },
@@ -35,6 +36,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const tide = pathname === "/sea";
   const garden = pathname === "/garden";
   const hive = pathname === "/hive";
+  const pond = pathname === "/pond";
   const cellar = pathname === "/cellar";
   const far = pathname === "/far";
   const study = pathname === "/study";
@@ -47,7 +49,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           "z-30 border-b border-border/80",
           demo || kennelGuest || kennel || shelf || hatchery || nest || desk
             ? "absolute inset-x-0 top-0 border-transparent bg-transparent"
-            : meet || den || tide || garden || hive || cellar || far || study || live
+            : meet || den || tide || garden || hive || pond || cellar || far || study || live
               ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
               : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
@@ -101,7 +103,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </header>
       {desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? (
         <div className="h-dvh">{children}</div>
-      ) : meet || den || tide || garden || hive || cellar || far || study ? (
+      ) : meet || den || tide || garden || hive || pond || cellar || far || study ? (
         <div>{children}</div>
       ) : (
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</div>

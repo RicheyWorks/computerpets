@@ -86,7 +86,7 @@ test("adult Luna still does not eat; prior leftovers stay", () => {
   const adult = { ...C.blankCare(grownBorn), hunger: 40, bornAt: grownBorn, lastTick: now };
   assert.equal(C.adultLuna("luna", adult, now), true);
   assert.equal(C.applyFeedFor("luna", adult, now).hunger, 40);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 90);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 100);
   assert.match(careSrc, /packLine/);
   assert.match(roomSrc, /tickCare/);
   assert.match(demoSrc, /persistLocal=\{false\}/);

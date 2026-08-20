@@ -64,7 +64,7 @@ test("nest pair with an immediate child navigates to the guest room", () => {
 test("catalog is a shelf, not a prospectus", () => {
   assert.match(catalogSrc, /CompanionRoom/);
   assert.match(catalogSrc, /persistLocal=\{false\}/);
-  assert.match(catalogSrc, /The ninety/);
+  assert.match(catalogSrc, /The hundred/);
   assert.match(catalogSrc, /on their shelves/);
   assert.match(catalogSrc, /The shelf is a room/);
   assert.doesNotMatch(catalogSrc, /license service/);
@@ -75,11 +75,12 @@ test("catalog is a shelf, not a prospectus", () => {
   assert.match(catalogSrc, /to="\/study"/);
   assert.match(catalogSrc, /to="\/snakes"/);
   assert.match(catalogSrc, /to="\/far"/);
+  assert.match(catalogSrc, /to="\/pond"/);
 });
 
 test("meet, demo, and kennel-guest rooms stay", () => {
   assert.match(meetSrc, /Watch Rui/);
-  assert.match(meetSrc, /Ninety guests walk the blotter/);
+  assert.match(meetSrc, /One hundred guests walk the blotter/);
   assert.match(demoPageSrc, /DemoStage/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);

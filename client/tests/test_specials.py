@@ -96,6 +96,16 @@ HOUSE_TRAITS = {
     "magneton": ("align", "Align", "I aligned. Hello."),
     "umbral": ("dim", "Dim", "I dimmed. Hello."),
     "cyst": ("wake", "Wake", "I waited. That was hello."),
+    "frog": ("croak", "Croak", "I jumped. That was hello."),
+    "toad": ("puff", "Puff", "I hopped. Hello."),
+    "newt": ("eft", "Eft", "I kept the orange. Hello."),
+    "salamander": ("hide", "Hide", "I waited under the leaf. Hello."),
+    "caecilian": ("ring", "Ring", "I am not a worm. Hello."),
+    "crayfish": ("pinch", "Pinch", "I pinched. That was hello."),
+    "pond_snail": ("rasp", "Rasp", "I rasped. Hello."),
+    "mussel": ("siphon", "Siphon", "I filtered. Hello."),
+    "leech": ("latch", "Latch", "I latched. Hello."),
+    "stickleback": ("flare", "Flare", "I flared. Hello."),
 }
 
 
