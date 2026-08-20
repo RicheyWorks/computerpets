@@ -126,6 +126,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   magneton: T(132, 6, 0.74, 0.48, {}, "align", "Align", "I aligned. Hello."),
   umbral: T(6, 0, 0.76, 0.04, { nocturnal: true }, "dim", "Dim", "I dimmed. Hello."),
   cyst: T(2, 0, 0.58, 0.02, {}, "wake", "Wake", "I waited. That was hello."),
+  frog: T(88, 32, 0.72, 0.45, {}, "croak", "Croak", "I jumped. That was hello."),
+  toad: T(54, 18, 0.78, 0.22, {}, "puff", "Puff", "I hopped. Hello."),
+  newt: T(62, 8, 0.58, 0.38, { aquatic: true }, "eft", "Eft", "I kept the orange. Hello."),
+  salamander: T(48, 6, 0.7, 0.12, { nocturnal: true }, "hide", "Hide", "I waited under the leaf. Hello."),
+  caecilian: T(44, 4, 0.82, 0.2, { aquatic: true }, "ring", "Ring", "I am not a worm. Hello."),
+  crayfish: T(70, 8, 0.68, 0.32, { aquatic: true }, "pinch", "Pinch", "I pinched. That was hello."),
+  pond_snail: T(10, 0, 0.55, 0.06, { aquatic: true }, "rasp", "Rasp", "I rasped. Hello."),
+  mussel: T(4, 0, 0.72, 0.03, { aquatic: true }, "siphon", "Siphon", "I filtered. Hello."),
+  leech: T(36, 4, 0.5, 0.28, { aquatic: true }, "latch", "Latch", "I latched. Hello."),
+  stickleback: T(80, 6, 0.64, 0.5, { aquatic: true }, "flare", "Flare", "I flared. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

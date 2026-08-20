@@ -2,7 +2,7 @@
 
 New keepers start at the root [README](../README.md).
 
-Browser companion for ComputerPets. The full house of **90** living kinds is awake — Rui and the original nineteen, plus ten named snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects plus ten bees and comb, a cellar of ten fungi, and a far den of ten guests that never evolved here. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue, a plant leans to the lamp, a bee waggles, a fungus leans or puffs. The tide den at `/sea` teaches the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` keeps a living comb; the colony has a line. Brood, stores, a quiet if neglected. Plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach. The nest is a room. The square sits on the paper. Neglect can close a line. The nest still keeps one. The hatch is a room. The draw lands you with the guest. The desk is the same house. You sit on the same wood. The desk keeps time. Leave and they are hungrier.
+Browser companion for ComputerPets. The full house of **100** living kinds is awake — Rui and the original nineteen, plus ten named snakes, a tide of ten sea creatures, a garden of ten plants, a hive of ten insects plus ten bees and comb, a pond of ten Animalia, a cellar of ten fungi, and a far den of ten guests that never evolved here. They turn before they cross the blotter, ease to a stop, and keep their own idle habits — a dog scratches, a snake flicks its tongue, a plant leans to the lamp, a bee waggles, a fungus leans or puffs, a frog hops. The tide den at `/sea` teaches the marine guests. The garden den at `/garden` is ten plants on the blotter; plaques teach. The hive den at `/hive` keeps a living comb; the colony has a line. Brood, stores, a quiet if neglected. Plaques teach. The pond den at `/pond` is ten Animalia on the blotter; plaques teach. The cellar den at `/cellar` is ten fungi on the blotter; plaques teach. The far den at `/far` is ten guests that never evolved here; plaques teach. The nest is a room. The square sits on the paper. Neglect can close a line. The nest still keeps one. The hatch is a room. The draw lands you with the guest. The desk is the same house. You sit on the same wood. The desk keeps time. Leave and they are hungrier.
 
 ## Run
 
@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel. The kennel is a room. The cards stay paper. The shelf is a room. The ninety sit by den, not by rarity.
+Opens the desk. Guests get Rui immediately. Signed-in keepers can hatch and care through the kennel. The kennel is a room. The cards stay paper. The shelf is a room. The hundred sit by den, not by rarity.
 
 Optional talk voice uses `XAI_API_KEY` (Grok chat + TTS) for a signed-in keeper. A guest still hears house lines. Without a house key, Rui still answers from local lines and the browser speech synthesizer.
 
@@ -35,12 +35,13 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 
 ## Advertising demos
 
-- `/catalog` — a room. The ninety sit by den, not by rarity.
+- `/catalog` — a room. The hundred sit by den, not by rarity.
 - `/meet` — house landing
 - `/snakes` — the snake den
 - `/sea` — the tide den
 - `/garden` — the garden den
 - `/hive` — the hive den
+- `/pond` — the pond den
 - `/cellar` — the cellar den
 - `/far` — the far den
 - `/nest` — a room. The square sits on the paper.

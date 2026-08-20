@@ -34,6 +34,8 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "float":
     case "edge":
     case "align":
+    case "eft":
+    case "flare":
       return { stats: next, cmd: "wander" };
     case "wheek":
     case "echo":
@@ -50,6 +52,7 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "count":
     case "warn":
     case "chord":
+    case "croak":
       next.mood = clampStat(next.mood + 8);
       return { stats: next, cmd: "talk" };
     case "still":
@@ -93,12 +96,19 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "frost":
     case "dim":
     case "wake":
+    case "puff":
+    case "hide":
+    case "ring":
+    case "rasp":
+    case "siphon":
+    case "latch":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
       return { stats: next, cmd: "sit" };
     case "trade":
     case "snap":
     case "spore":
+    case "pinch":
       next.mood = clampStat(next.mood + 8);
       return { stats: next, cmd: "play" };
     case "playdead":

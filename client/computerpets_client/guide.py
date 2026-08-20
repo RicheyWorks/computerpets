@@ -1,17 +1,18 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same ninety, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
-hive keeps the insect facts; the cellar keeps the fungus facts; the far den
-keeps the xenobiology facts; the twenty keep the study facts.
+hive keeps the insect facts; the pond keeps the Animalia facts; the cellar keeps
+the fungus facts; the far den keeps the xenobiology facts; the twenty keep the
+study facts.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_sea, is_snake
+from .species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, SPECIES, is_bee, is_far, is_fungus, is_garden, is_insect, is_pond, is_sea, is_snake
 
 
 @dataclass(frozen=True)
@@ -896,7 +897,100 @@ FAR_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE
+POND_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "frog",
+        "Lithobates clamitans",
+        "Long hind legs, smooth damp skin, a tympanum like a coin behind the eye. Green frog. She hops, then sits. The cup is a bank she agreed to.",
+        "Not a toad. Pebble is dry and warty, with parotoid glands; Reed is Lithobates clamitans, and the jump is the tell. A frog is not a toad. The damp is the species.",
+        "Green frog. Long legs. Damp skin. Not a toad.",
+        "reed cup",
+        "ready",
+    ),
+    _entry(
+        "toad",
+        "Anaxyrus americanus",
+        "Warty dry skin, short hops, a pair of parotoid glands behind the eyes like a warning she wears. American toad. She hops, then puffs. The dish is a leaf she agreed to.",
+        "Not a frog. Reed is damp and long-legged; Pebble is Anaxyrus americanus, and the glands are the tell. A toad is not a frog. The dry is the species.",
+        "American toad. Warty, dry, parotoids. Not a frog.",
+        "leaf dish",
+        "plain",
+    ),
+    _entry(
+        "newt",
+        "Notophthalmus viridescens",
+        "A smooth spotted salamander who walked the land as a red eft, then returned to water. Eastern newt. The tail is flattened, not scaled. The saucer is a moss she agreed to.",
+        "Not a lizard. Sol is an iguana of the wall; Eft is Notophthalmus viridescens, and the wet skin is the tell. A newt is not a lizard. The orange of the eft is a stage, not a costume.",
+        "Eastern newt. A newt is not a lizard.",
+        "moss saucer",
+        "bright",
+    ),
+    _entry(
+        "salamander",
+        "Ambystoma maculatum",
+        "Black with yellow coins, a vernal-pool guest who hides under leaves until the rain. Spotted salamander. She sits. Then she hides. The mold is a pool she agreed to wait for.",
+        "Not a lizard. Not Eft — Eft walked orange as a newt; Dapple is Ambystoma maculatum, and the coins are the tell. Sol keeps the wall. Dapple keeps the mold. A salamander is not a lizard.",
+        "Spotted salamander. Yellow coins on black. Not a lizard. Not Eft.",
+        "leaf mold",
+        "hidden",
+    ),
+    _entry(
+        "caecilian",
+        "Typhlonectes natans",
+        "Rings down a slick body, a jaw, eyes that barely keep office. Rio caecilian. An amphibian. She slips. The tray is a silt she agreed to.",
+        "Not a worm. Latch is a leech with suckers; Slip is Typhlonectes natans, and the jaw is the tell. A caecilian is not a worm. She is an amphibian who lost the walk and kept the rings.",
+        "Rio caecilian. A caecilian is not a worm.",
+        "silt tray",
+        "slick",
+    ),
+    _entry(
+        "crayfish",
+        "Cambarus bartonii",
+        "Ten walking legs, two claws, a fan of a tail. Common crayfish. A crustacean. She walks, then pinches. The tray is a pebble she agreed to.",
+        "Not an insect. Comb is a bee with six legs; Pinch is Cambarus bartonii, and the claws are the tell. A crayfish is not an insect. Ten legs. Two claws. The house of a crab, in a pond.",
+        "Common crayfish. A crayfish is not an insect.",
+        "pebble tray",
+        "armed",
+    ),
+    _entry(
+        "pond_snail",
+        "Lymnaea stagnalis",
+        "A tall spiral she grew herself, a lung under the shell, a rasp for a tongue. Great pond snail. She sits. Then she rasps. The rim is a glass she agreed to.",
+        "Not an insect. Not Tenant — Tenant borrows a shell; Whorl is Lymnaea stagnalis, and the house she grew is the tell. A pond snail is not a slug with a lid glued on. She built the rooms.",
+        "Great pond snail. A spiral she grew. Not an insect.",
+        "glass rim",
+        "slow",
+    ),
+    _entry(
+        "mussel",
+        "Elliptio complanata",
+        "Two dark valves, a pale hinge, a foot, a siphon that filters. Eastern elliptio. A freshwater mussel. She sits. Then she filters. The dish is a silt she agreed to.",
+        "Not a sea guest. Ochre is a sea star of the tide; Hinge is Elliptio complanata, and the river is the tell. Not lunch. A mussel is not a clam you eat. She filters the pond.",
+        "Eastern elliptio. Two valves. A filter. Not the tide.",
+        "silt dish",
+        "filtering",
+    ),
+    _entry(
+        "leech",
+        "Haemopis sanguisuga",
+        "Segments, a sucker at each end, a swim like a ribbon. Horse leech. She hunts worms. She does not drink you. The blotter is a damp she agreed to.",
+        "Not a worm you dig. Slip is a caecilian with a jaw; Latch is Haemopis sanguisuga, and the suckers are the tell. A leech is not a worm. Many pond leeches eat worms. The blood rumor is a different office.",
+        "Horse leech. A leech is not a worm you dig.",
+        "damp blotter",
+        "sure",
+    ),
+    _entry(
+        "stickleback",
+        "Gasterosteus aculeatus",
+        "Three spines on the back, a nest of glue in the weed, a flare when the compile is kind. Three-spined stickleback. She darts. Then she builds. The bowl is a weed she agreed to.",
+        "Not a goldfish. Coin circles one thought; Prickle is Gasterosteus aculeatus, and the nest is the tell. A stickleback is not Coin. She builds. She does not loop.",
+        "Three-spined stickleback. Three spines. A nest. Not Coin.",
+        "weed bowl",
+        "keen",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -929,6 +1023,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="cellar", label="All ten in the cellar", verb="stay")
     if is_far(key):
         return Classroom(room="far", label="All ten in the far den", verb="stay")
+    if is_pond(key):
+        return Classroom(room="pond", label="All ten in the pond", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
 
 
@@ -964,6 +1060,10 @@ def far_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in FAR_GUIDE)
 
 
+def pond_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in POND_GUIDE)
+
+
 def house_guide_complete() -> bool:
     return len(HOUSE_GUIDE) == len(HOUSE_KEYS) and all(k in _BY_KEY for k in HOUSE_KEYS)
 
@@ -996,6 +1096,10 @@ def far_guide_complete() -> bool:
     return len(FAR_GUIDE) == len(FAR_KEYS) and all(k in _BY_KEY for k in FAR_KEYS)
 
 
+def pond_guide_complete() -> bool:
+    return len(POND_GUIDE) == len(POND_KEYS) and all(k in _BY_KEY for k in POND_KEYS)
+
+
 def guide_complete() -> bool:
     return (
         house_guide_complete()
@@ -1006,6 +1110,7 @@ def guide_complete() -> bool:
         and bee_guide_complete()
         and fungi_guide_complete()
         and far_guide_complete()
+        and pond_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)
     )

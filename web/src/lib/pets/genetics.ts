@@ -122,7 +122,7 @@ export const GUILD_EXTRA: Record<string, LocusDef> = {
   far: GLOW,
 };
 
-export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "cellar" | "far";
+export type GuildId = "house" | "snakes" | "sea" | "garden" | "hive" | "pond" | "cellar" | "far";
 
 const GARDEN = new Set([
   "moss",
@@ -194,6 +194,18 @@ const FAR = new Set([
   "umbral",
   "cyst",
 ]);
+const POND = new Set([
+  "frog",
+  "toad",
+  "newt",
+  "salamander",
+  "caecilian",
+  "crayfish",
+  "pond_snail",
+  "mussel",
+  "leech",
+  "stickleback",
+]);
 const SNAKES = new Set([
   "ball_python",
   "corn_snake",
@@ -214,6 +226,7 @@ export function guildOf(key: string): GuildId {
   if (INSECTS.has(key)) return "hive";
   if (FUNGI.has(key)) return "cellar";
   if (FAR.has(key)) return "far";
+  if (POND.has(key)) return "pond";
   return "house";
 }
 
@@ -222,7 +235,7 @@ export function extraLocusFor(key: string): LocusDef | null {
   if (guild === "garden") return FRUIT;
   if (guild === "cellar") return SPORE;
   if (guild === "hive") return DUST;
-  if (guild === "sea" || guild === "far") return GLOW;
+  if (guild === "sea" || guild === "far" || guild === "pond") return GLOW;
   return null;
 }
 
@@ -770,6 +783,16 @@ const HOUSE_NAME: Record<string, string> = {
   luna: "Ghost",
   red_panda: "Rui",
   photovore: "Gleam",
+  frog: "Reed",
+  toad: "Pebble",
+  newt: "Eft",
+  salamander: "Dapple",
+  caecilian: "Slip",
+  crayfish: "Pinch",
+  pond_snail: "Whorl",
+  mussel: "Hinge",
+  leech: "Latch",
+  stickleback: "Prickle",
   honeybee: "Comb",
   moss: "Felt",
   bumblebee: "Thrum",
@@ -1003,7 +1026,7 @@ export function departVerb(speciesKey: string): string {
   if (guild === "cellar") return "dried";
   if (guild === "hive") return "spent";
   if (guild === "far") return "went dark";
-  if (guild === "snakes" || guild === "sea" || WENT_STILL.has(speciesKey)) return "went still";
+  if (guild === "snakes" || guild === "sea" || guild === "pond" || WENT_STILL.has(speciesKey)) return "went still";
   return "left";
 }
 
