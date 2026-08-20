@@ -171,6 +171,16 @@ export const SPECIES: Species[] = [
   { key: "paddlefish", displayName: "American Paddlefish", rarity: "RARE", temperament: "Filtering", habitat: "Current dish", blurb: "A paddle. Filter. Not a shark. Not Whisk." },
   { key: "lamprey", displayName: "Sea Lamprey", rarity: "UNCOMMON", temperament: "Attaching", habitat: "Stone disk", blurb: "A disk mouth. No jaws. Not an eel. Not Silver. Not a moray." },
   { key: "american_eel", displayName: "American Eel", rarity: "RARE", temperament: "Going", habitat: "Bank hole", blurb: "She goes to the Sargasso. Not a lamprey. Not Round. Not a moray of the tide." },
+  { key: "house_centipede", displayName: "House Centipede", rarity: "UNCOMMON", temperament: "Hunting", habitat: "Plaster crack", blurb: "Fifteen pairs. She hunts. Not a millipede. Not Link. Not an insect." },
+  { key: "millipede", displayName: "American Giant Millipede", rarity: "COMMON", temperament: "Oiled", habitat: "Damp log", blurb: "Two pairs per ring. She oils. Not a centipede. Not Haste." },
+  { key: "pillbug", displayName: "Common Pillbug", rarity: "COMMON", temperament: "Rolling", habitat: "Bark dish", blurb: "Seven pairs. A crustacean. Not an insect. Not Comb. Not Pinch." },
+  { key: "earthworm", displayName: "Common Earthworm", rarity: "COMMON", temperament: "Casting", habitat: "Soil tray", blurb: "A clitellum. She casts. Not a snake. Not Sash. Not Slip. Not Latch." },
+  { key: "velvet_worm", displayName: "Velvet Worm", rarity: "RARE", temperament: "Velvet", habitat: "Wet wood", blurb: "Velvet. Glue from the head. An onychophoran. Not a millipede. Not Link." },
+  { key: "springtail", displayName: "Orchesella Springtail", rarity: "COMMON", temperament: "Hopping", habitat: "Duff cup", blurb: "A furcula. A hexapod that is not an insect. Not a flea. Not Comb." },
+  { key: "tardigrade", displayName: "Water Bear", rarity: "RARE", temperament: "Waiting", habitat: "Moss film", blurb: "A tun when dry. A water bear. Not a bear. Not Coal." },
+  { key: "planarian", displayName: "Tiger Planarian", rarity: "UNCOMMON", temperament: "Splitting", habitat: "Film dish", blurb: "Eyes like commas. She splits. Not a leech. Not Latch." },
+  { key: "nematode", displayName: "C. elegans", rarity: "UNCOMMON", temperament: "Threading", habitat: "Soil film", blurb: "A roundworm. Not Cast. Not an earthworm you dig." },
+  { key: "amphipod", displayName: "Gammarus Scud", rarity: "COMMON", temperament: "Scudding", habitat: "Side pool", blurb: "A scud. She swims on her side. Not Pinch. Not a pillbug." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

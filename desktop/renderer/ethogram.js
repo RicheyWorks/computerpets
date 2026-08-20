@@ -168,6 +168,16 @@
     paddlefish: [A("filter", "sit_hold", 2.4, 5, "sit"), A("paddle", "bob", 1.6, 3), A("still", "freeze", 2.0, 2)],
     lamprey: [A("disk", "sit_hold", 2.2, 5, "sit"), A("cling", "freeze", 2.0, 3), A("still", "freeze", 1.8, 2)],
     american_eel: [A("swim", "wiggle", 1.4, 5), A("silver", "pulse", 1.0, 3), A("still", "freeze", 1.6, 2)],
+    house_centipede: [A("hunt", "dart", 0.5, 5), A("walk", "wiggle", 0.8, 3), A("still", "freeze", 1.4, 2)],
+    millipede: [A("walk", "wiggle", 1.6, 5), A("oil", "puff", 1.2, 3, "sit"), A("still", "freeze", 2.0, 2)],
+    pillbug: [A("roll", "sit_hold", 2.2, 5, "sit"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+    earthworm: [A("cast", "nod", 1.4, 5, "sit"), A("crawl", "wiggle", 1.2, 3), A("still", "freeze", 1.8, 2)],
+    velvet_worm: [A("jet", "snap", 0.7, 4, "play"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.8, 2)],
+    springtail: [A("hop", "hop", 0.5, 5, "play"), A("still", "freeze", 1.4, 3), A("walk", "wiggle", 0.8, 2)],
+    tardigrade: [A("tun", "sit_hold", 2.4, 5, "sit"), A("walk", "wiggle", 1.2, 3), A("still", "freeze", 2.0, 2)],
+    planarian: [A("split", "pulse", 1.2, 5), A("glide", "wiggle", 1.4, 3), A("still", "freeze", 1.8, 2)],
+    nematode: [A("thrash", "wiggle", 1.0, 5), A("still", "freeze", 1.6, 3), A("sit", "sit_hold", 1.8, 2, "sit")],
+    amphipod: [A("scud", "wiggle", 1.2, 5), A("dart", "dart", 0.6, 3), A("still", "freeze", 1.6, 2)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",

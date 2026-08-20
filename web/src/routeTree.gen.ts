@@ -20,6 +20,7 @@ import { Route as GardenRouteImport } from './routes/garden'
 import { Route as HatchRouteImport } from './routes/hatch'
 import { Route as HiveRouteImport } from './routes/hive'
 import { Route as LiveRouteImport } from './routes/live'
+import { Route as LogRouteImport } from './routes/log'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MeetRouteImport } from './routes/meet'
 import { Route as MindRouteImport } from './routes/mind'
@@ -95,6 +96,11 @@ const HiveRoute = HiveRouteImport.update({
 const LiveRoute = LiveRouteImport.update({
   id: '/live',
   path: '/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LogRoute = LogRouteImport.update({
+  id: '/log',
+  path: '/log',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -186,6 +192,7 @@ export interface FileRoutesByFullPath {
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
+  '/log': typeof LogRoute
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
@@ -215,6 +222,7 @@ export interface FileRoutesByTo {
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
+  '/log': typeof LogRoute
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
@@ -245,6 +253,7 @@ export interface FileRoutesById {
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
   '/live': typeof LiveRoute
+  '/log': typeof LogRoute
   '/login': typeof LoginRoute
   '/meet': typeof MeetRoute
   '/mind': typeof MindRoute
@@ -276,6 +285,7 @@ export interface FileRouteTypes {
     | '/hatch'
     | '/hive'
     | '/live'
+    | '/log'
     | '/login'
     | '/meet'
     | '/mind'
@@ -305,6 +315,7 @@ export interface FileRouteTypes {
     | '/hatch'
     | '/hive'
     | '/live'
+    | '/log'
     | '/login'
     | '/meet'
     | '/mind'
@@ -334,6 +345,7 @@ export interface FileRouteTypes {
     | '/hatch'
     | '/hive'
     | '/live'
+    | '/log'
     | '/login'
     | '/meet'
     | '/mind'
@@ -364,6 +376,7 @@ export interface RootRouteChildren {
   HatchRoute: typeof HatchRoute
   HiveRoute: typeof HiveRoute
   LiveRoute: typeof LiveRoute
+  LogRoute: typeof LogRoute
   LoginRoute: typeof LoginRoute
   MeetRoute: typeof MeetRoute
   MindRoute: typeof MindRoute
@@ -465,6 +478,13 @@ declare module '@tanstack/react-router' {
       path: '/live'
       fullPath: '/live'
       preLoaderRoute: typeof LiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/log': {
+      id: '/log'
+      path: '/log'
+      fullPath: '/log'
+      preLoaderRoute: typeof LogRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -588,6 +608,7 @@ const rootRouteChildren: RootRouteChildren = {
   HatchRoute: HatchRoute,
   HiveRoute: HiveRoute,
   LiveRoute: LiveRoute,
+  LogRoute: LogRoute,
   LoginRoute: LoginRoute,
   MeetRoute: MeetRoute,
   MindRoute: MindRoute,

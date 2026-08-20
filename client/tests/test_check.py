@@ -28,7 +28,7 @@ def test_offscreen_check_constructs_window():
     )
     assert result.returncode == 0, result.stderr
     assert "on the blotter" in result.stdout
-    assert "160 living kinds" in result.stdout
+    assert "170 living kinds" in result.stdout
     assert "species plaque" in result.stdout
     assert "shader engine" in result.stdout
     assert any(sky in result.stdout for sky in ("Clear", "Rain", "Wind", "Heat"))

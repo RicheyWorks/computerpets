@@ -191,6 +191,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "paddlefish": (_a("filter", "sit_hold", 2.4, 5, "sit"), _a("paddle", "bob", 1.6, 3), _a("still", "freeze", 2.0, 2)),
     "lamprey": (_a("disk", "sit_hold", 2.2, 5, "sit"), _a("cling", "freeze", 2.0, 3), _a("still", "freeze", 1.8, 2)),
     "american_eel": (_a("swim", "wiggle", 1.4, 5), _a("silver", "pulse", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "house_centipede": (_a("hunt", "dart", 0.5, 5), _a("walk", "wiggle", 0.8, 3), _a("still", "freeze", 1.4, 2)),
+    "millipede": (_a("walk", "wiggle", 1.6, 5), _a("oil", "puff", 1.2, 3, "sit"), _a("still", "freeze", 2.0, 2)),
+    "pillbug": (_a("roll", "sit_hold", 2.2, 5, "sit"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "earthworm": (_a("cast", "nod", 1.4, 5, "sit"), _a("crawl", "wiggle", 1.2, 3), _a("still", "freeze", 1.8, 2)),
+    "velvet_worm": (_a("jet", "snap", 0.7, 4, "play"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.8, 2)),
+    "springtail": (_a("hop", "hop", 0.5, 5, "play"), _a("still", "freeze", 1.4, 3), _a("walk", "wiggle", 0.8, 2)),
+    "tardigrade": (_a("tun", "sit_hold", 2.4, 5, "sit"), _a("walk", "wiggle", 1.2, 3), _a("still", "freeze", 2.0, 2)),
+    "planarian": (_a("split", "pulse", 1.2, 5), _a("glide", "wiggle", 1.4, 3), _a("still", "freeze", 1.8, 2)),
+    "nematode": (_a("thrash", "wiggle", 1.0, 5), _a("still", "freeze", 1.6, 3), _a("sit", "sit_hold", 1.8, 2, "sit")),
+    "amphipod": (_a("scud", "wiggle", 1.2, 5), _a("dart", "dart", 0.6, 3), _a("still", "freeze", 1.6, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

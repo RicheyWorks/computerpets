@@ -4,7 +4,7 @@ from computerpets_client.ethogram import (
     acts_for,
     pick_act,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, WOOD_KEYS, STONE_KEYS
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, LOG_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, WOOD_KEYS, STONE_KEYS
 
 
 def test_every_catalog_kind_has_acts():
@@ -188,3 +188,17 @@ def test_only_scratching_mammals_scratch():
     assert "filter" in [a["name"] for a in acts_for("paddlefish")]
     assert "disk" in [a["name"] for a in acts_for("lamprey")]
     assert "swim" in [a["name"] for a in acts_for("american_eel")]
+    for key in LOG_KEYS:
+        names = [a["name"] for a in acts_for(key)]
+        assert "scratch" not in names, key
+        assert "tongue" not in names, key
+    assert "hunt" in [a["name"] for a in acts_for("house_centipede")]
+    assert "oil" in [a["name"] for a in acts_for("millipede")]
+    assert "roll" in [a["name"] for a in acts_for("pillbug")]
+    assert "cast" in [a["name"] for a in acts_for("earthworm")]
+    assert "jet" in [a["name"] for a in acts_for("velvet_worm")]
+    assert "hop" in [a["name"] for a in acts_for("springtail")]
+    assert "tun" in [a["name"] for a in acts_for("tardigrade")]
+    assert "split" in [a["name"] for a in acts_for("planarian")]
+    assert "thrash" in [a["name"] for a in acts_for("nematode")]
+    assert "scud" in [a["name"] for a in acts_for("amphipod")]

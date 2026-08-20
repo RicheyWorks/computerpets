@@ -196,6 +196,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   paddlefish: T(26, 0, 1.14, 0.1, { aquatic: true }, "spoon", "Filter", "I filtered. Hello."),
   lamprey: T(22, 0, 0.72, 0.08, { aquatic: true }, "round", "Disk", "I sat the disk. Hello."),
   american_eel: T(58, 2, 0.86, 0.32, { aquatic: true, nocturnal: true }, "silver", "Silver", "I swam. Hello."),
+  house_centipede: T(168, 8, 0.72, 0.55, { nocturnal: true }, "haste", "Hunt", "I hunted. Hello."),
+  millipede: T(22, 2, 0.8, 0.1, { nocturnal: true }, "link", "Oil", "I oiled. Hello."),
+  pillbug: T(36, 4, 0.5, 0.16, { nocturnal: true }, "armor", "Roll", "I rolled. Hello."),
+  earthworm: T(18, 0, 0.7, 0.08, { nocturnal: true }, "cast", "Cast", "I cast. Hello."),
+  velvet_worm: T(28, 2, 0.65, 0.12, { nocturnal: true }, "jet", "Jet", "I jetted. Hello."),
+  springtail: T(90, 28, 0.4, 0.48, {}, "hop", "Hop", "I hopped. Hello."),
+  tardigrade: T(12, 0, 0.35, 0.06, {}, "tun", "Tun", "I sat the moss. Hello."),
+  planarian: T(16, 0, 0.5, 0.1, { aquatic: true }, "half", "Split", "I split. Hello."),
+  nematode: T(40, 0, 0.3, 0.22, {}, "thread", "Thrash", "I thrashed. Hello."),
+  amphipod: T(54, 4, 0.48, 0.36, { aquatic: true, nocturnal: true }, "scud", "Scud", "I swam on my side. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;
