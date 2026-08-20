@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { CompanionRoom } from "@/components/desk/companion-room";
 import { livingByKey, loadActiveKindKey, RED_PANDA_KIND, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { roomOf } from "@/lib/pets/rooms";
+import { homeSit } from "@/lib/pets/phone-desk";
 import { isTablet, readSit } from "@/lib/pets/tablet-desk";
 
 function isStandalone() {
@@ -29,6 +30,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
   }, [initial]);
 
   const room = roomOf(kind.key);
+  const pocket = homeSit(installed);
 
   function select(key: string) {
     const next = livingByKey(key);
@@ -45,7 +47,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
       detail="On this device"
       extraCare={[{ label: "Rest", action: "rest" }]}
       line={
-        !installed ? (
+        pocket === "add" ? (
           <p className="mt-3 text-xs text-subtle">Add to Home Screen. Tap the blotter for a treat.</p>
         ) : null
       }

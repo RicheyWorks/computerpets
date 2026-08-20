@@ -126,8 +126,8 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Phone and tablet</p>
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
-                On a tablet a tap talks. A drag is a carry. A long-press tends. On a phone, open Live,
-                then Add to Home Screen. All one hundred seventy.
+                On a tablet a tap talks. A drag is a carry. A long-press tends. On a phone they sit the
+                tall blotter the same way. Open Live, then Add to Home Screen. All one hundred seventy.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">

@@ -44,7 +44,8 @@ import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
-import { isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
+import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
+import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -128,15 +129,22 @@ export function CompanionRoom({
   const resetKey = guestKey ?? kind.key;
   const careRef = useRef<HTMLDivElement>(null);
   const [autoTablet, setAutoTablet] = useState(false);
+  const [autoPhone, setAutoPhone] = useState(false);
   const [orient, setOrient] = useState<TabletOrient>("blotter");
+  const [handOrient, setHandOrient] = useState<PhoneOrient>("blotter");
   const [tending, setTending] = useState(false);
   const pad = tablet || (!phone && autoTablet);
+  const hand = phone || (!pad && autoPhone);
 
   useEffect(() => {
     function measure() {
       const sit = readSit(window);
-      if (!phone && !tablet) setAutoTablet(isTablet(sit));
+      if (!phone && !tablet) {
+        setAutoTablet(isTablet(sit));
+        setAutoPhone(isPhone(sit));
+      }
       setOrient(tabletOrient(window.innerWidth, window.innerHeight));
+      setHandOrient(phoneOrient(window.innerWidth, window.innerHeight));
     }
     measure();
     window.addEventListener("resize", measure);
@@ -483,6 +491,9 @@ export function CompanionRoom({
       data-tablet-floor={pad ? "" : undefined}
       data-tablet-orient={pad ? orient : undefined}
       data-tablet-tending={pad && tending ? "" : undefined}
+      data-phone-floor={hand ? "" : undefined}
+      data-phone-orient={hand ? handOrient : undefined}
+      data-phone-tending={hand && tending ? "" : undefined}
     >
       <img
         src="/habitat.jpg"
@@ -611,8 +622,10 @@ export function CompanionRoom({
 
       <aside
         className={
-          phone
-            ? "absolute left-4 right-20 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 sm:left-8 sm:right-auto sm:max-w-[min(100%-2rem,20rem)]"
+          hand
+            ? handOrient === "sit"
+              ? "absolute left-[max(0.75rem,env(safe-area-inset-left))] right-24 top-[calc(3.25rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-7rem,16rem)]"
+              : "absolute left-4 right-16 top-[calc(4.25rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-5rem,18rem)]"
             : pad
               ? orient === "sit"
                 ? "absolute left-4 right-16 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[min(100%-2rem,22rem)]"
@@ -624,7 +637,9 @@ export function CompanionRoom({
           {hour} · {sky} · {caller} may call
           {detail ? ` · ${detail}` : ""}
         </p>
-        <h1 className="mt-2 font-display text-5xl leading-none sm:text-6xl">{displayName}</h1>
+        <h1 className={hand ? "mt-2 font-display text-4xl leading-none" : "mt-2 font-display text-5xl leading-none sm:text-6xl"}>
+          {displayName}
+        </h1>
         <p className="mt-3 max-w-sm text-sm text-muted">{kind.tagline}</p>
         {line}
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
@@ -634,8 +649,8 @@ export function CompanionRoom({
 
       <div
         className={
-          phone
-            ? "absolute right-4 top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right sm:right-8"
+          hand
+            ? "absolute right-[max(0.75rem,env(safe-area-inset-right))] top-[calc(4.25rem+env(safe-area-inset-top))] z-20 max-w-[9rem] text-right"
             : pad
               ? "absolute right-[max(1rem,env(safe-area-inset-right))] top-[calc(5.5rem+env(safe-area-inset-top))] z-20 max-w-[11rem] text-right"
               : "absolute right-4 top-20 z-20 max-w-[11rem] text-right sm:right-8 sm:top-24"
@@ -646,8 +661,10 @@ export function CompanionRoom({
 
       <div
         className={
-          phone
-            ? "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-16 sm:px-8"
+          hand
+            ? handOrient === "sit"
+              ? "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-2 px-[max(0.75rem,env(safe-area-inset-left))] pe-[max(0.75rem,env(safe-area-inset-right))] pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-10"
+              : "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-end gap-2 px-[max(0.75rem,env(safe-area-inset-left))] pe-[max(1rem,env(safe-area-inset-right))] pb-[max(1rem,env(safe-area-inset-bottom))] pt-10"
             : pad
               ? "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-[max(1rem,env(safe-area-inset-left))] pe-[max(1rem,env(safe-area-inset-right))] pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-16"
               : "pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center gap-3 px-4 pb-5 pt-16 sm:px-8"
@@ -655,7 +672,7 @@ export function CompanionRoom({
       >
         <div className="pointer-events-auto" ref={careRef}>
           <BlotterCare
-            className={phone ? "blotter-care-phone" : pad ? "blotter-care-tablet" : undefined}
+            className={hand ? "blotter-care-phone" : pad ? "blotter-care-tablet" : undefined}
             marks={[
               { label: "Feed", onClick: () => void feed(), disabled: busyOrHidden },
               { label: treatFor(kind.key).verb, onClick: () => dropTreatAt(randomTreatX()), disabled: busyOrHidden },
