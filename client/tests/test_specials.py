@@ -166,6 +166,16 @@ HOUSE_TRAITS = {
     "paddlefish": ("spoon", "Filter", "I filtered. Hello."),
     "lamprey": ("round", "Disk", "I sat the disk. Hello."),
     "american_eel": ("silver", "Silver", "I swam. Hello."),
+    "house_centipede": ("haste", "Hunt", "I hunted. Hello."),
+    "millipede": ("link", "Oil", "I oiled. Hello."),
+    "pillbug": ("armor", "Roll", "I rolled. Hello."),
+    "earthworm": ("cast", "Cast", "I cast. Hello."),
+    "velvet_worm": ("jet", "Jet", "I jetted. Hello."),
+    "springtail": ("hop", "Hop", "I hopped. Hello."),
+    "tardigrade": ("tun", "Tun", "I sat the moss. Hello."),
+    "planarian": ("half", "Split", "I split. Hello."),
+    "nematode": ("thread", "Thrash", "I thrashed. Hello."),
+    "amphipod": ("scud", "Scud", "I swam on my side. Hello."),
 }
 
 

@@ -14,7 +14,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: APP_NAME },
-      { name: "description", content: "One hundred sixty living desk companions, including ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of ten wild mammals, a stone of ten more reptiles, a creek of ten more fish, a cellar of ten fungi, a well of ten leftovers, and a far den of ten guests that never evolved here. They walk, talk, and wait in the browser." },
+      { name: "description", content: "One hundred seventy living desk companions, including ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of ten wild mammals, a stone of ten more reptiles, a creek of ten more fish, a log of ten litter guests, a cellar of ten fungi, a well of ten leftovers, and a far den of ten guests that never evolved here. They walk, talk, and wait in the browser." },
       { name: "apple-mobile-web-app-title", content: APP_NAME },
       { name: "theme-color", content: "#0c0b0a" },
       { name: "twitter:card", content: "summary_large_image" },

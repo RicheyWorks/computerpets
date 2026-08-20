@@ -160,6 +160,16 @@ const REST: Record<string, [number, number]> = {
   paddlefish: [21, 6],
   lamprey: [8, 18],
   american_eel: [8, 17],
+  house_centipede: [8, 18],
+  millipede: [8, 18],
+  pillbug: [8, 18],
+  earthworm: [8, 17],
+  velvet_worm: [8, 18],
+  springtail: [22, 6],
+  tardigrade: [22, 7],
+  planarian: [8, 18],
+  nematode: [22, 7],
+  amphipod: [8, 18],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -346,6 +356,16 @@ export const HIDE_LINE: Record<string, string> = {
   paddlefish: "Inside the current.",
   lamprey: "On the stone.",
   american_eel: "Inside the hole.",
+  house_centipede: "Inside the crack.",
+  millipede: "Under the log.",
+  pillbug: "Under the bark.",
+  earthworm: "Inside the soil.",
+  velvet_worm: "Inside the wood.",
+  springtail: "Inside the duff.",
+  tardigrade: "Inside the moss.",
+  planarian: "Inside the film.",
+  nematode: "Inside the film.",
+  amphipod: "Inside the pool.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -509,6 +529,16 @@ export const SNACK_LINE: Record<string, string> = {
   paddlefish: "Plankton of a treaty.",
   lamprey: "Stone of a treaty.",
   american_eel: "Scrap of a treaty.",
+  house_centipede: "Silverfish of a treaty.",
+  millipede: "Leaf of a treaty.",
+  pillbug: "Leaf of a treaty.",
+  earthworm: "Leaf of a treaty.",
+  velvet_worm: "Cricket of a treaty.",
+  springtail: "Flake of a treaty.",
+  tardigrade: "Moss of a treaty.",
+  planarian: "Worm of a treaty.",
+  nematode: "Flake of a treaty.",
+  amphipod: "Scrap of a treaty.",
 };
 
 
