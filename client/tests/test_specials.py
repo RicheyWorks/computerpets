@@ -176,6 +176,16 @@ HOUSE_TRAITS = {
     "planarian": ("half", "Split", "I split. Hello."),
     "nematode": ("thread", "Thrash", "I thrashed. Hello."),
     "amphipod": ("scud", "Scud", "I swam on my side. Hello."),
+    "fiddler_crab": ("wave", "Wave", "I waved. Hello."),
+    "ghost_crab": ("pale", "Run", "I ran. Hello."),
+    "limpet": ("clamp", "Clamp", "I clamped. Hello."),
+    "barnacle": ("cement", "Stay", "I sat the stone. Hello."),
+    "chiton": ("mail", "Plate", "I plated. Hello."),
+    "periwinkle": ("spire", "Rasp", "I rasped. Hello."),
+    "sand_dollar": ("token", "Bury", "I sat the sand. Hello."),
+    "sea_urchin": ("thorn", "Spine", "I sat the spines. Hello."),
+    "knobbed_whelk": ("knurl", "Hunt", "I hunted. Hello."),
+    "lugworm": ("heap", "Heap", "I heaped. Hello."),
 }
 
 

@@ -177,6 +177,16 @@ const LINES: Record<string, string> = {
   planarian: "I split. Then I left the film.",
   nematode: "I thrashed. Then I left the film.",
   amphipod: "I swam on my side. Then I left the pool.",
+  fiddler_crab: "I waved. Then I left the marsh.",
+  ghost_crab: "I ran. Then I left the sand.",
+  limpet: "I clamped. Then I left the rim.",
+  barnacle: "I sat the stone. Then I left the rim.",
+  chiton: "I plated. Then I left the rock.",
+  periwinkle: "I rasped. Then I left the face.",
+  sand_dollar: "I sat the sand. Then I left the plate.",
+  sea_urchin: "I sat the spines. Then I left the pool.",
+  knobbed_whelk: "I hunted. Then I left the wrack.",
+  lugworm: "I heaped. Then I left the sand.",
 };
 
 export function visitLine(guestKey: string) {

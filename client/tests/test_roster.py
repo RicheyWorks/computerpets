@@ -17,6 +17,7 @@ from computerpets_client.species import (
     WELL_KEYS,
     CREEK_KEYS,
     LOG_KEYS,
+    SHORE_KEYS,
     STONE_KEYS,
     WOOD_KEYS,
     SPECIES,
@@ -24,6 +25,7 @@ from computerpets_client.species import (
     is_corner,
     is_creek,
     is_log,
+    is_shore,
     is_far,
     is_fungus,
     is_garden,
@@ -212,6 +214,16 @@ WEB_CATALOG = (
     "planarian",
     "nematode",
     "amphipod",
+    "fiddler_crab",
+    "ghost_crab",
+    "limpet",
+    "barnacle",
+    "chiton",
+    "periwinkle",
+    "sand_dollar",
+    "sea_urchin",
+    "knobbed_whelk",
+    "lugworm",
 )
 
 WEB_SNAKES = (
@@ -412,6 +424,19 @@ WEB_LOG = (
     "amphipod",
 )
 
+WEB_SHORE = (
+    "fiddler_crab",
+    "ghost_crab",
+    "limpet",
+    "barnacle",
+    "chiton",
+    "periwinkle",
+    "sand_dollar",
+    "sea_urchin",
+    "knobbed_whelk",
+    "lugworm",
+)
+
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(CATALOG_KEYS) == len(WEB_CATALOG)
@@ -432,6 +457,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(STONE_KEYS) == 10
     assert len(CREEK_KEYS) == 10
     assert len(LOG_KEYS) == 10
+    assert len(SHORE_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -448,6 +474,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(STONE_KEYS) == set(WEB_STONE)
     assert set(CREEK_KEYS) == set(WEB_CREEK)
     assert set(LOG_KEYS) == set(WEB_LOG)
+    assert set(SHORE_KEYS) == set(WEB_SHORE)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -958,6 +985,46 @@ def test_ten_log_guests_are_present_and_honest():
     assert SPECIES["crayfish"].name == "Pinch"
 
 
+def test_ten_shore_guests_are_present_and_honest():
+    assert SHORE_KEYS == WEB_SHORE
+    for key in WEB_SHORE:
+        spec = SPECIES[key]
+        assert is_shore(key)
+        assert not is_log(key)
+        assert not is_creek(key)
+        assert not is_pond(key)
+        assert not is_sea(key)
+        assert not is_insect(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.silhouette != "bee"
+        assert spec.silhouette != "snake"
+    assert SPECIES["fiddler_crab"].slug == "wave"
+    assert SPECIES["fiddler_crab"].name == "Wave"
+    assert SPECIES["ghost_crab"].name == "Pale"
+    assert SPECIES["ghost_crab"].slug == "pale"
+    assert SPECIES["limpet"].name == "Cone"
+    assert SPECIES["barnacle"].name == "Cement"
+    assert SPECIES["chiton"].name == "Mail"
+    assert SPECIES["periwinkle"].name == "Spire"
+    assert SPECIES["sand_dollar"].name == "Token"
+    assert SPECIES["sea_urchin"].name == "Thorn"
+    assert SPECIES["knobbed_whelk"].name == "Knurl"
+    assert SPECIES["lugworm"].name == "Heap"
+    assert SPECIES["ghost_crab"].walk > SPECIES["fiddler_crab"].walk
+    assert SPECIES["barnacle"].aquatic is True
+    assert SPECIES["sand_dollar"].aquatic is True
+    assert SPECIES["luna"].name == "Ghost"
+    assert SPECIES["chanterelle"].name == "Horn"
+    assert SPECIES["goldfish"].name == "Coin"
+    assert SPECIES["hermit_crab"].name == "Tenant"
+    assert SPECIES["horseshoe_crab"].name == "Ledger"
+    assert SPECIES["earthworm"].name == "Cast"
+    assert SPECIES["box_turtle"].name == "Lid"
+    assert SPECIES["hedgehog"].name == "Burr"
+    assert SPECIES["porcupine"].name == "Spine"
+
+
 def test_ten_creek_guests_are_present_and_honest():
     assert CREEK_KEYS == WEB_CREEK
     for key in WEB_CREEK:
@@ -1030,9 +1097,11 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("black_bear") == "gecko"
     assert next_species_key("tuatara") == "bass"
     assert next_species_key("american_eel") == "house_centipede"
-    assert next_species_key("amphipod") == "red_panda"
-    assert prev_species_key("red_panda") == "amphipod"
+    assert next_species_key("amphipod") == "fiddler_crab"
+    assert next_species_key("lugworm") == "red_panda"
+    assert prev_species_key("red_panda") == "lugworm"
     assert prev_species_key("house_centipede") == "american_eel"
+    assert prev_species_key("fiddler_crab") == "amphipod"
     assert prev_species_key("bass") == "tuatara"
     assert prev_species_key("gecko") == "black_bear"
     assert prev_species_key("deer") == "solifuge"

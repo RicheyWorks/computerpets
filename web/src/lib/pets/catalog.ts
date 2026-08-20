@@ -181,6 +181,16 @@ export const SPECIES: Species[] = [
   { key: "planarian", displayName: "Tiger Planarian", rarity: "UNCOMMON", temperament: "Splitting", habitat: "Film dish", blurb: "Eyes like commas. She splits. Not a leech. Not Latch." },
   { key: "nematode", displayName: "C. elegans", rarity: "UNCOMMON", temperament: "Threading", habitat: "Soil film", blurb: "A roundworm. Not Cast. Not an earthworm you dig." },
   { key: "amphipod", displayName: "Gammarus Scud", rarity: "COMMON", temperament: "Scudding", habitat: "Side pool", blurb: "A scud. She swims on her side. Not Pinch. Not a pillbug." },
+  { key: "fiddler_crab", displayName: "Atlantic Fiddler Crab", rarity: "COMMON", temperament: "Signaling", habitat: "Marsh dish", blurb: "The big claw is a signal, not a pinch of lunch. Not Tenant. Not Pinch." },
+  { key: "ghost_crab", displayName: "Atlantic Ghost Crab", rarity: "UNCOMMON", temperament: "Running", habitat: "Dry sand", blurb: "She runs the dry sand. Not Tenant. Not Ledger. Not Ghost." },
+  { key: "limpet", displayName: "Common Limpet", rarity: "COMMON", temperament: "Clamping", habitat: "Rock rim", blurb: "A cone that clamps. Not Lid. Not Cement." },
+  { key: "barnacle", displayName: "Acorn Barnacle", rarity: "COMMON", temperament: "Cemented", habitat: "Stone rim", blurb: "Cemented. A crustacean. Not a limpet. Not a crab." },
+  { key: "chiton", displayName: "Lined Chiton", rarity: "UNCOMMON", temperament: "Plated", habitat: "Tide rock", blurb: "Eight plates. A chiton. Not a limpet. Not Armor." },
+  { key: "periwinkle", displayName: "Common Periwinkle", rarity: "COMMON", temperament: "Rasping", habitat: "Rock face", blurb: "A snail of the rock. Not Chamber. Not Whorl. Not Knurl." },
+  { key: "sand_dollar", displayName: "Common Sand Dollar", rarity: "COMMON", temperament: "Flat", habitat: "Sand plate", blurb: "A flat urchin. Not Coin. Not Disk. Not Ochre." },
+  { key: "sea_urchin", displayName: "Purple Sea Urchin", rarity: "UNCOMMON", temperament: "Spined", habitat: "Tide pool", blurb: "Spines. Not Burr. Not Spine. Not Token." },
+  { key: "knobbed_whelk", displayName: "Knobbed Whelk", rarity: "UNCOMMON", temperament: "Hunting", habitat: "Wrack dish", blurb: "A predator snail. The knobs are the tell. Not Spire. Not Horn." },
+  { key: "lugworm", displayName: "Lugworm", rarity: "COMMON", temperament: "Heaping", habitat: "Wet sand", blurb: "A worm of the castings. Not Cast. Not Latch." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

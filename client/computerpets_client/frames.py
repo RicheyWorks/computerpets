@@ -18,7 +18,9 @@ gecko, anole, skink, chameleon, horned lizard, alligator, crocodile, snapper,
 box turtle, tuatara. The creek stays — bass, brook trout, catfish, bluegill,
 perch, pike, walleye, paddlefish, lamprey, American eel. The log stays —
 house centipede, millipede, pillbug, earthworm, velvet worm, springtail,
-tardigrade, planarian, nematode, amphipod. The well stays —
+tardigrade, planarian, nematode, amphipod. The shore stays —
+fiddler, ghost crab, limpet, barnacle, chiton, periwinkle,
+sand dollar, urchin, whelk, lugworm. The well stays —
 paramecium, amoeba, euglena, volvox, diatom, kelp, chlamydomonas, stentor, coli,
 haloarchaea. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
@@ -343,6 +345,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "amphipod",
     ):
         _draw_log(p, species, anim, i, sit, eat, sleep)
+        return
+    if species.silhouette in (
+        "fiddler_crab",
+        "ghost_crab",
+        "limpet",
+        "barnacle",
+        "chiton",
+        "periwinkle",
+        "sand_dollar",
+        "sea_urchin",
+        "knobbed_whelk",
+        "lugworm",
+    ):
+        _draw_shore(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in (
         "paramecium",
@@ -3441,207 +3457,6 @@ def _draw_log(
     ear = _color(pal.ear)
     wave = math.sin(i * 1.15)
     sil = species.silhouette
-
-    if sil == "house_centipede":
-        p.setBrush(QBrush(body))
-        p.setPen(QPen(accent, 1.0))
-        p.drawEllipse(QRectF(-26, -8, 56, 16))
-        p.setPen(QPen(ring, 1.6))
-        for bx in range(-16, 22, 6):
-            p.drawLine(QPointF(bx, -6), QPointF(bx + 1, 6))
-        p.setPen(QPen(_color(pal.belly), 1.4))
-        for k in range(15):
-            t = k / 14
-            x = -22 + t * 48
-            swing = math.sin(i * 1.8 + k * 0.7) * (8 if anim in ("walk", "play") else 3)
-            side = 1 if k % 2 == 0 else -1
-            p.drawLine(QPointF(x, 2), QPointF(x + swing, 18 * side))
-        p.setBrush(QBrush(body))
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawEllipse(QRectF(-34, -6, 16, 12))
-        _draw_face(p, -28, -2, nose, sleep, anim, i, False)
-        return
-
-    if sil == "millipede":
-        for t in range(12):
-            x = -30 + t * 6
-            y = math.sin(t * 0.35 + i * 0.4) * 2
-            p.setBrush(QBrush(body if t % 2 == 0 else ring))
-            p.setPen(QPen(accent, 0.8))
-            p.drawEllipse(QRectF(x - 8, y - 7, 16, 14))
-        _draw_face(p, -34, 0, nose, sleep, anim, i, False)
-        return
-
-    if sil == "pillbug":
-        if anim in ("sit", "sleep", "play") or sleep > 0:
-            p.setBrush(QBrush(body))
-            p.setPen(QPen(accent, 1.1))
-            p.drawEllipse(QRectF(-18, -16, 36, 36))
-            p.setBrush(QBrush(ring))
-            p.setPen(Qt.PenStyle.NoPen)
-            for ang in range(0, 360, 40):
-                rad = math.radians(ang + i * 8)
-                p.drawEllipse(QRectF(math.cos(rad) * 8 - 4, math.sin(rad) * 8 - 2, 8, 6))
-            return
-        p.setBrush(QBrush(body))
-        p.setPen(QPen(accent, 1.1))
-        p.drawEllipse(QRectF(-18, -12, 36, 24))
-        p.setBrush(QBrush(belly))
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawEllipse(QRectF(-6, 0, 18, 10))
-        p.setPen(QPen(ring, 1.6))
-        for px in range(-12, 14, 5):
-            p.drawLine(QPointF(px, -8), QPointF(px + 2, 8))
-        _draw_face(p, -14, 0, nose, sleep, anim, i, False)
-        return
-
-    if sil == "earthworm":
-        pts = [(-30 + t * 7, math.sin(t * 0.55 + i * 0.5) * 4) for t in range(10)]
-        for k, (x, y) in enumerate(pts[:-1]):
-            p.setBrush(QBrush(ear if 3 <= k <= 4 else (body if k % 2 == 0 else ring)))
-            p.setPen(QPen(accent, 0.8))
-            p.drawEllipse(QRectF(x - 7, y - 5, 14, 10))
-        hx, hy = pts[0]
-        _draw_face(p, hx - 2, hy, nose, sleep, anim, i, False)
-        return
-
-    if sil == "velvet_worm":
-        p.setBrush(QBrush(body))
-        p.setPen(QPen(accent, 1.0))
-        p.drawEllipse(QRectF(-20, -10, 48, 20))
-        p.setBrush(QBrush(belly))
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawEllipse(QRectF(-4, 0, 22, 10))
-        p.setBrush(QBrush(body))
-        for t in range(7):
-            x = -16 + t * 6
-            p.drawEllipse(QRectF(x - 3, 6, 6, 10))
-        p.drawEllipse(QRectF(-30, -6, 16, 12))
-        if anim in ("play", "eat", "talk"):
-            glue = _color(pal.ear_inner)
-            p.setPen(QPen(glue, 2.0))
-            p.drawLine(QPointF(-28, 0), QPointF(-48, -8 + wave * 4))
-            p.drawLine(QPointF(-28, 2), QPointF(-46, 10 + wave * 3))
-        _draw_face(p, -24, -1, nose, sleep, anim, i, False)
-        return
-
-    if sil == "springtail":
-        hop = 10 if anim == "play" else (4 if anim == "walk" else 0)
-        p.setBrush(QBrush(body))
-        p.setPen(QPen(accent, 1.0))
-        p.drawEllipse(QRectF(-12, -8 - hop, 24, 16))
-        p.setPen(QPen(_color(pal.ear_inner), 3.0))
-        p.drawLine(QPointF(-4, -6 - hop), QPointF(6, -6 - hop))
-        p.setPen(QPen(ring, 2.0))
-        p.drawLine(QPointF(8, 4 - hop), QPointF(20, 14))
-        p.drawLine(QPointF(8, 4 - hop), QPointF(16, 18))
-        p.setBrush(QBrush(body))
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawEllipse(QRectF(-16, -4 - hop, 10, 8))
-        _draw_face(p, -12, -hop, nose, sleep, anim, i, False)
-        return
-
-    if sil == "tardigrade":
-        if anim in ("sit", "sleep") or sleep > 0:
-            p.setBrush(QBrush(ring))
-            p.setPen(QPen(accent, 1.0))
-            p.drawEllipse(QRectF(-16, -14, 32, 30))
-            p.setBrush(QBrush(belly))
-            p.setPen(Qt.PenStyle.NoPen)
-            p.drawEllipse(QRectF(-8, -4, 16, 12))
-            return
-        p.setBrush(QBrush(body))
-        p.setPen(QPen(accent, 1.0))
-        p.drawEllipse(QRectF(-16, -12, 32, 24))
-        p.setBrush(QBrush(belly))
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawEllipse(QRectF(-6, 0, 16, 10))
-        p.setBrush(QBrush(body))
-        for sx, sy in ((-10, 8), (-2, 10), (6, 10), (12, 8), (-10, -8), (-2, -10), (6, -10), (12, -8)):
-            p.drawEllipse(QRectF(sx - 3, sy - 3, 6, 7))
-        _draw_face(p, -12, 0, nose, sleep, anim, i, False)
-        return
-
-    if sil == "planarian":
-        split = anim == "play"
-
-        def body_at(ox: float) -> None:
-            path = QPainterPath()
-            path.moveTo(-22 + ox, 0)
-            path.lineTo(-8 + ox, -10)
-            path.lineTo(16 + ox, -6)
-            path.lineTo(28 + ox, 0)
-            path.lineTo(16 + ox, 8)
-            path.lineTo(-8 + ox, 10)
-            path.closeSubpath()
-            p.setBrush(QBrush(body))
-            p.setPen(QPen(accent, 1.0))
-            p.drawPath(path)
-            p.setBrush(QBrush(nose))
-            p.setPen(Qt.PenStyle.NoPen)
-            p.drawEllipse(QRectF(-14 + ox, -6, 6, 8))
-            p.drawEllipse(QRectF(-6 + ox, -6, 6, 8))
-
-        if split:
-            body_at(-12)
-            body_at(12)
-        else:
-            body_at(0)
-        return
-
-    if sil == "nematode":
-        pts = [(-32 + t * 7, math.sin(t * 0.9 + i * 0.8) * 7) for t in range(11)]
-        for k, (x, y) in enumerate(pts[:-1]):
-            p.setBrush(QBrush(body if k % 2 == 0 else ring))
-            p.setPen(QPen(accent, 0.7))
-            p.drawEllipse(QRectF(x - 5, y - 3, 9, 6))
-        hx, hy = pts[0]
-        _draw_face(p, hx - 2, hy, nose, sleep, anim, i, False)
-        return
-
-    p.save()
-    p.rotate(16 + wave * 3)
-    p.setBrush(QBrush(body))
-    p.setPen(QPen(accent, 1.0))
-    p.drawEllipse(QRectF(-18, -10, 36, 20))
-    p.setBrush(QBrush(belly))
-    p.setPen(Qt.PenStyle.NoPen)
-    p.drawEllipse(QRectF(-4, 0, 18, 8))
-    tail = QPainterPath()
-    tail.moveTo(14, -2)
-    tail.lineTo(26, -10 + wave)
-    tail.lineTo(22, 6)
-    tail.closeSubpath()
-    p.setBrush(QBrush(body))
-    p.setPen(QPen(accent, 0.8))
-    p.drawPath(tail)
-    p.setPen(QPen(ear, 1.2))
-    for k in range(6):
-        x = -10 + k * 4
-        p.drawLine(QPointF(x, 8), QPointF(x + math.sin(i + k) * 3, 16))
-    _draw_face(p, -14, 0, nose, sleep, anim, i, False)
-    p.restore()
-
-
-
-def _draw_log(
-    p: QPainter,
-    species: Species,
-    anim: str,
-    i: int,
-    sit: float,
-    eat: float,
-    sleep: float,
-) -> None:
-    pal = species.palette
-    body = _color(pal.body)
-    belly = _color(pal.belly)
-    accent = _color(pal.accent)
-    ring = _color(pal.ring)
-    nose = _color(pal.nose)
-    ear = _color(pal.ear)
-    wave = math.sin(i * 1.15)
-    sil = species.silhouette
     still = anim in ("sit", "sleep") or sleep > 0
 
     if sil == "house_centipede":
@@ -3822,5 +3637,186 @@ def _draw_log(
         p.drawLine(QPointF(x, 8), QPointF(x + math.sin(i + k) * 3, 16))
     _draw_face(p, -14, 0, nose, sleep, anim, i, False)
     p.restore()
+
+
+def _draw_shore(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    nose = _color(pal.nose)
+    ear = _color(pal.ear)
+    wave = math.sin(i * 1.15)
+    sil = species.silhouette
+
+    if sil == "fiddler_crab":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-14, -8, 28, 18))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -2, 14, 8))
+        lift = 10 + (8 if anim in ("walk", "play") else 2) + wave * 6
+        p.setBrush(QBrush(_color(pal.accent)))
+        p.setPen(QPen(accent, 1.2))
+        p.drawEllipse(QRectF(8, -lift, 16, 12))
+        p.setPen(QPen(ear, 1.4))
+        p.drawLine(QPointF(10, -2), QPointF(14, -lift + 6))
+        p.setPen(QPen(ear, 1.1))
+        for k in range(4):
+            x = -10 + k * 5
+            p.drawLine(QPointF(x, 8), QPointF(x - 2, 16 + wave))
+        _draw_face(p, -8, -4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "ghost_crab":
+        dash = 8 if anim in ("walk", "play") else 0
+        p.translate(dash * wave, 0)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 0.8))
+        p.drawEllipse(QRectF(-16, -8, 32, 16))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -2, 14, 7))
+        p.setPen(QPen(ear, 1.4))
+        p.drawLine(QPointF(-6, -6), QPointF(-10, -18))
+        p.drawLine(QPointF(2, -6), QPointF(6, -18))
+        p.setBrush(QBrush(nose))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-12, -20, 4, 4))
+        p.drawEllipse(QRectF(4, -20, 4, 4))
+        p.setPen(QPen(ear, 1.1))
+        for k in range(5):
+            x = -12 + k * 6
+            p.drawLine(QPointF(x, 6), QPointF(x + wave * 4, 16))
+        return
+
+    if sil == "limpet":
+        cone = QPainterPath()
+        cone.moveTo(0, -16 + sit * 2)
+        cone.lineTo(22, 10)
+        cone.lineTo(-22, 10)
+        cone.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(cone)
+        p.setPen(QPen(ring, 1.0))
+        p.drawLine(QPointF(-10, 2), QPointF(10, 2))
+        p.drawLine(QPointF(-6, -6), QPointF(6, -6))
+        _draw_face(p, 0, 4, nose, sleep, anim, i, False)
+        return
+
+    if sil == "barnacle":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPolygon([QPointF(-14, 12), QPointF(-10, -10), QPointF(10, -10), QPointF(14, 12)])
+        p.setPen(QPen(ring, 1.2))
+        p.drawLine(QPointF(-4, -10), QPointF(-6, 12))
+        p.drawLine(QPointF(4, -10), QPointF(6, 12))
+        if anim != "sleep":
+            p.setPen(QPen(belly, 1.3))
+            kick = 6 + wave * 4
+            p.drawLine(QPointF(-2, -10), QPointF(-8, -10 - kick))
+            p.drawLine(QPointF(2, -10), QPointF(8, -10 - kick))
+        return
+
+    if sil == "chiton":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-22, -10, 44, 20))
+        p.setPen(QPen(ring, 1.6))
+        for px in range(-16, 18, 5):
+            p.drawLine(QPointF(px, -8), QPointF(px + 1, 8))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-8, 0, 16, 6))
+        _draw_face(p, -16, -2, nose, sleep, anim, i, False)
+        return
+
+    if sil == "periwinkle":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-8, -6, 22, 20))
+        p.drawEllipse(QRectF(-2, -16, 14, 14))
+        p.setPen(QPen(ring, 1.2))
+        p.drawArc(QRectF(-4, -4, 16, 16), 30 * 16, 240 * 16)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-16, 6, 12, 8))
+        _draw_face(p, -12, 8, nose, sleep, anim, i, False)
+        return
+
+    if sil == "sand_dollar":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-20, -14, 40, 28))
+        p.setPen(QPen(ring, 1.3))
+        for ang in range(0, 360, 72):
+            rad = math.radians(ang - 90)
+            p.drawLine(QPointF(0, 0), QPointF(math.cos(rad) * 10, math.sin(rad) * 7))
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-4, -3, 8, 6))
+        return
+
+    if sil == "sea_urchin":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 0.8))
+        p.drawEllipse(QRectF(-12, -10, 24, 22))
+        p.setPen(QPen(ear, 1.6))
+        for k in range(16):
+            rad = math.radians(k * 22.5 + i * 4)
+            inner = 10
+            outer = 22 + (3 if anim == "play" else 0)
+            p.drawLine(
+                QPointF(math.cos(rad) * inner, math.sin(rad) * inner),
+                QPointF(math.cos(rad) * outer, math.sin(rad) * outer),
+            )
+        return
+
+    if sil == "knobbed_whelk":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-6, -8, 26, 24))
+        p.drawEllipse(QRectF(4, -20, 16, 16))
+        p.setBrush(QBrush(ring))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(6, -6, 6, 6))
+        p.drawEllipse(QRectF(12, 2, 6, 6))
+        p.drawEllipse(QRectF(8, 10, 5, 5))
+        canal = QPainterPath()
+        canal.moveTo(16, 12)
+        canal.lineTo(28, 20)
+        canal.lineTo(18, 18)
+        canal.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 0.8))
+        p.drawPath(canal)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-16, 8, 14, 8))
+        _draw_face(p, -12, 10, nose, sleep, anim, i, False)
+        return
+
+    pts = [(-28 + t * 7, math.sin(t * 0.55 + i * 0.5) * 4) for t in range(10)]
+    for k, (x, y) in enumerate(pts[:-1]):
+        p.setBrush(QBrush(ring if 3 <= k <= 4 else body))
+        p.setPen(QPen(accent, 0.7))
+        p.drawEllipse(QRectF(x - 7, y - 5, 14, 10))
+    if sit or eat or anim == "sit":
+        p.setBrush(QBrush(ear))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(6, 14, 16, 8))
+    hx, hy = pts[0]
+    _draw_face(p, hx - 2, hy, nose, sleep, anim, i, False)
 
 

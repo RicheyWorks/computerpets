@@ -171,6 +171,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   planarian: { shape: "crumb", verb: "Worm" },
   nematode: { shape: "flake", verb: "Flake" },
   amphipod: { shape: "crumb", verb: "Scrap" },
+  fiddler_crab: { shape: "flake", verb: "Algae" },
+  ghost_crab: { shape: "crumb", verb: "Scrap" },
+  limpet: { shape: "flake", verb: "Algae" },
+  barnacle: { shape: "flake", verb: "Drift" },
+  chiton: { shape: "flake", verb: "Algae" },
+  periwinkle: { shape: "flake", verb: "Algae" },
+  sand_dollar: { shape: "flake", verb: "Diatom" },
+  sea_urchin: { shape: "leaf", verb: "Kelp" },
+  knobbed_whelk: { shape: "crumb", verb: "Clam" },
+  lugworm: { shape: "pebble", verb: "Silt" },
 };
 
 export function treatFor(key: string) {
@@ -348,4 +358,14 @@ export const GIFT_LINE: Record<string, string> = {
   planarian: "A worm I was finished splitting after.",
   nematode: "A flake I was finished thrashing for.",
   amphipod: "A scrap I was finished taking on my side.",
+  fiddler_crab: "An algae I was finished waving for.",
+  ghost_crab: "A scrap I was finished running for.",
+  limpet: "An algae I was finished clamping for.",
+  barnacle: "A drift I was finished kicking for.",
+  chiton: "An algae I was finished plating for.",
+  periwinkle: "An algae I was finished rasping.",
+  sand_dollar: "A diatom I was finished burying for.",
+  sea_urchin: "A kelp I was finished walking for.",
+  knobbed_whelk: "A clam I was finished hunting.",
+  lugworm: "A silt I was finished heaping from.",
 };

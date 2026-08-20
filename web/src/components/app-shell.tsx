@@ -17,6 +17,7 @@ const NAV = [
   { to: "/stone", label: "Stone", hideOnPhone: false, hideOnDemo: true },
   { to: "/creek", label: "Creek", hideOnPhone: false, hideOnDemo: true },
   { to: "/log", label: "Log", hideOnPhone: false, hideOnDemo: true },
+  { to: "/shore", label: "Shore", hideOnPhone: false, hideOnDemo: true },
   { to: "/cellar", label: "Cellar", hideOnPhone: false, hideOnDemo: true },
   { to: "/well", label: "Well", hideOnPhone: false, hideOnDemo: true },
   { to: "/far", label: "Far", hideOnPhone: false, hideOnDemo: true },
@@ -50,6 +51,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const stone = pathname === "/stone";
   const creek = pathname === "/creek";
   const log = pathname === "/log";
+  const shore = pathname === "/shore";
   const cellar = pathname === "/cellar";
   const well = pathname === "/well";
   const far = pathname === "/far";
@@ -63,7 +65,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           "z-30 border-b border-border/80",
           demo || kennelGuest || kennel || shelf || hatchery || nest || desk
             ? "absolute inset-x-0 top-0 border-transparent bg-transparent"
-            : meet || den || tide || garden || hive || pond || roost || corner || wood || stone || creek || log || cellar || well || far || study || live
+            : meet || den || tide || garden || hive || pond || roost || corner || wood || stone || creek || log || shore || cellar || well || far || study || live
               ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
               : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}

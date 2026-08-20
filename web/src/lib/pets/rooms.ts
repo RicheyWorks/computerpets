@@ -13,13 +13,14 @@ import { isSnake } from "./shed";
 import { SNAKE_KEYS } from "./snakes";
 import { CREEK_KEYS, isCreek } from "./creek";
 import { LOG_KEYS, isLog } from "./log";
+import { SHORE_KEYS, isShore } from "./shore";
 import { STONE_KEYS, isStone } from "./stone";
 import { WELL_KEYS, isWell } from "./well";
 import { WOOD_KEYS, isWood } from "./wood";
 
-export type RoomId = "house" | "snakes" | "tide" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "stone" | "creek" | "log" | "cellar" | "well" | "far";
+export type RoomId = "house" | "snakes" | "tide" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "stone" | "creek" | "log" | "shore" | "cellar" | "well" | "far";
 
-export type RoomPath = "/study" | "/snakes" | "/sea" | "/garden" | "/hive" | "/pond" | "/roost" | "/corner" | "/wood" | "/stone" | "/creek" | "/log" | "/cellar" | "/well" | "/far";
+export type RoomPath = "/study" | "/snakes" | "/sea" | "/garden" | "/hive" | "/pond" | "/roost" | "/corner" | "/wood" | "/stone" | "/creek" | "/log" | "/shore" | "/cellar" | "/well" | "/far";
 
 export type Room = {
   id: RoomId;
@@ -154,6 +155,16 @@ export const ROOMS: readonly Room[] = [
     line: "Ten under the log. A millipede is not a centipede. A pillbug is not an insect.",
   },
   {
+    id: "shore",
+    label: "Shore",
+    kicker: "The shore",
+    path: "/shore",
+    watchSlug: "wave",
+    watchName: "Wave",
+    keys: SHORE_KEYS,
+    line: "Ten of the shore. A fiddler is not a hermit. A ghost crab is not a horseshoe crab.",
+  },
+  {
     id: "cellar",
     label: "Cellar",
     kicker: "The cellar",
@@ -204,6 +215,7 @@ export function roomOf(key: string | undefined | null): Room {
   if (isStone(key)) return BY_ID.stone;
   if (isCreek(key)) return BY_ID.creek;
   if (isLog(key)) return BY_ID.log;
+  if (isShore(key)) return BY_ID.shore;
   if (isFungus(key)) return BY_ID.cellar;
   if (isWell(key)) return BY_ID.well;
   if (isFar(key)) return BY_ID.far;

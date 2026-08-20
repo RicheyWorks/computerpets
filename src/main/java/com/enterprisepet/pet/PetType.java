@@ -180,7 +180,17 @@ public enum PetType {
     TARDIGRADE       ("tardigrade",        "Water Bear",             Rarity.RARE),
     PLANARIAN        ("planarian",         "Tiger Planarian",        Rarity.UNCOMMON),
     NEMATODE         ("nematode",          "C. elegans",             Rarity.UNCOMMON),
-    AMPHIPOD         ("amphipod",          "Gammarus Scud",          Rarity.COMMON);
+    AMPHIPOD         ("amphipod",          "Gammarus Scud",          Rarity.COMMON),
+    FIDDLER_CRAB     ("fiddler_crab",      "Atlantic Fiddler Crab",  Rarity.COMMON),
+    GHOST_CRAB       ("ghost_crab",        "Atlantic Ghost Crab",    Rarity.UNCOMMON),
+    LIMPET           ("limpet",            "Common Limpet",          Rarity.COMMON),
+    BARNACLE         ("barnacle",          "Acorn Barnacle",         Rarity.COMMON),
+    CHITON           ("chiton",            "Lined Chiton",           Rarity.UNCOMMON),
+    PERIWINKLE       ("periwinkle",        "Common Periwinkle",      Rarity.COMMON),
+    SAND_DOLLAR      ("sand_dollar",       "Common Sand Dollar",     Rarity.COMMON),
+    SEA_URCHIN       ("sea_urchin",        "Purple Sea Urchin",      Rarity.UNCOMMON),
+    KNOBBED_WHELK    ("knobbed_whelk",     "Knobbed Whelk",          Rarity.UNCOMMON),
+    LUGWORM          ("lugworm",           "Lugworm",                Rarity.COMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

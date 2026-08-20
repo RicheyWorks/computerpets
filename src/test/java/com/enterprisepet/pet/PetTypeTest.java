@@ -187,7 +187,17 @@ class PetTypeTest {
             new ExpectedSpecies("tardigrade", "Water Bear", PetType.Rarity.RARE),
             new ExpectedSpecies("planarian", "Tiger Planarian", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("nematode", "C. elegans", PetType.Rarity.UNCOMMON),
-            new ExpectedSpecies("amphipod", "Gammarus Scud", PetType.Rarity.COMMON)
+            new ExpectedSpecies("amphipod", "Gammarus Scud", PetType.Rarity.COMMON),
+            new ExpectedSpecies("fiddler_crab", "Atlantic Fiddler Crab", PetType.Rarity.COMMON),
+            new ExpectedSpecies("ghost_crab", "Atlantic Ghost Crab", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("limpet", "Common Limpet", PetType.Rarity.COMMON),
+            new ExpectedSpecies("barnacle", "Acorn Barnacle", PetType.Rarity.COMMON),
+            new ExpectedSpecies("chiton", "Lined Chiton", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("periwinkle", "Common Periwinkle", PetType.Rarity.COMMON),
+            new ExpectedSpecies("sand_dollar", "Common Sand Dollar", PetType.Rarity.COMMON),
+            new ExpectedSpecies("sea_urchin", "Purple Sea Urchin", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("knobbed_whelk", "Knobbed Whelk", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("lugworm", "Lugworm", PetType.Rarity.COMMON)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(
@@ -235,11 +245,16 @@ class PetTypeTest {
             "kelp", "chlamydomonas", "stentor", "coli", "haloarchaea"
     );
 
+    private static final List<String> SHORE_KEYS = List.of(
+            "fiddler_crab", "ghost_crab", "limpet", "barnacle", "chiton",
+            "periwinkle", "sand_dollar", "sea_urchin", "knobbed_whelk", "lugworm"
+    );
+
     @Test
     @DisplayName("catalog matches the living-desk web catalog, including the tide")
     void catalog_matchesWebHouse() {
         assertThat(PetType.values()).hasSize(WEB_CATALOG.size());
-        assertThat(WEB_CATALOG).hasSize(170);
+        assertThat(WEB_CATALOG).hasSize(180);
 
         Set<String> backendKeys = Arrays.stream(PetType.values())
                 .map(PetType::key)
@@ -284,9 +299,9 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(56L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(55L);
-        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(26L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(76L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(69L);
+        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(32L);
         assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(3L);
     }
 
@@ -331,6 +346,19 @@ class PetTypeTest {
         for (String key : WELL_KEYS) {
             assertThat(PetType.fromKey(key)).isPresent();
         }
+        for (String key : SHORE_KEYS) {
+            assertThat(PetType.fromKey(key)).isPresent();
+        }
+        assertThat(PetType.FIDDLER_CRAB.displayName()).isEqualTo("Atlantic Fiddler Crab");
+        assertThat(PetType.GHOST_CRAB.displayName()).isEqualTo("Atlantic Ghost Crab");
+        assertThat(PetType.LIMPET.displayName()).isEqualTo("Common Limpet");
+        assertThat(PetType.BARNACLE.displayName()).isEqualTo("Acorn Barnacle");
+        assertThat(PetType.CHITON.displayName()).isEqualTo("Lined Chiton");
+        assertThat(PetType.PERIWINKLE.displayName()).isEqualTo("Common Periwinkle");
+        assertThat(PetType.SAND_DOLLAR.displayName()).isEqualTo("Common Sand Dollar");
+        assertThat(PetType.SEA_URCHIN.displayName()).isEqualTo("Purple Sea Urchin");
+        assertThat(PetType.KNOBBED_WHELK.displayName()).isEqualTo("Knobbed Whelk");
+        assertThat(PetType.LUGWORM.displayName()).isEqualTo("Lugworm");
         assertThat(PetType.OCTOPUS.displayName()).isEqualTo("Common Octopus");
         assertThat(PetType.HORSESHOE_CRAB.displayName()).isEqualTo("Atlantic Horseshoe Crab");
         assertThat(PetType.MANTA.rarity()).isEqualTo(PetType.Rarity.RARE);

@@ -280,6 +280,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   planarian: [A("split", "pulse", 1.2, 5), A("glide", "wiggle", 1.4, 3), A("still", "freeze", 1.8, 2)],
   nematode: [A("thrash", "wiggle", 1.0, 5), A("still", "freeze", 1.6, 3), A("sit", "sit_hold", 1.8, 2, "sit")],
   amphipod: [A("scud", "wiggle", 1.2, 5), A("dart", "dart", 0.6, 3), A("still", "freeze", 1.6, 2)],
+  fiddler_crab: [A("wave", "pulse", 0.8, 5), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+  ghost_crab: [A("run", "dart", 0.5, 5), A("walk", "wiggle", 0.8, 3), A("still", "freeze", 1.4, 2)],
+  limpet: [A("clamp", "sit_hold", 2.4, 5, "sit"), A("rasp", "nod", 1.2, 3), A("still", "freeze", 2.0, 2)],
+  barnacle: [A("kick", "pulse", 1.0, 5), A("still", "freeze", 2.2, 4), A("sit", "sit_hold", 2.0, 2, "sit")],
+  chiton: [A("graze", "wiggle", 1.2, 5), A("plate", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  periwinkle: [A("rasp", "nod", 1.4, 5), A("sit", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  sand_dollar: [A("bury", "sit_hold", 2.2, 5, "sit"), A("flat", "freeze", 2.0, 3), A("still", "freeze", 1.8, 2)],
+  sea_urchin: [A("walk", "wiggle", 1.2, 5), A("spine", "pulse", 1.0, 3), A("still", "freeze", 1.8, 2)],
+  knobbed_whelk: [A("hunt", "wiggle", 1.2, 5), A("sit", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  lugworm: [A("heap", "nod", 1.4, 5, "sit"), A("cast", "wiggle", 1.2, 3), A("still", "freeze", 1.8, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

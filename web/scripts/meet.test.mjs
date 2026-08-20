@@ -12,9 +12,9 @@ const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"
 const rosterSrc = readFileSync(join(root, "src/lib/pets/roster.ts"), "utf8");
 const seaSrc = readFileSync(join(root, "src/lib/pets/sea.ts"), "utf8");
 
-test("meet says one hundred seventy, not Fifty", () => {
+test("meet says one hundred eighty, not Fifty", () => {
   assert.doesNotMatch(meetSrc, /\bFifty\b/);
-  assert.match(meetSrc, /One hundred seventy guests walk the blotter/);
+  assert.match(meetSrc, /One hundred eighty guests walk the blotter/);
   assert.match(meetSrc, /Watch Rui/);
   assert.match(meetSrc, /HouseFloor/);
   assert.match(meetSrc, /DenCabinet/);

@@ -206,6 +206,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   planarian: T(16, 0, 0.5, 0.1, { aquatic: true }, "half", "Split", "I split. Hello."),
   nematode: T(40, 0, 0.3, 0.22, {}, "thread", "Thrash", "I thrashed. Hello."),
   amphipod: T(54, 4, 0.48, 0.36, { aquatic: true, nocturnal: true }, "scud", "Scud", "I swam on my side. Hello."),
+  fiddler_crab: T(72, 6, 0.55, 0.38, {}, "wave", "Wave", "I waved. Hello."),
+  ghost_crab: T(148, 10, 0.62, 0.52, { nocturnal: true }, "pale", "Run", "I ran. Hello."),
+  limpet: T(10, 0, 0.48, 0.04, { clingy: true }, "clamp", "Clamp", "I clamped. Hello."),
+  barnacle: T(2, 0, 0.42, 0.0, { clingy: true, aquatic: true }, "cement", "Stay", "I sat the stone. Hello."),
+  chiton: T(18, 2, 0.52, 0.08, { clingy: true }, "mail", "Plate", "I plated. Hello."),
+  periwinkle: T(16, 2, 0.46, 0.08, { clingy: true }, "spire", "Rasp", "I rasped. Hello."),
+  sand_dollar: T(12, 0, 0.58, 0.06, { aquatic: true }, "token", "Bury", "I sat the sand. Hello."),
+  sea_urchin: T(22, 2, 0.64, 0.1, { aquatic: true }, "thorn", "Spine", "I sat the spines. Hello."),
+  knobbed_whelk: T(20, 2, 0.72, 0.08, {}, "knurl", "Hunt", "I hunted. Hello."),
+  lugworm: T(14, 0, 0.6, 0.06, { nocturnal: true }, "heap", "Heap", "I heaped. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;
