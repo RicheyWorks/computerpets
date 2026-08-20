@@ -57,6 +57,11 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "lance":
     case "night":
     case "silver":
+    case "haste":
+    case "link":
+    case "hop":
+    case "thread":
+    case "scud":
     case "cilia":
     case "reach":
     case "spot":
@@ -152,6 +157,10 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "crest":
     case "spoon":
     case "round":
+    case "armor":
+    case "cast":
+    case "tun":
+    case "half":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
       return { stats: next, cmd: "sit" };
@@ -165,6 +174,7 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "sting":
     case "spray":
     case "squirt":
+    case "jet":
       next.mood = clampStat(next.mood + 8);
       return { stats: next, cmd: "play" };
     case "playdead":

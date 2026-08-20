@@ -456,6 +456,16 @@ const TREAT_SHAPE = {
   paddlefish: "flake",
   lamprey: "pebble",
   american_eel: "crumb",
+  house_centipede: "crumb",
+  millipede: "leaf",
+  pillbug: "leaf",
+  earthworm: "leaf",
+  velvet_worm: "crumb",
+  springtail: "flake",
+  tardigrade: "flake",
+  planarian: "crumb",
+  nematode: "flake",
+  amphipod: "crumb",
 };
 
 function placeMark(kindName, x, hops = 0, meal) {
@@ -1244,6 +1254,16 @@ const VISIT_LINE = {
   paddlefish: "I filtered. Then I left the current.",
   lamprey: "I sat the disk. Then I left the stone.",
   american_eel: "I swam. Then I left the hole.",
+  house_centipede: "I hunted. Then I left the crack.",
+  millipede: "I oiled. Then I left the log.",
+  pillbug: "I rolled. Then I left the bark.",
+  earthworm: "I cast. Then I left the soil.",
+  velvet_worm: "I jetted. Then I left the wood.",
+  springtail: "I hopped. Then I left the duff.",
+  tardigrade: "I sat the moss. Then I left the film.",
+  planarian: "I split. Then I left the film.",
+  nematode: "I thrashed. Then I left the film.",
+  amphipod: "I swam on my side. Then I left the pool.",
 };
 
 let visit = null;

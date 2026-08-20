@@ -170,7 +170,17 @@ public enum PetType {
     WALLEYE          ("walleye",           "Walleye",                Rarity.UNCOMMON),
     PADDLEFISH       ("paddlefish",        "American Paddlefish",    Rarity.RARE),
     LAMPREY          ("lamprey",           "Sea Lamprey",            Rarity.UNCOMMON),
-    AMERICAN_EEL     ("american_eel",      "American Eel",           Rarity.RARE);
+    AMERICAN_EEL     ("american_eel",      "American Eel",           Rarity.RARE),
+    HOUSE_CENTIPEDE  ("house_centipede",   "House Centipede",        Rarity.UNCOMMON),
+    MILLIPEDE        ("millipede",         "American Giant Millipede", Rarity.COMMON),
+    PILLBUG          ("pillbug",           "Common Pillbug",         Rarity.COMMON),
+    EARTHWORM        ("earthworm",         "Common Earthworm",       Rarity.COMMON),
+    VELVET_WORM      ("velvet_worm",       "Velvet Worm",            Rarity.RARE),
+    SPRINGTAIL       ("springtail",        "Orchesella Springtail",  Rarity.COMMON),
+    TARDIGRADE       ("tardigrade",        "Water Bear",             Rarity.RARE),
+    PLANARIAN        ("planarian",         "Tiger Planarian",        Rarity.UNCOMMON),
+    NEMATODE         ("nematode",          "C. elegans",             Rarity.UNCOMMON),
+    AMPHIPOD         ("amphipod",          "Gammarus Scud",          Rarity.COMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

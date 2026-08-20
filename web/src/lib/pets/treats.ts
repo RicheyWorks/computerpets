@@ -161,6 +161,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   paddlefish: { shape: "flake", verb: "Plankton" },
   lamprey: { shape: "pebble", verb: "Stone" },
   american_eel: { shape: "crumb", verb: "Scrap" },
+  house_centipede: { shape: "crumb", verb: "Silverfish" },
+  millipede: { shape: "leaf", verb: "Leaf" },
+  pillbug: { shape: "leaf", verb: "Leaf" },
+  earthworm: { shape: "leaf", verb: "Leaf" },
+  velvet_worm: { shape: "crumb", verb: "Cricket" },
+  springtail: { shape: "flake", verb: "Flake" },
+  tardigrade: { shape: "flake", verb: "Moss" },
+  planarian: { shape: "crumb", verb: "Worm" },
+  nematode: { shape: "flake", verb: "Flake" },
+  amphipod: { shape: "crumb", verb: "Scrap" },
 };
 
 export function treatFor(key: string) {
@@ -328,4 +338,14 @@ export const GIFT_LINE: Record<string, string> = {
   paddlefish: "A plankton I was finished filtering.",
   lamprey: "A stone I was finished clinging to.",
   american_eel: "A scrap I was finished taking toward the Sargasso.",
+  house_centipede: "A silverfish I was finished hunting.",
+  millipede: "A leaf I was finished walking for.",
+  pillbug: "A leaf I was finished rolling after.",
+  earthworm: "A leaf I was finished casting from.",
+  velvet_worm: "A cricket I was finished jetting for.",
+  springtail: "A flake I was finished hopping for.",
+  tardigrade: "A moss I was finished walking.",
+  planarian: "A worm I was finished splitting after.",
+  nematode: "A flake I was finished thrashing for.",
+  amphipod: "A scrap I was finished taking on my side.",
 };

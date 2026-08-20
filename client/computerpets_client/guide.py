@@ -1,10 +1,10 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred and sixty, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred and seventy, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
-the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the cellar keeps
+the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
 the xenobiology facts; the twenty keep the study facts.
 """
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_pond, is_roost, is_sea, is_snake, is_stone, is_well, is_wood
+from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_log, is_pond, is_roost, is_sea, is_snake, is_stone, is_well, is_wood
 
 
 @dataclass(frozen=True)
@@ -1551,7 +1551,100 @@ CREEK_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE
+LOG_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "house_centipede",
+        "Scutigera coleoptrata",
+        "Fifteen pairs of long legs, a hunt across the plaster, a sit in the crack until the next silverfish. House centipede. She sits. Then she hunts. The crack is a plaster she agreed to.",
+        "Not a millipede. Link is Narceus americanus, two pairs per ring, an oil, a slow walk; Haste is Scutigera coleoptrata, and the fifteen pairs are the tell. Not an insect. A centipede is not a millipede. The hunt is the species.",
+        "House centipede. Fifteen pairs. She hunts. Not a millipede. Not Link. Not an insect.",
+        "plaster crack",
+        "hunting",
+    ),
+    _entry(
+        "millipede",
+        "Narceus americanus",
+        "Two pairs of legs on each ring, a slow walk, an oil when the compile is unkind. American giant millipede. She walks. Then she oils. The log is a damp she agreed to.",
+        "Not a centipede. Haste is Scutigera, fifteen pairs, a hunt; Link is Narceus americanus, and the rings are the tell. A millipede is not a centipede. The oil is the species.",
+        "American giant millipede. Two pairs per ring. She oils. Not a centipede. Not Haste.",
+        "damp log",
+        "oiled",
+    ),
+    _entry(
+        "pillbug",
+        "Armadillidium vulgare",
+        "Seven pairs, plates that close into a ball, a walk of the bark. Common pillbug. A roly-poly. A crustacean. She walks. Then she rolls. The dish is a bark she agreed to.",
+        "Not an insect. Comb is a bee with six legs. Not Pinch — Pinch is a crayfish with claws, a pond crustacean. Armor is Armadillidium vulgare, and the roll is the tell. A pillbug is not an insect. Seven pairs. The armor is the species.",
+        "Common pillbug. A roly-poly. Seven pairs. A crustacean. Not an insect. Not Comb. Not Pinch.",
+        "bark dish",
+        "rolling",
+    ),
+    _entry(
+        "earthworm",
+        "Lumbricus terrestris",
+        "A clitellum like a band, a cast left in the soil, a body that is not a snake. Common earthworm. She sits. Then she casts. The tray is a soil she agreed to.",
+        "Not a snake. Sash is a corn snake who threads a gap. Not Slip — Slip is a caecilian, an amphibian with a jaw. Not Latch — Latch is a leech with suckers who hunts worms. Cast is Lumbricus terrestris, and the clitellum is the tell. An earthworm is not a snake. The cast is the species.",
+        "Common earthworm. A clitellum. She casts. Not a snake. Not Sash. Not Slip. Not Latch.",
+        "soil tray",
+        "casting",
+    ),
+    _entry(
+        "velvet_worm",
+        "Euperipatoides rowelli",
+        "Velvet skin, a jet of glue from the head, a walk that is not a millipede's. Velvet worm. An onychophoran. She walks. Then she jets. The wood is a wet she agreed to.",
+        "Not a millipede. Link is Narceus, rings, an oil. Not Dew — Dew is a sundew that glitters and curls on the garden blotter. Not Velvet — Velvet is a tarantula of the corner. Jet is Euperipatoides rowelli, and the glue from the head is the tell. A velvet worm is not a millipede. The jet is the species.",
+        "Velvet worm. Velvet. Glue from the head. An onychophoran. Not a millipede. Not Link.",
+        "wet wood",
+        "velvet",
+    ),
+    _entry(
+        "springtail",
+        "Orchesella cincta",
+        "A furcula folded under the belly, a hop that is not a flea's, six legs that do not make an insect. Orchesella springtail. A hexapod that is not an insect. She sits. Then she hops. The cup is a duff she agreed to.",
+        "Not a flea. Not Comb — Comb is a bee of the hive. Hop is Orchesella cincta, and the furcula is the tell. A springtail is a hexapod. She is not an insect. The hop is the species.",
+        "Orchesella springtail. A furcula. A hexapod that is not an insect. Not a flea. Not Comb.",
+        "duff cup",
+        "hopping",
+    ),
+    _entry(
+        "tardigrade",
+        "Hypsibius exemplaris",
+        "Eight short legs, a plump walk of the moss, a tun when the film goes dry. Water bear. She walks. Then she goes tun. The film is a moss she agreed to.",
+        "Not a bear. Coal is an American black bear of the wood; Tun is Hypsibius exemplaris, and the tun is the tell. A tardigrade is a water bear. She is not Coal. The dry is the species.",
+        "Water bear. A tun when dry. Not a bear. Not Coal.",
+        "moss film",
+        "waiting",
+    ),
+    _entry(
+        "planarian",
+        "Girardia tigrina",
+        "Eyes like commas, a glide on the film, a body that can become two. Tiger planarian. She sits. Then she splits. The dish is a film she agreed to.",
+        "Not a leech. Latch is Haemopis, suckers, a hunt of worms; Half is Girardia tigrina, and the commas are the tell. A planarian is not a leech. The split is the species.",
+        "Tiger planarian. Eyes like commas. She splits. Not a leech. Not Latch.",
+        "film dish",
+        "splitting",
+    ),
+    _entry(
+        "nematode",
+        "Caenorhabditis elegans",
+        "A round thread, a thrash in the film, no clitellum, no cast you dig. C. elegans. A roundworm. She sits. Then she thrashes. The film is a soil she agreed to.",
+        "Not Cast. Cast is Lumbricus terrestris, a clitellum, a cast in the tray. Thread is Caenorhabditis elegans, and the round is the tell. A nematode is not an earthworm you dig. The thread is the species.",
+        "C. elegans. A roundworm. Not Cast. Not an earthworm you dig.",
+        "soil film",
+        "threading",
+    ),
+    _entry(
+        "amphipod",
+        "Gammarus minus",
+        "A compressed body, a swim on the side, no roll, no claws of a crayfish. Gammarus scud. She sits. Then she scuds. The pool is a side she agreed to.",
+        "Not Pinch. Pinch is a crayfish with ten legs and two claws. Not a pillbug — Armor rolls on bark, seven pairs, a crustacean of the dish. Scud is Gammarus minus, and the side is the tell. An amphipod is not a pillbug. The scud is the species.",
+        "Gammarus scud. A scud. She swims on her side. Not Pinch. Not a pillbug.",
+        "side pool",
+        "scudding",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1596,6 +1689,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="stone", label="All ten in the stone", verb="stay")
     if is_creek(key):
         return Classroom(room="creek", label="All ten in the creek", verb="swim")
+    if is_log(key):
+        return Classroom(room="log", label="All ten under the log", verb="stay")
     if is_well(key):
         return Classroom(room="well", label="All ten in the well", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
@@ -1655,6 +1750,10 @@ def stone_guide_keys() -> tuple[str, ...]:
 
 def creek_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in CREEK_GUIDE)
+
+
+def log_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in LOG_GUIDE)
 
 
 def well_guide_keys() -> tuple[str, ...]:
@@ -1717,6 +1816,10 @@ def creek_guide_complete() -> bool:
     return len(CREEK_GUIDE) == len(CREEK_KEYS) and all(k in _BY_KEY for k in CREEK_KEYS)
 
 
+def log_guide_complete() -> bool:
+    return len(LOG_GUIDE) == len(LOG_KEYS) and all(k in _BY_KEY for k in LOG_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -1737,6 +1840,7 @@ def guide_complete() -> bool:
         and wood_guide_complete()
         and stone_guide_complete()
         and creek_guide_complete()
+        and log_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)

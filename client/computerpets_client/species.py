@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred and sixty, painted here.
+the others walk. This is not a new bestiary — it is the same hundred and seventy, painted here.
 """
 
 from __future__ import annotations
@@ -216,7 +216,20 @@ CREEK_KEYS: tuple[str, ...] = (
     "american_eel",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS
+LOG_KEYS: tuple[str, ...] = (
+    "house_centipede",
+    "millipede",
+    "pillbug",
+    "earthworm",
+    "velvet_worm",
+    "springtail",
+    "tardigrade",
+    "planarian",
+    "nematode",
+    "amphipod",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS
 
 
 @dataclass(frozen=True)
@@ -4735,6 +4748,278 @@ SILVER = _kind(
     hungry=("An eel should not be this empty.", "A scrap would restore the swim."),
 )
 
+HASTE = _kind(
+    key="house_centipede",
+    slug="haste",
+    name="Haste",
+    label="House Centipede",
+    treat="Silverfish",
+    treat_shape="crumb",
+    silhouette="house_centipede",
+    walk=168,
+    palette=Palette(
+        body=(188, 156, 88),
+        belly=(212, 196, 148),
+        ear=(72, 56, 36),
+        ear_inner=(196, 172, 112),
+        nose=(24, 20, 16),
+        ring=(72, 56, 36),
+        accent=(48, 40, 28),
+    ),
+    greet=("I hunted. Hello.", "The crack kept my pairs.", "You may look. I am not a millipede."),
+    ambient=("Fifteen pairs. I hunt. I keep the grammar.", "I am not Link. Link oils and walks slow. I am Scutigera. I am not an insect.", "Your papers are a plaster I have already claimed.", "I sit. Then I hunt. Then I sit."),
+    feed=("Silverfish of a treaty.", "I will take this without leaving the crack.", "Accepted. The pairs record it."),
+    treat_lines=("Silverfish of a treaty.",),
+    hide=("Inside the crack.",),
+    call=("I hunted. Hello.",),
+    hungry=("A centipede should not be this empty.", "A silverfish would restore the hunt."),
+)
+
+LINK = _kind(
+    key="millipede",
+    slug="link",
+    name="Link",
+    label="American Giant Millipede",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="millipede",
+    walk=22,
+    palette=Palette(
+        body=(72, 44, 32),
+        belly=(120, 92, 48),
+        ear=(48, 28, 20),
+        ear_inner=(96, 68, 40),
+        nose=(20, 14, 10),
+        ring=(48, 28, 20),
+        accent=(40, 24, 16),
+    ),
+    greet=("I oiled. Hello.", "The log kept my rings.", "You may look. I am not a centipede."),
+    ambient=("Two pairs per ring. I oil. I keep the office.", "I am not Haste. Haste hunts on fifteen pairs. I am Narceus. I walk slow.", "Your papers are a log I have already claimed.", "I walk. Then I oil. Then I walk."),
+    feed=("Leaf of a treaty.", "I will take this without leaving the log.", "Accepted. The rings record it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("Under the log.",),
+    call=("I oiled. Hello.",),
+    hungry=("A millipede should not be this empty.", "A leaf would restore the walk."),
+)
+
+ARMOR = _kind(
+    key="pillbug",
+    slug="armor",
+    name="Armor",
+    label="Common Pillbug",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="pillbug",
+    walk=36,
+    palette=Palette(
+        body=(132, 124, 108),
+        belly=(196, 188, 168),
+        ear=(88, 80, 68),
+        ear_inner=(168, 160, 144),
+        nose=(20, 18, 14),
+        ring=(88, 80, 68),
+        accent=(72, 64, 52),
+    ),
+    greet=("I rolled. Hello.", "The dish kept my plates.", "You may look. I am not an insect."),
+    ambient=("Seven pairs. I roll. I keep the grammar.", "I am not Comb. Comb is a bee. I am not Pinch. Pinch is a crayfish with claws. I am Armadillidium. A crustacean.", "Your papers are a bark I have already claimed.", "I walk. Then I roll. Then I walk."),
+    feed=("Leaf of a treaty.", "I will take this and keep the roll.", "Accepted. The plates record it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("Under the bark.",),
+    call=("I rolled. Hello.",),
+    hungry=("A pillbug should not be this empty.", "A leaf would restore the roll."),
+)
+
+CAST = _kind(
+    key="earthworm",
+    slug="cast",
+    name="Cast",
+    label="Common Earthworm",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="earthworm",
+    walk=18,
+    palette=Palette(
+        body=(176, 112, 92),
+        belly=(196, 140, 116),
+        ear=(148, 72, 64),
+        ear_inner=(188, 128, 108),
+        nose=(88, 48, 40),
+        ring=(148, 72, 64),
+        accent=(88, 64, 40),
+    ),
+    greet=("I cast. Hello.", "The tray kept my clitellum.", "You may look. I am not a snake."),
+    ambient=("A clitellum. I cast. I keep the office.", "I am not Sash. Sash is a corn snake who threads a gap. I am not Slip. Slip is a caecilian with a jaw. I am not Latch. Latch hunts worms. I am Lumbricus.", "Your papers are a soil I have already claimed.", "I sit. Then I cast. Then I sit."),
+    feed=("Leaf of a treaty.", "I will take this without leaving the soil.", "Accepted. The clitellum records it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("Inside the soil.",),
+    call=("I cast. Hello.",),
+    hungry=("An earthworm should not be this empty.", "A leaf would restore the cast."),
+)
+
+JET = _kind(
+    key="velvet_worm",
+    slug="jet",
+    name="Jet",
+    label="Velvet Worm",
+    treat="Cricket",
+    treat_shape="crumb",
+    silhouette="velvet_worm",
+    walk=28,
+    palette=Palette(
+        body=(88, 56, 72),
+        belly=(148, 108, 120),
+        ear=(64, 40, 52),
+        ear_inner=(168, 128, 148),
+        nose=(24, 16, 20),
+        ring=(64, 40, 52),
+        accent=(52, 32, 44),
+    ),
+    greet=("I jetted. Hello.", "The wood kept my velvet.", "You may look. I am not a millipede."),
+    ambient=("Velvet. Glue from the head. I keep the grammar.", "I am not Link. Link oils and walks rings. I am not Dew. Dew is a sundew that glitters and curls. I am Euperipatoides. An onychophoran.", "Your papers are a wood I have already claimed.", "I walk. Then I jet. Then I walk."),
+    feed=("Cricket of a treaty.", "I will take this with a jet.", "Accepted. The velvet records it."),
+    treat_lines=("Cricket of a treaty.",),
+    hide=("Inside the wood.",),
+    call=("I jetted. Hello.",),
+    hungry=("A velvet worm should not be this empty.", "A cricket would restore the jet."),
+)
+
+HOP = _kind(
+    key="springtail",
+    slug="hop",
+    name="Hop",
+    label="Orchesella Springtail",
+    treat="Flake",
+    treat_shape="flake",
+    silhouette="springtail",
+    walk=90,
+    palette=Palette(
+        body=(64, 72, 56),
+        belly=(120, 128, 96),
+        ear=(48, 52, 40),
+        ear_inner=(212, 212, 196),
+        nose=(20, 24, 16),
+        ring=(212, 212, 196),
+        accent=(40, 44, 32),
+    ),
+    greet=("I hopped. Hello.", "The cup kept my furcula.", "You may look. I am not an insect."),
+    ambient=("A furcula. I hop. I keep the office.", "I am not Comb. Comb is a bee. I am not a flea. I am Orchesella. A hexapod that is not an insect.", "Your papers are a duff I have already claimed.", "I sit. Then I hop. Then I sit."),
+    feed=("Flake of a treaty.", "I will take this and keep the hop.", "Accepted. The furcula records it."),
+    treat_lines=("Flake of a treaty.",),
+    hide=("Inside the duff.",),
+    call=("I hopped. Hello.",),
+    hungry=("A springtail should not be this empty.", "A flake would restore the hop."),
+)
+
+TUN = _kind(
+    key="tardigrade",
+    slug="tun",
+    name="Tun",
+    label="Water Bear",
+    treat="Moss",
+    treat_shape="flake",
+    silhouette="tardigrade",
+    walk=12,
+    palette=Palette(
+        body=(180, 132, 140),
+        belly=(212, 180, 180),
+        ear=(148, 108, 116),
+        ear_inner=(220, 196, 196),
+        nose=(32, 20, 24),
+        ring=(88, 64, 72),
+        accent=(88, 64, 72),
+    ),
+    greet=("I sat the moss. Hello.", "The film kept my tun.", "You may look. I am not a bear."),
+    ambient=("A tun when dry. I keep the grammar.", "I am not Coal. Coal is a black bear of the wood. I am Hypsibius. A water bear. I go tun.", "Your papers are a moss I have already claimed.", "I walk. Then I tun. Then I walk."),
+    feed=("Moss of a treaty.", "I will take this without leaving the film.", "Accepted. The tun records it."),
+    treat_lines=("Moss of a treaty.",),
+    hide=("Inside the moss.",),
+    call=("I sat the moss. Hello.",),
+    hungry=("A tardigrade should not be this empty.", "A moss would restore the walk."),
+)
+
+HALF = _kind(
+    key="planarian",
+    slug="half",
+    name="Half",
+    label="Tiger Planarian",
+    treat="Worm",
+    treat_shape="crumb",
+    silhouette="planarian",
+    walk=16,
+    aquatic=True,
+    palette=Palette(
+        body=(72, 108, 88),
+        belly=(168, 196, 172),
+        ear=(24, 28, 24),
+        ear_inner=(140, 172, 148),
+        nose=(24, 28, 24),
+        ring=(24, 28, 24),
+        accent=(48, 72, 56),
+    ),
+    greet=("I split. Hello.", "The dish kept my commas.", "You may look. I am not a leech."),
+    ambient=("Eyes like commas. I split. I keep the office.", "I am not Latch. Latch is a leech with suckers who hunts worms. I am Girardia. I glide. I become two.", "Your papers are a film I have already claimed.", "I sit. Then I split. Then I sit."),
+    feed=("Worm of a treaty.", "I will take this and keep the split.", "Accepted. The commas record it."),
+    treat_lines=("Worm of a treaty.",),
+    hide=("Inside the film.",),
+    call=("I split. Hello.",),
+    hungry=("A planarian should not be this empty.", "A worm would restore the glide."),
+)
+
+THREAD = _kind(
+    key="nematode",
+    slug="thread",
+    name="Thread",
+    label="C. elegans",
+    treat="Flake",
+    treat_shape="flake",
+    silhouette="nematode",
+    walk=40,
+    palette=Palette(
+        body=(212, 196, 156),
+        belly=(232, 220, 188),
+        ear=(168, 148, 112),
+        ear_inner=(220, 208, 172),
+        nose=(40, 32, 24),
+        ring=(168, 148, 112),
+        accent=(168, 148, 112),
+    ),
+    greet=("I thrashed. Hello.", "The film kept my thread.", "You may look. I am not Cast."),
+    ambient=("A roundworm. I thrash. I keep the grammar.", "I am not Cast. Cast is Lumbricus, a clitellum, a cast you dig. I am Caenorhabditis. A nematode. Not an earthworm you dig.", "Your papers are a film I have already claimed.", "I sit. Then I thrash. Then I sit."),
+    feed=("Flake of a treaty.", "I will take this without leaving the film.", "Accepted. The thread records it."),
+    treat_lines=("Flake of a treaty.",),
+    hide=("Inside the film.",),
+    call=("I thrashed. Hello.",),
+    hungry=("A nematode should not be this empty.", "A flake would restore the thrash."),
+)
+
+SCUD = _kind(
+    key="amphipod",
+    slug="scud",
+    name="Scud",
+    label="Gammarus Scud",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="amphipod",
+    walk=54,
+    aquatic=True,
+    palette=Palette(
+        body=(148, 108, 64),
+        belly=(212, 188, 140),
+        ear=(88, 64, 40),
+        ear_inner=(188, 156, 108),
+        nose=(24, 18, 12),
+        ring=(88, 64, 40),
+        accent=(88, 64, 40),
+    ),
+    greet=("I swam on my side. Hello.", "The pool kept my scud.", "You may look. I am not Pinch."),
+    ambient=("A scud. I swim on my side. I keep the office.", "I am not Pinch. Pinch is a crayfish with ten legs and two claws. I am not Armor. Armor rolls on bark. I am Gammarus. I keep the side.", "Your papers are a pool I have already claimed.", "I sit. Then I scud. Then I sit."),
+    feed=("Scrap of a treaty.", "I will take this without leaving the side.", "Accepted. The scud records it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("Inside the pool.",),
+    call=("I swam on my side. Hello.",),
+    hungry=("A scud should not be this empty.", "A scrap would restore the swim."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -4897,6 +5182,16 @@ _ALL: tuple[Species, ...] = (
     SPOON,
     ROUND,
     SILVER,
+    HASTE,
+    LINK,
+    ARMOR,
+    CAST,
+    JET,
+    HOP,
+    TUN,
+    HALF,
+    THREAD,
+    SCUD,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -4963,6 +5258,10 @@ def is_stone(key: str) -> bool:
 
 def is_creek(key: str) -> bool:
     return key in CREEK_KEYS
+
+
+def is_log(key: str) -> bool:
+    return key in LOG_KEYS
 
 
 def next_species_key(key: str) -> str:
