@@ -201,6 +201,16 @@ export const SPECIES: Species[] = [
   { key: "acorn_weevil", displayName: "Acorn Weevil", rarity: "UNCOMMON", temperament: "Drilling", habitat: "Acorn cup", blurb: "A drill of an acorn. Not Auger. Not Mast. A weevil is not a bee." },
   { key: "click_beetle", displayName: "Eyed Click Beetle", rarity: "UNCOMMON", temperament: "Clicking", habitat: "Bark plate", blurb: "A click, not a snap. Not Snap. Not Spark. A click beetle is not a firefly." },
   { key: "robber_fly", displayName: "Robber Fly", rarity: "UNCOMMON", temperament: "Hunting", habitat: "Grass perch", blurb: "A fly that hunts. Not a bee. Not Thrum. Not Sip." },
+  { key: "sloth", displayName: "Linnaeus's Two-toed Sloth", rarity: "UNCOMMON", temperament: "Hanging", habitat: "Bough hook", blurb: "She hangs. She is not lazy. Not Rui." },
+  { key: "lemur", displayName: "Ring-tailed Lemur", rarity: "COMMON", temperament: "Flagged", habitat: "Sun ledge", blurb: "The tail is a flag. Not Stripe. Not Ring." },
+  { key: "gibbon", displayName: "Lar Gibbon", rarity: "UNCOMMON", temperament: "Singing", habitat: "Lamp arm", blurb: "A song and a swing. Not a monkey rumor. Not Quill." },
+  { key: "kinkajou", displayName: "Kinkajou", rarity: "UNCOMMON", temperament: "Wrapping", habitat: "Nectar cup", blurb: "A prehensile tail. Nectar at night. Not Sip. Not Comb. Not Rue." },
+  { key: "colugo", displayName: "Sunda Colugo", rarity: "UNCOMMON", temperament: "Sailing", habitat: "Trunk sail", blurb: "A skin that sails. Not a lemur. Not Glide. Not Cape." },
+  { key: "flying_squirrel", displayName: "Southern Flying Squirrel", rarity: "COMMON", temperament: "Gliding", habitat: "Oak fold", blurb: "A skin, not a wing. Not Kite. Not a bird." },
+  { key: "howler", displayName: "Mantled Howler", rarity: "UNCOMMON", temperament: "Howling", habitat: "Crown perch", blurb: "The howl is the tell. Not Vee. Not Swing." },
+  { key: "tarsier", displayName: "Philippine Tarsier", rarity: "RARE", temperament: "Looking", habitat: "Branch hollow", blurb: "The eyes are the face. Not Heart." },
+  { key: "potto", displayName: "Potto", rarity: "UNCOMMON", temperament: "Still", habitat: "Vine rail", blurb: "A slow cousin. Not a loris. Not Twig. Not Fold. Not Hang." },
+  { key: "koala", displayName: "Koala", rarity: "UNCOMMON", temperament: "Chewing", habitat: "Gum perch", blurb: "A marsupial. Not a bear. Not Coal. Not Burr." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

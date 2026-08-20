@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same hundred and ninety, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred, painted here.
 """
 
 from __future__ import annotations
@@ -255,7 +255,20 @@ MEADOW_KEYS: tuple[str, ...] = (
     "robber_fly",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS
+CANOPY_KEYS: tuple[str, ...] = (
+    "sloth",
+    "lemur",
+    "gibbon",
+    "kinkajou",
+    "colugo",
+    "flying_squirrel",
+    "howler",
+    "tarsier",
+    "potto",
+    "koala",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS
 
 
 @dataclass(frozen=True)
@@ -5592,6 +5605,285 @@ ROB = _kind(
     hungry=("A robber fly should not be this empty.", "A prey would restore the hunt."),
 )
 
+HANG = _kind(
+    key="sloth",
+    slug="hang",
+    name="Hang",
+    label="Linnaeus's Two-toed Sloth",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="sloth",
+    walk=12,
+    perch=True,
+    palette=Palette(
+        body=(148, 108, 72),
+        belly=(212, 188, 152),
+        ear=(120, 84, 52),
+        ear_inner=(212, 188, 152),
+        nose=(40, 28, 20),
+        ring=(88, 60, 36),
+        accent=(40, 28, 20),
+    ),
+    greet=("I hung. Hello.", "The hook kept my two.", "You may look. I am not lazy."),
+    ambient=("She hangs. I keep the office. I am not lazy.", "I am not Rui. Rui is a red panda, a scarf of a tail. I am Choloepus. Two toes. The hang is the work.", "Your papers are a bough I have already claimed.", "I hang. Then I reach. Then I hang."),
+    feed=("Leaf of a treaty.", "I will take this without leaving the hook.", "Accepted. The hang records it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("Under the bough.",),
+    call=("I hung. Hello.",),
+    hungry=("A sloth should not be this empty.", "A leaf would restore the hang."),
+)
+
+SUN = _kind(
+    key="lemur",
+    slug="sun",
+    name="Sun",
+    label="Ring-tailed Lemur",
+    treat="Fruit",
+    treat_shape="leaf",
+    silhouette="lemur",
+    walk=88,
+    palette=Palette(
+        body=(168, 164, 156),
+        belly=(236, 228, 212),
+        ear=(88, 84, 80),
+        ear_inner=(236, 228, 212),
+        nose=(32, 28, 24),
+        ring=(40, 36, 32),
+        accent=(40, 36, 32),
+    ),
+    greet=("I sat the sun. Hello.", "The ledge kept my flag.", "You may look. I am not a raccoon."),
+    ambient=("The tail is a flag. I keep the grammar.", "I am not Stripe. Stripe is a skunk of the duff. I am not Ring. Ring is a turkey tail, pores not gills. I am Lemur catta. A lemur is not a raccoon.", "Your papers are a ledge I have already claimed.", "I sit. Then I flag. Then I sit."),
+    feed=("Fruit of a treaty.", "I will take this without leaving the sun.", "Accepted. The flag records it."),
+    treat_lines=("Fruit of a treaty.",),
+    hide=("In the troop.",),
+    call=("I sat the sun. Hello.",),
+    hungry=("A lemur should not be this empty.", "A fruit would restore the flag."),
+)
+
+SWING = _kind(
+    key="gibbon",
+    slug="swing",
+    name="Swing",
+    label="Lar Gibbon",
+    treat="Fruit",
+    treat_shape="leaf",
+    silhouette="gibbon",
+    walk=118,
+    perch=True,
+    palette=Palette(
+        body=(220, 200, 160),
+        belly=(236, 220, 196),
+        ear=(180, 156, 116),
+        ear_inner=(236, 220, 196),
+        nose=(36, 28, 20),
+        ring=(180, 156, 116),
+        accent=(36, 28, 20),
+    ),
+    greet=("I sang. Hello.", "The arm kept my swing.", "You may look. I am not a monkey."),
+    ambient=("A song and a swing. I keep the office.", "I am not a monkey rumor. I am Hylobates. An ape who brachiates. I am not Quill. Quill is a macaw who quotes.", "Your papers are an arm I have already claimed.", "I swing. Then I sing. Then I swing."),
+    feed=("Fruit of a treaty.", "I will take this and keep the song.", "Accepted. The swing records it."),
+    treat_lines=("Fruit of a treaty.",),
+    hide=("Above the swing.",),
+    call=("I sang. Hello.",),
+    hungry=("A gibbon should not be this empty.", "A fruit would restore the song."),
+)
+
+WRIST = _kind(
+    key="kinkajou",
+    slug="wrist",
+    name="Wrist",
+    label="Kinkajou",
+    treat="Nectar",
+    treat_shape="flake",
+    silhouette="kinkajou",
+    walk=76,
+    perch=True,
+    palette=Palette(
+        body=(176, 124, 56),
+        belly=(232, 208, 160),
+        ear=(140, 96, 44),
+        ear_inner=(232, 208, 160),
+        nose=(32, 24, 16),
+        ring=(140, 96, 44),
+        accent=(32, 24, 16),
+    ),
+    greet=("I wrapped. Hello.", "The cup kept my tail.", "You may look. I am not a ferret."),
+    ambient=("A prehensile tail. Nectar at night. I keep the office.", "I am not Sip. Sip is a hummingbird. I am not Comb. Comb is a honey bee. I am not Rue. Rue is a fox. I am Potos. A kinkajou is not a ferret.", "Your papers are a cup I have already claimed.", "I wrap. Then I sip. Then I wrap."),
+    feed=("Nectar of a treaty.", "I will take this and keep the wrap.", "Accepted. The tail records it."),
+    treat_lines=("Nectar of a treaty.",),
+    hide=("Inside the nectar.",),
+    call=("I wrapped. Hello.",),
+    hungry=("A kinkajou should not be this empty.", "A nectar would restore the wrap."),
+)
+
+SAIL = _kind(
+    key="colugo",
+    slug="sail",
+    name="Sail",
+    label="Sunda Colugo",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="colugo",
+    walk=54,
+    perch=True,
+    palette=Palette(
+        body=(96, 72, 48),
+        belly=(168, 140, 108),
+        ear=(72, 56, 40),
+        ear_inner=(168, 140, 108),
+        nose=(28, 20, 14),
+        ring=(72, 56, 40),
+        accent=(28, 20, 14),
+    ),
+    greet=("I sailed. Hello.", "The trunk kept my skin.", "You may look. I am not a lemur."),
+    ambient=("A skin that sails. I keep the office. Not a wing.", "I am not Sun. Sun is a lemur of the ledge. I am not Glide. Glide is a squirrel with a fold. I am not Cape. Cape is a bat with hands. I am Galeopterus. A colugo is not a lemur.", "Your papers are a trunk I have already claimed.", "I cling. Then I sail. Then I cling."),
+    feed=("Leaf of a treaty.", "I will take this without leaving the trunk.", "Accepted. The sail records it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("On the trunk.",),
+    call=("I sailed. Hello.",),
+    hungry=("A colugo should not be this empty.", "A leaf would restore the sail."),
+)
+
+GLIDE = _kind(
+    key="flying_squirrel",
+    slug="glide",
+    name="Glide",
+    label="Southern Flying Squirrel",
+    treat="Nut",
+    treat_shape="seed",
+    silhouette="flying_squirrel",
+    walk=102,
+    perch=True,
+    palette=Palette(
+        body=(156, 148, 136),
+        belly=(228, 220, 204),
+        ear=(120, 112, 100),
+        ear_inner=(228, 220, 204),
+        nose=(36, 32, 28),
+        ring=(120, 112, 100),
+        accent=(36, 32, 28),
+    ),
+    greet=("I glided. Hello.", "The fold kept my skin.", "You may look. I am not a bird."),
+    ambient=("A skin, not a wing. I keep the office.", "I am not Kite. Kite is a manta of the bowl. I am not Cache. Cache is a gray squirrel who buries. I am Glaucomys. A flying squirrel is not a bird.", "Your papers are a fold I have already claimed.", "I hop. Then I glide. Then I hop."),
+    feed=("Nut of a treaty.", "I will take this and keep the fold.", "Accepted. The skin records it."),
+    treat_lines=("Nut of a treaty.",),
+    hide=("Inside the oak.",),
+    call=("I glided. Hello.",),
+    hungry=("A flying squirrel should not be this empty.", "A nut would restore the glide."),
+)
+
+BOOM = _kind(
+    key="howler",
+    slug="boom",
+    name="Boom",
+    label="Mantled Howler",
+    treat="Leaf",
+    treat_shape="leaf",
+    silhouette="howler",
+    walk=42,
+    perch=True,
+    palette=Palette(
+        body=(48, 40, 36),
+        belly=(156, 124, 96),
+        ear=(72, 56, 40),
+        ear_inner=(156, 124, 96),
+        nose=(16, 12, 10),
+        ring=(72, 56, 40),
+        accent=(16, 12, 10),
+    ),
+    greet=("I howled. Hello.", "The crown kept my boom.", "You may look. I am not a gibbon."),
+    ambient=("The howl is the tell. I keep the office.", "I am not Vee. Vee is a goose of the blotter. I am not Swing. Swing is a gibbon who sings and swings. I am Alouatta. A howler is not a gibbon.", "Your papers are a crown I have already claimed.", "I sit. Then I boom. Then I sit."),
+    feed=("Leaf of a treaty.", "I will take this without leaving the crown.", "Accepted. The howl records it."),
+    treat_lines=("Leaf of a treaty.",),
+    hide=("In the crown.",),
+    call=("I howled. Hello.",),
+    hungry=("A howler should not be this empty.", "A leaf would restore the boom."),
+)
+
+GAZE = _kind(
+    key="tarsier",
+    slug="gaze",
+    name="Gaze",
+    label="Philippine Tarsier",
+    treat="Insect",
+    treat_shape="crumb",
+    silhouette="tarsier",
+    walk=96,
+    perch=True,
+    palette=Palette(
+        body=(176, 140, 88),
+        belly=(236, 220, 188),
+        ear=(140, 108, 64),
+        ear_inner=(236, 220, 188),
+        nose=(16, 12, 10),
+        ring=(140, 108, 64),
+        accent=(16, 12, 10),
+    ),
+    greet=("I looked. Hello.", "The hollow kept my eyes.", "You may look. I am not an owl."),
+    ambient=("The eyes are the face. I keep the office.", "I am not Heart. Heart is a barn owl, a hiss, a heart of feathers. I am Carlito. A tarsier is not an owl.", "Your papers are a hollow I have already claimed.", "I look. Then I leap. Then I look."),
+    feed=("Insect of a treaty.", "I will take this without leaving the look.", "Accepted. The eyes record it."),
+    treat_lines=("Insect of a treaty.",),
+    hide=("Behind a look.",),
+    call=("I looked. Hello.",),
+    hungry=("A tarsier should not be this empty.", "An insect would restore the look."),
+)
+
+STILL = _kind(
+    key="potto",
+    slug="still",
+    name="Still",
+    label="Potto",
+    treat="Gum",
+    treat_shape="flake",
+    silhouette="potto",
+    walk=18,
+    perch=True,
+    palette=Palette(
+        body=(88, 64, 44),
+        belly=(176, 148, 112),
+        ear=(64, 48, 32),
+        ear_inner=(176, 148, 112),
+        nose=(24, 16, 12),
+        ring=(64, 48, 32),
+        accent=(24, 16, 12),
+    ),
+    greet=("I kept still. Hello.", "The rail kept my grip.", "You may look. I am not a loris."),
+    ambient=("A slow cousin. I am not a loris. I keep the office.", "I am not Twig. Twig is a walkingstick. I am not Fold. Fold is a mantis. I am not Hang. Hang is a sloth of two toes. I am Perodicticus. A potto is not a sloth.", "Your papers are a vine I have already claimed.", "I grip. Then I still. Then I grip."),
+    feed=("Gum of a treaty.", "I will take this without leaving the rail.", "Accepted. The still records it."),
+    treat_lines=("Gum of a treaty.",),
+    hide=("On the vine.",),
+    call=("I kept still. Hello.",),
+    hungry=("A potto should not be this empty.", "A gum would restore the still."),
+)
+
+GUM = _kind(
+    key="koala",
+    slug="gum",
+    name="Gum",
+    label="Koala",
+    treat="Gum",
+    treat_shape="leaf",
+    silhouette="koala",
+    walk=22,
+    perch=True,
+    palette=Palette(
+        body=(168, 164, 156),
+        belly=(232, 224, 212),
+        ear=(148, 144, 136),
+        ear_inner=(232, 224, 212),
+        nose=(28, 24, 20),
+        ring=(148, 144, 136),
+        accent=(28, 24, 20),
+    ),
+    greet=("I chewed. Hello.", "The perch kept my gum.", "You may look. I am not a bear."),
+    ambient=("A marsupial. I keep the office. I am not a bear.", "I am not Coal. Coal is Ursus, a bear of the denside. I am not Burr. Burr is a hedgehog who curls. I am Phascolarctos. A koala is not a bear.", "Your papers are a gum I have already claimed.", "I sit. Then I chew. Then I sit."),
+    feed=("Gum of a treaty.", "I will take this without leaving the perch.", "Accepted. The chew records it."),
+    treat_lines=("Gum of a treaty.",),
+    hide=("In the gum.",),
+    call=("I chewed. Hello.",),
+    hungry=("A koala should not be this empty.", "A gum would restore the chew."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -5784,6 +6076,16 @@ _ALL: tuple[Species, ...] = (
     SNOUT,
     CLICK,
     ROB,
+    HANG,
+    SUN,
+    SWING,
+    WRIST,
+    SAIL,
+    GLIDE,
+    BOOM,
+    GAZE,
+    STILL,
+    GUM,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -5862,6 +6164,10 @@ def is_shore(key: str) -> bool:
 
 def is_meadow(key: str) -> bool:
     return key in MEADOW_KEYS
+
+
+def is_canopy(key: str) -> bool:
+    return key in CANOPY_KEYS
 
 
 def next_species_key(key: str) -> str:

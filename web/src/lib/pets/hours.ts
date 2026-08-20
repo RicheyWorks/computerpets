@@ -190,6 +190,16 @@ const REST: Record<string, [number, number]> = {
   acorn_weevil: [22, 7],
   click_beetle: [8, 17],
   robber_fly: [22, 7],
+  sloth: [6, 16],
+  lemur: [20, 6],
+  gibbon: [19, 6],
+  kinkajou: [8, 18],
+  colugo: [8, 18],
+  flying_squirrel: [8, 18],
+  howler: [20, 6],
+  tarsier: [8, 18],
+  potto: [8, 18],
+  koala: [8, 17],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -406,6 +416,16 @@ export const HIDE_LINE: Record<string, string> = {
   acorn_weevil: "Inside the acorn.",
   click_beetle: "Under the bark.",
   robber_fly: "On the grass.",
+  sloth: "Under the bough.",
+  lemur: "In the troop.",
+  gibbon: "Above the swing.",
+  kinkajou: "Inside the nectar.",
+  colugo: "On the trunk.",
+  flying_squirrel: "Inside the oak.",
+  howler: "In the crown.",
+  tarsier: "Behind a look.",
+  potto: "On the vine.",
+  koala: "In the gum.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -599,6 +619,16 @@ export const SNACK_LINE: Record<string, string> = {
   acorn_weevil: "Acorn of a treaty.",
   click_beetle: "Scrap of a treaty.",
   robber_fly: "Prey of a treaty.",
+  sloth: "Leaf of a treaty.",
+  lemur: "Fruit of a treaty.",
+  gibbon: "Fruit of a treaty.",
+  kinkajou: "Nectar of a treaty.",
+  colugo: "Leaf of a treaty.",
+  flying_squirrel: "Nut of a treaty.",
+  howler: "Leaf of a treaty.",
+  tarsier: "Insect of a treaty.",
+  potto: "Gum of a treaty.",
+  koala: "Gum of a treaty.",
 };
 
 

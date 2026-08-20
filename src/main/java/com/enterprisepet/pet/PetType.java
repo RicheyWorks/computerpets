@@ -200,7 +200,17 @@ public enum PetType {
     EARWIG           ("earwig",            "European Earwig",        Rarity.COMMON),
     ACORN_WEEVIL     ("acorn_weevil",      "Acorn Weevil",           Rarity.UNCOMMON),
     CLICK_BEETLE     ("click_beetle",      "Eyed Click Beetle",      Rarity.UNCOMMON),
-    ROBBER_FLY       ("robber_fly",        "Robber Fly",             Rarity.UNCOMMON);
+    ROBBER_FLY       ("robber_fly",        "Robber Fly",             Rarity.UNCOMMON),
+    SLOTH            ("sloth",             "Linnaeus's Two-toed Sloth", Rarity.UNCOMMON),
+    LEMUR            ("lemur",             "Ring-tailed Lemur",      Rarity.COMMON),
+    GIBBON           ("gibbon",            "Lar Gibbon",             Rarity.UNCOMMON),
+    KINKAJOU         ("kinkajou",          "Kinkajou",               Rarity.UNCOMMON),
+    COLUGO           ("colugo",            "Sunda Colugo",           Rarity.UNCOMMON),
+    FLYING_SQUIRREL  ("flying_squirrel",   "Southern Flying Squirrel", Rarity.COMMON),
+    HOWLER           ("howler",            "Mantled Howler",         Rarity.UNCOMMON),
+    TARSIER          ("tarsier",           "Philippine Tarsier",     Rarity.RARE),
+    POTTO            ("potto",             "Potto",                  Rarity.UNCOMMON),
+    KOALA            ("koala",             "Koala",                  Rarity.UNCOMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

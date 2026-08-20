@@ -221,6 +221,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "acorn_weevil": (_a("drill", "sit_hold", 2.0, 5, "sit"), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.8, 2)),
     "click_beetle": (_a("click", "pulse", 0.7, 5), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
     "robber_fly": (_a("hunt", "dart", 0.6, 5), _a("perch", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.4, 2)),
+    "sloth": (_a("hang", "sit_hold", 2.6, 5, "sit"), _a("reach", "stretch", 1.6, 3, "sit"), _a("still", "freeze", 2.2, 2)),
+    "lemur": (_a("sun", "sit_hold", 2.2, 5, "sit"), _a("flag", "pulse", 0.8, 3), _a("walk", "wiggle", 1.0, 2)),
+    "gibbon": (_a("swing", "pulse", 1.2, 5), _a("song", "talk", 0.8, 3, "talk"), _a("still", "freeze", 1.6, 2)),
+    "kinkajou": (_a("wrap", "sit_hold", 2.0, 5, "sit"), _a("lick", "eat", 1.2, 3, "eat"), _a("still", "freeze", 1.6, 2)),
+    "colugo": (_a("sail", "pulse", 1.4, 5), _a("cling", "sit_hold", 2.2, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "flying_squirrel": (_a("glide", "pulse", 1.2, 5), _a("hop", "hop", 0.5, 3, "play"), _a("still", "freeze", 1.6, 2)),
+    "howler": (_a("boom", "talk", 0.9, 5, "talk"), _a("sit", "sit_hold", 2.2, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "tarsier": (_a("gaze", "nod", 1.4, 5, "sit"), _a("leap", "hop", 0.5, 3, "play"), _a("still", "freeze", 1.6, 2)),
+    "potto": (_a("still", "freeze", 2.6, 5), _a("cling", "sit_hold", 2.2, 3, "sit"), _a("walk", "wiggle", 1.0, 1)),
+    "koala": (_a("chew", "eat", 1.6, 5, "eat"), _a("cling", "sit_hold", 2.4, 3, "sit"), _a("still", "freeze", 2.0, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

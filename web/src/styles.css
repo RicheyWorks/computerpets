@@ -283,7 +283,8 @@
     mix-blend-mode: multiply;
   }
 
-  .room-wash-wood {
+  .room-wash-wood,
+  .room-wash-canopy {
     background:
       linear-gradient(180deg, rgb(44 36 24 / 0.24), rgb(32 28 20 / 0.12) 46%, rgb(14 12 10 / 0.3)),
       radial-gradient(55% 40% at 22% 72%, rgb(88 120 64 / 0.12), transparent 70%);
