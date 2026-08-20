@@ -208,6 +208,16 @@
     tarsier: [A("gaze", "nod", 1.4, 5, "sit"), A("leap", "hop", 0.5, 3, "play"), A("still", "freeze", 1.6, 2)],
     potto: [A("still", "freeze", 2.6, 5), A("cling", "sit_hold", 2.2, 3, "sit"), A("walk", "wiggle", 1.0, 1)],
     koala: [A("chew", "eat", 1.6, 5, "eat"), A("cling", "sit_hold", 2.4, 3, "sit"), A("still", "freeze", 2.0, 2)],
+    brain_coral: [A("ridge", "sit_hold", 2.6, 5, "sit"), A("polyp", "pulse", 1.4, 3), A("still", "freeze", 2.2, 2)],
+    anemone: [A("wreath", "pulse", 1.6, 5), A("open", "open", 1.8, 3, "sit"), A("still", "freeze", 2.0, 2)],
+    clownfish: [A("dart", "dart", 0.6, 5), A("nestle", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.4, 2)],
+    parrotfish: [A("scrape", "nod", 1.2, 5), A("swim", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
+    cleaner_shrimp: [A("wave", "pulse", 0.8, 5), A("wait", "sit_hold", 2.0, 3, "sit"), A("still", "freeze", 1.6, 2)],
+    sea_cucumber: [A("crawl", "wiggle", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("freeze", "freeze", 1.8, 2)],
+    lionfish: [A("veil", "pulse", 1.4, 5), A("hover", "bob", 1.6, 3), A("still", "freeze", 1.8, 2)],
+    giant_clam: [A("open", "open", 1.8, 5, "sit"), A("mantle", "sit_hold", 2.4, 4, "sit"), A("still", "freeze", 2.2, 2)],
+    eagle_ray: [A("soar", "pulse", 1.4, 5), A("glide", "bob", 1.8, 3), A("still", "freeze", 1.6, 2)],
+    grouper: [A("hide", "sit_hold", 2.4, 5, "sit"), A("gape", "gape", 1.0, 3), A("still", "freeze", 1.8, 2)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",

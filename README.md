@@ -1,6 +1,6 @@
 # ComputerPets
 
-A living ecology. A natural-history house. Two hundred guests walk the blotter.
+A living ecology. A natural-history house. Two hundred ten guests walk the blotter.
 
 Keep them so a line does not go quiet. The nest is a room. The square sits on the paper. Neglect can close a line.
 
@@ -23,7 +23,7 @@ Vite listens on `0.0.0.0:8080`. Open [http://localhost:8080](http://localhost:80
 
 Guests get Rui immediately. Sign in when you want to hatch, nest, and care.
 
-The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/roost`, `/corner`, `/wood`, `/canopy`, `/stone`, `/creek`, `/log`, `/shore`, `/meadow`, `/cellar`, `/well`, `/far`. On a tablet they sit the blotter. On a phone they sit the tall blotter. A tap talks. A drag is a carry. A long-press tends. Open **Live** and Add to Home Screen.
+The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/roost`, `/corner`, `/wood`, `/canopy`, `/stone`, `/creek`, `/log`, `/shore`, `/reef`, `/meadow`, `/cellar`, `/well`, `/far`. On a tablet they sit the blotter. On a phone they sit the tall blotter. A tap talks. A drag is a carry. A long-press tends. Open **Live** and Add to Home Screen.
 
 Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from local lines.
 
@@ -31,7 +31,7 @@ Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answ
 
 Walk the dens. Each room teaches its guests.
 
-Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The two hundred sit by den, not by rarity.
+Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The two hundred ten sit by den, not by rarity.
 
 Pair two you already keep at `/nest`. The nest is a room. The square sits on the paper.
 
@@ -83,7 +83,7 @@ The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at
 
 ## Features
 
-- Two hundred living kinds across the house, the dens, the tide, the garden, the hive, the pond, the roost, the corner, the wood, the canopy, the stone, the creek, the log, the shore, the meadow, the cellar, the well, and the far den
+- Two hundred ten living kinds across the house, the dens, the tide, the garden, the hive, the pond, the roost, the corner, the wood, the canopy, the stone, the creek, the log, the shore, the reef, the meadow, the cellar, the well, and the far den
 - A living desk in the browser, a native overlay, and a PyQt blotter
 - A nest that is a square. Neglect can close a line
 - Optional ownership verify. Fail-closed. Empty allowlists stay empty

@@ -236,6 +236,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   tarsier: T(96, 28, 0.48, 0.36, { nocturnal: true, perch: true }, "gaze", "Gaze", "I looked. Hello."),
   potto: T(18, 2, 0.62, 0.06, { nocturnal: true, perch: true }, "still", "Still", "I kept still. Hello."),
   koala: T(22, 3, 0.84, 0.08, { perch: true }, "gum", "Gum", "I chewed. Hello."),
+  brain_coral: T(4, 0, 0.88, 0.02, { aquatic: true, clingy: true }, "ridge", "Ridge", "I sat the rock. Hello."),
+  anemone: T(6, 0, 0.82, 0.04, { aquatic: true }, "wreath", "Wreath", "I opened. Hello."),
+  clownfish: T(86, 8, 0.58, 0.42, { aquatic: true }, "paint", "Paint", "I sat the wreath. Hello."),
+  parrotfish: T(72, 6, 0.86, 0.32, { aquatic: true }, "scrape", "Scrape", "I rasped. Hello."),
+  cleaner_shrimp: T(54, 8, 0.48, 0.28, { aquatic: true }, "scrub", "Scrub", "I waited. Hello."),
+  sea_cucumber: T(16, 2, 0.78, 0.08, { aquatic: true }, "tube", "Tube", "I sat the sand. Hello."),
+  lionfish: T(38, 4, 0.92, 0.14, { aquatic: true, nocturnal: true }, "veil", "Veil", "I veiled. Hello."),
+  giant_clam: T(2, 0, 1.08, 0.02, { aquatic: true, clingy: true }, "gate", "Gate", "I opened. Hello."),
+  eagle_ray: T(48, 4, 1.14, 0.46, { aquatic: true }, "soar", "Soar", "I soared. Hello."),
+  grouper: T(42, 4, 0.96, 0.1, { aquatic: true }, "hide", "Hide", "I sat the hole. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

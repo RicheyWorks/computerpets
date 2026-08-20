@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred ten, painted here.
 """
 
 from __future__ import annotations
@@ -268,7 +268,20 @@ CANOPY_KEYS: tuple[str, ...] = (
     "koala",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS
+REEF_KEYS: tuple[str, ...] = (
+    "brain_coral",
+    "anemone",
+    "clownfish",
+    "parrotfish",
+    "cleaner_shrimp",
+    "sea_cucumber",
+    "lionfish",
+    "giant_clam",
+    "eagle_ray",
+    "grouper",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS
 
 
 @dataclass(frozen=True)
@@ -5884,6 +5897,290 @@ GUM = _kind(
     hungry=("A koala should not be this empty.", "A gum would restore the chew."),
 )
 
+RIDGE = _kind(
+    key="brain_coral",
+    slug="ridge",
+    name="Ridge",
+    label="Boulder Brain Coral",
+    treat="Plankton",
+    treat_shape="flake",
+    silhouette="brain_coral",
+    walk=4,
+    gait="sit",
+    aquatic=True,
+    palette=Palette(
+        body=(176, 132, 88),
+        belly=(196, 156, 108),
+        ear=(112, 76, 48),
+        ear_inner=(220, 176, 120),
+        nose=(40, 28, 20),
+        ring=(112, 76, 48),
+        accent=(40, 28, 20),
+    ),
+    greet=("I sat the rock. Hello.", "The dish kept my valleys.", "You may look. I am an animal."),
+    ambient=("A coral is an animal. I keep the office. Not a plant.", "I am not Fan. Fan is a ginkgo of gold leaves. I am not Bloom. Bloom is an axolotl. I am not Hold. Hold is kelp in the well. I am not Coral. Coral is a milk snake who wears a warning. I am Colpophyllia. The valleys are the tell.", "Your papers are a boulder I have already claimed.", "I sit. Then I ridge. Then I sit."),
+    feed=("Plankton of a treaty.", "I will take this without leaving the rock.", "Accepted. The valleys record it."),
+    treat_lines=("Plankton of a treaty.",),
+    hide=("On the boulder.",),
+    call=("I sat the rock. Hello.",),
+    hungry=("A coral should not be this empty.", "A plankton would restore the ridge."),
+)
+
+WREATH = _kind(
+    key="anemone",
+    slug="wreath",
+    name="Wreath",
+    label="Magnificent Sea Anemone",
+    treat="Drift",
+    treat_shape="flake",
+    silhouette="anemone",
+    walk=6,
+    gait="sit",
+    aquatic=True,
+    palette=Palette(
+        body=(196, 92, 72),
+        belly=(236, 168, 140),
+        ear=(168, 72, 56),
+        ear_inner=(248, 220, 196),
+        nose=(64, 28, 24),
+        ring=(148, 68, 52),
+        accent=(64, 28, 24),
+    ),
+    greet=("I opened. Hello.", "The dish kept my wreath.", "You may look. I am not a jelly."),
+    ambient=("A wreath of tentacles. I keep the office. Not a jelly.", "I am not Pulse. Pulse is a moon jelly, a bell, no brain. I am not Snap. Snap is a flytrap of the garden. I am Heteractis. An anemone is not a jelly. Paint lives here.", "Your papers are a column I have already claimed.", "I sit. Then I wreath. Then I sit."),
+    feed=("Drift of a treaty.", "I will take this without leaving the column.", "Accepted. The tentacles record it."),
+    treat_lines=("Drift of a treaty.",),
+    hide=("On the column.",),
+    call=("I opened. Hello.",),
+    hungry=("An anemone should not be this empty.", "A drift would restore the wreath."),
+)
+
+PAINT = _kind(
+    key="clownfish",
+    slug="paint",
+    name="Paint",
+    label="Ocellaris Clownfish",
+    treat="Scrap",
+    treat_shape="flake",
+    silhouette="clownfish",
+    walk=86,
+    aquatic=True,
+    palette=Palette(
+        body=(228, 116, 36),
+        belly=(244, 168, 80),
+        ear=(248, 244, 236),
+        ear_inner=(248, 244, 236),
+        nose=(20, 16, 12),
+        ring=(28, 20, 16),
+        accent=(28, 20, 16),
+    ),
+    greet=("I sat the wreath. Hello.", "The cup kept my bars.", "You may look. I am not a goldfish."),
+    ambient=("She lives in the wreath. I keep the office. Not a goldfish.", "I am not Stripe. Stripe is a skunk of the duff. I am not Coin. Coin is a goldfish who circles a bowl. I am Amphiprion. A clownfish is not a goldfish. Wreath is the house I agreed to.", "Your papers are a cup I have already claimed.", "I dart. Then I nestle. Then I dart."),
+    feed=("Scrap of a treaty.", "I will take this and keep the wreath.", "Accepted. The bars record it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("Inside the wreath.",),
+    call=("I sat the wreath. Hello.",),
+    hungry=("A clownfish should not be this empty.", "A scrap would restore the bars."),
+)
+
+SCRAPE = _kind(
+    key="parrotfish",
+    slug="scrape",
+    name="Scrape",
+    label="Stoplight Parrotfish",
+    treat="Algae",
+    treat_shape="flake",
+    silhouette="parrotfish",
+    walk=72,
+    aquatic=True,
+    palette=Palette(
+        body=(36, 148, 124),
+        belly=(196, 212, 120),
+        ear=(24, 96, 88),
+        ear_inner=(236, 196, 72),
+        nose=(20, 16, 12),
+        ring=(20, 80, 68),
+        accent=(20, 80, 68),
+    ),
+    greet=("I rasped. Hello.", "The plate kept my scrape.", "You may look. I am not a parrot."),
+    ambient=("She rasps the rock. I keep the office. Not a parrot.", "I am not Quill. Quill is a macaw who quotes. I am not Beak. Beak is a snapping turtle of the stone. I am Sparisoma. A parrotfish is not a parrot. The scrape is the tell.", "Your papers are a plate I have already claimed.", "I scrape. Then I swim. Then I scrape."),
+    feed=("Algae of a treaty.", "I will take this without leaving the plate.", "Accepted. The scrape records it."),
+    treat_lines=("Algae of a treaty.",),
+    hide=("On the plate.",),
+    call=("I rasped. Hello.",),
+    hungry=("A parrotfish should not be this empty.", "An algae would restore the scrape."),
+)
+
+SCRUB = _kind(
+    key="cleaner_shrimp",
+    slug="scrub",
+    name="Scrub",
+    label="Pacific Cleaner Shrimp",
+    treat="Scrap",
+    treat_shape="crumb",
+    silhouette="cleaner_shrimp",
+    walk=54,
+    aquatic=True,
+    palette=Palette(
+        body=(244, 236, 220),
+        belly=(244, 236, 220),
+        ear=(196, 48, 48),
+        ear_inner=(220, 200, 176),
+        nose=(24, 16, 12),
+        ring=(196, 48, 48),
+        accent=(196, 48, 48),
+    ),
+    greet=("I waited. Hello.", "The dish kept my station.", "You may look. I am not a hermit."),
+    ambient=("A station, not a hunt. I keep the office. Not a hermit.", "I am not Tenant. Tenant shops for a lid. I am not Pinch. Pinch is a crayfish of the pond. I am Lysmata. A cleaner shrimp is not a hermit. The wave is the offer.", "Your papers are a station I have already claimed.", "I wait. Then I wave. Then I wait."),
+    feed=("Scrap of a treaty.", "I will take this without leaving the station.", "Accepted. The wave records it."),
+    treat_lines=("Scrap of a treaty.",),
+    hide=("At the station.",),
+    call=("I waited. Hello.",),
+    hungry=("A cleaner should not be this empty.", "A scrap would restore the station."),
+)
+
+TUBE = _kind(
+    key="sea_cucumber",
+    slug="tube",
+    name="Tube",
+    label="Pineapple Sea Cucumber",
+    treat="Detritus",
+    treat_shape="pebble",
+    silhouette="sea_cucumber",
+    walk=16,
+    gait="crawl",
+    aquatic=True,
+    palette=Palette(
+        body=(196, 72, 48),
+        belly=(236, 124, 72),
+        ear=(248, 188, 120),
+        ear_inner=(248, 188, 120),
+        nose=(64, 28, 20),
+        ring=(148, 52, 36),
+        accent=(64, 28, 20),
+    ),
+    greet=("I sat the sand. Hello.", "The well kept my soft.", "You may look. I am not a worm."),
+    ambient=("Soft. Not a worm. I keep the office.", "I am not Heap. Heap is a lugworm of the castings. I am not Cast. Cast is Lumbricus, a clitellum, a cast you dig in soil. I am Thelenota. A sea cucumber is not a lugworm. The papillae are the tell.", "Your papers are a sand I have already claimed.", "I crawl. Then I still. Then I crawl."),
+    feed=("Detritus of a treaty.", "I will take this without leaving the sand.", "Accepted. The soft records it."),
+    treat_lines=("Detritus of a treaty.",),
+    hide=("In the sand.",),
+    call=("I sat the sand. Hello.",),
+    hungry=("A sea cucumber should not be this empty.", "A detritus would restore the crawl."),
+)
+
+VEIL = _kind(
+    key="lionfish",
+    slug="veil",
+    name="Veil",
+    label="Red Lionfish",
+    treat="Prey",
+    treat_shape="crumb",
+    silhouette="lionfish",
+    walk=38,
+    aquatic=True,
+    palette=Palette(
+        body=(176, 56, 40),
+        belly=(244, 220, 196),
+        ear=(212, 88, 56),
+        ear_inner=(244, 220, 196),
+        nose=(20, 12, 8),
+        ring=(40, 20, 16),
+        accent=(40, 20, 16),
+    ),
+    greet=("I veiled. Hello.", "The ledge kept my rays.", "You may look. I am not a fungus."),
+    ambient=("The fins are a veil. I keep the office. Not a mane of teeth.", "I am not Mane. Mane is a fungus of teeth on a wound. I am not Fan. Fan is a ginkgo of the garden. I am not Spine. Spine is a porcupine of the wood. I am not Spike. Spike is a horned lizard. I am Pterois. A lionfish is not a ginkgo fan.", "Your papers are a ledge I have already claimed.", "I hover. Then I veil. Then I hover."),
+    feed=("Prey of a treaty.", "I will take this without leaving the veil.", "Accepted. The rays record it."),
+    treat_lines=("Prey of a treaty.",),
+    hide=("On the ledge.",),
+    call=("I veiled. Hello.",),
+    hungry=("A lionfish should not be this empty.", "A prey would restore the veil."),
+)
+
+GATE = _kind(
+    key="giant_clam",
+    slug="gate",
+    name="Gate",
+    label="Giant Clam",
+    treat="Light",
+    treat_shape="flake",
+    silhouette="giant_clam",
+    walk=2,
+    gait="sit",
+    aquatic=True,
+    palette=Palette(
+        body=(188, 168, 140),
+        belly=(72, 156, 148),
+        ear=(236, 196, 88),
+        ear_inner=(244, 220, 120),
+        nose=(80, 64, 48),
+        ring=(140, 120, 96),
+        accent=(80, 64, 48),
+    ),
+    greet=("I opened. Hello.", "The dish kept my mantle.", "You may look. I am not a nautilus."),
+    ambient=("A door of a shell. I keep the office. Not a nautilus.", "I am not Chamber. Chamber is a nautilus who rises by gas. I am not Cone. Cone is a limpet who clamps. I am Tridacna. A giant clam is not a nautilus. The mantle is the tell.", "Your papers are a dish I have already claimed.", "I sit. Then I open. Then I sit."),
+    feed=("Light of a treaty.", "I will take this without leaving the mantle.", "Accepted. The gate records it."),
+    treat_lines=("Light of a treaty.",),
+    hide=("Inside the mantle.",),
+    call=("I opened. Hello.",),
+    hungry=("A giant clam should not be this empty.", "A light would restore the mantle."),
+)
+
+SOAR = _kind(
+    key="eagle_ray",
+    slug="soar",
+    name="Soar",
+    label="Spotted Eagle Ray",
+    treat="Clam",
+    treat_shape="crumb",
+    silhouette="eagle_ray",
+    walk=48,
+    aquatic=True,
+    palette=Palette(
+        body=(48, 56, 72),
+        belly=(220, 216, 208),
+        ear=(40, 44, 56),
+        ear_inner=(236, 232, 224),
+        nose=(16, 16, 16),
+        ring=(236, 232, 224),
+        accent=(16, 16, 16),
+    ),
+    greet=("I soared. Hello.", "The sky kept my spots.", "You may look. I am not a manta."),
+    ambient=("A ray of the reef. I keep the office. Not a bird.", "I am not Kite. Kite is a manta of the bowl, a filter, a barrel. I am Aetobatus. An eagle ray is not a manta. The spots are the tell. I am not Hook. Hook soars the lamp.", "Your papers are a sky I have already claimed.", "I soar. Then I glide. Then I soar."),
+    feed=("Clam of a treaty.", "I will take this and keep the soar.", "Accepted. The spots record it."),
+    treat_lines=("Clam of a treaty.",),
+    hide=("In the sky.",),
+    call=("I soared. Hello.",),
+    hungry=("An eagle ray should not be this empty.", "A clam would restore the soar."),
+)
+
+HIDE = _kind(
+    key="grouper",
+    slug="hide",
+    name="Hide",
+    label="Nassau Grouper",
+    treat="Fish",
+    treat_shape="crumb",
+    silhouette="grouper",
+    walk=42,
+    aquatic=True,
+    palette=Palette(
+        body=(92, 108, 72),
+        belly=(188, 196, 152),
+        ear=(48, 56, 40),
+        ear_inner=(188, 196, 152),
+        nose=(20, 16, 12),
+        ring=(48, 56, 40),
+        accent=(20, 16, 12),
+    ),
+    greet=("I sat the hole. Hello.", "The dish kept my hide.", "You may look. I am not a moray."),
+    ambient=("A fish of a hole. I keep the office. Not a moray.", "I am not Door. Door is a green moray of the crevice, a gape that is air. I am not Lance. Lance is a pike of the creek who waits in a reed. I am Epinephelus. A grouper is not a moray. The hole is the tell.", "Your papers are a hole I have already claimed.", "I sit. Then I hide. Then I sit."),
+    feed=("Fish of a treaty.", "I will take this without leaving the hole.", "Accepted. The hide records it."),
+    treat_lines=("Fish of a treaty.",),
+    hide=("In the hole.",),
+    call=("I sat the hole. Hello.",),
+    hungry=("A grouper should not be this empty.", "A fish would restore the hide."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6086,6 +6383,16 @@ _ALL: tuple[Species, ...] = (
     GAZE,
     STILL,
     GUM,
+    RIDGE,
+    WREATH,
+    PAINT,
+    SCRAPE,
+    SCRUB,
+    TUBE,
+    VEIL,
+    GATE,
+    SOAR,
+    HIDE,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -6168,6 +6475,10 @@ def is_meadow(key: str) -> bool:
 
 def is_canopy(key: str) -> bool:
     return key in CANOPY_KEYS
+
+
+def is_reef(key: str) -> bool:
+    return key in REEF_KEYS
 
 
 def next_species_key(key: str) -> str:

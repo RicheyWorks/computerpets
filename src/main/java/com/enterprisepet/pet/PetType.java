@@ -210,7 +210,17 @@ public enum PetType {
     HOWLER           ("howler",            "Mantled Howler",         Rarity.UNCOMMON),
     TARSIER          ("tarsier",           "Philippine Tarsier",     Rarity.RARE),
     POTTO            ("potto",             "Potto",                  Rarity.UNCOMMON),
-    KOALA            ("koala",             "Koala",                  Rarity.UNCOMMON);
+    KOALA            ("koala",             "Koala",                  Rarity.UNCOMMON),
+    BRAIN_CORAL      ("brain_coral",       "Boulder Brain Coral",    Rarity.UNCOMMON),
+    ANEMONE          ("anemone",           "Magnificent Sea Anemone", Rarity.UNCOMMON),
+    CLOWNFISH        ("clownfish",         "Ocellaris Clownfish",    Rarity.COMMON),
+    PARROTFISH       ("parrotfish",        "Stoplight Parrotfish",   Rarity.UNCOMMON),
+    CLEANER_SHRIMP   ("cleaner_shrimp",    "Pacific Cleaner Shrimp", Rarity.COMMON),
+    SEA_CUCUMBER     ("sea_cucumber",      "Pineapple Sea Cucumber", Rarity.COMMON),
+    LIONFISH         ("lionfish",          "Red Lionfish",           Rarity.UNCOMMON),
+    GIANT_CLAM       ("giant_clam",        "Giant Clam",             Rarity.RARE),
+    EAGLE_RAY        ("eagle_ray",         "Spotted Eagle Ray",      Rarity.RARE),
+    GROUPER          ("grouper",           "Nassau Grouper",         Rarity.UNCOMMON);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

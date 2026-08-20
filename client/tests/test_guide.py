@@ -45,6 +45,8 @@ from computerpets_client.guide import (
     meadow_guide_keys,
     canopy_guide_complete,
     canopy_guide_keys,
+    reef_guide_complete,
+    reef_guide_keys,
     STONE_GUIDE,
     stone_guide_complete,
     stone_guide_keys,
@@ -70,7 +72,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, REEF_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -329,6 +331,19 @@ CANOPY_EXPECTED = [
     ("koala", "gum", "Phascolarctos cinereus"),
 ]
 
+REEF_EXPECTED = [
+    ("brain_coral", "ridge", "Colpophyllia natans"),
+    ("anemone", "wreath", "Heteractis magnifica"),
+    ("clownfish", "paint", "Amphiprion ocellaris"),
+    ("parrotfish", "scrape", "Sparisoma viride"),
+    ("cleaner_shrimp", "scrub", "Lysmata amboinensis"),
+    ("sea_cucumber", "tube", "Thelenota ananas"),
+    ("lionfish", "veil", "Pterois volitans"),
+    ("giant_clam", "gate", "Tridacna gigas"),
+    ("eagle_ray", "soar", "Aetobatus narinari"),
+    ("grouper", "hide", "Epinephelus striatus"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -357,6 +372,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert shore_guide_complete()
     assert meadow_guide_complete()
     assert canopy_guide_complete()
+    assert reef_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -376,6 +392,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert shore_guide_keys() == SHORE_KEYS
     assert meadow_guide_keys() == MEADOW_KEYS
     assert canopy_guide_keys() == CANOPY_KEYS
+    assert reef_guide_keys() == REEF_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -575,6 +592,17 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert classroom_for(key).room == "canopy"
         assert classroom_for(key).verb == "stay"
         assert classroom_for(key).label == "All ten in the canopy"
+    for key, slug, latin in REEF_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in REEF_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "reef"
+        assert classroom_for(key).verb == "stay"
+        assert classroom_for(key).label == "All ten on the reef"
 
 
 def test_the_important_house_mixups_are_actually_taught():
@@ -1215,6 +1243,52 @@ def test_the_important_canopy_mixups_are_actually_taught():
     assert re.search(r"marsupial", koala, re.I)
 
 
+def test_the_important_reef_mixups_are_actually_taught():
+    ridge = _taught(plaque_for("brain_coral"))
+    wreath = _taught(plaque_for("anemone"))
+    paint = _taught(plaque_for("clownfish"))
+    scrape = _taught(plaque_for("parrotfish"))
+    scrub = _taught(plaque_for("cleaner_shrimp"))
+    tube = _taught(plaque_for("sea_cucumber"))
+    veil = _taught(plaque_for("lionfish"))
+    gate = _taught(plaque_for("giant_clam"))
+    soar = _taught(plaque_for("eagle_ray"))
+    hide = _taught(plaque_for("grouper"))
+    assert re.search(r"not a plant", ridge, re.I)
+    assert re.search(r"not Fan", ridge, re.I)
+    assert re.search(r"not Bloom", ridge, re.I)
+    assert re.search(r"not Hold", ridge, re.I)
+    assert re.search(r"not Coral", ridge, re.I)
+    assert re.search(r"not a jelly", wreath, re.I)
+    assert re.search(r"not Pulse", wreath, re.I)
+    assert re.search(r"not Snap", wreath, re.I)
+    assert re.search(r"not a goldfish", paint, re.I)
+    assert re.search(r"not Stripe", paint, re.I)
+    assert re.search(r"not Coin", paint, re.I)
+    assert re.search(r"not a parrot", scrape, re.I)
+    assert re.search(r"not Quill", scrape, re.I)
+    assert re.search(r"not Beak", scrape, re.I)
+    assert re.search(r"not a hermit", scrub, re.I)
+    assert re.search(r"not Tenant", scrub, re.I)
+    assert re.search(r"not Pinch", scrub, re.I)
+    assert re.search(r"not a lugworm", tube, re.I)
+    assert re.search(r"not Heap", tube, re.I)
+    assert re.search(r"not Cast", tube, re.I)
+    assert re.search(r"not Mane", veil, re.I)
+    assert re.search(r"not Fan", veil, re.I)
+    assert re.search(r"not Spine", veil, re.I)
+    assert re.search(r"not Spike", veil, re.I)
+    assert re.search(r"not a nautilus", gate, re.I)
+    assert re.search(r"not Chamber", gate, re.I)
+    assert re.search(r"not Cone", gate, re.I)
+    assert re.search(r"not a manta", soar, re.I)
+    assert re.search(r"not Kite", soar, re.I)
+    assert re.search(r"not a bird", soar, re.I)
+    assert re.search(r"not a moray", hide, re.I)
+    assert re.search(r"not Door", hide, re.I)
+    assert re.search(r"not Lance", hide, re.I)
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -1240,6 +1314,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     shore_src = (WEB_PETS / "shore-guide.ts").read_text(encoding="utf-8")
     meadow_src = (WEB_PETS / "meadow-guide.ts").read_text(encoding="utf-8")
     canopy_src = (WEB_PETS / "canopy-guide.ts").read_text(encoding="utf-8")
+    reef_src = (WEB_PETS / "reef-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -1258,6 +1333,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     shore_keys = [key for key, _, _ in SHORE_EXPECTED]
     meadow_keys = [key for key, _, _ in MEADOW_EXPECTED]
     canopy_keys = [key for key, _, _ in CANOPY_EXPECTED]
+    reef_keys = [key for key, _, _ in REEF_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -1397,6 +1473,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(CANOPY_EXPECTED):
         nxt = canopy_keys[index + 1] if index + 1 < len(canopy_keys) else None
         chunk = _slice_entry(canopy_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(REEF_EXPECTED):
+        nxt = reef_keys[index + 1] if index + 1 < len(reef_keys) else None
+        chunk = _slice_entry(reef_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk

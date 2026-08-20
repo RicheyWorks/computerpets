@@ -201,6 +201,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   tarsier: { shape: "crumb", verb: "Insect" },
   potto: { shape: "flake", verb: "Gum" },
   koala: { shape: "leaf", verb: "Gum" },
+  brain_coral: { shape: "flake", verb: "Plankton" },
+  anemone: { shape: "flake", verb: "Drift" },
+  clownfish: { shape: "flake", verb: "Scrap" },
+  parrotfish: { shape: "flake", verb: "Algae" },
+  cleaner_shrimp: { shape: "crumb", verb: "Scrap" },
+  sea_cucumber: { shape: "pebble", verb: "Detritus" },
+  lionfish: { shape: "crumb", verb: "Prey" },
+  giant_clam: { shape: "flake", verb: "Light" },
+  eagle_ray: { shape: "crumb", verb: "Clam" },
+  grouper: { shape: "crumb", verb: "Fish" },
 };
 
 export function treatFor(key: string) {
@@ -408,4 +418,14 @@ export const GIFT_LINE: Record<string, string> = {
   tarsier: "An insect I was finished looking for.",
   potto: "A gum I was finished stilling for.",
   koala: "A gum I was finished chewing.",
+  brain_coral: "A plankton I was finished ridging for.",
+  anemone: "A drift I was finished wreathing for.",
+  clownfish: "A scrap I was finished nestling for.",
+  parrotfish: "An algae I was finished scraping.",
+  cleaner_shrimp: "A scrap I was finished waiting for.",
+  sea_cucumber: "A detritus I was finished crawling for.",
+  lionfish: "A prey I was finished veiling for.",
+  giant_clam: "A light I was finished opening for.",
+  eagle_ray: "A clam I was finished soaring for.",
+  grouper: "A fish I was finished hiding for.",
 };

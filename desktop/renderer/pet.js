@@ -506,6 +506,16 @@ const TREAT_SHAPE = {
   tarsier: "crumb",
   potto: "flake",
   koala: "leaf",
+  brain_coral: "flake",
+  anemone: "flake",
+  clownfish: "flake",
+  parrotfish: "flake",
+  cleaner_shrimp: "crumb",
+  sea_cucumber: "pebble",
+  lionfish: "crumb",
+  giant_clam: "flake",
+  eagle_ray: "crumb",
+  grouper: "crumb",
 };
 
 function placeMark(kindName, x, hops = 0, meal) {
@@ -1368,6 +1378,16 @@ const VISIT_LINE = {
   tarsier: "I looked. Then I left the branch.",
   potto: "I kept still. Then I left the vine.",
   koala: "I chewed. Then I left the gum.",
+  brain_coral: "I sat the rock. Then I left the boulder.",
+  anemone: "I opened. Then I left the column.",
+  clownfish: "I sat the wreath. Then I left the cup.",
+  parrotfish: "I rasped. Then I left the plate.",
+  cleaner_shrimp: "I waited. Then I left the station.",
+  sea_cucumber: "I sat the sand. Then I left the well.",
+  lionfish: "I veiled. Then I left the ledge.",
+  giant_clam: "I opened. Then I left the mantle.",
+  eagle_ray: "I soared. Then I left the sky.",
+  grouper: "I sat the hole. Then I left the dish.",
 };
 
 let visit = null;

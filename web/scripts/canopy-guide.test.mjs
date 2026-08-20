@@ -133,7 +133,7 @@ test("the catalog and living roster include the ten canopy keys", () => {
   assert.doesNotMatch(canopySrc, /name:\s*"Bluff"/);
   assert.doesNotMatch(canopySrc, /key:\s*"opossum"/);
   assert.doesNotMatch(guideSrc, /Wikipedia/i);
-  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 200);
+  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 210);
 });
 
 test("rooms.ts only adds a canopy room", () => {
