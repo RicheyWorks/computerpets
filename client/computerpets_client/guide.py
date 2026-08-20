@@ -1,10 +1,10 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same hundred and seventy, taught here. Snakes keep the den
+This is not a new bestiary — the same hundred and eighty, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
-the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the cellar keeps
+the arachnid facts; the wood keeps the wild mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
 the xenobiology facts; the twenty keep the study facts.
 """
@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_log, is_pond, is_roost, is_sea, is_snake, is_stone, is_well, is_wood
+from .species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_log, is_pond, is_roost, is_sea, is_shore, is_snake, is_stone, is_well, is_wood
 
 
 @dataclass(frozen=True)
@@ -1644,7 +1644,100 @@ LOG_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE
+SHORE_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "fiddler_crab",
+        "Minuca pugnax",
+        "One claw grown into a flag, a body that keeps the marsh dish, a wave that is a sentence. Atlantic fiddler. She sits. Then she waves. The dish is a marsh she agreed to.",
+        "Not a hermit. Tenant is Pagurus, a soft abdomen shopping for a lid. Not Pinch — Pinch is a crayfish of the pond, two claws, ten legs. Wave is Minuca pugnax, once filed as Uca, and the signal is the tell. A fiddler is not a hermit. The wave is the species.",
+        "Atlantic fiddler crab. The big claw is a signal, not a pinch of lunch. Not Tenant. Not Pinch.",
+        "marsh dish",
+        "signaling",
+    ),
+    _entry(
+        "ghost_crab",
+        "Ocypode quadrata",
+        "Pale on the dry sand, eyestalks like two questions, a run that leaves almost no print. Atlantic ghost crab. She sits. Then she runs. The sand is a dry she agreed to.",
+        "Not Tenant. Tenant shops and carries a house. Not Ledger — Ledger is Limulus, book-gills, a telson, not a crab. Not Ghost — Ghost is a luna moth of one week, no mouth. Pale is Ocypode quadrata, and the run is the tell. A ghost crab is not a horseshoe crab. The pale is the species.",
+        "Atlantic ghost crab. She runs the dry sand. Not Tenant. Not Ledger. Not Ghost.",
+        "dry sand",
+        "running",
+    ),
+    _entry(
+        "limpet",
+        "Patella vulgata",
+        "A cone of a shell, a foot that clamps the rock, a rasp that writes a home scar. Common limpet. She sits. Then she clamps. The rim is a rock she agreed to.",
+        "Not Lid. Lid is a box turtle, a hinged plastron, a shut. Not Cement — Cement is a barnacle, a crustacean glued to the stone, cirri for lunch. Cone is Patella vulgata, and the clamp is the tell. A limpet is not a barnacle. The cone is the species.",
+        "Common limpet. A cone that clamps. Not Lid. Not Cement.",
+        "rock rim",
+        "clamping",
+    ),
+    _entry(
+        "barnacle",
+        "Semibalanus balanoides",
+        "Plates cemented to the stone, cirri that kick a drift of food, a body that does not walk away. Acorn barnacle. She sits. Then she kicks. The rim is a stone she agreed to.",
+        "Not a limpet. Cone clamps and can walk a little; Cement is glued and stays. Not a crab — Wave and Pale walk; Cement is a cirripede, a crustacean who chose the stone. Semibalanus balanoides, and the cement is the tell. A barnacle is not a limpet. The stay is the species.",
+        "Acorn barnacle. Cemented. Not a limpet. Not a crab.",
+        "stone rim",
+        "cemented",
+    ),
+    _entry(
+        "chiton",
+        "Tonicella lineata",
+        "Eight overlapping plates, a girdle, a graze of the tide rock. Lined chiton. She walks. Then she plates. The rock is a tide she agreed to.",
+        "Not a limpet. Cone is one cone; Mail is eight valves, a polyplacophoran, not a snail. Not Armor — Armor is a pillbug who rolls on bark. Mail is Tonicella lineata, and the eight are the tell. A chiton is not a snail. The mail is the species.",
+        "Lined chiton. Eight plates. Not a limpet. Not Armor.",
+        "tide rock",
+        "plated",
+    ),
+    _entry(
+        "periwinkle",
+        "Littorina littorea",
+        "A dark spiral on the rock, a rasp, a snail who keeps the spray. Common periwinkle. She sits. Then she rasps. The face is a rock she agreed to.",
+        "Not Chamber. Chamber is a nautilus, chambers of gas, a cephalopod. Not Whorl — Whorl is a pond snail with a lung. Not Knurl — Knurl is a whelk who hunts. Spire is Littorina littorea, and the rock is the tell. A periwinkle is not a nautilus. The rasp is the species.",
+        "Common periwinkle. A snail of the rock. Not Chamber. Not Whorl. Not Knurl.",
+        "rock face",
+        "rasping",
+    ),
+    _entry(
+        "sand_dollar",
+        "Echinarachnius parma",
+        "A flat disk of an urchin, five petals on the test, a bury in the sand plate. Common sand dollar. She sits. Then she buries. The plate is a sand she agreed to.",
+        "Not Coin. Coin is a goldfish who circles a bowl. Not Disk — Disk is a water lily of the garden. Not Ochre — Ochre is a sea star who clings and everts a stomach. Token is Echinarachnius parma, a flattened echinoid, and the petals are the tell. A sand dollar is not a coin. The flat is the species.",
+        "Common sand dollar. A flat urchin. Not Coin. Not Disk. Not Ochre.",
+        "sand plate",
+        "flat",
+    ),
+    _entry(
+        "sea_urchin",
+        "Strongylocentrotus purpuratus",
+        "A purple globe, spines that walk, a mouth on the underside. Purple sea urchin. She walks. Then she spines. The pool is a tide she agreed to.",
+        "Not Burr. Burr is a hedgehog who uncurls for people who wait. Not Spine — Spine is a porcupine of the wood. Not Token — Token is flat and buries; Thorn is regular, purple, and keeps the spines. Strongylocentrotus purpuratus, and the spines are the tell. An urchin is not a sand dollar. The purple is the species.",
+        "Purple sea urchin. Spines. Not Burr. Not Spine. Not Token.",
+        "tide pool",
+        "spined",
+    ),
+    _entry(
+        "knobbed_whelk",
+        "Busycon carica",
+        "A heavy spiral, knobs on the shoulder, a canal, a hunt of clams. Knobbed whelk. She sits. Then she hunts. The dish is a wrack she agreed to.",
+        "Not Spire. Spire is a periwinkle who rasps and does not hunt. Not Horn — Horn is a golden chanterelle of the cellar, false gills that fork. Not Chamber. Knurl is Busycon carica, and the knobs are the tell. A whelk is not a periwinkle. The hunt is the species.",
+        "Knobbed whelk. A predator snail. Not Spire. Not Horn.",
+        "wrack dish",
+        "hunting",
+    ),
+    _entry(
+        "lugworm",
+        "Arenicola marina",
+        "A fat polychaete in the wet sand, a coil of castings left on the surface, a heap that is the tell. Lugworm. She sits. Then she heaps. The sand is a wet she agreed to.",
+        "Not Cast. Cast is Lumbricus terrestris, a clitellum, a cast you dig in soil. Not Latch — Latch is a leech with suckers who hunts worms. Not Thread. Heap is Arenicola marina, and the castings are the tell. A lugworm is not an earthworm. The heap is the species.",
+        "Lugworm. A worm of the castings. Not Cast. Not Latch.",
+        "wet sand",
+        "heaping",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -1691,6 +1784,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="creek", label="All ten in the creek", verb="swim")
     if is_log(key):
         return Classroom(room="log", label="All ten under the log", verb="stay")
+    if is_shore(key):
+        return Classroom(room="shore", label="All ten on the shore", verb="stay")
     if is_well(key):
         return Classroom(room="well", label="All ten in the well", verb="stay")
     return Classroom(room="house", label="The rest of the house", verb="walk")
@@ -1754,6 +1849,10 @@ def creek_guide_keys() -> tuple[str, ...]:
 
 def log_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in LOG_GUIDE)
+
+
+def shore_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in SHORE_GUIDE)
 
 
 def well_guide_keys() -> tuple[str, ...]:
@@ -1820,6 +1919,10 @@ def log_guide_complete() -> bool:
     return len(LOG_GUIDE) == len(LOG_KEYS) and all(k in _BY_KEY for k in LOG_KEYS)
 
 
+def shore_guide_complete() -> bool:
+    return len(SHORE_GUIDE) == len(SHORE_KEYS) and all(k in _BY_KEY for k in SHORE_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -1841,6 +1944,7 @@ def guide_complete() -> bool:
         and stone_guide_complete()
         and creek_guide_complete()
         and log_guide_complete()
+        and shore_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)

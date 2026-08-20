@@ -201,6 +201,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "planarian": (_a("split", "pulse", 1.2, 5), _a("glide", "wiggle", 1.4, 3), _a("still", "freeze", 1.8, 2)),
     "nematode": (_a("thrash", "wiggle", 1.0, 5), _a("still", "freeze", 1.6, 3), _a("sit", "sit_hold", 1.8, 2, "sit")),
     "amphipod": (_a("scud", "wiggle", 1.2, 5), _a("dart", "dart", 0.6, 3), _a("still", "freeze", 1.6, 2)),
+    "fiddler_crab": (_a("wave", "pulse", 0.8, 5), _a("walk", "wiggle", 1.0, 3), _a("still", "freeze", 1.6, 2)),
+    "ghost_crab": (_a("run", "dart", 0.5, 5), _a("walk", "wiggle", 0.8, 3), _a("still", "freeze", 1.4, 2)),
+    "limpet": (_a("clamp", "sit_hold", 2.4, 5, "sit"), _a("rasp", "nod", 1.2, 3), _a("still", "freeze", 2.0, 2)),
+    "barnacle": (_a("kick", "pulse", 1.0, 5), _a("still", "freeze", 2.2, 4), _a("sit", "sit_hold", 2.0, 2, "sit")),
+    "chiton": (_a("graze", "wiggle", 1.2, 5), _a("plate", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "periwinkle": (_a("rasp", "nod", 1.4, 5), _a("sit", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "sand_dollar": (_a("bury", "sit_hold", 2.2, 5, "sit"), _a("flat", "freeze", 2.0, 3), _a("still", "freeze", 1.8, 2)),
+    "sea_urchin": (_a("walk", "wiggle", 1.2, 5), _a("spine", "pulse", 1.0, 3), _a("still", "freeze", 1.8, 2)),
+    "knobbed_whelk": (_a("hunt", "wiggle", 1.2, 5), _a("sit", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "lugworm": (_a("heap", "nod", 1.4, 5, "sit"), _a("cast", "wiggle", 1.2, 3), _a("still", "freeze", 1.8, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS
