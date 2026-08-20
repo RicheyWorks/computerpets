@@ -150,6 +150,16 @@ const REST: Record<string, [number, number]> = {
   snapper: [8, 17],
   box_turtle: [20, 6],
   tuatara: [8, 18],
+  bass: [21, 6],
+  brook_trout: [20, 6],
+  catfish: [8, 17],
+  bluegill: [20, 6],
+  perch: [20, 6],
+  pike: [21, 6],
+  walleye: [8, 17],
+  paddlefish: [21, 6],
+  lamprey: [8, 18],
+  american_eel: [8, 17],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -326,6 +336,16 @@ export const HIDE_LINE: Record<string, string> = {
   snapper: "Inside the mud.",
   box_turtle: "Under the leaf.",
   tuatara: "Inside the burrow.",
+  bass: "Inside the weed.",
+  brook_trout: "Inside the riffle.",
+  catfish: "Inside the mud.",
+  bluegill: "Under the dock.",
+  perch: "Inside the rail.",
+  pike: "Inside the reed.",
+  walleye: "Inside the run.",
+  paddlefish: "Inside the current.",
+  lamprey: "On the stone.",
+  american_eel: "Inside the hole.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -479,6 +499,16 @@ export const SNACK_LINE: Record<string, string> = {
   snapper: "Fish of a treaty.",
   box_turtle: "Worm of a treaty.",
   tuatara: "Insect of a treaty.",
+  bass: "Minnow of a treaty.",
+  brook_trout: "Fly of a treaty.",
+  catfish: "Scrap of a treaty.",
+  bluegill: "Insect of a treaty.",
+  perch: "Minnow of a treaty.",
+  pike: "Fish of a treaty.",
+  walleye: "Minnow of a treaty.",
+  paddlefish: "Plankton of a treaty.",
+  lamprey: "Stone of a treaty.",
+  american_eel: "Scrap of a treaty.",
 };
 
 

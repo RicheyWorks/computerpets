@@ -30,6 +30,7 @@ import { Route as SeaRouteImport } from './routes/sea'
 import { Route as SnakesRouteImport } from './routes/snakes'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as WellRouteImport } from './routes/well'
+import { Route as CreekRouteImport } from './routes/creek'
 import { Route as StoneRouteImport } from './routes/stone'
 import { Route as WoodRouteImport } from './routes/wood'
 import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
@@ -59,6 +60,11 @@ const CellarRoute = CellarRouteImport.update({
 const CollectionRoute = CollectionRouteImport.update({
   id: '/collection',
   path: '/collection',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreekRoute = CreekRouteImport.update({
+  id: '/creek',
+  path: '/creek',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CornerRoute = CornerRouteImport.update({
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
   '/corner': typeof CornerRoute
+  '/creek': typeof CreekRoute
   '/far': typeof FarRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
@@ -202,6 +209,7 @@ export interface FileRoutesByTo {
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
   '/corner': typeof CornerRoute
+  '/creek': typeof CreekRoute
   '/far': typeof FarRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
@@ -231,6 +239,7 @@ export interface FileRoutesById {
   '/cellar': typeof CellarRoute
   '/collection': typeof CollectionRoute
   '/corner': typeof CornerRoute
+  '/creek': typeof CreekRoute
   '/far': typeof FarRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
@@ -261,6 +270,7 @@ export interface FileRouteTypes {
     | '/cellar'
     | '/collection'
     | '/corner'
+    | '/creek'
     | '/far'
     | '/garden'
     | '/hatch'
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/cellar'
     | '/collection'
     | '/corner'
+    | '/creek'
     | '/far'
     | '/garden'
     | '/hatch'
@@ -317,6 +328,7 @@ export interface FileRouteTypes {
     | '/cellar'
     | '/collection'
     | '/corner'
+    | '/creek'
     | '/far'
     | '/garden'
     | '/hatch'
@@ -346,6 +358,7 @@ export interface RootRouteChildren {
   CellarRoute: typeof CellarRoute
   CollectionRoute: typeof CollectionRoute
   CornerRoute: typeof CornerRoute
+  CreekRoute: typeof CreekRoute
   FarRoute: typeof FarRoute
   GardenRoute: typeof GardenRoute
   HatchRoute: typeof HatchRoute
@@ -410,6 +423,13 @@ declare module '@tanstack/react-router' {
       path: '/corner'
       fullPath: '/corner'
       preLoaderRoute: typeof CornerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/creek': {
+      id: '/creek'
+      path: '/creek'
+      fullPath: '/creek'
+      preLoaderRoute: typeof CreekRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/far': {
@@ -562,6 +582,7 @@ const rootRouteChildren: RootRouteChildren = {
   CellarRoute: CellarRoute,
   CollectionRoute: CollectionRoute,
   CornerRoute: CornerRoute,
+  CreekRoute: CreekRoute,
   FarRoute: FarRoute,
   GardenRoute: GardenRoute,
   HatchRoute: HatchRoute,

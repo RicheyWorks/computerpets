@@ -260,6 +260,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   snapper: [A("snap", "snap", 0.6, 5, "play"), A("sit", "sit_hold", 2.0, 3, "sit"), A("still", "freeze", 1.8, 2)],
   box_turtle: [A("shut", "sit_hold", 2.2, 5, "sit"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.8, 2)],
   tuatara: [A("still", "freeze", 2.6, 5), A("crest", "sit_hold", 2.2, 3, "sit"), A("watch", "nod", 1.6, 2)],
+  bass: [A("lunge", "dart", 0.6, 5), A("sit", "sit_hold", 2.0, 3, "sit"), A("gape", "gape", 0.8, 2)],
+  brook_trout: [A("dart", "dart", 0.5, 5), A("rise", "bob", 1.0, 3), A("still", "freeze", 1.6, 2)],
+  catfish: [A("whisk", "wiggle", 1.2, 5), A("sit", "sit_hold", 2.0, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  bluegill: [A("flare", "pulse", 0.8, 5), A("sit", "sit_hold", 1.8, 3, "sit"), A("dart", "dart", 0.6, 2)],
+  perch: [A("bar", "pulse", 0.8, 4), A("dart", "dart", 0.6, 4), A("still", "freeze", 1.6, 2)],
+  pike: [A("wait", "sit_hold", 2.4, 5, "sit"), A("lance", "dart", 0.5, 3), A("still", "freeze", 2.0, 2)],
+  walleye: [A("hunt", "dart", 0.8, 5), A("glow", "pulse", 1.2, 3), A("still", "freeze", 1.8, 2)],
+  paddlefish: [A("filter", "sit_hold", 2.4, 5, "sit"), A("paddle", "bob", 1.6, 3), A("still", "freeze", 2.0, 2)],
+  lamprey: [A("disk", "sit_hold", 2.2, 5, "sit"), A("cling", "freeze", 2.0, 3), A("still", "freeze", 1.8, 2)],
+  american_eel: [A("swim", "wiggle", 1.4, 5), A("silver", "pulse", 1.0, 3), A("still", "freeze", 1.6, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

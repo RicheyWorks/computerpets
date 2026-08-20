@@ -167,7 +167,17 @@ class PetTypeTest {
             new ExpectedSpecies("crocodile", "American Crocodile", PetType.Rarity.RARE),
             new ExpectedSpecies("snapper", "Common Snapping Turtle", PetType.Rarity.COMMON),
             new ExpectedSpecies("box_turtle", "Eastern Box Turtle", PetType.Rarity.COMMON),
-            new ExpectedSpecies("tuatara", "Tuatara", PetType.Rarity.RARE)
+            new ExpectedSpecies("tuatara", "Tuatara", PetType.Rarity.RARE),
+            new ExpectedSpecies("bass", "Largemouth Bass", PetType.Rarity.COMMON),
+            new ExpectedSpecies("brook_trout", "Brook Trout", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("catfish", "Channel Catfish", PetType.Rarity.COMMON),
+            new ExpectedSpecies("bluegill", "Bluegill", PetType.Rarity.COMMON),
+            new ExpectedSpecies("perch", "Yellow Perch", PetType.Rarity.COMMON),
+            new ExpectedSpecies("pike", "Northern Pike", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("walleye", "Walleye", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("paddlefish", "American Paddlefish", PetType.Rarity.RARE),
+            new ExpectedSpecies("lamprey", "Sea Lamprey", PetType.Rarity.UNCOMMON),
+            new ExpectedSpecies("american_eel", "American Eel", PetType.Rarity.RARE)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(
@@ -219,7 +229,7 @@ class PetTypeTest {
     @DisplayName("catalog matches the living-desk web catalog, including the tide")
     void catalog_matchesWebHouse() {
         assertThat(PetType.values()).hasSize(WEB_CATALOG.size());
-        assertThat(WEB_CATALOG).hasSize(150);
+        assertThat(WEB_CATALOG).hasSize(160);
 
         Set<String> backendKeys = Arrays.stream(PetType.values())
                 .map(PetType::key)
