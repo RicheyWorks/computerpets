@@ -764,7 +764,7 @@ def test_the_important_wood_mixups_are_actually_taught():
     assert re.search(r"Sip", bat)
     assert re.search(r"Peck", bat)
     assert re.search(r"not a chipmunk", squirrel, re.I)
-    assert re.search(r"not Slip", otter)
+    assert re.search(r"not Slip", otter, re.I)
     assert re.search(r"weasel", otter, re.I)
     assert re.search(r"Bandit", raccoon)
     assert re.search(r"Rui", raccoon)

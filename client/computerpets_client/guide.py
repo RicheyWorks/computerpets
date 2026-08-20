@@ -297,7 +297,7 @@ SNAKE_GUIDE: tuple[FieldGuide, ...] = (
         "garter",
         "Thamnophis sirtalis",
         "Three pale lines the length of a small errand — one down the spine, one on each flank — on a dark, keeled body. Often damp. Always mid-route.",
-        "Ribbon snakes are the slim cousins: longer tail, cleaner sides, less checkering between the stripes. Young watersnakes get the same glance. Stripe is the garden one.",
+        "Ribbon snakes are the slim cousins: longer tail, cleaner sides, less checkering between the stripes. Young watersnakes get the same glance. Sash is the garden one.",
         "Common garter. Three lines. I was already going.",
         "moss cup",
         "busy",
