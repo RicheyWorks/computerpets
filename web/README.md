@@ -52,4 +52,4 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 - `/well` — the well
 - `/far` — the far den
 - `/nest` — a room. The square sits on the paper.
-- `/demo/{slug}` — a room. The guest is already walking. Every species (rui, miso, pip, thimble, … ember, cup, felt, comb, frill, gleam, boot).
+- `/demo/{slug}` — a room. The guest is already walking. The extra shows the Mac sit. Every species (rui, miso, pip, thimble, … ember, cup, felt, comb, frill, gleam, boot).
