@@ -15,7 +15,7 @@ const EXPECTED = [
   ["octopus", "cup", "Octopus vulgaris"],
   ["cuttlefish", "sepia", "Sepia officinalis"],
   ["nautilus", "chamber", "Nautilus pompilius"],
-  ["moon_jelly", "bell", "Aurelia aurita"],
+  ["moon_jelly", "pulse", "Aurelia aurita"],
   ["sea_star", "ochre", "Pisaster ochraceus"],
   ["hermit_crab", "tenant", "Pagurus bernhardus"],
   ["horseshoe_crab", "ledger", "Limulus polyphemus"],

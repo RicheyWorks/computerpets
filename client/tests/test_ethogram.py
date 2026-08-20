@@ -4,7 +4,7 @@ from computerpets_client.ethogram import (
     acts_for,
     pick_act,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, POND_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS
 
 
 def test_every_catalog_kind_has_acts():
@@ -104,3 +104,17 @@ def test_only_scratching_mammals_scratch():
     assert "siphon" in [a["name"] for a in acts_for("mussel")]
     assert "latch" in [a["name"] for a in acts_for("leech")]
     assert "flare" in [a["name"] for a in acts_for("stickleback")]
+    for key in WELL_KEYS:
+        names = [a["name"] for a in acts_for(key)]
+        assert "scratch" not in names, key
+        assert "tongue" not in names, key
+    assert "cilia" in [a["name"] for a in acts_for("paramecium")]
+    assert "reach" in [a["name"] for a in acts_for("amoeba")]
+    assert "spot" in [a["name"] for a in acts_for("euglena")]
+    assert "roll" in [a["name"] for a in acts_for("volvox")]
+    assert "pane" in [a["name"] for a in acts_for("diatom")]
+    assert "holdfast" in [a["name"] for a in acts_for("kelp")]
+    assert "spin" in [a["name"] for a in acts_for("chlamydomonas")]
+    assert "trumpet" in [a["name"] for a in acts_for("stentor")]
+    assert "tumble" in [a["name"] for a in acts_for("coli")]
+    assert "blush" in [a["name"] for a in acts_for("haloarchaea")]

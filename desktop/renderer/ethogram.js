@@ -108,6 +108,16 @@
     mussel: [A("siphon", "open", 1.8, 5, "sit"), A("still", "sit_hold", 2.8, 4, "sit"), A("filter", "freeze", 2.2, 2)],
     leech: [A("latch", "sit_hold", 1.8, 4, "sit"), A("swim", "wiggle", 1.2, 3), A("still", "freeze", 1.6, 2)],
     stickleback: [A("flare", "pulse", 1.0, 4), A("dart", "dart", 0.8, 3), A("still", "freeze", 1.4, 2)],
+    paramecium: [A("cilia", "wiggle", 1.0, 5), A("row", "dart", 0.8, 3), A("still", "freeze", 1.4, 2)],
+    amoeba: [A("reach", "stretch", 1.6, 5, "sit"), A("foot", "sit_hold", 2.2, 3, "sit"), A("still", "freeze", 2.0, 2)],
+    euglena: [A("spot", "bob", 1.2, 4), A("drink", "drink", 1.4, 3), A("still", "freeze", 1.6, 2)],
+    volvox: [A("roll", "pulse", 1.4, 5), A("daughters", "ripple", 1.6, 2), A("still", "freeze", 1.8, 2)],
+    diatom: [A("glide", "sit_hold", 2.0, 4, "sit"), A("pane", "facet", 1.8, 3, "sit"), A("still", "freeze", 2.2, 2)],
+    kelp: [A("sway", "lean", 1.8, 5), A("holdfast", "sit_hold", 2.6, 3, "sit"), A("still", "freeze", 2.4, 2)],
+    chlamydomonas: [A("spin", "pulse", 1.0, 5), A("oar", "dart", 0.8, 3), A("still", "freeze", 1.4, 2)],
+    stentor: [A("trumpet", "open", 1.6, 5, "sit"), A("contract", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.8, 2)],
+    coli: [A("tumble", "dart", 0.7, 5), A("run", "wiggle", 0.9, 3), A("still", "freeze", 1.2, 2)],
+    haloarchaea: [A("blush", "frost", 1.8, 5, "sit"), A("still", "freeze", 2.2, 3), A("pink", "flush", 1.4, 1)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",

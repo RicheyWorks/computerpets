@@ -71,8 +71,8 @@ export const FAR_ROSTER: RosterDef[] = [
     temperament: "vacant",
     systemPrompt: prompt("Drift", "methane floater", "cold bowl", "vacant, cold, and honest about the air being the water", "the bowl, still methane, and whether anyone has filed you with a jelly"),
     lines: {
-      greet: ["I floated. That was hello.", "The bowl kept my cold.", "You may look. I am not a bell."],
-      ambient: ["The air is the water. I keep that office.", "I am not a jellyfish. Bell is Aurelia. I am gas.", "Your papers are a sea I agreed to breathe.", "I hover. Then I am a nimbus again."],
+      greet: ["I floated. That was hello.", "The bowl kept my cold.", "You may look. I am not a pulse."],
+      ambient: ["The air is the water. I keep that office.", "I am not a jellyfish. Pulse is Aurelia. I am gas.", "Your papers are a sea I agreed to breathe.", "I hover. Then I am a nimbus again."],
       feed: ["Gas of a treaty.", "I will take this without leaving the bowl.", "Accepted. The cold records it."],
       play: ["A float. Review the air.", "I win by remaining a gas.", "Again. Bring a kinder cold."],
       rest: ["I will hold this bowl.", "Wake me if the methane warms.", "The float is the correct sleep."],

@@ -9,7 +9,9 @@ beetle, darner, stick, ant, ladybird, mantis, cicada, then bees and comb. The ce
 shelf, amanita, morel, chanterelle, bracket, mane, puffball, sulfur shelf,
 yeast jar, lichen shrub. The far den stays — gleam, choir, nimbus, shard,
 dusk, knot, brine, beacon, hush, cyst. The pond stays — frog, toad, newt,
-salamander, caecilian, crayfish, snail, mussel, leech, stickleback. The others walk, with
+salamander, caecilian, crayfish, snail, mussel, leech, stickleback. The well stays —
+paramecium, amoeba, euglena, volvox, diatom, kelp, chlamydomonas, stentor, coli,
+haloarchaea. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
 bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, pitcher well, sundew, and so on.
 Earth guests stay honest; the far ten are coined xenobiology. Bloom stays the only axolotl.
@@ -248,6 +250,20 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "stickleback",
     ):
         _draw_pond(p, species, anim, i, sit, eat, sleep)
+        return
+    if species.silhouette in (
+        "paramecium",
+        "amoeba",
+        "euglena",
+        "volvox",
+        "diatom",
+        "kelp",
+        "chlamydomonas",
+        "stentor",
+        "coli",
+        "haloarchaea",
+    ):
+        _draw_well(p, species, anim, i, sit, eat, sleep)
         return
     if species.silhouette in ("bird", "parrot", "toucan", "phoenix", "penguin"):
         _draw_bird(p, species, anim, i, sit, eat, sleep, stride)
@@ -1725,6 +1741,209 @@ def _draw_pond(
     p.drawLine(6, -12, 6, -22)
     p.drawLine(14, -10, 14, -20)
     _draw_face(p, -14, -4, nose, sleep, anim, i, False)
+
+
+def _draw_well(
+    p: QPainter,
+    species: Species,
+    anim: str,
+    i: int,
+    sit: float,
+    eat: float,
+    sleep: float,
+) -> None:
+    pal = species.palette
+    body = _color(pal.body)
+    belly = _color(pal.belly)
+    accent = _color(pal.accent)
+    ring = _color(pal.ring)
+    nose = _color(pal.nose)
+    sil = species.silhouette
+    wave = math.sin(i * 0.9) * 4
+    p.translate(0, sit * 0.12)
+    if sleep:
+        p.rotate(-8)
+
+    if sil == "paramecium":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-26, -12, 52, 24))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-10, -6, 22, 12))
+        p.setPen(QPen(ring, 0.8))
+        for t in range(14):
+            ang = t / 13 * math.pi * 2
+            x1 = math.cos(ang) * 24
+            y1 = math.sin(ang) * 10
+            x2 = math.cos(ang) * (30 + wave * 0.15)
+            y2 = math.sin(ang) * (14 + wave * 0.1)
+            p.drawLine(QPointF(x1, y1), QPointF(x2, y2))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-8, -4, 6, 5))
+        return
+
+    if sil == "amoeba":
+        blob = QPainterPath()
+        blob.moveTo(-8 + wave * 0.2, -16)
+        blob.quadTo(-28, -8, -22, 4)
+        blob.quadTo(-30, 16, -8, 14)
+        blob.quadTo(10, 22, 16, 6)
+        blob.quadTo(28, -2, 14, -12)
+        blob.quadTo(4, -22, -8 + wave * 0.2, -16)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawPath(blob)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, -6, 14, 12))
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-2, -2, 5, 5))
+        foot = QPainterPath()
+        foot.moveTo(12, -4)
+        foot.quadTo(24, -14 + wave, 32, -6)
+        foot.quadTo(22, 2, 12, 2)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 0.9))
+        p.drawPath(foot)
+        return
+
+    if sil == "euglena":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-18, -10, 36, 18))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, -4, 16, 8))
+        p.setBrush(QBrush(ring))
+        p.drawEllipse(QRectF(-16, -6, 6, 6))
+        flag = QPainterPath()
+        flag.moveTo(16, 0)
+        flag.quadTo(28, -10 + wave, 38, -2)
+        p.setPen(QPen(nose, 1.4))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawPath(flag)
+        return
+
+    if sil == "volvox":
+        p.setBrush(QBrush(QColor(body.red(), body.green(), body.blue(), 80)))
+        p.setPen(QPen(accent, 1.2))
+        p.drawEllipse(QRectF(-22, -22, 44, 44))
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(ring, 0.8))
+        for x, y, r in ((-8, -8, 10), (4, -6, 8), (-4, 6, 9), (8, 4, 7), (0, -2, 6)):
+            p.drawEllipse(QRectF(x, y, r, r))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-4, -4, 8, 8))
+        return
+
+    if sil == "diatom":
+        boat = QPainterPath()
+        boat.moveTo(-26, 0)
+        boat.quadTo(-8, -12, 0, -10)
+        boat.quadTo(8, -12, 26, 0)
+        boat.quadTo(8, 12, 0, 10)
+        boat.quadTo(-8, 12, -26, 0)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.2))
+        p.drawPath(boat)
+        p.setPen(QPen(ring, 0.8))
+        for ox in range(-16, 17, 4):
+            p.drawLine(ox, -7, ox, 7)
+        p.setPen(QPen(nose, 1.2))
+        p.drawLine(-18, 0, 18, 0)
+        return
+
+    if sil == "kelp":
+        p.setBrush(QBrush(nose))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-10, 14, 20, 10))
+        p.setPen(QPen(ring, 2.2))
+        p.drawLine(0, 14, 0, -8)
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        blade = QPainterPath()
+        blade.moveTo(-2, -6)
+        blade.quadTo(-18, -20 + wave, -6, -32)
+        blade.quadTo(4, -18, 2, -6)
+        p.drawPath(blade)
+        blade2 = QPainterPath()
+        blade2.moveTo(2, -4)
+        blade2.quadTo(16, -18 - wave, 8, -30)
+        blade2.quadTo(-2, -16, 0, -4)
+        p.drawPath(blade2)
+        p.setBrush(QBrush(belly))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-8, -4, 7, 7))
+        p.drawEllipse(QRectF(4, -10, 6, 6))
+        return
+
+    if sil == "chlamydomonas":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.0))
+        p.drawEllipse(QRectF(-14, -12, 24, 22))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-8, -4, 14, 10))
+        p.setPen(QPen(nose, 1.4))
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        left = QPainterPath()
+        left.moveTo(-10, -8)
+        left.quadTo(-22, -20 + wave, -28, -8)
+        p.drawPath(left)
+        right = QPainterPath()
+        right.moveTo(-4, -10)
+        right.quadTo(-8, -24 - wave, -18, -26)
+        p.drawPath(right)
+        return
+
+    if sil == "stentor":
+        horn = QPainterPath()
+        horn.moveTo(-6, 18)
+        horn.quadTo(-10, 4, -18, -10)
+        horn.quadTo(0, -22 + wave * 0.2, 18, -10)
+        horn.quadTo(10, 4, 6, 18)
+        horn.closeSubpath()
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawPath(horn)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-10, -16, 20, 10))
+        p.setPen(QPen(ring, 0.8))
+        for t in range(8):
+            x = -14 + t * 4
+            p.drawLine(x, -14, x, -20)
+        return
+
+    if sil == "coli":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-22, -8, 40, 16), 8, 8)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-10, -4, 18, 8))
+        p.setPen(QPen(ring, 1.2))
+        flag = QPainterPath()
+        flag.moveTo(18, 0)
+        flag.quadTo(28, -8 + wave, 34, 2)
+        flag.quadTo(38, 8, 44, 0)
+        p.setBrush(Qt.BrushStyle.NoBrush)
+        p.drawPath(flag)
+        return
+
+    # haloarchaea — pink salt, not a rod of broth
+    p.setBrush(QBrush(body))
+    p.setPen(QPen(accent, 1.1))
+    p.drawRoundedRect(QRectF(-16, -14, 28, 26), 4, 4)
+    p.setPen(Qt.PenStyle.NoPen)
+    p.setBrush(QBrush(belly))
+    p.drawEllipse(QRectF(-8, -6, 14, 12))
+    p.setBrush(QBrush(ring))
+    p.drawEllipse(QRectF(8, -18, 10, 10))
+    p.drawEllipse(QRectF(-20, 6, 8, 8))
 
 
 def _draw_snake(

@@ -106,6 +106,16 @@ HOUSE_TRAITS = {
     "mussel": ("siphon", "Siphon", "I filtered. Hello."),
     "leech": ("latch", "Latch", "I latched. Hello."),
     "stickleback": ("flare", "Flare", "I flared. Hello."),
+    "paramecium": ("cilia", "Cilia", "I rowed. That was hello."),
+    "amoeba": ("reach", "Reach", "I reached. Hello."),
+    "euglena": ("spot", "Spot", "I kept the red. Hello."),
+    "volvox": ("roll", "Roll", "We rolled. Hello."),
+    "diatom": ("pane", "Pane", "I grew the pane. Hello."),
+    "kelp": ("holdfast", "Holdfast", "I held. Hello."),
+    "chlamydomonas": ("spin", "Spin", "I spun. Hello."),
+    "stentor": ("trumpet", "Trumpet", "I opened. Hello."),
+    "coli": ("tumble", "Tumble", "I tumbled. Hello."),
+    "haloarchaea": ("blush", "Blush", "I blushed. Hello."),
 }
 
 

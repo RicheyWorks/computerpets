@@ -100,6 +100,16 @@ const REST: Record<string, [number, number]> = {
   mussel: [22, 7],
   leech: [9, 17],
   stickleback: [21, 6],
+  paramecium: [22, 6],
+  amoeba: [21, 7],
+  euglena: [20, 6],
+  volvox: [20, 6],
+  diatom: [20, 6],
+  kelp: [20, 6],
+  chlamydomonas: [20, 6],
+  stentor: [22, 6],
+  coli: [23, 5],
+  haloarchaea: [20, 6],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -226,6 +236,16 @@ export const HIDE_LINE: Record<string, string> = {
   mussel: "Inside the dish.",
   leech: "On the blotter.",
   stickleback: "Inside the weed.",
+  paramecium: "Inside the drop.",
+  amoeba: "Inside the film.",
+  euglena: "Inside the red.",
+  volvox: "Inside the sphere.",
+  diatom: "Inside the pane.",
+  kelp: "Inside the hold.",
+  chlamydomonas: "Inside the plate.",
+  stentor: "Inside the horn.",
+  coli: "Inside the cup.",
+  haloarchaea: "Inside the pan.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -329,6 +349,16 @@ export const SNACK_LINE: Record<string, string> = {
   mussel: "Silt of a treaty.",
   leech: "Worm of a treaty.",
   stickleback: "Flake of a treaty.",
+  paramecium: "Bacteria of a treaty.",
+  amoeba: "Prey of a treaty.",
+  euglena: "Light of a treaty.",
+  volvox: "Light of a treaty.",
+  diatom: "Silica of a treaty.",
+  kelp: "Light of a treaty.",
+  chlamydomonas: "Light of a treaty.",
+  stentor: "Bacteria of a treaty.",
+  coli: "Broth of a treaty.",
+  haloarchaea: "Salt of a treaty.",
 };
 
 

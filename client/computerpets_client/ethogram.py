@@ -131,6 +131,16 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "mussel": (_a("siphon", "open", 1.8, 5, "sit"), _a("still", "sit_hold", 2.8, 4, "sit"), _a("filter", "freeze", 2.2, 2)),
     "leech": (_a("latch", "sit_hold", 1.8, 4, "sit"), _a("swim", "wiggle", 1.2, 3), _a("still", "freeze", 1.6, 2)),
     "stickleback": (_a("flare", "pulse", 1.0, 4), _a("dart", "dart", 0.8, 3), _a("still", "freeze", 1.4, 2)),
+    "paramecium": (_a("cilia", "wiggle", 1.0, 5), _a("row", "dart", 0.8, 3), _a("still", "freeze", 1.4, 2)),
+    "amoeba": (_a("reach", "stretch", 1.6, 5, "sit"), _a("foot", "sit_hold", 2.2, 3, "sit"), _a("still", "freeze", 2.0, 2)),
+    "euglena": (_a("spot", "bob", 1.2, 4), _a("drink", "drink", 1.4, 3), _a("still", "freeze", 1.6, 2)),
+    "volvox": (_a("roll", "pulse", 1.4, 5), _a("daughters", "ripple", 1.6, 2), _a("still", "freeze", 1.8, 2)),
+    "diatom": (_a("glide", "sit_hold", 2.0, 4, "sit"), _a("pane", "facet", 1.8, 3, "sit"), _a("still", "freeze", 2.2, 2)),
+    "kelp": (_a("sway", "lean", 1.8, 5), _a("holdfast", "sit_hold", 2.6, 3, "sit"), _a("still", "freeze", 2.4, 2)),
+    "chlamydomonas": (_a("spin", "pulse", 1.0, 5), _a("oar", "dart", 0.8, 3), _a("still", "freeze", 1.4, 2)),
+    "stentor": (_a("trumpet", "open", 1.6, 5, "sit"), _a("contract", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.8, 2)),
+    "coli": (_a("tumble", "dart", 0.7, 5), _a("run", "wiggle", 0.9, 3), _a("still", "freeze", 1.2, 2)),
+    "haloarchaea": (_a("blush", "frost", 1.8, 5, "sit"), _a("still", "freeze", 2.2, 3), _a("pink", "flush", 1.4, 1)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

@@ -111,6 +111,16 @@ export const SPECIES: Species[] = [
   { key: "mussel", displayName: "Eastern Elliptio", rarity: "UNCOMMON", temperament: "Filtering", habitat: "Silt dish", blurb: "Two valves. A foot. She filters. Not a sea guest. Not lunch." },
   { key: "leech", displayName: "Horse Leech", rarity: "UNCOMMON", temperament: "Sure", habitat: "Damp blotter", blurb: "Segments, suckers, a swim. She hunts worms. Not a worm you dig." },
   { key: "stickleback", displayName: "Three-spined Stickleback", rarity: "COMMON", temperament: "Keen", habitat: "Weed bowl", blurb: "Three spines. A nest of glue. Not Coin. A pond fish." },
+  { key: "paramecium", displayName: "Slipper Paramecium", rarity: "COMMON", temperament: "Busy", habitat: "Drop glass", blurb: "A slipper. Cilia. A cell that swims. Not an animal." },
+  { key: "amoeba", displayName: "Proteus Amoeba", rarity: "COMMON", temperament: "Slow", habitat: "Silt film", blurb: "She reaches, then she is that reach. Not a blob with no office." },
+  { key: "euglena", displayName: "Euglena", rarity: "UNCOMMON", temperament: "Bright", habitat: "Lamp drop", blurb: "Eyespot. Mixotroph. She drinks light and also lunch. Not a plant." },
+  { key: "volvox", displayName: "Golden Volvox", rarity: "UNCOMMON", temperament: "Many", habitat: "Green bowl", blurb: "A colony. Daughter spheres. She rolls. Not one creature. Not Pact." },
+  { key: "diatom", displayName: "Navicula", rarity: "COMMON", temperament: "Patient", habitat: "Silica dish", blurb: "A silica house she grew. Not Gleam. Not glass from the far den." },
+  { key: "kelp", displayName: "Giant Kelp", rarity: "RARE", temperament: "Anchored", habitat: "Cold hold", blurb: "Holdfast. Brown algae. Not Felt. Not a garden plant." },
+  { key: "chlamydomonas", displayName: "Chlamydomonas", rarity: "COMMON", temperament: "Spinning", habitat: "Wet plate", blurb: "Two flagella. A cup of green. Not a land plant." },
+  { key: "stentor", displayName: "Blue Stentor", rarity: "UNCOMMON", temperament: "Trumpet", habitat: "Trumpet rim", blurb: "A trumpet. Not a worm. Not Slip. Not Latch." },
+  { key: "coli", displayName: "Escherichia coli", rarity: "COMMON", temperament: "Dividing", habitat: "Broth cup", blurb: "A rod. A bacterium. Not a fungus. Not Starter." },
+  { key: "haloarchaea", displayName: "Halobacterium", rarity: "RARE", temperament: "Pink", habitat: "Salt pan", blurb: "An archaeon. Pink salt. Not a bacterium. Not Brine." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

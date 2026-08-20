@@ -1,6 +1,6 @@
 # ComputerPets
 
-A living ecology. A natural-history house. One hundred guests walk the blotter.
+A living ecology. A natural-history house. One hundred ten guests walk the blotter.
 
 Keep them so a line does not go quiet. The nest is a room. The square sits on the paper. Neglect can close a line.
 
@@ -23,7 +23,7 @@ Vite listens on `0.0.0.0:8080`. Open [http://localhost:8080](http://localhost:80
 
 Guests get Rui immediately. Sign in when you want to hatch, nest, and care.
 
-The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/cellar`, `/far`. On a phone, open **Live** and Add to Home Screen.
+The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/cellar`, `/well`, `/far`. On a phone, open **Live** and Add to Home Screen.
 
 Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from local lines.
 
@@ -31,13 +31,13 @@ Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answ
 
 Walk the dens. Each room teaches its guests.
 
-Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The hundred sit by den, not by rarity.
+Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The hundred ten sit by den, not by rarity.
 
 Pair two you already keep at `/nest`. The nest is a room. The square sits on the paper.
 
 Feed them. Clean the blotter. Give medicine. Stay gone and a line can leave. The nest still keeps one.
 
-Share one guest at `/demo/{slug}` — rui, cup, felt, comb, frill, gleam, and the rest of the house. The demo is a room. The guest is already walking.
+Share one guest at `/demo/{slug}` — rui, cup, felt, comb, frill, gleam, boot, and the rest of the house. The demo is a room. The guest is already walking.
 
 `/admin` is for operators. It is not in the house nav.
 
@@ -83,7 +83,7 @@ The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at
 
 ## Features
 
-- Eighty living kinds across the house, the dens, the tide, the garden, the hive, the cellar, and the far den
+- One hundred ten living kinds across the house, the dens, the tide, the garden, the hive, the pond, the cellar, the well, and the far den
 - A living desk in the browser, a native overlay, and a PyQt blotter
 - A nest that is a square. Neglect can close a line
 - Optional ownership verify. Fail-closed. Empty allowlists stay empty

@@ -276,6 +276,13 @@
     mix-blend-mode: multiply;
   }
 
+  .room-wash-well {
+    background:
+      radial-gradient(42% 36% at 50% 62%, rgb(36 56 64 / 0.28), transparent 72%),
+      linear-gradient(180deg, rgb(24 32 36 / 0.2), rgb(16 22 24 / 0.1) 48%, rgb(12 14 16 / 0.32));
+    mix-blend-mode: multiply;
+  }
+
   .room-wash-far {
     background: linear-gradient(180deg, rgb(210 214 220 / 0.1), rgb(180 188 200 / 0.05) 42%, rgb(12 11 10 / 0.16));
     mix-blend-mode: screen;
