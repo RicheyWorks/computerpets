@@ -30,6 +30,7 @@ import { Route as SeaRouteImport } from './routes/sea'
 import { Route as SnakesRouteImport } from './routes/snakes'
 import { Route as StudyRouteImport } from './routes/study'
 import { Route as WellRouteImport } from './routes/well'
+import { Route as WoodRouteImport } from './routes/wood'
 import { Route as DemoSlugRouteImport } from './routes/demo.$slug'
 import { Route as PetsKeyRouteImport } from './routes/pets.$key'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -139,6 +140,11 @@ const WellRoute = WellRouteImport.update({
   path: '/well',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WoodRoute = WoodRouteImport.update({
+  id: '/wood',
+  path: '/wood',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoSlugRoute = DemoSlugRouteImport.update({
   id: '/demo/$slug',
   path: '/demo/$slug',
@@ -177,6 +183,7 @@ export interface FileRoutesByFullPath {
   '/snakes': typeof SnakesRoute
   '/study': typeof StudyRoute
   '/well': typeof WellRoute
+  '/wood': typeof WoodRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -203,6 +210,7 @@ export interface FileRoutesByTo {
   '/snakes': typeof SnakesRoute
   '/study': typeof StudyRoute
   '/well': typeof WellRoute
+  '/wood': typeof WoodRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -230,6 +238,7 @@ export interface FileRoutesById {
   '/snakes': typeof SnakesRoute
   '/study': typeof StudyRoute
   '/well': typeof WellRoute
+  '/wood': typeof WoodRoute
   '/demo/$slug': typeof DemoSlugRoute
   '/pets/$key': typeof PetsKeyRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
@@ -258,6 +267,7 @@ export interface FileRouteTypes {
     | '/snakes'
     | '/study'
     | '/well'
+    | '/wood'
     | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
@@ -284,6 +294,7 @@ export interface FileRouteTypes {
     | '/snakes'
     | '/study'
     | '/well'
+    | '/wood'
     | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
@@ -310,6 +321,7 @@ export interface FileRouteTypes {
     | '/snakes'
     | '/study'
     | '/well'
+    | '/wood'
     | '/demo/$slug'
     | '/pets/$key'
     | '/api/auth/$'
@@ -337,6 +349,7 @@ export interface RootRouteChildren {
   SnakesRoute: typeof SnakesRoute
   StudyRoute: typeof StudyRoute
   WellRoute: typeof WellRoute
+  WoodRoute: typeof WoodRoute
   DemoSlugRoute: typeof DemoSlugRoute
   PetsKeyRoute: typeof PetsKeyRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
@@ -491,6 +504,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WellRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/wood': {
+      id: '/wood'
+      path: '/wood'
+      fullPath: '/wood'
+      preLoaderRoute: typeof WoodRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/$slug': {
       id: '/demo/$slug'
       path: '/demo/$slug'
@@ -537,6 +557,7 @@ const rootRouteChildren: RootRouteChildren = {
   SnakesRoute: SnakesRoute,
   StudyRoute: StudyRoute,
   WellRoute: WellRoute,
+  WoodRoute: WoodRoute,
   DemoSlugRoute: DemoSlugRoute,
   PetsKeyRoute: PetsKeyRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
