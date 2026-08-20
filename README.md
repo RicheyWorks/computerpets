@@ -79,7 +79,7 @@ You do not need Java to watch the blotter or walk the dens.
 
 The service at the repo root is only for ownership verify, license unlock, and the admin ledger. Java 21, Maven 3.9+. It needs `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, and `ADMIN_API_KEY`. Local run can use `RATE_LIMIT_BACKEND=memory` if Redis is not up.
 
-The desk already uses port 8080. If you start the backend too, move it. Operators: [docs/SETUP.md](docs/SETUP.md). The unlock wire is [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
+The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at both. They do not share a door. Operators: [docs/SETUP.md](docs/SETUP.md). The unlock wire is [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
 
 ## Features
 

@@ -35,7 +35,7 @@ spec:
           image: ghcr.io/richeyworks/computerpets:main
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 8080
+            - containerPort: 8081
               name: http
           envFrom:
             - configMapRef:

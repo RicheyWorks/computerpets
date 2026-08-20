@@ -8,7 +8,7 @@ const { resolveHwid, assertHwid } = require("./hwid.cjs");
 const { createLicenseClient, normalizeBackendUrl } = require("./client.cjs");
 
 const STORE_NAME = "license.json";
-const DEFAULT_BACKEND = "http://127.0.0.1:8080";
+const DEFAULT_BACKEND = "http://127.0.0.1:8081";
 
 function readStore(file, readFile) {
   try {

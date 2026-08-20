@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-18 (far den: ten xenobiology guests) |
+| **Last Updated** | 2026-08-20 (Java listen door is 8081; desk keeps 8080) |
 | **Version**      | 1.1                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -157,7 +157,7 @@ The diagram shows the plugin boundary clearly: adding a new platform (Gumroad, S
 ### Current Deployment Model
 The service runs as a Spring Boot executable JAR or the multi-stage `Dockerfile` image:
 
-- One JVM process listening on port 8080 (configurable via `server.port`).
+- One JVM process listening on port 8081 (configurable via `server.port`). The living desk keeps 8080.
 - Spring profiles (`dev` / `staging` / `prod`) overlay the same `application.yml` keys. Default and `dev` keep H2 unless `SPRING_DATASOURCE_*` is set (`docker-compose.yml` already points `dev` at Postgres). `staging` and `prod` require Postgres and have no H2 fallback.
 - Redis-backed Bucket4j rate limiter (Lettuce / `bucket4j-redis`) shared across replicas. If Redis is down, verify/download fail closed with HTTP 503. `prod` refuses `RATE_LIMIT_BACKEND=memory`.
 - Redis-backed jti deny-list (`RevocationIndex`) shared across replicas. Postgres `IssuedLicense.revokedAt` remains the ledger; Redis is a fast deny so a replica that has not seen the row still rejects. If Redis is down, `LicenseService.validate` falls back to the ledger (it does not accept a revoked license). HTTP download may still 503 from the rate-limit filter.

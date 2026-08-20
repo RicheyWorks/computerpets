@@ -36,12 +36,12 @@ RUN chown -R appuser:appgroup /app
 # Switch to non-root user
 USER appuser
 
-# Expose application port
-EXPOSE 8080
+# Expose application port (desk keeps 8080; Java sits here)
+EXPOSE 8081
 
 # Healthcheck (requires curl or use wget which is available in alpine)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8081/actuator/health || exit 1
 
 # JVM options for containers
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"

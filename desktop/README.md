@@ -38,14 +38,14 @@ Tray / House window → **Unlock…**. Steam is the first real provider shape (`
 
 | Variable | Required | Meaning |
 |----------|----------|---------|
-| `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8080` if unset. |
+| `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
 | `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the backend uses. Needed to decrypt the issued license locally. |
 | `BUNDLE_SIGNING_KEY` | no | If set, the overlay also checks the CDN URL HMAC. Download still works without it — the backend already signed the URL. |
 
 `ENTERPRISEPET_BACKEND_URL` is accepted as an alias for the backend origin.
 
 ```bash
-export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8080
+export COMPUTERPETS_BACKEND_URL=http://127.0.0.1:8081
 export LICENSE_SECRET_KEY=   # same value as the backend process
 cd desktop
 npm install
