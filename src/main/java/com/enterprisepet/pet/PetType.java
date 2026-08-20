@@ -110,7 +110,17 @@ public enum PetType {
     POND_SNAIL       ("pond_snail",        "Great Pond Snail",     Rarity.COMMON),
     MUSSEL           ("mussel",            "Eastern Elliptio",     Rarity.UNCOMMON),
     LEECH            ("leech",             "Horse Leech",          Rarity.UNCOMMON),
-    STICKLEBACK      ("stickleback",       "Three-spined Stickleback", Rarity.COMMON);
+    STICKLEBACK      ("stickleback",       "Three-spined Stickleback", Rarity.COMMON),
+    PARAMECIUM       ("paramecium",        "Slipper Paramecium",      Rarity.COMMON),
+    AMOEBA           ("amoeba",            "Proteus Amoeba",          Rarity.COMMON),
+    EUGLENA          ("euglena",           "Euglena",                 Rarity.UNCOMMON),
+    VOLVOX           ("volvox",            "Golden Volvox",           Rarity.UNCOMMON),
+    DIATOM           ("diatom",            "Navicula",                Rarity.COMMON),
+    KELP             ("kelp",              "Giant Kelp",              Rarity.RARE),
+    CHLAMYDOMONAS    ("chlamydomonas",     "Chlamydomonas",           Rarity.COMMON),
+    STENTOR          ("stentor",           "Blue Stentor",            Rarity.UNCOMMON),
+    COLI             ("coli",              "Escherichia coli",        Rarity.COMMON),
+    HALOARCHAEA      ("haloarchaea",       "Halobacterium",           Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

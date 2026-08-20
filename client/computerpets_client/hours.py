@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-hundred REST windows, same return lines. Do not invent rest hours or copy.
+hundred ten REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -118,6 +118,16 @@ REST: dict[str, tuple[int, int]] = {
     "mussel": (22, 7),
     "leech": (9, 17),
     "stickleback": (21, 6),
+    "paramecium": (22, 6),
+    "amoeba": (21, 7),
+    "euglena": (20, 6),
+    "volvox": (20, 6),
+    "diatom": (20, 6),
+    "kelp": (20, 6),
+    "chlamydomonas": (20, 6),
+    "stentor": (22, 6),
+    "coli": (23, 5),
+    "haloarchaea": (20, 6),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -225,6 +235,16 @@ HIDE_LINE: dict[str, str] = {
     "mussel": "Inside the dish.",
     "leech": "On the blotter.",
     "stickleback": "Inside the weed.",
+    "paramecium": "Inside the drop.",
+    "amoeba": "Inside the film.",
+    "euglena": "Inside the red.",
+    "volvox": "Inside the sphere.",
+    "diatom": "Inside the pane.",
+    "kelp": "Inside the hold.",
+    "chlamydomonas": "Inside the plate.",
+    "stentor": "Inside the horn.",
+    "coli": "Inside the cup.",
+    "haloarchaea": "Inside the pan.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -328,6 +348,16 @@ SNACK_LINE: dict[str, str] = {
     "mussel": "Silt of a treaty.",
     "leech": "Worm of a treaty.",
     "stickleback": "Flake of a treaty.",
+    "paramecium": "Bacteria of a treaty.",
+    "amoeba": "Prey of a treaty.",
+    "euglena": "Light of a treaty.",
+    "volvox": "Light of a treaty.",
+    "diatom": "Silica of a treaty.",
+    "kelp": "Light of a treaty.",
+    "chlamydomonas": "Light of a treaty.",
+    "stentor": "Bacteria of a treaty.",
+    "coli": "Broth of a treaty.",
+    "haloarchaea": "Salt of a treaty.",
 }
 
 

@@ -120,6 +120,16 @@ VISIT_LINES: dict[str, str] = {
     "mussel": "I filtered. Then I left the silt.",
     "leech": "I latched. Then I left the damp.",
     "stickleback": "I flared. Then I left the nest.",
+    "paramecium": "I rowed. Then I left the drop.",
+    "amoeba": "I reached. Then I left the film.",
+    "euglena": "I drank. Then I left the red.",
+    "volvox": "We rolled. Then we left the bowl.",
+    "diatom": "I glided. Then I left the pane.",
+    "kelp": "I held. Then I left the cold.",
+    "chlamydomonas": "I spun. Then I left the plate.",
+    "stentor": "I opened. Then I left the horn.",
+    "coli": "I tumbled. Then I left the broth.",
+    "haloarchaea": "I blushed. Then I left the pan.",
 }
 
 

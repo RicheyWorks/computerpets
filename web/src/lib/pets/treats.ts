@@ -101,6 +101,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   mussel: { shape: "flake", verb: "Silt" },
   leech: { shape: "flake", verb: "Worm" },
   stickleback: { shape: "flake", verb: "Flake" },
+  paramecium: { shape: "flake", verb: "Bacteria" },
+  amoeba: { shape: "crumb", verb: "Prey" },
+  euglena: { shape: "flake", verb: "Light" },
+  volvox: { shape: "flake", verb: "Light" },
+  diatom: { shape: "pebble", verb: "Silica" },
+  kelp: { shape: "flake", verb: "Light" },
+  chlamydomonas: { shape: "flake", verb: "Light" },
+  stentor: { shape: "flake", verb: "Bacteria" },
+  coli: { shape: "crumb", verb: "Broth" },
+  haloarchaea: { shape: "flake", verb: "Salt" },
 };
 
 export function treatFor(key: string) {
@@ -208,4 +218,14 @@ export const GIFT_LINE: Record<string, string> = {
   mussel: "A silt I was finished filtering.",
   leech: "A latch I was finished keeping.",
   stickleback: "A spine I was not using.",
+  paramecium: "A row I was finished keeping.",
+  amoeba: "A foot I was not using.",
+  euglena: "A red I was finished wearing.",
+  volvox: "A daughter I was finished keeping.",
+  diatom: "A pane I was finished growing.",
+  kelp: "A bladder I was not using.",
+  chlamydomonas: "An oar I was finished spinning.",
+  stentor: "A horn I was finished opening.",
+  coli: "A divide I was finished keeping.",
+  haloarchaea: "A blush I was finished wearing.",
 };

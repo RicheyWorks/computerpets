@@ -136,6 +136,16 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   mussel: T(4, 0, 0.72, 0.03, { aquatic: true }, "siphon", "Siphon", "I filtered. Hello."),
   leech: T(36, 4, 0.5, 0.28, { aquatic: true }, "latch", "Latch", "I latched. Hello."),
   stickleback: T(80, 6, 0.64, 0.5, { aquatic: true }, "flare", "Flare", "I flared. Hello."),
+  paramecium: T(48, 2, 0.55, 0.5, { aquatic: true }, "cilia", "Cilia", "I rowed. That was hello."),
+  amoeba: T(16, 2, 0.7, 0.12, { aquatic: true }, "reach", "Reach", "I reached. Hello."),
+  euglena: T(40, 2, 0.52, 0.4, { aquatic: true }, "spot", "Spot", "I kept the red. Hello."),
+  volvox: T(22, 2, 0.78, 0.25, { aquatic: true }, "roll", "Roll", "We rolled. Hello."),
+  diatom: T(8, 0, 0.5, 0.06, { aquatic: true }, "pane", "Pane", "I grew the pane. Hello."),
+  kelp: T(4, 0, 1.05, 0.03, {}, "holdfast", "Holdfast", "I held. Hello."),
+  chlamydomonas: T(56, 2, 0.48, 0.45, { aquatic: true }, "spin", "Spin", "I spun. Hello."),
+  stentor: T(12, 0, 0.72, 0.1, { aquatic: true }, "trumpet", "Trumpet", "I opened. Hello."),
+  coli: T(90, 4, 0.42, 0.55, {}, "tumble", "Tumble", "I tumbled. Hello."),
+  haloarchaea: T(28, 2, 0.5, 0.2, {}, "blush", "Blush", "I blushed. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;
