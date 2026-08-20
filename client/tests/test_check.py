@@ -14,9 +14,10 @@ pytest.importorskip("PyQt6")
 CLIENT_ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_offscreen_check_constructs_window():
+def test_offscreen_check_constructs_window(tmp_path):
     env = os.environ.copy()
     env["QT_QPA_PLATFORM"] = "offscreen"
+    env["COMPUTERPETS_CLIENT_HOME"] = str(tmp_path)
     result = subprocess.run(
         [sys.executable, "-m", "computerpets_client", "--check"],
         cwd=CLIENT_ROOT,
@@ -41,14 +42,14 @@ def test_offscreen_check_constructs_window():
     assert "is well" in result.stdout
 
 
-def test_desk_has_play_and_the_house_special():
+def test_desk_has_play_and_the_house_special(tmp_path):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from PyQt6.QtWidgets import QApplication
 
     from computerpets_client.app import DeskWindow
 
     app = QApplication.instance() or QApplication([])
-    window = DeskWindow()
+    window = DeskWindow(user_data_dir=tmp_path)
     window.show()
     assert window.play_btn is not None
     assert window.play_btn.text() == "Play"
@@ -67,7 +68,7 @@ def test_desk_has_play_and_the_house_special():
     del app
 
 
-def test_desk_day_has_weather_visitor_and_shed_coat():
+def test_desk_day_has_weather_visitor_and_shed_coat(tmp_path):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from PyQt6.QtWidgets import QApplication
 
@@ -76,7 +77,7 @@ def test_desk_day_has_weather_visitor_and_shed_coat():
     from computerpets_client.weather import weather_label
 
     app = QApplication.instance() or QApplication([])
-    window = DeskWindow()
+    window = DeskWindow(user_data_dir=tmp_path)
     window.show()
     assert window.weather.sky in ("clear", "rain", "wind", "heat")
     assert weather_label(window.weather.sky) in window.vital_label.text()
@@ -95,7 +96,7 @@ def test_desk_day_has_weather_visitor_and_shed_coat():
     del app
 
 
-def test_desk_clean_clears_a_seeded_mess():
+def test_desk_clean_clears_a_seeded_mess(tmp_path):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from dataclasses import replace
 
@@ -105,7 +106,7 @@ def test_desk_clean_clears_a_seeded_mess():
     from computerpets_client.life import MessPile
 
     app = QApplication.instance() or QApplication([])
-    window = DeskWindow()
+    window = DeskWindow(user_data_dir=tmp_path)
     window.show()
     window.care = replace(window.care, mess=[MessPile(id=1, x=30)], hygiene=20)
     window._sync_mess()
@@ -119,7 +120,7 @@ def test_desk_clean_clears_a_seeded_mess():
     del app
 
 
-def test_desk_medicine_clears_unwell():
+def test_desk_medicine_clears_unwell(tmp_path):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from dataclasses import replace
 
@@ -128,7 +129,7 @@ def test_desk_medicine_clears_unwell():
     from computerpets_client.app import DeskWindow
 
     app = QApplication.instance() or QApplication([])
-    window = DeskWindow()
+    window = DeskWindow(user_data_dir=tmp_path)
     window.show()
     window.care = replace(window.care, sick=True, health=40)
     window._refresh_vitals()
@@ -141,6 +142,32 @@ def test_desk_medicine_clears_unwell():
     assert not window.medicine_btn.isVisible()
     assert not window.pet.unwell
     window.close()
+    del app
+
+
+def test_desk_keeps_care_across_a_relaunch(tmp_path):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from dataclasses import replace
+
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+    from computerpets_client.life import CARE_NAME
+
+    app = QApplication.instance() or QApplication([])
+    first = DeskWindow(user_data_dir=tmp_path)
+    first.show()
+    first.care = replace(first.care, hunger=40, mood=50, bond=22)
+    first._keep_care()
+    first.close()
+    assert (tmp_path / CARE_NAME).is_file()
+
+    second = DeskWindow(user_data_dir=tmp_path)
+    second.show()
+    assert second.care.hunger == 40
+    assert second.care.mood == 50
+    assert second.care.bond == 22
+    second.close()
     del app
 
 

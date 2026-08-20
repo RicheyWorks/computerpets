@@ -180,7 +180,12 @@ function lineFrom(result) {
 function paintHud() {
   if (!life || !kind) return;
   hudName.textContent = `${kind.name} · ${life.stage}`;
-  hudVital.textContent = `${window.PetLife.vitals({ ...life, blue: window.PetLife.isBlue(life, kind.key) })} · ${skyLabel(skyOf())}${life.gifts?.length ? ` · ${life.gifts.length} gift${life.gifts.length > 1 ? "s" : ""}` : ""}`;
+  const hive = window.PetHive && window.PetHive.isHivePlace(kind.key) ? window.PetHive.colonyOf(life, life.hidden) : null;
+  const vital = hive
+    ? `${window.PetHive.colonyWord(hive)} · Brood · ${hive.brood} · Stores · ${hive.stores}`
+    : `${window.PetLife.vitals({ ...life, blue: window.PetLife.isBlue(life, kind.key) }, kind.key)} · ${skyLabel(skyOf())}${life.gifts?.length ? ` · ${life.gifts.length} gift${life.gifts.length > 1 ? "s" : ""}` : ""}`;
+  hudVital.textContent = vital;
+  pet.classList.toggle("dull", !!(hive && hive.quiet));
   barHunger.style.setProperty("--w", `${life.hunger}%`);
   barMood.style.setProperty("--w", `${life.mood}%`);
   barEnergy.style.setProperty("--w", `${life.energy}%`);
@@ -189,7 +194,7 @@ function paintHud() {
   window.desk?.vitals({
     key: kind.key,
     name: kind.name,
-    vital: window.PetLife.vitals(life),
+    vital: window.PetLife.vitals(life, kind.key),
     hunger: life.hunger,
     sick: life.sick,
     hidden: life.hidden,
@@ -257,7 +262,7 @@ function maybeNotify() {
 
 function tickLife() {
   if (!life || !trait) return;
-  const { grew } = window.PetLife.decay(life, trait);
+  const { grew } = window.PetLife.decay(life, trait, Date.now(), kind.key);
   if (grew) {
     say(life.stage === "grown" ? "I grew into the room." : "I have been here a long while.");
     window.desk?.notify(kind.name, life.stage === "grown" ? `${kind.name} grew up.` : `${kind.name} is an elder now.`);
@@ -666,7 +671,7 @@ function handle(cmd) {
     hudUntil = performance.now() + 5000;
     return;
   }
-  const result = window.PetLife.act(life, trait, cmd);
+  const result = window.PetLife.act(life, trait, cmd, Date.now(), kind.key);
   persist();
   if (cmd === "talk") {
     void askMind(result);
@@ -779,9 +784,9 @@ function applyArrive(via) {
     const care = mark?.meal === "feed" ? "feed" : "snack";
     clearMark();
     const prevBond = life.bond;
-    const result = window.PetLife.act(life, trait, care);
+    const result = window.PetLife.act(life, trait, care, Date.now(), kind.key);
     persist();
-    say(lineFrom(result) || "A small treaty.");
+    say(lineFrom(result) || window.PetLife.snackLine(kind.key));
     const title = window.PetLife.crossedBond(prevBond, life.bond);
     if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
     if (hop.issueEat) issue("eat");
@@ -791,7 +796,7 @@ function applyArrive(via) {
   if (hop.act === "play") {
     clearMark();
     const prevBond = life.bond;
-    const result = window.PetLife.act(life, trait, "play");
+    const result = window.PetLife.act(life, trait, "play", Date.now(), kind.key);
     persist();
     say(lineFrom(result) || pick(kind.lines.play));
     const title = window.PetLife.crossedBond(prevBond, life.bond);
@@ -903,7 +908,7 @@ function switchTo(key) {
   }
   life = window.PetLife.load(next.key);
   const away = Date.now() - (life.lastTick || Date.now());
-  window.PetLife.decay(life, trait);
+  window.PetLife.decay(life, trait, Date.now(), kind.key);
   persist();
   sim.anim = "idle";
   sim.frame = 0;
@@ -1504,7 +1509,7 @@ lureEl.addEventListener("click", (e) => {
   if (hop.act !== "play") return;
   taken = hop.next.taken;
   clearMark();
-  const result = window.PetLife.act(life, trait, "play");
+  const result = window.PetLife.act(life, trait, "play", Date.now(), kind.key);
   persist();
   say("You caught it first. I still win.");
   if (hop.issuePlay) issue("play");

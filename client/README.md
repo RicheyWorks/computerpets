@@ -46,7 +46,7 @@ Pets walk (or crawl) without a license — same as the overlay.
 
 ## Care
 
-The verbs that already exist on the living desk and fit this cut. Treat uses the species snack the overlay already has (Bamboo, Crumbs, Pinkie, Egg, …). Play and the special are the same science as `care.ts` / `specials.ts`:
+The verbs that already exist on the living desk and fit this cut. Treat uses the species snack the overlay already has (Bamboo, Crumbs, Pinkie, Egg, …). Play and the special are the same science as `care.ts` / `specials.ts`. The blotter keeps CareState locally. Hunger still ticks while you are gone. Fail closed.
 
 | Button | What happens |
 |--------|----------------|
@@ -75,7 +75,7 @@ Bad ciphertext, an expired payload, a revoked `jti`, a hardware mismatch, or a m
 | `COMPUTERPETS_BACKEND_URL` | yes* | Backend origin, no trailing slash. Default `http://127.0.0.1:8081` if unset. |
 | `LICENSE_SECRET_KEY` | yes | Same 32-byte standard Base64 key the backend uses. Needed to decrypt the issued license locally. |
 | `BUNDLE_SIGNING_KEY` | no | If set, the client also checks the CDN URL HMAC. Download still works without it — the backend already signed the URL. |
-| `COMPUTERPETS_CLIENT_HOME` | no | Override the user-data directory (`license.json`, `hwid.txt`, last-seen). |
+| `COMPUTERPETS_CLIENT_HOME` | no | Override the user-data directory (`license.json`, `hwid.txt`, last-seen, care). |
 
 `ENTERPRISEPET_BACKEND_URL` is accepted as an alias for the backend origin.
 
