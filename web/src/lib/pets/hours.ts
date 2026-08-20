@@ -140,6 +140,16 @@ const REST: Record<string, [number, number]> = {
   beaver: [8, 17],
   porcupine: [8, 18],
   black_bear: [22, 7],
+  gecko: [7, 19],
+  anole: [20, 6],
+  skink: [20, 6],
+  chameleon: [20, 6],
+  horned_lizard: [20, 6],
+  alligator: [22, 6],
+  crocodile: [22, 6],
+  snapper: [8, 17],
+  box_turtle: [20, 6],
+  tuatara: [8, 18],
 };
 
 export function isRestingHour(key: string, hour = new Date().getHours()) {
@@ -306,6 +316,16 @@ export const HIDE_LINE: Record<string, string> = {
   beaver: "Inside the lodge.",
   porcupine: "On the post.",
   black_bear: "Inside the denside.",
+  gecko: "On the plaster.",
+  anole: "On the post.",
+  skink: "Inside the crack.",
+  chameleon: "On the perch.",
+  horned_lizard: "Under the sand.",
+  alligator: "On the bank.",
+  crocodile: "Inside the dish.",
+  snapper: "Inside the mud.",
+  box_turtle: "Under the leaf.",
+  tuatara: "Inside the burrow.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -449,6 +469,16 @@ export const SNACK_LINE: Record<string, string> = {
   beaver: "Bark of a treaty.",
   porcupine: "Bark of a treaty.",
   black_bear: "Berry of a treaty.",
+  gecko: "Moth of a treaty.",
+  anole: "Cricket of a treaty.",
+  skink: "Cricket of a treaty.",
+  chameleon: "Cricket of a treaty.",
+  horned_lizard: "Ant of a treaty.",
+  alligator: "Fish of a treaty.",
+  crocodile: "Fish of a treaty.",
+  snapper: "Fish of a treaty.",
+  box_turtle: "Worm of a treaty.",
+  tuatara: "Insect of a treaty.",
 };
 
 

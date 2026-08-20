@@ -290,6 +290,13 @@
     mix-blend-mode: multiply;
   }
 
+  .room-wash-stone {
+    background:
+      linear-gradient(180deg, rgb(48 40 32 / 0.26), rgb(32 28 24 / 0.12) 46%, rgb(16 14 12 / 0.32)),
+      radial-gradient(50% 38% at 72% 28%, rgb(156 140 112 / 0.12), transparent 70%);
+    mix-blend-mode: multiply;
+  }
+
   .room-wash-cellar {
     background:
       radial-gradient(80% 70% at 50% 100%, rgb(18 22 16 / 0.5), transparent 74%),

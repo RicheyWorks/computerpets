@@ -250,6 +250,16 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   beaver: [A("gnaw", "eat", 1.4, 5, "eat"), A("slap", "snap", 0.7, 2, "play"), A("sit", "sit_hold", 2.0, 3, "sit")],
   porcupine: [A("bristle", "puff", 1.4, 5, "sit"), A("climb", "wiggle", 1.0, 2), A("still", "freeze", 2.0, 3)],
   black_bear: [A("forage", "eat", 1.4, 4, "eat"), A("sit", "sit_hold", 2.2, 4, "sit"), A("huff", "pulse", 0.8, 2)],
+  gecko: [A("climb", "wiggle", 1.0, 5), A("chirp", "talk", 0.7, 3, "talk"), A("cling", "sit_hold", 2.0, 2, "sit")],
+  anole: [A("flash", "pulse", 0.8, 5), A("brown", "nod", 1.2, 2, "sit"), A("still", "freeze", 1.6, 2)],
+  skink: [A("dash", "dart", 0.5, 5), A("tail", "pulse", 0.8, 3), A("still", "freeze", 1.4, 2)],
+  chameleon: [A("aim", "nod", 1.6, 5, "sit"), A("walk", "wiggle", 1.8, 3), A("catch", "snap", 0.6, 2, "play")],
+  horned_lizard: [A("crown", "sit_hold", 2.2, 5, "sit"), A("squirt", "pulse", 0.8, 2), A("still", "freeze", 2.0, 3)],
+  alligator: [A("bask", "sit_hold", 2.4, 5, "sit"), A("bank", "freeze", 2.0, 3), A("close", "nod", 1.2, 2)],
+  crocodile: [A("show", "gape", 1.2, 5), A("sit", "sit_hold", 2.2, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  snapper: [A("snap", "snap", 0.6, 5, "play"), A("sit", "sit_hold", 2.0, 3, "sit"), A("still", "freeze", 1.8, 2)],
+  box_turtle: [A("shut", "sit_hold", 2.2, 5, "sit"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.8, 2)],
+  tuatara: [A("still", "freeze", 2.6, 5), A("crest", "sit_hold", 2.2, 3, "sit"), A("watch", "nod", 1.6, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

@@ -1,6 +1,6 @@
 # ComputerPets
 
-A living ecology. A natural-history house. One hundred forty guests walk the blotter.
+A living ecology. A natural-history house. One hundred fifty guests walk the blotter.
 
 Keep them so a line does not go quiet. The nest is a room. The square sits on the paper. Neglect can close a line.
 
@@ -23,7 +23,7 @@ Vite listens on `0.0.0.0:8080`. Open [http://localhost:8080](http://localhost:80
 
 Guests get Rui immediately. Sign in when you want to hatch, nest, and care.
 
-The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/roost`, `/corner`, `/wood`, `/cellar`, `/well`, `/far`. On a phone, open **Live** and Add to Home Screen.
+The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/roost`, `/corner`, `/wood`, `/stone`, `/cellar`, `/well`, `/far`. On a phone, open **Live** and Add to Home Screen.
 
 Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from local lines.
 
@@ -31,7 +31,7 @@ Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answ
 
 Walk the dens. Each room teaches its guests.
 
-Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The hundred and forty sit by den, not by rarity.
+Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The hundred and fifty sit by den, not by rarity.
 
 Pair two you already keep at `/nest`. The nest is a room. The square sits on the paper.
 

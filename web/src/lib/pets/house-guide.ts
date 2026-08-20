@@ -10,6 +10,7 @@ import { ROSTER } from "./roster";
 import { SEA_KEYS } from "./sea";
 import { SNAKE_KEYS } from "./snakes";
 import { WELL_KEYS } from "./well";
+import { STONE_KEYS } from "./stone";
 import { WOOD_KEYS } from "./wood";
 
 export type HouseGuide = {
@@ -40,6 +41,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   if (CORNER_KEYS.includes(key)) throw new Error(`house guide does not file the corner: ${key}`);
   if (WELL_KEYS.includes(key)) throw new Error(`house guide does not file the well: ${key}`);
   if (WOOD_KEYS.includes(key)) throw new Error(`house guide does not file the wood: ${key}`);
+  if (STONE_KEYS.includes(key)) throw new Error(`house guide does not file the stone: ${key}`);
   return {
     key,
     slug: roster.slug,

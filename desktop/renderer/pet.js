@@ -435,6 +435,16 @@ const TREAT_SHAPE = {
   beaver: "leaf",
   porcupine: "leaf",
   black_bear: "leaf",
+  gecko: "crumb",
+  anole: "crumb",
+  skink: "crumb",
+  chameleon: "crumb",
+  horned_lizard: "crumb",
+  alligator: "crumb",
+  crocodile: "crumb",
+  snapper: "crumb",
+  box_turtle: "crumb",
+  tuatara: "crumb",
 };
 
 function placeMark(kindName, x, hops = 0) {
@@ -1182,6 +1192,16 @@ const VISIT_LINE = {
   beaver: "I gnawed. Then I left the lodge.",
   porcupine: "I bristled. Then I left the post.",
   black_bear: "I foraged. Then I left the denside.",
+  gecko: "I climbed. Then I left the plaster.",
+  anole: "I flashed. Then I left the post.",
+  skink: "I dashed. Then I left the crack.",
+  chameleon: "I shifted. Then I left the perch.",
+  horned_lizard: "I sat the crown. Then I left the sand.",
+  alligator: "I sat the bank. Then I left the dish.",
+  crocodile: "I showed. Then I left the dish.",
+  snapper: "I snapped. Then I left the mud.",
+  box_turtle: "I shut. Then I left the leaf.",
+  tuatara: "I kept still. Then I left the burrow.",
 };
 
 let visit = null;

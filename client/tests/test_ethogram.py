@@ -4,7 +4,7 @@ from computerpets_client.ethogram import (
     acts_for,
     pick_act,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, WOOD_KEYS
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, INSECT_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, WELL_KEYS, WOOD_KEYS, STONE_KEYS
 
 
 def test_every_catalog_kind_has_acts():
@@ -160,3 +160,17 @@ def test_only_scratching_mammals_scratch():
     assert "gnaw" in [a["name"] for a in acts_for("beaver")]
     assert "bristle" in [a["name"] for a in acts_for("porcupine")]
     assert "forage" in [a["name"] for a in acts_for("black_bear")]
+    for key in STONE_KEYS:
+        names = [a["name"] for a in acts_for(key)]
+        assert "scratch" not in names, key
+        assert "tongue" not in names, key
+    assert "climb" in [a["name"] for a in acts_for("gecko")]
+    assert "flash" in [a["name"] for a in acts_for("anole")]
+    assert "dash" in [a["name"] for a in acts_for("skink")]
+    assert "aim" in [a["name"] for a in acts_for("chameleon")]
+    assert "crown" in [a["name"] for a in acts_for("horned_lizard")]
+    assert "bask" in [a["name"] for a in acts_for("alligator")]
+    assert "show" in [a["name"] for a in acts_for("crocodile")]
+    assert "snap" in [a["name"] for a in acts_for("snapper")]
+    assert "shut" in [a["name"] for a in acts_for("box_turtle")]
+    assert "still" in [a["name"] for a in acts_for("tuatara")]

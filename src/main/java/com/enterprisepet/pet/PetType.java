@@ -150,7 +150,17 @@ public enum PetType {
     OPOSSUM          ("opossum",           "Virginia Opossum",       Rarity.COMMON),
     BEAVER           ("beaver",            "North American Beaver",  Rarity.UNCOMMON),
     PORCUPINE        ("porcupine",         "North American Porcupine", Rarity.UNCOMMON),
-    BLACK_BEAR       ("black_bear",        "American Black Bear",    Rarity.RARE);
+    BLACK_BEAR       ("black_bear",        "American Black Bear",    Rarity.RARE),
+    GECKO            ("gecko",             "Mediterranean House Gecko", Rarity.COMMON),
+    ANOLE            ("anole",             "Green Anole",            Rarity.COMMON),
+    SKINK            ("skink",             "Five-lined Skink",       Rarity.COMMON),
+    CHAMELEON        ("chameleon",         "Veiled Chameleon",       Rarity.UNCOMMON),
+    HORNED_LIZARD    ("horned_lizard",     "Texas Horned Lizard",    Rarity.UNCOMMON),
+    ALLIGATOR        ("alligator",         "American Alligator",     Rarity.UNCOMMON),
+    CROCODILE        ("crocodile",         "American Crocodile",     Rarity.RARE),
+    SNAPPER          ("snapper",           "Common Snapping Turtle", Rarity.COMMON),
+    BOX_TURTLE       ("box_turtle",        "Eastern Box Turtle",     Rarity.COMMON),
+    TUATARA          ("tuatara",           "Tuatara",                Rarity.RARE);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

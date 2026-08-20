@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-hundred and forty REST windows, same return lines. Do not invent rest hours or copy.
+hundred and fifty REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -158,6 +158,16 @@ REST: dict[str, tuple[int, int]] = {
     "beaver": (8, 17),
     "porcupine": (8, 18),
     "black_bear": (22, 7),
+    "gecko": (7, 19),
+    "anole": (20, 6),
+    "skink": (20, 6),
+    "chameleon": (20, 6),
+    "horned_lizard": (20, 6),
+    "alligator": (22, 6),
+    "crocodile": (22, 6),
+    "snapper": (8, 17),
+    "box_turtle": (20, 6),
+    "tuatara": (8, 18),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -305,6 +315,16 @@ HIDE_LINE: dict[str, str] = {
     "beaver": "Inside the lodge.",
     "porcupine": "On the post.",
     "black_bear": "Inside the denside.",
+    "gecko": "On the plaster.",
+    "anole": "On the post.",
+    "skink": "Inside the crack.",
+    "chameleon": "On the perch.",
+    "horned_lizard": "Under the sand.",
+    "alligator": "On the bank.",
+    "crocodile": "Inside the dish.",
+    "snapper": "Inside the mud.",
+    "box_turtle": "Under the leaf.",
+    "tuatara": "Inside the burrow.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -448,6 +468,16 @@ SNACK_LINE: dict[str, str] = {
     "beaver": "Bark of a treaty.",
     "porcupine": "Bark of a treaty.",
     "black_bear": "Berry of a treaty.",
+    "gecko": "Moth of a treaty.",
+    "anole": "Cricket of a treaty.",
+    "skink": "Cricket of a treaty.",
+    "chameleon": "Cricket of a treaty.",
+    "horned_lizard": "Ant of a treaty.",
+    "alligator": "Fish of a treaty.",
+    "crocodile": "Fish of a treaty.",
+    "snapper": "Fish of a treaty.",
+    "box_turtle": "Worm of a treaty.",
+    "tuatara": "Insect of a treaty.",
 }
 
 
