@@ -87,8 +87,8 @@ class PetCatalogTest {
                 PetType.Rarity.RARE,
                 PetType.Rarity.LEGENDARY
         );
-        assertThat(grouped.get(PetType.Rarity.COMMON)).hasSize(76);
-        assertThat(grouped.get(PetType.Rarity.UNCOMMON)).hasSize(69);
+        assertThat(grouped.get(PetType.Rarity.COMMON)).hasSize(80);
+        assertThat(grouped.get(PetType.Rarity.UNCOMMON)).hasSize(75);
         assertThat(grouped.get(PetType.Rarity.RARE)).hasSize(32);
         assertThat(grouped.get(PetType.Rarity.LEGENDARY)).hasSize(3);
     }
@@ -118,7 +118,9 @@ class PetCatalogTest {
         assertThat(csv).contains("hummingbird");
         assertThat(csv).contains("fiddler_crab");
         assertThat(csv).contains("lugworm");
-        assertThat(csv).endsWith("lugworm");
+        assertThat(csv).contains("field_cricket");
+        assertThat(csv).contains("robber_fly");
+        assertThat(csv).endsWith("robber_fly");
         assertThat(csv.split(", ")).hasSize(PetType.values().length);
     }
 }

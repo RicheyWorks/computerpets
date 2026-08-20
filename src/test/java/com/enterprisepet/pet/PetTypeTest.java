@@ -314,8 +314,8 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(76L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(69L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(80L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(75L);
         assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(32L);
         assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(3L);
     }
