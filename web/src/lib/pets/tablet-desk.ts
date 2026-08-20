@@ -1,7 +1,8 @@
 /** How the sit sits. A tablet has no extra and no mark. A tap talks. A drag is a carry. A long-press tends. */
 
-import { TAP_PX, TAP_PX_LINUX, TAP_PX_MAC, tapPxFor as deskTapPx } from "@/lib/pets/mac-desk";
-
+export const TAP_PX = 8;
+export const TAP_PX_MAC = 12;
+export const TAP_PX_LINUX = 10;
 export const TAP_PX_TABLET = 24;
 export const HOLD_MS = 480;
 
@@ -90,10 +91,12 @@ export function isTablet(sit: TabletSit | string | null | undefined): boolean {
   return false;
 }
 
-/** The house tap slop. A finger needs more wood than a mouse. */
+/** The house tap slop. A finger needs more wood than a mouse. The desks keep their own. */
 export function tapPxFor(platform: string | undefined | null, sit?: TabletSit | null): number {
   if (isTablet(sit ?? platform)) return TAP_PX_TABLET;
-  return deskTapPx(platform);
+  if (platform === "darwin" || /^Mac/i.test(platform || "")) return TAP_PX_MAC;
+  if (platform === "linux" || /^Linux/i.test(platform || "")) return TAP_PX_LINUX;
+  return TAP_PX;
 }
 
 /** Landscape is the blotter. Portrait is a sit. */
@@ -190,5 +193,3 @@ export function readSit(win?: {
     height: win?.innerHeight,
   };
 }
-
-export { TAP_PX, TAP_PX_LINUX, TAP_PX_MAC };
