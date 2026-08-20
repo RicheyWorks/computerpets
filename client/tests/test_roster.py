@@ -567,6 +567,10 @@ def test_ten_snakes_are_present_and_crawl():
         assert spec.silhouette == "snake"
         assert spec.treat
         assert spec.treat_shape in TREAT_SHAPES
+    assert SPECIES["kingsnake"].treat_shape == "egg"
+    assert SPECIES["kingsnake"].treat == "Egg"
+    assert SPECIES["milk_snake"].treat_shape == "egg"
+    assert SPECIES["milk_snake"].treat == "Egg"
 
 
 def test_walkers_walk_and_are_not_snakes():
