@@ -9,20 +9,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ItchHealthIndicatorTest {
 
     @Test
-    void health_down_whenNoKeyConfigured() {
+    void health_up_whenNoKeyConfigured() {
         ItchHealthIndicator indicator = new ItchHealthIndicator();
         Health health = indicator.health();
 
-        assertThat(health.getStatus()).isEqualTo(Status.DOWN);
-        assertThat(health.getDetails().get("reason")).isEqualTo("Itch.io API key is not configured");
+        assertThat(health.getStatus()).isEqualTo(Status.UP);
+        assertThat(health.getDetails().get("reason")).isEqualTo("Itch door is not hung yet");
     }
 
     @Test
-    void health_down_whenPlaceholderKey() {
+    void health_up_whenPlaceholderKey() {
         ItchHealthIndicator indicator = new ItchHealthIndicator(ItchService.PLACEHOLDER_API_KEY);
         Health health = indicator.health();
 
-        assertThat(health.getStatus()).isEqualTo(Status.DOWN);
+        assertThat(health.getStatus()).isEqualTo(Status.UP);
         assertThat(health.getDetails()).containsKey("reason");
     }
 
@@ -32,6 +32,6 @@ class ItchHealthIndicatorTest {
         Health health = indicator.health();
 
         assertThat(health.getStatus()).isEqualTo(Status.UP);
-        assertThat(health.getDetails().get("status")).isEqualTo("Itch.io API key is configured");
+        assertThat(health.getDetails().get("status")).isEqualTo("Itch door is hung");
     }
 }

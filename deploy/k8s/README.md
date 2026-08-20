@@ -86,7 +86,10 @@ docker build -t ghcr.io/richeyworks/computerpets:local .
 | readiness | `/actuator/health/readiness` | same |
 
 `SecurityConfig` permits those three paths (and `/actuator/health`)
-without a JWT. `/actuator/prometheus` stays authenticated.
+without a JWT. Public `/actuator/health` stays quiet — no room names,
+no Steam or Redis reasons. Liveness is the process is up. Unhung
+optional doors do not restart the house. `/actuator/prometheus` stays
+authenticated.
 
 ## Blue / green
 
