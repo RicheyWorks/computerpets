@@ -151,6 +151,16 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   snapper: { shape: "crumb", verb: "Fish" },
   box_turtle: { shape: "crumb", verb: "Worm" },
   tuatara: { shape: "crumb", verb: "Insect" },
+  bass: { shape: "flake", verb: "Minnow" },
+  brook_trout: { shape: "flake", verb: "Fly" },
+  catfish: { shape: "crumb", verb: "Scrap" },
+  bluegill: { shape: "flake", verb: "Insect" },
+  perch: { shape: "flake", verb: "Minnow" },
+  pike: { shape: "crumb", verb: "Fish" },
+  walleye: { shape: "flake", verb: "Minnow" },
+  paddlefish: { shape: "flake", verb: "Plankton" },
+  lamprey: { shape: "pebble", verb: "Stone" },
+  american_eel: { shape: "crumb", verb: "Scrap" },
 };
 
 export function treatFor(key: string) {
@@ -308,4 +318,14 @@ export const GIFT_LINE: Record<string, string> = {
   snapper: "A fish I was finished snapping for.",
   box_turtle: "A worm I was finished shutting after.",
   tuatara: "An insect I was finished keeping still for.",
+  bass: "A minnow I was finished lunging for.",
+  brook_trout: "A fly I was finished rising for.",
+  catfish: "A scrap I was finished whisking for.",
+  bluegill: "An insect I was finished flaring for.",
+  perch: "A minnow I was finished barring for.",
+  pike: "A fish I was finished waiting for.",
+  walleye: "A minnow I was finished hunting dusk for.",
+  paddlefish: "A plankton I was finished filtering.",
+  lamprey: "A stone I was finished clinging to.",
+  american_eel: "A scrap I was finished taking toward the Sargasso.",
 };

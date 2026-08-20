@@ -445,6 +445,16 @@ const TREAT_SHAPE = {
   snapper: "crumb",
   box_turtle: "crumb",
   tuatara: "crumb",
+  bass: "flake",
+  brook_trout: "flake",
+  catfish: "crumb",
+  bluegill: "flake",
+  perch: "flake",
+  pike: "crumb",
+  walleye: "flake",
+  paddlefish: "flake",
+  lamprey: "pebble",
+  american_eel: "crumb",
 };
 
 function placeMark(kindName, x, hops = 0) {
@@ -1202,6 +1212,16 @@ const VISIT_LINE = {
   snapper: "I snapped. Then I left the mud.",
   box_turtle: "I shut. Then I left the leaf.",
   tuatara: "I kept still. Then I left the burrow.",
+  bass: "I lunged. Then I left the edge.",
+  brook_trout: "I rose. Then I left the riffle.",
+  catfish: "I whisked. Then I left the mud.",
+  bluegill: "I flared. Then I left the shade.",
+  perch: "I kept the bars. Then I left the rail.",
+  pike: "I waited. Then I left the reed.",
+  walleye: "I hunted dusk. Then I left the run.",
+  paddlefish: "I filtered. Then I left the current.",
+  lamprey: "I sat the disk. Then I left the stone.",
+  american_eel: "I swam. Then I left the hole.",
 };
 
 let visit = null;
