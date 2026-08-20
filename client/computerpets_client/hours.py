@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-hundred and seventy REST windows, same return lines. Do not invent rest hours or copy.
+hundred and eighty REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -188,6 +188,16 @@ REST: dict[str, tuple[int, int]] = {
     "planarian": (8, 18),
     "nematode": (22, 7),
     "amphipod": (8, 18),
+    "fiddler_crab": (8, 18),
+    "ghost_crab": (8, 17),
+    "limpet": (22, 7),
+    "barnacle": (22, 7),
+    "chiton": (8, 18),
+    "periwinkle": (22, 7),
+    "sand_dollar": (8, 18),
+    "sea_urchin": (8, 18),
+    "knobbed_whelk": (8, 18),
+    "lugworm": (8, 17),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -365,6 +375,16 @@ HIDE_LINE: dict[str, str] = {
     "planarian": "Inside the film.",
     "nematode": "Inside the film.",
     "amphipod": "Inside the pool.",
+    "fiddler_crab": "Inside the marsh.",
+    "ghost_crab": "Inside the burrow.",
+    "limpet": "On the rim.",
+    "barnacle": "On the stone.",
+    "chiton": "On the rock.",
+    "periwinkle": "On the face.",
+    "sand_dollar": "Under the plate.",
+    "sea_urchin": "Inside the pool.",
+    "knobbed_whelk": "Inside the wrack.",
+    "lugworm": "Inside the sand.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -538,6 +558,16 @@ SNACK_LINE: dict[str, str] = {
     "planarian": "Worm of a treaty.",
     "nematode": "Flake of a treaty.",
     "amphipod": "Scrap of a treaty.",
+    "fiddler_crab": "Algae of a treaty.",
+    "ghost_crab": "Scrap of a treaty.",
+    "limpet": "Algae of a treaty.",
+    "barnacle": "Drift of a treaty.",
+    "chiton": "Algae of a treaty.",
+    "periwinkle": "Algae of a treaty.",
+    "sand_dollar": "Diatom of a treaty.",
+    "sea_urchin": "Kelp of a treaty.",
+    "knobbed_whelk": "Clam of a treaty.",
+    "lugworm": "Silt of a treaty.",
 }
 
 

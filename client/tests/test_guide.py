@@ -37,6 +37,9 @@ from computerpets_client.guide import (
     LOG_GUIDE,
     log_guide_complete,
     log_guide_keys,
+    SHORE_GUIDE,
+    shore_guide_complete,
+    shore_guide_keys,
     STONE_GUIDE,
     stone_guide_complete,
     stone_guide_keys,
@@ -62,7 +65,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, POND_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -282,6 +285,19 @@ LOG_EXPECTED = [
     ("amphipod", "scud", "Gammarus minus"),
 ]
 
+SHORE_EXPECTED = [
+    ("fiddler_crab", "wave", "Minuca pugnax"),
+    ("ghost_crab", "pale", "Ocypode quadrata"),
+    ("limpet", "cone", "Patella vulgata"),
+    ("barnacle", "cement", "Semibalanus balanoides"),
+    ("chiton", "mail", "Tonicella lineata"),
+    ("periwinkle", "spire", "Littorina littorea"),
+    ("sand_dollar", "token", "Echinarachnius parma"),
+    ("sea_urchin", "thorn", "Strongylocentrotus purpuratus"),
+    ("knobbed_whelk", "knurl", "Busycon carica"),
+    ("lugworm", "heap", "Arenicola marina"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -307,6 +323,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert stone_guide_complete()
     assert creek_guide_complete()
     assert log_guide_complete()
+    assert shore_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -323,6 +340,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert stone_guide_keys() == STONE_KEYS
     assert creek_guide_keys() == CREEK_KEYS
     assert log_guide_keys() == LOG_KEYS
+    assert shore_guide_keys() == SHORE_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -489,6 +507,17 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert classroom_for(key).room == "log"
         assert classroom_for(key).verb == "stay"
         assert classroom_for(key).label == "All ten under the log"
+    for key, slug, latin in SHORE_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in SHORE_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "shore"
+        assert classroom_for(key).verb == "stay"
+        assert classroom_for(key).label == "All ten on the shore"
 
 
 def test_the_important_house_mixups_are_actually_taught():
@@ -996,6 +1025,51 @@ def test_the_important_log_mixups_are_actually_taught():
     assert re.search(r"side", amphipod, re.I)
 
 
+def test_the_important_shore_mixups_are_actually_taught():
+    fiddler = _taught(plaque_for("fiddler_crab"))
+    ghost = _taught(plaque_for("ghost_crab"))
+    limpet = _taught(plaque_for("limpet"))
+    barnacle = _taught(plaque_for("barnacle"))
+    chiton = _taught(plaque_for("chiton"))
+    periwinkle = _taught(plaque_for("periwinkle"))
+    sand_dollar = _taught(plaque_for("sand_dollar"))
+    urchin = _taught(plaque_for("sea_urchin"))
+    whelk = _taught(plaque_for("knobbed_whelk"))
+    lugworm = _taught(plaque_for("lugworm"))
+    assert re.search(r"not a hermit", fiddler, re.I)
+    assert re.search(r"Tenant", fiddler)
+    assert re.search(r"not Pinch", fiddler, re.I)
+    assert re.search(r"signal", fiddler, re.I)
+    assert re.search(r"not Tenant", ghost, re.I)
+    assert re.search(r"not Ledger", ghost, re.I)
+    assert re.search(r"not Ghost", ghost, re.I)
+    assert re.search(r"not a horseshoe crab", ghost, re.I)
+    assert re.search(r"not Lid", limpet, re.I)
+    assert re.search(r"not Cement", limpet, re.I)
+    assert re.search(r"clamp", limpet, re.I)
+    assert re.search(r"not a limpet", barnacle, re.I)
+    assert re.search(r"not a crab", barnacle, re.I)
+    assert re.search(r"Cone", barnacle)
+    assert re.search(r"not a limpet", chiton, re.I)
+    assert re.search(r"not Armor", chiton, re.I)
+    assert re.search(r"eight", chiton, re.I)
+    assert re.search(r"not Chamber", periwinkle, re.I)
+    assert re.search(r"not Whorl", periwinkle, re.I)
+    assert re.search(r"not Knurl", periwinkle, re.I)
+    assert re.search(r"not Coin", sand_dollar, re.I)
+    assert re.search(r"not Disk", sand_dollar, re.I)
+    assert re.search(r"not Ochre", sand_dollar, re.I)
+    assert re.search(r"not Burr", urchin, re.I)
+    assert re.search(r"not Spine", urchin, re.I)
+    assert re.search(r"not Token", urchin, re.I)
+    assert re.search(r"not Spire", whelk, re.I)
+    assert re.search(r"not Horn", whelk, re.I)
+    assert re.search(r"knob", whelk, re.I)
+    assert re.search(r"not Cast", lugworm, re.I)
+    assert re.search(r"not Latch", lugworm, re.I)
+    assert re.search(r"not an earthworm", lugworm, re.I)
+
+
 def _slice_entry(src: str, key: str, next_key: str | None) -> str:
     start = src.index(f'"{key}"')
     end = src.index(f'"{next_key}"') if next_key else len(src)
@@ -1018,6 +1092,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     stone_src = (WEB_PETS / "stone-guide.ts").read_text(encoding="utf-8")
     creek_src = (WEB_PETS / "creek-guide.ts").read_text(encoding="utf-8")
     log_src = (WEB_PETS / "log-guide.ts").read_text(encoding="utf-8")
+    shore_src = (WEB_PETS / "shore-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -1033,6 +1108,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     stone_keys = [key for key, _, _ in STONE_EXPECTED]
     creek_keys = [key for key, _, _ in CREEK_EXPECTED]
     log_keys = [key for key, _, _ in LOG_EXPECTED]
+    shore_keys = [key for key, _, _ in SHORE_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -1148,6 +1224,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(LOG_EXPECTED):
         nxt = log_keys[index + 1] if index + 1 < len(log_keys) else None
         chunk = _slice_entry(log_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(SHORE_EXPECTED):
+        nxt = shore_keys[index + 1] if index + 1 < len(shore_keys) else None
+        chunk = _slice_entry(shore_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk
