@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from house_walkers import PHOTO_KEEP, SNAKE_STAMPS
+from house_walkers import PHOTO_KEEP, POSE_OWNED, SNAKE_STAMPS
 
 ROOT = Path(__file__).resolve().parents[2]
 SPRITES = ROOT / "web" / "public" / "sprites"
@@ -95,7 +95,7 @@ def main() -> None:
                 crumbs.append(f"red_panda/{anim}/{i + 1}")
 
     shared = []
-    for key in sorted(SNAKE_STAMPS) + ["crocodile"]:
+    for key in sorted(POSE_OWNED):
         idle = SPRITES / key / "idle" / "1.png"
         walk = SPRITES / key / "walk" / "1.png"
         sleep = SPRITES / key / "sleep" / "1.png"
@@ -113,7 +113,7 @@ def main() -> None:
         fail(f"magenta crumbs still on {crumbs[:12]} ({len(crumbs)})")
     if shared:
         fail(f"walk/sleep still share idle on {shared}")
-    print(f"ok 210 walkers, no plate, no thin stamp, rui crumbs gone, snake poses own")
+    print(f"ok 210 walkers, no plate, no thin stamp, rui crumbs gone, owned poses own")
 
 
 if __name__ == "__main__":

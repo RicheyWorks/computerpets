@@ -72,6 +72,30 @@ SNAKE_STAMPS = {
     "rosy_boa",
 }
 
+# Walk and sleep are their own paintings, not a gait stamp of idle.
+POSE_OWNED = SNAKE_STAMPS | {
+    "crocodile",
+    "alligator",
+    "anole",
+    "tuatara",
+    "gecko",
+    "skink",
+    "chameleon",
+    "horned_lizard",
+    "snapper",
+    "box_turtle",
+    "bumblebee",
+    "carpenter_bee",
+    "mason_bee",
+    "leafcutter",
+    "stingless",
+    "sweat_bee",
+    "mining_bee",
+    "honey_drone",
+    "honey_queen",
+    "honeycomb",
+}
+
 
 def _c(rgb, dim, a=255):
     return tuple(max(0, min(255, int(c * dim))) for c in rgb) + (a,)
@@ -319,11 +343,21 @@ def mild_pose(pose: dict) -> dict:
 
 
 def write_kind_from_poses(key: str, bodies: dict[str, Image.Image]) -> None:
-    """Each pose folder keeps its own painted body. Walk is not a tilted idle."""
+    """Each pose folder keeps its own painted body. Walk is not a tilted idle.
+
+    A later guest may keep the house-hand idle already sat in #92. New
+    walk, sit, sleep, talk, eat, and play paintings replace only those folders.
+    """
     idle = bodies.get("idle")
+    preserve_idle = idle is None
     if idle is None:
-        raise ValueError(f"{key} needs an idle painting")
+        existing = WEB_SPRITES / key / "idle" / "1.png"
+        if not existing.exists():
+            raise ValueError(f"{key} needs an idle painting")
+        idle = Image.open(existing).convert("RGBA")
     for anim, count in ANIMS.items():
+        if preserve_idle and anim == "idle":
+            continue
         body = bodies.get(anim) or idle
         dest = WEB_SPRITES / key / anim
         dest.mkdir(parents=True, exist_ok=True)
@@ -1624,7 +1658,8 @@ def sit_pose_bodies_from(folder: Path, keys: list[str] | None = None) -> list[st
             continue
         found.setdefault(key, {})[anim] = path
     for key, poses in sorted(found.items()):
-        if "idle" not in poses:
+        existing_idle = WEB_SPRITES / key / "idle" / "1.png"
+        if "idle" not in poses and not existing_idle.exists():
             print(f"skip {key}: no idle painting", flush=True)
             continue
         print(f"sit poses {key} {sorted(poses)}", flush=True)
