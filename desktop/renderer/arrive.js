@@ -1,4 +1,4 @@
-/** A lift on the guest. A short one talks. A long one places them. Neither is walking in. */
+/** A lift on the guest. A short one is a choice. A long one places them. Neither is walking in. */
 (function (root) {
   const TAP_PX = 8;
 

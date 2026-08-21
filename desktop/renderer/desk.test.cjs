@@ -60,7 +60,7 @@ test("Mac overlay is a panel extra, not a Windows tray in a wrapper", () => {
   assert.doesNotMatch(appMenuSrc, /Minds/);
 });
 
-test("a Mac tap talks; a drag is still a carry; control-click tends", () => {
+test("a Mac tap is a choice; a drag is still a carry; control-click tends", () => {
   assert.equal(D.tapPx("darwin"), D.TAP_PX_MAC);
   assert.equal(D.tapPx("win32"), D.TAP_PX);
   assert.equal(D.tapPx("MacIntel"), 12);

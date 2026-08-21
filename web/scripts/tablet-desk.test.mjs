@@ -112,7 +112,7 @@ test("a finger needs more wood than a mouse; the desks keep their slop", () => {
   assert.equal(place.arrive, false);
 });
 
-test("a long still finger tends; a short still finger talks; a drag is a carry", () => {
+test("a long still finger tends; a short still finger is a choice; a drag is a carry", () => {
   assert.equal(T.tabletLift(80, 3, 2), "tap");
   assert.equal(T.tabletLift(T.HOLD_MS, 3, 2), "tend");
   assert.equal(T.tabletLift(T.HOLD_MS + 40, 2, 1), "tend");

@@ -1,4 +1,4 @@
-/** How the sit sits on a phone. A tap talks. A drag is a carry. A long-press tends. /live is the door. */
+/** How the sit sits on a phone. A tap is a choice. A drag is a carry. A long-press tends. /live is the door. */
 
 import {
   HOLD_MS,
@@ -87,7 +87,7 @@ export function sitClick(sit: PhoneSit | string | null | undefined): "care" | "n
 }
 
 /**
- * A long still thumb tends. A short still thumb talks. A long move is a carry.
+ * A long still thumb tends. A short still thumb is a choice. A long move is a carry.
  * Same house walk as the tablet. The slop is a phone slop.
  */
 export function phoneLift(

@@ -107,7 +107,7 @@ test("a thumb needs more wood than a mouse and less than a tablet", () => {
   assert.equal(place.arrive, false);
 });
 
-test("a long still thumb tends; a short still thumb talks; a drag is a carry", () => {
+test("a long still thumb tends; a short still thumb is a choice; a drag is a carry", () => {
   assert.equal(P.phoneLift(80, 3, 2), "tap");
   assert.equal(P.phoneLift(P.HOLD_MS, 3, 2), "tend");
   assert.equal(P.phoneLift(P.HOLD_MS + 40, 2, 1), "tend");

@@ -23,7 +23,7 @@ Vite listens on `0.0.0.0:8080`. Open [http://localhost:8080](http://localhost:80
 
 Guests get Rui immediately. Sign in when you want to hatch, nest, and care.
 
-The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/roost`, `/corner`, `/wood`, `/canopy`, `/stone`, `/creek`, `/log`, `/shore`, `/reef`, `/meadow`, `/cellar`, `/well`, `/far`. On a tablet they sit the blotter. On a phone they sit the tall blotter. A tap talks. A drag is a carry. A long-press tends. Open **Live** and Add to Home Screen.
+The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/roost`, `/corner`, `/wood`, `/canopy`, `/stone`, `/creek`, `/log`, `/shore`, `/reef`, `/meadow`, `/cellar`, `/well`, `/far`. On a tablet they sit the blotter. On a phone they sit the tall blotter. A tap is a choice. A drag is a carry. A long-press tends. Open **Live** and Add to Home Screen.
 
 Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from local lines.
 

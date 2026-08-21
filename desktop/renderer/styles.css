@@ -321,6 +321,38 @@ body {
   opacity: 1;
 }
 
+#choice {
+  position: absolute;
+  left: 0;
+  bottom: 196px;
+  display: none;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  max-width: 220px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid #2a2621;
+  background: rgb(22 20 18 / 0.94);
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+#choice.show {
+  display: flex;
+}
+
+#choice button {
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: #f2ece3;
+  background: none;
+  border: 0;
+  padding: 8px 6px;
+  min-height: 36px;
+  cursor: pointer;
+}
+
 #hud-name {
   margin: 0;
   font-size: 12px;

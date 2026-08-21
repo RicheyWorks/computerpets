@@ -54,6 +54,8 @@ test("the demo is a room; the guest is already walking", () => {
   assert.match(demoSrc, /PhoneDeskSit/);
   assert.match(roomSrc, /LivingPet/);
   assert.match(roomSrc, /dropTreatAt/);
+  assert.match(roomSrc, /GuestChoice/);
+  assert.match(roomSrc, /guestTap\(\)/);
   assert.doesNotMatch(demoSrc, /BrowserWindow|setIgnoreMouseEvents|overlay/);
 });
 

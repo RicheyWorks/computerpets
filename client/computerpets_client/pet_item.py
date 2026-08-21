@@ -173,7 +173,7 @@ class MessPileItem(QGraphicsObject):
 
 
 class LivingPetItem(QGraphicsObject):
-    """Tap the guest to hear the house voice and keep the plaque on them."""
+    """Tap the guest. They wait for a sit."""
 
     tapped = pyqtSignal()
     arrived = pyqtSignal()
