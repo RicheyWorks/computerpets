@@ -1,4 +1,4 @@
-"""A living pet on the blotter: wander, eat, hide, seek a treat."""
+"""A living pet on the blotter: wander, eat, hide, seek a treat or a ribbon."""
 
 from __future__ import annotations
 
@@ -38,6 +38,46 @@ class TreatItem(QGraphicsPixmapItem):
         self.setPos(x, y)
         self.setZValue(2)
         self.setTransformationMode(Qt.TransformationMode.SmoothTransformation)
+
+
+class LureItem(QGraphicsObject):
+    """A ribbon on the wood — same catch as the desk / overlay lure."""
+
+    caught = pyqtSignal()
+
+    def __init__(self, x: float, y: float = 368):
+        super().__init__()
+        self._flutter = 0.0
+        self.setPos(x, y)
+        self.setZValue(3)
+        self.setRotation(-10)
+        self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+    def boundingRect(self) -> QRectF:
+        return QRectF(0, 0, 14, 22)
+
+    def paint(self, painter: QPainter, option, widget=None) -> None:  # noqa: ARG002
+        flutter = math.sin(self._flutter * 5.7) * 12
+        painter.save()
+        painter.translate(3, 18)
+        painter.rotate(flutter)
+        painter.translate(-3, -18)
+        painter.setPen(QPen(QColor(12, 11, 10, 70), 1))
+        painter.setBrush(QBrush(QColor(176, 137, 104, 230)))
+        painter.drawRoundedRect(QRectF(0, 0, 14, 22), 2, 8)
+        painter.restore()
+
+    def advance_flutter(self, dt: float) -> None:
+        self._flutter += dt
+        self.update()
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.caught.emit()
+            event.accept()
+            return
+        super().mousePressEvent(event)
 
 
 class ShedCoatItem(QGraphicsObject):
@@ -95,6 +135,7 @@ class LivingPetItem(QGraphicsObject):
     """Tap the guest to hear the house voice and keep the plaque on them."""
 
     tapped = pyqtSignal()
+    arrived = pyqtSignal()
 
     def __init__(self, species: Species):
         super().__init__()
@@ -132,6 +173,7 @@ class LivingPetItem(QGraphicsObject):
         self.act_walk = False
         self._tongue = 0.0
         self._edge: float | None = None
+        self.hop = 0.0
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
@@ -278,10 +320,8 @@ class LivingPetItem(QGraphicsObject):
             self._aim_at(self._logic_x + self.facing * dist)
 
     def issue(self, cmd: str, target: float | None = None) -> None:
-        # play / talk are house verbs; the wood already has wander and sit.
-        if cmd == "play":
-            cmd = "wander"
-        elif cmd == "talk":
+        # talk sits. Play is a hop after the ribbon, not a wander.
+        if cmd == "talk":
             cmd = "sit"
         if self.act and cmd in ("wander", "idle"):
             return
@@ -292,10 +332,20 @@ class LivingPetItem(QGraphicsObject):
         self.waypoints = []
         self.pose_hold = 0.0
         self.pending_pose = None
+        self.hop = 0.0
         if cmd == "eat":
             self.anim = "eat"
             self.frame = 0
             self.acc = 0.0
+        elif cmd == "play":
+            self.hop = 1.0
+            self.anim = "play"
+            self.frame = 0
+            self.acc = 0.0
+            self.target = None
+            self.waypoints = []
+            self.turn_hold = 0.0
+            self.pending_facing = None
         elif cmd in ("hide", "enter", "seek", "wander"):
             self.anim = "walk"
             self.frame = 0
@@ -304,6 +354,10 @@ class LivingPetItem(QGraphicsObject):
             self._edge = None
             if target is not None:
                 self._aim_at(target)
+        elif cmd == "idle":
+            self.anim = "idle"
+            self.frame = 0
+            self.target = None
         elif cmd in ("sit", "sleep"):
             self.pose_hold = POSE_HOLD_S
             self.pending_pose = cmd
@@ -316,9 +370,10 @@ class LivingPetItem(QGraphicsObject):
         settle = settle_offset(self.settle, self.settle_dir, self.overshoot) if self.settle > 0 else 0.0
         perch_step = abs(math.sin(self.walk_age * 8.0)) * 7.0 if self.anim == "walk" and self.species.perch and not self._crawl() else 0.0
         pose = act_pose(self.act_motion, self.act_t, self.act_hold) if self.act else {"dx": 0.0, "dy": 0.0}
+        hop_px = math.sin(self.hop * math.pi) * 18.0 if self.hop > 0 else 0.0
         self._logic_x = x
         self._display_dx = sway + shift + settle + pose["dx"]
-        self.setPos(x + self._display_dx, y - perch_step - pose["dy"])
+        self.setPos(x + self._display_dx, y - perch_step - pose["dy"] - hop_px)
         self.update()
 
     def advance_pet(self, dt: float, care: CareState, width: float) -> None:
@@ -336,11 +391,11 @@ class LivingPetItem(QGraphicsObject):
         while self.acc >= step:
             self.acc -= step
             self.frame += 1
-            if self.anim in ("eat",) and self.frame >= len(pack):
+            if self.anim in ("eat", "play") and self.frame >= len(pack):
                 self.once_done = True
                 self.anim = "idle"
                 self.frame = 0
-                if self.cmd == "eat":
+                if self.cmd in ("eat", "play"):
                     self.cmd = "wander"
             self.frame %= len(pack)
 
@@ -448,15 +503,20 @@ class LivingPetItem(QGraphicsObject):
                 x += direction * self._speed("seek", remaining) * dt
                 if (direction == 1 and x >= self.target) or (direction == -1 and x <= self.target):
                     x = self.target
-                    self.cmd = "eat"
-                    self.anim = "eat"
-                    self.frame = 0
                     self.target = None
                     self.walk_age = 0.0
+                    self._place(max(left, min(right, x)), y)
+                    self.arrived.emit()
+                    if self.cmd == "seek":
+                        self.cmd = "idle"
+                        self.anim = "idle"
+                    return
             self._place(max(left, min(right, x)), y)
             return
 
-        if self.cmd == "eat":
+        if self.cmd in ("eat", "play"):
+            if self.hop > 0:
+                self.hop = max(0.0, self.hop - dt * 2.15)
             self._place(x, y)
             return
 

@@ -322,7 +322,7 @@ class Species:
 
 def _fps(walk: float, *, crawl: bool = False) -> dict[str, float]:
     walk_fps = 5.0 if crawl else min(8.6, max(3.4, walk / 16.0))
-    return {"idle": 2.8, "walk": walk_fps, "sit": 2.2, "eat": 3.8, "sleep": 1.8}
+    return {"idle": 2.8, "walk": walk_fps, "sit": 2.2, "eat": 3.8, "sleep": 1.8, "play": 6.6}
 
 
 def _kind(
@@ -412,7 +412,7 @@ RUI = _kind(
     hide=("I went where the ribbon goes.", "The drawer is closed. By me."),
     call=("You called. I brought the whole tail.", "You found me. The blotter is still mine."),
     hungry=("The books are not edible. I checked.", "A small snack would improve my philosophy."),
-    fps={"idle": 3.2, "walk": 7.5, "sit": 2.4, "eat": 4.4, "sleep": 2.0},
+    fps={"idle": 3.2, "walk": 7.5, "sit": 2.4, "eat": 4.4, "sleep": 2.0, "play": 7.2},
 )
 
 MISO = _kind(
@@ -440,7 +440,7 @@ MISO = _kind(
     hide=("The ledge is closed.", "I waited by the door that is not here."),
     call=("I returned. The sun moved.", "You may look. I was never gone."),
     hungry=("The books are not food. I checked, once.",),
-    fps={"idle": 2.8, "walk": 6.4, "sit": 2.2, "eat": 3.8, "sleep": 1.8},
+    fps={"idle": 2.8, "walk": 6.4, "sit": 2.2, "eat": 3.8, "sleep": 1.8, "play": 6.6},
 )
 
 PIP = _kind(
@@ -468,7 +468,7 @@ PIP = _kind(
     hide=("I will be under the desk. Call if you walk.", "I waited by the door that is not here."),
     call=("You called. I was already coming.", "You came back. I kept the rug warm."),
     hungry=("I have considered the keyboard. It is not food. Sadly.",),
-    fps={"idle": 2.8, "walk": 6.8, "sit": 2.2, "eat": 3.8, "sleep": 1.8},
+    fps={"idle": 2.8, "walk": 6.8, "sit": 2.2, "eat": 3.8, "sleep": 1.8, "play": 6.6},
 )
 
 THIMBLE = _kind(
