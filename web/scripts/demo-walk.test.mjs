@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -11,12 +12,16 @@ const D = await import(join(root, "src/lib/pets/mac-desk.ts"));
 const Hive = await import(join(root, "src/lib/pets/hive.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
 const Treats = await import(join(root, "src/lib/pets/treats.ts"));
+const Traits = await import(join(root, "src/lib/pets/traits.ts"));
+const OverlaySpecial = createRequire(import.meta.url)(join(root, "../desktop/renderer/specials.js"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
 const treatsSrc = readFileSync(join(root, "src/lib/pets/treats.ts"), "utf8");
 const overlayPetSrc = readFileSync(join(root, "../desktop/renderer/pet.js"), "utf8");
+const overlaySpecialsSrc = readFileSync(join(root, "../desktop/renderer/specials.js"), "utf8");
+const overlayLifeSrc = readFileSync(join(root, "../desktop/renderer/life.js"), "utf8");
 const overlayStyleSrc = readFileSync(join(root, "../desktop/renderer/styles.css"), "utf8");
 const extraSrc = readFileSync(join(root, "src/components/desk/mac-desk-extra.tsx"), "utf8");
 const markSrc = readFileSync(join(root, "src/components/desk/linux-desk-extra.tsx"), "utf8");
@@ -111,6 +116,29 @@ test("the demo is the same house: Bandit and Coral drop an egg, the way the blot
   assert.match(overlayStyleSrc, /data-shape="egg"/);
   assert.doesNotMatch(overlayPetSrc, /kingsnake: "pebble"/);
   assert.doesNotMatch(overlayPetSrc, /milk_snake: "pebble"/);
+});
+
+test("the demo is the same house: later dens keep a living special, the way the blotter already does", () => {
+  const pins = [
+    ["brain_coral", "sit", "Ridge"],
+    ["field_cricket", "talk", "Chirp"],
+    ["fiddler_crab", "wander", "Wave"],
+    ["howler", "talk", "Boom"],
+    ["grouper", "sit", "Hide"],
+    ["velvet_worm", "play", "Jet"],
+  ];
+  for (const [key, cmd, verb] of pins) {
+    const trait = Traits.traitFor(key);
+    assert.equal(trait.verb, verb, key);
+    assert.equal(OverlaySpecial.commandFor(trait.special), cmd, key);
+  }
+  assert.match(roomSrc, /applySpecial/);
+  assert.match(roomSrc, /trait\.verb/);
+  assert.match(demoSrc, /CompanionRoom/);
+  assert.match(overlaySpecialsSrc, /brain_coral: "Ridge"/);
+  assert.match(overlaySpecialsSrc, /field_cricket: "Chirp"/);
+  assert.match(overlaySpecialsSrc, /fiddler_crab: "Wave"/);
+  assert.doesNotMatch(overlayLifeSrc, /default:\s*\n\s*return \{ life, line: pick\(extra\.special/);
 });
 
 test("the demo is the same house: night ticks, tend sits, and the kept guest is not written", () => {

@@ -123,6 +123,10 @@ test("the Linux mark sits in the panel; a click opens care; first click is a sit
 
 test("the extra keeps the house verbs; hide-the-guest is not hide-the-window", () => {
   for (const verb of D.careVerbs()) {
+    if (verb === "Special") {
+      assert.match(mainSrc, /lastVitals\.verb \|\| "Special"/);
+      continue;
+    }
     assert.match(mainSrc, new RegExp(`label: "${verb}"`));
   }
   assert.equal(D.hideWindowLabel(), "Hide the window");

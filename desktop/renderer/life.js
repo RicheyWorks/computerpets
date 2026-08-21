@@ -2,6 +2,7 @@
   const STORE = "computerpets.desktop.life.v2";
   const Hours = () => root.PetHours;
   const Hive = () => root.PetHive;
+  const Special = () => root.PetSpecial;
 
   function snackLine(key, existing) {
     const hours = Hours();
@@ -313,80 +314,30 @@
 
   function runSpecial(life, trait, now) {
     const extra = trait.extra || {};
-    bondUp(life, 2);
-    switch (trait.special) {
-      case "ribbon":
-        life.ribbon += 1;
-        life.mood = clamp(life.mood + 8);
-        if (life.bond >= 50 && life.gifts.length < 2) life.gifts.push({ id: `g-${now}`, x: 0.4 + Math.random() * 0.2 });
-        return { life, line: pick(extra.special), cmd: "play", notify: life.ribbon === 1 ? "ribbon" : null };
-      case "follow":
-        life.mood = clamp(life.mood + 4);
-        return { life, line: pick(extra.special), cmd: "wander", notify: null };
-      case "thump":
-        life.startledUntil = now + 2500;
-        return { life, line: pick(extra.special), cmd: "wander", notify: null };
-      case "hoard":
-        life.mood = clamp(life.mood + 6);
-        return { life, line: pick(extra.special), cmd: "sit", notify: null };
-      case "wheek":
-        life.mood = clamp(life.mood + 10);
-        return { life, line: pick(extra.special), cmd: "talk", notify: "wheek" };
-      case "still":
-      case "bask":
-        life.energy = clamp(life.energy + 8);
-        return { life, line: pick(extra.special), cmd: "sit", notify: null };
-      case "loop":
-        return { life, line: pick(extra.special), cmd: "wander", notify: null };
-      case "echo":
-      case "quote":
-        return { life, line: pick(extra.special), cmd: "talk", notify: null };
-      case "bug":
-        return { life, line: pick(extra.special), cmd: "talk", notify: "bug" };
-      case "ritual":
-        life.bond = clamp(life.bond + 3);
-        return { life, line: pick(extra.special), cmd: "sit", notify: null };
-      case "steal":
-        life.mood = clamp(life.mood + 8);
-        if (life.mess.length < 3) life.mess.push({ id: `steal-${now}`, x: 0.35 + Math.random() * 0.3, age: now });
-        return { life, line: pick(extra.special), cmd: "play", notify: "steal" };
-      case "curl":
-        return { life, line: pick(extra.special), cmd: "sit", notify: null };
-      case "bath":
-        return act(life, trait, "bath", now);
-      case "regrow":
-        life.health = clamp(life.health + 12);
-        return { life, line: pick(extra.special), cmd: "idle", notify: null };
-      case "bill":
-        return { life, line: pick(extra.special), cmd: "talk", notify: null };
-      case "reborn":
-        life.health = clamp(life.health + 10);
-        return { life, line: pick(extra.special), cmd: "talk", notify: "reborn" };
-      case "sun":
-        life.mood = clamp(life.mood + 6);
-        life.energy = clamp(life.energy + 4);
-        return { life, line: pick(extra.special), cmd: "sit", notify: null };
-      case "coil":
-      case "drape":
-      case "hold":
-      case "nest":
-        life.energy = clamp(life.energy + 8);
-        life.mood = clamp(life.mood + 6);
-        return { life, line: pick(extra.special), cmd: "sit", notify: null };
-      case "playdead":
-        life.energy = clamp(life.energy + 10);
-        return { life, line: pick(extra.special), cmd: "sit", notify: null };
-      case "slither":
-      case "patrol":
-      case "chart":
-        return { life, line: pick(extra.special), cmd: "wander", notify: null };
-      case "mimic":
-      case "inspect":
-        life.mood = clamp(life.mood + 8);
-        return { life, line: pick(extra.special), cmd: "talk", notify: null };
-      default:
-        return { life, line: pick(extra.special || ["..."]), cmd: "idle", notify: null };
+    const law = Special();
+    const applied = law && law.applySpecial
+      ? law.applySpecial(life, trait.special)
+      : { stats: { ...life, bond: clamp(life.bond + 2) }, cmd: "idle" };
+    life.bond = applied.stats.bond;
+    life.mood = applied.stats.mood;
+    life.energy = applied.stats.energy;
+    life.hygiene = applied.stats.hygiene;
+    life.health = applied.stats.health;
+    let notify = null;
+    if (trait.special === "ribbon") {
+      life.ribbon += 1;
+      if (life.bond >= 50 && life.gifts.length < 2) life.gifts.push({ id: `g-${now}`, x: 0.4 + Math.random() * 0.2 });
+      notify = life.ribbon === 1 ? "ribbon" : null;
     }
+    if (trait.special === "steal") {
+      if (life.mess.length < 3) life.mess.push({ id: `steal-${now}`, x: 0.35 + Math.random() * 0.3, age: now });
+      notify = "steal";
+    }
+    if (trait.special === "thump") life.startledUntil = now + 2500;
+    if (trait.special === "wheek") notify = "wheek";
+    if (trait.special === "bug") notify = "bug";
+    if (trait.special === "reborn") notify = "reborn";
+    return { life, line: pick(extra.special || ["..."]), cmd: applied.cmd, notify };
   }
 
   function bondTitle(bond) {

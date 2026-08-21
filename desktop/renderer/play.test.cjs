@@ -103,9 +103,10 @@ test("only the pet and a treat, ribbon, or mess on the floor is hittable", () =>
 });
 
 test("tray care stays the house verbs; hide-the-guest is not hide-the-window", () => {
-  for (const verb of ["Feed", "Treat", "Play", "Rest", "Talk", "Hide", "Call back", "Clean", "Bath", "Medicine", "Praise", "Special", "Shed"]) {
+  for (const verb of ["Feed", "Treat", "Play", "Rest", "Talk", "Hide", "Call back", "Clean", "Bath", "Medicine", "Praise", "Shed"]) {
     assert.match(mainSrc, new RegExp(`label: "${verb}"`));
   }
+  assert.match(mainSrc, /lastVitals\.verb \|\| "Special"/);
   assert.equal([...mainSrc.matchAll(/label: "Call back"/g)].length, 1);
   assert.equal([...mainSrc.matchAll(/label: "Hide the window"/g)].length, 2);
   assert.doesNotMatch(mainSrc, /label: "Hide", click: \(\) => win\?\.hide/);

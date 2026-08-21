@@ -201,6 +201,7 @@ function paintHud() {
     mess: life.mess.length,
     stage: life.stage,
     bond: life.bond,
+    verb: window.PetSpecial?.verbFor(kind.key) || "Special",
   });
 }
 
