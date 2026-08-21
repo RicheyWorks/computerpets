@@ -147,6 +147,7 @@ export function LivingPet({
   onTend,
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const hitRef = useRef<HTMLDivElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
@@ -635,11 +636,14 @@ export function LivingPet({
       const drawX = s.x + sway + shiftX + settleX + pose.dx;
       const drawY = y + pose.dy;
 
+      const walkXform = `translate3d(${drawX}px, ${-drawY}px, 0) rotate(${pose.rot}deg) scale(${s.facing * squat * scale}, ${stretch * scale})`;
+      if (hitRef.current) {
+        hitRef.current.style.transform = walkXform;
+      }
       if (imgRef.current) {
         if (imgRef.current.src !== new URL(src, window.location.origin).href) {
           imgRef.current.src = src;
         }
-        imgRef.current.style.transform = `translate3d(${drawX}px, ${-drawY}px, 0) rotate(${pose.rot}deg) scale(${s.facing * squat * scale}, ${stretch * scale})`;
       }
       if (shadowRef.current) {
         const shrink = 1 - hopPx / 90;
@@ -826,22 +830,35 @@ export function LivingPet({
           strokeLinecap="round"
         />
       </svg>
-      <img
-        ref={imgRef}
+      <div
+        ref={hitRef}
         data-pet
-        src={sprites.idle[0]}
-        alt=""
-        draggable={false}
-        className="pointer-events-auto absolute bottom-0 left-0 h-44 w-44 cursor-grab object-contain object-bottom active:cursor-grabbing select-none touch-none"
+        data-pet-hit
+        className="pointer-events-auto absolute bottom-0 left-0 cursor-grab active:cursor-grabbing select-none touch-none"
         style={{
           willChange: "transform",
           transformOrigin: "center bottom",
-          opacity: hidden ? 0 : 1,
-          filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+          background: "transparent",
           pointerEvents: hidden ? "none" : "auto",
-          transition: "opacity 280ms ease, filter 280ms ease",
         }}
-      />
+      >
+        <img
+          ref={imgRef}
+          data-pet-art
+          src={sprites.idle[0]}
+          alt=""
+          draggable={false}
+          className="pointer-events-none block h-44 w-44 object-contain object-bottom"
+          style={{
+            background: "transparent",
+            padding: 0,
+            border: 0,
+            opacity: hidden ? 0 : 1,
+            filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+            transition: "opacity 280ms ease, filter 280ms ease",
+          }}
+        />
+      </div>
     </div>
   );
 }

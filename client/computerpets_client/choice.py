@@ -68,7 +68,7 @@ def guest_pick(mark_id: str) -> str | None:
 
 
 def guest_hit_pad(*, phone: bool = False, tablet: bool = False) -> int:
-    """Extra wood around the guest on a finger sit. The room around them may still pan."""
+    """Extra wood around the guest on a finger sit. The pad is empty. It does not paint a plate."""
     if phone:
         return 12
     if tablet:

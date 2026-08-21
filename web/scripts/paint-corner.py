@@ -334,48 +334,20 @@ def paint_corner(key: str, anim: str, index: int) -> Image.Image:
 
 
 def write_sprites():
+    from house_walkers import PHOTO_KEEP, knockout_kind, write_kind
     for key in KEYS:
-        for anim, count in ANIMS.items():
-            dest = WEB_SPRITES / key / anim
-            dest.mkdir(parents=True, exist_ok=True)
-            for i in range(count):
-                paint_corner(key, anim, i).save(dest / f"{i + 1}.png", "PNG", optimize=True)
-        desk = DESK_SPRITES / key
-        if desk.exists():
-            shutil.rmtree(desk)
-        shutil.copytree(WEB_SPRITES / key, desk)
+        if key in PHOTO_KEEP:
+            knockout_kind(key)
+        else:
+            write_kind(key)
         print(f"sprites {key}", flush=True)
 
 
 def write_portraits():
-    if HABITAT.exists():
-        study = Image.open(HABITAT).convert("RGB")
-        study = ImageEnhance.Color(study).enhance(0.92)
-        study = ImageEnhance.Brightness(study).enhance(0.72)
-    else:
-        study = Image.new("RGB", (1408, 1408), (42, 32, 24))
-    try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif-Italic.ttf", 28)
-        small = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf", 18)
-    except OSError:
-        font = ImageFont.load_default()
-        small = font
-    WEB_PETS.mkdir(parents=True, exist_ok=True)
+    from house_walkers import write_portrait
     for key in KEYS:
-        plate = paint_corner(key, "idle", 0)
-        canvas = study.resize((1408, 1408), Image.Resampling.LANCZOS)
-        inset = plate.resize((720, 720), Image.Resampling.LANCZOS)
-        mask = Image.new("L", inset.size, 0)
-        ImageDraw.Draw(mask).ellipse((40, 40, 680, 680), fill=255)
-        mask = mask.filter(ImageFilter.GaussianBlur(18))
-        canvas.paste(inset, (344, 220), mask)
-        draw = ImageDraw.Draw(canvas)
-        draw.rounded_rectangle((90, 1120, 720, 1320), 10, fill=(236, 226, 206))
-        draw.text((118, 1150), LATIN[key], font=font, fill=(32, 26, 20))
-        draw.text((118, 1200), key.replace("_", " "), font=small, fill=(90, 72, 52))
-        canvas.save(WEB_PETS / f"{key}.jpg", "JPEG", quality=90)
+        write_portrait(key)
         print(f"portrait {key}", flush=True)
-
 
 def extract_roster() -> list[dict]:
     src = CORNER_TS.read_text()
