@@ -12,9 +12,23 @@ from typing import Literal
 
 Weather = Literal["clear", "rain", "wind", "heat"]
 
-_SWIMMERS = frozenset({"goldfish", "axolotl", "penguin"})
-_RAIN_LINE_KEYS = frozenset({"goldfish", "axolotl", "turtle", "penguin"})
-_WIND_KEYS = frozenset({"budgie", "parrot", "toucan", "phoenix"})
+_SWIMMERS = frozenset({"goldfish", "axolotl", "penguin", "mallard", "canada_goose"})
+_RAIN_LINE_KEYS = frozenset({"goldfish", "axolotl", "turtle", "penguin", "mallard", "canada_goose"})
+_WIND_KEYS = frozenset(
+    {
+        "budgie",
+        "parrot",
+        "toucan",
+        "phoenix",
+        "crow",
+        "raven",
+        "red_tail",
+        "chickadee",
+        "hummingbird",
+        "pileated",
+        "robin",
+    }
+)
 _HEAT_SIT = frozenset(
     {
         "iguana",
