@@ -34,6 +34,7 @@ from .hours import (
     day_part,
     day_part_label,
     is_resting_hour,
+    hide_line,
     remember_visit,
     return_line,
 )
@@ -458,22 +459,18 @@ class DeskWindow(QMainWindow):
         return at
 
     def _treat(self) -> None:
-        result = apply_treat(self.care, self.species)
-        self.care = result.state
-        if result.cmd == "seek":
-            self._clear_marks()
-            self._taken = False
-            self._mark = "treat"
-            tx = 420 + (hash(self.species.key) % 180)
-            self.treat = TreatItem(self.species.treat_shape, tx, 400)
-            self.scene.addItem(self.treat)
-            self.pet.issue("seek", tx - 40)
-        self._say(result.line)
-        self._keep_care()
-        self._refresh_vitals()
+        if self.care.hidden or self.pet.cmd == "leave":
+            return
+        self._clear_marks()
+        self._taken = False
+        self._mark = "treat"
+        tx = 420 + (hash(self.species.key) % 180)
+        self.treat = TreatItem(self.species.treat_shape, tx, 400)
+        self.scene.addItem(self.treat)
+        self.pet.issue("seek", tx - 40)
 
     def _play(self) -> None:
-        if self.care.hidden:
+        if self.care.hidden or self.pet.cmd == "leave":
             return
         at = self._place_lure(0)
         self.pet.issue("seek", at - 40)
@@ -515,8 +512,19 @@ class DeskWindow(QMainWindow):
             return
         if hop.act == "snack":
             self._clear_marks()
+            result = apply_treat(self.care, self.species)
+            self.care = result.state
+            self._say(result.line)
             if hop.issue_eat:
                 self.pet.issue("eat")
+            self._keep_care()
+            self._refresh_vitals()
+            return
+        if hop.act == "hide":
+            result = apply_hide(self.care, self.species)
+            self.care = result.state
+            self._keep_care()
+            self._refresh_vitals()
             return
         if hop.act == "idle":
             self.pet.issue("idle")
@@ -588,14 +596,17 @@ class DeskWindow(QMainWindow):
     def _hide_or_call(self) -> None:
         if self.care.hidden:
             result = apply_call(self.care, self.species)
-        else:
-            self._clear_marks()
-            result = apply_hide(self.care, self.species)
-        self.care = result.state
-        self.pet.issue(result.cmd)
-        self._say(result.line)
-        self._keep_care()
-        self._refresh_vitals()
+            self.care = result.state
+            self.pet.issue(result.cmd)
+            self._say(result.line)
+            self._keep_care()
+            self._refresh_vitals()
+            return
+        if self.pet.cmd == "leave":
+            return
+        self._clear_marks()
+        self._say(hide_line(self.species.key))
+        self.pet.issue("leave")
 
     def _tap_guest(self) -> None:
         """Same as the web blotter: tap the guest, the plaque teaches, they say the lesson."""

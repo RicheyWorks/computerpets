@@ -23,6 +23,7 @@ const overlayLifeSrc = readFileSync(join(root, "../desktop/renderer/life.js"), "
 const blotterHours = readFileSync(join(root, "../client/computerpets_client/hours.py"), "utf8");
 const blotterLife = readFileSync(join(root, "../client/computerpets_client/life.py"), "utf8");
 const blotterPet = readFileSync(join(root, "../client/computerpets_client/pet_item.py"), "utf8");
+const blotterApp = readFileSync(join(root, "../client/computerpets_client/app.py"), "utf8");
 
 const CATALOG = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
 const PIP = "You called. I brought the whole tail.";
@@ -99,6 +100,9 @@ test("overlay and blotter keep the same call and the same walk", () => {
   assert.match(blotterLife, /bond=clamp\(state\.bond \+ 1\)/);
   assert.match(blotterPet, /leave_target/);
   assert.match(blotterPet, /enter_spawn/);
+  assert.match(blotterPet, /"leave"/);
+  assert.match(blotterApp, /issue\("leave"\)/);
+  assert.match(blotterApp, /hop\.act == "hide"/);
   assert.match(overlayLifeSrc, /action === "call"[\s\S]{0,180}mood \+ 4/);
   assert.doesNotMatch(overlayLifeSrc, /action === "call"[\s\S]{0,180}mood \+ 6/);
 });

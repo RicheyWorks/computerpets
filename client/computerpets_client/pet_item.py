@@ -387,7 +387,7 @@ class LivingPetItem(QGraphicsObject):
             self.waypoints = []
             self.turn_hold = 0.0
             self.pending_facing = None
-        elif cmd in ("hide", "enter", "seek", "wander"):
+        elif cmd in ("hide", "leave", "enter", "seek", "wander"):
             self.anim = "walk"
             self.frame = 0
             self.acc = 0.0
@@ -418,7 +418,7 @@ class LivingPetItem(QGraphicsObject):
         self.update()
 
     def advance_pet(self, dt: float, care: CareState, width: float) -> None:
-        if care.hidden and self.cmd not in ("hide", "enter"):
+        if care.hidden and self.cmd not in ("hide", "leave", "enter"):
             if -SIZE < self._logic_x < width:
                 self.cmd = "hide"
                 self._edge = None
@@ -495,7 +495,7 @@ class LivingPetItem(QGraphicsObject):
         if self.shift_age > 0:
             self.shift_age = max(0.0, self.shift_age - dt)
 
-        if self.cmd == "hide":
+        if self.cmd in ("hide", "leave"):
             if self._edge is None:
                 self._edge = leave_target(x, width, SIZE)
             self.anim = "walk"
@@ -509,6 +509,12 @@ class LivingPetItem(QGraphicsObject):
             if abs(x - self._edge) <= 1:
                 x = self._edge
                 self.anim = "idle"
+                self._place(x, y)
+                if self.cmd == "leave":
+                    self.arrived.emit()
+                    if self.cmd == "leave":
+                        self.cmd = "idle"
+                return
             self._place(x, y)
             return
 

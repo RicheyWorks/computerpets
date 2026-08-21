@@ -232,7 +232,73 @@ def test_ribbon_flees_once_then_stays(tmp_path):
     del app
 
 
-def test_treat_seek_still_snacks_on_the_wood(tmp_path):
+def test_treat_seek_snacks_when_they_get_there(tmp_path):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+    from computerpets_client.life import apply_treat
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow(user_data_dir=tmp_path)
+    window.show()
+    start = CareState(
+        hunger=window.care.hunger,
+        mood=window.care.mood,
+        energy=window.care.energy,
+        bond=window.care.bond,
+    )
+    window._treat()
+    assert window.treat is not None
+    assert window._mark == "treat"
+    assert window.pet.cmd == "seek"
+    assert window.care.hunger == start.hunger
+    assert window.care.mood == start.mood
+    assert window.care.bond == start.bond
+    window._on_arrived()
+    snacked = apply_treat(start, RUI)
+    assert window.care.hunger == snacked.state.hunger
+    assert window.care.mood == snacked.state.mood
+    assert window.care.bond == snacked.state.bond
+    assert window.pet.cmd == "eat"
+    assert window.treat is None
+    assert window.care.last_line in RUI.treat_lines
+    window.close()
+    del app
+
+
+def test_hide_is_a_leave_until_they_walk_off(tmp_path):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+    from computerpets_client.hours import hide_line
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow(user_data_dir=tmp_path)
+    window.show()
+    window._hide_or_call()
+    line = hide_line(window.species.key)
+    assert window.care.hidden is False
+    assert window.pet.cmd == "leave"
+    assert window.care.last_line == line
+    assert window.bubble.toPlainText() == line
+    window._play()
+    assert window.lure is None
+    window._treat()
+    assert window.treat is None
+    window._on_arrived()
+    assert window.care.hidden is True
+    assert window.care.last_line == line
+    assert window.hide_btn.text() == "Call back"
+    window._play()
+    assert window.lure is None
+    assert window._mark is None
+    window.close()
+    del app
+
+
+def test_leave_walk_hides_when_they_reach_the_edge(tmp_path):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from PyQt6.QtWidgets import QApplication
 
@@ -241,17 +307,50 @@ def test_treat_seek_still_snacks_on_the_wood(tmp_path):
     app = QApplication.instance() or QApplication([])
     window = DeskWindow(user_data_dir=tmp_path)
     window.show()
+    window._hide_or_call()
+    assert window.pet.cmd == "leave"
+    assert window.care.hidden is False
+    for _ in range(800):
+        window.pet.advance_pet(0.05, window.care, 960)
+        if window.care.hidden:
+            break
+    assert window.care.hidden is True
+    assert window.hide_btn.text() == "Call back"
+    window.close()
+    del app
+
+
+def test_treat_and_hide_write_the_file_when_they_arrive(tmp_path):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+    from computerpets_client.life import load_care
+    from computerpets_client.species import DEFAULT_SPECIES_KEY
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow(user_data_dir=tmp_path)
+    window.show()
     hunger = window.care.hunger
     window._treat()
-    assert window.treat is not None
-    assert window._mark == "treat"
-    assert window.pet.cmd == "seek"
-    assert window.care.hunger == hunger + 12
+    disk = load_care(user_data_dir=tmp_path, key=DEFAULT_SPECIES_KEY)
+    assert disk is not None
+    assert disk.hunger == hunger
+    assert disk.hidden is False
     window._on_arrived()
-    assert window.pet.cmd == "eat"
-    assert window.treat is None
-    assert window.care.hunger == hunger + 12
+    disk = load_care(user_data_dir=tmp_path, key=DEFAULT_SPECIES_KEY)
+    assert disk.hunger == hunger + 12
+    window._hide_or_call()
+    disk = load_care(user_data_dir=tmp_path, key=DEFAULT_SPECIES_KEY)
+    assert disk.hidden is False
+    window._on_arrived()
+    disk = load_care(user_data_dir=tmp_path, key=DEFAULT_SPECIES_KEY)
+    assert disk.hidden is True
     window.close()
+    again = DeskWindow(user_data_dir=tmp_path)
+    again.show()
+    assert again.care.hidden is True
+    again.close()
     del app
 
 
@@ -265,6 +364,7 @@ def test_hidden_play_does_not_drop_a_ribbon(tmp_path):
     window = DeskWindow(user_data_dir=tmp_path)
     window.show()
     window._hide_or_call()
+    window._on_arrived()
     assert window.care.hidden is True
     window._play()
     assert window.lure is None
@@ -286,7 +386,18 @@ def test_window_claims_play_once_catch_and_flee_stay():
     assert '"arrive"' in room
     assert "issue(\"play\")" in room or "issue('play')" in room
     assert room.count("issue(\"play\")") + room.count("issue('play')") == 2
+    assert 'issue("leave")' in room or "issue('leave')" in room
+    assert "apply_treat" in room
+    treat_fn = inspect.getsource(app_mod.DeskWindow._treat)
+    arrived_fn = inspect.getsource(app_mod.DeskWindow._on_arrived)
+    hide_fn = inspect.getsource(app_mod.DeskWindow._hide_or_call)
+    assert "apply_treat" not in treat_fn
+    assert "apply_treat" in arrived_fn
+    assert "apply_hide" in arrived_fn
+    assert "apply_hide" not in hide_fn
     pet = inspect.getsource(pet_item.LivingPetItem)
     assert "arrived" in pet
     assert 'cmd == "play"' in pet or 'cmd == "play"' in inspect.getsource(pet_item.LivingPetItem.issue)
     assert "cmd = \"wander\"" not in inspect.getsource(pet_item.LivingPetItem.issue)
+    assert '"leave"' in pet
+    assert "arrived.emit" in pet
