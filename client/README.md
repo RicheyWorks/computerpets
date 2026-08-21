@@ -40,7 +40,7 @@ The **species rail** (house, then den, then tide, then garden, then hive, then p
 
 The **plaque** under the blotter is the classroom. Same copy as the web field guides: Coral’s red-touches-black, Nori balls vs Lula holds, Bandit no red; a moon jelly is not a fish; a horseshoe crab is not a crab; the moray’s gape is breath; moss has no flower; a saguaro is not a tree; a firefly is a beetle; a luna does not eat; a cicada waits seventeen years; a mushroom is not a plant; a lichen is not one creature; Gleam is not a firefly; Drift is not Pulse; Arca is not Brood; a frog is not a toad; a newt is not a lizard; a caecilian is not a worm; a crayfish is not an insect; a paramecium is not an animal; a euglena is not a plant; a kelp is not a garden plant; a bacterium is not a fungus; an archaeon is not a bacterium. You do not leave the window.
 
-The clock, the sky, the caller, the shed, and the specials are ports of `web/src/lib/pets/hours.ts`, `weather.ts`, `visitor.ts`, `shed.ts`, and `specials.ts` / `traits.ts` — not a third house. Hours is the clock; weather is the sky. Both can show. Rain / wind / heat only. Today’s visitor is `todaysVisitor`. The ten snakes go blue after eight hours and leave a cream coat on the blotter. Mess, illness, clean, and medicine are the same science as `care.ts`. Play and the two hundred ten verbs are the ones the living desk already knows.
+The clock, the sky, the caller, the shed, and the specials are ports of `web/src/lib/pets/hours.ts`, `weather.ts`, `visitor.ts`, `shed.ts`, and `specials.ts` / `traits.ts` — not a third house. Hours is the clock; weather is the sky. Both can show. Rain / wind / heat only. Today’s visitor is `todaysVisitor`. The ten snakes go blue after eight hours and leave a cream coat on the blotter. Mess, illness, clean, and medicine are the same science as `care.ts`. Play is the same ribbon chase the living desk already knows. The two hundred ten verbs stay the house verbs.
 
 Pets walk (or crawl) without a license — same as the overlay.
 
@@ -53,7 +53,7 @@ The verbs that already exist on the living desk and fit this cut. Treat uses the
 | **Feed** | Hunger up, eat animation, a house line |
 | **Treat** (species verb) | A snack drops on the blotter; they walk or crawl to it |
 | **Hide** / **Call back** | Leaves the blotter; call brings them in |
-| **Play** | Hunger down, mood up; they wander the wood |
+| **Play** | A ribbon drops. They walk to it. Catch it or let them arrive. One hop. |
 | **Clean** | Hygiene up; ink smudges leave the wood |
 | **Medicine** | When they are unwell: health up, sick clears |
 | **Steal ribbon** / **Heel** / **Play dead** … | The species special. They say the house line. |

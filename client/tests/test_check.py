@@ -57,7 +57,8 @@ def test_desk_has_play_and_the_house_special(tmp_path):
     assert window.species.key == "red_panda"
     assert window.special_btn.text() == "Steal ribbon"
     window._play()
-    assert window.pet.cmd in ("play", "wander")
+    assert window.pet.cmd == "seek"
+    assert window.lure is not None
     assert window.care.last_line
     assert window.talk_btn is not None
     assert window.talk_btn.text() == "Talk"
@@ -256,7 +257,7 @@ def test_return_line_after_a_real_absence(tmp_path):
     del app
 
 
-def test_resting_guest_sits_on_greet(tmp_path, monkeypatch):
+def test_resting_guest_sleeps_on_greet(tmp_path, monkeypatch):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from PyQt6.QtWidgets import QApplication
 
@@ -266,7 +267,7 @@ def test_resting_guest_sits_on_greet(tmp_path, monkeypatch):
     monkeypatch.setattr("computerpets_client.app.is_resting_hour", lambda key, hour=None: True)
     window = DeskWindow(user_data_dir=tmp_path)
     window.show()
-    assert window.pet.cmd == "sit"
+    assert window.pet.cmd == "sleep"
     window.close()
     del app
 

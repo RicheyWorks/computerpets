@@ -58,7 +58,8 @@ from .life import (
 )
 from .license.session import create_license_session
 from .paths import default_user_data_dir
-from .pet_item import LivingPetItem, MessPileItem, ShedCoatItem, TreatItem
+from .pet_item import LivingPetItem, LureItem, MessPileItem, ShedCoatItem, TreatItem
+from .play import BUG_LINE, CATCH_LINE, FLEE_MS, RIBBON_LINE, PlayChase, play_hop
 from .plaque import SpeciesPlaque
 from .rail import SpeciesRail
 from .shed import apply_shed, is_blue
@@ -117,6 +118,10 @@ class DeskWindow(QMainWindow):
             species_by_key(DEFAULT_SPECIES_KEY),
         )
         self.treat: TreatItem | None = None
+        self.lure: LureItem | None = None
+        self._mark: str | None = None
+        self._taken = False
+        self._lure_hops = 0
         self.coats: list[ShedCoatItem] = []
         self.piles: list[MessPileItem] = []
         self._speech_ms = 0.0
@@ -138,6 +143,7 @@ class DeskWindow(QMainWindow):
         self.scene.addItem(self.weather)
         self.pet = LivingPetItem(self.species)
         self.pet.tapped.connect(self._tap_guest)
+        self.pet.arrived.connect(self._on_arrived)
         self.scene.addItem(self.pet)
         self.guest = LivingPetItem(todays_visitor(self.species.key))
         self.guest.setScale(0.72)
@@ -252,6 +258,9 @@ class DeskWindow(QMainWindow):
         self.timer.setInterval(33)
         self.timer.timeout.connect(self._tick)
         self.timer.start()
+        self._lure_timer = QTimer(self)
+        self._lure_timer.setSingleShot(True)
+        self._lure_timer.timeout.connect(self._flee_lure)
         self._last_ms = 0.0
         self._ambient_acc = 0.0
 
@@ -395,6 +404,7 @@ class DeskWindow(QMainWindow):
             load_care(user_data_dir=self._user_data_dir, key=self.species.key),
             self.species,
         )
+        self._clear_marks()
         self._sync_coats()
         self._sync_mess()
         self._reset_visit()
@@ -409,12 +419,49 @@ class DeskWindow(QMainWindow):
         self._keep_care()
         self._refresh_vitals()
 
+    def _chase(self) -> PlayChase:
+        return PlayChase(taken=self._taken, cmd=self.pet.cmd, mark=self._mark)
+
+    def _clear_marks(self) -> None:
+        self._lure_timer.stop()
+        if self.treat is not None:
+            self.scene.removeItem(self.treat)
+            self.treat = None
+        if self.lure is not None:
+            self.scene.removeItem(self.lure)
+            self.lure = None
+        self._mark = None
+        self._lure_hops = 0
+
+    def _lure_x(self) -> float:
+        pct = 16 + random.random() * 68
+        return 80 + (SCENE_W - 160) * (pct / 100.0)
+
+    def _place_lure(self, hops: int = 0, x: float | None = None) -> float:
+        self._taken = False
+        self._mark = "lure"
+        self._lure_hops = hops
+        if self.treat is not None:
+            self.scene.removeItem(self.treat)
+            self.treat = None
+        if self.lure is not None:
+            self.scene.removeItem(self.lure)
+        at = self._lure_x() if x is None else x
+        self.lure = LureItem(at)
+        self.lure.caught.connect(self._catch_lure)
+        self.scene.addItem(self.lure)
+        self._lure_timer.stop()
+        if hops == 0:
+            self._lure_timer.start(FLEE_MS)
+        return at
+
     def _treat(self) -> None:
         result = apply_treat(self.care, self.species)
         self.care = result.state
         if result.cmd == "seek":
-            if self.treat is not None:
-                self.scene.removeItem(self.treat)
+            self._clear_marks()
+            self._taken = False
+            self._mark = "treat"
             tx = 420 + (hash(self.species.key) % 180)
             self.treat = TreatItem(self.species.treat_shape, tx, 400)
             self.scene.addItem(self.treat)
@@ -424,12 +471,56 @@ class DeskWindow(QMainWindow):
         self._refresh_vitals()
 
     def _play(self) -> None:
+        if self.care.hidden:
+            return
+        at = self._place_lure(0)
+        self.pet.issue("seek", at - 40)
+        line = BUG_LINE if trait_for(self.species.key).special == "bug" else RIBBON_LINE
+        self._say(line)
+
+    def _catch_lure(self) -> None:
+        hop = play_hop(self._chase(), "catch")
+        if hop.act != "play":
+            return
+        self._taken = True
+        self._clear_marks()
         result = apply_play(self.care, self.species)
         self.care = result.state
-        self.pet.issue(result.cmd)
-        self._say(result.line)
+        self._say(CATCH_LINE)
+        if hop.issue_play:
+            self.pet.issue("play")
         self._keep_care()
         self._refresh_vitals()
+
+    def _flee_lure(self) -> None:
+        if self.care.hidden or self._mark != "lure" or self._lure_hops > 0:
+            return
+        at = self._place_lure(1)
+        self.pet.issue("seek", at - 40)
+
+    def _on_arrived(self) -> None:
+        hop = play_hop(self._chase(), "arrive")
+        self._taken = hop.next.taken
+        if hop.act == "play":
+            self._clear_marks()
+            result = apply_play(self.care, self.species)
+            self.care = result.state
+            self._say(result.line)
+            if hop.issue_play:
+                self.pet.issue("play")
+            self._keep_care()
+            self._refresh_vitals()
+            return
+        if hop.act == "snack":
+            self._clear_marks()
+            if hop.issue_eat:
+                self.pet.issue("eat")
+            return
+        if hop.act == "idle":
+            self.pet.issue("idle")
+            return
+        if hop.act == "none" and self.pet.cmd == "seek":
+            self.pet.issue("idle")
 
     def _apply_care(self, result) -> None:
         self.care = result.state
@@ -487,6 +578,7 @@ class DeskWindow(QMainWindow):
         if self.care.hidden:
             result = apply_call(self.care, self.species)
         else:
+            self._clear_marks()
             result = apply_hide(self.care, self.species)
         self.care = result.state
         self.pet.issue(result.cmd)
@@ -572,6 +664,8 @@ class DeskWindow(QMainWindow):
         self.pet.advance_pet(dt, self.care, SCENE_W)
         self.weather.advance_weather(dt)
         self._advance_visit(self.timer.interval())
+        if self.lure is not None:
+            self.lure.advance_flutter(dt)
         if self.treat is not None and self.pet.cmd == "eat":
             self.scene.removeItem(self.treat)
             self.treat = None
