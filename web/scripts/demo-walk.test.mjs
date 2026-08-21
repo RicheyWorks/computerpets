@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -11,8 +12,8 @@ const D = await import(join(root, "src/lib/pets/mac-desk.ts"));
 const Hive = await import(join(root, "src/lib/pets/hive.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
 const Treats = await import(join(root, "src/lib/pets/treats.ts"));
-const Specials = await import(join(root, "src/lib/pets/specials.ts"));
 const Traits = await import(join(root, "src/lib/pets/traits.ts"));
+const OverlaySpecial = createRequire(import.meta.url)(join(root, "../desktop/renderer/specials.js"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
@@ -118,7 +119,6 @@ test("the demo is the same house: Bandit and Coral drop an egg, the way the blot
 });
 
 test("the demo is the same house: later dens keep a living special, the way the blotter already does", () => {
-  const prior = { hunger: 50, mood: 50, energy: 50, hygiene: 50, health: 80, bond: 10, sick: false, hidden: false, mess: [], gifts: [], bornAt: 0, lastTick: 0, shedAt: 0 };
   const pins = [
     ["brain_coral", "sit", "Ridge"],
     ["field_cricket", "talk", "Chirp"],
@@ -130,7 +130,7 @@ test("the demo is the same house: later dens keep a living special, the way the 
   for (const [key, cmd, verb] of pins) {
     const trait = Traits.traitFor(key);
     assert.equal(trait.verb, verb, key);
-    assert.equal(Specials.applySpecial(prior, trait).cmd, cmd, key);
+    assert.equal(OverlaySpecial.commandFor(trait.special), cmd, key);
   }
   assert.match(roomSrc, /applySpecial/);
   assert.match(roomSrc, /trait\.verb/);

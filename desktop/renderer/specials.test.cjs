@@ -16,10 +16,10 @@ const petSrc = readFileSync(join(__dirname, "pet.js"), "utf8");
 
 const CATALOG = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
 const WEB_TRAITS = Object.fromEntries(
-  [...traitsSrc.matchAll(/^\s{2}([a-z0-9_]+): T\([^;]+"([a-z]+)", "([^"]+)", "/gm)].map((m) => [
-    m[1],
-    { special: m[2], verb: m[3] },
-  ]),
+  traitsSrc.split("\n").flatMap((line) => {
+    const m = line.match(/^\s{2}([a-z0-9_]+): T\(.*, "([a-z]+)", "([^"]+)", "/);
+    return m ? [[m[1], { special: m[2], verb: m[3] }]] : [];
+  }),
 );
 const OVERLAY_SPECIAL = Object.fromEntries(
   [...overlayTraits.matchAll(/^\s{2}([a-z0-9_]+): \{[\s\S]*?special: "([a-z]+)"/gm)].map((m) => [m[1], m[2]]),
