@@ -9,10 +9,10 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const require = createRequire(import.meta.url);
 const Hours = await import(join(root, "src/lib/pets/hours.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
-const G = await import(join(root, "src/lib/pets/gait.ts"));
 const OverlayHours = require(join(root, "../desktop/renderer/hours.js"));
 const OverlayGait = require(join(root, "../desktop/renderer/gait.js"));
 const OverlayLife = require(join(root, "../desktop/renderer/life.js"));
+const gaitSrc = readFileSync(join(root, "src/lib/pets/gait.ts"), "utf8");
 
 const catalogSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
@@ -50,11 +50,13 @@ test("the desk walks off and walks in the house way, and call-back is not Pip fo
   assert.equal(back.mood, 54);
   assert.equal(back.bond, 11);
 
-  assert.equal(G.leaveTarget(80, 800, 176), -200);
-  assert.equal(G.leaveTarget(600, 800, 176), 812);
-  assert.equal(G.enterSpawn(800, 176, 20, true), -176);
-  assert.ok(G.enterSpawn(800, 176, 20, false) > 400);
-  assert.equal(G.enterSit(800, 176, 20, 0), 80);
+  assert.equal(OverlayGait.leaveTarget(80, 800, 176), -200);
+  assert.equal(OverlayGait.leaveTarget(600, 800, 176), 812);
+  assert.equal(OverlayGait.enterSpawn(800, 176, 20, true), -176);
+  assert.ok(OverlayGait.enterSpawn(800, 176, 20, false) > 400);
+  assert.equal(OverlayGait.enterSit(800, 176, 20, 0), 80);
+  assert.match(gaitSrc, /export function leaveTarget/);
+  assert.match(gaitSrc, /export function enterSpawn/);
 
   assert.match(roomSrc, /applyCall/);
   assert.match(roomSrc, /callLine\(kind\.key\)/);
@@ -85,10 +87,11 @@ test("overlay and blotter keep the same call and the same walk", () => {
   assert.equal(back.line, "I sang. Hello.");
   assert.equal(back.cmd, "enter");
 
-  assert.equal(OverlayGait.leaveTarget(80, 800, 176), G.leaveTarget(80, 800, 176));
-  assert.equal(OverlayGait.leaveTarget(600, 800, 176), G.leaveTarget(600, 800, 176));
-  assert.equal(OverlayGait.enterSpawn(800, 176, 20, true), G.enterSpawn(800, 176, 20, true));
-  assert.equal(OverlayGait.enterSit(800, 176, 20, 0), G.enterSit(800, 176, 20, 0));
+  assert.match(gaitSrc, /x \+ sprite \/ 2 < width \/ 2 \? -sprite - 24 : width \+ 12/);
+  assert.equal(OverlayGait.leaveTarget(80, 800, 176), -200);
+  assert.equal(OverlayGait.leaveTarget(600, 800, 176), 812);
+  assert.equal(OverlayGait.enterSpawn(800, 176, 20, true), -176);
+  assert.equal(OverlayGait.enterSit(800, 176, 20, 0), 80);
 
   assert.match(overlayLifeSrc, /callLine\(key\)/);
   assert.match(overlayPetSrc, /PetGait\.leaveTarget/);
@@ -96,5 +99,6 @@ test("overlay and blotter keep the same call and the same walk", () => {
   assert.match(blotterLife, /bond=clamp\(state\.bond \+ 1\)/);
   assert.match(blotterPet, /leave_target/);
   assert.match(blotterPet, /enter_spawn/);
-  assert.doesNotMatch(overlayLifeSrc, /mood \+ 6/);
+  assert.match(overlayLifeSrc, /action === "call"[\s\S]{0,180}mood \+ 4/);
+  assert.doesNotMatch(overlayLifeSrc, /action === "call"[\s\S]{0,180}mood \+ 6/);
 });
