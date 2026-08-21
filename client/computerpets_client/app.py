@@ -26,6 +26,7 @@ from PyQt6.QtWidgets import (
 )
 
 from .blotter import DayWash, DeskBackground, WeatherLayer, attach_gpu_viewport
+from .gift import gift_line, leave_gift, pick_gift
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
 from .hours import (
@@ -58,7 +59,7 @@ from .life import (
 )
 from .license.session import create_license_session
 from .paths import default_user_data_dir
-from .pet_item import LivingPetItem, LureItem, MessPileItem, ShedCoatItem, TreatItem
+from .pet_item import GiftItem, LivingPetItem, LureItem, MessPileItem, ShedCoatItem, TreatItem
 from .play import BUG_LINE, CATCH_LINE, FLEE_MS, RIBBON_LINE, PlayChase, play_hop
 from .plaque import SpeciesPlaque
 from .rail import SpeciesRail
@@ -122,7 +123,7 @@ class DeskWindow(QMainWindow):
         self._mark: str | None = None
         self._taken = False
         self._lure_hops = 0
-        self.coats: list[ShedCoatItem] = []
+        self.coats: list[ShedCoatItem | GiftItem] = []
         self.piles: list[MessPileItem] = []
         self._speech_ms = 0.0
         self._visit_ms = 0.0
@@ -264,6 +265,8 @@ class DeskWindow(QMainWindow):
         self._last_ms = 0.0
         self._ambient_acc = 0.0
 
+        self._sync_coats()
+        self._sync_mess()
         self._greet()
         self._refresh_license()
         self._refresh_vitals()
@@ -310,9 +313,8 @@ class DeskWindow(QMainWindow):
             self.scene.removeItem(item)
         self.coats = []
         for gift in self.care.gifts:
-            if gift.kind != "shed":
-                continue
-            item = ShedCoatItem(gift, SCENE_W)
+            item = ShedCoatItem(gift, SCENE_W) if gift.kind == "shed" else GiftItem(gift, SCENE_W)
+            item.tapped.connect(self._pick_gift)
             self.scene.addItem(item)
             self.coats.append(item)
 
@@ -568,9 +570,18 @@ class DeskWindow(QMainWindow):
 
     def _special(self) -> None:
         result = apply_special(self.care, self.species)
-        self.care = result.state
+        self.care = leave_gift(result.state)
         self.pet.issue(result.cmd)
         self._say(result.line)
+        self._sync_coats()
+        self._keep_care()
+        self._refresh_vitals()
+
+    def _pick_gift(self, gift_id: int) -> None:
+        result = pick_gift(self.care, gift_id, self.species.key)
+        self.care = result.state
+        self._say(result.line or gift_line(self.species.key))
+        self._sync_coats()
         self._keep_care()
         self._refresh_vitals()
 
@@ -658,9 +669,12 @@ class DeskWindow(QMainWindow):
     def _tick(self) -> None:
         dt = self.timer.interval() / 1000.0
         before_mess = len(self.care.mess)
+        before_gifts = [(gift.id, gift.kind) for gift in self.care.gifts]
         self.care = keep_hive(decay(self.care, self.timer.interval(), key=self.species.key), self.species)
         if len(self.care.mess) != before_mess:
             self._sync_mess()
+        if [(gift.id, gift.kind) for gift in self.care.gifts] != before_gifts:
+            self._sync_coats()
         self.pet.advance_pet(dt, self.care, SCENE_W)
         self.weather.advance_weather(dt)
         self._advance_visit(self.timer.interval())

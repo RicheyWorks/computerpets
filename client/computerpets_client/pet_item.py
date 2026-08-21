@@ -81,7 +81,9 @@ class LureItem(QGraphicsObject):
 
 
 class ShedCoatItem(QGraphicsObject):
-    """Old coat on the wood — same cream loop as the web / Electron blotter."""
+    """Old coat on the wood — same cream loop as the web / Electron blotter. Tap to pick it up."""
+
+    tapped = pyqtSignal(int)
 
     def __init__(self, coat: Coat, scene_width: float = 960):
         super().__init__()
@@ -90,7 +92,8 @@ class ShedCoatItem(QGraphicsObject):
         self.setPos(x, 412)
         self.setZValue(2)
         self.setRotation(-14)
-        self.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+        self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
     def boundingRect(self) -> QRectF:
         return QRectF(0, 0, 26, 7)
@@ -99,6 +102,44 @@ class ShedCoatItem(QGraphicsObject):
         painter.setPen(QPen(QColor(12, 11, 10, 64), 1))
         painter.setBrush(QBrush(QColor(216, 207, 192, 190)))
         painter.drawRoundedRect(QRectF(0, 0, 26, 7), 3, 3)
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.tapped.emit(self.coat.id)
+            event.accept()
+            return
+        super().mousePressEvent(event)
+
+
+class GiftItem(QGraphicsObject):
+    """A gift on the wood — same square as the desk / overlay gift-dot. Tap to pick it up."""
+
+    tapped = pyqtSignal(int)
+
+    def __init__(self, gift: Coat, scene_width: float = 960):
+        super().__init__()
+        self.coat = gift
+        x = 80 + (scene_width - 160) * (gift.x / 100.0)
+        self.setPos(x, 408)
+        self.setZValue(2)
+        self.setRotation(12)
+        self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
+        self.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+
+    def boundingRect(self) -> QRectF:
+        return QRectF(0, 0, 11, 11)
+
+    def paint(self, painter: QPainter, option, widget=None) -> None:  # noqa: ARG002
+        painter.setPen(QPen(QColor(12, 11, 10, 90), 1))
+        painter.setBrush(QBrush(QColor(216, 207, 192, 230)))
+        painter.drawRoundedRect(QRectF(0, 0, 11, 11), 2, 2)
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.tapped.emit(self.coat.id)
+            event.accept()
+            return
+        super().mousePressEvent(event)
 
 
 class MessPileItem(QGraphicsObject):

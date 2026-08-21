@@ -110,6 +110,13 @@ test("the overlay special is the same living sit as the desk, and the floor keep
   assert.equal(ribbon.notify, "ribbon");
   assert.equal(ribbon.life.gifts.length, 1);
 
+  const newRui = Life.act({ ...Life.blank(), bond: 18, gifts: [] }, trait("ribbon", "I found a ribbon."), "special", now, "red_panda");
+  assert.equal(newRui.life.gifts.length, 0);
+
+  const ridgeGift = Life.act({ ...Life.blank(), bond: 25, gifts: [] }, trait("ridge", "I sat the rock. Hello."), "special", now, "brain_coral");
+  assert.equal(ridgeGift.life.gifts.length, 1);
+  assert.ok(ridgeGift.life.bond >= 27);
+
   const steal = Life.act({ ...Life.blank(), mess: [] }, trait("steal", "I put your dongle somewhere better."), "special", now, "ferret");
   assert.equal(steal.cmd, "play");
   assert.equal(steal.notify, "steal");
@@ -119,6 +126,8 @@ test("the overlay special is the same living sit as the desk, and the floor keep
   assert.equal(thump.cmd, "wander");
   assert.equal(thump.life.startledUntil, now + 2500);
 
+  assert.match(lifeSrc, /leaveGift\(life, now\)/);
+  assert.doesNotMatch(lifeSrc, /bond >= 50 && life\.gifts\.length < 2/);
   assert.match(lifeSrc, /PetSpecial/);
   assert.match(lifeSrc, /applySpecial/);
   assert.match(htmlSrc, /specials\.js/);

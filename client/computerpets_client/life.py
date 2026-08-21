@@ -354,7 +354,14 @@ def decay(
     if next_state.hygiene < 42 and len(piles) < 5 and roll < min(0.35, dt / 120000):
         x = 12 + (rng.random() if rng is not None else random.random()) * 76
         piles.append(MessPile(id=stamp + len(piles), x=x, kind="mess"))
-    aged = replace(next_state, sick=sick, mess=piles, last_tick=stamp)
+    gifts = list(next_state.gifts)
+    gift_roll = rng.random() if rng is not None else random.random()
+    if next_state.bond >= 25 and len(gifts) < 2 and gift_roll < min(0.2, dt / 180000):
+        from .shed import Coat
+
+        gx = 14 + (rng.random() if rng is not None else random.random()) * 72
+        gifts.append(Coat(id=stamp + 17 + len(gifts), x=gx, kind="gift"))
+    aged = replace(next_state, sick=sick, mess=piles, gifts=gifts, last_tick=stamp)
     return keep_hive(aged)
 
 
@@ -422,7 +429,7 @@ def unpack_care(raw: object) -> CareState | None:
             for item in gifts_raw[:3]:
                 if not isinstance(item, dict):
                     continue
-                gifts.append(Coat(id=int(item["id"]), x=float(item["x"]), kind=str(item.get("kind") or "shed")))
+                gifts.append(Coat(id=int(item["id"]), x=float(item["x"]), kind=str(item.get("kind") or "gift")))
         brood_raw = raw.get("brood")
         stores_raw = raw.get("stores")
         return CareState(
