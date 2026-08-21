@@ -1,7 +1,7 @@
 """Catching the lure and arriving at it are the same catch. One hop.
 
 Port of ``web/src/lib/pets/play.ts`` (and ``desktop/renderer/play.js``).
-The blotter already kept the play deltas. This is the chase itself.
+Play, treat, and hide apply on the hop. The walk is not the snack.
 """
 
 from __future__ import annotations

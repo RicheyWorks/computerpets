@@ -73,7 +73,8 @@ def test_treat_is_a_smaller_snack():
     assert treated.state.mood == 55
     assert treated.state.bond == 11
     assert treated.state.hunger < fed.hunger
-    assert treated.cmd == "seek"
+    assert treated.cmd == "eat"
+    assert treated.anim == "eat"
 
 
 def test_hide_then_call_back():
@@ -102,7 +103,7 @@ def test_snake_treat_uses_house_line():
     nori = species_by_key("ball_python")
     assert nori is NORI
     result = apply_treat(CareState(), nori)
-    assert result.cmd == "seek"
+    assert result.cmd == "eat"
     assert result.line
     assert nori.treat == "Mouse"
 

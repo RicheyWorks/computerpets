@@ -10,6 +10,8 @@ const C = await import(join(root, "src/lib/pets/care.ts"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const blotterSrc = readFileSync(join(root, "src/components/desk/blotter.tsx"), "utf8");
+const blotterAppSrc = readFileSync(join(root, "../client/computerpets_client/app.py"), "utf8");
+const blotterPetSrc = readFileSync(join(root, "../client/computerpets_client/pet_item.py"), "utf8");
 const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
 const speciesSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
 const talkSrc = readFileSync(join(root, "src/lib/pets/talk.ts"), "utf8");
@@ -118,6 +120,17 @@ test("CompanionRoom claims play once; blotter catch and flee stay", () => {
   assert.match(blotterSrc, /onCatchLure\(\)/);
   assert.match(blotterSrc, /onFlee\(randomLureX\(\)\)/);
   assert.match(blotterSrc, /\(mark\.hops \?\? 0\) > 0/);
+
+  const treatFn = blotterAppSrc.slice(blotterAppSrc.indexOf("def _treat"), blotterAppSrc.indexOf("def _play"));
+  const arrivedFn = blotterAppSrc.slice(blotterAppSrc.indexOf("def _on_arrived"), blotterAppSrc.indexOf("def _apply_care"));
+  const hideFn = blotterAppSrc.slice(blotterAppSrc.indexOf("def _hide_or_call"), blotterAppSrc.indexOf("def _tap_guest"));
+  assert.doesNotMatch(treatFn, /apply_treat/);
+  assert.match(arrivedFn, /apply_treat/);
+  assert.match(arrivedFn, /apply_hide/);
+  assert.doesNotMatch(hideFn, /apply_hide/);
+  assert.match(hideFn, /issue\("leave"\)/);
+  assert.match(blotterPetSrc, /cmd in \("hide", "leave"\)/);
+  assert.match(blotterPetSrc, /arrived\.emit/);
 });
 
 test("drag-end still does not arrive; a walk to the mark still does", () => {

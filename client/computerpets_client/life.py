@@ -158,7 +158,7 @@ def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
         ),
         kind,
     )
-    return CareResult(next_state, next_state.last_line, "eat", "seek")
+    return CareResult(next_state, next_state.last_line, "eat", "eat")
 
 
 def apply_play(state: CareState, species: Species | None = None) -> CareResult:
