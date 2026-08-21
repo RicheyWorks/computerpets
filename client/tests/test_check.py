@@ -57,7 +57,8 @@ def test_desk_has_play_and_the_house_special(tmp_path):
     assert window.species.key == "red_panda"
     assert window.special_btn.text() == "Steal ribbon"
     window._play()
-    assert window.pet.cmd in ("play", "wander")
+    assert window.pet.cmd == "seek"
+    assert window.lure is not None
     assert window.care.last_line
     assert window.talk_btn is not None
     assert window.talk_btn.text() == "Talk"

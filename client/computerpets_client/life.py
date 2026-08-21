@@ -174,11 +174,11 @@ def apply_play(state: CareState, species: Species | None = None) -> CareResult:
             energy=clamp(state.energy - 14),
             bond=clamp(state.bond + 3),
             last_line=line,
-            anim="walk",
+            anim="play",
         ),
         kind,
     )
-    return CareResult(next_state, next_state.last_line, "walk", "play")
+    return CareResult(next_state, next_state.last_line, "play", "play")
 
 
 def apply_hide(state: CareState, species: Species | None = None) -> CareResult:

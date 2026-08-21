@@ -47,6 +47,7 @@ ANIMS = {
     "sit": 2,
     "eat": 4,
     "sleep": 4,
+    "play": 4,
 }
 
 
@@ -149,6 +150,10 @@ def _pose(anim: str, i: int) -> tuple[float, float, float, float, float, float]:
         sit = 18
         sleep = 1
         bob = (0, 1, 0, 1)[i]
+    elif anim == "play":
+        bob = (0, -10, -4, 0)[i]
+        stride = (1, 0, -1, 0)[i]
+        eat = (0, 4, 2, 0)[i]
     return bob, lean, sit, eat, sleep, stride
 
 

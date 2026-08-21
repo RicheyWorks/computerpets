@@ -45,6 +45,7 @@ def test_play_uses_the_house_deltas():
     assert result.state.energy == 36
     assert result.state.bond == 13
     assert result.cmd == "play"
+    assert result.anim == "play"
     assert result.line
 
 

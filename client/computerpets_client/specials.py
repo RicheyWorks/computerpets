@@ -289,6 +289,6 @@ def apply_special(state: CareState, species: Species | None = None) -> CareResul
         next_state = replace(next_state, health=clamp(next_state.health + 12))
         cmd = "idle"
 
-    anim = "walk" if cmd in ("play", "wander") else "sit" if cmd in ("talk", "sit") else "idle"
+    anim = "play" if cmd == "play" else "walk" if cmd == "wander" else "sit" if cmd in ("talk", "sit") else "idle"
     next_state = keep_hive(replace(next_state, last_line=trait.line, anim=anim), kind)
     return CareResult(next_state, trait.line, anim, cmd)
