@@ -144,6 +144,16 @@ POSE_OWNED = SNAKE_STAMPS | {
     "canada_goose",
     "pileated",
     "hummingbird",
+    "deer",
+    "bat",
+    "squirrel",
+    "otter",
+    "raccoon",
+    "skunk",
+    "opossum",
+    "beaver",
+    "porcupine",
+    "black_bear",
 }
 
 
@@ -349,6 +359,54 @@ def clear_wash_matte(im: Image.Image) -> Image.Image:
     return Image.fromarray(arr, "RGBA")
 
 
+def knock_island_crumbs(im: Image.Image) -> Image.Image:
+    """Small parchment islands that do not touch the guest go. The animal stays."""
+    import numpy as np
+
+    arr = np.array(im.convert("RGBA"))
+    h, w = arr.shape[:2]
+    a = arr[:, :, 3]
+    live = a > 12
+    seen = np.zeros((h, w), dtype=np.int32)
+    comps: list[tuple[int, int, int]] = []
+    cid = 0
+    for y in range(h):
+        row = live[y]
+        for x in range(w):
+            if not row[x] or seen[y, x]:
+                continue
+            cid += 1
+            q = deque([(x, y)])
+            seen[y, x] = cid
+            count = 0
+            tan = 0
+            while q:
+                cx, cy = q.popleft()
+                count += 1
+                r, g, b, aa = arr[cy, cx]
+                if aa > 12 and r > 140 and g > 110 and b > 70 and abs(int(r) - int(g)) < 60:
+                    tan += 1
+                for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
+                    if 0 <= nx < w and 0 <= ny < h and live[ny, nx] and not seen[ny, nx]:
+                        seen[ny, nx] = cid
+                        q.append((nx, ny))
+            comps.append((cid, count, tan))
+    if not comps:
+        return im
+    main = max(comps, key=lambda t: t[1])[0]
+    n = h * w
+    keep = {main}
+    for ident, count, tan in comps:
+        if ident == main:
+            continue
+        # A second limb or a spore puff may sit apart. A tan splash may not.
+        if count >= max(80, n // 90) and tan / max(1, count) < 0.62:
+            keep.add(ident)
+    drop = (seen > 0) & ~np.isin(seen, list(keep))
+    arr[drop] = CLEAR
+    return Image.fromarray(arr, "RGBA")
+
+
 def ingest_body(path: Path, key: str) -> Image.Image:
     """Knock the plate off a house-hand painting and sit it like Rui."""
     raw = Image.open(path).convert("RGBA")
@@ -365,7 +423,11 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         r, g, b, a = knocked.split()
         a = a.filter(ImageFilter.MinFilter(5))
         knocked = Image.merge("RGBA", (r, g, b, a))
-    return fit_like_rui(knocked)
+    # Tan islands that never touch the guest are crumbs, not a plate.
+    if knocked.getbbox():
+        knocked = knock_island_crumbs(knocked)
+    # Pose sit fills the blotter the way Rui does. Idle stays the #92 hand.
+    return fit_like_rui(knocked, side=0.90)
 
 
 def write_kind_from_body(key: str, body: Image.Image) -> None:

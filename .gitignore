@@ -22,7 +22,7 @@ logs/
 Thumbs.db
 
 # Living desk
-web/scripts/pose-bodies/
+web/scripts/pose-bodies*/
 web/**/__pycache__/
 web/node_modules/
 web/.vercel/

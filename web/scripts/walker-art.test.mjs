@@ -19,6 +19,7 @@ test("the walker paint is a clear plate; the tap pad is empty wood", () => {
   assert.match(lawSrc, /sit_body_frame/);
   assert.match(lawSrc, /clear_edge_matte/);
   assert.match(lawSrc, /clear_wash_matte/);
+  assert.match(lawSrc, /knock_island_crumbs/);
   assert.match(lawSrc, /write_kind_from_poses/);
   assert.match(lawSrc, /SNAKE_STAMPS/);
   assert.match(lawSrc, /POSE_OWNED/);
