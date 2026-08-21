@@ -124,6 +124,12 @@
     }
   }
 
+  /** Keep the leaving guest, then sit the arriving one. A kind change does not pour one body into the next. */
+  function switchGuest(fromKey, fromLife, toKey) {
+    if (fromKey && fromLife && fromKey !== toKey) save(fromKey, fromLife);
+    return load(toKey);
+  }
+
   function ageDays(life, now = Date.now()) {
     return Math.max(0, (now - (life.bornAt || now)) / 86400000);
   }
@@ -422,6 +428,7 @@
   const api = {
     load,
     save,
+    switchGuest,
     decay,
     act,
     vitals,

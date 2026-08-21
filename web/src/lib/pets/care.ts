@@ -573,3 +573,32 @@ export function saveCare(key: string, stats: CareStats) {
     /* ignore */
   }
 }
+
+export type GuestSit = {
+  localKey: string;
+  stats: CareStats;
+};
+
+export type GuestArrive = {
+  localKey: string;
+  speciesKey: string;
+  seed?: Partial<CareStats>;
+};
+
+/**
+ * Keep the leaving guest, then sit the arriving one.
+ * A kind change does not pour one body into the next.
+ * persist=false is /demo: memory only, a fresh sit if no seed.
+ */
+export function switchGuest(
+  leaving: GuestSit | null,
+  arriving: GuestArrive,
+  persist: boolean,
+  now = Date.now(),
+): CareStats {
+  if (persist && leaving && leaving.localKey !== arriving.localKey) {
+    saveCare(leaving.localKey, leaving.stats);
+  }
+  if (!persist) return normalizeCare(arriving.seed ?? null, now);
+  return loadCare(arriving.localKey, arriving.seed, arriving.speciesKey, now);
+}
