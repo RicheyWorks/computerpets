@@ -473,6 +473,20 @@ def save_care(
         return
 
 
+def switch_care(
+    state: CareState,
+    from_key: str,
+    to_key: str,
+    *,
+    user_data_dir: Path | str | None = None,
+    now: int | None = None,
+) -> CareState:
+    """Keep the leaving guest, then sit the arriving one. A kind change does not pour one body into the next."""
+    if from_key != to_key:
+        save_care(state, user_data_dir=user_data_dir, now=now, key=from_key)
+    return load_care(user_data_dir=user_data_dir, now=now, key=to_key)
+
+
 def load_care(
     *,
     user_data_dir: Path | str | None = None,

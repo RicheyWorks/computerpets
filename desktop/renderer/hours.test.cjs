@@ -136,6 +136,39 @@ test("a Known overlay guest can leave a gift on the tick", () => {
   assert.doesNotMatch(lifeSrc, /bond >= 50 && \(!life\.gifts/);
 });
 
+test("a kind change keeps the leaving overlay guest and sits the arriving one", () => {
+  const mem = new Map();
+  globalThis.localStorage = {
+    getItem: (k) => (mem.has(k) ? mem.get(k) : null),
+    setItem: (k, v) => mem.set(k, String(v)),
+    removeItem: (k) => mem.delete(k),
+    clear: () => mem.clear(),
+  };
+  const rui = { ...Life.blank(1_700_000_000_000), hunger: 19, hidden: true, bond: 40, key: "red_panda" };
+  const chirp = { ...Life.blank(1_700_000_000_000), hunger: 70, hidden: false, bond: 18, key: "field_cricket" };
+  Life.save("red_panda", rui);
+  Life.save("field_cricket", chirp);
+
+  const sat = Life.switchGuest("red_panda", { ...rui, hunger: 11, mess: [{ id: "m1", x: 0.2 }] }, "field_cricket");
+  assert.equal(sat.hunger, 70);
+  assert.equal(sat.hidden, false);
+  assert.equal(sat.bond, 18);
+  assert.equal(sat.key, "field_cricket");
+
+  const keptRui = JSON.parse(mem.get("computerpets.desktop.life.v2.red_panda"));
+  assert.equal(keptRui.hunger, 11);
+  assert.equal(keptRui.hidden, true);
+  assert.equal(keptRui.mess.length, 1);
+
+  const keptChirp = JSON.parse(mem.get("computerpets.desktop.life.v2.field_cricket"));
+  assert.equal(keptChirp.hunger, 70);
+  assert.notEqual(keptChirp.hunger, 11);
+
+  assert.match(lifeSrc, /function switchGuest/);
+  assert.match(petSrc, /PetLife\.switchGuest\(fromKey, fromLife, next\.key\)/);
+  assert.match(petSrc, /const fromKey = kind && kind\.key/);
+});
+
 test("the overlay snack branch says the guest's line", () => {
   const trait = { extra: {} };
   const dog = Life.act(Life.blank(), trait, "snack", Date.now(), "dog");

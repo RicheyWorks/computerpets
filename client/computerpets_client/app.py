@@ -58,6 +58,7 @@ from .life import (
     load_care,
     pick_mess,
     save_care,
+    switch_care,
 )
 from .license.session import create_license_session
 from .paths import default_user_data_dir
@@ -400,8 +401,12 @@ class DeskWindow(QMainWindow):
     def _apply_kind(self, key: str | None) -> None:
         self._close_choice()
         next_kind = species_by_key(key)
-        if next_kind.key != self.species.key:
-            self._keep_care()
+        arriving = switch_care(
+            self.care,
+            self.species.key,
+            next_kind.key,
+            user_data_dir=self._user_data_dir,
+        )
         self.species = next_kind
         self.pet.set_species(self.species)
         self.rail.set_active(self.species.key)
@@ -411,10 +416,7 @@ class DeskWindow(QMainWindow):
             blocked = self.kind_box.blockSignals(True)
             self.kind_box.setCurrentIndex(idx)
             self.kind_box.blockSignals(blocked)
-        self.care = keep_hive(
-            load_care(user_data_dir=self._user_data_dir, key=self.species.key),
-            self.species,
-        )
+        self.care = keep_hive(arriving, self.species)
         self._clear_marks()
         self._sync_coats()
         self._sync_mess()

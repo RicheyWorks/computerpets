@@ -955,6 +955,8 @@ function liftTapPx() {
 function switchTo(key) {
   closeChoice();
   const next = roster.find((r) => r.key === key) ?? roster[0];
+  const fromKey = kind && kind.key;
+  const fromLife = life;
   kind = { ...next, sprites: pack(next.key) };
   trait = window.PET_TRAITS[next.key] || window.PET_TRAITS.red_panda;
   try {
@@ -962,7 +964,7 @@ function switchTo(key) {
   } catch {
     /* ignore */
   }
-  life = window.PetLife.load(next.key);
+  life = window.PetLife.switchGuest(fromKey, fromLife, next.key);
   const away = Date.now() - (life.lastTick || Date.now());
   window.PetLife.decay(life, trait, Date.now(), kind.key);
   persist();

@@ -174,6 +174,7 @@ test("the demo is the same house: night ticks, tend sits, and the kept guest is 
   assert.match(demoSrc, /extraCare=\{\[\.\.\.DESK_TEND\]\}/);
   assert.match(roomSrc, /!persistLocal && !liveTick/);
   assert.match(roomSrc, /persistLocal \? rememberVisit\(kind\.key\) : 0/);
+  assert.match(roomSrc, /switchGuest/);
   assert.doesNotMatch(demoSrc, /saveCare|localStorage/);
 });
 
