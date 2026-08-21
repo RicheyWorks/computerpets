@@ -43,7 +43,7 @@ let tray = null;
 /** @type {{ key: string, name: string, speciesLabel: string }[]} */
 let roster = [];
 let currentKey = "red_panda";
-let lastVitals = { vital: "Settled", hunger: 80, sick: false, hidden: false, mess: 0, bond: 0, stage: "grown" };
+let lastVitals = { vital: "Settled", hunger: 80, sick: false, hidden: false, mess: 0, bond: 0, stage: "grown", verb: "Special" };
 
 function loadRoster() {
   const file = path.join(__dirname, "renderer", "roster.json");
@@ -118,7 +118,7 @@ function careMenu() {
     { label: "Bath", click: () => win?.webContents.send("command", "bath") },
     { label: "Medicine", click: () => win?.webContents.send("command", "medicine") },
     { label: "Praise", click: () => win?.webContents.send("command", "praise") },
-    { label: "Special", click: () => win?.webContents.send("command", "special") },
+    { label: lastVitals.verb || "Special", click: () => win?.webContents.send("command", "special") },
     { label: "Shed", click: () => win?.webContents.send("command", "shed") },
   ];
 }
@@ -385,7 +385,7 @@ ipcMain.on("vitals", (_e, payload) => {
   if (!payload) return;
   lastVitals = { ...lastVitals, ...payload };
   if (typeof payload.key === "string" && roster.some((r) => r.key === payload.key)) currentKey = payload.key;
-  const sig = `${currentKey}|${lastVitals.vital}|${lastVitals.stage}|${lastVitals.mess}|${lastVitals.bond}|${lastVitals.sick}|${lastVitals.hidden}`;
+  const sig = `${currentKey}|${lastVitals.vital}|${lastVitals.stage}|${lastVitals.mess}|${lastVitals.bond}|${lastVitals.sick}|${lastVitals.hidden}|${lastVitals.verb}`;
   if (sig === lastVitalsSig) return;
   lastVitalsSig = sig;
   refreshMenus();
