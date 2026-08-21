@@ -18,7 +18,6 @@ import {
   applyPraise,
   applyRest,
   applySnackFor,
-  loadCare,
   leaveGift,
   maybeBondLine,
   normalizeCare,
@@ -26,6 +25,7 @@ import {
   pickMess,
   saveCare,
   stageOf,
+  switchGuest,
   tickCare,
   type CareStats,
   type LifeStage,
@@ -53,9 +53,18 @@ import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
-function liveDeskCare(kind: LivingKind, persistLocal: boolean, seed?: Partial<CareStats>): CareStats {
+function liveDeskCare(
+  kind: LivingKind,
+  persistLocal: boolean,
+  seed?: Partial<CareStats>,
+  leaving?: { localKey: string; stats: CareStats } | null,
+): CareStats {
   const fallback = seed ?? { hunger: 78, mood: 80, energy: 82 };
-  const live = persistLocal ? loadCare(kind.localKey, fallback, kind.key) : normalizeCare(fallback);
+  const live = switchGuest(
+    persistLocal ? (leaving ?? null) : null,
+    { localKey: kind.localKey, speciesKey: kind.key, seed: fallback },
+    persistLocal,
+  );
   return isHivePlace(kind.key) ? stampColony(live) : live;
 }
 
@@ -136,6 +145,7 @@ export function CompanionRoom({
   statsRef.current = stats;
   markRef.current = mark;
   const resetKey = guestKey ?? kind.key;
+  const sittingRef = useRef(kind.localKey);
   const careRef = useRef<HTMLDivElement>(null);
   const [autoTablet, setAutoTablet] = useState(false);
   const [autoPhone, setAutoPhone] = useState(false);
@@ -166,7 +176,8 @@ export function CompanionRoom({
   }, [phone, tablet]);
 
   useEffect(() => {
-    if (persistLocal) saveCare(kind.localKey, stats);
+    // Only write the guest who is sitting. A kind change must not pour this body onto the next slot.
+    if (persistLocal && sittingRef.current === kind.localKey) saveCare(kind.localKey, stats);
   }, [kind.localKey, persistLocal, stats]);
 
   useEffect(() => {
@@ -244,7 +255,15 @@ export function CompanionRoom({
     setMark(null);
     setLeaving(false);
     setChoiceOpen(false);
-    const live = liveDeskCare(kind, persistLocal, seed);
+    const live = liveDeskCare(
+      kind,
+      persistLocal,
+      seed,
+      persistLocal && sittingRef.current !== kind.localKey
+        ? { localKey: sittingRef.current, stats: statsRef.current }
+        : null,
+    );
+    sittingRef.current = kind.localKey;
     setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;

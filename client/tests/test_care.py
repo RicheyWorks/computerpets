@@ -287,6 +287,43 @@ def test_old_shared_care_file_stays_rui(tmp_path):
     assert other.hunger == 78
 
 
+def test_a_kind_change_keeps_the_leaving_guest(tmp_path):
+    from computerpets_client.life import switch_care
+
+    now = 1_700_000_000_000
+    rui = CareState(hunger=19, hidden=True, bond=40, last_tick=now)
+    chirp = CareState(hunger=70, hidden=False, bond=18, last_tick=now)
+    save_care(rui, user_data_dir=tmp_path, now=now, key="red_panda")
+    save_care(chirp, user_data_dir=tmp_path, now=now, key="field_cricket")
+
+    sat = switch_care(
+        CareState(hunger=11, hidden=True, bond=40, last_tick=now, mess=[]),
+        "red_panda",
+        "field_cricket",
+        user_data_dir=tmp_path,
+        now=now,
+    )
+    assert sat.hunger == 70
+    assert sat.hidden is False
+    assert sat.bond == 18
+
+    kept_rui = load_care(user_data_dir=tmp_path, now=now, key="red_panda")
+    kept_chirp = load_care(user_data_dir=tmp_path, now=now, key="field_cricket")
+    assert kept_rui.hunger == 11
+    assert kept_rui.hidden is True
+    assert kept_chirp.hunger == 70
+    assert kept_chirp.hidden is False
+
+
+def test_blotter_kind_change_uses_the_house_switch():
+    from pathlib import Path
+
+    app_src = Path(__file__).resolve().parents[1] / "computerpets_client" / "app.py"
+    text = app_src.read_text(encoding="utf-8")
+    assert "switch_care(" in text
+    assert "arriving = switch_care(" in text
+
+
 def test_unpack_care_rejects_a_foreign_line():
     assert unpack_care(None) is None
     assert unpack_care({"v": 2, "hunger": 10}) is None
