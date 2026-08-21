@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const C = await import(join(root, "src/lib/pets/care.ts"));
 const Hours = await import(join(root, "src/lib/pets/hours.ts"));
+const Treats = await import(join(root, "src/lib/pets/treats.ts"));
 const G = await import(join(root, "src/lib/pets/genetics.ts"));
 
 const actionsSrc = readFileSync(join(root, "src/lib/pets/actions.ts"), "utf8");
@@ -303,6 +304,40 @@ test("a shed clock survives persist + hydrate so a snake can leave the hatch coa
   assert.equal(reloaded.shedAt, now);
   const tooSoon = C.applySanctuaryCare("shed", "ball_python", reloaded, now + 60_000).stats;
   assert.equal(tooSoon.shedAt, now);
+});
+
+test("a Known guest can leave a gift; picking it is mood and bond", () => {
+  const fresh = C.leaveGift(guest({ bond: 18, gifts: [] }));
+  assert.deepEqual(fresh.gifts, []);
+  const orig = Math.random;
+  Math.random = () => 0;
+  const known = C.leaveGift(guest({ bond: 25, gifts: [] }));
+  Math.random = orig;
+  assert.equal(known.gifts.length, 1);
+  assert.notEqual(known.gifts[0]?.kind, "shed");
+  const full = C.leaveGift(guest({ bond: 80, gifts: [{ id: 1, x: 10 }, { id: 2, x: 20 }] }));
+  assert.equal(full.gifts.length, 2);
+  const picked = C.pickGift(guest({ mood: 50, bond: 30, gifts: [{ id: 7, x: 20 }, { id: 8, x: 40, kind: "shed" }] }), 7);
+  assert.deepEqual(picked.gifts.map((g) => g.id), [8]);
+  assert.equal(picked.mood, 56);
+  assert.equal(picked.bond, 32);
+  assert.match(roomSrc, /leaveGift/);
+  assert.match(roomSrc, /pickGift/);
+  assert.match(roomSrc, /GIFT_LINE/);
+  assert.equal(Object.keys(Treats.GIFT_LINE).length, 210);
+  assert.equal(Treats.GIFT_LINE.red_panda, "A ribbon I was not using. For the desk.");
+});
+
+test("a tick can leave a gift once they are Known", () => {
+  const orig = Math.random;
+  Math.random = () => 0;
+  const later = now + 180_000;
+  const known = C.decayStats(guest({ bond: 25, hygiene: 80, hunger: 50, gifts: [], lastTick: now }), now, later);
+  const fresh = C.decayStats(guest({ bond: 18, hygiene: 80, hunger: 50, gifts: [], lastTick: now }), now, later);
+  Math.random = orig;
+  assert.equal(known.gifts.length, 1);
+  assert.notEqual(known.gifts[0]?.kind, "shed");
+  assert.equal(fresh.gifts.length, 0);
 });
 
 test("the sanctuary writes the line; kennel guest rooms seed it", () => {

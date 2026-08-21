@@ -16,6 +16,26 @@
     return existing || "You called.";
   }
 
+  function giftLine(key, existing) {
+    const hours = Hours();
+    if (hours && hours.giftLine) return hours.giftLine(key, existing);
+    return existing || "I left this.";
+  }
+
+  function leaveGift(life, now = Date.now()) {
+    if (!life.gifts) life.gifts = [];
+    if (life.bond < 25 || life.gifts.length >= 2) return life;
+    life.gifts.push({ id: `g-${now}`, x: 0.16 + Math.random() * 0.68 });
+    return life;
+  }
+
+  function pickGift(life, id) {
+    life.gifts = (life.gifts || []).filter((g) => g.id !== id);
+    life.mood = clamp(life.mood + 6);
+    life.bond = clamp(life.bond + 2);
+    return life;
+  }
+
   function stampHive(life, key) {
     const hive = Hive();
     if (!hive || !hive.isHivePlace(key)) return life;
@@ -167,9 +187,9 @@
     if (life.hygiene < 42 && life.mess.length < 5 && Math.random() < Math.min(0.35, dt / 120000)) {
       life.mess.push({ id: `${now}-${Math.random().toString(36).slice(2, 7)}`, x: 0.2 + Math.random() * 0.6, age: now });
     }
-    if (life.bond >= 50 && (!life.gifts || life.gifts.length < 2) && Math.random() < hours * 0.35) {
+    if (life.bond >= 25 && (!life.gifts || life.gifts.length < 2) && Math.random() < Math.min(0.2, dt / 180000)) {
       if (!life.gifts) life.gifts = [];
-      life.gifts.push({ id: `g-${now}`, x: 0.18 + Math.random() * 0.64 });
+      life.gifts.push({ id: `g-${now}`, x: 0.14 + Math.random() * 0.72 });
     }
 
     const neglected = life.hunger < 8 && life.mood < 18 && ageDays(life, now) > 0.2;
@@ -332,7 +352,6 @@
     let notify = null;
     if (trait.special === "ribbon") {
       life.ribbon += 1;
-      if (life.bond >= 50 && life.gifts.length < 2) life.gifts.push({ id: `g-${now}`, x: 0.4 + Math.random() * 0.2 });
       notify = life.ribbon === 1 ? "ribbon" : null;
     }
     if (trait.special === "steal") {
@@ -343,6 +362,7 @@
     if (trait.special === "wheek") notify = "wheek";
     if (trait.special === "bug") notify = "bug";
     if (trait.special === "reborn") notify = "reborn";
+    leaveGift(life, now);
     return { life, line: pick(extra.special || ["..."]), cmd: applied.cmd, notify };
   }
 
@@ -418,6 +438,9 @@
     SHEDDERS,
     snackLine,
     callLine,
+    giftLine,
+    leaveGift,
+    pickGift,
     stampHive,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
