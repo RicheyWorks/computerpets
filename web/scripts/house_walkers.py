@@ -94,6 +94,26 @@ POSE_OWNED = SNAKE_STAMPS | {
     "honey_drone",
     "honey_queen",
     "honeycomb",
+    "oyster",
+    "fly_agaric",
+    "morel",
+    "chanterelle",
+    "turkey_tail",
+    "lions_mane",
+    "puffball",
+    "chicken_of_woods",
+    "yeast",
+    "lichen",
+    "frog",
+    "toad",
+    "newt",
+    "salamander",
+    "caecilian",
+    "crayfish",
+    "pond_snail",
+    "mussel",
+    "leech",
+    "stickleback",
 }
 
 
@@ -1684,7 +1704,7 @@ def main(argv: list[str] | None = None) -> None:
         sat = sit_pose_bodies_from(Path(poses_arg), only or None)
     if bodies_arg:
         sat = sit_bodies_from(Path(bodies_arg), only or None)
-    if only and not bodies_arg:
+    if only and not bodies_arg and not poses_arg:
         keys = only
         knock = [k for k in keys if k in set(photo_plate_keys())]
         paint = [k for k in keys if k in SPECS]
