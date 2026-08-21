@@ -36,6 +36,13 @@ CARE_NAME = "care.json"
 CARE_VERSION = 1
 
 
+def care_filename(key: str | None = None) -> str:
+    """One line per guest, same as the desk localKey / overlay life slot."""
+    if key:
+        return f"care.{key}.json"
+    return CARE_NAME
+
+
 def clamp(n: float, lo: float = 0, hi: float = 100) -> int:
     return int(max(lo, min(hi, round(n))))
 
@@ -123,9 +130,10 @@ def apply_feed(state: CareState, species: Species | None = None) -> CareResult:
     next_state = keep_hive(
         replace(
             state,
-            hunger=clamp(state.hunger + 30),
+            hunger=clamp(state.hunger + 28),
             mood=clamp(state.mood + 6),
-            energy=clamp(state.energy - 5),
+            energy=clamp(state.energy - 6),
+            bond=clamp(state.bond + 2),
             last_line=pick_line(kind.feed),
             anim="eat",
         ),
@@ -144,6 +152,7 @@ def apply_treat(state: CareState, species: Species | None = None) -> CareResult:
             state,
             hunger=clamp(state.hunger + 12),
             mood=clamp(state.mood + 5),
+            bond=clamp(state.bond + 1),
             last_line=line,
             anim="eat",
         ),
@@ -241,11 +250,11 @@ def apply_rest(state: CareState, species: Species | None = None) -> CareResult:
             energy=clamp(state.energy + 34),
             bond=clamp(state.bond + 1),
             last_line=line,
-            anim="sit",
+            anim="sleep",
         ),
         kind,
     )
-    return CareResult(next_state, next_state.last_line, "sit", "sit")
+    return CareResult(next_state, next_state.last_line, "sleep", "sleep")
 
 
 def apply_bath(state: CareState, species: Species | None = None) -> CareResult:
@@ -262,6 +271,22 @@ def apply_bath(state: CareState, species: Species | None = None) -> CareResult:
         species,
     )
     return CareResult(next_state, BATH_LINE, "sit", "sit")
+
+
+def apply_talk(state: CareState, species: Species | None = None) -> CareResult:
+    """Same sit as the overlay tray: a line, bond +1. Hidden still answers."""
+    kind = species or species_by_key(None)
+    line = ambient_line(state, kind)
+    next_state = keep_hive(
+        replace(
+            state,
+            bond=clamp(state.bond + 1),
+            last_line=line,
+            anim="sit",
+        ),
+        kind,
+    )
+    return CareResult(next_state, next_state.last_line, "sit", "talk")
 
 
 def apply_praise(state: CareState, species: Species | None = None) -> CareResult:
@@ -427,11 +452,12 @@ def save_care(
     *,
     user_data_dir: Path | str | None = None,
     now: int | None = None,
+    key: str | None = None,
 ) -> None:
-    """Write the blotter line. Local. Fail closed."""
+    """Write that guest's blotter line. Local. Fail closed."""
     stamp = now if now is not None else _now_ms()
     root = Path(user_data_dir) if user_data_dir is not None else default_user_data_dir()
-    path = root / CARE_NAME
+    path = root / care_filename(key)
     try:
         packed = pack_care(replace(state, last_tick=stamp))
         root.mkdir(parents=True, exist_ok=True)
@@ -446,13 +472,18 @@ def load_care(
     now: int | None = None,
     key: str | None = None,
 ) -> CareState:
-    """Read the blotter line and age it. Missing or rotten file is a new sit."""
+    """Read that guest's line and age it. Missing or rotten file is a new sit."""
     stamp = now if now is not None else _now_ms()
     root = Path(user_data_dir) if user_data_dir is not None else default_user_data_dir()
-    path = root / CARE_NAME
+    path = root / care_filename(key)
     try:
         if not path.is_file():
-            return CareState(last_tick=stamp)
+            legacy = root / CARE_NAME
+            # The old shared care.json was Rui's sit. Other guests start fresh.
+            if key == "red_panda" and legacy.is_file():
+                path = legacy
+            else:
+                return CareState(last_tick=stamp)
         parsed = json.loads(path.read_text(encoding="utf-8"))
         state = unpack_care(parsed)
         if state is None:

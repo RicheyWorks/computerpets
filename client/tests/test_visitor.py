@@ -43,4 +43,8 @@ def test_visit_line_is_the_house_copy():
     assert visit_line("koala") == "I chewed. Then I left the gum."
     assert visit_line("brain_coral") == "I sat the rock. Then I left the boulder."
     assert visit_line("grouper") == "I sat the hole. Then I left the dish."
+    assert visit_line("chickadee") == "I deeed. Then I left the cup."
+    assert visit_line("robin") == "I hopped. Then I left the rim."
+    assert visit_line("canada_goose") == "I honked. Then I left the green."
+    assert visit_line("pileated") == "I drummed. Then I left the post."
     assert visit_line("not_a_pet") == "I came. I saw the lamp. I left."

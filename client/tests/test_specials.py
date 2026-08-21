@@ -206,6 +206,16 @@ HOUSE_TRAITS = {
     "tarsier": ("gaze", "Gaze", "I looked. Hello."),
     "potto": ("still", "Still", "I kept still. Hello."),
     "koala": ("gum", "Gum", "I chewed. Hello."),
+    "brain_coral": ("ridge", "Ridge", "I sat the rock. Hello."),
+    "anemone": ("wreath", "Wreath", "I opened. Hello."),
+    "clownfish": ("paint", "Paint", "I sat the wreath. Hello."),
+    "parrotfish": ("scrape", "Scrape", "I rasped. Hello."),
+    "cleaner_shrimp": ("scrub", "Scrub", "I waited. Hello."),
+    "sea_cucumber": ("tube", "Tube", "I sat the sand. Hello."),
+    "lionfish": ("veil", "Veil", "I veiled. Hello."),
+    "giant_clam": ("gate", "Gate", "I opened. Hello."),
+    "eagle_ray": ("soar", "Soar", "I soared. Hello."),
+    "grouper": ("hide", "Hide", "I sat the hole. Hello."),
 }
 
 

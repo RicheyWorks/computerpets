@@ -56,5 +56,14 @@ test("every living kind keeps a visit line", () => {
   assert.match(visitorSrc, /koala: "I chewed\. Then I left the gum\."/);
   assert.match(visitorSrc, /brain_coral: "I sat the rock\. Then I left the boulder\."/);
   assert.match(visitorSrc, /grouper: "I sat the hole\. Then I left the dish\."/);
+  assert.match(visitorSrc, /chickadee: "I deeed\. Then I left the cup\."/);
   assert.match(visitorSrc, /I came\. I saw the lamp\. I left\./);
+});
+
+test("the blotter roost lines match the house, not a second visit", () => {
+  const blotterSrc = readFileSync(join(root, "../client/computerpets_client/visitor.py"), "utf8");
+  assert.match(blotterSrc, /"chickadee": "I deeed\. Then I left the cup\."/);
+  assert.match(blotterSrc, /"robin": "I hopped\. Then I left the rim\."/);
+  assert.match(blotterSrc, /"canada_goose": "I honked\. Then I left the green\."/);
+  assert.match(blotterSrc, /"pileated": "I drummed\. Then I left the post\."/);
 });
