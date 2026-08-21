@@ -1550,7 +1550,10 @@ def test_desk_window_plaque_follows_rail_and_guest_tap():
     assert window.plaque.guide().key == "axolotl"
     assert "gills" in window.plaque.tell.text().lower()
     window._tap_guest()
-    assert "salamander" in window.bubble.toPlainText().lower()
+    assert window._choice is not None
+    assert "talk" in [m["id"] for m in window._choice]
+    window._pick_choice("talk")
+    assert window.bubble.isVisible()
     window._pick_key("kingsnake")
     assert window.plaque.guide().latin == "Lampropeltis californiae"
     assert "no red" in window.plaque.mixup.text().lower()

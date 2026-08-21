@@ -67,6 +67,8 @@ test("an unknown name is not a Rui ask; no one asked stays unset", () => {
 
 test("live is still one walker; persistLocal stays the desk default", () => {
   assert.match(liveSrc, /<CompanionRoom/);
+  assert.match(roomSrc, /GuestChoice/);
+  assert.match(roomSrc, /guestTap\(\)/);
   assert.equal(liveSrc.match(/<CompanionRoom/g)?.length, 1);
   assert.match(liveSrc, /DESK_TEND/);
   assert.match(liveSrc, /extraCare=\{\[\.\.\.DESK_TEND\]\}/);
