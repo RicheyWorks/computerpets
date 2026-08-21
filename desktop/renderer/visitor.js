@@ -1,39 +1,14 @@
-import { LIVING_KINDS, type LivingKind } from "./living";
+/** Today's caller. Same pick, same line, same walk as the desk HouseVisit. */
+(function (root) {
+  const VISIT_WAIT_MS = 7500;
+  const VISIT_TALK_MS = 1600;
+  const VISIT_WANDER_MS = 5200;
+  const VISIT_LEAVE_MS = 14000;
+  const VISIT_GONE_MS = 18500;
 
-/** Walk-through clock. Overlay and blotter keep this same call. */
-export const VISIT_WAIT_MS = 7500;
-export const VISIT_TALK_MS = 1600;
-export const VISIT_WANDER_MS = 5200;
-export const VISIT_LEAVE_MS = 14000;
-export const VISIT_GONE_MS = 18500;
+  const CATALOG_KEYS = ["red_panda","cat","dog","rabbit","hamster","guinea_pig","turtle","goldfish","budgie","fox","penguin","parrot","ferret","hedgehog","chinchilla","axolotl","toucan","iguana","dragon","phoenix","ball_python","corn_snake","kingsnake","green_tree_python","hognose","garter","boa","milk_snake","rosy_boa","carpet_python","octopus","cuttlefish","nautilus","moon_jelly","sea_star","hermit_crab","horseshoe_crab","seahorse","manta","moray","moss","maidenhair","ginkgo","oak","water_lily","orchid","saguaro","venus_flytrap","pitcher","sundew","honeybee","monarch","luna","firefly","darner","stick","carpenter_ant","ladybird","mantis","cicada","bumblebee","carpenter_bee","mason_bee","leafcutter","stingless","sweat_bee","mining_bee","honey_drone","honey_queen","honeycomb","oyster","fly_agaric","morel","chanterelle","turkey_tail","lions_mane","puffball","chicken_of_woods","yeast","lichen","photovore","choir","nimbus","silica","terminator","nexus","halovore","magneton","umbral","cyst","frog","toad","newt","salamander","caecilian","crayfish","pond_snail","mussel","leech","stickleback","paramecium","amoeba","euglena","volvox","diatom","kelp","chlamydomonas","stentor","coli","haloarchaea","crow","raven","barn_owl","red_tail","chickadee","robin","mallard","canada_goose","pileated","hummingbird","orb_weaver","jumping_spider","wolf_spider","tarantula","widow","harvestman","scorpion","vinegaroon","tick","solifuge","deer","bat","squirrel","otter","raccoon","skunk","opossum","beaver","porcupine","black_bear","gecko","anole","skink","chameleon","horned_lizard","alligator","crocodile","snapper","box_turtle","tuatara","bass","brook_trout","catfish","bluegill","perch","pike","walleye","paddlefish","lamprey","american_eel","house_centipede","millipede","pillbug","earthworm","velvet_worm","springtail","tardigrade","planarian","nematode","amphipod","fiddler_crab","ghost_crab","limpet","barnacle","chiton","periwinkle","sand_dollar","sea_urchin","knobbed_whelk","lugworm","field_cricket","katydid","grasshopper","swallowtail","jewelwing","lacewing","earwig","acorn_weevil","click_beetle","robber_fly","sloth","lemur","gibbon","kinkajou","colugo","flying_squirrel","howler","tarsier","potto","koala","brain_coral","anemone","clownfish","parrotfish","cleaner_shrimp","sea_cucumber","lionfish","giant_clam","eagle_ray","grouper"];
 
-export type VisitPhase = "wait" | "in" | "talk" | "wander" | "leave" | "gone";
-
-export function todaysVisitor(hostKey: string, now = new Date()): LivingKind {
-  const day = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
-  const others = LIVING_KINDS.filter((k) => k.key !== hostKey);
-  return others[Math.abs(day + hostKey.length) % others.length]!;
-}
-
-/** Elapsed from the wait clock. Blotter counts this way. */
-export function visitPhaseFromWait(elapsedMs: number, hostHidden = false): VisitPhase {
-  if (hostHidden) return "gone";
-  if (elapsedMs < VISIT_WAIT_MS) return "wait";
-  return visitPhaseFromEnter(elapsedMs - VISIT_WAIT_MS);
-}
-
-/** Elapsed from enter. Desk HouseVisit timers use this. */
-export function visitPhaseFromEnter(elapsedMs: number, hostHidden = false): VisitPhase {
-  if (hostHidden) return "gone";
-  if (elapsedMs < 0) return "wait";
-  if (elapsedMs >= VISIT_GONE_MS) return "gone";
-  if (elapsedMs >= VISIT_LEAVE_MS) return "leave";
-  if (elapsedMs >= VISIT_WANDER_MS) return "wander";
-  if (elapsedMs >= VISIT_TALK_MS) return "talk";
-  return "in";
-}
-
-const LINES: Record<string, string> = {
+  const VISIT_LINE = {
   red_panda: "I came for the ribbon. I'll put it back. Maybe.",
   cat: "I inspected the blotter. It will do.",
   dog: "I brought the whole tail. Then I took it home.",
@@ -246,6 +221,51 @@ const LINES: Record<string, string> = {
   grouper: "I sat the hole. Then I left the dish.",
 };
 
-export function visitLine(guestKey: string) {
-  return LINES[guestKey] ?? "I came. I saw the lamp. I left.";
-}
+  function civilDay(now) {
+    now = now || new Date();
+    return Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
+  }
+
+  function todaysVisitor(hostKey, keys, now) {
+    const walk = keys && keys.length ? keys : CATALOG_KEYS;
+    const others = walk.filter((key) => key !== hostKey);
+    if (!others.length) return null;
+    return others[Math.abs(civilDay(now) + String(hostKey || "").length) % others.length];
+  }
+
+  function visitLine(guestKey) {
+    return VISIT_LINE[guestKey] || "I came. I saw the lamp. I left.";
+  }
+
+  function visitPhaseFromEnter(elapsedMs, hostHidden) {
+    if (hostHidden) return "gone";
+    if (elapsedMs < 0) return "wait";
+    if (elapsedMs >= VISIT_GONE_MS) return "gone";
+    if (elapsedMs >= VISIT_LEAVE_MS) return "leave";
+    if (elapsedMs >= VISIT_WANDER_MS) return "wander";
+    if (elapsedMs >= VISIT_TALK_MS) return "talk";
+    return "in";
+  }
+
+  function visitPhaseFromWait(elapsedMs, hostHidden) {
+    if (hostHidden) return "gone";
+    if (elapsedMs < VISIT_WAIT_MS) return "wait";
+    return visitPhaseFromEnter(elapsedMs - VISIT_WAIT_MS);
+  }
+
+  const api = {
+    VISIT_WAIT_MS,
+    VISIT_TALK_MS,
+    VISIT_WANDER_MS,
+    VISIT_LEAVE_MS,
+    VISIT_GONE_MS,
+    CATALOG_KEYS,
+    VISIT_LINE,
+    todaysVisitor,
+    visitLine,
+    visitPhaseFromEnter,
+    visitPhaseFromWait,
+  };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  root.PetVisitor = api;
+})(typeof window !== "undefined" ? window : globalThis);

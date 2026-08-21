@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { LivingPet, type PetCommand } from "@/components/desk/living-pet";
-import { todaysVisitor, visitLine } from "@/lib/pets/visitor";
+import {
+  VISIT_GONE_MS,
+  VISIT_LEAVE_MS,
+  VISIT_TALK_MS,
+  VISIT_WAIT_MS,
+  VISIT_WANDER_MS,
+  todaysVisitor,
+  visitLine,
+} from "@/lib/pets/visitor";
 import { traitFor } from "@/lib/pets/traits";
 
 export function HouseVisit({ hostKey, hidden }: { hostKey: string; hidden?: boolean }) {
@@ -25,22 +33,22 @@ export function HouseVisit({ hostKey, hidden }: { hostKey: string; hidden?: bool
           window.setTimeout(() => {
             setSpeech(visitLine(guest.key));
             setOrder({ cmd: "talk", id: 2 });
-          }, 1600),
+          }, VISIT_TALK_MS),
         );
         timers.push(
           window.setTimeout(() => {
             setSpeech(null);
             setOrder({ cmd: "wander", id: 3 });
-          }, 5200),
+          }, VISIT_WANDER_MS),
         );
         timers.push(
           window.setTimeout(() => {
             setSpeech(null);
             setOrder({ cmd: "leave", id: 4 });
-          }, 14000),
+          }, VISIT_LEAVE_MS),
         );
-        timers.push(window.setTimeout(() => setPhase("gone"), 18500));
-      }, 7500),
+        timers.push(window.setTimeout(() => setPhase("gone"), VISIT_GONE_MS));
+      }, VISIT_WAIT_MS),
     );
     return () => {
       for (const id of timers) window.clearTimeout(id);
