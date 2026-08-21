@@ -57,6 +57,14 @@ test("treat seek still snacks; hide still hides; a catch is not a snack", () => 
   assert.equal(P.playClaim("catch", { taken: false, cmd: "seek", mark: "treat" }), "none");
   assert.equal(P.playClaim("arrive", { taken: false, cmd: "leave", mark: null }), "hide");
   assert.equal(P.playClaim("arrive", { taken: false, cmd: "play", mark: null }), "idle");
+
+  const handle = handleSrc();
+  const arrive = petSrc.slice(petSrc.indexOf("function applyArrive"), petSrc.indexOf("function clearAct"));
+  assert.doesNotMatch(handle, /PetLife\.act\(life, trait, "snack"\)/);
+  assert.match(handle, /issue\("leave"\)/);
+  assert.match(arrive, /hop\.act === "hide"/);
+  assert.match(arrive, /hop\.act === "snack"/);
+  assert.match(arrive, /PetLife\.act\(life, trait, care,/);
 });
 
 test("a snack or feed is a thing on the work-area floor; they walk to it", () => {

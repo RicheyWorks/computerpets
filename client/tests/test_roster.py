@@ -1322,7 +1322,7 @@ def test_care_verbs_work_for_a_snake_and_a_walker():
     assert fed.state.hunger > 40
     assert fed.line
     treated = apply_treat(CareState(hunger=40), thimble)
-    assert treated.cmd == "seek"
+    assert treated.cmd == "eat"
     assert treated.line
     hidden = apply_hide(CareState(), nori)
     assert hidden.state.hidden is True
