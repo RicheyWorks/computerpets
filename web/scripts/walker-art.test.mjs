@@ -16,6 +16,8 @@ test("the walker paint is a clear plate; the tap pad is empty wood", () => {
   assert.match(lawSrc, /CLEAR = \(0, 0, 0, 0\)/);
   assert.match(lawSrc, /fit_like_rui/);
   assert.match(lawSrc, /clear_connected_plate/);
+  assert.match(lawSrc, /sit_body_frame/);
+  assert.match(lawSrc, /clear_edge_matte/);
   assert.doesNotMatch(lawSrc, /Image\.new\("RGBA", \(HI, HI\), \(0, 0, 0, 255\)\)/);
   assert.match(livingSrc, /data-pet-hit/);
   assert.match(livingSrc, /data-pet-art/);
