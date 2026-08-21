@@ -43,6 +43,7 @@ ANIMS = {
 }
 
 # Photographs that already meet Rui's hand. Knock a plate if one remains.
+# A thin shared stamp in this set may still sit a house-hand painting.
 PHOTO_KEEP = {
     "axolotl", "ball_python", "boa", "budgie", "carpet_python", "cat",
     "chinchilla", "corn_snake", "cuttlefish", "dog", "dragon", "ferret",
@@ -55,6 +56,20 @@ PHOTO_KEEP = {
     "venus_flytrap", "water_lily",
     "carpenter_ant", "cicada", "darner", "firefly", "honeybee", "ladybird",
     "luna", "mantis", "monarch", "stick",
+}
+
+# First-fifty stamps that share one thin frame. They sit a house-hand pose set.
+SNAKE_STAMPS = {
+    "ball_python",
+    "boa",
+    "carpet_python",
+    "corn_snake",
+    "garter",
+    "green_tree_python",
+    "hognose",
+    "kingsnake",
+    "milk_snake",
+    "rosy_boa",
 }
 
 
@@ -212,15 +227,70 @@ def sit_body_frame(body: Image.Image, pose: dict, out: int = OUT) -> Image.Image
     return canvas
 
 
+def clear_wash_matte(im: Image.Image) -> Image.Image:
+    """Flood every hue the parchment border already wears. Interior ink stays."""
+    import numpy as np
+
+    arr = np.array(im.convert("RGBA"))
+    h, w = arr.shape[:2]
+    qbin = (arr[:, :, 0].astype(np.uint16) >> 4) << 8
+    qbin |= (arr[:, :, 1].astype(np.uint16) >> 4) << 4
+    qbin |= arr[:, :, 2].astype(np.uint16) >> 4
+    band = max(8, min(h, w) // 28)
+    border = np.concatenate(
+        [
+            qbin[:band, :].ravel(),
+            qbin[-band:, :].ravel(),
+            qbin[:, :band].ravel(),
+            qbin[:, -band:].ravel(),
+        ]
+    )
+    counts = np.bincount(border, minlength=4096)
+    wash_bins = counts >= max(12, border.size // 400)
+    a = arr[:, :, 3]
+    wash = (a <= 10) | wash_bins[qbin]
+    seen = np.zeros((h, w), dtype=np.uint8)
+    q = deque()
+
+    def push(x, y):
+        if 0 <= x < w and 0 <= y < h and not seen[y, x]:
+            seen[y, x] = 1
+            q.append((x, y))
+
+    for x in range(w):
+        push(x, 0)
+        push(x, h - 1)
+    for y in range(h):
+        push(0, y)
+        push(w - 1, y)
+    while q:
+        x, y = q.popleft()
+        if not wash[y, x]:
+            continue
+        arr[y, x] = CLEAR
+        push(x + 1, y)
+        push(x - 1, y)
+        push(x, y + 1)
+        push(x, y - 1)
+    return Image.fromarray(arr, "RGBA")
+
+
 def ingest_body(path: Path, key: str) -> Image.Image:
     """Knock the plate off a house-hand painting and sit it like Rui."""
     raw = Image.open(path).convert("RGBA")
     tol = 16 if key in DARK_MATTE else 30
-    knocked = clear_edge_matte(raw, tol=tol)
+    # A parchment wash floods first. Then any leftover plate.
+    knocked = clear_wash_matte(raw)
+    knocked = clear_edge_matte(knocked, tol=tol)
     if not knocked.getbbox():
         knocked = clear_edge_matte(raw, tol=max(10, tol - 8))
     if not knocked.getbbox():
         knocked = clear_connected_plate(raw, luma=14)
+    # A watercolor wash leaves a tan fringe. A short erode keeps the animal.
+    if knocked.getbbox():
+        r, g, b, a = knocked.split()
+        a = a.filter(ImageFilter.MinFilter(5))
+        knocked = Image.merge("RGBA", (r, g, b, a))
     return fit_like_rui(knocked)
 
 
@@ -230,6 +300,35 @@ def write_kind_from_body(key: str, body: Image.Image) -> None:
         dest.mkdir(parents=True, exist_ok=True)
         for i in range(count):
             pose = pose_for(key, anim, i, count)
+            sit_body_frame(body, pose).save(dest / f"{i + 1}.png", "PNG", optimize=True)
+    desk = DESK_SPRITES / key
+    if desk.exists():
+        shutil.rmtree(desk)
+    shutil.copytree(WEB_SPRITES / key, desk)
+
+
+def mild_pose(pose: dict) -> dict:
+    """The painting already holds the gait. The frames only breathe."""
+    out = dict(pose)
+    out["dx"] = pose.get("dx", 0.0) * 0.22
+    out["dy"] = pose.get("dy", 0.0) * 0.12
+    out["rot"] = pose.get("rot", 0.0) * 0.22
+    out["scale"] = 1.0 + (pose.get("scale", 1.0) - 1.0) * 0.25
+    out["hop"] = pose.get("hop", 0.0) * 0.15
+    return out
+
+
+def write_kind_from_poses(key: str, bodies: dict[str, Image.Image]) -> None:
+    """Each pose folder keeps its own painted body. Walk is not a tilted idle."""
+    idle = bodies.get("idle")
+    if idle is None:
+        raise ValueError(f"{key} needs an idle painting")
+    for anim, count in ANIMS.items():
+        body = bodies.get(anim) or idle
+        dest = WEB_SPRITES / key / anim
+        dest.mkdir(parents=True, exist_ok=True)
+        for i in range(count):
+            pose = mild_pose(pose_for(key, anim, i, count))
             sit_body_frame(body, pose).save(dest / f"{i + 1}.png", "PNG", optimize=True)
     desk = DESK_SPRITES / key
     if desk.exists():
@@ -362,6 +461,17 @@ def S(key, plan, fur, belly, ink, accent, tell, latin):
     SPECS[key] = Spec(plan, fur, belly, ink, accent, tell, latin)
 
 
+# House snakes — first-fifty stamps that sit a house-hand pose set
+S("ball_python", "snake", (92, 64, 40), (220, 196, 140), (32, 20, 12), (176, 140, 80), "bun", "Python regius")
+S("corn_snake", "snake", (220, 120, 56), (244, 220, 176), (80, 36, 16), (196, 72, 40), "saddle", "Pantherophis guttatus")
+S("kingsnake", "snake", (24, 24, 24), (236, 228, 212), (8, 8, 8), (244, 244, 236), "bands", "Lampropeltis californiae")
+S("green_tree_python", "snake", (56, 148, 64), (220, 228, 160), (20, 48, 24), (236, 244, 220), "saddle-coil", "Morelia viridis")
+S("hognose", "snake", (196, 164, 100), (236, 220, 176), (64, 44, 24), (88, 56, 32), "snout", "Heterodon nasicus")
+S("garter", "snake", (40, 48, 32), (220, 196, 72), (16, 16, 12), (236, 212, 88), "stripes", "Thamnophis sirtalis")
+S("boa", "snake", (168, 124, 72), (220, 196, 148), (40, 24, 12), (88, 56, 32), "heavy", "Boa constrictor")
+S("milk_snake", "snake", (196, 48, 40), (244, 236, 220), (16, 12, 10), (24, 20, 16), "triad", "Lampropeltis triangulum")
+S("rosy_boa", "snake", (212, 168, 140), (236, 212, 188), (72, 44, 28), (88, 52, 32), "three", "Lichanura trivirgata")
+S("carpet_python", "snake", (236, 204, 64), (32, 28, 20), (16, 12, 8), (48, 40, 24), "labyrinth", "Morelia spilota")
 # Wood
 S("deer", "mammal", (168, 132, 88), (236, 228, 212), (48, 36, 24), (220, 200, 176), "antler", "Odocoileus virginianus")
 S("bat", "bat", (72, 52, 36), (96, 72, 52), (20, 16, 12), (48, 36, 28), "wing", "Eptesicus fuscus")
@@ -1486,7 +1596,7 @@ def sit_bodies_from(folder: Path, keys: list[str] | None = None) -> list[str]:
         key = path.name[: -len("_body.png")]
         if wanted is not None and key not in wanted:
             continue
-        if key in PHOTO_KEEP:
+        if key in PHOTO_KEEP and key not in SNAKE_STAMPS:
             print(f"skip photograph {key}", flush=True)
             continue
         print(f"sit {key}", flush=True)
@@ -1496,15 +1606,47 @@ def sit_bodies_from(folder: Path, keys: list[str] | None = None) -> list[str]:
     return sat
 
 
+def sit_pose_bodies_from(folder: Path, keys: list[str] | None = None) -> list[str]:
+    """Sit a painted pose set. `{key}_{anim}.png` or `{key}_{anim}_body.png`."""
+    sat: list[str] = []
+    wanted = set(keys) if keys else None
+    found: dict[str, dict[str, Path]] = {}
+    for path in sorted(folder.glob("*.png")):
+        stem = path.stem[: -len("_body")] if path.stem.endswith("_body") else path.stem
+        parts = stem.rsplit("_", 1)
+        if len(parts) != 2 or parts[1] not in ANIMS:
+            continue
+        key, anim = parts
+        if wanted is not None and key not in wanted:
+            continue
+        if key in PHOTO_KEEP and key not in SNAKE_STAMPS:
+            print(f"skip photograph {key}", flush=True)
+            continue
+        found.setdefault(key, {})[anim] = path
+    for key, poses in sorted(found.items()):
+        if "idle" not in poses:
+            print(f"skip {key}: no idle painting", flush=True)
+            continue
+        print(f"sit poses {key} {sorted(poses)}", flush=True)
+        bodies = {anim: ingest_body(path, key) for anim, path in poses.items()}
+        write_kind_from_poses(key, bodies)
+        write_portrait(key)
+        sat.append(key)
+    return sat
+
+
 def main(argv: list[str] | None = None) -> None:
     import sys
 
     args = list(sys.argv[1:] if argv is None else argv)
-    only = [a for a in args if not a.startswith("-") and not a.startswith("--bodies=")]
+    only = [a for a in args if not a.startswith("-") and not a.startswith("--bodies=") and not a.startswith("--poses=")]
     bodies_arg = next((a.split("=", 1)[1] for a in args if a.startswith("--bodies=")), "")
-    do_knock = "--knock" in args or (not only and not bodies_arg)
+    poses_arg = next((a.split("=", 1)[1] for a in args if a.startswith("--poses=")), "")
+    do_knock = "--knock" in args or (not only and not bodies_arg and not poses_arg)
     do_paint = "--paint" in args
     sat: list[str] = []
+    if poses_arg:
+        sat = sit_pose_bodies_from(Path(poses_arg), only or None)
     if bodies_arg:
         sat = sit_bodies_from(Path(bodies_arg), only or None)
     if only and not bodies_arg:
@@ -1522,7 +1664,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"paint {key}", flush=True)
         write_kind(key)
         write_portrait(key)
-    print(f"done sit={len(sat)} paint={len(paint)} knock={len(knock)} catalog=210", flush=True)
+    print(f"done sit={len(sat)} paint={len(paint)} knock={len(knock)} poses={1 if poses_arg else 0} catalog=210", flush=True)
 
 
 if __name__ == "__main__":
