@@ -7,6 +7,7 @@ const E = require("./ethogram.js");
 const roster = JSON.parse(readFileSync(join(__dirname, "roster.json"), "utf8"));
 const traitsSrc = readFileSync(join(__dirname, "traits.js"), "utf8");
 const petSrc = readFileSync(join(__dirname, "pet.js"), "utf8");
+const visitorSrc = readFileSync(join(__dirname, "visitor.js"), "utf8");
 const styleSrc = readFileSync(join(__dirname, "styles.css"), "utf8");
 const catalogSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "catalog.ts"), "utf8");
 const treatsSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "treats.ts"), "utf8");
@@ -128,7 +129,7 @@ test("shore, meadow, canopy, and reef keep a living special on the overlay, not 
 
 test("treat shapes and visit lines cover bees, shore, meadow, canopy, and reef", () => {
   const treatKeys = objectKeys(petSrc, "const TREAT_SHAPE = {");
-  const visitKeys = objectKeys(petSrc, "const VISIT_LINE = {");
+  const visitKeys = objectKeys(visitorSrc, "const VISIT_LINE = {");
   for (const key of [...BEES, ...SHORE, ...MEADOW, ...CANOPY, ...REEF]) {
     assert.ok(treatKeys.includes(key), `treat ${key}`);
     assert.ok(visitKeys.includes(key), `visit ${key}`);
@@ -138,13 +139,13 @@ test("treat shapes and visit lines cover bees, shore, meadow, canopy, and reef",
   assert.match(petSrc, /sloth: "leaf"/);
   assert.match(petSrc, /koala: "leaf"/);
   assert.match(petSrc, /brain_coral: "flake"/);
-  assert.match(petSrc, /honeycomb: "I sat\. Then the line went quieter\."/);
-  assert.match(petSrc, /fiddler_crab: "I waved\. Then I left the marsh\."/);
-  assert.match(petSrc, /field_cricket: "I sang\. Then I left the grass\."/);
-  assert.match(petSrc, /sloth: "I hung\. Then I left the bough\."/);
-  assert.match(petSrc, /koala: "I chewed\. Then I left the gum\."/);
-  assert.match(petSrc, /brain_coral: "I sat the rock\. Then I left the boulder\."/);
-  assert.match(petSrc, /grouper: "I sat the hole\. Then I left the dish\."/);
+  assert.match(visitorSrc, /honeycomb: "I sat\. Then the line went quieter\."/);
+  assert.match(visitorSrc, /fiddler_crab: "I waved\. Then I left the marsh\."/);
+  assert.match(visitorSrc, /field_cricket: "I sang\. Then I left the grass\."/);
+  assert.match(visitorSrc, /sloth: "I hung\. Then I left the bough\."/);
+  assert.match(visitorSrc, /koala: "I chewed\. Then I left the gum\."/);
+  assert.match(visitorSrc, /brain_coral: "I sat the rock\. Then I left the boulder\."/);
+  assert.match(visitorSrc, /grouper: "I sat the hole\. Then I left the dish\."/);
 });
 
 test("the overlay drops the same treat the desk already drops, including the egg", () => {

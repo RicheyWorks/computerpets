@@ -1008,7 +1008,7 @@ function switchTo(key) {
   if (guestEl) guestEl.classList.remove("show");
   visit = null;
   window.clearTimeout(startVisit.timer);
-  startVisit.timer = window.setTimeout(startVisit, 7500);
+  startVisit.timer = window.setTimeout(startVisit, window.PetVisitor?.VISIT_WAIT_MS || 7500);
 }
 
 function tick(now) {
@@ -1241,232 +1241,33 @@ function tick(now) {
 }
 tick.last = performance.now();
 
-const VISIT_LINE = {
-  red_panda: "I came for the ribbon. I'll put it back. Maybe.",
-  cat: "I inspected the blotter. It will do.",
-  dog: "I brought the whole tail. Then I took it home.",
-  rabbit: "A short visit. The greens here are theoretical.",
-  hamster: "I mapped the crumbs. Officially.",
-  guinea_pig: "Wheek. That is the entire review.",
-  turtle: "I arrived. I will leave in due course.",
-  goldfish: "I drifted through. That counts.",
-  budgie: "A note: your house is loud. I approve.",
-  fox: "I found this desk first. Then I left it.",
-  penguin: "A pebble of a visit.",
-  parrot: "I came to quote the furniture.",
-  ferret: "I borrowed a dongle. I'll return a better one.",
-  hedgehog: "A quiet walk-through.",
-  chinchilla: "The dust here is a scandal. I took a sample.",
-  axolotl: "I grew a little more present. Then less.",
-  toucan: "The bill approves of this blotter.",
-  iguana: "I blinked at your lamp. Then I left.",
-  dragon: "A courtesy inspection of the hoard.",
-  phoenix: "I warmed the corner. You're welcome.",
-  ball_python: "I came as a bun. I will leave as a bun.",
-  corn_snake: "I threaded through. Your gap is fine.",
-  kingsnake: "I inspected. You may keep the desk.",
-  green_tree_python: "I hung on your lamp. Briefly.",
-  hognose: "I died on your blotter. I got over it.",
-  garter: "I patrolled. The moss is adequate.",
-  boa: "I held the edge. Then I let go.",
-  milk_snake: "I was a rumor. Then I was lunch-minded.",
-  rosy_boa: "I borrowed the warm corner. I left it pink.",
-  carpet_python: "I charted your shelf. You may land.",
-  octopus: "I tasted the rim. Then I was a cup again.",
-  cuttlefish: "I flushed. Then I left the weather.",
-  nautilus: "I rose through. The house can wait.",
-  moon_jelly: "I pulsed through. That counts.",
-  sea_star: "I clung. Then I unclung. Slowly.",
-  hermit_crab: "I measured the lids. None were free.",
-  horseshoe_crab: "I walked the sand. I am not a crab.",
-  seahorse: "I hitched your pencil. Briefly.",
-  manta: "I soared the bowl. You may keep the sky.",
-  moray: "I was the door. Then I was gone.",
-  moss: "I carpeted. Then I was the page again.",
-  maidenhair: "I unfurled. Then I folded.",
-  ginkgo: "I golded. Then I left the autumn.",
-  oak: "I dropped one. Then I was small again.",
-  water_lily: "I opened. Then I closed.",
-  orchid: "I bloomed. Then I was bark again.",
-  saguaro: "I stored a visit. Then I sat.",
-  venus_flytrap: "I did not snap. Then I left the cup.",
-  pitcher: "I kept the well. Then I left the rain.",
-  sundew: "I glittered. Then I uncurled.",
-  honeybee: "I danced. Then I left the map.",
-  monarch: "I kept the orange. Then I left the cup.",
-  luna: "I drifted. I did not eat.",
-  firefly: "I flashed. Then I left the grammar.",
-  darner: "I hawed. Then I was air again.",
-  stick: "I froze. Then I was a pencil again.",
-  carpenter_ant: "I laid a road. Then I left the grain.",
-  ladybird: "I counted. Then I left the seven.",
-  mantis: "I folded. Then I left the stem.",
-  cicada: "I sat. Then I left the years.",
-  oyster: "I fruited. Then I left the wood.",
-  fly_agaric: "I warned. Then I left the cup.",
-  morel: "I sat hollow. Then I left the mold.",
-  chanterelle: "I forked. Then I left the rim.",
-  turkey_tail: "I zoned. Then I left the grain.",
-  lions_mane: "I hung teeth. Then I left the wound.",
-  puffball: "I puffed. Then I left the cloud.",
-  chicken_of_woods: "I shelved. Then I left the oak.",
-  yeast: "I rose. Then I left the crock.",
-  lichen: "We sat. Then we left the share.",
-  photovore: "I drank. Then I left the glass.",
-  choir: "I sounded. Then I left the air.",
-  nimbus: "I floated. Then I left the bowl.",
-  silica: "I faceted. Then I left the stone.",
-  terminator: "I kept the rim. Then I left the belt.",
-  nexus: "We counted. Then we left the name.",
-  halovore: "I frosted. Then I left the dish.",
-  magneton: "I aligned. Then I left the line.",
-  umbral: "I dimmed. Then I left the cool.",
-  cyst: "I waited. Then I left the seal.",
-  frog: "I jumped. Then I left the bank.",
-  toad: "I hopped. Then I left the leaf.",
-  newt: "I kept the orange. Then I left the moss.",
-  salamander: "I hid. Then I left the mold.",
-  caecilian: "I slipped. Then I left the silt.",
-  crayfish: "I pinched. Then I left the pebble.",
-  pond_snail: "I rasped. Then I left the rim.",
-  mussel: "I filtered. Then I left the silt.",
-  leech: "I latched. Then I left the damp.",
-  stickleback: "I flared. Then I left the nest.",
-  paramecium: "I rowed. Then I left the drop.",
-  amoeba: "I reached. Then I left the film.",
-  euglena: "I drank. Then I left the red.",
-  volvox: "We rolled. Then we left the bowl.",
-  diatom: "I glided. Then I left the pane.",
-  kelp: "I held. Then I left the cold.",
-  chlamydomonas: "I spun. Then I left the plate.",
-  stentor: "I opened. Then I left the horn.",
-  coli: "I tumbled. Then I left the broth.",
-  haloarchaea: "I blushed. Then I left the pan.",
-  crow: "I cawed. Then I left the ledge.",
-  raven: "I croaked. Then I left the rafter.",
-  barn_owl: "I hissed. Then I left the beam.",
-  red_tail: "I soared. Then I left the post.",
-  chickadee: "I deeed. Then I left the cup.",
-  robin: "I hopped. Then I left the rim.",
-  mallard: "I dabbled. Then I left the dish.",
-  canada_goose: "I honked. Then I left the green.",
-  pileated: "I drummed. Then I left the post.",
-  hummingbird: "I hovered. Then I left the cup.",
-  orb_weaver: "I sat. Then I left the web.",
-  jumping_spider: "I leapt. Then I left the edge.",
-  wolf_spider: "I prowled. Then I left the litter.",
-  tarantula: "I sat. Then I left the silk.",
-  widow: "I hung. Then I left the corner.",
-  harvestman: "I walked. Then I left the stem.",
-  scorpion: "I raised. Then I left the bark.",
-  vinegaroon: "I whipped. Then I left the sand.",
-  tick: "I clasped. Then I left the hem.",
-  solifuge: "I ran. Then I left the dish.",
-  deer: "I flagged. Then I left the edge.",
-  bat: "I hung. Then I left the fold.",
-  squirrel: "I hid a thought. Then I left the dish.",
-  otter: "I slid. Then I left the dish.",
-  raccoon: "I washed. Then I left the bowl.",
-  skunk: "I stamped. Then I left the duff.",
-  opossum: "I went still. Then I left the hem.",
-  beaver: "I gnawed. Then I left the lodge.",
-  porcupine: "I bristled. Then I left the post.",
-  black_bear: "I foraged. Then I left the denside.",
-  gecko: "I climbed. Then I left the plaster.",
-  anole: "I flashed. Then I left the post.",
-  skink: "I dashed. Then I left the crack.",
-  chameleon: "I shifted. Then I left the perch.",
-  horned_lizard: "I sat the crown. Then I left the sand.",
-  alligator: "I sat the bank. Then I left the dish.",
-  crocodile: "I showed. Then I left the dish.",
-  snapper: "I snapped. Then I left the mud.",
-  box_turtle: "I shut. Then I left the leaf.",
-  tuatara: "I kept still. Then I left the burrow.",
-  bass: "I lunged. Then I left the edge.",
-  brook_trout: "I rose. Then I left the riffle.",
-  catfish: "I whisked. Then I left the mud.",
-  bluegill: "I flared. Then I left the shade.",
-  perch: "I kept the bars. Then I left the rail.",
-  pike: "I waited. Then I left the reed.",
-  walleye: "I hunted dusk. Then I left the run.",
-  paddlefish: "I filtered. Then I left the current.",
-  lamprey: "I sat the disk. Then I left the stone.",
-  american_eel: "I swam. Then I left the hole.",
-  house_centipede: "I hunted. Then I left the crack.",
-  millipede: "I oiled. Then I left the log.",
-  pillbug: "I rolled. Then I left the bark.",
-  earthworm: "I cast. Then I left the soil.",
-  velvet_worm: "I jetted. Then I left the wood.",
-  springtail: "I hopped. Then I left the duff.",
-  tardigrade: "I sat the moss. Then I left the film.",
-  planarian: "I split. Then I left the film.",
-  nematode: "I thrashed. Then I left the film.",
-  amphipod: "I swam on my side. Then I left the pool.",
-  bumblebee: "I thrummed. Then I left the cup.",
-  carpenter_bee: "I bored. Then I left the hole.",
-  mason_bee: "I sealed. Then I left the stone.",
-  leafcutter: "I cut. Then I left the disc.",
-  stingless: "I potted. Then I left the wax.",
-  sweat_bee: "I shone. Then I left the rim.",
-  mining_bee: "I dug. Then I left the bank.",
-  honey_drone: "I hummed. Then I left the dish.",
-  honey_queen: "I stayed. Then I left the line.",
-  honeycomb: "I sat. Then the line went quieter.",
-  fiddler_crab: "I waved. Then I left the marsh.",
-  ghost_crab: "I ran. Then I left the sand.",
-  limpet: "I clamped. Then I left the rim.",
-  barnacle: "I sat the stone. Then I left the rim.",
-  chiton: "I plated. Then I left the rock.",
-  periwinkle: "I rasped. Then I left the face.",
-  sand_dollar: "I sat the sand. Then I left the plate.",
-  sea_urchin: "I sat the spines. Then I left the pool.",
-  knobbed_whelk: "I hunted. Then I left the wrack.",
-  lugworm: "I heaped. Then I left the sand.",
-  field_cricket: "I sang. Then I left the grass.",
-  katydid: "I sat the leaf. Then I left the rim.",
-  grasshopper: "I vaulted. Then I left the grass.",
-  swallowtail: "I kept the yellow. Then I left the blossom.",
-  jewelwing: "I kept the black. Then I left the stream.",
-  lacewing: "I laced. Then I left the leaf.",
-  earwig: "I raised the cerci. Then I left the bark.",
-  acorn_weevil: "I sat the acorn. Then I left the cup.",
-  click_beetle: "I clicked. Then I left the bark.",
-  robber_fly: "I hunted. Then I left the perch.",
-  sloth: "I hung. Then I left the bough.",
-  lemur: "I sat the sun. Then I left the troop.",
-  gibbon: "I sang. Then I left the swing.",
-  kinkajou: "I wrapped. Then I left the nectar.",
-  colugo: "I sailed. Then I left the trunk.",
-  flying_squirrel: "I glided. Then I left the oak.",
-  howler: "I howled. Then I left the crown.",
-  tarsier: "I looked. Then I left the branch.",
-  potto: "I kept still. Then I left the vine.",
-  koala: "I chewed. Then I left the gum.",
-  brain_coral: "I sat the rock. Then I left the boulder.",
-  anemone: "I opened. Then I left the column.",
-  clownfish: "I sat the wreath. Then I left the cup.",
-  parrotfish: "I rasped. Then I left the plate.",
-  cleaner_shrimp: "I waited. Then I left the station.",
-  sea_cucumber: "I sat the sand. Then I left the well.",
-  lionfish: "I veiled. Then I left the ledge.",
-  giant_clam: "I opened. Then I left the mantle.",
-  eagle_ray: "I soared. Then I left the sky.",
-  grouper: "I sat the hole. Then I left the dish.",
-};
-
 let visit = null;
 
-function pickVisitorKind() {
-  if (!roster.length || !kind) return null;
-  const n = new Date();
-  const day = Math.floor(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) / 86400000);
-  const others = roster.filter((r) => r.key !== kind.key);
-  return others[Math.abs(day + kind.key.length) % others.length] ?? null;
+function visitLaw() {
+  return window.PetVisitor;
+}
+
+function endVisit() {
+  if (guestEl) guestEl.classList.remove("show");
+  visit = null;
+}
+
+function tapVisitor() {
+  const law = visitLaw();
+  if (!visit || !law) return false;
+  say(law.visitLine(visit.key));
+  visit.said = true;
+  visit.tapped = true;
+  if (visit.sprites.talk) guestEl.src = visit.sprites.talk[0];
+  else guestEl.src = visit.sprites.idle[0];
+  return true;
 }
 
 function startVisit() {
-  const g = pickVisitorKind();
-  if (!g || !guestEl) return;
+  const law = visitLaw();
+  const gKey = law && kind ? law.todaysVisitor(kind.key) : null;
+  const g = gKey ? roster.find((r) => r.key === gKey) : null;
+  if (!g || !guestEl || (life && life.hidden)) return;
   const sprites = pack(g.key);
   visit = {
     key: g.key,
@@ -1479,22 +1280,46 @@ function startVisit() {
     acc: 0,
     born: performance.now(),
     said: false,
+    tapped: false,
+    wandered: false,
+    phase: "in",
   };
   guestEl.classList.add("show");
   guestEl.src = sprites.walk[0];
 }
 
 function tickVisit(dt, now, width) {
-  if (!visit || !guestEl) return;
-  const age = now - visit.born;
-  if (age > 18000) {
-    guestEl.classList.remove("show");
-    visit = null;
+  const law = visitLaw();
+  if (!guestEl || !law) return;
+  if (life && life.hidden) {
+    if (guestEl.classList.contains("show")) guestEl.classList.remove("show");
+    if (visit) visit.phase = law.visitPhaseFromEnter(now - visit.born, true);
+    if (!visit || visit.phase === "gone") endVisit();
     return;
   }
-  if (age > 13500) visit.target = -140;
+  if (!visit) return;
+  const age = now - visit.born;
+  const phase = law.visitPhaseFromEnter(age);
+  if (phase === "gone") {
+    endVisit();
+    return;
+  }
+  if (phase === "leave") {
+    visit.target = -140;
+    visit.tapped = false;
+  } else if (phase === "wander" && !visit.wandered) {
+    visit.wandered = true;
+    visit.target = Math.max(80, width * (visit.x < width * 0.5 ? 0.72 : 0.28));
+  }
+  if (phase === "talk" && !visit.said) {
+    visit.said = true;
+    say(law.visitLine(visit.key));
+  }
+  visit.phase = phase;
+  const sitting = visit.tapped && phase !== "leave";
+  const walking = !sitting && (phase === "in" || phase === "wander" || phase === "leave");
   const remaining = Math.abs(visit.target - visit.x);
-  if (remaining > 2) {
+  if (walking && remaining > 2) {
     visit.facing = visit.target >= visit.x ? 1 : -1;
     visit.x += visit.facing * 86 * dt;
     visit.acc += dt;
@@ -1503,12 +1328,23 @@ function tickVisit(dt, now, width) {
       visit.frame = (visit.frame + 1) % visit.sprites.walk.length;
     }
     guestEl.src = visit.sprites.walk[visit.frame];
-  } else if (!visit.said && age > 2200) {
-    visit.said = true;
-    say(VISIT_LINE[visit.key] || "I came. I left.");
+  } else if (phase === "talk" || sitting) {
+    guestEl.src = visit.sprites.talk ? visit.sprites.talk[0] : visit.sprites.idle[0];
+  } else if (phase !== "leave") {
     guestEl.src = visit.sprites.idle[0];
   }
+  guestEl.classList.add("show");
   guestEl.style.transform = `translate3d(${visit.x}px, 0, 0) scale(${visit.facing}, 1)`;
+}
+
+if (guestEl) {
+  guestEl.addEventListener("pointerdown", (e) => {
+    if (e.button === 2) return;
+    if (!visit || !guestEl.classList.contains("show")) return;
+    e.stopPropagation();
+    tapVisitor();
+    setClickable(true);
+  });
 }
 
 pet.addEventListener("pointerdown", (e) => {

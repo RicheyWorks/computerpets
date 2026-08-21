@@ -12,12 +12,29 @@ from datetime import datetime
 from .species import CATALOG_KEYS, SPECIES, Species, species_by_key
 from .weather import civil_day_number
 
-# Walk-through timing from web/src/components/desk/house-visit.tsx
+# Walk-through clock from web/src/lib/pets/visitor.ts. Overlay keeps the same call.
 VISIT_WAIT_MS = 7500
 VISIT_TALK_MS = 1600
 VISIT_WANDER_MS = 5200
 VISIT_LEAVE_MS = 14000
 VISIT_GONE_MS = 18500
+
+def visit_phase(elapsed_ms: float, host_hidden: bool = False) -> str:
+    """Elapsed from the wait clock. Same sit as visitPhaseFromWait."""
+    if host_hidden:
+        return "gone"
+    if elapsed_ms < VISIT_WAIT_MS:
+        return "wait"
+    age = elapsed_ms - VISIT_WAIT_MS
+    if age >= VISIT_GONE_MS:
+        return "gone"
+    if age >= VISIT_LEAVE_MS:
+        return "leave"
+    if age >= VISIT_WANDER_MS:
+        return "wander"
+    if age >= VISIT_TALK_MS:
+        return "talk"
+    return "in"
 
 VISIT_LINES: dict[str, str] = {
     "red_panda": "I came for the ribbon. I'll put it back. Maybe.",

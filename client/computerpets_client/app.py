@@ -80,14 +80,10 @@ from .species import (
 )
 from .unlock_dialog import UnlockDialog
 from .visitor import (
-    VISIT_GONE_MS,
-    VISIT_LEAVE_MS,
-    VISIT_TALK_MS,
-    VISIT_WAIT_MS,
-    VISIT_WANDER_MS,
     todays_visitor,
     visit_caption,
     visit_line,
+    visit_phase,
 )
 from .weather import weather_idle, weather_label, weather_line, weather_of
 
@@ -702,25 +698,22 @@ class DeskWindow(QMainWindow):
         if self._visit_phase == "gone":
             return
         self._visit_ms += dt_ms
-        elapsed = self._visit_ms
-        if self._visit_phase == "wait" and elapsed >= VISIT_WAIT_MS:
-            self._visit_phase = "in"
-            self.guest.setVisible(True)
-            self.guest.setPos(SCENE_W + 8, self.guest._floor_y())
-            self.guest.issue("seek", SCENE_W * 0.52)
-        elif self._visit_phase == "in" and elapsed >= VISIT_WAIT_MS + VISIT_TALK_MS:
-            self._visit_phase = "talk"
-            self.guest.issue("sit")
-            self._say(visit_line(self.guest.species.key), 4200)
-        elif self._visit_phase == "talk" and elapsed >= VISIT_WAIT_MS + VISIT_WANDER_MS:
-            self._visit_phase = "wander"
-            self.guest.issue("wander")
-        elif self._visit_phase == "wander" and elapsed >= VISIT_WAIT_MS + VISIT_LEAVE_MS:
-            self._visit_phase = "leave"
-            self.guest.issue("hide")
-        elif elapsed >= VISIT_WAIT_MS + VISIT_GONE_MS:
-            self._visit_phase = "gone"
-            self.guest.setVisible(False)
+        nxt = visit_phase(self._visit_ms)
+        if nxt != self._visit_phase:
+            if nxt == "in":
+                self.guest.setVisible(True)
+                self.guest.setPos(SCENE_W + 8, self.guest._floor_y())
+                self.guest.issue("seek", SCENE_W * 0.52)
+            elif nxt == "talk":
+                self.guest.issue("sit")
+                self._say(visit_line(self.guest.species.key), 4200)
+            elif nxt == "wander":
+                self.guest.issue("wander")
+            elif nxt == "leave":
+                self.guest.issue("hide")
+            elif nxt == "gone":
+                self.guest.setVisible(False)
+            self._visit_phase = nxt
         if self.guest.isVisible():
             self.guest.advance_pet(dt_ms / 1000.0, CareState(), SCENE_W)
 

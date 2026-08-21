@@ -23,6 +23,7 @@ test("the desk mounts the same blotter room", () => {
   assert.match(deskSrc, /typedTalk/);
   assert.match(deskSrc, /journal/);
   assert.match(roomSrc, /LivingPet/);
+  assert.match(roomSrc, /HouseVisit/);
   assert.match(roomSrc, /BlotterMarks/);
   assert.match(roomSrc, /RoomWash/);
   assert.match(roomSrc, /DenCabinet/);
