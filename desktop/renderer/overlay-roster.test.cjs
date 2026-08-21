@@ -111,6 +111,21 @@ test("shore, meadow, canopy, and reef keep their own idle acts on the overlay", 
   assert.ok(E.actsFor("grouper").some((a) => a.name === "hide"));
 });
 
+test("shore, meadow, canopy, and reef keep a living special on the overlay, not an idle", () => {
+  const specialsSrc = readFileSync(join(__dirname, "specials.js"), "utf8");
+  const Special = require("./specials.js");
+  for (const key of [...SHORE, ...MEADOW, ...CANOPY, ...REEF]) {
+    const match = traitsSrc.match(new RegExp(`^\\s{2}${key}: \\{[\\s\\S]*?special: "([a-z]+)"`, "m"));
+    assert.ok(match, key);
+    assert.notEqual(Special.commandFor(match[1]), "idle", key);
+  }
+  assert.equal(Special.verbFor("brain_coral"), "Ridge");
+  assert.equal(Special.verbFor("field_cricket"), "Chirp");
+  assert.equal(Special.verbFor("fiddler_crab"), "Wave");
+  assert.equal(Special.verbFor("sloth"), "Hang");
+  assert.match(specialsSrc, /Ridge sits/);
+});
+
 test("treat shapes and visit lines cover bees, shore, meadow, canopy, and reef", () => {
   const treatKeys = objectKeys(petSrc, "const TREAT_SHAPE = {");
   const visitKeys = objectKeys(petSrc, "const VISIT_LINE = {");
