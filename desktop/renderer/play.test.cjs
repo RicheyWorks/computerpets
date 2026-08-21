@@ -64,7 +64,7 @@ test("treat seek still snacks; hide still hides; a catch is not a snack", () => 
   assert.match(handle, /issue\("leave"\)/);
   assert.match(arrive, /hop\.act === "hide"/);
   assert.match(arrive, /hop\.act === "snack"/);
-  assert.match(arrive, /PetLife\.act\(life, trait, care\)/);
+  assert.match(arrive, /PetLife\.act\(life, trait, care,/);
 });
 
 test("a snack or feed is a thing on the work-area floor; they walk to it", () => {

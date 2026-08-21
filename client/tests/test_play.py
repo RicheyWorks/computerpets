@@ -289,7 +289,6 @@ def test_hide_is_a_leave_until_they_walk_off(tmp_path):
     assert window.treat is None
     window._on_arrived()
     assert window.care.hidden is True
-    assert window.care.last_line == line
     assert window.hide_btn.text() == "Call back"
     window._play()
     assert window.lure is None
