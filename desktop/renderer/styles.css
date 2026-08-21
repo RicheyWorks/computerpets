@@ -69,6 +69,10 @@ body {
   transform-origin: center bottom;
   will-change: transform, filter;
   -webkit-user-drag: none;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  box-shadow: none;
 }
 
 #pet:active {

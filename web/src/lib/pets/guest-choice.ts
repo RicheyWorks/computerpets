@@ -77,7 +77,7 @@ export function guestPick(id: string): GuestChoiceId | null {
   return (GUEST_CHOICE as readonly string[]).includes(id) ? (id as GuestChoiceId) : null;
 }
 
-/** Extra wood around the guest on a finger sit. The room around them may still pan. */
+/** Extra wood around the guest on a finger sit. The pad is empty wood. It does not paint a plate. The room around them may still pan. */
 export function guestHitPad(sit?: { phone?: boolean; tablet?: boolean } | null): number {
   if (sit?.phone) return 12;
   if (sit?.tablet) return 16;
