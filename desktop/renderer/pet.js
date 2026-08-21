@@ -240,11 +240,9 @@ function paintGifts() {
     el.style.transform = `translate3d(${g.x * (width - 40)}px, 0, 0)`;
     el.addEventListener("click", (e) => {
       e.stopPropagation();
-      life.gifts = (life.gifts || []).filter((x) => x.id !== g.id);
-      life.mood = Math.min(100, life.mood + 6);
-      life.bond = Math.min(100, life.bond + 2);
+      window.PetLife.pickGift(life, g.id);
       persist();
-      say("I left this.");
+      say(window.PetLife.giftLine(kind.key));
       paintGifts();
       paintHud();
     });

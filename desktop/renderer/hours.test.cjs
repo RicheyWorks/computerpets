@@ -98,6 +98,44 @@ test("every overlay guest keeps their own call-back, not Pip's tail", () => {
   assert.match(petSrc, /PetGait\.enterSpawn/);
 });
 
+test("every overlay guest keeps their own gift line, not a leftover this", () => {
+  assert.equal(Object.keys(H.GIFT_LINE).length, 210);
+  assert.deepEqual(Object.keys(H.GIFT_LINE).sort(), [...CATALOG].sort());
+  assert.equal(H.giftLine("red_panda"), "A ribbon I was not using. For the desk.");
+  assert.equal(H.giftLine("grouper"), "A fish I was finished hiding for.");
+  assert.equal(H.giftLine("not_a_pet"), "I left this.");
+  assert.equal(H.giftLine("dog", "Already held."), "Already held.");
+  const treatsSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "treats.ts"), "utf8");
+  assert.match(treatsSrc, /red_panda: "A ribbon I was not using\. For the desk\."/);
+  assert.match(lifeSrc, /giftLine\(key/);
+  assert.match(petSrc, /PetLife\.giftLine\(kind\.key\)/);
+  assert.match(petSrc, /PetLife\.pickGift/);
+  assert.doesNotMatch(petSrc, /say\("I left this\."\)/);
+  const held = { ...Life.blank(), mood: 50, bond: 30, gifts: [{ id: 7, x: 0.2 }, { id: 8, x: 0.4, kind: "shed" }] };
+  Life.pickGift(held, 7);
+  assert.equal(held.gifts.length, 1);
+  assert.equal(held.gifts[0].id, 8);
+  assert.equal(held.mood, 56);
+  assert.equal(held.bond, 32);
+});
+
+test("a Known overlay guest can leave a gift on the tick", () => {
+  require("./hours.js");
+  const trait = { extra: {}, hungerH: 6, energyH: 9, hygieneH: 14, hardy: 0.8, social: 1, messy: 0.9, sleepStart: 0, sleepEnd: 4 };
+  const day = new Date(2023, 10, 14, 14, 0, 0).getTime();
+  const orig = Math.random;
+  Math.random = () => 0;
+  const known = Life.decay({ ...Life.blank(day), bond: 25, hygiene: 80, gifts: [], lastTick: day - 180000 }, trait, day, "dog");
+  const fresh = Life.decay({ ...Life.blank(day), bond: 18, hygiene: 80, gifts: [], lastTick: day - 180000 }, trait, day, "dog");
+  Math.random = orig;
+  assert.equal(known.life.gifts.length, 1);
+  assert.notEqual(known.life.gifts[0]?.kind, "shed");
+  assert.equal(fresh.life.gifts.length, 0);
+  assert.match(lifeSrc, /bond >= 25/);
+  assert.match(lifeSrc, /dt \/ 180000/);
+  assert.doesNotMatch(lifeSrc, /bond >= 50 && \(!life\.gifts/);
+});
+
 test("the overlay snack branch says the guest's line", () => {
   const trait = { extra: {} };
   const dog = Life.act(Life.blank(), trait, "snack", Date.now(), "dog");
