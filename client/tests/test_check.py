@@ -257,7 +257,7 @@ def test_return_line_after_a_real_absence(tmp_path):
     del app
 
 
-def test_resting_guest_sits_on_greet(tmp_path, monkeypatch):
+def test_resting_guest_sleeps_on_greet(tmp_path, monkeypatch):
     os.environ["QT_QPA_PLATFORM"] = "offscreen"
     from PyQt6.QtWidgets import QApplication
 
@@ -267,7 +267,7 @@ def test_resting_guest_sits_on_greet(tmp_path, monkeypatch):
     monkeypatch.setattr("computerpets_client.app.is_resting_hour", lambda key, hour=None: True)
     window = DeskWindow(user_data_dir=tmp_path)
     window.show()
-    assert window.pet.cmd == "sit"
+    assert window.pet.cmd == "sleep"
     window.close()
     del app
 
