@@ -11,6 +11,14 @@ test("walkSpeed ease-out is not linear", () => {
   assert.ok(near < linearNear - 1);
 });
 
+test("hide walks off the nearest edge and call-back comes from off-stage", () => {
+  assert.equal(G.leaveTarget(80, 800), -200);
+  assert.equal(G.leaveTarget(600, 800), 812);
+  assert.equal(G.enterSpawn(800, 176, 20, true), -176);
+  assert.equal(G.enterSpawn(800, 176, 20, false), 780);
+  assert.equal(G.enterSit(800, 176, 20, 0), 80);
+});
+
 test("a reverse target does not flip facing on frame 0", () => {
   assert.equal(G.facingAfter(1, 80, 10, 0, 0.23), 1);
   assert.equal(G.facingAfter(-1, 10, 80, 0, 0.23), -1);

@@ -13,6 +13,7 @@ const Hive = await import(join(root, "src/lib/pets/hive.ts"));
 const C = await import(join(root, "src/lib/pets/care.ts"));
 const Treats = await import(join(root, "src/lib/pets/treats.ts"));
 const Traits = await import(join(root, "src/lib/pets/traits.ts"));
+const Hours = await import(join(root, "src/lib/pets/hours.ts"));
 const OverlaySpecial = createRequire(import.meta.url)(join(root, "../desktop/renderer/specials.js"));
 
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
@@ -116,6 +117,20 @@ test("the demo is the same house: Bandit and Coral drop an egg, the way the blot
   assert.match(overlayStyleSrc, /data-shape="egg"/);
   assert.doesNotMatch(overlayPetSrc, /kingsnake: "pebble"/);
   assert.doesNotMatch(overlayPetSrc, /milk_snake: "pebble"/);
+});
+
+test("the demo is the same house: hide walks off and call-back is the guest, not Pip", () => {
+  assert.equal(Hours.callLine("field_cricket"), "I sang. Hello.");
+  assert.equal(Hours.callLine("brain_coral"), "I sat the rock. Hello.");
+  assert.equal(Hours.callLine("fiddler_crab"), "I waved. Hello.");
+  assert.notEqual(Hours.callLine("field_cricket"), "You called. I brought the whole tail.");
+  assert.match(roomSrc, /applyCall/);
+  assert.match(roomSrc, /callLine\(kind\.key\)/);
+  assert.match(roomSrc, /hideLine\(kind\.key\)/);
+  assert.match(roomSrc, /issue\("leave"\)/);
+  assert.match(roomSrc, /issue\("enter"\)/);
+  assert.match(demoSrc, /CompanionRoom/);
+  assert.doesNotMatch(roomSrc, /say\("You called\. I brought the whole tail\."\)/);
 });
 
 test("the demo is the same house: later dens keep a living special, the way the blotter already does", () => {

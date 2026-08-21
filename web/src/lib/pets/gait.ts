@@ -70,3 +70,23 @@ export function settleOffset(settle: number, dir: 1 | -1, px: number) {
 export function wanderPauseS() {
   return 0.2 + Math.random() * 0.2;
 }
+
+const SPRITE = 176;
+
+/** Walk off the nearest edge. Same sit on desk, overlay, and blotter. */
+export function leaveTarget(x: number, width: number, sprite = SPRITE) {
+  return x + sprite / 2 < width / 2 ? -sprite - 24 : width + 12;
+}
+
+/** Come back from off-stage. Same sit as the desk enter. */
+export function enterSpawn(width: number, sprite = SPRITE, pad = 20, left?: boolean) {
+  const max = width - sprite - pad;
+  const fromLeft = left ?? Math.random() < 0.5;
+  return fromLeft ? -sprite : max + sprite;
+}
+
+export function enterSit(width: number, sprite = SPRITE, pad = 20, rand = Math.random()) {
+  const max = width - sprite - pad;
+  const sit = 80 + rand * Math.max(40, max - 80);
+  return Math.max(pad, Math.min(max, sit));
+}
