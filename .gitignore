@@ -22,6 +22,7 @@ logs/
 Thumbs.db
 
 # Living desk
+web/**/__pycache__/
 web/node_modules/
 web/.vercel/
 web/.tanstack/
