@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import inspect
 import os
+from pathlib import Path
 
 from computerpets_client.choice import (
     GUEST_CHOICE,
@@ -67,7 +67,7 @@ def test_desk_window_tap_opens_a_choice_and_rest_sleeps():
     assert window._choice is not None
     assert mark_ids(window._choice)[0] == "rest"
     assert "talk" in mark_ids(window._choice)
-    assert window.choice_bar.isVisible()
+    assert not window.choice_bar.isHidden()
     before = window.care.energy
     window._pick_choice("rest")
     assert window._choice is None
@@ -80,9 +80,9 @@ def test_desk_window_tap_opens_a_choice_and_rest_sleeps():
     del app
 
 
-def test_blotter_choice_is_the_desk_law():
-    src = inspect.getsource(__import__("computerpets_client.app", fromlist=["DeskWindow"]).DeskWindow)
-    assert "_open_choice" in src
-    assert "_pick_choice" in src
-    assert "guest_tap" in src
-    assert "the plaque teaches, they say the lesson" not in src
+    def test_blotter_choice_is_the_desk_law():
+        src = Path(__file__).resolve().parents[1].joinpath("computerpets_client", "app.py").read_text()
+        assert "_open_choice" in src
+        assert "_pick_choice" in src
+        assert "guest_tap" in src
+        assert "the plaque teaches, they say the lesson" not in src

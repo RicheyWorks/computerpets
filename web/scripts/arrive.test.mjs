@@ -96,7 +96,9 @@ test("CompanionRoom still eats after a seek, hides after a leave, and picks mess
   assert.doesNotMatch(arrived, /pickGift/);
   assert.match(roomSrc, /pickMess/);
   assert.match(roomSrc, /pickGift/);
-  assert.match(roomSrc, /onTap=\{\(\) => void talk\(\)\}/);
+  assert.match(roomSrc, /guestTap\(\)/);
+  assert.match(roomSrc, /setChoiceOpen/);
+  assert.doesNotMatch(roomSrc, /onTap=\{\(\) => void talk\(\)\}/);
 });
 
 test("adult Luna still does not eat; sanctuary, talk keeper, clutch-once, desk time, rooms stay", () => {
