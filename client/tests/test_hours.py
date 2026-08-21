@@ -1,10 +1,12 @@
 """House hours match web/src/lib/pets/hours.ts — no invented rest or day parts."""
 
 from computerpets_client.hours import (
+    CALL_LINE,
     CHECK_HOUR,
     HIDE_LINE,
     REST,
     SNACK_LINE,
+    call_line,
     day_part,
     day_part_label,
     hide_line,
@@ -113,3 +115,15 @@ def test_hide_and_snack_lines_are_the_house_copy():
     assert snack_line("not_a_pet") == "A small treaty."
     assert set(HIDE_LINE) == set(CATALOG_KEYS)
     assert set(SNACK_LINE) == set(CATALOG_KEYS)
+
+
+def test_call_lines_are_the_house_copy_and_chirp_is_not_pip():
+    assert call_line("dog") == "You called. I was already coming."
+    assert call_line("field_cricket") == "I sang. Hello."
+    assert call_line("brain_coral") == "I sat the rock. Hello."
+    assert call_line("fiddler_crab") == "I waved. Hello."
+    assert call_line("field_cricket") != "You called. I brought the whole tail."
+    assert call_line("dog", "Already here.") == "Already here."
+    assert call_line("not_a_pet") == "You called."
+    assert set(CALL_LINE) == set(CATALOG_KEYS)
+    assert len(CALL_LINE) == len(CATALOG_KEYS)

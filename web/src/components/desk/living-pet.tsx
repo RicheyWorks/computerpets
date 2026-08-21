@@ -28,9 +28,12 @@ import {
   STEP_S_QUICK,
   SWAY_PX,
   WALK_HOP_PX,
+  enterSit,
+  enterSpawn,
   isCrawlKey,
   isHighWalk,
   isLowWalk,
+  leaveTarget,
   overshootPx,
   settleOffset,
   turnHoldS,
@@ -377,16 +380,16 @@ export function LivingPet({
         const width = box?.width ?? 800;
         s.leaving = true;
         s.waypoints = [];
-        aimAt(s.x + SPRITE / 2 < width / 2 ? -SPRITE - 24 : width + 12);
+        aimAt(leaveTarget(s.x, width, SPRITE));
         return;
       }
       if (cmd === "enter") {
         const box = stageBox();
-        const max = (box?.width ?? 400) - SPRITE - PAD;
+        const width = box?.width ?? 400;
         s.leaving = false;
         s.waypoints = [];
-        s.x = Math.random() < 0.5 ? -SPRITE : max + SPRITE;
-        aimAt(clamp(80 + Math.random() * Math.max(40, max - 80), PAD, max));
+        s.x = enterSpawn(width, SPRITE, PAD);
+        aimAt(enterSit(width, SPRITE, PAD));
         return;
       }
       if (cmd === "play") {

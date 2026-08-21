@@ -17,6 +17,9 @@ from .gait import (
     POSE_HOLD_S,
     SETTLE_S,
     SWAY_PX,
+    enter_sit,
+    enter_spawn,
+    leave_target,
     overshoot_px,
     settle_offset,
     turn_hold_s,
@@ -128,6 +131,7 @@ class LivingPetItem(QGraphicsObject):
         self.act_wait = 10.0 + random.random() * 8.0
         self.act_walk = False
         self._tongue = 0.0
+        self._edge: float | None = None
         self.setZValue(4)
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, False)
         self.setAcceptedMouseButtons(Qt.MouseButton.LeftButton)
@@ -297,6 +301,7 @@ class LivingPetItem(QGraphicsObject):
             self.frame = 0
             self.acc = 0.0
             self.walk_age = 0.0
+            self._edge = None
             if target is not None:
                 self._aim_at(target)
         elif cmd in ("sit", "sleep"):
@@ -318,8 +323,9 @@ class LivingPetItem(QGraphicsObject):
 
     def advance_pet(self, dt: float, care: CareState, width: float) -> None:
         if care.hidden and self.cmd not in ("hide", "enter"):
-            if self._logic_x > -SIZE:
+            if -SIZE < self._logic_x < width:
                 self.cmd = "hide"
+                self._edge = None
             else:
                 return
 
@@ -394,30 +400,42 @@ class LivingPetItem(QGraphicsObject):
             self.shift_age = max(0.0, self.shift_age - dt)
 
         if self.cmd == "hide":
+            if self._edge is None:
+                self._edge = leave_target(x, width, SIZE)
             self.anim = "walk"
-            self.facing = -1
+            self.facing = -1 if self._edge < x else 1
             self.walk_age += dt
-            x -= self._speed("hide") * dt
-            if x <= -SIZE:
-                x = -SIZE
+            step = self._speed("hide") * dt
+            if self.facing < 0:
+                x = max(self._edge, x - step)
+            else:
+                x = min(self._edge, x + step)
+            if abs(x - self._edge) <= 1:
+                x = self._edge
                 self.anim = "idle"
             self._place(x, y)
             return
 
         if self.cmd == "enter":
+            pad = 80.0
+            if self._edge is None:
+                if -SIZE < x < width:
+                    x = enter_spawn(width, SIZE, pad)
+                self._edge = enter_sit(width, SIZE, pad)
             self.anim = "walk"
-            self.facing = 1
+            self.facing = 1 if self._edge >= x else -1
             self.walk_age += dt
-            if x < left:
-                x = min(left, x + self._speed("hide") * dt) if x > -SIZE else -SIZE + self._speed("hide") * dt
-                if x < -SIZE + 4:
-                    x = -SIZE + 8
-            x += self._speed("hide") * dt
-            if x >= 200:
-                x = 200
+            step = self._speed("hide") * dt
+            if self.facing < 0:
+                x = max(self._edge, x - step)
+            else:
+                x = min(self._edge, x + step)
+            if abs(x - self._edge) <= 1:
+                x = self._edge
                 self.cmd = "wander"
                 self.anim = "idle"
                 self.walk_age = 0.0
+                self._edge = None
             self._place(x, y)
             return
 

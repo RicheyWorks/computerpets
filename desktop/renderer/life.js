@@ -10,6 +10,12 @@
     return existing || "A small treaty.";
   }
 
+  function callLine(key, existing) {
+    const hours = Hours();
+    if (hours && hours.callLine) return hours.callLine(key, existing);
+    return existing || "You called.";
+  }
+
   function stampHive(life, key) {
     const hive = Hive();
     if (!hive || !hive.isHivePlace(key)) return life;
@@ -286,9 +292,9 @@
     }
     if (action === "call") {
       life.hidden = false;
-      life.mood = clamp(life.mood + 6);
-      bondUp(life, 2);
-      return { life, line: pick(extra.call || ["You called."]), cmd: "talk", notify: null };
+      life.mood = clamp(life.mood + 4);
+      bondUp(life, 1);
+      return { life, line: callLine(key), cmd: "enter", notify: null };
     }
     if (action === "gift") {
       return { life, line: "I left this.", cmd: "talk", notify: null };
@@ -411,6 +417,7 @@
     isBlue,
     SHEDDERS,
     snackLine,
+    callLine,
     stampHive,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;

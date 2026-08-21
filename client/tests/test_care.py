@@ -75,6 +75,12 @@ def test_hide_then_call_back():
     back = apply_call(hidden.state, RUI)
     assert back.state.hidden is False
     assert back.cmd == "enter"
+    assert back.state.mood == hidden.state.mood + 4
+    assert back.state.bond == hidden.state.bond + 1
+    assert back.line == "You called. I brought the whole tail."
+    chirp = apply_call(hidden.state, species_by_key("field_cricket"))
+    assert chirp.line == "I sang. Hello."
+    assert chirp.line != "You called. I brought the whole tail."
 
 
 def test_feed_while_hidden_does_not_feed():
