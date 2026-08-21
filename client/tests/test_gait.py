@@ -1,7 +1,10 @@
 from computerpets_client.gait import (
     TURN_S,
     TURN_SNAKE_S,
+    enter_sit,
+    enter_spawn,
     facing_after,
+    leave_target,
     overshoot_px,
     turn_hold_s,
     walk_speed,
@@ -21,6 +24,14 @@ def test_reverse_target_does_not_flip_facing_on_frame_zero():
     assert facing_after(1, 100, 20, 0, TURN_S) == 1
     assert facing_after(1, 100, 20, TURN_S / 2, TURN_S) == 1
     assert facing_after(1, 100, 20, TURN_S, TURN_S) == -1
+
+
+def test_hide_walks_off_the_nearest_edge():
+    assert leave_target(80, 800) == -200
+    assert leave_target(600, 800) == 812
+    assert enter_spawn(800, 176, 20, True) == -176
+    assert enter_spawn(800, 176, 20, False) == 780
+    assert enter_sit(800, 176, 20, 0) == 80
 
 
 def test_snakes_and_turtles_turn_longer():

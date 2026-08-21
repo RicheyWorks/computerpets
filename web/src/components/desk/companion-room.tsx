@@ -9,6 +9,7 @@ import { DeskGrain, RoomWash } from "@/components/desk/room-wash";
 import { todaysVisitor } from "@/lib/pets/visitor";
 import {
   applyBath,
+  applyCall,
   applyClean,
   applyFeedFor,
   applyHide,
@@ -35,7 +36,7 @@ import { converseWithPet } from "@/lib/pets/talk";
 import { unlockDeskAudio } from "@/lib/pets/desk-audio";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
-import { HIDE_LINE, SNACK_LINE, dayPartLabel, dayPart, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
+import { SNACK_LINE, callLine, dayPartLabel, dayPart, hideLine, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
 import { applySpecial } from "@/lib/pets/specials";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
@@ -413,7 +414,7 @@ export function CompanionRoom({
   function hide() {
     if (busy || stats.hidden) return;
     acted.current = true;
-    say(HIDE_LINE[kind.key] ?? "I went where the ribbon goes.");
+    say(hideLine(kind.key));
     setLeaving(true);
     issue("leave");
     note(`${displayName} slipped off the blotter.`);
@@ -423,8 +424,8 @@ export function CompanionRoom({
     if (busy) return;
     acted.current = true;
     setLeaving(false);
-    setStats((s) => ({ ...s, hidden: false }));
-    say("You called. I brought the whole tail.");
+    setStats((s) => applyCall(s));
+    say(callLine(kind.key));
     issue("enter");
     note(`${displayName} came back.`);
   }

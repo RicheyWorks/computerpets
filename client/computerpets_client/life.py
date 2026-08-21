@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from .hive import colony_of, colony_word, is_hive_place, stamp_colony
-from .hours import hide_line, is_resting_hour, snack_line
+from .hours import call_line, hide_line, is_resting_hour, snack_line
 from .paths import default_user_data_dir
 from .species import Species, species_by_key
 
@@ -183,12 +183,14 @@ def apply_hide(state: CareState, species: Species | None = None) -> CareResult:
 
 def apply_call(state: CareState, species: Species | None = None) -> CareResult:
     kind = species or species_by_key(None)
+    line = call_line(kind.key)
     next_state = keep_hive(
         replace(
             state,
             hidden=False,
             mood=clamp(state.mood + 4),
-            last_line=pick_line(kind.call),
+            bond=clamp(state.bond + 1),
+            last_line=line,
             anim="walk",
         ),
         kind,

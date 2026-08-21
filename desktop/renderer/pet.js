@@ -603,14 +603,14 @@ function applyCommand() {
   if (sim.cmd === "leave") {
     leaving = true;
     sim.waypoints = [];
-    aimAt(sim.x + BASE / 2 < width / 2 ? -BASE - 24 : width + 12);
+    aimAt(window.PetGait.leaveTarget(sim.x, width, BASE));
     return;
   }
   if (sim.cmd === "enter") {
     leaving = false;
     sim.waypoints = [];
-    sim.x = Math.random() < 0.5 ? -BASE : max + BASE;
-    aimAt(clamp(80 + Math.random() * Math.max(40, max - 80), PAD, max));
+    sim.x = window.PetGait.enterSpawn(width, BASE, PAD);
+    aimAt(window.PetGait.enterSit(width, BASE, PAD));
     return;
   }
   if (sim.cmd === "play") {

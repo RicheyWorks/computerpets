@@ -70,3 +70,26 @@ def wander_pause_s() -> float:
     import random
 
     return 0.2 + random.random() * 0.2
+
+
+SPRITE = 176.0
+
+
+def leave_target(x: float, width: float, sprite: float = SPRITE) -> float:
+    """Walk off the nearest edge. Same sit as the desk leave."""
+    return -sprite - 24.0 if x + sprite / 2.0 < width / 2.0 else width + 12.0
+
+
+def enter_spawn(width: float, sprite: float = SPRITE, pad: float = 20.0, left: bool | None = None) -> float:
+    """Come back from off-stage. Same sit as the desk enter."""
+    import random
+
+    max_x = width - sprite - pad
+    from_left = random.random() < 0.5 if left is None else left
+    return -sprite if from_left else max_x + sprite
+
+
+def enter_sit(width: float, sprite: float = SPRITE, pad: float = 20.0, rand: float = 0.5) -> float:
+    max_x = width - sprite - pad
+    sit = 80.0 + rand * max(40.0, max_x - 80.0)
+    return max(pad, min(max_x, sit))

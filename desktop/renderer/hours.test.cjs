@@ -78,6 +78,26 @@ test("illness and mess tick the house way, and save keeps the clock", () => {
   assert.match(petSrc, /if \(document\.hidden\) return;/);
 });
 
+test("every overlay guest keeps their own call-back, not Pip's tail", () => {
+  assert.equal(Object.keys(H.CALL_LINE).length, 210);
+  assert.deepEqual(Object.keys(H.CALL_LINE).sort(), [...CATALOG].sort());
+  assert.equal(H.callLine("dog"), "You called. I was already coming.");
+  assert.equal(H.callLine("field_cricket"), "I sang. Hello.");
+  assert.equal(H.callLine("brain_coral"), "I sat the rock. Hello.");
+  assert.equal(H.callLine("not_a_pet"), "You called.");
+  assert.notEqual(H.callLine("field_cricket"), "You called. I brought the whole tail.");
+  assert.match(webHours, /field_cricket: "I sang\. Hello\."/);
+  const trait = { extra: {} };
+  const back = Life.act({ ...Life.blank(), hidden: true, mood: 50, bond: 10 }, trait, "call", Date.now(), "field_cricket");
+  assert.equal(back.line, "I sang. Hello.");
+  assert.equal(back.cmd, "enter");
+  assert.equal(back.life.mood, 54);
+  assert.equal(back.life.bond, 11);
+  assert.match(lifeSrc, /callLine\(key\)/);
+  assert.match(petSrc, /PetGait\.leaveTarget/);
+  assert.match(petSrc, /PetGait\.enterSpawn/);
+});
+
 test("the overlay snack branch says the guest's line", () => {
   const trait = { extra: {} };
   const dog = Life.act(Life.blank(), trait, "snack", Date.now(), "dog");

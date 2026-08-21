@@ -83,6 +83,30 @@
     return 0.2 + Math.random() * 0.2;
   }
 
+  const SPRITE = 176;
+
+  function leaveTarget(x, width, sprite) {
+    const size = sprite == null ? SPRITE : sprite;
+    return x + size / 2 < width / 2 ? -size - 24 : width + 12;
+  }
+
+  function enterSpawn(width, sprite, pad, left) {
+    const size = sprite == null ? SPRITE : sprite;
+    const edge = pad == null ? 20 : pad;
+    const max = width - size - edge;
+    const fromLeft = left == null ? Math.random() < 0.5 : left;
+    return fromLeft ? -size : max + size;
+  }
+
+  function enterSit(width, sprite, pad, rand) {
+    const size = sprite == null ? SPRITE : sprite;
+    const edge = pad == null ? 20 : pad;
+    const roll = rand == null ? Math.random() : rand;
+    const max = width - size - edge;
+    const sit = 80 + roll * Math.max(40, max - 80);
+    return Math.max(edge, Math.min(max, sit));
+  }
+
   const api = {
     ACCEL_S,
     DECEL_DIST,
@@ -113,6 +137,9 @@
     facingAfter,
     settleOffset,
     wanderPauseS,
+    leaveTarget,
+    enterSpawn,
+    enterSit,
   };
 
   if (typeof module !== "undefined" && module.exports) module.exports = api;
