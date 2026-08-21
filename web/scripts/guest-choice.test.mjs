@@ -63,12 +63,17 @@ test("a finger sit keeps extra wood; the room around them may still pan", () => 
   assert.equal(C.guestHitPad({}), 0);
   assert.equal(Overlay.guestHitPad({ phone: true }), 12);
   assert.equal(Overlay.guestHitPad({ tablet: true }), 16);
-  assert.match(cssSrc, /\[data-phone-floor\] img\[data-pet\]/);
-  assert.match(cssSrc, /padding:\s*12px/);
-  assert.match(cssSrc, /\[data-tablet-floor\] img\[data-pet\]/);
-  assert.match(cssSrc, /padding:\s*16px/);
+  assert.match(cssSrc, /\[data-phone-floor\] \[data-pet-hit\]/);
+  assert.match(cssSrc, /padding:\s*12px 12px 0/);
+  assert.match(cssSrc, /\[data-tablet-floor\] \[data-pet-hit\]/);
+  assert.match(cssSrc, /padding:\s*16px 16px 0/);
   assert.match(cssSrc, /touch-action:\s*manipulation/);
   assert.match(livingSrc, /touch-none/);
+  assert.match(livingSrc, /data-pet-hit/);
+  assert.match(livingSrc, /data-pet-art/);
+  assert.match(cssSrc, /\[data-pet-art\]/);
+  assert.match(cssSrc, /The pad is empty/);
+  assert.doesNotMatch(cssSrc, /\[data-phone-floor\] img\[data-pet\]/);
 });
 
 test("desk, /demo, and /live share the choice; a tap does not talk by itself", () => {

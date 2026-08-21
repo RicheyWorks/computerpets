@@ -429,17 +429,29 @@
     bottom: 10rem;
   }
 
-  [data-phone-floor] img[data-pet],
-  [data-tablet-floor] img[data-pet] {
+  /* Extra wood for a finger. The pad is empty. It does not paint a plate. */
+  [data-pet-art] {
+    background: transparent;
+    border: 0;
+    padding: 0;
+    box-shadow: none;
+    outline: none;
+  }
+
+  [data-pet-hit] {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    outline: none;
     box-sizing: content-box;
   }
 
-  [data-phone-floor] img[data-pet] {
-    padding: 12px;
+  [data-phone-floor] [data-pet-hit] {
+    padding: 12px 12px 0;
   }
 
-  [data-tablet-floor] img[data-pet] {
-    padding: 16px;
+  [data-tablet-floor] [data-pet-hit] {
+    padding: 16px 16px 0;
   }
 
   .blotter-care {

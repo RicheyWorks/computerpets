@@ -48,6 +48,7 @@
   }
 
   function guestHitPad(sit) {
+    // Extra wood. The pad is empty. It does not paint a plate.
     if (sit && sit.phone) return 12;
     if (sit && sit.tablet) return 16;
     return 0;

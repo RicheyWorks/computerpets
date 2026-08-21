@@ -356,45 +356,20 @@ def paint_stone(key: str, anim: str, index: int) -> Image.Image:
 
 
 def write_sprites():
-    WEB_SPRITES.mkdir(parents=True, exist_ok=True)
-    DESK_SPRITES.mkdir(parents=True, exist_ok=True)
+    from house_walkers import PHOTO_KEEP, knockout_kind, write_kind
     for key in KEYS:
-        for anim, n in ANIMS.items():
-            dest = WEB_SPRITES / key / anim
-            dest.mkdir(parents=True, exist_ok=True)
-            desk = DESK_SPRITES / key / anim
-            desk.mkdir(parents=True, exist_ok=True)
-            for i in range(n):
-                frame = paint_stone(key, anim, i)
-                small = frame.resize((OUT, OUT), Image.Resampling.LANCZOS)
-                path = dest / f"{i + 1}.png"
-                small.save(path, "PNG")
-                shutil.copy2(path, desk / f"{i + 1}.png")
-            print(f"sprites {key}/{anim}", flush=True)
+        if key in PHOTO_KEEP:
+            knockout_kind(key)
+        else:
+            write_kind(key)
+        print(f"sprites {key}", flush=True)
 
 
 def write_portraits():
-    WEB_PETS.mkdir(parents=True, exist_ok=True)
-    habitat = Image.open(HABITAT).convert("RGB") if HABITAT.exists() else Image.new("RGB", (1408, 1408), (42, 32, 24))
-    try:
-        font = ImageFont.truetype("DejaVuSans.ttf", 36)
-        small = ImageFont.truetype("DejaVuSans.ttf", 22)
-    except OSError:
-        font = ImageFont.load_default()
-        small = font
+    from house_walkers import write_portrait
     for key in KEYS:
-        study = habitat.resize((1408, 1408), Image.Resampling.LANCZOS) if habitat.size != (1408, 1408) else habitat.copy()
-        sprite = paint_stone(key, "idle", 0).resize((640, 640), Image.Resampling.LANCZOS)
-        study.paste(sprite, (384, 220), sprite)
-        canvas = study.filter(ImageFilter.GaussianBlur(0.4))
-        canvas = ImageEnhance.Color(canvas).enhance(0.92)
-        draw = ImageDraw.Draw(canvas)
-        draw.rounded_rectangle((90, 1120, 720, 1320), 10, fill=(236, 226, 206))
-        draw.text((118, 1150), LATIN[key], font=font, fill=(32, 26, 20))
-        draw.text((118, 1200), key.replace("_", " "), font=small, fill=(90, 72, 52))
-        canvas.save(WEB_PETS / f"{key}.jpg", "JPEG", quality=90)
+        write_portrait(key)
         print(f"portrait {key}", flush=True)
-
 
 def extract_roster() -> list[dict]:
     src = STONE_TS.read_text()
