@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from house_walkers import PHOTO_KEEP
+from house_walkers import PHOTO_KEEP, SNAKE_STAMPS
 
 ROOT = Path(__file__).resolve().parents[2]
 SPRITES = ROOT / "web" / "public" / "sprites"
@@ -69,22 +69,51 @@ def main() -> None:
         # A later guest that is still a two-color oval has not been painted.
         # Photographs already at Rui's hand keep their own count.
         # A raccoon is gray. A puffball is cream. They still need a house of hues.
-        if key not in PHOTO_KEEP and key != "stick":
-            colors = {(r // 12, g // 12, b // 12) for r, g, b, a in pix if a > 12 and (r + g + b) > 24}
-            if len(colors) < 95:
-                thin.append(key)
+        if key not in PHOTO_KEEP or key in SNAKE_STAMPS:
+            if key != "stick":
+                colors = {(r // 12, g // 12, b // 12) for r, g, b, a in pix if a > 12 and (r + g + b) > 24}
+                if len(colors) < 95:
+                    thin.append(key)
         for anim, count in ANIMS.items():
             for i in range(count):
                 frame = SPRITES / key / anim / f"{i + 1}.png"
                 if not frame.exists():
                     fail(f"missing frame {frame}")
 
+    crumbs = []
+    for anim, count in ANIMS.items():
+        for i in range(count):
+            path = SPRITES / "red_panda" / anim / f"{i + 1}.png"
+            if not path.exists():
+                continue
+            im = Image.open(path).convert("RGBA")
+            mag = 0
+            for r, g, b, a in im.getdata():
+                if a > 8 and r > 170 and b > 130 and g < 100 and (r - g) > 70:
+                    mag += 1
+            if mag >= 8:
+                crumbs.append(f"red_panda/{anim}/{i + 1}")
+
+    shared = []
+    for key in sorted(SNAKE_STAMPS) + ["crocodile"]:
+        idle = SPRITES / key / "idle" / "1.png"
+        walk = SPRITES / key / "walk" / "1.png"
+        sleep = SPRITES / key / "sleep" / "1.png"
+        if idle.exists() and walk.exists() and idle.read_bytes() == walk.read_bytes():
+            shared.append(f"{key}/walk")
+        if idle.exists() and sleep.exists() and idle.read_bytes() == sleep.read_bytes():
+            shared.append(f"{key}/sleep")
+
     plated = sorted(set(plated))
     if plated:
         fail(f"plate still on {plated[:20]} ({len(plated)})")
     if thin:
         fail(f"thin stamp still on {thin[:20]} ({len(thin)})")
-    print(f"ok 210 walkers, no plate, no thin stamp")
+    if crumbs:
+        fail(f"magenta crumbs still on {crumbs[:12]} ({len(crumbs)})")
+    if shared:
+        fail(f"walk/sleep still share idle on {shared}")
+    print(f"ok 210 walkers, no plate, no thin stamp, rui crumbs gone, snake poses own")
 
 
 if __name__ == "__main__":
