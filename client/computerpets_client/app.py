@@ -6,7 +6,6 @@ import argparse
 import os
 import random
 import sys
-from dataclasses import replace
 from typing import Any
 
 from PyQt6.QtCore import QRectF, Qt, QTimer
@@ -49,6 +48,7 @@ from .life import (
     apply_play,
     apply_praise,
     apply_rest,
+    apply_talk,
     apply_treat,
     decay,
     keep_hive,
@@ -170,6 +170,7 @@ class DeskWindow(QMainWindow):
         self.medicine_btn = QPushButton("Medicine")
         self.medicine_btn.setVisible(False)
         self.praise_btn = QPushButton("Praise")
+        self.talk_btn = QPushButton("Talk")
         self.special_btn = QPushButton(trait_for(self.species.key).verb)
         self.shed_btn = QPushButton("Shed")
         self.unlock_btn = QPushButton("Unlock…")
@@ -199,6 +200,7 @@ class DeskWindow(QMainWindow):
         self.bath_btn.clicked.connect(self._bath)
         self.medicine_btn.clicked.connect(self._medicine)
         self.praise_btn.clicked.connect(self._praise)
+        self.talk_btn.clicked.connect(self._talk)
         self.special_btn.clicked.connect(self._special)
         self.shed_btn.clicked.connect(self._shed)
         self.unlock_btn.clicked.connect(self._unlock)
@@ -222,6 +224,7 @@ class DeskWindow(QMainWindow):
         bar.addWidget(self.bath_btn)
         bar.addWidget(self.medicine_btn)
         bar.addWidget(self.praise_btn)
+        bar.addWidget(self.talk_btn)
         bar.addWidget(self.special_btn)
         bar.addWidget(self.shed_btn)
         bar.addWidget(self.prev_btn)
@@ -263,7 +266,7 @@ class DeskWindow(QMainWindow):
         super().closeEvent(event)
 
     def _keep_care(self) -> None:
-        save_care(self.care, user_data_dir=self._user_data_dir)
+        save_care(self.care, user_data_dir=self._user_data_dir, key=self.species.key)
 
     def _say(self, text: str, hold_ms: float = 4200) -> None:
         if not text:
@@ -282,7 +285,7 @@ class DeskWindow(QMainWindow):
             line = self.species.greet[0] if self.species.greet else "Hello."
         self._say(line, 5200)
         if is_resting_hour(self.species.key) and self.care.energy < 88:
-            self.pet.issue("sit")
+            self.pet.issue("sleep")
 
     def _reset_visit(self) -> None:
         self._visit_ms = 0.0
@@ -376,7 +379,10 @@ class DeskWindow(QMainWindow):
         self._apply_kind(self.kind_box.currentData())
 
     def _apply_kind(self, key: str | None) -> None:
-        self.species = species_by_key(key)
+        next_kind = species_by_key(key)
+        if next_kind.key != self.species.key:
+            self._keep_care()
+        self.species = next_kind
         self.pet.set_species(self.species)
         self.rail.set_active(self.species.key)
         self.plaque.set_key(self.species.key)
@@ -385,8 +391,10 @@ class DeskWindow(QMainWindow):
             blocked = self.kind_box.blockSignals(True)
             self.kind_box.setCurrentIndex(idx)
             self.kind_box.blockSignals(blocked)
-        self.care = keep_hive(replace(self.care, shed_at=0, gifts=[]), self.species)
-        self._keep_care()
+        self.care = keep_hive(
+            load_care(user_data_dir=self._user_data_dir, key=self.species.key),
+            self.species,
+        )
         self._sync_coats()
         self._sync_mess()
         self._reset_visit()
@@ -438,6 +446,9 @@ class DeskWindow(QMainWindow):
 
     def _praise(self) -> None:
         self._apply_care(apply_praise(self.care, self.species))
+
+    def _talk(self) -> None:
+        self._apply_care(apply_talk(self.care, self.species))
 
     def _clean(self) -> None:
         result = apply_clean(self.care, self.species)
@@ -545,7 +556,7 @@ class DeskWindow(QMainWindow):
             self.pet.issue(mood)
             return
         if is_resting_hour(self.species.key) and self.care.energy < 88:
-            self.pet.issue("sit")
+            self.pet.issue("sleep")
 
     def _unlock(self) -> None:
         dialog = UnlockDialog(self.session, self)

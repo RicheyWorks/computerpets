@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { CompanionRoom } from "@/components/desk/companion-room";
+import { DESK_TEND } from "@/lib/pets/care";
 import { livingByKey, loadActiveKindKey, RED_PANDA_KIND, saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { roomOf } from "@/lib/pets/rooms";
 import { homeSit } from "@/lib/pets/phone-desk";
@@ -45,7 +46,7 @@ export function LiveStage({ initial }: { initial?: LivingKind }) {
       phone={!pad}
       tablet={pad}
       detail="On this device"
-      extraCare={[{ label: "Rest", action: "rest" }]}
+      extraCare={[...DESK_TEND]}
       line={
         pocket === "add" ? (
           <p className="mt-3 text-xs text-subtle">Add to Home Screen. Tap the blotter for a treat.</p>

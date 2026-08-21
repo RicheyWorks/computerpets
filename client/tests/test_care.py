@@ -13,7 +13,9 @@ from computerpets_client.life import (
     apply_play,
     apply_praise,
     apply_rest,
+    apply_talk,
     apply_treat,
+    care_filename,
     decay,
     load_care,
     pack_care,
@@ -25,8 +27,11 @@ from computerpets_client.species import NORI, RUI, species_by_key
 
 
 def test_feed_raises_hunger_and_plays_eat():
-    result = apply_feed(CareState(hunger=40), RUI)
-    assert result.state.hunger > 40
+    before = CareState(hunger=40, energy=50, bond=10)
+    result = apply_feed(before, RUI)
+    assert result.state.hunger == 68
+    assert result.state.energy == 44
+    assert result.state.bond == 12
     assert result.anim == "eat"
     assert result.cmd == "eat"
     assert result.line
@@ -60,10 +65,12 @@ def test_play_while_hidden_does_not_play():
 
 
 def test_treat_is_a_smaller_snack():
-    before = CareState(hunger=40, mood=50)
+    before = CareState(hunger=40, mood=50, bond=10)
     fed = apply_feed(before, RUI).state
     treated = apply_treat(before, RUI)
-    assert treated.state.hunger > before.hunger
+    assert treated.state.hunger == 52
+    assert treated.state.mood == 55
+    assert treated.state.bond == 11
     assert treated.state.hunger < fed.hunger
     assert treated.cmd == "seek"
 
@@ -202,7 +209,8 @@ def test_rest_bath_praise_match_the_desk():
     assert rested.state.mood == 54
     assert rested.state.energy == 74
     assert rested.state.bond == 11
-    assert rested.cmd == "sit"
+    assert rested.cmd == "sleep"
+    assert rested.anim == "sleep"
     bathed = apply_bath(CareState(hygiene=40, mood=50, energy=50, bond=10), RUI)
     assert bathed.state.hygiene == 88
     assert bathed.state.mood == 56
@@ -231,6 +239,50 @@ def test_night_slows_hunger_and_hidden_still_ages():
     )
     assert hidden.hunger == 28
     assert hidden.hidden is True
+
+
+def test_talk_uses_a_house_line_and_the_overlay_bond():
+    before = CareState(mood=50, bond=10, hunger=60)
+    result = apply_talk(before, RUI)
+    assert result.cmd == "talk"
+    assert result.state.bond == 11
+    assert result.state.mood == 50
+    assert result.line
+    hidden = apply_hide(before, RUI).state
+    quiet = apply_talk(hidden, RUI)
+    assert quiet.state.hidden is True
+    assert quiet.state.bond == hidden.bond + 1
+    assert quiet.line
+
+
+def test_each_guest_keeps_their_own_care_line(tmp_path):
+    now = 1_700_000_000_000
+    rui = CareState(hunger=40, mood=50, bond=22, last_tick=now)
+    chirp = CareState(hunger=12, mood=80, bond=8, last_tick=now)
+    save_care(rui, user_data_dir=tmp_path, now=now, key="red_panda")
+    save_care(chirp, user_data_dir=tmp_path, now=now, key="field_cricket")
+    assert (tmp_path / care_filename("red_panda")).is_file()
+    assert (tmp_path / care_filename("field_cricket")).is_file()
+    assert not (tmp_path / CARE_NAME).is_file()
+    later_rui = load_care(user_data_dir=tmp_path, now=now, key="red_panda")
+    later_chirp = load_care(user_data_dir=tmp_path, now=now, key="field_cricket")
+    assert later_rui.hunger == 40
+    assert later_rui.bond == 22
+    assert later_chirp.hunger == 12
+    assert later_chirp.bond == 8
+    ridge = load_care(user_data_dir=tmp_path, now=now, key="brain_coral")
+    assert ridge.hunger == 78
+    assert ridge.bond == 18
+
+
+def test_old_shared_care_file_stays_rui(tmp_path):
+    now = 1_700_000_000_000
+    save_care(CareState(hunger=33, last_tick=now), user_data_dir=tmp_path, now=now)
+    assert (tmp_path / CARE_NAME).is_file()
+    rui = load_care(user_data_dir=tmp_path, now=now, key="red_panda")
+    other = load_care(user_data_dir=tmp_path, now=now, key="field_cricket")
+    assert rui.hunger == 33
+    assert other.hunger == 78
 
 
 def test_unpack_care_rejects_a_foreign_line():

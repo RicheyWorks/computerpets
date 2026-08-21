@@ -59,6 +59,11 @@ def test_desk_has_play_and_the_house_special(tmp_path):
     window._play()
     assert window.pet.cmd in ("play", "wander")
     assert window.care.last_line
+    assert window.talk_btn is not None
+    assert window.talk_btn.text() == "Talk"
+    window._talk()
+    assert window.pet.cmd in ("talk", "sit")
+    assert window.care.last_line
     window._pick_key("hognose")
     assert window.special_btn.text() == "Play dead"
     window._special()
@@ -185,7 +190,8 @@ def test_desk_keeps_care_across_a_relaunch(tmp_path):
     from PyQt6.QtWidgets import QApplication
 
     from computerpets_client.app import DeskWindow
-    from computerpets_client.life import CARE_NAME
+    from computerpets_client.life import care_filename
+    from computerpets_client.species import DEFAULT_SPECIES_KEY
 
     app = QApplication.instance() or QApplication([])
     first = DeskWindow(user_data_dir=tmp_path)
@@ -193,7 +199,7 @@ def test_desk_keeps_care_across_a_relaunch(tmp_path):
     first.care = replace(first.care, hunger=40, mood=50, bond=22)
     first._keep_care()
     first.close()
-    assert (tmp_path / CARE_NAME).is_file()
+    assert (tmp_path / care_filename(DEFAULT_SPECIES_KEY)).is_file()
 
     second = DeskWindow(user_data_dir=tmp_path)
     second.show()
@@ -201,6 +207,33 @@ def test_desk_keeps_care_across_a_relaunch(tmp_path):
     assert second.care.mood == 50
     assert second.care.bond == 22
     second.close()
+    del app
+
+
+def test_desk_keeps_each_guest_on_the_rail(tmp_path):
+    os.environ["QT_QPA_PLATFORM"] = "offscreen"
+    from dataclasses import replace
+
+    from PyQt6.QtWidgets import QApplication
+
+    from computerpets_client.app import DeskWindow
+
+    app = QApplication.instance() or QApplication([])
+    window = DeskWindow(user_data_dir=tmp_path)
+    window.show()
+    window.care = replace(window.care, hunger=40, mood=50, bond=22)
+    window._keep_care()
+    window._pick_key("field_cricket")
+    assert window.species.key == "field_cricket"
+    assert window.species.name == "Chirp"
+    assert window.care.hunger == 78
+    assert window.care.bond == 18
+    window._pick_key("red_panda")
+    assert window.species.key == "red_panda"
+    assert window.care.hunger == 40
+    assert window.care.mood == 50
+    assert window.care.bond == 22
+    window.close()
     del app
 
 

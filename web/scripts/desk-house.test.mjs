@@ -37,6 +37,9 @@ test("live is the phone of the same house", () => {
   assert.match(liveSrc, /Add to Home Screen/);
   assert.match(liveSrc, /isStandalone/);
   assert.match(liveSrc, /onSelectKind/);
+  assert.match(liveSrc, /DESK_TEND/);
+  assert.match(liveSrc, /extraCare=\{\[\.\.\.DESK_TEND\]\}/);
+  assert.doesNotMatch(liveSrc, /label: "Rest", action: "rest"/);
   assert.doesNotMatch(liveSrc, /LIVING_KINDS\.map/);
   assert.doesNotMatch(liveSrc, /<option/);
   assert.doesNotMatch(liveSrc, /<select/);
