@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Paint later walkers and knock the plate off the hive photographs."""
+"""Sit house-hand walkers. Do not flatten Rui. Knock a plate if one remains."""
 
 from house_walkers import main
 

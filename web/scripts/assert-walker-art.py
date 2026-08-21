@@ -8,6 +8,8 @@ from pathlib import Path
 
 from PIL import Image
 
+from house_walkers import PHOTO_KEEP
+
 ROOT = Path(__file__).resolve().parents[2]
 SPRITES = ROOT / "web" / "public" / "sprites"
 DESK = ROOT / "desktop" / "renderer" / "sprites"
@@ -61,9 +63,16 @@ def main() -> None:
         n = len(pix)
         if black / n > 0.18:
             plated.append(key)
-        # A walkingstick is a stick. The plate is gone; the animal is honestly thin.
-        if animal / n < 0.045 and key != "stick":
+        # A walkingstick is a stick. A jewelwing is a thread. The plate is gone.
+        if animal / n < 0.045 and key not in {"stick", "jewelwing"}:
             thin.append(key)
+        # A later guest that is still a two-color oval has not been painted.
+        # Photographs already at Rui's hand keep their own count.
+        # A raccoon is gray. A puffball is cream. They still need a house of hues.
+        if key not in PHOTO_KEEP and key != "stick":
+            colors = {(r // 12, g // 12, b // 12) for r, g, b, a in pix if a > 12 and (r + g + b) > 24}
+            if len(colors) < 95:
+                thin.append(key)
         for anim, count in ANIMS.items():
             for i in range(count):
                 frame = SPRITES / key / anim / f"{i + 1}.png"

@@ -6,9 +6,10 @@ transparent frame. The plate is the square. The stamp is the thin guest.
 
 This module:
 - paints on a clear plate
-- draws large, then sits the guest like Rui
-- knocks a connected black plate off a photograph without inventing a taxon
+- sits a house-hand painting the way Rui sits: large, low, clear corners
+- knocks a connected plate off a photograph without inventing a taxon
 - writes the same frames to the desk and the overlay
+- does not flatten the first fifty or the hive photographs
 """
 
 from __future__ import annotations
@@ -130,6 +131,110 @@ def fit_like_rui(img: Image.Image, out: int = OUT, side: float = 0.84) -> Image.
     y = out - nh - int(out * 0.06)
     canvas.paste(crop, (x, y), crop)
     return canvas
+
+
+# Dark guests: only a near-black plate may leave. A pupil that does not
+# touch the plate stays. A crow is charcoal, not a hole.
+DARK_MATTE = {
+    "alligator", "american_eel", "black_bear", "click_beetle", "coli",
+    "crow", "earwig", "field_cricket", "lamprey", "millipede", "pileated",
+    "raven", "robber_fly", "skunk", "umbral", "vinegaroon", "widow",
+}
+
+
+def clear_edge_matte(im: Image.Image, tol: int = 28) -> Image.Image:
+    """Flood from the edge. A plate the color of the border goes. Interior ink stays."""
+    im = im.convert("RGBA")
+    w, h = im.size
+    pix = im.load()
+    samples = []
+    for x in range(0, w, max(1, w // 64)):
+        samples.append(pix[x, 0][:3])
+        samples.append(pix[x, h - 1][:3])
+    for y in range(0, h, max(1, h // 64)):
+        samples.append(pix[0, y][:3])
+        samples.append(pix[w - 1, y][:3])
+    samples.sort()
+    mid = samples[len(samples) // 2]
+    limit = tol * 3
+
+    def plate(x, y):
+        r, g, b, a = pix[x, y]
+        if a <= 10:
+            return True
+        return abs(r - mid[0]) + abs(g - mid[1]) + abs(b - mid[2]) <= limit
+
+    seen = bytearray(w * h)
+    q = deque()
+
+    def push(x, y):
+        if 0 <= x < w and 0 <= y < h and not seen[y * w + x]:
+            seen[y * w + x] = 1
+            q.append((x, y))
+
+    for x in range(w):
+        push(x, 0)
+        push(x, h - 1)
+    for y in range(h):
+        push(0, y)
+        push(w - 1, y)
+    while q:
+        x, y = q.popleft()
+        if not plate(x, y):
+            continue
+        pix[x, y] = CLEAR
+        push(x + 1, y)
+        push(x - 1, y)
+        push(x, y + 1)
+        push(x, y - 1)
+    return im
+
+
+def sit_body_frame(body: Image.Image, pose: dict, out: int = OUT) -> Image.Image:
+    """The walk and the sit share the same painted body. The pose is the gait."""
+    img = body.convert("RGBA")
+    dim = pose.get("dim", 1.0)
+    if dim < 0.999:
+        r, g, b, a = img.split()
+        rgb = ImageEnhance.Brightness(Image.merge("RGB", (r, g, b))).enhance(dim)
+        img = Image.merge("RGBA", (*rgb.split(), a))
+    scale = pose.get("scale", 1.0)
+    if abs(scale - 1.0) > 0.001:
+        w, h = img.size
+        img = img.resize((max(1, int(w * scale)), max(1, int(h * scale))), Image.Resampling.LANCZOS)
+    rot = pose.get("rot", 0.0)
+    if abs(rot) > 0.05:
+        img = img.rotate(-rot, resample=Image.Resampling.BICUBIC, expand=False)
+    canvas = Image.new("RGBA", (out, out), CLEAR)
+    x = (out - img.size[0]) // 2 + int(pose.get("dx", 0))
+    y = (out - img.size[1]) // 2 + int(pose.get("dy", 0))
+    canvas.paste(img, (x, y), img)
+    return canvas
+
+
+def ingest_body(path: Path, key: str) -> Image.Image:
+    """Knock the plate off a house-hand painting and sit it like Rui."""
+    raw = Image.open(path).convert("RGBA")
+    tol = 16 if key in DARK_MATTE else 30
+    knocked = clear_edge_matte(raw, tol=tol)
+    if not knocked.getbbox():
+        knocked = clear_edge_matte(raw, tol=max(10, tol - 8))
+    if not knocked.getbbox():
+        knocked = clear_connected_plate(raw, luma=14)
+    return fit_like_rui(knocked)
+
+
+def write_kind_from_body(key: str, body: Image.Image) -> None:
+    for anim, count in ANIMS.items():
+        dest = WEB_SPRITES / key / anim
+        dest.mkdir(parents=True, exist_ok=True)
+        for i in range(count):
+            pose = pose_for(key, anim, i, count)
+            sit_body_frame(body, pose).save(dest / f"{i + 1}.png", "PNG", optimize=True)
+    desk = DESK_SPRITES / key
+    if desk.exists():
+        shutil.rmtree(desk)
+    shutil.copytree(WEB_SPRITES / key, desk)
 
 
 def clear_connected_plate(im: Image.Image, luma: int = 30) -> Image.Image:
@@ -1373,14 +1478,36 @@ def photo_plate_keys() -> list[str]:
     return ["carpenter_ant", "cicada", "darner", "firefly", "honeybee", "ladybird", "luna", "mantis", "monarch", "stick"]
 
 
+def sit_bodies_from(folder: Path, keys: list[str] | None = None) -> list[str]:
+    """Sit house-hand paintings. Do not redraw a photograph. Do not invent a taxon."""
+    sat: list[str] = []
+    wanted = set(keys) if keys else None
+    for path in sorted(folder.glob("*_body.png")):
+        key = path.name[: -len("_body.png")]
+        if wanted is not None and key not in wanted:
+            continue
+        if key in PHOTO_KEEP:
+            print(f"skip photograph {key}", flush=True)
+            continue
+        print(f"sit {key}", flush=True)
+        write_kind_from_body(key, ingest_body(path, key))
+        write_portrait(key)
+        sat.append(key)
+    return sat
+
+
 def main(argv: list[str] | None = None) -> None:
     import sys
 
     args = list(sys.argv[1:] if argv is None else argv)
-    only = [a for a in args if not a.startswith("-")]
-    do_knock = "--knock" in args or not only
-    do_paint = "--paint" in args or not only
-    if only:
+    only = [a for a in args if not a.startswith("-") and not a.startswith("--bodies=")]
+    bodies_arg = next((a.split("=", 1)[1] for a in args if a.startswith("--bodies=")), "")
+    do_knock = "--knock" in args or (not only and not bodies_arg)
+    do_paint = "--paint" in args
+    sat: list[str] = []
+    if bodies_arg:
+        sat = sit_bodies_from(Path(bodies_arg), only or None)
+    if only and not bodies_arg:
         keys = only
         knock = [k for k in keys if k in set(photo_plate_keys())]
         paint = [k for k in keys if k in SPECS]
@@ -1395,7 +1522,7 @@ def main(argv: list[str] | None = None) -> None:
         print(f"paint {key}", flush=True)
         write_kind(key)
         write_portrait(key)
-    print(f"done paint={len(paint)} knock={len(knock)} catalog=210", flush=True)
+    print(f"done sit={len(sat)} paint={len(paint)} knock={len(knock)} catalog=210", flush=True)
 
 
 if __name__ == "__main__":
