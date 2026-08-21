@@ -36,17 +36,30 @@ def test_pets_sit_or_swim_in_the_same_weather():
     assert weather_idle("goldfish", "rain") == "wander"
     assert weather_idle("axolotl", "rain") == "wander"
     assert weather_idle("penguin", "rain") == "wander"
+    assert weather_idle("mallard", "rain") == "wander"
+    assert weather_idle("canada_goose", "rain") == "wander"
     assert weather_idle("red_panda", "rain") == "sit"
+    assert weather_idle("turtle", "rain") == "sit"
     assert weather_idle("ball_python", "heat") == "sit"
+    assert weather_idle("milk_snake", "heat") == "sit"
     assert weather_idle("cat", "heat") == "sit"
     assert weather_idle("phoenix", "wind") == "wander"
+    assert weather_idle("crow", "wind") == "wander"
+    assert weather_idle("pileated", "wind") == "wander"
+    assert weather_idle("robin", "wind") == "wander"
     assert weather_idle("red_panda", "wind") is None
+    assert weather_idle("barn_owl", "wind") is None
     assert weather_idle("red_panda", "clear") is None
 
 
 def test_weather_lines_are_the_house_copy():
     assert weather_line("goldfish", "rain") == "Proper weather. At last."
+    assert weather_line("mallard", "rain") == "Proper weather. At last."
+    assert weather_line("canada_goose", "rain") == "Proper weather. At last."
     assert weather_line("red_panda", "rain") == "The blotter is honest about rain."
     assert weather_line("budgie", "wind") == "The air has opinions."
+    assert weather_line("pileated", "wind") == "The air has opinions."
+    assert weather_line("robin", "wind") == "The air has opinions."
+    assert weather_line("red_panda", "wind") == "Something moved that was not me."
     assert weather_line("ball_python", "heat") == "Heat. I was waiting for this clause."
     assert weather_line("red_panda", "clear") is None

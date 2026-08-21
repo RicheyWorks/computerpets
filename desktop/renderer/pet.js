@@ -101,21 +101,12 @@ let leaving = false;
 let choiceOpen = false;
 let lureTimer = 0;
 
-function skyOf() {
-  const n = new Date();
-  const day = Math.floor(Date.UTC(n.getFullYear(), n.getMonth(), n.getDate()) / 86400000);
-  const r = ((day * 9301 + 49297) % 233280) / 233280;
-  if (r < 0.4) return "clear";
-  if (r < 0.62) return "rain";
-  if (r < 0.82) return "wind";
-  return "heat";
+function skyOf(now) {
+  return window.PetWeather?.weatherOf(now) ?? "clear";
 }
 
 function skyLabel(w) {
-  if (w === "rain") return "Rain";
-  if (w === "wind") return "Wind";
-  if (w === "heat") return "Heat";
-  return "Clear";
+  return window.PetWeather?.weatherLabel(w) ?? "Clear";
 }
 
 function paintWeather() {
@@ -1001,7 +992,8 @@ function switchTo(key) {
           ? "You were elsewhere. I practiced waiting."
           : "Back. I noticed."
     : null;
-  say(life.hidden ? pick(trait.extra.hide) : back || pick(next.lines.greet), 5000);
+  const skyTalk = window.PetWeather?.weatherLine(kind.key, skyOf());
+  say(life.hidden ? pick(trait.extra.hide) : back || skyTalk || pick(next.lines.greet), 5000);
   if (!life.hidden) issue("talk");
   paintHud();
   paintMess();
@@ -1599,13 +1591,9 @@ setInterval(() => {
     issue("sleep");
     return;
   }
-  const sky = skyOf();
-  if (sky === "rain" && Math.random() < 0.4 && !["goldfish", "axolotl", "penguin"].includes(kind.key)) {
-    issue("sit");
-    return;
-  }
-  if (sky === "heat" && Math.random() < 0.35 && ["iguana", "turtle", "cat", "dragon"].includes(kind.key)) {
-    issue("sit");
+  const skyMood = window.PetWeather?.weatherIdle(kind.key, skyOf());
+  if (skyMood && Math.random() < 0.45) {
+    issue(skyMood);
     return;
   }
   const roll = Math.random();
