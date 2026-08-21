@@ -134,6 +134,16 @@ POSE_OWNED = SNAKE_STAMPS | {
     "stentor",
     "coli",
     "haloarchaea",
+    "crow",
+    "raven",
+    "barn_owl",
+    "red_tail",
+    "chickadee",
+    "robin",
+    "mallard",
+    "canada_goose",
+    "pileated",
+    "hummingbird",
 }
 
 
