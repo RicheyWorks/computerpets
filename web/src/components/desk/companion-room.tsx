@@ -43,11 +43,13 @@ import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/s
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
+import { GuestChoice } from "@/components/desk/guest-choice";
 import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
 import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
 import { isPhone, isTablet, readSit, tabletOrient, type TabletOrient } from "@/lib/pets/tablet-desk";
 import { phoneOrient, type PhoneOrient } from "@/lib/pets/phone-desk";
+import { guestMarks, guestPick, guestTap, type GuestChoiceId } from "@/lib/pets/guest-choice";
 
 type DeskCare = "rest" | "clean" | "medicine" | "bath" | "praise";
 
@@ -140,6 +142,7 @@ export function CompanionRoom({
   const [orient, setOrient] = useState<TabletOrient>("blotter");
   const [handOrient, setHandOrient] = useState<PhoneOrient>("blotter");
   const [tending, setTending] = useState(false);
+  const [choiceOpen, setChoiceOpen] = useState(false);
   const pad = tablet || (!phone && autoTablet);
   const hand = phone || (!pad && autoPhone);
 
@@ -240,6 +243,7 @@ export function CompanionRoom({
     takenRef.current = false;
     setMark(null);
     setLeaving(false);
+    setChoiceOpen(false);
     const live = liveDeskCare(kind, persistLocal, seed);
     setStats(live);
     const t = window.setTimeout(() => {
@@ -487,6 +491,43 @@ export function CompanionRoom({
     issue(action === "rest" ? "sleep" : "sit");
   }
 
+  function doSpecial() {
+    acted.current = true;
+    unlockDeskAudio();
+    const next = applySpecial(statsRef.current, trait);
+    const gifted = leaveGift(next.stats);
+    setStats(gifted);
+    say(trait.line);
+    note(`${displayName}: ${trait.line}`);
+    issue(next.cmd);
+  }
+
+  function pickFirstGift() {
+    const gift = statsRef.current.gifts[0];
+    if (!gift) return;
+    const prev = statsRef.current;
+    const next = pickGift(prev, gift.id);
+    setStats(next);
+    say(GIFT_LINE[kind.key] ?? "I left this.");
+    note(`${displayName} left a gift.`);
+    const bond = maybeBondLine(prev.bond, next.bond);
+    if (bond) window.setTimeout(() => say(bond), 900);
+  }
+
+  function pickGuest(id: GuestChoiceId) {
+    setChoiceOpen(false);
+    if (id === "rest") void tend("rest");
+    else if (id === "walk") issue("wander");
+    else if (id === "sit") issue("sit");
+    else if (id === "talk") void talk();
+    else if (id === "treat") dropTreatAt(randomTreatX());
+    else if (id === "play") startChase();
+    else if (id === "special") doSpecial();
+    else if (id === "hide") hide();
+    else if (id === "call") callBack();
+    else if (id === "pick") pickFirstGift();
+  }
+
   const room = roomOf(kind.key);
   const gait = useMemo(() => ({ ...trait, scale: trait.scale * 1.24 }), [trait]);
   const hive = isHivePlace(kind.key) ? colonyOf(stats, stats.hidden) : null;
@@ -588,7 +629,10 @@ export function CompanionRoom({
             issue("idle");
           }
         }}
-        onTap={() => void talk()}
+        onTap={() => {
+          if (guestTap() !== "choice") return;
+          setChoiceOpen((open) => !open);
+        }}
         onTend={() => {
           setTending(true);
           careRef.current?.querySelector("button")?.focus();
@@ -596,6 +640,25 @@ export function CompanionRoom({
         }}
       />
       <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
+
+      {choiceOpen ? (
+        <GuestChoice
+          marks={guestMarks({
+            hidden: stats.hidden,
+            leaving,
+            walking: order.cmd === "wander" || order.cmd === "seek" || order.cmd === "play" || order.cmd === "enter",
+            gifts: stats.gifts.length,
+            treatVerb: treatFor(kind.key).verb,
+            specialVerb: trait.verb,
+          })}
+          onPick={(id) => {
+            const picked = guestPick(id);
+            if (picked) pickGuest(picked);
+          }}
+          phone={hand}
+          tablet={pad}
+        />
+      ) : null}
 
       {stats.gifts.map((gift) => (
         <button
@@ -692,16 +755,7 @@ export function CompanionRoom({
               {
                 label: trait.verb,
                 disabled: busy,
-                onClick: () => {
-                  acted.current = true;
-                  unlockDeskAudio();
-                  const next = applySpecial(statsRef.current, trait);
-                  const gifted = leaveGift(next.stats);
-                  setStats(gifted);
-                  say(trait.line);
-                  note(`${displayName}: ${trait.line}`);
-                  issue(next.cmd);
-                },
+                onClick: doSpecial,
               },
               ...(isSnake(kind.key)
                 ? [

@@ -1,4 +1,4 @@
-/** How the sit sits. A tablet has no extra and no mark. A tap talks. A drag is a carry. A long-press tends. */
+/** How the sit sits. A tablet has no extra and no mark. A tap is a choice. A drag is a carry. A long-press tends. */
 
 export const TAP_PX = 8;
 export const TAP_PX_MAC = 12;
@@ -145,7 +145,7 @@ export function sitClick(sit: TabletSit | string | null | undefined): "care" | "
 }
 
 /**
- * A long still finger tends. A short still finger talks. A long move is a carry.
+ * A long still finger tends. A short still finger is a choice. A long move is a carry.
  * Neither is walking in.
  */
 export function tabletLift(

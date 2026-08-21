@@ -32,7 +32,7 @@ function onUpSrc() {
   return livingSrc.slice(start, end);
 }
 
-test("a drag-end does not arrive; a tap talks and does not arrive", () => {
+test("a drag-end does not arrive; a tap is a choice and does not arrive", () => {
   const tap = A.pointerUp(3, 4);
   assert.equal(tap.kind, "tap");
   assert.equal(tap.arrive, false);

@@ -416,6 +416,32 @@
     color: var(--color-fg);
   }
 
+  .guest-choice {
+    bottom: 9.5rem;
+    touch-action: manipulation;
+  }
+
+  [data-phone-floor] .guest-choice {
+    bottom: 8.25rem;
+  }
+
+  [data-tablet-floor] .guest-choice {
+    bottom: 10rem;
+  }
+
+  [data-phone-floor] img[data-pet],
+  [data-tablet-floor] img[data-pet] {
+    box-sizing: content-box;
+  }
+
+  [data-phone-floor] img[data-pet] {
+    padding: 12px;
+  }
+
+  [data-tablet-floor] img[data-pet] {
+    padding: 16px;
+  }
+
   .blotter-care {
     display: flex;
     flex-wrap: wrap;

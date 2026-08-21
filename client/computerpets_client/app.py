@@ -26,6 +26,7 @@ from PyQt6.QtWidgets import (
 )
 
 from .blotter import DayWash, DeskBackground, WeatherLayer, attach_gpu_viewport
+from .choice import guest_marks, guest_pick, guest_tap, walking_cmd
 from .gift import gift_line, leave_gift, pick_gift
 from .guide import plaque_for
 from .hive import colony_of, colony_word, is_hive_place
@@ -210,6 +211,11 @@ class DeskWindow(QMainWindow):
         self.praise_btn.clicked.connect(self._praise)
         self.talk_btn.clicked.connect(self._talk)
         self.special_btn.clicked.connect(self._special)
+        self._choice: list[dict[str, str]] | None = None
+        self.choice_bar = QWidget()
+        self.choice_row = QHBoxLayout(self.choice_bar)
+        self.choice_row.setContentsMargins(0, 0, 0, 0)
+        self.choice_bar.hide()
         self.shed_btn.clicked.connect(self._shed)
         self.unlock_btn.clicked.connect(self._unlock)
         self.kind_box.currentIndexChanged.connect(self._change_kind)
@@ -248,6 +254,7 @@ class DeskWindow(QMainWindow):
         layout.addWidget(self.rail)
         layout.addWidget(self.license_label)
         layout.addWidget(self.view, 1)
+        layout.addWidget(self.choice_bar)
         layout.addWidget(self.plaque)
         layout.addWidget(self.vital_label)
         self.setCentralWidget(root)
@@ -391,6 +398,7 @@ class DeskWindow(QMainWindow):
         self._apply_kind(self.kind_box.currentData())
 
     def _apply_kind(self, key: str | None) -> None:
+        self._close_choice()
         next_kind = species_by_key(key)
         if next_kind.key != self.species.key:
             self._keep_care()
@@ -608,12 +616,68 @@ class DeskWindow(QMainWindow):
         self._say(hide_line(self.species.key))
         self.pet.issue("leave")
 
+    def _close_choice(self) -> None:
+        self._choice = None
+        while self.choice_row.count():
+            item = self.choice_row.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.deleteLater()
+        self.choice_bar.hide()
+
+    def _open_choice(self) -> None:
+        if guest_tap() != "choice":
+            return
+        if self._choice is not None:
+            self._close_choice()
+            return
+        marks = guest_marks(
+            hidden=self.care.hidden,
+            leaving=self.pet.cmd == "leave",
+            walking=walking_cmd(self.pet.cmd),
+            gifts=len(self.care.gifts),
+            treat_verb=self.species.treat,
+            special_verb=trait_for(self.species.key).verb,
+        )
+        self._choice = marks
+        for mark in marks:
+            btn = QPushButton(mark["label"])
+            btn.clicked.connect(lambda _=False, key=mark["id"]: self._pick_choice(key))
+            self.choice_row.addWidget(btn)
+        self.choice_bar.show()
+
+    def _pick_choice(self, mark_id: str) -> None:
+        picked = guest_pick(mark_id)
+        self._close_choice()
+        if picked is None:
+            return
+        if picked == "rest":
+            self._rest()
+        elif picked == "walk":
+            self.pet.issue("wander")
+        elif picked == "sit":
+            self.pet.issue("sit")
+        elif picked == "talk":
+            self._talk()
+        elif picked == "treat":
+            self._treat()
+        elif picked == "play":
+            self._play()
+        elif picked == "special":
+            self._special()
+        elif picked == "hide":
+            if not self.care.hidden:
+                self._hide_or_call()
+        elif picked == "call":
+            if self.care.hidden:
+                self._hide_or_call()
+        elif picked == "pick":
+            if self.care.gifts:
+                self._pick_gift(self.care.gifts[0].id)
+
     def _tap_guest(self) -> None:
-        """Same as the web blotter: tap the guest, the plaque teaches, they say the lesson."""
-        guide = plaque_for(self.species.key)
-        if guide:
-            self.plaque.set_key(self.species.key)
-            self._say(guide.lesson, 5200)
+        """A tap is a choice. They pick. Then they do that sit."""
+        self._open_choice()
 
     def _tap_visitor(self) -> None:
         guest = todays_visitor(self.species.key)

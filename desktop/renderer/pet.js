@@ -38,6 +38,7 @@ const weatherRoot = document.getElementById("weather");
 const treatEl = document.getElementById("treat");
 const lureEl = document.getElementById("lure");
 const hud = document.getElementById("hud");
+const choiceEl = document.getElementById("choice");
 const hudName = document.getElementById("hud-name");
 const hudVital = document.getElementById("hud-vital");
 const barHunger = document.getElementById("bar-hunger");
@@ -97,6 +98,7 @@ let hudUntil = 0;
 let mark = null;
 let taken = false;
 let leaving = false;
+let choiceOpen = false;
 let lureTimer = 0;
 
 function skyOf() {
@@ -642,6 +644,69 @@ function applyCommand() {
   }
 }
 
+function closeChoice() {
+  choiceOpen = false;
+  if (!choiceEl) return;
+  choiceEl.classList.remove("show");
+  choiceEl.replaceChildren();
+}
+
+function openChoice() {
+  if (!choiceEl || !window.PetChoice || !kind) return;
+  if (choiceOpen) {
+    closeChoice();
+    return;
+  }
+  const marks = window.PetChoice.guestMarks({
+    hidden: !!(life && life.hidden),
+    leaving,
+    walking: sim.cmd === "wander" || sim.cmd === "seek" || sim.cmd === "play" || sim.cmd === "enter",
+    gifts: (life && life.gifts && life.gifts.length) || 0,
+    treatVerb: "Treat",
+    specialVerb: window.PetSpecial?.verbFor(kind.key) || "Special",
+  });
+  choiceEl.replaceChildren();
+  for (const mark of marks) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = mark.label;
+    btn.dataset.hit = "1";
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      pickChoice(mark.id);
+    });
+    choiceEl.appendChild(btn);
+  }
+  choiceEl.style.transform = `translate3d(${sim.x}px, 0, 0)`;
+  choiceEl.classList.add("show");
+  choiceOpen = true;
+  setClickable(true);
+}
+
+function pickChoice(id) {
+  const picked = window.PetChoice?.guestPick(id);
+  closeChoice();
+  if (!picked) return;
+  if (picked === "rest") handle("rest");
+  else if (picked === "walk") issue("wander");
+  else if (picked === "sit") issue("sit");
+  else if (picked === "talk") handle("talk");
+  else if (picked === "treat") handle("snack");
+  else if (picked === "play") handle("play");
+  else if (picked === "special") handle("special");
+  else if (picked === "hide") handle("hide");
+  else if (picked === "call") handle("call");
+  else if (picked === "pick") {
+    const gift = life && life.gifts && life.gifts[0];
+    if (!gift || !kind) return;
+    window.PetLife.pickGift(life, gift.id);
+    persist();
+    say(window.PetLife.giftLine(kind.key));
+    paintGifts();
+    paintHud();
+  }
+}
+
 function handle(cmd) {
   if (!life || !trait || !kind) return;
   tickLife();
@@ -897,6 +962,7 @@ function liftTapPx() {
 }
 
 function switchTo(key) {
+  closeChoice();
   const next = roster.find((r) => r.key === key) ?? roster[0];
   kind = { ...next, sprites: pack(next.key) };
   trait = window.PET_TRAITS[next.key] || window.PET_TRAITS.red_panda;
@@ -1480,7 +1546,7 @@ window.addEventListener("pointerup", (e) => {
   const dy = start ? e.clientY - start.y : 0;
   const lift = window.PetArrive.pointerUp(dx, dy, liftTapPx());
   if (lift.kind === "tap") {
-    handle("talk");
+    if (window.PetChoice?.guestTap() === "choice") openChoice();
     return;
   }
   sim.land = 0.55;
