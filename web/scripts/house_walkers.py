@@ -429,52 +429,204 @@ def clear_wash_matte(im: Image.Image) -> Image.Image:
     return Image.fromarray(arr, "RGBA")
 
 
-def knock_island_crumbs(im: Image.Image) -> Image.Image:
-    """Small parchment islands that do not touch the guest go. The animal stays."""
+def _live_components(arr):
+    """Return (seen, comps) where comps are (id, count, tan)."""
     import numpy as np
 
-    arr = np.array(im.convert("RGBA"))
     h, w = arr.shape[:2]
     a = arr[:, :, 3]
     live = a > 12
     seen = np.zeros((h, w), dtype=np.int32)
     comps: list[tuple[int, int, int]] = []
     cid = 0
-    for y in range(h):
-        row = live[y]
-        for x in range(w):
-            if not row[x] or seen[y, x]:
-                continue
-            cid += 1
-            q = deque([(x, y)])
-            seen[y, x] = cid
-            count = 0
-            tan = 0
-            while q:
-                cx, cy = q.popleft()
-                count += 1
-                r, g, b, aa = arr[cy, cx]
-                if aa > 12 and r > 140 and g > 110 and b > 70 and abs(int(r) - int(g)) < 60:
-                    tan += 1
-                for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
-                    if 0 <= nx < w and 0 <= ny < h and live[ny, nx] and not seen[ny, nx]:
-                        seen[ny, nx] = cid
-                        q.append((nx, ny))
-            comps.append((cid, count, tan))
+    r = arr[:, :, 0]
+    g = arr[:, :, 1]
+    b = arr[:, :, 2]
+    tan_map = (
+        live
+        & (r > 140)
+        & (g > 110)
+        & (b > 55)
+        & (np.abs(r.astype(np.int16) - g.astype(np.int16)) < 60)
+        & ((r.astype(np.int16) - b.astype(np.int16)) > 16)
+        & ((np.maximum(np.maximum(r, g), b) - np.minimum(np.minimum(r, g), b)) < 115)
+    )
+    ys, xs = np.where(live)
+    for y, x in zip(ys.tolist(), xs.tolist()):
+        if seen[y, x]:
+            continue
+        cid += 1
+        q = deque([(x, y)])
+        seen[y, x] = cid
+        count = 0
+        tan = 0
+        while q:
+            cx, cy = q.popleft()
+            count += 1
+            if tan_map[cy, cx]:
+                tan += 1
+            for nx, ny in ((cx + 1, cy), (cx - 1, cy), (cx, cy + 1), (cx, cy - 1)):
+                if 0 <= nx < w and 0 <= ny < h and live[ny, nx] and not seen[ny, nx]:
+                    seen[ny, nx] = cid
+                    q.append((nx, ny))
+        comps.append((cid, count, tan))
+    return seen, comps
+
+
+def parchment_island_pixels(im: Image.Image) -> int:
+    """Largest disconnected parchment island that is not the guest."""
+    import numpy as np
+
+    arr = np.array(im.convert("RGBA"))
+    _seen, comps = _live_components(arr)
+    if not comps:
+        return 0
+    # The guest is the ink, not the biggest tan splash.
+    main = max(comps, key=lambda t: (t[1] - t[2], t[1]))
+    biggest = 0
+    for ident, count, tan in comps:
+        if ident == main[0]:
+            continue
+        if tan / max(1, count) >= 0.50 and count >= 40:
+            biggest = max(biggest, count)
+    return biggest
+
+
+def knock_island_crumbs(im: Image.Image) -> Image.Image:
+    """Parchment islands that do not touch the guest go. The animal stays.
+
+    A second limb or a spore puff may sit apart. A tan splash may not,
+    even when the splash is larger than a crumb.
+    """
+    import numpy as np
+
+    arr = np.array(im.convert("RGBA"))
+    h, w = arr.shape[:2]
+    seen, comps = _live_components(arr)
     if not comps:
         return im
-    main = max(comps, key=lambda t: t[1])[0]
+    # Prefer the component with the most non-tan ink. A wash can outgrow a guest.
+    main_id, main_count, main_tan = max(comps, key=lambda t: (t[1] - t[2], t[1]))
+    main_tan_frac = main_tan / max(1, main_count)
     n = h * w
-    keep = {main}
+    keep = {main_id}
     for ident, count, tan in comps:
-        if ident == main:
+        if ident == main_id:
             continue
-        # A second limb or a spore puff may sit apart. A tan splash may not.
-        if count >= max(80, n // 90) and tan / max(1, count) < 0.62:
+        tan_frac = tan / max(1, count)
+        # A colorful second part (wing, claw, puff) stays when it is large.
+        if tan_frac < 0.50 and count >= max(80, n // 90):
+            keep.add(ident)
+            continue
+        # A tan animal may break into nearby fragments. Keep large tan parts.
+        if main_tan_frac >= 0.55 and count >= max(400, int(main_count * 0.12)):
+            keep.add(ident)
+            continue
+        # A parchment island of any honest size leaves.
+        if tan_frac >= 0.50:
+            continue
+        if count >= max(80, n // 90):
             keep.add(ident)
     drop = (seen > 0) & ~np.isin(seen, list(keep))
     arr[drop] = CLEAR
     return Image.fromarray(arr, "RGBA")
+
+
+def knock_parchment_fringe(im: Image.Image, steps: int = 3) -> Image.Image:
+    """Eat a tan halo that still touches empty wood. Interior ink stays.
+
+    When the guest has a real non-tan core, a wash that touches the wood
+    is flooded all the way through parchment. A yeast foam or a ghost crab
+    is the wash, so only a short halo is trimmed.
+    """
+    import numpy as np
+
+    arr = np.array(im.convert("RGBA"))
+    h, w = arr.shape[:2]
+    a = arr[:, :, 3]
+    r, g, b = arr[:, :, 0], arr[:, :, 1], arr[:, :, 2]
+    live = a > 12
+    if not live.any():
+        return im
+    parch = (
+        live
+        & (r > 140)
+        & (g > 110)
+        & (b > 55)
+        & (np.abs(r.astype(np.int16) - g.astype(np.int16)) < 60)
+        & ((r.astype(np.int16) - b.astype(np.int16)) > 16)
+        & ((np.maximum(np.maximum(r, g), b) - np.minimum(np.minimum(r, g), b)) < 115)
+    )
+    gray = ((r.astype(np.uint16) + g.astype(np.uint16) + b.astype(np.uint16)) // 3).astype(np.uint8)
+    gray_im = Image.fromarray(gray, "L")
+    local_range = np.array(gray_im.filter(ImageFilter.MaxFilter(5)), dtype=np.int16) - np.array(
+        gray_im.filter(ImageFilter.MinFilter(5)), dtype=np.int16
+    )
+    # A wash is flat tan. Cream fur and a whelk shell keep grain.
+    flat = parch & (local_range < 34)
+    core = live & ~parch
+    live_n = int(live.sum())
+    core_n = int(core.sum())
+    flood_all = core_n >= max(700, int(live_n * 0.12)) and int(flat.sum()) >= 80
+    if flood_all:
+        seen = np.zeros((h, w), dtype=np.uint8)
+        q = deque()
+
+        def push(x, y):
+            if 0 <= x < w and 0 <= y < h and not seen[y, x]:
+                seen[y, x] = 1
+                q.append((x, y))
+
+        for x in range(w):
+            push(x, 0)
+            push(x, h - 1)
+        for y in range(h):
+            push(0, y)
+            push(w - 1, y)
+        while q:
+            x, y = q.popleft()
+            aa = arr[y, x, 3]
+            is_flat = bool(flat[y, x]) if aa > 12 else False
+            if aa > 12 and not is_flat:
+                continue
+            if aa > 12 and is_flat:
+                arr[y, x] = CLEAR
+            if aa <= 12 or is_flat:
+                push(x + 1, y)
+                push(x - 1, y)
+                push(x, y + 1)
+                push(x, y - 1)
+        return Image.fromarray(arr, "RGBA")
+
+    # Tan guests: only a short halo. Do not eat the foam.
+    for _ in range(max(1, min(steps, 2))):
+        live = arr[:, :, 3] > 12
+        parch = (
+            live
+            & (arr[:, :, 0] > 140)
+            & (arr[:, :, 1] > 110)
+            & (arr[:, :, 2] > 55)
+            & (np.abs(arr[:, :, 0].astype(np.int16) - arr[:, :, 1].astype(np.int16)) < 60)
+            & ((arr[:, :, 0].astype(np.int16) - arr[:, :, 2].astype(np.int16)) > 16)
+        )
+        padded = np.pad(live, 1, constant_values=False)
+        edge = live & ~(
+            padded[1:-1, 2:] & padded[1:-1, :-2] & padded[2:, 1:-1] & padded[:-2, 1:-1]
+        )
+        arr[edge & parch] = CLEAR
+    return Image.fromarray(arr, "RGBA")
+
+
+def clean_guest_matte(im: Image.Image, key: str = "", idle: bool = False) -> Image.Image:
+    """Knock fringe and islands on a sat sprite. Idle keeps the #92 sit."""
+    knocked = knock_island_crumbs(im)
+    knocked = knock_parchment_fringe(knocked, steps=2 if idle else 3)
+    if knocked.getbbox() is None:
+        return im.convert("RGBA")
+    if idle:
+        return knocked
+    # Pose sit fills again after a wash leaves. Idle stays the #92 hand.
+    return fit_like_rui(knocked, side=0.90)
 
 
 def ingest_body(path: Path, key: str) -> Image.Image:
@@ -496,6 +648,7 @@ def ingest_body(path: Path, key: str) -> Image.Image:
     # Tan islands that never touch the guest are crumbs, not a plate.
     if knocked.getbbox():
         knocked = knock_island_crumbs(knocked)
+        knocked = knock_parchment_fringe(knocked, steps=3)
     # Pose sit fills the blotter the way Rui does. Idle stays the #92 hand.
     return fit_like_rui(knocked, side=0.90)
 
@@ -1852,6 +2005,65 @@ def sit_pose_bodies_from(folder: Path, keys: list[str] | None = None) -> list[st
     return sat
 
 
+def clean_owned_sprites(keys: list[str] | None = None) -> dict[str, list[str]]:
+    """Knock fringe and islands on sat painted poses. Idle keeps the #92 sit.
+
+    A pose folder is rewritten from its first frame after the wash leaves.
+    Idle frames are cleaned in place and not refit. A collapsed pose is
+    listed so a later hand can paint it; this pass does not invent a taxon.
+    """
+    wanted = set(keys) if keys else set(POSE_OWNED)
+    cleaned: list[str] = []
+    collapsed: list[str] = []
+    idle_cleaned: list[str] = []
+    for key in sorted(wanted):
+        dest_root = WEB_SPRITES / key
+        if not dest_root.exists():
+            continue
+        bodies: dict[str, Image.Image] = {}
+        touched = False
+        for anim, count in ANIMS.items():
+            first = dest_root / anim / "1.png"
+            if not first.exists():
+                continue
+            raw = Image.open(first).convert("RGBA")
+            before = parchment_island_pixels(raw)
+            cleaned_im = clean_guest_matte(raw, key, idle=(anim == "idle"))
+            after = parchment_island_pixels(cleaned_im)
+            animal = sum(1 for r, g, b, a in cleaned_im.getdata() if a > 12 and (r + g + b) > 24)
+            n = cleaned_im.size[0] * cleaned_im.size[1]
+            fill = animal / max(1, n)
+            if anim == "idle":
+                if before >= 80 or after < before:
+                    for i in range(count):
+                        path = dest_root / anim / f"{i + 1}.png"
+                        if not path.exists():
+                            continue
+                        frame = Image.open(path).convert("RGBA")
+                        clean_guest_matte(frame, key, idle=True).save(path, "PNG", optimize=True)
+                    idle_cleaned.append(key)
+                    touched = True
+                continue
+            if fill < 0.035 and key not in {"stick", "jewelwing"}:
+                collapsed.append(f"{key}/{anim}")
+                continue
+            bodies[anim] = cleaned_im
+            touched = True
+        if bodies:
+            write_kind_from_poses(key, bodies)
+            cleaned.append(key)
+        elif touched:
+            desk = DESK_SPRITES / key
+            if desk.exists():
+                shutil.rmtree(desk)
+            shutil.copytree(WEB_SPRITES / key, desk)
+            cleaned.append(key)
+        if touched:
+            write_portrait(key)
+            print(f"clean {key} poses={sorted(bodies)} idle={key in idle_cleaned}", flush=True)
+    return {"cleaned": cleaned, "collapsed": collapsed, "idle": idle_cleaned}
+
+
 def main(argv: list[str] | None = None) -> None:
     import sys
 
@@ -1859,14 +2071,18 @@ def main(argv: list[str] | None = None) -> None:
     only = [a for a in args if not a.startswith("-") and not a.startswith("--bodies=") and not a.startswith("--poses=")]
     bodies_arg = next((a.split("=", 1)[1] for a in args if a.startswith("--bodies=")), "")
     poses_arg = next((a.split("=", 1)[1] for a in args if a.startswith("--poses=")), "")
-    do_knock = "--knock" in args or (not only and not bodies_arg and not poses_arg)
+    do_knock = "--knock" in args or (not only and not bodies_arg and not poses_arg and "--clean-poses" not in args)
     do_paint = "--paint" in args
+    do_clean = "--clean-poses" in args
     sat: list[str] = []
+    cleaned: dict[str, list[str]] = {"cleaned": [], "collapsed": [], "idle": []}
     if poses_arg:
         sat = sit_pose_bodies_from(Path(poses_arg), only or None)
     if bodies_arg:
         sat = sit_bodies_from(Path(bodies_arg), only or None)
-    if only and not bodies_arg and not poses_arg:
+    if do_clean:
+        cleaned = clean_owned_sprites(only or None)
+    if only and not bodies_arg and not poses_arg and not do_clean:
         keys = only
         knock = [k for k in keys if k in set(photo_plate_keys())]
         paint = [k for k in keys if k in SPECS]
@@ -1881,7 +2097,14 @@ def main(argv: list[str] | None = None) -> None:
         print(f"paint {key}", flush=True)
         write_kind(key)
         write_portrait(key)
-    print(f"done sit={len(sat)} paint={len(paint)} knock={len(knock)} poses={1 if poses_arg else 0} catalog=210", flush=True)
+    print(
+        f"done sit={len(sat)} paint={len(paint)} knock={len(knock)} "
+        f"clean={len(cleaned['cleaned'])} collapsed={len(cleaned['collapsed'])} "
+        f"poses={1 if poses_arg else 0} catalog=210",
+        flush=True,
+    )
+    if cleaned["collapsed"]:
+        print("collapsed " + " ".join(cleaned["collapsed"]), flush=True)
 
 
 if __name__ == "__main__":
