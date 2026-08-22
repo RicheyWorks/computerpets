@@ -8,7 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from house_walkers import PHOTO_KEEP, POSE_OWNED, SNAKE_STAMPS
+from house_walkers import PHOTO_KEEP, POSE_OWNED, SNAKE_STAMPS, parchment_island_pixels
 
 ROOT = Path(__file__).resolve().parents[2]
 SPRITES = ROOT / "web" / "public" / "sprites"
@@ -95,6 +95,7 @@ def main() -> None:
                 crumbs.append(f"red_panda/{anim}/{i + 1}")
 
     shared = []
+    islands = []
     for key in sorted(POSE_OWNED):
         idle = SPRITES / key / "idle" / "1.png"
         walk = SPRITES / key / "walk" / "1.png"
@@ -103,6 +104,19 @@ def main() -> None:
             shared.append(f"{key}/walk")
         if idle.exists() and sleep.exists() and idle.read_bytes() == sleep.read_bytes():
             shared.append(f"{key}/sleep")
+        # A large tan splash that never touches the guest is not the house.
+        # A walkingstick and a jewelwing may stay a thread. Yeast foam may clump.
+        for anim in ("walk", "sit", "sleep", "talk", "eat", "play"):
+            frame = SPRITES / key / anim / "1.png"
+            if not frame.exists():
+                continue
+            # Yeast foam is many cells. A splash beside a frog is not foam.
+            if key == "yeast":
+                continue
+            isle = parchment_island_pixels(Image.open(frame))
+            # 4% of a 512 sheet, or 2500px. A second claw may sit apart.
+            if isle >= 2500:
+                islands.append(f"{key}/{anim}:{isle}")
 
     plated = sorted(set(plated))
     if plated:
@@ -113,7 +127,9 @@ def main() -> None:
         fail(f"magenta crumbs still on {crumbs[:12]} ({len(crumbs)})")
     if shared:
         fail(f"walk/sleep still share idle on {shared}")
-    print(f"ok 210 walkers, no plate, no thin stamp, rui crumbs gone, owned poses own")
+    if islands:
+        fail(f"parchment island still on {islands[:20]} ({len(islands)})")
+    print(f"ok 210 walkers, no plate, no thin stamp, rui crumbs gone, owned poses own, no parchment island")
 
 
 if __name__ == "__main__":
