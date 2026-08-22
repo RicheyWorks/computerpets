@@ -42,6 +42,20 @@ ANIMS = {
     "play": 4,
 }
 
+# Tan guests whose wash is also their hide. Ingest knocks the border only.
+TAN_SIT = {
+    "gecko",
+    "ghost_crab",
+    "hognose",
+    "knobbed_whelk",
+    "lions_mane",
+    "morel",
+    "oyster",
+    "rosy_boa",
+    "sloth",
+    "yeast",
+}
+
 # Photographs that already meet Rui's hand. Knock a plate if one remains.
 # A thin shared stamp in this set may still sit a house-hand painting.
 PHOTO_KEEP = {
@@ -483,6 +497,10 @@ def parchment_island_pixels(im: Image.Image) -> int:
         return 0
     # The guest is the ink, not the biggest tan splash.
     main = max(comps, key=lambda t: (t[1] - t[2], t[1]))
+    ink = sum(count - tan for _ident, count, tan in comps)
+    # A yeast foam or a tan gecko is the wash. A splash beside a frog is not.
+    if ink < 800:
+        return 0
     biggest = 0
     for ident, count, tan in comps:
         if ident == main[0]:
@@ -626,6 +644,33 @@ def clean_guest_matte(im: Image.Image, key: str = "", idle: bool = False) -> Ima
     if idle:
         return knocked
     # Pose sit fills again after a wash leaves. Idle stays the #92 hand.
+    return fit_like_rui(knocked, side=0.90)
+
+
+def knock_tiny_crumbs(im: Image.Image, limit: int = 48) -> Image.Image:
+    """Only specks leave. A tan guest may be many cells or a cream flank."""
+    import numpy as np
+
+    arr = np.array(im.convert("RGBA"))
+    seen, comps = _live_components(arr)
+    if not comps:
+        return im
+    main_id = max(comps, key=lambda t: t[1])[0]
+    keep = {ident for ident, count, _tan in comps if ident == main_id or count >= limit}
+    drop = (seen > 0) & ~np.isin(seen, list(keep))
+    arr[drop] = CLEAR
+    return Image.fromarray(arr, "RGBA")
+
+
+def ingest_tan_guest(path: Path, key: str) -> Image.Image:
+    """A tan guest is the wash. Knock the border. Do not eat the foam."""
+    raw = Image.open(path).convert("RGBA")
+    knocked = clear_wash_matte(raw)
+    knocked = clear_edge_matte(knocked, tol=20)
+    if not knocked.getbbox():
+        knocked = clear_edge_matte(raw, tol=14)
+    if knocked.getbbox():
+        knocked = knock_tiny_crumbs(knocked, limit=64)
     return fit_like_rui(knocked, side=0.90)
 
 
@@ -1261,6 +1306,49 @@ def fish(b: Brush, s: Spec, pose: dict):
         b.ell(-92, 6, 12, 6, (40, 20, 16), 200)
 
 
+def snake(b: Brush, s: Spec, pose: dict):
+    """A house snake. Coil, bands, or a hog of a snout. Not a worm."""
+    wave = pose.get("dx", 0) * 0.08
+    if s.tell == "bun" or s.tell == "saddle-coil":
+        for i, r in enumerate((70, 52, 36)):
+            b.ell(-8 + i * 6, 12 + i * 4, r, r * 0.72, mix(s.fur, s.ink, i * 0.12), 235)
+            b.scales(-8 + i * 6, 12 + i * 4, r * 0.8, r * 0.55, s.accent, 14)
+        b.ell(56, -8, 28, 16, s.fur, 240)
+        b.eye(68, -12, 6)
+        if s.tell == "saddle-coil":
+            b.ell(0, 4, 40, 18, s.accent, 90)
+        return
+    pts = [(-130 + t * 26, math.sin(t * 0.65 + wave) * (18 if s.tell != "heavy" else 12)) for t in range(12)]
+    for i, (x, y) in enumerate(pts[:-1]):
+        t = i / 11
+        rgb = s.fur
+        if s.tell == "bands" and i % 2 == 0:
+            rgb = s.accent
+        elif s.tell == "triad":
+            rgb = s.fur if i % 3 == 0 else s.ink if i % 3 == 1 else s.belly
+        elif s.tell == "stripes":
+            rgb = mix(s.fur, s.accent, 0.35 if i % 2 else 0)
+        elif s.tell == "three" and i % 3 == 0:
+            rgb = s.ink
+        elif s.tell == "labyrinth" and i % 2:
+            rgb = s.ink
+        elif s.tell == "saddle" and i % 3 == 1:
+            rgb = s.accent
+        b.ell(x, y, 26 - t * 8, 18 - t * 5, rgb, 235)
+        b.ell(x, y + 5, 14 - t * 4, 7, s.belly, 150)
+        if s.tell == "labyrinth":
+            b.ln(x - 8, y - 8, x + 8, y + 8, s.accent, 2, 120)
+    hx, hy = pts[0]
+    if s.tell == "snout":
+        b.ell(hx - 18, hy + 2, 22, 12, s.fur, 240)
+        b.poly([(hx - 36, hy + 2), (hx - 48, hy - 10), (hx - 28, hy - 4)], s.fur, 230)
+    else:
+        b.ell(hx - 12, hy, 20, 12, s.fur, 240)
+    b.eye(hx - 8, hy - 4, 6)
+    if pose.get("open", 0) > 0.2:
+        b.ell(hx - 22, hy + 8, 10, 6, s.ink, 200)
+
+
 def eel(b: Brush, s: Spec, pose: dict):
     pts = [(-140 + t * 28, math.sin(t * 0.7 + pose.get("dx", 0) * 0.1) * 22) for t in range(12)]
     for i, (x, y) in enumerate(pts[:-1]):
@@ -1818,6 +1906,7 @@ PLANS = {
     "mammal": mammal,
     "bat": bat,
     "bird": bird,
+    "snake": snake,
     "lizard": lizard,
     "croc": croc,
     "turtle": turtle,
@@ -1998,7 +2087,8 @@ def sit_pose_bodies_from(folder: Path, keys: list[str] | None = None) -> list[st
             print(f"skip {key}: no idle painting", flush=True)
             continue
         print(f"sit poses {key} {sorted(poses)}", flush=True)
-        bodies = {anim: ingest_body(path, key) for anim, path in poses.items()}
+        ingest = ingest_tan_guest if key in TAN_SIT else ingest_body
+        bodies = {anim: ingest(path, key) for anim, path in poses.items()}
         write_kind_from_poses(key, bodies)
         write_portrait(key)
         sat.append(key)

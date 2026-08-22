@@ -110,6 +110,9 @@ def main() -> None:
             frame = SPRITES / key / anim / "1.png"
             if not frame.exists():
                 continue
+            # Yeast foam is many cells. A splash beside a frog is not foam.
+            if key == "yeast":
+                continue
             isle = parchment_island_pixels(Image.open(frame))
             # 4% of a 512 sheet, or 2500px. A second claw may sit apart.
             if isle >= 2500:
