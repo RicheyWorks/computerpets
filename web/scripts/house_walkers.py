@@ -322,7 +322,7 @@ def fit_like_rui(img: Image.Image, out: int = OUT, side: float = 0.84) -> Image.
 DARK_MATTE = {
     "alligator", "american_eel", "black_bear", "caecilian", "click_beetle",
     "coli", "crayfish", "crow", "earwig", "field_cricket", "lamprey",
-    "millipede", "pileated", "raven", "robber_fly", "salamander", "skunk",
+    "leech", "millipede", "pileated", "raven", "robber_fly", "salamander", "skunk",
     "umbral", "vinegaroon", "widow",
 }
 
