@@ -682,13 +682,19 @@ def ingest_body(path: Path, key: str) -> Image.Image:
     """Knock the plate off a house-hand painting and sit it like Rui."""
     raw = Image.open(path).convert("RGBA")
     tol = 16 if key in DARK_MATTE else 30
-    # A parchment wash floods first. Then any leftover plate.
-    knocked = clear_wash_matte(raw)
-    knocked = clear_edge_matte(knocked, tol=tol)
-    if not knocked.getbbox():
-        knocked = clear_edge_matte(raw, tol=max(10, tol - 8))
-    if not knocked.getbbox():
-        knocked = clear_connected_plate(raw, luma=14)
+    # Paint's black bar-rims are hide. Edge-flood severs the tail.
+    if key == "clownfish":
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+    else:
+        # A parchment wash floods first. Then any leftover plate.
+        knocked = clear_wash_matte(raw)
+        knocked = clear_edge_matte(knocked, tol=tol)
+        if not knocked.getbbox():
+            knocked = clear_edge_matte(raw, tol=max(10, tol - 8))
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
     # A watercolor wash leaves a tan fringe. A short erode keeps the animal.
     if knocked.getbbox():
         r, g, b, a = knocked.split()
