@@ -10,6 +10,20 @@ Virtual pets that live on your computer.
 
 That page is a teacher. Click it. It has numbered steps. You do not need to know how to code.
 
+## Meet some of them
+
+There are **210** animals in this house. These are some of them.
+
+<p align="center">
+  <img src="docs/readme-friends.jpg" alt="Rui the red panda, Lunge the bass, Speck the brook trout, Whisk the catfish, Bar the perch, Night the walleye, Lance the pike, Silver the eel, Spoon the paddlefish, Penny the bluegill, Coin the goldfish, Reed the frog, Whorl the pond snail, Eft the newt, and Dapple the salamander" width="920">
+</p>
+
+<p align="center">
+  <img src="docs/readme-friends-more.jpg" alt="Pebble the toad, Pinch the crayfish, Hinge the mussel, Ink the turtle, Latch the leech, Prickle the stickleback, Ridge the brain coral, Wreath the anemone, Paint the clownfish, Scrape the parrotfish, Scrub the cleaner shrimp, Rue the fox, Slick the otter, Burr the hedgehog, and Wash the raccoon" width="920">
+</p>
+
+House names. The ones you say out loud.
+
 ## What you will do
 
 1. Install two free helpers (Git and Node). You only do this once.
