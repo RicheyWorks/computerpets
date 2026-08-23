@@ -44,6 +44,7 @@ ANIMS = {
 
 # Tan guests whose wash is also their hide. Ingest knocks the border only.
 TAN_SIT = {
+    "brain_coral",
     "gecko",
     "ghost_crab",
     "hognose",
