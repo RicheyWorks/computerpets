@@ -1,51 +1,56 @@
 # ComputerPets
 
-A living ecology. A natural-history house. Two hundred ten guests walk the blotter.
+Virtual pets that live on your computer.
 
-Keep them so a line does not go quiet. The nest is a room. The square sits on the paper. Neglect can close a line.
+<p align="center">
+  <img src="docs/readme-hero.jpg" alt="Rui the red panda, Paint the clownfish, Scrape the parrotfish, Wreath the anemone, and Reed the frog — five of two hundred ten ComputerPets" width="920">
+</p>
+
+<p align="center"><strong>210 animals.</strong> They live in your browser, and they can walk on your desktop.</p>
+
+## What it is
+
+ComputerPets is a Tamagotchi-style companion you run on your own machine. A pet sits in the browser. The same pets can also walk on your real Windows, Mac, or Linux desktop.
+
+There are **210** animals — red pandas, fish, frogs, and a lot more. You feed them, play with them, and let them sleep. If you ignore them they can get sick or leave.
+
+You can try one without signing in. **Rui the red panda** shows up as soon as you open the app.
+
+There is no public website and no store page yet. Clone the repo and run it locally.
+
+## Try it in the browser
+
+You need **Node 22+**.
 
 ```bash
 git clone https://github.com/RicheyWorks/computerpets
 cd computerpets
-```
-
-## How to sit with the house
-
-The living desk in `web/` is the first path. You need **Node 22+**.
-
-```bash
 cd web
 npm install
 npm run dev
 ```
 
-Vite listens on `0.0.0.0:8080`. Open [http://localhost:8080](http://localhost:8080) or [http://127.0.0.1:8080](http://127.0.0.1:8080).
+Then open [http://localhost:8080](http://localhost:8080) (or [http://127.0.0.1:8080](http://127.0.0.1:8080)). Rui is already there. No account required.
 
-Guests get Rui immediately. Sign in when you want to hatch, nest, and care.
+On a phone or tablet, open that same local page. You can Add to Home Screen if you want.
 
-The house nav is **Desk**, **Live**, and **Meet**. Then the dens: `/study`, `/snakes`, `/sea`, `/garden`, `/hive`, `/pond`, `/roost`, `/corner`, `/wood`, `/canopy`, `/stone`, `/creek`, `/log`, `/shore`, `/reef`, `/meadow`, `/cellar`, `/well`, `/far`. On a tablet they sit the blotter. On a phone they sit the tall blotter. A tap is a choice. A drag is a carry. A long-press tends. Open **Live** and Add to Home Screen.
+## Put them on your desktop
 
-Talk is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from local lines.
+Pets walk on **Windows, Mac, and Linux**. You don't need a license.
 
-## What you can do
+From the repo root:
 
-Walk the dens. Each room teaches its guests.
+```powershell
+# Windows
+.\desktop.ps1
+```
 
-Sign in. The hatch is a room. The draw lands you with the guest. The kennel is a room. The cards stay paper. The shelf is a room. The two hundred ten sit by den, not by rarity.
+```bash
+# Mac and Linux
+sh desktop.sh
+```
 
-Pair two you already keep at `/nest`. The nest is a room. The square sits on the paper.
-
-Feed them. Clean the blotter. Give medicine. Stay gone and a line can leave. The nest still keeps one.
-
-A guest walks at `/demo/{slug}` on this machine — rui, cup, felt, comb, frill, gleam, boot, and the rest of the house. The demo is a room. The guest is already walking.
-
-`/admin` is for operators. It is not in the house nav.
-
-## Also on your machine
-
-### Desktop overlay (`desktop/`)
-
-Windows, Mac, and Linux. Pets walk without a license.
+Or:
 
 ```bash
 cd desktop
@@ -53,15 +58,25 @@ npm install
 npm start
 ```
 
-From the repo root: Windows `.\desktop.ps1`, Mac and Linux `sh desktop.sh`.
-
-Right-click or use the tray: feed, play, rest, clean, medicine, hide, special. On a Mac the extra sits in the menu bar. On Linux the mark sits in the panel.
+Right-click the pet, or use the tray / menu bar: feed, play, rest, clean, medicine, hide, or a species special. On a Mac that extra control sits in the menu bar. On Linux it sits in the panel.
 
 More in [desktop/README.md](desktop/README.md).
 
-### PyQt blotter (`client/`)
+## What you can do
 
-Python 3.11+ (3.12 recommended). Pets walk without a license. Unlock is optional and fail-closed.
+- **Feed, play, rest, clean.** Give medicine if they get sick.
+- **Talk** is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from lines saved in the app.
+- Leave them alone too long and they can get hungry, unwell, or walk off until you call them back.
+
+Once the browser app is running on this machine, a single pet can also walk at `/demo/rui` (and other slugs). That page is **local only** — it is not a hosted demo.
+
+## Sign in, hatch, and nest (optional)
+
+Sign in when you want to hatch more pets, keep a collection, or pair two you already have at `/nest`. You do not need an account just to meet Rui.
+
+## Another desktop client (optional)
+
+A Python window lives in `client/`. Python 3.11+ (3.12 recommended). Pets walk without a license.
 
 ```bash
 cd client
@@ -73,26 +88,19 @@ python -m computerpets_client
 
 More in [client/README.md](client/README.md).
 
-## Unlock / backend (optional)
+## Unlock backend (optional, operators)
 
-You do not need Java to watch the blotter or walk the dens.
+You do not need Java to keep pets in the browser or on the desktop.
 
-The service at the repo root is only for ownership verify, license unlock, and the admin ledger. Java 21, Maven 3.9+. It needs `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, and `ADMIN_API_KEY`. Local run can use `RATE_LIMIT_BACKEND=memory` if Redis is not up.
+The service at the repo root is only for ownership verify, license unlock, and the admin ledger. It needs **Java 21**, **Maven 3.9+**, plus `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, and `ADMIN_API_KEY`. Local run can use `RATE_LIMIT_BACKEND=memory` if Redis is not up.
 
-The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at both. They do not share a door. Operators: [docs/SETUP.md](docs/SETUP.md). The unlock wire is [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md).
-
-## Features
-
-- Two hundred ten living kinds across the house, the den, the tide, the garden, the hive, the pond, the roost, the corner, the wood, the canopy, the stone, the creek, the log, the shore, the reef, the meadow, the cellar, the well, and the far den
-- A living desk in the browser, a native overlay, and a PyQt blotter
-- A nest that is a square. Neglect can close a line
-- Optional ownership verify. Fail-closed. Empty allowlists stay empty
+The browser app stays on **8080**. Java sits at **http://localhost:8081**. They do not share a port. Operators: [docs/SETUP.md](docs/SETUP.md). The unlock wire is [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md). `/admin` is for operators.
 
 ## Docs
 
-- [Living desk](web/README.md)
+- [Browser app](web/README.md)
 - [Desktop overlay](desktop/README.md)
-- [PyQt blotter](client/README.md)
+- [PyQt client](client/README.md)
 - [Setup](docs/SETUP.md) — Java backend, secrets, profiles
 - [Client contract](docs/CLIENT-CONTRACT.md)
 - [Documentation index](docs/README.md)
@@ -102,8 +110,8 @@ The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at
 
 ## License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE).
 
-See the [LICENSE](LICENSE) file for details.
+---
 
-Do not invent a public host, an NFT collection address, or a live Steam / Itch / Epic / Microsoft store ID. Those are not in this repo yet.
+*Two hundred ten living kinds. Keep them so a line does not go quiet.*
