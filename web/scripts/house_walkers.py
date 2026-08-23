@@ -51,6 +51,7 @@ TAN_SIT = {
     "lions_mane",
     "morel",
     "oyster",
+    "pond_snail",
     "rosy_boa",
     "sloth",
     "yeast",
