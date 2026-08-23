@@ -2,6 +2,8 @@
 
 Welcome to the **ComputerPets** documentation hub.
 
+**Never coded?** Start with [How to get your first pet](START-HERE.md). That page puts Rui on the real desktop.
+
 This repository contains the backend service for a secure, extensible platform that enables premium desktop virtual pets through verified ownership across multiple platforms (Steam, Ethereum NFTs, Microsoft Store, Itch.io, and Epic Games Store).
 
 The documentation in this folder is designed to help you understand the system architecture, get the project running locally, and contribute effectively.
@@ -37,6 +39,8 @@ For a deep technical understanding, start with the Architecture documentation.
 
 ## Getting Started
 
+Friends who have never coded should open [How to get your first pet](START-HERE.md) first.
+
 New to the project? Follow this recommended path:
 
 1. **Understand the System**  
@@ -57,6 +61,7 @@ New to the project? Follow this recommended path:
 
 | Document | Description |
 |----------|-------------|
+| **[How to get your first pet](START-HERE.md)** | Kid-facing steps: install the helpers, copy the house, put Rui on the real desktop. |
 | **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **Start here** for a complete understanding. |
 | **[Architecture Decision Records](adr/README.md)** | Numbered records of decisions already true on `main` (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron + PyQt contract clients, profiles + k8s). Not a wishlist. |
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |
