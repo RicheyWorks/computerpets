@@ -975,7 +975,7 @@ S("cleaner_shrimp", "shrimp", (220, 220, 224), (255, 255, 252), (40, 32, 28), (1
 def _more():
     extra = {
         "cleaner_shrimp": Spec("shrimp", (220, 220, 224), (255, 255, 252), (40, 32, 28), (196, 32, 40), "stripe", "Lysmata amboinensis"),
-        "sea_cucumber": Spec("worm", (120, 88, 64), (176, 140, 100), (36, 24, 16), (88, 60, 40), "wart", "Holothuria mexicana"),
+        "sea_cucumber": Spec("worm", (120, 88, 64), (176, 140, 100), (36, 24, 16), (88, 60, 40), "wart", "Thelenota ananas"),
         "lionfish": Spec("fish", (220, 196, 176), (196, 48, 40), (40, 24, 16), (32, 24, 20), "spines", "Pterois volitans"),
         "giant_clam": Spec("bivalve", (88, 120, 92), (220, 92, 120), (28, 36, 28), (255, 176, 72), "mantle", "Tridacna gigas"),
         "eagle_ray": Spec("ray", (48, 56, 72), (220, 216, 208), (16, 18, 24), (236, 232, 224), "spots", "Aetobatus narinari"),
