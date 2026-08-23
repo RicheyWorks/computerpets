@@ -1,5 +1,11 @@
 # How to get your first pet
 
+<p align="center">
+  <img src="readme-rui.jpg" alt="Rui the red panda, the first pet you meet" width="360">
+</p>
+
+<p align="center"><em>Rui the red panda, the first pet you meet.</em></p>
+
 Hi. This page is a teacher. You do not need to know how to code.
 
 You are going to put a ComputerPet **on your real desktop**. Not inside a game window. On top of your homework, your browser, everything. Rui the red panda walks there first.

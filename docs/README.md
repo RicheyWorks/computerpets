@@ -2,7 +2,7 @@
 
 Welcome to the **ComputerPets** documentation hub.
 
-**Never coded?** Start with [How to get your first pet](START-HERE.md). That page puts Rui on the real desktop.
+**Never coded?** Start with [How to get your first pet](START-HERE.md). That page puts Rui on the real desktop. Pictures of the house guests sit on the [front door](../README.md) (`readme-friends.jpg`).
 
 This repository contains the backend service for a secure, extensible platform that enables premium desktop virtual pets through verified ownership across multiple platforms (Steam, Ethereum NFTs, Microsoft Store, Itch.io, and Epic Games Store).
 
