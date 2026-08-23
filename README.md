@@ -6,107 +6,100 @@ Virtual pets that live on your computer.
   <img src="docs/readme-hero.jpg" alt="Rui the red panda, Paint the clownfish, Scrape the parrotfish, Wreath the anemone, and Reed the frog — five of two hundred ten ComputerPets" width="920">
 </p>
 
-<p align="center"><strong>210 animals.</strong> They live in your browser, and they can walk on your desktop.</p>
+**Start here: [How to get your first pet](docs/START-HERE.md)**
 
-## What it is
+That page is a teacher. Click it. It has numbered steps. You do not need to know how to code.
 
-ComputerPets is a Tamagotchi-style companion you run on your own machine. A pet sits in the browser. The same pets can also walk on your real Windows, Mac, or Linux desktop.
+## What you will do
 
-There are **210** animals — red pandas, fish, frogs, and a lot more. You feed them, play with them, and let them sleep. If you ignore them they can get sick or leave.
+1. Install two free helpers (Git and Node). You only do this once.
+2. Copy the pets onto your computer.
+3. Start them so a pet walks on your **real desktop**.
+4. Later, you can also visit them in a web browser if you want.
 
-You can try one without signing in. **Rui the red panda** shows up as soon as you open the app.
+There is no Steam, Itch, or Microsoft Store download yet. There is no `.exe` waiting on a website. You copy the pets from [this GitHub page](https://github.com/RicheyWorks/computerpets) and turn them on yourself. That is the real way.
 
-There is no public website and no store page yet. Clone the repo and run it locally.
+## Put a pet on your desktop
 
-## Try it in the browser
+This is the main thing. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. You do not need an account. You do not need a license.
 
-You need **Node 22+**.
+Windows first. Most friends are on Windows. The [start-here page](docs/START-HERE.md) shows every button.
 
-```bash
-git clone https://github.com/RicheyWorks/computerpets
-cd computerpets
-cd web
-npm install
-npm run dev
-```
+A tiny preview:
 
-Then open [http://localhost:8080](http://localhost:8080) (or [http://127.0.0.1:8080](http://127.0.0.1:8080)). Rui is already there. No account required.
-
-On a phone or tablet, open that same local page. You can Add to Home Screen if you want.
-
-## Put them on your desktop
-
-Pets walk on **Windows, Mac, and Linux**. You don't need a license.
-
-From the repo root:
+1. Install [Git](https://git-scm.com) (or [GitHub Desktop](https://desktop.github.com) if you like pictures more than typing).
+2. Install [Node](https://nodejs.org). Click the big **LTS** button. LTS means "the safe version." You want version 22 or newer. Node is a free helper app the pets need. You do not have to learn it. You only install it once.
+3. Copy the pets. Use GitHub Desktop, or type `git clone https://github.com/RicheyWorks/computerpets` into a folder **you** pick.
+4. Open PowerShell **in that folder** (the `computerpets` folder that has `desktop.ps1` in it).
+5. Type this and press Enter:
 
 ```powershell
-# Windows
 .\desktop.ps1
 ```
 
-```bash
-# Mac and Linux
-sh desktop.sh
-```
+Or, if the computer will not run that script:
 
-Or:
-
-```bash
+```powershell
 cd desktop
 npm install
 npm start
 ```
 
-Right-click the pet, or use the tray / menu bar: feed, play, rest, clean, medicine, hide, or a species special. On a Mac that extra control sits in the menu bar. On Linux it sits in the panel.
+The first time can take a few minutes. `npm install` means "get the pieces." Leave the window open. A pet should walk on your real desktop.
+
+- **First click** is a sit.
+- **Drag** is a carry.
+- **Right-click** the pet, or use the little tray icon by the clock: feed, play, rest, clean, medicine, hide.
+
+### Mac
+
+Same helpers. Then in Terminal, inside the `computerpets` folder:
+
+```bash
+sh desktop.sh
+```
+
+The extra control sits in the menu bar.
+
+### Linux
+
+Same helpers. Then:
+
+```bash
+sh desktop.sh
+```
+
+The mark sits in the panel.
 
 More in [desktop/README.md](desktop/README.md).
 
-## What you can do
+## How to take care of them
 
-- **Feed, play, rest, clean.** Give medicine if they get sick.
-- **Talk** is optional. Set `XAI_API_KEY` if you want Grok. Without it, Rui still answers from lines saved in the app.
-- Leave them alone too long and they can get hungry, unwell, or walk off until you call them back.
+Feed them when they look hungry. Play so they stay happy. Let them rest when they look tired. Clean up the mess they leave. Give medicine if they get sick.
 
-Once the browser app is running on this machine, a single pet can also walk at `/demo/rui` (and other slugs). That page is **local only** — it is not a hosted demo.
+If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
 
-## Sign in, hatch, and nest (optional)
+There are **210** animals. Rui is the first one you meet.
 
-Sign in when you want to hatch more pets, keep a collection, or pair two you already have at `/nest`. You do not need an account just to meet Rui.
+## Another way to visit them (browser)
 
-## Another desktop client (optional)
+After the helpers are installed, you can also open the pets in Chrome or Edge. This is optional. The desktop walk is the main quest.
 
-A Python window lives in `client/`. Python 3.11+ (3.12 recommended). Pets walk without a license.
-
-```bash
-cd client
-python3 -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -e ".[dev]"
-python -m computerpets_client
+```powershell
+cd web
+npm install
+npm run dev
 ```
 
-More in [client/README.md](client/README.md).
+Then open [http://localhost:8080](http://localhost:8080). Localhost means "this computer," not the internet. Rui is already there. No account.
 
-## Unlock backend (optional, operators)
+A page like `/demo/rui` only works on your own computer. It is not a website for the whole internet.
 
-You do not need Java to keep pets in the browser or on the desktop.
+## Grown-up notes
 
-The service at the repo root is only for ownership verify, license unlock, and the admin ledger. It needs **Java 21**, **Maven 3.9+**, plus `LICENSE_SECRET_KEY`, `JWT_SECRET_KEY`, `BUNDLE_SIGNING_KEY`, and `ADMIN_API_KEY`. Local run can use `RATE_LIMIT_BACKEND=memory` if Redis is not up.
+Unlock, Java, and secrets are **not** for meeting Rui. Pets already walk without a license. Operators: [docs/SETUP.md](docs/SETUP.md).
 
-The browser app stays on **8080**. Java sits at **http://localhost:8081**. They do not share a port. Operators: [docs/SETUP.md](docs/SETUP.md). The unlock wire is [docs/CLIENT-CONTRACT.md](docs/CLIENT-CONTRACT.md). `/admin` is for operators.
-
-## Docs
-
-- [Browser app](web/README.md)
-- [Desktop overlay](desktop/README.md)
-- [PyQt client](client/README.md)
-- [Setup](docs/SETUP.md) — Java backend, secrets, profiles
-- [Client contract](docs/CLIENT-CONTRACT.md)
-- [Documentation index](docs/README.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [ADRs](docs/adr/README.md)
-- [Contributing](CONTRIBUTING.md)
+More pages: [docs/README.md](docs/README.md).
 
 ## License
 
