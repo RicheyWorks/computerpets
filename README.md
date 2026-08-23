@@ -37,7 +37,7 @@ Pair two you already keep at `/nest`. The nest is a room. The square sits on the
 
 Feed them. Clean the blotter. Give medicine. Stay gone and a line can leave. The nest still keeps one.
 
-Share one guest at `/demo/{slug}` — rui, cup, felt, comb, frill, gleam, boot, and the rest of the house. The demo is a room. The guest is already walking.
+A guest walks at `/demo/{slug}` on this machine — rui, cup, felt, comb, frill, gleam, boot, and the rest of the house. The demo is a room. The guest is already walking.
 
 `/admin` is for operators. It is not in the house nav.
 
@@ -83,7 +83,7 @@ The desk keeps 8080. Java sits at **http://localhost:8081**. A keeper can sit at
 
 ## Features
 
-- Two hundred ten living kinds across the house, the dens, the tide, the garden, the hive, the pond, the roost, the corner, the wood, the canopy, the stone, the creek, the log, the shore, the reef, the meadow, the cellar, the well, and the far den
+- Two hundred ten living kinds across the house, the den, the tide, the garden, the hive, the pond, the roost, the corner, the wood, the canopy, the stone, the creek, the log, the shore, the reef, the meadow, the cellar, the well, and the far den
 - A living desk in the browser, a native overlay, and a PyQt blotter
 - A nest that is a square. Neglect can close a line
 - Optional ownership verify. Fail-closed. Empty allowlists stay empty
