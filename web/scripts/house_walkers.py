@@ -969,6 +969,35 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "chickadee":
+        # Dee's black cap, black bib, and dark legs nick when default
+        # plate-flood treats hide as black. Idle tore the cap and
+        # punched the white throat (~63k live against luma-8's ~71k).
+        # Sit lost the cap and the bib (~74k against 84k). Walk
+        # punched the face (~53k against 61k). Talk nicked the
+        # crown (~72k against 82k). Eat bit the cheek (~62k
+        # against 66k). Play nicked the inverted bib. Sleep
+        # survived default counts (~107k), but the same flood
+        # still ate the working poses. Buff flanks are hide, not
+        # Pale's wash — TAN_SIT is other keys. DARK_MATTE already
+        # lists crow and raven; that membership stays. The plate
+        # on these raws is actually black, so luma-8 knocks it
+        # (fill ~0.24–0.41, not a cream-plate leftover at ~0.78).
+        # Hook's red_tail elif stays Hook's. Hold's kelp elif
+        # stays Hold's. Rod's coli elif stays Rod's. Luma-8
+        # keeps the whole chickadee. knock_tiny_crumbs keeps
+        # specks off. Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
