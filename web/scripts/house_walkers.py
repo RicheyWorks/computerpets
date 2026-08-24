@@ -1083,6 +1083,37 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "pileated":
+        # Drum's black body and red crest nick when default plate-flood treats
+        # hide as black. Sleep tore the tucked body (~24k live against luma-8's
+        # ~55k, dark ~570 against ~3.7k) and left a head. Walk lost the hitch
+        # (~40k against ~49k). Sit nicked the settled drum (~42k against ~47k).
+        # Eat lost hide around the grub (~42k against ~50k). Play nicked the
+        # unfurled wing (~79k against ~87k). Idle and talk kept more mid-luma
+        # fringe on default, but the same flood still ate charcoal hide
+        # (idle dark ~1.2k against luma-8's ~2.7k). Black body, red crest, and
+        # white neck stripe are hide, not Pale's wash — TAN_SIT is other keys.
+        # Tan bark leftovers were furniture, not hide. DARK_MATTE already
+        # lists crow, raven, and pileated; that membership stays. I did not
+        # add pileated. That set still ate dark hide on these raws. The plate
+        # on these raws is actually black, so luma-8 knocks it (fill
+        # ~0.69–0.80, med luma 0, not a cream-plate leftover that luma-8
+        # would keep at ~0.78). Vee's canada_goose elif stays Vee's. Drake's
+        # mallard elif stays Drake's. Brick's robin elif stays Brick's. Dee's
+        # chickadee elif stays Dee's. Hook's red_tail elif stays Hook's.
+        # Hold's kelp elif stays Hold's. Rod's coli elif stays Rod's. Luma-8
+        # keeps the whole woodpecker. knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
