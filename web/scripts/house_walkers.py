@@ -750,6 +750,19 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_island_crumbs(knocked)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "limpet":
+        # Cone's dark olive grooves, tentacle shadow, and radula
+        # nick when default plate-flood treats them as black.
+        # Talk tore the ribs and left the foot a detached scrap.
+        # Sit punched a hole in the cone. Idle lost the dark
+        # mottling (~10k dark against luma-8's ~17k). Cream
+        # growth bands and the pale foot survive default — they
+        # are not Pale's wash. Luma-8 keeps the cone. Guest-only.
+        # Not a catalog wash. Not TAN_SIT — olive ribs are hide,
+        # not parchment. Not DARK_MATTE — that set is other keys.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
