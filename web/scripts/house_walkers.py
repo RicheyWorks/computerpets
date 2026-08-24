@@ -918,6 +918,30 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "coli":
+        # Rod's dark olive envelope and thin flagella nick when
+        # default plate-flood treats the underside as black.
+        # Walk lost the run (~36k live against luma-8's ~43k)
+        # and bit the lower envelope. Idle survived default
+        # counts, but the same flood that keeps a crow pupil
+        # still nicked the working flagella on a run. Tan
+        # leftover was the smiling pill, not Pale's wash —
+        # TAN_SIT is other keys. DARK_MATTE already lists
+        # coli; that membership stays. The default
+        # wash+edge+MinFilter+islands+fringe path still
+        # nicked the run. Luma-8 keeps the rod and the
+        # flagella. knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not TAN_SIT.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
