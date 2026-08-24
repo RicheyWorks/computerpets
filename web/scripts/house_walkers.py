@@ -1439,6 +1439,52 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "vinegaroon":
+        # Whip's dark hide, bulky pedipalps, and thin flagellum nick
+        # when default plate-flood treats hide as black. Sit lost
+        # dark hide (~17k dark against luma-8's ~21k; live ~37k
+        # against ~41k). Eat lost the grasp (~38k live against
+        # luma-8's ~42k, dark ~19k against ~23k). Talk left a
+        # blown plate (~79k live against luma-8's ~25k). Sleep
+        # lost the legs and kept mid-luma fringe (~48k live
+        # against luma-8's ~46k). Play left detached feelers.
+        # Walk kept extra fringe on default (~35k against luma-8's
+        # ~22k). Dark mottled hide is hide, not plate. TAN_SIT is
+        # other keys. I did not join. Parchment leftovers, the
+        # walk island, the sit island, the sleep dirt, the talk
+        # scrap, the eat tray, and the play scrap were furniture,
+        # not hide. DARK_MATTE already lists crow, raven,
+        # pileated, widow, and vinegaroon; that membership stays.
+        # I did not add vinegaroon. That set still ate dark hide
+        # on these raws (DARK_MATTE tol is the default path). The
+        # plate on these raws is actually black, so luma-8 knocks
+        # it (fill ~0.08–0.17, med luma 0, not a cream-plate
+        # leftover that luma-8 would keep at ~0.78). Leftover
+        # idle was already a house-hand giant vinegaroon on a
+        # clear plate (fill ~0.14, 264 hues). Barb's scorpion
+        # elif stays Barb's. Stem's harvestman elif stays Stem's.
+        # Hour's widow elif stays Hour's. Velvet's tarantula elif
+        # stays Velvet's. Prowl's wolf_spider elif stays Prowl's.
+        # Leap's jumping_spider elif stays Leap's. Loom's
+        # orb_weaver elif stays Loom's. Sip's hummingbird elif
+        # stays Sip's. Drum's pileated elif stays Drum's. Vee's
+        # canada_goose elif stays Vee's. Drake's mallard elif
+        # stays Drake's. Brick's robin elif stays Brick's. Dee's
+        # chickadee elif stays Dee's. Hook's red_tail elif stays
+        # Hook's. Hold's kelp elif stays Hold's. Rod's coli elif
+        # stays Rod's. Luma-8 keeps the whole giant vinegaroon.
+        # knock_tiny_crumbs keeps specks off. Guest-only. Not a
+        # catalog wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
