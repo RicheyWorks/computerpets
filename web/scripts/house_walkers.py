@@ -683,7 +683,8 @@ def ingest_body(path: Path, key: str) -> Image.Image:
     raw = Image.open(path).convert("RGBA")
     tol = 16 if key in DARK_MATTE else 30
     # Paint's black bar-rims are hide. Edge-flood severs the tail.
-    if key == "clownfish":
+    # Hide's chocolate bars are hide too. Default plate-flood nicks the tail.
+    if key in {"clownfish", "grouper"}:
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
@@ -979,7 +980,7 @@ def _more():
         "lionfish": Spec("fish", (220, 196, 176), (196, 48, 40), (40, 24, 16), (32, 24, 20), "spines", "Pterois volitans"),
         "giant_clam": Spec("bivalve", (88, 120, 92), (220, 92, 120), (28, 36, 28), (255, 176, 72), "mantle", "Tridacna gigas"),
         "eagle_ray": Spec("ray", (48, 56, 72), (220, 216, 208), (16, 18, 24), (236, 232, 224), "spots", "Aetobatus narinari"),
-        "grouper": Spec("fish", (92, 108, 72), (176, 188, 120), (28, 32, 20), (48, 56, 36), "thick", "Epinephelus itajara"),
+        "grouper": Spec("fish", (92, 108, 72), (176, 188, 120), (28, 32, 20), (48, 56, 36), "thick", "Epinephelus striatus"),
         "fiddler_crab": Spec("crab", (156, 92, 56), (212, 172, 120), (24, 16, 12), (196, 120, 48), "signal", "Minuca pugnax"),
         "ghost_crab": Spec("crab", (220, 204, 172), (236, 224, 200), (40, 32, 24), (188, 172, 140), "stalk", "Ocypode quadrata"),
         "limpet": Spec("shell", (132, 116, 96), (188, 172, 148), (40, 32, 24), (88, 72, 56), "cone", "Patella vulgata"),
