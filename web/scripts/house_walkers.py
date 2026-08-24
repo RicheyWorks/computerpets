@@ -702,6 +702,14 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
+    elif key == "manta":
+        # Kite's charcoal dorsal and wing shadow nick when default
+        # plate-flood treats them as black. White shoulder patches and
+        # ventral white survive. Luma-8 keeps the kite. Guest-only.
+        # Not a catalog wash. Not DARK_MATTE — that set still nicked sleep.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
