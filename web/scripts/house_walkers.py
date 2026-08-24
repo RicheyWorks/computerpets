@@ -942,6 +942,33 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "red_tail":
+        # Hook's dark scalloped wing shadow and hooked bill nick
+        # when default plate-flood treats feather dark as black.
+        # Idle tore the wing from the breast (~83k live against
+        # luma-8's ~94k) and left the rusty fan a second part.
+        # Sit lost the torso. Walk punched the chest. Sleep
+        # bit the tucked neck and ate cream hide (~5k against
+        # luma-8's ~10k). Pale cream belly and rusty tail are
+        # hide, not Pale's wash — TAN_SIT is other keys and
+        # holed idle. DARK_MATTE is other keys (crow, raven
+        # stay); that fringe still ate sleep cream. The plate
+        # on these raws is actually black, so luma-8 knocks
+        # it (fill ~0.24–0.42, not a cream-plate leftover at
+        # ~0.78). Hold's kelp elif stays Hold's. Rod's coli
+        # elif stays Rod's. Luma-8 keeps the whole hawk.
+        # knock_tiny_crumbs keeps specks off. Guest-only.
+        # Not a catalog wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
