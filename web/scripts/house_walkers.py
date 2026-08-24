@@ -777,6 +777,30 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
+    elif key == "sand_dollar":
+        # Token's cream disk and living fringe nick when
+        # knock_parchment_fringe treats velvety hide as Pale's
+        # wash. Purple petals are a non-tan core, so flood_all
+        # eats cream from the edge. Sleep lost the left pad
+        # and punched holes in the disk (~80k against a
+        # border-only ~99k). Idle, walk, sit, talk, eat, and
+        # play survived default counts, but the fringe that
+        # eats a wash eats Token. Guest-only. Not a catalog
+        # wash. Not TAN_SIT — cream hide is not Pale's wash.
+        # Not DARK_MATTE — that set is other keys.
+        knocked = clear_wash_matte(raw)
+        knocked = clear_edge_matte(knocked, tol=30)
+        if not knocked.getbbox():
+            knocked = clear_edge_matte(raw, tol=22)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_island_crumbs(knocked)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
