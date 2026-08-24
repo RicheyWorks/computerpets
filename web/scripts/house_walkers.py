@@ -1053,6 +1053,36 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "canada_goose":
+        # Vee's black head and long neck nick when default plate-flood treats
+        # hide as black. Idle tore the crown and the chinstrap (~82k live
+        # against luma-8's ~64k, dark ~2k against ~8k) and left a headless
+        # body. Walk lost the head. Talk lost the honk. Eat lost the graze.
+        # Play lost the flying V. Sit ate the neck (~2k dark against ~15k).
+        # Sleep kept more of the loaf than the leftovers, but default still
+        # nicked the tucked hide (~15k against ~20k) and bit the cream
+        # breast. White chinstrap and cream breast are hide, not Pale's
+        # wash — TAN_SIT is other keys. DARK_MATTE already lists crow and
+        # raven; that membership stays. That set still ate dark hide on
+        # these raws (~4k against luma-8's ~8k on idle). The plate on these
+        # raws is actually black, so luma-8 knocks it (fill ~0.59–0.78,
+        # med luma 0, not a cream-plate leftover that luma-8 would keep at
+        # ~0.78). Drake's mallard elif stays Drake's. Brick's robin elif
+        # stays Brick's. Dee's chickadee elif stays Dee's. Hook's red_tail
+        # elif stays Hook's. Hold's kelp elif stays Hold's. Rod's coli
+        # elif stays Rod's. Luma-8 keeps the whole goose. knock_tiny_crumbs
+        # keeps specks off. Guest-only. Not a catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
