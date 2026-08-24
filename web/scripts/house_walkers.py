@@ -49,7 +49,6 @@ TAN_SIT = {
     "gecko",
     "ghost_crab",
     "hognose",
-    "knobbed_whelk",
     "lions_mane",
     "morel",
     "oyster",
@@ -813,6 +812,30 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         # core. Guest-only. Not a catalog wash. Not
         # TAN_SIT. Not DARK_MATTE — that set is other
         # keys.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_island_crumbs(knocked)
+        return fit_like_rui(knocked, side=0.90)
+    elif key == "knobbed_whelk":
+        # Knurl's cream shell and orange knobs nick when
+        # default plate-flood treats dark aperture shadow
+        # as black. Idle punched a hole in the lip
+        # (~1932). Sleep bit the spiral (~65k against
+        # luma-8's ~72k, ~1509 holes). Orange knobs are
+        # a non-tan core, so parchment fringe flood_all
+        # eats cream hide. TAN_SIT keeps counts but
+        # sleep still holed (~94), and the hide is a
+        # cream-and-orange spiral, not Pale's wash.
+        # Luma-8 keeps the knurl, the operculum, and
+        # the clam of a treaty. Guest-only. Not a
+        # catalog wash. Not TAN_SIT. Not DARK_MATTE —
+        # that set is other keys.
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
