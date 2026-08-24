@@ -684,7 +684,8 @@ def ingest_body(path: Path, key: str) -> Image.Image:
     tol = 16 if key in DARK_MATTE else 30
     # Paint's black bar-rims are hide. Edge-flood severs the tail.
     # Hide's chocolate bars are hide too. Default plate-flood nicks the tail.
-    if key in {"clownfish", "grouper"}:
+    # Cup's rust hide nicks the same way: mantle holes if flood treats dark rust as plate.
+    if key in {"clownfish", "grouper", "octopus"}:
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
