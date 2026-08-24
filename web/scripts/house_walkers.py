@@ -1185,6 +1185,46 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "jumping_spider":
+        # Leap's dark hide, white abdominal spots, green chelicerae, and
+        # front eyes nick when default plate-flood treats hide as black.
+        # Walk tore the cephalothorax and ate the green (~69k live against
+        # luma-8's ~36k, dark ~370 against ~4.6k, green 0 against ~783).
+        # Sit lost the face (~37k against ~62k, green 0 against ~1.5k).
+        # Sleep tore the tucked body (~43k against ~103k, dark ~1.0k
+        # against ~21k). Talk lost the speak (~34k against ~71k, dark
+        # ~1.5k against ~14k). Eat left a holed hunt (~33k against ~86k).
+        # Play tore the coil (~42k against ~105k). White spots and pale
+        # leg bands are hide, not Pale's wash — TAN_SIT is other keys
+        # and still nicked dark (walk dark ~1.6k against ~4.6k; talk
+        # ~3.5k against ~14k). I did not join. Moss, earth, and
+        # parchment leftovers were furniture, not hide. DARK_MATTE
+        # already lists crow, raven, pileated, widow, and vinegaroon;
+        # that membership stays. I did not add jumping_spider. That set
+        # can nick pale hide and still ate walk (~22k against luma-8's
+        # ~32k). The plate on these raws is actually black, so luma-8
+        # knocks it (fill ~0.72–0.79, med luma 0, not a cream-plate
+        # leftover that luma-8 would keep at ~0.78). Leftover idle was
+        # already a house-hand jumper on a clear plate (fill ~0.20).
+        # Loom's orb_weaver elif stays Loom's. Sip's hummingbird elif
+        # stays Sip's. Drum's pileated elif stays Drum's. Vee's
+        # canada_goose elif stays Vee's. Drake's mallard elif stays
+        # Drake's. Brick's robin elif stays Brick's. Dee's chickadee
+        # elif stays Dee's. Hook's red_tail elif stays Hook's. Hold's
+        # kelp elif stays Hold's. Rod's coli elif stays Rod's. Luma-8
+        # keeps the whole bold jumper. knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
