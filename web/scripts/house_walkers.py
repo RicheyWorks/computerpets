@@ -1899,6 +1899,68 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "opossum":
+        # Grin's dark eye stripes, dark ears, dark eyes, and
+        # charcoal legs nick when default plate-flood treats hide
+        # as black or as Pale's wash. Sit lost live hide (~106k
+        # against luma-8's ~115k, dark ~3.4k against ~8.7k) and
+        # jagged the still. Walk lost the gait (~81k live against
+        # luma-8's ~90k, dark ~3.1k against ~6.7k) and nicked the
+        # paws. Sleep tore the curl (~89k live against luma-8's
+        # ~99k, dark ~3.3k against ~9.9k) and nicked the ear.
+        # Talk lost the speak (~80k live against luma-8's ~89k,
+        # dark ~2.8k against ~6.2k) and jagged the chin. Eat
+        # nicked the chew (~82k live against luma-8's ~90k, dark
+        # ~3.8k against ~7.4k) and punched the paws. Play jagged
+        # the still (~3.5k lost, dark ~974 against luma-8's
+        # ~4.1k). White face, white guard hairs, pink nose, pink
+        # tail, and pink paws are hide, not Pale's wash — they
+        # can look like tan wash; they are Didelphis. TAN_SIT is
+        # other keys. I did not join. That path still lost sit
+        # pink (~24k against luma-8's ~26k) and talk white (~6.5k
+        # against ~6.9k). Ground islands, parchment leftovers,
+        # the sit island, the walk patch, the sleep earth, the
+        # talk dirt, the eat torn parchment, and the play painted
+        # branch were furniture, not hide. A fruit in eat is
+        # living food and stayed. DARK_MATTE already lists crow,
+        # raven, pileated, widow, vinegaroon, and skunk; that
+        # membership stays. I did not add opossum. That set still
+        # nicked charcoal hide (sit dark ~6.5k against luma-8's
+        # ~8.7k; sleep dark ~6.8k against ~9.9k). The plate on
+        # these raws is actually black, so luma-8 knocks it (fill
+        # ~0.28–0.44, med luma 0, not a cream-plate leftover that
+        # luma-8 would keep at ~0.78). Leftover idle was already
+        # a house-hand Virginia opossum on a clear plate (fill
+        # ~0.29, 237 hues). Stripe's skunk elif stays Stripe's.
+        # Wash's raccoon elif stays Wash's. Slick's otter elif
+        # stays Slick's. Cache's squirrel elif stays Cache's.
+        # Cape's bat elif stays Cape's. Rack's deer elif stays
+        # Rack's. Gale's solifuge elif stays Gale's. Clasp's tick
+        # elif stays Clasp's. Whip's vinegaroon elif stays
+        # Whip's. Barb's scorpion elif stays Barb's. Stem's
+        # harvestman elif stays Stem's. Hour's widow elif stays
+        # Hour's. Velvet's tarantula elif stays Velvet's. Prowl's
+        # wolf_spider elif stays Prowl's. Leap's jumping_spider
+        # elif stays Leap's. Loom's orb_weaver elif stays Loom's.
+        # Sip's hummingbird elif stays Sip's. Drum's pileated
+        # elif stays Drum's. Vee's canada_goose elif stays Vee's.
+        # Drake's mallard elif stays Drake's. Brick's robin elif
+        # stays Brick's. Dee's chickadee elif stays Dee's. Hook's
+        # red_tail elif stays Hook's. Hold's kelp elif stays
+        # Hold's. Rod's coli elif stays Rod's. Luma-8 keeps the
+        # whole Virginia opossum. knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
