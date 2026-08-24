@@ -763,6 +763,20 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
+    elif key == "periwinkle":
+        # Spire's charcoal spiral, pebbled foot, and tentacle
+        # shadow nick when default plate-flood treats them as
+        # black. Idle tore the shell from the foot. Sleep lost
+        # the pad (~79k against luma-8's ~98k). Talk lost the
+        # raised eyestalks (~48k against 68k). Play punched
+        # holes in the rasp (~60k against 89k). Idle dark hide
+        # ~1k against luma-8's ~10k. Tan mottling is hide, not
+        # Pale's wash — TAN_SIT is other keys. DARK_MATTE is
+        # other keys and still nicked sleep. Luma-8 keeps the
+        # spire. Guest-only. Not a catalog wash.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
