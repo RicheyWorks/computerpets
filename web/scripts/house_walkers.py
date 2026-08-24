@@ -1673,6 +1673,56 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "squirrel":
+        # Cache's dark eyes, dark paws, and dark ear interiors nick when
+        # default plate-flood treats hide as black or as Pale's wash. Sit
+        # lost dark hide (~4.5k against luma-8's ~5.2k; live ~125k against
+        # ~127k) and left a torn hole in the eye. Talk lost the speak
+        # (~126k live against luma-8's ~129k, dark ~4.2k against ~4.8k)
+        # and dropped hind-foot pads. Walk nicked the same dark paws
+        # (~212 against ~393). Play nicked the chase (~336 against ~700).
+        # Eat nicked the chew (~4.0k dark against ~4.6k). Sleep nicked
+        # the curl (~4.4k against ~5.0k). Cream belly, white chest,
+        # silver-gray fur, and tan face are hide, not Pale's wash —
+        # they can look like tan wash; they are Sciurus. TAN_SIT is
+        # other keys. I did not join. That path can keep a tan halo and
+        # still is other keys. Parchment leftovers, the walk splash, the
+        # sit island, the sleep island, the talk wash and ground patch,
+        # the eat island, and the play island were furniture, not hide.
+        # DARK_MATTE already lists crow, raven, pileated, widow, and
+        # vinegaroon; that membership stays. I did not add squirrel.
+        # That set can nick pale cream hide and tan face. The plate on
+        # these raws is actually black, so luma-8 knocks it (fill
+        # ~0.15–0.56, med luma 0, not a cream-plate leftover that
+        # luma-8 would keep at ~0.78). Leftover idle was already a
+        # house-hand Eastern gray squirrel on a clear plate (fill
+        # ~0.42, 264 hues). Cape's bat elif stays Cape's. Rack's deer
+        # elif stays Rack's. Gale's solifuge elif stays Gale's.
+        # Clasp's tick elif stays Clasp's. Whip's vinegaroon elif
+        # stays Whip's. Barb's scorpion elif stays Barb's. Stem's
+        # harvestman elif stays Stem's. Hour's widow elif stays
+        # Hour's. Velvet's tarantula elif stays Velvet's. Prowl's
+        # wolf_spider elif stays Prowl's. Leap's jumping_spider
+        # elif stays Leap's. Loom's orb_weaver elif stays Loom's.
+        # Sip's hummingbird elif stays Sip's. Drum's pileated elif
+        # stays Drum's. Vee's canada_goose elif stays Vee's.
+        # Drake's mallard elif stays Drake's. Brick's robin elif
+        # stays Brick's. Dee's chickadee elif stays Dee's. Hook's
+        # red_tail elif stays Hook's. Hold's kelp elif stays
+        # Hold's. Rod's coli elif stays Rod's. Luma-8 keeps the
+        # whole Eastern gray squirrel. knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
