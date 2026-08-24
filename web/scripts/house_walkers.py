@@ -801,6 +801,28 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_island_crumbs(knocked)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "sea_urchin":
+        # Thorn's dark grooves between spines nick when
+        # default plate-flood treats them as black. Idle
+        # lost the globe (~54k against luma-8's ~89k).
+        # Sleep lost the quiet spine (~51k against 96k).
+        # Walk nicked the spines above the tube feet.
+        # Purple hide is not Pale's wash. The kelp of a
+        # treaty is tan; parchment fringe treats it as
+        # wash because the purple globe is a non-tan
+        # core. Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE — that set is other
+        # keys.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_island_crumbs(knocked)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
