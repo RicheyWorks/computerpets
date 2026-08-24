@@ -870,6 +870,28 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "paramecium":
+        # Boot's dark oral groove (speaking, bacteria of a
+        # treaty) nicks when default plate-flood treats the
+        # groove as black. Idle lost the groove (~349 dark
+        # against luma-8's ~1412). Sit lost ~353 against
+        # 1924. Play lost ~952 against 2114. Eat lost the
+        # dark bolus (~1894 against 2424). Cream cilia
+        # survive default — the Token fringe that eats a
+        # wash does not eat Boot's oars. Olive hide is not
+        # Pale's wash — TAN_SIT is other keys. DARK_MATTE
+        # is other keys. Luma-8 keeps the groove. Guest-only.
+        # Not a catalog wash.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
