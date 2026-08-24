@@ -892,6 +892,32 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "kelp":
+        # Hold's dark holdfast fibers nick when default
+        # plate-flood treats them as black. Idle lost the
+        # holdfast (~8k dark against luma-8's ~29k) and
+        # punched holes in the blades (~57k live against
+        # 107k). Sleep lost the quiet forest (~24k against
+        # 64k). Walk's blades severed from the stipe.
+        # Brown/gold blades are hide, not Pale's wash —
+        # TAN_SIT is other keys. knock_parchment_fringe
+        # did not eat the forest on luma-8 (live unchanged
+        # on idle). Default edge+islands already gutted
+        # the holdfast before fringe ran. Luma-8 keeps
+        # the holdfast. knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE — that set is other
+        # keys.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
