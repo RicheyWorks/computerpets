@@ -1838,6 +1838,67 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "skunk":
+        # Stripe's jet-black hide, dark eyes, dark nose, and dark
+        # paws nick when default plate-flood treats hide as black
+        # or as Pale's wash. Sit lost live hide (~60k against
+        # luma-8's ~69k, dark ~5.8k against ~8.8k) and jagged the
+        # crouch. Talk lost the speak (~51k live against luma-8's
+        # ~62k, dark ~4.3k against ~8.5k) and dropped the paws.
+        # Eat nicked the chew (~56k live against luma-8's ~66k,
+        # dark ~6.6k against ~10.5k) and dropped the grub. Sleep
+        # nicked the curl (~95k live against luma-8's ~100k, dark
+        # ~23k against ~27k). Walk lost the gait (~45k live
+        # against luma-8's ~60k, dark ~1.0k against ~14k) and
+        # cropped the belly. Play dropped the stamp (~57k live
+        # against luma-8's ~69k, dark ~4.0k against ~31k) and
+        # ate the hind legs. White stripes, white tail hairs, and
+        # the white face line are hide, not Pale's wash — they
+        # can look like tan wash; they are Mephitis. TAN_SIT is
+        # other keys. I did not join. That path still lost sleep
+        # dark (~880 against luma-8's ~27k) and eat dark (~776
+        # against ~10.5k). Ground islands, parchment leftovers,
+        # the sit island, the walk patch, the sleep earth, the
+        # talk soil, the eat torn splash, and the play ground
+        # patch and kicked dust were furniture, not hide. A grub
+        # in eat is living food and stayed. DARK_MATTE already
+        # lists crow, raven, pileated, widow, vinegaroon, and
+        # skunk; that membership stays. I did not add skunk. I
+        # did not remove skunk. That set is the default path on
+        # these raws and still nicked jet-black hide. The plate
+        # on these raws is actually black, so luma-8 knocks it
+        # (fill ~0.21–0.35, med luma 0, not a cream-plate leftover
+        # that luma-8 would keep at ~0.78). Leftover idle was
+        # already a house-hand striped skunk on a clear plate
+        # (fill ~0.21, 182 hues). Wash's raccoon elif stays
+        # Wash's. Slick's otter elif stays Slick's. Cache's
+        # squirrel elif stays Cache's. Cape's bat elif stays
+        # Cape's. Rack's deer elif stays Rack's. Gale's solifuge
+        # elif stays Gale's. Clasp's tick elif stays Clasp's.
+        # Whip's vinegaroon elif stays Whip's. Barb's scorpion
+        # elif stays Barb's. Stem's harvestman elif stays Stem's.
+        # Hour's widow elif stays Hour's. Velvet's tarantula elif
+        # stays Velvet's. Prowl's wolf_spider elif stays Prowl's.
+        # Leap's jumping_spider elif stays Leap's. Loom's
+        # orb_weaver elif stays Loom's. Sip's hummingbird elif
+        # stays Sip's. Drum's pileated elif stays Drum's. Vee's
+        # canada_goose elif stays Vee's. Drake's mallard elif
+        # stays Drake's. Brick's robin elif stays Brick's. Dee's
+        # chickadee elif stays Dee's. Hook's red_tail elif stays
+        # Hook's. Hold's kelp elif stays Hold's. Rod's coli elif
+        # stays Rod's. Luma-8 keeps the whole striped skunk.
+        # knock_tiny_crumbs keeps specks off. Guest-only. Not a
+        # catalog wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
