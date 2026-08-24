@@ -1025,6 +1025,34 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "mallard":
+        # Drake's iridescent green head nicks when default plate-flood treats
+        # hide as black. Idle tore the crown from the white collar (~75k live
+        # against luma-8's ~78k, green ~5k against ~7k) and left a floating
+        # fragment. Walk lost the head and left a grey silhouette. Talk tore
+        # the quack (~76k against ~89k, green ~6k against ~9k). Sit, eat, and
+        # play nicked the same green. Sleep kept more of the loaf than the
+        # leftovers, but default still ate dark hide (~10k against ~12k).
+        # Chestnut breast and grey flanks are hide, not Pale's wash —
+        # TAN_SIT is other keys. DARK_MATTE already lists crow and raven;
+        # that membership stays. That set still nicked idle's crown and
+        # walk's face on these raws. The plate on these raws is actually
+        # black, so luma-8 knocks it (fill ~0.62–0.74, not a cream-plate
+        # leftover at ~0.78). Brick's robin elif stays Brick's. Dee's
+        # chickadee elif stays Dee's. Hook's red_tail elif stays Hook's.
+        # Hold's kelp elif stays Hold's. Rod's coli elif stays Rod's.
+        # Luma-8 keeps the whole mallard. knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
