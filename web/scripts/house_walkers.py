@@ -1723,6 +1723,62 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "otter":
+        # Slick's dark chocolate fur, dark eyes, dark nose, and dark
+        # webbed paws nick when default plate-flood treats hide as
+        # black or as Pale's wash. Sit lost live hide (~77k against
+        # luma-8's ~92k, dark ~392 against ~2.3k) and left a torn
+        # hole at the neck and dropped the front paws. Talk lost the
+        # speak (~69k live against luma-8's ~81k, dark ~992 against
+        # ~3.2k) and dropped the legs. Eat nicked the chew (~74k
+        # live against luma-8's ~95k, dark ~886 against ~4.4k) and
+        # jagged the underside. Sleep tore the curl (~102k live
+        # against luma-8's ~120k, dark ~7.8k against ~11.0k) and
+        # nicked the muzzle and tail tip. Walk nicked the same dark
+        # paws (~165 against ~842; live ~26k against ~31k). Play
+        # jagged the slide (~39k live against luma-8's ~47k, dark
+        # ~322 against ~978). Cream throat and tan muzzle are hide,
+        # not Pale's wash — they can look like tan wash; they are
+        # Lontra. TAN_SIT is other keys. I did not join. That path
+        # kept a pale greenish-gray fringe on sit. Ground islands,
+        # the walk patch, the sleep earth, the talk wash, the eat
+        # island, and the play splash and map silhouette were
+        # furniture, not hide. DARK_MATTE already lists crow, raven,
+        # pileated, widow, and vinegaroon; that membership stays.
+        # I did not add otter. That set can nick pale cream hide
+        # and tan muzzle. The plate on these raws is actually
+        # black, so luma-8 knocks it (fill ~0.12–0.46, med luma 0,
+        # not a cream-plate leftover that luma-8 would keep at
+        # ~0.78). Leftover idle was already a house-hand North
+        # American river otter on a clear plate (fill ~0.23, 161
+        # hues). Cache's squirrel elif stays Cache's. Cape's bat
+        # elif stays Cape's. Rack's deer elif stays Rack's. Gale's
+        # solifuge elif stays Gale's. Clasp's tick elif stays
+        # Clasp's. Whip's vinegaroon elif stays Whip's. Barb's
+        # scorpion elif stays Barb's. Stem's harvestman elif stays
+        # Stem's. Hour's widow elif stays Hour's. Velvet's
+        # tarantula elif stays Velvet's. Prowl's wolf_spider elif
+        # stays Prowl's. Leap's jumping_spider elif stays Leap's.
+        # Loom's orb_weaver elif stays Loom's. Sip's hummingbird
+        # elif stays Sip's. Drum's pileated elif stays Drum's.
+        # Vee's canada_goose elif stays Vee's. Drake's mallard
+        # elif stays Drake's. Brick's robin elif stays Brick's.
+        # Dee's chickadee elif stays Dee's. Hook's red_tail elif
+        # stays Hook's. Hold's kelp elif stays Hold's. Rod's coli
+        # elif stays Rod's. Luma-8 keeps the whole North American
+        # river otter. knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
