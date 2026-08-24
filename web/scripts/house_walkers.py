@@ -719,6 +719,17 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
+    elif key == "goldfish":
+        # Coin's dark gape (speaking, a festival of flakes) nicks when
+        # default plate-flood treats the mouth as black. Gold hide and
+        # pale fins survive default, but the throat is the tell. Talk
+        # nicked the underside of the head. Eat lost the dark mouth of
+        # a festival. Luma-8 keeps the coin. Guest-only. Not a catalog
+        # wash. Not TAN_SIT — pale flakes are not parchment. Not
+        # DARK_MATTE — that set is other keys.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
