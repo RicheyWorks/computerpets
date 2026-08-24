@@ -730,6 +730,26 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
+    elif key == "fiddler_crab":
+        # Wave's dark olive carapace, tucked eyestalks, and leg
+        # shadow nick when default plate-flood treats them as black.
+        # Sleep lost the lower carapace. Idle punched holes in the
+        # palm. Talk severed the claw from the body. Luma-8 keeps
+        # the olive. Cream pincers are the signal, not parchment —
+        # the fringe that eats a wash would eat the wave. Guest-only.
+        # Not a catalog wash. Not TAN_SIT — the hide is olive and
+        # orange, not Pale's wash. Not DARK_MATTE — that set is
+        # other keys.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_island_crumbs(knocked)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
