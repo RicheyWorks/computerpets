@@ -685,7 +685,13 @@ def ingest_body(path: Path, key: str) -> Image.Image:
     # Paint's black bar-rims are hide. Edge-flood severs the tail.
     # Hide's chocolate bars are hide too. Default plate-flood nicks the tail.
     # Cup's rust hide nicks the same way: mantle holes if flood treats dark rust as plate.
+    # Chamber's rust rim and hood shadow nick the same way on default plate-flood.
+    # Luma-8 keeps cream nacre and the pinhole. Guest-only. Not a catalog wash.
     if key in {"clownfish", "grouper", "octopus"}:
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+    elif key == "nautilus":
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
