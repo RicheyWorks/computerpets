@@ -846,6 +846,30 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_island_crumbs(knocked)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "lugworm":
+        # Heap's dark head and gill shadow nick when
+        # default plate-flood treats them as black.
+        # Talk lost the dark head (~276k against luma-8's
+        # ~295k). Idle lost ~11k. Walk's honest heap is
+        # a second part (~10k) that knock_island_crumbs
+        # drops because it sits under n//90. Pink-tan
+        # hide is not Pale's wash — TAN_SIT holed idle
+        # (~322) and talk (~393). The painted sand was
+        # the leftover to knock, already gone from the
+        # raws. Luma-8 keeps the head. knock_tiny_crumbs
+        # keeps the heap. Guest-only. Not a catalog wash.
+        # Not TAN_SIT. Not DARK_MATTE — that set is
+        # other keys.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
