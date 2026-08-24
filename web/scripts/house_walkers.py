@@ -998,6 +998,33 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "robin":
+        # Brick's dark charcoal head nicks when default plate-flood
+        # treats hide as black. Sleep lost the tucked head (~242k
+        # live against luma-8's ~303k, dark ~709 against ~18k) and
+        # left the brick a second part. Eat punched the face and
+        # throat (~153k against ~187k). Idle lost the crown (~232k
+        # against ~244k). Sit, talk, walk, and play nicked the same
+        # charcoal. Brick breast and white vent are hide, not Pale's
+        # wash — TAN_SIT is other keys. DARK_MATTE already lists
+        # crow and raven; that membership stays. The plate on these
+        # raws is actually black, so luma-8 knocks it (fill
+        # ~0.17–0.35, not a cream-plate leftover at ~0.78). Dee's
+        # chickadee elif stays Dee's. Hook's red_tail elif stays
+        # Hook's. Hold's kelp elif stays Hold's. Rod's coli elif
+        # stays Rod's. Luma-8 keeps the whole robin. knock_tiny_crumbs
+        # keeps specks off. Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
