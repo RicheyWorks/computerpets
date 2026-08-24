@@ -1779,6 +1779,65 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "raccoon":
+        # Wash's dark mask, dark eyes, dark nose, dark paws, and dark
+        # tail rings nick when default plate-flood treats hide as
+        # black or as Pale's wash. Sit lost live hide (~126k against
+        # luma-8's ~136k, dark ~2.1k against ~3.2k) and jagged the
+        # paws. Talk lost the speak (~103k live against luma-8's
+        # ~115k, dark ~1.4k against ~1.8k) and dropped the lower
+        # body. Eat nicked the chew (~119k live against luma-8's
+        # ~126k, dark ~2.3k against ~5.8k) and punched the mask and
+        # chest. Sleep tore the curl (~96k live against luma-8's
+        # ~119k, dark ~602 against ~2.9k) and left a hole in the
+        # face. Walk nicked the same dark paws (~531 against ~558;
+        # live ~66k against ~69k). Play jagged the stand (~80k live
+        # against luma-8's ~84k, dark ~465 against ~535). White
+        # muzzle, white ear trim, silver-gray fur, and cream chest
+        # are hide, not Pale's wash — they can look like tan wash;
+        # they are Procyon. TAN_SIT is other keys. I did not join.
+        # That path still lost sleep dark (~1.0k against luma-8's
+        # ~2.9k). Ground islands, parchment leftovers, the sit
+        # island, the walk splash, the sleep earth, the talk wash,
+        # the eat torn-paper splash, and the play bat, ground
+        # patch, and map silhouette were furniture, not hide. A
+        # scrap in eat is living food and stayed. DARK_MATTE
+        # already lists crow, raven, pileated, widow, and
+        # vinegaroon; that membership stays. I did not add
+        # raccoon. That set can nick pale cream hide and the
+        # white muzzle (sleep dark ~1.7k against luma-8's ~2.9k).
+        # The plate on these raws is actually black, so luma-8
+        # knocks it (fill ~0.27–0.47, med luma 0, not a cream-plate
+        # leftover that luma-8 would keep at ~0.78). Leftover idle
+        # was already a house-hand raccoon on a clear plate (fill
+        # ~0.42, 121 hues). Slick's otter elif stays Slick's.
+        # Cache's squirrel elif stays Cache's. Cape's bat elif
+        # stays Cape's. Rack's deer elif stays Rack's. Gale's
+        # solifuge elif stays Gale's. Clasp's tick elif stays
+        # Clasp's. Whip's vinegaroon elif stays Whip's. Barb's
+        # scorpion elif stays Barb's. Stem's harvestman elif
+        # stays Stem's. Hour's widow elif stays Hour's. Velvet's
+        # tarantula elif stays Velvet's. Prowl's wolf_spider elif
+        # stays Prowl's. Leap's jumping_spider elif stays Leap's.
+        # Loom's orb_weaver elif stays Loom's. Sip's hummingbird
+        # elif stays Sip's. Drum's pileated elif stays Drum's.
+        # Vee's canada_goose elif stays Vee's. Drake's mallard
+        # elif stays Drake's. Brick's robin elif stays Brick's.
+        # Dee's chickadee elif stays Dee's. Hook's red_tail elif
+        # stays Hook's. Hold's kelp elif stays Hold's. Rod's coli
+        # elif stays Rod's. Luma-8 keeps the whole raccoon.
+        # knock_tiny_crumbs keeps specks off. Guest-only. Not a
+        # catalog wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
