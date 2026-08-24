@@ -1114,6 +1114,43 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "hummingbird":
+        # Sip's dark eye mask and needle bill nick when default plate-flood
+        # treats hide as black. Sit tore the face (~38k live against luma-8's
+        # ~40k, dark ~1.5k against ~3.2k) and left a detached bill. Play
+        # stubbed the needle and tore the hover (~631 dark against ~819).
+        # Sleep nicked the mask behind the bill and ragged the belly
+        # (~80k against ~81k, dark ~2.0k against ~2.7k). Walk and eat lost
+        # the same dark hide (walk ~709 against ~1.8k; eat ~632 against
+        # ~1.5k). Talk lost dark (~849 against ~1.3k). Idle kept more
+        # mid-luma fringe on default, but the same flood still ate the
+        # working poses. Ruby gorget, emerald back, and white breast are
+        # hide, not Pale's wash — TAN_SIT is other keys. Golden parchment
+        # leftovers, the sit branch, the sleep twig, and the eat trumpet
+        # cluster were furniture, not hide. DARK_MATTE already lists crow,
+        # raven, and pileated; that membership stays. I did not add
+        # hummingbird. That set still ate dark hide on these raws. The
+        # plate on the house-hand raws is actually black, so luma-8 knocks
+        # it (fill ~0.80–0.85, med luma 0, not a cream-plate leftover that
+        # luma-8 would keep at ~0.78). Leftover idle, talk, and play were
+        # already a clear plate (fill ~0.18–0.22). Drum's pileated elif
+        # stays Drum's. Vee's canada_goose elif stays Vee's. Drake's
+        # mallard elif stays Drake's. Brick's robin elif stays Brick's.
+        # Dee's chickadee elif stays Dee's. Hook's red_tail elif stays
+        # Hook's. Hold's kelp elif stays Hold's. Rod's coli elif stays
+        # Rod's. Luma-8 keeps the whole hummingbird. knock_tiny_crumbs
+        # keeps specks off. Guest-only. Not a catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
