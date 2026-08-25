@@ -2499,6 +2499,74 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "tardigrade":
+        # Tun's dark claws nick when default plate-flood treats
+        # hide as black or as Pale's wash. Pale tan hide can look
+        # like tan wash — it is hide. Sit lost dark hide (~1399
+        # against luma-8's ~1713) and live (~104k against luma-8's
+        # ~107k). Walk lost the walk (~64k live against luma-8's
+        # ~87k, tan ~24k against ~41k) and left a parchment island
+        # (41) and punched holes in the tan hide. Sleep stayed
+        # close (~158k against ~159k, dark ~2509 against ~2533).
+        # Talk lost dark (~1118 against ~1612) and live (~79k
+        # against ~81k). Eat lost dark (~1409 against ~2566) and
+        # live (~92k against ~109k) and punched holes in the
+        # chew. Play lost dark (~2801 against ~3834) and live
+        # (~100k against ~102k). Pale tan hide can look like
+        # Pale's wash — it is Hypsibius. TAN_SIT is other keys.
+        # I did not join. That path kept extra sit fringe
+        # (~108k against luma-8's ~107k) and extra talk fringe
+        # (~83k against ~81k). Dark claws are hide, not plate.
+        # A moss clump in eat is living food and stayed. A tun
+        # coil is the species, not furniture. DARK_MATTE already
+        # lists crow, raven, pileated, widow, vinegaroon, skunk,
+        # and millipede; that membership stays. I did not add
+        # tardigrade. I did not remove existing keys. That set
+        # still nicked walk (~66k against luma-8's ~87k) and eat
+        # (~99k against ~109k) and left a walk island (42). The
+        # plate on these raws is actually black, so luma-8 knocks
+        # it (fill ~0.31–0.61, med luma 0, not a cream-plate
+        # leftover that luma-8 would keep at ~0.78). Leftover
+        # idle was already a house-hand water bear on a clear
+        # plate (fill ~0.338, 168 hues). Hop's springtail elif
+        # stays Hop's. Jet's velvet_worm elif stays Jet's.
+        # Cast's earthworm elif stays Cast's. Armor's pillbug
+        # elif stays Armor's. Link's millipede elif stays
+        # Link's. Haste's house_centipede elif stays Haste's.
+        # Coal's black_bear stays on DARK_MATTE. Spine's
+        # porcupine elif stays Spine's. Dam's beaver elif
+        # stays Dam's. Grin's opossum elif stays Grin's.
+        # Stripe's skunk elif stays Stripe's. Wash's raccoon
+        # elif stays Wash's. Slick's otter elif stays Slick's.
+        # Cache's squirrel elif stays Cache's. Cape's bat elif
+        # stays Cape's. Rack's deer elif stays Rack's. Gale's
+        # solifuge elif stays Gale's. Clasp's tick elif stays
+        # Clasp's. Whip's vinegaroon elif stays Whip's. Barb's
+        # scorpion elif stays Barb's. Stem's harvestman elif
+        # stays Stem's. Hour's widow elif stays Hour's.
+        # Velvet's tarantula elif stays Velvet's. Prowl's
+        # wolf_spider elif stays Prowl's. Leap's
+        # jumping_spider elif stays Leap's. Loom's orb_weaver
+        # elif stays Loom's. Sip's hummingbird elif stays
+        # Sip's. Drum's pileated elif stays Drum's. Vee's
+        # canada_goose elif stays Vee's. Drake's mallard elif
+        # stays Drake's. Brick's robin elif stays Brick's.
+        # Dee's chickadee elif stays Dee's. Hook's red_tail
+        # elif stays Hook's. Hold's kelp elif stays Hold's.
+        # Rod's coli elif stays Rod's. Luma-8 keeps the whole
+        # water bear. knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
