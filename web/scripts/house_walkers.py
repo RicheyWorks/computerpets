@@ -7139,6 +7139,208 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "cyst":
+        # Arca's brown cyst hide
+        # nicks when default
+        # plate-flood treats
+        # dark seal as plate.
+        # They are a traveling
+        # cyst. Most of a life
+        # is the wait. Wakes
+        # when lamp and damp
+        # agree. I waited.
+        # That was hello. I am
+        # not Brood. Brood is
+        # a cicada. We both
+        # wait. That is the
+        # rhyme. Habitat is a
+        # damp blotter, which
+        # is weather, not a
+        # painted blotter, not
+        # a cyst you draw, not
+        # a parchment island,
+        # not a wait diorama.
+        # House food is damp.
+        # I will hold this
+        # blotter. The seal is
+        # the correct sleep.
+        # A wake. Review the
+        # wait. I win by
+        # remaining a cyst.
+        # I waited. That was
+        # hello. Named: Arca.
+        # The wait is the
+        # tell. They are not
+        # Brood. They are not
+        # a cicada. They are
+        # not a blotter with a
+        # face. Brown hide is
+        # hide. Tan furniture
+        # look is hide, not a
+        # plate. Do not punch
+        # holes in the wait.
+        # Proven on the new
+        # black-plate raws:
+        # plate corners med
+        # luma 0 (not a cream
+        # leftover luma-8
+        # would keep at
+        # ~0.78); fill
+        # ~0.52–0.61. Default
+        # shredded the living
+        # cyst: sleep
+        # collapsed (animal
+        # ~100.7k against
+        # luma-8's ~143.0k;
+        # dark 46079 against
+        # 81288; fill 0.384
+        # against 0.545), talk
+        # lost the voice
+        # (~137.8k against
+        # ~160.9k; dark 2181
+        # against 13901; 2
+        # comps against 1),
+        # eat lost the damp
+        # (~127.5k against
+        # ~158.1k; dark 14018
+        # against 33625), sit
+        # nicked dark hide
+        # (~133.5k against
+        # ~137.2k; dark 4653
+        # against 5784). Walk
+        # and play survived
+        # default counts; the
+        # living dark seal did
+        # not. Luma-8 keeps
+        # the whole wait.
+        # TAN_SIT left crumbs
+        # on sleep (38) and
+        # eat (18) and I did
+        # not join. Brown hide
+        # and a living tree
+        # window are not
+        # Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # and yeast from the
+        # original cellar sit.
+        # Lattice kept morel
+        # on TAN_SIT. Mane
+        # kept lions_mane on
+        # TAN_SIT. Starter
+        # kept yeast on
+        # TAN_SIT. Hang took
+        # sloth off; I did
+        # not put sloth back.
+        # Frill took oyster
+        # off; I did not put
+        # oyster back. Pact
+        # did not join. Gleam
+        # did not join. Choir,
+        # Drift, Shard, and
+        # Brine stayed on
+        # default. Flame
+        # stayed on default.
+        # Horn stayed on
+        # default. Dusk took a
+        # guest-only
+        # terminator luma-8
+        # elif. Knot took a
+        # guest-only nexus
+        # luma-8 elif. Beacon
+        # took a guest-only
+        # magneton luma-8
+        # elif. Hush took a
+        # guest-only umbral
+        # luma-8 elif. Those
+        # stay theirs.
+        # DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede,
+        # field_cricket from
+        # the original meadow
+        # sit, click_beetle
+        # from Click, earwig
+        # from Forceps, and
+        # robber_fly from Rob;
+        # that membership
+        # stays. umbral
+        # already sat in
+        # DARK_MATTE from the
+        # original far sit; I
+        # did not add or
+        # remove. The
+        # guest-only elif is
+        # the sit. That set is
+        # other keys.
+        # Leftover idle was
+        # already a house-hand
+        # living wait with no
+        # painted blotter; I
+        # kept it. Blotter
+        # follows idle. Sit
+        # sat leftover tan.
+        # Walk sat leftover
+        # crumbs and tan. Sleep
+        # lost the pale (the
+        # cream went out; the
+        # cyst went dark).
+        # Talk sat a connected
+        # brown cyst with
+        # orange. Eat piled
+        # leftover crumbs and
+        # tan (painted blotter
+        # as a dish). Play sat
+        # leftover crumbs and
+        # tan. Hush's umbral
+        # elif stays Hush's.
+        # Beacon's magneton
+        # elif stays Beacon's.
+        # Knot's nexus elif
+        # stays Knot's. Dusk's
+        # terminator elif
+        # stays Dusk's.
+        # Gleam's photovore
+        # elif stays Gleam's.
+        # Pact's lichen elif
+        # stays Pact's.
+        # Puff's puffball
+        # elif stays Puff's.
+        # Ring's turkey_tail
+        # elif stays Ring's.
+        # Cap's fly_agaric
+        # elif stays Cap's.
+        # Frill's oyster elif
+        # stays Frill's.
+        # Lattice's morel
+        # stayed on TAN_SIT.
+        # Horn stayed on
+        # default. Mane's
+        # lions_mane stayed
+        # on TAN_SIT. Flame
+        # stayed on default.
+        # Starter's yeast
+        # stayed on TAN_SIT.
+        # Luma-8 keeps the
+        # whole wait.
+        # knock_tiny_crumbs
+        # keeps specks off.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
