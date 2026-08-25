@@ -4399,6 +4399,133 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "water_lily":
+        # Disk's pale white petals
+        # and green pad nick when
+        # default plate-flood treats
+        # hide as black or as Pale's
+        # wash. She is a fragrant
+        # water lily. A round pad
+        # with a slit, a white bloom
+        # that opens for the lamp
+        # and closes for the night.
+        # The pad is the floor. The
+        # open is the tell. Not a
+        # lotus. Not Coin. Pale
+        # white petals can look
+        # like wash — they are hide.
+        # Green pad is hide. Silt
+        # is living food. Default
+        # shredded talk (the voice
+        # left live ~598.3k against
+        # luma-8's whole ~652.2k;
+        # after fit ~94.0k against
+        # ~145.9k; cream ~15.2k
+        # against ~46.7k; 131
+        # comps; the pale bloom
+        # face punched into holes),
+        # eat (the silt stay but
+        # the pad tore; live
+        # ~410.8k against ~448.8k;
+        # after fit ~103.8k against
+        # ~118.6k; dark ~1.3k
+        # against ~9.5k; default
+        # island-knock and wash
+        # left holes in the floor),
+        # sleep (the closed bloom
+        # nicked; live ~449.8k
+        # against ~465.1k; green
+        # ~384.7k against ~395.5k;
+        # after fit ~110.5k against
+        # ~115.4k), and walk (the
+        # open-then-close nicked;
+        # after fit live ~110.3k
+        # against ~115.1k; cream
+        # ~26.8k against ~31.1k;
+        # 24 comps). Sit close
+        # (live ~330.3k against
+        # ~331.5k; after fit
+        # ~92.3k against ~92.7k).
+        # Idle live ~541.5k against
+        # ~544.8k; after fit
+        # ~119.8k against ~120.9k.
+        # Play live ~527.5k against
+        # ~528.8k; after fit
+        # ~137.6k against ~138.0k.
+        # Cream leftover would
+        # leave studio plate on
+        # luma-8; these raws are
+        # actually black (fill
+        # ~0.32–0.62, med luma 0
+        # on the plate corners,
+        # not a cream leftover at
+        # ~0.78). Pale white
+        # petals are not Pale's
+        # wash — TAN_SIT is other
+        # keys. Hang took sloth
+        # off TAN_SIT; I did not
+        # put sloth back. I did
+        # not join. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add water_lily. She
+        # is a pad. That set is
+        # other keys. Leftover
+        # idle was a field-guide
+        # Nymphaea stamp on a
+        # black plate, the same
+        # open bloom on the same
+        # pad seven times; idle
+        # and blotter follow the
+        # new living open. Mast's
+        # oak elif stays Mast's.
+        # Fan's ginkgo elif stays
+        # Fan's. Vein's maidenhair
+        # elif stays Vein's.
+        # Felt's moss elif stays
+        # Felt's. Gum's koala elif
+        # stays Gum's. Still's
+        # potto elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays Boom's.
+        # Wrist's kinkajou elif
+        # stays Wrist's. Swing's
+        # gibbon elif stays
+        # Swing's. Sun's lemur
+        # elif stays Sun's. Hang's
+        # sloth elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Nymphaea. knock_tiny_crumbs
+        # keeps specks off.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
