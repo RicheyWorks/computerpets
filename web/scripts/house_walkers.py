@@ -6068,6 +6068,194 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "lichen":
+        # Pact's pale branching
+        # shrub, the partner's
+        # seafoam tint, and cream
+        # hide nick when default
+        # plate-flood treats the
+        # living share as Pale's
+        # wash. She is reindeer
+        # lichen. A pale branching
+        # shrub on stone, no cap,
+        # no gills, a guest that
+        # is already a treaty.
+        # Cladonia rangiferina.
+        # Not one creature. A
+        # fungus and a partner
+        # (alga or cyanobacterium).
+        # Two kingdoms in one
+        # guest. She sits. The
+        # stone is a tundra she
+        # agreed to. Not a moss —
+        # Felt is a plant; Pact
+        # is a fungus and a
+        # partner. Ledger taught
+        # not a crab. Pact teaches
+        # not one. The share is
+        # the tell. Habitat is a
+        # lamp stone, which is
+        # weather, not a painted
+        # rock, not a moss patch,
+        # not a parchment island,
+        # not a tundra diorama
+        # you draw. House food is
+        # dew. We will hold this
+        # stone. The share is the
+        # correct sleep. I sat.
+        # That was the game. We
+        # win by remaining two.
+        # We are two. Hello.
+        # Named: Pact. We are the
+        # name we keep. Pale shrub
+        # is hide. Branching is
+        # hide. The partner's tint
+        # is hide. Cream/pale can
+        # look like tan wash — it
+        # is hide. Do not punch
+        # holes in the shrub. She
+        # is lichen, not moss, not
+        # a mushroom with a cap,
+        # not one creature.
+        # Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not
+        # a cream leftover luma-8
+        # would keep at ~0.78);
+        # fill ~0.38–0.54. Default
+        # nicked the living shrub
+        # into islands: sit 82
+        # comps against luma-8's
+        # 1 (after fit 9 against
+        # 1; live ~102.4k against
+        # ~103.4k), walk 219
+        # comps against 1 (after
+        # fit 38 against 1; live
+        # ~95.8k against ~98.0k),
+        # sleep 92 against 1
+        # (after fit 15 against 1;
+        # live ~108.1k against
+        # ~110.4k), talk 40
+        # against 2 (after fit 2
+        # against 2; live ~128.1k
+        # against ~130.6k), eat
+        # 32 against 1 (after fit
+        # 5 against 1; live
+        # ~135.1k against
+        # ~137.7k), play 3
+        # against 1 (after fit 2
+        # against 2; live ~123.4k
+        # against ~125.4k).
+        # Default did not eat half
+        # the shrub the way Frill
+        # lost a shelf, but it
+        # shredded the living
+        # branches into islands.
+        # Luma-8 keeps the share.
+        # TAN_SIT stayed close
+        # (sit ~106.9k, walk
+        # ~102.4k, sleep ~112.8k)
+        # and I did not join.
+        # Pale lichen is not
+        # Pale's wash. TAN_SIT
+        # still lists morel,
+        # lions_mane, and yeast
+        # from the original cellar
+        # sit. Lattice kept morel
+        # on TAN_SIT. Mane kept
+        # lions_mane on TAN_SIT.
+        # Starter kept yeast on
+        # TAN_SIT. Hang took
+        # sloth off; I did not
+        # put sloth back. Frill
+        # took oyster off; I did
+        # not put oyster back.
+        # Puff did not join.
+        # Flame stayed on default
+        # and did not join.
+        # DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add lichen. She is
+        # a pale shrub. That set
+        # is other keys. Leftover
+        # idle was already a
+        # house-hand living
+        # Cladonia on a clear
+        # plate; I kept it.
+        # Blotter follows idle.
+        # Sit carried a tan splash
+        # crumb. Walk sat crumbs
+        # around a painted stone /
+        # moss patch. Sleep lost
+        # the pale (cream went
+        # out). Talk sat crumbs
+        # on a parchment base.
+        # Eat piled a green/tan
+        # moss or stone diorama.
+        # Play sat crumbs on a
+        # tan island. Puff's
+        # puffball elif stays
+        # Puff's. Ring's
+        # turkey_tail elif stays
+        # Ring's. Cap's
+        # fly_agaric elif stays
+        # Cap's. Frill's oyster
+        # elif stays Frill's.
+        # Lattice's morel stayed
+        # on TAN_SIT. Horn stayed
+        # on default. Mane's
+        # lions_mane stayed on
+        # TAN_SIT. Flame stayed
+        # on default. Starter's
+        # yeast stayed on TAN_SIT.
+        # Dew's sundew elif stays
+        # Dew's. Well's pitcher
+        # elif stays Well's.
+        # Snap's venus_flytrap
+        # elif stays Snap's.
+        # Arm's saguaro elif
+        # stays Arm's. Moth's
+        # orchid elif stays
+        # Moth's. Disk's
+        # water_lily elif stays
+        # Disk's. Mast's oak elif
+        # stays Mast's. Fan's
+        # ginkgo elif stays Fan's.
+        # Vein's maidenhair elif
+        # stays Vein's. Felt's
+        # moss elif stays Felt's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Cladonia.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
@@ -6420,7 +6608,7 @@ def _more():
         "puffball": Spec("puff", (220, 212, 180), (244, 236, 208), (88, 80, 56), (176, 168, 132), "puff", "Calvatia gigantea"),
         "chicken_of_woods": Spec("shelf", (220, 92, 32), (255, 176, 64), (80, 32, 12), (196, 64, 24), "fan", "Laetiporus sulphureus"),
         "yeast": Spec("yeast", (236, 212, 140), (255, 236, 188), (120, 96, 48), (196, 168, 88), "foam", "Saccharomyces cerevisiae"),
-        "lichen": Spec("lichen", (188, 196, 120), (236, 228, 176), (64, 72, 40), (120, 88, 64), "crust", "Xanthoria parietina"),
+        "lichen": Spec("lichen", (188, 196, 120), (236, 228, 176), (64, 72, 40), (120, 88, 64), "crust", "Cladonia rangiferina"),
         "paramecium": Spec("slipper", (176, 196, 140), (220, 232, 176), (48, 64, 36), (120, 148, 80), "cilia", "Paramecium caudatum"),
         "amoeba": Spec("amoeba", (168, 176, 120), (220, 220, 168), (56, 60, 40), (120, 128, 80), "foot", "Amoeba proteus"),
         "euglena": Spec("slipper", (72, 140, 56), (168, 196, 88), (24, 48, 20), (196, 64, 48), "flag", "Euglena gracilis"),
