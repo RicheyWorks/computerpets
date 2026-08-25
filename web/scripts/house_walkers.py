@@ -2837,6 +2837,68 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "swallowtail":
+        # Banner's yellow hide, black tiger stripes, swallow
+        # tails, and dark margin nick when default plate-flood
+        # treats hide as Pale's wash or as black. She is
+        # yellow / black. A swallowtail is the species, not
+        # painted furniture. Yellow hide and black stripes
+        # can look like tan wash — they are hide. Sit lost
+        # live hide (~48.0k against luma-8's ~67.1k, dark
+        # ~6.7k against ~15.5k) and punched the body into a
+        # wing scrap. Walk lost (~70.0k against ~75.9k, dark
+        # ~11.1k against ~16.7k) and nicked the lift. Talk
+        # lost (~50.8k against ~72.3k, dark ~2.9k against
+        # ~17.1k, hues ~401 against ~819) and fragmented
+        # the speaking still. Eat lost (~51.1k against
+        # ~70.8k, dark ~6.7k against ~13.7k). Sleep lost
+        # (~51.0k against ~73.6k, dark ~8.9k against
+        # ~20.8k) and left a wing without a body. Play lost
+        # (~56.2k against ~69.8k, dark ~3.9k against
+        # ~15.5k, hues ~551 against ~861). A pale blossom
+        # in eat is living food and stayed. TAN_SIT is
+        # other keys. I did not join. That path kept extra
+        # sit fringe (~68.0k against luma-8's ~67.1k) and
+        # extra eat fringe (~72.6k against ~70.8k), nicked
+        # talk (~62.5k against ~72.3k) and left a talk
+        # island. Pale yellow hide can look like Pale's
+        # wash — it is Papilio. DARK_MATTE already lists
+        # crow, raven, pileated, widow, vinegaroon, skunk,
+        # millipede, and field_cricket from the original
+        # meadow sit; that membership stays. I did not add
+        # swallowtail. I did not remove existing keys. She
+        # is yellow-and-black. That set (tol-16) still
+        # nicked sit (~64.0k against luma-8's ~67.1k) and
+        # talk (~51.0k against ~72.3k). The plate on these
+        # raws is actually black, so luma-8 knocks it
+        # (fill ~0.26–0.29, med luma 0, not a cream-plate
+        # leftover that luma-8 would keep at ~0.78).
+        # Leftover idle was already a house-hand Papilio
+        # on a clear plate (fill ~0.220, 387 hues). Vault's
+        # grasshopper elif stays Vault's. Blade's katydid
+        # stayed on default. Chirp's field_cricket elif
+        # stays Chirp's. Scud's amphipod elif stays
+        # Scud's. Thread's nematode stayed on default.
+        # Half's planarian elif stays Half's. Tun's
+        # tardigrade elif stays Tun's. Hop's springtail
+        # elif stays Hop's. Jet's velvet_worm elif stays
+        # Jet's. Cast's earthworm elif stays Cast's.
+        # Armor's pillbug elif stays Armor's. Link's
+        # millipede elif stays Link's. Haste's
+        # house_centipede elif stays Haste's. Luma-8
+        # keeps the whole Papilio. knock_tiny_crumbs
+        # keeps specks off. Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
