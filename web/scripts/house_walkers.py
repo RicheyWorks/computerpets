@@ -2775,6 +2775,68 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "grasshopper":
+        # Vault's olive-gold hide, barred femur, and dark
+        # compound eye nick when default plate-flood treats
+        # hide as Pale's wash or as black. She is olive /
+        # gold / tan. A grasshopper is the species, not
+        # painted furniture. Olive / gold hide and barred
+        # femur can look like tan wash — they are hide.
+        # Sit lost live hide (~43.6k against luma-8's
+        # ~55.8k, dark ~2.4k against ~5.0k) and punched
+        # the femur and the saddle. Walk lost (~33.9k
+        # against ~50.6k, dark ~2.5k against ~5.5k) and
+        # nicked the gait. Talk lost (~46.9k against
+        # ~67.5k, dark ~2.9k against ~6.9k) and
+        # fragmented the speaking still. Eat lost
+        # (~51.5k against ~71.8k, dark ~3.1k against
+        # ~6.8k) and severed the head from the pronotum.
+        # Sleep lost (~52.9k against ~58.4k, dark ~3.9k
+        # against ~4.9k). A green blade of grass in eat
+        # is living food and stayed. TAN_SIT is other
+        # keys. I did not join. That path kept extra sit
+        # fringe (~56.8k against luma-8's ~55.8k) and
+        # extra eat fringe (~73.3k against ~71.8k). Pale
+        # olive hide can look like Pale's wash — it is
+        # Melanoplus. DARK_MATTE already lists crow,
+        # raven, pileated, widow, vinegaroon, skunk,
+        # millipede, and field_cricket from the original
+        # meadow sit; that membership stays. I did not
+        # add grasshopper. I did not remove existing
+        # keys. That set (tol-16) still nicked sit
+        # (~54.9k against luma-8's ~55.8k) and walk
+        # (~48.3k against ~50.6k). The plate on these
+        # raws is actually black, so luma-8 knocks it
+        # (fill ~0.19–0.27, med luma 0, not a cream-plate
+        # leftover that luma-8 would keep at ~0.78).
+        # Leftover idle was already a house-hand
+        # Melanoplus on a clear plate (fill ~0.225, 320
+        # hues). Leftover play was already a house-hand
+        # mid-jump grasshopper on a clear plate (fill
+        # ~0.128, 378 hues). Blade's katydid stayed on
+        # default. Chirp's field_cricket elif stays
+        # Chirp's. Scud's amphipod elif stays Scud's.
+        # Thread's nematode stayed on default. Half's
+        # planarian elif stays Half's. Tun's tardigrade
+        # elif stays Tun's. Hop's springtail elif stays
+        # Hop's. Jet's velvet_worm elif stays Jet's.
+        # Cast's earthworm elif stays Cast's. Armor's
+        # pillbug elif stays Armor's. Link's millipede
+        # elif stays Link's. Haste's house_centipede
+        # elif stays Haste's. Luma-8 keeps the whole
+        # Melanoplus. knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
