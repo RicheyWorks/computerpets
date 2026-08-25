@@ -51,7 +51,6 @@ TAN_SIT = {
     "hognose",
     "lions_mane",
     "morel",
-    "oyster",
     "pond_snail",
     "rosy_boa",
     "yeast",
@@ -5338,6 +5337,192 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         # stayed on default.
         # Luma-8 keeps the whole
         # Drosera.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
+    elif key == "oyster":
+        # Frill's cream shelves,
+        # tan edges, and decurrent
+        # gills nick when default
+        # plate-flood treats hide
+        # as black or as Pale's
+        # wash. She is an oyster
+        # mushroom. Cream shelves
+        # stacked like plates, a
+        # short lateral stem,
+        # gills that run down.
+        # Oyster mushroom. She
+        # fruits on dead wood.
+        # She eats what has
+        # finished. The shelf is
+        # a log she agreed to.
+        # Not a plant. Plants
+        # keep chlorophyll and a
+        # different kingdom;
+        # Frill is Pleurotus
+        # ostreatus, a fungus,
+        # and the shelf is the
+        # tell. Not a turkey tail
+        # — those keep pores and
+        # zones. She decomposes.
+        # She does not
+        # photosynthesize.
+        # Habitat is a dead-wood
+        # shelf, which is
+        # weather, not painted
+        # bark, not a painted
+        # log, not a forest
+        # diorama you draw.
+        # House food is wood.
+        # She fruited. That is
+        # hello. The shelf is the
+        # name she keeps. I lean.
+        # Then I am a bracket
+        # again. Cream hide is
+        # hide. Tan edges are
+        # hide. Gills are hide.
+        # Wood stays living food.
+        # Default shredded idle
+        # (live ~285.1k against
+        # luma-8's whole ~465.1k;
+        # after fit ~76.7k
+        # against ~121.2k; cream
+        # ~101.1k against
+        # ~230.6k; 942 comps
+        # against 1; the living
+        # shelf nicked into
+        # islands), sit (live
+        # ~288.8k against
+        # ~411.0k; after fit
+        # ~81.8k against
+        # ~113.8k), walk (the
+        # lean left live ~239.3k
+        # against ~451.8k; after
+        # fit ~71.4k against
+        # ~126.4k; 1165 comps
+        # against 1; the living
+        # lean shredded), sleep
+        # (she holds this wood;
+        # live ~189.6k against
+        # ~294.1k; after fit
+        # ~49.9k against
+        # ~75.6k), talk (the
+        # voice left live
+        # ~371.5k against
+        # ~833.1k; after fit
+        # ~103.4k against
+        # ~168.7k; 36 comps
+        # against 1; the living
+        # face of gills shredded
+        # into fragments), eat
+        # (live ~310.1k against
+        # ~401.7k; after fit
+        # ~92.6k against
+        # ~118.1k), and play
+        # (the athletic lean
+        # left live ~168.2k
+        # against ~480.1k; after
+        # fit ~44.5k against
+        # ~113.5k; 1358 comps
+        # against 1; the living
+        # bracket shredded).
+        # Cream leftover would
+        # leave studio plate on
+        # luma-8; these raws are
+        # actually black (fill
+        # ~0.29–0.47, talk a
+        # close-up face at
+        # ~0.80, med luma 0 on
+        # the plate corners, not
+        # a cream leftover at
+        # ~0.78). Cream hide is
+        # not Pale's wash —
+        # TAN_SIT already listed
+        # oyster from the
+        # original cellar sit
+        # and still shredded
+        # talk (~104.7k against
+        # luma-8's ~168.7k after
+        # fit; 84 comps; isle
+        # ~16.9k). I took oyster
+        # off TAN_SIT. Hang took
+        # sloth off TAN_SIT; I
+        # did not put sloth
+        # back. I did not join.
+        # DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add oyster. She is
+        # an oyster mushroom.
+        # That set is other keys.
+        # Leftover idle was a
+        # field-guide Pleurotus
+        # stamp on a black plate,
+        # the same cream shelf
+        # seven times; eat still
+        # carried painted bark
+        # and tan wash; talk and
+        # walk were the same
+        # file; idle and blotter
+        # follow the new living
+        # shelf. Dew's sundew
+        # elif stays Dew's.
+        # Well's pitcher elif
+        # stays Well's. Snap's
+        # venus_flytrap elif
+        # stays Snap's. Arm's
+        # saguaro elif stays
+        # Arm's. Moth's orchid
+        # elif stays Moth's.
+        # Disk's water_lily elif
+        # stays Disk's. Mast's
+        # oak elif stays Mast's.
+        # Fan's ginkgo elif stays
+        # Fan's. Vein's
+        # maidenhair elif stays
+        # Vein's. Felt's moss
+        # elif stays Felt's.
+        # Gum's koala elif stays
+        # Gum's. Still's potto
+        # elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays
+        # Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's.
+        # Sun's lemur elif stays
+        # Sun's. Hang's sloth
+        # elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Pleurotus.
         # knock_tiny_crumbs keeps
         # specks off. Guest-only.
         # Not a catalog wash. Not
