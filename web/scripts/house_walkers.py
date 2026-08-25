@@ -4680,6 +4680,171 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "saguaro":
+        # Arm's green ribs and tan
+        # spines nick when default
+        # plate-flood treats hide
+        # as black or as Pale's
+        # wash. He is a young
+        # saguaro. A young column
+        # of ribs and spines,
+        # green, storing rain, an
+        # arm that has not
+        # arrived. Saguaro: a
+        # cactus of the Sonoran
+        # door. He sits the tray.
+        # He is not a tree. Trees
+        # keep wood and a
+        # different thirst; Arm
+        # is Carnegiea gigantea,
+        # a cactus, and the store
+        # is the species. Not a
+        # succulent of the
+        # windowsill rumor with
+        # no spines. He works the
+        # night. The day is for
+        # sitting. Habitat is a
+        # sand tray, which is
+        # weather, not painted
+        # sand, not a painted
+        # pot, not a desert
+        # diorama you draw. House
+        # food is rain. He
+        # stores. He is a cactus,
+        # not a tree. The arm is
+        # a promise. He is the
+        # wait. Green ribs are
+        # hide. Tan spines are
+        # hide. White areoles are
+        # hide. The golden crown
+        # is hide. Rain is living
+        # food. Default shredded
+        # sleep (the reclined rib
+        # left live ~154.9k
+        # against luma-8's whole
+        # ~183.1k; after fit
+        # ~51.2k against ~59.3k;
+        # dark ~16.6k against
+        # ~34.3k; 6 comps against
+        # 1; the store's dark
+        # valleys punched into
+        # holes), talk (the voice
+        # left live ~356.2k
+        # against ~413.1k; after
+        # fit ~95.6k against
+        # ~106.3k; green ~206.1k
+        # against ~249.0k; dark
+        # ~3.4k against ~32.9k;
+        # 6 comps against 1; the
+        # living face of ribs
+        # shredded into slivers),
+        # walk (the lean left
+        # live ~209.6k against
+        # ~217.3k; after fit
+        # ~59.2k against ~60.8k;
+        # 27 comps against 1;
+        # default island-knock
+        # nicked the lean and
+        # left spine tips a
+        # second part), sit (live
+        # ~224.8k against
+        # ~229.3k; after fit
+        # ~109.7k against
+        # ~111.1k), idle (live
+        # ~188.0k against
+        # ~191.4k; after fit
+        # ~60.9k against ~61.4k;
+        # tan ~20.4k against
+        # ~22.1k), play (live
+        # ~303.4k against
+        # ~311.6k; after fit
+        # ~78.2k against ~79.7k),
+        # and eat (live ~220.8k
+        # against ~234.2k;
+        # default island-knock
+        # dropped the rain of a
+        # treaty; luma-8 keeps
+        # the beads). Cream
+        # leftover would leave
+        # studio plate on luma-8;
+        # these raws are actually
+        # black (fill ~0.18–0.41,
+        # med luma 0 on the plate
+        # corners, not a cream
+        # leftover at ~0.78). Tan
+        # spines are not Pale's
+        # wash — TAN_SIT is other
+        # keys. Hang took sloth
+        # off TAN_SIT; I did not
+        # put sloth back. I did
+        # not join. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add saguaro. He is
+        # a young saguaro. That
+        # set is other keys.
+        # Leftover idle was a
+        # field-guide young
+        # Carnegiea stamp on a
+        # black plate, the same
+        # standing column plus
+        # the same corky cut
+        # seven times; idle and
+        # blotter follow the new
+        # living open. Moth's
+        # orchid elif stays
+        # Moth's. Disk's
+        # water_lily elif stays
+        # Disk's. Mast's oak elif
+        # stays Mast's. Fan's
+        # ginkgo elif stays Fan's.
+        # Vein's maidenhair elif
+        # stays Vein's. Felt's
+        # moss elif stays Felt's.
+        # Gum's koala elif stays
+        # Gum's. Still's potto
+        # elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays
+        # Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's.
+        # Sun's lemur elif stays
+        # Sun's. Hang's sloth
+        # elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Carnegiea.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
