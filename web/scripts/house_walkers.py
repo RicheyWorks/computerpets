@@ -3458,6 +3458,68 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "gibbon":
+        # Swing's dark face, black cap, and the dark
+        # of a white-handed reach nick when default
+        # plate-flood treats hide as black. She is a
+        # lar gibbon. The song and the swing are the
+        # tell. A gibbon is an ape, not a monkey.
+        # Not Quill. Cream / buff shaggy fur can look
+        # like wash — it is hide. Default shredded
+        # play (the swing left holes through chest
+        # and belly; live ~24.1k against luma-8's
+        # ~40.7k, dark ~66 against ~111) and nicked
+        # walk (the tucked thigh tore; live ~45.8k
+        # against ~48.9k, dark ~15 against ~69).
+        # Eat lost dark fingers and the face (~811
+        # against ~1.3k). Talk nicked the open mouth
+        # (~68.7k against ~70.4k, dark ~132 against
+        # ~190). Sit lost dark (~377 against ~515).
+        # Sleep nicked the same closed face (~1.2k
+        # against ~1.3k). Cream hide is not Pale's
+        # wash — TAN_SIT is other keys. Hang took
+        # sloth off TAN_SIT; I did not put sloth
+        # back. I did not join. DARK_MATTE already
+        # lists crow, raven, pileated, widow,
+        # vinegaroon, skunk, millipede, field_cricket
+        # from the original meadow sit, click_beetle
+        # from Click, earwig from Forceps, and
+        # robber_fly from Rob; that membership stays.
+        # I did not add gibbon. She is cream and a
+        # dark face. That set is other keys. The
+        # plate on these raws is actually black, so
+        # luma-8 knocks it (fill ~0.16–0.62, med
+        # luma 0 on the plate corners, not a
+        # cream-plate leftover that luma-8 would
+        # keep at ~0.78). Leftover idle was already
+        # a house-hand reach on a clear plate; idle
+        # and blotter stay. Sun's lemur elif stays
+        # Sun's. Hang's sloth elif stays Hang's.
+        # Rob's robber_fly elif stays Rob's. Click's
+        # click_beetle elif stays Click's. Snout's
+        # acorn_weevil elif stays Snout's. Forceps's
+        # earwig elif stays Forceps's. Lace's
+        # lacewing elif stays Lace's. Jewel's
+        # jewelwing elif stays Jewel's. Banner's
+        # swallowtail elif stays Banner's. Vault's
+        # grasshopper elif stays Vault's. Blade's
+        # katydid stayed on default. Chirp's
+        # field_cricket elif stays Chirp's.
+        # Thread's nematode stayed on default.
+        # Luma-8 keeps the whole Hylobates.
+        # knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
