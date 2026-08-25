@@ -3740,6 +3740,100 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "potto":
+        # Still's dark pads, a dark nose,
+        # and tawny hide nick when default
+        # plate-flood treats hide as black.
+        # She is a potto. A slow cousin.
+        # Not a loris. The grip, the still,
+        # is the tell. A potto is not a
+        # sloth and not a loris. Not Hang.
+        # Tawny hide can look like wash —
+        # it is hide. Default shredded sit
+        # (the quieter sit left detached
+        # scraps, 4 comps, live ~126.5k
+        # against luma-8's whole ~128.5k,
+        # dark ~567 against ~994), walk
+        # (the slow walk left the belly
+        # and hind a bite; ~62.1k against
+        # ~71.4k, dark ~98 against ~117),
+        # sleep (the quieter still left
+        # chest and muzzle torn; ~144.4k
+        # against ~161.6k, dark ~173
+        # against ~844), talk (the voice
+        # left the lower body a scrap;
+        # after fit the leftover head
+        # scales large — live ~136.9k
+        # against luma-8's whole ~125.8k,
+        # dark ~490 against ~780), eat
+        # (the gum stay but the rump
+        # nicked; ~120.5k against ~135.3k,
+        # dark ~230 against ~392), and
+        # play (the grip left a hole in
+        # the belly; ~96.5k against
+        # ~99.6k, dark ~127 against ~193).
+        # Cream leftover would leave
+        # studio plate on luma-8; these
+        # raws are actually black (fill
+        # ~0.27–0.62, med luma 0 on the
+        # plate corners, not a cream
+        # leftover at ~0.78). Tawny hide
+        # is not Pale's wash — TAN_SIT is
+        # other keys. Hang took sloth off
+        # TAN_SIT; I did not put sloth
+        # back. I did not join.
+        # DARK_MATTE already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk, millipede,
+        # field_cricket from the original
+        # meadow sit, click_beetle from
+        # Click, earwig from Forceps, and
+        # robber_fly from Rob; that
+        # membership stays. I did not add
+        # potto. She is tawny. That set
+        # is other keys. Leftover idle
+        # was already a house-hand still
+        # on a clear black plate; idle
+        # and blotter stay. Gaze's
+        # tarsier elif stays Gaze's.
+        # Boom's howler elif stays
+        # Boom's. Wrist's kinkajou elif
+        # stays Wrist's. Swing's gibbon
+        # elif stays Swing's. Sun's lemur
+        # elif stays Sun's. Hang's sloth
+        # elif stays Hang's. Rob's
+        # robber_fly elif stays Rob's.
+        # Click's click_beetle elif stays
+        # Click's. Snout's acorn_weevil
+        # elif stays Snout's. Forceps's
+        # earwig elif stays Forceps's.
+        # Lace's lacewing elif stays
+        # Lace's. Jewel's jewelwing elif
+        # stays Jewel's. Banner's
+        # swallowtail elif stays Banner's.
+        # Vault's grasshopper elif stays
+        # Vault's. Blade's katydid stayed
+        # on default. Chirp's field_cricket
+        # elif stays Chirp's. Thread's
+        # nematode stayed on default.
+        # Sail's colugo stayed on default.
+        # Glide's flying_squirrel stayed
+        # on default. Luma-8 keeps the
+        # whole Perodicticus.
+        # knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
