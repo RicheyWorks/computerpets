@@ -5189,6 +5189,169 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "sundew":
+        # Dew's lime-green stalks,
+        # round pads, red tentacles,
+        # and mucilage drops nick
+        # when default plate-flood
+        # treats hide as black or
+        # as Pale's wash. She is a
+        # round-leaved sundew.
+        # Round pads on thin stalks,
+        # red tentacles, a drop of
+        # glue on each hair, a curl
+        # that takes its time.
+        # Round-leaved sundew of
+        # peat and light. She
+        # glues. She is not a door.
+        # Not a flytrap. Snap
+        # slams; Dew is Drosera
+        # rotundifolia, mucilage
+        # and a slow curl. Not
+        # Well. Well is a pitfall
+        # that waits with water.
+        # Three hunts on this
+        # blotter: snap, drown,
+        # glue. Habitat is a peat
+        # saucer, which is weather,
+        # not painted moss, not a
+        # painted pot, not a bog
+        # diorama you draw. House
+        # food is a gnat. She
+        # glittered. That is hello.
+        # The glue is the tell.
+        # She does not snap. She
+        # curls, later. Lime-green
+        # stalks are hide. Round
+        # pads are hide. Red
+        # tentacles are hide.
+        # Mucilage drops are hide
+        # (they glitter; they are
+        # not wash). A gnat stays
+        # living food. Default
+        # shredded idle (live
+        # ~166.7k against luma-8's
+        # whole ~189.5k; after fit
+        # ~51.1k against ~56.2k;
+        # glitter 993 against 1784;
+        # 24 comps against 7; the
+        # living glitter shredded
+        # into nicked fragments),
+        # sit (glitter 379 against
+        # 732), walk (the lean left
+        # live ~146.6k against
+        # ~168.5k; after fit
+        # ~45.3k against ~51.4k;
+        # glitter 317 against 768),
+        # sleep (live ~157.5k
+        # against ~170.9k; glitter
+        # 665 against 890; she
+        # holds this glitter), talk
+        # (the voice left live
+        # ~388.1k against ~482.2k;
+        # after fit ~85.2k against
+        # ~101.6k; glitter 2829
+        # against 5196; the living
+        # face of a pad lost
+        # drops), eat (live
+        # ~128.0k against ~151.2k;
+        # red ~62.1k against
+        # ~74.0k; glitter 62
+        # against 208; luma-8
+        # keeps the gnat of a
+        # treaty), and play (live
+        # ~167.0k against ~199.4k;
+        # red ~61.8k against
+        # ~76.8k; glitter 137
+        # against 628; the athletic
+        # curl shredded). Cream
+        # leftover would leave
+        # studio plate on luma-8;
+        # these raws are actually
+        # black (fill ~0.16–0.46,
+        # med luma 0 on the plate
+        # corners, not a cream
+        # leftover at ~0.78). Tan
+        # glitter sheen is not
+        # Pale's wash — TAN_SIT
+        # is other keys. Hang
+        # took sloth off TAN_SIT;
+        # I did not put sloth
+        # back. I did not join.
+        # DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add sundew. She is a
+        # round-leaved sundew.
+        # That set is other keys.
+        # Leftover idle was a
+        # field-guide Drosera
+        # stamp on a black plate,
+        # the same rosette of
+        # round pads plus the
+        # same painted moss-and-
+        # soil mound seven times;
+        # idle and blotter follow
+        # the new living glitter.
+        # Well's pitcher elif
+        # stays Well's. Snap's
+        # venus_flytrap elif
+        # stays Snap's. Arm's
+        # saguaro elif stays
+        # Arm's. Moth's orchid
+        # elif stays Moth's.
+        # Disk's water_lily elif
+        # stays Disk's. Mast's
+        # oak elif stays Mast's.
+        # Fan's ginkgo elif stays
+        # Fan's. Vein's
+        # maidenhair elif stays
+        # Vein's. Felt's moss
+        # elif stays Felt's.
+        # Gum's koala elif stays
+        # Gum's. Still's potto
+        # elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays
+        # Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's.
+        # Sun's lemur elif stays
+        # Sun's. Hang's sloth
+        # elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Drosera.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
