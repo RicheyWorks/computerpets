@@ -3931,6 +3931,118 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "moss":
+        # Felt's pale green hide and
+        # dark recesses nick when
+        # default plate-flood treats
+        # hide as black or as Pale's
+        # wash. She is sheet moss. A
+        # green page. No flowers. No
+        # true roots — only rhizoids
+        # that cling. Cypress-moss.
+        # The carpet is the tell. Not
+        # a flowering plant. Not a
+        # lichen. Not Vein. Not Fan.
+        # Not a juniper or a cedar.
+        # Pale green hide can look
+        # like wash — it is hide.
+        # Default shredded talk (the
+        # voice left 13703 comps;
+        # live ~138.5k against
+        # luma-8's whole ~548.9k;
+        # mid ~2.9k against ~533.5k;
+        # after fit ~18.8k against
+        # ~110.4k, dark ~42 against
+        # ~14.4k), sleep (the quieter
+        # felt shredded; mid ~8.1k
+        # against luma-8's whole
+        # ~353.0k; after fit ~42.8k
+        # against ~96.7k), walk (the
+        # lean left 1148 comps; live
+        # ~354.2k against ~385.1k;
+        # mid ~316.9k against
+        # ~366.0k; after fit ~75.9k
+        # against ~86.7k, dark ~4.8k
+        # against ~8.1k), play (the
+        # athletic page nicked, 11
+        # comps; mid ~384.7k against
+        # ~436.1k; after fit ~89.2k
+        # against ~100.6k),
+        # sit (the quieter page left
+        # 113 comps; live ~246.2k
+        # against ~252.9k; after fit
+        # ~65.8k against ~68.0k),
+        # eat (the dew stay but the
+        # page nicked, 151 comps;
+        # live ~461.2k against
+        # ~471.9k; after fit ~96.9k
+        # against ~101.2k), and idle
+        # (100 comps; live ~481.8k
+        # against ~487.3k; after fit
+        # ~103.0k against ~104.9k).
+        # Cream leftover would leave
+        # studio plate on luma-8;
+        # these raws are actually
+        # black (fill ~0.24–0.52,
+        # med luma 0 on the plate
+        # corners, not a cream
+        # leftover at ~0.78). Pale
+        # green hide is not Pale's
+        # wash — TAN_SIT is other
+        # keys. Hang took sloth off
+        # TAN_SIT; I did not put
+        # sloth back. I did not
+        # join. DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that membership
+        # stays. I did not add moss.
+        # She is a green page. That
+        # set is other keys. Leftover
+        # idle was a field-guide
+        # clump on a black plate, a
+        # soft juniper stamp more
+        # than a living page; idle
+        # and blotter follow the new
+        # living carpet. Gum's koala
+        # elif stays Gum's. Still's
+        # potto elif stays Still's.
+        # Gaze's tarsier elif stays
+        # Gaze's. Boom's howler elif
+        # stays Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's. Sun's
+        # lemur elif stays Sun's.
+        # Hang's sloth elif stays
+        # Hang's. Blade's katydid
+        # stayed on default.
+        # Thread's nematode stayed
+        # on default. Sail's colugo
+        # stayed on default. Glide's
+        # flying_squirrel stayed on
+        # default. Luma-8 keeps the
+        # whole Hypnum.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
