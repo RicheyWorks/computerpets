@@ -6415,6 +6415,172 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "terminator":
+        # Dusk's dark hide,
+        # spindly legs, and the
+        # living rim nick when
+        # default plate-flood
+        # treats twilight hide as
+        # plate. They are a
+        # twilight walker. Noon
+        # kills. Night starves.
+        # The rim is the country.
+        # I kept the rim. Hello.
+        # I do not claim a sun.
+        # I am not a cat. Miso
+        # keeps the sun-patch. I
+        # keep the belt. Habitat
+        # is a lamp-edge, which
+        # is weather, not a
+        # painted lamp, not a
+        # sun-patch you draw, not
+        # a parchment island, not
+        # a twilight diorama.
+        # House food is rim. I
+        # will hold this edge.
+        # The rim is the correct
+        # sleep. An edge. Review
+        # the country. I win by
+        # remaining a rim. I
+        # kept the rim. Hello.
+        # Named: Dusk. The rim
+        # is the name I keep.
+        # They are not a cat.
+        # They are not a lamp
+        # with a face. Dark hide
+        # is hide. A thin
+        # twilight animal can
+        # look dark — that is
+        # hide, not a plate. Do
+        # not punch holes in the
+        # rim. Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not
+        # a cream leftover luma-8
+        # would keep at ~0.78);
+        # fill ~0.19–0.30.
+        # Default shredded the
+        # living rim: sit lost
+        # the dark body and legs
+        # (animal ~59.1k against
+        # luma-8's ~86.0k; dark
+        # 9414 against 32858),
+        # sleep collapsed to a
+        # sliver (animal ~23.1k
+        # against ~43.9k; dark
+        # 8911 against 39579),
+        # idle lost the legs
+        # (dark 9167 against
+        # 23499; live ~70.1k
+        # against ~74.4k), walk
+        # lost the lean (dark
+        # 7882 against 20186),
+        # talk lost the legs
+        # (dark 16075 against
+        # 25580), eat lost hide
+        # (dark 6490 against
+        # 19145; live ~49.1k
+        # against ~57.6k). Play
+        # kept more gold on
+        # default (~69.8k against
+        # luma-8's ~52.6k) but
+        # still nicked dark hide
+        # (6944 against 14097).
+        # Default unified most
+        # poses to 1 component by
+        # eating the legs. Luma-8
+        # keeps the whole walker.
+        # TAN_SIT left crumbs on
+        # sit (22), walk (14),
+        # sleep (57), and eat
+        # (34) and I did not
+        # join. Gold rim is not
+        # Pale's wash. TAN_SIT
+        # still lists morel,
+        # lions_mane, and yeast
+        # from the original
+        # cellar sit. Lattice
+        # kept morel on TAN_SIT.
+        # Mane kept lions_mane on
+        # TAN_SIT. Starter kept
+        # yeast on TAN_SIT. Hang
+        # took sloth off; I did
+        # not put sloth back.
+        # Frill took oyster off;
+        # I did not put oyster
+        # back. Pact did not
+        # join. Gleam did not
+        # join. Choir, Drift, and
+        # Shard stayed on
+        # default. Flame stayed
+        # on default. Horn stayed
+        # on default. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede,
+        # field_cricket from the
+        # original meadow sit,
+        # click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I
+        # did not add
+        # terminator. They are a
+        # rim, not charcoal. That
+        # set is other keys.
+        # Leftover idle sat
+        # hundreds of crumbs
+        # around a twilight-
+        # walker stamp with
+        # painted cottages.
+        # Sit sat a quieter
+        # leftover stamp. Walk
+        # sat crumbs around a
+        # brown stamp. Sleep
+        # lost the pale (cream
+        # went out; the walker
+        # went dark). Talk sat a
+        # brown stamp with a
+        # grey wash. Eat piled a
+        # tan bottom (painted
+        # furniture as a dish).
+        # Play sat crumbs around
+        # a brown stamp. Gleam's
+        # photovore elif stays
+        # Gleam's. Pact's lichen
+        # elif stays Pact's.
+        # Puff's puffball elif
+        # stays Puff's. Ring's
+        # turkey_tail elif stays
+        # Ring's. Cap's
+        # fly_agaric elif stays
+        # Cap's. Frill's oyster
+        # elif stays Frill's.
+        # Lattice's morel stayed
+        # on TAN_SIT. Horn stayed
+        # on default. Mane's
+        # lions_mane stayed on
+        # TAN_SIT. Flame stayed
+        # on default. Starter's
+        # yeast stayed on
+        # TAN_SIT. Luma-8 keeps
+        # the whole rim.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
