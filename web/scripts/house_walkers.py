@@ -5903,6 +5903,171 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "puffball":
+        # Puff's cream pearl hide,
+        # tiny warts, apical pore,
+        # and the living puff nick
+        # when default plate-flood
+        # treats hide as Pale's
+        # wash. She is a common
+        # puffball. A pearly globe
+        # with tiny warts, a pore
+        # at the top, a puff then
+        # a cloud. Common puffball.
+        # She sits. Then she
+        # bursts. The dish is a
+        # meadow she agreed to.
+        # Not a young Amanita.
+        # Cut a puffball and it is
+        # a room of white; cut a
+        # button Amanita and you
+        # find gills and a volva
+        # hiding. Puff is
+        # Lycoperdon perlatum.
+        # The cut is the law. Cap
+        # taught the warning. Puff
+        # teaches the check.
+        # Habitat is a duff dish,
+        # which is weather, not
+        # painted soil, not a leaf
+        # pile, not a parchment
+        # island, not a forest
+        # diorama you draw. House
+        # food is duff. Cap,
+        # Lattice, and Horn also
+        # eat duff. Do not pile
+        # leaves or soil on as a
+        # dish. Pearl hide is
+        # hide. Tiny warts are
+        # hide. The pore is hide.
+        # The puff is hide. Cream
+        # hide can look like tan
+        # wash — it is hide. Do
+        # not punch holes in the
+        # globe. Default shredded
+        # play (the athletic puff:
+        # live ~81.9k against
+        # luma-8's whole ~99.6k;
+        # cream ~20.8k against
+        # ~22.7k; 95 comps against
+        # 1; the living cloud
+        # nicked into islands) and
+        # nicked sleep dark hide
+        # (~8.7k against luma-8's
+        # ~18.3k; live ~135.1k
+        # against ~146.1k). Idle,
+        # sit, walk, talk, and
+        # eat stayed close on
+        # default (1 comp), but
+        # play is the burst. She
+        # wins by remaining a
+        # burst. Cream leftover
+        # would leave studio plate
+        # on luma-8; these raws
+        # are actually black (fill
+        # ~0.42–0.57, med luma 0
+        # on the plate corners,
+        # not a cream leftover at
+        # ~0.78). Cream pearl hide
+        # is not Pale's wash —
+        # TAN_SIT still lists
+        # morel, lions_mane, and
+        # yeast from the original
+        # cellar sit. I did not
+        # join those. I did not
+        # join puffball. Lattice
+        # kept morel on TAN_SIT.
+        # Mane kept lions_mane on
+        # TAN_SIT. Frill took
+        # oyster off TAN_SIT; I
+        # did not put oyster back.
+        # Hang took sloth off
+        # TAN_SIT; I did not put
+        # sloth back. I did not
+        # join. DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add puffball. She is
+        # a puffball. That set is
+        # other keys. Leftover
+        # idle was a smooth cream
+        # sphere stamp on a black
+        # plate, missing the tiny
+        # warts and the pore; sit
+        # sat a dome on a torn
+        # cardboard / parchment
+        # island with a nick;
+        # walk sat the sphere on
+        # a painted soil/mulch
+        # patch; sleep was the
+        # same standing puff; talk
+        # was a wrecked globe with
+        # a jagged torn hole and a
+        # brown parchment base;
+        # eat piled dried leaves
+        # and a mycelium tangle;
+        # play was beige/brown
+        # torn-paper shards in a
+        # broken circle. Idle and
+        # blotter follow the new
+        # living pearl. Ring's
+        # turkey_tail elif stays
+        # Ring's. Cap's
+        # fly_agaric elif stays
+        # Cap's. Frill's oyster
+        # elif stays Frill's.
+        # Lattice's morel stayed
+        # on TAN_SIT. Horn stayed
+        # on default. Mane's
+        # lions_mane stayed on
+        # TAN_SIT. Dew's sundew
+        # elif stays Dew's. Well's
+        # pitcher elif stays
+        # Well's. Snap's
+        # venus_flytrap elif
+        # stays Snap's. Arm's
+        # saguaro elif stays
+        # Arm's. Moth's orchid
+        # elif stays Moth's.
+        # Disk's water_lily elif
+        # stays Disk's. Mast's
+        # oak elif stays Mast's.
+        # Fan's ginkgo elif stays
+        # Fan's. Vein's
+        # maidenhair elif stays
+        # Vein's. Felt's moss
+        # elif stays Felt's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Lycoperdon.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
