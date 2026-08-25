@@ -3834,6 +3834,103 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "koala":
+        # Gum's dark nose, dark claws,
+        # and grey wool hide nick when
+        # default plate-flood treats hide
+        # as black. He is a koala. A
+        # marsupial. Not a bear. The
+        # chew, the pouch, is the tell.
+        # A koala is not a bear. Not
+        # Coal. Not Burr. Grey wool hide
+        # can look like wash — it is
+        # hide. Default shredded sit
+        # (the quieter sit left 14 comps
+        # and nicked dark hide; live
+        # ~107.9k against luma-8's whole
+        # ~109.9k, dark ~809 against
+        # ~1487; pre-fit lost ~10.7k),
+        # walk (the climb left a rump
+        # hole, 11 comps; pre-fit lost
+        # ~4.8k, dark after fit ~327
+        # against ~411), sleep (the
+        # quieter sit nicked dark hide;
+        # ~131.6k against ~131.7k, dark
+        # ~1.3k against ~1.6k; pre-fit
+        # lost ~6.3k), and eat (the chew
+        # stayed but claws and nose
+        # nicked, 8 comps; ~107.4k
+        # against ~108.3k, dark ~752
+        # against ~1143; pre-fit lost
+        # ~9.8k). Cream leftover would
+        # leave studio plate on luma-8;
+        # these raws are actually black
+        # (fill ~0.30–0.44, med luma 0
+        # on the plate corners, not a
+        # cream leftover at ~0.78). Grey
+        # wool hide is not Pale's wash —
+        # TAN_SIT is other keys. Hang
+        # took sloth off TAN_SIT; I did
+        # not put sloth back. I did not
+        # join. DARK_MATTE already lists
+        # crow, raven, pileated, widow,
+        # vinegaroon, skunk, millipede,
+        # field_cricket from the original
+        # meadow sit, click_beetle from
+        # Click, earwig from Forceps, and
+        # robber_fly from Rob; that
+        # membership stays. I did not add
+        # koala. He is grey wool. That
+        # set is other keys. Leftover
+        # idle was already a house-hand
+        # chew on a clear black plate;
+        # idle and blotter stay.
+        # Leftover talk was already a
+        # whole living open-mouth koala;
+        # talk stays. Leftover play was
+        # already a whole reaching koala;
+        # play stays. Still's potto elif
+        # stays Still's. Gaze's tarsier
+        # elif stays Gaze's. Boom's
+        # howler elif stays Boom's.
+        # Wrist's kinkajou elif stays
+        # Wrist's. Swing's gibbon elif
+        # stays Swing's. Sun's lemur
+        # elif stays Sun's. Hang's sloth
+        # elif stays Hang's. Rob's
+        # robber_fly elif stays Rob's.
+        # Click's click_beetle elif stays
+        # Click's. Snout's acorn_weevil
+        # elif stays Snout's. Forceps's
+        # earwig elif stays Forceps's.
+        # Lace's lacewing elif stays
+        # Lace's. Jewel's jewelwing elif
+        # stays Jewel's. Banner's
+        # swallowtail elif stays Banner's.
+        # Vault's grasshopper elif stays
+        # Vault's. Blade's katydid stayed
+        # on default. Chirp's
+        # field_cricket elif stays
+        # Chirp's. Thread's nematode
+        # stayed on default. Sail's
+        # colugo stayed on default.
+        # Glide's flying_squirrel stayed
+        # on default. Luma-8 keeps the
+        # whole Phascolarctos.
+        # knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
