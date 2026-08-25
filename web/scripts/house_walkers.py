@@ -4164,6 +4164,129 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "ginkgo":
+        # Fan's pale green fans and
+        # gold fans nick when
+        # default plate-flood treats
+        # hide as black or as Pale's
+        # wash. He is a ginkgo. A
+        # living fossil. Fan leaves
+        # with a notch, veins that
+        # do not net, gold when the
+        # desk turns autumn. He is
+        # not a flowering plant.
+        # The fan is the tell. The
+        # gold is a season, not a
+        # mood. Not a maple. Not
+        # Mast. Not Vein. Pale
+        # green fans can look like
+        # wash — they are hide.
+        # Gold fans are hide, a
+        # season. Default shredded
+        # walk (the lean left live
+        # ~80.4k against luma-8's
+        # whole ~124.1k; after fit
+        # ~21.9k against ~30.8k,
+        # fill 0.084; green ~37.4k
+        # against ~71.0k), eat (the
+        # leaf stay but the fans
+        # nicked; live ~154.2k
+        # against ~210.1k; after
+        # fit ~40.1k against
+        # ~51.3k; green ~113.8k
+        # against ~165.4k), sit
+        # (the quieter sit nicked;
+        # live ~323.2k against
+        # ~377.5k; after fit
+        # ~94.1k against ~109.7k),
+        # play (the athletic gold
+        # nicked; live ~344.2k
+        # against ~381.0k; after
+        # fit ~83.2k against
+        # ~89.5k; gold ~224.4k
+        # against ~256.7k), sleep
+        # (the quieter gold
+        # nicked; live ~247.3k
+        # against ~282.5k), and
+        # idle (live ~408.9k
+        # against ~432.2k; after
+        # fit ~91.0k against
+        # ~94.4k). Talk was nearly
+        # even (~392.5k against
+        # ~396.1k). Cream leftover
+        # would leave studio plate
+        # on luma-8; these raws
+        # are actually black
+        # (fill ~0.14–0.43, med
+        # luma 0 on the plate
+        # corners, not a cream
+        # leftover at ~0.78). Pale
+        # green fans and gold fans
+        # are not Pale's wash —
+        # TAN_SIT is other keys.
+        # Hang took sloth off
+        # TAN_SIT; I did not put
+        # sloth back. I did not
+        # join. DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add ginkgo. He is a
+        # ginkgo. That set is
+        # other keys. Leftover
+        # idle was a field-guide
+        # Ginkgo sapling stamp on
+        # a black plate, the same
+        # stem plus the same two
+        # gold leaves plus the
+        # same painted soil mound
+        # seven times; idle and
+        # blotter follow the new
+        # living fan. Vein's
+        # maidenhair elif stays
+        # Vein's. Felt's moss elif
+        # stays Felt's. Gum's
+        # koala elif stays Gum's.
+        # Still's potto elif stays
+        # Still's. Gaze's tarsier
+        # elif stays Gaze's.
+        # Boom's howler elif stays
+        # Boom's. Wrist's kinkajou
+        # elif stays Wrist's.
+        # Swing's gibbon elif stays
+        # Swing's. Sun's lemur
+        # elif stays Sun's. Hang's
+        # sloth elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Ginkgo.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
