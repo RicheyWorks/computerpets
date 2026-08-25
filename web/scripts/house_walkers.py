@@ -3030,6 +3030,79 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "earwig":
+        # Forceps's reddish-brown / mahogany hide,
+        # tan tegmina patches, tan thread antennae,
+        # and dark cerci nick when default plate-flood
+        # treats hide as black or as Pale's wash. She
+        # is an earwig. The forceps are the tell. An
+        # earwig is not a mantis. Cerci, not a sting.
+        # Red-brown hide and tan tegmina can look like
+        # tan wash — they are hide. Sit lost live hide
+        # (~18.6k against luma-8's ~34.0k, dark ~1.9k
+        # against ~8.8k) and punched the pause into a
+        # thin scrap. Walk lost (~14.8k against
+        # ~23.3k, dark ~1.5k against ~5.3k) and scaled
+        # the nicked guest larger on the current
+        # DARK_MATTE path. Sleep lost (~18.2k against
+        # ~35.2k, dark ~2.2k against ~10.3k). Talk
+        # lost (~16.8k against ~25.8k, dark ~1.7k
+        # against ~5.2k). Eat lost (~26.8k against
+        # ~41.8k, dark ~2.4k against ~9.2k). Play lost
+        # the raise (~22.4k against ~45.2k, dark ~3.1k
+        # against ~14.2k). Pale cream eggs / scraps at
+        # the mouth are living food and stayed.
+        # TAN_SIT is other keys. I did not join. That
+        # path nicked sit dark (~6.9k against luma-8's
+        # ~8.8k) and sleep dark (~7.5k against
+        # ~10.3k). Pale tan tegmina can look like
+        # Pale's wash — they are Forficula.
+        # DARK_MATTE already lists crow, raven,
+        # pileated, widow, vinegaroon, skunk,
+        # millipede, field_cricket from the original
+        # meadow sit, and earwig from that same sit;
+        # that membership stays. I did not add
+        # earwig. I did not remove existing keys. She
+        # is reddish-brown. That set (tol-16) still
+        # nicked sit (~28.8k against luma-8's ~34.0k,
+        # dark ~6.1k against ~8.8k) and play (~39.3k
+        # against ~45.2k, dark ~11.5k against
+        # ~14.2k). The plate on these raws is actually
+        # black, so luma-8 knocks it (fill
+        # ~0.09–0.17, med luma 0, not a cream-plate
+        # leftover that luma-8 would keep at ~0.78).
+        # Leftover idle was already a house-hand
+        # Forficula on a clear plate (fill ~0.110,
+        # 430 hues). Lace's lacewing elif stays
+        # Lace's. Jewel's jewelwing elif stays
+        # Jewel's. Banner's swallowtail elif stays
+        # Banner's. Vault's grasshopper elif stays
+        # Vault's. Blade's katydid stayed on default.
+        # Chirp's field_cricket elif stays Chirp's.
+        # Scud's amphipod elif stays Scud's. Thread's
+        # nematode stayed on default. Half's
+        # planarian elif stays Half's. Tun's
+        # tardigrade elif stays Tun's. Hop's
+        # springtail elif stays Hop's. Jet's
+        # velvet_worm elif stays Jet's. Cast's
+        # earthworm elif stays Cast's. Armor's
+        # pillbug elif stays Armor's. Link's
+        # millipede elif stays Link's. Haste's
+        # house_centipede elif stays Haste's. Luma-8
+        # keeps the whole Forficula.
+        # knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
