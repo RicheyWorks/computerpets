@@ -4526,6 +4526,160 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "orchid":
+        # Moth's pale white petals
+        # and silvery aerial roots
+        # nick when default
+        # plate-flood treats hide
+        # as black or as Pale's
+        # wash. She is a moth
+        # orchid. Thick aerial
+        # roots, a spray of white
+        # moths that are flowers,
+        # a stem that will not sit
+        # in dirt like a rumor.
+        # She blooms. The bark is
+        # a tree she borrowed.
+        # Not a moth — the moth
+        # is the flower's joke
+        # (Phalaenopsis, the
+        # moth-like one,
+        # amabilis). Not a lily.
+        # Disk floats; Moth hangs
+        # her roots in the air.
+        # The bloom is the tell.
+        # The dirt is optional.
+        # Pale white petals can
+        # look like wash — they
+        # are hide. Silvery-grey
+        # aerial roots are hide.
+        # Green leaves are hide.
+        # Yellow-orange lips are
+        # hide. Mist is living
+        # food. Default shredded
+        # sleep (the closed wing
+        # left live ~71.2k against
+        # luma-8's whole ~153.6k;
+        # after fit ~26.0k against
+        # ~54.5k; green ~4.7k
+        # against ~20.3k; dark
+        # ~4.0k against ~32.2k;
+        # 39 comps against 4; the
+        # folded buds and hanging
+        # roots punched into
+        # holes), walk (the lean
+        # left live ~139.8k
+        # against ~203.7k; after
+        # fit ~36.4k against
+        # ~51.9k; green ~5.9k
+        # against ~25.7k; default
+        # island-knock severed the
+        # stem and left the spray
+        # a second part), sit (the
+        # quieter sit nicked; live
+        # ~115.5k against
+        # ~156.4k; after fit
+        # ~43.0k against ~57.9k;
+        # green ~7.8k against
+        # ~22.7k), talk (the voice
+        # left live ~226.9k
+        # against ~283.1k; after
+        # fit ~58.2k against
+        # ~72.1k; dark ~2.5k
+        # against ~27.9k; 22
+        # comps against 1), eat
+        # (the mist stay but the
+        # plant nicked; live
+        # ~203.3k against
+        # ~252.3k; after fit
+        # ~55.4k against ~68.9k),
+        # idle (live ~228.9k
+        # against ~266.0k; after
+        # fit ~54.2k against
+        # ~62.3k), and play (the
+        # athletic bloom nicked;
+        # live ~142.3k against
+        # ~165.9k; after fit
+        # ~34.4k against ~39.8k;
+        # 26 comps against 6).
+        # Cream leftover would
+        # leave studio plate on
+        # luma-8; these raws are
+        # actually black (fill
+        # ~0.17–0.30, med luma 0
+        # on the plate corners,
+        # not a cream leftover at
+        # ~0.78). Pale white
+        # petals are not Pale's
+        # wash — TAN_SIT is other
+        # keys. Hang took sloth
+        # off TAN_SIT; I did not
+        # put sloth back. I did
+        # not join. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add orchid. She is
+        # a moth orchid. That set
+        # is other keys. Leftover
+        # idle was a field-guide
+        # Phalaenopsis stamp on a
+        # black plate, the same
+        # open spray plus the
+        # same hanging roots
+        # seven times; idle and
+        # blotter follow the new
+        # living open. Disk's
+        # water_lily elif stays
+        # Disk's. Mast's oak elif
+        # stays Mast's. Fan's
+        # ginkgo elif stays Fan's.
+        # Vein's maidenhair elif
+        # stays Vein's. Felt's
+        # moss elif stays Felt's.
+        # Gum's koala elif stays
+        # Gum's. Still's potto
+        # elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays
+        # Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's.
+        # Sun's lemur elif stays
+        # Sun's. Hang's sloth
+        # elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Phalaenopsis.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
