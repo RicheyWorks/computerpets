@@ -3247,6 +3247,88 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "robber_fly":
+        # Rob's grey-brown bristled thorax, white
+        # mystax, thin black legs, and the dark
+        # fly of a treaty nick when default
+        # plate-flood treats hide as black. She
+        # is a robber fly. The hunt is the tell.
+        # A robber fly is not a bee. Not Thrum.
+        # Not Sip. Grey bristle can look like
+        # wash — it is hide. The white mystax is
+        # Efferia, not Pale's wash. Sit lost
+        # (~57.3k live against luma-8's ~61.1k,
+        # dark ~12.6k against ~14.7k) and nicked
+        # the quieter perch legs. Walk lost the
+        # stride (~50.7k against ~54.7k, dark
+        # ~8.8k against ~10.1k). Sleep lost
+        # (~79.5k against ~94.0k, dark ~13.3k
+        # against ~21.6k) and took the tucked
+        # abdomen and legs. Talk lost the speak
+        # (~51.5k against ~53.9k, dark ~9.4k
+        # against ~10.8k) and clipped the raised
+        # speech leg. Eat lost (~55.8k against
+        # ~66.8k, dark ~10.0k against ~15.6k)
+        # and nicked the hunt. Play's extra live
+        # on default (~50.2k against ~43.6k) was
+        # a halo; luma-8 kept the take. The
+        # smaller dark fly at eat is living food
+        # and stayed. TAN_SIT is other keys. I
+        # did not join. Grey bristle can look
+        # like Pale's wash — it is hide.
+        # DARK_MATTE already lists robber_fly
+        # from the original meadow sit, and
+        # already lists crow, raven, pileated,
+        # widow, vinegaroon, skunk, millipede,
+        # field_cricket from that same sit,
+        # click_beetle from Click, and earwig
+        # from Forceps; that membership stays.
+        # I did not add robber_fly. I did not
+        # remove existing keys. She is bristled
+        # and dark-legged. That set is the
+        # default path here and still nicked
+        # sleep and eat and left play plate.
+        # The plate on these raws is actually
+        # black, so luma-8 knocks it (fill
+        # ~0.17–0.36, med luma 0, not a
+        # cream-plate leftover that luma-8
+        # would keep at ~0.78). Leftover idle
+        # was already a house-hand Efferia on a
+        # clear plate (fill ~0.249, 275 hues).
+        # Click's click_beetle elif stays
+        # Click's. Snout's acorn_weevil elif
+        # stays Snout's. Forceps's earwig elif
+        # stays Forceps's. Lace's lacewing elif
+        # stays Lace's. Jewel's jewelwing elif
+        # stays Jewel's. Banner's swallowtail
+        # elif stays Banner's. Vault's
+        # grasshopper elif stays Vault's.
+        # Blade's katydid stayed on default.
+        # Chirp's field_cricket elif stays
+        # Chirp's. Scud's amphipod elif stays
+        # Scud's. Thread's nematode stayed on
+        # default. Half's planarian elif stays
+        # Half's. Tun's tardigrade elif stays
+        # Tun's. Hop's springtail elif stays
+        # Hop's. Jet's velvet_worm elif stays
+        # Jet's. Cast's earthworm elif stays
+        # Cast's. Armor's pillbug elif stays
+        # Armor's. Link's millipede elif stays
+        # Link's. Haste's house_centipede elif
+        # stays Haste's. Luma-8 keeps the whole
+        # Efferia. knock_tiny_crumbs keeps
+        # specks off. Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
