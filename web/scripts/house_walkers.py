@@ -5736,6 +5736,173 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "turkey_tail":
+        # Ring's cream rims and white
+        # pore face nick when default
+        # plate-flood treats hide as
+        # Pale's wash. She is a turkey
+        # tail. Thin fans, color in
+        # zones, a white pore face if
+        # you turn her over. Turkey
+        # tail. A bracket. Not a
+        # turkey. The grain is a log
+        # she agreed to. Not a turkey.
+        # Not an oyster — Frill keeps
+        # gills; Ring is Trametes
+        # versicolor, pores not gills,
+        # and the zones are the years.
+        # Turn her over. The pore is
+        # the identification. Habitat
+        # is wood grain, which is
+        # weather, not painted bark,
+        # not a painted log, not moss
+        # on bark, not a parchment
+        # island, not a forest diorama
+        # you draw. House food is
+        # wood. Frill also eats wood;
+        # Horn, Lattice, and Cap eat
+        # duff. Do not pile bark or
+        # moss on as a dish. Zoned
+        # hide is hide. Cream rims are
+        # hide. The white pore face is
+        # hide. Olive bands are hide
+        # (not moss). Cream/tan hide
+        # can look like tan wash — it
+        # is hide. Default shredded
+        # idle (live ~526.2k against
+        # luma-8's whole ~534.0k;
+        # after fit ~126.4k against
+        # ~126.7k; cream ~20.9k
+        # against ~22.7k; 117 comps
+        # against 1; the living
+        # rosette nicked into
+        # islands), sit (the quieter
+        # sit stayed close: live
+        # ~107.7k against ~108.0k;
+        # 1 comp), walk (the lean
+        # left live ~114.9k against
+        # ~117.1k; cream ~20.8k
+        # against ~23.8k; 111 comps
+        # against 1; isle 49), sleep
+        # (she holds this grain; live
+        # ~88.7k against ~93.0k;
+        # cream ~8.6k against
+        # ~10.5k; 70 comps against
+        # 1), talk (the voice of
+        # pores left live ~130.8k
+        # against ~134.2k; cream
+        # ~30.5k against ~34.9k;
+        # white ~8.1k against ~9.6k;
+        # 152 comps against 1; the
+        # living pore face shredded),
+        # eat (live ~117.5k against
+        # ~127.2k; cream ~15.2k
+        # against ~19.1k; 148 comps
+        # against 1; luma-8 keeps
+        # the wood of a treaty), and
+        # play (the athletic lean
+        # left live ~128.9k against
+        # ~129.4k; 5 comps against
+        # 1). Cream leftover would
+        # leave studio plate on
+        # luma-8; these raws are
+        # actually black (fill
+        # ~0.37–0.61, med luma 0
+        # on the plate corners, not
+        # a cream leftover at
+        # ~0.78). Cream rims and
+        # the pore face are not
+        # Pale's wash — TAN_SIT
+        # still lists morel,
+        # lions_mane, and yeast
+        # from the original cellar
+        # sit. I did not join
+        # those. I did not join
+        # turkey_tail. Lattice kept
+        # morel on TAN_SIT. Frill
+        # took oyster off TAN_SIT;
+        # I did not put oyster
+        # back. Hang took sloth off
+        # TAN_SIT; I did not put
+        # sloth back. I did not
+        # join. DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add turkey_tail. She
+        # is a turkey tail. That
+        # set is other keys.
+        # Leftover idle was a
+        # field-guide turkey-tail
+        # stamp on a black plate;
+        # sit still carried a
+        # parchment island with
+        # painted bark and moss;
+        # walk had a diagonal
+        # painted-bark log; sleep
+        # sat on painted wood/bark;
+        # talk carried bark, moss,
+        # and a tan parchment wash;
+        # eat had vertical bark
+        # fragments and satellite
+        # chips; play sat a
+        # C-shaped cluster on a
+        # decaying-wood/soil base
+        # with stipple; idle and
+        # blotter follow the new
+        # living bracket. Cap's
+        # fly_agaric elif stays
+        # Cap's. Frill's oyster
+        # elif stays Frill's.
+        # Lattice's morel stayed
+        # on TAN_SIT. Horn stayed
+        # on default. Dew's sundew
+        # elif stays Dew's. Well's
+        # pitcher elif stays
+        # Well's. Snap's
+        # venus_flytrap elif
+        # stays Snap's. Arm's
+        # saguaro elif stays
+        # Arm's. Moth's orchid
+        # elif stays Moth's.
+        # Disk's water_lily elif
+        # stays Disk's. Mast's
+        # oak elif stays Mast's.
+        # Fan's ginkgo elif stays
+        # Fan's. Vein's
+        # maidenhair elif stays
+        # Vein's. Felt's moss
+        # elif stays Felt's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Trametes.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
