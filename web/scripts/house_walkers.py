@@ -3400,6 +3400,64 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "lemur":
+        # Sun's dark eye-masks, black muzzle, and the
+        # black rings of a flag tail nick when default
+        # plate-flood treats hide as black. She is a
+        # ring-tailed lemur. The tail is a flag. A
+        # lemur is not a raccoon. Not Stripe. Not Ring.
+        # Cream chest and white face can look like wash
+        # — they are hide. Default shredded sit (the
+        # flag left only a tip; dark ~2.8k against
+        # luma-8's ~6.7k) and eat (flag gone; live
+        # ~84.8k against ~115.5k, dark ~3.4k against
+        # ~12.0k). Talk nicked the open mouth and the
+        # flag (~91.6k against ~96.8k, dark ~6.6k
+        # against ~9.0k). Play lost dark (~2.5k
+        # against ~5.2k). Walk nicked the same rings
+        # (~55.0k against ~56.7k). Cream hide is not
+        # Pale's wash — TAN_SIT is other keys. Hang
+        # took sloth off TAN_SIT; I did not put sloth
+        # back. I did not join. DARK_MATTE already
+        # lists crow, raven, pileated, widow,
+        # vinegaroon, skunk, millipede, field_cricket
+        # from the original meadow sit, click_beetle
+        # from Click, earwig from Forceps, and
+        # robber_fly from Rob; that membership stays.
+        # I did not add lemur. She is cream and grey
+        # and a flag of black rings. That set is other
+        # keys. The plate on these raws is actually
+        # black, so luma-8 knocks it (fill ~0.23–0.46,
+        # med luma 0 on the plate corners, not a
+        # cream-plate leftover that luma-8 would keep
+        # at ~0.78). Leftover idle was already a
+        # house-hand flag on a clear plate; idle and
+        # blotter stay. Leftover sleep was already a
+        # curled house-hand rest; sleep stays. Hang's
+        # sloth elif stays Hang's. Rob's robber_fly
+        # elif stays Rob's. Click's click_beetle elif
+        # stays Click's. Snout's acorn_weevil elif
+        # stays Snout's. Forceps's earwig elif stays
+        # Forceps's. Lace's lacewing elif stays
+        # Lace's. Jewel's jewelwing elif stays
+        # Jewel's. Banner's swallowtail elif stays
+        # Banner's. Vault's grasshopper elif stays
+        # Vault's. Blade's katydid stayed on default.
+        # Chirp's field_cricket elif stays Chirp's.
+        # Thread's nematode stayed on default. Luma-8
+        # keeps the whole Lemur. knock_tiny_crumbs
+        # keeps specks off. Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
