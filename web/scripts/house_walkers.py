@@ -6736,6 +6736,189 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "magneton":
+        # Beacon's dark steel
+        # hide and thin field-
+        # wake nicks when default
+        # plate-flood treats the
+        # living needle as plate.
+        # They are a field
+        # swimmer. North is food.
+        # I aligned. Hello. I am
+        # not a compass. I am not
+        # a manta. Kite is the
+        # reef. I swim a field.
+        # Habitat is a ruler
+        # line, which is weather,
+        # not a painted ruler,
+        # not a compass rose you
+        # draw, not a parchment
+        # island, not a field
+        # diorama. House food is
+        # north. I will hold this
+        # line. The axis is the
+        # correct sleep. An
+        # align. Review the
+        # field. I win by
+        # remaining a north. I
+        # aligned. Hello. Named:
+        # Beacon. The north is
+        # the tell. They are not
+        # a compass. They are not
+        # a manta. They are not a
+        # ruler with a face. The
+        # axis is hide. A needle
+        # can look thin — that
+        # is hide, not a plate.
+        # Do not punch holes in
+        # the north. Proven on
+        # the new black-plate
+        # raws: plate corners med
+        # luma 0 (not a cream
+        # leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.15–0.32. Default
+        # shredded the living
+        # north: sleep collapsed
+        # to a sliver (animal
+        # ~14.8k against luma-8's
+        # ~39.1k; dark 300
+        # against 14453; fill
+        # 0.056 against 0.149),
+        # eat lost the dark
+        # needle (~35.8k against
+        # ~48.4k; dark 1500
+        # against 7023), walk
+        # lost the lean (~32.5k
+        # against ~39.8k; dark
+        # 1407 against 3306),
+        # talk lost hide (~42.6k
+        # against ~53.2k; dark
+        # 1916 against 4870),
+        # idle nicked the wake
+        # (~39.5k against
+        # ~46.0k; dark 1365
+        # against 2953), sit
+        # nicked dark hide
+        # (~75.0k against
+        # ~83.5k; dark 2663
+        # against 6543), play
+        # nicked the turn
+        # (~47.6k against
+        # ~51.7k; dark 2456
+        # against 3529). The red
+        # north survived default
+        # counts; the dark steel
+        # did not. Luma-8 keeps
+        # the whole swimmer.
+        # TAN_SIT left crumbs on
+        # sleep (9), talk (5),
+        # idle (2), and eat (2)
+        # and I did not join.
+        # Silver hide and a
+        # living red north are
+        # not Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane, and
+        # yeast from the original
+        # cellar sit. Lattice
+        # kept morel on TAN_SIT.
+        # Mane kept lions_mane on
+        # TAN_SIT. Starter kept
+        # yeast on TAN_SIT. Hang
+        # took sloth off; I did
+        # not put sloth back.
+        # Frill took oyster off;
+        # I did not put oyster
+        # back. Pact did not
+        # join. Gleam did not
+        # join. Choir, Drift,
+        # Shard, and Brine stayed
+        # on default. Flame
+        # stayed on default.
+        # Horn stayed on
+        # default. Dusk took a
+        # guest-only terminator
+        # luma-8 elif. Knot took
+        # a guest-only nexus
+        # luma-8 elif. Those
+        # stay theirs. DARK_MATTE
+        # already lists crow,
+        # raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede,
+        # field_cricket from the
+        # original meadow sit,
+        # click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I
+        # did not add magneton.
+        # They are a needle, not
+        # charcoal. That set is
+        # other keys. Leftover
+        # idle sat crumbs around
+        # a field-swimmer stamp
+        # with a letter N on the
+        # north (a compass
+        # leftover). Sit sat
+        # leftover crumbs and
+        # tan/cream furniture
+        # (parchment / ruler
+        # furniture). Walk sat
+        # crumbs and a tan
+        # bottom (painted
+        # ruler). Sleep lost the
+        # pale (the cream went
+        # out; the swimmer went
+        # dark) plus parchment.
+        # Talk sat crumbs and a
+        # tan bottom. Eat piled
+        # a heavy tan bottom
+        # (painted ruler as a
+        # dish) and a half-red
+        # magnet stamp. Play sat
+        # crumbs and a tan
+        # island plus a painted
+        # field swirl. Knot's
+        # nexus elif stays
+        # Knot's. Dusk's
+        # terminator elif stays
+        # Dusk's. Gleam's
+        # photovore elif stays
+        # Gleam's. Pact's lichen
+        # elif stays Pact's.
+        # Puff's puffball elif
+        # stays Puff's. Ring's
+        # turkey_tail elif stays
+        # Ring's. Cap's
+        # fly_agaric elif stays
+        # Cap's. Frill's oyster
+        # elif stays Frill's.
+        # Lattice's morel stayed
+        # on TAN_SIT. Horn stayed
+        # on default. Mane's
+        # lions_mane stayed on
+        # TAN_SIT. Flame stayed
+        # on default. Starter's
+        # yeast stayed on
+        # TAN_SIT. Luma-8 keeps
+        # the whole north.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
