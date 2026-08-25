@@ -2964,6 +2964,72 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "lacewing":
+        # Lace's pale lime-green hide, gold / bronze
+        # compound eyes, and long tan thread antennae
+        # nick when default plate-flood treats hide as
+        # Pale's wash. She is a lacewing. The lace is
+        # the tell. A lacewing is not a moth. Gold eyes
+        # and tan thread antennae can look like tan
+        # wash — they are hide. Sit lost gold thread
+        # (~137 gold against luma-8's ~183) and cropped
+        # the antennae. Walk lost the thread (~153
+        # gold against ~174) and scaled the nicked
+        # guest larger (~54.0k live against luma-8's
+        # ~48.7k) because the thread no longer extends
+        # the bbox. Talk nicked the same thread and
+        # scaled the speaking still (~58.2k against
+        # ~53.4k). Eat nicked gold (~134 against
+        # ~142). Play nicked gold (~85 against ~94).
+        # Sleep was nearly even (~42.7k against
+        # ~43.0k). A small aphid at the mouth is
+        # living food and stayed. TAN_SIT is other
+        # keys. I did not join. That path nicked
+        # sleep (~35.2k against luma-8's ~43.0k) and
+        # talk (~41.3k against ~53.4k). Pale green
+        # hide can look like Pale's wash — it is
+        # Chrysoperla. DARK_MATTE already lists crow,
+        # raven, pileated, widow, vinegaroon, skunk,
+        # millipede, and field_cricket from the
+        # original meadow sit; that membership stays.
+        # I did not add lacewing. I did not remove
+        # existing keys. She is pale green and gold.
+        # That set (tol-16) still nicked sit gold
+        # (~148 against luma-8's ~183). The plate on
+        # these raws is actually black, so luma-8
+        # knocks it (fill ~0.16–0.30, med luma 0, not
+        # a cream-plate leftover that luma-8 would
+        # keep at ~0.78). Leftover idle was already a
+        # house-hand Chrysoperla on a clear plate
+        # (fill ~0.211, 488 hues). Jewel's jewelwing
+        # elif stays Jewel's. Banner's swallowtail
+        # elif stays Banner's. Vault's grasshopper
+        # elif stays Vault's. Blade's katydid stayed
+        # on default. Chirp's field_cricket elif
+        # stays Chirp's. Scud's amphipod elif stays
+        # Scud's. Thread's nematode stayed on
+        # default. Half's planarian elif stays
+        # Half's. Tun's tardigrade elif stays Tun's.
+        # Hop's springtail elif stays Hop's. Jet's
+        # velvet_worm elif stays Jet's. Cast's
+        # earthworm elif stays Cast's. Armor's
+        # pillbug elif stays Armor's. Link's
+        # millipede elif stays Link's. Haste's
+        # house_centipede elif stays Haste's. Luma-8
+        # keeps the whole Chrysoperla.
+        # knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
