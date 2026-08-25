@@ -7665,6 +7665,126 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "guinea_pig":
+        # Whee's cream muzzle nicks when
+        # default plate-flood treats a
+        # ticked hide as Pale's wash or
+        # tears a loaf, a wheek, and a
+        # green bite into crumbs. They
+        # are a guinea pig / cavy. A
+        # loaf with a voice. No tail
+        # worth mentioning. The wheek
+        # carries when a fridge opens,
+        # or a deploy lands. She cannot
+        # make her own vitamin C. She
+        # prefers a second loaf nearby.
+        # She popcorns when the news is
+        # good. I sat the fridge-open
+        # salad hour. Hello. I am not a
+        # hamster. Clip works the night
+        # shift alone; I am a cavy from
+        # the Andes, social, and fluent
+        # in salad. I am not a pig. The
+        # name is a rumor I declined. I
+        # am not Thimble. I am not Pip.
+        # I am not Miso. I am not Rui.
+        # Habitat is weather
+        # (fridge-open salad hour), not
+        # painted furniture, not a hay
+        # pile you draw, not a bowl,
+        # not a salad diorama, not a
+        # parchment island. House food
+        # is green, then gone. A sit is
+        # a sit. A walk waddles. Sleep
+        # is a loaf with closed eyes.
+        # Talk is a wheek. Eat is
+        # salad. Play is popcorn. I win
+        # by remaining a second loaf
+        # nearby. Named: Whee. Agouti
+        # hide is hide, not Pale's
+        # wash. Do not punch holes in
+        # the loaf. Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not a
+        # cream leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.32–0.49. Default shredded
+        # the living cavy: idle left
+        # crumbs (21 comps against 1;
+        # animal ~134.6k against
+        # luma-8's ~140.9k), sit left
+        # crumbs (12 comps against 1),
+        # sleep left crumbs (18 comps
+        # against 1; ~118.6k against
+        # ~123.4k), talk left crumbs
+        # (18 comps against 1), eat
+        # left crumbs (23 comps against
+        # 1), play left crumbs (3 comps
+        # against 1), walk left crumbs
+        # (2 comps against 1). Luma-8
+        # keeps the whole loaf.
+        # TAN_SIT nicked the cream
+        # muzzle: idle ~116.1k against
+        # luma-8's ~140.9k, sit
+        # ~124.4k against ~152.1k, eat
+        # ~106.3k against ~119.3k, talk
+        # ~113.1k against ~132.3k. I
+        # did not join. Agouti/cream
+        # hide is not Pale's wash.
+        # TAN_SIT still lists morel,
+        # lions_mane, and yeast from
+        # the original cellar sit.
+        # Lattice kept morel on
+        # TAN_SIT. Mane kept
+        # lions_mane on TAN_SIT.
+        # Starter kept yeast on
+        # TAN_SIT. DARK_MATTE already
+        # lists crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add
+        # guinea_pig. A silver-agouti
+        # cavy is not charcoal.
+        # Thimble's rabbit elif stays
+        # Thimble's. Pip's dog elif
+        # stays Pip's. Miso's cat elif
+        # stays Miso's. Clip did not
+        # add a hamster elif; default
+        # kept the gold. I did not
+        # invent one for Clip. Arca's
+        # cyst elif stays Arca's.
+        # Hush's umbral elif stays
+        # Hush's. Beacon's magneton
+        # elif stays Beacon's. Knot's
+        # nexus elif stays Knot's.
+        # Dusk's terminator elif stays
+        # Dusk's. Gleam's photovore
+        # elif stays Gleam's. Pact's
+        # lichen elif stays Pact's.
+        # Puff's puffball elif stays
+        # Puff's. Ring's turkey_tail
+        # elif stays Ring's. Cap's
+        # fly_agaric elif stays Cap's.
+        # Frill's oyster elif stays
+        # Frill's. Existing luma-8
+        # elifs stay theirs. Luma-8
+        # keeps the whole loaf.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only. Not
+        # a catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
