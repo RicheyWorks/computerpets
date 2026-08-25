@@ -62,7 +62,7 @@ New to the project? Follow this recommended path:
 | Document | Description |
 |----------|-------------|
 | **[How to get your first pet](START-HERE.md)** | Kid-facing steps: install the helpers, copy the house, put Rui on the real desktop. |
-| **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **Start here** for a complete understanding. |
+| **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **§11** is the house polish north-star (the X ads). **Start here** for a complete understanding. |
 | **[Architecture Decision Records](adr/README.md)** | Numbered records of decisions already true on `main` (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron + PyQt contract clients, profiles + k8s). Not a wishlist. |
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |
 | **[NFT ownership](NFT.md)** | Official collections, token→pet bindings, ERC-721/1155, signatures, and verify examples. |
@@ -100,7 +100,7 @@ the [PyQt blotter](../client/README.md) first slice,
 and [ADRs](adr/README.md) for those decisions.
 
 Current status and detailed future plans are documented in the **[Roadmap](ROADMAP.md)**
-and **[Architecture](ARCHITECTURE.md)**.
+(Phase 6 is the house polish north-star) and **[Architecture](ARCHITECTURE.md)** (§11).
 
 ---
 

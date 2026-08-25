@@ -160,6 +160,25 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
+## Phase 6: House polish — the X ads
+
+**Goal:** Grow into the capability of the two ComputerPets X posters without taking their slogan. Every one of the two hundred ten already-named guests feels as present, instrumented, and house-hand as Rui in those frames — living on the real Windows desktop, GPU-lit, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
+
+North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-north-star-the-x-ads). This phase is the bar. Do not mark these done until the house ships them. Catalog stays two hundred ten. No new pets.
+
+- [ ] Rui-sharp keeper HUD on every screen (desk, `/demo`, Live, Meet, Windows overlay): name, level / bond, health, FEED / PLAY / REST. Same card, lockstep sprites. Pirate is Rui’s character, not a new guest.
+- [ ] Overlay heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from actuator — never a painted “UP”.
+- [ ] Align advertised care routes with what we ship, or grow `/pet/feed`, `/pet/play`, `/pet/rest` as the contract. Do not claim 200s we do not return.
+- [ ] Honest GPU sense as a first-class pet sense (heat, util, memory, power). `/metrics/gpu` or desktop-local metrics. Do not fake numbers.
+- [ ] Real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. Today’s overlay is Electron/Chromium; the blotter is Qt OpenGL. Do not invent a finished DX12 engine.
+- [ ] Pets occupy the real Windows 10/11 desktop among real windows and icons. Desktop-first. Mac / Linux / phone after Windows feels like the ad.
+- [ ] Desktop presence is not filesystem theft: no silent read/write/exfil, no keyloggers, no secret capture.
+- [ ] HUD may show who is listening on the mind plugin bus. Keys stay with the keeper.
+- [ ] Leftover art sits until all two hundred ten guests are house-hand. Rui stays the bar. No stamps, no parchment islands. Never retouch a landed guest while sitting a leftover.
+- [ ] Hard locks hold: catalog stays 210; no invented NFT / Store IDs; never retouch `START-HERE.md` to paper over `house-count.test.mjs`.
+
+---
+
 ## Documentation & Process (Ongoing)
 
 - Keep `README.md`, `ARCHITECTURE.md`, and this roadmap in sync
@@ -169,6 +188,6 @@ All critical items required before any public or limited production exposure hav
 
 ---
 
-**Last Updated:** 2026-08-18 (far den: ten xenobiology guests)
+**Last Updated:** 2026-08-25 (Phase 6: house polish north-star — the X ads)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

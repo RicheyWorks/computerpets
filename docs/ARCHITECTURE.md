@@ -8,8 +8,8 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-20 (Java listen door is 8081; desk keeps 8080) |
-| **Version**      | 1.1                                        |
+| **Last Updated** | 2026-08-25 (house polish north-star — the X ads; catalog stays 210) |
+| **Version**      | 1.2                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
 
@@ -44,6 +44,7 @@ Keeping this document accurate reduces onboarding friction and prevents architec
 - [8. Key Design Decisions & Tradeoffs](#8-key-design-decisions--tradeoffs)
 - [9. Scalability, Security & Extensibility Considerations](#9-scalability-security--extensibility-considerations)
 - [10. Recommendations & Next Steps](#10-recommendations--next-steps)
+- [11. House polish north-star (the X ads)](#11-house-polish-north-star-the-x-ads)
 - [Appendix: Glossary of Key Artifacts](#appendix-glossary-of-key-artifacts)
 
 ---
@@ -583,13 +584,14 @@ A detailed and actively maintained roadmap is available in a dedicated document:
 
 > **[📖 Full Implementation Roadmap](ROADMAP.md)**
 
-The roadmap is organized into five clear phases with concrete, prioritized work items:
+The roadmap is organized into six phases with concrete, prioritized work items:
 
 - **Phase 1:** Production Readiness Foundations *(completed May 2026)*
 - **Phase 2:** Security & Reliability Hardening *(current focus)*
 - **Phase 3:** Scalability & Operational Maturity
 - **Phase 4:** Client & Ecosystem Integration
 - **Phase 5:** Long-term Architecture Evolution
+- **Phase 6:** House polish — the X ads *(north-star; see [§11](#11-house-polish-north-star-the-x-ads))*
 
 **Status:** Phase 1 complete. All listed items (observability, persistence, CI/CD/containers, API contracts) delivered. Starting Phase 2. See [ROADMAP.md](ROADMAP.md) for the authoritative checklist.
 
@@ -708,6 +710,107 @@ Goal: Prepare for growth and complexity.
 - Keep `README.md` and this `ARCHITECTURE.md` synchronized after every significant change.
 - When a non-obvious choice lands on `main`, add or supersede an ADR under [`docs/adr/`](adr/README.md). Do not invent APIs, collection addresses, or storefronts.
 - Establish a lightweight threat-modeling practice for each new provider.
+
+---
+
+## 11. House polish north-star (the X ads)
+
+This section is the bar later leftovers grow into. It does **not** implement a HUD, a GPU engine, or a new guest. It translates two ComputerPets X posters into house architecture. The ads are pirate / cyber marketing. The house is ecology, natural history, art, and Tamagotchi. We take the **capability**, not the slogan. A fox, a glowing grid, a pirate hat, or a cyber beast in an ad is a poster, not a taxon. Catalog stays two hundred ten. Rui (`red_panda`) stays the bar. Pirate is Rui’s character, not a new sit.
+
+The leftover art campaign still polishes existing guests one at a time to Rui-level art. This leftover writes the north-star only. Do not retouch sprites, `START-HERE.md`, or the public README from this section.
+
+### 11.1 Promise
+
+Virtual pets that live on the keeper’s real desktop. Two hundred ten already-named guests. Rui-level art. GPU-honest. Backend-honest. Not a browser toy that happens to have a tray icon. Every guest should feel as present, instrumented, and house-hand as Rui in those posters — walking among real windows and icons, lit by a real GPU path, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
+
+### 11.2 What the ads demand, mapped to house systems
+
+| Ad capability | House system | Honest gap |
+|---|---|---|
+| Live on the desktop / rule the screen | Electron overlay (`desktop/`, `main.cjs`) already sits on the Windows work area; Mac extra and Linux mark already exist as later doors. Pets walk among real windows and icons. Desktop-first. **Windows 10/11 first.** | Overlay is Chromium compositing today, not a native compositor that owns the screen. Later leftovers grow the sit, not a fake wallpaper. |
+| 210 animals | `PetType` / living desk / overlay roster / blotter — two hundred ten living kinds. Leftover campaign polishes guests already named. | Catalog stays 210. No new taxa, dens, keys, slugs, or rooms. Ad beasts (cyber-dragon, cyber-scorpion) are metaphors. |
+| Rui-level render | Leftover art campaign. Desk and overlay lockstep. Blotter follows idle. Rui is the quality bar. | No stamps. No parchment islands. Never retouch a landed guest while sitting a leftover. Most guests are not yet Rui-sharp. |
+| FULL GPU / DirectX 12 / Vulkan | A real GPU path is the bar. Today the overlay is Electron/Chromium. The PyQt blotter has a Qt OpenGL viewport (`QOpenGLWidget`), not a custom shader engine. | Do not invent a finished DX12/Vulkan engine. Later: DX12/Vulkan, or an honest Chromium GPU path that still *feels* like the ad. Name the gap; do not paper it. |
+| GPU LOAD HUD (temp, util, memory, power, sparkline) | Host telemetry is a first-class **sense**. The pet may notice heat, util, and memory the way it already notices hunger, weather, and the lamp. New `/metrics/gpu` (or desktop-local metrics) is a future door. | Do not fake numbers. No HUD today. Sense must read the real machine or stay dark. |
+| FEED / PLAY / REST + level / bond card | Life sim already keeps hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, and bond titles (New→Soul) on desk, demo, Live, Meet, and Windows. | The gap is a house-hand overlay HUD as sharp as the ad, on every screen. Care verbs already live; the card does not yet look like the poster. |
+| Spring Boot UP + `/pet/feed` `/pet/play` `/pet/rest` | Backend is the trust anchor: ownership verify, licenses, download, admin revoke, actuator. Java listens on **8081**; the living desk keeps **8080**. Overlay must show a **true** heartbeat (up/down, profile, uptime). | Shipped doors today: `/api/verify/**`, `/api/download/**`, `/api/pets`, `/api/bundles/**`, `/api/admin/**`, `/actuator/health` (and liveness / readiness). Advertised `/pet/feed`, `/pet/play`, `/pet/rest` are the **contract to grow into**, not routes we pretend already return 200. Do not invent NFT addresses. Do not claim Store IDs we do not have. |
+| File explorer / pets among files | Pets occupy the **real** desktop, not a painted wallpaper. They sit on homework, browsers, and icons. | Desktop presence is not filesystem theft. Guests do not silently read, write, or exfiltrate keeper files. No keyloggers. No secret capture. No clipboard harvest. |
+| Mind / talk | Plugin bus (`docs/MIND.md`). House lines are the fallback. Keys stay with the keeper. | HUD may show **who is listening**. It must not invent a mind, leak a key, or ship a server-side secret. |
+
+### 11.3 Target architecture sketch
+
+One house, three doors. Lockstep sprites. The keeper machine holds life clocks and GPU sense. Spring Boot remains the trust anchor. The web desk and `/demo` are the same house in a browser, not a second catalog.
+
+```mermaid
+flowchart LR
+    subgraph Keeper["Keeper machine"]
+        OV[Electron overlay<br/>Windows 10/11 first]
+        GPU[GPU sense<br/>honest host telemetry]
+        LIFE[Life clocks<br/>feed / play / rest]
+        HUD[Keeper HUD<br/>care + heartbeat + mind]
+    end
+
+    subgraph House["Spring Boot 3.3 / Java 21 :8081"]
+        LIC[License / verify / download]
+        ACT[Actuator heartbeat]
+        CARE[Optional pet actions<br/>contract to grow into]
+        MET["/metrics/gpu door<br/>or desktop-local"]
+    end
+
+    subgraph Doors["Same house, three doors"]
+        DESK[Living desk /demo / Meet / dens<br/>:8080]
+        BLOT[PyQt blotter<br/>Qt OpenGL viewport]
+        OV2[Windows overlay<br/>sprites lockstep with desk]
+    end
+
+    OV --- GPU
+    OV --- LIFE
+    OV --- HUD
+    OV <--> LIC
+    HUD --> ACT
+    LIFE -.-> CARE
+    GPU -.-> MET
+    DESK --- OV2
+    BLOT --- DESK
+    LIC --- DESK
+```
+
+Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprites/`. The blotter follows idle. A guest who sits house-hand on the desk sits house-hand on the overlay. No third catalog.
+
+### 11.4 Honest now vs later
+
+**Now (already in the house)**
+
+- Two hundred ten living guests. Rui is the bar. Leftover art sits one guest at a time.
+- Living desk (`web/`), `/demo`, Meet house, dens.
+- Electron overlay on Windows (`desktop/`); renderer sprites lockstep with the desk. Mac extra and Linux mark exist as later doors, not the first polish target.
+- PyQt6 blotter (`client/`) — care verbs, plaques, Qt OpenGL viewport.
+- Life sim: hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, bond titles.
+- Spring Boot trust anchor on 8081: ownership verify, licenses, download, admin revoke, actuator.
+- Mind plugin bus. Keys stay with the keeper.
+
+**Later (grow into the ads; do not mark done)**
+
+- A Rui-sharp keeper HUD on the real desktop — and the same card on desk, demo, Live, Meet, and Windows.
+- Honest GPU sense: heat, util, memory, power. `/metrics/gpu` or desktop-local metrics. Dark if unread.
+- A real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the poster. Not a finished engine claimed today.
+- Advertised care routes aligned with what we ship, or grown as the contract. Heartbeat shows true up/down, profile, and uptime.
+- Mac / Linux / phone after Windows 10/11 feels like the ad.
+- Leftover sits until all two hundred ten are house-hand.
+
+### 11.5 Hard locks
+
+- Catalog stays **two hundred ten**. No new pets, taxa, dens, keys, slugs, or rooms.
+- No invented NFT collection addresses. No invented live Microsoft Store IDs.
+- Never retouch a landed guest while sitting a leftover.
+- Never retouch `docs/START-HERE.md` or the root `README.md` to paper over `house-count.test.mjs`.
+- Rui (`red_panda`) is the art bar. Pirate is Rui’s character, not a new guest.
+- Ad metaphors (cyber-dragon, cyber-scorpion, “zero mercy”) are not product identity and are not catalog rows.
+- Desktop presence is not filesystem theft. No keyloggers. No secret capture.
+- Mind keys stay with the keeper. HUD may name the listener; it may not invent one.
+- Do not implement the HUD, the GPU path, or a new guest from this leftover. Write the bar; later leftovers grow into it.
+
+Roadmap checklist: [ROADMAP.md](ROADMAP.md) Phase 6.
 
 ---
 
