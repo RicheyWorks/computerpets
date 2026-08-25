@@ -3176,6 +3176,77 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "click_beetle":
+        # Click's matte charcoal hide, velvety false-eye
+        # centers, beaded antennae, and thin black legs
+        # nick when default plate-flood treats hide as
+        # black. She is an eyed click beetle. The click
+        # is the tell. A click beetle is not a firefly.
+        # Not Snap. Not Spark. She clicks and does not
+        # light. Charcoal hide can look like plate — it
+        # is hide. Cream rings around the false eyes are
+        # Alaus hide, not wash. Sit lost extra studio
+        # plate (~70.0k live against luma-8's ~57.5k).
+        # Walk's extra live (~45.7k against ~32.6k) was
+        # a halo; luma-8 kept the stride. Sleep lost
+        # (~41.9k against ~50.8k, dark ~2.9k against
+        # ~5.7k) and took the tucked legs and antennae.
+        # Talk left a plate halo (~76.3k against ~41.7k)
+        # and lost the raised speech legs. Eat lost
+        # (~44.3k against ~49.8k, dark ~3.3k against
+        # ~6.9k) and nicked the charcoal hide of a
+        # treaty. Play left extra plate (~58.8k against
+        # ~49.5k). The bark scrap at eat is living food
+        # and stayed. TAN_SIT is other keys. I did not
+        # join. That path nicked eat dark (~1.6k against
+        # luma-8's ~6.9k). Pale cream rings can look
+        # like Pale's wash — they are Alaus. DARK_MATTE
+        # already lists click_beetle from the original
+        # meadow sit, and already lists crow, raven,
+        # pileated, widow, vinegaroon, skunk,
+        # millipede, field_cricket from that same sit,
+        # and earwig from Forceps; that membership
+        # stays. I did not add click_beetle. I did not
+        # remove existing keys. She is charcoal. That
+        # set is the default path here and still nicked
+        # sleep and talk and left sit and talk plate.
+        # The plate on these raws is actually black, so
+        # luma-8 knocks it (fill ~0.12–0.22, med luma
+        # 0, not a cream-plate leftover that luma-8
+        # would keep at ~0.78). Leftover idle was
+        # already a house-hand Alaus on a clear plate
+        # (fill ~0.132, 163 hues). Snout's acorn_weevil
+        # elif stays Snout's. Forceps's earwig elif
+        # stays Forceps's. Lace's lacewing elif stays
+        # Lace's. Jewel's jewelwing elif stays Jewel's.
+        # Banner's swallowtail elif stays Banner's.
+        # Vault's grasshopper elif stays Vault's.
+        # Blade's katydid stayed on default. Chirp's
+        # field_cricket elif stays Chirp's. Scud's
+        # amphipod elif stays Scud's. Thread's
+        # nematode stayed on default. Half's
+        # planarian elif stays Half's. Tun's
+        # tardigrade elif stays Tun's. Hop's
+        # springtail elif stays Hop's. Jet's
+        # velvet_worm elif stays Jet's. Cast's
+        # earthworm elif stays Cast's. Armor's
+        # pillbug elif stays Armor's. Link's
+        # millipede elif stays Link's. Haste's
+        # house_centipede elif stays Haste's. Luma-8
+        # keeps the whole Alaus.
+        # knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
