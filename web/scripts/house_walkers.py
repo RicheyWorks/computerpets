@@ -6581,6 +6581,161 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "nexus":
+        # Knot's many small
+        # animals nick when
+        # default plate-flood
+        # treats lattice gaps as
+        # plate. They are a
+        # walking colony. Many
+        # animals, one name. We
+        # counted. Hello. We are
+        # one guest. We are not a
+        # siphonophore of Earth.
+        # That is only the rhyme.
+        # Habitat is a paperweight,
+        # which is weather, not a
+        # painted weight, not a
+        # glass dome you draw, not
+        # a parchment island, not
+        # a colony diorama. House
+        # food is count. We will
+        # hold this weight. The
+        # name is the correct
+        # sleep. A ripple. Review
+        # the count. We win by
+        # remaining one name. We
+        # counted. Hello. Named:
+        # Knot. We are the name
+        # we keep. They are not a
+        # paperweight with a face.
+        # They are not a crowd of
+        # people. The count is
+        # hide. Do not punch holes
+        # in the colony. Proven on
+        # the new black-plate
+        # raws: plate corners med
+        # luma 0 (not a cream
+        # leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.32–0.43. Default
+        # nicked small animals off
+        # the one name: idle 4
+        # comps before fit
+        # (crumbs 8, 5, 2 against
+        # luma-8's 1; live ~109.4k
+        # against ~113.0k), sit 2
+        # comps after fit against
+        # luma-8's 1 (live ~87.1k
+        # against ~89.4k), eat
+        # split after fit (2 comps,
+        # 220px second part
+        # against luma-8's 1; live
+        # ~89.7k against ~91.5k),
+        # sleep lost dark hide
+        # (64 against luma-8's
+        # 185; live ~77.1k against
+        # ~81.2k), walk live
+        # ~73.2k against ~75.7k,
+        # talk ~109.4k against
+        # ~113.0k, play ~68.6k
+        # against ~69.6k. Default
+        # did not eat half the
+        # colony the way Dusk lost
+        # the rim, but it nicked
+        # the count into extra
+        # animals. Luma-8 keeps
+        # the whole name. TAN_SIT
+        # kept close (idle
+        # ~115.1k, sit ~89.8k,
+        # sleep ~81.9k) and I did
+        # not join. Lavender hide
+        # and tan lattice are not
+        # Pale's wash. TAN_SIT
+        # still lists morel,
+        # lions_mane, and yeast
+        # from the original cellar
+        # sit. Lattice kept morel
+        # on TAN_SIT. Mane kept
+        # lions_mane on TAN_SIT.
+        # Starter kept yeast on
+        # TAN_SIT. Hang took
+        # sloth off; I did not
+        # put sloth back. Frill
+        # took oyster off; I did
+        # not put oyster back.
+        # Pact did not join.
+        # Gleam did not join.
+        # Choir, Drift, and Shard
+        # stayed on default.
+        # Flame stayed on
+        # default. Horn stayed on
+        # default. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede,
+        # field_cricket from the
+        # original meadow sit,
+        # click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add nexus. They are
+        # a colony, not charcoal.
+        # That set is other keys.
+        # Leftover idle sat a
+        # walking-colony stamp
+        # with a cottage diorama.
+        # Sit sat tan parchment
+        # under a quieter stamp.
+        # Walk sat crumbs and a
+        # tan parchment behind.
+        # Sleep sat a tan crumb
+        # at the upper left (the
+        # leftover that lost the
+        # pale). Talk sat tan
+        # ground crumbs. Eat piled
+        # a tan ground and spilled
+        # count as a dish. Play
+        # sat crumbs and a tan
+        # wash behind. Dusk's
+        # terminator elif stays
+        # Dusk's. Gleam's
+        # photovore elif stays
+        # Gleam's. Pact's lichen
+        # elif stays Pact's.
+        # Puff's puffball elif
+        # stays Puff's. Ring's
+        # turkey_tail elif stays
+        # Ring's. Cap's
+        # fly_agaric elif stays
+        # Cap's. Frill's oyster
+        # elif stays Frill's.
+        # Lattice's morel stayed
+        # on TAN_SIT. Horn stayed
+        # on default. Mane's
+        # lions_mane stayed on
+        # TAN_SIT. Flame stayed
+        # on default. Starter's
+        # yeast stayed on
+        # TAN_SIT. Luma-8 keeps
+        # the whole name.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
