@@ -3583,6 +3583,77 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "howler":
+        # Boom's black hide, beard, and the dark of
+        # a howl nick when default plate-flood treats
+        # hide as black. He is a mantled howler.
+        # The howl is the tell. A howler is not a
+        # gibbon. Not Vee. Not Swing. Golden mantle
+        # can look like wash — it is hide. Black
+        # hide can look like plate. Default shredded
+        # sleep (the quieter rest left a mantle
+        # scrap; live ~30.5k against luma-8's
+        # ~84.1k, dark ~26 against ~16.7k), talk
+        # (the howl left a face and a mantle;
+        # ~38.1k against ~86.1k, dark ~1.6k against
+        # ~9.7k), play (the boom left a face and a
+        # mantle; ~37.7k against ~84.8k, dark ~3.0k
+        # against ~25.3k), eat (the leaf stayed but
+        # the belly tore; ~47.0k against ~89.8k,
+        # dark ~632 against ~11.6k), sit (the
+        # quieter sit left holes; ~29.0k against
+        # ~63.9k, dark ~129 against ~15.8k), and
+        # walk (the walk left a mantle scrap;
+        # ~20.3k against ~44.6k, dark ~6 against
+        # ~7.9k). Golden mantle is not Pale's wash
+        # — TAN_SIT is other keys. Hang took sloth
+        # off TAN_SIT; I did not put sloth back.
+        # I did not join. DARK_MATTE already lists
+        # crow, raven, pileated, widow,
+        # vinegaroon, skunk, millipede,
+        # field_cricket from the original meadow
+        # sit, click_beetle from Click, earwig
+        # from Forceps, and robber_fly from Rob;
+        # that membership stays. I did not add
+        # howler. He is black hide plus a golden
+        # mantle. That set is other keys. The
+        # plate on these raws is actually black,
+        # so luma-8 knocks it (fill ~0.17–0.34,
+        # med luma 0 on the plate corners, not a
+        # cream-plate leftover that luma-8 would
+        # keep at ~0.78). Leftover idle was already
+        # a house-hand howl on a clear plate; idle
+        # and blotter stay. Wrist's kinkajou elif
+        # stays Wrist's. Swing's gibbon elif stays
+        # Swing's. Sun's lemur elif stays Sun's.
+        # Hang's sloth elif stays Hang's. Rob's
+        # robber_fly elif stays Rob's. Click's
+        # click_beetle elif stays Click's. Snout's
+        # acorn_weevil elif stays Snout's.
+        # Forceps's earwig elif stays Forceps's.
+        # Lace's lacewing elif stays Lace's.
+        # Jewel's jewelwing elif stays Jewel's.
+        # Banner's swallowtail elif stays
+        # Banner's. Vault's grasshopper elif stays
+        # Vault's. Blade's katydid stayed on
+        # default. Chirp's field_cricket elif
+        # stays Chirp's. Thread's nematode stayed
+        # on default. Sail's colugo stayed on
+        # default. Glide's flying_squirrel stayed
+        # on default. Luma-8 keeps the whole
+        # Alouatta. knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
