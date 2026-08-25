@@ -4043,6 +4043,127 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "maidenhair":
+        # Vein's pale green fanlets
+        # and thin black stems nick
+        # when default plate-flood
+        # treats hide as black or as
+        # Pale's wash. She is a
+        # maidenhair fern. Black
+        # wiry stems, fanlets of
+        # pale green, a fiddlehead
+        # that unfurls like a
+        # sentence. She does not
+        # flower. The black stem is
+        # the tell. Not a flowering
+        # plant. Not a palm. Not
+        # Felt. Not Fan. Not Sol.
+        # Pale green fanlets can
+        # look like wash — they are
+        # hide. Thin black stems
+        # are stems, not wash.
+        # Default shredded play
+        # (the athletic fan left
+        # live ~7.7k against
+        # luma-8's whole ~272.6k;
+        # after fit ~8.3k against
+        # ~62.5k, fill 0.032),
+        # sleep (the folded-fan
+        # shredded; live ~22.3k
+        # against ~118.3k; after
+        # fit ~22.5k against
+        # ~52.5k), walk (the next
+        # coil nicked; live ~78.2k
+        # against ~224.3k; after
+        # fit ~26.1k against
+        # ~54.4k), sit (the quieter
+        # sit nicked; live ~95.3k
+        # against ~186.3k; after
+        # fit ~36.1k against
+        # ~46.5k), eat (mist stay
+        # but the fans nicked;
+        # live ~89.7k against
+        # ~260.8k; after fit
+        # ~35.2k against ~57.9k),
+        # talk (the voice of fans
+        # nicked; live ~116.5k
+        # against ~278.6k; after
+        # fit ~40.5k against
+        # ~69.2k), and idle (live
+        # ~141.8k against ~234.4k;
+        # after fit ~53.3k against
+        # ~57.7k, dark ~16.0k
+        # against ~24.5k). Cream
+        # leftover would leave
+        # studio plate on luma-8;
+        # these raws are actually
+        # black (near-black
+        # ~0.70–0.88, med luma 0
+        # on the plate corners,
+        # not a cream leftover at
+        # ~0.78). Pale green
+        # fanlets are not Pale's
+        # wash — TAN_SIT is other
+        # keys. Hang took sloth
+        # off TAN_SIT; I did not
+        # put sloth back. I did
+        # not join. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add maidenhair. She
+        # is a fern. That set is
+        # other keys. Leftover
+        # idle was a field-guide
+        # Adiantum stamp on a
+        # black plate, the same
+        # fiddlehead plus the same
+        # fanlets seven times;
+        # idle and blotter follow
+        # the new living unfurl.
+        # Felt's moss elif stays
+        # Felt's. Gum's koala elif
+        # stays Gum's. Still's
+        # potto elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays Boom's.
+        # Wrist's kinkajou elif
+        # stays Wrist's. Swing's
+        # gibbon elif stays
+        # Swing's. Sun's lemur
+        # elif stays Sun's. Hang's
+        # sloth elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Adiantum.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
