@@ -6919,6 +6919,226 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "umbral":
+        # Hush's dark
+        # violet hide and thin
+        # heat-mane nicks when
+        # default plate-flood
+        # treats the living
+        # shadow as plate. They
+        # are a heat shadow.
+        # Feeds on waste heat
+        # and shadow. The lamp
+        # is loud. The cool is
+        # lunch. I dimmed.
+        # Hello. I am not a
+        # moth. Moth is an
+        # orchid. I am a
+        # shadow that eats
+        # heat. Habitat is a
+        # lamp shadow, which
+        # is weather, not a
+        # painted lamp, not a
+        # shadow you draw, not
+        # a parchment island,
+        # not a heat diorama.
+        # House food is cool.
+        # I will hold this
+        # shadow. The cool is
+        # the correct sleep.
+        # A dim. Review the
+        # cool. I win by
+        # remaining a shadow.
+        # I dimmed. Hello.
+        # Named: Hush. The
+        # cool is the name I
+        # keep. They are not a
+        # moth. They are not
+        # an orchid. They are
+        # not a lamp with a
+        # face. Dark hide is
+        # hide. A shadow can
+        # look like plate —
+        # that is hide, not a
+        # plate. Do not punch
+        # holes in the cool.
+        # Proven on the new
+        # black-plate raws:
+        # plate corners med
+        # luma 0 (not a cream
+        # leftover luma-8
+        # would keep at
+        # ~0.78); fill
+        # ~0.27–0.39. Default
+        # shredded the living
+        # shadow: sleep
+        # collapsed and split
+        # (animal ~60.3k
+        # against luma-8's
+        # ~96.0k; dark 30681
+        # against 94664; fill
+        # 0.230 against 0.366;
+        # 2 comps against 1
+        # living curl), eat
+        # lost the cool
+        # (~54.0k against
+        # ~74.2k; dark 27578
+        # against 55178), talk
+        # lost the voice
+        # (~60.8k against
+        # ~77.6k; dark 15878
+        # against 32946), idle
+        # nicked the standing
+        # cool (~64.2k against
+        # ~78.9k; dark 25949
+        # against 43205), sit
+        # nicked dark hide
+        # (~75.1k against
+        # ~85.7k; dark 31144
+        # against 48461), walk
+        # nicked the lean
+        # (~62.9k against
+        # ~69.7k; dark 23399
+        # against 30516), play
+        # nicked the dim
+        # (~54.6k against
+        # ~57.3k; dark 19482
+        # against 21030). The
+        # orange heat survived
+        # default counts; the
+        # living shadow did
+        # not. Luma-8 keeps
+        # the whole cool.
+        # TAN_SIT left crumbs
+        # on sleep (32), walk
+        # (15), talk (21), eat
+        # (18), idle (12), and
+        # sit (11) and I did
+        # not join. Violet
+        # hide and a living
+        # heat-mane are not
+        # Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # and yeast from the
+        # original cellar sit.
+        # Lattice kept morel
+        # on TAN_SIT. Mane
+        # kept lions_mane on
+        # TAN_SIT. Starter
+        # kept yeast on
+        # TAN_SIT. Hang took
+        # sloth off; I did
+        # not put sloth back.
+        # Frill took oyster
+        # off; I did not put
+        # oyster back. Pact
+        # did not join. Gleam
+        # did not join. Choir,
+        # Drift, Shard, and
+        # Brine stayed on
+        # default. Flame
+        # stayed on default.
+        # Horn stayed on
+        # default. Dusk took a
+        # guest-only
+        # terminator luma-8
+        # elif. Knot took a
+        # guest-only nexus
+        # luma-8 elif. Beacon
+        # took a guest-only
+        # magneton luma-8
+        # elif. Those stay
+        # theirs. DARK_MATTE
+        # already lists crow,
+        # raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede,
+        # field_cricket from
+        # the original meadow
+        # sit, click_beetle
+        # from Click, earwig
+        # from Forceps, and
+        # robber_fly from Rob;
+        # that membership
+        # stays. umbral
+        # already sat in
+        # DARK_MATTE from
+        # the original far
+        # sit; I did not
+        # add or remove.
+        # The guest-only
+        # elif is the sit.
+        # That set is other
+        # keys.
+        # Leftover idle sat
+        # crumbs around a dark
+        # heat-shadow stamp.
+        # Sit sat leftover tan
+        # and a tan bottom
+        # (parchment / lamp
+        # furniture). Walk
+        # sat crumbs and a
+        # tan bottom (painted
+        # lamp). Sleep lost
+        # the pale (the cream
+        # went out; the
+        # shadow went dark)
+        # plus a tan bottom.
+        # Talk sat crumbs,
+        # tan, and brown
+        # furniture. Eat
+        # piled leftover
+        # crumbs and a tan
+        # bottom (painted
+        # lamp as a dish).
+        # Play sat crumbs and
+        # tan. Beacon's
+        # magneton elif stays
+        # Beacon's. Knot's
+        # nexus elif stays
+        # Knot's. Dusk's
+        # terminator elif
+        # stays Dusk's.
+        # Gleam's photovore
+        # elif stays Gleam's.
+        # Pact's lichen elif
+        # stays Pact's.
+        # Puff's puffball
+        # elif stays Puff's.
+        # Ring's turkey_tail
+        # elif stays Ring's.
+        # Cap's fly_agaric
+        # elif stays Cap's.
+        # Frill's oyster elif
+        # stays Frill's.
+        # Lattice's morel
+        # stayed on TAN_SIT.
+        # Horn stayed on
+        # default. Mane's
+        # lions_mane stayed
+        # on TAN_SIT. Flame
+        # stayed on default.
+        # Starter's yeast
+        # stayed on TAN_SIT.
+        # Luma-8 keeps the
+        # whole cool.
+        # knock_tiny_crumbs
+        # keeps specks off.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
