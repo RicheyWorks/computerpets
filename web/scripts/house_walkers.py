@@ -5020,6 +5020,175 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "pitcher":
+        # Well's wine-purple
+        # pitchers, heavy dark
+        # veins, open hoods, and
+        # rain in the well nick
+        # when default plate-flood
+        # treats hide as black or
+        # as Pale's wash. He is a
+        # purple pitcher plant.
+        # Short wine-purple
+        # pitchers, heavy veins, a
+        # hood that does not close,
+        # rain sitting in the well.
+        # Purple pitcher plant of
+        # northern bogs. He drowns.
+        # The leaf became a hole.
+        # The cup is a bog. Not a
+        # flytrap with a cup glued
+        # on. Snap hinges; Well is
+        # Sarracenia purpurea, a
+        # passive pitfall, and the
+        # water is the method. Not
+        # Dew — Dew glitters and
+        # curls. He does not chase.
+        # The well is enough.
+        # Habitat is a bog cup,
+        # which is weather, not
+        # painted moss, not a
+        # painted pot, not a bog
+        # diorama you draw. House
+        # food is a midge. Rain
+        # sits in him. That is the
+        # whole method. The hood
+        # does not close.
+        # Wine-purple hide is hide.
+        # Dark veins are hide. The
+        # hood is hide. Rain in the
+        # well is living water, not
+        # painted furniture. A
+        # midge stays living food.
+        # Default shredded idle
+        # (live ~298.6k against
+        # luma-8's whole ~379.9k;
+        # after fit ~67.3k against
+        # ~94.9k; dark ~11.4k
+        # against ~22.2k; wine
+        # ~50.0k against ~61.9k;
+        # 87 comps against 31; the
+        # living open shredded into
+        # nicked fragments), sit
+        # (live ~291.3k against
+        # ~327.3k; after fit
+        # ~82.9k against ~96.7k;
+        # 50 comps against 24),
+        # walk (the lean left live
+        # ~310.6k against ~341.7k;
+        # after fit ~81.4k against
+        # ~92.6k; 32 comps against
+        # 13), sleep (the held
+        # water left live ~222.4k
+        # against ~281.2k; after
+        # fit ~47.3k against
+        # ~65.5k; dark ~6.3k
+        # against ~12.4k; 61 comps
+        # against 10; the pitfall
+        # nicked into bites), talk
+        # (the voice left live
+        # ~310.4k against ~362.6k;
+        # after fit ~75.4k against
+        # ~93.2k; 86 comps against
+        # 51; the living face of a
+        # pitcher lost dark veins),
+        # eat (live ~358.2k against
+        # ~455.9k; after fit
+        # ~69.0k against ~99.1k;
+        # dark ~8.2k against
+        # ~18.8k; 127 comps
+        # against 38; luma-8 keeps
+        # the midge of a treaty),
+        # and play (live ~357.6k
+        # against ~410.2k; after
+        # fit ~74.7k against
+        # ~90.7k; dark ~5.9k
+        # against ~10.5k; 52 comps
+        # against 29; the athletic
+        # well shredded). Cream
+        # leftover would leave
+        # studio plate on luma-8;
+        # these raws are actually
+        # black (fill ~0.27–0.44,
+        # med luma 0 on the plate
+        # corners, not a cream
+        # leftover at ~0.78). Tan
+        # wet sheen is not Pale's
+        # wash — TAN_SIT is other
+        # keys. Hang took sloth
+        # off TAN_SIT; I did not
+        # put sloth back. I did
+        # not join. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add pitcher. He is a
+        # purple pitcher plant.
+        # That set is other keys.
+        # Leftover idle was a
+        # field-guide Sarracenia
+        # stamp on a black plate,
+        # the same wine-purple
+        # pitchers plus the same
+        # painted moss-and-soil
+        # mound seven times; idle
+        # and blotter follow the
+        # new living open. Snap's
+        # venus_flytrap elif stays
+        # Snap's. Arm's saguaro
+        # elif stays Arm's. Moth's
+        # orchid elif stays
+        # Moth's. Disk's
+        # water_lily elif stays
+        # Disk's. Mast's oak elif
+        # stays Mast's. Fan's
+        # ginkgo elif stays Fan's.
+        # Vein's maidenhair elif
+        # stays Vein's. Felt's
+        # moss elif stays Felt's.
+        # Gum's koala elif stays
+        # Gum's. Still's potto
+        # elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays
+        # Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's.
+        # Sun's lemur elif stays
+        # Sun's. Hang's sloth
+        # elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Sarracenia.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
