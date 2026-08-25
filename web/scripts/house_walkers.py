@@ -3654,6 +3654,92 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "tarsier":
+        # Gaze's dark pads, pupils, and the
+        # dark of a look nick when default
+        # plate-flood treats hide as black.
+        # She is a Philippine tarsier. The
+        # eyes are the face. A tarsier is
+        # not an owl. Not Heart. Tawny hide
+        # can look like wash — it is hide.
+        # Default shredded sit (the quieter
+        # sit left a detached foot and a
+        # hole in the chest; live ~108.8k
+        # against luma-8's ~116.8k, dark
+        # ~1.9k against ~3.5k), sleep (the
+        # house-hand ball left a torn
+        # underside; ~139.6k against
+        # ~161.8k, dark ~1.4k against
+        # ~3.6k), talk (the voice left the
+        # lower body a scrap; ~89.5k against
+        # ~101.8k, dark ~3.3k against
+        # ~4.2k), play (the splay left a
+        # hole in the torso; ~52.4k against
+        # ~55.9k, dark ~601 against ~806),
+        # and walk (the leap left a hole
+        # between belly and hind leg;
+        # ~32.2k against ~34.2k, dark ~273
+        # against ~350). Eat kept the insect
+        # but nicked pads (~105.9k against
+        # ~111.9k). Cream leftover would
+        # leave studio plate on luma-8;
+        # these raws are actually black
+        # (fill ~0.16–0.50, med luma 0 on
+        # the plate corners, not a cream
+        # leftover at ~0.78). Tawny hide is
+        # not Pale's wash — TAN_SIT is
+        # other keys. Hang took sloth off
+        # TAN_SIT; I did not put sloth
+        # back. I did not join.
+        # DARK_MATTE already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk, millipede,
+        # field_cricket from the original
+        # meadow sit, click_beetle from
+        # Click, earwig from Forceps, and
+        # robber_fly from Rob; that
+        # membership stays. I did not add
+        # tarsier. She is tawny. That set
+        # is other keys. Leftover idle had
+        # a painted branch; idle and
+        # blotter follow the new quieter
+        # look. Boom's howler elif stays
+        # Boom's. Wrist's kinkajou elif
+        # stays Wrist's. Swing's gibbon
+        # elif stays Swing's. Sun's lemur
+        # elif stays Sun's. Hang's sloth
+        # elif stays Hang's. Rob's
+        # robber_fly elif stays Rob's.
+        # Click's click_beetle elif stays
+        # Click's. Snout's acorn_weevil
+        # elif stays Snout's. Forceps's
+        # earwig elif stays Forceps's.
+        # Lace's lacewing elif stays
+        # Lace's. Jewel's jewelwing elif
+        # stays Jewel's. Banner's
+        # swallowtail elif stays Banner's.
+        # Vault's grasshopper elif stays
+        # Vault's. Blade's katydid stayed
+        # on default. Chirp's field_cricket
+        # elif stays Chirp's. Thread's
+        # nematode stayed on default.
+        # Sail's colugo stayed on default.
+        # Glide's flying_squirrel stayed
+        # on default. Luma-8 keeps the
+        # whole Carlito. knock_tiny_crumbs
+        # keeps specks off. Guest-only.
+        # Not a catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
