@@ -6256,6 +6256,165 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "photovore":
+        # Gleam's amber
+        # glass hide, lantern
+        # frames, dark claws, and
+        # the living drink nick
+        # when default plate-flood
+        # treats glow recesses as
+        # plate. She is a lamp-
+        # drinker. A living thirst
+        # of lamp-light. No mouth.
+        # Hunger is a wavelength.
+        # She hovers. Then she
+        # drinks again. Habitat is
+        # lamp glass, which is
+        # weather, not a painted
+        # globe, not a filament,
+        # not a parchment island,
+        # not a lamp you draw as
+        # furniture. House food is
+        # light. I will hold this
+        # glass. The thirst is the
+        # correct sleep. A drink.
+        # That was athletic for a
+        # thirst. I win by
+        # remaining a wavelength.
+        # I drank. That was hello.
+        # Named: Gleam. The thirst
+        # is the name I keep. She
+        # is not a moth — Hush is
+        # the heat shadow later;
+        # Moth is an orchid in the
+        # garden. She is not a
+        # jellyfish. Pulse is
+        # Aurelia. Gleam has no
+        # mouth. Lamp-glow is hide.
+        # Amber is hide. The thirst
+        # is hide. Glow can look
+        # like a wash or a plate —
+        # it is hide. Do not punch
+        # holes in the drink. Do
+        # not glue a mouth on.
+        # Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0–0.6
+        # (not a cream leftover
+        # luma-8 would keep at
+        # ~0.78); fill ~0.24–0.38.
+        # Default nicked dark
+        # lantern frames and claws
+        # and shredded the living
+        # drink: sit dark 253
+        # against luma-8's 409
+        # (live ~98.8k against
+        # ~99.7k), walk dark 129
+        # against 285 (live ~61.2k
+        # against ~62.1k), sleep
+        # dark 265 against 510
+        # (live ~66.9k against
+        # ~69.8k), talk 2 comps
+        # before fit against
+        # luma-8's 1 (after fit
+        # dark 194 against 522;
+        # live ~88.5k against
+        # ~89.0k), eat 2 comps
+        # after fit against
+        # luma-8's 1 (the drink
+        # split; live ~65.6k
+        # against ~67.4k; dark
+        # 1329 against 1886), play
+        # dark 94 against 343
+        # (live ~63.7k against
+        # ~64.4k). Default did not
+        # eat half the thirst the
+        # way Frill lost a shelf,
+        # but it nicked the living
+        # recesses and split the
+        # drink. Luma-8 keeps the
+        # whole wavelength. TAN_SIT
+        # stayed close (sit
+        # ~100.8k, walk ~63.5k,
+        # sleep ~69.8k) and I did
+        # not join. Amber glow is
+        # not Pale's wash. TAN_SIT
+        # still lists morel,
+        # lions_mane, and yeast
+        # from the original cellar
+        # sit. Lattice kept morel
+        # on TAN_SIT. Mane kept
+        # lions_mane on TAN_SIT.
+        # Starter kept yeast on
+        # TAN_SIT. Hang took
+        # sloth off; I did not
+        # put sloth back. Frill
+        # took oyster off; I did
+        # not put oyster back.
+        # Puff did not join.
+        # Flame stayed on default
+        # and did not join. Pact
+        # did not join. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add photovore. She
+        # is glow, not charcoal.
+        # That set is other keys.
+        # Leftover idle was
+        # already a house-hand
+        # living thirst on a
+        # clear plate; I kept it.
+        # Blotter follows idle.
+        # Sit sat crumbs beside
+        # the thirst. Walk sat
+        # crumbs around the hover.
+        # Sleep lost the lamp
+        # (orange and yellow went
+        # out). Talk sat crumbs.
+        # Eat piled a tan bottom
+        # (painted dish / glass
+        # furniture). Play sat
+        # twenty-two crumbs (torn
+        # shards). Pact's lichen
+        # elif stays Pact's.
+        # Puff's puffball elif
+        # stays Puff's. Ring's
+        # turkey_tail elif stays
+        # Ring's. Cap's
+        # fly_agaric elif stays
+        # Cap's. Frill's oyster
+        # elif stays Frill's.
+        # Lattice's morel stayed
+        # on TAN_SIT. Horn stayed
+        # on default. Mane's
+        # lions_mane stayed on
+        # TAN_SIT. Flame stayed
+        # on default. Starter's
+        # yeast stayed on TAN_SIT.
+        # Luma-8 keeps the whole
+        # thirst.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
