@@ -3103,6 +3103,79 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "acorn_weevil":
+        # Snout's tan / ochre hide, dark brown mottled
+        # bands, glossy black eyes, and the long
+        # downward-curving rostrum nick when default
+        # plate-flood treats hide as black or as Pale's
+        # wash. She is an acorn weevil. The snout is
+        # the tell. A weevil is not a bee. Not Auger.
+        # Not Mast. Tan hide and dark mottled bands
+        # can look like tan wash — they are hide. Sit
+        # lost live hide (~42.8k against luma-8's
+        # ~57.8k, dark ~8.0k against ~15.8k) and
+        # punched the pause, losing the legs. Walk
+        # lost (~39.5k against ~48.6k, dark ~7.2k
+        # against ~11.9k). Sleep lost (~93.0k against
+        # ~119.5k, dark ~14.7k against ~30.1k) and
+        # took the tucked drill. Talk lost (~45.3k
+        # against ~58.1k, dark ~10.5k against
+        # ~16.4k). Eat lost (~92.7k against ~126.6k,
+        # dark ~10.0k against ~39.1k) and nicked the
+        # acorn of a treaty. Play lost the raise
+        # (~45.3k against ~52.0k, dark ~7.7k against
+        # ~10.5k). The drilled acorn at eat is living
+        # food and stayed. TAN_SIT is other keys. I
+        # did not join. That path nicked sit dark
+        # (~14.5k against luma-8's ~15.8k) and sleep
+        # dark (~25.3k against ~30.1k). Pale tan hide
+        # can look like Pale's wash — it is Curculio.
+        # DARK_MATTE already lists crow, raven,
+        # pileated, widow, vinegaroon, skunk,
+        # millipede, field_cricket from the original
+        # meadow sit, and earwig from that same sit;
+        # that membership stays. I did not add
+        # acorn_weevil. I did not remove existing
+        # keys. She is tan. That set (tol-16) still
+        # nicked sleep (~108.7k against luma-8's
+        # ~119.5k, dark ~22.2k against ~30.1k) and
+        # talk (~53.0k against ~58.1k). The plate on
+        # these raws is actually black, so luma-8
+        # knocks it (fill ~0.19–0.48, med luma 0, not
+        # a cream-plate leftover that luma-8 would
+        # keep at ~0.78). Leftover idle was already a
+        # house-hand Curculio on a clear plate (fill
+        # ~0.180, 223 hues). Forceps's earwig elif
+        # stays Forceps's. Lace's lacewing elif stays
+        # Lace's. Jewel's jewelwing elif stays
+        # Jewel's. Banner's swallowtail elif stays
+        # Banner's. Vault's grasshopper elif stays
+        # Vault's. Blade's katydid stayed on default.
+        # Chirp's field_cricket elif stays Chirp's.
+        # Scud's amphipod elif stays Scud's. Thread's
+        # nematode stayed on default. Half's
+        # planarian elif stays Half's. Tun's
+        # tardigrade elif stays Tun's. Hop's
+        # springtail elif stays Hop's. Jet's
+        # velvet_worm elif stays Jet's. Cast's
+        # earthworm elif stays Cast's. Armor's
+        # pillbug elif stays Armor's. Link's
+        # millipede elif stays Link's. Haste's
+        # house_centipede elif stays Haste's. Luma-8
+        # keeps the whole Curculio.
+        # knock_tiny_crumbs keeps specks off.
+        # Guest-only. Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
