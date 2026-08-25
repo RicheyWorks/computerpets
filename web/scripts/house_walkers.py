@@ -54,7 +54,6 @@ TAN_SIT = {
     "oyster",
     "pond_snail",
     "rosy_boa",
-    "sloth",
     "yeast",
 }
 
@@ -3329,6 +3328,78 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "sloth":
+        # Hang's dark eye-masks, leathery nose, and
+        # the dark of a two-toed hook nick when
+        # default plate-flood treats hide as black.
+        # She is a two-toed sloth. The hang is the
+        # work. A sloth is not a red panda. Not Rui.
+        # Not Bradypus. Two ivory claws, not three.
+        # Tan shaggy fur can look like wash — it is
+        # hide. The cream face is Choloepus, not
+        # Pale's wash. Default shredded idle (~19.9k
+        # live against luma-8's ~143.0k, dark ~8
+        # against ~1.1k) and left two claw scraps.
+        # Talk lost the speak (~29.6k against
+        # ~142.6k, dark ~19 against ~3.0k) and left
+        # a parchment island (~12.0k). Eat lost the
+        # leaf of a treaty (~43.8k against ~110.6k,
+        # dark ~86 against ~1.6k). Sit kept counts
+        # (~107.7k against ~109.0k) but nicked dark
+        # mask (~351 against ~743). Sleep lost dark
+        # (~188 against ~524). Walk lost the reach
+        # (~72.5k against ~80.9k). Play lost dark
+        # (~114 against ~375). TAN_SIT already
+        # listed sloth from the original canopy sit.
+        # I took her off. That path nicked idle
+        # (~59.5k against luma-8's ~143.0k) and left
+        # a parchment island (~16.2k). Talk lost
+        # (~40.9k against ~142.6k, island ~13.5k).
+        # Eat lost (~27.5k against ~110.6k, island
+        # ~2.5k). Cream face and tan hide are not
+        # Pale's wash. DARK_MATTE already lists
+        # crow, raven, pileated, widow, vinegaroon,
+        # skunk, millipede, field_cricket from the
+        # original meadow sit, click_beetle from
+        # Click, earwig from Forceps, and
+        # robber_fly from Rob; that membership
+        # stays. I did not add sloth. I did not
+        # remove existing keys. She is tan. That
+        # set is other keys. The plate on these
+        # raws is actually black, so luma-8 knocks
+        # it (fill ~0.30–0.55, med luma 0 on the
+        # plate corners, not a cream-plate leftover
+        # that luma-8 would keep at ~0.78). Leftover
+        # idle was already a house-hand hang on a
+        # clear plate, but the mouth was a human
+        # smile; idle is a closed hang now. Talk
+        # was byte-identical to leftover eat; talk
+        # is speech now. Rob's robber_fly elif
+        # stays Rob's. Click's click_beetle elif
+        # stays Click's. Snout's acorn_weevil elif
+        # stays Snout's. Forceps's earwig elif
+        # stays Forceps's. Lace's lacewing elif
+        # stays Lace's. Jewel's jewelwing elif
+        # stays Jewel's. Banner's swallowtail elif
+        # stays Banner's. Vault's grasshopper elif
+        # stays Vault's. Blade's katydid stayed on
+        # default. Chirp's field_cricket elif stays
+        # Chirp's. Scud's amphipod elif stays
+        # Scud's. Thread's nematode stayed on
+        # default. Luma-8 keeps the whole
+        # Choloepus. knock_tiny_crumbs keeps
+        # specks off. Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
@@ -3550,7 +3621,7 @@ S("beaver", "mammal", (112, 80, 52), (168, 132, 88), (28, 20, 16), (72, 52, 36),
 S("porcupine", "mammal", (88, 68, 48), (196, 180, 152), (24, 18, 14), (48, 40, 32), "quill", "Erethizon dorsatum")
 S("black_bear", "mammal", (36, 32, 30), (72, 60, 52), (16, 14, 12), (56, 48, 40), "bear", "Ursus americanus")
 # Canopy
-S("sloth", "mammal", (120, 96, 64), (176, 156, 120), (40, 28, 20), (88, 68, 44), "claw", "Bradypus variegatus")
+S("sloth", "mammal", (120, 96, 64), (176, 156, 120), (40, 28, 20), (88, 68, 44), "claw", "Choloepus didactylus")
 S("lemur", "mammal", (92, 80, 68), (236, 228, 216), (28, 22, 18), (220, 80, 64), "rings", "Lemur catta")
 S("gibbon", "mammal", (92, 72, 48), (196, 176, 148), (32, 24, 18), (64, 48, 32), "arms", "Hylobates lar")
 S("kinkajou", "mammal", (196, 140, 64), (232, 200, 140), (40, 24, 12), (168, 112, 48), "gold", "Potos flavus")
