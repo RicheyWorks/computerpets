@@ -717,16 +717,51 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
     elif key == "goldfish":
-        # Coin's dark gape (speaking, a festival of flakes) nicks when
-        # default plate-flood treats the mouth as black. Gold hide and
-        # pale fins survive default, but the throat is the tell. Talk
-        # nicked the underside of the head. Eat lost the dark mouth of
-        # a festival. Luma-8 keeps the coin. Guest-only. Not a catalog
-        # wash. Not TAN_SIT — pale flakes are not parchment. Not
-        # DARK_MATTE — that set is other keys.
+        # Coin's gold hide is hide, not Pale's wash. Default
+        # plate-flood leaves crumbs on the new black-plate
+        # house-hand: idle 3 comps against luma-8's 1
+        # (animal ~65.2k against ~65.7k), sit 4 comps
+        # against 1 (~96.9k against ~97.4k), talk 9
+        # comps against 1 (~72.0k against ~72.5k).
+        # Walk, sleep, eat, and play stayed one animal
+        # on default; the voice and the hover did not.
+        # Animal counts are close — this is not the old
+        # leftover-photo dark-gape shred. Luma-8 keeps
+        # the whole coin. TAN_SIT kept a little more
+        # gold (~1–2k) and I did not join; a gold coat
+        # is hide, not Pale's wash. TAN_SIT still lists
+        # morel, lions_mane, and yeast. DARK_MATTE
+        # already lists crow, raven, pileated, widow,
+        # vinegaroon, skunk, millipede, field_cricket,
+        # earwig, click_beetle, and robber_fly; that
+        # membership stays. I did not add goldfish. A
+        # goldfish is not charcoal, and that path still
+        # left idle crumbs (3 comps) and talk crumbs
+        # (10 comps). Ink's turtle elif stays Ink's.
+        # Whee's guinea_pig elif stays Whee's.
+        # Thimble's rabbit elif stays Thimble's. Pip's
+        # dog elif stays Pip's. Miso's cat elif stays
+        # Miso's. Clip did not add a hamster elif;
+        # default kept the gold. I did not invent one
+        # for Clip. Existing luma-8 elifs stay theirs.
+        # Proven on the new black-plate raws: plate
+        # corners med luma 0 (not a cream leftover
+        # luma-8 would keep at ~0.78); fill
+        # ~0.23–0.40. Guest-only. Not a catalog wash.
+        # Not TAN_SIT. Not DARK_MATTE. Not Echo. Not
+        # Rue. Named: Coin. They win by remaining
+        # Carassius. No barbels. A split tail. I still
+        # have the thought.
         knocked = clear_connected_plate(raw, luma=8)
         if not knocked.getbbox():
             knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     elif key == "fiddler_crab":
         # Wave's dark olive carapace, tucked eyestalks, and leg
         # shadow nick when default plate-flood treats them as black.
