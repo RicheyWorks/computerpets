@@ -4845,6 +4845,181 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "venus_flytrap":
+        # Snap's green petioles,
+        # red trap mouths, green
+        # cilia, and trigger
+        # hairs nick when default
+        # plate-flood treats hide
+        # as black or as Pale's
+        # wash. She is a Venus
+        # flytrap. A rosette of
+        # hinged leaves, teeth
+        # like a polite fence,
+        # two hairs that must
+        # agree. Venus flytrap: a
+        # wetland plant of poor
+        # soil. She snaps. She is
+        # not a monster. The cup
+        # is a bog. Not a
+        # monster. Not Well —
+        # Well drowns, a leaf
+        # that became a pitfall.
+        # Not Dew — Dew glues and
+        # curls. Snap is Dionaea
+        # muscipula, the Carolina
+        # door, and two hairs are
+        # the law. Three hunts.
+        # Three plants. Habitat
+        # is a wetland cup, which
+        # is weather, not painted
+        # soil, not a painted
+        # moss mound, not a bog
+        # diorama you draw. House
+        # food is a fly. She did
+        # not snap. That is
+        # hello. Two hairs. Then
+        # the door. Green
+        # petioles are hide. Red
+        # trap mouths are hide.
+        # Green cilia are hide.
+        # Trigger hairs are hide.
+        # A fly stays living
+        # food. Default shredded
+        # walk (the lean left
+        # live ~122.5k against
+        # luma-8's whole ~431.1k;
+        # after fit ~40.8k
+        # against ~90.1k; green
+        # ~82.0k against
+        # ~275.8k; 6 comps
+        # against 1; the living
+        # watch shredded into
+        # nicked fragments), talk
+        # (the voice left live
+        # ~268.9k against
+        # ~605.5k; after fit
+        # ~88.1k against
+        # ~124.8k; green ~11.6k
+        # against ~130.1k; dark
+        # 62 against ~20.0k; 9
+        # comps against 1; the
+        # living face of a trap
+        # lost its green
+        # rosette), play (the
+        # athletic snap left live
+        # ~184.5k against
+        # ~522.1k; after fit
+        # ~42.8k against
+        # ~109.3k; green ~4.8k
+        # against ~147.4k; 5
+        # comps against 1; the
+        # sprung hinge shredded
+        # into floating
+        # fragments), sleep (the
+        # closed green hinge left
+        # live ~292.1k against
+        # ~403.7k; after fit
+        # ~77.3k against ~99.7k;
+        # dark ~2.2k against
+        # ~22.0k; 7 comps against
+        # 1; the rest nicked into
+        # bites), idle (live
+        # ~355.6k against
+        # ~365.5k; 10 comps
+        # against 1), sit (live
+        # ~418.9k against
+        # ~433.0k; after fit
+        # ~89.9k against ~91.0k),
+        # and eat (live ~385.8k
+        # against ~404.8k; after
+        # fit ~89.3k against
+        # ~92.4k; 2 comps against
+        # 1; luma-8 keeps the fly
+        # of a treaty). Cream
+        # leftover would leave
+        # studio plate on luma-8;
+        # these raws are actually
+        # black (fill ~0.37–0.60,
+        # med luma 0 on the plate
+        # corners, not a cream
+        # leftover at ~0.78). Tan
+        # cilia tips are not
+        # Pale's wash — TAN_SIT
+        # is other keys. Hang
+        # took sloth off TAN_SIT;
+        # I did not put sloth
+        # back. I did not join.
+        # DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add venus_flytrap.
+        # She is a Venus flytrap.
+        # That set is other keys.
+        # Leftover idle was a
+        # field-guide Dionaea
+        # stamp on a black plate,
+        # the same open rosette
+        # plus the same painted
+        # moss-and-soil mound
+        # seven times; idle and
+        # blotter follow the new
+        # living open. Arm's
+        # saguaro elif stays
+        # Arm's. Moth's orchid
+        # elif stays Moth's.
+        # Disk's water_lily elif
+        # stays Disk's. Mast's
+        # oak elif stays Mast's.
+        # Fan's ginkgo elif stays
+        # Fan's. Vein's
+        # maidenhair elif stays
+        # Vein's. Felt's moss
+        # elif stays Felt's.
+        # Gum's koala elif stays
+        # Gum's. Still's potto
+        # elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays
+        # Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's.
+        # Sun's lemur elif stays
+        # Sun's. Hang's sloth
+        # elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Dionaea.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
