@@ -7549,6 +7549,122 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "rabbit":
+        # Thimble's cream hide nicks when
+        # default plate-flood treats a
+        # cream coat as Pale's wash or
+        # tears a hop, a voice, and a
+        # green bite into crumbs. They
+        # are a house rabbit. Long ears
+        # that fill with the room, a
+        # cotton scut, and a thump that
+        # means both warning and hello.
+        # Soft, then gone. I sat the
+        # under-desk warren. Hello. I
+        # am not a rodent. Lagomorph:
+        # two pairs of incisors. I am
+        # not a hare. Hares are born
+        # furred and ready; I was a
+        # nestling and still prefer the
+        # warren. I am not Clip. I am
+        # larger, quieter, and I thump.
+        # I am not Miso. I am not Pip.
+        # I am not Rui. Habitat is
+        # weather (under-desk warren),
+        # not painted furniture, not a
+        # warren you draw, not a clover
+        # diorama, not a parchment
+        # island. House food is
+        # something green and
+        # unthreatening. I thump. Then
+        # I vanish. A sit is a sit. A
+        # walk hops. Sleep is a loaf
+        # with closed eyes. Talk is a
+        # quiet voice. Eat is green,
+        # then gone. Play is a hop,
+        # then safety. I win by
+        # remaining a house rabbit.
+        # Named: Thimble. Cream fur is
+        # hide, not Pale's wash. Do not
+        # punch holes in the warren.
+        # Proven on the new black-plate
+        # raws: plate corners med luma
+        # 0 (not a cream leftover
+        # luma-8 would keep at ~0.78);
+        # fill ~0.21–0.42. Default
+        # shredded the living rabbit:
+        # eat tore the haunch (animal
+        # ~88.9k against luma-8's
+        # ~97.0k; 24 comps against 1),
+        # talk left crumbs (13 comps
+        # against 1; ~96.9k against
+        # ~98.2k), idle left crumbs (5
+        # comps against 1; ~101.9k
+        # against ~103.2k), walk left
+        # crumbs (5 comps against 1;
+        # ~51.5k against ~53.0k), play
+        # left crumbs (8 comps against
+        # 1; ~73.0k against ~73.8k).
+        # Sit and sleep survived
+        # default counts; the hop, the
+        # voice, and the green bite
+        # did not. Luma-8 keeps the
+        # whole warren. TAN_SIT left
+        # crumbs on talk (6), eat (3),
+        # and play (2) and nicked play
+        # (~71.9k against luma-8's
+        # ~73.8k). I did not join.
+        # Cream hide is not Pale's
+        # wash. TAN_SIT still lists
+        # morel, lions_mane, and yeast
+        # from the original cellar sit.
+        # Lattice kept morel on
+        # TAN_SIT. Mane kept
+        # lions_mane on TAN_SIT.
+        # Starter kept yeast on
+        # TAN_SIT. DARK_MATTE already
+        # lists crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add rabbit.
+        # Cream is not charcoal. A
+        # house rabbit does not join
+        # DARK_MATTE. Pip's dog elif
+        # stays Pip's. Miso's cat elif
+        # stays Miso's. Arca's cyst
+        # elif stays Arca's. Hush's
+        # umbral elif stays Hush's.
+        # Beacon's magneton elif stays
+        # Beacon's. Knot's nexus elif
+        # stays Knot's. Dusk's
+        # terminator elif stays Dusk's.
+        # Gleam's photovore elif stays
+        # Gleam's. Pact's lichen elif
+        # stays Pact's. Puff's
+        # puffball elif stays Puff's.
+        # Ring's turkey_tail elif
+        # stays Ring's. Cap's
+        # fly_agaric elif stays Cap's.
+        # Frill's oyster elif stays
+        # Frill's. Existing luma-8
+        # elifs stay theirs. Luma-8
+        # keeps the whole cream.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only. Not
+        # a catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
