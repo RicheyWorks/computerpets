@@ -5537,6 +5537,205 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "fly_agaric":
+        # Cap's cream stem, white
+        # warts, white gills, skirt
+        # folds, and volva cup nick
+        # when default plate-flood
+        # treats hide as Pale's
+        # wash. She is a fly agaric.
+        # A red cap with white
+        # warts, white gills, a
+        # skirt on the stem, a
+        # volva at the base like a
+        # cup she has not left.
+        # Fly agaric. She is
+        # mycorrhizal. She trades
+        # with roots. The cup is a
+        # moss she agreed to. Not
+        # lunch. The red is a
+        # warning, not a costume.
+        # Cap is Amanita muscaria:
+        # white gills, a skirt, a
+        # volva. Not a puffball —
+        # cut a young one and an
+        # Amanita can hide inside
+        # a pearl. A warning. Not
+        # a meal. Habitat is a moss
+        # cup, which is weather,
+        # not painted moss, not
+        # pine needles, not a
+        # parchment island, not a
+        # forest diorama you draw.
+        # House food is duff. Wood
+        # stays living food for
+        # Frill; Cap's food is
+        # duff. Do not pile moss
+        # or soil on as a dish.
+        # Red hide is hide. White
+        # warts are hide. White
+        # gills are hide. The
+        # skirt is hide. The volva
+        # is hide. Cream/white hide
+        # can look like tan wash —
+        # it is hide. Default
+        # shredded idle (live
+        # ~393.3k against luma-8's
+        # whole ~424.0k; after fit
+        # ~105.5k against ~112.2k;
+        # cream ~27.9k against
+        # ~34.0k; 111 comps against
+        # 1; the living warning
+        # nicked into islands), sit
+        # (live ~335.9k against
+        # ~348.2k; after fit
+        # ~127.6k against ~131.4k;
+        # cream ~27.1k against
+        # ~30.6k; 30 comps against
+        # 1), walk (the lean left
+        # live ~244.6k against
+        # ~289.1k; after fit
+        # ~64.4k against ~73.8k;
+        # cream ~10.7k against
+        # ~19.9k; 227 comps against
+        # 1; the whole living stem
+        # shredded), sleep (she
+        # holds this cup; live
+        # ~368.9k against ~388.7k;
+        # after fit ~108.8k against
+        # ~114.2k; 3 comps against
+        # 1), talk (the voice left
+        # live ~353.4k against
+        # ~402.3k; after fit
+        # ~95.1k against ~107.6k;
+        # cream ~40.3k against
+        # ~48.7k; 73 comps against
+        # 1; isle ~15.9k; the
+        # living face of gills
+        # shredded into a
+        # parchment island), eat
+        # (live ~312.1k against
+        # ~389.8k; after fit
+        # ~96.0k against ~114.0k;
+        # cream ~24.2k against
+        # ~32.1k; 123 comps against
+        # 3; luma-8 keeps the duff
+        # of a treaty), and play
+        # (the athletic flush left
+        # live ~319.8k against
+        # ~376.7k; after fit
+        # ~82.2k against ~94.0k;
+        # cream ~16.9k against
+        # ~28.0k; 182 comps against
+        # 1; the living warning
+        # shredded). Cream leftover
+        # would leave studio plate
+        # on luma-8; these raws are
+        # actually black (fill
+        # ~0.28–0.41, med luma 0
+        # on the plate corners, not
+        # a cream leftover at
+        # ~0.78). Tan cream stem
+        # is not Pale's wash —
+        # TAN_SIT still lists
+        # lions_mane, morel, yeast
+        # from the original cellar
+        # sit. I did not join
+        # those. I did not join
+        # fly_agaric. Frill took
+        # oyster off TAN_SIT; I
+        # did not put oyster back.
+        # Hang took sloth off
+        # TAN_SIT; I did not put
+        # sloth back. I did not
+        # join. DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket
+        # from the original meadow
+        # sit, click_beetle from
+        # Click, earwig from
+        # Forceps, and robber_fly
+        # from Rob; that
+        # membership stays. I did
+        # not add fly_agaric. She
+        # is a fly agaric. That
+        # set is other keys.
+        # Leftover idle was a
+        # field-guide Amanita
+        # stamp on a black plate;
+        # sit still carried a
+        # parchment island with
+        # painted moss and pine
+        # needles; walk had a
+        # jagged hole through the
+        # stem; sleep had fallen
+        # on painted moss; talk
+        # carried an olive wash
+        # and white stipple; eat
+        # had a nick, moss, soil,
+        # and a mycelium
+        # cross-section; play
+        # carried a green wash, a
+        # white splash, and a
+        # moss patch; idle and
+        # blotter follow the new
+        # living warning. Frill's
+        # oyster elif stays
+        # Frill's. Dew's sundew
+        # elif stays Dew's.
+        # Well's pitcher elif
+        # stays Well's. Snap's
+        # venus_flytrap elif
+        # stays Snap's. Arm's
+        # saguaro elif stays
+        # Arm's. Moth's orchid
+        # elif stays Moth's.
+        # Disk's water_lily elif
+        # stays Disk's. Mast's
+        # oak elif stays Mast's.
+        # Fan's ginkgo elif stays
+        # Fan's. Vein's
+        # maidenhair elif stays
+        # Vein's. Felt's moss
+        # elif stays Felt's.
+        # Gum's koala elif stays
+        # Gum's. Still's potto
+        # elif stays Still's.
+        # Gaze's tarsier elif
+        # stays Gaze's. Boom's
+        # howler elif stays
+        # Boom's. Wrist's
+        # kinkajou elif stays
+        # Wrist's. Swing's gibbon
+        # elif stays Swing's.
+        # Sun's lemur elif stays
+        # Sun's. Hang's sloth
+        # elif stays Hang's.
+        # Blade's katydid stayed
+        # on default. Thread's
+        # nematode stayed on
+        # default. Sail's colugo
+        # stayed on default.
+        # Glide's flying_squirrel
+        # stayed on default.
+        # Luma-8 keeps the whole
+        # Amanita.
+        # knock_tiny_crumbs keeps
+        # specks off. Guest-only.
+        # Not a catalog wash. Not
+        # TAN_SIT. Not DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
