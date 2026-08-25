@@ -7785,6 +7785,130 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "turtle":
+        # Ink's dark olive dish, three faint
+        # keels, cream-yellow temporal stripes,
+        # and webbed working feet nick when
+        # default plate-flood treats hide as
+        # black or tears a withdrawn sleep
+        # into a shell only. He is a Reeves's
+        # turtle. A small pond turtle of the
+        # inkstone school. Three faint keels
+        # on the carapace. Webbed working
+        # feet. A head that can withdraw. He
+        # takes the long way through still
+        # water. I sat the still water.
+        # Hello. I am not a tortoise.
+        # Tortoises keep club feet and a high
+        # dry dome; I keep webbing and a
+        # dish. I am not a terrapin of the
+        # brackish rumor. I am the scholar's
+        # pond one, and I will outlive the
+        # framework. Webbed feet. I am not a
+        # dry-land rumor. I am not Whee. I
+        # am not Clip. I am not Thimble. I
+        # am not Pip. I am not Miso. I am
+        # not Rui. Habitat is weather (still
+        # water, inkstone school), not
+        # painted furniture, not a pond you
+        # draw, not a rock, not an algae
+        # diorama, not a parchment island.
+        # House food is a green bite, then
+        # gone. A sit is a sit. A walk is a
+        # slow walk in still water. Sleep
+        # withdraws. Talk is a quiet
+        # inkstone voice. Eat is the long
+        # way through a green bite. Play is
+        # a modest paddle. I win by
+        # remaining the scholar's pond one.
+        # Named: Ink. Olive hide is hide,
+        # not Pale's wash. Do not punch
+        # holes in the dish. Proven on the
+        # new black-plate raws: plate
+        # corners med luma 0 (not a cream
+        # leftover luma-8 would keep at
+        # ~0.78); fill ~0.23–0.38. Default
+        # shredded the living turtle: idle
+        # left crumbs (2 comps against 1;
+        # animal ~74.2k against luma-8's
+        # ~80.2k; dark ~5.6k against
+        # ~9.9k) and jagged the neck,
+        # sit nicked the loaf (~66.9k
+        # against ~81.9k; dark ~4.2k
+        # against ~9.3k), walk left crumbs
+        # (2 comps against 1; ~45.3k
+        # against ~51.4k; dark ~1.6k
+        # against ~4.4k), sleep ate the
+        # withdrawn head and the tucked
+        # feet (~75.7k against ~99.8k;
+        # dark ~5.1k against ~14.7k) and
+        # left a torn shell, talk nicked
+        # the voice (~59.8k against
+        # ~78.9k; dark ~4.8k against
+        # ~12.6k), eat left crumbs (2
+        # comps against 1; ~58.3k against
+        # ~66.7k). Play was close
+        # (~74.9k against ~72.3k). Luma-8
+        # keeps the whole dish. TAN_SIT
+        # nicked cream stripes into
+        # crumbs: sit 4 comps, talk 10
+        # comps, eat 5 comps, sleep 2
+        # comps, idle 2 comps. I did not
+        # join. Olive/cream hide is not
+        # Pale's wash. TAN_SIT still
+        # lists morel, lions_mane, and
+        # yeast from the original cellar
+        # sit. Lattice kept morel on
+        # TAN_SIT. Mane kept lions_mane
+        # on TAN_SIT. Starter kept yeast
+        # on TAN_SIT. DARK_MATTE already
+        # lists crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add turtle. A
+        # Reeves's turtle is not
+        # charcoal, and that path still
+        # left idle crumbs (2 comps) and
+        # talk crumbs (3 comps). Whee's
+        # guinea_pig elif stays Whee's.
+        # Thimble's rabbit elif stays
+        # Thimble's. Pip's dog elif stays
+        # Pip's. Miso's cat elif stays
+        # Miso's. Clip did not add a
+        # hamster elif; default kept the
+        # gold. I did not invent one for
+        # Clip. Arca's cyst elif stays
+        # Arca's. Hush's umbral elif
+        # stays Hush's. Beacon's
+        # magneton elif stays Beacon's.
+        # Knot's nexus elif stays Knot's.
+        # Dusk's terminator elif stays
+        # Dusk's. Gleam's photovore elif
+        # stays Gleam's. Pact's lichen
+        # elif stays Pact's. Puff's
+        # puffball elif stays Puff's.
+        # Ring's turkey_tail elif stays
+        # Ring's. Cap's fly_agaric elif
+        # stays Cap's. Frill's oyster
+        # elif stays Frill's. Existing
+        # luma-8 elifs stay theirs.
+        # Luma-8 keeps the whole dish.
+        # knock_tiny_crumbs keeps specks
+        # off. Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
