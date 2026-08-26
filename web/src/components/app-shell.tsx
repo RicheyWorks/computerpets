@@ -24,6 +24,7 @@ const NAV = [
   { to: "/cellar", label: "Cellar", hideOnPhone: false, hideOnDemo: true },
   { to: "/well", label: "Well", hideOnPhone: false, hideOnDemo: true },
   { to: "/far", label: "Far", hideOnPhone: false, hideOnDemo: true },
+  { to: "/grid", label: "Grid", hideOnPhone: false, hideOnDemo: true },
   { to: "/live", label: "Live", hideOnPhone: false, hideOnDemo: false },
   { to: "/", label: "Desk", hideOnPhone: false, hideOnDemo: false },
   { to: "/collection", label: "Kennel", hideOnPhone: true, hideOnDemo: true },
@@ -61,6 +62,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const cellar = pathname === "/cellar";
   const well = pathname === "/well";
   const far = pathname === "/far";
+  const grid = pathname === "/grid";
   const study = pathname === "/study";
   const live = pathname === "/live";
 
@@ -71,7 +73,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           "z-30 border-b border-border/80",
           demo || kennelGuest || kennel || shelf || hatchery || nest || desk
             ? "absolute inset-x-0 top-0 border-transparent bg-transparent"
-            : meet || den || tide || garden || hive || pond || roost || corner || wood || canopy || stone || creek || log || shore || reef || meadow || cellar || well || far || study || live
+            : meet || den || tide || garden || hive || pond || roost || corner || wood || canopy || stone || creek || log || shore || reef || meadow || cellar || well || far || grid || study || live
               ? "absolute inset-x-0 top-0 bg-bg/40 backdrop-blur-sm"
               : "sticky top-0 bg-bg/90 backdrop-blur-sm",
         )}
@@ -125,7 +127,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </header>
       {desk || demo || live || kennelGuest || kennel || shelf || hatchery || nest ? (
         <div className="h-dvh">{children}</div>
-      ) : meet || den || tide || garden || hive || pond || roost || corner || wood || canopy || stone || creek || log || shore || reef || meadow || cellar || well || far || study ? (
+      ) : meet || den || tide || garden || hive || pond || roost || corner || wood || canopy || stone || creek || log || shore || reef || meadow || cellar || well || far || grid || study ? (
         <div>{children}</div>
       ) : (
         <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">{children}</div>

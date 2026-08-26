@@ -47,6 +47,9 @@ from computerpets_client.guide import (
     canopy_guide_keys,
     reef_guide_complete,
     reef_guide_keys,
+    GRID_GUIDE,
+    grid_guide_complete,
+    grid_guide_keys,
     STONE_GUIDE,
     stone_guide_complete,
     stone_guide_keys,
@@ -72,7 +75,7 @@ from computerpets_client.guide import (
     snake_guide_complete,
     snake_guide_keys,
 )
-from computerpets_client.species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, REEF_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
+from computerpets_client.species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, GRID_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, REEF_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES
 
 HOUSE_EXPECTED = [
     ("red_panda", "rui", "Ailurus fulgens"),
@@ -344,6 +347,10 @@ REEF_EXPECTED = [
     ("grouper", "hide", "Epinephelus striatus"),
 ]
 
+GRID_EXPECTED = [
+    ("cyber_dragon", "arc", "Draco reticulum"),
+]
+
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
 
 
@@ -373,6 +380,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert meadow_guide_complete()
     assert canopy_guide_complete()
     assert reef_guide_complete()
+    assert grid_guide_complete()
     assert house_guide_keys() == HOUSE_KEYS
     assert snake_guide_keys() == SNAKE_KEYS
     assert sea_guide_keys() == SEA_KEYS
@@ -393,6 +401,7 @@ def test_every_catalog_key_has_a_tell_and_a_mixup():
     assert meadow_guide_keys() == MEADOW_KEYS
     assert canopy_guide_keys() == CANOPY_KEYS
     assert reef_guide_keys() == REEF_KEYS
+    assert grid_guide_keys() == GRID_KEYS
     assert len(FIELD_GUIDE) == len(CATALOG_KEYS)
     assert len(HOUSE_GUIDE) == 20
     assert len(SNAKE_GUIDE) == 10
@@ -603,6 +612,18 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert classroom_for(key).room == "reef"
         assert classroom_for(key).verb == "stay"
         assert classroom_for(key).label == "All ten on the reef"
+    for key, slug, latin in GRID_EXPECTED:
+        guide = plaque_for(key)
+        assert guide is not None
+        assert guide.slug == slug
+        assert guide.latin == latin
+        assert plaque_by_slug(slug) is guide
+    for key in GRID_KEYS:
+        assert plaque_for(key) is not None
+        assert classroom_for(key).room == "grid"
+        assert classroom_for(key).verb == "stay"
+        assert classroom_for(key).label == "The one on the grid"
+    assert [g.key for g in GRID_GUIDE] == [key for key, _, _ in GRID_EXPECTED]
 
 
 def test_the_important_house_mixups_are_actually_taught():
@@ -1315,6 +1336,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     meadow_src = (WEB_PETS / "meadow-guide.ts").read_text(encoding="utf-8")
     canopy_src = (WEB_PETS / "canopy-guide.ts").read_text(encoding="utf-8")
     reef_src = (WEB_PETS / "reef-guide.ts").read_text(encoding="utf-8")
+    grid_src = (WEB_PETS / "grid-guide.ts").read_text(encoding="utf-8")
     house_keys = [key for key, _, _ in HOUSE_EXPECTED]
     snake_keys = [key for key, _, _ in SNAKE_EXPECTED]
     sea_keys = [key for key, _, _ in SEA_EXPECTED]
@@ -1334,6 +1356,7 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     meadow_keys = [key for key, _, _ in MEADOW_EXPECTED]
     canopy_keys = [key for key, _, _ in CANOPY_EXPECTED]
     reef_keys = [key for key, _, _ in REEF_EXPECTED]
+    grid_keys = [key for key, _, _ in GRID_EXPECTED]
     for index, (key, _slug, latin) in enumerate(HOUSE_EXPECTED):
         nxt = house_keys[index + 1] if index + 1 < len(house_keys) else None
         chunk = _slice_entry(house_src, key, nxt)
@@ -1481,6 +1504,14 @@ def test_pyqt_guide_copy_matches_the_web_field_notes():
     for index, (key, _slug, latin) in enumerate(REEF_EXPECTED):
         nxt = reef_keys[index + 1] if index + 1 < len(reef_keys) else None
         chunk = _slice_entry(reef_src, key, nxt)
+        guide = plaque_for(key)
+        assert latin in chunk
+        assert guide.tell in chunk
+        assert guide.mixup in chunk
+        assert guide.lesson in chunk
+    for index, (key, _slug, latin) in enumerate(GRID_EXPECTED):
+        nxt = grid_keys[index + 1] if index + 1 < len(grid_keys) else None
+        chunk = _slice_entry(grid_src, key, nxt)
         guide = plaque_for(key)
         assert latin in chunk
         assert guide.tell in chunk

@@ -247,6 +247,7 @@ VISIT_LINES: dict[str, str] = {
     "giant_clam": "I opened. Then I left the mantle.",
     "eagle_ray": "I soared. Then I left the sky.",
     "grouper": "I sat the hole. Then I left the dish.",
+    "cyber_dragon": "I arced. Then I left the night.",
 }
 
 

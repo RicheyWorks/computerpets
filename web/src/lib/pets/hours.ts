@@ -210,6 +210,7 @@ const REST: Record<string, [number, number]> = {
   giant_clam: [22, 6],
   eagle_ray: [20, 6],
   grouper: [20, 6],
+  cyber_dragon: [8, 17],
 };
 
 /** House rest window. Overlay and blotter keep this same night. */
@@ -451,6 +452,7 @@ export const HIDE_LINE: Record<string, string> = {
   giant_clam: "Inside the mantle.",
   eagle_ray: "In the sky.",
   grouper: "In the hole.",
+  cyber_dragon: "In the glow.",
 };
 
 export const CALL_LINE: Record<string, string> = {
@@ -664,6 +666,7 @@ export const CALL_LINE: Record<string, string> = {
   giant_clam: "I opened. Hello.",
   eagle_ray: "I soared. Hello.",
   grouper: "I sat the hole. Hello.",
+  cyber_dragon: "I kept the grid. Hello.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -877,6 +880,7 @@ export const SNACK_LINE: Record<string, string> = {
   giant_clam: "Light of a treaty.",
   eagle_ray: "Clam of a treaty.",
   grouper: "Fish of a treaty.",
+  cyber_dragon: "Spark of a treaty.",
 };
 
 

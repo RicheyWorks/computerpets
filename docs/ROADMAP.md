@@ -118,9 +118,9 @@ All critical items required before any public or limited production exposure hav
 - [x] Cat (Miso) wakes on the living desk
 - [x] Dog (Pip) wakes on the living desk
 - [x] Browser ad demos (`/meet`, `/demo/rui`, `/demo/miso`, `/demo/pip`)
-- [x] Full catalog awake — all two hundred ten living kinds have living browser demos
-- [x] Windows/Mac desktop overlay for all two hundred ten + phone/tablet Live companion
-- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of insects plus bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of ten wild mammals, a canopy of ten tree mammals, a stone of ten more reptiles, a creek of ten more fish, a log of ten litter guests, a shore of ten strand guests, a reef of ten living-rock guests, a meadow of ten grass-and-night insects, a cellar of ten fungi, a well of ten leftovers, and a far den of ten xenobiology guests licensed)
+- [x] Full catalog awake — all two hundred eleven living kinds have living browser demos
+- [x] Windows/Mac desktop overlay for all two hundred eleven + phone/tablet Live companion
+- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of insects plus bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of ten wild mammals, a canopy of ten tree mammals, a stone of ten more reptiles, a creek of ten more fish, a log of ten litter guests, a shore of ten strand guests, a reef of ten living-rock guests, a meadow of ten grass-and-night insects, a cellar of ten fungi, a well of ten leftovers, a far den of ten xenobiology guests, and a grid of one grid dragon licensed)
 - [x] Per-species life sim — hunger clocks, mess, illness, age, specials, Windows hardening
 - [x] Mind plugin bus — 14 AI backends, per-pet assignment, custom webhook
 - [x] Browser desk specials + house journal; species gaits on every screen
@@ -162,9 +162,9 @@ All critical items required before any public or limited production exposure hav
 
 ## Phase 6: House polish — the X ads
 
-**Goal:** Grow into the capability of the two ComputerPets X posters without taking their slogan. Every one of the two hundred ten already-named guests feels as present, instrumented, and house-hand as Rui in those frames — living on the real Windows desktop, GPU-lit, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
+**Goal:** Grow into the capability of the two ComputerPets X posters without taking their slogan. Every living guest feels as present, instrumented, and house-hand as Rui in those frames — living on the real Windows desktop, GPU-lit, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
 
-North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-north-star-the-x-ads). This phase is the bar. Do not mark these done until the house ships them. Catalog stays two hundred ten. No new pets.
+North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-north-star-the-x-ads). This phase is the bar. Do not mark HUD / GPU items done until the house ships them. The leftover art campaign on the original 210 is finished. Catalog is two hundred eleven. Arc is the first cyber-dragon guest.
 
 - [ ] Rui-sharp keeper HUD on every screen (desk, `/demo`, Live, Meet, Windows overlay): name, level / bond, health, FEED / PLAY / REST. Same card, lockstep sprites. Pirate is Rui’s character, not a new guest.
 - [ ] Overlay heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from actuator — never a painted “UP”.
@@ -174,8 +174,8 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [ ] Pets occupy the real Windows 10/11 desktop among real windows and icons. Desktop-first. Mac / Linux / phone after Windows feels like the ad.
 - [ ] Desktop presence is not filesystem theft: no silent read/write/exfil, no keyloggers, no secret capture.
 - [ ] HUD may show who is listening on the mind plugin bus. Keys stay with the keeper.
-- [ ] Leftover art sits until all two hundred ten guests are house-hand. Rui stays the bar. No stamps, no parchment islands. Never retouch a landed guest while sitting a leftover.
-- [ ] Hard locks hold: catalog stays 210; no invented NFT / Store IDs; never retouch `START-HERE.md` to paper over `house-count.test.mjs`.
+- [x] Leftover art campaign on the original two hundred ten is finished (Peak, PR #303). Rui stays the bar. No stamps, no parchment islands. Never retouch a landed guest while sitting a new one.
+- [x] Arc sits the first cyber dragon (`cyber_dragon` / `arc`). Catalog is 211. Grid den opened only as far as Arc needs. No invented NFT / Store IDs. Never retouch `START-HERE.md` to paper over `house-count.test.mjs`.
 
 ---
 

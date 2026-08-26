@@ -258,3 +258,4 @@ def test_only_scratching_mammals_scratch():
     assert "open" in [a["name"] for a in acts_for("giant_clam")]
     assert "soar" in [a["name"] for a in acts_for("eagle_ray")]
     assert "hide" in [a["name"] for a in acts_for("grouper")]
+    assert "arc" in [a["name"] for a in acts_for("cyber_dragon")]
