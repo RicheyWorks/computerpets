@@ -10815,6 +10815,180 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "honey_drone":
+        # Hum's dark compound
+        # eye, dark abdomen
+        # bands, and the dark of
+        # a folded wing nick when
+        # default plate-flood
+        # treats hide as plate.
+        # He is a western honey
+        # bee drone. Apis
+        # mellifera. Larger than
+        # Comb. Eyes that meet.
+        # No pollen basket. No
+        # sting. He hums. The
+        # workers feed him. A
+        # drone is not a worker.
+        # He is not Comb. Comb
+        # forages and dances.
+        # Hum is the same
+        # species, a different
+        # caste. He does not
+        # work the flower. He
+        # does not keep a nest.
+        # I sat the whole drone.
+        # I hummed. That was
+        # hello. The dish kept
+        # my hum. You may look.
+        # I am not Comb. I am
+        # not Keep. Keep is a
+        # queen. I am not Wax.
+        # Wax is the nest. I am
+        # not Bank. Bank is a
+        # mining bee. I am not
+        # Sheen. Sheen is a
+        # sweat bee, metallic
+        # green. I am not Pot.
+        # Pot is stingless,
+        # pots. I am not Disc.
+        # Disc is a leafcutter.
+        # I am not Mortar.
+        # Mortar is a mason. I
+        # am not Auger. Auger is
+        # a carpenter. I am not
+        # Thrum. Thrum is a
+        # bumble. Habitat wax
+        # dish is weather, not a
+        # painted dish, not
+        # comb, not a nest, not
+        # furniture. House food
+        # is nectar of a treaty
+        # a worker brought —
+        # one sip. Play is a
+        # hum, a hover. Rest
+        # holds the dish. Sleep
+        # is a curled drone on
+        # nothing but black.
+        # The hum is the
+        # correct sleep. Talk
+        # is a bee, not a
+        # person. No human
+        # smile. No two-leg
+        # stand. No welcoming
+        # arms. Named: Hum.
+        # Dark hide is hide,
+        # not a hole. Do not
+        # punch the drone.
+        # Proven on the new
+        # black-plate raws:
+        # plate corners med
+        # luma 0 (not a cream
+        # leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.23–0.37. Default
+        # punched the living
+        # drone: sleep tore the
+        # curl (~67.2k live
+        # against luma-8's
+        # ~95.6k; dark ~3.2k
+        # against ~10.7k). Sit
+        # nicked the pause
+        # (~62.2k against
+        # ~68.3k; dark ~1.3k
+        # against ~3.8k). Idle
+        # nicked the hum
+        # (~55.6k against
+        # ~62.4k; dark ~5.4k
+        # against ~8.8k). Eat
+        # nicked the sip
+        # (~46.0k against
+        # ~59.9k; dark ~3.2k
+        # against ~11.1k). Play
+        # nicked the hover
+        # (~60.5k against
+        # ~70.1k; dark ~1.3k
+        # against ~3.4k). Walk
+        # default kept more
+        # animal (~70.0k
+        # against ~62.4k) —
+        # wash fringe. Talk
+        # default kept more
+        # animal (~71.8k
+        # against ~59.4k) —
+        # wash fringe. Both
+        # still lost dark
+        # (walk ~4.9k against
+        # ~5.5k; talk ~5.4k
+        # against ~6.9k).
+        # Sleep's torn curl is
+        # the tell. Luma-8
+        # keeps the whole
+        # drone. knock_tiny_
+        # crumbs (64) keeps
+        # specks off. MinFilter
+        # (5) is the leftover
+        # default path; I did
+        # not erode. It punches
+        # the drone. TAN_SIT I
+        # did not join. Amber
+        # fuzz is not Pale's
+        # wash. TAN_SIT still
+        # lists morel, lions_
+        # mane, rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists crow,
+        # raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede,
+        # field_cricket,
+        # earwig, click_
+        # beetle, and robber_
+        # fly; that membership
+        # stays. I did not add
+        # honey_drone. A bee's
+        # black band is hide,
+        # and that path still
+        # tore sleep. Thrum's
+        # bumblebee elif stays
+        # Thrum's. Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays Mortar's.
+        # Disc's leafcutter
+        # elif stays Disc's.
+        # Pot's stingless elif
+        # stays Pot's. Sheen's
+        # sweat_bee elif stays
+        # Sheen's. Bank's
+        # mining_bee elif stays
+        # Bank's. Atlas's
+        # carpet_python elif
+        # stays Atlas's.
+        # Coral's milk_snake
+        # elif stays Coral's.
+        # Ember's phoenix elif
+        # stays Ember's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Later hive (Keep,
+        # Wax) stay untouched.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not Comb.
+        # Not Keep. Not Wax.
+        # Not Bank. Not Sheen.
+        # Not Pot. Not Disc.
+        # Not Mortar. Not
+        # Auger. Not Thrum.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
