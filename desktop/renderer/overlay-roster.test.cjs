@@ -87,9 +87,9 @@ function objectKeys(src, marker) {
   return [...slice.matchAll(/^\s{2}([a-z0-9_]+):\s/gm)].map((m) => m[1]);
 }
 
-test("the overlay roster is the same two hundred seventeen as the catalog", () => {
+test("the overlay roster is the same two hundred eighteen as the catalog", () => {
   const keys = roster.map((r) => r.key);
-  assert.equal(keys.length, 217);
+  assert.equal(keys.length, 218);
   assert.deepEqual(keys.sort(), [...CATALOG].sort());
 });
 
@@ -164,8 +164,8 @@ test("the overlay drops the same treat the desk already drops, including the egg
   const overlayShapes = Object.fromEntries(
     [...overlaySlice.matchAll(/^\s{2}([a-z0-9_]+): "([a-z]+)"/gm)].map((m) => [m[1], m[2]]),
   );
-  assert.equal(Object.keys(overlayShapes).length, 217);
-  assert.equal(Object.keys(webShapes).length, 217);
+  assert.equal(Object.keys(overlayShapes).length, 218);
+  assert.equal(Object.keys(webShapes).length, 218);
   for (const key of CATALOG) {
     assert.equal(overlayShapes[key], webShapes[key], key);
   }

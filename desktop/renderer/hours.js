@@ -218,6 +218,7 @@
   spark_dragon: "Crackle of a treaty.",
   ion_dragon: "Haze of a treaty.",
   gauss_dragon: "Filing of a treaty.",
+  relay_dragon: "Click of a treaty.",
 };
 
   const CALL_LINE = {
@@ -438,6 +439,7 @@
   spark_dragon: "I kept the crackle. Hello.",
   ion_dragon: "I kept the haze. Hello.",
   gauss_dragon: "I kept the filings. Hello.",
+  relay_dragon: "I kept the click. Hello.",
 };
 
   const GIFT_LINE = {
@@ -658,6 +660,7 @@
   spark_dragon: "A crackle I was finished crackling for.",
   ion_dragon: "A haze I was finished hazing for.",
   gauss_dragon: "A filing I was finished filing for.",
+  relay_dragon: "A click I was finished clicking for.",
 };
 
   /** Same night the desk already keeps. Overlay no longer invents a second clock. */
@@ -879,6 +882,7 @@
   spark_dragon: [8, 17],
   ion_dragon: [8, 17],
   gauss_dragon: [8, 17],
+  relay_dragon: [8, 17],
 };
 
   function restWindow(key) {

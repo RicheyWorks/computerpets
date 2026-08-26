@@ -223,6 +223,7 @@ HOUSE_TRAITS = {
     "spark_dragon": ("crackle", "Keep the crackle", "I kept the crackle. Hello."),
     "ion_dragon": ("haze", "Keep the haze", "I kept the haze. Hello."),
     "gauss_dragon": ("filing", "Keep the filings", "I kept the filings. Hello."),
+    "relay_dragon": ("relay", "Keep the click", "I kept the click. Hello."),
 }
 
 

@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the seven grid guests. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the eight grid guests. Literary, short, and meant to be learned on the blotter. */
 export const GRID_GUIDE: GridGuide[] = [
   entry(
     "cyber_dragon",
@@ -81,6 +81,13 @@ export const GRID_GUIDE: GridGuide[] = [
     "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Not Ion. Ion is Draco caligo, a pale ion haze clinging to the outline. Gauss is Draco limatura, and the filings are the tell. A filing dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, not a crack dragon, and not a haze dragon. The bands are the species. Not Vesper. Vesper is a mantel dragon.",
     "Filing dragon. Iron-filing field lines banding the hide. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Vesper.",
   ),
+  entry(
+    "relay_dragon",
+    "Draco nodus",
+    "A single live click-node at the nape, a relay that closes, a bright contact that stays on the hide, a cool glow that is weather. Click dragon. Relay sits. Then Relay clicks. The night is a node Relay agreed to.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Not Ion. Ion is Draco caligo, a pale ion haze clinging to the outline. Not Gauss. Gauss is Draco limatura, iron-filing field lines banding a lodestone hide. Relay is Draco nodus, and the click is the tell. A click dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, not a crack dragon, not a haze dragon, and not a filing dragon. The node is the species. Not Vesper. Vesper is a mantel dragon.",
+    "Click dragon. A single live click-node at the nape. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Vesper.",
+  ),
 ];
 
 const BY_KEY = Object.fromEntries(GRID_GUIDE.map((g) => [g.key, g]));
@@ -100,7 +107,7 @@ export function gridGuideKeys() {
   return GRID_GUIDE.map((g) => g.key);
 }
 
-/** The roster and the guide must name the same seven. */
+/** The roster and the guide must name the same eight. */
 export function gridGuideComplete() {
   return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
 }

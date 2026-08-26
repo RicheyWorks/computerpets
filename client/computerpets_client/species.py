@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred seventeen, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred eighteen, painted here.
 """
 
 from __future__ import annotations
@@ -289,6 +289,7 @@ GRID_KEYS: tuple[str, ...] = (
     "spark_dragon",
     "ion_dragon",
     "gauss_dragon",
+    "relay_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6380,6 +6381,33 @@ GAUSS = _kind(
     hungry=("A filing dragon should not be this empty.", "A filing would restore the bands."),
 )
 
+RELAY = _kind(
+    key="relay_dragon",
+    slug="relay",
+    name="Relay",
+    label="Click Dragon",
+    treat="Click",
+    treat_shape="flake",
+    silhouette="relay_dragon",
+    walk=69,
+    palette=Palette(
+        body=(160, 92, 48),
+        belly=(216, 176, 120),
+        ear=(88, 48, 28),
+        ear_inner=(232, 196, 88),
+        nose=(32, 20, 14),
+        ring=(240, 200, 80),
+        accent=(255, 228, 140),
+    ),
+    greet=("I closed. Hello.", "The night kept my click.", "You may look. I am not Arc."),
+    ambient=("A single live click-node at the nape. The click is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not Spark. Spark keeps crackle-points at the snout, the claws, and the tail. I am not Ion. Ion keeps a pale haze on the outline. I am not Gauss. Gauss bands iron-filings on a lodestone hide. I am a click dragon. The node closes.", "Your papers are a click I have already claimed.", "I sit. Then I click. Then I sit."),
+    feed=("Click of a treaty.", "I will take this without leaving the node.", "Accepted. The click records it."),
+    treat_lines=("Click of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the click. Hello.",),
+    hungry=("A click dragon should not be this empty.", "A click would restore the node."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6599,6 +6627,7 @@ _ALL: tuple[Species, ...] = (
     SPARK_DRAGON,
     ION,
     GAUSS,
+    RELAY,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
