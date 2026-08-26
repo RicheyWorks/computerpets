@@ -8042,6 +8042,108 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=300)
         return sat
+    elif key == "parrot":
+        # Quill's black lower mandible, dark
+        # claws, and cobalt primaries nick
+        # when default plate-flood treats
+        # hide as plate. They are a scarlet
+        # macaw. Ara macao. Red that means
+        # it, yellow and blue in the wings,
+        # a hooked bill that can open a nut
+        # or a subject line. Zygodactyl
+        # feet — two toes forward, two
+        # back. The stand is a stage. I sat
+        # the stage. Hello. I am not a
+        # toucan. Keel's bill is a hollow
+        # fruit-bowl; mine is a tool. I am
+        # not a budgie with better
+        # lighting. Echo steals phrases.
+        # I quote from the chest. I am not
+        # a king parrot. I am not a lory.
+        # I am not Peck. I am not Rue. I
+        # am not Coin. I am not Echo.
+        # Habitat is weather, not a painted
+        # branch, not a perch you draw, not
+        # a cage, not a nut bowl, not a
+        # parchment island. House food is
+        # one nut, then gone. A sit sits.
+        # A walk sidles. Sleep tucks the
+        # head. Talk is a voice. Eat is
+        # one nut. Play is a hang. I win
+        # by remaining a scarlet macaw.
+        # The bill is a tool. I say it
+        # from the chest. Named: Quill.
+        # Dark hide is hide, not a hole.
+        # Do not punch the bill. Proven on
+        # the new black-plate raws: plate
+        # corners med luma 0 (not a cream
+        # leftover luma-8 would keep at
+        # ~0.78); fill ~0.17–0.37. Default
+        # nicked the living macaw: idle
+        # tore the bird (9 comps against
+        # luma-8's 1; animal ~36.3k
+        # against ~44.6k; dark 98 against
+        # 695), sit left crumbs (17 comps
+        # against 1; ~58.1k against
+        # ~70.1k; dark 355 against 1164),
+        # talk shredded the voice (6 comps
+        # against 1; ~27.0k against
+        # ~36.6k; dark 226 against 897),
+        # eat thinned the nutcracker (8
+        # comps against 1; ~41.2k against
+        # ~50.6k; dark 33 against 987),
+        # walk ate the claws (dark 57
+        # against 864; animal ~42.8k
+        # against ~56.9k), sleep split
+        # the tuck (2 comps against 1;
+        # ~45.8k against ~55.4k). Play
+        # stayed closer on default counts
+        # and still left crumbs. Luma-8
+        # keeps the whole macaw.
+        # knock_tiny_crumbs(300) keeps
+        # walk specks off (291 / 118 /
+        # 102). TAN_SIT I did not join.
+        # Scarlet hide is not Pale's
+        # wash. TAN_SIT still lists
+        # morel, lions_mane, and yeast.
+        # DARK_MATTE already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk, millipede,
+        # field_cricket, earwig,
+        # click_beetle, and robber_fly;
+        # that membership stays. I did
+        # not add parrot. A scarlet
+        # macaw is not charcoal. Rue's
+        # fox elif stays Rue's. Coin's
+        # goldfish elif stays Coin's.
+        # Echo did not add a budgie
+        # elif; default kept the cere.
+        # Peck did not add a penguin
+        # elif; default kept the bow.
+        # Ink's turtle elif stays Ink's.
+        # Whee's guinea_pig elif stays
+        # Whee's. Thimble's rabbit elif
+        # stays Thimble's. Pip's dog
+        # elif stays Pip's. Miso's cat
+        # elif stays Miso's. Clip did
+        # not add a hamster elif.
+        # Existing luma-8 elifs stay
+        # theirs. Guest-only. Not a
+        # catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE. Not Wick.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=300)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=300)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
