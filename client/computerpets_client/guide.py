@@ -1,12 +1,12 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same two hundred eleven, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred twelve, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
 the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the reef keeps the living-rock facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
-the xenobiology facts; the grid keeps the one grid dragon; the twenty keep the study facts.
+the xenobiology facts; the grid keeps the two cyber dragons; the twenty keep the study facts.
 """
 
 from __future__ import annotations
@@ -2027,6 +2027,15 @@ GRID_GUIDE: tuple[FieldGuide, ...] = (
         "machine-night",
         "charged",
     ),
+    _entry(
+        "volt_dragon",
+        "Draco spira",
+        "A live coil along the ribs, a winding current that stays on the hide, a cool glow that is weather. Coil dragon. He sits. Then he coils. The night is a current he agreed to.",
+        "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Volt is Draco spira, and the coil is the tell. A coil dragon is not a grid dragon. The current is the species. Not Vesper. Vesper is a mantel dragon.",
+        "Coil dragon. A live coil along the ribs. Not Arc. Not a dorsal jump. Not Vesper.",
+        "machine-night",
+        "coiled",
+    ),
 )
 
 FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE + CANOPY_GUIDE + REEF_GUIDE + GRID_GUIDE
@@ -2083,7 +2092,7 @@ def classroom_for(key: str) -> Classroom:
     if is_reef(key):
         return Classroom(room="reef", label="All ten on the reef", verb="stay")
     if is_grid(key):
-        return Classroom(room="grid", label="The one on the grid", verb="stay")
+        return Classroom(room="grid", label="The two on the grid", verb="stay")
     if is_meadow(key):
         return Classroom(room="meadow", label="All ten in the meadow", verb="stay")
     if is_well(key):

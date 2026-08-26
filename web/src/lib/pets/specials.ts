@@ -196,6 +196,7 @@ export function applySpecial(stats: CareStats, trait: SpeciesTrait): { stats: Ca
     case "veil":
     case "gate":
     case "arc":
+    case "current":
       next.energy = clampStat(next.energy + 6);
       next.mood = clampStat(next.mood + 6);
       return { stats: next, cmd: "sit" };

@@ -221,7 +221,8 @@ public enum PetType {
     GIANT_CLAM       ("giant_clam",        "Giant Clam",             Rarity.RARE),
     EAGLE_RAY        ("eagle_ray",         "Spotted Eagle Ray",      Rarity.RARE),
     GROUPER          ("grouper",           "Nassau Grouper",         Rarity.UNCOMMON),
-    CYBER_DRAGON     ("cyber_dragon",      "Grid Dragon",            Rarity.LEGENDARY);
+    CYBER_DRAGON     ("cyber_dragon",      "Grid Dragon",            Rarity.LEGENDARY),
+    VOLT_DRAGON      ("volt_dragon",       "Coil Dragon",            Rarity.LEGENDARY);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 

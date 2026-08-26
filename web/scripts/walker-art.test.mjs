@@ -37,12 +37,12 @@ test("the walker paint is a clear plate; the tap pad is empty wood", () => {
   assert.match(cssSrc, /\[data-pet-hit\]/);
   assert.doesNotMatch(cssSrc, /\[data-phone-floor\] img\[data-pet\] \{/);
   assert.match(overlayCss, /background: transparent;/);
-  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 211);
+  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 212);
 });
 
 test("every idle walker has no plate and is not a thin stamp", () => {
   const out = execFileSync("python3", [join(root, "scripts/assert-walker-art.py")], {
     encoding: "utf8",
   });
-  assert.match(out, /ok 211 walkers/);
+  assert.match(out, /ok 212 walkers/);
 });
