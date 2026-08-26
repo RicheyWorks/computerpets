@@ -13,7 +13,7 @@ export const Route = createFileRoute("/grid")({
       { title: "The grid — ComputerPets" },
       {
         name: "description",
-        content: "One of the grid on the blotter. A grid dragon is not a mantel dragon. Arc is not Vesper.",
+        content: "Two of the grid on the blotter. A grid dragon is not a mantel dragon. A coil dragon is not a grid dragon. Arc is not Vesper. Volt is not Arc.",
       },
     ],
   }),
@@ -26,8 +26,8 @@ export function GridPage() {
     <main className="bg-bg text-fg">
       <RoomHero
         room="grid"
-        headline="Arc sits. The hide is lit."
-        line="One of the grid lives on this blotter. Watch the arc. Read the plaque. Leave knowing a grid dragon is not a mantel dragon, and Arc is not Vesper."
+        headline="Arc sits. Volt coils. The hide is weather."
+        line="Two of the grid live on this blotter. Watch the arc. Watch the coil. Read the plaque. Leave knowing a grid dragon is not a mantel dragon, a coil dragon is not a grid dragon, Arc is not Vesper, and Volt is not Arc."
       />
 
       <GridDen selectedKey={selected} onSelect={setSelected} />
@@ -40,8 +40,8 @@ export function GridPage() {
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">How to use the grid</p>
             <p className="mt-2 font-display text-2xl">Watch, then tap.</p>
             <p className="mt-2 text-sm text-muted">
-              Arc sits the night. Treat, hide, and talk still live on her demo and on the desk. The
-              hide is weather. The plaque teaches.
+              Arc sits the night. Volt keeps the coil. Treat, hide, and talk still live on a demo
+              and on the desk. The hide is weather. The plaque teaches.
             </p>
             <p className="mt-4">
               <Link to="/" search={{ pet: selected }} className="text-sm text-fg">
@@ -55,9 +55,9 @@ export function GridPage() {
       <section className="border-t border-border">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
           <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Field notes</p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl">The one, told apart.</h2>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl">The two, told apart.</h2>
           <p className="mt-3 max-w-xl text-sm text-muted">
-            A short tell, one mix-up, and the night she already keeps. Open a demo if you want her
+            A short tell, one mix-up, and the night each already keeps. Open a demo if you want one
             to stay on your screen.
           </p>
           <div className="mt-10 grid gap-5 md:grid-cols-2">

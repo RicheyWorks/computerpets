@@ -44,6 +44,7 @@ def test_pets_sit_or_swim_in_the_same_weather():
     assert weather_idle("milk_snake", "heat") == "sit"
     assert weather_idle("cat", "heat") == "sit"
     assert weather_idle("cyber_dragon", "heat") == "sit"
+    assert weather_idle("volt_dragon", "heat") == "sit"
     assert weather_idle("phoenix", "wind") == "wander"
     assert weather_idle("crow", "wind") == "wander"
     assert weather_idle("pileated", "wind") == "wander"
@@ -64,4 +65,5 @@ def test_weather_lines_are_the_house_copy():
     assert weather_line("red_panda", "wind") == "Something moved that was not me."
     assert weather_line("ball_python", "heat") == "Heat. I was waiting for this clause."
     assert weather_line("cyber_dragon", "heat") == "The glow is reserved. Heat is weather I already keep."
+    assert weather_line("volt_dragon", "heat") == "The coil is reserved. Heat is weather I already keep."
     assert weather_line("red_panda", "clear") is None

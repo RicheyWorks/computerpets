@@ -3606,6 +3606,23 @@ window.PET_TRAITS = {
       call: ["I kept the grid. Hello."],
       special: ["I kept the grid. Hello."],
     },
+  },
+  volt_dragon: {
+    size: 1.12, walk: 70, hop: 16, pitch: 0.46, rate: 0.2,
+    nocturnal: true, sleepStart: 8, sleepEnd: 17,
+    hungerH: 8, energyH: 11, hygieneH: 14, hardy: 0.82, social: 0.16, messy: 0.04,
+    clingy: false, perch: false, aquatic: false, wander: 0.2,
+    special: "current", diet: "flake",
+    extra: {
+      sick: ["The coil is thin."],
+      clean: ["The night is an honest current."],
+      bath: ["Current. Then the coil."],
+      medicine: ["A current of a cure."],
+      praise: ["I will keep that in a coil."],
+      hide: ["In the glow."],
+      call: ["I kept the coil. Hello."],
+      special: ["I kept the coil. Hello."],
+    },
   }
 };
 

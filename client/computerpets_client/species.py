@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred eleven, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred twelve, painted here.
 """
 
 from __future__ import annotations
@@ -283,6 +283,7 @@ REEF_KEYS: tuple[str, ...] = (
 
 GRID_KEYS: tuple[str, ...] = (
     "cyber_dragon",
+    "volt_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6212,6 +6213,33 @@ ARC = _kind(
     hungry=("A grid dragon should not be this empty.", "A spark would restore the arc."),
 )
 
+VOLT = _kind(
+    key="volt_dragon",
+    slug="volt",
+    name="Volt",
+    label="Coil Dragon",
+    treat="Current",
+    treat_shape="flake",
+    silhouette="volt_dragon",
+    walk=70,
+    palette=Palette(
+        body=(48, 36, 28),
+        belly=(156, 112, 64),
+        ear=(28, 20, 16),
+        ear_inner=(232, 156, 48),
+        nose=(16, 12, 10),
+        ring=(232, 156, 48),
+        accent=(255, 176, 56),
+    ),
+    greet=("I coiled. Hello.", "The night kept my current.", "You may look. I am not Arc."),
+    ambient=("A live coil along the ribs. The current is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am a coil dragon. The ribs keep the live coil.", "Your papers are a current I have already claimed.", "I sit. Then I coil. Then I sit."),
+    feed=("Current of a treaty.", "I will take this without leaving the coil.", "Accepted. The coil records it."),
+    treat_lines=("Current of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the coil. Hello.",),
+    hungry=("A coil dragon should not be this empty.", "A current would restore the coil."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6425,6 +6453,7 @@ _ALL: tuple[Species, ...] = (
     SOAR,
     HIDE,
     ARC,
+    VOLT,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

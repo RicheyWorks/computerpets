@@ -228,7 +228,8 @@ class PetTypeTest {
             new ExpectedSpecies("giant_clam", "Giant Clam", PetType.Rarity.RARE),
             new ExpectedSpecies("eagle_ray", "Spotted Eagle Ray", PetType.Rarity.RARE),
             new ExpectedSpecies("grouper", "Nassau Grouper", PetType.Rarity.UNCOMMON),
-            new ExpectedSpecies("cyber_dragon", "Grid Dragon", PetType.Rarity.LEGENDARY)
+            new ExpectedSpecies("cyber_dragon", "Grid Dragon", PetType.Rarity.LEGENDARY),
+            new ExpectedSpecies("volt_dragon", "Coil Dragon", PetType.Rarity.LEGENDARY)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(
@@ -290,7 +291,7 @@ class PetTypeTest {
     @DisplayName("catalog matches the living-desk web catalog, including the tide")
     void catalog_matchesWebHouse() {
         assertThat(PetType.values()).hasSize(WEB_CATALOG.size());
-        assertThat(WEB_CATALOG).hasSize(211);
+        assertThat(WEB_CATALOG).hasSize(212);
 
         Set<String> backendKeys = Arrays.stream(PetType.values())
                 .map(PetType::key)
