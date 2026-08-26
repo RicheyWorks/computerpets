@@ -325,6 +325,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   trace_dragon: [A("path", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
   flux_dragon: [A("field", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
   spark_dragon: [A("crackle", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
+  ion_dragon: [A("haze", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

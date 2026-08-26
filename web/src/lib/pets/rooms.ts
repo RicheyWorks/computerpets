@@ -236,7 +236,7 @@ export const ROOMS: readonly Room[] = [
     watchSlug: "arc",
     watchName: "Arc",
     keys: GRID_KEYS,
-    line: "Five of the grid. Not Vesper.",
+    line: "Six of the grid. Not Vesper.",
   },
 ];
 

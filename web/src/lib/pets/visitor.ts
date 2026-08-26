@@ -249,6 +249,7 @@ const LINES: Record<string, string> = {
   trace_dragon: "I traced. Then I left the night.",
   flux_dragon: "I fielded. Then I left the night.",
   spark_dragon: "I crackled. Then I left the night.",
+  ion_dragon: "I hazed. Then I left the night.",
 };
 
 export function visitLine(guestKey: string) {

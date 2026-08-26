@@ -48,6 +48,7 @@ def test_pets_sit_or_swim_in_the_same_weather():
     assert weather_idle("trace_dragon", "heat") == "sit"
     assert weather_idle("flux_dragon", "heat") == "sit"
     assert weather_idle("spark_dragon", "heat") == "sit"
+    assert weather_idle("ion_dragon", "heat") == "sit"
     assert weather_idle("phoenix", "wind") == "wander"
     assert weather_idle("crow", "wind") == "wander"
     assert weather_idle("pileated", "wind") == "wander"
@@ -72,4 +73,5 @@ def test_weather_lines_are_the_house_copy():
     assert weather_line("trace_dragon", "heat") == "The path is reserved. Heat is weather I already keep."
     assert weather_line("flux_dragon", "heat") == "The field is reserved. Heat is weather I already keep."
     assert weather_line("spark_dragon", "heat") == "The crackle is reserved. Heat is weather I already keep."
+    assert weather_line("ion_dragon", "heat") == "The haze is reserved. Heat is weather I already keep."
     assert weather_line("red_panda", "clear") is None
