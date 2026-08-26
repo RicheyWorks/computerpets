@@ -548,7 +548,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(MEADOW_KEYS) == 10
     assert len(CANOPY_KEYS) == 10
     assert len(REEF_KEYS) == 10
-    assert len(GRID_KEYS) == 7
+    assert len(GRID_KEYS) == 8
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
