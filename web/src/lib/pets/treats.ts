@@ -214,6 +214,7 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   cyber_dragon: { shape: "flake", verb: "Spark" },
   volt_dragon: { shape: "flake", verb: "Current" },
   trace_dragon: { shape: "flake", verb: "Path" },
+  flux_dragon: { shape: "flake", verb: "Field" },
 };
 
 export function treatFor(key: string) {
@@ -434,4 +435,5 @@ export const GIFT_LINE: Record<string, string> = {
   cyber_dragon: "A spark I was finished arcing for.",
   volt_dragon: "A current I was finished coiling for.",
   trace_dragon: "A path I was finished tracing for.",
+  flux_dragon: "A field I was finished fielding for.",
 };

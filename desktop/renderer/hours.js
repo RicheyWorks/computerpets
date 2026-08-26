@@ -214,6 +214,7 @@
   cyber_dragon: "Spark of a treaty.",
   volt_dragon: "Current of a treaty.",
   trace_dragon: "Path of a treaty.",
+  flux_dragon: "Field of a treaty.",
 };
 
   const CALL_LINE = {
@@ -430,6 +431,7 @@
   cyber_dragon: "I kept the grid. Hello.",
   volt_dragon: "I kept the coil. Hello.",
   trace_dragon: "I kept the path. Hello.",
+  flux_dragon: "I kept the field. Hello.",
 };
 
   const GIFT_LINE = {
@@ -646,6 +648,7 @@
   cyber_dragon: "A spark I was finished arcing for.",
   volt_dragon: "A current I was finished coiling for.",
   trace_dragon: "A path I was finished tracing for.",
+  flux_dragon: "A field I was finished fielding for.",
 };
 
   /** Same night the desk already keeps. Overlay no longer invents a second clock. */
@@ -863,6 +866,7 @@
   cyber_dragon: [8, 17],
   volt_dragon: [8, 17],
   trace_dragon: [8, 17],
+  flux_dragon: [8, 17],
 };
 
   function restWindow(key) {

@@ -1,12 +1,12 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same two hundred thirteen, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred fourteen, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
 the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the reef keeps the living-rock facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
-the xenobiology facts; the grid keeps the three cyber dragons; the twenty keep the study facts.
+the xenobiology facts; the grid keeps the four cyber dragons; the twenty keep the study facts.
 """
 
 from __future__ import annotations
@@ -2045,6 +2045,15 @@ GRID_GUIDE: tuple[FieldGuide, ...] = (
         "machine-night",
         "pathed",
     ),
+    _entry(
+        "flux_dragon",
+        "Draco campus",
+        "A living heat-field under the hide, a shimmer as if a magnetic field is moving under the scales, a cool glow that is weather. Field dragon. Flux sits. Then Flux fields. The night is a heat Flux agreed to.",
+        "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Flux is Draco campus, and the field is the tell. A field dragon is not a grid dragon, not a coil dragon, and not a path dragon. The heat is the species. Not Vesper. Vesper is a mantel dragon.",
+        "Field dragon. A living heat-field under the hide. Not Arc. Not Volt. Not Trace. Not Vesper.",
+        "machine-night",
+        "fielded",
+    ),
 )
 
 FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE + CANOPY_GUIDE + REEF_GUIDE + GRID_GUIDE
@@ -2101,7 +2110,7 @@ def classroom_for(key: str) -> Classroom:
     if is_reef(key):
         return Classroom(room="reef", label="All ten on the reef", verb="stay")
     if is_grid(key):
-        return Classroom(room="grid", label="The three on the grid", verb="stay")
+        return Classroom(room="grid", label="The four on the grid", verb="stay")
     if is_meadow(key):
         return Classroom(room="meadow", label="All ten in the meadow", verb="stay")
     if is_well(key):

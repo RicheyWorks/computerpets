@@ -516,6 +516,7 @@ const TREAT_SHAPE = {
   cyber_dragon: "flake",
   volt_dragon: "flake",
   trace_dragon: "flake",
+  flux_dragon: "flake",
 };
 
 function placeMark(kindName, x, hops = 0, meal) {
