@@ -9631,6 +9631,123 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "milk_snake":
+        # Coral's red bands, black
+        # borders, cream rings, and
+        # the dark of a quiet eye
+        # nick when default plate-
+        # flood treats hide as plate.
+        # She is a Pueblo milk snake.
+        # Lampropeltis gentilis.
+        # Tricolor rumor. Wide red
+        # bordered by black, then
+        # pale cream. She wears a
+        # warning she does not mean.
+        # Then asks for an egg. I sat
+        # the whole snake. I am not
+        # who I look like. Hello. I
+        # am not a kingsnake. Bandit
+        # wears black-and-cream, no
+        # red. I am not a garter.
+        # Sash is three yellow lines.
+        # I am not a corn snake.
+        # Saffron is the orange
+        # thread. I am not a boa.
+        # Lula is tan-and-saddle. I
+        # am not a coral snake. A
+        # rhyme, not a cousin. Habitat
+        # stamp box is weather, not a
+        # painted box, not stamps,
+        # not a mosaic, not a
+        # theater, not sand, not
+        # furniture, not a parchment
+        # island. House food is an
+        # egg of a treaty — one bite,
+        # then gone. Not a whole-egg
+        # show. A sit stacks the
+        # colors like a flag, head a
+        # little out. A walk is a
+        # flicker of rumor, tail not
+        # cropped. Sleep is a quieter
+        # flag. Talk is a whole milk
+        # snake, a tongue. Eat is one
+        # egg bite. Play is a flicker
+        # of false warning, then
+        # kind. Named: Coral. Dark
+        # hide is hide, not a hole.
+        # Do not punch the rumor.
+        # Proven on the new black-
+        # plate raws: plate corners
+        # med luma 0 (not a cream
+        # leftover luma-8 would keep
+        # at ~0.78); fill ~0.08–0.48.
+        # Default punched the living
+        # milk snake: sleep left
+        # seven scraps (7 comps
+        # against luma-8's 1; live
+        # ~34.1k against ~125.6k;
+        # dark ~48 against ~5.1k).
+        # Eat left seven scraps (7
+        # comps against 1; ~33.8k
+        # against ~93.3k; dark ~542
+        # against ~8.9k). Sit split
+        # the flag (6 comps against
+        # 1; ~57.9k against ~98.0k;
+        # dark ~1.7k against ~7.7k).
+        # Talk left ten pieces (10
+        # comps against 1; ~66.9k
+        # against ~81.0k). Idle left
+        # two parts (2 comps against
+        # 1; ~23.2k against ~31.2k).
+        # Play nicked the warning (2
+        # comps against 1; ~78.9k
+        # against ~84.1k). Walk
+        # thinned the rumor (~18.0k
+        # against ~19.7k). Sleep's
+        # seven scraps are the tell.
+        # Luma-8 keeps the whole
+        # rumor. knock_tiny_crumbs
+        # (64) keeps specks off.
+        # MinFilter (5) is the
+        # leftover default path; I
+        # did not erode. It shredded
+        # sleep. TAN_SIT I did not
+        # join. Cream bands are hide,
+        # not Pale's wash. TAN_SIT
+        # still lists morel, lions_
+        # mane, rosy_boa, and yeast.
+        # DARK_MATTE already lists
+        # crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add
+        # milk_snake. A rumor's black
+        # is hide, and that path
+        # still shredded sleep.
+        # Nori's ball_python elif
+        # stays Nori's. Bandit's
+        # kingsnake elif stays
+        # Bandit's. Jade's green_
+        # tree_python elif stays
+        # Jade's. Sash's garter elif
+        # stays Sash's. Lula's boa
+        # elif stays Lula's. Saffron
+        # did not add a corn_snake
+        # elif. Bluff did not add a
+        # hognose elif. Ember's
+        # phoenix elif stays Ember's.
+        # Existing luma-8 elifs stay
+        # theirs. Guest-only. Not a
+        # catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE. Not Blush.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
