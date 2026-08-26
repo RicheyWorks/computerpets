@@ -627,7 +627,7 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "grid"
         assert classroom_for(key).verb == "stay"
-        assert classroom_for(key).label == "The five on the grid"
+        assert classroom_for(key).label == "The six on the grid"
     assert [g.key for g in GRID_GUIDE] == [key for key, _, _ in GRID_EXPECTED]
 
 

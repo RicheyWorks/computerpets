@@ -2128,7 +2128,7 @@ def classroom_for(key: str) -> Classroom:
     if is_reef(key):
         return Classroom(room="reef", label="All ten on the reef", verb="stay")
     if is_grid(key):
-        return Classroom(room="grid", label="The five on the grid", verb="stay")
+        return Classroom(room="grid", label="The six on the grid", verb="stay")
     if is_meadow(key):
         return Classroom(room="meadow", label="All ten in the meadow", verb="stay")
     if is_well(key):
