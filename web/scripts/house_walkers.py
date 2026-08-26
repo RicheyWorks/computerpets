@@ -10510,6 +10510,156 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "sweat_bee":
+        # Sheen's metallic green
+        # thorax, banded abdomen,
+        # dark compound eye, and
+        # the dark of a folded
+        # wing nick when default
+        # plate-flood treats hide
+        # as plate. She is a
+        # bicolored sweat bee.
+        # Agapostemon virescens.
+        # Metallic. Often
+        # solitary. A metallic
+        # green thorax, a banded
+        # abdomen, a small bright
+        # hover. The lamp rim is
+        # a meadow she agreed to.
+        # Sweat is a mineral she
+        # will take. Nectar is
+        # the meal. I shone.
+        # Hello. The rim kept my
+        # green. You may look. I
+        # am not Comb. Comb is
+        # Apis, already in the
+        # insect ten, a honey bee
+        # with a waggle and a
+        # dish of wax. Not a
+        # honey bee that learned
+        # to shine. I am not
+        # Pot. Pot is stingless,
+        # a small dark body,
+        # pots. I am not Disc.
+        # Disc is a leafcutter
+        # with a leaf disc. I am
+        # not Mortar. Mortar is a
+        # mason with mud. I am
+        # not Auger. Auger is a
+        # carpenter. I am not
+        # Thrum. Thrum is a
+        # bumble. Habitat lamp
+        # rim is weather, not a
+        # painted lamp, not a
+        # leaf, not a nest, not
+        # furniture. House food
+        # is nectar of a treaty —
+        # one sip. Play is a
+        # shine, a hover. Sleep
+        # is a curled sweat bee
+        # on nothing but black.
+        # Talk is a bee, not a
+        # person. No human smile.
+        # No two-leg stand. No
+        # welcoming arms. Named:
+        # Sheen. Dark hide is
+        # hide, not a hole. Do
+        # not punch the bee.
+        # Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not
+        # a cream leftover luma-8
+        # would keep at ~0.78);
+        # fill ~0.18–0.26.
+        # Default punched the
+        # living sweat bee: idle
+        # nicked the shine
+        # (~43.2k live against
+        # luma-8's ~56.3k; dark
+        # ~4.0k against ~11.3k).
+        # Sit nicked the pause
+        # (~49.3k against
+        # ~57.4k; dark ~9.3k
+        # against ~15.8k). Walk
+        # nicked the gait
+        # (~38.1k against
+        # ~46.5k; dark ~7.3k
+        # against ~10.7k). Talk
+        # nicked the speak
+        # (~45.3k against
+        # ~58.5k; dark ~7.2k
+        # against ~11.4k). Eat
+        # nicked the sip
+        # (~56.0k against
+        # ~61.3k; dark ~9.7k
+        # against ~13.4k). Play
+        # nicked the hover
+        # (~58.5k against
+        # ~66.2k; dark ~5.4k
+        # against ~8.0k). Sleep
+        # nicked dark hide
+        # (~15.2k against
+        # ~19.6k). Idle's nicked
+        # shine and walk's nicked
+        # gait are the tell.
+        # Luma-8 keeps the whole
+        # bee. knock_tiny_crumbs
+        # (64) keeps specks off.
+        # MinFilter (5) is the
+        # leftover default path;
+        # I did not erode. It
+        # punches the metal.
+        # TAN_SIT I did not
+        # join. A green metal is
+        # not Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # rosy_boa, and yeast.
+        # DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_
+        # cricket, earwig, click_
+        # beetle, and robber_fly;
+        # that membership stays.
+        # I did not add
+        # sweat_bee. A bee's
+        # black band is hide, and
+        # that path still nicked
+        # idle. Thrum's
+        # bumblebee elif stays
+        # Thrum's. Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee elif
+        # stays Mortar's. Disc's
+        # leafcutter elif stays
+        # Disc's. Pot's stingless
+        # elif stays Pot's.
+        # Atlas's carpet_python
+        # elif stays Atlas's.
+        # Coral's milk_snake elif
+        # stays Coral's. Ember's
+        # phoenix elif stays
+        # Ember's. Existing
+        # luma-8 elifs stay
+        # theirs. Later hive
+        # (Bank, Hum, Keep, Wax)
+        # stay untouched.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not Comb.
+        # Not Pot. Not Disc. Not
+        # Mortar. Not Auger. Not
+        # Thrum.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
