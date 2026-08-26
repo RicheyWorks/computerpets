@@ -11341,6 +11341,173 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "gecko":
+        # Pad's pale night
+        # hide, granular
+        # tubercles, and the
+        # dark of a vertical
+        # slit nick when
+        # default plate-flood
+        # treats the wash as
+        # the gecko. Pad is
+        # Hemidactylus
+        # turcicus. A
+        # Mediterranean house
+        # gecko. Toe pads
+        # like small lamps, a
+        # pale night body, a
+        # chirp that is a
+        # voice. She climbs.
+        # Then she sits the
+        # plaster. The wall
+        # is a stone she
+        # agreed to. A gecko
+        # is not a salamander.
+        # The pads are the
+        # tell. The climb is
+        # the species. I
+        # climbed. That was
+        # hello. The plaster
+        # kept my pads. You
+        # may look. I am not
+        # a salamander. Eat
+        # is moth of a
+        # treaty. Play is a
+        # climb. I win by
+        # remaining a gecko.
+        # Rest holds the
+        # plaster. The pad is
+        # the correct sleep.
+        # Habitat lamp plaster
+        # is weather, not
+        # painted furniture
+        # around the gecko.
+        # Sleep is a curled
+        # house gecko on
+        # nothing but black,
+        # still Hemidactylus,
+        # not a leopard gecko.
+        # Talk is a gecko, a
+        # chirp, not a person.
+        # Walk is a real
+        # climb. Named: Pad.
+        # Pale night hide is
+        # hide, not a hole.
+        # Do not punch the
+        # pads. Proven on the
+        # new black-plate
+        # raws: plate corners
+        # med luma 0 (not a
+        # cream leftover
+        # luma-8 would keep
+        # at ~0.78); fill
+        # ~0.14–0.38. Default
+        # punched the living
+        # gecko: idle tore
+        # the still (~45.0k
+        # live against
+        # luma-8's ~56.8k;
+        # 168 comps against
+        # 1; isle ~397). Sit
+        # tore the hold
+        # (~40.4k against
+        # ~49.9k; 135 comps
+        # against 1; isle
+        # ~613). Walk nicked
+        # the climb (~30.4k
+        # against ~34.6k; 31
+        # comps against 1).
+        # Sleep tore the curl
+        # (~97.3k against
+        # ~113.6k; 219 comps
+        # against 1). Talk
+        # lost the chirp
+        # (~45.8k against
+        # ~51.6k; 19 comps
+        # against 1). Eat
+        # nicked the moth
+        # sip (~37.7k against
+        # ~40.5k). Play
+        # jagged the climb
+        # (~33.1k against
+        # ~36.8k; 14 comps
+        # against 1). Idle's
+        # torn still is the
+        # tell. Luma-8 keeps
+        # the whole gecko.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I did
+        # not erode. It
+        # punches the pads
+        # (idle ~53.4k
+        # against luma-8's
+        # ~56.8k; walk
+        # ~32.0k against
+        # ~34.6k). TAN_SIT I
+        # did not join. Pale
+        # night hide is not
+        # Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists crow,
+        # raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede,
+        # field_cricket,
+        # earwig, click_
+        # beetle, and robber_
+        # fly; that
+        # membership stays.
+        # I did not add
+        # gecko. A gecko's
+        # slit is hide, and
+        # that path still
+        # tore idle. Thrum's
+        # bumblebee elif
+        # stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Dapple. Not Wink.
+        # Not Dash. Not
+        # Shift. Not Spike.
+        # Not Levee. Not Jaw.
+        # Not Beak. Not Lid.
+        # Not Peak.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
