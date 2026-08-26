@@ -32,8 +32,8 @@ test("the overlay keeps the house visit clock", () => {
 
 test("the overlay caller is today's guest, not the living sit", () => {
   assert.deepEqual(V.CATALOG_KEYS, CATALOG);
-  assert.equal(V.todaysVisitor("red_panda", null, new Date(2026, 7, 17)), "chicken_of_woods");
-  assert.equal(V.todaysVisitor("ball_python", null, new Date(2026, 7, 17)), "lichen");
+  assert.equal(V.todaysVisitor("red_panda", null, new Date(2026, 7, 17)), "brain_coral");
+  assert.equal(V.todaysVisitor("ball_python", null, new Date(2026, 7, 17)), "clownfish");
   assert.notEqual(V.todaysVisitor("red_panda", null, new Date(2026, 7, 17)), "red_panda");
   assert.equal(V.visitLine("axolotl"), "I grew a little more present. Then less.");
   assert.equal(V.visitLine("chickadee"), "I deeed. Then I left the cup.");
