@@ -21,6 +21,7 @@ from computerpets_client.species import (
     MEADOW_KEYS,
     CANOPY_KEYS,
     REEF_KEYS,
+    GRID_KEYS,
     STONE_KEYS,
     WOOD_KEYS,
     SPECIES,
@@ -30,6 +31,7 @@ from computerpets_client.species import (
     is_log,
     is_meadow,
     is_canopy,
+    is_grid,
     is_reef,
     is_shore,
     is_far,
@@ -511,8 +513,9 @@ WEB_REEF = (
     "giant_clam",
     "eagle_ray",
     "grouper",
-    "cyber_dragon",
 )
+
+WEB_GRID = ("cyber_dragon",)
 
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
@@ -538,6 +541,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(MEADOW_KEYS) == 10
     assert len(CANOPY_KEYS) == 10
     assert len(REEF_KEYS) == 10
+    assert len(GRID_KEYS) == 1
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -558,6 +562,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert set(MEADOW_KEYS) == set(WEB_MEADOW)
     assert set(CANOPY_KEYS) == set(WEB_CANOPY)
     assert set(REEF_KEYS) == set(WEB_REEF)
+    assert set(GRID_KEYS) == set(WEB_GRID)
 
 
 def test_ten_snakes_are_present_and_crawl():
@@ -1215,7 +1220,6 @@ def test_ten_reef_guests_are_present_and_honest():
     assert SPECIES["giant_clam"].name == "Gate"
     assert SPECIES["eagle_ray"].name == "Soar"
     assert SPECIES["grouper"].name == "Hide"
-    assert SPECIES["cyber_dragon"].name == "Arc"
     assert SPECIES["lions_mane"].name == "Mane"
     assert SPECIES["lions_mane"].slug == "mane"
     assert SPECIES["manta"].name == "Kite"
@@ -1223,6 +1227,24 @@ def test_ten_reef_guests_are_present_and_honest():
     assert SPECIES["goldfish"].name == "Coin"
     assert SPECIES["moon_jelly"].name == "Pulse"
     assert SPECIES["ginkgo"].name == "Fan"
+
+
+def test_one_grid_guest_is_present_and_honest():
+    assert GRID_KEYS == WEB_GRID
+    for key in WEB_GRID:
+        spec = SPECIES[key]
+        assert is_grid(key)
+        assert not is_reef(key)
+        assert not is_sea(key)
+        assert spec.treat
+        assert spec.treat_shape in TREAT_SHAPES
+        assert spec.aquatic is False
+        assert spec.silhouette != "dragon"
+    assert SPECIES["cyber_dragon"].slug == "arc"
+    assert SPECIES["cyber_dragon"].name == "Arc"
+    assert SPECIES["cyber_dragon"].label == "Grid Dragon"
+    assert SPECIES["dragon"].name == "Vesper"
+    assert SPECIES["dragon"].slug == "vesper"
 
 
 def test_ten_creek_guests_are_present_and_honest():
