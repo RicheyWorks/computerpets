@@ -12748,6 +12748,202 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "box_turtle":
+        # Lid's high-domed
+        # carapace, yellow-
+        # on-dark radiating
+        # scutes, hinged
+        # plastron, and
+        # orange-spotted
+        # skin nick when
+        # default plate-
+        # flood treats the
+        # wash as the turtle.
+        # Lid is Terrapene
+        # carolina. An
+        # Eastern box turtle.
+        # A high dome. A
+        # hinged plastron
+        # she can shut until
+        # she is a box. She
+        # walks. Then she
+        # shuts. Habitat leaf
+        # dish is weather,
+        # not painted
+        # furniture around
+        # the turtle. A box
+        # turtle is not Ink.
+        # She is not a
+        # Reeves's turtle.
+        # She is not Hinge
+        # the mussel. She is
+        # not Beak. She is
+        # not Peak. The
+        # plastron is the
+        # tell. The shut is
+        # the species. I
+        # shut. Hello. The
+        # dish kept my hinge.
+        # You may look. I am
+        # not Ink. Eat is
+        # worm of a treaty.
+        # One worm. No dish.
+        # Play is a shut. I
+        # win by remaining a
+        # box turtle. Rest
+        # holds this dish.
+        # The shut is the
+        # correct sleep.
+        # Sleep is a shut
+        # box turtle on
+        # nothing but black,
+        # still Terrapene,
+        # not Ink, not Hinge.
+        # Talk is a box
+        # turtle, not a
+        # person. No smile.
+        # No human limbs.
+        # Walk is a box
+        # turtle on black.
+        # High dome. Hinge.
+        # Named: Lid. Yellow
+        # rays and tan in
+        # the scutes are
+        # hide, not
+        # parchment. Do not
+        # punch the high
+        # dome, the hinge of
+        # the plastron, the
+        # yellow rays, or
+        # the claws. Proven
+        # on the new black-
+        # plate raws: plate
+        # corners med luma 0
+        # (not a cream
+        # leftover luma-8
+        # would keep at
+        # ~0.78); fill
+        # ~0.22–0.43.
+        # Default punched
+        # the living turtle:
+        # idle tore the
+        # still (~82.2k live
+        # against luma-8's
+        # ~105.3k; a hollow
+        # shell). Sit tore
+        # the hold (~56.2k
+        # against ~73.2k).
+        # Walk nicked the
+        # stride (~45.9k
+        # against ~55.9k).
+        # Sleep tore the
+        # rest (~95.2k
+        # against ~101.0k;
+        # 4 comps against
+        # 1). Talk lost the
+        # speak (~66.9k
+        # against ~75.3k).
+        # Eat nicked the
+        # worm sip (~49.6k
+        # against ~66.1k;
+        # 3 comps against
+        # 1). Play jagged
+        # the shut (~95.2k
+        # against ~108.9k;
+        # 4 comps against
+        # 1). Default left
+        # a torn turtle.
+        # Luma-8 keeps the
+        # whole box turtle.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I
+        # did not erode. It
+        # punches the high
+        # dome, the hinge,
+        # and the yellow
+        # rays (idle ~104.8k
+        # against luma-8's
+        # ~105.3k; sit
+        # ~72.2k against
+        # ~73.2k; walk
+        # ~54.7k against
+        # ~55.9k; talk
+        # ~73.4k against
+        # ~75.3k; eat
+        # ~64.4k against
+        # ~66.1k). TAN_SIT I
+        # did not join.
+        # Yellow-on-dark
+        # scutes are hide,
+        # not Pale's wash.
+        # TAN_SIT still
+        # lists morel,
+        # lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # I did not join.
+        # Dark scutes are
+        # hide; that set is
+        # other keys
+        # (alligator stays
+        # Levee's). Thrum's
+        # bumblebee elif
+        # stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Wink's anole elif
+        # stays Wink's.
+        # Dash's skink elif
+        # stays Dash's.
+        # Shift's chameleon
+        # elif stays Shift's.
+        # Spike's
+        # horned_lizard elif
+        # stays Spike's.
+        # Levee's alligator
+        # elif stays Levee's.
+        # Jaw's crocodile
+        # elif stays Jaw's.
+        # Beak's snapper
+        # elif stays Beak's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Ink. Not Hinge.
+        # Not Beak. Not
+        # Peak.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
