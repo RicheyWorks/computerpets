@@ -8730,6 +8730,115 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=300)
         return sat
+    elif key == "iguana":
+        # Sol's dark bands, dark claws,
+        # and the dark of a quiet eye
+        # nick when default plate-flood
+        # treats hide as plate. He is a
+        # green iguana. Iguana iguana.
+        # A green dewlap, a row of
+        # spines like a modest saw, and
+        # a third eye on the brow that
+        # watches the sun. A herbivore
+        # who treats stillness as a
+        # career. The wall is weather,
+        # not a chair you draw. I sat
+        # the whole iguana. Hello. I
+        # am not a chameleon. Those
+        # change on purpose and keep
+        # tong-feet. I am not a bearded
+        # dragon. I am not Vesper. I am
+        # Iguana iguana, the green one,
+        # and I will move when the
+        # light asks. People also file
+        # me with dinosaurs. I declined
+        # the extinction. Habitat is
+        # weather, not a painted wall,
+        # not a branch you draw, not a
+        # lettuce bowl, not a parchment
+        # island. House food is one
+        # leaf, then gone. A sit sits.
+        # A walk is slow. Sleep closes
+        # the eye. Talk is a dewlap. Eat
+        # is one leaf. Play is a head-
+        # bob. I win by remaining a
+        # green iguana. I blinked.
+        # Minutes will not record it.
+        # Named: Sol. Dark hide is hide,
+        # not a hole. Do not punch the
+        # bands. Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not a
+        # cream leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.11–0.24. Default shredded
+        # the living iguana: sleep tore
+        # the quiet (4 comps against
+        # luma-8's 1; animal ~45.7k
+        # against ~58.6k; dark 1.6k
+        # against 4.9k). Sit split the
+        # loaf (2 comps against 1;
+        # ~44.2k against ~57.6k; dark
+        # 1.8k against 5.1k). Talk left
+        # the dewlap a second part (3
+        # comps against 1; ~52.1k
+        # against ~59.4k). Eat and play
+        # split the same way (2 comps
+        # against 1). Idle and walk
+        # kept one body and still lost
+        # dark (idle ~44.4k against
+        # ~52.1k; walk ~21.8k against
+        # ~26.1k). Sleep's four pieces
+        # are the tell. Luma-8 keeps
+        # the whole iguana.
+        # knock_tiny_crumbs(300) keeps
+        # specks off. MinFilter(5) is
+        # the leftover default path; I
+        # did not erode. TAN_SIT I did
+        # not join. Olive hide is not
+        # Pale's wash. TAN_SIT still
+        # lists morel, lions_mane, and
+        # yeast. DARK_MATTE already
+        # lists crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add iguana.
+        # A green iguana is not
+        # charcoal. Keel's toucan elif
+        # stays Keel's. Bloom's
+        # axolotl elif stays Bloom's.
+        # Floss's chinchilla elif stays
+        # Floss's. Burr's hedgehog elif
+        # stays Burr's. Wick's ferret
+        # elif stays Wick's. Quill's
+        # parrot elif stays Quill's.
+        # Rue's fox elif stays Rue's.
+        # Coin's goldfish elif stays
+        # Coin's. Echo did not add a
+        # budgie elif. Peck did not
+        # add a penguin elif. Ink's
+        # turtle elif stays Ink's.
+        # Whee's guinea_pig elif stays
+        # Whee's. Thimble's rabbit elif
+        # stays Thimble's. Pip's dog
+        # elif stays Pip's. Miso's cat
+        # elif stays Miso's. Clip did
+        # not add a hamster elif.
+        # Existing luma-8 elifs stay
+        # theirs. Guest-only. Not a
+        # catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE. Not Vesper.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=300)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=300)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
