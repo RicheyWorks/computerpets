@@ -43,6 +43,7 @@ import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/s
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
 import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
+import { KeeperCard } from "@/components/desk/keeper-card";
 import { GuestChoice } from "@/components/desk/guest-choice";
 import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
@@ -738,6 +739,16 @@ export function CompanionRoom({
         {line}
         {latestNote ? <p className="mt-2 max-w-sm text-xs text-subtle">{latestNote}</p> : null}
         <SpeciesPlaque speciesKey={kind.key} compact paper className="mt-5 max-w-sm" showDemoLink={false} />
+        <KeeperCard
+          className="mt-4 max-w-sm"
+          name={displayName}
+          stage={age}
+          stats={stats}
+          busy={busyOrHidden}
+          onFeed={() => void feed()}
+          onPlay={startChase}
+          onRest={() => void tend("rest")}
+        />
         {aside}
       </aside>
 

@@ -41,10 +41,18 @@ const hud = document.getElementById("hud");
 const choiceEl = document.getElementById("choice");
 const hudName = document.getElementById("hud-name");
 const hudVital = document.getElementById("hud-vital");
+const hudHunger = document.getElementById("hud-hunger");
+const hudRest = document.getElementById("hud-rest");
+const hudBond = document.getElementById("hud-bond");
+const hudHeartbeat = document.getElementById("hud-heartbeat");
+const hudTruth = document.getElementById("hud-truth");
+const hudCare = document.getElementById("hud-care");
 const barHunger = document.getElementById("bar-hunger");
 const barMood = document.getElementById("bar-mood");
 const barEnergy = document.getElementById("bar-energy");
 const barHygiene = document.getElementById("bar-hygiene");
+const barBond = document.getElementById("bar-bond");
+let heartbeat = window.PetKeeper ? { ...window.PetKeeper.UNREAD } : { status: "DOWN", profile: null, uptimeSeconds: null, port: 8081 };
 for (let i = 0; i < 12; i++) dustRoot.appendChild(document.createElement("span"));
 
 let roster = [];
@@ -138,6 +146,33 @@ function persist() {
   if (kind && life) window.PetLife.save(kind.key, life);
 }
 
+function readHeartbeat() {
+  const K = window.PetKeeper;
+  if (!K) return;
+  fetch(K.HEARTBEAT_URL, { cache: "no-store" })
+    .then((r) => r.json())
+    .then((raw) => {
+      heartbeat = K.parseHeartbeat(raw);
+      paintHud();
+    })
+    .catch(() => {
+      heartbeat = { ...K.UNREAD };
+      paintHud();
+    });
+}
+
+if (hudCare) {
+  hudCare.addEventListener("click", (e) => {
+    const btn = e.target && e.target.closest && e.target.closest("[data-care]");
+    if (!btn) return;
+    e.stopPropagation();
+    const id = btn.getAttribute("data-care");
+    if (id === "feed" || id === "play" || id === "rest") handle(id);
+  });
+}
+setInterval(readHeartbeat, 15_000);
+readHeartbeat();
+
 function say(text, hold = 4200) {
   if (!text) return;
   bubbleText.textContent = text;
@@ -172,18 +207,26 @@ function lineFrom(result) {
 
 function paintHud() {
   if (!life || !kind) return;
+  const K = window.PetKeeper;
+  const meters = K ? K.meters(life) : { hunger: life.hunger, rest: life.energy, bond: life.bond, bondTitle: "New" };
   hudName.textContent = `${kind.name} · ${life.stage}`;
   const hive = window.PetHive && window.PetHive.isHivePlace(kind.key) ? window.PetHive.colonyOf(life, life.hidden) : null;
   const vital = hive
     ? `${window.PetHive.colonyWord(hive)} · Brood · ${hive.brood} · Stores · ${hive.stores}`
     : `${window.PetLife.vitals({ ...life, blue: window.PetLife.isBlue(life, kind.key) }, kind.key)} · ${skyLabel(skyOf())}${life.gifts?.length ? ` · ${life.gifts.length} gift${life.gifts.length > 1 ? "s" : ""}` : ""}`;
   hudVital.textContent = vital;
+  if (hudHunger) hudHunger.textContent = String(meters.hunger);
+  if (hudRest) hudRest.textContent = String(meters.rest);
+  if (hudBond) hudBond.textContent = meters.bondTitle;
+  if (hudHeartbeat && K) hudHeartbeat.textContent = K.heartbeatLine(heartbeat);
+  if (hudTruth && K) hudTruth.textContent = K.careTruth();
   pet.classList.toggle("dull", !!(hive && hive.quiet));
   barHunger.style.setProperty("--w", `${life.hunger}%`);
-  barMood.style.setProperty("--w", `${life.mood}%`);
+  if (barMood) barMood.style.setProperty("--w", `${life.mood}%`);
   barEnergy.style.setProperty("--w", `${life.energy}%`);
-  barHygiene.style.setProperty("--w", `${life.hygiene}%`);
-  hud.classList.toggle("show", performance.now() < hudUntil || life.sick || life.hidden);
+  if (barHygiene) barHygiene.style.setProperty("--w", `${life.hygiene}%`);
+  if (barBond) barBond.style.setProperty("--w", `${life.bond}%`);
+  hud.classList.add("show");
   window.desk?.vitals({
     key: kind.key,
     name: kind.name,

@@ -8,8 +8,8 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-26 (Ground sits the tenth cyber dragon; catalog is 220) |
-| **Version**      | 1.2                                        |
+| **Last Updated** | 2026-08-26 (Grid ten live on the Windows desk; keeper card tells the truth) |
+| **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
 
@@ -732,8 +732,8 @@ Virtual pets that live on the keeper’s real desktop. Two hundred twenty living
 | Rui-level render | Leftover art campaign. Desk and overlay lockstep. Blotter follows idle. Rui is the quality bar. | No stamps. No parchment islands. Never retouch a landed guest while sitting a leftover. Most guests are not yet Rui-sharp. |
 | FULL GPU / DirectX 12 / Vulkan | A real GPU path is the bar. Today the overlay is Electron/Chromium. The PyQt blotter has a Qt OpenGL viewport (`QOpenGLWidget`), not a custom shader engine. | Do not invent a finished DX12/Vulkan engine. Later: DX12/Vulkan, or an honest Chromium GPU path that still *feels* like the ad. Name the gap; do not paper it. |
 | GPU LOAD HUD (temp, util, memory, power, sparkline) | Host telemetry is a first-class **sense**. The pet may notice heat, util, and memory the way it already notices hunger, weather, and the lamp. New `/metrics/gpu` (or desktop-local metrics) is a future door. | Do not fake numbers. No HUD today. Sense must read the real machine or stay dark. |
-| FEED / PLAY / REST + level / bond card | Life sim already keeps hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, and bond titles (New→Soul) on desk, demo, Live, Meet, and Windows. | The gap is a house-hand overlay HUD as sharp as the ad, on every screen. Care verbs already live; the card does not yet look like the poster. |
-| Spring Boot UP + `/pet/feed` `/pet/play` `/pet/rest` | Backend is the trust anchor: ownership verify, licenses, download, admin revoke, actuator. Java listens on **8081**; the living desk keeps **8080**. Overlay must show a **true** heartbeat (up/down, profile, uptime). | Shipped doors today: `/api/verify/**`, `/api/download/**`, `/api/pets`, `/api/bundles/**`, `/api/admin/**`, `/actuator/health` (and liveness / readiness). Advertised `/pet/feed`, `/pet/play`, `/pet/rest` are the **contract to grow into**, not routes we pretend already return 200. Do not invent NFT addresses. Do not claim Store IDs we do not have. |
+| FEED / PLAY / REST + level / bond card | Life sim already keeps hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, and bond titles (New→Soul). A house-hand keeper card now sits overlay, `/demo`, desk, Live, and Meet: Feed / Play / Rest, hunger / rest / bond, stage. | The card tells the truth. It is not yet the poster-sharp HUD. Do not paint furniture into the art. |
+| Spring Boot UP + `/pet/feed` `/pet/play` `/pet/rest` | Backend is the trust anchor. Java listens on **8081**; the living desk keeps **8080**. The card reads a **true** heartbeat from `GET /api/public/heartbeat` (up/down, profile, uptime). Unreachable Java is DOWN / unread — never a painted UP. | Shipped doors today: `/api/verify/**`, `/api/download/**`, `/api/pets`, `/api/bundles/**`, `/api/admin/**`, `/api/public/heartbeat`, `/actuator/health` (and liveness / readiness). Advertised `/pet/feed`, `/pet/play`, `/pet/rest` are the **contract to grow into**, not routes we pretend already return 200. Care stays local. Do not invent NFT addresses. Do not claim Store IDs we do not have. |
 | File explorer / pets among files | Pets occupy the **real** desktop, not a painted wallpaper. They sit on homework, browsers, and icons. | Desktop presence is not filesystem theft. Guests do not silently read, write, or exfiltrate keeper files. No keyloggers. No secret capture. No clipboard harvest. |
 | Mind / talk | Plugin bus (`docs/MIND.md`). House lines are the fallback. Keys stay with the keeper. | HUD may show **who is listening**. It must not invent a mind, leak a key, or ship a server-side secret. |
 
@@ -786,15 +786,16 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 - Electron overlay on Windows (`desktop/`); renderer sprites lockstep with the desk. Mac extra and Linux mark exist as later doors, not the first polish target.
 - PyQt6 blotter (`client/`) — care verbs, plaques, Qt OpenGL viewport.
 - Life sim: hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, bond titles.
-- Spring Boot trust anchor on 8081: ownership verify, licenses, download, admin revoke, actuator.
+- House-hand keeper card on overlay, `/demo`, desk, Live, and Meet: Feed / Play / Rest, hunger / rest / bond, honest Java heartbeat. Care is local. `/pet/feed` is not a door.
+- Spring Boot trust anchor on 8081: ownership verify, licenses, download, admin revoke, actuator, quiet `/api/public/heartbeat`.
 - Mind plugin bus. Keys stay with the keeper.
 
 **Later (grow into the ads; do not mark done)**
 
-- A Rui-sharp keeper HUD on the real desktop — and the same card on desk, demo, Live, Meet, and Windows.
+- A Rui-sharp poster look for the keeper HUD. The card exists; it is not yet the ad frame.
 - Honest GPU sense: heat, util, memory, power. `/metrics/gpu` or desktop-local metrics. Dark if unread.
-- A real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the poster. Not a finished engine claimed today.
-- Advertised care routes aligned with what we ship, or grown as the contract. Heartbeat shows true up/down, profile, and uptime.
+- A real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the poster. Overlay is Electron/Chromium today. Not a finished engine claimed today.
+- Advertised care routes aligned with what we ship, or grown as the contract.
 - Mac / Linux / phone after Windows 10/11 feels like the ad.
 - Later cyber-dragon guests, if asked, sit one at a time. Do not invent nine empty rooms.
 
@@ -808,7 +809,7 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 - A cyber-scorpion is still not a catalog row. “Zero mercy” is still not product identity.
 - Desktop presence is not filesystem theft. No keyloggers. No secret capture.
 - Mind keys stay with the keeper. HUD may name the listener; it may not invent one.
-- Do not implement the HUD or the GPU path from this sit. Write the guest; later work grows the ad capability.
+- The house-hand keeper card may sit. Do not invent a finished DX12/Vulkan engine. Name the GPU gap.
 
 Roadmap checklist: [ROADMAP.md](ROADMAP.md) Phase 6.
 
