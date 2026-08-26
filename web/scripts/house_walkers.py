@@ -9419,6 +9419,104 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "garter":
+        # Sash's olive hide, three
+        # yellow lines, and the dark
+        # of a quiet eye nick when
+        # default plate-flood treats
+        # hide as plate. She is a
+        # common garter snake.
+        # Thamnophis sirtalis. Slender.
+        # Three yellow lines: one
+        # vertebral, two lateral. Olive-
+        # dark hide. She does not lounge.
+        # She pauses. I sat the whole
+        # snake. I was mid-patrol. You
+        # may join. I am not a ribbon
+        # snake. I am not a hognose.
+        # Bluff is the upturned snout.
+        # I am not a kingsnake. Bandit
+        # wears bands. I am not a corn
+        # snake. Saffron is the orange
+        # thread. I am not a ball
+        # python. Nori is a bun. I am
+        # not a green tree python. Jade
+        # sits like jewelry. Habitat is
+        # weather, not a painted moss
+        # cup, not moss, not a cup, not
+        # a sand wash, not a parchment
+        # island. House food is one
+        # small worm bite, then gone.
+        # A sit is a pause, head a
+        # little out. A walk is an
+        # honest dash. Sleep is a
+        # puddle of stripe. Talk is a
+        # whole snake, a tongue. Eat is
+        # a worm treaty, signed in
+        # three copies. Play is a dash,
+        # then a second dash. I win by
+        # finishing the route first.
+        # Named: Sash. Olive hide is
+        # hide, not a hole. Do not
+        # punch the lines. Proven on
+        # the new black-plate raws:
+        # plate corners med luma 0
+        # (not a cream leftover luma-8
+        # would keep at ~0.78); fill
+        # ~0.08–0.40. Default punched
+        # the living garter: sit lost
+        # the underside (1 main; live
+        # ~67.9k against luma-8's
+        # ~83.9k; dark ~7.3k against
+        # ~14.0k) and left a jagged
+        # fringe of crumbs. Idle
+        # thinned the pause (~35.1k
+        # against ~37.7k). Play
+        # nicked the second dash
+        # (~50.6k against ~54.3k).
+        # Walk thinned the route
+        # (~20.5k against ~23.0k).
+        # Sit's punched underside is
+        # the tell. Luma-8 keeps the
+        # whole route. knock_tiny_
+        # crumbs (64) keeps specks
+        # off. MinFilter (5) is the
+        # leftover default path; I
+        # did not erode. It shaved
+        # sit. TAN_SIT I did not
+        # join. Yellow lines are hide,
+        # not Pale's wash. TAN_SIT
+        # still lists morel, lions_
+        # mane, rosy_boa, and yeast.
+        # DARK_MATTE already lists
+        # crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add garter.
+        # A patrol's olive is hide,
+        # and that path still punched
+        # sit. Nori's ball_python
+        # elif stays Nori's. Bandit's
+        # kingsnake elif stays
+        # Bandit's. Jade's green_
+        # tree_python elif stays
+        # Jade's. Saffron did not add
+        # a corn_snake elif. Bluff
+        # did not add a hognose elif.
+        # Ember's phoenix elif stays
+        # Ember's. Existing luma-8
+        # elifs stay theirs. Guest-
+        # only. Not a catalog wash.
+        # Not TAN_SIT. Not DARK_MATTE.
+        # Not Lula.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
