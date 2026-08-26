@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred thirteen, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred fourteen, painted here.
 """
 
 from __future__ import annotations
@@ -285,6 +285,7 @@ GRID_KEYS: tuple[str, ...] = (
     "cyber_dragon",
     "volt_dragon",
     "trace_dragon",
+    "flux_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6268,6 +6269,33 @@ TRACE = _kind(
     hungry=("A path dragon should not be this empty.", "A path would restore the trace."),
 )
 
+FLUX = _kind(
+    key="flux_dragon",
+    slug="flux",
+    name="Flux",
+    label="Field Dragon",
+    treat="Field",
+    treat_shape="flake",
+    silhouette="flux_dragon",
+    walk=72,
+    palette=Palette(
+        body=(56, 32, 64),
+        belly=(176, 88, 112),
+        ear=(32, 20, 36),
+        ear_inner=(232, 120, 88),
+        nose=(16, 12, 16),
+        ring=(232, 140, 72),
+        accent=(255, 160, 88),
+    ),
+    greet=("I fielded. Hello.", "The night kept my heat.", "You may look. I am not Arc."),
+    ambient=("A living heat-field under the hide. The field is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am a field dragon. The hide shimmers.", "Your papers are a field I have already claimed.", "I sit. Then I field. Then I sit."),
+    feed=("Field of a treaty.", "I will take this without leaving the field.", "Accepted. The field records it."),
+    treat_lines=("Field of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the field. Hello.",),
+    hungry=("A field dragon should not be this empty.", "A field would restore the heat."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6483,6 +6511,7 @@ _ALL: tuple[Species, ...] = (
     ARC,
     VOLT,
     TRACE,
+    FLUX,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

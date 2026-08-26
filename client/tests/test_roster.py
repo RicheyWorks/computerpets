@@ -265,6 +265,7 @@ WEB_CATALOG = (
     "cyber_dragon",
     "volt_dragon",
     "trace_dragon",
+    "flux_dragon",
 )
 
 WEB_SNAKES = (
@@ -517,7 +518,7 @@ WEB_REEF = (
     "grouper",
 )
 
-WEB_GRID = ("cyber_dragon", "volt_dragon", "trace_dragon")
+WEB_GRID = ("cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon")
 
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
@@ -543,7 +544,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(MEADOW_KEYS) == 10
     assert len(CANOPY_KEYS) == 10
     assert len(REEF_KEYS) == 10
-    assert len(GRID_KEYS) == 3
+    assert len(GRID_KEYS) == 4
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -1231,7 +1232,7 @@ def test_ten_reef_guests_are_present_and_honest():
     assert SPECIES["ginkgo"].name == "Fan"
 
 
-def test_three_grid_guests_are_present_and_honest():
+def test_four_grid_guests_are_present_and_honest():
     assert GRID_KEYS == WEB_GRID
     for key in WEB_GRID:
         spec = SPECIES[key]
@@ -1251,9 +1252,15 @@ def test_three_grid_guests_are_present_and_honest():
     assert SPECIES["trace_dragon"].slug == "trace"
     assert SPECIES["trace_dragon"].name == "Trace"
     assert SPECIES["trace_dragon"].label == "Path Dragon"
+    assert SPECIES["flux_dragon"].slug == "flux"
+    assert SPECIES["flux_dragon"].name == "Flux"
+    assert SPECIES["flux_dragon"].label == "Field Dragon"
     assert SPECIES["trace_dragon"].silhouette != "cyber_dragon"
     assert SPECIES["trace_dragon"].silhouette != "volt_dragon"
     assert SPECIES["volt_dragon"].silhouette != "cyber_dragon"
+    assert SPECIES["flux_dragon"].silhouette != "cyber_dragon"
+    assert SPECIES["flux_dragon"].silhouette != "volt_dragon"
+    assert SPECIES["flux_dragon"].silhouette != "trace_dragon"
     assert SPECIES["dragon"].name == "Vesper"
     assert SPECIES["dragon"].slug == "vesper"
 
@@ -1337,8 +1344,9 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("grouper") == "cyber_dragon"
     assert next_species_key("cyber_dragon") == "volt_dragon"
     assert next_species_key("volt_dragon") == "trace_dragon"
-    assert next_species_key("trace_dragon") == "red_panda"
-    assert prev_species_key("red_panda") == "trace_dragon"
+    assert next_species_key("trace_dragon") == "flux_dragon"
+    assert next_species_key("flux_dragon") == "red_panda"
+    assert prev_species_key("red_panda") == "flux_dragon"
     assert prev_species_key("brain_coral") == "koala"
     assert prev_species_key("sloth") == "robber_fly"
     assert prev_species_key("field_cricket") == "lugworm"

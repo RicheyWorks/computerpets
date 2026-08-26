@@ -247,6 +247,7 @@ const LINES: Record<string, string> = {
   cyber_dragon: "I arced. Then I left the night.",
   volt_dragon: "I coiled. Then I left the night.",
   trace_dragon: "I traced. Then I left the night.",
+  flux_dragon: "I fielded. Then I left the night.",
 };
 
 export function visitLine(guestKey: string) {

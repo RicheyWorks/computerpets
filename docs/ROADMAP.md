@@ -118,9 +118,9 @@ All critical items required before any public or limited production exposure hav
 - [x] Cat (Miso) wakes on the living desk
 - [x] Dog (Pip) wakes on the living desk
 - [x] Browser ad demos (`/meet`, `/demo/rui`, `/demo/miso`, `/demo/pip`)
-- [x] Full catalog awake — all two hundred thirteen living kinds have living browser demos
-- [x] Windows/Mac desktop overlay for all two hundred thirteen + phone/tablet Live companion
-- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of insects plus bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of ten wild mammals, a canopy of ten tree mammals, a stone of ten more reptiles, a creek of ten more fish, a log of ten litter guests, a shore of ten strand guests, a reef of ten living-rock guests, a meadow of ten grass-and-night insects, a cellar of ten fungi, a well of ten leftovers, a far den of ten xenobiology guests, and a grid of three cyber dragons licensed)
+- [x] Full catalog awake — all two hundred fourteen living kinds have living browser demos
+- [x] Windows/Mac desktop overlay for all two hundred fourteen + phone/tablet Live companion
+- [x] Backend `PetType` catalog matches the living desk (ten snakes, a tide of ten sea creatures, a garden of ten plants, a hive of insects plus bees and comb, a pond of ten Animalia, a roost of ten birds, a corner of ten arachnids and their neighbors, a wood of ten wild mammals, a canopy of ten tree mammals, a stone of ten more reptiles, a creek of ten more fish, a log of ten litter guests, a shore of ten strand guests, a reef of ten living-rock guests, a meadow of ten grass-and-night insects, a cellar of ten fungi, a well of ten leftovers, a far den of ten xenobiology guests, and a grid of four cyber dragons licensed)
 - [x] Per-species life sim — hunger clocks, mess, illness, age, specials, Windows hardening
 - [x] Mind plugin bus — 14 AI backends, per-pet assignment, custom webhook
 - [x] Browser desk specials + house journal; species gaits on every screen
@@ -164,7 +164,7 @@ All critical items required before any public or limited production exposure hav
 
 **Goal:** Grow into the capability of the two ComputerPets X posters without taking their slogan. Every living guest feels as present, instrumented, and house-hand as Rui in those frames — living on the real Windows desktop, GPU-lit, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
 
-North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-north-star-the-x-ads). This phase is the bar. Do not mark HUD / GPU items done until the house ships them. The leftover art campaign on the original 210 is finished. Catalog is two hundred thirteen. Arc is the first cyber-dragon guest. Volt is the second. Trace is the third.
+North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-north-star-the-x-ads). This phase is the bar. Do not mark HUD / GPU items done until the house ships them. The leftover art campaign on the original 210 is finished. Catalog is two hundred fourteen. Arc is the first cyber-dragon guest. Volt is the second. Trace is the third. Flux is the fourth.
 
 - [ ] Rui-sharp keeper HUD on every screen (desk, `/demo`, Live, Meet, Windows overlay): name, level / bond, health, FEED / PLAY / REST. Same card, lockstep sprites. Pirate is Rui’s character, not a new guest.
 - [ ] Overlay heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from actuator — never a painted “UP”.
@@ -178,6 +178,7 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [x] Arc sits the first cyber dragon (`cyber_dragon` / `arc`). Catalog was 211. Grid den opened only as far as Arc needs. No invented NFT / Store IDs. Never retouch `START-HERE.md` to paper over `house-count.test.mjs`.
 - [x] Volt sits the second cyber dragon (`volt_dragon` / `volt`). Catalog is 212. Same grid den. Coil along the ribs, not Arc's dorsal jump. No invented NFT / Store IDs. Never retouch landed guests.
 - [x] Trace sits the third cyber dragon (`trace_dragon` / `trace`). Catalog is 213. Same grid den. A single live circuit-trace from snout to tail, not Arc's dorsal jump, not Volt's rib coils. No invented NFT / Store IDs. Never retouch landed guests.
+- [x] Flux sits the fourth cyber dragon (`flux_dragon` / `flux`). Catalog is 214. Same grid den. A living heat-field under the hide, not Arc's dorsal jump, not Volt's rib coils, not Trace's circuit-trace. No invented NFT / Store IDs. Never retouch landed guests.
 
 ---
 
