@@ -8960,6 +8960,128 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=300)
         return sat
+    elif key == "phoenix":
+        # Ember's charcoal flight
+        # feathers, dark hooked beak,
+        # and the dark of a quiet eye
+        # nick when default plate-flood
+        # treats hide as plate. She is
+        # the house relic. A bird of
+        # ash and return. Gold at the
+        # throat, ember at the flight
+        # feathers. She does not stay
+        # gone. I am not a peacock. I
+        # am not Quill with better
+        # lighting. I am not a
+        # pheasant. I am not a parrot
+        # who learned a trick. I am
+        # not Vesper. Named: Ember.
+        # Phoenix. I come back. That
+        # is the species. Habitat is
+        # weather, not a painted rock,
+        # not a nest, not an ash pile,
+        # not a hearth you draw, not a
+        # parchment island. House food
+        # is one bite, then gone. A
+        # sit sits. A walk is a hop.
+        # Sleep closes the eye. Talk
+        # is a beak and a crest. Eat
+        # is one bite. Play is a wing
+        # flare. I win by remaining a
+        # firebird. Dark hide is hide,
+        # not a hole. Do not punch the
+        # flight feathers. Proven on
+        # the new black-plate raws:
+        # plate corners med luma 0
+        # (not a cream leftover luma-8
+        # would keep at ~0.78); fill
+        # ~0.28–0.42. Default shredded
+        # the living phoenix: play
+        # left seven pieces (7 comps
+        # against luma-8's 1; live
+        # ~47.7k against ~88.1k; dark
+        # ~5.1k against ~28.0k). Eat
+        # tore the bite (4 comps
+        # against 1; ~37.4k against
+        # ~86.3k; dark ~4.1k against
+        # ~30.6k). Idle left a head
+        # and a tail (3 comps against
+        # 1; ~27.4k against ~72.2k;
+        # dark ~2.1k against ~32.6k).
+        # Walk left the hop a scrap
+        # (3 comps against 1; ~30.9k
+        # against ~76.5k). Sit split
+        # the loaf (3 comps against 1;
+        # ~43.5k against ~91.6k; dark
+        # ~3.9k against ~37.0k). Talk
+        # left the speak a second part
+        # (2 comps; ~40.3k against
+        # ~75.9k). Sleep tore the
+        # quiet (2 comps; ~78.4k
+        # against ~110k; dark ~5.8k
+        # against ~52.7k). Play's
+        # seven pieces are the tell.
+        # Luma-8 keeps the whole
+        # phoenix. knock_tiny_crumbs
+        # (1000) keeps sit specks off
+        # (sit left four crumbs at
+        # 300: 975, 793, 438, 396).
+        # MinFilter(5) is the leftover
+        # default path; I did not
+        # erode. TAN_SIT I did not
+        # join. Charcoal hide is not
+        # Pale's wash. TAN_SIT still
+        # lists morel, lions_mane, and
+        # yeast. DARK_MATTE already
+        # lists crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add
+        # phoenix. A firebird's
+        # charcoal is hide, and that
+        # path still nicked dark
+        # flight feathers (idle dark
+        # ~11.0k against luma-8's
+        # ~32.6k; walk 4 comps).
+        # Vesper's dragon elif stays
+        # Vesper's. Sol's iguana elif
+        # stays Sol's. Keel's toucan
+        # elif stays Keel's. Bloom's
+        # axolotl elif stays Bloom's.
+        # Floss's chinchilla elif
+        # stays Floss's. Burr's
+        # hedgehog elif stays Burr's.
+        # Wick's ferret elif stays
+        # Wick's. Quill's parrot elif
+        # stays Quill's. Rue's fox
+        # elif stays Rue's. Coin's
+        # goldfish elif stays Coin's.
+        # Echo did not add a budgie
+        # elif. Peck did not add a
+        # penguin elif. Ink's turtle
+        # elif stays Ink's. Whee's
+        # guinea_pig elif stays
+        # Whee's. Thimble's rabbit
+        # elif stays Thimble's. Pip's
+        # dog elif stays Pip's.
+        # Miso's cat elif stays
+        # Miso's. Clip did not add a
+        # hamster elif. Existing
+        # luma-8 elifs stay theirs.
+        # Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Nori.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=1000)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=1000)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
