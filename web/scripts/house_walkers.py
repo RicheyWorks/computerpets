@@ -7944,6 +7944,104 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "fox":
+        # Rue's black socks and the dark
+        # gap of a trot nick when default
+        # plate-flood treats hide as plate.
+        # She is a red fox. Vulpes vulpes.
+        # Red coat, black socks, and a white
+        # tip on the brush — that tip is the
+        # whole identification. Vertical
+        # pupils. A face that already knows
+        # why you opened the closet. I sat
+        # the closet. Hello. I am not a dog.
+        # Pip believes you; I have already
+        # found the bug. I am not a coyote,
+        # not a small wolf, not a cat who
+        # learned to scheme. I am not Echo.
+        # I am not Coin. I am not Ink. I am
+        # not Whee. I am not Clip. I am not
+        # Thimble. I am not Pip. I am not
+        # Miso. I am not Rui. Habitat is
+        # weather (the closet), not painted
+        # furniture, not a den you draw,
+        # not a carcass, not a chicken, not
+        # painted snow, not a parchment
+        # island. House food is one bite,
+        # then gone. A sit is a sit. A walk
+        # trots. Sleep curls with the eyes
+        # shut. Talk is a kinder chatter.
+        # Eat is one morsel. Play is a
+        # pounce. I win by remaining a red
+        # fox. The tail ends white. I found
+        # you first. Named: Rue. Black
+        # socks are hide, not a hole. Do
+        # not punch the trot. Proven on the
+        # new black-plate raws: plate
+        # corners med luma 0 (not a cream
+        # leftover luma-8 would keep at
+        # ~0.78); fill ~0.23–0.53. Default
+        # nicked the living fox: walk tore
+        # the belly from the hind and left
+        # a notch at the brush (2 comps
+        # against luma-8's 1; animal
+        # ~43.8k against ~49.2k; dark
+        # ~1.1k against ~3.8k), idle ate
+        # the socks (dark ~1.9k against
+        # ~5.9k; animal ~77.9k against
+        # ~86.3k), talk cut the haunches
+        # (dark ~2.0k against ~10.3k;
+        # ~73.4k against ~87.8k), eat
+        # thinned the socks (dark ~1.8k
+        # against ~9.8k; ~90.3k against
+        # ~102.6k). Sit, sleep, and play
+        # stayed one animal on default;
+        # the trot and the socks did not.
+        # Luma-8 keeps the whole fox.
+        # Talk left three specks (115 / 96
+        # / 74). Eat left one stray by a
+        # paw (253). The bite stays on the
+        # muzzle. knock_tiny_crumbs(300)
+        # keeps specks off. TAN_SIT left
+        # crumbs: idle 5 comps, sit 4,
+        # walk 3, sleep 7, talk 12, eat
+        # 10, play 9. I did not join. Red
+        # hide is not Pale's wash. TAN_SIT
+        # still lists morel, lions_mane,
+        # and yeast. DARK_MATTE already
+        # lists crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add fox. A red
+        # fox is not charcoal. Coin's
+        # goldfish elif stays Coin's.
+        # Echo did not add a budgie elif;
+        # default kept the cere. Ink's
+        # turtle elif stays Ink's. Whee's
+        # guinea_pig elif stays Whee's.
+        # Thimble's rabbit elif stays
+        # Thimble's. Pip's dog elif stays
+        # Pip's. Miso's cat elif stays
+        # Miso's. Clip did not add a
+        # hamster elif. Existing luma-8
+        # elifs stay theirs. Guest-only.
+        # Not a catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE. Not Peck.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=300)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=300)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
