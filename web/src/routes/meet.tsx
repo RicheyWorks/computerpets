@@ -6,6 +6,7 @@ import { HouseFloor } from "@/components/desk/house-floor";
 import { DeskGrain, RoomWash } from "@/components/desk/room-wash";
 import { portraitSrc } from "@/lib/pets/catalog";
 import { guestsIn, ROOMS } from "@/lib/pets/rooms";
+import { KeeperHeartbeat } from "@/components/desk/keeper-card";
 import { traitFor } from "@/lib/pets/traits";
 
 export const Route = createFileRoute("/meet")({
@@ -44,6 +45,7 @@ export function MeetPage() {
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
             Two hundred twenty guests walk the blotter. The nest is a square; neglect can close a line.
           </p>
+          <KeeperHeartbeat className="mt-4" />
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
             <Button asChild>
               <Link to="/demo/$slug" params={{ slug: "rui" }}>

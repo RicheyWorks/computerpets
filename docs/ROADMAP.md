@@ -166,8 +166,9 @@ All critical items required before any public or limited production exposure hav
 
 North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-north-star-the-x-ads). This phase is the bar. Do not mark HUD / GPU items done until the house ships them. The leftover art campaign on the original 210 is finished. Catalog is two hundred twenty. Arc is the first cyber-dragon guest. Volt is the second. Trace is the third. Flux is the fourth. Spark is the fifth. Ion is the sixth. Gauss is the seventh. Relay is the eighth. Fuse is the ninth. Ground is the tenth.
 
-- [ ] Rui-sharp keeper HUD on every screen (desk, `/demo`, Live, Meet, Windows overlay): name, level / bond, health, FEED / PLAY / REST. Same card, lockstep sprites. Pirate is Rui’s character, not a new guest.
-- [ ] Overlay heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from actuator — never a painted “UP”.
+- [x] House-hand keeper card on overlay, `/demo`, desk, Live, and Meet: name, stage / bond, hunger / rest / bond, FEED / PLAY / REST. Same house. Care is local. `/pet/feed` is not a door. Pirate is Rui’s character, not a new guest.
+- [x] Overlay and `/demo` heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from `GET /api/public/heartbeat` — never a painted “UP”. Unreachable Java is DOWN / unread.
+- [ ] Rui-sharp poster look for that card. The card exists; it is not yet the ad frame.
 - [ ] Align advertised care routes with what we ship, or grow `/pet/feed`, `/pet/play`, `/pet/rest` as the contract. Do not claim 200s we do not return.
 - [ ] Honest GPU sense as a first-class pet sense (heat, util, memory, power). `/metrics/gpu` or desktop-local metrics. Do not fake numbers.
 - [ ] Real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. Today’s overlay is Electron/Chromium; the blotter is Qt OpenGL. Do not invent a finished DX12 engine.
@@ -197,6 +198,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-08-25 (Phase 6: house polish north-star — the X ads)
+**Last Updated:** 2026-08-26 (Phase 6: house-hand keeper card on the Windows desk)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
