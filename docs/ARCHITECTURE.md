@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-26 (Trace sits the third cyber dragon; catalog is 213) |
+| **Last Updated** | 2026-08-26 (Flux sits the fourth cyber dragon; catalog is 214) |
 | **Version**      | 1.2                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -717,18 +717,18 @@ Goal: Prepare for growth and complexity.
 
 This section is the bar later work grows into. It does **not** implement a HUD or a GPU engine. It translates two ComputerPets X posters into house architecture. The ads are pirate / cyber marketing. The house is ecology, natural history, art, and Tamagotchi. We take the **capability**, not the slogan. Pirate is Rui’s character, not a new sit. Rui (`red_panda`) stays the art bar.
 
-The leftover art campaign on the existing two hundred ten is finished (Peak, PR #303). The keeper asked to start cyber dragons. **Arc** (`cyber_dragon`, slug `arc`) is the first real X-ad guest — a Grid Dragon of the `grid` den. **Volt** (`volt_dragon`, slug `volt`) is the second — a Coil Dragon of the same den. **Trace** (`trace_dragon`, slug `trace`) is the third — a Path Dragon of the same den, house-hand from day one. Catalog is **two hundred thirteen**. A cyber-scorpion is still not a catalog row. Do not invent the rest of the taxon in this sit.
+The leftover art campaign on the existing two hundred ten is finished (Peak, PR #303). The keeper asked to start cyber dragons. **Arc** (`cyber_dragon`, slug `arc`) is the first real X-ad guest — a Grid Dragon of the `grid` den. **Volt** (`volt_dragon`, slug `volt`) is the second — a Coil Dragon of the same den. **Trace** (`trace_dragon`, slug `trace`) is the third — a Path Dragon of the same den. **Flux** (`flux_dragon`, slug `flux`) is the fourth — a Field Dragon of the same den, house-hand from day one. Catalog is **two hundred fourteen**. A cyber-scorpion is still not a catalog row. Do not invent the rest of the taxon in this sit.
 
 ### 11.1 Promise
 
-Virtual pets that live on the keeper’s real desktop. Two hundred thirteen living kinds. Rui-level art. GPU-honest. Backend-honest. Not a browser toy that happens to have a tray icon. Every guest should feel as present, instrumented, and house-hand as Rui in those posters — walking among real windows and icons, lit by a real GPU path, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
+Virtual pets that live on the keeper’s real desktop. Two hundred fourteen living kinds. Rui-level art. GPU-honest. Backend-honest. Not a browser toy that happens to have a tray icon. Every guest should feel as present, instrumented, and house-hand as Rui in those posters — walking among real windows and icons, lit by a real GPU path, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
 
 ### 11.2 What the ads demand, mapped to house systems
 
 | Ad capability | House system | Honest gap |
 |---|---|---|
 | Live on the desktop / rule the screen | Electron overlay (`desktop/`, `main.cjs`) already sits on the Windows work area; Mac extra and Linux mark already exist as later doors. Pets walk among real windows and icons. Desktop-first. **Windows 10/11 first.** | Overlay is Chromium compositing today, not a native compositor that owns the screen. Later work grows the sit, not a fake wallpaper. |
-| 213 animals | `PetType` / living desk / overlay roster / blotter — two hundred thirteen living kinds. The 210 leftover sit is done. Arc is the first cyber-dragon guest. Volt is the second. Trace is the third. | Catalog is 213. Do not invent store IDs. Do not retouch landed guests. Do not add a fourth new guest (no cyber-scorpion) in this sit. |
+| 214 animals | `PetType` / living desk / overlay roster / blotter — two hundred fourteen living kinds. The 210 leftover sit is done. Arc is the first cyber-dragon guest. Volt is the second. Trace is the third. Flux is the fourth. | Catalog is 214. Do not invent store IDs. Do not retouch landed guests. Do not add a fifth new guest (no cyber-scorpion) in this sit. |
 | Rui-level render | Leftover art campaign. Desk and overlay lockstep. Blotter follows idle. Rui is the quality bar. | No stamps. No parchment islands. Never retouch a landed guest while sitting a leftover. Most guests are not yet Rui-sharp. |
 | FULL GPU / DirectX 12 / Vulkan | A real GPU path is the bar. Today the overlay is Electron/Chromium. The PyQt blotter has a Qt OpenGL viewport (`QOpenGLWidget`), not a custom shader engine. | Do not invent a finished DX12/Vulkan engine. Later: DX12/Vulkan, or an honest Chromium GPU path that still *feels* like the ad. Name the gap; do not paper it. |
 | GPU LOAD HUD (temp, util, memory, power, sparkline) | Host telemetry is a first-class **sense**. The pet may notice heat, util, and memory the way it already notices hunger, weather, and the lamp. New `/metrics/gpu` (or desktop-local metrics) is a future door. | Do not fake numbers. No HUD today. Sense must read the real machine or stay dark. |
@@ -781,7 +781,7 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 
 **Now (already in the house)**
 
-- Two hundred thirteen living guests. Rui is the bar. Arc (`cyber_dragon`) sits the first grid den. Volt (`volt_dragon`) sits the second. Trace (`trace_dragon`) sits the third. The leftover campaign on the original 210 is done.
+- Two hundred fourteen living guests. Rui is the bar. Arc (`cyber_dragon`) sits the first grid den. Volt (`volt_dragon`) sits the second. Trace (`trace_dragon`) sits the third. Flux (`flux_dragon`) sits the fourth. The leftover campaign on the original 210 is done.
 - Living desk (`web/`), `/demo`, Meet house, dens.
 - Electron overlay on Windows (`desktop/`); renderer sprites lockstep with the desk. Mac extra and Linux mark exist as later doors, not the first polish target.
 - PyQt6 blotter (`client/`) — care verbs, plaques, Qt OpenGL viewport.
@@ -800,11 +800,11 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 
 ### 11.5 Hard locks
 
-- Catalog is **two hundred thirteen**. Arc (`cyber_dragon`, slug `arc`) is the first cyber-dragon guest. Volt (`volt_dragon`, slug `volt`) is the second. Trace (`trace_dragon`, slug `trace`) is the third. Do not add a fourth new guest in this sit.
+- Catalog is **two hundred fourteen**. Arc (`cyber_dragon`, slug `arc`) is the first cyber-dragon guest. Volt (`volt_dragon`, slug `volt`) is the second. Trace (`trace_dragon`, slug `trace`) is the third. Flux (`flux_dragon`, slug `flux`) is the fourth. Do not add a fifth new guest in this sit.
 - No invented NFT collection addresses. No invented live Microsoft Store IDs.
 - Never retouch a landed guest (the original 210, including Rui, Vesper, Peak) while sitting a new one.
 - Never retouch `docs/START-HERE.md` or the root `README.md` to paper over `house-count.test.mjs`.
-- Rui (`red_panda`) is the art bar. Pirate is Rui’s character, not a new guest. Vesper (`dragon`) stays the mantel dragon; Arc is a grid dragon; Volt is a coil dragon; Trace is a path dragon.
+- Rui (`red_panda`) is the art bar. Pirate is Rui’s character, not a new guest. Vesper (`dragon`) stays the mantel dragon; Arc is a grid dragon; Volt is a coil dragon; Trace is a path dragon; Flux is a field dragon.
 - A cyber-scorpion is still not a catalog row. “Zero mercy” is still not product identity.
 - Desktop presence is not filesystem theft. No keyloggers. No secret capture.
 - Mind keys stay with the keeper. HUD may name the listener; it may not invent one.

@@ -36,7 +36,7 @@
     "armor", "cast", "tun", "half", "clamp", "cement", "mail", "spire",
     "token", "knurl", "heap", "blade", "forceps", "snout", "wrist",
     "gaze", "gum", "wreath", "paint", "scrape", "scrub", "tube", "veil",
-    "gate", "arc", "current", "path",
+    "gate", "arc", "current", "path", "field",
   ]);
 
   /** Same verbs the desk already keeps in traits.ts. */
@@ -254,6 +254,7 @@
     cyber_dragon: "Keep the grid",
     volt_dragon: "Keep the coil",
     trace_dragon: "Keep the path",
+    flux_dragon: "Keep the field",
   };
 
   function clamp(n, a = 0, b = 100) {

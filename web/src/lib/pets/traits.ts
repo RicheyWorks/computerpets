@@ -249,6 +249,7 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   cyber_dragon: T(76, 18, 1.16, 0.22, { nocturnal: true }, "arc", "Keep the grid", "I kept the grid. Hello."),
   volt_dragon: T(70, 16, 1.12, 0.2, { nocturnal: true }, "current", "Keep the coil", "I kept the coil. Hello."),
   trace_dragon: T(68, 16, 1.14, 0.2, { nocturnal: true }, "path", "Keep the path", "I kept the path. Hello."),
+  flux_dragon: T(72, 16, 1.13, 0.2, { nocturnal: true }, "field", "Keep the field", "I kept the field. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;
