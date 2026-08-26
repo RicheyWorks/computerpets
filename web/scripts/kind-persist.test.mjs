@@ -121,9 +121,9 @@ test("the desk and /live keep then sit; they do not write the sitting body onto 
   assert.doesNotMatch(liveSrc, /persistLocal=\{false\}/);
 });
 
-test("the catalog is two hundred sixteen; rooms gained the grid", () => {
+test("the catalog is two hundred seventeen; rooms gained the grid", () => {
   const keys = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
-  assert.equal(keys.length, 216);
-  assert.equal(new Set(keys).size, 216);
+  assert.equal(keys.length, 217);
+  assert.equal(new Set(keys).size, 217);
   assert.equal([...roomsSrc.matchAll(/^\s+id: "/gm)].length, 20);
 });

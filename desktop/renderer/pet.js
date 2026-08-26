@@ -519,6 +519,7 @@ const TREAT_SHAPE = {
   flux_dragon: "flake",
   spark_dragon: "flake",
   ion_dragon: "flake",
+  gauss_dragon: "flake",
 };
 
 function placeMark(kindName, x, hops = 0, meal) {

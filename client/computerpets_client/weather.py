@@ -41,6 +41,7 @@ _HEAT_SIT = frozenset(
         "flux_dragon",
         "spark_dragon",
         "ion_dragon",
+        "gauss_dragon",
         "hognose",
         "garter",
     }
@@ -53,6 +54,7 @@ _HEAT_PATH = frozenset({"trace_dragon"})
 _HEAT_FIELD = frozenset({"flux_dragon"})
 _HEAT_CRACKLE = frozenset({"spark_dragon"})
 _HEAT_HAZE = frozenset({"ion_dragon"})
+_HEAT_FILING = frozenset({"gauss_dragon"})
 _HEAT_CLAUSE = frozenset(
     {
         "ball_python",
@@ -122,6 +124,8 @@ def weather_line(key: str, w: Weather) -> str | None:
             return "The crackle is reserved. Heat is weather I already keep."
         if key in _HEAT_HAZE:
             return "The haze is reserved. Heat is weather I already keep."
+        if key in _HEAT_FILING:
+            return "The filings are reserved. Heat is weather I already keep."
         if key in _HEAT_CLAUSE:
             return "Heat. I was waiting for this clause."
         return "The lamp is working overtime."

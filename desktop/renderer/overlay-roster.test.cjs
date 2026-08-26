@@ -78,6 +78,7 @@ const REEF = [
   "flux_dragon",
   "spark_dragon",
   "ion_dragon",
+  "gauss_dragon",
 ];
 
 function objectKeys(src, marker) {
@@ -86,9 +87,9 @@ function objectKeys(src, marker) {
   return [...slice.matchAll(/^\s{2}([a-z0-9_]+):\s/gm)].map((m) => m[1]);
 }
 
-test("the overlay roster is the same two hundred sixteen as the catalog", () => {
+test("the overlay roster is the same two hundred seventeen as the catalog", () => {
   const keys = roster.map((r) => r.key);
-  assert.equal(keys.length, 216);
+  assert.equal(keys.length, 217);
   assert.deepEqual(keys.sort(), [...CATALOG].sort());
 });
 
@@ -163,8 +164,8 @@ test("the overlay drops the same treat the desk already drops, including the egg
   const overlayShapes = Object.fromEntries(
     [...overlaySlice.matchAll(/^\s{2}([a-z0-9_]+): "([a-z]+)"/gm)].map((m) => [m[1], m[2]]),
   );
-  assert.equal(Object.keys(overlayShapes).length, 216);
-  assert.equal(Object.keys(webShapes).length, 216);
+  assert.equal(Object.keys(overlayShapes).length, 217);
+  assert.equal(Object.keys(webShapes).length, 217);
   for (const key of CATALOG) {
     assert.equal(overlayShapes[key], webShapes[key], key);
   }

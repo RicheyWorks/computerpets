@@ -250,6 +250,7 @@ const LINES: Record<string, string> = {
   flux_dragon: "I fielded. Then I left the night.",
   spark_dragon: "I crackled. Then I left the night.",
   ion_dragon: "I hazed. Then I left the night.",
+  gauss_dragon: "I filed. Then I left the night.",
 };
 
 export function visitLine(guestKey: string) {
