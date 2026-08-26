@@ -1,7 +1,7 @@
 """Species specials the living desk already knows.
 
 Port of ``web/src/lib/pets/specials.ts`` plus the special / verb / line
-from ``traits.ts``. Same two hundred sixteen keys, same house copy. Do not invent a
+from ``traits.ts``. Same two hundred seventeen keys, same house copy. Do not invent a
 new trick.
 """
 
@@ -239,6 +239,7 @@ TRAITS: dict[str, SpeciesTrait] = {
     "flux_dragon": SpeciesTrait("field", "Keep the field", "I kept the field. Hello."),
     "spark_dragon": SpeciesTrait("crackle", "Keep the crackle", "I kept the crackle. Hello."),
     "ion_dragon": SpeciesTrait("haze", "Keep the haze", "I kept the haze. Hello."),
+    "gauss_dragon": SpeciesTrait("filing", "Keep the filings", "I kept the filings. Hello."),
 }
 
 FALLBACK_TRAIT = TRAITS["red_panda"]

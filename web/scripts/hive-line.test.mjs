@@ -260,7 +260,7 @@ test("other dens stay; catalog is two hundred; Comb stays Comb", () => {
   assert.match(seaSrc, /LivingBlotter/);
   assert.doesNotMatch(gardenSrc, /combSeats/);
   assert.doesNotMatch(cellarSrc, /combSeats/);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 216);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 217);
   assert.match(insectSrc, /slug:\s*"comb"/);
   assert.match(beeSrc, /slug:\s*"wax"/);
   assert.doesNotMatch(beeSrc, /key:\s*"honeybee"/);

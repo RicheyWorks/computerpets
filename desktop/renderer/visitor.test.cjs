@@ -27,7 +27,7 @@ test("the overlay keeps the house visit clock", () => {
   assert.equal(V.visitPhaseFromWait(7500), "in");
   assert.equal(V.visitPhaseFromWait(9100), "talk");
   assert.equal(V.visitPhaseFromEnter(800, true), "gone");
-  assert.equal(CATALOG.length, 216);
+  assert.equal(CATALOG.length, 217);
 });
 
 test("the overlay caller is today's guest, not the living sit", () => {

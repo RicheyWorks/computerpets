@@ -14,7 +14,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const CATALOG = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
 
 test("every overlay guest keeps their own snack line, not a small treaty", () => {
-  assert.equal(Object.keys(H.SNACK_LINE).length, 216);
+  assert.equal(Object.keys(H.SNACK_LINE).length, 217);
   assert.deepEqual(Object.keys(H.SNACK_LINE).sort(), [...CATALOG].sort());
   assert.equal(H.snackLine("dog"), "For me? I have prepared a sit.");
   assert.equal(H.snackLine("red_panda"), "A small treaty. Bamboo-adjacent.");
@@ -27,7 +27,7 @@ test("every overlay guest keeps their own snack line, not a small treaty", () =>
 });
 
 test("the overlay keeps the same night as the desk for every guest", () => {
-  assert.equal(Object.keys(H.REST).length, 216);
+  assert.equal(Object.keys(H.REST).length, 217);
   assert.deepEqual(Object.keys(H.REST).sort(), [...CATALOG].sort());
   assert.equal(H.isRestingHour("dog", 22), true);
   assert.equal(H.isRestingHour("dog", 14), false);
@@ -79,7 +79,7 @@ test("illness and mess tick the house way, and save keeps the clock", () => {
 });
 
 test("every overlay guest keeps their own call-back, not Pip's tail", () => {
-  assert.equal(Object.keys(H.CALL_LINE).length, 216);
+  assert.equal(Object.keys(H.CALL_LINE).length, 217);
   assert.deepEqual(Object.keys(H.CALL_LINE).sort(), [...CATALOG].sort());
   assert.equal(H.callLine("dog"), "You called. I was already coming.");
   assert.equal(H.callLine("field_cricket"), "I sang. Hello.");
@@ -99,7 +99,7 @@ test("every overlay guest keeps their own call-back, not Pip's tail", () => {
 });
 
 test("every overlay guest keeps their own gift line, not a leftover this", () => {
-  assert.equal(Object.keys(H.GIFT_LINE).length, 216);
+  assert.equal(Object.keys(H.GIFT_LINE).length, 217);
   assert.deepEqual(Object.keys(H.GIFT_LINE).sort(), [...CATALOG].sort());
   assert.equal(H.giftLine("red_panda"), "A ribbon I was not using. For the desk.");
   assert.equal(H.giftLine("grouper"), "A fish I was finished hiding for.");
