@@ -220,6 +220,7 @@
   gauss_dragon: "Filing of a treaty.",
   relay_dragon: "Click of a treaty.",
   fuse_dragon: "Cartridge of a treaty.",
+  ground_dragon: "Earth of a treaty.",
 };
 
   const CALL_LINE = {
@@ -442,6 +443,7 @@
   gauss_dragon: "I kept the filings. Hello.",
   relay_dragon: "I kept the click. Hello.",
   fuse_dragon: "I kept the filament. Hello.",
+  ground_dragon: "I kept the strap. Hello.",
 };
 
   const GIFT_LINE = {
@@ -664,6 +666,7 @@
   gauss_dragon: "A filing I was finished filing for.",
   relay_dragon: "A click I was finished clicking for.",
   fuse_dragon: "A cartridge I was finished fusing for.",
+  ground_dragon: "A strap I was finished earthing for.",
 };
 
   /** Same night the desk already keeps. Overlay no longer invents a second clock. */
@@ -887,6 +890,7 @@
   gauss_dragon: [8, 17],
   relay_dragon: [8, 17],
   fuse_dragon: [8, 17],
+  ground_dragon: [8, 17],
 };
 
   function restWindow(key) {

@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the nine grid guests. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the ten grid guests. Literary, short, and meant to be learned on the blotter. */
 export const GRID_GUIDE: GridGuide[] = [
   entry(
     "cyber_dragon",
@@ -95,6 +95,13 @@ export const GRID_GUIDE: GridGuide[] = [
     "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Not Ion. Ion is Draco caligo, a pale ion haze clinging to the outline. Not Gauss. Gauss is Draco limatura, iron-filing field lines banding a lodestone hide. Not Relay. Relay is Draco nodus, a single live click-node at the nape. Fuse is Draco ampulla, and the filament is the tell. A cartridge dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, not a crack dragon, not a haze dragon, not a filing dragon, and not a click dragon. The cartridge is the species. Not Vesper. Vesper is a mantel dragon.",
     "Cartridge dragon. A single glass cartridge fuse across the sternum. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Vesper.",
   ),
+  entry(
+    "ground_dragon",
+    "Draco terra",
+    "A single braided copper ground-strap from a chest lug down the left foreleg to a claw-lug, a return that stays on the hide, a cool glow that is weather. Earth dragon. Ground sits. Then Ground earths. The night is a strap Ground agreed to.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Not Ion. Ion is Draco caligo, a pale ion haze clinging to the outline. Not Gauss. Gauss is Draco limatura, iron-filing field lines banding a lodestone hide. Not Relay. Relay is Draco nodus, a single live click-node at the nape. Not Fuse. Fuse is Draco ampulla, a single glass cartridge fuse across the sternum. Ground is Draco terra, and the strap is the tell. An earth dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, not a crack dragon, not a haze dragon, not a filing dragon, not a click dragon, and not a cartridge dragon. The strap is the species. Not Vesper. Vesper is a mantel dragon.",
+    "Earth dragon. A braided copper ground-strap from chest to claw. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Fuse. Not Vesper.",
+  ),
 ];
 
 const BY_KEY = Object.fromEntries(GRID_GUIDE.map((g) => [g.key, g]));
@@ -114,7 +121,7 @@ export function gridGuideKeys() {
   return GRID_GUIDE.map((g) => g.key);
 }
 
-/** The roster and the guide must name the same nine. */
+/** The roster and the guide must name the same ten. */
 export function gridGuideComplete() {
   return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
 }

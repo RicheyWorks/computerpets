@@ -357,6 +357,7 @@ GRID_EXPECTED = [
     ("gauss_dragon", "gauss", "Draco limatura"),
     ("relay_dragon", "relay", "Draco nodus"),
     ("fuse_dragon", "fuse", "Draco ampulla"),
+    ("ground_dragon", "ground", "Draco terra"),
 ]
 
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"
@@ -630,7 +631,7 @@ def test_house_and_den_list_the_same_keys_as_the_roster():
         assert plaque_for(key) is not None
         assert classroom_for(key).room == "grid"
         assert classroom_for(key).verb == "stay"
-        assert classroom_for(key).label == "The nine on the grid"
+        assert classroom_for(key).label == "The ten on the grid"
     assert [g.key for g in GRID_GUIDE] == [key for key, _, _ in GRID_EXPECTED]
 
 

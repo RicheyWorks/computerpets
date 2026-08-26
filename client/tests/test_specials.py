@@ -225,6 +225,7 @@ HOUSE_TRAITS = {
     "gauss_dragon": ("filing", "Keep the filings", "I kept the filings. Hello."),
     "relay_dragon": ("relay", "Keep the click", "I kept the click. Hello."),
     "fuse_dragon": ("fuse", "Keep the filament", "I kept the filament. Hello."),
+    "ground_dragon": ("earth", "Keep the strap", "I kept the strap. Hello."),
 }
 
 
