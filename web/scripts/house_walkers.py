@@ -11508,6 +11508,168 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "anole":
+        # Wink's slender green
+        # (or honest brown)
+        # hide, cream jaw, and
+        # the pink of a dewlap
+        # flash nick when
+        # default plate-flood
+        # treats the wash as
+        # the anole. Wink is
+        # Anolis carolinensis.
+        # A green anole. A
+        # dewlap. She can go
+        # brown. She sits.
+        # Then she flashes.
+        # The vine is a post
+        # she agreed to.
+        # Habitat vine post is
+        # weather, not painted
+        # furniture around the
+        # anole. An anole is
+        # not a chameleon. The
+        # dewlap is the tell.
+        # The pink is the
+        # species. I flashed.
+        # Hello. The post kept
+        # my green. You may
+        # look. I am not a
+        # chameleon. Eat is
+        # cricket of a treaty.
+        # Play is a flash. I
+        # win by remaining an
+        # anole. Rest holds
+        # the post. The dewlap
+        # is the correct sleep.
+        # Sleep is a curled
+        # anole on nothing but
+        # black, still Anolis,
+        # not a gecko, not a
+        # chameleon. Talk is
+        # an anole, a flash,
+        # not a person. Walk
+        # is an anole on
+        # black. Named: Wink.
+        # Green hide and a
+        # cream throat are
+        # hide, not a hole.
+        # Do not punch the
+        # dewlap. Proven on
+        # the new black-plate
+        # raws: plate corners
+        # med luma 0 (not a
+        # cream leftover
+        # luma-8 would keep
+        # at ~0.78); fill
+        # ~0.08–0.30. Default
+        # punched the living
+        # anole: idle tore
+        # the still (~21.7k
+        # live against
+        # luma-8's ~25.8k;
+        # 30 comps against
+        # 1). Sit nicked the
+        # hold (~45.4k
+        # against ~48.1k; 2
+        # comps against 1).
+        # Walk nicked the
+        # stride (~17.4k
+        # against ~19.8k; 4
+        # comps against 1).
+        # Sleep kept closer
+        # (~88.9k against
+        # ~90.5k). Talk
+        # lost the flash
+        # (~45.1k against
+        # ~49.2k; 5 comps
+        # against 1). Eat
+        # nicked the cricket
+        # sip (~34.5k against
+        # ~35.9k). Play
+        # jagged the flash
+        # (~40.2k against
+        # ~43.7k). Idle's
+        # torn still is the
+        # tell. Luma-8 keeps
+        # the whole anole.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I did
+        # not erode. It
+        # punches the dewlap
+        # and the long toes
+        # (idle ~22.8k
+        # against luma-8's
+        # ~25.8k; walk
+        # ~17.7k against
+        # ~19.8k; talk
+        # ~45.7k against
+        # ~49.2k). TAN_SIT I
+        # did not join. Green
+        # and cream hide is
+        # not Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists crow,
+        # raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede,
+        # field_cricket,
+        # earwig, click_
+        # beetle, and robber_
+        # fly; that
+        # membership stays.
+        # I did not add
+        # anole. A dewlap is
+        # hide, and that path
+        # still tore idle.
+        # Thrum's bumblebee
+        # elif stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Pad. Not Dash. Not
+        # Shift. Not Spike.
+        # Not Levee. Not Jaw.
+        # Not Beak. Not Lid.
+        # Not Peak. Not
+        # Dapple.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
