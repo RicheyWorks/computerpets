@@ -32,6 +32,7 @@ const phoneSitSrc = readFileSync(join(root, "src/components/desk/phone-desk-sit.
 const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
 const T = await import(join(root, "src/lib/pets/tablet-desk.ts"));
 const H = await import(join(root, "src/lib/pets/phone-desk.ts"));
+const K = await import(join(root, "src/lib/pets/keeper.ts"));
 
 function lureSeek() {
   return { taken: false, cmd: "seek", mark: "lure" };
@@ -318,10 +319,13 @@ test("the demo room shows the Windows walk the way it shows the Mac and Linux wa
   assert.match(windowsSitSrc, /data-windows-sit/);
   assert.match(windowsSitSrc, /the tray/);
   assert.match(windowsSitSrc, /Clicks pass the glass/);
-  assert.match(windowsSitSrc, /Rui/);
-  assert.match(windowsSitSrc, /Arc/);
-  assert.match(windowsSitSrc, /Ground/);
+  assert.match(windowsSitSrc, /\["Rui"/);
   assert.match(windowsSitSrc, /GRID_LIVE/);
+  assert.deepEqual(
+    K.GRID_LIVE.map((guest) => guest.name),
+    ["Arc", "Volt", "Trace", "Flux", "Spark", "Ion", "Gauss", "Relay", "Fuse", "Ground"],
+  );
+  assert.equal(K.GRID_LIVE.find((guest) => guest.key === "spark_dragon")?.slug, "crackle");
   assert.doesNotMatch(windowsSitSrc, /Unlock|Minds/);
   assert.doesNotMatch(windowsSitSrc, /DirectX|Vulkan|DX12/);
   assert.doesNotMatch(windowsSitSrc, /cyber-scorpion|Bus/);
