@@ -159,7 +159,7 @@ export const GRID_ROSTER: RosterDef[] = [
   },
   {
     key: "spark_dragon",
-    slug: "spark",
+    slug: "crackle",
     name: "Spark",
     speciesLabel: "Crack Dragon",
     blurb: "A crack dragon. The points are live. Drag, tap, or send a word.",
@@ -178,7 +178,7 @@ export const GRID_ROSTER: RosterDef[] = [
       greet: ["I crackled. Hello.", "The night kept my points.", "You may look. I am not Arc."],
       ambient: [
         "Live crackle-points at the snout, the claws, and the tail. The crackle is the tell. I keep the night.",
-        "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am a crack dragon. The points are live.",
+        "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not the firefly. That Spark flashes a dusk. I am a crack dragon. The points are live.",
         "Your papers are a crackle I have already claimed.",
         "I sit. Then I crackle. Then I sit.",
       ],
@@ -189,7 +189,7 @@ export const GRID_ROSTER: RosterDef[] = [
       tired: ["I have been a very kind crackle.", "A quieter crackle."],
       listen: ["I hear you through the points.", "Speak. I have a patience of crackles."],
       neglected: "I crackled anyway. The night noticed.",
-      named: "Spark. I am not Arc. I am not Volt. I am not Trace. I am not Flux. The crackle is the tell.",
+      named: "Spark. I am not Arc. I am not Volt. I am not Trace. I am not Flux. I am not the firefly. The crackle is the tell.",
       foodTalk: "Crackle, and the idea of a point.",
       sleepTalk: "The crackle already dimmed.",
       loveTalk: "I will keep that in a crackle.",

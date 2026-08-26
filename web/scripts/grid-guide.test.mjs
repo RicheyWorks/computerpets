@@ -21,7 +21,7 @@ const EXPECTED = [
   ["volt_dragon", "volt", "Draco spira"],
   ["trace_dragon", "trace", "Draco semita"],
   ["flux_dragon", "flux", "Draco campus"],
-  ["spark_dragon", "spark", "Draco scintilla"],
+  ["spark_dragon", "crackle", "Draco scintilla"],
 ];
 
 function quotedKeys(src) {
@@ -81,6 +81,7 @@ test("the important mix-up is actually taught", () => {
   assert.match(spark, /not Flux/i);
   assert.match(spark, /crackle/i);
   assert.match(spark, /crackle-points/i);
+  assert.match(spark, /not the firefly/i);
   assert.doesNotMatch(spark, /Wikipedia/i);
 });
 

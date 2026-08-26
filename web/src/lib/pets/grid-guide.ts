@@ -64,7 +64,7 @@ export const GRID_GUIDE: GridGuide[] = [
     "spark_dragon",
     "Draco scintilla",
     "Live crackle-points at the snout, the claw tips, and the tail tip, small white-gold sparks that stay on the hide, a cool glow that is weather. Crack dragon. Spark sits. Then Spark crackles. The night is a point Spark agreed to.",
-    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Spark is Draco scintilla, and the crackle is the tell. A crack dragon is not a grid dragon, not a coil dragon, not a path dragon, and not a field dragon. The points are the species. Not Vesper. Vesper is a mantel dragon.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not the firefly. That Spark is Photinus, a beetle who flashes a dusk. This Spark is Draco scintilla, and the crackle is the tell. A crack dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, and not a firefly. The points are the species. Not Vesper. Vesper is a mantel dragon.",
     "Crack dragon. Live crackle-points at snout, claws, and tail. Not Arc. Not Volt. Not Trace. Not Flux. Not Vesper.",
   ),
 ];

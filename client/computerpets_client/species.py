@@ -6297,9 +6297,9 @@ FLUX = _kind(
     hungry=("A field dragon should not be this empty.", "A field would restore the heat."),
 )
 
-SPARK = _kind(
+SPARK_DRAGON = _kind(
     key="spark_dragon",
-    slug="spark",
+    slug="crackle",
     name="Spark",
     label="Crack Dragon",
     treat="Crackle",
@@ -6316,7 +6316,7 @@ SPARK = _kind(
         accent=(255, 244, 200),
     ),
     greet=("I crackled. Hello.", "The night kept my points.", "You may look. I am not Arc."),
-    ambient=("Live crackle-points at the snout, the claws, and the tail. The crackle is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am a crack dragon. The points are live.", "Your papers are a crackle I have already claimed.", "I sit. Then I crackle. Then I sit."),
+    ambient=("Live crackle-points at the snout, the claws, and the tail. The crackle is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not the firefly. That Spark flashes a dusk. I am a crack dragon. The points are live.", "Your papers are a crackle I have already claimed.", "I sit. Then I crackle. Then I sit."),
     feed=("Crackle of a treaty.", "I will take this without leaving the points.", "Accepted. The crackle records it."),
     treat_lines=("Crackle of a treaty.",),
     hide=("In the glow.",),
@@ -6540,7 +6540,7 @@ _ALL: tuple[Species, ...] = (
     VOLT,
     TRACE,
     FLUX,
-    SPARK,
+    SPARK_DRAGON,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

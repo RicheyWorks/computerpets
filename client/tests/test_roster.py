@@ -545,7 +545,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(MEADOW_KEYS) == 10
     assert len(CANOPY_KEYS) == 10
     assert len(REEF_KEYS) == 10
-    assert len(GRID_KEYS) == 4
+    assert len(GRID_KEYS) == 5
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -1262,7 +1262,7 @@ def test_four_grid_guests_are_present_and_honest():
     assert SPECIES["flux_dragon"].silhouette != "cyber_dragon"
     assert SPECIES["flux_dragon"].silhouette != "volt_dragon"
     assert SPECIES["flux_dragon"].silhouette != "trace_dragon"
-    assert SPECIES["spark_dragon"].slug == "spark"
+    assert SPECIES["spark_dragon"].slug == "crackle"
     assert SPECIES["spark_dragon"].name == "Spark"
     assert SPECIES["spark_dragon"].label == "Crack Dragon"
     assert SPECIES["spark_dragon"].silhouette != "cyber_dragon"
