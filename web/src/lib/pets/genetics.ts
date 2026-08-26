@@ -329,6 +329,7 @@ const REEF = new Set([
 const GRID = new Set([
   "cyber_dragon",
   "volt_dragon",
+  "trace_dragon",
 ]);
 const MEADOW = new Set([
   "field_cricket",

@@ -246,6 +246,7 @@ const LINES: Record<string, string> = {
   grouper: "I sat the hole. Then I left the dish.",
   cyber_dragon: "I arced. Then I left the night.",
   volt_dragon: "I coiled. Then I left the night.",
+  trace_dragon: "I traced. Then I left the night.",
 };
 
 export function visitLine(guestKey: string) {

@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the two grid guests. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the three grid guests. Literary, short, and meant to be learned on the blotter. */
 export const GRID_GUIDE: GridGuide[] = [
   entry(
     "cyber_dragon",
@@ -45,6 +45,13 @@ export const GRID_GUIDE: GridGuide[] = [
     "A live coil along the ribs, a winding current that stays on the hide, a cool glow that is weather. Coil dragon. He sits. Then he coils. The night is a current he agreed to.",
     "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Volt is Draco spira, and the coil is the tell. A coil dragon is not a grid dragon. The current is the species. Not Vesper. Vesper is a mantel dragon.",
     "Coil dragon. A live coil along the ribs. Not Arc. Not a dorsal jump. Not Vesper.",
+  ),
+  entry(
+    "trace_dragon",
+    "Draco semita",
+    "A single live circuit-trace from snout to tail, a path on a board that stays on the hide, a cool glow that is weather. Path dragon. Trace sits. Then Trace traces. The night is a board Trace agreed to.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Trace is Draco semita, and the path is the tell. A path dragon is not a grid dragon and not a coil dragon. The trace is the species. Not Vesper. Vesper is a mantel dragon.",
+    "Path dragon. A single live circuit-trace from snout to tail. Not Arc. Not Volt. Not Vesper.",
   ),
 ];
 
@@ -65,7 +72,7 @@ export function gridGuideKeys() {
   return GRID_GUIDE.map((g) => g.key);
 }
 
-/** The roster and the guide must name the same two. */
+/** The roster and the guide must name the same three. */
 export function gridGuideComplete() {
   return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
 }
