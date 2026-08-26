@@ -218,6 +218,7 @@ const REST: Record<string, [number, number]> = {
   ion_dragon: [8, 17],
   gauss_dragon: [8, 17],
   relay_dragon: [8, 17],
+  fuse_dragon: [8, 17],
 };
 
 /** House rest window. Overlay and blotter keep this same night. */
@@ -467,6 +468,7 @@ export const HIDE_LINE: Record<string, string> = {
   ion_dragon: "In the glow.",
   gauss_dragon: "In the glow.",
   relay_dragon: "In the glow.",
+  fuse_dragon: "In the glow.",
 };
 
 export const CALL_LINE: Record<string, string> = {
@@ -688,6 +690,7 @@ export const CALL_LINE: Record<string, string> = {
   ion_dragon: "I kept the haze. Hello.",
   gauss_dragon: "I kept the filings. Hello.",
   relay_dragon: "I kept the click. Hello.",
+  fuse_dragon: "I kept the filament. Hello.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -909,6 +912,7 @@ export const SNACK_LINE: Record<string, string> = {
   ion_dragon: "Haze of a treaty.",
   gauss_dragon: "Filing of a treaty.",
   relay_dragon: "Click of a treaty.",
+  fuse_dragon: "Cartridge of a treaty.",
 };
 
 

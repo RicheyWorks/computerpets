@@ -25,8 +25,8 @@ function todaysVisitor(hostKey, year, month, day) {
   return others[Math.abs(civilDay(year, month, day) + hostKey.length) % others.length];
 }
 
-test("today's visitor walks two hundred eighteen minus the host", () => {
-  assert.equal(KEYS.length, 218);
+test("today's visitor walks two hundred nineteen minus the host", () => {
+  assert.equal(KEYS.length, 219);
   assert.match(visitorSrc, /LIVING_KINDS\.filter\(\(k\) => k\.key !== hostKey\)/);
   assert.match(visitorSrc, /Math\.abs\(day \+ hostKey\.length\) % others\.length/);
   assert.match(rosterSrc, /\.\.\.SHORE_ROSTER/);

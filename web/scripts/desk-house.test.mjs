@@ -91,8 +91,8 @@ test("hatch, nest, kennel, and kennel-guest rooms stay", () => {
 
 test("meet still says Watch Rui and two hundred", () => {
   assert.match(meetSrc, /Watch Rui/);
-  assert.match(meetSrc, /Two hundred eighteen guests walk the blotter/);
-  assert.match(meetSrc, /Two hundred eighteen, on their shelves/);
+  assert.match(meetSrc, /Two hundred nineteen guests walk the blotter/);
+  assert.match(meetSrc, /Two hundred nineteen, on their shelves/);
   assert.doesNotMatch(meetSrc, /One hundred seventy/);
   assert.doesNotMatch(meetSrc, /one hundred ten/i);
 });

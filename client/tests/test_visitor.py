@@ -18,7 +18,7 @@ from computerpets_client.weather import civil_day_number
 
 
 def test_visitor_identity_matches_house_formula():
-    # Civil day plus host length, walked through two hundred eighteen minus the host.
+    # Civil day plus host length, walked through two hundred nineteen minus the host.
     # These pins move when a den lands. Update them with the web visitor test.
     now = datetime(2026, 8, 17)
     assert todays_visitor("red_panda", now).key == "chicken_of_woods"
@@ -61,6 +61,7 @@ def test_visit_line_is_the_house_copy():
     assert visit_line("ion_dragon") == "I hazed. Then I left the night."
     assert visit_line("gauss_dragon") == "I filed. Then I left the night."
     assert visit_line("relay_dragon") == "I closed. Then I left the night."
+    assert visit_line("fuse_dragon") == "I fused. Then I left the night."
     assert visit_line("chickadee") == "I deeed. Then I left the cup."
     assert visit_line("robin") == "I hopped. Then I left the rim."
     assert visit_line("canada_goose") == "I honked. Then I left the green."
