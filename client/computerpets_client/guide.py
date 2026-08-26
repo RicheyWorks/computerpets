@@ -1,12 +1,12 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same two hundred seventeen, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred eighteen, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
 the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the reef keeps the living-rock facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
-the xenobiology facts; the grid keeps the seven cyber dragons; the twenty keep the study facts.
+the xenobiology facts; the grid keeps the eight cyber dragons; the twenty keep the study facts.
 """
 
 from __future__ import annotations
@@ -2081,6 +2081,15 @@ GRID_GUIDE: tuple[FieldGuide, ...] = (
         "machine-night",
         "filed",
     ),
+    _entry(
+        "relay_dragon",
+        "Draco nodus",
+        "A single live click-node at the nape, a relay that closes, a bright contact that stays on the hide, a cool glow that is weather. Click dragon. Relay sits. Then Relay clicks. The night is a node Relay agreed to.",
+        "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Not Ion. Ion is Draco caligo, a pale ion haze clinging to the outline. Not Gauss. Gauss is Draco limatura, iron-filing field lines banding a lodestone hide. Relay is Draco nodus, and the click is the tell. A click dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, not a crack dragon, not a haze dragon, and not a filing dragon. The node is the species. Not Vesper. Vesper is a mantel dragon.",
+        "Click dragon. A single live click-node at the nape. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Vesper.",
+        "machine-night",
+        "clicked",
+    ),
 )
 
 FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE + CANOPY_GUIDE + REEF_GUIDE + GRID_GUIDE
@@ -2137,7 +2146,7 @@ def classroom_for(key: str) -> Classroom:
     if is_reef(key):
         return Classroom(room="reef", label="All ten on the reef", verb="stay")
     if is_grid(key):
-        return Classroom(room="grid", label="The seven on the grid", verb="stay")
+        return Classroom(room="grid", label="The eight on the grid", verb="stay")
     if is_meadow(key):
         return Classroom(room="meadow", label="All ten in the meadow", verb="stay")
     if is_well(key):

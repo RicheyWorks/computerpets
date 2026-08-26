@@ -227,7 +227,8 @@ public enum PetType {
     FLUX_DRAGON      ("flux_dragon",       "Field Dragon",           Rarity.LEGENDARY),
     SPARK_DRAGON     ("spark_dragon",      "Crack Dragon",           Rarity.LEGENDARY),
     ION_DRAGON       ("ion_dragon",        "Haze Dragon",            Rarity.LEGENDARY),
-    GAUSS_DRAGON     ("gauss_dragon",      "Filing Dragon",          Rarity.LEGENDARY);
+    GAUSS_DRAGON     ("gauss_dragon",      "Filing Dragon",          Rarity.LEGENDARY),
+    RELAY_DRAGON     ("relay_dragon",      "Click Dragon",           Rarity.LEGENDARY);
 
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 
