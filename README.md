@@ -3,7 +3,7 @@
 Virtual pets that live on your computer.
 
 <p align="center">
-  <img src="docs/readme-hero.jpg" alt="Rui the red panda, Paint the clownfish, Scrape the parrotfish, Wreath the anemone, and Reed the frog — five of two hundred sixteen ComputerPets" width="920">
+  <img src="docs/readme-hero.jpg" alt="Rui the red panda, Paint the clownfish, Scrape the parrotfish, Wreath the anemone, and Reed the frog — five of two hundred seventeen ComputerPets" width="920">
 </p>
 
 **Start here: [How to get your first pet](docs/START-HERE.md)**
@@ -12,7 +12,7 @@ That page is a teacher. Click it. It has numbered steps. You do not need to know
 
 ## Meet some of them
 
-There are **216** animals in this house. These are some of them.
+There are **217** animals in this house. These are some of them.
 
 <p align="center">
   <img src="docs/readme-friends.jpg" alt="Rui the red panda, Lunge the bass, Speck the brook trout, Whisk the catfish, Bar the perch, Night the walleye, Lance the pike, Silver the eel, Spoon the paddlefish, Penny the bluegill, Coin the goldfish, Reed the frog, Whorl the pond snail, Eft the newt, and Dapple the salamander" width="920">
@@ -93,7 +93,7 @@ Feed them when they look hungry. Play so they stay happy. Let them rest when the
 
 If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
 
-There are **216** animals. Rui is the first one you meet.
+There are **217** animals. Rui is the first one you meet.
 
 ## Another way to visit them (browser)
 
@@ -121,4 +121,4 @@ This project is licensed under the **MIT License**. See [LICENSE](LICENSE).
 
 ---
 
-*Two hundred sixteen living kinds. Keep them so a line does not go quiet.*
+*Two hundred seventeen living kinds. Keep them so a line does not go quiet.*

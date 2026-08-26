@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred sixteen, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred seventeen, painted here.
 """
 
 from __future__ import annotations
@@ -288,6 +288,7 @@ GRID_KEYS: tuple[str, ...] = (
     "flux_dragon",
     "spark_dragon",
     "ion_dragon",
+    "gauss_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6352,6 +6353,33 @@ ION = _kind(
     hungry=("A haze dragon should not be this empty.", "A haze would restore the outline."),
 )
 
+GAUSS = _kind(
+    key="gauss_dragon",
+    slug="gauss",
+    name="Gauss",
+    label="Filing Dragon",
+    treat="Filing",
+    treat_shape="flake",
+    silhouette="gauss_dragon",
+    walk=71,
+    palette=Palette(
+        body=(48, 36, 32),
+        belly=(140, 100, 72),
+        ear=(32, 24, 20),
+        ear_inner=(180, 96, 56),
+        nose=(20, 16, 14),
+        ring=(196, 140, 72),
+        accent=(220, 156, 80),
+    ),
+    greet=("I filed. Hello.", "The night kept my filings.", "You may look. I am not Arc."),
+    ambient=("Iron-filing field lines banding the hide. The filings are the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not Spark. Spark keeps crackle-points at the snout, the claws, and the tail. I am not Ion. Ion keeps a pale haze on the outline. I am a filing dragon. The filings stand.", "Your papers are filings I have already claimed.", "I sit. Then I file. Then I sit."),
+    feed=("Filing of a treaty.", "I will take this without leaving the bands.", "Accepted. The filings record it."),
+    treat_lines=("Filing of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the filings. Hello.",),
+    hungry=("A filing dragon should not be this empty.", "A filing would restore the bands."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6570,6 +6598,7 @@ _ALL: tuple[Species, ...] = (
     FLUX,
     SPARK_DRAGON,
     ION,
+    GAUSS,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

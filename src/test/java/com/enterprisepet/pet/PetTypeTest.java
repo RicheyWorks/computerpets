@@ -233,7 +233,8 @@ class PetTypeTest {
             new ExpectedSpecies("trace_dragon", "Path Dragon", PetType.Rarity.LEGENDARY),
             new ExpectedSpecies("flux_dragon", "Field Dragon", PetType.Rarity.LEGENDARY),
             new ExpectedSpecies("spark_dragon", "Crack Dragon", PetType.Rarity.LEGENDARY),
-            new ExpectedSpecies("ion_dragon", "Haze Dragon", PetType.Rarity.LEGENDARY)
+            new ExpectedSpecies("ion_dragon", "Haze Dragon", PetType.Rarity.LEGENDARY),
+            new ExpectedSpecies("gauss_dragon", "Filing Dragon", PetType.Rarity.LEGENDARY)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(

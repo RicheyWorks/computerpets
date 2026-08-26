@@ -264,3 +264,4 @@ def test_only_scratching_mammals_scratch():
     assert "field" in [a["name"] for a in acts_for("flux_dragon")]
     assert "crackle" in [a["name"] for a in acts_for("spark_dragon")]
     assert "haze" in [a["name"] for a in acts_for("ion_dragon")]
+    assert "filing" in [a["name"] for a in acts_for("gauss_dragon")]

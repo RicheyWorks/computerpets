@@ -3691,6 +3691,23 @@ window.PET_TRAITS = {
       call: ["I kept the haze. Hello."],
       special: ["I kept the haze. Hello."],
     },
+  },
+  gauss_dragon: {
+    size: 1.15, walk: 71, hop: 16, pitch: 0.46, rate: 0.2,
+    nocturnal: true, sleepStart: 8, sleepEnd: 17,
+    hungerH: 8, energyH: 11, hygieneH: 14, hardy: 0.82, social: 0.16, messy: 0.04,
+    clingy: false, perch: false, aquatic: false, wander: 0.2,
+    special: "filing", diet: "flake",
+    extra: {
+      sick: ["The filings are thin."],
+      clean: ["The night is an honest magnet."],
+      bath: ["Filing. Then the bands."],
+      medicine: ["A filing of a cure."],
+      praise: ["I will keep that in the filings."],
+      hide: ["In the glow."],
+      call: ["I kept the filings. Hello."],
+      special: ["I kept the filings. Hello."],
+    },
   }
 };
 
