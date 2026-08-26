@@ -9310,6 +9310,115 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "green_tree_python":
+        # Jade's jewel-green coils,
+        # cream belly in the folds,
+        # and the dark of a quiet
+        # slit-pupil nick when default
+        # plate-flood treats hide as
+        # plate. She is a green tree
+        # python. Morelia viridis.
+        # Adult emerald. White dashes
+        # along the spine. Heat pits.
+        # She folds in half. That is
+        # sitting. A living bracelet
+        # on the lamp. Still, jewel-
+        # green, above the work. I
+        # sat the whole snake. I am
+        # the jewelry. You may look.
+        # I am not an emerald tree
+        # boa. I am not a corn snake.
+        # Saffron is the orange
+        # thread. I am not a ball
+        # python. Nori is a bun. I
+        # am not a kingsnake. Bandit
+        # wears bands. She does not
+        # come down. Habitat is
+        # weather, not a painted
+        # lamp, not a branch, not a
+        # perch, not a vine, not a
+        # parchment island. House
+        # food is one small bite,
+        # then gone. A sit is still
+        # a bracelet, head a little
+        # out. A walk is an honest
+        # reach. Sleep is a deeper
+        # drape. Talk is a whole
+        # snake, a tongue. Eat is
+        # warmth first, then the
+        # treaty. Play is a sway.
+        # I win by not coming down.
+        # Named: Jade. Green hide is
+        # hide, not a hole. Do not
+        # punch the saddle. Proven
+        # on the new black-plate
+        # raws: plate corners med
+        # luma 0 (not a cream leftover
+        # luma-8 would keep at
+        # ~0.78); fill ~0.19–0.59.
+        # Default shredded the living
+        # python: idle left two parts
+        # (2 comps against luma-8's
+        # 1; live ~99.0k against
+        # ~118.0k; dark ~191 against
+        # ~564). Sit split the
+        # bracelet (2 comps against
+        # 1; ~109.5k against
+        # ~119.1k). Sleep punched the
+        # drape (2 comps against 1;
+        # ~107.3k against ~112.1k).
+        # Play split the sway (2
+        # comps against 1; ~66.4k
+        # against ~68.8k). Talk
+        # nicked the speak (~103.7k
+        # against ~119.6k; dark ~608
+        # against ~1.3k). Eat nicked
+        # the bite (~130.0k against
+        # ~139.5k; dark ~281 against
+        # ~1.4k). Walk thinned the
+        # reach (~41.7k against
+        # ~43.9k). Idle's two parts
+        # are the tell. Luma-8 keeps
+        # the whole bracelet.
+        # knock_tiny_crumbs (64)
+        # keeps specks off.
+        # MinFilter (5) is the
+        # leftover default path; I
+        # did not erode. It nicked
+        # walk (~41.7k against
+        # luma-8's ~43.9k). TAN_SIT
+        # I did not join. Cream
+        # belly is hide, not Pale's
+        # wash. TAN_SIT still lists
+        # morel, lions_mane,
+        # rosy_boa, and yeast.
+        # DARK_MATTE already lists
+        # crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add
+        # green_tree_python. A
+        # jewel's green is hide, and
+        # that path still shredded
+        # idle. Nori's ball_python
+        # elif stays Nori's.
+        # Bandit's kingsnake elif
+        # stays Bandit's. Saffron
+        # did not add a corn_snake
+        # elif. Ember's phoenix elif
+        # stays Ember's. Existing
+        # luma-8 elifs stay theirs.
+        # Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Bluff.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
