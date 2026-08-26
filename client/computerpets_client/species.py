@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred twelve, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred thirteen, painted here.
 """
 
 from __future__ import annotations
@@ -284,6 +284,7 @@ REEF_KEYS: tuple[str, ...] = (
 GRID_KEYS: tuple[str, ...] = (
     "cyber_dragon",
     "volt_dragon",
+    "trace_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6240,6 +6241,33 @@ VOLT = _kind(
     hungry=("A coil dragon should not be this empty.", "A current would restore the coil."),
 )
 
+TRACE = _kind(
+    key="trace_dragon",
+    slug="trace",
+    name="Trace",
+    label="Path Dragon",
+    treat="Path",
+    treat_shape="flake",
+    silhouette="trace_dragon",
+    walk=68,
+    palette=Palette(
+        body=(28, 36, 48),
+        belly=(88, 108, 132),
+        ear=(16, 20, 28),
+        ear_inner=(232, 176, 48),
+        nose=(12, 12, 16),
+        ring=(232, 176, 48),
+        accent=(255, 196, 64),
+    ),
+    greet=("I traced. Hello.", "The night kept my path.", "You may look. I am not Arc."),
+    ambient=("A live circuit-trace from snout to tail. The path is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am a path dragon. One trace runs the board.", "Your papers are a path I have already claimed.", "I sit. Then I trace. Then I sit."),
+    feed=("Path of a treaty.", "I will take this without leaving the path.", "Accepted. The path records it."),
+    treat_lines=("Path of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the path. Hello.",),
+    hungry=("A path dragon should not be this empty.", "A path would restore the trace."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6454,6 +6482,7 @@ _ALL: tuple[Species, ...] = (
     HIDE,
     ARC,
     VOLT,
+    TRACE,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

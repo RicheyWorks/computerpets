@@ -37,11 +37,13 @@ import { reefGuideFor, type ReefGuide } from "./reef-guide";
 import { isReef } from "./reef";
 import { woodGuideFor, type WoodGuide } from "./wood-guide";
 import { isWood } from "./wood";
+import { gridGuideFor, type GridGuide } from "./grid-guide";
+import { isGrid } from "./grid";
 
-export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | BeeGuide | FungiGuide | FarGuide | PondGuide | RoostGuide | WellGuide | CornerGuide | WoodGuide | CanopyGuide | StoneGuide | CreekGuide | LogGuide | ShoreGuide | ReefGuide | MeadowGuide;
+export type FieldGuide = SnakeGuide | HouseGuide | SeaGuide | GardenGuide | InsectGuide | BeeGuide | FungiGuide | FarGuide | PondGuide | RoostGuide | WellGuide | CornerGuide | WoodGuide | CanopyGuide | StoneGuide | CreekGuide | LogGuide | ShoreGuide | ReefGuide | MeadowGuide | GridGuide;
 
 export function plaqueFor(key: string | undefined | null): FieldGuide | null {
-  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? beeGuideFor(key) ?? pondGuideFor(key) ?? roostGuideFor(key) ?? cornerGuideFor(key) ?? woodGuideFor(key) ?? canopyGuideFor(key) ?? stoneGuideFor(key) ?? creekGuideFor(key) ?? logGuideFor(key) ?? shoreGuideFor(key) ?? reefGuideFor(key) ?? meadowGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? wellGuideFor(key) ?? houseGuideFor(key);
+  return guideFor(key) ?? seaGuideFor(key) ?? gardenGuideFor(key) ?? insectGuideFor(key) ?? beeGuideFor(key) ?? pondGuideFor(key) ?? roostGuideFor(key) ?? cornerGuideFor(key) ?? woodGuideFor(key) ?? canopyGuideFor(key) ?? stoneGuideFor(key) ?? creekGuideFor(key) ?? logGuideFor(key) ?? shoreGuideFor(key) ?? reefGuideFor(key) ?? meadowGuideFor(key) ?? fungiGuideFor(key) ?? farGuideFor(key) ?? wellGuideFor(key) ?? gridGuideFor(key) ?? houseGuideFor(key);
 }
 
 export function classroomFor(key: string) {
@@ -98,6 +100,9 @@ export function classroomFor(key: string) {
   }
   if (isFar(key)) {
     return { to: "/far" as const, label: "All ten in the far den", verb: "stay" };
+  }
+  if (isGrid(key)) {
+    return { to: "/grid" as const, label: "The three on the grid", verb: "stay" };
   }
   return { to: "/study" as const, label: "The rest of the house", verb: "walk" };
 }
