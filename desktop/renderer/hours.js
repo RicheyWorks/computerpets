@@ -216,6 +216,7 @@
   trace_dragon: "Path of a treaty.",
   flux_dragon: "Field of a treaty.",
   spark_dragon: "Crackle of a treaty.",
+  ion_dragon: "Haze of a treaty.",
 };
 
   const CALL_LINE = {
@@ -434,6 +435,7 @@
   trace_dragon: "I kept the path. Hello.",
   flux_dragon: "I kept the field. Hello.",
   spark_dragon: "I kept the crackle. Hello.",
+  ion_dragon: "I kept the haze. Hello.",
 };
 
   const GIFT_LINE = {
@@ -652,6 +654,7 @@
   trace_dragon: "A path I was finished tracing for.",
   flux_dragon: "A field I was finished fielding for.",
   spark_dragon: "A crackle I was finished crackling for.",
+  ion_dragon: "A haze I was finished hazing for.",
 };
 
   /** Same night the desk already keeps. Overlay no longer invents a second clock. */
@@ -871,6 +874,7 @@
   trace_dragon: [8, 17],
   flux_dragon: [8, 17],
   spark_dragon: [8, 17],
+  ion_dragon: [8, 17],
 };
 
   function restWindow(key) {

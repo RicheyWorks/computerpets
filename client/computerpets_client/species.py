@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred fifteen, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred sixteen, painted here.
 """
 
 from __future__ import annotations
@@ -287,6 +287,7 @@ GRID_KEYS: tuple[str, ...] = (
     "trace_dragon",
     "flux_dragon",
     "spark_dragon",
+    "ion_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6324,6 +6325,33 @@ SPARK_DRAGON = _kind(
     hungry=("A crack dragon should not be this empty.", "A crackle would restore the points."),
 )
 
+ION = _kind(
+    key="ion_dragon",
+    slug="ion",
+    name="Ion",
+    label="Haze Dragon",
+    treat="Haze",
+    treat_shape="flake",
+    silhouette="ion_dragon",
+    walk=73,
+    palette=Palette(
+        body=(156, 196, 204),
+        belly=(216, 232, 236),
+        ear=(88, 120, 128),
+        ear_inner=(200, 236, 244),
+        nose=(32, 48, 52),
+        ring=(200, 240, 248),
+        accent=(232, 252, 255),
+    ),
+    greet=("I hazed. Hello.", "The night kept my outline.", "You may look. I am not Arc."),
+    ambient=("A pale ion haze clinging to the outline. The haze is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not Spark. Spark keeps crackle-points at the snout, the claws, and the tail. I am a haze dragon. The air is charged.", "Your papers are a haze I have already claimed.", "I sit. Then I haze. Then I sit."),
+    feed=("Haze of a treaty.", "I will take this without leaving the outline.", "Accepted. The haze records it."),
+    treat_lines=("Haze of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the haze. Hello.",),
+    hungry=("A haze dragon should not be this empty.", "A haze would restore the outline."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6541,6 +6569,7 @@ _ALL: tuple[Species, ...] = (
     TRACE,
     FLUX,
     SPARK_DRAGON,
+    ION,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

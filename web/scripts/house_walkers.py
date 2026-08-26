@@ -103,6 +103,7 @@ POSE_OWNED = SNAKE_STAMPS | {
     "trace_dragon",
     "flux_dragon",
     "spark_dragon",
+    "ion_dragon",
     "bumblebee",
     "carpenter_bee",
     "mason_bee",
@@ -14789,7 +14790,7 @@ def main(argv: list[str] | None = None) -> None:
     print(
         f"done sit={len(sat)} paint={len(paint)} knock={len(knock)} "
         f"clean={len(cleaned['cleaned'])} collapsed={len(cleaned['collapsed'])} "
-        f"poses={1 if poses_arg else 0} catalog=215",
+        f"poses={1 if poses_arg else 0} catalog=216",
         flush=True,
     )
     if cleaned["collapsed"]:

@@ -353,6 +353,7 @@ GRID_EXPECTED = [
     ("trace_dragon", "trace", "Draco semita"),
     ("flux_dragon", "flux", "Draco campus"),
     ("spark_dragon", "crackle", "Draco scintilla"),
+    ("ion_dragon", "ion", "Draco caligo"),
 ]
 
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"

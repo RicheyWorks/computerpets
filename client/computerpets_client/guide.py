@@ -1,12 +1,12 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same two hundred fifteen, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred sixteen, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
 the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the reef keeps the living-rock facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
-the xenobiology facts; the grid keeps the five cyber dragons; the twenty keep the study facts.
+the xenobiology facts; the grid keeps the six cyber dragons; the twenty keep the study facts.
 """
 
 from __future__ import annotations
@@ -2062,6 +2062,15 @@ GRID_GUIDE: tuple[FieldGuide, ...] = (
         "Crack dragon. Live crackle-points at snout, claws, and tail. Not Arc. Not Volt. Not Trace. Not Flux. Not Vesper.",
         "machine-night",
         "crackled",
+    ),
+    _entry(
+        "ion_dragon",
+        "Draco caligo",
+        "A pale ion haze clinging to the outline, thin charged air that stays on the hide, a cool glow that is weather. Haze dragon. Ion sits. Then Ion hazes. The night is an outline Ion agreed to.",
+        "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Ion is Draco caligo, and the haze is the tell. A haze dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, and not a crack dragon. The outline is the species. Not Vesper. Vesper is a mantel dragon.",
+        "Haze dragon. A pale ion haze clinging to the outline. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Vesper.",
+        "machine-night",
+        "hazed",
     ),
 )
 
