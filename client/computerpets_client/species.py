@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred fourteen, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred fifteen, painted here.
 """
 
 from __future__ import annotations
@@ -286,6 +286,7 @@ GRID_KEYS: tuple[str, ...] = (
     "volt_dragon",
     "trace_dragon",
     "flux_dragon",
+    "spark_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6296,6 +6297,33 @@ FLUX = _kind(
     hungry=("A field dragon should not be this empty.", "A field would restore the heat."),
 )
 
+SPARK_DRAGON = _kind(
+    key="spark_dragon",
+    slug="crackle",
+    name="Spark",
+    label="Crack Dragon",
+    treat="Crackle",
+    treat_shape="flake",
+    silhouette="spark_dragon",
+    walk=74,
+    palette=Palette(
+        body=(148, 156, 164),
+        belly=(208, 212, 216),
+        ear=(88, 92, 96),
+        ear_inner=(232, 220, 180),
+        nose=(32, 32, 36),
+        ring=(255, 232, 160),
+        accent=(255, 244, 200),
+    ),
+    greet=("I crackled. Hello.", "The night kept my points.", "You may look. I am not Arc."),
+    ambient=("Live crackle-points at the snout, the claws, and the tail. The crackle is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not the firefly. That Spark flashes a dusk. I am a crack dragon. The points are live.", "Your papers are a crackle I have already claimed.", "I sit. Then I crackle. Then I sit."),
+    feed=("Crackle of a treaty.", "I will take this without leaving the points.", "Accepted. The crackle records it."),
+    treat_lines=("Crackle of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the crackle. Hello.",),
+    hungry=("A crack dragon should not be this empty.", "A crackle would restore the points."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6512,6 +6540,7 @@ _ALL: tuple[Species, ...] = (
     VOLT,
     TRACE,
     FLUX,
+    SPARK_DRAGON,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

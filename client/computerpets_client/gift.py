@@ -1,7 +1,7 @@
 """They leave a gift on the wood. Shed is not the only one.
 
 Port of ``leaveGift`` / ``pickGift`` from ``web/src/lib/pets/care.ts``
-and ``GIFT_LINE`` from ``treats.ts``. Same Known sit. Same two hundred fourteen
+and ``GIFT_LINE`` from ``treats.ts``. Same Known sit. Same two hundred fifteen
 lines. Do not invent a new gift.
 """
 
@@ -229,6 +229,7 @@ GIFT_LINE: dict[str, str] = {
     "volt_dragon": "A current I was finished coiling for.",
     "trace_dragon": "A path I was finished tracing for.",
     "flux_dragon": "A field I was finished fielding for.",
+    "spark_dragon": "A crackle I was finished crackling for.",
 }
 
 

@@ -222,6 +222,7 @@
     volt_dragon: [A("current", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
     trace_dragon: [A("path", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
     flux_dragon: [A("field", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
+    spark_dragon: [A("crackle", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",
