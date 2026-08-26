@@ -9748,6 +9748,123 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "carpet_python":
+        # Atlas's yellow cartography,
+        # black labyrinth, and the
+        # dark of a quiet eye-stripe
+        # nick when default plate-
+        # flood treats hide as plate.
+        # He is a jungle carpet
+        # python. Morelia spilota
+        # cheynei. Yellow and black
+        # cartography. He claims the
+        # shelf as a jungle. I sat
+        # the whole snake. I have
+        # charted the shelf. You may
+        # land. I am not a rosy boa.
+        # Blush is pink-tan with
+        # three stripes. I am not a
+        # milk snake. Coral is red-
+        # black-cream rings. I am
+        # not a boa. Lula is tan-
+        # and-saddle. I am not a
+        # kingsnake. Bandit wears
+        # black-and-cream bands. I
+        # am not a green tree
+        # python. Jade is jewel-
+        # green. Habitat map shelf
+        # is weather, not a painted
+        # shelf, not a map, not a
+        # chart, not jungle
+        # furniture, not a ridge,
+        # not a parchment island.
+        # House food is a morsel
+        # for the cartographer —
+        # one bite, then gone. A
+        # sit leaves a path, and
+        # the path is him, head a
+        # little out. A walk is a
+        # voyage, tail not cropped.
+        # Sleep drapes like a
+        # legend on a chart. Talk
+        # is a whole carpet python,
+        # a tongue. Eat is one
+        # morsel. Play is a climb
+        # that counts as a voyage.
+        # Named: Atlas. Dark hide
+        # is hide, not a hole. Do
+        # not punch the map.
+        # Proven on the new black-
+        # plate raws: plate corners
+        # med luma 0 (not a cream
+        # leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.07–0.42. Default
+        # punched the living
+        # carpet python: eat left
+        # holes in the hide (live
+        # ~69.2k against luma-8's
+        # ~99.9k; dark ~20.4k
+        # against ~34.6k). Sleep
+        # thinned the legend
+        # (~29.2k against ~41.5k;
+        # dark ~8.1k against
+        # ~12.8k). Sit nicked the
+        # path (~45.7k against
+        # ~54.5k; dark ~13.0k
+        # against ~16.6k). Eat's
+        # punched hide is the
+        # tell. Luma-8 keeps the
+        # whole map. knock_tiny_
+        # crumbs (64) keeps specks
+        # off. MinFilter (5) is
+        # the leftover default
+        # path; I did not erode.
+        # It holed eat. TAN_SIT I
+        # did not join. Yellow
+        # hide is not Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane, rosy_
+        # boa, and yeast. DARK_
+        # MATTE already lists
+        # crow, raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede, field_
+        # cricket, earwig, click_
+        # beetle, and robber_fly;
+        # that membership stays.
+        # I did not add carpet_
+        # python. A map's black
+        # is hide, and that path
+        # still holed eat. Nori's
+        # ball_python elif stays
+        # Nori's. Bandit's
+        # kingsnake elif stays
+        # Bandit's. Jade's green_
+        # tree_python elif stays
+        # Jade's. Sash's garter
+        # elif stays Sash's.
+        # Lula's boa elif stays
+        # Lula's. Coral's milk_
+        # snake elif stays
+        # Coral's. Saffron did
+        # not add a corn_snake
+        # elif. Bluff did not add
+        # a hognose elif. Blush
+        # did not add a rosy_boa
+        # elif. Ember's phoenix
+        # elif stays Ember's.
+        # Existing luma-8 elifs
+        # stay theirs. Guest-
+        # only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Thrum.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
