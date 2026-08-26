@@ -8144,6 +8144,115 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=300)
         return sat
+    elif key == "ferret":
+        # Wick's sable mask, dark
+        # legs, and the dark of a
+        # bound nick when default
+        # plate-flood treats hide as
+        # plate. He is a domestic
+        # ferret. Mustela furo. The
+        # house polecat. A tube with
+        # opinions: sable mask, short
+        # legs, a spine that treats a
+        # cable-run as a palace. I sat
+        # the run. Hello. I am not a
+        # weasel — those are the wild,
+        # smaller cousins. I am not a
+        # mongoose, not an otter, not
+        # a meerkat. I am not a black-
+        # footed ferret. I am not a
+        # prairie sit-stamp. I am not
+        # Quill. I am not Rue. I am
+        # not Peck. I am not Echo. I
+        # am not Coin. Habitat is
+        # weather (the cable-run), not
+        # a painted palace, not a
+        # dongle you draw, not a nest,
+        # not a parchment island.
+        # House food is one bite, then
+        # gone. A sit loafs. A walk
+        # bounds. Sleep is a comma.
+        # Talk is a kinder chatter.
+        # Eat is one morsel. Play is a
+        # war-dance. I win by remaining
+        # a house ferret. I am a tube.
+        # Your dongle is somewhere
+        # better. Named: Wick. Dark
+        # hide is hide, not a hole. Do
+        # not punch the mask. Proven on
+        # the new black-plate raws:
+        # plate corners med luma 0 (not
+        # a cream leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.20–0.57. Default nicked
+        # the living ferret: idle ate
+        # the socks and the mask (dark
+        # 321 against luma-8's 2892;
+        # animal ~53.7k against
+        # ~69.8k), sit thinned the loaf
+        # (dark 162 against 1119;
+        # ~40.0k against ~50.9k), walk
+        # ate the bound (dark 129
+        # against 2991; ~32.4k against
+        # ~44.4k), talk cut the chatter
+        # (dark 297 against 4935;
+        # ~63.2k against ~86.3k), eat
+        # left crumbs (3 comps against
+        # 1; ~78.5k against ~91.8k;
+        # dark 248 against 1844), play
+        # nicked the war-dance (dark
+        # 441 against 4628; ~76.4k
+        # against ~100.0k). Sleep kept
+        # more of the comma and still
+        # lost dark (~3.2k against
+        # ~4.4k). Luma-8 keeps the
+        # whole house ferret.
+        # knock_tiny_crumbs(300) keeps
+        # specks off. TAN_SIT left
+        # crumbs: idle 23 comps, sit 7,
+        # walk 8, sleep 7, talk 17, eat
+        # 6, play 13. I did not join.
+        # Sable hide is not Pale's
+        # wash. TAN_SIT still lists
+        # morel, lions_mane, and yeast.
+        # DARK_MATTE already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk, millipede,
+        # field_cricket, earwig,
+        # click_beetle, and robber_fly;
+        # that membership stays. I did
+        # not add ferret. A house ferret
+        # is not charcoal. Quill's
+        # parrot elif stays Quill's.
+        # Rue's fox elif stays Rue's.
+        # Coin's goldfish elif stays
+        # Coin's. Echo did not add a
+        # budgie elif. Peck did not add
+        # a penguin elif. Ink's turtle
+        # elif stays Ink's. Whee's
+        # guinea_pig elif stays Whee's.
+        # Thimble's rabbit elif stays
+        # Thimble's. Pip's dog elif
+        # stays Pip's. Miso's cat elif
+        # stays Miso's. Clip did not
+        # add a hamster elif. Existing
+        # luma-8 elifs stay theirs.
+        # Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Burr.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=300)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=300)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
