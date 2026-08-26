@@ -106,6 +106,7 @@ POSE_OWNED = SNAKE_STAMPS | {
     "ion_dragon",
     "gauss_dragon",
     "relay_dragon",
+    "fuse_dragon",
     "bumblebee",
     "carpenter_bee",
     "mason_bee",
@@ -13322,6 +13323,28 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "fuse_dragon":
+        # Fuse's olive-umber hide and
+        # single sternum cartridge sit
+        # on a black plate. Default
+        # plate-flood treats the dark
+        # hide as the night: idle
+        # animal ~36k against luma-8's
+        # ~72k. Corner med luma is 0.
+        # Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Arc. Not
+        # Volt. Not Trace. Not Flux.
+        # Not Spark. Not Ion. Not
+        # Gauss. Not Relay. Not
+        # Vesper. Not Rui. Landed
+        # elifs stay theirs.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
 
     else:
         # A parchment wash floods first. Then any leftover plate.
@@ -14836,7 +14859,7 @@ def main(argv: list[str] | None = None) -> None:
     print(
         f"done sit={len(sat)} paint={len(paint)} knock={len(knock)} "
         f"clean={len(cleaned['cleaned'])} collapsed={len(cleaned['collapsed'])} "
-        f"poses={1 if poses_arg else 0} catalog=218",
+        f"poses={1 if poses_arg else 0} catalog=219",
         flush=True,
     )
     if cleaned["collapsed"]:

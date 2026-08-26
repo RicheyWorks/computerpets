@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the eight grid guests. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the nine grid guests. Literary, short, and meant to be learned on the blotter. */
 export const GRID_GUIDE: GridGuide[] = [
   entry(
     "cyber_dragon",
@@ -88,6 +88,13 @@ export const GRID_GUIDE: GridGuide[] = [
     "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Not Ion. Ion is Draco caligo, a pale ion haze clinging to the outline. Not Gauss. Gauss is Draco limatura, iron-filing field lines banding a lodestone hide. Relay is Draco nodus, and the click is the tell. A click dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, not a crack dragon, not a haze dragon, and not a filing dragon. The node is the species. Not Vesper. Vesper is a mantel dragon.",
     "Click dragon. A single live click-node at the nape. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Vesper.",
   ),
+  entry(
+    "fuse_dragon",
+    "Draco ampulla",
+    "A single glass cartridge fuse across the sternum, a filament visible and warm when intact, a cool glow that is weather. Cartridge dragon. Fuse sits. Then Fuse holds. The night is a filament Fuse agreed to.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Not Ion. Ion is Draco caligo, a pale ion haze clinging to the outline. Not Gauss. Gauss is Draco limatura, iron-filing field lines banding a lodestone hide. Not Relay. Relay is Draco nodus, a single live click-node at the nape. Fuse is Draco ampulla, and the filament is the tell. A cartridge dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, not a crack dragon, not a haze dragon, not a filing dragon, and not a click dragon. The cartridge is the species. Not Vesper. Vesper is a mantel dragon.",
+    "Cartridge dragon. A single glass cartridge fuse across the sternum. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Vesper.",
+  ),
 ];
 
 const BY_KEY = Object.fromEntries(GRID_GUIDE.map((g) => [g.key, g]));
@@ -107,7 +114,7 @@ export function gridGuideKeys() {
   return GRID_GUIDE.map((g) => g.key);
 }
 
-/** The roster and the guide must name the same eight. */
+/** The roster and the guide must name the same nine. */
 export function gridGuideComplete() {
   return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
 }
