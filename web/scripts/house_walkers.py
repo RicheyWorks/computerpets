@@ -9206,6 +9206,110 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "kingsnake":
+        # Bandit's black bands, cream
+        # rings, and the dark of a
+        # quiet eye nick when default
+        # plate-flood treats hide as
+        # plate. He is a California
+        # kingsnake. Lampropeltis
+        # californiae. Banded phase.
+        # Black and cream. He wears
+        # the house in bands. He
+        # inspects other snakes for
+        # sport. Bold, striped, sure
+        # of the rules. I sat the
+        # whole snake. Bands present.
+        # Hello. I am not a corn
+        # snake. Saffron is the orange
+        # thread. I am not a milk
+        # snake. Coral is the tricolor
+        # rumor. I am not a krait. I
+        # am not a ball python. Nori
+        # is a bun. I am the law of
+        # this drawer. Habitat is
+        # weather, not a painted
+        # drawer, not rulers, not a
+        # sand mound, not a hide, not
+        # a parchment island. House
+        # food is one small bite,
+        # then gone. A sit is a coil
+        # with authority. A walk is
+        # an honest crawl. Sleep
+        # stacks like a verdict. Talk
+        # is a whole snake, a tongue.
+        # Eat is tribute in bands of
+        # flavor. Play is a strike
+        # that was mostly theater. I
+        # win. The stripes agree.
+        # Named: Bandit. Dark hide is
+        # hide, not a hole. Do not
+        # punch the bands. Proven on
+        # the new black-plate raws:
+        # plate corners med luma 0
+        # (not a cream leftover luma-8
+        # would keep at ~0.78); fill
+        # ~0.05–0.38. Default shredded
+        # the living king: idle left
+        # two parts (2 comps against
+        # luma-8's 1; live ~37.7k
+        # against ~100.4k; dark ~4.6k
+        # against ~18.8k). Sit split
+        # the coil (2 comps against
+        # 1; ~52.2k against ~100.1k;
+        # dark ~6.9k against ~18.5k).
+        # Sleep punched the verdict
+        # (1 comp; ~22.4k against
+        # ~93.3k; dark ~3.4k against
+        # ~19.6k). Talk lost the
+        # bands (~44.3k against
+        # ~83.6k; dark ~7.6k against
+        # ~22.7k). Eat nicked the
+        # bite (~33.7k against
+        # ~75.4k). Play nicked the
+        # strike (~20.7k against
+        # ~28.2k). Walk thinned the
+        # crawl (~11.8k against
+        # ~14.2k; fill ~0.045 against
+        # ~0.054). Idle's two parts
+        # are the tell. Luma-8 keeps
+        # the whole king. knock_tiny_
+        # crumbs (64) keeps specks
+        # off. MinFilter (5) is the
+        # leftover default path; I
+        # did not erode. It split
+        # talk (5 comps). TAN_SIT I
+        # did not join. Cream bands
+        # are hide, not Pale's wash.
+        # TAN_SIT still lists morel,
+        # lions_mane, rosy_boa, and
+        # yeast. DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add
+        # kingsnake. A king's black
+        # is hide, and that path
+        # still shredded idle. Nori's
+        # ball_python elif stays
+        # Nori's. Saffron did not add
+        # a corn_snake elif. Ember's
+        # phoenix elif stays Ember's.
+        # Vesper's dragon elif stays
+        # Vesper's. Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Jade.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
