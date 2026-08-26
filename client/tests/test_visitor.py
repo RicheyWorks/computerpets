@@ -21,10 +21,10 @@ def test_visitor_identity_matches_house_formula():
     # Civil day plus host length, walked through two hundred fourteen minus the host.
     # These pins move when a den lands. Update them with the web visitor test.
     now = datetime(2026, 8, 17)
-    assert todays_visitor("red_panda", now).key == "tick"
-    assert todays_visitor("ball_python", now).key == "deer"
-    assert todays_visitor("red_panda", datetime(2026, 1, 1)).key == "barn_owl"
-    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "sea_urchin"
+    assert todays_visitor("red_panda", now).key == "cuttlefish"
+    assert todays_visitor("ball_python", now).key == "moon_jelly"
+    assert todays_visitor("red_panda", datetime(2026, 1, 1)).key == "toucan"
+    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "terminator"
 
 
 def test_visitor_is_never_the_host():
@@ -47,7 +47,7 @@ def test_visitor_uses_catalog_order_minus_host():
 def test_visit_line_is_the_house_copy():
     assert visit_line("axolotl") == "I grew a little more present. Then less."
     assert visit_line("ball_python") == "I came as a bun. I will leave as a bun."
-    assert visit_caption("red_panda", datetime(2026, 8, 17)) == "Clasp may call"
+    assert visit_caption("red_panda", datetime(2026, 8, 17)) == "Sepia may call"
     assert visit_line("horseshoe_crab") == "I walked the sand. I am not a crab."
     assert visit_line("sloth") == "I hung. Then I left the bough."
     assert visit_line("koala") == "I chewed. Then I left the gum."
