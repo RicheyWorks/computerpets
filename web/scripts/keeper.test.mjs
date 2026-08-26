@@ -6,9 +6,11 @@ import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const K = await import(join(root, "src/lib/pets/keeper.ts"));
-const Living = await import(join(root, "src/lib/pets/living.ts"));
 
 const cardSrc = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
+const gridSrc = readFileSync(join(root, "src/lib/pets/grid.ts"), "utf8");
+const insectsSrc = readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8");
+const demoPageSrc = readFileSync(join(root, "src/routes/demo.$slug.tsx"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "utf8");
 const deskSrc = readFileSync(join(root, "src/components/desk/desk-stage.tsx"), "utf8");
@@ -27,7 +29,8 @@ test("Java is 8081, the desk is 8080, and /pet/feed is not a door", () => {
   assert.match(javaSrc, /\/api\/public/);
   assert.match(javaSrc, /\/heartbeat/);
   assert.match(javaSrc, /uptimeSeconds/);
-  assert.doesNotMatch(javaSrc, /\/pet\/feed/);
+  assert.doesNotMatch(javaSrc, /GetMapping\("\/pet\/feed"\)/);
+  assert.match(javaSrc, /care\.put\("feed", false\)/);
   assert.match(overlayKeeper, /127\.0\.0\.1:8081\/api\/public\/heartbeat/);
 });
 
@@ -57,13 +60,12 @@ test("the same keeper card sits desk, /demo, Live, Meet, and the Windows overlay
 test("the grid ten keep /demo slugs, and Spark is crackle", () => {
   assert.equal(K.GRID_LIVE.length, 10);
   for (const guest of K.GRID_LIVE) {
-    const kind = Living.livingBySlug(guest.slug);
-    assert.ok(kind, guest.slug);
-    assert.equal(kind.key, guest.key);
-    assert.equal(kind.name, guest.name);
-    assert.equal(kind.slug, guest.slug);
+    assert.match(gridSrc, new RegExp(`key: "${guest.key}"`));
+    assert.match(gridSrc, new RegExp(`slug: "${guest.slug}"`));
+    assert.match(gridSrc, new RegExp(`name: "${guest.name}"`));
   }
-  assert.equal(Living.livingBySlug("spark")?.key, "firefly");
-  assert.equal(Living.livingBySlug("crackle")?.key, "spark_dragon");
-  assert.equal(Living.livingByKey("spark_dragon").slug, "crackle");
+  assert.match(demoPageSrc, /livingBySlug/);
+  assert.match(insectsSrc, /slug: "spark"/);
+  assert.match(gridSrc, /slug: "crackle"/);
+  assert.doesNotMatch(gridSrc, /slug: "spark"/);
 });

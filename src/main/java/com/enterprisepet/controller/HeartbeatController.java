@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * Quiet public heartbeat for the keeper card. Status, profile, and uptime
- * only. Does not dump rooms. Does not invent {@code /pet/feed}.
+ * only. Does not dump rooms. Does not invent advertised care routes.
  */
 @RestController
 @RequestMapping("/api/public")

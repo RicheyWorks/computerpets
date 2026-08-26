@@ -1,4 +1,4 @@
-import { bondTitle, type CareStats } from "./care";
+import { bondTitle, type CareStats } from "./care.ts";
 
 /** Java listens here. The living desk keeps 8080. */
 export const JAVA_PORT = 8081;
