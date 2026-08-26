@@ -9517,6 +9517,120 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "boa":
+        # Lula's tan hide, rusting
+        # saddles, and the dark of a
+        # quiet eye-stripe nick when
+        # default plate-flood treats
+        # hide as plate. She is a boa
+        # constrictor. Boa constrictor.
+        # Heavy. Tan-and-saddle. A
+        # wedge head. A dark line
+        # through the eye. Gentle
+        # province of muscle. She
+        # holds the blotter the way a
+        # river holds a stone. I sat
+        # the whole snake. I saved
+        # you a length of blotter.
+        # Hello. Mind the coil. It is
+        # affectionate. I am not a
+        # garter. Sash is three lines
+        # on a patrol. I am not a
+        # hognose. Bluff is the
+        # upturned snout. I am not a
+        # ball python. Nori is a bun.
+        # I am not a corn snake.
+        # Saffron is the orange
+        # thread. I am not a green
+        # tree python. Jade sits like
+        # jewelry. I am not a rosy
+        # boa. Blush wears three
+        # stripes. Habitat blotter
+        # river is weather, not a
+        # painted river, not a
+        # blotter, not a bank, not a
+        # sand tray, not furniture,
+        # not a parchment island.
+        # House food is tribute taken
+        # slowly — one bite, then
+        # gone. Not a whole-rodent
+        # show. A sit is an
+        # affectionate coil, head a
+        # little out. A walk is a
+        # slow current of muscle,
+        # tail not cropped. Sleep is
+        # a river that decided to
+        # stop. Talk is a whole boa,
+        # a tongue. Eat is one crumb
+        # of tribute. Play is a slow
+        # loop. I win by arriving
+        # last and staying. Named:
+        # Lula. Dark saddle is hide,
+        # not a hole. Do not punch
+        # the river. Proven on the
+        # new black-plate raws: plate
+        # corners med luma 0 (not a
+        # cream leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.10–0.53. Default punched
+        # the living boa: eat left
+        # two scraps (2 comps against
+        # luma-8's 1; live ~77.0k
+        # against ~140.2k; dark ~5.9k
+        # against ~23.7k). Sleep
+        # split the stopped river (2
+        # comps against 1; live
+        # ~113.3k against ~117.8k;
+        # dark ~7.5k against
+        # ~10.6k). Idle thinned the
+        # saved length (~35.1k
+        # against ~36.8k). Sit
+        # thinned the coil (~133.5k
+        # against ~136.7k). Walk
+        # thinned the current (~25.9k
+        # against ~27.4k). Eat's two
+        # scraps are the tell. Luma-8
+        # keeps the whole river.
+        # knock_tiny_crumbs (64)
+        # keeps specks off.
+        # MinFilter (5) is the
+        # leftover default path; I
+        # did not erode. It shredded
+        # eat. TAN_SIT I did not
+        # join. Tan saddle is hide,
+        # not Pale's wash. TAN_SIT
+        # still lists morel, lions_
+        # mane, rosy_boa, and yeast.
+        # DARK_MATTE already lists
+        # crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add boa.
+        # A river's saddle is hide,
+        # and that path still
+        # shredded eat. Nori's
+        # ball_python elif stays
+        # Nori's. Bandit's kingsnake
+        # elif stays Bandit's. Jade's
+        # green_tree_python elif
+        # stays Jade's. Sash's garter
+        # elif stays Sash's. Saffron
+        # did not add a corn_snake
+        # elif. Bluff did not add a
+        # hognose elif. Ember's
+        # phoenix elif stays Ember's.
+        # Existing luma-8 elifs stay
+        # theirs. Guest-only. Not a
+        # catalog wash. Not TAN_SIT.
+        # Not DARK_MATTE. Not Coral.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
