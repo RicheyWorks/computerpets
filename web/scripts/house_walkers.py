@@ -8602,6 +8602,134 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=300)
         return sat
+    elif key == "toucan":
+        # Keel's black plumage, dark
+        # bill tip, and the dark of a
+        # fruit-stall gape nick when
+        # default plate-flood treats
+        # hide as plate. He is a
+        # keel-billed toucan.
+        # Ramphastos sulfuratus. The
+        # bill arrives first: keel-
+        # shaped, painted like a fruit
+        # stall, and lighter than it
+        # looks — keratin over air.
+        # Black body, a yellow bib, a
+        # bird that follows the
+        # architecture. I sat the
+        # bill. Hello. I am not a
+        # hornbill. Hornbills are the
+        # Old-World cousins with a
+        # casque; I am a keel-billed
+        # toucan of the American
+        # canopy. I am not a macaw.
+        # Quill's bill crushes. Mine
+        # carries fruit and makes an
+        # entrance. I am not a Toco.
+        # That leftover was the orange
+        # club and the white bib. I am
+        # not Peck. I am not Echo. I
+        # am not Bloom. Habitat is
+        # weather, not a painted
+        # branch, not a perch you
+        # draw, not a fruit bowl, not
+        # a parchment island. House
+        # food is one fruit, then
+        # gone. A sit roosts without
+        # furniture. A walk hops.
+        # Sleep tucks the bill. Talk
+        # is a voice. Eat is one
+        # fruit. Play is a toss of
+        # the bill. I win by remaining
+        # a keel-billed toucan. The
+        # bill is the room. I am
+        # behind it. Named: Keel.
+        # Dark hide is hide, not a
+        # hole. Do not punch the
+        # plumage. Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not a
+        # cream leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.19–0.32. Default
+        # shredded the living toucan:
+        # walk tore the hop (animal
+        # ~22.5k against luma-8's
+        # ~50.1k; dark 5.2k against
+        # 22.1k; a detached head and
+        # a wing). Sleep left a head
+        # (~42.3k against ~85.0k;
+        # dark 13.2k against 44.7k).
+        # Play thinned the toss
+        # (~29.1k against ~56.9k;
+        # dark 7.4k against 22.2k).
+        # Idle, talk, and eat kept a
+        # blown bill-and-bib after
+        # the black body left (idle
+        # 11 comps against 2; talk 5
+        # against 3; eat 6 against
+        # 1). Sit kept counts and
+        # still lost dark (~16.8k
+        # against ~32.8k). Walk's
+        # detached hop is the tell.
+        # Luma-8 keeps the whole
+        # toucan. MinFilter(5) punched
+        # talk into 7 living pieces
+        # and split sit and play. I
+        # did not erode.
+        # knock_tiny_crumbs(300)
+        # keeps specks off. TAN_SIT
+        # left crumbs: idle 33 comps,
+        # sit 46, walk 22, sleep 40,
+        # talk 36, eat 20, play 25.
+        # I did not join. Black hide
+        # is not Pale's wash. TAN_SIT
+        # still lists morel,
+        # lions_mane, and yeast.
+        # DARK_MATTE already lists
+        # crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that
+        # membership stays. I did
+        # not add toucan. A keel-
+        # billed toucan is not
+        # charcoal — the bill is the
+        # room. Bloom's axolotl elif
+        # stays Bloom's. Floss's
+        # chinchilla elif stays
+        # Floss's. Burr's hedgehog
+        # elif stays Burr's. Wick's
+        # ferret elif stays Wick's.
+        # Quill's parrot elif stays
+        # Quill's. Rue's fox elif
+        # stays Rue's. Coin's
+        # goldfish elif stays Coin's.
+        # Echo did not add a budgie
+        # elif. Peck did not add a
+        # penguin elif. Ink's turtle
+        # elif stays Ink's. Whee's
+        # guinea_pig elif stays
+        # Whee's. Thimble's rabbit
+        # elif stays Thimble's. Pip's
+        # dog elif stays Pip's.
+        # Miso's cat elif stays
+        # Miso's. Clip did not add a
+        # hamster elif. Existing
+        # luma-8 elifs stay theirs.
+        # Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Sol.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=300)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=300)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
