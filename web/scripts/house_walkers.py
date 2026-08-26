@@ -9865,6 +9865,123 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "bumblebee":
+        # Thrum's black fur, dark
+        # compound eye, and the
+        # dark of a folded wing
+        # nick when default plate-
+        # flood treats hide as
+        # plate. She is a common
+        # eastern bumble bee.
+        # Bombus impatiens. A
+        # round furred body, a
+        # louder wing, pollen in
+        # the fur. A bumblebee is
+        # not a honey bee. She
+        # keeps a smaller nest. I
+        # sat the whole bee. I
+        # thrummed. That was
+        # hello. I am not Comb.
+        # Comb is Apis, a honey
+        # bee with a waggle and a
+        # dish of wax. I am not
+        # Auger. Auger is a
+        # carpenter with a shiny
+        # abdomen. I am not Hum.
+        # Hum is a drone. I am
+        # not Keep. Keep is a
+        # queen. I am not Wax.
+        # Wax is the nest.
+        # Habitat moss cup is
+        # weather, not a painted
+        # cup, not a meadow, not
+        # a flower, not a dirt
+        # mound, not a nest, not
+        # furniture. House food
+        # is nectar of a treaty —
+        # one sip, then gone. A
+        # sit is a pause on
+        # nothing, fur present.
+        # A walk is she forages
+        # and she goes home,
+        # wings honest. Sleep is
+        # the fur. Talk is a
+        # whole bumblebee.
+        # Antennae and wings do
+        # the talking. No human
+        # smile. No pointing
+        # claw. Play is a thrum.
+        # I win by remaining a
+        # bumble. Named: Thrum.
+        # Dark fur is hide, not a
+        # hole. Do not punch the
+        # bee. Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not
+        # a cream leftover luma-8
+        # would keep at ~0.78);
+        # fill ~0.22–0.36.
+        # Default punched the
+        # living bumblebee: sleep
+        # tore the curl (~44.2k
+        # live against luma-8's
+        # ~94.0k; dark ~70
+        # against ~9.0k). Talk
+        # left a blown plate
+        # (~29.1k against
+        # ~58.6k). Play punched
+        # the thrum (~32.9k
+        # against ~58.0k; dark 3
+        # against ~1.6k). Walk
+        # nicked dark fur (dark 4
+        # against ~4.7k). Sleep's
+        # torn curl is the tell.
+        # Luma-8 keeps the whole
+        # bee. knock_tiny_crumbs
+        # (64) keeps specks off.
+        # MinFilter (5) is the
+        # leftover default path;
+        # I did not erode. It
+        # shredded sleep. TAN_SIT
+        # I did not join. Yellow
+        # fur is not Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # rosy_boa, and yeast.
+        # DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_
+        # cricket, earwig, click_
+        # beetle, and robber_fly;
+        # that membership stays.
+        # I did not add
+        # bumblebee. A bee's
+        # black is hide, and that
+        # path still shredded
+        # sleep. Atlas's carpet_
+        # python elif stays
+        # Atlas's. Coral's milk_
+        # snake elif stays
+        # Coral's. Ember's
+        # phoenix elif stays
+        # Ember's. Existing
+        # luma-8 elifs stay
+        # theirs. Later hive
+        # (Auger, Mortar, Disc,
+        # Pot, Sheen, Bank, Hum,
+        # Keep, Wax) stay
+        # untouched. Guest-only.
+        # Not a catalog wash.
+        # Not TAN_SIT. Not
+        # DARK_MATTE. Not Auger.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
