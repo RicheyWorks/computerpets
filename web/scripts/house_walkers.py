@@ -10660,6 +10660,161 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "mining_bee":
+        # Bank's dark compound
+        # eye, dark abdomen
+        # bands, and the dark of
+        # a folded wing nick when
+        # default plate-flood
+        # treats hide as plate.
+        # She is a neighborly
+        # mining bee. Andrena
+        # vicina. A brown-and-
+        # cream miner, a hole in
+        # the ground, a neighbor
+        # on the bank. Each bee
+        # her own burrow. The
+        # sand tray is a bank she
+        # agreed to. Neighbors
+        # may share a bank. Each
+        # hole is hers. I sat the
+        # whole bee. I dug.
+        # Hello. The tray kept
+        # my bank. You may look.
+        # I work alone. I am not
+        # Comb. Comb is Apis,
+        # already in the insect
+        # ten, a honey bee with a
+        # waggle and a dish of
+        # wax. Not a colony on
+        # the blotter. The ground
+        # is the nest. I am not
+        # Sheen. Sheen is a sweat
+        # bee, metallic green. I
+        # am not Pot. Pot is
+        # stingless, pots. I am
+        # not Disc. Disc is a
+        # leafcutter with a leaf
+        # disc. I am not Mortar.
+        # Mortar is a mason with
+        # mud. I am not Auger.
+        # Auger is a carpenter. I
+        # am not Thrum. Thrum is
+        # a bumble. Habitat sand
+        # tray is weather, not a
+        # painted hole, not a
+        # bank, not a nest, not
+        # furniture. House food
+        # is pollen of a treaty —
+        # one sip, then return to
+        # the bank. Play is a
+        # dig, a hover. Rest
+        # holds the tray. Sleep
+        # is a curled mining bee
+        # on nothing but black.
+        # The hole is the correct
+        # sleep. Talk is a bee,
+        # not a person. No human
+        # smile. No two-leg
+        # stand. No welcoming
+        # arms. Named: Bank. Dark
+        # hide is hide, not a
+        # hole. Do not punch the
+        # bee. Proven on the new
+        # black-plate raws: plate
+        # corners med luma 0 (not
+        # a cream leftover luma-8
+        # would keep at ~0.78);
+        # fill ~0.22–0.36.
+        # Default punched the
+        # living miner: sleep
+        # tore the curl (~84.5k
+        # live against luma-8's
+        # ~95.1k; dark ~10.9k
+        # against ~16.4k). Sit
+        # nicked the pause
+        # (~63.5k against
+        # ~68.0k; dark ~5.2k
+        # against ~6.6k). Walk
+        # nicked the gait
+        # (~70.0k against
+        # ~75.7k; dark ~7.0k
+        # against ~8.8k). Eat
+        # nicked the sip
+        # (~62.3k against
+        # ~66.4k; dark ~5.3k
+        # against ~6.5k). Play
+        # nicked the hover
+        # (~68.6k against
+        # ~74.1k; dark ~6.9k
+        # against ~9.2k). Idle
+        # default kept more
+        # animal (~72.1k against
+        # ~62.2k) — wash fringe.
+        # Talk default kept more
+        # animal (~69.3k against
+        # ~58.1k) and still lost
+        # dark (~5.9k against
+        # ~6.4k). Sleep's torn
+        # curl is the tell.
+        # Luma-8 keeps the whole
+        # bee. knock_tiny_crumbs
+        # (64) keeps specks off.
+        # MinFilter (5) is the
+        # leftover default path;
+        # I did not erode. It
+        # punches the miner.
+        # TAN_SIT I did not
+        # join. Cream fur is not
+        # Pale's wash. TAN_SIT
+        # still lists morel,
+        # lions_mane, rosy_boa,
+        # and yeast. DARK_MATTE
+        # already lists crow,
+        # raven, pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_
+        # cricket, earwig, click_
+        # beetle, and robber_fly;
+        # that membership stays.
+        # I did not add
+        # mining_bee. A bee's
+        # black band is hide, and
+        # that path still tore
+        # sleep. Thrum's
+        # bumblebee elif stays
+        # Thrum's. Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee elif
+        # stays Mortar's. Disc's
+        # leafcutter elif stays
+        # Disc's. Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee elif
+        # stays Sheen's. Atlas's
+        # carpet_python elif
+        # stays Atlas's. Coral's
+        # milk_snake elif stays
+        # Coral's. Ember's
+        # phoenix elif stays
+        # Ember's. Existing
+        # luma-8 elifs stay
+        # theirs. Later hive
+        # (Hum, Keep, Wax) stay
+        # untouched. Guest-only.
+        # Not a catalog wash.
+        # Not TAN_SIT. Not
+        # DARK_MATTE. Not Comb.
+        # Not Sheen. Not Pot. Not
+        # Disc. Not Mortar. Not
+        # Auger. Not Thrum.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
