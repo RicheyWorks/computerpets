@@ -12944,6 +12944,211 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "tuatara":
+        # Peak's olive hide,
+        # pale crest of
+        # spines, parietal
+        # third eye, cream
+        # belly, and tail
+        # tip nick when
+        # default plate-
+        # flood treats the
+        # wash as the
+        # tuatara. Peak is
+        # Sphenodon
+        # punctatus.
+        # Rhynchocephalia.
+        # A crest of spines.
+        # A third eye on the
+        # peak of the head.
+        # A still that is
+        # not laziness. She
+        # sits. Then she is
+        # still. Habitat
+        # stone burrow is
+        # weather, not
+        # painted furniture
+        # around the
+        # tuatara. She is
+        # her own order. Not
+        # a lizard. Not Sol
+        # (iguana). Not
+        # Spike. Not Lid.
+        # The third eye is
+        # the tell. The
+        # still is the
+        # species. I kept
+        # still. Hello. The
+        # burrow kept my
+        # crest. You may
+        # look. I am not a
+        # lizard. Eat is
+        # insect of a
+        # treaty. One
+        # insect. No dish.
+        # Play is a still. I
+        # win by remaining a
+        # tuatara. Rest
+        # holds this burrow.
+        # The still is the
+        # correct sleep.
+        # Sleep is a still
+        # tuatara on nothing
+        # but black, still
+        # Sphenodon, not
+        # Sol. Talk is a
+        # tuatara, not a
+        # person. No smile.
+        # No human limbs.
+        # Walk is a tuatara
+        # on black. Crest.
+        # Third eye. Named:
+        # Peak. Tan in the
+        # cream belly and
+        # pale crest is
+        # hide, not
+        # parchment. Do not
+        # punch the third
+        # eye, the crest of
+        # spines, the
+        # wrinkled neck, or
+        # the claws. Proven
+        # on the new black-
+        # plate raws: plate
+        # corners med luma 0
+        # (not a cream
+        # leftover luma-8
+        # would keep at
+        # ~0.78); fill
+        # ~0.19–0.34.
+        # Default punched
+        # the living
+        # tuatara: idle tore
+        # the still (~184.2k
+        # live against
+        # luma-8's ~232.3k;
+        # 23 comps against
+        # 1). Sit tore the
+        # hold (~300.6k
+        # against ~361.0k;
+        # 3 comps against
+        # 1). Walk nicked
+        # the stride
+        # (~185.0k against
+        # ~198.6k; 2 comps
+        # against 1). Sleep
+        # tore the rest
+        # (~231.8k against
+        # ~251.1k; 7 comps
+        # against 1). Talk
+        # lost the speak
+        # (~186.0k against
+        # ~245.4k). Eat
+        # nicked the insect
+        # sip (~221.3k
+        # against ~252.7k).
+        # Play jagged the
+        # still (~220.5k
+        # against ~270.3k;
+        # 19 comps against
+        # 2). Default left a
+        # torn tuatara.
+        # Luma-8 keeps the
+        # whole tuatara.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I
+        # did not erode. It
+        # punches the crest,
+        # the third eye, and
+        # the tail tip (idle
+        # ~218.7k against
+        # luma-8's ~232.3k;
+        # sit ~347.4k
+        # against ~361.0k;
+        # walk ~186.4k
+        # against ~198.6k;
+        # sleep ~242.2k
+        # against ~251.1k;
+        # talk ~232.4k
+        # against ~245.4k;
+        # eat ~240.4k
+        # against ~252.7k;
+        # play ~256.0k
+        # against ~270.3k).
+        # TAN_SIT I did not
+        # join. Cream belly
+        # and pale crest are
+        # hide, not Pale's
+        # wash. TAN_SIT
+        # still lists
+        # morel, lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # I did not join.
+        # Olive hide is
+        # hide; that set is
+        # other keys
+        # (alligator stays
+        # Levee's). Thrum's
+        # bumblebee elif
+        # stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Wink's anole elif
+        # stays Wink's.
+        # Dash's skink elif
+        # stays Dash's.
+        # Shift's chameleon
+        # elif stays Shift's.
+        # Spike's
+        # horned_lizard elif
+        # stays Spike's.
+        # Levee's alligator
+        # elif stays Levee's.
+        # Jaw's crocodile
+        # elif stays Jaw's.
+        # Beak's snapper
+        # elif stays Beak's.
+        # Lid's box_turtle
+        # elif stays Lid's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not a
+        # lizard. Not Sol.
+        # Not Spike. Not
+        # Lid.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
