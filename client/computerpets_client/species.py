@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred eighteen, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred nineteen, painted here.
 """
 
 from __future__ import annotations
@@ -290,6 +290,7 @@ GRID_KEYS: tuple[str, ...] = (
     "ion_dragon",
     "gauss_dragon",
     "relay_dragon",
+    "fuse_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6408,6 +6409,33 @@ RELAY = _kind(
     hungry=("A click dragon should not be this empty.", "A click would restore the node."),
 )
 
+FUSE = _kind(
+    key="fuse_dragon",
+    slug="fuse",
+    name="Fuse",
+    label="Cartridge Dragon",
+    treat="Fuse",
+    treat_shape="flake",
+    silhouette="fuse_dragon",
+    walk=67,
+    palette=Palette(
+        body=(88, 92, 48),
+        belly=(216, 200, 160),
+        ear=(56, 48, 28),
+        ear_inner=(232, 176, 64),
+        nose=(32, 24, 16),
+        ring=(240, 168, 56),
+        accent=(255, 196, 88),
+    ),
+    greet=("I fused. Hello.", "The night kept my cartridge.", "You may look. I am not Arc."),
+    ambient=("A single glass cartridge across the sternum. The filament is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not Spark. Spark keeps crackle-points at the snout, the claws, and the tail. I am not Ion. Ion keeps a pale haze on the outline. I am not Gauss. Gauss bands iron-filings on a lodestone hide. I am not Relay. Relay keeps a single live click-node at the nape. I am a cartridge dragon. The filament holds.", "Your papers are a cartridge I have already claimed.", "I sit. Then I fuse. Then I sit."),
+    feed=("Cartridge of a treaty.", "I will take this without leaving the filament.", "Accepted. The cartridge records it."),
+    treat_lines=("Cartridge of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the filament. Hello.",),
+    hungry=("A cartridge dragon should not be this empty.", "A filament would restore the cartridge."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6628,6 +6656,7 @@ _ALL: tuple[Species, ...] = (
     ION,
     GAUSS,
     RELAY,
+    FUSE,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}

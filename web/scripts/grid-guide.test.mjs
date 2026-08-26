@@ -25,18 +25,19 @@ const EXPECTED = [
   ["ion_dragon", "ion", "Draco caligo"],
   ["gauss_dragon", "gauss", "Draco limatura"],
   ["relay_dragon", "relay", "Draco nodus"],
+  ["fuse_dragon", "fuse", "Draco ampulla"],
 ];
 
 function quotedKeys(src) {
   return [...src.matchAll(/key:\s*"([a-z_]+)"/g)].map((m) => m[1]);
 }
 
-test("the grid lists the same eight guests as the roster", () => {
+test("the grid lists the same nine guests as the roster", () => {
   const rosterKeys = quotedKeys(gridSrc);
   const guideKeys = [...guideSrc.matchAll(/entry\(\s*"([a-z_]+)"/g)].map((m) => m[1]);
   assert.deepEqual(rosterKeys, EXPECTED.map(([key]) => key));
   assert.deepEqual(guideKeys, rosterKeys);
-  assert.equal(guideKeys.length, 8);
+  assert.equal(guideKeys.length, 9);
 });
 
 test("the guide entry has a tell, a mix-up, a lesson, and the latin name", () => {
@@ -46,7 +47,7 @@ test("the guide entry has a tell, a mix-up, a lesson, and the latin name", () =>
     assert.match(guideSrc, new RegExp(latin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   const entries = [...guideSrc.matchAll(/entry\(\s*"[a-z_]+"/g)];
-  assert.equal(entries.length, 8);
+  assert.equal(entries.length, 9);
   assert.match(guideSrc, /tell,/);
   assert.match(guideSrc, /mixup,/);
   assert.match(guideSrc, /lesson,/);
@@ -105,7 +106,7 @@ test("the important mix-up is actually taught", () => {
   assert.match(gauss, /filing/i);
   assert.match(gauss, /iron-filing/i);
   assert.doesNotMatch(gauss, /Wikipedia/i);
-  const relay = guideSrc.slice(guideSrc.indexOf('"relay_dragon"'));
+  const relay = guideSrc.slice(guideSrc.indexOf('"relay_dragon"'), guideSrc.indexOf('"fuse_dragon"'));
   assert.match(relay, /not Arc/i);
   assert.match(relay, /not Volt/i);
   assert.match(relay, /not Trace/i);
@@ -116,6 +117,18 @@ test("the important mix-up is actually taught", () => {
   assert.match(relay, /click/i);
   assert.match(relay, /click-node/i);
   assert.doesNotMatch(relay, /Wikipedia/i);
+  const fuse = guideSrc.slice(guideSrc.indexOf('"fuse_dragon"'));
+  assert.match(fuse, /not Arc/i);
+  assert.match(fuse, /not Volt/i);
+  assert.match(fuse, /not Trace/i);
+  assert.match(fuse, /not Flux/i);
+  assert.match(fuse, /not Spark/i);
+  assert.match(fuse, /not Ion/i);
+  assert.match(fuse, /not Gauss/i);
+  assert.match(fuse, /not Relay/i);
+  assert.match(fuse, /cartridge/i);
+  assert.match(fuse, /filament/i);
+  assert.doesNotMatch(fuse, /Wikipedia/i);
 });
 
 test("the grid page is a field guide, not a costume party", () => {
@@ -133,12 +146,13 @@ test("the grid page is a field guide, not a costume party", () => {
   assert.match(denSrc, /Ion is not Spark/);
   assert.match(denSrc, /Gauss is not Ion/);
   assert.match(denSrc, /Relay is not Gauss/);
+  assert.match(denSrc, /Fuse is not Relay/);
   assert.doesNotMatch(denSrc, /Wikipedia/i);
   assert.doesNotMatch(denSrc, /NFT/i);
   assert.doesNotMatch(denSrc, /cyber-scorpion/i);
 });
 
-test("the catalog and living roster include the eight grid keys", () => {
+test("the catalog and living roster include the nine grid keys", () => {
   assert.match(catalogSrc, /key:\s*"cyber_dragon"/);
   assert.match(catalogSrc, /displayName:\s*"Grid Dragon"/);
   assert.match(catalogSrc, /rarity:\s*"LEGENDARY"/);
@@ -156,6 +170,8 @@ test("the catalog and living roster include the eight grid keys", () => {
   assert.match(catalogSrc, /displayName:\s*"Filing Dragon"/);
   assert.match(catalogSrc, /key:\s*"relay_dragon"/);
   assert.match(catalogSrc, /displayName:\s*"Click Dragon"/);
+  assert.match(catalogSrc, /key:\s*"fuse_dragon"/);
+  assert.match(catalogSrc, /displayName:\s*"Cartridge Dragon"/);
   assert.match(rosterSrc, /GRID_ROSTER/);
   assert.doesNotMatch(gridSrc, /key:\s*"dragon"/);
   assert.doesNotMatch(gridSrc, /key:\s*"red_panda"/);
@@ -168,7 +184,7 @@ test("rooms.ts adds a grid room that still watches Arc", () => {
   assert.match(roomsSrc, /id:\s*"grid"/);
   assert.match(roomsSrc, /watchSlug:\s*"arc"/);
   assert.match(roomsSrc, /watchName:\s*"Arc"/);
-  assert.match(roomsSrc, /Eight of the grid\. Not Vesper\./);
+  assert.match(roomsSrc, /Nine of the grid\. Not Vesper\./);
   assert.match(roomsSrc, /isGrid/);
 });
 
@@ -184,6 +200,7 @@ test("the stone, hive, and walker elifs for other guests stay theirs", () => {
   assert.match(walkerSrc, /elif key == "spark_dragon":/);
   assert.match(walkerSrc, /elif key == "gauss_dragon":/);
   assert.match(walkerSrc, /elif key == "relay_dragon":/);
+  assert.match(walkerSrc, /elif key == "fuse_dragon":/);
   const tan = walkerSrc.slice(walkerSrc.indexOf("TAN_SIT ="), walkerSrc.indexOf("}", walkerSrc.indexOf("TAN_SIT =")) + 1);
   assert.doesNotMatch(tan, /cyber_dragon/);
   assert.doesNotMatch(tan, /volt_dragon/);
@@ -193,6 +210,7 @@ test("the stone, hive, and walker elifs for other guests stay theirs", () => {
   assert.doesNotMatch(tan, /ion_dragon/);
   assert.doesNotMatch(tan, /gauss_dragon/);
   assert.doesNotMatch(tan, /relay_dragon/);
+  assert.doesNotMatch(tan, /fuse_dragon/);
   const dark = walkerSrc.slice(walkerSrc.indexOf("DARK_MATTE ="), walkerSrc.indexOf("}", walkerSrc.indexOf("DARK_MATTE =")) + 1);
   assert.doesNotMatch(dark, /cyber_dragon/);
   assert.doesNotMatch(dark, /volt_dragon/);
@@ -202,6 +220,7 @@ test("the stone, hive, and walker elifs for other guests stay theirs", () => {
   assert.doesNotMatch(dark, /ion_dragon/);
   assert.doesNotMatch(dark, /gauss_dragon/);
   assert.doesNotMatch(dark, /relay_dragon/);
+  assert.doesNotMatch(dark, /fuse_dragon/);
   assert.match(tan, /morel/);
   assert.match(tan, /lions_mane/);
   assert.match(tan, /rosy_boa/);

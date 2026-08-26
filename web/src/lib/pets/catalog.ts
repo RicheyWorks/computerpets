@@ -229,6 +229,7 @@ export const SPECIES: Species[] = [
   { key: "ion_dragon", displayName: "Haze Dragon", rarity: "LEGENDARY", temperament: "Hazed", habitat: "Machine-night", blurb: "A pale ion haze clinging to the outline. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Vesper." },
   { key: "gauss_dragon", displayName: "Filing Dragon", rarity: "LEGENDARY", temperament: "Filed", habitat: "Machine-night", blurb: "Iron-filing field lines banding the hide. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Vesper." },
   { key: "relay_dragon", displayName: "Click Dragon", rarity: "LEGENDARY", temperament: "Clicked", habitat: "Machine-night", blurb: "A single live click-node at the nape. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Vesper." },
+  { key: "fuse_dragon", displayName: "Cartridge Dragon", rarity: "LEGENDARY", temperament: "Fused", habitat: "Machine-night", blurb: "A single glass cartridge fuse across the sternum. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Vesper." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

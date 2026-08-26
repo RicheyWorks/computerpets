@@ -35,6 +35,7 @@ export function weatherLine(key: string, w: Weather) {
     if (key === "ion_dragon") return "The haze is reserved. Heat is weather I already keep.";
     if (key === "gauss_dragon") return "The filings are reserved. Heat is weather I already keep.";
     if (key === "relay_dragon") return "The click is reserved. Heat is weather I already keep.";
+    if (key === "fuse_dragon") return "The filament is reserved. Heat is weather I already keep.";
     if (
       key === "ball_python" ||
       key === "corn_snake" ||
@@ -58,7 +59,7 @@ export function weatherIdle(key: string, w: Weather): "wander" | "sit" | "sleep"
     if (key === "goldfish" || key === "axolotl" || key === "penguin" || key === "mallard" || key === "canada_goose") return "wander";
     return "sit";
   }
-  if (w === "heat" && (key === "iguana" || key === "turtle" || key === "cat" || key === "dragon" || key === "cyber_dragon" || key === "volt_dragon" || key === "trace_dragon" || key === "flux_dragon" || key === "spark_dragon" || key === "ion_dragon" || key === "gauss_dragon" || key === "relay_dragon" || key.includes("snake") || key.includes("boa") || key.includes("python") || key === "hognose" || key === "garter")) return "sit";
+  if (w === "heat" && (key === "iguana" || key === "turtle" || key === "cat" || key === "dragon" || key === "cyber_dragon" || key === "volt_dragon" || key === "trace_dragon" || key === "flux_dragon" || key === "spark_dragon" || key === "ion_dragon" || key === "gauss_dragon" || key === "relay_dragon" || key === "fuse_dragon" || key.includes("snake") || key.includes("boa") || key.includes("python") || key === "hognose" || key === "garter")) return "sit";
   if (w === "wind" && (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix" || key === "crow" || key === "raven" || key === "red_tail" || key === "chickadee" || key === "hummingbird" || key === "pileated" || key === "robin")) return "wander";
   return null;
 }

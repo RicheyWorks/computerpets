@@ -3725,6 +3725,23 @@ window.PET_TRAITS = {
       call: ["I kept the click. Hello."],
       special: ["I kept the click. Hello."],
     },
+  },
+  fuse_dragon: {
+    size: 1.13, walk: 67, hop: 16, pitch: 0.46, rate: 0.2,
+    nocturnal: true, sleepStart: 8, sleepEnd: 17,
+    hungerH: 8, energyH: 11, hygieneH: 14, hardy: 0.82, social: 0.16, messy: 0.04,
+    clingy: false, perch: false, aquatic: false, wander: 0.2,
+    special: "fuse", diet: "flake",
+    extra: {
+      sick: ["The filament is thin."],
+      clean: ["The night is an honest cartridge."],
+      bath: ["Fuse. Then the filament."],
+      medicine: ["A cartridge of a cure."],
+      praise: ["I will keep that in the cartridge."],
+      hide: ["In the glow."],
+      call: ["I kept the filament. Hello."],
+      special: ["I kept the filament. Hello."],
+    },
   }
 };
 
