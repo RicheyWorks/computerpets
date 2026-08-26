@@ -211,6 +211,7 @@
   giant_clam: "Light of a treaty.",
   eagle_ray: "Clam of a treaty.",
   grouper: "Fish of a treaty.",
+  cyber_dragon: "Spark of a treaty.",
 };
 
   const CALL_LINE = {
@@ -424,6 +425,7 @@
   giant_clam: "I opened. Hello.",
   eagle_ray: "I soared. Hello.",
   grouper: "I sat the hole. Hello.",
+  cyber_dragon: "I kept the grid. Hello.",
 };
 
   const GIFT_LINE = {
@@ -637,6 +639,7 @@
   giant_clam: "A light I was finished opening for.",
   eagle_ray: "A clam I was finished soaring for.",
   grouper: "A fish I was finished hiding for.",
+  cyber_dragon: "A spark I was finished arcing for.",
 };
 
   /** Same night the desk already keeps. Overlay no longer invents a second clock. */
@@ -851,6 +854,7 @@
   giant_clam: [22, 6],
   eagle_ray: [20, 6],
   grouper: [20, 6],
+  cyber_dragon: [8, 17],
 };
 
   function restWindow(key) {

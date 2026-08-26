@@ -241,6 +241,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "giant_clam": (_a("open", "open", 1.8, 5, "sit"), _a("mantle", "sit_hold", 2.4, 4, "sit"), _a("still", "freeze", 2.2, 2)),
     "eagle_ray": (_a("soar", "pulse", 1.4, 5), _a("glide", "bob", 1.8, 3), _a("still", "freeze", 1.6, 2)),
     "grouper": (_a("hide", "sit_hold", 2.4, 5, "sit"), _a("gape", "gape", 1.0, 3), _a("still", "freeze", 1.8, 2)),
+    "cyber_dragon": (_a("arc", "pulse", 1.4, 5), _a("still", "sit_hold", 2.2, 3, "sit"), _a("watch", "freeze", 1.8, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

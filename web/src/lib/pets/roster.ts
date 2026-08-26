@@ -17,6 +17,7 @@ import { REEF_ROSTER } from "./reef";
 import { SHORE_ROSTER } from "./shore";
 import { STONE_ROSTER } from "./stone";
 import { WOOD_ROSTER } from "./wood";
+import { GRID_ROSTER } from "./grid";
 
 export type RosterLines = {
   greet: string[];
@@ -612,4 +613,5 @@ export const ROSTER: RosterDef[] = [
   ...MEADOW_ROSTER,
   ...CANOPY_ROSTER,
   ...REEF_ROSTER,
+  ...GRID_ROSTER,
 ];

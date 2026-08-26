@@ -35,12 +35,14 @@ _HEAT_SIT = frozenset(
         "turtle",
         "cat",
         "dragon",
+        "cyber_dragon",
         "hognose",
         "garter",
     }
 )
 _HEAT_SNAKE_MARKERS = ("snake", "boa", "python")
 _HEAT_RESERVED = frozenset({"iguana", "turtle", "dragon", "cat"})
+_HEAT_GLOW = frozenset({"cyber_dragon"})
 _HEAT_CLAUSE = frozenset(
     {
         "ball_python",
@@ -98,6 +100,8 @@ def weather_line(key: str, w: Weather) -> str | None:
     if w == "heat":
         if key in _HEAT_RESERVED:
             return "This patch of warmth is reserved."
+        if key in _HEAT_GLOW:
+            return "The glow is reserved. Heat is weather I already keep."
         if key in _HEAT_CLAUSE:
             return "Heat. I was waiting for this clause."
         return "The lamp is working overtime."

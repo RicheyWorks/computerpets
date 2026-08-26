@@ -3589,6 +3589,23 @@ window.PET_TRAITS = {
       call: ["I sat the hole. Hello."],
       special: ["I sat the hole. Hello."],
     },
+  },
+  cyber_dragon: {
+    size: 1.16, walk: 76, hop: 18, pitch: 0.48, rate: 0.2,
+    nocturnal: true, sleepStart: 8, sleepEnd: 17,
+    hungerH: 8, energyH: 11, hygieneH: 14, hardy: 0.82, social: 0.16, messy: 0.04,
+    clingy: false, perch: false, aquatic: false, wander: 0.22,
+    special: "arc", diet: "flake",
+    extra: {
+      sick: ["The grid is thin."],
+      clean: ["The night is an honest glow."],
+      bath: ["Spark. Then the grid."],
+      medicine: ["A spark of a cure."],
+      praise: ["I will keep that in a grid."],
+      hide: ["In the glow."],
+      call: ["I kept the grid. Hello."],
+      special: ["I kept the grid. Hello."],
+    },
   }
 };
 

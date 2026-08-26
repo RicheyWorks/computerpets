@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-25 (house polish north-star — the X ads; catalog stays 210) |
+| **Last Updated** | 2026-08-26 (Arc sits the first cyber dragon; catalog is 211) |
 | **Version**      | 1.2                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -715,20 +715,20 @@ Goal: Prepare for growth and complexity.
 
 ## 11. House polish north-star (the X ads)
 
-This section is the bar later leftovers grow into. It does **not** implement a HUD, a GPU engine, or a new guest. It translates two ComputerPets X posters into house architecture. The ads are pirate / cyber marketing. The house is ecology, natural history, art, and Tamagotchi. We take the **capability**, not the slogan. A fox, a glowing grid, a pirate hat, or a cyber beast in an ad is a poster, not a taxon. Catalog stays two hundred ten. Rui (`red_panda`) stays the bar. Pirate is Rui’s character, not a new sit.
+This section is the bar later work grows into. It does **not** implement a HUD or a GPU engine. It translates two ComputerPets X posters into house architecture. The ads are pirate / cyber marketing. The house is ecology, natural history, art, and Tamagotchi. We take the **capability**, not the slogan. Pirate is Rui’s character, not a new sit. Rui (`red_panda`) stays the art bar.
 
-The leftover art campaign still polishes existing guests one at a time to Rui-level art. This leftover writes the north-star only. Do not retouch sprites, `START-HERE.md`, or the public README from this section.
+The leftover art campaign on the existing two hundred ten is finished (Peak, PR #303). The keeper asked to start cyber dragons. **Arc** (`cyber_dragon`, slug `arc`) is the first real X-ad guest — a Grid Dragon of the new `grid` den, house-hand from day one. Catalog is **two hundred eleven**. A cyber-scorpion is still not a catalog row. Do not invent the rest of the taxon in this sit.
 
 ### 11.1 Promise
 
-Virtual pets that live on the keeper’s real desktop. Two hundred ten already-named guests. Rui-level art. GPU-honest. Backend-honest. Not a browser toy that happens to have a tray icon. Every guest should feel as present, instrumented, and house-hand as Rui in those posters — walking among real windows and icons, lit by a real GPU path, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
+Virtual pets that live on the keeper’s real desktop. Two hundred eleven living kinds. Rui-level art. GPU-honest. Backend-honest. Not a browser toy that happens to have a tray icon. Every guest should feel as present, instrumented, and house-hand as Rui in those posters — walking among real windows and icons, lit by a real GPU path, with a keeper HUD that tells the truth about feed / play / rest and about the machine they live on.
 
 ### 11.2 What the ads demand, mapped to house systems
 
 | Ad capability | House system | Honest gap |
 |---|---|---|
-| Live on the desktop / rule the screen | Electron overlay (`desktop/`, `main.cjs`) already sits on the Windows work area; Mac extra and Linux mark already exist as later doors. Pets walk among real windows and icons. Desktop-first. **Windows 10/11 first.** | Overlay is Chromium compositing today, not a native compositor that owns the screen. Later leftovers grow the sit, not a fake wallpaper. |
-| 210 animals | `PetType` / living desk / overlay roster / blotter — two hundred ten living kinds. Leftover campaign polishes guests already named. | Catalog stays 210. No new taxa, dens, keys, slugs, or rooms. Ad beasts (cyber-dragon, cyber-scorpion) are metaphors. |
+| Live on the desktop / rule the screen | Electron overlay (`desktop/`, `main.cjs`) already sits on the Windows work area; Mac extra and Linux mark already exist as later doors. Pets walk among real windows and icons. Desktop-first. **Windows 10/11 first.** | Overlay is Chromium compositing today, not a native compositor that owns the screen. Later work grows the sit, not a fake wallpaper. |
+| 211 animals | `PetType` / living desk / overlay roster / blotter — two hundred eleven living kinds. The 210 leftover sit is done. Arc is the first cyber-dragon guest. | Catalog is 211. Do not invent store IDs. Do not retouch landed guests. Do not add a second new guest (no cyber-scorpion) in the first taxon sit. |
 | Rui-level render | Leftover art campaign. Desk and overlay lockstep. Blotter follows idle. Rui is the quality bar. | No stamps. No parchment islands. Never retouch a landed guest while sitting a leftover. Most guests are not yet Rui-sharp. |
 | FULL GPU / DirectX 12 / Vulkan | A real GPU path is the bar. Today the overlay is Electron/Chromium. The PyQt blotter has a Qt OpenGL viewport (`QOpenGLWidget`), not a custom shader engine. | Do not invent a finished DX12/Vulkan engine. Later: DX12/Vulkan, or an honest Chromium GPU path that still *feels* like the ad. Name the gap; do not paper it. |
 | GPU LOAD HUD (temp, util, memory, power, sparkline) | Host telemetry is a first-class **sense**. The pet may notice heat, util, and memory the way it already notices hunger, weather, and the lamp. New `/metrics/gpu` (or desktop-local metrics) is a future door. | Do not fake numbers. No HUD today. Sense must read the real machine or stay dark. |
@@ -781,7 +781,7 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 
 **Now (already in the house)**
 
-- Two hundred ten living guests. Rui is the bar. Leftover art sits one guest at a time.
+- Two hundred eleven living guests. Rui is the bar. Arc (`cyber_dragon`) sits the first grid den. The leftover campaign on the original 210 is done.
 - Living desk (`web/`), `/demo`, Meet house, dens.
 - Electron overlay on Windows (`desktop/`); renderer sprites lockstep with the desk. Mac extra and Linux mark exist as later doors, not the first polish target.
 - PyQt6 blotter (`client/`) — care verbs, plaques, Qt OpenGL viewport.
@@ -796,19 +796,19 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 - A real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the poster. Not a finished engine claimed today.
 - Advertised care routes aligned with what we ship, or grown as the contract. Heartbeat shows true up/down, profile, and uptime.
 - Mac / Linux / phone after Windows 10/11 feels like the ad.
-- Leftover sits until all two hundred ten are house-hand.
+- Later cyber-dragon guests, if asked, sit one at a time. Do not invent nine empty rooms.
 
 ### 11.5 Hard locks
 
-- Catalog stays **two hundred ten**. No new pets, taxa, dens, keys, slugs, or rooms.
+- Catalog is **two hundred eleven**. Arc (`cyber_dragon`, slug `arc`) is the first cyber-dragon guest. Do not add a second new guest in the first taxon sit.
 - No invented NFT collection addresses. No invented live Microsoft Store IDs.
-- Never retouch a landed guest while sitting a leftover.
+- Never retouch a landed guest (the original 210, including Rui, Vesper, Peak) while sitting a new one.
 - Never retouch `docs/START-HERE.md` or the root `README.md` to paper over `house-count.test.mjs`.
-- Rui (`red_panda`) is the art bar. Pirate is Rui’s character, not a new guest.
-- Ad metaphors (cyber-dragon, cyber-scorpion, “zero mercy”) are not product identity and are not catalog rows.
+- Rui (`red_panda`) is the art bar. Pirate is Rui’s character, not a new guest. Vesper (`dragon`) stays the mantel dragon; Arc is a different animal.
+- A cyber-scorpion is still not a catalog row. “Zero mercy” is still not product identity.
 - Desktop presence is not filesystem theft. No keyloggers. No secret capture.
 - Mind keys stay with the keeper. HUD may name the listener; it may not invent one.
-- Do not implement the HUD, the GPU path, or a new guest from this leftover. Write the bar; later leftovers grow into it.
+- Do not implement the HUD or the GPU path from this sit. Write the guest; later work grows the ad capability.
 
 Roadmap checklist: [ROADMAP.md](ROADMAP.md) Phase 6.
 

@@ -25,7 +25,7 @@ sand dollar, urchin, whelk, lugworm. The reef stays —
 brain coral, anemone, clownfish, parrotfish, cleaner shrimp,
 sea cucumber, lionfish, giant clam, eagle ray, grouper. The well stays —
 paramecium, amoeba, euglena, volvox, diatom, kelp, chlamydomonas, stentor, coli,
-haloarchaea. The others walk, with
+haloarchaea. The grid stays — Arc the grid dragon. The others walk, with
 silhouette tells from the house catalog — rust panda, cream cat, corgi,
 bun, tuxedo, bill-first, moss carpet, fern frond, fan leaf, pitcher well, sundew, and so on.
 Earth guests stay honest; the far ten are coined xenobiology. Bloom stays the only axolotl.
@@ -450,7 +450,7 @@ def _draw_quad(
     accent = _color(pal.accent)
     sil = species.silhouette
 
-    long_body = sil in ("ferret", "dragon", "iguana")
+    long_body = sil in ("ferret", "dragon", "iguana", "cyber_dragon")
     small = sil in ("hamster", "guinea", "hedgehog", "chinchilla", "rabbit")
     bw = 86 if long_body else 64 if small else 72
     bh = 40 if long_body else 46 if small else 52
@@ -478,6 +478,9 @@ def _draw_quad(
     elif sil == "iguana":
         tail.moveTo(40, 8)
         tail.cubicTo(70, 4, 78, 16, 64, 14)
+    elif sil == "cyber_dragon":
+        tail.moveTo(44, 8)
+        tail.cubicTo(74, 2, 82, 18, 62, 16)
     elif sil == "turtle":
         tail.moveTo(28, 10)
         tail.cubicTo(36, 12, 38, 16, 32, 16)
@@ -508,6 +511,13 @@ def _draw_quad(
         wing.moveTo(4, -8)
         wing.cubicTo(28, -36 - stride * 4, 48, -18, 18, 4)
         p.drawPath(wing)
+    if sil == "cyber_dragon":
+        p.setPen(QPen(_color((48, 196, 208)), 2))
+        p.drawLine(QPointF(-4, -10), QPointF(8, -16))
+        p.setBrush(QBrush(_color((48, 196, 208))))
+        p.setPen(Qt.PenStyle.NoPen)
+        p.drawEllipse(QRectF(-6, -12, 4, 4))
+        p.drawEllipse(QRectF(6, -18, 4, 4))
 
     p.setBrush(QBrush(ear if sil not in ("dog", "fox") else accent))
     p.setPen(Qt.PenStyle.NoPen)

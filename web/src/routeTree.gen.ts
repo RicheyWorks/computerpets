@@ -16,6 +16,7 @@ import { Route as CellarRouteImport } from './routes/cellar'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as CornerRouteImport } from './routes/corner'
 import { Route as FarRouteImport } from './routes/far'
+import { Route as GridRouteImport } from './routes/grid'
 import { Route as GardenRouteImport } from './routes/garden'
 import { Route as HatchRouteImport } from './routes/hatch'
 import { Route as HiveRouteImport } from './routes/hive'
@@ -80,6 +81,11 @@ const CornerRoute = CornerRouteImport.update({
 const FarRoute = FarRouteImport.update({
   id: '/far',
   path: '/far',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GridRoute = GridRouteImport.update({
+  id: '/grid',
+  path: '/grid',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GardenRoute = GardenRouteImport.update({
@@ -212,6 +218,7 @@ export interface FileRoutesByFullPath {
   '/corner': typeof CornerRoute
   '/creek': typeof CreekRoute
   '/far': typeof FarRoute
+  '/grid': typeof GridRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
@@ -246,6 +253,7 @@ export interface FileRoutesByTo {
   '/corner': typeof CornerRoute
   '/creek': typeof CreekRoute
   '/far': typeof FarRoute
+  '/grid': typeof GridRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
@@ -281,6 +289,7 @@ export interface FileRoutesById {
   '/corner': typeof CornerRoute
   '/creek': typeof CreekRoute
   '/far': typeof FarRoute
+  '/grid': typeof GridRoute
   '/garden': typeof GardenRoute
   '/hatch': typeof HatchRoute
   '/hive': typeof HiveRoute
@@ -317,6 +326,7 @@ export interface FileRouteTypes {
     | '/corner'
     | '/creek'
     | '/far'
+    | '/grid'
     | '/garden'
     | '/hatch'
     | '/hive'
@@ -351,6 +361,7 @@ export interface FileRouteTypes {
     | '/corner'
     | '/creek'
     | '/far'
+    | '/grid'
     | '/garden'
     | '/hatch'
     | '/hive'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/corner'
     | '/creek'
     | '/far'
+    | '/grid'
     | '/garden'
     | '/hatch'
     | '/hive'
@@ -420,6 +432,7 @@ export interface RootRouteChildren {
   CornerRoute: typeof CornerRoute
   CreekRoute: typeof CreekRoute
   FarRoute: typeof FarRoute
+  GridRoute: typeof GridRoute
   GardenRoute: typeof GardenRoute
   HatchRoute: typeof HatchRoute
   HiveRoute: typeof HiveRoute
@@ -502,6 +515,13 @@ declare module '@tanstack/react-router' {
       path: '/far'
       fullPath: '/far'
       preLoaderRoute: typeof FarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/grid': {
+      id: '/grid'
+      path: '/grid'
+      fullPath: '/grid'
+      preLoaderRoute: typeof GridRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/garden': {
@@ -684,6 +704,7 @@ const rootRouteChildren: RootRouteChildren = {
   CornerRoute: CornerRoute,
   CreekRoute: CreekRoute,
   FarRoute: FarRoute,
+  GridRoute: GridRoute,
   GardenRoute: GardenRoute,
   HatchRoute: HatchRoute,
   HiveRoute: HiveRoute,

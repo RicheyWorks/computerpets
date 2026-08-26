@@ -211,6 +211,7 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   giant_clam: { shape: "flake", verb: "Light" },
   eagle_ray: { shape: "crumb", verb: "Clam" },
   grouper: { shape: "crumb", verb: "Fish" },
+  cyber_dragon: { shape: "flake", verb: "Spark" },
 };
 
 export function treatFor(key: string) {
@@ -428,4 +429,5 @@ export const GIFT_LINE: Record<string, string> = {
   giant_clam: "A light I was finished opening for.",
   eagle_ray: "A clam I was finished soaring for.",
   grouper: "A fish I was finished hiding for.",
+  cyber_dragon: "A spark I was finished arcing for.",
 };

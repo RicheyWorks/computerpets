@@ -41,9 +41,9 @@ function blankStats() {
 }
 
 test("every overlay guest keeps the same special verb the desk already keeps", () => {
-  assert.equal(Object.keys(Special.VERB).length, 210);
+  assert.equal(Object.keys(Special.VERB).length, 211);
   assert.deepEqual(Object.keys(Special.VERB).sort(), [...CATALOG].sort());
-  assert.equal(Object.keys(WEB_TRAITS).length, 210);
+  assert.equal(Object.keys(WEB_TRAITS).length, 211);
   for (const key of CATALOG) {
     assert.equal(Special.verbFor(key), WEB_TRAITS[key].verb, key);
     assert.equal(OVERLAY_SPECIAL[key], WEB_TRAITS[key].special, key);

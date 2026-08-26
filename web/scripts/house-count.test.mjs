@@ -66,56 +66,64 @@ const REEF = [
   "grouper",
 ];
 
-test("the catalog is two hundred ten, once each", () => {
-  assert.equal(KEYS.length, 210);
-  assert.equal(new Set(KEYS).size, 210);
+test("the catalog is two hundred eleven, once each", () => {
+  assert.equal(KEYS.length, 211);
+  assert.equal(new Set(KEYS).size, 211);
   for (const key of SHORE) assert.ok(KEYS.includes(key), key);
   for (const key of MEADOW) assert.ok(KEYS.includes(key), key);
   for (const key of CANOPY) assert.ok(KEYS.includes(key), key);
   for (const key of REEF) assert.ok(KEYS.includes(key), key);
+  assert.ok(KEYS.includes("cyber_dragon"), "cyber_dragon");
 });
 
-test("the house copy says two hundred ten, not a leftover count", () => {
-  assert.match(readmeSrc, /Two hundred ten guests walk the blotter/);
-  assert.match(readmeSrc, /Two hundred ten living kinds/);
+test("the house copy says two hundred eleven, not a leftover count", () => {
+  assert.match(readmeSrc, /There are \*\*211\*\* animals/);
+  assert.match(readmeSrc, /Two hundred eleven living kinds/);
   assert.doesNotMatch(readmeSrc, /One hundred thirty living kinds/);
   assert.doesNotMatch(readmeSrc, /One hundred seventy/);
   assert.doesNotMatch(readmeSrc, /One hundred sixty/);
   assert.doesNotMatch(readmeSrc, /One hundred ninety/);
-  assert.match(meetSrc, /Two hundred ten guests walk the blotter/);
-  assert.match(meetSrc, /Two hundred ten, on their shelves/);
+  assert.doesNotMatch(readmeSrc, /\*\*210\*\* animals/);
+  assert.match(meetSrc, /Two hundred eleven guests walk the blotter/);
+  assert.match(meetSrc, /Two hundred eleven, on their shelves/);
   assert.doesNotMatch(meetSrc, /One hundred seventy/);
   assert.doesNotMatch(meetSrc, /One hundred ninety/);
-  assert.match(rootSrc, /Two hundred ten living desk companions/);
+  assert.match(rootSrc, /Two hundred eleven living desk companions/);
   assert.match(rootSrc, /a shore of ten strand guests/);
   assert.match(rootSrc, /a reef of ten living-rock guests/);
   assert.match(rootSrc, /a meadow of ten grass-and-night insects/);
   assert.match(rootSrc, /a canopy of ten tree mammals/);
+  assert.match(rootSrc, /a grid of one grid dragon/);
   assert.doesNotMatch(rootSrc, /One hundred seventy/);
   assert.doesNotMatch(rootSrc, /One hundred ninety/);
-  assert.match(ogSrc, /Two hundred ten living demos/);
+  assert.match(ogSrc, /Two hundred eleven living demos/);
   assert.doesNotMatch(ogSrc, /One hundred twenty/);
   assert.doesNotMatch(ogSrc, /One hundred ninety/);
-  assert.match(webReadmeSrc, /\*\*210\*\* living kinds/);
+  assert.match(webReadmeSrc, /\*\*211\*\* living kinds/);
 });
 
-test("shore, meadow, canopy, and reef walk the same den door as the other rooms", () => {
+test("shore, meadow, canopy, reef, and grid walk the same den door as the other rooms", () => {
   assert.match(roomsSrc, /path: "\/shore"/);
   assert.match(roomsSrc, /path: "\/meadow"/);
   assert.match(roomsSrc, /path: "\/canopy"/);
   assert.match(roomsSrc, /path: "\/reef"/);
+  assert.match(roomsSrc, /path: "\/grid"/);
   assert.match(roomsSrc, /watchSlug: "wave"/);
   assert.match(roomsSrc, /watchSlug: "chirp"/);
   assert.match(roomsSrc, /watchSlug: "hang"/);
   assert.match(roomsSrc, /watchSlug: "ridge"/);
+  assert.match(roomsSrc, /watchSlug: "arc"/);
   assert.match(shellSrc, /to: "\/shore"/);
   assert.match(shellSrc, /to: "\/meadow"/);
   assert.match(shellSrc, /to: "\/canopy"/);
   assert.match(shellSrc, /to: "\/reef"/);
+  assert.match(shellSrc, /to: "\/grid"/);
   const header = shellSrc.slice(shellSrc.indexOf("<header"), shellSrc.indexOf("</header>"));
   assert.match(header, /shore \|\| reef \|\| meadow/);
   assert.match(header, /wood \|\| canopy/);
+  assert.match(header, /far \|\| grid \|\| study/);
   const bleed = shellSrc.slice(shellSrc.indexOf("{desk || demo"), shellSrc.indexOf("mx-auto max-w-6xl px-4 py-8"));
   assert.match(bleed, /shore \|\| reef \|\| meadow/);
   assert.match(bleed, /wood \|\| canopy/);
+  assert.match(bleed, /far \|\| grid \|\| study/);
 });

@@ -1,0 +1,102 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const gridSrc = readFileSync(join(root, "src/lib/pets/grid.ts"), "utf8");
+const guideSrc = readFileSync(join(root, "src/lib/pets/grid-guide.ts"), "utf8");
+const denSrc = readFileSync(join(root, "src/routes/grid.tsx"), "utf8");
+const catalogSrc = readFileSync(join(root, "src/lib/pets/catalog.ts"), "utf8");
+const rosterSrc = readFileSync(join(root, "src/lib/pets/roster.ts"), "utf8");
+const roomsSrc = readFileSync(join(root, "src/lib/pets/rooms.ts"), "utf8");
+const stoneSrc = readFileSync(join(root, "src/lib/pets/stone.ts"), "utf8");
+const beesSrc = readFileSync(join(root, "src/lib/pets/bees.ts"), "utf8");
+const hiveDenSrc = readFileSync(join(root, "src/components/desk/hive-den.tsx"), "utf8");
+const walkerSrc = readFileSync(join(root, "scripts/house_walkers.py"), "utf8");
+
+const EXPECTED = [["cyber_dragon", "arc", "Draco reticulum"]];
+
+function quotedKeys(src) {
+  return [...src.matchAll(/key:\s*"([a-z_]+)"/g)].map((m) => m[1]);
+}
+
+test("the grid lists the same one guest as the roster", () => {
+  const rosterKeys = quotedKeys(gridSrc);
+  const guideKeys = [...guideSrc.matchAll(/entry\(\s*"([a-z_]+)"/g)].map((m) => m[1]);
+  assert.deepEqual(rosterKeys, EXPECTED.map(([key]) => key));
+  assert.deepEqual(guideKeys, rosterKeys);
+  assert.equal(guideKeys.length, 1);
+});
+
+test("the guide entry has a tell, a mix-up, a lesson, and the latin name", () => {
+  for (const [key, slug, latin] of EXPECTED) {
+    assert.match(guideSrc, new RegExp(`entry\\(\\s*"${key}"`));
+    assert.match(gridSrc, new RegExp(`slug:\\s*"${slug}"`));
+    assert.match(guideSrc, new RegExp(latin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+  }
+  const entries = [...guideSrc.matchAll(/entry\(\s*"[a-z_]+"/g)];
+  assert.equal(entries.length, 1);
+  assert.match(guideSrc, /tell,/);
+  assert.match(guideSrc, /mixup,/);
+  assert.match(guideSrc, /lesson,/);
+  assert.match(guideSrc, /latin,/);
+});
+
+test("the important mix-up is actually taught", () => {
+  const arc = guideSrc.slice(guideSrc.indexOf('"cyber_dragon"'));
+  assert.match(arc, /not Vesper/i);
+  assert.match(arc, /mantel/);
+  assert.match(arc, /grid/i);
+  assert.doesNotMatch(arc, /Wikipedia/i);
+});
+
+test("the grid page is a field guide, not a costume party", () => {
+  assert.match(denSrc, /createFileRoute\("\/grid"\)/);
+  assert.match(denSrc, /GridDen/);
+  assert.match(denSrc, /SpeciesPlaque/);
+  assert.match(denSrc, /\/demo\/\$slug/);
+  assert.match(denSrc, /GRID_GUIDE\.map/);
+  assert.match(denSrc, /a grid dragon is not a mantel dragon/i);
+  assert.match(denSrc, /Arc is not Vesper/);
+  assert.doesNotMatch(denSrc, /Wikipedia/i);
+  assert.doesNotMatch(denSrc, /NFT/i);
+  assert.doesNotMatch(denSrc, /cyber-scorpion/i);
+});
+
+test("the catalog and living roster include the one grid key", () => {
+  assert.match(catalogSrc, /key:\s*"cyber_dragon"/);
+  assert.match(catalogSrc, /displayName:\s*"Grid Dragon"/);
+  assert.match(catalogSrc, /rarity:\s*"LEGENDARY"/);
+  assert.match(rosterSrc, /GRID_ROSTER/);
+  assert.doesNotMatch(gridSrc, /key:\s*"dragon"/);
+  assert.doesNotMatch(gridSrc, /key:\s*"red_panda"/);
+  assert.doesNotMatch(gridSrc, /name:\s*"Vesper"/);
+  assert.doesNotMatch(gridSrc, /name:\s*"Rui"/);
+  assert.doesNotMatch(guideSrc, /Wikipedia/i);
+});
+
+test("rooms.ts only adds a grid room for Arc", () => {
+  assert.match(roomsSrc, /id:\s*"grid"/);
+  assert.match(roomsSrc, /watchSlug:\s*"arc"/);
+  assert.match(roomsSrc, /watchName:\s*"Arc"/);
+  assert.match(roomsSrc, /One of the grid\. Not Vesper\./);
+  assert.match(roomsSrc, /isGrid/);
+});
+
+test("the stone, hive, and walker elifs for other guests stay theirs", () => {
+  assert.doesNotMatch(stoneSrc, /cyber_dragon|slug:\s*"arc"/);
+  assert.doesNotMatch(beesSrc, /cyber_dragon/);
+  assert.doesNotMatch(hiveDenSrc, /GridDen|GRID_KEYS|\/grid/);
+  assert.match(walkerSrc, /elif key == "tuatara":/);
+  assert.match(walkerSrc, /elif key == "cyber_dragon":/);
+  const tan = walkerSrc.slice(walkerSrc.indexOf("TAN_SIT ="), walkerSrc.indexOf("}", walkerSrc.indexOf("TAN_SIT =")) + 1);
+  assert.doesNotMatch(tan, /cyber_dragon/);
+  const dark = walkerSrc.slice(walkerSrc.indexOf("DARK_MATTE ="), walkerSrc.indexOf("}", walkerSrc.indexOf("DARK_MATTE =")) + 1);
+  assert.doesNotMatch(dark, /cyber_dragon/);
+  assert.match(tan, /morel/);
+  assert.match(tan, /lions_mane/);
+  assert.match(tan, /rosy_boa/);
+  assert.match(tan, /yeast/);
+});

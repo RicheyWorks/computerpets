@@ -1,0 +1,64 @@
+import { GRID_KEYS, GRID_ROSTER } from "./grid";
+
+export type GridGuide = {
+  key: string;
+  slug: string;
+  name: string;
+  species: string;
+  latin: string;
+  tell: string;
+  mixup: string;
+  lesson: string;
+  habitat: string;
+  temperament: string;
+};
+
+function entry(key: string, latin: string, tell: string, mixup: string, lesson: string): GridGuide {
+  const roster = GRID_ROSTER.find((s) => s.key === key);
+  if (!roster) throw new Error(`grid guide is missing roster for ${key}`);
+  return {
+    key,
+    slug: roster.slug,
+    name: roster.name,
+    species: roster.speciesLabel,
+    latin,
+    tell,
+    mixup,
+    lesson,
+    habitat: roster.habitat,
+    temperament: roster.temperament,
+  };
+}
+
+/** Field notes for the one grid guest. Literary, short, and meant to be learned on the blotter. */
+export const GRID_GUIDE: GridGuide[] = [
+  entry(
+    "cyber_dragon",
+    "Draco reticulum",
+    "A grid-lit hide, an electric arc between two nape nubs, a cool glow that is weather. Grid dragon. She sits. Then she arcs. The night is a glow she agreed to.",
+    "Not Vesper. Vesper is the house dragon of the mantel, a province, a proud sit, warm at the chest. Arc is Draco reticulum, and the grid is the tell. A grid dragon is not a mantel dragon. The arc is the species.",
+    "Grid dragon. A grid-lit hide. An electric arc. Not Vesper. Not a mantel dragon.",
+  ),
+];
+
+const BY_KEY = Object.fromEntries(GRID_GUIDE.map((g) => [g.key, g]));
+const BY_SLUG = Object.fromEntries(GRID_GUIDE.map((g) => [g.slug, g]));
+
+export function gridGuideFor(key: string | undefined | null) {
+  if (!key) return null;
+  return BY_KEY[key] ?? null;
+}
+
+export function gridGuideBySlug(slug: string | undefined | null) {
+  if (!slug) return null;
+  return BY_SLUG[slug] ?? null;
+}
+
+export function gridGuideKeys() {
+  return GRID_GUIDE.map((g) => g.key);
+}
+
+/** The roster and the guide must name the same one. */
+export function gridGuideComplete() {
+  return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
+}
