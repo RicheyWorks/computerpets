@@ -9082,6 +9082,130 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=1000)
         return sat
+    elif key == "ball_python":
+        # Nori's chocolate coils, dark
+        # crown, and the dark of a
+        # quiet eye nick when default
+        # plate-flood treats hide as
+        # plate. She is a ball python.
+        # Python regius. A short thick
+        # bun with opinions. Wild-type
+        # chocolate and tan alien-head
+        # blotches. She makes a bun of
+        # herself and guards the
+        # inkwell. I sat the whole
+        # snake. Hello. I am not a
+        # corn snake. Saffron is the
+        # orange thread. I am not a
+        # kingsnake. Bandit wears
+        # bands. I am not a boa. Lula
+        # holds. I am not a green tree
+        # python. Jade sits like
+        # jewelry. I ball. That is the
+        # name. Habitat is weather,
+        # not a painted inkwell, not a
+        # hide box, not a tank, not
+        # moss, not a dish, not an
+        # egg, not a parchment island.
+        # House food is one small
+        # bite, then gone. A sit is
+        # still mostly bun. A walk is
+        # an honest crawl. Sleep is a
+        # comma. Talk is a whole
+        # snake, a tongue. Eat is one
+        # quiet mouse of a treaty.
+        # Play is a lunge of an inch.
+        # I win by becoming smaller.
+        # Named: Nori. Dark hide is
+        # hide, not a hole. Do not
+        # punch the bun. Proven on
+        # the new black-plate raws:
+        # plate corners med luma 0
+        # (not a cream leftover luma-8
+        # would keep at ~0.78); fill
+        # ~0.14–0.44. Default shredded
+        # the living python: eat left
+        # seven pieces (7 comps
+        # against luma-8's 1; live
+        # ~57.6k against ~113.3k; dark
+        # ~6.6k against ~28.1k). Talk
+        # left six scraps (6 comps
+        # against 1; ~67.8k against
+        # ~121.3k; dark ~6.6k against
+        # ~35.1k). Idle left five
+        # parts (5 comps against 1;
+        # ~96.3k against ~118.1k; dark
+        # ~14.9k against ~27.3k). Sit
+        # split the bun (5 comps
+        # against 1; ~80.6k against
+        # ~126.6k; dark ~9.1k against
+        # ~30.6k). Sleep punched the
+        # chocolate (1 comp; ~90.9k
+        # against ~136.6k; dark ~6.8k
+        # against ~33.1k). Play nicked
+        # the lunge (~38.7k against
+        # ~55.9k; dark ~4.9k against
+        # ~13.2k). Walk nicked the
+        # crawl (~30.1k against
+        # ~33.2k). Eat's seven pieces
+        # are the tell. Luma-8 keeps
+        # the whole bun. knock_tiny_
+        # crumbs (64) keeps idle
+        # specks off (idle left ~180
+        # crumbs, largest 6). MinFilter
+        # (5) is the leftover default
+        # path; I did not erode. It
+        # split talk (2 comps) and
+        # shaved sit. TAN_SIT I did
+        # not join. Chocolate hide is
+        # not Pale's wash. TAN_SIT
+        # still lists morel, lions_
+        # mane, rosy_boa, and yeast.
+        # DARK_MATTE already lists
+        # crow, raven, pileated,
+        # widow, vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that membership
+        # stays. I did not add ball_
+        # python. A bun's chocolate
+        # is hide, and that path still
+        # shredded talk. Ember's
+        # phoenix elif stays Ember's.
+        # Vesper's dragon elif stays
+        # Vesper's. Sol's iguana elif
+        # stays Sol's. Keel's toucan
+        # elif stays Keel's. Bloom's
+        # axolotl elif stays Bloom's.
+        # Floss's chinchilla elif
+        # stays Floss's. Burr's
+        # hedgehog elif stays Burr's.
+        # Wick's ferret elif stays
+        # Wick's. Quill's parrot elif
+        # stays Quill's. Rue's fox
+        # elif stays Rue's. Coin's
+        # goldfish elif stays Coin's.
+        # Echo did not add a budgie
+        # elif. Peck did not add a
+        # penguin elif. Ink's turtle
+        # elif stays Ink's. Whee's
+        # guinea_pig elif stays
+        # Whee's. Thimble's rabbit
+        # elif stays Thimble's. Pip's
+        # dog elif stays Pip's.
+        # Miso's cat elif stays
+        # Miso's. Clip did not add a
+        # hamster elif. Existing
+        # luma-8 elifs stay theirs.
+        # Guest-only. Not a catalog
+        # wash. Not TAN_SIT. Not
+        # DARK_MATTE. Not Saffron.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
