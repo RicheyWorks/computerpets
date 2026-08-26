@@ -515,6 +515,7 @@ const TREAT_SHAPE = {
   grouper: "crumb",
   cyber_dragon: "flake",
   volt_dragon: "flake",
+  trace_dragon: "flake",
 };
 
 function placeMark(kindName, x, hops = 0, meal) {

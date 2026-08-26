@@ -322,6 +322,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   grouper: [A("hide", "sit_hold", 2.4, 5, "sit"), A("gape", "gape", 1.0, 3), A("still", "freeze", 1.8, 2)],
   cyber_dragon: [A("arc", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
   volt_dragon: [A("current", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
+  trace_dragon: [A("path", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

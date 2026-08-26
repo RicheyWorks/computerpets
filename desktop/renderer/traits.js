@@ -3623,6 +3623,23 @@ window.PET_TRAITS = {
       call: ["I kept the coil. Hello."],
       special: ["I kept the coil. Hello."],
     },
+  },
+  trace_dragon: {
+    size: 1.14, walk: 68, hop: 16, pitch: 0.46, rate: 0.2,
+    nocturnal: true, sleepStart: 8, sleepEnd: 17,
+    hungerH: 8, energyH: 11, hygieneH: 14, hardy: 0.82, social: 0.16, messy: 0.04,
+    clingy: false, perch: false, aquatic: false, wander: 0.2,
+    special: "path", diet: "flake",
+    extra: {
+      sick: ["The path is thin."],
+      clean: ["The night is an honest path."],
+      bath: ["Path. Then the board."],
+      medicine: ["A path of a cure."],
+      praise: ["I will keep that in a path."],
+      hide: ["In the glow."],
+      call: ["I kept the path. Hello."],
+      special: ["I kept the path. Hello."],
+    },
   }
 };
 

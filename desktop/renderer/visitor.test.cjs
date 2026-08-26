@@ -27,13 +27,13 @@ test("the overlay keeps the house visit clock", () => {
   assert.equal(V.visitPhaseFromWait(7500), "in");
   assert.equal(V.visitPhaseFromWait(9100), "talk");
   assert.equal(V.visitPhaseFromEnter(800, true), "gone");
-  assert.equal(CATALOG.length, 212);
+  assert.equal(CATALOG.length, 213);
 });
 
 test("the overlay caller is today's guest, not the living sit", () => {
   assert.deepEqual(V.CATALOG_KEYS, CATALOG);
-  assert.equal(V.todaysVisitor("red_panda", null, new Date(2026, 7, 17)), "chinchilla");
-  assert.equal(V.todaysVisitor("ball_python", null, new Date(2026, 7, 17)), "axolotl");
+  assert.equal(V.todaysVisitor("red_panda", null, new Date(2026, 7, 17)), "tick");
+  assert.equal(V.todaysVisitor("ball_python", null, new Date(2026, 7, 17)), "deer");
   assert.notEqual(V.todaysVisitor("red_panda", null, new Date(2026, 7, 17)), "red_panda");
   assert.equal(V.visitLine("axolotl"), "I grew a little more present. Then less.");
   assert.equal(V.visitLine("chickadee"), "I deeed. Then I left the cup.");

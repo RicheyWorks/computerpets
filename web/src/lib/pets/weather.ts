@@ -29,6 +29,7 @@ export function weatherLine(key: string, w: Weather) {
     if (key === "iguana" || key === "turtle" || key === "dragon" || key === "cat") return "This patch of warmth is reserved.";
     if (key === "cyber_dragon") return "The glow is reserved. Heat is weather I already keep.";
     if (key === "volt_dragon") return "The coil is reserved. Heat is weather I already keep.";
+    if (key === "trace_dragon") return "The path is reserved. Heat is weather I already keep.";
     if (
       key === "ball_python" ||
       key === "corn_snake" ||
@@ -52,7 +53,7 @@ export function weatherIdle(key: string, w: Weather): "wander" | "sit" | "sleep"
     if (key === "goldfish" || key === "axolotl" || key === "penguin" || key === "mallard" || key === "canada_goose") return "wander";
     return "sit";
   }
-  if (w === "heat" && (key === "iguana" || key === "turtle" || key === "cat" || key === "dragon" || key === "cyber_dragon" || key === "volt_dragon" || key.includes("snake") || key.includes("boa") || key.includes("python") || key === "hognose" || key === "garter")) return "sit";
+  if (w === "heat" && (key === "iguana" || key === "turtle" || key === "cat" || key === "dragon" || key === "cyber_dragon" || key === "volt_dragon" || key === "trace_dragon" || key.includes("snake") || key.includes("boa") || key.includes("python") || key === "hognose" || key === "garter")) return "sit";
   if (w === "wind" && (key === "budgie" || key === "parrot" || key === "toucan" || key === "phoenix" || key === "crow" || key === "raven" || key === "red_tail" || key === "chickadee" || key === "hummingbird" || key === "pileated" || key === "robin")) return "wander";
   return null;
 }
