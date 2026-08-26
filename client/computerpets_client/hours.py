@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-two hundred nineteen REST windows, same return lines. Do not invent rest hours or copy.
+two hundred twenty REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -237,6 +237,7 @@ REST: dict[str, tuple[int, int]] = {
     "gauss_dragon": (8, 17),
     "relay_dragon": (8, 17),
     "fuse_dragon": (8, 17),
+    "ground_dragon": (8, 17),
 }
 
 FALLBACK_REST: tuple[int, int] = (22, 7)
@@ -463,6 +464,7 @@ HIDE_LINE: dict[str, str] = {
     "gauss_dragon": "In the glow.",
     "relay_dragon": "In the glow.",
     "fuse_dragon": "In the glow.",
+    "ground_dragon": "In the glow.",
 }
 
 CALL_LINE: dict[str, str] = {
@@ -685,6 +687,7 @@ CALL_LINE: dict[str, str] = {
     "gauss_dragon": "I kept the filings. Hello.",
     "relay_dragon": "I kept the click. Hello.",
     "fuse_dragon": "I kept the filament. Hello.",
+    "ground_dragon": "I kept the strap. Hello.",
 }
 
 SNACK_LINE: dict[str, str] = {
@@ -907,6 +910,7 @@ SNACK_LINE: dict[str, str] = {
     "gauss_dragon": "Filing of a treaty.",
     "relay_dragon": "Click of a treaty.",
     "fuse_dragon": "Cartridge of a treaty.",
+    "ground_dragon": "Earth of a treaty.",
 }
 
 

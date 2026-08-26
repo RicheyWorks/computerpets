@@ -25,26 +25,27 @@ function todaysVisitor(hostKey, year, month, day) {
   return others[Math.abs(civilDay(year, month, day) + hostKey.length) % others.length];
 }
 
-test("today's visitor walks two hundred nineteen minus the host", () => {
-  assert.equal(KEYS.length, 219);
+test("today's visitor walks two hundred twenty minus the host", () => {
+  assert.equal(KEYS.length, 220);
   assert.match(visitorSrc, /LIVING_KINDS\.filter\(\(k\) => k\.key !== hostKey\)/);
   assert.match(visitorSrc, /Math\.abs\(day \+ hostKey\.length\) % others\.length/);
   assert.match(rosterSrc, /\.\.\.SHORE_ROSTER/);
   assert.match(rosterSrc, /\.\.\.MEADOW_ROSTER/);
   assert.match(rosterSrc, /\.\.\.REEF_ROSTER/);
-  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "brain_coral");
+  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "chlamydomonas");
   assert.notEqual(todaysVisitor("red_panda", 2026, 8, 17), "red_panda");
 });
 
 test("the house pins match the blotter after the grid", () => {
   // Same civil days as client/tests/test_visitor.py. A leftover that adds a den must move both.
-  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "brain_coral");
-  assert.equal(todaysVisitor("ball_python", 2026, 8, 17), "clownfish");
-  assert.equal(todaysVisitor("red_panda", 2026, 1, 1), "sloth");
-  assert.equal(todaysVisitor("red_panda", 2024, 6, 9), "stick");
-  assert.match(pySrc, /todays_visitor\("red_panda", now\)\.key == "brain_coral"/);
-  assert.match(pySrc, /todays_visitor\("ball_python", now\)\.key == "clownfish"/);
-  assert.match(pySrc, /Ridge may call/);
+  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "chlamydomonas");
+  assert.equal(todaysVisitor("ball_python", 2026, 8, 17), "coli");
+  assert.equal(todaysVisitor("red_panda", 2026, 1, 1), "mussel");
+  assert.equal(todaysVisitor("red_panda", 2024, 6, 9), "swallowtail");
+  assert.match(pySrc, /todays_visitor\("red_panda", now\)\.key == "chlamydomonas"/);
+  assert.match(pySrc, /todays_visitor\("ball_python", now\)\.key == "coli"/);
+  assert.match(pySrc, /Spin may call/);
+  assert.doesNotMatch(pySrc, /Ridge may call/);
   assert.doesNotMatch(pySrc, /Cone may call/);
   assert.doesNotMatch(pySrc, /Sepia may call/);
   assert.doesNotMatch(pySrc, /Floss may call/);

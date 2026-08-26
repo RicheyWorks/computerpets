@@ -32,8 +32,8 @@ def fail(msg: str) -> None:
 
 def main() -> None:
     keys = sorted(p.name for p in SPRITES.iterdir() if p.is_dir())
-    if len(keys) != 219:
-        fail(f"catalog sprites {len(keys)}, want 219")
+    if len(keys) != 220:
+        fail(f"catalog sprites {len(keys)}, want 220")
     desk_keys = sorted(p.name for p in DESK.iterdir() if p.is_dir())
     if set(desk_keys) != set(keys):
         fail(f"overlay sprites mismatch: {sorted(set(keys) ^ set(desk_keys))[:12]}")
@@ -129,7 +129,7 @@ def main() -> None:
         fail(f"walk/sleep still share idle on {shared}")
     if islands:
         fail(f"parchment island still on {islands[:20]} ({len(islands)})")
-    print(f"ok 219 walkers, no plate, no thin stamp, rui crumbs gone, owned poses own, no parchment island")
+    print(f"ok 220 walkers, no plate, no thin stamp, rui crumbs gone, owned poses own, no parchment island")
 
 
 if __name__ == "__main__":

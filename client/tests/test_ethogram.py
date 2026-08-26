@@ -267,3 +267,4 @@ def test_only_scratching_mammals_scratch():
     assert "filing" in [a["name"] for a in acts_for("gauss_dragon")]
     assert "relay" in [a["name"] for a in acts_for("relay_dragon")]
     assert "fuse" in [a["name"] for a in acts_for("fuse_dragon")]
+    assert "earth" in [a["name"] for a in acts_for("ground_dragon")]

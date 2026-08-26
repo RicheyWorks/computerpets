@@ -250,6 +250,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "gauss_dragon": (_a("filing", "pulse", 1.4, 5), _a("still", "sit_hold", 2.2, 3, "sit"), _a("watch", "freeze", 1.8, 2)),
     "relay_dragon": (_a("relay", "pulse", 1.4, 5), _a("still", "sit_hold", 2.2, 3, "sit"), _a("watch", "freeze", 1.8, 2)),
     "fuse_dragon": (_a("fuse", "pulse", 1.4, 5), _a("still", "sit_hold", 2.2, 3, "sit"), _a("watch", "freeze", 1.8, 2)),
+    "ground_dragon": (_a("earth", "pulse", 1.4, 5), _a("still", "sit_hold", 2.2, 3, "sit"), _a("watch", "freeze", 1.8, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

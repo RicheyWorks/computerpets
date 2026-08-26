@@ -336,6 +336,7 @@ const GRID = new Set([
   "gauss_dragon",
   "relay_dragon",
   "fuse_dragon",
+  "ground_dragon",
 ]);
 const MEADOW = new Set([
   "field_cricket",

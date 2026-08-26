@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred nineteen, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred twenty, painted here.
 """
 
 from __future__ import annotations
@@ -291,6 +291,7 @@ GRID_KEYS: tuple[str, ...] = (
     "gauss_dragon",
     "relay_dragon",
     "fuse_dragon",
+    "ground_dragon",
 )
 
 CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
@@ -6436,6 +6437,33 @@ FUSE = _kind(
     hungry=("A cartridge dragon should not be this empty.", "A filament would restore the cartridge."),
 )
 
+GROUND = _kind(
+    key="ground_dragon",
+    slug="ground",
+    name="Ground",
+    label="Earth Dragon",
+    treat="Earth",
+    treat_shape="flake",
+    silhouette="ground_dragon",
+    walk=65,
+    palette=Palette(
+        body=(72, 76, 80),
+        belly=(196, 168, 128),
+        ear=(48, 40, 32),
+        ear_inner=(184, 120, 64),
+        nose=(28, 24, 20),
+        ring=(200, 132, 64),
+        accent=(212, 148, 80),
+    ),
+    greet=("I earthed. Hello.", "The night kept my strap.", "You may look. I am not Arc."),
+    ambient=("A braided copper strap from a chest lug down the left foreleg. The earth is the tell. I keep the night.", "I am not Arc. Arc jumps a dorsal arc and wears a hex hide. I am not Volt. Volt keeps coils on the ribs. I am not Trace. Trace runs one gold path. I am not Flux. Flux shimmers a heat-field. I am not Spark. Spark keeps crackle-points at the snout, the claws, and the tail. I am not Ion. Ion keeps a pale haze on the outline. I am not Gauss. Gauss bands iron-filings on a lodestone hide. I am not Relay. Relay keeps a single live click-node at the nape. I am not Fuse. Fuse keeps a glass cartridge across the sternum. I am an earth dragon. The strap holds.", "Your papers are a strap I have already claimed.", "I sit. Then I earth. Then I sit."),
+    feed=("Earth of a treaty.", "I will take this without leaving the strap.", "Accepted. The strap records it."),
+    treat_lines=("Earth of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the strap. Hello.",),
+    hungry=("An earth dragon should not be this empty.", "A strap would restore the earth."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6657,6 +6685,7 @@ _ALL: tuple[Species, ...] = (
     GAUSS,
     RELAY,
     FUSE,
+    GROUND,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
