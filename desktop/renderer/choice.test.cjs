@@ -29,7 +29,7 @@ test("a tap on the overlay guest is a choice, not a talk", () => {
   assert.equal(C.guestPick("bath"), null);
 
   assert.match(htmlSrc, /choice\.js/);
-  assert.match(htmlSrc, /id="choice"/);
+  assert.match(htmlSrc, /id="choice"[^>]*data-hit/);
   assert.match(cssSrc, /#choice\.show/);
   assert.match(petSrc, /openChoice/);
   assert.match(petSrc, /pickChoice/);

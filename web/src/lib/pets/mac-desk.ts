@@ -4,6 +4,21 @@ export const TAP_PX = 8;
 export const TAP_PX_MAC = 12;
 export const TAP_PX_LINUX = 10;
 
+/** Rui and the grid ten. The tray can pick them without burying them in two hundred twenty. */
+export const DESK_PICKS = [
+  "red_panda",
+  "cyber_dragon",
+  "volt_dragon",
+  "trace_dragon",
+  "flux_dragon",
+  "spark_dragon",
+  "ion_dragon",
+  "gauss_dragon",
+  "relay_dragon",
+  "fuse_dragon",
+  "ground_dragon",
+] as const;
+
 export const CARE_VERBS = [
   "Feed",
   "Treat",
@@ -28,6 +43,10 @@ export function isLinux(platform: string | undefined | null): boolean {
   return platform === "linux" || /^Linux/i.test(platform || "");
 }
 
+export function isWindows(platform: string | undefined | null): boolean {
+  return platform === "win32" || /^Win/i.test(platform || "");
+}
+
 /** A click on the Mac extra or the Linux mark opens care. A click on the Windows tray toggles the window. */
 export function extraClick(platform: string): "menu" | "toggle" {
   return isMac(platform) || isLinux(platform) ? "menu" : "toggle";
@@ -40,12 +59,12 @@ export function tapPxFor(platform: string | undefined | null): number {
   return TAP_PX;
 }
 
-/** First click on a Mac or a Linux desk is a sit, not a focus. */
+/** First click on Windows, Mac, or Linux is a sit, not a focus steal. */
 export function firstClick(platform: string): "accept" | "focus" {
-  return isMac(platform) || isLinux(platform) ? "accept" : "focus";
+  return isMac(platform) || isLinux(platform) || isWindows(platform) ? "accept" : "focus";
 }
 
-/** They walk every Space. They walk every workspace. */
+/** They walk every Space. They walk every workspace. Windows virtual desktops stay a later door. */
 export function spacesWalk(platform: string): boolean {
   return isMac(platform) || isLinux(platform);
 }
@@ -58,9 +77,9 @@ export function appMenu(platform: string): boolean {
   return isMac(platform);
 }
 
-/** The Mac and Linux floors follow the desk under the cursor. Windows stays the primary blotter. */
+/** The Windows, Mac, and Linux floors follow the desk under the cursor. */
 export function followCursorDisplay(platform: string): boolean {
-  return isMac(platform) || isLinux(platform);
+  return isMac(platform) || isLinux(platform) || isWindows(platform);
 }
 
 export type OverlayChrome = {
@@ -92,16 +111,28 @@ export function overlayChrome(platform: string): OverlayChrome {
   }
   return {
     type: null,
-    acceptFirstMouse: false,
+    acceptFirstMouse: true,
     hiddenInMissionControl: false,
     hideDock: false,
-    focusable: true,
+    focusable: false,
   };
 }
 
-/** Mutter and KWin do not forward a hover through an ignored floor. The mark watches the cursor. */
+/**
+ * DWM layered glass, Mutter, and KWin do not reliably forward a hover through
+ * an ignored floor. The tray watches the cursor. This is still Chromium
+ * compositing, not a DirectX 12 or Vulkan engine.
+ */
 export function hitForward(platform: string): boolean {
-  return isLinux(platform);
+  return isLinux(platform) || isWindows(platform);
+}
+
+export function deskPicks(): string[] {
+  return [...DESK_PICKS];
+}
+
+export function isDeskPick(key: string | null | undefined): boolean {
+  return !!key && (DESK_PICKS as readonly string[]).includes(key);
 }
 
 export function cursorHits(

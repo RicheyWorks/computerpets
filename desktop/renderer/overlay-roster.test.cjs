@@ -98,6 +98,23 @@ test("the overlay roster is the same two hundred twenty as the catalog", () => {
   assert.deepEqual(keys.sort(), [...CATALOG].sort());
 });
 
+test("the tray pins Rui and the grid ten so they are not buried", () => {
+  const D = require("./desk.js");
+  const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
+  const byKey = Object.fromEntries(roster.map((r) => [r.key, r]));
+  assert.equal(D.deskPicks().length, 11);
+  assert.equal(D.deskPicks()[0], "red_panda");
+  assert.equal(byKey.red_panda.slug, "rui");
+  for (const key of D.deskPicks()) {
+    assert.ok(byKey[key], key);
+    assert.equal(D.isDeskPick(key), true);
+  }
+  assert.equal(byKey.spark_dragon.slug, "crackle");
+  assert.match(mainSrc, /On the desk/);
+  assert.match(mainSrc, /deskPickMenu/);
+  assert.equal(roster.length, 220);
+});
+
 test("the overlay can pick the grid ten, and Spark keeps slug crackle", () => {
   const byKey = Object.fromEntries(roster.map((r) => [r.key, r]));
   const slugs = {
