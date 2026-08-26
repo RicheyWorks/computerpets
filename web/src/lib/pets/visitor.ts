@@ -251,6 +251,7 @@ const LINES: Record<string, string> = {
   spark_dragon: "I crackled. Then I left the night.",
   ion_dragon: "I hazed. Then I left the night.",
   gauss_dragon: "I filed. Then I left the night.",
+  relay_dragon: "I closed. Then I left the night.",
 };
 
 export function visitLine(guestKey: string) {

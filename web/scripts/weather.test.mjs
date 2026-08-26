@@ -75,6 +75,7 @@ test("Drake swims the rain. Soot walks the wind. The snakes sit the heat.", () =
   assert.equal(W.weatherIdle("spark_dragon", "heat"), "sit");
   assert.equal(W.weatherIdle("ion_dragon", "heat"), "sit");
   assert.equal(W.weatherIdle("gauss_dragon", "heat"), "sit");
+  assert.equal(W.weatherIdle("relay_dragon", "heat"), "sit");
   assert.equal(Overlay.weatherIdle("ball_python", "heat"), "sit");
   assert.equal(Overlay.weatherIdle("phoenix", "wind"), "wander");
   assert.equal(Overlay.weatherIdle("cyber_dragon", "heat"), "sit");
@@ -84,6 +85,7 @@ test("Drake swims the rain. Soot walks the wind. The snakes sit the heat.", () =
   assert.equal(Overlay.weatherIdle("spark_dragon", "heat"), "sit");
   assert.equal(Overlay.weatherIdle("ion_dragon", "heat"), "sit");
   assert.equal(Overlay.weatherIdle("gauss_dragon", "heat"), "sit");
+  assert.equal(Overlay.weatherIdle("relay_dragon", "heat"), "sit");
 });
 
 test("the weather line is the same house copy", () => {
@@ -103,6 +105,7 @@ test("the weather line is the same house copy", () => {
   assert.equal(W.weatherLine("spark_dragon", "heat"), "The crackle is reserved. Heat is weather I already keep.");
   assert.equal(W.weatherLine("ion_dragon", "heat"), "The haze is reserved. Heat is weather I already keep.");
   assert.equal(W.weatherLine("gauss_dragon", "heat"), "The filings are reserved. Heat is weather I already keep.");
+  assert.equal(W.weatherLine("relay_dragon", "heat"), "The click is reserved. Heat is weather I already keep.");
   assert.equal(W.weatherLine("red_panda", "clear"), null);
   assert.equal(Overlay.weatherLine("mallard", "rain"), W.weatherLine("mallard", "rain"));
   assert.equal(Overlay.weatherLine("pileated", "wind"), W.weatherLine("pileated", "wind"));
@@ -114,10 +117,11 @@ test("the weather line is the same house copy", () => {
   assert.equal(Overlay.weatherLine("spark_dragon", "heat"), W.weatherLine("spark_dragon", "heat"));
   assert.equal(Overlay.weatherLine("ion_dragon", "heat"), W.weatherLine("ion_dragon", "heat"));
   assert.equal(Overlay.weatherLine("gauss_dragon", "heat"), W.weatherLine("gauss_dragon", "heat"));
+  assert.equal(Overlay.weatherLine("relay_dragon", "heat"), W.weatherLine("relay_dragon", "heat"));
 });
 
 test("desk, /demo, and /live sit the same sky; overlay and blotter keep it", () => {
-  assert.equal(KEYS.length, 217);
+  assert.equal(KEYS.length, 218);
   assert.equal(ROOM_COUNT, 20);
   assert.match(roomSrc, /weatherIdle\(kind\.key, weatherOf\(\)\)/);
   assert.match(roomSrc, /weatherLine\(kind\.key, weatherOf\(\)\)/);
