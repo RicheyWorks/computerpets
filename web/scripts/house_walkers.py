@@ -8368,6 +8368,121 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=300)
         return sat
+    elif key == "chinchilla":
+        # Floss's dark eye, dark
+        # ear rims, and the dark of
+        # a salt-and-pepper cloud
+        # nick when default plate-
+        # flood treats hide as plate.
+        # She is a long-tailed
+        # chinchilla. Chinchilla
+        # lanigera. A cloud with
+        # whiskers. The densest fur
+        # in the house — sixty hairs
+        # to a follicle. Soft enough
+        # to refuse water. She bathes
+        # in volcanic dust, not in
+        # the bowl. The Andes sent
+        # her. She likes the desk
+        # clean. I am not a rabbit.
+        # Thimble thumps; I roll in
+        # ash-fine dust because water
+        # ruins the coat. I am not a
+        # squirrel, not a hamster in
+        # formal wear. I am Andean,
+        # nocturnal, and particular.
+        # Fetch the dust, not the
+        # tub. Named: Floss.
+        # Chinchilla. I dust-bathe.
+        # Do not offer the tub.
+        # Habitat is weather (the
+        # dust), not a painted bowl,
+        # not a tub, not a cage, not
+        # a hay rack, not a parchment
+        # island. House food is one
+        # bite, then gone. A sit
+        # loafs. A walk hops. Sleep
+        # is a curl, eyes quiet. Talk
+        # is a kinder chatter. Eat is
+        # one morsel. Play is a dust-
+        # bath roll. Dark hide is
+        # hide, not a hole. Do not
+        # punch the eye or the
+        # midsection. Proven on the
+        # new black-plate raws: plate
+        # corners med luma 0 (not a
+        # cream leftover luma-8 would
+        # keep at ~0.78); fill
+        # ~0.28–0.46. Default nicked
+        # the living chinchilla: talk
+        # punched the midsection and
+        # detached the tail (2 comps
+        # against luma-8's 1; animal
+        # ~107.9k against ~115.5k).
+        # Eat left crumbs (2 against
+        # 1; ~107.9k against
+        # ~113.0k). Sleep kept more
+        # of the curl on luma-8
+        # (~126.5k against ~118.0k).
+        # Play held. Idle and sit
+        # nearly held; sit default
+        # kept more fringe. Talk's
+        # punched cloud is the tell.
+        # Luma-8 keeps the whole
+        # cloud. knock_tiny_crumbs(300)
+        # keeps specks off. TAN_SIT
+        # left crumbs: talk 8 comps,
+        # play 7 comps; sit lost hide
+        # (~110.2k against luma-8's
+        # ~122.2k). I did not join.
+        # Salt-and-pepper hide is not
+        # Pale's wash. TAN_SIT still
+        # lists morel, lions_mane,
+        # and yeast. DARK_MATTE
+        # already lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that
+        # membership stays. I did
+        # not add chinchilla. A
+        # chinchilla is not charcoal.
+        # Burr's hedgehog elif stays
+        # Burr's. Wick's ferret elif
+        # stays Wick's. Quill's
+        # parrot elif stays Quill's.
+        # Rue's fox elif stays Rue's.
+        # Coin's goldfish elif stays
+        # Coin's. Echo did not add a
+        # budgie elif. Peck did not
+        # add a penguin elif. Ink's
+        # turtle elif stays Ink's.
+        # Whee's guinea_pig elif
+        # stays Whee's. Thimble's
+        # rabbit elif stays
+        # Thimble's. Pip's dog elif
+        # stays Pip's. Miso's cat
+        # elif stays Miso's. Clip
+        # did not add a hamster
+        # elif. Existing luma-8
+        # elifs stay theirs. Guest-
+        # only. Not a catalog wash.
+        # Not TAN_SIT. Not
+        # DARK_MATTE. Not Bloom.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=300)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=300)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
