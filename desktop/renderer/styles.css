@@ -311,11 +311,11 @@ body {
   position: absolute;
   left: 0;
   bottom: 178px;
-  width: 168px;
-  padding: 6px 8px 8px;
+  width: 196px;
+  padding: 8px 10px 10px;
   border-radius: 10px;
   border: 1px solid #2a2621;
-  background: rgb(12 11 10 / 0.78);
+  background: rgb(12 11 10 / 0.86);
   color: #f2ece3;
   pointer-events: none;
   opacity: 0;
@@ -324,6 +324,84 @@ body {
 
 #hud.show {
   opacity: 1;
+}
+
+#hud-kicker {
+  margin: 0;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #9a9288;
+}
+
+#hud-care {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 6px;
+}
+
+#hud-care button {
+  pointer-events: auto;
+  font: inherit;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: #f2ece3;
+  background: none;
+  border: 1px solid #3d3831;
+  border-radius: 8px;
+  padding: 6px 8px;
+  min-height: 32px;
+  cursor: pointer;
+}
+
+.keeper-meters {
+  margin: 6px 0 0;
+}
+
+.keeper-meters > div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 8px;
+  margin-top: 4px;
+}
+
+.keeper-meters dt {
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #9a9288;
+}
+
+.keeper-meters dd {
+  margin: 0;
+  font-size: 9px;
+  color: #9a9288;
+}
+
+.keeper-meters i {
+  grid-column: 1 / -1;
+  display: block;
+  height: 3px;
+  border-radius: 99px;
+  background: #3d3831;
+  position: relative;
+  overflow: hidden;
+}
+
+.keeper-meters i::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--w, 50%);
+  background: #d8cfc0;
+}
+
+#hud-heartbeat,
+#hud-truth {
+  margin: 2px 0 0;
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  color: #9a9288;
 }
 
 #choice {

@@ -63,8 +63,15 @@ public class SecurityConfig {
         admin.setAllowedHeaders(List.of("X-Admin-Key", "Content-Type"));
         admin.setMaxAge(3600L);
 
+        CorsConfiguration heartbeat = new CorsConfiguration();
+        heartbeat.setAllowedOriginPatterns(List.of("*"));
+        heartbeat.setAllowedMethods(List.of("GET", "OPTIONS"));
+        heartbeat.setAllowedHeaders(List.of("Content-Type"));
+        heartbeat.setMaxAge(3600L);
+
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/admin/**", admin);
+        source.registerCorsConfiguration("/api/public/**", heartbeat);
         return source;
     }
 }

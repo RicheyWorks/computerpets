@@ -72,6 +72,8 @@ const REEF = [
   "giant_clam",
   "eagle_ray",
   "grouper",
+];
+const GRID = [
   "cyber_dragon",
   "volt_dragon",
   "trace_dragon",
@@ -79,6 +81,9 @@ const REEF = [
   "spark_dragon",
   "ion_dragon",
   "gauss_dragon",
+  "relay_dragon",
+  "fuse_dragon",
+  "ground_dragon",
 ];
 
 function objectKeys(src, marker) {
@@ -93,6 +98,28 @@ test("the overlay roster is the same two hundred twenty as the catalog", () => {
   assert.deepEqual(keys.sort(), [...CATALOG].sort());
 });
 
+test("the overlay can pick the grid ten, and Spark keeps slug crackle", () => {
+  const byKey = Object.fromEntries(roster.map((r) => [r.key, r]));
+  const slugs = {
+    cyber_dragon: "arc",
+    volt_dragon: "volt",
+    trace_dragon: "trace",
+    flux_dragon: "flux",
+    spark_dragon: "crackle",
+    ion_dragon: "ion",
+    gauss_dragon: "gauss",
+    relay_dragon: "relay",
+    fuse_dragon: "fuse",
+    ground_dragon: "ground",
+  };
+  for (const [key, slug] of Object.entries(slugs)) {
+    assert.ok(byKey[key], key);
+    assert.equal(byKey[key].slug, slug, key);
+  }
+  assert.equal(roster.filter((r) => r.slug === "spark").length, 1);
+  assert.notEqual(byKey.spark_dragon.slug, "spark");
+});
+
 test("every overlay guest keeps their own life traits, not Rui's clock", () => {
   const traitKeys = objectKeys(traitsSrc, "window.PET_TRAITS = {");
   for (const key of CATALOG) {
@@ -104,8 +131,8 @@ test("every overlay guest keeps their own life traits, not Rui's clock", () => {
   assert.doesNotMatch(traitsSrc.slice(traitsSrc.indexOf("fiddler_crab:")), /special: "ribbon"/);
 });
 
-test("shore, meadow, canopy, and reef keep their own idle acts on the overlay", () => {
-  for (const key of [...SHORE, ...MEADOW, ...CANOPY, ...REEF]) {
+test("shore, meadow, canopy, reef, and grid keep their own idle acts on the overlay", () => {
+  for (const key of [...SHORE, ...MEADOW, ...CANOPY, ...REEF, ...GRID]) {
     const names = E.actsFor(key).map((a) => a.name);
     assert.ok(names.length > 0, key);
     assert.equal(names.includes("scratch"), false, key);
@@ -119,10 +146,10 @@ test("shore, meadow, canopy, and reef keep their own idle acts on the overlay", 
   assert.ok(E.actsFor("grouper").some((a) => a.name === "hide"));
 });
 
-test("shore, meadow, canopy, and reef keep a living special on the overlay, not an idle", () => {
+test("shore, meadow, canopy, reef, and grid keep a living special on the overlay, not an idle", () => {
   const specialsSrc = readFileSync(join(__dirname, "specials.js"), "utf8");
   const Special = require("./specials.js");
-  for (const key of [...SHORE, ...MEADOW, ...CANOPY, ...REEF]) {
+  for (const key of [...SHORE, ...MEADOW, ...CANOPY, ...REEF, ...GRID]) {
     const match = traitsSrc.match(new RegExp(`^\\s{2}${key}: \\{[\\s\\S]*?special: "([a-z]+)"`, "m"));
     assert.ok(match, key);
     assert.notEqual(Special.commandFor(match[1]), "idle", key);
@@ -134,10 +161,10 @@ test("shore, meadow, canopy, and reef keep a living special on the overlay, not 
   assert.match(specialsSrc, /Ridge sits/);
 });
 
-test("treat shapes and visit lines cover bees, shore, meadow, canopy, and reef", () => {
+test("treat shapes and visit lines cover bees, shore, meadow, canopy, reef, and grid", () => {
   const treatKeys = objectKeys(petSrc, "const TREAT_SHAPE = {");
   const visitKeys = objectKeys(visitorSrc, "const VISIT_LINE = {");
-  for (const key of [...BEES, ...SHORE, ...MEADOW, ...CANOPY, ...REEF]) {
+  for (const key of [...BEES, ...SHORE, ...MEADOW, ...CANOPY, ...REEF, ...GRID]) {
     assert.ok(treatKeys.includes(key), `treat ${key}`);
     assert.ok(visitKeys.includes(key), `visit ${key}`);
   }
