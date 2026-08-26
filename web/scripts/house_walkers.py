@@ -8253,6 +8253,121 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if sat.getbbox():
             sat = knock_tiny_crumbs(sat, limit=300)
         return sat
+    elif key == "hedgehog":
+        # Burr's dark quill bases,
+        # dark eye, wet nose, and
+        # dark paws nick when default
+        # plate-flood treats hide as
+        # plate. She is an African
+        # pygmy hedgehog. Atelerix
+        # albiventris. A walking pin-
+        # cushion that chooses. The
+        # quills are hollow hairs,
+        # banded, and they stay put —
+        # she does not throw them.
+        # When the room is too much,
+        # she becomes a ball with a
+        # face inside. I am not a
+        # porcupine. Porcupines are
+        # rodents with long barbed
+        # quills they can leave in
+        # you. I am not a European
+        # garden hog. I am not Spine.
+        # I am not a rumor with a
+        # tail. Habitat is weather
+        # (the knit basket), not a
+        # painted nest, not a
+        # mealworm dish, not a log,
+        # not a parchment island.
+        # House food is one insect,
+        # then gone. A sit loafs
+        # with the face still
+        # visible. A walk trundles.
+        # Sleep is a ball with a
+        # face inside, eyes quiet.
+        # Talk is a kinder sniff.
+        # Eat is one insect. Play
+        # is an uncurl. Named: Burr.
+        # Hedgehog. Quills that stay.
+        # Dark hide is hide, not a
+        # hole. Do not punch the
+        # eye or the quill line.
+        # Proven on the new black-
+        # plate raws: plate corners
+        # med luma 0 (not a cream
+        # leftover luma-8 would keep
+        # at ~0.78); fill ~0.31–0.50.
+        # Default nicked the living
+        # hedgehog: walk ate the face,
+        # the ear, and the quill
+        # outline (19 comps against
+        # luma-8's 2; animal ~71.2k
+        # against ~74.9k; dark hide
+        # around the snout left as
+        # holes). Sleep kept more of
+        # the ball and still split
+        # (3 comps against 1). Eat
+        # left crumbs (3 against 1).
+        # Play nicked the uncurl (7
+        # against 5). Idle and sit
+        # nearly held. Talk default
+        # was cleaner of specks;
+        # walk's punched face is the
+        # tell. Luma-8 keeps the
+        # whole pin-cushion.
+        # knock_tiny_crumbs(300)
+        # keeps specks off. TAN_SIT
+        # left hide: talk ~105.8k
+        # against luma-8's ~134.2k,
+        # play ~111.9k against
+        # ~124.7k. I did not join.
+        # Cream face is not Pale's
+        # wash. TAN_SIT still lists
+        # morel, lions_mane, and
+        # yeast. DARK_MATTE already
+        # lists crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede, field_cricket,
+        # earwig, click_beetle, and
+        # robber_fly; that
+        # membership stays. I did
+        # not add hedgehog. A
+        # hedgehog is not charcoal.
+        # Wick's ferret elif stays
+        # Wick's. Quill's parrot
+        # elif stays Quill's. Rue's
+        # fox elif stays Rue's.
+        # Coin's goldfish elif stays
+        # Coin's. Echo did not add a
+        # budgie elif. Peck did not
+        # add a penguin elif. Ink's
+        # turtle elif stays Ink's.
+        # Whee's guinea_pig elif
+        # stays Whee's. Thimble's
+        # rabbit elif stays
+        # Thimble's. Pip's dog elif
+        # stays Pip's. Miso's cat
+        # elif stays Miso's. Clip
+        # did not add a hamster
+        # elif. Existing luma-8
+        # elifs stay theirs. Guest-
+        # only. Not a catalog wash.
+        # Not TAN_SIT. Not
+        # DARK_MATTE. Not Floss.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            r, g, b, a = knocked.split()
+            a = a.filter(ImageFilter.MinFilter(5))
+            knocked = Image.merge("RGBA", (r, g, b, a))
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=300)
+        sat = fit_like_rui(knocked, side=0.90)
+        if sat.getbbox():
+            sat = knock_tiny_crumbs(sat, limit=300)
+        return sat
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
