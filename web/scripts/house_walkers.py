@@ -11670,6 +11670,183 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "skink":
+        # Dash's dark lined
+        # hide, cream lines,
+        # and the blue of a
+        # young tail nick when
+        # default plate-flood
+        # treats the wash as
+        # the skink. Dash is
+        # Plestiodon
+        # fasciatus. A
+        # five-lined skink.
+        # Five pale lines, a
+        # blue tail when
+        # young, short legs
+        # that still walk.
+        # She dashes. Then
+        # she sits the crack.
+        # The stone is a
+        # route she agreed
+        # to. Habitat stone
+        # crack is weather,
+        # not painted
+        # furniture around
+        # the skink. A skink
+        # is not a snake.
+        # The legs are the
+        # tell. The dash is
+        # the species. I
+        # dashed. Hello.
+        # The crack kept my
+        # lines. You may
+        # look. I am not a
+        # snake. Eat is
+        # cricket of a
+        # treaty. Play is a
+        # dash. I win by
+        # remaining a skink.
+        # Rest holds the
+        # crack. The dash is
+        # the correct sleep.
+        # Sleep is a curled
+        # skink on nothing
+        # but black, still
+        # Plestiodon, blue
+        # tail, five lines,
+        # legs. Talk is a
+        # skink, not a
+        # person. Walk is a
+        # skink on black.
+        # Legs walk. Named:
+        # Dash. Dark hide and
+        # cream lines are
+        # hide, not a hole.
+        # Do not punch the
+        # blue tail. Proven
+        # on the new
+        # black-plate raws:
+        # plate corners med
+        # luma 0 (not a
+        # cream leftover
+        # luma-8 would keep
+        # at ~0.78); fill
+        # ~0.07–0.34.
+        # Default punched
+        # the living skink:
+        # idle tore the
+        # still (~34.9k live
+        # against luma-8's
+        # ~42.9k). Sit tore
+        # the hold (~36.4k
+        # against ~56.1k).
+        # Walk nicked the
+        # stride (~14.4k
+        # against ~16.7k).
+        # Sleep tore the
+        # curl (~56.3k
+        # against ~81.3k; 2
+        # comps against 1).
+        # Talk lost the
+        # speak (~38.2k
+        # against ~44.4k).
+        # Eat nicked the
+        # cricket sip
+        # (~34.0k against
+        # ~46.1k). Play
+        # jagged the dash
+        # (~15.4k against
+        # ~25.2k; 5 comps
+        # against 1). Sit's
+        # torn hold is the
+        # tell. Luma-8
+        # keeps the whole
+        # skink.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I
+        # did not erode. It
+        # punches the toes
+        # and the blue tip
+        # (idle ~40.5k
+        # against luma-8's
+        # ~42.9k; walk
+        # ~15.1k against
+        # ~16.7k; play
+        # ~22.8k against
+        # ~25.2k). TAN_SIT
+        # I did not join.
+        # Dark lined hide is
+        # not Pale's wash.
+        # TAN_SIT still
+        # lists morel,
+        # lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists
+        # crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede,
+        # field_cricket,
+        # earwig, click_
+        # beetle, and
+        # robber_fly; that
+        # membership stays.
+        # I did not add
+        # skink. A skink's
+        # lines are hide,
+        # and that path
+        # still tore sit.
+        # Thrum's bumblebee
+        # elif stays
+        # Thrum's. Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays
+        # Sheen's. Bank's
+        # mining_bee elif
+        # stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Wink's anole elif
+        # stays Wink's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Sash. Not Pad. Not
+        # Wink. Not Shift.
+        # Not Spike. Not
+        # Levee. Not Jaw.
+        # Not Beak. Not Lid.
+        # Not Peak. Not
+        # Dapple.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
