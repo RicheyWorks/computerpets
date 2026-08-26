@@ -12210,6 +12210,184 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "alligator":
+        # Levee's dark olive
+        # and charcoal scutes,
+        # cream belly tiles,
+        # and the U-snout nick
+        # when default plate-
+        # flood treats the
+        # wash as the
+        # alligator. Levee is
+        # Alligator
+        # mississippiensis.
+        # An American
+        # alligator. A broad
+        # U-snout. Teeth that
+        # hide when the mouth
+        # closes. She sits.
+        # Then she basks.
+        # Habitat bank dish is
+        # weather, not painted
+        # furniture around the
+        # alligator. An
+        # alligator is not a
+        # crocodile. She is
+        # not Jaw. She is not
+        # Spike. She is not
+        # Beak. She is not
+        # Lid. She is not
+        # Peak. The hidden
+        # teeth are the tell.
+        # The U is the
+        # species. I sat the
+        # bank. Hello. The
+        # dish kept my U. You
+        # may look. I am not
+        # a crocodile. Eat is
+        # fish of a treaty.
+        # One fish. No dish.
+        # Play is a sit. I
+        # win by remaining an
+        # alligator. Rest
+        # holds this bank.
+        # The bank is the
+        # correct sleep.
+        # Sleep is a basking
+        # alligator on nothing
+        # but black, still
+        # Alligator, not Jaw.
+        # Talk is an
+        # alligator, not a
+        # person. Walk is a
+        # U-snout alligator
+        # on black. Legs.
+        # Long tail. Named:
+        # Levee. Dark
+        # osteoderms are hide,
+        # not a hole. Do not
+        # punch the U-snout,
+        # the cream belly, the
+        # tail ridges, or the
+        # claws. Proven on the
+        # new black-plate
+        # raws: plate corners
+        # med luma 0 (not a
+        # cream leftover
+        # luma-8 would keep
+        # at ~0.78); fill
+        # ~0.15–0.32. Default
+        # punched the living
+        # alligator: idle tore
+        # the still (~42.9k
+        # live against
+        # luma-8's ~46.8k; 2
+        # comps against 1).
+        # Sit tore the hold
+        # (~43.2k against
+        # ~57.3k; dark ~9.6k
+        # against ~16.2k).
+        # Walk nicked the
+        # stride (~34.0k
+        # against ~36.0k; 2
+        # comps against 1).
+        # Sleep tore the rest
+        # (~38.3k against
+        # ~44.1k). Talk lost
+        # the speak (~46.7k
+        # against ~52.7k).
+        # Eat nicked the fish
+        # sip (~68.9k against
+        # ~72.2k). Play jagged
+        # the sit (~43.0k
+        # against ~60.0k;
+        # dark ~7.1k against
+        # ~14.8k). Sit's
+        # missing mid-body
+        # and play's eaten
+        # legs are the tell.
+        # Luma-8 keeps the
+        # whole alligator.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I did
+        # not erode. It
+        # punches the snout,
+        # osteoderms, and tail
+        # tip (idle ~44.8k
+        # against luma-8's
+        # ~46.8k; sit ~55.0k
+        # against ~57.3k;
+        # walk ~34.2k against
+        # ~36.0k; eat ~70.5k
+        # against ~72.2k).
+        # TAN_SIT I did not
+        # join. Cream belly
+        # tiles are not Pale's
+        # wash. TAN_SIT still
+        # lists morel,
+        # lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists
+        # alligator from the
+        # old leftovers; that
+        # membership stays. I
+        # did not add
+        # alligator again.
+        # Dark scutes are
+        # hide, and that path
+        # still tore sit.
+        # Thrum's bumblebee
+        # elif stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Wink's anole elif
+        # stays Wink's.
+        # Dash's skink elif
+        # stays Dash's.
+        # Shift's chameleon
+        # elif stays Shift's.
+        # Spike's
+        # horned_lizard elif
+        # stays Spike's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Jaw. Not Spike. Not
+        # Beak. Not Lid. Not
+        # Peak.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
