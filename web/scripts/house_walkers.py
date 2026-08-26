@@ -11187,6 +11187,160 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "honeycomb":
+        # Wax's cream cappings,
+        # amber stores, and the
+        # dark of an open hex
+        # cell nick when default
+        # plate-flood treats the
+        # nest as wash. Wax is
+        # the nest. Honeycomb.
+        # Hex cells. Brood in
+        # some. Stores in others.
+        # The nest as a place.
+        # Many bees, one nest.
+        # I sat. That was hello.
+        # The dish kept the line.
+        # You may look. I am the
+        # nest. I do not walk. I
+        # hold. Comb walks. Keep
+        # lays. Hum hums. Eat is
+        # nectar of a store,
+        # taken into a cell. I
+        # do not bite. Play: I
+        # sat. That was the
+        # game. I win by
+        # remaining a nest.
+        # Rest holds the dish.
+        # The comb is the
+        # correct sleep. foodTalk:
+        # Nectar, stored. I do
+        # not have a mouth. I am
+        # not Comb. Comb is a
+        # bee. I am not Keep.
+        # Keep is the queen. I
+        # am not Hum. Hum is a
+        # drone. I am not Thrum.
+        # I am not Auger. I am
+        # not Mortar. I am not
+        # Disc. I am not Pot. I
+        # am not Sheen. I am not
+        # Bank. Habitat wax dish
+        # is weather, not painted
+        # furniture around the
+        # comb. Sleep is a quiet
+        # sealed nest on nothing
+        # but black. Talk is
+        # still the nest. Walk
+        # is still the nest
+        # holding — a worker may
+        # cross it. The nest
+        # itself does not grow
+        # honey legs. Named:
+        # Wax. Cream wax is hide,
+        # not a hole. Do not
+        # punch the nest. Proven
+        # on the new black-plate
+        # raws: plate corners
+        # med luma 0 (not a
+        # cream leftover luma-8
+        # would keep at ~0.78);
+        # fill ~0.45–0.66. Default
+        # punched the living
+        # nest: sleep tore the
+        # sealed hold (~125.1k
+        # live against luma-8's
+        # ~127.6k; dark ~0.2k
+        # against ~1.0k; 5 comps
+        # against 1). Eat nicked
+        # the store (~121.5k
+        # against ~122.7k; dark
+        # ~96 against ~271).
+        # Idle default kept
+        # close (~152.2k against
+        # ~152.8k) and still
+        # lost dark (~0.5k
+        # against ~0.8k). Sit
+        # default kept close
+        # (~126.6k against
+        # ~127.2k). Walk
+        # default kept close
+        # (~115.0k against
+        # ~115.6k). Talk
+        # default kept close
+        # (~121.3k against
+        # ~122.1k). Play
+        # default kept close
+        # (~117.0k against
+        # ~117.6k). Sleep's
+        # torn hold is the
+        # tell. Luma-8 keeps
+        # the whole nest.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I did
+        # not erode. It
+        # punches the nest.
+        # TAN_SIT I did not
+        # join. Cream cappings
+        # are not Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists crow,
+        # raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede,
+        # field_cricket,
+        # earwig, click_
+        # beetle, and robber_
+        # fly; that
+        # membership stays.
+        # I did not add
+        # honeycomb. A nest's
+        # dark cell is hide,
+        # and that path still
+        # tore sleep. Thrum's
+        # bumblebee elif stays
+        # Thrum's. Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Comb. Not Keep. Not
+        # Hum. Not Bank. Not
+        # Sheen. Not Pot. Not
+        # Disc. Not Mortar.
+        # Not Auger. Not
+        # Thrum.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
