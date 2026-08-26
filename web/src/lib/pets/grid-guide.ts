@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the five grid guests. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the six grid guests. Literary, short, and meant to be learned on the blotter. */
 export const GRID_GUIDE: GridGuide[] = [
   entry(
     "cyber_dragon",
@@ -67,6 +67,13 @@ export const GRID_GUIDE: GridGuide[] = [
     "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not the firefly. That Spark is Photinus, a beetle who flashes a dusk. This Spark is Draco scintilla, and the crackle is the tell. A crack dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, and not a firefly. The points are the species. Not Vesper. Vesper is a mantel dragon.",
     "Crack dragon. Live crackle-points at snout, claws, and tail. Not Arc. Not Volt. Not Trace. Not Flux. Not Vesper.",
   ),
+  entry(
+    "ion_dragon",
+    "Draco caligo",
+    "A pale ion haze clinging to the outline, thin charged air that stays on the hide, a cool glow that is weather. Haze dragon. Ion sits. Then Ion hazes. The night is an outline Ion agreed to.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not Spark. Spark is Draco scintilla, live crackle-points at the snout, the claws, and the tail. Ion is Draco caligo, and the haze is the tell. A haze dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, and not a crack dragon. The outline is the species. Not Vesper. Vesper is a mantel dragon.",
+    "Haze dragon. A pale ion haze clinging to the outline. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Vesper.",
+  ),
 ];
 
 const BY_KEY = Object.fromEntries(GRID_GUIDE.map((g) => [g.key, g]));
@@ -86,7 +93,7 @@ export function gridGuideKeys() {
   return GRID_GUIDE.map((g) => g.key);
 }
 
-/** The roster and the guide must name the same five. */
+/** The roster and the guide must name the same six. */
 export function gridGuideComplete() {
   return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
 }

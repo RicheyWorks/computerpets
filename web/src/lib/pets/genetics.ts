@@ -332,6 +332,7 @@ const GRID = new Set([
   "trace_dragon",
   "flux_dragon",
   "spark_dragon",
+  "ion_dragon",
 ]);
 const MEADOW = new Set([
   "field_cricket",

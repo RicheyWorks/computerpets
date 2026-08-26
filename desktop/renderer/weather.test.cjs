@@ -19,7 +19,7 @@ test("the overlay keeps the house sky clock", () => {
   assert.equal(W.weatherOf(heatDay), "heat");
   assert.equal(W.weatherLabel("rain"), "Rain");
   assert.equal(W.weatherLabel("clear"), "Clear");
-  assert.equal(CATALOG.length, 215);
+  assert.equal(CATALOG.length, 216);
 });
 
 test("Drake swims the rain on the overlay. Soot walks the wind. A snake sits the heat.", () => {
@@ -39,6 +39,7 @@ test("Drake swims the rain on the overlay. Soot walks the wind. A snake sits the
   assert.equal(W.weatherIdle("trace_dragon", "heat"), "sit");
   assert.equal(W.weatherIdle("flux_dragon", "heat"), "sit");
   assert.equal(W.weatherIdle("spark_dragon", "heat"), "sit");
+  assert.equal(W.weatherIdle("ion_dragon", "heat"), "sit");
   assert.equal(W.weatherIdle("red_panda", "clear"), null);
 });
 
@@ -55,6 +56,7 @@ test("the overlay weather line is the house copy", () => {
   assert.equal(W.weatherLine("trace_dragon", "heat"), "The path is reserved. Heat is weather I already keep.");
   assert.equal(W.weatherLine("flux_dragon", "heat"), "The field is reserved. Heat is weather I already keep.");
   assert.equal(W.weatherLine("spark_dragon", "heat"), "The crackle is reserved. Heat is weather I already keep.");
+  assert.equal(W.weatherLine("ion_dragon", "heat"), "The haze is reserved. Heat is weather I already keep.");
   assert.equal(W.weatherLine("red_panda", "clear"), null);
   assert.match(webWeather, /key === "mallard"/);
   assert.match(webWeather, /key === "pileated"/);

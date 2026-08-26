@@ -450,7 +450,7 @@ def _draw_quad(
     accent = _color(pal.accent)
     sil = species.silhouette
 
-    long_body = sil in ("ferret", "dragon", "iguana", "cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon", "spark_dragon")
+    long_body = sil in ("ferret", "dragon", "iguana", "cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon", "spark_dragon", "ion_dragon")
     small = sil in ("hamster", "guinea", "hedgehog", "chinchilla", "rabbit")
     bw = 86 if long_body else 64 if small else 72
     bh = 40 if long_body else 46 if small else 52
@@ -493,6 +493,9 @@ def _draw_quad(
     elif sil == "spark_dragon":
         tail.moveTo(44, 8)
         tail.cubicTo(70, 0, 78, 16, 64, 12)
+    elif sil == "ion_dragon":
+        tail.moveTo(43, 9)
+        tail.cubicTo(68, 3, 80, 20, 58, 18)
     elif sil == "turtle":
         tail.moveTo(28, 10)
         tail.cubicTo(36, 12, 38, 16, 32, 16)
@@ -563,6 +566,11 @@ def _draw_quad(
         p.drawEllipse(QRectF(-16, 28, 3, 3))
         p.drawEllipse(QRectF(18, 28, 3, 3))
         p.drawEllipse(QRectF(58, 10, 4, 4))
+    if sil == "ion_dragon":
+        p.setPen(QPen(_color((200, 240, 248), 80), 3))
+        p.drawEllipse(QRectF(-28, -18, 92, 52))
+        p.setPen(QPen(_color((232, 252, 255), 60), 2))
+        p.drawEllipse(QRectF(-24, -14, 84, 46))
 
     p.setBrush(QBrush(ear if sil not in ("dog", "fox") else accent))
     p.setPen(Qt.PenStyle.NoPen)

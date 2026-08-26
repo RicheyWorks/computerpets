@@ -267,6 +267,7 @@ WEB_CATALOG = (
     "trace_dragon",
     "flux_dragon",
     "spark_dragon",
+    "ion_dragon",
 )
 
 WEB_SNAKES = (
@@ -519,7 +520,7 @@ WEB_REEF = (
     "grouper",
 )
 
-WEB_GRID = ("cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon", "spark_dragon")
+WEB_GRID = ("cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon", "spark_dragon", "ion_dragon")
 
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
@@ -545,7 +546,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(MEADOW_KEYS) == 10
     assert len(CANOPY_KEYS) == 10
     assert len(REEF_KEYS) == 10
-    assert len(GRID_KEYS) == 5
+    assert len(GRID_KEYS) == 6
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -1269,6 +1270,14 @@ def test_four_grid_guests_are_present_and_honest():
     assert SPECIES["spark_dragon"].silhouette != "volt_dragon"
     assert SPECIES["spark_dragon"].silhouette != "trace_dragon"
     assert SPECIES["spark_dragon"].silhouette != "flux_dragon"
+    assert SPECIES["ion_dragon"].slug == "ion"
+    assert SPECIES["ion_dragon"].name == "Ion"
+    assert SPECIES["ion_dragon"].label == "Haze Dragon"
+    assert SPECIES["ion_dragon"].silhouette != "cyber_dragon"
+    assert SPECIES["ion_dragon"].silhouette != "volt_dragon"
+    assert SPECIES["ion_dragon"].silhouette != "trace_dragon"
+    assert SPECIES["ion_dragon"].silhouette != "flux_dragon"
+    assert SPECIES["ion_dragon"].silhouette != "spark_dragon"
     assert SPECIES["dragon"].name == "Vesper"
     assert SPECIES["dragon"].slug == "vesper"
 
@@ -1354,8 +1363,9 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("volt_dragon") == "trace_dragon"
     assert next_species_key("trace_dragon") == "flux_dragon"
     assert next_species_key("flux_dragon") == "spark_dragon"
-    assert next_species_key("spark_dragon") == "red_panda"
-    assert prev_species_key("red_panda") == "spark_dragon"
+    assert next_species_key("spark_dragon") == "ion_dragon"
+    assert next_species_key("ion_dragon") == "red_panda"
+    assert prev_species_key("red_panda") == "ion_dragon"
     assert prev_species_key("brain_coral") == "koala"
     assert prev_species_key("sloth") == "robber_fly"
     assert prev_species_key("field_cricket") == "lugworm"
