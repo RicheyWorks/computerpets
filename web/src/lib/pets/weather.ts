@@ -27,6 +27,7 @@ export function weatherLine(key: string, w: Weather) {
   }
   if (w === "heat") {
     if (key === "iguana" || key === "turtle" || key === "dragon" || key === "cat") return "This patch of warmth is reserved.";
+    if (key === "cyber_dragon") return "The glow is reserved. Heat is weather I already keep.";
     if (
       key === "ball_python" ||
       key === "corn_snake" ||

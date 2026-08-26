@@ -435,6 +435,6 @@ Once that window is running, [http://localhost:8080/demo/rui](http://localhost:8
 
 If Rui is walking on your desktop, you did the main quest.
 
-There are **210** animals in this house. You did not add any. You met the first one.
+There are **211** animals in this house. You did not add any. You met the first one.
 
 When you want the long grown-up pages, they live next door: [SETUP.md](SETUP.md) is Java and secrets. You do not need those to keep a pet.

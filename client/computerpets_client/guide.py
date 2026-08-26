@@ -1,19 +1,19 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same two hundred ten, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred eleven, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
 the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the reef keeps the living-rock facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
-the xenobiology facts; the twenty keep the study facts.
+the xenobiology facts; the grid keeps the one grid dragon; the twenty keep the study facts.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 
-from .species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, REEF_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_canopy, is_corner, is_creek, is_far, is_fungus, is_garden, is_insect, is_log, is_meadow, is_pond, is_reef, is_roost, is_sea, is_shore, is_snake, is_stone, is_well, is_wood
+from .species import BEE_KEYS, CANOPY_KEYS, CATALOG_KEYS, CORNER_KEYS, CREEK_KEYS, FAR_KEYS, FUNGI_KEYS, GARDEN_KEYS, GRID_KEYS, HOUSE_KEYS, INSECT_KEYS, LOG_KEYS, MEADOW_KEYS, POND_KEYS, REEF_KEYS, ROOST_KEYS, SEA_KEYS, SHORE_KEYS, SNAKE_KEYS, STONE_KEYS, WELL_KEYS, WOOD_KEYS, SPECIES, is_bee, is_canopy, is_corner, is_creek, is_far, is_fungus, is_garden, is_grid, is_insect, is_log, is_meadow, is_pond, is_reef, is_roost, is_sea, is_shore, is_snake, is_stone, is_well, is_wood
 
 
 @dataclass(frozen=True)
@@ -2017,7 +2017,19 @@ REEF_GUIDE: tuple[FieldGuide, ...] = (
     ),
 )
 
-FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE + CANOPY_GUIDE + REEF_GUIDE
+GRID_GUIDE: tuple[FieldGuide, ...] = (
+    _entry(
+        "cyber_dragon",
+        "Draco reticulum",
+        "A grid-lit hide, an electric arc between two nape nubs, a cool glow that is weather. Grid dragon. She sits. Then she arcs. The night is a glow she agreed to.",
+        "Not Vesper. Vesper is the house dragon of the mantel, a province, a proud sit, warm at the chest. Arc is Draco reticulum, and the grid is the tell. A grid dragon is not a mantel dragon. The arc is the species.",
+        "Grid dragon. A grid-lit hide. An electric arc. Not Vesper. Not a mantel dragon.",
+        "machine-night",
+        "charged",
+    ),
+)
+
+FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE + CANOPY_GUIDE + REEF_GUIDE + GRID_GUIDE
 
 _BY_KEY: dict[str, FieldGuide] = {g.key: g for g in FIELD_GUIDE}
 _BY_SLUG: dict[str, FieldGuide] = {g.slug: g for g in FIELD_GUIDE}
@@ -2070,6 +2082,8 @@ def classroom_for(key: str) -> Classroom:
         return Classroom(room="shore", label="All ten on the shore", verb="stay")
     if is_reef(key):
         return Classroom(room="reef", label="All ten on the reef", verb="stay")
+    if is_grid(key):
+        return Classroom(room="grid", label="The one on the grid", verb="stay")
     if is_meadow(key):
         return Classroom(room="meadow", label="All ten in the meadow", verb="stay")
     if is_well(key):
@@ -2153,6 +2167,10 @@ def reef_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in REEF_GUIDE)
 
 
+def grid_guide_keys() -> tuple[str, ...]:
+    return tuple(g.key for g in GRID_GUIDE)
+
+
 def well_guide_keys() -> tuple[str, ...]:
     return tuple(g.key for g in WELL_GUIDE)
 
@@ -2233,6 +2251,10 @@ def reef_guide_complete() -> bool:
     return len(REEF_GUIDE) == len(REEF_KEYS) and all(k in _BY_KEY for k in REEF_KEYS)
 
 
+def grid_guide_complete() -> bool:
+    return len(GRID_GUIDE) == len(GRID_KEYS) and all(k in _BY_KEY for k in GRID_KEYS)
+
+
 def well_guide_complete() -> bool:
     return len(WELL_GUIDE) == len(WELL_KEYS) and all(k in _BY_KEY for k in WELL_KEYS)
 
@@ -2258,6 +2280,7 @@ def guide_complete() -> bool:
         and meadow_guide_complete()
         and canopy_guide_complete()
         and reef_guide_complete()
+        and grid_guide_complete()
         and well_guide_complete()
         and len(FIELD_GUIDE) == len(CATALOG_KEYS)
         and all(k in _BY_KEY for k in CATALOG_KEYS)

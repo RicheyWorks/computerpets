@@ -339,6 +339,13 @@
     opacity: 0.62;
   }
 
+  .room-wash-grid {
+    background:
+      linear-gradient(180deg, rgb(16 24 32 / 0.28), rgb(12 18 24 / 0.12) 46%, rgb(8 10 14 / 0.34)),
+      radial-gradient(48% 36% at 72% 28%, rgb(48 180 196 / 0.12), transparent 70%);
+    mix-blend-mode: multiply;
+  }
+
   .paper-card {
     --color-fg: #2a241c;
     --color-muted: #5c544a;

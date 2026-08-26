@@ -89,7 +89,7 @@ test("the weather line is the same house copy", () => {
 });
 
 test("desk, /demo, and /live sit the same sky; overlay and blotter keep it", () => {
-  assert.equal(KEYS.length, 210);
+  assert.equal(KEYS.length, 211);
   assert.equal(ROOM_COUNT, 19);
   assert.match(roomSrc, /weatherIdle\(kind\.key, weatherOf\(\)\)/);
   assert.match(roomSrc, /weatherLine\(kind\.key, weatherOf\(\)\)/);

@@ -342,6 +342,7 @@ REEF_EXPECTED = [
     ("giant_clam", "gate", "Tridacna gigas"),
     ("eagle_ray", "soar", "Aetobatus narinari"),
     ("grouper", "hide", "Epinephelus striatus"),
+    ("cyber_dragon", "arc", "Draco reticulum"),
 ]
 
 WEB_PETS = Path(__file__).resolve().parents[2] / "web" / "src" / "lib" / "pets"

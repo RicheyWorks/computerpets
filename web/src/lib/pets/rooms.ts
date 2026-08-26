@@ -20,10 +20,11 @@ import { WELL_KEYS, isWell } from "./well";
 import { CANOPY_KEYS, isCanopy } from "./canopy";
 import { REEF_KEYS, isReef } from "./reef";
 import { WOOD_KEYS, isWood } from "./wood";
+import { GRID_KEYS, isGrid } from "./grid";
 
-export type RoomId = "house" | "snakes" | "tide" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "canopy" | "stone" | "creek" | "log" | "shore" | "reef" | "meadow" | "cellar" | "well" | "far";
+export type RoomId = "house" | "snakes" | "tide" | "garden" | "hive" | "pond" | "roost" | "corner" | "wood" | "canopy" | "stone" | "creek" | "log" | "shore" | "reef" | "meadow" | "cellar" | "well" | "far" | "grid";
 
-export type RoomPath = "/study" | "/snakes" | "/sea" | "/garden" | "/hive" | "/pond" | "/roost" | "/corner" | "/wood" | "/canopy" | "/stone" | "/creek" | "/log" | "/shore" | "/reef" | "/meadow" | "/cellar" | "/well" | "/far";
+export type RoomPath = "/study" | "/snakes" | "/sea" | "/garden" | "/hive" | "/pond" | "/roost" | "/corner" | "/wood" | "/canopy" | "/stone" | "/creek" | "/log" | "/shore" | "/reef" | "/meadow" | "/cellar" | "/well" | "/far" | "/grid";
 
 export type Room = {
   id: RoomId;
@@ -227,6 +228,16 @@ export const ROOMS: readonly Room[] = [
     keys: FAR_KEYS,
     line: "Ten guests that never evolved here.",
   },
+  {
+    id: "grid",
+    label: "Grid",
+    kicker: "The grid",
+    path: "/grid",
+    watchSlug: "arc",
+    watchName: "Arc",
+    keys: GRID_KEYS,
+    line: "One of the grid. Not Vesper.",
+  },
 ];
 
 const BY_ID = Object.fromEntries(ROOMS.map((room) => [room.id, room])) as Record<RoomId, Room>;
@@ -255,6 +266,7 @@ export function roomOf(key: string | undefined | null): Room {
   if (isFungus(key)) return BY_ID.cellar;
   if (isWell(key)) return BY_ID.well;
   if (isFar(key)) return BY_ID.far;
+  if (isGrid(key)) return BY_ID.grid;
   return BY_ID.house;
 }
 

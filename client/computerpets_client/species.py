@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred ten, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred eleven, painted here.
 """
 
 from __future__ import annotations
@@ -281,7 +281,11 @@ REEF_KEYS: tuple[str, ...] = (
     "grouper",
 )
 
-CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS
+GRID_KEYS: tuple[str, ...] = (
+    "cyber_dragon",
+)
+
+CATALOG_KEYS: tuple[str, ...] = HOUSE_KEYS + SNAKE_KEYS + SEA_KEYS + GARDEN_KEYS + INSECT_KEYS + BEE_KEYS + FUNGI_KEYS + FAR_KEYS + POND_KEYS + WELL_KEYS + ROOST_KEYS + CORNER_KEYS + WOOD_KEYS + STONE_KEYS + CREEK_KEYS + LOG_KEYS + SHORE_KEYS + MEADOW_KEYS + CANOPY_KEYS + REEF_KEYS + GRID_KEYS
 
 
 @dataclass(frozen=True)
@@ -6181,6 +6185,33 @@ HIDE = _kind(
     hungry=("A grouper should not be this empty.", "A fish would restore the hide."),
 )
 
+ARC = _kind(
+    key="cyber_dragon",
+    slug="arc",
+    name="Arc",
+    label="Grid Dragon",
+    treat="Spark",
+    treat_shape="flake",
+    silhouette="cyber_dragon",
+    walk=76,
+    palette=Palette(
+        body=(36, 44, 52),
+        belly=(120, 148, 156),
+        ear=(20, 24, 28),
+        ear_inner=(48, 196, 208),
+        nose=(12, 12, 14),
+        ring=(48, 196, 208),
+        accent=(32, 220, 232),
+    ),
+    greet=("I arced. Hello.", "The night kept my grid.", "You may look. I am not Vesper."),
+    ambient=("A grid-lit hide. The arc is the tell. I keep the night.", "I am not Vesper. Vesper is a dragon of the mantel, a province, a proud sit. I am a grid dragon. The hide is weather.", "Your papers are a glow I have already claimed.", "I sit. Then I arc. Then I sit."),
+    feed=("Spark of a treaty.", "I will take this without leaving the night.", "Accepted. The grid records it."),
+    treat_lines=("Spark of a treaty.",),
+    hide=("In the glow.",),
+    call=("I kept the grid. Hello.",),
+    hungry=("A grid dragon should not be this empty.", "A spark would restore the arc."),
+)
+
 
 _ALL: tuple[Species, ...] = (
     RUI,
@@ -6393,6 +6424,7 @@ _ALL: tuple[Species, ...] = (
     GATE,
     SOAR,
     HIDE,
+    ARC,
 )
 
 SPECIES: dict[str, Species] = {s.key: s for s in _ALL}
@@ -6479,6 +6511,10 @@ def is_canopy(key: str) -> bool:
 
 def is_reef(key: str) -> bool:
     return key in REEF_KEYS
+
+
+def is_grid(key: str) -> bool:
+    return key in GRID_KEYS
 
 
 def next_species_key(key: str) -> str:

@@ -513,6 +513,7 @@ const TREAT_SHAPE = {
   giant_clam: "flake",
   eagle_ray: "crumb",
   grouper: "crumb",
+  cyber_dragon: "flake",
 };
 
 function placeMark(kindName, x, hops = 0, meal) {

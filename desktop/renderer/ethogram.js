@@ -218,6 +218,7 @@
     giant_clam: [A("open", "open", 1.8, 5, "sit"), A("mantle", "sit_hold", 2.4, 4, "sit"), A("still", "freeze", 2.2, 2)],
     eagle_ray: [A("soar", "pulse", 1.4, 5), A("glide", "bob", 1.8, 3), A("still", "freeze", 1.6, 2)],
     grouper: [A("hide", "sit_hold", 2.4, 5, "sit"), A("gape", "gape", 1.0, 3), A("still", "freeze", 1.8, 2)],
+    cyber_dragon: [A("arc", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
   };
   const TONGUE_KEYS = [
     "ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose",

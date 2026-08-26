@@ -19,7 +19,7 @@ test("the overlay keeps the house sky clock", () => {
   assert.equal(W.weatherOf(heatDay), "heat");
   assert.equal(W.weatherLabel("rain"), "Rain");
   assert.equal(W.weatherLabel("clear"), "Clear");
-  assert.equal(CATALOG.length, 210);
+  assert.equal(CATALOG.length, 211);
 });
 
 test("Drake swims the rain on the overlay. Soot walks the wind. A snake sits the heat.", () => {

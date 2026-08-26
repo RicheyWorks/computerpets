@@ -36,7 +36,7 @@
     "armor", "cast", "tun", "half", "clamp", "cement", "mail", "spire",
     "token", "knurl", "heap", "blade", "forceps", "snout", "wrist",
     "gaze", "gum", "wreath", "paint", "scrape", "scrub", "tube", "veil",
-    "gate",
+    "gate", "arc",
   ]);
 
   /** Same verbs the desk already keeps in traits.ts. */
@@ -251,6 +251,7 @@
     giant_clam: "Gate",
     eagle_ray: "Soar",
     grouper: "Hide",
+    cyber_dragon: "Keep the grid",
   };
 
   function clamp(n, a = 0, b = 100) {

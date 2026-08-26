@@ -260,6 +260,7 @@ WEB_CATALOG = (
     "giant_clam",
     "eagle_ray",
     "grouper",
+    "cyber_dragon",
 )
 
 WEB_SNAKES = (
@@ -510,6 +511,7 @@ WEB_REEF = (
     "giant_clam",
     "eagle_ray",
     "grouper",
+    "cyber_dragon",
 )
 
 
@@ -1213,6 +1215,7 @@ def test_ten_reef_guests_are_present_and_honest():
     assert SPECIES["giant_clam"].name == "Gate"
     assert SPECIES["eagle_ray"].name == "Soar"
     assert SPECIES["grouper"].name == "Hide"
+    assert SPECIES["cyber_dragon"].name == "Arc"
     assert SPECIES["lions_mane"].name == "Mane"
     assert SPECIES["lions_mane"].slug == "mane"
     assert SPECIES["manta"].name == "Kite"
@@ -1298,8 +1301,9 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("lugworm") == "field_cricket"
     assert next_species_key("robber_fly") == "sloth"
     assert next_species_key("koala") == "brain_coral"
-    assert next_species_key("grouper") == "red_panda"
-    assert prev_species_key("red_panda") == "grouper"
+    assert next_species_key("grouper") == "cyber_dragon"
+    assert next_species_key("cyber_dragon") == "red_panda"
+    assert prev_species_key("red_panda") == "cyber_dragon"
     assert prev_species_key("brain_coral") == "koala"
     assert prev_species_key("sloth") == "robber_fly"
     assert prev_species_key("field_cricket") == "lugworm"
