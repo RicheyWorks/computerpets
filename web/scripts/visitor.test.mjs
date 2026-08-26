@@ -32,19 +32,19 @@ test("today's visitor walks two hundred eleven minus the host", () => {
   assert.match(rosterSrc, /\.\.\.SHORE_ROSTER/);
   assert.match(rosterSrc, /\.\.\.MEADOW_ROSTER/);
   assert.match(rosterSrc, /\.\.\.REEF_ROSTER/);
-  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "cat");
+  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "barn_owl");
   assert.notEqual(todaysVisitor("red_panda", 2026, 8, 17), "red_panda");
 });
 
-test("the house pins match the blotter after the reef", () => {
+test("the house pins match the blotter after the grid", () => {
   // Same civil days as client/tests/test_visitor.py. A leftover that adds a den must move both.
-  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "cat");
-  assert.equal(todaysVisitor("ball_python", 2026, 8, 17), "dog");
-  assert.equal(todaysVisitor("red_panda", 2026, 1, 1), "lemur");
-  assert.equal(todaysVisitor("red_panda", 2024, 6, 9), "manta");
-  assert.match(pySrc, /todays_visitor\("red_panda", now\)\.key == "cat"/);
-  assert.match(pySrc, /todays_visitor\("ball_python", now\)\.key == "dog"/);
-  assert.match(pySrc, /Miso may call/);
+  assert.equal(todaysVisitor("red_panda", 2026, 8, 17), "barn_owl");
+  assert.equal(todaysVisitor("ball_python", 2026, 8, 17), "chickadee");
+  assert.equal(todaysVisitor("red_panda", 2026, 1, 1), "caecilian");
+  assert.equal(todaysVisitor("red_panda", 2024, 6, 9), "bluegill");
+  assert.match(pySrc, /todays_visitor\("red_panda", now\)\.key == "barn_owl"/);
+  assert.match(pySrc, /todays_visitor\("ball_python", now\)\.key == "chickadee"/);
+  assert.match(pySrc, /Heart may call/);
   assert.doesNotMatch(pySrc, /turkey_tail/);
   assert.doesNotMatch(pySrc, /Ring may call/);
   assert.doesNotMatch(pySrc, /Pebble may call/);
