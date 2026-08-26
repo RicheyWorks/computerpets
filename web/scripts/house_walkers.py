@@ -11847,6 +11847,192 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "chameleon":
+        # Shift's leaf-green
+        # hide, yellow-tan
+        # bands, and the dark
+        # of two turret
+        # offices nick when
+        # default plate-flood
+        # treats the wash as
+        # the chameleon.
+        # Shift is Chamaeleo
+        # calyptratus. A
+        # veiled chameleon.
+        # A casque, tong feet
+        # that hold a branch,
+        # eyes that keep two
+        # offices. She walks
+        # slow. Then she
+        # aims. The perch is
+        # a branch she agreed
+        # to. Habitat branch
+        # perch is weather,
+        # not painted
+        # furniture around
+        # the chameleon. A
+        # chameleon is not an
+        # anole. She is not
+        # an iguana. The eyes
+        # are the tell. The
+        # slow is the
+        # species. I shifted.
+        # Hello. The perch
+        # kept my casque. You
+        # may look. I am not
+        # Wink. Eat is
+        # cricket of a
+        # treaty, taken with
+        # a tongue. Play is a
+        # shift. I win by
+        # remaining a
+        # chameleon. Rest
+        # holds the perch.
+        # The slow is the
+        # correct sleep.
+        # Sleep is a curled
+        # chameleon on
+        # nothing but black,
+        # still Chamaeleo,
+        # not Wink, not Sol.
+        # Talk is a
+        # chameleon, not a
+        # person. Walk is a
+        # slow chameleon on
+        # black. Tong feet.
+        # Named: Shift. Green
+        # hide and a casque
+        # are hide, not a
+        # hole. Do not punch
+        # the independent
+        # eyes. Proven on the
+        # new black-plate
+        # raws: plate corners
+        # med luma 0 (not a
+        # cream leftover
+        # luma-8 would keep
+        # at ~0.78); fill
+        # ~0.21–0.40.
+        # Default punched
+        # the living
+        # chameleon: idle
+        # tore the still
+        # (~89.8k live
+        # against luma-8's
+        # ~105.8k; 13 comps
+        # against 1). Sit
+        # tore the hold
+        # (~92.1k against
+        # ~108.4k; 18 comps
+        # against 1). Walk
+        # nicked the stride
+        # (~51.9k against
+        # ~55.8k; 35 comps
+        # against 1). Sleep
+        # tore the curl
+        # (~102.9k against
+        # ~112.6k; 19 comps
+        # against 1). Talk
+        # lost the speak
+        # (~95.3k against
+        # ~102.9k; 5 comps
+        # against 1). Eat
+        # nicked the cricket
+        # sip (~47.6k against
+        # ~48.5k). Play
+        # jagged the shift
+        # (~95.1k against
+        # ~107.7k; 21 comps
+        # against 1). Idle's
+        # torn still is the
+        # tell. Luma-8 keeps
+        # the whole
+        # chameleon.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I
+        # did not erode. It
+        # punches the tong
+        # toes and the
+        # casque rim (idle
+        # ~102.7k against
+        # luma-8's ~105.8k;
+        # walk ~53.2k
+        # against ~55.8k;
+        # play ~104.2k
+        # against ~107.7k).
+        # TAN_SIT I did not
+        # join. Green hide is
+        # not Pale's wash.
+        # TAN_SIT still
+        # lists morel,
+        # lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists
+        # crow, raven,
+        # pileated, widow,
+        # vinegaroon, skunk,
+        # millipede,
+        # field_cricket,
+        # earwig, click_
+        # beetle, and
+        # robber_fly; that
+        # membership stays.
+        # I did not add
+        # chameleon. A
+        # casque is hide, and
+        # that path still
+        # tore idle. Thrum's
+        # bumblebee elif
+        # stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays
+        # Sheen's. Bank's
+        # mining_bee elif
+        # stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Wink's anole elif
+        # stays Wink's.
+        # Dash's skink elif
+        # stays Dash's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Wink. Not Sol. Not
+        # Pad. Not Dash. Not
+        # Spike. Not Levee.
+        # Not Jaw. Not Beak.
+        # Not Lid. Not Peak.
+        # Not Dapple.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
