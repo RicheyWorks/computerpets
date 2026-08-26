@@ -214,6 +214,7 @@ const REST: Record<string, [number, number]> = {
   volt_dragon: [8, 17],
   trace_dragon: [8, 17],
   flux_dragon: [8, 17],
+  spark_dragon: [8, 17],
 };
 
 /** House rest window. Overlay and blotter keep this same night. */
@@ -459,6 +460,7 @@ export const HIDE_LINE: Record<string, string> = {
   volt_dragon: "In the glow.",
   trace_dragon: "In the glow.",
   flux_dragon: "In the glow.",
+  spark_dragon: "In the glow.",
 };
 
 export const CALL_LINE: Record<string, string> = {
@@ -676,6 +678,7 @@ export const CALL_LINE: Record<string, string> = {
   volt_dragon: "I kept the coil. Hello.",
   trace_dragon: "I kept the path. Hello.",
   flux_dragon: "I kept the field. Hello.",
+  spark_dragon: "I kept the crackle. Hello.",
 };
 
 export const SNACK_LINE: Record<string, string> = {
@@ -893,6 +896,7 @@ export const SNACK_LINE: Record<string, string> = {
   volt_dragon: "Current of a treaty.",
   trace_dragon: "Path of a treaty.",
   flux_dragon: "Field of a treaty.",
+  spark_dragon: "Crackle of a treaty.",
 };
 
 

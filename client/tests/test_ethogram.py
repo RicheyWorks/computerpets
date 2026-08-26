@@ -262,3 +262,4 @@ def test_only_scratching_mammals_scratch():
     assert "current" in [a["name"] for a in acts_for("volt_dragon")]
     assert "path" in [a["name"] for a in acts_for("trace_dragon")]
     assert "field" in [a["name"] for a in acts_for("flux_dragon")]
+    assert "crackle" in [a["name"] for a in acts_for("spark_dragon")]

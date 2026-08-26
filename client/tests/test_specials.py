@@ -220,6 +220,7 @@ HOUSE_TRAITS = {
     "volt_dragon": ("current", "Keep the coil", "I kept the coil. Hello."),
     "trace_dragon": ("path", "Keep the path", "I kept the path. Hello."),
     "flux_dragon": ("field", "Keep the field", "I kept the field. Hello."),
+    "spark_dragon": ("crackle", "Keep the crackle", "I kept the crackle. Hello."),
 }
 
 

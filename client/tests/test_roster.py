@@ -266,6 +266,7 @@ WEB_CATALOG = (
     "volt_dragon",
     "trace_dragon",
     "flux_dragon",
+    "spark_dragon",
 )
 
 WEB_SNAKES = (
@@ -518,7 +519,7 @@ WEB_REEF = (
     "grouper",
 )
 
-WEB_GRID = ("cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon")
+WEB_GRID = ("cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon", "spark_dragon")
 
 
 def test_roster_has_catalog_keys_including_the_tide_and_garden():
@@ -1261,6 +1262,13 @@ def test_four_grid_guests_are_present_and_honest():
     assert SPECIES["flux_dragon"].silhouette != "cyber_dragon"
     assert SPECIES["flux_dragon"].silhouette != "volt_dragon"
     assert SPECIES["flux_dragon"].silhouette != "trace_dragon"
+    assert SPECIES["spark_dragon"].slug == "spark"
+    assert SPECIES["spark_dragon"].name == "Spark"
+    assert SPECIES["spark_dragon"].label == "Crack Dragon"
+    assert SPECIES["spark_dragon"].silhouette != "cyber_dragon"
+    assert SPECIES["spark_dragon"].silhouette != "volt_dragon"
+    assert SPECIES["spark_dragon"].silhouette != "trace_dragon"
+    assert SPECIES["spark_dragon"].silhouette != "flux_dragon"
     assert SPECIES["dragon"].name == "Vesper"
     assert SPECIES["dragon"].slug == "vesper"
 
@@ -1345,8 +1353,9 @@ def test_cycle_wraps_the_full_house():
     assert next_species_key("cyber_dragon") == "volt_dragon"
     assert next_species_key("volt_dragon") == "trace_dragon"
     assert next_species_key("trace_dragon") == "flux_dragon"
-    assert next_species_key("flux_dragon") == "red_panda"
-    assert prev_species_key("red_panda") == "flux_dragon"
+    assert next_species_key("flux_dragon") == "spark_dragon"
+    assert next_species_key("spark_dragon") == "red_panda"
+    assert prev_species_key("red_panda") == "spark_dragon"
     assert prev_species_key("brain_coral") == "koala"
     assert prev_species_key("sloth") == "robber_fly"
     assert prev_species_key("field_cricket") == "lugworm"

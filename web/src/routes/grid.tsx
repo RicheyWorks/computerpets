@@ -13,7 +13,7 @@ export const Route = createFileRoute("/grid")({
       { title: "The grid — ComputerPets" },
       {
         name: "description",
-        content: "Four of the grid on the blotter. A grid dragon is not a mantel dragon. A coil dragon is not a grid dragon. A path dragon is not a coil dragon. A field dragon is not a path dragon. Arc is not Vesper. Volt is not Arc. Trace is not Arc. Flux is not Trace.",
+        content: "Five of the grid on the blotter. A grid dragon is not a mantel dragon. A coil dragon is not a grid dragon. A path dragon is not a coil dragon. A field dragon is not a path dragon. A crack dragon is not a field dragon. Arc is not Vesper. Volt is not Arc. Trace is not Arc. Flux is not Trace. Spark is not Flux.",
       },
     ],
   }),
@@ -26,8 +26,8 @@ export function GridPage() {
     <main className="bg-bg text-fg">
       <RoomHero
         room="grid"
-        headline="Arc sits. Volt coils. Trace traces. Flux fields. The hide is weather."
-        line="Four of the grid live on this blotter. Watch the arc. Watch the coil. Watch the path. Watch the field. Read the plaque. Leave knowing a grid dragon is not a mantel dragon, a coil dragon is not a grid dragon, a path dragon is not a coil dragon, a field dragon is not a path dragon, Arc is not Vesper, Volt is not Arc, Trace is not Arc, and Flux is not Trace."
+        headline="Arc sits. Volt coils. Trace traces. Flux fields. Spark crackles. The hide is weather."
+        line="Five of the grid live on this blotter. Watch the arc. Watch the coil. Watch the path. Watch the field. Watch the crackle. Read the plaque. Leave knowing a grid dragon is not a mantel dragon, a coil dragon is not a grid dragon, a path dragon is not a coil dragon, a field dragon is not a path dragon, a crack dragon is not a field dragon, Arc is not Vesper, Volt is not Arc, Trace is not Arc, Flux is not Trace, and Spark is not Flux."
       />
 
       <GridDen selectedKey={selected} onSelect={setSelected} />
@@ -40,7 +40,7 @@ export function GridPage() {
             <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">How to use the grid</p>
             <p className="mt-2 font-display text-2xl">Watch, then tap.</p>
             <p className="mt-2 text-sm text-muted">
-              Arc sits the night. Volt keeps the coil. Trace keeps the path. Flux keeps the field. Treat, hide, and talk still live on a demo
+              Arc sits the night. Volt keeps the coil. Trace keeps the path. Flux keeps the field. Spark keeps the crackle. Treat, hide, and talk still live on a demo
               and on the desk. The hide is weather. The plaque teaches.
             </p>
             <p className="mt-4">
@@ -55,7 +55,7 @@ export function GridPage() {
       <section className="border-t border-border">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
           <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Field notes</p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl">The four, told apart.</h2>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl">The five, told apart.</h2>
           <p className="mt-3 max-w-xl text-sm text-muted">
             A short tell, one mix-up, and the night each already keeps. Open a demo if you want one
             to stay on your screen.

@@ -251,6 +251,7 @@ VISIT_LINES: dict[str, str] = {
     "volt_dragon": "I coiled. Then I left the night.",
     "trace_dragon": "I traced. Then I left the night.",
     "flux_dragon": "I fielded. Then I left the night.",
+    "spark_dragon": "I crackled. Then I left the night.",
 }
 
 

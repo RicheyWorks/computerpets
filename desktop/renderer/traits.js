@@ -3657,6 +3657,23 @@ window.PET_TRAITS = {
       call: ["I kept the field. Hello."],
       special: ["I kept the field. Hello."],
     },
+  },
+  spark_dragon: {
+    size: 1.14, walk: 74, hop: 16, pitch: 0.46, rate: 0.2,
+    nocturnal: true, sleepStart: 8, sleepEnd: 17,
+    hungerH: 8, energyH: 11, hygieneH: 14, hardy: 0.82, social: 0.16, messy: 0.04,
+    clingy: false, perch: false, aquatic: false, wander: 0.2,
+    special: "crackle", diet: "flake",
+    extra: {
+      sick: ["The crackle is thin."],
+      clean: ["The night is an honest point."],
+      bath: ["Crackle. Then the points."],
+      medicine: ["A crackle of a cure."],
+      praise: ["I will keep that in a crackle."],
+      hide: ["In the glow."],
+      call: ["I kept the crackle. Hello."],
+      special: ["I kept the crackle. Hello."],
+    },
   }
 };
 

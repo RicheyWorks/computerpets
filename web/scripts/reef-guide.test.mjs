@@ -137,7 +137,7 @@ test("the catalog and living roster include the ten reef keys", () => {
   assert.doesNotMatch(reefSrc, /slug:\s*"mane"/);
   assert.doesNotMatch(reefSrc, /name:\s*"Mane"/);
   assert.doesNotMatch(guideSrc, /Wikipedia/i);
-  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 214);
+  assert.equal([...catalogSrc.matchAll(/\{ key: "/g)].length, 215);
 });
 
 test("rooms.ts only adds a reef room", () => {
