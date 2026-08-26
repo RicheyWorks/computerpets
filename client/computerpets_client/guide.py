@@ -1,12 +1,12 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same two hundred fourteen, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred fifteen, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
 the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the reef keeps the living-rock facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
 the fungus facts; the well keeps the rest of the kingdoms; the far den keeps
-the xenobiology facts; the grid keeps the four cyber dragons; the twenty keep the study facts.
+the xenobiology facts; the grid keeps the five cyber dragons; the twenty keep the study facts.
 """
 
 from __future__ import annotations
@@ -2054,6 +2054,15 @@ GRID_GUIDE: tuple[FieldGuide, ...] = (
         "machine-night",
         "fielded",
     ),
+    _entry(
+        "spark_dragon",
+        "Draco scintilla",
+        "Live crackle-points at the snout, the claw tips, and the tail tip, small white-gold sparks that stay on the hide, a cool glow that is weather. Crack dragon. Spark sits. Then Spark crackles. The night is a point Spark agreed to.",
+        "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not the firefly. That Spark is Photinus, a beetle who flashes a dusk. This Spark is Draco scintilla, and the crackle is the tell. A crack dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, and not a firefly. The points are the species. Not Vesper. Vesper is a mantel dragon.",
+        "Crack dragon. Live crackle-points at snout, claws, and tail. Not Arc. Not Volt. Not Trace. Not Flux. Not Vesper.",
+        "machine-night",
+        "crackled",
+    ),
 )
 
 FIELD_GUIDE: tuple[FieldGuide, ...] = HOUSE_GUIDE + SNAKE_GUIDE + SEA_GUIDE + GARDEN_GUIDE + INSECT_GUIDE + BEE_GUIDE + FUNGI_GUIDE + FAR_GUIDE + POND_GUIDE + WELL_GUIDE + ROOST_GUIDE + CORNER_GUIDE + WOOD_GUIDE + STONE_GUIDE + CREEK_GUIDE + LOG_GUIDE + SHORE_GUIDE + MEADOW_GUIDE + CANOPY_GUIDE + REEF_GUIDE + GRID_GUIDE
@@ -2110,7 +2119,7 @@ def classroom_for(key: str) -> Classroom:
     if is_reef(key):
         return Classroom(room="reef", label="All ten on the reef", verb="stay")
     if is_grid(key):
-        return Classroom(room="grid", label="The four on the grid", verb="stay")
+        return Classroom(room="grid", label="The five on the grid", verb="stay")
     if is_meadow(key):
         return Classroom(room="meadow", label="All ten in the meadow", verb="stay")
     if is_well(key):

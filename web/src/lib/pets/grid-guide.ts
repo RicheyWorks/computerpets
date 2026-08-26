@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the four grid guests. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the five grid guests. Literary, short, and meant to be learned on the blotter. */
 export const GRID_GUIDE: GridGuide[] = [
   entry(
     "cyber_dragon",
@@ -60,6 +60,13 @@ export const GRID_GUIDE: GridGuide[] = [
     "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Flux is Draco campus, and the field is the tell. A field dragon is not a grid dragon, not a coil dragon, and not a path dragon. The heat is the species. Not Vesper. Vesper is a mantel dragon.",
     "Field dragon. A living heat-field under the hide. Not Arc. Not Volt. Not Trace. Not Vesper.",
   ),
+  entry(
+    "spark_dragon",
+    "Draco scintilla",
+    "Live crackle-points at the snout, the claw tips, and the tail tip, small white-gold sparks that stay on the hide, a cool glow that is weather. Crack dragon. Spark sits. Then Spark crackles. The night is a point Spark agreed to.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Not Volt. Volt is Draco spira, live coils on the ribs. Not Trace. Trace is Draco semita, one gold circuit-trace from snout to tail. Not Flux. Flux is Draco campus, a heat-field under dusk-plum scales. Not the firefly. That Spark is Photinus, a beetle who flashes a dusk. This Spark is Draco scintilla, and the crackle is the tell. A crack dragon is not a grid dragon, not a coil dragon, not a path dragon, not a field dragon, and not a firefly. The points are the species. Not Vesper. Vesper is a mantel dragon.",
+    "Crack dragon. Live crackle-points at snout, claws, and tail. Not Arc. Not Volt. Not Trace. Not Flux. Not Vesper.",
+  ),
 ];
 
 const BY_KEY = Object.fromEntries(GRID_GUIDE.map((g) => [g.key, g]));
@@ -79,7 +86,7 @@ export function gridGuideKeys() {
   return GRID_GUIDE.map((g) => g.key);
 }
 
-/** The roster and the guide must name the same four. */
+/** The roster and the guide must name the same five. */
 export function gridGuideComplete() {
   return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
 }

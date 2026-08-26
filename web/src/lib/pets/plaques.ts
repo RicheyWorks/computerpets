@@ -102,7 +102,7 @@ export function classroomFor(key: string) {
     return { to: "/far" as const, label: "All ten in the far den", verb: "stay" };
   }
   if (isGrid(key)) {
-    return { to: "/grid" as const, label: "The four on the grid", verb: "stay" };
+    return { to: "/grid" as const, label: "The five on the grid", verb: "stay" };
   }
   return { to: "/study" as const, label: "The rest of the house", verb: "walk" };
 }
