@@ -217,6 +217,7 @@ HOUSE_TRAITS = {
     "eagle_ray": ("soar", "Soar", "I soared. Hello."),
     "grouper": ("hide", "Hide", "I sat the hole. Hello."),
     "cyber_dragon": ("arc", "Keep the grid", "I kept the grid. Hello."),
+    "volt_dragon": ("current", "Keep the coil", "I kept the coil. Hello."),
 }
 
 

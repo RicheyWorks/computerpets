@@ -222,6 +222,7 @@ export const SPECIES: Species[] = [
   { key: "eagle_ray", displayName: "Spotted Eagle Ray", rarity: "RARE", temperament: "Soaring", habitat: "Reef sky", blurb: "A ray of the reef. Not Kite. Not a bird." },
   { key: "grouper", displayName: "Nassau Grouper", rarity: "UNCOMMON", temperament: "Hiding", habitat: "Hole dish", blurb: "A fish of a hole. Not Door. Not Lance." },
   { key: "cyber_dragon", displayName: "Grid Dragon", rarity: "LEGENDARY", temperament: "Charged", habitat: "Machine-night", blurb: "A grid-lit hide. An electric arc. Not Vesper. Not a mantel dragon." },
+  { key: "volt_dragon", displayName: "Coil Dragon", rarity: "LEGENDARY", temperament: "Coiled", habitat: "Machine-night", blurb: "A live coil along the ribs. Not Arc. Not a dorsal jump. Not Vesper." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

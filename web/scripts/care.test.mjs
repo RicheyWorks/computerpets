@@ -324,7 +324,7 @@ test("a Known guest can leave a gift; picking it is mood and bond", () => {
   assert.match(roomSrc, /leaveGift/);
   assert.match(roomSrc, /pickGift/);
   assert.match(roomSrc, /GIFT_LINE/);
-  assert.equal(Object.keys(Treats.GIFT_LINE).length, 211);
+  assert.equal(Object.keys(Treats.GIFT_LINE).length, 212);
   assert.equal(Treats.GIFT_LINE.red_panda, "A ribbon I was not using. For the desk.");
 });
 

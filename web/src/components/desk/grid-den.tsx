@@ -13,7 +13,7 @@ export function GridDen({
       keys={GRID_KEYS}
       selectedKey={selectedKey}
       onSelect={onSelect}
-      caption="Arc sits. Then she arcs. The plaque teaches. Tap the guest — or the name — for the lesson."
+      caption="Arc sits. Then she arcs. Volt coils. The plaque teaches. Tap the guest — or the name — for the lesson."
     />
   );
 }

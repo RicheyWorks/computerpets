@@ -247,6 +247,7 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   eagle_ray: T(48, 4, 1.14, 0.46, { aquatic: true }, "soar", "Soar", "I soared. Hello."),
   grouper: T(42, 4, 0.96, 0.1, { aquatic: true }, "hide", "Hide", "I sat the hole. Hello."),
   cyber_dragon: T(76, 18, 1.16, 0.22, { nocturnal: true }, "arc", "Keep the grid", "I kept the grid. Hello."),
+  volt_dragon: T(70, 16, 1.12, 0.2, { nocturnal: true }, "current", "Keep the coil", "I kept the coil. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

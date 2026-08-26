@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the one grid guest. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the two grid guests. Literary, short, and meant to be learned on the blotter. */
 export const GRID_GUIDE: GridGuide[] = [
   entry(
     "cyber_dragon",
@@ -38,6 +38,13 @@ export const GRID_GUIDE: GridGuide[] = [
     "A grid-lit hide, an electric arc between two nape nubs, a cool glow that is weather. Grid dragon. She sits. Then she arcs. The night is a glow she agreed to.",
     "Not Vesper. Vesper is the house dragon of the mantel, a province, a proud sit, warm at the chest. Arc is Draco reticulum, and the grid is the tell. A grid dragon is not a mantel dragon. The arc is the species.",
     "Grid dragon. A grid-lit hide. An electric arc. Not Vesper. Not a mantel dragon.",
+  ),
+  entry(
+    "volt_dragon",
+    "Draco spira",
+    "A live coil along the ribs, a winding current that stays on the hide, a cool glow that is weather. Coil dragon. He sits. Then he coils. The night is a current he agreed to.",
+    "Not Arc. Arc is Draco reticulum, a grid-lit hide, a jumping dorsal arc between two nape nubs. Volt is Draco spira, and the coil is the tell. A coil dragon is not a grid dragon. The current is the species. Not Vesper. Vesper is a mantel dragon.",
+    "Coil dragon. A live coil along the ribs. Not Arc. Not a dorsal jump. Not Vesper.",
   ),
 ];
 
@@ -58,7 +65,7 @@ export function gridGuideKeys() {
   return GRID_GUIDE.map((g) => g.key);
 }
 
-/** The roster and the guide must name the same one. */
+/** The roster and the guide must name the same two. */
 export function gridGuideComplete() {
   return GRID_KEYS.length === GRID_GUIDE.length && GRID_KEYS.every((key) => BY_KEY[key]);
 }
