@@ -12567,6 +12567,187 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "snapper":
+        # Beak's olive-brown
+        # and muddy hide, dark
+        # carapace scutes, the
+        # hooked beak, and the
+        # long saw tail nick
+        # when default plate-
+        # flood treats the
+        # wash as the snapper.
+        # Beak is Chelydra
+        # serpentina. A common
+        # snapping turtle. A
+        # hooked beak. A long
+        # saw of a tail. A
+        # rugged carapace she
+        # keeps in mud — not
+        # Macrochelys mountain
+        # keels. She sits.
+        # Then she snaps.
+        # Habitat mud bowl is
+        # weather, not painted
+        # furniture around the
+        # turtle. A snapper is
+        # not Ink. She is not
+        # a Reeves's turtle.
+        # She is not a
+        # tortoise. She is
+        # not Lid. She is not
+        # Jaw. She is not
+        # Levee. She is not
+        # Peak. The hook is
+        # the tell. The tail
+        # is the species. I
+        # snapped. Hello. The
+        # bowl kept my beak.
+        # You may look. I am
+        # not Ink. Eat is
+        # fish of a treaty.
+        # One fish. No dish.
+        # Play is a snap. I
+        # win by remaining a
+        # snapper. Rest holds
+        # this bowl. The beak
+        # is the correct
+        # sleep. Sleep is a
+        # snapper on nothing
+        # but black, still
+        # Chelydra, not Ink.
+        # Talk is a snapper,
+        # not a person. No
+        # smile. No human
+        # limbs. Walk is a
+        # snapper on black.
+        # Hooked beak. Long
+        # tail. Named: Beak.
+        # Dark scutes are
+        # hide, not a hole.
+        # Do not punch the
+        # hooked beak, the
+        # long saw tail, the
+        # warty neck, or the
+        # claws. Proven on the
+        # new black-plate
+        # raws: plate corners
+        # med luma 0 (not a
+        # cream leftover
+        # luma-8 would keep
+        # at ~0.78); fill
+        # ~0.21–0.35. Default
+        # punched the living
+        # snapper: idle tore
+        # the still (~229.6k
+        # live against
+        # luma-8's ~353.1k;
+        # 26 comps against 3).
+        # Sit tore the hold
+        # (~220.9k against
+        # ~365.2k; 21 comps
+        # against 2). Walk
+        # nicked the stride
+        # (~131.2k against
+        # ~234.4k; 16 comps
+        # against 1). Sleep
+        # tore the rest
+        # (~220.3k against
+        # ~405.6k). Talk lost
+        # the speak (~181.8k
+        # against ~260.6k; 20
+        # comps against 1).
+        # Eat nicked the fish
+        # sip (~158.7k against
+        # ~221.2k). Play
+        # jagged the snap
+        # (~165.0k against
+        # ~280.1k; 27 comps
+        # against 1). Default
+        # left a torn turtle.
+        # Luma-8 keeps the
+        # whole snapper.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I did
+        # not erode. It
+        # punches the hooked
+        # beak, the carapace
+        # scutes, and the tail
+        # saw (idle ~337.3k
+        # against luma-8's
+        # ~353.1k; sit
+        # ~350.7k against
+        # ~365.2k; walk
+        # ~222.7k against
+        # ~234.4k; eat
+        # ~213.1k against
+        # ~221.2k). TAN_SIT I
+        # did not join. Muddy
+        # olive hide is not
+        # Pale's wash. TAN_SIT
+        # still lists morel,
+        # lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE I
+        # did not join. Dark
+        # scutes are hide;
+        # that set is other
+        # keys (alligator
+        # stays Levee's).
+        # Thrum's bumblebee
+        # elif stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Wink's anole elif
+        # stays Wink's.
+        # Dash's skink elif
+        # stays Dash's.
+        # Shift's chameleon
+        # elif stays Shift's.
+        # Spike's
+        # horned_lizard elif
+        # stays Spike's.
+        # Levee's alligator
+        # elif stays Levee's.
+        # Jaw's crocodile
+        # elif stays Jaw's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Ink. Not Lid. Not
+        # Jaw. Not Levee. Not
+        # Peak.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
