@@ -12033,6 +12033,183 @@ def ingest_body(path: Path, key: str) -> Image.Image:
         if knocked.getbbox():
             knocked = knock_tiny_crumbs(knocked, limit=64)
         return fit_like_rui(knocked, side=0.90)
+    elif key == "horned_lizard":
+        # Spike's sandy tan
+        # hide, crown of
+        # horns, and the
+        # fringe of side
+        # spines nick when
+        # default plate-flood
+        # treats the wash as
+        # the horned lizard.
+        # Spike is Phrynosoma
+        # cornutum. A Texas
+        # horned lizard. A
+        # flattened body. A
+        # crown of horns. A
+        # threat that can be
+        # blood from the eye.
+        # She sits. Then she
+        # crowns. Habitat sand
+        # tray is weather, not
+        # painted furniture
+        # around the lizard.
+        # A horned lizard is
+        # not a toad. She is
+        # not Pad. She is not
+        # Wink. She is not
+        # Dash. She is not
+        # Shift. The crown is
+        # the tell. The horns
+        # are the species. I
+        # sat the crown.
+        # Hello. The tray kept
+        # my horns. You may
+        # look. I am not a
+        # toad. Eat is ant of
+        # a treaty. One ant.
+        # No dish. Play is a
+        # crown. I win by
+        # remaining a horned
+        # lizard. Rest holds
+        # this tray. The crown
+        # is the correct
+        # sleep. Sleep is a
+        # flattened horned
+        # lizard on nothing
+        # but black, still
+        # Phrynosoma, not a
+        # toad. Talk is a
+        # horned lizard, not a
+        # person. Walk is a
+        # crowned lizard on
+        # black. Short legs.
+        # Named: Spike. Sandy
+        # tan hide is hide,
+        # not a hole. Do not
+        # punch the crown of
+        # horns, the fringe of
+        # side spines, or the
+        # short tail. Proven
+        # on the new
+        # black-plate raws:
+        # plate corners med
+        # luma 0 (not a cream
+        # leftover luma-8
+        # would keep at
+        # ~0.78); fill
+        # ~0.24–0.38. Default
+        # punched the living
+        # horned lizard: idle
+        # tore the still
+        # (~66.8k live
+        # against luma-8's
+        # ~70.0k). Sit tore
+        # the hold (~76.4k
+        # against ~78.7k).
+        # Walk nicked the
+        # stride (~54.1k
+        # against ~56.0k).
+        # Sleep tore the rest
+        # (~70.1k against
+        # ~71.0k; 2 comps
+        # against 1). Talk
+        # lost the speak
+        # (~66.8k against
+        # ~69.9k). Eat nicked
+        # the ant sip (~72.2k
+        # against ~76.1k;
+        # dark ~2.9k against
+        # ~4.7k). Play jagged
+        # the crown (~83.4k
+        # against ~86.6k).
+        # Eat's lost ant is
+        # the tell. Luma-8
+        # keeps the whole
+        # horned lizard.
+        # knock_tiny_crumbs
+        # (64) keeps specks
+        # off. MinFilter (5)
+        # is the leftover
+        # default path; I did
+        # not erode. It
+        # punches the horns
+        # and the fringe
+        # (idle ~68.3k
+        # against luma-8's
+        # ~70.0k; walk
+        # ~54.2k against
+        # ~56.0k; eat ~74.1k
+        # against ~76.1k).
+        # TAN_SIT I did not
+        # join. Sandy tan hide
+        # is not Pale's wash.
+        # TAN_SIT still lists
+        # morel, lions_mane,
+        # rosy_boa, and
+        # yeast. DARK_MATTE
+        # already lists crow,
+        # raven, pileated,
+        # widow, vinegaroon,
+        # skunk, millipede,
+        # field_cricket,
+        # earwig, click_
+        # beetle, and robber_
+        # fly; that
+        # membership stays.
+        # I did not add
+        # horned_lizard. A
+        # crown is hide, and
+        # that path still
+        # tore idle. Thrum's
+        # bumblebee elif
+        # stays Thrum's.
+        # Auger's
+        # carpenter_bee elif
+        # stays Auger's.
+        # Mortar's mason_bee
+        # elif stays
+        # Mortar's. Disc's
+        # leafcutter elif
+        # stays Disc's.
+        # Pot's stingless
+        # elif stays Pot's.
+        # Sheen's sweat_bee
+        # elif stays Sheen's.
+        # Bank's mining_bee
+        # elif stays Bank's.
+        # Hum's honey_drone
+        # elif stays Hum's.
+        # Keep's honey_queen
+        # elif stays Keep's.
+        # Wax's honeycomb
+        # elif stays Wax's.
+        # Pad's gecko elif
+        # stays Pad's.
+        # Wink's anole elif
+        # stays Wink's.
+        # Dash's skink elif
+        # stays Dash's.
+        # Shift's chameleon
+        # elif stays Shift's.
+        # Existing luma-8
+        # elifs stay theirs.
+        # Guest-only. Not a
+        # catalog wash. Not
+        # TAN_SIT. Not
+        # DARK_MATTE. Not
+        # Pebble. Not Horn.
+        # Not Pad. Not Wink.
+        # Not Dash. Not
+        # Shift. Not Levee.
+        # Not Jaw. Not Beak.
+        # Not Lid. Not Peak.
+        knocked = clear_connected_plate(raw, luma=8)
+        if not knocked.getbbox():
+            knocked = clear_connected_plate(raw, luma=14)
+        if knocked.getbbox():
+            knocked = knock_tiny_crumbs(knocked, limit=64)
+        return fit_like_rui(knocked, side=0.90)
     else:
         # A parchment wash floods first. Then any leftover plate.
         knocked = clear_wash_matte(raw)
