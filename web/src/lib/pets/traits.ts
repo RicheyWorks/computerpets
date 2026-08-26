@@ -255,6 +255,7 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   gauss_dragon: T(71, 16, 1.15, 0.2, { nocturnal: true }, "filing", "Keep the filings", "I kept the filings. Hello."),
   relay_dragon: T(69, 16, 1.14, 0.2, { nocturnal: true }, "relay", "Keep the click", "I kept the click. Hello."),
   fuse_dragon: T(67, 16, 1.13, 0.2, { nocturnal: true }, "fuse", "Keep the filament", "I kept the filament. Hello."),
+  ground_dragon: T(65, 16, 1.12, 0.2, { nocturnal: true }, "earth", "Keep the strap", "I kept the strap. Hello."),
 };
 
 export const FALLBACK_TRAIT = TRAITS.red_panda!;

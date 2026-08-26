@@ -329,6 +329,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   gauss_dragon: [A("filing", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
   relay_dragon: [A("relay", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
   fuse_dragon: [A("fuse", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
+  ground_dragon: [A("earth", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;

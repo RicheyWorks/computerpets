@@ -220,6 +220,7 @@ const TREATS: Record<string, { shape: TreatShape; verb: string }> = {
   gauss_dragon: { shape: "flake", verb: "Filing" },
   relay_dragon: { shape: "flake", verb: "Click" },
   fuse_dragon: { shape: "flake", verb: "Fuse" },
+  ground_dragon: { shape: "flake", verb: "Earth" },
 };
 
 export function treatFor(key: string) {
@@ -446,4 +447,5 @@ export const GIFT_LINE: Record<string, string> = {
   gauss_dragon: "A filing I was finished filing for.",
   relay_dragon: "A click I was finished clicking for.",
   fuse_dragon: "A cartridge I was finished fusing for.",
+  ground_dragon: "A strap I was finished earthing for.",
 };
