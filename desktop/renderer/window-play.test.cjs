@@ -15709,7 +15709,8 @@ test("Soot caws a drip cap as a chimney pot: hop onto the cap, tuck a scrap, fan
   assert.ok(Math.abs(cap.x - bowl.x) > 20 || Math.abs(cap.lift - bowl.lift) > 12, "not Coin");
   const hopOn = P.cawOnPath(0.25, { x: 40, lift: 0 }, { x: cap.x, lift: cap.lift });
   const midOn = P.cawOnPath(0.5, { x: 40, lift: 0 }, { x: cap.x, lift: cap.lift });
-  assert.ok(hopOn.lift > cap.lift * 0.25 + 8, "two hops to the pot, not a cling");
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(hopOn.lift > cap.lift * hopEase + 12, "two hops to the pot, not a cling");
   assert.ok(Math.abs(midOn.x - (40 + (cap.x - 40) * 0.5)) < 8, "a hop lands between hops");
   const still = P.cawPath(0);
   const tuck = P.cawPath(0.16);

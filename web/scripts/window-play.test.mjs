@@ -9860,7 +9860,8 @@ test("the demo window plate walks Soot's caw the same way", () => {
   const deskHop = Overlay.cawOnPath(0.25, { x: 40, lift: 0 }, { x: cap.x, lift: cap.lift });
   assert.equal(hopOn.x, deskHop.x);
   assert.equal(hopOn.lift, deskHop.lift);
-  assert.ok(hopOn.lift > cap.lift * 0.25 + 8, "two hops to the pot, not a cling");
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(hopOn.lift > cap.lift * hopEase + 12, "two hops to the pot, not a cling");
   const tuck = P.cawPath(0.16);
   const deskTuck = Overlay.cawPath(0.16);
   assert.equal(tuck.x, deskTuck.x);
