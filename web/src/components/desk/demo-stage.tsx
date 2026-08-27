@@ -15,7 +15,7 @@ export function DemoStage({ kind }: { kind: LivingKind }) {
       <WindowsDeskSit name={kind.name} />
       <TabletDeskSit name={kind.name} />
       <PhoneDeskSit name={kind.name} />
-      <CompanionRoom kind={kind} persistLocal={false} liveTick extraCare={[...DESK_TEND]} />
+      <CompanionRoom kind={kind} persistLocal={false} liveTick demoWindow extraCare={[...DESK_TEND]} />
     </div>
   );
 }

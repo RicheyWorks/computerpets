@@ -116,7 +116,12 @@ const sim = {
   actHold: 0,
   actWait: 10 + Math.random() * 8,
   actWalk: false,
+  play: null,
+  playWait: 6 + Math.random() * 5,
 };
+
+/** Real window rects from main. /demo draws a plate instead. */
+let deskWindows = [];
 
 let speechUntil = 0;
 let clickable = false;
@@ -893,6 +898,21 @@ function applyCommand() {
     sim.pendingPose = null;
     sim.poseHold = 0;
     sim.pause = 0;
+    if (sim.play && window.PetWindowPlay) {
+      sim.play = window.PetWindowPlay.stepPlay(
+        sim.play,
+        0,
+        { x: sim.x, lift: sim.play.lift },
+        deskWindows,
+        { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
+        BASE,
+        { asleep: true, hidden: !!life.hidden, leaving, cmd: "sleep" },
+      );
+    }
+    return;
+  }
+  if (sim.play && (sim.cmd === "wander" || sim.cmd === "idle")) {
+    sim.lastOrder = sim.order;
     return;
   }
   if (sim.order === sim.lastOrder || sim.cmd === "none") return;
@@ -902,6 +922,22 @@ function applyCommand() {
   }
   sim.lastOrder = sim.order;
   clearAct();
+  if (sim.play && window.PetWindowPlay?.shouldAbort({
+    asleep: !!life?.asleep,
+    hidden: !!life?.hidden,
+    leaving,
+    cmd: sim.cmd,
+  })) {
+    sim.play = window.PetWindowPlay.stepPlay(
+      sim.play,
+      0,
+      { x: sim.x, lift: sim.play.lift },
+      deskWindows,
+      { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
+      BASE,
+      { asleep: !!life?.asleep, hidden: !!life?.hidden, leaving, cmd: sim.cmd },
+    );
+  }
   const width = window.innerWidth;
   const max = Math.max(PAD, width - BASE - PAD);
   sim.poseHold = 0;
@@ -1329,6 +1365,8 @@ function switchTo(key) {
   taken = false;
   clearAct();
   sim.actWait = 10 + Math.random() * 8;
+  sim.play = null;
+  sim.playWait = 6 + Math.random() * 5;
   pet.classList.toggle("sick", !!life.sick);
   pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
@@ -1395,6 +1433,44 @@ function tick(now) {
   if (!sim.dragging) {
     applyCommand();
     const p = gaitProfile();
+    const work = { width, height: window.innerHeight, floorLift: 0 };
+    const playFlags = {
+      asleep: !!life?.asleep,
+      hidden: !!life?.hidden,
+      leaving,
+      cmd: sim.cmd,
+    };
+    if (sim.play && window.PetWindowPlay) {
+      sim.play = window.PetWindowPlay.stepPlay(sim.play, dt, { x: sim.x, lift: sim.play.lift }, deskWindows, work, BASE, playFlags);
+      sim.x = sim.play.x;
+      sim.facing = sim.play.facing;
+      if (!life?.asleep) sim.anim = sim.play.anim;
+      if (sim.play.phase === "done") {
+        sim.play = null;
+        sim.land = 1;
+        sim.anim = life?.asleep ? "sleep" : "idle";
+        sim.playWait = window.PetWindowPlay.nextPlayWait(true);
+      }
+    } else if (
+      window.PetWindowPlay &&
+      !sim.act &&
+      !leaving &&
+      window.PetWindowPlay.canStart(playFlags) &&
+      window.PetWindowPlay.playFor(kind.key) !== "ignore" &&
+      deskWindows.length
+    ) {
+      sim.playWait -= dt;
+      if (sim.playWait <= 0) {
+        const target = window.PetWindowPlay.pickTarget(deskWindows, sim.x, kind.key, work, BASE);
+        sim.play = window.PetWindowPlay.beginPlay(target, sim.x);
+        if (sim.play) {
+          clearAct();
+          sim.target = null;
+          sim.waypoints = [];
+        }
+        sim.playWait = window.PetWindowPlay.nextPlayWait(false);
+      }
+    }
     if (sim.poseHold > 0) {
       sim.poseHold = Math.max(0, sim.poseHold - dt);
       if (sim.poseHold === 0 && sim.pendingPose) {
@@ -1404,7 +1480,9 @@ function tick(now) {
         sim.acc = 0;
       }
     }
-    if (sim.turnHold > 0) {
+    if (sim.play) {
+      /* window play owns the walk */
+    } else if (sim.turnHold > 0) {
       sim.turnHold = Math.max(0, sim.turnHold - dt);
       if (sim.turnHold === 0 && sim.pendingFacing) {
         sim.facing = sim.pendingFacing;
@@ -1458,7 +1536,9 @@ function tick(now) {
         aimAt(follow);
       }
     }
-    if (sim.act) {
+    if (sim.play) {
+      /* window play owns the pose */
+    } else if (sim.act) {
       sim.actT += dt;
       if (sim.actMotion === "stretch" && sim.actHold > 0 && sim.actT / sim.actHold > 0.55 && sim.anim === "sit") {
         sim.anim = "idle";
@@ -1470,6 +1550,7 @@ function tick(now) {
       }
     } else if (
       !leaving &&
+      !sim.play &&
       sim.target == null &&
       sim.turnHold <= 0 &&
       sim.pause <= 0 &&
@@ -1492,7 +1573,7 @@ function tick(now) {
       sim.shiftAge = 0.85;
     }
     if (sim.shiftAge > 0) sim.shiftAge = Math.max(0, sim.shiftAge - dt);
-    if (!leaving) sim.x = clamp(sim.x, PAD, maxX);
+    if (!leaving && !sim.play) sim.x = clamp(sim.x, PAD, maxX);
 
     if (life?.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) sim.anim = "sleep";
     const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
@@ -1556,8 +1637,11 @@ function tick(now) {
   const shiftX = sim.shiftAge > 0 ? sim.shift * Math.sin((1 - sim.shiftAge / 0.85) * Math.PI) : 0;
   const settleX = sim.settle > 0 ? G.settleOffset(sim.settle, sim.settleDir, sim.overshoot) : 0;
   const drawX = sim.x + sway + shiftX + settleX + pose.dx;
-  const lift = hopPx + walkBob + water + perch + pose.dy;
-  pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
+  const climbLift = sim.play ? sim.play.lift : 0;
+  const climbRot = sim.play ? sim.play.rot : 0;
+  const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
+  pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap") ? "center center" : "center bottom";
+  pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));
@@ -1773,12 +1857,16 @@ document.addEventListener("visibilitychange", () => {
 
 window.desk?.onCommand((cmd) => handle(cmd));
 window.desk?.onSwitch((key) => switchTo(key));
+window.desk?.onWindows((list) => {
+  deskWindows = Array.isArray(list) ? list : [];
+});
 
 setInterval(() => {
   if (document.hidden || !kind || !life) return;
   tickLife();
   if (performance.now() < speechUntil || life.hidden) return;
   const held = window.PetLife?.wanderWhileAsleep(life) || window.PetCard?.wanderWhileAsleep(life?.asleep);
+  if (sim.play) return;
   if (held) {
     issue(held.cmd);
     return;

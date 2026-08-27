@@ -55,6 +55,8 @@ test("the demo is a room; the guest is already walking", () => {
   assert.match(demoSrc, /WindowsDeskSit/);
   assert.match(demoSrc, /TabletDeskSit/);
   assert.match(demoSrc, /PhoneDeskSit/);
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(roomSrc, /DemoWindowPlate/);
   assert.match(roomSrc, /LivingPet/);
   assert.match(roomSrc, /dropTreatAt/);
   assert.match(roomSrc, /GuestChoice/);
