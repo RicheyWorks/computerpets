@@ -2906,11 +2906,11 @@ export function bunOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 
 export function writePoint(win: DeskWindow, u: number, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
-  const inset = Math.max(52, size * 0.28);
-  const tray = Math.max(140, Math.min(win.width * 0.34, Math.max(0, win.width - size - inset * 2)));
+  const inset = Math.max(88, size * 0.42);
+  const tray = Math.max(148, Math.min(win.width * 0.32, Math.max(0, win.width - size - inset * 2)));
   const t = Math.max(0, Math.min(1, u));
   const x = win.x + inset + tray * t;
-  const fromBot = Math.max(48, Math.min(size * 0.36, win.height * 0.18));
+  const fromBot = Math.max(88, Math.min(size * 0.52, win.height * 0.22));
   const gripY = win.y + win.height - fromBot;
   const lift = gripLift(gripY, work);
   const maxLift = (work && work.height ? work.height : 800) - 48;
