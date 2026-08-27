@@ -24,8 +24,10 @@ export type CareStats = {
   bond: number;
   sick: boolean;
   hidden: boolean;
-  /** Rest or night put them down. Wander must not stand them back up. */
+  /** Rest or night put them down. Walk / wander is a wake. */
   asleep?: boolean;
+  sleepHeld?: boolean;
+  nightSat?: boolean;
   mess: MessPile[];
   gifts: MessPile[];
   bornAt: number;
@@ -78,6 +80,8 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
     sick: Boolean(raw.sick),
     hidden: Boolean(raw.hidden),
     asleep: Boolean(raw.asleep),
+    sleepHeld: Boolean(raw.sleepHeld),
+    nightSat: Boolean(raw.nightSat),
     mess: Array.isArray(raw.mess) ? raw.mess.slice(0, 6) : [],
     gifts: Array.isArray(raw.gifts) ? raw.gifts.slice(0, 3) : [],
     bornAt: raw.bornAt ?? now,
@@ -277,6 +281,15 @@ export type SanctuaryTick = {
   verb: string | null;
 };
 
+function sitRuiNight(prior: Partial<CareStats>, live: CareStats, resting: boolean): CareStats {
+  if (!resting) return { ...live, nightSat: false, sleepHeld: false };
+  if (prior.nightSat && !prior.sleepHeld && !prior.asleep) {
+    return { ...live, asleep: false, nightSat: true, sleepHeld: false };
+  }
+  if (live.asleep) return { ...live, nightSat: true, sleepHeld: true };
+  return live;
+}
+
 function decayForSpecies(speciesKey: string, stats: CareStats, lastTick: number, now: number): CareStats {
   const resting = isRestingHour(speciesKey, new Date(now).getHours());
   if (adultLuna(speciesKey, stats, now)) {
@@ -285,7 +298,8 @@ function decayForSpecies(speciesKey: string, stats: CareStats, lastTick: number,
     return { ...live, hunger: stats.hunger };
   }
   const live = decayStats(stats, lastTick, now, resting);
-  return speciesKey === "honeycomb" ? stampHiveLine(live) : live;
+  const rui = speciesKey === "red_panda" ? sitRuiNight(stats, live, resting) : live;
+  return speciesKey === "honeycomb" ? stampHiveLine(rui) : rui;
 }
 
 /** Age a locally kept guest from lastTick. Same clocks as sanctuary; Luna's hunger stays pinned. */

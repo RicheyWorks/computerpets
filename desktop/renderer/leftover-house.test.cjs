@@ -29,6 +29,8 @@ test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () 
   assert.match(styleSrc, /#bird\.show/);
   assert.match(petSrc, /callSip/);
   assert.match(petSrc, /spawnCalled/);
+  assert.match(petSrc, /syncCalledPaint/);
+  assert.doesNotMatch(petSrc, /calledRoot\.replaceChildren\(\)/);
   assert.match(petSrc, /setFocusable/);
   assert.doesNotMatch(petSrc, /hid a ribbon/);
   assert.match(petSrc, /stealDeskRibbon/);
@@ -87,7 +89,10 @@ test("the tray pins Rui, Sip, and the grid ten", () => {
   assert.equal(M.parseRadioQuery("KEXP").call, "kexp");
   assert.equal(M.parseRadioQuery("KEXP").city, "");
   assert.match(M.radioSearchUrl("KEXP"), /name=KEXP/);
+  assert.equal(M.parseRadioQuery("portland").city, "Portland");
+  assert.ok(M.radioSearchUrls("portland").some((u) => /city=Portland|name=Portland/.test(u)));
   assert.equal(T.SLEEP_HOLD_FRAME, 1);
+  assert.ok(T.nextTrickWait(true, 0, "lie") >= 48);
   assert.ok(T.LIE_HOLD >= 8);
   assert.equal(R.RIBBON_SPECIAL, "I found a ribbon. It was not lost. It is now safer.");
   assert.equal(T.TRICK_KEY, "red_panda");

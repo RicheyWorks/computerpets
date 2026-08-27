@@ -44,7 +44,7 @@ const ROBOT_VOICE = /compact|bad news|good news|hysterical|zarvox|trinoids|boing
 
 export const VOICE_TRUTH = "The door is still the system speech voices.";
 export const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
-export const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide"] as const;
+export const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"] as const;
 
 export type CardColorId = (typeof CARD_COLORS)[number]["id"];
 export type VoiceStyleId = (typeof VOICE_STYLES)[number]["id"];

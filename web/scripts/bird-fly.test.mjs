@@ -44,7 +44,7 @@ test("when Rui sleeps Sip comes over and perches — she does not cruise off", (
   const deskHold = Overlay.perchPoint(200, 1, 0);
   assert.equal(hold.x, deskHold.x);
   assert.equal(hold.lift, deskHold.lift);
-  assert.ok(hold.lift > 40, "the perch is his back or shoulder, not the floor");
+  assert.ok(hold.lift >= 28 && hold.lift <= 52, "the perch sits his back, not a mid-air hover");
   let fly = F.beginFly(800, 480, true);
   fly = F.stepFly(fly, 0.2, 800, 480, { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 });
   assert.equal(fly.phase, "approach-perch");
@@ -58,4 +58,19 @@ test("when Rui sleeps Sip comes over and perches — she does not cruise off", (
   assert.ok(Math.abs(fly.x - parked.x) < 8, "a chill is not a cruise");
   fly = F.stepFly(fly, 0.1, 800, 480, { hostKey: "red_panda", hostSleeping: false, hostX: 200, hostFacing: 1, hostLift: 0 });
   assert.equal(fly.phase, "lift");
+});
+
+test("cruise cannot finish a sleep perch — MIN_STAY does not vanish Sip", () => {
+  let fly = F.beginFly(800, 480, true);
+  fly.age = F.MIN_STAY_S * 3;
+  fly = F.stepFly(fly, 1.2, 800, 480);
+  assert.equal(fly.phase, "hover");
+  fly = F.stepFly(fly, 2.3, 800, 480);
+  assert.equal(fly.phase, "cruise");
+  fly.age = F.MIN_STAY_S * 3;
+  fly.t = 99;
+  const flags = { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 };
+  fly = F.stepFly(fly, 0.05, 800, 480, flags);
+  assert.notEqual(fly.phase, "done");
+  assert.ok(fly.phase === "approach-perch" || fly.phase === "perch");
 });

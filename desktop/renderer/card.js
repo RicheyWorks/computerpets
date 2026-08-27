@@ -41,7 +41,7 @@
 
   const VOICE_TRUTH = "The door is still the system speech voices.";
   const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
-  const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide"];
+  const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"];
 
   function blankMutes() {
     return { talk: false, special: false, weather: false, treats: false, steps: false, music: false };

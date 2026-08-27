@@ -66,16 +66,16 @@ test("saved lines, alarm, and timer persist honestly", () => {
   assert.match(preloadSrc, /quit:/);
 });
 
-test("an asleep guest keeps the sleep pose and does not flip on the wander tick", () => {
+test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", () => {
   const life = { ...Life.blank(), asleep: true, sleepHeld: true, hunger: 70 };
-  assert.equal(Life.sleepHolds(life, "wander"), true);
+  assert.equal(Life.sleepHolds(life, "wander"), false);
   assert.equal(Life.sleepHolds(life, "sit"), true);
   assert.equal(Life.sleepHolds(life, "idle"), true);
   assert.equal(Life.sleepHolds(life, "sleep"), true);
   assert.equal(Life.sleepHolds(life, "talk"), false);
   assert.equal(Life.sleepHolds(life, "call"), false);
   assert.deepEqual(Life.wanderWhileAsleep(life), { cmd: "sleep", pose: "sleep" });
-  assert.equal(C.sleepHolds(true, "wander"), true);
+  assert.equal(C.sleepHolds(true, "wander"), false);
   assert.deepEqual(C.wanderWhileAsleep(true), { cmd: "sleep", pose: "sleep" });
   assert.equal(C.wanderWhileAsleep(false), null);
 

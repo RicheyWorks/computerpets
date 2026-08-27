@@ -1,24 +1,44 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type RefObject } from "react";
 import { livingByKey } from "@/lib/pets/living";
-import { beginCalled, dismissCalled, stepCalled, stillVisible, type CalledWalker } from "@/lib/pets/call-guests";
+import {
+  beginCalled,
+  dismissCalled,
+  markSung,
+  ROBIN_SONG,
+  shouldSing,
+  stepCalled,
+  stillVisible,
+  type CalledWalker,
+} from "@/lib/pets/call-guests";
 import { traitFor } from "@/lib/pets/traits";
 
 export function CalledGuests({
   keys,
   hostKey,
   hidden,
+  hostSleeping,
+  hostPoseRef,
+  onSong,
 }: {
   keys: string[];
   hostKey?: string;
   hidden?: boolean;
+  hostSleeping?: boolean;
+  hostPoseRef?: RefObject<{ x: number; facing: 1 | -1 }>;
+  onSong?: (line: string) => void;
 }) {
   const list = useMemo(() => keys.filter((k, i, all) => k && k !== hostKey && all.indexOf(k) === i), [hostKey, keys]);
   const [on, setOn] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const walkers = useRef<CalledWalker[]>([]);
   const frames = useRef<Record<string, string[]>>({});
+  const sitFrames = useRef<Record<string, string[]>>({});
   const acc = useRef<Record<string, number>>({});
   const frame = useRef<Record<string, number>>({});
+  const sleepRef = useRef(hostSleeping);
+  const songRef = useRef(onSong);
+  sleepRef.current = hostSleeping;
+  songRef.current = onSong;
 
   useEffect(() => {
     if (hidden || !list.length) {
@@ -30,6 +50,7 @@ export function CalledGuests({
     walkers.current = list.map((key, i) => {
       const guest = livingByKey(key);
       frames.current[key] = [...(guest.sprites.walk?.length ? guest.sprites.walk : guest.sprites.idle)];
+      sitFrames.current[key] = [...(guest.sprites.sit?.length ? guest.sprites.sit : guest.sprites.idle)];
       acc.current[key] = 0;
       frame.current[key] = 0;
       guest.preload();
@@ -42,7 +63,23 @@ export function CalledGuests({
       const dt = Math.min(0.08, (now - last) / 1000);
       last = now;
       const w = window.innerWidth;
-      walkers.current = walkers.current.map((g) => stepCalled(g, dt, w)).filter((g) => stillVisible(g));
+      const pose = hostPoseRef?.current;
+      const flags = {
+        hidden,
+        hostKey,
+        hostSleeping: !!sleepRef.current,
+        hostX: pose?.x,
+        hostLift: 0,
+        hostFacing: pose?.facing,
+      };
+      walkers.current = walkers.current.map((g) => {
+        const next = stepCalled(g, dt, w, flags);
+        if (shouldSing(next)) {
+          songRef.current?.(ROBIN_SONG);
+          return markSung(next);
+        }
+        return next;
+      }).filter((g) => stillVisible(g));
       const nodes = rootRef.current?.querySelectorAll<HTMLElement>("[data-called]") ?? [];
       for (const el of nodes) {
         const key = el.getAttribute("data-called") || "";
@@ -53,16 +90,20 @@ export function CalledGuests({
         }
         el.style.display = "";
         const trait = traitFor(key);
-        el.style.transform = `translate3d(${g.x}px, 0, 0) scale(${g.facing * (trait.scale || 1) * 0.72}, 1)`;
-        const imgs = frames.current[key] || [];
-        if (Math.abs(g.target - g.x) > 2) {
+        el.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing * (trait.scale || 1) * 0.72}, 1)`;
+        const perched = g.phase === "perch" || g.phase === "approach-perch";
+        const imgs = perched ? sitFrames.current[key] || frames.current[key] || [] : frames.current[key] || [];
+        if (Math.abs(g.target - g.x) > 2 && g.phase !== "perch") {
           acc.current[key] = (acc.current[key] || 0) + dt;
           if (acc.current[key] > 1 / 6.4 && imgs.length) {
             acc.current[key] = 0;
             frame.current[key] = ((frame.current[key] || 0) + 1) % imgs.length;
-            const img = el.querySelector("img");
-            if (img) img.src = imgs[frame.current[key]!]!;
           }
+        }
+        const img = el.querySelector("img");
+        if (img && imgs.length) {
+          const src = imgs[frame.current[key] || 0] || imgs[0];
+          if (src && img.src !== src) img.src = src;
         }
       }
       if (!walkers.current.length) {
@@ -73,7 +114,7 @@ export function CalledGuests({
     };
     raf = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(raf);
-  }, [hidden, list]);
+  }, [hidden, hostKey, hostPoseRef, list]);
 
   if (hidden || !on && !list.length) return null;
 

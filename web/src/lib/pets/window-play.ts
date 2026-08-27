@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -7,6 +7,7 @@ export const RIDGE = "ridge";
 export const COIL = "coil";
 export const PATH = "path";
 export const FIELD = "field";
+export const CRACKLE = "crackle";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -29,13 +30,16 @@ export const DUR = {
   fieldOn: 0.76,
   fieldHold: 1.55,
   fieldOff: 0.82,
+  crackleOn: 0.32,
+  crackleHop: 0.26,
+  crackleOff: 0.4,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof SILL | typeof IGNORE;
 export type PlayPhase =
   | "approach"
   | "leap"
@@ -56,6 +60,9 @@ export type PlayPhase =
   | "field-on"
   | "field-hold"
   | "field-off"
+  | "crackle-on"
+  | "crackle-hop"
+  | "crackle-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -79,6 +86,10 @@ export type PlayTarget = {
   sillEndX?: number;
   pathEndX?: number;
   pathEndLift?: number;
+  crackleEndX?: number;
+  crackleEndLift?: number;
+  hopFrom?: number;
+  hopTo?: number;
 };
 
 export type WindowPlay = {
@@ -93,6 +104,7 @@ export type WindowPlay = {
   from: PlayPoint;
   to: PlayPoint;
   abort?: boolean;
+  hopIndex?: number;
 };
 
 export type PlayFlags = {
@@ -118,6 +130,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "volt_dragon") return COIL;
   if (key === "trace_dragon") return PATH;
   if (key === "flux_dragon") return FIELD;
+  if (key === "spark_dragon") return CRACKLE;
   return SILL;
 }
 
@@ -193,6 +206,23 @@ export function coilPoint(win: DeskWindow, corner: "left" | "right", sprite: num
   const x = corner === "left" ? win.x - wrap : win.x + win.width - size + wrap;
   const lift = gripLift(win.y, work);
   return { x, lift: clamp(lift, 28, work.height - 48), corner };
+}
+
+export function cracklePoint(win: DeskWindow, u: number, sprite: number | undefined, work: WorkSpace, side?: "left" | "right") {
+  const size = sprite == null ? SPRITE : sprite;
+  const wrap = size * 0.28;
+  const edge = side === "right" ? "right" : "left";
+  const x = edge === "right" ? win.x + win.width - size + wrap : win.x - wrap;
+  const topLift = gripLift(win.y, work);
+  const botY = win.y + win.height * 0.7;
+  const maxLift = work.height - 48;
+  const botLift = clamp(gripLift(botY, work), 28, maxLift);
+  const t = Math.max(0, Math.min(1, u));
+  return {
+    x,
+    lift: clamp(topLift + (botLift - topLift) * t, 28, maxLift),
+    side: edge as "left" | "right",
+  };
 }
 
 export function fieldPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
@@ -271,6 +301,7 @@ export function pickTarget(
     if (kind === COIL) return w.width >= 140 && w.height >= 140;
     if (kind === PATH) return w.width >= 180 && w.height >= 160;
     if (kind === FIELD) return w.width >= 220 && w.height >= 200;
+    if (kind === CRACKLE) return w.width >= 100 && w.height >= 180;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -373,6 +404,31 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === CRACKLE) {
+    const edge = opts?.side || pickSide(best, petX, size, workW);
+    const startU = roll < 0.5 ? 0 : 1;
+    const endU = startU === 0 ? 1 : 0;
+    const start = cracklePoint(best, startU, size, work, edge);
+    const end = cracklePoint(best, endU, size, work, edge);
+    const approachX = clamp(start.x, 8, Math.max(8, workW - size - 8));
+    const leave = opts?.leave === "hop" || opts?.leave === "drop" ? opts.leave : roll < 0.5 ? "hop" : "drop";
+    const away = edge === "left" ? -88 : 88;
+    return {
+      id: best.id,
+      kind,
+      side: edge,
+      holdX: start.x,
+      holdLift: start.lift,
+      approachX,
+      landX: clamp(end.x + away, 8, Math.max(8, workW - size - 8)),
+      crackleEndX: end.x,
+      crackleEndLift: end.lift,
+      hopFrom: startU,
+      hopTo: endU,
+      leave,
+      spin: "none",
+    };
+  }
   const start = sillPoint(best, 0.12, size, work);
   const end = sillPoint(best, 0.88, size, work);
   return {
@@ -410,6 +466,11 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
   if (target.kind === FIELD) {
     const hold = fieldPoint(win, sprite, work);
     return { ...target, holdX: hold.x, holdLift: hold.lift };
+  }
+  if (target.kind === CRACKLE) {
+    const start = cracklePoint(win, target.hopFrom != null ? target.hopFrom : 0, sprite, work, target.side === "right" ? "right" : "left");
+    const end = cracklePoint(win, target.hopTo != null ? target.hopTo : 1, sprite, work, target.side === "right" ? "right" : "left");
+    return { ...target, holdX: start.x, holdLift: start.lift, crackleEndX: end.x, crackleEndLift: end.lift };
   }
   const start = sillPoint(win, 0.12, sprite, work);
   const end = sillPoint(win, 0.88, sprite, work);
@@ -600,14 +661,14 @@ export function stepPlay(
   if (!play || play.phase === "done") return play;
   const size = sprite == null ? SPRITE : sprite;
   const life = flags || {};
-  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off") {
+  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off") {
     return abortToFloor(play, { x: play.x, lift: play.lift }, work);
   }
   let next: WindowPlay = { ...play, t: play.t + Math.max(0, dt) };
   const win = findWin(windows, next.target.id);
-  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off") {
+  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off") {
     next = { ...next, target: refitTarget(next.target, win, size, work) };
-  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off") {
+  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off") {
     return abortToFloor(next, { x: next.x, lift: next.lift }, work);
   }
 
@@ -636,6 +697,9 @@ export function stepPlay(
       }
       if (target.kind === FIELD) {
         return goPhase(next, "field-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+      }
+      if (target.kind === CRACKLE) {
+        return goPhase(next, "crackle-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -881,6 +945,61 @@ export function stepPlay(
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = 0;
+    next.anim = "play";
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+  if (next.phase === "crackle-on") {
+    const u = next.t / DUR.crackleOn;
+    const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = target.side === "left" ? 1 : -1;
+    if (u >= 1) {
+      return { ...goPhase(next, "crackle-hop", { x: target.holdX, lift: target.holdLift }, { x: target.crackleEndX ?? target.holdX, lift: target.crackleEndLift ?? target.holdLift }, "play", next.facing), hopIndex: 0 };
+    }
+    return next;
+  }
+
+  if (next.phase === "crackle-hop") {
+    if (!win) return abortToFloor(next, { x: next.x, lift: next.lift }, work);
+    const hops = 3;
+    const idx = next.hopIndex || 0;
+    const startU = target.hopFrom != null ? target.hopFrom : 0;
+    const endU = target.hopTo != null ? target.hopTo : 1;
+    const fromU = startU + (endU - startU) * (idx / hops);
+    const toU = startU + (endU - startU) * ((idx + 1) / hops);
+    const from = cracklePoint(win, fromU, size, work, target.side === "right" ? "right" : "left");
+    const to = cracklePoint(win, toU, size, work, target.side === "right" ? "right" : "left");
+    const u = next.t / DUR.crackleHop;
+    const pose = leapPath(Math.min(1, u), from, to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot * 0.35;
+    next.anim = idx % 2 === 0 ? "play" : "idle";
+    next.facing = target.side === "left" ? 1 : -1;
+    if (u >= 1) {
+      if (idx + 1 >= hops) {
+        const endX = target.crackleEndX != null ? target.crackleEndX : to.x;
+        const endLift = target.crackleEndLift != null ? target.crackleEndLift : to.lift;
+        return goPhase(next, "crackle-off", { x: endX, lift: endLift }, { x: target.landX, lift: 0 }, "play", next.facing);
+      }
+      return { ...goPhase(next, "crackle-hop", to, to, idx % 2 === 0 ? "idle" : "play", next.facing), hopIndex: idx + 1 };
+    }
+    return next;
+  }
+
+  if (next.phase === "crackle-off") {
+    const u = next.t / DUR.crackleOff;
+    const pose = target.leave === "drop"
+      ? dropPath(Math.min(1, u), next.from, next.to)
+      : leapPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = target.leave === "drop" ? 0 : pose.rot;
     next.anim = "play";
     if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
     return next;

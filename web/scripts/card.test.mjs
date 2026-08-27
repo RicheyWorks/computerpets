@@ -40,7 +40,7 @@ test("the desk card law matches the overlay card", () => {
 test("an asleep guest keeps sleep on the wander tick", () => {
   assert.deepEqual(C.wanderWhileAsleep(true), { cmd: "sleep", pose: "sleep" });
   assert.equal(C.wanderWhileAsleep(false), null);
-  assert.equal(C.sleepHolds(true, "wander"), true);
+  assert.equal(C.sleepHolds(true, "wander"), false);
   assert.equal(C.sleepHolds(true, "sit"), true);
   assert.equal(C.sleepHolds(true, "idle"), true);
   assert.equal(C.sleepHolds(true, "talk"), false);

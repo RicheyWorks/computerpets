@@ -10,13 +10,13 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
   assert.equal(P.playFor("trace_dragon"), "path");
   assert.equal(P.playFor("flux_dragon"), "field");
-  assert.equal(P.playFor("spark_dragon"), "sill");
+  assert.equal(P.playFor("spark_dragon"), "crackle");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
@@ -534,6 +534,58 @@ test("an asleep Flux never starts a field, and sleep aborts a hold", () => {
   assert.equal(play.abort, true);
 });
 
+test("Spark crackles a window edge, hops corner to corner, then hops or drops — not cling, ridge, coil, path, field, or sill", () => {
+  const target = P.pickTarget([WIN], 40, "spark_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
+  assert.ok(target);
+  assert.equal(target.kind, "crackle");
+  assert.equal(target.side, "left");
+  assert.equal(target.spin, "none");
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const start = P.cracklePoint(WIN, 0, P.SPRITE, WORK, "left");
+  const end = P.cracklePoint(WIN, 1, P.SPRITE, WORK, "left");
+  assert.equal(target.holdX, start.x);
+  assert.ok(Math.abs(end.lift - start.lift) > 40, "corner to corner along the edge");
+  assert.ok(Math.abs(start.x - cling.x) > 8 || Math.abs(start.lift - cling.lift) > 20, "not Rui's mid-side cling");
+  assert.ok(Math.abs(start.x - ridge.x) > 40, "not Arc's title-bar center");
+  assert.ok(Math.abs(start.x - field.x) > 40, "not Flux's glass");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let hopLift = 0;
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "crackle-hop") hopLift = Math.max(hopLift, play.lift);
+  }
+  assert.ok(seen.has("crackle-on"));
+  assert.ok(seen.has("crackle-hop"));
+  assert.ok(seen.has("crackle-off"));
+  assert.ok(hopLift > 40);
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Spark's crackle, and sleep aborts it", () => {
+  const target = P.pickTarget([WIN], 200, "spark_dragon", WORK, P.SPRITE, { side: "left", leave: "drop" });
+  let play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: 0 }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  play = P.stepPlay(play, 0.4, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  assert.ok(play.phase === "crackle-on" || play.phase === "crackle-hop");
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.ok(Math.abs(play.target.holdX - target.holdX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "crackle-off");
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
@@ -542,6 +594,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /coil-on|coil-off/);
   assert.match(petSrc, /path-on|path-off/);
   assert.match(petSrc, /field-on|field-off/);
+  assert.match(petSrc, /crackle-on|crackle-off/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);

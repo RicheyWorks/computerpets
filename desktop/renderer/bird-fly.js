@@ -8,8 +8,8 @@
   const CALL_EVERY_S = 7.5;
   const PERCH_ON_S = 0.85;
   const LIFT_S = 0.72;
-  const SHOULDER_X = 38;
-  const SHOULDER_LIFT = 72;
+  const SHOULDER_X = 36;
+  const SHOULDER_LIFT = 36;
 
   function clamp(n, a, b) {
     return Math.max(a, Math.min(b, n));
@@ -153,6 +153,7 @@
       next.lift = flyLerp(u, next.fromLift, next.toLift, 22) + hoverBob;
       next.rot = Math.sin(u * Math.PI) * 10 * next.facing;
       if (u >= 1) {
+        if (perchNow) return goPerch(next, flags && flags.hostX, flags && flags.hostLift, flags && flags.hostFacing);
         if (next.age >= MIN_STAY_S * 2.2) return { ...next, phase: "done" };
         return { ...next, phase: "hover", t: 0, x: next.toX, lift: next.toLift, fromX: next.toX, fromLift: next.toLift };
       }
@@ -172,9 +173,9 @@
     }
     if (next.phase === "perch") {
       const hold = perchPoint(flags && flags.hostX, flags && flags.hostFacing, flags && flags.hostLift);
-      next.x = hold.x + Math.sin(next.age * 2.2) * 3;
-      next.lift = hold.lift + Math.sin(next.age * 6) * 2;
-      next.rot = Math.sin(next.age * 5) * 3;
+      next.x = hold.x + Math.sin(next.age * 1.4) * 1.2;
+      next.lift = hold.lift + Math.sin(next.age * 2.2) * 0.8;
+      next.rot = Math.sin(next.age * 2.4) * 1.5;
       next.toX = hold.x;
       next.toLift = hold.lift;
       return next;

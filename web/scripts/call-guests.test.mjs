@@ -46,6 +46,63 @@ test("/demo Call sits dropdown, type-in, den picker, and called walkers", () => 
   assert.match(roomSrc, /collapsed: false/);
 });
 
+test("a den of walkers keeps the same img nodes across ticks", () => {
+  const nodes = [];
+  const root = {
+    children: nodes,
+    appendChild(el) {
+      nodes.push(el);
+      return el;
+    },
+    removeChild(el) {
+      const i = nodes.indexOf(el);
+      if (i >= 0) nodes.splice(i, 1);
+      return el;
+    },
+    replaceChildren() {
+      throw new Error("replaceChildren-on-tick");
+    },
+  };
+  function createImg() {
+    const el = {
+      className: "",
+      alt: "",
+      dataset: {},
+      src: "",
+      style: {},
+      draggable: false,
+      addEventListener() {},
+      remove() {
+        root.removeChild(el);
+      },
+    };
+    return el;
+  }
+  const guests = ["cat", "dog", "robin"].map((key, i) => G.beginCalled(key, 800, i, 3));
+  const first = G.syncCalledPaint(root, guests, { createImg, frameOf: () => ["a.png", "b.png"] });
+  assert.equal(first.added, 3);
+  const kept = nodes.slice();
+  const stepped = guests.map((g) => G.stepCalled(g, 0.16, 800));
+  const second = G.syncCalledPaint(root, stepped, { createImg, frameOf: () => ["a.png", "b.png"] });
+  assert.equal(second.added, 0);
+  assert.equal(second.reused, 3);
+  assert.strictEqual(nodes[0], kept[0]);
+  assert.equal(Overlay.syncCalledPaint(root, stepped, { createImg, frameOf: () => ["a.png", "b.png"] }).reused, 3);
+});
+
+test("the robin perches on sleeping Rui and does not go gone", () => {
+  const flags = { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 };
+  let robin = G.beginCalled("robin", 800, 0, 1);
+  robin = G.stepCalled(robin, 0.05, 800, flags);
+  assert.equal(robin.phase, "approach-perch");
+  for (let i = 0; i < 40 && robin.phase !== "perch"; i++) robin = G.stepCalled(robin, 0.05, 800, flags);
+  assert.equal(robin.phase, "perch");
+  robin = G.stepCalled(robin, 24, 800, flags);
+  assert.equal(robin.phase, "perch");
+  assert.equal(G.ROBIN_SONG, Overlay.ROBIN_SONG);
+  assert.match(roomSrc, /hostSleeping/);
+});
+
 test("radio search splits 99.9 seattle fm and labels the box", () => {
   const q = music.parseRadioQuery("99.9 seattle fm");
   assert.equal(q.freq, "99.9");

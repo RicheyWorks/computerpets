@@ -386,8 +386,9 @@ function sitMusic() {
 function ruiSleepBout() {
   if (!kind || kind.key !== "red_panda") return false;
   if (life && life.hidden) return false;
-  if (life && life.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) return true;
   if (sim.trick && sim.trick.kind === "lie" && sim.trick.phase === "lie") return true;
+  if (sim.anim === "sleep") return true;
+  if (life && life.asleep) return true;
   return false;
 }
 
@@ -450,53 +451,57 @@ function spawnCalled(keys) {
   paintCalled();
 }
 
+function calledFlags() {
+  return {
+    hidden: !!(life && life.hidden),
+    hostKey: kind && kind.key,
+    hostSleeping: ruiSleepBout(),
+    hostX: sim.x,
+    hostLift: sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0,
+    hostFacing: sim.facing,
+  };
+}
+
 function paintCalled() {
-  if (!calledRoot) return;
   const G = window.PetCallGuests;
-  calledRoot.replaceChildren();
-  for (const g of called) {
-    if (G && !G.stillVisible(g)) continue;
-    const img = document.createElement("img");
-    img.className = "called-guest";
-    img.alt = g.name || g.key;
-    img.dataset.hit = "1";
-    img.dataset.callKey = g.key;
-    img.draggable = false;
-    const frames = g.sprites && g.sprites.walk ? g.sprites.walk : pack(g.key).walk;
-    img.src = frames[g.frame || 0];
-    img.style.transform = `translate3d(${g.x}px, 0, 0) scale(${g.facing}, 1)`;
-    img.addEventListener("pointerdown", (e) => {
-      e.stopPropagation();
-      if (!window.PetCallGuests) return;
-      const next = window.PetCallGuests.dismissCalled(g);
-      Object.assign(g, next);
-    });
-    calledRoot.appendChild(img);
-  }
+  if (!G || !calledRoot || !G.syncCalledPaint) return;
+  G.syncCalledPaint(calledRoot, called, {
+    frameOf: (g) => {
+      if (g.phase === "perch" || g.phase === "approach-perch") {
+        const sprites = g.sprites || pack(g.key);
+        return sprites.sit && sprites.sit.length ? sprites.sit : sprites.idle;
+      }
+      return (g.sprites && g.sprites.walk) || pack(g.key).walk;
+    },
+    onDismiss: (g) => {
+      Object.assign(g, G.dismissCalled(g));
+    },
+  });
 }
 
 function tickCalled(dt) {
   const G = window.PetCallGuests;
   if (!G || !calledRoot) return;
   const width = window.innerWidth;
-  let dirty = false;
+  const flags = calledFlags();
   called = called.filter((g) => {
-    const next = G.stepCalled(g, dt, width);
+    const next = G.stepCalled(g, dt, width, flags);
     Object.assign(g, next);
-    if (!G.stillVisible(g)) {
-      dirty = true;
-      return false;
-    }
+    if (!G.stillVisible(g)) return false;
     g.acc = (g.acc || 0) + dt;
-    if (Math.abs(g.target - g.x) > 2 && g.acc > 1 / 6.4) {
+    const moving = Math.abs(g.target - g.x) > 2 && g.phase !== "perch";
+    if (moving && g.acc > 1 / 6.4) {
       g.acc = 0;
       const walk = g.sprites.walk || pack(g.key).walk;
       g.frame = ((g.frame || 0) + 1) % walk.length;
     }
-    dirty = true;
+    if (G.shouldSing && G.shouldSing(g)) {
+      say(G.ROBIN_SONG);
+      Object.assign(g, G.markSung(g));
+    }
     return true;
   });
-  if (dirty) paintCalled();
+  paintCalled();
 }
 
 function tickBird(dt) {
@@ -1465,6 +1470,9 @@ function applyCommand() {
     sim.target = null;
     return;
   }
+  if ((sim.cmd === "wander" || sim.cmd === "seek" || sim.cmd === "eat" || sim.cmd === "play" || sim.cmd === "talk") && life?.asleep && window.PetLife?.wake) {
+    window.PetLife.wake(life);
+  }
   if (window.PetLife?.sleepHolds(life, sim.cmd) || (life?.asleep && window.PetCard?.sleepHolds(true, sim.cmd))) {
     sim.anim = "sleep";
     sim.target = null;
@@ -1648,7 +1656,10 @@ function pickChoice(id) {
   if (!picked) return;
   if (picked === "feed") handle("feed");
   else if (picked === "rest") handle("rest");
-  else if (picked === "walk") issue("wander");
+  else if (picked === "walk") {
+    if (window.PetLife?.wake) window.PetLife.wake(life);
+    issue("wander");
+  }
   else if (picked === "sit") issue("sit");
   else if (picked === "talk") handle("talk");
   else if (picked === "treat") handle("snack");
