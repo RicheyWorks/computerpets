@@ -18,7 +18,7 @@ const guideSrc = readFileSync(join(root, "src/lib/pets/house-guide.ts"), "utf8")
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark; Arm stores a stool as a sand tray; Snap counts a meeting rail as a wetland cup; Well fills a sill pan as a bog cup; Dew curls a glazing rebate as a peat saucer", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark; Arm stores a stool as a sand tray; Snap counts a meeting rail as a wetland cup; Well fills a sill pan as a bog cup; Dew curls a glazing rebate as a peat saucer; Thrum forages a window box as a meadow", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -140,6 +140,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("pitcher"), Overlay.playFor("pitcher"));
   assert.equal(P.playFor("sundew"), "curl");
   assert.equal(P.playFor("sundew"), Overlay.playFor("sundew"));
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("bumblebee"), Overlay.playFor("bumblebee"));
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -537,6 +539,15 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.ok(Math.abs(webFill.x - webCount.x) > 20 || Math.abs(webFill.lift - webCount.lift) > 16, "not Snap's cup");
   assert.ok(Math.abs(webFill.x - webStore.x) > 20 || Math.abs(webFill.lift - webStore.lift) > 16, "not Arm's tray");
   assert.ok(Math.abs(webFill.x - webOpen.x) > 20 || Math.abs(webFill.lift - webOpen.lift) > 16, "not Disk's ink");
+  const webForage = P.foragePoint(WIN, 176, WORK);
+  const deskForage = Overlay.foragePoint(WIN, 176, WORK);
+  assert.equal(webForage.lift, deskForage.lift);
+  assert.equal(webForage.x, deskForage.x);
+  assert.ok(webForage.lift > 16, "the window box is the nosing, not the floor");
+  assert.ok(Math.abs(webForage.x - webFill.x) > 20 || Math.abs(webForage.lift - webFill.lift) > 16, "not Well's pan");
+  const webCurl = P.curlPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(webForage.x - webCurl.x) > 20 || Math.abs(webForage.lift - webCurl.lift) > 16, "not Dew's rebate");
+  assert.ok(Math.abs(webForage.x - webCount.x) > 20 || Math.abs(webForage.lift - webCount.lift) > 16, "not Snap's cup");
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -6735,5 +6746,140 @@ test("the demo window plate walks Dew's curl the same way", () => {
   assert.ok(seen.has("curl-off"));
   assert.ok(curlRotMax > 8 && curlRotMax < 12, "a curl, not a slam");
   assert.ok(curlLiftMin < -4 && curlLiftMin > -8, "a fold, not a fill");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Thrum's forage the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/bees.ts"), "utf8"), /key: "bumblebee"[\s\S]{0,80}slug: "thrum"/);
+  const target = P.pickTarget([WIN], 80, "bumblebee", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "forage");
+  assert.equal(target.side, "box");
+  assert.equal(target.leave, "home");
+  assert.equal(Overlay.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("sundew"), "curl");
+  assert.equal(P.playFor("pitcher"), "fill");
+  assert.equal(P.playFor("venus_flytrap"), "count");
+  assert.equal(P.playFor("moss"), "lean");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("chinchilla"), "dust");
+  assert.equal(P.playFor("spark_dragon"), "crackle");
+  assert.equal(P.playFor("guinea_pig"), "wheek");
+  assert.equal(P.playFor("sea_star"), "reef");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("carpenter_bee"), "sill");
+  assert.equal(P.playFor("honeybee"), "sill");
+  assert.notEqual(target.kind, "thrum");
+  assert.notEqual(target.kind, "curl");
+  assert.notEqual(target.kind, "fill");
+  assert.notEqual(target.kind, "count");
+  assert.notEqual(target.kind, "lean");
+  assert.notEqual(target.kind, "dust");
+  assert.notEqual(target.kind, "crackle");
+  assert.notEqual(target.kind, "wheek");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she sits the window box, not the floor");
+  assert.ok(P.DUR.forage > P.DUR.forageHold, "the forage is the tell; the hold is the comma of fur");
+  assert.ok(P.DUR.forageOn !== Overlay.DUR.curlOn);
+  assert.ok(P.DUR.forage !== Overlay.DUR.curl);
+  assert.ok(P.DUR.forage !== Overlay.DUR.fill);
+  assert.ok(P.DUR.forage !== Overlay.DUR.count);
+  assert.ok(P.DUR.forage !== Overlay.DUR.lean);
+  assert.ok(P.DUR.forage !== Overlay.DUR.dust);
+  assert.ok(P.DUR.forage !== Overlay.DUR.crackleHop);
+  assert.ok(P.DUR.forage !== Overlay.DUR.wheek);
+  assert.ok(P.DUR.forage !== Overlay.DUR.chime);
+  assert.ok(P.DUR.forage !== Overlay.DUR.kindle);
+  assert.ok(P.DUR.forageHold !== Overlay.DUR.curlHold);
+  assert.ok(P.DUR.forageOff !== Overlay.DUR.curlOff);
+  const box = P.foragePoint(WIN, 176, WORK);
+  const deskBox = Overlay.foragePoint(WIN, 176, WORK);
+  assert.equal(box.x, deskBox.x);
+  assert.equal(box.lift, deskBox.lift);
+  const land = P.foragePath(0.1);
+  const deskLand = Overlay.foragePath(0.1);
+  assert.equal(land.rot, deskLand.rot);
+  assert.equal(land.lift, deskLand.lift);
+  assert.ok(land.rot < 2, "a land, not a buzz yet");
+  const buzz = P.foragePath(0.5);
+  const deskBuzz = Overlay.foragePath(0.5);
+  assert.equal(buzz.rot, deskBuzz.rot);
+  assert.equal(buzz.lift, deskBuzz.lift);
+  assert.ok(buzz.lift > 5, "one buzz, up");
+  assert.ok(buzz.rot > 6 && buzz.rot < 8, "one buzz, not a curl");
+  const done = P.foragePath(1);
+  const deskDone = Overlay.foragePath(1);
+  assert.equal(done.rot, deskDone.rot);
+  assert.equal(done.lift, deskDone.lift);
+  assert.ok(done.rot < 2, "then a comma of fur");
+  assert.ok(done.lift > -1 && done.lift < 2, "not a fold, not a fill");
+  const hold = P.forageHoldPath(0.5);
+  const deskHold = Overlay.forageHoldPath(0.5);
+  assert.equal(hold.rot, deskHold.rot);
+  assert.ok(hold.rot < 3, "the comma stays still");
+  assert.ok(hold.lift > -1 && hold.lift < 2, "not Dew's fold, not Well's rain");
+  const curl = P.curlPoint(WIN, 176, WORK);
+  const fill = P.fillPoint(WIN, 176, WORK);
+  const count = P.countPoint(WIN, 176, WORK);
+  const lean = P.leanPoint(WIN, 176, WORK);
+  const dust = P.dustPoint(WIN, 176, WORK);
+  const earth = P.earthPoint(WIN, 176, WORK);
+  const seed = P.seedPoint(WIN, 176, WORK);
+  const store = P.storePoint(WIN, 176, WORK);
+  const kindle = P.kindlePoint(WIN, 176, WORK);
+  const drape = P.drapePoint(WIN, "left", 176, WORK);
+  const sill = P.sillPoint(WIN, 0.12, 176, WORK);
+  assert.ok(Math.abs(target.holdX - curl.x) > 20 || Math.abs(target.holdLift - curl.lift) > 16, "not Dew");
+  assert.ok(Math.abs(target.holdX - fill.x) > 20 || Math.abs(target.holdLift - fill.lift) > 16, "not Well");
+  assert.ok(Math.abs(target.holdX - count.x) > 20 || Math.abs(target.holdLift - count.lift) > 16, "not Snap");
+  assert.ok(Math.abs(target.holdX - lean.x) > 20 || Math.abs(target.holdLift - lean.lift) > 16, "not Felt");
+  assert.ok(Math.abs(target.holdX - dust.x) > 20 || Math.abs(target.holdLift - dust.lift) > 16, "not Floss");
+  assert.ok(Math.abs(target.holdX - earth.x) > 20 || Math.abs(target.holdLift - earth.lift) > 16, "not Ground");
+  assert.ok(Math.abs(target.holdX - seed.x) > 20 || Math.abs(target.holdLift - seed.lift) > 16, "not Mast");
+  assert.ok(Math.abs(target.holdX - store.x) > 20 || Math.abs(target.holdLift - store.lift) > 16, "not Arm");
+  assert.ok(Math.abs(target.holdX - kindle.x) > 20 || Math.abs(target.holdLift - kindle.lift) > 16, "not Ember");
+  assert.ok(Math.abs(target.holdX - drape.x) > 20 || Math.abs(target.holdLift - drape.lift) > 16, "not Vesper");
+  assert.ok(Math.abs(target.holdLift - sill.lift) > 40, "not a generic sill");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let forageRotMax = 0;
+  let forageLiftMax = 0;
+  for (let i = 0; i < 3200 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "curl");
+    assert.notEqual(play.phase, "curl-hold");
+    assert.notEqual(play.phase, "fill");
+    assert.notEqual(play.phase, "fill-hold");
+    assert.notEqual(play.phase, "count");
+    assert.notEqual(play.phase, "count-hold");
+    assert.notEqual(play.phase, "lean");
+    assert.notEqual(play.phase, "dust");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "forage") {
+      forageRotMax = Math.max(forageRotMax, Math.abs(play.rot));
+      forageLiftMax = Math.max(forageLiftMax, play.lift - play.target.holdLift);
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift > 16);
+    }
+    if (play.phase === "forage-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift > -1, "not a fold");
+      assert.ok(play.lift - play.target.holdLift < 3, "a comma of fur");
+      assert.ok(Math.abs(play.rot) < 3, "still, not a curl");
+    }
+  }
+  assert.ok(seen.has("forage-on"));
+  assert.ok(seen.has("forage"));
+  assert.ok(seen.has("forage-hold"));
+  assert.ok(seen.has("forage-off"));
+  assert.ok(forageRotMax > 6 && forageRotMax < 8, "one buzz, not a curl");
+  assert.ok(forageLiftMax > 5, "one buzz, up");
   assert.equal(play.phase, "done");
 });
