@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -25,8 +25,9 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("cat"), "ledge");
   assert.equal(P.playFor("dog"), "watch");
   assert.equal(P.playFor("rabbit"), "thump");
+  assert.equal(P.playFor("hamster"), "stash");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("hamster"), "sill");
+  assert.equal(P.playFor("guinea_pig"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -76,6 +77,16 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(rabbit.kind, "watch");
   assert.notEqual(rabbit.kind, "ledge");
   assert.notEqual(rabbit.kind, "earth");
+  const hamster = P.pickTarget([WIN], 80, "hamster", WORK, P.SPRITE, { side: "left" });
+  assert.ok(hamster);
+  assert.equal(hamster.kind, "stash");
+  assert.equal(hamster.leave, "pop");
+  assert.ok(hamster.holdLift > 16);
+  assert.notEqual(hamster.kind, "sill");
+  assert.notEqual(hamster.kind, "watch");
+  assert.notEqual(hamster.kind, "thump");
+  assert.notEqual(hamster.kind, "ledge");
+  assert.notEqual(hamster.kind, "earth");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -193,6 +204,7 @@ test("other guests do not clone Rui's cling — they walk a sill and hop down", 
     assert.notEqual(play.phase, "dive");
     assert.notEqual(play.phase, "watch-hold");
     assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
   }
   assert.ok(seen.has("sill-hop"));
   assert.ok(seen.has("sill-walk"));
@@ -1625,6 +1637,158 @@ test("a moved window refits Thimble's thump; sleep, card, and hide abort; Thimbl
   assert.ok(play.lift < 40);
 });
 
+test("Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops out — not a ledge, watch, thump, earth, or sill", () => {
+  const WIN_B = { id: "hw2", x: 1040, y: 120, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "hamster", WORK, P.SPRITE, { side: "left" });
+  assert.ok(target);
+  assert.equal(target.kind, "stash");
+  assert.equal(target.side, "left");
+  assert.equal(target.leave, "pop");
+  assert.equal(target.clickToId, undefined);
+  assert.ok(P.DUR.stashCheek > P.DUR.thump, "the cheek is a hold, not Thimble's stamp");
+  assert.ok(P.DUR.stashCheek < P.DUR.watchHold / 2, "the cheek is short, not Pip's long watch");
+  assert.ok(P.DUR.stashCheek < P.DUR.ledgeSit / 2, "the cheek is not Miso's blink");
+  assert.ok(P.DUR.stashCheek < P.DUR.earthSit, "the cheek is not Ground's lug hold");
+  const stash = P.stashPoint(WIN, "left", P.SPRITE, WORK);
+  const watch = P.watchPoint(WIN, P.SPRITE, WORK);
+  const thump = P.thumpPoint(WIN, P.SPRITE, WORK, "left");
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.5, P.SPRITE, WORK);
+  const earth = P.earthPoint(WIN, P.SPRITE, WORK);
+  const ledge = P.ledgePoint(WIN, P.SPRITE, WORK);
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const hold = P.holdPoint(WIN, "jamb", "left", P.SPRITE, WORK);
+  const charge = P.chargePoint(WIN, "bl", P.SPRITE, WORK);
+  assert.equal(target.holdX, stash.x);
+  assert.equal(target.holdLift, stash.lift);
+  assert.ok(stash.lift > 16, "the drawer is off the floor");
+  assert.ok(stash.x >= WIN.x && stash.x + P.SPRITE <= WIN.x + WIN.width + 2, "he ducks inside the rect");
+  assert.ok(Math.abs(stash.x - earth.x) > 40, "not Ground's mid-rail lug");
+  assert.ok(stash.lift > earth.lift, "inside the bottom corner, not below the frame");
+  assert.ok(Math.abs(stash.x - charge.x) > 8 || Math.abs(stash.lift - charge.lift) > 16, "not Ion's glass gather");
+  assert.ok(ledge.lift > stash.lift + 40, "not Miso's top ledge");
+  assert.equal(watch.lift, 0, "Pip stays on the floor");
+  assert.equal(thump.lift, 0, "Thimble stays on the floor");
+  assert.ok(sill.lift > stash.lift + 40, "not a generic top sill");
+  assert.ok(ridge.lift > stash.lift + 40, "not Arc's ridge");
+  assert.ok(Math.abs(stash.x - cling.x) > 20 || Math.abs(stash.lift - cling.lift) > 40, "not Rui's mid-side cling");
+  assert.ok(Math.abs(stash.x - coil.x) > 20 || Math.abs(stash.lift - coil.lift) > 40, "not Volt's wrap-hold");
+  assert.ok(Math.abs(stash.x - field.x) > 40 || Math.abs(stash.lift - field.lift) > 20, "not Flux's glass");
+  assert.ok(Math.abs(stash.x - hold.x) > 16 || Math.abs(stash.lift - hold.lift) > 40, "not Fuse's jamb clip");
+  const on0 = P.stashOnPath(0, { x: 40, lift: 0 }, { x: stash.x, lift: stash.lift });
+  const onMid = P.stashOnPath(0.5, { x: 40, lift: 0 }, { x: stash.x, lift: stash.lift });
+  const on1 = P.stashOnPath(1, { x: 40, lift: 0 }, { x: stash.x, lift: stash.lift });
+  assert.equal(on0.lift, 0);
+  assert.ok(onMid.lift > on0.lift, "he hops into the drawer");
+  assert.ok(Math.abs(on1.lift - stash.lift) < 0.001);
+  assert.equal(on1.x, stash.x);
+  const cheek0 = P.stashCheekPath(0);
+  const cheekMid = P.stashCheekPath(0.25);
+  const cheek1 = P.stashCheekPath(1);
+  assert.equal(cheek0.lift, 0);
+  assert.ok(cheekMid.lift > 2 && cheekMid.lift < 8, "cheeks work in the drawer");
+  assert.ok(Math.abs(cheekMid.rot) > 2, "the stuff is visible");
+  assert.ok(Math.abs(cheekMid.rot) < 16, "not a look-up hold");
+  assert.equal(cheek1.lift, 0);
+  const popMid = P.stashOffPath(0.5, { x: stash.x, lift: stash.lift }, { x: stash.x - 80, lift: 0 });
+  assert.ok(popMid.lift > 20, "the pop leaves the drawer");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let cheekMs = 0;
+  let cheekLift = 0;
+  let cheekXMin = Infinity;
+  let cheekXMax = -Infinity;
+  let cheekRot = 0;
+  let maxLift = 0;
+  let windowIds = new Set();
+  for (let i = 0; i < 700 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    maxLift = Math.max(maxLift, play.lift);
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "earth-on");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "ledge-on");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "watch-on");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "thump-on");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "stash-cheek") {
+      cheekMs += 0.05;
+      cheekLift = play.lift;
+      cheekRot = Math.max(cheekRot, Math.abs(play.rot));
+      cheekXMin = Math.min(cheekXMin, play.x);
+      cheekXMax = Math.max(cheekXMax, play.x);
+      assert.equal(play.anim, "play");
+      assert.ok(play.lift > 16, "the cheek stays in the drawer");
+      assert.equal(play.x, play.target.holdX);
+    }
+    if (play.phase === "stash-on" || play.phase === "stash-off") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+  }
+  assert.ok(seen.has("stash-on"));
+  assert.ok(seen.has("stash-cheek"));
+  assert.ok(seen.has("stash-off"));
+  assert.ok(!seen.has("sill-walk"), "not a sill parade");
+  assert.ok(!seen.has("watch-hold"), "not Pip's watch");
+  assert.ok(!seen.has("thump"), "not Thimble's stamp");
+  assert.ok(!seen.has("ledge-sit"), "not Miso's ledge sit");
+  assert.ok(!seen.has("earth-sit"), "not Ground's lug");
+  assert.ok(cheekMs >= 0.75 && cheekMs <= 1.1, `the cheek is a short hold (${cheekMs})`);
+  assert.ok(cheekLift > 16, "he cheeks inside the drawer");
+  assert.ok(cheekRot > 2, "the cheeks work");
+  assert.ok(cheekXMax - cheekXMin < 2, "one hamster to a drawer");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(maxLift > 40, "he hops into the window drawer");
+  assert.ok(maxLift < ledge.lift - 20, "never the top ledge");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Clip's stash; sleep, card, and hide abort; Clip never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "hamster", WORK, P.SPRITE, { side: "left" });
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 120 && play.phase !== "stash-cheek"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "stash-cheek");
+  assert.ok(play.lift > 16);
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "stash-cheek");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  assert.equal(play.x, play.target.holdX);
+  assert.ok(play.lift > 16);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "stash-off");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
@@ -1642,6 +1806,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /ledge-on|ledge-off/);
   assert.match(petSrc, /watch-on|watch-off|playFor/);
   assert.match(petSrc, /thump-on|thump-off|playFor/);
+  assert.match(petSrc, /stash-on|stash-off|playFor/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);

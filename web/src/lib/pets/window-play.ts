@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -16,6 +16,7 @@ export const EARTH = "earth";
 export const LEDGE = "ledge";
 export const WATCH = "watch";
 export const THUMP = "thump";
+export const STASH = "stash";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -68,13 +69,16 @@ export const DUR = {
   thumpOn: 0.34,
   thump: 0.3,
   thumpOff: 0.3,
+  stashOn: 0.42,
+  stashCheek: 0.88,
+  stashOff: 0.4,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof SILL | typeof IGNORE;
 export type HoldClip = "jamb" | "sash";
 export type ClickNode = "left" | "right" | "tl" | "tr" | "bl" | "br";
 export type PlayPhase =
@@ -128,6 +132,9 @@ export type PlayPhase =
   | "thump-on"
   | "thump"
   | "thump-off"
+  | "stash-on"
+  | "stash-cheek"
+  | "stash-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -147,7 +154,7 @@ export type PlayTarget = {
   landX: number;
   diveFrom?: "top" | "side";
   spin?: "backflip" | "spin" | "none";
-  leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish";
+  leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop";
   sillEndX?: number;
   pathEndX?: number;
   pathEndLift?: number;
@@ -219,6 +226,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "cat") return LEDGE;
   if (key === "dog") return WATCH;
   if (key === "rabbit") return THUMP;
+  if (key === "hamster") return STASH;
   return SILL;
 }
 
@@ -419,6 +427,7 @@ export function pickTarget(
     if (kind === LEDGE) return w.width >= 180 && w.height >= 80;
     if (kind === WATCH) return w.width >= 160 && w.height >= 70;
     if (kind === THUMP) return w.width >= 140 && w.height >= 70;
+    if (kind === STASH) return w.width >= 160 && w.height >= 140;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -747,6 +756,23 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === STASH) {
+    const edge = opts?.side || pickSide(best, petX, size, workW);
+    const hold = stashPoint(best, edge, size, work);
+    const approachX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+    const away = edge === "left" ? -80 : 80;
+    return {
+      id: best.id,
+      kind,
+      side: edge,
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave: "pop",
+      spin: "none",
+    };
+  }
   const start = sillPoint(best, 0.12, size, work);
   const end = sillPoint(best, 0.88, size, work);
   return {
@@ -829,6 +855,11 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
     const edge = target.side === "right" ? "right" : "left";
     const hold = thumpPoint(win, sprite, work, edge);
     return { ...target, holdX: hold.x, holdLift: 0 };
+  }
+  if (target.kind === STASH) {
+    const edge = target.side === "right" ? "right" : "left";
+    const hold = stashPoint(win, edge, sprite, work);
+    return { ...target, holdX: hold.x, holdLift: hold.lift };
   }
   const start = sillPoint(win, 0.12, sprite, work);
   const end = sillPoint(win, 0.88, sprite, work);
@@ -1225,6 +1256,57 @@ export function thumpVanishPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
+export function stashPoint(win: DeskWindow, corner: "left" | "right" | string | undefined, sprite: number | undefined, work: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const edge: "left" | "right" = corner === "right" ? "right" : "left";
+  const nestX = Math.max(6, size * 0.03);
+  const nestBot = Math.max(14, size * 0.08);
+  const x = edge === "right" ? win.x + win.width - size - nestX : win.x + nestX;
+  const gripY = win.y + win.height - nestBot;
+  const lift = gripLift(gripY, work);
+  const maxLift = (work && work.height ? work.height : 800) - 48;
+  return { x, lift: clamp(lift, 16, maxLift), side: edge };
+}
+
+export function stashOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = t * t * (3 - 2 * t);
+  const fromX = from.x ?? 0;
+  const toX = to.x ?? fromX;
+  const fromLift = from.lift ?? 0;
+  const toLift = to.lift ?? 0;
+  const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + hop * 16,
+    rot: (toX >= fromX ? 1 : -1) * 10 * hop,
+  };
+}
+
+export function stashCheekPath(u: number) {
+  const t = Math.max(0, Math.min(1, u));
+  const pulse = Math.sin(t * Math.PI * 2);
+  return {
+    lift: Math.abs(pulse) * 5,
+    rot: pulse * 8,
+  };
+}
+
+export function stashOffPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = t * t * (2 - t);
+  const fromX = from.x ?? 0;
+  const toX = to.x ?? fromX;
+  const fromLift = from.lift ?? 0;
+  const toLift = to.lift ?? 0;
+  const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + hop * 20,
+    rot: (toX >= fromX ? 1 : -1) * 12 * hop,
+  };
+}
+
 export function earthStepOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   const t = Math.max(0, Math.min(1, u));
   const fromX = from.x ?? 0;
@@ -1329,7 +1411,7 @@ export function stepPlay(
   if (!play || play.phase === "done") return play;
   const size = sprite == null ? SPRITE : sprite;
   const life = flags || {};
-  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off") {
+  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off") {
     return abortToFloor(play, { x: play.x, lift: play.lift }, work);
   }
   let next: WindowPlay = { ...play, t: play.t + Math.max(0, dt) };
@@ -1337,9 +1419,9 @@ export function stepPlay(
     ? next.target.clickToId
     : next.target.id;
   const win = findWin(windows, lookId);
-  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off") {
+  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off") {
     next = { ...next, target: refitTarget(next.target, win, size, work, windows) };
-  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off") {
+  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off") {
     return abortToFloor(next, { x: next.x, lift: next.lift }, work);
   }
 
@@ -1395,6 +1477,9 @@ export function stepPlay(
       }
       if (target.kind === THUMP) {
         return goPhase(next, "thump-on", { x: dest, lift: 0 }, { x: target.holdX, lift: 0 }, "play", dir);
+      }
+      if (target.kind === STASH) {
+        return goPhase(next, "stash-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -2088,6 +2173,46 @@ export function stepPlay(
   if (next.phase === "thump-off") {
     const u = next.t / DUR.thumpOff;
     const pose = thumpVanishPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+  if (next.phase === "stash-on") {
+    const face: 1 | -1 = target.landX >= target.holdX ? 1 : -1;
+    const u = next.t / DUR.stashOn;
+    const pose = stashOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = target.side === "left" ? 1 : -1;
+    if (u >= 1) {
+      return goPhase(next, "stash-cheek", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "stash-cheek") {
+    const face: 1 | -1 = target.landX >= target.holdX ? 1 : -1;
+    const pose = stashCheekPath(Math.min(1, next.t / DUR.stashCheek));
+    next.x = target.holdX;
+    next.lift = target.holdLift + pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = face;
+    if (next.t >= DUR.stashCheek) {
+      return goPhase(next, "stash-off", { x: target.holdX, lift: target.holdLift }, { x: target.landX, lift: 0 }, "play", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "stash-off") {
+    const u = next.t / DUR.stashOff;
+    const pose = stashOffPath(Math.min(1, u), next.from, next.to);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
