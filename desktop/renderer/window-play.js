@@ -6805,10 +6805,10 @@
 
   function digPoint(win, sprite, work) {
     const size = sprite == null ? SPRITE : sprite;
-    const pad = 32;
+    const pad = 28;
     const span = Math.max(0, win.width - size - pad * 2);
-    const x = win.x + pad + span * 0.78;
-    const bank = Math.max(20, size * 0.12);
+    const x = win.x + pad + span * 0.34;
+    const bank = Math.max(34, size * 0.19);
     const gripY = win.y + win.height - bank;
     const lift = gripLift(gripY, work);
     const maxLift = (work && work.height ? work.height : 800) - 48;
