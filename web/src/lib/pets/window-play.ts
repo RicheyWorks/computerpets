@@ -1191,10 +1191,11 @@ export function thumpOnPath(u: number, from: PlayPoint, to: PlayPoint) {
   const ease = t * t * (3 - 2 * t);
   const fromX = from.x ?? 0;
   const toX = to.x ?? fromX;
+  const arc = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
   return {
     x: fromX + (toX - fromX) * ease,
-    lift: Math.sin(t * Math.PI) * 20,
-    rot: (toX >= fromX ? 1 : -1) * 10 * Math.sin(t * Math.PI),
+    lift: arc * 20,
+    rot: (toX >= fromX ? 1 : -1) * 10 * arc,
   };
 }
 
@@ -1216,10 +1217,11 @@ export function thumpVanishPath(u: number, from: PlayPoint, to: PlayPoint) {
   const ease = t * t * (2 - t);
   const fromX = from.x ?? 0;
   const toX = to.x ?? fromX;
+  const arc = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
   return {
     x: fromX + (toX - fromX) * ease,
-    lift: Math.sin(t * Math.PI) * 24,
-    rot: (toX >= fromX ? 1 : -1) * 14 * Math.sin(t * Math.PI),
+    lift: arc * 24,
+    rot: (toX >= fromX ? 1 : -1) * 14 * arc,
   };
 }
 
