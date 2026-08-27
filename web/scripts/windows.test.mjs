@@ -45,6 +45,8 @@ test("the demo draws a window plate; the overlay keeps real rects", () => {
   assert.match(roomSrc, /DemoWindowPlate/);
   assert.match(plateSrc, /data-demo-window/);
   assert.match(plateSrc, /A window/);
+  assert.match(plateSrc, /A second window/);
+  assert.equal(W.demoWindowPlates({ width: 1400, height: 800 }).length, 2);
   assert.match(livingSrc, /window-play/);
   assert.match(livingSrc, /beginPlay/);
   assert.doesNotMatch(plateSrc, /desktopCapturer|GetDC|BitBlt/);

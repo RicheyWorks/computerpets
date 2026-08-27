@@ -163,6 +163,7 @@ export function takeRects(
 }
 
 export const DEMO_WINDOW_ID = "demo-window";
+export const DEMO_WINDOW_B_ID = "demo-window-b";
 
 export function demoWindowPlate(stage: { width: number; height: number }): DeskWindow {
   const width = Math.min(stage.width * 0.46, 420);
@@ -174,4 +175,17 @@ export function demoWindowPlate(stage: { width: number; height: number }): DeskW
     width,
     height,
   };
+}
+
+export function demoWindowPlates(stage: { width: number; height: number }): DeskWindow[] {
+  return [
+    demoWindowPlate(stage),
+    {
+      id: DEMO_WINDOW_B_ID,
+      x: stage.width * 0.08,
+      y: stage.height * 0.32,
+      width: Math.min(stage.width * 0.34, 320),
+      height: stage.height * 0.36,
+    },
+  ];
 }
