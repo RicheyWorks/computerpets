@@ -16,7 +16,8 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Burr leftover balls at a pane foot; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Floss leftover dusts a meeting rail; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("chinchilla"), "dust");
   assert.equal(WP.playFor("hedgehog"), "ball");
   assert.equal(WP.playFor("ferret"), "thread");
   assert.equal(WP.playFor("parrot"), "hook");
