@@ -168,7 +168,7 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 - [x] House-hand keeper card on overlay, `/demo`, desk, Live, and Meet: name, stage / bond, hunger / rest / bond, FEED / PLAY / REST. Same house. Care is local. `/pet/feed` is not a door. Pirate is Rui’s character, not a new guest.
 - [x] Overlay and `/demo` heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from `GET /api/public/heartbeat` — never a painted “UP”. Unreachable Java is DOWN / unread.
-- [ ] Rui-sharp poster look for that card. The card exists; it is not yet the ad frame.
+- [x] Rui-sharp poster look for that card. Guest name, stage, bond title, hunger / rest / bond, Feed / Play / Rest, honest heartbeat. Same house on overlay, `/demo`, desk, Live, and Meet.
 - [ ] Align advertised care routes with what we ship, or grow `/pet/feed`, `/pet/play`, `/pet/rest` as the contract. Do not claim 200s we do not return.
 - [ ] Honest GPU sense as a first-class pet sense (heat, util, memory, power). `/metrics/gpu` or desktop-local metrics. Do not fake numbers.
 - [ ] Real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. Today’s overlay is Electron/Chromium; the blotter is Qt OpenGL. Do not invent a finished DX12 engine.
