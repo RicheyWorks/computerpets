@@ -7366,7 +7366,7 @@ test("the demo window plate walks Disc's snip the same way", () => {
     if (play.phase === "snip-hold" && play.t > 0) {
       assert.equal(play.anim, "sit");
       assert.ok(play.lift - play.target.holdLift < 0, "the disc is under her");
-      assert.ok(play.rot < -2, "nose down, carrying");
+      assert.ok(play.rot * play.facing < -2, "nose down, carrying");
       assert.ok(Math.abs(play.x - play.target.holdX) < 3, "still on the leaf");
     }
   }

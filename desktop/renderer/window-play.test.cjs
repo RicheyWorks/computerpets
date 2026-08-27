@@ -12023,7 +12023,7 @@ test("Disc snips a window-box leaf as foliage: hover to the foliage, snip a circ
     if (play.phase === "snip-hold" && play.t > 0) {
       assert.equal(play.anim, "sit", "the disc is carried");
       assert.ok(play.lift - play.target.holdLift < 0, "under her");
-      assert.ok(play.rot < -2, "nose down");
+      assert.ok(play.rot * play.facing < -2, "nose down");
       assert.ok(Math.abs(play.x - play.target.holdX) < 3, "still on the leaf");
     }
   }
