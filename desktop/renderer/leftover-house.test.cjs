@@ -16,7 +16,8 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Pulse leftover chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Ochre leftover reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("sea_star"), "reef");
   assert.equal(WP.playFor("moon_jelly"), "chime");
   assert.equal(WP.playFor("nautilus"), "rise");
   assert.equal(WP.playFor("cuttlefish"), "flush");
@@ -59,7 +60,7 @@ test("Pulse leftover chimes a window pane as a glass of water; Chamber leftover 
   assert.equal(WP.playFor("red_panda"), "cling-dive");
   assert.equal(WP.playFor("cyber_dragon"), "ridge");
   assert.equal(WP.playFor("gecko"), "sill");
-  assert.equal(WP.playFor("sea_star"), "sill");
+  assert.equal(WP.playFor("hermit_crab"), "sill");
 });
 
 test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () => {
