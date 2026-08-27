@@ -45,6 +45,7 @@ test("unread heartbeat stays DOWN; a live door can be UP", () => {
 test("the same keeper card sits desk, /demo, Live, Meet, and the Windows overlay", () => {
   assert.match(roomSrc, /KeeperCard/);
   assert.match(demoSrc, /CompanionRoom/);
+  assert.match(demoSrc, /WindowsDeskSit/);
   assert.match(deskSrc, /CompanionRoom/);
   assert.match(liveSrc, /CompanionRoom/);
   assert.match(meetSrc, /KeeperHeartbeat/);

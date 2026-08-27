@@ -4,6 +4,21 @@
   const TAP_PX_MAC = 12;
   const TAP_PX_LINUX = 10;
 
+  /** Rui and the grid ten. The tray can pick them without burying them in two hundred twenty. */
+  const DESK_PICKS = [
+    "red_panda",
+    "cyber_dragon",
+    "volt_dragon",
+    "trace_dragon",
+    "flux_dragon",
+    "spark_dragon",
+    "ion_dragon",
+    "gauss_dragon",
+    "relay_dragon",
+    "fuse_dragon",
+    "ground_dragon",
+  ];
+
   const CARE_VERBS = [
     "Feed",
     "Treat",
@@ -28,6 +43,10 @@
     return platform === "linux" || /^Linux/i.test(String(platform || ""));
   }
 
+  function isWindows(platform) {
+    return platform === "win32" || /^Win/i.test(String(platform || ""));
+  }
+
   /** A click on the Mac extra or the Linux mark opens care. A click on the Windows tray toggles the window. */
   function extraClick(platform) {
     return isMac(platform) || isLinux(platform) ? "menu" : "toggle";
@@ -40,12 +59,12 @@
     return TAP_PX;
   }
 
-  /** First click on a Mac or a Linux desk is a sit, not a focus. */
+  /** First click on Windows, Mac, or Linux is a sit, not a focus steal. */
   function firstClick(platform) {
-    return isMac(platform) || isLinux(platform) ? "accept" : "focus";
+    return isMac(platform) || isLinux(platform) || isWindows(platform) ? "accept" : "focus";
   }
 
-  /** They walk every Space. They walk every workspace. */
+  /** They walk every Space. They walk every workspace. Windows virtual desktops stay a later door. */
   function spacesWalk(platform) {
     return isMac(platform) || isLinux(platform);
   }
@@ -58,9 +77,9 @@
     return isMac(platform);
   }
 
-  /** The Mac and Linux floors follow the desk under the cursor. Windows stays the primary blotter. */
+  /** The Windows, Mac, and Linux floors follow the desk under the cursor. */
   function followCursorDisplay(platform) {
-    return isMac(platform) || isLinux(platform);
+    return isMac(platform) || isLinux(platform) || isWindows(platform);
   }
 
   function overlayChrome(platform) {
@@ -84,16 +103,28 @@
     }
     return {
       type: null,
-      acceptFirstMouse: false,
+      acceptFirstMouse: true,
       hiddenInMissionControl: false,
       hideDock: false,
-      focusable: true,
+      focusable: false,
     };
   }
 
-  /** Mutter and KWin do not forward a hover through an ignored floor. The mark watches the cursor. */
+  /**
+   * DWM layered glass, Mutter, and KWin do not reliably forward a hover through
+   * an ignored floor. The tray watches the cursor. This is still Chromium
+   * compositing, not a DirectX 12 or Vulkan engine.
+   */
   function hitForward(platform) {
-    return isLinux(platform);
+    return isLinux(platform) || isWindows(platform);
+  }
+
+  function deskPicks() {
+    return DESK_PICKS.slice();
+  }
+
+  function isDeskPick(key) {
+    return DESK_PICKS.indexOf(key) >= 0;
   }
 
   function cursorHits(point, rects) {
@@ -135,8 +166,10 @@
     TAP_PX,
     TAP_PX_MAC,
     TAP_PX_LINUX,
+    DESK_PICKS,
     isMac,
     isLinux,
+    isWindows,
     extraClick,
     tapPx,
     firstClick,
@@ -146,6 +179,8 @@
     followCursorDisplay,
     overlayChrome,
     hitForward,
+    deskPicks,
+    isDeskPick,
     cursorHits,
     sameArea,
     hideWindowLabel,

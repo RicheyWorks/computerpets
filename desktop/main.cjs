@@ -91,8 +91,8 @@ function currentName() {
   return roster.find((r) => r.key === currentKey)?.name ?? "Companion";
 }
 
-function companionMenu() {
-  return roster.map((r) => ({
+function guestRadio(r) {
+  return {
     label: `${r.name} — ${r.speciesLabel}`,
     type: "radio",
     checked: r.key === currentKey,
@@ -101,7 +101,19 @@ function companionMenu() {
       win?.webContents.send("switch", r.key);
       refreshMenus();
     },
-  }));
+  };
+}
+
+function companionMenu() {
+  return roster.map(guestRadio);
+}
+
+/** Rui and the grid ten sit first. The rest of the house stays under Companions. */
+function deskPickMenu() {
+  return Desk.deskPicks()
+    .map((key) => roster.find((r) => r.key === key))
+    .filter((r) => r && r.key)
+    .map(guestRadio);
 }
 
 function careMenu() {
@@ -134,6 +146,7 @@ function trayTemplate() {
   return [
     { label: statusLabel(), enabled: false },
     { type: "separator" },
+    { label: "On the desk", submenu: deskPickMenu() },
     { label: "Companions", submenu: companionMenu() },
     { type: "separator" },
     ...careMenu(),
@@ -157,6 +170,7 @@ function macAppMenu() {
   return [
     { role: "appMenu" },
     { label: "Care", submenu: careMenu() },
+    { label: "On the desk", submenu: deskPickMenu() },
     { label: "Companions", submenu: companionMenu() },
     {
       label: "Window",
@@ -261,7 +275,10 @@ function createWindow() {
   win.setIgnoreMouseEvents(true, { forward: true });
   win.setMenuBarVisibility(false);
   win.loadFile(path.join(__dirname, "renderer", "index.html"));
-  win.once("ready-to-show", () => win?.showInactive());
+  win.once("ready-to-show", () => {
+    fitWorkArea();
+    win?.showInactive();
+  });
   win.on("closed", () => {
     win = null;
   });
@@ -292,6 +309,7 @@ function popupPetMenu(x, y) {
   Menu.buildFromTemplate([
     { label: statusLabel(), enabled: false },
     { type: "separator" },
+    { label: "On the desk", submenu: deskPickMenu() },
     { label: "Companions", submenu: companionMenu() },
     { type: "separator" },
     ...careMenu(),
@@ -331,7 +349,7 @@ let hitRects = [];
 let hitPoll = null;
 let wantClickable = false;
 
-/** The compositor does not forward a hover. The mark watches the cursor. */
+/** DWM, Mutter, and KWin do not reliably forward a hover. The tray watches the cursor. */
 function startHitForward() {
   if (!Desk.hitForward(process.platform) || hitPoll) return;
   hitPoll = setInterval(() => {

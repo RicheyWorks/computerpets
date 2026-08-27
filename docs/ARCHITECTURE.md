@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-26 (Grid ten live on the Windows desk; keeper card tells the truth) |
+| **Last Updated** | 2026-08-26 (Windows overlay sits the work area; grid ten walk the glass) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -727,7 +727,7 @@ Virtual pets that live on the keeper’s real desktop. Two hundred twenty living
 
 | Ad capability | House system | Honest gap |
 |---|---|---|
-| Live on the desktop / rule the screen | Electron overlay (`desktop/`, `main.cjs`) already sits on the Windows work area; Mac extra and Linux mark already exist as later doors. Pets walk among real windows and icons. Desktop-first. **Windows 10/11 first.** | Overlay is Chromium compositing today, not a native compositor that owns the screen. Later work grows the sit, not a fake wallpaper. |
+| Live on the desktop / rule the screen | Electron overlay (`desktop/`, `main.cjs`) sits the Windows 10/11 work area under the cursor. Empty glass click-throughs; hits stay on the pet, keeper card, treats, gifts, and choice sheet. The tray pins Rui and the grid ten. `/demo` shows the same sit. Mac extra and Linux mark already exist as later doors. Desktop-first. **Windows 10/11 first.** | Overlay is Chromium compositing today, not a native compositor that owns the screen. Not DirectX 12. Not Vulkan. Windows virtual desktops stay a later door. Do not invent a fake wallpaper. |
 | 220 animals | `PetType` / living desk / overlay roster / blotter — two hundred twenty living kinds. The 210 leftover sit is done. Arc is the first cyber-dragon guest. Volt is the second. Trace is the third. Flux is the fourth. Spark is the fifth. Ion is the sixth. Gauss is the seventh. Relay is the eighth. Fuse is the ninth. Ground is the tenth. | Catalog is 220. Do not invent store IDs. Do not retouch landed guests. Do not add an eleventh new guest (no cyber-scorpion) in this sit. |
 | Rui-level render | Leftover art campaign. Desk and overlay lockstep. Blotter follows idle. Rui is the quality bar. | No stamps. No parchment islands. Never retouch a landed guest while sitting a leftover. Most guests are not yet Rui-sharp. |
 | FULL GPU / DirectX 12 / Vulkan | A real GPU path is the bar. Today the overlay is Electron/Chromium. The PyQt blotter has a Qt OpenGL viewport (`QOpenGLWidget`), not a custom shader engine. | Do not invent a finished DX12/Vulkan engine. Later: DX12/Vulkan, or an honest Chromium GPU path that still *feels* like the ad. Name the gap; do not paper it. |
@@ -783,7 +783,7 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 
 - Two hundred twenty living guests. Rui is the bar. Arc (`cyber_dragon`) sits the first grid den. Volt (`volt_dragon`) sits the second. Trace (`trace_dragon`) sits the third. Flux (`flux_dragon`) sits the fourth. Spark (`spark_dragon`) sits the fifth. Ion (`ion_dragon`) sits the sixth. Gauss (`gauss_dragon`) sits the seventh. Relay (`relay_dragon`) sits the eighth. Fuse (`fuse_dragon`) sits the ninth. Ground (`ground_dragon`) sits the tenth. The leftover campaign on the original 210 is done. The typical grid ten is closed.
 - Living desk (`web/`), `/demo`, Meet house, dens.
-- Electron overlay on Windows (`desktop/`); renderer sprites lockstep with the desk. Mac extra and Linux mark exist as later doors, not the first polish target.
+- Electron overlay on Windows (`desktop/`): work-area floor under the cursor, DWM glass click-through via hit-forward, tray pins Rui and the grid ten. Renderer sprites lockstep with the desk. Still Chromium compositing — not a finished DX12/Vulkan engine. Mac extra and Linux mark exist as later doors, not the first polish target.
 - PyQt6 blotter (`client/`) — care verbs, plaques, Qt OpenGL viewport.
 - Life sim: hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, bond titles.
 - House-hand keeper card on overlay, `/demo`, desk, Live, and Meet: Feed / Play / Rest, hunger / rest / bond, honest Java heartbeat. Care is local. `/pet/feed` is not a door.
