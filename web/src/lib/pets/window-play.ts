@@ -1285,7 +1285,7 @@ export function stashOnPath(u: number, from: PlayPoint, to: PlayPoint) {
 
 export function stashCheekPath(u: number) {
   const t = Math.max(0, Math.min(1, u));
-  const pulse = Math.sin(t * Math.PI * 2);
+  const pulse = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2);
   return {
     lift: Math.abs(pulse) * 5,
     rot: pulse * 8,
