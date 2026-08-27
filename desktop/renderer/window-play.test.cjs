@@ -15344,12 +15344,12 @@ test("Latch drinks a sash drip as a damp blotter: loop onto the drip, seal, drin
   const hold = P.drinkHoldPath(0.5);
   assert.ok(hold.lift > 6, "she stays swollen");
   assert.ok(hold.x > 1, "the body keeps the drink");
-  const off0 = P.drinkOffPath(0, { x: drip.x, lift: drip.lift + 7.7 }, { x: drip.x + 46, lift: 0 });
-  const offPop = P.drinkOffPath(0.2, { x: drip.x, lift: drip.lift + 7.7 }, { x: drip.x + 46, lift: 0 });
-  const offMid = P.drinkOffPath(0.5, { x: drip.x, lift: drip.lift + 7.7 }, { x: drip.x + 46, lift: 0 });
-  const off1 = P.drinkOffPath(1, { x: drip.x, lift: drip.lift + 7.7 }, { x: drip.x + 46, lift: 0 });
+  const off0 = P.drinkOffPath(0, { x: drip.x, lift: drip.lift + 11.3 }, { x: drip.x + 46, lift: 0 });
+  const offPop = P.drinkOffPath(0.2, { x: drip.x, lift: drip.lift + 11.3 }, { x: drip.x + 46, lift: 0 });
+  const offMid = P.drinkOffPath(0.5, { x: drip.x, lift: drip.lift + 11.3 }, { x: drip.x + 46, lift: 0 });
+  const off1 = P.drinkOffPath(1, { x: drip.x, lift: drip.lift + 11.3 }, { x: drip.x + 46, lift: 0 });
   assert.ok(Math.abs(off0.x - drip.x) < 2);
-  assert.ok(offPop.lift > drip.lift + 7.7 + 2, "she lets go");
+  assert.ok(offPop.lift > drip.lift + 11.3 + 2, "she lets go");
   assert.ok(offMid.lift > 8, "the leave is an undulate off the drip, not a hop");
   assert.ok(Math.abs(off1.lift) < 2);
   let play = P.beginPlay(target, target.approachX);

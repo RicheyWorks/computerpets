@@ -8623,15 +8623,15 @@ export function drinkPath(u: number) {
   const s = (t - 0.24) / 0.76;
   const ease = s * s * (3 - 2 * s);
   const pulse = Math.sin(s * Math.PI * 2) * 1.3;
-  return { x: ease * 2.4 + pulse * 0.35, lift: -3.1 + ease * 10.8 + pulse, rot: -7 + ease * 13 };
+  return { x: ease * 1.1 + pulse * 0.35, lift: -3.1 + ease * 14.4 + pulse, rot: -7 + ease * 13 };
 }
 
 export function drinkHoldPath(u: number) {
   const t = Math.max(0, Math.min(1, u));
   const breath = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.44;
   return {
-    x: 2.4,
-    lift: 7.7 + breath,
+    x: 1.1,
+    lift: 11.3 + breath,
     rot: 6,
   };
 }
