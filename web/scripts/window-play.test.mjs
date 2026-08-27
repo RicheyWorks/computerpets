@@ -16,7 +16,7 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -46,8 +46,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("rabbit"), Overlay.playFor("rabbit"));
   assert.equal(P.playFor("hamster"), "stash");
   assert.equal(P.playFor("hamster"), Overlay.playFor("hamster"));
+  assert.equal(P.playFor("guinea_pig"), "wheek");
+  assert.equal(P.playFor("guinea_pig"), Overlay.playFor("guinea_pig"));
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("guinea_pig"), "sill");
+  assert.equal(P.playFor("turtle"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -103,6 +105,11 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(webStash.lift, deskStash.lift);
   assert.equal(webStash.x, deskStash.x);
   assert.ok(webStash.lift > 16);
+  const webWheek = P.wheekPoint(WIN, 176, WORK);
+  const deskWheek = Overlay.wheekPoint(WIN, 176, WORK);
+  assert.equal(webWheek.lift, deskWheek.lift);
+  assert.equal(webWheek.x, deskWheek.x);
+  assert.equal(webWheek.lift, 0);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -429,6 +436,7 @@ test("the demo window plate walks Miso's ledge the same way", () => {
     assert.notEqual(play.phase, "watch-hold");
     assert.notEqual(play.phase, "thump");
     assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "ledge-sit") {
       sitXMin = Math.min(sitXMin, play.x);
@@ -478,6 +486,7 @@ test("the demo window plate walks Pip's watch the same way", () => {
     assert.notEqual(play.phase, "ledge-sit");
     assert.notEqual(play.phase, "thump");
     assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "watch-hold") {
       sitXMin = Math.min(sitXMin, play.x);
@@ -528,6 +537,7 @@ test("the demo window plate walks Thimble's thump the same way", () => {
     assert.notEqual(play.phase, "ledge-sit");
     assert.notEqual(play.phase, "watch-hold");
     assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "thump") {
       stampXMin = Math.min(stampXMin, play.x);
@@ -579,6 +589,7 @@ test("the demo window plate walks Clip's stash the same way", () => {
     assert.notEqual(play.phase, "ledge-sit");
     assert.notEqual(play.phase, "watch-hold");
     assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "stash-cheek") {
       cheekXMin = Math.min(cheekXMin, play.x);
@@ -591,5 +602,70 @@ test("the demo window plate walks Clip's stash the same way", () => {
   assert.ok(seen.has("stash-off"));
   assert.ok(cheekXMax - cheekXMin < 2, "one hamster to a drawer");
   assert.ok(maxLift > 40, "he hops into the window drawer");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Whee's wheek the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /wheek-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "guinea_pig", WORK, 176);
+  const target = P.pickTarget([WIN], 40, "guinea_pig", WORK, 176);
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.kind, "wheek");
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.equal(target.holdLift, 0);
+  assert.equal(target.leave, "waddle");
+  assert.equal(target.clickToId, undefined);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let loafXMin = Infinity;
+  let loafXMax = -Infinity;
+  let wheekXMin = Infinity;
+  let wheekXMax = -Infinity;
+  let maxLift = 0;
+  for (let i = 0; i < 700 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    maxLift = Math.max(maxLift, play.lift);
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "wheek-loaf") {
+      loafXMin = Math.min(loafXMin, play.x);
+      loafXMax = Math.max(loafXMax, play.x);
+      assert.equal(play.lift, 0);
+      assert.equal(play.rot, 0);
+      assert.equal(play.anim, "sit");
+    }
+    if (play.phase === "wheek") {
+      wheekXMin = Math.min(wheekXMin, play.x);
+      wheekXMax = Math.max(wheekXMax, play.x);
+      assert.equal(play.anim, "talk");
+      assert.equal(play.rot, 0);
+    }
+  }
+  assert.ok(seen.has("wheek-on"));
+  assert.ok(seen.has("wheek-loaf"));
+  assert.ok(seen.has("wheek"));
+  assert.ok(seen.has("wheek-pop"));
+  assert.ok(seen.has("wheek-off"));
+  assert.ok(loafXMax - loafXMin < 2, "one loaf — not a walk across");
+  assert.ok(wheekXMax - wheekXMin < 2, "one wheek — she meant you");
+  assert.ok(maxLift > 16, "one popcorn hop of joy");
+  assert.ok(maxLift < 40, "never hops onto the frame");
   assert.equal(play.phase, "done");
 });
