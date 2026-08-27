@@ -2922,7 +2922,7 @@ test("Quill hooks a window jamb with the bill, climbs, hangs sideways, quotes fr
   assert.ok(Math.abs(hang.x - cling.x) > 20 || Math.abs(hang.lift - cling.lift) > 20, "not Rui's mid-side cling");
   assert.ok(Math.abs(hang.lift - ledge.lift) > 40, "not Miso's top ledge");
   assert.ok(hang.lift !== 0 && Math.abs(hang.x - watch.x) > 20, "not Pip's floor watch");
-  assert.ok(hang.lift !== 0 && Math.abs(hang.x - scent.x) > 16, "not Rue's floor jamb");
+  assert.ok(Math.abs(hang.lift - scent.lift) > 16, "not Rue's floor jamb");
   assert.ok(hang.lift !== 0 && Math.abs(hang.x - thump.x) > 20, "not Thimble's stamp");
   assert.ok(hang.lift !== 0 && Math.abs(hang.x - wheek.x) > 20, "not Whee's floor loaf");
   assert.ok(Math.abs(hang.x - stash.x) > 20 || Math.abs(hang.lift - stash.lift) > 20, "not Clip's drawer");
