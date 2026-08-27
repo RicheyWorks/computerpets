@@ -16,7 +16,7 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -42,8 +42,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("cat"), Overlay.playFor("cat"));
   assert.equal(P.playFor("dog"), "watch");
   assert.equal(P.playFor("dog"), Overlay.playFor("dog"));
+  assert.equal(P.playFor("rabbit"), "thump");
+  assert.equal(P.playFor("rabbit"), Overlay.playFor("rabbit"));
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("rabbit"), "sill");
+  assert.equal(P.playFor("hamster"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -89,6 +91,11 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(webWatch.lift, deskWatch.lift);
   assert.equal(webWatch.x, deskWatch.x);
   assert.equal(webWatch.lift, 0);
+  const webThump = P.thumpPoint(WIN, 176, WORK, "left");
+  const deskThump = Overlay.thumpPoint(WIN, 176, WORK, "left");
+  assert.equal(webThump.lift, deskThump.lift);
+  assert.equal(webThump.x, deskThump.x);
+  assert.equal(webThump.lift, 0);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -413,6 +420,7 @@ test("the demo window plate walks Miso's ledge the same way", () => {
     assert.notEqual(play.phase, "hold-sit");
     assert.notEqual(play.phase, "earth-sit");
     assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "thump");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "ledge-sit") {
       sitXMin = Math.min(sitXMin, play.x);
@@ -460,6 +468,7 @@ test("the demo window plate walks Pip's watch the same way", () => {
     assert.notEqual(play.phase, "hold-sit");
     assert.notEqual(play.phase, "earth-sit");
     assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "thump");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "watch-hold") {
       sitXMin = Math.min(sitXMin, play.x);
@@ -472,5 +481,55 @@ test("the demo window plate walks Pip's watch the same way", () => {
   assert.ok(seen.has("watch-off"));
   assert.ok(sitXMax - sitXMin < 2, "one watch — not a walk across");
   assert.equal(maxLift, 0, "never hops onto the frame");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Thimble's thump the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /thump-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "rabbit", WORK, 176, { side: "left" });
+  const target = P.pickTarget([WIN], 40, "rabbit", WORK, 176, { side: "left" });
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.kind, "thump");
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.equal(target.holdLift, 0);
+  assert.equal(target.leave, "vanish");
+  assert.equal(target.clickToId, undefined);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let stampXMin = Infinity;
+  let stampXMax = -Infinity;
+  let maxLift = 0;
+  for (let i = 0; i < 700 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    maxLift = Math.max(maxLift, play.lift);
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "thump") {
+      stampXMin = Math.min(stampXMin, play.x);
+      stampXMax = Math.max(stampXMax, play.x);
+      assert.ok(play.lift < 16);
+    }
+  }
+  assert.ok(seen.has("thump-on"));
+  assert.ok(seen.has("thump"));
+  assert.ok(seen.has("thump-off"));
+  assert.ok(stampXMax - stampXMin < 2, "one stamp — not a walk across");
+  assert.ok(maxLift > 8, "she hops to the window and hops away");
+  assert.ok(maxLift < 40, "never hops onto the frame");
   assert.equal(play.phase, "done");
 });
