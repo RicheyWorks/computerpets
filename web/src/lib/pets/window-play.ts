@@ -8740,12 +8740,11 @@ export function gluePath(u: number) {
 
 export function glueHoldPath(u: number) {
   const t = Math.max(0, Math.min(1, u));
-  const rise = t < 0.28 ? (t / 0.28) * (t / 0.28) * (3 - 2 * (t / 0.28)) : 1;
   const breath = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.36;
   return {
     x: 0,
-    lift: rise * 8.4 + breath,
-    rot: rise * -3,
+    lift: 8.4 + breath,
+    rot: -3,
   };
 }
 
