@@ -11751,7 +11751,7 @@ test("the demo window plate walks Stem's stilt the same way", () => {
   assert.equal(P.playFor("kingsnake"), "inspect");
   assert.equal(P.playFor("orb_weaver"), "web");
   assert.equal(P.playFor("tarantula"), "kick");
-  assert.equal(P.playFor("scorpion"), "sill");
+  assert.equal(P.playFor("scorpion"), "raise");
   assert.notEqual(P.playFor("harvestman"), "stem");
   assert.notEqual(target.kind, "hitch");
   assert.notEqual(target.kind, "hang");
@@ -11829,3 +11829,93 @@ test("the demo window plate walks Stem's stilt the same way", () => {
   assert.equal(play.phase, "done");
 });
 
+
+test("the demo window plate walks Barb's raise the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "scorpion"[\s\S]{0,80}slug: "barb"/);
+  assert.equal(P.playFor("scorpion"), "raise");
+  const target = P.pickTarget([WIN], 80, "scorpion", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "raise");
+  assert.equal(target.side, "bark");
+  assert.equal(target.leave, "bark");
+  assert.equal(Overlay.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("mining_bee"), "dig");
+  assert.equal(P.playFor("saguaro"), "store");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("vinegaroon"), "sill");
+  assert.notEqual(P.playFor("scorpion"), "barb");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "plow");
+  assert.notEqual(target.kind, "dig");
+  assert.notEqual(target.kind, "stilt");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she raises a window stool, not the floor");
+  assert.ok(P.DUR.raiseHold > P.DUR.raise, "the wait is the hold; the still sting-up is the tell");
+  assert.ok(P.DUR.raiseOn !== Overlay.DUR.stiltOn);
+  assert.ok(P.DUR.raiseOn !== Overlay.DUR.riseOn);
+  assert.ok(P.DUR.raiseOn !== Overlay.DUR.pullOn);
+  assert.ok(P.DUR.raiseOn !== Overlay.DUR.plowOn);
+  assert.ok(P.DUR.raiseOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.riseOn, Overlay.DUR.riseOn);
+  assert.equal(P.DUR.raiseOn, Overlay.DUR.raiseOn);
+  assert.equal(P.DUR.raise, Overlay.DUR.raise);
+  assert.equal(P.DUR.raiseHold, Overlay.DUR.raiseHold);
+  assert.equal(P.DUR.raiseOff, Overlay.DUR.raiseOff);
+  const bark = P.raisePoint(WIN, 176, WORK);
+  const deskBark = Overlay.raisePoint(WIN, 176, WORK);
+  assert.equal(bark.x, deskBark.x);
+  assert.equal(bark.lift, deskBark.lift);
+  const lawn = P.pullPoint(WIN, 176, WORK);
+  const bead = P.stiltPoint(WIN, 176, WORK);
+  assert.ok(bark.lift > 8, "the window stool as bark");
+  assert.ok(Math.abs(bark.x - lawn.x) > 8 || Math.abs(bark.lift - lawn.lift) > 8, "not Brick");
+  assert.ok(Math.abs(bark.lift - bead.lift) > 40, "not Stem");
+  const walkOn = P.raiseOnPath(0.25, { x: 40, lift: 0 }, { x: bark.x, lift: bark.lift });
+  const deskWalk = Overlay.raiseOnPath(0.25, { x: 40, lift: 0 }, { x: bark.x, lift: bark.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks onto the stool wood");
+  const lift = P.raisePath(0.5);
+  const deskLift = Overlay.raisePath(0.5);
+  assert.equal(lift.lift, deskLift.lift);
+  assert.ok(lift.rot > 16, "the tail goes up");
+  assert.ok(lift.x < 2, "she stays on the wood");
+  const still = P.raiseHoldPath(0.5);
+  const deskStill = Overlay.raiseHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.rot > 28, "she holds the sting up");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "pull");
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "raise") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "raise-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "raise-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.8)) < 4, "she holds the sting up on the wood");
+    }
+  }
+  assert.ok(seen.has("raise-on"));
+  assert.ok(seen.has("raise"));
+  assert.ok(seen.has("raise-hold"));
+  assert.ok(seen.has("raise-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
