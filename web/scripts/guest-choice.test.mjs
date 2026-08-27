@@ -30,7 +30,7 @@ test("a tap is a choice, not a sit", () => {
   assert.equal(Overlay.guestTap(), "choice");
   assert.deepEqual([...C.GUEST_CHOICE], [...Overlay.GUEST_CHOICE]);
   assert.equal(C.guestPick("talk"), "talk");
-  assert.equal(C.guestPick("feed"), null);
+  assert.equal(C.guestPick("feed"), "feed");
   assert.equal(C.guestPick("bath"), null);
   assert.equal(Overlay.guestPick("rest"), "rest");
   assert.equal(Overlay.guestPick("medicine"), null);
@@ -41,9 +41,9 @@ test("the walking guest may sit; the still guest may walk; Rest is sleep", () =>
   assert.deepEqual(C.poseFlip(false), { id: "walk", label: "Walk" });
   assert.deepEqual(Overlay.poseFlip(true), { id: "sit", label: "Sit" });
   const open = ids(C.guestMarks({ walking: true }));
-  assert.deepEqual(open, ["rest", "sit", "talk", "treat", "play", "special", "hide"]);
+  assert.deepEqual(open, ["feed", "rest", "sit", "talk", "treat", "play", "special", "hide"]);
   const still = ids(C.guestMarks({ walking: false, treatVerb: "Egg", specialVerb: "Ridge" }));
-  assert.deepEqual(still, ["rest", "walk", "talk", "treat", "play", "special", "hide"]);
+  assert.deepEqual(still, ["feed", "rest", "walk", "talk", "treat", "play", "special", "hide"]);
   assert.equal(C.guestMarks({ treatVerb: "Egg" }).find((m) => m.id === "treat")?.label, "Egg");
   assert.equal(C.guestMarks({ specialVerb: "Ridge" }).find((m) => m.id === "special")?.label, "Ridge");
 });
@@ -68,6 +68,8 @@ test("a finger sit keeps extra wood; the room around them may still pan", () => 
   assert.match(cssSrc, /\[data-tablet-floor\] \[data-pet-hit\]/);
   assert.match(cssSrc, /padding:\s*16px 16px 0/);
   assert.match(cssSrc, /touch-action:\s*manipulation/);
+  assert.match(cssSrc, /\.guest-choice[\s\S]*overflow-y:\s*auto/);
+  assert.match(cssSrc, /\.keeper-card[\s\S]*overflow-y:\s*auto/);
   assert.match(livingSrc, /touch-none/);
   assert.match(livingSrc, /data-pet-hit/);
   assert.match(livingSrc, /data-pet-art/);
@@ -79,6 +81,9 @@ test("a finger sit keeps extra wood; the room around them may still pan", () => 
 test("desk, /demo, and /live share the choice; a tap does not talk by itself", () => {
   assert.match(roomSrc, /guestTap\(\)/);
   assert.match(roomSrc, /setChoiceOpen/);
+  assert.match(roomSrc, /setCardOpen/);
+  assert.match(roomSrc, /onCollapse/);
+  assert.match(livingSrc, /cardOpen/);
   assert.match(roomSrc, /GuestChoice/);
   assert.match(roomSrc, /pickGuest/);
   assert.match(roomSrc, /guestMarks\(/);

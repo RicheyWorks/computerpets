@@ -7,6 +7,7 @@ const Desk = require("./renderer/desk.js");
 const Roster = require("./renderer/roster-load.js");
 const Windows = require("./renderer/windows.js");
 const WindowEnum = require("./windows-enum.cjs");
+const HouseMusic = require("./renderer/house-music.js");
 
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
@@ -462,6 +463,46 @@ ipcMain.on("quit-desk", () => {
 });
 
 ipcMain.handle("roster-get", () => roster);
+
+async function fetchRadioJson(url) {
+  const hosts = HouseMusic.RADIO_HOSTS || [];
+  let lastErr = null;
+  for (const host of hosts) {
+    const next = HouseMusic.urlsOnHost([url], host)[0] || url;
+    try {
+      const res = await fetch(next, {
+        cache: "no-store",
+        headers: {
+          "User-Agent": HouseMusic.RADIO_UA,
+          Accept: "application/json",
+        },
+      });
+      if (!res.ok) {
+        lastErr = new Error(`radio ${res.status}`);
+        continue;
+      }
+      return await res.json();
+    } catch (err) {
+      lastErr = err;
+    }
+  }
+  throw lastErr || new Error("unread");
+}
+
+ipcMain.handle("radio-search", async (_e, query, area) => {
+  const urls = HouseMusic.radioSearchUrls(query, area);
+  if (!urls.length) return { ok: true, stations: [] };
+  const batches = await Promise.all(
+    urls.map((url) =>
+      fetchRadioJson(url)
+        .then((json) => HouseMusic.parseStations(json))
+        .catch(() => null),
+    ),
+  );
+  if (batches.every((b) => b == null)) return { ok: false, error: "unread", stations: [] };
+  const merged = HouseMusic.mergeStations(batches.filter(Boolean));
+  return { ok: true, stations: HouseMusic.rankStations(merged, query, area).slice(0, 16) };
+});
 
 /** Real top-level window bounds on Windows. Rects only. Mac/Linux stay a later door. */
 let windowTick = null;

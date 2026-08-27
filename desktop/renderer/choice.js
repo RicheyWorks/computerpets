@@ -1,6 +1,7 @@
 /** A tap on the guest is a choice, not a sit. They pick. Then they do that sit. */
 (function (root) {
   const GUEST_CHOICE = [
+    "feed",
     "rest",
     "walk",
     "sit",
@@ -28,6 +29,7 @@
     const busy = hidden || leaving;
     const marks = [];
     if (!busy) {
+      marks.push({ id: "feed", label: "Feed" });
       marks.push({ id: "rest", label: "Rest" });
       marks.push(poseFlip(!!sit.walking));
     }
