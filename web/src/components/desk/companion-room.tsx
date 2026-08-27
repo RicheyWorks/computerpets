@@ -174,6 +174,9 @@ export function CompanionRoom({
   const [weatherWin, setWeatherWin] = useState<DeskWindow | null>(null);
   const [liveSky, setLiveSky] = useState<LiveSky | null>(null);
   const [birdCall, setBirdCall] = useState(1);
+  const [birdOn, setBirdOn] = useState(false);
+  const [ruiLieHold, setRuiLieHold] = useState(false);
+  const sipSleepCalled = useRef(false);
   const [calledKeys, setCalledKeys] = useState<string[]>([]);
   const [cardOpenTick, setCardOpenTick] = useState(0);
   const [cardOpen, setCardOpen] = useState(() => !loadCard().collapsed);
@@ -206,6 +209,15 @@ export function CompanionRoom({
     // Only write the guest who is sitting. A kind change must not pour this body onto the next slot.
     if (persistLocal && sittingRef.current === kind.localKey) saveCare(kind.localKey, stats);
   }, [kind.localKey, persistLocal, stats]);
+
+  useEffect(() => {
+    const sleeping = kind.key === "red_panda" && (!!stats.asleep || ruiLieHold) && !stats.hidden && !leaving;
+    if (sleeping && !sipSleepCalled.current) {
+      sipSleepCalled.current = true;
+      if (!birdOn) setBirdCall((n) => n + 1);
+    }
+    if (!sleeping) sipSleepCalled.current = false;
+  }, [birdOn, kind.key, leaving, ruiLieHold, stats.asleep, stats.hidden]);
 
   useEffect(() => {
     if (!persistLocal && !liveTick) return;
@@ -695,6 +707,7 @@ export function CompanionRoom({
         onPose={(x, facing) => {
           poseRef.current = { x, facing };
         }}
+        onLieHold={setRuiLieHold}
         windows={demoWindow ? deskWindows : []}
         musicOn={kind.key === "red_panda" && musicOn}
         cardOpen={cardOpen}
@@ -768,7 +781,16 @@ export function CompanionRoom({
         }}
       />
       <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
-      {demoWindow && kind.key !== FLY_BIRD_KEY ? <BirdFlyer hidden={stats.hidden || leaving} startId={birdCall} /> : null}
+      {demoWindow && kind.key !== FLY_BIRD_KEY ? (
+        <BirdFlyer
+          hidden={stats.hidden || leaving}
+          startId={birdCall}
+          onVisible={setBirdOn}
+          hostKey={kind.key}
+          hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
+          hostPoseRef={poseRef}
+        />
+      ) : null}
       <CalledGuests keys={walkersOf(calledKeys, kind.key)} hostKey={kind.key} hidden={stats.hidden || leaving} />
 
       {choiceOpen ? (

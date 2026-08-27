@@ -1,7 +1,9 @@
-/** Rui ground tricks while idle. Sleep, hide, card, and window-play still win. */
+/** Rui ground tricks while idle. Feed-happy dances sit after eat. Sleep, hide, card, and window-play still win. */
 (function (root) {
   const TRICK_KEY = "red_panda";
   const TRICKS = ["somersault", "lie", "scratch", "wave", "dance"];
+  const HAPPY = ["twirl", "bounce", "shuffle"];
+  const HAPPY_DUR = { twirl: 1.35, bounce: 1.22, shuffle: 1.58 };
   /** sleep/2.png — lying down, eyes closed. Frames 3–4 are standing and must not loop. */
   const SLEEP_HOLD_FRAME = 1;
   const LIE_HOLD = 12;
@@ -55,6 +57,115 @@
     if (roll < 0.58) return "scratch";
     if (roll < 0.76) return "wave";
     return "dance";
+  }
+
+  function happyCanStart(state) {
+    if (!state) return false;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay) return false;
+    const cmd = String(state.cmd || "");
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    return true;
+  }
+
+  function happyShouldAbort(state) {
+    if (!state) return true;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay) return true;
+    const cmd = String(state.cmd || "");
+    return (
+      cmd === "sleep" ||
+      cmd === "leave" ||
+      cmd === "hide" ||
+      cmd === "rest" ||
+      cmd === "seek" ||
+      cmd === "play" ||
+      cmd === "talk" ||
+      cmd === "enter"
+    );
+  }
+
+  function pickHappy(lastKind, rand) {
+    const pool = HAPPY.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : HAPPY;
+    const roll = rand == null ? Math.random() : rand;
+    return list[Math.floor(roll * list.length)] || list[0];
+  }
+
+  function beginHappy(kind, x, facing) {
+    const name = HAPPY.indexOf(kind) >= 0 ? kind : "twirl";
+    return {
+      kind: name,
+      happy: true,
+      phase: "go",
+      t: 0,
+      x: x,
+      lift: 0,
+      rot: 0,
+      anim: name === "shuffle" ? "walk" : "play",
+      facing: facing || 1,
+      fromX: x,
+    };
+  }
+
+  function twirlPose(t, facing) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.twirl));
+    return {
+      lift: Math.abs(Math.sin(u * Math.PI * 2)) * 16,
+      rot: facing * 320 * u,
+      dx: 0,
+      anim: "play",
+    };
+  }
+
+  function bouncePose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.bounce));
+    return {
+      lift: Math.abs(Math.sin(u * Math.PI * 3)) * 28,
+      rot: Math.sin(u * Math.PI * 3) * 10,
+      dx: Math.sin(u * Math.PI * 3) * 4,
+      anim: "play",
+    };
+  }
+
+  function shufflePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.shuffle));
+    if (u < 0.38) {
+      const s = u / 0.38;
+      return { x: fromX + facing * 36 * s, lift: 0, rot: 0, anim: "walk" };
+    }
+    if (u < 0.76) {
+      const s = (u - 0.38) / 0.38;
+      return { x: fromX + facing * 36 * (1 - s), lift: 0, rot: 0, anim: "walk" };
+    }
+    return { x: fromX, lift: 2, rot: Math.sin((u - 0.76) / 0.24 * Math.PI) * 8, anim: "sit" };
+  }
+
+  function stepHappy(happy, dt, flags) {
+    if (!happy || happy.phase === "done") return happy;
+    if (happyShouldAbort(flags)) {
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    }
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
+    const hold = HAPPY_DUR[next.kind] || HAPPY_DUR.twirl;
+    if (next.kind === "twirl") {
+      const pose = twirlPose(next.t, next.facing);
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "bounce") {
+      const pose = bouncePose(next.t);
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else {
+      const pose = shufflePose(next.t, next.fromX != null ? next.fromX : next.x, next.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    }
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return next;
   }
 
   function sleepHoldFrame(key, frameCount) {
@@ -181,6 +292,8 @@
   const api = {
     TRICK_KEY,
     TRICKS,
+    HAPPY,
+    HAPPY_DUR,
     DUR,
     SLEEP_HOLD_FRAME,
     LIE_HOLD,
@@ -199,6 +312,14 @@
     stretchPose,
     dancePose,
     stepTrick,
+    happyCanStart,
+    happyShouldAbort,
+    pickHappy,
+    beginHappy,
+    twirlPose,
+    bouncePose,
+    shufflePose,
+    stepHappy,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetRuiTricks = api;

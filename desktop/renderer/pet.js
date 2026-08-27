@@ -133,6 +133,8 @@ const sim = {
   trick: null,
   trickWait: 3 + Math.random() * 3,
   lastTrick: null,
+  happy: null,
+  lastHappy: null,
 };
 
 /** Real window rects from main. /demo draws a plate instead. */
@@ -156,6 +158,7 @@ let newsUnread = false;
 let birdFly = null;
 let birdAcc = 0;
 let birdFrame = 0;
+let sipSleepCalled = false;
 let musicNode = null;
 let lureDrag = null;
 
@@ -380,6 +383,14 @@ function sitMusic() {
   });
 }
 
+function ruiSleepBout() {
+  if (!kind || kind.key !== "red_panda") return false;
+  if (life && life.hidden) return false;
+  if (life && life.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) return true;
+  if (sim.trick && sim.trick.kind === "lie" && sim.trick.phase === "lie") return true;
+  return false;
+}
+
 function callSip() {
   const F = window.PetBirdFly;
   const H = window.PetDeskHouse;
@@ -496,9 +507,20 @@ function tickBird(dt) {
     birdEl.classList.remove("show");
     return;
   }
+  const ruiSleep = ruiSleepBout();
+  if (ruiSleep && !sipSleepCalled) {
+    sipSleepCalled = true;
+    if (!birdFly) callSip();
+  }
+  if (!ruiSleep) sipSleepCalled = false;
   if (!birdFly) return;
   birdFly = F.stepFly(birdFly, dt, window.innerWidth, window.innerHeight, {
     hidden: !!(life && life.hidden),
+    hostKey: kind && kind.key,
+    hostSleeping: ruiSleep,
+    hostX: sim.x,
+    hostLift: sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0,
+    hostFacing: sim.facing,
   });
   if (!F.stillVisible(birdFly)) {
     birdFly = null;
@@ -1463,6 +1485,10 @@ function applyCommand() {
     }
     return;
   }
+  if (sim.happy && (sim.cmd === "wander" || sim.cmd === "idle")) {
+    sim.lastOrder = sim.order;
+    return;
+  }
   if (cardOpen() && (sim.cmd === "wander" || sim.cmd === "idle")) {
     sim.anim = life?.asleep ? "sleep" : "idle";
     sim.target = null;
@@ -1947,6 +1973,7 @@ function switchTo(key) {
   sim.playWait = 6 + Math.random() * 5;
   sim.trick = null;
   sim.trickWait = 3 + Math.random() * 3;
+  sim.happy = null;
   pet.classList.toggle("sick", !!life.sick);
   pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
@@ -2031,6 +2058,21 @@ function tick(now) {
       windowPlay: !!sim.play,
       card: cardOpen(),
     };
+    if (sim.happy && T && T.happyShouldAbort && T.happyShouldAbort({
+      asleep: !!life?.asleep,
+      hidden: !!life?.hidden,
+      leaving,
+      cmd: sim.cmd,
+      windowPlay: !!sim.play,
+    })) {
+      sim.happy = T.stepHappy(sim.happy, 0, {
+        asleep: !!life?.asleep,
+        hidden: !!life?.hidden,
+        leaving,
+        cmd: sim.cmd,
+        windowPlay: !!sim.play,
+      });
+    }
     if (sim.trick && T && T.shouldAbort(trickFlags)) {
       sim.trick = T.stepTrick(sim.trick, 0, trickFlags);
     }
@@ -2056,9 +2098,26 @@ function tick(now) {
         sim.anim = life?.asleep ? "sleep" : "idle";
         sim.trickWait = T.nextTrickWait(true, undefined, sim.lastTrick);
       }
+    } else if (sim.happy && T && T.stepHappy) {
+      sim.happy = T.stepHappy(sim.happy, dt, {
+        asleep: !!life?.asleep,
+        hidden: !!life?.hidden,
+        leaving,
+        cmd: sim.cmd,
+        windowPlay: !!sim.play,
+      });
+      sim.x = sim.happy.x;
+      if (!life?.asleep) sim.anim = sim.happy.anim;
+      if (sim.happy.phase === "done") {
+        sim.lastHappy = sim.happy.kind;
+        sim.happy = null;
+        sim.land = 1;
+        sim.anim = life?.asleep ? "sleep" : "idle";
+      }
     } else if (
       window.PetWindowPlay &&
       !sim.act &&
+      !sim.happy &&
       !leaving &&
       window.PetWindowPlay.canStart(playFlags) &&
       window.PetWindowPlay.playFor(kind.key) !== "ignore" &&
@@ -2080,6 +2139,7 @@ function tick(now) {
       T &&
       kind.key === T.TRICK_KEY &&
       !sim.act &&
+      !sim.happy &&
       !leaving &&
       T.canStart({
         asleep: !!life?.asleep,
@@ -2091,7 +2151,7 @@ function tick(now) {
       })
     ) {
       sim.trickWait -= dt;
-      const musicWantsDance = musicOn() && !sim.trick;
+      const musicWantsDance = musicOn() && !sim.trick && !sim.happy;
       if (sim.trickWait <= 0 || musicWantsDance) {
         sim.trick = T.beginTrick(T.pickTrick(undefined, musicOn(), sim.lastTrick), sim.x, sim.facing);
         if (sim.trick) {
@@ -2111,7 +2171,7 @@ function tick(now) {
         sim.acc = 0;
       }
     }
-    if (sim.play || sim.trick) {
+    if (sim.play || sim.trick || sim.happy) {
       /* window play or a ground trick owns the walk */
     } else if (sim.turnHold > 0) {
       sim.turnHold = Math.max(0, sim.turnHold - dt);
@@ -2167,7 +2227,7 @@ function tick(now) {
         aimAt(follow);
       }
     }
-    if (sim.play || sim.trick) {
+    if (sim.play || sim.trick || sim.happy) {
       /* window play or a ground trick owns the pose */
     } else if (sim.act) {
       sim.actT += dt;
@@ -2227,8 +2287,20 @@ function tick(now) {
         } else if (sim.anim === "sit") sim.frame = Math.min(len - 1, sim.frame + 1);
         else if (ONCE.has(sim.anim)) {
           if (sim.frame + 1 >= len) {
+            const wasEat = sim.anim === "eat";
             sim.anim = "idle";
             sim.frame = 0;
+            if (wasEat && kind.key === "red_panda" && window.PetRuiTricks?.beginHappy && window.PetRuiTricks.happyCanStart({
+              asleep: !!life?.asleep,
+              hidden: !!life?.hidden,
+              leaving,
+              cmd: "idle",
+              windowPlay: !!sim.play,
+            })) {
+              const pick = window.PetRuiTricks.pickHappy(sim.lastHappy);
+              sim.happy = window.PetRuiTricks.beginHappy(pick, sim.x, sim.facing);
+              sim.lastHappy = pick;
+            }
             issue("idle");
           } else {
             sim.frame += 1;
@@ -2277,10 +2349,10 @@ function tick(now) {
   const shiftX = sim.shiftAge > 0 ? sim.shift * Math.sin((1 - sim.shiftAge / 0.85) * Math.PI) : 0;
   const settleX = sim.settle > 0 ? G.settleOffset(sim.settle, sim.settleDir, sim.overshoot) : 0;
   const drawX = sim.x + sway + shiftX + settleX + pose.dx;
-  const climbLift = sim.play ? sim.play.lift : sim.trick ? sim.trick.lift : 0;
-  const climbRot = sim.play ? sim.play.rot : sim.trick ? sim.trick.rot : 0;
+  const climbLift = sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0;
+  const climbRot = sim.play ? sim.play.rot : sim.happy ? sim.happy.rot : sim.trick ? sim.trick.rot : 0;
   const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
-  pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off" || sim.play.phase === "coil-on" || sim.play.phase === "coil-off" || sim.play.phase === "path-on" || sim.play.phase === "path-off") ? "center center" : "center bottom";
+  pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off" || sim.play.phase === "coil-on" || sim.play.phase === "coil-off" || sim.play.phase === "path-on" || sim.play.phase === "path-off" || sim.play.phase === "field-on" || sim.play.phase === "field-off") ? "center center" : "center bottom";
   pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
@@ -2706,7 +2778,7 @@ setInterval(() => {
   tickLife();
   if (performance.now() < speechUntil || life.hidden) return;
   const held = window.PetLife?.wanderWhileAsleep(life) || window.PetCard?.wanderWhileAsleep(life?.asleep);
-  if (sim.play || sim.trick) return;
+  if (sim.play || sim.trick || sim.happy) return;
   if (held) {
     issue(held.cmd);
     return;

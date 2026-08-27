@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -6,6 +6,7 @@ export const CLING = "cling-dive";
 export const RIDGE = "ridge";
 export const COIL = "coil";
 export const PATH = "path";
+export const FIELD = "field";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -25,13 +26,16 @@ export const DUR = {
   pathWalk: 2.2,
   pathSit: 0.7,
   pathOff: 0.55,
+  fieldOn: 0.76,
+  fieldHold: 1.55,
+  fieldOff: 0.82,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof SILL | typeof IGNORE;
 export type PlayPhase =
   | "approach"
   | "leap"
@@ -49,6 +53,9 @@ export type PlayPhase =
   | "path-walk"
   | "path-sit"
   | "path-off"
+  | "field-on"
+  | "field-hold"
+  | "field-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -61,14 +68,14 @@ export type WorkSpace = { width: number; height: number; floorLift?: number };
 export type PlayTarget = {
   id: string;
   kind: WindowPlayKind;
-  side: "left" | "right" | "top";
+  side: "left" | "right" | "top" | "glass";
   holdX: number;
   holdLift: number;
   approachX: number;
   landX: number;
   diveFrom?: "top" | "side";
   spin?: "backflip" | "spin" | "none";
-  leave?: "hop" | "slide" | "drop";
+  leave?: "hop" | "slide" | "drop" | "drift";
   sillEndX?: number;
   pathEndX?: number;
   pathEndLift?: number;
@@ -110,6 +117,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "cyber_dragon") return RIDGE;
   if (key === "volt_dragon") return COIL;
   if (key === "trace_dragon") return PATH;
+  if (key === "flux_dragon") return FIELD;
   return SILL;
 }
 
@@ -187,6 +195,17 @@ export function coilPoint(win: DeskWindow, corner: "left" | "right", sprite: num
   return { x, lift: clamp(lift, 28, work.height - 48), corner };
 }
 
+export function fieldPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const insetTop = Math.max(56, size * 0.32);
+  const insetBot = Math.max(36, size * 0.18);
+  const x = win.x + (win.width - size) / 2;
+  const innerH = Math.max(0, win.height - insetTop - insetBot);
+  const gripY = win.y + insetTop + innerH * 0.5;
+  const lift = gripLift(gripY, work);
+  return { x, lift: clamp(lift, 36, work.height - 48) };
+}
+
 export function pathPoint(win: DeskWindow, u: number, sprite: number | undefined, work: WorkSpace, side?: "left" | "right" | "top") {
   const size = sprite == null ? SPRITE : sprite;
   const t = Math.max(0, Math.min(1, u));
@@ -238,7 +257,7 @@ export function pickTarget(
   key: string,
   work: WorkSpace,
   sprite?: number,
-  opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" },
+    opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" | "drift" },
 ): PlayTarget | null {
   const kind = playFor(key);
   if (kind === IGNORE) return null;
@@ -251,6 +270,7 @@ export function pickTarget(
     if (kind === RIDGE) return w.width >= 160 && w.height >= 80;
     if (kind === COIL) return w.width >= 140 && w.height >= 140;
     if (kind === PATH) return w.width >= 180 && w.height >= 160;
+    if (kind === FIELD) return w.width >= 220 && w.height >= 200;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -336,6 +356,23 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === FIELD) {
+    const hold = fieldPoint(best, size, work);
+    const approachX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+    const leave = opts?.leave ?? (roll < 0.5 ? "drift" : "drop");
+    const away = hold.x < workW / 2 ? 88 : -88;
+    return {
+      id: best.id,
+      kind,
+      side: "glass",
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave,
+      spin: "none",
+    };
+  }
   const start = sillPoint(best, 0.12, size, work);
   const end = sillPoint(best, 0.88, size, work);
   return {
@@ -369,6 +406,10 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
     const start = pathPoint(win, 0, sprite, work, startSide);
     const end = pathPoint(win, 1, sprite, work, startSide);
     return { ...target, holdX: start.x, holdLift: start.lift, pathEndX: end.x, pathEndLift: end.lift };
+  }
+  if (target.kind === FIELD) {
+    const hold = fieldPoint(win, sprite, work);
+    return { ...target, holdX: hold.x, holdLift: hold.lift };
   }
   const start = sillPoint(win, 0.12, sprite, work);
   const end = sillPoint(win, 0.88, sprite, work);
@@ -447,6 +488,34 @@ export function coilOffPath(u: number, from: PlayPoint, to: PlayPoint, side?: Pl
     x: fromX + (toX - fromX) * ease + out * 36 * Math.sin(t * Math.PI),
     lift: fromLift + (toLift - fromLift) * (t * t),
     rot: out * 48 * Math.sin(t * Math.PI),
+  };
+}
+
+export function fieldOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = smoothstep(t);
+  const fromX = from.x ?? 0;
+  const toX = to.x ?? fromX;
+  const fromLift = from.lift ?? 0;
+  const toLift = to.lift ?? 0;
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + Math.sin(t * Math.PI) * 10,
+    rot: 0,
+  };
+}
+
+export function driftOffPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = smoothstep(t);
+  const fromX = from.x ?? 0;
+  const toX = to.x ?? fromX;
+  const fromLift = from.lift ?? 0;
+  const toLift = to.lift ?? 0;
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * (t * t * 0.55 + ease * 0.45),
+    rot: 0,
   };
 }
 
@@ -531,14 +600,14 @@ export function stepPlay(
   if (!play || play.phase === "done") return play;
   const size = sprite == null ? SPRITE : sprite;
   const life = flags || {};
-  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off") {
+  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off") {
     return abortToFloor(play, { x: play.x, lift: play.lift }, work);
   }
   let next: WindowPlay = { ...play, t: play.t + Math.max(0, dt) };
   const win = findWin(windows, next.target.id);
-  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off") {
+  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off") {
     next = { ...next, target: refitTarget(next.target, win, size, work) };
-  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off") {
+  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off") {
     return abortToFloor(next, { x: next.x, lift: next.lift }, work);
   }
 
@@ -564,6 +633,9 @@ export function stepPlay(
       }
       if (target.kind === PATH) {
         return goPhase(next, "path-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+      }
+      if (target.kind === FIELD) {
+        return goPhase(next, "field-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -769,6 +841,46 @@ export function stepPlay(
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = target.leave === "drop" ? 0 : pose.rot;
+    next.anim = "play";
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+  if (next.phase === "field-on") {
+    const u = next.t / DUR.fieldOn;
+    const pose = fieldOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = 0;
+    next.anim = "play";
+    next.facing = target.landX >= target.holdX ? 1 : -1;
+    if (u >= 1) {
+      return goPhase(next, "field-hold", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", next.facing);
+    }
+    return next;
+  }
+
+  if (next.phase === "field-hold") {
+    next.x = target.holdX;
+    next.lift = target.holdLift;
+    next.rot = 0;
+    next.anim = "sit";
+    next.facing = target.landX >= target.holdX ? 1 : -1;
+    if (next.t >= DUR.fieldHold) {
+      const land = { x: target.landX, lift: 0 };
+      return goPhase(next, "field-off", { x: target.holdX, lift: target.holdLift }, land, "play", next.facing);
+    }
+    return next;
+  }
+
+  if (next.phase === "field-off") {
+    const u = next.t / DUR.fieldOff;
+    const pose = target.leave === "drop"
+      ? dropPath(Math.min(1, u), next.from, next.to)
+      : driftOffPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = 0;
     next.anim = "play";
     if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
     return next;
