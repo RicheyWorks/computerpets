@@ -22,7 +22,7 @@ test("Mac extra click opens care; Windows tray still toggles", () => {
 
 test("the Mac floor sits under the menu bar and follows the desk you are on", () => {
   assert.equal(D.followCursorDisplay("darwin"), true);
-  assert.equal(D.followCursorDisplay("win32"), false);
+  assert.equal(D.followCursorDisplay("win32"), true);
   assert.equal(D.spacesWalk("darwin"), true);
   assert.equal(D.spacesWalk("win32"), false);
   assert.match(mainSrc, /getDisplayNearestPoint/);
@@ -43,9 +43,9 @@ test("Mac overlay is a panel extra, not a Windows tray in a wrapper", () => {
 
   const win = D.overlayChrome("win32");
   assert.equal(win.type, null);
-  assert.equal(win.acceptFirstMouse, false);
+  assert.equal(win.acceptFirstMouse, true);
   assert.equal(win.hiddenInMissionControl, false);
-  assert.equal(D.firstClick("win32"), "focus");
+  assert.equal(D.firstClick("win32"), "accept");
   assert.equal(D.appMenu("win32"), false);
 
   assert.match(mainSrc, /acceptFirstMouse/);
@@ -90,7 +90,8 @@ test("the Linux mark sits in the panel; a click opens care; first click is a sit
   assert.equal(D.tapPx("linux"), D.TAP_PX_LINUX);
   assert.equal(D.tapPx("Linux x86_64"), 10);
   assert.equal(D.hitForward("linux"), true);
-  assert.equal(D.hitForward("win32"), false);
+  assert.equal(D.hitForward("win32"), true);
+  assert.equal(D.hitForward("Win32"), true);
   assert.equal(D.hitForward("darwin"), false);
 
   const linux = D.overlayChrome("linux");
@@ -102,7 +103,8 @@ test("the Linux mark sits in the panel; a click opens care; first click is a sit
 
   const win = D.overlayChrome("win32");
   assert.equal(win.type, null);
-  assert.equal(win.focusable, true);
+  assert.equal(win.focusable, false);
+  assert.equal(win.acceptFirstMouse, true);
   const mac = D.overlayChrome("darwin");
   assert.equal(mac.type, "panel");
   assert.equal(mac.focusable, true);
@@ -119,6 +121,48 @@ test("the Linux mark sits in the panel; a click opens care; first click is a sit
   assert.match(mainSrc, /focusable: chrome\.focusable/);
   assert.match(petSrc, /setHits|hitRects/);
   assert.match(preloadSrc, /setHits/);
+});
+
+test("Windows glass uses hit-forward and the tray can pick Rui plus the grid ten", () => {
+  assert.equal(D.isWindows("win32"), true);
+  assert.equal(D.isWindows("Win32"), true);
+  assert.equal(D.isWindows("darwin"), false);
+  assert.equal(D.isWindows("linux"), false);
+  assert.equal(D.followCursorDisplay("win32"), true);
+  assert.equal(D.followCursorDisplay("Win32"), true);
+  assert.equal(D.firstClick("win32"), "accept");
+  assert.equal(D.firstClick("Win32"), "accept");
+  assert.equal(D.spacesWalk("win32"), false);
+  assert.equal(D.hitForward("win32"), true);
+  assert.equal(D.extraClick("win32"), "toggle");
+  assert.deepEqual(D.deskPicks(), [
+    "red_panda",
+    "cyber_dragon",
+    "volt_dragon",
+    "trace_dragon",
+    "flux_dragon",
+    "spark_dragon",
+    "ion_dragon",
+    "gauss_dragon",
+    "relay_dragon",
+    "fuse_dragon",
+    "ground_dragon",
+  ]);
+  assert.equal(D.isDeskPick("red_panda"), true);
+  assert.equal(D.isDeskPick("spark_dragon"), true);
+  assert.equal(D.isDeskPick("ground_dragon"), true);
+  assert.equal(D.isDeskPick("firefly"), false);
+  assert.equal(D.deskPicks().length, 11);
+
+  assert.match(mainSrc, /On the desk/);
+  assert.match(mainSrc, /deskPickMenu/);
+  assert.match(mainSrc, /deskPicks/);
+  assert.match(mainSrc, /fitWorkArea\(\);\s*\n\s*win\?\.showInactive/);
+  assert.equal([...mainSrc.matchAll(/label: "On the desk"/g)].length, 3);
+  assert.equal([...mainSrc.matchAll(/label: "Companions"/g)].length, 3);
+  assert.match(htmlSrc, /id="choice"[^>]*data-hit/);
+  assert.match(petSrc, /setHits|hitRects/);
+  assert.doesNotMatch(mainSrc, /DirectX|Vulkan|DX12/);
 });
 
 test("the extra keeps the house verbs; hide-the-guest is not hide-the-window", () => {

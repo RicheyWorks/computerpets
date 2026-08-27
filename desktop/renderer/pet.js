@@ -986,6 +986,7 @@ function hitRects() {
   return [...document.querySelectorAll("[data-hit]")].flatMap((el) => {
     const style = getComputedStyle(el);
     if (style.pointerEvents === "none" || style.visibility === "hidden" || style.display === "none") return [];
+    if (Number(style.opacity) === 0) return [];
     const r = el.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) return [];
     return [{ x: r.x, y: r.y, width: r.width, height: r.height }];

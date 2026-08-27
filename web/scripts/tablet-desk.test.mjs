@@ -162,6 +162,7 @@ test("the demo room shows the tablet sit the way it shows the desk walks", () =>
   assert.match(demoSrc, /TabletDeskSit/);
   assert.match(demoSrc, /MacDeskExtra/);
   assert.match(demoSrc, /LinuxDeskExtra/);
+  assert.match(demoSrc, /WindowsDeskSit/);
   assert.match(demoSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.match(sitSrc, /data-tablet-sit/);
