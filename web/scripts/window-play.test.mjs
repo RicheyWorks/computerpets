@@ -2569,7 +2569,7 @@ test("the demo window plate walks Bandit's inspect the same way", () => {
 test("the demo window plate walks Jade's saddle the same way", () => {
   assert.match(demoSrc, /demoWindow/);
   assert.match(livingSrc, /playFor/);
-  assert.match(rosterSrc, /key: "green_tree_python"[\s\S]{0,80}slug: "jade"/);
+  assert.match(readFileSync(join(root, "src/lib/pets/snakes.ts"), "utf8"), /key: "green_tree_python"[\s\S]{0,80}slug: "jade"/);
   const target = P.pickTarget([WIN], 80, "green_tree_python", WORK, 176);
   assert.ok(target);
   assert.equal(target.kind, "saddle");
