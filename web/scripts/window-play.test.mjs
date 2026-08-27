@@ -440,7 +440,6 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.ok(webGape.lift > 36, "the sash-jamb crack is a book crevice, not the floor");
   assert.ok(Math.abs(webGape.x - webBarrel.x) > 20 || Math.abs(webGape.lift - webBarrel.lift) > 16, "not Kite's sky");
   assert.ok(Math.abs(webGape.x - webHitch.x) > 20 || Math.abs(webGape.lift - webHitch.lift) > 16, "not Anchor's bead");
-  const webThread = P.threadPoint(WIN, 0.5, 176, WORK);
   assert.ok(Math.abs(webGape.x - webThread.x) > 20 || Math.abs(webGape.lift - webThread.lift) > 16, "not Wick's tube");
 });
 
