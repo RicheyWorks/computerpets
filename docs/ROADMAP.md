@@ -220,6 +220,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-08-27 (Phase 6 leftover: Whee wheeks at a window; catalog stays 220)
+**Last Updated:** 2026-08-27 (Phase 6 leftover: Ink basks on a window rail; catalog stays 220)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
