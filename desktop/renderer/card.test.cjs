@@ -102,6 +102,9 @@ test("an asleep guest keeps the sleep pose and does not flip on the wander tick"
   assert.match(roomSrc, /wanderWhileAsleep/);
   assert.doesNotMatch(petSrc, /if \(sim\.cmd === "sit" \|\| sim\.cmd === "sleep"\)/);
   assert.match(styleSrc, /data-collapsed/);
+  assert.match(styleSrc, /#hud\[data-collapsed="1"\][\s\S]*display:\s*none/);
+  assert.match(petSrc, /openKeeperCard/);
+  assert.equal(C.blankCard().collapsed, true);
 });
 
 test("voice styles pick a human system voice and skip cartoon robots", () => {

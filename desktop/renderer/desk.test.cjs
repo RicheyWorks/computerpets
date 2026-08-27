@@ -121,6 +121,8 @@ test("the Linux mark sits in the panel; a click opens care; first click is a sit
   assert.match(mainSrc, /focusable: chrome\.focusable/);
   assert.match(petSrc, /setHits|hitRects/);
   assert.match(preloadSrc, /setHits/);
+  assert.match(preloadSrc, /setFocusable/);
+  assert.match(mainSrc, /set-focusable/);
 });
 
 test("Windows glass uses hit-forward and the tray can pick Rui plus the grid ten", () => {

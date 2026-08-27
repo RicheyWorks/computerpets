@@ -2,6 +2,9 @@
 import type { Weather } from "./weather";
 
 export const NO_AREA = "no area set";
+export const AREA_LABEL = "Weather area";
+export const AREA_PLACEHOLDER = "A city or place — weather, not radio";
+export const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
 export const GEOCODE_HOST = "geocoding-api.open-meteo.com";
 export const FORECAST_HOST = "api.open-meteo.com";
 export const MAX_AREAS = 8;

@@ -88,7 +88,7 @@ export function blankGuest(): CardGuest {
 
 export function blankCard(): CardPrefs {
   return {
-    collapsed: false,
+      collapsed: true,
     color: "ink",
     voiceStyle: "hearth",
     mutes: blankMutes(),

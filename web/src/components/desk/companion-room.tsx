@@ -42,7 +42,9 @@ import { weatherIdle, weatherLabel, weatherLine, weatherOf, type Weather } from 
 import { currentArea } from "@/lib/pets/weather-areas";
 import { DeskNewsPlate, DeskWeatherPlate, WEATHER_ID } from "@/components/desk/desk-plates";
 import { BirdFlyer } from "@/components/desk/bird-fly";
+import { CalledGuests } from "@/components/desk/called-guests";
 import { FLY_BIRD_KEY } from "@/lib/pets/bird-fly";
+import { walkersOf } from "@/lib/pets/call-guests";
 import { playVoice as playAnimalVoice } from "@/lib/pets/desk-audio";
 import { dropRibbon, RIBBON_CATCH, RIBBON_SPECIAL, stealRibbon } from "@/lib/pets/ribbon";
 import type { LiveSky } from "@/lib/pets/weather-areas";
@@ -172,6 +174,8 @@ export function CompanionRoom({
   const [weatherWin, setWeatherWin] = useState<DeskWindow | null>(null);
   const [liveSky, setLiveSky] = useState<LiveSky | null>(null);
   const [birdCall, setBirdCall] = useState(1);
+  const [calledKeys, setCalledKeys] = useState<string[]>([]);
+  const [cardOpenTick, setCardOpenTick] = useState(0);
   const [musicOn, setMusicOn] = useState(() => !!loadCard().music?.playing);
   const poseRef = useRef<{ x: number; facing: 1 | -1 }>({ x: 120, facing: 1 });
   const skyNow = (): Weather => weatherOf(new Date(), currentArea({ areas: loadCard().weatherAreas || [], currentId: loadCard().currentAreaId ?? null }) ? liveSky?.sky ?? null : null);
@@ -744,6 +748,8 @@ export function CompanionRoom({
           }
         }}
         onTap={() => {
+          saveCard({ ...loadCard(), collapsed: false });
+          setCardOpenTick((n) => n + 1);
           if (guestTap() !== "choice") return;
           setChoiceOpen((open) => !open);
         }}
@@ -755,6 +761,7 @@ export function CompanionRoom({
       />
       <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
       {demoWindow && kind.key !== FLY_BIRD_KEY ? <BirdFlyer hidden={stats.hidden || leaving} startId={birdCall} /> : null}
+      <CalledGuests keys={walkersOf(calledKeys, kind.key)} hostKey={kind.key} hidden={stats.hidden || leaving} />
 
       {choiceOpen ? (
         <GuestChoice
@@ -870,6 +877,11 @@ export function CompanionRoom({
             setBirdCall((n) => n + 1);
             playAnimalVoice(FLY_BIRD_KEY);
           }}
+          onCallGuests={(keys) => {
+            unlockDeskAudio();
+            setCalledKeys(keys);
+          }}
+          openTick={cardOpenTick}
           onMusicChange={(on) => setMusicOn(on)}
         />
         {deskOff ? (

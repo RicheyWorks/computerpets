@@ -14,7 +14,7 @@
       <div id="weather"></div>
       <article id="weather-plate" class="desk-plate" data-hit data-desk-plate="weather">
         <button type="button" id="weather-toggle" data-hit>
-          <span>Weather</span>
+          <span>Weather area</span>
           <span id="weather-line">no area set</span>
         </button>
         <div id="weather-body" hidden></div>
@@ -34,6 +34,7 @@
       <div id="dust"></div>
       <div id="bubble"><p id="bubble-text">&nbsp;</p></div>
       <img id="guest" data-hit alt="" draggable="false" />
+      <div id="called"></div>
       <img id="bird" data-hit alt="Sip" draggable="false" />
       <svg id="tongue" width="36" height="20" viewBox="0 0 36 20" aria-hidden="true">
         <path d="M2 10 L16 10 M16 10 L28 5 M16 10 L28 15" fill="none" stroke="rgba(214,92,108,0.94)" stroke-width="1.7" stroke-linecap="round" />
@@ -94,8 +95,22 @@
           <div id="hud-mutes" class="keeper-mutes" role="group" aria-label="Mute"></div>
           <div id="hud-steps" class="keeper-steps" role="group" aria-label="Footsteps"></div>
           <div id="hud-music" class="keeper-music" data-hit></div>
-          <div class="keeper-bird" data-hit>
-            <button type="button" id="hud-call-bird" data-hit data-card="call-bird">Call Sip</button>
+          <div class="keeper-call" data-hit>
+            <p>Call a guest</p>
+            <label>Guest
+              <select id="hud-call-pick" data-hit aria-label="Call guest dropdown"></select>
+            </label>
+            <label>Name or group
+              <input id="hud-call-q" type="text" autocomplete="off" spellcheck="false" placeholder="Rui, Sip, plant…" data-hit aria-label="Call by name or group" />
+            </label>
+            <label>Den
+              <select id="hud-call-group" data-hit aria-label="Call by den"></select>
+            </label>
+            <div class="keeper-line-row">
+              <button type="button" id="hud-call-go" data-hit data-card="call-go">Call</button>
+              <button type="button" id="hud-call-bird" data-hit data-card="call-bird">Call Sip</button>
+            </div>
+            <p id="hud-call-truth" class="keeper-truth"></p>
           </div>
           <div class="keeper-off" data-hit>
             <button type="button" id="hud-off" data-hit data-card="off">Turn off</button>
@@ -125,6 +140,7 @@
     <script src="news.js"></script>
     <script src="rui-tricks.js"></script>
     <script src="bird-fly.js"></script>
+    <script src="call-guests.js"></script>
     <script src="ribbon.js"></script>
     <script src="desk-house.js"></script>
     <script src="visitor.js"></script>

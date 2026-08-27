@@ -61,7 +61,7 @@
 
   function blankCard() {
     return {
-      collapsed: false,
+      collapsed: true,
       color: "ink",
       voiceStyle: "hearth",
       mutes: blankMutes(),
