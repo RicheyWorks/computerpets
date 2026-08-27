@@ -16,12 +16,12 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Fuse leftover holds a clip; Ground stays on the sill", () => {
+test("Ground leftover earths a window; Fuse still holds", () => {
+  assert.equal(WP.playFor("ground_dragon"), "earth");
   assert.equal(WP.playFor("fuse_dragon"), "hold");
   assert.equal(WP.playFor("relay_dragon"), "click");
   assert.equal(WP.playFor("gauss_dragon"), "orbit");
   assert.equal(WP.playFor("ion_dragon"), "charge");
-  assert.equal(WP.playFor("ground_dragon"), "sill");
   assert.equal(WP.playFor("red_panda"), "cling-dive");
 });
 
