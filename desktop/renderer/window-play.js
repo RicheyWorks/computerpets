@@ -1845,7 +1845,7 @@
       next.anim = "walk";
       next.facing = face;
       if (u >= 1) {
-        return goPhase(next, "watch-hold", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "sit", face);
+        return { ...goPhase(next, "watch-hold", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "sit", face), rot: 0.2 };
       }
       return next;
     }
@@ -1858,7 +1858,7 @@
       next.anim = "sit";
       next.facing = face;
       if (next.t >= DUR.watchHold) {
-        return goPhase(next, "watch-off", { x: target.holdX, lift: 0 }, { x: target.landX, lift: 0 }, "walk", face);
+        return { ...goPhase(next, "watch-off", { x: target.holdX, lift: 0 }, { x: target.landX, lift: 0 }, "walk", face), rot: 0.2 };
       }
       return next;
     }
