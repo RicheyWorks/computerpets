@@ -1,5 +1,4 @@
 /** Call any of the 220. Groups are the existing dens. Same map as desktop `call-guests.js`. */
-import { ROOMS, type Room } from "./rooms";
 
 export type CallGroup = {
   id: string;
@@ -8,36 +7,72 @@ export type CallGroup = {
   keys: readonly string[];
 };
 
-/** Words the rooms already use. Not new taxa. */
-const ALIASES: Record<string, string[]> = {
-  house: ["house", "study", "companions"],
-  snakes: ["snakes", "snake", "den"],
-  tide: ["tide", "sea", "marine"],
-  garden: ["garden", "plant", "plants"],
-  hive: ["hive", "insect", "insects", "bee", "bees"],
-  pond: ["pond"],
-  roost: ["roost", "bird", "birds"],
-  corner: ["corner"],
-  wood: ["wood"],
-  canopy: ["canopy"],
-  stone: ["stone"],
-  creek: ["creek"],
-  log: ["log"],
-  shore: ["shore"],
-  reef: ["reef"],
-  meadow: ["meadow"],
-  cellar: ["cellar", "fungi", "fungus"],
-  well: ["well"],
-  far: ["far", "far den"],
-  grid: ["grid"],
-};
+const HOUSE_KEYS = [
+  "red_panda",
+  "cat",
+  "dog",
+  "rabbit",
+  "hamster",
+  "guinea_pig",
+  "turtle",
+  "goldfish",
+  "budgie",
+  "fox",
+  "penguin",
+  "parrot",
+  "ferret",
+  "hedgehog",
+  "chinchilla",
+  "axolotl",
+  "toucan",
+  "iguana",
+  "dragon",
+  "phoenix",
+] as const;
+const SNAKE_KEYS = ["ball_python", "corn_snake", "kingsnake", "green_tree_python", "hognose", "garter", "boa", "milk_snake", "rosy_boa", "carpet_python"] as const;
+const SEA_KEYS = ["octopus", "cuttlefish", "nautilus", "moon_jelly", "sea_star", "hermit_crab", "horseshoe_crab", "seahorse", "manta", "moray"] as const;
+const GARDEN_KEYS = ["moss", "maidenhair", "ginkgo", "oak", "water_lily", "orchid", "saguaro", "venus_flytrap", "pitcher", "sundew"] as const;
+const INSECT_KEYS = ["honeybee", "monarch", "luna", "firefly", "darner", "stick", "carpenter_ant", "ladybird", "mantis", "cicada"] as const;
+const BEE_KEYS = ["bumblebee", "carpenter_bee", "mason_bee", "leafcutter", "stingless", "sweat_bee", "mining_bee", "honey_drone", "honey_queen", "honeycomb"] as const;
+const POND_KEYS = ["frog", "toad", "newt", "salamander", "caecilian", "crayfish", "pond_snail", "mussel", "leech", "stickleback"] as const;
+const ROOST_KEYS = ["crow", "raven", "barn_owl", "red_tail", "chickadee", "robin", "mallard", "canada_goose", "pileated", "hummingbird"] as const;
+const CORNER_KEYS = ["orb_weaver", "jumping_spider", "wolf_spider", "tarantula", "widow", "harvestman", "scorpion", "vinegaroon", "tick", "solifuge"] as const;
+const WOOD_KEYS = ["deer", "bat", "squirrel", "otter", "raccoon", "skunk", "opossum", "beaver", "porcupine", "black_bear"] as const;
+const CANOPY_KEYS = ["sloth", "lemur", "gibbon", "kinkajou", "colugo", "flying_squirrel", "howler", "tarsier", "potto", "koala"] as const;
+const STONE_KEYS = ["gecko", "anole", "skink", "chameleon", "horned_lizard", "alligator", "crocodile", "snapper", "box_turtle", "tuatara"] as const;
+const CREEK_KEYS = ["bass", "brook_trout", "catfish", "bluegill", "perch", "pike", "walleye", "paddlefish", "lamprey", "american_eel"] as const;
+const LOG_KEYS = ["house_centipede", "millipede", "pillbug", "earthworm", "velvet_worm", "springtail", "tardigrade", "planarian", "nematode", "amphipod"] as const;
+const SHORE_KEYS = ["fiddler_crab", "ghost_crab", "limpet", "barnacle", "chiton", "periwinkle", "sand_dollar", "sea_urchin", "knobbed_whelk", "lugworm"] as const;
+const REEF_KEYS = ["brain_coral", "anemone", "clownfish", "parrotfish", "cleaner_shrimp", "sea_cucumber", "lionfish", "giant_clam", "eagle_ray", "grouper"] as const;
+const MEADOW_KEYS = ["field_cricket", "katydid", "grasshopper", "swallowtail", "jewelwing", "lacewing", "earwig", "acorn_weevil", "click_beetle", "robber_fly"] as const;
+const FUNGI_KEYS = ["oyster", "fly_agaric", "morel", "chanterelle", "turkey_tail", "lions_mane", "puffball", "chicken_of_woods", "yeast", "lichen"] as const;
+const WELL_KEYS = ["paramecium", "amoeba", "euglena", "volvox", "diatom", "kelp", "chlamydomonas", "stentor", "coli", "haloarchaea"] as const;
+const FAR_KEYS = ["photovore", "choir", "nimbus", "silica", "terminator", "nexus", "halovore", "magneton", "umbral", "cyst"] as const;
+const GRID_KEYS = ["cyber_dragon", "volt_dragon", "trace_dragon", "flux_dragon", "spark_dragon", "ion_dragon", "gauss_dragon", "relay_dragon", "fuse_dragon", "ground_dragon"] as const;
 
-export const CALL_GROUPS: CallGroup[] = ROOMS.map((room: Room) => ({
-  id: room.id,
-  label: room.label,
-  aliases: ALIASES[room.id] ?? [room.id, room.label.toLowerCase()],
-  keys: room.keys,
-}));
+/** Same dens as the house rooms. Aliases are words the rooms already use. */
+export const CALL_GROUPS: CallGroup[] = [
+  { id: "house", label: "House", aliases: ["house", "study", "companions"], keys: HOUSE_KEYS },
+  { id: "snakes", label: "Snakes", aliases: ["snakes", "snake", "den"], keys: SNAKE_KEYS },
+  { id: "tide", label: "Tide", aliases: ["tide", "sea", "marine"], keys: SEA_KEYS },
+  { id: "garden", label: "Garden", aliases: ["garden", "plant", "plants"], keys: GARDEN_KEYS },
+  { id: "hive", label: "Hive", aliases: ["hive", "insect", "insects", "bee", "bees"], keys: [...INSECT_KEYS, ...BEE_KEYS] },
+  { id: "pond", label: "Pond", aliases: ["pond"], keys: POND_KEYS },
+  { id: "roost", label: "Roost", aliases: ["roost", "bird", "birds"], keys: ROOST_KEYS },
+  { id: "corner", label: "Corner", aliases: ["corner"], keys: CORNER_KEYS },
+  { id: "wood", label: "Wood", aliases: ["wood"], keys: WOOD_KEYS },
+  { id: "canopy", label: "Canopy", aliases: ["canopy"], keys: CANOPY_KEYS },
+  { id: "stone", label: "Stone", aliases: ["stone"], keys: STONE_KEYS },
+  { id: "creek", label: "Creek", aliases: ["creek"], keys: CREEK_KEYS },
+  { id: "log", label: "Log", aliases: ["log"], keys: LOG_KEYS },
+  { id: "shore", label: "Shore", aliases: ["shore"], keys: SHORE_KEYS },
+  { id: "reef", label: "Reef", aliases: ["reef"], keys: REEF_KEYS },
+  { id: "meadow", label: "Meadow", aliases: ["meadow"], keys: MEADOW_KEYS },
+  { id: "cellar", label: "Cellar", aliases: ["cellar", "fungi", "fungus"], keys: FUNGI_KEYS },
+  { id: "well", label: "Well", aliases: ["well"], keys: WELL_KEYS },
+  { id: "far", label: "Far", aliases: ["far", "far den"], keys: FAR_KEYS },
+  { id: "grid", label: "Grid", aliases: ["grid"], keys: GRID_KEYS },
+];
 
 export const FLY_BIRD_KEY = "hummingbird";
 export const MIN_STAY_S = 24;
@@ -119,11 +154,13 @@ export function matchCall(query: unknown, roster: CallGuest[] | null | undefined
 }
 
 export function callKeys(query: unknown, roster: CallGuest[] | null | undefined, groupId?: string | null) {
+  const fromQuery = matchCall(query, roster);
+  if (fromQuery.length) return fromQuery;
   if (groupId) {
     const g = groupById(groupId);
     return g ? g.keys.slice() : [];
   }
-  return matchCall(query, roster);
+  return [];
 }
 
 export function walkersOf(keys: string[] | null | undefined, hostKey?: string | null) {

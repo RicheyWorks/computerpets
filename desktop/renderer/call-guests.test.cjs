@@ -23,6 +23,7 @@ test("Call matches a name, a group string, and a den picker", () => {
   assert.ok(!plants.includes("kelp"));
   const garden = G.callKeys("", roster, "garden");
   assert.deepEqual(garden, plants);
+  assert.deepEqual(G.callKeys("Rui", roster, "roost"), ["red_panda"]);
   assert.equal(G.matchCall("no-such-guest", roster).length, 0);
   assert.equal(G.CALL_EMPTY, "no guest from that look-up");
 });

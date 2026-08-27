@@ -139,11 +139,13 @@
   }
 
   function callKeys(query, roster, groupId) {
+    const fromQuery = matchCall(query, roster);
+    if (fromQuery.length) return fromQuery;
     if (groupId) {
       const g = groupById(groupId);
       return g ? g.keys.slice() : [];
     }
-    return matchCall(query, roster);
+    return [];
   }
 
   function walkersOf(keys, hostKey) {

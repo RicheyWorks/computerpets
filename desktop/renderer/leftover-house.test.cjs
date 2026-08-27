@@ -36,6 +36,21 @@ test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () 
   assert.deepEqual(C.MUTE_BUSES, ["talk", "special", "weather", "treats", "steps", "music"]);
 });
 
+test("call-guests sits on the leftover rooms, not invented dens", () => {
+  const rooms = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "rooms.ts"), "utf8");
+  const overlay = readFileSync(join(__dirname, "call-guests.js"), "utf8");
+  const web = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "call-guests.ts"), "utf8");
+  assert.match(rooms, /id: "garden"/);
+  assert.match(rooms, /id: "roost"/);
+  assert.match(overlay, /id: "garden"/);
+  assert.match(overlay, /aliases: \["garden", "plant"/);
+  assert.match(web, /id: "garden"/);
+  assert.match(web, /aliases: \["garden", "plant"/);
+  assert.match(overlay, /function matchCall/);
+  assert.match(web, /export function matchCall/);
+  assert.doesNotMatch(web, /from "\.\/rooms"/);
+});
+
 test("the tray pins Rui, Sip, and the grid ten", () => {
   assert.deepEqual(D.deskPicks(), [
     "red_panda",
