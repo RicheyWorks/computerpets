@@ -16,7 +16,8 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Miso leftover sits a window ledge; Ground still earths", () => {
+test("Pip leftover watches a window from the floor; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("dog"), "watch");
   assert.equal(WP.playFor("cat"), "ledge");
   assert.equal(WP.playFor("ground_dragon"), "earth");
   assert.equal(WP.playFor("fuse_dragon"), "hold");
@@ -24,8 +25,8 @@ test("Miso leftover sits a window ledge; Ground still earths", () => {
   assert.equal(WP.playFor("gauss_dragon"), "orbit");
   assert.equal(WP.playFor("ion_dragon"), "charge");
   assert.equal(WP.playFor("red_panda"), "cling-dive");
-  assert.equal(WP.playFor("dog"), "sill");
   assert.equal(WP.playFor("gecko"), "sill");
+  assert.equal(WP.playFor("rabbit"), "sill");
 });
 
 test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () => {
