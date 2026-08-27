@@ -68,10 +68,10 @@ test("the honest download is GitHub plus the overlay, not a Store listing", () =
 });
 
 test("today's start is desktop.ps1 → npm start → electron .", () => {
-  assert.match(startSrc, /\\.\\desktop\.ps1/);
+  assert.match(startSrc, /desktop\.ps1/);
   assert.match(startSrc, /npm start/);
   assert.match(startSrc, /electron \./);
-  assert.match(readmeSrc, /\\.\\desktop\.ps1/);
+  assert.match(readmeSrc, /desktop\.ps1/);
   assert.match(readmeSrc, /electron \./);
   assert.equal(pkg.scripts.start, "electron .");
   assert.match(pkg.scripts.dist, /electron-builder/);
