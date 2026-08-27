@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Wick threads the sash-sill gap as a tube, then dashes off. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
@@ -23,6 +23,7 @@
   const SCENT = "scent";
   const BOW = "bow";
   const HOOK = "hook";
+  const THREAD = "thread";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -104,6 +105,9 @@
     hookClimb: 1.24,
     hook: 1.72,
     hookOff: 0.58,
+    threadOn: 0.44,
+    thread: 1.48,
+    threadOff: 0.38,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -142,6 +146,7 @@
     if (key === "fox") return SCENT;
     if (key === "penguin") return BOW;
     if (key === "parrot") return HOOK;
+    if (key === "ferret") return THREAD;
     return SILL;
   }
 
@@ -356,6 +361,7 @@
       if (kind === SCENT) return w.width >= 140 && w.height >= 80;
       if (kind === BOW) return w.width >= 180 && w.height >= 160;
       if (kind === HOOK) return w.width >= 140 && w.height >= 200;
+      if (kind === THREAD) return w.width >= 200 && w.height >= 80;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -827,6 +833,28 @@
         spin: "none",
       };
     }
+    if (kind === THREAD) {
+      const edge = (opts && opts.side) || pickSide(best, petX, size, workW);
+      const startU = edge === "right" ? 1 : 0;
+      const endU = startU === 0 ? 1 : 0;
+      const start = threadPoint(best, startU, size, work);
+      const end = threadPoint(best, endU, size, work);
+      const approachX = clamp(start.x, 8, Math.max(8, workW - size - 8));
+      const away = end.x >= start.x ? 80 : -80;
+      return {
+        id: best.id,
+        kind,
+        side: "gap",
+        holdX: start.x,
+        holdLift: start.lift,
+        threadEndX: end.x,
+        threadEndLift: end.lift,
+        approachX,
+        landX: clamp(end.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "dash",
+        spin: "none",
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -944,6 +972,12 @@
       const start = hookPoint(win, edge, 0, sprite, work);
       const hang = hookPoint(win, edge, 1, sprite, work);
       return { ...target, holdX: hang.x, holdLift: hang.lift, hookStartX: start.x, hookStartLift: start.lift };
+    }
+    if (target.kind === THREAD) {
+      const goingRight = (target.threadEndX != null ? target.threadEndX : target.holdX) >= target.holdX;
+      const start = threadPoint(win, goingRight ? 0 : 1, sprite, work);
+      const end = threadPoint(win, goingRight ? 1 : 0, sprite, work);
+      return { ...target, holdX: start.x, holdLift: start.lift, threadEndX: end.x, threadEndLift: end.lift };
     }
     const start = sillPoint(win, 0.12, sprite, work);
     const end = sillPoint(win, 0.88, sprite, work);
@@ -1785,6 +1819,66 @@
     };
   }
 
+  function threadPoint(win, u, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const inset = Math.max(28, size * 0.16);
+    const span = Math.max(0, win.width - size - inset * 2);
+    const t = Math.max(0, Math.min(1, u));
+    const x = win.x + inset + span * t;
+    const crack = Math.max(7, size * 0.04);
+    const gripY = win.y + win.height - crack;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 8, maxLift) };
+  }
+
+  function threadOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (3 - 2 * t);
+    const pour = t * t;
+    const mix = ease * 0.35 + pour * 0.65;
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const squeeze = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+    return {
+      x: fromX + (toX - fromX) * mix,
+      lift: fromLift + (toLift - fromLift) * mix + squeeze * 8,
+      rot: (toX >= fromX ? 1 : -1) * 22 * squeeze,
+    };
+  }
+
+  function threadPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (3 - 2 * t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const wriggle = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 5);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + wriggle * 7,
+      rot: (toX >= fromX ? 1 : -1) * 18 * wriggle,
+    };
+  }
+
+  function threadOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t;
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const pop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + pop * 12 * (1 - t),
+      rot: (toX >= fromX ? 1 : -1) * 10 * pop,
+    };
+  }
+
   function earthStepOffPath(u, from, to) {
     const t = Math.max(0, Math.min(1, u));
     const fromX = from && from.x != null ? from.x : 0;
@@ -1888,7 +1982,7 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off" && play.phase !== "circle-off" && play.phase !== "perch-off" && play.phase !== "scent-off" && play.phase !== "bow-off" && play.phase !== "hook-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off" && play.phase !== "circle-off" && play.phase !== "perch-off" && play.phase !== "scent-off" && play.phase !== "bow-off" && play.phase !== "hook-off" && play.phase !== "thread-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
@@ -1896,9 +1990,9 @@
       ? next.target.clickToId
       : next.target && next.target.id;
     const win = findWin(windows, lookId);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off" && next.phase !== "thread-off") {
       next.target = refitTarget(next.target, win, size, work, windows);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off" && next.phase !== "thread-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -1979,6 +2073,9 @@
         }
         if (target.kind === HOOK) {
           return goPhase(next, "hook-on", { x: dest, lift: 0 }, { x: target.hookStartX != null ? target.hookStartX : target.holdX, lift: target.hookStartLift != null ? target.hookStartLift : 0 }, "play", dir);
+        }
+        if (target.kind === THREAD) {
+          return goPhase(next, "thread-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -3096,6 +3193,54 @@
       return next;
     }
 
+    if (next.phase === "thread-on") {
+      const face = (target.threadEndX != null ? target.threadEndX : target.holdX) >= target.holdX ? 1 : -1;
+      const u = next.t / DUR.threadOn;
+      const pose = threadOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = face;
+      if (u >= 1) {
+        return goPhase(next, "thread", { x: target.holdX, lift: target.holdLift }, { x: target.threadEndX != null ? target.threadEndX : target.holdX, lift: target.threadEndLift != null ? target.threadEndLift : target.holdLift }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "thread") {
+      if (!win) return abortToFloor(next, { x: next.x, lift: next.lift }, work);
+      const goingRight = (target.threadEndX != null ? target.threadEndX : target.holdX) >= target.holdX;
+      const start = threadPoint(win, goingRight ? 0 : 1, size, work);
+      const end = threadPoint(win, goingRight ? 1 : 0, size, work);
+      const u = next.t / DUR.thread;
+      const pose = threadPath(Math.min(1, u), start, end);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = goingRight ? 1 : -1;
+      if (u >= 1) {
+        const endX = target.threadEndX != null ? target.threadEndX : end.x;
+        const endLift = target.threadEndLift != null ? target.threadEndLift : end.lift;
+        const leaveFace = target.landX >= endX ? 1 : -1;
+        return goPhase(next, "thread-off", { x: endX, lift: endLift }, { x: target.landX, lift: 0 }, "play", leaveFace);
+      }
+      return next;
+    }
+
+    if (next.phase === "thread-off") {
+      const u = next.t / DUR.threadOff;
+      const pose = threadOffPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = target.landX >= (target.threadEndX != null ? target.threadEndX : target.holdX) ? 1 : -1;
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -3171,6 +3316,7 @@
     SCENT,
     BOW,
     HOOK,
+    THREAD,
     SILL,
     IGNORE,
     DUR,
@@ -3240,6 +3386,10 @@
     hookClimbPath,
     hookQuotePath,
     hookOffPath,
+    threadPoint,
+    threadOnPath,
+    threadPath,
+    threadOffPath,
     pickTarget,
     refitTarget,
     divePath,
