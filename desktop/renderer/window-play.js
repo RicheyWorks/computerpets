@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
@@ -14,6 +14,7 @@
   const EARTH = "earth";
   const LEDGE = "ledge";
   const WATCH = "watch";
+  const THUMP = "thump";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -63,6 +64,9 @@
     watchOn: 0.74,
     watchHold: 1.85,
     watchOff: 0.66,
+    thumpOn: 0.34,
+    thump: 0.3,
+    thumpOff: 0.3,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -92,6 +96,7 @@
     if (key === "ground_dragon") return EARTH;
     if (key === "cat") return LEDGE;
     if (key === "dog") return WATCH;
+    if (key === "rabbit") return THUMP;
     return SILL;
   }
 
@@ -297,6 +302,7 @@
       if (kind === EARTH) return w.width >= 180 && w.height >= 140;
       if (kind === LEDGE) return w.width >= 180 && w.height >= 80;
       if (kind === WATCH) return w.width >= 160 && w.height >= 70;
+      if (kind === THUMP) return w.width >= 140 && w.height >= 70;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -606,6 +612,25 @@
         spin: "none",
       };
     }
+    if (kind === THUMP) {
+      const edge = (opts && opts.side) || pickSide(best, petX, size, workW);
+      const hold = thumpPoint(best, size, work, edge);
+      const holdX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+      const approachOff = edge === "left" ? -96 : 96;
+      const approachX = clamp(holdX + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = edge === "left" ? -118 : 118;
+      return {
+        id: best.id,
+        kind,
+        side: edge,
+        holdX,
+        holdLift: 0,
+        approachX,
+        landX: clamp(holdX + away, 8, Math.max(8, workW - size - 8)),
+        leave: "vanish",
+        spin: "none",
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -682,6 +707,11 @@
     }
     if (target.kind === WATCH) {
       const hold = watchPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: 0 };
+    }
+    if (target.kind === THUMP) {
+      const edge = target.side === "right" ? "right" : "left";
+      const hold = thumpPoint(win, sprite, work, edge);
       return { ...target, holdX: hold.x, holdLift: 0 };
     }
     const start = sillPoint(win, 0.12, sprite, work);
@@ -1037,6 +1067,53 @@
     };
   }
 
+  function thumpPoint(win, sprite, _work, side) {
+    const size = sprite == null ? SPRITE : sprite;
+    const edge = side === "right" ? "right" : "left";
+    const gap = Math.max(10, size * 0.08);
+    const x = edge === "right" ? win.x + win.width + gap : win.x - size - gap;
+    return { x, lift: 0, side: edge };
+  }
+
+  function thumpOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (3 - 2 * t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const arc = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: arc * 20,
+      rot: (toX >= fromX ? 1 : -1) * 10 * arc,
+    };
+  }
+
+  function thumpStampPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.45) {
+      const s = t / 0.45;
+      return { lift: 8 * Math.sin(s * Math.PI * 0.5), rot: -7 * s };
+    }
+    if (t < 0.62) {
+      const s = (t - 0.45) / 0.17;
+      return { lift: 8 * (1 - s), rot: -7 * (1 - s) };
+    }
+    return { lift: 0, rot: 0 };
+  }
+
+  function thumpVanishPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (2 - t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const arc = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: arc * 24,
+      rot: (toX >= fromX ? 1 : -1) * 14 * arc,
+    };
+  }
+
   function earthStepOffPath(u, from, to) {
     const t = Math.max(0, Math.min(1, u));
     const fromX = from && from.x != null ? from.x : 0;
@@ -1140,7 +1217,7 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
@@ -1148,9 +1225,9 @@
       ? next.target.clickToId
       : next.target && next.target.id;
     const win = findWin(windows, lookId);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off") {
       next.target = refitTarget(next.target, win, size, work, windows);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -1203,6 +1280,9 @@
         }
         if (target.kind === WATCH) {
           return goPhase(next, "watch-on", { x: dest, lift: 0 }, { x: target.holdX, lift: 0 }, "walk", dir);
+        }
+        if (target.kind === THUMP) {
+          return goPhase(next, "thump-on", { x: dest, lift: 0 }, { x: target.holdX, lift: 0 }, "play", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -1874,6 +1954,46 @@
       return next;
     }
 
+    if (next.phase === "thump-on") {
+      const face = target.holdX >= next.from.x ? 1 : -1;
+      const u = next.t / DUR.thumpOn;
+      const pose = thumpOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: 0 });
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = face;
+      if (u >= 1) {
+        return goPhase(next, "thump", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "thump") {
+      const face = target.landX >= target.holdX ? 1 : -1;
+      const pose = thumpStampPath(Math.min(1, next.t / DUR.thump));
+      next.x = target.holdX;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = face;
+      if (next.t >= DUR.thump) {
+        return goPhase(next, "thump-off", { x: target.holdX, lift: 0 }, { x: target.landX, lift: 0 }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "thump-off") {
+      const u = next.t / DUR.thumpOff;
+      const pose = thumpVanishPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -1940,6 +2060,7 @@
     EARTH,
     LEDGE,
     WATCH,
+    THUMP,
     SILL,
     IGNORE,
     DUR,
@@ -1971,6 +2092,10 @@
     watchPoint,
     watchOnPath,
     watchOffPath,
+    thumpPoint,
+    thumpOnPath,
+    thumpStampPath,
+    thumpVanishPath,
     pickTarget,
     refitTarget,
     divePath,
