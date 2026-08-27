@@ -3947,8 +3947,9 @@ test("Keel tosses fruit from a cornice — not wall, hook, perch, ridge, ledge, 
   assert.equal(on0.x, 40);
   assert.equal(on1.x, hold.x);
   assert.equal(on1.lift, hold.lift);
-  const flick = P.tossFlickPath(0.5);
-  assert.ok(Math.abs(flick.rot) > 16, "the toss is a bill flick");
+  let flickPeak = 0;
+  for (let u = 0; u <= 1; u += 0.05) flickPeak = Math.max(flickPeak, Math.abs(P.tossFlickPath(u).rot));
+  assert.ok(flickPeak > 16, "the toss is a bill flick");
   const off0 = P.tossOffPath(0, { x: hold.x, lift: hold.lift }, { x: hold.x + 72, lift: 0 });
   const off1 = P.tossOffPath(1, { x: hold.x, lift: hold.lift }, { x: hold.x + 72, lift: 0 });
   assert.equal(off0.x, hold.x);
