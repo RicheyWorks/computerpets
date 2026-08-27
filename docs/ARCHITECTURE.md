@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (poster-sharp keeper HUD sits the Windows desk and every door) |
+| **Last Updated** | 2026-08-27 (honest Windows desk download teaching; overlay and `/demo` stay lockstep) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -787,6 +787,7 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 - PyQt6 blotter (`client/`) — care verbs, plaques, Qt OpenGL viewport.
 - Life sim: hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, bond titles.
 - Poster-sharp keeper HUD on overlay, `/demo`, desk, Live, and Meet: guest name, stage, bond title, hunger / rest / bond, Feed / Play / Rest, honest Java heartbeat. Care is local. `/pet/feed` is not a door. Overlay verbs stay data-hit; empty glass still click-throughs.
+- Honest Windows 10/11 desk download teaching: [START-HERE](START-HERE.md) and the public README lead with the real overlay path (`desktop.ps1` → `npm start` → `electron .`). Node is taught after the pets-on-the-desk picture. There is no Microsoft Store listing and no live Store ID. `/demo` stays the same house (keeper card, tray **On the desk**, Spark at `/demo/crackle`).
 - Spring Boot trust anchor on 8081: ownership verify, licenses, download, admin revoke, actuator, quiet `/api/public/heartbeat`.
 - Mind plugin bus. Keys stay with the keeper.
 
