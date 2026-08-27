@@ -20,6 +20,11 @@ export const KEEPER_CARE = [
   { id: "rest" as const, label: "Rest" },
 ];
 
+/** Poster HUD width on the Windows overlay. Empty glass is still click-through. */
+export const HUD_WIDTH = 280;
+
+export const KEEPER_KICKER = "Keeper card";
+
 export type HeartbeatStatus = "UP" | "DOWN";
 
 export type Heartbeat = {
@@ -86,6 +91,28 @@ export function keeperMeters(stats: Pick<CareStats, "hunger" | "energy" | "bond"
     rest: stats.energy,
     bond: stats.bond,
     bondTitle: bondTitle(stats.bond),
+  };
+}
+
+/** One house face: name, stage, bond title, meters. Not a nametag. */
+export function keeperPoster(
+  name: string,
+  stage: string,
+  stats: Pick<CareStats, "hunger" | "energy" | "bond">,
+  beat: Heartbeat = UNREAD_HEARTBEAT,
+) {
+  const meters = keeperMeters(stats);
+  return {
+    kicker: KEEPER_KICKER,
+    name,
+    stage,
+    bondTitle: meters.bondTitle,
+    hunger: meters.hunger,
+    rest: meters.rest,
+    bond: meters.bond,
+    verbs: KEEPER_CARE.map((verb) => verb.id),
+    heartbeat: heartbeatLine(beat),
+    truth: careTruth(),
   };
 }
 

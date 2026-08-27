@@ -20,6 +20,7 @@ test("meet says two hundred, not Fifty", () => {
   assert.match(meetSrc, /Watch Rui/);
   assert.match(meetSrc, /HouseFloor/);
   assert.match(meetSrc, /DenCabinet/);
+  assert.match(meetSrc, /MeetKeeperCard/);
 });
 
 test("demo still mounts a known slug — rui and cup", () => {

@@ -40,6 +40,8 @@ const lureEl = document.getElementById("lure");
 const hud = document.getElementById("hud");
 const choiceEl = document.getElementById("choice");
 const hudName = document.getElementById("hud-name");
+const hudStage = document.getElementById("hud-stage");
+const hudBondTitle = document.getElementById("hud-bond-title");
 const hudVital = document.getElementById("hud-vital");
 const hudHunger = document.getElementById("hud-hunger");
 const hudRest = document.getElementById("hud-rest");
@@ -209,7 +211,9 @@ function paintHud() {
   if (!life || !kind) return;
   const K = window.PetKeeper;
   const meters = K ? K.meters(life) : { hunger: life.hunger, rest: life.energy, bond: life.bond, bondTitle: "New" };
-  hudName.textContent = `${kind.name} · ${life.stage}`;
+  hudName.textContent = kind.name;
+  if (hudStage) hudStage.textContent = life.stage;
+  if (hudBondTitle) hudBondTitle.textContent = meters.bondTitle;
   const hive = window.PetHive && window.PetHive.isHivePlace(kind.key) ? window.PetHive.colonyOf(life, life.hidden) : null;
   const vital = hive
     ? `${window.PetHive.colonyWord(hive)} · Brood · ${hive.brood} · Stores · ${hive.stores}`
@@ -217,8 +221,11 @@ function paintHud() {
   hudVital.textContent = vital;
   if (hudHunger) hudHunger.textContent = String(meters.hunger);
   if (hudRest) hudRest.textContent = String(meters.rest);
-  if (hudBond) hudBond.textContent = meters.bondTitle;
-  if (hudHeartbeat && K) hudHeartbeat.textContent = K.heartbeatLine(heartbeat);
+  if (hudBond) hudBond.textContent = String(meters.bond);
+  if (hudHeartbeat && K) {
+    hudHeartbeat.textContent = K.heartbeatLine(heartbeat);
+    hudHeartbeat.setAttribute("data-heartbeat", heartbeat.status || "DOWN");
+  }
   if (hudTruth && K) hudTruth.textContent = K.careTruth();
   pet.classList.toggle("dull", !!(hive && hive.quiet));
   barHunger.style.setProperty("--w", `${life.hunger}%`);
@@ -1267,7 +1274,8 @@ function tick(now) {
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));
   const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
   bubble.style.transform = `translate3d(${bx}px, ${-lift - 10}px, 0)`;
-  hud.style.transform = `translate3d(${clamp(drawX + 4, 8, width - 180)}px, ${-lift}px, 0)`;
+  const hudW = window.PetKeeper?.HUD_WIDTH ?? 280;
+  hud.style.transform = `translate3d(${clamp(drawX + 4, 8, Math.max(8, width - (hudW + 8)))}px, ${-lift}px, 0)`;
   if (tongueEl) {
     const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
     tongueEl.style.opacity = String(flick);
