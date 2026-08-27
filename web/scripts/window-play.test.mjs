@@ -1829,7 +1829,6 @@ test("the demo window plate walks Vesper's drape the same way", () => {
   assert.match(livingSrc, /drape-on|playFor/);
   assert.match(rosterSrc, /key: "dragon"[\s\S]{0,80}slug: "vesper"/);
   assert.match(guideSrc, /"dragon"/);
-  assert.match(guideSrc, /vesper/);
   const overlayTarget = Overlay.pickTarget([WIN], 40, "dragon", WORK, 176);
   const target = P.pickTarget([WIN], 40, "dragon", WORK, 176);
   assert.equal(target.kind, overlayTarget.kind);

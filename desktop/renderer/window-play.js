@@ -4190,7 +4190,10 @@
       next.anim = "play";
       next.facing = face;
       if (next.t >= DUR.drapeSettle) {
-        return goPhase(next, "drape", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+        const held = goPhase(next, "drape", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+        held.lift = target.holdLift - 2;
+        held.rot = face * 22;
+        return held;
       }
       return next;
     }
