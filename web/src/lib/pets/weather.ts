@@ -1,6 +1,7 @@
 export type Weather = "clear" | "rain" | "wind" | "heat";
 
-export function weatherOf(now = new Date()): Weather {
+export function weatherOf(now = new Date(), live?: Weather | null): Weather {
+  if (live === "clear" || live === "rain" || live === "wind" || live === "heat") return live;
   const day = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
   const n = ((day * 9301 + 49297) % 233280) / 233280;
   if (n < 0.4) return "clear";

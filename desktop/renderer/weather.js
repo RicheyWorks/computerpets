@@ -1,6 +1,7 @@
 /** Daily weather the house already uses. Same civil-day clock. Same sit-or-swim idle. */
 (function (root) {
-  function weatherOf(now) {
+  function weatherOf(now, live) {
+    if (live === "clear" || live === "rain" || live === "wind" || live === "heat") return live;
     now = now || new Date();
     const day = Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86400000);
     const n = ((day * 9301 + 49297) % 233280) / 233280;

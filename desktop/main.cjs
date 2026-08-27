@@ -128,7 +128,7 @@ function companionMenu() {
   return roster.map(guestRadio);
 }
 
-/** Rui and the grid ten sit first. The rest of the house stays under Companions. */
+/** Rui, Sip, and the grid ten sit first. The rest of the house stays under Companions. */
 function deskPickMenu() {
   return Desk.deskPicks()
     .map((key) => roster.find((r) => r.key === key))
