@@ -24,6 +24,8 @@ export type CareStats = {
   bond: number;
   sick: boolean;
   hidden: boolean;
+  /** Rest or night put them down. Wander must not stand them back up. */
+  asleep?: boolean;
   mess: MessPile[];
   gifts: MessPile[];
   bornAt: number;
@@ -54,6 +56,7 @@ export function blankCare(now = Date.now()): CareStats {
     bond: 18,
     sick: false,
     hidden: false,
+    asleep: false,
     mess: [],
     gifts: [],
     bornAt: now,
@@ -74,6 +77,7 @@ export function normalizeCare(raw: Partial<CareStats> | null | undefined, now = 
     bond: clampStat(raw.bond ?? base.bond),
     sick: Boolean(raw.sick),
     hidden: Boolean(raw.hidden),
+    asleep: Boolean(raw.asleep),
     mess: Array.isArray(raw.mess) ? raw.mess.slice(0, 6) : [],
     gifts: Array.isArray(raw.gifts) ? raw.gifts.slice(0, 3) : [],
     bornAt: raw.bornAt ?? now,
@@ -344,9 +348,12 @@ export function tickSanctuary(
 export function decayStats(stats: Partial<CareStats>, lastTick: number, now = Date.now(), resting = false): CareStats {
   const s = normalizeCare(stats, now);
   const dt = Math.max(0, now - lastTick);
-  const asleep = resting && !s.hidden && !s.sick;
+  const nightAsleep = resting && !s.hidden && !s.sick;
+  const held = !!s.asleep && !s.sick && !s.hidden && s.hunger >= 12;
+  const asleep = nightAsleep || held;
   const next: CareStats = {
     ...s,
+    asleep,
     hunger: clampStat(s.hunger - dt * HUNGER_PER_MS * (asleep ? NIGHT_HUNGER : 1)),
     mood: clampStat(s.mood - dt * MOOD_PER_MS * (s.sick ? 1.3 : 1)),
     energy: asleep ? clampStat(s.energy + dt * NIGHT_ENERGY_PER_MS) : clampStat(s.energy - dt * ENERGY_PER_MS),
@@ -373,6 +380,7 @@ export function applyFeed(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
   return {
     ...s,
+    asleep: false,
     hunger: clampStat(s.hunger + 28),
     mood: clampStat(s.mood + 6),
     energy: clampStat(s.energy - 6),
@@ -384,6 +392,7 @@ export function applyPlay(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
   return {
     ...s,
+    asleep: false,
     hunger: clampStat(s.hunger - 8),
     mood: clampStat(s.mood + 26),
     energy: clampStat(s.energy - 14),
@@ -395,6 +404,7 @@ export function applyRest(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
   return {
     ...s,
+    asleep: true,
     hunger: clampStat(s.hunger - 3),
     mood: clampStat(s.mood + 4),
     energy: clampStat(s.energy + 34),
@@ -439,6 +449,7 @@ export function applySnack(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
   return {
     ...s,
+    asleep: false,
     hunger: clampStat(s.hunger + 12),
     mood: clampStat(s.mood + 5),
     bond: clampStat(s.bond + 1),
@@ -464,7 +475,7 @@ export function applyPraise(stats: Partial<CareStats>): CareStats {
 
 export function applyCall(stats: Partial<CareStats>): CareStats {
   const s = normalizeCare(stats);
-  return { ...s, hidden: false, mood: clampStat(s.mood + 4), bond: clampStat(s.bond + 1) };
+  return { ...s, hidden: false, asleep: false, mood: clampStat(s.mood + 4), bond: clampStat(s.bond + 1) };
 }
 
 export function applyHide(stats: Partial<CareStats>): CareStats {

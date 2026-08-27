@@ -27,6 +27,8 @@ test("Java is 8081, the desk is 8080, and /pet/feed is not a door", () => {
   assert.equal(K.JAVA_PORT, 8081);
   assert.equal(K.DESK_PORT, 8080);
   assert.equal(K.HUD_WIDTH, 280);
+  assert.equal(K.HUD_WIDTH_COLLAPSED, 168);
+  assert.equal(K.VOICE_TRUTH, "The door is still the system speech voices.");
   assert.equal(K.HEARTBEAT_URL, "http://127.0.0.1:8081/api/public/heartbeat");
   assert.equal(K.ADVERTISED_CARE.feed, "/pet/feed");
   assert.equal(K.careTruth(), "Care is local. /pet/feed is not a door.");
@@ -59,6 +61,8 @@ test("the poster face is name, stage, bond title, meters, verbs, heartbeat", () 
   assert.deepEqual(face.verbs, ["feed", "play", "rest"]);
   assert.match(face.heartbeat, /Java 8081 · DOWN/);
   assert.equal(face.truth, K.careTruth());
+  assert.equal(face.voiceTruth, K.VOICE_TRUTH);
+  assert.match(face.quitTruth, /desktop\.ps1/);
 });
 
 test("the same poster keeper card sits desk, /demo, Live, Meet, and the Windows overlay", () => {
@@ -76,6 +80,7 @@ test("the same poster keeper card sits desk, /demo, Live, Meet, and the Windows 
   assert.match(cardSrc, /keeper-stage/);
   assert.match(cardSrc, /keeper-bond-title/);
   assert.match(cardSrc, /data-care=\{verb\.id\}/);
+  assert.match(cardSrc, /data-card="collapse"/);
   assert.match(cardSrc, /onFeed/);
   assert.match(cardSrc, /onPlay/);
   assert.match(cardSrc, /onRest/);

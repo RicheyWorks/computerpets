@@ -167,6 +167,7 @@ All critical items required before any public or limited production exposure hav
 North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-north-star-the-x-ads). This phase is the bar. Do not mark HUD / GPU items done until the house ships them. The leftover art campaign on the original 210 is finished. Catalog is two hundred twenty. Arc is the first cyber-dragon guest. Volt is the second. Trace is the third. Flux is the fourth. Spark is the fifth. Ion is the sixth. Gauss is the seventh. Relay is the eighth. Fuse is the ninth. Ground is the tenth.
 
 - [x] House-hand keeper card on overlay, `/demo`, desk, Live, and Meet: name, stage / bond, hunger / rest / bond, FEED / PLAY / REST. Same house. Care is local. `/pet/feed` is not a door. Pirate is Rui’s character, not a new guest.
+- [x] Keeper card sits the desk: collapse, personal volume, card color, house-voice styles (still `speechSynthesis`), saved lines, alarm, timer, per-bus mutes, honest overlay quit. Sleep stays on the sleep pose until a real wake. Catalog stays 220.
 - [x] Overlay and `/demo` heartbeat that tells the truth about Spring Boot (up/down, profile, uptime) from `GET /api/public/heartbeat` — never a painted “UP”. Unreachable Java is DOWN / unread.
 - [x] Rui-sharp poster look for that card. Guest name, stage, bond title, hunger / rest / bond, Feed / Play / Rest, honest heartbeat. Same house on overlay, `/demo`, desk, Live, and Meet.
 - [ ] Align advertised care routes with what we ship, or grow `/pet/feed`, `/pet/play`, `/pet/rest` as the contract. Do not claim 200s we do not return.
@@ -200,6 +201,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-08-26 (Phase 6: Windows overlay sits the work area for the grid ten)
+**Last Updated:** 2026-08-27 (Phase 6: keeper card sits the desk)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

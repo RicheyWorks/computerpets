@@ -64,6 +64,8 @@ type LivingPetProps = {
   /** Extra rise off the floor. Bees sit on Wax with this. */
   lift?: number;
   hidden?: boolean;
+  /** Rest or night put them down. Wander must not stand them back up. */
+  asleep?: boolean;
   unwell?: boolean;
   dull?: boolean;
   stage?: "hatchling" | "grown" | "elder";
@@ -138,6 +140,7 @@ export function LivingPet({
   startX = 120,
   lift = 0,
   hidden = false,
+  asleep = false,
   unwell = false,
   dull = false,
   stage = "grown",
@@ -202,6 +205,8 @@ export function LivingPet({
   const stageRef = useRef(stage);
   const kindRef = useRef(kind);
   const liftRef = useRef(lift);
+  const asleepRef = useRef(asleep);
+  asleepRef.current = asleep;
   gaitRef.current = gait;
   stageRef.current = stage;
   kindRef.current = kind;
@@ -339,6 +344,15 @@ export function LivingPet({
 
     const applyCommand = (cmd: PetCommand, order: number) => {
       if (s.dragging) return;
+      if (asleepRef.current && cmd !== "talk" && cmd !== "play" && cmd !== "eat" && cmd !== "seek" && cmd !== "leave" && cmd !== "enter") {
+        s.anim = "sleep";
+        s.target = null;
+        s.waypoints = [];
+        s.pendingPose = null;
+        s.poseHold = 0;
+        s.pause = 0;
+        return;
+      }
       if (order === lastOrder.current || cmd === "none") return;
       if (s.act && (cmd === "wander" || cmd === "idle")) {
         lastOrder.current = order;
@@ -412,7 +426,9 @@ export function LivingPet({
         s.pendingFacing = null;
         s.frame = 0;
         s.acc = 0;
-        if (!reduced && (cmd === "sit" || cmd === "sleep")) {
+        if (cmd === "sleep") {
+          s.anim = "sleep";
+        } else if (!reduced && cmd === "sit") {
           s.poseHold = POSE_HOLD_S;
           s.pendingPose = cmd;
           s.anim = "idle";
@@ -475,8 +491,9 @@ export function LivingPet({
           }
         } else if (s.pause > 0 && !reduced) {
           s.pause = Math.max(0, s.pause - dt);
-          s.anim = "idle";
-          if (s.pause === 0 && s.waypoints.length) {
+          if (asleepRef.current) s.anim = "sleep";
+          else s.anim = "idle";
+          if (s.pause === 0 && s.waypoints.length && !asleepRef.current) {
             const next = s.waypoints.shift()!;
             aimAt(next);
           }
@@ -535,6 +552,7 @@ export function LivingPet({
         } else if (
           !reduced &&
           !s.leaving &&
+          !asleepRef.current &&
           s.target == null &&
           s.turnHold <= 0 &&
           s.pause <= 0 &&

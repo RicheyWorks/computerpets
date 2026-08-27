@@ -1,0 +1,66 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { test } from "node:test";
+import { fileURLToPath } from "node:url";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const C = await import(join(root, "src/lib/pets/card.ts"));
+const Care = await import(join(root, "src/lib/pets/care.ts"));
+const K = await import(join(root, "src/lib/pets/keeper.ts"));
+
+const cardSrc = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
+const livingSrc = readFileSync(join(root, "src/components/desk/living-pet.tsx"), "utf8");
+const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
+const overlayCard = readFileSync(join(root, "../desktop/renderer/card.js"), "utf8");
+const overlayPet = readFileSync(join(root, "../desktop/renderer/pet.js"), "utf8");
+const overlayHtml = readFileSync(join(root, "../desktop/renderer/index.html"), "utf8");
+const overlayLife = readFileSync(join(root, "../desktop/renderer/life.js"), "utf8");
+
+test("the desk card law matches the overlay card", () => {
+  assert.deepEqual(C.CARD_COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
+  assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
+  assert.deepEqual([...C.MUTE_BUSES], ["talk", "special", "weather", "treats"]);
+  assert.equal(C.VOICE_TRUTH, "The door is still the system speech voices.");
+  assert.equal(K.VOICE_TRUTH, C.VOICE_TRUTH);
+  assert.match(K.QUIT_TRUTH, /desktop\.ps1/);
+  assert.equal(C.busOf("chirp"), "talk");
+  assert.equal(C.isMuted({ talk: true }, "chirp"), true);
+  assert.match(overlayCard, /VOICE_TRUTH/);
+  assert.match(overlayHtml, /data-card="collapse"/);
+  assert.match(cardSrc, /data-card="collapse"/);
+  assert.match(cardSrc, /Save say/);
+  assert.match(cardSrc, /Turn off/);
+});
+
+test("an asleep guest keeps sleep on the wander tick", () => {
+  assert.deepEqual(C.wanderWhileAsleep(true), { cmd: "sleep", pose: "sleep" });
+  assert.equal(C.wanderWhileAsleep(false), null);
+  assert.equal(C.sleepHolds(true, "wander"), true);
+  assert.equal(C.sleepHolds(true, "sit"), true);
+  assert.equal(C.sleepHolds(true, "idle"), true);
+  assert.equal(C.sleepHolds(true, "talk"), false);
+  const rested = Care.applyRest({ energy: 40, hunger: 70 });
+  assert.equal(rested.asleep, true);
+  const day = Care.decayStats(rested, Date.now(), Date.now() + 20_000, false);
+  assert.equal(day.asleep, true);
+  assert.deepEqual(C.wanderWhileAsleep(day.asleep), { cmd: "sleep", pose: "sleep" });
+  const woke = Care.applyCall(day);
+  assert.equal(woke.asleep, false);
+  assert.match(livingSrc, /asleepRef\.current/);
+  assert.match(roomSrc, /wanderWhileAsleep/);
+  assert.match(overlayPet, /wanderWhileAsleep/);
+  assert.match(overlayLife, /sleepHeld/);
+});
+
+test("saved lines, alarm, and timer are machine-local", () => {
+  let card = C.addLine(C.blankCard(), "red_panda", "A ribbon I was keeping.", "say");
+  assert.equal(C.guestOf(card, "red_panda").lines[0].text, "A ribbon I was keeping.");
+  const noon = new Date(2026, 7, 27, 7, 0, 5).getTime();
+  assert.equal(C.alarmDue({ on: true, hour: 7, minute: 0, lastRingDay: "" }, noon), true);
+  const started = C.startTimer(C.blankTimer(), 4000, 1000);
+  assert.equal(C.timerTick(started, 5000).rang, true);
+  const voices = [{ name: "Zarvox" }, { name: "Microsoft Aria Online (Natural)" }];
+  assert.equal(C.pickSystemVoice(voices, "hearth")?.name, "Microsoft Aria Online (Natural)");
+  assert.equal(C.CARD_STORE, "computerpets.card.v1");
+});

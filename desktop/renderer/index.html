@@ -24,28 +24,66 @@
         <path d="M2 10 L16 10 M16 10 L28 5 M16 10 L28 15" fill="none" stroke="rgba(214,92,108,0.94)" stroke-width="1.7" stroke-linecap="round" />
       </svg>
       <img id="pet" data-hit alt="" draggable="false" />
-      <article id="hud" class="keeper-card" aria-label="Keeper card">
-        <p id="hud-kicker" class="keeper-kicker">Keeper card</p>
-        <h2 id="hud-name" class="keeper-name">—</h2>
-        <p id="hud-stage" class="keeper-stage">—</p>
-        <p id="hud-bond-title" class="keeper-bond-title">New</p>
-        <p id="hud-vital" class="keeper-vital">Settled</p>
-        <dl class="keeper-meters">
-          <div><dt>Hunger</dt><dd id="hud-hunger">—</dd><i id="bar-hunger"></i></div>
-          <div><dt>Rest</dt><dd id="hud-rest">—</dd><i id="bar-energy"></i></div>
-          <div><dt>Bond</dt><dd id="hud-bond">—</dd><i id="bar-bond"></i></div>
-        </dl>
-        <div class="bars" hidden>
-          <i id="bar-mood"></i>
-          <i id="bar-hygiene"></i>
+      <article id="hud" class="keeper-card" aria-label="Keeper card" data-color="ink">
+        <button type="button" id="hud-collapse" class="keeper-collapse" data-hit data-card="collapse" aria-expanded="true">
+          <p id="hud-kicker" class="keeper-kicker">Keeper card</p>
+          <h2 id="hud-name" class="keeper-name">—</h2>
+        </button>
+        <div id="hud-body" class="keeper-body">
+          <p id="hud-stage" class="keeper-stage">—</p>
+          <p id="hud-bond-title" class="keeper-bond-title">New</p>
+          <p id="hud-vital" class="keeper-vital">Settled</p>
+          <dl class="keeper-meters">
+            <div><dt>Hunger</dt><dd id="hud-hunger">—</dd><i id="bar-hunger"></i></div>
+            <div><dt>Rest</dt><dd id="hud-rest">—</dd><i id="bar-energy"></i></div>
+            <div><dt>Bond</dt><dd id="hud-bond">—</dd><i id="bar-bond"></i></div>
+          </dl>
+          <div class="bars" hidden>
+            <i id="bar-mood"></i>
+            <i id="bar-hygiene"></i>
+          </div>
+          <div id="hud-care" class="keeper-care" role="toolbar" aria-label="Care">
+            <button type="button" data-hit data-care="feed">Feed</button>
+            <button type="button" data-hit data-care="play">Play</button>
+            <button type="button" data-hit data-care="rest">Rest</button>
+          </div>
+          <label class="keeper-volume" data-hit>
+            Voice
+            <input id="hud-volume" type="range" min="0" max="100" value="80" data-hit />
+          </label>
+          <div id="hud-colors" class="keeper-colors" role="group" aria-label="Card color"></div>
+          <div id="hud-voices" class="keeper-voices" role="group" aria-label="Voice style"></div>
+          <p id="hud-voice-truth" class="keeper-truth">The door is still the system speech voices.</p>
+          <div class="keeper-lines" data-hit>
+            <label>Saved line
+              <input id="hud-line-text" type="text" maxlength="140" placeholder="A house line." data-hit />
+            </label>
+            <div class="keeper-line-row">
+              <button type="button" data-hit data-card="save-say">Save say</button>
+              <button type="button" data-hit data-card="save-do">Save do</button>
+            </div>
+            <ul id="hud-lines" class="keeper-line-list"></ul>
+          </div>
+          <div class="keeper-clocks" data-hit>
+            <label>Alarm
+              <input id="hud-alarm-time" type="time" value="07:00" data-hit />
+            </label>
+            <button type="button" id="hud-alarm-on" data-hit data-card="alarm">Off</button>
+            <label>Timer
+              <input id="hud-timer-mins" type="number" min="1" max="180" value="5" data-hit />
+              min
+            </label>
+            <button type="button" id="hud-timer" data-hit data-card="timer">Start</button>
+            <p id="hud-timer-left" class="keeper-timer-left">0:00</p>
+          </div>
+          <div id="hud-mutes" class="keeper-mutes" role="group" aria-label="Mute"></div>
+          <div class="keeper-off" data-hit>
+            <button type="button" id="hud-off" data-hit data-card="off">Turn off</button>
+            <p id="hud-off-truth" class="keeper-truth">Turns the overlay off. Start again with .\\desktop.ps1.</p>
+          </div>
+          <p id="hud-heartbeat" class="keeper-heartbeat" data-heartbeat="DOWN">Java 8081 · DOWN · unread · unread</p>
+          <p id="hud-truth" class="keeper-truth">Care is local. /pet/feed is not a door.</p>
         </div>
-        <div id="hud-care" class="keeper-care" role="toolbar" aria-label="Care">
-          <button type="button" data-hit data-care="feed">Feed</button>
-          <button type="button" data-hit data-care="play">Play</button>
-          <button type="button" data-hit data-care="rest">Rest</button>
-        </div>
-        <p id="hud-heartbeat" class="keeper-heartbeat" data-heartbeat="DOWN">Java 8081 · DOWN · unread · unread</p>
-        <p id="hud-truth" class="keeper-truth">Care is local. /pet/feed is not a door.</p>
       </article>
       <div id="choice" data-hit></div>
     </div>
@@ -64,6 +102,7 @@
     <script src="specials.js"></script>
     <script src="life.js"></script>
     <script src="keeper.js"></script>
+    <script src="card.js"></script>
     <script src="mind.js"></script>
     <script src="pet.js"></script>
   </body>

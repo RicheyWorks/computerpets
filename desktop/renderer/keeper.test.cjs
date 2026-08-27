@@ -17,6 +17,8 @@ test("the overlay keeper card tells the same truth as the desk", () => {
   assert.equal(K.JAVA_PORT, 8081);
   assert.equal(K.DESK_PORT, 8080);
   assert.equal(K.HUD_WIDTH, 280);
+  assert.equal(K.HUD_WIDTH_COLLAPSED, 168);
+  assert.equal(K.VOICE_TRUTH, "The door is still the system speech voices.");
   assert.equal(K.HEARTBEAT_URL, "http://127.0.0.1:8081/api/public/heartbeat");
   assert.equal(K.ADVERTISED_CARE.feed, "/pet/feed");
   assert.equal(K.careTruth(), "Care is local. /pet/feed is not a door.");
@@ -52,6 +54,8 @@ test("the poster HUD is name, stage, bond title, meters, verbs, heartbeat", () =
   assert.deepEqual(face.verbs, ["feed", "play", "rest"]);
   assert.match(face.heartbeat, /Java 8081 · DOWN/);
   assert.match(face.truth, /Care is local/);
+  assert.equal(face.voiceTruth, K.VOICE_TRUTH);
+  assert.match(face.quitTruth, /desktop\.ps1/);
 });
 
 test("the overlay HUD is a keeper card with feed / play / rest and a heartbeat", () => {
@@ -66,6 +70,8 @@ test("the overlay HUD is a keeper card with feed / play / rest and a heartbeat",
   assert.match(htmlSrc, /id="hud-heartbeat"/);
   assert.match(htmlSrc, /id="hud-bond"/);
   assert.match(htmlSrc, /keeper\.js/);
+  assert.match(htmlSrc, /card\.js/);
+  assert.match(htmlSrc, /data-card="collapse"/);
   assert.match(petSrc, /PetKeeper/);
   assert.match(petSrc, /HEARTBEAT_URL/);
   assert.match(petSrc, /data-care/);
