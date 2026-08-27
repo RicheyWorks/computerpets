@@ -82,8 +82,7 @@ test("a sandboxed overlay does not fetch roster.json from file://", () => {
   assert.match(mainSrc, /Roster\.readRoster/);
   assert.match(preloadSrc, /roster:\s*\(\)\s*=>\s*ipcRenderer\.invoke\("roster-get"\)/);
   assert.match(petSrc, /PetRoster\.loadHouseRoster/);
-  assert.match(petSrc, /opened\.line/);
-  assert.match(petSrc, /The house could not find the roster/);
+  assert.match(petSrc, /say\("The house could not find the roster\."\)/);
   assert.match(petSrc, /start = "red_panda"/);
   assert.doesNotMatch(petSrc, /fetch\("roster\.json"\)/);
   assert.doesNotMatch(settingsSrc, /fetch\("roster\.json"\)/);

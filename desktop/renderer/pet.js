@@ -1513,7 +1513,7 @@ setInterval(() => {
 
 window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
   if (!opened.ok) {
-    say(opened.line);
+    say("The house could not find the roster.");
     return;
   }
   roster = opened.roster;
