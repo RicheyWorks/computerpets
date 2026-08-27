@@ -16,7 +16,7 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -52,8 +52,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("turtle"), Overlay.playFor("turtle"));
   assert.equal(P.playFor("goldfish"), "circle");
   assert.equal(P.playFor("goldfish"), Overlay.playFor("goldfish"));
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("budgie"), Overlay.playFor("budgie"));
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("budgie"), "sill");
+  assert.equal(P.playFor("fox"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -124,6 +126,11 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(webCircle.lift, deskCircle.lift);
   assert.equal(webCircle.x, deskCircle.x);
   assert.ok(webCircle.x > WIN.x && webCircle.x + 176 < WIN.x + WIN.width);
+  const webPerch = P.perchPoint(WIN, "left", 176, WORK);
+  const deskPerch = Overlay.perchPoint(WIN, "left", 176, WORK);
+  assert.equal(webPerch.lift, deskPerch.lift);
+  assert.equal(webPerch.x, deskPerch.x);
+  assert.ok(webPerch.lift > 16);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -803,6 +810,7 @@ test("the demo window plate walks Coin's circle the same way", () => {
     assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "bask");
     assert.notEqual(play.phase, "bask-withdraw");
+    assert.notEqual(play.phase, "perch-talk");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "circle") {
       circleXMin = Math.min(circleXMin, play.x);
@@ -818,5 +826,67 @@ test("the demo window plate walks Coin's circle the same way", () => {
   assert.ok(seen.has("circle-off"));
   assert.ok(circleXMax - circleXMin > 40, "one thought crosses the bowl");
   assert.ok(circleLiftMax - circleLiftMin > 40, "the circle changes height");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Echo's perch the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /perch-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "budgie", WORK, 176, { side: "left" });
+  const target = P.pickTarget([WIN], 40, "budgie", WORK, 176, { side: "left" });
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.kind, "perch");
+  assert.equal(target.side, "left");
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.ok(target.holdLift > 16);
+  assert.equal(target.leave, "hop");
+  assert.equal(target.clickToId, undefined);
+  const ledge = P.ledgePoint(WIN, 176, WORK);
+  const cling = P.sideHold(WIN, "left", 176, WORK);
+  const circle = P.circlePoint(WIN, 0, 176, WORK, 1);
+  const sill = P.sillPoint(WIN, 0.12, 176, WORK);
+  assert.ok(Math.abs(target.holdLift - ledge.lift) > 40, "not Miso");
+  assert.ok(Math.abs(target.holdX - cling.x) > 20 || Math.abs(target.holdLift - cling.lift) > 20, "not Rui");
+  assert.ok(Math.abs(target.holdX - circle.x) > 20 || Math.abs(target.holdLift - circle.lift) > 20, "not Coin");
+  assert.ok(Math.abs(target.holdLift - sill.lift) > 40, "not a generic sill");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let talkXMin = Infinity;
+  let talkXMax = -Infinity;
+  for (let i = 0; i < 800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "bask-withdraw");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "perch-talk") {
+      talkXMin = Math.min(talkXMin, play.x);
+      talkXMax = Math.max(talkXMax, play.x);
+      assert.equal(play.anim, "talk");
+      assert.ok(play.lift > 16);
+    }
+  }
+  assert.ok(seen.has("perch-on"));
+  assert.ok(seen.has("perch-talk"));
+  assert.ok(seen.has("perch-off"));
+  assert.ok(talkXMax - talkXMin < 2, "one perch — not a walk across");
   assert.equal(play.phase, "done");
 });
