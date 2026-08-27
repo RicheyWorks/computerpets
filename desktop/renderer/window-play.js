@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
@@ -7,6 +7,7 @@
   const PATH = "path";
   const FIELD = "field";
   const CRACKLE = "crackle";
+  const CHARGE = "charge";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -32,6 +33,10 @@
     crackleOn: 0.32,
     crackleHop: 0.26,
     crackleOff: 0.4,
+    chargeOn: 0.88,
+    chargeBolt: 0.36,
+    chargeHold: 0.78,
+    chargeOff: 0.5,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -54,6 +59,7 @@
     if (key === "trace_dragon") return PATH;
     if (key === "flux_dragon") return FIELD;
     if (key === "spark_dragon") return CRACKLE;
+    if (key === "ion_dragon") return CHARGE;
     return SILL;
   }
 
@@ -153,6 +159,28 @@
     };
   }
 
+  function chargeOpposite(corner) {
+    if (corner === "tl") return "br";
+    if (corner === "tr") return "bl";
+    if (corner === "bl") return "tr";
+    return "tl";
+  }
+
+  function chargePoint(win, corner, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const insetX = Math.max(22, size * 0.12);
+    const insetTop = Math.max(52, size * 0.3);
+    const insetBot = Math.max(44, size * 0.24);
+    const name = corner === "tr" || corner === "bl" || corner === "br" ? corner : "tl";
+    const right = name === "tr" || name === "br";
+    const top = name === "tl" || name === "tr";
+    const x = right ? win.x + win.width - size - insetX : win.x + insetX;
+    const gripY = top ? win.y + insetTop : win.y + win.height - insetBot;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 36, maxLift), corner: name };
+  }
+
   function fieldPoint(win, sprite, work) {
     const size = sprite == null ? SPRITE : sprite;
     const insetTop = Math.max(56, size * 0.32);
@@ -230,6 +258,7 @@
       if (kind === PATH) return w.width >= 180 && w.height >= 160;
       if (kind === FIELD) return w.width >= 220 && w.height >= 200;
       if (kind === CRACKLE) return w.width >= 100 && w.height >= 180;
+      if (kind === CHARGE) return w.width >= 200 && w.height >= 200;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -357,6 +386,32 @@
         spin: "none",
       };
     }
+    if (kind === CHARGE) {
+      const edge = (opts && opts.side) || pickSide(best, petX, size, workW);
+      const startCorner = (opts && opts.corner) || (edge === "right" ? "tr" : "tl");
+      const endCorner = chargeOpposite(startCorner);
+      const start = chargePoint(best, startCorner, size, work);
+      const end = chargePoint(best, endCorner, size, work);
+      const approachX = clamp(start.x, 8, Math.max(8, workW - size - 8));
+      const leave = opts && (opts.leave === "hop" || opts.leave === "drop") ? opts.leave : roll < 0.5 ? "hop" : "drop";
+      const endRight = endCorner === "tr" || endCorner === "br";
+      const away = endRight ? 88 : -88;
+      return {
+        id: best.id,
+        kind,
+        side: startCorner === "tr" || startCorner === "br" ? "right" : "left",
+        holdX: start.x,
+        holdLift: start.lift,
+        approachX,
+        landX: clamp(end.x + away, 8, Math.max(8, workW - size - 8)),
+        chargeEndX: end.x,
+        chargeEndLift: end.lift,
+        startCorner,
+        endCorner,
+        leave,
+        spin: "none",
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -399,6 +454,11 @@
       const start = cracklePoint(win, target.hopFrom != null ? target.hopFrom : 0, sprite, work, target.side);
       const end = cracklePoint(win, target.hopTo != null ? target.hopTo : 1, sprite, work, target.side);
       return { ...target, holdX: start.x, holdLift: start.lift, crackleEndX: end.x, crackleEndLift: end.lift };
+    }
+    if (target.kind === CHARGE) {
+      const start = chargePoint(win, target.startCorner || "tl", sprite, work);
+      const end = chargePoint(win, target.endCorner || chargeOpposite(target.startCorner || "tl"), sprite, work);
+      return { ...target, holdX: start.x, holdLift: start.lift, chargeEndX: end.x, chargeEndLift: end.lift };
     }
     const start = sillPoint(win, 0.12, sprite, work);
     const end = sillPoint(win, 0.88, sprite, work);
@@ -508,6 +568,20 @@
     };
   }
 
+  function chargeBoltPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (2 - t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease,
+      rot: (toX >= fromX ? 1 : -1) * 18 * Math.sin(t * Math.PI),
+    };
+  }
+
   function slideOffPath(u, from, to) {
     const t = Math.max(0, Math.min(1, u));
     const fromX = from && from.x != null ? from.x : 0;
@@ -588,14 +662,14 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
     const win = findWin(windows, next.target && next.target.id);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off") {
       next.target = refitTarget(next.target, win, size, work);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -627,6 +701,9 @@
         }
         if (target.kind === CRACKLE) {
           return goPhase(next, "crackle-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+        }
+        if (target.kind === CHARGE) {
+          return goPhase(next, "charge-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -935,6 +1012,74 @@
       return next;
     }
 
+    if (next.phase === "charge-on") {
+      const face = (target.chargeEndX != null ? target.chargeEndX : target.holdX) >= target.holdX ? 1 : -1;
+      const leapT = Math.min(DUR.leap, DUR.chargeOn * 0.55);
+      if (next.t < leapT) {
+        const pose = leapPath(Math.min(1, next.t / leapT), next.from, { x: target.holdX, lift: target.holdLift });
+        next.x = pose.x;
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = "play";
+      } else {
+        next.x = target.holdX;
+        next.lift = target.holdLift;
+        next.rot = 0;
+        next.anim = "sit";
+      }
+      next.facing = face;
+      if (next.t >= DUR.chargeOn) {
+        return goPhase(next, "charge-bolt", { x: target.holdX, lift: target.holdLift }, { x: target.chargeEndX, lift: target.chargeEndLift }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "charge-bolt") {
+      if (!win) return abortToFloor(next, { x: next.x, lift: next.lift }, work);
+      const from = chargePoint(win, target.startCorner || "tl", size, work);
+      const to = chargePoint(win, target.endCorner || chargeOpposite(target.startCorner || "tl"), size, work);
+      const u = next.t / DUR.chargeBolt;
+      const pose = chargeBoltPath(Math.min(1, u), from, to);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = to.x >= from.x ? 1 : -1;
+      if (u >= 1) {
+        const endX = target.chargeEndX != null ? target.chargeEndX : to.x;
+        const endLift = target.chargeEndLift != null ? target.chargeEndLift : to.lift;
+        return goPhase(next, "charge-hold", { x: endX, lift: endLift }, { x: endX, lift: endLift }, "sit", next.facing);
+      }
+      return next;
+    }
+
+    if (next.phase === "charge-hold") {
+      const sitX = target.chargeEndX != null ? target.chargeEndX : target.holdX;
+      const sitLift = target.chargeEndLift != null ? target.chargeEndLift : target.holdLift;
+      next.x = sitX;
+      next.lift = sitLift;
+      next.rot = 0;
+      next.anim = "sit";
+      next.facing = sitX >= target.holdX ? 1 : -1;
+      if (next.t >= DUR.chargeHold) {
+        return goPhase(next, "charge-off", { x: sitX, lift: sitLift }, { x: target.landX, lift: 0 }, "play", next.facing);
+      }
+      return next;
+    }
+
+    if (next.phase === "charge-off") {
+      const u = next.t / DUR.chargeOff;
+      const pose = target.leave === "drop"
+        ? dropPath(Math.min(1, u), next.from, next.to)
+        : leapPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = target.leave === "drop" ? 0 : pose.rot;
+      next.anim = "play";
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -994,6 +1139,7 @@
     PATH,
     FIELD,
     CRACKLE,
+    CHARGE,
     SILL,
     IGNORE,
     DUR,
@@ -1008,6 +1154,8 @@
     pathPoint,
     fieldPoint,
     cracklePoint,
+    chargePoint,
+    chargeOpposite,
     pickTarget,
     refitTarget,
     divePath,
@@ -1018,6 +1166,7 @@
     coilOffPath,
     fieldOnPath,
     driftOffPath,
+    chargeBoltPath,
     beginPlay,
     abortToFloor,
     stepPlay,
