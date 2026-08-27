@@ -6289,10 +6289,10 @@
 
   function boreHoldPath(u) {
     const t = Math.max(0, Math.min(1, u));
-    const bob = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2.6) * 3.2;
+    const bob = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2.6) * 2.4;
     return {
       x: -8.2,
-      lift: 5.4 + bob,
+      lift: 7.2 + bob,
       rot: 1.8,
     };
   }
