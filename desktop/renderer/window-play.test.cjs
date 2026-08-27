@@ -10,12 +10,13 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("volt_dragon"), "coil");
   assert.equal(P.playFor("cat"), "sill");
-  assert.equal(P.playFor("volt_dragon"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("trace_dragon"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -31,12 +32,21 @@ test("Rui's door is cling and dive; Arc rides the ridge; other guests walk a sil
   assert.equal(arc.side, "top");
   assert.notEqual(arc.kind, "cling-dive");
   assert.notEqual(arc.kind, "sill");
+  assert.notEqual(arc.kind, "coil");
+  const volt = P.pickTarget([WIN], 80, "volt_dragon", WORK, P.SPRITE, { side: "left" });
+  assert.ok(volt);
+  assert.equal(volt.kind, "coil");
+  assert.equal(volt.side, "left");
+  assert.notEqual(volt.kind, "cling-dive");
+  assert.notEqual(volt.kind, "ridge");
+  assert.notEqual(volt.kind, "sill");
   const cat = P.pickTarget([WIN], 80, "cat", WORK, P.SPRITE);
   assert.ok(cat);
   assert.equal(cat.kind, "sill");
   assert.equal(cat.side, "top");
   assert.notEqual(cat.kind, "cling-dive");
   assert.notEqual(cat.kind, "ridge");
+  assert.notEqual(cat.kind, "coil");
 });
 
 test("Rui approaches a window side, clings, hangs, then dives with a spin path", () => {
@@ -219,11 +229,90 @@ test("an asleep Arc never starts a ridge climb, and sleep aborts a hold", () => 
   assert.equal(play.abort, true);
 });
 
+test("Volt wraps a window corner, holds, then uncoils off — not a cling, ridge, or sill", () => {
+  const target = P.pickTarget([WIN], 40, "volt_dragon", WORK, P.SPRITE, { side: "left" });
+  assert.ok(target);
+  assert.equal(target.kind, "coil");
+  assert.equal(target.side, "left");
+  assert.equal(target.spin, "none");
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.5, P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  assert.equal(target.holdLift, coil.lift);
+  assert.equal(target.holdX, coil.x);
+  assert.ok(Math.abs(coil.lift - ridge.lift) < 0.001, "the coil sits the top corner, not a mid-side cling");
+  assert.ok(coil.lift > sill.lift, "the coil wraps the corner, not the inner sill");
+  assert.ok(Math.abs(coil.x - cling.x) > 1 || Math.abs(coil.lift - cling.lift) > 40, "not Rui's mid-side hold");
+  assert.ok(Math.abs(coil.x - ridge.x) > 40, "not Arc's mid-ridge sit");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let holdLift = 0;
+  let onRot = 0;
+  let offRot = 0;
+  for (let i = 0; i < 400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-leap");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "ridge-off");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "coil-on") onRot = Math.max(onRot, Math.abs(play.rot));
+    if (play.phase === "coil-hold") {
+      holdLift = play.lift;
+      assert.equal(play.anim, "sit");
+      assert.equal(play.rot, 0);
+    }
+    if (play.phase === "coil-off") offRot = Math.max(offRot, Math.abs(play.rot));
+  }
+  assert.ok(holdLift > 40, "Volt holds on a window corner");
+  assert.ok(onRot > 20, "the wrap tilts existing frames; it is not a stamp");
+  assert.ok(offRot > 10, "the uncoil is a wrap-off, not a sit-and-vanish");
+  assert.ok(onRot < 180, "the wrap is not Rui's 360 dive");
+  assert.ok(seen.has("coil-on"));
+  assert.ok(seen.has("coil-hold"));
+  assert.ok(seen.has("coil-off"));
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Volt's coil hold", () => {
+  const target = P.pickTarget([WIN], 200, "volt_dragon", WORK, P.SPRITE, { side: "left" });
+  let play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: 0 }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  play = P.stepPlay(play, 0.8, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "coil-hold");
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "coil-hold");
+  assert.ok(Math.abs(play.target.holdX - target.holdX) > 40);
+  assert.equal(play.x, play.target.holdX);
+});
+
+test("an asleep Volt never starts a coil, and sleep aborts a hold", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.shouldAbort({ cmd: "play" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ cmd: "rest" }), true);
+  const target = P.pickTarget([WIN], 40, "volt_dragon", WORK, P.SPRITE, { side: "left" });
+  let play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: 0 }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "coil-on");
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
   assert.match(petSrc, /shouldAbort/);
   assert.match(petSrc, /playFor/);
+  assert.match(petSrc, /coil-on|coil-off/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
+  assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
 });

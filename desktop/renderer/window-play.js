@@ -1,8 +1,9 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
   const RIDGE = "ridge";
+  const COIL = "coil";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -15,6 +16,9 @@
     ridgeLeap: 0.5,
     ridgeHold: 1.4,
     ridgeOff: 0.58,
+    coilOn: 0.68,
+    coilHold: 1.45,
+    coilOff: 0.72,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -33,6 +37,7 @@
   function playFor(key) {
     if (key === "red_panda") return CLING;
     if (key === "cyber_dragon") return RIDGE;
+    if (key === "volt_dragon") return COIL;
     return SILL;
   }
 
@@ -106,6 +111,15 @@
     return { x, lift: clamp(lift, 28, maxLift) };
   }
 
+  function coilPoint(win, corner, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const wrap = size * 0.36;
+    const x = corner === "left" ? win.x - wrap : win.x + win.width - size + wrap;
+    const lift = gripLift(win.y, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 28, maxLift), corner };
+  }
+
   function pickSide(win, petX, sprite, workW) {
     const size = sprite == null ? SPRITE : sprite;
     const petMid = petX + size / 2;
@@ -129,6 +143,7 @@
       if (!w) return false;
       if (kind === CLING) return w.height >= 160 && w.width >= 100;
       if (kind === RIDGE) return w.width >= 160 && w.height >= 80;
+      if (kind === COIL) return w.width >= 140 && w.height >= 140;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -177,6 +192,22 @@
         spin: "none",
       };
     }
+    if (kind === COIL) {
+      const corner = (opts && opts.side) || pickSide(best, petX, size, workW);
+      const hold = coilPoint(best, corner, size, work);
+      const approachX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+      const away = corner === "left" ? -90 : 90;
+      return {
+        id: best.id,
+        kind,
+        side: corner,
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        spin: "none",
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -200,6 +231,10 @@
     }
     if (target.kind === RIDGE) {
       const hold = ridgePoint(win, 0.5, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === COIL) {
+      const hold = coilPoint(win, target.side, sprite, work);
       return { ...target, holdX: hold.x, holdLift: hold.lift };
     }
     const start = sillPoint(win, 0.12, sprite, work);
@@ -249,6 +284,36 @@
       x: fromX + (toX - fromX) * smoothstep(t),
       lift: fromLift + (toLift - fromLift) * ease,
       rot: 0,
+    };
+  }
+
+  function coilOnPath(u, from, to, side) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = smoothstep(t);
+    const out = side === "left" ? -1 : 1;
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    return {
+      x: fromX + (toX - fromX) * ease + out * 40 * Math.sin(t * Math.PI),
+      lift: fromLift + (toLift - fromLift) * ease + Math.sin(t * Math.PI) * 26,
+      rot: out * -58 * Math.sin(t * Math.PI),
+    };
+  }
+
+  function coilOffPath(u, from, to, side) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = smoothstep(t);
+    const out = side === "left" ? -1 : 1;
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    return {
+      x: fromX + (toX - fromX) * ease + out * 36 * Math.sin(t * Math.PI),
+      lift: fromLift + (toLift - fromLift) * (t * t),
+      rot: out * 48 * Math.sin(t * Math.PI),
     };
   }
 
@@ -332,14 +397,14 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
     const win = findWin(windows, next.target && next.target.id);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off") {
       next.target = refitTarget(next.target, win, size, work);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -359,6 +424,9 @@
         }
         if (target.kind === RIDGE) {
           return goPhase(next, "ridge-leap", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+        }
+        if (target.kind === COIL) {
+          return goPhase(next, "coil-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -469,6 +537,44 @@
       return next;
     }
 
+    if (next.phase === "coil-on") {
+      const u = next.t / DUR.coilOn;
+      const pose = coilOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift }, target.side);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = target.side === "left" ? 1 : -1;
+      if (u >= 1) {
+        return goPhase(next, "coil-hold", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", next.facing);
+      }
+      return next;
+    }
+
+    if (next.phase === "coil-hold") {
+      next.x = target.holdX;
+      next.lift = target.holdLift;
+      next.rot = 0;
+      next.anim = "sit";
+      next.facing = target.side === "left" ? 1 : -1;
+      if (next.t >= DUR.coilHold) {
+        const land = { x: target.landX, lift: 0 };
+        return goPhase(next, "coil-off", { x: target.holdX, lift: target.holdLift }, land, "play", next.facing);
+      }
+      return next;
+    }
+
+    if (next.phase === "coil-off") {
+      const u = next.t / DUR.coilOff;
+      const pose = coilOffPath(Math.min(1, u), next.from, next.to, target.side);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -524,6 +630,7 @@
     SPRITE,
     CLING,
     RIDGE,
+    COIL,
     SILL,
     IGNORE,
     DUR,
@@ -534,12 +641,15 @@
     sideHold,
     sillPoint,
     ridgePoint,
+    coilPoint,
     pickTarget,
     refitTarget,
     divePath,
     leapPath,
     dropPath,
     slideOffPath,
+    coilOnPath,
+    coilOffPath,
     beginPlay,
     abortToFloor,
     stepPlay,
