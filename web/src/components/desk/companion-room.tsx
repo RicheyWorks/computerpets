@@ -346,7 +346,7 @@ export function CompanionRoom({
         issue(skyMood);
         return;
       }
-      if (isRestingHour(kind.key) && statsRef.current.energy < 88) {
+      if (isRestingHour(kind.key) && statsRef.current.energy < 28 && !statsRef.current.asleep) {
         issue("sleep");
         return;
       }
@@ -614,7 +614,10 @@ export function CompanionRoom({
     setChoiceOpen(false);
     if (id === "feed") void feed();
     else if (id === "rest") void tend("rest");
-    else if (id === "walk") issue("wander");
+    else if (id === "walk") {
+      setStats((s) => ({ ...s, asleep: false, sleepHeld: false }));
+      issue("wander");
+    }
     else if (id === "sit") issue("sit");
     else if (id === "talk") void talk();
     else if (id === "treat") dropTreatAt(randomTreatX());
@@ -791,7 +794,14 @@ export function CompanionRoom({
           hostPoseRef={poseRef}
         />
       ) : null}
-      <CalledGuests keys={walkersOf(calledKeys, kind.key)} hostKey={kind.key} hidden={stats.hidden || leaving} />
+      <CalledGuests
+        keys={walkersOf(calledKeys, kind.key)}
+        hostKey={kind.key}
+        hidden={stats.hidden || leaving}
+        hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
+        hostPoseRef={poseRef}
+        onSong={say}
+      />
 
       {choiceOpen ? (
         <GuestChoice

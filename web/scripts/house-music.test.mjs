@@ -46,3 +46,52 @@ test("Rui music is house loop or free radio, no paid key", () => {
   const stations = M.parseStations([{ name: "A free station", url_resolved: "https://example.test/stream", stationuuid: "s1" }]);
   assert.equal(stations[0].name, "A free station");
 });
+
+test("typed city and call-sign look-ups use name or city, never tag-as-city or jazz-only", () => {
+  for (const q of ["99.9 seattle fm", "KEXP", "seattle", "portland", "xyzzyville"]) {
+    const urls = M.radioSearchUrls(q);
+    const desk = Overlay.radioSearchUrls(q);
+    assert.ok(urls.length, q);
+    assert.deepEqual(urls, desk);
+    assert.ok(urls.every((u) => /name=|city=|state=|countrycode=/.test(u)), q);
+    assert.ok(!urls.some((u) => /tag=seattle/.test(u)), q);
+    assert.ok(!urls.every((u) => /name=jazz|tag=jazz/.test(u)), q);
+  }
+  assert.equal(M.parseRadioQuery("portland").city, "Portland");
+  assert.equal(M.parseRadioQuery("xyzzyville").city, "Xyzzyville");
+  assert.equal(M.parseRadioQuery("jazz seattle").place, "seattle");
+  assert.equal(M.parseRadioQuery("jazz seattle").city, "Seattle");
+  const fixture = [
+    { name: "Smooth Jazz All Night", url_resolved: "https://example.test/jazz", stationuuid: "jazz1", tags: "jazz", state: "Florida", countrycode: "US" },
+    { name: "KEXP 90.3 Seattle", url_resolved: "https://example.test/kexp", stationuuid: "kexp1", tags: "indie,alternative", state: "Washington", countrycode: "US", geo_lat: 47.6, geo_long: -122.3 },
+    { name: "Random Jazz Cafe", url_resolved: "https://example.test/cafe", stationuuid: "jazz2", tags: "jazz", countrycode: "FR" },
+  ];
+  const parsed = M.parseStations(fixture);
+  const kexp = M.rankStations(parsed, "KEXP");
+  assert.match(kexp[0].name, /KEXP/);
+  const seattle = M.rankStations(parsed, "seattle", { name: "Seattle, Washington, United States", query: "Seattle", lat: 47.6, lon: -122.3 });
+  assert.match(seattle[0].name, /KEXP|Seattle/i);
+  assert.notEqual(seattle[0].name, "Smooth Jazz All Night");
+});
+
+test("Radio Browser can return a station for a typed look-up", async (t) => {
+  const url = M.radioSearchUrl("KEXP");
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": M.RADIO_UA, Accept: "application/json" },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) {
+      t.skip("Radio Browser unread");
+      return;
+    }
+    const stations = M.parseStations(await res.json());
+    if (!stations.length) {
+      t.skip("no station from that look-up");
+      return;
+    }
+    assert.ok(stations.some((s) => /kexp|seattle/i.test(`${s.name} ${s.tags} ${s.state}`)));
+  } catch {
+    t.skip("can't reach");
+  }
+});

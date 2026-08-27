@@ -89,6 +89,7 @@
       hidden: false,
       asleep: false,
       sleepHeld: false,
+      nightSat: false,
       stage: "hatchling",
       mess: [],
       gifts: [],
@@ -167,15 +168,22 @@
     const when = new Date(now);
     const nightAsleep = night(trait, when.getHours() + when.getMinutes() / 60, key) && !life.hidden && !life.sick;
     if (nightAsleep) {
-      life.asleep = true;
-      life.sleepHeld = true;
+      if (key === "red_panda" && life.nightSat && !life.sleepHeld && !life.asleep) {
+        life.asleep = false;
+      } else {
+        life.asleep = true;
+        life.sleepHeld = true;
+        if (key === "red_panda") life.nightSat = true;
+      }
     } else if (life.sleepHeld && !life.sick && !life.hidden && life.hunger >= 12) {
       life.asleep = true;
     } else if (life.sick || life.hidden || life.hunger < 12) {
       life.asleep = false;
       life.sleepHeld = false;
+      life.nightSat = false;
     } else {
       life.asleep = false;
+      life.nightSat = false;
     }
     const asleep = !!life.asleep;
     const hungerRate = 100 / (trait.hungerH * hatch);
@@ -237,7 +245,7 @@
     life.bond = clamp(life.bond + n);
   }
 
-  const SLEEP_WAKES = new Set(["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide"]);
+  const SLEEP_WAKES = new Set(["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"]);
 
   function wake(life) {
     life.asleep = false;

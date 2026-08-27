@@ -68,6 +68,13 @@
   ];
 
   const FLY_BIRD_KEY = "hummingbird";
+  const PERCH_BIRD_KEY = "robin";
+  const PERCH_HOST = "red_panda";
+  const ROBIN_SONG = "I sang. The worm can wait.";
+  const SONG_EVERY_S = 8;
+  const PERCH_ON_S = 0.72;
+  const SHOULDER_X = 36;
+  const SHOULDER_LIFT = 36;
   const MIN_STAY_S = 24;
   const CALL_EMPTY = "no guest from that look-up";
 
@@ -168,27 +175,101 @@
       t: 0,
       age: 0,
       x: w + 24,
+      lift: 0,
       target: dest,
       facing: -1,
       dismissed: false,
+      sungAt: 0,
     };
   }
 
   function dismissCalled(guest) {
     if (!guest) return guest;
-    return { ...guest, phase: "leave", target: -160, dismissed: true };
+    return { ...guest, phase: "leave", target: -160, dismissed: true, lift: guest.lift || 0 };
   }
 
-  function stepCalled(guest, dt, width) {
+  function shouldPerchCalled(key, flags) {
+    if (!flags || flags.hidden) return false;
+    if (key !== PERCH_BIRD_KEY) return false;
+    if (flags.hostKey && flags.hostKey !== PERCH_HOST) return false;
+    return !!flags.hostSleeping;
+  }
+
+  function perchPoint(hostX, hostFacing, hostLift) {
+    const face = hostFacing < 0 ? -1 : 1;
+    return {
+      x: (hostX || 0) + face * SHOULDER_X,
+      lift: (hostLift || 0) + SHOULDER_LIFT,
+    };
+  }
+
+  function goCalledPerch(guest, flags) {
+    const hold = perchPoint(flags && flags.hostX, flags && flags.hostFacing, flags && flags.hostLift);
+    return {
+      ...guest,
+      phase: "approach-perch",
+      t: 0,
+      target: hold.x,
+      fromX: guest.x,
+      fromLift: guest.lift || 0,
+      toX: hold.x,
+      toLift: hold.lift,
+      facing: hold.x >= guest.x ? 1 : -1,
+    };
+  }
+
+  function shouldSing(guest) {
+    if (!guest || guest.key !== PERCH_BIRD_KEY || guest.phase !== "perch") return false;
+    return guest.age + 0.0001 >= (guest.sungAt || 0);
+  }
+
+  function markSung(guest) {
+    return { ...guest, sungAt: (guest.age || 0) + SONG_EVERY_S };
+  }
+
+  function stepCalled(guest, dt, width, flags) {
     if (!guest || guest.phase === "gone") return guest;
-    const next = { ...guest, t: guest.t + Math.max(0, dt), age: guest.age + Math.max(0, dt) };
+    const next = { ...guest, t: guest.t + Math.max(0, dt), age: guest.age + Math.max(0, dt), lift: guest.lift || 0 };
+    const perchNow = shouldPerchCalled(next.key, flags);
+    if (perchNow && next.phase !== "approach-perch" && next.phase !== "perch" && next.phase !== "leave" && next.phase !== "gone") {
+      return goCalledPerch(next, flags);
+    }
+    if (!perchNow && (next.phase === "approach-perch" || next.phase === "perch")) {
+      return { ...next, phase: "stay", t: 0, lift: 0, target: next.x };
+    }
+
+    if (next.phase === "approach-perch") {
+      const hold = perchPoint(flags && flags.hostX, flags && flags.hostFacing, flags && flags.hostLift);
+      next.target = hold.x;
+      next.toX = hold.x;
+      next.toLift = hold.lift;
+      const u = Math.min(1, next.t / PERCH_ON_S);
+      const fromX = next.fromX != null ? next.fromX : next.x;
+      const fromLift = next.fromLift != null ? next.fromLift : next.lift || 0;
+      next.x = fromX + (hold.x - fromX) * u;
+      next.lift = fromLift + (hold.lift - fromLift) * u;
+      next.facing = hold.x >= fromX ? 1 : -1;
+      if (u >= 1) return { ...next, phase: "perch", t: 0, x: hold.x, lift: hold.lift, target: hold.x };
+      return next;
+    }
+    if (next.phase === "perch") {
+      const hold = perchPoint(flags && flags.hostX, flags && flags.hostFacing, flags && flags.hostLift);
+      next.x = hold.x;
+      next.lift = hold.lift;
+      next.target = hold.x;
+      next.facing = (flags && flags.hostFacing) < 0 ? -1 : 1;
+      return next;
+    }
+
     const remaining = next.target - next.x;
     if (Math.abs(remaining) > 2) {
       next.facing = remaining >= 0 ? 1 : -1;
       next.x += next.facing * 90 * Math.max(0, dt);
+      next.lift = 0;
       return next;
     }
     next.x = next.target;
+    next.lift = 0;
     if (next.phase === "in") {
       return { ...next, phase: "stay", t: 0 };
     }
@@ -215,9 +296,68 @@
     return !!(guest && guest.phase !== "gone");
   }
 
+  function calledKids(root) {
+    if (!root) return [];
+    if (root.querySelectorAll) return Array.from(root.querySelectorAll("[data-call-key]"));
+    return Array.from(root.children || []);
+  }
+
+  function syncCalledPaint(root, guests, opts) {
+    if (!root) return { reused: 0, added: 0, removed: 0 };
+    const make = (opts && opts.createImg) || (typeof document !== "undefined" && document.createElement ? () => document.createElement("img") : null);
+    if (!make) return { reused: 0, added: 0, removed: 0 };
+    const visible = (Array.isArray(guests) ? guests : []).filter(stillVisible);
+    const keep = Object.create(null);
+    for (const g of visible) keep[g.key] = g;
+    let removed = 0;
+    for (const el of calledKids(root)) {
+      const key = el.dataset && el.dataset.callKey;
+      if (!key || !keep[key]) {
+        if (el.remove) el.remove();
+        else if (root.removeChild) root.removeChild(el);
+        removed += 1;
+      }
+    }
+    let reused = 0;
+    let added = 0;
+    const frameOf = opts && opts.frameOf;
+    const onDismiss = opts && opts.onDismiss;
+    for (const g of visible) {
+      let img = calledKids(root).find((el) => el.dataset && el.dataset.callKey === g.key);
+      if (!img) {
+        img = make();
+        img.className = "called-guest";
+        img.alt = g.name || g.key;
+        if (!img.dataset) img.dataset = {};
+        img.dataset.hit = "1";
+        img.dataset.callKey = g.key;
+        img.draggable = false;
+        if (onDismiss && img.addEventListener) {
+          img.addEventListener("pointerdown", (e) => {
+            e.stopPropagation();
+            onDismiss(g);
+          });
+        }
+        if (root.appendChild) root.appendChild(img);
+        added += 1;
+      } else {
+        reused += 1;
+      }
+      const frames = frameOf ? frameOf(g) : null;
+      const src = frames && frames.length ? frames[g.frame || 0] || frames[0] : "";
+      if (src && img.src !== src) img.src = src;
+      if (img.style) img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
+    }
+    return { reused, added, removed };
+  }
+
   const api = {
     CALL_GROUPS,
     FLY_BIRD_KEY,
+    PERCH_BIRD_KEY,
+    PERCH_HOST,
+    ROBIN_SONG,
+    SONG_EVERY_S,
     MIN_STAY_S,
     CALL_EMPTY,
     groups,
@@ -230,8 +370,13 @@
     shouldFly,
     beginCalled,
     dismissCalled,
+    shouldPerchCalled,
+    perchPoint,
+    shouldSing,
+    markSung,
     stepCalled,
     stillVisible,
+    syncCalledPaint,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetCallGuests = api;

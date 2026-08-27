@@ -12,8 +12,8 @@ export const MIN_STAY_S = 24;
 export const CALL_EVERY_S = 7.5;
 export const PERCH_ON_S = 0.85;
 export const LIFT_S = 0.72;
-const SHOULDER_X = 38;
-const SHOULDER_LIFT = 72;
+const SHOULDER_X = 36;
+const SHOULDER_LIFT = 36;
 
 export type FlyPhase = "enter" | "cruise" | "hover" | "approach-perch" | "perch" | "lift" | "done";
 export type FlyFlags = {
@@ -185,6 +185,7 @@ export function stepFly(fly: BirdFly, dt: number, width: number, height: number,
     next.lift = flyLerp(u, next.fromLift, next.toLift, 22) + hoverBob;
     next.rot = Math.sin(u * Math.PI) * 10 * next.facing;
     if (u >= 1) {
+      if (perchNow) return goPerch(next, flags?.hostX, flags?.hostLift, flags?.hostFacing);
       if (next.age >= MIN_STAY_S * 2.2) return { ...next, phase: "done" };
       return { ...next, phase: "hover", t: 0, x: next.toX, lift: next.toLift, fromX: next.toX, fromLift: next.toLift };
     }
@@ -204,9 +205,9 @@ export function stepFly(fly: BirdFly, dt: number, width: number, height: number,
   }
   if (next.phase === "perch") {
     const hold = perchPoint(flags?.hostX, flags?.hostFacing, flags?.hostLift);
-    next.x = hold.x + Math.sin(next.age * 2.2) * 3;
-    next.lift = hold.lift + Math.sin(next.age * 6) * 2;
-    next.rot = Math.sin(next.age * 5) * 3;
+    next.x = hold.x + Math.sin(next.age * 1.4) * 1.2;
+    next.lift = hold.lift + Math.sin(next.age * 2.2) * 0.8;
+    next.rot = Math.sin(next.age * 2.4) * 1.5;
     next.toX = hold.x;
     next.toLift = hold.lift;
     return next;

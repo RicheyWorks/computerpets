@@ -34,6 +34,7 @@
     call: "talk",
     music: "music",
     radio: "music",
+    sleep: "music",
   };
 
   const HUMAN_VOICE = /aria|jenny|guy|davis|natural|samantha|daniel|karen|moira|zira|david|mark|hazel|susan|google us english|microsoft/i;
@@ -41,7 +42,7 @@
 
   const VOICE_TRUTH = "The door is still the system speech voices.";
   const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
-  const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide"];
+  const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"];
 
   function blankMutes() {
     return { talk: false, special: false, weather: false, treats: false, steps: false, music: false };
@@ -71,6 +72,7 @@
       currentAreaId: null,
       stepKind: "species",
       music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
+      sleepAid: { plugin: "off", playing: false },
     };
   }
 
@@ -154,6 +156,7 @@
     next.currentAreaId = areas.currentId;
     next.stepKind = root.PetHouseSounds ? root.PetHouseSounds.parseStep(raw.stepKind) : "species";
     next.music = root.PetHouseMusic ? root.PetHouseMusic.parseMusic(raw.music) : { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
+    next.sleepAid = root.PetHouseSleep ? root.PetHouseSleep.parseSleepAid(raw.sleepAid) : { plugin: "off", playing: false };
     return next;
   }
 

@@ -177,7 +177,11 @@ export function resolvePlace(place = "", area?: RadioArea | null) {
     return { city: fromArea.city, state: fromArea.state, countrycode: fromArea.countrycode };
   }
   if (!place) return { city: fromArea.city, state: fromArea.state, countrycode: fromArea.countrycode };
-  return { city: "", state: "", countrycode: "" };
+  const city = String(place)
+    .replace(/\s+/g, " ")
+    .trim()
+    .replace(/^\w/, (c) => c.toUpperCase());
+  return { city, state: "", countrycode: "" };
 }
 
 export function parseRadioQuery(query = "", area?: RadioArea | null): RadioQuery {
@@ -193,7 +197,9 @@ export function parseRadioQuery(query = "", area?: RadioArea | null): RadioQuery
     .filter((t) => t && t !== freq && t !== "fm" && t !== "am");
   const isCall = (t: string) => /^[kw][a-z0-9]{2,4}$/i.test(t);
   const call = tokens.find(isCall) || "";
-  const place = tokens.find((t) => t.length > 2 && !/^\d/.test(t) && t !== call) || "";
+  const named = tokens.find((t) => knownPlace(t));
+  const places = tokens.filter((t) => t.length > 2 && !/^\d/.test(t) && t !== call);
+  const place = named || places[places.length - 1] || "";
   const resolved = resolvePlace(place, area);
   return {
     raw,

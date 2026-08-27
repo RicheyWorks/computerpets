@@ -792,6 +792,9 @@
   .keeper-lines,
   .keeper-clocks,
   .keeper-mutes,
+  .keeper-steps,
+  .keeper-music,
+  .keeper-sleep,
   .keeper-off,
   .keeper-colors,
   .keeper-voices {
@@ -822,6 +825,9 @@
   .keeper-colors button,
   .keeper-voices button,
   .keeper-mutes button,
+  .keeper-steps button,
+  .keeper-music button,
+  .keeper-sleep button,
   .keeper-line-row button,
   .keeper-clocks button,
   .keeper-off button,
@@ -840,6 +846,9 @@
   .keeper-colors button[data-on="1"],
   .keeper-voices button[data-on="1"],
   .keeper-mutes button[data-on="1"],
+  .keeper-steps button[data-on="1"],
+  .keeper-music button[data-on="1"],
+  .keeper-sleep button[data-on="1"],
   .keeper-clocks button[data-on="1"] {
     border-color: var(--color-primary);
     color: #fffaf3;

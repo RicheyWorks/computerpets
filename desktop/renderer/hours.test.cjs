@@ -36,6 +36,10 @@ test("the overlay keeps the same night as the desk for every guest", () => {
   assert.equal(H.isRestingHour("goldfish", 5), false);
   assert.equal(H.isRestingHour("ferret", 10), true);
   assert.equal(H.isRestingHour("ferret", 2), false);
+  assert.equal(H.isRestingHour("red_panda", 22), false);
+  assert.equal(H.isRestingHour("red_panda", 23), false);
+  assert.equal(H.isRestingHour("red_panda", 2), true);
+  assert.deepEqual(H.restWindow("red_panda"), [1, 6]);
   assert.match(webHours, /goldfish: \[23, 5\]/);
   assert.match(webHours, /ferret: \[10, 17\]/);
   assert.match(lifeSrc, /hours\.isRestingHour/);

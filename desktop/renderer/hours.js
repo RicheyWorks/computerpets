@@ -671,7 +671,7 @@
 
   /** Same night the desk already keeps. Overlay no longer invents a second clock. */
   const REST = {
-  red_panda: [22, 7],
+  red_panda: [1, 6],
   cat: [13, 16],
   dog: [21, 6],
   rabbit: [22, 6],
