@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -66,6 +66,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("maidenhair"), "unfurl");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("water_lily"), "open");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -781,6 +782,18 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(mast.kind, "toss");
   assert.notEqual(mast.kind, "plow");
   assert.notEqual(mast.kind, "mast");
+  const disk = P.pickTarget([WIN], 80, "water_lily", WORK, P.SPRITE);
+  assert.ok(disk);
+  assert.equal(disk.kind, "open");
+  assert.equal(disk.side, "ink");
+  assert.equal(disk.leave, "night");
+  assert.ok(disk.holdLift > 36);
+  assert.notEqual(disk.kind, "sill");
+  assert.notEqual(disk.kind, "seed");
+  assert.notEqual(disk.kind, "gold");
+  assert.notEqual(disk.kind, "circle");
+  assert.notEqual(disk.kind, "chime");
+  assert.notEqual(disk.kind, "disk");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -10120,5 +10133,177 @@ test("a moved window refits Mast's dish; sleep, card, and hide abort; Mast never
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "seed-off");
+  assert.equal(play.abort, true);
+});
+
+test("Disk opens a window pane as an ink-dish pad: float the still ink, open once for the lamp, close, remain the floor", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("ginkgo"), "gold");
+  assert.equal(P.playFor("maidenhair"), "unfurl");
+  assert.equal(P.playFor("moss"), "lean");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(P.playFor("manta"), "barrel");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(P.playFor("axolotl"), "wall");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("orchid"), "sill");
+  const target = P.pickTarget([WIN], 80, "water_lily", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "open");
+  assert.equal(target.side, "ink");
+  assert.equal(target.leave, "night");
+  assert.notEqual(target.kind, "disk");
+  assert.notEqual(target.kind, "moth");
+  assert.ok(target.holdLift > 36, "she floats the ink, not the floor");
+  assert.ok(P.DUR.openHold > P.DUR.open, "the open is the tell; the hold keeps the pad");
+  assert.ok(P.DUR.openOn !== P.DUR.seedOn);
+  assert.ok(P.DUR.open !== P.DUR.seed);
+  assert.ok(P.DUR.open !== P.DUR.gold);
+  assert.ok(P.DUR.open !== P.DUR.unfurl);
+  assert.ok(P.DUR.open !== P.DUR.lean);
+  assert.ok(P.DUR.open !== P.DUR.circle);
+  assert.ok(P.DUR.open !== P.DUR.chime);
+  assert.ok(P.DUR.openHold !== P.DUR.seedHold);
+  assert.ok(P.DUR.openOff !== P.DUR.seedOff);
+  const ink = P.openPoint(WIN, P.SPRITE, WORK);
+  const seed = P.seedPoint(WIN, P.SPRITE, WORK);
+  const gold = P.goldPoint(WIN, P.SPRITE, WORK);
+  const unfurl = P.unfurlPoint(WIN, P.SPRITE, WORK);
+  const lean = P.leanPoint(WIN, P.SPRITE, WORK);
+  const circle = P.circlePoint(WIN, 0, P.SPRITE, WORK, 1);
+  const chimeTop = P.chimePoint(WIN, 0, P.SPRITE, WORK);
+  const barrel = P.barrelPoint(WIN, 0, P.SPRITE, WORK, 1);
+  const bask = P.baskPoint(WIN, P.SPRITE, WORK);
+  const wall = P.wallPoint(WIN, 0, "left", P.SPRITE, WORK);
+  const kindle = P.kindlePoint(WIN, P.SPRITE, WORK);
+  const reef = P.reefPoint(WIN, P.SPRITE, WORK);
+  const drape = P.drapePoint(WIN, "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.ok(Math.abs(target.holdX - seed.x) > 20 || Math.abs(target.holdLift - seed.lift) > 16, "not Mast");
+  assert.ok(Math.abs(target.holdX - gold.x) > 20 || Math.abs(target.holdLift - gold.lift) > 16, "not Fan");
+  assert.ok(Math.abs(target.holdX - unfurl.x) > 20 || Math.abs(target.holdLift - unfurl.lift) > 16, "not Vein");
+  assert.ok(Math.abs(target.holdX - lean.x) > 20 || Math.abs(target.holdLift - lean.lift) > 16, "not Felt");
+  assert.ok(Math.abs(target.holdX - circle.x) > 20 || Math.abs(target.holdLift - circle.lift) > 16, "not Coin");
+  assert.ok(Math.abs(target.holdX - chimeTop.x) > 20 || Math.abs(target.holdLift - chimeTop.lift) > 16, "not Pulse");
+  assert.ok(Math.abs(target.holdX - barrel.x) > 20 || Math.abs(target.holdLift - barrel.lift) > 16, "not Kite");
+  assert.ok(Math.abs(target.holdX - bask.x) > 20 || Math.abs(target.holdLift - bask.lift) > 16, "not Ink");
+  assert.ok(Math.abs(target.holdX - wall.x) > 20 || Math.abs(target.holdLift - wall.lift) > 16, "not Bloom");
+  assert.ok(Math.abs(target.holdX - kindle.x) > 20 || Math.abs(target.holdLift - kindle.lift) > 16, "not Ember");
+  assert.ok(Math.abs(target.holdX - reef.x) > 20 || Math.abs(target.holdLift - reef.lift) > 16, "not Ochre");
+  assert.ok(Math.abs(target.holdX - drape.x) > 20 || Math.abs(target.holdLift - drape.lift) > 16, "not Vesper");
+  assert.ok(Math.abs(target.holdX - field.x) > 20 || Math.abs(target.holdLift - field.lift) > 16, "not Flux");
+  assert.ok(Math.abs(target.holdLift - sill.lift) > 40, "not a generic sill");
+  const on0 = P.openOnPath(0, { x: 40, lift: 0 }, { x: ink.x, lift: ink.lift });
+  const on1 = P.openOnPath(1, { x: 40, lift: 0 }, { x: ink.x, lift: ink.lift });
+  assert.ok(Math.abs(on0.lift) < 2);
+  assert.ok(Math.abs(on1.lift - ink.lift) < 6);
+  assert.ok(on1.lift - on0.lift > 36, "she floats onto the ink");
+  const bloom = P.openPath(0.55);
+  const shut = P.openPath(1);
+  const closed = P.openPath(0);
+  assert.ok(bloom.lift > 12, "she opens for the lamp");
+  assert.ok(bloom.lift < 22, "an open, not a fiddlehead");
+  assert.ok(bloom.rot > 4, "petals face the lamp");
+  assert.ok(bloom.rot < 12, "not Felt's lean");
+  assert.ok(shut.lift < 6, "then a close");
+  assert.ok(shut.rot < 1, "the bloom shuts");
+  assert.ok(bloom.lift > shut.lift, "an open, then a close");
+  assert.ok(closed.lift < bloom.lift, "the pad starts closed");
+  const hold = P.openHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot) < 0.5, "she remains the floor");
+  assert.ok(hold.lift < 8, "the pad is the chair");
+  const off0 = P.openOffPath(0, { x: ink.x, lift: ink.lift }, { x: ink.x + 60, lift: 0 });
+  const offMid = P.openOffPath(0.2, { x: ink.x, lift: ink.lift }, { x: ink.x + 60, lift: 0 });
+  const off1 = P.openOffPath(1, { x: ink.x, lift: ink.lift }, { x: ink.x + 60, lift: 0 });
+  assert.ok(Math.abs(off0.x - ink.x) < 2);
+  assert.ok(Math.abs(offMid.lift - ink.lift) < 2, "she stays the pad a moment");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let openLiftMax = 0;
+  let openRotMax = 0;
+  for (let i = 0; i < 2800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "seed");
+    assert.notEqual(play.phase, "seed-hold");
+    assert.notEqual(play.phase, "gold");
+    assert.notEqual(play.phase, "gold-hold");
+    assert.notEqual(play.phase, "unfurl");
+    assert.notEqual(play.phase, "unfurl-hold");
+    assert.notEqual(play.phase, "lean");
+    assert.notEqual(play.phase, "lean-hold");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "chime");
+    assert.notEqual(play.phase, "barrel");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "wall");
+    assert.notEqual(play.phase, "kindle");
+    assert.notEqual(play.phase, "reef");
+    assert.notEqual(play.phase, "drape");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "open") {
+      openLiftMax = Math.max(openLiftMax, play.lift - play.target.holdLift);
+      openRotMax = Math.max(openRotMax, Math.abs(play.rot));
+      assert.equal(play.anim, "sit", "the open occupies the ink");
+      assert.ok(play.lift > 36, "the ink is the pane, not the floor");
+    }
+    if (play.phase === "open-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit", "she remains the floor");
+      assert.ok(play.lift - play.target.holdLift > 2, "the pad stays");
+      assert.ok(play.lift - play.target.holdLift < 10, "the pad is the chair");
+    }
+  }
+  assert.ok(seen.has("open-on"));
+  assert.ok(seen.has("open"));
+  assert.ok(seen.has("open-hold"));
+  assert.ok(seen.has("open-off"));
+  assert.ok(!seen.has("seed"), "not Mast");
+  assert.ok(!seen.has("gold"), "not Fan");
+  assert.ok(!seen.has("unfurl"), "not Vein");
+  assert.ok(!seen.has("lean"), "not Felt");
+  assert.ok(!seen.has("circle"), "not Coin");
+  assert.ok(!seen.has("chime"), "not Pulse");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(openLiftMax > 12, "she opens for the lamp");
+  assert.ok(openLiftMax < 22, "an open, not a rise");
+  assert.ok(openRotMax > 4, "petals face the lamp");
+  assert.ok(openRotMax < 12, "not a lean");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Disk's ink; sleep, card, and hide abort; Disk never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "water_lily", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 720 && play.phase !== "open"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "open");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "open");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "open-off");
   assert.equal(play.abort, true);
 });
