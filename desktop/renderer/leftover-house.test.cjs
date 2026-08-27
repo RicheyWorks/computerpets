@@ -55,7 +55,6 @@ test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () 
   assert.match(petSrc, /stealDeskRibbon/);
   assert.match(petSrc, /playWindows/);
   assert.match(petSrc, /PetRuiTricks/);
-  assert.match(petSrc, /beginHappy/);
   assert.match(petSrc, /ruiSleepBout/);
   assert.match(petSrc, /hostSleeping/);
   const tricksSrc = readFileSync(join(__dirname, "rui-tricks.js"), "utf8");

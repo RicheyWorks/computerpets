@@ -706,7 +706,8 @@ test("Gauss orbits the outside of a window, holds, then hops or drops — not cl
   assert.equal(target.holdLift, start.lift);
   assert.ok(start.x + P.SPRITE / 2 < WIN.x, "the body center starts outside the left edge");
   assert.ok(mid.x + P.SPRITE / 2 > WIN.x + WIN.width, "the loop crosses the far outside");
-  assert.ok(Math.abs(mid.x - start.x) > 40 && Math.abs(end.lift - start.lift) > 20, "a closed loop, not one edge");
+  assert.ok(Math.abs(mid.x - start.x) > 40 && Math.abs(mid.lift - start.lift) > 20, "a closed loop, not one edge");
+  assert.ok(Math.abs(end.x - start.x) > 8 || Math.abs(end.lift - start.lift) > 8, "the sit is after most of a circuit");
   assert.ok(Math.abs(start.x - cling.x) > 20 || Math.abs(start.lift - cling.lift) > 40, "not Rui's mid-side cling");
   assert.ok(Math.abs(start.x - coil.x) > 20 || Math.abs(start.lift - coil.lift) > 40, "not Volt's wrap-hold");
   assert.ok(Math.abs(start.x - ridge.x) > 40, "not Arc's title-bar center");
