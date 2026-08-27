@@ -36,7 +36,7 @@ npm start
 Windows: `..\desktop.ps1`  
 Mac and Linux: `sh ../desktop.sh`
 
-Windows toasts use the tray identity `works.richey.computerpets.desk`. The overlay sits the Windows 10/11 work area under the cursor, across DPI and monitor changes. Empty glass click-throughs; the tray watches the cursor against hit rects because DWM layered glass does not reliably forward a hover. First click is a sit, not a focus steal. The tray can pick Rui and the grid ten without scrolling two hundred twenty names. Spark stays `spark_dragon` / `/demo/crackle`. This is still Chromium compositing, not DirectX 12 or Vulkan. On a Mac the extra is a template mark, the overlay is a panel, and the floor follows the desk under the cursor. On Linux the mark is a StatusNotifier sit, the overlay is a toolbar, and the floor follows the desk under the cursor.
+Windows toasts use the tray identity `works.richey.computerpets.desk`. The overlay sits the Windows 10/11 work area under the cursor, across DPI and monitor changes. Empty glass click-throughs; the tray watches the cursor against hit rects because DWM layered glass does not reliably forward a hover. First click is a sit, not a focus steal. The tray can pick Rui and the grid ten without scrolling two hundred twenty names. The overlay asks main for `desktop/renderer/roster.json` through preload IPC — a sandboxed `file://` fetch is not a door. Spark stays `spark_dragon` / `/demo/crackle`. This is still Chromium compositing, not DirectX 12 or Vulkan. On a Mac the extra is a template mark, the overlay is a panel, and the floor follows the desk under the cursor. On Linux the mark is a StatusNotifier sit, the overlay is a toolbar, and the floor follows the desk under the cursor.
 
 ## Unlock (client contract)
 
