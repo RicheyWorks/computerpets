@@ -174,6 +174,7 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [ ] Real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. Today’s overlay is Electron/Chromium; the blotter is Qt OpenGL. Do not invent a finished DX12 engine.
 - [x] Pets occupy the real Windows 10/11 desktop among real windows and icons. Work-area floor, click-through glass, tray picks Rui and the grid ten. `/demo` lockstep. Overlay is still Electron/Chromium, not DX12. Desktop-first. Mac / Linux / phone after Windows feels like the ad.
 - [x] Honest Windows desk download teaching: START-HERE / README lead with the real overlay path. Node after the pets-on-the-desk picture. No Store ID. No published `.exe`. `/demo` stays the same house. Catalog stays 220.
+- [x] Overlay finds the roster on Windows: renderer asks main for the house it already read. Sandboxed `file://` fetch is not a door. Catalog stays 220.
 - [ ] Desktop presence is not filesystem theft: no silent read/write/exfil, no keyloggers, no secret capture.
 - [ ] HUD may show who is listening on the mind plugin bus. Keys stay with the keeper.
 - [x] Leftover art campaign on the original two hundred ten is finished (Peak, PR #303). Rui stays the bar. No stamps, no parchment islands. Never retouch a landed guest while sitting a new one.

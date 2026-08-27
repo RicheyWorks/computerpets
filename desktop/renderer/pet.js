@@ -1511,20 +1511,19 @@ setInterval(() => {
   if (kind) tickLife();
 }, 20_000);
 
-fetch("roster.json")
-  .then((r) => r.json())
-  .then((data) => {
-    roster = data;
-    let start = "red_panda";
-    try {
-      start = localStorage.getItem(STORE_KIND) || start;
-    } catch {
-      /* ignore */
-    }
-    switchTo(start);
-    paintWeather();
-    requestAnimationFrame(tick);
-  })
-  .catch(() => {
-    say("The house could not find the roster.");
-  });
+window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
+  if (!opened.ok) {
+    say(opened.line);
+    return;
+  }
+  roster = opened.roster;
+  let start = "red_panda";
+  try {
+    start = localStorage.getItem(STORE_KIND) || start;
+  } catch {
+    /* ignore */
+  }
+  switchTo(start);
+  paintWeather();
+  requestAnimationFrame(tick);
+});

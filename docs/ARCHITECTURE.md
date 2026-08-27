@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (honest Windows desk download teaching; overlay and `/demo` stay lockstep) |
+| **Last Updated** | 2026-08-27 (overlay roster comes through preload IPC; catalog stays 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
@@ -783,7 +783,7 @@ Sprites stay lockstep between `web/public/sprites/` and `desktop/renderer/sprite
 
 - Two hundred twenty living guests. Rui is the bar. Arc (`cyber_dragon`) sits the first grid den. Volt (`volt_dragon`) sits the second. Trace (`trace_dragon`) sits the third. Flux (`flux_dragon`) sits the fourth. Spark (`spark_dragon`) sits the fifth. Ion (`ion_dragon`) sits the sixth. Gauss (`gauss_dragon`) sits the seventh. Relay (`relay_dragon`) sits the eighth. Fuse (`fuse_dragon`) sits the ninth. Ground (`ground_dragon`) sits the tenth. The leftover campaign on the original 210 is done. The typical grid ten is closed.
 - Living desk (`web/`), `/demo`, Meet house, dens.
-- Electron overlay on Windows (`desktop/`): work-area floor under the cursor, DWM glass click-through via hit-forward, tray pins Rui and the grid ten. Renderer sprites lockstep with the desk. Still Chromium compositing — not a finished DX12/Vulkan engine. Mac extra and Linux mark exist as later doors, not the first polish target.
+- Electron overlay on Windows (`desktop/`): work-area floor under the cursor, DWM glass click-through via hit-forward, tray pins Rui and the grid ten. The renderer asks main for the roster it already read (`desk.roster` → `roster-get`). A sandboxed `file://` fetch is not a door. Overlay stays `sandbox` + `contextIsolation`, no `nodeIntegration`. Renderer sprites lockstep with the desk. Still Chromium compositing — not a finished DX12/Vulkan engine. Mac extra and Linux mark exist as later doors, not the first polish target.
 - PyQt6 blotter (`client/`) — care verbs, plaques, Qt OpenGL viewport.
 - Life sim: hunger, mess, illness, age, feed / play / rest, weather, gifts, click-to-treat, hide, bond titles.
 - Poster-sharp keeper HUD on overlay, `/demo`, desk, Live, and Meet: guest name, stage, bond title, hunger / rest / bond, Feed / Play / Rest, honest Java heartbeat. Care is local. `/pet/feed` is not a door. Overlay verbs stay data-hit; empty glass still click-throughs.
