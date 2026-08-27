@@ -11244,7 +11244,7 @@ test("the demo window plate walks Loom's web the same way", () => {
   assert.equal(P.playFor("ion_dragon"), "charge");
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("honeycomb"), "draw");
-  assert.equal(P.playFor("jumping_spider"), "sill");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
   assert.equal(P.playFor("harvestman"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
   assert.notEqual(target.kind, "loom");
@@ -11334,6 +11334,109 @@ test("the demo window plate walks Loom's web the same way", () => {
   assert.ok(seen.has("web-hold"));
   assert.ok(seen.has("web-off"));
   assert.ok(webSpan > 4, "she draws spokes");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Leap's pounce the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "jumping_spider"[\s\S]{0,80}slug: "leap"/);
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  const target = P.pickTarget([WIN], 80, "jumping_spider", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "pounce");
+  assert.equal(target.side, "edge");
+  assert.equal(target.leave, "bound");
+  assert.equal(Overlay.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("chinchilla"), "dust");
+  assert.equal(P.playFor("venus_flytrap"), "count");
+  assert.equal(P.playFor("moss"), "lean");
+  assert.equal(P.playFor("wolf_spider"), "sill");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.notEqual(target.kind, "leap");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "dust");
+  assert.notEqual(target.kind, "count");
+  assert.notEqual(target.kind, "lean");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(P.DUR.pounceHold > P.DUR.pounce, "the look is the hold; the hop is the short tell");
+  assert.ok(P.DUR.pounceOn !== Overlay.DUR.webOn);
+  assert.ok(P.DUR.pounceOn !== Overlay.DUR.cacheOn);
+  assert.ok(P.DUR.pounceOn !== Overlay.DUR.dustOn);
+  assert.ok(P.DUR.pounceOn !== Overlay.DUR.sillHop);
+  assert.ok(P.DUR.pounce !== Overlay.DUR.leap);
+  assert.ok(P.DUR.pounceHold !== Overlay.DUR.webHold);
+  assert.ok(P.DUR.pounceOff !== Overlay.DUR.webOff);
+  assert.equal(P.DUR.pounceOn, Overlay.DUR.pounceOn);
+  assert.equal(P.DUR.pounce, Overlay.DUR.pounce);
+  assert.equal(P.DUR.pounceHold, Overlay.DUR.pounceHold);
+  assert.equal(P.DUR.pounceOff, Overlay.DUR.pounceOff);
+  const edge = P.pouncePoint(WIN, 176, WORK);
+  const deskEdge = Overlay.pouncePoint(WIN, 176, WORK);
+  assert.equal(edge.x, deskEdge.x);
+  assert.equal(edge.lift, deskEdge.lift);
+  const hub = P.webPoint(WIN, 176, WORK);
+  const nosing = P.cachePoint(WIN, 176, WORK);
+  const tray = P.dustPoint(WIN, 176, WORK);
+  const cup = P.countPoint(WIN, 176, WORK);
+  const felt = P.leanPoint(WIN, 176, WORK);
+  assert.ok(edge.x < WIN.x + WIN.width * 0.28, "rail end");
+  assert.ok(Math.abs(edge.x - nosing.x) > 40, "not Dee");
+  assert.ok(Math.abs(edge.x - tray.x) > 40, "not Floss");
+  assert.ok(Math.abs(edge.x - cup.x) > 40, "not Snap");
+  assert.ok(Math.abs(edge.x - felt.x) > 40, "not Felt");
+  assert.ok(Math.abs(edge.x - hub.x) > 40 || Math.abs(edge.lift - hub.lift) > 40, "not Loom");
+  const walkOn = P.pounceOnPath(0.25, { x: 40, lift: 0 }, { x: edge.x, lift: edge.lift });
+  const deskWalk = Overlay.pounceOnPath(0.25, { x: 40, lift: 0 }, { x: edge.x, lift: edge.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const quint = 0.25 * 0.25 * 0.25 * (0.25 * (0.25 * 6 - 15) + 10);
+  assert.ok(walkOn.lift - edge.lift * quint < 5, "a stalk walk to the rail end");
+  const hop = P.pouncePath(0.5);
+  const deskHop = Overlay.pouncePath(0.5);
+  assert.equal(hop.lift, deskHop.lift);
+  assert.ok(hop.lift > 16, "one short hop");
+  const hold = P.pounceHoldPath(0.5);
+  const deskHold = Overlay.pounceHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.lift < 1.2, "she looks with the front eyes");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let pounceLift = 0;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "dust");
+    assert.notEqual(play.phase, "count");
+    assert.notEqual(play.phase, "lean");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "pounce") {
+      pounceLift = Math.max(pounceLift, play.lift - play.target.holdLift);
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "pounce-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "pounce-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - play.target.holdLift) < 2, "she looks from the rail end");
+    }
+  }
+  assert.ok(seen.has("pounce-on"));
+  assert.ok(seen.has("pounce"));
+  assert.ok(seen.has("pounce-hold"));
+  assert.ok(seen.has("pounce-off"));
+  assert.ok(pounceLift > 8, "she pounces once");
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });

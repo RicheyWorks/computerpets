@@ -103,6 +103,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -17396,7 +17397,7 @@ test("Loom webs a lamp-side glass corner as a lamp web: walk to the interior top
   assert.equal(P.playFor("ion_dragon"), "charge");
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("honeycomb"), "draw");
-  assert.equal(P.playFor("jumping_spider"), "sill");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
   assert.equal(P.playFor("harvestman"), "sill");
   assert.equal(P.playFor("honeybee"), "sill");
   const target = P.pickTarget([WIN], 80, "orb_weaver", WORK, P.SPRITE);
@@ -17531,5 +17532,142 @@ test("a moved window refits Loom's lamp web; sleep, card, and hide abort; Loom n
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "web-off");
+  assert.equal(play.abort, true);
+});
+
+test("Leap pounces a meeting-rail end as a blotter edge: walk onto the rail end, look, pounce once, then hop off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("chinchilla"), "dust");
+  assert.equal(P.playFor("venus_flytrap"), "count");
+  assert.equal(P.playFor("moss"), "lean");
+  assert.equal(P.playFor("newt"), "trail");
+  assert.equal(P.playFor("wolf_spider"), "sill");
+  assert.equal(P.playFor("harvestman"), "sill");
+  assert.notEqual(P.playFor("jumping_spider"), "leap");
+  assert.notEqual(P.playFor("jumping_spider"), "sill");
+  assert.notEqual(P.playFor("jumping_spider"), "web");
+  const target = P.pickTarget([WIN], 80, "jumping_spider", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "pounce");
+  assert.equal(target.side, "edge");
+  assert.equal(target.leave, "bound");
+  assert.notEqual(target.kind, "leap");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "dust");
+  assert.notEqual(target.kind, "count");
+  assert.notEqual(target.kind, "lean");
+  assert.notEqual(target.kind, "trail");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 40, "she stands a meeting-rail end, not the floor");
+  assert.ok(P.DUR.pounceHold > P.DUR.pounce, "the look is the hold; the hop is the short tell");
+  assert.ok(P.DUR.pounceOn > P.DUR.pounce, "a stalk walk, not the hop");
+  assert.ok(P.DUR.pounceOn !== P.DUR.webOn);
+  assert.ok(P.DUR.pounceOn !== P.DUR.cacheOn);
+  assert.ok(P.DUR.pounceOn !== P.DUR.dustOn);
+  assert.ok(P.DUR.pounceOn !== P.DUR.countOn);
+  assert.ok(P.DUR.pounceOn !== P.DUR.leanOn);
+  assert.ok(P.DUR.pounceOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.pounce !== P.DUR.leap);
+  assert.ok(P.DUR.pounce !== P.DUR.web);
+  assert.ok(P.DUR.pounceHold !== P.DUR.webHold);
+  assert.ok(P.DUR.pounceOff !== P.DUR.webOff);
+  assert.ok(P.DUR.pounceOff !== P.DUR.sillDown);
+  const edge = P.pouncePoint(WIN, P.SPRITE, WORK);
+  const hub = P.webPoint(WIN, P.SPRITE, WORK);
+  const nosing = P.cachePoint(WIN, P.SPRITE, WORK);
+  const tray = P.dustPoint(WIN, P.SPRITE, WORK);
+  const cup = P.countPoint(WIN, P.SPRITE, WORK);
+  const felt = P.leanPoint(WIN, P.SPRITE, WORK);
+  const horn = P.trailPoint(WIN, P.SPRITE, WORK);
+  assert.ok(edge.x < WIN.x + WIN.width * 0.28, "the cut / horn of the mid-sash bar, not the long tray");
+  assert.ok(Math.abs(edge.x - nosing.x) > 40, "not Dee's meeting-rail nosing");
+  assert.ok(Math.abs(edge.x - tray.x) > 40, "not Floss's meeting-rail dust tray");
+  assert.ok(Math.abs(edge.x - cup.x) > 40, "not Snap's wetland cup");
+  assert.ok(Math.abs(edge.x - felt.x) > 40, "not Felt's blotter lean");
+  assert.ok(Math.abs(edge.x - horn.x) > 40, "not Eft's sash horn");
+  assert.ok(Math.abs(edge.x - hub.x) > 40 || Math.abs(edge.lift - hub.lift) > 40, "not Loom's glass corner");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 140, height: 140 }], 80, "jumping_spider", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real meeting rail, Snap's height, not a thin sill");
+  const walkOn = P.pounceOnPath(0.25, { x: 40, lift: 0 }, { x: edge.x, lift: edge.lift });
+  const quint = 0.25 * 0.25 * 0.25 * (0.25 * (0.25 * 6 - 15) + 10);
+  const hopOn = P.dustOnPath(0.25, { x: 40, lift: 0 }, { x: tray.x, lift: tray.lift });
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(walkOn.lift - edge.lift * quint < 5, "a stalk walk onto the rail end");
+  assert.ok(walkOn.lift - edge.lift * quint < hopOn.lift - tray.lift * hopEase, "a walk, not Floss's hop");
+  const hop = P.pouncePath(0.5);
+  const look = P.pounceHoldPath(0.5);
+  const spoke = P.webPath(0.18);
+  assert.ok(hop.lift > 16, "one short hop");
+  assert.ok(hop.x > 6, "she pounces forward");
+  assert.ok(look.lift < 1.2, "she looks with the front eyes");
+  assert.ok(Math.abs(look.x) < 0.4, "still on the rail end");
+  assert.ok(hop.lift !== spoke.lift || hop.x !== spoke.x, "not Loom's spokes");
+  const off0 = P.pounceOffPath(0, { x: edge.x, lift: edge.lift + 0.4 }, { x: edge.x + 46, lift: 0 });
+  const offMid = P.pounceOffPath(0.5, { x: edge.x, lift: edge.lift + 0.4 }, { x: edge.x + 46, lift: 0 });
+  const off1 = P.pounceOffPath(1, { x: edge.x, lift: edge.lift + 0.4 }, { x: edge.x + 46, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - edge.x) < 2);
+  assert.ok(offMid.lift - (edge.lift + 0.4) * (1 - midEase) > 4, "she hops off, not a silk leave");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let pounceLift = 0;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "dust");
+    assert.notEqual(play.phase, "count");
+    assert.notEqual(play.phase, "lean");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "pounce") {
+      pounceLift = Math.max(pounceLift, play.lift - play.target.holdLift);
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "pounce-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "pounce-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - play.target.holdLift) < 2, "she looks from the rail end");
+    }
+  }
+  assert.ok(seen.has("pounce-on"));
+  assert.ok(seen.has("pounce"));
+  assert.ok(seen.has("pounce-hold"));
+  assert.ok(seen.has("pounce-off"));
+  assert.ok(pounceLift > 8, "she pounces once");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Leap's rail end; sleep, card, and hide abort; Leap never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "jumping_spider", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "pounce"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "pounce");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "pounce");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "pounce-off");
   assert.equal(play.abort, true);
 });
