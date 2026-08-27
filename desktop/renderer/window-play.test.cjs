@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark; Arm stores a stool as a sand tray; Snap counts a meeting rail as a wetland cup; Well fills a sill pan as a bog cup; Dew curls a glazing rebate as a peat saucer; Thrum forages a window box as a meadow; Auger bores a sash stile as timber; other guests walk a sill; Mortar daubs a sash gap as an inkstone cell; Pot tends a sash pulley box as a cerumen hollow; Sheen licks a warm pane as a salt glass; Bank digs a window stool as a sand bank; Hum drones a window pane as congregation sky; Keep lays a window pane as a wax heart; Wax draws a window pane as a hive frame; Reed plops a window weep as a bank spring; Pebble puffs a casement leaf as a leaf dish; Eft trails a sash horn as a moss saucer; Dapple covers a window well as leaf mold; Slip rings a sill throat as a silt tray; Pinch claws a sill wash as a pebble tray; Whorl rasps a glass rim as her own house; Hinge filters a meeting-rail gap as a silt bed; Latch drinks a sash drip as a damp blotter; Prickle glues a putty fillet as a weed bowl; Soot caws a drip cap as a chimney pot; Wedge croaks a high transom as a rafter; Heart hisses a sash reveal as a beam hollow", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark; Arm stores a stool as a sand tray; Snap counts a meeting rail as a wetland cup; Well fills a sill pan as a bog cup; Dew curls a glazing rebate as a peat saucer; Thrum forages a window box as a meadow; Auger bores a sash stile as timber; other guests walk a sill; Mortar daubs a sash gap as an inkstone cell; Pot tends a sash pulley box as a cerumen hollow; Sheen licks a warm pane as a salt glass; Bank digs a window stool as a sand bank; Hum drones a window pane as congregation sky; Keep lays a window pane as a wax heart; Wax draws a window pane as a hive frame; Reed plops a window weep as a bank spring; Pebble puffs a casement leaf as a leaf dish; Eft trails a sash horn as a moss saucer; Dapple covers a window well as leaf mold; Slip rings a sill throat as a silt tray; Pinch claws a sill wash as a pebble tray; Whorl rasps a glass rim as her own house; Hinge filters a meeting-rail gap as a silt bed; Latch drinks a sash drip as a damp blotter; Prickle glues a putty fillet as a weed bowl; Soot caws a drip cap as a chimney pot; Wedge croaks a high transom as a rafter; Heart hisses a sash reveal as a beam hollow; Hook soars a lamp-post stile as lift", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -95,6 +95,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("crow"), "caw");
   assert.equal(P.playFor("raven"), "croak");
   assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("red_tail"), "soar");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -15825,7 +15826,7 @@ test("Wedge croaks a high transom as a rafter: hop onto the beam, drop the wedge
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("barn_owl"), "hiss");
-  assert.equal(P.playFor("red_tail"), "sill");
+  assert.equal(P.playFor("red_tail"), "soar");
   const target = P.pickTarget([WIN], 80, "raven", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "croak");
@@ -15999,7 +16000,7 @@ test("Heart hisses a sash reveal as a beam hollow: slip into the nest pocket, tu
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("red_tail"), "sill");
+  assert.equal(P.playFor("red_tail"), "soar");
   const target = P.pickTarget([WIN], 80, "barn_owl", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "hiss");
@@ -16143,5 +16144,179 @@ test("a moved window refits Heart's reveal; sleep, card, and hide abort; Heart n
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "hiss-off");
+  assert.equal(play.abort, true);
+});
+
+test("Hook soars a lamp-post stile as lift: take the outside of the stile, ride the lift, stoop once, then glide off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("crow"), "caw");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("stickleback"), "glue");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("mussel"), "filter");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("penguin"), "bow");
+  assert.equal(P.playFor("toucan"), "toss");
+  assert.equal(P.playFor("cat"), "ledge");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("manta"), "barrel");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("honeycomb"), "draw");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("gecko"), "sill");
+  const target = P.pickTarget([WIN], 80, "red_tail", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "soar");
+  assert.equal(target.side, "post");
+  assert.equal(target.leave, "lift");
+  assert.notEqual(target.kind, "hook");
+  assert.notEqual(target.kind, "hiss");
+  assert.notEqual(target.kind, "croak");
+  assert.notEqual(target.kind, "caw");
+  assert.notEqual(target.kind, "sill");
+  assert.notEqual(target.kind, "perch");
+  assert.notEqual(target.kind, "barrel");
+  assert.notEqual(target.kind, "orbit");
+  assert.notEqual(target.kind, "fan");
+  assert.ok(target.holdLift > 28, "she soars a post, not the floor");
+  assert.ok(P.DUR.soar > P.DUR.soarHold, "the soar is the tell; the post sit is the hold after");
+  assert.ok(P.DUR.soarOn !== P.DUR.hissOn);
+  assert.ok(P.DUR.soarOn !== P.DUR.croakOn);
+  assert.ok(P.DUR.soarOn !== P.DUR.cawOn);
+  assert.ok(P.DUR.soarOn !== P.DUR.perchOn);
+  assert.ok(P.DUR.soarOn !== P.DUR.hookOn);
+  assert.ok(P.DUR.soarOn !== P.DUR.barrelOn);
+  assert.ok(P.DUR.soarOn !== P.DUR.orbitOn);
+  assert.ok(P.DUR.soarOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.soar !== P.DUR.hiss);
+  assert.ok(P.DUR.soar !== P.DUR.croak);
+  assert.ok(P.DUR.soar !== P.DUR.caw);
+  assert.ok(P.DUR.soar !== P.DUR.perchTalk);
+  assert.ok(P.DUR.soar !== P.DUR.hook);
+  assert.ok(P.DUR.soar !== P.DUR.barrel);
+  assert.ok(P.DUR.soar !== P.DUR.orbitLoop);
+  assert.ok(P.DUR.soarHold !== P.DUR.hissHold);
+  assert.ok(P.DUR.soarHold !== P.DUR.croakHold);
+  assert.ok(P.DUR.soarOff !== P.DUR.hissOff);
+  assert.ok(P.DUR.soarOff !== P.DUR.croakOff);
+  assert.ok(P.DUR.soarOff !== P.DUR.sillDown);
+  const post = P.soarPoint(WIN, P.SPRITE, WORK);
+  const hollow = P.hissPoint(WIN, P.SPRITE, WORK);
+  const rafter = P.croakPoint(WIN, P.SPRITE, WORK);
+  const cap = P.cawPoint(WIN, P.SPRITE, WORK);
+  const perch = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  const hook = P.hookPoint(WIN, "left", 0, P.SPRITE, WORK);
+  const timber = P.borePoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(post.x - hollow.x) > 20, "outside the stile, not Heart's sash-reveal pocket");
+  assert.ok(post.lift > hollow.lift + 20, "a lamp-post height, not a beam hollow");
+  assert.ok(post.lift < cap.lift - 40, "not Soot's outside drip cap");
+  assert.ok(Math.abs(post.x - rafter.x) > 80, "stile side, not Wedge's midspan rafter");
+  assert.ok(post.lift < rafter.lift - 20, "not the interior head");
+  assert.ok(Math.abs(post.x - perch.x) > 40, "outside the post, not Echo's shade");
+  assert.ok(Math.abs(post.x - hook.x) > 20 || Math.abs(post.lift - hook.lift) > 20, "not Quill's jamb hook");
+  assert.ok(Math.abs(post.x - timber.x) > 40, "outside as lift, not Auger's timber bore");
+  const riseOn = P.soarOnPath(0.25, { x: 40, lift: 0 }, { x: post.x, lift: post.lift });
+  const midOn = P.soarOnPath(0.5, { x: 40, lift: 0 }, { x: post.x, lift: post.lift });
+  const hopEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  const hushMid = P.hissOnPath(0.5, { x: 40, lift: 0 }, { x: hollow.x, lift: hollow.lift });
+  const croakMid = P.croakOnPath(0.5, { x: 40, lift: 0 }, { x: rafter.x, lift: rafter.lift });
+  assert.ok(midOn.lift - post.lift * hopEase > 16, "she takes lift, not a hush");
+  assert.ok(midOn.lift > hushMid.lift + 8, "not Heart's silent wings");
+  assert.ok(Math.abs(midOn.x - (40 + (post.x - 40) * hopEase)) > 4, "a bank around the post, not a straight hop");
+  assert.ok(riseOn.lift > 8, "the rise starts before the stile");
+  assert.ok(midOn.lift < croakMid.lift + 40 || Math.abs(midOn.x - croakMid.x) > 20, "not Wedge's heavy hop");
+  const still = P.soarPath(0);
+  const ride = P.soarPath(0.2);
+  const peak = P.soarPath(0.5);
+  const stoop = P.soarPath(0.84);
+  const done = P.soarPath(1);
+  const face = P.hissPath(0.5);
+  const bob = P.cawPath(0.84);
+  const kronk = P.croakPath(0.84);
+  assert.ok(Math.abs(still.x) < 2);
+  assert.ok(Math.abs(still.lift) < 2);
+  assert.ok(ride.lift > 8, "she rides the lift");
+  assert.ok(peak.lift > 16, "the rusty fan works the air");
+  assert.ok(stoop.lift < -10, "then she stoops once");
+  assert.ok(Math.abs(face.rot) > 35, "Heart still turns the face");
+  assert.ok(bob.lift > 6, "Soot still caws up");
+  assert.ok(kronk.lift < -6, "Wedge still croaks down");
+  assert.ok(done.lift < 4, "the stoop finishes down the post");
+  const hold = P.soarHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot) < 10, "a watchful sit, not Heart's turned face");
+  assert.ok(hold.lift < 3, "she holds the post after the stoop");
+  const off0 = P.soarOffPath(0, { x: post.x, lift: post.lift + 1.2 }, { x: post.x + 58, lift: 0 });
+  const offMid = P.soarOffPath(0.5, { x: post.x, lift: post.lift + 1.2 }, { x: post.x + 58, lift: 0 });
+  const off1 = P.soarOffPath(1, { x: post.x, lift: post.lift + 1.2 }, { x: post.x + 58, lift: 0 });
+  const hissOff = P.hissOffPath(0.5, { x: hollow.x, lift: hollow.lift + 0.9 }, { x: hollow.x + 51, lift: 0 });
+  const croakOff = P.croakOffPath(0.5, { x: rafter.x, lift: rafter.lift + 0.8 }, { x: rafter.x + 54, lift: 0 });
+  assert.ok(Math.abs(off0.x - post.x) < 2);
+  assert.ok(offMid.lift > hissOff.lift + 4, "a departing glide, not a hush");
+  assert.ok(offMid.lift < croakOff.lift - 4, "not a hop off the rafter");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let soarLiftMax = -Infinity;
+  let soarLiftMin = Infinity;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hiss");
+    assert.notEqual(play.phase, "croak");
+    assert.notEqual(play.phase, "caw");
+    assert.notEqual(play.phase, "perch-talk");
+    assert.notEqual(play.phase, "hook");
+    assert.notEqual(play.phase, "barrel");
+    assert.notEqual(play.phase, "orbit");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "soar") {
+      soarLiftMax = Math.max(soarLiftMax, play.lift - play.target.holdLift);
+      soarLiftMin = Math.min(soarLiftMin, play.lift - play.target.holdLift);
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "soar-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift < 4, "she holds the post");
+    }
+  }
+  assert.ok(seen.has("soar-on"));
+  assert.ok(seen.has("soar"));
+  assert.ok(seen.has("soar-hold"));
+  assert.ok(seen.has("soar-off"));
+  assert.ok(soarLiftMax > 14, "she soars the lift");
+  assert.ok(soarLiftMin < -10, "then she stoops once");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Hook's post; sleep, card, and hide abort; Hook never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "red_tail", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 720 && play.phase !== "soar"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "soar");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "soar");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "soar-off");
   assert.equal(play.abort, true);
 });
