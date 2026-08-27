@@ -11356,7 +11356,7 @@ test("the demo window plate walks Leap's pounce the same way", () => {
   assert.equal(P.playFor("venus_flytrap"), "count");
   assert.equal(P.playFor("moss"), "lean");
   assert.equal(P.playFor("wolf_spider"), "carry");
-  assert.equal(P.playFor("tarantula"), "sill");
+  assert.equal(P.playFor("tarantula"), "kick");
   assert.equal(P.playFor("gecko"), "sill");
   assert.notEqual(target.kind, "leap");
   assert.notEqual(target.kind, "web");
@@ -11461,7 +11461,7 @@ test("the demo window plate walks Prowl's carry the same way", () => {
   assert.equal(P.playFor("guinea_pig"), "wheek");
   assert.equal(P.playFor("hedgehog"), "ball");
   assert.equal(P.playFor("salamander"), "cover");
-  assert.equal(P.playFor("tarantula"), "sill");
+  assert.equal(P.playFor("tarantula"), "kick");
   assert.notEqual(P.playFor("wolf_spider"), "prowl");
   assert.notEqual(target.kind, "pounce");
   assert.notEqual(target.kind, "web");
@@ -11538,6 +11538,104 @@ test("the demo window plate walks Prowl's carry the same way", () => {
   assert.ok(seen.has("carry-hold"));
   assert.ok(seen.has("carry-off"));
   assert.ok(maxLift < 8, "she never climbs the glass");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Velvet's kick the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "tarantula"[\s\S]{0,80}slug: "velvet"/);
+  assert.equal(P.playFor("tarantula"), "kick");
+  const target = P.pickTarget([WIN], 80, "tarantula", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "kick");
+  assert.equal(target.side, "burrow");
+  assert.equal(target.leave, "burrow");
+  assert.equal(Overlay.playFor("tarantula"), "kick");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("ball_python"), "bun");
+  assert.equal(P.playFor("stingless"), "tend");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("widow"), "sill");
+  assert.notEqual(P.playFor("tarantula"), "velvet");
+  assert.notEqual(target.kind, "carry");
+  assert.notEqual(target.kind, "pounce");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "bun");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she sits a sash well, not the floor");
+  assert.ok(P.DUR.kickHold > P.DUR.kick, "the sit is the hold; the hair flick is the tell");
+  assert.ok(P.DUR.kickOn !== Overlay.DUR.carryOn);
+  assert.ok(P.DUR.kickOn !== Overlay.DUR.pounceOn);
+  assert.ok(P.DUR.kickOn !== Overlay.DUR.webOn);
+  assert.ok(P.DUR.kickOn !== Overlay.DUR.bunOn);
+  assert.ok(P.DUR.kickOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.kickOn, Overlay.DUR.kickOn);
+  assert.equal(P.DUR.kick, Overlay.DUR.kick);
+  assert.equal(P.DUR.kickHold, Overlay.DUR.kickHold);
+  assert.equal(P.DUR.kickOff, Overlay.DUR.kickOff);
+  const well = P.kickPoint(WIN, 176, WORK);
+  const deskWell = Overlay.kickPoint(WIN, 176, WORK);
+  assert.equal(well.x, deskWell.x);
+  assert.equal(well.lift, deskWell.lift);
+  const hide = P.bunPoint(WIN, 176, WORK);
+  const box = P.tendPoint(WIN, 176, WORK);
+  const reveal = P.hissPoint(WIN, 176, WORK);
+  const litter = P.carryPoint(WIN, 176, WORK);
+  const edge = P.pouncePoint(WIN, 176, WORK);
+  const hub = P.webPoint(WIN, 176, WORK);
+  assert.ok(well.lift > 8, "the lower sash well");
+  assert.ok(Math.abs(well.x - hide.x) > 40 || Math.abs(well.lift - hide.lift) > 40, "not Nori");
+  assert.ok(Math.abs(well.x - box.x) > 40 || Math.abs(well.lift - box.lift) > 40, "not Pot");
+  assert.ok(Math.abs(well.x - reveal.x) > 40 || Math.abs(well.lift - reveal.lift) > 40, "not Heart");
+  assert.ok(Math.abs(well.x - litter.x) > 40 || Math.abs(well.lift - litter.lift) > 8, "not Prowl");
+  assert.ok(Math.abs(well.x - edge.x) > 40 || Math.abs(well.lift - edge.lift) > 40, "not Leap");
+  assert.ok(Math.abs(well.x - hub.x) > 40 || Math.abs(well.lift - hub.lift) > 40, "not Loom");
+  const walkOn = P.kickOnPath(0.25, { x: 40, lift: 0 }, { x: well.x, lift: well.lift });
+  const deskWalk = Overlay.kickOnPath(0.25, { x: 40, lift: 0 }, { x: well.x, lift: well.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks into the well");
+  const flick = P.kickPath(0.5);
+  const deskFlick = Overlay.kickPath(0.5);
+  assert.equal(flick.lift, deskFlick.lift);
+  assert.ok(flick.lift < 8, "a hair flick, not a pounce");
+  const sit = P.kickHoldPath(0.5);
+  const deskSit = Overlay.kickHoldPath(0.5);
+  assert.equal(sit.x, deskSit.x);
+  assert.equal(sit.lift, deskSit.lift);
+  assert.ok(sit.lift < 1.2, "she sits the silk");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "carry");
+    assert.notEqual(play.phase, "pounce");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "bun");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "kick") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "kick-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "kick-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - play.target.holdLift) < 4, "she sits the silk");
+    }
+  }
+  assert.ok(seen.has("kick-on"));
+  assert.ok(seen.has("kick"));
+  assert.ok(seen.has("kick-hold"));
+  assert.ok(seen.has("kick-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
