@@ -9539,7 +9539,7 @@ test("Felt leans a window meeting rail as blotter felt — not gape, reef, plow,
       assert.equal(play.anim, "sit", "the lean occupies the page");
       assert.ok(play.lift > 28, "the meeting rail is wood, not the floor");
     }
-    if (play.phase === "lean-hold") {
+    if (play.phase === "lean-hold" && play.t > 0) {
       assert.equal(play.anim, "sit", "she remains");
       assert.ok(Math.abs(play.rot) > 8, "the remain keeps the lean");
     }

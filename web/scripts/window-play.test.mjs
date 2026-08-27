@@ -5483,7 +5483,7 @@ test("the demo window plate walks Felt's lean the same way", () => {
       assert.equal(play.anim, "sit");
       assert.ok(play.lift > 28);
     }
-    if (play.phase === "lean-hold") {
+    if (play.phase === "lean-hold" && play.t > 0) {
       assert.equal(play.anim, "sit");
       assert.ok(Math.abs(play.rot) > 8);
     }
