@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -11,6 +11,7 @@ export const CRACKLE = "crackle";
 export const CHARGE = "charge";
 export const ORBIT = "orbit";
 export const CLICK = "click";
+export const HOLD = "hold";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -48,13 +49,17 @@ export const DUR = {
   clickHold: 0.36,
   clickHop: 0.62,
   clickOff: 0.5,
+  holdOn: 0.52,
+  holdSit: 2.4,
+  holdOff: 0.55,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof SILL | typeof IGNORE;
+export type HoldClip = "jamb" | "sash";
 export type ClickNode = "left" | "right" | "tl" | "tr" | "bl" | "br";
 export type PlayPhase =
   | "approach"
@@ -92,6 +97,9 @@ export type PlayPhase =
   | "click-hop"
   | "click-b"
   | "click-off"
+  | "hold-on"
+  | "hold-sit"
+  | "hold-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -133,6 +141,7 @@ export type PlayTarget = {
   clickEndLift?: number;
   startNode?: ClickNode;
   endNode?: ClickNode;
+  clip?: HoldClip;
 };
 
 export type WindowPlay = {
@@ -177,6 +186,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "ion_dragon") return CHARGE;
   if (key === "gauss_dragon") return ORBIT;
   if (key === "relay_dragon") return CLICK;
+  if (key === "fuse_dragon") return HOLD;
   return SILL;
 }
 
@@ -354,7 +364,7 @@ export function pickTarget(
   key: string,
   work: WorkSpace,
   sprite?: number,
-    opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" | "drift"; hopFrom?: 0 | 1; corner?: "tl" | "tr" | "bl" | "br"; orbitDir?: 1 | -1; pair?: "sides" | "corners"; nodeFrom?: ClickNode; nodeTo?: ClickNode },
+    opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" | "drift"; hopFrom?: 0 | 1; corner?: "tl" | "tr" | "bl" | "br"; orbitDir?: 1 | -1; pair?: "sides" | "corners"; nodeFrom?: ClickNode; nodeTo?: ClickNode; clip?: HoldClip },
 ): PlayTarget | null {
   const kind = playFor(key);
   if (kind === IGNORE) return null;
@@ -372,6 +382,7 @@ export function pickTarget(
     if (kind === CHARGE) return w.width >= 200 && w.height >= 200;
     if (kind === ORBIT) return w.width >= 200 && w.height >= 200;
     if (kind === CLICK) return w.width >= 160 && w.height >= 140;
+    if (kind === HOLD) return w.width >= 140 && w.height >= 160;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -608,6 +619,28 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === HOLD) {
+    const side = opts?.side || pickSide(best, petX, size, workW);
+    const clip: HoldClip = opts?.clip === "sash" || opts?.clip === "jamb"
+      ? opts.clip
+      : roll < 0.5 ? "jamb" : "sash";
+    const hold = holdPoint(best, clip, side, size, work);
+    const approachX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+    const leave = opts?.leave === "hop" || opts?.leave === "drop" ? opts.leave : roll < 0.5 ? "hop" : "drop";
+    const away = side === "left" ? -88 : 88;
+    return {
+      id: best.id,
+      kind,
+      side,
+      clip,
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave,
+      spin: "none",
+    };
+  }
   const start = sillPoint(best, 0.12, size, work);
   const end = sillPoint(best, 0.88, size, work);
   return {
@@ -669,6 +702,10 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
     const start = clickPoint(fromWin, target.startNode || "left", sprite, work);
     const end = clickPoint(toWin, target.endNode || clickOpposite(target.startNode || "left"), sprite, work);
     return { ...target, holdX: start.x, holdLift: start.lift, clickEndX: end.x, clickEndLift: end.lift };
+  }
+  if (target.kind === HOLD) {
+    const hold = holdPoint(win, target.clip || "jamb", target.side === "right" ? "right" : "left", sprite, work);
+    return { ...target, holdX: hold.x, holdLift: hold.lift };
   }
   const start = sillPoint(win, 0.12, sprite, work);
   const end = sillPoint(win, 0.88, sprite, work);
@@ -913,6 +950,43 @@ export function orbitOnPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
+export function holdClipName(clip?: string): HoldClip {
+  return clip === "sash" ? "sash" : "jamb";
+}
+
+export function holdPoint(win: DeskWindow, clip: HoldClip | string | undefined, side: "left" | "right" | string | undefined, sprite: number | undefined, work: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const edge: "left" | "right" = side === "right" ? "right" : "left";
+  const kind = holdClipName(clip);
+  const maxLift = work.height - 48;
+  if (kind === "sash") {
+    const pad = 16;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const u = edge === "right" ? 0.78 : 0.22;
+    const x = win.x + pad + span * u;
+    const gripY = win.y + win.height * 0.68;
+    return { x, lift: clamp(gripLift(gripY, work), 36, maxLift), clip: "sash" as const, side: edge };
+  }
+  const nest = size * 0.06;
+  const x = edge === "right" ? win.x + win.width - size + nest : win.x - nest;
+  const gripY = win.y + Math.max(48, win.height * 0.56);
+  return { x, lift: clamp(gripLift(gripY, work), 36, maxLift), clip: "jamb" as const, side: edge };
+}
+
+export function holdOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = t * t * (2 - t);
+  const fromX = from.x ?? 0;
+  const toX = to.x ?? fromX;
+  const fromLift = from.lift ?? 0;
+  const toLift = to.lift ?? 0;
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease,
+    rot: 0,
+  };
+}
+
 export function slideOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   const t = Math.max(0, Math.min(1, u));
   const fromX = from.x ?? 0;
@@ -994,7 +1068,7 @@ export function stepPlay(
   if (!play || play.phase === "done") return play;
   const size = sprite == null ? SPRITE : sprite;
   const life = flags || {};
-  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off") {
+  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off") {
     return abortToFloor(play, { x: play.x, lift: play.lift }, work);
   }
   let next: WindowPlay = { ...play, t: play.t + Math.max(0, dt) };
@@ -1002,9 +1076,9 @@ export function stepPlay(
     ? next.target.clickToId
     : next.target.id;
   const win = findWin(windows, lookId);
-  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off") {
+  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off") {
     next = { ...next, target: refitTarget(next.target, win, size, work, windows) };
-  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off") {
+  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off") {
     return abortToFloor(next, { x: next.x, lift: next.lift }, work);
   }
 
@@ -1045,6 +1119,9 @@ export function stepPlay(
       }
       if (target.kind === CLICK) {
         return goPhase(next, "click-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+      }
+      if (target.kind === HOLD) {
+        return goPhase(next, "hold-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -1537,6 +1614,45 @@ export function stepPlay(
 
   if (next.phase === "click-off") {
     const u = next.t / DUR.clickOff;
+    const pose = target.leave === "drop"
+      ? dropPath(Math.min(1, u), next.from, next.to)
+      : leapPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = target.leave === "drop" ? 0 : pose.rot;
+    next.anim = "play";
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+  if (next.phase === "hold-on") {
+    const u = next.t / DUR.holdOn;
+    const pose = holdOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = 0;
+    next.anim = "play";
+    next.facing = target.side === "left" ? 1 : -1;
+    if (u >= 1) {
+      return goPhase(next, "hold-sit", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", next.facing);
+    }
+    return next;
+  }
+
+  if (next.phase === "hold-sit") {
+    next.x = target.holdX;
+    next.lift = target.holdLift;
+    next.rot = 0;
+    next.anim = "sit";
+    next.facing = target.side === "left" ? 1 : -1;
+    if (next.t >= DUR.holdSit) {
+      return goPhase(next, "hold-off", { x: target.holdX, lift: target.holdLift }, { x: target.landX, lift: 0 }, "play", next.facing);
+    }
+    return next;
+  }
+
+  if (next.phase === "hold-off") {
+    const u = next.t / DUR.holdOff;
     const pose = target.leave === "drop"
       ? dropPath(Math.min(1, u), next.from, next.to)
       : leapPath(Math.min(1, u), next.from, next.to);

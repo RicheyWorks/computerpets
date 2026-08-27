@@ -34,7 +34,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("gauss_dragon"), Overlay.playFor("gauss_dragon"));
   assert.equal(P.playFor("relay_dragon"), "click");
   assert.equal(P.playFor("relay_dragon"), Overlay.playFor("relay_dragon"));
-  assert.equal(P.playFor("fuse_dragon"), "sill");
+  assert.equal(P.playFor("fuse_dragon"), "hold");
+  assert.equal(P.playFor("fuse_dragon"), Overlay.playFor("fuse_dragon"));
   assert.equal(P.playFor("ground_dragon"), "sill");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
@@ -65,6 +66,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   const deskClick = Overlay.clickPoint(WIN, "left", 176, WORK);
   assert.equal(webClick.lift, deskClick.lift);
   assert.equal(webClick.x, deskClick.x);
+  const webHold = P.holdPoint(WIN, "jamb", "left", 176, WORK);
+  const deskHold = Overlay.holdPoint(WIN, "jamb", "left", 176, WORK);
+  assert.equal(webHold.lift, deskHold.lift);
+  assert.equal(webHold.x, deskHold.x);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -290,5 +295,37 @@ test("the demo window plates walk Relay's click the same way", () => {
   assert.ok(seen.has("click-hop"));
   assert.ok(seen.has("click-b"));
   assert.ok(seen.has("click-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Fuse's hold the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /hold-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "fuse_dragon", WORK, 176, { side: "left", clip: "jamb", leave: "hop" });
+  const target = P.pickTarget([WIN], 40, "fuse_dragon", WORK, 176, { side: "left", clip: "jamb", leave: "hop" });
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.equal(target.clip, overlayTarget.clip);
+  assert.equal(target.clickToId, undefined);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 600 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "sill-walk");
+  }
+  assert.ok(seen.has("hold-on"));
+  assert.ok(seen.has("hold-sit"));
+  assert.ok(seen.has("hold-off"));
   assert.equal(play.phase, "done");
 });

@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -20,7 +20,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("ion_dragon"), "charge");
   assert.equal(P.playFor("gauss_dragon"), "orbit");
   assert.equal(P.playFor("relay_dragon"), "click");
-  assert.equal(P.playFor("fuse_dragon"), "sill");
+  assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(P.playFor("ground_dragon"), "sill");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
@@ -761,7 +761,7 @@ test("Gauss orbits the outside of a window, holds, then hops or drops — not cl
   assert.equal(play.lift, 0);
 });
 
-test("a moved window refits Gauss's orbit hold; sleep, card, and hide abort; Gauss never starts asleep; Fuse and Ground still walk a sill", () => {
+test("a moved window refits Gauss's orbit hold; sleep, card, and hide abort; Gauss never starts asleep; Ground still walks a sill", () => {
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
   assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
@@ -770,7 +770,7 @@ test("a moved window refits Gauss's orbit hold; sleep, card, and hide abort; Gau
   assert.equal(P.shouldAbort({ cmd: "hide" }), true);
   assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
   assert.equal(P.playFor("relay_dragon"), "click");
-  assert.equal(P.playFor("fuse_dragon"), "sill");
+  assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(P.playFor("ground_dragon"), "sill");
   const target = P.pickTarget([WIN], 200, "gauss_dragon", WORK, P.SPRITE, { side: "left", orbitDir: 1, leave: "drop" });
   let play = P.beginPlay(target, target.approachX);
@@ -938,6 +938,140 @@ test("a moved window refits Relay's second click; sleep, card, and hide abort; R
   assert.equal(play.abort, true);
 });
 
+test("Fuse seats into a window as a cartridge in a clip, holds still, then pops off — not cling, ridge, coil, path, field, crackle, charge, orbit, click, or sill", () => {
+  const WIN_B = { id: "hw2", x: 1040, y: 120, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 40, "fuse_dragon", WORK, P.SPRITE, { side: "left", clip: "jamb", leave: "hop" });
+  assert.ok(target);
+  assert.equal(target.kind, "hold");
+  assert.equal(target.spin, "none");
+  assert.equal(target.clip, "jamb");
+  assert.equal(target.side, "left");
+  assert.equal(target.id, "hw");
+  assert.equal(target.clickToId, undefined);
+  assert.ok(P.DUR.holdSit > P.DUR.clickHold * 4, "the hold is longer than Relay's brief click");
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const crackle = P.cracklePoint(WIN, 0, P.SPRITE, WORK, "left");
+  const charge = P.chargePoint(WIN, "tl", P.SPRITE, WORK);
+  const pathMid = P.pathPoint(WIN, 0.5, P.SPRITE, WORK, "left");
+  const orbit = P.orbitPoint(WIN, 0, P.SPRITE, WORK, 1);
+  const click = P.clickPoint(WIN, "left", P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.5, P.SPRITE, WORK);
+  const hold = P.holdPoint(WIN, "jamb", "left", P.SPRITE, WORK);
+  assert.equal(target.holdX, hold.x);
+  assert.equal(target.holdLift, hold.lift);
+  assert.ok(Math.abs(hold.x - cling.x) > 20, "seated in the jamb clip, not Rui's hang");
+  assert.ok(Math.abs(hold.lift - ridge.lift) > 40, "not Arc's title-bar ridge");
+  assert.ok(Math.abs(hold.x - coil.x) > 20 || Math.abs(hold.lift - coil.lift) > 40, "not Volt's wrap-hold");
+  assert.ok(Math.abs(hold.x - field.x) > 40, "not Flux's glass");
+  assert.ok(Math.abs(hold.x - crackle.x) > 16 || Math.abs(hold.lift - crackle.lift) > 16, "not Spark's edge");
+  assert.ok(Math.abs(hold.x - charge.x) > 16 || Math.abs(hold.lift - charge.lift) > 20, "not Ion's inside corner");
+  assert.ok(Math.abs(hold.x - orbit.x) > 20, "not Gauss's far outside circuit");
+  assert.ok(Math.abs(hold.x - click.x) > 16 || Math.abs(hold.lift - click.lift) > 16, "not Relay's nape node");
+  assert.ok(Math.abs(hold.x - pathMid.x) > 20 || Math.abs(hold.lift - pathMid.lift) > 20, "not Trace's outline");
+  assert.ok(Math.abs(hold.lift - sill.lift) > 40, "not a generic sill");
+  const seat0 = P.holdOnPath(0, { x: 40, lift: 0 }, { x: hold.x, lift: hold.lift });
+  const seatMid = P.holdOnPath(0.5, { x: 40, lift: 0 }, { x: hold.x, lift: hold.lift });
+  const seat1 = P.holdOnPath(1, { x: 40, lift: 0 }, { x: hold.x, lift: hold.lift });
+  const leapMid = P.leapPath(0.5, { x: 40, lift: 0 }, { x: hold.x, lift: hold.lift });
+  assert.equal(seat0.rot, 0);
+  assert.equal(seatMid.rot, 0);
+  assert.equal(seat1.rot, 0);
+  assert.ok(Math.abs(seatMid.lift - leapMid.lift) > 4, "a seat-in is not a leap arc");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let sitMs = 0;
+  let sitLift = 0;
+  let windowIds = new Set();
+  for (let i = 0; i < 600 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "hold-sit") {
+      sitMs += 0.05;
+      sitLift = play.lift;
+      assert.equal(play.anim, "sit");
+      assert.equal(play.rot, 0);
+      assert.equal(play.x, play.target.holdX);
+    }
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+  }
+  assert.ok(seen.has("hold-on"));
+  assert.ok(seen.has("hold-sit"));
+  assert.ok(seen.has("hold-off"));
+  assert.ok(sitMs >= 2.2, `the filament hold is long (${sitMs})`);
+  assert.ok(sitLift > 28, "Fuse holds in the clip");
+  assert.equal(windowIds.size, 1, "one window — not a hop between two");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("Fuse can seat a sash clip and drop off — still one window, still not a sill", () => {
+  const target = P.pickTarget([WIN], 200, "fuse_dragon", WORK, P.SPRITE, { side: "left", clip: "sash", leave: "drop" });
+  assert.ok(target);
+  assert.equal(target.kind, "hold");
+  assert.equal(target.clip, "sash");
+  assert.equal(target.clickToId, undefined);
+  const jamb = P.holdPoint(WIN, "jamb", "left", P.SPRITE, WORK);
+  const sash = P.holdPoint(WIN, "sash", "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  assert.ok(Math.abs(sash.x - jamb.x) > 20, "sash and jamb are different clips");
+  assert.ok(Math.abs(sash.x - field.x) > 40, "sash is not Flux's glass center");
+  assert.ok(Math.abs(sash.lift - ridge.lift) > 40, "sash is not the title-bar");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let dropRot = 0;
+  for (let i = 0; i < 600 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "sill-walk");
+    assert.notEqual(play.phase, "click-hop");
+    if (play.phase === "hold-off") dropRot = Math.max(dropRot, Math.abs(play.rot));
+  }
+  assert.ok(seen.has("hold-on"));
+  assert.ok(seen.has("hold-sit"));
+  assert.ok(seen.has("hold-off"));
+  assert.equal(dropRot, 0);
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Fuse's hold; sleep, card, and hide abort; Fuse never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "fuse_dragon", WORK, P.SPRITE, { side: "left", clip: "jamb", leave: "drop" });
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 120 && play.phase !== "hold-sit"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "hold-sit");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "hold-sit");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  assert.equal(play.x, play.target.holdX);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "hold-off");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
@@ -950,6 +1084,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /charge-on|charge-off/);
   assert.match(petSrc, /orbit-on|orbit-off/);
   assert.match(petSrc, /click-on|click-off/);
+  assert.match(petSrc, /hold-on|hold-off/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
