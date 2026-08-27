@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
@@ -18,6 +18,7 @@
   const STASH = "stash";
   const WHEEK = "wheek";
   const BASK = "bask";
+  const CIRCLE = "circle";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -82,6 +83,9 @@
     bask: 0.88,
     baskWithdraw: 1.72,
     baskOff: 1.08,
+    circleOn: 0.92,
+    circle: 2.85,
+    circleOff: 0.88,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -115,6 +119,7 @@
     if (key === "hamster") return STASH;
     if (key === "guinea_pig") return WHEEK;
     if (key === "turtle") return BASK;
+    if (key === "goldfish") return CIRCLE;
     return SILL;
   }
 
@@ -324,6 +329,7 @@
       if (kind === STASH) return w.width >= 160 && w.height >= 140;
       if (kind === WHEEK) return w.width >= 160 && w.height >= 70;
       if (kind === BASK) return w.width >= 180 && w.height >= 140;
+      if (kind === CIRCLE) return w.width >= 220 && w.height >= 200;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -705,6 +711,24 @@
         spin: "none",
       };
     }
+    if (kind === CIRCLE) {
+      const dir = opts && (opts.circleDir === -1 || opts.circleDir === 1) ? opts.circleDir : 1;
+      const hold = circlePoint(best, 0, size, work, dir);
+      const approachX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 88 : -88;
+      return {
+        id: best.id,
+        kind,
+        side: "bowl",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "drift",
+        spin: "none",
+        circleDir: dir,
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -799,6 +823,10 @@
     }
     if (target.kind === BASK) {
       const hold = baskPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === CIRCLE) {
+      const hold = circlePoint(win, 0, sprite, work, target.circleDir);
       return { ...target, holdX: hold.x, holdLift: hold.lift };
     }
     const start = sillPoint(win, 0.12, sprite, work);
@@ -1373,6 +1401,40 @@
     };
   }
 
+  function circlePoint(win, u, sprite, work, dir) {
+    const size = sprite == null ? SPRITE : sprite;
+    const field = fieldPoint(win, size, work);
+    const roomX = Math.max(20, (win.width - size) * 0.5 - 16);
+    const roomY = Math.max(20, win.height * 0.2);
+    const rx = clamp(Math.min(roomX, 80), 20, 80);
+    const ry = clamp(Math.min(roomY, 68), 20, 68);
+    const cx = field.x;
+    const cy = field.lift - Math.min(28, ry * 0.35);
+    const t = ((Number(u) % 1) + 1) % 1;
+    const sign = dir === -1 ? -1 : 1;
+    const theta = sign * t * Math.PI * 2;
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return {
+      x: cx + rx * Math.cos(theta),
+      lift: clamp(cy + ry * Math.sin(theta), 36, maxLift),
+      u: t,
+    };
+  }
+
+  function circleOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (3 - 2 * t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + Math.sin(t * Math.PI) * 8,
+      rot: 0,
+    };
+  }
+
   function earthStepOffPath(u, from, to) {
     const t = Math.max(0, Math.min(1, u));
     const fromX = from && from.x != null ? from.x : 0;
@@ -1476,7 +1538,7 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off" && play.phase !== "circle-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
@@ -1484,9 +1546,9 @@
       ? next.target.clickToId
       : next.target && next.target.id;
     const win = findWin(windows, lookId);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off") {
       next.target = refitTarget(next.target, win, size, work, windows);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -1552,6 +1614,9 @@
         }
         if (target.kind === BASK) {
           return goPhase(next, "bask-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+        }
+        if (target.kind === CIRCLE) {
+          return goPhase(next, "circle-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -2427,6 +2492,49 @@
       return next;
     }
 
+    if (next.phase === "circle-on") {
+      const u = next.t / DUR.circleOn;
+      const pose = circleOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = 0;
+      next.anim = "play";
+      next.facing = target.landX >= target.holdX ? 1 : -1;
+      if (u >= 1) {
+        return goPhase(next, "circle", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", next.facing);
+      }
+      return next;
+    }
+
+    if (next.phase === "circle") {
+      if (!win) return abortToFloor(next, { x: next.x, lift: next.lift }, work);
+      const dir = target.circleDir === -1 ? -1 : 1;
+      const u = Math.min(1, next.t / DUR.circle);
+      const pose = circlePoint(win, u, size, work, dir);
+      const theta = dir * u * Math.PI * 2;
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = 0;
+      next.anim = "play";
+      next.facing = Math.sin(theta) * dir > 0 ? -1 : 1;
+      if (u >= 1) {
+        return goPhase(next, "circle-off", { x: target.holdX, lift: target.holdLift }, { x: target.landX, lift: 0 }, "play", next.facing);
+      }
+      return next;
+    }
+
+    if (next.phase === "circle-off") {
+      const u = next.t / DUR.circleOff;
+      const pose = driftOffPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = 0;
+      next.anim = "play";
+      next.facing = target.landX >= target.holdX ? 1 : -1;
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -2497,6 +2605,7 @@
     STASH,
     WHEEK,
     BASK,
+    CIRCLE,
     SILL,
     IGNORE,
     DUR,
@@ -2546,6 +2655,8 @@
     baskOnPath,
     baskWithdrawPath,
     baskOffPath,
+    circlePoint,
+    circleOnPath,
     pickTarget,
     refitTarget,
     divePath,
