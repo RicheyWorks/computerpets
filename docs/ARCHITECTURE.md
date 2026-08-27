@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (Drum drums an upper sash stile as a dead-wood post; Vee leftover still honks; catalog stays 220) |
+| **Last Updated** | 2026-08-27 (Sip sips a window-box bloom as a nectar cup; roost ten closed; next leftover is Loom; catalog stays 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
