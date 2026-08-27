@@ -18,7 +18,7 @@ const guideSrc = readFileSync(join(root, "src/lib/pets/house-guide.ts"), "utf8")
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -76,8 +76,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("iguana"), Overlay.playFor("iguana"));
   assert.equal(P.playFor("dragon"), "drape");
   assert.equal(P.playFor("dragon"), Overlay.playFor("dragon"));
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("phoenix"), Overlay.playFor("phoenix"));
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("phoenix"), "sill");
+  assert.equal(P.playFor("gecko"), Overlay.playFor("gecko"));
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -217,6 +219,11 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(webDrape.lift, deskDrape.lift);
   assert.equal(webDrape.x, deskDrape.x);
   assert.ok(webDrape.lift > 36);
+  const webKindle = P.kindlePoint(WIN, 176, WORK);
+  const deskKindle = Overlay.kindlePoint(WIN, 176, WORK);
+  assert.equal(webKindle.lift, deskKindle.lift);
+  assert.equal(webKindle.x, deskKindle.x);
+  assert.ok(webKindle.lift > 36);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -1945,5 +1952,133 @@ test("the demo window plate walks Vesper's drape the same way", () => {
   assert.ok(sitXMax - sitXMin < 2, "one lintel — not a walk across");
   assert.ok(settleXMax - settleXMin < 2, "one settle — the fold stays");
   assert.ok(settleRot > 14, "the drape is visible");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Ember's kindle the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /kindle-on|playFor/);
+  assert.match(rosterSrc, /key: "phoenix"[\s\S]{0,80}slug: "ember"/);
+  assert.match(guideSrc, /"phoenix"/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "phoenix", WORK, 176);
+  const target = P.pickTarget([WIN], 40, "phoenix", WORK, 176);
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.kind, "kindle");
+  assert.equal(target.side, "ash");
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.ok(target.holdLift > 36);
+  assert.equal(target.leave, "return");
+  assert.equal(target.clickToId, undefined);
+  const flatten = P.flattenPoint(WIN, 176, WORK);
+  const drape = P.drapePoint(WIN, "left", 176, WORK);
+  const toss = P.tossPoint(WIN, "left", 176, WORK);
+  const wall = P.wallPoint(WIN, 0, "left", 176, WORK);
+  const hook = P.hookPoint(WIN, "left", 1, 176, WORK);
+  const bow = P.bowPoint(WIN, 176, WORK);
+  const scent = P.scentPoint(WIN, "left", 176, WORK);
+  const perch = P.perchPoint(WIN, "left", 176, WORK);
+  const watch = P.watchPoint(WIN, 176, WORK);
+  const wheek = P.wheekPoint(WIN, 176, WORK);
+  const thump = P.thumpPoint(WIN, 176, WORK, "left");
+  const ledge = P.ledgePoint(WIN, 176, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, 176, WORK);
+  const coil = P.coilPoint(WIN, "left", 176, WORK);
+  const stash = P.stashPoint(WIN, "left", 176, WORK);
+  const bask = P.baskPoint(WIN, 176, WORK);
+  const earth = P.earthPoint(WIN, 176, WORK);
+  const thread = P.threadPoint(WIN, 0, 176, WORK);
+  const ball = P.ballPoint(WIN, 176, WORK);
+  const field = P.fieldPoint(WIN, 176, WORK);
+  const circle = P.circlePoint(WIN, 0, 176, WORK, 1);
+  const dust = P.dustPoint(WIN, 176, WORK);
+  const sill = P.sillPoint(WIN, 0.12, 176, WORK);
+  assert.ok(Math.abs(target.holdX - watch.x) > 20 || Math.abs(target.holdLift - watch.lift) > 20, "not Pip");
+  assert.ok(Math.abs(target.holdX - wheek.x) > 20 || Math.abs(target.holdLift - wheek.lift) > 20, "not Whee");
+  assert.ok(Math.abs(target.holdX - scent.x) > 20 || Math.abs(target.holdLift - scent.lift) > 20, "not Rue");
+  assert.ok(Math.abs(target.holdX - thump.x) > 20 || Math.abs(target.holdLift - thump.lift) > 20, "not Thimble");
+  assert.ok(Math.abs(target.holdX - hook.x) > 20 || Math.abs(target.holdLift - hook.lift) > 20, "not Quill");
+  assert.ok(Math.abs(target.holdX - bow.x) > 20 || Math.abs(target.holdLift - bow.lift) > 20, "not Peck");
+  assert.ok(Math.abs(target.holdX - perch.x) > 20 || Math.abs(target.holdLift - perch.lift) > 20, "not Echo");
+  assert.ok(Math.abs(target.holdLift - ledge.lift) > 40, "not Miso");
+  assert.ok(Math.abs(target.holdLift - ridge.lift) > 40, "not Arc");
+  assert.ok(Math.abs(target.holdX - coil.x) > 20 || Math.abs(target.holdLift - coil.lift) > 20, "not Volt");
+  assert.ok(Math.abs(target.holdX - stash.x) > 20 || Math.abs(target.holdLift - stash.lift) > 16, "not Clip");
+  assert.ok(Math.abs(target.holdLift - bask.lift) > 16, "not Ink");
+  assert.ok(Math.abs(target.holdLift - earth.lift) > 16, "not Ground");
+  assert.ok(Math.abs(target.holdLift - thread.lift) > 8, "not Wick");
+  assert.ok(Math.abs(target.holdLift - ball.lift) > 20, "not Burr");
+  assert.ok(Math.abs(target.holdX - field.x) > 20 || Math.abs(target.holdLift - field.lift) > 20, "not Flux");
+  assert.ok(Math.abs(target.holdX - circle.x) > 20 || Math.abs(target.holdLift - circle.lift) > 20, "not Coin");
+  assert.ok(Math.abs(target.holdX - dust.x) > 20 || Math.abs(target.holdLift - dust.lift) > 20, "not Floss");
+  assert.ok(Math.abs(target.holdX - wall.x) > 20 || Math.abs(target.holdLift - wall.lift) > 20, "not Bloom");
+  assert.ok(Math.abs(target.holdX - toss.x) > 20 || Math.abs(target.holdLift - toss.lift) > 20, "not Keel");
+  assert.ok(Math.abs(target.holdLift - flatten.lift) > 40, "not Sol");
+  assert.ok(Math.abs(target.holdLift - drape.lift) > 40, "not Vesper");
+  assert.ok(Math.abs(target.holdLift - sill.lift) > 40, "not a generic sill");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let coalXMin = Infinity;
+  let coalXMax = -Infinity;
+  let riseXMin = Infinity;
+  let riseXMax = -Infinity;
+  let riseLift = 0;
+  for (let i = 0; i < 800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "perch-talk");
+    assert.notEqual(play.phase, "scent");
+    assert.notEqual(play.phase, "bow");
+    assert.notEqual(play.phase, "hook");
+    assert.notEqual(play.phase, "thread");
+    assert.notEqual(play.phase, "ball");
+    assert.notEqual(play.phase, "dust");
+    assert.notEqual(play.phase, "wall");
+    assert.notEqual(play.phase, "toss");
+    assert.notEqual(play.phase, "flatten");
+    assert.notEqual(play.phase, "flatten-bob");
+    assert.notEqual(play.phase, "drape");
+    assert.notEqual(play.phase, "drape-settle");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "kindle-coal") {
+      coalXMin = Math.min(coalXMin, play.x);
+      coalXMax = Math.max(coalXMax, play.x);
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift > 36);
+      assert.ok(play.rot < -4, "a coal tucks");
+    }
+    if (play.phase === "kindle") {
+      riseXMin = Math.min(riseXMin, play.x);
+      riseXMax = Math.max(riseXMax, play.x);
+      riseLift = Math.max(riseLift, play.lift - target.holdLift);
+      assert.equal(play.anim, "play");
+      assert.ok(play.lift > 36);
+    }
+  }
+  assert.ok(seen.has("kindle-on"));
+  assert.ok(seen.has("kindle-coal"));
+  assert.ok(seen.has("kindle"));
+  assert.ok(seen.has("kindle-off"));
+  assert.ok(coalXMax - coalXMin < 2, "one ash — not a walk across");
+  assert.ok(riseXMax - riseXMin < 2, "one kindle — she rises in place");
+  assert.ok(riseLift > 40, "the kindle is visible");
   assert.equal(play.phase, "done");
 });
