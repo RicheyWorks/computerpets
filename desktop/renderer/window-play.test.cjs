@@ -102,6 +102,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("canada_goose"), "honk");
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("orb_weaver"), "web");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -17250,7 +17251,7 @@ test("Sip sips a window-box bloom as a nectar cup: dart to the foliage, hover, s
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("orb_weaver"), "sill");
+  assert.equal(P.playFor("orb_weaver"), "web");
   const target = P.pickTarget([WIN], 80, "hummingbird", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "sip");
@@ -17381,5 +17382,154 @@ test("a moved window refits Sip's bloom; sleep, card, and hide abort; Sip never 
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "sip-off");
+  assert.equal(play.abort, true);
+});
+
+test("Loom webs a lamp-side glass corner as a lamp web: walk to the interior top-corner, draw an orb, sit the hub, then leave the silk", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("volt_dragon"), "coil");
+  assert.equal(P.playFor("trace_dragon"), "path");
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.playFor("spark_dragon"), "crackle");
+  assert.equal(P.playFor("ion_dragon"), "charge");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("honeycomb"), "draw");
+  assert.equal(P.playFor("jumping_spider"), "sill");
+  assert.equal(P.playFor("harvestman"), "sill");
+  assert.equal(P.playFor("honeybee"), "sill");
+  const target = P.pickTarget([WIN], 80, "orb_weaver", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "web");
+  assert.equal(target.side, "lamp");
+  assert.equal(target.leave, "silk");
+  assert.notEqual(target.kind, "loom");
+  assert.notEqual(target.kind, "orb_weaver");
+  assert.notEqual(target.kind, "coil");
+  assert.notEqual(target.kind, "path");
+  assert.notEqual(target.kind, "field");
+  assert.notEqual(target.kind, "crackle");
+  assert.notEqual(target.kind, "charge");
+  assert.notEqual(target.kind, "sip");
+  assert.notEqual(target.kind, "drum");
+  assert.notEqual(target.kind, "draw");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 40, "she sits a high interior corner, not the floor");
+  assert.ok(P.DUR.web > P.DUR.webHold, "the draw is the tell; the hub sit is the hold after");
+  assert.ok(P.DUR.webOn > P.DUR.sipOn, "a slow walk, not Sip's dart");
+  assert.ok(P.DUR.webOn !== P.DUR.coilOn);
+  assert.ok(P.DUR.webOn !== P.DUR.chargeOn);
+  assert.ok(P.DUR.webOn !== P.DUR.pathOn);
+  assert.ok(P.DUR.webOn !== P.DUR.fieldOn);
+  assert.ok(P.DUR.webOn !== P.DUR.crackleOn);
+  assert.ok(P.DUR.webOn !== P.DUR.drumOn);
+  assert.ok(P.DUR.webOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.web !== P.DUR.sip);
+  assert.ok(P.DUR.web !== P.DUR.coilHold);
+  assert.ok(P.DUR.webHold !== P.DUR.sipHold);
+  assert.ok(P.DUR.webOff !== P.DUR.sipOff);
+  assert.ok(P.DUR.webOff !== P.DUR.coilOff);
+  assert.ok(P.DUR.webOff !== P.DUR.sillDown);
+  const hub = P.webPoint(WIN, P.SPRITE, WORK);
+  const nectar = P.sipPoint(WIN, P.SPRITE, WORK);
+  const snag = P.drumPoint(WIN, P.SPRITE, WORK);
+  const wrapL = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const wrapR = P.coilPoint(WIN, "right", P.SPRITE, WORK);
+  const bolt = P.chargePoint(WIN, "tr", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  assert.ok(hub.x > WIN.x + 8, "interior glass, not the outer left wrap");
+  assert.ok(hub.x + P.SPRITE < WIN.x + WIN.width - 8, "interior glass, not the outer right wrap");
+  assert.ok(Math.abs(hub.x - wrapL.x) > 40, "not Volt's left wrap");
+  assert.ok(Math.abs(hub.x - wrapR.x) > 40, "not Volt's right wrap");
+  assert.ok(Math.abs(hub.x - bolt.x) > 16 || Math.abs(hub.lift - bolt.lift) > 8, "not Ion's charge corner");
+  assert.ok(Math.abs(hub.x - field.x) > 40, "not Flux's field center");
+  assert.ok(hub.lift > nectar.lift + 40, "not Sip's window-box bloom");
+  assert.ok(Math.abs(hub.x - snag.x) > 20 || Math.abs(hub.lift - snag.lift) > 16, "not Drum's upper stile");
+  assert.ok(hub.x > WIN.x + WIN.width / 2, "lamp-side interior top-corner");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 140, height: 140 }], 80, "orb_weaver", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real corner of glass, Ion's 200 gate, not Volt's 140 wrap");
+  const walkOn = P.webOnPath(0.25, { x: 40, lift: 0 }, { x: hub.x, lift: hub.lift });
+  const quint = 0.25 * 0.25 * 0.25 * (0.25 * (0.25 * 6 - 15) + 10);
+  const dartOn = P.sipOnPath(0.25, { x: 40, lift: 0 }, { x: nectar.x, lift: nectar.lift });
+  const dartEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(walkOn.lift - hub.lift * quint < 4, "a slow walk up the pane");
+  assert.ok(walkOn.lift - hub.lift * quint < dartOn.lift - nectar.lift * dartEase, "a walk, not Sip's dart");
+  const spoke = P.webPath(0.18);
+  const orb = P.webPath(0.64);
+  const home = P.webPath(0.94);
+  const needle = P.sipPath(0.42);
+  assert.ok(Math.abs(spoke.x) > 4 || Math.abs(spoke.lift) > 2, "spokes");
+  assert.ok(Math.abs(orb.x) > 4 || Math.abs(orb.lift) > 2, "an orb");
+  assert.ok(Math.abs(home.x) < Math.abs(orb.x) || Math.abs(home.lift) < 3, "she returns to the hub");
+  assert.ok(Math.abs(spoke.x) !== Math.abs(needle.x) || spoke.lift !== needle.lift, "not Sip's needle");
+  const hold = P.webHoldPath(0.5);
+  assert.ok(hold.lift < 1.2, "she sits the hub still");
+  assert.ok(Math.abs(hold.x) < 0.4, "still at the hub");
+  const off0 = P.webOffPath(0, { x: hub.x, lift: hub.lift + 0.7 }, { x: hub.x + 48, lift: 0 });
+  const offMid = P.webOffPath(0.5, { x: hub.x, lift: hub.lift + 0.7 }, { x: hub.x + 48, lift: 0 });
+  const off1 = P.webOffPath(1, { x: hub.x, lift: hub.lift + 0.7 }, { x: hub.x + 48, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - hub.x) < 2);
+  assert.ok(offMid.lift - (hub.lift + 0.7) * (1 - midEase) < 6, "she leaves the silk, not a dart");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let webSpan = 0;
+  for (let i = 0; i < 2800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "coil-on");
+    assert.notEqual(play.phase, "path-on");
+    assert.notEqual(play.phase, "field-on");
+    assert.notEqual(play.phase, "crackle-on");
+    assert.notEqual(play.phase, "charge-on");
+    assert.notEqual(play.phase, "sip");
+    assert.notEqual(play.phase, "drum");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "web") {
+      webSpan = Math.max(webSpan, Math.abs(play.x - play.target.holdX));
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "web-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "web-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - play.target.holdLift) < 2, "she sits the hub");
+    }
+  }
+  assert.ok(seen.has("web-on"));
+  assert.ok(seen.has("web"));
+  assert.ok(seen.has("web-hold"));
+  assert.ok(seen.has("web-off"));
+  assert.ok(webSpan > 4, "she draws spokes");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Loom's lamp web; sleep, card, and hide abort; Loom never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "orb_weaver", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "web"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "web");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "web");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "web-off");
   assert.equal(play.abort, true);
 });
