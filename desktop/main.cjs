@@ -54,6 +54,29 @@ function mindFile() {
   return path.join(app.getPath("userData"), "mind.json");
 }
 
+function cardFile() {
+  return path.join(app.getPath("userData"), "card.json");
+}
+
+function readCard() {
+  try {
+    const parsed = JSON.parse(fs.readFileSync(cardFile(), "utf8"));
+    if (!parsed || typeof parsed !== "object") return { collapsed: false, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
+    return parsed;
+  } catch {
+    return { collapsed: false, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
+  }
+}
+
+function writeCard(data) {
+  if (!data || typeof data !== "object") return;
+  try {
+    fs.writeFileSync(cardFile(), JSON.stringify(data));
+  } catch {
+    /* ignore */
+  }
+}
+
 function readMind() {
   try {
     const parsed = JSON.parse(fs.readFileSync(mindFile(), "utf8"));
@@ -410,6 +433,18 @@ ipcMain.on("mind-get", (e) => {
 
 ipcMain.on("mind-set", (_e, data) => {
   writeMind(data);
+});
+
+ipcMain.on("card-get", (e) => {
+  e.returnValue = readCard();
+});
+
+ipcMain.on("card-set", (_e, data) => {
+  writeCard(data);
+});
+
+ipcMain.on("quit-desk", () => {
+  app.quit();
 });
 
 ipcMain.handle("roster-get", () => roster);
