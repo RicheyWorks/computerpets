@@ -16,7 +16,13 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Snap leftover counts a window meeting rail as a wetland cup; Arm leftover still stores a window stool as a sand tray; Moth leftover still mounts a window jamb as bark; Disk leftover still opens a window pane as an ink-dish pad; Mast leftover still seeds a window stool as an acorn dish; Fan leftover still golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Well leftover fills a window sill pan as a bog cup; Snap leftover still counts a window meeting rail as a wetland cup; Arm leftover still stores a window stool as a sand tray; Moth leftover still mounts a window jamb as bark; Disk leftover still opens a window pane as an ink-dish pad; Mast leftover still seeds a window stool as an acorn dish; Fan leftover still golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("pitcher"), "fill");
+  assert.notEqual(WP.playFor("pitcher"), "well");
+  assert.notEqual(WP.playFor("pitcher"), "dew");
+  assert.notEqual(WP.playFor("pitcher"), "count");
+  assert.notEqual(WP.playFor("pitcher"), "sill");
+  assert.equal(WP.playFor("sundew"), "sill");
   assert.equal(WP.playFor("venus_flytrap"), "count");
   assert.notEqual(WP.playFor("venus_flytrap"), "snap");
   assert.notEqual(WP.playFor("venus_flytrap"), "well");
@@ -26,7 +32,6 @@ test("Snap leftover counts a window meeting rail as a wetland cup; Arm leftover 
   assert.notEqual(WP.playFor("saguaro"), "arm");
   assert.notEqual(WP.playFor("saguaro"), "snap");
   assert.notEqual(WP.playFor("saguaro"), "well");
-  assert.equal(WP.playFor("pitcher"), "sill");
   assert.equal(WP.playFor("orchid"), "mount");
   assert.equal(WP.playFor("water_lily"), "open");
   assert.equal(WP.playFor("oak"), "seed");
