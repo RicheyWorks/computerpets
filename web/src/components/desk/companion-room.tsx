@@ -46,6 +46,8 @@ import { appendJournal, loadJournal } from "@/lib/pets/journal";
 import { SpeciesPlaque } from "@/components/desk/species-plaque";
 import { KeeperCard } from "@/components/desk/keeper-card";
 import { GuestChoice } from "@/components/desk/guest-choice";
+import { DemoWindowPlate } from "@/components/desk/demo-window-plate";
+import type { DeskWindow } from "@/lib/pets/windows";
 import { roomOf } from "@/lib/pets/rooms";
 import { playClaim } from "@/lib/pets/play";
 import { colonyOf, colonyWord, isHivePlace, stampColony } from "@/lib/pets/hive";
@@ -104,6 +106,7 @@ export function CompanionRoom({
   extraMarks,
   aside,
   footer,
+  demoWindow = false,
 }: {
   kind: LivingKind;
   name?: string;
@@ -125,6 +128,8 @@ export function CompanionRoom({
   extraMarks?: CareMark[];
   aside?: ReactNode;
   footer?: ReactNode;
+  /** /demo draws a window plate. Overlay uses real window rects. */
+  demoWindow?: boolean;
 }) {
   const displayName = name ?? kind.name;
   const mind = useMindBinding(kind.key);
@@ -156,6 +161,7 @@ export function CompanionRoom({
   const [tending, setTending] = useState(false);
   const [choiceOpen, setChoiceOpen] = useState(false);
   const [deskOff, setDeskOff] = useState(() => loadCard().off);
+  const [deskWindows, setDeskWindows] = useState<DeskWindow[]>([]);
   const pad = tablet || (!phone && autoTablet);
   const hand = phone || (!pad && autoPhone);
 
@@ -598,6 +604,7 @@ export function CompanionRoom({
       <DayWash />
       <RoomWash room={room.id} />
       <DeskGrain />
+      {demoWindow ? <DemoWindowPlate onBounds={setDeskWindows} /> : null}
 
       <BlotterMarks
         mark={mark}
@@ -624,6 +631,7 @@ export function CompanionRoom({
         dull={isBlue(stats, kind.key) || !!(hive && hive.quiet)}
         stage={age}
         seekX={mark?.x}
+        windows={demoWindow ? deskWindows : []}
         onArrived={() => {
           const act = playClaim("arrive", {
             taken: takenRef.current,

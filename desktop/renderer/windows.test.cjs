@@ -1,0 +1,119 @@
+const assert = require("node:assert/strict");
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
+const { test } = require("node:test");
+const W = require("./windows.js");
+const Enum = require("../windows-enum.cjs");
+
+const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
+const preloadSrc = readFileSync(join(__dirname, "..", "preload.cjs"), "utf8");
+const petSrc = readFileSync(join(__dirname, "pet.js"), "utf8");
+const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
+const enumSrc = readFileSync(join(__dirname, "..", "windows-enum.cjs"), "utf8");
+
+const WORK = { x: 0, y: 40, width: 1600, height: 900 };
+
+function raw(over) {
+  return {
+    id: "100",
+    left: 200,
+    top: 120,
+    right: 900,
+    bottom: 700,
+    minimized: false,
+    tool: false,
+    cloaked: false,
+    className: "Chrome_WidgetWin_1",
+    ...over,
+  };
+}
+
+test("window-rect parsing sits work-area space and honors scale", () => {
+  const line = "4242\t200\t120\t900\t700\t0\t0\t0\tChrome_WidgetWin_1";
+  const parsed = W.parseEnumText(`${line}\nEND\n`);
+  assert.equal(parsed.length, 1);
+  assert.equal(parsed[0].id, "4242");
+  assert.equal(parsed[0].left, 200);
+  assert.equal(parsed[0].minimized, false);
+
+  const [box] = W.takeRects(parsed, { workArea: WORK, scaleFactor: 1 });
+  assert.equal(box.id, "4242");
+  assert.equal(box.x, 200);
+  assert.equal(box.y, 80);
+  assert.equal(box.width, 700);
+  assert.equal(box.height, 580);
+
+  const [scaled] = W.takeRects(
+    [{ id: "7", left: 300, top: 200, right: 900, bottom: 800 }],
+    { workArea: { x: 0, y: 0, width: 960, height: 540 }, scaleFactor: 2 },
+  );
+  assert.equal(scaled.x, 150);
+  assert.equal(scaled.y, 100);
+  assert.equal(scaled.width, 300);
+  assert.equal(scaled.height, 300);
+});
+
+test("the overlay hwnd, minimized, taskbar, and cloaked rows are not targets", () => {
+  const overlayId = "9999";
+  const rows = [
+    raw({ id: overlayId }),
+    raw({ id: "2", minimized: true }),
+    raw({ id: "3", className: "Shell_TrayWnd", left: 0, top: 940, right: 1600, bottom: 1080 }),
+    raw({ id: "4", className: "Progman", left: 0, top: 0, right: 1600, bottom: 1080 }),
+    raw({ id: "5", tool: true }),
+    raw({ id: "6", cloaked: true }),
+    raw({ id: "7", left: 10, top: 10, right: 20, bottom: 20 }),
+    raw({ id: "8", left: 240, top: 140, right: 880, bottom: 720 }),
+  ];
+  const taken = W.takeRects(rows, { workArea: WORK, skipIds: [overlayId] });
+  assert.deepEqual(taken.map((w) => w.id), ["8"]);
+  assert.equal(W.takeRects([raw({ id: overlayId })], { workArea: WORK, skipIds: [overlayId] }).length, 0);
+});
+
+test("Mac and Linux name the later door and do not invent rects", () => {
+  assert.equal(W.enumeratesOn("win32"), true);
+  assert.equal(W.enumeratesOn("Win32"), true);
+  assert.equal(W.enumeratesOn("darwin"), false);
+  assert.equal(W.enumeratesOn("linux"), false);
+  assert.equal(W.laterDoor("win32"), null);
+  assert.equal(W.laterDoor("darwin"), "mac-linux-window-play");
+  assert.equal(W.laterDoor("linux"), "mac-linux-window-play");
+});
+
+test("enum JSON from a fake run is parsed; a later platform stays empty", async () => {
+  const text = "11\t100\t80\t500\t400\t0\t0\t0\tNotepad\nEND\n";
+  const listed = await Enum.listRaw({
+    platform: "win32",
+    run: async () => text,
+  });
+  assert.equal(listed.later, null);
+  assert.equal(listed.raw[0].id, "11");
+  const later = await Enum.listRaw({ platform: "darwin" });
+  assert.deepEqual(later.raw, []);
+  assert.equal(later.later, "mac-linux-window-play");
+});
+
+test("hwnd buffer reads as the skip id", () => {
+  const buf = Buffer.alloc(8);
+  buf.writeBigUInt64LE(123456789n, 0);
+  assert.equal(W.hwndFromHandle(buf), "123456789");
+  assert.equal(W.hwndFromHandle(null), "");
+});
+
+test("the overlay asks main for window rects; it does not capture pixels", () => {
+  assert.match(mainSrc, /windows-enum/);
+  assert.match(mainSrc, /takeRects/);
+  assert.match(mainSrc, /skipIds/);
+  assert.match(mainSrc, /hwndFromHandle/);
+  assert.match(mainSrc, /webContents\.send\("windows"/);
+  assert.match(preloadSrc, /onWindows/);
+  assert.match(petSrc, /onWindows/);
+  assert.match(petSrc, /PetWindowPlay/);
+  assert.match(htmlSrc, /windows\.js/);
+  assert.match(htmlSrc, /window-play\.js/);
+  assert.match(enumSrc, /GetWindowRect/);
+  assert.match(enumSrc, /IsIconic/);
+  assert.doesNotMatch(enumSrc, /desktopCapturer|PrintWindow|BitBlt|GetDC/);
+  assert.doesNotMatch(mainSrc, /desktopCapturer/);
+  assert.doesNotMatch(petSrc, /desktopCapturer/);
+});

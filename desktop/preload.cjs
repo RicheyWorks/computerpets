@@ -28,4 +28,9 @@ contextBridge.exposeInMainWorld("desk", {
     ipcRenderer.on("switch", wrapped);
     return () => ipcRenderer.removeListener("switch", wrapped);
   },
+  onWindows: (fn) => {
+    const wrapped = (_e, list) => fn(list);
+    ipcRenderer.on("windows", wrapped);
+    return () => ipcRenderer.removeListener("windows", wrapped);
+  },
 });

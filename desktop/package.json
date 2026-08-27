@@ -23,6 +23,7 @@
     "files": [
       "main.cjs",
       "preload.cjs",
+      "windows-enum.cjs",
       "license/**/*.cjs",
       "!license/**/*.test.cjs",
       "!license/contract-test-double.cjs",

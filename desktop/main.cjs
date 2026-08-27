@@ -5,6 +5,8 @@ const { createLicenseSession } = require("./license/session.cjs");
 const { LicenseError } = require("./license/errors.cjs");
 const Desk = require("./renderer/desk.js");
 const Roster = require("./renderer/roster-load.js");
+const Windows = require("./renderer/windows.js");
+const WindowEnum = require("./windows-enum.cjs");
 
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
@@ -354,6 +356,7 @@ if (!gotLock) {
     createWindow();
     createTray();
     startHitForward();
+    startWindowTick();
     screen.on("display-metrics-changed", fitWorkArea);
     screen.on("display-added", fitWorkArea);
     screen.on("display-removed", fitWorkArea);
@@ -449,11 +452,73 @@ ipcMain.on("quit-desk", () => {
 
 ipcMain.handle("roster-get", () => roster);
 
+/** Real top-level window bounds on Windows. Rects only. Mac/Linux stay a later door. */
+let windowTick = null;
+let windowBusy = false;
+
+function overlaySkipIds() {
+  const ids = [];
+  if (win && !win.isDestroyed()) {
+    try {
+      const id = Windows.hwndFromHandle(win.getNativeWindowHandle());
+      if (id) ids.push(id);
+    } catch {
+      /* ignore */
+    }
+  }
+  if (settingsWin && !settingsWin.isDestroyed()) {
+    try {
+      const id = Windows.hwndFromHandle(settingsWin.getNativeWindowHandle());
+      if (id) ids.push(id);
+    } catch {
+      /* ignore */
+    }
+  }
+  return ids;
+}
+
+function pushWindowRects() {
+  if (!Desk.isWindows(process.platform)) return;
+  if (!win || win.isDestroyed() || windowBusy) return;
+  windowBusy = true;
+  const area = floorOf();
+  const display = screen.getDisplayNearestPoint({ x: area.x, y: area.y });
+  WindowEnum.listRaw({ platform: process.platform })
+    .then((listed) => {
+      if (!win || win.isDestroyed()) return;
+      const windows = Windows.takeRects(listed.raw, {
+        workArea: area,
+        scaleFactor: display.scaleFactor || 1,
+        skipIds: overlaySkipIds(),
+      });
+      win.webContents.send("windows", windows);
+    })
+    .catch(() => {
+      if (win && !win.isDestroyed()) win.webContents.send("windows", []);
+    })
+    .finally(() => {
+      windowBusy = false;
+    });
+}
+
+function startWindowTick() {
+  if (!Desk.isWindows(process.platform) || windowTick) return;
+  pushWindowRects();
+  windowTick = setInterval(pushWindowRects, 750);
+}
+
+function stopWindowTick() {
+  if (windowTick) clearInterval(windowTick);
+  windowTick = null;
+}
+
 ipcMain.handle("license-status", licenseIpc(() => getLicenseSession().status()));
 ipcMain.handle("license-unlock", licenseIpc((input) => getLicenseSession().unlock(input || {})));
 ipcMain.handle("license-download", licenseIpc(() => getLicenseSession().download()));
 ipcMain.handle("license-clear", licenseIpc(() => getLicenseSession().clear()));
 
 app.on("window-all-closed", () => {
+  stopWindowTick();
+  WindowEnum.disposePump();
   app.quit();
 });
