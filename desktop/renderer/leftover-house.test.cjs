@@ -14,6 +14,16 @@ const Sleep = require("./house-sleep.js");
 const R = require("./ribbon.js");
 const T = require("./rui-tricks.js");
 const C = require("./card.js");
+const WP = require("./window-play.js");
+
+test("Relay leftover clicks two nodes; Fuse and Ground stay on the sill", () => {
+  assert.equal(WP.playFor("relay_dragon"), "click");
+  assert.equal(WP.playFor("gauss_dragon"), "orbit");
+  assert.equal(WP.playFor("ion_dragon"), "charge");
+  assert.equal(WP.playFor("fuse_dragon"), "sill");
+  assert.equal(WP.playFor("ground_dragon"), "sill");
+  assert.equal(WP.playFor("red_panda"), "cling-dive");
+});
 
 test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () => {
   assert.match(htmlSrc, /id="weather-plate"/);
