@@ -16,7 +16,7 @@ This is the picture. Hold it in your head. The rest of the page is how you get t
 
 - A pet walks on your **real desktop**. Homework stays homework. The pet is a living sticker on top.
 - A **keeper card** sits with them. It says their name, whether they are a hatchling or grown, their bond word, and three meters: Hunger, Rest, Bond. Three buttons sit under that: **Feed**, **Play**, **Rest**. Click the name to collapse it to a small hit. Voice, color, saved lines, an alarm, a timer, mute, and **Turn off** sit on the expanded card. Turn off quits the overlay. Start again with `.\desktop.ps1`.
-- Near the clock (bottom-right) a small ComputerPets tray icon sits. Right-click it. **On the desk** picks Rui and the grid ten without scrolling two hundred twenty names: Rui, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground.
+- Near the clock (bottom-right) a small ComputerPets tray icon sits. Right-click it. **On the desk** picks Rui, Sip, and the grid ten without scrolling two hundred twenty names: Rui, Sip, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground.
 - Clicks on empty glass pass through to your windows. Hits stay on the pet, the keeper card buttons, treats, and gifts. The floor is the Windows work area — above the taskbar, under the cursor.
 - Rui can jump onto the **side** of a real window, hang on, then drop or dive back to the desk. Arc jumps onto the **top** (title-bar / ridge), holds, then hops or slides off. Other guests walk a sill or stay on the floor. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door.
 - The card may say `Java 8081 · DOWN · unread`. That is honest. You did not start Java. Care still works. Care is local. `/pet/feed` is not a door.
@@ -284,7 +284,7 @@ The pet is on your desk. Now you can care for it.
 - **Right-click** the pet for the longer care list.
 - Or **right-click the tray icon** by the clock.
 
-The tray has a line named **On the desk**. That is how you pick Rui and the grid ten (Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground) without scrolling the whole house. **Companions** still has all **220**. Spark on the desk is the same Spark whose browser room is `/demo/crackle`. The firefly already owns `/demo/spark`.
+The tray has a line named **On the desk**. That is how you pick Rui, Sip, and the grid ten (Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground) without scrolling the whole house. **Companions** still has all **220**. Spark on the desk is the same Spark whose browser room is `/demo/crackle`. The firefly already owns `/demo/spark`.
 
 Clicks on empty glass pass through. If you click "nothing," you click the window underneath. That is on purpose.
 

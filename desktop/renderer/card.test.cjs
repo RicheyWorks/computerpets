@@ -20,7 +20,7 @@ const roomSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "componen
 test("the card law is the same house on overlay and desk", () => {
   assert.deepEqual(C.COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
   assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
-  assert.deepEqual(C.MUTE_BUSES, ["talk", "special", "weather", "treats"]);
+  assert.deepEqual(C.MUTE_BUSES, ["talk", "special", "weather", "treats", "steps", "music"]);
   assert.equal(C.VOICE_TRUTH, "The door is still the system speech voices.");
   assert.match(C.QUIT_TRUTH, /desktop\.ps1/);
   assert.equal(C.voiceStyleOf("hearth").rate, 0.86);

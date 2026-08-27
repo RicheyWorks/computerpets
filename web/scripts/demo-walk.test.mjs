@@ -297,6 +297,7 @@ test("the demo room shows the Windows walk the way it shows the Mac and Linux wa
   assert.equal(D.isWindows("win32"), true);
   assert.deepEqual(D.deskPicks(), [
     "red_panda",
+    "hummingbird",
     "cyber_dragon",
     "volt_dragon",
     "trace_dragon",

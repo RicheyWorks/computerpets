@@ -1,7 +1,16 @@
 import { useEffect, useRef } from "react";
 import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pets/red-panda";
 import type { SpritePack } from "@/lib/pets/living";
-import { playDeskSound } from "@/lib/pets/desk-audio";
+import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
+import {
+  beginTrick,
+  canStart as trickCanStart,
+  nextTrickWait,
+  pickTrick,
+  shouldAbort as trickShouldAbort,
+  stepTrick,
+  type RuiTrick,
+} from "@/lib/pets/rui-tricks";
 import {
   actPose,
   afterSettleWait,
@@ -87,6 +96,9 @@ type LivingPetProps = {
   onTend?: () => void;
   /** Overlay: real window rects. /demo: a drawn plate. */
   windows?: DeskWindow[];
+  /** House loop or radio is on. Rui may dance. */
+  musicOn?: boolean;
+  onPose?: (x: number, facing: 1 | -1) => void;
 };
 
 type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
@@ -128,6 +140,8 @@ type Sim = {
   actWalk: boolean;
   play: WindowPlay | null;
   playWait: number;
+  trick: RuiTrick | null;
+  trickWait: number;
 };
 
 const WALK_SPEED = 98;
@@ -164,6 +178,8 @@ export function LivingPet({
   onTap,
   onTend,
   windows = [],
+  musicOn = false,
+  onPose,
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const hitRef = useRef<HTMLDivElement>(null);
@@ -209,6 +225,8 @@ export function LivingPet({
     actWalk: false,
     play: null,
     playWait: 6 + Math.random() * 5,
+    trick: null,
+    trickWait: 3 + Math.random() * 3,
   });
   const cmdRef = useRef(command);
   const orderRef = useRef(orderId);
@@ -226,9 +244,13 @@ export function LivingPet({
   const asleepRef = useRef(asleep);
   const hiddenRef = useRef(hidden);
   const windowsRef = useRef(windows);
+  const musicRef = useRef(musicOn);
+  const poseRef = useRef(onPose);
   asleepRef.current = asleep;
   hiddenRef.current = hidden;
   windowsRef.current = windows;
+  musicRef.current = musicOn;
+  poseRef.current = onPose;
   gaitRef.current = gait;
   stageRef.current = stage;
   kindRef.current = kind;
@@ -373,6 +395,9 @@ export function LivingPet({
       if (s.play && shouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
         s.play = stepPlay(s.play, 0, { x: s.x, lift: s.play.lift }, windowsRef.current, { width: 800, height: 500, floorLift: 0 }, SPRITE, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd });
       }
+      if (s.trick && trickShouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play })) {
+        s.trick = stepTrick(s.trick, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play });
+      }
       if (asleepRef.current && cmd !== "talk" && cmd !== "play" && cmd !== "eat" && cmd !== "seek" && cmd !== "leave" && cmd !== "enter") {
         s.anim = "sleep";
         s.target = null;
@@ -515,6 +540,23 @@ export function LivingPet({
             s.land = 1;
             s.anim = asleepRef.current ? "sleep" : "idle";
             s.playWait = nextPlayWait(true);
+            s.trickWait = nextTrickWait(true);
+          }
+        } else if (s.trick) {
+          s.trick = stepTrick(s.trick, dt, {
+            asleep: asleepRef.current,
+            hidden: hiddenRef.current,
+            leaving: s.leaving,
+            cmd: cmdRef.current,
+            windowPlay: false,
+          });
+          s.x = s.trick.x;
+          if (!asleepRef.current) s.anim = s.trick.anim;
+          if (s.trick.phase === "done") {
+            s.trick = null;
+            s.land = 1;
+            s.anim = asleepRef.current ? "sleep" : "idle";
+            s.trickWait = nextTrickWait(true);
           }
         } else if (
           !reduced &&
@@ -535,6 +577,30 @@ export function LivingPet({
             }
             s.playWait = nextPlayWait(false);
           }
+        } else if (
+          kindRef.current === "red_panda" &&
+          !reduced &&
+          !s.act &&
+          !s.leaving &&
+          trickCanStart({
+            asleep: asleepRef.current,
+            hidden: hiddenRef.current,
+            leaving: s.leaving,
+            cmd: cmdRef.current,
+            windowPlay: !!s.play,
+          })
+        ) {
+          s.trickWait -= dt;
+          const musicWantsDance = musicRef.current && !s.trick;
+          if (s.trickWait <= 0 || musicWantsDance) {
+            s.trick = beginTrick(pickTrick(undefined, musicRef.current), s.x, s.facing);
+            if (s.trick) {
+              clearAct();
+              s.target = null;
+              s.waypoints = [];
+            }
+            s.trickWait = nextTrickWait(false);
+          }
         }
 
         if (s.poseHold > 0) {
@@ -547,8 +613,8 @@ export function LivingPet({
           }
         }
 
-        if (s.play) {
-          /* window play owns the walk */
+        if (s.play || s.trick) {
+          /* window play or a ground trick owns the walk */
         } else if (s.turnHold > 0 && !reduced) {
           s.turnHold = Math.max(0, s.turnHold - dt);
           if (s.turnHold === 0 && s.pendingFacing) {
@@ -576,7 +642,7 @@ export function LivingPet({
           const stepEvery = p.high ? STEP_S_QUICK : p.crawl ? 0.32 : STEP_S;
           if (s.stepAcc > stepEvery) {
             s.stepAcc = 0;
-            playDeskSound("step");
+            if (!s.play && !s.trick && !asleepRef.current) playStep(kindRef.current ?? "red_panda");
             if (Math.random() < 0.45) puff(s.x, 4, 2);
           }
           if ((dir === 1 && s.x >= s.target) || (dir === -1 && s.x <= s.target)) {
@@ -606,10 +672,10 @@ export function LivingPet({
         ) {
           s.facing = s.cursorX >= s.x + SPRITE / 2 ? 1 : -1;
         }
-        s.x = s.leaving || s.play ? s.x : clamp(s.x, PAD, maxX);
+        s.x = s.leaving || s.play || s.trick ? s.x : clamp(s.x, PAD, maxX);
 
-        if (s.play) {
-          /* window play owns the pose */
+        if (s.play || s.trick) {
+          /* window play or a ground trick owns the pose */
         } else if (s.act) {
           s.actT += dt;
           if (s.actMotion === "stretch" && s.actHold > 0 && s.actT / s.actHold > 0.55 && s.anim === "sit") {
@@ -623,6 +689,7 @@ export function LivingPet({
         } else if (
           !reduced &&
           !s.play &&
+          !s.trick &&
           !s.leaving &&
           !asleepRef.current &&
           s.target == null &&
@@ -705,8 +772,8 @@ export function LivingPet({
       const stageNow = stageRef.current;
       const ageScale = stageNow === "hatchling" ? 0.82 : stageNow === "elder" ? 1.08 : 1;
       const scale = (gaitNow?.scale ?? 1) * ageScale;
-      const climbLift = s.play ? s.play.lift : 0;
-      const climbRot = s.play ? s.play.rot : 0;
+      const climbLift = s.play ? s.play.lift : s.trick ? s.trick.lift : 0;
+      const climbRot = s.play ? s.play.rot : s.trick ? s.trick.rot : 0;
       const y = floorY(height) + hopPx + walkBob + water + perch + liftRef.current + climbLift;
       const breathe =
         s.anim === "idle" || s.anim === "sit" || s.anim === "sleep"
@@ -727,6 +794,7 @@ export function LivingPet({
       const settleX = s.settle > 0 && !reduced ? settleOffset(s.settle, s.settleDir, s.overshoot) : 0;
       const drawX = s.x + sway + shiftX + settleX + pose.dx;
       const drawY = y + pose.dy;
+      poseRef.current?.(s.x, s.facing);
 
       const walkXform = `translate3d(${drawX}px, ${-drawY}px, 0) rotate(${pose.rot + climbRot}deg) scale(${s.facing * squat * scale}, ${stretch * scale})`;
       if (hitRef.current) {

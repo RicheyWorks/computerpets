@@ -38,7 +38,14 @@ import { loadCard, saveCard, wanderWhileAsleep, isMuted, pickSystemVoice, speakO
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { SNACK_LINE, callLine, dayPartLabel, dayPart, hideLine, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
-import { weatherIdle, weatherLabel, weatherLine, weatherOf } from "@/lib/pets/weather";
+import { weatherIdle, weatherLabel, weatherLine, weatherOf, type Weather } from "@/lib/pets/weather";
+import { currentArea } from "@/lib/pets/weather-areas";
+import { DeskNewsPlate, DeskWeatherPlate, WEATHER_ID } from "@/components/desk/desk-plates";
+import { BirdFlyer } from "@/components/desk/bird-fly";
+import { FLY_BIRD_KEY } from "@/lib/pets/bird-fly";
+import { playVoice as playAnimalVoice } from "@/lib/pets/desk-audio";
+import { dropRibbon, RIBBON_CATCH, RIBBON_SPECIAL, stealRibbon } from "@/lib/pets/ribbon";
+import type { LiveSky } from "@/lib/pets/weather-areas";
 import { applySpecial } from "@/lib/pets/specials";
 import { applyShed, isBlue, isSnake, shedLine, shedWaitLine } from "@/lib/pets/shed";
 import { GIFT_LINE, treatFor } from "@/lib/pets/treats";
@@ -162,6 +169,12 @@ export function CompanionRoom({
   const [choiceOpen, setChoiceOpen] = useState(false);
   const [deskOff, setDeskOff] = useState(() => loadCard().off);
   const [deskWindows, setDeskWindows] = useState<DeskWindow[]>([]);
+  const [weatherWin, setWeatherWin] = useState<DeskWindow | null>(null);
+  const [liveSky, setLiveSky] = useState<LiveSky | null>(null);
+  const [birdCall, setBirdCall] = useState(1);
+  const [musicOn, setMusicOn] = useState(() => !!loadCard().music?.playing);
+  const poseRef = useRef<{ x: number; facing: 1 | -1 }>({ x: 120, facing: 1 });
+  const skyNow = (): Weather => weatherOf(new Date(), currentArea({ areas: loadCard().weatherAreas || [], currentId: loadCard().currentAreaId ?? null }) ? liveSky?.sky ?? null : null);
   const pad = tablet || (!phone && autoTablet);
   const hand = phone || (!pad && autoPhone);
 
@@ -278,7 +291,7 @@ export function CompanionRoom({
       if (acted.current) return;
       say(
         returnLine(persistLocal ? rememberVisit(kind.key) : 0) ??
-          weatherLine(kind.key, weatherOf()) ??
+          weatherLine(kind.key, skyNow()) ??
           kind.greetLine(),
         5200,
       );
@@ -307,7 +320,7 @@ export function CompanionRoom({
         issue("wander");
         return;
       }
-      const skyMood = weatherIdle(kind.key, weatherOf());
+      const skyMood = weatherIdle(kind.key, skyNow());
       if (skyMood && Math.random() < 0.45) {
         issue(skyMood);
         return;
@@ -331,7 +344,7 @@ export function CompanionRoom({
   useEffect(() => {
     const id = window.setInterval(() => {
       if (document.hidden || deskOff) return;
-      const sky = weatherOf();
+      const sky = skyNow();
       if ((sky === "rain" || sky === "wind") && Math.random() < 0.55) playDeskSound(sky, kind.key);
     }, 1000);
     return () => window.clearInterval(id);
@@ -425,12 +438,19 @@ export function CompanionRoom({
     acted.current = true;
     unlockDeskAudio();
     takenRef.current = false;
-    setMark({ kind: "lure", x: randomLureX() });
-    say(trait.special === "bug" ? "There. A bug." : "A ribbon. Catch it.");
+    setMark({ kind: "lure", x: randomLureX(), hops: 0, stolen: false, carried: false });
+    say(trait.special === "bug" ? "There. A bug." : RIBBON_CATCH);
     issue("seek");
   }
 
   async function catchLure() {
+    if (markRef.current?.carried) {
+      const dropped = { ...dropRibbon(markRef.current, markRef.current.x), kind: "lure" as const };
+      takenRef.current = false;
+      markRef.current = dropped;
+      setMark(dropped);
+      return;
+    }
     const act = playClaim("catch", {
       taken: takenRef.current,
       cmd: order.cmd,
@@ -460,7 +480,7 @@ export function CompanionRoom({
 
   function fleeLure(x: number) {
     if (stats.hidden || leaving) return;
-    setMark({ kind: "lure", x, hops: 1 });
+    setMark({ kind: "lure", x, hops: 1, stolen: false, carried: false });
     issue("seek");
   }
 
@@ -548,6 +568,12 @@ export function CompanionRoom({
     setStats(gifted);
     say(trait.line);
     note(`${displayName}: ${trait.line}`);
+    if (trait.special === "ribbon") {
+      takenRef.current = false;
+      setMark({ kind: "lure", x: randomLureX(), hops: 0, stolen: false, carried: false });
+      issue("seek");
+      return;
+    }
     issue(next.cmd);
   }
 
@@ -581,7 +607,7 @@ export function CompanionRoom({
   const gait = useMemo(() => ({ ...trait, scale: trait.scale * 1.24 }), [trait]);
   const hive = isHivePlace(kind.key) ? colonyOf(stats, stats.hidden) : null;
   const hour = isBlue(stats, kind.key) ? "Blue" : dayPartLabel(dayPart());
-  const sky = weatherLabel(weatherOf());
+  const sky = weatherLabel(skyNow());
   const caller = todaysVisitor(kind.key).name;
   const busyOrHidden = busy || stats.hidden;
   const age = stage ?? stageOf(stats);
@@ -601,10 +627,29 @@ export function CompanionRoom({
         alt=""
         className="absolute inset-0 h-full w-full object-cover object-[center_72%]"
       />
-      <DayWash />
+      <DayWash sky={skyNow()} />
       <RoomWash room={room.id} />
       <DeskGrain />
-      {demoWindow ? <DemoWindowPlate onBounds={setDeskWindows} /> : null}
+      {demoWindow ? (
+        <DemoWindowPlate
+          onBounds={(wins) => {
+            setDeskWindows(weatherWin ? [...wins, weatherWin] : wins);
+          }}
+        />
+      ) : null}
+      {demoWindow ? (
+        <DeskWeatherPlate
+          onBounds={(win) => {
+            setWeatherWin(win);
+            setDeskWindows((prev) => {
+              const others = prev.filter((w) => w.id !== WEATHER_ID);
+              return win ? [...others, win] : others;
+            });
+          }}
+          onSky={setLiveSky}
+        />
+      ) : null}
+      {demoWindow ? <DeskNewsPlate /> : null}
 
       <BlotterMarks
         mark={mark}
@@ -613,6 +658,12 @@ export function CompanionRoom({
         onDropTreat={dropTreatAt}
         onCatchLure={() => void catchLure()}
         onFlee={fleeLure}
+        onDragLure={(x) => {
+          takenRef.current = false;
+          setMark((prev) => (prev && prev.kind === "lure" ? { ...dropRibbon(prev, x), kind: "lure", hops: 1 } : prev));
+          issue("seek");
+        }}
+        poseRef={poseRef}
       />
 
       <LivingPet
@@ -630,8 +681,12 @@ export function CompanionRoom({
         unwell={stats.sick}
         dull={isBlue(stats, kind.key) || !!(hive && hive.quiet)}
         stage={age}
-        seekX={mark?.x}
+        seekX={mark && !mark.carried ? mark.x : undefined}
+        onPose={(x, facing) => {
+          poseRef.current = { x, facing };
+        }}
         windows={demoWindow ? deskWindows : []}
+        musicOn={kind.key === "red_panda" && musicOn}
         onArrived={() => {
           const act = playClaim("arrive", {
             taken: takenRef.current,
@@ -657,12 +712,19 @@ export function CompanionRoom({
           }
           if (act === "play") {
             takenRef.current = true;
-            markRef.current = null;
-            setMark(null);
             const prev = statsRef.current;
             const finishPlay = (next: CareStats) => {
               setStats(next);
-              say(kind.careLine("play"));
+              if (trait.special === "ribbon" && markRef.current?.kind === "lure") {
+                const stolen = { ...stealRibbon(markRef.current, poseRef.current.x), kind: "lure" as const };
+                markRef.current = stolen;
+                setMark(stolen);
+                say(RIBBON_SPECIAL);
+              } else {
+                markRef.current = null;
+                setMark(null);
+                say(kind.careLine("play"));
+              }
               note(`${displayName} played.`);
               const bond = maybeBondLine(prev.bond, next.bond);
               if (bond) window.setTimeout(() => say(bond), 900);
@@ -692,6 +754,7 @@ export function CompanionRoom({
         }}
       />
       <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
+      {demoWindow && kind.key !== FLY_BIRD_KEY ? <BirdFlyer hidden={stats.hidden || leaving} startId={birdCall} /> : null}
 
       {choiceOpen ? (
         <GuestChoice
@@ -802,6 +865,12 @@ export function CompanionRoom({
             saveCard({ ...loadCard(), off: true });
             setDeskOff(true);
           }}
+          onCallBird={() => {
+            unlockDeskAudio();
+            setBirdCall((n) => n + 1);
+            playAnimalVoice(FLY_BIRD_KEY);
+          }}
+          onMusicChange={(on) => setMusicOn(on)}
         />
         {deskOff ? (
           <button

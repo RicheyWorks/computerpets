@@ -4,9 +4,10 @@
   const TAP_PX_MAC = 12;
   const TAP_PX_LINUX = 10;
 
-  /** Rui and the grid ten. The tray can pick them without burying them in two hundred twenty. */
+  /** Rui, Sip, and the grid ten. The tray can pick them without burying them in two hundred twenty. */
   const DESK_PICKS = [
     "red_panda",
+    "hummingbird",
     "cyber_dragon",
     "volt_dragon",
     "trace_dragon",

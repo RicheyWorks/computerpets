@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef, type RefObject } from "react";
 import { dayPart } from "@/lib/pets/hours";
-import { weatherOf } from "@/lib/pets/weather";
+import { weatherOf, type Weather } from "@/lib/pets/weather";
+import { carryX } from "@/lib/pets/ribbon";
 
-export type BlotterMark = { kind: "treat" | "lure"; x: number; hops?: number };
+export type BlotterMark = { kind: "treat" | "lure"; x: number; hops?: number; stolen?: boolean; carried?: boolean };
 
-export function DayWash() {
+export function DayWash({ sky }: { sky?: Weather }) {
   const part = dayPart();
   const night = part === "night";
   return (
@@ -25,13 +26,13 @@ export function DayWash() {
           night ? "opacity-35" : part === "dusk" ? "opacity-70" : ""
         }`}
       />
-      <WeatherLayer />
+      <WeatherLayer sky={sky} />
     </>
   );
 }
 
-export function WeatherLayer() {
-  const sky = weatherOf();
+export function WeatherLayer({ sky: live }: { sky?: Weather }) {
+  const sky = live ?? weatherOf();
   if (sky === "clear") return null;
   return (
     <div className={`desk-weather desk-weather-${sky}`} aria-hidden>
@@ -51,6 +52,8 @@ export function BlotterMarks({
   onDropTreat,
   onCatchLure,
   onFlee,
+  onDragLure,
+  poseRef,
 }: {
   mark: BlotterMark | null;
   hidden?: boolean;
@@ -58,9 +61,25 @@ export function BlotterMarks({
   onDropTreat: (x: number) => void;
   onCatchLure: () => void;
   onFlee?: (x: number) => void;
+  onDragLure?: (x: number) => void;
+  poseRef?: RefObject<{ x: number; facing: 1 | -1 }>;
 }) {
+  const drag = useRef<{ x: number; from: number; moved: boolean } | null>(null);
+  const lureRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
-    if (!onFlee || hidden || mark?.kind !== "lure" || (mark.hops ?? 0) > 0) return;
+    if (!mark?.carried || !poseRef) return;
+    let raf = 0;
+    const tick = () => {
+      const el = lureRef.current;
+      const pose = poseRef.current;
+      if (el && pose) el.style.left = `${carryX(mark, pose.x, pose.facing)}px`;
+      raf = window.requestAnimationFrame(tick);
+    };
+    raf = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(raf);
+  }, [mark, poseRef]);
+  useEffect(() => {
+    if (!onFlee || hidden || mark?.kind !== "lure" || (mark.hops ?? 0) > 0 || mark.stolen || mark.carried) return;
     const id = window.setTimeout(() => onFlee(randomLureX()), 2200);
     return () => window.clearTimeout(id);
   }, [hidden, mark, onFlee]);
@@ -85,11 +104,32 @@ export function BlotterMarks({
       {mark?.kind === "lure" && !hidden ? (
         <button
           type="button"
-          aria-label="Catch the lure"
-          className="desk-lure absolute z-10"
-          style={{ left: `${mark.x}%`, bottom: "28%" }}
+          aria-label="Catch the ribbon"
+          ref={lureRef}
+          className={`desk-lure absolute z-10 ${mark.carried ? "desk-lure-carried" : ""}`}
+          style={{ left: mark.carried ? `${mark.x}px` : `${mark.x}%`, bottom: "28%" }}
+          onPointerDown={(e) => {
+            e.stopPropagation();
+            drag.current = { x: e.clientX, from: mark.x, moved: false };
+            e.currentTarget.setPointerCapture(e.pointerId);
+          }}
+          onPointerMove={(e) => {
+            if (!drag.current || !onDragLure) return;
+            const box = e.currentTarget.parentElement?.getBoundingClientRect();
+            const dx = e.clientX - drag.current.x;
+            if (Math.abs(dx) > 6) drag.current.moved = true;
+            if (!drag.current.moved || !box) return;
+            const next = Math.max(8, Math.min(92, drag.current.from + (dx / box.width) * 100));
+            onDragLure(next);
+          }}
+          onPointerUp={() => {
+            const moved = !!drag.current?.moved;
+            drag.current = null;
+            if (moved) return;
+          }}
           onClick={(e) => {
             e.stopPropagation();
+            if (drag.current?.moved) return;
             onCatchLure();
           }}
         />

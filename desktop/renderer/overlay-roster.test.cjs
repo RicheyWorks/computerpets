@@ -102,12 +102,13 @@ test("the overlay roster is the same two hundred twenty as the catalog", () => {
   assert.equal(door[0].key, "red_panda");
 });
 
-test("the tray pins Rui and the grid ten so they are not buried", () => {
+test("the tray pins Rui, Sip, and the grid ten so they are not buried", () => {
   const D = require("./desk.js");
   const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
   const byKey = Object.fromEntries(roster.map((r) => [r.key, r]));
-  assert.equal(D.deskPicks().length, 11);
+  assert.equal(D.deskPicks().length, 12);
   assert.equal(D.deskPicks()[0], "red_panda");
+  assert.equal(D.deskPicks()[1], "hummingbird");
   assert.equal(byKey.red_panda.slug, "rui");
   for (const key of D.deskPicks()) {
     assert.ok(byKey[key], key);

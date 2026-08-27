@@ -1,4 +1,8 @@
 /** Keeper-card desk controls. Same truth as the overlay card. Persist on the machine. */
+import { parseAreas } from "./weather-areas";
+import { parseStep } from "./house-sounds";
+import { parseMusic } from "./house-music";
+
 export const CARD_STORE = "computerpets.card.v1";
 export const MAX_LINES = 12;
 export const LINE_CHARS = 140;
@@ -21,13 +25,18 @@ export const VOICE_STYLES = [
   { id: "bright" as const, name: "Bright", rate: 0.98, pitch: 1.1 },
 ];
 
-export const MUTE_BUSES = ["talk", "special", "weather", "treats"] as const;
+export const MUTE_BUSES = ["talk", "special", "weather", "treats", "steps", "music"] as const;
 export const SOUND_BUS = {
   chirp: "talk",
   hop: "special",
   munch: "treats",
   rain: "weather",
   wind: "weather",
+  step: "steps",
+  voice: "talk",
+  call: "talk",
+  music: "music",
+  radio: "music",
 } as const;
 
 const HUMAN_VOICE = /aria|jenny|guy|davis|natural|samantha|daniel|karen|moira|zira|david|mark|hazel|susan|google us english|microsoft/i;
@@ -46,7 +55,7 @@ export type SavedKind = "say" | "do";
 export type SavedLine = { id: string; text: string; kind: SavedKind };
 export type CardAlarm = { on: boolean; hour: number; minute: number; lineId: string; lastRingDay: string };
 export type CardTimer = { running: boolean; remainingMs: number; endsAt: number; lineId: string; durationMs: number };
-export type CardGuest = { volume: number; lines: SavedLine[]; alarm: CardAlarm; timer: CardTimer };
+export type CardGuest = { volume: number; lines: SavedLine[]; alarm: CardAlarm; timer: CardTimer; stepKind: string };
 export type CardMutes = Record<MuteBus, boolean>;
 export type CardPrefs = {
   collapsed: boolean;
@@ -55,10 +64,14 @@ export type CardPrefs = {
   mutes: CardMutes;
   off: boolean;
   pets: Record<string, CardGuest>;
+  weatherAreas: Array<{ id: string; name: string; query: string; lat: number; lon: number }>;
+  currentAreaId: string | null;
+  stepKind: string;
+  music: { plugin: string; stationId: string; stationName: string; stationUrl: string; playing: boolean };
 };
 
 export function blankMutes(): CardMutes {
-  return { talk: false, special: false, weather: false, treats: false };
+  return { talk: false, special: false, weather: false, treats: false, steps: false, music: false };
 }
 
 export function blankAlarm(): CardAlarm {
@@ -70,7 +83,7 @@ export function blankTimer(): CardTimer {
 }
 
 export function blankGuest(): CardGuest {
-  return { volume: 80, lines: [], alarm: blankAlarm(), timer: blankTimer() };
+  return { volume: 80, lines: [], alarm: blankAlarm(), timer: blankTimer(), stepKind: "" };
 }
 
 export function blankCard(): CardPrefs {
@@ -81,6 +94,10 @@ export function blankCard(): CardPrefs {
     mutes: blankMutes(),
     off: false,
     pets: {},
+    weatherAreas: [],
+    currentAreaId: null,
+    stepKind: "species",
+    music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
   };
 }
 
@@ -159,6 +176,7 @@ export function parseGuest(raw: unknown): CardGuest {
   next.lines = Array.isArray(o.lines) ? o.lines.map(parseLine).filter((line): line is SavedLine => !!line).slice(0, MAX_LINES) : [];
   next.alarm = parseAlarm(o.alarm);
   next.timer = parseTimer(o.timer);
+  next.stepKind = typeof o.stepKind === "string" ? o.stepKind : "";
   return next;
 }
 
@@ -177,6 +195,11 @@ export function parseCard(raw: unknown): CardPrefs {
       if (key) next.pets[key] = parseGuest(value);
     }
   }
+  const areas = parseAreas(o);
+  next.weatherAreas = areas.areas;
+  next.currentAreaId = areas.currentId;
+  next.stepKind = parseStep(o.stepKind);
+  next.music = parseMusic(o.music);
   return next;
 }
 
