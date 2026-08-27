@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -33,7 +33,9 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("fox"), "scent");
   assert.equal(P.playFor("penguin"), "bow");
   assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("hedgehog"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -189,6 +191,28 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(parrot.kind, "circle");
   assert.notEqual(parrot.kind, "bask");
   assert.notEqual(parrot.kind, "cling-dive");
+  const ferret = P.pickTarget([WIN], 80, "ferret", WORK, P.SPRITE, { side: "left" });
+  assert.ok(ferret);
+  assert.equal(ferret.kind, "thread");
+  assert.equal(ferret.side, "gap");
+  assert.equal(ferret.leave, "dash");
+  assert.ok(ferret.holdLift > 8);
+  assert.ok(ferret.threadEndX != null);
+  assert.ok(Math.abs(ferret.threadEndX - ferret.holdX) > 80, "he goes through the gap, not a sit");
+  assert.notEqual(ferret.kind, "sill");
+  assert.notEqual(ferret.kind, "hook");
+  assert.notEqual(ferret.kind, "bow");
+  assert.notEqual(ferret.kind, "perch");
+  assert.notEqual(ferret.kind, "scent");
+  assert.notEqual(ferret.kind, "stash");
+  assert.notEqual(ferret.kind, "bask");
+  assert.notEqual(ferret.kind, "watch");
+  assert.notEqual(ferret.kind, "ledge");
+  assert.notEqual(ferret.kind, "thump");
+  assert.notEqual(ferret.kind, "circle");
+  assert.notEqual(ferret.kind, "wheek");
+  assert.notEqual(ferret.kind, "earth");
+  assert.notEqual(ferret.kind, "cling-dive");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -3061,6 +3085,174 @@ test("a moved window refits Quill's jamb; sleep, card, and hide abort; Quill nev
   assert.equal(play.abort, true);
 });
 
+test("Wick threads a sash-sill gap as a tube, then dashes off — not hook, stash, scent, bask, earth, or sill", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "ferret", WORK, P.SPRITE, { side: "left" });
+  assert.ok(target);
+  assert.equal(target.kind, "thread");
+  assert.equal(target.side, "gap");
+  assert.equal(target.leave, "dash");
+  assert.equal(target.clickToId, undefined, "one window");
+  assert.ok(target.holdLift > 8, "he is in the gap, not on the floor");
+  assert.ok(P.DUR.thread > P.DUR.threadOn, "the through is the travel; the squeeze is the enter");
+  assert.ok(P.DUR.threadOn !== P.DUR.stashOn, "not Clip's drawer hop");
+  assert.ok(P.DUR.thread !== P.DUR.stashCheek, "not Clip's cheek");
+  assert.ok(P.DUR.threadOn !== P.DUR.hookOn, "not Quill's bill grab");
+  assert.ok(P.DUR.thread !== P.DUR.pathWalk, "not Trace's outline walk");
+  assert.ok(P.DUR.threadOff !== P.DUR.hookOff, "a dash, not a drop");
+  const start = P.threadPoint(WIN, 0, P.SPRITE, WORK);
+  const end = P.threadPoint(WIN, 1, P.SPRITE, WORK);
+  const hook = P.hookPoint(WIN, "left", 1, P.SPRITE, WORK);
+  const bow = P.bowPoint(WIN, P.SPRITE, WORK);
+  const scent = P.scentPoint(WIN, "left", P.SPRITE, WORK);
+  const perch = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ledge = P.ledgePoint(WIN, P.SPRITE, WORK);
+  const watch = P.watchPoint(WIN, P.SPRITE, WORK);
+  const thump = P.thumpPoint(WIN, P.SPRITE, WORK, "left");
+  const stash = P.stashPoint(WIN, "left", P.SPRITE, WORK);
+  const wheek = P.wheekPoint(WIN, P.SPRITE, WORK);
+  const hold = P.holdPoint(WIN, "jamb", "left", P.SPRITE, WORK);
+  const earth = P.earthPoint(WIN, P.SPRITE, WORK);
+  const bask = P.baskPoint(WIN, P.SPRITE, WORK);
+  const circle = P.circlePoint(WIN, 0, P.SPRITE, WORK, 1);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.equal(target.holdX, start.x);
+  assert.equal(target.holdLift, start.lift);
+  assert.equal(target.threadEndX, end.x);
+  assert.equal(target.threadEndLift, end.lift);
+  assert.ok(Math.abs(end.x - start.x) > 80, "the gap has a far end");
+  assert.ok(Math.abs(start.x - stash.x) > 20, "not Clip's drawer corner");
+  assert.ok(Math.abs(start.lift - bask.lift) > 20, "not Ink's rail sit");
+  assert.ok(Math.abs(start.lift - earth.lift) > 20, "not Ground's lug");
+  assert.ok(start.lift !== 0 && Math.abs(start.lift - scent.lift) > 16, "not Rue's floor jamb");
+  assert.ok(start.lift !== 0 && Math.abs(start.x - watch.x) > 20, "not Pip's floor watch");
+  assert.ok(start.lift !== 0 && Math.abs(start.x - thump.x) > 20, "not Thimble's stamp");
+  assert.ok(start.lift !== 0 && Math.abs(start.x - wheek.x) > 20, "not Whee's floor loaf");
+  assert.ok(Math.abs(start.x - hook.x) > 20 || Math.abs(start.lift - hook.lift) > 20, "not Quill's jamb hang");
+  assert.ok(Math.abs(start.x - perch.x) > 20 || Math.abs(start.lift - perch.lift) > 20, "not Echo's shade perch");
+  assert.ok(Math.abs(start.x - cling.x) > 20 || Math.abs(start.lift - cling.lift) > 20, "not Rui's mid-side cling");
+  assert.ok(Math.abs(start.lift - ledge.lift) > 40, "not Miso's top ledge");
+  assert.ok(Math.abs(start.x - hold.x) > 16 || Math.abs(start.lift - hold.lift) > 20, "not Fuse's jamb clip");
+  assert.ok(Math.abs(start.x - circle.x) > 20 || Math.abs(start.lift - circle.lift) > 20, "not Coin's bowl");
+  assert.ok(Math.abs(start.x - field.x) > 16 || Math.abs(start.lift - field.lift) > 16, "not Flux's glass sit");
+  assert.ok(Math.abs(start.lift - ridge.lift) > 40, "not Arc's title-bar ridge");
+  assert.ok(Math.abs(start.lift - sill.lift) > 40, "not a generic top sill");
+  assert.ok(Math.abs(start.x - bow.x) > 20 || Math.abs(start.lift - bow.lift) > 20, "not Peck's landing rock");
+  const on0 = P.threadOnPath(0, { x: 40, lift: 0 }, { x: start.x, lift: start.lift });
+  const on1 = P.threadOnPath(1, { x: 40, lift: 0 }, { x: start.x, lift: start.lift });
+  const onMid = P.threadOnPath(0.5, { x: 40, lift: 0 }, { x: start.x, lift: start.lift });
+  const stashMid = P.stashOnPath(0.5, { x: 40, lift: 0 }, { x: start.x, lift: start.lift });
+  assert.equal(on0.x, 40);
+  assert.equal(on1.x, start.x);
+  assert.equal(on1.lift, start.lift);
+  assert.ok(onMid.lift > 0, "he pours into the crack");
+  assert.ok(Math.abs(onMid.rot) !== Math.abs(stashMid.rot) || Math.abs(onMid.lift - stashMid.lift) > 0.5, "a squeeze, not Clip's hop");
+  const weave0 = P.threadPath(0, start, end);
+  const weave1 = P.threadPath(1, start, end);
+  const weaveMid = P.threadPath(0.35, start, end);
+  assert.equal(weave0.x, start.x);
+  assert.equal(weave1.x, end.x);
+  assert.ok(Math.abs(weaveMid.x - start.x) > 8, "the tube is already through");
+  assert.ok(Math.abs(weaveMid.rot) > 4, "the body wriggles");
+  const off0 = P.threadOffPath(0, { x: end.x, lift: end.lift }, { x: end.x + 80, lift: 0 });
+  const off1 = P.threadOffPath(1, { x: end.x, lift: end.lift }, { x: end.x + 80, lift: 0 });
+  assert.equal(off0.x, end.x);
+  assert.equal(off1.x, end.x + 80);
+  assert.equal(off1.lift, 0);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let threadXMin = Infinity;
+  let threadXMax = -Infinity;
+  let wriggle = 0;
+  const windowIds = new Set();
+  for (let i = 0; i < 800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    windowIds.add(play.target.id);
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "perch-talk");
+    assert.notEqual(play.phase, "scent");
+    assert.notEqual(play.phase, "bow");
+    assert.notEqual(play.phase, "hook");
+    assert.notEqual(play.phase, "hook-climb");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "thread") {
+      threadXMin = Math.min(threadXMin, play.x);
+      threadXMax = Math.max(threadXMax, play.x);
+      wriggle = Math.max(wriggle, Math.abs(play.rot));
+      assert.equal(play.anim, "play", "the tube weasels through");
+      assert.ok(play.lift > 8);
+    }
+    if (play.phase === "approach") {
+      assert.equal(play.anim, "walk");
+      assert.equal(play.lift, 0);
+    }
+  }
+  assert.ok(seen.has("thread-on"));
+  assert.ok(seen.has("thread"));
+  assert.ok(seen.has("thread-off"));
+  assert.ok(!seen.has("hook"), "not Quill");
+  assert.ok(!seen.has("bow"), "not Peck");
+  assert.ok(!seen.has("perch-talk"), "not Echo");
+  assert.ok(!seen.has("scent"), "not Rue");
+  assert.ok(!seen.has("stash-cheek"), "not Clip");
+  assert.ok(!seen.has("bask"), "not Ink");
+  assert.ok(!seen.has("watch-hold"), "not Pip");
+  assert.ok(!seen.has("ledge-sit"), "not Miso");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(threadXMax - threadXMin > 80, "he threads the gap, not a sit");
+  assert.ok(wriggle > 4, "the body wriggles");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Wick's gap; sleep, card, and hide abort; Wick never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "ferret", WORK, P.SPRITE, { side: "left" });
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 200 && play.phase !== "thread"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "thread");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "thread");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "thread-off");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
@@ -3086,6 +3278,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /scent-on|scent-off|playFor/);
   assert.match(petSrc, /bow-on|bow-off|playFor/);
   assert.match(petSrc, /hook-on|hook-off|playFor/);
+  assert.match(petSrc, /thread-on|thread-off|playFor/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
