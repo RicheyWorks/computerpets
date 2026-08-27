@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
@@ -13,6 +13,7 @@
   const HOLD = "hold";
   const EARTH = "earth";
   const LEDGE = "ledge";
+  const WATCH = "watch";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -59,6 +60,9 @@
     ledgeOn: 0.48,
     ledgeSit: 2.35,
     ledgeOff: 0.52,
+    watchOn: 0.74,
+    watchHold: 1.85,
+    watchOff: 0.66,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -87,6 +91,7 @@
     if (key === "fuse_dragon") return HOLD;
     if (key === "ground_dragon") return EARTH;
     if (key === "cat") return LEDGE;
+    if (key === "dog") return WATCH;
     return SILL;
   }
 
@@ -291,6 +296,7 @@
       if (kind === HOLD) return w.width >= 140 && w.height >= 160;
       if (kind === EARTH) return w.width >= 180 && w.height >= 140;
       if (kind === LEDGE) return w.width >= 180 && w.height >= 80;
+      if (kind === WATCH) return w.width >= 160 && w.height >= 70;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -582,6 +588,24 @@
         spin: "none",
       };
     }
+    if (kind === WATCH) {
+      const hold = watchPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -108 : 108;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 92 : -92;
+      return {
+        id: best.id,
+        kind,
+        side: "feet",
+        holdX: hold.x,
+        holdLift: 0,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "trot",
+        spin: "none",
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -655,6 +679,10 @@
     if (target.kind === LEDGE) {
       const hold = ledgePoint(win, sprite, work);
       return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === WATCH) {
+      const hold = watchPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: 0 };
     }
     const start = sillPoint(win, 0.12, sprite, work);
     const end = sillPoint(win, 0.88, sprite, work);
@@ -977,6 +1005,38 @@
     return { x, lift: clamp(lift, 28, maxLift) };
   }
 
+  function watchPoint(win, sprite, _work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 20;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.2;
+    return { x, lift: 0 };
+  }
+
+  function watchOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (2 - t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: 0,
+      rot: 0.2 * t,
+    };
+  }
+
+  function watchOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = smoothstep(t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: 0,
+      rot: 0.2 * (1 - t),
+    };
+  }
+
   function earthStepOffPath(u, from, to) {
     const t = Math.max(0, Math.min(1, u));
     const fromX = from && from.x != null ? from.x : 0;
@@ -1080,7 +1140,7 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
@@ -1088,9 +1148,9 @@
       ? next.target.clickToId
       : next.target && next.target.id;
     const win = findWin(windows, lookId);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off") {
       next.target = refitTarget(next.target, win, size, work, windows);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -1140,6 +1200,9 @@
         }
         if (target.kind === LEDGE) {
           return goPhase(next, "ledge-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+        }
+        if (target.kind === WATCH) {
+          return goPhase(next, "watch-on", { x: dest, lift: 0 }, { x: target.holdX, lift: 0 }, "walk", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -1772,6 +1835,45 @@
       return next;
     }
 
+    if (next.phase === "watch-on") {
+      const face = target.holdX >= next.from.x ? 1 : -1;
+      const u = next.t / DUR.watchOn;
+      const pose = watchOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: 0 });
+      next.x = pose.x;
+      next.lift = 0;
+      next.rot = pose.rot;
+      next.anim = "walk";
+      next.facing = face;
+      if (u >= 1) {
+        return goPhase(next, "watch-hold", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "sit", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "watch-hold") {
+      const face = target.landX >= target.holdX ? 1 : -1;
+      next.x = target.holdX;
+      next.lift = 0;
+      next.rot = 0.2;
+      next.anim = "sit";
+      next.facing = face;
+      if (next.t >= DUR.watchHold) {
+        return goPhase(next, "watch-off", { x: target.holdX, lift: 0 }, { x: target.landX, lift: 0 }, "walk", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "watch-off") {
+      const u = next.t / DUR.watchOff;
+      const pose = watchOffPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = 0;
+      next.rot = pose.rot;
+      next.anim = "walk";
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -1837,6 +1939,7 @@
     HOLD,
     EARTH,
     LEDGE,
+    WATCH,
     SILL,
     IGNORE,
     DUR,
@@ -1865,6 +1968,9 @@
     earthOnPath,
     earthStepOffPath,
     ledgePoint,
+    watchPoint,
+    watchOnPath,
+    watchOffPath,
     pickTarget,
     refitTarget,
     divePath,
