@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -21,6 +21,7 @@ export const WHEEK = "wheek";
 export const BASK = "bask";
 export const CIRCLE = "circle";
 export const PERCH = "perch";
+export const SCENT = "scent";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -91,13 +92,16 @@ export const DUR = {
   perchOn: 0.4,
   perchTalk: 1.48,
   perchOff: 0.46,
+  scentOn: 0.58,
+  scent: 1.72,
+  scentOff: 0.64,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof WHEEK | typeof BASK | typeof CIRCLE | typeof PERCH | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof WHEEK | typeof BASK | typeof CIRCLE | typeof PERCH | typeof SCENT | typeof SILL | typeof IGNORE;
 export type HoldClip = "jamb" | "sash";
 export type ClickNode = "left" | "right" | "tl" | "tr" | "bl" | "br";
 export type PlayPhase =
@@ -169,6 +173,9 @@ export type PlayPhase =
   | "perch-on"
   | "perch-talk"
   | "perch-off"
+  | "scent-on"
+  | "scent"
+  | "scent-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -188,7 +195,7 @@ export type PlayTarget = {
   landX: number;
   diveFrom?: "top" | "side";
   spin?: "backflip" | "spin" | "none";
-  leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop" | "waddle";
+  leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop" | "waddle" | "slip";
   sillEndX?: number;
   pathEndX?: number;
   pathEndLift?: number;
@@ -266,6 +273,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "turtle") return BASK;
   if (key === "goldfish") return CIRCLE;
   if (key === "budgie") return PERCH;
+  if (key === "fox") return SCENT;
   return SILL;
 }
 
@@ -443,7 +451,7 @@ export function pickTarget(
   key: string,
   work: WorkSpace,
   sprite?: number,
-    opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop" | "waddle"; hopFrom?: 0 | 1; corner?: "tl" | "tr" | "bl" | "br"; orbitDir?: 1 | -1; circleDir?: 1 | -1; pair?: "sides" | "corners"; nodeFrom?: ClickNode; nodeTo?: ClickNode; clip?: HoldClip },
+    opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop" | "waddle" | "slip"; hopFrom?: 0 | 1; corner?: "tl" | "tr" | "bl" | "br"; orbitDir?: 1 | -1; circleDir?: 1 | -1; pair?: "sides" | "corners"; nodeFrom?: ClickNode; nodeTo?: ClickNode; clip?: HoldClip },
 ): PlayTarget | null {
   const kind = playFor(key);
   if (kind === IGNORE) return null;
@@ -471,6 +479,7 @@ export function pickTarget(
     if (kind === BASK) return w.width >= 180 && w.height >= 140;
     if (kind === CIRCLE) return w.width >= 220 && w.height >= 200;
     if (kind === PERCH) return w.width >= 140 && w.height >= 180;
+    if (kind === SCENT) return w.width >= 140 && w.height >= 80;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -887,6 +896,25 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === SCENT) {
+    const side = opts?.side || pickSide(best, petX, size, workW);
+    const hold = scentPoint(best, side, size, work);
+    const holdX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+    const approachOff = side === "left" ? -92 : 92;
+    const approachX = clamp(holdX + approachOff, 8, Math.max(8, workW - size - 8));
+    const away = side === "left" ? -110 : 110;
+    return {
+      id: best.id,
+      kind,
+      side,
+      holdX,
+      holdLift: 0,
+      approachX,
+      landX: clamp(holdX + away, 8, Math.max(8, workW - size - 8)),
+      leave: "slip",
+      spin: "none",
+    };
+  }
   const start = sillPoint(best, 0.12, size, work);
   const end = sillPoint(best, 0.88, size, work);
   return {
@@ -990,6 +1018,10 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
   if (target.kind === PERCH) {
     const hold = perchPoint(win, target.side === "right" ? "right" : "left", sprite, work);
     return { ...target, holdX: hold.x, holdLift: hold.lift };
+  }
+  if (target.kind === SCENT) {
+    const hold = scentPoint(win, target.side === "right" ? "right" : "left", sprite, work);
+    return { ...target, holdX: hold.x, holdLift: 0 };
   }
   const start = sillPoint(win, 0.12, sprite, work);
   const end = sillPoint(win, 0.88, sprite, work);
@@ -1627,6 +1659,59 @@ export function perchTalkPath(u: number) {
   };
 }
 
+export function scentPoint(win: DeskWindow, side: "left" | "right" | string | undefined, sprite: number | undefined, _work?: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const edge: "left" | "right" = side === "right" ? "right" : "left";
+  const nest = Math.max(16, size * 0.11);
+  const x = edge === "right" ? win.x + win.width - size + nest : win.x - nest;
+  return { x, lift: 0, side: edge };
+}
+
+export function scentOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = t * t * (2 - t);
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  const lean = t * t;
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: 0,
+    rot: (toX >= fromX ? 1 : -1) * 6 * lean,
+  };
+}
+
+export function scentNosePath(u: number) {
+  const t = Math.max(0, Math.min(1, u));
+  if (t < 0.6) {
+    const s = t / 0.6;
+    const pulse = s <= 0 || s >= 1 ? 0 : Math.sin(s * Math.PI * 2);
+    return {
+      x: Math.abs(pulse) * 7,
+      lift: Math.abs(pulse) * 4,
+      rot: pulse * 6,
+    };
+  }
+  const s = (t - 0.6) / 0.4;
+  const peek = s * s * (3 - 2 * s);
+  return {
+    x: 5 + peek * 9,
+    lift: 2 + peek * 2,
+    rot: peek * 8,
+  };
+}
+
+export function scentOffPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = 1 - (1 - t) * (1 - t);
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: 0,
+    rot: (1 - ease) * (toX >= fromX ? -4 : 4),
+  };
+}
+
 export function earthStepOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   const t = Math.max(0, Math.min(1, u));
   const fromX = from.x ?? 0;
@@ -1731,7 +1816,7 @@ export function stepPlay(
   if (!play || play.phase === "done") return play;
   const size = sprite == null ? SPRITE : sprite;
   const life = flags || {};
-  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off" && play.phase !== "circle-off" && play.phase !== "perch-off") {
+  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off" && play.phase !== "circle-off" && play.phase !== "perch-off" && play.phase !== "scent-off") {
     return abortToFloor(play, { x: play.x, lift: play.lift }, work);
   }
   let next: WindowPlay = { ...play, t: play.t + Math.max(0, dt) };
@@ -1739,9 +1824,9 @@ export function stepPlay(
     ? next.target.clickToId
     : next.target.id;
   const win = findWin(windows, lookId);
-  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off") {
+  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off") {
     next = { ...next, target: refitTarget(next.target, win, size, work, windows) };
-  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off") {
+  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off") {
     return abortToFloor(next, { x: next.x, lift: next.lift }, work);
   }
 
@@ -1813,6 +1898,9 @@ export function stepPlay(
       }
       if (target.kind === PERCH) {
         return goPhase(next, "perch-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+      }
+      if (target.kind === SCENT) {
+        return goPhase(next, "scent-on", { x: dest, lift: 0 }, { x: target.holdX, lift: 0 }, "walk", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -2757,6 +2845,47 @@ export function stepPlay(
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = "play";
+    next.facing = target.landX >= target.holdX ? 1 : -1;
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+  if (next.phase === "scent-on") {
+    const face: 1 | -1 = target.side === "left" ? 1 : -1;
+    const u = next.t / DUR.scentOn;
+    const pose = scentOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: 0 });
+    next.x = pose.x;
+    next.lift = 0;
+    next.rot = pose.rot;
+    next.anim = "walk";
+    next.facing = face;
+    if (u >= 1) {
+      return goPhase(next, "scent", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "sit", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "scent") {
+    const face: 1 | -1 = target.side === "left" ? 1 : -1;
+    const pose = scentNosePath(Math.min(1, next.t / DUR.scent));
+    next.x = target.holdX + face * pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "sit";
+    next.facing = face;
+    if (next.t >= DUR.scent) {
+      return goPhase(next, "scent-off", { x: target.holdX, lift: 0 }, { x: target.landX, lift: 0 }, "walk", target.landX >= target.holdX ? 1 : -1);
+    }
+    return next;
+  }
+
+  if (next.phase === "scent-off") {
+    const u = next.t / DUR.scentOff;
+    const pose = scentOffPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = 0;
+    next.rot = pose.rot;
+    next.anim = "walk";
     next.facing = target.landX >= target.holdX ? 1 : -1;
     if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
     return next;
