@@ -800,7 +800,7 @@ export function LivingPet({
       if (hitRef.current) {
         hitRef.current.style.transform = walkXform;
         hitRef.current.style.transformOrigin =
-          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off" || s.play.phase === "coil-on" || s.play.phase === "coil-off")
+          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off" || s.play.phase === "coil-on" || s.play.phase === "coil-off" || s.play.phase === "path-on" || s.play.phase === "path-off")
             ? "center center"
             : "center bottom";
       }

@@ -10,13 +10,14 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
+  assert.equal(P.playFor("trace_dragon"), "path");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("trace_dragon"), "sill");
+  assert.equal(P.playFor("flux_dragon"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -47,6 +48,15 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; ot
   assert.notEqual(cat.kind, "cling-dive");
   assert.notEqual(cat.kind, "ridge");
   assert.notEqual(cat.kind, "coil");
+  assert.notEqual(cat.kind, "path");
+  const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
+  assert.ok(trace);
+  assert.equal(trace.kind, "path");
+  assert.equal(trace.side, "left");
+  assert.notEqual(trace.kind, "cling-dive");
+  assert.notEqual(trace.kind, "ridge");
+  assert.notEqual(trace.kind, "coil");
+  assert.notEqual(trace.kind, "sill");
 });
 
 test("Rui approaches a window side, clings, hangs, then dives with a spin path", () => {
@@ -306,13 +316,128 @@ test("an asleep Volt never starts a coil, and sleep aborts a hold", () => {
   assert.equal(play.abort, true);
 });
 
+test("Trace hops onto a window outline, walks the path, sits, then hops or drops off — not a cling, ridge, coil, or sill", () => {
+  const target = P.pickTarget([WIN], 40, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
+  assert.ok(target);
+  assert.equal(target.kind, "path");
+  assert.equal(target.side, "left");
+  assert.equal(target.spin, "none");
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.5, P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const start = P.pathPoint(WIN, 0, P.SPRITE, WORK, "left");
+  const mid = P.pathPoint(WIN, 0.5, P.SPRITE, WORK, "left");
+  const end = P.pathPoint(WIN, 1, P.SPRITE, WORK, "left");
+  assert.equal(target.holdLift, start.lift);
+  assert.equal(target.holdX, start.x);
+  assert.ok(start.lift < cling.lift, "the path starts lower on the near side, not Rui's mid-side cling");
+  assert.ok(Math.abs(mid.lift - ridge.lift) < 0.001, "the mid-path walks the title-bar top");
+  assert.ok(mid.lift > sill.lift, "the path rides the outer outline, not the inner sill");
+  assert.ok(Math.abs(start.x - coil.x) > 1 || Math.abs(start.lift - coil.lift) > 40, "not Volt's corner wrap");
+  assert.ok(Math.abs(end.x - start.x) > 40, "the trail ends on the far side");
+  assert.ok(Math.abs(mid.x - start.x) > 20, "the trail crosses the top, not a sit-in-place");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let walkLiftMin = Infinity;
+  let walkLiftMax = 0;
+  let walkXMin = Infinity;
+  let walkXMax = 0;
+  let sitLift = 0;
+  let offRot = 0;
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-leap");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "ridge-off");
+    assert.notEqual(play.phase, "coil-on");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "coil-off");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "path-walk") {
+      walkLiftMin = Math.min(walkLiftMin, play.lift);
+      walkLiftMax = Math.max(walkLiftMax, play.lift);
+      walkXMin = Math.min(walkXMin, play.x);
+      walkXMax = Math.max(walkXMax, play.x);
+      assert.equal(play.anim, "walk");
+      assert.equal(play.rot, 0);
+    }
+    if (play.phase === "path-sit") {
+      sitLift = play.lift;
+      assert.equal(play.anim, "sit");
+      assert.equal(play.rot, 0);
+    }
+    if (play.phase === "path-off") offRot = Math.max(offRot, Math.abs(play.rot));
+  }
+  assert.ok(walkLiftMax - walkLiftMin > 40, "the path climbs a side, not a flat sill");
+  assert.ok(walkXMax - walkXMin > 40, "the path crosses the window, not a one-side cling");
+  assert.ok(sitLift > 40, "Trace sits on the far outline before leaving");
+  assert.ok(offRot < 30, "a hop tilts; it is not a backflip dive");
+  assert.ok(seen.has("path-on"));
+  assert.ok(seen.has("path-walk"));
+  assert.ok(seen.has("path-sit"));
+  assert.ok(seen.has("path-off"));
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("Trace can drop off the path without a spin", () => {
+  const target = P.pickTarget([WIN], 200, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "drop" });
+  let play = P.beginPlay(target, target.approachX);
+  let dropRot = 0;
+  const seen = new Set();
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    if (play.phase === "path-off") dropRot = Math.max(dropRot, Math.abs(play.rot));
+  }
+  assert.ok(seen.has("path-walk"));
+  assert.ok(seen.has("path-off"));
+  assert.equal(dropRot, 0);
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Trace's path", () => {
+  const target = P.pickTarget([WIN], 200, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
+  let play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: 0 }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "path-walk");
+  const beforeX = play.x;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "path-walk");
+  assert.ok(Math.abs(play.target.holdX - target.holdX) > 40);
+  assert.ok(Math.abs(play.x - beforeX) > 40);
+});
+
+test("an asleep Trace never starts a path, and sleep aborts a walk", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.shouldAbort({ cmd: "play" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ cmd: "rest" }), true);
+  const target = P.pickTarget([WIN], 40, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
+  let play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: 0 }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "path-on");
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
   assert.match(petSrc, /shouldAbort/);
   assert.match(petSrc, /playFor/);
   assert.match(petSrc, /coil-on|coil-off/);
+  assert.match(petSrc, /path-on|path-off/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
+  assert.doesNotMatch(petSrc, /sprites\/trace_dragon\/.*write|createCanvas/);
 });
