@@ -63,7 +63,7 @@ Git and Node are the two helpers that make that start work. Install [Git](https:
 - **Feed / Play / Rest** sit on the keeper card.
 - **Right-click** the pet, or the little tray icon by the clock: **On the desk**, feed, play, rest, clean, medicine, hide.
 
-Clicks on empty glass pass through to your windows. The floor is the work area, above the taskbar.
+Clicks on empty glass pass through to your windows. The floor is the work area, above the taskbar. On Windows, Rui can jump onto the side of a real window, hang on, then drop or dive back to the desk. Other guests walk a sill. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door.
 
 ### Mac
 
