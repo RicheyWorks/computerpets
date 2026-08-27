@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
@@ -16,6 +16,7 @@
   const WATCH = "watch";
   const THUMP = "thump";
   const STASH = "stash";
+  const WHEEK = "wheek";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -71,6 +72,11 @@
     stashOn: 0.42,
     stashCheek: 0.88,
     stashOff: 0.4,
+    wheekOn: 0.7,
+    wheekLoaf: 0.72,
+    wheek: 0.46,
+    wheekPop: 0.4,
+    wheekOff: 0.68,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -102,6 +108,7 @@
     if (key === "dog") return WATCH;
     if (key === "rabbit") return THUMP;
     if (key === "hamster") return STASH;
+    if (key === "guinea_pig") return WHEEK;
     return SILL;
   }
 
@@ -309,6 +316,7 @@
       if (kind === WATCH) return w.width >= 160 && w.height >= 70;
       if (kind === THUMP) return w.width >= 140 && w.height >= 70;
       if (kind === STASH) return w.width >= 160 && w.height >= 140;
+      if (kind === WHEEK) return w.width >= 160 && w.height >= 70;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -654,6 +662,24 @@
         spin: "none",
       };
     }
+    if (kind === WHEEK) {
+      const hold = wheekPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -100 : 100;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 88 : -88;
+      return {
+        id: best.id,
+        kind,
+        side: "feet",
+        holdX: hold.x,
+        holdLift: 0,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "waddle",
+        spin: "none",
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -741,6 +767,10 @@
       const edge = target.side === "right" ? "right" : "left";
       const hold = stashPoint(win, edge, sprite, work);
       return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === WHEEK) {
+      const hold = wheekPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: 0 };
     }
     const start = sillPoint(win, 0.12, sprite, work);
     const end = sillPoint(win, 0.88, sprite, work);
@@ -1193,6 +1223,65 @@
     };
   }
 
+  function wheekPoint(win, sprite, _work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 24;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.56;
+    return { x, lift: 0 };
+  }
+
+  function wheekFace(target, win, size) {
+    const dim = size == null ? SPRITE : size;
+    if (win) {
+      const mid = win.x + win.width / 2;
+      return target.holdX + dim / 2 >= mid ? -1 : 1;
+    }
+    return target.landX >= target.holdX ? 1 : -1;
+  }
+
+  function wheekOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (2 - t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: 0,
+      rot: 0,
+    };
+  }
+
+  function wheekVoicePath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const pulse = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2);
+    return {
+      lift: Math.abs(pulse) * 5,
+      rot: 0,
+    };
+  }
+
+  function wheekPopPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+    return {
+      lift: hop * 30,
+      rot: 0,
+    };
+  }
+
+  function wheekOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = smoothstep(t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: 0,
+      rot: 0,
+    };
+  }
+
   function earthStepOffPath(u, from, to) {
     const t = Math.max(0, Math.min(1, u));
     const fromX = from && from.x != null ? from.x : 0;
@@ -1296,7 +1385,7 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
@@ -1304,9 +1393,9 @@
       ? next.target.clickToId
       : next.target && next.target.id;
     const win = findWin(windows, lookId);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off") {
       next.target = refitTarget(next.target, win, size, work, windows);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -1365,6 +1454,9 @@
         }
         if (target.kind === STASH) {
           return goPhase(next, "stash-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+        }
+        if (target.kind === WHEEK) {
+          return goPhase(next, "wheek-on", { x: dest, lift: 0 }, { x: target.holdX, lift: 0 }, "walk", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -2116,6 +2208,76 @@
       return next;
     }
 
+    if (next.phase === "wheek-on") {
+      const face = target.holdX >= next.from.x ? 1 : -1;
+      const u = next.t / DUR.wheekOn;
+      const pose = wheekOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: 0 });
+      next.x = pose.x;
+      next.lift = 0;
+      next.rot = 0;
+      next.anim = "walk";
+      next.facing = face;
+      if (u >= 1) {
+        const loafFace = wheekFace(target, win, size);
+        return goPhase(next, "wheek-loaf", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "sit", loafFace);
+      }
+      return next;
+    }
+
+    if (next.phase === "wheek-loaf") {
+      const face = wheekFace(target, win, size);
+      next.x = target.holdX;
+      next.lift = 0;
+      next.rot = 0;
+      next.anim = "sit";
+      next.facing = face;
+      if (next.t >= DUR.wheekLoaf) {
+        return goPhase(next, "wheek", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "talk", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "wheek") {
+      const face = wheekFace(target, win, size);
+      const pose = wheekVoicePath(Math.min(1, next.t / DUR.wheek));
+      next.x = target.holdX;
+      next.lift = pose.lift;
+      next.rot = 0;
+      next.anim = "talk";
+      next.facing = face;
+      if (next.t >= DUR.wheek) {
+        return goPhase(next, "wheek-pop", { x: target.holdX, lift: 0 }, { x: target.holdX, lift: 0 }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "wheek-pop") {
+      const face = wheekFace(target, win, size);
+      const pose = wheekPopPath(Math.min(1, next.t / DUR.wheekPop));
+      next.x = target.holdX;
+      next.lift = pose.lift;
+      next.rot = 0;
+      next.anim = "play";
+      next.facing = face;
+      if (next.t >= DUR.wheekPop) {
+        const leaveFace = target.landX >= target.holdX ? 1 : -1;
+        return goPhase(next, "wheek-off", { x: target.holdX, lift: 0 }, { x: target.landX, lift: 0 }, "walk", leaveFace);
+      }
+      return next;
+    }
+
+    if (next.phase === "wheek-off") {
+      const u = next.t / DUR.wheekOff;
+      const pose = wheekOffPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = 0;
+      next.rot = 0;
+      next.anim = "walk";
+      next.facing = target.landX >= target.holdX ? 1 : -1;
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -2184,6 +2346,7 @@
     WATCH,
     THUMP,
     STASH,
+    WHEEK,
     SILL,
     IGNORE,
     DUR,
@@ -2223,6 +2386,12 @@
     stashOnPath,
     stashCheekPath,
     stashOffPath,
+    wheekPoint,
+    wheekFace,
+    wheekOnPath,
+    wheekVoicePath,
+    wheekPopPath,
+    wheekOffPath,
     pickTarget,
     refitTarget,
     divePath,

@@ -16,7 +16,8 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Clip leftover stashes in a window drawer; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Whee leftover wheeks at a window; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("guinea_pig"), "wheek");
   assert.equal(WP.playFor("hamster"), "stash");
   assert.equal(WP.playFor("rabbit"), "thump");
   assert.equal(WP.playFor("dog"), "watch");
@@ -28,7 +29,7 @@ test("Clip leftover stashes in a window drawer; Thimble still thumps; Pip still 
   assert.equal(WP.playFor("ion_dragon"), "charge");
   assert.equal(WP.playFor("red_panda"), "cling-dive");
   assert.equal(WP.playFor("gecko"), "sill");
-  assert.equal(WP.playFor("guinea_pig"), "sill");
+  assert.equal(WP.playFor("turtle"), "sill");
 });
 
 test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () => {
