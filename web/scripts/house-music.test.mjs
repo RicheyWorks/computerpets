@@ -13,6 +13,10 @@ test("Rui music is house loop or free radio, no paid key", () => {
   assert.deepEqual(M.MUSIC_PLUGINS.map((p) => p.id), ["off", "house", "radio"]);
   assert.equal(M.RADIO_CANT_REACH, "can't reach");
   assert.match(M.radioSearchUrl("piano"), /radio-browser\.info/);
+  assert.match(M.radioSearchUrl("99.9 seattle fm"), /name=99\.9/);
+  assert.ok(M.radioSearchUrls("99.9 seattle fm").some((u) => /seattle/.test(u)));
+  assert.equal(M.parseRadioQuery("KEXP").raw, "KEXP");
+  assert.equal(M.RADIO_EMPTY, "no station from that look-up");
   assert.doesNotMatch(M.RADIO_DIR, /spotify|apple|youtube/i);
   const music = M.parseMusic({ plugin: "house", playing: true });
   assert.equal(M.playSrc(music), "/sounds/house-loop.wav");

@@ -396,6 +396,17 @@ ipcMain.on("set-clickable", (_e, clickable) => {
   win?.setIgnoreMouseEvents(!clickable, { forward: true });
 });
 
+ipcMain.on("set-focusable", (_e, focusable) => {
+  if (!win || win.isDestroyed()) return;
+  const want = !!focusable;
+  if (win.isFocusable() === want) {
+    if (want) win.focus();
+    return;
+  }
+  win.setFocusable(want);
+  if (want) win.focus();
+});
+
 ipcMain.on("pet-menu", (_e, pos) => {
   popupPetMenu(pos?.x ?? 40, pos?.y ?? 40);
 });
