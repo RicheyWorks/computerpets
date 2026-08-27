@@ -16,7 +16,7 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Keep leftover lays a window pane as a wax heart; Hum leftover still drones a window pane as congregation sky; Bank leftover still digs a window stool as a sand bank; Sheen leftover still licks a warm pane as a salt glass; Pot leftover still tends a sash pulley box as a cerumen hollow; Disc leftover still snips a window-box leaf as foliage; Mortar leftover still daubs a sash gap as an inkstone cell; Auger leftover still bores a sash stile as timber; Thrum leftover still forages a window box as a meadow; Dew leftover still curls a window glazing rebate as a peat saucer; Well leftover still fills a window sill pan as a bog cup; Snap leftover still counts a window meeting rail as a wetland cup; Arm leftover still stores a window stool as a sand tray; Moth leftover still mounts a window jamb as bark; Disk leftover still opens a window pane as an ink-dish pad; Mast leftover still seeds a window stool as an acorn dish; Fan leftover still golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Wax leftover draws a window pane as a hive frame; Keep leftover still lays a window pane as a wax heart; Hum leftover still drones a window pane as congregation sky; Bank leftover still digs a window stool as a sand bank; Sheen leftover still licks a warm pane as a salt glass; Pot leftover still tends a sash pulley box as a cerumen hollow; Disc leftover still snips a window-box leaf as foliage; Mortar leftover still daubs a sash gap as an inkstone cell; Auger leftover still bores a sash stile as timber; Thrum leftover still forages a window box as a meadow; Dew leftover still curls a window glazing rebate as a peat saucer; Well leftover still fills a window sill pan as a bog cup; Snap leftover still counts a window meeting rail as a wetland cup; Arm leftover still stores a window stool as a sand tray; Moth leftover still mounts a window jamb as bark; Disk leftover still opens a window pane as an ink-dish pad; Mast leftover still seeds a window stool as an acorn dish; Fan leftover still golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
   assert.equal(WP.playFor("bumblebee"), "forage");
   assert.notEqual(WP.playFor("bumblebee"), "thrum");
   assert.notEqual(WP.playFor("bumblebee"), "curl");
@@ -92,7 +92,21 @@ test("Keep leftover lays a window pane as a wax heart; Hum leftover still drones
   assert.notEqual(WP.playFor("honey_queen"), "chart");
   assert.notEqual(WP.playFor("honey_queen"), "sill");
   assert.equal(WP.playFor("honeybee"), "sill");
-  assert.equal(WP.playFor("honeycomb"), "sill");
+  assert.equal(WP.playFor("honeycomb"), "draw");
+  assert.notEqual(WP.playFor("honeycomb"), "wax");
+  assert.notEqual(WP.playFor("honeycomb"), "comb");
+  assert.notEqual(WP.playFor("honeycomb"), "lay");
+  assert.notEqual(WP.playFor("honeycomb"), "drone");
+  assert.notEqual(WP.playFor("honeycomb"), "dig");
+  assert.notEqual(WP.playFor("honeycomb"), "lick");
+  assert.notEqual(WP.playFor("honeycomb"), "tend");
+  assert.notEqual(WP.playFor("honeycomb"), "snip");
+  assert.notEqual(WP.playFor("honeycomb"), "daub");
+  assert.notEqual(WP.playFor("honeycomb"), "bore");
+  assert.notEqual(WP.playFor("honeycomb"), "forage");
+  assert.notEqual(WP.playFor("honeycomb"), "mosaic");
+  assert.notEqual(WP.playFor("honeycomb"), "field");
+  assert.notEqual(WP.playFor("honeycomb"), "sill");
   assert.equal(WP.playFor("sundew"), "curl");
   assert.notEqual(WP.playFor("sundew"), "dew");
   assert.notEqual(WP.playFor("sundew"), "fill");
