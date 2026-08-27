@@ -16,7 +16,7 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -50,8 +50,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("guinea_pig"), Overlay.playFor("guinea_pig"));
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(P.playFor("turtle"), Overlay.playFor("turtle"));
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("goldfish"), Overlay.playFor("goldfish"));
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("goldfish"), "sill");
+  assert.equal(P.playFor("budgie"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -117,6 +119,11 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(webBask.lift, deskBask.lift);
   assert.equal(webBask.x, deskBask.x);
   assert.ok(webBask.lift > webEarth.lift);
+  const webCircle = P.circlePoint(WIN, 0, 176, WORK, 1);
+  const deskCircle = Overlay.circlePoint(WIN, 0, 176, WORK, 1);
+  assert.equal(webCircle.lift, deskCircle.lift);
+  assert.equal(webCircle.x, deskCircle.x);
+  assert.ok(webCircle.x > WIN.x && webCircle.x + 176 < WIN.x + WIN.width);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -727,6 +734,8 @@ test("the demo window plate walks Ink's bask the same way", () => {
     assert.notEqual(play.phase, "stash-cheek");
     assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "sill-walk");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "circle-on");
     if (play.phase === "bask") {
       sitLift = play.lift;
       assert.equal(play.anim, "sit");
@@ -745,5 +754,69 @@ test("the demo window plate walks Ink's bask the same way", () => {
   assert.ok(seen.has("bask-off"));
   assert.ok(sitLift > earth.lift, "the stone is on the rail");
   assert.ok(withdrawXMax - withdrawXMin < 12, "the head tucks; he does not walk the rail");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Coin's circle the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /circle-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "goldfish", WORK, 176);
+  const target = P.pickTarget([WIN], 40, "goldfish", WORK, 176);
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.kind, "circle");
+  assert.equal(target.side, "bowl");
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.ok(target.holdLift > 16);
+  assert.equal(target.leave, "drift");
+  assert.equal(target.clickToId, undefined);
+  const field = P.fieldPoint(WIN, 176, WORK);
+  const orbit = Overlay.orbitPoint(WIN, 0, 176, WORK, 1);
+  const bask = P.baskPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(target.holdX - field.x) > 40 || Math.abs(target.holdLift - field.lift) > 20, "not Flux");
+  assert.ok(Math.abs(target.holdX - orbit.x) > 40, "not Gauss");
+  assert.ok(Math.abs(target.holdLift - bask.lift) > 40, "not Ink");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let circleXMin = Infinity;
+  let circleXMax = -Infinity;
+  let circleLiftMin = Infinity;
+  let circleLiftMax = -Infinity;
+  for (let i = 0; i < 800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "bask-withdraw");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "circle") {
+      circleXMin = Math.min(circleXMin, play.x);
+      circleXMax = Math.max(circleXMax, play.x);
+      circleLiftMin = Math.min(circleLiftMin, play.lift);
+      circleLiftMax = Math.max(circleLiftMax, play.lift);
+      assert.equal(play.anim, "play");
+      assert.equal(play.rot, 0);
+    }
+  }
+  assert.ok(seen.has("circle-on"));
+  assert.ok(seen.has("circle"));
+  assert.ok(seen.has("circle-off"));
+  assert.ok(circleXMax - circleXMin > 40, "one thought crosses the bowl");
+  assert.ok(circleLiftMax - circleLiftMin > 40, "the circle changes height");
   assert.equal(play.phase, "done");
 });
