@@ -16,7 +16,8 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Blush leftover stones a sill horn; Atlas leftover charts a transom; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Cup leftover lids a sash latch; Atlas leftover charts a transom; Blush leftover stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("octopus"), "lid");
   assert.equal(WP.playFor("rosy_boa"), "stone");
   assert.equal(WP.playFor("milk_snake"), "mosaic");
   assert.equal(WP.playFor("boa"), "loop");
