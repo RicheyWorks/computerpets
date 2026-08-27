@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -27,8 +27,9 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("rabbit"), "thump");
   assert.equal(P.playFor("hamster"), "stash");
   assert.equal(P.playFor("guinea_pig"), "wheek");
+  assert.equal(P.playFor("turtle"), "bask");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("turtle"), "sill");
+  assert.equal(P.playFor("goldfish"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -100,6 +101,19 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(guinea.kind, "stash");
   assert.notEqual(guinea.kind, "ledge");
   assert.notEqual(guinea.kind, "earth");
+  assert.notEqual(guinea.kind, "bask");
+  const turtle = P.pickTarget([WIN], 80, "turtle", WORK, P.SPRITE);
+  assert.ok(turtle);
+  assert.equal(turtle.kind, "bask");
+  assert.equal(turtle.side, "rail");
+  assert.equal(turtle.leave, "slide");
+  assert.ok(turtle.holdLift > 16);
+  assert.notEqual(turtle.kind, "sill");
+  assert.notEqual(turtle.kind, "earth");
+  assert.notEqual(turtle.kind, "ledge");
+  assert.notEqual(turtle.kind, "wheek");
+  assert.notEqual(turtle.kind, "watch");
+  assert.notEqual(turtle.kind, "stash");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -219,6 +233,8 @@ test("other guests do not clone Rui's cling — they walk a sill and hop down", 
     assert.notEqual(play.phase, "thump");
     assert.notEqual(play.phase, "stash-cheek");
     assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "bask-withdraw");
   }
   assert.ok(seen.has("sill-hop"));
   assert.ok(seen.has("sill-walk"));
@@ -1442,6 +1458,8 @@ test("Pip walks to a window, stays on the floor at its feet, watches, then trots
     assert.notEqual(play.phase, "thump-on");
     assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "wheek-loaf");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "bask-withdraw");
     assert.notEqual(play.phase, "sill-hop");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "watch-hold") {
@@ -1591,6 +1609,8 @@ test("Thimble hops to a window, stamps on the floor beside it, then vanishes —
     assert.notEqual(play.phase, "watch-on");
     assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "wheek-loaf");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "bask-withdraw");
     assert.notEqual(play.phase, "sill-hop");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "thump") {
@@ -1747,6 +1767,8 @@ test("Clip hops to a window, ducks into the bottom-inside corner as a drawer, ch
     assert.notEqual(play.phase, "thump-on");
     assert.notEqual(play.phase, "wheek");
     assert.notEqual(play.phase, "wheek-loaf");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "bask-withdraw");
     assert.notEqual(play.phase, "sill-hop");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "stash-cheek") {
@@ -1916,6 +1938,8 @@ test("Whee waddles to a window, loaves on the floor, wheeks, popcorns once, then
     assert.notEqual(play.phase, "thump-on");
     assert.notEqual(play.phase, "stash-cheek");
     assert.notEqual(play.phase, "stash-on");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "bask-withdraw");
     assert.notEqual(play.phase, "sill-hop");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "wheek-loaf") {
@@ -2002,6 +2026,160 @@ test("a moved window refits Whee's loaf; sleep, card, and hide abort; Whee never
   assert.equal(play.abort, true);
 });
 
+test("Ink paddles the long way to a window, basks on the bottom rail, withdraws the head, then slides back — not earth, ledge, wheek, watch, stash, or sill", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "turtle", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "bask");
+  assert.equal(target.side, "rail");
+  assert.equal(target.leave, "slide");
+  assert.equal(target.clickToId, undefined, "one window");
+  assert.ok(P.DUR.baskOn > P.DUR.earthOn, "the paddle climb is the long way, not Ground's seat");
+  assert.ok(P.DUR.baskWithdraw > P.DUR.wheek, "the scholar holds still longer than a wheek");
+  assert.ok(P.DUR.baskWithdraw > P.DUR.earthSit * 0.9, "the withdraw is a scholar's stillness");
+  assert.ok(P.DUR.baskOff > P.DUR.earthOff, "the slide home is the long way");
+  const bask = P.baskPoint(WIN, P.SPRITE, WORK);
+  const earth = P.earthPoint(WIN, P.SPRITE, WORK);
+  const ledge = P.ledgePoint(WIN, P.SPRITE, WORK);
+  const watch = P.watchPoint(WIN, P.SPRITE, WORK);
+  const wheek = P.wheekPoint(WIN, P.SPRITE, WORK);
+  const stash = P.stashPoint(WIN, "left", P.SPRITE, WORK);
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const hold = P.holdPoint(WIN, "jamb", "left", P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.equal(target.holdX, bask.x);
+  assert.equal(target.holdLift, bask.lift);
+  assert.ok(bask.lift > 16, "he sits the rail, not the floor");
+  assert.ok(bask.x > WIN.x && bask.x + P.SPRITE < WIN.x + WIN.width, "inside the glass");
+  assert.ok(bask.lift > earth.lift, "on the bottom rail, not below the frame as a lug");
+  assert.ok(Math.abs(bask.x - earth.x) > 40, "not Ground's mid-rail lug");
+  assert.ok(Math.abs(bask.lift - ledge.lift) > 40, "not Miso's top ledge");
+  assert.ok(bask.lift !== 0 && Math.abs(bask.x - watch.x) > 40, "not Pip's floor watch");
+  assert.ok(bask.lift !== 0 && Math.abs(bask.x - wheek.x) > 40, "not Whee's floor loaf");
+  assert.ok(Math.abs(bask.x - stash.x) > 40, "not Clip's drawer corner");
+  assert.ok(Math.abs(bask.x - cling.x) > 20 || Math.abs(bask.lift - cling.lift) > 20, "not Rui's mid-side cling");
+  assert.ok(Math.abs(bask.x - coil.x) > 20 || Math.abs(bask.lift - coil.lift) > 20, "not Volt's wrap-hold");
+  assert.ok(Math.abs(bask.x - field.x) > 20 || Math.abs(bask.lift - field.lift) > 20, "not Flux's glass");
+  assert.ok(Math.abs(bask.x - hold.x) > 16 || Math.abs(bask.lift - hold.lift) > 20, "not Fuse's jamb clip");
+  assert.ok(Math.abs(bask.lift - sill.lift) > 40, "not a generic top sill");
+  const on0 = P.baskOnPath(0, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
+  const onMid = P.baskOnPath(0.35, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
+  const on1 = P.baskOnPath(1, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
+  const earthMid = P.earthOnPath(0.35, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
+  assert.equal(on0.x, 40);
+  assert.equal(on1.x, bask.x);
+  assert.equal(on1.lift, bask.lift);
+  assert.ok(Math.abs(onMid.rot) > 1, "webbed feet paddle on the climb");
+  assert.ok(Math.abs(onMid.lift - earthMid.lift) > 1, "the paddle is not Ground's straight seat");
+  const tuck0 = P.baskWithdrawPath(0);
+  const tuckMid = P.baskWithdrawPath(0.5);
+  const tuck1 = P.baskWithdrawPath(1);
+  assert.equal(tuck0.x, 0);
+  assert.equal(tuck0.rot, 0);
+  assert.ok(tuckMid.x < -4, "the head withdraws");
+  assert.equal(tuck1.x, tuckMid.x);
+  assert.equal(tuck1.rot, 0);
+  const offMid = P.baskOffPath(0.25, { x: bask.x, lift: bask.lift }, { x: bask.x + 156, lift: 0 });
+  assert.equal(offMid.lift, bask.lift);
+  assert.ok(offMid.x !== bask.x, "the long way starts along the rail");
+  let play = P.beginPlay(target, target.approachX);
+  assert.ok(Math.abs(target.approachX - target.holdX) > 120, "he takes the long way in");
+  assert.ok(Math.abs(target.landX - target.holdX) > 120, "he takes the long way home");
+  const seen = new Set();
+  let baskMs = 0;
+  let withdrawMs = 0;
+  let sitLift = 0;
+  let withdrawRot = 0;
+  let withdrawXMin = Infinity;
+  let withdrawXMax = -Infinity;
+  let windowIds = new Set();
+  for (let i = 0; i < 800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    windowIds.add(play.target.id);
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "earth-on");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "ledge-on");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "watch-on");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "wheek-loaf");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bask") {
+      baskMs += 0.05;
+      sitLift = play.lift;
+      assert.equal(play.anim, "sit");
+      assert.equal(play.rot, 0);
+      assert.ok(play.lift > earth.lift, "the stone is on the rail");
+    }
+    if (play.phase === "bask-withdraw") {
+      withdrawMs += 0.05;
+      withdrawRot = Math.max(withdrawRot, Math.abs(play.rot));
+      withdrawXMin = Math.min(withdrawXMin, play.x);
+      withdrawXMax = Math.max(withdrawXMax, play.x);
+      assert.equal(play.anim, "sit", "the scholar holds still");
+      assert.equal(play.rot, 0, "a withdraw, not a look-up");
+      assert.ok(play.lift > 16, "still on the rail");
+    }
+    if (play.phase === "bask-on" || play.phase === "bask-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("bask-on"));
+  assert.ok(seen.has("bask"));
+  assert.ok(seen.has("bask-withdraw"));
+  assert.ok(seen.has("bask-off"));
+  assert.ok(!seen.has("earth-sit"), "not Ground's lug");
+  assert.ok(!seen.has("ledge-sit"), "not Miso's ledge");
+  assert.ok(!seen.has("wheek"), "not Whee's voice");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(sitLift > earth.lift, "Ink holds the rail as a pond stone");
+  assert.ok(baskMs >= 0.7 && baskMs <= 1.1, `the bask settles (${baskMs})`);
+  assert.ok(withdrawMs >= 1.5 && withdrawMs <= 2.0, `the scholar withdraws and holds (${withdrawMs})`);
+  assert.equal(withdrawRot, 0, "the withdraw is still, not a look-up");
+  assert.ok(withdrawXMax - withdrawXMin < 12, "the head tucks; he does not walk the rail");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Ink's rail; sleep, card, and hide abort; Ink never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "turtle", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 200 && play.phase !== "bask"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "bask");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "bask");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  assert.equal(play.x, play.target.holdX);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bask-off");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
@@ -2021,6 +2199,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /thump-on|thump-off|playFor/);
   assert.match(petSrc, /stash-on|stash-off|playFor/);
   assert.match(petSrc, /wheek-on|wheek-off|playFor/);
+  assert.match(petSrc, /bask-on|bask-off|playFor/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
