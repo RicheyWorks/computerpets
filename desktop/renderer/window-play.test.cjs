@@ -18110,7 +18110,7 @@ test("Stem stilts a sash parting bead as a blotter stem: walk onto the bead as a
   assert.equal(P.playFor("kingsnake"), "inspect");
   assert.equal(P.playFor("orb_weaver"), "web");
   assert.equal(P.playFor("tarantula"), "kick");
-  assert.equal(P.playFor("scorpion"), "sill");
+  assert.equal(P.playFor("scorpion"), "raise");
   assert.notEqual(P.playFor("harvestman"), "stem");
   assert.notEqual(P.playFor("harvestman"), "hang");
   assert.notEqual(P.playFor("harvestman"), "hitch");
@@ -18242,3 +18242,168 @@ test("a moved window refits Stem's parting-bead stem; sleep, card, and hide abor
   assert.equal(play.abort, true);
 });
 
+
+test("Barb raises a window stool as a bark tray: walk onto the wood, raise the tail, hold the sting, then walk off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("mining_bee"), "dig");
+  assert.equal(P.playFor("saguaro"), "store");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("nautilus"), "rise");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("vinegaroon"), "sill");
+  assert.notEqual(P.playFor("scorpion"), "barb");
+  assert.notEqual(P.playFor("scorpion"), "sill");
+  assert.notEqual(P.playFor("scorpion"), "stilt");
+  assert.notEqual(P.playFor("scorpion"), "pull");
+  assert.notEqual(P.playFor("scorpion"), "plow");
+  assert.notEqual(P.playFor("scorpion"), "dig");
+  assert.notEqual(P.playFor("scorpion"), "store");
+  assert.notEqual(P.playFor("scorpion"), "seed");
+  assert.notEqual(P.playFor("scorpion"), "rise");
+  assert.notEqual(P.playFor("scorpion"), "hang");
+  assert.notEqual(P.playFor("scorpion"), "sting");
+  assert.equal(P.DUR.hang, 1.35, "Rui's cling-dive hang duration stays");
+  assert.equal(P.DUR.riseOn, 1.58, "Chamber's rise durations stay");
+  const target = P.pickTarget([WIN], 80, "scorpion", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "raise");
+  assert.equal(target.side, "bark");
+  assert.equal(target.leave, "bark");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "plow");
+  assert.notEqual(target.kind, "dig");
+  assert.notEqual(target.kind, "store");
+  assert.notEqual(target.kind, "seed");
+  assert.notEqual(target.kind, "stilt");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she raises a window stool, not the floor");
+  assert.ok(P.DUR.raiseHold > P.DUR.raise, "the wait is the hold; the still sting-up is the tell");
+  assert.ok(P.DUR.raiseOn > P.DUR.raise, "a walk on, not the raise");
+  assert.ok(P.DUR.raiseOn !== P.DUR.stiltOn);
+  assert.ok(P.DUR.raiseOn !== P.DUR.riseOn);
+  assert.ok(P.DUR.raiseOn !== P.DUR.pullOn);
+  assert.ok(P.DUR.raiseOn !== P.DUR.plowOn);
+  assert.ok(P.DUR.raiseOn !== P.DUR.digOn);
+  assert.ok(P.DUR.raiseOn !== P.DUR.storeOn);
+  assert.ok(P.DUR.raiseOn !== P.DUR.seedOn);
+  assert.ok(P.DUR.raiseOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.raise !== P.DUR.rise);
+  assert.ok(P.DUR.raise !== P.DUR.stilt);
+  assert.ok(P.DUR.raiseHold !== P.DUR.riseHold);
+  assert.ok(P.DUR.raiseHold !== P.DUR.stiltHold);
+  assert.ok(P.DUR.raiseOff !== P.DUR.stiltOff);
+  assert.ok(P.DUR.raiseOff !== P.DUR.riseOff);
+  assert.ok(P.DUR.raiseOff !== P.DUR.sillDown);
+  const bark = P.raisePoint(WIN, P.SPRITE, WORK);
+  const lawn = P.pullPoint(WIN, P.SPRITE, WORK);
+  const sand = P.plowPoint(WIN, P.SPRITE, WORK);
+  const bank = P.digPoint(WIN, P.SPRITE, WORK);
+  const tray = P.storePoint(WIN, P.SPRITE, WORK);
+  const dish = P.seedPoint(WIN, P.SPRITE, WORK);
+  const bead = P.stiltPoint(WIN, P.SPRITE, WORK);
+  assert.ok(bark.lift > 8, "the window stool as bark, not the floor");
+  assert.ok(bark.x > WIN.x, "on the stool, inside the frame");
+  assert.ok(bark.x < WIN.x + WIN.width - 8, "inside the frame");
+  assert.ok(Math.abs(bark.x - lawn.x) > 8 || Math.abs(bark.lift - lawn.lift) > 8, "not Brick's lawn pull");
+  assert.ok(Math.abs(bark.x - sand.x) > 8 || Math.abs(bark.lift - sand.lift) > 8, "not Ledger's plow");
+  assert.ok(Math.abs(bark.x - bank.x) > 8 || Math.abs(bark.lift - bank.lift) > 8, "not Bank's dig");
+  assert.ok(Math.abs(bark.x - tray.x) > 8 || Math.abs(bark.lift - tray.lift) > 8, "not Arm's store");
+  assert.ok(Math.abs(bark.x - dish.x) > 8 || Math.abs(bark.lift - dish.lift) > 8, "not Mast's seed");
+  assert.ok(Math.abs(bark.lift - bead.lift) > 40, "not Stem's parting-bead stilt");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "scorpion", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real stool, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "scorpion", WORK, P.SPRITE);
+  assert.equal(short, null, "a real stool needs height");
+  const walkOn = P.raiseOnPath(0.25, { x: 40, lift: 0 }, { x: bark.x, lift: bark.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the stool wood");
+  assert.ok(walkOn.lift < bark.lift, "a walk on, not already sitting");
+  const lift = P.raisePath(0.5);
+  const still = P.raiseHoldPath(0.5);
+  const yank = P.pullPath(0.5);
+  const bury = P.plowPath(0.5);
+  const shaft = P.digPath(0.5);
+  const swell = P.storePath(0.5);
+  const drop = P.seedPath(0.5);
+  const stilt = P.stiltPath(0.5);
+  assert.ok(lift.rot > 16, "the tail goes up");
+  assert.ok(lift.x < 2, "she stays on the wood");
+  assert.ok(lift.lift < 8, "a tail raise, not a stilt");
+  assert.ok(lift.rot !== yank.rot, "not Brick's worm pull");
+  assert.ok(lift.lift !== bury.lift, "not Ledger's bury");
+  assert.ok(lift.lift !== shaft.lift, "not Bank's shaft");
+  assert.ok(lift.lift !== swell.lift, "not Arm's swell");
+  assert.ok(lift.lift !== drop.lift, "not Mast's seed drop");
+  assert.ok(lift.lift !== stilt.lift, "not Stem's one-body stilt");
+  assert.ok(still.rot > 28, "she holds the sting up");
+  assert.ok(Math.abs(still.x - 0.27) < 0.2, "still on the bark");
+  assert.ok(still.lift < 4, "a still raise on the wood, not a swell");
+  const off0 = P.raiseOffPath(0, { x: bark.x, lift: bark.lift, rot: 36 }, { x: bark.x + 62, lift: 0 });
+  const offMid = P.raiseOffPath(0.5, { x: bark.x, lift: bark.lift, rot: 36 }, { x: bark.x + 62, lift: 0 });
+  const off1 = P.raiseOffPath(1, { x: bark.x, lift: bark.lift, rot: 36 }, { x: bark.x + 62, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - bark.x) < 2);
+  assert.ok(Math.abs(offMid.x - (bark.x + 62 * midEase)) < 8, "she walks off, not a hop");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "pull");
+    assert.notEqual(play.phase, "plow");
+    assert.notEqual(play.phase, "dig");
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "raise") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "raise-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "raise-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.8)) < 4, "she holds the sting up on the wood");
+    }
+    if (play.phase === "raise-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("raise-on"));
+  assert.ok(seen.has("raise"));
+  assert.ok(seen.has("raise-hold"));
+  assert.ok(seen.has("raise-off"));
+  assert.ok(!seen.has("pull"), "Barb never uses Brick's worm pull");
+  assert.ok(!seen.has("stilt"), "Barb never uses Stem's stilt");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Barb's bark-tray stool; sleep, card, and hide abort; Barb never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "scorpion", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "raise"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "raise");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "raise");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "raise-off");
+  assert.equal(play.abort, true);
+});
