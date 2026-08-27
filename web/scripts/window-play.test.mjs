@@ -11355,7 +11355,8 @@ test("the demo window plate walks Leap's pounce the same way", () => {
   assert.equal(P.playFor("chinchilla"), "dust");
   assert.equal(P.playFor("venus_flytrap"), "count");
   assert.equal(P.playFor("moss"), "lean");
-  assert.equal(P.playFor("wolf_spider"), "sill");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("tarantula"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
   assert.notEqual(target.kind, "leap");
   assert.notEqual(target.kind, "web");
@@ -11437,6 +11438,106 @@ test("the demo window plate walks Leap's pounce the same way", () => {
   assert.ok(seen.has("pounce-hold"));
   assert.ok(seen.has("pounce-off"));
   assert.ok(pounceLift > 8, "she pounces once");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Prowl's carry the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "wolf_spider"[\s\S]{0,80}slug: "prowl"/);
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  const target = P.pickTarget([WIN], 80, "wolf_spider", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "carry");
+  assert.equal(target.side, "litter");
+  assert.equal(target.leave, "litter");
+  assert.equal(Overlay.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("dog"), "watch");
+  assert.equal(P.playFor("fox"), "scent");
+  assert.equal(P.playFor("guinea_pig"), "wheek");
+  assert.equal(P.playFor("hedgehog"), "ball");
+  assert.equal(P.playFor("salamander"), "cover");
+  assert.equal(P.playFor("tarantula"), "sill");
+  assert.notEqual(P.playFor("wolf_spider"), "prowl");
+  assert.notEqual(target.kind, "pounce");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "watch");
+  assert.notEqual(target.kind, "sill");
+  assert.equal(target.holdLift, 0, "she hunts on the floor, not the glass");
+  assert.ok(P.DUR.carryHold > P.DUR.carry, "the wait is the hold; brood-up is the tell");
+  assert.ok(P.DUR.carryOn !== Overlay.DUR.pounceOn);
+  assert.ok(P.DUR.carryOn !== Overlay.DUR.webOn);
+  assert.ok(P.DUR.carryOn !== Overlay.DUR.watchOn);
+  assert.ok(P.DUR.carryOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.carryOn, Overlay.DUR.carryOn);
+  assert.equal(P.DUR.carry, Overlay.DUR.carry);
+  assert.equal(P.DUR.carryHold, Overlay.DUR.carryHold);
+  assert.equal(P.DUR.carryOff, Overlay.DUR.carryOff);
+  const litter = P.carryPoint(WIN, 176, WORK);
+  const deskLitter = Overlay.carryPoint(WIN, 176, WORK);
+  assert.equal(litter.x, deskLitter.x);
+  assert.equal(litter.lift, deskLitter.lift);
+  const edge = P.pouncePoint(WIN, 176, WORK);
+  const hub = P.webPoint(WIN, 176, WORK);
+  const watch = P.watchPoint(WIN, 176, WORK);
+  const loaf = P.wheekPoint(WIN, 176, WORK);
+  const ball = P.ballPoint(WIN, 176, WORK);
+  const well = P.coverPoint(WIN, 176, WORK);
+  assert.ok(litter.lift === 0, "the floor at the pane's foot");
+  assert.ok(litter.x > WIN.x + WIN.width * 0.62, "the pane's far foot");
+  assert.ok(Math.abs(litter.x - watch.x) > 40, "not Pip");
+  assert.ok(Math.abs(litter.x - loaf.x) > 40, "not Whee");
+  assert.ok(Math.abs(litter.x - ball.x) > 40, "not Burr");
+  assert.ok(Math.abs(litter.x - well.x) > 40 || Math.abs(litter.lift - well.lift) > 8, "not Dapple");
+  assert.ok(Math.abs(litter.x - edge.x) > 40 || Math.abs(litter.lift - edge.lift) > 40, "not Leap");
+  assert.ok(Math.abs(litter.x - hub.x) > 40 || Math.abs(litter.lift - hub.lift) > 40, "not Loom");
+  const walkOn = P.carryOnPath(0.25, { x: 40, lift: 0 }, { x: litter.x, lift: 0 });
+  const deskWalk = Overlay.carryOnPath(0.25, { x: 40, lift: 0 }, { x: litter.x, lift: 0 });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.equal(walkOn.lift, 0, "a ground walk");
+  const brood = P.carryPath(0.5);
+  const deskBrood = Overlay.carryPath(0.5);
+  assert.equal(brood.lift, deskBrood.lift);
+  assert.ok(brood.lift < 4, "brood up, not a pounce");
+  const wait = P.carryHoldPath(0.5);
+  const deskWait = Overlay.carryHoldPath(0.5);
+  assert.equal(wait.x, deskWait.x);
+  assert.equal(wait.lift, deskWait.lift);
+  assert.ok(wait.lift < 4, "she waits with the brood");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let maxLift = 0;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    maxLift = Math.max(maxLift, play.lift || 0);
+    assert.notEqual(play.phase, "pounce");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "watch");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "carry") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "carry-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "carry-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - play.target.holdLift) < 4, "she waits with the brood");
+    }
+  }
+  assert.ok(seen.has("carry-on"));
+  assert.ok(seen.has("carry"));
+  assert.ok(seen.has("carry-hold"));
+  assert.ok(seen.has("carry-off"));
+  assert.ok(maxLift < 8, "she never climbs the glass");
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
