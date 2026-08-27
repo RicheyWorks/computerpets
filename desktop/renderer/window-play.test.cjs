@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -58,6 +58,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("moon_jelly"), "chime");
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -681,6 +682,18 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(tenant.kind, "stash");
   assert.notEqual(tenant.kind, "reef");
   assert.notEqual(tenant.kind, "hold");
+  const ledger = P.pickTarget([WIN], 80, "horseshoe_crab", WORK, P.SPRITE);
+  assert.ok(ledger);
+  assert.equal(ledger.kind, "plow");
+  assert.equal(ledger.side, "sand");
+  assert.equal(ledger.leave, "unbury");
+  assert.ok(ledger.holdLift > 18);
+  assert.notEqual(ledger.kind, "sill");
+  assert.notEqual(ledger.kind, "knob");
+  assert.notEqual(ledger.kind, "reef");
+  assert.notEqual(ledger.kind, "earth");
+  assert.notEqual(ledger.kind, "bask");
+  assert.notEqual(ledger.kind, "flip");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -8407,6 +8420,7 @@ test("Ochre reefs a window pane as a damp blotter — not chime, rise, wall, bas
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
   assert.equal(target.side, "blotter");
   assert.equal(target.leave, "uncling");
   assert.equal(target.clickToId, undefined, "one window");
@@ -8585,7 +8599,7 @@ test("Tenant knobs a window sash lift as a vacant shell — not lid, stash, reef
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("horseshoe_crab"), "sill");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
   assert.equal(target.side, "lift");
   assert.equal(target.leave, "reject");
   assert.equal(target.clickToId, undefined, "one window");
@@ -8733,5 +8747,176 @@ test("a moved window refits Tenant's sash lift; sleep, card, and hide abort; Ten
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "knob-off");
+  assert.equal(play.abort, true);
+});
+
+test("Ledger plows a window stool as a sand tray — not knob, reef, earth, bask, flip, or sill", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "horseshoe_crab", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "plow");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("sea_star"), "reef");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("nautilus"), "rise");
+  assert.equal(P.playFor("cuttlefish"), "flush");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("ground_dragon"), "earth");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("seahorse"), "sill");
+  assert.equal(target.side, "sand");
+  assert.equal(target.leave, "unbury");
+  assert.equal(target.clickToId, undefined, "one window");
+  assert.ok(target.holdLift > 18, "he plows the stool, not the floor");
+  assert.ok(P.DUR.plowRead > P.DUR.plow, "book-gills reading is the tell");
+  assert.ok(P.DUR.plowOn !== P.DUR.knobOn, "not Tenant's shuffle");
+  assert.ok(P.DUR.plowOn !== P.DUR.reefOn, "not Ochre's creep");
+  assert.ok(P.DUR.plowOn !== P.DUR.earthOn, "not Ground's seat");
+  assert.ok(P.DUR.plowOn !== P.DUR.baskOn, "not Ink's paddle");
+  assert.ok(P.DUR.plowOn !== P.DUR.flipOn, "not Bluff's hop");
+  assert.ok(P.DUR.plowRead !== P.DUR.knobMeasure, "not a claw measure");
+  assert.ok(P.DUR.plowRead !== P.DUR.reefHold, "not a remain");
+  assert.ok(P.DUR.plow !== P.DUR.knob, "not an abdomen try");
+  assert.ok(P.DUR.plow !== P.DUR.earthSit, "not an earth lug");
+  assert.ok(P.DUR.plow !== P.DUR.bask, "not a bask");
+  assert.ok(P.DUR.plowOff !== P.DUR.knobOff, "he unburies, not a reject");
+  assert.ok(P.DUR.plowOff !== P.DUR.reefOff, "not an uncling");
+  assert.ok(P.DUR.plowOff !== P.DUR.earthOff, "not a step off a lug");
+  const sand = P.plowPoint(WIN, P.SPRITE, WORK);
+  const knob = P.knobPoint(WIN, P.SPRITE, WORK);
+  const reef = P.reefPoint(WIN, P.SPRITE, WORK);
+  const earth = P.earthPoint(WIN, P.SPRITE, WORK);
+  const bask = P.baskPoint(WIN, P.SPRITE, WORK);
+  const flip = P.flipPoint(WIN, P.SPRITE, WORK);
+  const lid = P.lidPoint(WIN, P.SPRITE, WORK);
+  const stash = P.stashPoint(WIN, "left", P.SPRITE, WORK);
+  const chimeTop = P.chimePoint(WIN, 0, P.SPRITE, WORK);
+  const rise = P.risePoint(WIN, "left", 0, P.SPRITE, WORK);
+  const flush = P.flushPoint(WIN, 0, P.SPRITE, WORK);
+  const circle = P.circlePoint(WIN, 0, P.SPRITE, WORK, 1);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const wall = P.wallPoint(WIN, 0, "left", P.SPRITE, WORK);
+  const kindle = P.kindlePoint(WIN, P.SPRITE, WORK);
+  const chart = P.chartPoint(WIN, 0, P.SPRITE, WORK);
+  const flatten = P.flattenPoint(WIN, P.SPRITE, WORK);
+  const drape = P.drapePoint(WIN, "left", P.SPRITE, WORK);
+  const dust = P.dustPoint(WIN, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.ok(Math.abs(sand.x - knob.x) > 20 || Math.abs(sand.lift - knob.lift) > 16, "not Tenant");
+  assert.ok(Math.abs(sand.x - reef.x) > 20 || Math.abs(sand.lift - reef.lift) > 16, "not Ochre");
+  assert.ok(Math.abs(sand.x - earth.x) > 20 || Math.abs(sand.lift - earth.lift) > 16, "not Ground");
+  assert.ok(Math.abs(sand.x - bask.x) > 20 || Math.abs(sand.lift - bask.lift) > 16, "not Ink");
+  assert.ok(Math.abs(sand.x - flip.x) > 20 || Math.abs(sand.lift - flip.lift) > 16, "not Bluff");
+  assert.ok(Math.abs(sand.x - lid.x) > 20 || Math.abs(sand.lift - lid.lift) > 16, "not Cup");
+  assert.ok(Math.abs(sand.x - stash.x) > 20 || Math.abs(sand.lift - stash.lift) > 16, "not Clip");
+  assert.ok(Math.abs(sand.x - chimeTop.x) > 20 || Math.abs(sand.lift - chimeTop.lift) > 16, "not Pulse");
+  assert.ok(Math.abs(sand.x - rise.x) > 20 || Math.abs(sand.lift - rise.lift) > 16, "not Chamber");
+  assert.ok(Math.abs(sand.x - flush.x) > 20 || Math.abs(sand.lift - flush.lift) > 16, "not Sepia");
+  assert.ok(Math.abs(sand.x - circle.x) > 20 || Math.abs(sand.lift - circle.lift) > 16, "not Coin");
+  assert.ok(Math.abs(sand.x - field.x) > 20 || Math.abs(sand.lift - field.lift) > 16, "not Flux");
+  assert.ok(Math.abs(sand.x - wall.x) > 20 || Math.abs(sand.lift - wall.lift) > 16, "not Bloom");
+  assert.ok(Math.abs(sand.x - kindle.x) > 20 || Math.abs(sand.lift - kindle.lift) > 16, "not Ember");
+  assert.ok(Math.abs(sand.x - chart.x) > 20 || Math.abs(sand.lift - chart.lift) > 16, "not Atlas");
+  assert.ok(Math.abs(sand.x - flatten.x) > 20 || Math.abs(sand.lift - flatten.lift) > 16, "not Sol");
+  assert.ok(Math.abs(sand.x - dust.x) > 20 || Math.abs(sand.lift - dust.lift) > 16, "not Floss");
+  assert.ok(Math.abs(sand.lift - drape.lift) > 20, "not Vesper");
+  assert.ok(Math.abs(sand.lift - sill.lift) > 40, "not a generic sill");
+  const on0 = P.plowOnPath(0, { x: 40, lift: 0 }, { x: sand.x, lift: sand.lift });
+  const onMid = P.plowOnPath(0.5, { x: 40, lift: 0 }, { x: sand.x, lift: sand.lift });
+  const on1 = P.plowOnPath(1, { x: 40, lift: 0 }, { x: sand.x, lift: sand.lift });
+  assert.ok(Math.abs(on0.lift) < 2);
+  assert.ok(Math.abs(on1.lift - sand.lift) < 6);
+  assert.ok(on1.lift - on0.lift > 18, "he buries onto the stool");
+  const lerpMid = sand.lift * 0.5;
+  assert.ok(Math.abs(onMid.lift - lerpMid) < 8, "a plow, not a hop");
+  const read = P.plowReadPath(0.2);
+  const press = P.plowReadPath(0.51);
+  const readAgain = P.plowReadPath(0.78);
+  assert.ok(read.lift < -2, "book-gills press the wood");
+  assert.ok(press.lift < 0, "a press between pages");
+  assert.ok(readAgain.lift < -2, "a second page");
+  const helm = P.plowPath(1);
+  assert.ok(helm.lift < -2, "the helmet holds");
+  const off0 = P.plowOffPath(0, { x: sand.x, lift: sand.lift }, { x: sand.x + 68, lift: 0 });
+  const offMid = P.plowOffPath(0.55, { x: sand.x, lift: sand.lift }, { x: sand.x + 68, lift: 0 });
+  const off1 = P.plowOffPath(1, { x: sand.x, lift: sand.lift }, { x: sand.x + 68, lift: 0 });
+  assert.ok(Math.abs(off0.x - sand.x) < 2);
+  assert.ok(Math.abs(off1.lift) < 2);
+  assert.ok(offMid.lift < sand.lift + 8, "he unburies, not a hop");
+  assert.ok(offMid.lift > 8, "still leaving the tray");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let readLiftMin = Infinity;
+  let readXMin = Infinity;
+  let readXMax = -Infinity;
+  for (let i = 0; i < 2200 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "knob");
+    assert.notEqual(play.phase, "knob-measure");
+    assert.notEqual(play.phase, "reef");
+    assert.notEqual(play.phase, "reef-hold");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "flip");
+    assert.notEqual(play.phase, "chime");
+    assert.notEqual(play.phase, "rise");
+    assert.notEqual(play.phase, "flush");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "plow-read") {
+      readLiftMin = Math.min(readLiftMin, play.lift);
+      readXMin = Math.min(readXMin, play.x);
+      readXMax = Math.max(readXMax, play.x);
+      assert.equal(play.anim, "play", "book-gills read the grain");
+      assert.ok(play.lift > 12, "the read is on the stool");
+    }
+    if (play.phase === "plow") {
+      assert.equal(play.anim, "sit", "the helmet holds");
+    }
+  }
+  assert.ok(seen.has("plow-on"));
+  assert.ok(seen.has("plow-read"));
+  assert.ok(seen.has("plow"));
+  assert.ok(seen.has("plow-off"));
+  assert.ok(!seen.has("knob"), "not Tenant");
+  assert.ok(!seen.has("reef"), "not Ochre");
+  assert.ok(!seen.has("earth-sit"), "not Ground");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(readXMax - readXMin > 2, "pages turn");
+  assert.ok(readLiftMin < target.holdLift - 1, "book-gills press the wood");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Ledger's sand tray; sleep, card, and hide abort; Ledger never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "horseshoe_crab", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 520 && play.phase !== "plow-read"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "plow-read");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "plow-read");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "plow-off");
   assert.equal(play.abort, true);
 });
