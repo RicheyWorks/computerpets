@@ -86,6 +86,7 @@ export type RadioQuery = {
   place: string;
   tags: string[];
   tokens: string[];
+  call: string;
   city: string;
   state: string;
   countrycode: string;
@@ -175,8 +176,8 @@ export function resolvePlace(place = "", area?: RadioArea | null) {
   if (place && fromArea.city && fromArea.city.toLowerCase() === place.toLowerCase()) {
     return { city: fromArea.city, state: fromArea.state, countrycode: fromArea.countrycode };
   }
-  if (place) return { city: place, state: "", countrycode: "" };
-  return { city: fromArea.city, state: fromArea.state, countrycode: fromArea.countrycode };
+  if (!place) return { city: fromArea.city, state: fromArea.state, countrycode: fromArea.countrycode };
+  return { city: "", state: "", countrycode: "" };
 }
 
 export function parseRadioQuery(query = "", area?: RadioArea | null): RadioQuery {
@@ -190,7 +191,9 @@ export function parseRadioQuery(query = "", area?: RadioArea | null): RadioQuery
     .toLowerCase()
     .split(/[^a-z0-9.]+/)
     .filter((t) => t && t !== freq && t !== "fm" && t !== "am");
-  const place = tokens.find((t) => t.length > 2 && !/^\d/.test(t)) || "";
+  const isCall = (t: string) => /^[kw][a-z0-9]{2,4}$/i.test(t);
+  const call = tokens.find(isCall) || "";
+  const place = tokens.find((t) => t.length > 2 && !/^\d/.test(t) && t !== call) || "";
   const resolved = resolvePlace(place, area);
   return {
     raw,
@@ -198,6 +201,7 @@ export function parseRadioQuery(query = "", area?: RadioArea | null): RadioQuery
     place,
     tags,
     tokens,
+    call,
     city: resolved.city,
     state: resolved.state,
     countrycode: resolved.countrycode,
@@ -257,11 +261,8 @@ export function radioSearchUrls(query = "", area?: RadioArea | null) {
     add({ city: p.city, state: p.state, countrycode: p.countrycode });
     add({ name: p.city || p.place, state: p.state, countrycode: p.countrycode });
   }
-  if (!p.freq && p.raw && !p.place) add({ name: p.raw.slice(0, 40) });
-  if (!p.freq && p.raw && p.place && p.tokens.length) {
-    const call = p.tokens.find((t) => t.length >= 3 && t !== String(p.city).toLowerCase()) || "";
-    if (call) add({ name: call, countrycode: p.countrycode, state: p.state });
-  }
+  if (p.call) add({ name: p.call.toUpperCase(), countrycode: p.countrycode, state: p.state });
+  if (!p.freq && p.raw && !p.place && !p.call) add({ name: p.raw.slice(0, 40) });
   if (!out.length && p.raw) add({ name: p.raw.slice(0, 40) });
   return out.slice(0, 4);
 }

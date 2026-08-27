@@ -19,7 +19,13 @@ test("Rui music is house loop or free radio, no paid key", () => {
   assert.ok(M.radioSearchUrls("99.9 seattle fm").some((u) => /state=Washington/.test(u)));
   assert.ok(!M.radioSearchUrls("99.9 seattle fm").some((u) => /tag=seattle/.test(u)));
   assert.equal(M.parseRadioQuery("KEXP").raw, "KEXP");
-  assert.match(M.radioSearchUrl("KEXP"), /name=KEXP/i);
+  assert.equal(M.parseRadioQuery("KEXP").call, "kexp");
+  assert.equal(M.parseRadioQuery("KEXP").city, "");
+  assert.equal(M.parseRadioQuery("KEXP").place, "");
+  assert.match(M.radioSearchUrl("KEXP"), /name=KEXP/);
+  assert.ok(!M.radioSearchUrls("KEXP").some((u) => /city=/i.test(u)));
+  assert.equal(Overlay.parseRadioQuery("KEXP").call, "kexp");
+  assert.equal(Overlay.parseRadioQuery("KEXP").city, "");
   assert.deepEqual(M.radioSearchUrls(""), []);
   const seattle = { name: "Seattle, Washington, United States", query: "Seattle", lat: 47.6, lon: -122.3 };
   assert.ok(M.radioSearchUrls("", seattle).some((u) => /city=Seattle/i.test(u)));

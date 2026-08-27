@@ -79,6 +79,9 @@ test("the tray pins Rui, Sip, and the grid ten", () => {
   assert.equal(M.RADIO_LABEL, "Radio station");
   assert.equal(M.RADIO_LOCAL, "Local");
   assert.match(M.RADIO_UA, /ComputerPets/);
+  assert.equal(M.parseRadioQuery("KEXP").call, "kexp");
+  assert.equal(M.parseRadioQuery("KEXP").city, "");
+  assert.match(M.radioSearchUrl("KEXP"), /name=KEXP/);
   assert.equal(T.SLEEP_HOLD_FRAME, 1);
   assert.ok(T.LIE_HOLD >= 8);
   assert.equal(R.RIBBON_SPECIAL, "I found a ribbon. It was not lost. It is now safer.");
