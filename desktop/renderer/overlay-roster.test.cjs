@@ -96,6 +96,10 @@ test("the overlay roster is the same two hundred twenty as the catalog", () => {
   const keys = roster.map((r) => r.key);
   assert.equal(keys.length, 220);
   assert.deepEqual(keys.sort(), [...CATALOG].sort());
+  const R = require("./roster-load.js");
+  const door = R.readRoster(join(__dirname, "roster.json"), require("node:fs"));
+  assert.equal(door.length, 220);
+  assert.equal(door[0].key, "red_panda");
 });
 
 test("the tray pins Rui and the grid ten so they are not buried", () => {

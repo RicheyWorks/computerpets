@@ -10,6 +10,7 @@ contextBridge.exposeInMainWorld("desk", {
   vitals: (payload) => ipcRenderer.send("vitals", payload),
   mindGet: () => ipcRenderer.sendSync("mind-get"),
   mindSet: (data) => ipcRenderer.send("mind-set", data),
+  roster: () => ipcRenderer.invoke("roster-get"),
   licenseStatus: () => ipcRenderer.invoke("license-status"),
   licenseUnlock: (input) => ipcRenderer.invoke("license-unlock", input),
   licenseDownload: () => ipcRenderer.invoke("license-download"),

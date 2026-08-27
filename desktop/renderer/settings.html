@@ -94,24 +94,38 @@
       const licenseOk = document.getElementById("licenseOk");
       const licenseErr = document.getElementById("licenseErr");
 
-      fetch("roster.json")
-        .then((r) => r.json())
-        .then((roster) => {
-          (Array.isArray(roster) ? roster : []).forEach((row) => {
-            if (!row || !row.key) return;
-            const o = document.createElement("option");
-            o.value = row.key;
-            o.textContent = row.name ? `${row.name} — ${row.key}` : row.key;
-            petType.appendChild(o);
-          });
-          if (!petType.value) petType.value = "red_panda";
-        })
-        .catch(() => {
+      function fillPetTypes(rows) {
+        (Array.isArray(rows) ? rows : []).forEach((row) => {
+          if (!row || !row.key) return;
           const o = document.createElement("option");
-          o.value = "red_panda";
-          o.textContent = "red_panda";
+          o.value = row.key;
+          o.textContent = row.name ? `${row.name} — ${row.key}` : row.key;
           petType.appendChild(o);
         });
+        if (!petType.value) petType.value = "red_panda";
+      }
+
+      function fallbackPetType() {
+        const o = document.createElement("option");
+        o.value = "red_panda";
+        o.textContent = "red_panda";
+        petType.appendChild(o);
+      }
+
+      if (window.desk?.roster) {
+        window.desk
+          .roster()
+          .then((rows) => {
+            if (!Array.isArray(rows) || !rows.length) {
+              fallbackPetType();
+              return;
+            }
+            fillPetTypes(rows);
+          })
+          .catch(fallbackPetType);
+      } else {
+        fallbackPetType();
+      }
 
       function showLicense(status) {
         if (!status) return;

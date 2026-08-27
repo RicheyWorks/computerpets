@@ -4,6 +4,7 @@ const path = require("path");
 const { createLicenseSession } = require("./license/session.cjs");
 const { LicenseError } = require("./license/errors.cjs");
 const Desk = require("./renderer/desk.js");
+const Roster = require("./renderer/roster-load.js");
 
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
@@ -46,13 +47,7 @@ let currentKey = "red_panda";
 let lastVitals = { vital: "Settled", hunger: 80, sick: false, hidden: false, mess: 0, bond: 0, stage: "grown", verb: "Special" };
 
 function loadRoster() {
-  const file = path.join(__dirname, "renderer", "roster.json");
-  try {
-    const parsed = JSON.parse(fs.readFileSync(file, "utf8"));
-    roster = Array.isArray(parsed) ? parsed.filter((r) => r && r.key && r.name) : [];
-  } catch {
-    roster = [];
-  }
+  roster = Roster.readRoster(path.join(__dirname, "renderer", "roster.json"), fs);
 }
 
 function mindFile() {
@@ -416,6 +411,8 @@ ipcMain.on("mind-get", (e) => {
 ipcMain.on("mind-set", (_e, data) => {
   writeMind(data);
 });
+
+ipcMain.handle("roster-get", () => roster);
 
 ipcMain.handle("license-status", licenseIpc(() => getLicenseSession().status()));
 ipcMain.handle("license-unlock", licenseIpc((input) => getLicenseSession().unlock(input || {})));
