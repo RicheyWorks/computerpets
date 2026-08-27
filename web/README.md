@@ -56,4 +56,4 @@ Operators open `/admin` (not in the house nav) with `ADMIN_API_KEY` as `X-Admin-
 - `/well` — the well
 - `/far` — the far den
 - `/nest` — a room. The square sits on the paper.
-- `/demo/{slug}` — a room. The guest is already walking. Same house as the Windows overlay: keeper card, tray sit, Spark at `/demo/crackle`. The extra shows the Mac sit. The mark shows the Linux sit. The sit shows the tablet sit. The sit shows the phone sit. Every species (rui, miso, pip, thimble, … ember, cup, felt, comb, frill, gleam, boot, crackle).
+- `/demo/{slug}` — a room. The guest is already walking. Same house as the Windows overlay: keeper card, tray sit, Spark at `/demo/crackle`. The extra shows the Mac sit. The mark shows the Linux sit. The sit shows the tablet sit. The sit shows the phone sit. Every species (rui, miso, pip, thimble, … ember, cup, sepia, felt, comb, frill, gleam, boot, crackle).
