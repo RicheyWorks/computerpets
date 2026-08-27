@@ -119,7 +119,7 @@ More pages: [docs/README.md](docs/README.md).
 
 ## License
 
-This project is licensed under the **MIT License**. See [LICENSE](LICENSE).
+Copyright (c) 2026 RicheyWorks. All rights reserved. This is a private house. See [LICENSE](LICENSE).
 
 ---
 

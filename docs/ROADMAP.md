@@ -46,7 +46,7 @@ All critical items required before any public or limited production exposure hav
 - [x] Full springdoc-openapi + rich `@Schema` DTOs (VerifySuccessResponse, DownloadResponse, ErrorResponse, PetInfo, etc.)
 - [x] Centralized `ApiExamples` class with 25+ reusable request/response/error examples (all 3 providers, download flows, 10+ error variants)
 - [x] Professional docs/ folder (ARCHITECTURE.md living doc, ROADMAP.md, SETUP.md, CONTRIBUTING.md, README index)
-- [x] Root README + .github/ issue/PR templates for open-source readiness
+- [x] Root README + .github/ issue/PR templates
 
 **Outcome:** The backend is now production-foundation ready. Docker images publish to GHCR, Postgres-backed, fully observable, and have excellent machine-readable API contracts.
 
