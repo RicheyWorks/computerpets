@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Wick threads the sash-sill gap as a tube, then dashes off. Burr shuffles to a window, snuffles the foot of the pane, curls into a ball against the glass, waits, then uncurls and shuffles off. Floss hops onto a window meeting rail as a dust tray, rolls in the sash-dust, fluffs, then hops down. Bloom drifts onto a window as a cistern wall, walks the pane (a salamander on glass), then sinks off. Keel hops onto a window cornice, tosses fruit from the bill, then hops down. Sol climbs a sun-warmed pane, head-bobs once, flattens as the living ornament, then climbs down. Vesper drapes a window lintel as a sleeping wyrm, then slips down. Ember banks as a coal on the window ash, kindles, then returns. Nori buns in a sash well as an inkwell hide, then unrolls. Saffron writes an S-curve along the sash as a pencil-tray canyon, then finishes. Bandit inspects a window jamb as a ruler, ticks the frame in bands, then closes. Jade saddles a casement stay as a lamp-arm, folds in half, then unfolds. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Wick threads the sash-sill gap as a tube, then dashes off. Burr shuffles to a window, snuffles the foot of the pane, curls into a ball against the glass, waits, then uncurls and shuffles off. Floss hops onto a window meeting rail as a dust tray, rolls in the sash-dust, fluffs, then hops down. Bloom drifts onto a window as a cistern wall, walks the pane (a salamander on glass), then sinks off. Keel hops onto a window cornice, tosses fruit from the bill, then hops down. Sol climbs a sun-warmed pane, head-bobs once, flattens as the living ornament, then climbs down. Vesper drapes a window lintel as a sleeping wyrm, then slips down. Ember banks as a coal on the window ash, kindles, then returns. Nori buns in a sash well as an inkwell hide, then unrolls. Saffron writes an S-curve along the sash as a pencil-tray canyon, then finishes. Bandit inspects a window jamb as a ruler, ticks the frame in bands, then closes. Jade saddles a casement stay as a lamp-arm, folds in half, then unfolds. Bluff hops onto a window stool as an eraser-dish stage, flips belly-up, holds the death, then rights himself. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -36,6 +36,7 @@ export const BUN = "bun";
 export const WRITE = "write";
 export const INSPECT = "inspect";
 export const SADDLE = "saddle";
+export const FLIP = "flip";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -161,13 +162,17 @@ export const DUR = {
   saddleFold: 1.76,
   saddle: 3.42,
   saddleOff: 1.08,
+  flipOn: 0.64,
+  flipRoll: 0.92,
+  flip: 2.72,
+  flipOff: 0.78,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof WHEEK | typeof BASK | typeof CIRCLE | typeof PERCH | typeof SCENT | typeof BOW | typeof HOOK | typeof THREAD | typeof BALL | typeof DUST | typeof WALL | typeof TOSS | typeof FLATTEN | typeof DRAPE | typeof KINDLE | typeof BUN | typeof WRITE | typeof INSPECT | typeof SADDLE | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof WHEEK | typeof BASK | typeof CIRCLE | typeof PERCH | typeof SCENT | typeof BOW | typeof HOOK | typeof THREAD | typeof BALL | typeof DUST | typeof WALL | typeof TOSS | typeof FLATTEN | typeof DRAPE | typeof KINDLE | typeof BUN | typeof WRITE | typeof INSPECT | typeof SADDLE | typeof FLIP | typeof SILL | typeof IGNORE;
 export type HoldClip = "jamb" | "sash";
 export type ClickNode = "left" | "right" | "tl" | "tr" | "bl" | "br";
 export type PlayPhase =
@@ -294,6 +299,10 @@ export type PlayPhase =
   | "saddle-fold"
   | "saddle"
   | "saddle-off"
+  | "flip-on"
+  | "flip-roll"
+  | "flip"
+  | "flip-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -306,14 +315,14 @@ export type WorkSpace = { width: number; height: number; floorLift?: number };
 export type PlayTarget = {
   id: string;
   kind: WindowPlayKind;
-  side: "left" | "right" | "top" | "glass" | "bottom" | "feet" | "rail" | "bowl" | "pane" | "gap" | "foot" | "tray" | "tank" | "cornice" | "brick" | "lintel" | "ash" | "well" | "canyon" | "ruler" | "stay";
+  side: "left" | "right" | "top" | "glass" | "bottom" | "feet" | "rail" | "bowl" | "pane" | "gap" | "foot" | "tray" | "tank" | "cornice" | "brick" | "lintel" | "ash" | "well" | "canyon" | "ruler" | "stay" | "stool";
   holdX: number;
   holdLift: number;
   approachX: number;
   landX: number;
   diveFrom?: "top" | "side";
   spin?: "backflip" | "spin" | "none";
-  leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop" | "waddle" | "slip" | "dash" | "shuffle" | "sink" | "climb" | "return" | "unroll" | "finish" | "close" | "unfold";
+  leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop" | "waddle" | "slip" | "dash" | "shuffle" | "sink" | "climb" | "return" | "unroll" | "finish" | "close" | "unfold" | "over";
   sillEndX?: number;
   pathEndX?: number;
   pathEndLift?: number;
@@ -416,6 +425,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "corn_snake") return WRITE;
   if (key === "kingsnake") return INSPECT;
   if (key === "green_tree_python") return SADDLE;
+  if (key === "hognose") return FLIP;
   return SILL;
 }
 
@@ -636,6 +646,7 @@ export function pickTarget(
     if (kind === WRITE) return w.width >= 200 && w.height >= 100;
     if (kind === INSPECT) return w.width >= 140 && w.height >= 200;
     if (kind === SADDLE) return w.width >= 160 && w.height >= 220;
+    if (kind === FLIP) return w.width >= 180 && w.height >= 140;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -1337,6 +1348,24 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === FLIP) {
+    const hold = flipPoint(best, size, work);
+    const fromLeft = hold.x >= workW / 2;
+    const approachOff = fromLeft ? -70 : 70;
+    const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+    const away = hold.x < workW / 2 ? 68 : -68;
+    return {
+      id: best.id,
+      kind,
+      side: "stool",
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave: "over",
+      spin: "none",
+    };
+  }
   const start = sillPoint(best, 0.12, size, work);
   const end = sillPoint(best, 0.88, size, work);
   return {
@@ -1512,6 +1541,10 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
   if (target.kind === SADDLE) {
     const edge = saddleEdge(target, win, sprite);
     const hold = saddlePoint(win, edge, sprite, work);
+    return { ...target, holdX: hold.x, holdLift: hold.lift };
+  }
+  if (target.kind === FLIP) {
+    const hold = flipPoint(win, sprite, work);
     return { ...target, holdX: hold.x, holdLift: hold.lift };
   }
   const start = sillPoint(win, 0.12, sprite, work);
@@ -3240,6 +3273,77 @@ export function saddleOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
+export function flipPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const pad = 32;
+  const span = Math.max(0, win.width - size - pad * 2);
+  const x = win.x + pad + span * 0.52;
+  const fromBot = Math.max(48, Math.min(size * 0.34, win.height * 0.16));
+  const gripY = win.y + win.height - fromBot;
+  const lift = gripLift(gripY, work);
+  const maxLift = (work && work.height ? work.height : 800) - 48;
+  return { x, lift: clamp(lift, 20, maxLift) };
+}
+
+export function flipFace(target: PlayTarget): 1 | -1 {
+  return target.landX >= target.holdX ? -1 : 1;
+}
+
+export function flipOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  const fromLift = from && from.lift != null ? from.lift : 0;
+  const toLift = to && to.lift != null ? to.lift : 0;
+  const ease = t * t * (3 - 2 * t);
+  const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + hop * 18,
+    rot: (toX >= fromX ? 1 : -1) * 10 * hop,
+  };
+}
+
+export function flipRollPath(u: number) {
+  const t = Math.max(0, Math.min(1, u));
+  if (t < 0.22) {
+    const s = t / 0.22;
+    const ease = s * s;
+    return { lift: ease * 6, rot: ease * 14 };
+  }
+  if (t < 0.72) {
+    const s = (t - 0.22) / 0.5;
+    const roll = s * s * (3 - 2 * s);
+    return { lift: 6 - roll * 14, rot: 14 + roll * 154 };
+  }
+  return { lift: -8, rot: 168 };
+}
+
+export function flipOffPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  const fromLift = from && from.lift != null ? from.lift : 0;
+  const toLift = to && to.lift != null ? to.lift : 0;
+  if (t < 0.34) {
+    const s = t / 0.34;
+    const ease = s * s * (3 - 2 * s);
+    return {
+      x: fromX,
+      lift: fromLift + 10 * ease,
+      rot: 168 * (1 - ease),
+    };
+  }
+  const s = (t - 0.34) / 0.66;
+  const ease = s * s * (3 - 2 * s);
+  const hop = s <= 0 || s >= 1 ? 0 : Math.sin(s * Math.PI);
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + 10 + (toLift - fromLift - 10) * ease + hop * 10 * (1 - s),
+    rot: 0,
+  };
+}
+
 export function drapeOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   const t = Math.max(0, Math.min(1, u));
   const fromX = from.x ?? 0;
@@ -3389,7 +3493,7 @@ export function stepPlay(
     const dir: 1 | -1 = dest >= next.x ? 1 : -1;
     next.facing = dir;
     next.anim = "walk";
-    const pace = target.kind === BASK ? WALK_PX * 0.4 : target.kind === BOW ? WALK_PX * 0.62 : target.kind === BALL ? WALK_PX * 0.46 : target.kind === DUST ? WALK_PX * 0.92 : target.kind === WALL ? WALK_PX * 0.36 : target.kind === TOSS ? WALK_PX * 0.84 : target.kind === FLATTEN ? WALK_PX * 0.28 : target.kind === DRAPE ? WALK_PX * 0.34 : target.kind === KINDLE ? WALK_PX * 0.38 : target.kind === BUN ? WALK_PX * 0.31 : target.kind === WRITE ? WALK_PX * 0.58 : target.kind === INSPECT ? WALK_PX * 0.51 : target.kind === SADDLE ? WALK_PX * 0.29 : WALK_PX;
+    const pace = target.kind === BASK ? WALK_PX * 0.4 : target.kind === BOW ? WALK_PX * 0.62 : target.kind === BALL ? WALK_PX * 0.46 : target.kind === DUST ? WALK_PX * 0.92 : target.kind === WALL ? WALK_PX * 0.36 : target.kind === TOSS ? WALK_PX * 0.84 : target.kind === FLATTEN ? WALK_PX * 0.28 : target.kind === DRAPE ? WALK_PX * 0.34 : target.kind === KINDLE ? WALK_PX * 0.38 : target.kind === BUN ? WALK_PX * 0.31 : target.kind === WRITE ? WALK_PX * 0.58 : target.kind === INSPECT ? WALK_PX * 0.51 : target.kind === SADDLE ? WALK_PX * 0.29 : target.kind === FLIP ? WALK_PX * 0.44 : WALK_PX;
     next.x += dir * pace * dt;
     next.lift = 0;
     next.rot = 0;
@@ -3496,6 +3600,9 @@ export function stepPlay(
       }
       if (target.kind === SADDLE) {
         return goPhase(next, "saddle-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "walk", dir);
+      }
+      if (target.kind === FLIP) {
+        return goPhase(next, "flip-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -5257,6 +5364,67 @@ export function stepPlay(
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = "walk";
+    next.facing = target.landX >= target.holdX ? 1 : -1;
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+  if (next.phase === "flip-on") {
+    const face = flipFace(target);
+    const u = next.t / DUR.flipOn;
+    const pose = flipOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = face;
+    if (u >= 1) {
+      return goPhase(next, "flip-roll", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "flip-roll") {
+    const face = flipFace(target);
+    const pose = flipRollPath(Math.min(1, next.t / DUR.flipRoll));
+    next.x = target.holdX;
+    next.lift = target.holdLift + pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = face;
+    if (next.t >= DUR.flipRoll) {
+      const held = goPhase(next, "flip", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+      const dead = flipRollPath(1);
+      held.x = target.holdX;
+      held.lift = target.holdLift + dead.lift;
+      held.rot = dead.rot;
+      return held;
+    }
+    return next;
+  }
+
+  if (next.phase === "flip") {
+    const face = flipFace(target);
+    const dead = flipRollPath(1);
+    next.x = target.holdX;
+    next.lift = target.holdLift + dead.lift;
+    next.rot = dead.rot;
+    next.anim = "sit";
+    next.facing = face;
+    if (next.t >= DUR.flip) {
+      const leaveFace = target.landX >= target.holdX ? 1 : -1;
+      return goPhase(next, "flip-off", { x: target.holdX, lift: target.holdLift + dead.lift }, { x: target.landX, lift: 0 }, "play", leaveFace);
+    }
+    return next;
+  }
+
+  if (next.phase === "flip-off") {
+    const u = next.t / DUR.flipOff;
+    const pose = flipOffPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
     next.facing = target.landX >= target.holdX ? 1 : -1;
     if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
     return next;
