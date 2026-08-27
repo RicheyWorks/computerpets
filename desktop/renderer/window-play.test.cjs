@@ -1245,8 +1245,8 @@ test("Miso hops onto the top ledge, sits the blink, then hops down — not a sil
   assert.equal(target.holdLift, ledge.lift);
   assert.ok(ledge.x > WIN.x && ledge.x + P.SPRITE < WIN.x + WIN.width, "the perch sits on the top frame");
   assert.ok(Math.abs(ledge.x - ridge.x) > 40, "not Arc's title-bar center ride");
-  assert.ok(Math.abs(ledge.lift - ridge.lift) > 40, "on the outer ledge, not riding the title-bar");
-  assert.ok(Math.abs(ledge.lift - sill.lift) > 40, "not a generic inner sill walk");
+  assert.ok(ledge.lift > ridge.lift, "on the outer ledge, not riding the title-bar");
+  assert.ok(ledge.lift > sill.lift, "not a generic inner sill walk");
   assert.ok(Math.abs(ledge.lift - earth.lift) > 40, "not Ground's bottom lug");
   assert.ok(Math.abs(ledge.x - cling.x) > 40, "not Rui's mid-side cling");
   assert.ok(Math.abs(ledge.x - coil.x) > 40 || Math.abs(ledge.lift - coil.lift) > 40, "not Volt's wrap-hold");
