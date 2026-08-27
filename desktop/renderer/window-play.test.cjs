@@ -106,6 +106,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("jumping_spider"), "pounce");
   assert.equal(P.playFor("wolf_spider"), "carry");
   assert.equal(P.playFor("tarantula"), "kick");
+  assert.equal(P.playFor("widow"), "hang");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -17829,7 +17830,7 @@ test("Velvet kicks a sash well as a silk burrow: walk into the well, sit the sil
   assert.equal(P.playFor("ball_python"), "bun");
   assert.equal(P.playFor("stingless"), "tend");
   assert.equal(P.playFor("barn_owl"), "hiss");
-  assert.equal(P.playFor("widow"), "sill");
+  assert.equal(P.playFor("widow"), "hang");
   assert.notEqual(P.playFor("tarantula"), "velvet");
   assert.notEqual(P.playFor("tarantula"), "carry");
   assert.notEqual(P.playFor("tarantula"), "pounce");
@@ -17960,5 +17961,143 @@ test("a moved window refits Velvet's sash well; sleep, card, and hide abort; Vel
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "kick-off");
+  assert.equal(play.abort, true);
+});
+
+test("Hour hangs a bottom-inside jamb corner as a dark corner: walk to the lower interior corner, hang with the hourglass out, then drop off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("red_panda"), "cling-dive");
+  assert.equal(P.playFor("tarantula"), "kick");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("hamster"), "stash");
+  assert.equal(P.playFor("volt_dragon"), "coil");
+  assert.equal(P.playFor("harvestman"), "sill");
+  assert.notEqual(P.playFor("widow"), "hour");
+  assert.notEqual(P.playFor("widow"), "kick");
+  assert.notEqual(P.playFor("widow"), "web");
+  assert.notEqual(P.playFor("widow"), "stash");
+  assert.notEqual(P.playFor("widow"), "coil");
+  assert.notEqual(P.playFor("widow"), "sill");
+  assert.equal(P.DUR.hang, 1.35, "Rui's cling-dive hang duration stays");
+  const target = P.pickTarget([WIN], 80, "widow", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "hang");
+  assert.equal(target.side, "dark");
+  assert.equal(target.leave, "dark");
+  assert.notEqual(target.kind, "kick");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "stash");
+  assert.notEqual(target.kind, "coil");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she hangs a lower interior jamb, not the floor");
+  assert.ok(P.DUR.hourHold > P.DUR.hour, "the wait is the hold; the hourglass invert is the tell");
+  assert.ok(P.DUR.hourOn > P.DUR.hour, "a walk in, not the invert");
+  assert.ok(P.DUR.hourOn !== P.DUR.hang);
+  assert.ok(P.DUR.hourOn !== P.DUR.kickOn);
+  assert.ok(P.DUR.hourOn !== P.DUR.carryOn);
+  assert.ok(P.DUR.hourOn !== P.DUR.pounceOn);
+  assert.ok(P.DUR.hourOn !== P.DUR.webOn);
+  assert.ok(P.DUR.hourOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.hour !== P.DUR.hang);
+  assert.ok(P.DUR.hour !== P.DUR.kick);
+  assert.ok(P.DUR.hourHold !== P.DUR.kickHold);
+  assert.ok(P.DUR.hourOff !== P.DUR.kickOff);
+  assert.ok(P.DUR.hourOff !== P.DUR.sillDown);
+  const corner = P.hangPoint(WIN, P.SPRITE, WORK);
+  const well = P.kickPoint(WIN, P.SPRITE, WORK);
+  const drawer = P.stashPoint(WIN, "left", P.SPRITE, WORK);
+  const wrap = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const hub = P.webPoint(WIN, P.SPRITE, WORK);
+  const litter = P.carryPoint(WIN, P.SPRITE, WORK);
+  assert.ok(corner.lift > 8, "the lower interior jamb, not the floor");
+  assert.ok(corner.x > WIN.x, "interior, not Volt's outer wrap");
+  assert.ok(corner.x < WIN.x + WIN.width - 8, "inside the frame");
+  assert.ok(Math.abs(corner.x - well.x) > 40 || Math.abs(corner.lift - well.lift) > 40, "not Velvet's sash well");
+  assert.ok(Math.abs(corner.x - drawer.x) > 40 || Math.abs(corner.lift - drawer.lift) > 40, "not Clip's drawer stash");
+  assert.ok(Math.abs(corner.x - wrap.x) > 40 || Math.abs(corner.lift - wrap.lift) > 40, "not Volt's outer coil");
+  assert.ok(Math.abs(corner.x - hub.x) > 40 || Math.abs(corner.lift - hub.lift) > 40, "not Loom's lamp-side top hub");
+  assert.ok(Math.abs(corner.x - litter.x) > 40 || Math.abs(corner.lift - litter.lift) > 8, "not Prowl's floor foot");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "widow", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real bottom-inside corner, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "widow", WORK, P.SPRITE);
+  assert.equal(short, null, "a real bottom-inside corner needs height");
+  const walkOn = P.hangOnPath(0.25, { x: 40, lift: 0 }, { x: corner.x, lift: corner.lift });
+  assert.ok(walkOn.lift > 0, "she walks to the lower interior corner");
+  assert.ok(walkOn.lift < corner.lift, "a walk in, not already hanging");
+  const invert = P.hangPath(0.5);
+  const still = P.hangHoldPath(0.5);
+  const flick = P.kickPath(0.5);
+  assert.ok(invert.lift < 0, "she drops into the hang");
+  assert.ok(invert.rot > 40, "the hourglass turns out");
+  assert.ok(invert.lift !== flick.lift, "not Velvet's hair flick");
+  assert.ok(still.rot > 90, "she stays inverted");
+  assert.ok(Math.abs(still.x - 2.2) < 0.2, "still on the dark corner");
+  const off0 = P.hangOffPath(0, { x: corner.x, lift: corner.lift, rot: 174 }, { x: corner.x + 64, lift: 0 });
+  const offMid = P.hangOffPath(0.5, { x: corner.x, lift: corner.lift, rot: 174 }, { x: corner.x + 64, lift: 0 });
+  const off1 = P.hangOffPath(1, { x: corner.x, lift: corner.lift, rot: 174 }, { x: corner.x + 64, lift: 0 });
+  const midEase = 0.5 * 0.5 * (2 - 0.5);
+  assert.ok(Math.abs(off0.x - corner.x) < 2);
+  assert.ok(Math.abs(offMid.lift - corner.lift * (1 - midEase)) < 2, "she drops off, not a hop");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "kick");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "stash");
+    assert.notEqual(play.phase, "coil-on");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "hour") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "hang-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "hang-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 7.6)) < 4, "she hangs with the hourglass out");
+    }
+    if (play.phase === "hang-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("hang-on"));
+  assert.ok(seen.has("hour"));
+  assert.ok(seen.has("hang-hold"));
+  assert.ok(seen.has("hang-off"));
+  assert.ok(!seen.has("hang"), "Hour never uses Rui's cling-dive hang phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Hour's dark corner; sleep, card, and hide abort; Hour never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "widow", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "hour"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "hour");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "hour");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "hang-off");
   assert.equal(play.abort, true);
 });
