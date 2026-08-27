@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import type { DeskWindow } from "@/lib/pets/windows";
 import { DEMO_WINDOW_B_ID, DEMO_WINDOW_ID } from "@/lib/pets/windows";
 
-/** Drawn windows on /demo. Overlay uses real window rects instead. Relay hops A to B. */
+/** Drawn windows on /demo. Overlay uses real window rects instead. Relay hops A to B. Fuse holds one clip. */
 export function DemoWindowPlate({ onBounds }: { onBounds?: (windows: DeskWindow[]) => void }) {
   const aRef = useRef<HTMLDivElement>(null);
   const bRef = useRef<HTMLDivElement>(null);
