@@ -17402,7 +17402,7 @@ test("Loom webs a lamp-side glass corner as a lamp web: walk to the interior top
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("jumping_spider"), "pounce");
   assert.equal(P.playFor("wolf_spider"), "carry");
-  assert.equal(P.playFor("harvestman"), "sill");
+  assert.equal(P.playFor("harvestman"), "stilt");
   assert.equal(P.playFor("honeybee"), "sill");
   const target = P.pickTarget([WIN], 80, "orb_weaver", WORK, P.SPRITE);
   assert.ok(target);
@@ -17550,7 +17550,7 @@ test("Leap pounces a meeting-rail end as a blotter edge: walk onto the rail end,
   assert.equal(P.playFor("newt"), "trail");
   assert.equal(P.playFor("wolf_spider"), "carry");
   assert.equal(P.playFor("tarantula"), "kick");
-  assert.equal(P.playFor("harvestman"), "sill");
+  assert.equal(P.playFor("harvestman"), "stilt");
   assert.notEqual(P.playFor("jumping_spider"), "leap");
   assert.notEqual(P.playFor("jumping_spider"), "sill");
   assert.notEqual(P.playFor("jumping_spider"), "web");
@@ -17974,7 +17974,7 @@ test("Hour hangs a bottom-inside jamb corner as a dark corner: walk to the lower
   assert.equal(P.playFor("orb_weaver"), "web");
   assert.equal(P.playFor("hamster"), "stash");
   assert.equal(P.playFor("volt_dragon"), "coil");
-  assert.equal(P.playFor("harvestman"), "sill");
+  assert.equal(P.playFor("harvestman"), "stilt");
   assert.notEqual(P.playFor("widow"), "hour");
   assert.notEqual(P.playFor("widow"), "kick");
   assert.notEqual(P.playFor("widow"), "web");
@@ -18101,3 +18101,144 @@ test("a moved window refits Hour's dark corner; sleep, card, and hide abort; Hou
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "hang-off");
   assert.equal(play.abort, true);
 });
+
+test("Stem stilts a sash parting bead as a blotter stem: walk onto the bead as a stem, keep the one body, then walk off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("seahorse"), "hitch");
+  assert.equal(P.playFor("kingsnake"), "inspect");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("tarantula"), "kick");
+  assert.equal(P.playFor("scorpion"), "sill");
+  assert.notEqual(P.playFor("harvestman"), "stem");
+  assert.notEqual(P.playFor("harvestman"), "hang");
+  assert.notEqual(P.playFor("harvestman"), "hitch");
+  assert.notEqual(P.playFor("harvestman"), "web");
+  assert.notEqual(P.playFor("harvestman"), "inspect");
+  assert.notEqual(P.playFor("harvestman"), "sill");
+  assert.equal(P.DUR.hang, 1.35, "Rui's cling-dive hang duration stays");
+  const target = P.pickTarget([WIN], 80, "harvestman", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "stilt");
+  assert.equal(target.side, "stem");
+  assert.equal(target.leave, "stem");
+  assert.notEqual(target.kind, "hitch");
+  assert.notEqual(target.kind, "hang");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "inspect");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "he stilts a sash parting bead, not the floor");
+  assert.ok(P.DUR.stiltHold > P.DUR.stilt, "the wait is the hold; the one-body long-leg settle is the tell");
+  assert.ok(P.DUR.stiltOn > P.DUR.stilt, "a long-leg walk on, not the settle");
+  assert.ok(P.DUR.stiltOn !== P.DUR.hourOn);
+  assert.ok(P.DUR.stiltOn !== P.DUR.hitchOn);
+  assert.ok(P.DUR.stiltOn !== P.DUR.hang);
+  assert.ok(P.DUR.stiltOn !== P.DUR.kickOn);
+  assert.ok(P.DUR.stiltOn !== P.DUR.webOn);
+  assert.ok(P.DUR.stiltOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.stilt !== P.DUR.hour);
+  assert.ok(P.DUR.stilt !== P.DUR.hitch);
+  assert.ok(P.DUR.stiltHold !== P.DUR.hourHold);
+  assert.ok(P.DUR.stiltOff !== P.DUR.hourOff);
+  assert.ok(P.DUR.stiltOff !== P.DUR.hitchOff);
+  assert.ok(P.DUR.stiltOff !== P.DUR.sillDown);
+  const bead = P.stiltPoint(WIN, P.SPRITE, WORK);
+  const wrap = P.hitchPoint(WIN, P.SPRITE, WORK);
+  const corner = P.hangPoint(WIN, P.SPRITE, WORK);
+  const hub = P.webPoint(WIN, P.SPRITE, WORK);
+  const ruler = P.inspectPoint(WIN, "left", 0.5, P.SPRITE, WORK);
+  const well = P.kickPoint(WIN, P.SPRITE, WORK);
+  assert.ok(bead.lift > 8, "the sash parting bead as a stem, not the floor");
+  assert.ok(bead.x > WIN.x, "on the bead, inside the frame");
+  assert.ok(bead.x < WIN.x + WIN.width - 8, "inside the frame");
+  assert.ok(Math.abs(bead.x - wrap.x) > 8 || Math.abs(bead.lift - wrap.lift) > 40, "not Anchor's tail-wrap hitch");
+  assert.ok(Math.abs(bead.x - corner.x) > 40 || Math.abs(bead.lift - corner.lift) > 40, "not Hour's lower jamb hang");
+  assert.ok(Math.abs(bead.x - hub.x) > 40 || Math.abs(bead.lift - hub.lift) > 40, "not Loom's lamp-side top hub");
+  assert.ok(Math.abs(bead.x - ruler.x) > 40 || Math.abs(bead.lift - ruler.lift) > 40, "not Bandit's jamb inspect");
+  assert.ok(Math.abs(bead.x - well.x) > 40 || Math.abs(bead.lift - well.lift) > 40, "not Velvet's sash well");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "harvestman", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real parting bead, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "harvestman", WORK, P.SPRITE);
+  assert.equal(short, null, "a real parting bead needs height");
+  const walkOn = P.stiltOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  assert.ok(walkOn.lift > 0, "he walks onto the bead as a stem");
+  assert.ok(walkOn.lift < bead.lift, "a walk on, not already sitting");
+  const settle = P.stiltPath(0.5);
+  const still = P.stiltHoldPath(0.5);
+  const invert = P.hangPath(0.5);
+  const wrapPose = P.hitchWrapPath(0.5);
+  assert.ok(settle.lift > 2, "long legs hold the one body up");
+  assert.ok(settle.x < 2, "one body, not two");
+  assert.ok(settle.rot < 20, "not an hourglass invert");
+  assert.ok(settle.lift !== invert.lift, "not Hour's hang");
+  assert.ok(settle.x !== wrapPose.x, "not Anchor's tail wrap");
+  assert.ok(still.rot < 16, "he stays upright on the stem");
+  assert.ok(Math.abs(still.x - 0.48) < 0.2, "still one body on the bead");
+  const off0 = P.stiltOffPath(0, { x: bead.x, lift: bead.lift, rot: 3.2 }, { x: bead.x + 66, lift: 0 });
+  const offMid = P.stiltOffPath(0.5, { x: bead.x, lift: bead.lift, rot: 3.2 }, { x: bead.x + 66, lift: 0 });
+  const off1 = P.stiltOffPath(1, { x: bead.x, lift: bead.lift, rot: 3.2 }, { x: bead.x + 66, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - bead.x) < 2);
+  assert.ok(Math.abs(offMid.x - (bead.x + 66 * midEase)) < 8, "he walks off, not a drop");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "hour");
+    assert.notEqual(play.phase, "hitch");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "stilt") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "stilt-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "stilt-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 6.4)) < 4, "he stilts the one body on long legs");
+    }
+    if (play.phase === "stilt-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("stilt-on"));
+  assert.ok(seen.has("stilt"));
+  assert.ok(seen.has("stilt-hold"));
+  assert.ok(seen.has("stilt-off"));
+  assert.ok(!seen.has("hang"), "Stem never uses Rui's cling-dive hang phase");
+  assert.ok(!seen.has("hour"), "Stem never uses Hour's hang");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Stem's parting-bead stem; sleep, card, and hide abort; Stem never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "harvestman", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "stilt"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "stilt");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "stilt");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "stilt-off");
+  assert.equal(play.abort, true);
+});
+
