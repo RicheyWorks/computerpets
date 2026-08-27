@@ -2065,9 +2065,9 @@ test("Ink paddles the long way to a window, basks on the bottom rail, withdraws 
   assert.ok(Math.abs(bask.x - hold.x) > 16 || Math.abs(bask.lift - hold.lift) > 20, "not Fuse's jamb clip");
   assert.ok(Math.abs(bask.lift - sill.lift) > 40, "not a generic top sill");
   const on0 = P.baskOnPath(0, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
-  const onMid = P.baskOnPath(0.35, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
+  const onMid = P.baskOnPath(1 / 6, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
   const on1 = P.baskOnPath(1, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
-  const earthMid = P.earthOnPath(0.35, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
+  const earthMid = P.earthOnPath(1 / 6, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift });
   assert.equal(on0.x, 40);
   assert.equal(on1.x, bask.x);
   assert.equal(on1.lift, bask.lift);

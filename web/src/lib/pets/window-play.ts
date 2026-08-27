@@ -1466,8 +1466,8 @@ export function baskWithdrawPath(u: number) {
   const t = Math.max(0, Math.min(1, u));
   const s = t < 0.28 ? smoothstep(t / 0.28) : 1;
   return {
-    x: -9 * s,
-    lift: -3 * s,
+    x: s <= 0 ? 0 : -9 * s,
+    lift: s <= 0 ? 0 : -3 * s,
     rot: 0,
   };
 }
