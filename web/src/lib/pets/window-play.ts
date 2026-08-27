@@ -3494,17 +3494,17 @@ export function patrolOffPath(u: number, from: PlayPoint, to: PlayPoint) {
 
 export function loopPoint(win: DeskWindow, u: number, sprite: number | undefined, work: WorkSpace) {
   const size = sprite == null ? SPRITE : sprite;
-  const pad = 48;
+  const pad = 56;
   const span = Math.max(0, win.width - size - pad * 2);
   const t = Math.max(0, Math.min(1, u));
   const angle = Math.PI + t * Math.PI * 2;
   const cx = win.x + pad + span * 0.5;
-  const rx = span * 0.46;
+  const rx = span * 0.38;
   const x = cx + Math.cos(angle) * rx;
-  const fromBot = Math.max(50, Math.min(size * 0.32, win.height * 0.155));
+  const fromBot = Math.max(48, Math.min(size * 0.3, win.height * 0.145));
   const gripY = win.y + win.height - fromBot;
   const base = gripLift(gripY, work);
-  const ry = 12;
+  const ry = 10;
   const lift = base + Math.sin(angle) * ry;
   const maxLift = (work && work.height ? work.height : 800) - 48;
   return { x, lift: clamp(lift, 16, maxLift) };
