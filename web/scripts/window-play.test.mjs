@@ -18,7 +18,7 @@ const guideSrc = readFileSync(join(root, "src/lib/pets/house-guide.ts"), "utf8")
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark; Arm stores a stool as a sand tray", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -132,6 +132,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("water_lily"), Overlay.playFor("water_lily"));
   assert.equal(P.playFor("orchid"), "mount");
   assert.equal(P.playFor("orchid"), Overlay.playFor("orchid"));
+  assert.equal(P.playFor("saguaro"), "store");
+  assert.equal(P.playFor("saguaro"), Overlay.playFor("saguaro"));
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -504,6 +506,14 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.ok(Math.abs(webMount.x - webGold.x) > 20 || Math.abs(webMount.lift - webGold.lift) > 16, "not Fan's autumn");
   assert.ok(Math.abs(webMount.x - webUnfurl.x) > 20 || Math.abs(webMount.lift - webUnfurl.lift) > 16, "not Vein's pocket");
   assert.ok(Math.abs(webMount.x - webLean.x) > 20 || Math.abs(webMount.lift - webLean.lift) > 16, "not Felt's page");
+  const webStore = P.storePoint(WIN, 176, WORK);
+  const deskStore = Overlay.storePoint(WIN, 176, WORK);
+  assert.equal(webStore.lift, deskStore.lift);
+  assert.equal(webStore.x, deskStore.x);
+  assert.ok(webStore.lift > 22, "the stool is a sand tray, not the floor");
+  assert.ok(Math.abs(webStore.x - webMount.x) > 20 || Math.abs(webStore.lift - webMount.lift) > 16, "not Moth's bark");
+  assert.ok(Math.abs(webStore.x - webOpen.x) > 20 || Math.abs(webStore.lift - webOpen.lift) > 16, "not Disk's ink");
+  assert.ok(Math.abs(webStore.x - webSeed.x) > 20 || Math.abs(webStore.lift - webSeed.lift) > 16, "not Mast's dish");
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -6165,5 +6175,143 @@ test("the demo window plate walks Moth's mount the same way", () => {
   assert.ok(mountLiftMax < 10, "a moth, not a pad open");
   assert.ok(mountRotMax > 8, "a moth that stayed");
   assert.ok(mountRotMax < 14, "not a lean");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Arm's store the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/garden.ts"), "utf8"), /key: "saguaro"[\s\S]{0,80}slug: "arm"/);
+  const target = P.pickTarget([WIN], 80, "saguaro", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "store");
+  assert.equal(target.side, "column");
+  assert.equal(target.leave, "later");
+  assert.equal(Overlay.playFor("saguaro"), "store");
+  assert.equal(P.playFor("orchid"), "mount");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("ginkgo"), "gold");
+  assert.equal(P.playFor("maidenhair"), "unfurl");
+  assert.equal(P.playFor("moss"), "lean");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("ground_dragon"), "earth");
+  assert.equal(P.playFor("sea_star"), "reef");
+  assert.equal(P.playFor("iguana"), "flatten");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.notEqual(target.kind, "arm");
+  assert.notEqual(target.kind, "snap");
+  assert.notEqual(target.kind, "well");
+  assert.notEqual(target.kind, "sill");
+  assert.notEqual(target.kind, "mount");
+  assert.ok(target.holdLift > 22, "he stands the tray, not the floor");
+  assert.ok(P.DUR.storeHold > P.DUR.store, "the store is the tell; the hold keeps the rain");
+  assert.ok(P.DUR.storeOn !== Overlay.DUR.mountOn);
+  assert.ok(P.DUR.store !== Overlay.DUR.mount);
+  assert.ok(P.DUR.store !== Overlay.DUR.open);
+  assert.ok(P.DUR.store !== Overlay.DUR.seed);
+  assert.ok(P.DUR.store !== Overlay.DUR.gold);
+  assert.ok(P.DUR.store !== Overlay.DUR.unfurl);
+  assert.ok(P.DUR.store !== Overlay.DUR.lean);
+  assert.ok(P.DUR.store !== Overlay.DUR.plow);
+  assert.ok(P.DUR.store !== Overlay.DUR.flatten);
+  assert.ok(P.DUR.storeHold !== Overlay.DUR.mountHold);
+  assert.ok(P.DUR.storeOff !== Overlay.DUR.mountOff);
+  const tray = P.storePoint(WIN, 176, WORK);
+  const deskTray = Overlay.storePoint(WIN, 176, WORK);
+  assert.equal(tray.x, deskTray.x);
+  assert.equal(tray.lift, deskTray.lift);
+  const swell = P.storePath(0.5);
+  const deskSwell = Overlay.storePath(0.5);
+  assert.equal(swell.rot, deskSwell.rot);
+  assert.equal(swell.lift, deskSwell.lift);
+  assert.ok(swell.lift > 8, "ribs take the rain");
+  assert.ok(swell.lift < 16, "a store, not a rise");
+  assert.ok(Math.abs(swell.rot) < 2, "not a lean, not a bloom");
+  assert.ok(Math.abs(swell.x) < 3, "a column, not a letter");
+  const kept = P.storePath(1);
+  const deskKept = Overlay.storePath(1);
+  assert.equal(kept.rot, deskKept.rot);
+  assert.equal(kept.lift, deskKept.lift);
+  assert.ok(kept.lift > 8, "he kept the rain");
+  const hold = P.storeHoldPath(0.5);
+  assert.ok(hold.lift > 11, "the column remains");
+  assert.ok(hold.lift < 14, "not a moth bloom");
+  assert.ok(Math.abs(hold.rot) < 1, "I have not moved");
+  const mount = P.mountPoint(WIN, 176, WORK);
+  const open = P.openPoint(WIN, 176, WORK);
+  const seed = P.seedPoint(WIN, 176, WORK);
+  const gold = P.goldPoint(WIN, 176, WORK);
+  const unfurl = P.unfurlPoint(WIN, 176, WORK);
+  const lean = P.leanPoint(WIN, 176, WORK);
+  const plow = P.plowPoint(WIN, 176, WORK);
+  const flatten = P.flattenPoint(WIN, 176, WORK);
+  const earth = P.earthPoint(WIN, 176, WORK);
+  const reef = P.reefPoint(WIN, 176, WORK);
+  const kindle = P.kindlePoint(WIN, 176, WORK);
+  const drape = P.drapePoint(WIN, "left", 176, WORK);
+  const field = P.fieldPoint(WIN, 176, WORK);
+  const sill = P.sillPoint(WIN, 0.12, 176, WORK);
+  assert.ok(Math.abs(target.holdX - mount.x) > 20 || Math.abs(target.holdLift - mount.lift) > 16, "not Moth");
+  assert.ok(Math.abs(target.holdX - open.x) > 20 || Math.abs(target.holdLift - open.lift) > 16, "not Disk");
+  assert.ok(Math.abs(target.holdX - seed.x) > 20 || Math.abs(target.holdLift - seed.lift) > 16, "not Mast");
+  assert.ok(Math.abs(target.holdX - gold.x) > 20 || Math.abs(target.holdLift - gold.lift) > 16, "not Fan");
+  assert.ok(Math.abs(target.holdX - unfurl.x) > 20 || Math.abs(target.holdLift - unfurl.lift) > 16, "not Vein");
+  assert.ok(Math.abs(target.holdX - lean.x) > 20 || Math.abs(target.holdLift - lean.lift) > 16, "not Felt");
+  assert.ok(Math.abs(target.holdX - plow.x) > 20 || Math.abs(target.holdLift - plow.lift) > 16, "not Ledger");
+  assert.ok(Math.abs(target.holdX - flatten.x) > 20 || Math.abs(target.holdLift - flatten.lift) > 16, "not Sol");
+  assert.ok(Math.abs(target.holdX - earth.x) > 20 || Math.abs(target.holdLift - earth.lift) > 16, "not Ground");
+  assert.ok(Math.abs(target.holdX - reef.x) > 20 || Math.abs(target.holdLift - reef.lift) > 16, "not Ochre");
+  assert.ok(Math.abs(target.holdX - kindle.x) > 20 || Math.abs(target.holdLift - kindle.lift) > 16, "not Ember");
+  assert.ok(Math.abs(target.holdX - drape.x) > 20 || Math.abs(target.holdLift - drape.lift) > 16, "not Vesper");
+  assert.ok(Math.abs(target.holdX - field.x) > 20 || Math.abs(target.holdLift - field.lift) > 16, "not Flux");
+  assert.ok(Math.abs(target.holdLift - sill.lift) > 40, "not a generic sill");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let storeLiftMax = 0;
+  let storeRotMax = 0;
+  for (let i = 0; i < 2800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "mount");
+    assert.notEqual(play.phase, "mount-hold");
+    assert.notEqual(play.phase, "open");
+    assert.notEqual(play.phase, "open-hold");
+    assert.notEqual(play.phase, "seed");
+    assert.notEqual(play.phase, "seed-hold");
+    assert.notEqual(play.phase, "gold");
+    assert.notEqual(play.phase, "gold-hold");
+    assert.notEqual(play.phase, "unfurl");
+    assert.notEqual(play.phase, "unfurl-hold");
+    assert.notEqual(play.phase, "lean");
+    assert.notEqual(play.phase, "lean-hold");
+    assert.notEqual(play.phase, "plow");
+    assert.notEqual(play.phase, "plow-read");
+    assert.notEqual(play.phase, "flatten");
+    assert.notEqual(play.phase, "reef");
+    assert.notEqual(play.phase, "kindle");
+    assert.notEqual(play.phase, "drape");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "store") {
+      storeLiftMax = Math.max(storeLiftMax, play.lift - play.target.holdLift);
+      storeRotMax = Math.max(storeRotMax, Math.abs(play.rot));
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift > 22);
+    }
+    if (play.phase === "store-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift > 10);
+      assert.ok(play.lift - play.target.holdLift < 14, "the column remains");
+    }
+  }
+  assert.ok(seen.has("store-on"));
+  assert.ok(seen.has("store"));
+  assert.ok(seen.has("store-hold"));
+  assert.ok(seen.has("store-off"));
+  assert.ok(storeLiftMax > 8, "ribs take the rain");
+  assert.ok(storeLiftMax < 16, "a store, not a rise");
+  assert.ok(storeRotMax < 3, "a column, not a lean");
   assert.equal(play.phase, "done");
 });
