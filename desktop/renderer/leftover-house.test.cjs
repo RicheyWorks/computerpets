@@ -16,7 +16,7 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Dee leftover caches a meeting-rail nosing as a twig cup; Hook leftover still soars a lamp-post stile as lift; Heart leftover still hisses a sash reveal as a beam hollow; Wedge leftover still croaks a high transom as a rafter; Soot leftover still caws a drip cap as a chimney pot; Prickle leftover still glues a putty fillet as a weed bowl; Latch leftover still drinks a sash drip as a damp blotter; Hinge leftover still filters a meeting-rail gap as a silt bed; Whorl leftover still rasps a glass rim as her own house; Pinch leftover still claws a sill wash as a pebble tray; Slip leftover still rings a sill throat as a silt tray; Dapple leftover still covers a window well as leaf mold; Eft leftover still trails a sash horn as a moss saucer; Pebble leftover still puffs a casement leaf as a leaf dish; Reed leftover still plops a window weep as a bank spring; Wax leftover still draws a window pane as a hive frame; Keep leftover still lays a window pane as a wax heart; Hum leftover still drones a window pane as congregation sky; Bank leftover still digs a window stool as a sand bank; Sheen leftover still licks a warm pane as a salt glass; Pot leftover still tends a sash pulley box as a cerumen hollow; Disc leftover still snips a window-box leaf as foliage; Mortar leftover still daubs a sash gap as an inkstone cell; Auger leftover still bores a sash stile as timber; Thrum leftover still forages a window box as a meadow; Dew leftover still curls a window glazing rebate as a peat saucer; Well leftover still fills a window sill pan as a bog cup; Snap leftover still counts a window meeting rail as a wetland cup; Arm leftover still stores a window stool as a sand tray; Moth leftover still mounts a window jamb as bark; Disk leftover still opens a window pane as an ink-dish pad; Mast leftover still seeds a window stool as an acorn dish; Fan leftover still golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Brick leftover pulls a window stool as a lawn; Dee leftover still caches a meeting-rail nosing as a twig cup; Hook leftover still soars a lamp-post stile as lift; Heart leftover still hisses a sash reveal as a beam hollow; Wedge leftover still croaks a high transom as a rafter; Soot leftover still caws a drip cap as a chimney pot; Prickle leftover still glues a putty fillet as a weed bowl; Latch leftover still drinks a sash drip as a damp blotter; Hinge leftover still filters a meeting-rail gap as a silt bed; Whorl leftover still rasps a glass rim as her own house; Pinch leftover still claws a sill wash as a pebble tray; Slip leftover still rings a sill throat as a silt tray; Dapple leftover still covers a window well as leaf mold; Eft leftover still trails a sash horn as a moss saucer; Pebble leftover still puffs a casement leaf as a leaf dish; Reed leftover still plops a window weep as a bank spring; Wax leftover still draws a window pane as a hive frame; Keep leftover still lays a window pane as a wax heart; Hum leftover still drones a window pane as congregation sky; Bank leftover still digs a window stool as a sand bank; Sheen leftover still licks a warm pane as a salt glass; Pot leftover still tends a sash pulley box as a cerumen hollow; Disc leftover still snips a window-box leaf as foliage; Mortar leftover still daubs a sash gap as an inkstone cell; Auger leftover still bores a sash stile as timber; Thrum leftover still forages a window box as a meadow; Dew leftover still curls a window glazing rebate as a peat saucer; Well leftover still fills a window sill pan as a bog cup; Snap leftover still counts a window meeting rail as a wetland cup; Arm leftover still stores a window stool as a sand tray; Moth leftover still mounts a window jamb as bark; Disk leftover still opens a window pane as an ink-dish pad; Mast leftover still seeds a window stool as an acorn dish; Fan leftover still golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
   assert.equal(WP.playFor("frog"), "plop");
   assert.notEqual(WP.playFor("frog"), "reed");
   assert.notEqual(WP.playFor("frog"), "hop");
@@ -434,6 +434,30 @@ test("Dee leftover caches a meeting-rail nosing as a twig cup; Hook leftover sti
   assert.notEqual(WP.playFor("chickadee"), "hover");
   assert.notEqual(WP.playFor("chickadee"), "sip");
   assert.notEqual(WP.playFor("chickadee"), "bury");
+  assert.equal(WP.playFor("robin"), "pull");
+  assert.notEqual(WP.playFor("robin"), "brick");
+  assert.notEqual(WP.playFor("robin"), "cache");
+  assert.notEqual(WP.playFor("robin"), "soar");
+  assert.notEqual(WP.playFor("robin"), "hiss");
+  assert.notEqual(WP.playFor("robin"), "croak");
+  assert.notEqual(WP.playFor("robin"), "caw");
+  assert.notEqual(WP.playFor("robin"), "sill");
+  assert.notEqual(WP.playFor("robin"), "perch");
+  assert.notEqual(WP.playFor("robin"), "hook");
+  assert.notEqual(WP.playFor("robin"), "bow");
+  assert.notEqual(WP.playFor("robin"), "plop");
+  assert.notEqual(WP.playFor("robin"), "toss");
+  assert.notEqual(WP.playFor("robin"), "ledge");
+  assert.notEqual(WP.playFor("robin"), "stash");
+  assert.notEqual(WP.playFor("robin"), "dig");
+  assert.notEqual(WP.playFor("robin"), "forage");
+  assert.notEqual(WP.playFor("robin"), "hop");
+  assert.notEqual(WP.playFor("robin"), "dabble");
+  assert.notEqual(WP.playFor("robin"), "honk");
+  assert.notEqual(WP.playFor("robin"), "drum");
+  assert.notEqual(WP.playFor("robin"), "hover");
+  assert.notEqual(WP.playFor("robin"), "sip");
+  assert.notEqual(WP.playFor("robin"), "vee");
   assert.equal(WP.playFor("red_tail"), "soar");
   assert.equal(WP.playFor("barn_owl"), "hiss");
   assert.equal(WP.playFor("raven"), "croak");
@@ -452,7 +476,8 @@ test("Dee leftover caches a meeting-rail nosing as a twig cup; Hook leftover sti
   assert.equal(WP.playFor("octopus"), "lid");
   assert.equal(WP.playFor("hermit_crab"), "knob");
   assert.equal(WP.playFor("phoenix"), "kindle");
-  assert.equal(WP.playFor("robin"), "sill");
+  assert.equal(WP.playFor("robin"), "pull");
+  assert.equal(WP.playFor("mallard"), "sill");
   assert.equal(WP.playFor("squirrel"), "sill");
   assert.equal(WP.playFor("gecko"), "sill");
 });
