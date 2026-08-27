@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -56,7 +56,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("cuttlefish"), "flush");
   assert.equal(P.playFor("nautilus"), "rise");
   assert.equal(P.playFor("moon_jelly"), "chime");
-  assert.equal(P.playFor("sea_star"), "sill");
+  assert.equal(P.playFor("sea_star"), "reef");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -657,6 +657,18 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(pulse.kind, "lid");
   assert.notEqual(pulse.kind, "circle");
   assert.notEqual(pulse.kind, "field");
+  const ochre = P.pickTarget([WIN], 80, "sea_star", WORK, P.SPRITE);
+  assert.ok(ochre);
+  assert.equal(ochre.kind, "reef");
+  assert.equal(ochre.side, "blotter");
+  assert.equal(ochre.leave, "uncling");
+  assert.ok(ochre.holdLift > 36);
+  assert.notEqual(ochre.kind, "sill");
+  assert.notEqual(ochre.kind, "chime");
+  assert.notEqual(ochre.kind, "rise");
+  assert.notEqual(ochre.kind, "flush");
+  assert.notEqual(ochre.kind, "wall");
+  assert.notEqual(ochre.kind, "bask");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -3744,6 +3756,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /lid-on|lid-off|playFor/);
   assert.match(petSrc, /flush-on|flush-off|playFor/);
   assert.match(petSrc, /chime-on|chime-off|playFor/);
+  assert.match(petSrc, /reef-on|reef-off|playFor/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
@@ -7940,7 +7953,7 @@ test("Chamber rises a window jamb as stacked nacre rooms — not flush, lid, cir
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("moon_jelly"), "chime");
-  assert.equal(P.playFor("sea_star"), "sill");
+  assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(target.side, "rooms");
   assert.equal(target.leave, "sink");
   assert.equal(target.clickToId, undefined, "one window");
@@ -8200,7 +8213,7 @@ test("Pulse chimes a window pane as a glass of water — not rise, flush, circle
   assert.equal(P.playFor("dragon"), "drape");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("sea_star"), "sill");
+  assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(target.side, "saucer");
   assert.equal(target.leave, "drift");
   assert.equal(target.clickToId, undefined, "one window");
@@ -8359,5 +8372,185 @@ test("a moved window refits Pulse's saucer; sleep, card, and hide abort; Pulse n
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "chime-off");
+  assert.equal(play.abort, true);
+});
+
+test("Ochre reefs a window pane as a damp blotter — not chime, rise, wall, bask, or sill", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "sea_star", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "reef");
+  assert.equal(P.playFor("sea_star"), "reef");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("nautilus"), "rise");
+  assert.equal(P.playFor("cuttlefish"), "flush");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("carpet_python"), "chart");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(P.playFor("axolotl"), "wall");
+  assert.equal(P.playFor("ground_dragon"), "earth");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("hermit_crab"), "sill");
+  assert.equal(target.side, "blotter");
+  assert.equal(target.leave, "uncling");
+  assert.equal(target.clickToId, undefined, "one window");
+  assert.ok(target.holdLift > 36, "she reefs the pane, not the floor");
+  assert.ok(P.DUR.reefHold > P.DUR.reef, "the remain is the tell; five arms plant first");
+  assert.ok(P.DUR.reefOn !== P.DUR.chimeOn, "not Pulse's drift");
+  assert.ok(P.DUR.reefOn !== P.DUR.riseOn, "not Chamber's drift");
+  assert.ok(P.DUR.reefOn !== P.DUR.flushOn, "not Sepia's drift");
+  assert.ok(P.DUR.reefOn !== P.DUR.lidOn, "not Cup's crawl");
+  assert.ok(P.DUR.reefOn !== P.DUR.wallOn, "not Bloom's drift");
+  assert.ok(P.DUR.reefOn !== P.DUR.baskOn, "not Ink's paddle");
+  assert.ok(P.DUR.reefOn !== P.DUR.fieldOn, "not Flux's occupy");
+  assert.ok(P.DUR.reef !== P.DUR.chime, "not four moons");
+  assert.ok(P.DUR.reef !== P.DUR.rise, "not rooms");
+  assert.ok(P.DUR.reef !== P.DUR.wall, "not a tank walk");
+  assert.ok(P.DUR.reef !== P.DUR.bask, "not a bask");
+  assert.ok(P.DUR.reefHold !== P.DUR.chimePulse, "not a vacant pulse");
+  assert.ok(P.DUR.reefHold !== P.DUR.riseHold, "not an occupied chamber");
+  assert.ok(P.DUR.reefHold !== P.DUR.fieldHold, "not a field");
+  assert.ok(P.DUR.reefOff !== P.DUR.chimeOff, "she unclings, not a drift");
+  assert.ok(P.DUR.reefOff !== P.DUR.riseOff, "not a sink");
+  assert.ok(P.DUR.reefOff !== P.DUR.wallOff, "not Bloom's leave");
+  const blot = P.reefPoint(WIN, P.SPRITE, WORK);
+  const arm0 = P.reefArm(WIN, 0, P.SPRITE, WORK);
+  const arm1 = P.reefArm(WIN, 1, P.SPRITE, WORK);
+  const arm2 = P.reefArm(WIN, 2, P.SPRITE, WORK);
+  const chimeTop = P.chimePoint(WIN, 0, P.SPRITE, WORK);
+  const flatten = P.flattenPoint(WIN, P.SPRITE, WORK);
+  const drape = P.drapePoint(WIN, "left", P.SPRITE, WORK);
+  const wall = P.wallPoint(WIN, 0, "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const circle = P.circlePoint(WIN, 0, P.SPRITE, WORK, 1);
+  const rise = P.risePoint(WIN, "left", 0, P.SPRITE, WORK);
+  const flush = P.flushPoint(WIN, 0, P.SPRITE, WORK);
+  const lid = P.lidPoint(WIN, P.SPRITE, WORK);
+  const chart = P.chartPoint(WIN, 0, P.SPRITE, WORK);
+  const bask = P.baskPoint(WIN, P.SPRITE, WORK);
+  const earth = P.earthPoint(WIN, P.SPRITE, WORK);
+  const kindle = P.kindlePoint(WIN, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.ok(arm0.lift > blot.lift + 8, "the first arm plants up");
+  assert.ok(Math.abs(arm0.x - blot.x) < 6, "tube feet, not a moon tour");
+  assert.ok(Math.hypot(arm1.x - blot.x, arm1.lift - blot.lift) < 22, "five arms stay on the blot");
+  assert.ok(Math.hypot(arm2.x - blot.x, arm2.lift - blot.lift) < 22, "not Pulse's cross");
+  assert.ok(Math.abs(blot.x - chimeTop.x) > 20 || Math.abs(blot.lift - chimeTop.lift) > 16, "not Pulse");
+  assert.ok(Math.abs(blot.x - rise.x) > 20 || Math.abs(blot.lift - rise.lift) > 16, "not Chamber");
+  assert.ok(Math.abs(blot.x - flush.x) > 20 || Math.abs(blot.lift - flush.lift) > 16, "not Sepia");
+  assert.ok(Math.abs(blot.x - lid.x) > 20 || Math.abs(blot.lift - lid.lift) > 16, "not Cup");
+  assert.ok(Math.abs(blot.x - circle.x) > 20 || Math.abs(blot.lift - circle.lift) > 16, "not Coin");
+  assert.ok(Math.abs(blot.x - field.x) > 20 || Math.abs(blot.lift - field.lift) > 16, "not Flux");
+  assert.ok(Math.abs(blot.x - wall.x) > 20 || Math.abs(blot.lift - wall.lift) > 16, "not Bloom");
+  assert.ok(Math.abs(blot.x - bask.x) > 20 || Math.abs(blot.lift - bask.lift) > 16, "not Ink");
+  assert.ok(Math.abs(blot.x - earth.x) > 20 || Math.abs(blot.lift - earth.lift) > 16, "not Ground");
+  assert.ok(Math.abs(blot.x - chart.x) > 20 || Math.abs(blot.lift - chart.lift) > 16, "not Atlas");
+  assert.ok(Math.abs(blot.x - kindle.x) > 20 || Math.abs(blot.lift - kindle.lift) > 16, "not Ember");
+  assert.ok(Math.abs(blot.lift - sill.lift) > 40, "not a generic sill");
+  assert.ok(Math.abs(blot.x - flatten.x) > 20 || Math.abs(blot.lift - flatten.lift) > 16, "not Sol");
+  assert.ok(Math.abs(blot.lift - drape.lift) > 20, "not Vesper");
+  const on0 = P.reefOnPath(0, { x: 40, lift: 0 }, { x: blot.x, lift: blot.lift });
+  const on1 = P.reefOnPath(1, { x: 40, lift: 0 }, { x: blot.x, lift: blot.lift });
+  assert.ok(Math.abs(on0.lift) < 2);
+  assert.ok(Math.abs(on1.lift - blot.lift) < 6);
+  assert.ok(on1.lift - on0.lift > 40, "she creeps onto the wet glass");
+  const arms = [0, 1, 2, 3, 4].map((arm) => P.reefArm(WIN, arm, P.SPRITE, WORK));
+  const plant = P.reefPath(0.08, blot, arms);
+  assert.ok(Math.abs(plant.x - blot.x) < 8, "the first plant stays on the blot");
+  assert.ok(plant.lift > blot.lift + 4, "an arm takes");
+  const hold = P.reefHoldPath(0.5, blot);
+  assert.equal(hold.x, blot.x);
+  assert.equal(hold.lift, blot.lift);
+  const off0 = P.reefOffPath(0, { x: blot.x, lift: blot.lift }, { x: blot.x + 54, lift: 0 });
+  const offEarly = P.reefOffPath(0.1, { x: blot.x, lift: blot.lift }, { x: blot.x + 54, lift: 0 });
+  const off1 = P.reefOffPath(1, { x: blot.x, lift: blot.lift }, { x: blot.x + 54, lift: 0 });
+  assert.ok(Math.abs(off0.x - blot.x) < 2);
+  assert.ok(Math.abs(offEarly.x - blot.x) < 2, "she still clings");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let plantXMin = Infinity;
+  let plantXMax = -Infinity;
+  let plantLiftMin = Infinity;
+  let plantLiftMax = 0;
+  let remainXMin = Infinity;
+  let remainXMax = -Infinity;
+  for (let i = 0; i < 2000 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "chime");
+    assert.notEqual(play.phase, "chime-pulse");
+    assert.notEqual(play.phase, "rise");
+    assert.notEqual(play.phase, "rise-hold");
+    assert.notEqual(play.phase, "flush");
+    assert.notEqual(play.phase, "flush-hover");
+    assert.notEqual(play.phase, "lid");
+    assert.notEqual(play.phase, "lid-probe");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "wall");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "reef") {
+      plantXMin = Math.min(plantXMin, play.x);
+      plantXMax = Math.max(plantXMax, play.x);
+      plantLiftMin = Math.min(plantLiftMin, play.lift);
+      plantLiftMax = Math.max(plantLiftMax, play.lift);
+      assert.equal(play.anim, "play", "five arms take the glass");
+    }
+    if (play.phase === "reef-hold") {
+      remainXMin = Math.min(remainXMin, play.x);
+      remainXMax = Math.max(remainXMax, play.x);
+      assert.equal(play.anim, "sit", "she remains");
+      assert.ok(play.lift > 36, "the remain is on the blotter");
+    }
+  }
+  assert.ok(seen.has("reef-on"));
+  assert.ok(seen.has("reef"));
+  assert.ok(seen.has("reef-hold"));
+  assert.ok(seen.has("reef-off"));
+  assert.ok(!seen.has("chime"), "not Pulse");
+  assert.ok(!seen.has("rise"), "not Chamber");
+  assert.ok(!seen.has("flush"), "not Sepia");
+  assert.ok(!seen.has("lid"), "not Cup");
+  assert.ok(!seen.has("wall"), "not Bloom");
+  assert.ok(!seen.has("bask"), "not Ink");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(plantLiftMax - plantLiftMin > 8, "tube feet plant");
+  assert.ok(plantXMax - plantXMin < 48, "a blot, not four moons");
+  assert.ok(plantLiftMax - plantLiftMin < 48, "not Pulse's cross");
+  assert.ok(remainXMax - remainXMin < 4, "then she remains");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Ochre's blotter; sleep, card, and hide abort; Ochre never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "sea_star", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 520 && play.phase !== "reef-hold"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "reef-hold");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "reef-hold");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "reef-off");
   assert.equal(play.abort, true);
 });
