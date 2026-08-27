@@ -2,9 +2,9 @@
 
 Welcome to the **ComputerPets** documentation hub.
 
-**Never coded?** Start with [How to get your first pet](START-HERE.md). That page puts Rui on the real desktop. Pictures of the house guests sit on the [front door](../README.md) (`readme-friends.jpg`).
+**Never coded?** Start with [How to get your first pet](START-HERE.md). That page puts Rui on the real Windows desktop. Pictures of the house guests sit on the [front door](../README.md) (`readme-friends.jpg`). There is no Microsoft Store download yet.
 
-This repository contains the backend service for a secure, extensible platform that enables premium desktop virtual pets through verified ownership across multiple platforms (Steam, Ethereum NFTs, Microsoft Store, Itch.io, and Epic Games Store).
+This repository also contains the backend service for a secure, extensible platform that enables premium desktop virtual pets through verified ownership across multiple platforms (Steam, Ethereum NFTs, Microsoft Store, Itch.io, and Epic Games Store). Keepers do not need that door to meet Rui.
 
 The documentation in this folder is designed to help you understand the system architecture, get the project running locally, and contribute effectively.
 
@@ -39,9 +39,9 @@ For a deep technical understanding, start with the Architecture documentation.
 
 ## Getting Started
 
-Friends who have never coded should open [How to get your first pet](START-HERE.md) first.
+Friends who have never coded should open [How to get your first pet](START-HERE.md) first. That is the Windows desk download. Node is a helper for that walk, not the first lesson.
 
-New to the project? Follow this recommended path:
+Operators new to the backend? Follow this recommended path:
 
 1. **Understand the System**  
    Read the **[Architecture](ARCHITECTURE.md)** document, then the **[Architecture Decision Records](adr/README.md)** for the choices the code already made.
@@ -61,7 +61,7 @@ New to the project? Follow this recommended path:
 
 | Document | Description |
 |----------|-------------|
-| **[How to get your first pet](START-HERE.md)** | Kid-facing steps: install the helpers, copy the house, put Rui on the real desktop. |
+| **[How to get your first pet](START-HERE.md)** | Kid-facing Windows 10/11 path: copy the house from GitHub, put Rui on the real desktop overlay, then the browser `/demo`. No Store download. |
 | **[Architecture](ARCHITECTURE.md)** | Comprehensive system architecture document. Covers high-level design, component breakdown, data flows, deployment architecture, technology stack, security considerations, and recommendations. **§11** is the house polish north-star (the X ads). **Start here** for a complete understanding. |
 | **[Architecture Decision Records](adr/README.md)** | Numbered records of decisions already true on `main` (SPI, license crypto, Redis/Postgres, empty NFT allowlist, Electron + PyQt contract clients, profiles + k8s). Not a wishlist. |
 | **[Client contract](CLIENT-CONTRACT.md)** | What a native client implements: verify → AES-256-GCM license decrypt, hwid, JWT, signed download URL. Matches the code. |

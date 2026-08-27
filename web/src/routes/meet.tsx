@@ -43,7 +43,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Two hundred twenty guests walk the blotter. The nest is a square; neglect can close a line.
+            Two hundred twenty guests walk the blotter. On Windows they walk on the real desktop. This page is the same house in a browser. The nest is a square; neglect can close a line.
           </p>
           <MeetKeeperCard className="mt-6" />
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">

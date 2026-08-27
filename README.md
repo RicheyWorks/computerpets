@@ -24,28 +24,23 @@ There are **220** animals in this house. These are some of them.
 
 House names. The ones you say out loud.
 
-## What you will do
+## Put a pet on your real desktop
 
-1. Install two free helpers (Git and Node). You only do this once.
-2. Copy the pets onto your computer.
-3. Start them so a pet walks on your **real desktop**.
-4. Later, you can also visit them in a web browser if you want.
+This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. The tray by the clock has **On the desk** — Rui plus the grid ten, no scrolling two hundred twenty names.
 
-There is no Steam, Itch, or Microsoft Store download yet. There is no `.exe` waiting on a website. You copy the pets from [this GitHub page](https://github.com/RicheyWorks/computerpets) and turn them on yourself. That is the real way.
+You do not need an account. You do not need a license. You do not need Java.
 
-## Put a pet on your desktop
+Windows 10 and Windows 11 first. Most friends are on Windows. The [start-here page](docs/START-HERE.md) shows every button.
 
-This is the main thing. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. You do not need an account. You do not need a license.
+There is no Steam, Itch, or Microsoft Store download yet. There is no live Store ID. There is no `.exe` waiting on a website. You copy the pets from [this GitHub page](https://github.com/RicheyWorks/computerpets) and turn them on yourself. That is the real way.
 
-Windows first. Most friends are on Windows. The [start-here page](docs/START-HERE.md) shows every button.
+Today the overlay needs two free helpers — Git and Node — because the start is `.\desktop.ps1`, which runs `npm start`, which is `electron .`. You do not have to learn Node. You only install it once. Grown-ups can later build their own installer with electron-builder. We do not publish one.
 
 A tiny preview:
 
-1. Install [Git](https://git-scm.com) (or [GitHub Desktop](https://desktop.github.com) if you like pictures more than typing).
-2. Install [Node](https://nodejs.org). Click the big **LTS** button. LTS means "the safe version." You want version 22 or newer. Node is a free helper app the pets need. You do not have to learn it. You only install it once.
-3. Copy the pets. Use GitHub Desktop, or type `git clone https://github.com/RicheyWorks/computerpets` into a folder **you** pick.
-4. Open PowerShell **in that folder** (the `computerpets` folder that has `desktop.ps1` in it).
-5. Type this and press Enter:
+1. Copy the pets onto your computer (GitHub Desktop, or `git clone https://github.com/RicheyWorks/computerpets` into a folder **you** pick).
+2. Open PowerShell **in that folder** (the `computerpets` folder that has `desktop.ps1` in it).
+3. Type this and press Enter:
 
 ```powershell
 .\desktop.ps1
@@ -61,9 +56,14 @@ npm start
 
 The first time can take a few minutes. `npm install` means "get the pieces." Leave the window open. A pet should walk on your real desktop.
 
+Git and Node are the two helpers that make that start work. Install [Git](https://git-scm.com) (or [GitHub Desktop](https://desktop.github.com) if you like pictures more than typing) and [Node](https://nodejs.org) (the big **LTS** button, version 22 or newer) once, before you type the start. The start-here page shows those buttons.
+
 - **First click** is a sit.
 - **Drag** is a carry.
-- **Right-click** the pet, or use the little tray icon by the clock: feed, play, rest, clean, medicine, hide.
+- **Feed / Play / Rest** sit on the keeper card.
+- **Right-click** the pet, or the little tray icon by the clock: **On the desk**, feed, play, rest, clean, medicine, hide.
+
+Clicks on empty glass pass through to your windows. The floor is the work area, above the taskbar.
 
 ### Mac
 
@@ -91,13 +91,13 @@ More in [desktop/README.md](desktop/README.md).
 
 Feed them when they look hungry. Play so they stay happy. Let them rest when they look tired. Clean up the mess they leave. Give medicine if they get sick.
 
-If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
+The keeper card is the daily care. The tray **On the desk** picks Rui and the grid ten. If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
 
 There are **220** animals. Rui is the first one you meet.
 
 ## Another way to visit them (browser)
 
-After the helpers are installed, you can also open the pets in Chrome or Edge. This is optional. The desktop walk is the main quest.
+After a pet already walks on the desktop, you can also open the same house in Chrome or Edge. This is optional. The desktop walk is the main quest. `/demo` stays lockstep with the overlay — same keeper card, same tray sit. Spark's room is `/demo/crackle`.
 
 ```powershell
 cd web
@@ -112,6 +112,8 @@ A page like `/demo/rui` only works on your own computer. It is not a website for
 ## Grown-up notes
 
 Unlock, Java, and secrets are **not** for meeting Rui. Pets already walk without a license. Operators: [docs/SETUP.md](docs/SETUP.md).
+
+`desktop/` `npm start` is `electron .`. `npm run dist:win` is electron-builder (NSIS / portable) if you want to package a copy you built yourself. That is not a Microsoft Store listing. Do not invent a Store ID.
 
 More pages: [docs/README.md](docs/README.md).
 

@@ -8,26 +8,44 @@
 
 Hi. This page is a teacher. You do not need to know how to code.
 
-You are going to put a ComputerPet **on your real desktop**. Not inside a game window. On top of your homework, your browser, everything. Rui the red panda walks there first.
+You are going to put a ComputerPet **on your real Windows desktop**. Not inside a game window. On top of your homework, your browser, everything. Rui the red panda walks there first.
 
-There is no Steam page. There is no Itch page. There is no Microsoft Store button. There is no magic `.exe` sitting on a website. Anyone who says there is one is guessing. The honest way is: install two free helpers, copy the pets, then turn them on.
+## What that looks like
 
-This page is written for **Windows**. That is what most friends have. Mac and Linux friends get a short note near the end.
+This is the picture. Hold it in your head. The rest of the page is how you get there.
+
+- A pet walks on your **real desktop**. Homework stays homework. The pet is a living sticker on top.
+- A **keeper card** sits with them. It says their name, whether they are a hatchling or grown, their bond word, and three meters: Hunger, Rest, Bond. Three buttons sit under that: **Feed**, **Play**, **Rest**.
+- Near the clock (bottom-right) a small ComputerPets tray icon sits. Right-click it. **On the desk** picks Rui and the grid ten without scrolling two hundred twenty names: Rui, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground.
+- Clicks on empty glass pass through to your windows. Hits stay on the pet, the keeper card buttons, treats, and gifts. The floor is the Windows work area — above the taskbar, under the cursor.
+- The card may say `Java 8081 · DOWN · unread`. That is honest. You did not start Java. Care still works. Care is local. `/pet/feed` is not a door.
+
+That walk is the Electron overlay. It is Chromium on your desk, not DirectX 12, not a Microsoft Store app, not a browser tab.
+
+This page is written for **Windows 10 and Windows 11**. That is what most friends have. Mac and Linux friends get a short note near the end. Do not start there.
+
+## The honest download
+
+There is no Steam page. There is no Itch page. There is no Microsoft Store button. There is no live Store ID. There is no magic `.exe` sitting on a website. Anyone who says there is one is guessing.
+
+The honest way is: copy this house from [GitHub](https://github.com/RicheyWorks/computerpets), then turn the desktop overlay on.
+
+Today that needs two free helpers — Git (the copier) and Node (the flashlight the overlay uses). You do not have to learn them. You only install them once. The start you will type is `.\desktop.ps1`. That script runs `npm start`, which is `electron .`. Grown-ups can later build their own installer with electron-builder. We do not publish one. We do not have a Store listing.
 
 ## What you need
 
-- A computer
+- A computer with **Windows 10 or Windows 11**
 - The internet
 - About 15 minutes the first time (the first start can feel slow — that is normal)
 - A grown-up nearby if a download asks for a password
 
-You do not need an account. You do not need money. You do not need to learn Node. Node is a free helper app the pets need. You only install it once.
+You do not need an account. You do not need money. You do not need Java. You do not need a license. You do not need to learn Node.
 
 ## The main quest
 
 **Put Rui on your real desktop.**
 
-You will do five jobs:
+You will do five jobs. The picture above is the point. The helpers are how we get there today.
 
 1. Install Git (or GitHub Desktop)
 2. Install Node
@@ -35,7 +53,7 @@ You will do five jobs:
 4. Open PowerShell in the right folder
 5. Start the desktop pet
 
-The browser comes later. It is another way to visit them. It is not the main quest.
+The browser comes later. It is the same house in a window. It is not the main quest.
 
 ---
 
@@ -73,7 +91,7 @@ If the computer already has Git or GitHub Desktop, skip this step.
 
 ## Step 2 — Install Node (the helper the pets need)
 
-Node is a free helper app the pets need. You do not have to learn it. You only install it once.
+Node is a free helper app the overlay needs today. You do not have to learn it. You only install it once. There is no Store installer that skips this.
 
 1. Open [https://nodejs.org](https://nodejs.org).
 2. You will see two big buttons. Click the big **LTS** button. That is the recommended one.
@@ -214,7 +232,7 @@ The desktop pet lives in the `desktop/` folder. It does **not** need the web app
 The helper script `desktop.ps1` does two honest jobs:
 
 1. If the pieces are missing, it runs `npm install` (that means "get the pieces")
-2. Then it runs `npm start` (that means "turn the pets on")
+2. Then it runs `npm start` (that means "turn the pets on"). `npm start` is `electron .`. That is the overlay.
 
 In the PowerShell that is already inside `computerpets`, type this and press Enter:
 
@@ -243,6 +261,7 @@ That is the same start the grown-up docs already use.
 - Lots of words scroll by. Names. Numbers. Progress. That is `npm install` getting the pieces. It can take several minutes. You need the internet. Wait.
 - Then more words, and a pet appears **on your real desktop**.
 - Look near the clock (the bottom-right corner). A small ComputerPets tray icon should sit there.
+- Look for the **keeper card** next to the pet. Name. Stage. Bond word. Hunger, Rest, Bond. Feed, Play, Rest.
 
 **Every time after that:**
 
@@ -260,10 +279,15 @@ The pet is on your desk. Now you can care for it.
 
 - **First click** on the pet is a sit. They pause.
 - **Drag** the pet. That is a carry. Put them somewhere else on the screen.
-- **Right-click** the pet for the care list.
+- **Feed / Play / Rest** on the keeper card. Those three are the daily care.
+- **Right-click** the pet for the longer care list.
 - Or **right-click the tray icon** by the clock.
 
-The care list has kid words for real jobs:
+The tray has a line named **On the desk**. That is how you pick Rui and the grid ten (Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground) without scrolling the whole house. **Companions** still has all **220**. Spark on the desk is the same Spark whose browser room is `/demo/crackle`. The firefly already owns `/demo/spark`.
+
+Clicks on empty glass pass through. If you click "nothing," you click the window underneath. That is on purpose.
+
+The longer care list has kid words for real jobs:
 
 | You click | What it means |
 |-----------|----------------|
@@ -316,7 +340,7 @@ You started the pets, then closed the PowerShell. Open PowerShell in the `comput
 ### You see words, but no pet
 
 - Look behind other windows. Rui can sit on a second monitor.
-- Look by the clock for the tray icon. Right-click it. Try **Call back**.
+- Look by the clock for the tray icon. Right-click it. Try **On the desk** → **Rui**, or **Call back**.
 - Wait ten seconds. The first start is slower.
 - If a Windows firewall box pops up, allow it on this computer.
 
@@ -328,7 +352,7 @@ You started the pets, then closed the PowerShell. Open PowerShell in the `comput
 
 ### You went looking for a Store page
 
-There is not one yet. Do not download a random "ComputerPets.exe" from a stranger. Come back to this page and do Steps 1–5.
+There is not one yet. There is no live Microsoft Store ID. Do not download a random "ComputerPets.exe" from a stranger. Come back to this page and do Steps 1–5.
 
 ---
 
@@ -349,7 +373,7 @@ That is the whole next visit.
 
 ## Mac
 
-Same idea. Same two helpers.
+Same idea. Same two helpers. This leftover is Windows first. Keep this short.
 
 1. Install Git from [https://git-scm.com/downloads](https://git-scm.com/downloads), or install [GitHub Desktop](https://desktop.github.com).
 2. Install Node from [https://nodejs.org](https://nodejs.org). Click **LTS**. Version 22 or newer.
@@ -397,7 +421,7 @@ The mark sits in the **panel**. A click opens care. First click is a sit. Drag i
 
 This is **not** the main quest. Do this after a pet already walks on the desktop, or if you just want to peek in a window.
 
-The pets can also live in Chrome, Edge, Safari, or Firefox on **this computer**.
+The pets can also live in Chrome or Edge on **this computer**. Same house as the overlay. Same keeper card. Same Feed / Play / Rest. The `/demo` room shows the Windows tray sit the overlay already uses.
 
 1. Open PowerShell (or Terminal) in the `computerpets` folder. Same folder as `desktop.ps1`.
 2. Type these lines, one at a time:
@@ -411,13 +435,13 @@ npm run dev
 3. `npm install` means "get the pieces" for the browser app. It can take a minute. This is a **different** pile of pieces than the desktop pet.
 4. `npm run dev` means "turn the browser pets on."
 5. Leave that window open.
-6. Open your web browser. Click or type this exactly:
+6. Open Chrome or Edge. Click or type this exactly:
 
 [http://localhost:8080](http://localhost:8080)
 
 **Localhost means "this computer," not the internet.** Your friend at their house cannot open your localhost. They have to do these steps on their own computer.
 
-**What you should see:** Rui the red panda. No account.
+**What you should see:** Rui the red panda. No account. The keeper card. The tray sit.
 
 Type it as `http` — not `https`. If the browser adds an extra `s` and the page will not load, delete the `s`.
 
@@ -427,7 +451,7 @@ If the page will not load:
 - Did the words in that window mention `8080`?
 - Are you on this same computer?
 
-Once that window is running, [http://localhost:8080/demo/rui](http://localhost:8080/demo/rui) is a room where Rui is already walking. **That page is local only.** It is not a hosted demo. It is not a public ComputerPets website.
+Once that window is running, [http://localhost:8080/demo/rui](http://localhost:8080/demo/rui) is a room where Rui is already walking. Spark's room is [http://localhost:8080/demo/crackle](http://localhost:8080/demo/crackle). **Those pages are local only.** They are not a hosted demo. They are not a public ComputerPets website. They are the same house as the overlay.
 
 ---
 
@@ -435,6 +459,6 @@ Once that window is running, [http://localhost:8080/demo/rui](http://localhost:8
 
 If Rui is walking on your desktop, you did the main quest.
 
-There are **211** animals in this house. You did not add any. You met the first one.
+There are **220** animals in this house. You did not add any. You met the first one.
 
-When you want the long grown-up pages, they live next door: [SETUP.md](SETUP.md) is Java and secrets. You do not need those to keep a pet.
+When you want the long grown-up pages, they live next door: [SETUP.md](SETUP.md) is Java and secrets. You do not need those to keep a pet. [desktop/README.md](../desktop/README.md) is the overlay in grown-up words.
