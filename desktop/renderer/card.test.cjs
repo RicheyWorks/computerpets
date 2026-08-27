@@ -35,7 +35,7 @@ test("the card law is the same house on overlay and desk", () => {
   assert.match(webCard, /hearth/);
   assert.match(webKeeper, /VOICE_TRUTH/);
   assert.match(cardSrc, /data-card="collapse"/);
-  assert.match(cardSrc, /Mute \{bus\}/);
+  assert.match(cardSrc, /Mute \$\{bus\}/);
   assert.match(htmlSrc, /data-card="collapse"/);
   assert.match(htmlSrc, /card\.js/);
   assert.doesNotMatch(htmlSrc, /id="hud"[^>]*data-hit/);
