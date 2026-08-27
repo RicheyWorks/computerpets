@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Others walk a sill. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Others walk a sill. */
 (function (root) {
   const SPRITE = 176;
   const CLING = "cling-dive";
@@ -15,6 +15,7 @@
   const LEDGE = "ledge";
   const WATCH = "watch";
   const THUMP = "thump";
+  const STASH = "stash";
   const SILL = "sill";
   const IGNORE = "ignore";
   const WALK_PX = 98;
@@ -67,6 +68,9 @@
     thumpOn: 0.34,
     thump: 0.3,
     thumpOff: 0.3,
+    stashOn: 0.42,
+    stashCheek: 0.88,
+    stashOff: 0.4,
     sillHop: 0.38,
     sillWalk: 1.55,
     sillDown: 0.36,
@@ -97,6 +101,7 @@
     if (key === "cat") return LEDGE;
     if (key === "dog") return WATCH;
     if (key === "rabbit") return THUMP;
+    if (key === "hamster") return STASH;
     return SILL;
   }
 
@@ -303,6 +308,7 @@
       if (kind === LEDGE) return w.width >= 180 && w.height >= 80;
       if (kind === WATCH) return w.width >= 160 && w.height >= 70;
       if (kind === THUMP) return w.width >= 140 && w.height >= 70;
+      if (kind === STASH) return w.width >= 160 && w.height >= 140;
       return w.width >= 180 && w.height >= 70;
     });
     if (!usable.length) return null;
@@ -631,6 +637,23 @@
         spin: "none",
       };
     }
+    if (kind === STASH) {
+      const edge = (opts && opts.side) || pickSide(best, petX, size, workW);
+      const hold = stashPoint(best, edge, size, work);
+      const approachX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+      const away = edge === "left" ? -80 : 80;
+      return {
+        id: best.id,
+        kind,
+        side: edge,
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "pop",
+        spin: "none",
+      };
+    }
     const start = sillPoint(best, 0.12, size, work);
     const end = sillPoint(best, 0.88, size, work);
     return {
@@ -713,6 +736,11 @@
       const edge = target.side === "right" ? "right" : "left";
       const hold = thumpPoint(win, sprite, work, edge);
       return { ...target, holdX: hold.x, holdLift: 0 };
+    }
+    if (target.kind === STASH) {
+      const edge = target.side === "right" ? "right" : "left";
+      const hold = stashPoint(win, edge, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
     }
     const start = sillPoint(win, 0.12, sprite, work);
     const end = sillPoint(win, 0.88, sprite, work);
@@ -1114,6 +1142,57 @@
     };
   }
 
+  function stashPoint(win, corner, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const edge = corner === "right" ? "right" : "left";
+    const nestX = Math.max(6, size * 0.03);
+    const nestBot = Math.max(14, size * 0.08);
+    const x = edge === "right" ? win.x + win.width - size - nestX : win.x + nestX;
+    const gripY = win.y + win.height - nestBot;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 16, maxLift), side: edge };
+  }
+
+  function stashOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (3 - 2 * t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + hop * 16,
+      rot: (toX >= fromX ? 1 : -1) * 10 * hop,
+    };
+  }
+
+  function stashCheekPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const pulse = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2);
+    return {
+      lift: Math.abs(pulse) * 5,
+      rot: pulse * 8,
+    };
+  }
+
+  function stashOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (2 - t);
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + hop * 20,
+      rot: (toX >= fromX ? 1 : -1) * 12 * hop,
+    };
+  }
+
   function earthStepOffPath(u, from, to) {
     const t = Math.max(0, Math.min(1, u));
     const fromX = from && from.x != null ? from.x : 0;
@@ -1217,7 +1296,7 @@
     if (!play || play.phase === "done") return play;
     const size = sprite == null ? SPRITE : sprite;
     const life = flags || {};
-    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off") {
+    if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off") {
       return abortToFloor(play, { x: play.x, lift: play.lift }, work);
     }
     let next = { ...play, t: play.t + Math.max(0, dt) };
@@ -1225,9 +1304,9 @@
       ? next.target.clickToId
       : next.target && next.target.id;
     const win = findWin(windows, lookId);
-    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off") {
+    if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off") {
       next.target = refitTarget(next.target, win, size, work, windows);
-    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off") {
+    } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off") {
       return abortToFloor(next, { x: next.x, lift: next.lift }, work);
     }
 
@@ -1283,6 +1362,9 @@
         }
         if (target.kind === THUMP) {
           return goPhase(next, "thump-on", { x: dest, lift: 0 }, { x: target.holdX, lift: 0 }, "play", dir);
+        }
+        if (target.kind === STASH) {
+          return goPhase(next, "stash-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
         }
         return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
@@ -1994,6 +2076,46 @@
       return next;
     }
 
+    if (next.phase === "stash-on") {
+      const face = target.landX >= target.holdX ? 1 : -1;
+      const u = next.t / DUR.stashOn;
+      const pose = stashOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = target.side === "left" ? 1 : -1;
+      if (u >= 1) {
+        return goPhase(next, "stash-cheek", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "stash-cheek") {
+      const face = target.landX >= target.holdX ? 1 : -1;
+      const pose = stashCheekPath(Math.min(1, next.t / DUR.stashCheek));
+      next.x = target.holdX;
+      next.lift = target.holdLift + pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      next.facing = face;
+      if (next.t >= DUR.stashCheek) {
+        return goPhase(next, "stash-off", { x: target.holdX, lift: target.holdLift }, { x: target.landX, lift: 0 }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "stash-off") {
+      const u = next.t / DUR.stashOff;
+      const pose = stashOffPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "play";
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
     if (next.phase === "sill-hop") {
       const u = next.t / DUR.sillHop;
       const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
@@ -2061,6 +2183,7 @@
     LEDGE,
     WATCH,
     THUMP,
+    STASH,
     SILL,
     IGNORE,
     DUR,
@@ -2096,6 +2219,10 @@
     thumpOnPath,
     thumpStampPath,
     thumpVanishPath,
+    stashPoint,
+    stashOnPath,
+    stashCheekPath,
+    stashOffPath,
     pickTarget,
     refitTarget,
     divePath,
