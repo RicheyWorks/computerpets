@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -60,6 +60,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("horseshoe_crab"), "plow");
   assert.equal(P.playFor("seahorse"), "hitch");
+  assert.equal(P.playFor("manta"), "barrel");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -707,6 +708,17 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(anchor.kind, "reef");
   assert.notEqual(anchor.kind, "saddle");
   assert.notEqual(anchor.kind, "hold");
+  const kite = P.pickTarget([WIN], 80, "manta", WORK, P.SPRITE);
+  assert.ok(kite);
+  assert.equal(kite.kind, "barrel");
+  assert.equal(kite.side, "sky");
+  assert.equal(kite.leave, "glide");
+  assert.ok(kite.holdLift > 36);
+  assert.notEqual(kite.kind, "sill");
+  assert.notEqual(kite.kind, "hitch");
+  assert.notEqual(kite.kind, "circle");
+  assert.notEqual(kite.kind, "orbit");
+  assert.notEqual(kite.kind, "field");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -8952,7 +8964,7 @@ test("Anchor hitches a window parting bead as a pencil — not plow, knob, reef,
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("manta"), "sill");
+  assert.equal(P.playFor("manta"), "barrel");
   assert.equal(target.side, "bead");
   assert.equal(target.leave, "unhitch");
   assert.equal(target.clickToId, undefined, "one window");
@@ -9098,5 +9110,163 @@ test("a moved window refits Anchor's pencil hitch; sleep, card, and hide abort; 
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "hitch-off");
+  assert.equal(play.abort, true);
+});
+
+test("Kite barrels a window pane as the sky of a bowl — not hitch, circle, orbit, field, or sill", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "manta", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "barrel");
+  assert.equal(P.playFor("manta"), "barrel");
+  assert.equal(P.playFor("seahorse"), "hitch");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("sea_star"), "reef");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("nautilus"), "rise");
+  assert.equal(P.playFor("cuttlefish"), "flush");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("gauss_dragon"), "orbit");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(target.side, "sky");
+  assert.equal(target.leave, "glide");
+  assert.equal(target.clickToId, undefined, "one window");
+  assert.ok(target.holdLift > 36, "she soars the pane, not the floor");
+  assert.ok(P.DUR.barrelSpan > P.DUR.barrel, "the length of sky is the sit; the barrel is the tell");
+  assert.ok(P.DUR.barrelOn !== P.DUR.hitchOn, "not Anchor's hover");
+  assert.ok(P.DUR.barrelOn !== P.DUR.circleOn, "not Coin's drift");
+  assert.ok(P.DUR.barrelOn !== P.DUR.orbitOn, "not Gauss's snap");
+  assert.ok(P.DUR.barrelSpan !== P.DUR.circle, "a crossing, not a bowl lap");
+  assert.ok(P.DUR.barrelSpan !== P.DUR.orbitLoop, "not an outside circuit");
+  assert.ok(P.DUR.barrel !== P.DUR.hitch, "not a question-mark hold");
+  assert.ok(P.DUR.barrel !== P.DUR.circle, "not one slow circle");
+  assert.ok(P.DUR.barrelOff !== P.DUR.hitchOff, "she glides, not an unhitch");
+  assert.ok(P.DUR.barrelOff !== P.DUR.circleOff, "not Coin's drift off");
+  const sky = P.barrelPoint(WIN, 0, P.SPRITE, WORK, 1);
+  const far = P.barrelPoint(WIN, 1, P.SPRITE, WORK, 1);
+  const hitch = P.hitchPoint(WIN, P.SPRITE, WORK);
+  const plow = P.plowPoint(WIN, P.SPRITE, WORK);
+  const knob = P.knobPoint(WIN, P.SPRITE, WORK);
+  const reef = P.reefPoint(WIN, P.SPRITE, WORK);
+  const chimeTop = P.chimePoint(WIN, 0, P.SPRITE, WORK);
+  const rise = P.risePoint(WIN, "left", 0, P.SPRITE, WORK);
+  const flush = P.flushPoint(WIN, 0, P.SPRITE, WORK);
+  const lid = P.lidPoint(WIN, P.SPRITE, WORK);
+  const circle = P.circlePoint(WIN, 0, P.SPRITE, WORK, 1);
+  const orbit = P.orbitPoint(WIN, 0, P.SPRITE, WORK, 1);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const kindle = P.kindlePoint(WIN, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.ok(Math.abs(sky.x - hitch.x) > 20 || Math.abs(sky.lift - hitch.lift) > 16, "not Anchor");
+  assert.ok(Math.abs(sky.x - plow.x) > 20 || Math.abs(sky.lift - plow.lift) > 16, "not Ledger");
+  assert.ok(Math.abs(sky.x - knob.x) > 20 || Math.abs(sky.lift - knob.lift) > 16, "not Tenant");
+  assert.ok(Math.abs(sky.x - reef.x) > 20 || Math.abs(sky.lift - reef.lift) > 16, "not Ochre");
+  assert.ok(Math.abs(sky.x - chimeTop.x) > 20 || Math.abs(sky.lift - chimeTop.lift) > 16, "not Pulse");
+  assert.ok(Math.abs(sky.x - rise.x) > 20 || Math.abs(sky.lift - rise.lift) > 16, "not Chamber");
+  assert.ok(Math.abs(sky.x - flush.x) > 20 || Math.abs(sky.lift - flush.lift) > 16, "not Sepia");
+  assert.ok(Math.abs(sky.x - lid.x) > 20 || Math.abs(sky.lift - lid.lift) > 16, "not Cup");
+  assert.ok(Math.abs(sky.x - circle.x) > 20 || Math.abs(sky.lift - circle.lift) > 16, "not Coin");
+  assert.ok(Math.abs(sky.x - orbit.x) > 20 || Math.abs(sky.lift - orbit.lift) > 16, "not Gauss");
+  assert.ok(Math.abs(sky.x - field.x) > 20 || Math.abs(sky.lift - field.lift) > 16, "not Flux");
+  assert.ok(Math.abs(sky.x - kindle.x) > 20 || Math.abs(sky.lift - kindle.lift) > 16, "not Ember");
+  assert.ok(Math.abs(sky.lift - sill.lift) > 40, "not a generic sill");
+  assert.ok(Math.abs(far.x - sky.x) > 80, "a length of sky, not a still sit");
+  assert.ok(Math.abs(far.lift - sky.lift) < 80, "a soar across the bowl, not a dive");
+  const on0 = P.barrelOnPath(0, { x: 40, lift: 0 }, { x: sky.x, lift: sky.lift });
+  const onMid = P.barrelOnPath(0.5, { x: 40, lift: 0 }, { x: sky.x, lift: sky.lift });
+  const on1 = P.barrelOnPath(1, { x: 40, lift: 0 }, { x: sky.x, lift: sky.lift });
+  assert.ok(Math.abs(on0.lift) < 2);
+  assert.ok(Math.abs(on1.lift - sky.lift) < 6);
+  assert.ok(on1.lift - on0.lift > 36, "she soars up into the sky");
+  assert.ok(onMid.lift > 8, "a soar, not a hop that stays low");
+  const span0 = P.barrelSpanPath(0, { x: sky.x, lift: sky.lift }, { x: far.x, lift: far.lift });
+  const span1 = P.barrelSpanPath(1, { x: sky.x, lift: sky.lift }, { x: far.x, lift: far.lift });
+  assert.ok(Math.abs(span0.x - sky.x) < 2);
+  assert.ok(Math.abs(span1.x - far.x) < 2);
+  assert.ok(Math.abs(span1.x - span0.x) > 80, "the span crosses the pane");
+  const rollMid = P.barrelPath(0.5);
+  const rollEnd = P.barrelPath(1);
+  assert.ok(Math.abs(rollMid.rot) > 140, "one barrel turns over");
+  assert.ok(Math.abs(rollEnd.rot) > 300, "the roll finishes a turn");
+  assert.ok(Math.abs(rollEnd.x) < 40, "a roll, not Coin's bowl lap");
+  const off0 = P.barrelOffPath(0, { x: far.x, lift: far.lift }, { x: far.x + 60, lift: 0 });
+  const offMid = P.barrelOffPath(0.55, { x: far.x, lift: far.lift }, { x: far.x + 60, lift: 0 });
+  const off1 = P.barrelOffPath(1, { x: far.x, lift: far.lift }, { x: far.x + 60, lift: 0 });
+  assert.ok(Math.abs(off0.x - far.x) < 2);
+  assert.ok(Math.abs(off1.lift) < 2);
+  assert.ok(offMid.lift > 8, "still leaving the sky");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let spanXMin = Infinity;
+  let spanXMax = -Infinity;
+  let rollRotMax = 0;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hitch");
+    assert.notEqual(play.phase, "hitch-wrap");
+    assert.notEqual(play.phase, "plow");
+    assert.notEqual(play.phase, "knob");
+    assert.notEqual(play.phase, "reef");
+    assert.notEqual(play.phase, "chime");
+    assert.notEqual(play.phase, "rise");
+    assert.notEqual(play.phase, "flush");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "barrel-span") {
+      spanXMin = Math.min(spanXMin, play.x);
+      spanXMax = Math.max(spanXMax, play.x);
+      assert.equal(play.anim, "play", "she soars a length of sky");
+      assert.ok(play.lift > 28, "the soar is in the pane");
+    }
+    if (play.phase === "barrel") {
+      rollRotMax = Math.max(rollRotMax, Math.abs(play.rot));
+      assert.equal(play.anim, "play", "the barrel is a roll");
+    }
+  }
+  assert.ok(seen.has("barrel-on"));
+  assert.ok(seen.has("barrel-span"));
+  assert.ok(seen.has("barrel"));
+  assert.ok(seen.has("barrel-off"));
+  assert.ok(!seen.has("hitch"), "not Anchor");
+  assert.ok(!seen.has("circle"), "not Coin");
+  assert.ok(!seen.has("orbit-loop"), "not Gauss");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(spanXMax - spanXMin > 40, "a length of sky");
+  assert.ok(rollRotMax > 140, "one barrel");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Kite's sky; sleep, card, and hide abort; Kite never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "manta", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 520 && play.phase !== "barrel-span"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "barrel-span");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "barrel-span");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "barrel-off");
   assert.equal(play.abort, true);
 });
