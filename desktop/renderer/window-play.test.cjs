@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -41,6 +41,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("iguana"), "flatten");
   assert.equal(P.playFor("dragon"), "drape");
   assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("ball_python"), "bun");
   assert.equal(P.playFor("gecko"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
@@ -367,6 +368,23 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(phoenix.kind, "bow");
   assert.notEqual(phoenix.kind, "ridge");
   assert.notEqual(phoenix.kind, "cling-dive");
+  const nori = P.pickTarget([WIN], 80, "ball_python", WORK, P.SPRITE);
+  assert.ok(nori);
+  assert.equal(nori.kind, "bun");
+  assert.equal(nori.side, "well");
+  assert.equal(nori.leave, "unroll");
+  assert.ok(nori.holdLift > 36);
+  assert.notEqual(nori.kind, "sill");
+  assert.notEqual(nori.kind, "ball");
+  assert.notEqual(nori.kind, "kindle");
+  assert.notEqual(nori.kind, "drape");
+  assert.notEqual(nori.kind, "flatten");
+  assert.notEqual(nori.kind, "coil");
+  assert.notEqual(nori.kind, "thread");
+  assert.notEqual(nori.kind, "dust");
+  assert.notEqual(nori.kind, "hold");
+  assert.notEqual(nori.kind, "stash");
+  assert.notEqual(nori.kind, "cling-dive");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -3442,6 +3460,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /flatten-on|flatten-off|playFor/);
   assert.match(petSrc, /drape-on|drape-off|playFor/);
   assert.match(petSrc, /kindle-on|kindle-off|playFor/);
+  assert.match(petSrc, /bun-on|bun-off|playFor/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
@@ -4664,6 +4683,8 @@ test("Ember kindles the window ash — not drape, flatten, toss, perch, hook, or
     assert.notEqual(play.phase, "flatten-bob");
     assert.notEqual(play.phase, "drape");
     assert.notEqual(play.phase, "drape-settle");
+    assert.notEqual(play.phase, "bun");
+    assert.notEqual(play.phase, "bun-tuck");
     assert.notEqual(play.phase, "sill-hop");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "kindle-coal") {
@@ -4738,5 +4759,238 @@ test("a moved window refits Ember's ash; sleep, card, and hide abort; Ember neve
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "kindle-off");
+  assert.equal(play.abort, true);
+});
+
+test("Nori buns in the sash well — not ball, kindle, drape, coil, thread, dust, or sill", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "ball_python", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "bun");
+  assert.equal(target.side, "well");
+  assert.equal(target.leave, "unroll");
+  assert.equal(target.clickToId, undefined, "one window");
+  assert.ok(target.holdLift > 36, "she buns in the sash well, not the floor");
+  assert.ok(P.DUR.bun > P.DUR.bunTuck, "the bun is the career; the tuck is the hide");
+  assert.ok(P.DUR.bunOn > P.DUR.tossOn, "a pour, not a hop");
+  assert.ok(P.DUR.bunOn !== P.DUR.kindleOn, "not Ember's bank");
+  assert.ok(P.DUR.bunOn !== P.DUR.drapeOn, "not Vesper's smoke rise");
+  assert.ok(P.DUR.bunOn !== P.DUR.flattenOn, "not Sol's pane climb");
+  assert.ok(P.DUR.bunOn !== P.DUR.ballOn, "not Burr's shuffle-on");
+  assert.ok(P.DUR.bunTuck !== P.DUR.kindleCoal, "not Ember's coal");
+  assert.ok(P.DUR.bunTuck !== P.DUR.drapeSettle, "not Vesper's fold");
+  assert.ok(P.DUR.bunTuck !== P.DUR.ball, "not Burr's curl hold");
+  assert.ok(P.DUR.bun !== P.DUR.kindle, "not Ember's rise");
+  assert.ok(P.DUR.bun !== P.DUR.drape, "not Vesper's lintel hold");
+  assert.ok(P.DUR.bun !== P.DUR.flatten, "not Sol's ornament hold");
+  assert.ok(P.DUR.bun !== P.DUR.ball, "not Burr's pane-foot ball");
+  assert.ok(P.DUR.bun !== P.DUR.coilHold, "not Volt's wrap");
+  assert.ok(P.DUR.bunOff !== P.DUR.kindleOff, "an unroll, not a return");
+  assert.ok(P.DUR.bunOff !== P.DUR.drapeOff, "an unroll, not a slip");
+  assert.ok(P.DUR.bunOff !== P.DUR.ballOff, "an unroll from a well, not a floor uncurl");
+  const hold = P.bunPoint(WIN, P.SPRITE, WORK);
+  const flatten = P.flattenPoint(WIN, P.SPRITE, WORK);
+  const drape = P.drapePoint(WIN, "left", P.SPRITE, WORK);
+  const toss = P.tossPoint(WIN, "left", P.SPRITE, WORK);
+  const wall = P.wallPoint(WIN, 0, "left", P.SPRITE, WORK);
+  const hook = P.hookPoint(WIN, "left", 1, P.SPRITE, WORK);
+  const bow = P.bowPoint(WIN, P.SPRITE, WORK);
+  const scent = P.scentPoint(WIN, "left", P.SPRITE, WORK);
+  const perch = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ledge = P.ledgePoint(WIN, P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const watch = P.watchPoint(WIN, P.SPRITE, WORK);
+  const thump = P.thumpPoint(WIN, P.SPRITE, WORK, "left");
+  const stash = P.stashPoint(WIN, "left", P.SPRITE, WORK);
+  const wheek = P.wheekPoint(WIN, P.SPRITE, WORK);
+  const earth = P.earthPoint(WIN, P.SPRITE, WORK);
+  const bask = P.baskPoint(WIN, P.SPRITE, WORK);
+  const circle = P.circlePoint(WIN, 0, P.SPRITE, WORK, 1);
+  const thread = P.threadPoint(WIN, 0, P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const ball = P.ballPoint(WIN, P.SPRITE, WORK);
+  const dust = P.dustPoint(WIN, P.SPRITE, WORK);
+  const holdClip = P.holdPoint(WIN, "sash", "left", P.SPRITE, WORK);
+  const kindle = P.kindlePoint(WIN, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.equal(target.holdX, hold.x);
+  assert.equal(target.holdLift, hold.lift);
+  assert.ok(Math.abs(hold.x - watch.x) > 20 || Math.abs(hold.lift - watch.lift) > 20, "not Pip's floor watch");
+  assert.ok(Math.abs(hold.x - wheek.x) > 20 || Math.abs(hold.lift - wheek.lift) > 20, "not Whee's floor loaf");
+  assert.ok(Math.abs(hold.x - scent.x) > 20 || Math.abs(hold.lift - scent.lift) > 20, "not Rue's floor jamb");
+  assert.ok(Math.abs(hold.x - thump.x) > 20 || Math.abs(hold.lift - thump.lift) > 20, "not Thimble's stamp");
+  assert.ok(Math.abs(hold.x - stash.x) > 20 || Math.abs(hold.lift - stash.lift) > 16, "not Clip's drawer corner");
+  assert.ok(Math.abs(hold.lift - bask.lift) > 16, "not Ink's rail sit");
+  assert.ok(Math.abs(hold.lift - earth.lift) > 16, "not Ground's lug");
+  assert.ok(Math.abs(hold.lift - thread.lift) > 8, "not Wick's sash gap");
+  assert.ok(Math.abs(hold.x - hook.x) > 20 || Math.abs(hold.lift - hook.lift) > 20, "not Quill's jamb hang");
+  assert.ok(Math.abs(hold.x - perch.x) > 20 || Math.abs(hold.lift - perch.lift) > 20, "not Echo's shade perch");
+  assert.ok(Math.abs(hold.x - cling.x) > 20 || Math.abs(hold.lift - cling.lift) > 20, "not Rui's mid-side cling");
+  assert.ok(Math.abs(hold.lift - ledge.lift) > 40, "not Miso's top ledge");
+  assert.ok(Math.abs(hold.lift - ridge.lift) > 40, "not Arc's title-bar ridge");
+  assert.ok(Math.abs(hold.x - coil.x) > 20 || Math.abs(hold.lift - coil.lift) > 20, "not Volt's corner coil");
+  assert.ok(Math.abs(hold.x - circle.x) > 20 || Math.abs(hold.lift - circle.lift) > 20, "not Coin's bowl");
+  assert.ok(Math.abs(hold.x - field.x) > 20 || Math.abs(hold.lift - field.lift) > 20, "not Flux's glass field");
+  assert.ok(Math.abs(hold.lift - sill.lift) > 40, "not a generic top sill");
+  assert.ok(Math.abs(hold.x - bow.x) > 20 || Math.abs(hold.lift - bow.lift) > 20, "not Peck's landing rock");
+  assert.ok(Math.abs(hold.lift - ball.lift) > 20, "not Burr's pane foot");
+  assert.ok(Math.abs(hold.x - dust.x) > 20 || Math.abs(hold.lift - dust.lift) > 20, "not Floss's dust tray");
+  assert.ok(Math.abs(hold.x - wall.x) > 20 || Math.abs(hold.lift - wall.lift) > 20, "not Bloom's tank wall");
+  assert.ok(Math.abs(hold.x - toss.x) > 20 || Math.abs(hold.lift - toss.lift) > 20, "not Keel's cornice");
+  assert.ok(Math.abs(hold.lift - flatten.lift) > 40, "not Sol's sun-warmed pane");
+  assert.ok(Math.abs(hold.lift - drape.lift) > 40, "not Vesper's lintel");
+  assert.ok(Math.abs(hold.x - kindle.x) > 20 || Math.abs(hold.lift - kindle.lift) > 20, "not Ember's ash");
+  assert.ok(Math.abs(hold.x - holdClip.x) > 20 || Math.abs(hold.lift - holdClip.lift) > 20, "not Fuse's sash clip");
+  const on0 = P.bunOnPath(0, { x: 40, lift: 0 }, { x: hold.x, lift: hold.lift });
+  const on1 = P.bunOnPath(1, { x: 40, lift: 0 }, { x: hold.x, lift: hold.lift });
+  assert.equal(on0.x, 40);
+  assert.equal(on1.x, hold.x);
+  assert.ok(on1.lift < hold.lift, "she sinks into the well");
+  assert.ok(on1.rot > 4, "she begins the bun");
+  let tuckRot = 0;
+  let tuckSink = 0;
+  for (let u = 0; u <= 1; u += 0.05) {
+    const pose = P.bunTuckPath(u);
+    tuckRot = Math.max(tuckRot, pose.rot);
+    tuckSink = Math.min(tuckSink, pose.lift);
+  }
+  assert.ok(tuckRot > 36, "the bun is a tight coil");
+  assert.ok(tuckRot > 22, "tighter than Burr's pane-foot ball");
+  assert.ok(tuckSink < -10, "she hides in the well");
+  const off0 = P.bunOffPath(0, { x: hold.x, lift: hold.lift - 16 }, { x: hold.x + 68, lift: 0 });
+  const off1 = P.bunOffPath(1, { x: hold.x, lift: hold.lift - 16 }, { x: hold.x + 68, lift: 0 });
+  assert.equal(off0.x, hold.x);
+  assert.ok(off0.rot > 30, "she unrolls from a bun");
+  assert.equal(off1.x, hold.x + 68);
+  assert.equal(off1.lift, 0);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let tuckXMin = Infinity;
+  let tuckXMax = -Infinity;
+  let bunXMin = Infinity;
+  let bunXMax = -Infinity;
+  let bunRot = 0;
+  const windowIds = new Set();
+  for (let i = 0; i < 900 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    windowIds.add(play.target.id);
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "ledge-sit");
+    assert.notEqual(play.phase, "watch-hold");
+    assert.notEqual(play.phase, "thump");
+    assert.notEqual(play.phase, "stash-cheek");
+    assert.notEqual(play.phase, "wheek");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "perch-talk");
+    assert.notEqual(play.phase, "scent");
+    assert.notEqual(play.phase, "bow");
+    assert.notEqual(play.phase, "hook");
+    assert.notEqual(play.phase, "hook-climb");
+    assert.notEqual(play.phase, "thread");
+    assert.notEqual(play.phase, "ball");
+    assert.notEqual(play.phase, "dust");
+    assert.notEqual(play.phase, "dust-fluff");
+    assert.notEqual(play.phase, "wall");
+    assert.notEqual(play.phase, "toss");
+    assert.notEqual(play.phase, "toss-sit");
+    assert.notEqual(play.phase, "flatten");
+    assert.notEqual(play.phase, "flatten-bob");
+    assert.notEqual(play.phase, "drape");
+    assert.notEqual(play.phase, "drape-settle");
+    assert.notEqual(play.phase, "kindle");
+    assert.notEqual(play.phase, "kindle-coal");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bun-tuck") {
+      tuckXMin = Math.min(tuckXMin, play.x);
+      tuckXMax = Math.max(tuckXMax, play.x);
+      assert.equal(play.anim, "sit", "the tuck is sit");
+      assert.ok(play.lift > 20, "she tucks in the well");
+      assert.ok(play.rot > 6, "a bun begins");
+    }
+    if (play.phase === "bun") {
+      bunXMin = Math.min(bunXMin, play.x);
+      bunXMax = Math.max(bunXMax, play.x);
+      bunRot = Math.max(bunRot, play.rot);
+      assert.equal(play.anim, "sit", "the bun is sit");
+      assert.ok(play.lift > 20, "she is a bun in the well");
+      assert.ok(play.rot > 36, "the bun is visible");
+    }
+    if (play.phase === "approach") {
+      assert.equal(play.anim, "walk");
+      assert.equal(play.lift, 0);
+    }
+    if (play.phase === "bun-on") {
+      assert.equal(play.anim, "walk", "she pours, she does not hop");
+    }
+  }
+  assert.ok(seen.has("bun-on"));
+  assert.ok(seen.has("bun-tuck"));
+  assert.ok(seen.has("bun"));
+  assert.ok(seen.has("bun-off"));
+  assert.ok(!seen.has("ball"), "not Burr");
+  assert.ok(!seen.has("kindle"), "not Ember");
+  assert.ok(!seen.has("drape"), "not Vesper");
+  assert.ok(!seen.has("flatten"), "not Sol");
+  assert.ok(!seen.has("wall"), "not Bloom");
+  assert.ok(!seen.has("toss"), "not Keel");
+  assert.ok(!seen.has("dust"), "not Floss");
+  assert.ok(!seen.has("circle"), "not Coin");
+  assert.ok(!seen.has("field-hold"), "not Flux");
+  assert.ok(!seen.has("bask"), "not Ink");
+  assert.ok(!seen.has("bow"), "not Peck");
+  assert.ok(!seen.has("thread"), "not Wick");
+  assert.ok(!seen.has("hook"), "not Quill");
+  assert.ok(!seen.has("perch-talk"), "not Echo");
+  assert.ok(!seen.has("scent"), "not Rue");
+  assert.ok(!seen.has("ridge-hold"), "not Arc");
+  assert.ok(!seen.has("coil-hold"), "not Volt");
+  assert.ok(!seen.has("hold-sit"), "not Fuse");
+  assert.ok(!seen.has("ledge-sit"), "not Miso");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(tuckXMax - tuckXMin < 2, "one well — not a walk across");
+  assert.ok(bunXMax - bunXMin < 2, "one bun — she holds in place");
+  assert.ok(bunRot > 36, "the bun is a comma");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Nori's well; sleep, card, and hide abort; Nori never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "ball_python", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 240 && play.phase !== "bun"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "bun");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "bun");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bun-off");
   assert.equal(play.abort, true);
 });
