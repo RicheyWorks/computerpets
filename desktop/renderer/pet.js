@@ -1640,7 +1640,7 @@ function tick(now) {
   const climbLift = sim.play ? sim.play.lift : 0;
   const climbRot = sim.play ? sim.play.rot : 0;
   const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
-  pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap") ? "center center" : "center bottom";
+  pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off") ? "center center" : "center bottom";
   pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
