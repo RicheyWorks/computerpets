@@ -101,6 +101,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("canada_goose"), "honk");
   assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("hummingbird"), "sip");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -12398,7 +12399,7 @@ test("Sheen licks a warm pane as a salt glass: hover to the glass, lick once, ho
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("mining_bee"), "dig");
   assert.equal(P.playFor("honey_drone"), "drone");
-  assert.equal(P.playFor("hummingbird"), "sill");
+  assert.equal(P.playFor("hummingbird"), "sip");
   const target = P.pickTarget([WIN], 80, "sweat_bee", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "lick");
@@ -12617,7 +12618,7 @@ test("Bank digs a window stool as a sand bank: settle onto the wood, sink a shaf
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("honey_drone"), "drone");
-  assert.equal(P.playFor("hummingbird"), "sill");
+  assert.equal(P.playFor("hummingbird"), "sip");
   const target = P.pickTarget([WIN], 80, "mining_bee", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "dig");
@@ -12819,7 +12820,7 @@ test("Hum drones a window pane as congregation sky: lift into the glass, hang, d
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("manta"), "barrel");
   assert.equal(P.playFor("flux_dragon"), "field");
-  assert.equal(P.playFor("hummingbird"), "sill");
+  assert.equal(P.playFor("hummingbird"), "sip");
   const target = P.pickTarget([WIN], 80, "honey_drone", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "drone");
@@ -17067,7 +17068,7 @@ test("Drum drums an upper sash stile as a dead-wood post: hop onto the interior 
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("hummingbird"), "sill");
+  assert.equal(P.playFor("hummingbird"), "sip");
   const target = P.pickTarget([WIN], 80, "pileated", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "drum");
@@ -17217,5 +17218,168 @@ test("a moved window refits Drum's stile; sleep, card, and hide abort; Drum neve
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "drum-off");
+  assert.equal(play.abort, true);
+});
+
+
+test("Sip sips a window-box bloom as a nectar cup: dart to the foliage, hover, sip once, then dart off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("leafcutter"), "snip");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("crow"), "caw");
+  assert.equal(P.playFor("boa"), "loop");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("penguin"), "bow");
+  assert.equal(P.playFor("stickleback"), "glue");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("orb_weaver"), "sill");
+  const target = P.pickTarget([WIN], 80, "hummingbird", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "sip");
+  assert.equal(target.side, "nectar");
+  assert.equal(target.leave, "dart");
+  assert.notEqual(target.kind, "hummingbird");
+  assert.notEqual(target.kind, "hover");
+  assert.notEqual(target.kind, "forage");
+  assert.notEqual(target.kind, "snip");
+  assert.notEqual(target.kind, "drink");
+  assert.notEqual(target.kind, "drum");
+  assert.notEqual(target.kind, "honk");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 20, "she hovers just off the box bloom, not the floor");
+  assert.ok(P.DUR.sip > P.DUR.sipHold, "the sip is the tell; the hover hang is the hold after");
+  assert.ok(P.DUR.sipOn !== P.DUR.drumOn);
+  assert.ok(P.DUR.sipOn !== P.DUR.forageOn);
+  assert.ok(P.DUR.sipOn !== P.DUR.snipOn);
+  assert.ok(P.DUR.sipOn !== P.DUR.drinkOn);
+  assert.ok(P.DUR.sipOn !== P.DUR.honkOn);
+  assert.ok(P.DUR.sipOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.sip !== P.DUR.drum);
+  assert.ok(P.DUR.sip !== P.DUR.forage);
+  assert.ok(P.DUR.sip !== P.DUR.snip);
+  assert.ok(P.DUR.sip !== P.DUR.drink);
+  assert.ok(P.DUR.sipHold !== P.DUR.drumHold);
+  assert.ok(P.DUR.sipOff !== P.DUR.drumOff);
+  assert.ok(P.DUR.sipOff !== P.DUR.forageOff);
+  assert.ok(P.DUR.sipOff !== P.DUR.sillDown);
+  const nectar = P.sipPoint(WIN, P.SPRITE, WORK);
+  const bloom = P.foragePoint(WIN, P.SPRITE, WORK);
+  const foliage = P.snipPoint(WIN, P.SPRITE, WORK);
+  const drip = P.drinkPoint(WIN, P.SPRITE, WORK);
+  const snag = P.drumPoint(WIN, P.SPRITE, WORK);
+  const green = P.honkPoint(WIN, P.SPRITE, WORK);
+  const watch = P.watchPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(nectar.x - bloom.x) > 20 || Math.abs(nectar.lift - bloom.lift) > 16, "not Thrum's land-on-bloom");
+  assert.ok(Math.abs(nectar.x - foliage.x) > 20 || Math.abs(nectar.lift - foliage.lift) > 16, "not Disc's leaf");
+  assert.ok(Math.abs(nectar.x - drip.x) > 20 || Math.abs(nectar.lift - drip.lift) > 12, "not Latch's drip");
+  assert.ok(nectar.lift < snag.lift - 80, "not Drum's upper stile");
+  assert.ok(Math.abs(nectar.x - green.x) > 20 || Math.abs(nectar.lift - green.lift) > 16, "not Vee's apron");
+  assert.ok(nectar.lift > watch.lift + 20, "not Pip's floor");
+  assert.ok(nectar.lift > bloom.lift + 16, "a hover in air, not a land on the bloom");
+  const dartOn = P.sipOnPath(0.25, { x: 40, lift: 0 }, { x: nectar.x, lift: nectar.lift });
+  const dartEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  const hopOn = P.drumOnPath(0.25, { x: 40, lift: 0 }, { x: snag.x, lift: snag.lift });
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(dartOn.lift - nectar.lift * dartEase > 3, "a dart to the bloom");
+  assert.ok(dartOn.lift - nectar.lift * dartEase < hopOn.lift - snag.lift * hopEase, "a dart, not Drum's woodpecker hop");
+  const hang = P.sipPath(0.12);
+  const needle = P.sipPath(0.42);
+  const after = P.sipPath(0.86);
+  const buzz = P.foragePath(0.5);
+  const circle = P.snipPath(0.5);
+  const peck = P.drumPath(0.44);
+  assert.ok(hang.lift > 1.5, "a hover hang");
+  assert.ok(needle.x > 5, "needle in once");
+  assert.ok(Math.abs(needle.rot) > 6, "the bill goes in");
+  assert.ok(after.x < needle.x, "the needle withdraws");
+  assert.ok(hang.lift < buzz.lift, "a hover, not Thrum's buzz");
+  assert.ok(Math.abs(needle.x) < 12, "one sip, not Disc's leaf circle");
+  assert.ok(Math.abs(circle.x) > 4, "Disc still snips");
+  assert.ok(Math.abs(peck.x) > 2 || Math.abs(peck.lift) > 2, "Drum still drums");
+  const hold = P.sipHoldPath(0.5);
+  assert.ok(hold.lift > 2, "she hangs in the air after the sip");
+  assert.ok(Math.abs(hold.rot) > 2, "the needle stays kind");
+  const off0 = P.sipOffPath(0, { x: nectar.x, lift: nectar.lift + 2.6 }, { x: nectar.x + 54, lift: 0 });
+  const offMid = P.sipOffPath(0.5, { x: nectar.x, lift: nectar.lift + 2.6 }, { x: nectar.x + 54, lift: 0 });
+  const off1 = P.sipOffPath(1, { x: nectar.x, lift: nectar.lift + 2.6 }, { x: nectar.x + 54, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - nectar.x) < 2);
+  assert.ok(offMid.lift - (nectar.lift + 2.6) * (1 - midEase) > 4, "a dart off, not a hop");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let sipXMax = 0;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "snip");
+    assert.notEqual(play.phase, "drink");
+    assert.notEqual(play.phase, "drum");
+    assert.notEqual(play.phase, "honk");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "sip") {
+      sipXMax = Math.max(sipXMax, Math.abs(play.x - play.target.holdX));
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "sip-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "sip-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift > 1, "she hovers the nectar cup");
+    }
+  }
+  assert.ok(seen.has("sip-on"));
+  assert.ok(seen.has("sip"));
+  assert.ok(seen.has("sip-hold"));
+  assert.ok(seen.has("sip-off"));
+  assert.ok(sipXMax > 3, "the needle goes in");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Sip's bloom; sleep, card, and hide abort; Sip never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "hummingbird", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 720 && play.phase !== "sip"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "sip");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "sip");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "sip-off");
   assert.equal(play.abort, true);
 });

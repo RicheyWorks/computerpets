@@ -198,6 +198,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("canada_goose"), Overlay.playFor("canada_goose"));
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("pileated"), Overlay.playFor("pileated"));
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("hummingbird"), Overlay.playFor("hummingbird"));
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -11006,7 +11008,7 @@ test("the demo window plate walks Drum's drum the same way", () => {
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("hummingbird"), "sill");
+  assert.equal(P.playFor("hummingbird"), "sip");
   assert.notEqual(target.kind, "pileated");
   assert.notEqual(target.kind, "honk");
   assert.notEqual(target.kind, "soar");
@@ -11092,6 +11094,130 @@ test("the demo window plate walks Drum's drum the same way", () => {
   assert.ok(seen.has("drum-hold"));
   assert.ok(seen.has("drum-off"));
   assert.ok(drumXSpan > 2, "the bill walks a rectangle");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+
+test("the demo window plate walks Sip's sip the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/roost.ts"), "utf8"), /key: "hummingbird"[\s\S]{0,80}slug: "sip"/);
+  assert.equal(P.playFor("hummingbird"), "sip");
+  const target = P.pickTarget([WIN], 80, "hummingbird", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "sip");
+  assert.equal(target.side, "nectar");
+  assert.equal(target.leave, "dart");
+  assert.equal(Overlay.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("leafcutter"), "snip");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("crow"), "caw");
+  assert.equal(P.playFor("boa"), "loop");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("penguin"), "bow");
+  assert.equal(P.playFor("stickleback"), "glue");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("orb_weaver"), "sill");
+  assert.notEqual(target.kind, "hummingbird");
+  assert.notEqual(target.kind, "hover");
+  assert.notEqual(target.kind, "forage");
+  assert.notEqual(target.kind, "snip");
+  assert.notEqual(target.kind, "drink");
+  assert.notEqual(target.kind, "drum");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(P.DUR.sip > P.DUR.sipHold, "the sip is the tell; the hover hang is the hold after");
+  assert.ok(P.DUR.sipOn !== Overlay.DUR.drumOn);
+  assert.ok(P.DUR.sipOn !== Overlay.DUR.forageOn);
+  assert.ok(P.DUR.sipOn !== Overlay.DUR.snipOn);
+  assert.ok(P.DUR.sipOn !== Overlay.DUR.drinkOn);
+  assert.ok(P.DUR.sipOn !== Overlay.DUR.sillHop);
+  assert.ok(P.DUR.sip !== Overlay.DUR.drum);
+  assert.ok(P.DUR.sip !== Overlay.DUR.forage);
+  assert.ok(P.DUR.sipHold !== Overlay.DUR.drumHold);
+  assert.ok(P.DUR.sipOff !== Overlay.DUR.drumOff);
+  assert.equal(P.DUR.sipOn, Overlay.DUR.sipOn);
+  assert.equal(P.DUR.sip, Overlay.DUR.sip);
+  assert.equal(P.DUR.sipHold, Overlay.DUR.sipHold);
+  assert.equal(P.DUR.sipOff, Overlay.DUR.sipOff);
+  const nectar = P.sipPoint(WIN, 176, WORK);
+  const deskNectar = Overlay.sipPoint(WIN, 176, WORK);
+  assert.equal(nectar.x, deskNectar.x);
+  assert.equal(nectar.lift, deskNectar.lift);
+  const bloom = P.foragePoint(WIN, 176, WORK);
+  const foliage = P.snipPoint(WIN, 176, WORK);
+  const drip = P.drinkPoint(WIN, 176, WORK);
+  const snag = P.drumPoint(WIN, 176, WORK);
+  const green = P.honkPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(nectar.x - bloom.x) > 20 || Math.abs(nectar.lift - bloom.lift) > 16, "not Thrum");
+  assert.ok(Math.abs(nectar.x - foliage.x) > 20 || Math.abs(nectar.lift - foliage.lift) > 16, "not Disc");
+  assert.ok(Math.abs(nectar.x - drip.x) > 20 || Math.abs(nectar.lift - drip.lift) > 12, "not Latch");
+  assert.ok(nectar.lift < snag.lift - 80, "not Drum");
+  assert.ok(Math.abs(nectar.x - green.x) > 20 || Math.abs(nectar.lift - green.lift) > 16, "not Vee");
+  assert.ok(nectar.lift > bloom.lift + 16, "a hover, not a land");
+  const dartOn = P.sipOnPath(0.25, { x: 40, lift: 0 }, { x: nectar.x, lift: nectar.lift });
+  const deskDart = Overlay.sipOnPath(0.25, { x: 40, lift: 0 }, { x: nectar.x, lift: nectar.lift });
+  assert.equal(dartOn.x, deskDart.x);
+  assert.equal(dartOn.lift, deskDart.lift);
+  const dartEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(dartOn.lift - nectar.lift * dartEase > 3, "a dart to the bloom");
+  const needle = P.sipPath(0.42);
+  const deskNeedle = Overlay.sipPath(0.42);
+  assert.equal(needle.lift, deskNeedle.lift);
+  assert.ok(needle.x > 5, "needle in once");
+  const hold = P.sipHoldPath(0.5);
+  const deskHold = Overlay.sipHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.lift > 2, "she hangs in the air");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let sipXMax = 0;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "snip");
+    assert.notEqual(play.phase, "drink");
+    assert.notEqual(play.phase, "drum");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "sip") {
+      sipXMax = Math.max(sipXMax, Math.abs(play.x - play.target.holdX));
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "sip-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "sip-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift > 1, "she hovers the nectar cup");
+    }
+  }
+  assert.ok(seen.has("sip-on"));
+  assert.ok(seen.has("sip"));
+  assert.ok(seen.has("sip-hold"));
+  assert.ok(seen.has("sip-off"));
+  assert.ok(sipXMax > 3, "the needle goes in");
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
