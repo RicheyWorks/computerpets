@@ -223,6 +223,7 @@ select {
 
 .keeper-steps,
 .keeper-music,
+.keeper-sleep,
 .keeper-bird,
 .keeper-call {
   margin: 10px 0 0;
@@ -274,6 +275,7 @@ select {
 
 .keeper-steps button,
 .keeper-music button,
+.keeper-sleep button,
 .keeper-bird button,
 .keeper-call button {
   pointer-events: auto;
@@ -292,7 +294,8 @@ select {
 }
 
 .keeper-steps button[data-on="1"],
-.keeper-music button[data-on="1"] {
+.keeper-music button[data-on="1"],
+.keeper-sleep button[data-on="1"] {
   border-color: #d8cfc0;
   color: #fffaf3;
 }

@@ -94,7 +94,7 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: RuiTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "lie") return 16 + roll * 10;
+  if (kind === "lie") return 48 + roll * 24;
   return justFinished ? 9 + roll * 8 : 4 + roll * 6;
 }
 
@@ -108,9 +108,9 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: RuiTrickKin
     return "dance";
   }
   if (roll < 0.18) return "somersault";
-  if (roll < 0.38) return "lie";
-  if (roll < 0.58) return "scratch";
-  if (roll < 0.76) return "wave";
+  if (roll < 0.26) return "lie";
+  if (roll < 0.52) return "scratch";
+  if (roll < 0.74) return "wave";
   return "dance";
 }
 

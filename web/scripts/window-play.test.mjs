@@ -26,7 +26,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("trace_dragon"), Overlay.playFor("trace_dragon"));
   assert.equal(P.playFor("flux_dragon"), "field");
   assert.equal(P.playFor("flux_dragon"), Overlay.playFor("flux_dragon"));
-  assert.equal(P.playFor("spark_dragon"), "sill");
+  assert.equal(P.playFor("spark_dragon"), "crackle");
+  assert.equal(P.playFor("spark_dragon"), Overlay.playFor("spark_dragon"));
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -155,5 +156,30 @@ test("the demo window plate walks Flux's field the same way", () => {
   assert.ok(seen.has("field-on"));
   assert.ok(seen.has("field-hold"));
   assert.ok(seen.has("field-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Spark's crackle the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /crackle-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "spark_dragon", WORK, 176, { side: "left", leave: "hop", hopFrom: 0 });
+  const target = P.pickTarget([WIN], 40, "spark_dragon", WORK, 176, { side: "left", leave: "hop", hopFrom: 0 });
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "sill-walk");
+  }
+  assert.ok(seen.has("crackle-on"));
+  assert.ok(seen.has("crackle-hop"));
+  assert.ok(seen.has("crackle-off"));
   assert.equal(play.phase, "done");
 });

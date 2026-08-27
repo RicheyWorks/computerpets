@@ -2,6 +2,7 @@
 import { parseAreas } from "./weather-areas.ts";
 import { parseStep } from "./house-sounds.ts";
 import { parseMusic } from "./house-music.ts";
+import { parseSleepAid } from "./house-sleep.ts";
 
 export const CARD_STORE = "computerpets.card.v1";
 export const MAX_LINES = 12;
@@ -37,6 +38,7 @@ export const SOUND_BUS = {
   call: "talk",
   music: "music",
   radio: "music",
+  sleep: "music",
 } as const;
 
 const HUMAN_VOICE = /aria|jenny|guy|davis|natural|samantha|daniel|karen|moira|zira|david|mark|hazel|susan|google us english|microsoft/i;
@@ -44,7 +46,7 @@ const ROBOT_VOICE = /compact|bad news|good news|hysterical|zarvox|trinoids|boing
 
 export const VOICE_TRUTH = "The door is still the system speech voices.";
 export const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
-export const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide"] as const;
+export const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"] as const;
 
 export type CardColorId = (typeof CARD_COLORS)[number]["id"];
 export type VoiceStyleId = (typeof VOICE_STYLES)[number]["id"];
@@ -68,6 +70,7 @@ export type CardPrefs = {
   currentAreaId: string | null;
   stepKind: string;
   music: { plugin: string; stationId: string; stationName: string; stationUrl: string; playing: boolean };
+  sleepAid: { plugin: string; playing: boolean };
 };
 
 export function blankMutes(): CardMutes {
@@ -98,6 +101,7 @@ export function blankCard(): CardPrefs {
     currentAreaId: null,
     stepKind: "species",
     music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
+    sleepAid: { plugin: "off", playing: false },
   };
 }
 
@@ -200,6 +204,7 @@ export function parseCard(raw: unknown): CardPrefs {
   next.currentAreaId = areas.currentId;
   next.stepKind = parseStep(o.stepKind);
   next.music = parseMusic(o.music);
+  next.sleepAid = parseSleepAid(o.sleepAid);
   return next;
 }
 

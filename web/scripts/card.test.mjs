@@ -40,7 +40,7 @@ test("the desk card law matches the overlay card", () => {
 test("an asleep guest keeps sleep on the wander tick", () => {
   assert.deepEqual(C.wanderWhileAsleep(true), { cmd: "sleep", pose: "sleep" });
   assert.equal(C.wanderWhileAsleep(false), null);
-  assert.equal(C.sleepHolds(true, "wander"), true);
+  assert.equal(C.sleepHolds(true, "wander"), false);
   assert.equal(C.sleepHolds(true, "sit"), true);
   assert.equal(C.sleepHolds(true, "idle"), true);
   assert.equal(C.sleepHolds(true, "talk"), false);
@@ -68,4 +68,10 @@ test("saved lines, alarm, and timer are machine-local", () => {
   assert.equal(C.pickSystemVoice(voices, "hearth")?.name, "Microsoft Aria Online (Natural)");
   assert.equal(C.CARD_STORE, "computerpets.card.v1");
   assert.equal(C.blankCard().collapsed, true);
+  assert.equal(C.blankCard().sleepAid.plugin, "off");
+  const withBed = C.parseCard({ sleepAid: { plugin: "rain", playing: true } });
+  assert.equal(withBed.sleepAid.plugin, "rain");
+  assert.equal(withBed.sleepAid.playing, true);
+  assert.match(cardSrc, /SLEEP_AID_LABEL/);
+  assert.match(overlayHtml, /id="hud-sleep"/);
 });
