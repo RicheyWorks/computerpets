@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { BlotterCare } from "@/components/desk/blotter-care";
 import {
   ADVERTISED_CARE,
   DESK_PORT,
   HEARTBEAT_URL,
   KEEPER_CARE,
+  KEEPER_KICKER,
   UNREAD_HEARTBEAT,
   careTruth,
   heartbeatLine,
@@ -12,8 +12,18 @@ import {
   parseHeartbeat,
   type Heartbeat,
 } from "@/lib/pets/keeper";
+import {
+  applyFeedFor,
+  applyPlay,
+  applyRest,
+  blankCare,
+  loadCare,
+  saveCare,
+  stageOf,
+  type CareStats,
+} from "@/lib/pets/care";
+import { RED_PANDA_KIND } from "@/lib/pets/living";
 import { cn } from "@/lib/utils";
-import type { CareStats } from "@/lib/pets/care";
 
 export function KeeperCard({
   name,
@@ -57,31 +67,39 @@ export function KeeperCard({
   }, []);
 
   const verbs = [
-    { label: KEEPER_CARE[0]!.label, onClick: onFeed, disabled: busy },
-    { label: KEEPER_CARE[1]!.label, onClick: onPlay, disabled: busy },
-    { label: KEEPER_CARE[2]!.label, onClick: onRest, disabled: busy },
+    { id: KEEPER_CARE[0]!.id, label: KEEPER_CARE[0]!.label, onClick: onFeed },
+    { id: KEEPER_CARE[1]!.id, label: KEEPER_CARE[1]!.label, onClick: onPlay },
+    { id: KEEPER_CARE[2]!.id, label: KEEPER_CARE[2]!.label, onClick: onRest },
   ];
 
   return (
-    <article
-      className={cn("keeper-card paper-card rounded-[var(--radius-lg)] border border-border p-3", className)}
-      aria-label="Keeper card"
-    >
-      <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Keeper card</p>
-      <h2 className="mt-1 font-display text-2xl leading-none">
-        {name} · {stage}
-      </h2>
-      <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-subtle">{meters.bondTitle}</p>
-      <dl className="keeper-meters mt-3 grid gap-1.5">
+    <article className={cn("keeper-card", className)} aria-label="Keeper card" data-keeper-poster>
+      <p className="keeper-kicker">{KEEPER_KICKER}</p>
+      <h2 className="keeper-name">{name}</h2>
+      <p className="keeper-stage">{stage}</p>
+      <p className="keeper-bond-title">{meters.bondTitle}</p>
+      <dl className="keeper-meters">
         <Meter label="Hunger" value={meters.hunger} />
         <Meter label="Rest" value={meters.rest} />
         <Meter label="Bond" value={meters.bond} />
       </dl>
-      <BlotterCare className="mt-3 justify-start" marks={verbs} />
-      <p className="mt-2 font-mono text-[11px] text-subtle" data-heartbeat={beat.status}>
+      <div className="keeper-care" role="toolbar" aria-label="Care">
+        {verbs.map((verb) => (
+          <button
+            key={verb.id}
+            type="button"
+            data-care={verb.id}
+            disabled={busy}
+            onClick={verb.onClick}
+          >
+            {verb.label}
+          </button>
+        ))}
+      </div>
+      <p className="keeper-heartbeat" data-heartbeat={beat.status}>
         {heartbeatLine(beat)}
       </p>
-      <p className="mt-1 text-[11px] text-subtle">
+      <p className="keeper-truth">
         {careTruth()} Desk {DESK_PORT}. Not {ADVERTISED_CARE.feed}.
       </p>
     </article>
@@ -91,14 +109,37 @@ export function KeeperCard({
 function Meter({ label, value }: { label: string; value: number }) {
   return (
     <div>
-      <div className="flex items-baseline justify-between gap-3 text-[11px] uppercase tracking-[0.14em] text-subtle">
-        <dt>{label}</dt>
-        <dd>{value}</dd>
-      </div>
-      <div className="mt-0.5 h-1 overflow-hidden rounded-full bg-[#3d3831]">
-        <i className="block h-full rounded-full bg-[#d8cfc0]" style={{ width: `${value}%` }} />
-      </div>
+      <dt>{label}</dt>
+      <dd>{value}</dd>
+      <i style={{ ["--w" as string]: `${value}%` }} />
     </div>
+  );
+}
+
+/** Rui sits the Meet door. Same card. Care stays on her desk key. */
+export function MeetKeeperCard({ className }: { className?: string }) {
+  const kind = RED_PANDA_KIND;
+  const [stats, setStats] = useState<CareStats>(() => blankCare());
+
+  useEffect(() => {
+    setStats(loadCare(kind.localKey, undefined, kind.key));
+  }, [kind.key, kind.localKey]);
+
+  function tend(next: CareStats) {
+    saveCare(kind.localKey, next);
+    setStats(next);
+  }
+
+  return (
+    <KeeperCard
+      className={className}
+      name={kind.name}
+      stage={stageOf(stats)}
+      stats={stats}
+      onFeed={() => tend(applyFeedFor(kind.key, stats))}
+      onPlay={() => tend(applyPlay(stats))}
+      onRest={() => tend(applyRest(stats))}
+    />
   );
 }
 
@@ -125,7 +166,7 @@ export function KeeperHeartbeat({ className }: { className?: string }) {
   }, []);
 
   return (
-    <p className={cn("font-mono text-[11px] uppercase tracking-[0.12em] text-subtle", className)} data-heartbeat={beat.status}>
+    <p className={cn("keeper-heartbeat", className)} data-heartbeat={beat.status}>
       {heartbeatLine(beat)} · {careTruth()}
     </p>
   );

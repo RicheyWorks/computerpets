@@ -9,6 +9,8 @@
     { id: "play", label: "Play" },
     { id: "rest", label: "Rest" },
   ];
+  const HUD_WIDTH = 280;
+  const KEEPER_KICKER = "Keeper card";
 
   const UNREAD = {
     status: "DOWN",
@@ -69,12 +71,30 @@
     };
   }
 
+  function poster(name, stage, life, beat) {
+    const m = meters(life);
+    return {
+      kicker: KEEPER_KICKER,
+      name: name || "",
+      stage: stage || "",
+      bondTitle: m.bondTitle,
+      hunger: m.hunger,
+      rest: m.rest,
+      bond: m.bond,
+      verbs: KEEPER_CARE.map((verb) => verb.id),
+      heartbeat: heartbeatLine(beat || UNREAD),
+      truth: careTruth(),
+    };
+  }
+
   const api = {
     JAVA_PORT,
     DESK_PORT,
     HEARTBEAT_URL,
     ADVERTISED_CARE,
     KEEPER_CARE,
+    HUD_WIDTH,
+    KEEPER_KICKER,
     UNREAD,
     parseHeartbeat,
     formatUptime,
@@ -82,6 +102,7 @@
     careTruth,
     bondTitle,
     meters,
+    poster,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetKeeper = api;

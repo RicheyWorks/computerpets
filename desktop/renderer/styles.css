@@ -311,12 +311,13 @@ body {
   position: absolute;
   left: 0;
   bottom: 178px;
-  width: 196px;
-  padding: 8px 10px 10px;
-  border-radius: 10px;
-  border: 1px solid #2a2621;
-  background: rgb(12 11 10 / 0.86);
+  width: 280px;
+  padding: 14px 16px 15px;
+  border-radius: 14px;
+  border: 1px solid #3d3831;
+  background: rgb(12 11 10 / 0.92);
   color: #f2ece3;
+  box-shadow: 0 14px 36px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(242 236 227 / 0.08);
   pointer-events: none;
   opacity: 0;
   transition: opacity 160ms ease;
@@ -326,62 +327,110 @@ body {
   opacity: 1;
 }
 
-#hud-kicker {
+#hud-kicker,
+.keeper-kicker {
   margin: 0;
-  font-size: 9px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #9a9288;
+}
+
+#hud-name,
+.keeper-name {
+  margin: 6px 0 0;
+  font-family: Georgia, "Palatino Linotype", "Iowan Old Style", serif;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+#hud-stage,
+.keeper-stage {
+  margin: 8px 0 0;
+  font-size: 11px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #9a9288;
 }
 
-#hud-care {
-  display: flex;
-  gap: 6px;
-  margin: 8px 0 6px;
+#hud-bond-title,
+.keeper-bond-title {
+  margin: 2px 0 0;
+  font-family: Georgia, "Palatino Linotype", "Iowan Old Style", serif;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
-#hud-care button {
+#hud-vital,
+.keeper-vital {
+  margin: 6px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #6e6860;
+}
+
+#hud-care,
+.keeper-care {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0 8px;
+}
+
+#hud-care button,
+.keeper-care button {
   pointer-events: auto;
+  flex: 1;
   font: inherit;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: #f2ece3;
-  background: none;
+  background: #1d1a17;
   border: 1px solid #3d3831;
   border-radius: 8px;
-  padding: 6px 8px;
-  min-height: 32px;
+  padding: 8px 6px;
+  min-height: 36px;
   cursor: pointer;
 }
 
+#hud-care button:hover,
+.keeper-care button:hover {
+  border-color: #d8cfc0;
+  color: #fffaf3;
+}
+
 .keeper-meters {
-  margin: 6px 0 0;
+  margin: 12px 0 0;
 }
 
 .keeper-meters > div {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 2px 8px;
-  margin-top: 4px;
+  gap: 3px 10px;
+  margin-top: 8px;
 }
 
 .keeper-meters dt {
-  font-size: 9px;
-  letter-spacing: 0.14em;
+  font-size: 10px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: #9a9288;
 }
 
 .keeper-meters dd {
   margin: 0;
-  font-size: 9px;
-  color: #9a9288;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: #d8cfc0;
 }
 
 .keeper-meters i {
   grid-column: 1 / -1;
   display: block;
-  height: 3px;
+  height: 8px;
   border-radius: 99px;
   background: #3d3831;
   position: relative;
@@ -397,11 +446,19 @@ body {
 }
 
 #hud-heartbeat,
-#hud-truth {
-  margin: 2px 0 0;
-  font-size: 9px;
+#hud-truth,
+.keeper-heartbeat,
+.keeper-truth {
+  margin: 4px 0 0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  font-size: 10px;
   letter-spacing: 0.04em;
   color: #9a9288;
+}
+
+#hud-heartbeat[data-heartbeat="UP"],
+.keeper-heartbeat[data-heartbeat="UP"] {
+  color: #8fa08a;
 }
 
 #choice {
@@ -436,19 +493,6 @@ body {
   cursor: pointer;
 }
 
-#hud-name {
-  margin: 0;
-  font-size: 12px;
-  letter-spacing: -0.02em;
-}
-
-#hud-vital {
-  margin: 1px 0 6px;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #9a9288;
-}
 
 .bars {
   display: grid;
