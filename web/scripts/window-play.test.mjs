@@ -200,6 +200,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("pileated"), Overlay.playFor("pileated"));
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("hummingbird"), Overlay.playFor("hummingbird"));
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("orb_weaver"), Overlay.playFor("orb_weaver"));
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -11136,7 +11138,7 @@ test("the demo window plate walks Sip's sip the same way", () => {
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("orb_weaver"), "sill");
+  assert.equal(P.playFor("orb_weaver"), "web");
   assert.notEqual(target.kind, "hummingbird");
   assert.notEqual(target.kind, "hover");
   assert.notEqual(target.kind, "forage");
@@ -11218,6 +11220,120 @@ test("the demo window plate walks Sip's sip the same way", () => {
   assert.ok(seen.has("sip-hold"));
   assert.ok(seen.has("sip-off"));
   assert.ok(sipXMax > 3, "the needle goes in");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Loom's web the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "orb_weaver"[\s\S]{0,80}slug: "loom"/);
+  assert.equal(P.playFor("orb_weaver"), "web");
+  const target = P.pickTarget([WIN], 80, "orb_weaver", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "web");
+  assert.equal(target.side, "lamp");
+  assert.equal(target.leave, "silk");
+  assert.equal(Overlay.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("volt_dragon"), "coil");
+  assert.equal(P.playFor("trace_dragon"), "path");
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.playFor("spark_dragon"), "crackle");
+  assert.equal(P.playFor("ion_dragon"), "charge");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("honeycomb"), "draw");
+  assert.equal(P.playFor("jumping_spider"), "sill");
+  assert.equal(P.playFor("harvestman"), "sill");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.notEqual(target.kind, "loom");
+  assert.notEqual(target.kind, "coil");
+  assert.notEqual(target.kind, "path");
+  assert.notEqual(target.kind, "field");
+  assert.notEqual(target.kind, "crackle");
+  assert.notEqual(target.kind, "charge");
+  assert.notEqual(target.kind, "sip");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(P.DUR.web > P.DUR.webHold, "the draw is the tell; the hub sit is the hold after");
+  assert.ok(P.DUR.webOn !== Overlay.DUR.coilOn);
+  assert.ok(P.DUR.webOn !== Overlay.DUR.chargeOn);
+  assert.ok(P.DUR.webOn !== Overlay.DUR.sipOn);
+  assert.ok(P.DUR.webOn !== Overlay.DUR.drumOn);
+  assert.ok(P.DUR.webOn !== Overlay.DUR.sillHop);
+  assert.ok(P.DUR.web !== Overlay.DUR.sip);
+  assert.ok(P.DUR.webHold !== Overlay.DUR.sipHold);
+  assert.ok(P.DUR.webOff !== Overlay.DUR.sipOff);
+  assert.equal(P.DUR.webOn, Overlay.DUR.webOn);
+  assert.equal(P.DUR.web, Overlay.DUR.web);
+  assert.equal(P.DUR.webHold, Overlay.DUR.webHold);
+  assert.equal(P.DUR.webOff, Overlay.DUR.webOff);
+  const hub = P.webPoint(WIN, 176, WORK);
+  const deskHub = Overlay.webPoint(WIN, 176, WORK);
+  assert.equal(hub.x, deskHub.x);
+  assert.equal(hub.lift, deskHub.lift);
+  const wrapL = P.coilPoint(WIN, "left", 176, WORK);
+  const wrapR = P.coilPoint(WIN, "right", 176, WORK);
+  const bolt = P.chargePoint(WIN, "tr", 176, WORK);
+  const field = P.fieldPoint(WIN, 176, WORK);
+  const nectar = P.sipPoint(WIN, 176, WORK);
+  const snag = P.drumPoint(WIN, 176, WORK);
+  assert.ok(hub.x > WIN.x + 8, "interior glass");
+  assert.ok(hub.x + 176 < WIN.x + WIN.width - 8, "interior glass");
+  assert.ok(Math.abs(hub.x - wrapL.x) > 40, "not Volt");
+  assert.ok(Math.abs(hub.x - wrapR.x) > 40, "not Volt");
+  assert.ok(Math.abs(hub.x - bolt.x) > 16 || Math.abs(hub.lift - bolt.lift) > 8, "not Ion");
+  assert.ok(Math.abs(hub.x - field.x) > 40, "not Flux");
+  assert.ok(hub.lift > nectar.lift + 40, "not Sip");
+  assert.ok(Math.abs(hub.x - snag.x) > 20 || Math.abs(hub.lift - snag.lift) > 16, "not Drum");
+  const walkOn = P.webOnPath(0.25, { x: 40, lift: 0 }, { x: hub.x, lift: hub.lift });
+  const deskWalk = Overlay.webOnPath(0.25, { x: 40, lift: 0 }, { x: hub.x, lift: hub.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const quint = 0.25 * 0.25 * 0.25 * (0.25 * (0.25 * 6 - 15) + 10);
+  assert.ok(walkOn.lift - hub.lift * quint < 4, "a slow walk to the corner");
+  const spoke = P.webPath(0.18);
+  const deskSpoke = Overlay.webPath(0.18);
+  assert.equal(spoke.lift, deskSpoke.lift);
+  assert.ok(Math.abs(spoke.x) > 4 || Math.abs(spoke.lift) > 2, "spokes");
+  const hold = P.webHoldPath(0.5);
+  const deskHold = Overlay.webHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.lift < 1.2, "she sits the hub still");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let webSpan = 0;
+  for (let i = 0; i < 2800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "coil-on");
+    assert.notEqual(play.phase, "path-on");
+    assert.notEqual(play.phase, "field-on");
+    assert.notEqual(play.phase, "crackle-on");
+    assert.notEqual(play.phase, "charge-on");
+    assert.notEqual(play.phase, "sip");
+    assert.notEqual(play.phase, "drum");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "web") {
+      webSpan = Math.max(webSpan, Math.abs(play.x - play.target.holdX));
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "web-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "web-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - play.target.holdLift) < 2, "she sits the hub");
+    }
+  }
+  assert.ok(seen.has("web-on"));
+  assert.ok(seen.has("web"));
+  assert.ok(seen.has("web-hold"));
+  assert.ok(seen.has("web-off"));
+  assert.ok(webSpan > 4, "she draws spokes");
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
