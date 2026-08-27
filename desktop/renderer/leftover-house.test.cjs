@@ -16,7 +16,8 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Fan leftover golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Mast leftover seeds a window stool as an acorn dish; Fan leftover still golds a window lamp-side as autumn; Vein leftover still unfurls a window sash pocket as a damp saucer; Felt leftover still leans a window meeting rail as blotter felt; Door leftover still gapes a window sash-jamb crack as a book crevice; Kite leftover still barrels a window pane as the sky of a bowl; Anchor leftover still hitches a window parting bead as a pencil; Ledger leftover still plows a window stool as a sand tray; Tenant leftover still knobs a window sash lift as a vacant shell; Ochre leftover still reefs a window pane as a damp blotter; Pulse leftover still chimes a window pane as a glass of water; Chamber leftover still rises a window jamb as stacked nacre rooms; Sepia leftover still flushes a window light; Cup leftover still lids a sash latch; Atlas leftover still charts a transom; Blush leftover still stones a sill horn; Coral still mosaics; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("oak"), "seed");
   assert.equal(WP.playFor("ginkgo"), "gold");
   assert.equal(WP.playFor("maidenhair"), "unfurl");
   assert.equal(WP.playFor("moss"), "lean");
@@ -227,7 +228,10 @@ test("Sleep aid Off vs Rain and thunder starts, loops, and stops on mute", () =>
   assert.match(petSrc, /sitSleepAid\(\)/);
   assert.equal(C.parseCard({}).sleepAid.plugin, "off");
   assert.equal(C.parseCard({ sleepAid: { plugin: "rain", playing: true } }).sleepAid.playing, true);
-  assert.match(readFileSync(join(__dirname, "..", "main.cjs"), "utf8"), /sandbox:\s*true/);
+  const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
+  assert.match(mainSrc, /sandbox:\s*true/);
+  assert.match(mainSrc, /contextIsolation:\s*true/);
+  assert.match(mainSrc, /nodeIntegration:\s*false/);
 });
 
 const News = require("./news.js");
