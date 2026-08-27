@@ -16,10 +16,11 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Lula leftover loops an apron; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Coral leftover mosaics a muntin; Lula still loops; Sash still patrols; Bluff still flips; Jade still saddles; Bandit still inspects; Saffron still writes; Nori still buns; Ember still kindles; Vesper still drapes; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("milk_snake"), "mosaic");
   assert.equal(WP.playFor("boa"), "loop");
   assert.equal(WP.playFor("garter"), "patrol");
-  assert.equal(WP.playFor("milk_snake"), "sill");
+  assert.equal(WP.playFor("rosy_boa"), "sill");
   assert.equal(WP.playFor("hognose"), "flip");
   assert.equal(WP.playFor("green_tree_python"), "saddle");
   assert.equal(WP.playFor("kingsnake"), "inspect");
