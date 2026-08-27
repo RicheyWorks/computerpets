@@ -16,7 +16,8 @@ const T = require("./rui-tricks.js");
 const C = require("./card.js");
 const WP = require("./window-play.js");
 
-test("Sol leftover flattens on a sun-warmed pane; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+test("Vesper leftover drapes a lintel; Sol still flattens; Keel still tosses; Bloom still walls; Floss still dusts; Burr still balls; Wick still threads; Quill still hooks; Peck still bows; Rue still scents; Echo still perches; Coin still circles; Ink still basks; Whee still wheeks; Clip still stashes; Thimble still thumps; Pip still watches; Miso still sits a ledge", () => {
+  assert.equal(WP.playFor("dragon"), "drape");
   assert.equal(WP.playFor("iguana"), "flatten");
   assert.equal(WP.playFor("toucan"), "toss");
   assert.equal(WP.playFor("axolotl"), "wall");
@@ -41,6 +42,7 @@ test("Sol leftover flattens on a sun-warmed pane; Keel still tosses; Bloom still
   assert.equal(WP.playFor("ion_dragon"), "charge");
   assert.equal(WP.playFor("red_panda"), "cling-dive");
   assert.equal(WP.playFor("gecko"), "sill");
+  assert.equal(WP.playFor("phoenix"), "sill");
 });
 
 test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () => {
