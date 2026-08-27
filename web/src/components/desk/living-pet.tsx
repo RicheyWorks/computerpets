@@ -3,14 +3,12 @@ import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pet
 import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
 import {
-  beginHappy,
   beginTrick,
   canStart as trickCanStart,
-  happyCanStart,
   happyShouldAbort,
   nextTrickWait,
-  pickHappy,
   pickTrick,
+  startThankYou,
   shouldAbort as trickShouldAbort,
   sleepHoldFrame,
   stepHappy,
@@ -413,11 +411,15 @@ export function LivingPet({
 
     const applyCommand = (cmd: PetCommand, order: number) => {
       if (s.dragging) return;
+      if (s.happy && (cmd === "wander" || cmd === "idle")) {
+        lastOrder.current = order;
+        return;
+      }
       if (s.play && (cmd === "wander" || cmd === "idle")) {
         lastOrder.current = order;
         return;
       }
-      if (s.happy && (cmd === "wander" || cmd === "idle")) {
+      if ((cmd === "wander" || cmd === "idle") && (s.anim === "eat" || cmdRef.current === "eat" || cmdRef.current === "seek")) {
         lastOrder.current = order;
         return;
       }
@@ -427,8 +429,8 @@ export function LivingPet({
       if (s.trick && trickShouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play })) {
         s.trick = stepTrick(s.trick, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play });
       }
-      if (s.happy && happyShouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play })) {
-        s.happy = stepHappy(s.happy, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play });
+      if (s.happy && happyShouldAbort({ asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
+        s.happy = stepHappy(s.happy, 0, { asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd });
       }
       if (asleepRef.current && cmd !== "talk" && cmd !== "play" && cmd !== "eat" && cmd !== "seek" && cmd !== "leave" && cmd !== "enter") {
         s.anim = "sleep";
@@ -575,7 +577,22 @@ export function LivingPet({
           cmd: cmdRef.current,
           card: cardRef.current,
         };
-        if (s.play) {
+        if (s.happy) {
+          s.happy = stepHappy(s.happy, dt, {
+            asleep: false,
+            hidden: hiddenRef.current,
+            leaving: s.leaving,
+            cmd: cmdRef.current,
+          });
+          s.x = s.happy.x;
+          if (!asleepRef.current) s.anim = s.happy.anim;
+          if (s.happy.phase === "done") {
+            s.lastHappy = s.happy.kind;
+            s.happy = null;
+            s.land = 1;
+            s.anim = asleepRef.current ? "sleep" : "idle";
+          }
+        } else if (s.play) {
           s.play = stepPlay(s.play, dt, { x: s.x, lift: s.play.lift }, windowsRef.current, work, SPRITE, playFlags);
           s.x = s.play.x;
           s.facing = s.play.facing;
@@ -604,22 +621,6 @@ export function LivingPet({
             s.land = 1;
             s.anim = asleepRef.current ? "sleep" : "idle";
             s.trickWait = nextTrickWait(true, undefined, s.lastTrick);
-          }
-        } else if (s.happy) {
-          s.happy = stepHappy(s.happy, dt, {
-            asleep: asleepRef.current,
-            hidden: hiddenRef.current,
-            leaving: s.leaving,
-            cmd: cmdRef.current,
-            windowPlay: !!s.play,
-          });
-          s.x = s.happy.x;
-          if (!asleepRef.current) s.anim = s.happy.anim;
-          if (s.happy.phase === "done") {
-            s.lastHappy = s.happy.kind;
-            s.happy = null;
-            s.land = 1;
-            s.anim = asleepRef.current ? "sleep" : "idle";
           }
         } else if (
           !reduced &&
@@ -804,20 +805,19 @@ export function LivingPet({
                 const wasEat = s.anim === "eat";
                 s.anim = "idle";
                 s.frame = 0;
-                if (
-                  wasEat &&
-                  kindRef.current === "red_panda" &&
-                  happyCanStart({
-                    asleep: asleepRef.current,
+                if (wasEat) {
+                  const thanks = startThankYou(kindRef.current, s.lastHappy, s.x, s.facing, {
+                    asleep: false,
                     hidden: hiddenRef.current,
                     leaving: s.leaving,
                     cmd: "idle",
-                    windowPlay: !!s.play,
-                  })
-                ) {
-                  const pick = pickHappy(s.lastHappy);
-                  s.happy = beginHappy(pick, s.x, s.facing);
-                  s.lastHappy = pick;
+                  });
+                  if (thanks) {
+                    s.play = null;
+                    s.trick = null;
+                    s.happy = thanks.happy;
+                    s.lastHappy = thanks.kind;
+                  }
                 }
                 if (!s.act) arrivedRef.current?.();
               } else {
@@ -887,7 +887,7 @@ export function LivingPet({
       if (hitRef.current) {
         hitRef.current.style.transform = walkXform;
         hitRef.current.style.transformOrigin =
-          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off" || s.play.phase === "coil-on" || s.play.phase === "coil-off" || s.play.phase === "path-on" || s.play.phase === "path-off" || s.play.phase === "field-on" || s.play.phase === "field-off" || s.play.phase === "crackle-on" || s.play.phase === "crackle-hop" || s.play.phase === "crackle-off" || s.play.phase === "charge-on" || s.play.phase === "charge-bolt" || s.play.phase === "charge-off")
+          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off" || s.play.phase === "coil-on" || s.play.phase === "coil-off" || s.play.phase === "path-on" || s.play.phase === "path-off" || s.play.phase === "field-on" || s.play.phase === "field-off" || s.play.phase === "crackle-on" || s.play.phase === "crackle-hop" || s.play.phase === "crackle-off" || s.play.phase === "charge-on" || s.play.phase === "charge-bolt" || s.play.phase === "charge-off" || s.play.phase === "orbit-on" || s.play.phase === "orbit-off")
             ? "center center"
             : "center bottom";
       }

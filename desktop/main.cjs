@@ -8,6 +8,8 @@ const Roster = require("./renderer/roster-load.js");
 const Windows = require("./renderer/windows.js");
 const WindowEnum = require("./windows-enum.cjs");
 const HouseMusic = require("./renderer/house-music.js");
+const PetNews = require("./renderer/news.js");
+const PetMarket = require("./renderer/market.js");
 
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
@@ -502,6 +504,40 @@ ipcMain.handle("radio-search", async (_e, query, area) => {
   if (batches.every((b) => b == null)) return { ok: false, error: "unread", stations: [] };
   const merged = HouseMusic.mergeStations(batches.filter(Boolean));
   return { ok: true, stations: HouseMusic.rankStations(merged, query, area).slice(0, 16) };
+});
+
+ipcMain.handle("news-topic", async (_e, query) => {
+  const url = PetNews.topicRssUrl(query);
+  if (!url) return { ok: true, items: [] };
+  try {
+    const res = await fetch(url, { headers: { Accept: "application/rss+xml, application/xml, text/xml" } });
+    if (!res.ok) return { ok: false, error: "unread", items: [] };
+    const xml = await res.text();
+    return { ok: true, items: PetNews.parseRss(xml) };
+  } catch {
+    return { ok: false, error: "unread", items: [] };
+  }
+});
+
+ipcMain.handle("market-quote", async (_e, ticker) => {
+  const row = PetMarket.parseTicker(ticker);
+  if (!row) return { ok: false, error: "unread", live: null };
+  try {
+    if (row.kind === "crypto") {
+      const url = PetMarket.geckoUrl(row.geckoId);
+      const res = await fetch(url);
+      if (!res.ok) return { ok: false, error: "unread", live: null };
+      const live = PetMarket.parseGecko(await res.json(), row.geckoId);
+      return live ? { ok: true, live } : { ok: false, error: "unread", live: null };
+    }
+    const url = PetMarket.yahooUrl(row.symbol);
+    const res = await fetch(url);
+    if (!res.ok) return { ok: false, error: "unread", live: null };
+    const live = PetMarket.parseYahoo(await res.json());
+    return live ? { ok: true, live } : { ok: false, error: "unread", live: null };
+  } catch {
+    return { ok: false, error: "unread", live: null };
+  }
 });
 
 /** Real top-level window bounds on Windows. Rects only. Mac/Linux stay a later door. */

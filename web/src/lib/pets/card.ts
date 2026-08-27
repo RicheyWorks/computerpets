@@ -1,5 +1,7 @@
 /** Keeper-card desk controls. Same truth as the overlay card. Persist on the machine. */
 import { parseAreas } from "./weather-areas.ts";
+import { parseNewsPrefs } from "./news.ts";
+import { parseMarket } from "./market.ts";
 import { parseStep } from "./house-sounds.ts";
 import { parseMusic } from "./house-music.ts";
 import { parseSleepAid } from "./house-sleep.ts";
@@ -68,6 +70,10 @@ export type CardPrefs = {
   pets: Record<string, CardGuest>;
   weatherAreas: Array<{ id: string; name: string; query: string; lat: number; lon: number }>;
   currentAreaId: string | null;
+  newsPrefs: Array<{ id: string; name: string; query: string }>;
+  currentNewsId: string;
+  marketTickers: Array<{ id: string; symbol: string; kind: "stock" | "crypto"; geckoId: string; name: string }>;
+  currentTickerId: string | null;
   stepKind: string;
   music: { plugin: string; stationId: string; stationName: string; stationUrl: string; playing: boolean };
   sleepAid: { plugin: string; playing: boolean };
@@ -99,6 +105,10 @@ export function blankCard(): CardPrefs {
     pets: {},
     weatherAreas: [],
     currentAreaId: null,
+    newsPrefs: [{ id: "world", name: "World", query: "" }],
+    currentNewsId: "world",
+    marketTickers: [],
+    currentTickerId: null,
     stepKind: "species",
     music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
     sleepAid: { plugin: "off", playing: false },
@@ -202,6 +212,12 @@ export function parseCard(raw: unknown): CardPrefs {
   const areas = parseAreas(o);
   next.weatherAreas = areas.areas;
   next.currentAreaId = areas.currentId;
+  const news = parseNewsPrefs(o);
+  next.newsPrefs = news.topics;
+  next.currentNewsId = news.currentId;
+  const market = parseMarket(o);
+  next.marketTickers = market.tickers;
+  next.currentTickerId = market.currentId;
   next.stepKind = parseStep(o.stepKind);
   next.music = parseMusic(o.music);
   next.sleepAid = parseSleepAid(o.sleepAid);

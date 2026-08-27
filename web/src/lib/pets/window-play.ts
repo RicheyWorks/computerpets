@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -9,6 +9,7 @@ export const PATH = "path";
 export const FIELD = "field";
 export const CRACKLE = "crackle";
 export const CHARGE = "charge";
+export const ORBIT = "orbit";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -38,13 +39,17 @@ export const DUR = {
   chargeBolt: 0.36,
   chargeHold: 0.78,
   chargeOff: 0.5,
+  orbitOn: 0.58,
+  orbitLoop: 2.6,
+  orbitHold: 0.72,
+  orbitOff: 0.52,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof SILL | typeof IGNORE;
 export type PlayPhase =
   | "approach"
   | "leap"
@@ -72,6 +77,10 @@ export type PlayPhase =
   | "charge-bolt"
   | "charge-hold"
   | "charge-off"
+  | "orbit-on"
+  | "orbit-loop"
+  | "orbit-hold"
+  | "orbit-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -103,6 +112,11 @@ export type PlayTarget = {
   chargeEndLift?: number;
   startCorner?: "tl" | "tr" | "bl" | "br";
   endCorner?: "tl" | "tr" | "bl" | "br";
+  orbitStartU?: number;
+  orbitEndU?: number;
+  orbitDir?: 1 | -1;
+  orbitEndX?: number;
+  orbitEndLift?: number;
 };
 
 export type WindowPlay = {
@@ -145,6 +159,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "flux_dragon") return FIELD;
   if (key === "spark_dragon") return CRACKLE;
   if (key === "ion_dragon") return CHARGE;
+  if (key === "gauss_dragon") return ORBIT;
   return SILL;
 }
 
@@ -322,7 +337,7 @@ export function pickTarget(
   key: string,
   work: WorkSpace,
   sprite?: number,
-    opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" | "drift"; hopFrom?: 0 | 1; corner?: "tl" | "tr" | "bl" | "br" },
+    opts?: { rand?: number; side?: "left" | "right"; diveFrom?: "top" | "side"; spin?: "backflip" | "spin"; leave?: "hop" | "slide" | "drop" | "drift"; hopFrom?: 0 | 1; corner?: "tl" | "tr" | "bl" | "br"; orbitDir?: 1 | -1 },
 ): PlayTarget | null {
   const kind = playFor(key);
   if (kind === IGNORE) return null;
@@ -338,6 +353,7 @@ export function pickTarget(
     if (kind === FIELD) return w.width >= 220 && w.height >= 200;
     if (kind === CRACKLE) return w.width >= 100 && w.height >= 180;
     if (kind === CHARGE) return w.width >= 200 && w.height >= 200;
+    if (kind === ORBIT) return w.width >= 200 && w.height >= 200;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -491,6 +507,34 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === ORBIT) {
+    const side = opts?.side || pickSide(best, petX, size, workW);
+    const dir: 1 | -1 = opts && (opts.orbitDir === -1 || opts.orbitDir === 1) ? opts.orbitDir : roll < 0.5 ? 1 : -1;
+    const startU = side === "right" ? 0.75 : 0;
+    const span = 0.82;
+    const endU = ((startU + dir * span) % 1 + 1) % 1;
+    const start = orbitPoint(best, startU, size, work, dir);
+    const end = orbitPoint(best, endU, size, work, dir);
+    const approachX = clamp(start.x, 8, Math.max(8, workW - size - 8));
+    const leave = opts?.leave === "hop" || opts?.leave === "drop" ? opts.leave : roll < 0.5 ? "hop" : "drop";
+    const away = side === "left" ? -88 : 88;
+    return {
+      id: best.id,
+      kind,
+      side,
+      holdX: start.x,
+      holdLift: start.lift,
+      approachX,
+      landX: clamp(end.x + away, 8, Math.max(8, workW - size - 8)),
+      orbitStartU: startU,
+      orbitEndU: endU,
+      orbitDir: dir,
+      orbitEndX: end.x,
+      orbitEndLift: end.lift,
+      leave,
+      spin: "none",
+    };
+  }
   const start = sillPoint(best, 0.12, size, work);
   const end = sillPoint(best, 0.88, size, work);
   return {
@@ -538,6 +582,13 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
     const start = chargePoint(win, target.startCorner || "tl", sprite, work);
     const end = chargePoint(win, target.endCorner || chargeOpposite(target.startCorner), sprite, work);
     return { ...target, holdX: start.x, holdLift: start.lift, chargeEndX: end.x, chargeEndLift: end.lift };
+  }
+  if (target.kind === ORBIT) {
+    const startU = target.orbitStartU != null ? target.orbitStartU : 0;
+    const endU = target.orbitEndU != null ? target.orbitEndU : 0.82;
+    const start = orbitPoint(win, startU, sprite, work, target.orbitDir);
+    const end = orbitPoint(win, endU, sprite, work, target.orbitDir);
+    return { ...target, holdX: start.x, holdLift: start.lift, orbitEndX: end.x, orbitEndLift: end.lift };
   }
   const start = sillPoint(win, 0.12, sprite, work);
   const end = sillPoint(win, 0.88, sprite, work);
@@ -661,6 +712,62 @@ export function chargeBoltPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
+export function orbitPoint(win: DeskWindow, u: number, sprite: number | undefined, work: WorkSpace, _dir?: 1 | -1) {
+  const size = sprite == null ? SPRITE : sprite;
+  const t = ((Number(u) % 1) + 1) % 1;
+  const out = size * 0.62;
+  const leftX = win.x - out;
+  const rightX = win.x + win.width - size + out;
+  const maxLift = work.height - 48;
+  const top = clamp(gripLift(win.y - size * 0.1, work), 36, maxLift);
+  const bot = clamp(gripLift(win.y + win.height + size * 0.12, work), 16, maxLift);
+  const bl = { x: leftX, lift: bot };
+  const tl = { x: leftX, lift: top };
+  const tr = { x: rightX, lift: top };
+  const br = { x: rightX, lift: bot };
+  let from = bl;
+  let to = tl;
+  let s = t / 0.25;
+  if (t >= 0.75) {
+    from = br;
+    to = bl;
+    s = (t - 0.75) / 0.25;
+  } else if (t >= 0.5) {
+    from = tr;
+    to = br;
+    s = (t - 0.5) / 0.25;
+  } else if (t >= 0.25) {
+    from = tl;
+    to = tr;
+    s = (t - 0.25) / 0.25;
+  }
+  const x = from.x + (to.x - from.x) * s;
+  const lift = from.lift + (to.lift - from.lift) * s;
+  const midX = win.x + (win.width - size) / 2;
+  const midLift = (top + bot) / 2;
+  return {
+    x: x + (midX - x) * 0.06,
+    lift: clamp(lift + (midLift - lift) * 0.04, 16, maxLift),
+    u: t,
+  };
+}
+
+export function orbitOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const ease = t * t * (3 - 2 * t);
+  const pull = t * t * t;
+  const mix = ease * 0.4 + pull * 0.6;
+  const fromX = from.x ?? 0;
+  const toX = to.x ?? fromX;
+  const fromLift = from.lift ?? 0;
+  const toLift = to.lift ?? 0;
+  return {
+    x: fromX + (toX - fromX) * mix,
+    lift: fromLift + (toLift - fromLift) * mix + Math.sin(t * Math.PI) * 12,
+    rot: (toX >= fromX ? 1 : -1) * 10 * Math.sin(t * Math.PI),
+  };
+}
+
 export function slideOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   const t = Math.max(0, Math.min(1, u));
   const fromX = from.x ?? 0;
@@ -742,14 +849,14 @@ export function stepPlay(
   if (!play || play.phase === "done") return play;
   const size = sprite == null ? SPRITE : sprite;
   const life = flags || {};
-  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off") {
+  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off") {
     return abortToFloor(play, { x: play.x, lift: play.lift }, work);
   }
   let next: WindowPlay = { ...play, t: play.t + Math.max(0, dt) };
   const win = findWin(windows, next.target.id);
-  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off") {
+  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off") {
     next = { ...next, target: refitTarget(next.target, win, size, work) };
-  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off") {
+  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off") {
     return abortToFloor(next, { x: next.x, lift: next.lift }, work);
   }
 
@@ -784,6 +891,9 @@ export function stepPlay(
       }
       if (target.kind === CHARGE) {
         return goPhase(next, "charge-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+      }
+      if (target.kind === ORBIT) {
+        return goPhase(next, "orbit-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -1146,6 +1256,67 @@ export function stepPlay(
 
   if (next.phase === "charge-off") {
     const u = next.t / DUR.chargeOff;
+    const pose = target.leave === "drop"
+      ? dropPath(Math.min(1, u), next.from, next.to)
+      : leapPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = target.leave === "drop" ? 0 : pose.rot;
+    next.anim = "play";
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+  if (next.phase === "orbit-on") {
+    const u = next.t / DUR.orbitOn;
+    const pose = orbitOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = target.side === "left" ? 1 : -1;
+    if (u >= 1) {
+      return goPhase(next, "orbit-loop", { x: target.holdX, lift: target.holdLift }, { x: target.orbitEndX ?? target.holdX, lift: target.orbitEndLift ?? target.holdLift }, "walk", next.facing);
+    }
+    return next;
+  }
+
+  if (next.phase === "orbit-loop") {
+    if (!win) return abortToFloor(next, { x: next.x, lift: next.lift }, work);
+    const startU = target.orbitStartU != null ? target.orbitStartU : 0;
+    const dir: 1 | -1 = target.orbitDir === -1 ? -1 : 1;
+    const u = Math.min(1, next.t / DUR.orbitLoop);
+    const loopU = ((startU + dir * 0.82 * u) % 1 + 1) % 1;
+    const pose = orbitPoint(win, loopU, size, work, dir);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = (win.x + win.width / 2 > pose.x + size / 2 ? 1 : -1) * 8;
+    next.anim = "walk";
+    if (u < 0.5) next.facing = dir === 1 ? 1 : -1;
+    else next.facing = dir === 1 ? -1 : 1;
+    if (u >= 1) {
+      const endX = target.orbitEndX ?? pose.x;
+      const endLift = target.orbitEndLift ?? pose.lift;
+      return goPhase(next, "orbit-hold", { x: endX, lift: endLift }, { x: endX, lift: endLift }, "sit", next.facing);
+    }
+    return next;
+  }
+
+  if (next.phase === "orbit-hold") {
+    const sitX = target.orbitEndX ?? target.holdX;
+    const sitLift = target.orbitEndLift ?? target.holdLift;
+    next.x = sitX;
+    next.lift = sitLift;
+    next.rot = 0;
+    next.anim = "sit";
+    if (next.t >= DUR.orbitHold) {
+      return goPhase(next, "orbit-off", { x: sitX, lift: sitLift }, { x: target.landX, lift: 0 }, "play", next.facing);
+    }
+    return next;
+  }
+
+  if (next.phase === "orbit-off") {
+    const u = next.t / DUR.orbitOff;
     const pose = target.leave === "drop"
       ? dropPath(Math.min(1, u), next.from, next.to)
       : leapPath(Math.min(1, u), next.from, next.to);

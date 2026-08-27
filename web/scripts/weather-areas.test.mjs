@@ -35,6 +35,12 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.match(A.geocodeUrl("Oslo"), /geocoding-api\.open-meteo\.com/);
   assert.match(A.forecastUrl(59.9, 10.7), /api\.open-meteo\.com/);
   assert.equal(A.geocodeUrl("   "), "");
+  assert.equal(A.TYPE_A_CITY, "type a city");
+  assert.equal(A.HERE_FAIL, "this computer did not share a place");
+  assert.match(A.ipPlaceUrl(), /ipwho\.is/);
+  assert.match(A.reverseUrl(47.6, -122.3), /geocoding-api\.open-meteo\.com\/v1\/reverse/);
+  assert.equal(A.parseIpPlace({ success: true, city: "Seattle", region: "Washington", country: "United States", latitude: 47.6, longitude: -122.3 })?.name, "Seattle, Washington, United States");
+  assert.equal(Overlay.TYPE_A_CITY, A.TYPE_A_CITY);
   assert.equal(A.mapLiveSky(61, 12, 4), "rain");
   assert.equal(A.mapLiveSky(0, 12, 32), "wind");
   assert.equal(A.mapLiveSky(0, 34, 4), "heat");

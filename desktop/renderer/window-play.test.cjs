@@ -18,7 +18,8 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("flux_dragon"), "field");
   assert.equal(P.playFor("spark_dragon"), "crackle");
   assert.equal(P.playFor("ion_dragon"), "charge");
-  assert.equal(P.playFor("gauss_dragon"), "sill");
+  assert.equal(P.playFor("gauss_dragon"), "orbit");
+  assert.equal(P.playFor("relay_dragon"), "sill");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
@@ -685,6 +686,107 @@ test("a moved window refits Ion's charge hold; sleep, card, and hide abort; Ion 
   assert.equal(play.abort, true);
 });
 
+test("Gauss orbits the outside of a window, holds, then hops or drops — not cling, ridge, coil, path, field, crackle, charge, or sill", () => {
+  const target = P.pickTarget([WIN], 40, "gauss_dragon", WORK, P.SPRITE, { side: "left", orbitDir: 1, leave: "hop" });
+  assert.ok(target);
+  assert.equal(target.kind, "orbit");
+  assert.equal(target.side, "left");
+  assert.equal(target.spin, "none");
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const crackle = P.cracklePoint(WIN, 0, P.SPRITE, WORK, "left");
+  const charge = P.chargePoint(WIN, "tl", P.SPRITE, WORK);
+  const pathMid = P.pathPoint(WIN, 0.5, P.SPRITE, WORK, "left");
+  const start = P.orbitPoint(WIN, 0, P.SPRITE, WORK, 1);
+  const mid = P.orbitPoint(WIN, 0.5, P.SPRITE, WORK, 1);
+  const end = P.orbitPoint(WIN, target.orbitEndU, P.SPRITE, WORK, 1);
+  assert.equal(target.holdX, start.x);
+  assert.equal(target.holdLift, start.lift);
+  assert.ok(start.x + P.SPRITE / 2 < WIN.x, "the body center starts outside the left edge");
+  assert.ok(mid.x + P.SPRITE / 2 > WIN.x + WIN.width, "the loop crosses the far outside");
+  assert.ok(Math.abs(mid.x - start.x) > 40 && Math.abs(mid.lift - start.lift) > 20, "a closed loop, not one edge");
+  assert.ok(Math.abs(end.x - start.x) > 8 || Math.abs(end.lift - start.lift) > 8, "the sit is after most of a circuit");
+  assert.ok(Math.abs(start.x - cling.x) > 20 || Math.abs(start.lift - cling.lift) > 40, "not Rui's mid-side cling");
+  assert.ok(Math.abs(start.x - coil.x) > 20 || Math.abs(start.lift - coil.lift) > 40, "not Volt's wrap-hold");
+  assert.ok(Math.abs(start.x - ridge.x) > 40, "not Arc's title-bar center");
+  assert.ok(Math.abs(start.x - field.x) > 40, "not Flux's glass sit");
+  assert.ok(Math.abs(start.x - crackle.x) > 20 || Math.abs(start.lift - crackle.lift) > 20, "not Spark's edge");
+  assert.ok(Math.abs(start.x - charge.x) > 20, "not Ion's inside corner");
+  assert.ok(Math.abs(start.x - pathMid.x) > 20 || Math.abs(start.lift - pathMid.lift) > 20, "not Trace's outline");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let loopXMin = Infinity;
+  let loopXMax = 0;
+  let loopLiftMin = Infinity;
+  let loopLiftMax = 0;
+  let holdLift = 0;
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-on");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "orbit-loop") {
+      loopXMin = Math.min(loopXMin, play.x);
+      loopXMax = Math.max(loopXMax, play.x);
+      loopLiftMin = Math.min(loopLiftMin, play.lift);
+      loopLiftMax = Math.max(loopLiftMax, play.lift);
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "orbit-hold") {
+      holdLift = play.lift;
+      assert.equal(play.anim, "sit");
+      assert.equal(play.rot, 0);
+    }
+  }
+  assert.ok(seen.has("orbit-on"));
+  assert.ok(seen.has("orbit-loop"));
+  assert.ok(seen.has("orbit-hold"));
+  assert.ok(seen.has("orbit-off"));
+  assert.ok(loopXMax - loopXMin > 40, "the orbit crosses the frame");
+  assert.ok(loopLiftMax - loopLiftMin > 40, "the orbit changes height — a closed loop, not a sill");
+  assert.ok(holdLift > 16, "Gauss sits after the loop");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Gauss's orbit hold; sleep, card, and hide abort; Gauss never starts asleep; Relay still walks a sill", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.canStart({ asleep: false, hidden: false, card: false, cmd: "idle" }), true);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  assert.equal(P.playFor("relay_dragon"), "sill");
+  assert.equal(P.playFor("fuse_dragon"), "sill");
+  assert.equal(P.playFor("ground_dragon"), "sill");
+  const target = P.pickTarget([WIN], 200, "gauss_dragon", WORK, P.SPRITE, { side: "left", orbitDir: 1, leave: "drop" });
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 120 && play.phase !== "orbit-hold"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "orbit-hold");
+  const beforeEnd = play.target.orbitEndX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "orbit-hold");
+  assert.ok(Math.abs(play.target.orbitEndX - beforeEnd) > 40);
+  assert.equal(play.x, play.target.orbitEndX);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "orbit-off");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
@@ -695,6 +797,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /field-on|field-off/);
   assert.match(petSrc, /crackle-on|crackle-off/);
   assert.match(petSrc, /charge-on|charge-off/);
+  assert.match(petSrc, /orbit-on|orbit-off/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);

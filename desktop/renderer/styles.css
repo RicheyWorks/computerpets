@@ -144,6 +144,11 @@ select {
   left: auto;
 }
 
+#market-plate {
+  left: 4%;
+  top: 38%;
+}
+
 .desk-plate button,
 .desk-plate input {
   font: inherit;
