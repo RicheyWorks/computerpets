@@ -28,6 +28,9 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("flux_dragon"), Overlay.playFor("flux_dragon"));
   assert.equal(P.playFor("spark_dragon"), "crackle");
   assert.equal(P.playFor("spark_dragon"), Overlay.playFor("spark_dragon"));
+  assert.equal(P.playFor("ion_dragon"), "charge");
+  assert.equal(P.playFor("ion_dragon"), Overlay.playFor("ion_dragon"));
+  assert.equal(P.playFor("gauss_dragon"), "sill");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -49,6 +52,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   const deskField = Overlay.fieldPoint(WIN, 176, WORK);
   assert.equal(webField.lift, deskField.lift);
   assert.equal(webField.x, deskField.x);
+  const webCharge = P.chargePoint(WIN, "tl", 176, WORK);
+  const deskCharge = Overlay.chargePoint(WIN, "tl", 176, WORK);
+  assert.equal(webCharge.lift, deskCharge.lift);
+  assert.equal(webCharge.x, deskCharge.x);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -181,5 +188,34 @@ test("the demo window plate walks Spark's crackle the same way", () => {
   assert.ok(seen.has("crackle-on"));
   assert.ok(seen.has("crackle-hop"));
   assert.ok(seen.has("crackle-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Ion's charge the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /charge-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "ion_dragon", WORK, 176, { side: "left", corner: "tl", leave: "hop" });
+  const target = P.pickTarget([WIN], 40, "ion_dragon", WORK, 176, { side: "left", corner: "tl", leave: "hop" });
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.equal(target.chargeEndX, overlayTarget.chargeEndX);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "sill-walk");
+  }
+  assert.ok(seen.has("charge-on"));
+  assert.ok(seen.has("charge-bolt"));
+  assert.ok(seen.has("charge-hold"));
+  assert.ok(seen.has("charge-off"));
   assert.equal(play.phase, "done");
 });

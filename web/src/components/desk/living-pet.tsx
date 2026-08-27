@@ -887,7 +887,7 @@ export function LivingPet({
       if (hitRef.current) {
         hitRef.current.style.transform = walkXform;
         hitRef.current.style.transformOrigin =
-          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off" || s.play.phase === "coil-on" || s.play.phase === "coil-off" || s.play.phase === "path-on" || s.play.phase === "path-off" || s.play.phase === "field-on" || s.play.phase === "field-off" || s.play.phase === "crackle-on" || s.play.phase === "crackle-hop" || s.play.phase === "crackle-off")
+          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off" || s.play.phase === "coil-on" || s.play.phase === "coil-off" || s.play.phase === "path-on" || s.play.phase === "path-off" || s.play.phase === "field-on" || s.play.phase === "field-off" || s.play.phase === "crackle-on" || s.play.phase === "crackle-hop" || s.play.phase === "crackle-off" || s.play.phase === "charge-on" || s.play.phase === "charge-bolt" || s.play.phase === "charge-off")
             ? "center center"
             : "center bottom";
       }
