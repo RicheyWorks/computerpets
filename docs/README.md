@@ -124,7 +124,7 @@ All documents in this folder are **living documents**. When you make changes tha
 - **[Project README](../README.md)** — High-level overview, features, and quick start examples
 - **[Security & Audit Notes](../AUDIT.md)** — Known issues, P0 security concerns, and remediation priorities
 - **[Build Script](../build.ps1)** — Windows helper script for building and validating the project
-- **[LICENSE](../LICENSE)** — Project license (MIT)
+- **[LICENSE](../LICENSE)** — All rights reserved. Private house.
 
 ---
 
