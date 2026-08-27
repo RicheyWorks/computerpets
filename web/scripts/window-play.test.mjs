@@ -11560,7 +11560,7 @@ test("the demo window plate walks Velvet's kick the same way", () => {
   assert.equal(P.playFor("ball_python"), "bun");
   assert.equal(P.playFor("stingless"), "tend");
   assert.equal(P.playFor("barn_owl"), "hiss");
-  assert.equal(P.playFor("widow"), "sill");
+  assert.equal(P.playFor("widow"), "hang");
   assert.notEqual(P.playFor("tarantula"), "velvet");
   assert.notEqual(target.kind, "carry");
   assert.notEqual(target.kind, "pounce");
@@ -11636,6 +11636,100 @@ test("the demo window plate walks Velvet's kick the same way", () => {
   assert.ok(seen.has("kick"));
   assert.ok(seen.has("kick-hold"));
   assert.ok(seen.has("kick-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Hour's hang the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "widow"[\s\S]{0,80}slug: "hour"/);
+  assert.equal(P.playFor("widow"), "hang");
+  const target = P.pickTarget([WIN], 80, "widow", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "hang");
+  assert.equal(target.side, "dark");
+  assert.equal(target.leave, "dark");
+  assert.equal(Overlay.playFor("widow"), "hang");
+  assert.equal(P.playFor("tarantula"), "kick");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("hamster"), "stash");
+  assert.equal(P.playFor("volt_dragon"), "coil");
+  assert.equal(P.playFor("harvestman"), "sill");
+  assert.notEqual(P.playFor("widow"), "hour");
+  assert.notEqual(target.kind, "kick");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "stash");
+  assert.notEqual(target.kind, "coil");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she hangs a lower interior jamb, not the floor");
+  assert.ok(P.DUR.hourHold > P.DUR.hour, "the wait is the hold; the hourglass invert is the tell");
+  assert.ok(P.DUR.hourOn !== Overlay.DUR.hang);
+  assert.ok(P.DUR.hourOn !== Overlay.DUR.kickOn);
+  assert.ok(P.DUR.hourOn !== Overlay.DUR.webOn);
+  assert.ok(P.DUR.hourOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.hang, Overlay.DUR.hang);
+  assert.equal(P.DUR.hourOn, Overlay.DUR.hourOn);
+  assert.equal(P.DUR.hour, Overlay.DUR.hour);
+  assert.equal(P.DUR.hourHold, Overlay.DUR.hourHold);
+  assert.equal(P.DUR.hourOff, Overlay.DUR.hourOff);
+  const corner = P.hangPoint(WIN, 176, WORK);
+  const deskCorner = Overlay.hangPoint(WIN, 176, WORK);
+  assert.equal(corner.x, deskCorner.x);
+  assert.equal(corner.lift, deskCorner.lift);
+  const well = P.kickPoint(WIN, 176, WORK);
+  const drawer = P.stashPoint(WIN, "left", 176, WORK);
+  const wrap = P.coilPoint(WIN, "left", 176, WORK);
+  const hub = P.webPoint(WIN, 176, WORK);
+  assert.ok(corner.lift > 8, "the lower interior jamb");
+  assert.ok(Math.abs(corner.x - well.x) > 40 || Math.abs(corner.lift - well.lift) > 40, "not Velvet");
+  assert.ok(Math.abs(corner.x - drawer.x) > 40 || Math.abs(corner.lift - drawer.lift) > 40, "not Clip");
+  assert.ok(Math.abs(corner.x - wrap.x) > 40 || Math.abs(corner.lift - wrap.lift) > 40, "not Volt");
+  assert.ok(Math.abs(corner.x - hub.x) > 40 || Math.abs(corner.lift - hub.lift) > 40, "not Loom");
+  const walkOn = P.hangOnPath(0.25, { x: 40, lift: 0 }, { x: corner.x, lift: corner.lift });
+  const deskWalk = Overlay.hangOnPath(0.25, { x: 40, lift: 0 }, { x: corner.x, lift: corner.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks to the lower interior corner");
+  const invert = P.hangPath(0.5);
+  const deskInvert = Overlay.hangPath(0.5);
+  assert.equal(invert.lift, deskInvert.lift);
+  assert.ok(invert.lift < 0, "she drops into the hang");
+  assert.ok(invert.rot > 40, "the hourglass turns out");
+  const still = P.hangHoldPath(0.5);
+  const deskStill = Overlay.hangHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.rot > 90, "she stays inverted");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "kick");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "hour") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "hang-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "hang-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 7.6)) < 4, "she hangs with the hourglass out");
+    }
+  }
+  assert.ok(seen.has("hang-on"));
+  assert.ok(seen.has("hour"));
+  assert.ok(seen.has("hang-hold"));
+  assert.ok(seen.has("hang-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
