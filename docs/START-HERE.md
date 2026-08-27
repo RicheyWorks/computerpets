@@ -18,7 +18,7 @@ This is the picture. Hold it in your head. The rest of the page is how you get t
 - A **keeper card** sits with them. It says their name, whether they are a hatchling or grown, their bond word, and three meters: Hunger, Rest, Bond. Three buttons sit under that: **Feed**, **Play**, **Rest**. Click the name to collapse it to a small hit. Voice, color, saved lines, an alarm, a timer, mute, and **Turn off** sit on the expanded card. Turn off quits the overlay. Start again with `.\desktop.ps1`.
 - Near the clock (bottom-right) a small ComputerPets tray icon sits. Right-click it. **On the desk** picks Rui and the grid ten without scrolling two hundred twenty names: Rui, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground.
 - Clicks on empty glass pass through to your windows. Hits stay on the pet, the keeper card buttons, treats, and gifts. The floor is the Windows work area — above the taskbar, under the cursor.
-- Rui can jump onto the **side** of a real window, hang on, then drop or dive back to the desk. Other guests walk a sill or stay on the floor. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door.
+- Rui can jump onto the **side** of a real window, hang on, then drop or dive back to the desk. Arc jumps onto the **top** (title-bar / ridge), holds, then hops or slides off. Other guests walk a sill or stay on the floor. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door.
 - The card may say `Java 8081 · DOWN · unread`. That is honest. You did not start Java. Care still works. Care is local. `/pet/feed` is not a door.
 
 That walk is the Electron overlay. It is Chromium on your desk, not DirectX 12, not a Microsoft Store app, not a browser tab.

@@ -16,14 +16,20 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; a cat stays on the sill door", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; a cat stays on the sill door", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
   assert.equal(P.playFor("cat"), "sill");
+  assert.equal(P.playFor("volt_dragon"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   assert.equal(spin.rot, desk.rot);
   assert.ok(spin.rot > 0);
+  const webRidge = P.ridgePoint(WIN, 0.5, 176, WORK);
+  const deskRidge = Overlay.ridgePoint(WIN, 0.5, 176, WORK);
+  assert.equal(webRidge.lift, deskRidge.lift);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -41,5 +47,23 @@ test("the demo room walks the same Rui climb against a drawn window", () => {
   }
   assert.ok(seen.has("cling"));
   assert.ok(seen.has("dive"));
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Arc's ridge the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /ridge-leap|playFor/);
+  const target = P.pickTarget([WIN], 40, "cyber_dragon", WORK, 176, { leave: "hop" });
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "dive");
+  }
+  assert.ok(seen.has("ridge-leap"));
+  assert.ok(seen.has("ridge-hold"));
+  assert.ok(seen.has("ridge-off"));
   assert.equal(play.phase, "done");
 });
