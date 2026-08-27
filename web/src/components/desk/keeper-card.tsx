@@ -50,6 +50,7 @@ import {
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
 import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioSearchUrls, rankStations, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { SLEEP_AID_LABEL, SLEEP_AID_LICENSE, SLEEP_AID_MUTE_TRUTH, SLEEP_AID_PLUGINS, parseSleepAid, playSrc as sleepPlaySrc, type SleepAidPrefs } from "@/lib/pets/house-sleep";
 import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
 import { CALL_EMPTY, callKeys, groups as callGroups } from "@/lib/pets/call-guests";
@@ -115,6 +116,7 @@ export function KeeperCard({
     [],
   );
   const music = parseMusic(card.music);
+  const sleepAid = parseSleepAid(card.sleepAid);
   const houseStep = parseStep(card.stepKind);
 
   function write(next: CardPrefs) {
@@ -124,6 +126,10 @@ export function KeeperCard({
   function writeMusic(next: MusicPrefs) {
     write({ ...card, music: next });
     onMusicChange?.(!!next.playing && next.plugin !== "off");
+  }
+
+  function writeSleepAid(next: SleepAidPrefs) {
+    write({ ...card, sleepAid: next });
   }
 
   function hideCard() {
@@ -193,6 +199,19 @@ export function KeeperCard({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [music.plugin, music.playing, music.stationUrl, card.mutes.music, guest.volume]);
+
+  useEffect(() => {
+    const src = sleepPlaySrc(sleepAid);
+    if (!src || card.mutes.music) return;
+    const audio = new Audio(src);
+    audio.loop = true;
+    audio.volume = Math.max(0, Math.min(1, guest.volume / 100));
+    void audio.play().catch(() => {});
+    return () => {
+      audio.pause();
+      audio.src = "";
+    };
+  }, [sleepAid.plugin, sleepAid.playing, card.mutes.music, guest.volume]);
 
   useEffect(() => {
     let cancelled = false;
@@ -521,6 +540,25 @@ export function KeeperCard({
               </button>
             ))}
             <p className="keeper-truth">Now {STEP_LABELS[stepOf(houseStep, guest.stepKind, guestKey)]}. House-wide, or this guest if you pick on their card later.</p>
+          </div>
+          <div className="keeper-sleep" data-hit role="group" aria-label="Sleep aid">
+            <p>{SLEEP_AID_LABEL}</p>
+            {SLEEP_AID_PLUGINS.map((plugin) => (
+              <button
+                key={plugin.id}
+                type="button"
+                data-on={sleepAid.plugin === plugin.id ? "1" : "0"}
+                data-sleep={plugin.id}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  writeSleepAid({ plugin: plugin.id, playing: plugin.id !== "off" });
+                }}
+              >
+                {plugin.name}
+              </button>
+            ))}
+            {sleepAid.plugin === "rain" ? <p className="keeper-truth">{SLEEP_AID_LICENSE}</p> : null}
+            <p className="keeper-truth">{SLEEP_AID_MUTE_TRUTH}</p>
           </div>
           {guestKey === "red_panda" ? (
             <div className="keeper-music" data-hit>

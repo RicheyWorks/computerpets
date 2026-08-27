@@ -69,6 +69,7 @@ const hudTimerLeft = document.getElementById("hud-timer-left");
 const hudMutes = document.getElementById("hud-mutes");
 const hudSteps = document.getElementById("hud-steps");
 const hudMusic = document.getElementById("hud-music");
+const hudSleep = document.getElementById("hud-sleep");
 const hudCallBird = document.getElementById("hud-call-bird");
 const hudCallPick = document.getElementById("hud-call-pick");
 const hudCallQ = document.getElementById("hud-call-q");
@@ -160,6 +161,7 @@ let birdAcc = 0;
 let birdFrame = 0;
 let sipSleepCalled = false;
 let musicNode = null;
+let sleepNode = null;
 let lureDrag = null;
 
 function liveOverride() {
@@ -351,6 +353,12 @@ function fetchNews() {
       newsUnread = true;
       paintHousePlates();
     });
+}
+
+function sitSleepAid() {
+  const S = window.PetHouseSleep;
+  if (!S) return;
+  sleepNode = S.applySleepAid(sleepNode, card.sleepAid, card.mutes, cardGuest().volume / 100);
 }
 
 function sitMusic() {
@@ -1006,7 +1014,41 @@ function paintCard() {
   } else if (hudMusic) {
     hudMusic.replaceChildren();
   }
+  if (hudSleep && window.PetHouseSleep) {
+    const S = window.PetHouseSleep;
+    const aid = S.parseSleepAid(card.sleepAid);
+    hudSleep.replaceChildren();
+    const title = document.createElement("p");
+    title.textContent = S.SLEEP_AID_LABEL;
+    hudSleep.appendChild(title);
+    for (const plugin of S.SLEEP_AID_PLUGINS) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = plugin.name;
+      btn.dataset.hit = "1";
+      btn.dataset.sleep = plugin.id;
+      btn.dataset.on = aid.plugin === plugin.id ? "1" : "0";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card.sleepAid = S.parseSleepAid({ plugin: plugin.id, playing: plugin.id !== "off" });
+        persistCard();
+        sitSleepAid();
+      });
+      hudSleep.appendChild(btn);
+    }
+    if (aid.plugin === "rain") {
+      const license = document.createElement("p");
+      license.className = "keeper-truth";
+      license.textContent = S.SLEEP_AID_LICENSE;
+      hudSleep.appendChild(license);
+    }
+    const mute = document.createElement("p");
+    mute.className = "keeper-truth";
+    mute.textContent = S.SLEEP_AID_MUTE_TRUTH;
+    hudSleep.appendChild(mute);
+  }
   sitMusic();
+  sitSleepAid();
   if (hudLines) {
     hudLines.replaceChildren();
     for (const line of guest.lines) {
@@ -2859,6 +2901,7 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
   fetchWeather();
   fetchNews();
   sitMusic();
+  sitSleepAid();
   if (!(kind && window.PetBirdFly && kind.key === window.PetBirdFly.FLY_BIRD_KEY)) callSip();
   requestAnimationFrame(tick);
 });

@@ -10,6 +10,7 @@ const D = require("./desk.js");
 const F = require("./bird-fly.js");
 const S = require("./house-sounds.js");
 const M = require("./house-music.js");
+const Sleep = require("./house-sleep.js");
 const R = require("./ribbon.js");
 const T = require("./rui-tricks.js");
 const C = require("./card.js");
@@ -23,6 +24,8 @@ test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () 
   assert.match(htmlSrc, /weather-areas\.js/);
   assert.ok(htmlSrc.indexOf("weather-areas.js") < htmlSrc.indexOf("card.js"));
   assert.ok(htmlSrc.indexOf("house-sounds.js") < htmlSrc.indexOf("card.js"));
+  assert.ok(htmlSrc.indexOf("house-sleep.js") < htmlSrc.indexOf("card.js"));
+  assert.match(htmlSrc, /id="hud-sleep"/);
   assert.match(styleSrc, /\.desk-plate/);
   assert.match(styleSrc, /#hud[\s\S]*overflow-y:\s*auto/);
   assert.match(styleSrc, /#choice[\s\S]*overflow-y:\s*auto/);
@@ -98,4 +101,55 @@ test("the tray pins Rui, Sip, and the grid ten", () => {
   assert.equal(T.TRICK_KEY, "red_panda");
   assert.equal(existsSync(join(__dirname, "sounds", "hummingbird.wav")), true);
   assert.equal(existsSync(join(__dirname, "sounds", "house-loop.wav")), true);
+  assert.equal(existsSync(join(__dirname, "sounds", "sleep-rain.ogg")), true);
+  assert.equal(Sleep.SLEEP_AID_PLUGINS[0].name, "Off");
+  assert.equal(Sleep.SLEEP_AID_PLUGINS[1].name, "Rain and thunder");
+  assert.equal(Sleep.SLEEP_AID_LICENSE, "CC0 · house-made");
+});
+
+function oggDurationSeconds(buf, rate = 22050) {
+  let last = 0n;
+  for (let i = 0; i < buf.length - 27; i++) {
+    if (buf[i] === 0x4f && buf[i + 1] === 0x67 && buf[i + 2] === 0x67 && buf[i + 3] === 0x53) {
+      const granule = buf.readBigUInt64LE(i + 6);
+      if (granule > last) last = granule;
+    }
+  }
+  return Number(last) / rate;
+}
+
+test("Sleep aid Off vs Rain and thunder starts, loops, and stops on mute", () => {
+  assert.deepEqual(Sleep.SLEEP_AID_PLUGINS.map((p) => p.id), ["off", "rain"]);
+  assert.equal(Sleep.shouldPlay({ plugin: "rain", playing: true }, { music: false }), true);
+  assert.equal(Sleep.shouldPlay({ plugin: "rain", playing: true }, { music: true }), false);
+  assert.equal(Sleep.shouldPlay({ plugin: "off", playing: false }, { music: false }), false);
+  const makeAudio = (src) => {
+    const node = { src, loop: false, volume: 1, paused: true, plays: 0, dataset: {} };
+    node.play = () => {
+      node.paused = false;
+      node.plays += 1;
+      return Promise.resolve();
+    };
+    node.pause = () => {
+      node.paused = true;
+    };
+    return node;
+  };
+  const on = Sleep.applySleepAid(null, { plugin: "rain", playing: true }, { music: false }, 0.8, { makeAudio });
+  assert.equal(on.loop, true);
+  assert.equal(on.src, "sounds/sleep-rain.ogg");
+  assert.equal(on.paused, false);
+  const muted = Sleep.applySleepAid(on, { plugin: "rain", playing: true }, { music: true }, 0.8, { makeAudio });
+  assert.equal(muted, null);
+  assert.equal(on.paused, true);
+  const off = Sleep.applySleepAid(makeAudio("x"), { plugin: "off", playing: false }, { music: false }, 0.8, { makeAudio });
+  assert.equal(off, null);
+  const buf = readFileSync(join(__dirname, "sounds", "sleep-rain.ogg"));
+  const dur = oggDurationSeconds(buf);
+  assert.ok(dur >= 170 && dur <= 195, `sleep-rain duration ${dur}`);
+  assert.match(petSrc, /function sitSleepAid/);
+  assert.match(petSrc, /sitSleepAid\(\)/);
+  assert.equal(C.parseCard({}).sleepAid.plugin, "off");
+  assert.equal(C.parseCard({ sleepAid: { plugin: "rain", playing: true } }).sleepAid.playing, true);
+  assert.match(readFileSync(join(__dirname, "..", "main.cjs"), "utf8"), /sandbox:\s*true/);
 });
