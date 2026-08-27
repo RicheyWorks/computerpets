@@ -18,7 +18,7 @@ const guideSrc = readFileSync(join(root, "src/lib/pets/house-guide.ts"), "utf8")
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -130,6 +130,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("oak"), Overlay.playFor("oak"));
   assert.equal(P.playFor("water_lily"), "open");
   assert.equal(P.playFor("water_lily"), Overlay.playFor("water_lily"));
+  assert.equal(P.playFor("orchid"), "mount");
+  assert.equal(P.playFor("orchid"), Overlay.playFor("orchid"));
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -492,6 +494,16 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.ok(Math.abs(webOpen.x - webGold.x) > 20 || Math.abs(webOpen.lift - webGold.lift) > 16, "not Fan's autumn");
   assert.ok(Math.abs(webOpen.x - webUnfurl.x) > 20 || Math.abs(webOpen.lift - webUnfurl.lift) > 16, "not Vein's pocket");
   assert.ok(Math.abs(webOpen.x - webLean.x) > 20 || Math.abs(webOpen.lift - webLean.lift) > 16, "not Felt's page");
+  const webMount = P.mountPoint(WIN, 176, WORK);
+  const deskMount = Overlay.mountPoint(WIN, 176, WORK);
+  assert.equal(webMount.lift, deskMount.lift);
+  assert.equal(webMount.x, deskMount.x);
+  assert.ok(webMount.lift > 36, "the jamb is bark, not the floor");
+  assert.ok(Math.abs(webMount.x - webOpen.x) > 20 || Math.abs(webMount.lift - webOpen.lift) > 16, "not Disk's ink");
+  assert.ok(Math.abs(webMount.x - webSeed.x) > 20 || Math.abs(webMount.lift - webSeed.lift) > 16, "not Mast's dish");
+  assert.ok(Math.abs(webMount.x - webGold.x) > 20 || Math.abs(webMount.lift - webGold.lift) > 16, "not Fan's autumn");
+  assert.ok(Math.abs(webMount.x - webUnfurl.x) > 20 || Math.abs(webMount.lift - webUnfurl.lift) > 16, "not Vein's pocket");
+  assert.ok(Math.abs(webMount.x - webLean.x) > 20 || Math.abs(webMount.lift - webLean.lift) > 16, "not Felt's page");
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -5916,7 +5928,7 @@ test("the demo window plate walks Disk's open the same way", () => {
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("orchid"), "sill");
+  assert.equal(P.playFor("orchid"), "mount");
   assert.notEqual(target.kind, "disk");
   assert.notEqual(target.kind, "moth");
   assert.ok(target.holdLift > 36, "she floats the ink, not the floor");
@@ -5999,6 +6011,8 @@ test("the demo window plate walks Disk's open the same way", () => {
     assert.notEqual(play.phase, "reef");
     assert.notEqual(play.phase, "drape");
     assert.notEqual(play.phase, "sill-walk");
+    assert.notEqual(play.phase, "mount");
+    assert.notEqual(play.phase, "mount-hold");
     if (play.phase === "open") {
       openLiftMax = Math.max(openLiftMax, play.lift - play.target.holdLift);
       openRotMax = Math.max(openRotMax, Math.abs(play.rot));
@@ -6019,5 +6033,137 @@ test("the demo window plate walks Disk's open the same way", () => {
   assert.ok(openLiftMax < 22, "an open, not a rise");
   assert.ok(openRotMax > 4, "petals face the lamp");
   assert.ok(openRotMax < 12, "not a lean");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Moth's mount the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/garden.ts"), "utf8"), /key: "orchid"[\s\S]{0,80}slug: "moth"/);
+  const target = P.pickTarget([WIN], 80, "orchid", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "mount");
+  assert.equal(target.side, "bark");
+  assert.equal(target.leave, "dusk");
+  assert.equal(Overlay.playFor("orchid"), "mount");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("ginkgo"), "gold");
+  assert.equal(P.playFor("maidenhair"), "unfurl");
+  assert.equal(P.playFor("moss"), "lean");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(P.playFor("manta"), "barrel");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("sea_star"), "reef");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.notEqual(target.kind, "moth");
+  assert.notEqual(target.kind, "open");
+  assert.notEqual(target.kind, "arm");
+  assert.ok(target.holdLift > 36, "she mounts the bark, not the floor");
+  assert.ok(P.DUR.mountHold > P.DUR.mount, "the mount is the tell; the hold keeps the moth");
+  assert.ok(P.DUR.mountOn !== Overlay.DUR.openOn);
+  assert.ok(P.DUR.mount !== Overlay.DUR.open);
+  assert.ok(P.DUR.mount !== Overlay.DUR.seed);
+  assert.ok(P.DUR.mount !== Overlay.DUR.gold);
+  assert.ok(P.DUR.mount !== Overlay.DUR.unfurl);
+  assert.ok(P.DUR.mount !== Overlay.DUR.lean);
+  assert.ok(P.DUR.mount !== Overlay.DUR.perchTalk);
+  assert.ok(P.DUR.mountHold !== Overlay.DUR.openHold);
+  assert.ok(P.DUR.mountOff !== Overlay.DUR.openOff);
+  const bark = P.mountPoint(WIN, 176, WORK);
+  const deskBark = Overlay.mountPoint(WIN, 176, WORK);
+  assert.equal(bark.x, deskBark.x);
+  assert.equal(bark.lift, deskBark.lift);
+  const roots = P.mountPath(0.48);
+  const deskRoots = Overlay.mountPath(0.48);
+  assert.equal(roots.rot, deskRoots.rot);
+  assert.equal(roots.lift, deskRoots.lift);
+  assert.ok(roots.lift < -14, "aerial roots hang in the air");
+  const bloom = P.mountPath(1);
+  const deskBloom = Overlay.mountPath(1);
+  assert.equal(bloom.rot, deskBloom.rot);
+  assert.equal(bloom.lift, deskBloom.lift);
+  assert.ok(bloom.lift > 2, "she blooms once at dusk");
+  assert.ok(bloom.lift < 8, "a moth, not a pad open");
+  assert.ok(bloom.x > 10, "the moth leans into the pane");
+  assert.ok(bloom.rot > 8, "a moth that stayed");
+  assert.ok(bloom.rot < 14, "not Felt's lean");
+  assert.ok(bloom.lift > roots.lift, "roots first, then the moth");
+  const hold = P.mountHoldPath(0.5);
+  assert.ok(hold.lift > 3, "the moth stayed");
+  assert.ok(hold.lift < 7, "not Disk's open");
+  assert.ok(hold.rot > 8, "the wing holds");
+  const open = P.openPoint(WIN, 176, WORK);
+  const seed = P.seedPoint(WIN, 176, WORK);
+  const gold = P.goldPoint(WIN, 176, WORK);
+  const unfurl = P.unfurlPoint(WIN, 176, WORK);
+  const lean = P.leanPoint(WIN, 176, WORK);
+  const perch = P.perchPoint(WIN, "left", 176, WORK);
+  const kindle = P.kindlePoint(WIN, 176, WORK);
+  const reef = P.reefPoint(WIN, 176, WORK);
+  const drape = P.drapePoint(WIN, "left", 176, WORK);
+  const gape = P.gapePoint(WIN, 176, WORK);
+  const field = P.fieldPoint(WIN, 176, WORK);
+  const sill = P.sillPoint(WIN, 0.12, 176, WORK);
+  assert.ok(Math.abs(target.holdX - open.x) > 20 || Math.abs(target.holdLift - open.lift) > 16, "not Disk");
+  assert.ok(Math.abs(target.holdX - seed.x) > 20 || Math.abs(target.holdLift - seed.lift) > 16, "not Mast");
+  assert.ok(Math.abs(target.holdX - gold.x) > 20 || Math.abs(target.holdLift - gold.lift) > 16, "not Fan");
+  assert.ok(Math.abs(target.holdX - unfurl.x) > 20 || Math.abs(target.holdLift - unfurl.lift) > 16, "not Vein");
+  assert.ok(Math.abs(target.holdX - lean.x) > 20 || Math.abs(target.holdLift - lean.lift) > 16, "not Felt");
+  assert.ok(Math.abs(target.holdX - perch.x) > 20 || Math.abs(target.holdLift - perch.lift) > 16, "not Echo");
+  assert.ok(Math.abs(target.holdX - kindle.x) > 20 || Math.abs(target.holdLift - kindle.lift) > 16, "not Ember");
+  assert.ok(Math.abs(target.holdX - reef.x) > 20 || Math.abs(target.holdLift - reef.lift) > 16, "not Ochre");
+  assert.ok(Math.abs(target.holdX - drape.x) > 20 || Math.abs(target.holdLift - drape.lift) > 16, "not Vesper");
+  assert.ok(Math.abs(target.holdX - gape.x) > 20 || Math.abs(target.holdLift - gape.lift) > 16, "not Door");
+  assert.ok(Math.abs(target.holdX - field.x) > 20 || Math.abs(target.holdLift - field.lift) > 16, "not Flux");
+  assert.ok(Math.abs(target.holdLift - sill.lift) > 40, "not a generic sill");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let mountLiftMin = 0;
+  let mountLiftMax = -99;
+  let mountRotMax = 0;
+  for (let i = 0; i < 2800 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "open");
+    assert.notEqual(play.phase, "open-hold");
+    assert.notEqual(play.phase, "seed");
+    assert.notEqual(play.phase, "seed-hold");
+    assert.notEqual(play.phase, "gold");
+    assert.notEqual(play.phase, "gold-hold");
+    assert.notEqual(play.phase, "unfurl");
+    assert.notEqual(play.phase, "unfurl-hold");
+    assert.notEqual(play.phase, "lean");
+    assert.notEqual(play.phase, "lean-hold");
+    assert.notEqual(play.phase, "perch-talk");
+    assert.notEqual(play.phase, "kindle");
+    assert.notEqual(play.phase, "reef");
+    assert.notEqual(play.phase, "drape");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "mount") {
+      const rel = play.lift - play.target.holdLift;
+      mountLiftMin = Math.min(mountLiftMin, rel);
+      mountLiftMax = Math.max(mountLiftMax, rel);
+      mountRotMax = Math.max(mountRotMax, Math.abs(play.rot));
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift > 16);
+    }
+    if (play.phase === "mount-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift > 3);
+      assert.ok(play.lift - play.target.holdLift < 7, "the moth stayed");
+    }
+  }
+  assert.ok(seen.has("mount-on"));
+  assert.ok(seen.has("mount"));
+  assert.ok(seen.has("mount-hold"));
+  assert.ok(seen.has("mount-off"));
+  assert.ok(mountLiftMin < -14, "aerial roots hang in the air");
+  assert.ok(mountLiftMax > 2, "she blooms once at dusk");
+  assert.ok(mountLiftMax < 10, "a moth, not a pad open");
+  assert.ok(mountRotMax > 8, "a moth that stayed");
+  assert.ok(mountRotMax < 14, "not a lean");
   assert.equal(play.phase, "done");
 });
