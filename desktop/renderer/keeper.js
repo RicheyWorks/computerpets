@@ -10,7 +10,10 @@
     { id: "rest", label: "Rest" },
   ];
   const HUD_WIDTH = 280;
+  const HUD_WIDTH_COLLAPSED = 168;
   const KEEPER_KICKER = "Keeper card";
+  const VOICE_TRUTH = "The door is still the system speech voices.";
+  const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
 
   const UNREAD = {
     status: "DOWN",
@@ -84,6 +87,8 @@
       verbs: KEEPER_CARE.map((verb) => verb.id),
       heartbeat: heartbeatLine(beat || UNREAD),
       truth: careTruth(),
+      voiceTruth: VOICE_TRUTH,
+      quitTruth: QUIT_TRUTH,
     };
   }
 
@@ -94,7 +99,10 @@
     ADVERTISED_CARE,
     KEEPER_CARE,
     HUD_WIDTH,
+    HUD_WIDTH_COLLAPSED,
     KEEPER_KICKER,
+    VOICE_TRUTH,
+    QUIT_TRUTH,
     UNREAD,
     parseHeartbeat,
     formatUptime,

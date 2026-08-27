@@ -320,11 +320,62 @@ body {
   box-shadow: 0 14px 36px rgb(0 0 0 / 0.42), inset 0 1px 0 rgb(242 236 227 / 0.08);
   pointer-events: none;
   opacity: 0;
-  transition: opacity 160ms ease;
+  transition: opacity 160ms ease, width 160ms ease;
 }
 
 #hud.show {
   opacity: 1;
+}
+
+#hud[data-collapsed="1"] {
+  width: 168px;
+  padding: 10px 12px 11px;
+}
+
+#hud[data-expanded="1"] {
+  pointer-events: auto;
+}
+
+#hud[data-color="blotter"] {
+  background: rgb(58 48 38 / 0.94);
+  border-color: #c4a574;
+}
+
+#hud[data-color="moss"] {
+  background: rgb(24 36 28 / 0.94);
+  border-color: #8fa08a;
+}
+
+#hud[data-color="ember"] {
+  background: rgb(48 28 22 / 0.94);
+  border-color: #c48464;
+}
+
+#hud[data-color="dusk"] {
+  background: rgb(28 26 42 / 0.94);
+  border-color: #8a86b0;
+}
+
+#hud[data-color="frost"] {
+  background: rgb(28 34 40 / 0.94);
+  border-color: #8a97a6;
+}
+
+.keeper-collapse {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+#hud[data-collapsed="1"] .keeper-body {
+  display: none;
 }
 
 #hud-kicker,
@@ -377,6 +428,94 @@ body {
   display: flex;
   gap: 8px;
   margin: 12px 0 8px;
+}
+
+.keeper-volume,
+.keeper-lines,
+.keeper-clocks,
+.keeper-mutes,
+.keeper-off,
+.keeper-colors,
+.keeper-voices {
+  margin: 10px 0 0;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9a9288;
+  pointer-events: auto;
+}
+
+.keeper-volume input,
+.keeper-lines input,
+.keeper-clocks input {
+  display: block;
+  width: 100%;
+  margin: 4px 0 0;
+  pointer-events: auto;
+}
+
+.keeper-colors,
+.keeper-voices,
+.keeper-mutes,
+.keeper-line-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.keeper-colors button,
+.keeper-voices button,
+.keeper-mutes button,
+.keeper-line-row button,
+.keeper-clocks button,
+.keeper-off button,
+.keeper-line-list button {
+  pointer-events: auto;
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #f2ece3;
+  background: #1d1a17;
+  border: 1px solid #3d3831;
+  border-radius: 8px;
+  padding: 6px 7px;
+  min-height: 32px;
+  cursor: pointer;
+}
+
+.keeper-colors button[data-on="1"],
+.keeper-voices button[data-on="1"],
+.keeper-mutes button[data-on="1"],
+.keeper-clocks button[data-on="1"] {
+  border-color: #d8cfc0;
+  color: #fffaf3;
+}
+
+.keeper-line-list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+}
+
+.keeper-line-list li {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  margin-top: 4px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #f2ece3;
+  font-size: 12px;
+}
+
+.keeper-line-list span {
+  flex: 1;
+}
+
+.keeper-timer-left {
+  margin: 4px 0 0;
+  font-variant-numeric: tabular-nums;
 }
 
 #hud-care button,

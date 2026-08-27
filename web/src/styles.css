@@ -710,6 +710,131 @@
   .keeper-heartbeat[data-heartbeat="UP"] {
     color: var(--color-uncommon);
   }
+
+  .keeper-collapse {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .keeper-card[data-collapsed="1"] {
+    width: min(100%, 12rem);
+    padding: 0.7rem 0.8rem 0.75rem;
+  }
+
+  .keeper-card[data-color="blotter"] {
+    background: rgb(58 48 38 / 0.94);
+    border-color: #c4a574;
+  }
+
+  .keeper-card[data-color="moss"] {
+    background: rgb(24 36 28 / 0.94);
+    border-color: #8fa08a;
+  }
+
+  .keeper-card[data-color="ember"] {
+    background: rgb(48 28 22 / 0.94);
+    border-color: #c48464;
+  }
+
+  .keeper-card[data-color="dusk"] {
+    background: rgb(28 26 42 / 0.94);
+    border-color: #8a86b0;
+  }
+
+  .keeper-card[data-color="frost"] {
+    background: rgb(28 34 40 / 0.94);
+    border-color: #8a97a6;
+  }
+
+  .keeper-volume,
+  .keeper-lines,
+  .keeper-clocks,
+  .keeper-mutes,
+  .keeper-off,
+  .keeper-colors,
+  .keeper-voices {
+    margin: 0.65rem 0 0;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .keeper-volume input,
+  .keeper-lines input,
+  .keeper-clocks input {
+    display: block;
+    width: 100%;
+    margin: 0.25rem 0 0;
+  }
+
+  .keeper-colors,
+  .keeper-voices,
+  .keeper-mutes,
+  .keeper-line-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .keeper-colors button,
+  .keeper-voices button,
+  .keeper-mutes button,
+  .keeper-line-row button,
+  .keeper-clocks button,
+  .keeper-off button,
+  .keeper-line-list button {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-fg);
+    background: var(--color-elevated);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 8px;
+    padding: 0.4rem 0.45rem;
+    min-height: 32px;
+  }
+
+  .keeper-colors button[data-on="1"],
+  .keeper-voices button[data-on="1"],
+  .keeper-mutes button[data-on="1"],
+  .keeper-clocks button[data-on="1"] {
+    border-color: var(--color-primary);
+    color: #fffaf3;
+  }
+
+  .keeper-line-list {
+    list-style: none;
+    margin: 0.4rem 0 0;
+    padding: 0;
+  }
+
+  .keeper-line-list li {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+    margin-top: 0.25rem;
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--color-fg);
+    font-size: 12px;
+  }
+
+  .keeper-line-list span {
+    flex: 1;
+  }
+
+  .keeper-timer-left {
+    margin: 0.25rem 0 0;
+    font-variant-numeric: tabular-nums;
+  }
 }
 
 @keyframes desk-mote {

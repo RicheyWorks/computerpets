@@ -49,6 +49,22 @@ const hudBond = document.getElementById("hud-bond");
 const hudHeartbeat = document.getElementById("hud-heartbeat");
 const hudTruth = document.getElementById("hud-truth");
 const hudCare = document.getElementById("hud-care");
+const hudCollapse = document.getElementById("hud-collapse");
+const hudBody = document.getElementById("hud-body");
+const hudVolume = document.getElementById("hud-volume");
+const hudColors = document.getElementById("hud-colors");
+const hudVoices = document.getElementById("hud-voices");
+const hudVoiceTruth = document.getElementById("hud-voice-truth");
+const hudLineText = document.getElementById("hud-line-text");
+const hudLines = document.getElementById("hud-lines");
+const hudAlarmTime = document.getElementById("hud-alarm-time");
+const hudAlarmOn = document.getElementById("hud-alarm-on");
+const hudTimerMins = document.getElementById("hud-timer-mins");
+const hudTimer = document.getElementById("hud-timer");
+const hudTimerLeft = document.getElementById("hud-timer-left");
+const hudMutes = document.getElementById("hud-mutes");
+const hudOff = document.getElementById("hud-off");
+const hudOffTruth = document.getElementById("hud-off-truth");
 const barHunger = document.getElementById("bar-hunger");
 const barMood = document.getElementById("bar-mood");
 const barEnergy = document.getElementById("bar-energy");
@@ -110,6 +126,9 @@ let taken = false;
 let leaving = false;
 let choiceOpen = false;
 let lureTimer = 0;
+let card = window.PetCard ? window.PetCard.load() : { collapsed: false, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
+let offArmed = false;
+let voicesReady = [];
 
 function skyOf(now) {
   return window.PetWeather?.weatherOf(now) ?? "clear";
@@ -172,22 +191,152 @@ if (hudCare) {
     if (id === "feed" || id === "play" || id === "rest") handle(id);
   });
 }
+if (hudCollapse) {
+  hudCollapse.addEventListener("click", (e) => {
+    e.stopPropagation();
+    card.collapsed = !card.collapsed;
+    persistCard();
+  });
+}
+if (hud) {
+  hud.addEventListener("click", (e) => {
+    const hit = e.target && e.target.closest && e.target.closest("[data-care], [data-card], input, button, label");
+    if (hit) return;
+    if (card.collapsed) return;
+    card.collapsed = true;
+    persistCard();
+  });
+}
+if (hudVolume) {
+  hudVolume.addEventListener("input", (e) => {
+    e.stopPropagation();
+    if (!kind || !window.PetCard) return;
+    card = window.PetCard.setGuest(card, kind.key, { volume: Number(hudVolume.value) });
+    persistCard();
+  });
+}
+if (hudLineText) {
+  document.querySelectorAll("[data-card='save-say'], [data-card='save-do']").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (!kind || !window.PetCard) return;
+      const kindLine = btn.getAttribute("data-card") === "save-do" ? "do" : "say";
+      card = window.PetCard.addLine(card, kind.key, hudLineText.value, kindLine);
+      hudLineText.value = "";
+      persistCard();
+    });
+  });
+}
+if (hudAlarmTime) {
+  hudAlarmTime.addEventListener("change", (e) => {
+    e.stopPropagation();
+    if (!kind || !window.PetCard) return;
+    const [h, m] = String(hudAlarmTime.value || "07:00").split(":");
+    const guest = cardGuest();
+    guest.alarm.hour = Number(h);
+    guest.alarm.minute = Number(m);
+    card = window.PetCard.setGuest(card, kind.key, guest);
+    persistCard();
+  });
+}
+if (hudAlarmOn) {
+  hudAlarmOn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!kind || !window.PetCard) return;
+    const guest = cardGuest();
+    guest.alarm.on = !guest.alarm.on;
+    card = window.PetCard.setGuest(card, kind.key, guest);
+    persistCard();
+  });
+}
+if (hudTimer) {
+  hudTimer.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!kind || !window.PetCard) return;
+    const guest = cardGuest();
+    if (guest.timer.running) guest.timer = window.PetCard.stopTimer(guest.timer);
+    else {
+      const mins = Math.max(1, Number(hudTimerMins && hudTimerMins.value) || 5);
+      guest.timer = window.PetCard.startTimer(guest.timer, mins * 60_000);
+    }
+    card = window.PetCard.setGuest(card, kind.key, guest);
+    persistCard();
+  });
+}
+if (hudOff) {
+  hudOff.addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (!offArmed) {
+      offArmed = true;
+      paintCard();
+      return;
+    }
+    if (window.desk && window.desk.quit) window.desk.quit();
+    else window.close();
+  });
+}
+if ("speechSynthesis" in window) {
+  const refreshVoices = () => {
+    voicesReady = window.speechSynthesis.getVoices() || [];
+  };
+  refreshVoices();
+  window.speechSynthesis.addEventListener("voiceschanged", refreshVoices);
+}
 setInterval(readHeartbeat, 15_000);
 readHeartbeat();
+
+function cardGuest() {
+  const C = window.PetCard;
+  if (!C || !kind) return { volume: 80, lines: [], alarm: C ? C.blankAlarm() : null, timer: C ? C.blankTimer() : null };
+  return C.guestOf(card, kind.key);
+}
+
+function persistCard() {
+  const C = window.PetCard;
+  if (!C) return;
+  card = C.save(card);
+  paintCard();
+}
+
+function speakText(text) {
+  const C = window.PetCard;
+  if (!text || !("speechSynthesis" in window)) return;
+  if (C && C.isMuted(card.mutes, "chirp")) return;
+  window.speechSynthesis.cancel();
+  const guest = cardGuest();
+  const opts = C ? C.speakOpts(card.voiceStyle, guest.volume) : { rate: 0.86, pitch: 0.9, volume: 0.8 };
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = opts.rate;
+  u.pitch = opts.pitch;
+  u.volume = opts.volume;
+  const picked = C ? C.pickSystemVoice(voicesReady.length ? voicesReady : window.speechSynthesis.getVoices(), card.voiceStyle) : null;
+  if (picked) u.voice = picked;
+  window.speechSynthesis.speak(u);
+}
 
 function say(text, hold = 4200) {
   if (!text) return;
   bubbleText.textContent = text;
   bubble.classList.add("open");
   speechUntil = performance.now() + hold;
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.rate = trait?.rate ?? 0.94;
-    u.pitch = trait?.pitch ?? 1.05;
-    window.speechSynthesis.speak(u);
-  }
+  speakText(text);
   hudUntil = performance.now() + hold;
+}
+
+function playHouseLine(line) {
+  if (!line) return;
+  if (line.kind === "do") {
+    const verb = line.text.trim().toLowerCase();
+    if (verb === "sit" || verb === "wander" || verb === "sleep" || verb === "idle") issue(verb);
+    else if (verb === "talk" || verb === "feed" || verb === "play" || verb === "rest") handle(verb);
+    else {
+      say(line.text);
+      issue("talk");
+    }
+    return;
+  }
+  say(line.text);
+  issue("talk");
 }
 
 function issue(cmd) {
@@ -234,6 +383,7 @@ function paintHud() {
   if (barHygiene) barHygiene.style.setProperty("--w", `${life.hygiene}%`);
   if (barBond) barBond.style.setProperty("--w", `${life.bond}%`);
   hud.classList.add("show");
+  paintCard();
   window.desk?.vitals({
     key: kind.key,
     name: kind.name,
@@ -246,6 +396,111 @@ function paintHud() {
     bond: life.bond,
     verb: window.PetSpecial?.verbFor(kind.key) || "Special",
   });
+}
+
+function paintCard() {
+  const C = window.PetCard;
+  const K = window.PetKeeper;
+  if (!hud || !C) return;
+  const guest = cardGuest();
+  hud.dataset.color = card.color || "ink";
+  hud.dataset.collapsed = card.collapsed ? "1" : "0";
+  hud.dataset.expanded = card.collapsed ? "0" : "1";
+  if (card.collapsed) hud.removeAttribute("data-hit");
+  else hud.dataset.hit = "1";
+  if (hudCollapse) hudCollapse.setAttribute("aria-expanded", card.collapsed ? "false" : "true");
+  if (hudVolume) hudVolume.value = String(guest.volume);
+  if (hudVoiceTruth) hudVoiceTruth.textContent = (K && K.VOICE_TRUTH) || C.VOICE_TRUTH;
+  if (hudOffTruth) hudOffTruth.textContent = (K && K.QUIT_TRUTH) || C.QUIT_TRUTH;
+  if (hudOff) hudOff.textContent = offArmed ? "Off" : "Turn off";
+  if (hudAlarmTime) {
+    hudAlarmTime.value = `${String(guest.alarm.hour).padStart(2, "0")}:${String(guest.alarm.minute).padStart(2, "0")}`;
+  }
+  if (hudAlarmOn) {
+    hudAlarmOn.textContent = guest.alarm.on ? "On" : "Off";
+    hudAlarmOn.dataset.on = guest.alarm.on ? "1" : "0";
+  }
+  if (hudTimerMins && !guest.timer.running) hudTimerMins.value = String(Math.max(1, Math.round(guest.timer.durationMs / 60000)));
+  if (hudTimer) hudTimer.textContent = guest.timer.running ? "Stop" : "Start";
+  if (hudTimerLeft) hudTimerLeft.textContent = C.formatRemain(guest.timer.remainingMs);
+  if (hudColors) {
+    hudColors.replaceChildren();
+    for (const color of C.COLORS) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = color.name;
+      btn.dataset.hit = "1";
+      btn.dataset.color = color.id;
+      btn.dataset.on = card.color === color.id ? "1" : "0";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card.color = color.id;
+        persistCard();
+      });
+      hudColors.appendChild(btn);
+    }
+  }
+  if (hudVoices) {
+    hudVoices.replaceChildren();
+    for (const style of C.VOICE_STYLES) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = style.name;
+      btn.dataset.hit = "1";
+      btn.dataset.voice = style.id;
+      btn.dataset.on = card.voiceStyle === style.id ? "1" : "0";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card.voiceStyle = style.id;
+        persistCard();
+      });
+      hudVoices.appendChild(btn);
+    }
+  }
+  if (hudMutes) {
+    hudMutes.replaceChildren();
+    for (const bus of C.MUTE_BUSES) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = card.mutes[bus] ? `Muted ${bus}` : `Mute ${bus}`;
+      btn.dataset.hit = "1";
+      btn.dataset.bus = bus;
+      btn.dataset.on = card.mutes[bus] ? "1" : "0";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card.mutes = { ...card.mutes, [bus]: !card.mutes[bus] };
+        persistCard();
+      });
+      hudMutes.appendChild(btn);
+    }
+  }
+  if (hudLines) {
+    hudLines.replaceChildren();
+    for (const line of guest.lines) {
+      const li = document.createElement("li");
+      const span = document.createElement("span");
+      span.textContent = `${line.kind === "do" ? "Do" : "Say"} · ${line.text}`;
+      const play = document.createElement("button");
+      play.type = "button";
+      play.textContent = "Play";
+      play.dataset.hit = "1";
+      play.addEventListener("click", (e) => {
+        e.stopPropagation();
+        playHouseLine(line);
+      });
+      const drop = document.createElement("button");
+      drop.type = "button";
+      drop.textContent = "Drop";
+      drop.dataset.hit = "1";
+      drop.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card = C.removeLine(card, kind.key, line.id);
+        persistCard();
+      });
+      li.append(span, play, drop);
+      hudLines.appendChild(li);
+    }
+  }
 }
 
 function paintMess() {
@@ -317,6 +572,8 @@ function tickLife() {
 
 function playSound(kindName) {
   try {
+    const C = window.PetCard;
+    if (C && C.isMuted(card.mutes, kindName)) return;
     const Ctor = window.AudioContext || window.webkitAudioContext;
     if (!Ctor) return;
     const ac = playSound.ctx || (playSound.ctx = new Ctor());
@@ -326,10 +583,30 @@ function playSound(kindName) {
     const gain = ac.createGain();
     osc.connect(gain);
     gain.connect(ac.destination);
+    const vol = (cardGuest().volume / 100) * (kindName === "rain" || kindName === "wind" ? 0.018 : 0.03);
     const j = 0.92 + Math.random() * 0.16;
+    if (kindName === "rain") {
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(220 * j, now);
+      gain.gain.setValueAtTime(vol, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      osc.start(now);
+      osc.stop(now + 0.09);
+      return;
+    }
+    if (kindName === "wind") {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(180 * j, now);
+      osc.frequency.exponentialRampToValueAtTime(90, now + 0.22);
+      gain.gain.setValueAtTime(vol, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
+      osc.start(now);
+      osc.stop(now + 0.26);
+      return;
+    }
     osc.type = kindName === "munch" ? "square" : "sine";
     osc.frequency.setValueAtTime((kindName === "step" ? 140 : kindName === "hop" ? 320 : 480) * j, now);
-    gain.gain.setValueAtTime(0.03, now);
+    gain.gain.setValueAtTime(vol, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
     osc.start(now);
     osc.stop(now + 0.12);
@@ -609,9 +886,13 @@ function applyCommand() {
     sim.target = null;
     return;
   }
-  if (life?.asleep && sim.cmd !== "talk" && sim.cmd !== "play" && sim.cmd !== "eat" && sim.cmd !== "seek" && sim.cmd !== "leave" && sim.cmd !== "enter") {
+  if (window.PetLife?.sleepHolds(life, sim.cmd) || (life?.asleep && window.PetCard?.sleepHolds(true, sim.cmd))) {
     sim.anim = "sleep";
     sim.target = null;
+    sim.waypoints = [];
+    sim.pendingPose = null;
+    sim.poseHold = 0;
+    sim.pause = 0;
     return;
   }
   if (sim.order === sim.lastOrder || sim.cmd === "none") return;
@@ -683,7 +964,9 @@ function applyCommand() {
     sim.pendingFacing = null;
     sim.frame = 0;
     sim.acc = 0;
-    if (sim.cmd === "sit" || sim.cmd === "sleep") {
+    if (sim.cmd === "sleep") {
+      sim.anim = "sleep";
+    } else if (sim.cmd === "sit") {
       sim.poseHold = window.PetGait.POSE_HOLD_S;
       sim.pendingPose = sim.cmd;
       sim.anim = "idle";
@@ -763,6 +1046,7 @@ function handle(cmd) {
   tickLife();
   if (cmd === "play") {
     if (life.hidden) return;
+    if (window.PetLife?.wake) window.PetLife.wake(life);
     const width = window.innerWidth;
     placeMark("lure", 80 + Math.random() * Math.max(80, width - 200));
     say(trait.special === "bug" ? "There. A bug." : "A ribbon. Catch it.");
@@ -772,6 +1056,7 @@ function handle(cmd) {
   }
   if (cmd === "snack" || cmd === "feed") {
     if (life.hidden) return;
+    if (window.PetLife?.wake) window.PetLife.wake(life);
     const width = window.innerWidth;
     placeMark("treat", 80 + Math.random() * Math.max(80, width - 200), 0, cmd === "feed" ? "feed" : "snack");
     issue("seek");
@@ -780,6 +1065,7 @@ function handle(cmd) {
   }
   if (cmd === "hide") {
     if (life.hidden) return;
+    if (window.PetLife?.wake) window.PetLife.wake(life);
     say(pick(trait.extra.hide || ["I went where the ribbon goes."]));
     leaving = true;
     issue("leave");
@@ -1129,8 +1415,9 @@ function tick(now) {
       }
     } else if (sim.pause > 0) {
       sim.pause = Math.max(0, sim.pause - dt);
-      sim.anim = "idle";
-      if (sim.pause === 0 && sim.waypoints.length) aimAt(sim.waypoints.shift());
+      if (life?.asleep) sim.anim = "sleep";
+      else sim.anim = "idle";
+      if (sim.pause === 0 && sim.waypoints.length && !life?.asleep) aimAt(sim.waypoints.shift());
     } else if (sim.anim === "walk" && sim.target != null && sim.turnHold <= 0) {
       const remaining = Math.abs(sim.target - sim.x);
       const dir = sim.target >= sim.x ? 1 : -1;
@@ -1189,7 +1476,8 @@ function tick(now) {
       sim.settle <= 0 &&
       (sim.anim === "idle" || sim.anim === "sit") &&
       !life.hidden &&
-      !life.asleep
+      !life.asleep &&
+      sim.anim !== "sleep"
     ) {
       sim.actWait -= dt;
       if (sim.actWait <= 0) {
@@ -1206,6 +1494,7 @@ function tick(now) {
     if (sim.shiftAge > 0) sim.shiftAge = Math.max(0, sim.shiftAge - dt);
     if (!leaving) sim.x = clamp(sim.x, PAD, maxX);
 
+    if (life?.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) sim.anim = "sleep";
     const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
     if (fps > 0) {
       sim.acc += dt;
@@ -1274,7 +1563,9 @@ function tick(now) {
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));
   const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
   bubble.style.transform = `translate3d(${bx}px, ${-lift - 10}px, 0)`;
-  const hudW = window.PetKeeper?.HUD_WIDTH ?? 280;
+  const hudW = card.collapsed
+    ? (window.PetKeeper?.HUD_WIDTH_COLLAPSED ?? 168)
+    : (window.PetKeeper?.HUD_WIDTH ?? 280);
   hud.style.transform = `translate3d(${clamp(drawX + 4, 8, Math.max(8, width - (hudW + 8)))}px, ${-lift}px, 0)`;
   if (tongueEl) {
     const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
@@ -1487,8 +1778,9 @@ setInterval(() => {
   if (document.hidden || !kind || !life) return;
   tickLife();
   if (performance.now() < speechUntil || life.hidden) return;
-  if (life.asleep) {
-    issue("sleep");
+  const held = window.PetLife?.wanderWhileAsleep(life) || window.PetCard?.wanderWhileAsleep(life?.asleep);
+  if (held) {
+    issue(held.cmd);
     return;
   }
   const skyMood = window.PetWeather?.weatherIdle(kind.key, skyOf());
@@ -1510,6 +1802,30 @@ setInterval(() => {
   if (document.hidden) return;
   if (kind) tickLife();
 }, 20_000);
+setInterval(() => {
+  if (document.hidden || !kind || !window.PetCard) return;
+  const sky = skyOf();
+  if ((sky === "rain" || sky === "wind") && Math.random() < 0.55) playSound(sky);
+  const guest = cardGuest();
+  if (window.PetCard.alarmDue(guest.alarm)) {
+    guest.alarm = window.PetCard.markAlarmRang(guest.alarm);
+    const line = window.PetCard.lineById(card, kind.key, guest.alarm.lineId) || { text: "The clock asked.", kind: "say" };
+    card = window.PetCard.setGuest(card, kind.key, guest);
+    persistCard();
+    playHouseLine(line);
+    return;
+  }
+  if (guest.timer.running) {
+    const tick = window.PetCard.timerTick(guest.timer);
+    guest.timer = tick.timer;
+    card = window.PetCard.setGuest(card, kind.key, guest);
+    persistCard();
+    if (tick.rang) {
+      const line = window.PetCard.lineById(card, kind.key, guest.timer.lineId) || { text: "The timer is done.", kind: "say" };
+      playHouseLine(line);
+    }
+  }
+}, 1000);
 
 window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
   if (!opened.ok) {

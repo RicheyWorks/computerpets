@@ -88,6 +88,7 @@
       sick: false,
       hidden: false,
       asleep: false,
+      sleepHeld: false,
       stage: "hatchling",
       mess: [],
       gifts: [],
@@ -162,10 +163,21 @@
       stampHive(life, key);
       return { life, grew: false, asleep: !!life.asleep };
     }
-    const hatch = life.stage === "hatchling" ? 1.35 : life.stage === "elder" ? 0.85 : 1;
+      const hatch = life.stage === "hatchling" ? 1.35 : life.stage === "elder" ? 0.85 : 1;
     const when = new Date(now);
-    const asleep = night(trait, when.getHours() + when.getMinutes() / 60, key) && !life.hidden;
-    life.asleep = asleep && !life.sick;
+    const nightAsleep = night(trait, when.getHours() + when.getMinutes() / 60, key) && !life.hidden && !life.sick;
+    if (nightAsleep) {
+      life.asleep = true;
+      life.sleepHeld = true;
+    } else if (life.sleepHeld && !life.sick && !life.hidden && life.hunger >= 12) {
+      life.asleep = true;
+    } else if (life.sick || life.hidden || life.hunger < 12) {
+      life.asleep = false;
+      life.sleepHeld = false;
+    } else {
+      life.asleep = false;
+    }
+    const asleep = !!life.asleep;
     const hungerRate = 100 / (trait.hungerH * hatch);
     const energyRate = 100 / (trait.energyH);
     const hygieneRate = 100 / (trait.hygieneH);
@@ -225,6 +237,30 @@
     life.bond = clamp(life.bond + n);
   }
 
+  const SLEEP_WAKES = new Set(["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide"]);
+
+  function wake(life) {
+    life.asleep = false;
+    life.sleepHeld = false;
+    return life;
+  }
+
+  function holdSleep(life) {
+    life.asleep = true;
+    life.sleepHeld = true;
+    return life;
+  }
+
+  function sleepHolds(life, cmd) {
+    if (!life || !life.asleep) return false;
+    return !SLEEP_WAKES.has(cmd);
+  }
+
+  function wanderWhileAsleep(life) {
+    if (!life || !life.asleep) return null;
+    return { cmd: "sleep", pose: "sleep" };
+  }
+
   function actBody(life, trait, action, now = Date.now(), key) {
     const extra = trait.extra || {};
     if (life.hidden && action !== "call" && action !== "talk") {
@@ -232,6 +268,7 @@
     }
 
     if (action === "feed") {
+      wake(life);
       if (life.weight > 82) {
         life.mood = clamp(life.mood - 4);
         return { life, line: "Enough. The bowl is a mountain.", cmd: "idle", notify: null };
@@ -245,6 +282,7 @@
       return { life, line: null, cmd: "eat", notify: null, useRoster: "feed" };
     }
     if (action === "snack") {
+      wake(life);
       life.hunger = clamp(life.hunger + 12);
       life.mood = clamp(life.mood + 3);
       life.weight = clamp(life.weight + 1);
@@ -263,6 +301,7 @@
       return { life, line: pick(extra.shed || ["I left a copy."]), cmd: "sit", notify: "shed" };
     }
     if (action === "play") {
+      wake(life);
       if (life.energy < 12) return { life, line: "The paws vote no.", cmd: "sit", notify: null };
       if (trait.startle && Math.random() < 0.18) {
         life.startledUntil = now + 4000;
@@ -281,7 +320,7 @@
       life.hunger = clamp(life.hunger - 3);
       life.mood = clamp(life.mood + 4);
       life.energy = clamp(life.energy + 32);
-      life.asleep = true;
+      holdSleep(life);
       bondUp(life, 1);
       return { life, line: null, cmd: "sleep", notify: null, useRoster: "rest" };
     }
@@ -317,6 +356,7 @@
       return { life, line: pick(extra.praise || ["I heard that."]), cmd: "talk", notify: null };
     }
     if (action === "call") {
+      wake(life);
       life.hidden = false;
       life.mood = clamp(life.mood + 4);
       bondUp(life, 1);
@@ -329,6 +369,7 @@
       return runSpecial(life, trait, now);
     }
     if (action === "talk") {
+      wake(life);
       bondUp(life, 1);
       if (life.sick) return { life, line: pick(extra.sick || ["Unwell."]), cmd: "talk", notify: null };
       if (life.hunger < 24) return { life, line: null, cmd: "talk", notify: null, useRoster: "hungry" };
@@ -431,6 +472,11 @@
     switchGuest,
     decay,
     act,
+    wake,
+    holdSleep,
+    sleepHolds,
+    wanderWhileAsleep,
+    SLEEP_WAKES,
     vitals,
     alerts,
     ageDays,

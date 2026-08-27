@@ -26,7 +26,7 @@ House names. The ones you say out loud.
 
 ## Put a pet on your real desktop
 
-This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. The tray by the clock has **On the desk** — Rui plus the grid ten, no scrolling two hundred twenty names.
+This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. Click the name to collapse it. Voice, color, saved lines, alarm, timer, mute, and Turn off sit on the expanded card. The tray by the clock has **On the desk** — Rui plus the grid ten, no scrolling two hundred twenty names.
 
 You do not need an account. You do not need a license. You do not need Java.
 

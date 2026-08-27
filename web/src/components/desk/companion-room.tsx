@@ -33,7 +33,8 @@ import {
 } from "@/lib/pets/care";
 import { saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
-import { unlockDeskAudio } from "@/lib/pets/desk-audio";
+import { playDeskSound, unlockDeskAudio } from "@/lib/pets/desk-audio";
+import { loadCard, saveCard, wanderWhileAsleep, isMuted, pickSystemVoice, speakOpts, guestOf } from "@/lib/pets/card";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { SNACK_LINE, callLine, dayPartLabel, dayPart, hideLine, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
@@ -154,6 +155,7 @@ export function CompanionRoom({
   const [handOrient, setHandOrient] = useState<PhoneOrient>("blotter");
   const [tending, setTending] = useState(false);
   const [choiceOpen, setChoiceOpen] = useState(false);
+  const [deskOff, setDeskOff] = useState(() => loadCard().off);
   const pad = tablet || (!phone && autoTablet);
   const hand = phone || (!pad && autoPhone);
 
@@ -287,8 +289,13 @@ export function CompanionRoom({
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      if (document.hidden || busy || statsRef.current.hidden) return;
+      if (document.hidden || busy || statsRef.current.hidden || deskOff) return;
       if (performance.now() < speechUntil.current) return;
+      const held = wanderWhileAsleep(statsRef.current.asleep);
+      if (held) {
+        issue(held.cmd);
+        return;
+      }
       if (statsRef.current.hunger < 26) {
         say(kind.ambientLine(statsRef.current));
         issue("wander");
@@ -313,7 +320,16 @@ export function CompanionRoom({
       }
     }, 5200);
     return () => window.clearInterval(id);
-  }, [busy, issue, say, kind, trait.wander]);
+  }, [busy, deskOff, issue, say, kind, trait.wander]);
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      if (document.hidden || deskOff) return;
+      const sky = weatherOf();
+      if ((sky === "rain" || sky === "wind") && Math.random() < 0.55) playDeskSound(sky, kind.key);
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [deskOff, kind.key]);
 
   async function playVoice(src?: string, text?: string) {
     if (src) {
@@ -328,10 +344,16 @@ export function CompanionRoom({
       }
     }
     if (text && "speechSynthesis" in window) {
+      const prefs = loadCard();
+      if (isMuted(prefs.mutes, "chirp")) return;
       window.speechSynthesis.cancel();
+      const opts = speakOpts(prefs.voiceStyle, guestOf(prefs, kind.key).volume);
       const u = new SpeechSynthesisUtterance(text);
-      u.rate = 0.92;
-      u.pitch = 1.1;
+      u.rate = opts.rate;
+      u.pitch = opts.pitch;
+      u.volume = opts.volume;
+      const picked = pickSystemVoice(window.speechSynthesis.getVoices(), prefs.voiceStyle);
+      if (picked && "voiceURI" in picked) u.voice = picked as SpeechSynthesisVoice;
       window.speechSynthesis.speak(u);
     }
   }
@@ -356,6 +378,7 @@ export function CompanionRoom({
     if (busy) return;
     acted.current = true;
     unlockDeskAudio();
+    setStats((s) => ({ ...s, asleep: false }));
     setBusy(true);
     issue("talk");
     try {
@@ -595,7 +618,8 @@ export function CompanionRoom({
         once={kind.once}
         gait={gait}
         kind={kind.key}
-        hidden={stats.hidden}
+        hidden={stats.hidden || deskOff}
+        asleep={!!stats.asleep}
         unwell={stats.sick}
         dull={isBlue(stats, kind.key) || !!(hive && hive.quiet)}
         stage={age}
@@ -744,11 +768,45 @@ export function CompanionRoom({
           name={displayName}
           stage={age}
           stats={stats}
+          guestKey={kind.key}
           busy={busyOrHidden}
           onFeed={() => void feed()}
           onPlay={startChase}
           onRest={() => void tend("rest")}
+          onSay={(text) => {
+            say(text);
+            void playVoice(undefined, text);
+            issue("talk");
+          }}
+          onDo={(text) => {
+            const verb = text.trim().toLowerCase();
+            if (verb === "sit" || verb === "wander" || verb === "sleep" || verb === "idle") issue(verb);
+            else if (verb === "talk") void talk();
+            else if (verb === "feed") void feed();
+            else if (verb === "play") startChase();
+            else if (verb === "rest") void tend("rest");
+            else {
+              say(text);
+              issue("talk");
+            }
+          }}
+          onOff={() => {
+            saveCard({ ...loadCard(), off: true });
+            setDeskOff(true);
+          }}
         />
+        {deskOff ? (
+          <button
+            type="button"
+            className="mt-2 text-[11px] uppercase tracking-[0.14em] text-muted"
+            onClick={() => {
+              saveCard({ ...loadCard(), off: false });
+              setDeskOff(false);
+            }}
+          >
+            Sit again
+          </button>
+        ) : null}
         {aside}
       </aside>
 

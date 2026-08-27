@@ -22,8 +22,11 @@ export const KEEPER_CARE = [
 
 /** Poster HUD width on the Windows overlay. Empty glass is still click-through. */
 export const HUD_WIDTH = 280;
+export const HUD_WIDTH_COLLAPSED = 168;
 
 export const KEEPER_KICKER = "Keeper card";
+export const VOICE_TRUTH = "The door is still the system speech voices.";
+export const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
 
 export type HeartbeatStatus = "UP" | "DOWN";
 
@@ -113,6 +116,8 @@ export function keeperPoster(
     verbs: KEEPER_CARE.map((verb) => verb.id),
     heartbeat: heartbeatLine(beat),
     truth: careTruth(),
+    voiceTruth: VOICE_TRUTH,
+    quitTruth: QUIT_TRUTH,
   };
 }
 
