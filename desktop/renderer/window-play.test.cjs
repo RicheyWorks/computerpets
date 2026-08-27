@@ -10,7 +10,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; Relay clicks; Fuse holds; Ground earths; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
@@ -55,7 +55,8 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("octopus"), "lid");
   assert.equal(P.playFor("cuttlefish"), "flush");
   assert.equal(P.playFor("nautilus"), "rise");
-  assert.equal(P.playFor("moon_jelly"), "sill");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("sea_star"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -643,6 +644,19 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(chamber.kind, "lid");
   assert.notEqual(chamber.kind, "circle");
   assert.notEqual(chamber.kind, "chart");
+  assert.notEqual(chamber.kind, "chime");
+  const pulse = P.pickTarget([WIN], 80, "moon_jelly", WORK, P.SPRITE);
+  assert.ok(pulse);
+  assert.equal(pulse.kind, "chime");
+  assert.equal(pulse.side, "saucer");
+  assert.equal(pulse.leave, "drift");
+  assert.ok(pulse.holdLift > 36);
+  assert.notEqual(pulse.kind, "sill");
+  assert.notEqual(pulse.kind, "rise");
+  assert.notEqual(pulse.kind, "flush");
+  assert.notEqual(pulse.kind, "lid");
+  assert.notEqual(pulse.kind, "circle");
+  assert.notEqual(pulse.kind, "field");
   const trace = P.pickTarget([WIN], 80, "trace_dragon", WORK, P.SPRITE, { side: "left", leave: "hop" });
   assert.ok(trace);
   assert.equal(trace.kind, "path");
@@ -3729,6 +3743,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /chart-on|chart-off|playFor/);
   assert.match(petSrc, /lid-on|lid-off|playFor/);
   assert.match(petSrc, /flush-on|flush-off|playFor/);
+  assert.match(petSrc, /chime-on|chime-off|playFor/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);
@@ -7924,7 +7939,8 @@ test("Chamber rises a window jamb as stacked nacre rooms — not flush, lid, cir
   assert.equal(P.playFor("dragon"), "drape");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("moon_jelly"), "sill");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("sea_star"), "sill");
   assert.equal(target.side, "rooms");
   assert.equal(target.leave, "sink");
   assert.equal(target.clickToId, undefined, "one window");
@@ -8108,6 +8124,8 @@ test("Chamber rises a window jamb as stacked nacre rooms — not flush, lid, cir
     assert.notEqual(play.phase, "lid-probe");
     assert.notEqual(play.phase, "flush");
     assert.notEqual(play.phase, "flush-hover");
+    assert.notEqual(play.phase, "chime");
+    assert.notEqual(play.phase, "chime-pulse");
     assert.notEqual(play.phase, "sill-hop");
     assert.notEqual(play.phase, "sill-walk");
     if (play.phase === "rise") {
@@ -8161,5 +8179,185 @@ test("a moved window refits Chamber's rooms; sleep, card, and hide abort; Chambe
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "rise-off");
+  assert.equal(play.abort, true);
+});
+
+test("Pulse chimes a window pane as a glass of water — not rise, flush, circle, or sill", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  const target = P.pickTarget([WIN, WIN_B], 80, "moon_jelly", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "chime");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("nautilus"), "rise");
+  assert.equal(P.playFor("cuttlefish"), "flush");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("carpet_python"), "chart");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("boa"), "loop");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("dragon"), "drape");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("sea_star"), "sill");
+  assert.equal(target.side, "saucer");
+  assert.equal(target.leave, "drift");
+  assert.equal(target.clickToId, undefined, "one window");
+  assert.ok(target.holdLift > 36, "she chimes the pane, not the floor");
+  assert.ok(P.DUR.chime > P.DUR.chimePulse, "the four moons are the tell; the pulse is one vacant beat");
+  assert.ok(P.DUR.chimeOn !== P.DUR.riseOn, "not Chamber's drift");
+  assert.ok(P.DUR.chimeOn !== P.DUR.flushOn, "not Sepia's drift");
+  assert.ok(P.DUR.chimeOn !== P.DUR.lidOn, "not Cup's crawl");
+  assert.ok(P.DUR.chimeOn !== P.DUR.circleOn, "not Coin's drift");
+  assert.ok(P.DUR.chimeOn !== P.DUR.fieldOn, "not Flux's occupy");
+  assert.ok(P.DUR.chime !== P.DUR.rise, "not rooms");
+  assert.ok(P.DUR.chime !== P.DUR.flush, "not weather");
+  assert.ok(P.DUR.chime !== P.DUR.circle, "not a bowl");
+  assert.ok(P.DUR.chime !== P.DUR.fieldHold, "not a field");
+  assert.ok(P.DUR.chime !== P.DUR.wall, "not a tank walk");
+  assert.ok(P.DUR.chimePulse !== P.DUR.riseHold, "not an occupied chamber");
+  assert.ok(P.DUR.chimePulse !== P.DUR.flushHover, "not a W hover");
+  assert.ok(P.DUR.chimeOff !== P.DUR.riseOff, "she drifts, not a sink");
+  assert.ok(P.DUR.chimeOff !== P.DUR.circleOff, "not Coin's leave");
+  const top = P.chimePoint(WIN, 0, P.SPRITE, WORK);
+  const bottom = P.chimePoint(WIN, 1, P.SPRITE, WORK);
+  const left = P.chimePoint(WIN, 2, P.SPRITE, WORK);
+  const right = P.chimePoint(WIN, 3, P.SPRITE, WORK);
+  const center = P.chimeCenter(WIN, P.SPRITE, WORK);
+  const flatten = P.flattenPoint(WIN, P.SPRITE, WORK);
+  const drape = P.drapePoint(WIN, "left", P.SPRITE, WORK);
+  const toss = P.tossPoint(WIN, "left", P.SPRITE, WORK);
+  const wall = P.wallPoint(WIN, 0, "left", P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const circle = P.circlePoint(WIN, 0, P.SPRITE, WORK, 1);
+  const rise = P.risePoint(WIN, "left", 0, P.SPRITE, WORK);
+  const flush = P.flushPoint(WIN, 0, P.SPRITE, WORK);
+  const lid = P.lidPoint(WIN, P.SPRITE, WORK);
+  const chart = P.chartPoint(WIN, 0, P.SPRITE, WORK);
+  const stone = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  const mosaic = P.mosaicPoint(WIN, P.SPRITE, WORK);
+  const loop = P.loopPoint(WIN, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.12, P.SPRITE, WORK);
+  assert.equal(top.x, bottom.x, "a vertical pair of moons");
+  assert.equal(left.lift, right.lift, "a horizontal pair of moons");
+  assert.ok(top.lift - bottom.lift > 56, "four moons as a cross");
+  assert.ok(right.x - left.x > 56, "not a column");
+  assert.ok(Math.abs(top.x - rise.x) > 20 || Math.abs(top.lift - rise.lift) > 16, "not Chamber");
+  assert.ok(Math.abs(top.x - flush.x) > 20 || Math.abs(top.lift - flush.lift) > 16, "not Sepia");
+  assert.ok(Math.abs(top.x - lid.x) > 20 || Math.abs(top.lift - lid.lift) > 16, "not Cup");
+  assert.ok(Math.abs(top.x - circle.x) > 20 || Math.abs(top.lift - circle.lift) > 16, "not Coin");
+  assert.ok(Math.abs(top.x - field.x) > 20 || Math.abs(top.lift - field.lift) > 16, "not Flux");
+  assert.ok(Math.abs(top.x - wall.x) > 20 || Math.abs(top.lift - wall.lift) > 16, "not Bloom");
+  assert.ok(Math.abs(top.x - chart.x) > 20 || Math.abs(top.lift - chart.lift) > 16, "not Atlas");
+  assert.ok(Math.abs(top.x - stone.x) > 20 || Math.abs(top.lift - stone.lift) > 16, "not Blush");
+  assert.ok(Math.abs(top.x - mosaic.x) > 20 || Math.abs(top.lift - mosaic.lift) > 16, "not Coral");
+  assert.ok(Math.abs(top.x - loop.x) > 20 || Math.abs(top.lift - loop.lift) > 16, "not Lula");
+  assert.ok(Math.abs(top.lift - sill.lift) > 40, "not a generic sill");
+  assert.ok(Math.abs(top.x - flatten.x) > 20 || Math.abs(top.lift - flatten.lift) > 16, "not Sol");
+  assert.ok(Math.abs(top.lift - drape.lift) > 20, "not Vesper");
+  assert.ok(Math.abs(top.x - toss.x) > 20 || Math.abs(top.lift - toss.lift) > 16, "not Keel");
+  const on0 = P.chimeOnPath(0, { x: 40, lift: 0 }, { x: top.x, lift: top.lift });
+  const on1 = P.chimeOnPath(1, { x: 40, lift: 0 }, { x: top.x, lift: top.lift });
+  assert.ok(Math.abs(on0.lift) < 2);
+  assert.ok(Math.abs(on1.lift - top.lift) < 6);
+  assert.ok(on1.lift - on0.lift > 40, "she drifts onto the first moon");
+  const through = P.chimePath(0.23, top, bottom, left, right);
+  assert.ok(Math.abs(through.x - top.x) < 4, "the first stroke is vertical");
+  assert.ok(through.lift < top.lift - 8 && through.lift > bottom.lift + 8, "through the glass, not around a bowl");
+  const across = P.chimePath(0.87, top, bottom, left, right);
+  assert.ok(Math.abs(across.lift - left.lift) < 8, "the last stroke is horizontal");
+  const pulse0 = P.chimePulsePath(0, { x: right.x, lift: right.lift }, { x: center.x, lift: center.lift });
+  const pulseMid = P.chimePulsePath(0.68, { x: right.x, lift: right.lift }, { x: center.x, lift: center.lift });
+  const pulse1 = P.chimePulsePath(1, { x: right.x, lift: right.lift }, { x: center.x, lift: center.lift });
+  assert.ok(Math.abs(pulse0.x - right.x) < 2);
+  assert.ok(Math.abs(pulse1.x - center.x) < 2);
+  assert.ok(pulseMid.lift > center.lift + 8, "one pulse");
+  const off0 = P.chimeOffPath(0, { x: center.x, lift: center.lift }, { x: center.x + 62, lift: 0 });
+  const off1 = P.chimeOffPath(1, { x: center.x, lift: center.lift }, { x: center.x + 62, lift: 0 });
+  assert.ok(Math.abs(off0.x - center.x) < 2);
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let moonXMin = Infinity;
+  let moonXMax = -Infinity;
+  let moonLiftMin = Infinity;
+  let moonLiftMax = 0;
+  let pulseXMin = Infinity;
+  let pulseXMax = -Infinity;
+  let pulseLiftMin = Infinity;
+  let pulseLiftMax = 0;
+  for (let i = 0; i < 1600 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "rise");
+    assert.notEqual(play.phase, "rise-hold");
+    assert.notEqual(play.phase, "flush");
+    assert.notEqual(play.phase, "flush-hover");
+    assert.notEqual(play.phase, "lid");
+    assert.notEqual(play.phase, "lid-probe");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "wall");
+    assert.notEqual(play.phase, "sill-hop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "chime") {
+      moonXMin = Math.min(moonXMin, play.x);
+      moonXMax = Math.max(moonXMax, play.x);
+      moonLiftMin = Math.min(moonLiftMin, play.lift);
+      moonLiftMax = Math.max(moonLiftMax, play.lift);
+      assert.equal(play.anim, "play", "she rings with no brain");
+    }
+    if (play.phase === "chime-pulse") {
+      pulseXMin = Math.min(pulseXMin, play.x);
+      pulseXMax = Math.max(pulseXMax, play.x);
+      pulseLiftMin = Math.min(pulseLiftMin, play.lift);
+      pulseLiftMax = Math.max(pulseLiftMax, play.lift);
+      assert.equal(play.anim, "play", "one vacant pulse");
+      assert.ok(play.lift > 36, "the pulse is on the glass");
+    }
+  }
+  assert.ok(seen.has("chime-on"));
+  assert.ok(seen.has("chime"));
+  assert.ok(seen.has("chime-pulse"));
+  assert.ok(seen.has("chime-off"));
+  assert.ok(!seen.has("rise"), "not Chamber");
+  assert.ok(!seen.has("flush"), "not Sepia");
+  assert.ok(!seen.has("lid"), "not Cup");
+  assert.ok(!seen.has("circle"), "not Coin");
+  assert.ok(!seen.has("field-hold"), "not Flux");
+  assert.ok(!seen.has("sill-walk"), "not a generic sill");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.ok(moonXMax - moonXMin > 56, "left and right moons");
+  assert.ok(moonLiftMax - moonLiftMin > 56, "top and bottom moons");
+  assert.ok(pulseLiftMax - pulseLiftMin > 10, "one pulse");
+  assert.ok(pulseXMax - pulseXMin < 48, "the pulse stays in the glass");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Pulse's saucer; sleep, card, and hide abort; Pulse never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "moon_jelly", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 420 && play.phase !== "chime-pulse"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "chime-pulse");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "chime-pulse");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "chime-off");
   assert.equal(play.abort, true);
 });
