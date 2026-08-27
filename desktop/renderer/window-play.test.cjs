@@ -10,14 +10,15 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; other guests walk a sill", () => {
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; other guests walk a sill", () => {
   assert.equal(P.playFor("red_panda"), "cling-dive");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("volt_dragon"), "coil");
   assert.equal(P.playFor("trace_dragon"), "path");
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.playFor("spark_dragon"), "sill");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("flux_dragon"), "sill");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -57,6 +58,15 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.notEqual(trace.kind, "ridge");
   assert.notEqual(trace.kind, "coil");
   assert.notEqual(trace.kind, "sill");
+  const flux = P.pickTarget([WIN], 80, "flux_dragon", WORK, P.SPRITE, { leave: "drift" });
+  assert.ok(flux);
+  assert.equal(flux.kind, "field");
+  assert.equal(flux.side, "glass");
+  assert.notEqual(flux.kind, "cling-dive");
+  assert.notEqual(flux.kind, "ridge");
+  assert.notEqual(flux.kind, "coil");
+  assert.notEqual(flux.kind, "path");
+  assert.notEqual(flux.kind, "sill");
 });
 
 test("Rui approaches a window side, clings, hangs, then dives with a spin path", () => {
@@ -429,6 +439,101 @@ test("an asleep Trace never starts a path, and sleep aborts a walk", () => {
   assert.equal(play.abort, true);
 });
 
+test("Flux occupies the window glass as a field, holds, then drifts or drops — not a cling, ridge, coil, path, or sill", () => {
+  const target = P.pickTarget([WIN], 40, "flux_dragon", WORK, P.SPRITE, { leave: "drift" });
+  assert.ok(target);
+  assert.equal(target.kind, "field");
+  assert.equal(target.side, "glass");
+  assert.equal(target.spin, "none");
+  const cling = P.sideHold(WIN, "left", P.SPRITE, WORK);
+  const ridge = P.ridgePoint(WIN, 0.5, P.SPRITE, WORK);
+  const sill = P.sillPoint(WIN, 0.5, P.SPRITE, WORK);
+  const coil = P.coilPoint(WIN, "left", P.SPRITE, WORK);
+  const pathMid = P.pathPoint(WIN, 0.5, P.SPRITE, WORK, "left");
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  assert.equal(target.holdLift, field.lift);
+  assert.equal(target.holdX, field.x);
+  assert.ok(field.lift < cling.lift, "the field sits in the glass, not Rui's mid-side cling");
+  assert.ok(field.lift < ridge.lift - 40, "the field is not the title-bar ridge");
+  assert.ok(field.lift < sill.lift - 40, "the field is not the inner sill");
+  assert.ok(Math.abs(field.x - coil.x) > 40, "not Volt's corner wrap");
+  assert.ok(Math.abs(field.x - pathMid.x) > 20 || Math.abs(field.lift - pathMid.lift) > 40, "not Trace's outline");
+  assert.ok(field.x > WIN.x && field.x + P.SPRITE < WIN.x + WIN.width, "the hold stays inside the rect");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let holdLift = 0;
+  let offRot = 0;
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "field-hold") {
+      holdLift = play.lift;
+      assert.equal(play.anim, "sit");
+      assert.equal(play.rot, 0);
+    }
+    if (play.phase === "field-off") offRot = Math.max(offRot, Math.abs(play.rot));
+  }
+  assert.ok(holdLift > 40, "Flux holds in the window glass");
+  assert.equal(offRot, 0, "a drift is not a spin dive");
+  assert.ok(seen.has("field-on"));
+  assert.ok(seen.has("field-hold"));
+  assert.ok(seen.has("field-off"));
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("Flux can drop off the field without a spin", () => {
+  const target = P.pickTarget([WIN], 200, "flux_dragon", WORK, P.SPRITE, { leave: "drop" });
+  let play = P.beginPlay(target, target.approachX);
+  let dropRot = 0;
+  const seen = new Set();
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+    if (play.phase === "field-off") dropRot = Math.max(dropRot, Math.abs(play.rot));
+  }
+  assert.ok(seen.has("field-hold"));
+  assert.ok(seen.has("field-off"));
+  assert.equal(dropRot, 0);
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Flux's field hold", () => {
+  const target = P.pickTarget([WIN], 200, "flux_dragon", WORK, P.SPRITE, { leave: "drift" });
+  let play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: 0 }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  play = P.stepPlay(play, 0.9, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "field-hold");
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "field-hold");
+  assert.ok(Math.abs(play.target.holdX - target.holdX) > 40);
+  assert.equal(play.x, play.target.holdX);
+});
+
+test("an asleep Flux never starts a field, and sleep aborts a hold", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.shouldAbort({ cmd: "play" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ cmd: "rest" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 40, "flux_dragon", WORK, P.SPRITE, { leave: "drift" });
+  let play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: 0 }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "field-on");
+  play = P.stepPlay(play, 0.6, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done");
+  assert.equal(play.abort, true);
+});
+
 test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /PetWindowPlay/);
   assert.match(petSrc, /beginPlay/);
@@ -436,6 +541,7 @@ test("the overlay and the demo share the window-play door", () => {
   assert.match(petSrc, /playFor/);
   assert.match(petSrc, /coil-on|coil-off/);
   assert.match(petSrc, /path-on|path-off/);
+  assert.match(petSrc, /field-on|field-off/);
   assert.match(htmlSrc, /window-play\.js/);
   assert.doesNotMatch(petSrc, /sprites\/red_panda\/.*write|createCanvas/);
   assert.doesNotMatch(petSrc, /sprites\/volt_dragon\/.*write|createCanvas/);

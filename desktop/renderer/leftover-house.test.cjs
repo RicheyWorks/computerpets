@@ -34,6 +34,11 @@ test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () 
   assert.match(petSrc, /stealDeskRibbon/);
   assert.match(petSrc, /playWindows/);
   assert.match(petSrc, /PetRuiTricks/);
+  assert.match(petSrc, /beginHappy/);
+  assert.match(petSrc, /ruiSleepBout/);
+  assert.match(petSrc, /hostSleeping/);
+  assert.match(readFileSync(join(__dirname, "rui-tricks.js"), "utf8"), /HAPPY\s*=/);
+  assert.match(readFileSync(join(__dirname, "bird-fly.js"), "utf8"), /PERCH_HOST|approach-perch/);
   assert.match(petSrc, /PetDeskHouse\.playStep/);
   assert.deepEqual(C.MUTE_BUSES, ["talk", "special", "weather", "treats", "steps", "music"]);
 });

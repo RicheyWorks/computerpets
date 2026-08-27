@@ -16,7 +16,7 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; a cat stays on the sill door", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; a cat stays on the sill door", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -24,8 +24,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("volt_dragon"), Overlay.playFor("volt_dragon"));
   assert.equal(P.playFor("trace_dragon"), "path");
   assert.equal(P.playFor("trace_dragon"), Overlay.playFor("trace_dragon"));
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.playFor("flux_dragon"), Overlay.playFor("flux_dragon"));
+  assert.equal(P.playFor("spark_dragon"), "sill");
   assert.equal(P.playFor("cat"), "sill");
-  assert.equal(P.playFor("flux_dragon"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -42,6 +44,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   const deskPath = Overlay.pathPoint(WIN, 0.5, 176, WORK, "left");
   assert.equal(webPath.lift, deskPath.lift);
   assert.equal(webPath.x, deskPath.x);
+  const webField = P.fieldPoint(WIN, 176, WORK);
+  const deskField = Overlay.fieldPoint(WIN, 176, WORK);
+  assert.equal(webField.lift, deskField.lift);
+  assert.equal(webField.x, deskField.x);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -123,5 +129,31 @@ test("the demo window plate walks Trace's path the same way", () => {
   assert.ok(seen.has("path-walk"));
   assert.ok(seen.has("path-sit"));
   assert.ok(seen.has("path-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Flux's field the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /field-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "flux_dragon", WORK, 176, { leave: "drift" });
+  const target = P.pickTarget([WIN], 40, "flux_dragon", WORK, 176, { leave: "drift" });
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "dive");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "sill-walk");
+  }
+  assert.ok(seen.has("field-on"));
+  assert.ok(seen.has("field-hold"));
+  assert.ok(seen.has("field-off"));
   assert.equal(play.phase, "done");
 });

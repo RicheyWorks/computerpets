@@ -33,3 +33,29 @@ test("a fly-by enters, hovers, cruises, and calls", () => {
   const hidden = F.stepFly(fly, 0.1, 800, 480, { hidden: true });
   assert.equal(hidden.phase, "done");
 });
+
+test("when Rui sleeps Sip comes over and perches — she does not cruise off", () => {
+  assert.equal(F.PERCH_HOST, "red_panda");
+  assert.equal(F.shouldPerch({ hostKey: "red_panda", hostSleeping: true }), true);
+  assert.equal(F.shouldPerch({ hostKey: "red_panda", hostSleeping: false }), false);
+  assert.equal(F.shouldPerch({ hostKey: "flux_dragon", hostSleeping: true }), false);
+  assert.equal(Overlay.shouldPerch({ hostKey: "red_panda", hostSleeping: true }), true);
+  const hold = F.perchPoint(200, 1, 0);
+  const deskHold = Overlay.perchPoint(200, 1, 0);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.lift > 40, "the perch is his back or shoulder, not the floor");
+  let fly = F.beginFly(800, 480, true);
+  fly = F.stepFly(fly, 0.2, 800, 480, { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 });
+  assert.equal(fly.phase, "approach-perch");
+  for (let i = 0; i < 40 && fly.phase !== "perch"; i++) {
+    fly = F.stepFly(fly, 0.05, 800, 480, { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 });
+  }
+  assert.equal(fly.phase, "perch");
+  const parked = fly;
+  fly = F.stepFly(fly, 3, 800, 480, { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 });
+  assert.equal(fly.phase, "perch");
+  assert.ok(Math.abs(fly.x - parked.x) < 8, "a chill is not a cruise");
+  fly = F.stepFly(fly, 0.1, 800, 480, { hostKey: "red_panda", hostSleeping: false, hostX: 200, hostFacing: 1, hostLift: 0 });
+  assert.equal(fly.phase, "lift");
+});

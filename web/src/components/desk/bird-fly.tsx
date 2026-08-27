@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { livingByKey } from "@/lib/pets/living";
 import { beginFly, FLY_BIRD_KEY, FLY_BIRD_NAME, markCalled, shouldCall, stepFly, stillVisible } from "@/lib/pets/bird-fly";
 import { playVoice } from "@/lib/pets/desk-audio";
@@ -7,14 +7,24 @@ export function BirdFlyer({
   hidden,
   startId,
   onVisible,
+  hostKey,
+  hostSleeping,
+  hostPoseRef,
 }: {
   hidden?: boolean;
   startId: number;
   onVisible?: (on: boolean) => void;
+  hostKey?: string;
+  hostSleeping?: boolean;
+  hostPoseRef?: RefObject<{ x: number; facing: 1 | -1 }>;
 }) {
   const guest = livingByKey(FLY_BIRD_KEY);
   const img = useRef<HTMLImageElement>(null);
   const [on, setOn] = useState(false);
+  const sleepRef = useRef(hostSleeping);
+  const keyRef = useRef(hostKey);
+  sleepRef.current = hostSleeping;
+  keyRef.current = hostKey;
 
   useEffect(() => {
     if (hidden || !startId) {
@@ -35,7 +45,15 @@ export function BirdFlyer({
     const tick = (now: number) => {
       const dt = Math.min(0.08, (now - last) / 1000);
       last = now;
-      fly = stepFly(fly, dt, window.innerWidth, window.innerHeight, { hidden });
+      const pose = hostPoseRef?.current;
+      fly = stepFly(fly, dt, window.innerWidth, window.innerHeight, {
+        hidden,
+        hostKey: keyRef.current,
+        hostSleeping: !!sleepRef.current,
+        hostX: pose?.x,
+        hostLift: 0,
+        hostFacing: pose?.facing,
+      });
       if (!stillVisible(fly)) {
         setOn(false);
         onVisible?.(false);
@@ -59,7 +77,7 @@ export function BirdFlyer({
     };
     raf = window.requestAnimationFrame(tick);
     return () => window.cancelAnimationFrame(raf);
-  }, [guest.sprites.idle, guest.sprites.play, hidden, onVisible, startId]);
+  }, [guest.sprites.idle, guest.sprites.play, hidden, hostPoseRef, onVisible, startId]);
 
   if (!on && !startId) return null;
   return (
