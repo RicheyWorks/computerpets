@@ -1,7 +1,7 @@
 /** Keeper-card desk controls. Same truth as the overlay card. Persist on the machine. */
-import { parseAreas } from "./weather-areas";
-import { parseStep } from "./house-sounds";
-import { parseMusic } from "./house-music";
+import { parseAreas } from "./weather-areas.ts";
+import { parseStep } from "./house-sounds.ts";
+import { parseMusic } from "./house-music.ts";
 
 export const CARD_STORE = "computerpets.card.v1";
 export const MAX_LINES = 12;

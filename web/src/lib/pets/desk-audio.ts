@@ -1,5 +1,5 @@
 import { isMuted, loadCard, guestOf, type SoundKind } from "./card.ts";
-import { stepOf, stepSrc, voiceSrc, type StepKind } from "./house-sounds";
+import { stepOf, stepSrc, voiceSrc, type StepKind } from "./house-sounds.ts";
 
 type Kind = SoundKind | "step" | "voice" | "call" | "music" | "radio";
 
