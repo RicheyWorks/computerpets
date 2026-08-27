@@ -98,6 +98,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("red_tail"), "soar");
   assert.equal(P.playFor("chickadee"), "cache");
   assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("mallard"), "tip");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -16515,7 +16516,8 @@ test("Brick pulls a window stool as a lawn: hop onto the stool, listen, pull onc
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("mallard"), "sill");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("canada_goose"), "sill");
   assert.equal(P.playFor("squirrel"), "sill");
   const target = P.pickTarget([WIN], 80, "robin", WORK, P.SPRITE);
   assert.ok(target);
@@ -16662,5 +16664,183 @@ test("a moved window refits Brick's lawn; sleep, card, and hide abort; Brick nev
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "pull-off");
+  assert.equal(play.abort, true);
+});
+
+test("Drake tips a lower sash light as an ink dish: waddle onto the glass as still ink, paddle, tip once, then waddle off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("crow"), "caw");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("penguin"), "bow");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("stickleback"), "glue");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("canada_goose"), "sill");
+  const target = P.pickTarget([WIN], 80, "mallard", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "tip");
+  assert.equal(target.side, "dish");
+  assert.equal(target.leave, "ink");
+  assert.notEqual(target.kind, "drake");
+  assert.notEqual(target.kind, "dabble");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "soar");
+  assert.notEqual(target.kind, "circle");
+  assert.notEqual(target.kind, "open");
+  assert.notEqual(target.kind, "chime");
+  assert.notEqual(target.kind, "sill");
+  assert.notEqual(target.kind, "honk");
+  assert.notEqual(target.kind, "drum");
+  assert.notEqual(target.kind, "sip");
+  assert.notEqual(target.kind, "hover");
+  assert.ok(target.holdLift > 28, "she tips a dish of glass, not the floor");
+  assert.ok(P.DUR.tip > P.DUR.tipHold, "the tip is the tell; the dish sit is the hold after");
+  assert.ok(P.DUR.tipOn !== P.DUR.pullOn);
+  assert.ok(P.DUR.tipOn !== P.DUR.cacheOn);
+  assert.ok(P.DUR.tipOn !== P.DUR.soarOn);
+  assert.ok(P.DUR.tipOn !== P.DUR.circleOn);
+  assert.ok(P.DUR.tipOn !== P.DUR.openOn);
+  assert.ok(P.DUR.tipOn !== P.DUR.chimeOn);
+  assert.ok(P.DUR.tipOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.tip !== P.DUR.pull);
+  assert.ok(P.DUR.tip !== P.DUR.cache);
+  assert.ok(P.DUR.tip !== P.DUR.circle);
+  assert.ok(P.DUR.tip !== P.DUR.open);
+  assert.ok(P.DUR.tipHold !== P.DUR.pullHold);
+  assert.ok(P.DUR.tipOff !== P.DUR.pullOff);
+  assert.ok(P.DUR.tipOff !== P.DUR.sillDown);
+  const dish = P.tipPoint(WIN, P.SPRITE, WORK);
+  const lawn = P.pullPoint(WIN, P.SPRITE, WORK);
+  const cup = P.cachePoint(WIN, P.SPRITE, WORK);
+  const pad = P.openPoint(WIN, P.SPRITE, WORK);
+  const bowl = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const pan = P.fillPoint(WIN, P.SPRITE, WORK);
+  const moon = P.chimePoint(WIN, 0, P.SPRITE, WORK);
+  const acorn = P.seedPoint(WIN, P.SPRITE, WORK);
+  const watch = P.watchPoint(WIN, P.SPRITE, WORK);
+  const post = P.soarPoint(WIN, P.SPRITE, WORK);
+  const perch = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  const rock = P.bowPoint(WIN, P.SPRITE, WORK);
+  assert.ok(dish.lift > lawn.lift + 80, "a glass dish, not Brick's stool lawn");
+  assert.ok(dish.lift < cup.lift - 20, "not Dee's meeting-rail nosing");
+  assert.ok(Math.abs(dish.x - pad.x) > 20 || Math.abs(dish.lift - pad.lift) > 12, "not Disk's ink-dish pad");
+  assert.ok(Math.abs(dish.x - bowl.x) > 40, "not Coin's circling bowl");
+  assert.ok(dish.lift > pan.lift + 40, "not Well's sill pan");
+  assert.ok(Math.abs(dish.x - moon.x) > 40 || Math.abs(dish.lift - moon.lift) > 20, "not Pulse's glass of water");
+  assert.ok(Math.abs(dish.x - acorn.x) > 40, "not Mast's acorn dish");
+  assert.ok(dish.lift > watch.lift + 40, "not Pip's floor");
+  assert.ok(Math.abs(dish.x - post.x) > 40, "not Hook's lamp-post stile");
+  assert.ok(Math.abs(dish.x - perch.x) > 40, "not Echo's shade");
+  assert.ok(Math.abs(dish.x - rock.x) > 20 || Math.abs(dish.lift - rock.lift) > 12, "not Peck's landing rock");
+  const waddleOn = P.tipOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const waddleEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  const hopOn = P.pullOnPath(0.25, { x: 40, lift: 0 }, { x: lawn.x, lift: lawn.lift });
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(waddleOn.lift - dish.lift * waddleEase < 8, "a waddle onto the dish, not a hop");
+  assert.ok(waddleOn.lift - dish.lift * waddleEase > 1.5, "the waddle still has a step");
+  assert.ok(Math.abs(waddleOn.x - (40 + (dish.x - 40) * waddleEase)) > 3, "a side-to-side waddle");
+  assert.ok(hopOn.lift - lawn.lift * hopEase > 6, "Brick still hops");
+  const paddle = P.tipPath(0.1);
+  const dunk = P.tipPath(0.38);
+  const holdTip = P.tipPath(0.54);
+  const right = P.tipPath(0.92);
+  const yank = P.pullPath(0.42);
+  const bloom = P.openPath(0.52);
+  assert.ok(paddle.lift > 1, "she paddles the ink first");
+  assert.ok(Math.abs(paddle.rot) < 10, "a surface dabble, not a stoop");
+  assert.ok(dunk.lift < -12, "then she tips once");
+  assert.ok(dunk.rot > 28, "tail up; the mallard upend");
+  assert.ok(holdTip.lift < -20, "the bill stays in the ink");
+  assert.ok(holdTip.rot > 40, "one tip, held");
+  assert.ok(right.lift > dunk.lift + 10, "she rights herself");
+  assert.ok(dunk.lift < yank.lift - 4, "a tip, not Brick's worm yank");
+  assert.ok(dunk.rot > yank.rot + 10, "an upend, not a pull");
+  assert.ok(dunk.lift < bloom.lift - 20, "a tip into the ink, not Disk's open");
+  const hold = P.tipHoldPath(0.5);
+  assert.ok(hold.lift < 3, "she sits the dish; she does not flare");
+  assert.ok(Math.abs(hold.rot) < 8, "a green head, level again");
+  const off0 = P.tipOffPath(0, { x: dish.x, lift: dish.lift + 1.1 }, { x: dish.x + 44, lift: 0 });
+  const offMid = P.tipOffPath(0.5, { x: dish.x, lift: dish.lift + 1.1 }, { x: dish.x + 44, lift: 0 });
+  const off1 = P.tipOffPath(1, { x: dish.x, lift: dish.lift + 1.1 }, { x: dish.x + 44, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - dish.x) < 2);
+  assert.ok(offMid.lift - (dish.lift + 1.1) * (1 - midEase) < 8, "a waddle off, not a hop");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let tipLiftMin = Infinity;
+  let tipRotMax = 0;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "pull");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "soar");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "open");
+    assert.notEqual(play.phase, "chime");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "tip") {
+      tipLiftMin = Math.min(tipLiftMin, play.lift - play.target.holdLift);
+      tipRotMax = Math.max(tipRotMax, Math.abs(play.rot));
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "tip-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "tip-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift < 4, "she sits the dish");
+    }
+  }
+  assert.ok(seen.has("tip-on"));
+  assert.ok(seen.has("tip"));
+  assert.ok(seen.has("tip-hold"));
+  assert.ok(seen.has("tip-off"));
+  assert.ok(tipLiftMin < -20, "she tips into the ink");
+  assert.ok(tipRotMax > 40, "the tail goes up once");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Drake's dish; sleep, card, and hide abort; Drake never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "mallard", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 720 && play.phase !== "tip"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "tip");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "tip");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "tip-off");
   assert.equal(play.abort, true);
 });
