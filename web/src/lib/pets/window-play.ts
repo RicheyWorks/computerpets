@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Wick threads the sash-sill gap as a tube, then dashes off. Burr shuffles to a window, snuffles the foot of the pane, curls into a ball against the glass, waits, then uncurls and shuffles off. Floss hops onto a window meeting rail as a dust tray, rolls in the sash-dust, fluffs, then hops down. Bloom drifts onto a window as a cistern wall, walks the pane (a salamander on glass), then sinks off. Keel hops onto a window cornice, tosses fruit from the bill, then hops down. Sol climbs a sun-warmed pane, head-bobs once, flattens as the living ornament, then climbs down. Vesper drapes a window lintel as a sleeping wyrm, then slips down. Ember banks as a coal on the window ash, kindles, then returns. Nori buns in a sash well as an inkwell hide, then unrolls. Saffron writes an S-curve along the sash as a pencil-tray canyon, then finishes. Bandit inspects a window jamb as a ruler, ticks the frame in bands, then closes. Jade saddles a casement stay as a lamp-arm, folds in half, then unfolds. Bluff hops onto a window stool as an eraser-dish stage, flips belly-up, holds the death, then rights himself. Sash patrols a damp moss-cup along the condensation channel, pauses, then finishes the lap. Lula pours onto a window apron as a blotter river, loops, holds the weight, then lets go. Coral tiles a window muntin as a stamp box, flashes the tricolor rumor, then stays kind. Blush stones a window sill horn as a pink desert rock, tucks, holds, then inches off. Atlas charts a window transom as a map shelf, climbs the jamb as a tree, unrolls the carpet, then gathers off. Cup lids a window sash latch as a teacup: crawl to the latch, taste the lever as a lid, hide in the latch cup, then jet off. Sepia flushes a window light as lamp-ripple weather: write the pane, hover a W, then fade. Chamber rises a window jamb as stacked nacre rooms: drift onto the oldest room, rise room by room, occupy the last chamber, then sink. Pulse chimes a window pane as a glass of water: drift onto the first moon, ring four moons as a cross, pulse once, then drift. Ochre reefs a window pane as a damp blotter: creep onto the wet glass, plant five arms, remain, then uncling. Tenant knobs a window sash lift as a vacant shell: shuffle onto the lift, measure the mouth, try the abdomen, reject it, then drop. Ledger plows a window stool as a sand tray: bury onto the wood, book-gills read the grain, hold the helmet, then unbury. Anchor hitches a window parting bead as a pencil: hover to the bead, wrap the tail, hold the question mark, then unhitch. Kite barrels a window pane as the sky of a bowl: soar a length of sky, barrel once, then glide. Door gapes a window sash-jamb crack as a book crevice: slip into the crack, breathe the gape, dart once, then slip. Felt leans a window meeting rail as blotter felt: carpet the rail, lean toward the lamp, remain, then peel. Vein unfurls a window sash pocket as a damp saucer: slip into the pocket, unfurl black stems first, stay shy, then fold. Fan golds a window lamp-side as autumn: take the lamp-side glass, gold the fans, hold, then fade. Mast seeds a window stool as an acorn dish: take the stool, stand a small height, drop one letter, remain small, then step back. Disk opens a window pane as an ink-dish pad: float the still ink, open once for the lamp, close, remain the floor, then leave for the night. Moth mounts a window jamb as bark: clasp the wood, hang aerial roots in the air, bloom once at dusk, then leave the bark. Arm stores a window stool as a sand tray: plant onto the wood, swell the ribs once, remain a column, then step back later. Snap counts a window meeting rail as a wetland cup: sit the weather groove, wait two hairs, close once, then leave as a leaf. Well fills a window sill pan as a bog cup: settle into the hidden pan, take the rain the sash sheds, remain open, then leave the rain. Dew curls a window glazing rebate as a peat saucer: settle the rebate, glitter the tentacles, curl slowly, then uncurl. Thrum forages a window box as a meadow: hover to the nosing, land a bloom, buzz once, then go home. Auger bores a sash stile as timber: hover to the stile, bore a hole, hover the hole, then leave the hole. Mortar daubs a sash gap as an inkstone cell: hover to the gap, daub a partition, hold the cell, then leave the stone. Disc snips a window-box leaf as foliage: hover to the foliage, snip a circle, carry the disc, then leave for the tube. Pot tends a sash pulley box as a cerumen hollow: hover to the box, knead the wax, remain the store, then leave the nest. Sheen licks a warm pane as a salt glass: hover to the glass, lick once, hold the metal, then leave the rim. Bank digs a window stool as a sand bank: settle onto the wood, sink a shaft, remain in the hole, then leave the tray. Hum drones a window pane as congregation sky: lift into the glass, hang, drone once, then leave the sky. Keep lays a window pane as a wax heart: settle onto the brood just under the meeting rail, walk a short line, lay once, then leave the heart. Wax draws a window pane as a hive frame: attach at the head, draw hex cells down the glass, remain the house, then leave the cavity. Reed plops a window weep as a bank spring: hop to the weep, sit wet at the mouth, then plop off. Pebble puffs a casement leaf as a leaf dish: short-hop onto the leaf, puff, sit dry, then hop off. Eft trails a sash horn as a moss saucer: walk onto the meeting-rail horn, trail the tail, keep the orange, then walk off. Dapple covers a window well as leaf mold: creep into the areaway at the foot of a cellar sash, cover, keep the yellow coins, then leave for the pool. Slip rings a sill throat as a silt tray: press into the kerf, ring through, keep the jaw, then leave the tray. Pinch claws a sill wash as a pebble tray: walk onto the wash, claw a scrap from the grit, hold the scrap, then leave the pebble. Whorl rasps a glass rim as her own house: climb onto the rim, rasp the glass, add a room, then leave the rim. Hinge filters a meeting-rail gap as a silt bed: bury into the gap, filter, clamp shut, then leave the silt. Latch drinks a sash drip as a damp blotter: loop onto the drip, seal, drink, then let go. Prickle glues a putty fillet as a weed bowl: dart onto the fillet, glue a nest, flare, then dart off. Soot caws a drip cap as a chimney pot: hop onto the cap, tuck a scrap, fan, caw, then hop off. Wedge croaks a high transom as a rafter: hop onto the interior head as a beam, drop the wedge tail, croak, then hop off. Heart hisses a sash reveal as a beam hollow: slip into the jamb return as a nest pocket, turn the heart face, hiss, then slip off. Hook soars a lamp-post stile as lift: take the outside of the stile, ride the lift, stoop once, then glide off. Dee caches a meeting-rail nosing as a twig cup: hop onto the nosing, hide a seed, dee once, then hop off. Brick pulls a window stool as a lawn: hop onto the stool, listen, pull once, then hop off. Drake tips a lower sash light as an ink dish: waddle onto the glass as still ink, paddle, tip once, then waddle off. Vee honks a window apron as a blotter green: walk onto the apron as claimed grass, plant the V, honk once, then walk off. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Wick threads the sash-sill gap as a tube, then dashes off. Burr shuffles to a window, snuffles the foot of the pane, curls into a ball against the glass, waits, then uncurls and shuffles off. Floss hops onto a window meeting rail as a dust tray, rolls in the sash-dust, fluffs, then hops down. Bloom drifts onto a window as a cistern wall, walks the pane (a salamander on glass), then sinks off. Keel hops onto a window cornice, tosses fruit from the bill, then hops down. Sol climbs a sun-warmed pane, head-bobs once, flattens as the living ornament, then climbs down. Vesper drapes a window lintel as a sleeping wyrm, then slips down. Ember banks as a coal on the window ash, kindles, then returns. Nori buns in a sash well as an inkwell hide, then unrolls. Saffron writes an S-curve along the sash as a pencil-tray canyon, then finishes. Bandit inspects a window jamb as a ruler, ticks the frame in bands, then closes. Jade saddles a casement stay as a lamp-arm, folds in half, then unfolds. Bluff hops onto a window stool as an eraser-dish stage, flips belly-up, holds the death, then rights himself. Sash patrols a damp moss-cup along the condensation channel, pauses, then finishes the lap. Lula pours onto a window apron as a blotter river, loops, holds the weight, then lets go. Coral tiles a window muntin as a stamp box, flashes the tricolor rumor, then stays kind. Blush stones a window sill horn as a pink desert rock, tucks, holds, then inches off. Atlas charts a window transom as a map shelf, climbs the jamb as a tree, unrolls the carpet, then gathers off. Cup lids a window sash latch as a teacup: crawl to the latch, taste the lever as a lid, hide in the latch cup, then jet off. Sepia flushes a window light as lamp-ripple weather: write the pane, hover a W, then fade. Chamber rises a window jamb as stacked nacre rooms: drift onto the oldest room, rise room by room, occupy the last chamber, then sink. Pulse chimes a window pane as a glass of water: drift onto the first moon, ring four moons as a cross, pulse once, then drift. Ochre reefs a window pane as a damp blotter: creep onto the wet glass, plant five arms, remain, then uncling. Tenant knobs a window sash lift as a vacant shell: shuffle onto the lift, measure the mouth, try the abdomen, reject it, then drop. Ledger plows a window stool as a sand tray: bury onto the wood, book-gills read the grain, hold the helmet, then unbury. Anchor hitches a window parting bead as a pencil: hover to the bead, wrap the tail, hold the question mark, then unhitch. Kite barrels a window pane as the sky of a bowl: soar a length of sky, barrel once, then glide. Door gapes a window sash-jamb crack as a book crevice: slip into the crack, breathe the gape, dart once, then slip. Felt leans a window meeting rail as blotter felt: carpet the rail, lean toward the lamp, remain, then peel. Vein unfurls a window sash pocket as a damp saucer: slip into the pocket, unfurl black stems first, stay shy, then fold. Fan golds a window lamp-side as autumn: take the lamp-side glass, gold the fans, hold, then fade. Mast seeds a window stool as an acorn dish: take the stool, stand a small height, drop one letter, remain small, then step back. Disk opens a window pane as an ink-dish pad: float the still ink, open once for the lamp, close, remain the floor, then leave for the night. Moth mounts a window jamb as bark: clasp the wood, hang aerial roots in the air, bloom once at dusk, then leave the bark. Arm stores a window stool as a sand tray: plant onto the wood, swell the ribs once, remain a column, then step back later. Snap counts a window meeting rail as a wetland cup: sit the weather groove, wait two hairs, close once, then leave as a leaf. Well fills a window sill pan as a bog cup: settle into the hidden pan, take the rain the sash sheds, remain open, then leave the rain. Dew curls a window glazing rebate as a peat saucer: settle the rebate, glitter the tentacles, curl slowly, then uncurl. Thrum forages a window box as a meadow: hover to the nosing, land a bloom, buzz once, then go home. Auger bores a sash stile as timber: hover to the stile, bore a hole, hover the hole, then leave the hole. Mortar daubs a sash gap as an inkstone cell: hover to the gap, daub a partition, hold the cell, then leave the stone. Disc snips a window-box leaf as foliage: hover to the foliage, snip a circle, carry the disc, then leave for the tube. Pot tends a sash pulley box as a cerumen hollow: hover to the box, knead the wax, remain the store, then leave the nest. Sheen licks a warm pane as a salt glass: hover to the glass, lick once, hold the metal, then leave the rim. Bank digs a window stool as a sand bank: settle onto the wood, sink a shaft, remain in the hole, then leave the tray. Hum drones a window pane as congregation sky: lift into the glass, hang, drone once, then leave the sky. Keep lays a window pane as a wax heart: settle onto the brood just under the meeting rail, walk a short line, lay once, then leave the heart. Wax draws a window pane as a hive frame: attach at the head, draw hex cells down the glass, remain the house, then leave the cavity. Reed plops a window weep as a bank spring: hop to the weep, sit wet at the mouth, then plop off. Pebble puffs a casement leaf as a leaf dish: short-hop onto the leaf, puff, sit dry, then hop off. Eft trails a sash horn as a moss saucer: walk onto the meeting-rail horn, trail the tail, keep the orange, then walk off. Dapple covers a window well as leaf mold: creep into the areaway at the foot of a cellar sash, cover, keep the yellow coins, then leave for the pool. Slip rings a sill throat as a silt tray: press into the kerf, ring through, keep the jaw, then leave the tray. Pinch claws a sill wash as a pebble tray: walk onto the wash, claw a scrap from the grit, hold the scrap, then leave the pebble. Whorl rasps a glass rim as her own house: climb onto the rim, rasp the glass, add a room, then leave the rim. Hinge filters a meeting-rail gap as a silt bed: bury into the gap, filter, clamp shut, then leave the silt. Latch drinks a sash drip as a damp blotter: loop onto the drip, seal, drink, then let go. Prickle glues a putty fillet as a weed bowl: dart onto the fillet, glue a nest, flare, then dart off. Soot caws a drip cap as a chimney pot: hop onto the cap, tuck a scrap, fan, caw, then hop off. Wedge croaks a high transom as a rafter: hop onto the interior head as a beam, drop the wedge tail, croak, then hop off. Heart hisses a sash reveal as a beam hollow: slip into the jamb return as a nest pocket, turn the heart face, hiss, then slip off. Hook soars a lamp-post stile as lift: take the outside of the stile, ride the lift, stoop once, then glide off. Dee caches a meeting-rail nosing as a twig cup: hop onto the nosing, hide a seed, dee once, then hop off. Brick pulls a window stool as a lawn: hop onto the stool, listen, pull once, then hop off. Drake tips a lower sash light as an ink dish: waddle onto the glass as still ink, paddle, tip once, then waddle off. Vee honks a window apron as a blotter green: walk onto the apron as claimed grass, plant the V, honk once, then walk off. Drum drums an upper sash stile as a dead-wood post: hop onto the interior stile, drum a rectangle, flare the crest, then hop off. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -90,6 +90,7 @@ export const CACHE = "cache";
 export const PULL = "pull";
 export const TIP = "tip";
 export const HONK = "honk";
+export const DRUM = "drum";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -430,13 +431,17 @@ export const DUR = {
   honk: 2.68,
   honkHold: 1.78,
   honkOff: 1.12,
+  drumOn: 0.74,
+  drum: 1.96,
+  drumHold: 1.26,
+  drumOff: 0.68,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
   land: 0.18,
 };
 
-export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof WHEEK | typeof BASK | typeof CIRCLE | typeof PERCH | typeof SCENT | typeof BOW | typeof HOOK | typeof THREAD | typeof BALL | typeof DUST | typeof WALL | typeof TOSS | typeof FLATTEN | typeof DRAPE | typeof KINDLE | typeof BUN | typeof WRITE | typeof INSPECT | typeof SADDLE | typeof FLIP | typeof PATROL | typeof LOOP | typeof MOSAIC | typeof STONE | typeof CHART | typeof LID | typeof FLUSH | typeof RISE | typeof CHIME | typeof REEF | typeof KNOB | typeof PLOW | typeof HITCH | typeof BARREL | typeof GAPE | typeof LEAN | typeof UNFURL | typeof GOLD | typeof SEED | typeof OPEN | typeof MOUNT | typeof STORE | typeof COUNT | typeof FILL | typeof CURL | typeof FORAGE | typeof BORE | typeof DAUB | typeof SNIP | typeof TEND | typeof LICK | typeof DIG | typeof DRONE | typeof LAY | typeof DRAW | typeof PLOP | typeof PUFF | typeof TRAIL | typeof COVER | typeof RING | typeof CLAW | typeof RASP | typeof FILTER | typeof DRINK | typeof GLUE | typeof CAW | typeof CROAK | typeof HISS | typeof SOAR | typeof CACHE | typeof PULL | typeof TIP | typeof HONK | typeof SILL | typeof IGNORE;
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof WHEEK | typeof BASK | typeof CIRCLE | typeof PERCH | typeof SCENT | typeof BOW | typeof HOOK | typeof THREAD | typeof BALL | typeof DUST | typeof WALL | typeof TOSS | typeof FLATTEN | typeof DRAPE | typeof KINDLE | typeof BUN | typeof WRITE | typeof INSPECT | typeof SADDLE | typeof FLIP | typeof PATROL | typeof LOOP | typeof MOSAIC | typeof STONE | typeof CHART | typeof LID | typeof FLUSH | typeof RISE | typeof CHIME | typeof REEF | typeof KNOB | typeof PLOW | typeof HITCH | typeof BARREL | typeof GAPE | typeof LEAN | typeof UNFURL | typeof GOLD | typeof SEED | typeof OPEN | typeof MOUNT | typeof STORE | typeof COUNT | typeof FILL | typeof CURL | typeof FORAGE | typeof BORE | typeof DAUB | typeof SNIP | typeof TEND | typeof LICK | typeof DIG | typeof DRONE | typeof LAY | typeof DRAW | typeof PLOP | typeof PUFF | typeof TRAIL | typeof COVER | typeof RING | typeof CLAW | typeof RASP | typeof FILTER | typeof DRINK | typeof GLUE | typeof CAW | typeof CROAK | typeof HISS | typeof SOAR | typeof CACHE | typeof PULL | typeof TIP | typeof HONK | typeof DRUM | typeof SILL | typeof IGNORE;
 export type HoldClip = "jamb" | "sash";
 export type ClickNode = "left" | "right" | "tl" | "tr" | "bl" | "br";
 export type PlayPhase =
@@ -778,6 +783,10 @@ export type PlayPhase =
   | "honk"
   | "honk-hold"
   | "honk-off"
+  | "drum-on"
+  | "drum"
+  | "drum-hold"
+  | "drum-off"
   | "sill-hop"
   | "sill-walk"
   | "sill-down"
@@ -974,6 +983,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "robin") return PULL;
   if (key === "mallard") return TIP;
   if (key === "canada_goose") return HONK;
+  if (key === "pileated") return DRUM;
   return SILL;
 }
 
@@ -1246,6 +1256,7 @@ export function pickTarget(
     if (kind === PULL) return w.width >= 186 && w.height >= 158;
     if (kind === TIP) return w.width >= 188 && w.height >= 172;
     if (kind === HONK) return w.width >= 196 && w.height >= 176;
+    if (kind === DRUM) return w.width >= 192 && w.height >= 220;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -2888,6 +2899,25 @@ export function pickTarget(
     };
   }
 
+  if (kind === DRUM) {
+    const hold = drumPoint(best, size, work);
+    const approachOff = hold.x < workW / 2 ? -52 : 52;
+    const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+    const away = hold.x < workW / 2 ? 46 : -46;
+    return {
+      id: best.id,
+      kind,
+      side: "snag",
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave: "crest",
+      spin: "none",
+    };
+  }
+
+
   if (kind === CURL) {
     const hold = curlPoint(best, size, work);
     const approachOff = hold.x < workW / 2 ? -66 : 66;
@@ -3308,6 +3338,10 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
   }
   if (target.kind === HONK) {
     const hold = honkPoint(win, sprite, work);
+    return { ...target, holdX: hold.x, holdLift: hold.lift };
+  }
+  if (target.kind === DRUM) {
+    const hold = drumPoint(win, sprite, work);
     return { ...target, holdX: hold.x, holdLift: hold.lift };
   }
   const start = sillPoint(win, 0.12, sprite, work);
@@ -9740,6 +9774,94 @@ export function honkOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
+export function drumPoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const workW = work && work.width ? work.width : 1400;
+  const left = win.x + win.width / 2 < workW / 2;
+  const stile = Math.max(16, Math.min(size * 0.14, win.width * 0.08));
+  const x = left ? win.x + stile : win.x + win.width - size - stile;
+  const upper = Math.max(62, win.height * 0.21);
+  const gripY = win.y + upper;
+  const lift = gripLift(gripY, work);
+  const maxLift = (work && work.height ? work.height : 800) - 48;
+  return { x, lift: clamp(lift, 40, maxLift) };
+}
+
+export function drumFace(target: PlayTarget): 1 | -1 {
+  return target.approachX >= target.holdX ? -1 : 1;
+}
+
+export function drumOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  const fromLift = from && from.lift != null ? from.lift : 0;
+  const toLift = to && to.lift != null ? to.lift : 0;
+  const ease = t * t * (3 - 2 * t);
+  const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 17.6 * (1 - t * 0.1);
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + hop,
+    rot: (toX >= fromX ? 1 : -1) * 7 * hop / 17.6,
+  };
+}
+
+export function drumPath(u: number) {
+  const t = Math.max(0, Math.min(1, u));
+  if (t < 0.14) {
+    const s = t / 0.14;
+    const ease = s * s * (3 - 2 * s);
+    return {
+      x: ease * 1.2,
+      lift: ease * 7.6,
+      rot: ease * -8,
+    };
+  }
+  const pecks = (t - 0.14) / 0.86;
+  const n = Math.min(3.999, pecks * 4);
+  const i = Math.floor(n);
+  const s = n - i;
+  const jab = Math.sin(s * Math.PI);
+  const corners = [
+    [0, 0],
+    [6.4, 0.4],
+    [6.0, -8.8],
+    [-0.4, -8.4],
+  ];
+  const cx = corners[i][0];
+  const cy = corners[i][1];
+  return {
+    x: 1.2 + cx + jab * 1.6,
+    lift: 7.6 + cy - jab * 3.4,
+    rot: -8 + (i % 2 === 0 ? -6 : 5) * jab,
+  };
+}
+
+export function drumHoldPath(u: number) {
+  const t = Math.max(0, Math.min(1, u));
+  const breath = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.42;
+  return {
+    x: 0.8,
+    lift: 5.2 + breath,
+    rot: -7.2,
+  };
+}
+
+export function drumOffPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  const fromLift = from && from.lift != null ? from.lift : 0;
+  const toLift = to && to.lift != null ? to.lift : 0;
+  const ease = t * t * (3 - 2 * t);
+  const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 16.2;
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + hop,
+    rot: (toX >= fromX ? 1 : -1) * 6.2 * (1 - ease),
+  };
+}
+
 export function earthStepOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   const t = Math.max(0, Math.min(1, u));
   const fromX = from.x ?? 0;
@@ -9844,7 +9966,7 @@ export function stepPlay(
   if (!play || play.phase === "done") return play;
   const size = sprite == null ? SPRITE : sprite;
   const life = flags || {};
-  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off" && play.phase !== "circle-off" && play.phase !== "perch-off" && play.phase !== "scent-off" && play.phase !== "bow-off" && play.phase !== "hook-off" && play.phase !== "thread-off" && play.phase !== "ball-off" && play.phase !== "dust-off" && play.phase !== "wall-off" && play.phase !== "toss-off" && play.phase !== "flatten-off" && play.phase !== "drape-off" && play.phase !== "kindle-off" && play.phase !== "bun-off" && play.phase !== "write-off" && play.phase !== "inspect-off" && play.phase !== "saddle-off" && play.phase !== "patrol-off" && play.phase !== "loop-off" && play.phase !== "mosaic-off" && play.phase !== "stone-off" && play.phase !== "chart-off" && play.phase !== "lid-off" && play.phase !== "flush-off" && play.phase !== "rise-off" && play.phase !== "chime-off" && play.phase !== "reef-off" && play.phase !== "knob-off" && play.phase !== "plow-off" && play.phase !== "hitch-off" && play.phase !== "barrel-off" && play.phase !== "gape-off" && play.phase !== "lean-off" && play.phase !== "unfurl-off" && play.phase !== "gold-off" && play.phase !== "seed-off" && play.phase !== "open-off" && play.phase !== "mount-off" && play.phase !== "store-off" && play.phase !== "count-off" && play.phase !== "fill-off" && play.phase !== "curl-off" && play.phase !== "forage-off" && play.phase !== "bore-off" && play.phase !== "daub-off" && play.phase !== "snip-off" && play.phase !== "tend-off" && play.phase !== "lick-off" && play.phase !== "dig-off" && play.phase !== "drone-off" && play.phase !== "plop-off" && play.phase !== "puff-off" && play.phase !== "trail-off" && play.phase !== "cover-off" && play.phase !== "ring-off" && play.phase !== "claw-off" && play.phase !== "rasp-off" && play.phase !== "filter-off" && play.phase !== "drink-off" && play.phase !== "glue-off" && play.phase !== "caw-off" && play.phase !== "croak-off" && play.phase !== "hiss-off" && play.phase !== "soar-off" && play.phase !== "cache-off" && play.phase !== "pull-off" && play.phase !== "tip-off" && play.phase !== "honk-off") {
+  if (shouldAbort(life) && play.phase !== "drop" && play.phase !== "dive" && play.phase !== "land" && play.phase !== "ridge-off" && play.phase !== "coil-off" && play.phase !== "path-off" && play.phase !== "field-off" && play.phase !== "crackle-off" && play.phase !== "charge-off" && play.phase !== "orbit-off" && play.phase !== "click-off" && play.phase !== "hold-off" && play.phase !== "earth-off" && play.phase !== "ledge-off" && play.phase !== "watch-off" && play.phase !== "thump-off" && play.phase !== "stash-off" && play.phase !== "wheek-off" && play.phase !== "bask-off" && play.phase !== "circle-off" && play.phase !== "perch-off" && play.phase !== "scent-off" && play.phase !== "bow-off" && play.phase !== "hook-off" && play.phase !== "thread-off" && play.phase !== "ball-off" && play.phase !== "dust-off" && play.phase !== "wall-off" && play.phase !== "toss-off" && play.phase !== "flatten-off" && play.phase !== "drape-off" && play.phase !== "kindle-off" && play.phase !== "bun-off" && play.phase !== "write-off" && play.phase !== "inspect-off" && play.phase !== "saddle-off" && play.phase !== "patrol-off" && play.phase !== "loop-off" && play.phase !== "mosaic-off" && play.phase !== "stone-off" && play.phase !== "chart-off" && play.phase !== "lid-off" && play.phase !== "flush-off" && play.phase !== "rise-off" && play.phase !== "chime-off" && play.phase !== "reef-off" && play.phase !== "knob-off" && play.phase !== "plow-off" && play.phase !== "hitch-off" && play.phase !== "barrel-off" && play.phase !== "gape-off" && play.phase !== "lean-off" && play.phase !== "unfurl-off" && play.phase !== "gold-off" && play.phase !== "seed-off" && play.phase !== "open-off" && play.phase !== "mount-off" && play.phase !== "store-off" && play.phase !== "count-off" && play.phase !== "fill-off" && play.phase !== "curl-off" && play.phase !== "forage-off" && play.phase !== "bore-off" && play.phase !== "daub-off" && play.phase !== "snip-off" && play.phase !== "tend-off" && play.phase !== "lick-off" && play.phase !== "dig-off" && play.phase !== "drone-off" && play.phase !== "plop-off" && play.phase !== "puff-off" && play.phase !== "trail-off" && play.phase !== "cover-off" && play.phase !== "ring-off" && play.phase !== "claw-off" && play.phase !== "rasp-off" && play.phase !== "filter-off" && play.phase !== "drink-off" && play.phase !== "glue-off" && play.phase !== "caw-off" && play.phase !== "croak-off" && play.phase !== "hiss-off" && play.phase !== "soar-off" && play.phase !== "cache-off" && play.phase !== "pull-off" && play.phase !== "tip-off" && play.phase !== "honk-off" && play.phase !== "drum-off") {
     return abortToFloor(play, { x: play.x, lift: play.lift }, work);
   }
   let next: WindowPlay = { ...play, t: play.t + Math.max(0, dt) };
@@ -9852,9 +9974,9 @@ export function stepPlay(
     ? next.target.clickToId
     : next.target.id;
   const win = findWin(windows, lookId);
-  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off" && next.phase !== "thread-off" && next.phase !== "ball-off" && next.phase !== "dust-off" && next.phase !== "wall-off" && next.phase !== "toss-off" && next.phase !== "flatten-off" && next.phase !== "drape-off" && next.phase !== "kindle-off" && next.phase !== "bun-off" && next.phase !== "write-off" && next.phase !== "inspect-off" && next.phase !== "saddle-off" && next.phase !== "patrol-off" && next.phase !== "loop-off" && next.phase !== "mosaic-off" && next.phase !== "stone-off" && next.phase !== "chart-off" && next.phase !== "lid-off" && next.phase !== "flush-off" && next.phase !== "rise-off" && next.phase !== "chime-off" && next.phase !== "reef-off" && next.phase !== "knob-off" && next.phase !== "plow-off" && next.phase !== "hitch-off" && next.phase !== "barrel-off" && next.phase !== "gape-off" && next.phase !== "lean-off" && next.phase !== "unfurl-off" && next.phase !== "gold-off" && next.phase !== "seed-off" && next.phase !== "open-off" && next.phase !== "mount-off" && next.phase !== "store-off" && next.phase !== "count-off" && next.phase !== "fill-off" && next.phase !== "curl-off" && next.phase !== "forage-off" && next.phase !== "bore-off" && next.phase !== "daub-off" && next.phase !== "snip-off" && next.phase !== "tend-off" && next.phase !== "lick-off" && next.phase !== "dig-off" && next.phase !== "drone-off" && next.phase !== "plop-off" && next.phase !== "puff-off" && next.phase !== "trail-off" && next.phase !== "cover-off" && next.phase !== "ring-off" && next.phase !== "claw-off" && next.phase !== "rasp-off" && next.phase !== "filter-off" && next.phase !== "drink-off" && next.phase !== "glue-off" && next.phase !== "caw-off" && next.phase !== "croak-off" && next.phase !== "hiss-off" && next.phase !== "soar-off" && next.phase !== "cache-off" && next.phase !== "pull-off" && next.phase !== "tip-off" && next.phase !== "honk-off") {
+  if (win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off" && next.phase !== "thread-off" && next.phase !== "ball-off" && next.phase !== "dust-off" && next.phase !== "wall-off" && next.phase !== "toss-off" && next.phase !== "flatten-off" && next.phase !== "drape-off" && next.phase !== "kindle-off" && next.phase !== "bun-off" && next.phase !== "write-off" && next.phase !== "inspect-off" && next.phase !== "saddle-off" && next.phase !== "patrol-off" && next.phase !== "loop-off" && next.phase !== "mosaic-off" && next.phase !== "stone-off" && next.phase !== "chart-off" && next.phase !== "lid-off" && next.phase !== "flush-off" && next.phase !== "rise-off" && next.phase !== "chime-off" && next.phase !== "reef-off" && next.phase !== "knob-off" && next.phase !== "plow-off" && next.phase !== "hitch-off" && next.phase !== "barrel-off" && next.phase !== "gape-off" && next.phase !== "lean-off" && next.phase !== "unfurl-off" && next.phase !== "gold-off" && next.phase !== "seed-off" && next.phase !== "open-off" && next.phase !== "mount-off" && next.phase !== "store-off" && next.phase !== "count-off" && next.phase !== "fill-off" && next.phase !== "curl-off" && next.phase !== "forage-off" && next.phase !== "bore-off" && next.phase !== "daub-off" && next.phase !== "snip-off" && next.phase !== "tend-off" && next.phase !== "lick-off" && next.phase !== "dig-off" && next.phase !== "drone-off" && next.phase !== "plop-off" && next.phase !== "puff-off" && next.phase !== "trail-off" && next.phase !== "cover-off" && next.phase !== "ring-off" && next.phase !== "claw-off" && next.phase !== "rasp-off" && next.phase !== "filter-off" && next.phase !== "drink-off" && next.phase !== "glue-off" && next.phase !== "caw-off" && next.phase !== "croak-off" && next.phase !== "hiss-off" && next.phase !== "soar-off" && next.phase !== "cache-off" && next.phase !== "pull-off" && next.phase !== "tip-off" && next.phase !== "honk-off" && next.phase !== "drum-off") {
     next = { ...next, target: refitTarget(next.target, win, size, work, windows) };
-  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off" && next.phase !== "thread-off" && next.phase !== "ball-off" && next.phase !== "dust-off" && next.phase !== "wall-off" && next.phase !== "toss-off" && next.phase !== "flatten-off" && next.phase !== "drape-off" && next.phase !== "kindle-off" && next.phase !== "bun-off" && next.phase !== "write-off" && next.phase !== "inspect-off" && next.phase !== "saddle-off" && next.phase !== "patrol-off" && next.phase !== "loop-off" && next.phase !== "mosaic-off" && next.phase !== "stone-off" && next.phase !== "chart-off" && next.phase !== "lid-off" && next.phase !== "flush-off" && next.phase !== "rise-off" && next.phase !== "chime-off" && next.phase !== "reef-off" && next.phase !== "knob-off" && next.phase !== "plow-off" && next.phase !== "hitch-off" && next.phase !== "barrel-off" && next.phase !== "gape-off" && next.phase !== "lean-off" && next.phase !== "unfurl-off" && next.phase !== "gold-off" && next.phase !== "seed-off" && next.phase !== "open-off" && next.phase !== "mount-off" && next.phase !== "store-off" && next.phase !== "count-off" && next.phase !== "fill-off" && next.phase !== "curl-off" && next.phase !== "forage-off" && next.phase !== "bore-off" && next.phase !== "daub-off" && next.phase !== "snip-off" && next.phase !== "tend-off" && next.phase !== "lick-off" && next.phase !== "dig-off" && next.phase !== "drone-off" && next.phase !== "plop-off" && next.phase !== "puff-off" && next.phase !== "trail-off" && next.phase !== "cover-off" && next.phase !== "ring-off" && next.phase !== "claw-off" && next.phase !== "rasp-off" && next.phase !== "filter-off" && next.phase !== "drink-off" && next.phase !== "glue-off" && next.phase !== "caw-off" && next.phase !== "croak-off" && next.phase !== "hiss-off" && next.phase !== "soar-off" && next.phase !== "cache-off" && next.phase !== "pull-off" && next.phase !== "tip-off" && next.phase !== "honk-off") {
+  } else if (!win && next.phase !== "dive" && next.phase !== "drop" && next.phase !== "land" && next.phase !== "approach" && next.phase !== "ridge-off" && next.phase !== "coil-off" && next.phase !== "path-off" && next.phase !== "field-off" && next.phase !== "crackle-off" && next.phase !== "charge-off" && next.phase !== "orbit-off" && next.phase !== "click-off" && next.phase !== "hold-off" && next.phase !== "earth-off" && next.phase !== "ledge-off" && next.phase !== "watch-off" && next.phase !== "thump-off" && next.phase !== "stash-off" && next.phase !== "wheek-off" && next.phase !== "bask-off" && next.phase !== "circle-off" && next.phase !== "perch-off" && next.phase !== "scent-off" && next.phase !== "bow-off" && next.phase !== "hook-off" && next.phase !== "thread-off" && next.phase !== "ball-off" && next.phase !== "dust-off" && next.phase !== "wall-off" && next.phase !== "toss-off" && next.phase !== "flatten-off" && next.phase !== "drape-off" && next.phase !== "kindle-off" && next.phase !== "bun-off" && next.phase !== "write-off" && next.phase !== "inspect-off" && next.phase !== "saddle-off" && next.phase !== "patrol-off" && next.phase !== "loop-off" && next.phase !== "mosaic-off" && next.phase !== "stone-off" && next.phase !== "chart-off" && next.phase !== "lid-off" && next.phase !== "flush-off" && next.phase !== "rise-off" && next.phase !== "chime-off" && next.phase !== "reef-off" && next.phase !== "knob-off" && next.phase !== "plow-off" && next.phase !== "hitch-off" && next.phase !== "barrel-off" && next.phase !== "gape-off" && next.phase !== "lean-off" && next.phase !== "unfurl-off" && next.phase !== "gold-off" && next.phase !== "seed-off" && next.phase !== "open-off" && next.phase !== "mount-off" && next.phase !== "store-off" && next.phase !== "count-off" && next.phase !== "fill-off" && next.phase !== "curl-off" && next.phase !== "forage-off" && next.phase !== "bore-off" && next.phase !== "daub-off" && next.phase !== "snip-off" && next.phase !== "tend-off" && next.phase !== "lick-off" && next.phase !== "dig-off" && next.phase !== "drone-off" && next.phase !== "plop-off" && next.phase !== "puff-off" && next.phase !== "trail-off" && next.phase !== "cover-off" && next.phase !== "ring-off" && next.phase !== "claw-off" && next.phase !== "rasp-off" && next.phase !== "filter-off" && next.phase !== "drink-off" && next.phase !== "glue-off" && next.phase !== "caw-off" && next.phase !== "croak-off" && next.phase !== "hiss-off" && next.phase !== "soar-off" && next.phase !== "cache-off" && next.phase !== "pull-off" && next.phase !== "tip-off" && next.phase !== "honk-off" && next.phase !== "drum-off") {
     return abortToFloor(next, { x: next.x, lift: next.lift }, work);
   }
 
@@ -10133,6 +10255,9 @@ export function stepPlay(
       }
       if (target.kind === HONK) {
         return goPhase(next, "honk-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "walk", dir);
+      }
+      if (target.kind === DRUM) {
+        return goPhase(next, "drum-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
     }
@@ -15030,6 +15155,64 @@ export function stepPlay(
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = "walk";
+    next.facing = target.landX >= target.holdX ? 1 : -1;
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+
+  if (next.phase === "drum-on") {
+    const face = drumFace(target);
+    const u = next.t / DUR.drumOn;
+    const pose = drumOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = face;
+    if (u >= 1) {
+      return goPhase(next, "drum", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "drum") {
+    const face = drumFace(target);
+    const pose = drumPath(Math.min(1, next.t / DUR.drum));
+    next.x = target.holdX + pose.x * face;
+    next.lift = target.holdLift + pose.lift;
+    next.rot = pose.rot * face;
+    next.anim = "play";
+    next.facing = face;
+    if (next.t >= DUR.drum) {
+      return goPhase(next, "drum-hold", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "drum-hold") {
+    const face = drumFace(target);
+    const pose = drumHoldPath(Math.min(1, next.t / DUR.drumHold));
+    next.x = target.holdX + pose.x * face;
+    next.lift = target.holdLift + pose.lift;
+    next.rot = pose.rot * face;
+    next.anim = "sit";
+    next.facing = face;
+    if (next.t >= DUR.drumHold) {
+      const leaveFace = target.landX >= target.holdX ? 1 : -1;
+      const done = drumHoldPath(1);
+      return goPhase(next, "drum-off", { x: target.holdX + done.x * face, lift: target.holdLift + done.lift }, { x: target.landX, lift: 0 }, "play", leaveFace);
+    }
+    return next;
+  }
+
+  if (next.phase === "drum-off") {
+    const u = next.t / DUR.drumOff;
+    const pose = drumOffPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
     next.facing = target.landX >= target.holdX ? 1 : -1;
     if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
     return next;
