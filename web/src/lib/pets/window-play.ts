@@ -1785,14 +1785,14 @@ export function bowDipPath(u: number) {
   if (t < 0.38) {
     const s = t / 0.38;
     const dip = s * s * (3 - 2 * s);
-    return { lift: -6 * dip, rot: 14 * dip };
+    return { lift: -6 * dip || 0, rot: 14 * dip };
   }
   if (t < 0.55) {
     return { lift: -6, rot: 14 };
   }
   const s = (t - 0.55) / 0.45;
   const up = s * s * (3 - 2 * s);
-  return { lift: -6 * (1 - up), rot: 14 * (1 - up) };
+  return { lift: -6 * (1 - up) || 0, rot: 14 * (1 - up) };
 }
 
 export function bowOffPath(u: number, from: PlayPoint, to: PlayPoint) {
