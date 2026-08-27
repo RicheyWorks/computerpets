@@ -132,6 +132,7 @@ const sim = {
   playWait: 6 + Math.random() * 5,
   trick: null,
   trickWait: 3 + Math.random() * 3,
+  lastTrick: null,
 };
 
 /** Real window rects from main. /demo draws a plate instead. */
@@ -184,6 +185,85 @@ function musicOn() {
   const M = window.PetHouseMusic;
   if (!M || !card || !card.music) return false;
   return !!(card.music.playing && card.music.plugin !== "off" && !(window.PetCard && window.PetCard.isMuted(card.mutes, "music")));
+}
+
+function cardOpen() {
+  return !card.collapsed;
+}
+
+function radioArea() {
+  const A = window.PetWeatherAreas;
+  if (!A) return null;
+  return A.currentArea(A.parseAreas(card));
+}
+
+function fillRadioHits(list, truth, music, stations) {
+  const M = window.PetHouseMusic;
+  if (!M || !list || !truth) return;
+  list.replaceChildren();
+  truth.textContent = "";
+  if (!stations.length) {
+    truth.textContent = M.RADIO_EMPTY;
+    return;
+  }
+  for (const st of stations) {
+    const li = document.createElement("li");
+    const pick = document.createElement("button");
+    pick.type = "button";
+    pick.textContent = st.name;
+    pick.dataset.hit = "1";
+    pick.dataset.on = music.stationId === st.id ? "1" : "0";
+    pick.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      card.music = M.parseMusic({
+        plugin: "radio",
+        stationId: st.id,
+        stationName: st.name,
+        stationUrl: st.url,
+        playing: true,
+      });
+      persistCard();
+      sitMusic();
+    });
+    li.appendChild(pick);
+    list.appendChild(li);
+  }
+}
+
+function lookupRadio(query, list, truth, music) {
+  const M = window.PetHouseMusic;
+  if (!M) return;
+  const area = radioArea();
+  const q = String(query || "");
+  const urls = M.radioSearchUrls ? M.radioSearchUrls(q, area) : [];
+  if (!urls.length) {
+    fillRadioHits(list, truth, music, []);
+    return;
+  }
+  const door = window.desk && window.desk.radioSearch;
+  const work = door
+    ? door(q, area).then((res) => {
+        if (!res || res.ok === false) throw new Error("unread");
+        return Array.isArray(res.stations) ? res.stations : [];
+      })
+    : Promise.all(
+        urls.map((url) =>
+          fetch(url, { cache: "no-store", headers: { Accept: "application/json" } })
+            .then((r) => r.json())
+            .then((json) => M.parseStations(json))
+            .catch(() => null),
+        ),
+      ).then((batches) => {
+        if (batches.every((b) => b == null)) throw new Error("unread");
+        const merged = M.mergeStations ? M.mergeStations(batches.filter(Boolean)) : batches.flat().filter(Boolean);
+        return M.rankStations ? M.rankStations(merged, q, area).slice(0, 16) : merged.slice(0, 16);
+      });
+  work
+    .then((stations) => fillRadioHits(list, truth, music, stations || []))
+    .catch(() => {
+      list.replaceChildren();
+      truth.textContent = M.RADIO_CANT_REACH;
+    });
 }
 
 function skyLabel(w) {
@@ -324,6 +404,9 @@ function openKeeperCard() {
   if (!card.collapsed) return;
   card.collapsed = false;
   persistCard();
+  sim.target = null;
+  sim.waypoints = [];
+  if (sim.anim === "walk" && !life?.asleep) sim.anim = "idle";
 }
 
 function callGuestsFromCard() {
@@ -869,54 +952,22 @@ function paintCard() {
         e.preventDefault();
         e.stopPropagation();
         radioQ = input.value;
-        const urls = M.radioSearchUrls ? M.radioSearchUrls(input.value) : [M.radioSearchUrl(input.value)];
-        Promise.all(
-          urls.map((url) =>
-            fetch(url, { cache: "no-store" })
-              .then((r) => r.json())
-              .then((json) => M.parseStations(json))
-              .catch(() => null),
-          ),
-        )
-          .then((batches) => {
-            if (batches.every((b) => b == null)) throw new Error("unread");
-            const merged = M.mergeStations ? M.mergeStations(batches.filter(Boolean)) : batches.flat().filter(Boolean);
-            const stations = M.rankStations ? M.rankStations(merged, input.value).slice(0, 16) : merged.slice(0, 16);
-            list.replaceChildren();
-            truth.textContent = "";
-            if (!stations.length) {
-              truth.textContent = M.RADIO_EMPTY || M.RADIO_CANT_REACH;
-              return;
-            }
-            for (const st of stations) {
-              const li = document.createElement("li");
-              const pick = document.createElement("button");
-              pick.type = "button";
-              pick.textContent = st.name;
-              pick.dataset.hit = "1";
-              pick.dataset.on = music.stationId === st.id ? "1" : "0";
-              pick.addEventListener("click", (ev) => {
-                ev.stopPropagation();
-                card.music = M.parseMusic({
-                  plugin: "radio",
-                  stationId: st.id,
-                  stationName: st.name,
-                  stationUrl: st.url,
-                  playing: true,
-                });
-                persistCard();
-                sitMusic();
-              });
-              li.appendChild(pick);
-              list.appendChild(li);
-            }
-          })
-          .catch(() => {
-            list.replaceChildren();
-            truth.textContent = M.RADIO_CANT_REACH;
-          });
+        lookupRadio(input.value, list, truth, music);
       });
       form.append(label, find);
+      if (radioArea()) {
+        const local = document.createElement("button");
+        local.type = "button";
+        local.textContent = M.RADIO_LOCAL || "Local";
+        local.dataset.hit = "1";
+        local.addEventListener("click", (e) => {
+          e.stopPropagation();
+          radioQ = "";
+          input.value = "";
+          lookupRadio("", list, truth, music);
+        });
+        form.appendChild(local);
+      }
       hudMusic.append(form, truth, list);
       if (music.stationName) {
         const now = document.createElement("p");
@@ -1407,9 +1458,17 @@ function applyCommand() {
       playWindows(),
       { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
       BASE,
-      { asleep: true, hidden: !!life.hidden, leaving, cmd: "sleep" },
+      { asleep: true, hidden: !!life.hidden, leaving, cmd: "sleep", card: cardOpen() },
       );
     }
+    return;
+  }
+  if (cardOpen() && (sim.cmd === "wander" || sim.cmd === "idle")) {
+    sim.anim = life?.asleep ? "sleep" : "idle";
+    sim.target = null;
+    sim.waypoints = [];
+    sim.pause = 0;
+    sim.lastOrder = sim.order;
     return;
   }
   if (sim.play && (sim.cmd === "wander" || sim.cmd === "idle")) {
@@ -1428,6 +1487,7 @@ function applyCommand() {
     hidden: !!life?.hidden,
     leaving,
     cmd: sim.cmd,
+    card: cardOpen(),
   })) {
     sim.play = window.PetWindowPlay.stepPlay(
       sim.play,
@@ -1436,7 +1496,7 @@ function applyCommand() {
       playWindows(),
       { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
       BASE,
-      { asleep: !!life?.asleep, hidden: !!life?.hidden, leaving, cmd: sim.cmd },
+      { asleep: !!life?.asleep, hidden: !!life?.hidden, leaving, cmd: sim.cmd, card: cardOpen() },
     );
   }
   const width = window.innerWidth;
@@ -1503,6 +1563,8 @@ function applyCommand() {
     sim.acc = 0;
     if (sim.cmd === "sleep") {
       sim.anim = "sleep";
+      const hold = window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length);
+      if (hold != null) sim.frame = hold;
     } else if (sim.cmd === "sit") {
       sim.poseHold = window.PetGait.POSE_HOLD_S;
       sim.pendingPose = sim.cmd;
@@ -1558,7 +1620,8 @@ function pickChoice(id) {
   const picked = window.PetChoice?.guestPick(id);
   closeChoice();
   if (!picked) return;
-  if (picked === "rest") handle("rest");
+  if (picked === "feed") handle("feed");
+  else if (picked === "rest") handle("rest");
   else if (picked === "walk") issue("wander");
   else if (picked === "sit") issue("sit");
   else if (picked === "talk") handle("talk");
@@ -1956,6 +2019,7 @@ function tick(now) {
       hidden: !!life?.hidden,
       leaving,
       cmd: sim.cmd,
+      card: cardOpen(),
     };
     const wins = playWindows();
     const T = window.PetRuiTricks;
@@ -1965,6 +2029,7 @@ function tick(now) {
       leaving,
       cmd: sim.cmd,
       windowPlay: !!sim.play,
+      card: cardOpen(),
     };
     if (sim.trick && T && T.shouldAbort(trickFlags)) {
       sim.trick = T.stepTrick(sim.trick, 0, trickFlags);
@@ -1985,10 +2050,11 @@ function tick(now) {
       sim.x = sim.trick.x;
       if (!life?.asleep) sim.anim = sim.trick.anim;
       if (sim.trick.phase === "done") {
+        sim.lastTrick = sim.trick.kind;
         sim.trick = null;
         sim.land = 1;
         sim.anim = life?.asleep ? "sleep" : "idle";
-        sim.trickWait = T.nextTrickWait(true);
+        sim.trickWait = T.nextTrickWait(true, undefined, sim.lastTrick);
       }
     } else if (
       window.PetWindowPlay &&
@@ -2021,12 +2087,13 @@ function tick(now) {
         leaving,
         cmd: sim.cmd,
         windowPlay: !!sim.play,
+        card: cardOpen(),
       })
     ) {
       sim.trickWait -= dt;
       const musicWantsDance = musicOn() && !sim.trick;
       if (sim.trickWait <= 0 || musicWantsDance) {
-        sim.trick = T.beginTrick(T.pickTrick(undefined, musicOn()), sim.x, sim.facing);
+        sim.trick = T.beginTrick(T.pickTrick(undefined, musicOn(), sim.lastTrick), sim.x, sim.facing);
         if (sim.trick) {
           clearAct();
           sim.target = null;
@@ -2093,7 +2160,7 @@ function tick(now) {
     } else if (!sim.act && (sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
       sim.facing = sim.cursorX >= sim.x + BASE / 2 ? 1 : -1;
     }
-    if (trait.clingy && sim.cursorX != null && !life.hidden && !life.asleep && Math.random() < dt * 0.35) {
+    if (trait.clingy && sim.cursorX != null && !life.hidden && !life.asleep && !cardOpen() && Math.random() < dt * 0.35) {
       const follow = clamp(sim.cursorX - BASE / 2, PAD, maxX);
       if (Math.abs(follow - sim.x) > 80) {
         sim.waypoints = [];
@@ -2116,6 +2183,7 @@ function tick(now) {
       !leaving &&
       !sim.play &&
       !sim.trick &&
+      !cardOpen() &&
       sim.target == null &&
       sim.turnHold <= 0 &&
       sim.pause <= 0 &&
@@ -2140,7 +2208,11 @@ function tick(now) {
     if (sim.shiftAge > 0) sim.shiftAge = Math.max(0, sim.shiftAge - dt);
     if (!leaving && !sim.play && !sim.trick) sim.x = clamp(sim.x, PAD, maxX);
 
-    if (life?.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) sim.anim = "sleep";
+    if (life?.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) {
+      sim.anim = "sleep";
+      const hold = window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length);
+      if (hold != null) sim.frame = hold;
+    }
     const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
     if (fps > 0) {
       sim.acc += dt;
@@ -2149,7 +2221,10 @@ function tick(now) {
         sim.acc -= step;
         const frames = kind.sprites[sim.anim];
         const len = frames.length;
-        if (sim.anim === "sit") sim.frame = Math.min(len - 1, sim.frame + 1);
+        if (sim.anim === "sleep") {
+          const hold = T && T.sleepHoldFrame ? T.sleepHoldFrame(kind.key, len) : null;
+          sim.frame = hold == null ? (sim.frame + 1) % len : hold;
+        } else if (sim.anim === "sit") sim.frame = Math.min(len - 1, sim.frame + 1);
         else if (ONCE.has(sim.anim)) {
           if (sim.frame + 1 >= len) {
             sim.anim = "idle";
@@ -2213,10 +2288,17 @@ function tick(now) {
   const hudW = card.collapsed
     ? 0
     : (window.PetKeeper?.HUD_WIDTH ?? 280);
-  const cardLift = card.collapsed ? 0 : Math.min((hud.offsetHeight || 0) + 16, 360);
+  const choiceW = choiceOpen && choiceEl ? Math.min(168, choiceEl.offsetWidth || 168) : 0;
+  const cardLift = card.collapsed ? 0 : Math.min((hud.offsetHeight || 0) + 16, 220);
   const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
   bubble.style.transform = `translate3d(${bx}px, ${-lift - 10 - cardLift}px, 0)`;
-  hud.style.transform = `translate3d(${clamp(drawX + 4, 8, Math.max(8, width - (hudW + 8)))}px, ${-lift}px, 0)`;
+  let choiceX = clamp(drawX - choiceW - 12, 8, Math.max(8, width - choiceW - 8));
+  let cardX = clamp(drawX + BASE * 0.55, 8, Math.max(8, width - (hudW + 8)));
+  if (!card.collapsed && choiceOpen && hudW && cardX < choiceX + choiceW + 8) {
+    cardX = clamp(choiceX + choiceW + 8, 8, Math.max(8, width - (hudW + 8)));
+  }
+  if (choiceEl && choiceOpen) choiceEl.style.transform = `translate3d(${choiceX}px, 0, 0)`;
+  hud.style.transform = `translate3d(${cardX}px, ${-lift}px, 0)`;
   if (tongueEl) {
     const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
     tongueEl.style.opacity = String(flick);
@@ -2627,6 +2709,10 @@ setInterval(() => {
   if (sim.play || sim.trick) return;
   if (held) {
     issue(held.cmd);
+    return;
+  }
+  if (cardOpen()) {
+    issue("idle");
     return;
   }
   const skyMood = window.PetWeather?.weatherIdle(kind.key, skyOf());

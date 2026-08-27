@@ -49,7 +49,8 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_LABEL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioSearchUrls, rankStations, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_LABEL, RADIO_LOCAL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioSearchUrls, rankStations, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { currentArea, parseAreas } from "@/lib/pets/weather-areas";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
 import { CALL_EMPTY, callKeys, groups as callGroups } from "@/lib/pets/call-guests";
 import { LIVING_KINDS } from "@/lib/pets/living";
@@ -70,6 +71,7 @@ export function KeeperCard({
   onCallBird,
   onCallGuests,
   onMusicChange,
+  onCollapse,
   stayOpen,
   openTick,
   className,
@@ -88,6 +90,7 @@ export function KeeperCard({
   onCallBird?: () => void;
   onCallGuests?: (keys: string[]) => void;
   onMusicChange?: (on: boolean) => void;
+  onCollapse?: () => void;
   stayOpen?: boolean;
   openTick?: number;
   className?: string;
@@ -121,6 +124,51 @@ export function KeeperCard({
   function writeMusic(next: MusicPrefs) {
     write({ ...card, music: next });
     onMusicChange?.(!!next.playing && next.plugin !== "off");
+  }
+
+  function hideCard() {
+    write({ ...card, collapsed: true });
+    onCollapse?.();
+  }
+
+  function weatherRadioArea() {
+    return currentArea(parseAreas(card));
+  }
+
+  function lookupRadio(query: string) {
+    const area = weatherRadioArea();
+    const urls = radioSearchUrls(query, area);
+    if (!urls.length) {
+      setStations([]);
+      setRadioUnread(false);
+      setRadioEmpty(true);
+      return;
+    }
+    void Promise.all(
+      urls.map((url) =>
+        fetch(url, { cache: "no-store", headers: { Accept: "application/json" } })
+          .then((r) => r.json())
+          .then((json) => parseStations(json))
+          .catch(() => null),
+      ),
+    )
+      .then((batches) => {
+        if (batches.every((b) => b == null)) {
+          setRadioUnread(true);
+          setRadioEmpty(false);
+          setStations([]);
+          return;
+        }
+        const merged = mergeStations(batches.filter((b): b is RadioStation[] => !!b));
+        const next = rankStations(merged, query, area).slice(0, 16);
+        setStations(next);
+        setRadioUnread(false);
+        setRadioEmpty(!next.length);
+      })
+      .catch(() => {
+        setRadioUnread(true);
+        setRadioEmpty(false);
+      });
   }
 
   useEffect(() => {
@@ -242,7 +290,7 @@ export function KeeperCard({
       onClick={(e) => {
         const hit = (e.target as HTMLElement).closest("button, input, label, select, [data-care]");
         if (hit) return;
-        write({ ...card, collapsed: true });
+        hideCard();
       }}
     >
       <button
@@ -252,7 +300,7 @@ export function KeeperCard({
         aria-expanded="true"
         onClick={(e) => {
           e.stopPropagation();
-          write({ ...card, collapsed: true });
+          hideCard();
         }}
       >
         <p className="keeper-kicker">{KEEPER_KICKER}</p>
@@ -507,31 +555,7 @@ export function KeeperCard({
                     onSubmit={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      void Promise.all(
-                        radioSearchUrls(radioQ).map((url) =>
-                          fetch(url)
-                            .then((r) => r.json())
-                            .then((json) => parseStations(json))
-                            .catch(() => null),
-                        ),
-                      )
-                        .then((batches) => {
-                          if (batches.every((b) => b == null)) {
-                            setRadioUnread(true);
-                            setRadioEmpty(false);
-                            setStations([]);
-                            return;
-                          }
-                          const merged = mergeStations(batches.filter((b): b is RadioStation[] => !!b));
-                          const next = rankStations(merged, radioQ).slice(0, 16);
-                          setStations(next);
-                          setRadioUnread(false);
-                          setRadioEmpty(!next.length);
-                        })
-                        .catch(() => {
-                          setRadioUnread(true);
-                          setRadioEmpty(false);
-                        });
+                      lookupRadio(radioQ);
                     }}
                   >
                     <label>
@@ -548,6 +572,18 @@ export function KeeperCard({
                       />
                     </label>
                     <button type="submit">Find</button>
+                    {weatherRadioArea() ? (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setRadioQ("");
+                          lookupRadio("");
+                        }}
+                      >
+                        {RADIO_LOCAL}
+                      </button>
+                    ) : null}
                   </form>
                   {radioUnread ? <p className="keeper-truth">{RADIO_CANT_REACH}</p> : null}
                   {radioEmpty ? <p className="keeper-truth">{RADIO_EMPTY}</p> : null}

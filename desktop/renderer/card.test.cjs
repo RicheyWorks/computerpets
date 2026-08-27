@@ -103,7 +103,16 @@ test("an asleep guest keeps the sleep pose and does not flip on the wander tick"
   assert.doesNotMatch(petSrc, /if \(sim\.cmd === "sit" \|\| sim\.cmd === "sleep"\)/);
   assert.match(styleSrc, /data-collapsed/);
   assert.match(styleSrc, /#hud\[data-collapsed="1"\][\s\S]*display:\s*none/);
+  assert.match(styleSrc, /#hud[\s\S]*overflow-y:\s*auto/);
+  assert.match(styleSrc, /#choice[\s\S]*overflow-y:\s*auto/);
   assert.match(petSrc, /openKeeperCard/);
+  assert.match(petSrc, /cardOpen\(\)/);
+  assert.match(petSrc, /desk\.radioSearch/);
+  assert.match(livingSrc, /cardOpen/);
+  assert.match(mainSrc, /radio-search/);
+  assert.match(mainSrc, /RADIO_UA/);
+  assert.match(mainSrc, /sandbox:\s*true/);
+  assert.match(preloadSrc, /radioSearch/);
   assert.equal(C.blankCard().collapsed, true);
 });
 

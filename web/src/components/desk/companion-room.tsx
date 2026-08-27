@@ -176,6 +176,7 @@ export function CompanionRoom({
   const [birdCall, setBirdCall] = useState(1);
   const [calledKeys, setCalledKeys] = useState<string[]>([]);
   const [cardOpenTick, setCardOpenTick] = useState(0);
+  const [cardOpen, setCardOpen] = useState(() => !loadCard().collapsed);
   const [musicOn, setMusicOn] = useState(() => !!loadCard().music?.playing);
   const poseRef = useRef<{ x: number; facing: 1 | -1 }>({ x: 120, facing: 1 });
   const skyNow = (): Weather => weatherOf(new Date(), currentArea({ areas: loadCard().weatherAreas || [], currentId: loadCard().currentAreaId ?? null }) ? liveSky?.sky ?? null : null);
@@ -319,6 +320,10 @@ export function CompanionRoom({
         issue(held.cmd);
         return;
       }
+      if (cardOpen) {
+        issue("idle");
+        return;
+      }
       if (statsRef.current.hunger < 26) {
         say(kind.ambientLine(statsRef.current));
         issue("wander");
@@ -343,7 +348,7 @@ export function CompanionRoom({
       }
     }, 5200);
     return () => window.clearInterval(id);
-  }, [busy, deskOff, issue, say, kind, trait.wander]);
+  }, [busy, deskOff, issue, say, kind, trait.wander, cardOpen]);
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -595,7 +600,8 @@ export function CompanionRoom({
 
   function pickGuest(id: GuestChoiceId) {
     setChoiceOpen(false);
-    if (id === "rest") void tend("rest");
+    if (id === "feed") void feed();
+    else if (id === "rest") void tend("rest");
     else if (id === "walk") issue("wander");
     else if (id === "sit") issue("sit");
     else if (id === "talk") void talk();
@@ -691,6 +697,7 @@ export function CompanionRoom({
         }}
         windows={demoWindow ? deskWindows : []}
         musicOn={kind.key === "red_panda" && musicOn}
+        cardOpen={cardOpen}
         onArrived={() => {
           const act = playClaim("arrive", {
             taken: takenRef.current,
@@ -749,6 +756,7 @@ export function CompanionRoom({
         }}
         onTap={() => {
           saveCard({ ...loadCard(), collapsed: false });
+          setCardOpen(true);
           setCardOpenTick((n) => n + 1);
           if (guestTap() !== "choice") return;
           setChoiceOpen((open) => !open);
@@ -882,6 +890,7 @@ export function CompanionRoom({
             setCalledKeys(keys);
           }}
           openTick={cardOpenTick}
+          onCollapse={() => setCardOpen(false)}
           onMusicChange={(on) => setMusicOn(on)}
         />
         {deskOff ? (

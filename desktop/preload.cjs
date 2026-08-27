@@ -15,6 +15,7 @@ contextBridge.exposeInMainWorld("desk", {
   cardSet: (data) => ipcRenderer.send("card-set", data),
   quit: () => ipcRenderer.send("quit-desk"),
   roster: () => ipcRenderer.invoke("roster-get"),
+  radioSearch: (query, area) => ipcRenderer.invoke("radio-search", query, area),
   licenseStatus: () => ipcRenderer.invoke("license-status"),
   licenseUnlock: (input) => ipcRenderer.invoke("license-unlock", input),
   licenseDownload: () => ipcRenderer.invoke("license-download"),

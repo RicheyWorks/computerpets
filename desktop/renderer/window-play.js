@@ -49,7 +49,7 @@
 
   function canStart(state) {
     if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
+    if (state.asleep || state.hidden || state.leaving || state.card) return false;
     const cmd = String(state.cmd || "");
     if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
     if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
@@ -58,7 +58,7 @@
 
   function shouldAbort(state) {
     if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
+    if (state.asleep || state.hidden || state.leaving || state.card) return true;
     const cmd = String(state.cmd || "");
     return (
       cmd === "sleep" ||

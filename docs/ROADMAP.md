@@ -180,6 +180,7 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [x] Volt (`volt_dragon` / `volt`) coils a real window corner: wrap the top-left or top-right edge-corner, hold, then uncoil off. Not Rui's cling-dive. Not Arc's title-bar ridge. Not the generic sill. Same `playFor` door. `/demo` lockstep. Sleep, hide, leave, rest, the keeper card, and the ribbon still win. Windows first. Mac / Linux window play stays `mac-linux-window-play`. Catalog stays 220. Trace leftover follows.
 - [x] Trace (`trace_dragon` / `trace`) traces a real window path: hop onto the outline, walk the frame (near side up, top across, far side down), sit, then hop or drop off. Not Rui's cling-dive. Not Arc's title-bar ridge. Not Volt's corner coil. Not the generic sill. Same `playFor` door. `/demo` lockstep. Sleep, hide, leave, rest, the keeper card, and the ribbon still win. Windows first. Mac / Linux window play stays `mac-linux-window-play`. Catalog stays 220. Do not start Flux.
 - [x] Desk leftover after weather / Sip / ribbon: a real type-in Radio station box (Radio Browser finds `99.9 seattle fm`, `KEXP`, `seattle`; honest empty / can't-reach), weather area labeled apart from radio and still first-run `no area set`, Call the rest of the 220 (dropdown, name, group string, den picker), no Windows ribbon toast, keeper card pops on a pet click and collapse hides it completely so speech is readable. Overlay + `/demo` lockstep. Catalog stays 220. Sandbox stays on. Trace leftover follows.
+- [x] Desk leftover after #325: Radio Browser finds local stations (`99.9 seattle fm` uses city / state / countrycode, not tag-as-city; overlay search goes through main with a User-Agent). Rui sleep is a real bout — closed-eye lie hold, then stretch and a backflip, no get-up/lie loop. Night rest 22–7 and the keeper Rest hold still win. While the keeper card is open the host stands still. The card and the left choice ribbon scroll so Feed and the top verbs stay hittable. Overlay + `/demo` lockstep. Catalog stays 220. Sandbox stays on. Do not start Flux. Do not retouch Trace's path.
 - [x] Honest Windows desk download teaching: START-HERE / README lead with the real overlay path. Node after the pets-on-the-desk picture. No Store ID. No published `.exe`. `/demo` stays the same house. Catalog stays 220.
 - [x] Overlay finds the roster on Windows: renderer asks main for the house it already read. Sandboxed `file://` fetch is not a door. Catalog stays 220.
 - [ ] Desktop presence is not filesystem theft: no silent read/write/exfil, no keyloggers, no secret capture.
@@ -207,6 +208,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-08-27 (Phase 6 leftover: Trace traces a window path; catalog stays 220)
+**Last Updated:** 2026-08-27 (Phase 6 leftover: local radio, Rui sleep bout, card still + scroll; Trace path already on main; catalog stays 220)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

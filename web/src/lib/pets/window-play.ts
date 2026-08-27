@@ -93,6 +93,7 @@ export type PlayFlags = {
   hidden?: boolean;
   leaving?: boolean;
   cmd?: string;
+  card?: boolean;
 };
 
 function clamp(n: number, a: number, b: number) {
@@ -114,7 +115,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
 
 export function canStart(state: PlayFlags | undefined) {
   if (!state) return false;
-  if (state.asleep || state.hidden || state.leaving) return false;
+  if (state.asleep || state.hidden || state.leaving || state.card) return false;
   const cmd = String(state.cmd || "");
   if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
   if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
@@ -123,7 +124,7 @@ export function canStart(state: PlayFlags | undefined) {
 
 export function shouldAbort(state: PlayFlags | undefined) {
   if (!state) return true;
-  if (state.asleep || state.hidden || state.leaving) return true;
+  if (state.asleep || state.hidden || state.leaving || state.card) return true;
   const cmd = String(state.cmd || "");
   return (
     cmd === "sleep" ||

@@ -15,7 +15,7 @@ You are going to put a ComputerPet **on your real Windows desktop**. Not inside 
 This is the picture. Hold it in your head. The rest of the page is how you get there.
 
 - A pet walks on your **real desktop**. Homework stays homework. The pet is a living sticker on top.
-- A **keeper card** pops up when you **click the animal**. It says their name, whether they are a hatchling or grown, their bond word, and three meters: Hunger, Rest, Bond. Three buttons sit under that: **Feed**, **Play**, **Rest**. Collapse hides the card completely so you can read their words. Voice, color, saved lines, an alarm, a timer, mute, **Call** (any of the 220, or a den such as plant), Rui's radio station box, and **Turn off** sit on the expanded card. Turn off quits the overlay. Start again with `.\desktop.ps1`.
+- A **keeper card** pops up when you **click the animal**. It says their name, whether they are a hatchling or grown, their bond word, and three meters: Hunger, Rest, Bond. Three buttons sit under that: **Feed**, **Play**, **Rest**. The card scrolls if it is taller than the work area, so Feed at the top stays reachable. The left choice ribbon scrolls too. Collapse hides the card completely so you can read their words. While the card is open the host stands still. Voice, color, saved lines, an alarm, a timer, mute, **Call** (any of the 220, or a den such as plant), Rui's radio station box, and **Turn off** sit on the expanded card. Type `99.9 seattle fm` or `KEXP` and Find actually returns stations. Empty is `no station from that look-up`. Unreachable is `can't reach`. A weather area can prefer Local stations. Turn off quits the overlay. Start again with `.\desktop.ps1`.
 - Near the clock (bottom-right) a small ComputerPets tray icon sits. Right-click it. **On the desk** picks Rui, Sip, and the grid ten without scrolling two hundred twenty names: Rui, Sip, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground.
 - Clicks on empty glass pass through to your windows. Hits stay on the pet, the keeper card buttons, treats, and gifts. The floor is the Windows work area — above the taskbar, under the cursor.
 - Rui can jump onto the **side** of a real window, hang on, then drop or dive back to the desk. Arc jumps onto the **top** (title-bar / ridge), holds, then hops or slides off. Volt wraps a **corner** (top-left or top-right), holds, then uncoils off. Trace follows the **outline** as a path, then hops or drops back to the desk. Other guests walk a sill or stay on the floor. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door.
@@ -280,7 +280,7 @@ The pet is on your desk. Now you can care for it.
 
 - **First click** on the pet is a sit. They pause.
 - **Drag** the pet. That is a carry. Put them somewhere else on the screen.
-- **Click the animal** to open the keeper card. **Feed / Play / Rest** are the daily care. Collapse hides the card completely — their spoken words stay readable. **Turn off** quits the overlay.
+- **Click the animal** to open the keeper card. **Feed / Play / Rest** are the daily care. Scroll the card if it runs long. Collapse hides the card completely — their spoken words stay readable. **Turn off** quits the overlay.
 - **Right-click** the pet for the longer care list.
 - Or **right-click the tray icon** by the clock.
 
