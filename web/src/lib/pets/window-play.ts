@@ -6067,7 +6067,11 @@ export function stepPlay(
     next.anim = "sit";
     next.facing = face;
     if (next.t >= DUR.stoneTuck) {
-      return goPhase(next, "stone", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+      const held = goPhase(next, "stone", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+      held.x = target.holdX;
+      held.lift = target.holdLift - 12;
+      held.rot = 14;
+      return held;
     }
     return next;
   }
