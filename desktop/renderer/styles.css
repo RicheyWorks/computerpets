@@ -501,6 +501,10 @@ select {
   left: 0;
   bottom: 178px;
   width: 280px;
+  max-height: calc(100vh - 196px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 14px 16px 15px;
   border-radius: 14px;
   border: 1px solid #3d3831;
@@ -803,15 +807,23 @@ select {
   left: 0;
   bottom: 196px;
   display: none;
-  flex-wrap: wrap;
-  gap: 4px 8px;
-  max-width: 220px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 2px;
+  width: 168px;
+  max-width: 168px;
+  max-height: calc(100vh - 220px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 8px 10px;
   border-radius: 10px;
   border: 1px solid #2a2621;
   background: rgb(22 20 18 / 0.94);
   pointer-events: auto;
   touch-action: manipulation;
+  z-index: 6;
 }
 
 #choice.show {

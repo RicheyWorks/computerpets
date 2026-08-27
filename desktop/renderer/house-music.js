@@ -13,9 +13,36 @@
   const RADIO_CANT_REACH = "can't reach";
   const RADIO_EMPTY = "no station from that look-up";
   const HOUSE_LOOP_LICENSE = "CC0 · house-made";
-  const RADIO_DIR = "https://de1.api.radio-browser.info/json/stations/search";
+  const RADIO_UA = "ComputerPets/0.2 (https://github.com/RicheyWorks/computerpets)";
+  const RADIO_HOSTS = [
+    "https://de1.api.radio-browser.info",
+    "https://de2.api.radio-browser.info",
+    "https://fi1.api.radio-browser.info",
+  ];
+  const RADIO_DIR = `${RADIO_HOSTS[0]}/json/stations/search`;
   const RADIO_LABEL = "Radio station";
   const RADIO_PLACEHOLDER = "Station, city, or 99.9";
+  const RADIO_LOCAL = "Local";
+
+  /** Typed city names only. The house does not guess a city they did not name. */
+  const KNOWN_PLACES = {
+    seattle: { city: "Seattle", state: "Washington", countrycode: "US" },
+  };
+
+  const COUNTRY_CODES = {
+    "united states": "US",
+    usa: "US",
+    us: "US",
+    "united kingdom": "GB",
+    uk: "GB",
+    canada: "CA",
+    australia: "AU",
+    germany: "DE",
+    france: "FR",
+    japan: "JP",
+    ireland: "IE",
+    mexico: "MX",
+  };
 
   function blankMusic() {
     return { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
@@ -48,7 +75,63 @@
     return MUSIC_PLUGINS.find((p) => p.id === id) || MUSIC_PLUGINS[0];
   }
 
-  function parseRadioQuery(query) {
+  function countryCodeOf(raw) {
+    const key = String(raw || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+    if (!key) return "";
+    if (/^[a-z]{2}$/.test(key)) return key.toUpperCase();
+    return COUNTRY_CODES[key] || "";
+  }
+
+  function parseAreaPlace(area) {
+    if (!area || typeof area !== "object") return { city: "", state: "", countrycode: "", lat: null, lon: null };
+    const name = String(area.name || area.query || "")
+      .replace(/\s+/g, " ")
+      .trim();
+    const bits = name
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const city = String(area.query || bits[0] || "").trim();
+    let state = "";
+    let country = "";
+    for (const bit of bits.slice(1)) {
+      if (countryCodeOf(bit)) country = bit;
+      else if (!state) state = bit;
+    }
+    const lat = Number(area.lat);
+    const lon = Number(area.lon);
+    return {
+      city,
+      state,
+      countrycode: countryCodeOf(country) || countryCodeOf(area.countrycode) || "",
+      lat: Number.isFinite(lat) ? lat : null,
+      lon: Number.isFinite(lon) ? lon : null,
+    };
+  }
+
+  function knownPlace(token) {
+    const key = String(token || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .toLowerCase();
+    return KNOWN_PLACES[key] || null;
+  }
+
+  function resolvePlace(place, area) {
+    const named = knownPlace(place);
+    if (named) return { city: named.city, state: named.state, countrycode: named.countrycode };
+    const fromArea = parseAreaPlace(area);
+    if (place && fromArea.city && fromArea.city.toLowerCase() === String(place).toLowerCase()) {
+      return { city: fromArea.city, state: fromArea.state, countrycode: fromArea.countrycode };
+    }
+    if (!place) return { city: fromArea.city, state: fromArea.state, countrycode: fromArea.countrycode };
+    return { city: "", state: "", countrycode: "" };
+  }
+
+  function parseRadioQuery(query, area) {
     const raw = String(query || "").replace(/\s+/g, " ").trim().slice(0, 80);
     const freqMatch = raw.match(/\b(\d{2,3}\.\d)\b/);
     const freq = freqMatch ? freqMatch[1] : "";
@@ -59,61 +142,117 @@
       .toLowerCase()
       .split(/[^a-z0-9.]+/)
       .filter((t) => t && t !== freq && t !== "fm" && t !== "am");
-    const place = tokens.find((t) => t.length > 2 && !/^\d/.test(t)) || "";
-    return { raw, freq, place, tags, tokens };
+    const isCall = (t) => /^[kw][a-z0-9]{2,4}$/i.test(t);
+    const call = tokens.find(isCall) || "";
+    const place = tokens.find((t) => t.length > 2 && !/^\d/.test(t) && t !== call) || "";
+    const resolved = resolvePlace(place, area);
+    return {
+      raw,
+      freq,
+      place,
+      tags,
+      tokens,
+      call,
+      city: resolved.city,
+      state: resolved.state,
+      countrycode: resolved.countrycode,
+    };
   }
 
-  function searchParams(extra) {
+  function searchParams(extra, host) {
     const params = new URLSearchParams({
-      limit: "16",
+      limit: "24",
       hidebroken: "true",
       order: "clickcount",
       reverse: "true",
     });
     for (const [k, v] of Object.entries(extra || {})) {
-      if (v) params.set(k, String(v).slice(0, 40));
+      if (v != null && v !== "") params.set(k, String(v).slice(0, 40));
     }
-    return `${RADIO_DIR}?${params.toString()}`;
+    const base = `${host || RADIO_HOSTS[0]}/json/stations/search`;
+    return `${base}?${params.toString()}`;
   }
 
-  function radioSearchUrl(query) {
-    const p = parseRadioQuery(query);
-    if (!p.raw) return searchParams({ tag: "classical" });
-    if (p.freq && p.place) return searchParams({ name: p.freq, tag: p.place });
-    if (p.freq) return searchParams({ name: p.freq });
-    return searchParams({ name: p.raw.slice(0, 40) });
+  function localAreaParams(area) {
+    const place = parseAreaPlace(area);
+    if (!place.city && !place.state && !place.countrycode) return null;
+    const extra = {};
+    if (place.city) extra.city = place.city;
+    if (place.state) extra.state = place.state;
+    if (place.countrycode) extra.countrycode = place.countrycode;
+    return extra;
   }
 
-  function radioSearchUrls(query) {
-    const p = parseRadioQuery(query);
-    if (!p.raw) return [searchParams({ tag: "classical" })];
+  function radioSearchUrl(query, area) {
+    const urls = radioSearchUrls(query, area);
+    return urls[0] || "";
+  }
+
+  function radioSearchUrls(query, area) {
+    const p = parseRadioQuery(query, area);
     const out = [];
-    const add = (url) => {
+    const add = (extra) => {
+      if (!extra || !Object.keys(extra).length) return;
+      const url = searchParams(extra);
       if (url && out.indexOf(url) < 0) out.push(url);
     };
-    add(radioSearchUrl(p.raw));
-    if (p.freq) add(searchParams({ name: p.freq }));
-    if (p.place) {
-      add(searchParams({ name: p.place }));
-      add(searchParams({ tag: p.place }));
-      add(searchParams({ state: p.place }));
+    if (!p.raw) {
+      const local = localAreaParams(area);
+      if (local) {
+        add(local);
+        if (local.city) add({ name: local.city, countrycode: local.countrycode, state: local.state });
+      }
+      return out.slice(0, 4);
     }
+    if (p.freq && (p.city || p.state || p.countrycode)) {
+      add({ name: p.freq, city: p.city, state: p.state, countrycode: p.countrycode });
+      add({ name: p.freq, state: p.state, countrycode: p.countrycode });
+    }
+    if (p.freq) add({ name: p.freq });
+    if (p.city || p.state || p.countrycode) {
+      add({ city: p.city, state: p.state, countrycode: p.countrycode });
+      add({ name: p.city || p.place, state: p.state, countrycode: p.countrycode });
+    }
+    if (p.call) add({ name: p.call.toUpperCase(), countrycode: p.countrycode, state: p.state });
+    if (!p.freq && p.raw && !p.place && !p.call) add({ name: p.raw.slice(0, 40) });
+    if (!out.length && p.raw) add({ name: p.raw.slice(0, 40) });
     return out.slice(0, 4);
   }
 
-  function rankStations(stations, query) {
-    const p = parseRadioQuery(query);
-    const tokens = [p.freq, p.place].concat(p.tokens, p.tags).filter(Boolean);
+  function kmBetween(aLat, aLon, bLat, bLon) {
+    if (![aLat, aLon, bLat, bLon].every((n) => Number.isFinite(n))) return null;
+    const toRad = (d) => (d * Math.PI) / 180;
+    const dLat = toRad(bLat - aLat);
+    const dLon = toRad(bLon - aLon);
+    const s =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(aLat)) * Math.cos(toRad(bLat)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    return 6371 * 2 * Math.atan2(Math.sqrt(s), Math.sqrt(1 - s));
+  }
+
+  function rankStations(stations, query, area) {
+    const p = parseRadioQuery(query, area);
+    const tokens = [p.freq, p.place, p.city, p.state, p.countrycode].concat(p.tokens, p.tags).filter(Boolean);
     const list = Array.isArray(stations) ? stations.slice() : [];
+    const here = parseAreaPlace(area);
     return list
       .map((st) => {
-        const hay = `${st.name || ""} ${st.tags || ""}`.toLowerCase();
+        const hay = `${st.name || ""} ${st.tags || ""} ${st.state || ""} ${st.country || ""} ${st.countrycode || ""} ${st.city || ""}`.toLowerCase();
         let score = 0;
         for (const t of tokens) {
           if (hay.indexOf(String(t).toLowerCase()) >= 0) score += 2;
         }
         if (p.freq && hay.indexOf(p.freq) >= 0) score += 5;
-        if (p.place && hay.indexOf(p.place) >= 0) score += 3;
+        if (p.place && hay.indexOf(String(p.place).toLowerCase()) >= 0) score += 3;
+        if (p.city && hay.indexOf(String(p.city).toLowerCase()) >= 0) score += 4;
+        if (p.state && hay.indexOf(String(p.state).toLowerCase()) >= 0) score += 3;
+        if (p.countrycode && String(st.countrycode || "").toUpperCase() === p.countrycode) score += 2;
+        const km = kmBetween(here.lat, here.lon, Number(st.geo_lat), Number(st.geo_long));
+        if (km != null) {
+          if (km <= 80) score += 6;
+          else if (km <= 250) score += 3;
+          else if (km <= 600) score += 1;
+        }
         return { st, score };
       })
       .sort((a, b) => b.score - a.score)
@@ -149,9 +288,26 @@
         name,
         url,
         tags: String(row.tags || "").slice(0, 60),
+        city: String(row.state || row.city || "").slice(0, 40),
+        state: String(row.state || "").slice(0, 40),
+        country: String(row.country || "").slice(0, 40),
+        countrycode: String(row.countrycode || "").slice(0, 4),
+        geo_lat: Number(row.geo_lat),
+        geo_long: Number(row.geo_long),
       });
     }
-    return out.slice(0, 16);
+    return out.slice(0, 24);
+  }
+
+  function urlsOnHost(urls, host) {
+    return (Array.isArray(urls) ? urls : []).map((url) => {
+      try {
+        const parsed = new URL(url);
+        return `${host}${parsed.pathname}${parsed.search}`;
+      } catch {
+        return "";
+      }
+    }).filter(Boolean);
   }
 
   function houseLoopSrc() {
@@ -180,15 +336,22 @@
     RADIO_EMPTY,
     RADIO_LABEL,
     RADIO_PLACEHOLDER,
+    RADIO_LOCAL,
     HOUSE_LOOP_LICENSE,
     RADIO_DIR,
+    RADIO_UA,
+    RADIO_HOSTS,
+    KNOWN_PLACES,
     blankMusic,
     parseMusic,
     safeStream,
     musicPreset,
     parseRadioQuery,
+    parseAreaPlace,
+    resolvePlace,
     radioSearchUrl,
     radioSearchUrls,
+    urlsOnHost,
     rankStations,
     mergeStations,
     parseStations,

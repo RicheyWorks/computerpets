@@ -446,6 +446,10 @@
 
   .guest-choice {
     bottom: 9.5rem;
+    max-height: min(22rem, calc(100vh - 14rem));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     touch-action: manipulation;
   }
 
@@ -606,6 +610,10 @@
 
   .keeper-card {
     width: min(100%, 20rem);
+    max-height: min(36rem, calc(100vh - 8rem));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 0.9rem 1rem 1rem;
     border-radius: 14px;
     border: 1px solid var(--color-border-strong);

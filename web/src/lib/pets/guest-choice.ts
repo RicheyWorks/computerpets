@@ -1,6 +1,7 @@
 /** A tap on the guest is a choice, not a sit. They pick. Then they do that sit. */
 
 export type GuestChoiceId =
+  | "feed"
   | "rest"
   | "walk"
   | "sit"
@@ -28,6 +29,7 @@ export type GuestChoiceSit = {
 
 /** The sits a tap may offer. Rest is sleep. Walk and Sit change the pose. The rest are house verbs. */
 export const GUEST_CHOICE = [
+  "feed",
   "rest",
   "walk",
   "sit",
@@ -57,6 +59,7 @@ export function guestMarks(sit: GuestChoiceSit = {}): GuestChoiceMark[] {
   const busy = hidden || leaving;
   const marks: GuestChoiceMark[] = [];
   if (!busy) {
+    marks.push({ id: "feed", label: "Feed" });
     marks.push({ id: "rest", label: "Rest" });
     marks.push(poseFlip(!!sit.walking));
   }

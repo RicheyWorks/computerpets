@@ -8,8 +8,10 @@ import {
   nextTrickWait,
   pickTrick,
   shouldAbort as trickShouldAbort,
+  sleepHoldFrame,
   stepTrick,
   type RuiTrick,
+  type RuiTrickKind,
 } from "@/lib/pets/rui-tricks";
 import {
   actPose,
@@ -98,6 +100,8 @@ type LivingPetProps = {
   windows?: DeskWindow[];
   /** House loop or radio is on. Rui may dance. */
   musicOn?: boolean;
+  /** Expanded keeper card. The host stands still so verbs stay hittable. */
+  cardOpen?: boolean;
   onPose?: (x: number, facing: 1 | -1) => void;
 };
 
@@ -142,6 +146,7 @@ type Sim = {
   playWait: number;
   trick: RuiTrick | null;
   trickWait: number;
+  lastTrick: RuiTrickKind | null;
 };
 
 const WALK_SPEED = 98;
@@ -179,6 +184,7 @@ export function LivingPet({
   onTend,
   windows = [],
   musicOn = false,
+  cardOpen = false,
   onPose,
 }: LivingPetProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -227,6 +233,7 @@ export function LivingPet({
     playWait: 6 + Math.random() * 5,
     trick: null,
     trickWait: 3 + Math.random() * 3,
+    lastTrick: null,
   });
   const cmdRef = useRef(command);
   const orderRef = useRef(orderId);
@@ -245,9 +252,11 @@ export function LivingPet({
   const hiddenRef = useRef(hidden);
   const windowsRef = useRef(windows);
   const musicRef = useRef(musicOn);
+  const cardRef = useRef(cardOpen);
   const poseRef = useRef(onPose);
   asleepRef.current = asleep;
   hiddenRef.current = hidden;
+  cardRef.current = cardOpen;
   windowsRef.current = windows;
   musicRef.current = musicOn;
   poseRef.current = onPose;
@@ -405,6 +414,16 @@ export function LivingPet({
         s.pendingPose = null;
         s.poseHold = 0;
         s.pause = 0;
+        const hold = sleepHoldFrame(kindRef.current, spritesRef.current.sleep.length);
+        if (hold != null) s.frame = hold;
+        return;
+      }
+      if (cardRef.current && (cmd === "wander" || cmd === "idle")) {
+        s.anim = asleepRef.current ? "sleep" : "idle";
+        s.target = null;
+        s.waypoints = [];
+        s.pause = 0;
+        lastOrder.current = order;
         return;
       }
       if (order === lastOrder.current || cmd === "none") return;
@@ -482,6 +501,8 @@ export function LivingPet({
         s.acc = 0;
         if (cmd === "sleep") {
           s.anim = "sleep";
+          const hold = sleepHoldFrame(kindRef.current, spritesRef.current.sleep.length);
+          if (hold != null) s.frame = hold;
         } else if (!reduced && cmd === "sit") {
           s.poseHold = POSE_HOLD_S;
           s.pendingPose = cmd;
@@ -529,6 +550,7 @@ export function LivingPet({
           hidden: hiddenRef.current,
           leaving: s.leaving,
           cmd: cmdRef.current,
+          card: cardRef.current,
         };
         if (s.play) {
           s.play = stepPlay(s.play, dt, { x: s.x, lift: s.play.lift }, windowsRef.current, work, SPRITE, playFlags);
@@ -549,14 +571,16 @@ export function LivingPet({
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: false,
+            card: cardRef.current,
           });
           s.x = s.trick.x;
           if (!asleepRef.current) s.anim = s.trick.anim;
           if (s.trick.phase === "done") {
+            s.lastTrick = s.trick.kind;
             s.trick = null;
             s.land = 1;
             s.anim = asleepRef.current ? "sleep" : "idle";
-            s.trickWait = nextTrickWait(true);
+            s.trickWait = nextTrickWait(true, undefined, s.lastTrick);
           }
         } else if (
           !reduced &&
@@ -588,12 +612,13 @@ export function LivingPet({
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: !!s.play,
+            card: cardRef.current,
           })
         ) {
           s.trickWait -= dt;
           const musicWantsDance = musicRef.current && !s.trick;
           if (s.trickWait <= 0 || musicWantsDance) {
-            s.trick = beginTrick(pickTrick(undefined, musicRef.current), s.x, s.facing);
+            s.trick = beginTrick(pickTrick(undefined, musicRef.current, s.lastTrick), s.x, s.facing);
             if (s.trick) {
               clearAct();
               s.target = null;
@@ -692,6 +717,7 @@ export function LivingPet({
           !s.trick &&
           !s.leaving &&
           !asleepRef.current &&
+          !cardRef.current &&
           s.target == null &&
           s.turnHold <= 0 &&
           s.pause <= 0 &&
@@ -727,7 +753,10 @@ export function LivingPet({
             s.acc -= step;
             const frames = spritesRef.current[s.anim];
             const len = frames.length;
-            if (s.anim === "sit") {
+            if (s.anim === "sleep") {
+              const hold = sleepHoldFrame(kindRef.current, len);
+              s.frame = hold == null ? (s.frame + 1) % len : hold;
+            } else if (s.anim === "sit") {
               s.frame = Math.min(len - 1, s.frame + 1);
             } else if (onceRef.current.has(s.anim)) {
               if (s.frame + 1 >= len) {

@@ -15,6 +15,7 @@ function ids(marks) {
 test("a tap on the overlay guest is a choice, not a talk", () => {
   assert.equal(C.guestTap(), "choice");
   assert.deepEqual(ids(C.guestMarks({ walking: true })), [
+    "feed",
     "rest",
     "sit",
     "talk",
@@ -31,6 +32,9 @@ test("a tap on the overlay guest is a choice, not a talk", () => {
   assert.match(htmlSrc, /choice\.js/);
   assert.match(htmlSrc, /id="choice"[^>]*data-hit/);
   assert.match(cssSrc, /#choice\.show/);
+  assert.match(cssSrc, /#choice[\s\S]*overflow-y:\s*auto/);
+  assert.match(cssSrc, /#hud[\s\S]*overflow-y:\s*auto/);
+  assert.match(cssSrc, /#hud[\s\S]*max-height/);
   assert.match(petSrc, /openChoice/);
   assert.match(petSrc, /pickChoice/);
   const liftStart = petSrc.indexOf('window.addEventListener("pointerup"');

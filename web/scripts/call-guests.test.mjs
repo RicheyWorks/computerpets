@@ -52,7 +52,9 @@ test("radio search splits 99.9 seattle fm and labels the box", () => {
   assert.equal(q.place, "seattle");
   const urls = music.radioSearchUrls("99.9 seattle fm");
   assert.ok(urls.some((u) => /name=99\.9/.test(u)));
-  assert.ok(urls.some((u) => /seattle/.test(u)));
+  assert.ok(urls.some((u) => /seattle/i.test(u)));
+  assert.ok(urls.some((u) => /countrycode=US/.test(u)));
+  assert.ok(!urls.some((u) => /tag=seattle/.test(u)));
   assert.equal(music.RADIO_LABEL, OverlayMusic.RADIO_LABEL);
   assert.equal(music.RADIO_EMPTY, OverlayMusic.RADIO_EMPTY);
   assert.match(cardSrc, /RADIO_LABEL/);
