@@ -18,7 +18,7 @@ const guideSrc = readFileSync(join(root, "src/lib/pets/house-guide.ts"), "utf8")
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark; Arm stores a stool as a sand tray; Snap counts a meeting rail as a wetland cup; Well fills a sill pan as a bog cup; Dew curls a glazing rebate as a peat saucer; Thrum forages a window box as a meadow; Auger bores a sash stile as timber; Mortar daubs a sash gap as an inkstone cell; Pot tends a sash pulley box as a cerumen hollow; Sheen licks a warm pane as a salt glass; Bank digs a window stool as a sand bank; Hum drones a window pane as congregation sky; Keep lays a window pane as a wax heart; Wax draws a window pane as a hive frame; Reed plops a window weep as a bank spring; Pebble puffs a casement leaf as a leaf dish", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; Pip watches from the floor; Thimble thumps then vanishes; Clip stashes in a drawer; Whee wheeks at a window; Ink basks on a rail; Coin circles a bowl; Echo perches a shade; Rue scents a jamb; Peck bows a pane; Quill hooks a jamb; Wick threads a gap; Burr balls at a pane foot; Floss dusts a meeting rail; Bloom walks a tank wall; Keel tosses fruit from a cornice; Sol flattens on a sun-warmed pane; Vesper drapes a lintel; Ember kindles the ash; Nori buns in a sash well; Saffron writes a sash canyon; Bandit inspects a jamb as a ruler; Jade saddles a casement stay; Bluff flips dead on a stool; Sash patrols a moss-cup; Lula loops an apron; Coral mosaics a muntin; Blush stones a sill horn; Atlas charts a transom; Cup lids a sash latch; Sepia flushes a window light; Chamber rises a jamb as stacked rooms; Pulse chimes a pane as a glass of water; Ochre reefs a pane as a damp blotter; Tenant knobs a sash lift as a vacant shell; Ledger plows a stool as a sand tray; Anchor hitches a parting bead as a pencil; Kite barrels a pane as the sky of a bowl; Door gapes a sash-jamb crack as a book crevice; Felt leans a meeting rail as blotter felt; Vein unfurls a sash pocket as a damp saucer; Fan golds a lamp-side as autumn; Mast seeds a stool as an acorn dish; Disk opens a pane as an ink-dish pad; Moth mounts a jamb as bark; Arm stores a stool as a sand tray; Snap counts a meeting rail as a wetland cup; Well fills a sill pan as a bog cup; Dew curls a glazing rebate as a peat saucer; Thrum forages a window box as a meadow; Auger bores a sash stile as timber; Mortar daubs a sash gap as an inkstone cell; Pot tends a sash pulley box as a cerumen hollow; Sheen licks a warm pane as a salt glass; Bank digs a window stool as a sand bank; Hum drones a window pane as congregation sky; Keep lays a window pane as a wax heart; Wax draws a window pane as a hive frame; Reed plops a window weep as a bank spring; Pebble puffs a casement leaf as a leaf dish; Eft trails a sash horn as a moss saucer", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -164,6 +164,8 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("frog"), Overlay.playFor("frog"));
   assert.equal(P.playFor("toad"), "puff");
   assert.equal(P.playFor("toad"), Overlay.playFor("toad"));
+  assert.equal(P.playFor("newt"), "trail");
+  assert.equal(P.playFor("newt"), Overlay.playFor("newt"));
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -8447,7 +8449,7 @@ test("the demo window plate walks Pebble's puff the same way", () => {
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("newt"), "sill");
+  assert.equal(P.playFor("salamander"), "sill");
   assert.notEqual(target.kind, "pebble");
   assert.notEqual(target.kind, "hop");
   assert.notEqual(target.kind, "plop");
@@ -8538,5 +8540,125 @@ test("the demo window plate walks Pebble's puff the same way", () => {
   assert.ok(seen.has("puff-off"));
   assert.ok(puffMax > 6, "she puffs dry on the leaf");
   assert.ok(sitXMax < 8, "a sit, not a walk or a circle");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Eft's trail the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("newt"), "trail");
+  const target = P.pickTarget([WIN], 80, "newt", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "trail");
+  assert.equal(target.side, "moss");
+  assert.equal(target.leave, "saucer");
+  assert.equal(Overlay.playFor("newt"), "trail");
+  assert.equal(P.playFor("toad"), "puff");
+  assert.equal(P.playFor("frog"), "plop");
+  assert.equal(P.playFor("honeycomb"), "draw");
+  assert.equal(P.playFor("honey_queen"), "lay");
+  assert.equal(P.playFor("honey_drone"), "drone");
+  assert.equal(P.playFor("mining_bee"), "dig");
+  assert.equal(P.playFor("sundew"), "curl");
+  assert.equal(P.playFor("pitcher"), "fill");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(P.playFor("axolotl"), "wall");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("iguana"), "flatten");
+  assert.equal(P.playFor("maidenhair"), "unfurl");
+  assert.equal(P.playFor("sea_star"), "reef");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("salamander"), "sill");
+  assert.notEqual(target.kind, "puff");
+  assert.notEqual(target.kind, "plop");
+  assert.notEqual(target.kind, "wall");
+  assert.notEqual(target.kind, "flatten");
+  assert.notEqual(target.kind, "unfurl");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(P.DUR.trail < P.DUR.trailHold, "the trail is the tell; the hold is the orange after");
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.puffOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.plopOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.baskOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.wallOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.flattenOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.unfurlOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.circleOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.drawOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.fillOn);
+  assert.ok(P.DUR.trailOn !== Overlay.DUR.sillHop);
+  assert.ok(P.DUR.trail !== Overlay.DUR.puff);
+  assert.ok(P.DUR.trail !== Overlay.DUR.plop);
+  assert.ok(P.DUR.trail !== Overlay.DUR.bask);
+  assert.ok(P.DUR.trail !== Overlay.DUR.wall);
+  assert.ok(P.DUR.trail !== Overlay.DUR.flatten);
+  assert.ok(P.DUR.trail !== Overlay.DUR.unfurl);
+  assert.ok(P.DUR.trail !== Overlay.DUR.circle);
+  assert.ok(P.DUR.trail !== Overlay.DUR.draw);
+  assert.ok(P.DUR.trail !== Overlay.DUR.fill);
+  assert.ok(P.DUR.trailHold !== Overlay.DUR.puffHold);
+  assert.ok(P.DUR.trailHold !== Overlay.DUR.plopHold);
+  assert.ok(P.DUR.trailHold !== Overlay.DUR.drawHold);
+  assert.ok(P.DUR.trailHold !== Overlay.DUR.fillHold);
+  assert.ok(P.DUR.trailOff !== Overlay.DUR.puffOff);
+  assert.ok(P.DUR.trailOff !== Overlay.DUR.plopOff);
+  assert.ok(P.DUR.trailOff !== Overlay.DUR.baskOff);
+  assert.ok(P.DUR.trailOff !== Overlay.DUR.drawOff);
+  assert.ok(P.DUR.trailOff !== Overlay.DUR.fillOff);
+  const horn = P.trailPoint(WIN, 176, WORK);
+  const deskHorn = Overlay.trailPoint(WIN, 176, WORK);
+  assert.equal(horn.x, deskHorn.x);
+  assert.equal(horn.lift, deskHorn.lift);
+  const walk = P.trailOnPath(0.5, { x: 40, lift: 0 }, { x: horn.x, lift: horn.lift });
+  const deskWalk = Overlay.trailOnPath(0.5, { x: 40, lift: 0 }, { x: horn.x, lift: horn.lift });
+  assert.equal(walk.x, deskWalk.x);
+  assert.equal(walk.lift, deskWalk.lift);
+  const trailed = P.trailPath(1);
+  const deskTrailed = Overlay.trailPath(1);
+  assert.equal(trailed.x, deskTrailed.x);
+  assert.equal(trailed.lift, deskTrailed.lift);
+  assert.ok(trailed.x > 10, "the tail trails");
+  assert.ok(trailed.lift < 5, "he keeps low on the moss");
+  const hold = P.trailHoldPath(0.5);
+  const deskHold = Overlay.trailHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  const leaf = P.puffPoint(WIN, 176, WORK);
+  const weep = P.plopPoint(WIN, 176, WORK);
+  const pane = P.flattenPoint(WIN, 176, WORK);
+  const pocket = P.unfurlPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(horn.x - leaf.x) > 20 || Math.abs(horn.lift - leaf.lift) > 12, "not Pebble");
+  assert.ok(Math.abs(horn.x - weep.x) > 20 || Math.abs(horn.lift - weep.lift) > 12, "not Reed");
+  assert.ok(Math.abs(horn.x - pane.x) > 20 || Math.abs(horn.lift - pane.lift) > 12, "not Sol");
+  assert.ok(Math.abs(horn.x - pocket.x) > 20 || Math.abs(horn.lift - pocket.lift) > 12, "not Vein");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let trailXMax = 0;
+  for (let i = 0; i < 2200 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "puff");
+    assert.notEqual(play.phase, "plop");
+    assert.notEqual(play.phase, "wall");
+    assert.notEqual(play.phase, "flatten");
+    assert.notEqual(play.phase, "unfurl");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "trail") {
+      trailXMax = Math.max(trailXMax, Math.abs(play.x - play.target.holdX));
+      assert.equal(play.anim, "sit");
+    }
+    if (play.phase === "trail-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.x - play.target.holdX) > 8, "the tail stays trailed");
+    }
+  }
+  assert.ok(seen.has("trail-on"));
+  assert.ok(seen.has("trail"));
+  assert.ok(seen.has("trail-hold"));
+  assert.ok(seen.has("trail-off"));
+  assert.ok(trailXMax > 8, "the tail trails on the moss");
+  assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
