@@ -72,6 +72,6 @@ test("saved lines, alarm, and timer are machine-local", () => {
   const withBed = C.parseCard({ sleepAid: { plugin: "rain", playing: true } });
   assert.equal(withBed.sleepAid.plugin, "rain");
   assert.equal(withBed.sleepAid.playing, true);
-  assert.match(cardSrc, /Sleep aid/);
+  assert.match(cardSrc, /SLEEP_AID_LABEL/);
   assert.match(overlayHtml, /id="hud-sleep"/);
 });

@@ -162,8 +162,8 @@ test("the demo window plate walks Flux's field the same way", () => {
 test("the demo window plate walks Spark's crackle the same way", () => {
   assert.match(demoSrc, /demoWindow/);
   assert.match(livingSrc, /crackle-on|playFor/);
-  const overlayTarget = Overlay.pickTarget([WIN], 40, "spark_dragon", WORK, 176, { side: "left", leave: "hop" });
-  const target = P.pickTarget([WIN], 40, "spark_dragon", WORK, 176, { side: "left", leave: "hop" });
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "spark_dragon", WORK, 176, { side: "left", leave: "hop", hopFrom: 0 });
+  const target = P.pickTarget([WIN], 40, "spark_dragon", WORK, 176, { side: "left", leave: "hop", hopFrom: 0 });
   assert.equal(target.kind, overlayTarget.kind);
   assert.equal(target.holdX, overlayTarget.holdX);
   assert.equal(target.holdLift, overlayTarget.holdLift);

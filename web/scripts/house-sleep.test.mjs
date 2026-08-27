@@ -113,7 +113,7 @@ test("Off, mute, and Rain and thunder actually start or stop the loop", () => {
   const off = S.applySleepAid(FakeAudio("x"), { plugin: "off", playing: false }, { music: false }, 0.8, { makeAudio, srcOf: S.overlayPlaySrc });
   assert.equal(off, null);
   assert.match(cardSrc, /SLEEP_AID_LABEL/);
-  assert.match(cardSrc, /Rain and thunder/);
+  assert.match(cardSrc, /SLEEP_AID_PLUGINS/);
   assert.match(cardSrc, /sleepPlaySrc/);
   assert.match(cardSrc, /audio\.loop = true/);
   assert.match(overlayPet, /function sitSleepAid/);

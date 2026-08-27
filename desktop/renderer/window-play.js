@@ -334,7 +334,7 @@
     }
     if (kind === CRACKLE) {
       const edge = (opts && opts.side) || pickSide(best, petX, size, workW);
-      const startU = roll < 0.5 ? 0 : 1;
+      const startU = opts && (opts.hopFrom === 0 || opts.hopFrom === 1) ? opts.hopFrom : roll < 0.5 ? 0 : 1;
       const endU = startU === 0 ? 1 : 0;
       const start = cracklePoint(best, startU, size, work, edge);
       const end = cracklePoint(best, endU, size, work, edge);
