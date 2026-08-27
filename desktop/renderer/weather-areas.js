@@ -1,6 +1,9 @@
 /** Keeper-chosen weather areas. The house does not guess a city. */
 (function (root) {
   const NO_AREA = "no area set";
+  const AREA_LABEL = "Weather area";
+  const AREA_PLACEHOLDER = "A city or place — weather, not radio";
+  const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
   const GEOCODE_HOST = "geocoding-api.open-meteo.com";
   const FORECAST_HOST = "api.open-meteo.com";
   const MAX_AREAS = 8;
@@ -172,6 +175,9 @@
 
   const api = {
     NO_AREA,
+    AREA_LABEL,
+    AREA_PLACEHOLDER,
+    AREA_TRUTH,
     GEOCODE_HOST,
     FORECAST_HOST,
     MAX_AREAS,

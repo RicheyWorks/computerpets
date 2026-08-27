@@ -26,6 +26,9 @@ test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () 
   assert.match(styleSrc, /\.desk-plate/);
   assert.match(styleSrc, /#bird\.show/);
   assert.match(petSrc, /callSip/);
+  assert.match(petSrc, /spawnCalled/);
+  assert.match(petSrc, /setFocusable/);
+  assert.doesNotMatch(petSrc, /hid a ribbon/);
   assert.match(petSrc, /stealDeskRibbon/);
   assert.match(petSrc, /playWindows/);
   assert.match(petSrc, /PetRuiTricks/);
@@ -55,6 +58,8 @@ test("the tray pins Rui, Sip, and the grid ten", () => {
   assert.deepEqual(S.VOICE_KEYS, ["red_panda", "hummingbird", "cat", "dog", "chickadee"]);
   assert.equal(S.stepDefault("red_panda"), "soft");
   assert.equal(M.RADIO_CANT_REACH, "can't reach");
+  assert.equal(M.RADIO_EMPTY, "no station from that look-up");
+  assert.equal(M.RADIO_LABEL, "Radio station");
   assert.equal(R.RIBBON_SPECIAL, "I found a ribbon. It was not lost. It is now safer.");
   assert.equal(T.TRICK_KEY, "red_panda");
   assert.equal(existsSync(join(__dirname, "sounds", "hummingbird.wav")), true);

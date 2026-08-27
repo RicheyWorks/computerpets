@@ -10,6 +10,8 @@ const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/w
 
 test("the house does not guess a city", () => {
   assert.equal(A.NO_AREA, "no area set");
+  assert.equal(A.AREA_LABEL, "Weather area");
+  assert.equal(Overlay.AREA_LABEL, A.AREA_LABEL);
   assert.equal(A.plateLine(A.blankAreas(), null), "no area set");
   assert.equal(A.currentArea(A.blankAreas()), null);
   assert.equal(Overlay.NO_AREA, A.NO_AREA);

@@ -4,6 +4,9 @@ import {
   currentArea,
   forecastUrl,
   geocodeUrl,
+  AREA_LABEL,
+  AREA_PLACEHOLDER,
+  AREA_TRUTH,
   NO_AREA,
   parseForecast,
   parseGeocode,
@@ -157,7 +160,7 @@ export function DeskWeatherPlate({
         className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left"
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">Weather</span>
+        <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">Weather area</span>
         <span className="truncate text-sm text-ink">{plateLine(areas, live, unread)}</span>
       </button>
       {open ? (
@@ -206,6 +209,7 @@ export function DeskWeatherPlate({
               </li>
             ))}
           </ul>
+          <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{AREA_TRUTH}</p>
           <form
             className="mt-2 flex gap-2"
             onSubmit={(e) => {
@@ -213,12 +217,18 @@ export function DeskWeatherPlate({
               void search();
             }}
           >
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="A city or place"
-              aria-label="Look up an area"
-            />
+            <label className="flex min-w-0 flex-1 flex-col gap-1">
+              {AREA_LABEL}
+              <input
+                type="text"
+                autoComplete="off"
+                spellCheck={false}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={AREA_PLACEHOLDER}
+                aria-label={AREA_LABEL}
+              />
+            </label>
             <button type="submit">{looking ? "…" : "Look up"}</button>
           </form>
           {hits.length ? (

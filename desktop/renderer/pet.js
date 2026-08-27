@@ -38,6 +38,7 @@ const weatherRoot = document.getElementById("weather");
 const treatEl = document.getElementById("treat");
 const lureEl = document.getElementById("lure");
 const birdEl = document.getElementById("bird");
+const calledRoot = document.getElementById("called");
 const weatherPlate = document.getElementById("weather-plate");
 const newsPlate = document.getElementById("news-plate");
 const hud = document.getElementById("hud");
@@ -69,6 +70,11 @@ const hudMutes = document.getElementById("hud-mutes");
 const hudSteps = document.getElementById("hud-steps");
 const hudMusic = document.getElementById("hud-music");
 const hudCallBird = document.getElementById("hud-call-bird");
+const hudCallPick = document.getElementById("hud-call-pick");
+const hudCallQ = document.getElementById("hud-call-q");
+const hudCallGroup = document.getElementById("hud-call-group");
+const hudCallGo = document.getElementById("hud-call-go");
+const hudCallTruth = document.getElementById("hud-call-truth");
 const hudOff = document.getElementById("hud-off");
 const hudOffTruth = document.getElementById("hud-off-truth");
 const barHunger = document.getElementById("bar-hunger");
@@ -139,7 +145,7 @@ let taken = false;
 let leaving = false;
 let choiceOpen = false;
 let lureTimer = 0;
-let card = window.PetCard ? window.PetCard.load() : { collapsed: false, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
+let card = window.PetCard ? window.PetCard.load() : { collapsed: true, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
 let offArmed = false;
 let voicesReady = [];
 let liveSky = null;
@@ -312,6 +318,91 @@ function callSip() {
   const sprites = pack(F.FLY_BIRD_KEY);
   birdEl.src = (sprites.play && sprites.play[0]) || sprites.idle[0];
   birdFly = F.markCalled(birdFly);
+}
+
+function openKeeperCard() {
+  if (!card.collapsed) return;
+  card.collapsed = false;
+  persistCard();
+}
+
+function callGuestsFromCard() {
+  const G = window.PetCallGuests;
+  if (!G) return;
+  const typed = hudCallQ ? hudCallQ.value : "";
+  const pick = hudCallPick && hudCallPick.value && hudCallPick.value !== typed ? hudCallPick.value : "";
+  const groupId = hudCallGroup && hudCallGroup.value ? hudCallGroup.value : "";
+  const query = typed || pick;
+  const keys = G.callKeys(query, roster, groupId || null);
+  if (hudCallTruth) hudCallTruth.textContent = keys.length ? "" : G.CALL_EMPTY;
+  if (!keys.length) return;
+  spawnCalled(keys);
+}
+
+function spawnCalled(keys) {
+  const G = window.PetCallGuests;
+  if (!G) return;
+  const host = kind && kind.key;
+  if (G.shouldFly(keys, host)) callSip();
+  const walkers = G.walkersOf(keys, host);
+  const width = window.innerWidth;
+  for (let i = 0; i < walkers.length; i++) {
+    const key = walkers[i];
+    if (called.some((c) => c.key === key && G.stillVisible(c))) continue;
+    const row = roster.find((r) => r.key === key);
+    if (!row) continue;
+    called.push({ ...G.beginCalled(key, width, i, walkers.length), sprites: pack(key), name: row.name, frame: 0, acc: 0 });
+  }
+  paintCalled();
+}
+
+function paintCalled() {
+  if (!calledRoot) return;
+  const G = window.PetCallGuests;
+  calledRoot.replaceChildren();
+  for (const g of called) {
+    if (G && !G.stillVisible(g)) continue;
+    const img = document.createElement("img");
+    img.className = "called-guest";
+    img.alt = g.name || g.key;
+    img.dataset.hit = "1";
+    img.dataset.callKey = g.key;
+    img.draggable = false;
+    const frames = g.sprites && g.sprites.walk ? g.sprites.walk : pack(g.key).walk;
+    img.src = frames[g.frame || 0];
+    img.style.transform = `translate3d(${g.x}px, 0, 0) scale(${g.facing}, 1)`;
+    img.addEventListener("pointerdown", (e) => {
+      e.stopPropagation();
+      if (!window.PetCallGuests) return;
+      const next = window.PetCallGuests.dismissCalled(g);
+      Object.assign(g, next);
+    });
+    calledRoot.appendChild(img);
+  }
+}
+
+function tickCalled(dt) {
+  const G = window.PetCallGuests;
+  if (!G || !calledRoot) return;
+  const width = window.innerWidth;
+  let dirty = false;
+  called = called.filter((g) => {
+    const next = G.stepCalled(g, dt, width);
+    Object.assign(g, next);
+    if (!G.stillVisible(g)) {
+      dirty = true;
+      return false;
+    }
+    g.acc = (g.acc || 0) + dt;
+    if (Math.abs(g.target - g.x) > 2 && g.acc > 1 / 6.4) {
+      g.acc = 0;
+      const walk = g.sprites.walk || pack(g.key).walk;
+      g.frame = ((g.frame || 0) + 1) % walk.length;
+    }
+    dirty = true;
+    return true;
+  });
+  if (dirty) paintCalled();
 }
 
 function tickBird(dt) {
@@ -588,7 +679,8 @@ function paintHud() {
   barEnergy.style.setProperty("--w", `${life.energy}%`);
   if (barHygiene) barHygiene.style.setProperty("--w", `${life.hygiene}%`);
   if (barBond) barBond.style.setProperty("--w", `${life.bond}%`);
-  hud.classList.add("show");
+  if (card.collapsed) hud.classList.remove("show");
+  else hud.classList.add("show");
   paintCard();
   window.desk?.vitals({
     key: kind.key,
@@ -709,6 +801,10 @@ function paintCard() {
   if (hudMusic && window.PetHouseMusic && kind && kind.key === "red_panda") {
     const M = window.PetHouseMusic;
     const music = M.parseMusic(card.music);
+    const typingMusic = hudMusic.contains(document.activeElement);
+    if (typingMusic) {
+      /* keep the radio box while the keeper types */
+    } else {
     hudMusic.replaceChildren();
     const title = document.createElement("p");
     title.textContent = "Music · Rui";
@@ -747,28 +843,49 @@ function paintCard() {
     if (music.plugin === "radio") {
       const form = document.createElement("form");
       form.dataset.hit = "1";
+      const label = document.createElement("label");
+      label.textContent = M.RADIO_LABEL || "Radio station";
       const input = document.createElement("input");
-      input.placeholder = "Station name";
+      input.type = "text";
+      input.autocomplete = "off";
+      input.spellcheck = false;
+      input.placeholder = M.RADIO_PLACEHOLDER || "Station, city, or 99.9";
+      input.setAttribute("aria-label", M.RADIO_LABEL || "Radio station");
       input.dataset.hit = "1";
+      input.value = radioQ;
+      input.addEventListener("input", () => {
+        radioQ = input.value;
+      });
+      label.appendChild(input);
       const find = document.createElement("button");
       find.type = "submit";
       find.textContent = "Find";
       find.dataset.hit = "1";
       const list = document.createElement("ul");
       list.className = "keeper-line-list";
+      const truth = document.createElement("p");
+      truth.className = "keeper-truth";
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         e.stopPropagation();
-        fetch(M.radioSearchUrl(input.value), { cache: "no-store" })
-          .then((r) => r.json())
-          .then((json) => {
-            const stations = M.parseStations(json);
+        radioQ = input.value;
+        const urls = M.radioSearchUrls ? M.radioSearchUrls(input.value) : [M.radioSearchUrl(input.value)];
+        Promise.all(
+          urls.map((url) =>
+            fetch(url, { cache: "no-store" })
+              .then((r) => r.json())
+              .then((json) => M.parseStations(json))
+              .catch(() => null),
+          ),
+        )
+          .then((batches) => {
+            if (batches.every((b) => b == null)) throw new Error("unread");
+            const merged = M.mergeStations ? M.mergeStations(batches.filter(Boolean)) : batches.flat().filter(Boolean);
+            const stations = M.rankStations ? M.rankStations(merged, input.value).slice(0, 16) : merged.slice(0, 16);
             list.replaceChildren();
+            truth.textContent = "";
             if (!stations.length) {
-              const miss = document.createElement("p");
-              miss.className = "keeper-truth";
-              miss.textContent = M.RADIO_CANT_REACH;
-              list.appendChild(miss);
+              truth.textContent = M.RADIO_EMPTY || M.RADIO_CANT_REACH;
               return;
             }
             for (const st of stations) {
@@ -796,14 +913,17 @@ function paintCard() {
           })
           .catch(() => {
             list.replaceChildren();
-            const miss = document.createElement("p");
-            miss.className = "keeper-truth";
-            miss.textContent = M.RADIO_CANT_REACH;
-            list.appendChild(miss);
+            truth.textContent = M.RADIO_CANT_REACH;
           });
       });
-      form.append(input, find);
-      hudMusic.append(form, list);
+      form.append(label, find);
+      hudMusic.append(form, truth, list);
+      if (music.stationName) {
+        const now = document.createElement("p");
+        now.textContent = `Now ${music.stationName}. No now-playing inventing.`;
+        hudMusic.appendChild(now);
+      }
+    }
     }
   } else if (hudMusic) {
     hudMusic.replaceChildren();
@@ -836,6 +956,42 @@ function paintCard() {
       hudLines.appendChild(li);
     }
   }
+  fillCallLists();
+}
+
+function fillCallLists() {
+  const G = window.PetCallGuests;
+  if (!G || !roster.length) return;
+  if (hudCallPick && !callFilled) {
+    hudCallPick.replaceChildren();
+    const blank = document.createElement("option");
+    blank.value = "";
+    blank.textContent = "Pick a guest";
+    hudCallPick.appendChild(blank);
+    const rows = roster
+      .slice()
+      .sort((a, b) => String(a.name).localeCompare(String(b.name)));
+    for (const row of rows) {
+      const opt = document.createElement("option");
+      opt.value = row.name;
+      opt.textContent = `${row.name} · ${row.speciesLabel || row.key}`;
+      hudCallPick.appendChild(opt);
+    }
+  }
+  if (hudCallGroup && hudCallGroup.options.length <= 1) {
+    hudCallGroup.replaceChildren();
+    const blank = document.createElement("option");
+    blank.value = "";
+    blank.textContent = "Pick a den";
+    hudCallGroup.appendChild(blank);
+    for (const group of G.groups()) {
+      const opt = document.createElement("option");
+      opt.value = group.id;
+      opt.textContent = group.label;
+      hudCallGroup.appendChild(opt);
+    }
+  }
+  callFilled = true;
 }
 
 function paintMess() {
@@ -1460,7 +1616,6 @@ function handle(cmd) {
     placeMark("lure", 80 + Math.random() * Math.max(80, width - 200));
     say(window.PetRibbon.RIBBON_SPECIAL);
     issue("seek");
-    window.desk?.notify(kind.name, `${kind.name} hid a ribbon.`);
     hudUntil = performance.now() + 5000;
     return;
   }
@@ -1480,7 +1635,6 @@ function handle(cmd) {
   if (result.cmd && cmd !== "call") issue(result.cmd);
   paintHud();
   paintMess();
-  if (result.notify === "ribbon") window.desk?.notify(kind.name, `${kind.name} hid a ribbon.`);
   if (result.notify === "steal") window.desk?.notify(kind.name, `${kind.name} rearranged something.`);
   if (result.notify === "bug") window.desk?.notify(kind.name, `${kind.name} found a bug.`);
   hudUntil = performance.now() + 5000;
@@ -2056,11 +2210,12 @@ function tick(now) {
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));
-  const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
-  bubble.style.transform = `translate3d(${bx}px, ${-lift - 10}px, 0)`;
   const hudW = card.collapsed
-    ? (window.PetKeeper?.HUD_WIDTH_COLLAPSED ?? 168)
+    ? 0
     : (window.PetKeeper?.HUD_WIDTH ?? 280);
+  const cardLift = card.collapsed ? 0 : Math.min((hud.offsetHeight || 0) + 16, 360);
+  const bx = clamp(drawX + BASE * 0.5 - 110, 10, Math.max(10, width - 230));
+  bubble.style.transform = `translate3d(${bx}px, ${-lift - 10 - cardLift}px, 0)`;
   hud.style.transform = `translate3d(${clamp(drawX + 4, 8, Math.max(8, width - (hudW + 8)))}px, ${-lift}px, 0)`;
   if (tongueEl) {
     const flick = p.crawl && sim.actMotion === "tongue" ? window.PetEthogram.tongueFlick(sim.actT, sim.actHold) : 0;
@@ -2084,6 +2239,7 @@ function tick(now) {
 
   tickVisit(dt, now, width);
   tickBird(dt);
+  tickCalled(dt);
   paintLure();
   reportHits();
 
@@ -2092,6 +2248,9 @@ function tick(now) {
 tick.last = performance.now();
 
 let visit = null;
+let called = [];
+let radioQ = "";
+let callFilled = false;
 
 function visitLaw() {
   return window.PetVisitor;
@@ -2226,6 +2385,7 @@ window.addEventListener("pointerup", (e) => {
   const dy = start ? e.clientY - start.y : 0;
   const lift = window.PetArrive.pointerUp(dx, dy, liftTapPx());
   if (lift.kind === "tap") {
+    openKeeperCard();
     if (window.PetChoice?.guestTap() === "choice") openChoice();
     return;
   }
@@ -2304,6 +2464,34 @@ if (hudCallBird) {
     callSip();
   });
 }
+if (hudCallGo) {
+  hudCallGo.addEventListener("click", (e) => {
+    e.stopPropagation();
+    callGuestsFromCard();
+  });
+}
+if (hudCallQ) {
+  hudCallQ.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      e.stopPropagation();
+      callGuestsFromCard();
+    }
+  });
+}
+document.addEventListener("focusin", (e) => {
+  const field = e.target && e.target.closest && e.target.closest("input, textarea, select");
+  if (!field) return;
+  setClickable(true);
+  window.desk?.setFocusable?.(true);
+});
+document.addEventListener("focusout", () => {
+  window.setTimeout(() => {
+    const active = document.activeElement;
+    if (active && active.closest && active.closest("input, textarea, select")) return;
+    window.desk?.setFocusable?.(false);
+  }, 0);
+});
 if (weatherPlate) {
   weatherPlate.addEventListener("click", (e) => {
     const toggle = e.target && e.target.closest && e.target.closest("#weather-toggle");

@@ -29,6 +29,8 @@ test("the desk card law matches the overlay card", () => {
   assert.match(overlayCard, /VOICE_TRUTH/);
   assert.match(overlayHtml, /data-card="collapse"/);
   assert.match(cardSrc, /data-card="collapse"/);
+  assert.match(cardSrc, /if \(card\.collapsed && !stayOpen\) return null/);
+  assert.match(overlayPet, /openKeeperCard/);
   assert.match(cardSrc, /Save say/);
   assert.match(cardSrc, /Turn off/);
 });
@@ -63,4 +65,5 @@ test("saved lines, alarm, and timer are machine-local", () => {
   const voices = [{ name: "Zarvox" }, { name: "Microsoft Aria Online (Natural)" }];
   assert.equal(C.pickSystemVoice(voices, "hearth")?.name, "Microsoft Aria Online (Natural)");
   assert.equal(C.CARD_STORE, "computerpets.card.v1");
+  assert.equal(C.blankCard().collapsed, true);
 });

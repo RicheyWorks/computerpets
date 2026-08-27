@@ -45,26 +45,43 @@
     line.textContent = A.plateLine(areas, live, unread);
     if (!body) return;
     const area = A.currentArea(areas);
-    const bits = [];
-    if (!area) bits.push(`<p>${A.NO_AREA}</p>`);
-    else if (unread) bits.push(`<p>${area.name} · unread</p>`);
-    else if (live) bits.push(`<p>${area.name}. ${live.label}. Open-Meteo.</p>`);
+    const liveBits = [];
+    if (!area) liveBits.push(`<p>${A.NO_AREA}</p>`);
+    else if (unread) liveBits.push(`<p>${area.name} · unread</p>`);
+    else if (live) liveBits.push(`<p>${area.name}. ${live.label}. Open-Meteo.</p>`);
     if (live && live.daily) {
-      bits.push("<ul>");
+      liveBits.push("<ul>");
       for (const d of live.daily) {
-        bits.push(`<li>${d.day} · ${d.sky}${d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}</li>`);
+        liveBits.push(`<li>${d.day} · ${d.sky}${d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}</li>`);
       }
-      bits.push("</ul>");
+      liveBits.push("</ul>");
     }
-    bits.push("<ul>");
+    liveBits.push("<ul>");
     for (const row of areas.areas) {
-      bits.push(
+      liveBits.push(
         `<li><button type="button" data-hit data-area-pick="${row.id}" data-on="${row.id === areas.currentId ? "1" : "0"}">${row.name}</button> <button type="button" data-hit data-area-del="${row.id}">Remove</button></li>`,
       );
     }
-    bits.push("</ul>");
-    bits.push('<form id="weather-add"><input data-hit id="weather-q" placeholder="A city or place" /><button data-hit type="submit">Look up</button></form><ul id="weather-hits"></ul>');
-    body.innerHTML = bits.join("");
+    liveBits.push("</ul>");
+    let liveBox = $("weather-live");
+    if (!liveBox) {
+      body.innerHTML = "";
+      liveBox = document.createElement("div");
+      liveBox.id = "weather-live";
+      body.appendChild(liveBox);
+      const truth = document.createElement("p");
+      truth.className = "keeper-truth";
+      truth.textContent = A.AREA_TRUTH || "Weather area. Named places you add. Not the radio station.";
+      body.appendChild(truth);
+      const form = document.createElement("form");
+      form.id = "weather-add";
+      form.innerHTML = `<label>Weather area<input data-hit id="weather-q" type="text" autocomplete="off" spellcheck="false" placeholder="${A.AREA_PLACEHOLDER || "A city or place — weather, not radio"}" aria-label="Weather area" /></label><button data-hit type="submit">Look up</button>`;
+      body.appendChild(form);
+      const hits = document.createElement("ul");
+      hits.id = "weather-hits";
+      body.appendChild(hits);
+    }
+    liveBox.innerHTML = liveBits.join("");
   }
 
   function paintNews(items, unread) {

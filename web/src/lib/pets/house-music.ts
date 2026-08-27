@@ -34,8 +34,19 @@ export type RadioStation = {
 };
 
 export const RADIO_CANT_REACH = "can't reach";
+export const RADIO_EMPTY = "no station from that look-up";
+export const RADIO_LABEL = "Radio station";
+export const RADIO_PLACEHOLDER = "Station, city, or 99.9";
 export const HOUSE_LOOP_LICENSE = "CC0 · house-made";
 export const RADIO_DIR = "https://de1.api.radio-browser.info/json/stations/search";
+
+export type RadioQuery = {
+  raw: string;
+  freq: string;
+  place: string;
+  tags: string[];
+  tokens: string[];
+};
 
 export function blankMusic(): MusicPrefs {
   return { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
@@ -69,17 +80,89 @@ export function musicPreset(id: string | undefined) {
   return MUSIC_PLUGINS.find((p) => p.id === id) ?? MUSIC_PLUGINS[0]!;
 }
 
-export function radioSearchUrl(query = "") {
-  const q = String(query || "").trim().slice(0, 40);
+export function parseRadioQuery(query = ""): RadioQuery {
+  const raw = String(query || "").replace(/\s+/g, " ").trim().slice(0, 80);
+  const freqMatch = raw.match(/\b(\d{2,3}\.\d)\b/);
+  const freq = freqMatch ? freqMatch[1] : "";
+  const tags: string[] = [];
+  if (/\bfm\b/i.test(raw)) tags.push("fm");
+  if (/\bam\b/i.test(raw)) tags.push("am");
+  const tokens = raw
+    .toLowerCase()
+    .split(/[^a-z0-9.]+/)
+    .filter((t) => t && t !== freq && t !== "fm" && t !== "am");
+  const place = tokens.find((t) => t.length > 2 && !/^\d/.test(t)) || "";
+  return { raw, freq, place, tags, tokens };
+}
+
+function searchParams(extra: Record<string, string>) {
   const params = new URLSearchParams({
     limit: "16",
     hidebroken: "true",
     order: "clickcount",
     reverse: "true",
   });
-  if (q) params.set("name", q);
-  else params.set("tag", "classical");
+  for (const [k, v] of Object.entries(extra || {})) {
+    if (v) params.set(k, String(v).slice(0, 40));
+  }
   return `${RADIO_DIR}?${params.toString()}`;
+}
+
+export function radioSearchUrl(query = "") {
+  const p = parseRadioQuery(query);
+  if (!p.raw) return searchParams({ tag: "classical" });
+  if (p.freq && p.place) return searchParams({ name: p.freq, tag: p.place });
+  if (p.freq) return searchParams({ name: p.freq });
+  return searchParams({ name: p.raw.slice(0, 40) });
+}
+
+export function radioSearchUrls(query = "") {
+  const p = parseRadioQuery(query);
+  if (!p.raw) return [searchParams({ tag: "classical" })];
+  const out: string[] = [];
+  const add = (url: string) => {
+    if (url && !out.includes(url)) out.push(url);
+  };
+  add(radioSearchUrl(p.raw));
+  if (p.freq) add(searchParams({ name: p.freq }));
+  if (p.place) {
+    add(searchParams({ name: p.place }));
+    add(searchParams({ tag: p.place }));
+    add(searchParams({ state: p.place }));
+  }
+  return out.slice(0, 4);
+}
+
+export function rankStations(stations: RadioStation[], query = "") {
+  const p = parseRadioQuery(query);
+  const tokens = [p.freq, p.place, ...p.tokens, ...p.tags].filter(Boolean);
+  const list = Array.isArray(stations) ? stations.slice() : [];
+  return list
+    .map((st) => {
+      const hay = `${st.name || ""} ${st.tags || ""}`.toLowerCase();
+      let score = 0;
+      for (const t of tokens) {
+        if (hay.includes(String(t).toLowerCase())) score += 2;
+      }
+      if (p.freq && hay.includes(p.freq)) score += 5;
+      if (p.place && hay.includes(p.place)) score += 3;
+      return { st, score };
+    })
+    .sort((a, b) => b.score - a.score)
+    .map((row) => row.st);
+}
+
+export function mergeStations(batches: Array<RadioStation[] | null | undefined>) {
+  const seen: Record<string, true> = Object.create(null);
+  const out: RadioStation[] = [];
+  for (const list of batches || []) {
+    for (const st of list || []) {
+      if (!st || !st.id || seen[st.id]) continue;
+      seen[st.id] = true;
+      out.push(st);
+    }
+  }
+  return out;
 }
 
 export function parseStations(json: unknown): RadioStation[] {

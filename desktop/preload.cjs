@@ -4,6 +4,7 @@ contextBridge.exposeInMainWorld("desk", {
   platform: process.platform,
   setClickable: (clickable) => ipcRenderer.send("set-clickable", !!clickable),
   setHits: (rects) => ipcRenderer.send("set-hits", Array.isArray(rects) ? rects : []),
+  setFocusable: (focusable) => ipcRenderer.send("set-focusable", !!focusable),
   openMenu: (x, y) => ipcRenderer.send("pet-menu", { x, y }),
   switchPet: (key) => ipcRenderer.send("switch-pet", key),
   notify: (title, body) => ipcRenderer.send("notify", { title, body }),

@@ -49,8 +49,10 @@ import {
 } from "@/lib/pets/card";
 import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
 import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
-import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, parseMusic, parseStations, playSrc, radioSearchUrl, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, RADIO_EMPTY, RADIO_LABEL, RADIO_PLACEHOLDER, mergeStations, parseMusic, parseStations, playSrc, radioSearchUrls, rankStations, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
 import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
+import { CALL_EMPTY, callKeys, groups as callGroups } from "@/lib/pets/call-guests";
+import { LIVING_KINDS } from "@/lib/pets/living";
 import { cn } from "@/lib/utils";
 
 export function KeeperCard({
@@ -66,7 +68,10 @@ export function KeeperCard({
   onDo,
   onOff,
   onCallBird,
+  onCallGuests,
   onMusicChange,
+  stayOpen,
+  openTick,
   className,
 }: {
   name: string;
@@ -81,7 +86,10 @@ export function KeeperCard({
   onDo?: (text: string) => void;
   onOff?: () => void;
   onCallBird?: () => void;
+  onCallGuests?: (keys: string[]) => void;
   onMusicChange?: (on: boolean) => void;
+  stayOpen?: boolean;
+  openTick?: number;
   className?: string;
 }) {
   const meters = keeperMeters(stats);
@@ -91,8 +99,18 @@ export function KeeperCard({
   const [offArmed, setOffArmed] = useState(false);
   const [stations, setStations] = useState<RadioStation[]>([]);
   const [radioUnread, setRadioUnread] = useState(false);
+  const [radioEmpty, setRadioEmpty] = useState(false);
   const [radioQ, setRadioQ] = useState("");
+  const [callQ, setCallQ] = useState("");
+  const [callPick, setCallPick] = useState("");
+  const [callGroup, setCallGroup] = useState("");
+  const [callTruth, setCallTruth] = useState("");
   const guest = useMemo(() => guestOf(card, guestKey), [card, guestKey]);
+  const dens = useMemo(() => callGroups(), []);
+  const callRoster = useMemo(
+    () => LIVING_KINDS.map((k) => ({ key: k.key, slug: k.slug, name: k.name, speciesLabel: k.speciesLabel })).sort((a, b) => a.name.localeCompare(b.name)),
+    [],
+  );
   const music = parseMusic(card.music);
   const houseStep = parseStep(card.stepKind);
 
@@ -104,6 +122,12 @@ export function KeeperCard({
     write({ ...card, music: next });
     onMusicChange?.(!!next.playing && next.plugin !== "off");
   }
+
+  useEffect(() => {
+    if (!openTick) return;
+    write({ ...loadCard(), collapsed: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openTick]);
 
   useEffect(() => {
     const src = playSrc(music);
@@ -198,16 +222,26 @@ export function KeeperCard({
     window.speechSynthesis.speak(u);
   }
 
+  function runCall() {
+    const keys = callKeys(callQ || callPick, callRoster, callGroup || null);
+    setCallTruth(keys.length ? "" : CALL_EMPTY);
+    if (!keys.length) return;
+    if (keys.includes("hummingbird")) onCallBird?.();
+    onCallGuests?.(keys);
+  }
+
+  if (card.collapsed && !stayOpen) return null;
+
   return (
     <article
       className={cn("keeper-card", className)}
       aria-label="Keeper card"
       data-keeper-poster
       data-color={card.color}
-      data-collapsed={card.collapsed ? "1" : "0"}
+      data-collapsed="0"
       onClick={(e) => {
-        const hit = (e.target as HTMLElement).closest("button, input, label, [data-care]");
-        if (hit || card.collapsed) return;
+        const hit = (e.target as HTMLElement).closest("button, input, label, select, [data-care]");
+        if (hit) return;
         write({ ...card, collapsed: true });
       }}
     >
@@ -215,16 +249,16 @@ export function KeeperCard({
         type="button"
         className="keeper-collapse"
         data-card="collapse"
-        aria-expanded={!card.collapsed}
+        aria-expanded="true"
         onClick={(e) => {
           e.stopPropagation();
-          write({ ...card, collapsed: !card.collapsed });
+          write({ ...card, collapsed: true });
         }}
       >
         <p className="keeper-kicker">{KEEPER_KICKER}</p>
         <h2 className="keeper-name">{name}</h2>
       </button>
-      {card.collapsed ? null : (
+      {(
         <div className="keeper-body">
           <p className="keeper-stage">{stage}</p>
           <p className="keeper-bond-title">{meters.bondTitle}</p>
@@ -473,26 +507,50 @@ export function KeeperCard({
                     onSubmit={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
-                      void fetch(radioSearchUrl(radioQ))
-                        .then((r) => r.json())
-                        .then((json) => {
-                          const next = parseStations(json);
+                      void Promise.all(
+                        radioSearchUrls(radioQ).map((url) =>
+                          fetch(url)
+                            .then((r) => r.json())
+                            .then((json) => parseStations(json))
+                            .catch(() => null),
+                        ),
+                      )
+                        .then((batches) => {
+                          if (batches.every((b) => b == null)) {
+                            setRadioUnread(true);
+                            setRadioEmpty(false);
+                            setStations([]);
+                            return;
+                          }
+                          const merged = mergeStations(batches.filter((b): b is RadioStation[] => !!b));
+                          const next = rankStations(merged, radioQ).slice(0, 16);
                           setStations(next);
-                          setRadioUnread(!next.length);
+                          setRadioUnread(false);
+                          setRadioEmpty(!next.length);
                         })
-                        .catch(() => setRadioUnread(true));
+                        .catch(() => {
+                          setRadioUnread(true);
+                          setRadioEmpty(false);
+                        });
                     }}
                   >
-                    <input
-                      value={radioQ}
-                      onChange={(e) => setRadioQ(e.target.value)}
-                      placeholder="Station name"
-                      aria-label="Search free radio"
-                      onClick={(e) => e.stopPropagation()}
-                    />
+                    <label>
+                      {RADIO_LABEL}
+                      <input
+                        type="text"
+                        autoComplete="off"
+                        spellCheck={false}
+                        value={radioQ}
+                        onChange={(e) => setRadioQ(e.target.value)}
+                        placeholder={RADIO_PLACEHOLDER}
+                        aria-label={RADIO_LABEL}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </label>
                     <button type="submit">Find</button>
                   </form>
                   {radioUnread ? <p className="keeper-truth">{RADIO_CANT_REACH}</p> : null}
+                  {radioEmpty ? <p className="keeper-truth">{RADIO_EMPTY}</p> : null}
                   <ul className="keeper-line-list">
                     {stations.map((st) => (
                       <li key={st.id}>
@@ -514,18 +572,83 @@ export function KeeperCard({
               ) : null}
             </div>
           ) : null}
-          <div className="keeper-bird">
-            <button
-              type="button"
-              data-card="call-bird"
-              onClick={(e) => {
-                e.stopPropagation();
-                playVoice("hummingbird");
-                onCallBird?.();
-              }}
-            >
-              Call {FLY_BIRD_NAME}
-            </button>
+          <div className="keeper-call">
+            <p>Call a guest</p>
+            <label>
+              Guest
+              <select
+                aria-label="Call guest dropdown"
+                value={callPick}
+                onChange={(e) => setCallPick(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <option value="">Pick a guest</option>
+                {callRoster.map((row) => (
+                  <option key={row.key} value={row.name}>
+                    {row.name} · {row.speciesLabel}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Name or group
+              <input
+                type="text"
+                autoComplete="off"
+                spellCheck={false}
+                value={callQ}
+                onChange={(e) => setCallQ(e.target.value)}
+                placeholder="Rui, Sip, plant…"
+                aria-label="Call by name or group"
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    runCall();
+                  }
+                }}
+              />
+            </label>
+            <label>
+              Den
+              <select
+                aria-label="Call by den"
+                value={callGroup}
+                onChange={(e) => setCallGroup(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <option value="">Pick a den</option>
+                {dens.map((den) => (
+                  <option key={den.id} value={den.id}>
+                    {den.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="keeper-line-row">
+              <button
+                type="button"
+                data-card="call-go"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  runCall();
+                }}
+              >
+                Call
+              </button>
+              <button
+                type="button"
+                data-card="call-bird"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playVoice("hummingbird");
+                  onCallBird?.();
+                }}
+              >
+                Call {FLY_BIRD_NAME}
+              </button>
+            </div>
+            {callTruth ? <p className="keeper-truth">{callTruth}</p> : null}
           </div>
           <div className="keeper-off">
             <button
@@ -612,6 +735,7 @@ export function MeetKeeperCard({ className }: { className?: string }) {
       onPlay={() => tend(applyPlay(stats))}
       onRest={() => tend(applyRest(stats))}
       onOff={() => setHidden(true)}
+      stayOpen
     />
   );
 }

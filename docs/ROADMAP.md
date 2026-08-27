@@ -178,6 +178,7 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [x] Real window rects on Windows (work-area space, skip overlay / minimized / taskbar). Rui (`red_panda`) clings a window side and dives. The species door (`playFor`) is how later guests get their own sit. Other guests walked a sill that leftover. `/demo` draws a plate and walks the same climb. Sleep and hide still win. Mac / Linux window play is a later door. Catalog stays 220.
 - [x] Arc (`cyber_dragon` / `arc`) rides a real window ridge: jump onto the title-bar / top, hold, then hop or slide off. Not Rui's cling-dive. Not the generic sill. Same `playFor` door. `/demo` lockstep. Sleep, hide, leave, rest, and the keeper card still win. Windows first. Mac / Linux window play stays `mac-linux-window-play`. Catalog stays 220. Volt leftover follows.
 - [x] Volt (`volt_dragon` / `volt`) coils a real window corner: wrap the top-left or top-right edge-corner, hold, then uncoil off. Not Rui's cling-dive. Not Arc's title-bar ridge. Not the generic sill. Same `playFor` door. `/demo` lockstep. Sleep, hide, leave, rest, the keeper card, and the ribbon still win. Windows first. Mac / Linux window play stays `mac-linux-window-play`. Catalog stays 220. Do not start Trace.
+- [x] Desk leftover after weather / Sip / ribbon: a real type-in Radio station box (Radio Browser finds `99.9 seattle fm`, `KEXP`, `seattle`; honest empty / can't-reach), weather area labeled apart from radio and still first-run `no area set`, Call the rest of the 220 (dropdown, name, group string, den picker), no Windows ribbon toast, keeper card pops on a pet click and collapse hides it completely so speech is readable. Overlay + `/demo` lockstep. Catalog stays 220. Sandbox stays on. Do not start Trace.
 - [x] Honest Windows desk download teaching: START-HERE / README lead with the real overlay path. Node after the pets-on-the-desk picture. No Store ID. No published `.exe`. `/demo` stays the same house. Catalog stays 220.
 - [x] Overlay finds the roster on Windows: renderer asks main for the house it already read. Sandboxed `file://` fetch is not a door. Catalog stays 220.
 - [ ] Desktop presence is not filesystem theft: no silent read/write/exfil, no keyloggers, no secret capture.
@@ -205,6 +206,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-08-27 (Phase 6 leftover: weather, news, Sip, ribbon)
+**Last Updated:** 2026-08-27 (Phase 6 leftover: radio type-in, Call catalog, card hide, no ribbon toast)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
