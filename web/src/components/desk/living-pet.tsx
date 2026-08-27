@@ -732,7 +732,9 @@ export function LivingPet({
       if (hitRef.current) {
         hitRef.current.style.transform = walkXform;
         hitRef.current.style.transformOrigin =
-          s.play && (s.play.phase === "dive" || s.play.phase === "leap") ? "center center" : "center bottom";
+          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off")
+            ? "center center"
+            : "center bottom";
       }
       if (imgRef.current) {
         if (imgRef.current.src !== new URL(src, window.location.origin).href) {
