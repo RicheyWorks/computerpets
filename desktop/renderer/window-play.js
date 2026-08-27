@@ -4339,7 +4339,12 @@
       next.anim = "walk";
       next.facing = face;
       if (u >= 1) {
-        return goPhase(next, "kindle-coal", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+        const banked = goPhase(next, "kindle-coal", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+        const coal = kindleCoalPath(0);
+        banked.x = target.holdX;
+        banked.lift = target.holdLift + coal.lift;
+        banked.rot = coal.rot;
+        return banked;
       }
       return next;
     }
