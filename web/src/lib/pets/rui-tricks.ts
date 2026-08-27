@@ -1,10 +1,13 @@
-/** Rui ground tricks while idle. Sleep, hide, card, and window-play still win. Same map as desktop `rui-tricks.js`. */
+/** Rui ground tricks while idle. Feed-happy dances sit after eat. Sleep, hide, card, and window-play still win. Same map as desktop `rui-tricks.js`. */
 
 export const TRICK_KEY = "red_panda";
 export const TRICKS = ["somersault", "lie", "scratch", "wave", "dance"] as const;
+export const HAPPY = ["twirl", "bounce", "shuffle"] as const;
 export type RuiTrickKind = (typeof TRICKS)[number];
+export type RuiHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
 export type TrickPhase = "go" | "lie" | "stretch" | "flip" | "done";
+export type HappyPhase = "go" | "done";
 
 export type TrickFlags = {
   asleep?: boolean;
@@ -27,6 +30,26 @@ export type RuiTrick = {
   fromX?: number;
   flipFrom?: number;
   abort?: boolean;
+};
+
+export type RuiHappy = {
+  kind: RuiHappyKind;
+  happy: true;
+  phase: HappyPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX?: number;
+  abort?: boolean;
+};
+
+export const HAPPY_DUR: Record<RuiHappyKind, number> = {
+  twirl: 1.35,
+  bounce: 1.22,
+  shuffle: 1.58,
 };
 
 /** sleep/2.png — lying down, eyes closed. Frames 3–4 are standing and must not loop. */
@@ -89,6 +112,115 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: RuiTrickKin
   if (roll < 0.58) return "scratch";
   if (roll < 0.76) return "wave";
   return "dance";
+}
+
+export function happyCanStart(state: TrickFlags | undefined) {
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
+export function happyShouldAbort(state: TrickFlags | undefined) {
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
+export function pickHappy(lastKind?: RuiHappyKind | null, rand?: number): RuiHappyKind {
+  const pool = HAPPY.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...HAPPY];
+  const roll = rand == null ? Math.random() : rand;
+  return list[Math.floor(roll * list.length)] ?? list[0]!;
+}
+
+export function beginHappy(kind: RuiHappyKind, x: number, facing: 1 | -1 = 1): RuiHappy {
+  const name: RuiHappyKind = HAPPY.includes(kind) ? kind : "twirl";
+  return {
+    kind: name,
+    happy: true,
+    phase: "go",
+    t: 0,
+    x,
+    lift: 0,
+    rot: 0,
+    anim: name === "shuffle" ? "walk" : "play",
+    facing,
+    fromX: x,
+  };
+}
+
+export function twirlPose(t: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.twirl));
+  return {
+    lift: Math.abs(Math.sin(u * Math.PI * 2)) * 16,
+    rot: facing * 320 * u,
+    dx: 0,
+    anim: "play" as const,
+  };
+}
+
+export function bouncePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.bounce));
+  return {
+    lift: Math.abs(Math.sin(u * Math.PI * 3)) * 28,
+    rot: Math.sin(u * Math.PI * 3) * 10,
+    dx: Math.sin(u * Math.PI * 3) * 4,
+    anim: "play" as const,
+  };
+}
+
+export function shufflePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.shuffle));
+  if (u < 0.38) {
+    const s = u / 0.38;
+    return { x: fromX + facing * 36 * s, lift: 0, rot: 0, anim: "walk" as const };
+  }
+  if (u < 0.76) {
+    const s = (u - 0.38) / 0.38;
+    return { x: fromX + facing * 36 * (1 - s), lift: 0, rot: 0, anim: "walk" as const };
+  }
+  return { x: fromX, lift: 2, rot: Math.sin(((u - 0.76) / 0.24) * Math.PI) * 8, anim: "sit" as const };
+}
+
+export function stepHappy(happy: RuiHappy, dt: number, flags?: TrickFlags): RuiHappy {
+  if (!happy || happy.phase === "done") return happy;
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: RuiHappy = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "twirl") {
+    const pose = twirlPose(next.t, next.facing);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "bounce") {
+    const pose = bouncePose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = shufflePose(next.t, next.fromX != null ? next.fromX : next.x, next.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
 }
 
 export function sleepHoldFrame(key: string | undefined, frameCount?: number) {

@@ -58,3 +58,36 @@ test("somersault is a rotate+arc on existing play frames", () => {
   const wave = T.beginTrick("wave", 80, 1);
   assert.equal(wave.anim, "talk");
 });
+
+test("feed-happy is its own sit: three dances, not the music loop, and two feeds are not the same", () => {
+  assert.deepEqual([...T.HAPPY], ["twirl", "bounce", "shuffle"]);
+  assert.equal(T.HAPPY.includes("dance"), false);
+  assert.equal(T.pickHappy("twirl", 0), "bounce");
+  assert.notEqual(T.pickHappy("twirl", 0.9), "twirl");
+  assert.equal(Overlay.pickHappy("bounce", 0) !== "bounce", true);
+  assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
+  assert.equal(T.happyCanStart({ asleep: false, hidden: false, leaving: false, cmd: "idle", card: true }), true);
+  assert.equal(T.happyCanStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
+  assert.equal(T.happyShouldAbort({ cmd: "sleep" }), true);
+  assert.equal(T.happyShouldAbort({ cmd: "hide" }), true);
+  assert.equal(T.happyShouldAbort({ card: true, cmd: "idle" }), false);
+  const twirl = T.beginHappy("twirl", 80, 1);
+  assert.equal(twirl.anim, "play");
+  const twirlMid = T.stepHappy(twirl, 0.7, { cmd: "idle" });
+  assert.ok(Math.abs(twirlMid.rot) > 40);
+  assert.notEqual(twirlMid.phase, "done");
+  const bounce = T.beginHappy("bounce", 80, 1);
+  const bounceMid = T.stepHappy(bounce, 0.2, { cmd: "idle" });
+  assert.ok(bounceMid.lift > 8);
+  assert.ok(Math.abs(bounceMid.rot) < 40);
+  const shuffle = T.beginHappy("shuffle", 80, 1);
+  assert.equal(shuffle.anim, "walk");
+  const shuffleMid = T.stepHappy(shuffle, 0.3, { cmd: "idle" });
+  assert.equal(shuffleMid.anim, "walk");
+  assert.ok(Math.abs(shuffleMid.x - 80) > 4);
+  const done = T.stepHappy(twirl, T.HAPPY_DUR.twirl + 0.1, { cmd: "idle" });
+  assert.equal(done.phase, "done");
+  const aborted = T.stepHappy(bounceMid, 0.1, { asleep: true, cmd: "sleep" });
+  assert.equal(aborted.phase, "done");
+  assert.equal(aborted.abort, true);
+});

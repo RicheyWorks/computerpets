@@ -1,10 +1,15 @@
-/** Sip the ruby-throated hummingbird. Stay and fly. Not a walk-with-wings-glued. */
+/** Sip the ruby-throated hummingbird. Stay and fly. When Rui sleeps she lands and chills. */
 (function (root) {
   const FLY_BIRD_KEY = "hummingbird";
   const FLY_BIRD_NAME = "Sip";
   const FLY_BIRD_SLUG = "sip";
+  const PERCH_HOST = "red_panda";
   const MIN_STAY_S = 24;
   const CALL_EVERY_S = 7.5;
+  const PERCH_ON_S = 0.85;
+  const LIFT_S = 0.72;
+  const SHOULDER_X = 38;
+  const SHOULDER_LIFT = 72;
 
   function clamp(n, a, b) {
     return Math.max(a, Math.min(b, n));
@@ -22,6 +27,20 @@
 
   function shouldAbort(state) {
     return !!(state && state.hidden);
+  }
+
+  function shouldPerch(flags) {
+    if (!flags || flags.hidden) return false;
+    if (flags.hostKey && flags.hostKey !== PERCH_HOST) return false;
+    return !!flags.hostSleeping;
+  }
+
+  function perchPoint(hostX, hostFacing, hostLift) {
+    const face = hostFacing < 0 ? -1 : 1;
+    return {
+      x: (hostX || 0) + face * SHOULDER_X,
+      lift: (hostLift || 0) + SHOULDER_LIFT,
+    };
   }
 
   function beginFly(width, height, fromRight) {
@@ -66,6 +85,33 @@
     };
   }
 
+  function goPerch(fly, hostX, hostLift, hostFacing) {
+    const hold = perchPoint(hostX, hostFacing, hostLift);
+    return {
+      ...fly,
+      phase: "approach-perch",
+      t: 0,
+      fromX: fly.x,
+      toX: hold.x,
+      fromLift: fly.lift,
+      toLift: hold.lift,
+      facing: hold.x >= fly.x ? 1 : -1,
+    };
+  }
+
+  function goLift(fly, height) {
+    const destLift = Math.min((fly.lift || 0) + 48, (height || 480) - 70);
+    return {
+      ...fly,
+      phase: "lift",
+      t: 0,
+      fromX: fly.x,
+      toX: fly.x,
+      fromLift: fly.lift,
+      toLift: destLift,
+    };
+  }
+
   function flyLerp(u, from, to, arc) {
     const t = smoothstep(Math.max(0, Math.min(1, u)));
     return from + (to - from) * t + Math.sin(Math.max(0, Math.min(1, u)) * Math.PI) * arc;
@@ -76,6 +122,14 @@
     if (shouldAbort(flags)) return { ...fly, phase: "done", called: false };
     const next = { ...fly, t: fly.t + Math.max(0, dt), age: fly.age + Math.max(0, dt) };
     const hoverBob = Math.sin(next.age * 14) * 5;
+    const perchNow = shouldPerch(flags);
+    if (perchNow && next.phase !== "approach-perch" && next.phase !== "perch") {
+      return goPerch(next, flags.hostX, flags.hostLift, flags.hostFacing);
+    }
+    if (!perchNow && (next.phase === "approach-perch" || next.phase === "perch")) {
+      return goLift(next, height);
+    }
+
     if (next.phase === "enter") {
       const u = next.t / 1.15;
       next.x = flyLerp(u, next.fromX, next.toX, 0);
@@ -104,6 +158,35 @@
       }
       return next;
     }
+    if (next.phase === "approach-perch") {
+      const hold = perchPoint(flags && flags.hostX, flags && flags.hostFacing, flags && flags.hostLift);
+      next.toX = hold.x;
+      next.toLift = hold.lift;
+      const u = next.t / PERCH_ON_S;
+      next.x = flyLerp(u, next.fromX, next.toX, 8);
+      next.lift = flyLerp(u, next.fromLift, next.toLift, 12);
+      next.rot = Math.sin(Math.max(0, Math.min(1, u)) * Math.PI) * 6 * next.facing;
+      next.facing = next.toX >= next.fromX ? 1 : -1;
+      if (u >= 1) return { ...next, phase: "perch", t: 0, x: hold.x, lift: hold.lift, fromX: hold.x, toX: hold.x, fromLift: hold.lift, toLift: hold.lift };
+      return next;
+    }
+    if (next.phase === "perch") {
+      const hold = perchPoint(flags && flags.hostX, flags && flags.hostFacing, flags && flags.hostLift);
+      next.x = hold.x + Math.sin(next.age * 2.2) * 3;
+      next.lift = hold.lift + Math.sin(next.age * 6) * 2;
+      next.rot = Math.sin(next.age * 5) * 3;
+      next.toX = hold.x;
+      next.toLift = hold.lift;
+      return next;
+    }
+    if (next.phase === "lift") {
+      const u = next.t / LIFT_S;
+      next.x = flyLerp(u, next.fromX, next.toX, 0);
+      next.lift = flyLerp(u, next.fromLift, next.toLift, 10);
+      next.rot = Math.sin(Math.max(0, Math.min(1, u)) * Math.PI) * 5;
+      if (u >= 1) return { ...next, phase: "hover", t: 0, x: next.toX, lift: next.toLift, fromX: next.toX, fromLift: next.toLift };
+      return next;
+    }
     return next;
   }
 
@@ -124,11 +207,17 @@
     FLY_BIRD_KEY,
     FLY_BIRD_NAME,
     FLY_BIRD_SLUG,
+    PERCH_HOST,
     MIN_STAY_S,
     CALL_EVERY_S,
+    PERCH_ON_S,
+    LIFT_S,
     canStart,
     shouldAbort,
+    shouldPerch,
+    perchPoint,
     beginFly,
+    goPerch,
     stepFly,
     shouldCall,
     markCalled,
