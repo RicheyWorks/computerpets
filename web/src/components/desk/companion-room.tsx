@@ -40,7 +40,7 @@ import { traitFor } from "@/lib/pets/traits";
 import { SNACK_LINE, callLine, dayPartLabel, dayPart, hideLine, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
 import { weatherIdle, weatherLabel, weatherLine, weatherOf, type Weather } from "@/lib/pets/weather";
 import { currentArea } from "@/lib/pets/weather-areas";
-import { DeskNewsPlate, DeskWeatherPlate, WEATHER_ID } from "@/components/desk/desk-plates";
+import { DeskMarketPlate, DeskNewsPlate, DeskWeatherPlate, WEATHER_ID } from "@/components/desk/desk-plates";
 import { BirdFlyer } from "@/components/desk/bird-fly";
 import { CalledGuests } from "@/components/desk/called-guests";
 import { FLY_BIRD_KEY } from "@/lib/pets/bird-fly";
@@ -333,7 +333,7 @@ export function CompanionRoom({
         return;
       }
       if (cardOpen) {
-        issue("idle");
+        if (order.cmd !== "eat" && order.cmd !== "seek" && order.cmd !== "play") issue("idle");
         return;
       }
       if (statsRef.current.hunger < 26) {
@@ -675,6 +675,7 @@ export function CompanionRoom({
         />
       ) : null}
       {demoWindow ? <DeskNewsPlate /> : null}
+      {demoWindow ? <DeskMarketPlate /> : null}
 
       <BlotterMarks
         mark={mark}

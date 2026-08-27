@@ -63,40 +63,85 @@
       );
     }
     liveBits.push("</ul>");
-    let liveBox = $("weather-live");
-    if (!liveBox) {
-      body.innerHTML = "";
-      liveBox = document.createElement("div");
-      liveBox.id = "weather-live";
-      body.appendChild(liveBox);
-      const truth = document.createElement("p");
-      truth.className = "keeper-truth";
-      truth.textContent = A.AREA_TRUTH || "Weather area. Named places you add. Not the radio station.";
-      body.appendChild(truth);
-      const form = document.createElement("form");
-      form.id = "weather-add";
-      form.innerHTML = `<label>Weather area<input data-hit id="weather-q" type="text" autocomplete="off" spellcheck="false" placeholder="${A.AREA_PLACEHOLDER || "A city or place — weather, not radio"}" aria-label="Weather area" /></label><button data-hit type="submit">Look up</button>`;
-      body.appendChild(form);
-      const hits = document.createElement("ul");
-      hits.id = "weather-hits";
-      body.appendChild(hits);
-    }
-    liveBox.innerHTML = liveBits.join("");
+    const liveBox = $("weather-live");
+    if (liveBox) liveBox.innerHTML = liveBits.join("");
   }
 
-  function paintNews(items, unread) {
+  function paintNews(items, unread, card) {
     const N = root.PetNews;
     const line = $("news-line");
-    const body = $("news-body");
     if (!N || !line) return;
     line.textContent = N.newsLine(items, unread);
-    if (!body) return;
-    if (unread && (!items || !items.length)) body.innerHTML = `<p>${N.CANT_REACH}</p>`;
-    else if (!items || !items.length) body.innerHTML = `<p>${N.NO_HEADLINES}</p>`;
+    const liveBox = $("news-live");
+    if (!liveBox) return;
+    const prefs = N.parseNewsPrefs(card || {});
+    const topic = N.currentTopic(prefs);
+    const source = N.sourceLine(topic);
+    const topics = $("news-topics");
+    if (topics) {
+      topics.replaceChildren();
+      for (const row of prefs.topics) {
+        const li = document.createElement("li");
+        const pick = document.createElement("button");
+        pick.type = "button";
+        pick.dataset.hit = "1";
+        pick.dataset.newsPick = row.id;
+        pick.dataset.on = row.id === prefs.currentId ? "1" : "0";
+        pick.textContent = row.name;
+        li.appendChild(pick);
+        if (row.id !== N.WORLD_ID) {
+          const del = document.createElement("button");
+          del.type = "button";
+          del.dataset.hit = "1";
+          del.dataset.newsDel = row.id;
+          del.textContent = "Remove";
+          li.appendChild(del);
+        }
+        topics.appendChild(li);
+      }
+    }
+    if (unread && (!items || !items.length)) liveBox.innerHTML = `<p>${source}</p><p>${N.CANT_REACH}</p>`;
+    else if (!items || !items.length) liveBox.innerHTML = `<p>${source}</p><p>${N.NO_HEADLINES}</p>`;
     else {
-      body.innerHTML = `<p>${N.NEWS_SOURCE}</p><ul>${items
-        .map((it) => `<li><a data-hit href="${it.url}" target="_blank" rel="noreferrer">${it.title}</a></li>`)
+      liveBox.innerHTML = `<p>${source}</p><ul>${items
+        .map((it) => `<li><a data-hit href="${it.url}" target="_blank" rel="noreferrer">${it.title}</a>${it.summary ? `<p>${it.summary}</p>` : ""}</li>`)
         .join("")}</ul>`;
+    }
+  }
+
+  function paintMarket(card, live, unread) {
+    const M = root.PetMarket;
+    const line = $("market-line");
+    if (!M || !line) return;
+    const house = M.parseMarket(card || {});
+    line.textContent = M.plateLine(house, live, unread);
+    const liveBox = $("market-live");
+    const list = $("market-tickers");
+    const ticker = M.currentTicker(house);
+    if (liveBox) {
+      if (!ticker) liveBox.innerHTML = `<p>${M.NO_QUOTE}</p>`;
+      else if (unread && !live) liveBox.innerHTML = `<p>${ticker.symbol} · ${M.CANT_REACH}</p>`;
+      else if (!live) liveBox.innerHTML = `<p>${ticker.symbol} · looking up</p>`;
+      else liveBox.innerHTML = `<p>${ticker.symbol}. ${live.name}. ${live.price} ${live.currency}. ${live.source === "coingecko" ? "CoinGecko" : "Yahoo"}.</p>`;
+    }
+    if (list) {
+      list.replaceChildren();
+      for (const row of house.tickers) {
+        const li = document.createElement("li");
+        const pick = document.createElement("button");
+        pick.type = "button";
+        pick.dataset.hit = "1";
+        pick.dataset.tickerPick = row.id;
+        pick.dataset.on = row.id === house.currentId ? "1" : "0";
+        pick.textContent = row.symbol;
+        const del = document.createElement("button");
+        del.type = "button";
+        del.dataset.hit = "1";
+        del.dataset.tickerDel = row.id;
+        del.textContent = "Remove";
+        li.append(pick, del);
+        list.appendChild(li);
+      }
     }
   }
 
@@ -107,7 +152,7 @@
     return { id: "desk-weather", x: r.left, y: r.top, width: r.width, height: r.height };
   }
 
-  const api = { playVoice, playStep, paintWeather, paintNews, weatherRect, clipEl };
+  const api = { playVoice, playStep, paintWeather, paintNews, paintMarket, weatherRect, clipEl };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetDeskHouse = api;
 })(typeof window !== "undefined" ? window : globalThis);

@@ -16,6 +16,8 @@ contextBridge.exposeInMainWorld("desk", {
   quit: () => ipcRenderer.send("quit-desk"),
   roster: () => ipcRenderer.invoke("roster-get"),
   radioSearch: (query, area) => ipcRenderer.invoke("radio-search", query, area),
+  newsTopic: (query) => ipcRenderer.invoke("news-topic", query),
+  marketQuote: (ticker) => ipcRenderer.invoke("market-quote", ticker),
   licenseStatus: () => ipcRenderer.invoke("license-status"),
   licenseUnlock: (input) => ipcRenderer.invoke("license-unlock", input),
   licenseDownload: () => ipcRenderer.invoke("license-download"),

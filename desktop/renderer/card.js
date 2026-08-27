@@ -70,6 +70,10 @@
       pets: {},
       weatherAreas: [],
       currentAreaId: null,
+      newsPrefs: [],
+      currentNewsId: "world",
+      marketTickers: [],
+      currentTickerId: null,
       stepKind: "species",
       music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
       sleepAid: { plugin: "off", playing: false },
@@ -154,6 +158,12 @@
     const areas = root.PetWeatherAreas ? root.PetWeatherAreas.parseAreas(raw) : { areas: [], currentId: null };
     next.weatherAreas = areas.areas;
     next.currentAreaId = areas.currentId;
+    const news = root.PetNews ? root.PetNews.parseNewsPrefs(raw) : { topics: [{ id: "world", name: "World", query: "" }], currentId: "world" };
+    next.newsPrefs = news.topics;
+    next.currentNewsId = news.currentId;
+    const market = root.PetMarket ? root.PetMarket.parseMarket(raw) : { tickers: [], currentId: null };
+    next.marketTickers = market.tickers;
+    next.currentTickerId = market.currentId;
     next.stepKind = root.PetHouseSounds ? root.PetHouseSounds.parseStep(raw.stepKind) : "species";
     next.music = root.PetHouseMusic ? root.PetHouseMusic.parseMusic(raw.music) : { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
     next.sleepAid = root.PetHouseSleep ? root.PetHouseSleep.parseSleepAid(raw.sleepAid) : { plugin: "off", playing: false };

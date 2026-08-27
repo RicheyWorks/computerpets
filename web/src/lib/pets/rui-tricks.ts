@@ -1,4 +1,4 @@
-/** Rui ground tricks while idle. Feed-happy dances sit after eat. Sleep, hide, card, and window-play still win. Same map as desktop `rui-tricks.js`. */
+/** Rui ground tricks while idle. Feed-happy dances sit after eat. Card-open freeze and leftover window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `rui-tricks.js`. */
 
 export const TRICK_KEY = "red_panda";
 export const TRICKS = ["somersault", "lie", "scratch", "wave", "dance"] as const;
@@ -116,7 +116,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: RuiTrickKin
 
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
-  if (state.asleep || state.hidden || state.leaving || state.windowPlay) return false;
+  if (state.asleep || state.hidden || state.leaving) return false;
   const cmd = String(state.cmd || "");
   if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
   if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
@@ -125,7 +125,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
 
 export function happyShouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
-  if (state.asleep || state.hidden || state.leaving || state.windowPlay) return true;
+  if (state.asleep || state.hidden || state.leaving) return true;
   const cmd = String(state.cmd || "");
   return (
     cmd === "sleep" ||
@@ -137,6 +137,23 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
     cmd === "talk" ||
     cmd === "enter"
   );
+}
+
+export function wantsThankYou(key: string | undefined) {
+  return key === TRICK_KEY || key === "rui";
+}
+
+export function startThankYou(
+  key: string | undefined,
+  lastKind: RuiHappyKind | null | undefined,
+  x: number,
+  facing: 1 | -1,
+  flags?: TrickFlags,
+) {
+  if (!wantsThankYou(key)) return null;
+  if (!happyCanStart(flags || { cmd: "idle" })) return null;
+  const pick = pickHappy(lastKind);
+  return { happy: beginHappy(pick, x, facing), kind: pick };
 }
 
 export function pickHappy(lastKind?: RuiHappyKind | null, rand?: number): RuiHappyKind {

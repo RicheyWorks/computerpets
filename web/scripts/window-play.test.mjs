@@ -30,7 +30,9 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("spark_dragon"), Overlay.playFor("spark_dragon"));
   assert.equal(P.playFor("ion_dragon"), "charge");
   assert.equal(P.playFor("ion_dragon"), Overlay.playFor("ion_dragon"));
-  assert.equal(P.playFor("gauss_dragon"), "sill");
+  assert.equal(P.playFor("gauss_dragon"), "orbit");
+  assert.equal(P.playFor("gauss_dragon"), Overlay.playFor("gauss_dragon"));
+  assert.equal(P.playFor("relay_dragon"), "sill");
   assert.equal(P.playFor("cat"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -217,5 +219,35 @@ test("the demo window plate walks Ion's charge the same way", () => {
   assert.ok(seen.has("charge-bolt"));
   assert.ok(seen.has("charge-hold"));
   assert.ok(seen.has("charge-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Gauss's orbit the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /orbit-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "gauss_dragon", WORK, 176, { side: "left", orbitDir: 1, leave: "hop" });
+  const target = P.pickTarget([WIN], 40, "gauss_dragon", WORK, 176, { side: "left", orbitDir: 1, leave: "hop" });
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.equal(target.orbitEndX, overlayTarget.orbitEndX);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 500 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "sill-walk");
+  }
+  assert.ok(seen.has("orbit-on"));
+  assert.ok(seen.has("orbit-loop"));
+  assert.ok(seen.has("orbit-hold"));
+  assert.ok(seen.has("orbit-off"));
   assert.equal(play.phase, "done");
 });
