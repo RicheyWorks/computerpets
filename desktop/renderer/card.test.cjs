@@ -108,11 +108,17 @@ test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", (
   assert.match(petSrc, /openKeeperCard/);
   assert.match(petSrc, /cardOpen\(\)/);
   assert.match(petSrc, /desk\.radioSearch/);
+  assert.match(petSrc, /desk\.newsTopic/);
+  assert.match(petSrc, /desk\.marketQuote/);
   assert.match(livingSrc, /cardOpen/);
   assert.match(mainSrc, /radio-search/);
+  assert.match(mainSrc, /news-topic/);
+  assert.match(mainSrc, /market-quote/);
   assert.match(mainSrc, /RADIO_UA/);
   assert.match(mainSrc, /sandbox:\s*true/);
   assert.match(preloadSrc, /radioSearch/);
+  assert.match(preloadSrc, /newsTopic/);
+  assert.match(preloadSrc, /marketQuote/);
   assert.equal(C.blankCard().collapsed, true);
 });
 

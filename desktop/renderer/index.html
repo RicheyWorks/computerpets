@@ -17,14 +17,54 @@
           <span>Weather area</span>
           <span id="weather-line">no area set</span>
         </button>
-        <div id="weather-body" hidden></div>
+        <div id="weather-body" hidden>
+          <div id="weather-live"></div>
+          <p class="keeper-truth">Weather area. Named places you add. Not the radio station.</p>
+          <form id="weather-add" data-hit>
+            <label>Weather area
+              <input data-hit id="weather-q" type="text" autocomplete="off" spellcheck="false" placeholder="A city or place — weather, not radio" aria-label="Weather area" />
+            </label>
+            <button data-hit type="submit" id="weather-lookup">Look up</button>
+          </form>
+          <button type="button" data-hit id="weather-here">Use this computer's location</button>
+          <p id="weather-here-truth" class="keeper-truth"></p>
+          <ul id="weather-hits"></ul>
+        </div>
       </article>
       <article id="news-plate" class="desk-plate" data-hit data-desk-plate="news">
         <button type="button" id="news-toggle" data-hit>
           <span>News</span>
           <span id="news-line">no headlines yet</span>
         </button>
-        <div id="news-body" hidden></div>
+        <div id="news-body" hidden>
+          <div id="news-live"></div>
+          <p class="keeper-truth">World is Wikipedia In the news. A named topic is Google News RSS.</p>
+          <form id="news-add" data-hit>
+            <label>News topic
+              <input data-hit id="news-q" type="text" autocomplete="off" spellcheck="false" placeholder="A topic — Tacoma crime, marijuana news" aria-label="News topic" />
+            </label>
+            <button data-hit type="submit" id="news-lookup">Look up</button>
+          </form>
+          <ul id="news-topics"></ul>
+        </div>
+      </article>
+      <article id="market-plate" class="desk-plate" data-hit data-desk-plate="market">
+        <button type="button" id="market-toggle" data-hit>
+          <span>Quotes</span>
+          <span id="market-line">no quote yet</span>
+        </button>
+        <div id="market-body" hidden>
+          <div id="market-live"></div>
+          <p class="keeper-truth">Stocks are Yahoo chart. Crypto is CoinGecko. No paid key.</p>
+          <form id="market-add" data-hit>
+            <label>Quotes
+              <input data-hit id="market-q" type="text" autocomplete="off" spellcheck="false" placeholder="A ticker — AAPL, BTC" aria-label="Quotes" />
+            </label>
+            <button data-hit type="submit" id="market-lookup">Look up</button>
+          </form>
+          <p id="market-truth" class="keeper-truth"></p>
+          <ul id="market-tickers"></ul>
+        </div>
       </article>
       <div id="mess"></div>
       <div id="gifts"></div>
@@ -94,7 +134,22 @@
           </div>
           <div id="hud-mutes" class="keeper-mutes" role="group" aria-label="Mute"></div>
           <div id="hud-steps" class="keeper-steps" role="group" aria-label="Footsteps"></div>
-          <div id="hud-music" class="keeper-music" data-hit></div>
+          <div id="hud-music" class="keeper-music" data-hit>
+            <p id="hud-music-title">Music</p>
+            <div id="hud-music-plugins"></div>
+            <button type="button" id="hud-music-play" data-hit hidden>Play</button>
+            <p id="hud-music-license" class="keeper-truth" hidden></p>
+            <form id="hud-radio-form" data-hit hidden>
+              <label>Radio station
+                <input id="hud-radio-q" type="text" autocomplete="off" spellcheck="false" placeholder="Station, city, or 99.9" aria-label="Radio station" data-hit />
+              </label>
+              <button type="submit" data-hit>Find</button>
+              <button type="button" id="hud-radio-local" data-hit hidden>Local</button>
+            </form>
+            <p id="hud-radio-truth" class="keeper-truth"></p>
+            <ul id="hud-radio-hits" class="keeper-line-list"></ul>
+            <p id="hud-music-now"></p>
+          </div>
           <div id="hud-sleep" class="keeper-sleep" data-hit></div>
           <div class="keeper-call" data-hit>
             <p>Call a guest</p>
@@ -140,6 +195,7 @@
     <script src="house-music.js"></script>
     <script src="house-sleep.js"></script>
     <script src="news.js"></script>
+    <script src="market.js"></script>
     <script src="rui-tricks.js"></script>
     <script src="bird-fly.js"></script>
     <script src="call-guests.js"></script>

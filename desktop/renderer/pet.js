@@ -136,6 +136,7 @@ const sim = {
   lastTrick: null,
   happy: null,
   lastHappy: null,
+  thankYou: false,
 };
 
 /** Real window rects from main. /demo draws a plate instead. */
@@ -156,6 +157,8 @@ let liveSky = null;
 let weatherUnread = false;
 let newsItems = [];
 let newsUnread = false;
+let marketLive = null;
+let marketUnread = false;
 let birdFly = null;
 let birdAcc = 0;
 let birdFrame = 0;
@@ -194,6 +197,28 @@ function musicOn() {
 
 function cardOpen() {
   return !card.collapsed;
+}
+
+function applyThankYou() {
+  const T = window.PetRuiTricks;
+  if (!T?.startThankYou || !kind) return false;
+  if (life?.asleep && window.PetLife?.wake) window.PetLife.wake(life);
+  const thanks = T.startThankYou(kind.key, sim.lastHappy, sim.x, sim.facing, {
+    asleep: false,
+    hidden: !!life?.hidden,
+    leaving,
+    cmd: "idle",
+  });
+  if (!thanks) {
+    sim.thankYou = false;
+    return false;
+  }
+  sim.play = null;
+  sim.trick = null;
+  sim.happy = thanks.happy;
+  sim.lastHappy = thanks.kind;
+  sim.thankYou = false;
+  return true;
 }
 
 function radioArea() {
@@ -304,10 +329,8 @@ function paintHousePlates() {
   const H = window.PetDeskHouse;
   if (!H) return;
   H.paintWeather(card, liveSky, weatherUnread);
-  H.paintNews(newsItems, newsUnread);
-  const here = document.getElementById("weather-here");
-  const body = document.getElementById("weather-body");
-  if (here && body && !body.contains(here)) body.appendChild(here);
+  H.paintNews(newsItems, newsUnread, card);
+  if (H.paintMarket) H.paintMarket(card, marketLive, marketUnread);
 }
 
 function fetchWeather() {
@@ -342,15 +365,72 @@ function fetchWeather() {
 function fetchNews() {
   const N = window.PetNews;
   if (!N) return;
-  fetch(N.newsUrl(), { cache: "no-store" })
+  const prefs = N.parseNewsPrefs(card);
+  const topic = N.currentTopic(prefs);
+  if (topic && topic.id !== N.WORLD_ID && topic.query) {
+    const door = window.desk && window.desk.newsTopic;
+    const url = N.topicRssUrl(topic.query);
+    if (!url) return;
+    const work = door
+      ? door(topic.query).then((res) => {
+          if (!res || res.ok === false) throw new Error("unread");
+          return Array.isArray(res.items) ? res.items : [];
+        })
+      : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
+    work
+      .then((items) => {
+        if (items && items.length) newsItems = items;
+        newsUnread = !items || !items.length;
+        paintHousePlates();
+      })
+      .catch(() => {
+        newsUnread = !newsItems.length;
+        paintHousePlates();
+      });
+    return;
+  }
+  fetch(N.newsUrl())
     .then((r) => r.json())
     .then((json) => {
-      newsItems = N.parseNews(json);
-      newsUnread = !newsItems.length;
+      const next = N.parseNews(json);
+      if (next.length) newsItems = next;
+      newsUnread = !next.length;
       paintHousePlates();
     })
     .catch(() => {
-      newsUnread = true;
+      newsUnread = !newsItems.length;
+      paintHousePlates();
+    });
+}
+
+function fetchMarket() {
+  const M = window.PetMarket;
+  if (!M) return;
+  const house = M.parseMarket(card);
+  const ticker = M.currentTicker(house);
+  if (!ticker) {
+    marketLive = null;
+    marketUnread = false;
+    paintHousePlates();
+    return;
+  }
+  const door = window.desk && window.desk.marketQuote;
+  const work = door
+    ? door(ticker).then((res) => {
+        if (!res || res.ok === false) throw new Error("unread");
+        return res.live || null;
+      })
+    : ticker.kind === "crypto"
+      ? fetch(M.geckoUrl(ticker.geckoId)).then((r) => r.json()).then((json) => M.parseGecko(json, ticker.geckoId))
+      : fetch(M.yahooUrl(ticker.symbol)).then((r) => r.json()).then((json) => M.parseYahoo(json));
+  work
+    .then((live) => {
+      if (live) marketLive = live;
+      marketUnread = !live;
+      paintHousePlates();
+    })
+    .catch(() => {
+      marketUnread = !marketLive;
       paintHousePlates();
     });
 }
@@ -919,100 +999,45 @@ function paintCard() {
   if (hudMusic && window.PetHouseMusic && kind && kind.key === "red_panda") {
     const M = window.PetHouseMusic;
     const music = M.parseMusic(card.music);
-    const typingMusic = hudMusic.contains(document.activeElement);
-    if (typingMusic) {
-      /* keep the radio box while the keeper types */
-    } else {
-    hudMusic.replaceChildren();
-    const title = document.createElement("p");
-    title.textContent = "Music · Rui";
-    hudMusic.appendChild(title);
-    for (const plugin of M.MUSIC_PLUGINS) {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.textContent = plugin.name;
-      btn.dataset.hit = "1";
-      btn.dataset.on = music.plugin === plugin.id ? "1" : "0";
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        card.music = M.parseMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
-        persistCard();
-        sitMusic();
-      });
-      hudMusic.appendChild(btn);
-    }
-    const play = document.createElement("button");
-    play.type = "button";
-    play.textContent = music.playing ? "Stop" : "Play";
-    play.dataset.hit = "1";
-    play.addEventListener("click", (e) => {
-      e.stopPropagation();
-      card.music = M.parseMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
-      persistCard();
-      sitMusic();
-    });
-    hudMusic.appendChild(play);
-    if (music.plugin === "house") {
-      const license = document.createElement("p");
-      license.className = "keeper-truth";
-      license.textContent = M.HOUSE_LOOP_LICENSE;
-      hudMusic.appendChild(license);
-    }
-    if (music.plugin === "radio") {
-      const form = document.createElement("form");
-      form.dataset.hit = "1";
-      const label = document.createElement("label");
-      label.textContent = M.RADIO_LABEL || "Radio station";
-      const input = document.createElement("input");
-      input.type = "text";
-      input.autocomplete = "off";
-      input.spellcheck = false;
-      input.placeholder = M.RADIO_PLACEHOLDER || "Station, city, or 99.9";
-      input.setAttribute("aria-label", M.RADIO_LABEL || "Radio station");
-      input.dataset.hit = "1";
-      input.value = radioQ;
-      input.addEventListener("input", () => {
-        radioQ = input.value;
-      });
-      label.appendChild(input);
-      const find = document.createElement("button");
-      find.type = "submit";
-      find.textContent = "Find";
-      find.dataset.hit = "1";
-      const list = document.createElement("ul");
-      list.className = "keeper-line-list";
-      const truth = document.createElement("p");
-      truth.className = "keeper-truth";
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        radioQ = input.value;
-        lookupRadio(input.value, list, truth, music);
-      });
-      form.append(label, find);
-      if (radioArea()) {
-        const local = document.createElement("button");
-        local.type = "button";
-        local.textContent = M.RADIO_LOCAL || "Local";
-        local.dataset.hit = "1";
-        local.addEventListener("click", (e) => {
+    hudMusic.hidden = false;
+    const title = document.getElementById("hud-music-title");
+    if (title) title.textContent = "Music · Rui";
+    const plugins = document.getElementById("hud-music-plugins");
+    if (plugins) {
+      plugins.replaceChildren();
+      for (const plugin of M.MUSIC_PLUGINS) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = plugin.name;
+        btn.dataset.hit = "1";
+        btn.dataset.on = music.plugin === plugin.id ? "1" : "0";
+        btn.addEventListener("click", (e) => {
           e.stopPropagation();
-          radioQ = "";
-          input.value = "";
-          lookupRadio("", list, truth, music);
+          card.music = M.parseMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
+          persistCard();
+          sitMusic();
         });
-        form.appendChild(local);
-      }
-      hudMusic.append(form, truth, list);
-      if (music.stationName) {
-        const now = document.createElement("p");
-        now.textContent = `Now ${music.stationName}. No now-playing inventing.`;
-        hudMusic.appendChild(now);
+        plugins.appendChild(btn);
       }
     }
+    const play = document.getElementById("hud-music-play");
+    if (play) {
+      play.hidden = false;
+      play.textContent = music.playing ? "Stop" : "Play";
     }
+    const license = document.getElementById("hud-music-license");
+    if (license) {
+      license.hidden = music.plugin !== "house";
+      license.textContent = music.plugin === "house" ? M.HOUSE_LOOP_LICENSE : "";
+    }
+    const form = document.getElementById("hud-radio-form");
+    const local = document.getElementById("hud-radio-local");
+    if (form) form.hidden = music.plugin !== "radio";
+    if (local) local.hidden = music.plugin !== "radio" || !radioArea();
+    const now = document.getElementById("hud-music-now");
+    if (now) now.textContent = music.plugin === "radio" && music.stationName ? `Now ${music.stationName}. No now-playing inventing.` : "";
   } else if (hudMusic) {
-    hudMusic.replaceChildren();
+    hudMusic.hidden = true;
   }
   if (hudSleep && window.PetHouseSleep) {
     const S = window.PetHouseSleep;
@@ -1512,8 +1537,19 @@ function applyCommand() {
     sim.target = null;
     return;
   }
-  if ((sim.cmd === "wander" || sim.cmd === "seek" || sim.cmd === "eat" || sim.cmd === "play" || sim.cmd === "talk") && life?.asleep && window.PetLife?.wake) {
+  if ((sim.cmd === "wander" || sim.cmd === "seek" || sim.cmd === "eat" || sim.cmd === "play" || sim.cmd === "talk" || sim.happy || sim.thankYou) && life?.asleep && window.PetLife?.wake) {
     window.PetLife.wake(life);
+  }
+  if (sim.happy && (sim.cmd === "wander" || sim.cmd === "idle")) {
+    sim.lastOrder = sim.order;
+    return;
+  }
+  if ((sim.cmd === "seek" || sim.cmd === "eat" || sim.anim === "eat" || sim.thankYou) && (sim.cmd === "wander" || sim.cmd === "idle")) {
+    if (sim.thankYou && sim.anim !== "eat" && sim.cmd !== "seek" && sim.cmd !== "eat") {
+      applyThankYou();
+    }
+    sim.lastOrder = sim.order;
+    return;
   }
   if (window.PetLife?.sleepHolds(life, sim.cmd) || (life?.asleep && window.PetCard?.sleepHolds(true, sim.cmd))) {
     sim.anim = "sleep";
@@ -1533,10 +1569,6 @@ function applyCommand() {
       { asleep: true, hidden: !!life.hidden, leaving, cmd: "sleep", card: cardOpen() },
       );
     }
-    return;
-  }
-  if (sim.happy && (sim.cmd === "wander" || sim.cmd === "idle")) {
-    sim.lastOrder = sim.order;
     return;
   }
   if (cardOpen() && (sim.cmd === "wander" || sim.cmd === "idle")) {
@@ -1878,7 +1910,10 @@ function applyArrive(via) {
     say(lineFrom(result) || window.PetLife.snackLine(kind.key));
     const title = window.PetLife.crossedBond(prevBond, life.bond);
     if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
-    if (hop.issueEat) issue("eat");
+    if (hop.issueEat) {
+      sim.thankYou = !!(window.PetRuiTricks && window.PetRuiTricks.wantsThankYou && window.PetRuiTricks.wantsThankYou(kind.key));
+      issue("eat");
+    }
     paintHud();
     return;
   }
@@ -2112,24 +2147,37 @@ function tick(now) {
       card: cardOpen(),
     };
     if (sim.happy && T && T.happyShouldAbort && T.happyShouldAbort({
-      asleep: !!life?.asleep,
+      asleep: false,
       hidden: !!life?.hidden,
       leaving,
       cmd: sim.cmd,
-      windowPlay: !!sim.play,
     })) {
       sim.happy = T.stepHappy(sim.happy, 0, {
-        asleep: !!life?.asleep,
+        asleep: false,
         hidden: !!life?.hidden,
         leaving,
         cmd: sim.cmd,
-        windowPlay: !!sim.play,
       });
     }
     if (sim.trick && T && T.shouldAbort(trickFlags)) {
       sim.trick = T.stepTrick(sim.trick, 0, trickFlags);
     }
-    if (sim.play && window.PetWindowPlay) {
+    if (sim.happy && T && T.stepHappy) {
+      sim.happy = T.stepHappy(sim.happy, dt, {
+        asleep: false,
+        hidden: !!life?.hidden,
+        leaving,
+        cmd: sim.cmd,
+      });
+      sim.x = sim.happy.x;
+      if (!life?.asleep) sim.anim = sim.happy.anim;
+      if (sim.happy.phase === "done") {
+        sim.lastHappy = sim.happy.kind;
+        sim.happy = null;
+        sim.land = 1;
+        sim.anim = life?.asleep ? "sleep" : cardOpen() ? "idle" : "idle";
+      }
+    } else if (sim.play && window.PetWindowPlay) {
       sim.play = window.PetWindowPlay.stepPlay(sim.play, dt, { x: sim.x, lift: sim.play.lift }, wins, work, BASE, playFlags);
       sim.x = sim.play.x;
       sim.facing = sim.play.facing;
@@ -2150,22 +2198,6 @@ function tick(now) {
         sim.land = 1;
         sim.anim = life?.asleep ? "sleep" : "idle";
         sim.trickWait = T.nextTrickWait(true, undefined, sim.lastTrick);
-      }
-    } else if (sim.happy && T && T.stepHappy) {
-      sim.happy = T.stepHappy(sim.happy, dt, {
-        asleep: !!life?.asleep,
-        hidden: !!life?.hidden,
-        leaving,
-        cmd: sim.cmd,
-        windowPlay: !!sim.play,
-      });
-      sim.x = sim.happy.x;
-      if (!life?.asleep) sim.anim = sim.happy.anim;
-      if (sim.happy.phase === "done") {
-        sim.lastHappy = sim.happy.kind;
-        sim.happy = null;
-        sim.land = 1;
-        sim.anim = life?.asleep ? "sleep" : "idle";
       }
     } else if (
       window.PetWindowPlay &&
@@ -2321,7 +2353,7 @@ function tick(now) {
     if (sim.shiftAge > 0) sim.shiftAge = Math.max(0, sim.shiftAge - dt);
     if (!leaving && !sim.play && !sim.trick) sim.x = clamp(sim.x, PAD, maxX);
 
-    if (life?.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) {
+    if (life?.asleep && !sim.happy && window.PetLife?.sleepHolds(life, sim.cmd)) {
       sim.anim = "sleep";
       const hold = window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length);
       if (hold != null) sim.frame = hold;
@@ -2343,17 +2375,7 @@ function tick(now) {
             const wasEat = sim.anim === "eat";
             sim.anim = "idle";
             sim.frame = 0;
-            if (wasEat && kind.key === "red_panda" && window.PetRuiTricks?.beginHappy && window.PetRuiTricks.happyCanStart({
-              asleep: !!life?.asleep,
-              hidden: !!life?.hidden,
-              leaving,
-              cmd: "idle",
-              windowPlay: !!sim.play,
-            })) {
-              const pick = window.PetRuiTricks.pickHappy(sim.lastHappy);
-              sim.happy = window.PetRuiTricks.beginHappy(pick, sim.x, sim.facing);
-              sim.lastHappy = pick;
-            }
+            if (wasEat) applyThankYou();
             issue("idle");
           } else {
             sim.frame += 1;
@@ -2405,7 +2427,7 @@ function tick(now) {
   const climbLift = sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0;
   const climbRot = sim.play ? sim.play.rot : sim.happy ? sim.happy.rot : sim.trick ? sim.trick.rot : 0;
   const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
-  pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off" || sim.play.phase === "coil-on" || sim.play.phase === "coil-off" || sim.play.phase === "path-on" || sim.play.phase === "path-off" || sim.play.phase === "field-on" || sim.play.phase === "field-off" || sim.play.phase === "crackle-on" || sim.play.phase === "crackle-hop" || sim.play.phase === "crackle-off" || sim.play.phase === "charge-on" || sim.play.phase === "charge-bolt" || sim.play.phase === "charge-off") ? "center center" : "center bottom";
+  pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off" || sim.play.phase === "coil-on" || sim.play.phase === "coil-off" || sim.play.phase === "path-on" || sim.play.phase === "path-off" || sim.play.phase === "field-on" || sim.play.phase === "field-off" || sim.play.phase === "crackle-on" || sim.play.phase === "crackle-hop" || sim.play.phase === "crackle-off" || sim.play.phase === "charge-on" || sim.play.phase === "charge-bolt" || sim.play.phase === "charge-off" || sim.play.phase === "orbit-on" || sim.play.phase === "orbit-off") ? "center center" : "center bottom";
   pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
@@ -2686,19 +2708,68 @@ if (hudCallQ) {
     }
   });
 }
+function fieldOf(el) {
+  return el && el.closest && el.closest("input, textarea, select");
+}
+document.addEventListener("pointerdown", (e) => {
+  if (!fieldOf(e.target)) return;
+  setClickable(true);
+  window.desk?.setFocusable?.(true);
+}, true);
 document.addEventListener("focusin", (e) => {
-  const field = e.target && e.target.closest && e.target.closest("input, textarea, select");
+  const field = fieldOf(e.target);
   if (!field) return;
   setClickable(true);
   window.desk?.setFocusable?.(true);
 });
 document.addEventListener("focusout", () => {
   window.setTimeout(() => {
-    const active = document.activeElement;
-    if (active && active.closest && active.closest("input, textarea, select")) return;
+    if (fieldOf(document.activeElement)) return;
     window.desk?.setFocusable?.(false);
   }, 0);
 });
+const hudMusicPlay = document.getElementById("hud-music-play");
+if (hudMusicPlay) {
+  hudMusicPlay.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const M = window.PetHouseMusic;
+    if (!M) return;
+    const music = M.parseMusic(card.music);
+    card.music = M.parseMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
+    persistCard();
+    sitMusic();
+  });
+}
+const hudRadioForm = document.getElementById("hud-radio-form");
+const hudRadioQ = document.getElementById("hud-radio-q");
+const hudRadioTruth = document.getElementById("hud-radio-truth");
+const hudRadioHits = document.getElementById("hud-radio-hits");
+if (hudRadioQ) {
+  hudRadioQ.addEventListener("input", () => {
+    radioQ = hudRadioQ.value;
+  });
+}
+if (hudRadioForm) {
+  hudRadioForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const M = window.PetHouseMusic;
+    if (!M || !hudRadioHits || !hudRadioTruth) return;
+    radioQ = hudRadioQ ? hudRadioQ.value : radioQ;
+    lookupRadio(radioQ, hudRadioHits, hudRadioTruth, M.parseMusic(card.music));
+  });
+}
+const hudRadioLocal = document.getElementById("hud-radio-local");
+if (hudRadioLocal) {
+  hudRadioLocal.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const M = window.PetHouseMusic;
+    if (!M || !hudRadioHits || !hudRadioTruth) return;
+    radioQ = "";
+    if (hudRadioQ) hudRadioQ.value = "";
+    lookupRadio("", hudRadioHits, hudRadioTruth, M.parseMusic(card.music));
+  });
+}
 if (weatherPlate) {
   weatherPlate.addEventListener("click", (e) => {
     const toggle = e.target && e.target.closest && e.target.closest("#weather-toggle");
@@ -2732,14 +2803,19 @@ if (weatherPlate) {
     if (!e.target || e.target.id !== "weather-add" || !window.PetWeatherAreas) return;
     e.preventDefault();
     e.stopPropagation();
+    const A = window.PetWeatherAreas;
     const q = document.getElementById("weather-q");
-    const url = window.PetWeatherAreas.geocodeUrl(q && q.value);
     const hits = document.getElementById("weather-hits");
-    if (!url || !hits) return;
+    if (!hits) return;
+    const url = A.geocodeUrl(q && q.value);
+    if (!url) {
+      hits.innerHTML = `<li>${A.TYPE_A_CITY}</li>`;
+      return;
+    }
     fetch(url, { cache: "no-store" })
       .then((r) => r.json())
       .then((json) => {
-        const found = window.PetWeatherAreas.parseGeocode(json);
+        const found = A.parseGeocode(json);
         hits.replaceChildren();
         if (!found.length) {
           hits.innerHTML = "<li>No place from that look-up.</li>";
@@ -2753,10 +2829,11 @@ if (weatherPlate) {
           btn.textContent = `Add ${hit.name}`;
           btn.addEventListener("click", (ev) => {
             ev.stopPropagation();
-            const house = window.PetWeatherAreas.addArea(card, hit);
+            const house = A.addArea(card, hit);
             card.weatherAreas = house.areas;
             card.currentAreaId = house.currentId;
             persistCard();
+            hits.replaceChildren();
             fetchWeather();
           });
           li.appendChild(btn);
@@ -2764,41 +2841,62 @@ if (weatherPlate) {
         }
       })
       .catch(() => {
-        hits.innerHTML = "<li>unread</li>";
+        hits.innerHTML = `<li>${A.CANT_REACH}</li>`;
       });
   });
-  if (navigator.permissions && navigator.permissions.query) {
-    void navigator.permissions.query({ name: "geolocation" }).then((p) => {
-      if (p.state !== "granted" || !weatherPlate) return;
-      const body = document.getElementById("weather-body");
-      if (!body) return;
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.dataset.hit = "1";
-      btn.id = "weather-here";
-      btn.textContent = "Use this computer's location";
-      body.appendChild(btn);
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        navigator.geolocation.getCurrentPosition(
-          (pos) => {
-            if (!window.PetWeatherAreas) return;
-            const house = window.PetWeatherAreas.addArea(card, {
-              id: "here",
-              name: "This computer",
-              query: "this computer",
-              lat: pos.coords.latitude,
-              lon: pos.coords.longitude,
-            });
-            card.weatherAreas = house.areas;
-            card.currentAreaId = house.currentId;
-            persistCard();
-            fetchWeather();
-          },
-          () => undefined,
-          { maximumAge: 600_000 },
-        );
-      });
+  const hereBtn = document.getElementById("weather-here");
+  if (hereBtn) {
+    hereBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const A = window.PetWeatherAreas;
+      const truth = document.getElementById("weather-here-truth");
+      if (!A) return;
+      function keepHere(area) {
+        const house = A.addArea(card, area);
+        card.weatherAreas = house.areas;
+        card.currentAreaId = house.currentId;
+        persistCard();
+        if (truth) truth.textContent = "";
+        fetchWeather();
+      }
+      function failHere(line) {
+        if (truth) truth.textContent = line;
+      }
+      function fromIp() {
+        fetch(A.ipPlaceUrl(), { cache: "no-store" })
+          .then((r) => r.json())
+          .then((json) => {
+            const place = A.parseIpPlace(json);
+            if (!place) {
+              failHere(A.HERE_FAIL);
+              return;
+            }
+            keepHere(place);
+          })
+          .catch(() => failHere(A.CANT_REACH));
+      }
+      if (!navigator.geolocation) {
+        fromIp();
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const url = A.reverseUrl(pos.coords.latitude, pos.coords.longitude);
+          if (!url) {
+            keepHere({ id: "here", name: "This computer", query: "this computer", lat: pos.coords.latitude, lon: pos.coords.longitude });
+            return;
+          }
+          fetch(url, { cache: "no-store" })
+            .then((r) => r.json())
+            .then((json) => {
+              const named = A.parseReverse(json);
+              keepHere(named || { id: "here", name: "This computer", query: "this computer", lat: pos.coords.latitude, lon: pos.coords.longitude });
+            })
+            .catch(() => fromIp());
+        },
+        () => fromIp(),
+        { maximumAge: 600_000 },
+      );
     });
   }
 }
@@ -2809,7 +2907,91 @@ if (newsPlate) {
       e.stopPropagation();
       const body = document.getElementById("news-body");
       if (body) body.hidden = !body.hidden;
+      return;
     }
+    const pick = e.target && e.target.closest && e.target.closest("[data-news-pick]");
+    if (pick && window.PetNews) {
+      e.stopPropagation();
+      const house = window.PetNews.pickTopic(card, pick.getAttribute("data-news-pick"));
+      card.newsPrefs = house.topics;
+      card.currentNewsId = house.currentId;
+      persistCard();
+      fetchNews();
+      return;
+    }
+    const del = e.target && e.target.closest && e.target.closest("[data-news-del]");
+    if (del && window.PetNews) {
+      e.stopPropagation();
+      const house = window.PetNews.removeTopic(card, del.getAttribute("data-news-del"));
+      card.newsPrefs = house.topics;
+      card.currentNewsId = house.currentId;
+      persistCard();
+      fetchNews();
+    }
+  });
+  newsPlate.addEventListener("submit", (e) => {
+    if (!e.target || e.target.id !== "news-add" || !window.PetNews) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const q = document.getElementById("news-q");
+    const text = q && q.value;
+    if (!String(text || "").trim()) return;
+    const house = window.PetNews.addTopic(card, { name: text, query: text });
+    card.newsPrefs = house.topics;
+    card.currentNewsId = house.currentId;
+    persistCard();
+    if (q) q.value = "";
+    fetchNews();
+  });
+}
+const marketPlate = document.getElementById("market-plate");
+if (marketPlate) {
+  marketPlate.addEventListener("click", (e) => {
+    const toggle = e.target && e.target.closest && e.target.closest("#market-toggle");
+    if (toggle) {
+      e.stopPropagation();
+      const body = document.getElementById("market-body");
+      if (body) body.hidden = !body.hidden;
+      return;
+    }
+    const pick = e.target && e.target.closest && e.target.closest("[data-ticker-pick]");
+    if (pick && window.PetMarket) {
+      e.stopPropagation();
+      const house = window.PetMarket.pickTicker(card, pick.getAttribute("data-ticker-pick"));
+      card.marketTickers = house.tickers;
+      card.currentTickerId = house.currentId;
+      persistCard();
+      fetchMarket();
+      return;
+    }
+    const del = e.target && e.target.closest && e.target.closest("[data-ticker-del]");
+    if (del && window.PetMarket) {
+      e.stopPropagation();
+      const house = window.PetMarket.removeTicker(card, del.getAttribute("data-ticker-del"));
+      card.marketTickers = house.tickers;
+      card.currentTickerId = house.currentId;
+      persistCard();
+      fetchMarket();
+    }
+  });
+  marketPlate.addEventListener("submit", (e) => {
+    if (!e.target || e.target.id !== "market-add" || !window.PetMarket) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const q = document.getElementById("market-q");
+    const truth = document.getElementById("market-truth");
+    const next = window.PetMarket.parseTicker(q && q.value);
+    if (!next) {
+      if (truth) truth.textContent = "type a ticker";
+      return;
+    }
+    const house = window.PetMarket.addTicker(card, next);
+    card.marketTickers = house.tickers;
+    card.currentTickerId = house.currentId;
+    persistCard();
+    if (q) q.value = "";
+    if (truth) truth.textContent = "";
+    fetchMarket();
   });
 }
 window.addEventListener("resize", () => {
@@ -2832,6 +3014,7 @@ setInterval(() => {
   if (performance.now() < speechUntil || life.hidden) return;
   const held = window.PetLife?.wanderWhileAsleep(life) || window.PetCard?.wanderWhileAsleep(life?.asleep);
   if (sim.play || sim.trick || sim.happy) return;
+  if (sim.cmd === "seek" || sim.cmd === "eat" || sim.anim === "eat" || sim.thankYou) return;
   if (held) {
     issue(held.cmd);
     return;
@@ -2859,6 +3042,11 @@ setInterval(() => {
   if (document.hidden) return;
   if (kind) tickLife();
 }, 20_000);
+setInterval(() => {
+  if (document.hidden) return;
+  fetchNews();
+  fetchMarket();
+}, 20 * 60 * 1000);
 setInterval(() => {
   if (document.hidden || !kind || !window.PetCard) return;
   const sky = skyOf();
@@ -2900,6 +3088,7 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
   paintWeather();
   fetchWeather();
   fetchNews();
+  fetchMarket();
   sitMusic();
   sitSleepAid();
   if (!(kind && window.PetBirdFly && kind.key === window.PetBirdFly.FLY_BIRD_KEY)) callSip();

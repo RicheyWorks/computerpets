@@ -5,8 +5,12 @@ export const NO_AREA = "no area set";
 export const AREA_LABEL = "Weather area";
 export const AREA_PLACEHOLDER = "A city or place — weather, not radio";
 export const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
+export const TYPE_A_CITY = "type a city";
+export const HERE_FAIL = "this computer did not share a place";
+export const CANT_REACH = "can't reach";
 export const GEOCODE_HOST = "geocoding-api.open-meteo.com";
 export const FORECAST_HOST = "api.open-meteo.com";
+export const IP_PLACE_HOST = "ipwho.is";
 export const MAX_AREAS = 8;
 export const AREA_NAME_CHARS = 48;
 
@@ -119,6 +123,37 @@ export function geocodeUrl(query: string) {
   const q = clipName(query);
   if (!q) return "";
   return `https://${GEOCODE_HOST}/v1/search?name=${encodeURIComponent(q)}&count=5&language=en&format=json`;
+}
+
+export function reverseUrl(lat: number, lon: number) {
+  const la = num(lat);
+  const lo = num(lon);
+  if (la == null || lo == null) return "";
+  return `https://${GEOCODE_HOST}/v1/reverse?latitude=${la}&longitude=${lo}&language=en&format=json`;
+}
+
+export function ipPlaceUrl() {
+  return `https://${IP_PLACE_HOST}/`;
+}
+
+export function parseIpPlace(json: unknown): WeatherArea | null {
+  if (!json || typeof json !== "object") return null;
+  const o = json as Record<string, unknown>;
+  if (o.success === false) return null;
+  const lat = num(o.latitude);
+  const lon = num(o.longitude);
+  if (lat == null || lon == null) return null;
+  const bits = [clipName(o.city), clipName(o.region), clipName(o.country)].filter(Boolean);
+  const name = bits.join(", ");
+  if (!name) return null;
+  return { id: "here", name, query: name, lat, lon };
+}
+
+export function parseReverse(json: unknown): WeatherArea | null {
+  if (!json || typeof json !== "object") return null;
+  const o = json as { results?: unknown; name?: unknown };
+  const list = Array.isArray(o.results) ? o.results : o.name ? [o] : [];
+  return parseGeocode({ results: list })[0] || null;
 }
 
 export function forecastUrl(lat: number, lon: number) {

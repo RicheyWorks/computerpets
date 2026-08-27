@@ -4,8 +4,12 @@
   const AREA_LABEL = "Weather area";
   const AREA_PLACEHOLDER = "A city or place — weather, not radio";
   const AREA_TRUTH = "Weather area. Named places you add. Not the radio station.";
+  const TYPE_A_CITY = "type a city";
+  const HERE_FAIL = "this computer did not share a place";
+  const CANT_REACH = "can't reach";
   const GEOCODE_HOST = "geocoding-api.open-meteo.com";
   const FORECAST_HOST = "api.open-meteo.com";
+  const IP_PLACE_HOST = "ipwho.is";
   const MAX_AREAS = 8;
   const AREA_NAME_CHARS = 48;
 
@@ -96,6 +100,33 @@
     return `https://${GEOCODE_HOST}/v1/search?name=${encodeURIComponent(q)}&count=5&language=en&format=json`;
   }
 
+  function reverseUrl(lat, lon) {
+    const la = num(lat);
+    const lo = num(lon);
+    if (la == null || lo == null) return "";
+    return `https://${GEOCODE_HOST}/v1/reverse?latitude=${la}&longitude=${lo}&language=en&format=json`;
+  }
+
+  function ipPlaceUrl() {
+    return `https://${IP_PLACE_HOST}/`;
+  }
+
+  function parseIpPlace(json) {
+    if (!json || typeof json !== "object" || json.success === false) return null;
+    const lat = num(json.latitude);
+    const lon = num(json.longitude);
+    if (lat == null || lon == null) return null;
+    const bits = [clipName(json.city), clipName(json.region), clipName(json.country)].filter(Boolean);
+    const name = bits.join(", ");
+    if (!name) return null;
+    return { id: "here", name, query: name, lat, lon };
+  }
+
+  function parseReverse(json) {
+    const list = json && Array.isArray(json.results) ? json.results : json && json.name ? [json] : [];
+    return parseGeocode({ results: list })[0] || null;
+  }
+
   function forecastUrl(lat, lon) {
     const la = num(lat);
     const lo = num(lon);
@@ -178,7 +209,11 @@
     AREA_LABEL,
     AREA_PLACEHOLDER,
     AREA_TRUTH,
+    TYPE_A_CITY,
+    HERE_FAIL,
+    CANT_REACH,
     GEOCODE_HOST,
+    IP_PLACE_HOST,
     FORECAST_HOST,
     MAX_AREAS,
     blankAreas,
@@ -190,6 +225,10 @@
     pickArea,
     renameArea,
     geocodeUrl,
+    reverseUrl,
+    ipPlaceUrl,
+    parseIpPlace,
+    parseReverse,
     forecastUrl,
     parseGeocode,
     mapLiveSky,
