@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https: http://127.0.0.1:* http://localhost:*; media-src 'none'"
+      content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src https: http://127.0.0.1:* http://localhost:*; media-src 'self' https: http: blob:"
     />
     <title>ComputerPets</title>
     <link rel="stylesheet" href="styles.css" />
@@ -12,6 +12,20 @@
   <body>
     <div id="stage">
       <div id="weather"></div>
+      <article id="weather-plate" class="desk-plate" data-hit data-desk-plate="weather">
+        <button type="button" id="weather-toggle" data-hit>
+          <span>Weather</span>
+          <span id="weather-line">no area set</span>
+        </button>
+        <div id="weather-body" hidden></div>
+      </article>
+      <article id="news-plate" class="desk-plate" data-hit data-desk-plate="news">
+        <button type="button" id="news-toggle" data-hit>
+          <span>News</span>
+          <span id="news-line">no headlines yet</span>
+        </button>
+        <div id="news-body" hidden></div>
+      </article>
       <div id="mess"></div>
       <div id="gifts"></div>
       <div id="treat" data-hit></div>
@@ -20,6 +34,7 @@
       <div id="dust"></div>
       <div id="bubble"><p id="bubble-text">&nbsp;</p></div>
       <img id="guest" data-hit alt="" draggable="false" />
+      <img id="bird" data-hit alt="Sip" draggable="false" />
       <svg id="tongue" width="36" height="20" viewBox="0 0 36 20" aria-hidden="true">
         <path d="M2 10 L16 10 M16 10 L28 5 M16 10 L28 15" fill="none" stroke="rgba(214,92,108,0.94)" stroke-width="1.7" stroke-linecap="round" />
       </svg>
@@ -77,6 +92,11 @@
             <p id="hud-timer-left" class="keeper-timer-left">0:00</p>
           </div>
           <div id="hud-mutes" class="keeper-mutes" role="group" aria-label="Mute"></div>
+          <div id="hud-steps" class="keeper-steps" role="group" aria-label="Footsteps"></div>
+          <div id="hud-music" class="keeper-music" data-hit></div>
+          <div class="keeper-bird" data-hit>
+            <button type="button" id="hud-call-bird" data-hit data-card="call-bird">Call Sip</button>
+          </div>
           <div class="keeper-off" data-hit>
             <button type="button" id="hud-off" data-hit data-card="off">Turn off</button>
             <p id="hud-off-truth" class="keeper-truth">Turns the overlay off. Start again with .\\desktop.ps1.</p>
@@ -99,6 +119,14 @@
     <script src="roster-load.js"></script>
     <script src="hours.js"></script>
     <script src="weather.js"></script>
+    <script src="weather-areas.js"></script>
+    <script src="house-sounds.js"></script>
+    <script src="house-music.js"></script>
+    <script src="news.js"></script>
+    <script src="rui-tricks.js"></script>
+    <script src="bird-fly.js"></script>
+    <script src="ribbon.js"></script>
+    <script src="desk-house.js"></script>
     <script src="visitor.js"></script>
     <script src="hive.js"></script>
     <script src="specials.js"></script>

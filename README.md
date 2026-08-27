@@ -26,7 +26,7 @@ House names. The ones you say out loud.
 
 ## Put a pet on your real desktop
 
-This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. Click the name to collapse it. Voice, color, saved lines, alarm, timer, mute, and Turn off sit on the expanded card. The tray by the clock has **On the desk** — Rui plus the grid ten, no scrolling two hundred twenty names.
+This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. Click the name to collapse it. Voice, color, saved lines, alarm, timer, mute, and Turn off sit on the expanded card. The tray by the clock has **On the desk** — Rui, Sip, and the grid ten, no scrolling two hundred twenty names.
 
 You do not need an account. You do not need a license. You do not need Java.
 
@@ -91,7 +91,7 @@ More in [desktop/README.md](desktop/README.md).
 
 Feed them when they look hungry. Play so they stay happy. Let them rest when they look tired. Clean up the mess they leave. Give medicine if they get sick.
 
-The keeper card is the daily care. The tray **On the desk** picks Rui and the grid ten. If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
+The keeper card is the daily care. The tray **On the desk** picks Rui, Sip, and the grid ten. If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
 
 There are **220** animals. Rui is the first one you meet.
 

@@ -47,7 +47,10 @@ import {
   type CardPrefs,
   type SavedKind,
 } from "@/lib/pets/card";
-import { playDeskSound } from "@/lib/pets/desk-audio";
+import { playDeskSound, playStep, playVoice } from "@/lib/pets/desk-audio";
+import { STEP_KINDS, STEP_LABELS, parseStep, stepOf } from "@/lib/pets/house-sounds";
+import { HOUSE_LOOP_LICENSE, MUSIC_PLUGINS, RADIO_CANT_REACH, parseMusic, parseStations, playSrc, radioSearchUrl, type MusicPrefs, type RadioStation } from "@/lib/pets/house-music";
+import { FLY_BIRD_NAME } from "@/lib/pets/bird-fly";
 import { cn } from "@/lib/utils";
 
 export function KeeperCard({
@@ -62,6 +65,8 @@ export function KeeperCard({
   onSay,
   onDo,
   onOff,
+  onCallBird,
+  onMusicChange,
   className,
 }: {
   name: string;
@@ -75,6 +80,8 @@ export function KeeperCard({
   onSay?: (text: string) => void;
   onDo?: (text: string) => void;
   onOff?: () => void;
+  onCallBird?: () => void;
+  onMusicChange?: (on: boolean) => void;
   className?: string;
 }) {
   const meters = keeperMeters(stats);
@@ -82,11 +89,38 @@ export function KeeperCard({
   const [card, setCard] = useState<CardPrefs>(() => loadCard());
   const [draft, setDraft] = useState("");
   const [offArmed, setOffArmed] = useState(false);
+  const [stations, setStations] = useState<RadioStation[]>([]);
+  const [radioUnread, setRadioUnread] = useState(false);
+  const [radioQ, setRadioQ] = useState("");
   const guest = useMemo(() => guestOf(card, guestKey), [card, guestKey]);
+  const music = parseMusic(card.music);
+  const houseStep = parseStep(card.stepKind);
 
   function write(next: CardPrefs) {
     setCard(saveCard(next));
   }
+
+  function writeMusic(next: MusicPrefs) {
+    write({ ...card, music: next });
+    onMusicChange?.(!!next.playing && next.plugin !== "off");
+  }
+
+  useEffect(() => {
+    const src = playSrc(music);
+    if (!src || card.mutes.music) {
+      onMusicChange?.(false);
+      return;
+    }
+    const audio = new Audio(src);
+    audio.loop = music.plugin === "house";
+    audio.volume = Math.max(0, Math.min(1, guest.volume / 100));
+    void audio.play().then(() => onMusicChange?.(true)).catch(() => onMusicChange?.(false));
+    return () => {
+      audio.pause();
+      audio.src = "";
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [music.plugin, music.playing, music.stationUrl, card.mutes.music, guest.volume]);
 
   useEffect(() => {
     let cancelled = false;
@@ -381,11 +415,117 @@ export function KeeperCard({
                   e.stopPropagation();
                   write({ ...card, mutes: { ...card.mutes, [bus]: !card.mutes[bus] } });
                   if (bus === "special" && !card.mutes[bus]) playDeskSound("hop", guestKey);
+                  if (bus === "steps" && !card.mutes[bus]) playStep(guestKey);
                 }}
               >
                 {card.mutes[bus] ? `Muted ${bus}` : `Mute ${bus}`}
               </button>
             ))}
+          </div>
+          <div className="keeper-steps" role="group" aria-label="Footsteps">
+            <p>Footsteps</p>
+            {STEP_KINDS.map((kind) => (
+              <button
+                key={kind}
+                type="button"
+                data-on={houseStep === kind ? "1" : "0"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  write({ ...card, stepKind: kind });
+                  if (kind !== "mute") playStep(guestKey);
+                }}
+              >
+                {STEP_LABELS[kind]}
+              </button>
+            ))}
+            <p className="keeper-truth">Now {STEP_LABELS[stepOf(houseStep, guest.stepKind, guestKey)]}. House-wide, or this guest if you pick on their card later.</p>
+          </div>
+          {guestKey === "red_panda" ? (
+            <div className="keeper-music" data-hit>
+              <p>Music · Rui</p>
+              {MUSIC_PLUGINS.map((plugin) => (
+                <button
+                  key={plugin.id}
+                  type="button"
+                  data-on={music.plugin === plugin.id ? "1" : "0"}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    writeMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
+                  }}
+                >
+                  {plugin.name}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  writeMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
+                }}
+              >
+                {music.playing ? "Stop" : "Play"}
+              </button>
+              {music.plugin === "house" ? <p className="keeper-truth">{HOUSE_LOOP_LICENSE}</p> : null}
+              {music.plugin === "radio" ? (
+                <>
+                  <p className="keeper-truth">{MUSIC_PLUGINS[2]!.license}</p>
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      void fetch(radioSearchUrl(radioQ))
+                        .then((r) => r.json())
+                        .then((json) => {
+                          const next = parseStations(json);
+                          setStations(next);
+                          setRadioUnread(!next.length);
+                        })
+                        .catch(() => setRadioUnread(true));
+                    }}
+                  >
+                    <input
+                      value={radioQ}
+                      onChange={(e) => setRadioQ(e.target.value)}
+                      placeholder="Station name"
+                      aria-label="Search free radio"
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                    <button type="submit">Find</button>
+                  </form>
+                  {radioUnread ? <p className="keeper-truth">{RADIO_CANT_REACH}</p> : null}
+                  <ul className="keeper-line-list">
+                    {stations.map((st) => (
+                      <li key={st.id}>
+                        <button
+                          type="button"
+                          data-on={music.stationId === st.id ? "1" : "0"}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            writeMusic({ ...music, plugin: "radio", stationId: st.id, stationName: st.name, stationUrl: st.url, playing: true });
+                          }}
+                        >
+                          {st.name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  {music.stationName ? <p>Now {music.stationName}. No now-playing inventing.</p> : null}
+                </>
+              ) : null}
+            </div>
+          ) : null}
+          <div className="keeper-bird">
+            <button
+              type="button"
+              data-card="call-bird"
+              onClick={(e) => {
+                e.stopPropagation();
+                playVoice("hummingbird");
+                onCallBird?.();
+              }}
+            >
+              Call {FLY_BIRD_NAME}
+            </button>
           </div>
           <div className="keeper-off">
             <button

@@ -1,6 +1,7 @@
 import { isMuted, loadCard, guestOf, type SoundKind } from "./card.ts";
+import { stepOf, stepSrc, voiceSrc, type StepKind } from "./house-sounds.ts";
 
-type Kind = SoundKind | "step";
+type Kind = SoundKind | "step" | "voice" | "call" | "music" | "radio";
 
 let ctx: AudioContext | null = null;
 
@@ -16,9 +17,41 @@ export function unlockDeskAudio() {
   context();
 }
 
+export function playClip(src: string, guestKey = "red_panda", kind: Kind = "chirp") {
+  const card = loadCard();
+  if (!src || isMuted(card.mutes, kind)) return;
+  try {
+    const audio = new Audio(src);
+    audio.volume = Math.max(0, Math.min(1, guestOf(card, guestKey).volume / 100));
+    void audio.play();
+  } catch {
+    /* never break the pet loop */
+  }
+}
+
+export function playVoice(key: string, guestKey = key) {
+  playClip(voiceSrc(key), guestKey, "voice");
+}
+
+export function playStep(guestKey = "red_panda") {
+  const card = loadCard();
+  const guest = guestOf(card, guestKey);
+  const kind = stepOf(card.stepKind, guest.stepKind, guestKey) as StepKind;
+  if (kind === "mute") return;
+  playClip(stepSrc(kind, guestKey), guestKey, "step");
+}
+
 export function playDeskSound(kind: Kind, guestKey = "red_panda") {
   const card = loadCard();
   if (isMuted(card.mutes, kind)) return;
+  if (kind === "step") {
+    playStep(guestKey);
+    return;
+  }
+  if (kind === "voice" || kind === "call") {
+    playVoice(guestKey, guestKey);
+    return;
+  }
   const ac = context();
   if (!ac) return;
   try {

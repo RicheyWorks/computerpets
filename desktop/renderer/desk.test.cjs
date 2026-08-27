@@ -137,6 +137,7 @@ test("Windows glass uses hit-forward and the tray can pick Rui plus the grid ten
   assert.equal(D.extraClick("win32"), "toggle");
   assert.deepEqual(D.deskPicks(), [
     "red_panda",
+    "hummingbird",
     "cyber_dragon",
     "volt_dragon",
     "trace_dragon",
@@ -149,10 +150,11 @@ test("Windows glass uses hit-forward and the tray can pick Rui plus the grid ten
     "ground_dragon",
   ]);
   assert.equal(D.isDeskPick("red_panda"), true);
+  assert.equal(D.isDeskPick("hummingbird"), true);
   assert.equal(D.isDeskPick("spark_dragon"), true);
   assert.equal(D.isDeskPick("ground_dragon"), true);
   assert.equal(D.isDeskPick("firefly"), false);
-  assert.equal(D.deskPicks().length, 11);
+  assert.equal(D.deskPicks().length, 12);
 
   assert.match(mainSrc, /On the desk/);
   assert.match(mainSrc, /deskPickMenu/);

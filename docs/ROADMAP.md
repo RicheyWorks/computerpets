@@ -173,7 +173,8 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 - [ ] Align advertised care routes with what we ship, or grow `/pet/feed`, `/pet/play`, `/pet/rest` as the contract. Do not claim 200s we do not return.
 - [ ] Honest GPU sense as a first-class pet sense (heat, util, memory, power). `/metrics/gpu` or desktop-local metrics. Do not fake numbers.
 - [ ] Real GPU path: DirectX 12 / Vulkan, or an honest Chromium GPU path that still feels like the ad. Today’s overlay is Electron/Chromium; the blotter is Qt OpenGL. Do not invent a finished DX12 engine.
-- [x] Pets occupy the real Windows 10/11 desktop among real windows and icons. Work-area floor, click-through glass, tray picks Rui and the grid ten. `/demo` lockstep. Overlay is still Electron/Chromium, not DX12. Desktop-first. Mac / Linux / phone after Windows feels like the ad.
+- [x] Pets occupy the real Windows 10/11 desktop among real windows and icons. Work-area floor, click-through glass, tray picks Rui, Sip, and the grid ten. `/demo` lockstep. Overlay is still Electron/Chromium, not DX12. Desktop-first. Mac / Linux / phone after Windows feels like the ad.
+- [x] House leftover on overlay + `/demo`: keeper multi-area weather plate (Open-Meteo, first-run `no area set`), Wikipedia news plate, Rui ground tricks, Sip pinned and flying (not a 1-second flash), five house voices, footstep options, free music + radio for Rui, and a real steal/carry ribbon. Catalog stays 220. Sandbox stays on.
 - [x] Real window rects on Windows (work-area space, skip overlay / minimized / taskbar). Rui (`red_panda`) clings a window side and dives. The species door (`playFor`) is how later guests get their own sit. Other guests walked a sill that leftover. `/demo` draws a plate and walks the same climb. Sleep and hide still win. Mac / Linux window play is a later door. Catalog stays 220.
 - [x] Arc (`cyber_dragon` / `arc`) rides a real window ridge: jump onto the title-bar / top, hold, then hop or slide off. Not Rui's cling-dive. Not the generic sill. Same `playFor` door. `/demo` lockstep. Sleep, hide, leave, rest, and the keeper card still win. Windows first. Mac / Linux window play stays `mac-linux-window-play`. Catalog stays 220. Do not start Volt.
 - [x] Honest Windows desk download teaching: START-HERE / README lead with the real overlay path. Node after the pets-on-the-desk picture. No Store ID. No published `.exe`. `/demo` stays the same house. Catalog stays 220.
@@ -203,6 +204,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-08-27 (Phase 6: Arc rides a window ridge)
+**Last Updated:** 2026-08-27 (Phase 6 leftover: weather, news, Sip, ribbon)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.

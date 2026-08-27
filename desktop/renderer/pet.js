@@ -37,6 +37,9 @@ const giftRoot = document.getElementById("gifts");
 const weatherRoot = document.getElementById("weather");
 const treatEl = document.getElementById("treat");
 const lureEl = document.getElementById("lure");
+const birdEl = document.getElementById("bird");
+const weatherPlate = document.getElementById("weather-plate");
+const newsPlate = document.getElementById("news-plate");
 const hud = document.getElementById("hud");
 const choiceEl = document.getElementById("choice");
 const hudName = document.getElementById("hud-name");
@@ -63,6 +66,9 @@ const hudTimerMins = document.getElementById("hud-timer-mins");
 const hudTimer = document.getElementById("hud-timer");
 const hudTimerLeft = document.getElementById("hud-timer-left");
 const hudMutes = document.getElementById("hud-mutes");
+const hudSteps = document.getElementById("hud-steps");
+const hudMusic = document.getElementById("hud-music");
+const hudCallBird = document.getElementById("hud-call-bird");
 const hudOff = document.getElementById("hud-off");
 const hudOffTruth = document.getElementById("hud-off-truth");
 const barHunger = document.getElementById("bar-hunger");
@@ -118,6 +124,8 @@ const sim = {
   actWalk: false,
   play: null,
   playWait: 6 + Math.random() * 5,
+  trick: null,
+  trickWait: 3 + Math.random() * 3,
 };
 
 /** Real window rects from main. /demo draws a plate instead. */
@@ -134,9 +142,42 @@ let lureTimer = 0;
 let card = window.PetCard ? window.PetCard.load() : { collapsed: false, color: "ink", voiceStyle: "hearth", mutes: {}, off: false, pets: {} };
 let offArmed = false;
 let voicesReady = [];
+let liveSky = null;
+let weatherUnread = false;
+let newsItems = [];
+let newsUnread = false;
+let birdFly = null;
+let birdAcc = 0;
+let birdFrame = 0;
+let musicNode = null;
+let lureDrag = null;
+
+function liveOverride() {
+  const A = window.PetWeatherAreas;
+  if (!A) return null;
+  const areas = A.parseAreas(card);
+  return A.currentArea(areas) ? liveSky && liveSky.sky : null;
+}
 
 function skyOf(now) {
-  return window.PetWeather?.weatherOf(now) ?? "clear";
+  return window.PetWeather?.weatherOf(now, liveOverride()) ?? "clear";
+}
+
+function playWindows() {
+  const extra = window.PetDeskHouse && window.PetDeskHouse.weatherRect();
+  const list = Array.isArray(deskWindows) ? deskWindows.slice() : [];
+  if (extra && extra.width >= 8 && extra.height >= 8) {
+    const i = list.findIndex((w) => w.id === extra.id);
+    if (i >= 0) list[i] = extra;
+    else list.push(extra);
+  }
+  return list;
+}
+
+function musicOn() {
+  const M = window.PetHouseMusic;
+  if (!M || !card || !card.music) return false;
+  return !!(card.music.playing && card.music.plugin !== "off" && !(window.PetCard && window.PetCard.isMuted(card.mutes, "music")));
 }
 
 function skyLabel(w) {
@@ -166,6 +207,166 @@ function paintWeather() {
       weatherRoot.appendChild(s);
     }
   }
+}
+
+function paintHousePlates() {
+  const H = window.PetDeskHouse;
+  if (!H) return;
+  H.paintWeather(card, liveSky, weatherUnread);
+  H.paintNews(newsItems, newsUnread);
+  const here = document.getElementById("weather-here");
+  const body = document.getElementById("weather-body");
+  if (here && body && !body.contains(here)) body.appendChild(here);
+}
+
+function fetchWeather() {
+  const A = window.PetWeatherAreas;
+  if (!A) return;
+  const area = A.currentArea(A.parseAreas(card));
+  if (!area) {
+    liveSky = null;
+    weatherUnread = false;
+    paintHousePlates();
+    paintWeather();
+    return;
+  }
+  const url = A.forecastUrl(area.lat, area.lon);
+  if (!url) return;
+  fetch(url, { cache: "no-store" })
+    .then((r) => r.json())
+    .then((json) => {
+      liveSky = A.parseForecast(json);
+      weatherUnread = !liveSky;
+      paintHousePlates();
+      paintWeather();
+    })
+    .catch(() => {
+      liveSky = null;
+      weatherUnread = true;
+      paintHousePlates();
+      paintWeather();
+    });
+}
+
+function fetchNews() {
+  const N = window.PetNews;
+  if (!N) return;
+  fetch(N.newsUrl(), { cache: "no-store" })
+    .then((r) => r.json())
+    .then((json) => {
+      newsItems = N.parseNews(json);
+      newsUnread = !newsItems.length;
+      paintHousePlates();
+    })
+    .catch(() => {
+      newsUnread = true;
+      paintHousePlates();
+    });
+}
+
+function sitMusic() {
+  const M = window.PetHouseMusic;
+  const C = window.PetCard;
+  if (!M) return;
+  const src = M.overlayPlaySrc(card.music);
+  if (!src || (C && C.isMuted(card.mutes, "music"))) {
+    if (musicNode) {
+      musicNode.pause();
+      musicNode.src = "";
+      musicNode = null;
+    }
+    return;
+  }
+  if (musicNode && musicNode.dataset.src === src) {
+    musicNode.volume = cardGuest().volume / 100;
+    return;
+  }
+  if (musicNode) {
+    musicNode.pause();
+    musicNode.src = "";
+  }
+  musicNode = new Audio(src);
+  musicNode.dataset.src = src;
+  musicNode.loop = card.music.plugin === "house";
+  musicNode.volume = cardGuest().volume / 100;
+  void musicNode.play().catch(() => {
+    /* honest: stream may not land */
+  });
+}
+
+function callSip() {
+  const F = window.PetBirdFly;
+  const H = window.PetDeskHouse;
+  if (H) H.playVoice("hummingbird", card);
+  if (!F || !birdEl) return;
+  if (kind && kind.key === F.FLY_BIRD_KEY) {
+    birdFly = null;
+    birdEl.classList.remove("show");
+    return;
+  }
+  if (life && life.hidden) return;
+  birdFly = F.beginFly(window.innerWidth, window.innerHeight, true);
+  birdAcc = 0;
+  birdFrame = 0;
+  birdEl.classList.add("show");
+  const sprites = pack(F.FLY_BIRD_KEY);
+  birdEl.src = (sprites.play && sprites.play[0]) || sprites.idle[0];
+  birdFly = F.markCalled(birdFly);
+}
+
+function tickBird(dt) {
+  const F = window.PetBirdFly;
+  if (!F || !birdEl) return;
+  if (kind && kind.key === F.FLY_BIRD_KEY) {
+    birdFly = null;
+    birdEl.classList.remove("show");
+    return;
+  }
+  if (!birdFly) return;
+  birdFly = F.stepFly(birdFly, dt, window.innerWidth, window.innerHeight, {
+    hidden: !!(life && life.hidden),
+  });
+  if (!F.stillVisible(birdFly)) {
+    birdFly = null;
+    birdEl.classList.remove("show");
+    return;
+  }
+  if (F.shouldCall(birdFly)) {
+    window.PetDeskHouse && window.PetDeskHouse.playVoice(F.FLY_BIRD_KEY, card);
+    birdFly = F.markCalled(birdFly);
+  }
+  birdAcc += dt;
+  const sprites = pack(F.FLY_BIRD_KEY);
+  const frames = sprites.play && sprites.play.length ? sprites.play : sprites.idle;
+  if (birdAcc > 1 / 8) {
+    birdAcc = 0;
+    birdFrame = (birdFrame + 1) % frames.length;
+    birdEl.src = frames[birdFrame];
+  }
+  birdEl.classList.add("show");
+  birdEl.style.transform = `translate3d(${birdFly.x}px, ${-birdFly.lift}px, 0) rotate(${birdFly.rot}deg) scale(${birdFly.facing}, 1)`;
+}
+
+function paintLure() {
+  if (!lureEl || !mark || mark.kind !== "lure") return;
+  const R = window.PetRibbon;
+  let x = mark.x;
+  if (R && mark.carried) x = R.carryX(mark, sim.x, sim.facing);
+  mark.x = x;
+  lureEl.style.left = `${x}px`;
+  lureEl.style.transform = "";
+  lureEl.classList.toggle("carried", !!mark.carried);
+}
+
+function stealDeskRibbon() {
+  const R = window.PetRibbon;
+  if (!R || !mark || mark.kind !== "lure") return;
+  const next = R.stealRibbon(mark, sim.x);
+  mark = { ...mark, ...next, kind: "lure" };
+  taken = true;
+  window.clearTimeout(lureTimer);
+  lureEl.classList.add("show");
+  paintLure();
 }
 
 function persist() {
@@ -479,6 +680,135 @@ function paintCard() {
       hudMutes.appendChild(btn);
     }
   }
+  if (hudSteps && window.PetHouseSounds) {
+    const S = window.PetHouseSounds;
+    hudSteps.replaceChildren();
+    const title = document.createElement("p");
+    title.textContent = "Footsteps";
+    hudSteps.appendChild(title);
+    for (const step of S.STEP_KINDS) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = S.STEP_LABELS[step];
+      btn.dataset.hit = "1";
+      btn.dataset.step = step;
+      btn.dataset.on = card.stepKind === step ? "1" : "0";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card.stepKind = step;
+        persistCard();
+        if (step !== "mute") window.PetDeskHouse && window.PetDeskHouse.playStep(kind && kind.key, card);
+      });
+      hudSteps.appendChild(btn);
+    }
+    const truth = document.createElement("p");
+    truth.className = "keeper-truth";
+    truth.textContent = `Now ${S.STEP_LABELS[S.stepOf(card.stepKind, cardGuest().stepKind, kind && kind.key)]}. House-wide.`;
+    hudSteps.appendChild(truth);
+  }
+  if (hudMusic && window.PetHouseMusic && kind && kind.key === "red_panda") {
+    const M = window.PetHouseMusic;
+    const music = M.parseMusic(card.music);
+    hudMusic.replaceChildren();
+    const title = document.createElement("p");
+    title.textContent = "Music · Rui";
+    hudMusic.appendChild(title);
+    for (const plugin of M.MUSIC_PLUGINS) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.textContent = plugin.name;
+      btn.dataset.hit = "1";
+      btn.dataset.on = music.plugin === plugin.id ? "1" : "0";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        card.music = M.parseMusic({ ...music, plugin: plugin.id, playing: plugin.id !== "off" });
+        persistCard();
+        sitMusic();
+      });
+      hudMusic.appendChild(btn);
+    }
+    const play = document.createElement("button");
+    play.type = "button";
+    play.textContent = music.playing ? "Stop" : "Play";
+    play.dataset.hit = "1";
+    play.addEventListener("click", (e) => {
+      e.stopPropagation();
+      card.music = M.parseMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
+      persistCard();
+      sitMusic();
+    });
+    hudMusic.appendChild(play);
+    if (music.plugin === "house") {
+      const license = document.createElement("p");
+      license.className = "keeper-truth";
+      license.textContent = M.HOUSE_LOOP_LICENSE;
+      hudMusic.appendChild(license);
+    }
+    if (music.plugin === "radio") {
+      const form = document.createElement("form");
+      form.dataset.hit = "1";
+      const input = document.createElement("input");
+      input.placeholder = "Station name";
+      input.dataset.hit = "1";
+      const find = document.createElement("button");
+      find.type = "submit";
+      find.textContent = "Find";
+      find.dataset.hit = "1";
+      const list = document.createElement("ul");
+      list.className = "keeper-line-list";
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        fetch(M.radioSearchUrl(input.value), { cache: "no-store" })
+          .then((r) => r.json())
+          .then((json) => {
+            const stations = M.parseStations(json);
+            list.replaceChildren();
+            if (!stations.length) {
+              const miss = document.createElement("p");
+              miss.className = "keeper-truth";
+              miss.textContent = M.RADIO_CANT_REACH;
+              list.appendChild(miss);
+              return;
+            }
+            for (const st of stations) {
+              const li = document.createElement("li");
+              const pick = document.createElement("button");
+              pick.type = "button";
+              pick.textContent = st.name;
+              pick.dataset.hit = "1";
+              pick.dataset.on = music.stationId === st.id ? "1" : "0";
+              pick.addEventListener("click", (ev) => {
+                ev.stopPropagation();
+                card.music = M.parseMusic({
+                  plugin: "radio",
+                  stationId: st.id,
+                  stationName: st.name,
+                  stationUrl: st.url,
+                  playing: true,
+                });
+                persistCard();
+                sitMusic();
+              });
+              li.appendChild(pick);
+              list.appendChild(li);
+            }
+          })
+          .catch(() => {
+            list.replaceChildren();
+            const miss = document.createElement("p");
+            miss.className = "keeper-truth";
+            miss.textContent = M.RADIO_CANT_REACH;
+            list.appendChild(miss);
+          });
+      });
+      form.append(input, find);
+      hudMusic.append(form, list);
+    }
+  } else if (hudMusic) {
+    hudMusic.replaceChildren();
+  }
+  sitMusic();
   if (hudLines) {
     hudLines.replaceChildren();
     for (const line of guest.lines) {
@@ -579,6 +909,14 @@ function playSound(kindName) {
   try {
     const C = window.PetCard;
     if (C && C.isMuted(card.mutes, kindName)) return;
+    if (kindName === "step") {
+      if (window.PetDeskHouse) window.PetDeskHouse.playStep(kind && kind.key, card);
+      return;
+    }
+    if ((kindName === "chirp" || kindName === "voice" || kindName === "call") && kind && window.PetHouseSounds && window.PetHouseSounds.isVoiceKey(kind.key)) {
+      if (window.PetDeskHouse) window.PetDeskHouse.playVoice(kind.key, card);
+      return;
+    }
     const Ctor = window.AudioContext || window.webkitAudioContext;
     if (!Ctor) return;
     const ac = playSound.ctx || (playSound.ctx = new Ctor());
@@ -864,10 +1202,17 @@ function placeMark(kindName, x, hops = 0, meal) {
   const other = kindName === "treat" ? lureEl : treatEl;
   other.classList.remove("show");
   el.classList.add("show");
-  el.style.transform = `translate3d(${x}px, 0, 0)`;
+  if (kindName === "lure") {
+    mark = window.PetRibbon ? { ...window.PetRibbon.blankRibbon(x), kind: "lure" } : { kind: "lure", x, hops };
+    lureEl.style.left = `${x}px`;
+    lureEl.style.transform = "";
+    lureEl.classList.remove("carried");
+  } else {
+    el.style.transform = `translate3d(${x}px, 0, 0)`;
+  }
   if (kindName === "treat") treatEl.dataset.shape = TREAT_SHAPE[kind?.key] || "crumb";
   window.clearTimeout(lureTimer);
-  if (kindName === "lure" && hops === 0) {
+  if (kindName === "lure" && hops === 0 && !(mark && mark.stolen)) {
     lureTimer = window.setTimeout(() => {
       if (!mark || mark.kind !== "lure" || mark.hops > 0) return;
       const width = window.innerWidth;
@@ -903,10 +1248,10 @@ function applyCommand() {
         sim.play,
         0,
         { x: sim.x, lift: sim.play.lift },
-        deskWindows,
-        { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
-        BASE,
-        { asleep: true, hidden: !!life.hidden, leaving, cmd: "sleep" },
+      playWindows(),
+      { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
+      BASE,
+      { asleep: true, hidden: !!life.hidden, leaving, cmd: "sleep" },
       );
     }
     return;
@@ -932,7 +1277,7 @@ function applyCommand() {
       sim.play,
       0,
       { x: sim.x, lift: sim.play.lift },
-      deskWindows,
+      playWindows(),
       { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
       BASE,
       { asleep: !!life?.asleep, hidden: !!life?.hidden, leaving, cmd: sim.cmd },
@@ -962,7 +1307,7 @@ function applyCommand() {
     aimAt(next);
     return;
   }
-  if (sim.cmd === "seek" && mark) {
+  if (sim.cmd === "seek" && mark && !mark.carried) {
     leaving = false;
     sim.waypoints = [];
     aimAt(clamp(mark.x - BASE * 0.4, PAD, max));
@@ -1085,7 +1430,7 @@ function handle(cmd) {
     if (window.PetLife?.wake) window.PetLife.wake(life);
     const width = window.innerWidth;
     placeMark("lure", 80 + Math.random() * Math.max(80, width - 200));
-    say(trait.special === "bug" ? "There. A bug." : "A ribbon. Catch it.");
+    say(trait.special === "bug" ? "There. A bug." : (window.PetRibbon && window.PetRibbon.RIBBON_CATCH) || "A ribbon. Catch it.");
     issue("seek");
     hudUntil = performance.now() + 5000;
     return;
@@ -1105,6 +1450,17 @@ function handle(cmd) {
     say(pick(trait.extra.hide || ["I went where the ribbon goes."]));
     leaving = true;
     issue("leave");
+    hudUntil = performance.now() + 5000;
+    return;
+  }
+  if (cmd === "special" && window.PetRibbon && window.PetRibbon.isRibbonSpecial(trait.special)) {
+    if (life.hidden) return;
+    if (window.PetLife?.wake) window.PetLife.wake(life);
+    const width = window.innerWidth;
+    placeMark("lure", 80 + Math.random() * Math.max(80, width - 200));
+    say(window.PetRibbon.RIBBON_SPECIAL);
+    issue("seek");
+    window.desk?.notify(kind.name, `${kind.name} hid a ribbon.`);
     hudUntil = performance.now() + 5000;
     return;
   }
@@ -1231,11 +1587,16 @@ function applyArrive(via) {
     return;
   }
   if (hop.act === "play") {
-    clearMark();
     const prevBond = life.bond;
     const result = window.PetLife.act(life, trait, "play", Date.now(), kind.key);
     persist();
-    say(lineFrom(result) || pick(kind.lines.play));
+    if (window.PetRibbon && window.PetRibbon.isRibbonSpecial(trait.special) && mark && mark.kind === "lure") {
+      stealDeskRibbon();
+      say(window.PetRibbon.RIBBON_SPECIAL);
+    } else {
+      clearMark();
+      say(lineFrom(result) || pick(kind.lines.play));
+    }
     const title = window.PetLife.crossedBond(prevBond, life.bond);
     if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
     if (hop.issuePlay) issue("play");
@@ -1367,6 +1728,8 @@ function switchTo(key) {
   sim.actWait = 10 + Math.random() * 8;
   sim.play = null;
   sim.playWait = 6 + Math.random() * 5;
+  sim.trick = null;
+  sim.trickWait = 3 + Math.random() * 3;
   pet.classList.toggle("sick", !!life.sick);
   pet.classList.toggle("blue", !!(kind && window.PetLife.isBlue(life, kind.key)));
   pet.classList.toggle("hidden", !!life.hidden);
@@ -1440,8 +1803,20 @@ function tick(now) {
       leaving,
       cmd: sim.cmd,
     };
+    const wins = playWindows();
+    const T = window.PetRuiTricks;
+    const trickFlags = {
+      asleep: !!life?.asleep,
+      hidden: !!life?.hidden,
+      leaving,
+      cmd: sim.cmd,
+      windowPlay: !!sim.play,
+    };
+    if (sim.trick && T && T.shouldAbort(trickFlags)) {
+      sim.trick = T.stepTrick(sim.trick, 0, trickFlags);
+    }
     if (sim.play && window.PetWindowPlay) {
-      sim.play = window.PetWindowPlay.stepPlay(sim.play, dt, { x: sim.x, lift: sim.play.lift }, deskWindows, work, BASE, playFlags);
+      sim.play = window.PetWindowPlay.stepPlay(sim.play, dt, { x: sim.x, lift: sim.play.lift }, wins, work, BASE, playFlags);
       sim.x = sim.play.x;
       sim.facing = sim.play.facing;
       if (!life?.asleep) sim.anim = sim.play.anim;
@@ -1451,24 +1826,59 @@ function tick(now) {
         sim.anim = life?.asleep ? "sleep" : "idle";
         sim.playWait = window.PetWindowPlay.nextPlayWait(true);
       }
+    } else if (sim.trick && T) {
+      sim.trick = T.stepTrick(sim.trick, dt, trickFlags);
+      sim.x = sim.trick.x;
+      if (!life?.asleep) sim.anim = sim.trick.anim;
+      if (sim.trick.phase === "done") {
+        sim.trick = null;
+        sim.land = 1;
+        sim.anim = life?.asleep ? "sleep" : "idle";
+        sim.trickWait = T.nextTrickWait(true);
+      }
     } else if (
       window.PetWindowPlay &&
       !sim.act &&
       !leaving &&
       window.PetWindowPlay.canStart(playFlags) &&
       window.PetWindowPlay.playFor(kind.key) !== "ignore" &&
-      deskWindows.length
+      wins.length
     ) {
       sim.playWait -= dt;
       if (sim.playWait <= 0) {
-        const target = window.PetWindowPlay.pickTarget(deskWindows, sim.x, kind.key, work, BASE);
+        const target = window.PetWindowPlay.pickTarget(wins, sim.x, kind.key, work, BASE);
         sim.play = window.PetWindowPlay.beginPlay(target, sim.x);
         if (sim.play) {
           clearAct();
           sim.target = null;
           sim.waypoints = [];
+          sim.trick = null;
         }
         sim.playWait = window.PetWindowPlay.nextPlayWait(false);
+      }
+    } else if (
+      T &&
+      kind.key === T.TRICK_KEY &&
+      !sim.act &&
+      !leaving &&
+      T.canStart({
+        asleep: !!life?.asleep,
+        hidden: !!life?.hidden,
+        leaving,
+        cmd: sim.cmd,
+        windowPlay: !!sim.play,
+      })
+    ) {
+      sim.trickWait -= dt;
+      const musicWantsDance = musicOn() && !sim.trick;
+      if (sim.trickWait <= 0 || musicWantsDance) {
+        sim.trick = T.beginTrick(T.pickTrick(undefined, musicOn()), sim.x, sim.facing);
+        if (sim.trick) {
+          clearAct();
+          sim.target = null;
+          sim.waypoints = [];
+        }
+        sim.trickWait = T.nextTrickWait(false);
       }
     }
     if (sim.poseHold > 0) {
@@ -1480,8 +1890,8 @@ function tick(now) {
         sim.acc = 0;
       }
     }
-    if (sim.play) {
-      /* window play owns the walk */
+    if (sim.play || sim.trick) {
+      /* window play or a ground trick owns the walk */
     } else if (sim.turnHold > 0) {
       sim.turnHold = Math.max(0, sim.turnHold - dt);
       if (sim.turnHold === 0 && sim.pendingFacing) {
@@ -1505,7 +1915,7 @@ function tick(now) {
       const stepEvery = p.high ? window.PetGait.STEP_S_QUICK : p.crawl ? 0.32 : window.PetGait.STEP_S;
       if (sim.stepAcc > stepEvery) {
         sim.stepAcc = 0;
-        playSound("step");
+        if (!sim.play && !sim.trick && !life?.asleep) playSound("step");
         if (Math.random() < 0.45) puff(sim.x, 2);
       }
       if ((dir === 1 && sim.x >= sim.target) || (dir === -1 && sim.x <= sim.target)) {
@@ -1536,8 +1946,8 @@ function tick(now) {
         aimAt(follow);
       }
     }
-    if (sim.play) {
-      /* window play owns the pose */
+    if (sim.play || sim.trick) {
+      /* window play or a ground trick owns the pose */
     } else if (sim.act) {
       sim.actT += dt;
       if (sim.actMotion === "stretch" && sim.actHold > 0 && sim.actT / sim.actHold > 0.55 && sim.anim === "sit") {
@@ -1551,6 +1961,7 @@ function tick(now) {
     } else if (
       !leaving &&
       !sim.play &&
+      !sim.trick &&
       sim.target == null &&
       sim.turnHold <= 0 &&
       sim.pause <= 0 &&
@@ -1573,7 +1984,7 @@ function tick(now) {
       sim.shiftAge = 0.85;
     }
     if (sim.shiftAge > 0) sim.shiftAge = Math.max(0, sim.shiftAge - dt);
-    if (!leaving && !sim.play) sim.x = clamp(sim.x, PAD, maxX);
+    if (!leaving && !sim.play && !sim.trick) sim.x = clamp(sim.x, PAD, maxX);
 
     if (life?.asleep && window.PetLife?.sleepHolds(life, sim.cmd)) sim.anim = "sleep";
     const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
@@ -1637,8 +2048,8 @@ function tick(now) {
   const shiftX = sim.shiftAge > 0 ? sim.shift * Math.sin((1 - sim.shiftAge / 0.85) * Math.PI) : 0;
   const settleX = sim.settle > 0 ? G.settleOffset(sim.settle, sim.settleDir, sim.overshoot) : 0;
   const drawX = sim.x + sway + shiftX + settleX + pose.dx;
-  const climbLift = sim.play ? sim.play.lift : 0;
-  const climbRot = sim.play ? sim.play.rot : 0;
+  const climbLift = sim.play ? sim.play.lift : sim.trick ? sim.trick.lift : 0;
+  const climbRot = sim.play ? sim.play.rot : sim.trick ? sim.trick.rot : 0;
   const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
   pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off") ? "center center" : "center bottom";
   pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
@@ -1672,6 +2083,8 @@ function tick(now) {
   }
 
   tickVisit(dt, now, width);
+  tickBird(dt);
+  paintLure();
   reportHits();
 
   requestAnimationFrame(tick);
@@ -1837,6 +2250,13 @@ pet.addEventListener("contextmenu", (e) => {
 lureEl.addEventListener("click", (e) => {
   e.stopPropagation();
   if (!mark || mark.kind !== "lure" || !life || !trait || !kind) return;
+  if (lureDrag && lureDrag.moved) return;
+  if (mark.carried && window.PetRibbon) {
+    mark = { ...window.PetRibbon.dropRibbon(mark, mark.x), kind: "lure" };
+    taken = false;
+    paintLure();
+    return;
+  }
   const hop = window.PetPlay.playHop(chaseOf(), "catch");
   if (hop.act !== "play") return;
   taken = hop.next.taken;
@@ -1847,6 +2267,156 @@ lureEl.addEventListener("click", (e) => {
   if (hop.issuePlay) issue("play");
   paintHud();
 });
+if (lureEl) {
+  lureEl.addEventListener("pointerdown", (e) => {
+    if (e.button === 2 || !mark || mark.kind !== "lure") return;
+    e.stopPropagation();
+    lureDrag = { id: e.pointerId, x: e.clientX, from: mark.x, moved: false };
+    lureEl.setPointerCapture(e.pointerId);
+    setClickable(true);
+  });
+  lureEl.addEventListener("pointermove", (e) => {
+    if (!lureDrag || lureDrag.id !== e.pointerId || !mark || mark.kind !== "lure") return;
+    const dx = e.clientX - lureDrag.x;
+    if (Math.abs(dx) > 6) lureDrag.moved = true;
+    if (!lureDrag.moved) return;
+    if (mark.carried && window.PetRibbon) mark = { ...window.PetRibbon.dropRibbon(mark, mark.x), kind: "lure" };
+    mark.x = clamp(lureDrag.from + dx, 24, window.innerWidth - 40);
+    mark.hops = Math.max(mark.hops || 0, 1);
+    taken = false;
+    window.clearTimeout(lureTimer);
+    paintLure();
+    issue("seek");
+  });
+  lureEl.addEventListener("pointerup", (e) => {
+    if (!lureDrag || lureDrag.id !== e.pointerId) return;
+    window.setTimeout(() => {
+      lureDrag = null;
+    }, 0);
+  });
+  lureEl.addEventListener("pointercancel", () => {
+    lureDrag = null;
+  });
+}
+if (hudCallBird) {
+  hudCallBird.addEventListener("click", (e) => {
+    e.stopPropagation();
+    callSip();
+  });
+}
+if (weatherPlate) {
+  weatherPlate.addEventListener("click", (e) => {
+    const toggle = e.target && e.target.closest && e.target.closest("#weather-toggle");
+    if (toggle) {
+      e.stopPropagation();
+      const body = document.getElementById("weather-body");
+      if (body) body.hidden = !body.hidden;
+      return;
+    }
+    const pick = e.target && e.target.closest && e.target.closest("[data-area-pick]");
+    if (pick && window.PetWeatherAreas) {
+      e.stopPropagation();
+      const house = window.PetWeatherAreas.pickArea(card, pick.getAttribute("data-area-pick"));
+      card.weatherAreas = house.areas;
+      card.currentAreaId = house.currentId;
+      persistCard();
+      fetchWeather();
+      return;
+    }
+    const del = e.target && e.target.closest && e.target.closest("[data-area-del]");
+    if (del && window.PetWeatherAreas) {
+      e.stopPropagation();
+      const house = window.PetWeatherAreas.removeArea(card, del.getAttribute("data-area-del"));
+      card.weatherAreas = house.areas;
+      card.currentAreaId = house.currentId;
+      persistCard();
+      fetchWeather();
+    }
+  });
+  weatherPlate.addEventListener("submit", (e) => {
+    if (!e.target || e.target.id !== "weather-add" || !window.PetWeatherAreas) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const q = document.getElementById("weather-q");
+    const url = window.PetWeatherAreas.geocodeUrl(q && q.value);
+    const hits = document.getElementById("weather-hits");
+    if (!url || !hits) return;
+    fetch(url, { cache: "no-store" })
+      .then((r) => r.json())
+      .then((json) => {
+        const found = window.PetWeatherAreas.parseGeocode(json);
+        hits.replaceChildren();
+        if (!found.length) {
+          hits.innerHTML = "<li>No place from that look-up.</li>";
+          return;
+        }
+        for (const hit of found) {
+          const li = document.createElement("li");
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.dataset.hit = "1";
+          btn.textContent = `Add ${hit.name}`;
+          btn.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            const house = window.PetWeatherAreas.addArea(card, hit);
+            card.weatherAreas = house.areas;
+            card.currentAreaId = house.currentId;
+            persistCard();
+            fetchWeather();
+          });
+          li.appendChild(btn);
+          hits.appendChild(li);
+        }
+      })
+      .catch(() => {
+        hits.innerHTML = "<li>unread</li>";
+      });
+  });
+  if (navigator.permissions && navigator.permissions.query) {
+    void navigator.permissions.query({ name: "geolocation" }).then((p) => {
+      if (p.state !== "granted" || !weatherPlate) return;
+      const body = document.getElementById("weather-body");
+      if (!body) return;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.dataset.hit = "1";
+      btn.id = "weather-here";
+      btn.textContent = "Use this computer's location";
+      body.appendChild(btn);
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            if (!window.PetWeatherAreas) return;
+            const house = window.PetWeatherAreas.addArea(card, {
+              id: "here",
+              name: "This computer",
+              query: "this computer",
+              lat: pos.coords.latitude,
+              lon: pos.coords.longitude,
+            });
+            card.weatherAreas = house.areas;
+            card.currentAreaId = house.currentId;
+            persistCard();
+            fetchWeather();
+          },
+          () => undefined,
+          { maximumAge: 600_000 },
+        );
+      });
+    });
+  }
+}
+if (newsPlate) {
+  newsPlate.addEventListener("click", (e) => {
+    const toggle = e.target && e.target.closest && e.target.closest("#news-toggle");
+    if (toggle) {
+      e.stopPropagation();
+      const body = document.getElementById("news-body");
+      if (body) body.hidden = !body.hidden;
+    }
+  });
+}
 window.addEventListener("resize", () => {
   sim.x = clamp(sim.x, PAD, Math.max(PAD, window.innerWidth - BASE - PAD));
   paintMess();
@@ -1866,7 +2436,7 @@ setInterval(() => {
   tickLife();
   if (performance.now() < speechUntil || life.hidden) return;
   const held = window.PetLife?.wanderWhileAsleep(life) || window.PetCard?.wanderWhileAsleep(life?.asleep);
-  if (sim.play) return;
+  if (sim.play || sim.trick) return;
   if (held) {
     issue(held.cmd);
     return;
@@ -1929,5 +2499,9 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
   }
   switchTo(start);
   paintWeather();
+  fetchWeather();
+  fetchNews();
+  sitMusic();
+  if (!(kind && window.PetBirdFly && kind.key === window.PetBirdFly.FLY_BIRD_KEY)) callSip();
   requestAnimationFrame(tick);
 });

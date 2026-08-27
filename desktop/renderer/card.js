@@ -22,13 +22,18 @@
     { id: "bright", name: "Bright", rate: 0.98, pitch: 1.1 },
   ];
 
-  const MUTE_BUSES = ["talk", "special", "weather", "treats"];
+  const MUTE_BUSES = ["talk", "special", "weather", "treats", "steps", "music"];
   const SOUND_BUS = {
     chirp: "talk",
     hop: "special",
     munch: "treats",
     rain: "weather",
     wind: "weather",
+    step: "steps",
+    voice: "talk",
+    call: "talk",
+    music: "music",
+    radio: "music",
   };
 
   const HUMAN_VOICE = /aria|jenny|guy|davis|natural|samantha|daniel|karen|moira|zira|david|mark|hazel|susan|google us english|microsoft/i;
@@ -39,7 +44,7 @@
   const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide"];
 
   function blankMutes() {
-    return { talk: false, special: false, weather: false, treats: false };
+    return { talk: false, special: false, weather: false, treats: false, steps: false, music: false };
   }
 
   function blankAlarm() {
@@ -51,7 +56,7 @@
   }
 
   function blankGuest() {
-    return { volume: 80, lines: [], alarm: blankAlarm(), timer: blankTimer() };
+    return { volume: 80, lines: [], alarm: blankAlarm(), timer: blankTimer(), stepKind: "" };
   }
 
   function blankCard() {
@@ -62,6 +67,10 @@
       mutes: blankMutes(),
       off: false,
       pets: {},
+      weatherAreas: [],
+      currentAreaId: null,
+      stepKind: "species",
+      music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
     };
   }
 
@@ -122,6 +131,7 @@
     next.lines = Array.isArray(raw.lines) ? raw.lines.map(parseLine).filter(Boolean).slice(0, MAX_LINES) : [];
     next.alarm = parseAlarm(raw.alarm);
     next.timer = parseTimer(raw.timer);
+    next.stepKind = typeof raw.stepKind === "string" ? raw.stepKind : "";
     return next;
   }
 
@@ -139,6 +149,11 @@
         if (typeof key === "string" && key) next.pets[key] = parseGuest(value);
       }
     }
+    const areas = root.PetWeatherAreas ? root.PetWeatherAreas.parseAreas(raw) : { areas: [], currentId: null };
+    next.weatherAreas = areas.areas;
+    next.currentAreaId = areas.currentId;
+    next.stepKind = root.PetHouseSounds ? root.PetHouseSounds.parseStep(raw.stepKind) : "species";
+    next.music = root.PetHouseMusic ? root.PetHouseMusic.parseMusic(raw.music) : { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
     return next;
   }
 

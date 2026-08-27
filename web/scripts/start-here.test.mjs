@@ -87,7 +87,7 @@ test("the taught house is the overlay that runs: keeper card, On the desk, local
   assert.match(startSrc, /Hunger, Rest, Bond/);
   assert.match(startSrc, /\*\*Feed\*\*, \*\*Play\*\*, \*\*Rest\*\*/);
   assert.match(startSrc, /On the desk/);
-  assert.match(startSrc, /Rui, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground/);
+  assert.match(startSrc, /Rui, Sip, Arc, Volt, Trace, Flux, Spark, Ion, Gauss, Relay, Fuse, Ground/);
   assert.match(startSrc, /Java 8081 · DOWN · unread/);
   assert.match(startSrc, /Care is local/);
   assert.match(startSrc, /\/pet\/feed` is not a door/);

@@ -20,7 +20,7 @@ const overlayLife = readFileSync(join(root, "../desktop/renderer/life.js"), "utf
 test("the desk card law matches the overlay card", () => {
   assert.deepEqual(C.CARD_COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
   assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
-  assert.deepEqual([...C.MUTE_BUSES], ["talk", "special", "weather", "treats"]);
+  assert.deepEqual([...C.MUTE_BUSES], ["talk", "special", "weather", "treats", "steps", "music"]);
   assert.equal(C.VOICE_TRUTH, "The door is still the system speech voices.");
   assert.equal(K.VOICE_TRUTH, C.VOICE_TRUTH);
   assert.match(K.QUIT_TRUTH, /desktop\.ps1/);
