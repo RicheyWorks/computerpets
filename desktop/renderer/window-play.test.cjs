@@ -100,6 +100,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("robin"), "pull");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("pileated"), "drum");
   const rui = P.pickTarget([WIN], 80, "red_panda", WORK, P.SPRITE, {
     rand: 0.9,
     side: "left",
@@ -16870,7 +16871,7 @@ test("Vee honks a window apron as a blotter green: walk onto the apron as claime
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
-  assert.equal(P.playFor("pileated"), "sill");
+  assert.equal(P.playFor("pileated"), "drum");
   const target = P.pickTarget([WIN], 80, "canada_goose", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "honk");
@@ -17036,5 +17037,185 @@ test("a moved window refits Vee's apron; sleep, card, and hide abort; Vee never 
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "honk-off");
+  assert.equal(play.abort, true);
+});
+
+
+test("Drum drums an upper sash stile as a dead-wood post: hop onto the interior stile, drum a rectangle, flare the crest, then hop off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("crow"), "caw");
+  assert.equal(P.playFor("boa"), "loop");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("moon_jelly"), "chime");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("penguin"), "bow");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("stickleback"), "glue");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("hummingbird"), "sill");
+  const target = P.pickTarget([WIN], 80, "pileated", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "drum");
+  assert.equal(target.side, "snag");
+  assert.equal(target.leave, "crest");
+  assert.notEqual(target.kind, "pileated");
+  assert.notEqual(target.kind, "woodpecker");
+  assert.notEqual(target.kind, "honk");
+  assert.notEqual(target.kind, "tip");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "soar");
+  assert.notEqual(target.kind, "bore");
+  assert.notEqual(target.kind, "hook");
+  assert.notEqual(target.kind, "sip");
+  assert.notEqual(target.kind, "hover");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 40, "he holds the upper stile, not the floor");
+  assert.ok(P.DUR.drum > P.DUR.drumHold, "the drum is the tell; the crest sit is the hold after");
+  assert.ok(P.DUR.drumOn !== P.DUR.honkOn);
+  assert.ok(P.DUR.drumOn !== P.DUR.tipOn);
+  assert.ok(P.DUR.drumOn !== P.DUR.pullOn);
+  assert.ok(P.DUR.drumOn !== P.DUR.cacheOn);
+  assert.ok(P.DUR.drumOn !== P.DUR.soarOn);
+  assert.ok(P.DUR.drumOn !== P.DUR.boreOn);
+  assert.ok(P.DUR.drumOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.drum !== P.DUR.honk);
+  assert.ok(P.DUR.drum !== P.DUR.tip);
+  assert.ok(P.DUR.drum !== P.DUR.pull);
+  assert.ok(P.DUR.drum !== P.DUR.bore);
+  assert.ok(P.DUR.drumHold !== P.DUR.honkHold);
+  assert.ok(P.DUR.drumOff !== P.DUR.honkOff);
+  assert.ok(P.DUR.drumOff !== P.DUR.pullOff);
+  assert.ok(P.DUR.drumOff !== P.DUR.sillDown);
+  const snag = P.drumPoint(WIN, P.SPRITE, WORK);
+  const green = P.honkPoint(WIN, P.SPRITE, WORK);
+  const dish = P.tipPoint(WIN, P.SPRITE, WORK);
+  const lawn = P.pullPoint(WIN, P.SPRITE, WORK);
+  const cup = P.cachePoint(WIN, P.SPRITE, WORK);
+  const post = P.soarPoint(WIN, P.SPRITE, WORK);
+  const timber = P.borePoint(WIN, P.SPRITE, WORK);
+  const watch = P.watchPoint(WIN, P.SPRITE, WORK);
+  const perch = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  const rock = P.bowPoint(WIN, P.SPRITE, WORK);
+  assert.ok(snag.lift > green.lift + 80, "an upper stile, not Vee's apron");
+  assert.ok(snag.lift > lawn.lift + 40, "not Brick's stool lawn");
+  assert.ok(snag.lift > dish.lift + 40, "not Drake's glass ink dish");
+  assert.ok(snag.lift > cup.lift + 20, "not Dee's meeting-rail nosing");
+  assert.ok(Math.abs(snag.x - post.x) > 40, "interior stile, not Hook's outside lamp-post");
+  assert.ok(Math.abs(snag.x - timber.x) > 40, "not Auger's stile bore");
+  assert.ok(snag.x > WIN.x, "inside the sash, not outside the frame");
+  assert.ok(snag.x < WIN.x + WIN.width - 20, "interior of the stile");
+  assert.ok(snag.lift > watch.lift + 40, "not Pip's floor");
+  assert.ok(Math.abs(snag.x - perch.x) > 20 || Math.abs(snag.lift - perch.lift) > 12, "not Echo's shade");
+  assert.ok(Math.abs(snag.x - rock.x) > 20 || Math.abs(snag.lift - rock.lift) > 12, "not Peck's landing rock");
+  const hopOn = P.drumOnPath(0.25, { x: 40, lift: 0 }, { x: snag.x, lift: snag.lift });
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  const walkOn = P.honkOnPath(0.25, { x: 40, lift: 0 }, { x: green.x, lift: green.lift });
+  const walkEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(hopOn.lift - snag.lift * hopEase > 8, "a hop onto the stile, not a goose walk");
+  assert.ok(walkOn.lift - green.lift * walkEase < 10, "Vee still walks");
+  const flare = P.drumPath(0.08);
+  const strikeA = P.drumPath(0.22);
+  const strikeB = P.drumPath(0.44);
+  const strikeC = P.drumPath(0.66);
+  const settle = P.drumPath(0.94);
+  const call = P.honkPath(0.38);
+  const grind = P.borePath(0.5);
+  assert.ok(flare.lift > 3, "the crest goes up first");
+  assert.ok(Math.abs(flare.rot) > 3, "crest flared");
+  assert.ok(Math.abs(strikeB.x - strikeA.x) > 3 || Math.abs(strikeC.x - strikeB.x) > 3, "bill strikes a rectangle");
+  assert.ok(Math.abs(strikeC.lift - strikeB.lift) > 4, "a tall rectangle, not a flicker chip");
+  assert.ok(flare.lift < call.lift + 2, "a crest, not Vee's neck honk");
+  assert.ok(Math.abs(strikeB.x) < 14, "pecks stay on the stile, not Auger's timber grind");
+  assert.ok(grind.x > 2, "Auger still bores");
+  assert.ok(settle.lift < flare.lift + 8, "he finishes the rectangle");
+  const hold = P.drumHoldPath(0.5);
+  assert.ok(hold.lift > 4, "the crest stays flared on the post");
+  assert.ok(Math.abs(hold.rot) > 4, "a red crest, not a goose sit");
+  const off0 = P.drumOffPath(0, { x: snag.x, lift: snag.lift + 5.2 }, { x: snag.x + 46, lift: 0 });
+  const offMid = P.drumOffPath(0.5, { x: snag.x, lift: snag.lift + 5.2 }, { x: snag.x + 46, lift: 0 });
+  const off1 = P.drumOffPath(1, { x: snag.x, lift: snag.lift + 5.2 }, { x: snag.x + 46, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - snag.x) < 2);
+  assert.ok(offMid.lift - (snag.lift + 5.2) * (1 - midEase) > 6, "a hop off, not a walk");
+  assert.ok(Math.abs(off1.lift) < 2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  let drumXSpan = 0;
+  let drumLiftMin = Infinity;
+  let firstX = null;
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "honk");
+    assert.notEqual(play.phase, "tip");
+    assert.notEqual(play.phase, "pull");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "soar");
+    assert.notEqual(play.phase, "bore");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "drum") {
+      if (firstX == null) firstX = play.x;
+      drumXSpan = Math.max(drumXSpan, Math.abs(play.x - firstX));
+      drumLiftMin = Math.min(drumLiftMin, play.lift - play.target.holdLift);
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "drum-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "drum-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift - play.target.holdLift > 3, "he holds the post with the crest up");
+    }
+  }
+  assert.ok(seen.has("drum-on"));
+  assert.ok(seen.has("drum"));
+  assert.ok(seen.has("drum-hold"));
+  assert.ok(seen.has("drum-off"));
+  assert.ok(drumXSpan > 2, "the bill walks a rectangle");
+  assert.ok(drumLiftMin < 4, "strikes cut a hole in the wood");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Drum's stile; sleep, card, and hide abort; Drum never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "pileated", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 720 && play.phase !== "drum"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "drum");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "drum");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "drum-off");
   assert.equal(play.abort, true);
 });
