@@ -16,7 +16,7 @@ const demoSrc = readFileSync(join(root, "src/components/desk/demo-stage.tsx"), "
 const WORK = { width: 1400, height: 800, floorLift: 0 };
 const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
 
-test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; a cat stays on the sill door", () => {
+test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace path is shared; Flux field is shared; Miso sits a ledge; a dog stays on the sill door", () => {
   assert.equal(P.playFor("red_panda"), Overlay.playFor("red_panda"));
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("cyber_dragon"), Overlay.playFor("cyber_dragon"));
@@ -38,7 +38,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   assert.equal(P.playFor("fuse_dragon"), Overlay.playFor("fuse_dragon"));
   assert.equal(P.playFor("ground_dragon"), "earth");
   assert.equal(P.playFor("ground_dragon"), Overlay.playFor("ground_dragon"));
-  assert.equal(P.playFor("cat"), "sill");
+  assert.equal(P.playFor("cat"), "ledge");
+  assert.equal(P.playFor("cat"), Overlay.playFor("cat"));
+  assert.equal(P.playFor("dog"), "sill");
+  assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   const spin = P.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
   const desk = Overlay.divePath(0.5, { x: 400, lift: 200, side: "right" }, { x: 500, lift: 0 }, "spin");
@@ -75,6 +78,10 @@ test("Rui cling-dive is shared; Arc ridge is shared; Volt coil is shared; Trace 
   const deskEarth = Overlay.earthPoint(WIN, 176, WORK);
   assert.equal(webEarth.lift, deskEarth.lift);
   assert.equal(webEarth.x, deskEarth.x);
+  const webLedge = P.ledgePoint(WIN, 176, WORK);
+  const deskLedge = Overlay.ledgePoint(WIN, 176, WORK);
+  assert.equal(webLedge.lift, deskLedge.lift);
+  assert.equal(webLedge.x, deskLedge.x);
 });
 
 test("the demo room walks the same Rui climb against a drawn window", () => {
@@ -365,5 +372,48 @@ test("the demo window plate walks Ground's earth the same way", () => {
   assert.ok(seen.has("earth-on"));
   assert.ok(seen.has("earth-sit"));
   assert.ok(seen.has("earth-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Miso's ledge the same way", () => {
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /ledge-on|playFor/);
+  const overlayTarget = Overlay.pickTarget([WIN], 40, "cat", WORK, 176);
+  const target = P.pickTarget([WIN], 40, "cat", WORK, 176);
+  assert.equal(target.kind, overlayTarget.kind);
+  assert.equal(target.kind, "ledge");
+  assert.equal(target.holdX, overlayTarget.holdX);
+  assert.equal(target.holdLift, overlayTarget.holdLift);
+  assert.equal(target.side, "top");
+  assert.equal(target.leave, "hop");
+  assert.equal(target.clickToId, undefined);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  let sitXMin = Infinity;
+  let sitXMax = -Infinity;
+  for (let i = 0; i < 700 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "ridge-hold");
+    assert.notEqual(play.phase, "coil-hold");
+    assert.notEqual(play.phase, "path-walk");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "crackle-hop");
+    assert.notEqual(play.phase, "charge-bolt");
+    assert.notEqual(play.phase, "orbit-loop");
+    assert.notEqual(play.phase, "click-hop");
+    assert.notEqual(play.phase, "hold-sit");
+    assert.notEqual(play.phase, "earth-sit");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "ledge-sit") {
+      sitXMin = Math.min(sitXMin, play.x);
+      sitXMax = Math.max(sitXMax, play.x);
+    }
+  }
+  assert.ok(seen.has("ledge-on"));
+  assert.ok(seen.has("ledge-sit"));
+  assert.ok(seen.has("ledge-off"));
+  assert.ok(sitXMax - sitXMin < 2, "one sit — not a walk across");
   assert.equal(play.phase, "done");
 });
