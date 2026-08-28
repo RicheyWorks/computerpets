@@ -228,12 +228,46 @@ export function callKeys(query: unknown, roster: CallGuest[] | null | undefined,
 
 export function walkersOf(keys: string[] | null | undefined, hostKey?: string | null) {
   const list = Array.isArray(keys) ? keys.filter((k, i, all) => k && all.indexOf(k) === i) : [];
-  return list.filter((k) => k !== hostKey && k !== FLY_BIRD_KEY);
+  return list.filter((k) => k !== hostKey && k !== FLY_BIRD_KEY && k !== PERCH_BIRD_KEY);
 }
 
 export function shouldFly(keys: string[] | null | undefined, hostKey?: string | null) {
   const list = Array.isArray(keys) ? keys : [];
   return list.includes(FLY_BIRD_KEY) && hostKey !== FLY_BIRD_KEY;
+}
+
+export function shouldRobinFly(keys: string[] | null | undefined, hostKey?: string | null) {
+  const list = Array.isArray(keys) ? keys : [];
+  return list.includes(PERCH_BIRD_KEY) && hostKey !== PERCH_BIRD_KEY;
+}
+
+export const AUTO_MEET_KEYS = [MEET_DEE_KEY, MEET_CAT_KEY, MEET_DOG_KEY, MEET_CROW_KEY, MEET_RABBIT_KEY, MEET_RAVEN_KEY];
+
+export function nextAutoMeet(present: Array<string | { key?: string }> | null | undefined, hostKey?: string | null) {
+  const have = new Set((Array.isArray(present) ? present : []).map((row) => (typeof row === "string" ? row : row && row.key)).filter(Boolean));
+  for (const key of AUTO_MEET_KEYS) {
+    if (key !== hostKey && !have.has(key)) return key;
+  }
+  return null;
+}
+
+export const GUEST_DEST = 128;
+
+export function destFit(img: { style?: Record<string, string>; setAttribute?: (name: string, value: string) => void } | null | undefined) {
+  if (!img) return false;
+  if (img.style) {
+    img.style.width = `${GUEST_DEST}px`;
+    img.style.height = `${GUEST_DEST}px`;
+    img.style.objectFit = "contain";
+    img.style.objectPosition = "bottom";
+    img.style.border = "0";
+    img.style.outline = "none";
+    img.style.background = "transparent";
+    img.style.boxShadow = "none";
+  }
+  img.setAttribute?.("width", String(GUEST_DEST));
+  img.setAttribute?.("height", String(GUEST_DEST));
+  return true;
 }
 
 export function beginCalled(key: string, width: number, slot: number, of: number): CalledWalker {
@@ -781,9 +815,11 @@ export function syncCalledPaint(
     } else {
       reused += 1;
     }
-    const frames = opts?.frameOf?.(g) || poseFrames(g);
-    const src = frames && frames.length ? frames[Math.abs((g.frame as number) || 0) % frames.length] || frames[0] : "";
-    assignSrc(img, src);
+    const frames = opts?.frameOf?.(g) || poseFrames(g, (g as CalledWalker & { sprites?: CalledSprites }).sprites);
+    let src = frames && frames.length ? frames[Math.abs((g.frame as number) || 0) % frames.length] || frames[0] : "";
+    if (!src) src = poseSrc(g, (g as CalledWalker & { sprites?: CalledSprites }).sprites);
+    assignSrc(img, src || "");
+    destFit(img);
     img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
   }
   return { reused, added, removed };

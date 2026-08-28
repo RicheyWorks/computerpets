@@ -10,6 +10,7 @@ import {
   visitLine,
 } from "@/lib/pets/visitor";
 import { traitFor } from "@/lib/pets/traits";
+import { ROBIN_KEY } from "@/lib/pets/robin-fly";
 
 export function HouseVisit({ hostKey, hidden }: { hostKey: string; hidden?: boolean }) {
   const guest = useMemo(() => todaysVisitor(hostKey), [hostKey]);
@@ -55,7 +56,7 @@ export function HouseVisit({ hostKey, hidden }: { hostKey: string; hidden?: bool
     };
   }, [guest, hostKey]);
 
-  if (hidden || phase === "wait" || phase === "gone") return null;
+  if (hidden || phase === "wait" || phase === "gone" || guest.key === ROBIN_KEY) return null;
 
   return (
     <LivingPet

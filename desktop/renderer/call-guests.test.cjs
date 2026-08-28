@@ -115,7 +115,16 @@ test("called guests walk, stay, and can be dismissed", () => {
   assert.equal(gone.dismissed, true);
   assert.equal(gone.phase, "leave");
   assert.deepEqual(G.walkersOf(["hummingbird", "cat"], "red_panda"), ["cat"]);
+  assert.deepEqual(G.walkersOf(["hummingbird", "robin", "cat"], "red_panda"), ["cat"]);
   assert.equal(G.shouldFly(["hummingbird", "moss"], "red_panda"), true);
+  assert.equal(G.shouldRobinFly(["robin", "cat"], "red_panda"), true);
+  assert.equal(G.shouldRobinFly(["cat"], "red_panda"), false);
+  assert.equal(G.nextAutoMeet([], "red_panda"), "chickadee");
+  assert.equal(G.nextAutoMeet(["chickadee"], "red_panda"), "cat");
+  const dest = { style: {}, setAttribute(n, v) { this[n] = v; } };
+  assert.equal(G.destFit(dest), true);
+  assert.equal(dest.style.objectFit, "contain");
+  assert.equal(dest.style.border, "0");
 });
 
 test("overlay Call sits the card and the floor, and click-through does not eat type-in", () => {

@@ -3,10 +3,10 @@ import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const G = await import(join(root, "src/lib/pets/call-guests.ts"));
+const G = await import(pathToFileURL(join(root, "src/lib/pets/call-guests.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/call-guests.js"));
 const roster = createRequire(import.meta.url)(join(root, "../desktop/renderer/roster.json"));
 const roomsSrc = readFileSync(join(root, "src/lib/pets/rooms.ts"), "utf8");
@@ -14,7 +14,7 @@ const roomsSrc = readFileSync(join(root, "src/lib/pets/rooms.ts"), "utf8");
 const cardSrc = readFileSync(join(root, "src/components/desk/keeper-card.tsx"), "utf8");
 const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
 const platesSrc = readFileSync(join(root, "src/components/desk/desk-plates.tsx"), "utf8");
-const music = await import(join(root, "src/lib/pets/house-music.ts"));
+const music = await import(pathToFileURL(join(root, "src/lib/pets/house-music.ts")).href);
 const OverlayMusic = createRequire(import.meta.url)(join(root, "../desktop/renderer/house-music.js"));
 
 test("Call lockstep uses the existing dens, not invented groups", () => {
@@ -118,4 +118,13 @@ test("radio search splits 99.9 seattle fm and labels the box", () => {
   assert.match(cardSrc, /RADIO_PLACEHOLDER/);
   assert.match(platesSrc, /AREA_LABEL/);
   assert.match(platesSrc, /Weather area/);
+});
+
+test("/demo walkers skip robin and a meet guest can auto-walk in", () => {
+  assert.deepEqual(G.walkersOf(["hummingbird", "robin", "cat"], "red_panda"), ["cat"]);
+  assert.deepEqual(Overlay.walkersOf(["hummingbird", "robin", "cat"], "red_panda"), ["cat"]);
+  assert.equal(G.shouldRobinFly(["robin"], "red_panda"), true);
+  assert.equal(G.nextAutoMeet([], "red_panda"), "chickadee");
+  assert.equal(Overlay.nextAutoMeet([], "red_panda"), "chickadee");
+  assert.match(roomSrc, /nextAutoMeet/);
 });

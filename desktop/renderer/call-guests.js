@@ -191,12 +191,48 @@
 
   function walkersOf(keys, hostKey) {
     const list = Array.isArray(keys) ? keys.filter((k, i, all) => k && all.indexOf(k) === i) : [];
-    return list.filter((k) => k !== hostKey && k !== FLY_BIRD_KEY);
+    return list.filter((k) => k !== hostKey && k !== FLY_BIRD_KEY && k !== PERCH_BIRD_KEY);
   }
 
   function shouldFly(keys, hostKey) {
     const list = Array.isArray(keys) ? keys : [];
     return list.indexOf(FLY_BIRD_KEY) >= 0 && hostKey !== FLY_BIRD_KEY;
+  }
+
+  function shouldRobinFly(keys, hostKey) {
+    const list = Array.isArray(keys) ? keys : [];
+    return list.indexOf(PERCH_BIRD_KEY) >= 0 && hostKey !== PERCH_BIRD_KEY;
+  }
+
+  const AUTO_MEET_KEYS = [MEET_DEE_KEY, MEET_CAT_KEY, MEET_DOG_KEY, MEET_CROW_KEY, MEET_RABBIT_KEY, MEET_RAVEN_KEY];
+
+  function nextAutoMeet(present, hostKey) {
+    const have = new Set((Array.isArray(present) ? present : []).map((row) => (typeof row === "string" ? row : row && row.key)).filter(Boolean));
+    for (const key of AUTO_MEET_KEYS) {
+      if (key !== hostKey && !have.has(key)) return key;
+    }
+    return null;
+  }
+
+  const GUEST_DEST = 128;
+
+  function destFit(img) {
+    if (!img) return false;
+    if (img.style) {
+      img.style.width = GUEST_DEST + "px";
+      img.style.height = GUEST_DEST + "px";
+      img.style.objectFit = "contain";
+      img.style.objectPosition = "bottom";
+      img.style.border = "0";
+      img.style.outline = "none";
+      img.style.background = "transparent";
+      img.style.boxShadow = "none";
+    }
+    if (img.setAttribute) {
+      img.setAttribute("width", String(GUEST_DEST));
+      img.setAttribute("height", String(GUEST_DEST));
+    }
+    return true;
   }
 
   function beginCalled(key, width, slot, of) {
@@ -736,8 +772,10 @@
         reused += 1;
       }
       const frames = frameOf ? frameOf(g) : poseFrames(g, g.sprites);
-      const src = frames && frames.length ? frames[Math.abs(g.frame || 0) % frames.length] || frames[0] : "";
+      let src = frames && frames.length ? frames[Math.abs(g.frame || 0) % frames.length] || frames[0] : "";
+      if (!src) src = poseSrc(g, g.sprites) || (g.sprites && (g.sprites.idle && g.sprites.idle[0])) || "";
       assignSrc(img, src);
+      destFit(img);
       if (img.style) img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
     }
     return { reused, added, removed };
@@ -786,6 +824,11 @@
     callKeys,
     walkersOf,
     shouldFly,
+    shouldRobinFly,
+    AUTO_MEET_KEYS,
+    nextAutoMeet,
+    GUEST_DEST,
+    destFit,
     beginCalled,
     dismissCalled,
     shouldPerchCalled,
