@@ -22080,3 +22080,181 @@ test("a moved window refits Gaze's branch-hollow pulley box; sleep, card, and hi
   assert.equal(play.abort, true);
 });
 
+
+test("Still creeps a sash parting bead as a vine rail: creep onto the bead, hold slowly, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("potto"), "creep");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(P.playFor("tick"), "grip");
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.playFor("seahorse"), "hitch");
+  assert.equal(P.playFor("sloth"), "reach");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.notEqual(P.playFor("potto"), "still");
+  assert.notEqual(P.playFor("potto"), "grip");
+  assert.notEqual(P.playFor("potto"), "stilt");
+  assert.notEqual(P.playFor("potto"), "hitch");
+  assert.notEqual(P.playFor("potto"), "reach");
+  assert.notEqual(P.playFor("potto"), "hang");
+  assert.notEqual(P.playFor("potto"), "look");
+  assert.notEqual(P.playFor("potto"), "sill");
+  assert.equal(P.DUR.stillOn, 1.14, "Grin still durations stay");
+  assert.equal(P.DUR.gripOn, 1.18, "Clasp grip durations stay");
+  assert.equal(P.DUR.stiltOn, 1.52, "Stem stilt durations stay");
+  assert.equal(P.DUR.lookOn, 1.31, "Gaze look durations stay");
+  const target = P.pickTarget([WIN], 80, "potto", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "creep");
+  assert.equal(target.side, "vinerail");
+  assert.equal(target.leave, "slow");
+  assert.notEqual(target.kind, "still");
+  assert.notEqual(target.kind, "grip");
+  assert.notEqual(target.kind, "stilt");
+  assert.notEqual(target.kind, "hitch");
+  assert.notEqual(target.kind, "reach");
+  assert.notEqual(target.kind, "look");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she creeps a sash parting bead as a vine rail, not the floor");
+  assert.ok(P.DUR.creepHold > P.DUR.creep, "the hold is the slow stay after; the creep is the tell");
+  assert.ok(P.DUR.creepOn > 0.5, "a creep onto the bead, not the hold");
+  assert.ok(P.DUR.creepOn !== P.DUR.stiltOn);
+  assert.ok(P.DUR.creepOn !== P.DUR.hitchOn);
+  assert.ok(P.DUR.creepOn !== P.DUR.stillOn);
+  assert.ok(P.DUR.creepOn !== P.DUR.gripOn);
+  assert.ok(P.DUR.creepOn !== P.DUR.reachOn);
+  assert.ok(P.DUR.creepOn !== P.DUR.lookOn);
+  assert.ok(P.DUR.creepOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.creep !== P.DUR.stilt);
+  assert.ok(P.DUR.creep !== P.DUR.hitch);
+  assert.ok(P.DUR.creep !== P.DUR.still);
+  assert.ok(P.DUR.creep !== P.DUR.grip);
+  assert.ok(P.DUR.creep !== P.DUR.look);
+  assert.ok(P.DUR.creepHold !== P.DUR.stiltHold);
+  assert.ok(P.DUR.creepHold !== P.DUR.stillHold);
+  assert.ok(P.DUR.creepHold !== P.DUR.gripHold);
+  assert.ok(P.DUR.creepOff !== P.DUR.stiltOff);
+  assert.ok(P.DUR.creepOff !== P.DUR.stillOff);
+  assert.ok(P.DUR.creepOff !== P.DUR.gripOff);
+  assert.ok(P.DUR.creepOff !== P.DUR.sillDown);
+  const vine = P.creepPoint(WIN, P.SPRITE, WORK);
+  const bead = P.stiltPoint(WIN, P.SPRITE, WORK);
+  const wrap = P.hitchPoint(WIN, P.SPRITE, WORK);
+  const dead = P.stillPoint(WIN, P.SPRITE, WORK);
+  const hem = P.gripPoint(WIN, P.SPRITE, WORK);
+  const bough = P.reachPoint(WIN, P.SPRITE, WORK);
+  const hollow = P.lookPoint(WIN, P.SPRITE, WORK);
+  assert.ok(vine.lift > 8, "the sash parting bead as a vine rail, not the floor");
+  assert.ok(Math.abs(vine.lift - bead.lift) < 8, "same sash parting bead furniture family as Stem");
+  assert.ok(Math.abs(vine.x - bead.x) > 20, "same bead, not Stem's stilt spot");
+  assert.ok(Math.abs(vine.x - wrap.x) > 8 || Math.abs(vine.lift - wrap.lift) > 20, "not Anchor's parting-bead hitch");
+  assert.ok(Math.abs(vine.x - dead.x) > 8 || Math.abs(vine.lift - dead.lift) > 20, "not Grin's soffit still");
+  assert.ok(Math.abs(vine.x - hem.x) > 8 || Math.abs(vine.lift - hem.lift) > 20, "not Clasp's apron-hem grip");
+  assert.ok(Math.abs(vine.x - bough.x) > 8 || Math.abs(vine.lift - bough.lift) > 20, "not Hang's soffit reach");
+  assert.ok(Math.abs(vine.x - hollow.x) > 8 || Math.abs(vine.lift - hollow.lift) > 20, "not Gaze's pulley-box look");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "potto", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash parting bead, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "potto", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash parting bead needs height");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 168, height: 200 }], 80, "potto", WORK, P.SPRITE);
+  assert.equal(thin, null, "Still needs Stem's real parting bead, not a shorter vine");
+  const rail = P.pickTarget([{ id: "rail", x: 200, y: 80, width: 168, height: 208 }], 80, "potto", WORK, P.SPRITE);
+  assert.ok(rail, "a real sash parting bead as a vine rail");
+  const stem = P.pickTarget([{ id: "rail", x: 200, y: 80, width: 168, height: 208 }], 80, "harvestman", WORK, P.SPRITE);
+  assert.ok(stem, "Stem still takes the parting bead");
+  const creepOn = P.creepOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const stiltOn = P.stiltOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const hitchOn = P.hitchOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const stillOn = P.stillOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const creepEase = 0.25 * 0.25 * 0.25 * (0.25 * (0.25 * 6 - 15) + 10);
+  assert.ok(creepOn.lift > vine.lift * creepEase, "she creeps onto the bead as a vine");
+  assert.ok(creepOn.lift !== stiltOn.lift, "a creep, not Stem's stilt walk");
+  assert.ok(creepOn.lift !== hitchOn.lift, "a creep, not Anchor's hover hitch");
+  assert.ok(creepOn.lift !== stillOn.lift, "a creep, not Grin's play-dead still");
+  const gripThen = P.creepPath(0.5);
+  const stiltPose = P.stiltPath(0.5);
+  const hitchPose = P.hitchWrapPath ? P.hitchWrapPath(0.5) : P.hitchPath(0.5);
+  const stillPose = P.stillPath(0.5);
+  const gripPose = P.gripPath(0.5);
+  const lookPose = P.lookPath(0.5);
+  assert.ok(gripThen.lift > 1 && gripThen.lift < 4, "she grips the vine, then stills; not a stilt");
+  assert.ok(gripThen.rot < 8, "a slow cousin, not a look-up");
+  assert.ok(gripThen.lift !== stiltPose.lift, "not Stem's stilt");
+  assert.ok(gripThen.x !== hitchPose.x, "not Anchor's hitch");
+  assert.ok(gripThen.rot !== stillPose.rot, "not Grin's still");
+  assert.ok(gripThen.rot !== gripPose.rot, "not Clasp's grip");
+  assert.ok(gripThen.rot !== lookPose.rot, "not Gaze's look");
+  const hold = P.creepHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 3.5) < 0.2, "she holds slowly on the vine");
+  assert.ok(Math.abs(hold.x - 1.1) < 0.2, "she holds the vine rail");
+  assert.ok(hold.lift > 2 && hold.lift < 3, "a slow hold, not a stilt lift");
+  const off0 = P.creepOffPath(0, { x: vine.x, lift: vine.lift, rot: 3.5 }, { x: vine.x + 54, lift: 0 });
+  const offMid = P.creepOffPath(0.5, { x: vine.x, lift: vine.lift, rot: 3.5 }, { x: vine.x + 54, lift: 0 });
+  const off1 = P.creepOffPath(1, { x: vine.x, lift: vine.lift, rot: 3.5 }, { x: vine.x + 54, lift: 0 });
+  assert.ok(Math.abs(off0.x - vine.x) < 2);
+  assert.ok(offMid.lift > 2, "a leave off the vine rail");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "hitch");
+    assert.notEqual(play.phase, "still");
+    assert.notEqual(play.phase, "grip");
+    assert.notEqual(play.phase, "reach");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "look");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "creep") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "creep-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "creep-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.2)) < 3, "she holds slowly on the vine rail");
+    }
+    if (play.phase === "creep-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("creep-on"));
+  assert.ok(seen.has("creep"));
+  assert.ok(seen.has("creep-hold"));
+  assert.ok(seen.has("creep-off"));
+  assert.ok(!seen.has("stilt"), "Still never uses Stem's stilt");
+  assert.ok(!seen.has("hitch"), "Still never uses Anchor's hitch");
+  assert.ok(!seen.has("still"), "Still never uses Grin's still");
+  assert.ok(!seen.has("grip"), "Still never uses Clasp's grip");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Still's vine-rail parting bead; sleep, card, and hide abort; Still never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "potto", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "creep"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "creep");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "creep");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "creep-off");
+  assert.equal(play.abort, true);
+});

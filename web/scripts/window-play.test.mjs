@@ -13849,3 +13849,90 @@ test("the demo window plate walks Gaze look the same way", () => {
   assert.equal(play.phase, "done");
 });
 
+
+test("the demo window plate walks Still creep the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "potto"[\s\S]{0,80}slug: "still"/);
+  assert.equal(P.playFor("potto"), "creep");
+  const target = P.pickTarget([WIN], 80, "potto", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "creep");
+  assert.equal(target.side, "vinerail");
+  assert.equal(target.leave, "slow");
+  assert.equal(Overlay.playFor("potto"), "creep");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(Overlay.playFor("opossum"), "still");
+  assert.equal(P.playFor("tick"), "grip");
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.notEqual(P.playFor("potto"), "still");
+  assert.notEqual(P.playFor("potto"), "grip");
+  assert.notEqual(P.playFor("potto"), "stilt");
+  assert.notEqual(target.kind, "still");
+  assert.notEqual(target.kind, "grip");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she creeps a sash parting bead as a vine rail, not the sash foot");
+  assert.ok(P.DUR.creepHold > P.DUR.creep, "the hold is the slow stay after; the creep is the tell");
+  assert.ok(P.DUR.creepOn !== Overlay.DUR.stiltOn);
+  assert.ok(P.DUR.creepOn !== Overlay.DUR.stillOn);
+  assert.ok(P.DUR.creepOn !== Overlay.DUR.gripOn);
+  assert.ok(P.DUR.creepOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.cling, Overlay.DUR.cling);
+  assert.equal(P.DUR.creepOn, Overlay.DUR.creepOn);
+  assert.equal(P.DUR.creep, Overlay.DUR.creep);
+  assert.equal(P.DUR.creepHold, Overlay.DUR.creepHold);
+  assert.equal(P.DUR.creepOff, Overlay.DUR.creepOff);
+  const vine = P.creepPoint(WIN, 176, WORK);
+  const deskVine = Overlay.creepPoint(WIN, Overlay.SPRITE, WORK);
+  const bead = P.stiltPoint(WIN, 176, WORK);
+  const wrap = P.hitchPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(vine.x - deskVine.x) < 1);
+  assert.ok(Math.abs(vine.lift - deskVine.lift) < 1);
+  assert.ok(Math.abs(vine.lift - bead.lift) < 8, "same sash parting bead furniture as Stem");
+  assert.ok(Math.abs(vine.x - bead.x) > 20, "not Stem's stilt");
+  assert.ok(Math.abs(vine.x - wrap.x) > 8 || Math.abs(vine.lift - wrap.lift) > 20, "not Anchor's hitch");
+  const creepOn = P.creepOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const deskCreep = Overlay.creepOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  assert.equal(creepOn.x, deskCreep.x);
+  assert.equal(creepOn.lift, deskCreep.lift);
+  assert.ok(creepOn.lift > 0, "she creeps onto the vine rail");
+  const gripThen = P.creepPath(0.5);
+  const deskGrip = Overlay.creepPath(0.5);
+  assert.equal(gripThen.lift, deskGrip.lift);
+  assert.ok(gripThen.lift > 1 && gripThen.lift < 4, "she grips then stills, not a stilt");
+  const hold = P.creepHoldPath(0.5);
+  const deskHold = Overlay.creepHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 3.5) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "still");
+    assert.notEqual(play.phase, "grip");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "creep") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "creep-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "creep-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.2)) < 3, "she holds slowly on the vine rail");
+    }
+  }
+  assert.ok(seen.has("creep-on"));
+  assert.ok(seen.has("creep"));
+  assert.ok(seen.has("creep-hold"));
+  assert.ok(seen.has("creep-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
