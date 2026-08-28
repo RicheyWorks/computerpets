@@ -50,6 +50,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("boa"), "loop");
   assert.equal(P.playFor("milk_snake"), "mosaic");
   assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("anole"), "flash");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("carpet_python"), "chart");
   assert.equal(P.playFor("octopus"), "lid");
@@ -1112,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "anole", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "skink", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -6962,6 +6963,7 @@ test("Coral mosaics a window muntin as a stamp box — not loop, inspect, patrol
   assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("anole"), "flash");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(target.side, "muntin");
@@ -12392,7 +12394,7 @@ test("Sheen licks a warm pane as a salt glass: hover to the glass, lick once, ho
   assert.equal(P.playFor("venus_flytrap"), "count");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("iguana"), "flatten");
-  assert.equal(P.playFor("anole"), "sill");
+  assert.equal(P.playFor("skink"), "sill");
   assert.equal(P.playFor("moss"), "lean");
   assert.equal(P.playFor("moon_jelly"), "chime");
   assert.equal(P.playFor("goldfish"), "circle");
@@ -14058,7 +14060,7 @@ test("Dapple covers a window well as leaf mold: creep into the areaway, cover, k
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("anole"), "sill");
+  assert.equal(P.playFor("skink"), "sill");
   assert.equal(P.playFor("caecilian"), "ring");
   const target = P.pickTarget([WIN], 80, "salamander", WORK, P.SPRITE);
   assert.ok(target);
@@ -22452,7 +22454,7 @@ test("Pad chirps a lamp-side jamb as lamp plaster: climb the jamb, chirp once (t
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("budgie"), "perch");
   assert.equal(P.playFor("salamander"), "cover");
-  assert.equal(P.playFor("anole"), "sill");
+  assert.equal(P.playFor("skink"), "sill");
   assert.notEqual(P.playFor("gecko"), "pad");
   assert.notEqual(P.playFor("gecko"), "stone");
   assert.notEqual(P.playFor("gecko"), "cling");
@@ -22617,5 +22619,190 @@ test("a moved window refits Pad's lamp-plaster jamb; sleep, card, and hide abort
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "chirp-off");
+  assert.equal(play.abort, true);
+});
+
+
+test("Wink flashes a sash stile as a vine post: sit on the stile, flash the dewlap once, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("anole"), "flash");
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("beaver"), "gnaw");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("potto"), "creep");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.playFor("skink"), "sill");
+  assert.notEqual(P.playFor("anole"), "wink");
+  assert.notEqual(P.playFor("anole"), "chirp");
+  assert.notEqual(P.playFor("anole"), "stone");
+  assert.notEqual(P.playFor("anole"), "gnaw");
+  assert.notEqual(P.playFor("anole"), "drum");
+  assert.notEqual(P.playFor("anole"), "bore");
+  assert.notEqual(P.playFor("anole"), "creep");
+  assert.notEqual(P.playFor("anole"), "sill");
+  assert.equal(P.DUR.chirpOn, 1.11, "Pad chirp durations stay");
+  assert.equal(P.DUR.gnawOn, 1.19, "Dam gnaw durations stay");
+  assert.equal(P.DUR.drumOn, 0.74, "Drum drum durations stay");
+  assert.equal(P.DUR.boreOn, 1.22, "Auger bore durations stay");
+  assert.equal(P.DUR.creepOn, 1.73, "Still creep durations stay");
+  const target = P.pickTarget([WIN], 80, "anole", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "flash");
+  assert.equal(target.side, "vinepost");
+  assert.equal(target.leave, "dewlap");
+  assert.notEqual(target.kind, "wink");
+  assert.notEqual(target.kind, "chirp");
+  assert.notEqual(target.kind, "stone");
+  assert.notEqual(target.kind, "gnaw");
+  assert.notEqual(target.kind, "drum");
+  assert.notEqual(target.kind, "bore");
+  assert.notEqual(target.kind, "creep");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she flashes a sash stile as a vine post, not the floor");
+  assert.ok(P.DUR.flashHold > P.DUR.flash, "the hold is the sit after; the flash is the tell");
+  assert.ok(P.DUR.flashOn > 0.5, "a sit onto the stile, not the flash");
+  assert.ok(P.DUR.flashOn !== P.DUR.chirpOn);
+  assert.ok(P.DUR.flashOn !== P.DUR.gnawOn);
+  assert.ok(P.DUR.flashOn !== P.DUR.drumOn);
+  assert.ok(P.DUR.flashOn !== P.DUR.boreOn);
+  assert.ok(P.DUR.flashOn !== P.DUR.creepOn);
+  assert.ok(P.DUR.flashOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.flash !== P.DUR.chirp);
+  assert.ok(P.DUR.flash !== P.DUR.gnaw);
+  assert.ok(P.DUR.flash !== P.DUR.drum);
+  assert.ok(P.DUR.flash !== P.DUR.bore);
+  assert.ok(P.DUR.flash !== P.DUR.stone);
+  assert.ok(P.DUR.flashHold !== P.DUR.chirpHold);
+  assert.ok(P.DUR.flashHold !== P.DUR.gnawHold);
+  assert.ok(P.DUR.flashOff !== P.DUR.chirpOff);
+  assert.ok(P.DUR.flashOff !== P.DUR.gnawOff);
+  assert.ok(P.DUR.flashOff !== P.DUR.sillDown);
+  const vine = P.flashPoint(WIN, P.SPRITE, WORK);
+  const lodge = P.gnawPoint(WIN, P.SPRITE, WORK);
+  const snag = P.drumPoint(WIN, P.SPRITE, WORK);
+  const timber = P.borePoint(WIN, P.SPRITE, WORK);
+  const plaster = P.chirpPoint(WIN, P.SPRITE, WORK);
+  const bead = P.creepPoint(WIN, P.SPRITE, WORK);
+  const stem = P.stiltPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(vine.lift > 36, "the interior sash stile as a vine post, not the floor");
+  assert.ok(Math.abs(vine.x - lodge.x) < 2, "the same interior sash stile Dam gnaws; the pose is a flash");
+  assert.ok(Math.abs(vine.x - snag.x) < 2, "the same interior sash stile Drum drums; the pose is a flash");
+  assert.ok(vine.lift > lodge.lift + 8, "a vine-post sit, not Dam lodge cup");
+  assert.ok(vine.lift < snag.lift - 8, "a vine-post sit, not Drum upper post");
+  assert.ok(Math.abs(vine.x - timber.x) > 8, "not Auger circular timber bore");
+  assert.ok(Math.abs(vine.x - plaster.x) > 20, "not Pad lamp-side jamb chirp");
+  assert.ok(Math.abs(vine.x - bead.x) > 8 || Math.abs(vine.lift - bead.lift) > 8, "not Still parting-bead creep");
+  assert.ok(Math.abs(vine.x - stem.x) > 8 || Math.abs(vine.lift - stem.lift) > 8, "not Stem parting-bead stilt");
+  assert.ok(Math.abs(vine.x - horn.x) > 8 || Math.abs(vine.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "anole", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash stile, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "anole", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash stile, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 191, height: 214 }], 80, "anole", WORK, P.SPRITE);
+  assert.equal(thin, null, "Wink needs Dam's real stile, not a shorter post");
+  const stile = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 191, height: 216 }], 80, "anole", WORK, P.SPRITE);
+  assert.ok(stile, "a real sash stile as a vine post");
+  const damOk = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 191, height: 216 }], 80, "beaver", WORK, P.SPRITE);
+  assert.ok(damOk, "Dam still takes the stile");
+  const drumOk = P.pickTarget([{ id: "post", x: 200, y: 80, width: 192, height: 220 }], 80, "pileated", WORK, P.SPRITE);
+  assert.ok(drumOk, "Drum still takes an upper sash stile");
+  const augerOk = P.pickTarget([{ id: "auger", x: 200, y: 80, width: 188, height: 208 }], 80, "carpenter_bee", WORK, P.SPRITE);
+  assert.ok(augerOk, "Auger still takes the timber stile");
+  const sitOn = P.flashOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const walkOn = P.gnawOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const hopOn = P.drumOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const hoverOn = P.boreOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const climbOn = P.chirpOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  assert.ok(sitOn.lift > 0, "she sits onto the stile as a vine post");
+  assert.ok(sitOn.lift !== walkOn.lift, "a sit onto the stile, not Dam gnaw");
+  assert.ok(sitOn.lift !== hopOn.lift, "a sit onto the stile, not Drum hop");
+  assert.ok(sitOn.lift !== hoverOn.lift, "a sit onto the stile, not Auger hover");
+  assert.ok(sitOn.lift !== climbOn.lift, "a sit onto the stile, not Pad climb");
+  const pink = P.flashPath(0.5);
+  const voice = P.chirpPath(0.5);
+  const bite = P.gnawPath(0.5);
+  const peck = P.drumPath(0.5);
+  const grind = P.borePath(0.5);
+  const stone = P.stonePath ? P.stonePath(0.5) : { lift: 99, rot: 99 };
+  assert.ok(pink.lift > 3, "she flashes the dewlap once; the pink is a sentence");
+  assert.ok(pink.rot > 10, "a dewlap flash, not a chirp");
+  assert.ok(pink.lift !== voice.lift, "not Pad chirp");
+  assert.ok(pink.rot !== bite.rot, "not Dam gnaw");
+  assert.ok(pink.lift !== peck.lift, "not Drum drum");
+  assert.ok(pink.x !== grind.x, "not Auger bore");
+  const hold = P.flashHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 2.0) < 0.2, "she holds the vine post after the flash");
+  assert.ok(Math.abs(hold.x - 0.3) < 0.2, "she stays on the stile");
+  assert.ok(hold.lift > 0 && hold.lift < 2, "a hold after the flash, not a dewlap flare");
+  const off0 = P.flashOffPath(0, { x: vine.x, lift: vine.lift, rot: 2.0 }, { x: vine.x + 52, lift: 0 });
+  const offMid = P.flashOffPath(0.5, { x: vine.x, lift: vine.lift, rot: 2.0 }, { x: vine.x + 52, lift: 0 });
+  const off1 = P.flashOffPath(1, { x: vine.x, lift: vine.lift, rot: 2.0 }, { x: vine.x + 52, lift: 0 });
+  assert.ok(Math.abs(off0.x - vine.x) < 2);
+  assert.ok(offMid.lift > 2, "a leave off the vine post");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "chirp");
+    assert.notEqual(play.phase, "gnaw");
+    assert.notEqual(play.phase, "drum");
+    assert.notEqual(play.phase, "bore");
+    assert.notEqual(play.phase, "creep");
+    assert.notEqual(play.phase, "stone");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "flash") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "flash-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "flash-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.5)) < 3, "she holds the vine post after the flash");
+    }
+    if (play.phase === "flash-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("flash-on"));
+  assert.ok(seen.has("flash"));
+  assert.ok(seen.has("flash-hold"));
+  assert.ok(seen.has("flash-off"));
+  assert.ok(!seen.has("chirp"), "Wink never uses Pad chirp");
+  assert.ok(!seen.has("gnaw"), "Wink never uses Dam gnaw");
+  assert.ok(!seen.has("drum"), "Wink never uses Drum drum");
+  assert.ok(!seen.has("bore"), "Wink never uses Auger bore");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Wink's vine-post stile; sleep, card, and hide abort; Wink never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "anole", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "flash"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "flash");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "flash");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "flash-off");
   assert.equal(play.abort, true);
 });
