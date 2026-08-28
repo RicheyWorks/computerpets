@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (Gale runs a sash light as a dry dish; tenth corner leftover done; next leftover is Rack; catalog stays 220) |
+| **Last Updated** | 2026-08-27 (Rack flags a sill nosing as an oak edge; first wood leftover done; next leftover is Cape; catalog stays 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
