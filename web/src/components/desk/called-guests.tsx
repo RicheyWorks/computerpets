@@ -19,6 +19,7 @@ import {
 } from "@/lib/pets/call-guests";
 import { traitFor } from "@/lib/pets/traits";
 import type { DeskWindow } from "@/lib/pets/windows";
+import { firstGrassBound, loadPlants } from "@/lib/pets/desk-plants";
 
 export function CalledGuests({
   keys,
@@ -89,6 +90,7 @@ export function CalledGuests({
         windowBound: firstWindowBound(windowsRef.current, { width: w, height: window.innerHeight, floorLift: 0 }),
         capBound: firstCapBound(windowsRef.current, { width: w, height: window.innerHeight, floorLift: 0 }),
         transomBound: firstTransomBound(windowsRef.current, { width: w, height: window.innerHeight, floorLift: 0 }),
+        grassBound: firstGrassBound(loadPlants(w, window.innerHeight), { width: w, height: window.innerHeight, floorLift: 0 }),
       };
       walkers.current = walkers.current.map((g) => {
         const next = stepCalled(g, dt, w, flags);

@@ -281,6 +281,43 @@ select {
   outline: 1px solid rgb(216 207 192 / 0.45);
 }
 
+#plant-choice {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  width: 128px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  border: 1px solid #2a2621;
+  background: rgb(22 20 18 / 0.94);
+  pointer-events: auto;
+  z-index: 7;
+}
+
+#plant-choice.show {
+  display: flex;
+}
+
+#plant-choice button {
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: #f2ece3;
+  background: none;
+  border: 0;
+  padding: 8px 6px;
+  min-height: 32px;
+  cursor: pointer;
+  text-align: left;
+}
+
+#plant-choice button[data-on="1"] {
+  color: #d8cfc0;
+}
+
 .keeper-steps,
 .keeper-music,
 .keeper-sleep,

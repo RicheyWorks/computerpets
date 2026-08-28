@@ -146,3 +146,25 @@ test("overlay Call sits the card and the floor, and click-through does not eat t
   assert.match(mainSrc, /nodeIntegration:\s*false/);
   assert.doesNotMatch(petSrc, /hid a ribbon/);
 });
+
+test("Miso loafs the Felt grass bound when the plant is in Meet", () => {
+  const P = require("./desk-plants.js");
+  const felt = P.setMode(P.defaultSpot("moss", 800, 480, 1), "meet");
+  const grass = P.grassBound(felt, { width: 800, height: 480, floorLift: 0 });
+  assert.ok(grass);
+  assert.equal(G.GRASS_LIE_KEY, "cat");
+  const flags = { hostKey: "red_panda", hostX: 80, hostFacing: 1, hostLift: 0, grassBound: grass };
+  assert.equal(G.shouldSitGrass("cat", flags), true);
+  assert.equal(G.shouldSitBound("cat", flags), true);
+  assert.equal(G.shouldSitGrass("dog", flags), false);
+  let miso = G.beginCalled("cat", 800, 0, 1);
+  for (let i = 0; i < 80 && miso.phase !== "bound"; i++) miso = G.stepCalled(miso, 0.05, 800, flags);
+  assert.equal(miso.phase, "bound");
+  assert.ok(Math.abs(miso.x - grass.x) < 2);
+  assert.equal(miso.boundKind, "grass");
+  assert.equal(G.tellLine(miso), G.CAT_GRASS_LINE);
+  const sit = ["sprites/cat/sit/1.png"];
+  assert.ok(G.poseSrc(miso, { sit, walk: ["w.png"] }).includes("cat/sit/"));
+  const stillFlags = { ...flags, grassBound: null };
+  assert.equal(G.shouldSitGrass("cat", stillFlags), false);
+});

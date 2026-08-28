@@ -45,6 +45,7 @@ const weatherPlate = document.getElementById("weather-plate");
 const newsPlate = document.getElementById("news-plate");
 const hud = document.getElementById("hud");
 const choiceEl = document.getElementById("choice");
+const plantChoiceEl = document.getElementById("plant-choice");
 const hudName = document.getElementById("hud-name");
 const hudStage = document.getElementById("hud-stage");
 const hudBondTitle = document.getElementById("hud-bond-title");
@@ -171,6 +172,9 @@ let robinFrame = 0;
 let deskPlants = [];
 let plantAge = 0;
 let plantDrag = null;
+let plantPress = null;
+let plantChoiceKey = null;
+let houseBooted = false;
 let autoMeetWait = 4.5;
 let musicNode = null;
 let sleepNode = null;
@@ -585,8 +589,9 @@ function paintPlants() {
         if (e.button === 2) return;
         e.stopPropagation();
         img.setPointerCapture(e.pointerId);
-        deskPlants = P.selectOnly(deskPlants, plant.key).map((row) => (row.key === plant.key ? P.beginDrag(row, e.clientX, e.clientY) : row));
-        plantDrag = plant.key;
+        deskPlants = P.selectOnly(deskPlants, plant.key);
+        plantPress = { key: plant.key, x: e.clientX, y: e.clientY };
+        plantDrag = null;
         paintPlants();
       });
       plantsRoot.appendChild(img);
@@ -595,7 +600,7 @@ function paintPlants() {
     if (src && img.getAttribute("src") !== src) img.setAttribute("src", src);
     P.applyDest(img);
     img.dataset.on = plant.selected ? "1" : "0";
-    const lean = P.windLean(plantAge, windOn, plant.selected);
+    const lean = P.windLean(plantAge, windOn, plant.selected, plant.mode);
     img.style.transform = P.paintTransform(plant, lean);
   }
 }
@@ -687,6 +692,7 @@ function calledFlags() {
     windowBound: bound,
     capBound: cap,
     transomBound: transom,
+    grassBound: window.PetDeskPlants && window.PetDeskPlants.firstGrassBound ? window.PetDeskPlants.firstGrassBound(deskPlants, work) : null,
   };
 }
 
@@ -1835,6 +1841,40 @@ function closeChoice() {
   choiceEl.replaceChildren();
 }
 
+function closePlantChoice() {
+  plantChoiceKey = null;
+  if (!plantChoiceEl) return;
+  plantChoiceEl.classList.remove("show");
+  plantChoiceEl.replaceChildren();
+}
+
+function openPlantChoice(key) {
+  const P = window.PetDeskPlants;
+  if (!P || !plantChoiceEl || !key) return;
+  closeChoice();
+  plantChoiceKey = key;
+  const plant = deskPlants.find((p) => p.key === key);
+  plantChoiceEl.replaceChildren();
+  for (const mark of P.plantChoiceMarks()) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = mark.label;
+    btn.dataset.hit = "1";
+    btn.dataset.plantMode = mark.id;
+    if (plant && plant.mode === mark.id) btn.dataset.on = "1";
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deskPlants = P.savePlants(deskPlants.map((p) => (p.key === key ? P.setMode(p, mark.id) : p)));
+      closePlantChoice();
+      paintPlants();
+    });
+    plantChoiceEl.appendChild(btn);
+  }
+  if (plant) plantChoiceEl.style.transform = `translate3d(${plant.x}px, ${plant.y - 12}px, 0)`;
+  plantChoiceEl.classList.add("show");
+  setClickable(true);
+}
+
 function openChoice() {
   if (!choiceEl || !window.PetChoice || !kind) return;
   if (choiceOpen) {
@@ -2188,6 +2228,12 @@ function switchTo(key) {
   life = window.PetLife.switchGuest(fromKey, fromLife, next.key);
   const away = Date.now() - (life.lastTick || Date.now());
   window.PetLife.decay(life, trait, Date.now(), kind.key);
+  if (!houseBooted && window.PetLife.revealOnBoot) {
+    window.PetLife.revealOnBoot(life);
+    houseBooted = true;
+  } else if (next.key === "red_panda" && window.PetLife.revealOnBoot) {
+    window.PetLife.revealOnBoot(life);
+  }
   persist();
   sim.anim = "idle";
   sim.frame = 0;
@@ -2222,7 +2268,15 @@ function switchTo(key) {
     : null;
   const skyTalk = window.PetWeather?.weatherLine(kind.key, skyOf());
   say(life.hidden ? pick(trait.extra.hide) : back || skyTalk || pick(next.lines.greet), 5000);
-  if (!life.hidden) issue("talk");
+  if (!life.hidden) {
+    const boot = window.PetLife.bootCmd ? window.PetLife.bootCmd(next.key) : "talk";
+    issue(boot);
+    if (next.key === "red_panda") {
+      sim.playWait = 0.8;
+      sim.trickWait = 2.2;
+      sim.actWait = 16;
+    }
+  }
   paintHud();
   paintMess();
   for (const frames of Object.values(kind.sprites)) {
@@ -2757,10 +2811,18 @@ pet.addEventListener("pointerdown", (e) => {
 window.addEventListener("pointermove", (e) => {
   sim.cursorX = e.clientX;
   const over = e.target && e.target.closest && e.target.closest("[data-hit]");
-  setClickable(!!over || sim.dragging || !!plantDrag);
-  if (plantDrag && window.PetDeskPlants) {
-    deskPlants = deskPlants.map((p) => (p.key === plantDrag ? window.PetDeskPlants.moveDrag(p, e.clientX, e.clientY, window.innerWidth, window.innerHeight) : p));
-    paintPlants();
+  setClickable(!!over || sim.dragging || !!plantDrag || !!plantPress || !!plantChoiceKey);
+  if (plantPress && window.PetDeskPlants) {
+    const P = window.PetDeskPlants;
+    if (!plantDrag && P.clickMoved(e.clientX - plantPress.x, e.clientY - plantPress.y)) {
+      deskPlants = deskPlants.map((p) => (p.key === plantPress.key ? P.beginDrag(p, plantPress.x, plantPress.y) : p));
+      plantDrag = plantPress.key;
+      closePlantChoice();
+    }
+    if (plantDrag) {
+      deskPlants = deskPlants.map((p) => (p.key === plantDrag ? P.moveDrag(p, e.clientX, e.clientY, window.innerWidth, window.innerHeight) : p));
+      paintPlants();
+    }
   }
   if (!sim.dragging) return;
   const maxX = Math.max(PAD, window.innerWidth - BASE - PAD);
@@ -2770,8 +2832,14 @@ window.addEventListener("pointermove", (e) => {
   }
 });
 window.addEventListener("pointerup", (e) => {
-  if (plantDrag && window.PetDeskPlants) {
-    deskPlants = window.PetDeskPlants.savePlants(deskPlants.map((p) => window.PetDeskPlants.endDrag(p)));
+  if (plantPress && window.PetDeskPlants) {
+    const P = window.PetDeskPlants;
+    if (plantDrag) {
+      deskPlants = P.savePlants(deskPlants.map((p) => P.endDrag(p)));
+    } else {
+      openPlantChoice(plantPress.key);
+    }
+    plantPress = null;
     plantDrag = null;
     paintPlants();
   }
@@ -2798,8 +2866,9 @@ window.addEventListener("pointerup", (e) => {
   }
 });
 window.addEventListener("pointercancel", () => {
-  if (plantDrag && window.PetDeskPlants) {
+  if ((plantPress || plantDrag) && window.PetDeskPlants) {
     deskPlants = window.PetDeskPlants.savePlants(deskPlants.map((row) => window.PetDeskPlants.endDrag(row)));
+    plantPress = null;
     plantDrag = null;
     paintPlants();
   }
@@ -3199,6 +3268,16 @@ setInterval(() => {
     return;
   }
   const roll = Math.random();
+  if (kind.key === "red_panda") {
+    if (roll < (trait?.wander ?? 0.45) || (life.energy < 8 && roll < 0.7)) issue("wander");
+    else if (roll < 0.84) issue("wander");
+    else if (roll < 0.92 && trait?.special) handle("special");
+    else {
+      say(lineFrom({ useRoster: "ambient" }));
+      issue("talk");
+    }
+    return;
+  }
   if (roll < (trait?.wander ?? 0.45) || (life.energy < 8 && roll < 0.7)) issue("wander");
   else if (roll < 0.7) issue("sit");
   else if (roll < 0.84) issue("idle");

@@ -51,3 +51,41 @@ test("plants drag to a new spot and stay, and lean in the wind", () => {
   assert.equal(img.style.objectFit, "contain");
   assert.match(P.paintTransform(disk, 4), /rotate\(4deg\)/);
 });
+
+test("click sets Still with no wind, Wind restores sway, Meet is the grass sit", () => {
+  assert.deepEqual(P.PLANT_MODES, ["still", "wind", "meet"]);
+  assert.equal(P.defaultMode("moss"), "meet");
+  assert.equal(P.defaultMode("water_lily"), "wind");
+  assert.equal(P.isGrass("moss"), true);
+  assert.equal(P.isGrass("water_lily"), false);
+  const store = {
+    data: Object.create(null),
+    getItem(k) { return this.data[k] || null; },
+    setItem(k, v) { this.data[k] = v; },
+  };
+  let plants = P.loadPlants(800, 480, store);
+  const felt = plants.find((p) => p.key === "moss");
+  assert.equal(felt.mode, "meet");
+  const still = P.setMode(felt, "still");
+  assert.equal(P.windLean(0.25, true, false, still.mode), 0);
+  const wind = P.setMode(still, "wind");
+  assert.notEqual(P.windLean(0.25, true, false, wind.mode), 0);
+  const meet = P.setMode(wind, "meet");
+  const bound = P.grassBound(meet, { width: 800, height: 480, floorLift: 0 });
+  assert.ok(bound);
+  assert.equal(bound.kind, "grass");
+  assert.ok(Math.abs(bound.x - (meet.x + P.DEST_PX * 0.38)) < 1);
+  const frozen = P.setMode(meet, "still");
+  assert.equal(P.grassBound(frozen, { width: 800, height: 480 }), null);
+  P.savePlants([plants[0], meet], store);
+  const again = P.loadPlants(800, 480, store);
+  assert.equal(again[1].mode, "meet");
+  assert.equal(P.clickMoved(2, 2), false);
+  assert.equal(P.clickMoved(20, 0), true);
+  assert.deepEqual(P.plantChoiceMarks().map((m) => m.id), ["still", "wind", "meet"]);
+  assert.equal(P.plantPick("wind"), "wind");
+  assert.match(petSrc, /openPlantChoice/);
+  assert.match(petSrc, /clickMoved/);
+  assert.match(petSrc, /plant-choice/);
+  assert.match(htmlSrc, /id="plant-choice"/);
+});
