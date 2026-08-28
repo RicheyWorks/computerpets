@@ -12830,3 +12830,91 @@ test("the demo window plate walks Grin's still the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Dam gnaw the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "beaver"[\s\S]{0,80}slug: "dam"/);
+  assert.equal(P.playFor("beaver"), "gnaw");
+  const target = P.pickTarget([WIN], 80, "beaver", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "gnaw");
+  assert.equal(target.side, "lodgecup");
+  assert.equal(target.leave, "teeth");
+  assert.equal(Overlay.playFor("beaver"), "gnaw");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(Overlay.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(P.playFor("porcupine"), "sill");
+  assert.notEqual(P.playFor("beaver"), "dam");
+  assert.notEqual(target.kind, "bore");
+  assert.notEqual(target.kind, "drum");
+  assert.notEqual(target.kind, "still");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she gnaws a sash stile as a lodge cup, not the sash foot");
+  assert.ok(P.DUR.gnawHold > P.DUR.gnaw, "the bite is the tell; the hold is the lodge she wears");
+  assert.ok(P.DUR.gnawOn !== Overlay.DUR.boreOn);
+  assert.ok(P.DUR.gnawOn !== Overlay.DUR.drumOn);
+  assert.ok(P.DUR.gnawOn !== Overlay.DUR.stillOn);
+  assert.ok(P.DUR.gnawOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.boreOn, Overlay.DUR.boreOn);
+  assert.equal(P.DUR.gnawOn, Overlay.DUR.gnawOn);
+  assert.equal(P.DUR.gnaw, Overlay.DUR.gnaw);
+  const lodge = P.gnawPoint(WIN, 176, WORK);
+  const deskLodge = Overlay.gnawPoint(WIN, Overlay.SPRITE, WORK);
+  const snag = P.drumPoint(WIN, 176, WORK);
+  const timber = P.borePoint(WIN, 176, WORK);
+  const hem = P.stillPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(lodge.x - deskLodge.x) < 1);
+  assert.ok(Math.abs(lodge.lift - deskLodge.lift) < 1);
+  assert.ok(Math.abs(lodge.x - snag.x) < 2, "the same interior sash stile");
+  assert.ok(lodge.lift < snag.lift - 8, "not Drum upper post");
+  assert.ok(Math.abs(lodge.x - timber.x) > 8, "not Auger timber");
+  assert.ok(Math.abs(lodge.x - hem.x) > 8 || Math.abs(lodge.lift - hem.lift) > 8, "not Grin");
+  const walkOn = P.gnawOnPath(0.25, { x: 40, lift: 0 }, { x: lodge.x, lift: lodge.lift });
+  const deskWalk = Overlay.gnawOnPath(0.25, { x: 40, lift: 0 }, { x: lodge.x, lift: lodge.lift });
+  const hopOn = P.drumOnPath(0.25, { x: 40, lift: 0 }, { x: lodge.x, lift: lodge.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks up onto the stile");
+  assert.ok(walkOn.lift !== hopOn.lift, "a walk, not Drum hop");
+  const bite = P.gnawPath(0.5);
+  const deskBite = Overlay.gnawPath(0.5);
+  assert.equal(bite.lift, deskBite.lift);
+  assert.ok(bite.rot < -10, "she leans in to gnaw");
+  const hold = P.gnawHoldPath(0.5);
+  const deskHold = Overlay.gnawHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.rot < 0);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "bore");
+    assert.notEqual(play.phase, "drum");
+    assert.notEqual(play.phase, "still");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "gnaw") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "gnaw-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "gnaw-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.7)) < 3, "she holds the gnaw on the lodge cup");
+    }
+  }
+  assert.ok(seen.has("gnaw-on"));
+  assert.ok(seen.has("gnaw"));
+  assert.ok(seen.has("gnaw-hold"));
+  assert.ok(seen.has("gnaw-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
