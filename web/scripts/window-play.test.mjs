@@ -15307,7 +15307,7 @@ test("the demo window plate walks Penny flare the same way", () => {
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("perch"), "barred");
-  assert.equal(P.playFor("lamprey"), "sill");
+  assert.equal(P.playFor("american_eel"), "sill");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -15401,7 +15401,7 @@ test("the demo window plate walks Bar barred the same way", () => {
   assert.equal(Overlay.playFor("skunk"), "stamp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("lamprey"), "sill");
+  assert.equal(P.playFor("american_eel"), "sill");
   assert.notEqual(P.playFor("perch"), "bar");
   assert.notEqual(P.playFor("perch"), "perch");
   assert.notEqual(P.playFor("perch"), "flare");
@@ -15497,7 +15497,7 @@ test("the demo window plate walks Lance bill the same way", () => {
   assert.equal(Overlay.playFor("bluegill"), "flare");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("lamprey"), "sill");
+  assert.equal(P.playFor("american_eel"), "sill");
   assert.notEqual(P.playFor("pike"), "lance");
   assert.notEqual(P.playFor("pike"), "barred");
   assert.notEqual(P.playFor("pike"), "mouth");
@@ -15595,7 +15595,7 @@ test("the demo window plate walks Night dusk the same way", () => {
   assert.equal(Overlay.playFor("bluegill"), "flare");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("lamprey"), "sill");
+  assert.equal(P.playFor("american_eel"), "sill");
   assert.notEqual(P.playFor("walleye"), "night");
   assert.notEqual(P.playFor("walleye"), "look");
   assert.notEqual(P.playFor("walleye"), "bill");
@@ -15698,7 +15698,7 @@ test("the demo window plate walks Spoon paddle the same way", () => {
   assert.equal(Overlay.playFor("crocodile"), "show");
   assert.equal(P.playFor("raccoon"), "rinse");
   assert.equal(Overlay.playFor("raccoon"), "rinse");
-  assert.equal(P.playFor("lamprey"), "sill");
+  assert.equal(P.playFor("american_eel"), "sill");
   assert.notEqual(P.playFor("paddlefish"), "spoon");
   assert.notEqual(P.playFor("paddlefish"), "filter");
   assert.notEqual(P.playFor("paddlefish"), "dusk");
@@ -15774,6 +15774,107 @@ test("the demo window plate walks Spoon paddle the same way", () => {
   assert.ok(seen.has("paddle"));
   assert.ok(seen.has("paddle-hold"));
   assert.ok(seen.has("paddle-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Round disk the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "lamprey"[\s\S]{0,80}slug: "round"/);
+  assert.equal(P.playFor("lamprey"), "disk");
+  const target = P.pickTarget([WIN], 80, "lamprey", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "disk");
+  assert.equal(target.side, "stonedisk");
+  assert.equal(target.leave, "disks");
+  assert.equal(Overlay.playFor("lamprey"), "disk");
+  assert.equal(P.playFor("paddlefish"), "paddle");
+  assert.equal(Overlay.playFor("paddlefish"), "paddle");
+  assert.equal(P.playFor("colugo"), "cling");
+  assert.equal(Overlay.playFor("colugo"), "cling");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(Overlay.playFor("moray"), "gape");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("walleye"), "dusk");
+  assert.equal(Overlay.playFor("walleye"), "dusk");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(Overlay.playFor("water_lily"), "open");
+  assert.equal(P.playFor("american_eel"), "sill");
+  assert.notEqual(P.playFor("lamprey"), "round");
+  assert.notEqual(P.playFor("lamprey"), "cling");
+  assert.notEqual(P.playFor("lamprey"), "paddle");
+  assert.notEqual(target.kind, "round");
+  assert.notEqual(target.kind, "cling");
+  assert.notEqual(target.kind, "paddle");
+  assert.notEqual(target.kind, "stone");
+  assert.notEqual(target.kind, "gape");
+  assert.ok(target.holdLift > 16, "he disks a sill horn as a stone disk, not the floor");
+  assert.ok(P.DUR.diskHold > P.DUR.disk, "the hold is the sit after; the disk mouth is the tell");
+  assert.ok(P.DUR.diskOn !== Overlay.DUR.stoneOn);
+  assert.ok(P.DUR.diskOn !== Overlay.DUR.paddleOn);
+  assert.ok(P.DUR.diskOn !== Overlay.DUR.gapeOn);
+  assert.ok(P.DUR.diskOn !== Overlay.DUR.duskOn);
+  assert.ok(P.DUR.diskOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.diskOn, Overlay.DUR.diskOn);
+  assert.equal(P.DUR.disk, Overlay.DUR.disk);
+  assert.equal(P.DUR.diskHold, Overlay.DUR.diskHold);
+  assert.equal(P.DUR.diskOff, Overlay.DUR.diskOff);
+  const horn = P.diskPoint(WIN, "left", 176, WORK);
+  const deskHorn = Overlay.diskPoint(WIN, "left", Overlay.SPRITE, WORK);
+  const blush = P.stonePoint(WIN, "left", 176, WORK);
+  const dish = P.paddlePoint(WIN, 176, WORK);
+  const crack = P.gapePoint(WIN, 176, WORK);
+  const sail = P.clingPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(horn.x - deskHorn.x) < 1);
+  assert.ok(Math.abs(horn.lift - deskHorn.lift) < 1);
+  assert.ok(Math.abs(horn.lift - blush.lift) < 2, "same sill horn as Blush");
+  assert.ok(Math.abs(horn.x - blush.x) > 8, "not Blush stone");
+  assert.ok(Math.abs(horn.x - dish.x) > 8 || Math.abs(horn.lift - dish.lift) > 8, "not Spoon paddle");
+  assert.ok(Math.abs(horn.x - crack.x) > 8 || Math.abs(horn.lift - crack.lift) > 8, "not Door gape");
+  assert.ok(Math.abs(horn.x - sail.x) > 8 || Math.abs(horn.lift - sail.lift) > 8, "not Sail cling");
+  const walkOn = P.diskOnPath(0.25, { x: 40, lift: 0 }, { x: horn.x, lift: horn.lift });
+  const deskWalk = Overlay.diskOnPath(0.25, { x: 40, lift: 0 }, { x: horn.x, lift: horn.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const mouth = P.diskPath(0.5);
+  const deskMouth = Overlay.diskPath(0.5);
+  assert.equal(mouth.lift, deskMouth.lift);
+  assert.ok(mouth.lift < -4, "he sits the disk mouth");
+  const hold = P.diskHoldPath(0.5);
+  const deskHold = Overlay.diskHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 7.4) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "stone");
+    assert.notEqual(play.phase, "paddle");
+    assert.notEqual(play.phase, "gape");
+    assert.notEqual(play.phase, "scoot");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "disk") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "disk-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "disk-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 3.8)) < 3, "he holds the disk sit on the stone disk");
+    }
+  }
+  assert.ok(seen.has("disk-on"));
+  assert.ok(seen.has("disk"));
+  assert.ok(seen.has("disk-hold"));
+  assert.ok(seen.has("disk-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
