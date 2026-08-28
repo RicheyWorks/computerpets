@@ -13027,7 +13027,7 @@ test("the demo window plate walks Coal browse the same way", () => {
   assert.equal(P.playFor("squirrel"), "bury");
   assert.equal(P.playFor("porcupine"), "bristle");
   assert.equal(P.playFor("widow"), "hang");
-  assert.equal(P.playFor("sloth"), "sill");
+  assert.equal(P.playFor("sloth"), "reach");
   assert.notEqual(P.playFor("black_bear"), "coal");
   assert.notEqual(P.playFor("black_bear"), "forage");
   assert.notEqual(P.playFor("black_bear"), "cover");
@@ -13095,6 +13095,101 @@ test("the demo window plate walks Coal browse the same way", () => {
   assert.ok(seen.has("browse"));
   assert.ok(seen.has("browse-hold"));
   assert.ok(seen.has("browse-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+
+test("the demo window plate walks Hang reach the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "sloth"[\s\S]{0,80}slug: "hang"/);
+  assert.equal(P.playFor("sloth"), "reach");
+  const target = P.pickTarget([WIN], 80, "sloth", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "reach");
+  assert.equal(target.side, "boughhook");
+  assert.equal(target.leave, "unhook");
+  assert.equal(Overlay.playFor("sloth"), "reach");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(Overlay.playFor("widow"), "hang");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("lemur"), "sill");
+  assert.notEqual(P.playFor("sloth"), "hang");
+  assert.notEqual(P.playFor("sloth"), "hook");
+  assert.notEqual(P.playFor("sloth"), "fold");
+  assert.notEqual(target.kind, "hang");
+  assert.notEqual(target.kind, "fold");
+  assert.notEqual(target.kind, "still");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she reaches a transom soffit as a bough hook, not the sash foot");
+  assert.ok(P.DUR.reachHold > P.DUR.reach, "the reach is the tell; the hold is the two-toed hang");
+  assert.ok(P.DUR.reachOn !== Overlay.DUR.foldOn);
+  assert.ok(P.DUR.reachOn !== Overlay.DUR.stillOn);
+  assert.ok(P.DUR.reachOn !== Overlay.DUR.hourOn);
+  assert.ok(P.DUR.reachOn !== Overlay.DUR.hookOn);
+  assert.ok(P.DUR.reachOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.foldOn, Overlay.DUR.foldOn);
+  assert.equal(P.DUR.reachOn, Overlay.DUR.reachOn);
+  assert.equal(P.DUR.reach, Overlay.DUR.reach);
+  const bough = P.reachPoint(WIN, 176, WORK);
+  const deskBough = Overlay.reachPoint(WIN, Overlay.SPRITE, WORK);
+  const soffit = P.foldPoint(WIN, 176, WORK);
+  const hem = P.stillPoint(WIN, 176, WORK);
+  const dark = P.hangPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(bough.x - deskBough.x) < 1);
+  assert.ok(Math.abs(bough.lift - deskBough.lift) < 1);
+  assert.ok(Math.abs(bough.x - soffit.x) < 2 && Math.abs(bough.lift - soffit.lift) < 2, "same soffit as Cape; the pose is a reach");
+  assert.ok(Math.abs(bough.x - hem.x) < 2 && Math.abs(bough.lift - hem.lift) < 2, "same soffit as Grin; the pose is a reach");
+  assert.ok(bough.lift > dark.lift + 40, "not Hour's bottom-inside hang");
+  const climbOn = P.reachOnPath(0.25, { x: 40, lift: 0 }, { x: bough.x, lift: bough.lift });
+  const deskClimb = Overlay.reachOnPath(0.25, { x: 40, lift: 0 }, { x: bough.x, lift: bough.lift });
+  const flyOn = P.foldOnPath(0.25, { x: 40, lift: 0 }, { x: bough.x, lift: bough.lift });
+  assert.equal(climbOn.x, deskClimb.x);
+  assert.equal(climbOn.lift, deskClimb.lift);
+  assert.ok(climbOn.lift > 0, "she climbs to the soffit");
+  assert.ok(climbOn.lift !== flyOn.lift, "a climb, not Cape's fly");
+  const stretch = P.reachPath(0.5);
+  const deskStretch = Overlay.reachPath(0.5);
+  assert.equal(stretch.lift, deskStretch.lift);
+  assert.ok(stretch.rot > 80 && stretch.rot < 150, "two toes, then a reach");
+  const hold = P.reachHoldPath(0.5);
+  const deskHold = Overlay.reachHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.rot < 150);
+  assert.notEqual(hold.rot, 180);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "fold");
+    assert.notEqual(play.phase, "still");
+    assert.notEqual(play.phase, "hook");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "reach") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "reach-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "reach-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 4.0)) < 3, "she holds the two-toed reach under the soffit");
+    }
+  }
+  assert.ok(seen.has("reach-on"));
+  assert.ok(seen.has("reach"));
+  assert.ok(seen.has("reach-hold"));
+  assert.ok(seen.has("reach-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
