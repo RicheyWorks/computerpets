@@ -14827,7 +14827,7 @@ test("the demo window plate walks Lid shut the same way", () => {
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(Overlay.playFor("turtle"), "bask");
   assert.equal(P.playFor("tuatara"), "crest");
-  assert.equal(P.playFor("catfish"), "sill");
+  assert.equal(P.playFor("bluegill"), "sill");
   assert.notEqual(P.playFor("box_turtle"), "lid");
   assert.notEqual(P.playFor("box_turtle"), "snap");
   assert.notEqual(P.playFor("box_turtle"), "bask");
@@ -14927,7 +14927,7 @@ test("the demo window plate walks Peak crest the same way", () => {
   assert.equal(Overlay.playFor("opossum"), "still");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("catfish"), "sill");
+  assert.equal(P.playFor("bluegill"), "sill");
   assert.notEqual(P.playFor("tuatara"), "peak");
   assert.notEqual(P.playFor("tuatara"), "still");
   assert.notEqual(P.playFor("tuatara"), "look");
@@ -15021,7 +15021,7 @@ test("the demo window plate walks Lunge mouth the same way", () => {
   assert.equal(Overlay.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("catfish"), "sill");
+  assert.equal(P.playFor("bluegill"), "sill");
   assert.notEqual(P.playFor("bass"), "lunge");
   assert.notEqual(P.playFor("bass"), "gape");
   assert.notEqual(P.playFor("bass"), "crest");
@@ -15116,7 +15116,8 @@ test("the demo window plate walks Speck mark the same way", () => {
   assert.equal(Overlay.playFor("moray"), "gape");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("catfish"), "sill");
+  assert.equal(P.playFor("bluegill"), "sill");
+  assert.equal(P.playFor("catfish"), "barbel");
   assert.notEqual(P.playFor("brook_trout"), "speck");
   assert.notEqual(P.playFor("brook_trout"), "rise");
   assert.notEqual(P.playFor("brook_trout"), "mouth");
@@ -15184,6 +15185,99 @@ test("the demo window plate walks Speck mark the same way", () => {
   assert.ok(seen.has("mark"));
   assert.ok(seen.has("mark-hold"));
   assert.ok(seen.has("mark-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Whisk barbel the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "catfish"[\s\S]{0,80}slug: "whisk"/);
+  assert.equal(P.playFor("catfish"), "barbel");
+  const target = P.pickTarget([WIN], 80, "catfish", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "barbel");
+  assert.equal(target.side, "mudrun");
+  assert.equal(target.leave, "barbels");
+  assert.equal(Overlay.playFor("catfish"), "barbel");
+  assert.equal(P.playFor("brook_trout"), "mark");
+  assert.equal(Overlay.playFor("brook_trout"), "mark");
+  assert.equal(P.playFor("bass"), "mouth");
+  assert.equal(Overlay.playFor("bass"), "mouth");
+  assert.equal(P.playFor("mussel"), "filter");
+  assert.equal(Overlay.playFor("mussel"), "filter");
+  assert.equal(P.playFor("snapper"), "snap");
+  assert.equal(Overlay.playFor("snapper"), "snap");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("bluegill"), "sill");
+  assert.notEqual(P.playFor("catfish"), "whisk");
+  assert.notEqual(P.playFor("catfish"), "filter");
+  assert.notEqual(P.playFor("catfish"), "mark");
+  assert.notEqual(target.kind, "whisk");
+  assert.notEqual(target.kind, "snap");
+  assert.notEqual(target.kind, "crown");
+  assert.notEqual(target.kind, "browse");
+  assert.ok(target.holdLift > 16, "he barbels a window well as a mud run, not the floor");
+  assert.ok(P.DUR.barbelHold > P.DUR.barbel, "the hold is the sit after; the barbels are the tell");
+  assert.ok(P.DUR.barbelOn !== Overlay.DUR.snapOn);
+  assert.ok(P.DUR.barbelOn !== Overlay.DUR.crownOn);
+  assert.ok(P.DUR.barbelOn !== Overlay.DUR.browseOn);
+  assert.ok(P.DUR.barbelOn !== Overlay.DUR.markOn);
+  assert.ok(P.DUR.barbelOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.barbelOn, Overlay.DUR.barbelOn);
+  assert.equal(P.DUR.barbel, Overlay.DUR.barbel);
+  assert.equal(P.DUR.barbelHold, Overlay.DUR.barbelHold);
+  assert.equal(P.DUR.barbelOff, Overlay.DUR.barbelOff);
+  const run = P.barbelPoint(WIN, 176, WORK);
+  const deskRun = Overlay.barbelPoint(WIN, Overlay.SPRITE, WORK);
+  const bowl = P.snapPoint(WIN, 176, WORK);
+  const riffle = P.markPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(run.x - deskRun.x) < 1);
+  assert.ok(Math.abs(run.lift - deskRun.lift) < 1);
+  assert.ok(Math.abs(run.lift - bowl.lift) < 2, "same window well as Beak");
+  assert.ok(Math.abs(run.x - bowl.x) > 8, "not Beak snap");
+  assert.ok(Math.abs(run.lift - riffle.lift) > 8 || Math.abs(run.x - riffle.x) > 8, "not Speck mark");
+  const walkOn = P.barbelOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  const deskWalk = Overlay.barbelOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const taste = P.barbelPath(0.5);
+  const deskTaste = Overlay.barbelPath(0.5);
+  assert.equal(taste.lift, deskTaste.lift);
+  assert.ok(taste.lift < -4, "he sits then tastes with barbels");
+  const hold = P.barbelHoldPath(0.5);
+  const deskHold = Overlay.barbelHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - -5.2) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "snap");
+    assert.notEqual(play.phase, "mark");
+    assert.notEqual(play.phase, "filter");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "barbel") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "barbel-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "barbel-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 2.4)) < 3, "he holds the mud run after the barbel");
+    }
+  }
+  assert.ok(seen.has("barbel-on"));
+  assert.ok(seen.has("barbel"));
+  assert.ok(seen.has("barbel-hold"));
+  assert.ok(seen.has("barbel-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
