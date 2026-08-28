@@ -13761,3 +13761,91 @@ test("the demo window plate walks Boom howl the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Gaze look the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "tarsier"[\s\S]{0,80}slug: "gaze"/);
+  assert.equal(P.playFor("tarsier"), "look");
+  const target = P.pickTarget([WIN], 80, "tarsier", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "look");
+  assert.equal(target.side, "branchhollow");
+  assert.equal(target.leave, "eyes");
+  assert.equal(Overlay.playFor("tarsier"), "look");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(Overlay.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("howler"), "howl");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(P.playFor("dog"), "watch");
+  assert.notEqual(P.playFor("tarsier"), "gaze");
+  assert.notEqual(P.playFor("tarsier"), "hiss");
+  assert.notEqual(P.playFor("tarsier"), "pounce");
+  assert.notEqual(target.kind, "gaze");
+  assert.notEqual(target.kind, "hiss");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she looks from a sash pulley box as a branch hollow, not the sash foot");
+  assert.ok(P.DUR.lookHold > P.DUR.look, "the hold is the stare after; the look is the tell");
+  assert.ok(P.DUR.lookOn !== Overlay.DUR.tendOn);
+  assert.ok(P.DUR.lookOn !== Overlay.DUR.hissOn);
+  assert.ok(P.DUR.lookOn !== Overlay.DUR.howlOn);
+  assert.ok(P.DUR.lookOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.cling, Overlay.DUR.cling);
+  assert.equal(P.DUR.lookOn, Overlay.DUR.lookOn);
+  assert.equal(P.DUR.look, Overlay.DUR.look);
+  assert.equal(P.DUR.lookHold, Overlay.DUR.lookHold);
+  assert.equal(P.DUR.lookOff, Overlay.DUR.lookOff);
+  const hollow = P.lookPoint(WIN, 176, WORK);
+  const deskHollow = Overlay.lookPoint(WIN, Overlay.SPRITE, WORK);
+  const wax = P.tendPoint(WIN, 176, WORK);
+  const reveal = P.hissPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(hollow.x - deskHollow.x) < 1);
+  assert.ok(Math.abs(hollow.lift - deskHollow.lift) < 1);
+  assert.ok(Math.abs(hollow.lift - wax.lift) < 8, "same sash pulley box furniture as Pot");
+  assert.ok(Math.abs(hollow.x - wax.x) > 20, "not Pot's tend");
+  assert.ok(Math.abs(hollow.x - reveal.x) > 8 || Math.abs(hollow.lift - reveal.lift) > 20, "not Heart's hiss");
+  const climbOn = P.lookOnPath(0.25, { x: 40, lift: 0 }, { x: hollow.x, lift: hollow.lift });
+  const deskClimb = Overlay.lookOnPath(0.25, { x: 40, lift: 0 }, { x: hollow.x, lift: hollow.lift });
+  assert.equal(climbOn.x, deskClimb.x);
+  assert.equal(climbOn.lift, deskClimb.lift);
+  assert.ok(climbOn.lift > 0, "she climbs into the pulley box");
+  const eyes = P.lookPath(0.5);
+  const deskEyes = Overlay.lookPath(0.5);
+  assert.equal(eyes.lift, deskEyes.lift);
+  assert.ok(eyes.lift > 2 && eyes.rot > 8, "the eyes fill the face, not a tend");
+  const hold = P.lookHoldPath(0.5);
+  const deskHold = Overlay.lookHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 11.4) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "tend");
+    assert.notEqual(play.phase, "hiss");
+    assert.notEqual(play.phase, "howl");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "look") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "look-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "look-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.4)) < 3, "she holds the look in the hollow");
+    }
+  }
+  assert.ok(seen.has("look-on"));
+  assert.ok(seen.has("look"));
+  assert.ok(seen.has("look-hold"));
+  assert.ok(seen.has("look-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
