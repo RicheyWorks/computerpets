@@ -12738,3 +12738,95 @@ test("the demo window plate walks Stripe's stamp the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Grin's still the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "opossum"[\s\S]{0,80}slug: "grin"/);
+  assert.equal(P.playFor("opossum"), "still");
+  const target = P.pickTarget([WIN], 80, "opossum", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "still");
+  assert.equal(target.side, "rafterhem");
+  assert.equal(target.leave, "dead");
+  assert.equal(Overlay.playFor("opossum"), "still");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.equal(Overlay.playFor("bat"), "fold");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("skunk"), "stamp");
+  assert.notEqual(P.playFor("opossum"), "grin");
+  assert.notEqual(target.kind, "fold");
+  assert.notEqual(target.kind, "hang");
+  assert.notEqual(target.kind, "croak");
+  assert.notEqual(target.kind, "stamp");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she goes still on the transom soffit as a rafter hem, not the sash foot");
+  assert.ok(P.DUR.stillHold > P.DUR.still, "the limp is the tell; the hold is the death she wears");
+  assert.ok(P.DUR.stillOn !== Overlay.DUR.foldOn);
+  assert.ok(P.DUR.stillOn !== Overlay.DUR.hourOn);
+  assert.ok(P.DUR.stillOn !== Overlay.DUR.croakOn);
+  assert.ok(P.DUR.stillOn !== Overlay.DUR.stampOn);
+  assert.ok(P.DUR.stillOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.foldOn, Overlay.DUR.foldOn);
+  assert.equal(P.DUR.stillOn, Overlay.DUR.stillOn);
+  assert.equal(P.DUR.still, Overlay.DUR.still);
+  const hem = P.stillPoint(WIN, 176, WORK);
+  const deskHem = Overlay.stillPoint(WIN, Overlay.SPRITE, WORK);
+  const soffit = P.foldPoint(WIN, 176, WORK);
+  const rafter = P.croakPoint(WIN, 176, WORK);
+  const dark = P.hangPoint(WIN, 176, WORK);
+  const duff = P.stampPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(hem.x - deskHem.x) < 1);
+  assert.ok(Math.abs(hem.lift - deskHem.lift) < 1);
+  assert.ok(Math.abs(hem.x - soffit.x) < 2 && Math.abs(hem.lift - soffit.lift) < 2, "the same transom soffit");
+  assert.ok(hem.lift < rafter.lift - 20, "not Wedge");
+  assert.ok(hem.lift > dark.lift + 40, "not Hour");
+  assert.ok(Math.abs(hem.x - duff.x) > 8 || Math.abs(hem.lift - duff.lift) > 8, "not Stripe");
+  const walkOn = P.stillOnPath(0.25, { x: 40, lift: 0 }, { x: hem.x, lift: hem.lift });
+  const deskWalk = Overlay.stillOnPath(0.25, { x: 40, lift: 0 }, { x: hem.x, lift: hem.lift });
+  const flyOn = P.foldOnPath(0.25, { x: 40, lift: 0 }, { x: hem.x, lift: hem.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks up onto the soffit");
+  assert.ok(walkOn.lift !== flyOn.lift, "a walk, not Cape's fly");
+  const limp = P.stillPath(0.5);
+  const deskLimp = Overlay.stillPath(0.5);
+  assert.equal(limp.lift, deskLimp.lift);
+  assert.ok(limp.rot < 80, "she goes limp, not an inverted hang");
+  const hush = P.stillHoldPath(0.5);
+  const deskHush = Overlay.stillHoldPath(0.5);
+  assert.equal(hush.x, deskHush.x);
+  assert.equal(hush.lift, deskHush.lift);
+  assert.notEqual(hush.rot, 180);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "fold");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "croak");
+    assert.notEqual(play.phase, "stamp");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "still") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "still-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "still-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.8)) < 3, "she holds the death on the rafter hem");
+    }
+  }
+  assert.ok(seen.has("still-on"));
+  assert.ok(seen.has("still"));
+  assert.ok(seen.has("still-hold"));
+  assert.ok(seen.has("still-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
