@@ -14827,7 +14827,7 @@ test("the demo window plate walks Lid shut the same way", () => {
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(Overlay.playFor("turtle"), "bask");
   assert.equal(P.playFor("tuatara"), "crest");
-  assert.equal(P.playFor("brook_trout"), "sill");
+  assert.equal(P.playFor("catfish"), "sill");
   assert.notEqual(P.playFor("box_turtle"), "lid");
   assert.notEqual(P.playFor("box_turtle"), "snap");
   assert.notEqual(P.playFor("box_turtle"), "bask");
@@ -14927,7 +14927,7 @@ test("the demo window plate walks Peak crest the same way", () => {
   assert.equal(Overlay.playFor("opossum"), "still");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("brook_trout"), "sill");
+  assert.equal(P.playFor("catfish"), "sill");
   assert.notEqual(P.playFor("tuatara"), "peak");
   assert.notEqual(P.playFor("tuatara"), "still");
   assert.notEqual(P.playFor("tuatara"), "look");
@@ -15021,7 +15021,7 @@ test("the demo window plate walks Lunge mouth the same way", () => {
   assert.equal(Overlay.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("brook_trout"), "sill");
+  assert.equal(P.playFor("catfish"), "sill");
   assert.notEqual(P.playFor("bass"), "lunge");
   assert.notEqual(P.playFor("bass"), "gape");
   assert.notEqual(P.playFor("bass"), "crest");
@@ -15090,6 +15090,100 @@ test("the demo window plate walks Lunge mouth the same way", () => {
   assert.ok(seen.has("mouth"));
   assert.ok(seen.has("mouth-hold"));
   assert.ok(seen.has("mouth-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Speck mark the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "brook_trout"[\s\S]{0,80}slug: "speck"/);
+  assert.equal(P.playFor("brook_trout"), "mark");
+  const target = P.pickTarget([WIN], 80, "brook_trout", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "mark");
+  assert.equal(target.side, "riffle");
+  assert.equal(target.leave, "marks");
+  assert.equal(Overlay.playFor("brook_trout"), "mark");
+  assert.equal(P.playFor("bass"), "mouth");
+  assert.equal(Overlay.playFor("bass"), "mouth");
+  assert.equal(P.playFor("tuatara"), "crest");
+  assert.equal(Overlay.playFor("tuatara"), "crest");
+  assert.equal(P.playFor("nautilus"), "rise");
+  assert.equal(Overlay.playFor("nautilus"), "rise");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(Overlay.playFor("moray"), "gape");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("catfish"), "sill");
+  assert.notEqual(P.playFor("brook_trout"), "speck");
+  assert.notEqual(P.playFor("brook_trout"), "rise");
+  assert.notEqual(P.playFor("brook_trout"), "mouth");
+  assert.notEqual(target.kind, "speck");
+  assert.notEqual(target.kind, "rise");
+  assert.notEqual(target.kind, "mouth");
+  assert.notEqual(target.kind, "count");
+  assert.ok(target.holdLift > 8, "she marks a meeting rail as a riffle cup, not the floor");
+  assert.ok(P.DUR.markHold > P.DUR.mark, "the hold is the sit after; the worm marks are the tell");
+  assert.ok(P.DUR.markOn !== Overlay.DUR.countOn);
+  assert.ok(P.DUR.markOn !== Overlay.DUR.filterOn);
+  assert.ok(P.DUR.markOn !== Overlay.DUR.leanOn);
+  assert.ok(P.DUR.markOn !== Overlay.DUR.mouthOn);
+  assert.ok(P.DUR.markOn !== Overlay.DUR.riseOn);
+  assert.ok(P.DUR.markOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.markOn, Overlay.DUR.markOn);
+  assert.equal(P.DUR.mark, Overlay.DUR.mark);
+  assert.equal(P.DUR.markHold, Overlay.DUR.markHold);
+  assert.equal(P.DUR.markOff, Overlay.DUR.markOff);
+  const riffle = P.markPoint(WIN, 176, WORK);
+  const deskRiffle = Overlay.markPoint(WIN, Overlay.SPRITE, WORK);
+  const cup = P.countPoint(WIN, 176, WORK);
+  const edge = P.mouthPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(riffle.x - deskRiffle.x) < 1);
+  assert.ok(Math.abs(riffle.lift - deskRiffle.lift) < 1);
+  assert.ok(Math.abs(riffle.lift - cup.lift) < 24, "same meeting rail as Snap");
+  assert.ok(Math.abs(riffle.x - cup.x) > 12, "not Snap count");
+  assert.ok(Math.abs(riffle.lift - edge.lift) > 8 || Math.abs(riffle.x - edge.x) > 8, "not Lunge mouth");
+  const walkOn = P.markOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  const deskWalk = Overlay.markOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const marks = P.markPath(0.5);
+  const deskMarks = Overlay.markPath(0.5);
+  assert.equal(marks.lift, deskMarks.lift);
+  assert.ok(marks.lift > 8, "she rises to show the worm marks");
+  const hold = P.markHoldPath(0.5);
+  const deskHold = Overlay.markHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 2.1) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "count");
+    assert.notEqual(play.phase, "mouth");
+    assert.notEqual(play.phase, "rise");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "mark") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "mark-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "mark-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.2)) < 3, "she holds the worm marks on the riffle");
+    }
+  }
+  assert.ok(seen.has("mark-on"));
+  assert.ok(seen.has("mark"));
+  assert.ok(seen.has("mark-hold"));
+  assert.ok(seen.has("mark-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
