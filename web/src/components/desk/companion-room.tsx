@@ -42,9 +42,12 @@ import { weatherIdle, weatherLabel, weatherLine, weatherOf, type Weather } from 
 import { currentArea } from "@/lib/pets/weather-areas";
 import { DeskMarketPlate, DeskNewsPlate, DeskWeatherPlate, WEATHER_ID } from "@/components/desk/desk-plates";
 import { BirdFlyer } from "@/components/desk/bird-fly";
+import { RobinFlyer } from "@/components/desk/robin-fly";
+import { DeskPlants } from "@/components/desk/desk-plants";
 import { CalledGuests } from "@/components/desk/called-guests";
 import { FLY_BIRD_KEY } from "@/lib/pets/bird-fly";
-import { walkersOf } from "@/lib/pets/call-guests";
+import { ROBIN_KEY } from "@/lib/pets/robin-fly";
+import { nextAutoMeet, shouldRobinFly, walkersOf } from "@/lib/pets/call-guests";
 import { playVoice as playAnimalVoice } from "@/lib/pets/desk-audio";
 import { dropRibbon, RIBBON_CATCH, RIBBON_SPECIAL, stealRibbon } from "@/lib/pets/ribbon";
 import type { LiveSky } from "@/lib/pets/weather-areas";
@@ -175,6 +178,7 @@ export function CompanionRoom({
   const [liveSky, setLiveSky] = useState<LiveSky | null>(null);
   const [birdCall, setBirdCall] = useState(1);
   const [birdOn, setBirdOn] = useState(false);
+  const [robinCall, setRobinCall] = useState(1);
   const [ruiLieHold, setRuiLieHold] = useState(false);
   const sipSleepCalled = useRef(false);
   const [calledKeys, setCalledKeys] = useState<string[]>([]);
@@ -218,6 +222,26 @@ export function CompanionRoom({
     }
     if (!sleeping) sipSleepCalled.current = false;
   }, [birdOn, kind.key, leaving, ruiLieHold, stats.asleep, stats.hidden]);
+
+  useEffect(() => {
+    if (kind.key !== "red_panda" || stats.hidden || leaving) return;
+    const id = window.setInterval(() => {
+      setCalledKeys((keys) => {
+        const next = nextAutoMeet(keys, kind.key);
+        return next ? [...keys, next] : keys;
+      });
+    }, 16000);
+    const first = window.setTimeout(() => {
+      setCalledKeys((keys) => {
+        const next = nextAutoMeet(keys, kind.key);
+        return next ? [...keys, next] : keys;
+      });
+    }, 4500);
+    return () => {
+      window.clearInterval(id);
+      window.clearTimeout(first);
+    };
+  }, [kind.key, leaving, stats.hidden]);
 
   useEffect(() => {
     if (!persistLocal && !liveTick) return;
@@ -332,10 +356,6 @@ export function CompanionRoom({
         issue(held.cmd);
         return;
       }
-      if (cardOpen) {
-        if (order.cmd !== "eat" && order.cmd !== "seek" && order.cmd !== "play") issue("idle");
-        return;
-      }
       if (statsRef.current.hunger < 26) {
         say(kind.ambientLine(statsRef.current));
         issue("wander");
@@ -351,9 +371,9 @@ export function CompanionRoom({
         return;
       }
       const roll = Math.random();
-      if (roll < trait.wander) issue("wander");
-      else if (roll < trait.wander + 0.22) issue(statsRef.current.energy < 35 ? "sleep" : "sit");
-      else if (roll < trait.wander + 0.4) issue("idle");
+      if (roll < trait.wander || (statsRef.current.energy < 8 && roll < 0.7)) issue("wander");
+      else if (roll < 0.7) issue("sit");
+      else if (roll < 0.84) issue("idle");
       else {
         say(kind.ambientLine(statsRef.current));
         issue("talk");
@@ -785,11 +805,22 @@ export function CompanionRoom({
         }}
       />
       <HouseVisit hostKey={kind.key} hidden={stats.hidden || leaving} />
+      <DeskPlants windOn={skyNow() === "wind"} />
       {demoWindow && kind.key !== FLY_BIRD_KEY ? (
         <BirdFlyer
           hidden={stats.hidden || leaving}
           startId={birdCall}
           onVisible={setBirdOn}
+          hostKey={kind.key}
+          hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
+          hostPoseRef={poseRef}
+        />
+      ) : null}
+      {demoWindow && kind.key !== ROBIN_KEY ? (
+        <RobinFlyer
+          hidden={stats.hidden || leaving}
+          startId={robinCall}
+          onSong={say}
           hostKey={kind.key}
           hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
           hostPoseRef={poseRef}
@@ -922,6 +953,7 @@ export function CompanionRoom({
           onCallGuests={(keys) => {
             unlockDeskAudio();
             setCalledKeys(keys);
+            if (shouldRobinFly(keys, kind.key)) setRobinCall((n) => n + 1);
           }}
           openTick={cardOpenTick}
           onCollapse={() => setCardOpen(false)}

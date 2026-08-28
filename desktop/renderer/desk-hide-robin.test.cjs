@@ -94,3 +94,23 @@ test("robin draw uses one real sit or walk frame, not two empty rects, and perch
   assert.match(calledSrc, /poseFrames/);
   assert.doesNotMatch(calledSrc, /if \(hidden \|\| !list\.length\)/);
 });
+
+test("Rui idle is the house routine, not a parked sit_hold on an open card", () => {
+  assert.match(petSrc, /if \(false && cardOpen\(\)/);
+  assert.doesNotMatch(petSrc, /if \(cardOpen\(\)\) \{\s*issue\("idle"\)/);
+  assert.match(livingSrc, /if \(false && cardRef\.current/);
+  assert.match(petSrc, /life\.energy < 8 && roll < 0\.7\)\) issue\("wander"\)/);
+  assert.match(petSrc, /startAct\(window\.PetEthogram\.pickAct/);
+});
+
+test("already-sat meet guests can spawn visible on the live overlay", () => {
+  assert.equal(Call.nextAutoMeet([], "red_panda"), "chickadee");
+  assert.ok(Call.AUTO_MEET_KEYS.includes("cat"));
+  assert.ok(Call.AUTO_MEET_KEYS.includes("dog"));
+  assert.match(petSrc, /nextAutoMeet/);
+  assert.match(petSrc, /spawnCalled\(\[next\]\)/);
+  const img = { style: {}, src: "", setAttribute(n, v) { this[n] = v; this.src = n === "src" ? v : this.src; } };
+  assert.equal(Call.destFit(img), true);
+  assert.equal(Call.assignSrc(img, "sprites/cat/walk/1.png"), true);
+  assert.notEqual(img.src, "");
+});

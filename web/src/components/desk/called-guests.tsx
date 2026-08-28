@@ -37,7 +37,7 @@ export function CalledGuests({
   onSong?: (line: string) => void;
   windows?: DeskWindow[];
 }) {
-  const list = useMemo(() => keys.filter((k, i, all) => k && k !== hostKey && all.indexOf(k) === i), [hostKey, keys]);
+  const list = useMemo(() => keys.filter((k, i, all) => k && k !== hostKey && k !== "hummingbird" && k !== "robin" && all.indexOf(k) === i), [hostKey, keys]);
   const [on, setOn] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const walkers = useRef<CalledWalker[]>([]);
@@ -126,6 +126,10 @@ export function CalledGuests({
         if (img && imgs.length) {
           const src = imgs[(frame.current[key] || 0) % imgs.length] || imgs[0];
           if (src && img.getAttribute("src") !== src) img.setAttribute("src", src);
+          img.style.objectFit = "contain";
+          img.style.objectPosition = "bottom";
+          img.style.border = "0";
+          img.style.background = "transparent";
         }
       }
       if (!walkers.current.length) {
@@ -152,13 +156,13 @@ export function CalledGuests({
             data-hit
             data-called={key}
             aria-label={`Dismiss ${guest.name}`}
-            className="called-guest pointer-events-auto absolute bottom-0 left-0 h-32 w-32 origin-bottom bg-transparent p-0"
+            className="called-guest pointer-events-auto absolute bottom-0 left-0 h-32 w-32 origin-bottom border-0 bg-transparent p-0 shadow-none outline-none"
             onClick={(e) => {
               e.stopPropagation();
               walkers.current = walkers.current.map((row) => (row.key === key ? dismissCalled(row)! : row));
             }}
           >
-            <img alt={guest.name} src={src} className="h-full w-full object-contain object-bottom" draggable={false} />
+            <img alt={guest.name} src={src} className="h-full w-full border-0 bg-transparent object-contain object-bottom shadow-none outline-none" draggable={false} />
           </button>
         );
       })}

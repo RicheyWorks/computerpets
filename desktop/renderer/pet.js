@@ -38,6 +38,8 @@ const weatherRoot = document.getElementById("weather");
 const treatEl = document.getElementById("treat");
 const lureEl = document.getElementById("lure");
 const birdEl = document.getElementById("bird");
+const robinEl = document.getElementById("robin");
+const plantsRoot = document.getElementById("plants");
 const calledRoot = document.getElementById("called");
 const weatherPlate = document.getElementById("weather-plate");
 const newsPlate = document.getElementById("news-plate");
@@ -163,6 +165,13 @@ let birdFly = null;
 let birdAcc = 0;
 let birdFrame = 0;
 let sipSleepCalled = false;
+let robinFly = null;
+let robinAcc = 0;
+let robinFrame = 0;
+let deskPlants = [];
+let plantAge = 0;
+let plantDrag = null;
+let autoMeetWait = 4.5;
 let musicNode = null;
 let sleepNode = null;
 let lureDrag = null;
@@ -480,6 +489,125 @@ function ruiSleepBout() {
   return false;
 }
 
+function callRobin() {
+  const R = window.PetRobinFly;
+  if (!R || !robinEl) return;
+  if (kind && kind.key === R.ROBIN_KEY) {
+    robinFly = null;
+    robinEl.classList.remove("show");
+    return;
+  }
+  if (life && life.hidden) return;
+  robinFly = R.beginRobinFly(window.innerWidth, window.innerHeight, true);
+  robinAcc = 0;
+  robinFrame = 0;
+  const sprites = pack(R.ROBIN_KEY);
+  const src = R.destSrc(robinFly, sprites);
+  if (src) {
+    robinEl.setAttribute("src", src);
+    if (robinEl.dataset) robinEl.dataset.frameSrc = src;
+  }
+  R.applyDest(robinEl);
+  robinEl.classList.add("show");
+}
+
+function tickRobin(dt) {
+  const R = window.PetRobinFly;
+  if (!R || !robinEl) return;
+  if (kind && kind.key === R.ROBIN_KEY) {
+    robinFly = null;
+    robinEl.classList.remove("show");
+    return;
+  }
+  if (!robinFly) return;
+  robinFly = R.stepRobinFly(robinFly, dt, window.innerWidth, window.innerHeight, {
+    hidden: !!(life && life.hidden),
+    hostKey: kind && kind.key,
+    hostSleeping: ruiSleepBout(),
+    hostX: sim.x,
+    hostLift: sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0,
+    hostFacing: sim.facing,
+  });
+  if (!R.stillVisible(robinFly)) {
+    robinFly = null;
+    robinEl.classList.remove("show");
+    return;
+  }
+  if (R.shouldSing(robinFly)) {
+    say(R.ROBIN_SONG);
+    robinFly = R.markSung(robinFly);
+  }
+  robinAcc += dt;
+  const sprites = pack(R.ROBIN_KEY);
+  if (robinAcc > 1 / 8) {
+    robinAcc = 0;
+    robinFrame = (robinFrame + 1) % 4;
+  }
+  robinFly.frame = robinFrame;
+  const src = R.destSrc(robinFly, sprites);
+  if (src && robinEl.getAttribute("src") !== src) {
+    robinEl.setAttribute("src", src);
+    if (robinEl.dataset) robinEl.dataset.frameSrc = src;
+  }
+  R.applyDest(robinEl);
+  robinEl.classList.add("show");
+  robinEl.style.transform = `translate3d(${robinFly.x}px, ${-robinFly.lift}px, 0) rotate(${robinFly.rot}deg) scale(${robinFly.facing}, ${robinFly.flap || 1})`;
+}
+
+function sitPlants() {
+  const P = window.PetDeskPlants;
+  if (!P || !plantsRoot) return;
+  deskPlants = P.loadPlants(window.innerWidth, window.innerHeight);
+  paintPlants();
+}
+
+function paintPlants() {
+  const P = window.PetDeskPlants;
+  if (!P || !plantsRoot) return;
+  const windOn = skyOf() === "wind";
+  const kids = Array.from(plantsRoot.querySelectorAll("[data-plant]"));
+  const keep = Object.create(null);
+  for (const plant of deskPlants) keep[plant.key] = plant;
+  for (const el of kids) {
+    const key = el.dataset && el.dataset.plant;
+    if (!key || !keep[key]) el.remove();
+  }
+  for (const plant of deskPlants) {
+    let img = kids.find((el) => el.dataset && el.dataset.plant === plant.key);
+    if (!img) {
+      img = document.createElement("img");
+      img.className = "desk-plant";
+      img.alt = plant.name;
+      img.dataset.hit = "1";
+      img.dataset.plant = plant.key;
+      img.draggable = false;
+      img.addEventListener("pointerdown", (e) => {
+        if (e.button === 2) return;
+        e.stopPropagation();
+        img.setPointerCapture(e.pointerId);
+        deskPlants = P.selectOnly(deskPlants, plant.key).map((row) => (row.key === plant.key ? P.beginDrag(row, e.clientX, e.clientY) : row));
+        plantDrag = plant.key;
+        paintPlants();
+      });
+      plantsRoot.appendChild(img);
+    }
+    const src = P.plantSrc(plant.key, pack(plant.key));
+    if (src && img.getAttribute("src") !== src) img.setAttribute("src", src);
+    P.applyDest(img);
+    img.dataset.on = plant.selected ? "1" : "0";
+    const lean = P.windLean(plantAge, windOn, plant.selected);
+    img.style.transform = P.paintTransform(plant, lean);
+  }
+}
+
+function tickPlants(dt) {
+  const P = window.PetDeskPlants;
+  if (!P || !plantsRoot) return;
+  plantAge += Math.max(0, dt);
+  if (!deskPlants.length) sitPlants();
+  paintPlants();
+}
+
 function callSip() {
   const F = window.PetBirdFly;
   const H = window.PetDeskHouse;
@@ -527,6 +655,7 @@ function spawnCalled(keys) {
   if (!G) return;
   const host = kind && kind.key;
   if (G.shouldFly(keys, host)) callSip();
+  if (G.shouldRobinFly && G.shouldRobinFly(keys, host)) callRobin();
   const walkers = G.walkersOf(keys, host);
   const width = window.innerWidth;
   for (let i = 0; i < walkers.length; i++) {
@@ -552,7 +681,9 @@ function calledFlags() {
     hostX: sim.x,
     hostLift: sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0,
     hostFacing: sim.facing,
-    peers: called.map((c) => ({ key: c.key, x: c.x, lift: c.lift || 0, phase: c.phase })),
+    peers: called.map((c) => ({ key: c.key, x: c.x, lift: c.lift || 0, phase: c.phase })).concat(
+      window.PetRobinFly && window.PetRobinFly.asPeer(robinFly) ? [window.PetRobinFly.asPeer(robinFly)] : [],
+    ),
     windowBound: bound,
     capBound: cap,
     transomBound: transom,
@@ -1583,7 +1714,7 @@ function applyCommand() {
     }
     return;
   }
-  if (cardOpen() && (sim.cmd === "wander" || sim.cmd === "idle")) {
+  if (false && cardOpen() && (sim.cmd === "wander" || sim.cmd === "idle")) {
     sim.anim = life?.asleep ? "sleep" : "idle";
     sim.target = null;
     sim.waypoints = [];
@@ -1607,7 +1738,7 @@ function applyCommand() {
     hidden: !!life?.hidden,
     leaving,
     cmd: sim.cmd,
-    card: cardOpen(),
+    card: false,
   })) {
     sim.play = window.PetWindowPlay.stepPlay(
       sim.play,
@@ -1616,7 +1747,7 @@ function applyCommand() {
       playWindows(),
       { width: window.innerWidth, height: window.innerHeight, floorLift: 0 },
       BASE,
-      { asleep: !!life?.asleep, hidden: !!life?.hidden, leaving, cmd: sim.cmd, card: cardOpen() },
+      { asleep: !!life?.asleep, hidden: !!life?.hidden, leaving, cmd: sim.cmd, card: false },
     );
   }
   const width = window.innerWidth;
@@ -2149,7 +2280,7 @@ function tick(now) {
       hidden: !!life?.hidden,
       leaving,
       cmd: sim.cmd,
-      card: cardOpen(),
+      card: false,
     };
     const wins = playWindows();
     const T = window.PetRuiTricks;
@@ -2159,7 +2290,7 @@ function tick(now) {
       leaving,
       cmd: sim.cmd,
       windowPlay: !!sim.play,
-      card: cardOpen(),
+      card: false,
     };
     if (sim.happy && T && T.happyShouldAbort && T.happyShouldAbort({
       asleep: false,
@@ -2247,7 +2378,7 @@ function tick(now) {
         leaving,
         cmd: sim.cmd,
         windowPlay: !!sim.play,
-        card: cardOpen(),
+        card: false,
       })
     ) {
       sim.trickWait -= dt;
@@ -2320,7 +2451,7 @@ function tick(now) {
     } else if (!sim.act && (sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
       sim.facing = sim.cursorX >= sim.x + BASE / 2 ? 1 : -1;
     }
-    if (trait.clingy && sim.cursorX != null && !life.hidden && !life.asleep && !cardOpen() && Math.random() < dt * 0.35) {
+    if (trait.clingy && sim.cursorX != null && !life.hidden && !life.asleep && Math.random() < dt * 0.35) {
       const follow = clamp(sim.cursorX - BASE / 2, PAD, maxX);
       if (Math.abs(follow - sim.x) > 80) {
         sim.waypoints = [];
@@ -2343,7 +2474,6 @@ function tick(now) {
       !leaving &&
       !sim.play &&
       !sim.trick &&
-      !cardOpen() &&
       sim.target == null &&
       sim.turnHold <= 0 &&
       sim.pause <= 0 &&
@@ -2483,7 +2613,17 @@ function tick(now) {
 
   tickVisit(dt, now, width);
   tickBird(dt);
+  tickRobin(dt);
+  tickPlants(dt);
   tickCalled(dt);
+  if (kind && kind.key === "red_panda" && !(life && life.hidden) && window.PetCallGuests && window.PetCallGuests.nextAutoMeet) {
+    autoMeetWait -= dt;
+    if (autoMeetWait <= 0) {
+      autoMeetWait = 16;
+      const next = window.PetCallGuests.nextAutoMeet(called.map((c) => c.key), kind.key);
+      if (next) spawnCalled([next]);
+    }
+  }
   paintLure();
   reportHits();
 
@@ -2521,6 +2661,10 @@ function startVisit() {
   const gKey = law && kind ? law.todaysVisitor(kind.key) : null;
   const g = gKey ? roster.find((r) => r.key === gKey) : null;
   if (!g || !guestEl || (life && life.hidden)) return;
+  if (g.key === "robin") {
+    callRobin();
+    return;
+  }
   const sprites = pack(g.key);
   visit = {
     key: g.key,
@@ -2539,6 +2683,7 @@ function startVisit() {
   };
   guestEl.classList.add("show");
   guestEl.src = sprites.walk[0];
+  if (window.PetCallGuests && window.PetCallGuests.destFit) window.PetCallGuests.destFit(guestEl);
 }
 
 function tickVisit(dt, now, width) {
@@ -2612,7 +2757,11 @@ pet.addEventListener("pointerdown", (e) => {
 window.addEventListener("pointermove", (e) => {
   sim.cursorX = e.clientX;
   const over = e.target && e.target.closest && e.target.closest("[data-hit]");
-  setClickable(!!over || sim.dragging);
+  setClickable(!!over || sim.dragging || !!plantDrag);
+  if (plantDrag && window.PetDeskPlants) {
+    deskPlants = deskPlants.map((p) => (p.key === plantDrag ? window.PetDeskPlants.moveDrag(p, e.clientX, e.clientY, window.innerWidth, window.innerHeight) : p));
+    paintPlants();
+  }
   if (!sim.dragging) return;
   const maxX = Math.max(PAD, window.innerWidth - BASE - PAD);
   sim.x = clamp(e.clientX - sim.dragDx, PAD, maxX);
@@ -2621,6 +2770,11 @@ window.addEventListener("pointermove", (e) => {
   }
 });
 window.addEventListener("pointerup", (e) => {
+  if (plantDrag && window.PetDeskPlants) {
+    deskPlants = window.PetDeskPlants.savePlants(deskPlants.map((p) => window.PetDeskPlants.endDrag(p)));
+    plantDrag = null;
+    paintPlants();
+  }
   if (!sim.dragging) return;
   const start = sim.pointerStart;
   sim.dragging = false;
@@ -2644,6 +2798,11 @@ window.addEventListener("pointerup", (e) => {
   }
 });
 window.addEventListener("pointercancel", () => {
+  if (plantDrag && window.PetDeskPlants) {
+    deskPlants = window.PetDeskPlants.savePlants(deskPlants.map((row) => window.PetDeskPlants.endDrag(row)));
+    plantDrag = null;
+    paintPlants();
+  }
   sim.dragging = false;
   sim.pointerStart = null;
 });
@@ -3034,18 +3193,14 @@ setInterval(() => {
     issue(held.cmd);
     return;
   }
-  if (cardOpen()) {
-    issue("idle");
-    return;
-  }
   const skyMood = window.PetWeather?.weatherIdle(kind.key, skyOf());
   if (skyMood && Math.random() < 0.45) {
     issue(skyMood);
     return;
   }
   const roll = Math.random();
-  if (roll < (trait?.wander ?? 0.45)) issue("wander");
-  else if (roll < 0.7) issue(life.energy < 35 ? "sleep" : "sit");
+  if (roll < (trait?.wander ?? 0.45) || (life.energy < 8 && roll < 0.7)) issue("wander");
+  else if (roll < 0.7) issue("sit");
   else if (roll < 0.84) issue("idle");
   else if (roll < 0.92 && trait?.special) handle("special");
   else {
@@ -3106,6 +3261,8 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
   fetchMarket();
   sitMusic();
   sitSleepAid();
+  sitPlants();
   if (!(kind && window.PetBirdFly && kind.key === window.PetBirdFly.FLY_BIRD_KEY)) callSip();
+  if (!(kind && window.PetRobinFly && kind.key === window.PetRobinFly.ROBIN_KEY)) callRobin();
   requestAnimationFrame(tick);
 });
