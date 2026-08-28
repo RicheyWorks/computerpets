@@ -15307,7 +15307,7 @@ test("the demo window plate walks Penny flare the same way", () => {
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("perch"), "barred");
-  assert.equal(P.playFor("american_eel"), "sill");
+  assert.equal(P.playFor("american_eel"), "go");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -15401,7 +15401,7 @@ test("the demo window plate walks Bar barred the same way", () => {
   assert.equal(Overlay.playFor("skunk"), "stamp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("american_eel"), "sill");
+  assert.equal(P.playFor("american_eel"), "go");
   assert.notEqual(P.playFor("perch"), "bar");
   assert.notEqual(P.playFor("perch"), "perch");
   assert.notEqual(P.playFor("perch"), "flare");
@@ -15497,7 +15497,7 @@ test("the demo window plate walks Lance bill the same way", () => {
   assert.equal(Overlay.playFor("bluegill"), "flare");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("american_eel"), "sill");
+  assert.equal(P.playFor("american_eel"), "go");
   assert.notEqual(P.playFor("pike"), "lance");
   assert.notEqual(P.playFor("pike"), "barred");
   assert.notEqual(P.playFor("pike"), "mouth");
@@ -15595,7 +15595,7 @@ test("the demo window plate walks Night dusk the same way", () => {
   assert.equal(Overlay.playFor("bluegill"), "flare");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("american_eel"), "sill");
+  assert.equal(P.playFor("american_eel"), "go");
   assert.notEqual(P.playFor("walleye"), "night");
   assert.notEqual(P.playFor("walleye"), "look");
   assert.notEqual(P.playFor("walleye"), "bill");
@@ -15698,7 +15698,7 @@ test("the demo window plate walks Spoon paddle the same way", () => {
   assert.equal(Overlay.playFor("crocodile"), "show");
   assert.equal(P.playFor("raccoon"), "rinse");
   assert.equal(Overlay.playFor("raccoon"), "rinse");
-  assert.equal(P.playFor("american_eel"), "sill");
+  assert.equal(P.playFor("american_eel"), "go");
   assert.notEqual(P.playFor("paddlefish"), "spoon");
   assert.notEqual(P.playFor("paddlefish"), "filter");
   assert.notEqual(P.playFor("paddlefish"), "dusk");
@@ -15802,7 +15802,7 @@ test("the demo window plate walks Round disk the same way", () => {
   assert.equal(Overlay.playFor("walleye"), "dusk");
   assert.equal(P.playFor("water_lily"), "open");
   assert.equal(Overlay.playFor("water_lily"), "open");
-  assert.equal(P.playFor("american_eel"), "sill");
+  assert.equal(P.playFor("american_eel"), "go");
   assert.notEqual(P.playFor("lamprey"), "round");
   assert.notEqual(P.playFor("lamprey"), "cling");
   assert.notEqual(P.playFor("lamprey"), "paddle");
@@ -15875,6 +15875,110 @@ test("the demo window plate walks Round disk the same way", () => {
   assert.ok(seen.has("disk"));
   assert.ok(seen.has("disk-hold"));
   assert.ok(seen.has("disk-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Silver go the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "american_eel"[\s\S]{0,80}slug: "silver"/);
+  assert.equal(P.playFor("american_eel"), "go");
+  const target = P.pickTarget([WIN], 80, "american_eel", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "go");
+  assert.equal(target.side, "bankhole");
+  assert.equal(target.leave, "goes");
+  assert.equal(Overlay.playFor("american_eel"), "go");
+  assert.equal(P.playFor("lamprey"), "disk");
+  assert.equal(Overlay.playFor("lamprey"), "disk");
+  assert.equal(P.playFor("colugo"), "cling");
+  assert.equal(Overlay.playFor("colugo"), "cling");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(Overlay.playFor("moray"), "gape");
+  assert.equal(P.playFor("paddlefish"), "paddle");
+  assert.equal(Overlay.playFor("paddlefish"), "paddle");
+  assert.equal(P.playFor("catfish"), "barbel");
+  assert.equal(Overlay.playFor("catfish"), "barbel");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("house_centipede"), "sill");
+  assert.equal(Overlay.playFor("house_centipede"), "sill");
+  assert.notEqual(P.playFor("american_eel"), "silver");
+  assert.notEqual(P.playFor("american_eel"), "disk");
+  assert.notEqual(P.playFor("american_eel"), "cling");
+  assert.notEqual(target.kind, "silver");
+  assert.notEqual(target.kind, "disk");
+  assert.notEqual(target.kind, "cling");
+  assert.notEqual(target.kind, "gape");
+  assert.notEqual(target.kind, "barbel");
+  assert.ok(target.holdLift > 16, "she goes a window well as a bank hole, not the floor");
+  assert.ok(P.DUR.goHold > P.DUR.go, "the hold is the sit after; the going is the tell");
+  assert.ok(P.DUR.goOn !== Overlay.DUR.diskOn);
+  assert.ok(P.DUR.goOn !== Overlay.DUR.barbelOn);
+  assert.ok(P.DUR.goOn !== Overlay.DUR.snapOn);
+  assert.ok(P.DUR.goOn !== Overlay.DUR.crownOn);
+  assert.ok(P.DUR.goOn !== Overlay.DUR.browseOn);
+  assert.ok(P.DUR.goOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.goOn, Overlay.DUR.goOn);
+  assert.equal(P.DUR.go, Overlay.DUR.go);
+  assert.equal(P.DUR.goHold, Overlay.DUR.goHold);
+  assert.equal(P.DUR.goOff, Overlay.DUR.goOff);
+  const hole = P.goPoint(WIN, 176, WORK);
+  const deskHole = Overlay.goPoint(WIN, Overlay.SPRITE, WORK);
+  const run = P.barbelPoint(WIN, 176, WORK);
+  const bowl = P.snapPoint(WIN, 176, WORK);
+  const tray = P.crownPoint(WIN, 176, WORK);
+  const den = P.browsePoint(WIN, 176, WORK);
+  const horn = P.diskPoint(WIN, "left", 176, WORK);
+  assert.ok(Math.abs(hole.x - deskHole.x) < 1);
+  assert.ok(Math.abs(hole.lift - deskHole.lift) < 1);
+  assert.ok(Math.abs(hole.lift - run.lift) < 2, "same window well as Whisk");
+  assert.ok(Math.abs(hole.x - run.x) > 8, "not Whisk barbel");
+  assert.ok(Math.abs(hole.x - bowl.x) > 8, "not Beak snap");
+  assert.ok(Math.abs(hole.x - tray.x) > 8, "not Spike crown");
+  assert.ok(Math.abs(hole.x - den.x) > 8, "not Coal browse");
+  assert.ok(Math.abs(hole.x - horn.x) > 8 || Math.abs(hole.lift - horn.lift) > 8, "not Round disk");
+  const walkOn = P.goOnPath(0.25, { x: 40, lift: 0 }, { x: hole.x, lift: hole.lift });
+  const deskWalk = Overlay.goOnPath(0.25, { x: 40, lift: 0 }, { x: hole.x, lift: hole.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const swim = P.goPath(0.5);
+  const deskSwim = Overlay.goPath(0.5);
+  assert.equal(swim.lift, deskSwim.lift);
+  assert.ok(swim.lift < -6, "she swims the going");
+  const hold = P.goHoldPath(0.5);
+  const deskHold = Overlay.goHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 10.4) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "barbel");
+    assert.notEqual(play.phase, "snap");
+    assert.notEqual(play.phase, "disk");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "go") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "go-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "go-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 6.1)) < 3, "she holds the going sit in the bank hole");
+    }
+  }
+  assert.ok(seen.has("go-on"));
+  assert.ok(seen.has("go"));
+  assert.ok(seen.has("go-hold"));
+  assert.ok(seen.has("go-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });

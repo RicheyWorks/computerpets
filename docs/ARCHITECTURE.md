@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-28 (Round disks a sill horn as a stone disk; ninth creek leftover done; next leftover is Silver; catalog stays 220; Spoon still owns paddle; Sail still owns cling; Door still owns gape; Blush still owns stone; Night still owns dusk) |
+| **Last Updated** | 2026-08-28 (Silver goes a window well as a bank hole; tenth creek leftover done; creek ten is closed; next leftover is Haste; catalog stays 220; Round still owns disk; Sail still owns cling; Door still owns gape; Spoon still owns paddle; Whisk still owns barbel; Blush still owns stone) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
