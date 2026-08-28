@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "alligator", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "crocodile", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -23194,7 +23194,7 @@ test("Spike crowns a window well as a sand tray: walk onto the well, sit flat an
   assert.equal(P.playFor("black_bear"), "browse");
   assert.equal(P.playFor("raccoon"), "rinse");
   assert.equal(P.playFor("skunk"), "stamp");
-  assert.equal(P.playFor("alligator"), "sill");
+  assert.equal(P.playFor("crocodile"), "sill");
   assert.notEqual(P.playFor("horned_lizard"), "spike");
   assert.notEqual(P.playFor("horned_lizard"), "stone");
   assert.notEqual(P.playFor("horned_lizard"), "aim");
@@ -23371,3 +23371,186 @@ test("a moved window refits Spike's sand-tray well; sleep, card, and hide abort;
   assert.equal(play.abort, true);
 });
 
+
+test("Levee banks a window stool as a bank dish: walk onto the stool, sit the U-snout (teeth hide), then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("alligator"), "bank");
+  assert.equal(P.BANK, "bank");
+  assert.equal(P.playFor("horned_lizard"), "crown");
+  assert.equal(P.playFor("chameleon"), "aim");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(P.playFor("flying_squirrel"), "plane");
+  assert.equal(P.playFor("koala"), "chew");
+  assert.equal(P.playFor("mining_bee"), "dig");
+  assert.equal(P.playFor("crocodile"), "sill");
+  assert.notEqual(P.playFor("alligator"), "levee");
+  assert.notEqual(P.playFor("alligator"), "bask");
+  assert.notEqual(P.playFor("alligator"), "show");
+  assert.notEqual(P.playFor("alligator"), "crown");
+  assert.notEqual(P.playFor("alligator"), "plane");
+  assert.notEqual(P.playFor("alligator"), "chew");
+  assert.notEqual(P.playFor("alligator"), "dig");
+  assert.notEqual(P.playFor("alligator"), "sill");
+  assert.equal(P.DUR.crownOn, 1.18, "Spike crown durations stay");
+  assert.equal(P.DUR.aimOn, 1.08, "Shift aim durations stay");
+  assert.equal(P.DUR.planeOn, 0.81, "Glide plane durations stay");
+  assert.equal(P.DUR.chewOn, 0.97, "Gum chew durations stay");
+  assert.equal(P.DUR.stone, P.DUR.stone, "Blush stone stays");
+  const target = P.pickTarget([WIN], 80, "alligator", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "bank");
+  assert.equal(target.side, "bankdish");
+  assert.equal(target.leave, "snout");
+  assert.notEqual(target.kind, "levee");
+  assert.notEqual(target.kind, "bask");
+  assert.notEqual(target.kind, "show");
+  assert.notEqual(target.kind, "crown");
+  assert.notEqual(target.kind, "plane");
+  assert.notEqual(target.kind, "chew");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she banks a window stool as a bank dish, not the floor");
+  assert.ok(P.DUR.bankHold > P.DUR.bank, "the hold is the sit after; the U-snout is the tell");
+  assert.ok(P.DUR.bankOn > 0.5, "a walk onto the stool, not the bank");
+  assert.ok(P.DUR.bankOn !== P.DUR.crownOn);
+  assert.ok(P.DUR.bankOn !== P.DUR.aimOn);
+  assert.ok(P.DUR.bankOn !== P.DUR.planeOn);
+  assert.ok(P.DUR.bankOn !== P.DUR.chewOn);
+  assert.ok(P.DUR.bankOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.bank !== P.DUR.crown);
+  assert.ok(P.DUR.bank !== P.DUR.plane);
+  assert.ok(P.DUR.bank !== P.DUR.chew);
+  assert.ok(P.DUR.bank !== P.DUR.stone);
+  assert.ok(P.DUR.bankHold !== P.DUR.crownHold);
+  assert.ok(P.DUR.bankHold !== P.DUR.planeHold);
+  assert.ok(P.DUR.bankOff !== P.DUR.crownOff);
+  assert.ok(P.DUR.bankOff !== P.DUR.planeOff);
+  assert.ok(P.DUR.bankOff !== P.DUR.sillDown);
+  const dish = P.bankPoint(WIN, P.SPRITE, WORK);
+  const oak = P.planePoint(WIN, P.SPRITE, WORK);
+  const gum = P.chewPoint(WIN, P.SPRITE, WORK);
+  const tray = P.crownPoint(WIN, P.SPRITE, WORK);
+  const pond = P.baskPoint ? P.baskPoint(WIN, P.SPRITE, WORK) : null;
+  const pan = P.rinsePoint(WIN, P.SPRITE, WORK);
+  const bead = P.aimPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(dish.lift > 16, "the window stool as a bank dish, not the floor");
+  assert.ok(Math.abs(dish.lift - oak.lift) < 2, "the same window stool Glide planes; the pose is a bank");
+  assert.ok(Math.abs(dish.x - oak.x) > 8, "not Glide's oak-fold plane");
+  assert.ok(Math.abs(dish.lift - gum.lift) < 2, "same stool family as Gum");
+  assert.ok(Math.abs(dish.x - gum.x) > 8, "not Gum's gum-perch chew");
+  assert.ok(Math.abs(dish.x - tray.x) > 8 || Math.abs(dish.lift - tray.lift) > 8, "not Spike window-well crown");
+  assert.ok(Math.abs(dish.x - pan.x) > 8 || Math.abs(dish.lift - pan.lift) > 8, "not Wash sill-pan rinse");
+  assert.ok(Math.abs(dish.x - bead.x) > 8 || Math.abs(dish.lift - bead.lift) > 8, "not Shift bead aim");
+  assert.ok(Math.abs(dish.x - horn.x) > 8 || Math.abs(dish.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "alligator", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window stool, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "alligator", WORK, P.SPRITE);
+  assert.equal(short, null, "a real window stool, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 194, height: 160 }], 80, "alligator", WORK, P.SPRITE);
+  assert.equal(thin, null, "Levee needs Glide's real window stool, not a shallower mouth");
+  const stool = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 194, height: 162 }], 80, "alligator", WORK, P.SPRITE);
+  assert.ok(stool, "a real window stool as a bank dish");
+  const glideOk = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 194, height: 162 }], 80, "flying_squirrel", WORK, P.SPRITE);
+  assert.ok(glideOk, "Glide still takes the stool");
+  const gumOk = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 194, height: 162 }], 80, "koala", WORK, P.SPRITE);
+  assert.ok(gumOk, "Gum still takes the stool");
+  const spikeOk = P.pickTarget([{ id: "well", x: 200, y: 80, width: 178, height: 162 }], 80, "horned_lizard", WORK, P.SPRITE);
+  assert.ok(spikeOk, "Spike still takes the well");
+  const shiftOk = P.pickTarget([{ id: "bead", x: 200, y: 80, width: 168, height: 208 }], 80, "chameleon", WORK, P.SPRITE);
+  assert.ok(shiftOk, "Shift still takes the bead");
+  const walkOn = P.bankOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const planeOn = P.planeOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const chewOn = P.chewOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const crownOn = P.crownOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const aimOn = P.aimOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the stool as a bank dish");
+  assert.ok(walkOn.lift !== planeOn.lift, "a walk-and-bank, not Glide plane");
+  assert.ok(walkOn.lift !== chewOn.lift, "a walk-and-bank, not Gum chew");
+  assert.ok(walkOn.lift !== crownOn.lift, "a walk-and-bank, not Spike crown");
+  assert.ok(walkOn.lift !== aimOn.lift, "a walk-and-bank, not Shift aim");
+  const snout = P.bankPath(0.5);
+  const fold = P.planePath(0.5);
+  const jaw = P.chewPath(0.5);
+  const horns = P.crownPath(0.5);
+  const eyes = P.aimPath(0.5);
+  assert.ok(snout.lift < -3, "she sits the U-snout");
+  assert.ok(snout.rot < 0, "teeth hide on the close");
+  assert.ok(snout.lift !== fold.lift, "not Glide plane");
+  assert.ok(snout.lift !== jaw.lift, "not Gum chew");
+  assert.ok(snout.lift !== horns.lift, "not Spike crown");
+  assert.ok(snout.lift !== eyes.lift, "not Shift aim");
+  const hold = P.bankHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - -2.8) < 0.2, "she holds the U-snout after the close");
+  assert.ok(Math.abs(hold.x - 1.4) < 0.2, "she stays on the bank dish");
+  assert.ok(hold.lift < -4 && hold.lift > -6, "a U-snout sit after the bank, teeth hidden");
+  const off0 = P.bankOffPath(0, { x: dish.x, lift: dish.lift, rot: -2.8 }, { x: dish.x + 54, lift: 0 });
+  const offMid = P.bankOffPath(0.5, { x: dish.x, lift: dish.lift, rot: -2.8 }, { x: dish.x + 54, lift: 0 });
+  const off1 = P.bankOffPath(1, { x: dish.x, lift: dish.lift, rot: -2.8 }, { x: dish.x + 54, lift: 0 });
+  assert.ok(Math.abs(off0.x - dish.x) < 2);
+  assert.ok(offMid.lift > 1, "a walk off the bank dish");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "crown");
+    assert.notEqual(play.phase, "plane");
+    assert.notEqual(play.phase, "chew");
+    assert.notEqual(play.phase, "aim");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "stone");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bank") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bank-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "bank-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 4.7)) < 3, "she holds the bank dish after the U-snout");
+    }
+    if (play.phase === "bank-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("bank-on"));
+  assert.ok(seen.has("bank"));
+  assert.ok(seen.has("bank-hold"));
+  assert.ok(seen.has("bank-off"));
+  assert.ok(!seen.has("crown"), "Levee never uses Spike crown");
+  assert.ok(!seen.has("plane"), "Levee never uses Glide plane");
+  assert.ok(!seen.has("chew"), "Levee never uses Gum chew");
+  assert.ok(!seen.has("aim"), "Levee never uses Shift aim");
+  assert.ok(!seen.has("bask"), "Levee never uses Ink bask");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Levee's bank-dish stool; sleep, card, and hide abort; Levee never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "alligator", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "bank"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "bank");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "bank");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bank-off");
+  assert.equal(play.abort, true);
+});
