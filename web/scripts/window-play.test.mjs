@@ -15307,7 +15307,7 @@ test("the demo window plate walks Penny flare the same way", () => {
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("perch"), "barred");
-  assert.equal(P.playFor("pike"), "sill");
+  assert.equal(P.playFor("walleye"), "sill");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -15401,7 +15401,7 @@ test("the demo window plate walks Bar barred the same way", () => {
   assert.equal(Overlay.playFor("skunk"), "stamp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("pike"), "sill");
+  assert.equal(P.playFor("walleye"), "sill");
   assert.notEqual(P.playFor("perch"), "bar");
   assert.notEqual(P.playFor("perch"), "perch");
   assert.notEqual(P.playFor("perch"), "flare");
@@ -15471,6 +15471,102 @@ test("the demo window plate walks Bar barred the same way", () => {
   assert.ok(seen.has("barred"));
   assert.ok(seen.has("barred-hold"));
   assert.ok(seen.has("barred-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Lance bill the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "pike"[\s\S]{0,80}slug: "lance"/);
+  assert.equal(P.playFor("pike"), "bill");
+  const target = P.pickTarget([WIN], 80, "pike", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "bill");
+  assert.equal(target.side, "reedambush");
+  assert.equal(target.leave, "bills");
+  assert.equal(Overlay.playFor("pike"), "bill");
+  assert.equal(P.playFor("bass"), "mouth");
+  assert.equal(Overlay.playFor("bass"), "mouth");
+  assert.equal(P.playFor("perch"), "barred");
+  assert.equal(Overlay.playFor("perch"), "barred");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(Overlay.playFor("budgie"), "perch");
+  assert.equal(P.playFor("bluegill"), "flare");
+  assert.equal(Overlay.playFor("bluegill"), "flare");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("walleye"), "sill");
+  assert.notEqual(P.playFor("pike"), "lance");
+  assert.notEqual(P.playFor("pike"), "barred");
+  assert.notEqual(P.playFor("pike"), "mouth");
+  assert.notEqual(target.kind, "lance");
+  assert.notEqual(target.kind, "mouth");
+  assert.notEqual(target.kind, "barred");
+  assert.notEqual(target.kind, "wrap");
+  assert.ok(target.holdLift > 8, "he bills a window-box as a reed ambush, not the floor");
+  assert.ok(P.DUR.billHold > P.DUR.bill, "the hold is the sit after; the duckbill wait is the tell");
+  assert.ok(P.DUR.billOn !== Overlay.DUR.mouthOn);
+  assert.ok(P.DUR.billOn !== Overlay.DUR.wrapOn);
+  assert.ok(P.DUR.billOn !== Overlay.DUR.sipOn);
+  assert.ok(P.DUR.billOn !== Overlay.DUR.barredOn);
+  assert.ok(P.DUR.billOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.billOn, Overlay.DUR.billOn);
+  assert.equal(P.DUR.bill, Overlay.DUR.bill);
+  assert.equal(P.DUR.billHold, Overlay.DUR.billHold);
+  assert.equal(P.DUR.billOff, Overlay.DUR.billOff);
+  const reed = P.billPoint(WIN, 176, WORK);
+  const deskReed = Overlay.billPoint(WIN, Overlay.SPRITE, WORK);
+  const edge = P.mouthPoint(WIN, 176, WORK);
+  const bloom = P.wrapPoint(WIN, 176, WORK);
+  const weed = P.barredPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(reed.x - deskReed.x) < 1);
+  assert.ok(Math.abs(reed.lift - deskReed.lift) < 1);
+  assert.ok(Math.abs(reed.lift - edge.lift) < 8, "same window-box as Lunge");
+  assert.ok(Math.abs(reed.x - edge.x) > 20, "not Lunge mouth");
+  assert.ok(Math.abs(reed.lift - bloom.lift) < 8, "same window-box as Wrist");
+  assert.ok(Math.abs(reed.x - bloom.x) > 20, "not Wrist wrap");
+  assert.ok(Math.abs(reed.lift - weed.lift) > 8 || Math.abs(reed.x - weed.x) > 8, "not Bar barred");
+  const walkOn = P.billOnPath(0.25, { x: 40, lift: 0 }, { x: reed.x, lift: reed.lift });
+  const deskWalk = Overlay.billOnPath(0.25, { x: 40, lift: 0 }, { x: reed.x, lift: reed.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const duck = P.billPath(0.5);
+  const deskDuck = Overlay.billPath(0.5);
+  assert.equal(duck.lift, deskDuck.lift);
+  assert.ok(duck.rot > 6 && duck.rot < 9, "he sits the duckbill and waits");
+  const hold = P.billHoldPath(0.5);
+  const deskHold = Overlay.billHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 5.6) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "mouth");
+    assert.notEqual(play.phase, "wrap");
+    assert.notEqual(play.phase, "barred");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bill") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bill-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "bill-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.2)) < 3, "he holds the duckbill in the reed ambush");
+    }
+  }
+  assert.ok(seen.has("bill-on"));
+  assert.ok(seen.has("bill"));
+  assert.ok(seen.has("bill-hold"));
+  assert.ok(seen.has("bill-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
