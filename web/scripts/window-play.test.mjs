@@ -12292,3 +12292,95 @@ test("the demo window plate walks Rack's flag the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Cape's fold the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "bat"[\s\S]{0,80}slug: "cape"/);
+  assert.equal(P.playFor("bat"), "fold");
+  const target = P.pickTarget([WIN], 80, "bat", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "fold");
+  assert.equal(target.side, "soffit");
+  assert.equal(target.leave, "soffit");
+  assert.equal(Overlay.playFor("bat"), "fold");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("deer"), "flag");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.notEqual(P.playFor("bat"), "cape");
+  assert.notEqual(target.kind, "croak");
+  assert.notEqual(target.kind, "hang");
+  assert.notEqual(target.kind, "perch");
+  assert.notEqual(target.kind, "flag");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she hangs under the interior head as a rafter fold, not the floor");
+  assert.ok(P.DUR.foldHold > P.DUR.fold, "the hang is the hold; the fold of the hands is the tell");
+  assert.ok(P.DUR.foldOn !== Overlay.DUR.hourOn);
+  assert.ok(P.DUR.foldOn !== Overlay.DUR.croakOn);
+  assert.ok(P.DUR.foldOn !== Overlay.DUR.hang);
+  assert.ok(P.DUR.foldOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.hourOn, Overlay.DUR.hourOn);
+  assert.equal(P.DUR.foldOn, Overlay.DUR.foldOn);
+  assert.equal(P.DUR.fold, Overlay.DUR.fold);
+  assert.equal(P.DUR.foldHold, Overlay.DUR.foldHold);
+  assert.equal(P.DUR.foldOff, Overlay.DUR.foldOff);
+  const soffit = P.foldPoint(WIN, 176, WORK);
+  const deskSoffit = Overlay.foldPoint(WIN, 176, WORK);
+  assert.equal(soffit.x, deskSoffit.x);
+  assert.equal(soffit.lift, deskSoffit.lift);
+  const rafter = P.croakPoint(WIN, 176, WORK);
+  const dark = P.hangPoint(WIN, 176, WORK);
+  const shade = P.perchPoint(WIN, "left", 176, WORK);
+  const oak = P.flagPoint(WIN, 176, WORK);
+  assert.ok(soffit.lift > 36, "the underside of the interior head");
+  assert.ok(soffit.lift < rafter.lift - 20, "not Wedge");
+  assert.ok(soffit.lift > dark.lift + 40, "not Hour");
+  assert.ok(Math.abs(soffit.x - shade.x) > 8 || Math.abs(soffit.lift - shade.lift) > 20, "not Echo");
+  assert.ok(Math.abs(soffit.x - oak.x) > 8 || Math.abs(soffit.lift - oak.lift) > 20, "not Rack");
+  const flyOn = P.foldOnPath(0.25, { x: 40, lift: 0 }, { x: soffit.x, lift: soffit.lift });
+  const deskFly = Overlay.foldOnPath(0.25, { x: 40, lift: 0 }, { x: soffit.x, lift: soffit.lift });
+  assert.equal(flyOn.x, deskFly.x);
+  assert.equal(flyOn.lift, deskFly.lift);
+  assert.ok(flyOn.lift > 0, "she flies up to the soffit");
+  const invert = P.foldPath(0.5);
+  const deskInvert = Overlay.foldPath(0.5);
+  assert.equal(invert.lift, deskInvert.lift);
+  assert.ok(invert.rot > 150, "she inverts and hangs by the feet");
+  assert.ok(invert.x > 0.8, "the hands fold");
+  const still = P.foldHoldPath(0.5);
+  const deskStill = Overlay.foldHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.rot === 180, "she holds inverted");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "croak");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "flag");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "fold") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "fold-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "fold-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 5.0)) < 4, "she holds the inverted fold under the soffit");
+    }
+  }
+  assert.ok(seen.has("fold-on"));
+  assert.ok(seen.has("fold"));
+  assert.ok(seen.has("fold-hold"));
+  assert.ok(seen.has("fold-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
