@@ -12017,3 +12017,94 @@ test("the demo window plate walks Whip's spray the same way", () => {
   assert.equal(play.phase, "done");
 });
 
+test("the demo window plate walks Clasp's grip the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "tick"[\s\S]{0,80}slug: "clasp"/);
+  assert.equal(P.playFor("tick"), "grip");
+  const target = P.pickTarget([WIN], 80, "tick", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "grip");
+  assert.equal(target.side, "hem");
+  assert.equal(target.leave, "hem");
+  assert.equal(Overlay.playFor("tick"), "grip");
+  assert.equal(P.playFor("vinegaroon"), "spray");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("boa"), "loop");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.notEqual(P.playFor("tick"), "clasp");
+  assert.notEqual(target.kind, "spray");
+  assert.notEqual(target.kind, "honk");
+  assert.notEqual(target.kind, "loop");
+  assert.notEqual(target.kind, "drink");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she grips a sash apron hem, not the floor");
+  assert.ok(P.DUR.gripHold > P.DUR.grip, "the wait is the hold; the eight-leg clasp is the tell");
+  assert.ok(P.DUR.gripOn !== Overlay.DUR.sprayOn);
+  assert.ok(P.DUR.gripOn !== Overlay.DUR.honkOn);
+  assert.ok(P.DUR.gripOn !== Overlay.DUR.loopOn);
+  assert.ok(P.DUR.gripOn !== Overlay.DUR.drinkOn);
+  assert.ok(P.DUR.gripOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.sprayOn, Overlay.DUR.sprayOn);
+  assert.equal(P.DUR.gripOn, Overlay.DUR.gripOn);
+  assert.equal(P.DUR.grip, Overlay.DUR.grip);
+  assert.equal(P.DUR.gripHold, Overlay.DUR.gripHold);
+  assert.equal(P.DUR.gripOff, Overlay.DUR.gripOff);
+  const hem = P.gripPoint(WIN, 176, WORK);
+  const deskHem = Overlay.gripPoint(WIN, 176, WORK);
+  assert.equal(hem.x, deskHem.x);
+  assert.equal(hem.lift, deskHem.lift);
+  const wash = P.sprayPoint(WIN, 176, WORK);
+  const green = P.honkPoint(WIN, 176, WORK);
+  const river = P.loopPoint(WIN, 176, WORK);
+  const drip = P.drinkPoint(WIN, 176, WORK);
+  assert.ok(hem.lift > 8, "the sash apron hem as blotter");
+  assert.ok(Math.abs(hem.x - green.x) > 8 || Math.abs(hem.lift - green.lift) > 8, "not Vee");
+  assert.ok(Math.abs(hem.x - river.x) > 8 || Math.abs(hem.lift - river.lift) > 8, "not Lula");
+  assert.ok(Math.abs(hem.x - wash.x) > 8 || Math.abs(hem.lift - wash.lift) > 8, "not Whip");
+  assert.ok(Math.abs(hem.x - drip.x) > 8 || Math.abs(hem.lift - drip.lift) > 8, "not Latch");
+  const walkOn = P.gripOnPath(0.25, { x: 40, lift: 0 }, { x: hem.x, lift: hem.lift });
+  const deskWalk = Overlay.gripOnPath(0.25, { x: 40, lift: 0 }, { x: hem.x, lift: hem.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks to the apron edge");
+  const clasp = P.gripPath(0.5);
+  const deskClasp = Overlay.gripPath(0.5);
+  assert.equal(clasp.lift, deskClasp.lift);
+  assert.ok(clasp.lift < 0, "eight legs press the hem");
+  assert.ok(Math.abs(clasp.x) < 2, "she stays on the hem");
+  const still = P.gripHoldPath(0.5);
+  const deskStill = Overlay.gripHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.rot > 0, "she holds the clasp");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "spray");
+    assert.notEqual(play.phase, "honk");
+    assert.notEqual(play.phase, "loop");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "grip") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "grip-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "grip-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 2.2)) < 4, "she holds the eight-leg clasp on the hem");
+    }
+  }
+  assert.ok(seen.has("grip-on"));
+  assert.ok(seen.has("grip"));
+  assert.ok(seen.has("grip-hold"));
+  assert.ok(seen.has("grip-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
