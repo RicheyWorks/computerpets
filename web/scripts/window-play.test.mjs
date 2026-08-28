@@ -8730,7 +8730,7 @@ test("the demo window plate walks Dapple's cover the same way", () => {
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("anole"), "sill");
+  assert.equal(P.playFor("skink"), "sill");
   assert.equal(P.playFor("caecilian"), "ring");
   assert.notEqual(target.kind, "dapple");
   assert.notEqual(target.kind, "hide");
@@ -14047,7 +14047,7 @@ test("the demo window plate walks Pad chirp the same way", () => {
   assert.equal(P.playFor("colugo"), "cling");
   assert.equal(P.playFor("porcupine"), "bristle");
   assert.equal(P.playFor("orchid"), "mount");
-  assert.equal(P.playFor("anole"), "sill");
+  assert.equal(P.playFor("skink"), "sill");
   assert.notEqual(P.playFor("gecko"), "pad");
   assert.notEqual(P.playFor("gecko"), "stone");
   assert.notEqual(P.playFor("gecko"), "cling");
@@ -14114,6 +14114,96 @@ test("the demo window plate walks Pad chirp the same way", () => {
   assert.ok(seen.has("chirp"));
   assert.ok(seen.has("chirp-hold"));
   assert.ok(seen.has("chirp-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+
+test("the demo window plate walks Wink flash the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/stone.ts"), "utf8"), /key: "anole"[\s\S]{0,80}slug: "wink"/);
+  assert.equal(P.playFor("anole"), "flash");
+  const target = P.pickTarget([WIN], 80, "anole", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "flash");
+  assert.equal(target.side, "vinepost");
+  assert.equal(target.leave, "dewlap");
+  assert.equal(Overlay.playFor("anole"), "flash");
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(Overlay.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("beaver"), "gnaw");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("skink"), "sill");
+  assert.notEqual(P.playFor("anole"), "wink");
+  assert.notEqual(P.playFor("anole"), "chirp");
+  assert.notEqual(P.playFor("anole"), "stone");
+  assert.notEqual(target.kind, "wink");
+  assert.notEqual(target.kind, "chirp");
+  assert.notEqual(target.kind, "stone");
+  assert.ok(target.holdLift > 20, "she flashes a sash stile as a vine post, not the sash foot");
+  assert.ok(P.DUR.flashHold > P.DUR.flash, "the hold is the sit after; the flash is the tell");
+  assert.ok(P.DUR.flashOn !== Overlay.DUR.chirpOn);
+  assert.ok(P.DUR.flashOn !== Overlay.DUR.gnawOn);
+  assert.ok(P.DUR.flashOn !== Overlay.DUR.drumOn);
+  assert.ok(P.DUR.flashOn !== Overlay.DUR.boreOn);
+  assert.ok(P.DUR.flashOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.flashOn, Overlay.DUR.flashOn);
+  assert.equal(P.DUR.flash, Overlay.DUR.flash);
+  assert.equal(P.DUR.flashHold, Overlay.DUR.flashHold);
+  assert.equal(P.DUR.flashOff, Overlay.DUR.flashOff);
+  const vine = P.flashPoint(WIN, 176, WORK);
+  const deskWink = Overlay.flashPoint(WIN, Overlay.SPRITE, WORK);
+  const lodge = P.gnawPoint(WIN, 176, WORK);
+  const plaster = P.chirpPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(vine.x - deskWink.x) < 1);
+  assert.ok(Math.abs(vine.lift - deskWink.lift) < 1);
+  assert.ok(Math.abs(vine.x - lodge.x) < 2, "same stile family as Dam");
+  assert.ok(Math.abs(vine.x - plaster.x) > 20, "not Pad chirp");
+  const flashOn = P.flashOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  const deskFlash = Overlay.flashOnPath(0.25, { x: 40, lift: 0 }, { x: vine.x, lift: vine.lift });
+  assert.equal(flashOn.x, deskFlash.x);
+  assert.equal(flashOn.lift, deskFlash.lift);
+  assert.ok(flashOn.lift > 0, "she sits onto the stile as a vine post");
+  const pink = P.flashPath(0.5);
+  const deskPink = Overlay.flashPath(0.5);
+  assert.equal(pink.lift, deskPink.lift);
+  assert.ok(pink.lift > 3, "she flashes the dewlap once; the pink is a sentence");
+  const hold = P.flashHoldPath(0.5);
+  const deskHold = Overlay.flashHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 2.0) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "chirp");
+    assert.notEqual(play.phase, "gnaw");
+    assert.notEqual(play.phase, "drum");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "flash") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "flash-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "flash-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.5)) < 3, "she holds the vine post after the flash");
+    }
+  }
+  assert.ok(seen.has("flash-on"));
+  assert.ok(seen.has("flash"));
+  assert.ok(seen.has("flash-hold"));
+  assert.ok(seen.has("flash-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
