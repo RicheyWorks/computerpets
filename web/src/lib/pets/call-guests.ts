@@ -84,6 +84,20 @@ const SHOULDER_X = 36;
 const SHOULDER_LIFT = 36;
 export const MIN_STAY_S = 24;
 export const CALL_EMPTY = "no guest from that look-up";
+export const MEET_DEE_KEY = "chickadee";
+export const MEET_CAT_KEY = "cat";
+export const MEET_HOST = "red_panda";
+export const PEER_ROBIN_KEY = "robin";
+export const WINDOW_SIT_KEY = "cat";
+export const DEE_RUI_LINE = "Dee-dee. I saw the red one.";
+export const DEE_ROBIN_LINE = "Dee. You found the lawn first.";
+export const CAT_RUI_LINE = "I sat. You were already here.";
+export const CAT_SILL_LINE = "The sill will do.";
+export const MEET_ON_S = 0.64;
+export const TELL_S = 1.6;
+const HOP_LIFT = 10;
+const BESIDE_X = 52;
+const NEAR_X = 44;
 
 export type CallGuest = {
   key: string;
@@ -100,11 +114,13 @@ export type CalledFlags = {
   hostX?: number;
   hostLift?: number;
   hostFacing?: 1 | -1;
+  peers?: { key: string; x?: number; lift?: number; phase?: string }[];
+  windowBound?: { x: number; lift: number; kind?: string } | null;
 };
 
 export type CalledWalker = {
   key: string;
-  phase: "in" | "stay" | "wander" | "leave" | "gone" | "approach-perch" | "perch";
+  phase: "in" | "stay" | "wander" | "leave" | "gone" | "approach-perch" | "perch" | "approach-meet" | "meet" | "approach-bound" | "bound";
   t: number;
   age: number;
   x: number;
@@ -118,6 +134,8 @@ export type CalledWalker = {
   toLift?: number;
   sungAt?: number;
   frame?: number;
+  meetKind?: "rui" | "peer" | "bound";
+  told?: boolean;
 };
 
 export function norm(text: unknown) {
@@ -249,6 +267,151 @@ function goCalledPerch(guest: CalledWalker, flags?: CalledFlags): CalledWalker {
   };
 }
 
+export type CalledPeer = { key: string; x?: number; lift?: number; phase?: string };
+export type WindowBound = { x: number; lift: number; kind?: string };
+
+export function peerOf(flags: CalledFlags | null | undefined, key: string) {
+  const peers = flags && Array.isArray(flags.peers) ? flags.peers : [];
+  for (const p of peers) {
+    if (!p || p.key !== key) continue;
+    if (p.phase === "gone" || p.phase === "leave") continue;
+    return p;
+  }
+  return null;
+}
+
+export function shouldMeetRui(key: string, flags?: CalledFlags) {
+  if (!flags || flags.hidden) return false;
+  if (key !== MEET_DEE_KEY && key !== MEET_CAT_KEY) return false;
+  if (flags.hostKey && flags.hostKey !== MEET_HOST) return false;
+  if (key === MEET_DEE_KEY && peerOf(flags, PEER_ROBIN_KEY)) return false;
+  return true;
+}
+
+export function shouldMeetPeer(key: string, flags?: CalledFlags) {
+  if (!flags || flags.hidden) return false;
+  if (key !== MEET_DEE_KEY) return false;
+  return !!peerOf(flags, PEER_ROBIN_KEY);
+}
+
+export function shouldSitBound(key: string, flags?: CalledFlags) {
+  if (!flags || flags.hidden) return false;
+  if (key !== WINDOW_SIT_KEY) return false;
+  const b = flags.windowBound;
+  return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+}
+
+export function meetPoint(flags?: CalledFlags, key?: string) {
+  const hostX = flags && flags.hostX != null ? flags.hostX : 0;
+  const face = flags && flags.hostFacing != null && flags.hostFacing < 0 ? -1 : 1;
+  if (key === MEET_DEE_KEY) return { x: hostX + face * NEAR_X, lift: 8 };
+  return { x: hostX - face * BESIDE_X, lift: 0 };
+}
+
+export function peerPoint(flags?: CalledFlags) {
+  const p = peerOf(flags, PEER_ROBIN_KEY);
+  if (!p) return { x: 200, lift: 8 };
+  return { x: (p.x || 0) + 36, lift: (p.lift || 0) + 8 };
+}
+
+function boundPoint(flags?: CalledFlags) {
+  const b = flags && flags.windowBound;
+  if (!b) return { x: 120, lift: 18, kind: "sill" };
+  return { x: b.x, lift: b.lift, kind: b.kind || "sill" };
+}
+
+export function windowSitBound(win: { x?: number; y?: number; width?: number; height?: number } | null | undefined, work?: { height?: number; floorLift?: number } | null) {
+  if (!win || typeof win !== "object") return null;
+  const w = Number(win.width);
+  const h = Number(win.height);
+  if (!(w > 8) || !(h > 8)) return null;
+  const workH = Math.max(240, (work && work.height) || 800);
+  const floor = (work && work.floorLift) || 0;
+  const x0 = Number(win.x);
+  const y0 = Number(win.y);
+  if (![x0, y0, w, h].every(Number.isFinite)) return null;
+  const bottom = y0 + h;
+  let lift = workH - bottom + 16;
+  if (!Number.isFinite(lift)) return null;
+  lift = Math.max(floor + 12, Math.min(workH * 0.42, lift));
+  return { kind: "sill" as const, x: x0 + w * 0.38, lift };
+}
+
+export function firstWindowBound(windows: Array<{ x?: number; y?: number; width?: number; height?: number }> | null | undefined, work?: { height?: number; floorLift?: number } | null) {
+  const list = Array.isArray(windows) ? windows : [];
+  for (const win of list) {
+    const b = windowSitBound(win, work);
+    if (b) return b;
+  }
+  return null;
+}
+
+function goCalledMeet(guest: CalledWalker, flags: CalledFlags | undefined, kind: "rui" | "peer"): CalledWalker {
+  const hold = kind === "peer" ? peerPoint(flags) : meetPoint(flags, guest.key);
+  return {
+    ...guest,
+    phase: "approach-meet",
+    meetKind: kind,
+    t: 0,
+    target: hold.x,
+    fromX: guest.x,
+    fromLift: guest.lift || 0,
+    toX: hold.x,
+    toLift: hold.lift,
+    facing: hold.x >= guest.x ? 1 : -1,
+    told: false,
+  };
+}
+
+function goCalledBound(guest: CalledWalker, flags?: CalledFlags): CalledWalker {
+  const hold = boundPoint(flags);
+  return {
+    ...guest,
+    phase: "approach-bound",
+    meetKind: "bound",
+    t: 0,
+    target: hold.x,
+    fromX: guest.x,
+    fromLift: guest.lift || 0,
+    toX: hold.x,
+    toLift: hold.lift,
+    facing: hold.x >= guest.x ? 1 : -1,
+    told: false,
+  };
+}
+
+function meetBusy(phase: CalledWalker["phase"]) {
+  return (
+    phase === "approach-meet" ||
+    phase === "meet" ||
+    phase === "approach-bound" ||
+    phase === "bound" ||
+    phase === "approach-perch" ||
+    phase === "perch" ||
+    phase === "leave" ||
+    phase === "gone"
+  );
+}
+
+export function shouldTell(guest: CalledWalker | null | undefined) {
+  if (!guest || guest.told) return false;
+  if (guest.phase !== "meet" && guest.phase !== "bound") return false;
+  return true;
+}
+
+export function tellLine(guest: CalledWalker | null | undefined) {
+  if (!guest) return "";
+  if (guest.phase === "bound" || guest.meetKind === "bound") return CAT_SILL_LINE;
+  if (guest.key === MEET_DEE_KEY && guest.meetKind === "peer") return DEE_ROBIN_LINE;
+  if (guest.key === MEET_DEE_KEY) return DEE_RUI_LINE;
+  if (guest.key === MEET_CAT_KEY) return CAT_RUI_LINE;
+  return "";
+}
+
+export function markTold(guest: CalledWalker): CalledWalker {
+  return { ...guest, told: true };
+}
+
 export function shouldSing(guest: CalledWalker | null | undefined) {
   if (!guest || guest.key !== PERCH_BIRD_KEY || guest.phase !== "perch") return false;
   return guest.age + 0.0001 >= (guest.sungAt || 0);
@@ -266,6 +429,22 @@ export function stepCalled(guest: CalledWalker, dt: number, width: number, flags
     return goCalledPerch(next, flags);
   }
   if (!perchNow && (next.phase === "approach-perch" || next.phase === "perch")) {
+    return { ...next, phase: "stay", t: 0, lift: 0, target: next.x };
+  }
+
+  const meetPeer = shouldMeetPeer(next.key, flags);
+  const meetRui = shouldMeetRui(next.key, flags);
+  const sitBound = shouldSitBound(next.key, flags);
+  if (!meetBusy(next.phase)) {
+    if (meetPeer) return goCalledMeet(next, flags, "peer");
+    if (meetRui) return goCalledMeet(next, flags, "rui");
+    if (sitBound) return goCalledBound(next, flags);
+  }
+  if ((next.phase === "approach-meet" || next.phase === "meet") && !meetPeer && !meetRui) {
+    if (sitBound && next.key === WINDOW_SIT_KEY) return goCalledBound(next, flags);
+    return { ...next, phase: "stay", t: 0, lift: 0, target: next.x };
+  }
+  if ((next.phase === "approach-bound" || next.phase === "bound") && !sitBound) {
     return { ...next, phase: "stay", t: 0, lift: 0, target: next.x };
   }
 
@@ -289,6 +468,55 @@ export function stepCalled(guest: CalledWalker, dt: number, width: number, flags
     next.lift = hold.lift;
     next.target = hold.x;
     next.facing = flags?.hostFacing != null && flags.hostFacing < 0 ? -1 : 1;
+    return next;
+  }
+
+  if (next.phase === "approach-meet") {
+    const hold = next.meetKind === "peer" ? peerPoint(flags) : meetPoint(flags, next.key);
+    next.target = hold.x;
+    next.toX = hold.x;
+    next.toLift = hold.lift;
+    const u = Math.min(1, next.t / MEET_ON_S);
+    const fromX = next.fromX != null ? next.fromX : next.x;
+    const fromLift = next.fromLift != null ? next.fromLift : next.lift || 0;
+    const hop = next.key === MEET_DEE_KEY ? Math.abs(Math.sin(next.t * 16)) * HOP_LIFT * (1 - u) : 0;
+    next.x = fromX + (hold.x - fromX) * u;
+    next.lift = fromLift + (hold.lift - fromLift) * u + hop;
+    next.facing = hold.x >= fromX ? 1 : -1;
+    if (u >= 1) return { ...next, phase: "meet", t: 0, x: hold.x, lift: hold.lift, target: hold.x };
+    return next;
+  }
+  if (next.phase === "meet") {
+    const hold = next.meetKind === "peer" ? peerPoint(flags) : meetPoint(flags, next.key);
+    next.x = hold.x;
+    next.lift = hold.lift;
+    next.target = hold.x;
+    if (next.t >= TELL_S) {
+      if (next.key === WINDOW_SIT_KEY && sitBound) return goCalledBound(next, flags);
+      return dismissCalled(next);
+    }
+    return next;
+  }
+  if (next.phase === "approach-bound") {
+    const hold = boundPoint(flags);
+    next.target = hold.x;
+    next.toX = hold.x;
+    next.toLift = hold.lift;
+    const u = Math.min(1, next.t / MEET_ON_S);
+    const fromX = next.fromX != null ? next.fromX : next.x;
+    const fromLift = next.fromLift != null ? next.fromLift : next.lift || 0;
+    next.x = fromX + (hold.x - fromX) * u;
+    next.lift = fromLift + (hold.lift - fromLift) * u;
+    next.facing = hold.x >= fromX ? 1 : -1;
+    if (u >= 1) return { ...next, phase: "bound", t: 0, x: hold.x, lift: hold.lift, target: hold.x };
+    return next;
+  }
+  if (next.phase === "bound") {
+    const hold = boundPoint(flags);
+    next.x = hold.x;
+    next.lift = hold.lift;
+    next.target = hold.x;
+    if (next.t >= TELL_S) return dismissCalled(next)!;
     return next;
   }
 
@@ -333,7 +561,7 @@ export function poseFrames(guest: CalledWalker | null | undefined, sprites?: Cal
   const sit = Array.isArray(pack.sit) ? pack.sit.filter(Boolean) : [];
   const idle = Array.isArray(pack.idle) ? pack.idle.filter(Boolean) : [];
   const walk = Array.isArray(pack.walk) ? pack.walk.filter(Boolean) : [];
-  if (guest && (guest.phase === "perch" || guest.phase === "approach-perch")) {
+  if (guest && (guest.phase === "perch" || guest.phase === "approach-perch" || guest.phase === "meet" || guest.phase === "bound")) {
     if (sit.length) return sit;
     if (idle.length) return idle;
   }
