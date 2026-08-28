@@ -13215,7 +13215,7 @@ test("the demo window plate walks Sun warm the same way", () => {
   assert.equal(P.playFor("solifuge"), "run");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("sweat_bee"), "lick");
-  assert.equal(P.playFor("gibbon"), "sill");
+  assert.equal(P.playFor("gibbon"), "sing");
   assert.notEqual(P.playFor("lemur"), "flag");
   assert.notEqual(P.playFor("lemur"), "ring");
   assert.notEqual(P.playFor("lemur"), "sun");
@@ -13289,6 +13289,107 @@ test("the demo window plate walks Sun warm the same way", () => {
   assert.ok(seen.has("warm"));
   assert.ok(seen.has("warm-hold"));
   assert.ok(seen.has("warm-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+
+test("the demo window plate walks Swing sing the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "gibbon"[\s\S]{0,80}slug: "swing"/);
+  assert.equal(P.playFor("gibbon"), "sing");
+  const target = P.pickTarget([WIN], 80, "gibbon", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "sing");
+  assert.equal(target.side, "lamparm");
+  assert.equal(target.leave, "unhook");
+  assert.equal(Overlay.playFor("gibbon"), "sing");
+  assert.equal(P.playFor("lemur"), "warm");
+  assert.equal(Overlay.playFor("lemur"), "warm");
+  assert.equal(P.playFor("sloth"), "reach");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("ginkgo"), "gold");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("kinkajou"), "sill");
+  assert.notEqual(P.playFor("gibbon"), "swing");
+  assert.notEqual(P.playFor("gibbon"), "hook");
+  assert.notEqual(P.playFor("gibbon"), "reach");
+  assert.notEqual(target.kind, "swing");
+  assert.notEqual(target.kind, "hook");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 40, "she sings a lamp-side stile as a lamp arm, not the sash foot");
+  assert.ok(P.DUR.singHold > P.DUR.sing, "the song is the tell; the hold is the unhook wait");
+  assert.ok(P.DUR.singOn !== Overlay.DUR.warmOn);
+  assert.ok(P.DUR.singOn !== Overlay.DUR.reachOn);
+  assert.ok(P.DUR.singOn !== Overlay.DUR.hookOn);
+  assert.ok(P.DUR.singOn !== Overlay.DUR.soarOn);
+  assert.ok(P.DUR.singOn !== Overlay.DUR.webOn);
+  assert.ok(P.DUR.singOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.warmOn, Overlay.DUR.warmOn);
+  assert.equal(P.DUR.singOn, Overlay.DUR.singOn);
+  assert.equal(P.DUR.sing, Overlay.DUR.sing);
+  const arm = P.singPoint(WIN, 176, WORK);
+  const deskArm = Overlay.singPoint(WIN, Overlay.SPRITE, WORK);
+  const ledge = P.warmPoint(WIN, 176, WORK);
+  const silk = P.webPoint(WIN, 176, WORK);
+  const autumn = P.goldPoint(WIN, 176, WORK);
+  const post = P.soarPoint(WIN, 176, WORK);
+  const bough = P.reachPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(arm.x - deskArm.x) < 1);
+  assert.ok(Math.abs(arm.lift - deskArm.lift) < 1);
+  assert.ok(Math.abs(arm.x - silk.x) > 8 || Math.abs(arm.lift - silk.lift) > 8, "not Loom's web");
+  assert.ok(Math.abs(arm.x - autumn.x) > 8 || Math.abs(arm.lift - autumn.lift) > 8, "not Fan's gold");
+  assert.ok(Math.abs(arm.x - post.x) > 8 || Math.abs(arm.lift - post.lift) > 8, "not Hook's soar");
+  assert.ok(Math.abs(arm.x - bough.x) > 8 || Math.abs(arm.lift - bough.lift) > 8, "not Hang's reach");
+  assert.ok(Math.abs(arm.x - ledge.x) > 8 || Math.abs(arm.lift - ledge.lift) > 8, "not Sun's warm");
+  const swingOn = P.singOnPath(0.25, { x: 40, lift: 0 }, { x: arm.x, lift: arm.lift });
+  const deskSwing = Overlay.singOnPath(0.25, { x: 40, lift: 0 }, { x: arm.x, lift: arm.lift });
+  const walkOn = P.warmOnPath(0.25, { x: 40, lift: 0 }, { x: arm.x, lift: arm.lift });
+  assert.equal(swingOn.x, deskSwing.x);
+  assert.equal(swingOn.lift, deskSwing.lift);
+  assert.ok(swingOn.lift > 0, "she swings onto the stile");
+  assert.ok(swingOn.lift !== walkOn.lift, "a swing, not Sun's walk");
+  const song = P.singPath(0.5);
+  const deskSong = Overlay.singPath(0.5);
+  assert.equal(song.lift, deskSong.lift);
+  assert.ok(song.rot < 0 && song.rot > -40, "a song on the lamp arm");
+  const hold = P.singHoldPath(0.5);
+  const deskHold = Overlay.singHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - -7) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "warm");
+    assert.notEqual(play.phase, "reach");
+    assert.notEqual(play.phase, "hook");
+    assert.notEqual(play.phase, "soar");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "sing") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "sing-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "sing-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.4)) < 3, "she holds the song on the lamp arm");
+    }
+  }
+  assert.ok(seen.has("sing-on"));
+  assert.ok(seen.has("sing"));
+  assert.ok(seen.has("sing-hold"));
+  assert.ok(seen.has("sing-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
