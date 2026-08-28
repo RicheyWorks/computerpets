@@ -15903,8 +15903,10 @@ test("the demo window plate walks Silver go the same way", () => {
   assert.equal(Overlay.playFor("catfish"), "barbel");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("house_centipede"), "sill");
-  assert.equal(Overlay.playFor("house_centipede"), "sill");
+  assert.equal(P.playFor("house_centipede"), "hunt");
+  assert.equal(Overlay.playFor("house_centipede"), "hunt");
+  assert.equal(P.playFor("millipede"), "sill");
+  assert.equal(Overlay.playFor("millipede"), "sill");
   assert.notEqual(P.playFor("american_eel"), "silver");
   assert.notEqual(P.playFor("american_eel"), "disk");
   assert.notEqual(P.playFor("american_eel"), "cling");
@@ -15979,6 +15981,107 @@ test("the demo window plate walks Silver go the same way", () => {
   assert.ok(seen.has("go"));
   assert.ok(seen.has("go-hold"));
   assert.ok(seen.has("go-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Haste hunt the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/log.ts"), "utf8"), /key: "house_centipede"[\s\S]{0,80}slug: "haste"/);
+  assert.equal(P.playFor("house_centipede"), "hunt");
+  const target = P.pickTarget([WIN], 80, "house_centipede", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "hunt");
+  assert.equal(target.side, "plastercrack");
+  assert.equal(target.leave, "pairs");
+  assert.equal(Overlay.playFor("house_centipede"), "hunt");
+  assert.equal(P.playFor("american_eel"), "go");
+  assert.equal(Overlay.playFor("american_eel"), "go");
+  assert.equal(P.playFor("lamprey"), "disk");
+  assert.equal(Overlay.playFor("lamprey"), "disk");
+  assert.equal(P.playFor("colugo"), "cling");
+  assert.equal(Overlay.playFor("colugo"), "cling");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(Overlay.playFor("moray"), "gape");
+  assert.equal(P.playFor("skink"), "scoot");
+  assert.equal(Overlay.playFor("skink"), "scoot");
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(Overlay.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("millipede"), "sill");
+  assert.equal(Overlay.playFor("millipede"), "sill");
+  assert.notEqual(P.playFor("house_centipede"), "haste");
+  assert.notEqual(P.playFor("house_centipede"), "go");
+  assert.notEqual(P.playFor("house_centipede"), "scoot");
+  assert.notEqual(P.playFor("house_centipede"), "gape");
+  assert.notEqual(target.kind, "haste");
+  assert.notEqual(target.kind, "go");
+  assert.notEqual(target.kind, "scoot");
+  assert.notEqual(target.kind, "gape");
+  assert.ok(target.holdLift > 16, "she hunts a sash-jamb crack as a plaster crack, not the floor");
+  assert.ok(P.DUR.huntHold > P.DUR.hunt, "the hold is the sit after; the hunt dart is the tell");
+  assert.ok(P.DUR.huntOn !== Overlay.DUR.goOn);
+  assert.ok(P.DUR.huntOn !== Overlay.DUR.scootOn);
+  assert.ok(P.DUR.huntOn !== Overlay.DUR.gapeOn);
+  assert.ok(P.DUR.huntOn !== Overlay.DUR.chirpOn);
+  assert.ok(P.DUR.huntOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.huntOn, Overlay.DUR.huntOn);
+  assert.equal(P.DUR.hunt, Overlay.DUR.hunt);
+  assert.equal(P.DUR.huntHold, Overlay.DUR.huntHold);
+  assert.equal(P.DUR.huntOff, Overlay.DUR.huntOff);
+  const crack = P.huntPoint(WIN, 176, WORK);
+  const deskCrack = Overlay.huntPoint(WIN, Overlay.SPRITE, WORK);
+  const scoot = P.scootPoint(WIN, 176, WORK);
+  const door = P.gapePoint(WIN, 176, WORK);
+  const pad = P.chirpPoint(WIN, 176, WORK);
+  const hole = P.goPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(crack.x - deskCrack.x) < 1);
+  assert.ok(Math.abs(crack.lift - deskCrack.lift) < 1);
+  assert.ok(Math.abs(crack.lift - scoot.lift) < 2, "same sash-jamb crack as Dash");
+  assert.ok(Math.abs(crack.x - scoot.x) > 8, "not Dash scoot");
+  assert.ok(Math.abs(crack.x - door.x) > 8 || Math.abs(crack.lift - door.lift) > 8, "not Door gape");
+  assert.ok(Math.abs(crack.x - pad.x) > 8 || Math.abs(crack.lift - pad.lift) > 8, "not Pad chirp");
+  assert.ok(Math.abs(crack.x - hole.x) > 8 || Math.abs(crack.lift - hole.lift) > 8, "not Silver go");
+  const walkOn = P.huntOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  const deskWalk = Overlay.huntOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const dart = P.huntPath(0.5);
+  const deskDart = Overlay.huntPath(0.5);
+  assert.equal(dart.lift, deskDart.lift);
+  assert.ok(dart.lift < -2, "she darts the hunt");
+  const hold = P.huntHoldPath(0.5);
+  const deskHold = Overlay.huntHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 8.1) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "scoot");
+    assert.notEqual(play.phase, "gape");
+    assert.notEqual(play.phase, "go");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "hunt") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "hunt-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "hunt-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 2.6)) < 3, "she holds the hunt sit in the plaster crack");
+    }
+  }
+  assert.ok(seen.has("hunt-on"));
+  assert.ok(seen.has("hunt"));
+  assert.ok(seen.has("hunt-hold"));
+  assert.ok(seen.has("hunt-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
