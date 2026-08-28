@@ -86,6 +86,9 @@
   const DEE_ROBIN_LINE = "Dee. You found the lawn first.";
   const CAT_RUI_LINE = "I sat. You were already here.";
   const CAT_SILL_LINE = "The sill will do.";
+  const GRASS_LIE_KEY = "cat";
+  const CAT_GRASS_LINE = "The moss will do.";
+  const GRASS_STAY_S = 4.8;
   const MEET_DOG_KEY = "dog";
   const MEET_CROW_KEY = "crow";
   const PEER_PIP_KEY = "dog";
@@ -322,9 +325,25 @@
     return false;
   }
 
+  function shouldSitGrass(key, flags) {
+    if (!flags || flags.hidden) return false;
+    if (key !== GRASS_LIE_KEY) return false;
+    const b = flags.grassBound;
+    return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+  }
+
+  function shouldSitGrass(key, flags) {
+    if (!flags || flags.hidden) return false;
+    if (key !== GRASS_LIE_KEY) return false;
+    const b = flags.grassBound;
+    return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+  }
+
   function shouldSitBound(key, flags) {
     if (!flags || flags.hidden) return false;
     if (key === WINDOW_SIT_KEY) {
+      const g = flags.grassBound;
+      if (g && Number.isFinite(g.x) && Number.isFinite(g.lift)) return true;
       const b = flags.windowBound;
       return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
     }
@@ -362,6 +381,10 @@
   }
 
   function boundPoint(flags, key) {
+    if (key === WINDOW_SIT_KEY || key === MEET_CAT_KEY || key === GRASS_LIE_KEY) {
+      const g = flags && flags.grassBound;
+      if (g && Number.isFinite(g.x) && Number.isFinite(g.lift)) return { x: g.x, lift: g.lift, kind: g.kind || "grass" };
+    }
     if (key === WINDOW_TRANSOM_KEY || key === MEET_RAVEN_KEY) {
       const b = flags && flags.transomBound;
       if (!b) return { x: 120, lift: 72, kind: "transom" };
@@ -491,6 +514,7 @@
       toLift: hold.lift,
       facing: hold.x >= guest.x ? 1 : -1,
       told: false,
+      boundKind: hold.kind,
     };
   }
 
@@ -516,6 +540,7 @@
   function tellLine(guest) {
     if (!guest) return "";
     if (guest.phase === "bound" || guest.meetKind === "bound") {
+      if (guest.boundKind === "grass" || guest.boundKind === "pad") return CAT_GRASS_LINE;
       if (guest.key === MEET_CROW_KEY || guest.key === WINDOW_CAP_KEY) return SOOT_CAP_LINE;
       if (guest.key === MEET_RAVEN_KEY || guest.key === WINDOW_TRANSOM_KEY) return WEDGE_TRANSOM_LINE;
       return CAT_SILL_LINE;
@@ -646,9 +671,14 @@
     if (next.phase === "bound") {
       const hold = boundPoint(flags, next.key);
       next.x = hold.x;
-      next.lift = hold.lift;
+      const bat = next.key === GRASS_LIE_KEY && (hold.kind === "grass" || hold.kind === "pad") && next.t > 1.1 && next.t < 2.4
+        ? Math.abs(Math.sin(next.t * 9)) * 7
+        : 0;
+      next.lift = hold.lift + bat;
       next.target = hold.x;
-      if (next.t >= TELL_S) return dismissCalled(next);
+      next.boundKind = hold.kind;
+      const stay = hold.kind === "grass" || hold.kind === "pad" ? GRASS_STAY_S : TELL_S;
+      if (next.t >= stay) return dismissCalled(next);
       return next;
     }
 
@@ -796,6 +826,9 @@
     DEE_ROBIN_LINE,
     CAT_RUI_LINE,
     CAT_SILL_LINE,
+    GRASS_LIE_KEY,
+    CAT_GRASS_LINE,
+    GRASS_STAY_S,
     MEET_DOG_KEY,
     MEET_CROW_KEY,
     PEER_PIP_KEY,
@@ -838,6 +871,7 @@
     shouldMeetRui,
     shouldMeetPeer,
     shouldSitBound,
+    shouldSitGrass,
     meetPoint,
     peerPoint,
     windowSitBound,

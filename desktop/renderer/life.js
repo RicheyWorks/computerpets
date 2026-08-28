@@ -109,7 +109,7 @@
         return stampHive(fresh, key);
       }
       const data = JSON.parse(raw);
-      const life = { ...blank(), ...data, v: 2, key, mess: Array.isArray(data.mess) ? data.mess : [], gifts: Array.isArray(data.gifts) ? data.gifts : [] };
+      const life = { ...blank(), ...data, v: 2, key, hidden: false, mess: Array.isArray(data.mess) ? data.mess : [], gifts: Array.isArray(data.gifts) ? data.gifts : [] };
       return stampHive(life, key);
     } catch {
       const fresh = blank();
@@ -120,7 +120,7 @@
 
   function save(key, life) {
     try {
-      localStorage.setItem(`${STORE}.${key}`, JSON.stringify(life));
+      localStorage.setItem(`${STORE}.${key}`, JSON.stringify({ ...life, hidden: false }));
     } catch {
       /* ignore */
     }
@@ -219,7 +219,7 @@
     }
 
     const neglected = life.hunger < 8 && life.mood < 18 && ageDays(life, now) > 0.2;
-    if (neglected && !life.hidden && Math.random() < hours * 0.8) life.hidden = true;
+    if (neglected && !life.hidden && key !== "red_panda" && Math.random() < hours * 0.8) life.hidden = true;
 
     if (trait.special === "reborn" && life.health <= 4) {
       life.hunger = 70;
@@ -251,6 +251,18 @@
     life.asleep = false;
     life.sleepHeld = false;
     return life;
+  }
+
+  function revealOnBoot(life) {
+    if (!life) return life;
+    life.hidden = false;
+    life.asleep = false;
+    life.sleepHeld = false;
+    return life;
+  }
+
+  function bootCmd(key) {
+    return key === "red_panda" ? "wander" : "talk";
   }
 
   function holdSleep(life) {
@@ -481,6 +493,8 @@
     decay,
     act,
     wake,
+    revealOnBoot,
+    bootCmd,
     holdSleep,
     sleepHolds,
     wanderWhileAsleep,

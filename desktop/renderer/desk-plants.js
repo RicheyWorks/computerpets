@@ -1,10 +1,14 @@
-﻿/** Disk the water lily and Felt the moss. Existing garden guests. Drag-place and lean in the wind. Not a new taxon. */
+/** Disk the water lily and Felt the moss. Existing garden guests. Drag-place, click a mode, lean in the wind. Not a new taxon. */
 (function (root) {
   const STORE = "computerpets.desktop.plants.v1";
   const PLANT_KEYS = ["water_lily", "moss"];
   const PLANT_NAMES = { water_lily: "Disk", moss: "Felt" };
+  const PLANT_MODES = ["still", "wind", "meet"];
+  const DEFAULT_MODE = { water_lily: "wind", moss: "meet" };
+  const GRASS_KEYS = ["moss"];
   const DEST_PX = 128;
   const WIND_HZ = 1.15;
+  const CLICK_PX = 8;
 
   function clamp(n, a, b) {
     return Math.max(a, Math.min(b, n));
@@ -12,6 +16,18 @@
 
   function isPlantKey(key) {
     return PLANT_KEYS.indexOf(key) >= 0;
+  }
+
+  function isPlantMode(mode) {
+    return PLANT_MODES.indexOf(mode) >= 0;
+  }
+
+  function defaultMode(key) {
+    return DEFAULT_MODE[key] || "wind";
+  }
+
+  function isGrass(key) {
+    return GRASS_KEYS.indexOf(key) >= 0;
   }
 
   function defaultSpot(key, width, height, i) {
@@ -22,6 +38,7 @@
       name: PLANT_NAMES[key] || key,
       x: clamp(w * (0.22 + (i || 0) * 0.28), 24, w - DEST_PX - 16),
       y: clamp(h * 0.62, 80, h - DEST_PX - 8),
+      mode: defaultMode(key),
       selected: false,
       dragging: false,
     };
@@ -33,6 +50,7 @@
     if (!raw || typeof raw !== "object") return spot;
     if (Number.isFinite(Number(raw.x))) spot.x = clamp(Number(raw.x), 8, Math.max(8, (width || 800) - 40));
     if (Number.isFinite(Number(raw.y))) spot.y = clamp(Number(raw.y), 8, Math.max(8, (height || 480) - 40));
+    if (isPlantMode(raw.mode)) spot.mode = raw.mode;
     return spot;
   }
 
@@ -51,7 +69,7 @@
   function savePlants(plants, storage) {
     const store = storage || (typeof localStorage !== "undefined" ? localStorage : null);
     if (!store || !store.setItem) return plants;
-    const rows = (Array.isArray(plants) ? plants : []).map((p) => ({ key: p.key, x: p.x, y: p.y }));
+    const rows = (Array.isArray(plants) ? plants : []).map((p) => ({ key: p.key, x: p.x, y: p.y, mode: isPlantMode(p.mode) ? p.mode : defaultMode(p.key) }));
     try {
       store.setItem(STORE, JSON.stringify(rows));
     } catch {
@@ -60,7 +78,8 @@
     return plants;
   }
 
-  function windLean(age, windOn, selected) {
+  function windLean(age, windOn, selected, mode) {
+    if (mode === "still") return 0;
     const gust = windOn ? 1 : 0.35;
     const hold = selected ? 0.4 : 1;
     return Math.sin((age || 0) * WIND_HZ * Math.PI * 2) * 7.5 * gust * hold;
@@ -134,12 +153,83 @@
     return `translate3d(${x}px, ${y}px, 0) rotate(${lean || 0}deg)`;
   }
 
+  function setMode(plant, mode) {
+    if (!plant) return plant;
+    return { ...plant, mode: isPlantMode(mode) ? mode : defaultMode(plant.key) };
+  }
+
+  function cycleMode(plant) {
+    if (!plant) return plant;
+    const i = PLANT_MODES.indexOf(plant.mode);
+    return setMode(plant, PLANT_MODES[(i + 1) % PLANT_MODES.length]);
+  }
+
+  function clickMoved(dx, dy, threshold) {
+    const lim = threshold == null ? CLICK_PX : threshold;
+    return Math.abs(dx || 0) > lim || Math.abs(dy || 0) > lim;
+  }
+
+  function plantChoiceMarks() {
+    return [
+      { id: "still", label: "Still" },
+      { id: "wind", label: "Wind" },
+      { id: "meet", label: "Meet" },
+    ];
+  }
+
+  function plantPick(id) {
+    return isPlantMode(id) ? id : null;
+  }
+
+  function isMeet(plant) {
+    return !!(plant && plant.mode === "meet");
+  }
+
+  function isStill(plant) {
+    return !!(plant && plant.mode === "still");
+  }
+
+  function grassBound(plant, work) {
+    if (!plant || !isMeet(plant)) return null;
+    if (!isGrass(plant.key) && plant.key !== "water_lily") return null;
+    const workH = Math.max(240, (work && work.height) || 800);
+    const floor = (work && work.floorLift) || 0;
+    const bottom = (plant.y || 0) + DEST_PX;
+    let lift = workH - bottom + 12;
+    if (!Number.isFinite(lift)) return null;
+    lift = Math.max(floor, Math.min(floor + 28, lift));
+    return {
+      kind: isGrass(plant.key) ? "grass" : "pad",
+      key: plant.key,
+      x: (plant.x || 0) + DEST_PX * 0.38,
+      lift,
+    };
+  }
+
+  function firstGrassBound(plants, work) {
+    const list = Array.isArray(plants) ? plants : [];
+    const moss = list.find((p) => p && isGrass(p.key) && isMeet(p));
+    if (moss) return grassBound(moss, work);
+    for (const p of list) {
+      const b = grassBound(p, work);
+      if (b) return b;
+    }
+    return null;
+  }
+
   const api = {
     STORE,
     PLANT_KEYS,
     PLANT_NAMES,
+    PLANT_MODES,
+    DEFAULT_MODE,
+    GRASS_KEYS,
     DEST_PX,
+    CLICK_PX,
     isPlantKey,
+    isPlantMode,
+    defaultMode,
+    isGrass,
     defaultSpot,
     parsePlant,
     loadPlants,
@@ -153,6 +243,15 @@
     endDrag,
     selectOnly,
     paintTransform,
+    setMode,
+    cycleMode,
+    clickMoved,
+    plantChoiceMarks,
+    plantPick,
+    isMeet,
+    isStill,
+    grassBound,
+    firstGrassBound,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetDeskPlants = api;
