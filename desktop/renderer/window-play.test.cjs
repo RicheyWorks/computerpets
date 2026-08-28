@@ -18876,3 +18876,160 @@ test("a moved window refits Gale's dry-dish sash light; sleep, card, and hide ab
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "run-off");
   assert.equal(play.abort, true);
 });
+
+test("Rack flags a sill nosing as an oak edge: walk the outer nosing, flag the white tail once, then walk off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("deer"), "flag");
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.notEqual(P.playFor("deer"), "rack");
+  assert.notEqual(P.playFor("deer"), "sill");
+  assert.notEqual(P.playFor("deer"), "run");
+  assert.notEqual(P.playFor("deer"), "cache");
+  assert.notEqual(P.playFor("deer"), "forage");
+  assert.notEqual(P.playFor("deer"), "carry");
+  assert.notEqual(P.playFor("deer"), "honk");
+  assert.notEqual(P.playFor("deer"), "pull");
+  assert.equal(P.DUR.runOn, 0.44, "Gale's run durations stay");
+  assert.equal(P.DUR.cacheOn, 0.66, "Dee's cache durations stay");
+  const target = P.pickTarget([WIN], 80, "deer", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "flag");
+  assert.equal(target.side, "oak");
+  assert.equal(target.leave, "oak");
+  assert.notEqual(target.kind, "run");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "forage");
+  assert.notEqual(target.kind, "carry");
+  assert.notEqual(target.kind, "honk");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 14, "she walks the outer sill nosing as an oak edge, not the floor");
+  assert.ok(P.DUR.flagHold > P.DUR.flag, "the stand is the hold; the white tail is the tell");
+  assert.ok(P.DUR.flagOn > P.DUR.flag, "a walk on, not the flag");
+  assert.ok(P.DUR.flagOn > P.DUR.runOn, "heavier than Gale's dash");
+  assert.ok(P.DUR.flagHold > P.DUR.runHold, "heavier than Gale's sit");
+  assert.ok(P.DUR.flagOn !== P.DUR.runOn);
+  assert.ok(P.DUR.flagOn !== P.DUR.cacheOn);
+  assert.ok(P.DUR.flagOn !== P.DUR.forageOn);
+  assert.ok(P.DUR.flagOn !== P.DUR.carryOn);
+  assert.ok(P.DUR.flagOn !== P.DUR.honkOn);
+  assert.ok(P.DUR.flagOn !== P.DUR.pullOn);
+  assert.ok(P.DUR.flagOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.flag !== P.DUR.run);
+  assert.ok(P.DUR.flag !== P.DUR.cache);
+  assert.ok(P.DUR.flagHold !== P.DUR.runHold);
+  assert.ok(P.DUR.flagHold !== P.DUR.cacheHold);
+  assert.ok(P.DUR.flagOff !== P.DUR.runOff);
+  assert.ok(P.DUR.flagOff !== P.DUR.cacheOff);
+  assert.ok(P.DUR.flagOff !== P.DUR.sillDown);
+  const oak = P.flagPoint(WIN, P.SPRITE, WORK);
+  const twig = P.cachePoint(WIN, P.SPRITE, WORK);
+  const meadow = P.foragePoint(WIN, P.SPRITE, WORK);
+  const litter = P.carryPoint(WIN, P.SPRITE, WORK);
+  const dry = P.runPoint(WIN, P.SPRITE, WORK);
+  const green = P.honkPoint(WIN, P.SPRITE, WORK);
+  const lawn = P.pullPoint(WIN, P.SPRITE, WORK);
+  assert.ok(oak.lift > 14, "the outer sill nosing as an oak edge, not the floor");
+  assert.ok(oak.x > WIN.x, "on the oak edge, inside the frame");
+  assert.ok(oak.x < WIN.x + WIN.width - 8, "inside the frame");
+  assert.ok(Math.abs(oak.x - twig.x) > 8 || Math.abs(oak.lift - twig.lift) > 8, "not Dee's meeting-rail nosing");
+  assert.ok(Math.abs(oak.x - meadow.x) > 8 || Math.abs(oak.lift - meadow.lift) > 8, "not Thrum's window-box nosing");
+  assert.ok(Math.abs(oak.x - litter.x) > 8 || Math.abs(oak.lift - litter.lift) > 8, "not Prowl's floor foot");
+  assert.ok(Math.abs(oak.x - dry.x) > 8 || Math.abs(oak.lift - dry.lift) > 8, "not Gale's sash light");
+  assert.ok(Math.abs(oak.x - green.x) > 8 || Math.abs(oak.lift - green.lift) > 8, "not Vee's apron");
+  assert.ok(Math.abs(oak.x - lawn.x) > 8 || Math.abs(oak.lift - lawn.lift) > 8, "not Brick's stool");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "deer", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sill nosing, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "deer", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sill nosing needs a walkable oak edge");
+  const galeOnly = P.pickTarget([{ id: "dry", x: 200, y: 80, width: 190, height: 174 }], 80, "deer", WORK, P.SPRITE);
+  assert.equal(galeOnly, null, "Rack needs a real outer nosing, not Gale's thinner dry light");
+  const galeDry = P.pickTarget([{ id: "dry", x: 200, y: 80, width: 190, height: 174 }], 80, "solifuge", WORK, P.SPRITE);
+  assert.ok(galeDry, "Gale still takes the sash light");
+  const walkOn = P.flagOnPath(0.25, { x: 40, lift: 0 }, { x: oak.x, lift: oak.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the outer nosing");
+  assert.ok(walkOn.lift < oak.lift, "a walk on, not already standing");
+  const flash = P.flagPath(0.5);
+  const still = P.flagHoldPath(0.5);
+  const bite = P.runPath(0.5);
+  const hide = P.cachePath(0.5);
+  assert.ok(flash.lift > 2, "the white tail flags once");
+  assert.ok(Math.abs(flash.x) < 2, "she stays on the oak edge");
+  assert.ok(flash.rot < -20 && flash.rot > -40, "a tail flag, not a dash or a honk");
+  assert.ok(flash.lift !== bite.lift, "not Gale's jaw bite");
+  assert.ok(flash.lift !== hide.lift, "not Dee's seed cache");
+  assert.ok(still.rot < 0, "she holds the flag briefly");
+  assert.ok(Math.abs(still.x - 0.25) < 0.2, "still on the oak edge");
+  assert.ok(still.lift > 0, "a brief oak stand, not a floor carry");
+  const off0 = P.flagOffPath(0, { x: oak.x, lift: oak.lift, rot: -14 }, { x: oak.x + 78, lift: 0 });
+  const offMid = P.flagOffPath(0.5, { x: oak.x, lift: oak.lift, rot: -14 }, { x: oak.x + 78, lift: 0 });
+  const off1 = P.flagOffPath(1, { x: oak.x, lift: oak.lift, rot: -14 }, { x: oak.x + 78, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - oak.x) < 2);
+  assert.ok(Math.abs(offMid.x - (oak.x + 78 * midEase)) < 10, "she walks off, not a dash");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "run");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "carry");
+    assert.notEqual(play.phase, "honk");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "flag") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "flag-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "flag-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.6)) < 4, "she holds the brief flag on the oak edge");
+    }
+    if (play.phase === "flag-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("flag-on"));
+  assert.ok(seen.has("flag"));
+  assert.ok(seen.has("flag-hold"));
+  assert.ok(seen.has("flag-off"));
+  assert.ok(!seen.has("run"), "Rack never uses Gale's run");
+  assert.ok(!seen.has("cache"), "Rack never uses Dee's cache");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Rack's oak-edge sill nosing; sleep, card, and hide abort; Rack never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "deer", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "flag"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "flag");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "flag");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "flag-off");
+  assert.equal(play.abort, true);
+});
