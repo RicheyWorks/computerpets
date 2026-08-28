@@ -21902,3 +21902,181 @@ test("a moved window refits Boom's crown-perch transom; sleep, card, and hide ab
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "howl-off");
   assert.equal(play.abort, true);
 });
+
+test("Gaze looks from a sash pulley box as a branch hollow: climb into the box, look (eyes fill the face), then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("howler"), "howl");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(P.playFor("dog"), "watch");
+  assert.equal(P.playFor("stingless"), "tend");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.notEqual(P.playFor("tarsier"), "gaze");
+  assert.notEqual(P.playFor("tarsier"), "hiss");
+  assert.notEqual(P.playFor("tarsier"), "pounce");
+  assert.notEqual(P.playFor("tarsier"), "perch");
+  assert.notEqual(P.playFor("tarsier"), "howl");
+  assert.notEqual(P.playFor("tarsier"), "tend");
+  assert.notEqual(P.playFor("tarsier"), "watch");
+  assert.notEqual(P.playFor("tarsier"), "still");
+  assert.notEqual(P.playFor("tarsier"), "sill");
+  assert.equal(P.DUR.howlOn, 1.23, "Boom howl durations stay");
+  assert.equal(P.DUR.tendOn, 2.04, "Pot tend durations stay");
+  assert.equal(P.DUR.hissOn, 1.18, "Heart hiss durations stay");
+  const target = P.pickTarget([WIN], 80, "tarsier", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "look");
+  assert.equal(target.side, "branchhollow");
+  assert.equal(target.leave, "eyes");
+  assert.notEqual(target.kind, "gaze");
+  assert.notEqual(target.kind, "hiss");
+  assert.notEqual(target.kind, "pounce");
+  assert.notEqual(target.kind, "perch");
+  assert.notEqual(target.kind, "howl");
+  assert.notEqual(target.kind, "tend");
+  assert.notEqual(target.kind, "watch");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she looks from a sash pulley box as a branch hollow, not the floor");
+  assert.ok(P.DUR.lookHold > P.DUR.look, "the hold is the stare after; the look is the tell");
+  assert.ok(P.DUR.lookOn > 0.5, "a climb into the box, not the look");
+  assert.ok(P.DUR.lookOn !== P.DUR.tendOn);
+  assert.ok(P.DUR.lookOn !== P.DUR.hissOn);
+  assert.ok(P.DUR.lookOn !== P.DUR.howlOn);
+  assert.ok(P.DUR.lookOn !== P.DUR.pounceOn);
+  assert.ok(P.DUR.lookOn !== P.DUR.perchOn);
+  assert.ok(P.DUR.lookOn !== P.DUR.watchHold);
+  assert.ok(P.DUR.lookOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.look !== P.DUR.tend);
+  assert.ok(P.DUR.look !== P.DUR.hiss);
+  assert.ok(P.DUR.look !== P.DUR.howl);
+  assert.ok(P.DUR.look !== P.DUR.pounce);
+  assert.ok(P.DUR.lookHold !== P.DUR.tendHold);
+  assert.ok(P.DUR.lookHold !== P.DUR.hissHold);
+  assert.ok(P.DUR.lookHold !== P.DUR.howlHold);
+  assert.ok(P.DUR.lookOff !== P.DUR.tendOff);
+  assert.ok(P.DUR.lookOff !== P.DUR.hissOff);
+  assert.ok(P.DUR.lookOff !== P.DUR.howlOff);
+  assert.ok(P.DUR.lookOff !== P.DUR.sillDown);
+  const hollow = P.lookPoint(WIN, P.SPRITE, WORK);
+  const wax = P.tendPoint(WIN, P.SPRITE, WORK);
+  const reveal = P.hissPoint(WIN, P.SPRITE, WORK);
+  const crown = P.howlPoint(WIN, P.SPRITE, WORK);
+  const rail = P.pouncePoint(WIN, P.SPRITE, WORK);
+  const shade = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(hollow.lift > 36, "the sash pulley box as a branch hollow, not the floor");
+  assert.ok(Math.abs(hollow.lift - wax.lift) < 8, "same sash pulley box furniture family as Pot");
+  assert.ok(Math.abs(hollow.x - wax.x) > 20, "same pulley box, not Pot's tend spot");
+  assert.ok(Math.abs(hollow.x - reveal.x) > 8 || Math.abs(hollow.lift - reveal.lift) > 20, "not Heart's sash-reveal hiss");
+  assert.ok(Math.abs(hollow.x - crown.x) > 8 || Math.abs(hollow.lift - crown.lift) > 20, "not Boom's transom howl");
+  assert.ok(Math.abs(hollow.x - rail.x) > 8 || Math.abs(hollow.lift - rail.lift) > 20, "not Leap's meeting-rail pounce");
+  assert.ok(Math.abs(hollow.x - shade.x) > 8 || Math.abs(hollow.lift - shade.lift) > 20, "not Echo's lamp-shade perch");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "tarsier", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash pulley box, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "tarsier", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash pulley box, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 186, height: 200 }], 80, "tarsier", WORK, P.SPRITE);
+  assert.equal(thin, null, "Gaze needs Pot's real pulley box, not a thinner hollow");
+  const box = P.pickTarget([{ id: "box", x: 200, y: 80, width: 186, height: 214 }], 80, "tarsier", WORK, P.SPRITE);
+  assert.ok(box, "a real sash pulley box as a branch hollow");
+  const pot = P.pickTarget([{ id: "box", x: 200, y: 80, width: 186, height: 214 }], 80, "stingless", WORK, P.SPRITE);
+  assert.ok(pot, "Pot still takes the pulley box");
+  const climbOn = P.lookOnPath(0.25, { x: 40, lift: 0 }, { x: hollow.x, lift: hollow.lift });
+  const tendOn = P.tendOnPath(0.25, { x: 40, lift: 0 }, { x: hollow.x, lift: hollow.lift });
+  const hissOn = P.hissOnPath(0.25, { x: 40, lift: 0 }, { x: hollow.x, lift: hollow.lift });
+  const howlOn = P.howlOnPath(0.25, { x: 40, lift: 0 }, { x: hollow.x, lift: hollow.lift });
+  const climbEase = 0.25 * 0.25 * 0.25 * (0.25 * (0.25 * 6 - 15) + 10);
+  assert.ok(climbOn.lift > hollow.lift * climbEase + 2, "she climbs into the pulley box");
+  assert.ok(climbOn.lift !== tendOn.lift, "a climb, not Pot's hover tend");
+  assert.ok(climbOn.lift !== hissOn.lift, "a climb, not Heart's slip");
+  assert.ok(climbOn.lift !== howlOn.lift, "a climb, not Boom's sit");
+  const eyes = P.lookPath(0.5);
+  const knead = P.tendPath(0.5);
+  const hiss = P.hissPath(0.5);
+  const boom = P.howlPath(0.5);
+  const hop = P.pouncePath(0.5);
+  const talk = P.perchTalkPath ? P.perchTalkPath(0.5) : P.perchPath(0.5);
+  assert.ok(eyes.lift > 2, "the eyes fill the face");
+  assert.ok(eyes.rot > 8, "the face is the eyes");
+  assert.ok(eyes.lift !== knead.lift, "not Pot's tend");
+  assert.ok(eyes.rot !== hiss.rot, "not Heart's hiss");
+  assert.ok(eyes.rot !== boom.rot, "not Boom's howl");
+  assert.ok(eyes.rot !== hop.rot, "not Leap's pounce");
+  assert.ok(eyes.rot !== talk.rot, "not Echo's perch");
+  const hold = P.lookHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 11.4) < 0.2, "the eyes are the face");
+  assert.ok(Math.abs(hold.x - 3.2) < 0.2, "she holds the branch hollow");
+  assert.ok(hold.lift > 2, "looking from the hollow, not a tend knead");
+  const off0 = P.lookOffPath(0, { x: hollow.x, lift: hollow.lift, rot: 11.4 }, { x: hollow.x + 48, lift: 0 });
+  const offMid = P.lookOffPath(0.5, { x: hollow.x, lift: hollow.lift, rot: 11.4 }, { x: hollow.x + 48, lift: 0 });
+  const off1 = P.lookOffPath(1, { x: hollow.x, lift: hollow.lift, rot: 11.4 }, { x: hollow.x + 48, lift: 0 });
+  assert.ok(Math.abs(off0.x - hollow.x) < 2);
+  assert.ok(offMid.lift > 4, "a leave off the branch hollow");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "tend");
+    assert.notEqual(play.phase, "hiss");
+    assert.notEqual(play.phase, "howl");
+    assert.notEqual(play.phase, "pounce");
+    assert.notEqual(play.phase, "perch");
+    assert.notEqual(play.phase, "watch");
+    assert.notEqual(play.phase, "still");
+    assert.notEqual(play.phase, "gaze");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "look") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "look-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "look-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.4)) < 3, "she holds the look in the hollow");
+    }
+    if (play.phase === "look-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("look-on"));
+  assert.ok(seen.has("look"));
+  assert.ok(seen.has("look-hold"));
+  assert.ok(seen.has("look-off"));
+  assert.ok(!seen.has("tend"), "Gaze never uses Pot's tend");
+  assert.ok(!seen.has("hiss"), "Gaze never uses Heart's hiss");
+  assert.ok(!seen.has("howl"), "Gaze never uses Boom's howl");
+  assert.ok(!seen.has("gaze"), "Gaze never uses gaze as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Gaze's branch-hollow pulley box; sleep, card, and hide abort; Gaze never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "tarsier", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "look"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "look");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "look");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "look-off");
+  assert.equal(play.abort, true);
+});
+
