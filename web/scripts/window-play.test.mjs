@@ -12108,3 +12108,95 @@ test("the demo window plate walks Clasp's grip the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+test("the demo window plate walks Gale's run the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "solifuge"[\s\S]{0,80}slug: "gale"/);
+  assert.equal(P.playFor("solifuge"), "run");
+  const target = P.pickTarget([WIN], 80, "solifuge", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "run");
+  assert.equal(target.side, "dry");
+  assert.equal(target.leave, "dry");
+  assert.equal(Overlay.playFor("solifuge"), "run");
+  assert.equal(P.playFor("tick"), "grip");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.playFor("manta"), "barrel");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.notEqual(P.playFor("solifuge"), "gale");
+  assert.notEqual(target.kind, "grip");
+  assert.notEqual(target.kind, "tip");
+  assert.notEqual(target.kind, "circle");
+  assert.notEqual(target.kind, "field");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she runs a sash light as a dry dish, not the floor");
+  assert.ok(P.DUR.runHold > P.DUR.run, "the brief sit is the hold; the jaw bite is the tell");
+  assert.ok(P.DUR.runOn !== Overlay.DUR.gripOn);
+  assert.ok(P.DUR.runOn !== Overlay.DUR.tipOn);
+  assert.ok(P.DUR.runOn !== Overlay.DUR.fieldOn);
+  assert.ok(P.DUR.runOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.gripOn, Overlay.DUR.gripOn);
+  assert.equal(P.DUR.runOn, Overlay.DUR.runOn);
+  assert.equal(P.DUR.run, Overlay.DUR.run);
+  assert.equal(P.DUR.runHold, Overlay.DUR.runHold);
+  assert.equal(P.DUR.runOff, Overlay.DUR.runOff);
+  const dry = P.runPoint(WIN, 176, WORK);
+  const deskDry = Overlay.runPoint(WIN, 176, WORK);
+  assert.equal(dry.x, deskDry.x);
+  assert.equal(dry.lift, deskDry.lift);
+  const ink = P.tipPoint(WIN, 176, WORK);
+  const field = P.fieldPoint(WIN, 176, WORK);
+  const pad = P.openPoint(WIN, 176, WORK);
+  const hem = P.gripPoint(WIN, 176, WORK);
+  assert.ok(dry.lift > 36, "the sash light as a dry dish");
+  assert.ok(Math.abs(dry.x - ink.x) > 8 || Math.abs(dry.lift - ink.lift) > 8, "not Drake");
+  assert.ok(Math.abs(dry.x - field.x) > 8 || Math.abs(dry.lift - field.lift) > 8, "not Flux");
+  assert.ok(Math.abs(dry.x - pad.x) > 8 || Math.abs(dry.lift - pad.lift) > 8, "not Disk");
+  assert.ok(Math.abs(dry.x - hem.x) > 8 || Math.abs(dry.lift - hem.lift) > 8, "not Clasp");
+  const dashOn = P.runOnPath(0.25, { x: 40, lift: 0 }, { x: dry.x, lift: dry.lift });
+  const deskDash = Overlay.runOnPath(0.25, { x: 40, lift: 0 }, { x: dry.x, lift: dry.lift });
+  assert.equal(dashOn.x, deskDash.x);
+  assert.equal(dashOn.lift, deskDash.lift);
+  assert.ok(dashOn.lift > 0, "she dashes onto the glass");
+  const bite = P.runPath(0.5);
+  const deskBite = Overlay.runPath(0.5);
+  assert.equal(bite.lift, deskBite.lift);
+  assert.ok(bite.lift < 0, "the jaws bite once");
+  assert.ok(Math.abs(bite.x) < 4, "she stays on the dry glass");
+  const still = P.runHoldPath(0.5);
+  const deskStill = Overlay.runHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.rot < 0, "she holds the bite briefly");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "grip");
+    assert.notEqual(play.phase, "tip");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "run") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "run-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "run-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.8)) < 4, "she holds the brief bite on the dry glass");
+    }
+  }
+  assert.ok(seen.has("run-on"));
+  assert.ok(seen.has("run"));
+  assert.ok(seen.has("run-hold"));
+  assert.ok(seen.has("run-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});

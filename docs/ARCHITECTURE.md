@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (Clasp grips a sash apron hem as a blotter hem; ninth corner leftover done; next leftover is Gale; catalog stays 220) |
+| **Last Updated** | 2026-08-27 (Gale runs a sash light as a dry dish; tenth corner leftover done; next leftover is Rack; catalog stays 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
