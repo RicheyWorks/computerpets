@@ -16355,7 +16355,7 @@ test("Dee caches a meeting-rail nosing as a twig cup: hop onto the nosing, hide 
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("robin"), "pull");
-  assert.equal(P.playFor("squirrel"), "sill");
+  assert.equal(P.playFor("squirrel"), "bury");
   const target = P.pickTarget([WIN], 80, "chickadee", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "cache");
@@ -16526,7 +16526,7 @@ test("Brick pulls a window stool as a lawn: hop onto the stool, listen, pull onc
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("canada_goose"), "honk");
-  assert.equal(P.playFor("squirrel"), "sill");
+  assert.equal(P.playFor("squirrel"), "bury");
   const target = P.pickTarget([WIN], 80, "robin", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "pull");
@@ -19188,5 +19188,175 @@ test("a moved window refits Cape's rafter-fold soffit; sleep, card, and hide abo
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "fold-off");
+  assert.equal(play.abort, true);
+});
+
+test("Cache buries a window stool as an oak dish: hop onto the stool, bury a thought, then hop off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("mining_bee"), "dig");
+  assert.equal(P.playFor("saguaro"), "store");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.notEqual(P.playFor("squirrel"), "cache");
+  assert.notEqual(P.playFor("squirrel"), "seed");
+  assert.notEqual(P.playFor("squirrel"), "pull");
+  assert.notEqual(P.playFor("squirrel"), "raise");
+  assert.notEqual(P.playFor("squirrel"), "plow");
+  assert.notEqual(P.playFor("squirrel"), "dig");
+  assert.notEqual(P.playFor("squirrel"), "store");
+  assert.notEqual(P.playFor("squirrel"), "hide");
+  assert.notEqual(P.playFor("squirrel"), "sill");
+  assert.equal(P.DUR.cacheOn, 0.66, "Dee's cache durations stay");
+  assert.equal(P.DUR.seedOn, 2.22, "Mast's seed durations stay");
+  assert.equal(P.DUR.pullOn, 0.71, "Brick's pull durations stay");
+  const target = P.pickTarget([WIN], 80, "squirrel", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "bury");
+  assert.equal(target.side, "oakdish");
+  assert.equal(target.leave, "thought");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "seed");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "raise");
+  assert.notEqual(target.kind, "plow");
+  assert.notEqual(target.kind, "dig");
+  assert.notEqual(target.kind, "store");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she buries a window stool as an oak dish, not the floor");
+  assert.ok(P.DUR.buryHold > P.DUR.bury, "the hold is the thought staying hid; the press is the tell");
+  assert.ok(P.DUR.buryOn > 0.5, "a hop onto the stool, not the press");
+  assert.ok(P.DUR.buryOn !== P.DUR.cacheOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.seedOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.pullOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.raiseOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.plowOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.digOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.storeOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.foldOn);
+  assert.ok(P.DUR.buryOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.bury !== P.DUR.cache);
+  assert.ok(P.DUR.bury !== P.DUR.seed);
+  assert.ok(P.DUR.bury !== P.DUR.pull);
+  assert.ok(P.DUR.buryHold !== P.DUR.cacheHold);
+  assert.ok(P.DUR.buryHold !== P.DUR.pullHold);
+  assert.ok(P.DUR.buryOff !== P.DUR.cacheOff);
+  assert.ok(P.DUR.buryOff !== P.DUR.pullOff);
+  assert.ok(P.DUR.buryOff !== P.DUR.sillDown);
+  const oak = P.buryPoint(WIN, P.SPRITE, WORK);
+  const cup = P.cachePoint(WIN, P.SPRITE, WORK);
+  const dish = P.seedPoint(WIN, P.SPRITE, WORK);
+  const lawn = P.pullPoint(WIN, P.SPRITE, WORK);
+  const bark = P.raisePoint(WIN, P.SPRITE, WORK);
+  const sand = P.plowPoint(WIN, P.SPRITE, WORK);
+  const bank = P.digPoint(WIN, P.SPRITE, WORK);
+  const tray = P.storePoint(WIN, P.SPRITE, WORK);
+  assert.ok(oak.lift > 16, "the interior stool as an oak dish, not the floor");
+  assert.ok(oak.lift < cup.lift - 80, "a stool oak dish, not Dee's meeting-rail nosing");
+  assert.ok(Math.abs(oak.x - dish.x) > 20 || Math.abs(oak.lift - dish.lift) > 10, "not Mast's acorn dish");
+  assert.ok(Math.abs(oak.x - lawn.x) > 20 || Math.abs(oak.lift - lawn.lift) > 10, "not Brick's lawn");
+  assert.ok(Math.abs(oak.x - bark.x) > 20 || Math.abs(oak.lift - bark.lift) > 10, "not Barb's bark tray");
+  assert.ok(Math.abs(oak.x - sand.x) > 20 || Math.abs(oak.lift - sand.lift) > 10, "not Ledger's plow");
+  assert.ok(Math.abs(oak.x - bank.x) > 20 || Math.abs(oak.lift - bank.lift) > 10, "not Bank's sand bank");
+  assert.ok(Math.abs(oak.x - tray.x) > 20 || Math.abs(oak.lift - tray.lift) > 10, "not Arm's sand tray");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "squirrel", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real stool, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "squirrel", WORK, P.SPRITE);
+  assert.equal(short, null, "a real interior stool, not a short sash");
+  const brickOnly = P.pickTarget([{ id: "lawn", x: 200, y: 80, width: 186, height: 158 }], 80, "squirrel", WORK, P.SPRITE);
+  assert.equal(brickOnly, null, "Cache needs a real oak dish, not Brick's thinner lawn");
+  const stool = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 194, height: 162 }], 80, "squirrel", WORK, P.SPRITE);
+  assert.ok(stool, "a real window stool as an oak dish");
+  const brick = P.pickTarget([{ id: "lawn", x: 200, y: 80, width: 186, height: 158 }], 80, "robin", WORK, P.SPRITE);
+  assert.ok(brick, "Brick still takes the thinner lawn");
+  const hopOn = P.buryOnPath(0.25, { x: 40, lift: 0 }, { x: oak.x, lift: oak.lift });
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(hopOn.lift > oak.lift * hopEase + 4, "she hops onto the oak dish");
+  const press = P.buryPath(0.45);
+  const seedDrop = P.seedPath(0.5);
+  const yank = P.pullPath(0.42);
+  const hide = P.cachePath(0.16);
+  const sting = P.raisePath(0.5);
+  assert.ok(press.lift < -6, "she presses a thought into the wood");
+  assert.ok(press.lift < seedDrop.lift - 10, "a bury press, not Mast's seed drop");
+  assert.ok(Math.abs(press.x) < 3, "the thought stays under her, not a letter dropped aside");
+  assert.ok(press.lift !== yank.lift, "not Brick's worm pull");
+  assert.ok(press.lift !== hide.lift, "not Dee's hide");
+  assert.ok(press.rot !== sting.rot, "not Barb's tail raise");
+  const still = P.buryHoldPath(0.5);
+  assert.ok(still.lift < -3, "she holds over the buried thought");
+  assert.ok(Math.abs(still.x - 0.5) < 0.2, "the thought stays hid");
+  const off0 = P.buryOffPath(0, { x: oak.x, lift: oak.lift - 4.6, rot: 9 }, { x: oak.x + 47, lift: 0 });
+  const offMid = P.buryOffPath(0.5, { x: oak.x, lift: oak.lift - 4.6, rot: 9 }, { x: oak.x + 47, lift: 0 });
+  const off1 = P.buryOffPath(1, { x: oak.x, lift: oak.lift - 4.6, rot: 9 }, { x: oak.x + 47, lift: 0 });
+  assert.ok(Math.abs(off0.x - oak.x) < 2);
+  assert.ok(offMid.lift > 4, "a hop off the oak dish");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "seed");
+    assert.notEqual(play.phase, "pull");
+    assert.notEqual(play.phase, "raise");
+    assert.notEqual(play.phase, "plow");
+    assert.notEqual(play.phase, "dig");
+    assert.notEqual(play.phase, "store");
+    assert.notEqual(play.phase, "fold");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bury") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bury-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bury-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 4.6)) < 4, "she holds over the buried thought");
+    }
+    if (play.phase === "bury-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("bury-on"));
+  assert.ok(seen.has("bury"));
+  assert.ok(seen.has("bury-hold"));
+  assert.ok(seen.has("bury-off"));
+  assert.ok(!seen.has("cache"), "Cache never uses Dee's cache");
+  assert.ok(!seen.has("seed"), "Cache never uses Mast's seed");
+  assert.ok(!seen.has("pull"), "Cache never uses Brick's pull");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Cache's oak-dish stool; sleep, card, and hide abort; Cache never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "squirrel", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "bury"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "bury");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "bury");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bury-off");
   assert.equal(play.abort, true);
 });

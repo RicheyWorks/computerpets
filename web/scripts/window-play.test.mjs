@@ -10359,7 +10359,7 @@ test("the demo window plate walks Dee's cache the same way", () => {
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("robin"), "pull");
-  assert.equal(P.playFor("squirrel"), "sill");
+  assert.equal(P.playFor("squirrel"), "bury");
   assert.notEqual(target.kind, "dee");
   assert.notEqual(target.kind, "soar");
   assert.notEqual(target.kind, "hiss");
@@ -10521,7 +10521,7 @@ test("the demo window plate walks Brick's pull the same way", () => {
   assert.equal(P.playFor("gecko"), "sill");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("canada_goose"), "honk");
-  assert.equal(P.playFor("squirrel"), "sill");
+  assert.equal(P.playFor("squirrel"), "bury");
   assert.notEqual(target.kind, "brick");
   assert.notEqual(target.kind, "cache");
   assert.notEqual(target.kind, "soar");
@@ -12381,6 +12381,95 @@ test("the demo window plate walks Cape's fold the same way", () => {
   assert.ok(seen.has("fold"));
   assert.ok(seen.has("fold-hold"));
   assert.ok(seen.has("fold-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Cache's bury the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "squirrel"[\s\S]{0,80}slug: "cache"/);
+  assert.equal(P.playFor("squirrel"), "bury");
+  const target = P.pickTarget([WIN], 80, "squirrel", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "bury");
+  assert.equal(target.side, "oakdish");
+  assert.equal(target.leave, "thought");
+  assert.equal(Overlay.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(Overlay.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.notEqual(P.playFor("squirrel"), "cache");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "seed");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she buries a window stool as an oak dish, not the floor");
+  assert.ok(P.DUR.buryHold > P.DUR.bury, "the hold is the thought staying hid; the press is the tell");
+  assert.ok(P.DUR.buryOn !== Overlay.DUR.cacheOn);
+  assert.ok(P.DUR.buryOn !== Overlay.DUR.seedOn);
+  assert.ok(P.DUR.buryOn !== Overlay.DUR.pullOn);
+  assert.ok(P.DUR.buryOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.cacheOn, Overlay.DUR.cacheOn);
+  assert.equal(P.DUR.buryOn, Overlay.DUR.buryOn);
+  assert.equal(P.DUR.bury, Overlay.DUR.bury);
+  assert.equal(P.DUR.buryHold, Overlay.DUR.buryHold);
+  assert.equal(P.DUR.buryOff, Overlay.DUR.buryOff);
+  const oak = P.buryPoint(WIN, 176, WORK);
+  const deskOak = Overlay.buryPoint(WIN, 176, WORK);
+  assert.equal(oak.x, deskOak.x);
+  assert.equal(oak.lift, deskOak.lift);
+  const cup = P.cachePoint(WIN, 176, WORK);
+  const dish = P.seedPoint(WIN, 176, WORK);
+  const lawn = P.pullPoint(WIN, 176, WORK);
+  assert.ok(oak.lift > 16, "the interior stool as an oak dish");
+  assert.ok(oak.lift < cup.lift - 80, "not Dee");
+  assert.ok(Math.abs(oak.x - dish.x) > 20 || Math.abs(oak.lift - dish.lift) > 10, "not Mast");
+  assert.ok(Math.abs(oak.x - lawn.x) > 20 || Math.abs(oak.lift - lawn.lift) > 10, "not Brick");
+  const hopOn = P.buryOnPath(0.25, { x: 40, lift: 0 }, { x: oak.x, lift: oak.lift });
+  const deskHop = Overlay.buryOnPath(0.25, { x: 40, lift: 0 }, { x: oak.x, lift: oak.lift });
+  assert.equal(hopOn.x, deskHop.x);
+  assert.equal(hopOn.lift, deskHop.lift);
+  assert.ok(hopOn.lift > 0, "she hops onto the oak dish");
+  const press = P.buryPath(0.45);
+  const deskPress = Overlay.buryPath(0.45);
+  assert.equal(press.lift, deskPress.lift);
+  assert.ok(press.lift < -6, "she presses a thought into the wood");
+  const still = P.buryHoldPath(0.5);
+  const deskStill = Overlay.buryHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.lift < -3, "she holds over the buried thought");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "seed");
+    assert.notEqual(play.phase, "pull");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bury") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bury-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bury-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 4.6)) < 4, "she holds over the buried thought");
+    }
+  }
+  assert.ok(seen.has("bury-on"));
+  assert.ok(seen.has("bury"));
+  assert.ok(seen.has("bury-hold"));
+  assert.ok(seen.has("bury-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
