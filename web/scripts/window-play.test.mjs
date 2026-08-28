@@ -12937,7 +12937,7 @@ test("the demo window plate walks Spine bristle the same way", () => {
   assert.equal(P.playFor("parrot"), "hook");
   assert.equal(P.playFor("hedgehog"), "ball");
   assert.equal(P.playFor("beaver"), "gnaw");
-  assert.equal(P.playFor("black_bear"), "sill");
+  assert.equal(P.playFor("black_bear"), "browse");
   assert.notEqual(P.playFor("porcupine"), "spine");
   assert.notEqual(P.playFor("porcupine"), "hook");
   assert.notEqual(P.playFor("porcupine"), "ball");
@@ -13004,6 +13004,97 @@ test("the demo window plate walks Spine bristle the same way", () => {
   assert.ok(seen.has("bristle"));
   assert.ok(seen.has("bristle-hold"));
   assert.ok(seen.has("bristle-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+
+test("the demo window plate walks Coal browse the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "black_bear"[\s\S]{0,80}slug: "coal"/);
+  assert.equal(P.playFor("black_bear"), "browse");
+  const target = P.pickTarget([WIN], 80, "black_bear", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "browse");
+  assert.equal(target.side, "oakdenside");
+  assert.equal(target.leave, "size");
+  assert.equal(Overlay.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("salamander"), "cover");
+  assert.equal(Overlay.playFor("salamander"), "cover");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("porcupine"), "bristle");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("sloth"), "sill");
+  assert.notEqual(P.playFor("black_bear"), "coal");
+  assert.notEqual(P.playFor("black_bear"), "forage");
+  assert.notEqual(P.playFor("black_bear"), "cover");
+  assert.notEqual(target.kind, "cover");
+  assert.notEqual(target.kind, "forage");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she browses a window well as an oak denside, not the sash foot");
+  assert.ok(P.DUR.browseHold > P.DUR.browse, "the browse is the tell; the hold is the size that fills the well");
+  assert.ok(P.DUR.browseOn !== Overlay.DUR.coverOn);
+  assert.ok(P.DUR.browseOn !== Overlay.DUR.forageOn);
+  assert.ok(P.DUR.browseOn !== Overlay.DUR.buryOn);
+  assert.ok(P.DUR.browseOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.coverOn, Overlay.DUR.coverOn);
+  assert.equal(P.DUR.browseOn, Overlay.DUR.browseOn);
+  assert.equal(P.DUR.browse, Overlay.DUR.browse);
+  const den = P.browsePoint(WIN, 176, WORK);
+  const deskDen = Overlay.browsePoint(WIN, Overlay.SPRITE, WORK);
+  const mold = P.coverPoint(WIN, 176, WORK);
+  const meadow = P.foragePoint(WIN, 176, WORK);
+  assert.ok(Math.abs(den.x - deskDen.x) < 1);
+  assert.ok(Math.abs(den.lift - deskDen.lift) < 1);
+  assert.ok(Math.abs(den.lift - mold.lift) < 4, "same well family as Dapple");
+  assert.ok(Math.abs(den.x - mold.x) > 8, "she fills the well, not Dapple cover");
+  assert.ok(Math.abs(den.x - meadow.x) > 8 || Math.abs(den.lift - meadow.lift) > 8, "not Thrum forage");
+  const walkOn = P.browseOnPath(0.25, { x: 40, lift: 0 }, { x: den.x, lift: den.lift });
+  const deskWalk = Overlay.browseOnPath(0.25, { x: 40, lift: 0 }, { x: den.x, lift: den.lift });
+  const creepOn = P.coverOnPath(0.25, { x: 40, lift: 0 }, { x: den.x, lift: den.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks to the well");
+  assert.ok(walkOn.lift !== creepOn.lift, "a walk, not Dapple cover");
+  const fill = P.browsePath(0.5);
+  const deskFill = Overlay.browsePath(0.5);
+  assert.equal(fill.lift, deskFill.lift);
+  assert.ok(fill.x > 2, "she fills the well");
+  const hold = P.browseHoldPath(0.5);
+  const deskHold = Overlay.browseHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.rot < -8);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "cover");
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "bury");
+    assert.notEqual(play.phase, "bristle");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "browse") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "browse-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "browse-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 7.6)) < 3, "she fills the well; size is the tell");
+    }
+  }
+  assert.ok(seen.has("browse-on"));
+  assert.ok(seen.has("browse"));
+  assert.ok(seen.has("browse-hold"));
+  assert.ok(seen.has("browse-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
