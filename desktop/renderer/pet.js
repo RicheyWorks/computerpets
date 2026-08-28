@@ -543,6 +543,7 @@ function calledFlags() {
   const G = window.PetCallGuests;
   const work = { width: window.innerWidth, height: window.innerHeight, floorLift: 0 };
   const bound = G && G.firstWindowBound ? G.firstWindowBound(playWindows(), work) : null;
+  const cap = G && G.firstCapBound ? G.firstCapBound(playWindows(), work) : null;
   return {
     hidden: !!(life && life.hidden),
     hostKey: kind && kind.key,
@@ -552,6 +553,7 @@ function calledFlags() {
     hostFacing: sim.facing,
     peers: called.map((c) => ({ key: c.key, x: c.x, lift: c.lift || 0, phase: c.phase })),
     windowBound: bound,
+    capBound: cap,
   };
 }
 
