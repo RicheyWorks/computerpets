@@ -18722,3 +18722,157 @@ test("a moved window refits Clasp's blotter-hem apron; sleep, card, and hide abo
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "grip-off");
   assert.equal(play.abort, true);
 });
+test("Gale runs a sash light as a dry dish: dash onto the glass, bite once, then dash off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("tick"), "grip");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.playFor("manta"), "barrel");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.notEqual(P.playFor("solifuge"), "gale");
+  assert.notEqual(P.playFor("solifuge"), "sill");
+  assert.notEqual(P.playFor("solifuge"), "grip");
+  assert.notEqual(P.playFor("solifuge"), "tip");
+  assert.notEqual(P.playFor("solifuge"), "circle");
+  assert.notEqual(P.playFor("solifuge"), "field");
+  assert.notEqual(P.playFor("solifuge"), "barrel");
+  assert.notEqual(P.playFor("solifuge"), "open");
+  assert.notEqual(P.playFor("solifuge"), "web");
+  assert.notEqual(P.playFor("solifuge"), "raise");
+  assert.equal(P.DUR.gripOn, 1.18, "Clasp's grip durations stay");
+  assert.equal(P.DUR.tipOn, 1.08, "Drake's tip durations stay");
+  const target = P.pickTarget([WIN], 80, "solifuge", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "run");
+  assert.equal(target.side, "dry");
+  assert.equal(target.leave, "dry");
+  assert.notEqual(target.kind, "grip");
+  assert.notEqual(target.kind, "tip");
+  assert.notEqual(target.kind, "circle");
+  assert.notEqual(target.kind, "field");
+  assert.notEqual(target.kind, "barrel");
+  assert.notEqual(target.kind, "open");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she runs a sash light as a dry dish, not the floor");
+  assert.ok(P.DUR.runHold > P.DUR.run, "the brief sit is the hold; the jaw bite is the tell");
+  assert.ok(P.DUR.runOn > P.DUR.run, "a dash on, not the bite");
+  assert.ok(P.DUR.runOn < P.DUR.gripOn, "quicker than Clasp's walk");
+  assert.ok(P.DUR.runHold < P.DUR.gripHold, "quicker than Clasp's wait");
+  assert.ok(P.DUR.runOn !== P.DUR.gripOn);
+  assert.ok(P.DUR.runOn !== P.DUR.tipOn);
+  assert.ok(P.DUR.runOn !== P.DUR.fieldOn);
+  assert.ok(P.DUR.runOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.run !== P.DUR.grip);
+  assert.ok(P.DUR.run !== P.DUR.tip);
+  assert.ok(P.DUR.runHold !== P.DUR.gripHold);
+  assert.ok(P.DUR.runHold !== P.DUR.tipHold);
+  assert.ok(P.DUR.runOff !== P.DUR.gripOff);
+  assert.ok(P.DUR.runOff !== P.DUR.tipOff);
+  assert.ok(P.DUR.runOff !== P.DUR.sillDown);
+  const dry = P.runPoint(WIN, P.SPRITE, WORK);
+  const ink = P.tipPoint(WIN, P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  const pad = P.openPoint(WIN, P.SPRITE, WORK);
+  const hem = P.gripPoint(WIN, P.SPRITE, WORK);
+  assert.ok(dry.lift > 36, "the sash light as a dry dish, not the floor");
+  assert.ok(dry.x > WIN.x, "on the glass, inside the frame");
+  assert.ok(dry.x < WIN.x + WIN.width - 8, "inside the frame");
+  assert.ok(Math.abs(dry.x - ink.x) > 8 || Math.abs(dry.lift - ink.lift) > 8, "not Drake's lower-sash ink tip");
+  assert.ok(Math.abs(dry.x - field.x) > 8 || Math.abs(dry.lift - field.lift) > 8, "not Flux's field sit");
+  assert.ok(Math.abs(dry.x - pad.x) > 8 || Math.abs(dry.lift - pad.lift) > 8, "not Disk's still-ink open");
+  assert.ok(Math.abs(dry.x - hem.x) > 8 || Math.abs(dry.lift - hem.lift) > 8, "not Clasp's apron hem");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "solifuge", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash light, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "solifuge", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash light needs height");
+  const inkOnly = P.pickTarget([{ id: "ink", x: 200, y: 80, width: 188, height: 172 }], 80, "solifuge", WORK, P.SPRITE);
+  assert.equal(inkOnly, null, "Gale needs a real dry light, not Drake's thinner ink dish");
+  const drakeInk = P.pickTarget([{ id: "ink", x: 200, y: 80, width: 188, height: 172 }], 80, "mallard", WORK, P.SPRITE);
+  assert.ok(drakeInk, "Drake still takes the lower-sash ink dish");
+  const dashOn = P.runOnPath(0.25, { x: 40, lift: 0 }, { x: dry.x, lift: dry.lift });
+  assert.ok(dashOn.lift > 0, "she dashes onto the glass");
+  assert.ok(dashOn.lift < dry.lift, "a dash on, not already sitting");
+  const bite = P.runPath(0.5);
+  const still = P.runHoldPath(0.5);
+  const clasp = P.gripPath(0.5);
+  const tip = P.tipPath(0.5);
+  assert.ok(bite.lift < 0, "the jaws bite once");
+  assert.ok(Math.abs(bite.x) < 4, "she stays on the dry glass");
+  assert.ok(bite.rot > 4 && bite.rot < 16, "a jaw snap, not a web or a sting");
+  assert.ok(bite.lift !== clasp.lift, "not Clasp's eight-leg pinch");
+  assert.ok(bite.lift !== tip.lift, "not Drake's dabble tip");
+  assert.ok(still.rot < 0, "she holds the bite briefly");
+  assert.ok(Math.abs(still.x - 0.5) < 0.2, "still on the dry glass");
+  assert.ok(still.lift > 0, "a brief dry sit, not a hem clasp");
+  const off0 = P.runOffPath(0, { x: dry.x, lift: dry.lift, rot: -1.4 }, { x: dry.x + 68, lift: 0 });
+  const offMid = P.runOffPath(0.5, { x: dry.x, lift: dry.lift, rot: -1.4 }, { x: dry.x + 68, lift: 0 });
+  const off1 = P.runOffPath(1, { x: dry.x, lift: dry.lift, rot: -1.4 }, { x: dry.x + 68, lift: 0 });
+  const midHaste = 0.5 * 0.5 * (2 - 0.5);
+  assert.ok(Math.abs(off0.x - dry.x) < 2);
+  assert.ok(Math.abs(offMid.x - (dry.x + 68 * midHaste)) < 10, "she dashes off, not a waddle");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "grip");
+    assert.notEqual(play.phase, "tip");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "field-hold");
+    assert.notEqual(play.phase, "barrel");
+    assert.notEqual(play.phase, "open");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "run") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "run-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "run-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.8)) < 4, "she holds the brief bite on the dry glass");
+    }
+    if (play.phase === "run-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("run-on"));
+  assert.ok(seen.has("run"));
+  assert.ok(seen.has("run-hold"));
+  assert.ok(seen.has("run-off"));
+  assert.ok(!seen.has("grip"), "Gale never uses Clasp's grip");
+  assert.ok(!seen.has("tip"), "Gale never uses Drake's tip");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Gale's dry-dish sash light; sleep, card, and hide abort; Gale never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "solifuge", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "run"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "run");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "run");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "run-off");
+  assert.equal(play.abort, true);
+});
