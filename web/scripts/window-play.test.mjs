@@ -14827,7 +14827,7 @@ test("the demo window plate walks Lid shut the same way", () => {
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(Overlay.playFor("turtle"), "bask");
   assert.equal(P.playFor("tuatara"), "crest");
-  assert.equal(P.playFor("bass"), "sill");
+  assert.equal(P.playFor("brook_trout"), "sill");
   assert.notEqual(P.playFor("box_turtle"), "lid");
   assert.notEqual(P.playFor("box_turtle"), "snap");
   assert.notEqual(P.playFor("box_turtle"), "bask");
@@ -14927,7 +14927,7 @@ test("the demo window plate walks Peak crest the same way", () => {
   assert.equal(Overlay.playFor("opossum"), "still");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("bass"), "sill");
+  assert.equal(P.playFor("brook_trout"), "sill");
   assert.notEqual(P.playFor("tuatara"), "peak");
   assert.notEqual(P.playFor("tuatara"), "still");
   assert.notEqual(P.playFor("tuatara"), "look");
@@ -14993,6 +14993,103 @@ test("the demo window plate walks Peak crest the same way", () => {
   assert.ok(seen.has("crest"));
   assert.ok(seen.has("crest-hold"));
   assert.ok(seen.has("crest-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Lunge mouth the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "bass"[\s\S]{0,80}slug: "lunge"/);
+  assert.equal(P.playFor("bass"), "mouth");
+  const target = P.pickTarget([WIN], 80, "bass", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "mouth");
+  assert.equal(target.side, "weedge");
+  assert.equal(target.leave, "wide");
+  assert.equal(Overlay.playFor("bass"), "mouth");
+  assert.equal(P.playFor("tuatara"), "crest");
+  assert.equal(Overlay.playFor("tuatara"), "crest");
+  assert.equal(P.playFor("box_turtle"), "shut");
+  assert.equal(Overlay.playFor("box_turtle"), "shut");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(Overlay.playFor("moray"), "gape");
+  assert.equal(P.playFor("kinkajou"), "wrap");
+  assert.equal(Overlay.playFor("kinkajou"), "wrap");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(Overlay.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("brook_trout"), "sill");
+  assert.notEqual(P.playFor("bass"), "lunge");
+  assert.notEqual(P.playFor("bass"), "gape");
+  assert.notEqual(P.playFor("bass"), "crest");
+  assert.notEqual(target.kind, "lunge");
+  assert.notEqual(target.kind, "gape");
+  assert.notEqual(target.kind, "wrap");
+  assert.notEqual(target.kind, "sip");
+  assert.ok(target.holdLift > 8, "he mouths a window-box as a weed edge, not the floor");
+  assert.ok(P.DUR.mouthHold > P.DUR.mouth, "the hold is the sit after; the wide mouth is the tell");
+  assert.ok(P.DUR.mouthOn !== Overlay.DUR.wrapOn);
+  assert.ok(P.DUR.mouthOn !== Overlay.DUR.sipOn);
+  assert.ok(P.DUR.mouthOn !== Overlay.DUR.gapeOn);
+  assert.ok(P.DUR.mouthOn !== Overlay.DUR.crestOn);
+  assert.ok(P.DUR.mouthOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.mouthOn, Overlay.DUR.mouthOn);
+  assert.equal(P.DUR.mouth, Overlay.DUR.mouth);
+  assert.equal(P.DUR.mouthHold, Overlay.DUR.mouthHold);
+  assert.equal(P.DUR.mouthOff, Overlay.DUR.mouthOff);
+  const edge = P.mouthPoint(WIN, 176, WORK);
+  const deskEdge = Overlay.mouthPoint(WIN, Overlay.SPRITE, WORK);
+  const bloom = P.wrapPoint(WIN, 176, WORK);
+  const nectar = P.sipPoint(WIN, 176, WORK);
+  const burrow = P.crestPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(edge.x - deskEdge.x) < 1);
+  assert.ok(Math.abs(edge.lift - deskEdge.lift) < 1);
+  assert.ok(Math.abs(edge.lift - bloom.lift) < 8, "same window-box as Wrist");
+  assert.ok(Math.abs(edge.x - bloom.x) > 20, "not Wrist wrap");
+  assert.ok(Math.abs(edge.lift - nectar.lift) > 8, "not Sip hover sip");
+  assert.ok(Math.abs(edge.x - burrow.x) > 8 || Math.abs(edge.lift - burrow.lift) > 8, "not Peak crest");
+  const walkOn = P.mouthOnPath(0.25, { x: 40, lift: 0 }, { x: edge.x, lift: edge.lift });
+  const deskWalk = Overlay.mouthOnPath(0.25, { x: 40, lift: 0 }, { x: edge.x, lift: edge.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const wide = P.mouthPath(0.5);
+  const deskWide = Overlay.mouthPath(0.5);
+  assert.equal(wide.lift, deskWide.lift);
+  assert.ok(wide.rot > 10 && wide.rot < 16, "he sits the wide mouth");
+  const hold = P.mouthHoldPath(0.5);
+  const deskHold = Overlay.mouthHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 3.8) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "wrap");
+    assert.notEqual(play.phase, "sip");
+    assert.notEqual(play.phase, "gape");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "mouth") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "mouth-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "mouth-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.2)) < 3, "he holds the wide mouth on the weed edge");
+    }
+  }
+  assert.ok(seen.has("mouth-on"));
+  assert.ok(seen.has("mouth"));
+  assert.ok(seen.has("mouth-hold"));
+  assert.ok(seen.has("mouth-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
