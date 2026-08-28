@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "bass", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "catfish", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -23922,7 +23922,7 @@ test("Lid shuts a window foot as a leaf dish: walk onto the foot, shut the hinge
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(P.playFor("parrot"), "hook");
   assert.equal(P.playFor("tuatara"), "crest");
-  assert.equal(P.playFor("brook_trout"), "sill");
+  assert.equal(P.playFor("catfish"), "sill");
   assert.notEqual(P.playFor("box_turtle"), "lid");
   assert.notEqual(P.playFor("box_turtle"), "snap");
   assert.notEqual(P.playFor("box_turtle"), "bask");
@@ -24094,7 +24094,7 @@ test("Peak crests a sash pulley box as a stone burrow: walk into the box, sit th
   assert.equal(P.playFor("opossum"), "still");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("stingless"), "tend");
-  assert.equal(P.playFor("brook_trout"), "sill");
+  assert.equal(P.playFor("catfish"), "sill");
   assert.notEqual(P.playFor("tuatara"), "peak");
   assert.notEqual(P.playFor("tuatara"), "still");
   assert.notEqual(P.playFor("tuatara"), "look");
@@ -24266,7 +24266,7 @@ test("Lunge mouths a window-box as a weed edge: walk onto the box, sit the wide 
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("bumblebee"), "forage");
   assert.equal(P.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("brook_trout"), "sill");
+  assert.equal(P.playFor("catfish"), "sill");
   assert.notEqual(P.playFor("bass"), "lunge");
   assert.notEqual(P.playFor("bass"), "gape");
   assert.notEqual(P.playFor("bass"), "crest");
@@ -24430,5 +24430,201 @@ test("a moved window refits Lunge's weed-edge window-box; sleep, card, and hide 
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "mouth-off");
+  assert.equal(play.abort, true);
+});
+
+test("Speck marks a meeting rail as a riffle cup: walk onto the rail, show the worm marks, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("brook_trout"), "mark");
+  assert.equal(P.MARK, "mark");
+  assert.equal(P.playFor("bass"), "mouth");
+  assert.equal(P.playFor("tuatara"), "crest");
+  assert.equal(P.playFor("nautilus"), "rise");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("venus_flytrap"), "count");
+  assert.equal(P.playFor("mussel"), "filter");
+  assert.equal(P.playFor("moss"), "lean");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("catfish"), "sill");
+  assert.notEqual(P.playFor("brook_trout"), "speck");
+  assert.notEqual(P.playFor("brook_trout"), "rise");
+  assert.notEqual(P.playFor("brook_trout"), "mouth");
+  assert.notEqual(P.playFor("brook_trout"), "count");
+  assert.notEqual(P.playFor("brook_trout"), "filter");
+  assert.notEqual(P.playFor("brook_trout"), "lean");
+  assert.notEqual(P.playFor("brook_trout"), "cache");
+  assert.notEqual(P.playFor("brook_trout"), "sill");
+  assert.equal(P.DUR.mouthOn, 1.69, "Lunge mouth durations stay");
+  assert.equal(P.DUR.riseOn, 1.58, "Chamber rise durations stay");
+  assert.equal(P.DUR.crestOn, 1.54, "Peak crest durations stay");
+  assert.equal(P.DUR.gapeOn, 1.16, "Door gape durations stay");
+  const target = P.pickTarget([WIN], 80, "brook_trout", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "mark");
+  assert.equal(target.side, "riffle");
+  assert.equal(target.leave, "marks");
+  assert.notEqual(target.kind, "speck");
+  assert.notEqual(target.kind, "rise");
+  assert.notEqual(target.kind, "mouth");
+  assert.notEqual(target.kind, "count");
+  assert.notEqual(target.kind, "filter");
+  assert.notEqual(target.kind, "lean");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she marks a meeting rail as a riffle cup, not the floor");
+  assert.ok(P.DUR.markHold > P.DUR.mark, "the hold is the sit after; the worm marks are the tell");
+  assert.ok(P.DUR.markOn > 1.0, "a walk onto the rail, not the mark");
+  assert.ok(P.DUR.markOn !== P.DUR.countOn);
+  assert.ok(P.DUR.markOn !== P.DUR.filterOn);
+  assert.ok(P.DUR.markOn !== P.DUR.leanOn);
+  assert.ok(P.DUR.markOn !== P.DUR.cacheOn);
+  assert.ok(P.DUR.markOn !== P.DUR.mouthOn);
+  assert.ok(P.DUR.markOn !== P.DUR.riseOn);
+  assert.ok(P.DUR.markOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.mark !== P.DUR.count);
+  assert.ok(P.DUR.mark !== P.DUR.filter);
+  assert.ok(P.DUR.mark !== P.DUR.lean);
+  assert.ok(P.DUR.mark !== P.DUR.mouth);
+  assert.ok(P.DUR.markHold !== P.DUR.countHold);
+  assert.ok(P.DUR.markHold !== P.DUR.filterHold);
+  assert.ok(P.DUR.markHold !== P.DUR.leanHold);
+  assert.ok(P.DUR.markOff !== P.DUR.cacheOff);
+  assert.ok(P.DUR.markOff !== P.DUR.mouthOff);
+  assert.ok(P.DUR.markOff !== P.DUR.sillDown);
+  const riffle = P.markPoint(WIN, P.SPRITE, WORK);
+  const cup = P.countPoint(WIN, P.SPRITE, WORK);
+  const bed = P.filterPoint(WIN, P.SPRITE, WORK);
+  const page = P.leanPoint(WIN, P.SPRITE, WORK);
+  const nosing = P.cachePoint(WIN, P.SPRITE, WORK);
+  const edge = P.mouthPoint(WIN, P.SPRITE, WORK);
+  const rooms = P.risePoint(WIN, "left", 0, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(riffle.lift > 8, "the meeting rail as a riffle cup, not the floor");
+  assert.ok(Math.abs(riffle.lift - cup.lift) < 24, "same meeting-rail furniture family as Snap");
+  assert.ok(Math.abs(riffle.x - cup.x) > 12, "same meeting rail, not Snap's count spot");
+  assert.ok(Math.abs(riffle.x - bed.x) > 12, "same meeting rail, not Hinge's filter gap");
+  assert.ok(Math.abs(riffle.x - page.x) > 12, "same meeting rail, not Felt's lean");
+  assert.ok(Math.abs(riffle.x - nosing.x) > 8, "same meeting rail, not Dee's cache nosing");
+  assert.ok(Math.abs(riffle.lift - edge.lift) > 8 || Math.abs(riffle.x - edge.x) > 8, "not Lunge's window-box mouth");
+  assert.ok(Math.abs(riffle.x - rooms.x) > 8 || Math.abs(riffle.lift - rooms.lift) > 8, "not Chamber's jamb rise");
+  assert.ok(Math.abs(riffle.x - horn.x) > 8 || Math.abs(riffle.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "brook_trout", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real meeting rail, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "brook_trout", WORK, P.SPRITE);
+  assert.equal(short, null, "a real meeting rail, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 190, height: 180 }], 80, "brook_trout", WORK, P.SPRITE);
+  assert.equal(thin, null, "Speck needs a real meeting rail, not a thinner rail");
+  const rail = P.pickTarget([{ id: "rail", x: 200, y: 80, width: 190, height: 188 }], 80, "brook_trout", WORK, P.SPRITE);
+  assert.ok(rail, "a real meeting rail as a riffle cup");
+  const snapOk = P.pickTarget([{ id: "rail", x: 200, y: 80, width: 196, height: 202 }], 80, "venus_flytrap", WORK, P.SPRITE);
+  assert.ok(snapOk, "Snap still takes the meeting rail");
+  const hingeOk = P.pickTarget([{ id: "rail", x: 200, y: 80, width: 196, height: 188 }], 80, "mussel", WORK, P.SPRITE);
+  assert.ok(hingeOk, "Hinge still takes the meeting-rail gap");
+  const feltOk = P.pickTarget([{ id: "rail", x: 200, y: 80, width: 196, height: 188 }], 80, "moss", WORK, P.SPRITE);
+  assert.ok(feltOk, "Felt still takes the meeting rail");
+  const walkOn = P.markOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  const countOn = P.countOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  const filterOn = P.filterOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  const leanOn = P.leanOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  const cacheOn = P.cacheOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  const mouthOn = P.mouthOnPath(0.25, { x: 40, lift: 0 }, { x: riffle.x, lift: riffle.lift });
+  const walkEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(Math.abs(walkOn.lift - (riffle.lift * walkEase)) < 6, "she walks onto the meeting rail");
+  assert.ok(walkOn.lift !== countOn.lift, "a walk, not Snap count");
+  assert.ok(walkOn.lift !== filterOn.lift, "a walk, not Hinge filter");
+  assert.ok(walkOn.lift !== leanOn.lift, "a walk, not Felt lean");
+  assert.ok(walkOn.lift !== cacheOn.lift, "a walk, not Dee cache");
+  assert.ok(walkOn.rot !== mouthOn.rot, "a walk onto the riffle, not Lunge mouth");
+  const marks = P.markPath(0.5);
+  const close = P.countPath(0.5);
+  const silt = P.filterPath(0.5);
+  const blot = P.leanPath(0.5);
+  const seed = P.cachePath(0.5);
+  const wide = P.mouthPath(0.5);
+  const roomsPath = P.risePath(0.5, { x: 0, lift: 0 }, { x: 10, lift: 10 });
+  assert.ok(marks.lift > 8, "she rises to show the worm marks");
+  assert.ok(marks.rot > 3 && marks.rot < 8, "the back tilts the worm marks");
+  assert.ok(marks.lift !== close.lift, "a mark, not Snap count");
+  assert.ok(marks.rot !== silt.rot, "a mark, not Hinge filter");
+  assert.ok(marks.rot !== blot.rot, "a mark, not Felt lean");
+  assert.ok(marks.lift !== seed.lift, "a mark, not Dee cache");
+  assert.ok(marks.rot !== wide.rot, "a mark, not Lunge mouth");
+  assert.ok(marks.lift !== roomsPath.lift, "a mark sit, not Chamber rise");
+  const hold = P.markHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 2.1) < 0.2, "she holds after the worm marks");
+  assert.ok(Math.abs(hold.x - 11.8) < 0.2, "she stays on the riffle");
+  assert.ok(hold.lift > 2.0 && hold.lift < 2.7, "a sit after the mark");
+  const off0 = P.markOffPath(0, { x: riffle.x, lift: riffle.lift, rot: 2.1 }, { x: riffle.x + 49, lift: 0 });
+  const offMid = P.markOffPath(0.5, { x: riffle.x, lift: riffle.lift, rot: 2.1 }, { x: riffle.x + 49, lift: 0 });
+  const off1 = P.markOffPath(1, { x: riffle.x, lift: riffle.lift, rot: 2.1 }, { x: riffle.x + 49, lift: 0 });
+  assert.ok(Math.abs(off0.x - riffle.x) < 2);
+  assert.ok(offMid.lift > 4, "a walk leave off the riffle");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "count");
+    assert.notEqual(play.phase, "filter");
+    assert.notEqual(play.phase, "lean");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "mouth");
+    assert.notEqual(play.phase, "rise");
+    assert.notEqual(play.phase, "speck");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "mark") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "mark-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "mark-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.2)) < 3, "she holds the worm marks on the riffle");
+    }
+    if (play.phase === "mark-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("mark-on"));
+  assert.ok(seen.has("mark"));
+  assert.ok(seen.has("mark-hold"));
+  assert.ok(seen.has("mark-off"));
+  assert.ok(!seen.has("count"), "Speck never uses Snap count");
+  assert.ok(!seen.has("filter"), "Speck never uses Hinge filter");
+  assert.ok(!seen.has("lean"), "Speck never uses Felt lean");
+  assert.ok(!seen.has("cache"), "Speck never uses Dee cache");
+  assert.ok(!seen.has("mouth"), "Speck never uses Lunge mouth");
+  assert.ok(!seen.has("rise"), "Speck never uses Chamber rise");
+  assert.ok(!seen.has("speck"), "Speck never uses speck as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Speck's riffle-cup meeting rail; sleep, card, and hide abort; Speck never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "brook_trout", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "mark"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "mark");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "mark");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "mark-off");
   assert.equal(play.abort, true);
 });
