@@ -65,7 +65,7 @@ test("the desk walks off and walks in the house way, and call-back is not Pip fo
   assert.match(roomSrc, /issue\("leave"\)/);
   assert.match(roomSrc, /issue\("enter"\)/);
   assert.doesNotMatch(roomSrc, /say\("You called\. I brought the whole tail\."\)/);
-  assert.match(livingSrc, /leaveTarget/);
+  assert.match(livingSrc, /hideTuck/);
   assert.match(livingSrc, /enterSpawn/);
   assert.match(livingSrc, /enterSit/);
   assert.match(demoSrc, /CompanionRoom/);
@@ -95,7 +95,7 @@ test("overlay and blotter keep the same call and the same walk", () => {
   assert.equal(OverlayGait.enterSit(800, 176, 20, 0), 80);
 
   assert.match(overlayLifeSrc, /callLine\(key\)/);
-  assert.match(overlayPetSrc, /PetGait\.leaveTarget/);
+  assert.match(overlayPetSrc, /PetGait\.hideTuck/);
   assert.match(overlayPetSrc, /PetGait\.enterSpawn/);
   assert.match(blotterLife, /bond=clamp\(state\.bond \+ 1\)/);
   assert.match(blotterPet, /leave_target/);

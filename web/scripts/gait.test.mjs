@@ -36,15 +36,17 @@ test("walkSpeed ease-out is not linear", () => {
   assert.ok(G.walkSpeed(56, 0.2, base) < G.walkSpeed(56, 0.4, base));
 });
 
-test("hide walks off the nearest edge and call-back comes from off-stage", () => {
+test("hide tucks at the ribbon edge and call-back comes from off-stage", () => {
   assert.equal(G.leaveTarget(80, 800), -200);
   assert.equal(G.leaveTarget(600, 800), 812);
+  assert.equal(G.hideTuck(80, 800, 176, 16), 16);
+  assert.equal(G.hideTuck(600, 800, 176, 16), 608);
   assert.equal(G.enterSpawn(800, 176, 20, true), -176);
   assert.equal(G.enterSpawn(800, 176, 20, false), 780);
   assert.equal(G.enterSit(800, 176, 20, 0), 80);
   assert.match(gaitSrc, /function leaveTarget/);
   assert.match(gaitSrc, /function enterSpawn/);
-  assert.match(livingSrc, /leaveTarget/);
+  assert.match(livingSrc, /hideTuck/);
   assert.match(livingSrc, /enterSpawn/);
 });
 

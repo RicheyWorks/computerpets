@@ -302,6 +302,43 @@
     return Array.from(root.children || []);
   }
 
+  function poseFrames(guest, sprites) {
+    const pack = sprites && typeof sprites === "object" ? sprites : {};
+    const sit = Array.isArray(pack.sit) ? pack.sit.filter(Boolean) : [];
+    const idle = Array.isArray(pack.idle) ? pack.idle.filter(Boolean) : [];
+    const walk = Array.isArray(pack.walk) ? pack.walk.filter(Boolean) : [];
+    if (guest && (guest.phase === "perch" || guest.phase === "approach-perch")) {
+      if (sit.length) return sit;
+      if (idle.length) return idle;
+    }
+    if (walk.length) return walk;
+    if (idle.length) return idle;
+    if (sit.length) return sit;
+    return [];
+  }
+
+  function poseSrc(guest, sprites) {
+    const frames = poseFrames(guest, sprites);
+    if (!frames.length) return "";
+    const i = Math.abs((guest && guest.frame) || 0) % frames.length;
+    return frames[i];
+  }
+
+  function assignedSrc(img) {
+    if (!img) return "";
+    if (img.dataset && img.dataset.frameSrc) return img.dataset.frameSrc;
+    if (img.getAttribute) return img.getAttribute("src") || "";
+    return img.src || "";
+  }
+
+  function assignSrc(img, src) {
+    if (!img || !src) return false;
+    if (assignedSrc(img) === src) return false;
+    if (img.dataset) img.dataset.frameSrc = src;
+    if (img.setAttribute) img.setAttribute("src", src);
+    else img.src = src;
+    return true;
+  }
   function syncCalledPaint(root, guests, opts) {
     if (!root) return { reused: 0, added: 0, removed: 0 };
     const make = (opts && opts.createImg) || (typeof document !== "undefined" && document.createElement ? () => document.createElement("img") : null);
@@ -343,9 +380,9 @@
       } else {
         reused += 1;
       }
-      const frames = frameOf ? frameOf(g) : null;
-      const src = frames && frames.length ? frames[g.frame || 0] || frames[0] : "";
-      if (src && img.src !== src) img.src = src;
+      const frames = frameOf ? frameOf(g) : poseFrames(g, g.sprites);
+      const src = frames && frames.length ? frames[Math.abs(g.frame || 0) % frames.length] || frames[0] : "";
+      assignSrc(img, src);
       if (img.style) img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
     }
     return { reused, added, removed };
@@ -376,6 +413,9 @@
     markSung,
     stepCalled,
     stillVisible,
+    poseFrames,
+    poseSrc,
+    assignSrc,
     syncCalledPaint,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
