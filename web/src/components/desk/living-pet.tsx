@@ -443,7 +443,7 @@ export function LivingPet({
         if (hold != null) s.frame = hold;
         return;
       }
-      if (cardRef.current && (cmd === "wander" || cmd === "idle")) {
+      if (false && cardRef.current && (cmd === "wander" || cmd === "idle")) {
         s.anim = asleepRef.current ? "sleep" : "idle";
         s.target = null;
         s.waypoints = [];
@@ -575,7 +575,7 @@ export function LivingPet({
           hidden: hiddenRef.current,
           leaving: s.leaving,
           cmd: cmdRef.current,
-          card: cardRef.current,
+          card: false,
         };
         if (s.happy) {
           s.happy = stepHappy(s.happy, dt, {
@@ -611,7 +611,7 @@ export function LivingPet({
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: false,
-            card: cardRef.current,
+            card: false,
           });
           s.x = s.trick.x;
           if (!asleepRef.current) s.anim = s.trick.anim;
@@ -654,7 +654,7 @@ export function LivingPet({
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: !!s.play,
-            card: cardRef.current,
+            card: false,
           })
         ) {
           s.trickWait -= dt;
@@ -759,7 +759,6 @@ export function LivingPet({
           !s.trick &&
           !s.leaving &&
           !asleepRef.current &&
-          !cardRef.current &&
           s.target == null &&
           s.turnHold <= 0 &&
           s.pause <= 0 &&

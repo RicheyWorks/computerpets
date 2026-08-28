@@ -43,3 +43,10 @@ test("/demo robin paint uses one real pose and does not unmount on host hide", (
   assert.match(calledSrc, /hiddenRef/);
   assert.doesNotMatch(calledSrc, /if \(hidden \|\| !list\.length\)/);
 });
+
+test("/demo Rui idle is not a parked card sit, and hide still tucks", () => {
+  assert.match(livingSrc, /if \(false && cardRef\.current/);
+  assert.match(petSrc, /if \(false && cardOpen\(\)/);
+  assert.match(livingSrc, /pointerEvents: "auto"/);
+  assert.match(cssSrc, /#pet\.hidden[\s\S]{0,80}pointer-events:\s*auto/);
+});

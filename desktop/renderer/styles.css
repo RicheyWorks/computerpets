@@ -98,6 +98,10 @@ select {
   opacity: 0;
   transform-origin: center bottom;
   will-change: transform;
+  border: 0;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
 #guest.show {
@@ -226,6 +230,57 @@ select {
   pointer-events: auto;
 }
 
+#robin {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  object-position: bottom;
+  pointer-events: none;
+  opacity: 0;
+  transform-origin: center bottom;
+  -webkit-user-drag: none;
+  border: 0;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+#robin.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#plants {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.desk-plant {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 128px;
+  height: 128px;
+  object-fit: contain;
+  object-position: bottom;
+  pointer-events: auto;
+  transform-origin: center bottom;
+  -webkit-user-drag: none;
+  border: 0;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+.desk-plant[data-on="1"] {
+  outline: 1px solid rgb(216 207 192 / 0.45);
+}
+
 .keeper-steps,
 .keeper-music,
 .keeper-sleep,
@@ -276,6 +331,10 @@ select {
   pointer-events: auto;
   transform-origin: center bottom;
   -webkit-user-drag: none;
+  border: 0;
+  background: transparent;
+  outline: none;
+  box-shadow: none;
 }
 
 .keeper-steps button,
