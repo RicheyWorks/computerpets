@@ -13674,3 +13674,90 @@ test("the demo window plate walks Glide plane the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Boom howl the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "howler"[\s\S]{0,80}slug: "boom"/);
+  assert.equal(P.playFor("howler"), "howl");
+  const target = P.pickTarget([WIN], 80, "howler", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "howl");
+  assert.equal(target.side, "crownperch");
+  assert.equal(target.leave, "crown");
+  assert.equal(Overlay.playFor("howler"), "howl");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(Overlay.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("gibbon"), "sing");
+  assert.equal(P.playFor("flying_squirrel"), "plane");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.notEqual(P.playFor("howler"), "boom");
+  assert.notEqual(P.playFor("howler"), "honk");
+  assert.notEqual(P.playFor("howler"), "sing");
+  assert.notEqual(target.kind, "boom");
+  assert.notEqual(target.kind, "croak");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she howls a high transom as a crown perch, not the sash foot");
+  assert.ok(P.DUR.howlHold > P.DUR.howl, "the hold is the sit after; the howl is the tell");
+  assert.ok(P.DUR.howlOn !== Overlay.DUR.croakOn);
+  assert.ok(P.DUR.howlOn !== Overlay.DUR.honkOn);
+  assert.ok(P.DUR.howlOn !== Overlay.DUR.singOn);
+  assert.ok(P.DUR.howlOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.cling, Overlay.DUR.cling);
+  assert.equal(P.DUR.howlOn, Overlay.DUR.howlOn);
+  assert.equal(P.DUR.howl, Overlay.DUR.howl);
+  assert.equal(P.DUR.howlHold, Overlay.DUR.howlHold);
+  assert.equal(P.DUR.howlOff, Overlay.DUR.howlOff);
+  const crown = P.howlPoint(WIN, 176, WORK);
+  const deskCrown = Overlay.howlPoint(WIN, Overlay.SPRITE, WORK);
+  const rafter = P.croakPoint(WIN, 176, WORK);
+  const cape = P.foldPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(crown.x - deskCrown.x) < 1);
+  assert.ok(Math.abs(crown.lift - deskCrown.lift) < 1);
+  assert.ok(Math.abs(crown.lift - rafter.lift) < 8, "same high transom furniture as Wedge");
+  assert.ok(Math.abs(crown.x - rafter.x) > 20, "not Wedge's croak");
+  assert.ok(Math.abs(crown.x - cape.x) > 8 || Math.abs(crown.lift - cape.lift) > 20, "not Cape's fold");
+  const sitOn = P.howlOnPath(0.25, { x: 40, lift: 0 }, { x: crown.x, lift: crown.lift });
+  const deskSit = Overlay.howlOnPath(0.25, { x: 40, lift: 0 }, { x: crown.x, lift: crown.lift });
+  assert.equal(sitOn.x, deskSit.x);
+  assert.equal(sitOn.lift, deskSit.lift);
+  assert.ok(sitOn.lift > 0, "she sits onto the crown perch");
+  const boom = P.howlPath(0.5);
+  const deskBoom = Overlay.howlPath(0.5);
+  assert.equal(boom.lift, deskBoom.lift);
+  assert.ok(boom.lift > 4 && boom.rot > 8, "a hyoid howl on the crown, not a croak");
+  const hold = P.howlHoldPath(0.5);
+  const deskHold = Overlay.howlHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 6.4) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "croak");
+    assert.notEqual(play.phase, "honk");
+    assert.notEqual(play.phase, "sing");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "howl") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "howl-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "howl-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.6)) < 3, "she holds the sit on the head");
+    }
+  }
+  assert.ok(seen.has("howl-on"));
+  assert.ok(seen.has("howl"));
+  assert.ok(seen.has("howl-hold"));
+  assert.ok(seen.has("howl-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
