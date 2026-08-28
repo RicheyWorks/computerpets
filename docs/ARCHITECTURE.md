@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (Dam gnaws a sash stile as a lodge cup; eighth wood leftover done; next leftover is Spine; catalog stays 220) |
+| **Last Updated** | 2026-08-27 (Spine bristles a window jamb as a pine post; ninth wood leftover done; next leftover is Coal; catalog stays 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |

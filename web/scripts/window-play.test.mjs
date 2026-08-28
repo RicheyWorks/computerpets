@@ -12847,7 +12847,7 @@ test("the demo window plate walks Dam gnaw the same way", () => {
   assert.equal(Overlay.playFor("carpenter_bee"), "bore");
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("opossum"), "still");
-  assert.equal(P.playFor("porcupine"), "sill");
+  assert.equal(P.playFor("porcupine"), "bristle");
   assert.notEqual(P.playFor("beaver"), "dam");
   assert.notEqual(target.kind, "bore");
   assert.notEqual(target.kind, "drum");
@@ -12915,6 +12915,95 @@ test("the demo window plate walks Dam gnaw the same way", () => {
   assert.ok(seen.has("gnaw"));
   assert.ok(seen.has("gnaw-hold"));
   assert.ok(seen.has("gnaw-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+
+test("the demo window plate walks Spine bristle the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "porcupine"[\s\S]{0,80}slug: "spine"/);
+  assert.equal(P.playFor("porcupine"), "bristle");
+  const target = P.pickTarget([WIN], 80, "porcupine", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "bristle");
+  assert.equal(target.side, "pinepost");
+  assert.equal(target.leave, "quills");
+  assert.equal(Overlay.playFor("porcupine"), "bristle");
+  assert.equal(P.playFor("orchid"), "mount");
+  assert.equal(Overlay.playFor("orchid"), "mount");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("hedgehog"), "ball");
+  assert.equal(P.playFor("beaver"), "gnaw");
+  assert.equal(P.playFor("black_bear"), "sill");
+  assert.notEqual(P.playFor("porcupine"), "spine");
+  assert.notEqual(P.playFor("porcupine"), "hook");
+  assert.notEqual(P.playFor("porcupine"), "ball");
+  assert.notEqual(target.kind, "mount");
+  assert.notEqual(target.kind, "gnaw");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she bristles a window jamb as a pine post, not the sash foot");
+  assert.ok(P.DUR.bristleHold > P.DUR.bristle, "the flare is the tell; the hold is the quills that stay");
+  assert.ok(P.DUR.bristleOn !== Overlay.DUR.mountOn);
+  assert.ok(P.DUR.bristleOn !== Overlay.DUR.gnawOn);
+  assert.ok(P.DUR.bristleOn !== Overlay.DUR.hookOn);
+  assert.ok(P.DUR.bristleOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.mountOn, Overlay.DUR.mountOn);
+  assert.equal(P.DUR.bristleOn, Overlay.DUR.bristleOn);
+  assert.equal(P.DUR.bristle, Overlay.DUR.bristle);
+  const post = P.bristlePoint(WIN, 176, WORK);
+  const deskPost = Overlay.bristlePoint(WIN, Overlay.SPRITE, WORK);
+  const bark = P.mountPoint(WIN, 176, WORK);
+  const lodge = P.gnawPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(post.x - deskPost.x) < 1);
+  assert.ok(Math.abs(post.lift - deskPost.lift) < 1);
+  assert.ok(Math.abs(post.x - bark.x) > 8, "same jamb family, not Moth outside clasp");
+  assert.ok(Math.abs(post.x - lodge.x) > 8, "the jamb, not Dam sash stile");
+  const walkOn = P.bristleOnPath(0.25, { x: 40, lift: 0 }, { x: post.x, lift: post.lift });
+  const deskWalk = Overlay.bristleOnPath(0.25, { x: 40, lift: 0 }, { x: post.x, lift: post.lift });
+  const claspOn = P.mountOnPath(0.25, { x: 40, lift: 0 }, { x: post.x, lift: post.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks up onto the jamb");
+  assert.ok(walkOn.lift !== claspOn.lift, "a walk, not Moth clasp");
+  const flare = P.bristlePath(0.5);
+  const deskFlare = Overlay.bristlePath(0.5);
+  assert.equal(flare.lift, deskFlare.lift);
+  assert.ok(flare.lift > 3, "quills rise");
+  const hold = P.bristleHoldPath(0.5);
+  const deskHold = Overlay.bristleHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(hold.rot > 8);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "mount");
+    assert.notEqual(play.phase, "gnaw");
+    assert.notEqual(play.phase, "hook");
+    assert.notEqual(play.phase, "ball");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bristle") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bristle-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "bristle-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 4.2)) < 3, "she holds the bristle on the pine post");
+    }
+  }
+  assert.ok(seen.has("bristle-on"));
+  assert.ok(seen.has("bristle"));
+  assert.ok(seen.has("bristle-hold"));
+  assert.ok(seen.has("bristle-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
