@@ -13314,7 +13314,7 @@ test("the demo window plate walks Swing sing the same way", () => {
   assert.equal(P.playFor("orb_weaver"), "web");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("budgie"), "perch");
-  assert.equal(P.playFor("kinkajou"), "sill");
+  assert.equal(P.playFor("kinkajou"), "wrap");
   assert.notEqual(P.playFor("gibbon"), "swing");
   assert.notEqual(P.playFor("gibbon"), "hook");
   assert.notEqual(P.playFor("gibbon"), "reach");
@@ -13390,6 +13390,104 @@ test("the demo window plate walks Swing sing the same way", () => {
   assert.ok(seen.has("sing"));
   assert.ok(seen.has("sing-hold"));
   assert.ok(seen.has("sing-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Wrist wrap the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "kinkajou"[\s\S]{0,80}slug: "wrist"/);
+  assert.equal(P.playFor("kinkajou"), "wrap");
+  const target = P.pickTarget([WIN], 80, "kinkajou", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "wrap");
+  assert.equal(target.side, "nectarcup");
+  assert.equal(target.leave, "unhook");
+  assert.equal(Overlay.playFor("kinkajou"), "wrap");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(Overlay.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("gibbon"), "sing");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("leafcutter"), "snip");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("colugo"), "sill");
+  assert.notEqual(P.playFor("kinkajou"), "sip");
+  assert.notEqual(P.playFor("kinkajou"), "wrist");
+  assert.notEqual(P.playFor("kinkajou"), "drink");
+  assert.notEqual(target.kind, "sip");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 10, "she wraps a window-box bloom as a nectar cup, not the sash foot");
+  assert.ok(P.DUR.wrapHold > P.DUR.wrap, "the wrap is the tell; the hold is the unhook wait");
+  assert.ok(P.DUR.wrapOn !== Overlay.DUR.sipOn);
+  assert.ok(P.DUR.wrapOn !== Overlay.DUR.forageOn);
+  assert.ok(P.DUR.wrapOn !== Overlay.DUR.snipOn);
+  assert.ok(P.DUR.wrapOn !== Overlay.DUR.drinkOn);
+  assert.ok(P.DUR.wrapOn !== Overlay.DUR.singOn);
+  assert.ok(P.DUR.wrapOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.sipOn, Overlay.DUR.sipOn);
+  assert.equal(P.DUR.wrapOn, Overlay.DUR.wrapOn);
+  assert.equal(P.DUR.wrap, Overlay.DUR.wrap);
+  const cup = P.wrapPoint(WIN, 176, WORK);
+  const deskCup = Overlay.wrapPoint(WIN, Overlay.SPRITE, WORK);
+  const nectar = P.sipPoint(WIN, 176, WORK);
+  const meadow = P.foragePoint(WIN, 176, WORK);
+  const foliage = P.snipPoint(WIN, 176, WORK);
+  const drip = P.drinkPoint(WIN, 176, WORK);
+  const arm = P.singPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(cup.x - deskCup.x) < 1);
+  assert.ok(Math.abs(cup.lift - deskCup.lift) < 1);
+  assert.ok(Math.abs(cup.x - nectar.x) < 2, "same bloom Sip sips");
+  assert.ok(cup.lift < nectar.lift - 8, "a wrap, not Sip's hover");
+  assert.ok(Math.abs(cup.x - meadow.x) > 20 || Math.abs(cup.lift - meadow.lift) > 8, "not Thrum's forage");
+  assert.ok(Math.abs(cup.x - foliage.x) > 20 || Math.abs(cup.lift - foliage.lift) > 8, "not Disc's snip");
+  assert.ok(Math.abs(cup.x - drip.x) > 20 || Math.abs(cup.lift - drip.lift) > 8, "not Latch's drink");
+  assert.ok(Math.abs(cup.x - arm.x) > 8 || Math.abs(cup.lift - arm.lift) > 20, "not Swing's sing");
+  const walkOn = P.wrapOnPath(0.25, { x: 40, lift: 0 }, { x: cup.x, lift: cup.lift });
+  const deskWalk = Overlay.wrapOnPath(0.25, { x: 40, lift: 0 }, { x: cup.x, lift: cup.lift });
+  const dartOn = P.sipOnPath(0.25, { x: 40, lift: 0 }, { x: cup.x, lift: cup.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks onto the bloom");
+  assert.ok(walkOn.lift !== dartOn.lift, "a walk, not Sip's dart");
+  const coil = P.wrapPath(0.5);
+  const deskCoil = Overlay.wrapPath(0.5);
+  assert.equal(coil.lift, deskCoil.lift);
+  assert.ok(coil.rot > 20 && coil.rot < 50, "a tail wrap on the nectar cup");
+  const hold = P.wrapHoldPath(0.5);
+  const deskHold = Overlay.wrapHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 38) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "sip");
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "snip");
+    assert.notEqual(play.phase, "drink");
+    assert.notEqual(play.phase, "sing");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "wrap") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "wrap-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "wrap-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 4.0)) < 3, "she holds the wrap on the bloom");
+    }
+  }
+  assert.ok(seen.has("wrap-on"));
+  assert.ok(seen.has("wrap"));
+  assert.ok(seen.has("wrap-hold"));
+  assert.ok(seen.has("wrap-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
