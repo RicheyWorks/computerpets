@@ -13936,3 +13936,93 @@ test("the demo window plate walks Still creep the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+
+test("the demo window plate walks Gum chew the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "koala"[\s\S]{0,80}slug: "gum"/);
+  assert.equal(P.playFor("koala"), "chew");
+  const target = P.pickTarget([WIN], 80, "koala", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "chew");
+  assert.equal(target.side, "gumperch");
+  assert.equal(target.leave, "leaf");
+  assert.equal(Overlay.playFor("koala"), "chew");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(Overlay.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("potto"), "creep");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("flying_squirrel"), "plane");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.notEqual(P.playFor("koala"), "gum");
+  assert.notEqual(P.playFor("koala"), "browse");
+  assert.notEqual(P.playFor("koala"), "perch");
+  assert.notEqual(target.kind, "gum");
+  assert.notEqual(target.kind, "browse");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she chews a window stool as a gum perch, not the sash foot");
+  assert.ok(P.DUR.chewHold > P.DUR.chew, "the hold is the sit after; the chew is the tell");
+  assert.ok(P.DUR.chewOn !== Overlay.DUR.planeOn);
+  assert.ok(P.DUR.chewOn !== Overlay.DUR.buryOn);
+  assert.ok(P.DUR.chewOn !== Overlay.DUR.browseOn);
+  assert.ok(P.DUR.chewOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.cling, Overlay.DUR.cling);
+  assert.equal(P.DUR.chewOn, Overlay.DUR.chewOn);
+  assert.equal(P.DUR.chew, Overlay.DUR.chew);
+  assert.equal(P.DUR.chewHold, Overlay.DUR.chewHold);
+  assert.equal(P.DUR.chewOff, Overlay.DUR.chewOff);
+  const gum = P.chewPoint(WIN, 176, WORK);
+  const deskGum = Overlay.chewPoint(WIN, Overlay.SPRITE, WORK);
+  const oak = P.buryPoint(WIN, 176, WORK);
+  const fold = P.planePoint(WIN, 176, WORK);
+  assert.ok(Math.abs(gum.x - deskGum.x) < 1);
+  assert.ok(Math.abs(gum.lift - deskGum.lift) < 1);
+  assert.ok(Math.abs(gum.lift - oak.lift) < 8, "same window stool furniture as Cache");
+  assert.ok(Math.abs(gum.lift - fold.lift) < 8, "same window stool furniture as Glide");
+  assert.ok(Math.abs(gum.x - oak.x) > 20, "not Cache's bury");
+  assert.ok(Math.abs(gum.x - fold.x) > 20, "not Glide's plane");
+  const chewOn = P.chewOnPath(0.25, { x: 40, lift: 0 }, { x: gum.x, lift: gum.lift });
+  const deskChew = Overlay.chewOnPath(0.25, { x: 40, lift: 0 }, { x: gum.x, lift: gum.lift });
+  assert.equal(chewOn.x, deskChew.x);
+  assert.equal(chewOn.lift, deskChew.lift);
+  assert.ok(chewOn.lift > 0, "she sits onto the stool as a gum perch");
+  const jaw = P.chewPath(0.5);
+  const deskJaw = Overlay.chewPath(0.5);
+  assert.equal(jaw.lift, deskJaw.lift);
+  assert.ok(jaw.lift < -3, "she chews once; the jaw dips");
+  const hold = P.chewHoldPath(0.5);
+  const deskHold = Overlay.chewHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 4.3) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "bury");
+    assert.notEqual(play.phase, "plane");
+    assert.notEqual(play.phase, "browse");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "chew") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "chew-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "chew-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.6)) < 3, "she sits the gum perch after the chew");
+    }
+  }
+  assert.ok(seen.has("chew-on"));
+  assert.ok(seen.has("chew"));
+  assert.ok(seen.has("chew-hold"));
+  assert.ok(seen.has("chew-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});

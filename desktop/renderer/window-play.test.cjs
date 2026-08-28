@@ -22258,3 +22258,183 @@ test("a moved window refits Still's vine-rail parting bead; sleep, card, and hid
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "creep-off");
   assert.equal(play.abort, true);
 });
+
+
+test("Gum chews a window stool as a gum perch: sit on the stool, chew once, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("koala"), "chew");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("potto"), "creep");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("flying_squirrel"), "plane");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("hedgehog"), "ball");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.notEqual(P.playFor("koala"), "gum");
+  assert.notEqual(P.playFor("koala"), "browse");
+  assert.notEqual(P.playFor("koala"), "perch");
+  assert.notEqual(P.playFor("koala"), "forage");
+  assert.notEqual(P.playFor("koala"), "ball");
+  assert.notEqual(P.playFor("koala"), "plane");
+  assert.notEqual(P.playFor("koala"), "bury");
+  assert.notEqual(P.playFor("koala"), "pull");
+  assert.notEqual(P.playFor("koala"), "sill");
+  assert.equal(P.DUR.browseOn, 1.36, "Coal browse durations stay");
+  assert.equal(P.DUR.planeOn, 0.81, "Glide plane durations stay");
+  assert.equal(P.DUR.creepOn, 1.73, "Still creep durations stay");
+  const target = P.pickTarget([WIN], 80, "koala", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "chew");
+  assert.equal(target.side, "gumperch");
+  assert.equal(target.leave, "leaf");
+  assert.notEqual(target.kind, "gum");
+  assert.notEqual(target.kind, "browse");
+  assert.notEqual(target.kind, "perch");
+  assert.notEqual(target.kind, "plane");
+  assert.notEqual(target.kind, "bury");
+  assert.notEqual(target.kind, "pull");
+  assert.notEqual(target.kind, "ball");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she chews a window stool as a gum perch, not the floor");
+  assert.ok(P.DUR.chewHold > P.DUR.chew, "the hold is the sit after; the chew is the tell");
+  assert.ok(P.DUR.chewOn > 0.5, "a sit onto the stool, not the chew");
+  assert.ok(P.DUR.chewOn !== P.DUR.planeOn);
+  assert.ok(P.DUR.chewOn !== P.DUR.buryOn);
+  assert.ok(P.DUR.chewOn !== P.DUR.pullOn);
+  assert.ok(P.DUR.chewOn !== P.DUR.browseOn);
+  assert.ok(P.DUR.chewOn !== P.DUR.perchOn);
+  assert.ok(P.DUR.chewOn !== P.DUR.creepOn);
+  assert.ok(P.DUR.chewOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.chew !== P.DUR.plane);
+  assert.ok(P.DUR.chew !== P.DUR.bury);
+  assert.ok(P.DUR.chew !== P.DUR.browse);
+  assert.ok(P.DUR.chew !== P.DUR.perch);
+  assert.ok(P.DUR.chewHold !== P.DUR.planeHold);
+  assert.ok(P.DUR.chewHold !== P.DUR.buryHold);
+  assert.ok(P.DUR.chewHold !== P.DUR.browseHold);
+  assert.ok(P.DUR.chewOff !== P.DUR.planeOff);
+  assert.ok(P.DUR.chewOff !== P.DUR.buryOff);
+  assert.ok(P.DUR.chewOff !== P.DUR.sillDown);
+  const gum = P.chewPoint(WIN, P.SPRITE, WORK);
+  const oak = P.buryPoint(WIN, P.SPRITE, WORK);
+  const fold = P.planePoint(WIN, P.SPRITE, WORK);
+  const lawn = P.pullPoint(WIN, P.SPRITE, WORK);
+  const well = P.browsePoint(WIN, P.SPRITE, WORK);
+  const shade = P.perchPoint(WIN, P.SPRITE, WORK);
+  const ball = P.ballPoint(WIN, P.SPRITE, WORK);
+  assert.ok(gum.lift > 8, "the window stool as a gum perch, not the floor");
+  assert.ok(Math.abs(gum.lift - oak.lift) < 8, "same window stool furniture family as Cache");
+  assert.ok(Math.abs(gum.lift - fold.lift) < 8, "same window stool furniture family as Glide");
+  assert.ok(Math.abs(gum.x - oak.x) > 20, "same stool, not Cache's bury spot");
+  assert.ok(Math.abs(gum.x - fold.x) > 20, "same stool, not Glide's plane spot");
+  assert.ok(Math.abs(gum.x - lawn.x) > 8 || Math.abs(gum.lift - lawn.lift) > 20, "not Brick's stool pull");
+  assert.ok(Math.abs(gum.x - well.x) > 8 || Math.abs(gum.lift - well.lift) > 20, "not Coal's window-well browse");
+  assert.ok(Math.abs(gum.x - shade.x) > 8 || Math.abs(gum.lift - shade.lift) > 20, "not Echo's lamp-shade perch");
+  assert.ok(Math.abs(gum.x - ball.x) > 8 || Math.abs(gum.lift - ball.lift) > 20, "not Burr's ball");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "koala", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window stool, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "koala", WORK, P.SPRITE);
+  assert.equal(short, null, "a real window stool needs height");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 194, height: 160 }], 80, "koala", WORK, P.SPRITE);
+  assert.equal(thin, null, "Gum needs Cache and Glide's real stool, not a shorter perch");
+  const stool = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 194, height: 162 }], 80, "koala", WORK, P.SPRITE);
+  assert.ok(stool, "a real window stool as a gum perch");
+  const cache = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 194, height: 162 }], 80, "squirrel", WORK, P.SPRITE);
+  assert.ok(cache, "Cache still takes the stool");
+  const glide = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 194, height: 162 }], 80, "flying_squirrel", WORK, P.SPRITE);
+  assert.ok(glide, "Glide still takes the stool");
+  const chewOn = P.chewOnPath(0.25, { x: 40, lift: 0 }, { x: gum.x, lift: gum.lift });
+  const buryOn = P.buryOnPath(0.25, { x: 40, lift: 0 }, { x: gum.x, lift: gum.lift });
+  const planeOn = P.planeOnPath(0.25, { x: 40, lift: 0 }, { x: gum.x, lift: gum.lift });
+  const pullOn = P.pullOnPath(0.25, { x: 40, lift: 0 }, { x: gum.x, lift: gum.lift });
+  assert.ok(chewOn.lift > 0, "she sits onto the stool as a gum perch");
+  assert.ok(chewOn.lift !== buryOn.lift, "a sit, not Cache's bury hop");
+  assert.ok(chewOn.lift !== planeOn.lift, "a sit, not Glide's plane hop");
+  assert.ok(chewOn.lift !== pullOn.lift, "a sit, not Brick's pull hop");
+  const jaw = P.chewPath(0.5);
+  const buryPose = P.buryPath(0.5);
+  const planePose = P.planePath(0.5);
+  const pullPose = P.pullPath(0.5);
+  const browsePose = P.browsePath(0.5);
+  const perchPose = P.perchTalkPath ? P.perchTalkPath(0.5) : P.perchPath(0.5);
+  assert.ok(jaw.lift < -3, "she chews once; the jaw dips");
+  assert.ok(jaw.rot > 10, "a chew, not a plane");
+  assert.ok(jaw.lift !== buryPose.lift, "not Cache's bury");
+  assert.ok(jaw.x !== planePose.x, "not Glide's plane");
+  assert.ok(jaw.rot !== pullPose.rot, "not Brick's pull");
+  assert.ok(jaw.rot !== browsePose.rot, "not Coal's browse");
+  assert.ok(jaw.rot !== perchPose.rot, "not Echo's perch");
+  const hold = P.chewHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 4.3) < 0.2, "she sits the gum perch after the chew");
+  assert.ok(Math.abs(hold.x - 0.4) < 0.2, "she sits on the stool");
+  assert.ok(hold.lift < 0 && hold.lift > -3, "a sit after the chew, not a bury");
+  const off0 = P.chewOffPath(0, { x: gum.x, lift: gum.lift, rot: 4.3 }, { x: gum.x + 50, lift: 0 });
+  const offMid = P.chewOffPath(0.5, { x: gum.x, lift: gum.lift, rot: 4.3 }, { x: gum.x + 50, lift: 0 });
+  const off1 = P.chewOffPath(1, { x: gum.x, lift: gum.lift, rot: 4.3 }, { x: gum.x + 50, lift: 0 });
+  assert.ok(Math.abs(off0.x - gum.x) < 2);
+  assert.ok(offMid.lift > 2, "a leave off the gum perch");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "bury");
+    assert.notEqual(play.phase, "plane");
+    assert.notEqual(play.phase, "pull");
+    assert.notEqual(play.phase, "browse");
+    assert.notEqual(play.phase, "perch");
+    assert.notEqual(play.phase, "ball");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "chew") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "chew-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "chew-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.6)) < 3, "she sits the gum perch after the chew");
+    }
+    if (play.phase === "chew-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("chew-on"));
+  assert.ok(seen.has("chew"));
+  assert.ok(seen.has("chew-hold"));
+  assert.ok(seen.has("chew-off"));
+  assert.ok(!seen.has("bury"), "Gum never uses Cache's bury");
+  assert.ok(!seen.has("plane"), "Gum never uses Glide's plane");
+  assert.ok(!seen.has("pull"), "Gum never uses Brick's pull");
+  assert.ok(!seen.has("browse"), "Gum never uses Coal's browse");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Gum's gum-perch stool; sleep, card, and hide abort; Gum never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "koala", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "chew"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "chew");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "chew");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "chew-off");
+  assert.equal(play.abort, true);
+});
