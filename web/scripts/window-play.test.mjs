@@ -15306,7 +15306,8 @@ test("the demo window plate walks Penny flare the same way", () => {
   assert.equal(Overlay.playFor("gecko"), "chirp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("perch"), "sill");
+  assert.equal(P.playFor("perch"), "barred");
+  assert.equal(P.playFor("pike"), "sill");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -15372,6 +15373,104 @@ test("the demo window plate walks Penny flare the same way", () => {
   assert.ok(seen.has("flare"));
   assert.ok(seen.has("flare-hold"));
   assert.ok(seen.has("flare-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Bar barred the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "perch"[\s\S]{0,80}slug: "bar"/);
+  assert.equal(P.playFor("perch"), "barred");
+  const target = P.pickTarget([WIN], 80, "perch", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "barred");
+  assert.equal(target.side, "weedrail");
+  assert.equal(target.leave, "bars");
+  assert.equal(Overlay.playFor("perch"), "barred");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(Overlay.playFor("budgie"), "perch");
+  assert.equal(P.playFor("bluegill"), "flare");
+  assert.equal(Overlay.playFor("bluegill"), "flare");
+  assert.equal(P.playFor("brook_trout"), "mark");
+  assert.equal(Overlay.playFor("brook_trout"), "mark");
+  assert.equal(P.playFor("catfish"), "barbel");
+  assert.equal(Overlay.playFor("catfish"), "barbel");
+  assert.equal(P.playFor("skunk"), "stamp");
+  assert.equal(Overlay.playFor("skunk"), "stamp");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("pike"), "sill");
+  assert.notEqual(P.playFor("perch"), "bar");
+  assert.notEqual(P.playFor("perch"), "perch");
+  assert.notEqual(P.playFor("perch"), "flare");
+  assert.notEqual(target.kind, "bar");
+  assert.notEqual(target.kind, "perch");
+  assert.notEqual(target.kind, "flare");
+  assert.notEqual(target.kind, "mark");
+  assert.ok(target.holdLift > 8, "he bars a meeting rail as a weed rail, not the floor");
+  assert.ok(P.DUR.barredHold > P.DUR.barred, "the hold is the sit after; the side bars are the tell");
+  assert.ok(P.DUR.barredOn !== Overlay.DUR.markOn);
+  assert.ok(P.DUR.barredOn !== Overlay.DUR.countOn);
+  assert.ok(P.DUR.barredOn !== Overlay.DUR.filterOn);
+  assert.ok(P.DUR.barredOn !== Overlay.DUR.flareOn);
+  assert.ok(P.DUR.barredOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.barredOn, Overlay.DUR.barredOn);
+  assert.equal(P.DUR.barred, Overlay.DUR.barred);
+  assert.equal(P.DUR.barredHold, Overlay.DUR.barredHold);
+  assert.equal(P.DUR.barredOff, Overlay.DUR.barredOff);
+  const weed = P.barredPoint(WIN, 176, WORK);
+  const deskWeed = Overlay.barredPoint(WIN, Overlay.SPRITE, WORK);
+  const riffle = P.markPoint(WIN, 176, WORK);
+  const cup = P.countPoint(WIN, 176, WORK);
+  const shade = P.flarePoint(WIN, 176, WORK);
+  assert.ok(Math.abs(weed.x - deskWeed.x) < 1);
+  assert.ok(Math.abs(weed.lift - deskWeed.lift) < 1);
+  assert.ok(Math.abs(weed.lift - riffle.lift) < 24, "same meeting rail as Speck");
+  assert.ok(Math.abs(weed.x - riffle.x) > 12, "not Speck mark");
+  assert.ok(Math.abs(weed.lift - cup.lift) < 24, "same meeting rail as Snap");
+  assert.ok(Math.abs(weed.x - cup.x) > 12, "not Snap count");
+  assert.ok(Math.abs(weed.lift - shade.lift) > 8 || Math.abs(weed.x - shade.x) > 8, "not Penny flare");
+  const walkOn = P.barredOnPath(0.25, { x: 40, lift: 0 }, { x: weed.x, lift: weed.lift });
+  const deskWalk = Overlay.barredOnPath(0.25, { x: 40, lift: 0 }, { x: weed.x, lift: weed.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const bars = P.barredPath(0.5);
+  const deskBars = Overlay.barredPath(0.5);
+  assert.equal(bars.lift, deskBars.lift);
+  assert.ok(bars.lift > 6, "he darts then shows the side bars");
+  const hold = P.barredHoldPath(0.5);
+  const deskHold = Overlay.barredHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 8.0) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "mark");
+    assert.notEqual(play.phase, "count");
+    assert.notEqual(play.phase, "flare");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "barred") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "barred-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "barred-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.5)) < 3, "he holds the side bars on the weed rail");
+    }
+  }
+  assert.ok(seen.has("barred-on"));
+  assert.ok(seen.has("barred"));
+  assert.ok(seen.has("barred-hold"));
+  assert.ok(seen.has("barred-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
