@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "skink", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "chameleon", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -12394,7 +12394,7 @@ test("Sheen licks a warm pane as a salt glass: hover to the glass, lick once, ho
   assert.equal(P.playFor("venus_flytrap"), "count");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("iguana"), "flatten");
-  assert.equal(P.playFor("skink"), "sill");
+  assert.equal(P.playFor("skink"), "scoot");
   assert.equal(P.playFor("moss"), "lean");
   assert.equal(P.playFor("moon_jelly"), "chime");
   assert.equal(P.playFor("goldfish"), "circle");
@@ -14060,7 +14060,7 @@ test("Dapple covers a window well as leaf mold: creep into the areaway, cover, k
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("skink"), "sill");
+  assert.equal(P.playFor("skink"), "scoot");
   assert.equal(P.playFor("caecilian"), "ring");
   const target = P.pickTarget([WIN], 80, "salamander", WORK, P.SPRITE);
   assert.ok(target);
@@ -22454,7 +22454,7 @@ test("Pad chirps a lamp-side jamb as lamp plaster: climb the jamb, chirp once (t
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("budgie"), "perch");
   assert.equal(P.playFor("salamander"), "cover");
-  assert.equal(P.playFor("skink"), "sill");
+  assert.equal(P.playFor("skink"), "scoot");
   assert.notEqual(P.playFor("gecko"), "pad");
   assert.notEqual(P.playFor("gecko"), "stone");
   assert.notEqual(P.playFor("gecko"), "cling");
@@ -22633,7 +22633,7 @@ test("Wink flashes a sash stile as a vine post: sit on the stile, flash the dewl
   assert.equal(P.playFor("carpenter_bee"), "bore");
   assert.equal(P.playFor("potto"), "creep");
   assert.equal(P.playFor("harvestman"), "stilt");
-  assert.equal(P.playFor("skink"), "sill");
+  assert.equal(P.playFor("skink"), "scoot");
   assert.notEqual(P.playFor("anole"), "wink");
   assert.notEqual(P.playFor("anole"), "chirp");
   assert.notEqual(P.playFor("anole"), "stone");
@@ -22806,3 +22806,182 @@ test("a moved window refits Wink's vine-post stile; sleep, card, and hide abort;
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "flash-off");
   assert.equal(play.abort, true);
 });
+
+test("Dash scoots a sash-jamb crack as a stone crack: scoot into the crack, show the blue, then scoot out", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("skink"), "scoot");
+  assert.equal(P.playFor("anole"), "flash");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(P.playFor("mussel"), "filter");
+  assert.equal(P.playFor("mason_bee"), "daub");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("garter"), "patrol");
+  assert.equal(P.playFor("chameleon"), "sill");
+  assert.notEqual(P.playFor("skink"), "dash");
+  assert.notEqual(P.playFor("skink"), "stone");
+  assert.notEqual(P.playFor("skink"), "run");
+  assert.notEqual(P.playFor("skink"), "flash");
+  assert.notEqual(P.playFor("skink"), "gape");
+  assert.notEqual(P.playFor("skink"), "sill");
+  assert.equal(P.DUR.flashOn, 1.04, "Wink flash durations stay");
+  assert.equal(P.DUR.gapeOn, 1.16, "Door gape durations stay");
+  assert.equal(P.DUR.chirpOn, 1.11, "Pad chirp durations stay");
+  assert.equal(P.DUR.stone, P.DUR.stone, "Blush stone stays");
+  const target = P.pickTarget([WIN], 80, "skink", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "scoot");
+  assert.equal(target.side, "stonecrack");
+  assert.equal(target.leave, "blue");
+  assert.notEqual(target.kind, "dash");
+  assert.notEqual(target.kind, "stone");
+  assert.notEqual(target.kind, "run");
+  assert.notEqual(target.kind, "gape");
+  assert.notEqual(target.kind, "flash");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she scoots a sash-jamb crack as a stone crack, not the floor");
+  assert.ok(P.DUR.scootHold > P.DUR.scoot, "the hold is the blue sit after; the scoot is the tell");
+  assert.ok(P.DUR.scootOn > 0.5, "a scoot into the crack, not the flash");
+  assert.ok(P.DUR.scootOn !== P.DUR.flashOn);
+  assert.ok(P.DUR.scootOn !== P.DUR.gapeOn);
+  assert.ok(P.DUR.scootOn !== P.DUR.chirpOn);
+  assert.ok(P.DUR.scootOn !== P.DUR.runOn);
+  assert.ok(P.DUR.scootOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.scoot !== P.DUR.flash);
+  assert.ok(P.DUR.scoot !== P.DUR.gape);
+  assert.ok(P.DUR.scoot !== P.DUR.gapeDart);
+  assert.ok(P.DUR.scoot !== P.DUR.run);
+  assert.ok(P.DUR.scootHold !== P.DUR.flashHold);
+  assert.ok(P.DUR.scootHold !== P.DUR.chirpHold);
+  assert.ok(P.DUR.scootOff !== P.DUR.flashOff);
+  assert.ok(P.DUR.scootOff !== P.DUR.gapeOff);
+  assert.ok(P.DUR.scootOff !== P.DUR.sillDown);
+  const crack = P.scootPoint(WIN, P.SPRITE, WORK);
+  const gape = P.gapePoint(WIN, P.SPRITE, WORK);
+  const vine = P.flashPoint(WIN, P.SPRITE, WORK);
+  const plaster = P.chirpPoint(WIN, P.SPRITE, WORK);
+  const silt = P.filterPoint(WIN, P.SPRITE, WORK);
+  const cell = P.daubPoint(WIN, P.SPRITE, WORK);
+  const reveal = P.hissPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  const dry = P.runPoint(WIN, P.SPRITE, WORK);
+  assert.ok(crack.lift > 36, "the sash-jamb crack as a stone crack, not the floor");
+  assert.ok(Math.abs(crack.x - gape.x) < 20, "the same sash-jamb crack Door gapes; the pose is a scoot");
+  assert.ok(Math.abs(crack.x - vine.x) > 20, "not Wink stile flash");
+  assert.ok(Math.abs(crack.x - plaster.x) > 8 || Math.abs(crack.lift - plaster.lift) > 8, "not Pad jamb chirp");
+  assert.ok(Math.abs(crack.x - silt.x) > 8 || Math.abs(crack.lift - silt.lift) > 8, "not Hinge meeting-rail-gap filter");
+  assert.ok(Math.abs(crack.x - cell.x) > 8 || Math.abs(crack.lift - cell.lift) > 8, "not Mortar sash-gap daub");
+  assert.ok(Math.abs(crack.x - reveal.x) > 8 || Math.abs(crack.lift - reveal.lift) > 8, "not Heart sash-reveal hiss");
+  assert.ok(Math.abs(crack.x - horn.x) > 8 || Math.abs(crack.lift - horn.lift) > 8, "not Blush sill horn stone");
+  assert.ok(Math.abs(crack.x - dry.x) > 8 || Math.abs(crack.lift - dry.lift) > 8, "not Gale sash-light run");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "skink", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash-jamb crack, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 170, height: 80 }], 80, "skink", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash-jamb crack, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 172, height: 210 }], 80, "skink", WORK, P.SPRITE);
+  assert.equal(thin, null, "Dash needs Door's real crack, not a shorter gap");
+  const crackOk = P.pickTarget([{ id: "crack", x: 200, y: 80, width: 172, height: 212 }], 80, "skink", WORK, P.SPRITE);
+  assert.ok(crackOk, "a real sash-jamb crack as a stone crack");
+  const doorOk = P.pickTarget([{ id: "crack", x: 200, y: 80, width: 172, height: 212 }], 80, "moray", WORK, P.SPRITE);
+  assert.ok(doorOk, "Door still takes the crack");
+  const winkOk = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 191, height: 216 }], 80, "anole", WORK, P.SPRITE);
+  assert.ok(winkOk, "Wink still takes the stile");
+  const scootOn = P.scootOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  const pourOn = P.gapeOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  const sitOn = P.flashOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  const climbOn = P.chirpOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  const dashOn = P.runOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  assert.ok(scootOn.lift > 0, "she scoots into the crack as a stone crack");
+  assert.ok(scootOn.lift !== pourOn.lift, "a scoot, not Door gape");
+  assert.ok(scootOn.lift !== sitOn.lift, "a scoot, not Wink flash sit");
+  assert.ok(scootOn.lift !== climbOn.lift, "a scoot, not Pad climb");
+  assert.ok(scootOn.lift !== dashOn.lift, "a scoot, not Gale dash");
+  const blue = P.scootPath(0.5);
+  const pink = P.flashPath(0.5);
+  const jaw = P.gapePath(0.5);
+  const voice = P.chirpPath(0.5);
+  const bite = P.runPath ? P.runPath(0.5) : { lift: 99, rot: 99 };
+  assert.ok(blue.lift > 2, "she shows the blue; the blue is the tell");
+  assert.ok(blue.rot < 12, "a blue tail, not a dewlap flash");
+  assert.ok(blue.lift !== pink.lift, "not Wink flash");
+  assert.ok(blue.rot !== jaw.rot, "not Door gape");
+  assert.ok(blue.lift !== voice.lift, "not Pad chirp");
+  const hold = P.scootHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 2.5) < 0.2, "she holds the crack after the blue");
+  assert.ok(Math.abs(hold.x - 2.8) < 0.2, "she stays in the crack");
+  assert.ok(hold.lift > 0 && hold.lift < 2, "a hold after the scoot, not a tail flare");
+  const off0 = P.scootOffPath(0, { x: crack.x, lift: crack.lift, rot: 2.5 }, { x: crack.x + 67, lift: 0 });
+  const offMid = P.scootOffPath(0.5, { x: crack.x, lift: crack.lift, rot: 2.5 }, { x: crack.x + 67, lift: 0 });
+  const off1 = P.scootOffPath(1, { x: crack.x, lift: crack.lift, rot: 2.5 }, { x: crack.x + 67, lift: 0 });
+  assert.ok(Math.abs(off0.x - crack.x) < 2);
+  assert.ok(offMid.lift > 1, "a scoot out of the stone crack");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "flash");
+    assert.notEqual(play.phase, "gape");
+    assert.notEqual(play.phase, "gape-dart");
+    assert.notEqual(play.phase, "chirp");
+    assert.notEqual(play.phase, "filter");
+    assert.notEqual(play.phase, "daub");
+    assert.notEqual(play.phase, "hiss");
+    assert.notEqual(play.phase, "run");
+    assert.notEqual(play.phase, "stone");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "scoot") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "scoot-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "scoot-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.9)) < 3, "she holds the stone crack after the blue");
+    }
+    if (play.phase === "scoot-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("scoot-on"));
+  assert.ok(seen.has("scoot"));
+  assert.ok(seen.has("scoot-hold"));
+  assert.ok(seen.has("scoot-off"));
+  assert.ok(!seen.has("flash"), "Dash never uses Wink flash");
+  assert.ok(!seen.has("gape"), "Dash never uses Door gape");
+  assert.ok(!seen.has("chirp"), "Dash never uses Pad chirp");
+  assert.ok(!seen.has("run"), "Dash never uses Gale run");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Dash's stone-crack; sleep, card, and hide abort; Dash never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "skink", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "scoot"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "scoot");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "scoot");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "scoot-off");
+  assert.equal(play.abort, true);
+});
+
