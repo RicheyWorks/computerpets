@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "perch", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "walleye", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -24831,7 +24831,7 @@ test("Penny flares a lamp-side stile as dock shade: walk onto the stile, flare t
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("perch"), "barred");
-  assert.equal(P.playFor("pike"), "sill");
+  assert.equal(P.playFor("walleye"), "sill");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -25009,7 +25009,7 @@ test("Bar bars a meeting rail as a weed rail: walk onto the rail, show the side 
   assert.equal(P.playFor("mussel"), "filter");
   assert.equal(P.playFor("moss"), "lean");
   assert.equal(P.playFor("chickadee"), "cache");
-  assert.equal(P.playFor("pike"), "sill");
+  assert.equal(P.playFor("walleye"), "sill");
   assert.notEqual(P.playFor("perch"), "bar");
   assert.notEqual(P.playFor("perch"), "perch");
   assert.notEqual(P.playFor("perch"), "flare");
@@ -25201,5 +25201,193 @@ test("a moved window refits Bar's weed-rail meeting rail; sleep, card, and hide 
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "barred-off");
+  assert.equal(play.abort, true);
+});
+
+test("Lance bills a window-box as a reed ambush: walk onto the box, sit the duckbill and wait, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("pike"), "bill");
+  assert.equal(P.BILL, "bill");
+  assert.equal(P.playFor("bass"), "mouth");
+  assert.equal(P.playFor("perch"), "barred");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("bluegill"), "flare");
+  assert.equal(P.playFor("kinkajou"), "wrap");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("walleye"), "sill");
+  assert.notEqual(P.playFor("pike"), "lance");
+  assert.notEqual(P.playFor("pike"), "barred");
+  assert.notEqual(P.playFor("pike"), "mouth");
+  assert.notEqual(P.playFor("pike"), "wrap");
+  assert.notEqual(P.playFor("pike"), "sip");
+  assert.notEqual(P.playFor("pike"), "forage");
+  assert.notEqual(P.playFor("pike"), "sill");
+  assert.equal(P.DUR.mouthOn, 1.69, "Lunge mouth durations stay");
+  assert.equal(P.DUR.barredOn, 1.58, "Bar barred durations stay");
+  assert.equal(P.DUR.wrapOn, 1.47, "Wrist wrap durations stay");
+  assert.equal(P.DUR.sipOn, 0.46, "Sip sip durations stay");
+  const target = P.pickTarget([WIN], 80, "pike", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "bill");
+  assert.equal(target.side, "reedambush");
+  assert.equal(target.leave, "bills");
+  assert.notEqual(target.kind, "lance");
+  assert.notEqual(target.kind, "mouth");
+  assert.notEqual(target.kind, "barred");
+  assert.notEqual(target.kind, "wrap");
+  assert.notEqual(target.kind, "sip");
+  assert.notEqual(target.kind, "forage");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "he bills a window-box as a reed ambush, not the floor");
+  assert.ok(P.DUR.billHold > P.DUR.bill, "the hold is the sit after; the duckbill wait is the tell");
+  assert.ok(P.DUR.billOn > 1.0, "a walk onto the box, not the bill");
+  assert.ok(P.DUR.billOn !== P.DUR.mouthOn);
+  assert.ok(P.DUR.billOn !== P.DUR.wrapOn);
+  assert.ok(P.DUR.billOn !== P.DUR.sipOn);
+  assert.ok(P.DUR.billOn !== P.DUR.forageOn);
+  assert.ok(P.DUR.billOn !== P.DUR.barredOn);
+  assert.ok(P.DUR.billOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.bill !== P.DUR.mouth);
+  assert.ok(P.DUR.bill !== P.DUR.wrap);
+  assert.ok(P.DUR.bill !== P.DUR.sip);
+  assert.ok(P.DUR.bill !== P.DUR.barred);
+  assert.ok(P.DUR.billHold !== P.DUR.mouthHold);
+  assert.ok(P.DUR.billHold !== P.DUR.wrapHold);
+  assert.ok(P.DUR.billOff !== P.DUR.mouthOff);
+  assert.ok(P.DUR.billOff !== P.DUR.wrapOff);
+  assert.ok(P.DUR.billOff !== P.DUR.sillDown);
+  const reed = P.billPoint(WIN, P.SPRITE, WORK);
+  const edge = P.mouthPoint(WIN, P.SPRITE, WORK);
+  const bloom = P.wrapPoint(WIN, P.SPRITE, WORK);
+  const nectar = P.sipPoint(WIN, P.SPRITE, WORK);
+  const meadow = P.foragePoint(WIN, P.SPRITE, WORK);
+  const weed = P.barredPoint(WIN, P.SPRITE, WORK);
+  const perch = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(reed.lift > 8, "the window-box as a reed ambush, not the floor");
+  assert.ok(Math.abs(reed.lift - edge.lift) < 8, "same window-box furniture family as Lunge");
+  assert.ok(Math.abs(reed.x - edge.x) > 20, "same window-box, not Lunge mouth spot");
+  assert.ok(Math.abs(reed.lift - bloom.lift) < 8, "same window-box furniture family as Wrist");
+  assert.ok(Math.abs(reed.x - bloom.x) > 20, "same window-box, not Wrist wrap spot");
+  assert.ok(Math.abs(reed.lift - nectar.lift) > 8, "same window-box family, not Sip hover sip");
+  assert.ok(Math.abs(reed.x - meadow.x) > 20, "same window-box, not Thrum forage spot");
+  assert.ok(Math.abs(reed.lift - weed.lift) > 8 || Math.abs(reed.x - weed.x) > 8, "not Bar meeting-rail barred");
+  assert.ok(Math.abs(reed.x - perch.x) > 8 || Math.abs(reed.lift - perch.lift) > 8, "not Echo shade perch");
+  assert.ok(Math.abs(reed.x - horn.x) > 8 || Math.abs(reed.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "pike", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window-box, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "pike", WORK, P.SPRITE);
+  assert.equal(short, null, "a real window-box, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 193, height: 160 }], 80, "pike", WORK, P.SPRITE);
+  assert.equal(thin, null, "Lance needs Lunge, Wrist, and Sip's real window-box, not a thinner box");
+  const box = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "pike", WORK, P.SPRITE);
+  assert.ok(box, "a real window-box as a reed ambush");
+  const mouthOk = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "bass", WORK, P.SPRITE);
+  assert.ok(mouthOk, "Lunge still takes the window-box");
+  const wrapOk = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "kinkajou", WORK, P.SPRITE);
+  assert.ok(wrapOk, "Wrist still takes the window-box");
+  const sipOk = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "hummingbird", WORK, P.SPRITE);
+  assert.ok(sipOk, "Sip still takes the window-box");
+  const walkOn = P.billOnPath(0.25, { x: 40, lift: 0 }, { x: reed.x, lift: reed.lift });
+  const mouthOn = P.mouthOnPath(0.25, { x: 40, lift: 0 }, { x: reed.x, lift: reed.lift });
+  const wrapOn = P.wrapOnPath(0.25, { x: 40, lift: 0 }, { x: reed.x, lift: reed.lift });
+  const sipOn = P.sipOnPath(0.25, { x: 40, lift: 0 }, { x: reed.x, lift: reed.lift });
+  const forageOn = P.forageOnPath(0.25, { x: 40, lift: 0 }, { x: reed.x, lift: reed.lift });
+  const walkEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(Math.abs(walkOn.lift - (reed.lift * walkEase)) < 6, "he walks onto the window-box");
+  assert.ok(walkOn.lift !== mouthOn.lift, "a walk, not Lunge mouth");
+  assert.ok(walkOn.lift !== wrapOn.lift, "a walk, not Wrist wrap");
+  assert.ok(walkOn.lift !== sipOn.lift, "a walk onto the box, not Sip hover");
+  assert.ok(walkOn.lift !== forageOn.lift, "a walk, not Thrum forage");
+  const duck = P.billPath(0.5);
+  const wide = P.mouthPath(0.5);
+  const coil = P.wrapPath(0.5);
+  const jab = P.sipPath(0.5);
+  const buzz = P.foragePath(0.5);
+  const bars = P.barredPath(0.5);
+  assert.ok(duck.rot > 6 && duck.rot < 9, "he sits the duckbill and waits");
+  assert.ok(duck.x < 4, "he sits, he does not lunge");
+  assert.ok(duck.lift < 0, "a duckbill wait in the reeds, not a hover sip");
+  assert.ok(duck.rot !== wide.rot, "a bill, not Lunge mouth");
+  assert.ok(duck.x !== wide.x, "a wait, not Lunge lunge");
+  assert.ok(duck.rot !== coil.rot, "not Wrist wrap");
+  assert.ok(duck.lift !== jab.lift, "not Sip sip");
+  assert.ok(duck.lift !== buzz.lift, "not Thrum forage");
+  assert.ok(duck.rot !== bars.rot, "not Bar barred");
+  const hold = P.billHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 5.6) < 0.2, "he holds after the duckbill");
+  assert.ok(Math.abs(hold.x - 1.8) < 0.2, "he stays in the reed ambush");
+  assert.ok(hold.lift > -1.3 && hold.lift < -0.9, "a sit after the bill");
+  const off0 = P.billOffPath(0, { x: reed.x, lift: reed.lift, rot: 5.6 }, { x: reed.x + 49, lift: 0 });
+  const offMid = P.billOffPath(0.5, { x: reed.x, lift: reed.lift, rot: 5.6 }, { x: reed.x + 49, lift: 0 });
+  const off1 = P.billOffPath(1, { x: reed.x, lift: reed.lift, rot: 5.6 }, { x: reed.x + 49, lift: 0 });
+  assert.ok(Math.abs(off0.x - reed.x) < 2);
+  assert.ok(offMid.lift > 4, "a walk leave off the reed ambush");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "mouth");
+    assert.notEqual(play.phase, "wrap");
+    assert.notEqual(play.phase, "sip");
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "barred");
+    assert.notEqual(play.phase, "lance");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "bill") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "bill-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "bill-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.2)) < 3, "he holds the duckbill in the reed ambush");
+    }
+    if (play.phase === "bill-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("bill-on"));
+  assert.ok(seen.has("bill"));
+  assert.ok(seen.has("bill-hold"));
+  assert.ok(seen.has("bill-off"));
+  assert.ok(!seen.has("mouth"), "Lance never uses Lunge mouth");
+  assert.ok(!seen.has("wrap"), "Lance never uses Wrist wrap");
+  assert.ok(!seen.has("sip"), "Lance never uses Sip sip");
+  assert.ok(!seen.has("forage"), "Lance never uses Thrum forage");
+  assert.ok(!seen.has("barred"), "Lance never uses Bar barred");
+  assert.ok(!seen.has("lance"), "Lance never uses lance as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Lance's reed-ambush window-box; sleep, card, and hide abort; Lance never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "pike", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "bill"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "bill");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "bill");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bill-off");
   assert.equal(play.abort, true);
 });
