@@ -11848,7 +11848,7 @@ test("the demo window plate walks Barb's raise the same way", () => {
   assert.equal(P.playFor("mining_bee"), "dig");
   assert.equal(P.playFor("saguaro"), "store");
   assert.equal(P.playFor("oak"), "seed");
-  assert.equal(P.playFor("vinegaroon"), "sill");
+  assert.equal(P.playFor("vinegaroon"), "spray");
   assert.notEqual(P.playFor("scorpion"), "barb");
   assert.notEqual(target.kind, "pull");
   assert.notEqual(target.kind, "plow");
@@ -11919,3 +11919,101 @@ test("the demo window plate walks Barb's raise the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Whip's spray the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/corner.ts"), "utf8"), /key: "vinegaroon"[\s\S]{0,80}slug: "whip"/);
+  assert.equal(P.playFor("vinegaroon"), "spray");
+  const target = P.pickTarget([WIN], 80, "vinegaroon", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "spray");
+  assert.equal(target.side, "sand");
+  assert.equal(target.leave, "sand");
+  assert.equal(Overlay.playFor("vinegaroon"), "spray");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.playFor("crayfish"), "claw");
+  assert.equal(P.playFor("caecilian"), "ring");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("mining_bee"), "dig");
+  assert.equal(P.playFor("saguaro"), "store");
+  assert.notEqual(P.playFor("vinegaroon"), "whip");
+  assert.notEqual(target.kind, "raise");
+  assert.notEqual(target.kind, "claw");
+  assert.notEqual(target.kind, "ring");
+  assert.notEqual(target.kind, "plow");
+  assert.notEqual(target.kind, "stilt");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "he sprays a sill wash, not the floor");
+  assert.ok(P.DUR.sprayHold > P.DUR.spray, "the wait is the hold; the acetic spray is the tell");
+  assert.ok(P.DUR.sprayOn !== Overlay.DUR.raiseOn);
+  assert.ok(P.DUR.sprayOn !== Overlay.DUR.stiltOn);
+  assert.ok(P.DUR.sprayOn !== Overlay.DUR.clawOn);
+  assert.ok(P.DUR.sprayOn !== Overlay.DUR.ringOn);
+  assert.ok(P.DUR.sprayOn !== Overlay.DUR.plowOn);
+  assert.ok(P.DUR.sprayOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.raiseOn, Overlay.DUR.raiseOn);
+  assert.equal(P.DUR.sprayOn, Overlay.DUR.sprayOn);
+  assert.equal(P.DUR.spray, Overlay.DUR.spray);
+  assert.equal(P.DUR.sprayHold, Overlay.DUR.sprayHold);
+  assert.equal(P.DUR.sprayOff, Overlay.DUR.sprayOff);
+  const wash = P.sprayPoint(WIN, 176, WORK);
+  const deskWash = Overlay.sprayPoint(WIN, 176, WORK);
+  assert.equal(wash.x, deskWash.x);
+  assert.equal(wash.lift, deskWash.lift);
+  const bark = P.raisePoint(WIN, 176, WORK);
+  const scrap = P.clawPoint(WIN, 176, WORK);
+  const kerf = P.ringPoint(WIN, 176, WORK);
+  const bead = P.stiltPoint(WIN, 176, WORK);
+  assert.ok(wash.lift > 8, "the sill wash as sand");
+  assert.ok(Math.abs(wash.x - scrap.x) > 8 || Math.abs(wash.lift - scrap.lift) > 8, "not Pinch");
+  assert.ok(Math.abs(wash.x - bark.x) > 8 || Math.abs(wash.lift - bark.lift) > 8, "not Barb");
+  assert.ok(Math.abs(wash.x - kerf.x) > 8 || Math.abs(wash.lift - kerf.lift) > 8, "not Slip");
+  assert.ok(Math.abs(wash.lift - bead.lift) > 40, "not Stem");
+  const walkOn = P.sprayOnPath(0.25, { x: 40, lift: 0 }, { x: wash.x, lift: wash.lift });
+  const deskWalk = Overlay.sprayOnPath(0.25, { x: 40, lift: 0 }, { x: wash.x, lift: wash.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "he walks onto the wash");
+  const puff = P.sprayPath(0.5);
+  const deskPuff = Overlay.sprayPath(0.5);
+  assert.equal(puff.lift, deskPuff.lift);
+  assert.ok(puff.rot < -10, "the whip goes back");
+  assert.ok(Math.abs(puff.x) < 4, "he stays on the wash");
+  const still = P.sprayHoldPath(0.5);
+  const deskStill = Overlay.sprayHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.rot < -10, "he holds the whip back, no sting");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "raise");
+    assert.notEqual(play.phase, "claw");
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "spray") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "spray-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "spray-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.6)) < 4, "he holds the whip back on the wash");
+    }
+  }
+  assert.ok(seen.has("spray-on"));
+  assert.ok(seen.has("spray"));
+  assert.ok(seen.has("spray-hold"));
+  assert.ok(seen.has("spray-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
