@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "chameleon", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "horned_lizard", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -22819,7 +22819,8 @@ test("Dash scoots a sash-jamb crack as a stone crack: scoot into the crack, show
   assert.equal(P.playFor("barn_owl"), "hiss");
   assert.equal(P.playFor("solifuge"), "run");
   assert.equal(P.playFor("garter"), "patrol");
-  assert.equal(P.playFor("chameleon"), "sill");
+  assert.equal(P.playFor("chameleon"), "aim");
+  assert.equal(P.playFor("horned_lizard"), "sill");
   assert.notEqual(P.playFor("skink"), "dash");
   assert.notEqual(P.playFor("skink"), "stone");
   assert.notEqual(P.playFor("skink"), "run");
@@ -22985,3 +22986,200 @@ test("a moved window refits Dash's stone-crack; sleep, card, and hide abort; Das
   assert.equal(play.abort, true);
 });
 
+
+test("Shift aims a sash parting bead as a branch perch: walk onto the bead, aim (independent eyes), then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("chameleon"), "aim");
+  assert.equal(P.playFor("skink"), "scoot");
+  assert.equal(P.playFor("anole"), "flash");
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("potto"), "creep");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.playFor("seahorse"), "hitch");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("horned_lizard"), "sill");
+  assert.notEqual(P.playFor("chameleon"), "shift");
+  assert.notEqual(P.playFor("chameleon"), "look");
+  assert.notEqual(P.playFor("chameleon"), "flash");
+  assert.notEqual(P.playFor("chameleon"), "scoot");
+  assert.notEqual(P.playFor("chameleon"), "stilt");
+  assert.notEqual(P.playFor("chameleon"), "creep");
+  assert.notEqual(P.playFor("chameleon"), "hitch");
+  assert.notEqual(P.playFor("chameleon"), "perch");
+  assert.notEqual(P.playFor("chameleon"), "sill");
+  assert.equal(P.DUR.scootOn, 0.92, "Dash scoot durations stay");
+  assert.equal(P.DUR.flashOn, 1.04, "Wink flash durations stay");
+  assert.equal(P.DUR.stone, P.DUR.stone, "Blush stone stays");
+  const target = P.pickTarget([WIN], 80, "chameleon", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "aim");
+  assert.equal(target.side, "branchperch");
+  assert.equal(target.leave, "casque");
+  assert.notEqual(target.kind, "shift");
+  assert.notEqual(target.kind, "look");
+  assert.notEqual(target.kind, "flash");
+  assert.notEqual(target.kind, "scoot");
+  assert.notEqual(target.kind, "stilt");
+  assert.notEqual(target.kind, "creep");
+  assert.notEqual(target.kind, "hitch");
+  assert.notEqual(target.kind, "perch");
+  assert.notEqual(target.kind, "stone");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she aims a sash parting bead as a branch perch, not the floor");
+  assert.ok(P.DUR.aimHold > P.DUR.aim, "the hold is the sit after; the aim is the tell");
+  assert.ok(P.DUR.aimOn > 0.5, "a walk onto the bead, not the aim");
+  assert.ok(P.DUR.aimOn !== P.DUR.scootOn);
+  assert.ok(P.DUR.aimOn !== P.DUR.flashOn);
+  assert.ok(P.DUR.aimOn !== P.DUR.lookOn);
+  assert.ok(P.DUR.aimOn !== P.DUR.stiltOn);
+  assert.ok(P.DUR.aimOn !== P.DUR.creepOn);
+  assert.ok(P.DUR.aimOn !== P.DUR.hitchOn);
+  assert.ok(P.DUR.aimOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.aim !== P.DUR.scoot);
+  assert.ok(P.DUR.aim !== P.DUR.flash);
+  assert.ok(P.DUR.aim !== P.DUR.look);
+  assert.ok(P.DUR.aim !== P.DUR.stilt);
+  assert.ok(P.DUR.aim !== P.DUR.creep);
+  assert.ok(P.DUR.aimHold !== P.DUR.scootHold);
+  assert.ok(P.DUR.aimHold !== P.DUR.flashHold);
+  assert.ok(P.DUR.aimHold !== P.DUR.lookHold);
+  assert.ok(P.DUR.aimOff !== P.DUR.scootOff);
+  assert.ok(P.DUR.aimOff !== P.DUR.flashOff);
+  assert.ok(P.DUR.aimOff !== P.DUR.sillDown);
+  const bead = P.aimPoint(WIN, P.SPRITE, WORK);
+  const stem = P.stiltPoint(WIN, P.SPRITE, WORK);
+  const vine = P.creepPoint(WIN, P.SPRITE, WORK);
+  const hitch = P.hitchPoint(WIN, P.SPRITE, WORK);
+  const hollow = P.lookPoint(WIN, P.SPRITE, WORK);
+  const stile = P.flashPoint(WIN, P.SPRITE, WORK);
+  const crack = P.scootPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(bead.lift > 36, "the sash parting bead as a branch perch, not the floor");
+  assert.ok(Math.abs(bead.lift - stem.lift) < 2, "the same sash parting bead Stem stilts; the pose is an aim");
+  assert.ok(Math.abs(bead.x - stem.x) > 8, "not Stem's stilt spot");
+  assert.ok(Math.abs(bead.x - vine.x) > 8, "not Still's creep spot");
+  assert.ok(Math.abs(bead.x - hitch.x) > 8 || Math.abs(bead.lift - hitch.lift) > 8, "not Anchor hitch");
+  assert.ok(Math.abs(bead.x - hollow.x) > 8 || Math.abs(bead.lift - hollow.lift) > 8, "not Gaze pulley-box look");
+  assert.ok(Math.abs(bead.x - stile.x) > 8 || Math.abs(bead.lift - stile.lift) > 8, "not Wink stile flash");
+  assert.ok(Math.abs(bead.x - crack.x) > 8 || Math.abs(bead.lift - crack.lift) > 8, "not Dash crack scoot");
+  assert.ok(Math.abs(bead.x - horn.x) > 8 || Math.abs(bead.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "chameleon", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash parting bead, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 168, height: 80 }], 80, "chameleon", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash parting bead, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 168, height: 207 }], 80, "chameleon", WORK, P.SPRITE);
+  assert.equal(thin, null, "Shift needs Stem's real bead, not a shorter sash");
+  const beadOk = P.pickTarget([{ id: "bead", x: 200, y: 80, width: 168, height: 208 }], 80, "chameleon", WORK, P.SPRITE);
+  assert.ok(beadOk, "a real sash parting bead as a branch perch");
+  const stemOk = P.pickTarget([{ id: "bead", x: 200, y: 80, width: 168, height: 208 }], 80, "harvestman", WORK, P.SPRITE);
+  assert.ok(stemOk, "Stem still takes the bead");
+  const stillOk = P.pickTarget([{ id: "bead", x: 200, y: 80, width: 168, height: 208 }], 80, "potto", WORK, P.SPRITE);
+  assert.ok(stillOk, "Still still takes the bead");
+  const winkOk = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 191, height: 216 }], 80, "anole", WORK, P.SPRITE);
+  assert.ok(winkOk, "Wink still takes the stile");
+  const dashOk = P.pickTarget([{ id: "crack", x: 200, y: 80, width: 172, height: 212 }], 80, "skink", WORK, P.SPRITE);
+  assert.ok(dashOk, "Dash still takes the crack");
+  const walkOn = P.aimOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  const stiltOn = P.stiltOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  const creepOn = P.creepOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  const hitchOn = P.hitchOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  const lookOn = P.lookOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  const sitOn = P.flashOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  const scootOn = P.scootOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the bead as a branch perch");
+  assert.ok(walkOn.lift !== stiltOn.lift, "a walk-and-aim, not Stem stilt");
+  assert.ok(walkOn.lift !== creepOn.lift, "a walk-and-aim, not Still creep");
+  assert.ok(walkOn.lift !== hitchOn.lift, "a walk-and-aim, not Anchor hitch");
+  assert.ok(walkOn.lift !== lookOn.lift, "a walk-and-aim, not Gaze look");
+  assert.ok(walkOn.lift !== sitOn.lift, "a walk-and-aim, not Wink flash sit");
+  assert.ok(walkOn.lift !== scootOn.lift, "a walk-and-aim, not Dash scoot");
+  const eyes = P.aimPath(0.5);
+  const pink = P.flashPath(0.5);
+  const stare = P.lookPath(0.5);
+  const blue = P.scootPath(0.5);
+  const stemPose = P.stiltPath(0.5);
+  const slow = P.creepPath(0.5);
+  assert.ok(eyes.lift > 3, "she aims; independent eyes, tongue ready");
+  assert.ok(eyes.rot > 8 && eyes.rot < 16, "a casque aim, not a dewlap flash");
+  assert.ok(eyes.lift !== pink.lift, "not Wink flash");
+  assert.ok(eyes.rot !== stare.rot, "not Gaze look");
+  assert.ok(eyes.lift !== blue.lift, "not Dash scoot");
+  assert.ok(eyes.lift !== stemPose.lift, "not Stem stilt");
+  assert.ok(eyes.lift !== slow.lift, "not Still creep");
+  const hold = P.aimHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 8.4) < 0.2, "she holds the aim after the eyes");
+  assert.ok(Math.abs(hold.x - 1.4) < 0.2, "she stays on the bead");
+  assert.ok(hold.lift > 3 && hold.lift < 5, "a hold after the aim, not a tongue strike");
+  const off0 = P.aimOffPath(0, { x: bead.x, lift: bead.lift, rot: 8.4 }, { x: bead.x + 57, lift: 0 });
+  const offMid = P.aimOffPath(0.5, { x: bead.x, lift: bead.lift, rot: 8.4 }, { x: bead.x + 57, lift: 0 });
+  const off1 = P.aimOffPath(1, { x: bead.x, lift: bead.lift, rot: 8.4 }, { x: bead.x + 57, lift: 0 });
+  assert.ok(Math.abs(off0.x - bead.x) < 2);
+  assert.ok(offMid.lift > 1, "a walk off the branch perch");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "flash");
+    assert.notEqual(play.phase, "look");
+    assert.notEqual(play.phase, "scoot");
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "creep");
+    assert.notEqual(play.phase, "hitch");
+    assert.notEqual(play.phase, "perch");
+    assert.notEqual(play.phase, "stone");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "aim") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "aim-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "aim-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 3.8)) < 3, "she holds the branch perch after the aim");
+    }
+    if (play.phase === "aim-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("aim-on"));
+  assert.ok(seen.has("aim"));
+  assert.ok(seen.has("aim-hold"));
+  assert.ok(seen.has("aim-off"));
+  assert.ok(!seen.has("flash"), "Shift never uses Wink flash");
+  assert.ok(!seen.has("look"), "Shift never uses Gaze look");
+  assert.ok(!seen.has("scoot"), "Shift never uses Dash scoot");
+  assert.ok(!seen.has("stilt"), "Shift never uses Stem stilt");
+  assert.ok(!seen.has("creep"), "Shift never uses Still creep");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Shift's branch-perch; sleep, card, and hide abort; Shift never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "chameleon", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "aim"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "aim");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "aim");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "aim-off");
+  assert.equal(play.abort, true);
+});

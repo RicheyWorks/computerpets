@@ -14226,7 +14226,8 @@ test("the demo window plate walks Dash scoot the same way", () => {
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("moray"), "gape");
-  assert.equal(P.playFor("chameleon"), "sill");
+  assert.equal(P.playFor("chameleon"), "aim");
+  assert.equal(P.playFor("horned_lizard"), "sill");
   assert.notEqual(P.playFor("skink"), "dash");
   assert.notEqual(P.playFor("skink"), "stone");
   assert.notEqual(P.playFor("skink"), "run");
@@ -14299,3 +14300,107 @@ test("the demo window plate walks Dash scoot the same way", () => {
   assert.equal(play.phase, "done");
 });
 
+
+test("the demo window plate walks Shift aim the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/stone.ts"), "utf8"), /key: "chameleon"[\s\S]{0,80}slug: "shift"/);
+  assert.equal(P.playFor("chameleon"), "aim");
+  const target = P.pickTarget([WIN], 80, "chameleon", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "aim");
+  assert.equal(target.side, "branchperch");
+  assert.equal(target.leave, "casque");
+  assert.equal(Overlay.playFor("chameleon"), "aim");
+  assert.equal(P.playFor("skink"), "scoot");
+  assert.equal(Overlay.playFor("skink"), "scoot");
+  assert.equal(P.playFor("anole"), "flash");
+  assert.equal(Overlay.playFor("anole"), "flash");
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(Overlay.playFor("tarsier"), "look");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("horned_lizard"), "sill");
+  assert.notEqual(P.playFor("chameleon"), "shift");
+  assert.notEqual(P.playFor("chameleon"), "look");
+  assert.notEqual(P.playFor("chameleon"), "flash");
+  assert.notEqual(P.playFor("chameleon"), "scoot");
+  assert.notEqual(target.kind, "shift");
+  assert.notEqual(target.kind, "look");
+  assert.notEqual(target.kind, "flash");
+  assert.notEqual(target.kind, "stilt");
+  assert.notEqual(target.kind, "creep");
+  assert.notEqual(target.kind, "hitch");
+  assert.ok(target.holdLift > 20, "she aims a sash parting bead as a branch perch, not the sash foot");
+  assert.ok(P.DUR.aimHold > P.DUR.aim, "the hold is the sit after; the aim is the tell");
+  assert.ok(P.DUR.aimOn !== Overlay.DUR.scootOn);
+  assert.ok(P.DUR.aimOn !== Overlay.DUR.flashOn);
+  assert.ok(P.DUR.aimOn !== Overlay.DUR.lookOn);
+  assert.ok(P.DUR.aimOn !== Overlay.DUR.stiltOn);
+  assert.ok(P.DUR.aimOn !== Overlay.DUR.creepOn);
+  assert.ok(P.DUR.aimOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.aimOn, Overlay.DUR.aimOn);
+  assert.equal(P.DUR.aim, Overlay.DUR.aim);
+  assert.equal(P.DUR.aimHold, Overlay.DUR.aimHold);
+  assert.equal(P.DUR.aimOff, Overlay.DUR.aimOff);
+  const bead = P.aimPoint(WIN, 176, WORK);
+  const deskShift = Overlay.aimPoint(WIN, Overlay.SPRITE, WORK);
+  const stem = P.stiltPoint(WIN, 176, WORK);
+  const vine = P.creepPoint(WIN, 176, WORK);
+  const hitch = P.hitchPoint(WIN, 176, WORK);
+  const hollow = P.lookPoint(WIN, 176, WORK);
+  const stile = P.flashPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(bead.x - deskShift.x) < 1);
+  assert.ok(Math.abs(bead.lift - deskShift.lift) < 1);
+  assert.ok(Math.abs(bead.lift - stem.lift) < 2, "same parting bead as Stem");
+  assert.ok(Math.abs(bead.x - stem.x) > 8, "not Stem stilt");
+  assert.ok(Math.abs(bead.x - vine.x) > 8, "not Still creep");
+  assert.ok(Math.abs(bead.x - hitch.x) > 8 || Math.abs(bead.lift - hitch.lift) > 8, "not Anchor hitch");
+  assert.ok(Math.abs(bead.x - hollow.x) > 8 || Math.abs(bead.lift - hollow.lift) > 8, "not Gaze look");
+  assert.ok(Math.abs(bead.x - stile.x) > 8 || Math.abs(bead.lift - stile.lift) > 8, "not Wink flash");
+  const walkOn = P.aimOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  const deskWalk = Overlay.aimOnPath(0.25, { x: 40, lift: 0 }, { x: bead.x, lift: bead.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks onto the bead as a branch perch");
+  const eyes = P.aimPath(0.5);
+  const deskEyes = Overlay.aimPath(0.5);
+  assert.equal(eyes.lift, deskEyes.lift);
+  assert.ok(eyes.lift > 3, "she aims; independent eyes, tongue ready");
+  const hold = P.aimHoldPath(0.5);
+  const deskHold = Overlay.aimHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 8.4) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "flash");
+    assert.notEqual(play.phase, "look");
+    assert.notEqual(play.phase, "scoot");
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "creep");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "aim") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "aim-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "aim-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 3.8)) < 3, "she holds the branch perch after the aim");
+    }
+  }
+  assert.ok(seen.has("aim-on"));
+  assert.ok(seen.has("aim"));
+  assert.ok(seen.has("aim-hold"));
+  assert.ok(seen.has("aim-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
