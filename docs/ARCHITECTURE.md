@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-28 (Haste hunts a sash-jamb crack as a plaster crack; first log leftover done; this opens log ten; next leftover is Link; catalog stays 220; Silver still owns go; Round still owns disk; Sail still owns cling; Door still owns gape; Dash still owns scoot; Pad still owns chirp) |
+| **Last Updated** | 2026-08-28 (Link oils a window stool as a damp log; second log leftover done; next leftover is Armor; catalog stays 220; Haste still owns hunt; Silver still owns go; Round still owns disk; Sail still owns cling; Cache still owns bury; Gum still owns chew; Coal still owns browse) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |

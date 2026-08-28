@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "millipede", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "pillbug", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -25795,7 +25795,7 @@ test("Round disks a sill horn as a stone disk: walk onto the horn, sit the disk 
   assert.equal(P.playFor("water_lily"), "open");
   assert.equal(P.playFor("american_eel"), "go");
   assert.equal(P.playFor("house_centipede"), "hunt");
-  assert.equal(P.playFor("millipede"), "sill");
+  assert.equal(P.playFor("pillbug"), "sill");
   assert.notEqual(P.playFor("lamprey"), "round");
   assert.notEqual(P.playFor("lamprey"), "cling");
   assert.notEqual(P.playFor("lamprey"), "paddle");
@@ -25981,7 +25981,7 @@ test("Silver goes a window well as a bank hole: walk into the well, swim the goi
   assert.equal(P.playFor("horned_lizard"), "crown");
   assert.equal(P.playFor("black_bear"), "browse");
   assert.equal(P.playFor("house_centipede"), "hunt");
-  assert.equal(P.playFor("millipede"), "sill");
+  assert.equal(P.playFor("pillbug"), "sill");
   assert.notEqual(P.playFor("american_eel"), "silver");
   assert.notEqual(P.playFor("american_eel"), "disk");
   assert.notEqual(P.playFor("american_eel"), "cling");
@@ -26189,7 +26189,7 @@ test("Haste hunts a sash-jamb crack as a plaster crack: walk into the crack, dar
   assert.equal(P.playFor("moray"), "gape");
   assert.equal(P.playFor("skink"), "scoot");
   assert.equal(P.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("millipede"), "sill");
+  assert.equal(P.playFor("pillbug"), "sill");
   assert.notEqual(P.playFor("house_centipede"), "haste");
   assert.notEqual(P.playFor("house_centipede"), "go");
   assert.notEqual(P.playFor("house_centipede"), "scoot");
@@ -26356,5 +26356,183 @@ test("a moved window refits Haste's plaster-crack hunt; sleep, card, and hide ab
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "hunt-off");
+  assert.equal(play.abort, true);
+});
+
+test("Link oils a window stool as a damp log: walk onto the stool, oil the rings, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("millipede"), "oil");
+  assert.equal(P.OIL, "oil");
+  assert.equal(P.playFor("house_centipede"), "hunt");
+  assert.equal(P.playFor("american_eel"), "go");
+  assert.equal(P.playFor("lamprey"), "disk");
+  assert.equal(P.playFor("colugo"), "cling");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("koala"), "chew");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("alligator"), "bank");
+  assert.equal(P.playFor("pillbug"), "sill");
+  assert.notEqual(P.playFor("millipede"), "link");
+  assert.notEqual(P.playFor("millipede"), "hunt");
+  assert.notEqual(P.playFor("millipede"), "go");
+  assert.notEqual(P.playFor("millipede"), "disk");
+  assert.notEqual(P.playFor("millipede"), "cling");
+  assert.notEqual(P.playFor("millipede"), "bury");
+  assert.notEqual(P.playFor("millipede"), "chew");
+  assert.notEqual(P.playFor("millipede"), "bank");
+  assert.notEqual(P.playFor("millipede"), "browse");
+  assert.notEqual(P.playFor("millipede"), "sill");
+  assert.equal(P.DUR.huntOn, 1.76, "Haste hunt durations stay");
+  assert.equal(P.DUR.goOn, 1.71, "Silver go durations stay");
+  assert.equal(P.DUR.diskOn, 1.63, "Round disk durations stay");
+  assert.equal(P.DUR.buryOn, 0.78, "Cache bury durations stay");
+  const target = P.pickTarget([WIN], 80, "millipede", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "oil");
+  assert.equal(target.side, "damplog");
+  assert.equal(target.leave, "rings");
+  assert.notEqual(target.kind, "link");
+  assert.notEqual(target.kind, "hunt");
+  assert.notEqual(target.kind, "bury");
+  assert.notEqual(target.kind, "chew");
+  assert.notEqual(target.kind, "bank");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she oils a window stool as a damp log, not the floor");
+  assert.ok(P.DUR.oilHold > P.DUR.oil, "the hold is the sit after; the ring oil is the tell");
+  assert.ok(P.DUR.oilOn > 1.0, "a walk onto the stool, not the oil");
+  assert.ok(P.DUR.oilOn !== P.DUR.huntOn);
+  assert.ok(P.DUR.oilOn !== P.DUR.buryOn);
+  assert.ok(P.DUR.oilOn !== P.DUR.chewOn);
+  assert.ok(P.DUR.oilOn !== P.DUR.bankOn);
+  assert.ok(P.DUR.oilOn !== P.DUR.goOn);
+  assert.ok(P.DUR.oilOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.oil !== P.DUR.hunt);
+  assert.ok(P.DUR.oil !== P.DUR.bury);
+  assert.ok(P.DUR.oil !== P.DUR.chew);
+  assert.ok(P.DUR.oilHold !== P.DUR.huntHold);
+  assert.ok(P.DUR.oilHold !== P.DUR.buryHold);
+  assert.ok(P.DUR.oilOff !== P.DUR.huntOff);
+  assert.ok(P.DUR.oilOff !== P.DUR.buryOff);
+  assert.ok(P.DUR.oilOff !== P.DUR.sillDown);
+  const log = P.oilPoint(WIN, P.SPRITE, WORK);
+  const oak = P.buryPoint(WIN, P.SPRITE, WORK);
+  const gum = P.chewPoint(WIN, P.SPRITE, WORK);
+  const bank = P.bankPoint(WIN, P.SPRITE, WORK);
+  const crack = P.huntPoint(WIN, P.SPRITE, WORK);
+  const den = P.browsePoint(WIN, P.SPRITE, WORK);
+  assert.ok(log.lift > 8, "the window stool as a damp log, not the floor");
+  assert.ok(Math.abs(log.lift - oak.lift) < 2, "the same window stool Cache buries; the pose is an oil");
+  assert.ok(Math.abs(log.lift - gum.lift) < 2, "the same window stool Gum chews; the pose is an oil");
+  assert.ok(Math.abs(log.lift - bank.lift) < 2, "the same window stool Levee banks; the pose is an oil");
+  assert.ok(Math.abs(log.x - oak.x) > 8, "not Cache's window-stool bury");
+  assert.ok(Math.abs(log.x - gum.x) > 8, "not Gum's window-stool chew");
+  assert.ok(Math.abs(log.x - bank.x) > 8, "not Levee's window-stool bank");
+  assert.ok(Math.abs(log.x - crack.x) > 8 || Math.abs(log.lift - crack.lift) > 8, "not Haste's sash-jamb hunt");
+  assert.ok(Math.abs(log.x - den.x) > 8 || Math.abs(log.lift - den.lift) > 8, "not Coal's window-well browse");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "millipede", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window stool, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 190, height: 80 }], 80, "millipede", WORK, P.SPRITE);
+  assert.equal(short, null, "a real window stool, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 194, height: 160 }], 80, "millipede", WORK, P.SPRITE);
+  assert.equal(thin, null, "Link needs Cache and Gum and Levee's real window stool, not a shallower mouth");
+  const okLog = P.pickTarget([{ id: "log", x: 200, y: 80, width: 194, height: 162 }], 80, "millipede", WORK, P.SPRITE);
+  assert.ok(okLog, "a real window stool as a damp log");
+  const cacheOk = P.pickTarget([{ id: "log", x: 200, y: 80, width: 194, height: 162 }], 80, "squirrel", WORK, P.SPRITE);
+  assert.ok(cacheOk, "Cache still takes the stool");
+  const gumOk = P.pickTarget([{ id: "log", x: 200, y: 80, width: 194, height: 162 }], 80, "koala", WORK, P.SPRITE);
+  assert.ok(gumOk, "Gum still takes the stool");
+  const leveeOk = P.pickTarget([{ id: "log", x: 200, y: 80, width: 194, height: 162 }], 80, "alligator", WORK, P.SPRITE);
+  assert.ok(leveeOk, "Levee still takes the stool");
+  const hasteOk = P.pickTarget([{ id: "crack", x: 200, y: 80, width: 172, height: 212 }], 80, "house_centipede", WORK, P.SPRITE);
+  assert.ok(hasteOk, "Haste still takes the crack");
+  const walkOn = P.oilOnPath(0.25, { x: 40, lift: 0 }, { x: log.x, lift: log.lift });
+  const buryOn = P.buryOnPath(0.25, { x: 40, lift: 0 }, { x: log.x, lift: log.lift });
+  const chewOn = P.chewOnPath(0.25, { x: 40, lift: 0 }, { x: log.x, lift: log.lift });
+  const bankOn = P.bankOnPath(0.25, { x: 40, lift: 0 }, { x: log.x, lift: log.lift });
+  const huntOn = P.huntOnPath(0.25, { x: 40, lift: 0 }, { x: log.x, lift: log.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the stool as a damp log");
+  assert.ok(walkOn.rot !== buryOn.rot, "a walk onto the stool, not Cache bury");
+  assert.ok(walkOn.rot !== chewOn.rot, "a walk onto the stool, not Gum chew");
+  assert.ok(walkOn.rot !== huntOn.rot, "a walk onto the stool, not Haste hunt");
+  const oil = P.oilPath(0.5);
+  const press = P.buryPath(0.5);
+  const chew = P.chewPath(0.5);
+  const bankPose = P.bankPath(0.5);
+  const dart = P.huntPath(0.5);
+  assert.ok(oil.lift !== press.lift, "an oil, not Cache bury");
+  assert.ok(oil.rot !== chew.rot, "an oil, not Gum chew");
+  assert.ok(oil.lift !== bankPose.lift, "an oil, not Levee bank");
+  assert.ok(oil.rot !== dart.rot, "an oil, not Haste hunt");
+  const hold = P.oilHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 4.6) < 0.2, "she holds after the ring oil");
+  assert.ok(Math.abs(hold.x - 1.9) < 0.2, "she stays on the damp log");
+  assert.ok(hold.lift < -1.0 && hold.lift > -1.6, "a sit after the oil");
+  const off0 = P.oilOffPath(0, { x: log.x, lift: log.lift, rot: 4.6 }, { x: log.x + 46, lift: 0 });
+  const offMid = P.oilOffPath(0.5, { x: log.x, lift: log.lift, rot: 4.6 }, { x: log.x + 46, lift: 0 });
+  const off1 = P.oilOffPath(1, { x: log.x, lift: log.lift, rot: 4.6 }, { x: log.x + 46, lift: 0 });
+  assert.ok(Math.abs(off0.x - log.x) < 2);
+  assert.ok(offMid.lift > 1, "a walk leave off the damp log");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "hunt");
+    assert.notEqual(play.phase, "bury");
+    assert.notEqual(play.phase, "chew");
+    assert.notEqual(play.phase, "bank");
+    assert.notEqual(play.phase, "link");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "oil") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "oil-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "oil-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.3)) < 3, "she holds the oil sit on the damp log");
+    }
+    if (play.phase === "oil-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("oil-on"));
+  assert.ok(seen.has("oil"));
+  assert.ok(seen.has("oil-hold"));
+  assert.ok(seen.has("oil-off"));
+  assert.ok(!seen.has("hunt"), "Link never uses Haste hunt");
+  assert.ok(!seen.has("bury"), "Link never uses Cache bury");
+  assert.ok(!seen.has("chew"), "Link never uses Gum chew");
+  assert.ok(!seen.has("bank"), "Link never uses Levee bank");
+  assert.ok(!seen.has("link"), "Link never uses link as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Link's damp-log oil; sleep, card, and hide abort; Link never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "millipede", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "oil"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "oil");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "oil");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "oil-off");
   assert.equal(play.abort, true);
 });
