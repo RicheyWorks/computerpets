@@ -12650,3 +12650,91 @@ test("the demo window plate walks Wash's rinse the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+
+test("the demo window plate walks Stripe's stamp the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "skunk"[\s\S]{0,80}slug: "stripe"/);
+  assert.equal(P.playFor("skunk"), "stamp");
+  const target = P.pickTarget([WIN], 80, "skunk", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "stamp");
+  assert.equal(target.side, "duff");
+  assert.equal(target.leave, "warn");
+  assert.equal(Overlay.playFor("skunk"), "stamp");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(Overlay.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("vinegaroon"), "spray");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("raccoon"), "rinse");
+  assert.notEqual(P.playFor("skunk"), "stripe");
+  assert.notEqual(target.kind, "carry");
+  assert.notEqual(target.kind, "spray");
+  assert.notEqual(target.kind, "raise");
+  assert.notEqual(target.kind, "rinse");
+  assert.notEqual(target.kind, "sill");
+  assert.equal(target.holdLift, 0, "she stamps a window foot as a duff dish, not the sash");
+  assert.ok(P.DUR.stampHold > P.DUR.stamp, "the plant is the tell; the hold is the warning she wears");
+  assert.ok(P.DUR.stampOn !== Overlay.DUR.carryOn);
+  assert.ok(P.DUR.stampOn !== Overlay.DUR.sprayOn);
+  assert.ok(P.DUR.stampOn !== Overlay.DUR.raiseOn);
+  assert.ok(P.DUR.stampOn !== Overlay.DUR.rinseOn);
+  assert.ok(P.DUR.stampOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.carryOn, Overlay.DUR.carryOn);
+  assert.equal(P.DUR.stampOn, Overlay.DUR.stampOn);
+  assert.equal(P.DUR.stamp, Overlay.DUR.stamp);
+  const duff = P.stampPoint(WIN, 176, WORK);
+  const deskDuff = Overlay.stampPoint(WIN, Overlay.SPRITE, WORK);
+  const litter = P.carryPoint(WIN, 176, WORK);
+  const wash = P.sprayPoint(WIN, 176, WORK);
+  const bowl = P.rinsePoint(WIN, 176, WORK);
+  assert.ok(Math.abs(duff.x - deskDuff.x) < 1);
+  assert.ok(Math.abs(duff.lift - deskDuff.lift) < 1);
+  assert.ok(Math.abs(duff.x - litter.x) < 2 && Math.abs(duff.lift - litter.lift) < 2, "the same window foot");
+  assert.ok(Math.abs(duff.x - wash.x) > 8 || Math.abs(duff.lift - wash.lift) > 8, "not Whip");
+  assert.ok(Math.abs(duff.x - bowl.x) > 8 || Math.abs(duff.lift - bowl.lift) > 8, "not Wash");
+  const walkOn = P.stampOnPath(0.25, { x: 40, lift: 0 }, { x: duff.x, lift: 0 });
+  const deskWalk = Overlay.stampOnPath(0.25, { x: 40, lift: 0 }, { x: duff.x, lift: 0 });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.equal(walkOn.lift, 0, "she walks onto the floor strip");
+  const plant = P.stampPath(0.5);
+  const deskPlant = Overlay.stampPath(0.5);
+  assert.equal(plant.lift, deskPlant.lift);
+  assert.ok(plant.lift < -2, "she plants a warning stamp into the duff");
+  const still = P.stampHoldPath(0.5);
+  const deskStill = Overlay.stampHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "carry");
+    assert.notEqual(play.phase, "spray");
+    assert.notEqual(play.phase, "raise");
+    assert.notEqual(play.phase, "rinse");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "stamp") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "stamp-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "stamp-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift < 1 && play.lift > -3, "she holds the planted warning on the duff");
+    }
+  }
+  assert.ok(seen.has("stamp-on"));
+  assert.ok(seen.has("stamp"));
+  assert.ok(seen.has("stamp-hold"));
+  assert.ok(seen.has("stamp-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
