@@ -13412,7 +13412,7 @@ test("the demo window plate walks Wrist wrap the same way", () => {
   assert.equal(P.playFor("bumblebee"), "forage");
   assert.equal(P.playFor("leafcutter"), "snip");
   assert.equal(P.playFor("leech"), "drink");
-  assert.equal(P.playFor("colugo"), "sill");
+  assert.equal(P.playFor("colugo"), "cling");
   assert.notEqual(P.playFor("kinkajou"), "sip");
   assert.notEqual(P.playFor("kinkajou"), "wrist");
   assert.notEqual(P.playFor("kinkajou"), "drink");
@@ -13488,6 +13488,99 @@ test("the demo window plate walks Wrist wrap the same way", () => {
   assert.ok(seen.has("wrap"));
   assert.ok(seen.has("wrap-hold"));
   assert.ok(seen.has("wrap-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Sail cling the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "colugo"[\s\S]{0,80}slug: "sail"/);
+  assert.equal(P.playFor("colugo"), "cling");
+  const target = P.pickTarget([WIN], 80, "colugo", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "cling");
+  assert.equal(target.side, "trunksail");
+  assert.equal(target.leave, "skin");
+  assert.equal(Overlay.playFor("colugo"), "cling");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.equal(Overlay.playFor("bat"), "fold");
+  assert.equal(P.playFor("kinkajou"), "wrap");
+  assert.equal(P.playFor("porcupine"), "bristle");
+  assert.equal(P.playFor("orchid"), "mount");
+  assert.equal(P.playFor("red_panda"), "cling-dive");
+  assert.equal(P.playFor("flying_squirrel"), "sill");
+  assert.notEqual(P.playFor("colugo"), "sail");
+  assert.notEqual(P.playFor("colugo"), "fold");
+  assert.notEqual(P.playFor("colugo"), "glide");
+  assert.notEqual(target.kind, "sail");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 40, "she clings a window jamb as a trunk sail, not the sash foot");
+  assert.ok(P.DUR.skinHold > P.DUR.skin, "the skin sail is the tell; the hold is the leave wait");
+  assert.ok(P.DUR.skinOn !== Overlay.DUR.wrapOn);
+  assert.ok(P.DUR.skinOn !== Overlay.DUR.bristleOn);
+  assert.ok(P.DUR.skinOn !== Overlay.DUR.mountOn);
+  assert.ok(P.DUR.skinOn !== Overlay.DUR.foldOn);
+  assert.ok(P.DUR.skinOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.cling, Overlay.DUR.cling);
+  assert.equal(P.DUR.skinOn, Overlay.DUR.skinOn);
+  assert.equal(P.DUR.skin, Overlay.DUR.skin);
+  const trunk = P.clingPoint(WIN, 176, WORK);
+  const deskTrunk = Overlay.clingPoint(WIN, Overlay.SPRITE, WORK);
+  const pine = P.bristlePoint(WIN, 176, WORK);
+  const bark = P.mountPoint(WIN, 176, WORK);
+  const fold = P.foldPoint(WIN, 176, WORK);
+  const cup = P.wrapPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(trunk.x - deskTrunk.x) < 1);
+  assert.ok(Math.abs(trunk.lift - deskTrunk.lift) < 1);
+  assert.ok(Math.abs(trunk.x - pine.x) > 4 || Math.abs(trunk.lift - pine.lift) > 8, "not Spine's bristle");
+  assert.ok(Math.abs(trunk.x - bark.x) > 8 || Math.abs(trunk.lift - bark.lift) > 8, "not Moth's mount");
+  assert.ok(Math.abs(trunk.x - fold.x) > 8 || Math.abs(trunk.lift - fold.lift) > 20, "not Cape's fold");
+  assert.ok(Math.abs(trunk.x - cup.x) > 8 || Math.abs(trunk.lift - cup.lift) > 8, "not Wrist's wrap");
+  const walkOn = P.clingOnPath(0.25, { x: 40, lift: 0 }, { x: trunk.x, lift: trunk.lift });
+  const deskWalk = Overlay.clingOnPath(0.25, { x: 40, lift: 0 }, { x: trunk.x, lift: trunk.lift });
+  const bristleOn = P.bristleOnPath(0.25, { x: 40, lift: 0 }, { x: trunk.x, lift: trunk.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she clings onto the jamb");
+  assert.ok(walkOn.lift !== bristleOn.lift, "a cling, not Spine's bristle");
+  const open = P.clingPath(0.5);
+  const deskOpen = Overlay.clingPath(0.5);
+  assert.equal(open.lift, deskOpen.lift);
+  assert.ok(open.x > 2 && open.rot < 20, "a patagium open on the trunk sail");
+  const hold = P.clingHoldPath(0.5);
+  const deskHold = Overlay.clingHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 16) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "fold");
+    assert.notEqual(play.phase, "bristle");
+    assert.notEqual(play.phase, "mount");
+    assert.notEqual(play.phase, "wrap");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "skin") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "cling-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "cling-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 3.8)) < 3, "she holds the open skin on the jamb");
+    }
+  }
+  assert.ok(seen.has("cling-on"));
+  assert.ok(seen.has("skin"));
+  assert.ok(seen.has("cling-hold"));
+  assert.ok(seen.has("cling-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
