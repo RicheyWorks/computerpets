@@ -20219,7 +20219,7 @@ test("Spine bristles a window jamb as a pine post: walk onto the jamb, bristle (
   assert.equal(P.playFor("red_tail"), "soar");
   assert.equal(P.playFor("opossum"), "still");
   assert.equal(P.playFor("skunk"), "stamp");
-  assert.equal(P.playFor("black_bear"), "sill");
+  assert.equal(P.playFor("black_bear"), "browse");
   assert.notEqual(P.playFor("porcupine"), "spine");
   assert.notEqual(P.playFor("porcupine"), "hook");
   assert.notEqual(P.playFor("porcupine"), "ball");
@@ -20400,5 +20400,187 @@ test("a moved window refits Spine pine-post jamb; sleep, card, and hide abort; S
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bristle-off");
+  assert.equal(play.abort, true);
+});
+
+
+test("Coal browses a window well as an oak denside: walk to the well, browse (size is the tell), then walk off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("salamander"), "cover");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("porcupine"), "bristle");
+  assert.equal(P.playFor("beaver"), "gnaw");
+  assert.equal(P.playFor("deer"), "flag");
+  assert.equal(P.playFor("red_panda"), "cling-dive");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("sloth"), "sill");
+  assert.notEqual(P.playFor("black_bear"), "coal");
+  assert.notEqual(P.playFor("black_bear"), "forage");
+  assert.notEqual(P.playFor("black_bear"), "cover");
+  assert.notEqual(P.playFor("black_bear"), "bury");
+  assert.notEqual(P.playFor("black_bear"), "bristle");
+  assert.notEqual(P.playFor("black_bear"), "sill");
+  assert.equal(P.DUR.coverOn, 2.14, "Dapple cover durations stay");
+  assert.equal(P.DUR.forageOn, 1.58, "Thrum forage durations stay");
+  assert.equal(P.DUR.buryOn, 0.78, "Cache bury durations stay");
+  assert.equal(P.DUR.bristleOn, 1.27, "Spine bristle durations stay");
+  assert.equal(P.DUR.gnawOn, 1.19, "Dam gnaw durations stay");
+  assert.equal(P.DUR.flagOn, 1.46, "Rack flag durations stay");
+  const target = P.pickTarget([WIN], 80, "black_bear", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "browse");
+  assert.equal(target.side, "oakdenside");
+  assert.equal(target.leave, "size");
+  assert.notEqual(target.kind, "cover");
+  assert.notEqual(target.kind, "forage");
+  assert.notEqual(target.kind, "bury");
+  assert.notEqual(target.kind, "bristle");
+  assert.notEqual(target.kind, "coal");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she browses a window well as an oak denside, not the floor");
+  assert.ok(P.DUR.browseHold > P.DUR.browse, "the browse is the tell; the hold is the size that fills the well");
+  assert.ok(P.DUR.browseOn > 1.0, "a walk to the well, not a hop");
+  assert.ok(P.DUR.browseOn !== P.DUR.coverOn);
+  assert.ok(P.DUR.browseOn !== P.DUR.forageOn);
+  assert.ok(P.DUR.browseOn !== P.DUR.buryOn);
+  assert.ok(P.DUR.browseOn !== P.DUR.bristleOn);
+  assert.ok(P.DUR.browseOn !== P.DUR.gnawOn);
+  assert.ok(P.DUR.browseOn !== P.DUR.flagOn);
+  assert.ok(P.DUR.browseOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.browse !== P.DUR.cover);
+  assert.ok(P.DUR.browse !== P.DUR.forage);
+  assert.ok(P.DUR.browse !== P.DUR.bury);
+  assert.ok(P.DUR.browse !== P.DUR.bristle);
+  assert.ok(P.DUR.browseHold !== P.DUR.coverHold);
+  assert.ok(P.DUR.browseHold !== P.DUR.forageHold);
+  assert.ok(P.DUR.browseOff !== P.DUR.coverOff);
+  assert.ok(P.DUR.browseOff !== P.DUR.forageOff);
+  assert.ok(P.DUR.browseOff !== P.DUR.sillDown);
+  const den = P.browsePoint(WIN, P.SPRITE, WORK);
+  const mold = P.coverPoint(WIN, P.SPRITE, WORK);
+  const meadow = P.foragePoint(WIN, P.SPRITE, WORK);
+  const dish = P.buryPoint(WIN, P.SPRITE, WORK);
+  const post = P.bristlePoint(WIN, P.SPRITE, WORK);
+  const lodge = P.gnawPoint(WIN, P.SPRITE, WORK);
+  const oak = P.flagPoint(WIN, P.SPRITE, WORK);
+  assert.ok(den.lift > 16, "the window well as an oak denside, not the floor");
+  assert.ok(Math.abs(den.lift - mold.lift) < 4, "same well family as Dapple");
+  assert.ok(Math.abs(den.x - mold.x) > 8, "she fills the well; she does not cover Dapple's nest");
+  assert.ok(Math.abs(den.x - meadow.x) > 8 || Math.abs(den.lift - meadow.lift) > 8, "not Thrum window-box forage");
+  assert.ok(Math.abs(den.x - dish.x) > 8 || Math.abs(den.lift - dish.lift) > 8, "not Cache stool bury");
+  assert.ok(Math.abs(den.x - post.x) > 8 || Math.abs(den.lift - post.lift) > 8, "not Spine jamb bristle");
+  assert.ok(Math.abs(den.x - lodge.x) > 8 || Math.abs(den.lift - lodge.lift) > 8, "not Dam sash stile gnaw");
+  assert.ok(Math.abs(den.x - oak.x) > 8 || Math.abs(den.lift - oak.lift) > 8, "not Rack sill-nosing flag");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "black_bear", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window well, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "black_bear", WORK, P.SPRITE);
+  assert.equal(short, null, "a real window well, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 178, height: 160 }], 80, "black_bear", WORK, P.SPRITE);
+  assert.equal(thin, null, "Coal needs a real window well, not a shallower mouth");
+  const well = P.pickTarget([{ id: "well", x: 200, y: 80, width: 178, height: 162 }], 80, "black_bear", WORK, P.SPRITE);
+  assert.ok(well, "a real window well as an oak denside");
+  const dappleWell = P.pickTarget([{ id: "mold", x: 200, y: 80, width: 178, height: 162 }], 80, "salamander", WORK, P.SPRITE);
+  assert.ok(dappleWell, "Dapple still takes the same well family");
+  const walkOn = P.browseOnPath(0.25, { x: 40, lift: 0 }, { x: den.x, lift: den.lift });
+  const creepOn = P.coverOnPath(0.25, { x: 40, lift: 0 }, { x: den.x, lift: den.lift });
+  const bristleOn = P.bristleOnPath(0.25, { x: 40, lift: 0 }, { x: den.x, lift: den.lift });
+  assert.ok(walkOn.lift > 0, "she walks to the well");
+  assert.ok(walkOn.lift !== creepOn.lift, "a walk to the well, not Dapple cover creep");
+  assert.ok(walkOn.lift !== bristleOn.lift, "a walk to the well, not Spine bristle");
+  const fill = P.browsePath(0.5);
+  const hide = P.coverPath(0.5);
+  const buzz = P.foragePath(0.5);
+  const press = P.buryPath(0.5);
+  const flare = P.bristlePath(0.5);
+  const bite = P.gnawPath(0.5);
+  const flag = P.flagPath(0.5);
+  assert.ok(fill.x > 2, "she fills the well; size is the tell");
+  assert.ok(fill.rot < -10, "she browses, head down");
+  assert.ok(hide.lift < -6, "Dapple still covers");
+  assert.ok(fill.x !== hide.x, "not Dapple cover");
+  assert.ok(fill.rot !== hide.rot, "a browse, not a cover");
+  assert.ok(fill.x !== buzz.x || fill.lift !== buzz.lift, "not Thrum forage");
+  assert.ok(fill.lift !== press.lift, "not Cache bury");
+  assert.ok(fill.rot !== flare.rot, "not Spine bristle");
+  assert.ok(fill.rot !== bite.rot, "not Dam gnaw");
+  assert.ok(fill.lift !== flag.lift, "not Rack flag");
+  const hold = P.browseHoldPath(0.5);
+  assert.ok(hold.rot < -8, "she holds the browse, size fills the well");
+  assert.ok(Math.abs(hold.x - 3.4) < 0.2, "still filling the denside");
+  assert.ok(hold.lift < -6, "in the well, not a hang");
+  const off0 = P.browseOffPath(0, { x: den.x, lift: den.lift, rot: -11 }, { x: den.x + 62, lift: 0 });
+  const offMid = P.browseOffPath(0.5, { x: den.x, lift: den.lift, rot: -11 }, { x: den.x + 62, lift: 0 });
+  const off1 = P.browseOffPath(1, { x: den.x, lift: den.lift, rot: -11 }, { x: den.x + 62, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - den.x) < 2);
+  assert.ok(Math.abs(offMid.x - (den.x + 62 * midEase)) < 10, "she walks off, not a drop");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cover");
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "bury");
+    assert.notEqual(play.phase, "bristle");
+    assert.notEqual(play.phase, "gnaw");
+    assert.notEqual(play.phase, "flag");
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "browse") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "browse-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "browse-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 7.6)) < 3, "she fills the well; size is the tell");
+    }
+    if (play.phase === "browse-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("browse-on"));
+  assert.ok(seen.has("browse"));
+  assert.ok(seen.has("browse-hold"));
+  assert.ok(seen.has("browse-off"));
+  assert.ok(!seen.has("cover"), "Coal never uses Dapple cover");
+  assert.ok(!seen.has("forage"), "Coal never uses Thrum forage");
+  assert.ok(!seen.has("bury"), "Coal never uses Cache bury");
+  assert.ok(!seen.has("bristle"), "Coal never uses Spine bristle");
+  assert.ok(!seen.has("gnaw"), "Coal never uses Dam gnaw");
+  assert.ok(!seen.has("flag"), "Coal never uses Rack flag");
+  assert.ok(!seen.has("cling"), "Coal never uses Rui cling");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Coal oak-denside well; sleep, card, and hide abort; Coal never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "black_bear", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "browse"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "browse");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "browse");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "browse-off");
   assert.equal(play.abort, true);
 });
