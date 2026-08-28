@@ -86,6 +86,16 @@
   const DEE_ROBIN_LINE = "Dee. You found the lawn first.";
   const CAT_RUI_LINE = "I sat. You were already here.";
   const CAT_SILL_LINE = "The sill will do.";
+  const MEET_DOG_KEY = "dog";
+  const MEET_CROW_KEY = "crow";
+  const PEER_PIP_KEY = "dog";
+  const WINDOW_CAP_KEY = "crow";
+  const PIP_RUI_LINE = "I walked over. You were the red one.";
+  const SOOT_RUI_LINE = "Caw. I found the red one.";
+  const SOOT_CAP_LINE = "The cap will do.";
+  const CAT_PIP_LINE = "I sat. You were already walking.";
+  const CROW_HOP = 16;
+  const CROW_LIFT = 16;
   const MEET_ON_S = 0.64;
   const TELL_S = 1.6;
   const HOP_LIFT = 10;
@@ -244,39 +254,62 @@
 
   function shouldMeetRui(key, flags) {
     if (!flags || flags.hidden) return false;
-    if (key !== MEET_DEE_KEY && key !== MEET_CAT_KEY) return false;
+    if (key !== MEET_DEE_KEY && key !== MEET_CAT_KEY && key !== MEET_DOG_KEY && key !== MEET_CROW_KEY) return false;
     if (flags.hostKey && flags.hostKey !== MEET_HOST) return false;
     if (key === MEET_DEE_KEY && peerOf(flags, PEER_ROBIN_KEY)) return false;
+    if (key === MEET_CAT_KEY && peerOf(flags, PEER_PIP_KEY)) return false;
     return true;
   }
 
   function shouldMeetPeer(key, flags) {
     if (!flags || flags.hidden) return false;
-    if (key !== MEET_DEE_KEY) return false;
-    return !!peerOf(flags, PEER_ROBIN_KEY);
+    if (key === MEET_DEE_KEY) return !!peerOf(flags, PEER_ROBIN_KEY);
+    if (key === MEET_CAT_KEY) {
+      if (peerOf(flags, PEER_ROBIN_KEY) && peerOf(flags, MEET_DEE_KEY)) return false;
+      return !!peerOf(flags, PEER_PIP_KEY);
+    }
+    return false;
   }
 
   function shouldSitBound(key, flags) {
     if (!flags || flags.hidden) return false;
-    if (key !== WINDOW_SIT_KEY) return false;
-    const b = flags.windowBound;
-    return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+    if (key === WINDOW_SIT_KEY) {
+      const b = flags.windowBound;
+      return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+    }
+    if (key === WINDOW_CAP_KEY) {
+      const b = flags.capBound;
+      return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+    }
+    return false;
   }
 
   function meetPoint(flags, key) {
     const hostX = flags && flags.hostX != null ? flags.hostX : 0;
     const face = flags && flags.hostFacing < 0 ? -1 : 1;
     if (key === MEET_DEE_KEY) return { x: hostX + face * NEAR_X, lift: 8 };
+    if (key === MEET_CROW_KEY) return { x: hostX + face * NEAR_X, lift: CROW_LIFT };
+    if (key === MEET_DOG_KEY) return { x: hostX + face * BESIDE_X, lift: 0 };
     return { x: hostX - face * BESIDE_X, lift: 0 };
   }
 
-  function peerPoint(flags) {
+  function peerPoint(flags, guestKey) {
+    if (guestKey === MEET_CAT_KEY) {
+      const p = peerOf(flags, PEER_PIP_KEY);
+      if (!p) return { x: 200, lift: 0 };
+      return { x: (p.x || 0) + 48, lift: 0 };
+    }
     const p = peerOf(flags, PEER_ROBIN_KEY);
     if (!p) return { x: 200, lift: 8 };
     return { x: (p.x || 0) + 36, lift: (p.lift || 0) + 8 };
   }
 
-  function boundPoint(flags) {
+  function boundPoint(flags, key) {
+    if (key === WINDOW_CAP_KEY || key === MEET_CROW_KEY) {
+      const b = flags && flags.capBound;
+      if (!b) return { x: 120, lift: 48, kind: "drip-cap" };
+      return { x: b.x, lift: b.lift, kind: b.kind || "drip-cap" };
+    }
     const b = flags && flags.windowBound;
     if (!b) return { x: 120, lift: 18, kind: "sill" };
     return { x: b.x, lift: b.lift, kind: b.kind || "sill" };
@@ -308,8 +341,38 @@
     return null;
   }
 
+  function windowCapBound(win, work) {
+    if (!win || typeof win !== "object") return null;
+    const w = Number(win.width);
+    const h = Number(win.height);
+    if (!(w > 8) || !(h > 8)) return null;
+    const workH = Math.max(240, (work && work.height) || 800);
+    const workW = Math.max(320, (work && work.width) || 1400);
+    const floor = (work && work.floorLift) || 0;
+    const x0 = Number(win.x);
+    const y0 = Number(win.y);
+    if (![x0, y0, w, h].every(Number.isFinite)) return null;
+    const cap = 22;
+    const gripY = y0 - cap;
+    let lift = workH - floor - gripY;
+    if (!Number.isFinite(lift)) return null;
+    lift = Math.max(floor + 36, Math.min(workH * 0.72, lift));
+    const chimneyLeft = x0 + w / 2 < workW / 2;
+    const x = chimneyLeft ? x0 + 10 : x0 + w - 10;
+    return { kind: "drip-cap", x, lift };
+  }
+
+  function firstCapBound(windows, work) {
+    const list = Array.isArray(windows) ? windows : [];
+    for (const win of list) {
+      const b = windowCapBound(win, work);
+      if (b) return b;
+    }
+    return null;
+  }
+
   function goCalledMeet(guest, flags, kind) {
-    const hold = kind === "peer" ? peerPoint(flags) : meetPoint(flags, guest.key);
+    const hold = kind === "peer" ? peerPoint(flags, guest.key) : meetPoint(flags, guest.key);
     return {
       ...guest,
       phase: "approach-meet",
@@ -326,7 +389,7 @@
   }
 
   function goCalledBound(guest, flags) {
-    const hold = boundPoint(flags);
+    const hold = boundPoint(flags, guest.key);
     return {
       ...guest,
       phase: "approach-bound",
@@ -363,10 +426,16 @@
 
   function tellLine(guest) {
     if (!guest) return "";
-    if (guest.phase === "bound" || guest.meetKind === "bound") return CAT_SILL_LINE;
+    if (guest.phase === "bound" || guest.meetKind === "bound") {
+      if (guest.key === MEET_CROW_KEY || guest.key === WINDOW_CAP_KEY) return SOOT_CAP_LINE;
+      return CAT_SILL_LINE;
+    }
     if (guest.key === MEET_DEE_KEY && guest.meetKind === "peer") return DEE_ROBIN_LINE;
     if (guest.key === MEET_DEE_KEY) return DEE_RUI_LINE;
+    if (guest.key === MEET_CAT_KEY && guest.meetKind === "peer") return CAT_PIP_LINE;
     if (guest.key === MEET_CAT_KEY) return CAT_RUI_LINE;
+    if (guest.key === MEET_DOG_KEY) return PIP_RUI_LINE;
+    if (guest.key === MEET_CROW_KEY) return SOOT_RUI_LINE;
     return "";
   }
 
@@ -403,7 +472,7 @@
       if (sitBound) return goCalledBound(next, flags);
     }
     if ((next.phase === "approach-meet" || next.phase === "meet") && !meetPeer && !meetRui) {
-      if (sitBound && next.key === WINDOW_SIT_KEY) return goCalledBound(next, flags);
+      if (sitBound && (next.key === WINDOW_SIT_KEY || next.key === WINDOW_CAP_KEY)) return goCalledBound(next, flags);
       return { ...next, phase: "stay", t: 0, lift: 0, target: next.x };
     }
     if ((next.phase === "approach-bound" || next.phase === "bound") && !sitBound) {
@@ -434,14 +503,18 @@
     }
 
     if (next.phase === "approach-meet") {
-      const hold = next.meetKind === "peer" ? peerPoint(flags) : meetPoint(flags, next.key);
+      const hold = next.meetKind === "peer" ? peerPoint(flags, next.key) : meetPoint(flags, next.key);
       next.target = hold.x;
       next.toX = hold.x;
       next.toLift = hold.lift;
       const u = Math.min(1, next.t / MEET_ON_S);
       const fromX = next.fromX != null ? next.fromX : next.x;
       const fromLift = next.fromLift != null ? next.fromLift : next.lift || 0;
-      const hop = next.key === MEET_DEE_KEY ? Math.abs(Math.sin(next.t * 16)) * HOP_LIFT * (1 - u) : 0;
+      const hop = next.key === MEET_DEE_KEY
+        ? Math.abs(Math.sin(next.t * 16)) * HOP_LIFT * (1 - u)
+        : next.key === MEET_CROW_KEY
+          ? Math.abs(Math.sin(next.t * 14)) * CROW_HOP * (1 - u)
+          : 0;
       next.x = fromX + (hold.x - fromX) * u;
       next.lift = fromLift + (hold.lift - fromLift) * u + hop;
       next.facing = hold.x >= fromX ? 1 : -1;
@@ -449,18 +522,18 @@
       return next;
     }
     if (next.phase === "meet") {
-      const hold = next.meetKind === "peer" ? peerPoint(flags) : meetPoint(flags, next.key);
+      const hold = next.meetKind === "peer" ? peerPoint(flags, next.key) : meetPoint(flags, next.key);
       next.x = hold.x;
       next.lift = hold.lift;
       next.target = hold.x;
       if (next.t >= TELL_S) {
-        if (next.key === WINDOW_SIT_KEY && sitBound) return goCalledBound(next, flags);
+        if (next.meetKind === "rui" && (next.key === WINDOW_SIT_KEY || next.key === WINDOW_CAP_KEY) && sitBound) return goCalledBound(next, flags);
         return dismissCalled(next);
       }
       return next;
     }
     if (next.phase === "approach-bound") {
-      const hold = boundPoint(flags);
+      const hold = boundPoint(flags, next.key);
       next.target = hold.x;
       next.toX = hold.x;
       next.toLift = hold.lift;
@@ -474,7 +547,7 @@
       return next;
     }
     if (next.phase === "bound") {
-      const hold = boundPoint(flags);
+      const hold = boundPoint(flags, next.key);
       next.x = hold.x;
       next.lift = hold.lift;
       next.target = hold.x;
@@ -624,6 +697,14 @@
     DEE_ROBIN_LINE,
     CAT_RUI_LINE,
     CAT_SILL_LINE,
+    MEET_DOG_KEY,
+    MEET_CROW_KEY,
+    PEER_PIP_KEY,
+    WINDOW_CAP_KEY,
+    PIP_RUI_LINE,
+    SOOT_RUI_LINE,
+    SOOT_CAP_LINE,
+    CAT_PIP_LINE,
     MEET_ON_S,
     TELL_S,
     SONG_EVERY_S,
@@ -650,6 +731,8 @@
     peerPoint,
     windowSitBound,
     firstWindowBound,
+    windowCapBound,
+    firstCapBound,
     shouldTell,
     tellLine,
     markTold,

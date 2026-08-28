@@ -10,6 +10,7 @@ import {
   stillVisible,
   poseFrames,
   firstWindowBound,
+  firstCapBound,
   shouldTell,
   tellLine,
   markTold,
@@ -85,6 +86,7 @@ export function CalledGuests({
         hostFacing: pose?.facing,
         peers: walkers.current.map((row) => ({ key: row.key, x: row.x, lift: row.lift || 0, phase: row.phase })),
         windowBound: firstWindowBound(windowsRef.current, { width: w, height: window.innerHeight, floorLift: 0 }),
+        capBound: firstCapBound(windowsRef.current, { width: w, height: window.innerHeight, floorLift: 0 }),
       };
       walkers.current = walkers.current.map((g) => {
         const next = stepCalled(g, dt, w, flags);
