@@ -12473,3 +12473,93 @@ test("the demo window plate walks Cache's bury the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Slick's slide the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "otter"[\s\S]{0,80}slug: "slick"/);
+  assert.equal(P.playFor("otter"), "slide");
+  const target = P.pickTarget([WIN], 80, "otter", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "slide");
+  assert.equal(target.side, "inkdish");
+  assert.equal(target.leave, "wet");
+  assert.equal(Overlay.playFor("otter"), "slide");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(Overlay.playFor("mallard"), "tip");
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.notEqual(P.playFor("otter"), "slick");
+  assert.notEqual(target.kind, "tip");
+  assert.notEqual(target.kind, "run");
+  assert.notEqual(target.kind, "circle");
+  assert.notEqual(target.kind, "bury");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she hops onto a window pane as an ink dish, not the floor");
+  assert.ok(P.DUR.slide > P.DUR.slideHold, "the slide is the tell; the hold is a wet beat");
+  assert.ok(P.DUR.slideOn !== Overlay.DUR.tipOn);
+  assert.ok(P.DUR.slideOn !== Overlay.DUR.runOn);
+  assert.ok(P.DUR.slideOn !== Overlay.DUR.circleOn);
+  assert.ok(P.DUR.slideOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.tipOn, Overlay.DUR.tipOn);
+  assert.equal(P.DUR.slideOn, Overlay.DUR.slideOn);
+  assert.equal(P.DUR.slide, Overlay.DUR.slide);
+  assert.equal(P.DUR.slideHold, Overlay.DUR.slideHold);
+  assert.equal(P.DUR.slideOff, Overlay.DUR.slideOff);
+  const pane = P.slidePoint(WIN, 176, WORK);
+  const deskPane = Overlay.slidePoint(WIN, 176, WORK);
+  assert.equal(pane.x, deskPane.x);
+  assert.equal(pane.lift, deskPane.lift);
+  const dish = P.tipPoint(WIN, 176, WORK);
+  const dry = P.runPoint(WIN, 176, WORK);
+  const oak = P.buryPoint(WIN, 176, WORK);
+  assert.ok(pane.lift > 36, "the window pane as an ink dish");
+  assert.ok(pane.lift > dish.lift + 40, "not Drake");
+  assert.ok(Math.abs(pane.x - dry.x) > 20 || Math.abs(pane.lift - dry.lift) > 10, "not Gale");
+  assert.ok(pane.lift > oak.lift + 40, "not Cache");
+  const hopOn = P.slideOnPath(0.25, { x: 40, lift: 0 }, { x: pane.x, lift: pane.lift });
+  const deskHop = Overlay.slideOnPath(0.25, { x: 40, lift: 0 }, { x: pane.x, lift: pane.lift });
+  assert.equal(hopOn.x, deskHop.x);
+  assert.equal(hopOn.lift, deskHop.lift);
+  assert.ok(hopOn.lift > 0, "she hops onto the glass");
+  const wet = P.slidePath(0.85);
+  const deskWet = Overlay.slidePath(0.85);
+  assert.equal(wet.lift, deskWet.lift);
+  assert.ok(wet.lift < -20, "she slides down the pane once");
+  const still = P.slideHoldPath(0.5);
+  const deskStill = Overlay.slideHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.lift < -65, "she holds wet at the bottom of the slide");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "tip");
+    assert.notEqual(play.phase, "run");
+    assert.notEqual(play.phase, "circle");
+    assert.notEqual(play.phase, "bury");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "slide") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "slide-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "slide-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 72)) < 6, "she holds wet at the bottom of the slide");
+    }
+  }
+  assert.ok(seen.has("slide-on"));
+  assert.ok(seen.has("slide"));
+  assert.ok(seen.has("slide-hold"));
+  assert.ok(seen.has("slide-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
