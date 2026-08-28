@@ -8730,7 +8730,7 @@ test("the demo window plate walks Dapple's cover the same way", () => {
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("skink"), "sill");
+  assert.equal(P.playFor("skink"), "scoot");
   assert.equal(P.playFor("caecilian"), "ring");
   assert.notEqual(target.kind, "dapple");
   assert.notEqual(target.kind, "hide");
@@ -14047,7 +14047,7 @@ test("the demo window plate walks Pad chirp the same way", () => {
   assert.equal(P.playFor("colugo"), "cling");
   assert.equal(P.playFor("porcupine"), "bristle");
   assert.equal(P.playFor("orchid"), "mount");
-  assert.equal(P.playFor("skink"), "sill");
+  assert.equal(P.playFor("skink"), "scoot");
   assert.notEqual(P.playFor("gecko"), "pad");
   assert.notEqual(P.playFor("gecko"), "stone");
   assert.notEqual(P.playFor("gecko"), "cling");
@@ -14138,7 +14138,7 @@ test("the demo window plate walks Wink flash the same way", () => {
   assert.equal(P.playFor("beaver"), "gnaw");
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("carpenter_bee"), "bore");
-  assert.equal(P.playFor("skink"), "sill");
+  assert.equal(P.playFor("skink"), "scoot");
   assert.notEqual(P.playFor("anole"), "wink");
   assert.notEqual(P.playFor("anole"), "chirp");
   assert.notEqual(P.playFor("anole"), "stone");
@@ -14207,3 +14207,95 @@ test("the demo window plate walks Wink flash the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Dash scoot the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/stone.ts"), "utf8"), /key: "skink"[\s\S]{0,80}slug: "dash"/);
+  assert.equal(P.playFor("skink"), "scoot");
+  const target = P.pickTarget([WIN], 80, "skink", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "scoot");
+  assert.equal(target.side, "stonecrack");
+  assert.equal(target.leave, "blue");
+  assert.equal(Overlay.playFor("skink"), "scoot");
+  assert.equal(P.playFor("anole"), "flash");
+  assert.equal(Overlay.playFor("anole"), "flash");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("moray"), "gape");
+  assert.equal(P.playFor("chameleon"), "sill");
+  assert.notEqual(P.playFor("skink"), "dash");
+  assert.notEqual(P.playFor("skink"), "stone");
+  assert.notEqual(P.playFor("skink"), "run");
+  assert.notEqual(P.playFor("skink"), "flash");
+  assert.notEqual(target.kind, "dash");
+  assert.notEqual(target.kind, "gape");
+  assert.notEqual(target.kind, "flash");
+  assert.ok(target.holdLift > 20, "she scoots a sash-jamb crack as a stone crack, not the sash foot");
+  assert.ok(P.DUR.scootHold > P.DUR.scoot, "the hold is the sit after; the scoot is the tell");
+  assert.ok(P.DUR.scootOn !== Overlay.DUR.flashOn);
+  assert.ok(P.DUR.scootOn !== Overlay.DUR.gapeOn);
+  assert.ok(P.DUR.scootOn !== Overlay.DUR.chirpOn);
+  assert.ok(P.DUR.scootOn !== Overlay.DUR.runOn);
+  assert.ok(P.DUR.scootOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.scootOn, Overlay.DUR.scootOn);
+  assert.equal(P.DUR.scoot, Overlay.DUR.scoot);
+  assert.equal(P.DUR.scootHold, Overlay.DUR.scootHold);
+  assert.equal(P.DUR.scootOff, Overlay.DUR.scootOff);
+  const crack = P.scootPoint(WIN, 176, WORK);
+  const deskDash = Overlay.scootPoint(WIN, Overlay.SPRITE, WORK);
+  const gape = P.gapePoint(WIN, 176, WORK);
+  const vine = P.flashPoint(WIN, 176, WORK);
+  const plaster = P.chirpPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(crack.x - deskDash.x) < 1);
+  assert.ok(Math.abs(crack.lift - deskDash.lift) < 1);
+  assert.ok(Math.abs(crack.x - gape.x) < 20, "same sash-jamb crack as Door");
+  assert.ok(Math.abs(crack.x - vine.x) > 20, "not Wink flash");
+  assert.ok(Math.abs(crack.x - plaster.x) > 8 || Math.abs(crack.lift - plaster.lift) > 8, "not Pad chirp");
+  const scootOn = P.scootOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  const deskScoot = Overlay.scootOnPath(0.25, { x: 40, lift: 0 }, { x: crack.x, lift: crack.lift });
+  assert.equal(scootOn.x, deskScoot.x);
+  assert.equal(scootOn.lift, deskScoot.lift);
+  assert.ok(scootOn.lift > 0, "she scoots into the crack as a stone crack");
+  const blue = P.scootPath(0.5);
+  const deskBlue = Overlay.scootPath(0.5);
+  assert.equal(blue.lift, deskBlue.lift);
+  assert.ok(blue.lift > 2, "she shows the blue; the blue is the tell");
+  const hold = P.scootHoldPath(0.5);
+  const deskHold = Overlay.scootHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 2.5) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "flash");
+    assert.notEqual(play.phase, "gape");
+    assert.notEqual(play.phase, "chirp");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "scoot") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "scoot-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "scoot-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.9)) < 3, "she holds the stone crack after the blue");
+    }
+  }
+  assert.ok(seen.has("scoot-on"));
+  assert.ok(seen.has("scoot"));
+  assert.ok(seen.has("scoot-hold"));
+  assert.ok(seen.has("scoot-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
