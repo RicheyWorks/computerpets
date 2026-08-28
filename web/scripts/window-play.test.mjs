@@ -14801,3 +14801,104 @@ test("the demo window plate walks Beak snap the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Lid shut the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/stone.ts"), "utf8"), /key: "box_turtle"[\s\S]{0,80}slug: "lid"/);
+  assert.equal(P.playFor("box_turtle"), "shut");
+  const target = P.pickTarget([WIN], 80, "box_turtle", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "shut");
+  assert.equal(target.side, "leafdish");
+  assert.equal(target.leave, "plastron");
+  assert.equal(Overlay.playFor("box_turtle"), "shut");
+  assert.equal(P.playFor("snapper"), "snap");
+  assert.equal(Overlay.playFor("snapper"), "snap");
+  assert.equal(P.playFor("crocodile"), "show");
+  assert.equal(Overlay.playFor("crocodile"), "show");
+  assert.equal(P.playFor("skunk"), "stamp");
+  assert.equal(Overlay.playFor("skunk"), "stamp");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(Overlay.playFor("octopus"), "lid");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(Overlay.playFor("turtle"), "bask");
+  assert.equal(P.playFor("tuatara"), "sill");
+  assert.notEqual(P.playFor("box_turtle"), "lid");
+  assert.notEqual(P.playFor("box_turtle"), "snap");
+  assert.notEqual(P.playFor("box_turtle"), "bask");
+  assert.notEqual(P.playFor("box_turtle"), "stamp");
+  assert.notEqual(target.kind, "lid");
+  assert.notEqual(target.kind, "snap");
+  assert.notEqual(target.kind, "stamp");
+  assert.notEqual(target.kind, "bask");
+  assert.equal(target.holdLift, 0, "she shuts a window foot as a leaf dish, not the sash");
+  assert.ok(P.DUR.shutHold > P.DUR.shut, "the hold is the sit after; the hinged plastron is the tell");
+  assert.ok(P.DUR.shutOn !== Overlay.DUR.snapOn);
+  assert.ok(P.DUR.shutOn !== Overlay.DUR.stampOn);
+  assert.ok(P.DUR.shutOn !== Overlay.DUR.showOn);
+  assert.ok(P.DUR.shutOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.shutOn, Overlay.DUR.shutOn);
+  assert.equal(P.DUR.shut, Overlay.DUR.shut);
+  assert.equal(P.DUR.shutHold, Overlay.DUR.shutHold);
+  assert.equal(P.DUR.shutOff, Overlay.DUR.shutOff);
+  const dish = P.shutPoint(WIN, 176, WORK);
+  const deskLid = Overlay.shutPoint(WIN, Overlay.SPRITE, WORK);
+  const duff = P.stampPoint(WIN, 176, WORK);
+  const bowl = P.snapPoint(WIN, 176, WORK);
+  const pan = P.showPoint(WIN, 176, WORK);
+  const cup = P.lidPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(dish.x - deskLid.x) < 1);
+  assert.ok(Math.abs(dish.lift - deskLid.lift) < 1);
+  assert.ok(Math.abs(dish.lift - duff.lift) < 2, "same window foot as Stripe");
+  assert.ok(Math.abs(dish.x - duff.x) > 8, "not Stripe stamp");
+  assert.ok(Math.abs(dish.x - bowl.x) > 8 || Math.abs(dish.lift - bowl.lift) > 8, "not Beak snap");
+  assert.ok(Math.abs(dish.x - pan.x) > 8 || Math.abs(dish.lift - pan.lift) > 8, "not Jaw show");
+  assert.ok(Math.abs(dish.x - cup.x) > 8 || Math.abs(dish.lift - cup.lift) > 8, "not Cup lid");
+  const walkOn = P.shutOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: 0 });
+  const deskWalk = Overlay.shutOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: 0 });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.equal(walkOn.lift, 0, "she walks onto the foot as a leaf dish");
+  const hinge = P.shutPath(0.5);
+  const deskHinge = Overlay.shutPath(0.5);
+  assert.equal(hinge.lift, deskHinge.lift);
+  assert.ok(hinge.lift < -6, "she walks then shuts");
+  assert.ok(hinge.rot > 6 && hinge.rot < 12, "the hinged plastron is the tell");
+  const hold = P.shutHoldPath(0.5);
+  const deskHold = Overlay.shutHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 9.4) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "snap");
+    assert.notEqual(play.phase, "stamp");
+    assert.notEqual(play.phase, "show");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "shut") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "shut-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "shut-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift < -5 && play.lift > -8, "she holds the leaf dish after the shut");
+    }
+  }
+  assert.ok(seen.has("shut-on"));
+  assert.ok(seen.has("shut"));
+  assert.ok(seen.has("shut-hold"));
+  assert.ok(seen.has("shut-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
