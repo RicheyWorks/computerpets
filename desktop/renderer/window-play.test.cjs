@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "walleye", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "paddlefish", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -24831,7 +24831,7 @@ test("Penny flares a lamp-side stile as dock shade: walk onto the stile, flare t
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("perch"), "barred");
-  assert.equal(P.playFor("walleye"), "sill");
+  assert.equal(P.playFor("paddlefish"), "sill");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -25009,7 +25009,7 @@ test("Bar bars a meeting rail as a weed rail: walk onto the rail, show the side 
   assert.equal(P.playFor("mussel"), "filter");
   assert.equal(P.playFor("moss"), "lean");
   assert.equal(P.playFor("chickadee"), "cache");
-  assert.equal(P.playFor("walleye"), "sill");
+  assert.equal(P.playFor("paddlefish"), "sill");
   assert.notEqual(P.playFor("perch"), "bar");
   assert.notEqual(P.playFor("perch"), "perch");
   assert.notEqual(P.playFor("perch"), "flare");
@@ -25216,7 +25216,7 @@ test("Lance bills a window-box as a reed ambush: walk onto the box, sit the duck
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("bumblebee"), "forage");
   assert.equal(P.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("walleye"), "sill");
+  assert.equal(P.playFor("paddlefish"), "sill");
   assert.notEqual(P.playFor("pike"), "lance");
   assert.notEqual(P.playFor("pike"), "barred");
   assert.notEqual(P.playFor("pike"), "mouth");
@@ -25389,5 +25389,198 @@ test("a moved window refits Lance's reed-ambush window-box; sleep, card, and hid
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bill-off");
+  assert.equal(play.abort, true);
+});
+
+test("Night dusks a lamp-side stile as a dusk run: walk onto the stile (when the lamp leans), sit the tapetum, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("walleye"), "dusk");
+  assert.equal(P.DUSK, "dusk");
+  assert.equal(P.playFor("pike"), "bill");
+  assert.equal(P.playFor("perch"), "barred");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(P.playFor("bluegill"), "flare");
+  assert.equal(P.playFor("gibbon"), "sing");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("paddlefish"), "sill");
+  assert.notEqual(P.playFor("walleye"), "night");
+  assert.notEqual(P.playFor("walleye"), "look");
+  assert.notEqual(P.playFor("walleye"), "bill");
+  assert.notEqual(P.playFor("walleye"), "flare");
+  assert.notEqual(P.playFor("walleye"), "sing");
+  assert.notEqual(P.playFor("walleye"), "sill");
+  assert.equal(P.DUR.billOn, 1.61, "Lance bill durations stay");
+  assert.equal(P.DUR.flareOn, 1.51, "Penny flare durations stay");
+  assert.equal(P.DUR.singOn, 1.39, "Swing sing durations stay");
+  assert.equal(P.DUR.lookOn, 1.31, "Gaze look durations stay");
+  const target = P.pickTarget([WIN], 80, "walleye", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "dusk");
+  assert.equal(target.side, "duskrun");
+  assert.equal(target.leave, "dusks");
+  assert.notEqual(target.kind, "night");
+  assert.notEqual(target.kind, "look");
+  assert.notEqual(target.kind, "bill");
+  assert.notEqual(target.kind, "flare");
+  assert.notEqual(target.kind, "sing");
+  assert.notEqual(target.kind, "chirp");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she dusks a lamp-side stile as a dusk run, not the floor");
+  assert.ok(P.DUR.duskHold > P.DUR.dusk, "the hold is the sit after; the tapetum is the tell");
+  assert.ok(P.DUR.duskOn > 1.0, "a walk onto the stile, not the dusk");
+  assert.ok(P.DUR.duskOn !== P.DUR.flareOn);
+  assert.ok(P.DUR.duskOn !== P.DUR.singOn);
+  assert.ok(P.DUR.duskOn !== P.DUR.lookOn);
+  assert.ok(P.DUR.duskOn !== P.DUR.billOn);
+  assert.ok(P.DUR.duskOn !== P.DUR.chirpOn);
+  assert.ok(P.DUR.duskOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.dusk !== P.DUR.flare);
+  assert.ok(P.DUR.dusk !== P.DUR.sing);
+  assert.ok(P.DUR.dusk !== P.DUR.look);
+  assert.ok(P.DUR.dusk !== P.DUR.bill);
+  assert.ok(P.DUR.duskHold !== P.DUR.flareHold);
+  assert.ok(P.DUR.duskHold !== P.DUR.singHold);
+  assert.ok(P.DUR.duskHold !== P.DUR.lookHold);
+  assert.ok(P.DUR.duskOff !== P.DUR.flareOff);
+  assert.ok(P.DUR.duskOff !== P.DUR.billOff);
+  assert.ok(P.DUR.duskOff !== P.DUR.sillDown);
+  const run = P.duskPoint(WIN, P.SPRITE, WORK);
+  const shade = P.flarePoint(WIN, P.SPRITE, WORK);
+  const arm = P.singPoint(WIN, P.SPRITE, WORK);
+  const plaster = P.chirpPoint(WIN, P.SPRITE, WORK);
+  const silk = P.webPoint(WIN, P.SPRITE, WORK);
+  const reed = P.billPoint(WIN, P.SPRITE, WORK);
+  const hollow = P.lookPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(run.lift > 36, "the lamp-side stile as a dusk run, not the floor");
+  assert.ok(Math.abs(run.x - shade.x) < 2, "the same lamp-side stile Penny flares; the pose is a dusk");
+  assert.ok(Math.abs(run.x - arm.x) < 2, "the same lamp-side stile Swing sings; the pose is a dusk");
+  assert.ok(Math.abs(run.lift - shade.lift) > 8, "not Penny's dock-shade flare");
+  assert.ok(Math.abs(run.lift - arm.lift) > 8, "not Swing's lamp-arm sing");
+  assert.ok(Math.abs(run.x - plaster.x) > 8 || Math.abs(run.lift - plaster.lift) > 8, "not Pad's lamp-side jamb chirp");
+  assert.ok(Math.abs(run.x - silk.x) > 8 || Math.abs(run.lift - silk.lift) > 8, "not Loom's lamp-side glass web");
+  assert.ok(Math.abs(run.x - reed.x) > 8 || Math.abs(run.lift - reed.lift) > 8, "not Lance's window-box bill");
+  assert.ok(Math.abs(run.x - hollow.x) > 8 || Math.abs(run.lift - hollow.lift) > 8, "not Gaze's pulley-box look");
+  assert.ok(Math.abs(run.x - horn.x) > 8 || Math.abs(run.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "walleye", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real lamp-side stile, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "walleye", WORK, P.SPRITE);
+  assert.equal(short, null, "a real lamp-side stile, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 204, height: 220 }], 80, "walleye", WORK, P.SPRITE);
+  assert.equal(thin, null, "Night needs Penny and Swing's real lamp-side stile, not a shallower mouth");
+  const stile = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 204, height: 224 }], 80, "walleye", WORK, P.SPRITE);
+  assert.ok(stile, "a real lamp-side stile as a dusk run");
+  const pennyOk = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 204, height: 224 }], 80, "bluegill", WORK, P.SPRITE);
+  assert.ok(pennyOk, "Penny still takes the stile");
+  const swingOk = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 204, height: 224 }], 80, "gibbon", WORK, P.SPRITE);
+  assert.ok(swingOk, "Swing still takes the stile");
+  const gazeOk = P.pickTarget([{ id: "box", x: 200, y: 80, width: 186, height: 214 }], 80, "tarsier", WORK, P.SPRITE);
+  assert.ok(gazeOk, "Gaze still takes the pulley box");
+  const lanceOk = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "pike", WORK, P.SPRITE);
+  assert.ok(lanceOk, "Lance still takes the window-box");
+  const walkOn = P.duskOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  const flareOn = P.flareOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  const singOn = P.singOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  const lookOn = P.lookOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  const billOn = P.billOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  const walkEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(Math.abs(walkOn.lift - (run.lift * walkEase)) < 6, "she walks onto the lamp-side stile");
+  assert.ok(walkOn.lift !== singOn.lift, "a walk, not Swing sing");
+  assert.ok(walkOn.rot !== flareOn.rot, "a walk onto the dusk run, not Penny flare");
+  assert.ok(walkOn.rot !== billOn.rot, "a walk, not Lance bill");
+  assert.ok(walkOn.lift !== lookOn.lift, "a walk onto the stile, not Gaze look");
+  const gleam = P.duskPath(0.5);
+  const flap = P.flarePath(0.5);
+  const song = P.singPath(0.5);
+  const eyes = P.lookPath(0.5);
+  const duck = P.billPath(0.5);
+  const chirp = P.chirpPath(0.5);
+  assert.ok(gleam.rot > 9 && gleam.rot < 13, "she sits the tapetum");
+  assert.ok(gleam.lift > 2 && gleam.lift < 5, "the tapetum is the tell, not a flare");
+  assert.ok(gleam.x < 4, "she sits, she does not flare");
+  assert.ok(gleam.rot !== flap.rot, "a dusk, not Penny flare");
+  assert.ok(gleam.lift !== song.lift, "a dusk, not Swing sing");
+  assert.ok(gleam.rot !== eyes.rot, "a tapetum sit, not Gaze look");
+  assert.ok(gleam.rot !== duck.rot, "not Lance bill");
+  assert.ok(gleam.lift !== chirp.lift, "not Pad chirp");
+  const hold = P.duskHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 7.2) < 0.2, "she holds after the tapetum sit");
+  assert.ok(Math.abs(hold.x - 2.4) < 0.2, "she stays on the dusk run");
+  assert.ok(hold.lift > 1.5 && hold.lift < 1.9, "a sit after the dusk");
+  const off0 = P.duskOffPath(0, { x: run.x, lift: run.lift, rot: 7.2 }, { x: run.x + 55, lift: 0 });
+  const offMid = P.duskOffPath(0.5, { x: run.x, lift: run.lift, rot: 7.2 }, { x: run.x + 55, lift: 0 });
+  const off1 = P.duskOffPath(1, { x: run.x, lift: run.lift, rot: 7.2 }, { x: run.x + 55, lift: 0 });
+  assert.ok(Math.abs(off0.x - run.x) < 2);
+  assert.ok(offMid.lift > 4, "a walk leave off the dusk run");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "flare");
+    assert.notEqual(play.phase, "sing");
+    assert.notEqual(play.phase, "look");
+    assert.notEqual(play.phase, "bill");
+    assert.notEqual(play.phase, "chirp");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "night");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "dusk") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "dusk-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "dusk-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.6)) < 3, "she holds the tapetum sit on the dusk run");
+    }
+    if (play.phase === "dusk-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("dusk-on"));
+  assert.ok(seen.has("dusk"));
+  assert.ok(seen.has("dusk-hold"));
+  assert.ok(seen.has("dusk-off"));
+  assert.ok(!seen.has("flare"), "Night never uses Penny flare");
+  assert.ok(!seen.has("sing"), "Night never uses Swing sing");
+  assert.ok(!seen.has("look"), "Night never uses Gaze look");
+  assert.ok(!seen.has("bill"), "Night never uses Lance bill");
+  assert.ok(!seen.has("chirp"), "Night never uses Pad chirp");
+  assert.ok(!seen.has("web"), "Night never uses Loom web");
+  assert.ok(!seen.has("night"), "Night never uses night as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Night's dusk-run stile; sleep, card, and hide abort; Night never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "walleye", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "dusk"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "dusk");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "dusk");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "dusk-off");
   assert.equal(play.abort, true);
 });
