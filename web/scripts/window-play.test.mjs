@@ -13510,7 +13510,7 @@ test("the demo window plate walks Sail cling the same way", () => {
   assert.equal(P.playFor("porcupine"), "bristle");
   assert.equal(P.playFor("orchid"), "mount");
   assert.equal(P.playFor("red_panda"), "cling-dive");
-  assert.equal(P.playFor("flying_squirrel"), "sill");
+  assert.equal(P.playFor("flying_squirrel"), "plane");
   assert.notEqual(P.playFor("colugo"), "sail");
   assert.notEqual(P.playFor("colugo"), "fold");
   assert.notEqual(P.playFor("colugo"), "glide");
@@ -13581,6 +13581,96 @@ test("the demo window plate walks Sail cling the same way", () => {
   assert.ok(seen.has("skin"));
   assert.ok(seen.has("cling-hold"));
   assert.ok(seen.has("cling-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Glide plane the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "flying_squirrel"[\s\S]{0,80}slug: "glide"/);
+  assert.equal(P.playFor("flying_squirrel"), "plane");
+  const target = P.pickTarget([WIN], 80, "flying_squirrel", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "plane");
+  assert.equal(target.side, "oakfold");
+  assert.equal(target.leave, "oak");
+  assert.equal(Overlay.playFor("flying_squirrel"), "plane");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.equal(Overlay.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("colugo"), "cling");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.equal(P.playFor("manta"), "barrel");
+  assert.equal(P.playFor("red_panda"), "cling-dive");
+  assert.notEqual(P.playFor("flying_squirrel"), "glide");
+  assert.notEqual(P.playFor("flying_squirrel"), "fold");
+  assert.notEqual(P.playFor("flying_squirrel"), "cling");
+  assert.notEqual(target.kind, "glide");
+  assert.notEqual(target.kind, "bury");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she planes a window stool as an oak fold, not the sash foot");
+  assert.ok(P.DUR.planeHold > P.DUR.plane, "the hold is the open skin; the plane is the tell");
+  assert.ok(P.DUR.planeOn !== Overlay.DUR.buryOn);
+  assert.ok(P.DUR.planeOn !== Overlay.DUR.skinOn);
+  assert.ok(P.DUR.planeOn !== Overlay.DUR.foldOn);
+  assert.ok(P.DUR.planeOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.cling, Overlay.DUR.cling);
+  assert.equal(P.DUR.planeOn, Overlay.DUR.planeOn);
+  assert.equal(P.DUR.plane, Overlay.DUR.plane);
+  assert.equal(P.DUR.planeHold, Overlay.DUR.planeHold);
+  assert.equal(P.DUR.planeOff, Overlay.DUR.planeOff);
+  const foldOak = P.planePoint(WIN, 176, WORK);
+  const deskOak = Overlay.planePoint(WIN, Overlay.SPRITE, WORK);
+  const dish = P.buryPoint(WIN, 176, WORK);
+  const trunk = P.clingPoint(WIN, 176, WORK);
+  const cape = P.foldPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(foldOak.x - deskOak.x) < 1);
+  assert.ok(Math.abs(foldOak.lift - deskOak.lift) < 1);
+  assert.ok(Math.abs(foldOak.lift - dish.lift) < 8, "same stool furniture as Cache");
+  assert.ok(Math.abs(foldOak.x - dish.x) > 20, "not Cache's bury");
+  assert.ok(Math.abs(foldOak.x - trunk.x) > 8 || Math.abs(foldOak.lift - trunk.lift) > 20, "not Sail's cling");
+  assert.ok(Math.abs(foldOak.x - cape.x) > 8 || Math.abs(foldOak.lift - cape.lift) > 20, "not Cape's fold");
+  const hopOn = P.planeOnPath(0.25, { x: 40, lift: 0 }, { x: foldOak.x, lift: foldOak.lift });
+  const deskHop = Overlay.planeOnPath(0.25, { x: 40, lift: 0 }, { x: foldOak.x, lift: foldOak.lift });
+  assert.equal(hopOn.x, deskHop.x);
+  assert.equal(hopOn.lift, deskHop.lift);
+  assert.ok(hopOn.lift > 0, "she hops onto the oak fold");
+  const open = P.planePath(0.5);
+  const deskOpen = Overlay.planePath(0.5);
+  assert.equal(open.lift, deskOpen.lift);
+  assert.ok(open.x > 2 && open.lift > 0 && open.rot < 12, "a skin open on the oak fold, not a wing");
+  const hold = P.planeHoldPath(0.5);
+  const deskHold = Overlay.planeHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 9) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "bury");
+    assert.notEqual(play.phase, "skin");
+    assert.notEqual(play.phase, "fold");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "plane") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "plane-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "plane-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.9)) < 3, "she holds the open skin on the stool");
+    }
+  }
+  assert.ok(seen.has("plane-on"));
+  assert.ok(seen.has("plane"));
+  assert.ok(seen.has("plane-hold"));
+  assert.ok(seen.has("plane-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
