@@ -12563,3 +12563,90 @@ test("the demo window plate walks Slick's slide the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Wash's rinse the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "raccoon"[\s\S]{0,80}slug: "wash"/);
+  assert.equal(P.playFor("raccoon"), "rinse");
+  const target = P.pickTarget([WIN], 80, "raccoon", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "rinse");
+  assert.equal(target.side, "bowl");
+  assert.equal(target.leave, "scrap");
+  assert.equal(Overlay.playFor("raccoon"), "rinse");
+  assert.equal(P.playFor("pitcher"), "fill");
+  assert.equal(Overlay.playFor("pitcher"), "fill");
+  assert.equal(P.playFor("vinegaroon"), "spray");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("otter"), "slide");
+  assert.notEqual(P.playFor("raccoon"), "wash");
+  assert.notEqual(target.kind, "fill");
+  assert.notEqual(target.kind, "spray");
+  assert.notEqual(target.kind, "drink");
+  assert.notEqual(target.kind, "slide");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 28, "she rinses a sill pan as a wash bowl, not the floor");
+  assert.ok(P.DUR.rinse > P.DUR.rinseHold, "the rinse dunk is the tell; the hold is a wet scrap");
+  assert.ok(P.DUR.rinseOn !== Overlay.DUR.fillOn);
+  assert.ok(P.DUR.rinseOn !== Overlay.DUR.sprayOn);
+  assert.ok(P.DUR.rinseOn !== Overlay.DUR.drinkOn);
+  assert.ok(P.DUR.rinseOn !== Overlay.DUR.slideOn);
+  assert.ok(P.DUR.rinseOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.fillOn, Overlay.DUR.fillOn);
+  assert.equal(P.DUR.rinseOn, Overlay.DUR.rinseOn);
+  assert.equal(P.DUR.rinse, Overlay.DUR.rinse);
+  const bowl = P.rinsePoint(WIN, 176, WORK);
+  const deskBowl = Overlay.rinsePoint(WIN, Overlay.SPRITE, WORK);
+  const pan = P.fillPoint(WIN, 176, WORK);
+  const wash = P.sprayPoint(WIN, 176, WORK);
+  const pane = P.slidePoint(WIN, 176, WORK);
+  assert.ok(Math.abs(bowl.x - deskBowl.x) < 1);
+  assert.ok(Math.abs(bowl.lift - deskBowl.lift) < 1);
+  assert.ok(Math.abs(bowl.x - pan.x) < 2 && Math.abs(bowl.lift - pan.lift) < 2, "the same hidden sill pan");
+  assert.ok(Math.abs(bowl.x - wash.x) > 8 || Math.abs(bowl.lift - wash.lift) > 8, "not Whip");
+  assert.ok(Math.abs(bowl.x - pane.x) > 8 || Math.abs(bowl.lift - pane.lift) > 8, "not Slick");
+  const walkOn = P.rinseOnPath(0.25, { x: 40, lift: 0 }, { x: bowl.x, lift: bowl.lift });
+  const deskWalk = Overlay.rinseOnPath(0.25, { x: 40, lift: 0 }, { x: bowl.x, lift: bowl.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks to the pan");
+  const dunk = P.rinsePath(0.5);
+  const deskDunk = Overlay.rinsePath(0.5);
+  assert.equal(dunk.lift, deskDunk.lift);
+  assert.ok(dunk.lift < -10, "she dunks a scrap in the pan");
+  const still = P.rinseHoldPath(0.5);
+  const deskStill = Overlay.rinseHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "fill");
+    assert.notEqual(play.phase, "spray");
+    assert.notEqual(play.phase, "drink");
+    assert.notEqual(play.phase, "slide");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "rinse") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "rinse-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "rinse-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 2.6)) < 4, "she holds the wet scrap at the rim");
+    }
+  }
+  assert.ok(seen.has("rinse-on"));
+  assert.ok(seen.has("rinse"));
+  assert.ok(seen.has("rinse-hold"));
+  assert.ok(seen.has("rinse-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});

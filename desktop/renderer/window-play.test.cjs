@@ -19534,3 +19534,162 @@ test("a moved window refits Slick's ink-dish pane; sleep, card, and hide abort; 
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "slide-off");
   assert.equal(play.abort, true);
 });
+
+test("Wash rinses a sill pan as a wash bowl: walk to the hidden pan, rinse a scrap, then walk off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("raccoon"), "rinse");
+  assert.equal(P.playFor("pitcher"), "fill");
+  assert.equal(P.playFor("vinegaroon"), "spray");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("otter"), "slide");
+  assert.equal(P.playFor("kingsnake"), "inspect");
+  assert.equal(P.playFor("red_panda"), "cling-dive");
+  assert.notEqual(P.playFor("raccoon"), "wash");
+  assert.notEqual(P.playFor("raccoon"), "fill");
+  assert.notEqual(P.playFor("raccoon"), "spray");
+  assert.notEqual(P.playFor("raccoon"), "drink");
+  assert.notEqual(P.playFor("raccoon"), "slide");
+  assert.notEqual(P.playFor("raccoon"), "inspect");
+  assert.notEqual(P.playFor("raccoon"), "cling-dive");
+  assert.notEqual(P.playFor("raccoon"), "bury");
+  assert.notEqual(P.playFor("raccoon"), "sill");
+  assert.equal(P.DUR.fillOn, 2.48, "Well's fill durations stay");
+  assert.equal(P.DUR.sprayOn, 1.31, "Whip's spray durations stay");
+  assert.equal(P.DUR.drinkOn, 2.17, "Latch's drink durations stay");
+  assert.equal(P.DUR.slideOn, 0.64, "Slick's slide durations stay");
+  const target = P.pickTarget([WIN], 80, "raccoon", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "rinse");
+  assert.equal(target.side, "bowl");
+  assert.equal(target.leave, "scrap");
+  assert.notEqual(target.kind, "fill");
+  assert.notEqual(target.kind, "spray");
+  assert.notEqual(target.kind, "drink");
+  assert.notEqual(target.kind, "slide");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 28, "she rinses a sill pan as a wash bowl, not the floor");
+  assert.ok(P.DUR.rinse > P.DUR.rinseHold, "the rinse dunk is the tell; the hold is a wet scrap");
+  assert.ok(P.DUR.rinseOn > 1.0, "a walk to the pan, not a hop");
+  assert.ok(P.DUR.rinseOn !== P.DUR.fillOn);
+  assert.ok(P.DUR.rinseOn !== P.DUR.sprayOn);
+  assert.ok(P.DUR.rinseOn !== P.DUR.drinkOn);
+  assert.ok(P.DUR.rinseOn !== P.DUR.slideOn);
+  assert.ok(P.DUR.rinseOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.rinse !== P.DUR.fill);
+  assert.ok(P.DUR.rinse !== P.DUR.spray);
+  assert.ok(P.DUR.rinse !== P.DUR.drink);
+  assert.ok(P.DUR.rinse !== P.DUR.slide);
+  assert.ok(P.DUR.rinseHold !== P.DUR.fillHold);
+  assert.ok(P.DUR.rinseHold !== P.DUR.sprayHold);
+  assert.ok(P.DUR.rinseOff !== P.DUR.fillOff);
+  assert.ok(P.DUR.rinseOff !== P.DUR.sprayOff);
+  assert.ok(P.DUR.rinseOff !== P.DUR.slideOff);
+  assert.ok(P.DUR.rinseOff !== P.DUR.sillDown);
+  const bowl = P.rinsePoint(WIN, P.SPRITE, WORK);
+  const pan = P.fillPoint(WIN, P.SPRITE, WORK);
+  const wash = P.sprayPoint(WIN, P.SPRITE, WORK);
+  const drip = P.drinkPoint(WIN, P.SPRITE, WORK);
+  const pane = P.slidePoint(WIN, P.SPRITE, WORK);
+  assert.ok(bowl.lift > 28, "the hidden sill pan as a wash bowl, not the floor");
+  assert.ok(Math.abs(bowl.x - pan.x) < 2 && Math.abs(bowl.lift - pan.lift) < 2, "the same hidden sill pan Well fills");
+  assert.ok(Math.abs(bowl.x - wash.x) > 8 || Math.abs(bowl.lift - wash.lift) > 8, "not Whip's sill-wash spray");
+  assert.ok(Math.abs(bowl.x - pan.x) < 2, "Wash and Latch can share the lower sash; the pan is Well's hidden cup");
+  assert.ok(Math.abs(bowl.x - pane.x) > 8 || Math.abs(bowl.lift - pane.lift) > 8, "not Slick's pane slide");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "raccoon", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sill pan, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "raccoon", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sill pan needs height");
+  const whipOnly = P.pickTarget([{ id: "wash", x: 200, y: 80, width: 188, height: 172 }], 80, "raccoon", WORK, P.SPRITE);
+  assert.equal(whipOnly, null, "Wash needs a real sill pan, not Whip's thinner wash");
+  const panOk = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "raccoon", WORK, P.SPRITE);
+  assert.ok(panOk, "a real sill pan as a wash bowl");
+  const well = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "pitcher", WORK, P.SPRITE);
+  assert.ok(well, "Well still takes the same sill pan");
+  const walkOn = P.rinseOnPath(0.25, { x: 40, lift: 0 }, { x: bowl.x, lift: bowl.lift });
+  const hopOn = P.slideOnPath(0.25, { x: 40, lift: 0 }, { x: bowl.x, lift: bowl.lift });
+  const hopEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(walkOn.lift > 0, "she walks to the pan");
+  assert.ok(walkOn.lift < bowl.lift, "a walk on, not already sitting");
+  assert.ok(walkOn.lift < hopOn.lift - 2, "a walk to the pan, not Slick's hop");
+  const dunk = P.rinsePath(0.5);
+  const rain = P.fillPath(0.5);
+  const puff = P.sprayPath(0.5);
+  const wet = P.slidePath(0.5);
+  const sip = P.drinkPath(0.5);
+  assert.ok(dunk.lift < -10, "she dunks a scrap in the pan");
+  assert.ok(dunk.lift < rain.lift - 4, "a rinse dunk, not Well's remain-open fill");
+  assert.ok(dunk.rot > -8, "paws in the bowl, not Whip's whip-back spray");
+  assert.ok(dunk.lift > wet.lift + 8, "a bowl dunk, not Slick's pane slide");
+  assert.ok(Math.abs(dunk.x) < 8, "she stays on the wash bowl");
+  assert.ok(dunk.lift !== sip.lift, "not Latch's drip drink");
+  const still = P.rinseHoldPath(0.5);
+  assert.ok(still.lift > rain.lift, "she holds the wet scrap at the rim, not Well's rain keep");
+  assert.ok(Math.abs(still.x) < 0.2, "still on the bowl");
+  const off0 = P.rinseOffPath(0, { x: bowl.x, lift: bowl.lift, rot: 4.8 }, { x: bowl.x + 49, lift: 0 });
+  const offMid = P.rinseOffPath(0.5, { x: bowl.x, lift: bowl.lift, rot: 4.8 }, { x: bowl.x + 49, lift: 0 });
+  const off1 = P.rinseOffPath(1, { x: bowl.x, lift: bowl.lift, rot: 4.8 }, { x: bowl.x + 49, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - bowl.x) < 2);
+  assert.ok(Math.abs(offMid.x - (bowl.x + 49 * midEase)) < 8, "she walks off, not a hop");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "fill");
+    assert.notEqual(play.phase, "spray");
+    assert.notEqual(play.phase, "drink");
+    assert.notEqual(play.phase, "slide");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "rinse") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "rinse-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "rinse-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 2.6)) < 4, "she holds the wet scrap at the rim");
+    }
+    if (play.phase === "rinse-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("rinse-on"));
+  assert.ok(seen.has("rinse"));
+  assert.ok(seen.has("rinse-hold"));
+  assert.ok(seen.has("rinse-off"));
+  assert.ok(!seen.has("fill"), "Wash never uses Well's fill");
+  assert.ok(!seen.has("spray"), "Wash never uses Whip's spray");
+  assert.ok(!seen.has("drink"), "Wash never uses Latch's drink");
+  assert.ok(!seen.has("slide"), "Wash never uses Slick's slide");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Wash's wash-bowl pan; sleep, card, and hide abort; Wash never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "raccoon", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "rinse"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "rinse");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "rinse");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "rinse-off");
+  assert.equal(play.abort, true);
+});
