@@ -12200,3 +12200,95 @@ test("the demo window plate walks Gale's run the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Rack's flag the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/wood.ts"), "utf8"), /key: "deer"[\s\S]{0,80}slug: "rack"/);
+  assert.equal(P.playFor("deer"), "flag");
+  const target = P.pickTarget([WIN], 80, "deer", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "flag");
+  assert.equal(target.side, "oak");
+  assert.equal(target.leave, "oak");
+  assert.equal(Overlay.playFor("deer"), "flag");
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.notEqual(P.playFor("deer"), "rack");
+  assert.notEqual(target.kind, "run");
+  assert.notEqual(target.kind, "cache");
+  assert.notEqual(target.kind, "forage");
+  assert.notEqual(target.kind, "carry");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 14, "she walks the outer sill nosing as an oak edge, not the floor");
+  assert.ok(P.DUR.flagHold > P.DUR.flag, "the stand is the hold; the white tail is the tell");
+  assert.ok(P.DUR.flagOn !== Overlay.DUR.runOn);
+  assert.ok(P.DUR.flagOn !== Overlay.DUR.cacheOn);
+  assert.ok(P.DUR.flagOn !== Overlay.DUR.forageOn);
+  assert.ok(P.DUR.flagOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.runOn, Overlay.DUR.runOn);
+  assert.equal(P.DUR.flagOn, Overlay.DUR.flagOn);
+  assert.equal(P.DUR.flag, Overlay.DUR.flag);
+  assert.equal(P.DUR.flagHold, Overlay.DUR.flagHold);
+  assert.equal(P.DUR.flagOff, Overlay.DUR.flagOff);
+  const oak = P.flagPoint(WIN, 176, WORK);
+  const deskOak = Overlay.flagPoint(WIN, 176, WORK);
+  assert.equal(oak.x, deskOak.x);
+  assert.equal(oak.lift, deskOak.lift);
+  const twig = P.cachePoint(WIN, 176, WORK);
+  const meadow = P.foragePoint(WIN, 176, WORK);
+  const litter = P.carryPoint(WIN, 176, WORK);
+  const dry = P.runPoint(WIN, 176, WORK);
+  assert.ok(oak.lift > 14, "the outer sill nosing as an oak edge");
+  assert.ok(Math.abs(oak.x - twig.x) > 8 || Math.abs(oak.lift - twig.lift) > 8, "not Dee");
+  assert.ok(Math.abs(oak.x - meadow.x) > 8 || Math.abs(oak.lift - meadow.lift) > 8, "not Thrum");
+  assert.ok(Math.abs(oak.x - litter.x) > 8 || Math.abs(oak.lift - litter.lift) > 8, "not Prowl");
+  assert.ok(Math.abs(oak.x - dry.x) > 8 || Math.abs(oak.lift - dry.lift) > 8, "not Gale");
+  const walkOn = P.flagOnPath(0.25, { x: 40, lift: 0 }, { x: oak.x, lift: oak.lift });
+  const deskWalk = Overlay.flagOnPath(0.25, { x: 40, lift: 0 }, { x: oak.x, lift: oak.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks onto the outer nosing");
+  const flash = P.flagPath(0.5);
+  const deskFlash = Overlay.flagPath(0.5);
+  assert.equal(flash.lift, deskFlash.lift);
+  assert.ok(flash.lift > 2, "the white tail flags once");
+  assert.ok(Math.abs(flash.x) < 2, "she stays on the oak edge");
+  const still = P.flagHoldPath(0.5);
+  const deskStill = Overlay.flagHoldPath(0.5);
+  assert.equal(still.x, deskStill.x);
+  assert.equal(still.lift, deskStill.lift);
+  assert.ok(still.rot < 0, "she holds the flag briefly");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "run");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "forage");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "flag") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "flag-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "flag-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.6)) < 4, "she holds the brief flag on the oak edge");
+    }
+  }
+  assert.ok(seen.has("flag-on"));
+  assert.ok(seen.has("flag"));
+  assert.ok(seen.has("flag-hold"));
+  assert.ok(seen.has("flag-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
