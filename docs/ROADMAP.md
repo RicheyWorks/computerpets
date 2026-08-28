@@ -329,6 +329,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-08-27 (Phase 6 leftover: Spike crowns a window well as a sand tray; fifth stone leftover done; next leftover is Levee; catalog stays 220; Shift still owns aim; Dash still owns scoot; Wink still owns flash; Blush still owns stone; Coal still owns browse)
+**Last Updated:** 2026-08-27 (Phase 6 leftover: Levee banks a window stool as a bank dish; sixth stone leftover done; next leftover is Jaw; catalog stays 220; Spike still owns crown; Shift still owns aim; Ink still owns bask; Blush still owns stone)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
