@@ -15307,7 +15307,7 @@ test("the demo window plate walks Penny flare the same way", () => {
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("perch"), "barred");
-  assert.equal(P.playFor("walleye"), "sill");
+  assert.equal(P.playFor("paddlefish"), "sill");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -15401,7 +15401,7 @@ test("the demo window plate walks Bar barred the same way", () => {
   assert.equal(Overlay.playFor("skunk"), "stamp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("walleye"), "sill");
+  assert.equal(P.playFor("paddlefish"), "sill");
   assert.notEqual(P.playFor("perch"), "bar");
   assert.notEqual(P.playFor("perch"), "perch");
   assert.notEqual(P.playFor("perch"), "flare");
@@ -15497,7 +15497,7 @@ test("the demo window plate walks Lance bill the same way", () => {
   assert.equal(Overlay.playFor("bluegill"), "flare");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("walleye"), "sill");
+  assert.equal(P.playFor("paddlefish"), "sill");
   assert.notEqual(P.playFor("pike"), "lance");
   assert.notEqual(P.playFor("pike"), "barred");
   assert.notEqual(P.playFor("pike"), "mouth");
@@ -15567,6 +15567,107 @@ test("the demo window plate walks Lance bill the same way", () => {
   assert.ok(seen.has("bill"));
   assert.ok(seen.has("bill-hold"));
   assert.ok(seen.has("bill-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Night dusk the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/creek.ts"), "utf8"), /key: "walleye"[\s\S]{0,80}slug: "night"/);
+  assert.equal(P.playFor("walleye"), "dusk");
+  const target = P.pickTarget([WIN], 80, "walleye", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "dusk");
+  assert.equal(target.side, "duskrun");
+  assert.equal(target.leave, "dusks");
+  assert.equal(Overlay.playFor("walleye"), "dusk");
+  assert.equal(P.playFor("pike"), "bill");
+  assert.equal(Overlay.playFor("pike"), "bill");
+  assert.equal(P.playFor("perch"), "barred");
+  assert.equal(Overlay.playFor("perch"), "barred");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(Overlay.playFor("budgie"), "perch");
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(Overlay.playFor("tarsier"), "look");
+  assert.equal(P.playFor("bluegill"), "flare");
+  assert.equal(Overlay.playFor("bluegill"), "flare");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("paddlefish"), "sill");
+  assert.notEqual(P.playFor("walleye"), "night");
+  assert.notEqual(P.playFor("walleye"), "look");
+  assert.notEqual(P.playFor("walleye"), "bill");
+  assert.notEqual(P.playFor("walleye"), "flare");
+  assert.notEqual(target.kind, "night");
+  assert.notEqual(target.kind, "look");
+  assert.notEqual(target.kind, "bill");
+  assert.notEqual(target.kind, "flare");
+  assert.notEqual(target.kind, "sing");
+  assert.ok(target.holdLift > 36, "she dusks a lamp-side stile as a dusk run, not the floor");
+  assert.ok(P.DUR.duskHold > P.DUR.dusk, "the hold is the sit after; the tapetum is the tell");
+  assert.ok(P.DUR.duskOn !== Overlay.DUR.flareOn);
+  assert.ok(P.DUR.duskOn !== Overlay.DUR.singOn);
+  assert.ok(P.DUR.duskOn !== Overlay.DUR.lookOn);
+  assert.ok(P.DUR.duskOn !== Overlay.DUR.billOn);
+  assert.ok(P.DUR.duskOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.duskOn, Overlay.DUR.duskOn);
+  assert.equal(P.DUR.dusk, Overlay.DUR.dusk);
+  assert.equal(P.DUR.duskHold, Overlay.DUR.duskHold);
+  assert.equal(P.DUR.duskOff, Overlay.DUR.duskOff);
+  const run = P.duskPoint(WIN, 176, WORK);
+  const deskRun = Overlay.duskPoint(WIN, Overlay.SPRITE, WORK);
+  const shade = P.flarePoint(WIN, 176, WORK);
+  const arm = P.singPoint(WIN, 176, WORK);
+  const reed = P.billPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(run.x - deskRun.x) < 1);
+  assert.ok(Math.abs(run.lift - deskRun.lift) < 1);
+  assert.ok(Math.abs(run.x - shade.x) < 2, "same lamp-side stile as Penny");
+  assert.ok(Math.abs(run.lift - shade.lift) > 8, "not Penny flare");
+  assert.ok(Math.abs(run.x - arm.x) < 2, "same lamp-side stile as Swing");
+  assert.ok(Math.abs(run.lift - arm.lift) > 8, "not Swing sing");
+  assert.ok(Math.abs(run.lift - reed.lift) > 8 || Math.abs(run.x - reed.x) > 8, "not Lance bill");
+  const walkOn = P.duskOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  const deskWalk = Overlay.duskOnPath(0.25, { x: 40, lift: 0 }, { x: run.x, lift: run.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const gleam = P.duskPath(0.5);
+  const deskGleam = Overlay.duskPath(0.5);
+  assert.equal(gleam.lift, deskGleam.lift);
+  assert.ok(gleam.rot > 9 && gleam.rot < 13, "she sits the tapetum");
+  const hold = P.duskHoldPath(0.5);
+  const deskHold = Overlay.duskHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 7.2) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "flare");
+    assert.notEqual(play.phase, "sing");
+    assert.notEqual(play.phase, "look");
+    assert.notEqual(play.phase, "bill");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "dusk") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "dusk-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "dusk-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.6)) < 3, "she holds the tapetum sit on the dusk run");
+    }
+  }
+  assert.ok(seen.has("dusk-on"));
+  assert.ok(seen.has("dusk"));
+  assert.ok(seen.has("dusk-hold"));
+  assert.ok(seen.has("dusk-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
