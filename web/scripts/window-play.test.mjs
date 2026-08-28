@@ -15905,8 +15905,8 @@ test("the demo window plate walks Silver go the same way", () => {
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("house_centipede"), "hunt");
   assert.equal(Overlay.playFor("house_centipede"), "hunt");
-  assert.equal(P.playFor("millipede"), "sill");
-  assert.equal(Overlay.playFor("millipede"), "sill");
+  assert.equal(P.playFor("pillbug"), "sill");
+  assert.equal(Overlay.playFor("pillbug"), "sill");
   assert.notEqual(P.playFor("american_eel"), "silver");
   assert.notEqual(P.playFor("american_eel"), "disk");
   assert.notEqual(P.playFor("american_eel"), "cling");
@@ -16009,8 +16009,8 @@ test("the demo window plate walks Haste hunt the same way", () => {
   assert.equal(Overlay.playFor("skink"), "scoot");
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(Overlay.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("millipede"), "sill");
-  assert.equal(Overlay.playFor("millipede"), "sill");
+  assert.equal(P.playFor("pillbug"), "sill");
+  assert.equal(Overlay.playFor("pillbug"), "sill");
   assert.notEqual(P.playFor("house_centipede"), "haste");
   assert.notEqual(P.playFor("house_centipede"), "go");
   assert.notEqual(P.playFor("house_centipede"), "scoot");
@@ -16082,6 +16082,102 @@ test("the demo window plate walks Haste hunt the same way", () => {
   assert.ok(seen.has("hunt"));
   assert.ok(seen.has("hunt-hold"));
   assert.ok(seen.has("hunt-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Link oil the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/log.ts"), "utf8"), /key: "millipede"[\s\S]{0,80}slug: "link"/);
+  assert.equal(P.playFor("millipede"), "oil");
+  const target = P.pickTarget([WIN], 80, "millipede", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "oil");
+  assert.equal(target.side, "damplog");
+  assert.equal(target.leave, "rings");
+  assert.equal(Overlay.playFor("millipede"), "oil");
+  assert.equal(P.playFor("house_centipede"), "hunt");
+  assert.equal(Overlay.playFor("house_centipede"), "hunt");
+  assert.equal(P.playFor("american_eel"), "go");
+  assert.equal(Overlay.playFor("american_eel"), "go");
+  assert.equal(P.playFor("lamprey"), "disk");
+  assert.equal(Overlay.playFor("lamprey"), "disk");
+  assert.equal(P.playFor("colugo"), "cling");
+  assert.equal(Overlay.playFor("colugo"), "cling");
+  assert.equal(P.playFor("squirrel"), "bury");
+  assert.equal(Overlay.playFor("squirrel"), "bury");
+  assert.equal(P.playFor("koala"), "chew");
+  assert.equal(Overlay.playFor("koala"), "chew");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(Overlay.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("pillbug"), "sill");
+  assert.equal(Overlay.playFor("pillbug"), "sill");
+  assert.notEqual(P.playFor("millipede"), "link");
+  assert.notEqual(P.playFor("millipede"), "hunt");
+  assert.notEqual(P.playFor("millipede"), "go");
+  assert.notEqual(P.playFor("millipede"), "bury");
+  assert.notEqual(P.playFor("millipede"), "chew");
+  assert.notEqual(target.kind, "link");
+  assert.ok(target.holdLift > 8, "she oils a window stool as a damp log, not the floor");
+  assert.ok(P.DUR.oilHold > P.DUR.oil, "the hold is the sit after; the ring oil is the tell");
+  assert.ok(P.DUR.oilOn !== Overlay.DUR.huntOn);
+  assert.ok(P.DUR.oilOn !== Overlay.DUR.buryOn);
+  assert.ok(P.DUR.oilOn !== Overlay.DUR.chewOn);
+  assert.ok(P.DUR.oilOn !== Overlay.DUR.bankOn);
+  assert.ok(P.DUR.oilOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.oilOn, Overlay.DUR.oilOn);
+  assert.equal(P.DUR.oil, Overlay.DUR.oil);
+  assert.equal(P.DUR.oilHold, Overlay.DUR.oilHold);
+  assert.equal(P.DUR.oilOff, Overlay.DUR.oilOff);
+  const log = P.oilPoint(WIN, 176, WORK);
+  const deskLog = Overlay.oilPoint(WIN, Overlay.SPRITE, WORK);
+  const oak = P.buryPoint(WIN, 176, WORK);
+  const gum = P.chewPoint(WIN, 176, WORK);
+  const bank = P.bankPoint(WIN, 176, WORK);
+  const crack = P.huntPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(log.x - deskLog.x) < 1);
+  assert.ok(Math.abs(log.lift - deskLog.lift) < 1);
+  assert.ok(Math.abs(log.lift - oak.lift) < 2, "same stool family as Cache bury");
+  assert.ok(Math.abs(log.x - oak.x) > 8, "not Cache bury");
+  assert.ok(Math.abs(log.x - gum.x) > 8, "not Gum chew");
+  assert.ok(Math.abs(log.x - bank.x) > 8, "not Levee bank");
+  assert.ok(Math.abs(log.x - crack.x) > 8 || Math.abs(log.lift - crack.lift) > 8, "not Haste hunt");
+  const walkOn = P.oilOnPath(0.25, { x: 40, lift: 0 }, { x: log.x, lift: log.lift });
+  const deskWalk = Overlay.oilOnPath(0.25, { x: 40, lift: 0 }, { x: log.x, lift: log.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const oil = P.oilPath(0.5);
+  const deskOil = Overlay.oilPath(0.5);
+  assert.equal(oil.x, deskOil.x);
+  assert.ok(oil.lift !== P.buryPath(0.5).lift, "an oil, not a bury");
+  const hold = P.oilHoldPath(0.5);
+  const deskHold = Overlay.oilHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "oil") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "oil-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "oil-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.3)) < 3, "she holds the oil sit on the damp log");
+    }
+  }
+  assert.ok(seen.has("oil-on"));
+  assert.ok(seen.has("oil"));
+  assert.ok(seen.has("oil-hold"));
+  assert.ok(seen.has("oil-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
