@@ -802,6 +802,7 @@ export function CompanionRoom({
         hostSleeping={kind.key === "red_panda" && (!!stats.asleep || ruiLieHold)}
         hostPoseRef={poseRef}
         onSong={say}
+        windows={demoWindow ? deskWindows : []}
       />
 
       {choiceOpen ? (

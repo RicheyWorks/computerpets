@@ -540,6 +540,9 @@ function spawnCalled(keys) {
 }
 
 function calledFlags() {
+  const G = window.PetCallGuests;
+  const work = { width: window.innerWidth, height: window.innerHeight, floorLift: 0 };
+  const bound = G && G.firstWindowBound ? G.firstWindowBound(playWindows(), work) : null;
   return {
     hidden: !!(life && life.hidden),
     hostKey: kind && kind.key,
@@ -547,6 +550,8 @@ function calledFlags() {
     hostX: sim.x,
     hostLift: sim.play ? sim.play.lift : sim.happy ? sim.happy.lift : sim.trick ? sim.trick.lift : 0,
     hostFacing: sim.facing,
+    peers: called.map((c) => ({ key: c.key, x: c.x, lift: c.lift || 0, phase: c.phase })),
+    windowBound: bound,
   };
 }
 
@@ -574,7 +579,7 @@ function tickCalled(dt) {
     Object.assign(g, next);
     if (!G.stillVisible(g)) return false;
     g.acc = (g.acc || 0) + dt;
-    const moving = Math.abs(g.target - g.x) > 2 && g.phase !== "perch";
+    const moving = Math.abs(g.target - g.x) > 2 && g.phase !== "perch" && g.phase !== "meet" && g.phase !== "bound";
     if (moving && g.acc > 1 / 6.4) {
       g.acc = 0;
       const sprites = g.sprites || pack(g.key);
@@ -584,6 +589,11 @@ function tickCalled(dt) {
     if (G.shouldSing && G.shouldSing(g)) {
       say(G.ROBIN_SONG);
       Object.assign(g, G.markSung(g));
+    }
+    if (G.shouldTell && G.shouldTell(g)) {
+      const line = G.tellLine ? G.tellLine(g) : "";
+      if (line) say(line);
+      Object.assign(g, G.markTold(g));
     }
     return true;
   });

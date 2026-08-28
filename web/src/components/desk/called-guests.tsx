@@ -9,9 +9,14 @@ import {
   stepCalled,
   stillVisible,
   poseFrames,
+  firstWindowBound,
+  shouldTell,
+  tellLine,
+  markTold,
   type CalledWalker,
 } from "@/lib/pets/call-guests";
 import { traitFor } from "@/lib/pets/traits";
+import type { DeskWindow } from "@/lib/pets/windows";
 
 export function CalledGuests({
   keys,
@@ -20,6 +25,7 @@ export function CalledGuests({
   hostSleeping,
   hostPoseRef,
   onSong,
+  windows,
 }: {
   keys: string[];
   hostKey?: string;
@@ -27,6 +33,7 @@ export function CalledGuests({
   hostSleeping?: boolean;
   hostPoseRef?: RefObject<{ x: number; facing: 1 | -1 }>;
   onSong?: (line: string) => void;
+  windows?: DeskWindow[];
 }) {
   const list = useMemo(() => keys.filter((k, i, all) => k && k !== hostKey && all.indexOf(k) === i), [hostKey, keys]);
   const [on, setOn] = useState(false);
@@ -39,9 +46,11 @@ export function CalledGuests({
   const hiddenRef = useRef(hidden);
   const sleepRef = useRef(hostSleeping);
   const songRef = useRef(onSong);
+  const windowsRef = useRef(windows);
   hiddenRef.current = hidden;
   sleepRef.current = hostSleeping;
   songRef.current = onSong;
+  windowsRef.current = windows;
 
   useEffect(() => {
     if (!list.length) {
@@ -74,12 +83,19 @@ export function CalledGuests({
         hostX: pose?.x,
         hostLift: 0,
         hostFacing: pose?.facing,
+        peers: walkers.current.map((row) => ({ key: row.key, x: row.x, lift: row.lift || 0, phase: row.phase })),
+        windowBound: firstWindowBound(windowsRef.current, { width: w, height: window.innerHeight, floorLift: 0 }),
       };
       walkers.current = walkers.current.map((g) => {
         const next = stepCalled(g, dt, w, flags);
         if (shouldSing(next)) {
           songRef.current?.(ROBIN_SONG);
           return markSung(next);
+        }
+        if (shouldTell(next)) {
+          const line = tellLine(next);
+          if (line) songRef.current?.(line);
+          return markTold(next);
         }
         return next;
       }).filter((g) => stillVisible(g));
@@ -95,7 +111,7 @@ export function CalledGuests({
         const trait = traitFor(key);
         el.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing * (trait.scale || 1) * 0.72}, 1)`;
         const imgs = poseFrames(g, { sit: sitFrames.current[key], walk: frames.current[key], idle: frames.current[key] });
-        if (Math.abs(g.target - g.x) > 2 && g.phase !== "perch") {
+        if (Math.abs(g.target - g.x) > 2 && g.phase !== "perch" && g.phase !== "meet" && g.phase !== "bound") {
           acc.current[key] = (acc.current[key] || 0) + dt;
           if (acc.current[key] > 1 / 6.4 && imgs.length) {
             acc.current[key] = 0;
