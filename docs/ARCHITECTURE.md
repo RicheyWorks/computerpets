@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (Wrist wraps a window-box bloom as a nectar cup; fourth canopy leftover done; next leftover is Sail; catalog stays 220) |
+| **Last Updated** | 2026-08-27 (Sail clings a window jamb as a trunk sail; fifth canopy leftover done; next leftover is Glide; catalog stays 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
