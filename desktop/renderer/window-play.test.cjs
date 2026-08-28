@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "paddlefish", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "lamprey", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -24831,7 +24831,7 @@ test("Penny flares a lamp-side stile as dock shade: walk onto the stile, flare t
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("perch"), "barred");
-  assert.equal(P.playFor("paddlefish"), "sill");
+  assert.equal(P.playFor("lamprey"), "sill");
   assert.notEqual(P.playFor("bluegill"), "penny");
   assert.notEqual(P.playFor("bluegill"), "circle");
   assert.notEqual(P.playFor("bluegill"), "barbel");
@@ -25009,7 +25009,7 @@ test("Bar bars a meeting rail as a weed rail: walk onto the rail, show the side 
   assert.equal(P.playFor("mussel"), "filter");
   assert.equal(P.playFor("moss"), "lean");
   assert.equal(P.playFor("chickadee"), "cache");
-  assert.equal(P.playFor("paddlefish"), "sill");
+  assert.equal(P.playFor("lamprey"), "sill");
   assert.notEqual(P.playFor("perch"), "bar");
   assert.notEqual(P.playFor("perch"), "perch");
   assert.notEqual(P.playFor("perch"), "flare");
@@ -25216,7 +25216,7 @@ test("Lance bills a window-box as a reed ambush: walk onto the box, sit the duck
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("bumblebee"), "forage");
   assert.equal(P.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("paddlefish"), "sill");
+  assert.equal(P.playFor("lamprey"), "sill");
   assert.notEqual(P.playFor("pike"), "lance");
   assert.notEqual(P.playFor("pike"), "barred");
   assert.notEqual(P.playFor("pike"), "mouth");
@@ -25405,7 +25405,7 @@ test("Night dusks a lamp-side stile as a dusk run: walk onto the stile (when the
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("orb_weaver"), "web");
-  assert.equal(P.playFor("paddlefish"), "sill");
+  assert.equal(P.playFor("lamprey"), "sill");
   assert.notEqual(P.playFor("walleye"), "night");
   assert.notEqual(P.playFor("walleye"), "look");
   assert.notEqual(P.playFor("walleye"), "bill");
@@ -25582,5 +25582,202 @@ test("a moved window refits Night's dusk-run stile; sleep, card, and hide abort;
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "dusk-off");
+  assert.equal(play.abort, true);
+});
+
+test("Spoon paddles a sill pan as a current dish: walk onto the pan, sit the paddle and sieve, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("paddlefish"), "paddle");
+  assert.equal(P.PADDLE, "paddle");
+  assert.equal(P.playFor("walleye"), "dusk");
+  assert.equal(P.playFor("pike"), "bill");
+  assert.equal(P.playFor("mussel"), "filter");
+  assert.equal(P.playFor("catfish"), "barbel");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("crocodile"), "show");
+  assert.equal(P.playFor("raccoon"), "rinse");
+  assert.equal(P.playFor("pitcher"), "fill");
+  assert.equal(P.playFor("lamprey"), "sill");
+  assert.notEqual(P.playFor("paddlefish"), "spoon");
+  assert.notEqual(P.playFor("paddlefish"), "filter");
+  assert.notEqual(P.playFor("paddlefish"), "dusk");
+  assert.notEqual(P.playFor("paddlefish"), "show");
+  assert.notEqual(P.playFor("paddlefish"), "rinse");
+  assert.notEqual(P.playFor("paddlefish"), "fill");
+  assert.notEqual(P.playFor("paddlefish"), "sill");
+  assert.equal(P.DUR.duskOn, 1.54, "Night dusk durations stay");
+  assert.equal(P.DUR.filterOn, 2.53, "Hinge filter durations stay");
+  assert.equal(P.DUR.showOn, 1.33, "Jaw show durations stay");
+  assert.equal(P.DUR.rinseOn, 1.21, "Wash rinse durations stay");
+  assert.equal(P.DUR.fillOn, 2.48, "Well fill durations stay");
+  const target = P.pickTarget([WIN], 80, "paddlefish", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "paddle");
+  assert.equal(target.side, "currentdish");
+  assert.equal(target.leave, "paddles");
+  assert.notEqual(target.kind, "spoon");
+  assert.notEqual(target.kind, "filter");
+  assert.notEqual(target.kind, "dusk");
+  assert.notEqual(target.kind, "show");
+  assert.notEqual(target.kind, "rinse");
+  assert.notEqual(target.kind, "fill");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 16, "she paddles a sill pan as a current dish, not the floor");
+  assert.ok(P.DUR.paddleHold > P.DUR.paddle, "the hold is the sit after; the paddle is the tell");
+  assert.ok(P.DUR.paddleOn > 1.0, "a walk onto the pan, not the paddle");
+  assert.ok(P.DUR.paddleOn !== P.DUR.showOn);
+  assert.ok(P.DUR.paddleOn !== P.DUR.rinseOn);
+  assert.ok(P.DUR.paddleOn !== P.DUR.fillOn);
+  assert.ok(P.DUR.paddleOn !== P.DUR.filterOn);
+  assert.ok(P.DUR.paddleOn !== P.DUR.duskOn);
+  assert.ok(P.DUR.paddleOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.paddle !== P.DUR.show);
+  assert.ok(P.DUR.paddle !== P.DUR.rinse);
+  assert.ok(P.DUR.paddle !== P.DUR.fill);
+  assert.ok(P.DUR.paddle !== P.DUR.filter);
+  assert.ok(P.DUR.paddle !== P.DUR.dusk);
+  assert.ok(P.DUR.paddleHold !== P.DUR.showHold);
+  assert.ok(P.DUR.paddleHold !== P.DUR.rinseHold);
+  assert.ok(P.DUR.paddleHold !== P.DUR.filterHold);
+  assert.ok(P.DUR.paddleHold !== P.DUR.duskHold);
+  assert.ok(P.DUR.paddleOff !== P.DUR.showOff);
+  assert.ok(P.DUR.paddleOff !== P.DUR.rinseOff);
+  assert.ok(P.DUR.paddleOff !== P.DUR.duskOff);
+  assert.ok(P.DUR.paddleOff !== P.DUR.sillDown);
+  const dish = P.paddlePoint(WIN, P.SPRITE, WORK);
+  const show = P.showPoint(WIN, P.SPRITE, WORK);
+  const rinse = P.rinsePoint(WIN, P.SPRITE, WORK);
+  const fill = P.fillPoint(WIN, P.SPRITE, WORK);
+  const silt = P.filterPoint(WIN, P.SPRITE, WORK);
+  const run = P.duskPoint(WIN, P.SPRITE, WORK);
+  const well = P.barbelPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(dish.lift > 16, "the sill pan as a current dish, not the floor");
+  assert.ok(Math.abs(dish.lift - show.lift) < 2, "the same sill pan Jaw shows; the pose is a paddle");
+  assert.ok(Math.abs(dish.lift - rinse.lift) < 2, "the same sill pan Wash rinses; the pose is a paddle");
+  assert.ok(Math.abs(dish.lift - fill.lift) < 2, "the same sill pan Well fills; the pose is a paddle");
+  assert.ok(Math.abs(dish.x - show.x) > 8, "not Jaw's sill-pan show");
+  assert.ok(Math.abs(dish.x - rinse.x) > 8, "not Wash's sill-pan rinse");
+  assert.ok(Math.abs(dish.x - fill.x) > 8, "not Well's sill-pan fill");
+  assert.ok(Math.abs(dish.x - silt.x) > 8 || Math.abs(dish.lift - silt.lift) > 8, "not Hinge's meeting-rail filter");
+  assert.ok(Math.abs(dish.x - run.x) > 8 || Math.abs(dish.lift - run.lift) > 8, "not Night's lamp-side dusk");
+  assert.ok(Math.abs(dish.x - well.x) > 8 || Math.abs(dish.lift - well.lift) > 8, "not Whisk window-well barbel");
+  assert.ok(Math.abs(dish.x - horn.x) > 8 || Math.abs(dish.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "paddlefish", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sill pan, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "paddlefish", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sill pan, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 190, height: 182 }], 80, "paddlefish", WORK, P.SPRITE);
+  assert.equal(thin, null, "Spoon needs Jaw and Wash's real sill pan, not a shallower mouth");
+  const okPan = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "paddlefish", WORK, P.SPRITE);
+  assert.ok(okPan, "a real sill pan as a current dish");
+  const jawOk = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "crocodile", WORK, P.SPRITE);
+  assert.ok(jawOk, "Jaw still takes the pan");
+  const washOk = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "raccoon", WORK, P.SPRITE);
+  assert.ok(washOk, "Wash still takes the pan");
+  const wellOk = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "pitcher", WORK, P.SPRITE);
+  assert.ok(wellOk, "Well still takes the pan");
+  const hingeOk = P.pickTarget([{ id: "gap", x: 200, y: 80, width: 196, height: 170 }], 80, "mussel", WORK, P.SPRITE);
+  assert.ok(hingeOk, "Hinge still takes the meeting-rail gap");
+  const nightOk = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 204, height: 224 }], 80, "walleye", WORK, P.SPRITE);
+  assert.ok(nightOk, "Night still takes the stile");
+  const walkOn = P.paddleOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const showOn = P.showOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const rinseOn = P.rinseOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const fillOn = P.fillOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const filterOn = P.filterOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const duskOn = P.duskOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the pan as a current dish");
+  assert.ok(walkOn.lift !== rinseOn.lift, "a walk-and-paddle, not Wash rinse");
+  assert.ok(walkOn.rot !== showOn.rot, "a walk onto the current dish, not Jaw show");
+  assert.ok(walkOn.lift !== fillOn.lift, "a walk, not Well fill");
+  assert.ok(walkOn.rot !== filterOn.rot, "a walk onto the pan, not Hinge filter");
+  assert.ok(walkOn.rot !== duskOn.rot, "a walk onto the pan, not Night dusk");
+  const sieve = P.paddlePath(0.5);
+  const tooth = P.showPath(0.5);
+  const dunk = P.rinsePath(0.5);
+  const brim = P.fillPath(0.5);
+  const clamp = P.filterPath(0.5);
+  const gleam = P.duskPath(0.5);
+  assert.ok(sieve.x > 5 && sieve.x < 8, "she sieves the current");
+  assert.ok(sieve.lift > -1 && sieve.lift < 2, "she sits the paddle, she does not dunk");
+  assert.ok(sieve.lift !== dunk.lift, "a paddle, not Wash rinse");
+  assert.ok(sieve.lift !== tooth.lift, "a paddle, not Jaw show");
+  assert.ok(sieve.rot !== gleam.rot, "a paddle sit, not Night dusk");
+  assert.ok(sieve.lift !== clamp.lift, "not Hinge filter");
+  assert.ok(sieve.rot !== brim.rot, "not Well fill");
+  const hold = P.paddleHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - -1.8) < 0.2, "she holds after the paddle sit");
+  assert.ok(Math.abs(hold.x - 1.4) < 0.2, "she stays on the current dish");
+  assert.ok(hold.lift > -0.5 && hold.lift < 0.1, "a sit after the paddle");
+  const off0 = P.paddleOffPath(0, { x: dish.x, lift: dish.lift, rot: -1.8 }, { x: dish.x + 52, lift: 0 });
+  const offMid = P.paddleOffPath(0.5, { x: dish.x, lift: dish.lift, rot: -1.8 }, { x: dish.x + 52, lift: 0 });
+  const off1 = P.paddleOffPath(1, { x: dish.x, lift: dish.lift, rot: -1.8 }, { x: dish.x + 52, lift: 0 });
+  assert.ok(Math.abs(off0.x - dish.x) < 2);
+  assert.ok(offMid.lift > 1, "a walk leave off the current dish");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "show");
+    assert.notEqual(play.phase, "rinse");
+    assert.notEqual(play.phase, "fill");
+    assert.notEqual(play.phase, "filter");
+    assert.notEqual(play.phase, "dusk");
+    assert.notEqual(play.phase, "spoon");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "paddle") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "paddle-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "paddle-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 0.4)) < 3, "she holds the paddle sit on the current dish");
+    }
+    if (play.phase === "paddle-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("paddle-on"));
+  assert.ok(seen.has("paddle"));
+  assert.ok(seen.has("paddle-hold"));
+  assert.ok(seen.has("paddle-off"));
+  assert.ok(!seen.has("show"), "Spoon never uses Jaw show");
+  assert.ok(!seen.has("rinse"), "Spoon never uses Wash rinse");
+  assert.ok(!seen.has("fill"), "Spoon never uses Well fill");
+  assert.ok(!seen.has("filter"), "Spoon never uses Hinge filter");
+  assert.ok(!seen.has("dusk"), "Spoon never uses Night dusk");
+  assert.ok(!seen.has("spoon"), "Spoon never uses spoon as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Spoon's current-dish pan; sleep, card, and hide abort; Spoon never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "paddlefish", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "paddle"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "paddle");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "paddle");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "paddle-off");
   assert.equal(play.abort, true);
 });
