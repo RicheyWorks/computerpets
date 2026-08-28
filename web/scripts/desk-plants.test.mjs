@@ -34,3 +34,21 @@ test("/demo plants are Disk and Felt, drag-placeable, and lean in the wind", () 
   assert.match(deskSrc, /windLean/);
   assert.match(roomSrc, /DeskPlants/);
 });
+
+test("/demo click sets Still, Wind, and Meet lockstep with the overlay", () => {
+  assert.deepEqual([...P.PLANT_MODES], Overlay.PLANT_MODES);
+  assert.equal(P.defaultMode("moss"), Overlay.defaultMode("moss"));
+  const felt = P.setMode(P.defaultSpot("moss", 800, 480, 1), "still");
+  assert.equal(P.windLean(0.3, true, false, felt.mode), 0);
+  assert.equal(P.windLean(0.3, true, false, "still"), Overlay.windLean(0.3, true, false, "still"));
+  const wind = P.setMode(felt, "wind");
+  assert.notEqual(P.windLean(0.3, true, false, wind.mode), 0);
+  const meet = P.setMode(wind, "meet");
+  const bound = P.firstGrassBound([meet], { width: 800, height: 480, floorLift: 0 });
+  assert.ok(bound);
+  assert.equal(bound.kind, "grass");
+  assert.equal(P.clickMoved(1, 1), Overlay.clickMoved(1, 1));
+  assert.match(deskSrc, /clickMoved/);
+  assert.match(deskSrc, /plantChoiceMarks/);
+  assert.match(deskSrc, /setMode/);
+});

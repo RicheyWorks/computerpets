@@ -327,6 +327,11 @@ export function CompanionRoom({
         : null,
     );
     sittingRef.current = kind.localKey;
+    if (kind.key === "red_panda") {
+      live.hidden = false;
+      live.asleep = false;
+      live.sleepHeld = false;
+    }
     setStats(live);
     const t = window.setTimeout(() => {
       if (acted.current) return;
@@ -336,7 +341,7 @@ export function CompanionRoom({
           kind.greetLine(),
         5200,
       );
-      issue("talk");
+      issue(kind.key === "red_panda" ? "wander" : "talk");
     }, 500);
     return () => window.clearTimeout(t);
     // seed is a mount snapshot; guestKey / kind change is the reset
@@ -344,7 +349,7 @@ export function CompanionRoom({
   }, [kind, resetKey, persistLocal, issue, say]);
 
   useEffect(() => {
-    if (!speech && order.cmd === "talk") issue("sit");
+    if (!speech && order.cmd === "talk") issue(kind.key === "red_panda" ? "wander" : "sit");
   }, [speech, order.cmd, issue]);
 
   useEffect(() => {
@@ -366,11 +371,20 @@ export function CompanionRoom({
         issue(skyMood);
         return;
       }
-      if (isRestingHour(kind.key) && statsRef.current.energy < 28 && !statsRef.current.asleep) {
+      if (kind.key !== "red_panda" && isRestingHour(kind.key) && statsRef.current.energy < 28 && !statsRef.current.asleep) {
         issue("sleep");
         return;
       }
       const roll = Math.random();
+      if (kind.key === "red_panda") {
+        if (roll < trait.wander || (statsRef.current.energy < 8 && roll < 0.7)) issue("wander");
+        else if (roll < 0.84) issue("wander");
+        else {
+          say(kind.ambientLine(statsRef.current));
+          issue("talk");
+        }
+        return;
+      }
       if (roll < trait.wander || (statsRef.current.energy < 8 && roll < 0.7)) issue("wander");
       else if (roll < 0.7) issue("sit");
       else if (roll < 0.84) issue("idle");

@@ -50,3 +50,11 @@ test("/demo Rui idle is not a parked card sit, and hide still tucks", () => {
   assert.match(livingSrc, /pointerEvents: "auto"/);
   assert.match(cssSrc, /#pet\.hidden[\s\S]{0,80}pointer-events:\s*auto/);
 });
+
+test("/demo launch walks Rui and does not sit after talk", () => {
+  const roomSrc = readFileSync(join(root, "src/components/desk/companion-room.tsx"), "utf8");
+  assert.match(roomSrc, /issue\(kind\.key === "red_panda" \? "wander" : "talk"\)/);
+  assert.match(roomSrc, /live\.hidden = false/);
+  assert.match(petSrc, /PetLife\.bootCmd/);
+  assert.match(petSrc, /issue\(boot\)/);
+});

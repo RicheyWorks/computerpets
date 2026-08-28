@@ -114,3 +114,36 @@ test("already-sat meet guests can spawn visible on the live overlay", () => {
   assert.equal(Call.assignSrc(img, "sprites/cat/walk/1.png"), true);
   assert.notEqual(img.src, "");
 });
+
+
+test("fresh launch walks Rui; hide is only the Hide click; click-on-Rui does not hide", () => {
+  assert.equal(Life.bootCmd("red_panda"), "wander");
+  assert.notEqual(Life.bootCmd("red_panda"), "hide");
+  assert.notEqual(Life.bootCmd("red_panda"), "sit");
+  const tucked = Life.revealOnBoot({ hidden: true, asleep: true, sleepHeld: true, mood: 40 });
+  assert.equal(tucked.hidden, false);
+  assert.equal(tucked.asleep, false);
+  const store = {
+    data: Object.create(null),
+    getItem(k) { return this.data[k] || null; },
+    setItem(k, v) { this.data[k] = v; },
+  };
+  const prev = typeof localStorage === "undefined" ? null : localStorage;
+  global.localStorage = store;
+  store.setItem("computerpets.desktop.life.v2.red_panda", JSON.stringify({ hidden: true, hunger: 70, mood: 70, energy: 70 }));
+  const loaded = Life.load("red_panda");
+  assert.equal(loaded.hidden, false);
+  Life.save("red_panda", { ...loaded, hidden: true });
+  const again = JSON.parse(store.getItem("computerpets.desktop.life.v2.red_panda"));
+  assert.equal(again.hidden, false);
+  if (prev) global.localStorage = prev;
+  else delete global.localStorage;
+  assert.match(petSrc, /PetLife\.bootCmd/);
+  assert.match(petSrc, /PetLife\.revealOnBoot/);
+  assert.match(petSrc, /issue\(boot\)/);
+  assert.match(petSrc, /kind\.key === "red_panda"/);
+  assert.match(petSrc, /if \(cmd === "hide"\)/);
+  assert.match(petSrc, /if \(lift\.kind === "tap"\) \{\s*openKeeperCard/);
+  assert.doesNotMatch(petSrc, /if \(lift\.kind === "tap"\)[\s\S]{0,120}handle\("hide"\)/);
+  assert.match(livingSrc, /if \(false && cardRef\.current/);
+});

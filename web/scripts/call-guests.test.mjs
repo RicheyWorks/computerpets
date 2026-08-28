@@ -128,3 +128,17 @@ test("/demo walkers skip robin and a meet guest can auto-walk in", () => {
   assert.equal(Overlay.nextAutoMeet([], "red_panda"), "chickadee");
   assert.match(roomSrc, /nextAutoMeet/);
 });
+
+test("/demo Miso loafs Felt grass in Meet lockstep with the overlay", async () => {
+  const Plants = await import(pathToFileURL(join(root, "src/lib/pets/desk-plants.ts")).href);
+  const felt = Plants.setMode(Plants.defaultSpot("moss", 800, 480, 1), "meet");
+  const grass = Plants.grassBound(felt, { width: 800, height: 480, floorLift: 0 });
+  const flags = { hostKey: "red_panda", hostX: 80, hostFacing: 1, hostLift: 0, grassBound: grass };
+  assert.equal(G.shouldSitGrass("cat", flags), true);
+  assert.equal(Overlay.shouldSitGrass("cat", flags), true);
+  let miso = G.beginCalled("cat", 800, 0, 1);
+  for (let i = 0; i < 80 && miso.phase !== "bound"; i++) miso = G.stepCalled(miso, 0.05, 800, flags);
+  assert.equal(miso.phase, "bound");
+  assert.equal(G.tellLine(miso), Overlay.CAT_GRASS_LINE);
+  assert.match(roomSrc, /CalledGuests/);
+});

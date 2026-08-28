@@ -93,6 +93,9 @@ export const DEE_RUI_LINE = "Dee-dee. I saw the red one.";
 export const DEE_ROBIN_LINE = "Dee. You found the lawn first.";
 export const CAT_RUI_LINE = "I sat. You were already here.";
 export const CAT_SILL_LINE = "The sill will do.";
+export const GRASS_LIE_KEY = "cat";
+export const CAT_GRASS_LINE = "The moss will do.";
+export const GRASS_STAY_S = 4.8;
 export const MEET_DOG_KEY = "dog";
 export const MEET_CROW_KEY = "crow";
 export const PEER_PIP_KEY = "dog";
@@ -138,6 +141,7 @@ export type CalledFlags = {
   windowBound?: { x: number; lift: number; kind?: string } | null;
   capBound?: { x: number; lift: number; kind?: string } | null;
   transomBound?: { x: number; lift: number; kind?: string } | null;
+  grassBound?: { x: number; lift: number; kind?: string } | null;
 };
 
 export type CalledWalker = {
@@ -157,6 +161,7 @@ export type CalledWalker = {
   sungAt?: number;
   frame?: number;
   meetKind?: "rui" | "peer" | "bound";
+  boundKind?: string;
   told?: boolean;
 };
 
@@ -360,9 +365,17 @@ export function shouldMeetPeer(key: string, flags?: CalledFlags) {
   return false;
 }
 
+export function shouldSitGrass(key: string, flags?: CalledFlags) {
+  if (!flags || flags.hidden) return false;
+  if (key !== GRASS_LIE_KEY) return false;
+  const b = flags.grassBound;
+  return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+}
+
 export function shouldSitBound(key: string, flags?: CalledFlags) {
   if (!flags || flags.hidden) return false;
   if (key === WINDOW_SIT_KEY) {
+    if (shouldSitGrass(key, flags)) return true;
     const b = flags.windowBound;
     return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
   }
@@ -400,6 +413,10 @@ export function peerPoint(flags?: CalledFlags, guestKey?: string) {
 }
 
 function boundPoint(flags?: CalledFlags, key?: string) {
+  if (key === WINDOW_SIT_KEY || key === MEET_CAT_KEY || key === GRASS_LIE_KEY) {
+    const g = flags && flags.grassBound;
+    if (g && Number.isFinite(g.x) && Number.isFinite(g.lift)) return { x: g.x, lift: g.lift, kind: g.kind || "grass" };
+  }
   if (key === WINDOW_TRANSOM_KEY || key === MEET_RAVEN_KEY) {
     const b = flags && flags.transomBound;
     if (!b) return { x: 120, lift: 72, kind: "transom" };
@@ -529,6 +546,7 @@ function goCalledBound(guest: CalledWalker, flags?: CalledFlags): CalledWalker {
     toLift: hold.lift,
     facing: hold.x >= guest.x ? 1 : -1,
     told: false,
+    boundKind: hold.kind,
   };
 }
 
@@ -554,6 +572,7 @@ export function shouldTell(guest: CalledWalker | null | undefined) {
 export function tellLine(guest: CalledWalker | null | undefined) {
   if (!guest) return "";
   if (guest.phase === "bound" || guest.meetKind === "bound") {
+    if (guest.boundKind === "grass" || guest.boundKind === "pad") return CAT_GRASS_LINE;
     if (guest.key === MEET_CROW_KEY || guest.key === WINDOW_CAP_KEY) return SOOT_CAP_LINE;
     if (guest.key === MEET_RAVEN_KEY || guest.key === WINDOW_TRANSOM_KEY) return WEDGE_TRANSOM_LINE;
     return CAT_SILL_LINE;
@@ -684,9 +703,14 @@ export function stepCalled(guest: CalledWalker, dt: number, width: number, flags
   if (next.phase === "bound") {
     const hold = boundPoint(flags, next.key);
     next.x = hold.x;
-    next.lift = hold.lift;
+    const bat = next.key === GRASS_LIE_KEY && (hold.kind === "grass" || hold.kind === "pad") && next.t > 1.1 && next.t < 2.4
+      ? Math.abs(Math.sin(next.t * 9)) * 7
+      : 0;
+    next.lift = hold.lift + bat;
     next.target = hold.x;
-    if (next.t >= TELL_S) return dismissCalled(next)!;
+    next.boundKind = hold.kind;
+    const stay = hold.kind === "grass" || hold.kind === "pad" ? GRASS_STAY_S : TELL_S;
+    if (next.t >= stay) return dismissCalled(next)!;
     return next;
   }
 
