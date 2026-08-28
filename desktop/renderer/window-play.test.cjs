@@ -49,7 +49,7 @@ test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Tr
   assert.equal(P.playFor("garter"), "patrol");
   assert.equal(P.playFor("boa"), "loop");
   assert.equal(P.playFor("milk_snake"), "mosaic");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("carpet_python"), "chart");
   assert.equal(P.playFor("octopus"), "lid");
@@ -1112,7 +1112,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "gecko", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "anole", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -6717,7 +6717,7 @@ test("Lula loops a window apron as a blotter river — not patrol, flip, saddle,
   assert.equal(P.playFor("hedgehog"), "ball");
   assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(target.side, "apron");
   assert.equal(target.leave, "let");
@@ -6961,7 +6961,7 @@ test("Coral mosaics a window muntin as a stamp box — not loop, inspect, patrol
   assert.equal(P.playFor("hedgehog"), "ball");
   assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(target.side, "muntin");
@@ -7215,7 +7215,7 @@ test("Blush stones a window sill horn as a pink desert rock — not mosaic, loop
   assert.equal(P.playFor("hedgehog"), "ball");
   assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("carpet_python"), "chart");
   assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(target.side, "horn");
@@ -7482,7 +7482,7 @@ test("Atlas charts a window transom as a map shelf — not stone, saddle, drape,
   assert.equal(P.playFor("hedgehog"), "ball");
   assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(target.side, "transom");
   assert.equal(target.leave, "gather");
@@ -7766,7 +7766,7 @@ test("Cup lids a window sash latch as a teacup — not stash, bun, hold, circle,
   assert.equal(P.playFor("hamster"), "stash");
   assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("fuse_dragon"), "hold");
   assert.equal(target.side, "latch");
   assert.equal(target.leave, "jet");
@@ -8028,7 +8028,7 @@ test("Sepia flushes a window light as lamp-ripple weather — not lid, circle, f
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("dragon"), "drape");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("goldfish"), "circle");
   assert.equal(P.playFor("flux_dragon"), "field");
   assert.equal(P.playFor("spark_dragon"), "crackle");
@@ -8288,7 +8288,7 @@ test("Chamber rises a window jamb as stacked nacre rooms — not flush, lid, cir
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("dragon"), "drape");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("moon_jelly"), "chime");
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(target.side, "rooms");
@@ -8549,7 +8549,7 @@ test("Pulse chimes a window pane as a glass of water — not rise, flush, circle
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("dragon"), "drape");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(target.side, "saucer");
   assert.equal(target.leave, "drift");
@@ -8729,7 +8729,7 @@ test("Ochre reefs a window pane as a damp blotter — not chime, rise, wall, bas
   assert.equal(P.playFor("ground_dragon"), "earth");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("horseshoe_crab"), "plow");
   assert.equal(target.side, "blotter");
@@ -8909,7 +8909,7 @@ test("Tenant knobs a window sash lift as a vacant shell — not lid, stash, reef
   assert.equal(P.playFor("goldfish"), "circle");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("horseshoe_crab"), "plow");
   assert.equal(target.side, "lift");
   assert.equal(target.leave, "reject");
@@ -9078,7 +9078,7 @@ test("Ledger plows a window stool as a sand tray — not knob, reef, earth, bask
   assert.equal(P.playFor("goldfish"), "circle");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(target.side, "sand");
   assert.equal(target.leave, "unbury");
   assert.equal(target.clickToId, undefined, "one window");
@@ -9249,7 +9249,7 @@ test("Anchor hitches a window parting bead as a pencil — not plow, knob, reef,
   assert.equal(P.playFor("goldfish"), "circle");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("manta"), "barrel");
   assert.equal(target.side, "bead");
   assert.equal(target.leave, "unhitch");
@@ -9417,7 +9417,7 @@ test("Kite barrels a window pane as the sky of a bowl — not hitch, circle, orb
   assert.equal(P.playFor("gauss_dragon"), "orbit");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(target.side, "sky");
   assert.equal(target.leave, "glide");
   assert.equal(target.clickToId, undefined, "one window");
@@ -9576,7 +9576,7 @@ test("Door gapes a window sash-jamb crack as a book crevice — not barrel, hitc
   assert.equal(P.playFor("boa"), "loop");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(target.side, "crevice");
   assert.equal(target.leave, "slip");
   assert.ok(target.holdLift > 36, "she occupies the crack, not the floor");
@@ -9719,7 +9719,7 @@ test("Felt leans a window meeting rail as blotter felt — not gape, reef, plow,
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(target.side, "page");
   assert.equal(target.leave, "peel");
   assert.ok(target.holdLift > 36, "she carpets the meeting rail, not the floor");
@@ -9863,7 +9863,7 @@ test("Vein unfurls a window sash pocket as a damp saucer — not lean, gape, ree
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(target.side, "pocket");
   assert.equal(target.leave, "fold");
   assert.notEqual(target.kind, "fan");
@@ -10023,7 +10023,7 @@ test("Fan golds a window lamp-side as autumn — not unfurl, lean, kindle, flatt
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("ground_dragon"), "earth");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(target.side, "autumn");
   assert.equal(target.leave, "fade");
   assert.notEqual(target.kind, "fan");
@@ -10186,7 +10186,7 @@ test("Mast seeds a window stool as an acorn dish: stand a small height, drop one
   assert.equal(P.playFor("ground_dragon"), "earth");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   const target = P.pickTarget([WIN], 80, "oak", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "seed");
@@ -10362,7 +10362,7 @@ test("Disk opens a window pane as an ink-dish pad: float the still ink, open onc
   assert.equal(P.playFor("axolotl"), "wall");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("orchid"), "mount");
   const target = P.pickTarget([WIN], 80, "water_lily", WORK, P.SPRITE);
   assert.ok(target);
@@ -10535,7 +10535,7 @@ test("Moth mounts a window jamb as bark: clasp the wood, hang aerial roots in th
   assert.equal(P.playFor("budgie"), "perch");
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   const target = P.pickTarget([WIN], 80, "orchid", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "mount");
@@ -10706,7 +10706,7 @@ test("Arm stores a window stool as a sand tray: plant onto the wood, swell the r
   assert.equal(P.playFor("iguana"), "flatten");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   const target = P.pickTarget([WIN], 80, "saguaro", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "store");
@@ -10891,7 +10891,7 @@ test("Snap counts a window meeting rail as a wetland cup: sit the weather groove
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("pitcher"), "fill");
   assert.equal(P.playFor("sundew"), "curl");
   const target = P.pickTarget([WIN], 80, "venus_flytrap", WORK, P.SPRITE);
@@ -11063,7 +11063,7 @@ test("Well fills a window sill pan as a bog cup: settle into the hidden pan, tak
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("sundew"), "curl");
   const target = P.pickTarget([WIN], 80, "pitcher", WORK, P.SPRITE);
   assert.ok(target);
@@ -11234,7 +11234,7 @@ test("Dew curls a window glazing rebate as a peat saucer: settle the rebate, gli
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   const target = P.pickTarget([WIN], 80, "sundew", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "curl");
@@ -11417,7 +11417,7 @@ test("Thrum forages a window box as a meadow: hover to the nosing, land a bloom,
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("carpenter_bee"), "bore");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("mason_bee"), "daub");
@@ -11587,7 +11587,7 @@ test("Auger bores a sash stile as timber: hover to the stile, bore a hole, hover
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("mason_bee"), "daub");
   assert.equal(P.playFor("leafcutter"), "snip");
@@ -11768,7 +11768,7 @@ test("Mortar daubs a sash gap as an inkstone cell: hover to the gap, daub a part
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("leafcutter"), "snip");
   const target = P.pickTarget([WIN], 80, "mason_bee", WORK, P.SPRITE);
@@ -11965,7 +11965,7 @@ test("Disc snips a window-box leaf as foliage: hover to the foliage, snip a circ
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("stingless"), "tend");
   const target = P.pickTarget([WIN], 80, "leafcutter", WORK, P.SPRITE);
@@ -12178,7 +12178,7 @@ test("Pot tends a sash pulley box as a cerumen hollow: hover to the box, knead t
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("sweat_bee"), "lick");
   assert.equal(P.playFor("mining_bee"), "dig");
@@ -12400,7 +12400,7 @@ test("Sheen licks a warm pane as a salt glass: hover to the glass, lick once, ho
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("mining_bee"), "dig");
   assert.equal(P.playFor("honey_drone"), "drone");
@@ -12620,7 +12620,7 @@ test("Bank digs a window stool as a sand bank: settle onto the wood, sink a shaf
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("honey_drone"), "drone");
   assert.equal(P.playFor("hummingbird"), "sip");
@@ -12820,7 +12820,7 @@ test("Hum drones a window pane as congregation sky: lift into the glass, hang, d
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("manta"), "barrel");
@@ -13035,7 +13035,7 @@ test("Keep lays a window pane as a wax heart: settle onto the brood just under t
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   assert.equal(P.playFor("honeycomb"), "draw");
   const target = P.pickTarget([WIN], 80, "honey_queen", WORK, P.SPRITE);
@@ -13246,7 +13246,7 @@ test("Wax draws a window pane as a hive frame: attach at the head, draw hex cell
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("honeybee"), "sill");
   const target = P.pickTarget([WIN], 80, "honeycomb", WORK, P.SPRITE);
   assert.ok(target);
@@ -13471,7 +13471,7 @@ test("Reed plops a window weep as a bank spring: hop to the weep, sit wet at the
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("toad"), "puff");
   const target = P.pickTarget([WIN], 80, "frog", WORK, P.SPRITE);
   assert.ok(target);
@@ -13649,7 +13649,7 @@ test("Pebble puffs a casement leaf as a leaf dish: short-hop onto the leaf, puff
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("salamander"), "cover");
   const target = P.pickTarget([WIN], 80, "toad", WORK, P.SPRITE);
   assert.ok(target);
@@ -13843,7 +13843,7 @@ test("Eft trails a sash horn as a moss saucer: walk onto the horn, trail the tai
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("salamander"), "cover");
   const target = P.pickTarget([WIN], 80, "newt", WORK, P.SPRITE);
   assert.ok(target);
@@ -14057,7 +14057,7 @@ test("Dapple covers a window well as leaf mold: creep into the areaway, cover, k
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("anole"), "sill");
   assert.equal(P.playFor("caecilian"), "ring");
   const target = P.pickTarget([WIN], 80, "salamander", WORK, P.SPRITE);
@@ -14294,7 +14294,7 @@ test("Slip rings a sill throat as a silt tray: press into the kerf, ring through
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("moon_jelly"), "chime");
   assert.equal(P.playFor("ferret"), "thread");
   assert.equal(P.playFor("moray"), "gape");
@@ -14536,7 +14536,7 @@ test("Pinch claws a sill wash as a pebble tray: walk onto the wash, claw a scrap
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("pond_snail"), "rasp");
   const target = P.pickTarget([WIN], 80, "crayfish", WORK, P.SPRITE);
   assert.ok(target);
@@ -14787,7 +14787,7 @@ test("Whorl rasps a glass rim as her own house: climb onto the rim, rasp the gla
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("nautilus"), "rise");
   assert.equal(P.playFor("sweat_bee"), "lick");
   assert.equal(P.playFor("mussel"), "filter");
@@ -15034,7 +15034,7 @@ test("Hinge filters a meeting-rail gap as a silt bed: bury into the gap, filter,
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("leech"), "drink");
   const target = P.pickTarget([WIN], 80, "mussel", WORK, P.SPRITE);
   assert.ok(target);
@@ -15235,7 +15235,7 @@ test("Latch drinks a sash drip as a damp blotter: loop onto the drip, seal, drin
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("moray"), "gape");
   assert.equal(P.playFor("fuse_dragon"), "hold");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("stickleback"), "glue");
   const target = P.pickTarget([WIN], 80, "leech", WORK, P.SPRITE);
   assert.ok(target);
@@ -15462,7 +15462,7 @@ test("Prickle glues a putty fillet as a weed bowl: dart onto the fillet, glue a 
   assert.equal(P.playFor("sea_star"), "reef");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   const target = P.pickTarget([WIN], 80, "stickleback", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "glue");
@@ -15667,7 +15667,7 @@ test("Soot caws a drip cap as a chimney pot: hop onto the cap, tuck a scrap, fan
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   const target = P.pickTarget([WIN], 80, "crow", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "caw");
@@ -15835,7 +15835,7 @@ test("Wedge croaks a high transom as a rafter: hop onto the beam, drop the wedge
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("barn_owl"), "hiss");
   assert.equal(P.playFor("red_tail"), "soar");
   const target = P.pickTarget([WIN], 80, "raven", WORK, P.SPRITE);
@@ -16010,7 +16010,7 @@ test("Heart hisses a sash reveal as a beam hollow: slip into the nest pocket, tu
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("phoenix"), "kindle");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("red_tail"), "soar");
   const target = P.pickTarget([WIN], 80, "barn_owl", WORK, P.SPRITE);
   assert.ok(target);
@@ -16179,7 +16179,7 @@ test("Hook soars a lamp-post stile as lift: take the outside of the stile, ride 
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("phoenix"), "kindle");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   const target = P.pickTarget([WIN], 80, "red_tail", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "soar");
@@ -16353,7 +16353,7 @@ test("Dee caches a meeting-rail nosing as a twig cup: hop onto the nosing, hide 
   assert.equal(P.playFor("octopus"), "lid");
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("phoenix"), "kindle");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("robin"), "pull");
   assert.equal(P.playFor("squirrel"), "bury");
   const target = P.pickTarget([WIN], 80, "chickadee", WORK, P.SPRITE);
@@ -16523,7 +16523,7 @@ test("Brick pulls a window stool as a lawn: hop onto the stool, listen, pull onc
   assert.equal(P.playFor("octopus"), "lid");
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("phoenix"), "kindle");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("canada_goose"), "honk");
   assert.equal(P.playFor("squirrel"), "bury");
@@ -16696,7 +16696,7 @@ test("Drake tips a lower sash light as an ink dish: waddle onto the glass as sti
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("canada_goose"), "honk");
   const target = P.pickTarget([WIN], 80, "mallard", WORK, P.SPRITE);
   assert.ok(target);
@@ -16876,7 +16876,7 @@ test("Vee honks a window apron as a blotter green: walk onto the apron as claime
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("pileated"), "drum");
   const target = P.pickTarget([WIN], 80, "canada_goose", WORK, P.SPRITE);
   assert.ok(target);
@@ -17072,7 +17072,7 @@ test("Drum drums an upper sash stile as a dead-wood post: hop onto the interior 
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("hummingbird"), "sip");
   const target = P.pickTarget([WIN], 80, "pileated", WORK, P.SPRITE);
   assert.ok(target);
@@ -17254,7 +17254,7 @@ test("Sip sips a window-box bloom as a nectar cup: dart to the foliage, hover, s
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
   assert.equal(P.playFor("phoenix"), "kindle");
-  assert.equal(P.playFor("gecko"), "sill");
+  assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("orb_weaver"), "web");
   const target = P.pickTarget([WIN], 80, "hummingbird", WORK, P.SPRITE);
   assert.ok(target);
@@ -22436,5 +22436,186 @@ test("a moved window refits Gum's gum-perch stool; sleep, card, and hide abort; 
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "chew-off");
+  assert.equal(play.abort, true);
+});
+
+
+test("Pad chirps a lamp-side jamb as lamp plaster: climb the jamb, chirp once (toe pads), then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("koala"), "chew");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("colugo"), "cling");
+  assert.equal(P.playFor("porcupine"), "bristle");
+  assert.equal(P.playFor("orchid"), "mount");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("ginkgo"), "gold");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("salamander"), "cover");
+  assert.equal(P.playFor("anole"), "sill");
+  assert.notEqual(P.playFor("gecko"), "pad");
+  assert.notEqual(P.playFor("gecko"), "stone");
+  assert.notEqual(P.playFor("gecko"), "cling");
+  assert.notEqual(P.playFor("gecko"), "bristle");
+  assert.notEqual(P.playFor("gecko"), "mount");
+  assert.notEqual(P.playFor("gecko"), "cover");
+  assert.notEqual(P.playFor("gecko"), "chew");
+  assert.notEqual(P.playFor("gecko"), "sill");
+  assert.equal(P.DUR.chewOn, 0.97, "Gum chew durations stay");
+  assert.equal(P.DUR.skinOn, 1.58, "Sail cling durations stay");
+  assert.equal(P.DUR.bristleOn, 1.27, "Spine bristle durations stay");
+  const target = P.pickTarget([WIN], 80, "gecko", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "chirp");
+  assert.equal(target.side, "lampplaster");
+  assert.equal(target.leave, "pads");
+  assert.notEqual(target.kind, "pad");
+  assert.notEqual(target.kind, "stone");
+  assert.notEqual(target.kind, "cling");
+  assert.notEqual(target.kind, "bristle");
+  assert.notEqual(target.kind, "mount");
+  assert.notEqual(target.kind, "web");
+  assert.notEqual(target.kind, "cover");
+  assert.notEqual(target.kind, "chew");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 20, "she chirps a lamp-side jamb as lamp plaster, not the floor");
+  assert.ok(P.DUR.chirpHold > P.DUR.chirp, "the hold is the sit after; the chirp is the tell");
+  assert.ok(P.DUR.chirpOn > 0.5, "a climb onto the jamb, not the chirp");
+  assert.ok(P.DUR.chirpOn !== P.DUR.skinOn);
+  assert.ok(P.DUR.chirpOn !== P.DUR.bristleOn);
+  assert.ok(P.DUR.chirpOn !== P.DUR.mountOn);
+  assert.ok(P.DUR.chirpOn !== P.DUR.chewOn);
+  assert.ok(P.DUR.chirpOn !== P.DUR.webOn);
+  assert.ok(P.DUR.chirpOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.chirp !== P.DUR.skin);
+  assert.ok(P.DUR.chirp !== P.DUR.bristle);
+  assert.ok(P.DUR.chirp !== P.DUR.mount);
+  assert.ok(P.DUR.chirp !== P.DUR.chew);
+  assert.ok(P.DUR.chirpHold !== P.DUR.skinHold);
+  assert.ok(P.DUR.chirpHold !== P.DUR.bristleHold);
+  assert.ok(P.DUR.chirpOff !== P.DUR.skinOff);
+  assert.ok(P.DUR.chirpOff !== P.DUR.sillDown);
+  const plaster = P.chirpPoint(WIN, P.SPRITE, WORK);
+  const sail = P.clingPoint(WIN, P.SPRITE, WORK);
+  const spine = P.bristlePoint(WIN, P.SPRITE, WORK);
+  const moth = P.mountPoint(WIN, P.SPRITE, WORK);
+  const loom = P.webPoint(WIN, P.SPRITE, WORK);
+  const fan = P.goldPoint(WIN, P.SPRITE, WORK);
+  const echo = P.perchPoint(WIN, "right", P.SPRITE, WORK);
+  const dapple = P.coverPoint(WIN, P.SPRITE, WORK);
+  const gum = P.chewPoint(WIN, P.SPRITE, WORK);
+  assert.ok(plaster.lift > 20, "the lamp-side jamb as lamp plaster, not the floor");
+  assert.ok(Math.abs(plaster.x - sail.x) > 20, "same jamb family, not Sail's cling");
+  assert.ok(Math.abs(plaster.x - spine.x) > 20, "same jamb family, not Spine's bristle");
+  assert.ok(Math.abs(plaster.lift - moth.lift) > 8 || Math.abs(plaster.x - moth.x) > 8, "same jamb family, not Moth's mount");
+  assert.ok(Math.abs(plaster.x - loom.x) > 8 || Math.abs(plaster.lift - loom.lift) > 12, "not Loom's lamp-side glass web");
+  assert.ok(Math.abs(plaster.x - fan.x) > 8 || Math.abs(plaster.lift - fan.lift) > 12, "not Fan's lamp-side gold");
+  assert.ok(Math.abs(plaster.x - echo.x) > 8 || Math.abs(plaster.lift - echo.lift) > 12, "not Echo's lamp-shade perch");
+  assert.ok(Math.abs(plaster.x - dapple.x) > 8 || Math.abs(plaster.lift - dapple.lift) > 12, "not Dapple's window-well cover");
+  assert.ok(Math.abs(plaster.x - gum.x) > 8 || Math.abs(plaster.lift - gum.lift) > 12, "not Gum's stool chew");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "gecko", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real lamp-side jamb, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "gecko", WORK, P.SPRITE);
+  assert.equal(short, null, "a real lamp-side jamb needs height");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 182, height: 214 }], 80, "gecko", WORK, P.SPRITE);
+  assert.equal(thin, null, "Pad needs Sail and Spine's real jamb, not a shorter post");
+  const jamb = P.pickTarget([{ id: "jamb", x: 200, y: 80, width: 182, height: 216 }], 80, "gecko", WORK, P.SPRITE);
+  assert.ok(jamb, "a real lamp-side jamb as lamp plaster");
+  const sailOk = P.pickTarget([{ id: "jamb", x: 200, y: 80, width: 182, height: 216 }], 80, "colugo", WORK, P.SPRITE);
+  assert.ok(sailOk, "Sail still takes the jamb");
+  const spineOk = P.pickTarget([{ id: "jamb", x: 200, y: 80, width: 182, height: 216 }], 80, "porcupine", WORK, P.SPRITE);
+  assert.ok(spineOk, "Spine still takes the jamb");
+  const mothOk = P.pickTarget([{ id: "jamb", x: 200, y: 80, width: 182, height: 216 }], 80, "orchid", WORK, P.SPRITE);
+  assert.ok(mothOk, "Moth still takes the jamb");
+  const chirpOn = P.chirpOnPath(0.25, { x: 40, lift: 0 }, { x: plaster.x, lift: plaster.lift });
+  const clingOn = P.clingOnPath(0.25, { x: 40, lift: 0 }, { x: plaster.x, lift: plaster.lift });
+  const bristleOn = P.bristleOnPath(0.25, { x: 40, lift: 0 }, { x: plaster.x, lift: plaster.lift });
+  const mountOn = P.mountOnPath(0.25, { x: 40, lift: 0 }, { x: plaster.x, lift: plaster.lift });
+  assert.ok(chirpOn.lift > 0, "she climbs onto the lamp-side jamb as lamp plaster");
+  assert.ok(chirpOn.lift !== clingOn.lift, "a climb, not Sail's cling");
+  assert.ok(chirpOn.lift !== bristleOn.lift, "a climb, not Spine's bristle");
+  assert.ok(chirpOn.lift !== mountOn.lift, "a climb, not Moth's mount");
+  const voice = P.chirpPath(0.5);
+  const clingPose = P.clingPath(0.5);
+  const bristlePose = P.bristlePath(0.5);
+  const mountPose = P.mountPath(0.5);
+  const chewPose = P.chewPath(0.5);
+  assert.ok(voice.lift > 4, "she chirps once; the night voice lifts");
+  assert.ok(voice.rot < 0, "a chirp, not a cling");
+  assert.ok(voice.lift !== clingPose.lift, "not Sail's cling");
+  assert.ok(voice.rot !== bristlePose.rot, "not Spine's bristle");
+  assert.ok(voice.lift !== mountPose.lift, "not Moth's mount");
+  assert.ok(voice.lift !== chewPose.lift, "not Gum's chew");
+  const hold = P.chirpHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 3.0) < 0.2, "she holds the plaster after the chirp");
+  assert.ok(Math.abs(hold.x - 0.6) < 0.2, "she stays on the pads");
+  assert.ok(hold.lift > 0 && hold.lift < 3, "a hold after the chirp, not a mount bloom");
+  const off0 = P.chirpOffPath(0, { x: plaster.x, lift: plaster.lift, rot: 3.0 }, { x: plaster.x + 52, lift: 0 });
+  const offMid = P.chirpOffPath(0.5, { x: plaster.x, lift: plaster.lift, rot: 3.0 }, { x: plaster.x + 52, lift: 0 });
+  const off1 = P.chirpOffPath(1, { x: plaster.x, lift: plaster.lift, rot: 3.0 }, { x: plaster.x + 52, lift: 0 });
+  assert.ok(Math.abs(off0.x - plaster.x) < 2);
+  assert.ok(offMid.lift > 2, "a leave off the lamp plaster");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cling");
+    assert.notEqual(play.phase, "bristle");
+    assert.notEqual(play.phase, "mount");
+    assert.notEqual(play.phase, "web");
+    assert.notEqual(play.phase, "cover");
+    assert.notEqual(play.phase, "chew");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "chirp") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "chirp-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "chirp-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.0)) < 3, "she holds the lamp plaster after the chirp");
+    }
+    if (play.phase === "chirp-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("chirp-on"));
+  assert.ok(seen.has("chirp"));
+  assert.ok(seen.has("chirp-hold"));
+  assert.ok(seen.has("chirp-off"));
+  assert.ok(!seen.has("cling"), "Pad never uses Sail's cling");
+  assert.ok(!seen.has("bristle"), "Pad never uses Spine's bristle");
+  assert.ok(!seen.has("mount"), "Pad never uses Moth's mount");
+  assert.ok(!seen.has("chew"), "Pad never uses Gum's chew");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Pad's lamp-plaster jamb; sleep, card, and hide abort; Pad never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "gecko", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "chirp"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "chirp");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "chirp");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "chirp-off");
   assert.equal(play.abort, true);
 });
