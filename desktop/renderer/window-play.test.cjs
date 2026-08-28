@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "box_turtle", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "tuatara", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -23906,5 +23906,178 @@ test("a moved window refits Beak's mud-bowl well; sleep, card, and hide abort; B
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "snap-off");
+  assert.equal(play.abort, true);
+});
+
+test("Lid shuts a window foot as a leaf dish: walk onto the foot, shut the hinged plastron, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("box_turtle"), "shut");
+  assert.equal(P.SHUT, "shut");
+  assert.equal(P.playFor("snapper"), "snap");
+  assert.equal(P.playFor("crocodile"), "show");
+  assert.equal(P.playFor("alligator"), "bank");
+  assert.equal(P.playFor("skunk"), "stamp");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("tuatara"), "sill");
+  assert.notEqual(P.playFor("box_turtle"), "lid");
+  assert.notEqual(P.playFor("box_turtle"), "snap");
+  assert.notEqual(P.playFor("box_turtle"), "bask");
+  assert.notEqual(P.playFor("box_turtle"), "stamp");
+  assert.notEqual(P.playFor("box_turtle"), "show");
+  assert.notEqual(P.playFor("box_turtle"), "hinge");
+  assert.notEqual(P.playFor("box_turtle"), "filter");
+  assert.notEqual(P.playFor("box_turtle"), "sill");
+  assert.equal(P.playFor("snapper"), "snap");
+  assert.equal(P.playFor("crocodile"), "show");
+  assert.equal(P.DUR.snapOn, 1.39, "Beak snap durations stay");
+  assert.equal(P.DUR.showOn, 1.33, "Jaw show durations stay");
+  assert.equal(P.DUR.stampOn, 1.03, "Stripe stamp durations stay");
+  assert.equal(P.DUR.hookOn, P.DUR.hookOn, "Quill hook stays");
+  assert.equal(P.DUR.stone, P.DUR.stone, "Blush stone stays");
+  const target = P.pickTarget([WIN], 80, "box_turtle", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "shut");
+  assert.equal(target.side, "leafdish");
+  assert.equal(target.leave, "plastron");
+  assert.notEqual(target.kind, "lid");
+  assert.notEqual(target.kind, "snap");
+  assert.notEqual(target.kind, "bask");
+  assert.notEqual(target.kind, "stamp");
+  assert.notEqual(target.kind, "show");
+  assert.notEqual(target.kind, "sill");
+  assert.equal(target.holdLift, 0, "she shuts a window foot as a leaf dish, not the sash");
+  assert.ok(P.DUR.shutHold > P.DUR.shut, "the hold is the sit after; the hinged plastron is the tell");
+  assert.ok(P.DUR.shutOn > 1.0, "a walk onto the leaves, not the shut");
+  assert.ok(P.DUR.shutOn !== P.DUR.snapOn);
+  assert.ok(P.DUR.shutOn !== P.DUR.stampOn);
+  assert.ok(P.DUR.shutOn !== P.DUR.showOn);
+  assert.ok(P.DUR.shutOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.shut !== P.DUR.snap);
+  assert.ok(P.DUR.shut !== P.DUR.stamp);
+  assert.ok(P.DUR.shut !== P.DUR.stone);
+  assert.ok(P.DUR.shutHold !== P.DUR.snapHold);
+  assert.ok(P.DUR.shutHold !== P.DUR.stampHold);
+  assert.ok(P.DUR.shutOff !== P.DUR.snapOff);
+  assert.ok(P.DUR.shutOff !== P.DUR.stampOff);
+  assert.ok(P.DUR.shutOff !== P.DUR.sillDown);
+  const dish = P.shutPoint(WIN, P.SPRITE, WORK);
+  const duff = P.stampPoint(WIN, P.SPRITE, WORK);
+  const bowl = P.snapPoint(WIN, P.SPRITE, WORK);
+  const pan = P.showPoint(WIN, P.SPRITE, WORK);
+  const pond = P.baskPoint ? P.baskPoint(WIN, P.SPRITE, WORK) : null;
+  const cup = P.lidPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.equal(dish.lift, 0, "the window foot as a leaf dish, not the sash");
+  assert.ok(Math.abs(dish.lift - duff.lift) < 2, "the same window foot Stripe stamps; the pose is a shut");
+  assert.ok(Math.abs(dish.x - duff.x) > 8, "not Stripe's window-foot stamp");
+  assert.ok(Math.abs(dish.x - bowl.x) > 8 || Math.abs(dish.lift - bowl.lift) > 8, "not Beak window-well snap");
+  assert.ok(Math.abs(dish.x - pan.x) > 8 || Math.abs(dish.lift - pan.lift) > 8, "not Jaw sill-pan show");
+  assert.ok(Math.abs(dish.x - cup.x) > 8 || Math.abs(dish.lift - cup.lift) > 8, "not Cup lid");
+  assert.ok(Math.abs(dish.x - horn.x) > 8 || Math.abs(dish.lift - horn.lift) > 8, "not Blush sill horn stone");
+  if (pond) {
+    assert.ok(Math.abs(dish.x - pond.x) > 8 || Math.abs(dish.lift - pond.lift) > 8, "not Ink bask");
+  }
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "box_turtle", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window foot, not a thin strip");
+  const foot = P.pickTarget([{ id: "foot", x: 200, y: 80, width: 160, height: 70 }], 80, "box_turtle", WORK, P.SPRITE);
+  assert.ok(foot, "a real window foot as a leaf dish");
+  const stripeOk = P.pickTarget([{ id: "foot", x: 200, y: 80, width: 160, height: 70 }], 80, "skunk", WORK, P.SPRITE);
+  assert.ok(stripeOk, "Stripe still takes the foot");
+  const beakOk = P.pickTarget([{ id: "well", x: 200, y: 80, width: 178, height: 162 }], 80, "snapper", WORK, P.SPRITE);
+  assert.ok(beakOk, "Beak still takes the well");
+  const jawOk = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "crocodile", WORK, P.SPRITE);
+  assert.ok(jawOk, "Jaw still takes the pan");
+  const cupOk = P.pickTarget([{ id: "latch", x: 200, y: 80, width: 220, height: 220 }], 80, "octopus", WORK, P.SPRITE);
+  assert.ok(cupOk, "Cup still takes the latch");
+  const walkOn = P.shutOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: 0 });
+  const stampOn = P.stampOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: 0 });
+  const snapOn = P.snapOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  assert.equal(walkOn.lift, 0, "she walks onto the foot as a leaf dish");
+  assert.ok(walkOn.rot !== stampOn.rot, "a walk-and-shut, not Stripe stamp");
+  assert.ok(walkOn.lift !== snapOn.lift, "a walk-and-shut, not Beak snap");
+  const hinge = P.shutPath(0.5);
+  const plant = P.stampPath(0.5);
+  const hook = P.snapPath(0.5);
+  const tooth = P.showPath(0.5);
+  assert.ok(hinge.lift < -6, "she walks then shuts");
+  assert.ok(hinge.rot > 6 && hinge.rot < 12, "the hinged plastron is the tell");
+  assert.ok(hinge.lift !== plant.lift, "not Stripe stamp");
+  assert.ok(hinge.rot !== plant.rot, "a shut, not a stamp");
+  assert.ok(hinge.rot !== hook.rot, "not Beak snap");
+  assert.ok(hinge.lift !== tooth.lift, "not Jaw show");
+  const hold = P.shutHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 9.4) < 0.2, "she holds after the shut");
+  assert.ok(Math.abs(hold.x - 0.45) < 0.2, "she stays on the leaf dish");
+  assert.ok(hold.lift < -6.2 && hold.lift > -6.8, "a sit after the shut, hinged");
+  const off0 = P.shutOffPath(0, { x: dish.x, lift: 0, rot: 9.4 }, { x: dish.x + 57, lift: 0 });
+  const offMid = P.shutOffPath(0.5, { x: dish.x, lift: 0, rot: 9.4 }, { x: dish.x + 57, lift: 0 });
+  const off1 = P.shutOffPath(1, { x: dish.x, lift: 0, rot: 9.4 }, { x: dish.x + 57, lift: 0 });
+  assert.ok(Math.abs(off0.x - dish.x) < 2);
+  assert.ok(Math.abs(offMid.x - (dish.x + 57 * (0.5 * 0.5 * (3 - 2 * 0.5)))) < 8, "a walk off the leaf dish");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "snap");
+    assert.notEqual(play.phase, "stamp");
+    assert.notEqual(play.phase, "show");
+    assert.notEqual(play.phase, "bask");
+    assert.notEqual(play.phase, "lid");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "shut") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "shut-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "shut-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift < -5 && play.lift > -8, "she holds the leaf dish after the shut");
+    }
+    if (play.phase === "shut-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("shut-on"));
+  assert.ok(seen.has("shut"));
+  assert.ok(seen.has("shut-hold"));
+  assert.ok(seen.has("shut-off"));
+  assert.ok(!seen.has("snap"), "Lid never uses Beak snap");
+  assert.ok(!seen.has("stamp"), "Lid never uses Stripe stamp");
+  assert.ok(!seen.has("show"), "Lid never uses Jaw show");
+  assert.ok(!seen.has("bask"), "Lid never uses Ink bask");
+  assert.ok(!seen.has("lid"), "Lid never uses Cup lid");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Lid's leaf-dish foot; sleep, card, and hide abort; Lid never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "box_turtle", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "shut"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "shut");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "shut");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "shut-off");
   assert.equal(play.abort, true);
 });
