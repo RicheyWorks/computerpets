@@ -19033,3 +19033,160 @@ test("a moved window refits Rack's oak-edge sill nosing; sleep, card, and hide a
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "flag-off");
   assert.equal(play.abort, true);
 });
+
+test("Cape folds a transom soffit as a rafter fold: fly to the underside of the head, hang by the feet, fold the hands, then drop off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("bat"), "fold");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("widow"), "hang");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("penguin"), "bow");
+  assert.equal(P.playFor("deer"), "flag");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.notEqual(P.playFor("bat"), "cape");
+  assert.notEqual(P.playFor("bat"), "hang");
+  assert.notEqual(P.playFor("bat"), "croak");
+  assert.notEqual(P.playFor("bat"), "perch");
+  assert.notEqual(P.playFor("bat"), "sip");
+  assert.notEqual(P.playFor("bat"), "bow");
+  assert.notEqual(P.playFor("bat"), "flag");
+  assert.notEqual(P.playFor("bat"), "sill");
+  assert.equal(P.DUR.hourOn, 1.44, "Hour's hang durations stay");
+  assert.equal(P.DUR.hang, 1.35, "Rui's hang duration stays");
+  assert.equal(P.DUR.croakOn, 0.91, "Wedge's croak durations stay");
+  const target = P.pickTarget([WIN], 80, "bat", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "fold");
+  assert.equal(target.side, "soffit");
+  assert.equal(target.leave, "soffit");
+  assert.notEqual(target.kind, "croak");
+  assert.notEqual(target.kind, "hang");
+  assert.notEqual(target.kind, "perch");
+  assert.notEqual(target.kind, "sip");
+  assert.notEqual(target.kind, "bow");
+  assert.notEqual(target.kind, "flag");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she hangs under the interior head as a rafter fold, not the floor");
+  assert.ok(P.DUR.foldHold > P.DUR.fold, "the hang is the hold; the fold of the hands is the tell");
+  assert.ok(P.DUR.foldOn > P.DUR.fold, "a fly up, not the fold");
+  assert.ok(P.DUR.foldOn !== P.DUR.hourOn);
+  assert.ok(P.DUR.foldOn !== P.DUR.hang);
+  assert.ok(P.DUR.foldOn !== P.DUR.croakOn);
+  assert.ok(P.DUR.foldOn !== P.DUR.perchOn);
+  assert.ok(P.DUR.foldOn !== P.DUR.sipOn);
+  assert.ok(P.DUR.foldOn !== P.DUR.flagOn);
+  assert.ok(P.DUR.foldOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.fold !== P.DUR.hour);
+  assert.ok(P.DUR.fold !== P.DUR.hang);
+  assert.ok(P.DUR.fold !== P.DUR.croak);
+  assert.ok(P.DUR.foldHold !== P.DUR.hourHold);
+  assert.ok(P.DUR.foldHold !== P.DUR.croakHold);
+  assert.ok(P.DUR.foldOff !== P.DUR.hourOff);
+  assert.ok(P.DUR.foldOff !== P.DUR.croakOff);
+  assert.ok(P.DUR.foldOff !== P.DUR.sillDown);
+  const soffit = P.foldPoint(WIN, P.SPRITE, WORK);
+  const rafter = P.croakPoint(WIN, P.SPRITE, WORK);
+  const dark = P.hangPoint(WIN, P.SPRITE, WORK);
+  const shade = P.perchPoint(WIN, "left", P.SPRITE, WORK);
+  const oak = P.flagPoint(WIN, P.SPRITE, WORK);
+  const nectar = P.sipPoint(WIN, P.SPRITE, WORK);
+  assert.ok(soffit.lift > 36, "the underside of the interior head, not the floor");
+  assert.ok(soffit.lift < rafter.lift - 20, "under the soffit, not Wedge's sit ON the head");
+  assert.ok(soffit.lift > dark.lift + 40, "a high rafter fold, not Hour's bottom-inside hang");
+  assert.ok(Math.abs(soffit.x - rafter.x) < 8, "the same transom, the underside");
+  assert.ok(Math.abs(soffit.x - shade.x) > 8 || Math.abs(soffit.lift - shade.lift) > 20, "not Echo's lamp-shade perch");
+  assert.ok(Math.abs(soffit.x - oak.x) > 8 || Math.abs(soffit.lift - oak.lift) > 20, "not Rack's sill nosing");
+  assert.ok(Math.abs(soffit.x - nectar.x) > 8 || Math.abs(soffit.lift - nectar.lift) > 20, "not Sip's nectar cup");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "bat", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real transom, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 200, height: 80 }], 80, "bat", WORK, P.SPRITE);
+  assert.equal(short, null, "a real interior head, not a short sash");
+  const oakOnly = P.pickTarget([{ id: "oak", x: 200, y: 80, width: 208, height: 168 }], 80, "bat", WORK, P.SPRITE);
+  assert.equal(oakOnly, null, "Cape needs a real transom, not Rack's thinner oak edge");
+  const beam = P.pickTarget([{ id: "beam", x: 200, y: 80, width: 208, height: 228 }], 80, "bat", WORK, P.SPRITE);
+  assert.ok(beam, "a real transom / interior head");
+  const wedgeBeam = P.pickTarget([{ id: "beam", x: 200, y: 80, width: 208, height: 228 }], 80, "raven", WORK, P.SPRITE);
+  assert.ok(wedgeBeam, "Wedge still takes the high transom");
+  const flyOn = P.foldOnPath(0.25, { x: 40, lift: 0 }, { x: soffit.x, lift: soffit.lift });
+  assert.ok(flyOn.lift > 0, "she flies up to the soffit");
+  assert.ok(flyOn.lift < soffit.lift, "a fly up, not already hanging");
+  const invert = P.foldPath(0.5);
+  const still = P.foldHoldPath(0.5);
+  const kronk = P.croakPath(0.5);
+  const hourHang = P.hangPath(0.5);
+  assert.ok(invert.rot > 150, "she inverts and hangs by the feet");
+  assert.ok(invert.lift < -3, "an upside-down hang, not Wedge's beam sit");
+  assert.ok(invert.x > 0.8, "the hands fold");
+  assert.ok(invert.rot !== hourHang.rot, "not Hour's hourglass hang");
+  assert.ok(invert.lift !== kronk.lift, "not Wedge's croak");
+  assert.ok(still.rot === 180, "she holds inverted");
+  assert.ok(still.lift < -4, "a hang under the soffit, not a sit on the head");
+  assert.ok(Math.abs(still.x - 0.8) < 0.2, "hands stay folded");
+  const off0 = P.foldOffPath(0, { x: soffit.x, lift: soffit.lift, rot: 180 }, { x: soffit.x + 58, lift: 0 });
+  const offMid = P.foldOffPath(0.5, { x: soffit.x, lift: soffit.lift, rot: 180 }, { x: soffit.x + 58, lift: 0 });
+  const off1 = P.foldOffPath(1, { x: soffit.x, lift: soffit.lift, rot: 180 }, { x: soffit.x + 58, lift: 0 });
+  const dropEase = 0.5 * 0.5;
+  assert.ok(Math.abs(off0.x - soffit.x) < 2);
+  assert.ok(Math.abs(offMid.x - (soffit.x + 58 * dropEase)) < 10, "she drops off, not a hop");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "croak");
+    assert.notEqual(play.phase, "hang");
+    assert.notEqual(play.phase, "perch-talk");
+    assert.notEqual(play.phase, "sip");
+    assert.notEqual(play.phase, "flag");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "fold") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "fold-on") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "fold-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 5.0)) < 4, "she holds the inverted fold under the soffit");
+    }
+    if (play.phase === "fold-off") {
+      assert.equal(play.anim, "play");
+    }
+  }
+  assert.ok(seen.has("fold-on"));
+  assert.ok(seen.has("fold"));
+  assert.ok(seen.has("fold-hold"));
+  assert.ok(seen.has("fold-off"));
+  assert.ok(!seen.has("croak"), "Cape never uses Wedge's croak");
+  assert.ok(!seen.has("hang"), "Cape never uses Hour's hang");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Cape's rafter-fold soffit; sleep, card, and hide abort; Cape never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "bat", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "fold"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "fold");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "fold");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "fold-off");
+  assert.equal(play.abort, true);
+});
