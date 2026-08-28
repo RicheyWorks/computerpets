@@ -128,6 +128,24 @@
     return DESK_PICKS.indexOf(key) >= 0;
   }
 
+  function hitId(el) {
+    if (!el) return "";
+    if (el.id) return String(el.id);
+    if (typeof el.getAttribute === "function") return String(el.getAttribute("id") || "");
+    return "";
+  }
+
+  /** Hidden Rui and his choice chrome stay hittable. Empty desk stays click-through. */
+  function hitAllows(el, style) {
+    const id = hitId(el);
+    if (id === "pet" || id === "choice") return true;
+    if (el && el.dataset && (el.dataset.petHit != null || el.dataset.hit === "pet")) return true;
+    if (el && typeof el.hasAttribute === "function" && (el.hasAttribute("data-pet-hit") || el.hasAttribute("data-pet"))) return true;
+    if (!style) return false;
+    if (style.pointerEvents === "none" || style.visibility === "hidden" || style.display === "none") return false;
+    if (Number(style.opacity) === 0) return false;
+    return true;
+  }
   function cursorHits(point, rects) {
     if (!point || !Array.isArray(rects)) return false;
     return rects.some((r) => {
@@ -183,6 +201,7 @@
     deskPicks,
     isDeskPick,
     cursorHits,
+    hitAllows,
     sameArea,
     hideWindowLabel,
     careVerbs,
