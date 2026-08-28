@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "tuatara", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "bass", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -23921,7 +23921,8 @@ test("Lid shuts a window foot as a leaf dish: walk onto the foot, shut the hinge
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(P.playFor("parrot"), "hook");
-  assert.equal(P.playFor("tuatara"), "sill");
+  assert.equal(P.playFor("tuatara"), "crest");
+  assert.equal(P.playFor("bass"), "sill");
   assert.notEqual(P.playFor("box_turtle"), "lid");
   assert.notEqual(P.playFor("box_turtle"), "snap");
   assert.notEqual(P.playFor("box_turtle"), "bask");
@@ -24079,5 +24080,177 @@ test("a moved window refits Lid's leaf-dish foot; sleep, card, and hide abort; L
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "shut-off");
+  assert.equal(play.abort, true);
+});
+
+
+test("Peak crests a sash pulley box as a stone burrow: walk into the box, sit the crest (third eye), then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("tuatara"), "crest");
+  assert.equal(P.CREST, "crest");
+  assert.equal(P.playFor("box_turtle"), "shut");
+  assert.equal(P.playFor("snapper"), "snap");
+  assert.equal(P.playFor("tarsier"), "look");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("stingless"), "tend");
+  assert.equal(P.playFor("bass"), "sill");
+  assert.notEqual(P.playFor("tuatara"), "peak");
+  assert.notEqual(P.playFor("tuatara"), "still");
+  assert.notEqual(P.playFor("tuatara"), "look");
+  assert.notEqual(P.playFor("tuatara"), "stone");
+  assert.notEqual(P.playFor("tuatara"), "shut");
+  assert.notEqual(P.playFor("tuatara"), "snap");
+  assert.notEqual(P.playFor("tuatara"), "sill");
+  assert.equal(P.DUR.shutOn, 1.47, "Lid shut durations stay");
+  assert.equal(P.DUR.lookOn, 1.31, "Gaze look durations stay");
+  assert.equal(P.DUR.snapOn, 1.39, "Beak snap durations stay");
+  assert.equal(P.DUR.tendOn, 2.04, "Pot tend durations stay");
+  const target = P.pickTarget([WIN], 80, "tuatara", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "crest");
+  assert.equal(target.side, "stoneburrow");
+  assert.equal(target.leave, "thirdeye");
+  assert.notEqual(target.kind, "peak");
+  assert.notEqual(target.kind, "look");
+  assert.notEqual(target.kind, "shut");
+  assert.notEqual(target.kind, "still");
+  assert.notEqual(target.kind, "stone");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 36, "she crests a sash pulley box as a stone burrow, not the floor");
+  assert.ok(P.DUR.crestHold > P.DUR.crest, "the hold is the sit after; the crest is the tell");
+  assert.ok(P.DUR.crestOn > 1.0, "a walk into the burrow, not the crest");
+  assert.ok(P.DUR.crestOn !== P.DUR.lookOn);
+  assert.ok(P.DUR.crestOn !== P.DUR.shutOn);
+  assert.ok(P.DUR.crestOn !== P.DUR.tendOn);
+  assert.ok(P.DUR.crestOn !== P.DUR.stillOn);
+  assert.ok(P.DUR.crestOn !== P.DUR.stoneOn);
+  assert.ok(P.DUR.crestOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.crest !== P.DUR.look);
+  assert.ok(P.DUR.crest !== P.DUR.shut);
+  assert.ok(P.DUR.crest !== P.DUR.still);
+  assert.ok(P.DUR.crestHold !== P.DUR.lookHold);
+  assert.ok(P.DUR.crestHold !== P.DUR.shutHold);
+  assert.ok(P.DUR.crestOff !== P.DUR.lookOff);
+  assert.ok(P.DUR.crestOff !== P.DUR.shutOff);
+  assert.ok(P.DUR.crestOff !== P.DUR.sillDown);
+  const burrow = P.crestPoint(WIN, P.SPRITE, WORK);
+  const hollow = P.lookPoint(WIN, P.SPRITE, WORK);
+  const wax = P.tendPoint(WIN, P.SPRITE, WORK);
+  const dish = P.shutPoint(WIN, P.SPRITE, WORK);
+  const bowl = P.snapPoint(WIN, P.SPRITE, WORK);
+  const horn = P.stonePoint(WIN, "left", P.SPRITE, WORK);
+  assert.ok(burrow.lift > 36, "the sash pulley box as a stone burrow, not the floor");
+  assert.ok(Math.abs(burrow.lift - hollow.lift) < 8, "same sash pulley box furniture family as Gaze");
+  assert.ok(Math.abs(burrow.x - hollow.x) > 20, "same pulley box, not Gaze's look spot");
+  assert.ok(Math.abs(burrow.lift - wax.lift) < 8, "same sash pulley box furniture family as Pot");
+  assert.ok(Math.abs(burrow.x - wax.x) > 20, "same pulley box, not Pot's tend spot");
+  assert.ok(Math.abs(burrow.x - dish.x) > 8 || Math.abs(burrow.lift - dish.lift) > 8, "not Lid window-foot shut");
+  assert.ok(Math.abs(burrow.x - bowl.x) > 8 || Math.abs(burrow.lift - bowl.lift) > 8, "not Beak window-well snap");
+  assert.ok(Math.abs(burrow.x - horn.x) > 8 || Math.abs(burrow.lift - horn.lift) > 8, "not Blush sill horn stone");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "tuatara", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash pulley box, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "tuatara", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash pulley box, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 186, height: 200 }], 80, "tuatara", WORK, P.SPRITE);
+  assert.equal(thin, null, "Peak needs Gaze's real pulley box, not a thinner burrow");
+  const box = P.pickTarget([{ id: "box", x: 200, y: 80, width: 186, height: 214 }], 80, "tuatara", WORK, P.SPRITE);
+  assert.ok(box, "a real sash pulley box as a stone burrow");
+  const gazeOk = P.pickTarget([{ id: "box", x: 200, y: 80, width: 186, height: 214 }], 80, "tarsier", WORK, P.SPRITE);
+  assert.ok(gazeOk, "Gaze still takes the pulley box");
+  const pot = P.pickTarget([{ id: "box", x: 200, y: 80, width: 186, height: 214 }], 80, "stingless", WORK, P.SPRITE);
+  assert.ok(pot, "Pot still takes the pulley box");
+  const walkOn = P.crestOnPath(0.25, { x: 40, lift: 0 }, { x: burrow.x, lift: burrow.lift });
+  const climbOn = P.lookOnPath(0.25, { x: 40, lift: 0 }, { x: burrow.x, lift: burrow.lift });
+  const shutOn = P.shutOnPath(0.25, { x: 40, lift: 0 }, { x: burrow.x, lift: 0 });
+  const tendOn = P.tendOnPath(0.25, { x: 40, lift: 0 }, { x: burrow.x, lift: burrow.lift });
+  const walkEase = 0.25 * 0.25 * (3 - 2 * 0.25);
+  assert.ok(Math.abs(walkOn.lift - (burrow.lift * walkEase)) < 4, "she walks into the pulley box");
+  assert.ok(walkOn.lift !== climbOn.lift, "a walk, not Gaze's climb look");
+  assert.ok(walkOn.lift !== shutOn.lift, "a walk into the burrow, not Lid's floor shut");
+  assert.ok(walkOn.lift !== tendOn.lift, "a walk, not Pot's hover tend");
+  const eye = P.crestPath(0.5);
+  const eyes = P.lookPath(0.5);
+  const hinge = P.shutPath(0.5);
+  const knead = P.tendPath(0.5);
+  assert.ok(eye.rot > 4 && eye.rot < 8, "she sits the crest (third eye)");
+  assert.ok(eye.lift < 2, "a crest sit, not Gaze's eyes filling the face");
+  assert.ok(eye.rot !== eyes.rot, "a crest, not Gaze look");
+  assert.ok(eye.lift !== hinge.lift, "not Lid shut");
+  assert.ok(eye.rot !== knead.rot, "not Pot tend");
+  const hold = P.crestHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 5.8) < 0.2, "she holds the crest");
+  assert.ok(Math.abs(hold.x - 1.0) < 0.2, "she stays in the stone burrow");
+  assert.ok(hold.lift > 0.4 && hold.lift < 1.0, "a still sit after the crest");
+  const off0 = P.crestOffPath(0, { x: burrow.x, lift: burrow.lift, rot: 5.8 }, { x: burrow.x + 53, lift: 0 });
+  const offMid = P.crestOffPath(0.5, { x: burrow.x, lift: burrow.lift, rot: 5.8 }, { x: burrow.x + 53, lift: 0 });
+  const off1 = P.crestOffPath(1, { x: burrow.x, lift: burrow.lift, rot: 5.8 }, { x: burrow.x + 53, lift: 0 });
+  assert.ok(Math.abs(off0.x - burrow.x) < 2);
+  assert.ok(offMid.lift > 4, "a walk leave off the stone burrow");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "look");
+    assert.notEqual(play.phase, "shut");
+    assert.notEqual(play.phase, "still");
+    assert.notEqual(play.phase, "stone");
+    assert.notEqual(play.phase, "snap");
+    assert.notEqual(play.phase, "tend");
+    assert.notEqual(play.phase, "peak");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "crest") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "crest-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "crest-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.6)) < 3, "she holds the crest in the burrow");
+    }
+    if (play.phase === "crest-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("crest-on"));
+  assert.ok(seen.has("crest"));
+  assert.ok(seen.has("crest-hold"));
+  assert.ok(seen.has("crest-off"));
+  assert.ok(!seen.has("look"), "Peak never uses Gaze look");
+  assert.ok(!seen.has("shut"), "Peak never uses Lid shut");
+  assert.ok(!seen.has("still"), "Peak never uses Grin still");
+  assert.ok(!seen.has("stone"), "Peak never uses Blush stone");
+  assert.ok(!seen.has("snap"), "Peak never uses Beak snap");
+  assert.ok(!seen.has("peak"), "Peak never uses peak as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Peak's stone-burrow pulley box; sleep, card, and hide abort; Peak never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "tuatara", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "crest"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "crest");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "crest");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "crest-off");
   assert.equal(play.abort, true);
 });
