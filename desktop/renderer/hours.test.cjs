@@ -98,7 +98,7 @@ test("every overlay guest keeps their own call-back, not Pip's tail", () => {
   assert.equal(back.life.mood, 54);
   assert.equal(back.life.bond, 11);
   assert.match(lifeSrc, /callLine\(key\)/);
-  assert.match(petSrc, /PetGait\.leaveTarget/);
+  assert.match(petSrc, /PetGait\.hideTuck/);
   assert.match(petSrc, /PetGait\.enterSpawn/);
 });
 

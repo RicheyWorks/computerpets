@@ -325,6 +325,46 @@ export function stillVisible(guest: CalledWalker | null | undefined) {
   return !!(guest && guest.phase !== "gone");
 }
 
+
+export type CalledSprites = { sit?: string[] | null; idle?: string[] | null; walk?: string[] | null };
+
+export function poseFrames(guest: CalledWalker | null | undefined, sprites?: CalledSprites | null) {
+  const pack = sprites && typeof sprites === "object" ? sprites : {};
+  const sit = Array.isArray(pack.sit) ? pack.sit.filter(Boolean) : [];
+  const idle = Array.isArray(pack.idle) ? pack.idle.filter(Boolean) : [];
+  const walk = Array.isArray(pack.walk) ? pack.walk.filter(Boolean) : [];
+  if (guest && (guest.phase === "perch" || guest.phase === "approach-perch")) {
+    if (sit.length) return sit;
+    if (idle.length) return idle;
+  }
+  if (walk.length) return walk;
+  if (idle.length) return idle;
+  if (sit.length) return sit;
+  return [];
+}
+
+export function poseSrc(guest: CalledWalker | null | undefined, sprites?: CalledSprites | null) {
+  const frames = poseFrames(guest, sprites);
+  if (!frames.length) return "";
+  const i = Math.abs(guest?.frame || 0) % frames.length;
+  return frames[i] || "";
+}
+
+export function assignedSrc(img: { dataset?: Record<string, string>; getAttribute?: (name: string) => string | null; src?: string } | null | undefined) {
+  if (!img) return "";
+  if (img.dataset && img.dataset.frameSrc) return img.dataset.frameSrc;
+  if (img.getAttribute) return img.getAttribute("src") || "";
+  return img.src || "";
+}
+
+export function assignSrc(img: { dataset?: Record<string, string>; setAttribute?: (name: string, value: string) => void; src?: string } | null | undefined, src: string) {
+  if (!img || !src) return false;
+  if (assignedSrc(img) === src) return false;
+  if (img.dataset) img.dataset.frameSrc = src;
+  if (img.setAttribute) img.setAttribute("src", src);
+  else img.src = src;
+  return true;
+}
 export type CalledPaintOpts = {
   createImg?: () => { className: string; alt: string; dataset: Record<string, string>; src: string; style: { transform?: string }; draggable: boolean; addEventListener?: (type: string, fn: (e: { stopPropagation: () => void }) => void) => void; remove?: () => void };
   frameOf?: (guest: CalledWalker) => string[] | null | undefined;
@@ -377,9 +417,9 @@ export function syncCalledPaint(
     } else {
       reused += 1;
     }
-    const frames = opts?.frameOf?.(g);
-    const src = frames && frames.length ? frames[g.frame as number || 0] || frames[0] : "";
-    if (src && img.src !== src) img.src = src;
+    const frames = opts?.frameOf?.(g) || poseFrames(g);
+    const src = frames && frames.length ? frames[Math.abs((g.frame as number) || 0) % frames.length] || frames[0] : "";
+    assignSrc(img, src);
     img.style.transform = `translate3d(${g.x}px, ${-(g.lift || 0)}px, 0) scale(${g.facing || 1}, 1)`;
   }
   return { reused, added, removed };

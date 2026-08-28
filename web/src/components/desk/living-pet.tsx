@@ -57,10 +57,10 @@ import {
   WALK_HOP_PX,
   enterSit,
   enterSpawn,
+  hideTuck,
   isCrawlKey,
   isHighWalk,
   isLowWalk,
-  leaveTarget,
   overshootPx,
   settleOffset,
   turnHoldS,
@@ -493,7 +493,7 @@ export function LivingPet({
         const width = box?.width ?? 800;
         s.leaving = true;
         s.waypoints = [];
-        aimAt(leaveTarget(s.x, width, SPRITE));
+        aimAt(hideTuck(s.x, width, SPRITE, PAD));
         return;
       }
       if (cmd === "enter") {
@@ -1090,7 +1090,7 @@ export function LivingPet({
           willChange: "transform",
           transformOrigin: "center bottom",
           background: "transparent",
-          pointerEvents: hidden ? "none" : "auto",
+          pointerEvents: "auto",
         }}
       >
         <img
@@ -1104,7 +1104,7 @@ export function LivingPet({
             background: "transparent",
             padding: 0,
             border: 0,
-            opacity: hidden ? 0 : 1,
+            opacity: hidden ? 0.22 : 1,
             filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
             transition: "opacity 280ms ease, filter 280ms ease",
           }}

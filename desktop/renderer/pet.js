@@ -555,11 +555,8 @@ function paintCalled() {
   if (!G || !calledRoot || !G.syncCalledPaint) return;
   G.syncCalledPaint(calledRoot, called, {
     frameOf: (g) => {
-      if (g.phase === "perch" || g.phase === "approach-perch") {
-        const sprites = g.sprites || pack(g.key);
-        return sprites.sit && sprites.sit.length ? sprites.sit : sprites.idle;
-      }
-      return (g.sprites && g.sprites.walk) || pack(g.key).walk;
+      const sprites = g.sprites || pack(g.key);
+      return (G.poseFrames && G.poseFrames(g, sprites)) || (g.phase === "perch" || g.phase === "approach-perch" ? (sprites.sit && sprites.sit.length ? sprites.sit : sprites.idle) : sprites.walk || sprites.idle);
     },
     onDismiss: (g) => {
       Object.assign(g, G.dismissCalled(g));
@@ -580,8 +577,9 @@ function tickCalled(dt) {
     const moving = Math.abs(g.target - g.x) > 2 && g.phase !== "perch";
     if (moving && g.acc > 1 / 6.4) {
       g.acc = 0;
-      const walk = g.sprites.walk || pack(g.key).walk;
-      g.frame = ((g.frame || 0) + 1) % walk.length;
+      const sprites = g.sprites || pack(g.key);
+      const frames = (G.poseFrames && G.poseFrames(g, sprites)) || sprites.walk || sprites.idle || [];
+      g.frame = ((g.frame || 0) + 1) % Math.max(1, frames.length);
     }
     if (G.shouldSing && G.shouldSing(g)) {
       say(G.ROBIN_SONG);
@@ -1640,7 +1638,7 @@ function applyCommand() {
   if (sim.cmd === "leave") {
     leaving = true;
     sim.waypoints = [];
-    aimAt(window.PetGait.leaveTarget(sim.x, width, BASE));
+    aimAt(window.PetGait.hideTuck(sim.x, width, BASE, PAD));
     return;
   }
   if (sim.cmd === "enter") {
@@ -2006,8 +2004,11 @@ function setClickable(next) {
 function hitRects() {
   return [...document.querySelectorAll("[data-hit]")].flatMap((el) => {
     const style = getComputedStyle(el);
-    if (style.pointerEvents === "none" || style.visibility === "hidden" || style.display === "none") return [];
-    if (Number(style.opacity) === 0) return [];
+    if (window.PetDesk && window.PetDesk.hitAllows) {
+      if (!window.PetDesk.hitAllows(el, style)) return [];
+    } else if (style.pointerEvents === "none" || style.visibility === "hidden" || style.display === "none" || Number(style.opacity) === 0) {
+      return [];
+    }
     const r = el.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) return [];
     return [{ x: r.x, y: r.y, width: r.width, height: r.height }];

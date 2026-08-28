@@ -90,6 +90,16 @@
     return x + size / 2 < width / 2 ? -size - 24 : width + 12;
   }
 
+  /** Hide tucks at the ribbon edge of the floor. Still on the desk. Still hittable. */
+  function hideTuck(x, width, sprite, pad) {
+    const size = sprite == null ? SPRITE : sprite;
+    const edge = pad == null ? 16 : pad;
+    const floor = width == null ? 0 : width;
+    const left = edge;
+    const right = Math.max(edge, floor - size - edge);
+    return x + size / 2 < floor / 2 ? left : right;
+  }
+
   function enterSpawn(width, sprite, pad, left) {
     const size = sprite == null ? SPRITE : sprite;
     const edge = pad == null ? 20 : pad;
@@ -138,6 +148,7 @@
     settleOffset,
     wanderPauseS,
     leaveTarget,
+    hideTuck,
     enterSpawn,
     enterSit,
   };

@@ -78,6 +78,13 @@ export function leaveTarget(x: number, width: number, sprite = SPRITE) {
   return x + sprite / 2 < width / 2 ? -sprite - 24 : width + 12;
 }
 
+
+/** Hide tucks at the ribbon edge of the floor. Still on the desk. Still hittable. */
+export function hideTuck(x: number, width: number, sprite = SPRITE, pad = 16) {
+  const left = pad;
+  const right = Math.max(pad, width - sprite - pad);
+  return x + sprite / 2 < width / 2 ? left : right;
+}
 /** Come back from off-stage. Same sit as the desk enter. */
 export function enterSpawn(width: number, sprite = SPRITE, pad = 20, left?: boolean) {
   const max = width - sprite - pad;
