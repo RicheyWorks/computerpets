@@ -1,4 +1,4 @@
-/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Wick threads the sash-sill gap as a tube, then dashes off. Burr shuffles to a window, snuffles the foot of the pane, curls into a ball against the glass, waits, then uncurls and shuffles off. Floss hops onto a window meeting rail as a dust tray, rolls in the sash-dust, fluffs, then hops down. Bloom drifts onto a window as a cistern wall, walks the pane (a salamander on glass), then sinks off. Keel hops onto a window cornice, tosses fruit from the bill, then hops down. Sol climbs a sun-warmed pane, head-bobs once, flattens as the living ornament, then climbs down. Vesper drapes a window lintel as a sleeping wyrm, then slips down. Ember banks as a coal on the window ash, kindles, then returns. Nori buns in a sash well as an inkwell hide, then unrolls. Saffron writes an S-curve along the sash as a pencil-tray canyon, then finishes. Bandit inspects a window jamb as a ruler, ticks the frame in bands, then closes. Jade saddles a casement stay as a lamp-arm, folds in half, then unfolds. Bluff hops onto a window stool as an eraser-dish stage, flips belly-up, holds the death, then rights himself. Sash patrols a damp moss-cup along the condensation channel, pauses, then finishes the lap. Lula pours onto a window apron as a blotter river, loops, holds the weight, then lets go. Coral tiles a window muntin as a stamp box, flashes the tricolor rumor, then stays kind. Blush stones a window sill horn as a pink desert rock, tucks, holds, then inches off. Atlas charts a window transom as a map shelf, climbs the jamb as a tree, unrolls the carpet, then gathers off. Cup lids a window sash latch as a teacup: crawl to the latch, taste the lever as a lid, hide in the latch cup, then jet off. Sepia flushes a window light as lamp-ripple weather: write the pane, hover a W, then fade. Chamber rises a window jamb as stacked nacre rooms: drift onto the oldest room, rise room by room, occupy the last chamber, then sink. Pulse chimes a window pane as a glass of water: drift onto the first moon, ring four moons as a cross, pulse once, then drift. Ochre reefs a window pane as a damp blotter: creep onto the wet glass, plant five arms, remain, then uncling. Tenant knobs a window sash lift as a vacant shell: shuffle onto the lift, measure the mouth, try the abdomen, reject it, then drop. Ledger plows a window stool as a sand tray: bury onto the wood, book-gills read the grain, hold the helmet, then unbury. Anchor hitches a window parting bead as a pencil: hover to the bead, wrap the tail, hold the question mark, then unhitch. Kite barrels a window pane as the sky of a bowl: soar a length of sky, barrel once, then glide. Door gapes a window sash-jamb crack as a book crevice: slip into the crack, breathe the gape, dart once, then slip. Felt leans a window meeting rail as blotter felt: carpet the rail, lean toward the lamp, remain, then peel. Vein unfurls a window sash pocket as a damp saucer: slip into the pocket, unfurl black stems first, stay shy, then fold. Fan golds a window lamp-side as autumn: take the lamp-side glass, gold the fans, hold, then fade. Mast seeds a window stool as an acorn dish: take the stool, stand a small height, drop one letter, remain small, then step back. Disk opens a window pane as an ink-dish pad: float the still ink, open once for the lamp, close, remain the floor, then leave for the night. Moth mounts a window jamb as bark: clasp the wood, hang aerial roots in the air, bloom once at dusk, then leave the bark. Arm stores a window stool as a sand tray: plant onto the wood, swell the ribs once, remain a column, then step back later. Snap counts a window meeting rail as a wetland cup: sit the weather groove, wait two hairs, close once, then leave as a leaf. Well fills a window sill pan as a bog cup: settle into the hidden pan, take the rain the sash sheds, remain open, then leave the rain. Dew curls a window glazing rebate as a peat saucer: settle the rebate, glitter the tentacles, curl slowly, then uncurl. Thrum forages a window box as a meadow: hover to the nosing, land a bloom, buzz once, then go home. Auger bores a sash stile as timber: hover to the stile, bore a hole, hover the hole, then leave the hole. Mortar daubs a sash gap as an inkstone cell: hover to the gap, daub a partition, hold the cell, then leave the stone. Disc snips a window-box leaf as foliage: hover to the foliage, snip a circle, carry the disc, then leave for the tube. Pot tends a sash pulley box as a cerumen hollow: hover to the box, knead the wax, remain the store, then leave the nest. Sheen licks a warm pane as a salt glass: hover to the glass, lick once, hold the metal, then leave the rim. Bank digs a window stool as a sand bank: settle onto the wood, sink a shaft, remain in the hole, then leave the tray. Hum drones a window pane as congregation sky: lift into the glass, hang, drone once, then leave the sky. Keep lays a window pane as a wax heart: settle onto the brood just under the meeting rail, walk a short line, lay once, then leave the heart. Wax draws a window pane as a hive frame: attach at the head, draw hex cells down the glass, remain the house, then leave the cavity. Reed plops a window weep as a bank spring: hop to the weep, sit wet at the mouth, then plop off. Pebble puffs a casement leaf as a leaf dish: short-hop onto the leaf, puff, sit dry, then hop off. Eft trails a sash horn as a moss saucer: walk onto the meeting-rail horn, trail the tail, keep the orange, then walk off. Dapple covers a window well as leaf mold: creep into the areaway at the foot of a cellar sash, cover, keep the yellow coins, then leave for the pool. Slip rings a sill throat as a silt tray: press into the kerf, ring through, keep the jaw, then leave the tray. Pinch claws a sill wash as a pebble tray: walk onto the wash, claw a scrap from the grit, hold the scrap, then leave the pebble. Whorl rasps a glass rim as her own house: climb onto the rim, rasp the glass, add a room, then leave the rim. Hinge filters a meeting-rail gap as a silt bed: bury into the gap, filter, clamp shut, then leave the silt. Latch drinks a sash drip as a damp blotter: loop onto the drip, seal, drink, then let go. Prickle glues a putty fillet as a weed bowl: dart onto the fillet, glue a nest, flare, then dart off. Soot caws a drip cap as a chimney pot: hop onto the cap, tuck a scrap, fan, caw, then hop off. Wedge croaks a high transom as a rafter: hop onto the interior head as a beam, drop the wedge tail, croak, then hop off. Heart hisses a sash reveal as a beam hollow: slip into the jamb return as a nest pocket, turn the heart face, hiss, then slip off. Hook soars a lamp-post stile as lift: take the outside of the stile, ride the lift, stoop once, then glide off. Dee caches a meeting-rail nosing as a twig cup: hop onto the nosing, hide a seed, dee once, then hop off. Brick pulls a window stool as a lawn: hop onto the stool, listen, pull once, then hop off. Drake tips a lower sash light as an ink dish: waddle onto the glass as still ink, paddle, tip once, then waddle off. Vee honks a window apron as a blotter green: walk onto the apron as claimed grass, plant the V, honk once, then walk off. Drum drums an upper sash stile as a dead-wood post: hop onto the interior stile, drum a rectangle, flare the crest, then hop off. Sip sips a window-box bloom as a nectar cup: dart to the foliage, hover, sip once, then dart off. Loom webs a lamp-side glass corner as a lamp web: walk to the interior top-corner, draw an orb, sit the hub, then leave the silk. Leap pounces a meeting-rail end as a blotter edge: walk onto the rail end, look, pounce once, then hop off. Prowl carries a window foot as leaf litter: walk to the floor at the pane's foot, wait with the brood, then walk off. Velvet kicks a sash well as a silk burrow: walk into the well, sit the silk, flick hair once, then walk off. Hour hangs a bottom-inside jamb corner as a dark corner: walk to the lower interior corner, hang with the hourglass out, then drop off. Stem stilts a sash parting bead as a blotter stem: walk onto the bead as a stem, keep the one body, then walk off. Barb raises a window stool as a bark tray: walk onto the wood, raise the tail, hold the sting, then walk off. Whip sprays a sill wash as a sand tray: walk onto the wash, raise the whip, spray once, then walk off. Clasp grips a sash apron hem as a blotter hem: walk to the apron edge, grip with eight legs, wait, then let go. Gale runs a sash light as a dry dish: dash onto the glass, bite once, then dash off. Rack flags a sill nosing as an oak edge: walk the outer nosing, flag the white tail once, then walk off. Cape folds a transom soffit as a rafter fold: fly to the underside of the head, hang by the feet, fold the hands, then drop off. Cache buries a window stool as an oak dish: hop onto the stool, bury a thought, then hop off. Slick slides a window pane as an ink dish: hop onto the glass, slide down once, then slip off. Wash rinses a sill pan as a wash bowl: walk to the hidden pan, rinse a scrap, then walk off. Stripe stamps a window foot as a duff dish: walk onto the floor strip, plant a warning stamp, then walk off. Grin goes still on a transom soffit as a rafter hem: walk onto the underside, play dead, then walk off. Dam gnaws a sash stile as a lodge cup: walk onto the stile, gnaw once, then walk off. Spine bristles a window jamb as a pine post: walk onto the jamb, bristle (quills stay), then walk off. Coal browses a window well as an oak denside: walk to the well, browse (size is the tell), then walk off. Hang reaches a transom soffit as a bough hook: climb to the underside, reach (two toes), then unhook. Hour still owns hang. Sun warms an upper sash light as a sun ledge: walk onto the glass, hold the ringed tail up, then walk off. Swing sings a lamp-side stile as a lamp arm: swing along the stile, sing once, then unhook. Wrist wraps a window-box bloom as a nectar cup: walk to the bloom, wrap the tail, then unhook. Sail clings a window jamb as a trunk sail: cling to the jamb, open the skin once, then leave. Glide planes a window stool as an oak fold: hop onto the stool, plane once (skin, not a wing), then hop off. Boom howls a high transom as a crown perch: sit on the head, howl once, then leave. Gaze looks from a sash pulley box as a branch hollow: climb into the box, look (eyes fill the face), then leave. Heart still owns hiss. Vee still owns honk. Swing still owns sing. Cape still owns fold. Sail still owns cling. Sip still owns sip. Rack still owns flag. Slip still owns ring. Others walk a sill. Same map as desktop `window-play.js`. */
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watches from the floor at a window's feet. Thimble hops to a window, thumps on the floor beside it, then vanishes. Clip hops to a window, ducks into the bottom-inside corner as a drawer, cheeks inventory, then pops back to the floor. Whee waddles to a window, loaves on the floor at its feet, wheeks, popcorns once, then waddles off. Ink paddles the long way to a window, basks on the bottom rail as a pond stone, withdraws the head, then slides the long way back. Coin drifts onto a window as if the glass were a bowl, swims one slow honest circle on the pane, then drifts off. Echo hops onto a window as a lamp-shade perch, repeats the room kinder, then hops off. Rue walks to a window, scents the near jamb on the floor (muzzle in the crack), then slips away. Peck hops onto a window as a landing rock, stands in full dress, bows (brief, required), then hops down. Quill hooks a window jamb with the bill as a third foot, climbs, hangs sideways, quotes from the chest, then drops. Wick threads the sash-sill gap as a tube, then dashes off. Burr shuffles to a window, snuffles the foot of the pane, curls into a ball against the glass, waits, then uncurls and shuffles off. Floss hops onto a window meeting rail as a dust tray, rolls in the sash-dust, fluffs, then hops down. Bloom drifts onto a window as a cistern wall, walks the pane (a salamander on glass), then sinks off. Keel hops onto a window cornice, tosses fruit from the bill, then hops down. Sol climbs a sun-warmed pane, head-bobs once, flattens as the living ornament, then climbs down. Vesper drapes a window lintel as a sleeping wyrm, then slips down. Ember banks as a coal on the window ash, kindles, then returns. Nori buns in a sash well as an inkwell hide, then unrolls. Saffron writes an S-curve along the sash as a pencil-tray canyon, then finishes. Bandit inspects a window jamb as a ruler, ticks the frame in bands, then closes. Jade saddles a casement stay as a lamp-arm, folds in half, then unfolds. Bluff hops onto a window stool as an eraser-dish stage, flips belly-up, holds the death, then rights himself. Sash patrols a damp moss-cup along the condensation channel, pauses, then finishes the lap. Lula pours onto a window apron as a blotter river, loops, holds the weight, then lets go. Coral tiles a window muntin as a stamp box, flashes the tricolor rumor, then stays kind. Blush stones a window sill horn as a pink desert rock, tucks, holds, then inches off. Atlas charts a window transom as a map shelf, climbs the jamb as a tree, unrolls the carpet, then gathers off. Cup lids a window sash latch as a teacup: crawl to the latch, taste the lever as a lid, hide in the latch cup, then jet off. Sepia flushes a window light as lamp-ripple weather: write the pane, hover a W, then fade. Chamber rises a window jamb as stacked nacre rooms: drift onto the oldest room, rise room by room, occupy the last chamber, then sink. Pulse chimes a window pane as a glass of water: drift onto the first moon, ring four moons as a cross, pulse once, then drift. Ochre reefs a window pane as a damp blotter: creep onto the wet glass, plant five arms, remain, then uncling. Tenant knobs a window sash lift as a vacant shell: shuffle onto the lift, measure the mouth, try the abdomen, reject it, then drop. Ledger plows a window stool as a sand tray: bury onto the wood, book-gills read the grain, hold the helmet, then unbury. Anchor hitches a window parting bead as a pencil: hover to the bead, wrap the tail, hold the question mark, then unhitch. Kite barrels a window pane as the sky of a bowl: soar a length of sky, barrel once, then glide. Door gapes a window sash-jamb crack as a book crevice: slip into the crack, breathe the gape, dart once, then slip. Felt leans a window meeting rail as blotter felt: carpet the rail, lean toward the lamp, remain, then peel. Vein unfurls a window sash pocket as a damp saucer: slip into the pocket, unfurl black stems first, stay shy, then fold. Fan golds a window lamp-side as autumn: take the lamp-side glass, gold the fans, hold, then fade. Mast seeds a window stool as an acorn dish: take the stool, stand a small height, drop one letter, remain small, then step back. Disk opens a window pane as an ink-dish pad: float the still ink, open once for the lamp, close, remain the floor, then leave for the night. Moth mounts a window jamb as bark: clasp the wood, hang aerial roots in the air, bloom once at dusk, then leave the bark. Arm stores a window stool as a sand tray: plant onto the wood, swell the ribs once, remain a column, then step back later. Snap counts a window meeting rail as a wetland cup: sit the weather groove, wait two hairs, close once, then leave as a leaf. Well fills a window sill pan as a bog cup: settle into the hidden pan, take the rain the sash sheds, remain open, then leave the rain. Dew curls a window glazing rebate as a peat saucer: settle the rebate, glitter the tentacles, curl slowly, then uncurl. Thrum forages a window box as a meadow: hover to the nosing, land a bloom, buzz once, then go home. Auger bores a sash stile as timber: hover to the stile, bore a hole, hover the hole, then leave the hole. Mortar daubs a sash gap as an inkstone cell: hover to the gap, daub a partition, hold the cell, then leave the stone. Disc snips a window-box leaf as foliage: hover to the foliage, snip a circle, carry the disc, then leave for the tube. Pot tends a sash pulley box as a cerumen hollow: hover to the box, knead the wax, remain the store, then leave the nest. Sheen licks a warm pane as a salt glass: hover to the glass, lick once, hold the metal, then leave the rim. Bank digs a window stool as a sand bank: settle onto the wood, sink a shaft, remain in the hole, then leave the tray. Hum drones a window pane as congregation sky: lift into the glass, hang, drone once, then leave the sky. Keep lays a window pane as a wax heart: settle onto the brood just under the meeting rail, walk a short line, lay once, then leave the heart. Wax draws a window pane as a hive frame: attach at the head, draw hex cells down the glass, remain the house, then leave the cavity. Reed plops a window weep as a bank spring: hop to the weep, sit wet at the mouth, then plop off. Pebble puffs a casement leaf as a leaf dish: short-hop onto the leaf, puff, sit dry, then hop off. Eft trails a sash horn as a moss saucer: walk onto the meeting-rail horn, trail the tail, keep the orange, then walk off. Dapple covers a window well as leaf mold: creep into the areaway at the foot of a cellar sash, cover, keep the yellow coins, then leave for the pool. Slip rings a sill throat as a silt tray: press into the kerf, ring through, keep the jaw, then leave the tray. Pinch claws a sill wash as a pebble tray: walk onto the wash, claw a scrap from the grit, hold the scrap, then leave the pebble. Whorl rasps a glass rim as her own house: climb onto the rim, rasp the glass, add a room, then leave the rim. Hinge filters a meeting-rail gap as a silt bed: bury into the gap, filter, clamp shut, then leave the silt. Latch drinks a sash drip as a damp blotter: loop onto the drip, seal, drink, then let go. Prickle glues a putty fillet as a weed bowl: dart onto the fillet, glue a nest, flare, then dart off. Soot caws a drip cap as a chimney pot: hop onto the cap, tuck a scrap, fan, caw, then hop off. Wedge croaks a high transom as a rafter: hop onto the interior head as a beam, drop the wedge tail, croak, then hop off. Heart hisses a sash reveal as a beam hollow: slip into the jamb return as a nest pocket, turn the heart face, hiss, then slip off. Hook soars a lamp-post stile as lift: take the outside of the stile, ride the lift, stoop once, then glide off. Dee caches a meeting-rail nosing as a twig cup: hop onto the nosing, hide a seed, dee once, then hop off. Brick pulls a window stool as a lawn: hop onto the stool, listen, pull once, then hop off. Drake tips a lower sash light as an ink dish: waddle onto the glass as still ink, paddle, tip once, then waddle off. Vee honks a window apron as a blotter green: walk onto the apron as claimed grass, plant the V, honk once, then walk off. Drum drums an upper sash stile as a dead-wood post: hop onto the interior stile, drum a rectangle, flare the crest, then hop off. Sip sips a window-box bloom as a nectar cup: dart to the foliage, hover, sip once, then dart off. Loom webs a lamp-side glass corner as a lamp web: walk to the interior top-corner, draw an orb, sit the hub, then leave the silk. Leap pounces a meeting-rail end as a blotter edge: walk onto the rail end, look, pounce once, then hop off. Prowl carries a window foot as leaf litter: walk to the floor at the pane's foot, wait with the brood, then walk off. Velvet kicks a sash well as a silk burrow: walk into the well, sit the silk, flick hair once, then walk off. Hour hangs a bottom-inside jamb corner as a dark corner: walk to the lower interior corner, hang with the hourglass out, then drop off. Stem stilts a sash parting bead as a blotter stem: walk onto the bead as a stem, keep the one body, then walk off. Barb raises a window stool as a bark tray: walk onto the wood, raise the tail, hold the sting, then walk off. Whip sprays a sill wash as a sand tray: walk onto the wash, raise the whip, spray once, then walk off. Clasp grips a sash apron hem as a blotter hem: walk to the apron edge, grip with eight legs, wait, then let go. Gale runs a sash light as a dry dish: dash onto the glass, bite once, then dash off. Rack flags a sill nosing as an oak edge: walk the outer nosing, flag the white tail once, then walk off. Cape folds a transom soffit as a rafter fold: fly to the underside of the head, hang by the feet, fold the hands, then drop off. Cache buries a window stool as an oak dish: hop onto the stool, bury a thought, then hop off. Slick slides a window pane as an ink dish: hop onto the glass, slide down once, then slip off. Wash rinses a sill pan as a wash bowl: walk to the hidden pan, rinse a scrap, then walk off. Stripe stamps a window foot as a duff dish: walk onto the floor strip, plant a warning stamp, then walk off. Grin goes still on a transom soffit as a rafter hem: walk onto the underside, play dead, then walk off. Dam gnaws a sash stile as a lodge cup: walk onto the stile, gnaw once, then walk off. Spine bristles a window jamb as a pine post: walk onto the jamb, bristle (quills stay), then walk off. Coal browses a window well as an oak denside: walk to the well, browse (size is the tell), then walk off. Hang reaches a transom soffit as a bough hook: climb to the underside, reach (two toes), then unhook. Hour still owns hang. Sun warms an upper sash light as a sun ledge: walk onto the glass, hold the ringed tail up, then walk off. Swing sings a lamp-side stile as a lamp arm: swing along the stile, sing once, then unhook. Wrist wraps a window-box bloom as a nectar cup: walk to the bloom, wrap the tail, then unhook. Sail clings a window jamb as a trunk sail: cling to the jamb, open the skin once, then leave. Glide planes a window stool as an oak fold: hop onto the stool, plane once (skin, not a wing), then hop off. Boom howls a high transom as a crown perch: sit on the head, howl once, then leave. Gaze looks from a sash pulley box as a branch hollow: climb into the box, look (eyes fill the face), then leave. Still creeps a sash parting bead as a vine rail: creep onto the bead, hold slowly, then leave. Grin still owns still. Clasp still owns grip. Heart still owns hiss. Vee still owns honk. Swing still owns sing. Cape still owns fold. Sail still owns cling. Sip still owns sip. Rack still owns flag. Slip still owns ring. Others walk a sill. Same map as desktop `window-play.js`. */
 import type { DeskWindow } from "@/lib/pets/windows";
 
 export const SPRITE = 176;
@@ -120,6 +120,7 @@ export const SKIN = "cling";
 export const PLANE = "plane";
 export const HOWL = "howl";
 export const LOOK = "look";
+export const CREEP = "creep";
 export const SILL = "sill";
 export const IGNORE = "ignore";
 export const WALK_PX = 98;
@@ -580,6 +581,10 @@ export const DUR = {
   look: 1.47,
   lookHold: 1.72,
   lookOff: 0.93,
+  creepOn: 1.73,
+  creep: 1.28,
+  creepHold: 2.36,
+  creepOff: 1.41,
   sillHop: 0.38,
   sillWalk: 1.55,
   sillDown: 0.36,
@@ -1274,6 +1279,7 @@ export function playFor(key: string | undefined): WindowPlayKind {
   if (key === "flying_squirrel") return PLANE;
   if (key === "howler") return HOWL;
   if (key === "tarsier") return LOOK;
+  if (key === "potto") return CREEP;
   return SILL;
 }
 
@@ -1576,6 +1582,7 @@ export function pickTarget(
     if (kind === PLANE) return w.width >= 194 && w.height >= 162;
     if (kind === HOWL) return w.width >= 208 && w.height >= 228;
     if (kind === LOOK) return w.width >= 186 && w.height >= 214;
+    if (kind === CREEP) return w.width >= 168 && w.height >= 208;
     return w.width >= 180 && w.height >= 70;
   });
   if (!usable.length) return null;
@@ -3711,6 +3718,23 @@ export function pickTarget(
       spin: "none",
     };
   }
+  if (kind === CREEP) {
+    const hold = creepPoint(best, size, work);
+    const approachOff = hold.x < workW / 2 ? -60 : 60;
+    const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+    const away = hold.x < workW / 2 ? 54 : -54;
+    return {
+      id: best.id,
+      kind,
+      side: "vinerail",
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave: "slow",
+      spin: "none",
+    };
+  }
   if (kind === WRAP) {
     const hold = wrapPoint(best, size, work);
     const fromLeft = hold.x >= workW / 2;
@@ -4301,6 +4325,10 @@ export function refitTarget(target: PlayTarget, win: DeskWindow, sprite: number 
   }
   if (target.kind === LOOK) {
     const hold = lookPoint(win, sprite, work);
+    return { ...target, holdX: hold.x, holdLift: hold.lift };
+  }
+  if (target.kind === CREEP) {
+    const hold = creepPoint(win, sprite, work);
     return { ...target, holdX: hold.x, holdLift: hold.lift };
   }
   if (target.kind === BURY) {
@@ -12841,6 +12869,69 @@ export function lookOffPath(u: number, from: PlayPoint, to: PlayPoint) {
   };
 }
 
+export function creepPoint(win: { x: number; y: number; width: number; height: number }, sprite: number | undefined, work: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const span = Math.max(0, win.width - size);
+  const x = win.x + span * 0.34;
+  const gripY = win.y + win.height * 0.42;
+  const lift = gripLift(gripY, work);
+  const maxLift = (work && work.height ? work.height : 800) - 48;
+  return { x, lift: clamp(lift, 36, maxLift) };
+}
+
+export function creepFace(target: PlayTarget) {
+  return target.approachX >= target.holdX ? -1 : 1;
+}
+
+export function creepOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  const fromLift = from && from.lift != null ? from.lift : 0;
+  const toLift = to && to.lift != null ? to.lift : 0;
+  const ease = t * t * t * (t * (t * 6 - 15) + 10);
+  const creep = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 3) * 2.8 * (1 - t * 0.2);
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + creep,
+    rot: (toX >= fromX ? 1 : -1) * 2.4 * (1 - ease),
+  };
+}
+
+export function creepPath(u: number) {
+  const t = Math.max(0, Math.min(1, u));
+  if (t < 0.38) {
+    const s = t / 0.38;
+    const ease = s * s * (3 - 2 * s);
+    return { x: ease * 1.4, lift: ease * 1.8, rot: ease * 4.6 };
+  }
+  const s = (t - 0.38) / 0.62;
+  const ease = s * s * (3 - 2 * s);
+  return { x: 1.4 - ease * 0.3, lift: 1.8 + ease * 0.4, rot: 4.6 - ease * 1.1 };
+}
+
+export function creepHoldPath(u: number) {
+  const t = Math.max(0, Math.min(1, u));
+  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.12;
+  return { x: 1.1, lift: 2.2 + hush, rot: 3.5 };
+}
+
+export function creepOffPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? to.x : fromX;
+  const fromLift = from && from.lift != null ? from.lift : 0;
+  const toLift = to && to.lift != null ? to.lift : 0;
+  const ease = t * t * (3 - 2 * t);
+  const creep = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2) * 2.1;
+  return {
+    x: fromX + (toX - fromX) * ease,
+    lift: fromLift + (toLift - fromLift) * ease + creep,
+    rot: ((from as { rot?: number }).rot != null ? (from as { rot?: number }).rot : 3.5) * (1 - ease),
+  };
+}
+
+
 export function beginPlay(target: PlayTarget | null | undefined, petX: number): WindowPlay | null {
   if (!target) return null;
   const x = petX == null ? target.approachX : petX;
@@ -13272,6 +13363,9 @@ export function stepPlay(
       }
       if (target.kind === LOOK) {
         return goPhase(next, "look-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+      }
+      if (target.kind === CREEP) {
+        return goPhase(next, "creep-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
       }
       if (target.kind === WRAP) {
         return goPhase(next, "wrap-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "walk", dir);
@@ -19899,6 +19993,64 @@ export function stepPlay(
     if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
     return next;
   }
+
+  if (next.phase === "creep-on") {
+    const face = creepFace(target);
+    const u = next.t / DUR.creepOn;
+    const pose = creepOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = face;
+    if (u >= 1) {
+      return goPhase(next, "creep", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "creep") {
+    const face = creepFace(target);
+    const pose = creepPath(Math.min(1, next.t / DUR.creep));
+    next.x = target.holdX + pose.x * face;
+    next.lift = target.holdLift + pose.lift;
+    next.rot = pose.rot * face;
+    next.anim = "play";
+    next.facing = face;
+    if (next.t >= DUR.creep) {
+      return goPhase(next, "creep-hold", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+    }
+    return next;
+  }
+
+  if (next.phase === "creep-hold") {
+    const face = creepFace(target);
+    const pose = creepHoldPath(Math.min(1, next.t / DUR.creepHold));
+    next.x = target.holdX + pose.x * face;
+    next.lift = target.holdLift + pose.lift;
+    next.rot = pose.rot * face;
+    next.anim = "sit";
+    next.facing = face;
+    if (next.t >= DUR.creepHold) {
+      const leaveFace = target.landX >= target.holdX ? 1 : -1;
+      const done = creepHoldPath(1);
+      return goPhase(next, "creep-off", { x: target.holdX + done.x * face, lift: target.holdLift + done.lift, rot: done.rot * face }, { x: target.landX, lift: 0 }, "play", leaveFace);
+    }
+    return next;
+  }
+
+  if (next.phase === "creep-off") {
+    const u = next.t / DUR.creepOff;
+    const pose = creepOffPath(Math.min(1, u), next.from, next.to);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = "play";
+    next.facing = target.landX >= target.holdX ? 1 : -1;
+    if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
 
   if (next.phase === "sill-hop") {
     const u = next.t / DUR.sillHop;
