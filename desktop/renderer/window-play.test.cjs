@@ -19693,3 +19693,165 @@ test("a moved window refits Wash's wash-bowl pan; sleep, card, and hide abort; W
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "rinse-off");
   assert.equal(play.abort, true);
 });
+
+
+test("Stripe stamps a window foot as a duff dish: walk onto the floor strip, plant a warning stamp, then walk off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("skunk"), "stamp");
+  assert.equal(P.playFor("wolf_spider"), "carry");
+  assert.equal(P.playFor("vinegaroon"), "spray");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("raccoon"), "rinse");
+  assert.equal(P.playFor("deer"), "flag");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("ferret"), "thread");
+  assert.equal(P.playFor("opossum"), "sill");
+  assert.notEqual(P.playFor("skunk"), "stripe");
+  assert.notEqual(P.playFor("skunk"), "spray");
+  assert.notEqual(P.playFor("skunk"), "raise");
+  assert.notEqual(P.playFor("skunk"), "carry");
+  assert.notEqual(P.playFor("skunk"), "rinse");
+  assert.notEqual(P.playFor("skunk"), "flag");
+  assert.notEqual(P.playFor("skunk"), "honk");
+  assert.notEqual(P.playFor("skunk"), "sill");
+  assert.equal(P.DUR.carryOn, 0.96, "Prowl's carry durations stay");
+  assert.equal(P.DUR.sprayOn, 1.31, "Whip's spray durations stay");
+  assert.equal(P.DUR.raiseOn, 1.37, "Barb's raise durations stay");
+  assert.equal(P.DUR.rinseOn, 1.21, "Wash's rinse durations stay");
+  const target = P.pickTarget([WIN], 80, "skunk", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "stamp");
+  assert.equal(target.side, "duff");
+  assert.equal(target.leave, "warn");
+  assert.notEqual(target.kind, "carry");
+  assert.notEqual(target.kind, "spray");
+  assert.notEqual(target.kind, "raise");
+  assert.notEqual(target.kind, "rinse");
+  assert.notEqual(target.kind, "flag");
+  assert.notEqual(target.kind, "honk");
+  assert.notEqual(target.kind, "sill");
+  assert.equal(target.holdLift, 0, "she stamps a window foot as a duff dish, not the sash");
+  assert.ok(P.DUR.stampHold > P.DUR.stamp, "the plant is the tell; the hold is the warning she wears");
+  assert.ok(P.DUR.stampOn > 1.0, "a walk onto the duff, not a hop");
+  assert.ok(P.DUR.stampOn !== P.DUR.carryOn);
+  assert.ok(P.DUR.stampOn !== P.DUR.sprayOn);
+  assert.ok(P.DUR.stampOn !== P.DUR.raiseOn);
+  assert.ok(P.DUR.stampOn !== P.DUR.rinseOn);
+  assert.ok(P.DUR.stampOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.stamp !== P.DUR.carry);
+  assert.ok(P.DUR.stamp !== P.DUR.spray);
+  assert.ok(P.DUR.stamp !== P.DUR.raise);
+  assert.ok(P.DUR.stamp !== P.DUR.rinse);
+  assert.ok(P.DUR.stampHold !== P.DUR.carryHold);
+  assert.ok(P.DUR.stampHold !== P.DUR.sprayHold);
+  assert.ok(P.DUR.stampOff !== P.DUR.carryOff);
+  assert.ok(P.DUR.stampOff !== P.DUR.sprayOff);
+  assert.ok(P.DUR.stampOff !== P.DUR.rinseOff);
+  assert.ok(P.DUR.stampOff !== P.DUR.sillDown);
+  const duff = P.stampPoint(WIN, P.SPRITE, WORK);
+  const litter = P.carryPoint(WIN, P.SPRITE, WORK);
+  const wash = P.sprayPoint(WIN, P.SPRITE, WORK);
+  const bowl = P.rinsePoint(WIN, P.SPRITE, WORK);
+  const bark = P.raisePoint(WIN, P.SPRITE, WORK);
+  const oak = P.flagPoint(WIN, P.SPRITE, WORK);
+  const grass = P.honkPoint(WIN, P.SPRITE, WORK);
+  assert.equal(duff.lift, 0, "the floor strip under the window is the duff");
+  assert.ok(Math.abs(duff.x - litter.x) < 2 && Math.abs(duff.lift - litter.lift) < 2, "the same window foot Prowl carries; the pose is a stamp");
+  assert.ok(Math.abs(duff.x - wash.x) > 8 || Math.abs(duff.lift - wash.lift) > 8, "not Whip's sill-wash spray");
+  assert.ok(Math.abs(duff.x - bowl.x) > 8 || Math.abs(duff.lift - bowl.lift) > 8, "not Wash's pan rinse");
+  assert.ok(Math.abs(duff.x - bark.x) > 8 || Math.abs(duff.lift - bark.lift) > 8, "not Barb's stool raise");
+  assert.ok(Math.abs(duff.x - oak.x) > 8 || Math.abs(duff.lift - oak.lift) > 8, "not Rack's sill-nosing flag");
+  assert.ok(Math.abs(duff.x - grass.x) > 8 || Math.abs(duff.lift - grass.lift) > 8, "not Vee's apron honk");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "skunk", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window foot, not a thin strip");
+  const foot = P.pickTarget([{ id: "foot", x: 200, y: 80, width: 160, height: 70 }], 80, "skunk", WORK, P.SPRITE);
+  assert.ok(foot, "a real window foot as a duff dish");
+  const prowl = P.pickTarget([{ id: "foot", x: 200, y: 80, width: 160, height: 70 }], 80, "wolf_spider", WORK, P.SPRITE);
+  assert.ok(prowl, "Prowl still takes the same window foot");
+  const walkOn = P.stampOnPath(0.25, { x: 40, lift: 0 }, { x: duff.x, lift: 0 });
+  const broodOn = P.carryOnPath(0.25, { x: 40, lift: 0 }, { x: duff.x, lift: 0 });
+  assert.equal(walkOn.lift, 0, "she walks onto the floor strip");
+  assert.ok(walkOn.rot !== broodOn.rot, "a warning walk, not Prowl's litter hunt");
+  const plant = P.stampPath(0.5);
+  const brood = P.carryPath(0.5);
+  const puff = P.sprayPath(0.5);
+  const sting = P.raisePath(0.5);
+  const dunk = P.rinsePath(0.5);
+  assert.ok(plant.lift < -2, "she plants a warning stamp into the duff");
+  assert.ok(plant.lift < brood.lift - 4, "a plant, not Prowl's brood-up carry");
+  assert.ok(plant.rot > 4, "a stamp lean, not a carry");
+  assert.ok(Math.abs(plant.x) < 2, "she stays on the duff");
+  assert.ok(plant.lift !== puff.lift, "not Whip's spray");
+  assert.ok(plant.lift !== sting.lift, "not Barb's raise");
+  assert.ok(plant.lift > dunk.lift + 8, "a floor stamp, not Wash's bowl dunk");
+  const still = P.stampHoldPath(0.5);
+  assert.ok(still.lift < 0, "she holds the planted warning");
+  assert.ok(Math.abs(still.x) < 0.2, "still on the duff");
+  const off0 = P.stampOffPath(0, { x: duff.x, lift: 0, rot: 7.6 }, { x: duff.x + 61, lift: 0 });
+  const offMid = P.stampOffPath(0.5, { x: duff.x, lift: 0, rot: 7.6 }, { x: duff.x + 61, lift: 0 });
+  const off1 = P.stampOffPath(1, { x: duff.x, lift: 0, rot: 7.6 }, { x: duff.x + 61, lift: 0 });
+  const midEase = 0.5 * 0.5 * (3 - 2 * 0.5);
+  assert.ok(Math.abs(off0.x - duff.x) < 2);
+  assert.ok(Math.abs(offMid.x - (duff.x + 61 * midEase)) < 8, "she walks off, not a hop");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "carry");
+    assert.notEqual(play.phase, "spray");
+    assert.notEqual(play.phase, "raise");
+    assert.notEqual(play.phase, "rinse");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "stamp") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "stamp-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "stamp-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(play.lift < 1 && play.lift > -3, "she holds the planted warning on the duff");
+    }
+    if (play.phase === "stamp-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("stamp-on"));
+  assert.ok(seen.has("stamp"));
+  assert.ok(seen.has("stamp-hold"));
+  assert.ok(seen.has("stamp-off"));
+  assert.ok(!seen.has("carry"), "Stripe never uses Prowl's carry");
+  assert.ok(!seen.has("spray"), "Stripe never uses Whip's spray");
+  assert.ok(!seen.has("raise"), "Stripe never uses Barb's raise");
+  assert.ok(!seen.has("rinse"), "Stripe never uses Wash's rinse");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+
+test("a moved window refits Stripe's duff-dish foot; sleep, card, and hide abort; Stripe never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "skunk", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "stamp"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "stamp");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "stamp");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "stamp-off");
+  assert.equal(play.abort, true);
+});

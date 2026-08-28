@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-27 (Wash rinses a sill pan as a wash bowl; fifth wood leftover done; next leftover is Stripe; catalog stays 220) |
+| **Last Updated** | 2026-08-27 (Stripe stamps a window foot as a duff dish; sixth wood leftover done; next leftover is Grin; catalog stays 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
