@@ -13118,7 +13118,7 @@ test("the demo window plate walks Hang reach the same way", () => {
   assert.equal(P.playFor("opossum"), "still");
   assert.equal(P.playFor("parrot"), "hook");
   assert.equal(P.playFor("black_bear"), "browse");
-  assert.equal(P.playFor("lemur"), "sill");
+  assert.equal(P.playFor("lemur"), "warm");
   assert.notEqual(P.playFor("sloth"), "hang");
   assert.notEqual(P.playFor("sloth"), "hook");
   assert.notEqual(P.playFor("sloth"), "fold");
@@ -13190,6 +13190,105 @@ test("the demo window plate walks Hang reach the same way", () => {
   assert.ok(seen.has("reach"));
   assert.ok(seen.has("reach-hold"));
   assert.ok(seen.has("reach-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+
+test("the demo window plate walks Sun warm the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/canopy.ts"), "utf8"), /key: "lemur"[\s\S]{0,80}slug: "sun"/);
+  assert.equal(P.playFor("lemur"), "warm");
+  const target = P.pickTarget([WIN], 80, "lemur", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "warm");
+  assert.equal(target.side, "sunledge");
+  assert.equal(target.leave, "ledge");
+  assert.equal(Overlay.playFor("lemur"), "warm");
+  assert.equal(P.playFor("sloth"), "reach");
+  assert.equal(Overlay.playFor("sloth"), "reach");
+  assert.equal(P.playFor("deer"), "flag");
+  assert.equal(P.playFor("caecilian"), "ring");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("sweat_bee"), "lick");
+  assert.equal(P.playFor("gibbon"), "sill");
+  assert.notEqual(P.playFor("lemur"), "flag");
+  assert.notEqual(P.playFor("lemur"), "ring");
+  assert.notEqual(P.playFor("lemur"), "sun");
+  assert.notEqual(P.playFor("lemur"), "bask");
+  assert.notEqual(target.kind, "run");
+  assert.notEqual(target.kind, "tip");
+  assert.notEqual(target.kind, "lick");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 40, "she warms an upper sash light as a sun ledge, not the sash foot");
+  assert.ok(P.DUR.warmHold > P.DUR.warm, "the sit is the hold; the ringed tail up is the tell");
+  assert.ok(P.DUR.warmOn !== Overlay.DUR.runOn);
+  assert.ok(P.DUR.warmOn !== Overlay.DUR.tipOn);
+  assert.ok(P.DUR.warmOn !== Overlay.DUR.lickOn);
+  assert.ok(P.DUR.warmOn !== Overlay.DUR.reachOn);
+  assert.ok(P.DUR.warmOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.runOn, Overlay.DUR.runOn);
+  assert.equal(P.DUR.warmOn, Overlay.DUR.warmOn);
+  assert.equal(P.DUR.warm, Overlay.DUR.warm);
+  const ledge = P.warmPoint(WIN, 176, WORK);
+  const deskLedge = Overlay.warmPoint(WIN, Overlay.SPRITE, WORK);
+  const dry = P.runPoint(WIN, 176, WORK);
+  const ink = P.tipPoint(WIN, 176, WORK);
+  const salt = P.lickPoint(WIN, 176, WORK);
+  const bough = P.reachPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(ledge.x - deskLedge.x) < 1);
+  assert.ok(Math.abs(ledge.lift - deskLedge.lift) < 1);
+  assert.ok(ledge.lift > dry.lift, "an upper sash light, not Gale's run");
+  assert.ok(ledge.lift > ink.lift, "not Drake's lower-sash tip");
+  assert.ok(Math.abs(ledge.x - salt.x) > 8 || Math.abs(ledge.lift - salt.lift) > 8, "not Sheen's lick");
+  assert.ok(ledge.lift < bough.lift - 8, "on the glass, not Hang's soffit");
+  const walkOn = P.warmOnPath(0.25, { x: 40, lift: 0 }, { x: ledge.x, lift: ledge.lift });
+  const deskWalk = Overlay.warmOnPath(0.25, { x: 40, lift: 0 }, { x: ledge.x, lift: ledge.lift });
+  const dashOn = P.runOnPath(0.25, { x: 40, lift: 0 }, { x: ledge.x, lift: ledge.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks onto the glass");
+  assert.ok(walkOn.lift !== dashOn.lift, "a walk, not Gale's dash");
+  const sit = P.warmPath(0.5);
+  const deskSit = Overlay.warmPath(0.5);
+  assert.equal(sit.lift, deskSit.lift);
+  assert.ok(sit.rot > 10 && sit.rot < 50, "a sun sit with the ringed tail up");
+  const hold = P.warmHoldPath(0.5);
+  const deskHold = Overlay.warmHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 28) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "run");
+    assert.notEqual(play.phase, "tip");
+    assert.notEqual(play.phase, "lick");
+    assert.notEqual(play.phase, "reach");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "warm") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "warm-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "warm-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.8)) < 3, "she holds the sun sit with the ringed tail up");
+    }
+  }
+  assert.ok(seen.has("warm-on"));
+  assert.ok(seen.has("warm"));
+  assert.ok(seen.has("warm-hold"));
+  assert.ok(seen.has("warm-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
