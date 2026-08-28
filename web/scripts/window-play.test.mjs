@@ -14227,7 +14227,7 @@ test("the demo window plate walks Dash scoot the same way", () => {
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("moray"), "gape");
   assert.equal(P.playFor("chameleon"), "aim");
-  assert.equal(P.playFor("horned_lizard"), "sill");
+  assert.equal(P.playFor("horned_lizard"), "crown");
   assert.notEqual(P.playFor("skink"), "dash");
   assert.notEqual(P.playFor("skink"), "stone");
   assert.notEqual(P.playFor("skink"), "run");
@@ -14321,7 +14321,7 @@ test("the demo window plate walks Shift aim the same way", () => {
   assert.equal(Overlay.playFor("tarsier"), "look");
   assert.equal(P.playFor("rosy_boa"), "stone");
   assert.equal(Overlay.playFor("rosy_boa"), "stone");
-  assert.equal(P.playFor("horned_lizard"), "sill");
+  assert.equal(P.playFor("horned_lizard"), "crown");
   assert.notEqual(P.playFor("chameleon"), "shift");
   assert.notEqual(P.playFor("chameleon"), "look");
   assert.notEqual(P.playFor("chameleon"), "flash");
@@ -14404,3 +14404,103 @@ test("the demo window plate walks Shift aim the same way", () => {
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
+
+test("the demo window plate walks Spike crown the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/stone.ts"), "utf8"), /key: "horned_lizard"[\s\S]{0,80}slug: "spike"/);
+  assert.equal(P.playFor("horned_lizard"), "crown");
+  const target = P.pickTarget([WIN], 80, "horned_lizard", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "crown");
+  assert.equal(target.side, "sandtray");
+  assert.equal(target.leave, "horns");
+  assert.equal(Overlay.playFor("horned_lizard"), "crown");
+  assert.equal(P.playFor("chameleon"), "aim");
+  assert.equal(Overlay.playFor("chameleon"), "aim");
+  assert.equal(P.playFor("skink"), "scoot");
+  assert.equal(Overlay.playFor("skink"), "scoot");
+  assert.equal(P.playFor("anole"), "flash");
+  assert.equal(Overlay.playFor("anole"), "flash");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(Overlay.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("alligator"), "sill");
+  assert.notEqual(P.playFor("horned_lizard"), "spike");
+  assert.notEqual(P.playFor("horned_lizard"), "stone");
+  assert.notEqual(P.playFor("horned_lizard"), "aim");
+  assert.notEqual(target.kind, "spike");
+  assert.notEqual(target.kind, "browse");
+  assert.notEqual(target.kind, "rinse");
+  assert.notEqual(target.kind, "stamp");
+  assert.ok(target.holdLift > 16, "she crowns a window well as a sand tray, not the sash foot");
+  assert.ok(P.DUR.crownHold > P.DUR.crown, "the hold is the sit after; the crown is the tell");
+  assert.ok(P.DUR.crownOn !== Overlay.DUR.browseOn);
+  assert.ok(P.DUR.crownOn !== Overlay.DUR.aimOn);
+  assert.ok(P.DUR.crownOn !== Overlay.DUR.scootOn);
+  assert.ok(P.DUR.crownOn !== Overlay.DUR.flashOn);
+  assert.ok(P.DUR.crownOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.crownOn, Overlay.DUR.crownOn);
+  assert.equal(P.DUR.crown, Overlay.DUR.crown);
+  assert.equal(P.DUR.crownHold, Overlay.DUR.crownHold);
+  assert.equal(P.DUR.crownOff, Overlay.DUR.crownOff);
+  const tray = P.crownPoint(WIN, 176, WORK);
+  const deskSpike = Overlay.crownPoint(WIN, Overlay.SPRITE, WORK);
+  const den = P.browsePoint(WIN, 176, WORK);
+  const pan = P.rinsePoint(WIN, 176, WORK);
+  const foot = P.stampPoint(WIN, 176, WORK);
+  const bead = P.aimPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(tray.x - deskSpike.x) < 1);
+  assert.ok(Math.abs(tray.lift - deskSpike.lift) < 1);
+  assert.ok(Math.abs(tray.lift - den.lift) < 2, "same window well as Coal");
+  assert.ok(Math.abs(tray.x - den.x) > 8, "not Coal browse");
+  assert.ok(Math.abs(tray.x - pan.x) > 8 || Math.abs(tray.lift - pan.lift) > 8, "not Wash rinse");
+  assert.ok(Math.abs(tray.x - foot.x) > 8 || Math.abs(tray.lift - foot.lift) > 8, "not Stripe stamp");
+  assert.ok(Math.abs(tray.x - bead.x) > 8 || Math.abs(tray.lift - bead.lift) > 8, "not Shift aim");
+  const walkOn = P.crownOnPath(0.25, { x: 40, lift: 0 }, { x: tray.x, lift: tray.lift });
+  const deskWalk = Overlay.crownOnPath(0.25, { x: 40, lift: 0 }, { x: tray.x, lift: tray.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "she walks onto the well as a sand tray");
+  const horns = P.crownPath(0.5);
+  const deskHorns = Overlay.crownPath(0.5);
+  assert.equal(horns.lift, deskHorns.lift);
+  assert.ok(horns.lift < -5, "she sits flat and crowns the horns");
+  const hold = P.crownHoldPath(0.5);
+  const deskHold = Overlay.crownHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - -1.8) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "browse");
+    assert.notEqual(play.phase, "aim");
+    assert.notEqual(play.phase, "rinse");
+    assert.notEqual(play.phase, "stamp");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "crown") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "crown-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "crown-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 7.2)) < 3, "she holds the sand tray after the crown");
+    }
+  }
+  assert.ok(seen.has("crown-on"));
+  assert.ok(seen.has("crown"));
+  assert.ok(seen.has("crown-hold"));
+  assert.ok(seen.has("crown-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
