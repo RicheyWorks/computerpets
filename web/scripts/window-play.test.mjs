@@ -14428,7 +14428,7 @@ test("the demo window plate walks Spike crown the same way", () => {
   assert.equal(P.playFor("black_bear"), "browse");
   assert.equal(Overlay.playFor("black_bear"), "browse");
   assert.equal(P.playFor("crocodile"), "show");
-  assert.equal(P.playFor("snapper"), "sill");
+  assert.equal(P.playFor("snapper"), "snap");
   assert.notEqual(P.playFor("horned_lizard"), "spike");
   assert.notEqual(P.playFor("horned_lizard"), "stone");
   assert.notEqual(P.playFor("horned_lizard"), "aim");
@@ -14527,7 +14527,7 @@ test("the demo window plate walks Levee bank the same way", () => {
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(Overlay.playFor("turtle"), "bask");
   assert.equal(P.playFor("crocodile"), "show");
-  assert.equal(P.playFor("snapper"), "sill");
+  assert.equal(P.playFor("snapper"), "snap");
   assert.notEqual(P.playFor("alligator"), "levee");
   assert.notEqual(P.playFor("alligator"), "bask");
   assert.notEqual(P.playFor("alligator"), "show");
@@ -14627,7 +14627,7 @@ test("the demo window plate walks Jaw show the same way", () => {
   assert.equal(P.playFor("turtle"), "bask");
   assert.equal(Overlay.playFor("turtle"), "bask");
   assert.equal(P.playFor("raccoon"), "rinse");
-  assert.equal(P.playFor("snapper"), "sill");
+  assert.equal(P.playFor("snapper"), "snap");
   assert.notEqual(P.playFor("crocodile"), "jaw");
   assert.notEqual(P.playFor("crocodile"), "bank");
   assert.notEqual(P.playFor("crocodile"), "bask");
@@ -14698,6 +14698,106 @@ test("the demo window plate walks Jaw show the same way", () => {
   assert.ok(seen.has("show"));
   assert.ok(seen.has("show-hold"));
   assert.ok(seen.has("show-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Beak snap the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/stone.ts"), "utf8"), /key: "snapper"[\s\S]{0,80}slug: "beak"/);
+  assert.equal(P.playFor("snapper"), "snap");
+  const target = P.pickTarget([WIN], 80, "snapper", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "snap");
+  assert.equal(target.side, "mudbowl");
+  assert.equal(target.leave, "beak");
+  assert.equal(Overlay.playFor("snapper"), "snap");
+  assert.equal(P.playFor("crocodile"), "show");
+  assert.equal(Overlay.playFor("crocodile"), "show");
+  assert.equal(P.playFor("alligator"), "bank");
+  assert.equal(Overlay.playFor("alligator"), "bank");
+  assert.equal(P.playFor("horned_lizard"), "crown");
+  assert.equal(Overlay.playFor("horned_lizard"), "crown");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(Overlay.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("rosy_boa"), "stone");
+  assert.equal(Overlay.playFor("rosy_boa"), "stone");
+  assert.equal(P.playFor("turtle"), "bask");
+  assert.equal(Overlay.playFor("turtle"), "bask");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.notEqual(P.playFor("snapper"), "beak");
+  assert.notEqual(P.playFor("snapper"), "hook");
+  assert.notEqual(P.playFor("snapper"), "show");
+  assert.notEqual(P.playFor("snapper"), "crown");
+  assert.notEqual(target.kind, "beak");
+  assert.notEqual(target.kind, "hook");
+  assert.notEqual(target.kind, "show");
+  assert.notEqual(target.kind, "crown");
+  assert.ok(target.holdLift > 16, "he snaps a window well as a mud bowl, not the sash foot");
+  assert.ok(P.DUR.snapHold > P.DUR.snap, "the hold is the sit after; the hooked beak is the tell");
+  assert.ok(P.DUR.snapOn !== Overlay.DUR.showOn);
+  assert.ok(P.DUR.snapOn !== Overlay.DUR.crownOn);
+  assert.ok(P.DUR.snapOn !== Overlay.DUR.browseOn);
+  assert.ok(P.DUR.snapOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.snapOn, Overlay.DUR.snapOn);
+  assert.equal(P.DUR.snap, Overlay.DUR.snap);
+  assert.equal(P.DUR.snapHold, Overlay.DUR.snapHold);
+  assert.equal(P.DUR.snapOff, Overlay.DUR.snapOff);
+  const bowl = P.snapPoint(WIN, 176, WORK);
+  const deskBeak = Overlay.snapPoint(WIN, Overlay.SPRITE, WORK);
+  const tray = P.crownPoint(WIN, 176, WORK);
+  const den = P.browsePoint(WIN, 176, WORK);
+  const dish = P.showPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(bowl.x - deskBeak.x) < 1);
+  assert.ok(Math.abs(bowl.lift - deskBeak.lift) < 1);
+  assert.ok(Math.abs(bowl.lift - tray.lift) < 2, "same window well as Spike");
+  assert.ok(Math.abs(bowl.x - tray.x) > 8, "not Spike crown");
+  assert.ok(Math.abs(bowl.lift - den.lift) < 2, "same window well as Coal");
+  assert.ok(Math.abs(bowl.x - den.x) > 8, "not Coal browse");
+  assert.ok(Math.abs(bowl.x - dish.x) > 8 || Math.abs(bowl.lift - dish.lift) > 8, "not Jaw show");
+  const walkOn = P.snapOnPath(0.25, { x: 40, lift: 0 }, { x: bowl.x, lift: bowl.lift });
+  const deskWalk = Overlay.snapOnPath(0.25, { x: 40, lift: 0 }, { x: bowl.x, lift: bowl.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  assert.ok(walkOn.lift > 0, "he walks onto the well as a mud bowl");
+  const hook = P.snapPath(0.5);
+  const deskHook = Overlay.snapPath(0.5);
+  assert.equal(hook.lift, deskHook.lift);
+  assert.ok(hook.lift < -5, "he sits then snaps");
+  assert.ok(hook.rot > 10, "the hooked beak is the tell");
+  const hold = P.snapHoldPath(0.5);
+  const deskHold = Overlay.snapHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  assert.ok(Math.abs(hold.rot - 5.2) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    assert.notEqual(play.phase, "show");
+    assert.notEqual(play.phase, "crown");
+    assert.notEqual(play.phase, "browse");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "snap") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "snap-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "snap-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 5.2)) < 3, "he holds the mud bowl after the snap");
+    }
+  }
+  assert.ok(seen.has("snap-on"));
+  assert.ok(seen.has("snap"));
+  assert.ok(seen.has("snap-hold"));
+  assert.ok(seen.has("snap-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
