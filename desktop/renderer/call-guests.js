@@ -94,8 +94,18 @@
   const SOOT_RUI_LINE = "Caw. I found the red one.";
   const SOOT_CAP_LINE = "The cap will do.";
   const CAT_PIP_LINE = "I sat. You were already walking.";
+  const MEET_RABBIT_KEY = "rabbit";
+  const MEET_RAVEN_KEY = "raven";
+  const WINDOW_TRANSOM_KEY = "raven";
+  const THIMBLE_RUI_LINE = "I thumped. You were the red one.";
+  const THIMBLE_PIP_LINE = "I thumped. You were already walking.";
+  const WEDGE_RUI_LINE = "I croaked. You were the red one.";
+  const WEDGE_TRANSOM_LINE = "The transom will do.";
   const CROW_HOP = 16;
   const CROW_LIFT = 16;
+  const RAVEN_HOP = 22;
+  const RAVEN_LIFT = 20;
+  const THUMP_HOP = 8;
   const MEET_ON_S = 0.64;
   const TELL_S = 1.6;
   const HOP_LIFT = 10;
@@ -254,10 +264,11 @@
 
   function shouldMeetRui(key, flags) {
     if (!flags || flags.hidden) return false;
-    if (key !== MEET_DEE_KEY && key !== MEET_CAT_KEY && key !== MEET_DOG_KEY && key !== MEET_CROW_KEY) return false;
+    if (key !== MEET_DEE_KEY && key !== MEET_CAT_KEY && key !== MEET_DOG_KEY && key !== MEET_CROW_KEY && key !== MEET_RABBIT_KEY && key !== MEET_RAVEN_KEY) return false;
     if (flags.hostKey && flags.hostKey !== MEET_HOST) return false;
     if (key === MEET_DEE_KEY && peerOf(flags, PEER_ROBIN_KEY)) return false;
     if (key === MEET_CAT_KEY && peerOf(flags, PEER_PIP_KEY)) return false;
+    if (key === MEET_RABBIT_KEY && peerOf(flags, PEER_PIP_KEY)) return false;
     return true;
   }
 
@@ -266,6 +277,10 @@
     if (key === MEET_DEE_KEY) return !!peerOf(flags, PEER_ROBIN_KEY);
     if (key === MEET_CAT_KEY) {
       if (peerOf(flags, PEER_ROBIN_KEY) && peerOf(flags, MEET_DEE_KEY)) return false;
+      return !!peerOf(flags, PEER_PIP_KEY);
+    }
+    if (key === MEET_RABBIT_KEY) {
+      if (peerOf(flags, MEET_CAT_KEY)) return false;
       return !!peerOf(flags, PEER_PIP_KEY);
     }
     return false;
@@ -281,6 +296,10 @@
       const b = flags.capBound;
       return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
     }
+    if (key === WINDOW_TRANSOM_KEY) {
+      const b = flags.transomBound;
+      return !!(b && Number.isFinite(b.x) && Number.isFinite(b.lift));
+    }
     return false;
   }
 
@@ -289,12 +308,14 @@
     const face = flags && flags.hostFacing < 0 ? -1 : 1;
     if (key === MEET_DEE_KEY) return { x: hostX + face * NEAR_X, lift: 8 };
     if (key === MEET_CROW_KEY) return { x: hostX + face * NEAR_X, lift: CROW_LIFT };
+    if (key === MEET_RAVEN_KEY) return { x: hostX + face * NEAR_X, lift: RAVEN_LIFT };
     if (key === MEET_DOG_KEY) return { x: hostX + face * BESIDE_X, lift: 0 };
+    if (key === MEET_RABBIT_KEY) return { x: hostX - face * BESIDE_X, lift: 0 };
     return { x: hostX - face * BESIDE_X, lift: 0 };
   }
 
   function peerPoint(flags, guestKey) {
-    if (guestKey === MEET_CAT_KEY) {
+    if (guestKey === MEET_CAT_KEY || guestKey === MEET_RABBIT_KEY) {
       const p = peerOf(flags, PEER_PIP_KEY);
       if (!p) return { x: 200, lift: 0 };
       return { x: (p.x || 0) + 48, lift: 0 };
@@ -305,6 +326,11 @@
   }
 
   function boundPoint(flags, key) {
+    if (key === WINDOW_TRANSOM_KEY || key === MEET_RAVEN_KEY) {
+      const b = flags && flags.transomBound;
+      if (!b) return { x: 120, lift: 72, kind: "transom" };
+      return { x: b.x, lift: b.lift, kind: b.kind || "transom" };
+    }
     if (key === WINDOW_CAP_KEY || key === MEET_CROW_KEY) {
       const b = flags && flags.capBound;
       if (!b) return { x: 120, lift: 48, kind: "drip-cap" };
@@ -371,6 +397,33 @@
     return null;
   }
 
+  function windowTransomBound(win, work) {
+    if (!win || typeof win !== "object") return null;
+    const w = Number(win.width);
+    const h = Number(win.height);
+    if (!(w > 8) || !(h > 8)) return null;
+    const workH = Math.max(240, (work && work.height) || 800);
+    const floor = (work && work.floorLift) || 0;
+    const x0 = Number(win.x);
+    const y0 = Number(win.y);
+    if (![x0, y0, w, h].every(Number.isFinite)) return null;
+    const rafter = 16;
+    const gripY = y0 + rafter;
+    let lift = workH - floor - gripY;
+    if (!Number.isFinite(lift)) return null;
+    lift = Math.max(floor + 48, Math.min(workH * 0.82, lift));
+    return { kind: "transom", x: x0 + w * 0.5, lift };
+  }
+
+  function firstTransomBound(windows, work) {
+    const list = Array.isArray(windows) ? windows : [];
+    for (const win of list) {
+      const b = windowTransomBound(win, work);
+      if (b) return b;
+    }
+    return null;
+  }
+
   function goCalledMeet(guest, flags, kind) {
     const hold = kind === "peer" ? peerPoint(flags, guest.key) : meetPoint(flags, guest.key);
     return {
@@ -428,14 +481,18 @@
     if (!guest) return "";
     if (guest.phase === "bound" || guest.meetKind === "bound") {
       if (guest.key === MEET_CROW_KEY || guest.key === WINDOW_CAP_KEY) return SOOT_CAP_LINE;
+      if (guest.key === MEET_RAVEN_KEY || guest.key === WINDOW_TRANSOM_KEY) return WEDGE_TRANSOM_LINE;
       return CAT_SILL_LINE;
     }
     if (guest.key === MEET_DEE_KEY && guest.meetKind === "peer") return DEE_ROBIN_LINE;
     if (guest.key === MEET_DEE_KEY) return DEE_RUI_LINE;
     if (guest.key === MEET_CAT_KEY && guest.meetKind === "peer") return CAT_PIP_LINE;
     if (guest.key === MEET_CAT_KEY) return CAT_RUI_LINE;
+    if (guest.key === MEET_RABBIT_KEY && guest.meetKind === "peer") return THIMBLE_PIP_LINE;
+    if (guest.key === MEET_RABBIT_KEY) return THIMBLE_RUI_LINE;
     if (guest.key === MEET_DOG_KEY) return PIP_RUI_LINE;
     if (guest.key === MEET_CROW_KEY) return SOOT_RUI_LINE;
+    if (guest.key === MEET_RAVEN_KEY) return WEDGE_RUI_LINE;
     return "";
   }
 
@@ -472,7 +529,7 @@
       if (sitBound) return goCalledBound(next, flags);
     }
     if ((next.phase === "approach-meet" || next.phase === "meet") && !meetPeer && !meetRui) {
-      if (sitBound && (next.key === WINDOW_SIT_KEY || next.key === WINDOW_CAP_KEY)) return goCalledBound(next, flags);
+      if (sitBound && (next.key === WINDOW_SIT_KEY || next.key === WINDOW_CAP_KEY || next.key === WINDOW_TRANSOM_KEY)) return goCalledBound(next, flags);
       return { ...next, phase: "stay", t: 0, lift: 0, target: next.x };
     }
     if ((next.phase === "approach-bound" || next.phase === "bound") && !sitBound) {
@@ -514,7 +571,11 @@
         ? Math.abs(Math.sin(next.t * 16)) * HOP_LIFT * (1 - u)
         : next.key === MEET_CROW_KEY
           ? Math.abs(Math.sin(next.t * 14)) * CROW_HOP * (1 - u)
-          : 0;
+          : next.key === MEET_RAVEN_KEY
+            ? Math.abs(Math.sin(next.t * 11)) * RAVEN_HOP * (1 - u)
+            : next.key === MEET_RABBIT_KEY
+              ? Math.abs(Math.sin(next.t * 10)) * THUMP_HOP * (1 - u)
+              : 0;
       next.x = fromX + (hold.x - fromX) * u;
       next.lift = fromLift + (hold.lift - fromLift) * u + hop;
       next.facing = hold.x >= fromX ? 1 : -1;
@@ -527,7 +588,7 @@
       next.lift = hold.lift;
       next.target = hold.x;
       if (next.t >= TELL_S) {
-        if (next.meetKind === "rui" && (next.key === WINDOW_SIT_KEY || next.key === WINDOW_CAP_KEY) && sitBound) return goCalledBound(next, flags);
+        if (next.meetKind === "rui" && (next.key === WINDOW_SIT_KEY || next.key === WINDOW_CAP_KEY || next.key === WINDOW_TRANSOM_KEY) && sitBound) return goCalledBound(next, flags);
         return dismissCalled(next);
       }
       return next;
@@ -705,6 +766,13 @@
     SOOT_RUI_LINE,
     SOOT_CAP_LINE,
     CAT_PIP_LINE,
+    MEET_RABBIT_KEY,
+    MEET_RAVEN_KEY,
+    WINDOW_TRANSOM_KEY,
+    THIMBLE_RUI_LINE,
+    THIMBLE_PIP_LINE,
+    WEDGE_RUI_LINE,
+    WEDGE_TRANSOM_LINE,
     MEET_ON_S,
     TELL_S,
     SONG_EVERY_S,
@@ -733,6 +801,8 @@
     firstWindowBound,
     windowCapBound,
     firstCapBound,
+    windowTransomBound,
+    firstTransomBound,
     shouldTell,
     tellLine,
     markTold,
