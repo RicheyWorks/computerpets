@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-28 (Jet glues a sash stile as wet wood; fifth log leftover done; next leftover is Hop; catalog stays 220; Armor still owns roll; Link still owns oil; Haste still owns hunt; Silver still owns go; Round still owns disk; Sail still owns cling; Bank still owns dig; Slip still owns ring; Latch still owns drink) |
+| **Last Updated** | 2026-08-28 (Hop springs a window foot as a duff cup; sixth log leftover done; next leftover is Tun; catalog stays 220; Jet still owns velvet; Stripe still owns stamp; Cast still owns band; Armor still owns roll; Link still owns oil; Haste still owns hunt) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
