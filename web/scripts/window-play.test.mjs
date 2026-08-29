@@ -15907,8 +15907,10 @@ test("the demo window plate walks Silver go the same way", () => {
   assert.equal(Overlay.playFor("house_centipede"), "hunt");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(Overlay.playFor("velvet_worm"), "velvet");
-  assert.equal(P.playFor("springtail"), "sill");
-  assert.equal(Overlay.playFor("springtail"), "sill");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(Overlay.playFor("springtail"), "spring");
+  assert.equal(Overlay.playFor("tardigrade"), "sill");
   assert.notEqual(P.playFor("american_eel"), "silver");
   assert.notEqual(P.playFor("american_eel"), "disk");
   assert.notEqual(P.playFor("american_eel"), "cling");
@@ -16013,8 +16015,10 @@ test("the demo window plate walks Haste hunt the same way", () => {
   assert.equal(Overlay.playFor("gecko"), "chirp");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(Overlay.playFor("velvet_worm"), "velvet");
-  assert.equal(P.playFor("springtail"), "sill");
-  assert.equal(Overlay.playFor("springtail"), "sill");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(Overlay.playFor("springtail"), "spring");
+  assert.equal(Overlay.playFor("tardigrade"), "sill");
   assert.notEqual(P.playFor("house_centipede"), "haste");
   assert.notEqual(P.playFor("house_centipede"), "go");
   assert.notEqual(P.playFor("house_centipede"), "scoot");
@@ -16118,8 +16122,10 @@ test("the demo window plate walks Link oil the same way", () => {
   assert.equal(Overlay.playFor("black_bear"), "browse");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(Overlay.playFor("velvet_worm"), "velvet");
-  assert.equal(P.playFor("springtail"), "sill");
-  assert.equal(Overlay.playFor("springtail"), "sill");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(Overlay.playFor("springtail"), "spring");
+  assert.equal(Overlay.playFor("tardigrade"), "sill");
   assert.notEqual(P.playFor("millipede"), "link");
   assert.notEqual(P.playFor("millipede"), "hunt");
   assert.notEqual(P.playFor("millipede"), "go");
@@ -16218,8 +16224,10 @@ test("the demo window plate walks Armor roll the same way", () => {
   assert.equal(Overlay.playFor("scorpion"), "raise");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(Overlay.playFor("velvet_worm"), "velvet");
-  assert.equal(P.playFor("springtail"), "sill");
-  assert.equal(Overlay.playFor("springtail"), "sill");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(Overlay.playFor("springtail"), "spring");
+  assert.equal(Overlay.playFor("tardigrade"), "sill");
   assert.notEqual(P.playFor("pillbug"), "armor");
   assert.notEqual(P.playFor("pillbug"), "oil");
   assert.notEqual(P.playFor("pillbug"), "hunt");
@@ -16326,8 +16334,10 @@ test("the demo window plate walks Cast band the same way", () => {
   assert.equal(P.playFor("leech"), "drink");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(Overlay.playFor("velvet_worm"), "velvet");
-  assert.equal(P.playFor("springtail"), "sill");
-  assert.equal(Overlay.playFor("springtail"), "sill");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(Overlay.playFor("springtail"), "spring");
+  assert.equal(Overlay.playFor("tardigrade"), "sill");
   assert.notEqual(P.playFor("earthworm"), "cast");
   assert.notEqual(P.playFor("earthworm"), "roll");
   assert.notEqual(P.playFor("earthworm"), "oil");
@@ -16434,8 +16444,10 @@ test("the demo window plate walks Jet velvet the same way", () => {
   assert.equal(P.playFor("beaver"), "gnaw");
   assert.equal(Overlay.playFor("beaver"), "gnaw");
   assert.equal(P.playFor("black_bear"), "browse");
-  assert.equal(P.playFor("springtail"), "sill");
-  assert.equal(Overlay.playFor("springtail"), "sill");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(Overlay.playFor("springtail"), "spring");
+  assert.equal(Overlay.playFor("tardigrade"), "sill");
   assert.notEqual(P.playFor("velvet_worm"), "jet");
   assert.notEqual(P.playFor("velvet_worm"), "glue");
   assert.notEqual(P.playFor("velvet_worm"), "band");
@@ -16502,6 +16514,99 @@ test("the demo window plate walks Jet velvet the same way", () => {
   assert.ok(seen.has("velvet"));
   assert.ok(seen.has("velvet-hold"));
   assert.ok(seen.has("velvet-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Hop spring the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/log.ts"), "utf8"), /key: "springtail"[\s\S]{0,80}slug: "hop"/);
+  assert.equal(P.playFor("springtail"), "spring");
+  const target = P.pickTarget([WIN], 80, "springtail", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "spring");
+  assert.equal(target.side, "duffcup");
+  assert.equal(target.leave, "furcula");
+  assert.equal(Overlay.playFor("springtail"), "spring");
+  assert.equal(P.SPRING, "spring");
+  assert.equal(Overlay.SPRING, "spring");
+  assert.equal(P.playFor("skunk"), "stamp");
+  assert.equal(Overlay.playFor("skunk"), "stamp");
+  assert.equal(P.playFor("velvet_worm"), "velvet");
+  assert.equal(Overlay.playFor("velvet_worm"), "velvet");
+  assert.equal(P.playFor("earthworm"), "band");
+  assert.equal(Overlay.playFor("earthworm"), "band");
+  assert.equal(P.playFor("pillbug"), "roll");
+  assert.equal(Overlay.playFor("pillbug"), "roll");
+  assert.equal(P.playFor("millipede"), "oil");
+  assert.equal(Overlay.playFor("millipede"), "oil");
+  assert.equal(P.playFor("house_centipede"), "hunt");
+  assert.equal(Overlay.playFor("house_centipede"), "hunt");
+  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(Overlay.playFor("tardigrade"), "sill");
+  assert.notEqual(P.playFor("springtail"), "hop");
+  assert.notEqual(P.playFor("springtail"), "stamp");
+  assert.notEqual(P.playFor("springtail"), "velvet");
+  assert.notEqual(target.kind, "hop");
+  assert.ok(Math.abs(target.holdLift) < 1, "she springs a window foot as a duff cup, the floor");
+  assert.ok(P.DUR.springHold > P.DUR.spring, "the hold is the sit after; the furcula spring is the tell");
+  assert.ok(P.DUR.springOn !== Overlay.DUR.velvetOn);
+  assert.ok(P.DUR.springOn !== Overlay.DUR.stampOn);
+  assert.ok(P.DUR.springOn !== Overlay.DUR.sillHop);
+  assert.equal(P.DUR.springOn, Overlay.DUR.springOn);
+  assert.equal(P.DUR.spring, Overlay.DUR.spring);
+  assert.equal(P.DUR.springHold, Overlay.DUR.springHold);
+  assert.equal(P.DUR.springOff, Overlay.DUR.springOff);
+  const cup = P.springPoint(WIN, 176, WORK);
+  const deskCup = Overlay.springPoint(WIN, Overlay.SPRITE, WORK);
+  const dish = P.stampPoint(WIN, 176, WORK);
+  const wood = P.velvetPoint(WIN, 176, WORK);
+  const tray = P.bandPoint(WIN, 176, WORK);
+  const roll = P.rollPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(cup.x - deskCup.x) < 1);
+  assert.ok(Math.abs(cup.lift - deskCup.lift) < 1);
+  assert.ok(Math.abs(cup.x - dish.x) > 8, "same foot family as Stripe stamp");
+  assert.ok(Math.abs(cup.lift) < 1, "duff cup, the floor");
+  assert.ok(Math.abs(cup.x - wood.x) > 8 || Math.abs(cup.lift - wood.lift) > 8, "not Jet velvet");
+  assert.ok(Math.abs(cup.x - tray.x) > 8 || Math.abs(cup.lift - tray.lift) > 8, "not Cast band");
+  assert.ok(Math.abs(cup.x - roll.x) > 8 || Math.abs(cup.lift - roll.lift) > 8, "not Armor roll");
+  const walkOn = P.springOnPath(0.25, { x: 40, lift: 0 }, { x: cup.x, lift: cup.lift });
+  const deskWalk = Overlay.springOnPath(0.25, { x: 40, lift: 0 }, { x: cup.x, lift: cup.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const kick = P.springPath(0.5);
+  const deskKick = Overlay.springPath(0.5);
+  assert.equal(kick.x, deskKick.x);
+  assert.ok(kick.rot !== P.stampPath(0.5).rot, "a spring, not a stamp");
+  assert.ok(kick.rot !== P.velvetPath(0.5).rot, "a spring, not a velvet");
+  const hold = P.springHoldPath(0.5);
+  const deskHold = Overlay.springHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "spring") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "spring-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "spring-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.6)) < 3, "she holds the sit on the duff cup");
+    }
+  }
+  assert.ok(seen.has("spring-on"));
+  assert.ok(seen.has("spring"));
+  assert.ok(seen.has("spring-hold"));
+  assert.ok(seen.has("spring-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
