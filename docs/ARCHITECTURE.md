@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Heap castings a window foot as wet sand; tenth shore leftover done; shore ten is closed; next leftover is Comb; catalog stays 220; castings is the tell; Cast still owns band; Latch still owns drink; Knurl still owns knobs; Thorn still owns spines; Token still owns flat; Spire still owns rock; Mail still owns eight; Cement still owns cirri; Cone still owns clamp; Pale still owns sand; Wave still owns signal) |
+| **Last Updated** | 2026-09-01 (Comb waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; catalog stays 220; waggle is the tell; Hum still owns drone; Keep still owns lay; Wax still owns draw; Sip still owns sip; Heap still owns castings; Wave still owns signal; Token still owns flat) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
