@@ -17363,7 +17363,7 @@ test("the demo window plate walks Mail eight the same way", () => {
   assert.equal(P.playFor("fiddler_crab"), "signal");
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("pillbug"), "roll");
-  assert.equal(P.playFor("periwinkle"), "sill");
+  assert.equal(P.playFor("periwinkle"), "rock");
   assert.equal(P.DUR.eightOn, Overlay.DUR.eightOn);
   assert.equal(P.DUR.eight, Overlay.DUR.eight);
   assert.equal(P.DUR.eightHold, Overlay.DUR.eightHold);
@@ -17429,6 +17429,108 @@ test("the demo window plate walks Mail eight the same way", () => {
   assert.ok(seen.has("eight"));
   assert.ok(seen.has("eight-hold"));
   assert.ok(seen.has("eight-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+test("the demo window plate walks Spire rock the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/shore.ts"), "utf8"), /key: "periwinkle"[\s\S]{0,80}slug: "spire"/);
+  assert.equal(P.playFor("periwinkle"), "rock");
+  const target = P.pickTarget([WIN], 80, "periwinkle", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "rock");
+  assert.equal(target.side, "rockface");
+  assert.equal(target.leave, "grazed");
+  assert.equal(Overlay.playFor("periwinkle"), "rock");
+  assert.equal(P.ROCK, "rock");
+  assert.equal(Overlay.ROCK, "rock");
+  assert.notEqual(P.playFor("periwinkle"), "spire");
+  assert.notEqual(P.playFor("periwinkle"), "rasp");
+  assert.notEqual(P.playFor("periwinkle"), "eight");
+  assert.notEqual(P.playFor("periwinkle"), "cirri");
+  assert.notEqual(P.playFor("periwinkle"), "clamp");
+  assert.equal(P.playFor("pond_snail"), "rasp");
+  assert.equal(Overlay.playFor("pond_snail"), "rasp");
+  assert.equal(P.playFor("chiton"), "eight");
+  assert.equal(Overlay.playFor("chiton"), "eight");
+  assert.equal(P.playFor("barnacle"), "cirri");
+  assert.equal(Overlay.playFor("barnacle"), "cirri");
+  assert.equal(P.playFor("limpet"), "clamp");
+  assert.equal(Overlay.playFor("limpet"), "clamp");
+  assert.equal(P.playFor("ghost_crab"), "sand");
+  assert.equal(Overlay.playFor("ghost_crab"), "sand");
+  assert.equal(P.playFor("fiddler_crab"), "signal");
+  assert.equal(Overlay.playFor("fiddler_crab"), "signal");
+  assert.equal(P.playFor("sand_dollar"), "sill");
+  assert.equal(P.DUR.rockOn, Overlay.DUR.rockOn);
+  assert.equal(P.DUR.rock, Overlay.DUR.rock);
+  assert.equal(P.DUR.rockHold, Overlay.DUR.rockHold);
+  assert.equal(P.DUR.rockOff, Overlay.DUR.rockOff);
+  assert.ok(P.DUR.rockOn !== Overlay.DUR.eightOn);
+  assert.ok(P.DUR.rockOn !== Overlay.DUR.cirriOn);
+  assert.ok(P.DUR.rockOn !== Overlay.DUR.clampOn);
+  assert.ok(P.DUR.rockOn !== Overlay.DUR.raspOn);
+  const jamb = P.rockPoint(WIN, 176, WORK);
+  const deskJamb = Overlay.rockPoint(WIN, Overlay.SPRITE, WORK);
+  const cling = P.clingPoint(WIN, 176, WORK);
+  const bristle = P.bristlePoint(WIN, 176, WORK);
+  const rail = P.eightPoint(WIN, 176, WORK);
+  const rasp = P.raspPoint(WIN, 176, WORK);
+  const stile = P.cirriPoint(WIN, 176, WORK);
+  const rim = P.clampPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(jamb.x - deskJamb.x) < 1);
+  assert.ok(Math.abs(jamb.lift - deskJamb.lift) < 1);
+  assert.ok(Math.abs(jamb.x - cling.x) > 2 || Math.abs(jamb.lift - cling.lift) > 8, "same jamb family as Sail, different pose");
+  assert.ok(Math.abs(jamb.x - bristle.x) > 2 || Math.abs(jamb.lift - bristle.lift) > 8, "same jamb family as Spine, different pose");
+  assert.ok(jamb.lift > 28, "rock face, the jamb");
+  assert.ok(Math.abs(jamb.x - rail.x) > 8, "not Mail eight");
+  assert.ok(Math.abs(jamb.x - rasp.x) > 8 || Math.abs(jamb.lift - rasp.lift) > 8, "not Whorl rasp");
+  assert.ok(Math.abs(jamb.x - stile.x) > 2 || Math.abs(jamb.lift - stile.lift) > 8, "not Cement cirri");
+  assert.ok(Math.abs(jamb.x - rim.x) > 8 || Math.abs(jamb.lift - rim.lift) > 8, "not Cone clamp");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "periwinkle", WORK, 176);
+  assert.equal(tiny, null, "a real sash jamb");
+  const okJamb = P.pickTarget([{ id: "jamb", x: 200, y: 80, width: 182, height: 216 }], 80, "periwinkle", WORK, 176);
+  assert.ok(okJamb, "a real sash jamb as a rock face");
+  const walkOn = P.rockOnPath(0.25, { x: 40, lift: 0 }, { x: jamb.x, lift: jamb.lift });
+  const deskWalk = Overlay.rockOnPath(0.25, { x: 40, lift: 0 }, { x: jamb.x, lift: jamb.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.rockPath(0.5);
+  const deskPulse = Overlay.rockPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.lift > 0, "a rock graze, the play");
+  assert.ok(pulse.rot !== P.eightPath(0.5).rot, "a rock, not an eight");
+  assert.ok(pulse.rot !== P.cirriPath(0.5).rot, "a rock, not a cirri");
+  assert.ok(pulse.rot !== P.clampPath(0.5).rot, "a rock, not a clamp");
+  assert.ok(pulse.rot !== P.raspPath(0.5).rot, "a rock, not a rasp");
+  const hold = P.rockHoldPath(0.5);
+  const deskHold = Overlay.rockHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "rock") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "rock-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "rock-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.9)) < 3, "she holds the graze after the rock on the jamb");
+    }
+  }
+  assert.ok(seen.has("rock-on"));
+  assert.ok(seen.has("rock"));
+  assert.ok(seen.has("rock-hold"));
+  assert.ok(seen.has("rock-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
