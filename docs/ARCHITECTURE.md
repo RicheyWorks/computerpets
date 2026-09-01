@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Wave signals a sill pan as a marsh dish; first shore leftover done; this opens shore ten; next leftover is Pale; catalog stays 220; signal is the tell; Scud still owns side; Thread still owns thrash; Armor still owns roll; Pinch still owns claw; Tenant still owns knob; Gale still owns run) |
+| **Last Updated** | 2026-09-01 (Pale sands a window stool as dry sand; second shore leftover done; next leftover is Cone; catalog stays 220; sand is the tell; Wave still owns signal; Scud still owns side; Gale still owns run; Tun still owns dry; Tenant still owns knob; Ledger still owns plow) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |

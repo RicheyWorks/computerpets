@@ -16984,7 +16984,8 @@ test("the demo window plate walks Wave signal the same way", () => {
   assert.equal(P.playFor("crayfish"), "claw");
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("solifuge"), "run");
-  assert.equal(P.playFor("ghost_crab"), "sill");
+  assert.equal(P.playFor("ghost_crab"), "sand");
+  assert.equal(P.playFor("limpet"), "sill");
   assert.notEqual(P.playFor("fiddler_crab"), "wave");
   assert.notEqual(P.playFor("fiddler_crab"), "side");
   assert.notEqual(P.playFor("fiddler_crab"), "scud");
@@ -17052,6 +17053,98 @@ test("the demo window plate walks Wave signal the same way", () => {
   assert.ok(seen.has("signal"));
   assert.ok(seen.has("signal-hold"));
   assert.ok(seen.has("signal-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Pale sand the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/shore.ts"), "utf8"), /key: "ghost_crab"[\s\S]{0,80}slug: "pale"/);
+  assert.equal(P.playFor("ghost_crab"), "sand");
+  const target = P.pickTarget([WIN], 80, "ghost_crab", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "sand");
+  assert.equal(target.side, "drysand");
+  assert.equal(target.leave, "sands");
+  assert.equal(Overlay.playFor("ghost_crab"), "sand");
+  assert.equal(P.SAND, "sand");
+  assert.equal(Overlay.SAND, "sand");
+  assert.equal(P.playFor("fiddler_crab"), "signal");
+  assert.equal(Overlay.playFor("fiddler_crab"), "signal");
+  assert.equal(P.playFor("amphipod"), "side");
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("tardigrade"), "dry");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("horseshoe_crab"), "plow");
+  assert.equal(P.playFor("limpet"), "sill");
+  assert.notEqual(P.playFor("ghost_crab"), "pale");
+  assert.notEqual(P.playFor("ghost_crab"), "run");
+  assert.notEqual(P.playFor("ghost_crab"), "signal");
+  assert.notEqual(P.playFor("ghost_crab"), "sill");
+  assert.equal(P.DUR.sandOn, Overlay.DUR.sandOn);
+  assert.equal(P.DUR.sand, Overlay.DUR.sand);
+  assert.equal(P.DUR.sandHold, Overlay.DUR.sandHold);
+  assert.equal(P.DUR.sandOff, Overlay.DUR.sandOff);
+  assert.ok(P.DUR.sandOn !== Overlay.DUR.signalOn);
+  assert.ok(P.DUR.sandOn !== Overlay.DUR.runOn);
+  assert.ok(P.DUR.sandOn !== Overlay.DUR.plowOn);
+  const dish = P.sandPoint(WIN, 176, WORK);
+  const deskDish = Overlay.sandPoint(WIN, Overlay.SPRITE, WORK);
+  const plow = P.plowPoint(WIN, 176, WORK);
+  const store = P.storePoint(WIN, 176, WORK);
+  const gale = P.runPoint(WIN, 176, WORK);
+  const wave = P.signalPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(dish.x - deskDish.x) < 1);
+  assert.ok(Math.abs(dish.lift - deskDish.lift) < 1);
+  assert.ok(Math.abs(dish.lift - plow.lift) < 2, "same stool family as Ledger, different pose");
+  assert.ok(Math.abs(dish.x - plow.x) > 8, "not Ledger plow");
+  assert.ok(dish.lift > 16, "dry sand, the stool");
+  assert.ok(Math.abs(dish.x - store.x) > 8, "not Arm store");
+  assert.ok(Math.abs(dish.x - gale.x) > 8 || Math.abs(dish.lift - gale.lift) > 8, "not Gale run");
+  assert.ok(Math.abs(dish.x - wave.x) > 8 || Math.abs(dish.lift - wave.lift) > 8, "not Wave signal");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "ghost_crab", WORK, 176);
+  assert.equal(tiny, null, "a real window stool");
+  const okStool = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 192, height: 158 }], 80, "ghost_crab", WORK, 176);
+  assert.ok(okStool, "a real window stool as dry sand");
+  const walkOn = P.sandOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const deskWalk = Overlay.sandOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.sandPath(0.5);
+  const deskPulse = Overlay.sandPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.x > 6, "a sand, the tell");
+  assert.ok(pulse.rot !== P.plowPath(0.5).rot, "a sand, not a plow");
+  assert.ok(pulse.rot !== P.runPath(0.5).rot, "a sand, not a run");
+  assert.ok(pulse.rot !== P.signalPath(0.5).rot, "a sand, not a signal");
+  const hold = P.sandHoldPath(0.5);
+  const deskHold = Overlay.sandHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "sand") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "sand-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "sand-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.6)) < 3, "she holds the sit after the run on the stool");
+    }
+  }
+  assert.ok(seen.has("sand-on"));
+  assert.ok(seen.has("sand"));
+  assert.ok(seen.has("sand-hold"));
+  assert.ok(seen.has("sand-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
