@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Scud sides a window well as a side pool; tenth log leftover done; log ten closed; next leftover is Wave; catalog stays 220; side is the tell; Thread still owns thrash; Armor still owns roll; Silver still owns go; Wick still owns thread; Half still owns split; Tun still owns dry) |
+| **Last Updated** | 2026-09-01 (Wave signals a sill pan as a marsh dish; first shore leftover done; this opens shore ten; next leftover is Pale; catalog stays 220; signal is the tell; Scud still owns side; Thread still owns thrash; Armor still owns roll; Pinch still owns claw; Tenant still owns knob; Gale still owns run) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
