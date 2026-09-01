@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Comb waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; catalog stays 220; waggle is the tell; Hum still owns drone; Keep still owns lay; Wax still owns draw; Sip still owns sip; Heap still owns castings; Wave still owns signal; Token still owns flat) |
+| **Last Updated** | 2026-09-01 (Milk weeds a window-box as a milkweed cup; second leftover of the remaining hive den done; shore ten is closed; next leftover is Ghost; catalog stays 220; weed is the tell; Comb still owns waggle; Sip still owns sip; Wrist still owns wrap; Disc still owns snip; Fan still owns gold; Hum still owns drone; Keep still owns lay; Wax still owns draw; Heap still owns castings) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
