@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Half splits a meeting-rail underside as a stream stone; eighth log leftover done; next leftover is Thread; catalog stays 220; split is the half tell; Tun still owns dry; Hop still owns spring; Jet still owns velvet; Felt still owns lean; Latch still owns drink) |
+| **Last Updated** | 2026-09-01 (Thread thrashes a glazing rebate as a soil film; ninth log leftover done; next leftover is Scud; catalog stays 220; thrash is the round tell; Wick still owns thread; Half still owns split; Tun still owns dry; Hop still owns spring; Cast still owns band) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
