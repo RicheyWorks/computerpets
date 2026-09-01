@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Seven spots a window-box leaf as a leaf dish; eighth leftover of the remaining hive den done; shore ten is closed; next leftover is Fold; catalog stays 220; spot is the tell; Haste still owns hunt; Disc still owns snip; Thrum still owns forage; Sip still owns sip; Comb still owns waggle; Column still owns nest; Twig still owns freeze; Dart still owns hawk) |
+| **Last Updated** | 2026-09-01 (Fold prays a window-box stem as a green hinge; ninth leftover of the remaining hive den done; shore ten is closed; next leftover is Brood; catalog stays 220; pray is the tell; bat still owns fold; Stem still owns stilt; Twig still owns freeze; Still still owns creep; Hang still owns reach; Snap still owns count; Haste still owns hunt; Seven still owns spot) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
