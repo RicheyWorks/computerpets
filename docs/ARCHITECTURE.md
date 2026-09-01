@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Milk weeds a window-box as a milkweed cup; second leftover of the remaining hive den done; shore ten is closed; next leftover is Ghost; catalog stays 220; weed is the tell; Comb still owns waggle; Sip still owns sip; Wrist still owns wrap; Disc still owns snip; Fan still owns gold; Hum still owns drone; Keep still owns lay; Wax still owns draw; Heap still owns castings) |
+| **Last Updated** | 2026-09-01 (Ghost weeks a lamp-side glass as lamp dusk; third leftover of the remaining hive den done; shore ten is closed; next leftover is Spark; catalog stays 220; week is the tell; Night still owns dusk; Moth still owns mount; Milk still owns weed; Loom still owns web; Comb still owns waggle; Fan still owns gold; Pale still owns sand) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |

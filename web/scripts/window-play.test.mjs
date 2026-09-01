@@ -18017,7 +18017,7 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("sand_dollar"), "flat");
   assert.equal(Overlay.playFor("sand_dollar"), "flat");
-  assert.equal(P.playFor("luna"), "sill");
+  assert.equal(P.playFor("firefly"), "sill");
   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
   assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
   assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
@@ -18119,7 +18119,7 @@ test("the demo window plate walks Milk weed the same way", () => {
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("lugworm"), "castings");
-  assert.equal(P.playFor("luna"), "sill");
+  assert.equal(P.playFor("firefly"), "sill");
   assert.equal(P.DUR.weedOn, Overlay.DUR.weedOn);
   assert.equal(P.DUR.weed, Overlay.DUR.weed);
   assert.equal(P.DUR.weedHold, Overlay.DUR.weedHold);
@@ -18181,6 +18181,104 @@ test("the demo window plate walks Milk weed the same way", () => {
   assert.ok(seen.has("weed"));
   assert.ok(seen.has("weed-hold"));
   assert.ok(seen.has("weed-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Ghost week the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8"), /key: "luna"[\s\S]{0,80}slug: "ghost"/);
+  assert.equal(P.playFor("luna"), "week");
+  const target = P.pickTarget([WIN], 80, "luna", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "week");
+  assert.equal(target.side, "lampdusk");
+  assert.equal(target.leave, "weeked");
+  assert.equal(Overlay.playFor("luna"), "week");
+  assert.equal(P.WEEK, "week");
+  assert.equal(Overlay.WEEK, "week");
+  assert.notEqual(P.playFor("luna"), "ghost");
+  assert.notEqual(P.playFor("luna"), "dusk");
+  assert.notEqual(P.playFor("luna"), "mount");
+  assert.notEqual(P.playFor("luna"), "weed");
+  assert.notEqual(P.playFor("luna"), "web");
+  assert.notEqual(P.playFor("luna"), "gold");
+  assert.equal(P.playFor("monarch"), "weed");
+  assert.equal(Overlay.playFor("monarch"), "weed");
+  assert.equal(P.playFor("walleye"), "dusk");
+  assert.equal(Overlay.playFor("walleye"), "dusk");
+  assert.equal(P.playFor("orchid"), "mount");
+  assert.equal(Overlay.playFor("orchid"), "mount");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  assert.equal(Overlay.playFor("orb_weaver"), "web");
+  assert.equal(P.playFor("honeybee"), "waggle");
+  assert.equal(P.playFor("ginkgo"), "gold");
+  assert.equal(P.playFor("ghost_crab"), "sand");
+  assert.equal(P.playFor("firefly"), "sill");
+  assert.equal(P.DUR.weekOn, Overlay.DUR.weekOn);
+  assert.equal(P.DUR.week, Overlay.DUR.week);
+  assert.equal(P.DUR.weekHold, Overlay.DUR.weekHold);
+  assert.equal(P.DUR.weekOff, Overlay.DUR.weekOff);
+  assert.ok(P.DUR.weekOn !== Overlay.DUR.weedOn);
+  assert.ok(P.DUR.weekOn !== Overlay.DUR.duskOn);
+  assert.ok(P.DUR.weekOn !== Overlay.DUR.mountOn);
+  assert.ok(P.DUR.weekOn !== Overlay.DUR.webOn);
+  const glass = P.weekPoint(WIN, 176, WORK);
+  const deskGlass = Overlay.weekPoint(WIN, Overlay.SPRITE, WORK);
+  const hub = P.webPoint(WIN, 176, WORK);
+  const stile = P.duskPoint(WIN, 176, WORK);
+  const cup = P.weedPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(glass.x - deskGlass.x) < 1);
+  assert.ok(Math.abs(glass.lift - deskGlass.lift) < 1);
+  assert.ok(glass.lift > 8, "lamp dusk, the glass");
+  assert.ok(Math.abs(glass.lift - hub.lift) > 20, "not Loom web");
+  assert.ok(Math.abs(glass.x - stile.x) > 20, "not Night dusk");
+  assert.ok(Math.abs(glass.x - cup.x) > 20 || Math.abs(glass.lift - cup.lift) > 8, "not Milk weed");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 160, height: 70 }], 80, "luna", WORK, 176);
+  assert.equal(tiny, null, "a real lamp-side glass");
+  const okGlass = P.pickTarget([{ id: "pane", x: 200, y: 80, width: 200, height: 200 }], 80, "luna", WORK, 176);
+  assert.ok(okGlass, "a real lamp-side glass as lamp dusk");
+  const walkOn = P.weekOnPath(0.25, { x: 40, lift: 0 }, { x: glass.x, lift: glass.lift });
+  const deskWalk = Overlay.weekOnPath(0.25, { x: 40, lift: 0 }, { x: glass.x, lift: glass.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.weekPath(0.5);
+  const deskPulse = Overlay.weekPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.lift > 1, "sit the week, the play");
+  assert.ok(pulse.rot !== P.webPath(0.5).rot, "week, not a web");
+  assert.ok(pulse.rot !== P.duskPath(0.5).rot, "week, not a dusk");
+  assert.ok(pulse.rot !== P.mountPath(0.5).rot, "week, not a mount");
+  assert.ok(pulse.rot !== P.weedPath(0.5).rot, "week, not a weed");
+  assert.ok(pulse.rot !== P.goldPath(0.5).rot, "week, not gold");
+  const hold = P.weekHoldPath(0.5);
+  const deskHold = Overlay.weekHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "week") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "week-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "week-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.5)) < 3, "she holds the week after the sit on the glass");
+    }
+  }
+  assert.ok(seen.has("week-on"));
+  assert.ok(seen.has("week"));
+  assert.ok(seen.has("week-hold"));
+  assert.ok(seen.has("week-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
