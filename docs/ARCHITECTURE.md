@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Pale sands a window stool as dry sand; second shore leftover done; next leftover is Cone; catalog stays 220; sand is the tell; Wave still owns signal; Scud still owns side; Gale still owns run; Tun still owns dry; Tenant still owns knob; Ledger still owns plow) |
+| **Last Updated** | 2026-09-01 (Cone clamps a glass rim as a rock rim; third shore leftover done; next leftover is Cement; catalog stays 220; clamp is the tell; Pale still owns sand; Wave still owns signal; Lid still owns shut; Whorl still rasps; Tenant still owns knob) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |

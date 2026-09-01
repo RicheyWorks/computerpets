@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "limpet", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "barnacle", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -28004,7 +28004,7 @@ test("Wave signals a sill pan as a marsh dish: walk onto the pan, signal the big
   assert.equal(P.playFor("raccoon"), "rinse");
   assert.equal(P.playFor("paddlefish"), "paddle");
   assert.equal(P.playFor("ghost_crab"), "sand");
-  assert.equal(P.playFor("limpet"), "sill");
+  assert.equal(P.playFor("limpet"), "clamp");
   assert.notEqual(P.playFor("fiddler_crab"), "wave");
   assert.notEqual(P.playFor("fiddler_crab"), "side");
   assert.notEqual(P.playFor("fiddler_crab"), "scud");
@@ -28199,7 +28199,7 @@ test("Pale sands a window stool as dry sand: walk onto the stool, run the pale, 
   assert.equal(P.playFor("mining_bee"), "dig");
   assert.equal(P.playFor("squirrel"), "bury");
   assert.equal(P.playFor("vinegaroon"), "spray");
-  assert.equal(P.playFor("limpet"), "sill");
+  assert.equal(P.playFor("limpet"), "clamp");
   assert.notEqual(P.playFor("ghost_crab"), "pale");
   assert.notEqual(P.playFor("ghost_crab"), "run");
   assert.notEqual(P.playFor("ghost_crab"), "signal");
@@ -28372,5 +28372,182 @@ test("a moved window refits Pale's dry-sand sand; sleep, card, and hide abort; P
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "sand-off");
+  assert.equal(play.abort, true);
+});
+
+test("Cone clamps a glass rim as a rock rim: walk onto the rim, clamp the cone, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("limpet"), "clamp");
+  assert.equal(P.CLAMP, "clamp");
+  assert.equal(P.playFor("ghost_crab"), "sand");
+  assert.equal(P.SAND, "sand");
+  assert.equal(P.playFor("fiddler_crab"), "signal");
+  assert.equal(P.SIGNAL, "signal");
+  assert.equal(P.playFor("amphipod"), "side");
+  assert.equal(P.playFor("box_turtle"), "shut");
+  assert.equal(P.SHUT, "shut");
+  assert.equal(P.playFor("pond_snail"), "rasp");
+  assert.equal(P.RASP, "rasp");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("tick"), "grip");
+  assert.equal(P.playFor("barnacle"), "sill");
+  assert.notEqual(P.playFor("limpet"), "cone");
+  assert.notEqual(P.playFor("limpet"), "sand");
+  assert.notEqual(P.playFor("limpet"), "shut");
+  assert.notEqual(P.playFor("limpet"), "rasp");
+  assert.notEqual(P.playFor("limpet"), "signal");
+  assert.notEqual(P.playFor("limpet"), "side");
+  assert.notEqual(P.playFor("limpet"), "knob");
+  assert.notEqual(P.playFor("limpet"), "grip");
+  assert.notEqual(P.playFor("limpet"), "sill");
+  assert.equal(P.DUR.sandOn, 2.52, "Pale sand durations stay");
+  assert.equal(P.DUR.signalOn, 2.45, "Wave signal durations stay");
+  assert.equal(P.DUR.shutOn, 1.47, "Lid shut durations stay");
+  assert.equal(P.DUR.raspOn, 2.69, "Whorl rasp durations stay");
+  assert.equal(P.DUR.knobOn, 0.82, "Tenant knob durations stay");
+  const target = P.pickTarget([WIN], 80, "limpet", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "clamp");
+  assert.equal(target.side, "rockrim");
+  assert.equal(target.leave, "clamps");
+  assert.notEqual(target.kind, "cone");
+  assert.notEqual(target.kind, "rasp");
+  assert.notEqual(target.kind, "sand");
+  assert.notEqual(target.kind, "shut");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 28, "she clamps a glass rim as a rock rim, not the floor");
+  assert.ok(P.DUR.clampHold > P.DUR.clamp, "the hold is the sit after; the clamp is the tell");
+  assert.ok(P.DUR.clampOn > 1.0, "a walk onto the rim, not the clamp");
+  assert.ok(P.DUR.clampOn !== P.DUR.raspOn);
+  assert.ok(P.DUR.clampOn !== P.DUR.sandOn);
+  assert.ok(P.DUR.clampOn !== P.DUR.signalOn);
+  assert.ok(P.DUR.clampOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.clamp !== P.DUR.rasp);
+  assert.ok(P.DUR.clamp !== P.DUR.sand);
+  assert.ok(P.DUR.clamp !== P.DUR.shut);
+  assert.ok(P.DUR.clampHold !== P.DUR.raspHold);
+  assert.ok(P.DUR.clampHold !== P.DUR.sandHold);
+  assert.ok(P.DUR.clampOff !== P.DUR.raspOff);
+  assert.ok(P.DUR.clampOff !== P.DUR.sillDown);
+  const rim = P.clampPoint(WIN, P.SPRITE, WORK);
+  const rasp = P.raspPoint(WIN, P.SPRITE, WORK);
+  const shut = P.shutPoint(WIN, P.SPRITE, WORK);
+  const sand = P.sandPoint(WIN, P.SPRITE, WORK);
+  const wave = P.signalPoint(WIN, P.SPRITE, WORK);
+  const filter = P.filterPoint(WIN, P.SPRITE, WORK);
+  assert.ok(rim.lift > 28, "the glass rim as a rock rim, not the floor");
+  assert.ok(Math.abs(rim.lift - rasp.lift) < 2, "the same glass rim Whorl rasps; the pose is a clamp");
+  assert.ok(Math.abs(rim.x - rasp.x) > 8, "not Whorl's glass-rim rasp");
+  assert.ok(Math.abs(rim.x - shut.x) > 8 || Math.abs(rim.lift - shut.lift) > 8, "not Lid's window-foot shut");
+  assert.ok(Math.abs(rim.x - sand.x) > 8 || Math.abs(rim.lift - sand.lift) > 8, "not Pale's window-stool sand");
+  assert.ok(Math.abs(rim.x - wave.x) > 8 || Math.abs(rim.lift - wave.lift) > 8, "not Wave's sill-pan signal");
+  assert.ok(Math.abs(rim.x - filter.x) > 8 || Math.abs(rim.lift - filter.lift) > 8, "not Hinge's meeting-rail filter");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "limpet", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real glass rim, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 184, height: 80 }], 80, "limpet", WORK, P.SPRITE);
+  assert.equal(short, null, "a real glass rim, not a short sash");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 184, height: 176 }], 80, "limpet", WORK, P.SPRITE);
+  assert.equal(thin, null, "Cone needs Whorl's real glass rim, not a shallower mouth");
+  const rock = P.pickTarget([{ id: "rim", x: 200, y: 80, width: 184, height: 178 }], 80, "limpet", WORK, P.SPRITE);
+  assert.ok(rock, "a real glass rim as a rock rim");
+  const whorlOk = P.pickTarget([{ id: "rim", x: 200, y: 80, width: 184, height: 178 }], 80, "pond_snail", WORK, P.SPRITE);
+  assert.ok(whorlOk, "Whorl still takes the rim");
+  const paleOk = P.pickTarget([{ id: "stool", x: 200, y: 80, width: 192, height: 158 }], 80, "ghost_crab", WORK, P.SPRITE);
+  assert.ok(paleOk, "Pale still takes the stool");
+  const waveOk = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "fiddler_crab", WORK, P.SPRITE);
+  assert.ok(waveOk, "Wave still takes the pan");
+  const lidOk = P.pickTarget([{ id: "foot", x: 200, y: 80, width: 160, height: 70 }], 80, "box_turtle", WORK, P.SPRITE);
+  assert.ok(lidOk, "Lid still takes the window foot");
+  const walkOn = P.clampOnPath(0.25, { x: 40, lift: 0 }, { x: rim.x, lift: rim.lift });
+  const raspOn = P.raspOnPath(0.25, { x: 40, lift: 0 }, { x: rim.x, lift: rim.lift });
+  const sandOn = P.sandOnPath(0.25, { x: 40, lift: 0 }, { x: rim.x, lift: rim.lift });
+  const shutOn = P.shutOnPath(0.25, { x: 40, lift: 0 }, { x: rim.x, lift: rim.lift });
+  const signalOn = P.signalOnPath(0.25, { x: 40, lift: 0 }, { x: rim.x, lift: rim.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the rim as a rock rim");
+  assert.ok(walkOn.rot !== raspOn.rot, "a walk onto the rim, not Whorl rasp");
+  assert.ok(walkOn.rot !== sandOn.rot, "a walk onto the rim, not Pale sand");
+  assert.ok(walkOn.rot !== shutOn.rot, "a walk onto the rim, not Lid shut");
+  assert.ok(walkOn.rot !== signalOn.rot, "a walk onto the rim, not Wave signal");
+  const pulse = P.clampPath(0.5);
+  const raspPose = P.raspPath(0.5);
+  const sandPose = P.sandPath(0.5);
+  const shutPose = P.shutPath(0.5);
+  const claw = P.signalPath(0.5);
+  const filterPose = P.filterPath(0.5);
+  assert.ok(pulse.lift < 0, "she clamps the cone; the clamp is the tell");
+  assert.ok(pulse.rot < -8, "the cone presses the rock rim");
+  assert.ok(pulse.rot !== raspPose.rot, "a clamp, not a rasp");
+  assert.ok(pulse.rot !== sandPose.rot, "a clamp, not a sand");
+  assert.ok(pulse.rot !== shutPose.rot, "a clamp, not a shut");
+  assert.ok(pulse.rot !== claw.rot, "a clamp, not a signal");
+  assert.ok(pulse.rot !== filterPose.rot, "a clamp, not a filter");
+  const hold = P.clampHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - -11.2) < 0.2, "she holds after the clamp, cone still the tell");
+  assert.ok(Math.abs(hold.x - 0.6) < 0.2, "she stays on the rock rim");
+  assert.ok(hold.lift < -6, "a sit-hold on the rim after the clamp");
+  const off0 = P.clampOffPath(0, { x: rim.x, lift: rim.lift, rot: -11.2 }, { x: rim.x + 46, lift: 0 });
+  const offMid = P.clampOffPath(0.5, { x: rim.x, lift: rim.lift, rot: -11.2 }, { x: rim.x + 46, lift: 0 });
+  const off1 = P.clampOffPath(1, { x: rim.x, lift: rim.lift, rot: -11.2 }, { x: rim.x + 46, lift: 0 });
+  assert.ok(Math.abs(off0.x - rim.x) < 2);
+  assert.ok(Math.abs(offMid.x - rim.x) > 8, "a walk leave off the rock rim");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "rasp");
+    assert.notEqual(play.phase, "sand");
+    assert.notEqual(play.phase, "shut");
+    assert.notEqual(play.phase, "signal");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "clamp") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "clamp-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "clamp-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 6.8)) < 3, "she holds the sit after the clamp on the rim");
+    }
+    if (play.phase === "clamp-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("clamp-on"));
+  assert.ok(seen.has("clamp"));
+  assert.ok(seen.has("clamp-hold"));
+  assert.ok(seen.has("clamp-off"));
+  assert.ok(!seen.has("rasp"), "Cone never uses Whorl rasp");
+  assert.ok(!seen.has("sand"), "Cone never uses Pale sand");
+  assert.ok(!seen.has("shut"), "Cone never uses Lid shut");
+  assert.ok(!seen.has("signal"), "Cone never uses Wave signal");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+test("a moved window refits Cone's rock-rim clamp; sleep, card, and hide abort; Cone never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "limpet", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "clamp"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "clamp");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "clamp");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "clamp-off");
   assert.equal(play.abort, true);
 });
