@@ -18017,7 +18017,7 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("sand_dollar"), "flat");
   assert.equal(Overlay.playFor("sand_dollar"), "flat");
-  assert.equal(P.playFor("firefly"), "sill");
+  assert.equal(P.playFor("darner"), "sill");
   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
   assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
   assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
@@ -18119,7 +18119,7 @@ test("the demo window plate walks Milk weed the same way", () => {
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("lugworm"), "castings");
-  assert.equal(P.playFor("firefly"), "sill");
+  assert.equal(P.playFor("darner"), "sill");
   assert.equal(P.DUR.weedOn, Overlay.DUR.weedOn);
   assert.equal(P.DUR.weed, Overlay.DUR.weed);
   assert.equal(P.DUR.weedHold, Overlay.DUR.weedHold);
@@ -18216,7 +18216,7 @@ test("the demo window plate walks Ghost week the same way", () => {
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("ghost_crab"), "sand");
-  assert.equal(P.playFor("firefly"), "sill");
+  assert.equal(P.playFor("darner"), "sill");
   assert.equal(P.DUR.weekOn, Overlay.DUR.weekOn);
   assert.equal(P.DUR.week, Overlay.DUR.week);
   assert.equal(P.DUR.weekHold, Overlay.DUR.weekHold);
@@ -18279,6 +18279,103 @@ test("the demo window plate walks Ghost week the same way", () => {
   assert.ok(seen.has("week"));
   assert.ok(seen.has("week-hold"));
   assert.ok(seen.has("week-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Spark the firefly glow the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8"), /key: "firefly"[\s\S]{0,80}slug: "spark"/);
+  assert.equal(P.playFor("firefly"), "glow");
+  const target = P.pickTarget([WIN], 80, "firefly", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "glow");
+  assert.equal(target.side, "inkdusk");
+  assert.equal(target.leave, "glowed");
+  assert.equal(Overlay.playFor("firefly"), "glow");
+  assert.equal(P.GLOW, "glow");
+  assert.equal(Overlay.GLOW, "glow");
+  assert.notEqual(P.playFor("firefly"), "spark");
+  assert.notEqual(P.playFor("firefly"), "crackle");
+  assert.notEqual(P.playFor("firefly"), "flash");
+  assert.notEqual(P.playFor("firefly"), "kindle");
+  assert.notEqual(P.playFor("firefly"), "week");
+  assert.notEqual(P.playFor("firefly"), "dusk");
+  assert.equal(P.playFor("spark_dragon"), "crackle");
+  assert.equal(Overlay.playFor("spark_dragon"), "crackle");
+  assert.equal(P.playFor("luna"), "week");
+  assert.equal(Overlay.playFor("luna"), "week");
+  assert.equal(P.playFor("anole"), "flash");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("walleye"), "dusk");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("solifuge"), "run");
+  assert.equal(P.playFor("darner"), "sill");
+  assert.equal(P.DUR.glowOn, Overlay.DUR.glowOn);
+  assert.equal(P.DUR.glow, Overlay.DUR.glow);
+  assert.equal(P.DUR.glowHold, Overlay.DUR.glowHold);
+  assert.equal(P.DUR.glowOff, Overlay.DUR.glowOff);
+  assert.ok(P.DUR.glowOn !== Overlay.DUR.weekOn);
+  assert.ok(P.DUR.glowOn !== Overlay.DUR.duskOn);
+  assert.ok(P.DUR.glowOn !== Overlay.DUR.flashOn);
+  assert.ok(P.DUR.glowOn !== Overlay.DUR.crackleOn);
+  const light = P.glowPoint(WIN, 176, WORK);
+  const deskLight = Overlay.glowPoint(WIN, Overlay.SPRITE, WORK);
+  const dish = P.tipPoint(WIN, 176, WORK);
+  const dry = P.runPoint(WIN, 176, WORK);
+  const glass = P.weekPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(light.x - deskLight.x) < 1);
+  assert.ok(Math.abs(light.lift - deskLight.lift) < 1);
+  assert.ok(light.lift > 8, "ink dusk, the lower sash light");
+  assert.ok(Math.abs(light.lift - dish.lift) < 8, "same sash-light family as Drake");
+  assert.ok(Math.abs(light.x - dish.x) > 12, "not Drake tip");
+  assert.ok(Math.abs(light.lift - dry.lift) > 8, "not Gale run");
+  assert.ok(Math.abs(light.x - glass.x) > 20 || Math.abs(light.lift - glass.lift) > 8, "not Ghost week");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 160, height: 70 }], 80, "firefly", WORK, 176);
+  assert.equal(tiny, null, "a real lower sash light");
+  const okLight = P.pickTarget([{ id: "light", x: 200, y: 80, width: 189, height: 173 }], 80, "firefly", WORK, 176);
+  assert.ok(okLight, "a real lower sash light as ink dusk");
+  const walkOn = P.glowOnPath(0.25, { x: 40, lift: 0 }, { x: light.x, lift: light.lift });
+  const deskWalk = Overlay.glowOnPath(0.25, { x: 40, lift: 0 }, { x: light.x, lift: light.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.glowPath(0.5);
+  const deskPulse = Overlay.glowPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.lift > 1, "sit the glow, the play");
+  assert.ok(pulse.rot !== P.tipPath(0.5).rot, "glow, not a tip");
+  assert.ok(pulse.rot !== P.runPath(0.5).rot, "glow, not a run");
+  assert.ok(pulse.rot !== P.weekPath(0.5).rot, "glow, not a week");
+  assert.ok(pulse.rot !== P.duskPath(0.5).rot, "glow, not a dusk");
+  assert.ok(pulse.rot !== P.flashPath(0.5).rot, "glow, not a flash");
+  const hold = P.glowHoldPath(0.5);
+  const deskHold = Overlay.glowHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "glow") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "glow-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "glow-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 4.4)) < 3, "she holds the glow after the sit on the light");
+    }
+  }
+  assert.ok(seen.has("glow-on"));
+  assert.ok(seen.has("glow"));
+  assert.ok(seen.has("glow-hold"));
+  assert.ok(seen.has("glow-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
