@@ -18017,7 +18017,7 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("sand_dollar"), "flat");
   assert.equal(Overlay.playFor("sand_dollar"), "flat");
-  assert.equal(P.playFor("darner"), "sill");
+  assert.equal(P.playFor("stick"), "sill");
   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
   assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
   assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
@@ -18119,7 +18119,7 @@ test("the demo window plate walks Milk weed the same way", () => {
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("lugworm"), "castings");
-  assert.equal(P.playFor("darner"), "sill");
+  assert.equal(P.playFor("stick"), "sill");
   assert.equal(P.DUR.weedOn, Overlay.DUR.weedOn);
   assert.equal(P.DUR.weed, Overlay.DUR.weed);
   assert.equal(P.DUR.weedHold, Overlay.DUR.weedHold);
@@ -18216,7 +18216,7 @@ test("the demo window plate walks Ghost week the same way", () => {
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("ghost_crab"), "sand");
-  assert.equal(P.playFor("darner"), "sill");
+  assert.equal(P.playFor("stick"), "sill");
   assert.equal(P.DUR.weekOn, Overlay.DUR.weekOn);
   assert.equal(P.DUR.week, Overlay.DUR.week);
   assert.equal(P.DUR.weekHold, Overlay.DUR.weekHold);
@@ -18312,7 +18312,7 @@ test("the demo window plate walks Spark the firefly glow the same way", () => {
   assert.equal(P.playFor("walleye"), "dusk");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("solifuge"), "run");
-  assert.equal(P.playFor("darner"), "sill");
+  assert.equal(P.playFor("stick"), "sill");
   assert.equal(P.DUR.glowOn, Overlay.DUR.glowOn);
   assert.equal(P.DUR.glow, Overlay.DUR.glow);
   assert.equal(P.DUR.glowHold, Overlay.DUR.glowHold);
@@ -18376,6 +18376,101 @@ test("the demo window plate walks Spark the firefly glow the same way", () => {
   assert.ok(seen.has("glow"));
   assert.ok(seen.has("glow-hold"));
   assert.ok(seen.has("glow-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Dart hawk the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8"), /key: "darner"[\s\S]{0,80}slug: "dart"/);
+  assert.equal(P.playFor("darner"), "hawk");
+  const target = P.pickTarget([WIN], 80, "darner", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "hawk");
+  assert.equal(target.side, "preyair");
+  assert.equal(target.leave, "hawked");
+  assert.equal(Overlay.playFor("darner"), "hawk");
+  assert.equal(P.HAWK, "hawk");
+  assert.equal(Overlay.HAWK, "hawk");
+  assert.notEqual(P.playFor("darner"), "dart");
+  assert.notEqual(P.playFor("darner"), "hunt");
+  assert.notEqual(P.playFor("darner"), "soar");
+  assert.notEqual(P.playFor("darner"), "glow");
+  assert.notEqual(P.playFor("darner"), "sip");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(Overlay.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("house_centipede"), "hunt");
+  assert.equal(Overlay.playFor("house_centipede"), "hunt");
+  assert.equal(P.playFor("firefly"), "glow");
+  assert.equal(Overlay.playFor("firefly"), "glow");
+  assert.equal(P.playFor("spark_dragon"), "crackle");
+  assert.equal(P.playFor("luna"), "week");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("stick"), "sill");
+  assert.equal(P.DUR.hawkOn, Overlay.DUR.hawkOn);
+  assert.equal(P.DUR.hawk, Overlay.DUR.hawk);
+  assert.equal(P.DUR.hawkHold, Overlay.DUR.hawkHold);
+  assert.equal(P.DUR.hawkOff, Overlay.DUR.hawkOff);
+  assert.ok(P.DUR.hawkOn !== Overlay.DUR.glowOn);
+  assert.ok(P.DUR.hawkOn !== Overlay.DUR.soarOn);
+  assert.ok(P.DUR.hawkOn !== Overlay.DUR.huntOn);
+  assert.ok(P.DUR.hawkOn !== Overlay.DUR.sipOn);
+  const air = P.hawkPoint(WIN, 176, WORK);
+  const deskAir = Overlay.hawkPoint(WIN, Overlay.SPRITE, WORK);
+  const light = P.glowPoint(WIN, 176, WORK);
+  const stile = P.soarPoint(WIN, 176, WORK);
+  const glass = P.weekPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(air.x - deskAir.x) < 1);
+  assert.ok(Math.abs(air.lift - deskAir.lift) < 1);
+  assert.ok(air.lift > 8, "prey air, the lamp-side air");
+  assert.ok(Math.abs(air.lift - light.lift) > 8, "not Spark glow");
+  assert.ok(Math.abs(air.x - stile.x) > 20 || Math.abs(air.lift - stile.lift) > 8, "not Hook soar");
+  assert.ok(Math.abs(air.x - glass.x) > 12 || Math.abs(air.lift - glass.lift) > 8, "not Ghost week");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 160, height: 70 }], 80, "darner", WORK, 176);
+  assert.equal(tiny, null, "a real lamp-side air");
+  const okAir = P.pickTarget([{ id: "air", x: 200, y: 80, width: 200, height: 210 }], 80, "darner", WORK, 176);
+  assert.ok(okAir, "a real lamp-side air as prey air");
+  const walkOn = P.hawkOnPath(0.25, { x: 40, lift: 0 }, { x: air.x, lift: air.lift });
+  const deskWalk = Overlay.hawkOnPath(0.25, { x: 40, lift: 0 }, { x: air.x, lift: air.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.hawkPath(0.5);
+  const deskPulse = Overlay.hawkPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.lift > 1, "sit the hawk, the play");
+  assert.ok(pulse.rot !== P.glowPath(0.5).rot, "hawk, not a glow");
+  assert.ok(pulse.rot !== P.soarPath(0.5).rot, "hawk, not a soar");
+  assert.ok(pulse.rot !== P.huntPath(0.5).rot, "hawk, not a hunt");
+  assert.ok(pulse.rot !== P.sipPath(0.5).rot, "hawk, not a sip");
+  assert.ok(pulse.rot !== P.weekPath(0.5).rot, "hawk, not a week");
+  const hold = P.hawkHoldPath(0.5);
+  const deskHold = Overlay.hawkHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "hawk") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "hawk-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "hawk-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 8.4)) < 3, "he holds the hawk after the sit in the air");
+    }
+  }
+  assert.ok(seen.has("hawk-on"));
+  assert.ok(seen.has("hawk"));
+  assert.ok(seen.has("hawk-hold"));
+  assert.ok(seen.has("hawk-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
