@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Twig freezes a sash muntin as a pencil stem; sixth leftover of the remaining hive den done; shore ten is closed; next leftover is Column; catalog stays 220; freeze is the tell; Still still owns creep; Hang still owns reach; Stem still owns stilt; Anchor still owns hitch; Mast still owns seed; Dart still owns hawk; Spark the firefly still owns glow; Comb still owns waggle; Milk still owns weed) |
+| **Last Updated** | 2026-09-01 (Column nests a sash stile as a timber gallery; seventh leftover of the remaining hive den done; shore ten is closed; next leftover is Seven; catalog stays 220; nest is the tell; Auger still owns bore; Dam still owns gnaw; Bank still owns dig; Twig still owns freeze; Dart still owns hawk; Spark the firefly still owns glow; Comb still owns waggle; Milk still owns weed) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
