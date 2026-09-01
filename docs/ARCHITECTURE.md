@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Thorn spines a window well as a tide pool; eighth shore leftover done; next leftover is Knurl; catalog stays 220; spines is the tell; Spine still owns bristle; Burr still owns ball; Spike still owns crown; Token still owns flat; Spire still owns rock; Mail still owns eight; Cement still owns cirri; Cone still owns clamp; Pale still owns sand; Wave still owns signal) |
+| **Last Updated** | 2026-09-01 (Knurl knobs a window stool as a wrack dish; ninth shore leftover done; next leftover is Heap; catalog stays 220; knobs is the tell; Tenant still owns knob; Haste still owns hunt; Whorl still owns rasp; Spire still owns rock; Thorn still owns spines; Token still owns flat; Mail still owns eight; Cement still owns cirri; Cone still owns clamp; Pale still owns sand; Wave still owns signal) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
