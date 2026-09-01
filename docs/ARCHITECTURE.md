@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Spire rocks a sash jamb as a rock face; sixth shore leftover done; next leftover is Token; catalog stays 220; rock is the tell; Mail still owns eight; Cement still owns cirri; Cone still owns clamp; Pale still owns sand; Wave still owns signal; Lid still owns shut; Whorl still rasps; Chamber still owns rise; Blush still owns stone) |
+| **Last Updated** | 2026-09-01 (Token flats a sill pan as a sand plate; seventh shore leftover done; next leftover is Thorn; catalog stays 220; flat is the tell; Cache still owns bury; Pale still owns sand; Spire still owns rock; Mail still owns eight; Cement still owns cirri; Cone still owns clamp; Wave still owns signal; Coin still owns circle; Disk still owns open; Ochre still owns reef) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
