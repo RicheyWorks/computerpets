@@ -17170,7 +17170,7 @@ test("the demo window plate walks Cone clamp the same way", () => {
   assert.equal(P.playFor("box_turtle"), "shut");
   assert.equal(P.playFor("pond_snail"), "rasp");
   assert.equal(P.playFor("hermit_crab"), "knob");
-  assert.equal(P.playFor("barnacle"), "sill");
+  assert.equal(P.playFor("barnacle"), "cirri");
   assert.notEqual(P.playFor("limpet"), "cone");
   assert.notEqual(P.playFor("limpet"), "sand");
   assert.notEqual(P.playFor("limpet"), "shut");
@@ -17238,6 +17238,99 @@ test("the demo window plate walks Cone clamp the same way", () => {
   assert.ok(seen.has("clamp"));
   assert.ok(seen.has("clamp-hold"));
   assert.ok(seen.has("clamp-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Cement cirri the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/shore.ts"), "utf8"), /key: "barnacle"[\s\S]{0,80}slug: "cement"/);
+  assert.equal(P.playFor("barnacle"), "cirri");
+  const target = P.pickTarget([WIN], 80, "barnacle", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "cirri");
+  assert.equal(target.side, "stonerim");
+  assert.equal(target.leave, "stays");
+  assert.equal(Overlay.playFor("barnacle"), "cirri");
+  assert.equal(P.CIRRI, "cirri");
+  assert.equal(Overlay.CIRRI, "cirri");
+  assert.notEqual(P.playFor("barnacle"), "cement");
+  assert.notEqual(P.playFor("barnacle"), "clamp");
+  assert.notEqual(P.playFor("barnacle"), "sand");
+  assert.equal(P.playFor("limpet"), "clamp");
+  assert.equal(Overlay.playFor("limpet"), "clamp");
+  assert.equal(P.playFor("ghost_crab"), "sand");
+  assert.equal(Overlay.playFor("ghost_crab"), "sand");
+  assert.equal(P.playFor("fiddler_crab"), "signal");
+  assert.equal(Overlay.playFor("fiddler_crab"), "signal");
+  assert.equal(P.playFor("beaver"), "gnaw");
+  assert.equal(P.playFor("velvet_worm"), "velvet");
+  assert.equal(P.playFor("chiton"), "sill");
+  assert.equal(P.DUR.cirriOn, Overlay.DUR.cirriOn);
+  assert.equal(P.DUR.cirri, Overlay.DUR.cirri);
+  assert.equal(P.DUR.cirriHold, Overlay.DUR.cirriHold);
+  assert.equal(P.DUR.cirriOff, Overlay.DUR.cirriOff);
+  assert.ok(P.DUR.cirriOn !== Overlay.DUR.clampOn);
+  assert.ok(P.DUR.cirriOn !== Overlay.DUR.gnawOn);
+  assert.ok(P.DUR.cirriOn !== Overlay.DUR.velvetOn);
+  const stile = P.cirriPoint(WIN, 176, WORK);
+  const deskStile = Overlay.cirriPoint(WIN, Overlay.SPRITE, WORK);
+  const lodge = P.gnawPoint(WIN, 176, WORK);
+  const wood = P.velvetPoint(WIN, 176, WORK);
+  const rim = P.clampPoint(WIN, 176, WORK);
+  const sand = P.sandPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(stile.x - deskStile.x) < 1);
+  assert.ok(Math.abs(stile.lift - deskStile.lift) < 1);
+  assert.ok(Math.abs(stile.x - lodge.x) < 2, "same stile family as Dam, different pose");
+  assert.ok(Math.abs(stile.x - wood.x) < 2, "same stile family as Jet, different pose");
+  assert.ok(Math.abs(stile.lift - lodge.lift) > 8, "not Dam gnaw");
+  assert.ok(Math.abs(stile.lift - wood.lift) > 8, "not Jet velvet");
+  assert.ok(stile.lift > 28, "stone rim, the stile");
+  assert.ok(Math.abs(stile.x - rim.x) > 8 || Math.abs(stile.lift - rim.lift) > 8, "not Cone clamp");
+  assert.ok(Math.abs(stile.x - sand.x) > 8 || Math.abs(stile.lift - sand.lift) > 8, "not Pale sand");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "barnacle", WORK, 176);
+  assert.equal(tiny, null, "a real sash stile");
+  const okStile = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 191, height: 216 }], 80, "barnacle", WORK, 176);
+  assert.ok(okStile, "a real sash stile as a stone rim");
+  const walkOn = P.cirriOnPath(0.25, { x: 40, lift: 0 }, { x: stile.x, lift: stile.lift });
+  const deskWalk = Overlay.cirriOnPath(0.25, { x: 40, lift: 0 }, { x: stile.x, lift: stile.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.cirriPath(0.5);
+  const deskPulse = Overlay.cirriPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.lift > 0, "a cirri kick, the play");
+  assert.ok(pulse.rot !== P.clampPath(0.5).rot, "a cirri, not a clamp");
+  assert.ok(pulse.rot !== P.gnawPath(0.5).rot, "a cirri, not a gnaw");
+  assert.ok(pulse.rot !== P.velvetPath(0.5).rot, "a cirri, not a velvet");
+  const hold = P.cirriHoldPath(0.5);
+  const deskHold = Overlay.cirriHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "cirri") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "cirri-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "cirri-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 1.6)) < 3, "she holds the stay after the cirri kick on the stile");
+    }
+  }
+  assert.ok(seen.has("cirri-on"));
+  assert.ok(seen.has("cirri"));
+  assert.ok(seen.has("cirri-hold"));
+  assert.ok(seen.has("cirri-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
