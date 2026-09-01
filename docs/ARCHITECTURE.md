@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Column nests a sash stile as a timber gallery; seventh leftover of the remaining hive den done; shore ten is closed; next leftover is Seven; catalog stays 220; nest is the tell; Auger still owns bore; Dam still owns gnaw; Bank still owns dig; Twig still owns freeze; Dart still owns hawk; Spark the firefly still owns glow; Comb still owns waggle; Milk still owns weed) |
+| **Last Updated** | 2026-09-01 (Seven spots a window-box leaf as a leaf dish; eighth leftover of the remaining hive den done; shore ten is closed; next leftover is Fold; catalog stays 220; spot is the tell; Haste still owns hunt; Disc still owns snip; Thrum still owns forage; Sip still owns sip; Comb still owns waggle; Column still owns nest; Twig still owns freeze; Dart still owns hawk) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
