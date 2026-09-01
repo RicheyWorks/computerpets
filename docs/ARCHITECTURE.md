@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Spark the firefly glows a lower sash light as ink dusk; fourth leftover of the remaining hive den done; shore ten is closed; next leftover is Dart; catalog stays 220; glow is the tell; the dragon Spark still owns crackle; Wink still owns flash; Ember still owns kindle; Ghost still owns week; Night still owns dusk; Comb still owns waggle; Milk still owns weed) |
+| **Last Updated** | 2026-09-01 (Dart hawks a lamp-side air as prey air; fifth leftover of the remaining hive den done; shore ten is closed; next leftover is Twig; catalog stays 220; hawk is the tell; Hook still owns soar; Haste still owns hunt; Spark the firefly still owns glow; the dragon Spark still owns crackle; Ghost still owns week; Sip still owns sip; Comb still owns waggle; Milk still owns weed) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
