@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Thread thrashes a glazing rebate as a soil film; ninth log leftover done; next leftover is Scud; catalog stays 220; thrash is the round tell; Wick still owns thread; Half still owns split; Tun still owns dry; Hop still owns spring; Cast still owns band) |
+| **Last Updated** | 2026-09-01 (Scud sides a window well as a side pool; tenth log leftover done; log ten closed; next leftover is Wave; catalog stays 220; side is the tell; Thread still owns thrash; Armor still owns roll; Silver still owns go; Wick still owns thread; Half still owns split; Tun still owns dry) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
