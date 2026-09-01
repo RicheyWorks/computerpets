@@ -18017,7 +18017,7 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("sand_dollar"), "flat");
   assert.equal(Overlay.playFor("sand_dollar"), "flat");
-  assert.equal(P.playFor("carpenter_ant"), "sill");
+  assert.equal(P.playFor("ladybird"), "sill");
   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
   assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
   assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
@@ -18119,7 +18119,7 @@ test("the demo window plate walks Milk weed the same way", () => {
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("lugworm"), "castings");
-  assert.equal(P.playFor("carpenter_ant"), "sill");
+  assert.equal(P.playFor("ladybird"), "sill");
   assert.equal(P.DUR.weedOn, Overlay.DUR.weedOn);
   assert.equal(P.DUR.weed, Overlay.DUR.weed);
   assert.equal(P.DUR.weedHold, Overlay.DUR.weedHold);
@@ -18216,7 +18216,7 @@ test("the demo window plate walks Ghost week the same way", () => {
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("ghost_crab"), "sand");
-  assert.equal(P.playFor("carpenter_ant"), "sill");
+  assert.equal(P.playFor("ladybird"), "sill");
   assert.equal(P.DUR.weekOn, Overlay.DUR.weekOn);
   assert.equal(P.DUR.week, Overlay.DUR.week);
   assert.equal(P.DUR.weekHold, Overlay.DUR.weekHold);
@@ -18312,7 +18312,7 @@ test("the demo window plate walks Spark the firefly glow the same way", () => {
   assert.equal(P.playFor("walleye"), "dusk");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("solifuge"), "run");
-  assert.equal(P.playFor("carpenter_ant"), "sill");
+  assert.equal(P.playFor("ladybird"), "sill");
   assert.equal(P.DUR.glowOn, Overlay.DUR.glowOn);
   assert.equal(P.DUR.glow, Overlay.DUR.glow);
   assert.equal(P.DUR.glowHold, Overlay.DUR.glowHold);
@@ -18408,7 +18408,7 @@ test("the demo window plate walks Dart hawk the same way", () => {
   assert.equal(P.playFor("spark_dragon"), "crackle");
   assert.equal(P.playFor("luna"), "week");
   assert.equal(P.playFor("hummingbird"), "sip");
-  assert.equal(P.playFor("carpenter_ant"), "sill");
+  assert.equal(P.playFor("ladybird"), "sill");
   assert.equal(P.DUR.hawkOn, Overlay.DUR.hawkOn);
   assert.equal(P.DUR.hawk, Overlay.DUR.hawk);
   assert.equal(P.DUR.hawkHold, Overlay.DUR.hawkHold);
@@ -18504,7 +18504,7 @@ test("the demo window plate walks Twig freeze the same way", () => {
   assert.equal(P.playFor("seahorse"), "hitch");
   assert.equal(P.playFor("oak"), "seed");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("carpenter_ant"), "sill");
+  assert.equal(P.playFor("ladybird"), "sill");
   assert.equal(P.DUR.freezeOn, Overlay.DUR.freezeOn);
   assert.equal(P.DUR.freeze, Overlay.DUR.freeze);
   assert.equal(P.DUR.freezeHold, Overlay.DUR.freezeHold);
@@ -18566,6 +18566,104 @@ test("the demo window plate walks Twig freeze the same way", () => {
   assert.ok(seen.has("freeze"));
   assert.ok(seen.has("freeze-hold"));
   assert.ok(seen.has("freeze-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Column nest the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8"), /key: "carpenter_ant"[\s\S]{0,80}slug: "column"/);
+  assert.equal(P.playFor("carpenter_ant"), "nest");
+  const target = P.pickTarget([WIN], 80, "carpenter_ant", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "nest");
+  assert.equal(target.side, "timbergallery");
+  assert.equal(target.leave, "nested");
+  assert.equal(Overlay.playFor("carpenter_ant"), "nest");
+  assert.equal(P.NEST, "nest");
+  assert.equal(Overlay.NEST, "nest");
+  assert.notEqual(P.playFor("carpenter_ant"), "column");
+  assert.notEqual(P.playFor("carpenter_ant"), "bore");
+  assert.notEqual(P.playFor("carpenter_ant"), "trail");
+  assert.notEqual(P.playFor("carpenter_ant"), "chew");
+  assert.notEqual(P.playFor("carpenter_ant"), "scent");
+  assert.notEqual(P.playFor("carpenter_ant"), "carry");
+  assert.notEqual(P.playFor("carpenter_ant"), "glue");
+  assert.notEqual(P.playFor("carpenter_ant"), "freeze");
+  assert.notEqual(P.playFor("carpenter_ant"), "hawk");
+  assert.notEqual(P.playFor("carpenter_ant"), "road");
+  assert.notEqual(P.playFor("carpenter_ant"), "ant");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(Overlay.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("beaver"), "gnaw");
+  assert.equal(Overlay.playFor("beaver"), "gnaw");
+  assert.equal(P.playFor("mining_bee"), "dig");
+  assert.equal(P.playFor("stick"), "freeze");
+  assert.equal(P.playFor("darner"), "hawk");
+  assert.equal(P.playFor("ladybird"), "sill");
+  assert.equal(P.DUR.nestOn, Overlay.DUR.nestOn);
+  assert.equal(P.DUR.nest, Overlay.DUR.nest);
+  assert.equal(P.DUR.nestHold, Overlay.DUR.nestHold);
+  assert.equal(P.DUR.nestOff, Overlay.DUR.nestOff);
+  assert.ok(P.DUR.nestOn !== Overlay.DUR.boreOn);
+  assert.ok(P.DUR.nestOn !== Overlay.DUR.digOn);
+  assert.ok(P.DUR.nestOn !== Overlay.DUR.freezeOn);
+  assert.ok(P.DUR.nestOn !== Overlay.DUR.hawkOn);
+  const gallery = P.nestPoint(WIN, 176, WORK);
+  const deskGallery = Overlay.nestPoint(WIN, Overlay.SPRITE, WORK);
+  const bore = P.borePoint(WIN, 176, WORK);
+  const muntin = P.freezePoint(WIN, 176, WORK);
+  const air = P.hawkPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(gallery.x - deskGallery.x) < 1);
+  assert.ok(Math.abs(gallery.lift - deskGallery.lift) < 1);
+  assert.ok(gallery.lift > 8, "timber gallery, the sash stile");
+  assert.ok(Math.abs(gallery.x - bore.x) > 20 || Math.abs(gallery.lift - bore.lift) > 8, "not Auger bore");
+  assert.ok(Math.abs(gallery.x - muntin.x) > 20 || Math.abs(gallery.lift - muntin.lift) > 8, "not Twig freeze");
+  assert.ok(Math.abs(gallery.x - air.x) > 20 || Math.abs(gallery.lift - air.lift) > 8, "not Dart hawk");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 160, height: 70 }], 80, "carpenter_ant", WORK, 176);
+  assert.equal(tiny, null, "a real sash stile");
+  const okNest = P.pickTarget([{ id: "nest", x: 200, y: 80, width: 188, height: 200 }], 80, "carpenter_ant", WORK, 176);
+  assert.ok(okNest, "a real sash stile as a timber gallery");
+  const walkOn = P.nestOnPath(0.25, { x: 40, lift: 0 }, { x: gallery.x, lift: gallery.lift });
+  const deskWalk = Overlay.nestOnPath(0.25, { x: 40, lift: 0 }, { x: gallery.x, lift: gallery.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.nestPath(0.5);
+  const deskPulse = Overlay.nestPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(Math.abs(pulse.rot) > 6, "sit the nest, the play");
+  assert.ok(pulse.rot !== P.borePath(0.5).rot, "nest, not a bore");
+  assert.ok(pulse.rot !== P.digPath(0.5).rot, "nest, not a dig");
+  assert.ok(pulse.rot !== P.freezePath(0.5).rot, "nest, not a freeze");
+  assert.ok(pulse.rot !== P.hawkPath(0.5).rot, "nest, not a hawk");
+  const hold = P.nestHoldPath(0.5);
+  const deskHold = Overlay.nestHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "nest") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "nest-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "nest-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.8)) < 3, "she holds the nest after the sit on the stile");
+    }
+  }
+  assert.ok(seen.has("nest-on"));
+  assert.ok(seen.has("nest"));
+  assert.ok(seen.has("nest-hold"));
+  assert.ok(seen.has("nest-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
