@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Cone clamps a glass rim as a rock rim; third shore leftover done; next leftover is Cement; catalog stays 220; clamp is the tell; Pale still owns sand; Wave still owns signal; Lid still owns shut; Whorl still rasps; Tenant still owns knob) |
+| **Last Updated** | 2026-09-01 (Cement stays a sash stile as a stone rim; fourth shore leftover done; next leftover is Mail; catalog stays 220; cirri is the tell; Cone still owns clamp; Pale still owns sand; Wave still owns signal; Lid still owns shut; Whorl still rasps; Dam still gnaws; Jet still owns velvet) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
