@@ -16985,7 +16985,7 @@ test("the demo window plate walks Wave signal the same way", () => {
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("solifuge"), "run");
   assert.equal(P.playFor("ghost_crab"), "sand");
-  assert.equal(P.playFor("limpet"), "sill");
+  assert.equal(P.playFor("limpet"), "clamp");
   assert.notEqual(P.playFor("fiddler_crab"), "wave");
   assert.notEqual(P.playFor("fiddler_crab"), "side");
   assert.notEqual(P.playFor("fiddler_crab"), "scud");
@@ -17078,7 +17078,7 @@ test("the demo window plate walks Pale sand the same way", () => {
   assert.equal(P.playFor("tardigrade"), "dry");
   assert.equal(P.playFor("hermit_crab"), "knob");
   assert.equal(P.playFor("horseshoe_crab"), "plow");
-  assert.equal(P.playFor("limpet"), "sill");
+  assert.equal(P.playFor("limpet"), "clamp");
   assert.notEqual(P.playFor("ghost_crab"), "pale");
   assert.notEqual(P.playFor("ghost_crab"), "run");
   assert.notEqual(P.playFor("ghost_crab"), "signal");
@@ -17145,6 +17145,99 @@ test("the demo window plate walks Pale sand the same way", () => {
   assert.ok(seen.has("sand"));
   assert.ok(seen.has("sand-hold"));
   assert.ok(seen.has("sand-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Cone clamp the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/shore.ts"), "utf8"), /key: "limpet"[\s\S]{0,80}slug: "cone"/);
+  assert.equal(P.playFor("limpet"), "clamp");
+  const target = P.pickTarget([WIN], 80, "limpet", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "clamp");
+  assert.equal(target.side, "rockrim");
+  assert.equal(target.leave, "clamps");
+  assert.equal(Overlay.playFor("limpet"), "clamp");
+  assert.equal(P.CLAMP, "clamp");
+  assert.equal(Overlay.CLAMP, "clamp");
+  assert.equal(P.playFor("ghost_crab"), "sand");
+  assert.equal(Overlay.playFor("ghost_crab"), "sand");
+  assert.equal(P.playFor("fiddler_crab"), "signal");
+  assert.equal(Overlay.playFor("fiddler_crab"), "signal");
+  assert.equal(P.playFor("box_turtle"), "shut");
+  assert.equal(P.playFor("pond_snail"), "rasp");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("barnacle"), "sill");
+  assert.notEqual(P.playFor("limpet"), "cone");
+  assert.notEqual(P.playFor("limpet"), "sand");
+  assert.notEqual(P.playFor("limpet"), "shut");
+  assert.notEqual(P.playFor("limpet"), "rasp");
+  assert.notEqual(P.playFor("limpet"), "sill");
+  assert.equal(P.DUR.clampOn, Overlay.DUR.clampOn);
+  assert.equal(P.DUR.clamp, Overlay.DUR.clamp);
+  assert.equal(P.DUR.clampHold, Overlay.DUR.clampHold);
+  assert.equal(P.DUR.clampOff, Overlay.DUR.clampOff);
+  assert.ok(P.DUR.clampOn !== Overlay.DUR.raspOn);
+  assert.ok(P.DUR.clampOn !== Overlay.DUR.sandOn);
+  assert.ok(P.DUR.clampOn !== Overlay.DUR.signalOn);
+  const rim = P.clampPoint(WIN, 176, WORK);
+  const deskRim = Overlay.clampPoint(WIN, Overlay.SPRITE, WORK);
+  const rasp = P.raspPoint(WIN, 176, WORK);
+  const shut = P.shutPoint(WIN, 176, WORK);
+  const sand = P.sandPoint(WIN, 176, WORK);
+  const wave = P.signalPoint(WIN, 176, WORK);
+  assert.ok(Math.abs(rim.x - deskRim.x) < 1);
+  assert.ok(Math.abs(rim.lift - deskRim.lift) < 1);
+  assert.ok(Math.abs(rim.lift - rasp.lift) < 2, "same rim family as Whorl, different pose");
+  assert.ok(Math.abs(rim.x - rasp.x) > 8, "not Whorl rasp");
+  assert.ok(rim.lift > 28, "rock rim, the glass");
+  assert.ok(Math.abs(rim.x - shut.x) > 8 || Math.abs(rim.lift - shut.lift) > 8, "not Lid shut");
+  assert.ok(Math.abs(rim.x - sand.x) > 8 || Math.abs(rim.lift - sand.lift) > 8, "not Pale sand");
+  assert.ok(Math.abs(rim.x - wave.x) > 8 || Math.abs(rim.lift - wave.lift) > 8, "not Wave signal");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "limpet", WORK, 176);
+  assert.equal(tiny, null, "a real glass rim");
+  const okRim = P.pickTarget([{ id: "rim", x: 200, y: 80, width: 184, height: 178 }], 80, "limpet", WORK, 176);
+  assert.ok(okRim, "a real glass rim as a rock rim");
+  const walkOn = P.clampOnPath(0.25, { x: 40, lift: 0 }, { x: rim.x, lift: rim.lift });
+  const deskWalk = Overlay.clampOnPath(0.25, { x: 40, lift: 0 }, { x: rim.x, lift: rim.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.clampPath(0.5);
+  const deskPulse = Overlay.clampPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.lift < 0, "a clamp, the tell");
+  assert.ok(pulse.rot !== P.raspPath(0.5).rot, "a clamp, not a rasp");
+  assert.ok(pulse.rot !== P.sandPath(0.5).rot, "a clamp, not a sand");
+  assert.ok(pulse.rot !== P.shutPath(0.5).rot, "a clamp, not a shut");
+  const hold = P.clampHoldPath(0.5);
+  const deskHold = Overlay.clampHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "clamp") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "clamp-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "clamp-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift - 6.8)) < 3, "she holds the sit after the clamp on the rim");
+    }
+  }
+  assert.ok(seen.has("clamp-on"));
+  assert.ok(seen.has("clamp"));
+  assert.ok(seen.has("clamp-hold"));
+  assert.ok(seen.has("clamp-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
