@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Token flats a sill pan as a sand plate; seventh shore leftover done; next leftover is Thorn; catalog stays 220; flat is the tell; Cache still owns bury; Pale still owns sand; Spire still owns rock; Mail still owns eight; Cement still owns cirri; Cone still owns clamp; Wave still owns signal; Coin still owns circle; Disk still owns open; Ochre still owns reef) |
+| **Last Updated** | 2026-09-01 (Thorn spines a window well as a tide pool; eighth shore leftover done; next leftover is Knurl; catalog stays 220; spines is the tell; Spine still owns bristle; Burr still owns ball; Spike still owns crown; Token still owns flat; Spire still owns rock; Mail still owns eight; Cement still owns cirri; Cone still owns clamp; Pale still owns sand; Wave still owns signal) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
