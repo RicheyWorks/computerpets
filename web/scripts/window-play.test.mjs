@@ -18017,7 +18017,7 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("sand_dollar"), "flat");
   assert.equal(Overlay.playFor("sand_dollar"), "flat");
-  assert.equal(P.playFor("monarch"), "sill");
+  assert.equal(P.playFor("luna"), "sill");
   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
   assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
   assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
@@ -18081,6 +18081,106 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.ok(seen.has("waggle"));
   assert.ok(seen.has("waggle-hold"));
   assert.ok(seen.has("waggle-off"));
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+});
+
+test("the demo window plate walks Milk weed the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8"), /key: "monarch"[\s\S]{0,80}slug: "milk"/);
+  assert.equal(P.playFor("monarch"), "weed");
+  const target = P.pickTarget([WIN], 80, "monarch", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "weed");
+  assert.equal(target.side, "milkweedcup");
+  assert.equal(target.leave, "weeded");
+  assert.equal(Overlay.playFor("monarch"), "weed");
+  assert.equal(P.WEED, "weed");
+  assert.equal(Overlay.WEED, "weed");
+  assert.notEqual(P.playFor("monarch"), "milk");
+  assert.notEqual(P.playFor("monarch"), "gold");
+  assert.notEqual(P.playFor("monarch"), "snip");
+  assert.notEqual(P.playFor("monarch"), "sip");
+  assert.notEqual(P.playFor("monarch"), "wrap");
+  assert.notEqual(P.playFor("monarch"), "waggle");
+  assert.equal(P.playFor("honeybee"), "waggle");
+  assert.equal(Overlay.playFor("honeybee"), "waggle");
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(Overlay.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("kinkajou"), "wrap");
+  assert.equal(Overlay.playFor("kinkajou"), "wrap");
+  assert.equal(P.playFor("leafcutter"), "snip");
+  assert.equal(Overlay.playFor("leafcutter"), "snip");
+  assert.equal(P.playFor("ginkgo"), "gold");
+  assert.equal(Overlay.playFor("ginkgo"), "gold");
+  assert.equal(P.playFor("honey_drone"), "drone");
+  assert.equal(P.playFor("honey_queen"), "lay");
+  assert.equal(P.playFor("honeycomb"), "draw");
+  assert.equal(P.playFor("lugworm"), "castings");
+  assert.equal(P.playFor("luna"), "sill");
+  assert.equal(P.DUR.weedOn, Overlay.DUR.weedOn);
+  assert.equal(P.DUR.weed, Overlay.DUR.weed);
+  assert.equal(P.DUR.weedHold, Overlay.DUR.weedHold);
+  assert.equal(P.DUR.weedOff, Overlay.DUR.weedOff);
+  assert.ok(P.DUR.weedOn !== Overlay.DUR.waggleOn);
+  assert.ok(P.DUR.weedOn !== Overlay.DUR.sipOn);
+  assert.ok(P.DUR.weedOn !== Overlay.DUR.wrapOn);
+  const cup = P.weedPoint(WIN, 176, WORK);
+  const deskCup = Overlay.weedPoint(WIN, Overlay.SPRITE, WORK);
+  const nectar = P.sipPoint(WIN, 176, WORK);
+  const bloom = P.wrapPoint(WIN, 176, WORK);
+  const dish = P.wagglePoint(WIN, 176, WORK);
+  assert.ok(Math.abs(cup.x - deskCup.x) < 1);
+  assert.ok(Math.abs(cup.lift - deskCup.lift) < 1);
+  assert.ok(cup.lift > 8, "milkweed cup, the box");
+  assert.ok(Math.abs(cup.x - nectar.x) > 8, "not Sip sip");
+  assert.ok(Math.abs(cup.x - bloom.x) > 8, "not Wrist wrap");
+  assert.ok(Math.abs(cup.lift - dish.lift) > 8, "not Comb waggle");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 160, height: 70 }], 80, "monarch", WORK, 176);
+  assert.equal(tiny, null, "a real window-box");
+  const okBox = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "monarch", WORK, 176);
+  assert.ok(okBox, "a real window-box as a milkweed cup");
+  const walkOn = P.weedOnPath(0.25, { x: 40, lift: 0 }, { x: cup.x, lift: cup.lift });
+  const deskWalk = Overlay.weedOnPath(0.25, { x: 40, lift: 0 }, { x: cup.x, lift: cup.lift });
+  assert.equal(walkOn.x, deskWalk.x);
+  assert.equal(walkOn.lift, deskWalk.lift);
+  const pulse = P.weedPath(0.5);
+  const deskPulse = Overlay.weedPath(0.5);
+  assert.equal(pulse.x, deskPulse.x);
+  assert.ok(pulse.lift > 1, "sit the weed, the play");
+  assert.ok(pulse.rot !== P.sipPath(0.5).rot, "weed, not a sip");
+  assert.ok(pulse.rot !== P.wrapPath(0.5).rot, "weed, not a wrap");
+  assert.ok(pulse.rot !== P.snipPath(0.5).rot, "weed, not a snip");
+  assert.ok(pulse.rot !== P.wagglePath(0.5).rot, "weed, not a waggle");
+  assert.ok(pulse.rot !== P.goldPath(0.5).rot, "weed, not gold");
+  const hold = P.weedHoldPath(0.5);
+  const deskHold = Overlay.weedHoldPath(0.5);
+  assert.equal(hold.x, deskHold.x);
+  assert.equal(hold.lift, deskHold.lift);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+    if (play.phase === "weed") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "weed-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "weed-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 1.8)) < 3, "she holds the weed after the sit on the cup");
+    }
+  }
+  assert.ok(seen.has("weed-on"));
+  assert.ok(seen.has("weed"));
+  assert.ok(seen.has("weed-hold"));
+  assert.ok(seen.has("weed-off"));
   assert.equal(windowIds.size, 1, "one window");
   assert.equal(play.phase, "done");
 });
