@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Dart hawks a lamp-side air as prey air; fifth leftover of the remaining hive den done; shore ten is closed; next leftover is Twig; catalog stays 220; hawk is the tell; Hook still owns soar; Haste still owns hunt; Spark the firefly still owns glow; the dragon Spark still owns crackle; Ghost still owns week; Sip still owns sip; Comb still owns waggle; Milk still owns weed) |
+| **Last Updated** | 2026-09-01 (Twig freezes a sash muntin as a pencil stem; sixth leftover of the remaining hive den done; shore ten is closed; next leftover is Column; catalog stays 220; freeze is the tell; Still still owns creep; Hang still owns reach; Stem still owns stilt; Anchor still owns hitch; Mast still owns seed; Dart still owns hawk; Spark the firefly still owns glow; Comb still owns waggle; Milk still owns weed) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
