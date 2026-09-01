@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "tardigrade", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "planarian", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -25797,7 +25797,7 @@ test("Round disks a sill horn as a stone disk: walk onto the horn, sit the disk 
   assert.equal(P.playFor("house_centipede"), "hunt");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("lamprey"), "round");
   assert.notEqual(P.playFor("lamprey"), "cling");
   assert.notEqual(P.playFor("lamprey"), "paddle");
@@ -25985,7 +25985,7 @@ test("Silver goes a window well as a bank hole: walk into the well, swim the goi
   assert.equal(P.playFor("house_centipede"), "hunt");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("american_eel"), "silver");
   assert.notEqual(P.playFor("american_eel"), "disk");
   assert.notEqual(P.playFor("american_eel"), "cling");
@@ -26195,7 +26195,7 @@ test("Haste hunts a sash-jamb crack as a plaster crack: walk into the crack, dar
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("house_centipede"), "haste");
   assert.notEqual(P.playFor("house_centipede"), "go");
   assert.notEqual(P.playFor("house_centipede"), "scoot");
@@ -26379,7 +26379,7 @@ test("Link oils a window stool as a damp log: walk onto the stool, oil the rings
   assert.equal(P.playFor("alligator"), "bank");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("millipede"), "link");
   assert.notEqual(P.playFor("millipede"), "hunt");
   assert.notEqual(P.playFor("millipede"), "go");
@@ -26560,7 +26560,7 @@ test("Armor rolls a window stool as a bark dish: walk onto the stool, roll the p
   assert.equal(P.playFor("alligator"), "bank");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("pillbug"), "armor");
   assert.notEqual(P.playFor("pillbug"), "oil");
   assert.notEqual(P.playFor("pillbug"), "hunt");
@@ -26768,7 +26768,7 @@ test("Cast bands a window stool as a soil tray: walk onto the stool, sit the cli
   assert.equal(P.playFor("leech"), "drink");
   assert.equal(P.playFor("velvet_worm"), "velvet");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("earthworm"), "cast");
   assert.notEqual(P.playFor("earthworm"), "roll");
   assert.notEqual(P.playFor("earthworm"), "oil");
@@ -26963,7 +26963,7 @@ test("Jet glues a sash stile as wet wood: walk onto the stile, glue from the hea
   assert.equal(P.playFor("beaver"), "gnaw");
   assert.equal(P.playFor("black_bear"), "browse");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("velvet_worm"), "jet");
   assert.notEqual(P.playFor("velvet_worm"), "glue");
   assert.notEqual(P.playFor("velvet_worm"), "band");
@@ -26971,7 +26971,7 @@ test("Jet glues a sash stile as wet wood: walk onto the stile, glue from the hea
   assert.notEqual(P.playFor("velvet_worm"), "hunt");
   assert.notEqual(P.playFor("velvet_worm"), "gnaw");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.equal(P.DUR.bandOn, 1.97, "Cast band durations stay");
   assert.equal(P.DUR.rollOn, 1.91, "Armor roll durations stay");
   assert.equal(P.DUR.oilOn, 1.84, "Link oil durations stay");
@@ -27147,7 +27147,7 @@ test("Hop springs a window foot as a duff cup: walk onto the foot, spring the fu
   assert.equal(P.playFor("millipede"), "oil");
   assert.equal(P.playFor("house_centipede"), "hunt");
   assert.equal(P.playFor("jumping_spider"), "pounce");
-  assert.equal(P.playFor("tardigrade"), "sill");
+  assert.equal(P.playFor("planarian"), "sill");
   assert.notEqual(P.playFor("springtail"), "hop");
   assert.notEqual(P.playFor("springtail"), "stamp");
   assert.notEqual(P.playFor("springtail"), "velvet");
@@ -27307,5 +27307,174 @@ test("a moved window refits Hop's duff-cup spring; sleep, card, and hide abort; 
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "spring-off");
+  assert.equal(play.abort, true);
+});
+test("Tun dries a window pane as a moss film: walk onto the pane, sit the tun (the dry), then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("tardigrade"), "dry");
+  assert.equal(P.DRY, "dry");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.SPRING, "spring");
+  assert.equal(P.playFor("velvet_worm"), "velvet");
+  assert.equal(P.VELVET, "velvet");
+  assert.equal(P.playFor("earthworm"), "band");
+  assert.equal(P.playFor("pillbug"), "roll");
+  assert.equal(P.playFor("black_bear"), "browse");
+  assert.equal(P.playFor("opossum"), "still");
+  assert.equal(P.playFor("otter"), "slide");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("planarian"), "sill");
+  assert.notEqual(P.playFor("tardigrade"), "tun");
+  assert.notEqual(P.playFor("tardigrade"), "spring");
+  assert.notEqual(P.playFor("tardigrade"), "velvet");
+  assert.notEqual(P.playFor("tardigrade"), "slide");
+  assert.notEqual(P.playFor("tardigrade"), "open");
+  assert.notEqual(P.playFor("tardigrade"), "barrel");
+  assert.notEqual(P.playFor("tardigrade"), "curl");
+  assert.notEqual(P.playFor("tardigrade"), "sill");
+  assert.equal(P.DUR.springOn, 2.11, "Hop spring durations stay");
+  assert.equal(P.DUR.velvetOn, 2.04, "Jet velvet durations stay");
+  assert.equal(P.DUR.bandOn, 1.97, "Cast band durations stay");
+  assert.equal(P.DUR.rollOn, 1.91, "Armor roll durations stay");
+  assert.equal(P.DUR.browseOn, 1.36, "Coal browse durations stay");
+  const target = P.pickTarget([WIN], 80, "tardigrade", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "dry");
+  assert.equal(target.side, "mossfilm");
+  assert.equal(target.leave, "film");
+  assert.notEqual(target.kind, "tun");
+  assert.notEqual(target.kind, "spring");
+  assert.notEqual(target.kind, "velvet");
+  assert.notEqual(target.kind, "slide");
+  assert.notEqual(target.kind, "open");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 30, "she dries a window pane as a moss film, the glass");
+  assert.ok(P.DUR.dryHold > P.DUR.dry, "the hold is the sit after; the tun is the tell");
+  assert.ok(P.DUR.dryOn > 1.0, "a walk onto the pane, not the tun");
+  assert.ok(P.DUR.dryOn !== P.DUR.springOn);
+  assert.ok(P.DUR.dryOn !== P.DUR.velvetOn);
+  assert.ok(P.DUR.dryOn !== P.DUR.slideOn);
+  assert.ok(P.DUR.dryOn !== P.DUR.openOn);
+  assert.ok(P.DUR.dryOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.dry !== P.DUR.spring);
+  assert.ok(P.DUR.dry !== P.DUR.velvet);
+  assert.ok(P.DUR.dry !== P.DUR.slide);
+  assert.ok(P.DUR.dryHold !== P.DUR.springHold);
+  assert.ok(P.DUR.dryHold !== P.DUR.velvetHold);
+  assert.ok(P.DUR.dryOff !== P.DUR.springOff);
+  assert.ok(P.DUR.dryOff !== P.DUR.velvetOff);
+  assert.ok(P.DUR.dryOff !== P.DUR.sillDown);
+  const film = P.dryPoint(WIN, P.SPRITE, WORK);
+  const slide = P.slidePoint(WIN, P.SPRITE, WORK);
+  const pad = P.openPoint(WIN, P.SPRITE, WORK);
+  const cup = P.springPoint(WIN, P.SPRITE, WORK);
+  const wood = P.velvetPoint(WIN, P.SPRITE, WORK);
+  assert.ok(film.lift > 30, "the window pane as a moss film, the glass");
+  assert.ok(Math.abs(film.x - slide.x) > 8, "same window-pane family as Slick; the pose is a dry, not a slide");
+  assert.ok(Math.abs(film.lift - slide.lift) > 8 || Math.abs(film.x - slide.x) > 8, "not Slick window-pane slide");
+  assert.ok(Math.abs(film.x - pad.x) > 8 || Math.abs(film.lift - pad.lift) > 8, "not Disk window-pane open");
+  assert.ok(Math.abs(film.lift - cup.lift) > 8, "not Hop window-foot spring");
+  assert.ok(Math.abs(film.x - wood.x) > 8 || Math.abs(film.lift - wood.lift) > 8, "not Jet sash-stile velvet");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "tardigrade", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window pane, not a thin strip");
+  const foot = P.pickTarget([{ id: "foot", x: 200, y: 80, width: 160, height: 70 }], 80, "tardigrade", WORK, P.SPRITE);
+  assert.equal(foot, null, "a real window pane, not a window foot");
+  const okPane = P.pickTarget([{ id: "pane", x: 200, y: 80, width: 196, height: 188 }], 80, "tardigrade", WORK, P.SPRITE);
+  assert.ok(okPane, "a real window pane as a moss film");
+  const slickOk = P.pickTarget([{ id: "pane", x: 200, y: 80, width: 196, height: 204 }], 80, "otter", WORK, P.SPRITE);
+  assert.ok(slickOk, "Slick still takes the pane");
+  const diskOk = P.pickTarget([{ id: "pad", x: 200, y: 80, width: 194, height: 188 }], 80, "water_lily", WORK, P.SPRITE);
+  assert.ok(diskOk, "Disk still takes the pane");
+  const hopOk = P.pickTarget([{ id: "foot", x: 200, y: 80, width: 160, height: 70 }], 80, "springtail", WORK, P.SPRITE);
+  assert.ok(hopOk, "Hop still takes the foot");
+  const jetOk = P.pickTarget([{ id: "stile", x: 200, y: 80, width: 191, height: 216 }], 80, "velvet_worm", WORK, P.SPRITE);
+  assert.ok(jetOk, "Jet still takes the stile");
+  const walkOn = P.dryOnPath(0.25, { x: 40, lift: 0 }, { x: film.x, lift: film.lift });
+  const slideOn = P.slideOnPath(0.25, { x: 40, lift: 0 }, { x: film.x, lift: film.lift });
+  const springOn = P.springOnPath(0.25, { x: 40, lift: 0 }, { x: film.x, lift: film.lift });
+  const velvetOn = P.velvetOnPath(0.25, { x: 40, lift: 0 }, { x: film.x, lift: film.lift });
+  assert.ok(walkOn.lift > 4, "she walks onto the pane as a moss film");
+  assert.ok(walkOn.rot !== slideOn.rot, "a walk onto the pane, not Slick slide");
+  assert.ok(walkOn.rot !== springOn.rot, "a walk onto the pane, not Hop spring");
+  assert.ok(walkOn.rot !== velvetOn.rot, "a walk onto the pane, not Jet velvet");
+  const tun = P.dryPath(0.5);
+  const wet = P.slidePath(0.5);
+  const kick = P.springPath(0.5);
+  const glueHead = P.velvetPath(0.5);
+  assert.ok(tun.lift < 8 && tun.lift > 0, "a tun, compact on the film");
+  assert.ok(wet.lift < -20, "Slick still slides down");
+  assert.ok(kick.lift > 8, "Hop still springs up");
+  assert.ok(tun.rot !== wet.rot, "a dry, not a slide");
+  assert.ok(tun.rot !== kick.rot, "a dry, not a spring");
+  assert.ok(tun.rot !== glueHead.rot, "a dry, not Jet velvet");
+  const hold = P.dryHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 12.2) < 0.2, "she holds after the tun");
+  assert.ok(Math.abs(hold.x - 0.45) < 0.2, "she stays on the moss film");
+  assert.ok(hold.lift > 2.4 && hold.lift < 3.0, "a sit after the dry");
+  const off0 = P.dryOffPath(0, { x: film.x, lift: film.lift, rot: 12.2 }, { x: film.x + 59, lift: 0 });
+  const offMid = P.dryOffPath(0.5, { x: film.x, lift: film.lift, rot: 12.2 }, { x: film.x + 59, lift: 0 });
+  const off1 = P.dryOffPath(1, { x: film.x, lift: film.lift, rot: 12.2 }, { x: film.x + 59, lift: 0 });
+  assert.ok(Math.abs(off0.x - film.x) < 2);
+  assert.ok(Math.abs(offMid.x - film.x) > 8, "a walk leave off the moss film");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "slide");
+    assert.notEqual(play.phase, "open");
+    assert.notEqual(play.phase, "spring");
+    assert.notEqual(play.phase, "velvet");
+    assert.notEqual(play.phase, "tun");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "dry") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "dry-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "dry-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 2.6)) < 3, "she holds the sit on the moss film");
+    }
+    if (play.phase === "dry-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("dry-on"));
+  assert.ok(seen.has("dry"));
+  assert.ok(seen.has("dry-hold"));
+  assert.ok(seen.has("dry-off"));
+  assert.ok(!seen.has("slide"), "Tun never uses Slick slide");
+  assert.ok(!seen.has("open"), "Tun never uses Disk open");
+  assert.ok(!seen.has("spring"), "Tun never uses Hop spring");
+  assert.ok(!seen.has("tun"), "Tun never uses tun as a phase");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+test("a moved window refits Tun's moss-film dry; sleep, card, and hide abort; Tun never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "tardigrade", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "dry"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "dry");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "dry");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "dry-off");
   assert.equal(play.abort, true);
 });

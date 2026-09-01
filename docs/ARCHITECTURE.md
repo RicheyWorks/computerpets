@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-08-28 (Hop springs a window foot as a duff cup; sixth log leftover done; next leftover is Tun; catalog stays 220; Jet still owns velvet; Stripe still owns stamp; Cast still owns band; Armor still owns roll; Link still owns oil; Haste still owns hunt) |
+| **Last Updated** | 2026-09-01 (Tun dries a window pane as a moss film; seventh log leftover done; next leftover is Half; catalog stays 220; dry is the tun tell; Hop still owns spring; Jet still owns velvet; Cast still owns band; Armor still owns roll; Coal still owns browse) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
