@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Frill shelves a sash stile as a timber shelf; first leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Cap; catalog stays 220; shelf is the tell; Rob still owns seize; Fan still owns gold; Felt still owns lean; Cape still owns fold; Mast still owns seed; Auger still owns bore) |
+| **Last Updated** | 2026-09-02 (Cap warts a window apron as a moss cup; second leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Lattice; catalog stays 220; warts is the tell; Frill still owns shelf; Seven still owns spot; Sepia still owns flush; Rob still owns seize; Slip still owns ring) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
