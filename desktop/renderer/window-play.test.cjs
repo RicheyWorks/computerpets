@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "paramecium", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "volvox", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -30062,7 +30062,7 @@ test("Comb waggles a sill pan as a wax dish: walk onto the pan, dance the waggle
   assert.equal(P.playFor("pitcher"), "fill");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.castingsOn, 3.08, "Heap castings durations stay");
   assert.equal(P.DUR.knobsOn, 3.01, "Knurl knobs durations stay");
   assert.equal(P.DUR.spinesOn, 2.94, "Thorn spines durations stay");
@@ -30276,7 +30276,7 @@ test("Milk weeds a window-box as a milkweed cup: walk onto the box, sit the weed
   assert.equal(P.playFor("bumblebee"), "forage");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.waggleOn, 3.15, "Comb waggle durations stay");
   assert.equal(P.DUR.castingsOn, 3.08, "Heap castings durations stay");
   const target = P.pickTarget([WIN], 80, "monarch", WORK, P.SPRITE);
@@ -30477,7 +30477,7 @@ test("Ghost weeks a lamp-side glass as lamp dusk: walk onto the glass, sit the w
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.weedOn, 3.22, "Milk weed durations stay");
   assert.equal(P.DUR.waggleOn, 3.15, "Comb waggle durations stay");
   assert.equal(P.DUR.duskOn, 1.54, "Night dusk durations stay");
@@ -30671,7 +30671,7 @@ test("Spark the firefly glows a lower sash light as ink dusk: walk onto the ligh
   assert.equal(P.playFor("monarch"), "weed");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.weekOn, 3.41, "Ghost week durations stay");
   assert.equal(P.DUR.duskOn, 1.54, "Night dusk durations stay");
   assert.equal(P.DUR.weedOn, 3.22, "Milk weed durations stay");
@@ -30860,7 +30860,7 @@ test("Dart hawks a lamp-side air as prey air: walk into the air, sit the hawk, t
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.glowOn, 3.48, "Spark glow durations stay");
   assert.equal(P.DUR.soarOn, 1.46, "Hook soar durations stay");
   assert.equal(P.DUR.huntOn, 1.76, "Haste hunt durations stay");
@@ -31039,11 +31039,11 @@ test("Twig freezes a sash muntin as a pencil stem: walk onto the muntin, sit the
   assert.equal(P.playFor("stickleback"), "glue");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.playFor("darner"), "hawk");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.hawkOn, 3.22, "Dart hawk durations stay");
   assert.equal(P.DUR.creepOn, 1.73, "Still creep durations stay");
   assert.equal(P.DUR.reachOn, 1.61, "Hang reach durations stay");
@@ -31222,10 +31222,10 @@ test("Column nests a sash stile as a timber gallery: walk onto the stile, sit th
   assert.equal(P.HAWK, "hawk");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.freezeOn, 3.56, "Twig freeze durations stay");
   assert.equal(P.DUR.boreOn, 1.22, "Auger bore durations stay");
   assert.equal(P.DUR.digOn, 1.68, "Bank dig durations stay");
@@ -31408,7 +31408,7 @@ test("Seven spots a window-box leaf as a leaf dish: walk onto the leaf, sit the 
   assert.equal(P.NEST, "nest");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.nestOn, 2.84, "Column nest durations stay");
   assert.equal(P.DUR.huntOn, P.DUR.huntOn, "Haste hunt durations stay");
   assert.equal(P.DUR.snipOn, P.DUR.snipOn, "Disc snip durations stay");
@@ -31594,7 +31594,7 @@ test("Fold prays a window-box stem as a green hinge: walk onto the stem, sit the
   assert.equal(P.SPOT, "spot");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.spotOn, 3.12, "Seven spot durations stay");
   assert.equal(P.DUR.freezeOn, P.DUR.freezeOn, "Twig freeze durations stay");
   assert.equal(P.DUR.stiltOn, P.DUR.stiltOn, "Stem stilt durations stay");
@@ -31782,7 +31782,7 @@ test("Brood emerges a window foot as a soil husk: walk onto the foot, sit, burst
   assert.equal(P.playFor("bumblebee"), "forage");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.prayOn, P.DUR.prayOn, "Fold pray durations stay");
   assert.equal(P.DUR.castingsOn, P.DUR.castingsOn, "Heap castings durations stay");
   assert.equal(P.DUR.springOn, P.DUR.springOn, "Hop spring durations stay");
@@ -31958,7 +31958,7 @@ test("Chirp songs a window stool as a grass dish: walk onto the stool, sit the s
   assert.equal(P.playFor("mantis"), "pray");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.emergeOn, P.DUR.emergeOn, "Brood emerge durations stay");
   assert.equal(P.DUR.chirpOn, P.DUR.chirpOn, "Pad chirp durations stay");
   assert.equal(P.DUR.singOn, P.DUR.singOn, "Swing sing durations stay");
@@ -32129,7 +32129,7 @@ test("Blade leafs a sash horn as a leaf rim: walk onto the horn, sit the leaf, s
   assert.equal(P.playFor("opossum"), "still");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.songOn, P.DUR.songOn, "Chirp song durations stay");
   assert.equal(P.DUR.freezeOn, P.DUR.freezeOn, "Twig freeze durations stay");
   assert.equal(P.DUR.chirpOn, P.DUR.chirpOn, "Pad chirp durations stay");
@@ -32287,7 +32287,7 @@ test("Vault jumps a window apron as a grass plate: walk onto the apron, sit, vau
   assert.equal(P.playFor("red_tail"), "soar");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.leafOn, P.DUR.leafOn, "Blade leaf durations stay");
   assert.equal(P.DUR.songOn, P.DUR.songOn, "Chirp song durations stay");
   assert.equal(P.DUR.springOn, P.DUR.springOn, "Hop spring durations stay");
@@ -32447,7 +32447,7 @@ test("Banner tails a window stool as a blossom dish: walk onto the stool, sit, b
   assert.equal(P.playFor("luna"), "week");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.DUR.jumpOn, P.DUR.jumpOn, "Vault jump durations stay");
   assert.equal(P.DUR.leafOn, P.DUR.leafOn, "Blade leaf durations stay");
   assert.equal(P.DUR.songOn, P.DUR.songOn, "Chirp song durations stay");
@@ -32617,7 +32617,7 @@ test("Jewel blacks a glass rim as a stream jewel: walk onto the rim, sit, jewel 
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "jewelwing", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "black");
@@ -32772,7 +32772,7 @@ test("Lace nets a window stool as a leaf dish: walk onto the stool, sit, lace on
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "lacewing", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "net");
@@ -32928,7 +32928,7 @@ test("Forceps cercis a window stool as a bark dish: walk onto the stool, sit, ra
   assert.equal(P.playFor("vinegaroon"), "spray");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "earwig", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "cerci");
@@ -33083,7 +33083,7 @@ test("Snout drills a window stool as an acorn cup: walk onto the stool, sit, dri
   assert.equal(P.playFor("octopus"), "lid");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "acorn_weevil", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "drill");
@@ -33238,7 +33238,7 @@ test("Click rights a window stool as a bark plate: walk onto the stool, sit, rig
   assert.equal(P.playFor("firefly"), "glow");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "click_beetle", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "right");
@@ -33396,7 +33396,7 @@ test("Rob seizes a window stool as a grass perch: walk onto the stool, sit, seiz
   assert.equal(P.playFor("honey_drone"), "drone");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "robber_fly", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "seize");
@@ -33536,7 +33536,7 @@ test("Frill shelves a sash stile as a timber shelf: walk onto the stile, sit, le
   assert.equal(P.playFor("carpenter_bee"), "bore");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "oyster", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "shelf");
@@ -33674,7 +33674,7 @@ test("Cap warts a window apron as a moss cup: walk onto the apron, sit, wart onc
   assert.equal(P.playFor("caecilian"), "ring");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "fly_agaric", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "warts");
@@ -33808,7 +33808,7 @@ test("Lattice hollows a sash well as leaf mold: walk into the well, sit the holl
   assert.equal(P.HAWK, "hawk");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "morel", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "hollow");
@@ -33956,7 +33956,7 @@ test("Horn forks a sash drip as a moss rim: walk onto the drip, sit the fork, th
   assert.equal(P.RIDGE, "ridge");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "chanterelle", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "fork");
@@ -34113,7 +34113,7 @@ test("Ring zones a sash stile as wood grain: walk onto the stile, sit the zones,
   assert.equal(P.RING, "ring");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "turkey_tail", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "zones");
@@ -34271,7 +34271,7 @@ test("Mane teeths a sash gap as a wood wound: walk into the gap, sit the teeth, 
   assert.equal(P.playFor("mason_bee"), "daub");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "lions_mane", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "teeth");
@@ -34436,7 +34436,7 @@ test("Puff clouds a window apron as a spore dish: walk onto the apron, sit the s
   assert.equal(P.playFor("oyster"), "shelf");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "puffball", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "cloud");
@@ -34575,7 +34575,7 @@ test("Flame drips a sash stile as warm wood: walk onto the stile, sit the bright
   assert.equal(P.playFor("fly_agaric"), "warts");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "chicken_of_woods", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "drip");
@@ -34713,7 +34713,7 @@ test("Starter blooms a damp pane as a yeast film: walk onto the pane, sit the wa
   assert.equal(P.playFor("fly_agaric"), "warts");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "yeast", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "bloom");
@@ -34854,7 +34854,7 @@ test("Pact plaques a cool stile as bark stone: walk onto the stile, sit the cool
   assert.equal(P.playFor("fly_agaric"), "warts");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "lichen", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "plaque");
@@ -34993,7 +34993,7 @@ test("Gleam thirsts a bright pane as lamp glass: walk onto the pane, sit the bri
   assert.equal(P.SHELF, "shelf");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "photovore", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "thirst");
@@ -35138,7 +35138,7 @@ test("Choir chords a mid pane as blotter air: walk onto the pane, sit the blotte
   assert.equal(P.SHELF, "shelf");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "choir", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "chord");
@@ -35288,7 +35288,7 @@ test("Nimbus floats a mid pane as a methane bowl: walk onto the pane, sit the me
   assert.equal(P.SHELF, "shelf");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "nimbus", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "float");
@@ -35424,7 +35424,7 @@ test("Shard facets a sash gap as an inkstone: walk into the gap, sit the facet, 
   assert.notEqual(P.playFor("silica"), "cloud");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   assert.equal(P.playFor("nimbus"), "float");
   assert.equal(P.FLOAT, "float");
   assert.equal(P.playFor("mason_bee"), "daub");
@@ -35445,7 +35445,7 @@ test("Shard facets a sash gap as an inkstone: walk into the gap, sit the facet, 
   assert.equal(P.CLOUD, "cloud");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "silica", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "facet");
@@ -35590,7 +35590,7 @@ test("Dusk leftover rims a lamp-side stile as a lamp-edge: walk onto the stile, 
   assert.equal(P.playFor("choir"), "chord");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "terminator", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "rim");
@@ -35741,7 +35741,7 @@ test("Knot leftover manys a window stool as a paperweight: walk onto the stool, 
   assert.equal(P.FLOAT, "float");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "nexus", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "many");
@@ -35902,7 +35902,7 @@ test("Brine leftover frosts a window stool as a salt dish: walk onto the stool, 
   assert.equal(P.playFor("squirrel"), "bury");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "halovore", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "frost");
@@ -36054,7 +36054,7 @@ test("Beacon leftover aligns a sash parting bead as a ruler line: walk onto the 
   assert.equal(P.STILT, "stilt");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "magneton", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "align");
@@ -36205,7 +36205,7 @@ test("Hush leftover cools a lamp-side pane as a lamp shadow: walk into the shado
   assert.equal(P.THIRST, "thirst");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "umbral", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "cool");
@@ -36353,7 +36353,7 @@ test("Arca leftover waits a sash drip as a damp blotter: walk onto the drip, sit
   assert.equal(P.EMERGE, "emerge");
   assert.equal(P.playFor("paramecium"), "slipper");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "cyst", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "wait");
@@ -36500,7 +36500,7 @@ test("Boot leftover slippers a window pane as a drop glass: walk onto the pane, 
   assert.equal(P.playFor("leech"), "drink");
   assert.equal(P.DRINK, "drink");
   assert.equal(P.playFor("amoeba"), "foot");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "paramecium", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "slipper");
@@ -36640,7 +36640,7 @@ test("Reach leftover foots a glazing rebate as a silt film: walk into the rebate
   assert.equal(P.SPOT, "spot");
   assert.equal(P.playFor("nematode"), "thrash");
   assert.equal(P.THRASH, "thrash");
-  assert.equal(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("euglena"), "red");
   const target = P.pickTarget([WIN], 80, "amoeba", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "foot");
@@ -36769,5 +36769,171 @@ test("a moved window refits Reach's silt-film foot; sleep, card, and hide abort;
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40, "refit follows the moved silt film");
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "foot-off");
+  assert.equal(play.abort, true);
+});
+
+test("Spot leftover reds a lower sash light as a lamp drop: walk onto the light, sit the red, then leave", () => {
+  const WIN_B = { id: "rw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("euglena"), "red");
+  assert.equal(P.RED, "red");
+  assert.notEqual(P.playFor("euglena"), "spot");
+  assert.notEqual(P.playFor("euglena"), "euglena");
+  assert.notEqual(P.playFor("euglena"), "foot");
+  assert.notEqual(P.playFor("euglena"), "slipper");
+  assert.notEqual(P.playFor("euglena"), "drink");
+  assert.notEqual(P.playFor("euglena"), "glow");
+  assert.notEqual(P.playFor("euglena"), "thirst");
+  assert.notEqual(P.playFor("euglena"), "week");
+  assert.notEqual(P.playFor("euglena"), "cool");
+  assert.notEqual(P.playFor("euglena"), "sill");
+  assert.equal(P.playFor("amoeba"), "foot");
+  assert.equal(P.FOOT, "foot");
+  assert.equal(P.playFor("paramecium"), "slipper");
+  assert.equal(P.SLIPPER, "slipper");
+  assert.equal(P.playFor("ladybird"), "spot");
+  assert.equal(P.SPOT, "spot");
+  assert.equal(P.playFor("firefly"), "glow");
+  assert.equal(P.GLOW, "glow");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("photovore"), "thirst");
+  assert.equal(P.playFor("luna"), "week");
+  assert.equal(P.playFor("umbral"), "cool");
+  assert.equal(P.playFor("volvox"), "sill");
+  const target = P.pickTarget([WIN], 80, "euglena", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "red");
+  assert.equal(target.side, "lampdrop");
+  assert.equal(target.leave, "redded");
+  assert.notEqual(target.kind, "glow");
+  assert.notEqual(target.kind, "spot");
+  assert.notEqual(target.kind, "foot");
+  assert.notEqual(target.kind, "slipper");
+  assert.notEqual(target.kind, "thirst");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "it reds a lower sash light as a lamp drop");
+  assert.ok(P.DUR.redHold > P.DUR.red * 1.2, "the hold is the sit; red is the tell");
+  assert.ok(P.DUR.redOn > 1.0, "a walk onto the light, not a cling");
+  assert.ok(P.DUR.redOn !== P.DUR.glowOn);
+  assert.ok(P.DUR.redOn !== P.DUR.footOn);
+  assert.ok(P.DUR.redOn !== P.DUR.slipperOn);
+  assert.ok(P.DUR.redOn !== P.DUR.thirstOn);
+  assert.ok(P.DUR.redOn !== P.DUR.weekOn);
+  assert.ok(P.DUR.redOn !== P.DUR.coolOn);
+  assert.ok(P.DUR.redOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.red !== P.DUR.glow);
+  assert.ok(P.DUR.red !== P.DUR.foot);
+  assert.ok(P.DUR.redHold !== P.DUR.glowHold);
+  assert.ok(P.DUR.redOff !== P.DUR.glowOff);
+  const red = P.redPoint(WIN, P.SPRITE, WORK);
+  const glow = P.glowPoint(WIN, P.SPRITE, WORK);
+  const tip = P.tipPoint(WIN, P.SPRITE, WORK);
+  const thirst = P.thirstPoint(WIN, P.SPRITE, WORK);
+  const cool = P.coolPoint(WIN, P.SPRITE, WORK);
+  const week = P.weekPoint(WIN, P.SPRITE, WORK);
+  const foot = P.footPoint(WIN, P.SPRITE, WORK);
+  const slipper = P.slipperPoint(WIN, P.SPRITE, WORK);
+  assert.ok(red.lift > 8, "the lower sash light as a lamp drop, not the sky");
+  assert.ok(Math.abs(red.lift - glow.lift) < 8, "a real lower sash light, Spark's furniture family");
+  assert.ok(Math.abs(red.lift - tip.lift) < 8, "a real lower sash light, Drake's furniture family");
+  assert.ok(Math.abs(red.x - glow.x) > 8, "not Spark's ink-dusk glow");
+  assert.ok(Math.abs(red.x - tip.x) > 8, "not Drake's ink-dish tip");
+  assert.ok(Math.abs(red.x - thirst.x) > 8 || Math.abs(red.lift - thirst.lift) > 1, "not Gleam bright-pane lamp glass");
+  assert.ok(Math.abs(red.x - cool.x) > 8 || Math.abs(red.lift - cool.lift) > 1, "not Hush lamp-shadow pane");
+  assert.ok(Math.abs(red.x - week.x) > 8 || Math.abs(red.lift - week.lift) > 1, "not Ghost lamp-side glass week");
+  assert.ok(Math.abs(red.x - foot.x) > 8 || Math.abs(red.lift - foot.lift) > 1, "not Reach silt-film rebate");
+  assert.ok(Math.abs(red.x - slipper.x) > 8 || Math.abs(red.lift - slipper.lift) > 1, "not Boot drop-glass pane");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "euglena", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real lower sash light, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "euglena", WORK, P.SPRITE);
+  assert.equal(short, null, "a real lower sash light, not a short pane");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 191, height: 174 }], 80, "euglena", WORK, P.SPRITE);
+  assert.equal(thin, null, "a real lower sash light, not a shorter light");
+  const okRed = P.pickTarget([{ id: "lamp", x: 200, y: 80, width: 191, height: 175 }], 80, "euglena", WORK, P.SPRITE);
+  assert.ok(okRed, "a real lower sash light as a lamp drop");
+  const shortW = P.pickTarget([{ id: "shortW", x: 200, y: 80, width: 190, height: 175 }], 80, "euglena", WORK, P.SPRITE);
+  assert.equal(shortW, null, "a real lower sash light, not a thinner light");
+  const sparkOk = P.pickTarget([{ id: "light", x: 200, y: 80, width: 189, height: 173 }], 80, "firefly", WORK, P.SPRITE);
+  assert.ok(sparkOk, "Spark still takes a lower sash light");
+  const gleamOk = P.pickTarget([{ id: "thirst", x: 200, y: 80, width: 190, height: 170 }], 80, "photovore", WORK, P.SPRITE);
+  assert.ok(gleamOk, "Gleam still takes a bright pane");
+  const hushOk = P.pickTarget([{ id: "cool", x: 200, y: 80, width: 198, height: 188 }], 80, "umbral", WORK, P.SPRITE);
+  assert.ok(hushOk, "Hush still takes a lamp-shadow pane");
+  const reachOk = P.pickTarget([{ id: "rebate", x: 200, y: 80, width: 192, height: 198 }], 80, "amoeba", WORK, P.SPRITE);
+  assert.ok(reachOk, "Reach still takes a glazing rebate");
+  const bootOk = P.pickTarget([{ id: "slipper", x: 200, y: 80, width: 196, height: 180 }], 80, "paramecium", WORK, P.SPRITE);
+  assert.ok(bootOk, "Boot still takes a window pane as a drop glass");
+  const sevenOk = P.pickTarget([{ id: "spot", x: 200, y: 80, width: 186, height: 170 }], 80, "ladybird", WORK, P.SPRITE);
+  assert.ok(sevenOk, "Seven still takes a window-box leaf");
+  const walkOn = P.redOnPath(0.25, { x: 40, lift: 0 }, { x: red.x, lift: red.lift });
+  const glowOn = P.glowOnPath(0.25, { x: 40, lift: 0 }, { x: glow.x, lift: glow.lift });
+  const footOn = P.footOnPath(0.25, { x: 40, lift: 0 }, { x: foot.x, lift: foot.lift });
+  assert.ok(walkOn.lift >= 0, "it walks onto the lower sash light as a lamp drop");
+  assert.ok(walkOn.rot !== glowOn.rot, "a walk onto the light, not Spark glow");
+  assert.ok(walkOn.rot !== footOn.rot, "a walk onto the light, not Reach foot");
+  const redPose = P.redPath(0.3);
+  const glowPose = P.glowPath(0.3);
+  const footPose = P.footPath(0.3);
+  const thirstPose = P.thirstPath(0.3);
+  const weekPose = P.weekPath(0.3);
+  assert.ok(Math.abs(redPose.lift) > 0.15 || Math.abs(redPose.rot) > 0.8, "it reds once; red is the tell");
+  assert.ok(redPose.rot !== glowPose.rot, "red, not glow");
+  assert.ok(redPose.rot !== footPose.rot, "red, not foot");
+  assert.ok(redPose.rot !== thirstPose.rot, "red, not thirst");
+  assert.ok(redPose.rot !== weekPose.rot, "red, not week");
+  const hold = P.redHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 2.0) < 0.2, "it holds the sit on the lamp drop");
+  assert.ok(Math.abs(hold.x - 0.52) < 0.05, "it stays on the lower sash light");
+  assert.ok(hold.lift > 0, "sit the red, not a bury sink");
+  const off0 = P.redOffPath(0, { x: red.x, lift: red.lift + 4.1, rot: 2.0 }, { x: red.x + 50, lift: 0 });
+  const offMid = P.redOffPath(0.5, { x: red.x, lift: red.lift + 4.1, rot: 2.0 }, { x: red.x + 50, lift: 0 });
+  const off1 = P.redOffPath(1, { x: red.x, lift: red.lift + 4.1, rot: 2.0 }, { x: red.x + 50, lift: 0 });
+  assert.ok(Math.abs(off0.x - red.x) < 2);
+  assert.ok(Math.abs(offMid.x - red.x) > 8, "a walk leave off the lamp drop");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "glow");
+    assert.notEqual(play.phase, "foot");
+    assert.notEqual(play.phase, "spot");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "red") {
+      assert.ok(play.lift !== undefined, "it reds on the lamp drop");
+    }
+  }
+  assert.ok(seen.has("red-on"));
+  assert.ok(seen.has("red"));
+  assert.ok(seen.has("red-hold"));
+  assert.ok(seen.has("red-off"));
+  assert.ok(seen.has("approach") || seen.has("walk") || seen.has("land"));
+  assert.equal(windowIds.size, 1, "one window; bounds-only");
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Spot's lamp-drop red; sleep, card, and hide abort; Spot never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "euglena", WORK, P.SPRITE);
+  assert.ok(target);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "red"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "red");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "red");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40, "refit follows the moved lamp drop");
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "red-off");
   assert.equal(play.abort, true);
 });
