@@ -36091,11 +36091,13 @@ test("a moved window refits Beacon's ruler-line align; sleep, card, and hide abo
   assert.equal(play.abort, true);
 });
 
-test("Hush leftover quiets a lamp-side pane as a lamp shadow: walk onto the cool glass, sit the cool, then leave", () => {
+test("Hush leftover cools a lamp-side pane as a lamp shadow: walk into the shadow, sit the cool, then leave", () => {
   const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
-  assert.equal(P.playFor("umbral"), "quiet");
-  assert.equal(P.QUIET, "quiet");
+  assert.equal(P.playFor("umbral"), "cool");
+  assert.equal(P.COOL, "cool");
   assert.notEqual(P.playFor("umbral"), "week");
+  assert.notEqual(P.playFor("umbral"), "dusk");
+  assert.notEqual(P.playFor("umbral"), "glow");
   assert.notEqual(P.playFor("umbral"), "rim");
   assert.notEqual(P.playFor("umbral"), "gold");
   assert.notEqual(P.playFor("umbral"), "web");
@@ -36122,9 +36124,9 @@ test("Hush leftover quiets a lamp-side pane as a lamp shadow: walk onto the cool
   assert.equal(P.playFor("cyst"), "sill");
   const target = P.pickTarget([WIN], 80, "umbral", WORK, P.SPRITE);
   assert.ok(target);
-  assert.equal(target.kind, "quiet");
+  assert.equal(target.kind, "cool");
   assert.equal(target.side, "lampshadow");
-  assert.equal(target.leave, "quieted");
+  assert.equal(target.leave, "cooled");
   assert.notEqual(target.kind, "week");
   assert.notEqual(target.kind, "rim");
   assert.notEqual(target.kind, "gold");
@@ -36132,64 +36134,64 @@ test("Hush leftover quiets a lamp-side pane as a lamp shadow: walk onto the cool
   assert.notEqual(target.kind, "thirst");
   assert.notEqual(target.kind, "align");
   assert.notEqual(target.kind, "sill");
-  assert.ok(target.holdLift >= 0, "it quiets a lamp-side pane as a lamp shadow");
-  assert.ok(P.DUR.quietHold > P.DUR.quiet * 1.2, "the hold is the sit; quiet is the tell");
-  assert.ok(P.DUR.quietOn > 1.0, "a walk onto the cool glass, not a cling");
-  assert.ok(P.DUR.quietOn !== P.DUR.alignOn);
-  assert.ok(P.DUR.quietOn !== P.DUR.frostOn);
-  assert.ok(P.DUR.quietOn !== P.DUR.weekOn);
-  assert.ok(P.DUR.quietOn !== P.DUR.rimOn);
-  assert.ok(P.DUR.quietOn !== P.DUR.thirstOn);
-  assert.ok(P.DUR.quietOn !== P.DUR.sillHop);
-  assert.ok(P.DUR.quiet !== P.DUR.align);
-  assert.ok(P.DUR.quiet !== P.DUR.frost);
-  assert.ok(P.DUR.quietHold !== P.DUR.alignHold);
-  assert.ok(P.DUR.quietOff !== P.DUR.alignOff);
-  const quiet = P.quietPoint(WIN, P.SPRITE, WORK);
+  assert.ok(target.holdLift >= 0, "it cools a lamp-side pane as a lamp shadow");
+  assert.ok(P.DUR.coolHold > P.DUR.cool * 1.2, "the hold is the sit; cool is the tell");
+  assert.ok(P.DUR.coolOn > 1.0, "a walk into the shadow, not a cling");
+  assert.ok(P.DUR.coolOn !== P.DUR.alignOn);
+  assert.ok(P.DUR.coolOn !== P.DUR.frostOn);
+  assert.ok(P.DUR.coolOn !== P.DUR.weekOn);
+  assert.ok(P.DUR.coolOn !== P.DUR.rimOn);
+  assert.ok(P.DUR.coolOn !== P.DUR.thirstOn);
+  assert.ok(P.DUR.coolOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.cool !== P.DUR.align);
+  assert.ok(P.DUR.cool !== P.DUR.frost);
+  assert.ok(P.DUR.coolHold !== P.DUR.alignHold);
+  assert.ok(P.DUR.coolOff !== P.DUR.alignOff);
+  const cool = P.coolPoint(WIN, P.SPRITE, WORK);
   const week = P.weekPoint(WIN, P.SPRITE, WORK);
   const rim = P.rimPoint(WIN, P.SPRITE, WORK);
   const gold = P.goldPoint(WIN, P.SPRITE, WORK);
   const web = P.webPoint(WIN, P.SPRITE, WORK);
   const thirst = P.thirstPoint(WIN, P.SPRITE, WORK);
   const align = P.alignPoint(WIN, P.SPRITE, WORK);
-  assert.ok(quiet.lift >= 0, "the lamp-side pane as a lamp shadow, not the sky");
-  assert.ok(Math.abs(quiet.x - week.x) > 8 || Math.abs(quiet.lift - week.lift) > 1, "not Ghost lamp-side week");
-  assert.ok(Math.abs(quiet.x - rim.x) > 8 || Math.abs(quiet.lift - rim.lift) > 1, "not Dusk lamp-edge rim");
-  assert.ok(Math.abs(quiet.x - gold.x) > 8 || Math.abs(quiet.lift - gold.lift) > 1, "not Fan lamp-side gold");
-  assert.ok(Math.abs(quiet.x - web.x) > 8 || Math.abs(quiet.lift - web.lift) > 1, "not Loom lamp-side web");
-  assert.ok(Math.abs(quiet.x - thirst.x) > 8 || Math.abs(quiet.lift - thirst.lift) > 1, "not Gleam thirst bright pane");
-  assert.ok(Math.abs(quiet.x - align.x) > 8 || Math.abs(quiet.lift - align.lift) > 1, "not Beacon align");
+  assert.ok(cool.lift >= 0, "the lamp-side pane as a lamp shadow, not the sky");
+  assert.ok(Math.abs(cool.x - week.x) > 8 || Math.abs(cool.lift - week.lift) > 1, "not Ghost lamp-side week");
+  assert.ok(Math.abs(cool.x - rim.x) > 8 || Math.abs(cool.lift - rim.lift) > 1, "not Dusk lamp-edge rim");
+  assert.ok(Math.abs(cool.x - gold.x) > 8 || Math.abs(cool.lift - gold.lift) > 1, "not Fan lamp-side gold");
+  assert.ok(Math.abs(cool.x - web.x) > 8 || Math.abs(cool.lift - web.lift) > 1, "not Loom lamp-side web");
+  assert.ok(Math.abs(cool.x - thirst.x) > 8 || Math.abs(cool.lift - thirst.lift) > 1, "not Gleam thirst bright pane");
+  assert.ok(Math.abs(cool.x - align.x) > 8 || Math.abs(cool.lift - align.lift) > 1, "not Beacon align");
   const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "umbral", WORK, P.SPRITE);
   assert.equal(tiny, null, "a real cool pane, not a thin strip");
   const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 196, height: 186 }], 80, "umbral", WORK, P.SPRITE);
   assert.equal(short, null, "a real cool pane, not a thinner frame");
-  const okQuiet = P.pickTarget([{ id: "quiet", x: 200, y: 80, width: 198, height: 188 }], 80, "umbral", WORK, P.SPRITE);
+  const okQuiet = P.pickTarget([{ id: "cool", x: 200, y: 80, width: 198, height: 188 }], 80, "umbral", WORK, P.SPRITE);
   assert.ok(okQuiet, "a real lamp-side pane as a lamp shadow");
   const alignOk = P.pickTarget([{ id: "align", x: 200, y: 80, width: 172, height: 212 }], 80, "magneton", WORK, P.SPRITE);
   assert.ok(alignOk, "Beacon still takes a ruler-line bead");
   const weekOk = P.pickTarget([{ id: "week", x: 200, y: 80, width: 200, height: 200 }], 80, "luna", WORK, P.SPRITE);
   assert.ok(weekOk, "Ghost still takes a lamp-side week");
-  const walkOn = P.quietOnPath(0.25, { x: 40, lift: 0 }, { x: quiet.x, lift: quiet.lift });
-  const weekOn = P.weekOnPath(0.25, { x: 40, lift: 0 }, { x: quiet.x, lift: quiet.lift });
+  const walkOn = P.coolOnPath(0.25, { x: 40, lift: 0 }, { x: cool.x, lift: cool.lift });
+  const weekOn = P.weekOnPath(0.25, { x: 40, lift: 0 }, { x: cool.x, lift: cool.lift });
   assert.ok(walkOn.lift >= 0, "it walks onto the lamp-side pane as a lamp shadow");
-  assert.ok(walkOn.rot !== weekOn.rot, "a walk onto the cool glass, not Ghost week");
-  const quietPose = P.quietPath(0.3);
+  assert.ok(walkOn.rot !== weekOn.rot, "a walk into the shadow, not Ghost week");
+  const coolPose = P.coolPath(0.3);
   const weekPose = P.weekPath(0.3);
   const rimPose = P.rimPath(0.3);
   const alignPose = P.alignPath(0.3);
-  assert.ok(Math.abs(quietPose.lift) > 0.2 || Math.abs(quietPose.rot) > 0.8, "it quiets once; quiet is the tell");
-  assert.ok(quietPose.rot !== weekPose.rot, "quiet, not week");
-  assert.ok(quietPose.rot !== rimPose.rot, "quiet, not rim");
-  assert.ok(quietPose.rot !== alignPose.rot, "quiet, not align");
-  const hold = P.quietHoldPath(0.5);
+  assert.ok(Math.abs(coolPose.lift) > 0.2 || Math.abs(coolPose.rot) > 0.8, "it cools once; cool is the tell");
+  assert.ok(coolPose.rot !== weekPose.rot, "cool, not week");
+  assert.ok(coolPose.rot !== rimPose.rot, "cool, not rim");
+  assert.ok(coolPose.rot !== alignPose.rot, "cool, not align");
+  const hold = P.coolHoldPath(0.5);
   assert.ok(Math.abs(hold.rot - 1.77) < 0.2, "it holds the sit on the cool glass");
   assert.ok(Math.abs(hold.x - 0.83) < 0.05, "it stays on the lamp shadow");
   assert.ok(hold.lift > 0, "sit the cool of the pane, not a bury sink");
-  const off0 = P.quietOffPath(0, { x: quiet.x, lift: quiet.lift + 0.60, rot: 1.77 }, { x: quiet.x + 50, lift: 0 });
-  const offMid = P.quietOffPath(0.5, { x: quiet.x, lift: quiet.lift + 0.60, rot: 1.77 }, { x: quiet.x + 50, lift: 0 });
-  const off1 = P.quietOffPath(1, { x: quiet.x, lift: quiet.lift + 0.60, rot: 1.77 }, { x: quiet.x + 50, lift: 0 });
-  assert.ok(Math.abs(off0.x - quiet.x) < 2);
-  assert.ok(Math.abs(offMid.x - quiet.x) > 8, "a walk leave off the lamp shadow");
+  const off0 = P.coolOffPath(0, { x: cool.x, lift: cool.lift + 0.60, rot: 1.77 }, { x: cool.x + 50, lift: 0 });
+  const offMid = P.coolOffPath(0.5, { x: cool.x, lift: cool.lift + 0.60, rot: 1.77 }, { x: cool.x + 50, lift: 0 });
+  const off1 = P.coolOffPath(1, { x: cool.x, lift: cool.lift + 0.60, rot: 1.77 }, { x: cool.x + 50, lift: 0 });
+  assert.ok(Math.abs(off0.x - cool.x) < 2);
+  assert.ok(Math.abs(offMid.x - cool.x) > 8, "a walk leave off the lamp shadow");
   assert.ok(Math.abs(off1.lift) < 3);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
@@ -36202,20 +36204,20 @@ test("Hush leftover quiets a lamp-side pane as a lamp shadow: walk onto the cool
     assert.notEqual(play.phase, "rim");
     assert.notEqual(play.phase, "align");
     assert.notEqual(play.phase, "sill-walk");
-    if (play.phase === "quiet") {
-      assert.ok(play.lift !== undefined, "it quiets on the lamp-side pane");
+    if (play.phase === "cool") {
+      assert.ok(play.lift !== undefined, "it cools on the lamp-side pane");
     }
   }
-  assert.ok(seen.has("quiet-on"));
-  assert.ok(seen.has("quiet"));
-  assert.ok(seen.has("quiet-hold"));
-  assert.ok(seen.has("quiet-off"));
+  assert.ok(seen.has("cool-on"));
+  assert.ok(seen.has("cool"));
+  assert.ok(seen.has("cool-hold"));
+  assert.ok(seen.has("cool-off"));
   assert.ok(seen.has("approach") || seen.has("walk") || seen.has("land"));
   assert.equal(windowIds.size, 1, "one window; bounds-only");
   assert.equal(play.phase, "done");
 });
 
-test("a moved window refits Hush's lamp-shadow quiet; sleep, card, and hide abort; Hush never starts asleep", () => {
+test("a moved window refits Hush's lamp-shadow cool; sleep, card, and hide abort; Hush never starts asleep", () => {
   assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
   assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
   assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
@@ -36225,16 +36227,16 @@ test("a moved window refits Hush's lamp-shadow quiet; sleep, card, and hide abor
   const target = P.pickTarget([WIN], 200, "umbral", WORK, P.SPRITE);
   assert.ok(target);
   let play = P.beginPlay(target, target.approachX);
-  for (let i = 0; i < 900 && play.phase !== "quiet"; i++) {
+  for (let i = 0; i < 900 && play.phase !== "cool"; i++) {
     play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
   }
-  assert.equal(play.phase, "quiet");
+  assert.equal(play.phase, "cool");
   const beforeX = play.target.holdX;
   const moved = { ...WIN, x: WIN.x + 140 };
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
-  assert.equal(play.phase, "quiet");
+  assert.equal(play.phase, "cool");
   assert.ok(Math.abs(play.target.holdX - beforeX) > 40, "refit follows the moved lamp shadow");
   play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
-  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "quiet-off");
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "cool-off");
   assert.equal(play.abort, true);
 });
