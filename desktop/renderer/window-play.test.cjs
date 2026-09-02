@@ -1113,7 +1113,7 @@ test("a moved window refits the cling hold", () => {
 });
 
 test("other guests do not clone Rui's cling — they walk a sill and hop down", () => {
-  const target = P.pickTarget([WIN], 80, "earwig", WORK, P.SPRITE);
+  const target = P.pickTarget([WIN], 80, "acorn_weevil", WORK, P.SPRITE);
   let play = P.beginPlay(target, target.approachX);
   const seen = new Set();
   for (let i = 0; i < 400 && play.phase !== "done"; i++) {
@@ -30058,7 +30058,7 @@ test("Comb waggles a sill pan as a wax dish: walk onto the pan, dance the waggle
   assert.equal(P.playFor("raccoon"), "rinse");
   assert.equal(P.playFor("crocodile"), "show");
   assert.equal(P.playFor("pitcher"), "fill");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.castingsOn, 3.08, "Heap castings durations stay");
   assert.equal(P.DUR.knobsOn, 3.01, "Knurl knobs durations stay");
   assert.equal(P.DUR.spinesOn, 2.94, "Thorn spines durations stay");
@@ -30270,7 +30270,7 @@ test("Milk weeds a window-box as a milkweed cup: walk onto the box, sit the weed
   assert.equal(P.playFor("lugworm"), "castings");
   assert.equal(P.CASTINGS, "castings");
   assert.equal(P.playFor("bumblebee"), "forage");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.waggleOn, 3.15, "Comb waggle durations stay");
   assert.equal(P.DUR.castingsOn, 3.08, "Heap castings durations stay");
   const target = P.pickTarget([WIN], 80, "monarch", WORK, P.SPRITE);
@@ -30469,7 +30469,7 @@ test("Ghost weeks a lamp-side glass as lamp dusk: walk onto the glass, sit the w
   assert.equal(P.SAND, "sand");
   assert.equal(P.playFor("solifuge"), "run");
   assert.equal(P.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.weedOn, 3.22, "Milk weed durations stay");
   assert.equal(P.DUR.waggleOn, 3.15, "Comb waggle durations stay");
   assert.equal(P.DUR.duskOn, 1.54, "Night dusk durations stay");
@@ -30661,7 +30661,7 @@ test("Spark the firefly glows a lower sash light as ink dusk: walk onto the ligh
   assert.equal(P.playFor("solifuge"), "run");
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("monarch"), "weed");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.weekOn, 3.41, "Ghost week durations stay");
   assert.equal(P.DUR.duskOn, 1.54, "Night dusk durations stay");
   assert.equal(P.DUR.weedOn, 3.22, "Milk weed durations stay");
@@ -30848,7 +30848,7 @@ test("Dart hawks a lamp-side air as prey air: walk into the air, sit the hawk, t
   assert.equal(P.playFor("spark_dragon"), "crackle");
   assert.equal(P.playFor("luna"), "week");
   assert.equal(P.playFor("hummingbird"), "sip");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.glowOn, 3.48, "Spark glow durations stay");
   assert.equal(P.DUR.soarOn, 1.46, "Hook soar durations stay");
   assert.equal(P.DUR.huntOn, 1.76, "Haste hunt durations stay");
@@ -31025,9 +31025,9 @@ test("Twig freezes a sash muntin as a pencil stem: walk onto the muntin, sit the
   assert.equal(P.SEED, "seed");
   assert.equal(P.playFor("opossum"), "still");
   assert.equal(P.playFor("stickleback"), "glue");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.hawkOn, 3.22, "Dart hawk durations stay");
   assert.equal(P.DUR.creepOn, 1.73, "Still creep durations stay");
   assert.equal(P.DUR.reachOn, 1.61, "Hang reach durations stay");
@@ -31204,8 +31204,8 @@ test("Column nests a sash stile as a timber gallery: walk onto the stile, sit th
   assert.equal(P.FREEZE, "freeze");
   assert.equal(P.playFor("darner"), "hawk");
   assert.equal(P.HAWK, "hawk");
-  assert.equal(P.playFor("earwig"), "sill");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.freezeOn, 3.56, "Twig freeze durations stay");
   assert.equal(P.DUR.boreOn, 1.22, "Auger bore durations stay");
   assert.equal(P.DUR.digOn, 1.68, "Bank dig durations stay");
@@ -31386,7 +31386,7 @@ test("Seven spots a window-box leaf as a leaf dish: walk onto the leaf, sit the 
   assert.equal(P.WAGGLE, "waggle");
   assert.equal(P.playFor("carpenter_ant"), "nest");
   assert.equal(P.NEST, "nest");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.nestOn, 2.84, "Column nest durations stay");
   assert.equal(P.DUR.huntOn, P.DUR.huntOn, "Haste hunt durations stay");
   assert.equal(P.DUR.snipOn, P.DUR.snipOn, "Disc snip durations stay");
@@ -31570,7 +31570,7 @@ test("Fold prays a window-box stem as a green hinge: walk onto the stem, sit the
   assert.equal(P.HUNT, "hunt");
   assert.equal(P.playFor("ladybird"), "spot");
   assert.equal(P.SPOT, "spot");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.spotOn, 3.12, "Seven spot durations stay");
   assert.equal(P.DUR.freezeOn, P.DUR.freezeOn, "Twig freeze durations stay");
   assert.equal(P.DUR.stiltOn, P.DUR.stiltOn, "Stem stilt durations stay");
@@ -31756,7 +31756,7 @@ test("Brood emerges a window foot as a soil husk: walk onto the foot, sit, burst
   assert.equal(P.playFor("pileated"), "drum");
   assert.equal(P.playFor("honey_drone"), "drone");
   assert.equal(P.playFor("bumblebee"), "forage");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.prayOn, P.DUR.prayOn, "Fold pray durations stay");
   assert.equal(P.DUR.castingsOn, P.DUR.castingsOn, "Heap castings durations stay");
   assert.equal(P.DUR.springOn, P.DUR.springOn, "Hop spring durations stay");
@@ -31930,7 +31930,7 @@ test("Chirp songs a window stool as a grass dish: walk onto the stool, sit the s
   assert.equal(P.playFor("honey_drone"), "drone");
   assert.equal(P.playFor("bumblebee"), "forage");
   assert.equal(P.playFor("mantis"), "pray");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.emergeOn, P.DUR.emergeOn, "Brood emerge durations stay");
   assert.equal(P.DUR.chirpOn, P.DUR.chirpOn, "Pad chirp durations stay");
   assert.equal(P.DUR.singOn, P.DUR.singOn, "Swing sing durations stay");
@@ -32099,7 +32099,7 @@ test("Blade leafs a sash horn as a leaf rim: walk onto the horn, sit the leaf, s
   assert.equal(P.playFor("mantis"), "pray");
   assert.equal(P.playFor("leafcutter"), "snip");
   assert.equal(P.playFor("opossum"), "still");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.songOn, P.DUR.songOn, "Chirp song durations stay");
   assert.equal(P.DUR.freezeOn, P.DUR.freezeOn, "Twig freeze durations stay");
   assert.equal(P.DUR.chirpOn, P.DUR.chirpOn, "Pad chirp durations stay");
@@ -32255,7 +32255,7 @@ test("Vault jumps a window apron as a grass plate: walk onto the apron, sit, vau
   assert.equal(P.playFor("springtail"), "spring");
   assert.equal(P.playFor("jumping_spider"), "pounce");
   assert.equal(P.playFor("red_tail"), "soar");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.leafOn, P.DUR.leafOn, "Blade leaf durations stay");
   assert.equal(P.DUR.songOn, P.DUR.songOn, "Chirp song durations stay");
   assert.equal(P.DUR.springOn, P.DUR.springOn, "Hop spring durations stay");
@@ -32413,7 +32413,7 @@ test("Banner tails a window stool as a blossom dish: walk onto the stool, sit, b
   assert.equal(P.SONG, "song");
   assert.equal(P.playFor("monarch"), "weed");
   assert.equal(P.playFor("luna"), "week");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   assert.equal(P.DUR.jumpOn, P.DUR.jumpOn, "Vault jump durations stay");
   assert.equal(P.DUR.leafOn, P.DUR.leafOn, "Blade leaf durations stay");
   assert.equal(P.DUR.songOn, P.DUR.songOn, "Chirp song durations stay");
@@ -32581,7 +32581,7 @@ test("Jewel blacks a glass rim as a stream jewel: walk onto the rim, sit, jewel 
   assert.equal(P.playFor("grasshopper"), "jump");
   assert.equal(P.playFor("katydid"), "leaf");
   assert.equal(P.playFor("field_cricket"), "song");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   const target = P.pickTarget([WIN], 80, "jewelwing", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "black");
@@ -32734,7 +32734,7 @@ test("Lace nets a window stool as a leaf dish: walk onto the stool, sit, lace on
   assert.equal(P.playFor("grasshopper"), "jump");
   assert.equal(P.playFor("katydid"), "leaf");
   assert.equal(P.playFor("field_cricket"), "song");
-  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
   const target = P.pickTarget([WIN], 80, "lacewing", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "net");
@@ -32863,6 +32863,166 @@ test("a moved window refits Lace's leaf-dish net; sleep, card, and hide abort; L
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "net-off");
   assert.equal(play.abort, true);
 });
+﻿test("Forceps cercis a window stool as a bark dish: walk onto the stool, sit, raise the cerci once, sit the dish, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("earwig"), "cerci");
+  assert.equal(P.CERCI, "cerci");
+  assert.notEqual(P.playFor("earwig"), "forceps");
+  assert.notEqual(P.playFor("earwig"), "raise");
+  assert.notEqual(P.playFor("earwig"), "claw");
+  assert.notEqual(P.playFor("earwig"), "pinch");
+  assert.notEqual(P.playFor("earwig"), "fold");
+  assert.notEqual(P.playFor("earwig"), "pray");
+  assert.notEqual(P.playFor("earwig"), "sting");
+  assert.notEqual(P.playFor("earwig"), "net");
+  assert.notEqual(P.playFor("earwig"), "black");
+  assert.notEqual(P.playFor("earwig"), "spray");
+  assert.notEqual(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("lacewing"), "net");
+  assert.equal(P.NET, "net");
+  assert.equal(P.playFor("jewelwing"), "black");
+  assert.equal(P.BLACK, "black");
+  assert.equal(P.playFor("mantis"), "pray");
+  assert.equal(P.PRAY, "pray");
+  assert.equal(P.playFor("crayfish"), "claw");
+  assert.equal(P.CLAW, "claw");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("vinegaroon"), "spray");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
+  const target = P.pickTarget([WIN], 80, "earwig", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "cerci");
+  assert.equal(target.side, "paperbark");
+  assert.equal(target.leave, "cercied");
+  assert.notEqual(target.kind, "net");
+  assert.notEqual(target.kind, "black");
+  assert.notEqual(target.kind, "pray");
+  assert.notEqual(target.kind, "claw");
+  assert.notEqual(target.kind, "raise");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift >= 0, "she cercis a window stool as a bark dish");
+  assert.ok(P.DUR.cerciHold > P.DUR.cerci * 1.2, "the hold is the sit; the cerci is the tell");
+  assert.ok(P.DUR.cerciOn > 1.0, "a walk onto the stool, not the raise");
+  assert.ok(P.DUR.cerciOn !== P.DUR.netOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.blackOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.prayOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.clawOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.raiseOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.sprayOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.cerci !== P.DUR.net);
+  assert.ok(P.DUR.cerci !== P.DUR.black);
+  assert.ok(P.DUR.cerci !== P.DUR.pray);
+  assert.ok(P.DUR.cerci !== P.DUR.claw);
+  assert.ok(P.DUR.cerci !== P.DUR.raise);
+  assert.ok(P.DUR.cerciHold !== P.DUR.netHold);
+  assert.ok(P.DUR.cerciHold !== P.DUR.blackHold);
+  assert.ok(P.DUR.cerciHold !== P.DUR.prayHold);
+  assert.ok(P.DUR.cerciOff !== P.DUR.netOff);
+  assert.ok(P.DUR.cerciOff !== P.DUR.blackOff);
+  assert.ok(P.DUR.cerciOff !== P.DUR.prayOff);
+  const dish = P.cerciPoint(WIN, P.SPRITE, WORK);
+  const leaf = P.netPoint(WIN, P.SPRITE, WORK);
+  const jewel = P.blackPoint(WIN, P.SPRITE, WORK);
+  const hinge = P.prayPoint(WIN, P.SPRITE, WORK);
+  const pebble = P.clawPoint(WIN, P.SPRITE, WORK);
+  const bark = P.raisePoint(WIN, P.SPRITE, WORK);
+  assert.ok(dish.lift >= 0, "the window stool as a bark dish, not the sky");
+  assert.ok(Math.abs(dish.x - leaf.x) > 12 || Math.abs(dish.lift - leaf.lift) > 2, "not Lace's leaf-dish net");
+  assert.ok(Math.abs(dish.x - jewel.x) > 12 || Math.abs(dish.lift - jewel.lift) > 4, "not Jewel's glass-rim black");
+  assert.ok(Math.abs(dish.x - hinge.x) > 12 || Math.abs(dish.lift - hinge.lift) > 4, "not Fold's window-box-stem pray");
+  assert.ok(Math.abs(dish.x - pebble.x) > 12 || Math.abs(dish.lift - pebble.lift) > 4, "not Pinch's sill-wash claw");
+  assert.ok(Math.abs(dish.x - bark.x) > 12 || Math.abs(dish.lift - bark.lift) > 2, "not Barb's bark-tray raise");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "earwig", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window stool, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 168, height: 74 }], 80, "earwig", WORK, P.SPRITE);
+  assert.equal(short, null, "a real bark dish, not Brood's emerge gate");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 188, height: 152 }], 80, "earwig", WORK, P.SPRITE);
+  assert.equal(thin, null, "a real bark-dish stool, not a thinner stool");
+  const okCerci = P.pickTarget([{ id: "cerci", x: 200, y: 80, width: 188, height: 154 }], 80, "earwig", WORK, P.SPRITE);
+  assert.ok(okCerci, "a real window stool as a bark dish");
+  const netOk = P.pickTarget([{ id: "net", x: 200, y: 80, width: 190, height: 152 }], 80, "lacewing", WORK, P.SPRITE);
+  assert.ok(netOk, "Lace still takes a leaf dish");
+  const blackOk = P.pickTarget([{ id: "black", x: 200, y: 80, width: 184, height: 156 }], 80, "jewelwing", WORK, P.SPRITE);
+  assert.ok(blackOk, "Jewel still takes a stream jewel");
+  const prayOk = P.pickTarget([{ id: "pray", x: 200, y: 80, width: 184, height: 178 }], 80, "mantis", WORK, P.SPRITE);
+  assert.ok(prayOk, "Fold still takes a green hinge");
+  const clawOk = P.pickTarget([{ id: "claw", x: 200, y: 80, width: 188, height: 172 }], 80, "crayfish", WORK, P.SPRITE);
+  assert.ok(clawOk, "Pinch still takes a pebble tray");
+  const walkOn = P.cerciOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const netOn = P.netOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  const prayOn = P.prayOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+  assert.ok(walkOn.lift >= 0, "she walks onto the stool as a bark dish");
+  assert.ok(walkOn.rot !== netOn.rot, "a walk onto the stool, not Lace net");
+  assert.ok(walkOn.rot !== prayOn.rot, "a walk onto the stool, not Fold pray");
+  const cerciPose = P.cerciPath(0.4);
+  const netPose = P.netPath(0.4);
+  const raisePose = P.raisePath(0.4);
+  const prayPose = P.prayPath(0.4);
+  assert.ok(cerciPose.lift > 0.5, "she raises the cerci; cerci is the tell");
+  assert.ok(cerciPose.rot !== netPose.rot, "cerci, not net");
+  assert.ok(cerciPose.rot !== raisePose.rot, "cerci, not Barb raise");
+  assert.ok(cerciPose.rot !== prayPose.rot, "cerci, not Fold pray");
+  const hold = P.cerciHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 1.6) < 0.2, "she holds the sit on the dish");
+  assert.ok(Math.abs(hold.x - 0.16) < 0.05, "she stays on the bark dish");
+  assert.ok(hold.lift < 2, "sit on the stool, not a cerci pulse");
+  const off0 = P.cerciOffPath(0, { x: dish.x, lift: dish.lift + 0.58, rot: -1.6 }, { x: dish.x + 50, lift: 0 });
+  const offMid = P.cerciOffPath(0.5, { x: dish.x, lift: dish.lift + 0.58, rot: -1.6 }, { x: dish.x + 50, lift: 0 });
+  const off1 = P.cerciOffPath(1, { x: dish.x, lift: dish.lift + 0.58, rot: -1.6 }, { x: dish.x + 50, lift: 0 });
+  assert.ok(Math.abs(off0.x - dish.x) < 2);
+  assert.ok(Math.abs(offMid.x - dish.x) > 8, "a walk leave off the bark dish");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "net");
+    assert.notEqual(play.phase, "black");
+    assert.notEqual(play.phase, "pray");
+    assert.notEqual(play.phase, "claw");
+    assert.notEqual(play.phase, "raise");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "cerci") {
+      assert.ok(play.lift >= 0, "she raises cerci on the window stool");
+    }
+  }
+  assert.ok(seen.has("cerci-on"));
+  assert.ok(seen.has("cerci"));
+  assert.ok(seen.has("cerci-hold"));
+  assert.ok(seen.has("cerci-off"));
+  assert.ok(seen.has("approach") || seen.has("walk") || seen.has("land"));
+  assert.equal(windowIds.size, 1, "one window; bounds-only");
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Forceps's bark-dish cerci; sleep, card, and hide abort; Forceps never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "earwig", WORK, P.SPRITE);
+  assert.ok(target);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "cerci"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "cerci");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "cerci");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40, "refit follows the moved window stool");
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "cerci-off");
+  assert.equal(play.abort, true);
+});
+
 
 
 
