@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Puff clouds a window apron as a spore dish; seventh leftover of the fungi den done; Mane leftover still teeths a sash gap as a wood wound; sixth leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Flame; catalog stays 220; cloud is the tell; Mane still owns teeth; Ring still owns zones; Horn still owns fork; Lattice still owns hollow; Cap still owns warts; Frill still owns shelf; Pebble still owns puff; Floss still owns dust) |
+| **Last Updated** | 2026-09-02 (Flame drips a sash stile as warm wood; eighth leftover of the fungi den done; Puff leftover still clouds a window apron as a spore dish; seventh leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Starter; catalog stays 220; drip is the tell; Puff still owns cloud; Mane still owns teeth; Ring still owns zones; Horn still owns fork; Lattice still owns hollow; Cap still owns warts; Frill still owns shelf; Pebble still owns puff; Floss still owns dust) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
