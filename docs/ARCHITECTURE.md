@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Lattice hollows a sash well as leaf mold; third leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Horn; catalog stays 220; hollow is the tell; Cap still owns warts; Frill still owns shelf; Felt still owns lean; Velvet still owns kick; Dapple still owns cover) |
+| **Last Updated** | 2026-09-02 (Horn forks a sash drip as a moss rim; fourth leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Ring; catalog stays 220; fork is the tell; Lattice still owns hollow; Cap still owns warts; Frill still owns shelf; Latch still owns drink; Fan still owns gold; Spark still owns glow; Arc still owns ridge) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
