@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Cap warts a window apron as a moss cup; second leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Lattice; catalog stays 220; warts is the tell; Frill still owns shelf; Seven still owns spot; Sepia still owns flush; Rob still owns seize; Slip still owns ring) |
+| **Last Updated** | 2026-09-02 (Lattice hollows a sash well as leaf mold; third leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Horn; catalog stays 220; hollow is the tell; Cap still owns warts; Frill still owns shelf; Felt still owns lean; Velvet still owns kick; Dapple still owns cover) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
