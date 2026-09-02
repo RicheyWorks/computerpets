@@ -18017,7 +18017,7 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("sand_dollar"), "flat");
   assert.equal(Overlay.playFor("sand_dollar"), "flat");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
   assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
   assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
@@ -18119,7 +18119,7 @@ test("the demo window plate walks Milk weed the same way", () => {
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("lugworm"), "castings");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.weedOn, Overlay.DUR.weedOn);
   assert.equal(P.DUR.weed, Overlay.DUR.weed);
   assert.equal(P.DUR.weedHold, Overlay.DUR.weedHold);
@@ -18216,7 +18216,7 @@ test("the demo window plate walks Ghost week the same way", () => {
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("ghost_crab"), "sand");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.weekOn, Overlay.DUR.weekOn);
   assert.equal(P.DUR.week, Overlay.DUR.week);
   assert.equal(P.DUR.weekHold, Overlay.DUR.weekHold);
@@ -18312,7 +18312,7 @@ test("the demo window plate walks Spark the firefly glow the same way", () => {
   assert.equal(P.playFor("walleye"), "dusk");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("solifuge"), "run");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.glowOn, Overlay.DUR.glowOn);
   assert.equal(P.DUR.glow, Overlay.DUR.glow);
   assert.equal(P.DUR.glowHold, Overlay.DUR.glowHold);
@@ -18408,7 +18408,7 @@ test("the demo window plate walks Dart hawk the same way", () => {
   assert.equal(P.playFor("spark_dragon"), "crackle");
   assert.equal(P.playFor("luna"), "week");
   assert.equal(P.playFor("hummingbird"), "sip");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.hawkOn, Overlay.DUR.hawkOn);
   assert.equal(P.DUR.hawk, Overlay.DUR.hawk);
   assert.equal(P.DUR.hawkHold, Overlay.DUR.hawkHold);
@@ -18504,7 +18504,7 @@ test("the demo window plate walks Twig freeze the same way", () => {
   assert.equal(P.playFor("seahorse"), "hitch");
   assert.equal(P.playFor("oak"), "seed");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.freezeOn, Overlay.DUR.freezeOn);
   assert.equal(P.DUR.freeze, Overlay.DUR.freeze);
   assert.equal(P.DUR.freezeHold, Overlay.DUR.freezeHold);
@@ -18602,7 +18602,7 @@ test("the demo window plate walks Column nest the same way", () => {
   assert.equal(P.playFor("mining_bee"), "dig");
   assert.equal(P.playFor("stick"), "freeze");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.nestOn, Overlay.DUR.nestOn);
   assert.equal(P.DUR.nest, Overlay.DUR.nest);
   assert.equal(P.DUR.nestHold, Overlay.DUR.nestHold);
@@ -18701,7 +18701,7 @@ test("the demo window plate walks Seven spot the same way", () => {
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("carpenter_ant"), "nest");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.spotOn, Overlay.DUR.spotOn);
   assert.equal(P.DUR.spot, Overlay.DUR.spot);
   assert.equal(P.DUR.spotHold, Overlay.DUR.spotHold);
@@ -18790,7 +18790,7 @@ test("the demo window plate walks Fold pray the same way", () => {
   assert.equal(P.playFor("stick"), "freeze");
   assert.equal(P.playFor("harvestman"), "stilt");
   assert.equal(P.playFor("house_centipede"), "hunt");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.prayOn, Overlay.DUR.prayOn);
   assert.equal(P.DUR.pray, Overlay.DUR.pray);
   assert.equal(P.DUR.prayHold, Overlay.DUR.prayHold);
@@ -18878,7 +18878,7 @@ test("the demo window plate walks Brood emerge the same way", () => {
   assert.equal(P.playFor("ladybird"), "spot");
   assert.equal(P.playFor("lugworm"), "castings");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.emergeOn, Overlay.DUR.emergeOn);
   assert.equal(P.DUR.emerge, Overlay.DUR.emerge);
   assert.equal(P.DUR.emergeHold, Overlay.DUR.emergeHold);
@@ -18962,7 +18962,7 @@ test("the demo window plate walks Chirp song the same way", () => {
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(Overlay.playFor("gecko"), "chirp");
   assert.equal(P.playFor("gibbon"), "sing");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.songOn, Overlay.DUR.songOn);
   assert.equal(P.DUR.song, Overlay.DUR.song);
   assert.equal(P.DUR.songHold, Overlay.DUR.songHold);
@@ -19045,7 +19045,7 @@ test("the demo window plate walks Blade leaf the same way", () => {
   assert.equal(Overlay.playFor("field_cricket"), "song");
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(Overlay.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.leafOn, Overlay.DUR.leafOn);
   assert.equal(P.DUR.leaf, Overlay.DUR.leaf);
   assert.equal(P.DUR.leafHold, Overlay.DUR.leafHold);
@@ -19117,7 +19117,7 @@ test("Vault jumps a window apron as a grass plate: walk onto the apron, sit, vau
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(P.playFor("springtail"), "spring");
   assert.equal(P.playFor("jumping_spider"), "pounce");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(Overlay.playFor("grasshopper"), "jump");
   const target = P.pickTarget([WIN], 80, "grasshopper", WORK, P.SPRITE);
   assert.ok(target);
@@ -19203,7 +19203,7 @@ test("the demo window plate walks Vault jump the same way", () => {
   assert.equal(Overlay.playFor("katydid"), "leaf");
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(Overlay.playFor("field_cricket"), "song");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.jumpOn, Overlay.DUR.jumpOn);
   assert.equal(P.DUR.jump, Overlay.DUR.jump);
   assert.equal(P.DUR.jumpHold, Overlay.DUR.jumpHold);
@@ -19251,7 +19251,7 @@ test("Banner tails a window stool as a blossom dish: walk onto the stool, sit, b
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(P.playFor("monarch"), "weed");
   assert.equal(P.playFor("luna"), "week");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(Overlay.playFor("swallowtail"), "tails");
   const target = P.pickTarget([WIN], 80, "swallowtail", WORK, P.SPRITE);
   assert.ok(target);
@@ -19340,7 +19340,7 @@ test("the demo window plate walks Banner tails the same way", () => {
   assert.equal(Overlay.playFor("katydid"), "leaf");
   assert.equal(P.playFor("monarch"), "weed");
   assert.equal(Overlay.playFor("monarch"), "weed");
-  assert.equal(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("lacewing"), "sill");
   assert.equal(P.DUR.tailsOn, Overlay.DUR.tailsOn);
   assert.equal(P.DUR.tails, Overlay.DUR.tails);
   assert.equal(P.DUR.tailsHold, Overlay.DUR.tailsHold);
@@ -19368,4 +19368,110 @@ test("the demo window plate walks Banner tails the same way", () => {
   assert.ok(seen.has("tails-off"));
   assert.equal(play.phase, "done");
 });
+test("Jewel blacks a glass rim as a stream jewel: walk onto the rim, sit, jewel once, sit the jewel, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("jewelwing"), "black");
+  assert.equal(P.BLACK, "black");
+  assert.notEqual(P.playFor("jewelwing"), "jewel");
+  assert.notEqual(P.playFor("jewelwing"), "hawk");
+  assert.notEqual(P.playFor("jewelwing"), "fold");
+  assert.notEqual(P.playFor("jewelwing"), "cling");
+  assert.notEqual(P.playFor("jewelwing"), "flash");
+  assert.notEqual(P.playFor("jewelwing"), "tails");
+  assert.notEqual(P.playFor("jewelwing"), "jump");
+  assert.notEqual(P.playFor("jewelwing"), "leaf");
+  assert.notEqual(P.playFor("jewelwing"), "song");
+  assert.notEqual(P.playFor("jewelwing"), "dart");
+  assert.notEqual(P.playFor("jewelwing"), "sheen");
+  assert.notEqual(P.playFor("jewelwing"), "damsel");
+  assert.notEqual(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("swallowtail"), "tails");
+  assert.equal(P.TAILS, "tails");
+  assert.equal(P.playFor("darner"), "hawk");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.equal(P.playFor("grasshopper"), "jump");
+  assert.equal(P.playFor("katydid"), "leaf");
+  assert.equal(P.playFor("field_cricket"), "song");
+  assert.equal(P.playFor("lacewing"), "sill");
+  assert.equal(Overlay.playFor("jewelwing"), "black");
+  const target = P.pickTarget([WIN], 80, "jewelwing", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "black");
+  assert.equal(target.side, "streamjewel");
+  assert.equal(target.leave, "jewelled");
+  assert.ok(target.holdLift > 20);
+  assert.ok(P.DUR.blackHold > P.DUR.black * 1.2);
+  assert.ok(P.DUR.blackOn !== P.DUR.tailsOn);
+  assert.ok(P.DUR.blackOn !== P.DUR.hawkOn);
+  assert.ok(P.DUR.blackOn !== P.DUR.jumpOn);
+  assert.ok(P.DUR.black !== P.DUR.tails);
+  assert.ok(P.DUR.black !== P.DUR.hawk);
+  const jewel = P.blackPoint(WIN, P.SPRITE, WORK);
+  const blossom = P.tailsPoint(WIN, P.SPRITE, WORK);
+  const prey = P.hawkPoint(WIN, P.SPRITE, WORK);
+  const plate = P.jumpPoint(WIN, P.SPRITE, WORK);
+  const rimLeaf = P.leafPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(jewel.x - blossom.x) > 12 || Math.abs(jewel.lift - blossom.lift) > 4);
+  assert.ok(Math.abs(jewel.x - prey.x) > 12 || Math.abs(jewel.lift - prey.lift) > 4);
+  assert.ok(Math.abs(jewel.x - plate.x) > 12 || Math.abs(jewel.lift - plate.lift) > 4);
+  assert.ok(Math.abs(jewel.x - rimLeaf.x) > 12 || Math.abs(jewel.lift - rimLeaf.lift) > 4);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "jewelwing", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okBlack = P.pickTarget([{ id: "black", x: 200, y: 80, width: 184, height: 156 }], 80, "jewelwing", WORK, P.SPRITE);
+  assert.ok(okBlack);
+  const blackPose = P.blackPath(0.4);
+  assert.ok(blackPose.lift > 1);
+  const hold = P.blackHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 2.7) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "tails");
+    assert.notEqual(play.phase, "hawk");
+    assert.notEqual(play.phase, "jump");
+    assert.notEqual(play.phase, "leaf");
+    assert.notEqual(play.phase, "song");
+  }
+  assert.ok(seen.has("black-on"));
+  assert.ok(seen.has("black"));
+  assert.ok(seen.has("black-hold"));
+  assert.ok(seen.has("black-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Jewel's stream-jewel black; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "jewelwing", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "black"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "black");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "black");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "black-off");
+  assert.equal(play.abort, true);
+});
+
+test("the demo window plate walks Jewel black the same way", () => {
+  const target = P.pickTarget([WIN], 80, "jewelwing", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "black");
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "done");
+});
+
 

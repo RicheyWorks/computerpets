@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Banner tails a window stool as a blossom dish; fourth leftover of the meadow den done; hive ten closed; shore ten is closed; next leftover is Jewel; catalog stays 220; tails are the tell; Vault still owns jump; Blade still owns leaf; Chirp still owns song; Milk still owns weed; Ghost still owns week; gecko still owns chirp) |
+| **Last Updated** | 2026-09-02 (Jewel blacks a glass rim as a stream jewel; fifth leftover of the meadow den done; hive ten closed; shore ten is closed; next leftover is Lace; catalog stays 220; black is the tell; Banner still owns tails; Dart still owns hawk; Bat still owns fold; Vault still owns jump; Blade still owns leaf; gecko still owns chirp) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
