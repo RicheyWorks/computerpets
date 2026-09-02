@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-01 (Blade leafs a sash horn as a leaf rim; second leftover of the meadow den done; hive ten closed; shore ten is closed; next leftover is Vault; catalog stays 220; leaf is the tell; Chirp still owns song; Twig still owns freeze; Seven still owns spot; Fold still owns pray; Disc still owns snip; Vein still owns unfurl; Grin still owns still; gecko still owns chirp) |
+| **Last Updated** | 2026-09-01 (Vault jumps a window apron as a grass plate; third leftover of the meadow den done; hive ten closed; shore ten is closed; next leftover is Banner; catalog stays 220; jump is the tell; Blade still owns leaf; Chirp still owns song; Hop still owns spring; Leap still owns pounce; Hook still owns soar; gecko still owns chirp) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
