@@ -18017,7 +18017,7 @@ test("the demo window plate walks Comb waggle the same way", () => {
   assert.equal(Overlay.playFor("fiddler_crab"), "signal");
   assert.equal(P.playFor("sand_dollar"), "flat");
   assert.equal(Overlay.playFor("sand_dollar"), "flat");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
   assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
   assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
@@ -18119,7 +18119,7 @@ test("the demo window plate walks Milk weed the same way", () => {
   assert.equal(P.playFor("honey_queen"), "lay");
   assert.equal(P.playFor("honeycomb"), "draw");
   assert.equal(P.playFor("lugworm"), "castings");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.weedOn, Overlay.DUR.weedOn);
   assert.equal(P.DUR.weed, Overlay.DUR.weed);
   assert.equal(P.DUR.weedHold, Overlay.DUR.weedHold);
@@ -18216,7 +18216,7 @@ test("the demo window plate walks Ghost week the same way", () => {
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("ghost_crab"), "sand");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.weekOn, Overlay.DUR.weekOn);
   assert.equal(P.DUR.week, Overlay.DUR.week);
   assert.equal(P.DUR.weekHold, Overlay.DUR.weekHold);
@@ -18312,7 +18312,7 @@ test("the demo window plate walks Spark the firefly glow the same way", () => {
   assert.equal(P.playFor("walleye"), "dusk");
   assert.equal(P.playFor("mallard"), "tip");
   assert.equal(P.playFor("solifuge"), "run");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.glowOn, Overlay.DUR.glowOn);
   assert.equal(P.DUR.glow, Overlay.DUR.glow);
   assert.equal(P.DUR.glowHold, Overlay.DUR.glowHold);
@@ -18408,7 +18408,7 @@ test("the demo window plate walks Dart hawk the same way", () => {
   assert.equal(P.playFor("spark_dragon"), "crackle");
   assert.equal(P.playFor("luna"), "week");
   assert.equal(P.playFor("hummingbird"), "sip");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.hawkOn, Overlay.DUR.hawkOn);
   assert.equal(P.DUR.hawk, Overlay.DUR.hawk);
   assert.equal(P.DUR.hawkHold, Overlay.DUR.hawkHold);
@@ -18504,7 +18504,7 @@ test("the demo window plate walks Twig freeze the same way", () => {
   assert.equal(P.playFor("seahorse"), "hitch");
   assert.equal(P.playFor("oak"), "seed");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.freezeOn, Overlay.DUR.freezeOn);
   assert.equal(P.DUR.freeze, Overlay.DUR.freeze);
   assert.equal(P.DUR.freezeHold, Overlay.DUR.freezeHold);
@@ -18602,7 +18602,7 @@ test("the demo window plate walks Column nest the same way", () => {
   assert.equal(P.playFor("mining_bee"), "dig");
   assert.equal(P.playFor("stick"), "freeze");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.nestOn, Overlay.DUR.nestOn);
   assert.equal(P.DUR.nest, Overlay.DUR.nest);
   assert.equal(P.DUR.nestHold, Overlay.DUR.nestHold);
@@ -18701,7 +18701,7 @@ test("the demo window plate walks Seven spot the same way", () => {
   assert.equal(P.playFor("hummingbird"), "sip");
   assert.equal(P.playFor("honeybee"), "waggle");
   assert.equal(P.playFor("carpenter_ant"), "nest");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.spotOn, Overlay.DUR.spotOn);
   assert.equal(P.DUR.spot, Overlay.DUR.spot);
   assert.equal(P.DUR.spotHold, Overlay.DUR.spotHold);
@@ -18790,7 +18790,7 @@ test("the demo window plate walks Fold pray the same way", () => {
   assert.equal(P.playFor("stick"), "freeze");
   assert.equal(P.playFor("harvestman"), "stilt");
   assert.equal(P.playFor("house_centipede"), "hunt");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.prayOn, Overlay.DUR.prayOn);
   assert.equal(P.DUR.pray, Overlay.DUR.pray);
   assert.equal(P.DUR.prayHold, Overlay.DUR.prayHold);
@@ -18878,7 +18878,7 @@ test("the demo window plate walks Brood emerge the same way", () => {
   assert.equal(P.playFor("ladybird"), "spot");
   assert.equal(P.playFor("lugworm"), "castings");
   assert.equal(P.playFor("springtail"), "spring");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.emergeOn, Overlay.DUR.emergeOn);
   assert.equal(P.DUR.emerge, Overlay.DUR.emerge);
   assert.equal(P.DUR.emergeHold, Overlay.DUR.emergeHold);
@@ -18962,7 +18962,7 @@ test("the demo window plate walks Chirp song the same way", () => {
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(Overlay.playFor("gecko"), "chirp");
   assert.equal(P.playFor("gibbon"), "sing");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.songOn, Overlay.DUR.songOn);
   assert.equal(P.DUR.song, Overlay.DUR.song);
   assert.equal(P.DUR.songHold, Overlay.DUR.songHold);
@@ -19045,7 +19045,7 @@ test("the demo window plate walks Blade leaf the same way", () => {
   assert.equal(Overlay.playFor("field_cricket"), "song");
   assert.equal(P.playFor("gecko"), "chirp");
   assert.equal(Overlay.playFor("gecko"), "chirp");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.leafOn, Overlay.DUR.leafOn);
   assert.equal(P.DUR.leaf, Overlay.DUR.leaf);
   assert.equal(P.DUR.leafHold, Overlay.DUR.leafHold);
@@ -19117,7 +19117,7 @@ test("Vault jumps a window apron as a grass plate: walk onto the apron, sit, vau
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(P.playFor("springtail"), "spring");
   assert.equal(P.playFor("jumping_spider"), "pounce");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("grasshopper"), "jump");
   const target = P.pickTarget([WIN], 80, "grasshopper", WORK, P.SPRITE);
   assert.ok(target);
@@ -19203,7 +19203,7 @@ test("the demo window plate walks Vault jump the same way", () => {
   assert.equal(Overlay.playFor("katydid"), "leaf");
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(Overlay.playFor("field_cricket"), "song");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.jumpOn, Overlay.DUR.jumpOn);
   assert.equal(P.DUR.jump, Overlay.DUR.jump);
   assert.equal(P.DUR.jumpHold, Overlay.DUR.jumpHold);
@@ -19251,7 +19251,7 @@ test("Banner tails a window stool as a blossom dish: walk onto the stool, sit, b
   assert.equal(P.playFor("field_cricket"), "song");
   assert.equal(P.playFor("monarch"), "weed");
   assert.equal(P.playFor("luna"), "week");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("swallowtail"), "tails");
   const target = P.pickTarget([WIN], 80, "swallowtail", WORK, P.SPRITE);
   assert.ok(target);
@@ -19340,7 +19340,7 @@ test("the demo window plate walks Banner tails the same way", () => {
   assert.equal(Overlay.playFor("katydid"), "leaf");
   assert.equal(P.playFor("monarch"), "weed");
   assert.equal(Overlay.playFor("monarch"), "weed");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(P.DUR.tailsOn, Overlay.DUR.tailsOn);
   assert.equal(P.DUR.tails, Overlay.DUR.tails);
   assert.equal(P.DUR.tailsHold, Overlay.DUR.tailsHold);
@@ -19392,7 +19392,7 @@ test("Jewel blacks a glass rim as a stream jewel: walk onto the rim, sit, jewel 
   assert.equal(P.playFor("grasshopper"), "jump");
   assert.equal(P.playFor("katydid"), "leaf");
   assert.equal(P.playFor("field_cricket"), "song");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("jewelwing"), "black");
   const target = P.pickTarget([WIN], 80, "jewelwing", WORK, P.SPRITE);
   assert.ok(target);
@@ -19499,7 +19499,7 @@ test("Lace nets a window stool as a leaf dish: walk onto the stool, sit, lace on
   assert.equal(P.playFor("grasshopper"), "jump");
   assert.equal(P.playFor("katydid"), "leaf");
   assert.equal(P.playFor("field_cricket"), "song");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("lacewing"), "net");
   const target = P.pickTarget([WIN], 80, "lacewing", WORK, P.SPRITE);
   assert.ok(target);
@@ -19597,7 +19597,7 @@ test("Forceps cercis a window stool as a bark dish: walk onto the stool, sit, ra
   assert.equal(P.playFor("mantis"), "pray");
   assert.equal(P.playFor("crayfish"), "claw");
   assert.equal(P.playFor("scorpion"), "raise");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("earwig"), "cerci");
   const target = P.pickTarget([WIN], 80, "earwig", WORK, P.SPRITE);
   assert.ok(target);
@@ -19698,7 +19698,7 @@ test("Snout drills a window stool as an acorn cup: walk onto the stool, sit, dri
   assert.equal(P.playFor("oak"), "seed");
   assert.equal(P.playFor("chickadee"), "cache");
   assert.equal(P.playFor("octopus"), "lid");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("acorn_weevil"), "drill");
   const target = P.pickTarget([WIN], 80, "acorn_weevil", WORK, P.SPRITE);
   assert.ok(target);
@@ -19798,7 +19798,7 @@ test("Click rights a window stool as a bark plate: walk onto the stool, sit, rig
   assert.equal(P.playFor("snapper"), "snap");
   assert.equal(P.playFor("hognose"), "flip");
   assert.equal(P.playFor("firefly"), "glow");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("click_beetle"), "right");
   const target = P.pickTarget([WIN], 80, "click_beetle", WORK, P.SPRITE);
   assert.ok(target);
@@ -19893,7 +19893,7 @@ test("Rob seizes a window stool as a grass perch: walk onto the stool, sit, seiz
   assert.equal(P.CLICK, "click");
   assert.equal(P.playFor("house_centipede"), "hunt");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("robber_fly"), "seize");
   const target = P.pickTarget([WIN], 80, "robber_fly", WORK, P.SPRITE);
   assert.ok(target);
@@ -19978,7 +19978,7 @@ test("Frill shelves a sash stile as a timber shelf: walk onto the stile, sit, le
   assert.equal(P.SEIZE, "seize");
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("moss"), "lean");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("oyster"), "shelf");
   const target = P.pickTarget([WIN], 80, "oyster", WORK, P.SPRITE);
   assert.ok(target);
@@ -20060,7 +20060,7 @@ test("Cap warts a window apron as a moss cup: walk onto the apron, sit, wart onc
   assert.notEqual(P.playFor("fly_agaric"), "sill");
   assert.equal(P.playFor("oyster"), "shelf");
   assert.equal(P.SHELF, "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("fly_agaric"), "warts");
   const target = P.pickTarget([WIN], 80, "fly_agaric", WORK, P.SPRITE);
   assert.ok(target);
@@ -20147,7 +20147,7 @@ test("Lattice hollows a sash well as leaf mold: walk into the well, sit the holl
   assert.equal(P.SHELF, "shelf");
   assert.equal(P.playFor("moss"), "lean");
   assert.equal(P.playFor("darner"), "hawk");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("morel"), "hollow");
   const target = P.pickTarget([WIN], 80, "morel", WORK, P.SPRITE);
   assert.ok(target);
@@ -20240,7 +20240,7 @@ test("Horn forks a sash drip as a moss rim: walk onto the drip, sit the fork, th
   assert.equal(P.playFor("ginkgo"), "gold");
   assert.equal(P.playFor("firefly"), "glow");
   assert.equal(P.playFor("cyber_dragon"), "ridge");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("chanterelle"), "fork");
   const target = P.pickTarget([WIN], 80, "chanterelle", WORK, P.SPRITE);
   assert.ok(target);
@@ -20328,7 +20328,7 @@ test("Ring zones a sash stile as wood grain: walk onto the stile, sit the zones,
   assert.equal(P.playFor("morel"), "hollow");
   assert.equal(P.playFor("fly_agaric"), "warts");
   assert.equal(P.playFor("oyster"), "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("turkey_tail"), "zones");
   const target = P.pickTarget([WIN], 80, "turkey_tail", WORK, P.SPRITE);
   assert.ok(target);
@@ -20419,7 +20419,7 @@ test("Mane teeths a sash gap as a wood wound: walk into the gap, sit the teeth, 
   assert.equal(P.playFor("fly_agaric"), "warts");
   assert.equal(P.playFor("oyster"), "shelf");
   assert.equal(P.playFor("caecilian"), "ring");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("lions_mane"), "teeth");
   const target = P.pickTarget([WIN], 80, "lions_mane", WORK, P.SPRITE);
   assert.ok(target);
@@ -20485,7 +20485,7 @@ test("Puff clouds a window apron as a spore dish: walk onto the apron, sit the s
   assert.notEqual(P.playFor("puffball"), "sill");
   assert.equal(P.playFor("toad"), "puff");
   assert.equal(P.playFor("lions_mane"), "teeth");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("puffball"), "cloud");
   const target = P.pickTarget([WIN], 80, "puffball", WORK, P.SPRITE);
   assert.ok(target);
@@ -20550,7 +20550,7 @@ test("Flame drips a sash stile as warm wood: walk onto the stile, sit the bright
   assert.notEqual(P.playFor("chicken_of_woods"), "sill");
   assert.equal(P.playFor("puffball"), "cloud");
   assert.equal(P.playFor("oyster"), "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("chicken_of_woods"), "drip");
   const target = P.pickTarget([WIN], 80, "chicken_of_woods", WORK, P.SPRITE);
   assert.ok(target);
@@ -20617,7 +20617,7 @@ test("Starter blooms a damp pane as a yeast film: walk onto the pane, sit the wa
   assert.equal(P.playFor("chicken_of_woods"), "drip");
   assert.equal(P.playFor("puffball"), "cloud");
   assert.equal(P.playFor("oyster"), "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("yeast"), "bloom");
   const target = P.pickTarget([WIN], 80, "yeast", WORK, P.SPRITE);
   assert.ok(target);
@@ -20684,7 +20684,7 @@ test("Pact plaques a cool stile as bark stone: walk onto the stile, sit the cool
   assert.equal(P.playFor("chicken_of_woods"), "drip");
   assert.equal(P.playFor("puffball"), "cloud");
   assert.equal(P.playFor("oyster"), "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("lichen"), "plaque");
   const target = P.pickTarget([WIN], 80, "lichen", WORK, P.SPRITE);
   assert.ok(target);
@@ -20753,7 +20753,7 @@ test("Gleam thirsts a bright pane as lamp glass: walk onto the pane, sit the bri
   assert.equal(P.playFor("chicken_of_woods"), "drip");
   assert.equal(P.playFor("puffball"), "cloud");
   assert.equal(P.playFor("oyster"), "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   assert.equal(Overlay.playFor("photovore"), "thirst");
   const target = P.pickTarget([WIN], 80, "photovore", WORK, P.SPRITE);
   assert.ok(target);
@@ -20837,7 +20837,7 @@ test("Choir chords a mid pane as blotter air: walk onto the pane, sit the blotte
   assert.equal(P.CLOUD, "cloud");
   assert.equal(P.playFor("oyster"), "shelf");
   assert.equal(P.SHELF, "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   const target = P.pickTarget([WIN], 80, "choir", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "chord");
@@ -20985,7 +20985,7 @@ test("Nimbus floats a mid pane as a methane bowl: walk onto the pane, sit the me
   assert.equal(P.CLOUD, "cloud");
   assert.equal(P.playFor("oyster"), "shelf");
   assert.equal(P.SHELF, "shelf");
-  assert.equal(P.playFor("silica"), "sill");
+  assert.equal(P.playFor("terminator"), "sill");
   const target = P.pickTarget([WIN], 80, "nimbus", WORK, P.SPRITE);
   assert.ok(target);
   assert.equal(target.kind, "float");
@@ -21102,6 +21102,146 @@ test("a moved window refits Nimbus's methane-bowl float; sleep, card, and hide a
   assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "float-off");
   assert.equal(play.abort, true);
 });
+test("Shard facets a sash gap as an inkstone: walk into the gap, sit the facet, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("silica"), "facet");
+  assert.equal(P.FACET, "facet");
+  assert.notEqual(P.playFor("silica"), "float");
+  assert.notEqual(P.playFor("silica"), "chord");
+  assert.notEqual(P.playFor("silica"), "thirst");
+  assert.notEqual(P.playFor("silica"), "plaque");
+  assert.notEqual(P.playFor("silica"), "daub");
+  assert.notEqual(P.playFor("silica"), "teeth");
+  assert.notEqual(P.playFor("silica"), "silica");
+  assert.notEqual(P.playFor("silica"), "shard");
+  assert.equal(P.playFor("terminator"), "sill");
+  assert.equal(P.playFor("nimbus"), "float");
+  assert.equal(P.FLOAT, "float");
+  assert.equal(P.playFor("choir"), "chord");
+  assert.equal(P.CHORD, "chord");
+  assert.equal(P.playFor("photovore"), "thirst");
+  assert.equal(P.THIRST, "thirst");
+  assert.equal(P.playFor("lichen"), "plaque");
+  assert.equal(P.PLAQUE, "plaque");
+  assert.equal(P.playFor("yeast"), "bloom");
+  assert.equal(P.BLOOM, "bloom");
+  assert.equal(P.playFor("chicken_of_woods"), "drip");
+  assert.equal(P.DRIP, "drip");
+  assert.equal(P.playFor("puffball"), "cloud");
+  assert.equal(P.CLOUD, "cloud");
+  assert.equal(P.playFor("oyster"), "shelf");
+  assert.equal(P.SHELF, "shelf");
+  assert.equal(P.playFor("terminator"), "sill");
+  const target = P.pickTarget([WIN], 80, "silica", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "facet");
+  assert.equal(target.side, "inkstone");
+  assert.equal(target.leave, "faceted");
+  assert.notEqual(target.kind, "float");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift >= 0, "it facets a sash gap as an inkstone");
+  assert.ok(P.DUR.facetHold > P.DUR.facet * 1.2, "the hold is the sit; facet is the tell");
+  assert.ok(P.DUR.facetOn > 1.0, "a walk into the gap, not a cling");
+  assert.ok(P.DUR.facetOn !== P.DUR.floatOn);
+  assert.ok(P.DUR.facetOn !== P.DUR.chordOn);
+  assert.ok(P.DUR.facetOn !== P.DUR.thirstOn);
+  assert.ok(P.DUR.facetOn !== P.DUR.plaqueOn);
+  assert.ok(P.DUR.facetOn !== P.DUR.teethOn);
+  assert.ok(P.DUR.facetOn !== P.DUR.daubOn);
+  assert.ok(P.DUR.facetOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.facet !== P.DUR.float);
+  assert.ok(P.DUR.facet !== P.DUR.chord);
+  assert.ok(P.DUR.facetHold !== P.DUR.floatHold);
+  assert.ok(P.DUR.facetOff !== P.DUR.floatOff);
+  const stone = P.facetPoint(WIN, P.SPRITE, WORK);
+  const bowl = P.floatPoint(WIN, P.SPRITE, WORK);
+  const air = P.chordPoint(WIN, P.SPRITE, WORK);
+  const glass = P.thirstPoint(WIN, P.SPRITE, WORK);
+  const bark = P.plaquePoint(WIN, P.SPRITE, WORK);
+  const wound = P.teethPoint(WIN, P.SPRITE, WORK);
+  const cell = P.daubPoint(WIN, P.SPRITE, WORK);
+  assert.ok(stone.lift >= 0, "the sash gap as an inkstone, not the sky");
+  assert.ok(Math.abs(stone.x - bowl.x) > 8 || Math.abs(stone.lift - bowl.lift) > 1, "not Nimbus's methane bowl");
+  assert.ok(Math.abs(stone.x - air.x) > 8 || Math.abs(stone.lift - air.lift) > 1, "not Choir's blotter air");
+  assert.ok(Math.abs(stone.x - glass.x) > 12 || Math.abs(stone.lift - glass.lift) > 1, "not Gleam's bright lamp glass");
+  assert.ok(Math.abs(stone.x - bark.x) > 12 || Math.abs(stone.lift - bark.lift) > 1, "not Pact's cool bark stile");
+  assert.ok(Math.abs(stone.x - wound.x) > 8 || Math.abs(stone.lift - wound.lift) > 1, "not Mane's wood-wound teeth");
+  assert.ok(Math.abs(stone.x - cell.x) > 8 || Math.abs(stone.lift - cell.lift) > 1, "not Mortar's inkstone-cell daub");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "silica", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real sash gap, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 186, height: 196 }], 80, "silica", WORK, P.SPRITE);
+  assert.equal(short, null, "a real inkstone gap, not a thinner frame");
+  const okFacet = P.pickTarget([{ id: "facet", x: 200, y: 80, width: 188, height: 198 }], 80, "silica", WORK, P.SPRITE);
+  assert.ok(okFacet, "a real sash gap as an inkstone");
+  const floatOk = P.pickTarget([{ id: "float", x: 200, y: 80, width: 194, height: 174 }], 80, "nimbus", WORK, P.SPRITE);
+  assert.ok(floatOk, "Nimbus still takes a methane-bowl pane");
+  const walkOn = P.facetOnPath(0.25, { x: 40, lift: 0 }, { x: stone.x, lift: stone.lift });
+  const floatOn = P.floatOnPath(0.25, { x: 40, lift: 0 }, { x: stone.x, lift: stone.lift });
+  assert.ok(walkOn.lift !== undefined, "it walks into the sash gap as an inkstone");
+  assert.ok(walkOn.rot !== floatOn.rot, "a walk into the gap, not Nimbus float");
+  const facetPose = P.facetPath(0.3);
+  const floatPose = P.floatPath(0.3);
+  const chordPose = P.chordPath(0.3);
+  assert.ok(Math.abs(facetPose.lift) > 0.2 || Math.abs(facetPose.rot) > 0.8, "it facets once; facet is the tell");
+  assert.ok(facetPose.rot !== floatPose.rot, "facet, not float");
+  assert.ok(facetPose.rot !== chordPose.rot, "facet, not chord");
+  const hold = P.facetHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 1.7) < 0.2, "it holds the sit on the inkstone");
+  assert.ok(Math.abs(hold.x - 0.16) < 0.05, "it stays on the facet");
+  assert.ok(hold.lift < 0, "sit into the gap, not a float peak");
+  const off0 = P.facetOffPath(0, { x: stone.x, lift: stone.lift - 1.03, rot: 1.7 }, { x: stone.x + 50, lift: 0 });
+  const offMid = P.facetOffPath(0.5, { x: stone.x, lift: stone.lift - 1.03, rot: 1.7 }, { x: stone.x + 50, lift: 0 });
+  const off1 = P.facetOffPath(1, { x: stone.x, lift: stone.lift - 1.03, rot: 1.7 }, { x: stone.x + 50, lift: 0 });
+  assert.ok(Math.abs(off0.x - stone.x) < 2);
+  assert.ok(Math.abs(offMid.x - stone.x) > 8, "a walk leave off the inkstone");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "float");
+    assert.notEqual(play.phase, "chord");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "facet") {
+      assert.ok(play.lift !== undefined, "it facets on the sash gap");
+    }
+  }
+  assert.ok(seen.has("facet-on"));
+  assert.ok(seen.has("facet"));
+  assert.ok(seen.has("facet-hold"));
+  assert.ok(seen.has("facet-off"));
+  assert.ok(seen.has("approach") || seen.has("walk") || seen.has("land"));
+  assert.equal(windowIds.size, 1, "one window; bounds-only");
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Shard's inkstone facet; sleep, card, and hide abort; Shard never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "silica", WORK, P.SPRITE);
+  assert.ok(target);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "facet"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "facet");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "facet");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40, "refit follows the moved inkstone");
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "facet-off");
+  assert.equal(play.abort, true);
+});
+
 
 
 
