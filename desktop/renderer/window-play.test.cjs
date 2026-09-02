@@ -35677,7 +35677,7 @@ test("Knot leftover manys a window stool as a paperweight: walk onto the stool, 
   assert.notEqual(target.kind, "sill");
   assert.ok(target.holdLift >= 0, "it manys a window stool as a paperweight");
   assert.ok(P.DUR.manyHold > P.DUR.many * 1.2, "the hold is the sit; many is the tell");
-  assert.ok(P.DUR.manyOn > 1.0, "a walk onto the stool, not a cling");
+  assert.ok(P.DUR.manyOn > 1.0, "a walk onto the drip, not a cling");
   assert.ok(P.DUR.manyOn !== P.DUR.rimOn);
   assert.ok(P.DUR.manyOn !== P.DUR.countOn);
   assert.ok(P.DUR.manyOn !== P.DUR.buryOn);
@@ -35835,7 +35835,7 @@ test("Brine leftover frosts a window stool as a salt dish: walk onto the stool, 
   assert.notEqual(target.kind, "sill");
   assert.ok(target.holdLift >= 0, "it frosts a window stool as a salt dish");
   assert.ok(P.DUR.frostHold > P.DUR.frost * 1.2, "the hold is the sit; frost is the tell");
-  assert.ok(P.DUR.frostOn > 1.0, "a walk onto the stool, not a cling");
+  assert.ok(P.DUR.frostOn > 1.0, "a walk onto the drip, not a cling");
   assert.ok(P.DUR.frostOn !== P.DUR.manyOn);
   assert.ok(P.DUR.frostOn !== P.DUR.dryOn);
   assert.ok(P.DUR.frostOn !== P.DUR.lickOn);
@@ -36241,7 +36241,7 @@ test("a moved window refits Hush's lamp-shadow cool; sleep, card, and hide abort
   assert.equal(play.abort, true);
 });
 
-test("Arca leftover waits a window stool as a damp blotter: walk onto the stool, sit the wait, then leave", () => {
+test("Arca leftover waits a sash drip as a damp blotter: walk onto the drip, sit the wait, then leave", () => {
   const WIN_B = { id: "aw2", x: 980, y: 90, width: 300, height: 360 };
   assert.equal(P.playFor("cyst"), "wait");
   assert.equal(P.WAIT, "wait");
@@ -36279,9 +36279,9 @@ test("Arca leftover waits a window stool as a damp blotter: walk onto the stool,
   assert.notEqual(target.kind, "emerge");
   assert.notEqual(target.kind, "cool");
   assert.notEqual(target.kind, "sill");
-  assert.ok(target.holdLift >= 0, "it waits a window stool as a damp blotter");
+  assert.ok(target.holdLift >= 0, "it waits a sash drip as a damp blotter");
   assert.ok(P.DUR.waitHold > P.DUR.wait * 1.2, "the hold is the sit; wait is the tell");
-  assert.ok(P.DUR.waitOn > 1.0, "a walk onto the stool, not a cling");
+  assert.ok(P.DUR.waitOn > 1.0, "a walk onto the drip, not a cling");
   assert.ok(P.DUR.waitOn !== P.DUR.coolOn);
   assert.ok(P.DUR.waitOn !== P.DUR.frostOn);
   assert.ok(P.DUR.waitOn !== P.DUR.reefOn);
@@ -36299,26 +36299,36 @@ test("Arca leftover waits a window stool as a damp blotter: walk onto the stool,
   const emerge = P.emergePoint(WIN, P.SPRITE, WORK);
   const frost = P.frostPoint(WIN, P.SPRITE, WORK);
   const cool = P.coolPoint(WIN, P.SPRITE, WORK);
-  assert.ok(wait.lift >= 0, "the window stool as a damp blotter, not the sky");
+  assert.ok(wait.lift >= 0, "the sash drip as a damp blotter, not the sky");
   assert.ok(Math.abs(wait.x - reef.x) > 8 || Math.abs(wait.lift - reef.lift) > 1, "not Ochre pane reef");
   assert.ok(Math.abs(wait.x - drink.x) > 8 || Math.abs(wait.lift - drink.lift) > 1, "not Latch drip drink");
   assert.ok(Math.abs(wait.x - loop.x) > 8 || Math.abs(wait.lift - loop.lift) > 1, "not Lula apron loop");
   assert.ok(Math.abs(wait.x - emerge.x) > 8 || Math.abs(wait.lift - emerge.lift) > 1, "not Brood emerge");
   assert.ok(Math.abs(wait.x - frost.x) > 8 || Math.abs(wait.lift - frost.lift) > 1, "not Brine salt-dish frost");
   assert.ok(Math.abs(wait.x - cool.x) > 8 || Math.abs(wait.lift - cool.lift) > 1, "not Hush lamp-shadow cool");
+  const fork = P.forkPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(wait.lift - drink.lift) < 8, "same sash drip furniture family as Latch");
+  assert.ok(Math.abs(wait.x - drink.x) > 20, "same drip, not Latch's drink spot");
+  assert.ok(Math.abs(wait.x - fork.x) > 20, "same drip, not Horn's fork spot");
   const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "cyst", WORK, P.SPRITE);
-  assert.equal(tiny, null, "a real stool blotter, not a thin strip");
-  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 194, height: 162 }], 80, "cyst", WORK, P.SPRITE);
-  assert.equal(short, null, "a real stool blotter, not a thinner frame");
-  const okWait = P.pickTarget([{ id: "wait", x: 200, y: 80, width: 196, height: 164 }], 80, "cyst", WORK, P.SPRITE);
-  assert.ok(okWait, "a real window stool as a damp blotter");
+  assert.equal(tiny, null, "a real sash drip, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 193, height: 176 }], 80, "cyst", WORK, P.SPRITE);
+  assert.equal(short, null, "a real sash drip, not a thinner drip");
+  const okWait = P.pickTarget([{ id: "wait", x: 200, y: 80, width: 194, height: 176 }], 80, "cyst", WORK, P.SPRITE);
+  assert.ok(okWait, "a real sash drip as a damp blotter");
+  const shortH = P.pickTarget([{ id: "shortH", x: 200, y: 80, width: 194, height: 175 }], 80, "cyst", WORK, P.SPRITE);
+  assert.equal(shortH, null, "a real sash drip, not a shorter drip");
+  const drinkOk = P.pickTarget([{ id: "drip", x: 200, y: 80, width: 194, height: 176 }], 80, "leech", WORK, P.SPRITE);
+  assert.ok(drinkOk, "Latch still takes a sash drip");
+  const forkOk = P.pickTarget([{ id: "fork", x: 200, y: 80, width: 194, height: 176 }], 80, "chanterelle", WORK, P.SPRITE);
+  assert.ok(forkOk, "Horn still takes a sash drip");
   const coolOk = P.pickTarget([{ id: "cool", x: 200, y: 80, width: 198, height: 188 }], 80, "umbral", WORK, P.SPRITE);
   assert.ok(coolOk, "Hush still takes a lamp-shadow pane");
   const frostOk = P.pickTarget([{ id: "frost", x: 200, y: 80, width: 196, height: 164 }], 80, "halovore", WORK, P.SPRITE);
   assert.ok(frostOk, "Brine still takes a salt-dish stool");
   const walkOn = P.waitOnPath(0.25, { x: 40, lift: 0 }, { x: wait.x, lift: wait.lift });
   const frostOn = P.frostOnPath(0.25, { x: 40, lift: 0 }, { x: wait.x, lift: wait.lift });
-  assert.ok(walkOn.lift >= 0, "it walks onto the window stool as a damp blotter");
+  assert.ok(walkOn.lift >= 0, "it walks onto the sash drip as a damp blotter");
   assert.ok(walkOn.rot !== frostOn.rot, "a walk onto the damp blotter, not Brine frost");
   const waitPose = P.waitPath(0.3);
   const reefPose = P.reefPath(0.3);
@@ -36330,7 +36340,7 @@ test("Arca leftover waits a window stool as a damp blotter: walk onto the stool,
   assert.ok(waitPose.rot !== frostPose.rot, "wait, not frost");
   const hold = P.waitHoldPath(0.5);
   assert.ok(Math.abs(hold.rot - 1.73) < 0.2, "it holds the sit on the damp blotter");
-  assert.ok(Math.abs(hold.x - 0.88) < 0.05, "it stays on the stool blotter");
+  assert.ok(Math.abs(hold.x - 0.88) < 0.05, "it stays on the sash drip");
   assert.ok(hold.lift > 0, "sit the sealed wait, not a bury sink");
   const off0 = P.waitOffPath(0, { x: wait.x, lift: wait.lift + 0.64, rot: 1.73 }, { x: wait.x + 50, lift: 0 });
   const offMid = P.waitOffPath(0.5, { x: wait.x, lift: wait.lift + 0.64, rot: 1.73 }, { x: wait.x + 50, lift: 0 });
