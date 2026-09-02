@@ -431,6 +431,6 @@ North-star write-up: [ARCHITECTURE.md §11](ARCHITECTURE.md#11-house-polish-nort
 
 ---
 
-**Last Updated:** 2026-09-02 (Phase 6 leftover: Ring zones a sash stile as wood grain; fifth leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Mane; catalog stays 220; zones is the tell; Horn still owns fork; Lattice still owns hollow; Cap still owns warts; Frill still owns shelf)
+**Last Updated:** 2026-09-02 (Phase 6 leftover: Mane teeths a sash gap as a wood wound; sixth leftover of the fungi den done; Ring leftover still zones a sash stile as wood grain; fifth leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Puff; catalog stays 220; teeth is the tell; Ring still owns zones; Horn still owns fork; Lattice still owns hollow; Cap still owns warts; Frill still owns shelf)
 
 This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
