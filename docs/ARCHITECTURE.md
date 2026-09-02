@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Rob seizes a window stool as a grass perch; tenth leftover of the meadow den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Rob; catalog stays 220; right is the tell; Snout still owns drill; Relay still owns click; Snap still owns count; Beak still owns snap; Bluff still owns flip; gecko still owns chirp) |
+| **Last Updated** | 2026-09-02 (Frill shelves a sash stile as a timber shelf; first leftover of the fungi den done; meadow ten closed; hive ten closed; shore ten is closed; next leftover is Cap; catalog stays 220; shelf is the tell; Rob still owns seize; Fan still owns gold; Felt still owns lean; Cape still owns fold; Mast still owns seed; Auger still owns bore) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
