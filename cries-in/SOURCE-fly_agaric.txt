@@ -1,0 +1,10 @@
+key: fly_agaric
+guest: Cap (Fly Agaric)
+source: Wikimedia Commons Leaves_in_the_wind_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Leaves_in_the_wind_(Gravity_Sound).wav
+direct: https://upload.wikimedia.org/wikipedia/commons/0/05/Leaves_in_the_wind_%28Gravity_Sound%29.wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet fungus sit — Amanita muscaria has no voice. Soft leaves-in-wind hush attenuated to almost nothing (distinct from Frill's rustling-leaves cut). Source kept as short ogg excerpt of Commons wav. No music. No narrator. No cartoon beep. House cut ~3.4s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
