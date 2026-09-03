@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Soar leftover spots a mid pane as a reef sky; ninth leftover of remaining reef/sea after well ten closed; Gate leftover still mantles a window stool as a mantle dish; catalog 220) |
+| **Last Updated** | 2026-09-02 (Hide leftover holes a sash well as a reef hole; tenth leftover of remaining reef/sea after well ten closed; reef/sea leftovers closed; next leftover none; Soar leftover still spots; catalog 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
