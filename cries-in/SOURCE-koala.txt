@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Perception-of-Male-Caller-Identity-in-Koalas-(Phascolarctos-cinereus)-Acoustic-Analysis-and-pone.0020329.s001.ogv
+Author: Charlton B, Ellis W, McKinnon A, Brumm J, Nilsson K, Fitch W (PLOS ONE)
+License: Creative Commons Attribution 2.5 / 3.0 (CC BY)
+URL: https://commons.wikimedia.org/wiki/File:Perception-of-Male-Caller-Identity-in-Koalas-(Phascolarctos-cinereus)-Acoustic-Analysis-and-pone.0020329.s001.ogv
+Paper: https://doi.org/10.1371/journal.pone.0020329
+Notes: Bellowing male koala (Andy) at Lone Pine Koala Sanctuary. House cut ~3.5s from ~12s mark, mono 44.1kHz.
+House path: build our own from field tape — not Grok Imagine
