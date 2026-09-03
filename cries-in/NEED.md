@@ -116,7 +116,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 72. [x] `fly_agaric.wav` — **Cap** — Fly Agaric — A fly agaric is silent. Almost nothing. No voice. — sat 2026-09-03 Commons CC BY 4.0 Leaves_in_the_wind_(Gravity_Sound).wav (Gravity Sound)
 73. [x] `morel.wav` — **Lattice** — American Morel — A morel is silent. Damp-air hush. No voice. — sat 2026-09-03 Commons CC BY 4.0 Rain_on_leaves_(Gravity_Sound).wav (Gravity Sound)
 74. [x] `chanterelle.wav` — **Horn** — Golden Chanterelle — A chanterelle is silent. Soft moss hush. No voice. — sat 2026-09-03 Commons CC BY 4.0 Wind_in_forest_(Gravity_Sound).wav (Gravity Sound)
-75. [ ] `turkey_tail.mp4` — **Ring** — Turkey Tail — Turkey tail is silent. Dry bracket hush. No voice. (zip synth — replace with Grok)
+75. [x] `turkey_tail.wav` — **Ring** — Turkey Tail — Turkey tail is silent. Dry bracket hush. No voice. — sat 2026-09-03 Commons CC BY 4.0 Leaf_crunch_(Gravity_Sound).wav (Gravity Sound)
 76. [ ] `lions_mane.mp4` — **Mane** — Lion's Mane — Lion's mane is silent. Soft tooth hush. No voice. (zip synth — replace with Grok)
 77. [ ] `puffball.mp4` — **Puff** — Common Puffball — A puffball puffs spores, a dry dust cough. No voice. (zip synth — replace with Grok)
 78. [ ] `chicken_of_woods.mp4` — **Flame** — Chicken of the Woods — Chicken of the woods is silent. Dry shelf hush. No voice. (zip synth — replace with Grok)

@@ -1,0 +1,10 @@
+key: turkey_tail
+guest: Ring (Turkey Tail)
+source: Wikimedia Commons Leaf_crunch_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Leaf_crunch_(Gravity_Sound).wav
+direct: https://upload.wikimedia.org/wikipedia/commons/9/92/Leaf_crunch_%28Gravity_Sound%29.wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet fungus sit — Trametes versicolor has no voice. Soft dry leaf-crunch as dry bracket hush (heavily attenuated). Distinct from Horn forest-wind moss hush and Frill/Cap/Lattice leaf sits. Source kept as short ogg of Commons wav. No music. No narrator. No cartoon beep. House cut ~2.0s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
