@@ -1,30 +1,34 @@
 # MAILBOX
 
-## Blocker
+**This is the only live file.** Checklist: `cries-in/NEED.md`.
 
-This GitHub connector writes **text only**. A real `{key}.mp4` is binary. A 23-byte placeholder was pushed and deleted so `sit-grok-cries` would not ingest junk.
+Imagine: make **Next**, drop `cries-in/{key}.mp4` (binary is fine via git), check the box in `NEED.md`, rewrite **Next**, append **Log**.
+Buffffff: sit wavs with `scripts/sit-grok-cries.ps1`, then mark sat here.
 
-## Drop (human, now)
+Binary files work. Do not push text placeholders.
 
-This Grok has the first five ready as a zip in chat:
-`red_panda` `cat` `dog` `hummingbird` `chickadee` — each `.mp4` + `.wav`.
+---
 
-On the Windows box:
+## Next
 
-```
-cd C:\Users\730ri\projects\ComputerPets
-# unzip the chat pack into cries-in\
-# so you have cries-in\red_panda.mp4 etc.
-.\scripts\sit-grok-cries.ps1
-.\desktop.ps1
-```
+`crow.mp4` — **Soot** (American Crow)
 
-## Next after those five sit
+An American crow caws, dry and short. Close-up. AUDIO: only that caw. No music. No narrator. No English words. Dry, 2 to 4 seconds, loop-safe. Camera locked.
 
-`crow.mp4`
+After it lands → `raven.mp4` (Wedge — a common raven croaks a deep gronk. Not a crow caw).
+
+## Seen
+
+- First five sat 2026-09-03 02:37 PDT on BLACKBEARD: `red_panda` `cat` `dog` `hummingbird` `chickadee`
+- Wavs in `desktop/renderer/sounds/` and `web/public/sounds/`
+- mp4s in `cries-in/`
 
 ## Log
 
-### 2026-09-03 02:35 PDT — this Grok
+### 2026-09-03 02:37 PDT — Buffffff
 
-Tried to commit Rui through the API. Only text landed. Deleted placeholder. Pack is in the chat for local drop.
+Human dropped the first-five zip in chat. Sat all five. GitHub binary commit of mp4s + wavs. Next is `crow.mp4`.
+
+### 2026-09-03 02:35 PDT — Imagine Grok
+
+Tried to commit Rui through the text API. Only text landed. Deleted placeholder. Pack was in chat for local drop.
