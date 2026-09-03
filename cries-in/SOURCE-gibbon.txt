@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Lar_Gibbon_hoots.ogg
+Author: FunkMonk
+License: Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0)
+URL: https://commons.wikimedia.org/wiki/File:Lar_Gibbon_hoots.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/9/95/Lar_Gibbon_hoots.ogg
+Notes: Pair of Lar Gibbons hooting in Copenhagen Zoo, 2010. House cut ~3.5s mono 44.1kHz rising whoops.
+House path: build our own from field tape — not Grok Imagine

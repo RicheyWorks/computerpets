@@ -32,7 +32,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `guinea_pig.wav` — **Whee** (Guinea Pig) — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
 - [x] `fox.wav` — **Rue** (Fox) — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
 - [x] `howler.wav` — **Boom** (Mantled Howler) — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
-- [ ] `gibbon.mp4` — **Swing** (Lar Gibbon) — A lar gibbon whoops a rising great-call of short hoots, quavering at the edges. No words. — now: zip synth — replace
+- [x] `gibbon.wav` — **Swing** (Lar Gibbon) — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
 - [ ] `koala.mp4` — **Gum** (Koala) — A koala bellows: deep snoring inhalations and belching exhalations. Far-carrying, low. — now: zip synth — replace
 - [ ] `alligator.mp4` — **Levee** (American Alligator) — An American alligator bellows a low rumble. Hiss if threatened. No movie roar. — now: zip field
 - [ ] `bat.mp4` — **Cape** (Big Brown Bat) — A big brown bat click-chirps echolocation, rapid and thin. A feeding buzz. Not a bird. — now: zip field
@@ -234,7 +234,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 190. [ ] `robber_fly.mp4` — **Rob** — Robber Fly — A robber fly buzzes its wings, short and dry. No voice. (zip synth — replace with Grok)
 191. [ ] `sloth.mp4` — **Hang** — Linnaeus's Two-toed Sloth — A two-toed sloth is nearly silent. A high thin whistle, then a hiss if pressed. (zip synth — replace with Grok)
 192. [ ] `lemur.mp4` — **Sun** — Ring-tailed Lemur — A ring-tailed lemur mews a contact call, then a short howl. No English. (zip synth — replace with Grok)
-193. [ ] `gibbon.mp4` — **Swing** — Lar Gibbon — A lar gibbon whoops a rising great-call of short hoots, quavering at the edges. No words. (zip synth — replace with Grok)
+193. [x] `gibbon.wav` — **Swing** — Lar Gibbon — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
 194. [ ] `kinkajou.mp4` — **Wrist** — Kinkajou — A kinkajou barks a short squeak-bark. No words. (zip synth — replace with Grok)
 195. [ ] `colugo.mp4` — **Sail** — Sunda Colugo — A Sunda colugo is nearly silent. Glide-skin rustle, a faint squeak. (zip synth — replace with Grok)
 196. [ ] `flying_squirrel.mp4` — **Glide** — Southern Flying Squirrel — A southern flying squirrel chirps, high and thin. Not a bird. (zip synth — replace with Grok)
