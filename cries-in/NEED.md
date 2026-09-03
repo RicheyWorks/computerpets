@@ -31,7 +31,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `cicada.wav` — **Brood** (Periodical Cicada) — sat 2026-09-03 Commons CC BY-SA 4.0 Magicicada_cassinii-call.ogg (Peterwchen)
 - [x] `guinea_pig.wav` — **Whee** (Guinea Pig) — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
 - [x] `fox.wav` — **Rue** (Fox) — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
-- [ ] `howler.mp4` — **Boom** (Mantled Howler) — A mantled howler howls a deep roar-howl. No English. — now: zip synth — replace
+- [x] `howler.wav` — **Boom** (Mantled Howler) — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
 - [ ] `gibbon.mp4` — **Swing** (Lar Gibbon) — A lar gibbon whoops a rising great-call of short hoots, quavering at the edges. No words. — now: zip synth — replace
 - [ ] `koala.mp4` — **Gum** (Koala) — A koala bellows: deep snoring inhalations and belching exhalations. Far-carrying, low. — now: zip synth — replace
 - [ ] `alligator.mp4` — **Levee** (American Alligator) — An American alligator bellows a low rumble. Hiss if threatened. No movie roar. — now: zip field
@@ -238,7 +238,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 194. [ ] `kinkajou.mp4` — **Wrist** — Kinkajou — A kinkajou barks a short squeak-bark. No words. (zip synth — replace with Grok)
 195. [ ] `colugo.mp4` — **Sail** — Sunda Colugo — A Sunda colugo is nearly silent. Glide-skin rustle, a faint squeak. (zip synth — replace with Grok)
 196. [ ] `flying_squirrel.mp4` — **Glide** — Southern Flying Squirrel — A southern flying squirrel chirps, high and thin. Not a bird. (zip synth — replace with Grok)
-197. [ ] `howler.mp4` — **Boom** — Mantled Howler — A mantled howler howls a deep roar-howl. No English. (zip synth — replace with Grok)
+197. [x] `howler.wav` — **Boom** — Mantled Howler — A mantled howler howls a deep roar-howl. No English. — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
 198. [ ] `tarsier.mp4` — **Gaze** — Philippine Tarsier — A Philippine tarsier looses a piercing single-note loud call, or a soft bird-like twill. (zip synth — replace with Grok)
 199. [ ] `potto.mp4` — **Still** — Potto — A potto calls a high-pitched tsic, mostly between mother and young. Otherwise nearly silent. (zip synth — replace with Grok)
 200. [ ] `koala.mp4` — **Gum** — Koala — A koala bellows: deep snoring inhalations and belching exhalations. Far-carrying, low. (zip synth — replace with Grok)
