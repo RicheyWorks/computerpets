@@ -119,7 +119,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 75. [x] `turkey_tail.wav` — **Ring** — Turkey Tail — Turkey tail is silent. Dry bracket hush. No voice. — sat 2026-09-03 Commons CC BY 4.0 Leaf_crunch_(Gravity_Sound).wav (Gravity Sound)
 76. [x] `lions_mane.wav` — **Mane** — Lion's Mane — Lion's mane is silent. Soft tooth hush. No voice. — sat 2026-09-03 Commons CC BY 4.0 Blade_of_grass_(Gravity_Sound).wav (Gravity Sound)
 77. [x] `puffball.wav` — **Puff** — Common Puffball — A puffball puffs spores, a dry dust cough. No voice. — sat 2026-09-03 Commons CC BY 4.0 Leaf_crunch_3_(Gravity_Sound).wav (Gravity Sound)
-78. [ ] `chicken_of_woods.mp4` — **Flame** — Chicken of the Woods — Chicken of the woods is silent. Dry shelf hush. No voice. (zip synth — replace with Grok)
+78. [x] `chicken_of_woods.wav` — **Flame** — Chicken of the Woods — Chicken of the woods is silent. Dry shelf hush. No voice. — sat 2026-09-03 Commons CC BY 4.0 Forest_ambience_2_(Gravity_Sound).wav (Gravity Sound)
 79. [ ] `yeast.mp4` — **Starter** — Baker's Yeast — Baker's yeast is silent. Tiny fermentation bubbles. No voice. (zip synth — replace with Grok)
 80. [ ] `lichen.mp4` — **Pact** — Reindeer Lichen — Reindeer lichen is almost silent. A dry crust tick. No voice. (zip synth — replace with Grok)
 81. [ ] `photovore.mp4` — **Gleam** — Lamp-drinker — A lamp-drinker ticks a thin dry light-hum. No mouth. No words. (zip synth — replace with Grok)
