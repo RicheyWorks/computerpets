@@ -9,7 +9,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 
 ## Need first (the five that already play)
 
-- [ ] `red_panda.mp4` — **Rui** (Red Panda) — REMAKE: last Imagine take sounded sad/unwell; need bright healthy twitter then soft bleat
+- [x] `red_panda.mp4` — **Rui** (Red Panda) — sat 2026-09-03 Commons PD twittering (Mizunoryu)
 - [x] `cat.mp4` — **Miso** (Cat) — sat 2026-09-03 from Grok zip
 - [x] `dog.mp4` — **Pip** (Dog) — sat 2026-09-03 from Grok zip
 - [x] `hummingbird.mp4` — **Sip** (Ruby-throated Hummingbird) — sat 2026-09-03 XC109598 field chips
@@ -42,7 +42,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 
 Check a box in your head when the Grok file is in this folder. Zip field tape is a stand-in, not done.
 
-1. [ ] `red_panda.mp4` — **Rui** — Red Panda — A red panda twitters, then a short bleat-squeal. Females twitter; fights growl and bark. (zip synth — replace with Grok)
+1. [x] `red_panda.mp4` — **Rui** — Red Panda — A red panda twitters, then a short bleat-squeal. Females twitter; fights growl and bark. (zip synth — replace with Grok)
 2. [x] `cat.mp4` — **Miso** — Cat — A cat meows once, short. May purr or hiss. No words. (zip field — still want Grok)
 3. [x] `dog.mp4` — **Pip** — Dog — A dog barks once, short and bright. No words. (zip field — still want Grok)
 4. [ ] `rabbit.mp4` — **Thimble** — Rabbit — A rabbit is almost voiceless. One hind-foot thump on wood. No scream. (zip synth — replace with Grok)

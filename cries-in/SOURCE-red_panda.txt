@@ -1,0 +1,6 @@
+Source: Wikimedia Commons File:Red_panda_twittering.ogg
+Author: Mizunoryu
+License: Public domain (released by copyright holder)
+URL: https://commons.wikimedia.org/wiki/File:Red_panda_twittering.ogg
+Cut: 0.15s start, 2.8s, mono 44.1kHz, dynaudnorm
+House path: build our own from field tape — not Grok Imagine
