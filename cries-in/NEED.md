@@ -20,7 +20,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `crow.wav` — **Soot** (American Crow) — sat 2026-09-03 Commons PD American_Crow.ogg (G McGrane)
 - [x] `raven.wav` — **Wedge** (Common Raven) — sat 2026-09-03 Commons PD Common_Raven.ogg (G. McGrane)
 - [x] `robin.wav` — **Brick** (American Robin) — sat 2026-09-03 Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS)
-- [ ] `barn_owl.mp4` — **Heart** (Barn Owl) — A barn owl shrieks a dry hiss-scream. Not a hoot. Wings nearly silent. — now: zip synth — replace
+- [x] `barn_owl.wav` — **Heart** (Barn Owl) — sat 2026-09-03 Commons CC BY 4.0 Barn Owl screams (Victor C. Lewis / BL)
 - [ ] `red_tail.mp4` — **Hook** (Red-tailed Hawk) — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. — now: zip synth — replace
 - [ ] `pileated.mp4` — **Drum** (Pileated Woodpecker) — A pileated woodpecker drums, then a ringing kuk or woick call. — now: zip field
 - [ ] `mallard.mp4` — **Drake** (Mallard) — A mallard hen quacks a descending series. The drake's quack is deeper and quieter. — now: zip field

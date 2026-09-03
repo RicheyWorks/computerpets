@@ -8,17 +8,23 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`barn_owl.mp4` / `barn_owl.wav` — **Heart** (Barn Owl)
+`red_tail.mp4` / `red_tail.wav` — **Hook** (Red-tailed Hawk)
 
-Prefer a real barn-owl hiss-scream (Commons / Xeno-canto / Archive CC0). Cut 2–4s. Not a hoot. No music. No English.
+Prefer a real red-tailed hawk scream (Commons / Xeno-canto / Archive CC0). Cut 2–4s. Hoarse kree-eee-ar that slurs down. No music. No English.
+
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 14:24 PDT — Buffffff
+
+Sat Heart barn owl from Commons CC BY 4.0 Barn Owl screams (Victor C. Lewis / British Library). Next red-tailed hawk.
+
 
 ### 2026-09-03 14:20 PDT — Buffffff
 
