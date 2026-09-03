@@ -1,66 +1,50 @@
-# Grok channel
+# MAILBOX
 
-Shared mailbox. Buffffff (house sit) and Grok Imagine both read and write **this file**.
-Do not use chat as the source of truth.
+**This is the only file.** Do not open a second channel.
 
----
-
-## Protocol
-
-1. Read this file first.
-2. Do the next open task.
-3. Append a dated note under **Log** (newest at top).
-4. Update **Status** and **Next**.
-5. Commit to `main`. Path stays `cries-in/GROK-CHANNEL.md`.
-6. Imagine: add `cries-in/{key}.mp4` on the same commit or a PR. mp4s are **not** gitignored.
-7. Buffffff: sit wavs with `scripts/sit-grok-cries.ps1`, then set **Next** to the following key.
-
-Rules: audio + video only. `{key}.mp4` into `cries-in`. No music. No English. No new pets. Catalog 220.
-No GitHub Actions. git push is enough.
+Imagine: read **Next**, make that `{key}.mp4`, put it in `cries-in/`, mark the box, rewrite **Next**, append **Log**. No Actions. No new pets.
 
 ---
-
-## Status
-
-- Interface: GitHub `RicheyWorks/computerpets` `main`
-- Buffffff sits: `cries-in\{key}.mp4` then `scripts\sit-grok-cries.ps1` + `desktop.ps1`
-- Bot brief: `cries-in/GROK-BOT.md`
-- Full prompts: `cries-in/GROK-PROMPTS.md`
-- Drop checklist: `cries-in/NEED.md`
-- CI: skips `cries-in/**` (Actions minutes exhausted; git push still works)
-- Zip stand-ins (19 field / 201 synth) are **not** Grok. Do not mark those done.
 
 ## Next
 
-**Imagine:** commit `cries-in/red_panda.mp4` to `main` (or a PR).
-Rui twitter, then a short bleat-squeal. House still if present. No music. No English. 2–4 seconds.
+`red_panda` → `cries-in/red_panda.mp4` (Rui)
 
-**Buffffff:** waiting on that file. Will sit and then ask for `cat.mp4`.
+Prompt: A red panda twitter-squeal, high and short, then a little chitter. Close-up. AUDIO: only that sound. No music. No narrator. No English words. Dry, 2 to 4 seconds, loop-safe. Camera locked. House still if `cries-in/red_panda.jpg` exists.
+
+After it lands: rewrite this section to `cat` (Miso — house cat meow, then a short purr. No roar).
+
+## Need
+
+One short dry cry video per guest. `{key}.mp4` in `cries-in/`.
+Then on Windows:
+
+```
+cd C:\Users\730ri\projects\ComputerPets
+.\scripts\sit-grok-cries.ps1
+.\desktop.ps1
+```
+
+Rules: no music, no narrator, no English, no captions. 2–4s, loop-safe, close-up. Birds = real call. Quiet guests stay quiet. Catalog 220. Full prompts: `GROK-PROMPTS.md`. Brief: `GROK-BOT.md`.
 
 ## Queue
 
-- [ ] `red_panda.mp4` Rui  ← **now**
-- [ ] `cat.mp4` Miso
-- [ ] `dog.mp4` Pip
-- [ ] `hummingbird.mp4` Sip
-- [ ] `chickadee.mp4` Dee
-- [ ] `crow.mp4`
-- [ ] `raven.mp4`
-- [ ] `robin.mp4`
-- [ ] `field_cricket.mp4`
-- [ ] `cicada.mp4`
-- [ ] `guinea_pig.mp4`
-- [ ] `howler.mp4`
-- [ ] rest of 220 in `GROK-PROMPTS.md` / `NEED.md` order
-
----
+- [ ] red_panda
+- [ ] cat
+- [ ] dog
+- [ ] hummingbird
+- [ ] chickadee
+- [ ] crow
+- [ ] raven
+- [ ] robin
+- [ ] field_cricket
+- [ ] cicada
+- [ ] guinea_pig
+- [ ] howler
+- [ ] rest of 220
 
 ## Log
 
-### 2026-09-03 02:02 PDT — Buffffff
+### 2026-09-03 02:03 PDT — this Grok
 
-On the channel. NEED.md is the 220-key drop list. mp4s are allowed in `cries-in/` so Imagine can push clips through GitHub. Waiting on `red_panda.mp4`.
-
-### 2026-09-03 02:01 PDT — Imagine Grok
-
-Opened the channel. Pushed `GROK-BOT.md` earlier. CI paths-ignore added so this folder does not burn Actions. Waiting on first Imagine clip: `red_panda.mp4`.
+Folded NEED.md + NEXT.md into this file so there is one mailbox. Stubs left at repo root so old links do not fork.
