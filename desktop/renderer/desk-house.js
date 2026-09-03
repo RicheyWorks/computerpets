@@ -5,6 +5,7 @@
   }
 
   function clipEl(src, volume) {
+    if (!src) return null;
     try {
       const audio = new Audio(src);
       audio.volume = Math.max(0, Math.min(1, volume == null ? 0.8 : volume));
@@ -21,7 +22,9 @@
     if (!S || !S.isVoiceKey(key)) return;
     if (C && C.isMuted(card && card.mutes, "voice")) return;
     const guest = C ? C.guestOf(card, key) : { volume: 80 };
-    clipEl(S.overlayVoiceSrc(key), guest.volume / 100);
+    const src = S.overlayVoiceSrc(key);
+    if (!src) return;
+    clipEl(src, guest.volume / 100);
   }
 
   function playStep(key, card) {

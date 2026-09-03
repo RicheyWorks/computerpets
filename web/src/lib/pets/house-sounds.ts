@@ -1,5 +1,7 @@
 /** Species-true house clips and footstep picks. Same map as desktop `house-sounds.js`. */
 
+import { SPECIES_BY_KEY } from "./catalog.ts";
+
 export const VOICE_KEYS = ["red_panda", "hummingbird", "cat", "dog", "chickadee"] as const;
 export type VoiceKey = (typeof VOICE_KEYS)[number];
 
@@ -15,10 +17,11 @@ export const STEP_LABELS: Record<StepKind, string> = {
   mute: "Mute",
 };
 
-export const SOUND_LICENSE = "House-synthesized. Short, loop-safe, public-domain.";
+export const SOUND_LICENSE =
+  "Cries may be Grok Imagine extracts (house-sat). Short, loop-safe. Not CC0 zoo tapes. Five house-synth cries remain until replaced.";
 
-export function isVoiceKey(key: string | undefined): key is VoiceKey {
-  return !!key && (VOICE_KEYS as readonly string[]).includes(key);
+export function isVoiceKey(key: string | undefined): boolean {
+  return typeof key === "string" && key.length > 0 && Object.prototype.hasOwnProperty.call(SPECIES_BY_KEY, key);
 }
 
 export function parseStep(raw: unknown): StepKind {
