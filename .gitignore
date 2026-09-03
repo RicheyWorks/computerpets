@@ -38,3 +38,8 @@ client/.venv/
 client/**/__pycache__/
 client/*.egg-info/
 client/.pytest_cache/
+
+# Grok cry drops (sit script extracts wavs; keep README + GROK-PROMPTS.md)
+cries-in/*.mp4
+cries-in/*.mov
+cries-in/*.webm

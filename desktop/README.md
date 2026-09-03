@@ -18,6 +18,7 @@ A tap on the guest is a choice. They pick Rest, Walk or Sit, Talk, Treat, Play, 
 
 - Feed, treat (species snack), play (chase a ribbon), rest, talk
 - Hide — they walk off the screen. Call back — they walk in.
+- Call uses a species cry when the wav exists.
 - Clean (click droppings on the floor too)
 - Bath, medicine, praise
 - Call back if they hide
