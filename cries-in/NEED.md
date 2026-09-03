@@ -45,7 +45,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 1. [x] `red_panda.mp4` — **Rui** — Red Panda — A red panda twitters, then a short bleat-squeal. Females twitter; fights growl and bark. (zip synth — replace with Grok)
 2. [x] `cat.mp4` — **Miso** — Cat — A cat meows once, short. May purr or hiss. No words. (zip field — still want Grok)
 3. [x] `dog.mp4` — **Pip** — Dog — A dog barks once, short and bright. No words. (zip field — still want Grok)
-4. [ ] `rabbit.mp4` — **Thimble** — Rabbit — A rabbit is almost voiceless. One hind-foot thump on wood. No scream. (zip synth — replace with Grok)
+4. [x] `rabbit.wav` — **Thimble** — Rabbit — A rabbit is almost voiceless. One hind-foot thump on wood. No scream. — sat 2026-09-03 Freesound CC0 Rabbit Thump on Soil (kessir)
 5. [ ] `hamster.mp4` — **Clip** — Hamster — A golden hamster squeaks, thin and high, almost ultrasonic. Quiet cheek rustle. (zip synth — replace with Grok)
 6. [x] `guinea_pig.wav` — **Whee** — Guinea Pig — A guinea pig wheeks, a loud whistle. No words. — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
 7. [ ] `turtle.mp4` — **Ink** — Turtle — A turtle hisses a little air. Not mute, but no roar. (zip synth — replace with Grok)
