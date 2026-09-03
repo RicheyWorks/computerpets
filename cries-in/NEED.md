@@ -123,7 +123,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 79. [x] `yeast.wav` — **Starter** — Baker's Yeast — Baker's yeast is silent. Tiny fermentation bubbles. No voice. — sat 2026-09-03 BigSoundBank CC0 Fermentation airlock #1 (Joseph SARDIN)
 80. [x] `lichen.wav` — **Pact** — Reindeer Lichen — Reindeer lichen is almost silent. A dry crust tick. No voice. — sat 2026-09-03 BigSoundBank CC0 Broken twigs #1 (Joseph SARDIN)
 81. [x] `photovore.wav` — **Gleam** — Lamp-drinker — A lamp-drinker ticks a thin dry light-hum. No mouth. No words. — sat 2026-09-03 Freesound CC0 Fluorescent light buzzing (Rvgerxini #474312)
-82. [ ] `choir.mp4` — **Choir** — Chord Body — A chord body sounds one dry chord, held. No music bed. No words. (zip synth — replace with Grok)
+82. [x] `choir.wav` — **Choir** — Chord Body — A chord body sounds one dry chord, held. No music bed. No words. — sat 2026-09-03 Commons CC BY-SA 3.0 CMajor Chord (1RadicalOne, Grand Piano)
 83. [ ] `nimbus.mp4` — **Drift** — Methane Floater — A methane floater ticks frost and a cold-gas hiss. Dry. (zip synth — replace with Grok)
 84. [ ] `silica.mp4` — **Shard** — Living Crystal — A living crystal ticks as facets settle. Dry frost tick. (zip synth — replace with Grok)
 85. [ ] `terminator.mp4` — **Dusk** — Twilight Walker — A twilight walker hums a dry rim-tone. No words. (zip synth — replace with Grok)
