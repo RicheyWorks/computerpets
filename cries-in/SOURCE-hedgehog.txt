@@ -1,0 +1,7 @@
+Source: Freesound sound 528183 "Angry hedgehog sniffing 1" by fthgurdy
+Author: fthgurdy
+License: Creative Commons Zero (CC0 1.0)
+URL: https://freesound.org/people/fthgurdy/sounds/528183/
+Direct: https://cdn.freesound.org/previews/528/528183_3302313-hq.mp3
+Notes: Juvenile hedgehog angrily huffs and sniffs. House cut first ~4s mono 44.1kHz — snuffle/huff, no bark, no words, no music.
+House path: build our own from field tape — not Grok Imagine
