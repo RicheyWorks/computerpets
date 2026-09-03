@@ -115,9 +115,10 @@ Right now these voices are in the house:
 - **Boom** (mantled howler) — a deep roar-howl from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en), British Library / [Richard Ranft](https://commons.wikimedia.org/wiki/File:Mantled_Howler_Monkey_(Alouatta_palliata)_(W_ALOUATTA_PALLIATA_R1_C2).ogg) (Santa Rosa NP).
 - **Swing** (lar gibbon) — rising whoops from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), recorded by [FunkMonk](https://commons.wikimedia.org/wiki/File:Lar_Gibbon_hoots.ogg) (`Lar_Gibbon_hoots.ogg`, Copenhagen Zoo).
 - **Gum** (koala) — a deep bellow from Wikimedia Commons / [PLOS ONE](https://doi.org/10.1371/journal.pone.0020329), [CC BY](https://creativecommons.org/licenses/by/2.5/), recorded by [Charlton et al.](https://commons.wikimedia.org/wiki/File:Perception-of-Male-Caller-Identity-in-Koalas-(Phascolarctos-cinereus)-Acoustic-Analysis-and-pone.0020329.s001.ogv) (male Andy, Lone Pine Koala Sanctuary).
+- **Levee** (American alligator) — a low rumble bellow from Wikimedia Commons, public domain (PD-USGov-FWS), [`Alligatorbellow1.ogg`](https://commons.wikimedia.org/wiki/File:Alligatorbellow1.ogg) (United States Fish and Wildlife Service). Not a movie roar.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Levee** the American alligator — a low rumble bellow, not a movie roar.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Cape** the big brown bat — thin click-chirps / a feeding buzz, not a bird.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
