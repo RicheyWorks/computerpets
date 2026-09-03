@@ -8,7 +8,7 @@
 
 | Field            | Value                                      |
 |------------------|--------------------------------------------|
-| **Last Updated** | 2026-09-02 (Veil leftover rays a window apron as a reef ledge; seventh leftover of remaining reef/sea after well ten closed; Tube leftover still papillaes a window well as a sand well; catalog 220) |
+| **Last Updated** | 2026-09-02 (Gate leftover mantles a window stool as a mantle dish; eighth leftover of remaining reef/sea after well ten closed; Veil leftover still rays a window apron as a reef ledge; catalog 220) |
 | **Version**      | 1.3                                        |
 | **Status**       | Active — Maintained                        |
 | **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
