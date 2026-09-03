@@ -27,7 +27,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `canada_goose.wav` — **Vee** (Canada Goose) — sat 2026-09-03 Commons PD Branta_canadensis.ogg
 - [x] `frog.wav` — **Reed** (Green Frog) — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr, obs 13344280)
 - [x] `toad.wav` — **Pebble** (American Toad) — sat 2026-09-03 Commons CC BY 4.0 SwampVids
-- [ ] `field_cricket.mp4` — **Chirp** (Fall Field Cricket) — A fall field cricket chirps a fast dry stridulation. Wing-file scrape. — now: zip field
+- [x] `field_cricket.wav` — **Chirp** (Fall Field Cricket) — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
 - [ ] `cicada.mp4` — **Brood** (Periodical Cicada) — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. — now: zip field
 - [ ] `guinea_pig.mp4` — **Whee** (Guinea Pig) — A guinea pig wheeks, a loud whistle. No words. — now: zip synth — replace
 - [ ] `fox.mp4` — **Rue** (Fox) — A red fox barks, sharp and high. Not a dog bark. — now: zip field
@@ -222,7 +222,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 178. [ ] `sea_urchin.mp4` — **Thorn** — Purple Sea Urchin — A sea urchin ticks spines and rasps its lantern. No voice. (zip synth — replace with Grok)
 179. [ ] `knobbed_whelk.mp4` — **Knurl** — Knobbed Whelk — A knobbed whelk is silent. Radula rasp. No voice. (zip synth — replace with Grok)
 180. [ ] `lugworm.mp4` — **Heap** — Lugworm — A lugworm is silent. Wet-sand heave. No voice. (zip synth — replace with Grok)
-181. [ ] `field_cricket.mp4` — **Chirp** — Fall Field Cricket — A fall field cricket chirps a fast dry stridulation. Wing-file scrape. (zip field — still want Grok)
+181. [x] `field_cricket.wav` — **Chirp** — Fall Field Cricket — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
 182. [ ] `katydid.mp4` — **Blade** — Northern True Katydid — A northern true katydid rasps a loud pulsed song, often heard as katy-did. No words. (zip synth — replace with Grok)
 183. [ ] `grasshopper.mp4` — **Vault** — Differential Grasshopper — A differential grasshopper stridulates a dry creak. Wing-leg rasp. (zip synth — replace with Grok)
 184. [ ] `swallowtail.mp4` — **Banner** — Eastern Tiger Swallowtail — A tiger swallowtail is nearly silent. Soft wing flutter. No voice. (zip synth — replace with Grok)
