@@ -35,7 +35,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `gibbon.wav` — **Swing** (Lar Gibbon) — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
 - [x] `koala.wav` — **Gum** (Koala) — sat 2026-09-03 Commons/PLOS CC BY bellowing male Andy (Charlton et al.)
 - [x] `alligator.wav` — **Levee** (American Alligator) — sat 2026-09-03 Commons PD Alligatorbellow1.ogg (USFWS)
-- [ ] `bat.mp4` — **Cape** (Big Brown Bat) — A big brown bat click-chirps echolocation, rapid and thin. A feeding buzz. Not a bird. — now: zip field
+- [x] `bat.wav` — **Cape** (Big Brown Bat) — sat 2026-09-03 Commons CC0 Bat_feeding_buzz.wav (Kaldari)
 - [ ] `deer.mp4` — **Rack** (White-tailed Deer) — A white-tailed deer blows, a heavy alarm breath. Then a hoof stamp. No words. — now: zip field
 
 ## All 220
@@ -173,7 +173,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 129. [ ] `tick.mp4` — **Clasp** — Black-legged Tick — A tick is silent. Almost nothing. No voice. (zip synth — replace with Grok)
 130. [ ] `solifuge.mp4` — **Gale** — Windscorpion — A windscorpion is silent. Fast dry scuttle. No voice. (zip synth — replace with Grok)
 131. [ ] `deer.mp4` — **Rack** — White-tailed Deer — A white-tailed deer blows, a heavy alarm breath. Then a hoof stamp. No words. (zip field — still want Grok)
-132. [ ] `bat.mp4` — **Cape** — Big Brown Bat — A big brown bat click-chirps echolocation, rapid and thin. A feeding buzz. Not a bird. (zip field — still want Grok)
+132. [x] `bat.wav` — **Cape** — Big Brown Bat — A big brown bat click-chirps echolocation, rapid and thin. A feeding buzz. Not a bird. — sat 2026-09-03 Commons CC0 Bat_feeding_buzz.wav (Kaldari)
 133. [ ] `squirrel.mp4` — **Cache** — Eastern Gray Squirrel — An eastern gray squirrel chatters, then a raspy mehr-mehr-mehr. Or a mouse-like squeak. (zip synth — replace with Grok)
 134. [ ] `otter.mp4` — **Slick** — North American River Otter — A river otter chirps a short whistle-chuckle. No words. (zip synth — replace with Grok)
 135. [ ] `raccoon.mp4` — **Wash** — Raccoon — A raccoon chitters, fast and dry. No meow. (zip synth — replace with Grok)
