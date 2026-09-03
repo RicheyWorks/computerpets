@@ -52,7 +52,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 8. [x] `goldfish.wav` — **Coin** — Goldfish — A goldfish has no voice. Only a water tick and a bubble. — sat 2026-09-03 Commons PD Noisy_aquarium.ogg (alys / PDSounds)
 9. [x] `budgie.wav` — **Echo** — Budgie — A budgerigar chirps and chatters. No words. — sat 2026-09-03 Commons PD Budgerigar_chirping.ogg (mary905 / PDSounds)
 10. [x] `fox.wav` — **Rue** — Fox — A red fox barks, sharp and high. Not a dog bark. — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
-11. [ ] `penguin.mp4` — **Peck** — Penguin — A penguin brays a short nasal call. No words. (zip synth — replace with Grok)
+11. [x] `penguin.wav` — **Peck** — Penguin — A penguin brays a short nasal call. No words. — sat 2026-09-03 Commons CC BY 3.0 Little Penguin (Benchill)
 12. [ ] `parrot.mp4` — **Quill** — Parrot — A parrot squawks a harsh contact call. No words. (zip field — still want Grok)
 13. [ ] `ferret.mp4` — **Wick** — Ferret — A ferret dooks, a unique soft clucking. If scared, a hiss. No bark. (zip synth — replace with Grok)
 14. [ ] `hedgehog.mp4` — **Burr** — Hedgehog — A hedgehog snuffles and huffs. No bark. (zip synth — replace with Grok)
