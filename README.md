@@ -24,6 +24,8 @@ There are **220** animals in this house. These are some of them.
 
 House names. The ones you say out loud.
 
+**[See all 220](docs/GUESTS.md)** — every guest’s real picture, not just these groups.
+
 ## Put a pet on your real desktop
 
 This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. Click the name to collapse it. Voice, color, saved lines, alarm, timer, mute, and Turn off sit on the expanded card. The tray by the clock has **On the desk** — Rui, Sip, and the grid ten, no scrolling two hundred twenty names.

@@ -22,10 +22,16 @@ Overlay and `/demo` stay one house.
 
 For each guest, in order:
 
-1. If a house still `{key}.jpg` exists, **image-to-video** from that still.
-2. If not, Imagine Video from the prompt alone. Close-up. Camera still.
-3. Save `{key}.mp4` only. Do not invent extra filenames.
-4. One guest at a time. Wait for “next”.
+1. Open the house portrait. All 220 exist:
+   `web/public/pets/{key}.jpg`
+   GitHub: `https://github.com/RicheyWorks/computerpets/blob/main/web/public/pets/{key}.jpg`
+   Public gallery: `docs/GUESTS.md`
+2. Extra poses (walk / sit / play / sleep / eat / talk / idle) live in
+   `desktop/renderer/sprites/{key}/`
+   Never retouch Rui’s landed poses.
+3. **Image-to-video from that portrait.** Match this animal. Do not invent a beige computer-case still. Do not draw a new pet.
+4. Save `{key}.mp4` only. Do not invent extra filenames.
+5. One guest at a time. Wait for “next”.
 
 Do not design a new house. Do not add pets. Do not write a soundtrack. Do not narrate.
 
@@ -66,7 +72,7 @@ Save as `{key}.jpg`. Immediately image-to-video it.
 ## Video prompt footer (append every time)
 
 ```
-Image-to-video from this still if present. Keep the house and camera locked. Only the guest moves a little. AUDIO: only that sound. No music. No narrator. No English words. Dry, 2 to 4 seconds, loop-safe. Close-up.
+Image-to-video from web/public/pets/{key}.jpg. Keep the animal. Camera locked. Only the guest moves a little. AUDIO: only that sound. No music. No narrator. No English words. Dry, 2 to 4 seconds, loop-safe. Close-up.
 ```
 
 ---
