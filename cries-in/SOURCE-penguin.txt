@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Little_Penguin_(Eudyptula_minor).ogg
+Author: Benchill
+License: Creative Commons Attribution 3.0 (CC BY 3.0)
+URL: https://commons.wikimedia.org/wiki/File:Little_Penguin_(Eudyptula_minor).ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/2/2c/Little_Penguin_%28Eudyptula_minor%29.ogg
+Notes: Little Penguins (Eudyptula minor) calling at dusk in New Zealand. House cut first ~4s mono 44.1kHz — short nasal bray/call, no words, no music.
+House path: build our own from field tape — not Grok Imagine
