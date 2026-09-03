@@ -33,7 +33,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `fox.wav` — **Rue** (Fox) — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
 - [x] `howler.wav` — **Boom** (Mantled Howler) — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
 - [x] `gibbon.wav` — **Swing** (Lar Gibbon) — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
-- [ ] `koala.mp4` — **Gum** (Koala) — A koala bellows: deep snoring inhalations and belching exhalations. Far-carrying, low. — now: zip synth — replace
+- [x] `koala.wav` — **Gum** (Koala) — sat 2026-09-03 Commons/PLOS CC BY bellowing male Andy (Charlton et al.)
 - [ ] `alligator.mp4` — **Levee** (American Alligator) — An American alligator bellows a low rumble. Hiss if threatened. No movie roar. — now: zip field
 - [ ] `bat.mp4` — **Cape** (Big Brown Bat) — A big brown bat click-chirps echolocation, rapid and thin. A feeding buzz. Not a bird. — now: zip field
 - [ ] `deer.mp4` — **Rack** (White-tailed Deer) — A white-tailed deer blows, a heavy alarm breath. Then a hoof stamp. No words. — now: zip field
@@ -241,7 +241,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 197. [x] `howler.wav` — **Boom** — Mantled Howler — A mantled howler howls a deep roar-howl. No English. — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
 198. [ ] `tarsier.mp4` — **Gaze** — Philippine Tarsier — A Philippine tarsier looses a piercing single-note loud call, or a soft bird-like twill. (zip synth — replace with Grok)
 199. [ ] `potto.mp4` — **Still** — Potto — A potto calls a high-pitched tsic, mostly between mother and young. Otherwise nearly silent. (zip synth — replace with Grok)
-200. [ ] `koala.mp4` — **Gum** — Koala — A koala bellows: deep snoring inhalations and belching exhalations. Far-carrying, low. (zip synth — replace with Grok)
+200. [x] `koala.wav` — **Gum** — Koala — sat 2026-09-03 Commons/PLOS CC BY bellowing male Andy (Charlton et al.)
 201. [ ] `brain_coral.mp4` — **Ridge** — Boulder Brain Coral — Brain coral is silent. Water over ridges. No voice. (zip synth — replace with Grok)
 202. [ ] `anemone.mp4` — **Wreath** — Magnificent Sea Anemone — A sea anemone is silent. Tentacle water hush. No voice. (zip synth — replace with Grok)
 203. [ ] `clownfish.mp4` — **Paint** — Ocellaris Clownfish — An ocellaris clownfish is silent. Tiny water ticks. No cartoon voice. (zip synth — replace with Grok)
