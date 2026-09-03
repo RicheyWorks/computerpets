@@ -111,7 +111,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 67. [x] `mining_bee.wav` — **Bank** — Neighborly Mining Bee — A mining bee buzzes, short and dry. Wing only. — sat 2026-09-03 Freesound CC BY Andrena ground-nest (dobroide #32588)
 68. [x] `honey_drone.wav` — **Hum** — Western Honey Bee Drone — A honey-bee drone buzzes, deeper than a worker. Wing only. — sat 2026-09-03 Commons CC BY 3.0 YleArkisto Apis mellifera swarm (Freesound 263673)
 69. [x] `honey_queen.wav` — **Keep** — Western Honey Bee Queen — A honey-bee queen pipes a short toot. No words. — sat 2026-09-03 Commons CC BY-SA 4.0 QueenBeePiping2017.wav (Gerard Allan)
-70. [ ] `honeycomb.mp4` — **Wax** — Honeycomb — Honeycomb is silent wax. A faint worker-wing hum through the comb at most. No music. (zip synth — replace with Grok)
+70. [x] `honeycomb.wav` — **Wax** — Honeycomb — Honeycomb is silent wax. A faint worker-wing hum through the comb at most. No music. — sat 2026-09-03 Commons CC BY-SA 4.0 Buzzing_bees.ogg muffled-through-wax (Serg Childed)
 71. [ ] `oyster.mp4` — **Frill** — Oyster Mushroom — An oyster mushroom is silent. A faint spore hush. No voice. (zip synth — replace with Grok)
 72. [ ] `fly_agaric.mp4` — **Cap** — Fly Agaric — A fly agaric is silent. Almost nothing. No voice. (zip synth — replace with Grok)
 73. [ ] `morel.mp4` — **Lattice** — American Morel — A morel is silent. Damp-air hush. No voice. (zip synth — replace with Grok)
