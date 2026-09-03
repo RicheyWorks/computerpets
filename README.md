@@ -1,6 +1,6 @@
 # ComputerPets
 
-Virtual pets that live on your computer.
+Virtual pets that live on your computer — walk your windows, eat from the keeper card, and **caw** when you Call.
 
 <p align="center">
   <img src="docs/readme-hero.jpg" alt="Rui the red panda, Paint the clownfish, Scrape the parrotfish, Wreath the anemone, and Reed the frog — five of two hundred twenty ComputerPets" width="920">
@@ -90,9 +90,24 @@ The mark sits in the panel.
 
 More in [desktop/README.md](desktop/README.md).
 
+## They make real noise
+
+Call is not a cartoon beep. When a guest has a cry file, **Call** plays a short species sound — the kind a microphone caught outside, cut dry for the desk.
+
+Right now these voices are in the house:
+
+- **Rui** (red panda) — a bright twitter from Wikimedia Commons, public domain, recorded by [Mizunoryu](https://commons.wikimedia.org/wiki/File:Red_panda_twittering.ogg) (`Red_panda_twittering.ogg`).
+- **Sip** (ruby-throated hummingbird) — field chips from [xeno-canto XC109598](https://xeno-canto.org/109598), recordist **Jonathon Jongsma** (Archilochus colubris, foraging calls). Credit him; see that page for the license.
+- **Soot** (American crow) — a dry caw from Wikimedia Commons, public domain, recorded by [G McGrane](https://commons.wikimedia.org/wiki/File:American_Crow.ogg) (`American_Crow.ogg`, parabolic mike, 2004).
+- **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
+
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Wedge** the raven — a deep gronk, not a crow caw.
+
+No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
+
 ## How to take care of them
 
-Feed them when they look hungry. Play so they stay happy. Let them rest when they look tired. Clean up the mess they leave. Give medicine if they get sick.
+Feed them when they look hungry. Play so they stay happy. Let them rest when they look tired. Clean up the mess they leave. Give **Medicine** if they get sick (the card will say Unwell when health dips — Feed and Clean help too).
 
 The keeper card is the daily care. The tray **On the desk** picks Rui, Sip, and the grid ten. If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
 
