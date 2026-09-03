@@ -1,0 +1,8 @@
+Source: Wikimedia Commons File:Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg
+Author: Victor C. Lewis (British Library Wildlife Sounds / Europeana Sounds)
+License: CC BY 4.0
+URL: https://commons.wikimedia.org/wiki/File:Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/2/2b/Barn_Owl_%28Tyto_alba%29_%28W_TYTO_ALBA_R1_C16%29.ogg
+Notes: Barn Owl screams, recorded in Cardiganshire, Wales, 1988-08-02. BL shelfmark W1CDR0001419 BD20. Dry hiss-scream, not a hoot.
+Cut: silenceremove + dynaudnorm, atrim 0:4, mono 44.1kHz
+House path: build our own from field tape — not Grok Imagine
