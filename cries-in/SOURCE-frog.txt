@@ -1,0 +1,8 @@
+Source: iNaturalist observation 13344280
+Author: Stacey Lee Kerr
+License: CC BY 4.0
+URL: https://www.inaturalist.org/observations/13344280
+Direct: https://static.inaturalist.org/sounds/22952.wav
+Notes: Green Frog (Lithobates clamitans) field call. Banjo-like pluck croak.
+Cut: highpass 200 + dynaudnorm, atrim 0:3.5, mono 44.1kHz
+House path: build our own from field tape — not Grok Imagine

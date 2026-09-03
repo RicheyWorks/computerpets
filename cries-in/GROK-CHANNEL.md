@@ -8,18 +8,23 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`frog.mp4` / `frog.wav` — **Reed** (Green Frog)
+`toad.mp4` / `toad.wav` — **Pebble** (American Toad)
 
-Prefer a real green frog banjo croak (Commons / Xeno-canto / Archive CC0). Cut 2–4s. No music. No English.
+Prefer a real American toad trill (Commons / Xeno-canto / Archive CC0 / iNat CC BY). Cut 2–4s. No music. No English.
 
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane) `mallard` (Commons CC BY-SA 4.0 BL female, Aubrey John Williams) `canada_goose` (Commons PD `Branta_canadensis.ogg`)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane) `mallard` (Commons CC BY-SA 4.0 BL female, Aubrey John Williams) `canada_goose` (Commons PD `Branta_canadensis.ogg`) `frog` (iNat CC BY Stacey Lee Kerr obs 13344280)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 14:39 PDT — Buffffff
+
+Sat Reed frog from iNaturalist CC BY (Stacey Lee Kerr, obs 13344280). Next toad.
+
 
 ### 2026-09-03 14:35 PDT — Buffffff
 
