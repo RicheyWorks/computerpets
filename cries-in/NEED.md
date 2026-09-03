@@ -25,7 +25,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `pileated.wav` — **Drum** (Pileated Woodpecker) — sat 2026-09-03 Commons PD Pileated_Woodpecker.ogg (G. McGrane)
 - [x] `mallard.wav` — **Drake** (Mallard) — sat 2026-09-03 Commons CC BY-SA 4.0 female mallard (Aubrey John Williams / BL)
 - [x] `canada_goose.wav` — **Vee** (Canada Goose) — sat 2026-09-03 Commons PD Branta_canadensis.ogg
-- [ ] `frog.mp4` — **Reed** (Green Frog) — A green frog gives a short territorial croak, banjo-like. Males use breeding calls. — now: zip field
+- [x] `frog.wav` — **Reed** (Green Frog) — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr, obs 13344280)
 - [ ] `toad.mp4` — **Pebble** (American Toad) — An American toad looses a long high trill. No words. — now: zip synth — replace
 - [ ] `field_cricket.mp4` — **Chirp** (Fall Field Cricket) — A fall field cricket chirps a fast dry stridulation. Wing-file scrape. — now: zip field
 - [ ] `cicada.mp4` — **Brood** (Periodical Cicada) — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. — now: zip field
@@ -132,7 +132,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 88. [ ] `magneton.mp4` — **Beacon** — Field Swimmer — A field swimmer hums a low magnetic hum. Dry. (zip synth — replace with Grok)
 89. [ ] `umbral.mp4` — **Hush** — Heat Shadow — A heat shadow is almost silent. A cool hush. No words. (zip synth — replace with Grok)
 90. [ ] `cyst.mp4` — **Arca** — Traveling Cyst — A traveling cyst clicks once, dry and small. (zip synth — replace with Grok)
-91. [ ] `frog.mp4` — **Reed** — Green Frog — A green frog gives a short territorial croak, banjo-like. Males use breeding calls. (zip field — still want Grok)
+91. [x] `frog.wav` — **Reed** — Green Frog — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr)
 92. [ ] `toad.mp4` — **Pebble** — American Toad — An American toad looses a long high trill. No words. (zip synth — replace with Grok)
 93. [ ] `newt.mp4` — **Eft** — Eastern Newt — An eastern newt is silent. Damp skin and a water tick. No voice. (zip synth — replace with Grok)
 94. [ ] `salamander.mp4` — **Dapple** — Spotted Salamander — A spotted salamander is silent. Leaf-mold hush. No voice. (zip synth — replace with Grok)

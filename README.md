@@ -106,9 +106,10 @@ Right now these voices are in the house:
 - **Drum** (pileated woodpecker) — a ringing call from Wikimedia Commons, public domain, recorded by [G. McGrane](https://commons.wikimedia.org/wiki/File:Pileated_Woodpecker.ogg) (`Pileated_Woodpecker.ogg`).
 - **Drake** (mallard) — a hen quack series from Wikimedia Commons, CC BY-SA 4.0, recorded by [Aubrey John Williams](https://commons.wikimedia.org/wiki/File:Mallard_(Anas_platyrhynchos)_(W1CDR0001518_BD17).ogg) (British Library Wildlife Sounds, Rye Grove, Surrey).
 - **Vee** (Canada goose) — a short nasal honk from Wikimedia Commons, public domain (`Branta_canadensis.ogg`).
+- **Reed** (green frog) — a banjo-pluck croak from [iNaturalist](https://www.inaturalist.org/observations/13344280), CC BY, recorded by [Stacey Lee Kerr](https://www.inaturalist.org/people/staceyleekerr).
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Reed** the green frog — a short banjo croak.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Pebble** the American toad — a long high trill.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
