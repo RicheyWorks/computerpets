@@ -1,0 +1,10 @@
+key: lions_mane
+guest: Mane (Lion's Mane)
+source: Wikimedia Commons Blade_of_grass_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Blade_of_grass_(Gravity_Sound).wav
+direct: https://commons.wikimedia.org/wiki/Special:FilePath/Blade_of_grass_(Gravity_Sound).wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet fungus sit — Hericium erinaceus has no voice. Soft blade-of-grass rustle as soft tooth hush (heavily attenuated). Distinct from Ring leaf-crunch bracket hush and Horn forest-wind moss hush. Source kept as short ogg of Commons wav. No music. No narrator. No cartoon beep. House cut ~2.2s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
