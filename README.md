@@ -120,9 +120,10 @@ Right now these voices are in the house:
 - **Rack** (white-tailed deer) — an alarm snort/blow from [iNaturalist observation 376669369](https://www.inaturalist.org/observations/376669369), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [Thomas J Nolan](https://www.inaturalist.org/people/tnolan).
 - **Thimble** (rabbit) — a hind-foot thump on bare soil from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [kessir](https://freesound.org/people/kessir/sounds/386007/) (`Rabbit Thump on Soil`).
 - **Clip** (hamster) — cage rustle and thin squeak from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [ondrosik](https://freesound.org/people/ondrosik/sounds/165906/) (`hamster2.wav`).
+- **Ink** (turtle) — a short sulcata tortoise croak from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [TheKingOfGeeks360](https://freesound.org/people/TheKingOfGeeks360/sounds/850006/) (`Reptiles - Sulcata Tortoise; Breeding Croak from Male`).
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Ink** the turtle — a quiet air hiss or soft shell scrape.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Coin** the goldfish — only a water tick or bubble (quiet guest).
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 

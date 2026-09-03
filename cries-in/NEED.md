@@ -48,7 +48,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 4. [x] `rabbit.wav` — **Thimble** — Rabbit — A rabbit is almost voiceless. One hind-foot thump on wood. No scream. — sat 2026-09-03 Freesound CC0 Rabbit Thump on Soil (kessir)
 5. [x] `hamster.wav` — **Clip** — Hamster — A golden hamster squeaks, thin and high, almost ultrasonic. Quiet cheek rustle. — sat 2026-09-03 Freesound CC0 hamster2.wav (ondrosik)
 6. [x] `guinea_pig.wav` — **Whee** — Guinea Pig — A guinea pig wheeks, a loud whistle. No words. — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
-7. [ ] `turtle.mp4` — **Ink** — Turtle — A turtle hisses a little air. Not mute, but no roar. (zip synth — replace with Grok)
+7. [x] `turtle.wav` — **Ink** — Turtle — A turtle hisses a little air. Not mute, but no roar. — sat 2026-09-03 Freesound CC0 sulcata tortoise croak (TheKingOfGeeks360)
 8. [ ] `goldfish.mp4` — **Coin** — Goldfish — A goldfish has no voice. Only a water tick and a bubble. (zip synth — replace with Grok)
 9. [ ] `budgie.mp4` — **Echo** — Budgie — A budgerigar chirps and chatters. No words. (zip synth — replace with Grok)
 10. [x] `fox.wav` — **Rue** — Fox — A red fox barks, sharp and high. Not a dog bark. — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
