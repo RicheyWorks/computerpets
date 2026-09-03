@@ -1,0 +1,10 @@
+key: honey_drone
+guest: Hum (Western Honey Bee Drone)
+source: Wikimedia Commons / Freesound YleArkisto 263673 Apis mellifera swarm among flowers
+URL: https://commons.wikimedia.org/wiki/File:263673_ylearkisto_mehilainen-tarhamehilainen-parvi-bees-honeybees-a-swarm-of-bees-buzzing-among-the-flowers-apis-mellifera.wav
+Freesound: https://freesound.org/people/YleArkisto/sounds/263673/
+author: YleArkisto
+license: Creative Commons Attribution 3.0 (CC BY 3.0)
+note: Apis mellifera bees buzzing among flowers. Worker honeybee (Comb) already sits Serg Childed close buzz; this deeper swarm cut is the honest drone wing for Hum. House cut ~3.5s mono 44.1kHz. No words. No music. No narrator.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
