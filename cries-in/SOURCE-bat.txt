@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Bat_feeding_buzz.wav
+Author: Kaldari
+License: Creative Commons Zero (CC0)
+URL: https://commons.wikimedia.org/wiki/File:Bat_feeding_buzz.wav
+Direct: https://upload.wikimedia.org/wikipedia/commons/e/e7/Bat_feeding_buzz.wav
+Notes: Feeding buzz of a bat in Butler County, PA; most likely big brown bat (Eptesicus fuscus). Source is slowed 1/10 so humans hear the clicks. House cut ~3.5s from ~3s mark, mono 44.1kHz.
+House path: build our own from field tape — not Grok Imagine
