@@ -1,0 +1,7 @@
+Source: Freesound sound 860985 "Rodents - Chinchilla; Single" by TheKingOfGeeks360
+Author: TheKingOfGeeks360
+License: Creative Commons Zero (CC0 1.0)
+URL: https://freesound.org/people/TheKingOfGeeks360/sounds/860985/
+Direct: https://cdn.freesound.org/previews/860/860985_15895934-hq.mp3
+Notes: Single chinchilla squeak/alarm bark (Critter Zone pack). House cut mono 44.1kHz — high brief bark, no words, no music. Clip is naturally short (~0.1s).
+House path: build our own from field tape — not Grok Imagine
