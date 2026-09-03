@@ -1,0 +1,9 @@
+Source: Wikimedia Commons File:Mallard_(Anas_platyrhynchos)_(W1CDR0001518_BD17).ogg
+Author: Aubrey John Williams (British Library Wildlife Sounds)
+Copyright holder: The British Library Board
+License: CC BY-SA 4.0
+URL: https://commons.wikimedia.org/wiki/File:Mallard_(Anas_platyrhynchos)_(W1CDR0001518_BD17).ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/9/95/Mallard_%28Anas_platyrhynchos%29_%28W1CDR0001518_BD17%29.ogg
+Notes: Calls of a female Mallard, recorded at Rye Grove, Surrey, England, 1976-01-26. BL shelfmark W1CDR0001518 BD17. Hen quack series, not a drake.
+Cut: ss 14.6 + dynaudnorm + silenceremove, atrim 0:3.6, mono 44.1kHz
+House path: build our own from field tape — not Grok Imagine
