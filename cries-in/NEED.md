@@ -29,7 +29,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `toad.wav` — **Pebble** (American Toad) — sat 2026-09-03 Commons CC BY 4.0 SwampVids
 - [x] `field_cricket.wav` — **Chirp** (Fall Field Cricket) — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
 - [x] `cicada.wav` — **Brood** (Periodical Cicada) — sat 2026-09-03 Commons CC BY-SA 4.0 Magicicada_cassinii-call.ogg (Peterwchen)
-- [ ] `guinea_pig.mp4` — **Whee** (Guinea Pig) — A guinea pig wheeks, a loud whistle. No words. — now: zip synth — replace
+- [x] `guinea_pig.wav` — **Whee** (Guinea Pig) — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
 - [ ] `fox.mp4` — **Rue** (Fox) — A red fox barks, sharp and high. Not a dog bark. — now: zip field
 - [ ] `howler.mp4` — **Boom** (Mantled Howler) — A mantled howler howls a deep roar-howl. No English. — now: zip synth — replace
 - [ ] `gibbon.mp4` — **Swing** (Lar Gibbon) — A lar gibbon whoops a rising great-call of short hoots, quavering at the edges. No words. — now: zip synth — replace
@@ -47,7 +47,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 3. [x] `dog.mp4` — **Pip** — Dog — A dog barks once, short and bright. No words. (zip field — still want Grok)
 4. [ ] `rabbit.mp4` — **Thimble** — Rabbit — A rabbit is almost voiceless. One hind-foot thump on wood. No scream. (zip synth — replace with Grok)
 5. [ ] `hamster.mp4` — **Clip** — Hamster — A golden hamster squeaks, thin and high, almost ultrasonic. Quiet cheek rustle. (zip synth — replace with Grok)
-6. [ ] `guinea_pig.mp4` — **Whee** — Guinea Pig — A guinea pig wheeks, a loud whistle. No words. (zip synth — replace with Grok)
+6. [x] `guinea_pig.wav` — **Whee** — Guinea Pig — A guinea pig wheeks, a loud whistle. No words. — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
 7. [ ] `turtle.mp4` — **Ink** — Turtle — A turtle hisses a little air. Not mute, but no roar. (zip synth — replace with Grok)
 8. [ ] `goldfish.mp4` — **Coin** — Goldfish — A goldfish has no voice. Only a water tick and a bubble. (zip synth — replace with Grok)
 9. [ ] `budgie.mp4` — **Echo** — Budgie — A budgerigar chirps and chatters. No words. (zip synth — replace with Grok)
