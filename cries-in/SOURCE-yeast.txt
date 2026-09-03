@@ -1,0 +1,10 @@
+key: yeast
+guest: Starter (Baker's Yeast)
+source: BigSoundBank Fermentation airlock #1 (sound 3560)
+URL: https://bigsoundbank.com/fermentation-airlock-1-s3560.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/3560.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet microbe sit — Saccharomyces has no voice. Real beer-fermentation airlock bubble tape cut as tiny CO2 tick (attenuated). Commons WWS brewery CO2 was 429 at sit time; BigSoundBank CC0 airlock is honest fermentation bubble field tape. No music. No narrator. No cartoon beep. House cut ~3.2s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
