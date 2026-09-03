@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:American_Robin_Yellowstone_National_Park.ogg
+Author: National Park Service
+License: Public domain (PD-USGov / NPS)
+URL: https://commons.wikimedia.org/wiki/File:American_Robin_Yellowstone_National_Park.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/3/3d/American_Robin_Yellowstone_National_Park.ogg
+Notes: American Robin at Yellowstone National Park, 2005-04-19. Short carol, ~3.3s house cut.
+House path: build our own from field tape — not Grok Imagine
