@@ -24,7 +24,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `red_tail.wav` — **Hook** (Red-tailed Hawk) — sat 2026-09-03 Commons/XC71575 CC BY-SA 3.0 (Jonathon Jongsma)
 - [x] `pileated.wav` — **Drum** (Pileated Woodpecker) — sat 2026-09-03 Commons PD Pileated_Woodpecker.ogg (G. McGrane)
 - [x] `mallard.wav` — **Drake** (Mallard) — sat 2026-09-03 Commons CC BY-SA 4.0 female mallard (Aubrey John Williams / BL)
-- [ ] `canada_goose.mp4` — **Vee** (Canada Goose) — A Canada goose honks, nasal and short. A warning hiss if pressed. — now: zip field
+- [x] `canada_goose.wav` — **Vee** (Canada Goose) — sat 2026-09-03 Commons PD Branta_canadensis.ogg
 - [ ] `frog.mp4` — **Reed** (Green Frog) — A green frog gives a short territorial croak, banjo-like. Males use breeding calls. — now: zip field
 - [ ] `toad.mp4` — **Pebble** (American Toad) — An American toad looses a long high trill. No words. — now: zip synth — replace
 - [ ] `field_cricket.mp4` — **Chirp** (Fall Field Cricket) — A fall field cricket chirps a fast dry stridulation. Wing-file scrape. — now: zip field
@@ -159,7 +159,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 115. [x] `chickadee.mp4` — **Dee** — Black-capped Chickadee — A black-capped chickadee calls chick-a-dee-dee, or a two-note fee-bee. (zip field — still want Grok)
 116. [x] `robin.wav` — **Brick** — American Robin — sat 2026-09-03 Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS)
 117. [x] `mallard.wav` — **Drake** — Mallard — sat 2026-09-03 Commons CC BY-SA 4.0 female mallard (Aubrey John Williams / BL)
-118. [ ] `canada_goose.mp4` — **Vee** — Canada Goose — A Canada goose honks, nasal and short. A warning hiss if pressed. (zip field — still want Grok)
+118. [x] `canada_goose.wav` — **Vee** — Canada Goose — sat 2026-09-03 Commons PD Branta_canadensis.ogg
 119. [ ] `pileated.mp4` — **Drum** — Pileated Woodpecker — A pileated woodpecker drums, then a ringing kuk or woick call. (zip field — still want Grok)
 120. [x] `hummingbird.mp4` — **Sip** — Ruby-throated Hummingbird — A ruby-throated hummingbird: rapid squeaky chirps, plus male wing tik-tik. (zip field — still want Grok)
 121. [ ] `orb_weaver.mp4` — **Loom** — European Garden Spider — An orb-weaver is silent. Silk tick on the web. No voice. (zip synth — replace with Grok)

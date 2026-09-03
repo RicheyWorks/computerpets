@@ -1,0 +1,8 @@
+Source: Wikimedia Commons File:Branta_canadensis.ogg
+Author: Unknown
+License: Public domain
+URL: https://commons.wikimedia.org/wiki/File:Branta_canadensis.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/7/77/Branta_canadensis.ogg
+Notes: Call of the Canada Goose (Branta canadensis). Short nasal honk series.
+Cut: dynaudnorm + silenceremove, atrim 0:3.05, mono 44.1kHz (resampled from 11.025kHz source)
+House path: build our own from field tape — not Grok Imagine
