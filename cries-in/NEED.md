@@ -103,7 +103,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 59. [ ] `mantis.mp4` — **Fold** — Chinese Mantis — A Chinese mantis is silent. Faint chitin tick. No roar. (zip synth — replace with Grok)
 60. [x] `cicada.wav` — **Brood** — Periodical Cicada — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. — sat 2026-09-03 Commons CC BY-SA 4.0 Magicicada_cassinii-call.ogg (Peterwchen)
 61. [x] `bumblebee.wav` — **Thrum** — Common Eastern Bumble Bee — A common eastern bumble bee buzzes low and heavy. Wing drone only. — sat 2026-09-03 Commons PD Bombus_buzz.ogg (Mysid)
-62. [ ] `carpenter_bee.mp4` — **Auger** — Eastern Carpenter Bee — An eastern carpenter bee buzzes loud, a deep wing drone. (zip synth — replace with Grok)
+62. [x] `carpenter_bee.wav` — **Auger** — Eastern Carpenter Bee — An eastern carpenter bee buzzes loud, a deep wing drone. — sat 2026-09-03 Freesound CC0 buzzing bee 1 (cognito perceptu #117144)
 63. [ ] `mason_bee.mp4` — **Mortar** — Blue Orchard Mason — A mason bee buzzes, small and brief. Wing only. (zip synth — replace with Grok)
 64. [ ] `leafcutter.mp4` — **Disc** — Alfalfa Leafcutter — A leafcutter bee buzzes, then a tiny leaf snip. No voice. (zip synth — replace with Grok)
 65. [ ] `stingless.mp4` — **Pot** — Maya Stingless Bee — A stingless bee buzzes high and thin. Wing only. (zip synth — replace with Grok)

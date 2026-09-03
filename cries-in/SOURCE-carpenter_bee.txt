@@ -1,0 +1,7 @@
+Source: Freesound sound 117144 "buzzing bee 1" by cognito perceptu
+Author: cognito perceptu
+License: Creative Commons Zero (CC0 1.0)
+URL: https://freesound.org/people/cognito%20perceptu/sounds/117144/
+Direct: https://cdn.freesound.org/previews/117/117144_57789-hq.mp3
+Notes: Described by author as a buzzing carpenter bee in flight (US speakers often call them bumblebees). House cut first ~4s mono 44.1kHz — deep wing drone for Auger (Xylocopa virginica). No words. No music. No narrator.
+House path: build our own from field tape — not Grok Imagine
