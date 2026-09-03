@@ -182,7 +182,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 138. [ ] `beaver.mp4` — **Dam** — North American Beaver — A beaver slaps its tail on water, one wet smack. (zip synth — replace with Grok)
 139. [ ] `porcupine.mp4` — **Spine** — North American Porcupine — A porcupine tooth-chatters, then a quill rattle. No roar. (zip synth — replace with Grok)
 140. [ ] `black_bear.mp4` — **Coal** — American Black Bear — A black bear tongue-clicks and grunts. If nervous, a huff. Not a roar. (zip synth — replace with Grok)
-141. [ ] `gecko.mp4` — **Pad** — Mediterranean House Gecko — A Mediterranean house gecko calls a high bird-like squeak-chirp. Territorial. (zip field — still want Grok)
+141. [x] `gecko.wav` — **Pad** — Mediterranean House Gecko — A Mediterranean house gecko calls a high bird-like squeak-chirp. — sat 2026-09-03 Commons CC BY-SA 3.0 HouseGeckoChirp.ogg (Glueball)
 142. [ ] `anole.mp4` — **Wink** — Green Anole — A green anole is nearly silent. Dewlap, not a voice. A tiny squeak if pressed. (zip synth — replace with Grok)
 143. [ ] `skink.mp4` — **Dash** — Five-lined Skink — A five-lined skink is silent. Dry leaf rustle as it runs. No voice. (zip synth — replace with Grok)
 144. [ ] `chameleon.mp4` — **Shift** — Veiled Chameleon — A veiled chameleon hisses, dry and small. No roar. (zip synth — replace with Grok)
