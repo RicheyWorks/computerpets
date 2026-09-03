@@ -111,6 +111,7 @@ Right now these voices are in the house:
 - **Chirp** (fall field cricket) — a fast dry wing-file scrape from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), recorded by [Thatcher](https://commons.wikimedia.org/wiki/File:Field_cricket_Gryllus_pennsylvanicus.ogg) (`Field_cricket_Gryllus_pennsylvanicus.ogg`).
 - **Brood** (periodical cicada) — a tymbal call from Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Peterwchen](https://commons.wikimedia.org/wiki/File:Magicicada_cassinii-call.ogg) (`Magicicada_cassinii-call.ogg`, Magicicada cassinii).
 - **Whee** (guinea pig) — a feeding wheek from Wikimedia Commons, public domain (`Guinea_Pig_Feeding_Wheek.ogg`).
+- **Rue** (red fox) — a short bark from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.en), recorded by [Jugrü](https://commons.wikimedia.org/wiki/File:Bellender_Fuchs.ogg) (`Bellender_Fuchs.ogg`).
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
 More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Rue** the fox — a sharp high bark, not a dog.

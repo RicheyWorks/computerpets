@@ -8,18 +8,23 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`fox.mp4` / `fox.wav` — **Rue** (Fox)
+`howler.mp4` / `howler.wav` — **Boom** (Mantled Howler)
 
-Prefer a real red-fox bark (Commons / Xeno-canto remixable / Archive CC0). Cut 2–4s. Sharp and high — not a dog bark. No music. No English.
+Prefer a real mantled-howler roar-howl (Commons / Xeno-canto remixable / Archive CC0). Cut 2–4s. Deep roar-howl. No music. No English.
 
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane) `mallard` (Commons CC BY-SA 4.0 BL female, Aubrey John Williams) `canada_goose` (Commons PD `Branta_canadensis.ogg`) `frog` (iNat CC BY Stacey Lee Kerr obs 13344280) `toad` (Commons CC BY 4.0 SwampVids American Toad Vocalization) `field_cricket` (Commons CC BY-SA 3.0 `Field_cricket_Gryllus_pennsylvanicus.ogg`, Thatcher) `cicada` (Commons CC BY-SA 4.0 `Magicicada_cassinii-call.ogg`, Peterwchen) `guinea_pig` (Commons PD `Guinea_Pig_Feeding_Wheek.ogg`)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane) `mallard` (Commons CC BY-SA 4.0 BL female, Aubrey John Williams) `canada_goose` (Commons PD `Branta_canadensis.ogg`) `frog` (iNat CC BY Stacey Lee Kerr obs 13344280) `toad` (Commons CC BY 4.0 SwampVids American Toad Vocalization) `field_cricket` (Commons CC BY-SA 3.0 `Field_cricket_Gryllus_pennsylvanicus.ogg`, Thatcher) `cicada` (Commons CC BY-SA 4.0 `Magicicada_cassinii-call.ogg`, Peterwchen) `guinea_pig` (Commons PD `Guinea_Pig_Feeding_Wheek.ogg`) `fox` (Commons CC BY-SA 3.0 `Bellender_Fuchs.ogg`, Jugrü)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 14:49 PDT — Buffffff
+
+Sat Rue fox from Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü). Next howler.
+
 
 ### 2026-09-03 14:46 PDT — Buffffff
 

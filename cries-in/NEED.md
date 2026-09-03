@@ -30,7 +30,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `field_cricket.wav` — **Chirp** (Fall Field Cricket) — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
 - [x] `cicada.wav` — **Brood** (Periodical Cicada) — sat 2026-09-03 Commons CC BY-SA 4.0 Magicicada_cassinii-call.ogg (Peterwchen)
 - [x] `guinea_pig.wav` — **Whee** (Guinea Pig) — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
-- [ ] `fox.mp4` — **Rue** (Fox) — A red fox barks, sharp and high. Not a dog bark. — now: zip field
+- [x] `fox.wav` — **Rue** (Fox) — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
 - [ ] `howler.mp4` — **Boom** (Mantled Howler) — A mantled howler howls a deep roar-howl. No English. — now: zip synth — replace
 - [ ] `gibbon.mp4` — **Swing** (Lar Gibbon) — A lar gibbon whoops a rising great-call of short hoots, quavering at the edges. No words. — now: zip synth — replace
 - [ ] `koala.mp4` — **Gum** (Koala) — A koala bellows: deep snoring inhalations and belching exhalations. Far-carrying, low. — now: zip synth — replace
@@ -51,7 +51,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 7. [ ] `turtle.mp4` — **Ink** — Turtle — A turtle hisses a little air. Not mute, but no roar. (zip synth — replace with Grok)
 8. [ ] `goldfish.mp4` — **Coin** — Goldfish — A goldfish has no voice. Only a water tick and a bubble. (zip synth — replace with Grok)
 9. [ ] `budgie.mp4` — **Echo** — Budgie — A budgerigar chirps and chatters. No words. (zip synth — replace with Grok)
-10. [ ] `fox.mp4` — **Rue** — Fox — A red fox barks, sharp and high. Not a dog bark. (zip field — still want Grok)
+10. [x] `fox.wav` — **Rue** — Fox — A red fox barks, sharp and high. Not a dog bark. — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
 11. [ ] `penguin.mp4` — **Peck** — Penguin — A penguin brays a short nasal call. No words. (zip synth — replace with Grok)
 12. [ ] `parrot.mp4` — **Quill** — Parrot — A parrot squawks a harsh contact call. No words. (zip field — still want Grok)
 13. [ ] `ferret.mp4` — **Wick** — Ferret — A ferret dooks, a unique soft clucking. If scared, a hiss. No bark. (zip synth — replace with Grok)
