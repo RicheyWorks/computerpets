@@ -55,7 +55,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 11. [x] `penguin.wav` — **Peck** — Penguin — A penguin brays a short nasal call. No words. — sat 2026-09-03 Commons CC BY 3.0 Little Penguin (Benchill)
 12. [x] `parrot.wav` — **Quill** — Parrot — A parrot squawks a harsh contact call. No words. — sat 2026-09-03 Commons CC BY 4.0 Mealy Amazon (Richard Ranft / BL)
 13. [x] `ferret.wav` — **Wick** — Ferret — A ferret dooks, a unique soft clucking. If scared, a hiss. No bark. — sat 2026-09-03 Freesound CC BY 4.0 playing ferret (J.Zazvurek)
-14. [ ] `hedgehog.mp4` — **Burr** — Hedgehog — A hedgehog snuffles and huffs. No bark. (zip synth — replace with Grok)
+14. [x] `hedgehog.wav` — **Burr** — Hedgehog — A hedgehog snuffles and huffs. No bark. — sat 2026-09-03 Freesound CC0 Angry hedgehog sniffing 1 (fthgurdy)
 15. [ ] `chinchilla.mp4` — **Floss** — Chinchilla — A chinchilla barks, high and brief, an alarm bark. Teeth may chatter. (zip synth — replace with Grok)
 16. [ ] `axolotl.mp4` — **Bloom** — Axolotl — An axolotl is silent. Gill flutter and a water tick. No voice. (zip synth — replace with Grok)
 17. [ ] `toucan.mp4` — **Keel** — Toucan — A toucan calls a dry croak-yelp. Frog-like, not a songbird. (zip synth — replace with Grok)

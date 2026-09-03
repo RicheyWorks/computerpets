@@ -126,9 +126,10 @@ Right now these voices are in the house:
 - **Peck** (penguin) — little penguin dusk calls from Wikimedia Commons, CC BY 3.0, recorded by [Benchill](https://commons.wikimedia.org/wiki/File:Little_Penguin_(Eudyptula_minor).ogg) (`Little_Penguin_(Eudyptula_minor).ogg`). Short nasal bray. No words.
 - **Quill** (parrot) — mealy amazon calls from Wikimedia Commons / British Library, CC BY 4.0, recorded by [Richard Ranft](https://commons.wikimedia.org/wiki/File:Mealy_Amazon_(Amazona_farinosa)_(W_AMAZONA_FARINOSA_R1_C5).ogg) (`Mealy_Amazon_(Amazona_farinosa)_(W_AMAZONA_FARINOSA_R1_C5).ogg`). Harsh contact squawk. No words.
 - **Wick** (ferret) — playing dook/cluck from Freesound, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [J.Zazvurek](https://freesound.org/people/J.Zazvurek/sounds/155115/) (`Ferret`, sound 155115). Soft play dook. No bark. No words.
+- **Burr** (hedgehog) — juvenile huff and sniff from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [fthgurdy](https://freesound.org/people/fthgurdy/sounds/528183/) (`Angry hedgehog sniffing 1`, sound 528183). Snuffle and huff. No bark.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Burr** the hedgehog — a snuffle and huff, no bark.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Floss** the chinchilla — a high brief alarm bark, or teeth chatter.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
