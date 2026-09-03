@@ -128,9 +128,10 @@ Right now these voices are in the house:
 - **Wick** (ferret) — playing dook/cluck from Freesound, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [J.Zazvurek](https://freesound.org/people/J.Zazvurek/sounds/155115/) (`Ferret`, sound 155115). Soft play dook. No bark. No words.
 - **Burr** (hedgehog) — juvenile huff and sniff from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [fthgurdy](https://freesound.org/people/fthgurdy/sounds/528183/) (`Angry hedgehog sniffing 1`, sound 528183). Snuffle and huff. No bark.
 - **Floss** (chinchilla) — a high brief alarm squeak from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [TheKingOfGeeks360](https://freesound.org/people/TheKingOfGeeks360/sounds/860985/) (`Rodents - Chinchilla; Single`, sound 860985). Short bark. No words.
+- **Bloom** (axolotl) — quiet water bubbling from Wikimedia Commons, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [A.-K. D.](https://commons.wikimedia.org/wiki/File:Toberbreedia_water_bubbling.opus) (`Toberbreedia_water_bubbling.opus`, holy well). Voiceless guest — water tick only, never a cartoon beep.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Bloom** the axolotl — silent: gill flutter and a water tick, never a cartoon beep.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Keel** the toucan — a dry croak-yelp, frog-like, not a songbird.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 

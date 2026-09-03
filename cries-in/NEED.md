@@ -57,7 +57,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 13. [x] `ferret.wav` — **Wick** — Ferret — A ferret dooks, a unique soft clucking. If scared, a hiss. No bark. — sat 2026-09-03 Freesound CC BY 4.0 playing ferret (J.Zazvurek)
 14. [x] `hedgehog.wav` — **Burr** — Hedgehog — A hedgehog snuffles and huffs. No bark. — sat 2026-09-03 Freesound CC0 Angry hedgehog sniffing 1 (fthgurdy)
 15. [x] `chinchilla.wav` — **Floss** — Chinchilla — A chinchilla barks, high and brief, an alarm bark. Teeth may chatter. — sat 2026-09-03 Freesound CC0 Rodents - Chinchilla; Single (TheKingOfGeeks360)
-16. [ ] `axolotl.mp4` — **Bloom** — Axolotl — An axolotl is silent. Gill flutter and a water tick. No voice. (zip synth — replace with Grok)
+- [x] `axolotl.wav` — **Bloom** — Axolotl — An axolotl is silent. Gill flutter and a water tick. No voice. — sat 2026-09-03 Commons CC0 Toberbreedia_water_bubbling.opus (A.-K. D.)
 17. [ ] `toucan.mp4` — **Keel** — Toucan — A toucan calls a dry croak-yelp. Frog-like, not a songbird. (zip synth — replace with Grok)
 18. [ ] `iguana.mp4` — **Sol** — Iguana — A green iguana hisses, dewlap out. No roar. (zip synth — replace with Grok)
 19. [ ] `dragon.mp4` — **Vesper** — Dragon — A small desk dragon breathes a dry hiss-rumble. No movie roar. (zip synth — replace with Grok)
