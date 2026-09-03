@@ -113,7 +113,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 69. [x] `honey_queen.wav` — **Keep** — Western Honey Bee Queen — A honey-bee queen pipes a short toot. No words. — sat 2026-09-03 Commons CC BY-SA 4.0 QueenBeePiping2017.wav (Gerard Allan)
 70. [x] `honeycomb.wav` — **Wax** — Honeycomb — Honeycomb is silent wax. A faint worker-wing hum through the comb at most. No music. — sat 2026-09-03 Commons CC BY-SA 4.0 Buzzing_bees.ogg muffled-through-wax (Serg Childed)
 71. [x] `oyster.wav` — **Frill** — Oyster Mushroom — An oyster mushroom is silent. A faint spore hush. No voice. — sat 2026-09-03 Commons CC BY 4.0 Rustling_leaves_(Gravity_Sound).wav (Gravity Sound)
-72. [ ] `fly_agaric.mp4` — **Cap** — Fly Agaric — A fly agaric is silent. Almost nothing. No voice. (zip synth — replace with Grok)
+72. [x] `fly_agaric.wav` — **Cap** — Fly Agaric — A fly agaric is silent. Almost nothing. No voice. — sat 2026-09-03 Commons CC BY 4.0 Leaves_in_the_wind_(Gravity_Sound).wav (Gravity Sound)
 73. [ ] `morel.mp4` — **Lattice** — American Morel — A morel is silent. Damp-air hush. No voice. (zip synth — replace with Grok)
 74. [ ] `chanterelle.mp4` — **Horn** — Golden Chanterelle — A chanterelle is silent. Soft moss hush. No voice. (zip synth — replace with Grok)
 75. [ ] `turkey_tail.mp4` — **Ring** — Turkey Tail — Turkey tail is silent. Dry bracket hush. No voice. (zip synth — replace with Grok)
