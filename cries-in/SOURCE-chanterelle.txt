@@ -1,0 +1,10 @@
+key: chanterelle
+guest: Horn (Golden Chanterelle)
+source: Wikimedia Commons Wind_in_forest_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Wind_in_forest_(Gravity_Sound).wav
+direct: https://upload.wikimedia.org/wikipedia/commons/4/47/Wind_in_forest_%28Gravity_Sound%29.wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet fungus sit — Cantharellus has no voice. Soft forest-wind as moss hush (attenuated). Distinct from Frill rustle, Cap leaf-wind, Lattice rain-leaf. Source kept as short ogg excerpt of Commons wav. No music. No narrator. No cartoon beep. House cut ~3.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
