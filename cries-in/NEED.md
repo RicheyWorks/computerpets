@@ -59,7 +59,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 15. [x] `chinchilla.wav` — **Floss** — Chinchilla — A chinchilla barks, high and brief, an alarm bark. Teeth may chatter. — sat 2026-09-03 Freesound CC0 Rodents - Chinchilla; Single (TheKingOfGeeks360)
 - [x] `axolotl.wav` — **Bloom** — Axolotl — An axolotl is silent. Gill flutter and a water tick. No voice. — sat 2026-09-03 Commons CC0 Toberbreedia_water_bubbling.opus (A.-K. D.)
 - [x] `toucan.wav` — **Keel** — Toucan — A toucan calls a dry croak-yelp. Frog-like, not a songbird. — sat 2026-09-03 Commons CC BY-SA 3.0 Keel-billed_toucan.ogg (Thatcher)
-18. [ ] `iguana.mp4` — **Sol** — Iguana — A green iguana hisses, dewlap out. No roar. (zip synth — replace with Grok)
+- [ ] `iguana.mp4` — **Sol** — Iguana — A green iguana hisses, dewlap out. No roar. — SKIP 2026-09-03 Buffffff: no legal PD/CC0/CC BY field hiss found (Commons spoken-word only; iNat all BY-NC/ARR; Freesound no iguana animal tape). Leave for later hunt.
 19. [ ] `dragon.mp4` — **Vesper** — Dragon — A small desk dragon breathes a dry hiss-rumble. No movie roar. (zip synth — replace with Grok)
 20. [ ] `phoenix.mp4` — **Ember** — Phoenix — A phoenix looses a thin rising whistle. No words. No music. (zip synth — replace with Grok)
 21. [ ] `ball_python.mp4` — **Nori** — Ball Python — A ball python is nearly silent. Faint scale rustle, maybe a thin hiss. (zip synth — replace with Grok)
@@ -102,7 +102,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 58. [ ] `ladybird.mp4` — **Seven** — Seven-spot Ladybird — A seven-spot ladybird is nearly silent. Tiny wing whir if it lifts. (zip synth — replace with Grok)
 59. [ ] `mantis.mp4` — **Fold** — Chinese Mantis — A Chinese mantis is silent. Faint chitin tick. No roar. (zip synth — replace with Grok)
 60. [x] `cicada.wav` — **Brood** — Periodical Cicada — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. — sat 2026-09-03 Commons CC BY-SA 4.0 Magicicada_cassinii-call.ogg (Peterwchen)
-61. [ ] `bumblebee.mp4` — **Thrum** — Common Eastern Bumble Bee — A common eastern bumble bee buzzes low and heavy. Wing drone only. (zip field — still want Grok)
+61. [x] `bumblebee.wav` — **Thrum** — Common Eastern Bumble Bee — A common eastern bumble bee buzzes low and heavy. Wing drone only. — sat 2026-09-03 Commons PD Bombus_buzz.ogg (Mysid)
 62. [ ] `carpenter_bee.mp4` — **Auger** — Eastern Carpenter Bee — An eastern carpenter bee buzzes loud, a deep wing drone. (zip synth — replace with Grok)
 63. [ ] `mason_bee.mp4` — **Mortar** — Blue Orchard Mason — A mason bee buzzes, small and brief. Wing only. (zip synth — replace with Grok)
 64. [ ] `leafcutter.mp4` — **Disc** — Alfalfa Leafcutter — A leafcutter bee buzzes, then a tiny leaf snip. No voice. (zip synth — replace with Grok)
