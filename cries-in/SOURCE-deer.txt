@@ -1,0 +1,7 @@
+Source: iNaturalist observation 376669369 (sound 2049394.wav)
+Author: Thomas J Nolan (tnolan)
+License: Creative Commons Attribution 4.0 (CC BY 4.0)
+URL: https://www.inaturalist.org/observations/376669369
+Direct: https://static.inaturalist.org/sounds/2049394.wav
+Notes: White-tailed deer (Odocoileus virginianus) alarm / warning call as a doe took off after noticing the observer (snort/blow). Field recording. House cut ~3.5s from start, mono 44.1kHz.
+House path: build our own from field tape — not Grok Imagine
