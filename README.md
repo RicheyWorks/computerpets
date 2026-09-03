@@ -118,9 +118,10 @@ Right now these voices are in the house:
 - **Levee** (American alligator) — a low rumble bellow from Wikimedia Commons, public domain (PD-USGov-FWS), [`Alligatorbellow1.ogg`](https://commons.wikimedia.org/wiki/File:Alligatorbellow1.ogg) (United States Fish and Wildlife Service). Not a movie roar.
 - **Cape** (big brown bat) — a slowed feeding-buzz click train from Wikimedia Commons, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Kaldari](https://commons.wikimedia.org/wiki/File:Bat_feeding_buzz.wav) (`Bat_feeding_buzz.wav`, Butler County PA; most likely *Eptesicus fuscus*). Not a bird.
 - **Rack** (white-tailed deer) — an alarm snort/blow from [iNaturalist observation 376669369](https://www.inaturalist.org/observations/376669369), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [Thomas J Nolan](https://www.inaturalist.org/people/tnolan).
+- **Thimble** (rabbit) — a hind-foot thump on bare soil from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [kessir](https://freesound.org/people/kessir/sounds/386007/) (`Rabbit Thump on Soil`).
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Thimble** the rabbit — one hind-foot thump on wood, almost voiceless.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Clip** the golden hamster — a thin high squeak or quiet cheek rustle.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
