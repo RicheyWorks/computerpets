@@ -113,9 +113,10 @@ Right now these voices are in the house:
 - **Whee** (guinea pig) — a feeding wheek from Wikimedia Commons, public domain (`Guinea_Pig_Feeding_Wheek.ogg`).
 - **Rue** (red fox) — a short bark from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.en), recorded by [Jugrü](https://commons.wikimedia.org/wiki/File:Bellender_Fuchs.ogg) (`Bellender_Fuchs.ogg`).
 - **Boom** (mantled howler) — a deep roar-howl from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.en), British Library / [Richard Ranft](https://commons.wikimedia.org/wiki/File:Mantled_Howler_Monkey_(Alouatta_palliata)_(W_ALOUATTA_PALLIATA_R1_C2).ogg) (Santa Rosa NP).
+- **Swing** (lar gibbon) — rising whoops from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), recorded by [FunkMonk](https://commons.wikimedia.org/wiki/File:Lar_Gibbon_hoots.ogg) (`Lar_Gibbon_hoots.ogg`, Copenhagen Zoo).
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Rue** the fox — a sharp high bark, not a dog.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Gum** the koala — a deep bellow, snoring inhale and belching exhale.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
