@@ -107,7 +107,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 63. [x] `mason_bee.wav` — **Mortar** — Blue Orchard Mason — A mason bee buzzes, small and brief. Wing only. — sat 2026-09-03 Freesound CC BY 4.0 solitary bees (dobroide #161582)
 64. [x] `leafcutter.wav` — **Disc** — Alfalfa Leafcutter — A leafcutter bee buzzes, then a tiny leaf snip. No voice. — sat 2026-09-03 Commons CC BY 3.0 bee buzz (Free Sounds Library) + Commons CC BY 4.0 WWS scissors snip
 65. [x] `stingless.wav` — **Pot** — Maya Stingless Bee — A stingless bee buzzes high and thin. Wing only. — sat 2026-09-03 iNat CC BY Trigona spinipes (B. Phalan obs 263773947)
-66. [ ] `sweat_bee.mp4` — **Sheen** — Bicolored Sweat Bee — A sweat bee buzzes, faint and small. Wing only. (zip synth — replace with Grok)
+66. [x] `sweat_bee.wav` — **Sheen** — Bicolored Sweat Bee — A sweat bee buzzes, faint and small. Wing only. — sat 2026-09-03 Commons CC BY 3.0 FSL Bee_Buzzing_Sound_-_Animal_Sounds.opus (no Halictidae remixable)
 67. [ ] `mining_bee.mp4` — **Bank** — Neighborly Mining Bee — A mining bee buzzes, short and dry. Wing only. (zip synth — replace with Grok)
 68. [ ] `honey_drone.mp4` — **Hum** — Western Honey Bee Drone — A honey-bee drone buzzes, deeper than a worker. Wing only. (zip synth — replace with Grok)
 69. [ ] `honey_queen.mp4` — **Keep** — Western Honey Bee Queen — A honey-bee queen pipes a short toot. No words. (zip synth — replace with Grok)
