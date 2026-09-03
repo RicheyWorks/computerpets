@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Guinea_Pig_Feeding_Wheek.ogg
+Author: myself (uploader; Commons marks Public domain)
+License: Public domain
+URL: https://commons.wikimedia.org/wiki/File:Guinea_Pig_Feeding_Wheek.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/e/e2/Guinea_Pig_Feeding_Wheek.ogg
+Notes: Guinea pig feeding wheek. House cut ~3.5s mono 44.1kHz.
+House path: build our own from field tape — not Grok Imagine
