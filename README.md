@@ -103,9 +103,10 @@ Right now these voices are in the house:
 - **Brick** (American robin) — a short carol from Wikimedia Commons, public domain, recorded by the [National Park Service](https://commons.wikimedia.org/wiki/File:American_Robin_Yellowstone_National_Park.ogg) (`American_Robin_Yellowstone_National_Park.ogg`, Yellowstone).
 - **Heart** (barn owl) — a dry hiss-scream from Wikimedia Commons, CC BY 4.0, recorded by [Victor C. Lewis](https://commons.wikimedia.org/wiki/File:Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg) (British Library Wildlife Sounds, Cardiganshire). Not a hoot.
 - **Hook** (red-tailed hawk) — a descending scream from [xeno-canto XC71575](https://xeno-canto.org/71575) via Commons, CC BY-SA 3.0, recorded by [Jonathon Jongsma](https://commons.wikimedia.org/wiki/File:Buteo_jamaicensis_-_Red-tailed_Hawk_-_XC71575.ogg) (Dordt College Prairie, IA).
+- **Drum** (pileated woodpecker) — a ringing call from Wikimedia Commons, public domain, recorded by [G. McGrane](https://commons.wikimedia.org/wiki/File:Pileated_Woodpecker.ogg) (`Pileated_Woodpecker.ogg`).
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Drum** the pileated woodpecker — a drum, then a ringing kuk or woick.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Drake** the mallard — a descending hen quack series.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
