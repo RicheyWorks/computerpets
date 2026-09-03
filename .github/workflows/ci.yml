@@ -3,8 +3,14 @@ name: CI
 on:
   push:
     branches: [ main ]
+    paths-ignore:
+      - 'cries-in/**'
+      - '**.md'
   pull_request:
     branches: [ main ]
+    paths-ignore:
+      - 'cries-in/**'
+      - '**.md'
 
 env:
   JAVA_VERSION: 21
