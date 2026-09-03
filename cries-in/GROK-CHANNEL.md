@@ -8,17 +8,22 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`robin.mp4` / `robin.wav` — **Brick** (American Robin)
+`barn_owl.mp4` / `barn_owl.wav` — **Heart** (Barn Owl)
 
-Prefer a real robin carol or alarm tik (Commons / Xeno-canto / Archive CC0). Cut 2–4s. No music. No English.
+Prefer a real barn-owl hiss-scream (Commons / Xeno-canto / Archive CC0). Cut 2–4s. Not a hoot. No music. No English.
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 14:20 PDT — Buffffff
+
+Sat Brick robin from Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS). Next barn owl.
+
 
 ### 2026-09-03 14:17 PDT — Buffffff
 

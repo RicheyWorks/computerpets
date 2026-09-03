@@ -19,7 +19,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 
 - [x] `crow.wav` — **Soot** (American Crow) — sat 2026-09-03 Commons PD American_Crow.ogg (G McGrane)
 - [x] `raven.wav` — **Wedge** (Common Raven) — sat 2026-09-03 Commons PD Common_Raven.ogg (G. McGrane)
-- [ ] `robin.mp4` — **Brick** (American Robin) — An American robin sings a short carol, then a sharp alarm tik. No words. — now: zip synth — replace
+- [x] `robin.wav` — **Brick** (American Robin) — sat 2026-09-03 Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS)
 - [ ] `barn_owl.mp4` — **Heart** (Barn Owl) — A barn owl shrieks a dry hiss-scream. Not a hoot. Wings nearly silent. — now: zip synth — replace
 - [ ] `red_tail.mp4` — **Hook** (Red-tailed Hawk) — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. — now: zip synth — replace
 - [ ] `pileated.mp4` — **Drum** (Pileated Woodpecker) — A pileated woodpecker drums, then a ringing kuk or woick call. — now: zip field
@@ -157,7 +157,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 113. [ ] `barn_owl.mp4` — **Heart** — Barn Owl — A barn owl shrieks a dry hiss-scream. Not a hoot. Wings nearly silent. (zip synth — replace with Grok)
 114. [ ] `red_tail.mp4` — **Hook** — Red-tailed Hawk — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. (zip synth — replace with Grok)
 115. [x] `chickadee.mp4` — **Dee** — Black-capped Chickadee — A black-capped chickadee calls chick-a-dee-dee, or a two-note fee-bee. (zip field — still want Grok)
-116. [ ] `robin.mp4` — **Brick** — American Robin — An American robin sings a short carol, then a sharp alarm tik. No words. (zip synth — replace with Grok)
+116. [x] `robin.wav` — **Brick** — American Robin — sat 2026-09-03 Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS)
 117. [ ] `mallard.mp4` — **Drake** — Mallard — A mallard hen quacks a descending series. The drake's quack is deeper and quieter. (zip field — still want Grok)
 118. [ ] `canada_goose.mp4` — **Vee** — Canada Goose — A Canada goose honks, nasal and short. A warning hiss if pressed. (zip field — still want Grok)
 119. [ ] `pileated.mp4` — **Drum** — Pileated Woodpecker — A pileated woodpecker drums, then a ringing kuk or woick call. (zip field — still want Grok)
