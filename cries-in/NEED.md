@@ -28,7 +28,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `frog.wav` — **Reed** (Green Frog) — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr, obs 13344280)
 - [x] `toad.wav` — **Pebble** (American Toad) — sat 2026-09-03 Commons CC BY 4.0 SwampVids
 - [x] `field_cricket.wav` — **Chirp** (Fall Field Cricket) — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
-- [ ] `cicada.mp4` — **Brood** (Periodical Cicada) — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. — now: zip field
+- [x] `cicada.wav` — **Brood** (Periodical Cicada) — sat 2026-09-03 Commons CC BY-SA 4.0 Magicicada_cassinii-call.ogg (Peterwchen)
 - [ ] `guinea_pig.mp4` — **Whee** (Guinea Pig) — A guinea pig wheeks, a loud whistle. No words. — now: zip synth — replace
 - [ ] `fox.mp4` — **Rue** (Fox) — A red fox barks, sharp and high. Not a dog bark. — now: zip field
 - [ ] `howler.mp4` — **Boom** (Mantled Howler) — A mantled howler howls a deep roar-howl. No English. — now: zip synth — replace
@@ -101,7 +101,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 57. [ ] `carpenter_ant.mp4` — **Column** — Black Carpenter Ant — A carpenter ant stridulates a faint dry rasp. No voice words. (zip synth — replace with Grok)
 58. [ ] `ladybird.mp4` — **Seven** — Seven-spot Ladybird — A seven-spot ladybird is nearly silent. Tiny wing whir if it lifts. (zip synth — replace with Grok)
 59. [ ] `mantis.mp4` — **Fold** — Chinese Mantis — A Chinese mantis is silent. Faint chitin tick. No roar. (zip synth — replace with Grok)
-60. [ ] `cicada.mp4` — **Brood** — Periodical Cicada — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. (zip field — still want Grok)
+60. [x] `cicada.wav` — **Brood** — Periodical Cicada — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. — sat 2026-09-03 Commons CC BY-SA 4.0 Magicicada_cassinii-call.ogg (Peterwchen)
 61. [ ] `bumblebee.mp4` — **Thrum** — Common Eastern Bumble Bee — A common eastern bumble bee buzzes low and heavy. Wing drone only. (zip field — still want Grok)
 62. [ ] `carpenter_bee.mp4` — **Auger** — Eastern Carpenter Bee — An eastern carpenter bee buzzes loud, a deep wing drone. (zip synth — replace with Grok)
 63. [ ] `mason_bee.mp4` — **Mortar** — Blue Orchard Mason — A mason bee buzzes, small and brief. Wing only. (zip synth — replace with Grok)
