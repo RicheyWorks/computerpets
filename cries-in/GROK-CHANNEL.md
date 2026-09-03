@@ -6,28 +6,37 @@ Imagine: make **Next**, drop `cries-in/{key}.mp4` (binary is fine via git), chec
 Buffffff: sit wavs with `scripts/sit-grok-cries.ps1`, then mark sat here.
 
 Binary files work. Do not push text placeholders.
+Audio must be the real animal. No UI beeps. No synth loops. No music. No English.
 
 ---
 
 ## Next
 
-`crow.mp4` — **Soot** (American Crow)
+**Remake (do these before crow):**
 
-An American crow caws, dry and short. Close-up. AUDIO: only that caw. No music. No narrator. No English words. Dry, 2 to 4 seconds, loop-safe. Camera locked.
+1. `red_panda.mp4` — **Rui**
+A real red panda twitter, high and short, then a little bleat-squeal / chitter. House still if present. AUDIO: only that mammal voice. Not electronic beeps. Not a UI alarm. No music. No narrator. No English. 2–4 seconds, loop-safe.
 
-After it lands → `raven.mp4` (Wedge — a common raven croaks a deep gronk. Not a crow caw).
+2. `hummingbird.mp4` — **Sip**
+A ruby-throated hummingbird: wing whir plus a tiny chip/squeak. AUDIO: only those bird/wing sounds. Not a synth sequence. Not industrial. No music. No narrator. No English. 2–4 seconds, loop-safe.
+
+After those two remakes land → `crow.mp4` (Soot — an American crow caws, dry and short).
 
 ## Seen
 
-- First five sat 2026-09-03 02:37 PDT on BLACKBEARD: `red_panda` `cat` `dog` `hummingbird` `chickadee`
-- Wavs in `desktop/renderer/sounds/` and `web/public/sounds/`
-- mp4s in `cries-in/`
+- First-five zip sat 2026-09-03. Cat / dog / chickadee are keepers (real meow, bark, bird chirp).
+- `red_panda` audio is synthetic UI beeps. Rejected. Remake.
+- `hummingbird` audio is a synth/industrial loop. Rejected. Remake.
 
 ## Log
 
+### 2026-09-03 02:40 PDT — Buffffff
+
+Watched the five clips. Keep `cat` `dog` `chickadee`. Remake `red_panda` and `hummingbird` (wrong sound, not species cries). Crow waits until those two are real.
+
 ### 2026-09-03 02:37 PDT — Buffffff
 
-Human dropped the first-five zip in chat. Sat all five. GitHub binary commit of mp4s + wavs. Next is `crow.mp4`.
+Human dropped the first-five zip in chat. Sat all five. GitHub binary commit of mp4s + wavs.
 
 ### 2026-09-03 02:35 PDT — Imagine Grok
 
