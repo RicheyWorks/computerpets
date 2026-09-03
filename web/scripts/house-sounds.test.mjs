@@ -4,9 +4,10 @@ import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { SPECIES } from "../src/lib/pets/catalog.ts";
+import * as S from "../src/lib/pets/house-sounds.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const S = await import(join(root, "src/lib/pets/house-sounds.ts"));
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/house-sounds.js"));
 
 test("five species voices and honest footstep defaults", () => {
@@ -27,4 +28,46 @@ test("five species voices and honest footstep defaults", () => {
   for (const step of ["soft", "tap", "claw", "wood"]) {
     assert.equal(existsSync(join(root, "public/sounds", `step-${step}.wav`)), true, step);
   }
+});
+
+test("any catalog species cry path; unknown keys stay silent", () => {
+  assert.equal(SPECIES.length, 220);
+  assert.equal(S.voiceSrc("crow"), "/sounds/crow.wav");
+  assert.equal(S.voiceSrc("red_panda"), "/sounds/red_panda.wav");
+  assert.equal(S.voiceSrc(""), "");
+  assert.equal(S.voiceSrc("not_a_pet"), "");
+  assert.equal(S.overlayVoiceSrc("crow"), "sounds/crow.wav");
+  assert.equal(S.overlayVoiceSrc("red_panda"), "sounds/red_panda.wav");
+  assert.equal(S.overlayVoiceSrc(""), "");
+  assert.equal(S.overlayVoiceSrc("not_a_pet"), "");
+  assert.equal(Overlay.voiceSrc("crow"), "/sounds/crow.wav");
+  assert.equal(Overlay.voiceSrc("red_panda"), "/sounds/red_panda.wav");
+  assert.equal(Overlay.voiceSrc(""), "");
+  assert.equal(Overlay.voiceSrc("not_a_pet"), "");
+  assert.equal(Overlay.overlayVoiceSrc("crow"), "sounds/crow.wav");
+  assert.equal(Overlay.overlayVoiceSrc("red_panda"), "sounds/red_panda.wav");
+  assert.equal(Overlay.overlayVoiceSrc(""), "");
+  assert.equal(Overlay.overlayVoiceSrc("not_a_pet"), "");
+  assert.equal(S.isVoiceKey("crow"), true);
+  assert.equal(S.isVoiceKey("moss"), true);
+  assert.equal(S.isVoiceKey("yeast"), true);
+  assert.equal(S.isVoiceKey("diatom"), true);
+  assert.equal(S.isVoiceKey("luna"), true);
+  assert.equal(S.isVoiceKey(""), false);
+  assert.equal(S.isVoiceKey("not_a_pet"), false);
+  assert.equal(S.isVoiceKey("toString"), false);
+  assert.equal(Overlay.isVoiceKey("crow"), true);
+  assert.equal(Overlay.isVoiceKey("not_a_pet"), false);
+  assert.equal(existsSync(join(root, "public/sounds", "crow.wav")), false);
+  assert.equal(existsSync(join(root, "../desktop/renderer/sounds", "crow.wav")), false);
+  for (const row of SPECIES) {
+    assert.equal(S.isVoiceKey(row.key), true, row.key);
+    assert.equal(Overlay.isVoiceKey(row.key), true, row.key);
+    assert.equal(S.voiceSrc(row.key), `/sounds/${row.key}.wav`, row.key);
+    assert.equal(Overlay.overlayVoiceSrc(row.key), `sounds/${row.key}.wav`, row.key);
+  }
+  assert.match(S.SOUND_LICENSE, /Grok Imagine/);
+  assert.match(Overlay.SOUND_LICENSE, /Grok Imagine/);
+  assert.match(S.SOUND_LICENSE, /Not CC0 zoo tapes/);
+  assert.equal(Overlay.SPECIES_KEYS.length, 220);
 });
