@@ -105,7 +105,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 61. [x] `bumblebee.wav` — **Thrum** — Common Eastern Bumble Bee — A common eastern bumble bee buzzes low and heavy. Wing drone only. — sat 2026-09-03 Commons PD Bombus_buzz.ogg (Mysid)
 62. [x] `carpenter_bee.wav` — **Auger** — Eastern Carpenter Bee — An eastern carpenter bee buzzes loud, a deep wing drone. — sat 2026-09-03 Freesound CC0 buzzing bee 1 (cognito perceptu #117144)
 63. [x] `mason_bee.wav` — **Mortar** — Blue Orchard Mason — A mason bee buzzes, small and brief. Wing only. — sat 2026-09-03 Freesound CC BY 4.0 solitary bees (dobroide #161582)
-64. [ ] `leafcutter.mp4` — **Disc** — Alfalfa Leafcutter — A leafcutter bee buzzes, then a tiny leaf snip. No voice. (zip synth — replace with Grok)
+64. [x] `leafcutter.wav` — **Disc** — Alfalfa Leafcutter — A leafcutter bee buzzes, then a tiny leaf snip. No voice. — sat 2026-09-03 Commons CC BY 3.0 bee buzz (Free Sounds Library) + Commons CC BY 4.0 WWS scissors snip
 65. [ ] `stingless.mp4` — **Pot** — Maya Stingless Bee — A stingless bee buzzes high and thin. Wing only. (zip synth — replace with Grok)
 66. [ ] `sweat_bee.mp4` — **Sheen** — Bicolored Sweat Bee — A sweat bee buzzes, faint and small. Wing only. (zip synth — replace with Grok)
 67. [ ] `mining_bee.mp4` — **Bank** — Neighborly Mining Bee — A mining bee buzzes, short and dry. Wing only. (zip synth — replace with Grok)
