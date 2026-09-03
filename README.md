@@ -122,9 +122,10 @@ Right now these voices are in the house:
 - **Clip** (hamster) — cage rustle and thin squeak from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [ondrosik](https://freesound.org/people/ondrosik/sounds/165906/) (`hamster2.wav`).
 - **Ink** (turtle) — a short sulcata tortoise croak from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [TheKingOfGeeks360](https://freesound.org/people/TheKingOfGeeks360/sounds/850006/) (`Reptiles - Sulcata Tortoise; Breeding Croak from Male`).
 - **Coin** (goldfish) — aquarium water tick and bubble from Wikimedia Commons, public domain, recorded by [alys](https://commons.wikimedia.org/wiki/File:Noisy_aquarium.ogg) (`Noisy_aquarium.ogg`, PDSounds). Quiet guest — never a cartoon beep.
+- **Echo** (budgie) — chirps from Wikimedia Commons, public domain, recorded by [mary905](https://commons.wikimedia.org/wiki/File:Budgerigar_chirping.ogg) (`Budgerigar_chirping.ogg`, PDSounds). No words.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Echo** the budgie — chirps and chatter, no words.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Peck** the penguin — a short nasal bray, no words.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 

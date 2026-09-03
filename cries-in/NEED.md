@@ -50,7 +50,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 6. [x] `guinea_pig.wav` — **Whee** — Guinea Pig — A guinea pig wheeks, a loud whistle. No words. — sat 2026-09-03 Commons PD Guinea_Pig_Feeding_Wheek.ogg
 7. [x] `turtle.wav` — **Ink** — Turtle — A turtle hisses a little air. Not mute, but no roar. — sat 2026-09-03 Freesound CC0 sulcata tortoise croak (TheKingOfGeeks360)
 8. [x] `goldfish.wav` — **Coin** — Goldfish — A goldfish has no voice. Only a water tick and a bubble. — sat 2026-09-03 Commons PD Noisy_aquarium.ogg (alys / PDSounds)
-9. [ ] `budgie.mp4` — **Echo** — Budgie — A budgerigar chirps and chatters. No words. (zip synth — replace with Grok)
+9. [x] `budgie.wav` — **Echo** — Budgie — A budgerigar chirps and chatters. No words. — sat 2026-09-03 Commons PD Budgerigar_chirping.ogg (mary905 / PDSounds)
 10. [x] `fox.wav` — **Rue** — Fox — A red fox barks, sharp and high. Not a dog bark. — sat 2026-09-03 Commons CC BY-SA 3.0 Bellender_Fuchs.ogg (Jugrü)
 11. [ ] `penguin.mp4` — **Peck** — Penguin — A penguin brays a short nasal call. No words. (zip synth — replace with Grok)
 12. [ ] `parrot.mp4` — **Quill** — Parrot — A parrot squawks a harsh contact call. No words. (zip field — still want Grok)
