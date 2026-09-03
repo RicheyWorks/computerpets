@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Mealy_Amazon_(Amazona_farinosa)_(W_AMAZONA_FARINOSA_R1_C5).ogg
+Author: Richard Ranft / British Library (Europeana Sounds)
+License: Creative Commons Attribution 4.0 (CC BY 4.0)
+URL: https://commons.wikimedia.org/wiki/File:Mealy_Amazon_(Amazona_farinosa)_(W_AMAZONA_FARINOSA_R1_C5).ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/3/36/Mealy_Amazon_%28Amazona_farinosa%29_%28W_AMAZONA_FARINOSA_R1_C5%29.ogg
+Notes: Mealy Amazon calls, Tambopata Wildlife Reserve, Peru. House cut first ~4s mono 44.1kHz — harsh contact squawk, no words, no music.
+House path: build our own from field tape — not Grok Imagine

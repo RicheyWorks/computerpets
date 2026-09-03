@@ -8,17 +8,22 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`parrot.mp4` / `parrot.wav` — **Quill** (Parrot)
+`ferret.mp4` / `ferret.wav` — **Wick** (Ferret)
 
-Harsh contact squawk. Commons / remixable field tape. No words. No music. No English.
+Soft dook / cluck, or a hiss if scared. Commons / remixable field tape. No bark. No words. No music.
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane) `mallard` (Commons CC BY-SA 4.0 BL female, Aubrey John Williams) `canada_goose` (Commons PD `Branta_canadensis.ogg`) `frog` (iNat CC BY Stacey Lee Kerr obs 13344280) `toad` (Commons CC BY 4.0 SwampVids American Toad Vocalization) `field_cricket` (Commons CC BY-SA 3.0 `Field_cricket_Gryllus_pennsylvanicus.ogg`, Thatcher) `cicada` (Commons CC BY-SA 4.0 `Magicicada_cassinii-call.ogg`, Peterwchen) `guinea_pig` (Commons PD `Guinea_Pig_Feeding_Wheek.ogg`) `fox` (Commons CC BY-SA 3.0 `Bellender_Fuchs.ogg`, Jugrü) `howler` (Commons CC BY 4.0 Mantled Howler Monkey BL, Richard Ranft) `gibbon` (Commons CC BY-SA 3.0 `Lar_Gibbon_hoots.ogg`, FunkMonk) `koala` (Commons/PLOS CC BY bellowing male Andy, Charlton et al.) `alligator` (Commons PD `Alligatorbellow1.ogg`, USFWS) `bat` (Commons CC0 `Bat_feeding_buzz.wav`, Kaldari; likely Eptesicus fuscus) `deer` (iNat CC BY Thomas J Nolan obs 376669369) `rabbit` (Freesound CC0 Rabbit Thump on Soil, kessir) `hamster` (Freesound CC0 hamster2.wav, ondrosik) `turtle` (Freesound CC0 sulcata croak, TheKingOfGeeks360) `goldfish` (Commons PD `Noisy_aquarium.ogg`, alys / PDSounds) `budgie` (Commons PD `Budgerigar_chirping.ogg`, mary905 / PDSounds) `penguin` (Commons CC BY 3.0 `Little_Penguin_(Eudyptula_minor).ogg`, Benchill)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane) `mallard` (Commons CC BY-SA 4.0 BL female, Aubrey John Williams) `canada_goose` (Commons PD `Branta_canadensis.ogg`) `frog` (iNat CC BY Stacey Lee Kerr obs 13344280) `toad` (Commons CC BY 4.0 SwampVids American Toad Vocalization) `field_cricket` (Commons CC BY-SA 3.0 `Field_cricket_Gryllus_pennsylvanicus.ogg`, Thatcher) `cicada` (Commons CC BY-SA 4.0 `Magicicada_cassinii-call.ogg`, Peterwchen) `guinea_pig` (Commons PD `Guinea_Pig_Feeding_Wheek.ogg`) `fox` (Commons CC BY-SA 3.0 `Bellender_Fuchs.ogg`, Jugrü) `howler` (Commons CC BY 4.0 Mantled Howler Monkey BL, Richard Ranft) `gibbon` (Commons CC BY-SA 3.0 `Lar_Gibbon_hoots.ogg`, FunkMonk) `koala` (Commons/PLOS CC BY bellowing male Andy, Charlton et al.) `alligator` (Commons PD `Alligatorbellow1.ogg`, USFWS) `bat` (Commons CC0 `Bat_feeding_buzz.wav`, Kaldari; likely Eptesicus fuscus) `deer` (iNat CC BY Thomas J Nolan obs 376669369) `rabbit` (Freesound CC0 Rabbit Thump on Soil, kessir) `hamster` (Freesound CC0 hamster2.wav, ondrosik) `turtle` (Freesound CC0 sulcata croak, TheKingOfGeeks360) `goldfish` (Commons PD `Noisy_aquarium.ogg`, alys / PDSounds) `budgie` (Commons PD `Budgerigar_chirping.ogg`, mary905 / PDSounds) `penguin` (Commons CC BY 3.0 `Little_Penguin_(Eudyptula_minor).ogg`, Benchill) `parrot` (Commons CC BY 4.0 Mealy Amazon BL, Richard Ranft)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 15:22 PDT — Buffffff
+
+Sat Quill parrot from Commons CC BY 4.0 Mealy Amazon (Richard Ranft / BL). Next ferret.
+
 
 ### 2026-09-03 15:20 PDT — Buffffff
 
