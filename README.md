@@ -129,9 +129,10 @@ Right now these voices are in the house:
 - **Burr** (hedgehog) — juvenile huff and sniff from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [fthgurdy](https://freesound.org/people/fthgurdy/sounds/528183/) (`Angry hedgehog sniffing 1`, sound 528183). Snuffle and huff. No bark.
 - **Floss** (chinchilla) — a high brief alarm squeak from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [TheKingOfGeeks360](https://freesound.org/people/TheKingOfGeeks360/sounds/860985/) (`Rodents - Chinchilla; Single`, sound 860985). Short bark. No words.
 - **Bloom** (axolotl) — quiet water bubbling from Wikimedia Commons, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [A.-K. D.](https://commons.wikimedia.org/wiki/File:Toberbreedia_water_bubbling.opus) (`Toberbreedia_water_bubbling.opus`, holy well). Voiceless guest — water tick only, never a cartoon beep.
+- **Keel** (toucan) — a dry croak-yelp from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), recorded by [Thatcher](https://commons.wikimedia.org/wiki/File:Keel-billed_toucan.ogg) (`Keel-billed_toucan.ogg`, Roatan Butterfly Garden). Frog-like, not a songbird. No words.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Keel** the toucan — a dry croak-yelp, frog-like, not a songbird.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Sol** the iguana — a green iguana hiss, dewlap out, no roar.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
