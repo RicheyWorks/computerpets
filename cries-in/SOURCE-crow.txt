@@ -1,0 +1,7 @@
+﻿Source: Wikimedia Commons File:American_Crow.ogg
+Author: G McGrane
+License: Public domain (PD-self, 2004)
+URL: https://commons.wikimedia.org/wiki/File:American_Crow.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/f/f3/American_Crow.ogg
+Cut: 2.2s start, ~2.1s, mono 44.1kHz, dynaudnorm
+House path: build our own from field tape — not Grok Imagine
