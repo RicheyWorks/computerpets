@@ -9,11 +9,11 @@ After you drop a batch, tell me. I will sit them into the desk.
 
 ## Need first (the five that already play)
 
-- [ ] `red_panda.mp4` — **Rui** (Red Panda) — Rui twitter, then a short bleat-squeal — now: zip synth (replace with Grok)
-- [ ] `cat.mp4` — **Miso** (Cat) — Miso meow — now: zip field tape (not Grok yet)
-- [ ] `dog.mp4` — **Pip** (Dog) — Pip bark — now: zip field tape (not Grok yet)
-- [ ] `hummingbird.mp4` — **Sip** (Ruby-throated Hummingbird) — Sip wing whir and a tiny chip — now: zip field tape (not Grok yet)
-- [ ] `chickadee.mp4` — **Dee** (Black-capped Chickadee) — Dee fee-bee or chick-a-dee-dee — now: zip field tape (not Grok yet)
+- [x] `red_panda.mp4` — **Rui** (Red Panda) — sat 2026-09-03 from Grok zip
+- [x] `cat.mp4` — **Miso** (Cat) — sat 2026-09-03 from Grok zip
+- [x] `dog.mp4` — **Pip** (Dog) — sat 2026-09-03 from Grok zip
+- [x] `hummingbird.mp4` — **Sip** (Ruby-throated Hummingbird) — sat 2026-09-03 from Grok zip
+- [x] `chickadee.mp4` — **Dee** (Black-capped Chickadee) — sat 2026-09-03 from Grok zip
 
 ## Need next (loud, real voices)
 
@@ -42,9 +42,9 @@ After you drop a batch, tell me. I will sit them into the desk.
 
 Check a box in your head when the Grok file is in this folder. Zip field tape is a stand-in, not done.
 
-1. [ ] `red_panda.mp4` — **Rui** — Red Panda — A red panda twitters, then a short bleat-squeal. Females twitter; fights growl and bark. (zip synth — replace with Grok)
-2. [ ] `cat.mp4` — **Miso** — Cat — A cat meows once, short. May purr or hiss. No words. (zip field — still want Grok)
-3. [ ] `dog.mp4` — **Pip** — Dog — A dog barks once, short and bright. No words. (zip field — still want Grok)
+1. [x] `red_panda.mp4` — **Rui** — Red Panda — A red panda twitters, then a short bleat-squeal. Females twitter; fights growl and bark. (zip synth — replace with Grok)
+2. [x] `cat.mp4` — **Miso** — Cat — A cat meows once, short. May purr or hiss. No words. (zip field — still want Grok)
+3. [x] `dog.mp4` — **Pip** — Dog — A dog barks once, short and bright. No words. (zip field — still want Grok)
 4. [ ] `rabbit.mp4` — **Thimble** — Rabbit — A rabbit is almost voiceless. One hind-foot thump on wood. No scream. (zip synth — replace with Grok)
 5. [ ] `hamster.mp4` — **Clip** — Hamster — A golden hamster squeaks, thin and high, almost ultrasonic. Quiet cheek rustle. (zip synth — replace with Grok)
 6. [ ] `guinea_pig.mp4` — **Whee** — Guinea Pig — A guinea pig wheeks, a loud whistle. No words. (zip synth — replace with Grok)
@@ -156,12 +156,12 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 112. [ ] `raven.mp4` — **Wedge** — Common Raven — A common raven croaks a deep gronk. Not a crow caw. (zip synth — replace with Grok)
 113. [ ] `barn_owl.mp4` — **Heart** — Barn Owl — A barn owl shrieks a dry hiss-scream. Not a hoot. Wings nearly silent. (zip synth — replace with Grok)
 114. [ ] `red_tail.mp4` — **Hook** — Red-tailed Hawk — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. (zip synth — replace with Grok)
-115. [ ] `chickadee.mp4` — **Dee** — Black-capped Chickadee — A black-capped chickadee calls chick-a-dee-dee, or a two-note fee-bee. (zip field — still want Grok)
+115. [x] `chickadee.mp4` — **Dee** — Black-capped Chickadee — A black-capped chickadee calls chick-a-dee-dee, or a two-note fee-bee. (zip field — still want Grok)
 116. [ ] `robin.mp4` — **Brick** — American Robin — An American robin sings a short carol, then a sharp alarm tik. No words. (zip synth — replace with Grok)
 117. [ ] `mallard.mp4` — **Drake** — Mallard — A mallard hen quacks a descending series. The drake's quack is deeper and quieter. (zip field — still want Grok)
 118. [ ] `canada_goose.mp4` — **Vee** — Canada Goose — A Canada goose honks, nasal and short. A warning hiss if pressed. (zip field — still want Grok)
 119. [ ] `pileated.mp4` — **Drum** — Pileated Woodpecker — A pileated woodpecker drums, then a ringing kuk or woick call. (zip field — still want Grok)
-120. [ ] `hummingbird.mp4` — **Sip** — Ruby-throated Hummingbird — A ruby-throated hummingbird: rapid squeaky chirps, plus male wing tik-tik. (zip field — still want Grok)
+120. [x] `hummingbird.mp4` — **Sip** — Ruby-throated Hummingbird — A ruby-throated hummingbird: rapid squeaky chirps, plus male wing tik-tik. (zip field — still want Grok)
 121. [ ] `orb_weaver.mp4` — **Loom** — European Garden Spider — An orb-weaver is silent. Silk tick on the web. No voice. (zip synth — replace with Grok)
 122. [ ] `jumping_spider.mp4` — **Leap** — Bold Jumper — A jumping spider is nearly silent. Tiny chitin tick. No voice. (zip synth — replace with Grok)
 123. [ ] `wolf_spider.mp4` — **Prowl** — Wetland Wolf Spider — A wolf spider is nearly silent. Maybe a faint leg-drum on dry leaf. No voice. (zip synth — replace with Grok)
