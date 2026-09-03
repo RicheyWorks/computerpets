@@ -21,7 +21,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `raven.wav` — **Wedge** (Common Raven) — sat 2026-09-03 Commons PD Common_Raven.ogg (G. McGrane)
 - [x] `robin.wav` — **Brick** (American Robin) — sat 2026-09-03 Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS)
 - [x] `barn_owl.wav` — **Heart** (Barn Owl) — sat 2026-09-03 Commons CC BY 4.0 Barn Owl screams (Victor C. Lewis / BL)
-- [ ] `red_tail.mp4` — **Hook** (Red-tailed Hawk) — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. — now: zip synth — replace
+- [x] `red_tail.wav` — **Hook** (Red-tailed Hawk) — sat 2026-09-03 Commons/XC71575 CC BY-SA 3.0 (Jonathon Jongsma)
 - [ ] `pileated.mp4` — **Drum** (Pileated Woodpecker) — A pileated woodpecker drums, then a ringing kuk or woick call. — now: zip field
 - [ ] `mallard.mp4` — **Drake** (Mallard) — A mallard hen quacks a descending series. The drake's quack is deeper and quieter. — now: zip field
 - [ ] `canada_goose.mp4` — **Vee** (Canada Goose) — A Canada goose honks, nasal and short. A warning hiss if pressed. — now: zip field
