@@ -134,9 +134,10 @@ Right now these voices are in the house:
 - **Pad** (house gecko) — a high squeak-chirp from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), recorded by [Glueball](https://commons.wikimedia.org/wiki/File:HouseGeckoChirp.ogg) (`HouseGeckoChirp.ogg`). Bird-like, not a frog. No words.
 - **Comb** (honeybee) — a close wing buzz from Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Serg Childed](https://commons.wikimedia.org/wiki/File:Buzzing_bees.ogg) (`Buzzing_bees.ogg`, bees on flowering plum). Buzz only. No words.
 - **Auger** (carpenter_bee) — a deep wing drone from Freesound, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [cognito perceptu](https://freesound.org/people/cognito%20perceptu/sounds/117144/) (`buzzing bee 1`, sound 117144; author notes carpenter bee in flight). Buzz only. No words.
+- **Mortar** (mason_bee) — a small brief wing buzz of solitary bees from Freesound, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [dobroide](https://freesound.org/people/dobroide/sounds/161582/) (`20120714_buzz.03`, sound 161582; Echium near Puebla de Sanabria). Closest legal mason/solitary sit (no Osmia lignaria-labeled tape). Buzz only. No words.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Mortar** the blue orchard mason — a small brief wing buzz, no words.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Disc** the alfalfa leafcutter — a wing buzz then a tiny leaf snip, no words.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 

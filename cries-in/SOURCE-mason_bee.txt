@@ -1,0 +1,7 @@
+Source: Freesound sound 161582 "20120714_buzz.03" by dobroide
+Author: dobroide
+License: Creative Commons Attribution 4.0 (CC BY 4.0)
+URL: https://freesound.org/people/dobroide/sounds/161582/
+Direct: https://cdn.freesound.org/previews/161/161582_8043-hq.mp3
+Notes: Buzz of solitary bees foraging on blooming Echium near Puebla de Sanabria (Zamora, Spain). Closest legal remixable solitary/mason-bee wing tape found (no Osmia lignaria-labeled PD/CC0). House cut ~3.2s mono 44.1kHz — small brief wing buzz for Mortar (Osmia lignaria). No words. No music. No narrator.
+House path: build our own from field tape — not Grok Imagine
