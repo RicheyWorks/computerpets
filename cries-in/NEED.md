@@ -92,7 +92,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 48. [ ] `venus_flytrap.mp4` — **Snap** — Venus Flytrap — A Venus flytrap snaps its lobes. No voice. A dry clap. (zip synth — replace with Grok)
 49. [ ] `pitcher.mp4` — **Well** — Purple Pitcher Plant — A pitcher plant is silent. One drip into the well. No voice. (zip synth — replace with Grok)
 50. [ ] `sundew.mp4` — **Dew** — Round-leaved Sundew — A sundew is silent. A tiny glue tick. No voice. (zip synth — replace with Grok)
-51. [ ] `honeybee.mp4` — **Comb** — Western Honey Bee — A western honey bee buzzes its wings, close and dry. No words. (zip synth — replace with Grok)
+51. [x] `honeybee.wav` — **Comb** — Western Honey Bee — A western honey bee buzzes its wings, close and dry. No words. — sat 2026-09-03 Commons CC BY-SA 4.0 Buzzing_bees.ogg (Serg Childed)
 52. [ ] `monarch.mp4` — **Milk** — Monarch — A monarch butterfly is nearly silent. Soft wing flutter only. No voice. (zip synth — replace with Grok)
 53. [ ] `luna.mp4` — **Ghost** — Luna Moth — A luna moth is silent. Adults have vestigial mouthparts and do not eat. Faint wing silk. (zip synth — replace with Grok)
 54. [ ] `firefly.mp4` — **Spark** — Common Eastern Firefly — A firefly is silent. Flash, not voice. Tiny wing whir. (zip synth — replace with Grok)
@@ -188,7 +188,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 144. [ ] `chameleon.mp4` — **Shift** — Veiled Chameleon — A veiled chameleon hisses, dry and small. No roar. (zip synth — replace with Grok)
 145. [ ] `horned_lizard.mp4` — **Spike** — Texas Horned Lizard — A Texas horned lizard hisses. No roar. (zip synth — replace with Grok)
 146. [x] `alligator.wav` — **Levee** — American Alligator — An American alligator bellows a low rumble. Hiss if threatened. No movie roar. — sat 2026-09-03 Commons PD Alligatorbellow1.ogg (USFWS)
-147. [ ] `crocodile.mp4` — **Jaw** — American Crocodile — An American crocodile hisses, then a short bellow. No movie roar. (zip field — still want Grok)
+147. [ ] `crocodile.mp4` — **Jaw** — American Crocodile — An American crocodile hisses, then a short bellow. No movie roar. — SKIP 2026-09-03 Buffffff: no legal PD/CC0/CC BY American crocodile field tape (Commons images only; iNat BY-NC/none; Freesound monster/synth only; Archive film unlicensed). Leave for later hunt.
 148. [ ] `snapper.mp4` — **Beak** — Common Snapping Turtle — A snapping turtle hisses air. No roar. (zip synth — replace with Grok)
 149. [ ] `box_turtle.mp4` — **Lid** — Eastern Box Turtle — A box turtle hisses as it shuts. Short air. No roar. (zip synth — replace with Grok)
 150. [ ] `tuatara.mp4` — **Peak** — Tuatara — A tuatara is nearly silent. Primitive ears; a low croak if any. No roar. (zip synth — replace with Grok)
@@ -265,7 +265,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 
 ## Already in the zip you dropped
 
-- Field tape (19): alligator, bat, bumblebee, canada_goose, cat, chickadee, cicada, crocodile, crow, deer, dog, field_cricket, fox, frog, gecko, hummingbird, mallard, parrot, pileated
+- Field tape (20): alligator, bat, bumblebee, canada_goose, cat, chickadee, cicada, crocodile, crow, deer, dog, field_cricket, fox, frog, gecko, honeybee, hummingbird, mallard, parrot, pileated
 - Synth stand-ins (201): do not treat as done.
 - Grok Imagine mp4s: **0**. That is what I still need.
 
