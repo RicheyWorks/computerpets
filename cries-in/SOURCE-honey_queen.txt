@@ -1,0 +1,10 @@
+key: honey_queen
+guest: Keep (Western Honey Bee Queen)
+source: Wikimedia Commons QueenBeePiping2017.wav
+URL: https://commons.wikimedia.org/wiki/File:QueenBeePiping2017.wav
+direct: https://upload.wikimedia.org/wikipedia/commons/5/5f/QueenBeePiping2017.wav
+author: Gerard Allan
+license: Creative Commons Attribution-Share Alike 4.0 (CC BY-SA 4.0)
+note: Virgin Queen Bee Piping, inside hive. Bristol, UK. 27 May 2017. Distinct from Comb worker and Hum drone wing. House cut ~4s mono 44.1kHz. No words. No music. No narrator.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
