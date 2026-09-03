@@ -1,4 +1,4 @@
-# Drop Grok cries here
+﻿# Drop Grok cries here
 
 Folder: `C:\Users\730ri\projects\ComputerPets\cries-in`
 
@@ -17,7 +17,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 
 ## Need next (loud, real voices)
 
-- [ ] `crow.mp4` — **Soot** (American Crow) — An American crow caws, dry and short. No words. — now: zip field
+- [x] `crow.wav` — **Soot** (American Crow) — sat 2026-09-03 Commons PD American_Crow.ogg (G McGrane)
 - [ ] `raven.mp4` — **Wedge** (Common Raven) — A common raven croaks a deep gronk. Not a crow caw. — now: zip synth — replace
 - [ ] `robin.mp4` — **Brick** (American Robin) — An American robin sings a short carol, then a sharp alarm tik. No words. — now: zip synth — replace
 - [ ] `barn_owl.mp4` — **Heart** (Barn Owl) — A barn owl shrieks a dry hiss-scream. Not a hoot. Wings nearly silent. — now: zip synth — replace
@@ -152,7 +152,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 108. [ ] `stentor.mp4` — **Bell** — Blue Stentor — A stentor is silent. Cilia whir at a trumpet rim. No voice. (zip synth — replace with Grok)
 109. [ ] `coli.mp4` — **Rod** — Escherichia coli — E. coli is silent. A broth bubble at most. No voice. (zip synth — replace with Grok)
 110. [ ] `haloarchaea.mp4` — **Rose** — Halobacterium — Halobacterium is silent. Salt-crust tick. No voice. (zip synth — replace with Grok)
-111. [ ] `crow.mp4` — **Soot** — American Crow — An American crow caws, dry and short. No words. (zip field — still want Grok)
+111. [x] `crow.wav` — **Soot** — American Crow — sat 2026-09-03 Commons PD American_Crow.ogg (G McGrane)
 112. [ ] `raven.mp4` — **Wedge** — Common Raven — A common raven croaks a deep gronk. Not a crow caw. (zip synth — replace with Grok)
 113. [ ] `barn_owl.mp4` — **Heart** — Barn Owl — A barn owl shrieks a dry hiss-scream. Not a hoot. Wings nearly silent. (zip synth — replace with Grok)
 114. [ ] `red_tail.mp4` — **Hook** — Red-tailed Hawk — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. (zip synth — replace with Grok)
@@ -270,3 +270,4 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - Grok Imagine mp4s: **0**. That is what I still need.
 
 Catalog 220. No new pets.
+
