@@ -2,30 +2,33 @@
 
 **This is the only live file.** Checklist: `cries-in/NEED.md`.
 
-Imagine: image-to-video from `web/public/pets/{key}.jpg`.
-Buffffff sits keepers after a listen/spectrogram pass.
-
 ---
 
 ## Next
 
-`crow.mp4` — **Soot** (American Crow)
+**Remake Rui first** — `red_panda.mp4`
 
-Attach `web/public/pets/crow.jpg` if present. An American crow caws, dry and short. AUDIO: only that caw. No music. No narrator. No English. 2–4 seconds. Camera locked.
+Attach `web/public/pets/red_panda.jpg`. Square. Video. Quality 2.0.
 
-After crow → `raven.mp4`.
+AUDIO goal: a **healthy, bright** red panda twitter — short, chirpy, curious — then a soft little bleat. Content mammal. Not sad. Not sick. Not a long cry. Not UI beeps.
+
+Ban list: distress cry, whimper, moan, sad howl, electronic beeps, music, English, narrator.
+
+2–4 seconds. Camera locked. Close-up. Only that sound.
+
+After a keeper Rui lands → `crow.mp4`.
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Grok Imagine 2026-09-03)
-- Build beep takes for Rui rejected earlier and replaced
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598)
+- `red_panda` Imagine take 2026-09-03 sat then rejected by ear — sounded unwell/sad. Remake.
 
 ## Log
 
+### 2026-09-03 12:33 PDT — Buffffff
+
+User: Rui sounds unwell/sad. Unchecked Rui. Remake with a bright healthy twitter. Crow waits.
+
 ### 2026-09-03 12:29 PDT — Buffffff
 
-Sat Rui from Grok Imagine house-portrait video (`grok.com/imagine/post/eaa9bad6…`). Spectrogram had mammal-like energy, not UI beeps. Next is `crow.mp4`.
-
-### 2026-09-03 03:13 PDT — Buffffff
-
-Sat Sip (XC109598). Rui was next.
+Sat Rui Imagine take. Ear later said sad/unwell — remaking.
