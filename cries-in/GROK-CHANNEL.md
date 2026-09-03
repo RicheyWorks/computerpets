@@ -8,18 +8,23 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`red_tail.mp4` / `red_tail.wav` — **Hook** (Red-tailed Hawk)
+`pileated.mp4` / `pileated.wav` — **Drum** (Pileated Woodpecker)
 
-Prefer a real red-tailed hawk scream (Commons / Xeno-canto / Archive CC0). Cut 2–4s. Hoarse kree-eee-ar that slurs down. No music. No English.
+Prefer a real pileated drum or kuk/woick (Commons / Xeno-canto / Archive CC0). Cut 2–4s. No music. No English.
 
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 14:27 PDT — Buffffff
+
+Sat Hook red-tailed hawk from Commons/XC71575 (Jonathon Jongsma, CC BY-SA 3.0). Next pileated woodpecker.
+
 
 ### 2026-09-03 14:24 PDT — Buffffff
 
