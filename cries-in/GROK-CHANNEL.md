@@ -8,17 +8,22 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`raven.mp4` / `raven.wav` — **Wedge** (Common Raven)
+`robin.mp4` / `robin.wav` — **Brick** (American Robin)
 
-Prefer a real raven gronk (Commons / Xeno-canto / Archive CC0). Cut 2–4s. Deep croak, not a crow caw. No music. No English.
+Prefer a real robin carol or alarm tik (Commons / Xeno-canto / Archive CC0). Cut 2–4s. No music. No English.
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 14:17 PDT — Buffffff
+
+User: continue all tapes until all animals done. Sat Wedge raven from Commons PD Common_Raven.ogg (G. McGrane). Campaign loops field tape one guest at a time. Next robin.
+
 
 ### 2026-09-03 13:31 PDT — Buffffff
 
