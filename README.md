@@ -101,9 +101,10 @@ Right now these voices are in the house:
 - **Soot** (American crow) — a dry caw from Wikimedia Commons, public domain, recorded by [G McGrane](https://commons.wikimedia.org/wiki/File:American_Crow.ogg) (`American_Crow.ogg`, parabolic mike, 2004).
 - **Wedge** (common raven) — a deep croak from Wikimedia Commons, public domain, recorded by [G. McGrane](https://commons.wikimedia.org/wiki/File:Common_Raven.ogg) (`Common_Raven.ogg`, Acadia National Park). Not a crow caw.
 - **Brick** (American robin) — a short carol from Wikimedia Commons, public domain, recorded by the [National Park Service](https://commons.wikimedia.org/wiki/File:American_Robin_Yellowstone_National_Park.ogg) (`American_Robin_Yellowstone_National_Park.ogg`, Yellowstone).
+- **Heart** (barn owl) — a dry hiss-scream from Wikimedia Commons, CC BY 4.0, recorded by [Victor C. Lewis](https://commons.wikimedia.org/wiki/File:Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg) (British Library Wildlife Sounds, Cardiganshire). Not a hoot.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Heart** the barn owl — a dry hiss-scream, not a hoot.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Hook** the red-tailed hawk — a hoarse kree-eee-ar that slurs down.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
