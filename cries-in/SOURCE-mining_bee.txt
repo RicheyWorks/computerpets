@@ -1,0 +1,9 @@
+key: mining_bee
+guest: Bank (Neighborly Mining Bee)
+source: Freesound sound 32588 "20070318.hive.00" by dobroide
+URL: https://freesound.org/people/dobroide/sounds/32588/
+author: dobroide
+license: Creative Commons Attribution (CC BY)
+note: Field tape of wild ground-nesting Andrena bees (author: not a hive — Andrenas nesting in the ground; birds in background). House cut ~3.5s mono 44.1kHz — short dry wing buzz for Bank. No words. No music. No narrator.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

@@ -108,7 +108,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 64. [x] `leafcutter.wav` — **Disc** — Alfalfa Leafcutter — A leafcutter bee buzzes, then a tiny leaf snip. No voice. — sat 2026-09-03 Commons CC BY 3.0 bee buzz (Free Sounds Library) + Commons CC BY 4.0 WWS scissors snip
 65. [x] `stingless.wav` — **Pot** — Maya Stingless Bee — A stingless bee buzzes high and thin. Wing only. — sat 2026-09-03 iNat CC BY Trigona spinipes (B. Phalan obs 263773947)
 66. [x] `sweat_bee.wav` — **Sheen** — Bicolored Sweat Bee — A sweat bee buzzes, faint and small. Wing only. — sat 2026-09-03 Commons CC BY 3.0 FSL Bee_Buzzing_Sound_-_Animal_Sounds.opus (no Halictidae remixable)
-67. [ ] `mining_bee.mp4` — **Bank** — Neighborly Mining Bee — A mining bee buzzes, short and dry. Wing only. (zip synth — replace with Grok)
+67. [x] `mining_bee.wav` — **Bank** — Neighborly Mining Bee — A mining bee buzzes, short and dry. Wing only. — sat 2026-09-03 Freesound CC BY Andrena ground-nest (dobroide #32588)
 68. [ ] `honey_drone.mp4` — **Hum** — Western Honey Bee Drone — A honey-bee drone buzzes, deeper than a worker. Wing only. (zip synth — replace with Grok)
 69. [ ] `honey_queen.mp4` — **Keep** — Western Honey Bee Queen — A honey-bee queen pipes a short toot. No words. (zip synth — replace with Grok)
 70. [ ] `honeycomb.mp4` — **Wax** — Honeycomb — Honeycomb is silent wax. A faint worker-wing hum through the comb at most. No music. (zip synth — replace with Grok)
