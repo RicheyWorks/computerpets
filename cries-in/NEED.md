@@ -23,7 +23,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `barn_owl.wav` — **Heart** (Barn Owl) — sat 2026-09-03 Commons CC BY 4.0 Barn Owl screams (Victor C. Lewis / BL)
 - [x] `red_tail.wav` — **Hook** (Red-tailed Hawk) — sat 2026-09-03 Commons/XC71575 CC BY-SA 3.0 (Jonathon Jongsma)
 - [x] `pileated.wav` — **Drum** (Pileated Woodpecker) — sat 2026-09-03 Commons PD Pileated_Woodpecker.ogg (G. McGrane)
-- [ ] `mallard.mp4` — **Drake** (Mallard) — A mallard hen quacks a descending series. The drake's quack is deeper and quieter. — now: zip field
+- [x] `mallard.wav` — **Drake** (Mallard) — sat 2026-09-03 Commons CC BY-SA 4.0 female mallard (Aubrey John Williams / BL)
 - [ ] `canada_goose.mp4` — **Vee** (Canada Goose) — A Canada goose honks, nasal and short. A warning hiss if pressed. — now: zip field
 - [ ] `frog.mp4` — **Reed** (Green Frog) — A green frog gives a short territorial croak, banjo-like. Males use breeding calls. — now: zip field
 - [ ] `toad.mp4` — **Pebble** (American Toad) — An American toad looses a long high trill. No words. — now: zip synth — replace
@@ -158,7 +158,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 114. [ ] `red_tail.mp4` — **Hook** — Red-tailed Hawk — A red-tailed hawk screams a two-to-three-second hoarse kree-eee-ar that slurs downward. (zip synth — replace with Grok)
 115. [x] `chickadee.mp4` — **Dee** — Black-capped Chickadee — A black-capped chickadee calls chick-a-dee-dee, or a two-note fee-bee. (zip field — still want Grok)
 116. [x] `robin.wav` — **Brick** — American Robin — sat 2026-09-03 Commons PD American_Robin_Yellowstone_National_Park.ogg (NPS)
-117. [ ] `mallard.mp4` — **Drake** — Mallard — A mallard hen quacks a descending series. The drake's quack is deeper and quieter. (zip field — still want Grok)
+117. [x] `mallard.wav` — **Drake** — Mallard — sat 2026-09-03 Commons CC BY-SA 4.0 female mallard (Aubrey John Williams / BL)
 118. [ ] `canada_goose.mp4` — **Vee** — Canada Goose — A Canada goose honks, nasal and short. A warning hiss if pressed. (zip field — still want Grok)
 119. [ ] `pileated.mp4` — **Drum** — Pileated Woodpecker — A pileated woodpecker drums, then a ringing kuk or woick call. (zip field — still want Grok)
 120. [x] `hummingbird.mp4` — **Sip** — Ruby-throated Hummingbird — A ruby-throated hummingbird: rapid squeaky chirps, plus male wing tik-tik. (zip field — still want Grok)

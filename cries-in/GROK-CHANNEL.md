@@ -8,18 +8,23 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`mallard.mp4` / `mallard.wav` — **Drake** (Mallard)
+`canada_goose.mp4` / `canada_goose.wav` — **Vee** (Canada Goose)
 
-Prefer a real mallard hen quack series (Commons / Xeno-canto / Archive CC0). Cut 2–4s. No music. No English.
+Prefer a real Canada goose honk (Commons / Xeno-canto / Archive CC0). Cut 2–4s. No music. No English.
 
 
 ## Seen
 
-- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane)
+- Keepers: `cat` `dog` `chickadee` `hummingbird` (XC109598) `red_panda` (Commons PD `Red_panda_twittering.ogg`, Mizunoryu) `crow` (Commons PD `American_Crow.ogg`, G McGrane) `raven` (Commons PD `Common_Raven.ogg`, G. McGrane) `robin` (Commons PD `American_Robin_Yellowstone_National_Park.ogg`, NPS) `barn_owl` (Commons CC BY 4.0 `Barn_Owl_(Tyto_alba)_(W_TYTO_ALBA_R1_C16).ogg`, Victor C. Lewis / BL) `red_tail` (Commons/XC71575 CC BY-SA 3.0, Jonathon Jongsma) `pileated` (Commons PD `Pileated_Woodpecker.ogg`, G. McGrane) `mallard` (Commons CC BY-SA 4.0 BL female, Aubrey John Williams)
 - Imagine sad Rui take replaced by Commons PD twitter
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-03 14:33 PDT — Buffffff
+
+Sat Drake mallard from Commons CC BY-SA 4.0 female Mallard (Aubrey John Williams / British Library, W1CDR0001518 BD17). Next canada_goose.
+
 
 ### 2026-09-03 14:29 PDT — Buffffff
 
