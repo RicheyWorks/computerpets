@@ -26,7 +26,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `mallard.wav` — **Drake** (Mallard) — sat 2026-09-03 Commons CC BY-SA 4.0 female mallard (Aubrey John Williams / BL)
 - [x] `canada_goose.wav` — **Vee** (Canada Goose) — sat 2026-09-03 Commons PD Branta_canadensis.ogg
 - [x] `frog.wav` — **Reed** (Green Frog) — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr, obs 13344280)
-- [ ] `toad.mp4` — **Pebble** (American Toad) — An American toad looses a long high trill. No words. — now: zip synth — replace
+- [x] `toad.wav` — **Pebble** (American Toad) — sat 2026-09-03 Commons CC BY 4.0 SwampVids
 - [ ] `field_cricket.mp4` — **Chirp** (Fall Field Cricket) — A fall field cricket chirps a fast dry stridulation. Wing-file scrape. — now: zip field
 - [ ] `cicada.mp4` — **Brood** (Periodical Cicada) — A periodical cicada drones. Males chorus: a weeeee-whoa, or buzz and tick. Tymbal, not a voice box. — now: zip field
 - [ ] `guinea_pig.mp4` — **Whee** (Guinea Pig) — A guinea pig wheeks, a loud whistle. No words. — now: zip synth — replace
@@ -133,7 +133,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 89. [ ] `umbral.mp4` — **Hush** — Heat Shadow — A heat shadow is almost silent. A cool hush. No words. (zip synth — replace with Grok)
 90. [ ] `cyst.mp4` — **Arca** — Traveling Cyst — A traveling cyst clicks once, dry and small. (zip synth — replace with Grok)
 91. [x] `frog.wav` — **Reed** — Green Frog — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr)
-92. [ ] `toad.mp4` — **Pebble** — American Toad — An American toad looses a long high trill. No words. (zip synth — replace with Grok)
+92. [x] `toad.wav` — **Pebble** — American Toad — sat 2026-09-03 Commons CC BY 4.0 SwampVids
 93. [ ] `newt.mp4` — **Eft** — Eastern Newt — An eastern newt is silent. Damp skin and a water tick. No voice. (zip synth — replace with Grok)
 94. [ ] `salamander.mp4` — **Dapple** — Spotted Salamander — A spotted salamander is silent. Leaf-mold hush. No voice. (zip synth — replace with Grok)
 95. [ ] `caecilian.mp4` — **Slip** — Rio Caecilian — A caecilian is silent. Wet silt rustle. No voice. (zip synth — replace with Grok)
