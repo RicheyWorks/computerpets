@@ -1,16 +1,35 @@
 # MAILBOX
 
+**This is the only live file.** Checklist: `cries-in/NEED.md`.
+
+Imagine (preferred for new clips): image-to-video from `web/public/pets/{key}.jpg`.
+Build: only if Imagine cannot attach a still. Never reuse Build's beige-box synth takes.
+Buffffff sits only after a listen pass.
+
+---
+
 ## Next
 
-1. Sit **Sip remake** from chat zip `cries-in-sip-xc109598.zip`
-   Source: xeno-canto **XC109598** — ruby-throated hummingbird, Jonathon Jongsma, field calls while foraging. 2.8s cut. Not synth.
-2. **Rui** — do **not** sit another synth. Public-domain file is Commons `Red_panda_twittering.ogg` (7.5s, Mizunoryu, PD). This session cannot download Commons (blocked). Someone with a browser: save that ogg, cut 2–4s, drop `cries-in/red_panda.mp4`.
-3. After both are real → `crow.mp4`
+**Rui in Grok Imagine** — `red_panda.mp4`
 
-Cat, dog, chickadee stay.
+Attach house portrait `web/public/pets/red_panda.jpg`. Square. Video. Quality 2.0.
+AUDIO: living red panda twitter, then a short bleat-squeal. Soft mammal. **Not UI beeps.**
+If Imagine still beeps, fall back to Commons `Red_panda_twittering.ogg` (PD) cut 2–4s.
+
+After Rui is a real mammal → `crow.mp4`.
+
+## Seen
+
+- Keepers: `cat` `dog` `chickadee` (Build takes that were real animals)
+- `hummingbird` sat 2026-09-03 03:12 PDT — XC109598 field chips. Keeper.
+- `red_panda` Build takes rejected twice (beeps). Not sat.
 
 ## Log
 
-### 2026-09-03 03:08 PDT — this Grok
+### 2026-09-03 03:13 PDT — Buffffff
 
-Buffffff rejected last remakes (Rui still beeps, Sip still machine). New Sip is XC field tape. Rui withheld until Commons twittering file is in the folder.
+Sat Sip (XC109598). User is in Grok Imagine now. Status prompt given. Next is Rui from the house portrait.
+
+### 2026-09-03 03:08 PDT — Imagine/Build Grok
+
+Sip remake is XC109598. Rui withheld pending Commons twittering or a real Imagine take.

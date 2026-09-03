@@ -12,7 +12,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [ ] `red_panda.mp4` — **Rui** (Red Panda) — REMake: last clip was UI beeps, need a real twitter then bleat-squeal
 - [x] `cat.mp4` — **Miso** (Cat) — sat 2026-09-03 from Grok zip
 - [x] `dog.mp4` — **Pip** (Dog) — sat 2026-09-03 from Grok zip
-- [ ] `hummingbird.mp4` — **Sip** (Ruby-throated Hummingbird) — REMake: last clip was a synth loop, need wing whir + chip
+- [x] `hummingbird.mp4` — **Sip** (Ruby-throated Hummingbird) — sat 2026-09-03 XC109598 field chips
 - [x] `chickadee.mp4` — **Dee** (Black-capped Chickadee) — sat 2026-09-03 from Grok zip
 
 ## Need next (loud, real voices)
@@ -161,7 +161,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 117. [ ] `mallard.mp4` — **Drake** — Mallard — A mallard hen quacks a descending series. The drake's quack is deeper and quieter. (zip field — still want Grok)
 118. [ ] `canada_goose.mp4` — **Vee** — Canada Goose — A Canada goose honks, nasal and short. A warning hiss if pressed. (zip field — still want Grok)
 119. [ ] `pileated.mp4` — **Drum** — Pileated Woodpecker — A pileated woodpecker drums, then a ringing kuk or woick call. (zip field — still want Grok)
-120. [ ] `hummingbird.mp4` — **Sip** — Ruby-throated Hummingbird — A ruby-throated hummingbird: rapid squeaky chirps, plus male wing tik-tik. (zip field — still want Grok)
+120. [x] `hummingbird.mp4` — **Sip** — Ruby-throated Hummingbird — A ruby-throated hummingbird: rapid squeaky chirps, plus male wing tik-tik. (zip field — still want Grok)
 121. [ ] `orb_weaver.mp4` — **Loom** — European Garden Spider — An orb-weaver is silent. Silk tick on the web. No voice. (zip synth — replace with Grok)
 122. [ ] `jumping_spider.mp4` — **Leap** — Bold Jumper — A jumping spider is nearly silent. Tiny chitin tick. No voice. (zip synth — replace with Grok)
 123. [ ] `wolf_spider.mp4` — **Prowl** — Wetland Wolf Spider — A wolf spider is nearly silent. Maybe a faint leg-drum on dry leaf. No voice. (zip synth — replace with Grok)
