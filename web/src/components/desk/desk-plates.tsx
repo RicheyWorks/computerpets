@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import {
   addArea,
   currentArea,
@@ -65,7 +65,129 @@ import {
 } from "@/lib/pets/market";
 import { loadCard, saveCard, type CardPrefs } from "@/lib/pets/card";
 import type { DeskWindow } from "@/lib/pets/windows";
+import {
+  SWATCHES,
+  applySwatch,
+  beginDrag,
+  clickMoved,
+  endDrag,
+  loadPlates,
+  moveDrag,
+  paintStyle,
+  plateOf,
+  savePlates,
+  setColors,
+  type DeskPlate,
+  type PlateKey,
+} from "@/lib/pets/desk-plates";
 import { cn } from "@/lib/utils";
+
+
+function usePlateChrome(key: PlateKey) {
+  const [plate, setPlate] = useState<DeskPlate | null>(null);
+  const press = useRef<{ x: number; y: number } | null>(null);
+  const skipToggle = useRef(false);
+  const plateRef = useRef(plate);
+  plateRef.current = plate;
+
+  useEffect(() => {
+    const row = plateOf(loadPlates(window.innerWidth, window.innerHeight), key);
+    setPlate(row);
+  }, [key]);
+
+  function persist(next: DeskPlate) {
+    const all = loadPlates(window.innerWidth, window.innerHeight).map((p) => (p.key === key ? next : p));
+    savePlates(all);
+    setPlate(endDrag(next));
+  }
+
+  function onTogglePointerDown(e: ReactPointerEvent<HTMLButtonElement>) {
+    e.stopPropagation();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    press.current = { x: e.clientX, y: e.clientY };
+    skipToggle.current = false;
+  }
+
+  function onTogglePointerMove(e: ReactPointerEvent<HTMLButtonElement>) {
+    if (!e.currentTarget.hasPointerCapture(e.pointerId) || !press.current || !plateRef.current) return;
+    let row = plateRef.current;
+    if (!row.dragging && clickMoved(e.clientX - press.current.x, e.clientY - press.current.y)) {
+      row = beginDrag(row, press.current.x, press.current.y);
+      skipToggle.current = true;
+      setPlate(row);
+    }
+    if (row.dragging) {
+      const box = e.currentTarget.closest("article")?.getBoundingClientRect();
+      row = moveDrag(row, e.clientX, e.clientY, window.innerWidth, window.innerHeight, box?.width, box?.height);
+      setPlate(row);
+    }
+  }
+
+  function onTogglePointerUp() {
+    const row = plateRef.current;
+    if (row?.dragging) persist(endDrag(row));
+    press.current = null;
+  }
+
+  function toggleOpen(setter: (v: boolean | ((b: boolean) => boolean)) => void) {
+    if (skipToggle.current) {
+      skipToggle.current = false;
+      return;
+    }
+    setter((v) => !v);
+  }
+
+  function recolor(patch: { bg?: string; fg?: string; muted?: string }) {
+    if (!plateRef.current) return;
+    persist(setColors(plateRef.current, patch));
+  }
+
+  function swatch(id: string) {
+    if (!plateRef.current) return;
+    persist(applySwatch(plateRef.current, id));
+  }
+
+  const style = plate ? (paintStyle(plate) as CSSProperties) : undefined;
+
+  const colorUi = plate ? (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <label className="flex items-center gap-2 text-xs">
+        Plate color
+        <input type="color" aria-label="Plate color" value={plate.bg} onChange={(e) => recolor({ bg: e.target.value })} />
+      </label>
+      <label className="flex items-center gap-2 text-xs">
+        Words
+        <input type="color" aria-label="Words color" value={plate.fg} onChange={(e) => recolor({ fg: e.target.value })} />
+      </label>
+      <label className="flex items-center gap-2 text-xs">
+        Label
+        <input type="color" aria-label="Label color" value={plate.muted} onChange={(e) => recolor({ muted: e.target.value })} />
+      </label>
+      <div className="flex flex-wrap gap-1">
+        {SWATCHES.map((row) => (
+          <button
+            key={row.id}
+            type="button"
+            title={row.name}
+            aria-label={row.name}
+            className="h-5 w-5 rounded-full border border-border/60 p-0"
+            style={{ background: row.bg }}
+            onClick={() => swatch(row.id)}
+          />
+        ))}
+      </div>
+    </div>
+  ) : null;
+
+  return {
+    style,
+    colorUi,
+    onTogglePointerDown,
+    onTogglePointerMove,
+    onTogglePointerUp,
+    toggleOpen,
+  };
+}
 
 const WEATHER_ID = "desk-weather";
 const NEWS_ID = "desk-news";
@@ -97,6 +219,7 @@ export function DeskWeatherPlate({
   const [lookLine, setLookLine] = useState("");
   const areas = useMemo(() => areasOf(card), [card]);
   const area = currentArea(areas);
+  const chrome = usePlateChrome("weather");
 
   useEffect(() => {
     const el = ref.current;
@@ -239,14 +362,22 @@ export function DeskWeatherPlate({
       data-hit
       data-desk-plate="weather"
       className={cn(
-        "desk-plate pointer-events-auto absolute left-[4%] top-[8%] z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 bg-surface/80 shadow-lg",
+        "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 shadow-lg",
         open && "w-[min(22rem,52%)]",
       )}
+      style={{
+        ...chrome.style,
+        background: "color-mix(in srgb, var(--plate-bg, #161412) 82%, transparent)",
+        color: "var(--plate-fg, #f2ece3)",
+      }}
     >
       <button
         type="button"
         className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left"
-        onClick={() => setOpen((v) => !v)}
+        onPointerDown={chrome.onTogglePointerDown}
+        onPointerMove={chrome.onTogglePointerMove}
+        onPointerUp={chrome.onTogglePointerUp}
+        onClick={() => chrome.toggleOpen(setOpen)}
       >
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">Weather area</span>
         <span className="truncate text-sm text-ink">{plateLine(areas, live, unread)}</span>
@@ -336,6 +467,7 @@ export function DeskWeatherPlate({
             Use this computer's location
           </button>
           {hereLine ? <p className="mt-1 text-subtle">{hereLine}</p> : null}
+          {chrome.colorUi}
         </div>
       ) : null}
     </article>
@@ -350,6 +482,7 @@ export function DeskNewsPlate() {
   const [query, setQuery] = useState("");
   const prefs = useMemo(() => parseNewsPrefs(card), [card]);
   const topic = currentTopic(prefs);
+  const chrome = usePlateChrome("news");
 
   useEffect(() => {
     let cancelled = false;
@@ -385,11 +518,16 @@ export function DeskNewsPlate() {
       data-hit
       data-desk-plate="news"
       className={cn(
-        "desk-plate pointer-events-auto absolute right-[8%] top-[8%] z-[4] w-[min(18rem,40%)] rounded-sm border border-border/50 bg-surface/80 shadow-lg",
+        "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,40%)] rounded-sm border border-border/50 shadow-lg",
         open && "w-[min(22rem,48%)]",
       )}
+      style={{
+        ...chrome.style,
+        background: "color-mix(in srgb, var(--plate-bg, #161412) 82%, transparent)",
+        color: "var(--plate-fg, #f2ece3)",
+      }}
     >
-      <button type="button" className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left" onClick={() => setOpen((v) => !v)}>
+      <button type="button" className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left" onPointerDown={chrome.onTogglePointerDown} onPointerMove={chrome.onTogglePointerMove} onPointerUp={chrome.onTogglePointerUp} onClick={() => chrome.toggleOpen(setOpen)}>
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">News</span>
         <span className="truncate text-sm text-ink">{newsLine(items, unread)}</span>
       </button>
@@ -445,6 +583,7 @@ export function DeskNewsPlate() {
             </label>
             <button type="submit">Look up</button>
           </form>
+          {chrome.colorUi}
         </div>
       ) : null}
     </article>
@@ -460,6 +599,7 @@ export function DeskMarketPlate() {
   const [truth, setTruth] = useState("");
   const house = useMemo(() => parseMarket(card), [card]);
   const ticker = currentTicker(house);
+  const chrome = usePlateChrome("market");
 
   useEffect(() => {
     if (!ticker) {
@@ -502,11 +642,16 @@ export function DeskMarketPlate() {
       data-hit
       data-desk-plate="market"
       className={cn(
-        "desk-plate pointer-events-auto absolute left-[4%] top-[38%] z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 bg-surface/80 shadow-lg",
+        "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 shadow-lg",
         open && "w-[min(22rem,52%)]",
       )}
+      style={{
+        ...chrome.style,
+        background: "color-mix(in srgb, var(--plate-bg, #161412) 82%, transparent)",
+        color: "var(--plate-fg, #f2ece3)",
+      }}
     >
-      <button type="button" className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left" onClick={() => setOpen((v) => !v)}>
+      <button type="button" className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left" onPointerDown={chrome.onTogglePointerDown} onPointerMove={chrome.onTogglePointerMove} onPointerUp={chrome.onTogglePointerUp} onClick={() => chrome.toggleOpen(setOpen)}>
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">{MARKET_LABEL}</span>
         <span className="truncate text-sm text-ink">{marketLine(house, live, unread)}</span>
       </button>
@@ -560,6 +705,7 @@ export function DeskMarketPlate() {
             <button type="submit">Look up</button>
           </form>
           {truth ? <p className="mt-1 text-subtle">{truth}</p> : null}
+          {chrome.colorUi}
         </div>
       ) : null}
     </article>

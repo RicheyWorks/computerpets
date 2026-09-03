@@ -127,15 +127,18 @@ select {
 }
 
 .desk-plate {
+  --plate-bg: #161412;
+  --plate-fg: #f2ece3;
+  --plate-muted: #9a9288;
   position: absolute;
   top: 8%;
   z-index: 4;
   width: min(18rem, 42%);
   pointer-events: auto;
-  border: 1px solid #2a2621;
+  border: 1px solid color-mix(in srgb, var(--plate-fg) 18%, #2a2621);
   border-radius: 8px;
-  background: rgb(22 20 18 / 0.82);
-  color: #f2ece3;
+  background: color-mix(in srgb, var(--plate-bg) 82%, transparent);
+  color: var(--plate-fg);
   box-shadow: 0 8px 24px rgb(12 11 10 / 0.28);
 }
 
@@ -178,7 +181,7 @@ select {
   font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #9a9288;
+  color: var(--plate-muted);
 }
 
 .desk-plate > div {
@@ -209,6 +212,47 @@ select {
 
 .desk-plate a {
   color: #d8cfc0;
+}
+
+
+
+.desk-plate-colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.desk-plate-colors label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.desk-plate-colors input[type="color"] {
+  width: 2rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 1px solid #3d3831;
+  background: transparent;
+  cursor: pointer;
+}
+
+.desk-plate-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.desk-plate-swatches button {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  border: 1px solid #3d3831;
+  padding: 0;
+  cursor: pointer;
 }
 
 #bird {

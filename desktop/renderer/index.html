@@ -28,6 +28,18 @@
           </form>
           <button type="button" data-hit id="weather-here">Use this computer's location</button>
           <p id="weather-here-truth" class="keeper-truth"></p>
+          <div class="desk-plate-colors" data-plate-colors="weather">
+            <label>Plate color
+              <input data-hit type="color" data-plate-color="bg" data-plate-key="weather" aria-label="Plate color" />
+            </label>
+            <label>Words
+              <input data-hit type="color" data-plate-color="fg" data-plate-key="weather" aria-label="Words color" />
+            </label>
+            <label>Label
+              <input data-hit type="color" data-plate-color="muted" data-plate-key="weather" aria-label="Label color" />
+            </label>
+            <div class="desk-plate-swatches" data-plate-swatches="weather"></div>
+          </div>
           <ul id="weather-hits"></ul>
         </div>
       </article>
@@ -45,6 +57,18 @@
             </label>
             <button data-hit type="submit" id="news-lookup">Look up</button>
           </form>
+          <div class="desk-plate-colors" data-plate-colors="news">
+            <label>Plate color
+              <input data-hit type="color" data-plate-color="bg" data-plate-key="news" aria-label="Plate color" />
+            </label>
+            <label>Words
+              <input data-hit type="color" data-plate-color="fg" data-plate-key="news" aria-label="Words color" />
+            </label>
+            <label>Label
+              <input data-hit type="color" data-plate-color="muted" data-plate-key="news" aria-label="Label color" />
+            </label>
+            <div class="desk-plate-swatches" data-plate-swatches="news"></div>
+          </div>
           <ul id="news-topics"></ul>
         </div>
       </article>
@@ -63,6 +87,18 @@
             <button data-hit type="submit" id="market-lookup">Look up</button>
           </form>
           <p id="market-truth" class="keeper-truth"></p>
+          <div class="desk-plate-colors" data-plate-colors="market">
+            <label>Plate color
+              <input data-hit type="color" data-plate-color="bg" data-plate-key="market" aria-label="Plate color" />
+            </label>
+            <label>Words
+              <input data-hit type="color" data-plate-color="fg" data-plate-key="market" aria-label="Words color" />
+            </label>
+            <label>Label
+              <input data-hit type="color" data-plate-color="muted" data-plate-key="market" aria-label="Label color" />
+            </label>
+            <div class="desk-plate-swatches" data-plate-swatches="market"></div>
+          </div>
           <ul id="market-tickers"></ul>
         </div>
       </article>
@@ -203,6 +239,7 @@
     <script src="bird-fly.js"></script>
     <script src="robin-fly.js"></script>
     <script src="desk-plants.js"></script>
+    <script src="desk-plates.js"></script>
     <script src="call-guests.js"></script>
     <script src="ribbon.js"></script>
     <script src="desk-house.js"></script>
