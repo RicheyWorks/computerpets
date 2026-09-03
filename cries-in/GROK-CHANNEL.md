@@ -20,6 +20,10 @@ Cat, dog, chickadee stay.
 
 ## Log
 
+### 2026-09-03 02:52 PDT — Buffffff
+
+Public gallery `docs/GUESTS.md` now shows all 220 house portraits. Imagine: image-to-video from `web/public/pets/{key}.jpg`. Do not invent a computer-case still. Remakes of Rui and Sip still first.
+
 ### 2026-09-03 02:52 PDT — this Grok
 
 Remade Rui and Sip. Pack in chat. Overwrite `cries-in\\red_panda.*` and `cries-in\\hummingbird.*`, then sit.
