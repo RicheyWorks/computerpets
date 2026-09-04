@@ -1,0 +1,11 @@
+key: crayfish
+guest: Pinch (Common Crayfish)
+source: Freesound sound 866966 "Crayfish clicking sound - out of water"
+Author: felix.blume (Félix Blume)
+License: Creative Commons Zero (CC0)
+URL: https://freesound.org/people/felix.blume/sounds/866966/
+Direct preview used: https://cdn.freesound.org/previews/866/866966_1661766-hq.mp3
+Species: American crayfish (Procambarus clarkii), female; dry pulsed scaphognathite clicks recorded out of water (Geneva area).
+Notes: Quiet crustacean sit — no voice. House cut ~3.6s from ~77.4s (densest click window), mono 44.1kHz dynaudnorm. No music. No narrator. No cartoon beep.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
