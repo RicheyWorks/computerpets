@@ -1,0 +1,10 @@
+key: magneton
+guest: Beacon (Field Swimmer)
+source: BigSoundBank Electric transformer #3 (sound 467)
+URL: https://bigsoundbank.com/tansfo-electrique-s0467.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0467.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet alien sit — field swimmer has no mouth-voice. Real low hum from a small power transformer (magnetostriction / mains magnetic hum) cut as dry magnetic tick. No music. No narrator. No cartoon beep. House cut ~4s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
