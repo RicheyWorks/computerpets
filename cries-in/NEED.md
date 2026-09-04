@@ -65,7 +65,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 21. [x] `ball_python.wav` — **Nori** — Ball Python — A ball python is nearly silent. Faint scale rustle, maybe a thin hiss. — sat 2026-09-03 BigSoundBank CC0 Great Page that Turns #1 (Joseph SARDIN #362)
 22. [x] `corn_snake.wav` — **Saffron** — Corn Snake — A corn snake is nearly silent. Soft scale rustle. No roar. — sat 2026-09-03 BigSoundBank CC0 Pages that turn #2 (Joseph SARDIN #1413)
 23. [x] `kingsnake.wav` — **Bandit** — California Kingsnake — A California kingsnake hisses, then rattles its tail. Dry. No roar. — sat 2026-09-03 Freesound CC0 Mexican black kingsnake hiss (TheKingOfGeeks360 #846337)
-24. [ ] `green_tree_python.mp4` — **Jade** — Green Tree Python — A green tree python is silent. Faint scale settle on a perch. (zip synth — replace with Grok)
+24. [x] `green_tree_python.wav` — **Jade** — Green Tree Python — A green tree python is silent. Faint scale settle on a perch. — sat 2026-09-03 BigSoundBank CC0 Pages that turn #3 (Joseph SARDIN #1414)
 25. [ ] `hognose.mp4` — **Bluff** — Western Hognose — A western hognose hisses loudly, dramatic and dry. No roar. (zip synth — replace with Grok)
 26. [ ] `garter.mp4` — **Sash** — Common Garter — A garter snake is nearly silent. Soft grass rustle. Maybe a thin hiss. (zip synth — replace with Grok)
 27. [ ] `boa.mp4` — **Lula** — Boa Constrictor — A boa constrictor hisses, dry. Then slow scale rustle. No roar. (zip synth — replace with Grok)
