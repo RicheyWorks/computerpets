@@ -1,0 +1,11 @@
+﻿key: volvox
+guest: Orb (Golden Volvox)
+source: Wikimedia Commons Water_bubbles_chortling.ogg
+URL: https://commons.wikimedia.org/wiki/File:Water_bubbles_chortling.ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/4/4b/Water_bubbles_chortling.ogg
+author: stephan
+license: Public domain
+Species: quiet colony sit — Golden Volvox has no voice. Soft attenuated water-chortle / soft roll-in-water stand-in. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz dynaudnorm volume=-10dB from ~12s offset. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
