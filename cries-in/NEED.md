@@ -130,7 +130,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 86. [x] `nexus.wav` — **Knot** — Walking Colony — A walking colony clicks many small body-clicks as one. — sat 2026-09-03 BigSoundBank CC0 Tongue clicks (Joseph SARDIN #1038)
 87. [x] `halovore.wav` — **Brine** — Salt-drinker — A salt-drinker ticks frost-salt. Dry. No words. — sat 2026-09-03 BigSoundBank CC0 Raw rice poured into a saucepan (Joseph SARDIN #201)
 88. [x] `magneton.wav` — **Beacon** — Field Swimmer — A field swimmer hums a low magnetic hum. Dry. — sat 2026-09-03 BigSoundBank CC0 Electric transformer #3 (Joseph SARDIN #467)
-89. [ ] `umbral.mp4` — **Hush** — Heat Shadow — A heat shadow is almost silent. A cool hush. No words. (zip synth — replace with Grok)
+89. [x] `umbral.wav` — **Hush** — Heat Shadow — A heat shadow is almost silent. A cool hush. No words. — sat 2026-09-03 BigSoundBank CC0 Whistling of the Wind #1 (Joseph SARDIN #147)
 90. [ ] `cyst.mp4` — **Arca** — Traveling Cyst — A traveling cyst clicks once, dry and small. (zip synth — replace with Grok)
 91. [x] `frog.wav` — **Reed** — Green Frog — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr)
 92. [x] `toad.wav` — **Pebble** — American Toad — sat 2026-09-03 Commons CC BY 4.0 SwampVids
