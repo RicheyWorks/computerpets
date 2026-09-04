@@ -8,9 +8,9 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`oak.mp4` / `oak.wav` — **Mast** (White Oak)
+`water_lily.mp4` / `water_lily.wav` — **Disk** (Fragrant Water Lily)
 
-Silent. Leaf rustle, maybe an acorn tick. No voice.
+Silent. Quiet water tick. No voice.
 
 ## Seen
 
