@@ -1,0 +1,11 @@
+﻿key: stentor
+guest: Bell (Blue Stentor)
+source: BigSoundBank Splash, small #2 (sound 1530)
+URL: https://bigsoundbank.com/splash-small-2-s1530.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1530.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet protist sit — Stentor coeruleus has no voice. Soft attenuated water-tick as cilia whir at a trumpet rim. No music. No narrator. No cartoon beep.
+Notes: House cut ~2.3s mono 44.1kHz dynaudnorm volume=-14dB from full 2.37s source. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
