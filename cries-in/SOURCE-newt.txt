@@ -1,0 +1,10 @@
+﻿key: newt
+guest: Eft (Eastern Newt)
+source: BigSoundBank Drops of water #1 (sound 1384)
+URL: https://bigsoundbank.com/drops-of-water-1-s1384.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1384.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet amphibian sit — eastern newt has no voice. Real soft water drops cut as damp-skin / water tick. No music. No narrator. No cartoon beep. House cut ~3s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
