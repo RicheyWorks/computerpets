@@ -1,0 +1,10 @@
+key: moss
+guest: Felt (Sheet Moss)
+source: Wikimedia Commons Leaf_crunch_2_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Leaf_crunch_2_(Gravity_Sound).wav
+direct: https://upload.wikimedia.org/wikipedia/commons/b/b7/Leaf_crunch_2_%28Gravity_Sound%29.wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet plant sit — sheet moss (Hypnales / house guest Felt) has no voice. Soft attenuated leaf-crunch 2 as faint damp rustle (~-16dBFS). Distinct from Ring Leaf_crunch and Puff Leaf_crunch_3. Source kept as short ogg of Commons wav. No music. No narrator. No cartoon beep. House cut ~2.0s mono 44.1kHz highpass/lowpass + volume=-18dB mild dynaudnorm + afade + volume=-6dB.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
