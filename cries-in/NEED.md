@@ -77,7 +77,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 33. [x] `nautilus.wav` — **Chamber** — Chambered Nautilus — A chambered nautilus is silent. A jet bubble and water tick. — sat 2026-09-03 BigSoundBank CC0 Bubbles Burst (Joseph SARDIN #1074)
 34. [x] `moon_jelly.wav` — **Pulse** — Moon Jelly — A moon jelly is silent. Only a wet pulse in water. No voice. — sat 2026-09-03 BigSoundBank CC0 Splash small #5 (Joseph SARDIN #1533)
 35. [x] `sea_star.wav` — **Ochre** — Ochre Sea Star — An ochre sea star is silent. Damp tube-foot tick. No voice. — sat 2026-09-03 BigSoundBank CC0 Drops of water #4 (Joseph SARDIN #1387)
-36. [ ] `hermit_crab.mp4` — **Tenant** — Common Hermit — A hermit crab scrapes its shell and clicks a claw. No voice. (zip synth — replace with Grok)
+36. [x] `hermit_crab.wav` — **Tenant** — Common Hermit — A hermit crab scrapes its shell and clicks a claw. No voice. — sat 2026-09-03 BigSoundBank CC0 Shells sculpture (Joseph SARDIN #38)
 37. [ ] `horseshoe_crab.mp4` — **Ledger** — Atlantic Horseshoe Crab — A horseshoe crab is silent. Sand scrape and book-gill rustle. (zip synth — replace with Grok)
 38. [ ] `seahorse.mp4` — **Anchor** — Lined Seahorse — A lined seahorse clicks its coronet, dry and tiny. Skull against the crown. (zip synth — replace with Grok)
 39. [ ] `manta.mp4` — **Kite** — Reef Manta — A reef manta is silent. Slow water whoosh of fins. No voice. (zip synth — replace with Grok)
