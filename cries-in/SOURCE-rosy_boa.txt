@@ -1,0 +1,11 @@
+﻿key: rosy_boa
+guest: Blush (Rosy Boa)
+source: BigSoundBank News paper, pages (sound 1250)
+URL: https://bigsoundbank.com/news-paper-pages-s1250.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1250.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Lichanura trivirgata (rosy boa) — silent. Soft attenuated newspaper-page rustle as soft body rustle. No roar. No hiss. No music. No narrator.
+Notes: House cut ~3.2s mono 44.1kHz from ~5–8.2s of source, volume=-14dB + dynaudnorm + afade. Quiet snake sit. Distinct from Coral milk_snake #493 and Saffron #1413.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
