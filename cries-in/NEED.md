@@ -75,7 +75,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 31. [x] `octopus.wav` — **Cup** — Common Octopus — A common octopus is silent. Sucker peel and a water tick. No voice. — sat 2026-09-03 BigSoundBank CC0 Straw suction #1 (Joseph SARDIN #1244)
 32. [x] `cuttlefish.wav` — **Sepia** — Common Cuttlefish — A cuttlefish is silent. Fin flutter in water. No voice. — sat 2026-09-03 BigSoundBank CC0 Rowing slowly (Joseph SARDIN #1514)
 33. [x] `nautilus.wav` — **Chamber** — Chambered Nautilus — A chambered nautilus is silent. A jet bubble and water tick. — sat 2026-09-03 BigSoundBank CC0 Bubbles Burst (Joseph SARDIN #1074)
-34. [ ] `moon_jelly.mp4` — **Pulse** — Moon Jelly — A moon jelly is silent. Only a wet pulse in water. (zip synth — replace with Grok)
+34. [x] `moon_jelly.wav` — **Pulse** — Moon Jelly — A moon jelly is silent. Only a wet pulse in water. No voice. — sat 2026-09-03 BigSoundBank CC0 Splash small #5 (Joseph SARDIN #1533)
 35. [ ] `sea_star.mp4` — **Ochre** — Ochre Sea Star — An ochre sea star is silent. Damp tube-foot tick. No voice. (zip synth — replace with Grok)
 36. [ ] `hermit_crab.mp4` — **Tenant** — Common Hermit — A hermit crab scrapes its shell and clicks a claw. No voice. (zip synth — replace with Grok)
 37. [ ] `horseshoe_crab.mp4` — **Ledger** — Atlantic Horseshoe Crab — A horseshoe crab is silent. Sand scrape and book-gill rustle. (zip synth — replace with Grok)

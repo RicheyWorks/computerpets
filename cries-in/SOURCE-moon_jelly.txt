@@ -1,0 +1,11 @@
+key: moon_jelly
+guest: Pulse (Moon Jelly)
+source: BigSoundBank Splash, small #5 (sound 1533)
+URL: https://bigsoundbank.com/splash-small-5-s1533.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1533.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Aurelia aurita (moon jelly) — silent. Soft attenuated splash-small #5 as wet pulse in water. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~2.1s mono 44.1kHz volume=-10dB + dynaudnorm + afade from full ~2.12s source. Quiet guest. Distinct from Prickle/Bell/Hold-adjacent splash #1–#4 (1529–1532).
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
