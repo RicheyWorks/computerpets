@@ -902,7 +902,7 @@ if (hudCare) {
     if (!btn) return;
     e.stopPropagation();
     const id = btn.getAttribute("data-care");
-    if (id === "feed" || id === "play" || id === "rest") handle(id);
+    if (id) handle(id);
   });
 }
 if (hudCollapse) {
@@ -1241,8 +1241,8 @@ function paintCard() {
     }
     const play = document.getElementById("hud-music-play");
     if (play) {
-      play.hidden = false;
-      play.textContent = music.playing ? "Stop" : "Play";
+      play.hidden = music.plugin === "off";
+      play.textContent = music.playing ? "Pause" : "Play";
     }
     const license = document.getElementById("hud-music-license");
     if (license) {
@@ -1790,7 +1790,7 @@ function applyCommand() {
     }
     return;
   }
-  if (false && cardOpen() && (sim.cmd === "wander" || sim.cmd === "idle")) {
+  if (cardOpen() && (sim.cmd === "wander" || sim.cmd === "idle")) {
     sim.anim = life?.asleep ? "sleep" : "idle";
     sim.target = null;
     sim.waypoints = [];

@@ -96,9 +96,11 @@ test("robin draw uses one real sit or walk frame, not two empty rects, and perch
 });
 
 test("Rui idle is the house routine, not a parked sit_hold on an open card", () => {
-  assert.match(petSrc, /if \(false && cardOpen\(\)/);
+  assert.match(petSrc, /if \(cardOpen\(\) && \(sim\.cmd === "wander"/);
+  assert.doesNotMatch(petSrc, /if \(false && cardOpen\(\)/);
   assert.doesNotMatch(petSrc, /if \(cardOpen\(\)\) \{\s*issue\("idle"\)/);
-  assert.match(livingSrc, /if \(false && cardRef\.current/);
+  assert.match(livingSrc, /if \(cardRef\.current && \(cmd === "wander"/);
+  assert.doesNotMatch(livingSrc, /if \(false && cardRef\.current/);
   assert.match(petSrc, /life\.energy < 8 && roll < 0\.7\)\) issue\("wander"\)/);
   assert.match(petSrc, /startAct\(window\.PetEthogram\.pickAct/);
 });
@@ -145,5 +147,6 @@ test("fresh launch walks Rui; hide is only the Hide click; click-on-Rui does not
   assert.match(petSrc, /if \(cmd === "hide"\)/);
   assert.match(petSrc, /if \(lift\.kind === "tap"\) \{\s*openKeeperCard/);
   assert.doesNotMatch(petSrc, /if \(lift\.kind === "tap"\)[\s\S]{0,120}handle\("hide"\)/);
-  assert.match(livingSrc, /if \(false && cardRef\.current/);
+  assert.match(livingSrc, /if \(cardRef\.current && \(cmd === "wander"/);
+  assert.doesNotMatch(livingSrc, /if \(false && cardRef\.current/);
 });

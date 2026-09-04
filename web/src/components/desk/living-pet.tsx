@@ -443,7 +443,7 @@ export function LivingPet({
         if (hold != null) s.frame = hold;
         return;
       }
-      if (false && cardRef.current && (cmd === "wander" || cmd === "idle")) {
+      if (cardRef.current && (cmd === "wander" || cmd === "idle")) {
         s.anim = asleepRef.current ? "sleep" : "idle";
         s.target = null;
         s.waypoints = [];

@@ -260,11 +260,16 @@ export function KeeperCard({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [guestKey]);
 
-  const verbs = [
-    { id: KEEPER_CARE[0]!.id, label: KEEPER_CARE[0]!.label, onClick: onFeed },
-    { id: KEEPER_CARE[1]!.id, label: KEEPER_CARE[1]!.label, onClick: onPlay },
-    { id: KEEPER_CARE[2]!.id, label: KEEPER_CARE[2]!.label, onClick: onRest },
-  ];
+  const careClicks: Record<string, (() => void) | undefined> = {
+    feed: onFeed,
+    play: onPlay,
+    rest: onRest,
+  };
+  const verbs = KEEPER_CARE.filter((v) => careClicks[v.id]).map((v) => ({
+    id: v.id,
+    label: v.label,
+    onClick: careClicks[v.id]!,
+  }));
 
   function playHouse(kind: SavedKind, text: string) {
     if (kind === "do" && onDo) {
@@ -563,6 +568,17 @@ export function KeeperCard({
           {guestKey === "red_panda" ? (
             <div className="keeper-music" data-hit>
               <p>Music · Rui</p>
+              {music.plugin !== "off" ? (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    writeMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
+                  }}
+                >
+                  {music.playing ? "Pause" : "Play"}
+                </button>
+              ) : null}
               {MUSIC_PLUGINS.map((plugin) => (
                 <button
                   key={plugin.id}
@@ -576,15 +592,6 @@ export function KeeperCard({
                   {plugin.name}
                 </button>
               ))}
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  writeMusic({ ...music, playing: !music.playing && music.plugin !== "off" });
-                }}
-              >
-                {music.playing ? "Stop" : "Play"}
-              </button>
               {music.plugin === "house" ? <p className="keeper-truth">{HOUSE_LOOP_LICENSE}</p> : null}
               {music.plugin === "radio" ? (
                 <>

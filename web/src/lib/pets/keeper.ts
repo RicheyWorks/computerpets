@@ -16,8 +16,18 @@ export const ADVERTISED_CARE = {
 
 export const KEEPER_CARE = [
   { id: "feed" as const, label: "Feed" },
+  { id: "snack" as const, label: "Treat" },
   { id: "play" as const, label: "Play" },
   { id: "rest" as const, label: "Rest" },
+  { id: "talk" as const, label: "Talk" },
+  { id: "hide" as const, label: "Hide" },
+  { id: "call" as const, label: "Call back" },
+  { id: "clean" as const, label: "Clean" },
+  { id: "bath" as const, label: "Bath" },
+  { id: "medicine" as const, label: "Medicine" },
+  { id: "praise" as const, label: "Praise" },
+  { id: "special" as const, label: "Special" },
+  { id: "shed" as const, label: "Shed" },
 ];
 
 /** Poster HUD width on the Windows overlay. Empty glass is still click-through. */
