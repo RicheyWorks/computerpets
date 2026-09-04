@@ -1,0 +1,11 @@
+key: ginkgo
+guest: Fan (Ginkgo)
+source: BigSoundBank Miscanthus sinensis #3 (sound 1813)
+URL: https://bigsoundbank.com/miscanthus-sinensis-3-s1813.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1813.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Ginkgo biloba (ginkgo; house guest Fan) — silent. Soft attenuated Miscanthus #3 as dry fan-leaf rustle. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from salamander Miscanthus #1 (#1811) and maidenhair Miscanthus #2 (#1812). House cut ~1.6s mono 44.1kHz highpass/lowpass + volume=-16dB mild dynaudnorm + afade + volume=-5dB. Quiet plant.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
