@@ -134,7 +134,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 90. [x] `cyst.wav` — **Arca** — Traveling Cyst — A traveling cyst clicks once, dry and small. — sat 2026-09-03 BigSoundBank CC0 Bubble wrap: Breakouts (Joseph SARDIN #462)
 91. [x] `frog.wav` — **Reed** — Green Frog — sat 2026-09-03 iNaturalist CC BY (Stacey Lee Kerr)
 92. [x] `toad.wav` — **Pebble** — American Toad — sat 2026-09-03 Commons CC BY 4.0 SwampVids
-93. [ ] `newt.mp4` — **Eft** — Eastern Newt — An eastern newt is silent. Damp skin and a water tick. No voice. (zip synth — replace with Grok)
+93. [x] `newt.wav` — **Eft** — Eastern Newt — An eastern newt is silent. Damp skin and a water tick. No voice. — sat 2026-09-03 BigSoundBank CC0 Drops of water #1 (Joseph SARDIN #1384)
 94. [ ] `salamander.mp4` — **Dapple** — Spotted Salamander — A spotted salamander is silent. Leaf-mold hush. No voice. (zip synth — replace with Grok)
 95. [ ] `caecilian.mp4` — **Slip** — Rio Caecilian — A caecilian is silent. Wet silt rustle. No voice. (zip synth — replace with Grok)
 96. [ ] `crayfish.mp4` — **Pinch** — Common Crayfish — A crayfish clicks a claw in water. No voice. (zip synth — replace with Grok)
