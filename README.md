@@ -169,9 +169,10 @@ Right now these voices are in the house:
 - **Whorl** (great pond snail) — a real snail radula rasp from Wikimedia Commons, [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Miguel Tremblay](https://commons.wikimedia.org/wiki/User:Dirac) (`Snail_eating_a_leaf.ogg`). Quiet mollusk — no voice. No music. No beep.
 - **Hinge** (eastern elliptio) — faint filter-water bubbles from [BigSoundBank](https://bigsoundbank.com/water-bubble-2-s0183.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://bigsoundbank.com/) (Water Bubble #2 / sound 183, attenuated). Quiet bivalve — no voice. No music. No beep.
 - **Latch** (horse leech) — a wet water-slip swirl from [BigSoundBank](https://bigsoundbank.com/swirl-in-the-water-s0192.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://bigsoundbank.com/) (Swirl in the water / sound 192). Quiet annelid — no voice. No music. No beep.
+- **Prickle** (three-spined stickleback) — a tiny water tick from [BigSoundBank](https://bigsoundbank.com/splash-small-1-s1529.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://bigsoundbank.com/) (Splash, Small #1 / sound 1529). Quiet fish — no voice. No music. No beep.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Prickle** the three-spined stickleback — tiny water tick.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Boot** the slipper paramecium — close cilia whir.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
