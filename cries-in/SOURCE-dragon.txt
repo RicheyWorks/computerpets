@@ -1,0 +1,11 @@
+key: dragon
+guest: Vesper (Dragon)
+source: BigSoundBank Pressure cooker (sound 805)
+URL: https://bigsoundbank.com/pressure-cooker-s0805.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0805.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: desk-dragon sit — no real taxon. Soft attenuated steam hiss as dry breath rumble. No music. No narrator. No movie roar. No cartoon beep.
+Notes: House cut ~3.2s mono 44.1kHz dynaudnorm volume=-10dB from full ~100s source start. Fantasy guest foley.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
