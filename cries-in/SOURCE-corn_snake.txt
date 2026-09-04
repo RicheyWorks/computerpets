@@ -1,0 +1,11 @@
+key: corn_snake
+guest: Saffron (Corn Snake)
+source: BigSoundBank Pages that turn #2 (sound 1413)
+URL: https://bigsoundbank.com/pages-that-turn-2-s1413.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1413.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Pantherophis guttatus — nearly silent. Soft dry multi-page rustle as faint scale rustle. No hiss roar. No music. No narrator.
+Notes: House cut ~3.5s mono 44.1kHz silenceremove+volume=-10dB+dynaudnorm+afade from 39s source. Quiet snake sit. Distinct from Nori ball_python #362.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
