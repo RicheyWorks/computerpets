@@ -1,0 +1,11 @@
+key: sea_star
+guest: Ochre (Ochre Sea Star)
+source: BigSoundBank Drops of water #4 (sound 1387)
+URL: https://bigsoundbank.com/drops-of-water-4-s1387.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1387.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Pisaster ochraceus (ochre sea star) — silent. Soft attenuated drops-of-water #4 as damp tube-foot tick. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut mono 44.1kHz volume=-9dB + dynaudnorm + afade. Quiet guest. Distinct from Eft/Reach/Spot drops #1–#3 (1384–1386).
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
