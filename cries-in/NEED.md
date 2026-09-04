@@ -127,7 +127,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 83. [x] `nimbus.wav` — **Drift** — Methane Floater — A methane floater ticks frost and a cold-gas hiss. Dry. — sat 2026-09-03 BigSoundBank CC0 Air leak (Joseph SARDIN #1486)
 84. [x] `silica.wav` — **Shard** — Living Crystal — A living crystal ticks as facets settle. Dry frost tick. — sat 2026-09-03 BigSoundBank CC0 Cracking ice #1 (Joseph SARDIN #2205)
 85. [x] `terminator.wav` — **Dusk** — Twilight Walker — A twilight walker hums a dry rim-tone. No words. — sat 2026-09-03 BigSoundBank CC0 Tibetan bowl singing (Joseph SARDIN #1109)
-86. [ ] `nexus.mp4` — **Knot** — Walking Colony — A walking colony clicks many small body-clicks as one. (zip synth — replace with Grok)
+86. [x] `nexus.wav` — **Knot** — Walking Colony — A walking colony clicks many small body-clicks as one. — sat 2026-09-03 BigSoundBank CC0 Tongue clicks (Joseph SARDIN #1038)
 87. [ ] `halovore.mp4` — **Brine** — Salt-drinker — A salt-drinker ticks frost-salt. Dry. No words. (zip synth — replace with Grok)
 88. [ ] `magneton.mp4` — **Beacon** — Field Swimmer — A field swimmer hums a low magnetic hum. Dry. (zip synth — replace with Grok)
 89. [ ] `umbral.mp4` — **Hush** — Heat Shadow — A heat shadow is almost silent. A cool hush. No words. (zip synth — replace with Grok)

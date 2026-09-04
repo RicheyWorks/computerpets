@@ -1,0 +1,10 @@
+key: nexus
+guest: Knot (Walking Colony)
+source: BigSoundBank Tongue clicks (sound 1038)
+URL: https://bigsoundbank.com/tongue-clicks-s1038.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1038.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet alien sit — walking colony has no mouth-voice. Real tongue-click foley (15 dry body clicks) cut as many small body-clicks as one. No music. No narrator. No cartoon beep. House cut ~2.4s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
