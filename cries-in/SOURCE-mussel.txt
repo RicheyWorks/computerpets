@@ -1,0 +1,11 @@
+key: mussel
+guest: Hinge (Eastern Elliptio)
+source: BigSoundBank Water Bubble #2 (sound 183)
+URL: https://bigsoundbank.com/water-bubble-2-s0183.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0183.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet bivalve sit — Eastern Elliptio has no voice. Soft water-bubble / filter-water stand-in (attenuated). No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz dynaudnorm. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
