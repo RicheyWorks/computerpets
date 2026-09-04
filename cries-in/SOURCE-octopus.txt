@@ -1,0 +1,11 @@
+key: octopus
+guest: Cup (Common Octopus)
+source: BigSoundBank Straw, suction #1 (sound 1244)
+URL: https://bigsoundbank.com/straw-suction-1-s1244.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1244.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Octopus vulgaris (common octopus) — silent. Soft attenuated straw-suction as sucker peel / water tick. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz volume=-6dB + dynaudnorm + afade from full ~3.57s source. Quiet guest. Distinct from Hinge mussel Water Bubble #2 and Coin aquarium.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
