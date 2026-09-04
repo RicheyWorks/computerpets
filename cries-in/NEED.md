@@ -138,7 +138,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 94. [x] `salamander.wav` — **Dapple** — Spotted Salamander — A spotted salamander is silent. Leaf-mold hush. No voice. — sat 2026-09-03 BigSoundBank CC0 Miscanthus sinensis #1 (Joseph SARDIN #1811)
 95. [x] `caecilian.wav` — **Slip** — Rio Caecilian — A caecilian is silent. Wet silt rustle. No voice. — sat 2026-09-03 BigSoundBank CC0 Steps in the Mud (Joseph SARDIN #495)
 96. [x] `crayfish.wav` — **Pinch** — Common Crayfish — A crayfish clicks a claw in water. No voice. — sat 2026-09-03 Freesound CC0 Crayfish clicking sound - out of water (felix.blume #866966)
-97. [ ] `pond_snail.mp4` — **Whorl** — Great Pond Snail — A pond snail rasps its radula on glass. No voice. (zip synth — replace with Grok)
+97. [x] `pond_snail.wav` — **Whorl** — Great Pond Snail — A pond snail rasps its radula on glass. No voice. — sat 2026-09-03 Commons CC0 Snail eating a leaf.ogg (Miguel Tremblay / Dirac)
 98. [ ] `mussel.mp4` — **Hinge** — Eastern Elliptio — A mussel is silent. Faint filter water. No voice. (zip synth — replace with Grok)
 99. [ ] `leech.mp4` — **Latch** — Horse Leech — A leech is silent. A wet slip in water. No voice. (zip synth — replace with Grok)
 100. [ ] `stickleback.mp4` — **Prickle** — Three-spined Stickleback — A three-spined stickleback is silent. Tiny water tick. No voice. (zip synth — replace with Grok)
