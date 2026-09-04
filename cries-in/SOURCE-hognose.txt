@@ -1,0 +1,11 @@
+﻿key: hognose
+guest: Bluff (Western Hognose)
+source: Freesound sound 706977 "Angry snake hissing. OWI.wav" by JesterWhoo
+URL: https://freesound.org/people/JesterWhoo/sounds/706977/
+Direct: https://cdn.freesound.org/previews/706/706977_14781925-hq.mp3
+author: JesterWhoo
+license: Creative Commons Zero (CC0 1.0)
+Species: real captive snake hiss (uploader: snake upset during enclosure clean). Used as dramatic dry defensive hiss stand-in for Western hognose (Heterodon nasicus) — hognose is famous for loud bluff hisses. No movie roar. No music. No narrator.
+Notes: House cut ~3.4s mono 44.1kHz atrim+afade+dynaudnorm from ~10s HQ preview. Distinct from Bandit kingsnake #846337.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
