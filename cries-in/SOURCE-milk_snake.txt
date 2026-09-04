@@ -1,0 +1,11 @@
+﻿key: milk_snake
+guest: Coral (Pueblo Milk Snake)
+source: BigSoundBank Pages that turn #1 (sound 493)
+URL: https://bigsoundbank.com/pages-that-turn-1-s0493.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0493.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Lampropeltis triangulum (pueblo milk snake) — nearly silent. Soft attenuated dry page rustle as short scale / tail-substrate rustle. No rattle. No movie hiss roar. No music. No narrator.
+Notes: House cut ~3.2s mono 44.1kHz from ~3–6.2s of source, volume=-10dB + dynaudnorm + afade. Quiet snake sit. Distinct from Nori #362, Saffron #1413, Jade #1414.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
