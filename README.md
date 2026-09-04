@@ -209,7 +209,8 @@ These voices are in the house:
 - **Mast** (white oak) — a dry leaf rustle from [BigSoundBank](https://bigsoundbank.com/miscanthus-sinensis-4-s1814.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Miscanthus sinensis #4 / #1814). Quiet plant — no voice. No music. No beep.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Disk** the fragrant water lily — a quiet water tick. Silent. No voice.
+- **Disk** (fragrant water lily) — a quiet pad-water tick from Wikimedia Commons, public domain, recorded by [stephan](https://commons.wikimedia.org/wiki/File:Welling_rivulet_in_the_woods.ogg) (`Welling_rivulet_in_the_woods.ogg`, PDSounds). Quiet plant — no voice. No music. No beep.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Moth** the moth orchid — almost nothing. Silent. No voice.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 

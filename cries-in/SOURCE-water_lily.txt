@@ -1,0 +1,11 @@
+key: water_lily
+guest: Disk (Fragrant Water Lily)
+source: Wikimedia Commons Welling_rivulet_in_the_woods.ogg (PDSounds / stephan)
+URL: https://commons.wikimedia.org/wiki/File:Welling_rivulet_in_the_woods.ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/a/a4/Welling_rivulet_in_the_woods.ogg
+author: stephan / PDSounds
+license: Public domain
+Species: Nymphaea odorata (fragrant water lily; house guest Disk) — silent. Soft attenuated welling rivulet as quiet pad-water tick. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut mono 44.1kHz atrim 0:4 + silenceremove + dynaudnorm + volume=0.35. Quiet plant.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
