@@ -8,9 +8,9 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`terminator.mp4` / `terminator.wav` — **Dusk** (Twilight Walker)
+`nexus.mp4` / `nexus.wav` — **Knot** (Walking Colony)
 
-Quiet alien. Dry rim-tone hum.
+Quiet alien. Many small body-clicks.
 
 ## Seen
 
