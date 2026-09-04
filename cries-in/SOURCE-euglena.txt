@@ -1,0 +1,11 @@
+key: euglena
+guest: Spot (Euglena)
+source: BigSoundBank Drops of water #3 (sound 1386)
+URL: https://bigsoundbank.com/drops-of-water-3-s1386.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1386.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet protist sit ? Euglena has no voice. Soft attenuated water-drop / faint flagellar-whir stand-in. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz dynaudnorm volume=-12dB. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape ? not Grok Imagine
