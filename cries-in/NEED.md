@@ -81,7 +81,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 37. [x] `horseshoe_crab.wav` — **Ledger** — Atlantic Horseshoe Crab — A horseshoe crab is silent. Sand scrape and book-gill rustle. — sat 2026-09-03 BigSoundBank CC0 Step on gravels (Pierre #85)
 38. [x] `seahorse.wav` — **Anchor** — Lined Seahorse — A lined seahorse clicks its coronet, dry and tiny. Skull against the crown. — sat 2026-09-03 BigSoundBank CC0 Finger clashes (Joseph SARDIN #483)
 39. [x] `manta.wav` — **Kite** — Reef Manta — A reef manta is silent. Slow water whoosh of fins. No voice. — sat 2026-09-03 BigSoundBank CC0 Water: swirls and flow (DenisChardonnet #245)
-40. [ ] `moray.mp4` — **Door** — Green Moray — A green moray is nearly silent. A wet gulp. No roar. (zip synth — replace with Grok)
+40. [x] `moray.wav` — **Door** — Green Moray — A green moray is nearly silent. A wet gulp. No roar. — sat 2026-09-03 BigSoundBank CC0 Straw suction #2 (Joseph SARDIN #1245)
 41. [ ] `moss.mp4` — **Felt** — Sheet Moss — Sheet moss is silent. A faint damp rustle. No voice. (zip synth — replace with Grok)
 42. [ ] `maidenhair.mp4` — **Vein** — Maidenhair Fern — A maidenhair fern is silent. Soft frond rustle. No voice. (zip synth — replace with Grok)
 43. [ ] `ginkgo.mp4` — **Fan** — Ginkgo — A ginkgo is silent. Dry fan-leaf rustle. No voice. (zip synth — replace with Grok)
