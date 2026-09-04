@@ -1,0 +1,11 @@
+﻿key: diatom
+guest: Pane (Navicula)
+source: BigSoundBank Cracking ice #2 (sound 2206)
+URL: https://bigsoundbank.com/cracking-ice-2-s2206.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/2206.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet diatom sit — Navicula has no voice. Soft attenuated ice-crack as silica tick in a drop. No music. No narrator. No cartoon beep.
+Notes: House cut ~1.2s mono 44.1kHz dynaudnorm volume=-12dB from full 1.3s source. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
