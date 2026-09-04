@@ -61,7 +61,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - [x] `toucan.wav` — **Keel** — Toucan — A toucan calls a dry croak-yelp. Frog-like, not a songbird. — sat 2026-09-03 Commons CC BY-SA 3.0 Keel-billed_toucan.ogg (Thatcher)
 - [ ] `iguana.mp4` — **Sol** — Iguana — A green iguana hisses, dewlap out. No roar. — SKIP 2026-09-03 Buffffff: no legal PD/CC0/CC BY field hiss found (Commons spoken-word only; iNat all BY-NC/ARR; Freesound no iguana animal tape). Leave for later hunt.
 19. [x] `dragon.wav` — **Vesper** — Dragon — A small desk dragon breathes a dry hiss-rumble. No movie roar. — sat 2026-09-03 BigSoundBank CC0 Pressure cooker (Joseph SARDIN #805)
-20. [ ] `phoenix.mp4` — **Ember** — Phoenix — A phoenix looses a thin rising whistle. No words. No music. (zip synth — replace with Grok)
+20. [x] `phoenix.wav` — **Ember** — Phoenix — A phoenix looses a thin rising whistle. No words. No music. — sat 2026-09-03 BigSoundBank CC0 Ghost on the Flute #1 (Joseph SARDIN #2054)
 21. [ ] `ball_python.mp4` — **Nori** — Ball Python — A ball python is nearly silent. Faint scale rustle, maybe a thin hiss. (zip synth — replace with Grok)
 22. [ ] `corn_snake.mp4` — **Saffron** — Corn Snake — A corn snake is nearly silent. Soft scale rustle. No roar. (zip synth — replace with Grok)
 23. [ ] `kingsnake.mp4` — **Bandit** — California Kingsnake — A California kingsnake hisses, then rattles its tail. Dry. No roar. (zip synth — replace with Grok)
@@ -270,3 +270,4 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - Grok Imagine mp4s: **0**. That is what I still need.
 
 Catalog 220. No new pets.
+
