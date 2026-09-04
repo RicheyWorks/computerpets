@@ -1,0 +1,11 @@
+key: cuttlefish
+guest: Sepia (Common Cuttlefish)
+source: BigSoundBank Rowing slowly (sound 1514)
+URL: https://bigsoundbank.com/rowing-slowly-s1514.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1514.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Sepia officinalis (common cuttlefish) — silent. Soft attenuated rowing / water-displacement as fin flutter in water. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.8s mono 44.1kHz volume=-8dB + dynaudnorm + afade from full ~66s source (quiet mid segment). Quiet guest. Distinct from Cup octopus Straw suction #1 and Coin aquarium.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
