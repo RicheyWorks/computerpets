@@ -1,0 +1,10 @@
+﻿key: terminator
+guest: Dusk (Twilight Walker)
+source: BigSoundBank Tibetan bowl singing (sound 1109)
+URL: https://bigsoundbank.com/tibetan-bowl-singing-s1109.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1109.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet alien sit — twilight walker has no mouth-voice. Real Tibetan singing-bowl rim friction cut as dry rim-tone hum (attenuated; mid-sustain slice). No music. No narrator. No cartoon beep. House cut ~4s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

@@ -19,6 +19,10 @@ Quiet alien. Dry rim-tone hum.
 - Path lock: build our own from internet field tape
 
 ## Log
+### 2026-09-03 17:09 PDT — Buffffff
+
+Sat Dusk terminator from BigSoundBank CC0 Tibetan bowl singing (Joseph SARDIN #1109) as dry rim-tone hum. Quiet alien — no mouth. Next nexus (quiet).
+
 ### 2026-09-03 17:05 PDT — Buffffff
 
 Sat Shard silica from BigSoundBank CC0 Cracking ice #1 (Joseph SARDIN #2205) as dry frost facet tick. Quiet alien — no mouth. Next terminator (quiet).
