@@ -83,7 +83,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 39. [x] `manta.wav` — **Kite** — Reef Manta — A reef manta is silent. Slow water whoosh of fins. No voice. — sat 2026-09-03 BigSoundBank CC0 Water: swirls and flow (DenisChardonnet #245)
 40. [x] `moray.wav` — **Door** — Green Moray — A green moray is nearly silent. A wet gulp. No roar. — sat 2026-09-03 BigSoundBank CC0 Straw suction #2 (Joseph SARDIN #1245)
 41. [x] `moss.wav` — **Felt** — Sheet Moss — Sheet moss is silent. A faint damp rustle. No voice. — sat 2026-09-03 Commons CC BY 4.0 Leaf_crunch_2_(Gravity_Sound).wav (Gravity Sound)
-42. [ ] `maidenhair.mp4` — **Vein** — Maidenhair Fern — A maidenhair fern is silent. Soft frond rustle. No voice. (zip synth — replace with Grok)
+42. [x] `maidenhair.wav` — **Vein** — Maidenhair Fern — A maidenhair fern is silent. Soft frond rustle. No voice. — sat 2026-09-03 BigSoundBank CC0 Miscanthus sinensis #2 (Joseph SARDIN #1812)
 43. [ ] `ginkgo.mp4` — **Fan** — Ginkgo — A ginkgo is silent. Dry fan-leaf rustle. No voice. (zip synth — replace with Grok)
 44. [ ] `oak.mp4` — **Mast** — White Oak — A white oak seedling is silent. Leaf rustle, maybe an acorn tick. (zip synth — replace with Grok)
 45. [ ] `water_lily.mp4` — **Disk** — Fragrant Water Lily — A fragrant water lily is silent. A quiet water tick. No voice. (zip synth — replace with Grok)
