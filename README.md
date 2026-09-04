@@ -204,9 +204,10 @@ These voices are in the house:
 - **Kite** (reef manta) — a soft slow fin whoosh through water from [BigSoundBank](https://bigsoundbank.com/water-swirls-and-flow-s0245.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by DenisChardonnet (Water: swirls and flow / #245). Silent — no voice. No music. No beep.
 - **Door** (green moray) — a soft wet gulp from [BigSoundBank](https://bigsoundbank.com/straw-suction-2-s1245.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Straw, suction #2 / #1245). Nearly silent — no roar. No music. No beep.
 - **Felt** (sheet moss) — a faint damp rustle from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [Gravity Sound](https://commons.wikimedia.org/wiki/File:Leaf_crunch_2_(Gravity_Sound).wav) (`Leaf_crunch_2_(Gravity_Sound).wav`, attenuated). Quiet plant — no voice. No music. No beep.
+- **Vein** (maidenhair fern) — a soft frond rustle from [BigSoundBank](https://bigsoundbank.com/sound-1812-roseau-de-chine-2.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Miscanthus sinensis #2 / #1812). Quiet plant — no voice. No music. No beep.
 - **Miso**, **Pip**, and **Dee** (cat, dog, chickadee) — early house field drops already sat as keepers. Fresh Commons / Xeno-canto cites land here as we replace them.
 
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Vein** the maidenhair fern — a soft frond rustle. Silent. No voice.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Fan** the ginkgo — a dry fan-leaf rustle. Silent. No voice.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
