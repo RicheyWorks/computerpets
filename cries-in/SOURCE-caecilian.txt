@@ -1,0 +1,10 @@
+key: caecilian
+guest: Slip (Rio Caecilian)
+source: BigSoundBank Steps in the Mud (sound 495)
+URL: https://bigsoundbank.com/steps-in-the-mud-s0495.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0495.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet amphibian sit — caecilian has no voice. Real wet mud / silt steps cut as wet silt rustle. No music. No narrator. No cartoon beep. House cut ~3.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
