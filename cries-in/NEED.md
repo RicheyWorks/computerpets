@@ -86,7 +86,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 42. [x] `maidenhair.wav` — **Vein** — Maidenhair Fern — A maidenhair fern is silent. Soft frond rustle. No voice. — sat 2026-09-03 BigSoundBank CC0 Miscanthus sinensis #2 (Joseph SARDIN #1812)
 43. [x] `ginkgo.wav` — **Fan** — Ginkgo — A ginkgo is silent. Dry fan-leaf rustle. No voice. — sat 2026-09-03 BigSoundBank CC0 Miscanthus sinensis #3 (Joseph SARDIN #1813)
 44. [x] `oak.wav` — **Mast** — White Oak — A white oak seedling is silent. Leaf rustle, maybe an acorn tick. — sat 2026-09-03 BigSoundBank CC0 Miscanthus sinensis #4 (Joseph SARDIN #1814)
-45. [ ] `water_lily.mp4` — **Disk** — Fragrant Water Lily — A fragrant water lily is silent. A quiet water tick. No voice. (zip synth — replace with Grok)
+45. [x] `water_lily.mp4` — **Disk** — Fragrant Water Lily — A fragrant water lily is silent. A quiet water tick. No voice. (zip synth — replace with Grok) — sat 2026-09-03 Commons PD Welling_rivulet_in_the_woods.ogg (stephan)
 46. [ ] `orchid.mp4` — **Moth** — Moth Orchid — A moth orchid is silent. Almost nothing. No voice. (zip synth — replace with Grok)
 47. [ ] `saguaro.mp4` — **Arm** — Saguaro — A saguaro is silent. Dry spine tick in still air. No voice. (zip synth — replace with Grok)
 48. [ ] `venus_flytrap.mp4` — **Snap** — Venus Flytrap — A Venus flytrap snaps its lobes. No voice. A dry clap. (zip synth — replace with Grok)
