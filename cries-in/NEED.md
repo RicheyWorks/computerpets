@@ -1,4 +1,4 @@
-﻿# Drop Grok cries here
+# Drop Grok cries here
 
 Folder: `C:\Users\730ri\projects\ComputerPets\cries-in`
 
@@ -124,8 +124,8 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 80. [x] `lichen.wav` — **Pact** — Reindeer Lichen — Reindeer lichen is almost silent. A dry crust tick. No voice. — sat 2026-09-03 BigSoundBank CC0 Broken twigs #1 (Joseph SARDIN)
 81. [x] `photovore.wav` — **Gleam** — Lamp-drinker — A lamp-drinker ticks a thin dry light-hum. No mouth. No words. — sat 2026-09-03 Freesound CC0 Fluorescent light buzzing (Rvgerxini #474312)
 82. [x] `choir.wav` — **Choir** — Chord Body — A chord body sounds one dry chord, held. No music bed. No words. — sat 2026-09-03 Commons CC BY-SA 3.0 CMajor Chord (1RadicalOne, Grand Piano)
-83. [x] imbus.wav\ — **Drift** — Methane Floater — A methane floater ticks frost and a cold-gas hiss. Dry. — sat 2026-09-03 BigSoundBank CC0 Air leak (Joseph SARDIN #1486)
-84. [ ] `silica.mp4` — **Shard** — Living Crystal — A living crystal ticks as facets settle. Dry frost tick. (zip synth — replace with Grok)
+83. [x] `nimbus.wav` — **Drift** — Methane Floater — A methane floater ticks frost and a cold-gas hiss. Dry. — sat 2026-09-03 BigSoundBank CC0 Air leak (Joseph SARDIN #1486)
+84. [x] `silica.wav` — **Shard** — Living Crystal — A living crystal ticks as facets settle. Dry frost tick. — sat 2026-09-03 BigSoundBank CC0 Cracking ice #1 (Joseph SARDIN #2205)
 85. [ ] `terminator.mp4` — **Dusk** — Twilight Walker — A twilight walker hums a dry rim-tone. No words. (zip synth — replace with Grok)
 86. [ ] `nexus.mp4` — **Knot** — Walking Colony — A walking colony clicks many small body-clicks as one. (zip synth — replace with Grok)
 87. [ ] `halovore.mp4` — **Brine** — Salt-drinker — A salt-drinker ticks frost-salt. Dry. No words. (zip synth — replace with Grok)
@@ -270,4 +270,3 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - Grok Imagine mp4s: **0**. That is what I still need.
 
 Catalog 220. No new pets.
-
