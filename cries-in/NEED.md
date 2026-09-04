@@ -72,7 +72,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 28. [x] `milk_snake.wav` — **Coral** — Pueblo Milk Snake — A milk snake may vibrate its tail. Short dry rustle, maybe a hiss. No rattle. — sat 2026-09-03 BigSoundBank CC0 Pages that turn #1 (Joseph SARDIN #493)
 29. [x] `rosy_boa.wav` — **Blush** — Rosy Boa — A rosy boa is silent. Soft body rustle. No roar. — sat 2026-09-03 BigSoundBank CC0 News paper, pages (Joseph SARDIN #1250)
 30. [x] `carpet_python.wav` — **Atlas** — Jungle Carpet Python — A carpet python is nearly silent. Scale rustle, maybe a thin hiss. No roar. — sat 2026-09-03 BigSoundBank CC0 Pages that turn #4 (Joseph SARDIN #2211)
-31. [ ] `octopus.mp4` — **Cup** — Common Octopus — A common octopus is silent. Sucker peel and a water tick. No voice. (zip synth — replace with Grok)
+31. [x] `octopus.wav` — **Cup** — Common Octopus — A common octopus is silent. Sucker peel and a water tick. No voice. — sat 2026-09-03 BigSoundBank CC0 Straw suction #1 (Joseph SARDIN #1244)
 32. [ ] `cuttlefish.mp4` — **Sepia** — Common Cuttlefish — A cuttlefish is silent. Fin flutter in water. No voice. (zip synth — replace with Grok)
 33. [ ] `nautilus.mp4` — **Chamber** — Chambered Nautilus — A chambered nautilus is silent. A jet bubble and water tick. (zip synth — replace with Grok)
 34. [ ] `moon_jelly.mp4` — **Pulse** — Moon Jelly — A moon jelly is silent. Only a wet pulse in water. (zip synth — replace with Grok)
