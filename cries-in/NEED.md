@@ -145,7 +145,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 101. [x] `paramecium.wav` — **Boot** — Slipper Paramecium — A paramecium is silent. Close cilia whir in a drop. No voice. — sat 2026-09-03 BigSoundBank CC0 Water bubbles (Joseph SARDIN #150)
 102. [x] `amoeba.wav` — **Reach** — Proteus Amoeba — An amoeba is silent. Almost nothing. No voice. — sat 2026-09-03 BigSoundBank CC0 Drops of water #2 (Joseph SARDIN #1385)
 103. [x] `euglena.wav` — **Spot** — Euglena — A euglena is silent. Faint flagellar whir. No voice. — sat 2026-09-03 BigSoundBank CC0 Drops of water #3 (Joseph SARDIN #1386)
-104. [ ] `volvox.mp4` — **Orb** — Golden Volvox — A volvox is silent. A soft roll in water. No voice. (zip synth — replace with Grok)
+104. [x] `volvox.wav` — **Orb** — Golden Volvox — A volvox is silent. A soft roll in water. No voice. — sat 2026-09-03 Commons PD Water_bubbles_chortling.ogg (stephan)
 105. [ ] `diatom.mp4` — **Pane** — Navicula — A diatom is silent. A silica tick in a drop. No voice. (zip synth — replace with Grok)
 106. [ ] `kelp.mp4` — **Hold** — Giant Kelp — Giant kelp is silent. Frond in a cold-water surge. No voice. (zip synth — replace with Grok)
 107. [ ] `chlamydomonas.mp4` — **Spin** — Chlamydomonas — Chlamydomonas is silent. Tiny flagellar whir. No voice. (zip synth — replace with Grok)
