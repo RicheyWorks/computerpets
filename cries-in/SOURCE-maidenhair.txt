@@ -1,0 +1,11 @@
+key: maidenhair
+guest: Vein (Maidenhair Fern)
+source: BigSoundBank Miscanthus sinensis #2 (sound 1812)
+URL: https://bigsoundbank.com/sound-1812-roseau-de-chine-2.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1812.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Adiantum (maidenhair fern; house guest Vein) — silent. Soft attenuated Miscanthus #2 as soft frond rustle. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from salamander Miscanthus #1 (#1811). House cut ~2.0s mono 44.1kHz highpass/lowpass + volume=-16dB mild dynaudnorm + afade + volume=-5dB. Quiet plant.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
