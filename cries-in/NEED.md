@@ -150,7 +150,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 106. [x] `kelp.wav` — **Hold** — Giant Kelp — Giant kelp is silent. Frond in a cold-water surge. No voice. — sat 2026-09-03 BigSoundBank CC0 Splash small #3 (Joseph SARDIN #1531)
 107. [x] `chlamydomonas.wav` — **Spin** — Chlamydomonas — Chlamydomonas is silent. Tiny flagellar whir. No voice. — sat 2026-09-03 BigSoundBank CC0 Splash small #4 (Joseph SARDIN #1532)
 108. [x] `stentor.wav` — **Bell** — Blue Stentor — A stentor is silent. Cilia whir at a trumpet rim. No voice. — sat 2026-09-03 BigSoundBank CC0 Splash small #2 (Joseph SARDIN #1530)
-109. [ ] `coli.mp4` — **Rod** — Escherichia coli — E. coli is silent. A broth bubble at most. No voice. (zip synth — replace with Grok)
+109. [x] `coli.wav` — **Rod** — Escherichia coli — E. coli is silent. A broth bubble at most. No voice. — sat 2026-09-03 BigSoundBank CC0 Fermentation airlock #2 (Joseph SARDIN #3561)
 110. [ ] `haloarchaea.mp4` — **Rose** — Halobacterium — Halobacterium is silent. Salt-crust tick. No voice. (zip synth — replace with Grok)
 111. [x] `crow.wav` — **Soot** — American Crow — sat 2026-09-03 Commons PD American_Crow.ogg (G McGrane)
 112. [x] `raven.wav` — **Wedge** — Common Raven — sat 2026-09-03 Commons PD Common_Raven.ogg (G. McGrane)
