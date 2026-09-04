@@ -1,0 +1,11 @@
+﻿key: coli
+guest: Rod (Escherichia coli)
+source: BigSoundBank Fermentation airlock #2 (sound 3561)
+URL: https://bigsoundbank.com/fermentation-airlock-2-s3561.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/3561.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet bacterium sit — Escherichia coli has no voice. Soft attenuated broth-culture bubble from a real fermentation airlock (distinct from Starter yeast airlock #1). No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz dynaudnorm volume=0.35 from full ~66s source. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
