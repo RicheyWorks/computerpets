@@ -1,0 +1,11 @@
+key: carpet_python
+guest: Atlas (Jungle Carpet Python)
+source: BigSoundBank Pages that turn #4 (sound 2211)
+URL: https://bigsoundbank.com/pages-that-turn-4-s2211.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/2211.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Morelia spilota (jungle carpet python) — nearly silent. Soft attenuated paperback page-turn as faint scale rustle / body settle. No roar. No hiss. No music. No narrator.
+Notes: House cut ~2.8s mono 44.1kHz volume=-10dB + dynaudnorm + afade + apad from ~1.85s source. Quiet snake sit. Distinct from Jade #1414, Nori #362, Coral #493, Saffron #1413, Blush #1250.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
