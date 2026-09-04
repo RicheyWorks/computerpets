@@ -1,0 +1,11 @@
+key: horseshoe_crab
+guest: Ledger (Atlantic Horseshoe Crab)
+source: BigSoundBank Step on gravels (sound 85)
+URL: https://bigsoundbank.com/step-on-gravel-s0085.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0085.ogg
+author: Pierre / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Limulus polyphemus (Atlantic horseshoe crab; house guest Ledger) — silent voice. Soft attenuated gravel/sand scrape as sand scrape and book-gill rustle stand-in. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.8s mono 44.1kHz volume=-8dB + dynaudnorm + afade from full ~8.15s source. Quiet guest. Distinct from Tenant hermit_crab Shells sculpture (#38) and Pinch crayfish clicks.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
