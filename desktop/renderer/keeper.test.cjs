@@ -22,7 +22,7 @@ test("the overlay keeper card tells the same truth as the desk", () => {
   assert.equal(K.HEARTBEAT_URL, "http://127.0.0.1:8081/api/public/heartbeat");
   assert.equal(K.ADVERTISED_CARE.feed, "/pet/feed");
   assert.equal(K.careTruth(), "Care is local. /pet/feed is not a door.");
-  assert.deepEqual(K.KEEPER_CARE.map((m) => m.id), ["feed", "play", "rest"]);
+  assert.deepEqual(K.KEEPER_CARE.map((m) => m.id), ["feed", "snack", "play", "rest", "talk", "hide", "call", "clean", "bath", "medicine", "praise", "special", "shed"]);
   assert.match(webKeeper, /JAVA_PORT = 8081/);
   assert.match(webKeeper, /DESK_PORT = 8080/);
   assert.match(webKeeper, /HUD_WIDTH = 280/);
@@ -51,22 +51,24 @@ test("the poster HUD is name, stage, bond title, meters, verbs, heartbeat", () =
   assert.equal(face.hunger, 40);
   assert.equal(face.rest, 70);
   assert.equal(face.bond, 50);
-  assert.deepEqual(face.verbs, ["feed", "play", "rest"]);
+  assert.deepEqual(face.verbs, ["feed", "snack", "play", "rest", "talk", "hide", "call", "clean", "bath", "medicine", "praise", "special", "shed"]);
   assert.match(face.heartbeat, /Java 8081 · DOWN/);
   assert.match(face.truth, /Care is local/);
   assert.equal(face.voiceTruth, K.VOICE_TRUTH);
   assert.match(face.quitTruth, /desktop\.ps1/);
 });
 
-test("the overlay HUD is a keeper card with feed / play / rest and a heartbeat", () => {
+test("the overlay HUD is a keeper card with full care verbs and a heartbeat", () => {
   assert.match(htmlSrc, /id="hud"/);
   assert.match(htmlSrc, /class="keeper-card"/);
   assert.match(htmlSrc, /id="hud-stage"/);
   assert.match(htmlSrc, /id="hud-bond-title"/);
   assert.doesNotMatch(htmlSrc, /id="hud"[^>]*data-hit/);
-  assert.match(htmlSrc, /data-care="feed"/);
-  assert.match(htmlSrc, /data-care="play"/);
-  assert.match(htmlSrc, /data-care="rest"/);
+  for (const id of K.KEEPER_CARE.map((m) => m.id)) {
+    assert.match(htmlSrc, new RegExp(`data-care="${id}"`));
+  }
+  assert.match(htmlSrc, /data-care="snack">Treat</);
+  assert.match(htmlSrc, /data-care="call">Call back</);
   assert.match(htmlSrc, /id="hud-heartbeat"/);
   assert.match(htmlSrc, /id="hud-bond"/);
   assert.match(htmlSrc, /keeper\.js/);
@@ -77,9 +79,13 @@ test("the overlay HUD is a keeper card with feed / play / rest and a heartbeat",
   assert.match(petSrc, /data-care/);
   assert.match(petSrc, /hudStage/);
   assert.match(petSrc, /hudBondTitle/);
-  assert.match(petSrc, /handle\("feed"\)|handle\(id\)/);
+  assert.match(petSrc, /if \(id\) handle\(id\)/);
+  assert.match(petSrc, /play\.textContent = music\.playing \? "Pause" : "Play"/);
+  assert.match(petSrc, /play\.hidden = music\.plugin === "off"/);
+  assert.doesNotMatch(petSrc, /music\.playing \? "Stop"/);
   assert.doesNotMatch(petSrc, /\/pet\/feed/);
   assert.match(styleSrc, /#hud-care button/);
+  assert.match(styleSrc, /#hud-care,[\s\S]*flex-wrap:\s*wrap/);
   assert.match(styleSrc, /width: 280px/);
   assert.match(styleSrc, /pointer-events: auto/);
   assert.match(cardSrc, /data-keeper-poster/);

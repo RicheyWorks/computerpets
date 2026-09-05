@@ -6,8 +6,18 @@
   const ADVERTISED_CARE = { feed: "/pet/feed", play: "/pet/play", rest: "/pet/rest" };
   const KEEPER_CARE = [
     { id: "feed", label: "Feed" },
+    { id: "snack", label: "Treat" },
     { id: "play", label: "Play" },
     { id: "rest", label: "Rest" },
+    { id: "talk", label: "Talk" },
+    { id: "hide", label: "Hide" },
+    { id: "call", label: "Call back" },
+    { id: "clean", label: "Clean" },
+    { id: "bath", label: "Bath" },
+    { id: "medicine", label: "Medicine" },
+    { id: "praise", label: "Praise" },
+    { id: "special", label: "Special" },
+    { id: "shed", label: "Shed" },
   ];
   const HUD_WIDTH = 280;
   const HUD_WIDTH_COLLAPSED = 168;
