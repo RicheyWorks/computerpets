@@ -1,0 +1,11 @@
+key: venus_flytrap
+guest: Snap (Venus Flytrap)
+source: BigSoundBank Broken twigs #2 (sound 1300)
+URL: https://bigsoundbank.com/broken-twigs-2-s1300.html
+direct: https://bigsoundbank.com/UPLOAD/bwf-en/1300.wav
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Dionaea muscipula (Venus flytrap; house guest Snap) — silent. Soft attenuated Broken twigs #2 as dry lobe clap stand-in. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from lichen Broken twigs #1 (#1299). House cut ~1.1s mono 44.1kHz highpass/lowpass + volume attenuation + mild dynaudnorm + afade. Quiet carnivorous plant.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
