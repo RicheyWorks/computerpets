@@ -93,7 +93,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 49. [x] `pitcher.wav` — **Well** — Purple Pitcher Plant — A pitcher plant is silent. One drip into the well. No voice. — sat 2026-09-05 Commons CC BY-SA 3.0 Water drips in Treak Cliff Cavern (Andy Mabbett)
 50. [x] `sundew.wav` — **Dew** — Round-leaved Sundew — A sundew is silent. A tiny glue tick. No voice. — sat 2026-09-05 Commons CC BY-SA 3.0 Water drops dripping (ZooFari)
 51. [x] `honeybee.wav` — **Comb** — Western Honey Bee — A western honey bee buzzes its wings, close and dry. No words. — sat 2026-09-03 Commons CC BY-SA 4.0 Buzzing_bees.ogg (Serg Childed)
-52. [ ] `monarch.mp4` — **Milk** — Monarch — A monarch butterfly is nearly silent. Soft wing flutter only. No voice. (zip synth — replace with Grok)
+52. [x] `monarch.wav` — **Milk** — Monarch — A monarch butterfly is nearly silent. Soft wing flutter only. No voice. — sat 2026-09-05 Freesound CC0 Butterfly Wings Fluttering 1 (FunWithSound #402781; painted lady enclosure flutter)
 53. [ ] `luna.mp4` — **Ghost** — Luna Moth — A luna moth is silent. Adults have vestigial mouthparts and do not eat. Faint wing silk. (zip synth — replace with Grok)
 54. [ ] `firefly.mp4` — **Spark** — Common Eastern Firefly — A firefly is silent. Flash, not voice. Tiny wing whir. (zip synth — replace with Grok)
 55. [ ] `darner.mp4` — **Dart** — Common Green Darner — A green darner whirrs its wings, dry and fast. No voice. (zip synth — replace with Grok)
