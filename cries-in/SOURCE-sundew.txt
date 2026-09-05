@@ -1,0 +1,11 @@
+key: sundew
+guest: Dew (Round-leaved Sundew)
+source: Wikimedia Commons Water drops dripping.ogg
+URL: https://commons.wikimedia.org/wiki/File:Water_drops_dripping.ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/1/1c/Water_drops_dripping.ogg
+author: ZooFari
+license: CC BY-SA 3.0
+Species: Drosera rotundifolia (round-leaved sundew; house guest Dew) — silent. Soft attenuated water-drop drip as tiny glue/dew tick on a tentacle. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from Well pitcher Treak Cliff cavern drip and Disk water_lily PD rivulet. House cut ~2.2s mono 44.1kHz from ~6.9s mark; highpass/lowpass + volume + mild dynaudnorm + afade. Quiet carnivorous plant.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine

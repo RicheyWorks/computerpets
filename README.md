@@ -12,7 +12,7 @@ That page is a teacher. Click it. It has numbered steps. You do not need to know
 
 ## Half the house already talks for real
 
-**115 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
+**116 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
 
 ## Meet some of them
 
@@ -96,7 +96,7 @@ More in [desktop/README.md](desktop/README.md).
 
 ## They make real noise
 
-**115 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**116 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
 
 These voices are in the house:
 
@@ -214,7 +214,8 @@ These voices are in the house:
 - **Arm** (saguaro) — a dry spine tick from [BigSoundBank](https://bigsoundbank.com/miscanthus-sinensis-6-s1816.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Miscanthus sinensis #6 / #1816). Quiet plant — no voice. No music. No beep.
 - **Snap** (venus_flytrap) — a dry lobe clap from [BigSoundBank](https://bigsoundbank.com/broken-twigs-2-s1300.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Broken twigs #2 / #1300). Quiet plant — no voice. No music. No beep.
 - **Well** (purple pitcher plant) — one soft drip into the well from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), recorded by [Andy Mabbett](https://commons.wikimedia.org/wiki/File:Water_drips_in_Treak_Cliff_Cavern,_Derbyshire.flac) (`Water_drips_in_Treak_Cliff_Cavern,_Derbyshire.flac`, attenuated). Quiet plant — no voice. No music. No beep.
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Dew** the Round-leaved Sundew — a tiny glue tick. No voice.
+- **Dew** (round-leaved sundew) — a tiny glue/dew tick from Wikimedia Commons, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), recorded by [ZooFari](https://commons.wikimedia.org/wiki/File:Water_drops_dripping.ogg) (`Water_drops_dripping.ogg`, attenuated). Quiet plant — no voice. No music. No beep.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Milk** the Monarch — soft wing flutter only. No voice.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
