@@ -212,6 +212,7 @@ These voices are in the house:
 - **Disk** (fragrant water lily) — a quiet pad-water tick from Wikimedia Commons, public domain, recorded by [stephan](https://commons.wikimedia.org/wiki/File:Welling_rivulet_in_the_woods.ogg) (`Welling_rivulet_in_the_woods.ogg`, PDSounds). Quiet plant — no voice. No music. No beep.
 - **Moth** (moth orchid) — a soft petal/leaf rustle from [BigSoundBank](https://bigsoundbank.com/miscanthus-sinensis-5-s1815.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Miscanthus sinensis #5 / #1815). Quiet plant — no voice. No music. No beep.
 - **Arm** (saguaro) — a dry spine tick from [BigSoundBank](https://bigsoundbank.com/miscanthus-sinensis-6-s1816.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Miscanthus sinensis #6 / #1816). Quiet plant — no voice. No music. No beep.
+- **Snap** (venus_flytrap) — a dry lobe clap from [BigSoundBank](https://bigsoundbank.com/broken-twigs-2-s1300.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/) (Broken twigs #2 / #1300). Quiet plant — no voice. No music. No beep.
 More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Snap** the Venus flytrap — a dry clap. No voice.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
@@ -253,3 +254,4 @@ Copyright (c) 2026 RicheyWorks. All rights reserved. This is a private house. Se
 ---
 
 *Two hundred twenty living kinds. Keep them so a line does not go cool.*
+

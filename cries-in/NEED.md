@@ -89,7 +89,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 45. [x] `water_lily.mp4` — **Disk** — Fragrant Water Lily — A fragrant water lily is silent. A quiet water tick. No voice. (zip synth — replace with Grok) — sat 2026-09-03 Commons PD Welling_rivulet_in_the_woods.ogg (stephan)
 46. [x] `orchid.wav` — **Moth** — Moth Orchid — A moth orchid is silent. Almost nothing. No voice. — sat 2026-09-03 BigSoundBank CC0 Miscanthus sinensis #5 (Joseph SARDIN #1815)
 47. [x] `saguaro.wav` — **Arm** — Saguaro — A saguaro is silent. Dry spine tick in still air. No voice. — sat 2026-09-03 BigSoundBank CC0 Miscanthus sinensis #6 (Joseph SARDIN #1816)
-48. [ ] `venus_flytrap.mp4` — **Snap** — Venus Flytrap — A Venus flytrap snaps its lobes. No voice. A dry clap. (zip synth — replace with Grok)
+48. [x] `venus_flytrap.wav` — **Snap** — Venus Flytrap — A Venus flytrap snaps its lobes. No voice. A dry clap. — sat 2026-09-05 BigSoundBank CC0 Broken twigs #2 (Joseph SARDIN #1300)
 49. [ ] `pitcher.mp4` — **Well** — Purple Pitcher Plant — A pitcher plant is silent. One drip into the well. No voice. (zip synth — replace with Grok)
 50. [ ] `sundew.mp4` — **Dew** — Round-leaved Sundew — A sundew is silent. A tiny glue tick. No voice. (zip synth — replace with Grok)
 51. [x] `honeybee.wav` — **Comb** — Western Honey Bee — A western honey bee buzzes its wings, close and dry. No words. — sat 2026-09-03 Commons CC BY-SA 4.0 Buzzing_bees.ogg (Serg Childed)
@@ -270,4 +270,5 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - Grok Imagine mp4s: **0**. That is what I still need.
 
 Catalog 220. No new pets.
+
 
