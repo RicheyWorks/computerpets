@@ -13,6 +13,13 @@ Thumbs.db
 .git/
 .gitignore
 
+# The backend image copies only pom.xml and src; client art and source-audio
+# mailboxes are runtime inputs for the separate clients, not this build.
+web/
+desktop/
+client/
+cries-in/
+
 # Documentation (not needed in image)
 docs/
 *.md
