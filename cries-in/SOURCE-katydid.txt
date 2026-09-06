@@ -1,0 +1,12 @@
+Blade (katydid) cry — field tape
+
+URL: https://commons.wikimedia.org/wiki/File:Pterophylla_camellifolia_singing.wav
+Also: https://www.inaturalist.org/observations/90278754
+Title: Pterophylla camellifolia singing.wav
+Author: peterwchen
+License: Creative Commons Attribution 4.0 International (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+Notes: Exact common true katydid (Pterophylla camellifolia) male singing in Arrowhead Park, Naperville, Illinois. House cut keeps the pulsed katy-did rasp. No music, no narrator, no English words.
+House cut: mono 44.1kHz wav ~3.5s (dynaudnorm).
+Sat by Buffffff 2026-09-05.
