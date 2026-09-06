@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/small-stream-s0823.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/0823.mp3
+Title: Small Stream (sound 0823)
+Author: Joseph SARDIN
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Soft mountain-riffle water for silent brook trout. No voice. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim 0:4. Distinct from Splash Big #1519 (bass) and Splash Small series.
