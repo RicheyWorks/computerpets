@@ -184,7 +184,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 140. [x] `black_bear.wav` — **Coal** — American Black Bear — A black bear tongue-clicks and grunts. If nervous, a huff. Not a roar. — sat 2026-09-05 iNaturalist CC BY (marykrieger, obs 287411149) nervous huff
 141. [x] `gecko.wav` — **Pad** — Mediterranean House Gecko — A Mediterranean house gecko calls a high bird-like squeak-chirp. — sat 2026-09-03 Commons CC BY-SA 3.0 HouseGeckoChirp.ogg (Glueball)
 142. [x] `anole.wav` — **Wink** — Green Anole — A green anole is nearly silent. Dewlap, not a voice. A tiny squeak if pressed. — sat 2026-09-05 Freesound CC0 ThằngLằng (SieuAmThanh #400573) night lizard tick
-143. [ ] `skink.mp4` — **Dash** — Five-lined Skink — A five-lined skink is silent. Dry leaf rustle as it runs. No voice. (zip synth — replace with Grok)
+143. [x] `skink.wav` — **Dash** — Five-lined Skink — A five-lined skink is silent. Dry leaf rustle as it runs. No voice. — sat 2026-09-05 Commons CC BY 4.0 Leaf crunch 4 (Gravity Sound)
 144. [ ] `chameleon.mp4` — **Shift** — Veiled Chameleon — A veiled chameleon hisses, dry and small. No roar. (zip synth — replace with Grok)
 145. [ ] `horned_lizard.mp4` — **Spike** — Texas Horned Lizard — A Texas horned lizard hisses. No roar. (zip synth — replace with Grok)
 146. [x] `alligator.wav` — **Levee** — American Alligator — An American alligator bellows a low rumble. Hiss if threatened. No movie roar. — sat 2026-09-03 Commons PD Alligatorbellow1.ogg (USFWS)
