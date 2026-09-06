@@ -261,7 +261,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 217. [x] `gauss_dragon.wav` — **Gauss** — Filing Dragon — A filing dragon hums magnetic field-lines. Dry tick. No words. — sat 2026-09-05 BigSoundBank CC0 Electric transformer #1 (Joseph SARDIN #0064)
 218. [x] `relay_dragon.wav` — **Relay** — Click Dragon — A click dragon clicks one relay at the nape. Dry. No roar. — sat 2026-09-05 BigSoundBank CC0 Electric switch (Joseph SARDIN #0026)
 219. [x] `fuse_dragon.wav` — **Fuse** — Cartridge Dragon — A cartridge dragon ticks a glass-fuse tick. Thin hum. No words. — sat 2026-09-05 BigSoundBank CC0 Electric transformer #2 (Joseph SARDIN #0086)
-220. [ ] `ground_dragon.mp4` — **Ground** — Earth Dragon — An earth dragon hums a low grounded hum. No roar. No music. (zip synth — replace with Grok)
+220. [x] `ground_dragon.wav` — **Ground** — Earth Dragon — An earth dragon hums a low grounded hum. No roar. No music. — sat 2026-09-05 BigSoundBank CC0 Electric meter (Joseph SARDIN #1091)
 
 ## Already in the zip you dropped
 
