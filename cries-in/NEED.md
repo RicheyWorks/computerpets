@@ -240,7 +240,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 196. [x] `flying_squirrel.wav` — **Glide** — Southern Flying Squirrel — high thin chirps — sat 2026-09-05 iNat CC BY obs 331870521 (ncb1221; exact Glaucomys volans).
 197. [x] `howler.wav` — **Boom** — Mantled Howler — A mantled howler howls a deep roar-howl. No English. — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
 198. [x] `tarsier.wav` — **Gaze** — Philippine Tarsier — piercing call — sat 2026-09-05 iNat CC BY obs 323492684 (plains-wanderer; Tarsius fuscus genus proxy — no Carlito syrichta remixable).
-199. [ ] `potto.mp4` — **Still** — Potto — A potto calls a high-pitched tsic, mostly between mother and young. Otherwise nearly silent. (zip synth — replace with Grok)
+199. [x] `potto.wav` — **Still** — Potto — soft canopy branch grind — sat 2026-09-05 BigSoundBank CC0 Wind and tree squeaks #1051 (Joseph SARDIN; no Perodicticus remixable).
 200. [x] `koala.wav` — **Gum** — Koala — sat 2026-09-03 Commons/PLOS CC BY bellowing male Andy (Charlton et al.)
 201. [ ] `brain_coral.mp4` — **Ridge** — Boulder Brain Coral — Brain coral is silent. Water over ridges. No voice. (zip synth — replace with Grok)
 202. [ ] `anemone.mp4` — **Wreath** — Magnificent Sea Anemone — A sea anemone is silent. Tentacle water hush. No voice. (zip synth — replace with Grok)
