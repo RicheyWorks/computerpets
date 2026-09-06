@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, and Cling today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, and Tenant today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -38,8 +38,9 @@ import * as Cuttlefish from "./cuttlefish-tricks";
 import * as Nautilus from "./nautilus-tricks";
 import * as MoonJelly from "./moon_jelly-tricks";
 import * as SeaStar from "./sea_star-tricks";
+import * as HermitCrab from "./hermit_crab-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish | typeof Nautilus | typeof MoonJelly | typeof SeaStar;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish | typeof Nautilus | typeof MoonJelly | typeof SeaStar | typeof HermitCrab;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -81,6 +82,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === Nautilus.TRICK_KEY || key === "chamber") return Nautilus;
   if (key === MoonJelly.TRICK_KEY || key === "pulse") return MoonJelly;
   if (key === SeaStar.TRICK_KEY || key === "cling") return SeaStar;
+  if (key === HermitCrab.TRICK_KEY || key === "tenant") return HermitCrab;
   return null;
 }
 
