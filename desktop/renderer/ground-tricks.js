@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, and Thimble today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, and Clip today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -9,6 +9,7 @@
     const Cat = root.PetCatTricks;
     const Dog = root.PetDogTricks;
     const Rabbit = root.PetRabbitTricks;
+    const Hamster = root.PetHamsterTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -16,6 +17,7 @@
     if (Cat && (key === Cat.TRICK_KEY || key === "miso")) return Cat;
     if (Dog && (key === Dog.TRICK_KEY || key === "pip")) return Dog;
     if (Rabbit && (key === Rabbit.TRICK_KEY || key === "thimble")) return Rabbit;
+    if (Hamster && (key === Hamster.TRICK_KEY || key === "clip")) return Hamster;
     return null;
   }
 
