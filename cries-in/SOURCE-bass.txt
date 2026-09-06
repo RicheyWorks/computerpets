@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/splash-big-1-s1519.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/1519.mp3
+Title: Splash, Big #1 (sound 1519)
+Author: Joseph SARDIN
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Surface water thrash for silent largemouth bass. No voice. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim 0:4. Distinct from Splash Small series used by stickleback/kelp/moon_jelly.
