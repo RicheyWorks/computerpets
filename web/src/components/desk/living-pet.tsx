@@ -7,12 +7,13 @@ import type { RelayHappy, RelayHappyKind, RelayTrick, RelayTrickKind } from "@/l
 import type { FuseHappy, FuseHappyKind, FuseTrick, FuseTrickKind } from "@/lib/pets/fuse-tricks";
 import type { EarthHappy, EarthHappyKind, EarthTrick, EarthTrickKind } from "@/lib/pets/earth-tricks";
 import type { CatHappy, CatHappyKind, CatTrick, CatTrickKind } from "@/lib/pets/cat-tricks";
+import type { DogHappy, DogHappyKind, DogTrick, DogTrickKind } from "@/lib/pets/dog-tricks";
 import { sleepHoldFrame, startThankYou, tricksFor } from "@/lib/pets/ground-tricks";
 
-type GroundTrick = RuiTrick | RelayTrick | FuseTrick | EarthTrick | CatTrick;
-type GroundHappy = RuiHappy | RelayHappy | FuseHappy | EarthHappy | CatHappy;
-type GroundTrickKind = RuiTrickKind | RelayTrickKind | FuseTrickKind | EarthTrickKind | CatTrickKind;
-type GroundHappyKind = RuiHappyKind | RelayHappyKind | FuseHappyKind | EarthHappyKind | CatHappyKind;
+type GroundTrick = RuiTrick | RelayTrick | FuseTrick | EarthTrick | CatTrick | DogTrick;
+type GroundHappy = RuiHappy | RelayHappy | FuseHappy | EarthHappy | CatHappy | DogHappy;
+type GroundTrickKind = RuiTrickKind | RelayTrickKind | FuseTrickKind | EarthTrickKind | CatTrickKind | DogTrickKind;
+type GroundHappyKind = RuiHappyKind | RelayHappyKind | FuseHappyKind | EarthHappyKind | CatHappyKind | DogHappyKind;
 import {
   actPose,
   afterSettleWait,

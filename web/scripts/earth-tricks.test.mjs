@@ -15,6 +15,7 @@ const OverlayRui = createRequire(import.meta.url)(join(root, "../desktop/rendere
 const OverlayRelay = createRequire(import.meta.url)(join(root, "../desktop/renderer/relay-tricks.js"));
 const OverlayFuse = createRequire(import.meta.url)(join(root, "../desktop/renderer/fuse-tricks.js"));
 const OverlayCat = createRequire(import.meta.url)(join(root, "../desktop/renderer/cat-tricks.js"));
+const OverlayDog = createRequire(import.meta.url)(join(root, "../desktop/renderer/dog-tricks.js"));
 
 test("Ground tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["lug", "earth", "heave", "bed"]);
@@ -156,6 +157,7 @@ test("ground registry keeps Rui gated; Relay Fuse Ground selectable", () => {
   globalThis.PetFuseTricks = OverlayFuse;
   globalThis.PetEarthTricks = Overlay;
   globalThis.PetCatTricks = OverlayCat;
+  globalThis.PetDogTricks = OverlayDog;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("relay_dragon"), OverlayRelay);
@@ -165,11 +167,13 @@ test("ground registry keeps Rui gated; Relay Fuse Ground selectable", () => {
   assert.equal(OverlayGround.tricksFor("ground_dragon"), Overlay);
   assert.equal(OverlayGround.tricksFor("ground"), Overlay);
   assert.equal(OverlayGround.tricksFor("cat"), OverlayCat);
+  assert.equal(OverlayGround.tricksFor("dog"), OverlayDog);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("ground_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("cat"), true);
+  assert.equal(OverlayGround.wantsThankYou("dog"), true);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("relay_dragon"), null);
   assert.equal(OverlayGround.sleepHoldFrame("fuse_dragon", 4), null);
