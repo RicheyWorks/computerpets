@@ -168,7 +168,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 124. [x] `tarantula.wav` — **Velvet** — Desert Blonde — A desert blonde tarantula is nearly silent. Faint hair-rasp if threatened. No roar. — sat 2026-09-05 BigSoundBank CC0 Synthetic Coat Rubbed (Joseph SARDIN #1104)
 125. [x] `widow.wav` — **Hour** — Southern Black Widow — A black widow is silent. Silk tick. No voice. — sat 2026-09-05 Freesound CC0 Stick though thick spiderweb 1 (Sadiquecat #689317)
 126. [x] `harvestman.wav` — **Stem** — Common Harvestman — A harvestman is silent. Leg rustle on wood. No voice. — sat 2026-09-05 Freesound CC0 Hard Wood Surface Light Scratching 1_2 (Joao_Janz #477680)
-127. [ ] `scorpion.mp4` — **Barb** — Striped Bark Scorpion — A striped bark scorpion is nearly silent. A pincer click. No voice. (zip synth — replace with Grok)
+127. [x] `scorpion.wav` — **Barb** — Striped Bark Scorpion — A striped bark scorpion is nearly silent. A pincer click. No voice. — sat 2026-09-05 Freesound CC0 Crab - Pincers, scissors (Vrymaa #770030)
 128. [ ] `vinegaroon.mp4` — **Whip** — Giant Vinegaroon — A vinegaroon rustles pedipalps. A dry hiss of spray-air. No roar. (zip synth — replace with Grok)
 129. [ ] `tick.mp4` — **Clasp** — Black-legged Tick — A tick is silent. Almost nothing. No voice. (zip synth — replace with Grok)
 130. [ ] `solifuge.mp4` — **Gale** — Windscorpion — A windscorpion is silent. Fast dry scuttle. No voice. (zip synth — replace with Grok)
