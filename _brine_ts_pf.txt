@@ -1,0 +1,1 @@
+'if (key === "nexus") return MANY;\n  return SILL;\n}\n\nexport function canStart(state: PlayFlags | undefined) {\n  if (!state) return false;\n  if (state.asleep || s'

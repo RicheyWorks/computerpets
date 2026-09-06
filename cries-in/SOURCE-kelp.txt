@@ -1,0 +1,11 @@
+﻿key: kelp
+guest: Hold (Giant Kelp)
+source: BigSoundBank Splash, small #3 (sound 1531)
+URL: https://bigsoundbank.com/splash-small-3-s1531.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1531.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet kelp sit — Giant kelp has no voice. Soft attenuated water-splash as frond in a cold-water surge. No music. No narrator. No cartoon beep.
+Notes: House cut ~2.0s mono 44.1kHz dynaudnorm volume=-10dB from full 2.06s source. Quiet guest. (Rejected Commons Ocean_Waves upload — file metadata pointed at a YouTube forest-creek rip.)
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

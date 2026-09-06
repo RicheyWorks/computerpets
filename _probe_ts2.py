@@ -1,0 +1,10 @@
+﻿ts=open("web/src/lib/pets/window-play.ts",encoding="utf-8").read()
+i=ts.find("type WindowPlayKind")
+print(ts[i:i+2500])
+print("====SIDE/LEAVE====")
+# find leave union containing trumpeted
+i=ts.find("trumpeted")
+print(repr(ts[max(0,i-300):i+80]))
+print("====")
+i=ts.find("trumpetrim")
+print(repr(ts[max(0,i-200):i+80]))

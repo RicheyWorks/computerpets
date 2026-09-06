@@ -1,0 +1,8 @@
+﻿ts=open("web/src/lib/pets/window-play.ts",encoding="utf-8").read()
+i=ts.find("export function trumpetPoint")
+print(ts[i:i+700])
+print("====")
+js=open("desktop/renderer/window-play.js",encoding="utf-8").read()
+print("JS TUMBLE", "const TUMBLE" in js, 'key === "coli") return TUMBLE' in js)
+print("JS header Rod", "Rod tumbles" in js)
+print("JS phases", "tumble-on" in js)

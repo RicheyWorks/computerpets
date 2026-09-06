@@ -1,0 +1,67 @@
+﻿test("Pact plaques a cool stile as bark stone: walk onto the stile, sit the cool bark wood, plaque once, sit the two-kingdom share, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("lichen"), "plaque");
+  assert.equal(P.PLAQUE, "plaque");
+  assert.notEqual(P.playFor("lichen"), "bloom");
+  assert.notEqual(P.playFor("lichen"), "drip");
+  assert.notEqual(P.playFor("lichen"), "shelf");
+  assert.notEqual(P.playFor("lichen"), "cloud");
+  assert.notEqual(P.playFor("lichen"), "sill");
+  assert.equal(P.playFor("yeast"), "bloom");
+  assert.equal(P.playFor("chicken_of_woods"), "drip");
+  assert.equal(P.playFor("puffball"), "cloud");
+  assert.equal(P.playFor("oyster"), "shelf");
+  assert.equal(P.playFor("photovore"), "sill");
+  assert.equal(Overlay.playFor("lichen"), "plaque");
+  const target = P.pickTarget([WIN], 80, "lichen", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "plaque");
+  assert.equal(target.side, "barkstone");
+  assert.equal(target.leave, "plaqued");
+  assert.ok(target.holdLift >= 0);
+  assert.ok(P.DUR.plaqueHold > P.DUR.plaque * 1.2);
+  assert.ok(P.DUR.plaqueOn !== P.DUR.bloomOn);
+  assert.ok(P.DUR.plaque !== P.DUR.drip);
+  const stone = P.plaquePoint(WIN, P.SPRITE, WORK);
+  const film = P.bloomPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(stone.x - film.x) > 12 || Math.abs(stone.lift - film.lift) > 1);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "lichen", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okPlaque = P.pickTarget([{ id: "plaque", x: 200, y: 80, width: 188, height: 168 }], 80, "lichen", WORK, P.SPRITE);
+  assert.ok(okPlaque);
+  const plaquePose = P.plaquePath(0.3);
+  assert.ok(Math.abs(plaquePose.lift) > 0.2 || Math.abs(plaquePose.rot) > 0.8);
+  const hold = P.plaqueHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 1.7) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "bloom");
+    assert.notEqual(play.phase, "drip");
+  }
+  assert.ok(seen.has("plaque-on"));
+  assert.ok(seen.has("plaque"));
+  assert.ok(seen.has("plaque-hold"));
+  assert.ok(seen.has("plaque-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Pact's bark-stone plaque; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "lichen", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "plaque"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "plaque");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "plaque");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "plaque-off");
+  assert.equal(play.abort, true);
+});

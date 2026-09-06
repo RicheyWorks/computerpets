@@ -1,0 +1,20 @@
+# Optional. Not included in kustomization.yaml — apply only if you have
+# an Ingress controller. Change the host.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: computerpets
+  namespace: computerpets
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: computerpets.example
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: computerpets
+                port:
+                  name: http

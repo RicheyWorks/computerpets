@@ -1,0 +1,10 @@
+key: halovore
+guest: Brine (Salt-drinker)
+source: BigSoundBank Raw rice poured into a saucepan (sound 201)
+URL: https://bigsoundbank.com/raw-rice-poured-into-a-saucepan-s0201.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0201.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet alien sit — salt-drinker has no mouth-voice. Real dry grain pour (rice as salt-grain stand-in; page notes it passes for small seeds) cut as frost-salt tick. No music. No narrator. No cartoon beep. House cut ~3s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

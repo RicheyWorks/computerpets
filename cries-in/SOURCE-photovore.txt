@@ -1,0 +1,11 @@
+key: photovore
+guest: Gleam (Lamp-drinker)
+source: Freesound sound 474312 "Fluorescent light buzzing" by Rvgerxini (Pixabay mirror download)
+URL: https://freesound.org/people/Rvgerxini/sounds/474312/
+mirror: https://pixabay.com/sound-effects/fluorescent-light-buzzing-98373/
+direct: https://cdn.pixabay.com/download/audio/2022/03/20/audio_bd5834b2b5.mp3?filename=freesound_community-fluorescent-light-buzzing-98373.mp3
+author: Rvgerxini
+license: Creative Commons Zero (CC0 1.0)
+note: Quiet alien sit — Gleam has no mouth. Real fluorescent microscope-lamp hum cut as thin dry light-hum tick (highpassed + attenuated). No music. No narrator. No cartoon beep. House cut ~3.8s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

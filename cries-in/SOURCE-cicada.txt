@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Magicicada_cassinii-call.ogg
+Author: Peterwchen
+License: Creative Commons Attribution-Share Alike 4.0 (CC BY-SA 4.0)
+URL: https://commons.wikimedia.org/wiki/File:Magicicada_cassinii-call.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/8/8b/Magicicada_cassinii-call.ogg
+Notes: Calling song of periodical cicada Magicicada cassinii. House cut ~4.0s mono 44.1kHz.
+House path: build our own from field tape — not Grok Imagine

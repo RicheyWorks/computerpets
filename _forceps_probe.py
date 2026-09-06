@@ -1,0 +1,11 @@
+﻿from pathlib import Path
+t = Path("desktop/renderer/window-play.js").read_text(encoding="utf-8")
+print(t[:1100])
+print("---")
+i = t.find("Lace nets")
+print(repr(t[i:i+420]))
+print("---EXPORTS---")
+j = t.rfind("BLACK,")
+print(t[j:j+200])
+k = t.rfind("netOffPath,")
+print(t[k:k+180])

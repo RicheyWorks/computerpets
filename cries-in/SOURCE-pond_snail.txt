@@ -1,0 +1,11 @@
+key: pond_snail
+guest: Whorl (Great Pond Snail)
+source: Wikimedia Commons Snail eating a leaf.ogg
+URL: https://commons.wikimedia.org/wiki/File:Snail_eating_a_leaf.ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/3/32/Snail_eating_a_leaf.ogg
+author: Miguel Tremblay (User:Dirac)
+license: Creative Commons Zero (CC0)
+Species: snail radula rasp while eating a leaf (field video audio; quiet mollusk sit for Lymnaea/Whorl — real radula scrape, not glass foley, not cartoon).
+Notes: Quiet guest — no voice. House cut ~3.5s from ~35.5s (densest rasp window), mono 44.1kHz dynaudnorm. No music. No narrator. No cartoon beep.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

@@ -1,0 +1,11 @@
+key: manta
+guest: Kite (Reef Manta)
+source: BigSoundBank Water: swirls and flow (sound 245)
+URL: https://bigsoundbank.com/water-swirls-and-flow-s0245.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0245.ogg
+author: DenisChardonnet / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Mobula alfredi (reef manta; house guest Kite) — silent. Soft attenuated water swirls/flow as slow fin whoosh through water. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz volume=-10dB + dynaudnorm + afade from full ~4.5s source. Quiet guest. Distinct from Siphon leech Swirl #192 and Sepia cuttlefish Rowing slowly #1514.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

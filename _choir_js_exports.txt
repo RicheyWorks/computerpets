@@ -1,0 +1,9 @@
+// sit the wavelength drink; the thirst records it
+    return { x: 0.11, lift: 0.22 + hush, rot: 1.2 };
+  }
+
+  function thirstOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = f

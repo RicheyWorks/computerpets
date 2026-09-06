@@ -1,0 +1,10 @@
+key: stingless
+guest: Pot (Maya Stingless Bee)
+source: iNaturalist observation 263773947
+taxon: Trigona spinipes (stingless bee; Meliponini — honest sit for Melipona/Maya stingless wing buzz)
+URL: https://www.inaturalist.org/observations/263773947
+sound: https://static.inaturalist.org/sounds/1470781.wav
+author: B. Phalan (deboas)
+license: CC BY 4.0 (sound); observation CC0
+note: High thin hive wing buzz. Cut ~4.0–7.5s, mono 44.1kHz, dynaudnorm. No Melipona-labeled remixable short tape found; Trigona is Meliponini stingless.
+sat: 2026-09-03 Buffffff

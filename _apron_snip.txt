@@ -1,0 +1,60 @@
+2121:    if (kind === PATROL) {
+2122:      const start = patrolPoint(best, 0, size, work);
+2123:      const end = patrolPoint(best, 1, size, work);
+2124:      const approachX = clamp(start.x - 64, 8, Math.max(8, workW - size - 8));
+2125:      const away = 72;
+2126:      return {
+2127:        id: best.id,
+2128:        kind,
+2129:        side: "cup",
+2130:        holdX: start.x,
+2131:        holdLift: start.lift,
+2132:        approachX,
+2133:        landX: clamp(end.x + away, 8, Math.max(8, workW - size - 8)),
+2134:        leave: "lap",
+2135:        spin: "none",
+2136:        patrolEndX: end.x,
+2137:        patrolEndLift: end.lift,
+2138:      };
+2139:    }
+2140:    if (kind === LOOP) {
+2141:      const hold = loopPoint(best, size, work);
+2142:      const fromLeft = hold.x >= workW / 2;
+2143:      const approachOff = fromLeft ? -76 : 76;
+2144:      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+2145:      const away = hold.x < workW / 2 ? 74 : -74;
+2146:      return {
+2147:        id: best.id,
+2148:        kind,
+2149:        side: "apron",
+2150:        holdX: hold.x,
+2151:        holdLift: hold.lift,
+2152:        approachX,
+2153:        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+2154:        leave: "let",
+2155:        spin: "none",
+2156:      };
+2157:    }
+2158:    if (kind === MOSAIC) {
+2159:      const hold = mosaicPoint(best, size, work);
+2160:      const fromLeft = hold.x >= workW / 2;
+2161:      const approachOff = fromLeft ? -68 : 68;
+2162:      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+2163:      const away = hold.x < workW / 2 ? 70 : -70;
+2164:      return {
+2165:        id: best.id,
+2166:        kind,
+2167:        side: "muntin",
+2168:        holdX: hold.x,
+2169:        holdLift: hold.lift,
+2170:        approachX,
+2171:        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+2172:        leave: "kind",
+2173:        spin: "none",
+2174:      };
+2175:    }
+2176:    if (kind === STONE) {
+2177:      const edge = opts && (opts.side === "right" || opts.side === "left") ? opts.side : pickSide(best, petX, size, workW);
+2178:      const hold = stonePoint(best, edge, size, work);
+2179:      const approachOff = edge === "left" ? -70 : 70;
+2180:      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));

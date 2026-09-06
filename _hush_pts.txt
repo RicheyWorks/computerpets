@@ -1,0 +1,87 @@
+orb_weaver -> if (key === "orb_weaver") return WEB;
+spider -> NO
+loom -> NO
+luna -> if (key === "luna") return WEEK;
+autumn -> NO
+fan -> NO
+photovore -> if (key === "photovore") return THIRST;
+terminator -> if (key === "terminator") return RIM;
+WEB -> const WEB = "web";
+WEEK -> const WEEK = "week";
+GOLD -> const GOLD = "gold";
+RIM -> const RIM = "rim";
+THIRST -> const THIRST = "thirst";
+ALIGN -> const ALIGN = "align";
+QUIET -> missing
+DUSK -> const DUSK = "dusk";
+=== weekPoint @ 628520 ===
+function weekPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const dir = weekLampDir(win, work);
+    const right = dir === 1;
+    const glassInset = Math.max(90, size * 0.52);
+    const x = right ? win.x + win.width - size - glassInset : win.x + glassInset;
+    const duskSit = Math.max(118, win.height * 0.46);
+    const gripY = win.y + duskSit;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return 
+=== rimPoint @ 720714 ===
+function rimPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const workW = work && work.width ? work.width : 1280;
+    const lampRight = win.x + win.width / 2 < workW / 2;
+    // lamp-side stile as a lamp-edge — walk onto the stile, sit the rim; not Night dusk-run tapetum, not Penny dock-shade flare, not Swing lamp-arm sing, not Ghost lamp-side glass week, not Gleam bright pane lamp glass, not Shard sash-gap inkstone, not Miso top ledge
+    const stile = Math.max
+=== goldPoint @ 347196 ===
+function goldPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const dir = goldLampDir(win, work);
+    const pad = 28;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const u = dir === 1 ? 0.78 : 0.22;
+    const x = win.x + pad + span * u;
+    const light = Math.max(70, win.height * 0.38);
+    const gripY = win.y + light;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: 
+=== thirstPoint @ 707466 ===
+function thirstPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 10;
+    const span = Math.max(0, win.width - size - pad * 2);
+    // upper-right bright pane -- lamp-glass micro-site for a photovore thirst; not Pact's cool left bark stile, not Starter's lower damp yeast film, not Flame's right warm drip, not Sun's upper sash warm, not Spark's lower sash glow
+    const x = win.x + pad + span * 0.68;
+    const pane = Math.max(62, win.height * 0.26);
+    
+=== webPoint @ 449955 ===
+function webPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const dir = webLampDir(win, work);
+    const right = dir === 1;
+    const insetX = Math.max(48, size * 0.28);
+    const insetTop = Math.max(58, size * 0.34);
+    const x = right ? win.x + win.width - size - insetX : win.x + insetX;
+    const gripY = win.y + insetTop;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(li
+=== alignPoint @ 730548 ===
+function alignPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const span = Math.max(0, win.width - size);
+    // sash parting bead as a ruler line — sit the interior parting bead (vertical thin bead between sash and jamb / pencil-line of the frame); north needle; not Bandit jamb-as-ruler inspect, not Anchor hitch, not Stem stilt, not Shift aim, not Flux field, not Gauss orbit, not Brine frost
+    const x = win.x + span * 0.18;
+    const gripY = win.y + win.heigh
+=== duskPoint @ 564007 ===
+function duskPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const workW = work && work.width ? work.width : 1280;
+    const lampRight = win.x + win.width / 2 < workW / 2;
+    const stile = Math.max(16, Math.min(size * 0.14, win.width * 0.08));
+    const x = lampRight ? win.x + win.width - size - stile : win.x + stile;
+    const sit = Math.max(88, win.height * 0.48);
+    const gripY = win.y + sit;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work

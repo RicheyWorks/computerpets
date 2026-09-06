@@ -1,0 +1,44 @@
+# Maven
+target/
+
+# Backups
+backups/
+*.zip
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Environment
+.env
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Living desk
+web/scripts/pose-bodies*/
+web/**/__pycache__/
+web/node_modules/
+web/.vercel/
+web/.tanstack/
+web/dist/
+
+# Desktop companion
+desktop/node_modules/
+desktop/dist/
+
+# PyQt blotter client
+client/.venv/
+client/**/__pycache__/
+client/*.egg-info/
+client/.pytest_cache/
+
+# Grok cry drops: mp4s ARE the GitHub mailbox. Ignore only huge unpack zips.
+cries-in/incoming-cries.zip
+cries-in/*.zip

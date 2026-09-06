@@ -1,0 +1,224 @@
+﻿# -*- coding: utf-8 -*-
+from pathlib import Path
+
+HERE = Path(r"C:\Users\730ri\projects\ComputerPets")
+
+def once(text, old, new, label):
+    n = text.count(old)
+    if n != 1:
+        raise SystemExit("%s: expected 1, got %d\nOLD START: %r" % (label, n, old[:280]))
+    return text.replace(old, new, 1)
+
+TEST_BLOCK = r'''
+test("Beacon leftover aligns a sash parting bead as a ruler line: walk onto the bead, sit the north, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("magneton"), "align");
+  assert.equal(P.ALIGN, "align");
+  assert.notEqual(P.playFor("magneton"), "field");
+  assert.notEqual(P.playFor("magneton"), "north");
+  assert.notEqual(P.playFor("magneton"), "beacon");
+  assert.notEqual(P.playFor("magneton"), "magneton");
+  assert.notEqual(P.playFor("magneton"), "inspect");
+  assert.notEqual(P.playFor("magneton"), "hitch");
+  assert.notEqual(P.playFor("magneton"), "stilt");
+  assert.notEqual(P.playFor("magneton"), "aim");
+  assert.notEqual(P.playFor("magneton"), "frost");
+  assert.notEqual(P.playFor("magneton"), "orbit");
+  assert.notEqual(P.playFor("magneton"), "sill");
+  assert.equal(P.playFor("halovore"), "frost");
+  assert.equal(P.FROST, "frost");
+  assert.equal(P.playFor("nexus"), "many");
+  assert.equal(P.MANY, "many");
+  assert.equal(P.playFor("flux_dragon"), "field");
+  assert.equal(P.FIELD, "field");
+  assert.equal(P.playFor("kingsnake"), "inspect");
+  assert.equal(P.INSPECT, "inspect");
+  assert.equal(P.playFor("seahorse"), "hitch");
+  assert.equal(P.HITCH, "hitch");
+  assert.equal(P.playFor("harvestman"), "stilt");
+  assert.equal(P.STILT, "stilt");
+  assert.equal(P.playFor("umbral"), "sill");
+  const target = P.pickTarget([WIN], 80, "magneton", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "align");
+  assert.equal(target.side, "rulerline");
+  assert.equal(target.leave, "aligned");
+  assert.notEqual(target.kind, "field");
+  assert.notEqual(target.kind, "inspect");
+  assert.notEqual(target.kind, "hitch");
+  assert.notEqual(target.kind, "stilt");
+  assert.notEqual(target.kind, "frost");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift >= 0, "it aligns a sash parting bead as a ruler line");
+  assert.ok(P.DUR.alignHold > P.DUR.align * 1.2, "the hold is the sit; align is the tell");
+  assert.ok(P.DUR.alignOn > 1.0, "a walk onto the bead, not a cling");
+  assert.ok(P.DUR.alignOn !== P.DUR.frostOn);
+  assert.ok(P.DUR.alignOn !== P.DUR.manyOn);
+  assert.ok(P.DUR.alignOn !== P.DUR.hitchOn);
+  assert.ok(P.DUR.alignOn !== P.DUR.stiltOn);
+  assert.ok(P.DUR.alignOn !== P.DUR.fieldOn);
+  assert.ok(P.DUR.alignOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.align !== P.DUR.frost);
+  assert.ok(P.DUR.align !== P.DUR.many);
+  assert.ok(P.DUR.alignHold !== P.DUR.frostHold);
+  assert.ok(P.DUR.alignOff !== P.DUR.frostOff);
+  const align = P.alignPoint(WIN, P.SPRITE, WORK);
+  const frost = P.frostPoint(WIN, P.SPRITE, WORK);
+  const hitch = P.hitchPoint(WIN, P.SPRITE, WORK);
+  const stilt = P.stiltPoint(WIN, P.SPRITE, WORK);
+  const aim = P.aimPoint(WIN, P.SPRITE, WORK);
+  const field = P.fieldPoint(WIN, P.SPRITE, WORK);
+  assert.ok(align.lift >= 0, "the sash parting bead as a ruler line, not the sky");
+  assert.ok(Math.abs(align.x - frost.x) > 8 || Math.abs(align.lift - frost.lift) > 1, "not Brine salt-dish frost");
+  assert.ok(Math.abs(align.x - hitch.x) > 8 || Math.abs(align.lift - hitch.lift) > 1, "not Anchor hitch");
+  assert.ok(Math.abs(align.x - stilt.x) > 8 || Math.abs(align.lift - stilt.lift) > 1, "not Stem stilt");
+  assert.ok(Math.abs(align.x - aim.x) > 8 || Math.abs(align.lift - aim.lift) > 1, "not Shift aim");
+  assert.ok(Math.abs(align.x - field.x) > 8 || Math.abs(align.lift - field.lift) > 1, "not Flux field");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "magneton", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real parting bead, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 170, height: 210 }], 80, "magneton", WORK, P.SPRITE);
+  assert.equal(short, null, "a real parting bead, not a thinner frame");
+  const okAlign = P.pickTarget([{ id: "align", x: 200, y: 80, width: 172, height: 212 }], 80, "magneton", WORK, P.SPRITE);
+  assert.ok(okAlign, "a real sash parting bead as a ruler line");
+  const frostOk = P.pickTarget([{ id: "frost", x: 200, y: 80, width: 196, height: 164 }], 80, "halovore", WORK, P.SPRITE);
+  assert.ok(frostOk, "Brine still takes a salt-dish stool");
+  const hitchOk = P.pickTarget([{ id: "hitch", x: 200, y: 80, width: 168, height: 208 }], 80, "seahorse", WORK, P.SPRITE);
+  assert.ok(hitchOk, "Anchor still takes a parting-bead hitch");
+  const stiltOk = P.pickTarget([{ id: "stilt", x: 200, y: 80, width: 168, height: 208 }], 80, "harvestman", WORK, P.SPRITE);
+  assert.ok(stiltOk, "Stem still takes a parting-bead stilt");
+  const walkOn = P.alignOnPath(0.25, { x: 40, lift: 0 }, { x: align.x, lift: align.lift });
+  const frostOn = P.frostOnPath(0.25, { x: 40, lift: 0 }, { x: align.x, lift: align.lift });
+  assert.ok(walkOn.lift >= 0, "it walks onto the sash parting bead as a ruler line");
+  assert.ok(walkOn.rot !== frostOn.rot, "a walk onto the ruler line, not Brine frost");
+  const alignPose = P.alignPath(0.3);
+  const frostPose = P.frostPath(0.3);
+  const hitchPose = P.hitchPath(0.3);
+  const stiltPose = P.stiltPath(0.3);
+  assert.ok(Math.abs(alignPose.lift) > 0.2 || Math.abs(alignPose.rot) > 0.8, "it aligns once; align is the tell");
+  assert.ok(alignPose.rot !== frostPose.rot, "align, not frost");
+  assert.ok(alignPose.rot !== hitchPose.rot, "align, not hitch");
+  assert.ok(alignPose.rot !== stiltPose.rot, "align, not stilt");
+  const hold = P.alignHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot - 1.95) < 0.2, "it holds the sit on the ruler line");
+  assert.ok(Math.abs(hold.x - 0.89) < 0.05, "it stays on the ruler line");
+  assert.ok(hold.lift > 0, "sit the north of the bead, not a bury sink");
+  const off0 = P.alignOffPath(0, { x: align.x, lift: align.lift + 0.68, rot: 1.95 }, { x: align.x + 50, lift: 0 });
+  const offMid = P.alignOffPath(0.5, { x: align.x, lift: align.lift + 0.68, rot: 1.95 }, { x: align.x + 50, lift: 0 });
+  const off1 = P.alignOffPath(1, { x: align.x, lift: align.lift + 0.68, rot: 1.95 }, { x: align.x + 50, lift: 0 });
+  assert.ok(Math.abs(off0.x - align.x) < 2);
+  assert.ok(Math.abs(offMid.x - align.x) > 8, "a walk leave off the ruler line");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "frost");
+    assert.notEqual(play.phase, "hitch");
+    assert.notEqual(play.phase, "stilt");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "align") {
+      assert.ok(play.lift !== undefined, "it aligns on the sash parting bead");
+    }
+  }
+  assert.ok(seen.has("align-on"));
+  assert.ok(seen.has("align"));
+  assert.ok(seen.has("align-hold"));
+  assert.ok(seen.has("align-off"));
+  assert.ok(seen.has("approach") || seen.has("walk") || seen.has("land"));
+  assert.equal(windowIds.size, 1, "one window; bounds-only");
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Beacon's ruler-line align; sleep, card, and hide abort; Beacon never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "magneton", WORK, P.SPRITE);
+  assert.ok(target);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "align"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "align");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "align");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40, "refit follows the moved ruler line");
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "align-off");
+  assert.equal(play.abort, true);
+});
+'''
+
+def pin_generic(text, label):
+    old = 'playFor("magneton"), "sill"'
+    new = 'playFor("umbral"), "sill"'
+    n = text.count(old)
+    if n < 1:
+        raise SystemExit("%s: no magneton sill pins" % label)
+    text = text.replace(old, new)
+    print(label, "sill pins", n)
+    old_pick = 'pickTarget([WIN], 80, "magneton"'
+    new_pick = 'pickTarget([WIN], 80, "umbral"'
+    n2 = text.count(old_pick)
+    if n2:
+        text = text.replace(old_pick, new_pick)
+        print(label, "other-guests picks", n2)
+    return text
+
+def append_tests(path):
+    text = path.read_text(encoding="utf-8")
+    text = pin_generic(text, path.name)
+    if 'test("Beacon leftover aligns a sash parting bead as a ruler line' in text:
+        print(path.name, "beacon tests already")
+        return
+    text = text.rstrip() + "\n" + TEST_BLOCK
+    if not text.endswith("\n"):
+        text += "\n"
+    path.write_text(text, encoding="utf-8", newline="\n")
+    print(path.name, "tests appended")
+
+cjs = HERE / "desktop" / "renderer" / "window-play.test.cjs"
+mjs = HERE / "web" / "scripts" / "window-play.test.mjs"
+append_tests(cjs)
+append_tests(mjs)
+
+house = HERE / "desktop" / "renderer" / "leftover-house.test.cjs"
+ht = house.read_text(encoding="utf-8")
+ht = once(
+    ht,
+    'test("Brine leftover frosts a window stool as a salt dish; seventh leftover of the far den done;',
+    'test("Beacon leftover aligns a sash parting bead as a ruler line; eighth leftover of the far den done; Brine leftover still frosts a window stool as a salt dish; seventh leftover of the far den done;',
+    "house title start",
+)
+n_next = ht.count("next leftover is Beacon")
+if n_next != 1:
+    raise SystemExit("house next leftover is Beacon: expected 1, got %d" % n_next)
+ht = ht.replace("next leftover is Beacon", "next leftover is Hush")
+ht = pin_generic(ht, "leftover-house")
+beacon_asserts = (
+    '  assert.equal(WP.playFor("magneton"), "align");\n'
+    '  assert.equal(WP.ALIGN, "align");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "field");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "north");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "beacon");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "magneton");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "inspect");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "hitch");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "stilt");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "frost");\n'
+    '  assert.notEqual(WP.playFor("magneton"), "sill");\n'
+    '  assert.equal(WP.playFor("halovore"), "frost");\n'
+    '  assert.equal(WP.playFor("umbral"), "sill");\n'
+)
+halovore_block = '  assert.equal(WP.playFor("halovore"), "frost");\n  assert.equal(WP.FROST, "frost");'
+ht = once(ht, halovore_block, beacon_asserts + halovore_block, "house beacon asserts")
+house.write_text(ht, encoding="utf-8", newline="\n")
+print("leftover-house updated")

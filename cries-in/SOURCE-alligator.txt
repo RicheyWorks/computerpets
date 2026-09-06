@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Alligatorbellow1.ogg
+Author: United States Fish and Wildlife Service (FWS sound archive; Commons upload by Borisblue)
+License: Public domain (PD-USGov-FWS)
+URL: https://commons.wikimedia.org/wiki/File:Alligatorbellow1.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/1/1a/Alligatorbellow1.ogg
+Notes: American alligator bellowing. House cut ~3.5s from ~14s mark, mono 44.1kHz. Low rumble — not a movie roar.
+House path: build our own from field tape — not Grok Imagine

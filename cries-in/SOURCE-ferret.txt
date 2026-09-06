@@ -1,0 +1,7 @@
+Source: Freesound sound 155115 "Ferret" by J.Zazvurek
+Author: J.Zazvurek
+License: Creative Commons Attribution 4.0 (CC BY 4.0)
+URL: https://freesound.org/people/J.Zazvurek/sounds/155115/
+Direct: https://cdn.freesound.org/previews/155/155115_199526-hq.mp3
+Notes: Cell recording of a playing ferret (dook / happy play). House cut first ~4s mono 44.1kHz — soft cluck/dook, no bark, no words, no music.
+House path: build our own from field tape — not Grok Imagine

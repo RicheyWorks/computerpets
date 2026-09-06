@@ -1,0 +1,1114 @@
+import { useEffect, useRef } from "react";
+import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pets/red-panda";
+import type { SpritePack } from "@/lib/pets/living";
+import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
+import {
+  beginTrick,
+  canStart as trickCanStart,
+  happyShouldAbort,
+  nextTrickWait,
+  pickTrick,
+  startThankYou,
+  shouldAbort as trickShouldAbort,
+  sleepHoldFrame,
+  stepHappy,
+  stepTrick,
+  type RuiHappy,
+  type RuiHappyKind,
+  type RuiTrick,
+  type RuiTrickKind,
+} from "@/lib/pets/rui-tricks";
+import {
+  actPose,
+  afterSettleWait,
+  nextActWait,
+  pickAct,
+  tongueFlick,
+  type ActMotion,
+} from "@/lib/pets/ethogram";
+import { dayPart } from "@/lib/pets/hours";
+import { traitFor } from "@/lib/pets/traits";
+import { afterPlace, arriveFinish, pointerUp, walkLand } from "@/lib/pets/arrive";
+import { carePointer } from "@/lib/pets/mac-desk";
+import { HOLD_MS, isPhone, isTablet, readSit, tabletLift } from "@/lib/pets/tablet-desk";
+import { followHover, tapPxFor } from "@/lib/pets/phone-desk";
+import {
+  beginPlay,
+  canStart,
+  nextPlayWait,
+  pickTarget,
+  playFor,
+  shouldAbort,
+  stepPlay,
+  type WindowPlay,
+} from "@/lib/pets/window-play";
+import type { DeskWindow } from "@/lib/pets/windows";
+import {
+  BREATHE_IDLE,
+  BREATHE_SLEEP,
+  HIGH_HOP,
+  LAND_DECAY,
+  PERCH_STEP_PX,
+  POSE_HOLD_S,
+  SETTLE_S,
+  STEP_S,
+  STEP_S_QUICK,
+  SWAY_PX,
+  WALK_HOP_PX,
+  enterSit,
+  enterSpawn,
+  hideTuck,
+  isCrawlKey,
+  isHighWalk,
+  isLowWalk,
+  overshootPx,
+  settleOffset,
+  turnHoldS,
+  walkSpeed,
+  wanderPauseS,
+} from "@/lib/pets/gait";
+
+export type PetCommand = PetAnim | "wander" | "leave" | "enter" | "seek" | "none";
+
+type Gait = {
+  walk: number;
+  hop: number;
+  scale: number;
+  perch?: boolean;
+  aquatic?: boolean;
+};
+
+type LivingPetProps = {
+  command: PetCommand;
+  orderId: number;
+  speech: string | null;
+  sprites?: SpritePack;
+  fps?: Record<PetAnim, number>;
+  once?: ReadonlySet<PetAnim>;
+  gait?: Gait;
+  kind?: string;
+  startX?: number;
+  /** Extra rise off the floor. Bees sit on Wax with this. */
+  lift?: number;
+  hidden?: boolean;
+  /** Rest or night put them down. Wander must not stand them back up. */
+  asleep?: boolean;
+  unwell?: boolean;
+  dull?: boolean;
+  stage?: "hatchling" | "grown" | "elder";
+  seekX?: number;
+  onArrived?: () => void;
+  onTap?: () => void;
+  /** A long-press tends. A tablet has no right-click. A phone has no right-click. */
+  onTend?: () => void;
+  /** Overlay: real window rects. /demo: a drawn plate. */
+  windows?: DeskWindow[];
+  /** House loop or radio is on. Rui may dance. */
+  musicOn?: boolean;
+  /** Expanded keeper card. The host stands still so verbs stay hittable. */
+  cardOpen?: boolean;
+  onPose?: (x: number, facing: 1 | -1) => void;
+  /** Rui's closed-eye lie hold (not the stretch / backflip). */
+  onLieHold?: (on: boolean) => void;
+};
+
+type Dust = { x: number; y: number; vx: number; vy: number; life: number; size: number };
+
+type Sim = {
+  x: number;
+  facing: 1 | -1;
+  anim: PetAnim;
+  frame: number;
+  acc: number;
+  target: number | null;
+  hop: number;
+  land: number;
+  walkAge: number;
+  dragging: boolean;
+  dragDx: number;
+  pointerStart: { x: number; y: number } | null;
+  cursorX: number | null;
+  dust: Dust[];
+  stepAcc: number;
+  turnHold: number;
+  pendingFacing: 1 | -1 | null;
+  waypoints: number[];
+  pause: number;
+  settle: number;
+  settleDir: 1 | -1;
+  overshoot: number;
+  poseHold: number;
+  pendingPose: PetAnim | null;
+  shift: number;
+  shiftAge: number;
+  arrivedPending: boolean;
+  leaving: boolean;
+  act: string | null;
+  actMotion: ActMotion | null;
+  actT: number;
+  actHold: number;
+  actWait: number;
+  actWalk: boolean;
+  play: WindowPlay | null;
+  playWait: number;
+  trick: RuiTrick | null;
+  trickWait: number;
+  lastTrick: RuiTrickKind | null;
+  happy: RuiHappy | null;
+  lastHappy: RuiHappyKind | null;
+};
+
+const WALK_SPEED = 98;
+const PAD = 20;
+const SPRITE = 176;
+const BUBBLE_W = 220;
+
+function clamp(n: number, a: number, b: number) {
+  return Math.max(a, Math.min(b, n));
+}
+
+function floorY(h: number) {
+  return h * 0.27;
+}
+
+export function LivingPet({
+  command,
+  orderId,
+  speech,
+  sprites = RED_PANDA_SPRITES,
+  fps = ANIM_FPS,
+  once = ONCE_ANIMS,
+  gait,
+  kind,
+  startX = 120,
+  lift = 0,
+  hidden = false,
+  asleep = false,
+  unwell = false,
+  dull = false,
+  stage = "grown",
+  seekX,
+  onArrived,
+  onTap,
+  onTend,
+  windows = [],
+  musicOn = false,
+  cardOpen = false,
+  onPose,
+  onLieHold,
+}: LivingPetProps) {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const hitRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const bubbleRef = useRef<HTMLDivElement>(null);
+  const shadowRef = useRef<HTMLDivElement>(null);
+  const dustRef = useRef<HTMLDivElement>(null);
+  const tongueRef = useRef<SVGSVGElement>(null);
+  const sim = useRef<Sim>({
+    x: startX,
+    facing: 1,
+    anim: "idle",
+    frame: 0,
+    acc: 0,
+    target: null,
+    hop: 0,
+    land: 0,
+    walkAge: 0,
+    dragging: false,
+    dragDx: 0,
+    pointerStart: null,
+    cursorX: null,
+    dust: [],
+    stepAcc: 0,
+    turnHold: 0,
+    pendingFacing: null,
+    waypoints: [],
+    pause: 0,
+    settle: 0,
+    settleDir: 1,
+    overshoot: 0,
+    poseHold: 0,
+    pendingPose: null,
+    shift: 0,
+    shiftAge: 0,
+    arrivedPending: false,
+    leaving: false,
+    act: null,
+    actMotion: null,
+    actT: 0,
+    actHold: 0,
+    actWait: 10 + Math.random() * 8,
+    actWalk: false,
+    play: null,
+    playWait: 6 + Math.random() * 5,
+    trick: null,
+    trickWait: 3 + Math.random() * 3,
+    lastTrick: null,
+    happy: null,
+    lastHappy: null,
+  });
+  const cmdRef = useRef(command);
+  const orderRef = useRef(orderId);
+  const lastOrder = useRef(-1);
+  const arrivedRef = useRef(onArrived);
+  const tapRef = useRef(onTap);
+  const tendRef = useRef(onTend);
+  const spritesRef = useRef(sprites);
+  const fpsRef = useRef(fps);
+  const onceRef = useRef(once);
+  const gaitRef = useRef(gait);
+  const stageRef = useRef(stage);
+  const kindRef = useRef(kind);
+  const liftRef = useRef(lift);
+  const asleepRef = useRef(asleep);
+  const hiddenRef = useRef(hidden);
+  const windowsRef = useRef(windows);
+  const musicRef = useRef(musicOn);
+  const cardRef = useRef(cardOpen);
+  const poseRef = useRef(onPose);
+  const lieHoldRef = useRef(onLieHold);
+  asleepRef.current = asleep;
+  hiddenRef.current = hidden;
+  cardRef.current = cardOpen;
+  windowsRef.current = windows;
+  musicRef.current = musicOn;
+  poseRef.current = onPose;
+  lieHoldRef.current = onLieHold;
+  gaitRef.current = gait;
+  stageRef.current = stage;
+  kindRef.current = kind;
+  liftRef.current = lift;
+  const seekRef = useRef(seekX);
+  seekRef.current = seekX;
+  spritesRef.current = sprites;
+  fpsRef.current = fps;
+  onceRef.current = once;
+  cmdRef.current = command;
+  orderRef.current = orderId;
+  arrivedRef.current = onArrived;
+  tapRef.current = onTap;
+  tendRef.current = onTend;
+
+  useEffect(() => {
+    const root = wrapRef.current;
+    if (!root) return;
+    const s = sim.current;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let last = performance.now();
+    let raf = 0;
+
+    const stageBox = () => root.parentElement?.getBoundingClientRect();
+
+    const profile = () => {
+      const g = gaitRef.current;
+      const crawl = isCrawlKey(kindRef.current);
+      return {
+        walk: g?.walk ?? WALK_SPEED,
+        hop: g?.hop ?? 26,
+        perch: !!g?.perch,
+        aquatic: !!g?.aquatic,
+        crawl,
+        low: isLowWalk(g?.hop ?? 26, g?.walk ?? WALK_SPEED),
+        high: isHighWalk(g?.walk ?? WALK_SPEED),
+      };
+    };
+
+    const puff = (x: number, y: number, n = 4) => {
+      for (let i = 0; i < n; i++) {
+        s.dust.push({
+          x: x + 60 + (Math.random() - 0.5) * 36,
+          y: y + 8,
+          vx: (Math.random() - 0.5) * 36,
+          vy: -12 - Math.random() * 22,
+          life: 0.45 + Math.random() * 0.25,
+          size: 3 + Math.random() * 4,
+        });
+      }
+      if (s.dust.length > 18) s.dust.splice(0, s.dust.length - 18);
+    };
+
+    const aimAt = (next: number) => {
+      const p = profile();
+      s.target = next;
+      s.walkAge = 0;
+      s.pause = 0;
+      s.settle = 0;
+      s.arrivedPending = false;
+      const desired: 1 | -1 = next >= s.x ? 1 : -1;
+      if (!reduced && desired !== s.facing) {
+        s.turnHold = turnHoldS({ crawl: p.crawl, hop: p.hop, walk: p.walk });
+        s.pendingFacing = desired;
+        s.anim = "idle";
+        s.frame = 0;
+        return;
+      }
+      s.turnHold = 0;
+      s.pendingFacing = null;
+      s.facing = desired;
+      s.anim = "walk";
+      s.frame = 0;
+    };
+
+    const finishArrive = () => {
+      if (arriveFinish(s.leaving) === "now") {
+        s.x = s.target ?? s.x;
+        s.target = null;
+        s.anim = "idle";
+        s.frame = 0;
+        arrivedRef.current?.();
+        return;
+      }
+      const p = profile();
+      const dir: 1 | -1 = s.target != null && s.target >= s.x ? 1 : s.facing;
+      s.x = s.target ?? s.x;
+      s.target = null;
+      s.settle = 1;
+      s.settleDir = dir;
+      s.overshoot = overshootPx({ crawl: p.crawl, hop: p.hop, walk: p.walk });
+      s.land = 1;
+      s.anim = "idle";
+      s.frame = 0;
+      s.arrivedPending = true;
+      s.actWait = afterSettleWait(traitFor(kindRef.current ?? "red_panda").wander);
+    };
+
+    const clearAct = () => {
+      s.act = null;
+      s.actMotion = null;
+      s.actT = 0;
+      s.actHold = 0;
+      s.actWalk = false;
+    };
+
+    const startAct = (act: NonNullable<ReturnType<typeof pickAct>>) => {
+      s.act = act.name;
+      s.actMotion = act.motion;
+      s.actT = 0;
+      s.actHold = act.hold;
+      s.target = null;
+      s.waypoints = [];
+      if (act.anim) {
+        s.anim = act.anim;
+        s.frame = 0;
+        s.acc = 0;
+      }
+      if (act.motion === "hop") {
+        s.hop = 1;
+        s.anim = "play";
+        s.frame = 0;
+        playDeskSound("hop");
+      }
+      if (act.anim === "talk") playDeskSound("chirp");
+      if (act.anim === "eat") playDeskSound("munch");
+      if (act.motion === "dart" || act.motion === "circle") {
+        const box = stageBox();
+        const max = Math.max(PAD, (box?.width ?? 400) - SPRITE - PAD);
+        const dist = act.motion === "circle" ? 36 : 44 + Math.random() * 28;
+        s.actWalk = true;
+        aimAt(clamp(s.x + s.facing * dist, PAD, max));
+      }
+    };
+
+    const applyCommand = (cmd: PetCommand, order: number) => {
+      if (s.dragging) return;
+      if (s.happy && (cmd === "wander" || cmd === "idle")) {
+        lastOrder.current = order;
+        return;
+      }
+      if (s.play && (cmd === "wander" || cmd === "idle")) {
+        lastOrder.current = order;
+        return;
+      }
+      if ((cmd === "wander" || cmd === "idle") && (s.anim === "eat" || cmdRef.current === "eat" || cmdRef.current === "seek")) {
+        lastOrder.current = order;
+        return;
+      }
+      if (s.play && shouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
+        s.play = stepPlay(s.play, 0, { x: s.x, lift: s.play.lift }, windowsRef.current, { width: 800, height: 500, floorLift: 0 }, SPRITE, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd });
+      }
+      if (s.trick && trickShouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play })) {
+        s.trick = stepTrick(s.trick, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play });
+      }
+      if (s.happy && happyShouldAbort({ asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
+        s.happy = stepHappy(s.happy, 0, { asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd });
+      }
+      if (asleepRef.current && cmd !== "talk" && cmd !== "play" && cmd !== "eat" && cmd !== "seek" && cmd !== "leave" && cmd !== "enter") {
+        s.anim = "sleep";
+        s.target = null;
+        s.waypoints = [];
+        s.pendingPose = null;
+        s.poseHold = 0;
+        s.pause = 0;
+        const hold = sleepHoldFrame(kindRef.current, spritesRef.current.sleep.length);
+        if (hold != null) s.frame = hold;
+        return;
+      }
+      if (cardRef.current && (cmd === "wander" || cmd === "idle")) {
+        s.anim = asleepRef.current ? "sleep" : "idle";
+        s.target = null;
+        s.waypoints = [];
+        s.pause = 0;
+        lastOrder.current = order;
+        return;
+      }
+      if (order === lastOrder.current || cmd === "none") return;
+      if (s.act && (cmd === "wander" || cmd === "idle")) {
+        lastOrder.current = order;
+        return;
+      }
+      lastOrder.current = order;
+      clearAct();
+      s.poseHold = 0;
+      s.pendingPose = null;
+      if (cmd === "wander") {
+        const box = stageBox();
+        const max = (box?.width ?? 400) - SPRITE - PAD;
+        const span = Math.max(48, max - PAD);
+        const p = profile();
+        let next = PAD + Math.random() * span;
+        if (Math.abs(next - s.x) < 50) next = clamp(s.x + (s.facing * 90 || 90), PAD, max);
+        s.leaving = false;
+        s.waypoints = [];
+        const twoBeat = Math.random() < (p.low || p.crawl ? 0.7 : 0.42);
+        if (twoBeat) {
+          let second = PAD + Math.random() * span;
+          if (Math.abs(second - next) < 40) second = clamp(next + s.facing * 80, PAD, max);
+          s.waypoints = [second];
+        }
+        aimAt(next);
+        return;
+      }
+      if (cmd === "seek") {
+        const box = stageBox();
+        const width = box?.width ?? 400;
+        const max = width - SPRITE - PAD;
+        const px = ((seekRef.current ?? 50) / 100) * width - SPRITE * 0.45;
+        s.leaving = false;
+        s.waypoints = [];
+        aimAt(clamp(px, PAD, Math.max(PAD, max)));
+        return;
+      }
+      if (cmd === "leave") {
+        const box = stageBox();
+        const width = box?.width ?? 800;
+        s.leaving = true;
+        s.waypoints = [];
+        aimAt(hideTuck(s.x, width, SPRITE, PAD));
+        return;
+      }
+      if (cmd === "enter") {
+        const box = stageBox();
+        const width = box?.width ?? 400;
+        s.leaving = false;
+        s.waypoints = [];
+        s.x = enterSpawn(width, SPRITE, PAD);
+        aimAt(enterSit(width, SPRITE, PAD));
+        return;
+      }
+      if (cmd === "play") {
+        s.hop = 1;
+        s.anim = "play";
+        s.target = null;
+        s.waypoints = [];
+        s.turnHold = 0;
+        s.pendingFacing = null;
+        s.frame = 0;
+        s.acc = 0;
+        playDeskSound("hop");
+        return;
+      }
+      if (cmd === "eat" || cmd === "talk" || cmd === "idle" || cmd === "sit" || cmd === "sleep") {
+        s.target = null;
+        s.waypoints = [];
+        s.turnHold = 0;
+        s.pendingFacing = null;
+        s.frame = 0;
+        s.acc = 0;
+        if (cmd === "sleep") {
+          s.anim = "sleep";
+          const hold = sleepHoldFrame(kindRef.current, spritesRef.current.sleep.length);
+          if (hold != null) s.frame = hold;
+        } else if (!reduced && cmd === "sit") {
+          s.poseHold = POSE_HOLD_S;
+          s.pendingPose = cmd;
+          s.anim = "idle";
+        } else {
+          s.anim = cmd;
+        }
+        if (cmd === "eat") playDeskSound("munch");
+        if (cmd === "talk") playDeskSound("chirp");
+      }
+    };
+
+    const tick = (now: number) => {
+      try {
+      const dt = Math.min(0.1, (now - last) / 1000);
+      last = now;
+      const box = stageBox();
+      const width = box?.width ?? 800;
+      const height = box?.height ?? 500;
+      const maxX = Math.max(PAD, width - SPRITE - PAD);
+      const p = profile();
+
+      if (s.hop > 0) {
+        const prev = s.hop;
+        s.hop = Math.max(0, s.hop - dt * 2.15);
+        if (prev > 0 && s.hop === 0) {
+          s.land = 1;
+          puff(s.x, 0, 5);
+        }
+      }
+      if (s.land > 0) s.land = Math.max(0, s.land - dt * LAND_DECAY);
+      if (s.settle > 0 && !s.dragging) {
+        s.settle = Math.max(0, s.settle - dt / SETTLE_S);
+        if (s.settle === 0 && s.arrivedPending) {
+          s.arrivedPending = false;
+          arrivedRef.current?.();
+        }
+      }
+
+      if (!s.dragging) {
+        applyCommand(cmdRef.current, orderRef.current);
+        const work = { width, height, floorLift: floorY(height) };
+        const playFlags = {
+          asleep: asleepRef.current,
+          hidden: hiddenRef.current,
+          leaving: s.leaving,
+          cmd: cmdRef.current,
+          card: false,
+        };
+        if (s.happy) {
+          s.happy = stepHappy(s.happy, dt, {
+            asleep: false,
+            hidden: hiddenRef.current,
+            leaving: s.leaving,
+            cmd: cmdRef.current,
+          });
+          s.x = s.happy.x;
+          if (!asleepRef.current) s.anim = s.happy.anim;
+          if (s.happy.phase === "done") {
+            s.lastHappy = s.happy.kind;
+            s.happy = null;
+            s.land = 1;
+            s.anim = asleepRef.current ? "sleep" : "idle";
+          }
+        } else if (s.play) {
+          s.play = stepPlay(s.play, dt, { x: s.x, lift: s.play.lift }, windowsRef.current, work, SPRITE, playFlags);
+          s.x = s.play.x;
+          s.facing = s.play.facing;
+          if (!asleepRef.current) s.anim = s.play.anim;
+          if (s.play.phase === "done") {
+            s.play = null;
+            s.land = 1;
+            s.anim = asleepRef.current ? "sleep" : "idle";
+            s.playWait = nextPlayWait(true);
+            s.trickWait = nextTrickWait(true);
+          }
+        } else if (s.trick) {
+          s.trick = stepTrick(s.trick, dt, {
+            asleep: asleepRef.current,
+            hidden: hiddenRef.current,
+            leaving: s.leaving,
+            cmd: cmdRef.current,
+            windowPlay: false,
+            card: false,
+          });
+          s.x = s.trick.x;
+          if (!asleepRef.current) s.anim = s.trick.anim;
+          if (s.trick.phase === "done") {
+            s.lastTrick = s.trick.kind;
+            s.trick = null;
+            s.land = 1;
+            s.anim = asleepRef.current ? "sleep" : "idle";
+            s.trickWait = nextTrickWait(true, undefined, s.lastTrick);
+          }
+        } else if (
+          !reduced &&
+          !s.act &&
+          !s.happy &&
+          !s.leaving &&
+          canStart(playFlags) &&
+          playFor(kindRef.current) !== "ignore" &&
+          windowsRef.current.length
+        ) {
+          s.playWait -= dt;
+          if (s.playWait <= 0) {
+            const target = pickTarget(windowsRef.current, s.x, kindRef.current ?? "red_panda", work, SPRITE);
+            s.play = beginPlay(target, s.x);
+            if (s.play) {
+              clearAct();
+              s.target = null;
+              s.waypoints = [];
+            }
+            s.playWait = nextPlayWait(false);
+          }
+        } else if (
+          kindRef.current === "red_panda" &&
+          !reduced &&
+          !s.act &&
+          !s.happy &&
+          !s.leaving &&
+          trickCanStart({
+            asleep: asleepRef.current,
+            hidden: hiddenRef.current,
+            leaving: s.leaving,
+            cmd: cmdRef.current,
+            windowPlay: !!s.play,
+            card: false,
+          })
+        ) {
+          s.trickWait -= dt;
+          const musicWantsDance = musicRef.current && !s.trick && !s.happy;
+          if (s.trickWait <= 0 || musicWantsDance) {
+            s.trick = beginTrick(pickTrick(undefined, musicRef.current, s.lastTrick), s.x, s.facing);
+            if (s.trick) {
+              clearAct();
+              s.target = null;
+              s.waypoints = [];
+            }
+            s.trickWait = nextTrickWait(false);
+          }
+        }
+
+        if (s.poseHold > 0) {
+          s.poseHold = Math.max(0, s.poseHold - dt);
+          if (s.poseHold === 0 && s.pendingPose) {
+            s.anim = s.pendingPose;
+            s.pendingPose = null;
+            s.frame = 0;
+            s.acc = 0;
+          }
+        }
+
+        if (s.play || s.trick || s.happy) {
+          /* window play or a ground trick owns the walk */
+        } else if (s.turnHold > 0 && !reduced) {
+          s.turnHold = Math.max(0, s.turnHold - dt);
+          if (s.turnHold === 0 && s.pendingFacing) {
+            s.facing = s.pendingFacing;
+            s.pendingFacing = null;
+            s.anim = "walk";
+            s.frame = 0;
+            s.walkAge = 0;
+          }
+        } else if (s.pause > 0 && !reduced) {
+          s.pause = Math.max(0, s.pause - dt);
+          if (asleepRef.current) s.anim = "sleep";
+          else s.anim = "idle";
+          if (s.pause === 0 && s.waypoints.length && !asleepRef.current) {
+            const next = s.waypoints.shift()!;
+            aimAt(next);
+          }
+        } else if (s.anim === "walk" && s.target != null && !reduced && s.turnHold <= 0) {
+          const remaining = Math.abs(s.target - s.x);
+          const dir: 1 | -1 = s.target >= s.x ? 1 : -1;
+          s.walkAge += dt;
+          const stageMul = stageRef.current === "hatchling" ? 0.88 : stageRef.current === "elder" ? 0.78 : 1;
+          s.x += dir * walkSpeed(remaining, s.walkAge, p.walk * stageMul) * dt;
+          s.stepAcc += dt;
+          const stepEvery = p.high ? STEP_S_QUICK : p.crawl ? 0.32 : STEP_S;
+          if (s.stepAcc > stepEvery) {
+            s.stepAcc = 0;
+            if (!s.play && !s.trick && !asleepRef.current) playStep(kindRef.current ?? "red_panda");
+            if (Math.random() < 0.45) puff(s.x, 4, 2);
+          }
+          if ((dir === 1 && s.x >= s.target) || (dir === -1 && s.x <= s.target)) {
+            s.x = s.target;
+            const land = walkLand(s.actWalk, s.waypoints.length);
+            if (land === "act") {
+              s.target = null;
+              s.actWalk = false;
+              s.anim = s.actMotion === "circle" ? "sit" : "idle";
+              s.frame = 0;
+              s.land = 0.4;
+            } else if (land === "pause") {
+              s.target = null;
+              s.pause = wanderPauseS();
+              s.anim = "idle";
+              s.frame = 0;
+            } else {
+              finishArrive();
+            }
+          }
+        } else if (
+          !s.act &&
+          (s.anim === "idle" || s.anim === "sit") &&
+          s.cursorX != null &&
+          followHover(readSit(window)) &&
+          Math.abs(s.cursorX - (s.x + SPRITE / 2)) > 36
+        ) {
+          s.facing = s.cursorX >= s.x + SPRITE / 2 ? 1 : -1;
+        }
+        s.x = s.leaving || s.play || s.trick || s.happy ? s.x : clamp(s.x, PAD, maxX);
+
+        if (s.play || s.trick || s.happy) {
+          /* window play or a ground trick owns the pose */
+        } else if (s.act) {
+          s.actT += dt;
+          if (s.actMotion === "stretch" && s.actHold > 0 && s.actT / s.actHold > 0.55 && s.anim === "sit") {
+            s.anim = "idle";
+          }
+          if (s.actT >= s.actHold && !s.actWalk) {
+            clearAct();
+            s.anim = "idle";
+            s.frame = 0;
+          }
+        } else if (
+          !reduced &&
+          !s.play &&
+          !s.trick &&
+          !s.leaving &&
+          !asleepRef.current &&
+          s.target == null &&
+          s.turnHold <= 0 &&
+          s.pause <= 0 &&
+          s.settle <= 0 &&
+          (s.anim === "idle" || s.anim === "sit")
+        ) {
+          s.actWait -= dt;
+          if (s.actWait <= 0) {
+            const next = pickAct(kindRef.current);
+            const trait = traitFor(kindRef.current ?? "red_panda");
+            if (next) startAct(next);
+            s.actWait = nextActWait(trait.wander, trait.nocturnal, dayPart() === "night");
+          }
+        }
+
+        if (
+          (s.anim === "idle" || s.anim === "sit") &&
+          s.shiftAge <= 0 &&
+          !reduced &&
+          s.actMotion !== "freeze" &&
+          Math.random() < dt * 0.45
+        ) {
+          s.shift = (1 + Math.random() * 2) * (Math.random() < 0.5 ? 1 : -1);
+          s.shiftAge = 0.85;
+        }
+        if (s.shiftAge > 0) s.shiftAge = Math.max(0, s.shiftAge - dt);
+
+        const fpsNow = reduced ? 0 : fpsRef.current[s.anim];
+        if (fpsNow > 0) {
+          s.acc += dt;
+          const step = 1 / fpsNow;
+          while (s.acc >= step) {
+            s.acc -= step;
+            const frames = spritesRef.current[s.anim];
+            const len = frames.length;
+            if (s.anim === "sleep") {
+              const hold = sleepHoldFrame(kindRef.current, len);
+              s.frame = hold == null ? (s.frame + 1) % len : hold;
+            } else if (s.anim === "sit") {
+              s.frame = Math.min(len - 1, s.frame + 1);
+            } else if (onceRef.current.has(s.anim)) {
+              if (s.frame + 1 >= len) {
+                const wasEat = s.anim === "eat";
+                s.anim = "idle";
+                s.frame = 0;
+                if (wasEat) {
+                  const thanks = startThankYou(kindRef.current, s.lastHappy, s.x, s.facing, {
+                    asleep: false,
+                    hidden: hiddenRef.current,
+                    leaving: s.leaving,
+                    cmd: "idle",
+                  });
+                  if (thanks) {
+                    s.play = null;
+                    s.trick = null;
+                    s.happy = thanks.happy;
+                    s.lastHappy = thanks.kind;
+                  }
+                }
+                if (!s.act) arrivedRef.current?.();
+              } else {
+                s.frame += 1;
+                if (s.anim === "eat" && s.frame === 1) playDeskSound("munch");
+              }
+            } else {
+              s.frame = (s.frame + 1) % len;
+            }
+          }
+        }
+      }
+
+      for (const d of s.dust) {
+        d.life -= dt;
+        d.x += d.vx * dt;
+        d.y += d.vy * dt;
+        d.vy += 28 * dt;
+      }
+      s.dust = s.dust.filter((d) => d.life > 0);
+
+      const frames = spritesRef.current[s.anim];
+      const src = frames[Math.min(s.frame, frames.length - 1)]!;
+      const gaitNow = gaitRef.current;
+      const hopPx = s.hop > 0 ? Math.sin(s.hop * Math.PI) * (gaitNow?.hop ?? 26) : 0;
+      const walkBob =
+        s.anim === "walk" && !reduced
+          ? p.crawl
+            ? 0
+            : p.perch
+              ? Math.abs(Math.sin(s.walkAge * 8)) * PERCH_STEP_PX
+              : (gaitNow?.hop ?? 0) > HIGH_HOP
+                ? Math.abs(Math.sin(s.walkAge * 10)) * WALK_HOP_PX
+                : 0
+          : 0;
+      const water = gaitNow?.aquatic ? Math.sin(now * 0.004) * 6 : 0;
+      const perch = gaitNow?.perch ? 18 : 0;
+      const stageNow = stageRef.current;
+      const ageScale = stageNow === "hatchling" ? 0.82 : stageNow === "elder" ? 1.08 : 1;
+      const scale = (gaitNow?.scale ?? 1) * ageScale;
+      const climbLift = s.play ? s.play.lift : s.happy ? s.happy.lift : s.trick ? s.trick.lift : 0;
+      const climbRot = s.play ? s.play.rot : s.happy ? s.happy.rot : s.trick ? s.trick.rot : 0;
+      const y = floorY(height) + hopPx + walkBob + water + perch + liftRef.current + climbLift;
+      const breathe =
+        s.anim === "idle" || s.anim === "sit" || s.anim === "sleep"
+          ? 1 + Math.sin(now * (s.anim === "sleep" ? 0.0032 : 0.0046)) * (s.anim === "sleep" ? BREATHE_SLEEP : BREATHE_IDLE)
+          : 1;
+      const pose = !reduced && s.act ? actPose(s.actMotion, s.actT, s.actHold) : { dx: 0, dy: 0, rot: 0, stretch: 1, squat: 1 };
+      const stretch =
+        s.hop > 0
+          ? 1 + Math.sin(s.hop * Math.PI) * 0.09
+          : s.land > 0
+            ? 1 - Math.sin(s.land * Math.PI) * 0.08
+            : s.act
+              ? breathe * pose.stretch
+              : breathe;
+      const squat = s.act && pose.squat !== 1 ? pose.squat : 2 - stretch;
+      const sway = s.anim === "walk" && p.crawl && !reduced ? Math.sin(s.walkAge * 5.5) * SWAY_PX : 0;
+      const shiftX = s.shiftAge > 0 && !reduced ? s.shift * Math.sin((1 - s.shiftAge / 0.85) * Math.PI) : 0;
+      const settleX = s.settle > 0 && !reduced ? settleOffset(s.settle, s.settleDir, s.overshoot) : 0;
+      const drawX = s.x + sway + shiftX + settleX + pose.dx;
+      const drawY = y + pose.dy;
+      poseRef.current?.(s.x, s.facing);
+      lieHoldRef.current?.(!!(s.trick && s.trick.kind === "lie" && s.trick.phase === "lie"));
+
+      const walkXform = `translate3d(${drawX}px, ${-drawY}px, 0) rotate(${pose.rot + climbRot}deg) scale(${s.facing * squat * scale}, ${stretch * scale})`;
+      if (hitRef.current) {
+        hitRef.current.style.transform = walkXform;
+        hitRef.current.style.transformOrigin =
+          s.play && (s.play.phase === "dive" || s.play.phase === "leap" || s.play.phase === "ridge-leap" || s.play.phase === "ridge-off" || s.play.phase === "coil-on" || s.play.phase === "coil-off" || s.play.phase === "path-on" || s.play.phase === "path-off" || s.play.phase === "field-on" || s.play.phase === "field-off" || s.play.phase === "crackle-on" || s.play.phase === "crackle-hop" || s.play.phase === "crackle-off" || s.play.phase === "charge-on" || s.play.phase === "charge-bolt" || s.play.phase === "charge-off" || s.play.phase === "orbit-on" || s.play.phase === "orbit-off" || s.play.phase === "click-on" || s.play.phase === "click-hop" || s.play.phase === "click-off" || s.play.phase === "hold-on" || s.play.phase === "hold-off" || s.play.phase === "earth-on" || s.play.phase === "earth-off" || s.play.phase === "ledge-on" || s.play.phase === "ledge-off" || s.play.phase === "circle-on" || s.play.phase === "circle-off")
+            ? "center center"
+            : "center bottom";
+      }
+      if (imgRef.current) {
+        if (imgRef.current.src !== new URL(src, window.location.origin).href) {
+          imgRef.current.src = src;
+        }
+      }
+      if (shadowRef.current) {
+        const shrink = 1 - hopPx / 90;
+        shadowRef.current.style.transform = `translate3d(${drawX + 34}px, ${8}px, 0) scale(${shrink}, ${shrink})`;
+        shadowRef.current.style.opacity = String(0.32 - hopPx / 90);
+      }
+      if (bubbleRef.current) {
+        const bx = clamp(drawX + SPRITE * 0.5 - BUBBLE_W * 0.5, 10, Math.max(10, width - BUBBLE_W - 10));
+        bubbleRef.current.style.transform = `translate3d(${bx}px, ${-drawY - 18}px, 0)`;
+      }
+      if (tongueRef.current) {
+        const flick = p.crawl && s.actMotion === "tongue" && !reduced ? tongueFlick(s.actT, s.actHold) : 0;
+        tongueRef.current.style.opacity = String(flick);
+        tongueRef.current.style.transform = `translate3d(${drawX + SPRITE * 0.5 + s.facing * 36 - 2}px, ${-(drawY + 48)}px, 0) scale(${s.facing}, 1)`;
+      }
+      if (dustRef.current) {
+        const nodes = dustRef.current.children;
+        for (let i = 0; i < nodes.length; i++) {
+          const el = nodes[i] as HTMLElement;
+          const d = s.dust[i];
+          if (!d) {
+            el.style.opacity = "0";
+            continue;
+          }
+          el.style.opacity = String(Math.max(0, d.life * 1.4));
+          el.style.width = `${d.size}px`;
+          el.style.height = `${d.size}px`;
+          el.style.transform = `translate3d(${d.x}px, ${-floorY(height) + d.y}px, 0)`;
+        }
+      }
+
+      raf = requestAnimationFrame(tick);
+      } catch {
+        raf = requestAnimationFrame(tick);
+      }
+    };
+
+    raf = requestAnimationFrame(tick);
+
+    const sitOf = () => readSit(window);
+    let holdTimer = 0;
+    let holdAt = 0;
+    let tended = false;
+    const clearHold = () => {
+      if (holdTimer) window.clearTimeout(holdTimer);
+      holdTimer = 0;
+    };
+    const tendNow = () => {
+      tended = true;
+      s.dragging = false;
+      s.pointerStart = null;
+      clearHold();
+      tendRef.current?.();
+    };
+
+    const onDown = (e: PointerEvent) => {
+      const t = e.target as HTMLElement;
+      if (!t.closest("[data-pet]")) return;
+      if (carePointer(e)) return;
+      const sit = sitOf();
+      s.dragging = true;
+      s.pointerStart = { x: e.clientX, y: e.clientY };
+      s.dragDx = e.clientX - s.x;
+      holdAt = performance.now();
+      tended = false;
+      clearHold();
+      if (isTablet(sit) || isPhone(sit)) {
+        holdTimer = window.setTimeout(() => {
+          if (!s.dragging || !s.pointerStart) return;
+          tendNow();
+        }, HOLD_MS);
+      }
+      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    };
+    const onMove = (e: PointerEvent) => {
+      const box = stageBox();
+      const sit = sitOf();
+      const slop = tapPxFor(navigator.platform, sit);
+      if (followHover(sit) || s.dragging) {
+        s.cursorX = e.clientX - (box?.left ?? 0);
+      }
+      if (!s.dragging || tended) return;
+      if (s.pointerStart && Math.hypot(e.clientX - s.pointerStart.x, e.clientY - s.pointerStart.y) >= slop) {
+        clearHold();
+      }
+      const maxX = Math.max(PAD, (box?.width ?? 800) - SPRITE - PAD);
+      s.x = clamp(e.clientX - s.dragDx, PAD, maxX);
+      if (s.pointerStart && Math.abs(e.clientX - s.pointerStart.x) > slop) {
+        s.facing = e.clientX >= s.pointerStart.x ? 1 : -1;
+      }
+    };
+    const onUp = (e: PointerEvent) => {
+      clearHold();
+      if (tended) {
+        tended = false;
+        return;
+      }
+      if (!s.dragging) return;
+      const start = s.pointerStart;
+      s.dragging = false;
+      s.pointerStart = null;
+      const dx = start ? e.clientX - start.x : 0;
+      const dy = start ? e.clientY - start.y : 0;
+      const sit = sitOf();
+      const slop = tapPxFor(navigator.platform, sit);
+      const heldMs = holdAt ? performance.now() - holdAt : 0;
+      const kind = isTablet(sit) || isPhone(sit) ? tabletLift(heldMs, dx, dy, slop) : pointerUp(dx, dy, slop).kind;
+      if (kind === "tend") {
+        tendRef.current?.();
+        return;
+      }
+      if (kind === "tap") {
+        tapRef.current?.();
+        return;
+      }
+      s.land = 0.55;
+      puff(s.x, 4, 3);
+      s.arrivedPending = false;
+      s.settle = 0;
+      if (afterPlace(s.target != null) === "resume" && s.target != null) {
+        aimAt(s.target);
+      } else {
+        s.anim = "idle";
+      }
+    };
+    const onMenu = (e: Event) => {
+      if ((e.target as HTMLElement)?.closest?.("[data-pet]")) e.preventDefault();
+    };
+
+    root.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    root.addEventListener("contextmenu", onMenu);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      clearHold();
+      root.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      root.removeEventListener("contextmenu", onMenu);
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div
+        ref={shadowRef}
+        className="absolute bottom-0 left-0 h-3.5 w-24 rounded-[100%] bg-bg/55 blur-[4px]"
+        style={{ willChange: "transform" }}
+      />
+      <div ref={dustRef} className="absolute bottom-0 left-0">
+        {Array.from({ length: 12 }, (_, i) => (
+          <span
+            key={i}
+            className="absolute bottom-0 left-0 rounded-full bg-primary/50"
+            style={{ opacity: 0, willChange: "transform, opacity" }}
+          />
+        ))}
+      </div>
+      <div
+        ref={bubbleRef}
+        className="absolute bottom-[214px] left-0 z-10 w-[min(220px,70vw)] pointer-events-none transition-opacity duration-200"
+        style={{ willChange: "transform", opacity: speech ? 1 : 0 }}
+      >
+        <p className="rounded-[var(--radius-md)] border border-border bg-surface/95 px-3 py-2 text-sm leading-snug text-fg shadow-lg">
+          {speech ?? "\u00a0"}
+        </p>
+      </div>
+      <svg
+        ref={tongueRef}
+        className="pointer-events-none absolute bottom-0 left-0 overflow-visible"
+        width="36"
+        height="20"
+        viewBox="0 0 36 20"
+        aria-hidden
+        style={{ opacity: 0, willChange: "transform, opacity", transformOrigin: "2px 10px" }}
+      >
+        <path
+          d="M2 10 L16 10 M16 10 L28 5 M16 10 L28 15"
+          fill="none"
+          stroke="rgba(214,92,108,0.94)"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+      </svg>
+      <div
+        ref={hitRef}
+        data-pet
+        data-pet-hit
+        className="pointer-events-auto absolute bottom-0 left-0 cursor-grab active:cursor-grabbing select-none touch-none"
+        style={{
+          willChange: "transform",
+          transformOrigin: "center bottom",
+          background: "transparent",
+          pointerEvents: "auto",
+        }}
+      >
+        <img
+          ref={imgRef}
+          data-pet-art
+          src={sprites.idle[0]}
+          alt=""
+          draggable={false}
+          className="pointer-events-none block h-44 w-44 object-contain object-bottom"
+          style={{
+            background: "transparent",
+            padding: 0,
+            border: 0,
+            opacity: hidden ? 0.22 : 1,
+            filter: dull ? "saturate(0.42) brightness(0.82) contrast(0.92)" : unwell ? "saturate(0.5) brightness(0.88)" : undefined,
+            transition: "opacity 280ms ease, filter 280ms ease",
+          }}
+        />
+      </div>
+    </div>
+  );
+}

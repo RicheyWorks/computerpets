@@ -1,0 +1,10 @@
+﻿ts=open("web/src/lib/pets/window-play.ts",encoding="utf-8").read()
+print("JUMP const", 'export const JUMP = "jump"' in ts)
+print("jump-on phase", '"jump-on"' in ts)
+print("grassplate", "grassplate" in ts)
+print("vaulted", "vaulted" in ts)
+print("jumpPoint export", "export function jumpPoint" in ts)
+print("playFor grasshopper", 'key === "grasshopper") return JUMP' in ts)
+# check side/leave type unions
+i=ts.find("leafrim")
+print("leafrim context", ts[i-80:i+120].replace("\n"," | "))

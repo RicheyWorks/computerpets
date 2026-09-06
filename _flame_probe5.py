@@ -1,0 +1,11 @@
+﻿from pathlib import Path
+b = Path("web/src/lib/pets/window-play.ts").read_bytes()
+print("bytes CR", b.count(b"\r"), "LF", b.count(b"\n"))
+idx = b.find(b'phase === "cloud-off"')
+print(repr(b[idx:idx+200]))
+idx2 = b.find(b'phase === "teeth-off"')
+print("teeth", repr(b[idx2:idx2+120]))
+jsb = Path("desktop/renderer/window-play.js").read_bytes()
+print("js CR", jsb.count(b"\r"), "LF", jsb.count(b"\n"))
+idx3 = jsb.find(b'phase === "cloud-off"')
+print("js cloud", repr(jsb[idx3:idx3+120]))

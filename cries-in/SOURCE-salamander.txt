@@ -1,0 +1,10 @@
+key: salamander
+guest: Dapple (Spotted Salamander)
+source: BigSoundBank Miscanthus sinensis #1 (sound 1811)
+URL: https://bigsoundbank.com/miscanthus-sinensis-1-s1811.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1811.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet amphibian sit — spotted salamander has no voice. Real soft leaf rustle cut as leaf-mold hush. No music. No narrator. No cartoon beep. House cut ~2.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

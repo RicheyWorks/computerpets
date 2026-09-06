@@ -1,0 +1,103 @@
+===== ts waxdish =====
+idx 165057 LINE 4945
+-70 : 70;
+    const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+    const away = hold.x < workW / 2 ? 64 : -64;
+    return {
+      id: best.id,
+      kind,
+      side: "waxdish",
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave: "waggled",
+      spin: "none",
+    };
+  }
+
+
+
+===== ts waggled leave =====
+    id: best.id,
+      kind,
+      side: "waxdish",
+      holdX: hold.x,
+      holdLift: hold.lift,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave: "waggled",
+      spin: "none",
+    };
+  }
+
+  if (kind === WRAP) {
+    const hold = wrapPoint(best, size, work);
+    const fromLeft = hold.x >= workW / 2;
+    const approachOff = fromLeft ? -64 : 64;
+    const approachX = clamp(hold.x + approachOff, 8,
+
+===== PlayPhase waggle =====
+-off"
+  | "castings-on"
+  | "castings"
+  | "castings-hold"
+  | "castings-off"
+  | "waggle-on"
+  | "waggle"
+  | "waggle-hold"
+  | "waggle-off"
+  | "sill-hop"
+  | "sill-walk"
+  | "sill-down"
+  | "land"
+  | "done";
+export type PlayAnim = "idle" | "walk" | "sit" |
+
+===== ARCH 'Other guests walk a sill' idx=71120 =====
+nto the stile, glue from the head, then leave. Cast still owns band. Armor still owns roll. Link still owns oil. Dam still owns the lodge-cup gnaw. This is the fifth log leftover. Other guests walk a sill. When Rui sleeps, Sip and the American robin land on him and chill. After a feed, Rui does a happy dance. Call a den keeps the same img nodes. Walk wakes a sleeping Rui. `/demo` draws two window plates and walks the same climb. The tray pins Rui, Sip, and the grid ten. Weather and news plates sit the desk. Sip flies and stays. Mac extra and Linux mark already exist as late
+
+===== ARCH 'remaining hive' idx=547 =====
+                  |
+|------------------|--------------------------------------------|
+| **Last Updated** | 2026-09-01 (Comb waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; catalog stays 220; waggle is the tell; Hum still owns drone; Keep still owns lay; Wax still owns draw; Sip still owns sip; Heap still owns castings; Wave still owns signal; Token still owns flat) |
+| **Version**      | 1.3                                        |
+| **Status**       | Active — Maintained                        |
+|
+
+===== ARCH 'first leftover of the remaining' idx=525 =====
+ue                                      |
+|------------------|--------------------------------------------|
+| **Last Updated** | 2026-09-01 (Comb waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; catalog stays 220; waggle is the tell; Hum still owns drone; Keep still owns lay; Wax still owns draw; Sip still owns sip; Heap still owns castings; Wave still owns signal; Token still owns flat) |
+| **Version**      | 1.3                                        |
+| **Status**       | Active — Maintained     
+
+===== README other guests =====
+b waggles a sill pan as a wax dish: walk onto the pan, dance the waggle, then leave. Hum still owns drone. Keep still owns lay. Wax still owns draw. Heap still owns castings. This is the first leftover of the remaining hive den. Shore ten is closed. Other guests walk a sill. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door. When Rui sleeps, Sip and the American robin land on him and chill. After a feed, Rui d
+
+===== mjs monarch =====
+L18020: .playFor("sand_dollar"), "flat"); |   assert.equal(P.playFor("monarch"), "sill"); |   assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn); |   asse
+total 1
+
+===== ts size/pick WAGGLE =====
+L2044: if (kind === WAGGLE) return w.width >= 190 && w.height >= 184; |     return w.width >= 180 && w.height >= 70; |   }); |   if (!usable.length) return null; |   let best = usable[0]!; |   let bestDist = Infinity; |   for (const w of usable) { |     const mid = w.x + w.width / 2; |     const d = Ma
+L4936: if (kind === WAGGLE) { |     const hold = wagglePoint(best, size, work); |     const fromLeft = hold.x >= workW / 2; |     const approachOff = fromLeft ? -70 : 70; |     const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8)); |     const away = hold.x < workW / 2 ?
+
+===== ts target.kind WAGGLE =====
+L5716: if (target.kind === WAGGLE) { |     const hold = wagglePoint(win, sprite, work); |     return { ...target, holdX: hold.x, holdLift: hold.lift }; |   } |   if (target.kind === BURY) { |     const hold = buryPoint(win, sprite, work); |     return { ...ta
+L17758: if (target.kind === WAGGLE) { |         return goPhase(next, "waggle-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "walk", dir); |       } |       if (target.kind === WRAP) { |         return goPhase(next, "wrap-on", { x: d
+
+===== cjs real window-box =====
+L21266: t) > 8, "not Quill's jamb hook"); |   const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "kinkajou", WORK, P.SPRITE); |   assert.equal(tiny, null, "a real window-box bloom, not a thin strip"); |   const short = P.pickTarget([{ id:
+L21268: box bloom, not a thin strip"); |   const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "kinkajou", WORK, P.SPRITE); |   assert.equal(short, null, "a real window-box bloom needs a cup"); |   const bloom = P.pickTarget([{ id: "cup"
+L21270:  "a real window-box bloom needs a cup"); |   const bloom = P.pickTarget([{ id: "cup", x: 200, y: 80, width: 193, height: 169 }], 80, "kinkajou", WORK, P.SPRITE); |   assert.ok(bloom, "a real window-box bloom as a nectar cup"); |   const sipBloom = P.pickTarget([{ id
+L24326: t) > 8, "not Blush sill horn stone"); |   const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "bass", WORK, P.SPRITE); |   assert.equal(tiny, null, "a real window-box, not a thin strip"); |   const short = P.pickTarget([{ id: "shor
+L24328: al window-box, not a thin strip"); |   const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "bass", WORK, P.SPRITE); |   assert.equal(short, null, "a real window-box, not a short sash"); |   const thin = P.pickTarget([{ id: "thin"
+L24332:  and Sip's real window-box, not a thinner box"); |   const box = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "bass", WORK, P.SPRITE); |   assert.ok(box, "a real window-box as a weed edge"); |   const wrapOk = P.pickTarget([{ id: "box", 
+L25280: t) > 8, "not Blush sill horn stone"); |   const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "pike", WORK, P.SPRITE); |   assert.equal(tiny, null, "a real window-box, not a thin strip"); |   const short = P.pickTarget([{ id: "shor
+L25282: al window-box, not a thin strip"); |   const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 180, height: 80 }], 80, "pike", WORK, P.SPRITE); |   assert.equal(short, null, "a real window-box, not a short sash"); |   const thin = P.pickTarget([{ id: "thin"
+L25286:  and Sip's real window-box, not a thinner box"); |   const box = P.pickTarget([{ id: "box", x: 200, y: 80, width: 193, height: 169 }], 80, "pike", WORK, P.SPRITE); |   assert.ok(box, "a real window-box as a reed ambush"); |   const mouthOk = P.pickTarget([{ id: "box
+
+===== Wrist tiny =====
+no tiny in first 4000
+width 193: none

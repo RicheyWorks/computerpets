@@ -1,0 +1,11 @@
+﻿key: leech
+guest: Latch (Horse Leech)
+source: BigSoundBank Swirl in the water (sound 192)
+URL: https://bigsoundbank.com/swirl-in-the-water-s0192.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0192.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet annelid sit — Horse Leech (Haemopis) has no voice. Soft wet water-slip stand-in (hand swirl in water, attenuated). No music. No narrator. No cartoon beep.
+Notes: House cut ~4s mono 44.1kHz dynaudnorm. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

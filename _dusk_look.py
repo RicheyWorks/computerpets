@@ -1,0 +1,12 @@
+from pathlib import Path
+p = Path("web/scripts/window-play.test.mjs")
+t = p.read_text(encoding="utf-8")
+idx = t.find("other guests do not clone")
+print("idx", idx)
+print(t[idx:idx+500] if idx>=0 else "missing")
+print("--- terminator remaining", t.count('playFor("terminator"), "sill"'))
+print("nexus sill", t.count('playFor("nexus"), "sill"'))
+print("dusk test", 'Dusk leftover rims' in t)
+print("pick terminator", t.count('pickTarget([WIN], 80, "terminator"'))
+print("pick nexus", t.count('pickTarget([WIN], 80, "nexus"'))
+print("pick silica", t.count('pickTarget([WIN], 80, "silica"'))

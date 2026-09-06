@@ -1,0 +1,10 @@
+﻿const fs = require("fs");
+const lines = fs.readFileSync("desktop/renderer/window-play.js", "utf8").split(/\n/);
+for (let i = 1210; i < 1260; i++) console.log((i+1)+":"+lines[i]);
+console.log("==== PLAYFOR");
+for (let i = 800; i < 920; i++) console.log((i+1)+":"+lines[i]);
+console.log("==== DUR TAIL");
+for (let i = 720; i < 760; i++) console.log((i+1)+":"+lines[i]);
+console.log("==== WIN TEST");
+const t = fs.readFileSync("desktop/renderer/window-play.test.cjs", "utf8").split(/\n/);
+for (let i = 0; i < 40; i++) if (t[i].includes("WIN") || t[i].includes("WORK")) console.log("T"+(i+1)+":"+t[i]);

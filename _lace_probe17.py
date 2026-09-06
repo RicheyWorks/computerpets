@@ -1,0 +1,23 @@
+﻿from pathlib import Path
+js = Path("desktop/renderer/window-play.js").read_text(encoding="utf-8")
+i = js.find("jumpOn:")
+print(js[i:i+80])
+i = js.find("netOn:")
+print(js[i:i+80])
+i = js.find("blackOn:")
+print(js[i:i+80])
+i = js.find("tailsOn:")
+print(js[i:i+80])
+i = js.find("weekOn:")
+print(js[i:i+80])
+i = js.find("mountOn:")
+print(js[i:i+80])
+i = js.find("spotOn:")
+print(js[i:i+80])
+i = js.find("songOn:")
+print(js[i:i+80])
+# how card abort works during black-hold - search abort/card handling
+i = js.find('cmd === "card"')
+print("card handlers", js.count('cmd === "card"'))
+# read jewel_fix_abort
+print(Path("_jewel_fix_abort.py").read_text(encoding="utf-8")[:1500])

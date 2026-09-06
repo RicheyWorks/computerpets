@@ -1,0 +1,19 @@
+function spherePoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 48;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.76;
+    // sill pan as a green bowl — sit the sphere on the pan; she spheres, she does not fill/flat/signal; sphere is the tell
+    // not Well bog-cup fill, not Token sand-plate flat, not Wave marsh-dish signal, not Comb wax-dish waggle, not Spot lamp-drop red, not Armor bark-dish roll, not Knot paperweight many
+    const pan = Math.max(68, size * 0.38);
+    const gripY = win.y + win.height - pan;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 28, maxLift) };
+  }
+
+  function sphereFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function sphereOnPath(u, from, to)

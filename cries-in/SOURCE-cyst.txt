@@ -1,0 +1,10 @@
+﻿key: cyst
+guest: Arca (Traveling Cyst)
+source: BigSoundBank Bubble wrap: Breakouts (sound 462)
+URL: https://bigsoundbank.com/bubble-wrap-breakouts-s0462.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0462.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet alien sit — traveling cyst has no mouth-voice. Real single bubble-wrap membrane pop cut as one dry small click. No music. No narrator. No cartoon beep. House cut ~2s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

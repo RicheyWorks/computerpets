@@ -1,0 +1,1 @@
+'loomed" | "plaqued" | "thirsted" | "chorded" | "floated" | "faceted" | "rimmed" | "manyed";\n  sillEndX?: number;\n  pathEndX?: numb'

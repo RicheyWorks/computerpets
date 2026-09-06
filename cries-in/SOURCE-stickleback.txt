@@ -1,0 +1,11 @@
+﻿key: stickleback
+guest: Prickle (Three-spined Stickleback)
+source: BigSoundBank Splash, Small #1 (sound 1529)
+URL: https://bigsoundbank.com/splash-small-1-s1529.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1529.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: quiet fish sit — Three-spined Stickleback has no voice. Tiny water-tick / small splash stand-in. No music. No narrator. No cartoon beep.
+Notes: House cut ~2.6s mono 44.1kHz dynaudnorm. Quiet guest.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

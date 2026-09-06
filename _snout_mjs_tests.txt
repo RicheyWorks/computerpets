@@ -1,0 +1,101 @@
+test("Snout drills a window stool as an acorn cup: walk onto the stool, sit, drill once, sit the cup, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("acorn_weevil"), "drill");
+  assert.equal(P.DRILL, "drill");
+  assert.notEqual(P.playFor("acorn_weevil"), "snout");
+  assert.notEqual(P.playFor("acorn_weevil"), "bore");
+  assert.notEqual(P.playFor("acorn_weevil"), "seed");
+  assert.notEqual(P.playFor("acorn_weevil"), "cerci");
+  assert.notEqual(P.playFor("acorn_weevil"), "net");
+  assert.notEqual(P.playFor("acorn_weevil"), "nest");
+  assert.notEqual(P.playFor("acorn_weevil"), "chew");
+  assert.notEqual(P.playFor("acorn_weevil"), "acorn");
+  assert.notEqual(P.playFor("acorn_weevil"), "sill");
+  assert.equal(P.playFor("earwig"), "cerci");
+  assert.equal(P.CERCI, "cerci");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("oak"), "seed");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("click_beetle"), "sill");
+  assert.equal(Overlay.playFor("acorn_weevil"), "drill");
+  const target = P.pickTarget([WIN], 80, "acorn_weevil", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "drill");
+  assert.equal(target.side, "acorncup");
+  assert.equal(target.leave, "drilled");
+  assert.ok(target.holdLift >= 0);
+  assert.ok(P.DUR.drillHold > P.DUR.drill * 1.2);
+  assert.ok(P.DUR.drillOn !== P.DUR.cerciOn);
+  assert.ok(P.DUR.drillOn !== P.DUR.boreOn);
+  assert.ok(P.DUR.drillOn !== P.DUR.seedOn);
+  assert.ok(P.DUR.drill !== P.DUR.cerci);
+  assert.ok(P.DUR.drill !== P.DUR.bore);
+  const cup = P.drillPoint(WIN, P.SPRITE, WORK);
+  const bark = P.cerciPoint(WIN, P.SPRITE, WORK);
+  const seed = P.seedPoint(WIN, P.SPRITE, WORK);
+  const timber = P.borePoint(WIN, P.SPRITE, WORK);
+  const latch = P.lidPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(cup.x - bark.x) > 12 || Math.abs(cup.lift - bark.lift) > 2);
+  assert.ok(Math.abs(cup.x - seed.x) > 12 || Math.abs(cup.lift - seed.lift) > 2);
+  assert.ok(Math.abs(cup.x - timber.x) > 12 || Math.abs(cup.lift - timber.lift) > 4);
+  assert.ok(Math.abs(cup.x - latch.x) > 12 || Math.abs(cup.lift - latch.lift) > 4);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "acorn_weevil", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okDrill = P.pickTarget([{ id: "drill", x: 200, y: 80, width: 186, height: 150 }], 80, "acorn_weevil", WORK, P.SPRITE);
+  assert.ok(okDrill);
+  const drillPose = P.drillPath(0.4);
+  assert.ok(drillPose.lift < 0.5 || Math.abs(drillPose.rot) > 2);
+  const hold = P.drillHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 1.8) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "cerci");
+    assert.notEqual(play.phase, "bore");
+    assert.notEqual(play.phase, "seed");
+    assert.notEqual(play.phase, "cache");
+    assert.notEqual(play.phase, "lid");
+  }
+  assert.ok(seen.has("drill-on"));
+  assert.ok(seen.has("drill"));
+  assert.ok(seen.has("drill-hold"));
+  assert.ok(seen.has("drill-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Snout's acorn-cup drill; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "acorn_weevil", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "drill"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "drill");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "drill");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "drill-off");
+  assert.equal(play.abort, true);
+});
+
+test("the demo window plate walks Snout drill the same way", () => {
+  assert.equal(Overlay.playFor("acorn_weevil"), "drill");
+  assert.equal(P.playFor("acorn_weevil"), "drill");
+  const target = P.pickTarget([WIN], 80, "acorn_weevil", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "drill");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.ok(seen.has("drill"));
+  assert.equal(play.phase, "done");
+});

@@ -1,0 +1,10 @@
+key: honeycomb
+guest: Wax (Honeycomb)
+source: Wikimedia Commons Buzzing_bees.ogg
+URL: https://commons.wikimedia.org/wiki/File:Buzzing_bees.ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/7/77/Buzzing_bees.ogg
+author: Serg Childed
+license: Creative Commons Attribution-Share Alike 4.0 (CC BY-SA 4.0)
+note: Quiet honeycomb sit — faint Apis mellifera worker wing heard through the comb (lowpassed, attenuated). Same Commons tape as Comb's close buzz; Wax is the muffled-through-wax cut, not a second close buzz. Honeycomb has no voice. No music. No narrator. No cartoon beep. House cut ~3.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

@@ -1,0 +1,11 @@
+key: green_tree_python
+guest: Jade (Green Tree Python)
+source: BigSoundBank Pages that turn #3 (sound 1414)
+URL: https://bigsoundbank.com/pages-that-turn-3-s1414.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1414.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Morelia viridis — silent. Soft attenuated dry multi-page rustle as faint scale settle on a perch. Distinct from Nori #362 and Saffron #1413. No hiss roar. No music. No narrator.
+Notes: House cut ~3.2s mono 44.1kHz from ~2–6s of source, volume=-12dB + dynaudnorm + afade. Quiet snake sit.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

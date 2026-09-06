@@ -1,0 +1,21 @@
+const P = require("./desktop/renderer/window-play.js");
+function log(k, v) { console.log(k + "=" + v); }
+log("terminator", P.playFor("terminator"));
+log("silica", P.playFor("silica"));
+log("walleye", P.playFor("walleye"));
+log("nimbus", P.playFor("nimbus"));
+log("luna", P.playFor("luna"));
+log("potto", P.playFor("potto"));
+log("miso", P.playFor("miso"));
+log("choir", P.playFor("choir"));
+log("photovore", P.playFor("photovore"));
+log("nexus", P.playFor("nexus"));
+log("RIM", P.RIM);
+log("FACET", P.FACET);
+log("DUSK", P.DUSK);
+log("FLOAT", P.FLOAT);
+log("WEEK", P.WEEK);
+log("rimOn", P.DUR.rimOn);
+log("rimPoint", typeof P.rimPoint);
+log("facetPoint", typeof P.facetPoint);
+log("duskPoint", typeof P.duskPoint);

@@ -1,0 +1,67 @@
+﻿
+test("Starter blooms a damp pane as a yeast film: walk onto the pane, sit the warm damp glass, bloom once, sit the soft culture film, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("yeast"), "bloom");
+  assert.equal(P.BLOOM, "bloom");
+  assert.notEqual(P.playFor("yeast"), "drip");
+  assert.notEqual(P.playFor("yeast"), "shelf");
+  assert.notEqual(P.playFor("yeast"), "cloud");
+  assert.notEqual(P.playFor("yeast"), "dry");
+  assert.notEqual(P.playFor("yeast"), "sill");
+  assert.equal(P.playFor("chicken_of_woods"), "drip");
+  assert.equal(P.playFor("puffball"), "cloud");
+  assert.equal(P.playFor("oyster"), "shelf");
+  assert.equal(P.playFor("lichen"), "sill");
+  assert.equal(Overlay.playFor("yeast"), "bloom");
+  const target = P.pickTarget([WIN], 80, "yeast", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "bloom");
+  assert.equal(target.side, "yeastfilm");
+  assert.equal(target.leave, "bloomed");
+  assert.ok(target.holdLift >= 0);
+  assert.ok(P.DUR.bloomHold > P.DUR.bloom * 1.2);
+  assert.ok(P.DUR.bloomOn !== P.DUR.dripOn);
+  assert.ok(P.DUR.bloom !== P.DUR.cloud);
+  const film = P.bloomPoint(WIN, P.SPRITE, WORK);
+  const wood = P.dripPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(film.x - wood.x) > 12 || Math.abs(film.lift - wood.lift) > 1);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "yeast", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okBloom = P.pickTarget([{ id: "bloom", x: 200, y: 80, width: 186, height: 156 }], 80, "yeast", WORK, P.SPRITE);
+  assert.ok(okBloom);
+  const bloomPose = P.bloomPath(0.3);
+  assert.ok(Math.abs(bloomPose.lift) > 0.3 || Math.abs(bloomPose.rot) > 1);
+  const hold = P.bloomHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 2.4) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "drip");
+    assert.notEqual(play.phase, "cloud");
+  }
+  assert.ok(seen.has("bloom-on"));
+  assert.ok(seen.has("bloom"));
+  assert.ok(seen.has("bloom-hold"));
+  assert.ok(seen.has("bloom-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Starter's yeast-film bloom; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "yeast", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "bloom"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "bloom");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "bloom");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "bloom-off");
+  assert.equal(play.abort, true);
+});

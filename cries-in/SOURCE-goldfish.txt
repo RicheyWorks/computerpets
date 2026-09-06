@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Noisy_aquarium.ogg
+Author: alys (PDSounds record 543; transferred by Fæ)
+License: Public domain
+URL: https://commons.wikimedia.org/wiki/File:Noisy_aquarium.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/9/94/Noisy_aquarium.ogg
+Notes: Noisy aquarium — pump, rippling water, fish tank bubbles (~5.2s source). House cut 4.0s mono 44.1kHz. Quiet guest: water tick/bubble only, never a cartoon beep.
+House path: build our own from field tape — not Grok Imagine

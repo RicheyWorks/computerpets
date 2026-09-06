@@ -1,0 +1,11 @@
+﻿key: saguaro
+guest: Arm (Saguaro)
+source: BigSoundBank Miscanthus sinensis #6 (sound 1816)
+URL: https://bigsoundbank.com/miscanthus-sinensis-6-s1816.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1816.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Carnegiea gigantea (saguaro; house guest Arm) — silent. Soft attenuated Miscanthus #6 as dry spine tick / still-air rustle stand-in. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from salamander #1811, maidenhair #1812, ginkgo #1813, oak #1814, orchid #1815. House cut ~2.8s mono 44.1kHz highpass/lowpass + volume=-18dB mild dynaudnorm + afade + volume=-6dB. Quiet plant.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

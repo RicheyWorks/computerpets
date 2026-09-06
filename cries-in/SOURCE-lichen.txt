@@ -1,0 +1,10 @@
+key: lichen
+guest: Pact (Reindeer Lichen)
+source: BigSoundBank Broken twigs #1 (sound 1299)
+URL: https://bigsoundbank.com/broken-twigs-1-s1299.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1299.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet lichen sit — Cladonia has no voice. Dry forest-twig break tape cut as dry crust tick (highpassed + attenuated). Distinct from Gravity leaf-hush fungus sits and Starter fermentation bubbles. No music. No narrator. No cartoon beep. House cut ~3.2s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

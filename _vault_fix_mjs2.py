@@ -1,0 +1,11 @@
+﻿mjs=open("web/scripts/window-play.test.mjs",encoding="utf-8").read()
+# find Blade test
+i=mjs.find("Blade leafs")
+print("blade idx", i)
+print(mjs[i:i+800])
+print("====")
+print("grasshopper pick", mjs.count('pickTarget([WIN], 80, "grasshopper"'))
+print("P.playFor grasshopper sill", mjs.count('P.playFor("grasshopper"), "sill"'))
+print("cjs vault", "Vault jumps" in open("desktop/renderer/window-play.test.cjs",encoding="utf-8").read())
+print("js jump", 'const JUMP = "jump"' in open("desktop/renderer/window-play.js",encoding="utf-8").read())
+print("ts jump", 'export const JUMP = "jump"' in open("web/src/lib/pets/window-play.ts",encoding="utf-8").read())

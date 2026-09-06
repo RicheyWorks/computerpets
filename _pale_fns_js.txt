@@ -1,0 +1,66 @@
+  function sandPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 32;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.79;
+    const stool = Math.max(14, size * 0.09);
+    const gripY = win.y + win.height - stool;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 18, maxLift) };
+  }
+
+  function sandFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function sandOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.92) * 3.1;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (toX >= fromX ? 1 : -1) * 5.8 * (1 - ease) + stride * 0.16,
+    };
+  }
+
+  function sandPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.16) {
+      const s = t / 0.16;
+      const ease = s * s * (3 - 2 * s);
+      return { x: ease * 3.4, lift: ease * 2.2, rot: ease * 11.6 };
+    }
+    if (t < 0.84) {
+      const s = (t - 0.16) / 0.68;
+      const stride = Math.sin(s * Math.PI * 2.8);
+      return { x: 3.4 + s * 18.2 + stride * 1.6, lift: 2.2 + Math.abs(stride) * 3.1, rot: 11.6 + stride * 7.4 };
+    }
+    return { x: 21.6, lift: 2.6, rot: 9.2 };
+  }
+
+  function sandHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const wait = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.28;
+    return { x: 21.6, lift: 2.6 + wait, rot: 9.2 };
+  }
+
+  function sandOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.88) * 2.7;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (from && from.rot != null ? from.rot : 9.2) * (1 - ease),
+    };
+  }

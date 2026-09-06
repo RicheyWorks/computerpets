@@ -1,0 +1,10 @@
+﻿key: silica
+guest: Shard (Living Crystal)
+source: BigSoundBank Cracking ice #1 (sound 2205)
+URL: https://bigsoundbank.com/cracking-ice-1-s2205.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/2205.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet alien sit — living crystal has no mouth-voice. Real ice-crack foley cut as dry frost facet tick. No music. No narrator. No cartoon beep. House cut ~1.7s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

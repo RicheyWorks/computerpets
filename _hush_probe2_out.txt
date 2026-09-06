@@ -1,0 +1,143 @@
+﻿==== desktop/renderer/leftover-house.test.cjs hits 15
+19:test("Beacon leftover aligns a sash parting bead as a ruler line; eighth leftover of the far den done; Brine leftover still frosts a window stool as a salt dish; seventh leftover of the far den done; Knot leftover still 
+1319:  assert.equal(WP.playFor("umbral"), "sill");
+1702:  assert.equal(WP.playFor("magneton"), "align");
+1704:  assert.notEqual(WP.playFor("magneton"), "field");
+1705:  assert.notEqual(WP.playFor("magneton"), "north");
+1706:  assert.notEqual(WP.playFor("magneton"), "beacon");
+1707:  assert.notEqual(WP.playFor("magneton"), "magneton");
+1708:  assert.notEqual(WP.playFor("magneton"), "inspect");
+1709:  assert.notEqual(WP.playFor("magneton"), "hitch");
+1710:  assert.notEqual(WP.playFor("magneton"), "stilt");
+1711:  assert.notEqual(WP.playFor("magneton"), "frost");
+1712:  assert.notEqual(WP.playFor("magneton"), "sill");
+1714:  assert.equal(WP.playFor("umbral"), "sill");
+1725:  assert.equal(WP.playFor("umbral"), "sill");
+1809:  assert.equal(WP.playFor("umbral"), "sill");
+
+==== desktop/renderer/window-play.test.cjs hits 199
+33199:  assert.equal(P.playFor("umbral"), "sill");
+33355:  assert.equal(P.playFor("umbral"), "sill");
+33493:  assert.equal(P.playFor("umbral"), "sill");
+33629:  assert.equal(P.playFor("umbral"), "sill");
+33761:  assert.equal(P.playFor("umbral"), "sill");
+33907:  assert.equal(P.playFor("umbral"), "sill");
+34062:  assert.equal(P.playFor("umbral"), "sill");
+34218:  assert.equal(P.playFor("umbral"), "sill");
+34381:  assert.equal(P.playFor("umbral"), "sill");
+34518:  assert.equal(P.playFor("umbral"), "sill");
+34654:  assert.equal(P.playFor("umbral"), "sill");
+34793:  assert.equal(P.playFor("umbral"), "sill");
+34930:  assert.equal(P.playFor("umbral"), "sill");
+35073:  assert.equal(P.playFor("umbral"), "sill");
+35221:  assert.equal(P.playFor("umbral"), "sill");
+35355:  assert.equal(P.playFor("umbral"), "sill");
+35374:  assert.equal(P.playFor("umbral"), "sill");
+35506:  assert.equal(P.playFor("umbral"), "sill");
+35666:  assert.equal(P.playFor("umbral"), "sill");
+35825:  assert.equal(P.playFor("umbral"), "sill");
+35948:test("Beacon leftover aligns a sash parting bead as a ruler line: walk onto the bead, sit the north, then leave", () => {
+35950:  assert.equal(P.playFor("magneton"), "align");
+35952:  assert.notEqual(P.playFor("magneton"), "field");
+35953:  assert.notEqual(P.playFor("magneton"), "north");
+35954:  assert.notEqual(P.playFor("magneton"), "beacon");
+35955:  assert.notEqual(P.playFor("magneton"), "magneton");
+35956:  assert.notEqual(P.playFor("magneton"), "inspect");
+35957:  assert.notEqual(P.playFor("magneton"), "hitch");
+35958:  assert.notEqual(P.playFor("magneton"), "stilt");
+35959:  assert.notEqual(P.playFor("magneton"), "aim");
+35960:  assert.notEqual(P.playFor("magneton"), "frost");
+35961:  assert.notEqual(P.playFor("magneton"), "orbit");
+35962:  assert.notEqual(P.playFor("magneton"), "sill");
+35975:  assert.equal(P.playFor("umbral"), "sill");
+35976:  const target = P.pickTarget([WIN], 80, "magneton", WORK, P.SPRITE);
+36012:  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "magneton", WORK, P.SPRITE);
+36014:  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 170, height: 210 }], 80, "magneton", WORK, P.SPRITE);
+36016:  const okAlign = P.pickTarget([{ id: "align", x: 200, y: 80, width: 172, height: 212 }], 80, "magneton", WORK, P.SPRITE);
+36070:test("a moved window refits Beacon's ruler-line align; sleep, card, and hide abort; Beacon never starts asleep", () => {
+36077:  const target = P.pickTarget([WIN], 200, "magneton", WORK, P.SPRITE);
+
+==== web/scripts/window-play.test.mjs hits 112
+19801:  assert.equal(P.playFor("umbral"), "sill");
+19896:  assert.equal(P.playFor("umbral"), "sill");
+19981:  assert.equal(P.playFor("umbral"), "sill");
+20063:  assert.equal(P.playFor("umbral"), "sill");
+20150:  assert.equal(P.playFor("umbral"), "sill");
+20243:  assert.equal(P.playFor("umbral"), "sill");
+20331:  assert.equal(P.playFor("umbral"), "sill");
+20422:  assert.equal(P.playFor("umbral"), "sill");
+20488:  assert.equal(P.playFor("umbral"), "sill");
+20553:  assert.equal(P.playFor("umbral"), "sill");
+20620:  assert.equal(P.playFor("umbral"), "sill");
+20687:  assert.equal(P.playFor("umbral"), "sill");
+20756:  assert.equal(P.playFor("umbral"), "sill");
+20840:  assert.equal(P.playFor("umbral"), "sill");
+20988:  assert.equal(P.playFor("umbral"), "sill");
+21117:  assert.equal(P.playFor("umbral"), "sill");
+21134:  assert.equal(P.playFor("umbral"), "sill");
+21260:  assert.equal(P.playFor("umbral"), "sill");
+21464:  assert.equal(P.playFor("umbral"), "sill");
+21623:  assert.equal(P.playFor("umbral"), "sill");
+21746:test("Beacon leftover aligns a sash parting bead as a ruler line: walk onto the bead, sit the north, then leave", () => {
+21748:  assert.equal(P.playFor("magneton"), "align");
+21750:  assert.notEqual(P.playFor("magneton"), "field");
+21751:  assert.notEqual(P.playFor("magneton"), "north");
+21752:  assert.notEqual(P.playFor("magneton"), "beacon");
+21753:  assert.notEqual(P.playFor("magneton"), "magneton");
+21754:  assert.notEqual(P.playFor("magneton"), "inspect");
+21755:  assert.notEqual(P.playFor("magneton"), "hitch");
+21756:  assert.notEqual(P.playFor("magneton"), "stilt");
+21757:  assert.notEqual(P.playFor("magneton"), "aim");
+21758:  assert.notEqual(P.playFor("magneton"), "frost");
+21759:  assert.notEqual(P.playFor("magneton"), "orbit");
+21760:  assert.notEqual(P.playFor("magneton"), "sill");
+21773:  assert.equal(P.playFor("umbral"), "sill");
+21774:  const target = P.pickTarget([WIN], 80, "magneton", WORK, P.SPRITE);
+21810:  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "magneton", WORK, P.SPRITE);
+21812:  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 170, height: 210 }], 80, "magneton", WORK, P.SPRITE);
+21814:  const okAlign = P.pickTarget([{ id: "align", x: 200, y: 80, width: 172, height: 212 }], 80, "magneton", WORK, P.SPRITE);
+21868:test("a moved window refits Beacon's ruler-line align; sleep, card, and hide abort; Beacon never starts asleep", () => {
+21875:  const target = P.pickTarget([WIN], 200, "magneton", WORK, P.SPRITE);
+
+==== web/src/lib/pets/window-play.ts hits 87
+19717:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.07;
+19718:  return { x: 0.1, lift: 0.6 + hush, rot: -2.8 };
+19790:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.09;
+19791:  return { x: 0.28, lift: 0.75 + hush, rot: -2.4 };
+19864:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.07;
+19865:  return { x: 1.15, lift: 0.62 + hush, rot: -3.5 };
+19938:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.08;
+19939:  return { x: 0.23, lift: 0.67 + hush, rot: -2.6 };
+20012:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.07;
+20013:  return { x: 0.14, lift: -2.17 + hush, rot: 2.65 };
+20086:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.09;
+20087:  return { x: 0.18, lift: -0.73 + hush, rot: 2.2 };
+20163:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.08;
+20165:  return { x: 0.24, lift: 0.54 + hush, rot: 2.2 };
+20240:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.09;
+20242:  return { x: 0.12, lift: -2.07 + hush, rot: 2.8 };
+20376:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.07;
+20380:  return { x: 0.12, lift: 0.42 + hush, rot: -1.8 };
+20533:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.075;
+20537:  return { x: 0.34, lift: 0.32 + hush, rot: -3.8 };
+20690:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.055;
+20694:  return { x: 0.22, lift: 0.24 + hush, rot: -2.4 };
+20847:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.04;
+20851:  return { x: 0.14, lift: 0.18 + hush, rot: -1.7 };
+21004:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.05;
+21008:  return { x: 0.11, lift: 0.22 + hush, rot: 1.2 };
+21159:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.06;
+21163:  return { x: 0.08, lift: 0.18 + hush, rot: 1.0 };
+21424:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.08;
+21432:  return { x: 0.07, lift: 0.24 + hush, rot: 0.7 };
+21612:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.07;
+21616:  return { x: 0.16, lift: -1.03 + hush, rot: 1.7 };
+21767:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.11;
+21771:  return { x: 1.65, lift: 1.12 + hush, rot: 3.3 };
+21918:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.09;
+21922:  return { x: 1.28, lift: 0.88 + hush, rot: 2.9 };
+22070:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.07;
+22074:  return { x: 1.07, lift: 0.77 + hush, rot: 2.25 };
+22217:  const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.06;
+22221:  return { x: 0.89, lift: 0.68 + hush, rot: 1.95 };
+

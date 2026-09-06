@@ -1,0 +1,155 @@
+test("Vault jumps a window apron as a grass plate: walk onto the apron, sit, vault once, sit the plate, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("grasshopper"), "jump");
+  assert.equal(P.JUMP, "jump");
+  assert.notEqual(P.playFor("grasshopper"), "vault");
+  assert.notEqual(P.playFor("grasshopper"), "hop");
+  assert.notEqual(P.playFor("grasshopper"), "leap");
+  assert.notEqual(P.playFor("grasshopper"), "spring");
+  assert.notEqual(P.playFor("grasshopper"), "pounce");
+  assert.notEqual(P.playFor("grasshopper"), "soar");
+  assert.notEqual(P.playFor("grasshopper"), "leaf");
+  assert.notEqual(P.playFor("grasshopper"), "song");
+  assert.notEqual(P.playFor("grasshopper"), "kick");
+  assert.notEqual(P.playFor("grasshopper"), "grass");
+  assert.notEqual(P.playFor("grasshopper"), "sill");
+  assert.equal(P.playFor("katydid"), "leaf");
+  assert.equal(P.LEAF, "leaf");
+  assert.equal(P.playFor("field_cricket"), "song");
+  assert.equal(P.SONG, "song");
+  assert.equal(P.playFor("springtail"), "spring");
+  assert.equal(P.playFor("jumping_spider"), "pounce");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("swallowtail"), "sill");
+  assert.equal(P.DUR.leafOn, P.DUR.leafOn, "Blade leaf durations stay");
+  assert.equal(P.DUR.songOn, P.DUR.songOn, "Chirp song durations stay");
+  assert.equal(P.DUR.springOn, P.DUR.springOn, "Hop spring durations stay");
+  const target = P.pickTarget([WIN], 80, "grasshopper", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "jump");
+  assert.equal(target.side, "grassplate");
+  assert.equal(target.leave, "vaulted");
+  assert.notEqual(target.kind, "leaf");
+  assert.notEqual(target.kind, "song");
+  assert.notEqual(target.kind, "spring");
+  assert.notEqual(target.kind, "pounce");
+  assert.notEqual(target.kind, "soar");
+  assert.notEqual(target.kind, "sill");
+  assert.ok(target.holdLift > 8, "she jumps a window apron as a grass plate, not the foot");
+  assert.ok(P.DUR.jumpHold > P.DUR.jump * 1.2, "the hold is the sit; the jump is the tell");
+  assert.ok(P.DUR.jumpOn > 1.0, "a walk onto the apron, not the vault");
+  assert.ok(P.DUR.jumpOn !== P.DUR.leafOn);
+  assert.ok(P.DUR.jumpOn !== P.DUR.songOn);
+  assert.ok(P.DUR.jumpOn !== P.DUR.springOn);
+  assert.ok(P.DUR.jumpOn !== P.DUR.sillHop);
+  assert.ok(P.DUR.jump !== P.DUR.leaf);
+  assert.ok(P.DUR.jump !== P.DUR.song);
+  assert.ok(P.DUR.jump !== P.DUR.spring);
+  assert.ok(P.DUR.jumpHold !== P.DUR.leafHold);
+  assert.ok(P.DUR.jumpHold !== P.DUR.songHold);
+  assert.ok(P.DUR.jumpOff !== P.DUR.leafOff);
+  assert.ok(P.DUR.jumpOff !== P.DUR.songOff);
+  const plate = P.jumpPoint(WIN, P.SPRITE, WORK);
+  const rim = P.leafPoint(WIN, P.SPRITE, WORK);
+  const dish = P.songPoint(WIN, P.SPRITE, WORK);
+  const duff = P.springPoint(WIN, P.SPRITE, WORK);
+  const rail = P.pouncePoint(WIN, P.SPRITE, WORK);
+  assert.ok(plate.lift > 8, "the window apron as a grass plate, not the floor");
+  assert.ok(Math.abs(plate.x - rim.x) > 12 || Math.abs(plate.lift - rim.lift) > 4, "not Blade's sash-horn leaf");
+  assert.ok(Math.abs(plate.x - dish.x) > 12 || Math.abs(plate.lift - dish.lift) > 2, "not Chirp's window-stool song");
+  assert.ok(Math.abs(plate.x - duff.x) > 12 || Math.abs(plate.lift - duff.lift) > 2, "not Hop's window-foot spring");
+  assert.ok(Math.abs(plate.x - rail.x) > 12 || Math.abs(plate.lift - rail.lift) > 2, "not Leap's meeting-rail pounce");
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "grasshopper", WORK, P.SPRITE);
+  assert.equal(tiny, null, "a real window apron, not a thin strip");
+  const short = P.pickTarget([{ id: "short", x: 200, y: 80, width: 168, height: 74 }], 80, "grasshopper", WORK, P.SPRITE);
+  assert.equal(short, null, "a real grass plate, not Brood's emerge gate");
+  const thin = P.pickTarget([{ id: "thin", x: 200, y: 80, width: 188, height: 150 }], 80, "grasshopper", WORK, P.SPRITE);
+  assert.equal(thin, null, "a real grass plate apron, not a thinner apron");
+  const okJump = P.pickTarget([{ id: "jump", x: 200, y: 80, width: 188, height: 152 }], 80, "grasshopper", WORK, P.SPRITE);
+  assert.ok(okJump, "a real window apron as a grass plate");
+  const leafOk = P.pickTarget([{ id: "leaf", x: 200, y: 80, width: 184, height: 148 }], 80, "katydid", WORK, P.SPRITE);
+  assert.ok(leafOk, "Blade still takes a leaf rim");
+  const walkOn = P.jumpOnPath(0.25, { x: 40, lift: 0 }, { x: plate.x, lift: plate.lift });
+  const leafOn = P.leafOnPath(0.25, { x: 40, lift: 0 }, { x: plate.x, lift: plate.lift });
+  const songOn = P.songOnPath(0.25, { x: 40, lift: 0 }, { x: plate.x, lift: plate.lift });
+  assert.ok(walkOn.lift > 0, "she walks onto the apron as a grass plate");
+  assert.ok(walkOn.rot !== leafOn.rot, "a walk onto the apron, not Blade leaf");
+  assert.ok(walkOn.rot !== songOn.rot, "a walk onto the apron, not Chirp song");
+  const jumpPose = P.jumpPath(0.4);
+  const leafPose = P.leafPath(0.5);
+  const songPose = P.songPath(0.5);
+  const springPose = P.springPath(0.4);
+  assert.ok(jumpPose.lift > 6, "she vaults; jump is the tell");
+  assert.ok(jumpPose.rot !== leafPose.rot, "jump, not leaf");
+  assert.ok(jumpPose.rot !== songPose.rot, "jump, not song");
+  assert.ok(jumpPose.lift !== springPose.lift || jumpPose.x !== springPose.x, "jump, not Hop spring");
+  const hold = P.jumpHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 4.4) < 0.2, "she holds the sit on the plate");
+  assert.ok(Math.abs(hold.x - 0.38) < 0.05, "she stays on the grass plate");
+  assert.ok(hold.lift < 2, "sit on the apron, not a vault pulse");
+  const off0 = P.jumpOffPath(0, { x: plate.x, lift: plate.lift + 0.8, rot: -4.4 }, { x: plate.x + 50, lift: 0 });
+  const offMid = P.jumpOffPath(0.5, { x: plate.x, lift: plate.lift + 0.8, rot: -4.4 }, { x: plate.x + 50, lift: 0 });
+  const off1 = P.jumpOffPath(1, { x: plate.x, lift: plate.lift + 0.8, rot: -4.4 }, { x: plate.x + 50, lift: 0 });
+  assert.ok(Math.abs(off0.x - plate.x) < 2);
+  assert.ok(Math.abs(offMid.x - plate.x) > 8, "a walk leave off the grass plate");
+  assert.ok(Math.abs(off1.lift) < 3);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  const windowIds = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    if (play.target && play.target.id) windowIds.add(play.target.id);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "leaf");
+    assert.notEqual(play.phase, "song");
+    assert.notEqual(play.phase, "spring");
+    assert.notEqual(play.phase, "pounce");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "jump") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "jump-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "jump-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.8)) < 2, "she holds the sit on the apron");
+    }
+    if (play.phase === "jump-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("jump-on"));
+  assert.ok(seen.has("jump"));
+  assert.ok(seen.has("jump-hold"));
+  assert.ok(seen.has("jump-off"));
+  assert.ok(!seen.has("leaf"), "Vault never uses Blade leaf");
+  assert.ok(!seen.has("song"), "Vault never uses Chirp song");
+  assert.ok(!seen.has("spring"), "Vault never uses Hop spring");
+  assert.ok(!seen.has("pounce"), "Vault never uses Leap pounce");
+  assert.equal(windowIds.size, 1, "one window");
+  assert.equal(play.phase, "done");
+  assert.equal(play.lift, 0);
+});
+test("a moved window refits Vault's grass-plate jump; sleep, card, and hide abort; Vault never starts asleep", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ card: true, cmd: "idle" }), false);
+  assert.equal(P.canStart({ hidden: true, cmd: "wander" }), false);
+  assert.equal(P.shouldAbort({ cmd: "sleep" }), true);
+  assert.equal(P.shouldAbort({ cmd: "hide" }), true);
+  assert.equal(P.shouldAbort({ card: true, cmd: "idle" }), true);
+  const target = P.pickTarget([WIN], 200, "grasshopper", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "jump"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "jump");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "jump");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "jump-off");
+  assert.equal(play.abort, true);
+});

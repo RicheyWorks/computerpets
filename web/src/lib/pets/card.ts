@@ -1,0 +1,380 @@
+/** Keeper-card desk controls. Same truth as the overlay card. Persist on the machine. */
+import { parseAreas } from "./weather-areas.ts";
+import { parseNewsPrefs } from "./news.ts";
+import { parseMarket } from "./market.ts";
+import { parseStep } from "./house-sounds.ts";
+import { parseMusic } from "./house-music.ts";
+import { parseSleepAid } from "./house-sleep.ts";
+
+export const CARD_STORE = "computerpets.card.v1";
+export const MAX_LINES = 12;
+export const LINE_CHARS = 140;
+
+export const CARD_COLORS = [
+  { id: "ink" as const, name: "Ink" },
+  { id: "blotter" as const, name: "Blotter" },
+  { id: "moss" as const, name: "Moss" },
+  { id: "ember" as const, name: "Ember" },
+  { id: "dusk" as const, name: "Dusk" },
+  { id: "frost" as const, name: "Frost" },
+];
+
+/** House-voice names. The door is still speechSynthesis. */
+export const VOICE_STYLES = [
+  { id: "hearth" as const, name: "Hearth", rate: 0.86, pitch: 0.9 },
+  { id: "hush" as const, name: "Hush", rate: 0.8, pitch: 1.02 },
+  { id: "even" as const, name: "Even", rate: 0.92, pitch: 1 },
+  { id: "low" as const, name: "Low", rate: 0.84, pitch: 0.76 },
+  { id: "bright" as const, name: "Bright", rate: 0.98, pitch: 1.1 },
+];
+
+export const MUTE_BUSES = ["talk", "special", "weather", "treats", "steps", "music"] as const;
+export const SOUND_BUS = {
+  chirp: "talk",
+  hop: "special",
+  munch: "treats",
+  rain: "weather",
+  wind: "weather",
+  step: "steps",
+  voice: "talk",
+  call: "talk",
+  music: "music",
+  radio: "music",
+  sleep: "music",
+} as const;
+
+const HUMAN_VOICE = /aria|jenny|guy|davis|natural|samantha|daniel|karen|moira|zira|david|mark|hazel|susan|google us english|microsoft/i;
+const ROBOT_VOICE = /compact|bad news|good news|hysterical|zarvox|trinoids|boing|bubbles|albert|whisper|princess|junior|cellos|organ|bells|pipe/i;
+
+export const VOICE_TRUTH = "The door is still the system speech voices.";
+export const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
+export const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"] as const;
+
+export type CardColorId = (typeof CARD_COLORS)[number]["id"];
+export type VoiceStyleId = (typeof VOICE_STYLES)[number]["id"];
+export type MuteBus = (typeof MUTE_BUSES)[number];
+export type SoundKind = keyof typeof SOUND_BUS;
+export type SavedKind = "say" | "do";
+
+export type SavedLine = { id: string; text: string; kind: SavedKind };
+export type CardAlarm = { on: boolean; hour: number; minute: number; lineId: string; lastRingDay: string };
+export type CardTimer = { running: boolean; remainingMs: number; endsAt: number; lineId: string; durationMs: number };
+export type CardGuest = { volume: number; lines: SavedLine[]; alarm: CardAlarm; timer: CardTimer; stepKind: string };
+export type CardMutes = Record<MuteBus, boolean>;
+export type CardPrefs = {
+  collapsed: boolean;
+  color: CardColorId;
+  voiceStyle: VoiceStyleId;
+  mutes: CardMutes;
+  off: boolean;
+  pets: Record<string, CardGuest>;
+  weatherAreas: Array<{ id: string; name: string; query: string; lat: number; lon: number }>;
+  currentAreaId: string | null;
+  newsPrefs: Array<{ id: string; name: string; query: string }>;
+  currentNewsId: string;
+  marketTickers: Array<{ id: string; symbol: string; kind: "stock" | "crypto"; geckoId: string; name: string }>;
+  currentTickerId: string | null;
+  stepKind: string;
+  music: { plugin: string; stationId: string; stationName: string; stationUrl: string; playing: boolean };
+  sleepAid: { plugin: string; playing: boolean };
+};
+
+export function blankMutes(): CardMutes {
+  return { talk: false, special: false, weather: false, treats: false, steps: false, music: false };
+}
+
+export function blankAlarm(): CardAlarm {
+  return { on: false, hour: 7, minute: 0, lineId: "", lastRingDay: "" };
+}
+
+export function blankTimer(): CardTimer {
+  return { running: false, remainingMs: 0, endsAt: 0, lineId: "", durationMs: 5 * 60 * 1000 };
+}
+
+export function blankGuest(): CardGuest {
+  return { volume: 80, lines: [], alarm: blankAlarm(), timer: blankTimer(), stepKind: "" };
+}
+
+export function blankCard(): CardPrefs {
+  return {
+      collapsed: true,
+    color: "ink",
+    voiceStyle: "hearth",
+    mutes: blankMutes(),
+    off: false,
+    pets: {},
+    weatherAreas: [],
+    currentAreaId: null,
+    newsPrefs: [{ id: "world", name: "World", query: "" }],
+    currentNewsId: "world",
+    marketTickers: [],
+    currentTickerId: null,
+    stepKind: "species",
+    music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
+    sleepAid: { plugin: "off", playing: false },
+  };
+}
+
+function clamp(n: unknown, a: number, b: number) {
+  return Math.max(a, Math.min(b, Math.round(Number(n) || 0)));
+}
+
+function colorId(id: unknown): CardColorId {
+  return CARD_COLORS.some((c) => c.id === id) ? (id as CardColorId) : "ink";
+}
+
+function styleId(id: unknown): VoiceStyleId {
+  return VOICE_STYLES.some((s) => s.id === id) ? (id as VoiceStyleId) : "hearth";
+}
+
+export function parseMutes(raw: unknown): CardMutes {
+  const next = blankMutes();
+  if (!raw || typeof raw !== "object") return next;
+  const o = raw as Record<string, unknown>;
+  for (const bus of MUTE_BUSES) next[bus] = !!o[bus];
+  return next;
+}
+
+export function parseAlarm(raw: unknown): CardAlarm {
+  const next = blankAlarm();
+  if (!raw || typeof raw !== "object") return next;
+  const o = raw as Record<string, unknown>;
+  next.on = !!o.on;
+  next.hour = clamp(o.hour, 0, 23);
+  next.minute = clamp(o.minute, 0, 59);
+  next.lineId = typeof o.lineId === "string" ? o.lineId : "";
+  next.lastRingDay = typeof o.lastRingDay === "string" ? o.lastRingDay : "";
+  return next;
+}
+
+export function parseTimer(raw: unknown): CardTimer {
+  const next = blankTimer();
+  if (!raw || typeof raw !== "object") return next;
+  const o = raw as Record<string, unknown>;
+  next.running = !!o.running;
+  next.remainingMs = Math.max(0, Math.round(Number(o.remainingMs) || 0));
+  next.endsAt = Math.max(0, Math.round(Number(o.endsAt) || 0));
+  next.lineId = typeof o.lineId === "string" ? o.lineId : "";
+  next.durationMs = Math.max(1000, Math.round(Number(o.durationMs) || next.durationMs));
+  return next;
+}
+
+function hash(text: string) {
+  let n = 0;
+  for (let i = 0; i < text.length; i++) n = (n * 31 + text.charCodeAt(i)) | 0;
+  return n;
+}
+
+export function clipLine(text: unknown) {
+  return String(text || "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, LINE_CHARS);
+}
+
+function parseLine(raw: unknown): SavedLine | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const text = clipLine(o.text);
+  if (!text) return null;
+  const id = typeof o.id === "string" && o.id ? o.id : `l-${Math.abs(hash(text))}`;
+  const kind: SavedKind = o.kind === "do" ? "do" : "say";
+  return { id, text, kind };
+}
+
+export function parseGuest(raw: unknown): CardGuest {
+  const next = blankGuest();
+  if (!raw || typeof raw !== "object") return next;
+  const o = raw as Record<string, unknown>;
+  next.volume = clamp(o.volume, 0, 100);
+  next.lines = Array.isArray(o.lines) ? o.lines.map(parseLine).filter((line): line is SavedLine => !!line).slice(0, MAX_LINES) : [];
+  next.alarm = parseAlarm(o.alarm);
+  next.timer = parseTimer(o.timer);
+  next.stepKind = typeof o.stepKind === "string" ? o.stepKind : "";
+  return next;
+}
+
+export function parseCard(raw: unknown): CardPrefs {
+  const next = blankCard();
+  if (!raw || typeof raw !== "object") return next;
+  const o = raw as Record<string, unknown>;
+  next.collapsed = !!o.collapsed;
+  next.color = colorId(o.color);
+  next.voiceStyle = styleId(o.voiceStyle);
+  next.mutes = parseMutes(o.mutes);
+  next.off = !!o.off;
+  next.pets = {};
+  if (o.pets && typeof o.pets === "object") {
+    for (const [key, value] of Object.entries(o.pets as Record<string, unknown>)) {
+      if (key) next.pets[key] = parseGuest(value);
+    }
+  }
+  const areas = parseAreas(o);
+  next.weatherAreas = areas.areas;
+  next.currentAreaId = areas.currentId;
+  const news = parseNewsPrefs(o);
+  next.newsPrefs = news.topics;
+  next.currentNewsId = news.currentId;
+  const market = parseMarket(o);
+  next.marketTickers = market.tickers;
+  next.currentTickerId = market.currentId;
+  next.stepKind = parseStep(o.stepKind);
+  next.music = parseMusic(o.music);
+  next.sleepAid = parseSleepAid(o.sleepAid);
+  return next;
+}
+
+export function guestOf(card: unknown, key: string): CardGuest {
+  const house = parseCard(card);
+  return parseGuest(house.pets[key]);
+}
+
+export function setGuest(card: unknown, key: string, patch: Partial<CardGuest>): CardPrefs {
+  const house = parseCard(card);
+  house.pets[key] = parseGuest({ ...guestOf(house, key), ...patch });
+  return house;
+}
+
+export function addLine(card: unknown, key: string, text: unknown, kind: SavedKind = "say"): CardPrefs {
+  const clipped = clipLine(text);
+  if (!clipped) return parseCard(card);
+  const guest = guestOf(card, key);
+  const line: SavedLine = {
+    id: `l-${Date.now().toString(36)}-${Math.abs(hash(clipped)).toString(36)}`,
+    text: clipped,
+    kind: kind === "do" ? "do" : "say",
+  };
+  guest.lines = [...guest.lines, line].slice(-MAX_LINES);
+  return setGuest(card, key, guest);
+}
+
+export function removeLine(card: unknown, key: string, id: string): CardPrefs {
+  const guest = guestOf(card, key);
+  guest.lines = guest.lines.filter((line) => line.id !== id);
+  return setGuest(card, key, guest);
+}
+
+export function lineById(card: unknown, key: string, id: string): SavedLine | null {
+  return guestOf(card, key).lines.find((line) => line.id === id) ?? null;
+}
+
+export function dayKey(now = Date.now()) {
+  const d = new Date(now);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export function alarmDue(alarm: unknown, now = Date.now()) {
+  const a = parseAlarm(alarm);
+  if (!a.on) return false;
+  const d = new Date(now);
+  if (dayKey(now) === a.lastRingDay) return false;
+  return d.getHours() === a.hour && d.getMinutes() === a.minute;
+}
+
+export function markAlarmRang(alarm: unknown, now = Date.now()): CardAlarm {
+  const a = parseAlarm(alarm);
+  a.lastRingDay = dayKey(now);
+  return a;
+}
+
+export function startTimer(timer: unknown, durationMs: number, now = Date.now()): CardTimer {
+  const t = parseTimer(timer);
+  const ms = Math.max(1000, Math.round(durationMs || t.durationMs || 60_000));
+  t.running = true;
+  t.durationMs = ms;
+  t.remainingMs = ms;
+  t.endsAt = now + ms;
+  return t;
+}
+
+export function stopTimer(timer: unknown, now = Date.now()): CardTimer {
+  const t = parseTimer(timer);
+  if (t.running && t.endsAt) t.remainingMs = Math.max(0, t.endsAt - now);
+  t.running = false;
+  t.endsAt = 0;
+  return t;
+}
+
+export function timerTick(timer: unknown, now = Date.now()) {
+  const t = parseTimer(timer);
+  if (!t.running) return { timer: t, rang: false };
+  const left = Math.max(0, t.endsAt - now);
+  t.remainingMs = left;
+  if (left <= 0) {
+    t.running = false;
+    t.endsAt = 0;
+    t.remainingMs = 0;
+    return { timer: t, rang: true };
+  }
+  return { timer: t, rang: false };
+}
+
+export function formatRemain(ms: number) {
+  const total = Math.max(0, Math.round(ms / 1000));
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+export function voiceStyleOf(id: unknown) {
+  return VOICE_STYLES.find((s) => s.id === id) ?? VOICE_STYLES[0]!;
+}
+
+export function pickSystemVoice(voices: Array<{ name?: string; voiceURI?: string }> | null | undefined) {
+  const list = Array.isArray(voices) ? voices.filter((v) => v && (v.name || v.voiceURI)) : [];
+  if (!list.length) return null;
+  const human = list.filter((v) => HUMAN_VOICE.test(v.name || "") && !ROBOT_VOICE.test(v.name || ""));
+  const pool = human.length ? human : list.filter((v) => !ROBOT_VOICE.test(v.name || ""));
+  return pool[0] ?? list[0] ?? null;
+}
+
+export function speakOpts(styleId: unknown, volume: number) {
+  const style = voiceStyleOf(styleId);
+  return {
+    rate: style.rate,
+    pitch: style.pitch,
+    volume: clamp(volume, 0, 100) / 100,
+  };
+}
+
+export function busOf(kindName: string): MuteBus | null {
+  return (SOUND_BUS as Record<string, MuteBus>)[kindName] ?? null;
+}
+
+export function isMuted(mutes: unknown, kindName: string) {
+  const bus = busOf(kindName);
+  if (!bus) return false;
+  return !!parseMutes(mutes)[bus];
+}
+
+export function sleepHolds(asleep: boolean | undefined, cmd: string) {
+  if (!asleep) return false;
+  return !(SLEEP_WAKES as readonly string[]).includes(cmd);
+}
+
+export function wanderWhileAsleep(asleep: boolean | undefined) {
+  if (!asleep) return null;
+  return { cmd: "sleep" as const, pose: "sleep" as const };
+}
+
+export function loadCard(): CardPrefs {
+  if (typeof window === "undefined") return blankCard();
+  try {
+    const raw = JSON.parse(window.localStorage.getItem(CARD_STORE) || "null");
+    return parseCard(raw);
+  } catch {
+    return blankCard();
+  }
+}
+
+export function saveCard(next: unknown): CardPrefs {
+  const card = parseCard(next);
+  if (typeof window !== "undefined") {
+    try {
+      window.localStorage.setItem(CARD_STORE, JSON.stringify(card));
+    } catch {
+      /* ignore */
+    }
+  }
+  return card;
+}

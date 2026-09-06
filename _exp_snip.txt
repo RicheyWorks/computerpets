@@ -1,0 +1,70 @@
+27931:        const done = leafHoldPath(1);
+27932:        return goPhase(next, "leaf-off", { x: target.holdX + done.x * face, lift: target.holdLift + done.lift, rot: done.rot * face }, { x: target.landX, lift: 0 }, "walk", leaveFace);
+27933:      }
+27934:      return next;
+27935:    }
+27936:
+27937:    if (next.phase === "leaf-off") {
+27938:      const u = next.t / DUR.leafOff;
+27939:      const pose = leafOffPath(Math.min(1, u), next.from, next.to);
+27940:      next.x = pose.x;
+27941:      next.lift = pose.lift;
+27942:      next.rot = pose.rot;
+27943:      next.anim = "walk";
+27944:      next.facing = target.landX >= target.holdX ? 1 : -1;
+27945:      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+27946:      return next;
+27947:    }
+27948:
+27949:    if (next.phase === "sill-hop") {
+27950:      const u = next.t / DUR.sillHop;
+27951:      const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+27952:      next.x = pose.x;
+27953:      next.lift = pose.lift;
+27954:      next.rot = pose.rot;
+27955:      next.anim = "play";
+27956:      if (u >= 1) {
+27957:        return goPhase(next, "sill-walk", { x: target.holdX, lift: target.holdLift }, { x: target.sillEndX, lift: target.holdLift }, "walk", target.sillEndX >= target.holdX ? 1 : -1);
+27958:      }
+27959:      return next;
+27960:    }
+28146:    FREEZE,
+28147:    NEST,
+28148:    SPOT,
+28149:    PRAY,
+28150:    EMERGE,
+28151:    SONG,
+28152:    LEAF,
+28153:    IGNORE,
+28154:    DUR,
+28155:    playFor,
+28156:    canStart,
+28157:    shouldAbort,
+28158:    nextPlayWait,
+28159:    sideHold,
+28160:    sillPoint,
+28161:    ridgePoint,
+28162:    coilPoint,
+28163:    pathPoint,
+28164:    fieldPoint,
+28165:    cracklePoint,
+29111:    songFace,
+29112:    songOnPath,
+29113:    songPath,
+29114:    songHoldPath,
+29115:    songOffPath,
+29116:    leafPoint,
+29117:    leafFace,
+29118:    leafOnPath,
+29119:    leafPath,
+29120:    leafHoldPath,
+29121:    leafOffPath,
+29122:    pickTarget,
+29123:    refitTarget,
+29124:    divePath,
+29125:    leapPath,
+29126:    dropPath,
+29127:    slideOffPath,
+29128:    coilOnPath,
+29129:    coilOffPath,
+29130:    fieldOnPath,

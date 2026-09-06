@@ -1,0 +1,54 @@
+==== README.md ====
+count=1
+HUNK 0 HEAD:
+Clicks on empty glass pass through to your windows. The floor is the work area, above the taskbar. On Windows, Rui can jump onto the side of a real window, hang on, then drop or dive back to the desk. Arc jumps onto the top (the title-bar ridge), holds, then hops or slides off. Volt wraps a corner, holds, then uncoils off. Trace follows the outline as a path, then hops or drops back to the desk. F...
+HUNK 0 BOOT:
+Clicks on empty glass pass through to your windows. The floor is the work area, above the taskbar. On Windows, Rui can jump onto the side of a real window, hang on, then drop or dive back to the desk. Arc jumps onto the top (the title-bar ridge), holds, then hops or slides off. Volt wraps a corner, holds, then uncoils off. Trace follows the outline as a path, then hops or drops back to the desk. F...
+---
+==== desktop/README.md ====
+count=1
+HUNK 0 HEAD:
+On Windows the tray sits by the clock. A click toggles the window. The floor sits the work area under the cursor, above the taskbar. Empty glass click-throughs. Hits stay on the pet, the keeper card (collapse and verbs stay `data-hit`), treats, gifts, and the choice sheet. Visible top-level window bounds (work-area space, not pixels) are pushed on a calm tick so Rui can jump onto a window side, cl...
+HUNK 0 BOOT:
+On Windows the tray sits by the clock. A click toggles the window. The floor sits the work area under the cursor, above the taskbar. Empty glass click-throughs. Hits stay on the pet, the keeper card (collapse and verbs stay `data-hit`), treats, gifts, and the choice sheet. Visible top-level window bounds (work-area space, not pixels) are pushed on a calm tick so Rui can jump onto a window side, cl...
+---
+==== desktop/renderer/leftover-house.test.cjs ====
+count=1
+HUNK 0 HEAD:
+test("Arca leftover waits a sash drip as a damp blotter; tenth leftover of the far den done; far ten closed; Hush leftover still cools a lamp-side pane as a lamp shadow; ninth leftover of the far den done; Beacon leftover still aligns a sash parting bead as a ruler line; eighth leftover of the far den done; Brine leftover still frosts a window stool as a salt dish; seventh leftover of the far den ...
+HUNK 0 BOOT:
+test("Boot leftover rows a lower sash light as a drop glass; first leftover after far den closed; Arca leftover still waits a window stool as a damp blotter; far ten closed; next leftover Reach; Hush leftover still cools a lamp-side pane as a lamp shadow; ninth leftover of the far den done; Beacon leftover still aligns a sash parting bead as a ruler line; eighth leftover of the far den done; Brine...
+---
+==== docs/ARCHITECTURE.md ====
+count=1
+HUNK 0 HEAD:
+| **Last Updated** | 2026-09-02 (Arca waits a sash drip as a damp blotter; tenth leftover of the far den done and closes far ten; Hush leftover still cools a lamp-side pane as a lamp shadow; ninth leftover of the far den done; Beacon leftover still aligns a sash parting bead as a ruler line; eighth leftover of the far den done; Brine leftover still frosts a window stool as a salt dish; seventh lef...
+HUNK 0 BOOT:
+| **Last Updated** | 2026-09-02 (Boot rows a lower sash light as a drop glass; first leftover after far den closed; Arca leftover still waits a window stool as a damp blotter; far ten closed; next leftover Reach; Hush leftover still cools a lamp-side pane as a lamp shadow; ninth leftover of the far den done; Beacon leftover still aligns a sash parting bead as a ruler line; eighth leftover of the f...
+---
+==== docs/ROADMAP.md ====
+count=2
+HUNK 0 HEAD:
+- [x] Arca (`cyst` / `arca`) waits a real sash drip as a damp blotter: walk onto the drip (sash drip — she waits, she does not drink; a traveling cyst waits; not Ochre pane reef, not Latch drip drink, not Lula apron loop, not Felt lean blotter-felt, not Brood emerge soil husk, not Vein damp saucer unfurl, not Brine salt-dish frost, not Knot paperweight many, not Hush lamp-shadow cool; sit the wait...
+HUNK 0 BOOT:
+- [x] Boot (`paramecium` / `boot`) rows a real lower sash light as a drop glass: walk onto the glass (lower interior sash light — water-drop film a slipper rows with cilia; not Coin bowl-circle, not Drake ink-dish tip, not Slip silt-tray ring, not Arca stool wait, not Hush lamp-shadow cool, not animal; sit the slipper; row as one name; cilia; named: Boot / paramecium. The row is the tell. Hours: R...
+---
+HUNK 1 HEAD:
+**Last Updated:** 2026-09-02 (Phase 6 leftover: Arca waits a sash drip as a damp blotter; tenth leftover of the far den done and closes far ten; Hush leftover still cools a lamp-side pane as a lamp shadow; ninth leftover of the far den done; Beacon leftover still aligns a sash parting bead as a ruler line; eighth leftover of the far den done; Brine leftover still frosts a window stool as a salt di...
+HUNK 1 BOOT:
+**Last Updated:** 2026-09-02 (Phase 6 leftover: Boot rows a lower sash light as a drop glass; first leftover after far den closed; Arca leftover still waits a window stool as a damp blotter; far ten closed; next leftover Reach (`amoeba`); Hush leftover still cools a lamp-side pane as a lamp shadow; ninth leftover of the far den done; Beacon leftover still aligns a sash parting bead as a ruler line...
+---
+==== desktop/renderer/window-play.js ====
+count=0
+==== web/src/lib/pets/window-play.ts ====
+count=2
+HUNK 0 HEAD:
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watc...
+HUNK 0 BOOT:
+/** Species-true window play. Rui clings and dives. Arc rides the title-bar ridge. Volt coils a window corner. Trace traces a window path. Flux fields the glass. Spark crackles an edge. Ion charges a corner, then bolts the glass. Gauss orbits the outside of the frame. Relay clicks two nodes. Fuse seats into a clip and holds. Ground seats the bottom lug and earths. Miso sits the top ledge. Pip watc...
+---
+HUNK 1 HEAD:
+  if (kind === WAIT) return w.width >= 194 && w.height >= 176;\n
+HUNK 1 BOOT:
+  if (kind === WAIT) return w.width >= 196 && w.height >= 164;\n    if (kind === ROW) return w.width >= 190 && w.height >= 174;\n
+---

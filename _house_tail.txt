@@ -1,0 +1,120 @@
+  assert.match(overlay, /function matchCall/);
+  assert.match(web, /export function matchCall/);
+  assert.doesNotMatch(web, /from "\.\/rooms"/);
+});
+
+test("the tray pins Rui, Sip, and the grid ten", () => {
+  assert.deepEqual(D.deskPicks(), [
+    "red_panda",
+    "hummingbird",
+    "cyber_dragon",
+    "volt_dragon",
+    "trace_dragon",
+    "flux_dragon",
+    "spark_dragon",
+    "ion_dragon",
+    "gauss_dragon",
+    "relay_dragon",
+    "fuse_dragon",
+    "ground_dragon",
+  ]);
+  assert.equal(D.deskPicks().length, 12);
+  assert.equal(D.deskPicks()[1], "hummingbird");
+  assert.equal(F.FLY_BIRD_KEY, "hummingbird");
+  assert.ok(F.MIN_STAY_S >= 24);
+  assert.deepEqual(S.VOICE_KEYS, ["red_panda", "hummingbird", "cat", "dog", "chickadee"]);
+  assert.equal(S.stepDefault("red_panda"), "soft");
+  assert.equal(M.RADIO_CANT_REACH, "can't reach");
+  assert.equal(M.RADIO_EMPTY, "no station from that look-up");
+  assert.equal(M.RADIO_LABEL, "Radio station");
+  assert.equal(M.RADIO_LOCAL, "Local");
+  assert.match(M.RADIO_UA, /ComputerPets/);
+  assert.equal(M.parseRadioQuery("KEXP").call, "kexp");
+  assert.equal(M.parseRadioQuery("KEXP").city, "");
+  assert.match(M.radioSearchUrl("KEXP"), /name=KEXP/);
+  assert.equal(M.parseRadioQuery("portland").city, "Portland");
+  assert.ok(M.radioSearchUrls("portland").some((u) => /city=Portland|name=Portland/.test(u)));
+  assert.equal(T.SLEEP_HOLD_FRAME, 1);
+  assert.ok(T.nextTrickWait(true, 0, "lie") >= 48);
+  assert.ok(T.LIE_HOLD >= 8);
+  assert.equal(R.RIBBON_SPECIAL, "I found a ribbon. It was not lost. It is now safer.");
+  assert.equal(T.TRICK_KEY, "red_panda");
+  assert.equal(existsSync(join(__dirname, "sounds", "hummingbird.wav")), true);
+  assert.equal(existsSync(join(__dirname, "sounds", "house-loop.wav")), true);
+  assert.equal(existsSync(join(__dirname, "sounds", "sleep-rain.ogg")), true);
+  assert.equal(Sleep.SLEEP_AID_PLUGINS[0].name, "Off");
+  assert.equal(Sleep.SLEEP_AID_PLUGINS[1].name, "Rain and thunder");
+  assert.equal(Sleep.SLEEP_AID_LICENSE, "CC0 · house-made");
+});
+
+function oggDurationSeconds(buf, rate = 22050) {
+  let last = 0n;
+  for (let i = 0; i < buf.length - 27; i++) {
+    if (buf[i] === 0x4f && buf[i + 1] === 0x67 && buf[i + 2] === 0x67 && buf[i + 3] === 0x53) {
+      const granule = buf.readBigUInt64LE(i + 6);
+      if (granule > last) last = granule;
+    }
+  }
+  return Number(last) / rate;
+}
+
+test("Sleep aid Off vs Rain and thunder starts, loops, and stops on mute", () => {
+  assert.deepEqual(Sleep.SLEEP_AID_PLUGINS.map((p) => p.id), ["off", "rain"]);
+  assert.equal(Sleep.shouldPlay({ plugin: "rain", playing: true }, { music: false }), true);
+  assert.equal(Sleep.shouldPlay({ plugin: "rain", playing: true }, { music: true }), false);
+  assert.equal(Sleep.shouldPlay({ plugin: "off", playing: false }, { music: false }), false);
+  const makeAudio = (src) => {
+    const node = { src, loop: false, volume: 1, paused: true, plays: 0, dataset: {} };
+    node.play = () => {
+      node.paused = false;
+      node.plays += 1;
+      return Promise.resolve();
+    };
+    node.pause = () => {
+      node.paused = true;
+    };
+    return node;
+  };
+  const on = Sleep.applySleepAid(null, { plugin: "rain", playing: true }, { music: false }, 0.8, { makeAudio });
+  assert.equal(on.loop, true);
+  assert.equal(on.src, "sounds/sleep-rain.ogg");
+  assert.equal(on.paused, false);
+  const muted = Sleep.applySleepAid(on, { plugin: "rain", playing: true }, { music: true }, 0.8, { makeAudio });
+  assert.equal(muted, null);
+  assert.equal(on.paused, true);
+  const off = Sleep.applySleepAid(makeAudio("x"), { plugin: "off", playing: false }, { music: false }, 0.8, { makeAudio });
+  assert.equal(off, null);
+  const buf = readFileSync(join(__dirname, "sounds", "sleep-rain.ogg"));
+  const dur = oggDurationSeconds(buf);
+  assert.ok(dur >= 170 && dur <= 195, `sleep-rain duration ${dur}`);
+  assert.match(petSrc, /function sitSleepAid/);
+  assert.match(petSrc, /sitSleepAid\(\)/);
+  assert.equal(C.parseCard({}).sleepAid.plugin, "off");
+  assert.equal(C.parseCard({ sleepAid: { plugin: "rain", playing: true } }).sleepAid.playing, true);
+  const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
+  assert.match(mainSrc, /sandbox:\s*true/);
+  assert.match(mainSrc, /contextIsolation:\s*true/);
+  assert.match(mainSrc, /nodeIntegration:\s*false/);
+});
+
+const News = require("./news.js");
+const Market = require("./market.js");
+
+test("news topics and quotes persist on the leftover card", () => {
+  const world = News.currentTopic(News.blankNewsPrefs());
+  assert.equal(world.id, "world");
+  assert.equal(world.name, "World");
+  let prefs = News.addTopic(News.blankNewsPrefs(), { name: "marijuana news", query: "marijuana news" });
+  assert.equal(News.currentTopic(prefs).query, "marijuana news");
+  assert.match(News.topicRssUrl("Tacoma crime"), /news\.google\.com/);
+  const card = C.parseCard({ newsPrefs: prefs.topics, currentNewsId: prefs.currentId, marketTickers: [{ symbol: "AAPL" }, { symbol: "BTC" }] });
+  assert.equal(card.currentNewsId, prefs.currentId);
+  assert.ok(card.newsPrefs.some((t) => t.query === "marijuana news"));
+  assert.equal(card.marketTickers.length, 2);
+  assert.equal(Market.classify("AAPL").kind, "stock");
+  assert.equal(Market.classify("BTC").kind, "crypto");
+  assert.match(Market.yahooUrl("AAPL"), /query1\.finance\.yahoo\.com/);
+  assert.match(Market.geckoUrl("bitcoin"), /api\.coingecko\.com/);
+  assert.equal(Market.parseYahoo({ chart: { result: [{ meta: { regularMarketPrice: 12.5, shortName: "Apple", currency: "USD" } }] } }).price, 12.5);
+  assert.equal(Market.parseGecko({ bitcoin: { usd: 64000 } }, "bitcoin").price, 64000);
+});

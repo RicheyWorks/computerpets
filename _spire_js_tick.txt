@@ -1,0 +1,57 @@
+    if (next.phase === "rock-on") {
+      const face = rockFace(target);
+      const u = next.t / DUR.rockOn;
+      const pose = rockOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "walk";
+      next.facing = face;
+      if (u >= 1) {
+        return goPhase(next, "rock", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "rock") {
+      const face = rockFace(target);
+      const pose = rockPath(Math.min(1, next.t / DUR.rock));
+      next.x = target.holdX + pose.x * face;
+      next.lift = target.holdLift + pose.lift;
+      next.rot = pose.rot * face;
+      next.anim = "play";
+      next.facing = face;
+      if (next.t >= DUR.rock) {
+        return goPhase(next, "rock-hold", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "rock-hold") {
+      const face = rockFace(target);
+      const pose = rockHoldPath(Math.min(1, next.t / DUR.rockHold));
+      next.x = target.holdX + pose.x * face;
+      next.lift = target.holdLift + pose.lift;
+      next.rot = pose.rot * face;
+      next.anim = "sit";
+      next.facing = face;
+      if (next.t >= DUR.rockHold) {
+        const leaveFace = target.landX >= target.holdX ? 1 : -1;
+        const done = rockHoldPath(1);
+        return goPhase(next, "rock-off", { x: target.holdX + done.x * face, lift: target.holdLift + done.lift, rot: done.rot * face }, { x: target.landX, lift: 0 }, "walk", leaveFace);
+      }
+      return next;
+    }
+
+    if (next.phase === "rock-off") {
+      const u = next.t / DUR.rockOff;
+      const pose = rockOffPath(Math.min(1, u), next.from, next.to);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "walk";
+      next.facing = target.landX >= target.holdX ? 1 : -1;
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+

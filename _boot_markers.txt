@@ -1,0 +1,139 @@
+==== leftover-house playFor ====
+1068:assert.equal(WP.playFor("tardigrade"), "dry");
+1069:assert.notEqual(WP.playFor("tardigrade"), "tun");
+1070:assert.notEqual(WP.playFor("tardigrade"), "spring");
+1071:assert.notEqual(WP.playFor("tardigrade"), "velvet");
+1090:assert.equal(WP.playFor("tardigrade"), "dry");
+1100:assert.equal(WP.playFor("tardigrade"), "dry");
+1124:assert.equal(WP.playFor("tardigrade"), "dry");
+1319:assert.equal(WP.playFor("paramecium"), "sill");
+1704:assert.equal(WP.playFor("cyst"), "wait");
+1706:assert.notEqual(WP.playFor("cyst"), "arca");
+1707:assert.notEqual(WP.playFor("cyst"), "cyst");
+1708:assert.notEqual(WP.playFor("cyst"), "reef");
+1709:assert.notEqual(WP.playFor("cyst"), "drink");
+1710:assert.notEqual(WP.playFor("cyst"), "loop");
+1711:assert.notEqual(WP.playFor("cyst"), "emerge");
+1712:assert.notEqual(WP.playFor("cyst"), "cool");
+1713:assert.notEqual(WP.playFor("cyst"), "sill");
+1714:assert.equal(WP.playFor("paramecium"), "sill");
+1727:assert.equal(WP.playFor("paramecium"), "sill");
+1742:assert.equal(WP.playFor("paramecium"), "sill");
+1752:assert.equal(WP.playFor("tardigrade"), "dry");
+1753:assert.equal(WP.playFor("paramecium"), "sill");
+1837:assert.equal(WP.playFor("paramecium"), "sill");
+==== JS DUR wait ====
+988:waitOn: 3.10,
+990:waitHold: 5.40,
+991:waitOff: 2.92,
+==== JS playFor cyst ====
+1154:if (key === "tardigrade") return DRY;
+1207:if (key === "cyst") return WAIT;
+==== JS size WAIT ====
+1597:if (kind === WAIT) return w.width >= 194 && w.height >= 176;
+5230:if (kind === WAIT) {
+6171:if (target.kind === WAIT) {
+21253:if (target.kind === WAIT) {
+==== JS exports WAIT ====
+32846:WAIT,
+33980:waitPoint,
+33985:waitOffPath,
+==== TS WAIT const ====
+TS 204:export const WAIT = "wait";
+TS 205:export const SILL = "sill";
+TS 992:waitOff: 2.92,
+TS 2100:if (key === "cyst") return WAIT;
+TS 2484:if (kind === WAIT) return w.width >= 194 && w.height >= 176;
+TS 6097:if (kind === WAIT) {
+TS 7035:if (target.kind === WAIT) {
+TS 23324:if (target.kind === WAIT) {
+==== docs short ====
+README.md:66:Clicks on empty glass pass through to your windows. The floor is the work area, above the taskbar. On Windows, Rui can jump onto the side of a real window, hang on, then drop or dive back to the desk.
+desktop\README.md:9:On Windows the tray sits by the clock. A click toggles the window. The floor sits the work area under the cursor, above the taskbar. Empty glass click-throughs. Hits stay on the pet, the keeper card (
+docs\ARCHITECTURE.md:11:| **Last Updated** | 2026-09-02 (Arca waits a sash drip as a damp blotter; tenth leftover of the far den done and closes far ten; Hush leftover still cools a lamp-side pane as a lamp shadow; ninth lef
+docs\ROADMAP.md:318:- [x] Round (`lamprey` / `round`) disks a real window sill horn as a stone disk: walk onto the horn (the stone — the same furniture family Blush stones as a pink desert rock, not Blush's stone, not Da
+docs\ROADMAP.md:319:- [x] Haste (`house_centipede` / `haste`) hunts a real window sash-jamb crack as a plaster crack: walk into the crack (the crack — the same furniture family Dash scoots as a stone crack and Door gapes
+docs\ROADMAP.md:320:- [x] Link (`millipede` / `link`) oils a real window stool as a damp log: walk onto the stool (the log — the same furniture family Cache buries as an oak dish, Gum chews as a gum perch, and Levee bank
+docs\ROADMAP.md:321:- [x] Armor (`pillbug` / `armor`) rolls a real window stool as a bark dish: walk onto the stool (the dish — the same furniture family Barb raises as a bark tray, Link oils as a damp log, Cache buries 
+docs\ROADMAP.md:322:- [x] Cast (`earthworm` / `cast`) bands a real window stool as a soil tray: walk onto the stool (the tray — the same furniture family Armor rolls as a bark dish, Link oils as a damp log, Barb raises a
+docs\ROADMAP.md:325:- [x] Hop (`springtail` / `hop`) springs a real window foot as a duff cup: walk onto the foot (the cup — the same furniture family Stripe stamps as a duff dish and Lid shuts as a leaf dish, not Stripe
+docs\ROADMAP.md:326:- [x] Half (`planarian` / `half`) splits a real window meeting-rail underside as a stream stone: walk onto the underside (the stone — the wet underside of an interior meeting rail; photophobic; not Fe
+docs\ROADMAP.md:327:- [x] Thread (`nematode` / `thread`) thrashes a real window glazing rebate as a soil film: walk into the rebate (the film — the same furniture family Dew curls as a peat saucer, not Dew's curl, not Tu
+docs\ROADMAP.md:328:- [x] Wave (`fiddler_crab` / `wave`) signals a real window sill pan as a marsh dish: walk onto the pan (the dish — the same furniture family Jaw shows as a brackish dish, Wash rinses as a wash bowl, a
+docs\ROADMAP.md:329:- [x] Pale (`ghost_crab` / `pale`) sands a real window stool as dry sand: walk onto the stool (the sand — the same furniture family Ledger plows as a sand tray, Arm stores as a sand tray, Bank digs as
+docs\ROADMAP.md:330:- [x] Cone (`limpet` / `cone`) clamps a real glass rim as a rock rim: walk onto the rim (the rim — the same furniture family Whorl rasps as her own house, not Whorl's rasp, not Lid's window-foot shut,
+docs\ROADMAP.md:331:- [x] Cement (`barnacle` / `cement`) stays a real sash stile as a stone rim: walk onto the stile (the stile — the same furniture family Dam gnaws as a lodge cup and Jet glues as wet wood, not Dam's gn
+docs\ROADMAP.md:332:- [x] Mail (`chiton` / `mail`) plates a real window meeting rail as a tide rock: walk onto the rail (the rail — the same furniture family Speck marks as a riffle cup, Bar bars as a weed rail, Felt lea
+docs\ROADMAP.md:333:- [x] Spire (`periwinkle` / `spire`) rocks a real window sash jamb as a rock face: walk onto the jamb (the jamb — the same furniture family Sail clings as a trunk sail, Spine bristles as a pine post, 
+docs\ROADMAP.md:334:- [x] Token (`sand_dollar` / `token`) flats a real window sill pan as a sand plate: walk onto the pan (the pan — the same furniture family Wave signals as a marsh dish, Spoon paddles as a current dish
+docs\ROADMAP.md:335:- [x] Thorn (`sea_urchin` / `thorn`) spines a real window well as a tide pool: walk into the well (the pool — the same furniture family Scud sides as a side pool, Spike crowns as a sand tray, Beak sna
+docs\ROADMAP.md:336:- [x] Knurl (`knobbed_whelk` / `knurl`) knobs a real window stool as a wrack dish: walk onto the stool (the dish — the same furniture family Pale sands as dry sand, Armor rolls as a bark dish, Cast ba
+docs\ROADMAP.md:341:- [x] Heap (`lugworm` / `heap`) castings a real window foot as wet sand: walk onto the foot (the foot — the same furniture family Lid shuts as a leaf dish and Stripe stamps as a duff dish, not Lid's s
+docs\ROADMAP.md:347:- [x] Ghost (`luna` / `ghost`) weeks a real lamp-side glass as lamp dusk: walk onto the glass (the glass — the same furniture family Loom webs as a lamp web, not Loom's web, not Night's lamp-side stil
+docs\ROADMAP.md:349:- [x] Spark (`firefly` / `spark`) glows a real lower sash light as ink dusk: walk onto the light (the light — the same furniture family Drake tips as an ink dish and Gale runs as a dry dish, not Drake
+docs\ROADMAP.md:351:- [x] Dart (`darner` / `dart`) hawks a real lamp-side air as prey air: walk into the air (the open air on the lamp side of the glass — not Hook's lamp-post stile soar, not Haste's sash-jamb crack hunt
+docs\ROADMAP.md:353:- [x] Milk (`monarch` / `milk`) weeds a real window-box as a milkweed cup: walk onto the box (the cup — the same furniture family Sip sips as a nectar cup, Wrist wraps as a nectar cup, Disc snips as f
+docs\ROADMAP.md:355:- [x] Comb (`honeybee` / `comb`) waggles a real window sill pan as a wax dish: walk onto the pan (the dish — the same furniture family Wave signals as a marsh dish, Token flats as a sand plate, Spoon 
+docs\ROADMAP.md:357:- [x] Scud (`amphipod` / `scud`) sides a real window well as a side pool: walk into the well (the pool — the same furniture family Silver goes as a bank hole, Whisk barbels as a mud run, Beak snaps as
+docs\ROADMAP.md:358:- [x] Tun (`tardigrade` / `tun`) dries a real window pane as a moss film: walk onto the pane (the film — the same furniture family Slick slides as an ink dish and Disk opens as an ink-dish pad, not Sl
+docs\ROADMAP.md:359:- [x] Jet (`velvet_worm` / `jet`) glues a real window sash stile as wet wood: walk onto the stile (the wood — the same furniture family Dam gnaws as a lodge cup, not Dam's gnaw, not Spine's window-jam
+docs\ROADMAP.md:361:- [x] Silver (`american_eel` / `silver`) goes a real window well as a bank hole: walk into the well (the hole — the same furniture family Whisk barbels as a mud run, Beak snaps as a mud bowl, Spike cr
+docs\ROADMAP.md:371:- [x] Twig (`stick` / `twig`) freezes a real sash muntin as a pencil stem: walk onto the muntin (the thin bar that divides the lights — not Still's sash parting-bead vine rail creep, not Hang's transo
+docs\ROADMAP.md:373:- [x] Column (`carpenter_ant` / `column`) nests a real sash stile as a timber gallery: walk onto the stile (structural timber — not Auger's sash-stile timber hole bore, not Dam's sash-stile lodge-cup 
+docs\ROADMAP.md:375:- [x] Seven (`ladybird` / `seven`) spots a real window-box leaf as a leaf dish: walk onto the leaf (window-box foliage — not Disc's window-box leaf foliage snip, not Thrum's window-box meadow forage, 
+docs\ROADMAP.md:377:- [x] Fold (`mantis` / `fold`) prays a real window-box stem as a green hinge: walk onto the stem (window-box plant stem — not Stem's sash parting-bead blotter stem stilt, not Twig's sash muntin pencil
+docs\ROADMAP.md:379:- [x] Brood (`cicada` / `brood`) emerges a real window foot as a soil husk: walk onto the foot (the soil at the pane's foot — not Heap's window-foot wet-sand castings, not Hop's window-foot duff-cup s
+docs\ROADMAP.md:381:- [x] Chirp (`field_cricket` / `chirp`) songs a real window stool as a grass dish: walk onto the stool (papers are grass — the same furniture family Pale sands as dry sand, Ledger plows as a sand tray
+docs\ROADMAP.md:383:- [x] Blade (`katydid` / `blade`) leafs a real sash horn as a leaf rim: walk onto the horn (the meeting-rail / sash horn — the same furniture family Blush stones as a pink desert rock and Eft trails a
+docs\ROADMAP.md:385:- [x] Vault (`grasshopper` / `vault`) jumps a real window apron as a grass plate: walk onto the apron (the apron under the sill — the same furniture family Vee honks as a blotter green and Lula loops 
+docs\ROADMAP.md:387:- [x] Banner (`swallowtail` / `banner`) tails a real window stool as a blossom dish: walk onto the stool (papers are a blossom — the same furniture family Chirp songs as a grass dish, Pale sands as dr
+docs\ROADMAP.md:389:- [x] Jewel (`jewelwing` / `jewel`) blacks a real glass rim as a stream jewel: walk onto the rim (the glass edge — the same furniture family Whorl rasps as her own house, not Dart's lamp-side-air prey
+docs\ROADMAP.md:391:- [x] Lace (`lacewing` / `lace`) nets a real window stool as a leaf dish: walk onto the stool (the stool — the same furniture family Chirp songs as a grass dish and Banner tails as a blossom dish, not
+docs\ROADMAP.md:393:- [x] Forceps (`earwig` / `forceps`) cercis a real window stool as a bark dish: walk onto the stool (the stool — papers are bark; the same furniture family Lace nets as a leaf dish, Chirp songs as a g
+docs\ROADMAP.md:395:- [x] Snout (`acorn_weevil` / `snout`) drills a real window stool as an acorn cup: walk onto the stool (the stool — papers are an acorn; the same furniture family Forceps cercis as a bark dish, Lace n
+docs\ROADMAP.md:397:- [x] Click (`click_beetle` / `click`) rights a real window stool as a bark plate: walk onto the stool (the stool — papers are bark; the same furniture family Snout drills as an acorn cup, Forceps cer
+docs\ROADMAP.md:399:- [x] Rob (`robber_fly` / `rob`) seizes a real window stool as a grass perch: walk onto the stool (the stool — papers are grass; the same furniture family Click rights as a bark plate, Snout drills as
+docs\ROADMAP.md:401:- [x] Frill (`oyster` / `frill`) shelves a real sash stile as a timber shelf: walk onto the stile (the stile — dead wood a bracket shelves; lean then bracket again; layers; grain; papers are a forest 
+docs\ROADMAP.md:403:- [x] Cap (`fly_agaric` / `cap`) warts a real window apron as a moss cup: walk onto the apron (the apron under the sill — the same furniture family Vee honks as a blotter green, Lula loops as a blotte
+docs\ROADMAP.md:405:- [x] Lattice (`morel` / `lattice`) hollows a real sash well as leaf mold: walk into the well (the sash well — the same furniture family Velvet kicks as a silk burrow and Nori buns as an inkwell hide;
+docs\ROADMAP.md:407:- [x] Horn (`chanterelle` / `horn`) forks a real sash drip as a moss rim: walk onto the drip (the sash drip — the same furniture family Latch drinks as a damp blotter; not Latch's drink, not Lattice's
+docs\ROADMAP.md:414:- [x] Ring (`turkey_tail` / `ring`) zones a real sash stile as wood grain: walk onto the stile (the stile — dead wood a bracket zones; thin, zoned, pores not gills; a bracket, not a turkey; not Frill'
+docs\ROADMAP.md:422:- [x] Pact (`lichen` / `pact`) plaques a real cool stile as bark stone: walk onto the stile (upper cool left timber — bark/stone a two-kingdom plaque keeps; not Frill's mid left timber shelf, not Flam
+docs\ROADMAP.md:426:- [x] Arca (`cyst` / `arca`) waits a real sash drip as a damp blotter: walk onto the drip (sash drip — she waits, she does not drink; a traveling cyst waits; not Ochre pane reef, not Latch drip drink,
+docs\ROADMAP.md:428:- [x] Beacon (`magneton` / `beacon`) aligns a real sash parting bead as a ruler line: walk onto the bead (interior parting bead — vertical thin bead between sash and jamb / pencil-line of the frame a 
+docs\ROADMAP.md:430:- [x] Shard (`silica` / `shard`) facets a real sash gap as an inkstone: walk into the gap (left sash gap — inkstone a living crystal facets; not Mortar's left inkstone-cell daub, not Mane's right wood
+docs\ROADMAP.md:432:- [x] Dusk (`terminator` / `dusk`) rims a real lamp-side stile as a lamp-edge: walk onto the stile (lamp-side stile as a lamp-edge a twilight walker rims; not Night's lamp-side stile dusk run, not Pen
+docs\ROADMAP.md:434:- [x] Knot (`nexus` / `knot`) manys a real window stool as a paperweight: walk onto the stool (window stool as a paperweight a walking colony manys; not Cache oak-dish bury, not Armor bark-dish roll, 
+docs\ROADMAP.md:436:- [x] Brine (`halovore` / `brine`) frosts a real window stool as a salt dish: walk onto the stool (window stool as a salt dish a salt-drinker frosts; not Sheen salt-glass lick, not Tun dry moss-film, 
+docs\ROADMAP.md:457:**Last Updated:** 2026-09-02 (Phase 6 leftover: Arca waits a sash drip as a damp blotter; tenth leftover of the far den done and closes far ten; Hush leftover still cools a lamp-side pane as a lamp sh
+==== cjs Arca leftover tests ====
+cjs 35374:assert.equal(P.playFor("paramecium"), "sill");
+cjs 35517:assert.equal(P.playFor("paramecium"), "sill");
+cjs 35666:assert.equal(P.playFor("paramecium"), "sill");
+cjs 35825:assert.equal(P.playFor("paramecium"), "sill");
+cjs 35975:assert.equal(P.playFor("paramecium"), "sill");
+cjs 36124:assert.equal(P.playFor("paramecium"), "sill");
+cjs 36244:test("Arca leftover waits a sash drip as a damp blotter: walk onto the drip, sit the wait, then leave", () => {
+cjs 36246:assert.equal(P.playFor("cyst"), "wait");
+cjs 36248:assert.notEqual(P.playFor("cyst"), "reef");
+cjs 36249:assert.notEqual(P.playFor("cyst"), "drink");
+cjs 36250:assert.notEqual(P.playFor("cyst"), "loop");
+cjs 36251:assert.notEqual(P.playFor("cyst"), "emerge");
+cjs 36252:assert.notEqual(P.playFor("cyst"), "lean");
+cjs 36253:assert.notEqual(P.playFor("cyst"), "unfurl");
+cjs 36254:assert.notEqual(P.playFor("cyst"), "frost");
+cjs 36255:assert.notEqual(P.playFor("cyst"), "many");
+cjs 36256:assert.notEqual(P.playFor("cyst"), "cool");
+cjs 36257:assert.notEqual(P.playFor("cyst"), "arca");
+cjs 36258:assert.notEqual(P.playFor("cyst"), "cyst");
+cjs 36259:assert.notEqual(P.playFor("cyst"), "sill");
+cjs 36270:assert.equal(P.playFor("paramecium"), "sill");
+cjs 36282:assert.ok(target.holdLift >= 0, "it waits a sash drip as a damp blotter");
+cjs 36302:assert.ok(wait.lift >= 0, "the sash drip as a damp blotter, not the sky");
+cjs 36318:assert.ok(okWait, "a real sash drip as a damp blotter");
+cjs 36331:assert.ok(walkOn.lift >= 0, "it walks onto the sash drip as a damp blotter");
+cjs 36332:assert.ok(walkOn.rot !== frostOn.rot, "a walk onto the damp blotter, not Brine frost");
+cjs 36342:assert.ok(Math.abs(hold.rot - 1.73) < 0.2, "it holds the sit on the damp blotter");
+cjs 36349:assert.ok(Math.abs(offMid.x - wait.x) > 8, "a walk leave off the damp blotter");
+cjs 36363:assert.ok(play.lift !== undefined, "it waits on the damp blotter");
+cjs 36393:assert.ok(Math.abs(play.target.holdX - beforeX) > 40, "refit follows the moved damp blotter");

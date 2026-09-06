@@ -1,0 +1,10 @@
+key: morel
+guest: Lattice (American Morel)
+source: Wikimedia Commons Rain_on_leaves_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Rain_on_leaves_(Gravity_Sound).wav
+direct: https://upload.wikimedia.org/wikipedia/commons/9/92/Rain_on_leaves_%28Gravity_Sound%29.wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet fungus sit — Morchella has no voice. Soft rain-on-leaves as damp-air hush (attenuated). Source kept as short ogg excerpt of Commons wav. No music. No narrator. No cartoon beep. House cut ~3.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

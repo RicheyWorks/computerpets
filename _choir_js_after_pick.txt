@@ -1,0 +1,16 @@
+side: "lampglass",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "thirsted",
+        spin: "none",
+      };
+    }
+
+        if (kind === WRAP) {
+      const hold = wrapPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -64 : 64;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = 

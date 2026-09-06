@@ -1,0 +1,69 @@
+
+  function rockPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const workW = work && work.width ? work.width : 1400;
+    const left = win.x + win.width / 2 < workW / 2;
+    const jamb = Math.max(8, Math.min(size * 0.055, win.width * 0.033));
+    const x = left ? win.x + jamb : win.x + win.width - size - jamb;
+    const face = Math.max(94, win.height * 0.44);
+    const gripY = win.y + face;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 37, maxLift) };
+  }
+
+  function rockFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function rockOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.69) * 2.35;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (toX >= fromX ? 1 : -1) * 4.55 * (1 - ease) + stride * 0.19,
+    };
+  }
+
+  function rockPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.32) {
+      const s = t / 0.32;
+      const ease = s * s * (3 - 2 * s);
+      return { x: ease * 2.2, lift: ease * 1.6, rot: ease * 11.4 };
+    }
+    if (t < 0.78) {
+      const s = (t - 0.32) / 0.46;
+      const graze = Math.sin(s * Math.PI);
+      return { x: 2.2 + graze * 1.4, lift: 1.6 + graze * 3.1, rot: 11.4 + graze * 4.8 };
+    }
+    return { x: 2.5, lift: 1.9, rot: 12.1 };
+  }
+
+  function rockHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.24;
+    return { x: 2.5, lift: 1.9 + hush, rot: 12.1 };
+  }
+
+  function rockOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.51) * 2.05;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (from && from.rot != null ? from.rot : 12.1) * (1 - ease),
+    };
+  }
+

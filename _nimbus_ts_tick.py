@@ -1,0 +1,10 @@
+﻿import pathlib
+ts = pathlib.Path("web/src/lib/pets/window-play.ts").read_text(encoding="utf-8")
+i = ts.find('if (next.phase === "chord-off")')
+print(repr(ts[i:i+900]))
+print("==== beginPlay before ====")
+j = ts.find("export function beginPlay(target: PlayTarget | null | undefined, petX: number): WindowPlay | null")
+print(repr(ts[j-200:j]))
+print("==== chordOffPath end ====")
+k = ts.find("export function chordOffPath")
+print(repr(ts[k:k+600]))

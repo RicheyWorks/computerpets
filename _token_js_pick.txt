@@ -1,0 +1,19 @@
+﻿    if (kind === FLAT) {
+      const hold = flatPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -78 : 78;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 71 : -71;
+      return {
+        id: best.id,
+        kind,
+        side: "sandplate",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "flats",
+        spin: "none",
+      };
+    }
+

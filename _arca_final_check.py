@@ -1,0 +1,13 @@
+﻿from pathlib import Path
+js=Path("desktop/renderer/window-play.js").read_text(encoding="utf-8")
+ts=Path("web/src/lib/pets/window-play.ts").read_text(encoding="utf-8")
+cjs=Path("desktop/renderer/window-play.test.cjs").read_text(encoding="utf-8")
+print("WAIT", 'const WAIT = "wait"' in js, 'export const WAIT' in ts)
+print("cyst->wait", 'cyst") return WAIT' in js)
+print("closes far", "closes far ten" in js)
+print("Arca tests", cjs.count("Arca leftover"))
+print("paramecium sill", cjs.count('playFor("paramecium"), "sill"'))
+print("cyst sill left", cjs.count('playFor("cyst"), "sill"'))
+print("sea_star", 'playFor("sea_star"), "reef"' in cjs)
+print("typeof WAIT", "typeof WAIT" in ts)
+print("dampblotter", js.count("dampblotter"), ts.count("dampblotter"))

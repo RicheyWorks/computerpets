@@ -1,0 +1,8 @@
+Source: Wikimedia Commons File:Pileated_Woodpecker.ogg
+Author: G. McGrane
+License: Public domain (PD-self)
+URL: https://commons.wikimedia.org/wiki/File:Pileated_Woodpecker.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/0/06/Pileated_Woodpecker.ogg
+Notes: Pileated Woodpecker call. Same Commons PD hand as American Crow / Common Raven.
+Cut: silenceremove + dynaudnorm, atrim 0:3.5, mono 44.1kHz
+House path: build our own from field tape — not Grok Imagine

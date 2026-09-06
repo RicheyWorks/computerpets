@@ -1,0 +1,31 @@
+  function honkPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 44;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.10;
+    const apron = Math.max(26, Math.min(size * 0.15, win.height * 0.07));
+    const gripY = win.y + win.height - apron;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 16, maxLift) };
+  }
+
+  function honkFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function honkOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const step = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2);
+    const bob = t <= 0 || t >= 1 ? 0 : Math.abs(Math.sin(t * Math.PI * 2)) * 6.8;
+    return {
+      x: fromX + (toX - fromX) * ease + step * 6.4 * (1 - t * 0.06),
+      lift: fromLift + (toLift - fromLift) * ease + bob,
+      rot: (toX >= fromX ? 1 : -1) * step * 7,
+    };
+  }

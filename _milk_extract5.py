@@ -1,0 +1,16 @@
+﻿from pathlib import Path
+js = Path(r"C:\Users\730ri\projects\ComputerPets\desktop\renderer\window-play.js").read_text(encoding="utf-8")
+cjs = Path(r"C:\Users\730ri\projects\ComputerPets\desktop\renderer\window-play.test.cjs").read_text(encoding="utf-8")
+out = Path(r"C:\Users\730ri\projects\ComputerPets\_milk_extract5.txt")
+lines = []
+i = js.find('if (next.phase === "mouth-on")')
+lines.append("===== mouth tick =====")
+lines.append(js[i:i+1400])
+i = cjs.find('if (play.phase === "mouth")')
+lines.append("\n===== cjs mouth anim =====")
+lines.append(cjs[i-80:i+500] if i>=0 else "missing")
+i = cjs.find('if (play.phase === "wrap")')
+lines.append("\n===== cjs wrap anim =====")
+lines.append(cjs[i-40:i+400] if i>=0 else "missing")
+out.write_text("\n".join(lines), encoding="utf-8")
+print("ok", out.stat().st_size)

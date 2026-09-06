@@ -1,0 +1,10 @@
+key: puffball
+guest: Puff (Common Puffball)
+source: Wikimedia Commons Leaf_crunch_3_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Leaf_crunch_3_(Gravity_Sound).wav
+direct: https://commons.wikimedia.org/wiki/Special:FilePath/Leaf_crunch_3_(Gravity_Sound).wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet fungus sit — Lycoperdon has no voice. Short dry leaf-crunch burst as dry dust cough / spore puff (highpassed + attenuated). Distinct from Ring Leaf_crunch_(Gravity_Sound).wav bracket hush. Source kept as short ogg of Commons wav. No music. No narrator. No cartoon beep. House cut ~2.2s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

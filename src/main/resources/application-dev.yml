@@ -1,0 +1,16 @@
+# Local laptop and docker-compose (compose already sets SPRING_PROFILES_ACTIVE=dev
+# and overrides the datasource to Postgres via SPRING_DATASOURCE_*).
+# Bare `mvn spring-boot:run -Dspring-boot.run.profiles=dev` keeps H2 from application.yml.
+spring:
+  h2:
+    console:
+      enabled: true
+  jpa:
+    show-sql: true
+
+# Allowed here only. Leave unset unless you are on a laptop without Xbox tokens.
+microsoft:
+  dev-mode: ${MICROSOFT_DEV_MODE:false}
+
+# Redis is still the default from application.yml. RATE_LIMIT_BACKEND=memory is
+# allowed in this profile for a single local process (not for compose replicas).

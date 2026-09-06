@@ -1,0 +1,16 @@
+﻿from pathlib import Path
+road = Path("docs/ROADMAP.md").read_text(encoding="utf-8")
+# find Jewel bullet start
+i = road.find("Jewel (`jewelwing`")
+print(road[i:i+900])
+print("==== LAST ====")
+i = road.find("2026-09-02 (Phase 6 leftover: Jewel")
+print(road[i:i+500] if i>=0 else "no")
+arch = Path("docs/ARCHITECTURE.md").read_text(encoding="utf-8")
+i = arch.find("2026-09-02 (Jewel")
+print("==== ARCH ====")
+print(arch[i:i+500] if i>=0 else "no")
+readme = Path("README.md").read_text(encoding="utf-8")
+i = readme.find("Jewel blacks")
+print("==== README ====")
+print(readme[i-80:i+450] if i>=0 else "no")
