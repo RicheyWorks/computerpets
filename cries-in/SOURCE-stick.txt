@@ -1,0 +1,11 @@
+﻿key: stick
+guest: Twig (Common Walkingstick)
+source: BigSoundBank Steps on the Twigs (sound 1301)
+URL: https://bigsoundbank.com/steps-on-the-twigs-s1301.html
+direct: https://bigsoundbank.com/UPLOAD/bwf-en/1301.wav
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Diapheromera femorata (common walkingstick; house guest Twig) — silent. No stridulation. Soft attenuated Steps on the Twigs as faint twig tick stand-in. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from Pact Broken twigs #1 (#1299) and Snap Broken twigs #2 (#1300). House cut ~2.4s mono 44.1kHz from ~9s mark; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit near moss loudness. Quiet stick insect.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
