@@ -231,7 +231,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 187. [x] `earwig.wav` — **Forceps** — European Earwig — An earwig is silent. Cerci rustle on bark. No voice. — sat 2026-09-05 Freesound CC0 Tree Bark Close Rustling (NikoletB #846406)
 188. [x] `acorn_weevil.wav` — **Snout** — Acorn Weevil — An acorn weevil is silent. A tiny snout tick. No voice. — sat 2026-09-05 Commons CC BY 4.0 Leaf crunch 5 (Gravity Sound)
 189. [x] `click_beetle.wav` — **Click** — Eyed Click Beetle — A click beetle clicks its prosternum, one dry snap. No voice. — sat 2026-09-05 iNat CC BY obs 333256714 (Dr Pamela Muggeridge) Elateridae
-190. [ ] `robber_fly.mp4` — **Rob** — Robber Fly — A robber fly buzzes its wings, short and dry. No voice. (zip synth — replace with Grok)
+190. [x] `robber_fly.wav` — **Rob** — Robber Fly — A robber fly buzzes its wings, short and dry. No voice. — sat 2026-09-05 BigSoundBank CC0 Fly and Glass #0759 (Joseph SARDIN)
 191. [ ] `sloth.mp4` — **Hang** — Linnaeus's Two-toed Sloth — A two-toed sloth is nearly silent. A high thin whistle, then a hiss if pressed. (zip synth — replace with Grok)
 192. [ ] `lemur.mp4` — **Sun** — Ring-tailed Lemur — A ring-tailed lemur mews a contact call, then a short howl. No English. (zip synth — replace with Grok)
 193. [x] `gibbon.wav` — **Swing** — Lar Gibbon — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
