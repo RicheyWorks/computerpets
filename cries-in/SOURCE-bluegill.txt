@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/drops-metal-sink-s1383.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/1383.mp3
+Title: Drops, metal sink (sound 1383)
+Author: Joseph SARDIN
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Soft water-tick drops for silent bluegill. No voice. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim 0:4. Distinct from clownfish Drops metal pan #1382 and Drops of water #1384–1387.
