@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, and Quill today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, and Wick today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -15,8 +15,9 @@ import * as Budgie from "./budgie-tricks";
 import * as Fox from "./fox-tricks";
 import * as Penguin from "./penguin-tricks";
 import * as Parrot from "./parrot-tricks";
+import * as Ferret from "./ferret-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -35,6 +36,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === Fox.TRICK_KEY || key === "rue") return Fox;
   if (key === Penguin.TRICK_KEY || key === "peck") return Penguin;
   if (key === Parrot.TRICK_KEY || key === "quill") return Parrot;
+  if (key === Ferret.TRICK_KEY || key === "wick") return Ferret;
   return null;
 }
 
