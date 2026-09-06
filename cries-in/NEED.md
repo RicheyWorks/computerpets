@@ -254,7 +254,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 210. [x] `grouper.wav` — **Hide** — Nassau Grouper — water hush — sat 2026-09-05 BigSoundBank CC0 Water flow #2 (#205, Joseph SARDIN).
 211. [x] `cyber_dragon.wav` — **Arc** — Grid Dragon — A grid dragon crackles a short electric arc. No roar. No words. — sat 2026-09-05 BigSoundBank CC0 Short welds (Joseph SARDIN #952)
 212. [x] `volt_dragon.wav` — **Volt** — Coil Dragon — A coil dragon hums a live-coil hum. Dry. No music. — sat 2026-09-05 BigSoundBank CC0 Neon or transformer #1 (Joseph SARDIN #2118)
-213. [ ] `trace_dragon.mp4` — **Trace** — Path Dragon — A path dragon ticks a thin circuit-trace. No roar. (zip synth — replace with Grok)
+213. [x] `trace_dragon.wav` — **Trace** — Path Dragon — A path dragon ticks a thin circuit-trace. No roar. — sat 2026-09-05 BigSoundBank CC0 Electronic switch (Joseph SARDIN #25)
 214. [ ] `flux_dragon.mp4` — **Flux** — Field Dragon — A field dragon hums a low heat-field. No music. No words. (zip synth — replace with Grok)
 215. [ ] `spark_dragon.mp4` — **Spark** — Crack Dragon — A crack dragon pops small spark-cracks at snout and claws. (zip synth — replace with Grok)
 216. [ ] `ion_dragon.mp4` — **Ion** — Haze Dragon — A haze dragon hisses a pale ion hiss. No roar. (zip synth — replace with Grok)
