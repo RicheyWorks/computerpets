@@ -1,0 +1,11 @@
+﻿key: carpenter_ant
+guest: Column (Black Carpenter Ant)
+source: Freesound sound 140327 "ANT SOUND" by 130221
+URL: https://freesound.org/people/130221/sounds/140327/
+direct: https://cdn.freesound.org/previews/140/140327_1077167-hq.mp3
+author: 130221
+license: Creative Commons Zero (CC0 1.0)
+Species: Camponotus pennsylvanicus (black carpenter ant; house guest Column) — stridulates a faint dry rasp. Soft attenuated single major-worker ant emission (Saharan field tape; Camponotus stand-in) as faint dry rasp. No voice words. No music. No narrator. No cartoon beep.
+Notes: Distinct from bee wing drones and cricket/cicada choruses. House cut ~2.8s mono 44.1kHz from ~8s mark; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit near moss loudness. Quiet ant rasp.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
