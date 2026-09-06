@@ -2,22 +2,14 @@ import { useEffect, useRef } from "react";
 import { ANIM_FPS, ONCE_ANIMS, RED_PANDA_SPRITES, type PetAnim } from "@/lib/pets/red-panda";
 import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
-import {
-  beginTrick,
-  canStart as trickCanStart,
-  happyShouldAbort,
-  nextTrickWait,
-  pickTrick,
-  startThankYou,
-  shouldAbort as trickShouldAbort,
-  sleepHoldFrame,
-  stepHappy,
-  stepTrick,
-  type RuiHappy,
-  type RuiHappyKind,
-  type RuiTrick,
-  type RuiTrickKind,
-} from "@/lib/pets/rui-tricks";
+import type { RuiHappy, RuiHappyKind, RuiTrick, RuiTrickKind } from "@/lib/pets/rui-tricks";
+import type { RelayHappy, RelayHappyKind, RelayTrick, RelayTrickKind } from "@/lib/pets/relay-tricks";
+import { sleepHoldFrame, startThankYou, tricksFor } from "@/lib/pets/ground-tricks";
+
+type GroundTrick = RuiTrick | RelayTrick;
+type GroundHappy = RuiHappy | RelayHappy;
+type GroundTrickKind = RuiTrickKind | RelayTrickKind;
+type GroundHappyKind = RuiHappyKind | RelayHappyKind;
 import {
   actPose,
   afterSettleWait,
@@ -151,11 +143,11 @@ type Sim = {
   actWalk: boolean;
   play: WindowPlay | null;
   playWait: number;
-  trick: RuiTrick | null;
+  trick: GroundTrick | null;
   trickWait: number;
-  lastTrick: RuiTrickKind | null;
-  happy: RuiHappy | null;
-  lastHappy: RuiHappyKind | null;
+  lastTrick: GroundTrickKind | null;
+  happy: GroundHappy | null;
+  lastHappy: GroundHappyKind | null;
 };
 
 const WALK_SPEED = 98;
@@ -426,11 +418,14 @@ export function LivingPet({
       if (s.play && shouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
         s.play = stepPlay(s.play, 0, { x: s.x, lift: s.play.lift }, windowsRef.current, { width: 800, height: 500, floorLift: 0 }, SPRITE, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd });
       }
-      if (s.trick && trickShouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play })) {
-        s.trick = stepTrick(s.trick, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play });
-      }
-      if (s.happy && happyShouldAbort({ asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
-        s.happy = stepHappy(s.happy, 0, { asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd });
+      {
+        const GT = tricksFor(kindRef.current);
+        if (s.trick && GT && GT.shouldAbort({ asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play })) {
+          s.trick = GT.stepTrick(s.trick as never, 0, { asleep: asleepRef.current, hidden: hiddenRef.current, leaving: s.leaving, cmd, windowPlay: !!s.play }) as GroundTrick;
+        }
+        if (s.happy && GT && GT.happyShouldAbort({ asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd })) {
+          s.happy = GT.stepHappy(s.happy as never, 0, { asleep: false, hidden: hiddenRef.current, leaving: s.leaving, cmd }) as GroundHappy;
+        }
       }
       if (asleepRef.current && cmd !== "talk" && cmd !== "play" && cmd !== "eat" && cmd !== "seek" && cmd !== "leave" && cmd !== "enter") {
         s.anim = "sleep";
@@ -577,17 +572,18 @@ export function LivingPet({
           cmd: cmdRef.current,
           card: false,
         };
-        if (s.happy) {
-          s.happy = stepHappy(s.happy, dt, {
+        const GT = tricksFor(kindRef.current);
+        if (s.happy && GT) {
+          s.happy = GT.stepHappy(s.happy as never, dt, {
             asleep: false,
             hidden: hiddenRef.current,
             leaving: s.leaving,
             cmd: cmdRef.current,
-          });
+          }) as GroundHappy;
           s.x = s.happy.x;
           if (!asleepRef.current) s.anim = s.happy.anim;
           if (s.happy.phase === "done") {
-            s.lastHappy = s.happy.kind;
+            s.lastHappy = s.happy.kind as GroundHappyKind;
             s.happy = null;
             s.land = 1;
             s.anim = asleepRef.current ? "sleep" : "idle";
@@ -602,25 +598,25 @@ export function LivingPet({
             s.land = 1;
             s.anim = asleepRef.current ? "sleep" : "idle";
             s.playWait = nextPlayWait(true);
-            s.trickWait = nextTrickWait(true);
+            s.trickWait = GT ? GT.nextTrickWait(true) : 9 + Math.random() * 8;
           }
-        } else if (s.trick) {
-          s.trick = stepTrick(s.trick, dt, {
+        } else if (s.trick && GT) {
+          s.trick = GT.stepTrick(s.trick as never, dt, {
             asleep: asleepRef.current,
             hidden: hiddenRef.current,
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: false,
             card: false,
-          });
+          }) as GroundTrick;
           s.x = s.trick.x;
           if (!asleepRef.current) s.anim = s.trick.anim;
           if (s.trick.phase === "done") {
-            s.lastTrick = s.trick.kind;
+            s.lastTrick = s.trick.kind as GroundTrickKind;
             s.trick = null;
             s.land = 1;
             s.anim = asleepRef.current ? "sleep" : "idle";
-            s.trickWait = nextTrickWait(true, undefined, s.lastTrick);
+            s.trickWait = GT.nextTrickWait(true, undefined, s.lastTrick as never);
           }
         } else if (
           !reduced &&
@@ -643,12 +639,12 @@ export function LivingPet({
             s.playWait = nextPlayWait(false);
           }
         } else if (
-          kindRef.current === "red_panda" &&
+          GT &&
           !reduced &&
           !s.act &&
           !s.happy &&
           !s.leaving &&
-          trickCanStart({
+          GT.canStart({
             asleep: asleepRef.current,
             hidden: hiddenRef.current,
             leaving: s.leaving,
@@ -660,13 +656,13 @@ export function LivingPet({
           s.trickWait -= dt;
           const musicWantsDance = musicRef.current && !s.trick && !s.happy;
           if (s.trickWait <= 0 || musicWantsDance) {
-            s.trick = beginTrick(pickTrick(undefined, musicRef.current, s.lastTrick), s.x, s.facing);
+            s.trick = GT.beginTrick(GT.pickTrick(undefined, musicRef.current, s.lastTrick as never), s.x, s.facing) as GroundTrick;
             if (s.trick) {
               clearAct();
               s.target = null;
               s.waypoints = [];
             }
-            s.trickWait = nextTrickWait(false);
+            s.trickWait = GT.nextTrickWait(false);
           }
         }
 
