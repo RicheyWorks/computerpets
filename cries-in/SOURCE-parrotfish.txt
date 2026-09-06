@@ -1,0 +1,11 @@
+key: parrotfish
+guest: Scrape (Stoplight Parrotfish)
+source: Dryad / FishEye Collaborative FEC-00084 Sparisoma viride (Dantzker et al. 2025)
+URL: https://doi.org/10.5061/dryad.mcvdnckcp (file Sparisoma_viride.zip → FEC-00084 Sparisoma viride.mp4)
+FishEye: https://www.fisheyecollaborative.org/fish-sounds/sparisoma-viride
+author: Marc Dantzker, Matthew Duggan, Erika Berlik, Symeon Delikaris-Manias, Vasileios Bountourakis, Ville Pulkki, Aaron Rice (FishEye Collaborative / Cornell / Aalto)
+license: CC0 1.0 (https://creativecommons.org/publicdomain/zero/1.0/) — Dryad media specimens approved under CC0 waiver
+Species: Sparisoma viride (Stoplight parrotfish; house guest Scrape) — exact species field tape. Beak/coral grazing rasp pulses (no voice). No music. No English narrator. No cartoon beep.
+Notes: House cut ~3.1s mono 44.1kHz from FEC-00084 loudest 3s window (~6.75–9.85s) with silenceremove + dynaudnorm + afade. Quiet reef guest — rasp only.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
