@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/brita-jug-flow-s0592.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/0592.mp3
+Title: Brita jug flow (sound 0592)
+Author: Joseph SARDIN
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Soft filter-water hush for silent American paddlefish. No voice. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim 0:3.5. Distinct from Night mountain stream #2755 and Hide Water flow #2 #205.

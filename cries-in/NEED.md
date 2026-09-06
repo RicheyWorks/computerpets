@@ -199,7 +199,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 155. [x] `perch.wav` — **Bar** — Yellow Perch — A yellow perch is silent. Water tick only. No voice. — sat 2026-09-05 BigSoundBank CC0 Water Blop #2 (Joseph SARDIN & Axeline T. #3428)
 156. [x] `pike.wav` — **Lance** — Northern Pike — A northern pike is silent. A sudden water surge. No voice. — sat 2026-09-05 BigSoundBank CC0 Splash, big #2 (Joseph SARDIN #1520)
 157. [x] `walleye.wav` — **Night** — Walleye — A walleye is silent. Night water hush. No voice. — sat 2026-09-05 BigSoundBank CC0 Mountain stream #2 (Pierre SIBANARCO #2755)
-158. [ ] `paddlefish.mp4` — **Spoon** — American Paddlefish — A paddlefish is silent. Filter-water hush. No voice. (zip synth — replace with Grok)
+158. [x] `paddlefish.wav` — **Spoon** — American Paddlefish — A paddlefish is silent. Filter-water hush. No voice. — sat 2026-09-05 BigSoundBank CC0 Brita jug flow (Joseph SARDIN #0592)
 159. [ ] `lamprey.mp4` — **Round** — Sea Lamprey — A sea lamprey is silent. A wet sucker rasp. No voice. (zip synth — replace with Grok)
 160. [ ] `american_eel.mp4` — **Silver** — American Eel — An American eel is silent. A water slip. No voice. (zip synth — replace with Grok)
 161. [ ] `house_centipede.mp4` — **Haste** — House Centipede — A house centipede is silent. Fast dry scuttle. No voice. (zip synth — replace with Grok)
