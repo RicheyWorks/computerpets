@@ -1,0 +1,11 @@
+﻿key: cleaner_shrimp
+guest: Scrub (Pacific Cleaner Shrimp)
+source: BigSoundBank Cleaning (sound 0109)
+URL: https://bigsoundbank.com/cleaning-s0109.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0109.ogg
+author: charlesdu76 / BigSoundBank.com
+license: Creative Commons Zero (CC0 1.0)
+Species: Lysmata amboinensis (Pacific cleaner shrimp; house guest Scrub) — silent. Soft attenuated small-brush bristle tick as tiny antenna tick stand-in. No Lysmata remixable field tape (Commons/iNat empty for shrimp antenna audio). Quiet guest — never a cartoon beep. Distinct from hermit_crab Shells sculpture (#38), crayfish clicking (#866966), clownfish metal-pan drops (#1382).
+Notes: House cut ~3.6s mono 44.1kHz from ~2.5–6.1s of 21s source: volume=-10dB, highpass 800Hz, dynaudnorm, silenceremove, afade. No music. No English narrator. No cartoon beep.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
