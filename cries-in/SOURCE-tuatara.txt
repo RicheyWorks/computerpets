@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/feet-in-leaves-s0137.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/0137.mp3
+Title: Feet in Leaves #1 (sound 0137)
+Author: Joseph SARDIN
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Soft forest-floor leaf rustle as nearly-silent tuatara stand-in. No Sphenodon remixable field tape on Commons/iNat/Freesound/Archive. Not a cartoon croak. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim 0:4.
