@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, and Cup today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, and Sepia today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -34,8 +34,9 @@ import * as MilkSnake from "./milk-snake-tricks";
 import * as RosyBoa from "./rosy-boa-tricks";
 import * as CarpetPython from "./carpet-python-tricks";
 import * as Octopus from "./octopus-tricks";
+import * as Cuttlefish from "./cuttlefish-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -73,6 +74,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === RosyBoa.TRICK_KEY || key === "blush") return RosyBoa;
   if (key === CarpetPython.TRICK_KEY || key === "atlas") return CarpetPython;
   if (key === Octopus.TRICK_KEY || key === "cup") return Octopus;
+  if (key === Cuttlefish.TRICK_KEY || key === "sepia") return Cuttlefish;
   return null;
 }
 
