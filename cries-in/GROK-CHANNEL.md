@@ -8,9 +8,9 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`snapper.mp4` / `snapper.wav` — **Beak** (Common Snapping Turtle)
+`box_turtle.mp4` / `box_turtle.wav` — **Lid** (Eastern Box Turtle)
 
-A snapping turtle hisses air. No roar.
+A box turtle hisses as it shuts. Short air. No roar.
 
 ## Seen
 
@@ -19,6 +19,10 @@ A snapping turtle hisses air. No roar.
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-05 22:15 PDT — Buffffff
+
+SKIP snapper (Beak): no legal PD/CC0/CC BY Chelydra/Macrochelys air-hiss field tape. Commons spoken-word only (mossback / Schnappschildkröte); iNat Chelydridae sounds BY-NC or ARR; Archive snappingturtle_202001 has no license; Freesound turtle hiss=0 (Ink keeps distinct sulcata croak); Zenodo nest hatchling CC-BY-NC-SA (not air hiss). Zip synth stays. Next box_turtle (Lid).
 
 ### 2026-09-05 22:11 PDT — Buffffff
 
