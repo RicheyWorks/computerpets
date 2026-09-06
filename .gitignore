@@ -42,3 +42,10 @@ client/.pytest_cache/
 # Grok cry drops: mp4s ARE the GitHub mailbox. Ignore only huge unpack zips.
 cries-in/incoming-cries.zip
 cries-in/*.zip
+
+# Field-tape SOURCE masters (keep cites SOURCE-*.txt; house wavs live under desktop/renderer/sounds)
+cries-in/*-source.*
+cries-in/_local-stale/
+_cry_staging/
+_cry_stage/
+_inbox/
