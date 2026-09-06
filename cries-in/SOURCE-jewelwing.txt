@@ -1,0 +1,11 @@
+key: jewelwing
+guest: Jewel (Ebony Jewelwing)
+source: Freesound sound 198818 "butterfly wings.wav" by Yuval
+URL: https://freesound.org/people/Yuval/sounds/198818/
+direct: https://cdn.freesound.org/previews/198/198818_770707-hq.mp3
+author: Yuval
+license: Creative Commons Zero (CC0 1.0)
+Species: Calopteryx maculata (ebony jewelwing; house guest Jewel) — nearly silent. Soft attenuated peacock butterfly (Aglais io) wing flutter as faint fluttery damselfly wing stand-in (Calopteryx flies butterfly-like; no Calopteryx-labeled remixable CC0 tape found; Commons/iNat sounds empty). No cicada song. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from Dart darner Freesound #240549 (dragonfly-in-net) and Milk/Banner FunWithSound painted-lady flutters. House cut ~3.0s mono 44.1kHz from ~56.5s mark; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit quieter than Dart, near moss hush. Quiet damselfly.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
