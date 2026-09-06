@@ -215,7 +215,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 171. [x] `fiddler_crab.wav` — **Wave** — Atlantic Fiddler Crab — A fiddler crab taps its big claw on sand. No voice. — sat 2026-09-05 BigSoundBank CC0 Brush on concrete (Joseph SARDIN #1107)
 172. [x] `ghost_crab.wav` — **Pale** — Atlantic Ghost Crab — A ghost crab stridulates a dry rasp, then scuttles. — sat 2026-09-05 BigSoundBank CC0 Repetitive squeaking #1 (Joseph SARDIN #3323)
 173. [x] `limpet.wav` — **Cone** — Common Limpet — A limpet is silent. Radula rasp on rock. No voice. — sat 2026-09-05 BigSoundBank CC0 Metal grinding #2 (Joseph SARDIN #0857)
-174. [ ] `barnacle.mp4` — **Cement** — Acorn Barnacle — A barnacle is silent. Cirri tick in water. No voice. (zip synth — replace with Grok)
+174. [x] `barnacle.wav` — **Cement** — Acorn Barnacle — A barnacle is silent. Cirri tick in water. No voice. — sat 2026-09-05 BigSoundBank CC0 Fermentation airlock #3 (Joseph SARDIN #3562)
 175. [ ] `chiton.mp4` — **Mail** — Lined Chiton — A chiton is silent. Radula rasp on rock. No voice. (zip synth — replace with Grok)
 176. [ ] `periwinkle.mp4` — **Spire** — Common Periwinkle — A periwinkle rasps its radula on rock. No voice. (zip synth — replace with Grok)
 177. [ ] `sand_dollar.mp4` — **Token** — Common Sand Dollar — A sand dollar is silent. Sand tick. No voice. (zip synth — replace with Grok)
