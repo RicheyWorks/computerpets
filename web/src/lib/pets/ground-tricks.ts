@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, and Sash today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, and Lula today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -29,8 +29,9 @@ import * as Kingsnake from "./kingsnake-tricks";
 import * as GreenTreePython from "./green-tree-python-tricks";
 import * as Hognose from "./hognose-tricks";
 import * as Garter from "./garter-tricks";
+import * as Boa from "./boa-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -63,6 +64,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === GreenTreePython.TRICK_KEY || key === "jade") return GreenTreePython;
   if (key === Hognose.TRICK_KEY || key === "bluff") return Hognose;
   if (key === Garter.TRICK_KEY || key === "sash") return Garter;
+  if (key === Boa.TRICK_KEY || key === "lula") return Boa;
   return null;
 }
 
