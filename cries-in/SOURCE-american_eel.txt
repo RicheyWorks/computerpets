@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/water-blop-1-s3427.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/3427.mp3
+Title: Water Blop #1 (sound 3427)
+Author: Joseph SARDIN & Axeline T.
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Soft hydrophone water-slip blop for silent American eel. No voice. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + pad/atrim. Distinct from Bar Water Blop #2 #3428 and Round Straw suction #3 #1246.
