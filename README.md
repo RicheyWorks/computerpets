@@ -12,7 +12,7 @@ That page is a teacher. Click it. It has numbered steps. You do not need to know
 
 ## Half the house already talks for real
 
-**116 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
+**162 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
 
 ## Meet some of them
 
@@ -96,7 +96,7 @@ More in [desktop/README.md](desktop/README.md).
 
 ## They make real noise
 
-**116 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**162 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
 
 These voices are in the house:
 
@@ -250,9 +250,10 @@ These voices are in the house:
 - **Coal** (American black bear) — nervous huff from [iNaturalist](https://www.inaturalist.org/observations/287411149), [CC BY](https://creativecommons.org/licenses/by/4.0/), recorded by [marykrieger](https://www.inaturalist.org/people/marykrieger). Exact Ursus americanus field tape. No music. No roar.
 - **Wink** (green anole) — short night-lizard tick from [Freesound](https://freesound.org/people/SieuAmThanh/sounds/400573/), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [SieuAmThanh](https://freesound.org/people/SieuAmThanh/). Nearly silent dewlap guest. No music. No roar.
 - **Dash** (five-lined skink) — dry leaf rustle from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [Gravity Sound](https://commons.wikimedia.org/wiki/File:Leaf_crunch_4_(Gravity_Sound).wav) (`Leaf_crunch_4_(Gravity_Sound).wav`). Silent guest — leaf crunch only, never a voice or beep.
+- **Hang** (Linnaeus's two-toed sloth) — soft claw/rail tick and zoo hush from Wikimedia Commons, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/), recorded by [Peter Chen 2.0](https://commons.wikimedia.org/wiki/File:Two-toed_sloth_rail_walking_%E4%BA%8C%E8%B6%BE%E6%A8%B9%E7%8D%BA%E7%88%AC%E8%A1%8C_(HD).webm) (Taipei Zoo; exact *Choloepus didactylus*). Nearly silent guest — no cartoon whistle. No music.
 - **Blade** (northern true katydid) — pulsed katy-did song from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [peterwchen](https://commons.wikimedia.org/wiki/File:Pterophylla_camellifolia_singing.wav) (`Pterophylla_camellifolia_singing.wav`, also [iNat 90278754](https://www.inaturalist.org/observations/90278754)). Exact Pterophylla camellifolia. No music. No words.
 **Vault** (differential grasshopper) — dry wing-leg creak from Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Baudewijn Odé](https://commons.wikimedia.org/wiki/File:Chorthippus_parallelus_-_sound.oga) (`Chorthippus_parallelus_-_sound.oga`, KNNV Veldgids Sprinkhanen). Exact Melanoplus differentialis tape unavailable — Acrididae meadow-grasshopper proxy. No music. No words.
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Hang** the two-toed sloth — thin whistle / hiss.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Sun** the ring-tailed lemur — contact mew / short howl.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
