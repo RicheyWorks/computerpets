@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, and Nori today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, and Saffron today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -24,8 +24,9 @@ import * as Iguana from "./iguana-tricks";
 import * as Dragon from "./dragon-tricks";
 import * as Phoenix from "./phoenix-tricks";
 import * as BallPython from "./ball-python-tricks";
+import * as CornSnake from "./corn-snake-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -53,6 +54,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === Dragon.TRICK_KEY || key === "vesper") return Dragon;
   if (key === Phoenix.TRICK_KEY || key === "ember") return Phoenix;
   if (key === BallPython.TRICK_KEY || key === "nori") return BallPython;
+  if (key === CornSnake.TRICK_KEY || key === "saffron") return CornSnake;
   return null;
 }
 
