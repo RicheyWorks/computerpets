@@ -1,4 +1,4 @@
-# Drop Grok cries here
+﻿# Drop Grok cries here
 
 Folder: `C:\Users\730ri\projects\ComputerPets\cries-in`
 
@@ -233,7 +233,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 189. [x] `click_beetle.wav` — **Click** — Eyed Click Beetle — A click beetle clicks its prosternum, one dry snap. No voice. — sat 2026-09-05 iNat CC BY obs 333256714 (Dr Pamela Muggeridge) Elateridae
 190. [x] `robber_fly.wav` — **Rob** — Robber Fly — A robber fly buzzes its wings, short and dry. No voice. — sat 2026-09-05 BigSoundBank CC0 Fly and Glass #0759 (Joseph SARDIN)
 191. [x] `sloth.wav` — **Hang** — Linnaeus's Two-toed Sloth — nearly silent claw/rail hush — sat 2026-09-05 Commons CC BY 3.0 Two-toed sloth rail walking (Peter Chen 2.0; Taipei Zoo; exact Choloepus didactylus). No remixable vocal whistle/hiss (iNat BY-NC/ARR).
-192. [ ] `lemur.mp4` — **Sun** — Ring-tailed Lemur — A ring-tailed lemur mews a contact call, then a short howl. No English. (zip synth — replace with Grok)
+192. [x] `lemur.wav` — **Sun** — Ring-tailed Lemur — mew then short howl — sat 2026-09-05 Commons CC BY-SA 3.0 Lemur catta--chirps1.ogg + howl1.ogg (Joseph M. Macedonia; exact Lemur catta).
 193. [x] `gibbon.wav` — **Swing** — Lar Gibbon — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
 194. [ ] `kinkajou.mp4` — **Wrist** — Kinkajou — A kinkajou barks a short squeak-bark. No words. (zip synth — replace with Grok)
 195. [ ] `colugo.mp4` — **Sail** — Sunda Colugo — A Sunda colugo is nearly silent. Glide-skin rustle, a faint squeak. (zip synth — replace with Grok)
