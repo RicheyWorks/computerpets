@@ -36,6 +36,7 @@ const OverlayBudgie = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayFox = createRequire(import.meta.url)(join(root, "../desktop/renderer/fox-tricks.js"));
 const OverlayParrot = createRequire(import.meta.url)(join(root, "../desktop/renderer/parrot-tricks.js"));
 const OverlayFerret = createRequire(import.meta.url)(join(root, "../desktop/renderer/ferret-tricks.js"));
+const OverlayHedgehog = createRequire(import.meta.url)(join(root, "../desktop/renderer/hedgehog-tricks.js"));
 
 test("Peck tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet"]);
@@ -271,6 +272,7 @@ test("ground registry keeps prior guests gated; Peck selectable; no bow/preen/pa
   globalThis.PetPenguinTricks = Overlay;
 globalThis.PetParrotTricks = OverlayParrot;
 globalThis.PetFerretTricks = OverlayFerret;
+  globalThis.PetHedgehogTricks = OverlayHedgehog;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("relay_dragon"), OverlayRelay);
@@ -301,7 +303,9 @@ globalThis.PetFerretTricks = OverlayFerret;
   assert.equal(OverlayGround.tricksFor("quill"), OverlayParrot);
   assert.equal(OverlayGround.tricksFor("ferret"), OverlayFerret);
   assert.equal(OverlayGround.tricksFor("wick"), OverlayFerret);
-  assert.equal(OverlayGround.tricksFor("hedgehog"), null);
+  assert.equal(OverlayGround.tricksFor("hedgehog"), OverlayHedgehog);
+  assert.equal(OverlayGround.tricksFor("burr"), OverlayHedgehog);
+  assert.equal(OverlayGround.tricksFor("chinchilla"), null);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
@@ -330,7 +334,9 @@ globalThis.PetFerretTricks = OverlayFerret;
   assert.equal(OverlayGround.wantsThankYou("quill"), true);
   assert.equal(OverlayGround.wantsThankYou("ferret"), true);
   assert.equal(OverlayGround.wantsThankYou("wick"), true);
-  assert.equal(OverlayGround.wantsThankYou("hedgehog"), false);
+  assert.equal(OverlayGround.wantsThankYou("hedgehog"), true);
+  assert.equal(OverlayGround.wantsThankYou("burr"), true);
+  assert.equal(OverlayGround.wantsThankYou("chinchilla"), false);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("dog", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
@@ -344,4 +350,5 @@ globalThis.PetFerretTricks = OverlayFerret;
   assert.equal(OverlayGround.sleepHoldFrame("penguin", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("parrot", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("ferret", 4), null);
+  assert.equal(OverlayGround.sleepHoldFrame("hedgehog", 4), null);
 });
