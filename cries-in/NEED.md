@@ -97,7 +97,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 53. [x] `luna.wav` — **Ghost** — Luna Moth — A luna moth is silent. Adults have vestigial mouthparts and do not eat. Faint wing silk. — sat 2026-09-05 Freesound CC0 Flying moth 2 (nahmandub #131340)
 54. [x] `firefly.wav` — **Spark** — Common Eastern Firefly — A firefly is silent. Flash, not voice. Tiny wing whir. — sat 2026-09-05 BigSoundBank CC0 Flying Melolonthinae (Joseph SARDIN #1833)
 55. [x] `darner.wav` — **Dart** — Common Green Darner — A green darner whirrs its wings, dry and fast. No voice. — sat 2026-09-05 Freesound CC0 Dragonfly Caught in Net Wing Movement (jaegrover #240549)
-56. [ ] `stick.mp4` — **Twig** — Common Walkingstick — A walkingstick is silent. No stridulation. Faint twig tick. (zip synth — replace with Grok)
+56. [x] `stick.wav` — **Twig** — Common Walkingstick — A walkingstick is silent. No stridulation. Faint twig tick. — sat 2026-09-05 BigSoundBank CC0 Steps on the Twigs (Joseph SARDIN #1301)
 57. [ ] `carpenter_ant.mp4` — **Column** — Black Carpenter Ant — A carpenter ant stridulates a faint dry rasp. No voice words. (zip synth — replace with Grok)
 58. [ ] `ladybird.mp4` — **Seven** — Seven-spot Ladybird — A seven-spot ladybird is nearly silent. Tiny wing whir if it lifts. (zip synth — replace with Grok)
 59. [ ] `mantis.mp4` — **Fold** — Chinese Mantis — A Chinese mantis is silent. Faint chitin tick. No roar. (zip synth — replace with Grok)
