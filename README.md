@@ -1,4 +1,4 @@
-﻿# ComputerPets
+# ComputerPets
 
 Virtual pets that live on your computer — walk your windows, eat from the keeper card, and **caw** when you Call.
 
@@ -225,7 +225,9 @@ These voices are in the house:
 - **Fold** (Chinese mantis) — faint chitin tick from [Freesound](https://freesound.org/people/NikoletB/sounds/846441/), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [NikoletB](https://freesound.org/people/NikoletB/) (`Pistachio Shell Rustle – Crunchy Texture`, attenuated). Quiet mantis — no roar. No music. No beep.
 - **Loom** (European garden spider) — silk tick on the web from [Freesound](https://freesound.org/people/kyles/sounds/450849/), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [kyles](https://freesound.org/people/kyles/) (nylon fishing-line friction, attenuated). Quiet orb-weaver — no voice. No music. No beep.
 - **Leap** (bold jumper) — tiny chitin tick from [Freesound](https://freesound.org/people/c64cosmin/sounds/828623/), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [c64cosmin](https://freesound.org/people/c64cosmin/) (`bug legs tapping`, attenuated). Quiet jumping spider — no voice. No music. No beep.
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Prowl** the Wetland Wolf Spider — faint leg-drum on dry leaf. No voice.
+- **Prowl** (wetland wolf spider) — faint leg-drum on dry leaf from [Freesound](https://freesound.org/people/elliotlp/sounds/235755/), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [elliotlp](https://freesound.org/people/elliotlp/) (`Crumple Dry Leaf 1`, attenuated). Quiet lycosid — no voice. No music. No beep.
+- **Velvet** (desert blonde tarantula) — faint hair-rasp from [BigSoundBank](https://bigsoundbank.com/synthetic-coat-rubbed-s1104.html), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://bigsoundbank.com/) (`Synthetic Coat Rubbed`, attenuated fabric rasp stand-in). Quiet theraphosid — no roar. No music. No beep.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Hour** the Southern Black Widow — silk tick. No voice.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
