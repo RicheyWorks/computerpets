@@ -1,0 +1,10 @@
+key: tarsier
+guest: Gaze (Philippine Tarsier / Carlito syrichta)
+source: iNaturalist observation 323492684
+url: https://www.inaturalist.org/observations/323492684
+file: https://static.inaturalist.org/sounds/1679729.wav
+author: Wich’yanan (Jay) Limparungpatthanakij (plains-wanderer)
+license: CC BY (Creative Commons Attribution)
+attribution: (c) Wich’yanan (Jay) Limparungpatthanakij, some rights reserved (CC BY)
+notes: Exact Carlito syrichta remixable tape not found (iNat/Commons empty). Research-grade Tarsius fuscus (Sulawesi brown tarsier) piercing calls as genus proxy. House cut ~3.2s mono 44.1kHz; no English; no music.
+sat: 2026-09-05 Buffffff
