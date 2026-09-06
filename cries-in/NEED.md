@@ -251,7 +251,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 207. [x] `lionfish.wav` — **Veil** — Red Lionfish — fin-water hush — sat 2026-09-05 BigSoundBank CC0 Underwater (#3430, Joseph SARDIN & Axeline T.).
 208. [x] `giant_clam.wav` — **Gate** — Giant Clam — shell tick in water — sat 2026-09-05 BigSoundBank CC0 Sparkling water (#230, Joseph SARDIN).
 209. [x] `eagle_ray.wav` — **Soar** — Spotted Eagle Ray — slow water whoosh — sat 2026-09-05 BigSoundBank CC0 Beach Small Waves (#265, Joseph SARDIN).
-210. [ ] `grouper.mp4` — **Hide** — Nassau Grouper — A Nassau grouper is silent. Water hush. No roar. (zip synth — replace with Grok)
+210. [x] `grouper.wav` — **Hide** — Nassau Grouper — water hush — sat 2026-09-05 BigSoundBank CC0 Water flow #2 (#205, Joseph SARDIN).
 211. [ ] `cyber_dragon.mp4` — **Arc** — Grid Dragon — A grid dragon crackles a short electric arc. No roar. No words. (zip synth — replace with Grok)
 212. [ ] `volt_dragon.mp4` — **Volt** — Coil Dragon — A coil dragon hums a live-coil hum. Dry. No music. (zip synth — replace with Grok)
 213. [ ] `trace_dragon.mp4` — **Trace** — Path Dragon — A path dragon ticks a thin circuit-trace. No roar. (zip synth — replace with Grok)
