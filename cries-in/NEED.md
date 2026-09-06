@@ -236,7 +236,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 192. [x] `lemur.wav` — **Sun** — Ring-tailed Lemur — mew then short howl — sat 2026-09-05 Commons CC BY-SA 3.0 Lemur catta--chirps1.ogg + howl1.ogg (Joseph M. Macedonia; exact Lemur catta).
 193. [x] `gibbon.wav` — **Swing** — Lar Gibbon — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
 194. [x] `kinkajou.wav` — **Wrist** — Kinkajou — short squeak-bark — sat 2026-09-05 iNat CC BY obs 289928039 (Raquel Mondino; exact Potos flavus).
-195. [ ] `colugo.mp4` — **Sail** — Sunda Colugo — A Sunda colugo is nearly silent. Glide-skin rustle, a faint squeak. (zip synth — replace with Grok)
+195. [x] `colugo.wav` — **Sail** — Sunda Colugo — glide-skin rustle — sat 2026-09-05 BigSoundBank CC0 Flag #3 (#1789, Joseph SARDIN; nylon membrane stand-in — no Galeopterus remixable tape).
 196. [ ] `flying_squirrel.mp4` — **Glide** — Southern Flying Squirrel — A southern flying squirrel chirps, high and thin. Not a bird. (zip synth — replace with Grok)
 197. [x] `howler.wav` — **Boom** — Mantled Howler — A mantled howler howls a deep roar-howl. No English. — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
 198. [ ] `tarsier.mp4` — **Gaze** — Philippine Tarsier — A Philippine tarsier looses a piercing single-note loud call, or a soft bird-like twill. (zip synth — replace with Grok)
@@ -270,5 +270,6 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - Grok Imagine mp4s: **0**. That is what I still need.
 
 Catalog 220. No new pets.
+
 
 
