@@ -180,7 +180,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 136. [x] `skunk.mp4` — **Stripe** — Striped Skunk — A striped skunk stamps, then a short hiss. No spray as voice. (zip synth — replace with Grok)
 137. [x] `opossum.wav` — **Grin** — Virginia Opossum — A Virginia opossum hisses and clicks. No meow. — sat 2026-09-05 iNaturalist CC BY (ncb1221, obs 112927147)
 138. [x] `beaver.wav` — **Dam** — North American Beaver — A beaver slaps its tail on water, one wet smack. — sat 2026-09-05 iNaturalist CC0 (leahmfulton, obs 72399972)
-139. [ ] `porcupine.mp4` — **Spine** — North American Porcupine — A porcupine tooth-chatters, then a quill rattle. No roar. (zip synth — replace with Grok)
+139. [x] `porcupine.wav` — **Spine** — North American Porcupine — A porcupine tooth-chatters, then a quill rattle. No roar. — sat 2026-09-05 Archive CC0 SSE Library (Craig Smith / USC) porcupine puffing grunting & rattling quills
 140. [ ] `black_bear.mp4` — **Coal** — American Black Bear — A black bear tongue-clicks and grunts. If nervous, a huff. Not a roar. (zip synth — replace with Grok)
 141. [x] `gecko.wav` — **Pad** — Mediterranean House Gecko — A Mediterranean house gecko calls a high bird-like squeak-chirp. — sat 2026-09-03 Commons CC BY-SA 3.0 HouseGeckoChirp.ogg (Glueball)
 142. [ ] `anole.mp4` — **Wink** — Green Anole — A green anole is nearly silent. Dewlap, not a voice. A tiny squeak if pressed. (zip synth — replace with Grok)
