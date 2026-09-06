@@ -209,7 +209,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 165. [x] `velvet_worm.wav` — **Jet** — Velvet Worm — A velvet worm is silent. A faint glue squirt. No voice. — sat 2026-09-05 BigSoundBank CC0 Short spray (Joseph SARDIN #0044)
 166. [x] `springtail.wav` — **Hop** — Orchesella Springtail — A springtail is silent. A tiny hop tick. No voice. — sat 2026-09-05 BigSoundBank CC0 Zipper #13 (Joseph SARDIN & Axeline T. #3328)
 167. [x] `tardigrade.wav` — **Tun** — Water Bear — A water bear is silent. Almost nothing. No voice. — sat 2026-09-05 BigSoundBank CC0 Small water leak (Joseph SARDIN #0701)
-168. [ ] `planarian.mp4` — **Half** — Tiger Planarian — A planarian is silent. Film-water hush. No voice. (zip synth — replace with Grok)
+168. [x] `planarian.wav` — **Half** — Tiger Planarian — A planarian is silent. Film-water hush. No voice. — sat 2026-09-05 BigSoundBank CC0 Water flow #1 (Joseph SARDIN #0204)
 169. [ ] `nematode.mp4` — **Thread** — C. elegans — A nematode is silent. Almost nothing. No voice. (zip synth — replace with Grok)
 170. [ ] `amphipod.mp4` — **Scud** — Gammarus Scud — A scud is silent. A side-swim tick in water. No voice. (zip synth — replace with Grok)
 171. [ ] `fiddler_crab.mp4` — **Wave** — Atlantic Fiddler Crab — A fiddler crab taps its big claw on sand. No voice. (zip synth — replace with Grok)
