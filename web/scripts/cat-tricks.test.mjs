@@ -18,6 +18,7 @@ const OverlayFuse = createRequire(import.meta.url)(join(root, "../desktop/render
 const OverlayEarth = createRequire(import.meta.url)(join(root, "../desktop/renderer/earth-tricks.js"));
 const OverlayDog = createRequire(import.meta.url)(join(root, "../desktop/renderer/dog-tricks.js"));
 const OverlayRabbit = createRequire(import.meta.url)(join(root, "../desktop/renderer/rabbit-tricks.js"));
+const OverlayHamster = createRequire(import.meta.url)(join(root, "../desktop/renderer/hamster-tricks.js"));
 
 test("Miso tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce"]);
@@ -164,6 +165,7 @@ test("ground registry keeps prior guests gated; Miso selectable; no scratch-name
   globalThis.PetCatTricks = Overlay;
   globalThis.PetDogTricks = OverlayDog;
   globalThis.PetRabbitTricks = OverlayRabbit;
+  globalThis.PetHamsterTricks = OverlayHamster;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("relay_dragon"), OverlayRelay);
@@ -176,7 +178,10 @@ test("ground registry keeps prior guests gated; Miso selectable; no scratch-name
   assert.equal(OverlayGround.tricksFor("pip"), OverlayDog);
   assert.equal(OverlayGround.tricksFor("rabbit"), OverlayRabbit);
   assert.equal(OverlayGround.tricksFor("thimble"), OverlayRabbit);
-  assert.equal(OverlayGround.tricksFor("hamster"), null);
+  assert.equal(OverlayGround.tricksFor("hamster"), OverlayHamster);
+  assert.equal(OverlayGround.tricksFor("clip"), OverlayHamster);
+  assert.equal(OverlayGround.tricksFor("guinea_pig"), null);
+  assert.equal(OverlayGround.tricksFor("whee"), null);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
@@ -187,7 +192,10 @@ test("ground registry keeps prior guests gated; Miso selectable; no scratch-name
   assert.equal(OverlayGround.wantsThankYou("pip"), true);
   assert.equal(OverlayGround.wantsThankYou("rabbit"), true);
   assert.equal(OverlayGround.wantsThankYou("thimble"), true);
-  assert.equal(OverlayGround.wantsThankYou("hamster"), false);
+  assert.equal(OverlayGround.wantsThankYou("hamster"), true);
+  assert.equal(OverlayGround.wantsThankYou("clip"), true);
+  assert.equal(OverlayGround.wantsThankYou("guinea_pig"), false);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
+  assert.equal(OverlayGround.sleepHoldFrame("hamster", 4), null);
 });
