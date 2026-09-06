@@ -162,7 +162,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 118. [x] `canada_goose.wav` — **Vee** — Canada Goose — sat 2026-09-03 Commons PD Branta_canadensis.ogg
 119. [ ] `pileated.mp4` — **Drum** — Pileated Woodpecker — A pileated woodpecker drums, then a ringing kuk or woick call. (zip field — still want Grok)
 120. [x] `hummingbird.mp4` — **Sip** — Ruby-throated Hummingbird — A ruby-throated hummingbird: rapid squeaky chirps, plus male wing tik-tik. (zip field — still want Grok)
-121. [ ] `orb_weaver.mp4` — **Loom** — European Garden Spider — An orb-weaver is silent. Silk tick on the web. No voice. (zip synth — replace with Grok)
+121. [x] `orb_weaver.wav` — **Loom** — European Garden Spider — An orb-weaver is silent. Silk tick on the web. No voice. — sat 2026-09-05 Freesound CC0 nylon fishing line friction (kyles #450849)
 122. [ ] `jumping_spider.mp4` — **Leap** — Bold Jumper — A jumping spider is nearly silent. Tiny chitin tick. No voice. (zip synth — replace with Grok)
 123. [ ] `wolf_spider.mp4` — **Prowl** — Wetland Wolf Spider — A wolf spider is nearly silent. Maybe a faint leg-drum on dry leaf. No voice. (zip synth — replace with Grok)
 124. [ ] `tarantula.mp4` — **Velvet** — Desert Blonde — A desert blonde tarantula is nearly silent. Faint hair-rasp if threatened. No roar. (zip synth — replace with Grok)
