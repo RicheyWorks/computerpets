@@ -46,6 +46,7 @@ const OverlayHedgehog = createRequire(import.meta.url)(join(root, "../desktop/re
 const OverlayChinchilla = createRequire(import.meta.url)(join(root, "../desktop/renderer/chinchilla-tricks.js"));
 const OverlayToucan = createRequire(import.meta.url)(join(root, "../desktop/renderer/toucan-tricks.js"));
 const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/renderer/iguana-tricks.js"));
+const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Bloom tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
@@ -363,6 +364,7 @@ test("ground registry keeps prior guests gated; Bloom selectable; no wall/float/
   globalThis.PetAxolotlTricks = Overlay;
 globalThis.PetToucanTricks = OverlayToucan;
 globalThis.PetIguanaTricks = OverlayIguana;
+  globalThis.PetDragonTricks = OverlayDragon;
   globalThis.PetChinchillaTricks = OverlayChinchilla;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
@@ -405,7 +407,8 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.tricksFor("keel"), OverlayToucan);
   assert.equal(OverlayGround.tricksFor("iguana"), OverlayIguana);
   assert.equal(OverlayGround.tricksFor("sol"), OverlayIguana);
-  assert.equal(OverlayGround.tricksFor("dragon"), null);
+  assert.equal(OverlayGround.tricksFor("dragon"), OverlayDragon);
+  assert.equal(OverlayGround.tricksFor("vesper"), OverlayDragon);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
@@ -442,7 +445,8 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.wantsThankYou("keel"), true);
   assert.equal(OverlayGround.wantsThankYou("iguana"), true);
   assert.equal(OverlayGround.wantsThankYou("sol"), true);
-  assert.equal(OverlayGround.wantsThankYou("dragon"), false);
+  assert.equal(OverlayGround.wantsThankYou("dragon"), true);
+  assert.equal(OverlayGround.wantsThankYou("vesper"), true);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("dog", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
@@ -460,20 +464,21 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("axolotl", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
+  assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
 });
 
-test("notes: Bloom idle-life done; Keel / toucan now has tricks; Sol / iguana now has tricks; next lacking is Vesper / dragon", () => {
+test("notes: Bloom idle-life done; Keel / toucan now has tricks; Sol / iguana now has tricks; Vesper / dragon now has tricks; next lacking is Ember / phoenix", () => {
   assert.equal(T.TRICK_KEY, "axolotl");
   assert.equal(T.wantsThankYou("bloom"), true);
   assert.equal(OverlayGround.tricksFor("toucan"), OverlayToucan);
   assert.equal(OverlayGround.tricksFor("keel"), OverlayToucan);
   assert.equal(OverlayGround.tricksFor("iguana"), OverlayIguana);
   assert.equal(OverlayGround.tricksFor("sol"), OverlayIguana);
-  assert.equal(OverlayGround.tricksFor("dragon"), null);
+  assert.equal(OverlayGround.tricksFor("dragon"), OverlayDragon);
   assert.equal(OverlayGround.wantsThankYou("toucan"), true);
   assert.equal(OverlayGround.wantsThankYou("keel"), true);
   assert.equal(OverlayGround.wantsThankYou("iguana"), true);
   assert.equal(OverlayGround.wantsThankYou("sol"), true);
-  assert.equal(OverlayGround.wantsThankYou("dragon"), false);
+  assert.equal(OverlayGround.wantsThankYou("dragon"), true);
 });
 
