@@ -237,7 +237,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 193. [x] `gibbon.wav` — **Swing** — Lar Gibbon — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
 194. [x] `kinkajou.wav` — **Wrist** — Kinkajou — short squeak-bark — sat 2026-09-05 iNat CC BY obs 289928039 (Raquel Mondino; exact Potos flavus).
 195. [x] `colugo.wav` — **Sail** — Sunda Colugo — glide-skin rustle — sat 2026-09-05 BigSoundBank CC0 Flag #3 (#1789, Joseph SARDIN; nylon membrane stand-in — no Galeopterus remixable tape).
-196. [ ] `flying_squirrel.mp4` — **Glide** — Southern Flying Squirrel — A southern flying squirrel chirps, high and thin. Not a bird. (zip synth — replace with Grok)
+196. [x] `flying_squirrel.wav` — **Glide** — Southern Flying Squirrel — high thin chirps — sat 2026-09-05 iNat CC BY obs 331870521 (ncb1221; exact Glaucomys volans).
 197. [x] `howler.wav` — **Boom** — Mantled Howler — A mantled howler howls a deep roar-howl. No English. — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
 198. [ ] `tarsier.mp4` — **Gaze** — Philippine Tarsier — A Philippine tarsier looses a piercing single-note loud call, or a soft bird-like twill. (zip synth — replace with Grok)
 199. [ ] `potto.mp4` — **Still** — Potto — A potto calls a high-pitched tsic, mostly between mother and young. Otherwise nearly silent. (zip synth — replace with Grok)
