@@ -1,0 +1,11 @@
+key: giant_clam
+guest: Gate (Giant Clam)
+source: BigSoundBank Sparkling water (sound 230)
+URL: https://bigsoundbank.com/sparkling-water-s0230.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0230.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: Creative Commons Zero (CC0 1.0)
+Species: Tridacna / giant clam (house guest Gate) — silent. Soft attenuated sparkling-water tick/fizz as shell-tick-in-water stand-in. No Tridacna remixable field tape (Commons spoken-word/conch only; iNat empty for clam mantle audio). Quiet guest — never a cartoon beep. Distinct from mussel straw Water Bubble #2 (#183), hermit Shells sculpture (#38), lionfish Underwater (#3430), moon_jelly splash (#1533).
+Notes: House cut ~3.5s mono 44.1kHz from CC0 source: volume=-8dB, highpass/lowpass, silenceremove, dynaudnorm, afade. No music. No English narrator. No cartoon beep.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
