@@ -1,0 +1,12 @@
+﻿Vault (grasshopper) cry — field tape
+
+URL: https://commons.wikimedia.org/wiki/File:Chorthippus_parallelus_-_sound.oga
+Direct: https://upload.wikimedia.org/wikipedia/commons/5/5c/Chorthippus_parallelus_-_sound.oga
+Title: Chorthippus parallelus - sound.oga
+Author: Baudewijn Odé
+License: Creative Commons Attribution-Share Alike 4.0 International (CC BY-SA 4.0)
+https://creativecommons.org/licenses/by-sa/4.0/
+
+Notes: Meadow grasshopper (Chorthippus parallelus / Pseudochorthippus parallelus) Acrididae femoro-tegminal stridulation from the Odé / KNNV Veldgids Sprinkhanen en Krekels CD-ROM. Exact Melanoplus differentialis remixable field tape not found (Commons none; iNat Melanoplus differentialis sounds=0). Closest legal wing-leg rasp in same family Acrididae. House cut keeps the dry creak. No music, no narrator.
+House cut: mono 44.1kHz wav 4.0s (silenceremove, dynaudnorm, atrim 0:4).
+Sat by Buffffff 2026-09-05.
