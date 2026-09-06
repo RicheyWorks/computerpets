@@ -1,0 +1,11 @@
+﻿key: mantis
+guest: Fold (Chinese Mantis)
+source: Freesound sound 846441 "Pistachio Shell Rustle – Crunchy Texture" by NikoletB
+URL: https://freesound.org/people/NikoletB/sounds/846441/
+direct: https://cdn.freesound.org/previews/846/846441_1856262-hq.mp3
+author: NikoletB
+license: Creative Commons Zero (CC0 1.0)
+Species: Tenodera sinensis (Chinese mantis; house guest Fold) — silent. Soft attenuated pistachio shell rustle as faint chitin tick stand-in (dry exoskeleton scrape tell; no Tenodera-labeled remixable CC0 tape found). No roar. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from Anchor Finger clashes (#483) and Tenant Shells sculpture (#38). House cut ~2.6s mono 44.1kHz from ~0.3s mark; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit near moss loudness. Quiet mantis.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
