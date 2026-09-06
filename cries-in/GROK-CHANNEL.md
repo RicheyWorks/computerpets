@@ -20,6 +20,11 @@ A Virginia opossum hisses and clicks. No meow.
 
 ## Log
 
+### 2026-09-05 19:20 PDT — Buffffff
+
+Sat Stripe skunk from iNaturalist CC0 obs 304384700 (kristinpiston) as fight hiss/stamp warning. Exact Mephitis mephitis field tape. Next opossum (Grin).
+
+
 ### 2026-09-05 19:15 PDT — Buffffff
 
 Sat Wash raccoon from Freesound CC0 racoon gecker.wav (h_sylvan #637445) as fast dry chitter/gecker. Exact species field tape. Next skunk (Stripe).
