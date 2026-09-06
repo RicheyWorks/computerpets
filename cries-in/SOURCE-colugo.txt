@@ -1,0 +1,11 @@
+﻿key: colugo
+guest: Sail (Sunda Colugo)
+source: BigSoundBank Flag #3 (sound 1789)
+URL: https://bigsoundbank.com/flag-3-s1789.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1789.ogg
+author: Joseph SARDIN
+license: Creative Commons Zero (CC0 1.0)
+Species: Galeopterus variegatus (Sunda colugo; house guest Sail) — nearly silent. Soft attenuated shaken-nylon-flag rustle as glide-skin / patagium stand-in. No Galeopterus remixable field tape (Commons images only; iNat sounds=0; Archive music/NC). Quiet dermopteran — membrane rustle only. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz from full ~3.9s source; highpass/lowpass + volume + mild dynaudnorm + silenceremove + afade.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
