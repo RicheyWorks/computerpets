@@ -1,4 +1,4 @@
-# Drop Grok cries here
+﻿# Drop Grok cries here
 
 Folder: `C:\Users\730ri\projects\ComputerPets\cries-in`
 
@@ -206,7 +206,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 162. [x] `millipede.wav` — **Link** — American Giant Millipede — A millipede is silent. Oiled ring rustle. No voice. — sat 2026-09-05 BigSoundBank CC0 Velcro tape (Joseph SARDIN #0629)
 163. [x] `pillbug.wav` — **Armor** — Common Pillbug — A pillbug is silent. A tiny armor tick. No voice. — sat 2026-09-05 BigSoundBank CC0 Vinyl Scratch #1 (Joseph SARDIN #2858)
 164. [x] `earthworm.wav` — **Cast** — Common Earthworm — An earthworm is silent. Soil tick. No voice. — sat 2026-09-05 BigSoundBank CC0 Liquid flowing over the soil (Joseph SARDIN #0563)
-165. [ ] `velvet_worm.mp4` — **Jet** — Velvet Worm — A velvet worm is silent. A faint glue squirt. No voice. (zip synth — replace with Grok)
+165. [x] `velvet_worm.wav` — **Jet** — Velvet Worm — A velvet worm is silent. A faint glue squirt. No voice. — sat 2026-09-05 BigSoundBank CC0 Short spray (Joseph SARDIN #0044)
 166. [ ] `springtail.mp4` — **Hop** — Orchesella Springtail — A springtail is silent. A tiny hop tick. No voice. (zip synth — replace with Grok)
 167. [ ] `tardigrade.mp4` — **Tun** — Water Bear — A water bear is silent. Almost nothing. No voice. (zip synth — replace with Grok)
 168. [ ] `planarian.mp4` — **Half** — Tiger Planarian — A planarian is silent. Film-water hush. No voice. (zip synth — replace with Grok)
