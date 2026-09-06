@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, and Jade today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, and Bluff today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -29,6 +29,7 @@
     const CornSnake = root.PetCornSnakeTricks;
     const Kingsnake = root.PetKingsnakeTricks;
     const GreenTreePython = root.PetGreenTreePythonTricks;
+    const Hognose = root.PetHognoseTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -56,6 +57,7 @@
     if (CornSnake && (key === CornSnake.TRICK_KEY || key === "saffron")) return CornSnake;
     if (Kingsnake && (key === Kingsnake.TRICK_KEY || key === "bandit")) return Kingsnake;
     if (GreenTreePython && (key === GreenTreePython.TRICK_KEY || key === "jade")) return GreenTreePython;
+    if (Hognose && (key === Hognose.TRICK_KEY || key === "bluff")) return Hognose;
     return null;
   }
 
