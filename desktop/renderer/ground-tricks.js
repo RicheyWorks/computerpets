@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, and Moth today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, and Arm today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -51,6 +51,7 @@
     const Oak = root.PetOakTricks;
     const WaterLily = root.PetWaterLilyTricks;
     const Orchid = root.PetOrchidTricks;
+    const Saguaro = root.PetSaguaroTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -100,6 +101,7 @@
     if (Oak && (key === Oak.TRICK_KEY || key === "mast")) return Oak;
     if (WaterLily && (key === WaterLily.TRICK_KEY || key === "disk")) return WaterLily;
     if (Orchid && (key === Orchid.TRICK_KEY || key === "moth")) return Orchid;
+    if (Saguaro && (key === Saguaro.TRICK_KEY || key === "arm")) return Saguaro;
     return null;
   }
 
