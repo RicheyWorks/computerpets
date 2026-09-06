@@ -1,0 +1,11 @@
+key: squirrel
+guest: Cache (Eastern Gray Squirrel)
+source: Commons Grey Squirrel (Sciurus carolinensis) (W1CDR0001470 BD12).ogg
+URL: https://commons.wikimedia.org/wiki/File:Grey_Squirrel_(Sciurus_carolinensis)_(W1CDR0001470_BD12).ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/d/d8/Grey_Squirrel_%28Sciurus_carolinensis%29_%28W1CDR0001470_BD12%29.ogg
+author: Aubrey John Williams / The British Library Board
+license: Creative Commons Attribution-Share Alike 4.0 International (CC BY-SA 4.0)
+Species: Sciurus carolinensis (Eastern gray squirrel; house guest Cache) — lone grey squirrel call, Camberley Surrey 1977. Chatters / raspy mehr. No music. No English narrator. No cartoon beep.
+Notes: House cut ~4.0s mono 44.1kHz from loud call window near end of BL tape; highpass/lowpass + dynaudnorm + afade. Exact species field tape.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine

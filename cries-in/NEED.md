@@ -174,7 +174,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 130. [x] `solifuge.wav` — **Gale** — Windscorpion — A windscorpion is silent. Fast dry scuttle. No voice. — sat 2026-09-05 Freesound CC0 insect running on the table (paulmegens #824443)
 131. [x] `deer.wav` — **Rack** — White-tailed Deer — A white-tailed deer blows, a heavy alarm breath. Then a hoof stamp. No words. — sat 2026-09-03 iNaturalist CC BY (Thomas J Nolan, obs 376669369)
 132. [x] `bat.wav` — **Cape** — Big Brown Bat — A big brown bat click-chirps echolocation, rapid and thin. A feeding buzz. Not a bird. — sat 2026-09-03 Commons CC0 Bat_feeding_buzz.wav (Kaldari)
-133. [ ] `squirrel.mp4` — **Cache** — Eastern Gray Squirrel — An eastern gray squirrel chatters, then a raspy mehr-mehr-mehr. Or a mouse-like squeak. (zip synth — replace with Grok)
+133. [x] `squirrel.mp4` — **Cache** — Eastern Gray Squirrel — An eastern gray squirrel chatters, then a raspy mehr-mehr-mehr. Or a mouse-like squeak. (zip synth — replace with Grok)
 134. [ ] `otter.mp4` — **Slick** — North American River Otter — A river otter chirps a short whistle-chuckle. No words. (zip synth — replace with Grok)
 135. [ ] `raccoon.mp4` — **Wash** — Raccoon — A raccoon chitters, fast and dry. No meow. (zip synth — replace with Grok)
 136. [ ] `skunk.mp4` — **Stripe** — Striped Skunk — A striped skunk stamps, then a short hiss. No spray as voice. (zip synth — replace with Grok)
