@@ -50,6 +50,7 @@ const OverlayChinchilla = createRequire(import.meta.url)(join(root, "../desktop/
 const OverlayAxolotl = createRequire(import.meta.url)(join(root, "../desktop/renderer/axolotl-tricks.js"));
 const OverlayToucan = createRequire(import.meta.url)(join(root, "../desktop/renderer/toucan-tricks.js"));
 const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/renderer/iguana-tricks.js"));
+const OverlayPhoenix = createRequire(import.meta.url)(join(root, "../desktop/renderer/phoenix-tricks.js"));
 
 test("Vesper tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
@@ -377,6 +378,7 @@ test("ground registry keeps prior guests gated; Vesper selectable; no drape/bask
   globalThis.PetToucanTricks = OverlayToucan;
   globalThis.PetIguanaTricks = OverlayIguana;
   globalThis.PetDragonTricks = Overlay;
+  globalThis.PetPhoenixTricks = OverlayPhoenix;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("relay_dragon"), OverlayRelay);
@@ -419,6 +421,8 @@ test("ground registry keeps prior guests gated; Vesper selectable; no drape/bask
   assert.equal(OverlayGround.tricksFor("sol"), OverlayIguana);
   assert.equal(OverlayGround.tricksFor("dragon"), Overlay);
   assert.equal(OverlayGround.tricksFor("vesper"), Overlay);
+  assert.equal(OverlayGround.tricksFor("phoenix"), OverlayPhoenix);
+  assert.equal(OverlayGround.tricksFor("ember"), OverlayPhoenix);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
@@ -477,13 +481,16 @@ test("ground registry keeps prior guests gated; Vesper selectable; no drape/bask
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
 });
 
-test("notes: Vesper idle-life done; next house-order guest still lacking tricks is Ember / phoenix", () => {
+test("notes: Vesper idle-life done; Ember / phoenix now has tricks; next lacking is Nori / ball_python", () => {
   assert.equal(T.TRICK_KEY, "dragon");
   assert.equal(T.wantsThankYou("vesper"), true);
   assert.equal(OverlayGround.tricksFor("dragon"), Overlay);
   assert.equal(OverlayGround.tricksFor("vesper"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("vesper"), true);
-  assert.equal(OverlayGround.tricksFor("phoenix"), null);
-  assert.equal(OverlayGround.wantsThankYou("phoenix"), false);
+  assert.equal(OverlayGround.tricksFor("phoenix"), OverlayPhoenix);
+  assert.equal(OverlayGround.tricksFor("ember"), OverlayPhoenix);
+  assert.equal(OverlayGround.wantsThankYou("phoenix"), true);
+  assert.equal(OverlayGround.wantsThankYou("ember"), true);
+  assert.equal(OverlayGround.tricksFor("ball_python"), null);
 });
