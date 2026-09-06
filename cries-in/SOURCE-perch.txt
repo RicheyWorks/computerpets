@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/water-blop-2-s3428.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/3428.mp3
+Title: Water Blop #2 (sound 3428)
+Author: Joseph SARDIN & Axeline T.
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Soft hydrophone water-tick blop for silent yellow perch. No voice. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim. Distinct from Penny metal-sink drops #1383, Paint metal pan #1382, Veil Underwater #3430.

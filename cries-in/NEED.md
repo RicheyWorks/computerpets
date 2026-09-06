@@ -196,7 +196,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 152. [x] `brook_trout.wav` — **Speck** — Brook Trout — A brook trout is silent. Riffle water only. No voice. — sat 2026-09-05 BigSoundBank CC0 Small Stream (Joseph SARDIN #0823)
 153. [x] `catfish.wav` — **Whisk** — Channel Catfish — A channel catfish stridulates: a dry pectoral-spine click or grind. Some drum the swim bladder. — sat 2026-09-05 Commons CC BY-SA 4.0 Platydoras armatulus creaking (Kacper Aleksander; Siluriformes spine-stridulation proxy — exact Ictalurus punctatus remixable empty)
 154. [x] `bluegill.wav` — **Penny** — Bluegill — A bluegill is silent. A small water tick. No voice. — sat 2026-09-05 BigSoundBank CC0 Drops, metal sink (Joseph SARDIN #1383)
-155. [ ] `perch.mp4` — **Bar** — Yellow Perch — A yellow perch is silent. Water tick only. No voice. (zip synth — replace with Grok)
+155. [x] `perch.wav` — **Bar** — Yellow Perch — A yellow perch is silent. Water tick only. No voice. — sat 2026-09-05 BigSoundBank CC0 Water Blop #2 (Joseph SARDIN & Axeline T. #3428)
 156. [ ] `pike.mp4` — **Lance** — Northern Pike — A northern pike is silent. A sudden water surge. No voice. (zip synth — replace with Grok)
 157. [ ] `walleye.mp4` — **Night** — Walleye — A walleye is silent. Night water hush. No voice. (zip synth — replace with Grok)
 158. [ ] `paddlefish.mp4` — **Spoon** — American Paddlefish — A paddlefish is silent. Filter-water hush. No voice. (zip synth — replace with Grok)
