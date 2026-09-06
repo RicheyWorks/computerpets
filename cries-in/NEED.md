@@ -228,7 +228,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 184. [x] `swallowtail.wav` — **Banner** — Eastern Tiger Swallowtail — A tiger swallowtail is nearly silent. Soft wing flutter. No voice. — sat 2026-09-05 Freesound CC0 Butterfly Wings Fluttering 2 (FunWithSound #479233; painted-lady soft wing stand-in)
 185. [x] `jewelwing.wav` — **Jewel** — Ebony Jewelwing — A jewelwing damselfly whirrs wings, faint. No cicada song. — sat 2026-09-05 Freesound CC0 butterfly wings (Yuval #198818; peacock fluttery stand-in for Calopteryx)
 186. [x] `lacewing.wav` — **Lace** — Green Lacewing — A green lacewing is nearly silent. Soft wing. A tiny rasp. — sat 2026-09-05 iNat CC0 obs 67716720 (victorengel) Chrysoperla rufilabris courtship tick/rasp
-187. [ ] `earwig.mp4` — **Forceps** — European Earwig — An earwig is silent. Cerci rustle on bark. No voice. (zip synth — replace with Grok)
+187. [x] `earwig.wav` — **Forceps** — European Earwig — An earwig is silent. Cerci rustle on bark. No voice. — sat 2026-09-05 Freesound CC0 Tree Bark Close Rustling (NikoletB #846406)
 188. [ ] `acorn_weevil.mp4` — **Snout** — Acorn Weevil — An acorn weevil is silent. A tiny snout tick. No voice. (zip synth — replace with Grok)
 189. [ ] `click_beetle.mp4` — **Click** — Eyed Click Beetle — A click beetle clicks its prosternum, one dry snap. No voice. (zip synth — replace with Grok)
 190. [ ] `robber_fly.mp4` — **Rob** — Robber Fly — A robber fly buzzes its wings, short and dry. No voice. (zip synth — replace with Grok)
