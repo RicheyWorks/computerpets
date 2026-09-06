@@ -8,9 +8,9 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-`box_turtle.mp4` / `box_turtle.wav` — **Lid** (Eastern Box Turtle)
+`tuatara.mp4` / `tuatara.wav` — **Peak** (Tuatara)
 
-A box turtle hisses as it shuts. Short air. No roar.
+A tuatara is nearly silent. Primitive ears; a low croak if any. No roar.
 
 ## Seen
 
@@ -19,6 +19,10 @@ A box turtle hisses as it shuts. Short air. No roar.
 - Path lock: build our own from internet field tape
 
 ## Log
+
+### 2026-09-05 22:20 PDT — Buffffff
+
+SKIP Lid box_turtle: no legal PD/CC0/CC BY Terrapene air-hiss field tape. Commons images only; iNat BY-NC/ARR or heartbeat-doppler CC BY (obs 395142386) not a hiss; Freesound turtle-hiss=0; Archive none. Zip synth stays. Distinct from Ink sulcata croak. Next tuatara (Peak).
 
 ### 2026-09-05 22:15 PDT — Buffffff
 
