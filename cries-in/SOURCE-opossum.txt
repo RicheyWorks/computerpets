@@ -1,0 +1,11 @@
+Grin (opossum) cry — field tape
+
+URL: https://www.inaturalist.org/observations/112927147
+Title: Virginia Opossum vocalization (audio)
+Author: ncb1221
+License: Creative Commons Attribution 4.0 (CC BY 4.0)
+https://creativecommons.org/licenses/by/4.0/
+
+Notes: Exact Didelphis virginiana field tape (Louisiana). Observer note: unusual possum vocalization — house cut keeps hiss/click character, no meow. No music, no narrator.
+House cut: mono 44.1kHz wav ~4s (highpass/lowpass, silenceremove, dynaudnorm, atrim).
+Sat by Buffffff 2026-09-05.
