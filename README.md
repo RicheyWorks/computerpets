@@ -281,7 +281,7 @@ These voices are in the house:
 
 - **Blade** (northern true katydid) — pulsed katy-did song from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [peterwchen](https://commons.wikimedia.org/wiki/File:Pterophylla_camellifolia_singing.wav) (`Pterophylla_camellifolia_singing.wav`, also [iNat 90278754](https://www.inaturalist.org/observations/90278754)). Exact Pterophylla camellifolia. No music. No words.
 **Vault** (differential grasshopper) — dry wing-leg creak from Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Baudewijn Odé](https://commons.wikimedia.org/wiki/File:Chorthippus_parallelus_-_sound.oga) (`Chorthippus_parallelus_-_sound.oga`, KNNV Veldgids Sprinkhanen). Exact Melanoplus differentialis tape unavailable — Acrididae meadow-grasshopper proxy. No music. No words.
-More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Lid** the eastern box turtle — short air hiss as it shuts.
+More guests still wait. We hunt tape on the internet, cut 2–4 seconds, drop it in [`cries-in/`](cries-in/), and sit it into `desktop/renderer/sounds/` and `web/public/sounds/`. Each real tape keeps a `SOURCE-*.txt` next to the drop. The mailbox is [`cries-in/GROK-CHANNEL.md`](cries-in/GROK-CHANNEL.md). Next up: **Peak** the tuatara — nearly silent forest-floor hush.
 
 No music beds. No English narrator. If it sounds like a phone UI, it does not ship.
 
