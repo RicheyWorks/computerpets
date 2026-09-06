@@ -1,0 +1,10 @@
+key: umbral
+guest: Hush (Heat Shadow)
+source: BigSoundBank Whistling of the Wind #1 (sound 147)
+URL: https://bigsoundbank.com/whistling-of-the-wind-1-s0147.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0147.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+note: Quiet alien sit — heat shadow has no mouth-voice. Real slight cool wind hush through a house window cut as dry cool hush. No music. No narrator. No cartoon beep. House cut ~3.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

@@ -1,0 +1,10 @@
+= pose.rot;
+      next.anim = "walk";
+      next.facing = target.landX >= target.holdX ? 1 : -1;
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
+    if (next.phase === "sill-hop") {
+      const u = next.t / DUR.sillHop;
+      con

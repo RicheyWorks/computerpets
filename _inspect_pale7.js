@@ -1,0 +1,11 @@
+﻿const fs = require("fs");
+const lines = fs.readFileSync("web/src/lib/pets/window-play.ts", "utf8").split(/\n/);
+for (let i = 1280; i < 1360; i++) console.log((i+1)+":"+lines[i]);
+console.log("==== tick signal-on block");
+for (let i = 25185; i < 25270; i++) console.log((i+1)+":"+lines[i]);
+console.log("==== TS pick SIGNAL");
+for (let i = 4645; i < 4675; i++) console.log((i+1)+":"+lines[i]);
+console.log("==== TS refit SIGNAL");
+for (let i = 5384; i < 5400; i++) console.log((i+1)+":"+lines[i]);
+console.log("==== TS begin SIGNAL");
+for (let i = 16718; i < 16740; i++) console.log((i+1)+":"+lines[i]);

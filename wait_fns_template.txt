@@ -1,0 +1,86 @@
+  function quietLampDir(win, work) {
+    const workW = work && work.width ? work.width : 1280;
+    // lamp side: windows on the left half of the desk face a lamp to their right
+    return win.x + win.width / 2 < workW / 2 ? 1 : -1;
+  }
+
+  function quietPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const lampDir = quietLampDir(win, work);
+    // cool / lamp-shadow side of the glass — opposite the bright lamp edge; interior pane toward shadow
+    // not Ghost lamp-side week, not Dusk lamp-edge rim stile, not Fan lamp-side gold, not Loom lamp-side web corner, not Gleam thirst bright pane, not Beacon align, not Brine frost, not Flux field
+    const shadowRight = lampDir !== 1;
+    const pad = 22;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const u = shadowRight ? 0.72 : 0.28;
+    const x = win.x + pad + span * u;
+    const coolSit = Math.max(96, win.height * 0.42);
+    const gripY = win.y + coolSit;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 36, maxLift) };
+  }
+
+  function quietFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function quietOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.14) * 1.32;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (toX >= fromX ? 1 : -1) * 1.42 * (1 - ease) + stride * 0.035,
+    };
+  }
+
+  function quietPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.22) {
+      const s = t / 0.22;
+      const ease = s * s * (3 - 2 * s);
+      // walk onto the cool glass — take the lamp shadow; cool lunch / dim shadow / heat waste; not Ghost week, not Dusk rim, not Fan gold, not Loom web, not Gleam thirst
+      return { x: ease * 0.88, lift: ease * 0.42, rot: ease * 2.15 };
+    }
+    if (t < 0.68) {
+      const s = (t - 0.22) / 0.46;
+      // sit the cool once — remain a shadow; quiet is the tell; not week, not rim, not gold, not web, not thirst, not align, not frost
+      const dim = Math.sin(s * Math.PI);
+      return { x: 0.88 + dim * 0.22, lift: 0.42 + dim * 0.72, rot: 2.15 + dim * 1.55 };
+    }
+    if (t < 0.90) {
+      const s = (t - 0.68) / 0.22;
+      const ease = s * s * (3 - 2 * s);
+      // remain a shadow / review the cool
+      return { x: 0.88 - ease * 0.05, lift: 0.42 + ease * 0.18, rot: 2.15 - ease * 0.38 };
+    }
+    return { x: 0.83, lift: 0.60, rot: 1.77 };
+  }
+
+  function quietHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const hush = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.055;
+    // sit the cool on the lamp-side pane as a lamp shadow (cool glass)
+    return { x: 0.83, lift: 0.60 + hush, rot: 1.77 };
+  }
+
+  function quietOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.02) * 1.18;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (from && from.rot != null ? from.rot : 1.77) * (1 - ease),
+    };
+  }

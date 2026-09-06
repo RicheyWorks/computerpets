@@ -1,0 +1,69 @@
+  function songPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 30;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.41;
+    const stool = Math.max(16, size * 0.10);
+    const gripY = win.y + win.height - stool;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 18, maxLift - 8) };
+  }
+
+  function songFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function songOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2.05) * 1.05;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (toX >= fromX ? 1 : -1) * 2.15 * (1 - ease) + stride * 0.09,
+    };
+  }
+
+  function songPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.28) {
+      const s = t / 0.28;
+      const ease = s * s * (3 - 2 * s);
+      return { x: ease * 0.15, lift: ease * 0.55, rot: ease * -3.2 };
+    }
+    if (t < 0.78) {
+      const s = (t - 0.28) / 0.50;
+      const pulse = Math.sin(s * Math.PI * 3.2) * 3.8;
+      const ease = s * s * (3 - 2 * s);
+      return { x: 0.15 + ease * 0.12 + pulse * 0.08, lift: 0.55 + ease * 0.35 + Math.abs(pulse) * 0.12, rot: -3.2 + ease * 8.6 + pulse };
+    }
+    return { x: 0.27, lift: 0.9, rot: 5.4 };
+  }
+
+  function songHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const night = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2.4) * 1.15;
+    return { x: 0.27 + night * 0.04, lift: 0.9 + Math.abs(night) * 0.08, rot: 5.4 + night };
+  }
+
+  function songOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.82) * 1.18;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (from && from.rot != null ? from.rot : 5.4) * (1 - ease),
+    };
+  }
+
+

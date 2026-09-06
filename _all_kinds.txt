@@ -1,0 +1,10 @@
+drop
+jamb
+left
+right
+sash
+side
+sides
+slide
+spin
+tl

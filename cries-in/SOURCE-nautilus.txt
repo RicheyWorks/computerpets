@@ -1,0 +1,11 @@
+key: nautilus
+guest: Chamber (Chambered Nautilus)
+source: BigSoundBank Bubbles Burst (sound 1074)
+URL: https://bigsoundbank.com/bursting-bubbles-s1074.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1074.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Nautilus pompilius (chambered nautilus) — silent. Soft attenuated bubble burst as jet bubble / water tick. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.6s mono 44.1kHz volume=-7dB + dynaudnorm + afade from full source. Quiet guest. Distinct from Cup octopus Straw suction #1 and Sepia Rowing slowly.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

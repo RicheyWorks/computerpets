@@ -1,0 +1,312 @@
+===== WIN =====
+const WIN = { id: "hw", x: 360, y: 80, width: 640, height: 420 };
+
+test("Rui's door is cling and dive; Arc rides the ridge; Volt coils a corner; Trace traces a path; Flux fields the glass; Spark crackles an edge; Ion charges a corner; Gauss orbits; R
+
+===== PlayTarget =====
+side: "left" | "right" | "top" | "glass" | "bottom" | "feet" | "rail" | "bowl" | "pane" | "gap" | "foot" | "tray" | "tank" | "cornice" | "brick" | "lintel" | "ash" | "well" | "canyon" | "ruler" | "stay" | "stool" | "cup" | "apron" | "muntin" | "horn" | "transom" | "latch" | "ripple" | "rooms" | "saucer" | "blotter" | "lift" | "sand" | "bead" | "sky" | "crevice" | "page" | "pocket" | "autumn" | "dish" | "ink" | "bark" | "column" | "pan" | "peat" | "box" | "timber" | "cell" | "foliage" | "hollow" | "salt" | "air" | "comb" | "head" | "weep" | "leaf" | "moss" | "mold" | "throat" | "wash" | "rim" | "bed" | "drip" | "fillet" | "cap" | "rafter" | "reveal" | "post" | "nosing" | "lawn" | "green" | "nectar" | "snag" | "lamp" | "edge" | "burrow" | "dark" | "stem" | "bark" | "hem" | "dry" | "oak" | "soffit" | "oakdish" | "inkdish" | "duff" | "rafterhem" | "lodgecup" | "pinepost" | "oakdenside" | "lamparm" | "sunledge" | "boughhook" | "nectarcup" | "trunksail" | "oakfold" | "lampplaster" | "gumperch" | "vinepost" | "stonecrack" | "branchperch" | "sandtray" | "bankdish" | "brackishdish" | "mudbowl" | "leafdish" | "dockshade" | "weedrail" | "reedambush" | "duskrun" | "currentdish" | "stonedisk" | "bankhole" | "plastercrack" | "damplog" | "barkdish" | "soiltray" | "duffcup" | "wetwood" | "mossfilm" | "streamstone" | "soilfilm" | "sidepool" | "sandplate" | "tidepool" | "wrackdish";
+  holdX: number;
+  holdLift: number;
+  approachX: number;
+  landX: number;
+  diveFrom?: "top" | "side";
+  spin?: "backflip" | "spin" | "none";
+  leave?: "hop" | "slide" | "drop" | "drift" | "step" | "trot" | "vanish" | "pop" | "waddle" | "slip" | "dash" | "shuffle" | "sink" | "climb" | "return" | "unroll" | "finish" | "close" | "unfold" | "over" | "lap" | "let" | "kind" | "inch" | "gather" | "jet" | "fade" | "uncling" | "reject" | "unbury" | "unhitch" | "glide" | "peel" | "fold" | "small" | "night" | "dusk" | "later" | "leaf" | "rain" | "uncurl" | "home" | "hole" | "stone" | "tube" | "nest" | "rim" | "sky" | "heart" | "cavity" | "spring" | "dish" | "saucer" | "pool" | "tray" | "pebble" | "room" | "silt" | "damp" | "weed" | "pot" | "height" | "beam" | "lift" | "grass" | "dart" | "crest" | "silk" | "bound" | "litter" | "burrow" | "dark" | "stem" | "bark" | "hem" | "dry" | "oak" | "soffit" | "thought" | "warn" | "dead" | "wet" | "scrap" | "teeth" | "quills" | "unhook" | "ledge" | "skin" | "pads" | "dewlap" | "blue" | "casque" | "horns" | "snout" | "tooth" | "beak" | "plastron" | "flares" | "bars" |
+
+===== leave first =====
+leave: "hop",
+      spin: "none",
+    };
+  }
+  if (kind === WATCH) {
+    const hold = watchPoint(best, size, work);
+    const fromLeft = hold.x >= workW / 2;
+    const approachOff = fromLeft ? -108 : 108;
+    const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+    const away = hold.x < workW / 2 ? 92 : -92;
+    return {
+      id: best.id,
+      kind,
+      side: "feet",
+      holdX: hold.x,
+      holdLift: 0,
+      approachX,
+      landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+      leave: "trot",
+      spin: "none",
+    };
+  }
+  if (kind === THUMP) {
+    const edge = opts?.side || pickSide(best, petX, size, workW);
+    const hold = thumpPoint(best, size, work, edge);
+    const holdX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+    const 
+
+===== Sip test start LINE 17232 =====
+Sip sips a window-box bloom as a nectar cup: dart to the foliage, hover, sip once, then dart off", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("hummingbird"), "sip");
+  assert.equal(P.playFor("pileated"), "drum");
+  assert.equal(P.playFor("canada_goose"), "honk");
+  assert.equal(P.playFor("mallard"), "tip");
+  assert.equal(P.playFor("robin"), "pull");
+  assert.equal(P.playFor("chickadee"), "cache");
+  assert.equal(P.playFor("red_tail"), "soar");
+  assert.equal(P.playFor("bumblebee"), "forage");
+  assert.equal(P.playFor("leafcutter"), "snip");
+  assert.equal(P.playFor("leech"), "drink");
+  assert.equal(P.playFor("carpenter_bee"), "bore");
+  assert.equal(P.playFor("barn_owl"), "hiss");
+  assert.equal(P.playFor("raven"), "croak");
+  assert.equal(P.playFor("crow"), "caw");
+  assert.equal(P.playFor("boa"), "loop");
+  assert.equal(P.playFor("goldfish"), "circle");
+  assert.equal(P.playFor("water_lily"), "open");
+  assert.equal(P.playFor("parrot"), "hook");
+  assert.equal(P.playFor("budgie"), "perch");
+  assert.equal(P.playFor("penguin"), "bow");
+  assert.equal(P.playFor("stickleback"), "glue");
+  assert.equal(P.playFor("octopus"), "lid");
+  assert.equal(P.playFor("hermit_crab"), "knob");
+  assert.equal(P.playFor("cyber_dragon"), "ridge");
+  assert.equal(P.playFor("phoenix"), "kindle");
+  assert.equal(P.playFor("gecko"), "chirp");
+  assert.equal(P.playFor("orb_weaver"), "web");
+  const target = P.pickTarget([WIN], 80, "hummingbird", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "sip");
+  assert.equal(target.side, "nectar");
+  assert.equal(target.leave, "dart");
+  assert.notEqual(target.kind, "hummingbird");
+  assert.notEqual(target.kind, "hover");
+  assert.notEqual(target.kind, "forage");
+  assert.
+
+===== Disc test start LINE 11951 =====
+  width: @ 172: nst WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 }; |   assert.equal(P.playFor("leafcutter"), "snip"); |   assert.equal(P.playFor("mason_bee"), "daub
+  pickTarget @ 1191: tingless"), "tend"); |   const target = P.pickTarget([WIN], 80, "leafcutter", WORK, P.SPRITE); |   assert.ok(target); |   assert.equal(target.kind, "snip"); |   assert.
+  holdLift @ 1968: arget.kind, "sill"); |   assert.ok(target.holdLift > 28, "she sits the foliage as a leaf, not the floor"); |   assert.ok(P.DUR.snip > P.DUR.snipHold, "the snip is t
+
+===== Wrist test LINE 21187 =====
+
+===== sipPath =====
+function sipPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.26) {
+      const s = t / 0.26;
+      const bob = Math.sin(s * Math.PI * 2) * 1.6;
+      return { x: bob * 0.35, lift: 2.8 + bob, rot: -3.2 };
+    }
+    if (t < 0.58) {
+      const s = (t - 0.26) / 0.32;
+      const jab = Math.sin(s * Math.PI);
+      return { x: jab * 7.8, lift: 2.2 - jab * 1.8, rot: -3.2 - jab * 8.4 };
+    }
+    const s = (t - 0.58) / 0.42;
+    const ease = s * s * (3 - 2 * s);
+    return { x: 0.4 * (1 - ease), lift: 2.5 + Math.sin(s * Math.PI) * 0.48, rot: -3.6 };
+  }
+
+  function sipHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const breath = t <= 0 || t >= 1 ? 0 : Math.sin(t * Ma
+
+===== wrapPath =====
+function wrapPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.38) {
+      const s = t / 0.38;
+      const ease = s * s * (3 - 2 * s);
+      return { x: ease * 4.2, lift: ease * 2.6, rot: ease * 22 };
+    }
+    const s = (t - 0.38) / 0.62;
+    const ease = s * s * (3 - 2 * s);
+    const coil = Math.sin(s * Math.PI);
+    return { x: 4.2 + ease * 1.8, lift: 2.6 + ease * 1.4 + coil * 0.8, rot: 22 + ease * 16 };
+  }
+
+  function wrapHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const sway = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.26;
+    return { x: 6.0, lift: 4.0 + sway, rot: 38 };
+  }
+
+  function wrapOffPath(u, from, to) {
+    const t = Math.max(0, Math.
+
+===== snipPath =====
+function snipPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.14) {
+      const s = t / 0.14;
+      const ease = s * s * (3 - 2 * s);
+      return { x: 0, lift: 0.7 - ease * 1.4, rot: ease * 1.1 };
+    }
+    const s = (t - 0.14) / 0.86;
+    const ang = s * Math.PI * 2;
+    return {
+      x: Math.cos(ang) * 6.6,
+      lift: Math.sin(ang) * 6.6,
+      rot: Math.sin(ang) * 4.2,
+    };
+  }
+
+  function snipHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const keep = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.32;
+    return {
+      x: 0.4,
+      lift: -1.8 + keep,
+      rot: -3.6,
+    };
+  }
+
+  function snipOffPath(u, from, to) {
+    const t = Math.max(0, Math.
+
+===== foragePath =====
+function foragePath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.22) {
+      const s = t / 0.22;
+      const ease = s * s * (3 - 2 * s);
+      return { x: 0, lift: 1.1 - ease * 1.1, rot: ease * 0.8 };
+    }
+    if (t < 0.78) {
+      const s = (t - 0.22) / 0.56;
+      const pulse = Math.sin(s * Math.PI);
+      return {
+        x: pulse * 1.4,
+        lift: pulse * 6.4,
+        rot: pulse * 7.2,
+      };
+    }
+    return { x: 0, lift: 0.6, rot: 1.4 };
+  }
+
+  function forageHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const keep = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.35;
+    return {
+      x: 0,
+      lift: 0.6 + keep,
+      rot: 1.4,
+    };
+  }
+
+  f
+
+===== goldPath =====
+function goldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = t * t * (3 - 2 * t);
+    return {
+      x: ease * 8,
+      lift: 2 + ease * 7,
+      rot: 3 * (1 - ease),
+    };
+  }
+
+  function goldHoldPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    const fossil = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 0.35;
+    return {
+      x: 8,
+      lift: 9 + fossil,
+      rot: 0,
+    };
+  }
+
+  function goldOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+
+===== mouthPath =====
+function mouthPath(u) {
+    const t = Math.max(0, Math.min(1, u));
+    if (t < 0.28) {
+      const s = t / 0.28;
+      const ease = s * s * (3 - 2 * s);
+      return { x: ease * 0.4, lift: ease * 0.3, rot: ease * 2.6 };
+    }
+    if (t < 0.72) {
+      const s = (t - 0.28) / 0.44;
+      const wide = Math.sin(s * Math.PI);
+      return { x: 0.4 + wide * 8.6, lift: 0.3 + wide * -2.4, rot: 2.6 + wide * 11.2 };
+    }
+    return { x: 0.6, lift: 0.2, rot: 3.8 };
+  }
+
+  function mouthHoldPath(u) {
+    c
+
+===== ARCH overlay Comb sentence =====
+MISSING walk sentence
+
+===== ROADMAP Comb entry end / next =====
+ngs`. Wave (`fiddler_crab`) still owns `signal`. Token (`sand_dollar`) still owns `flat`. Same `playFor` door. `/demo/comb` lockstep. Sleep, hide, leave, rest, the keeper card, and the ribbon still win. Windows first. Mac / Linux window play stays `mac-linux-window-play`. Catalog stays 220. First leftover of the remaining hive den. Shore ten stays closed. Next leftover is Milk. Do not start Milk.
+
+- [x] Scud (`amphipod` / `scud`) sides a real window well as a side pool: walk 
+
+===== HOUSE title first 500 =====
+test("Comb leftover waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; Heap leftover still castings a window foot as wet sand; tenth shore leftover done; Knurl leftover still knobs a window stool as a wrack dish; ninth shore leftover done; Thorn leftover still spines a window well as a tide pool; eighth shore leftover done; Token leftover still flats a sill pan as a sand plate; seventh shore leftover done; Spire leftover s
+
+===== luna in playFor js =====
+-1
+
+===== api WAGGLE const =====
+,
+    CIRRI,
+    EIGHT,
+    ROCK,
+    FLAT,
+    SPINES,
+    KNOBS,
+    CASTINGS,
+    WAGGLE,
+    IGNORE,
+    DUR,
+    pl
+
+===== CASTINGS kind approach =====
+L5015: if (target.kind === CASTINGS) { |       const hold = castingsPoint(win, sprite, work); |       return { ...target, holdX: hold.x, holdLift: hold.lift }; |     } |     if (target.kind === WAGGLE) { |       const hold = wagglePoint(
+L17055: if (target.kind === CASTINGS) { |           return goPhase(next, "castings-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "walk", dir); |         } |         if (target.kind === WAGGLE) { |           retu
+count 2
+
+===== tick waggle-on LINE 26123 =====
+ing = target.landX >= target.holdX ? 1 : -1;
+      if (u >= 1) return goPhase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+      return next;
+    }
+
+
+
+    if (next.phase === "waggle-on") {
+      const face = waggleFace(target);
+      const u = next.t / DU
+
+===== ts tick waggle-on LINE 26804 =====
+ase(next, "land", { x: next.to.x, lift: 0 }, { x: next.to.x, lift: 0 }, "idle", next.facing);
+    return next;
+  }
+
+
+
+  if (next.phase === "waggle-on") {
+    const face = waggleFace(target);
+    const
+
+===== ts playFor around honeybee =====
+ === "knobbed_whelk") return KNOBS;
+  if (key === "lugworm") return CASTINGS;
+  if (key === "honeybee") return WAGGLE;
+  return SILL;
+}
+
+export function canStar
+
+===== WindowPlayKind CASTINGS.. =====
+typeof CASTINGS | typeof WAGGLE | typeof SILL | typeof IGNORE;
+export type HoldClip = "jamb" | "sash";
+export type ClickNode = "left" | "right" | "tl" | "tr" | "bl" | "br";
+export type PlayPhase =
+  |

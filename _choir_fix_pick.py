@@ -1,0 +1,26 @@
+﻿from pathlib import Path
+js = Path("desktop/renderer/window-play.js").read_text(encoding="utf-8")
+ts = Path("web/src/lib/pets/window-play.ts").read_text(encoding="utf-8")
+i = js.find('leave: "thirsted"')
+print("JS thirsted context repr:")
+print(repr(js[i:i+220]))
+print("---")
+i = ts.find('leave: "thirsted"')
+print("TS thirsted context repr:")
+print(repr(ts[i:i+220]))
+print("---")
+# find WRAP after thirst
+i = js.find('leave: "thirsted"')
+j = js.find("kind === WRAP", i)
+print("JS between thirsted and WRAP chars", j-i)
+print(repr(js[i:j+30]))
+print("---")
+i = js.find('phase === "thirst-off"')
+j = js.find('phase === "sill-hop"', i)
+print("JS thirst-off to sill chars", j-i)
+print(repr(js[j-120:j+40]))
+# check if WRAP still exists near pick
+print("WRAP count", js.count("kind === WRAP"))
+# maybe WRAP was replaced? find what follows thirst pick
+idx = js.find('side: "lampglass"')
+print(js[idx:idx+600])

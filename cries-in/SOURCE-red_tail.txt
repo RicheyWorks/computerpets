@@ -1,0 +1,9 @@
+Source: Wikimedia Commons File:Buteo_jamaicensis_-_Red-tailed_Hawk_-_XC71575.ogg (xeno-canto XC71575)
+Author: Jonathon Jongsma
+License: CC BY-SA 3.0
+URL: https://commons.wikimedia.org/wiki/File:Buteo_jamaicensis_-_Red-tailed_Hawk_-_XC71575.ogg
+XC: https://xeno-canto.org/71575
+Direct: https://upload.wikimedia.org/wikipedia/commons/e/e5/Buteo_jamaicensis_-_Red-tailed_Hawk_-_XC71575.ogg
+Notes: Red-tailed Hawk (Buteo jamaicensis), Dordt College Prairie, Sioux, IA, 2011-02-12. Classic descending scream ~2.1s source.
+Cut: silenceremove + dynaudnorm, atrim 0:4, mono 44.1kHz
+House path: build our own from field tape — not Grok Imagine

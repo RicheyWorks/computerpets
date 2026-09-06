@@ -1,0 +1,1 @@
+'eight >= 224;\n  if (kind === MANY) return w.width >= 194 && w.height >= 162;\n    return w.width >= 180 && w.height >= 70;\n  });\n  if (!usable.length) '

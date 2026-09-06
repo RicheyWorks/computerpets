@@ -1,0 +1,14 @@
+// const
+const FINS = "fins";
+  const SILL
+
+// dur
+finsOn: 3.08,
+    fins: 2.77,
+    finsHold: 6.04,
+    finsOff: 3.04,
+    sillHop:
+
+// playfor
+if (key === "lionfish") return FINS;
+    return SILL

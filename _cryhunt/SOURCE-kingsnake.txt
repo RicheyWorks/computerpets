@@ -1,0 +1,10 @@
+key: kingsnake
+guest: Bandit (California Kingsnake)
+source: Freesound sound 846337 "Reptiles - Snake; Mexican Black Kingsnake, Short Hiss and Lunge" by TheKingOfGeeks360
+URL: https://freesound.org/people/TheKingOfGeeks360/sounds/846337/
+Direct: https://cdn.freesound.org/previews/846/846337_15895934-hq.mp3
+author: TheKingOfGeeks360
+license: Creative Commons Zero (CC0 1.0) — Critter Zone pack
+Species: Lampropeltis getula nigrita (Mexican black kingsnake) — same getula complex as California kingsnake (L. californiae). Short dry defensive hiss (~0.67s). House pad to ~3.2s mono 44.1kHz with quiet trail. No movie roar. No music. No narrator. Tail-rattle is substrate vibration; hiss is the legal field tell.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

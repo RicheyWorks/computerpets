@@ -1,0 +1,7 @@
+Source: Freesound sound 386007 "Rabbit Thump on Soil"
+Author: kessir
+License: Creative Commons Zero (CC0)
+URL: https://freesound.org/people/kessir/sounds/386007/
+Direct preview used: https://cdn.freesound.org/previews/386/386007_4521595-hq.mp3
+Notes: Two sounds of a rabbit thumping on bare soil. House cut ~3.7s covering both thumps, mono 44.1kHz.
+House path: build our own from field tape — not Grok Imagine

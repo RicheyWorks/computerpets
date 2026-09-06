@@ -1,0 +1,74 @@
+===== mouth tick =====
+if (next.phase === "mouth-on") {
+      const face = mouthFace(target);
+      const u = next.t / DUR.mouthOn;
+      const pose = mouthOnPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "walk";
+      next.facing = face;
+      if (u >= 1) {
+        return goPhase(next, "mouth", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "play", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "mouth") {
+      const face = mouthFace(target);
+      const pose = mouthPath(Math.min(1, next.t / DUR.mouth));
+      next.x = target.holdX + pose.x * face;
+      next.lift = target.holdLift + pose.lift;
+      next.rot = pose.rot * face;
+      next.anim = "play";
+      next.facing = face;
+      if (next.t >= DUR.mouth) {
+        return goPhase(next, "mouth-hold", { x: target.holdX, lift: target.holdLift }, { x: target.holdX, lift: target.holdLift }, "sit", face);
+      }
+      return next;
+    }
+
+    if (next.phase === "mouth-hold") {
+      const face = mouthFace(target);
+      const pose = mouthHoldPath(Math.min(1, next.t / DUR.mouthHold));
+      next.x = target.holdX + pose.x * face;
+      next.lift = target.holdLift + pose.lift;
+      next.rot = pose.rot * face;
+      next.anim = "sit";
+      next.facing = face;
+      if (ne
+
+===== cjs mouth anim =====
+otEqual(play.phase, "lunge");
+    assert.notEqual(play.phase, "sill-walk");
+    if (play.phase === "mouth") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "mouth-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "mouth-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 0.2)) < 3, "he holds the wide mouth on the weed edge");
+    }
+    if (play.phase === "mouth-off") {
+      assert.equal(play.anim, "walk");
+    }
+  }
+  assert.ok(seen.has("mouth-on"));
+  asser
+
+===== cjs wrap anim =====
+.notEqual(play.phase, "sill-walk");
+    if (play.phase === "wrap") {
+      assert.equal(play.anim, "play");
+    }
+    if (play.phase === "wrap-on") {
+      assert.equal(play.anim, "walk");
+    }
+    if (play.phase === "wrap-hold" && play.t > 0) {
+      assert.equal(play.anim, "sit");
+      assert.ok(Math.abs(play.lift - (play.target.holdLift + 4.0)) < 3, "she holds the wrap on the bloom");
+    }
+    if (play.phase === "wrap-off") {
+    

@@ -1,0 +1,11 @@
+﻿const fs = require("fs");
+const ts = fs.readFileSync("web/src/lib/pets/window-play.ts", "utf8");
+console.log("typeof SPOTS in kind", ts.includes("typeof SPOTS"));
+console.log("typeof MANTLE in kind", ts.includes("typeof MANTLE"));
+const line = ts.split(/\r?\n/).find(l => l.startsWith("export type WindowPlayKind"));
+console.log("len", line.length);
+console.log("tail", line.slice(-200));
+console.log("has spotted leave", ts.includes('| "spotted"'));
+console.log("has mantled", ts.includes('| "mantled"'));
+console.log("has sandwell", ts.includes("sandwell") || ts.includes("\"sandwell\""));
+console.log("has mantledish", ts.includes("mantledish"));

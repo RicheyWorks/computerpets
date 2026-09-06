@@ -1,0 +1,8 @@
+key: sweat_bee
+guest: Sheen (Bicolored Sweat Bee)
+source: Wikimedia Commons Bee_Buzzing_Sound_-_Animal_Sounds.opus
+URL: https://commons.wikimedia.org/wiki/File:Bee_Buzzing_Sound_-_Animal_Sounds.opus
+author: Free Sounds Library (Spanac / YouTube FreeSoundsLibrary)
+license: CC BY 3.0
+note: No Halictidae/Agapostemon/Lasioglossum remixable field tape (iNat all BY-NC/ARR; Commons empty). Honest small/faint solitary wing buzz: highpassed quieter cut of unused FSL bee file (distinct from leafcutter's Bee_buzzing_sound_(animal_noises).opus). Buzz only.
+sat: 2026-09-03 Buffffff

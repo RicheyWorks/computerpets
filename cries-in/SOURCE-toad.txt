@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:Anaxyrus_americanus_-_American_Toad_Vocalization.wav
+Author: SwampVids
+License: Creative Commons Attribution 4.0 (CC BY 4.0)
+URL: https://commons.wikimedia.org/wiki/File:Anaxyrus_americanus_-_American_Toad_Vocalization.wav
+Direct: https://upload.wikimedia.org/wikipedia/commons/3/3a/Anaxyrus_americanus_-_American_Toad_Vocalization.wav
+Notes: Song of American Toad, Anaxyrus americanus. House cut ~3.0s mono 44.1kHz.
+House path: build our own from field tape — not Grok Imagine

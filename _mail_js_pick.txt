@@ -1,0 +1,18 @@
+    if (kind === EIGHT) {
+      const hold = eightPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -53 : 53;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 48 : -48;
+      return {
+        id: best.id,
+        kind,
+        side: "tiderock",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "plated",
+        spin: "none",
+      };
+    }

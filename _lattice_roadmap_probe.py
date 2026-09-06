@@ -1,0 +1,11 @@
+﻿from pathlib import Path
+t = Path("docs/ROADMAP.md").read_text(encoding="utf-8")
+i = t.find("- [x] Cap (`fly_agaric`")
+print("CAP ITEM idx", i)
+print(t[i:i+2200])
+print("\n\n===== NEXT LATTICE =====")
+j = t.find("Next leftover is Lattice")
+print(t[j-400:j+600])
+print("\n\n===== LAST UPDATED =====")
+k = t.rfind("Last Updated")
+print(t[k:k+700])

@@ -1,0 +1,10 @@
+﻿from pathlib import Path
+js = Path("desktop/renderer/window-play.js").read_text(encoding="utf-8")
+ts = Path("web/src/lib/pets/window-play.ts").read_text(encoding="utf-8")
+print("JS has header", "This is the second leftover of the fungi den. Others walk a sill. */" in js)
+print("TS has header", "This is the second leftover of the fungi den. Others walk a sill. */" in ts)
+print("TS has second leftover", ts.count("second leftover of the fungi den"))
+i = ts.find("second leftover of the fungi den")
+print(repr(ts[i:i+120]))
+print("JS const HOLLOW", "const HOLLOW" in js)
+print("JS file already patched?", 'key === "morel") return HOLLOW' in js)

@@ -1,0 +1,7 @@
+Source: Freesound sound 165906 "hamster2.wav"
+Author: ondrosik
+License: Creative Commons Zero (CC0)
+URL: https://freesound.org/people/ondrosik/sounds/165906/
+Direct preview used: https://cdn.freesound.org/previews/165/165906_2140699-hq.mp3
+Notes: Sound of a hamster moving in a cage and squeaking (Zoom H1). House cut ~3.8s from ~9.0s (loudest squeak/rustle window), mono 44.1kHz dynaudnorm.
+House path: build our own from field tape — not Grok Imagine

@@ -1,0 +1,1 @@
+'rkstone" | "lampglass" | "blotterair" | "methanebowl" | "inkstone" | "lampedge" | "paperweight";\n  holdX: number;\n  holdLift: number;\n  approachX: num'

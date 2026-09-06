@@ -1,0 +1,114 @@
+﻿from pathlib import Path
+Path("_lace_mjs_tests.txt").write_text(r'''test("Lace nets a window stool as a leaf dish: walk onto the stool, sit, lace once, sit the dish, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("lacewing"), "net");
+  assert.equal(P.NET, "net");
+  assert.notEqual(P.playFor("lacewing"), "lace");
+  assert.notEqual(P.playFor("lacewing"), "week");
+  assert.notEqual(P.playFor("lacewing"), "mount");
+  assert.notEqual(P.playFor("lacewing"), "gold");
+  assert.notEqual(P.playFor("lacewing"), "black");
+  assert.notEqual(P.playFor("lacewing"), "hawk");
+  assert.notEqual(P.playFor("lacewing"), "tails");
+  assert.notEqual(P.playFor("lacewing"), "jump");
+  assert.notEqual(P.playFor("lacewing"), "leaf");
+  assert.notEqual(P.playFor("lacewing"), "song");
+  assert.notEqual(P.playFor("lacewing"), "spot");
+  assert.notEqual(P.playFor("lacewing"), "sill");
+  assert.equal(P.playFor("jewelwing"), "black");
+  assert.equal(P.BLACK, "black");
+  assert.equal(P.playFor("swallowtail"), "tails");
+  assert.equal(P.TAILS, "tails");
+  assert.equal(P.playFor("luna"), "week");
+  assert.equal(P.playFor("moth"), "mount");
+  assert.equal(P.playFor("darner"), "hawk");
+  assert.equal(P.playFor("grasshopper"), "jump");
+  assert.equal(P.playFor("katydid"), "leaf");
+  assert.equal(P.playFor("field_cricket"), "song");
+  assert.equal(P.playFor("earwig"), "sill");
+  assert.equal(Overlay.playFor("lacewing"), "net");
+  const target = P.pickTarget([WIN], 80, "lacewing", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "net");
+  assert.equal(target.side, "leafdish");
+  assert.equal(target.leave, "laced");
+  assert.ok(target.holdLift >= 0);
+  assert.ok(P.DUR.netHold > P.DUR.net * 1.2);
+  assert.ok(P.DUR.netOn !== P.DUR.blackOn);
+  assert.ok(P.DUR.netOn !== P.DUR.tailsOn);
+  assert.ok(P.DUR.netOn !== P.DUR.weekOn);
+  assert.ok(P.DUR.net !== P.DUR.black);
+  assert.ok(P.DUR.net !== P.DUR.tails);
+  const dish = P.netPoint(WIN, P.SPRITE, WORK);
+  const jewel = P.blackPoint(WIN, P.SPRITE, WORK);
+  const blossom = P.tailsPoint(WIN, P.SPRITE, WORK);
+  const dusk = P.weekPoint(WIN, P.SPRITE, WORK);
+  const spots = P.spotPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(dish.x - jewel.x) > 12 || Math.abs(dish.lift - jewel.lift) > 4);
+  assert.ok(Math.abs(dish.x - blossom.x) > 12 || Math.abs(dish.lift - blossom.lift) > 2);
+  assert.ok(Math.abs(dish.x - dusk.x) > 12 || Math.abs(dish.lift - dusk.lift) > 4);
+  assert.ok(Math.abs(dish.x - spots.x) > 12 || Math.abs(dish.lift - spots.lift) > 2);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "lacewing", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okNet = P.pickTarget([{ id: "net", x: 200, y: 80, width: 190, height: 152 }], 80, "lacewing", WORK, P.SPRITE);
+  assert.ok(okNet);
+  const netPose = P.netPath(0.4);
+  assert.ok(netPose.lift > 0.5);
+  const hold = P.netHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 2.1) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "black");
+    assert.notEqual(play.phase, "tails");
+    assert.notEqual(play.phase, "week");
+    assert.notEqual(play.phase, "mount");
+    assert.notEqual(play.phase, "spot");
+  }
+  assert.ok(seen.has("net-on"));
+  assert.ok(seen.has("net"));
+  assert.ok(seen.has("net-hold"));
+  assert.ok(seen.has("net-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Lace's leaf-dish net; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "lacewing", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "net"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "net");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "net");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "net-off");
+  play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 400 && play.phase !== "net-hold"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "card" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "net-off" || play.abort === true);
+  play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "hide" });
+  assert.equal(play.abort, true);
+});
+
+test("the demo window plate walks Lace net the same way", () => {
+  const target = P.pickTarget([WIN], 80, "lacewing", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "net");
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "done");
+});
+''', encoding="utf-8")
+print("mjs", Path("_lace_mjs_tests.txt").stat().st_size)

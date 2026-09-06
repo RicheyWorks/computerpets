@@ -1,0 +1,100 @@
+﻿test("Forceps cercis a window stool as a bark dish: walk onto the stool, sit, raise the cerci once, sit the dish, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("earwig"), "cerci");
+  assert.equal(P.CERCI, "cerci");
+  assert.notEqual(P.playFor("earwig"), "forceps");
+  assert.notEqual(P.playFor("earwig"), "raise");
+  assert.notEqual(P.playFor("earwig"), "claw");
+  assert.notEqual(P.playFor("earwig"), "pray");
+  assert.notEqual(P.playFor("earwig"), "sting");
+  assert.notEqual(P.playFor("earwig"), "net");
+  assert.notEqual(P.playFor("earwig"), "black");
+  assert.notEqual(P.playFor("earwig"), "sill");
+  assert.equal(P.playFor("lacewing"), "net");
+  assert.equal(P.NET, "net");
+  assert.equal(P.playFor("jewelwing"), "black");
+  assert.equal(P.playFor("mantis"), "pray");
+  assert.equal(P.playFor("crayfish"), "claw");
+  assert.equal(P.playFor("scorpion"), "raise");
+  assert.equal(P.playFor("acorn_weevil"), "sill");
+  assert.equal(Overlay.playFor("earwig"), "cerci");
+  const target = P.pickTarget([WIN], 80, "earwig", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "cerci");
+  assert.equal(target.side, "paperbark");
+  assert.equal(target.leave, "cercied");
+  assert.ok(target.holdLift >= 0);
+  assert.ok(P.DUR.cerciHold > P.DUR.cerci * 1.2);
+  assert.ok(P.DUR.cerciOn !== P.DUR.netOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.blackOn);
+  assert.ok(P.DUR.cerciOn !== P.DUR.prayOn);
+  assert.ok(P.DUR.cerci !== P.DUR.net);
+  assert.ok(P.DUR.cerci !== P.DUR.raise);
+  const dish = P.cerciPoint(WIN, P.SPRITE, WORK);
+  const leaf = P.netPoint(WIN, P.SPRITE, WORK);
+  const jewel = P.blackPoint(WIN, P.SPRITE, WORK);
+  const hinge = P.prayPoint(WIN, P.SPRITE, WORK);
+  const bark = P.raisePoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(dish.x - leaf.x) > 12 || Math.abs(dish.lift - leaf.lift) > 2);
+  assert.ok(Math.abs(dish.x - jewel.x) > 12 || Math.abs(dish.lift - jewel.lift) > 4);
+  assert.ok(Math.abs(dish.x - hinge.x) > 12 || Math.abs(dish.lift - hinge.lift) > 4);
+  assert.ok(Math.abs(dish.x - bark.x) > 12 || Math.abs(dish.lift - bark.lift) > 2);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "earwig", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okCerci = P.pickTarget([{ id: "cerci", x: 200, y: 80, width: 188, height: 154 }], 80, "earwig", WORK, P.SPRITE);
+  assert.ok(okCerci);
+  const cerciPose = P.cerciPath(0.4);
+  assert.ok(cerciPose.lift > 0.5);
+  const hold = P.cerciHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 1.6) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "net");
+    assert.notEqual(play.phase, "black");
+    assert.notEqual(play.phase, "pray");
+    assert.notEqual(play.phase, "claw");
+    assert.notEqual(play.phase, "raise");
+  }
+  assert.ok(seen.has("cerci-on"));
+  assert.ok(seen.has("cerci"));
+  assert.ok(seen.has("cerci-hold"));
+  assert.ok(seen.has("cerci-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Forceps's bark-dish cerci; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "earwig", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "cerci"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "cerci");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "cerci");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "cerci-off");
+  assert.equal(play.abort, true);
+});
+
+test("the demo window plate walks Forceps cerci the same way", () => {
+  assert.equal(Overlay.playFor("earwig"), "cerci");
+  assert.equal(P.playFor("earwig"), "cerci");
+  const target = P.pickTarget([WIN], 80, "earwig", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "cerci");
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.ok(seen.has("cerci"));
+  assert.equal(play.phase, "done");
+});

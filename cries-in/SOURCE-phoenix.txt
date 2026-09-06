@@ -1,0 +1,11 @@
+﻿key: phoenix
+guest: Ember (Phoenix)
+source: BigSoundBank Ghost on the Flute #1 (sound 2054)
+URL: https://bigsoundbank.com/ghost-on-the-flute-1-s2054.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/2054.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: mythical phoenix sit — no real taxon. Thin rising slide-flute whistle (piston flute ghost cry). No music. No narrator. No words.
+Notes: House cut ~3.5s mono 44.1kHz silenceremove+dynaudnorm from full ~6.2s source. Fantasy guest field-tape foley.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

@@ -1,0 +1,11 @@
+key: moray
+guest: Door (Green Moray)
+source: BigSoundBank Straw, suction #2 (sound 1245)
+URL: https://bigsoundbank.com/straw-suction-2-s1245.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1245.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Gymnothorax funebris (green moray; house guest Door) — nearly silent. Soft attenuated straw-suction #2 as wet gulp. No roar. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.0s mono 44.1kHz volume=-10dB + dynaudnorm + afade from full ~3.05s source. Quiet guest. Distinct from Cup octopus Straw suction #1 (#1244).
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

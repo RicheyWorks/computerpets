@@ -1,0 +1,702 @@
+
+===== js weed occurrences =====
+  L1: k, then let go. Prickle glues a putty fillet as a weed bowl: dart onto the fillet, glue a nest, flar
+  L1:  closes stone ten. Lunge mouths a window-box as a weed edge: walk onto the box, sit the wide mouth, 
+  L1: urth creek leftover. Bar bars a meeting rail as a weed rail: walk onto the rail, show the side bars,
+  L2825: , Math.max(8, workW - size - 8)), |         leave: "weed", |         spin: "none", |       }; |     } |     if
+  L3700:         id: best.id, |         kind, |         side: "weedge", |         holdX: hold.x, |         holdLift: 
+  L3772:         id: best.id, |         kind, |         side: "weedrail", |         holdX: hold.x, |         holdLift
+  L14398:    const x = win.x + pad + span * 0.72; |     const weed = Math.max(18, size * 0.11); |     const gripY 
+  L14399: e * 0.11); |     const gripY = win.y + win.height + weed; |     const lift = gripLift(gripY, work); |     
+  L14676:    const x = win.x + pad + span * 0.08; |     const weed = Math.max(88, win.height * 0.52); |     const 
+  L14677: 88, win.height * 0.52); |     const gripY = win.y + weed; |     const lift = gripLift(gripY, work); |     
+  total 10
+
+===== ts weed occurrences =====
+  L1: k, then let go. Prickle glues a putty fillet as a weed bowl: dart onto the fillet, glue a nest, flar
+  L1:  closes stone ten. Lunge mouths a window-box as a weed edge: walk onto the box, sit the wide mouth, 
+  L1: urth creek leftover. Bar bars a meeting rail as a weed rail: walk onto the rail, show the side bars,
+  L1443: shdish" | "mudbowl" | "leafdish" | "dockshade" | "weedrail" | "reedambush" | "duskrun" | "currentdis
+  L1450: | "tray" | "pebble" | "room" | "silt" | "damp" | "weed" | "pot" | "height" | "beam" | "lift" | "gras
+  L3545:  8, Math.max(8, workW - size - 8)), |       leave: "weed", |       spin: "none", |     }; |   } |   if (kind =
+  L4402: urn { |       id: best.id, |       kind, |       side: "weedge", |       holdX: hold.x, |       holdLift: hold
+  L4474: urn { |       id: best.id, |       kind, |       side: "weedrail", |       holdX: hold.x, |       holdLift: ho
+  L15093: ); |   const x = win.x + pad + span * 0.72; |   const weed = Math.max(18, size * 0.11); |   const gripY = 
+  L15094: ize * 0.11); |   const gripY = win.y + win.height + weed; |   const lift = gripLift(gripY, work); |   cons
+  L15371: ); |   const x = win.x + pad + span * 0.08; |   const weed = Math.max(88, win.height * 0.52); |   const gr
+  L15372: x(88, win.height * 0.52); |   const gripY = win.y + weed; |   const lift = gripLift(gripY, work); |   cons
+  total 12
+
+===== js beginPlay WAGGLE goPhase idx=186517 LINE 5019 =====
+if (target.kind === WAGGLE) {
+      const hold = wagglePoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === BURY) {
+      const hold = buryPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    const start = sillPoint(win, 0.12, sprite, work);
+    const end = sillPoint(win, 0.88, sprite, work);
+    return { ...target, holdX: start.x, holdLift: start.lift, sillEndX: end.x };
+  }
+
+  function divePath(u, from, to, spin) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = smoothstep(t);
+    const out = from && from.side === "left" ? -1 : 1;
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && 
+
+===== js goPhase waggle-on idx=622017 LINE 17059 =====
+"waggle-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "walk", dir);
+        }
+        if (target.kind === WRAP) {
+          return goPhase(next, "wrap-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "walk", dir);
+        }
+        if (target.kind === BURY) {
+          return goPhase(next, "bury-on", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+        }
+        return goPhase(next, "sill-hop", { x: dest, lift: 0 }, { x: target.holdX, lift: target.holdLift }, "play", dir);
+      }
+      return next;
+    }
+
+    if (next.phase === "leap") {
+      const u = next.t / DUR.leap;
+      const pose = leapPath(Math.min(1, u), next.from, { x: target.holdX, lift: target.holdLift });
+      next.x = pose.x;
+      next.lift
+
+===== ts goPhase waggle-on idx=46906 LINE 1427 =====
+"waggle-on"
+  | "waggle"
+  | "waggle-hold"
+  | "waggle-off"
+  | "sill-hop"
+  | "sill-walk"
+  | "sill-down"
+  | "land"
+  | "done";
+export type PlayAnim = "idle" | "walk" | "sit" | "play" | "talk";
+export type PlayPoint = { x: number; lift: number; side?: "left" | "right" | "top" };
+export type WorkSpace = { width: number; height: number; floorLift?: number };
+
+export type PlayTarget = {
+  id: string;
+  kind: WindowPlayKind;
+  side: "left" | "right" | "top" | "glass" | "bottom" | "feet" | "rail" | "bowl" | "pane" | "gap" | "foot" | "tray" | "tank" | "cornice" | "brick" | "lintel" | "ash" | "well" | "canyon" | "ruler" | "stay" | "stool" | "cup" | "apron" | "muntin" | "horn" | "transom" | "latch" | "ripple" | "rooms" | "saucer" | "blotter" | "lift" | "sand" | "bead" | "sky" | "crevice" | "page
+
+===== js module exports idx=-1 LINE ? =====
+
+===== js assign WAGGLE idx=974622 LINE 26372 =====
+WAGGLE,
+    IGNORE,
+    DUR,
+    playFor,
+    canStart,
+    shouldAbort,
+    nextPlayWait,
+    sideHold,
+    sillPoint,
+    ridgePoint,
+    coilPoint,
+    pathPoint,
+    fieldPoint,
+    cracklePoint,
+    chargePoint,
+    chargeOpposite,
+    orbitPoint,
+    orbitOnPath,
+    clickPoint,
+    clickOpposite,
+    clickOnPath,
+    clickHopPath,
+    holdPoint,
+    holdOnPath,
+    earthPoint,
+    earthOnPath,
+    earthStepOffPath,
+    ledgePoint,
+    watchPoint,
+    watchOnPath,
+    watchOffPath,
+    thumpPoint,
+    thumpOnPath,
+    thumpStampPath,
+    thumpVanishPath,
+    stashPoint,
+    stashOnPath,
+    stashCheekPath,
+    stashOffPath,
+    wheekPoint,
+    wheekFace,
+    wheekOnPath,
+    wheekVoicePath,
+    wheekPopPath,
+    wheekOffPath,
+    baskPoint,
+    baskOnPath,
+    baskWithdrawPath,
+    b
+
+===== ts WindowPlayKind WAGGLE idx=37653 LINE 804 =====
+typeof WAGGLE | typeof SILL | typeof IGNORE;
+export type HoldClip = "jamb" | "sash";
+export type ClickNode = "left" | "right" | "tl" | "tr" | "bl" | "br";
+export type PlayPhase =
+  | "approach"
+  | "leap"
+  | "cling"
+  | "hang"
+  | "drop"
+  | "dive"
+  | "ridge-leap"
+  | "ridge-hold"
+  | "ridge-off"
+  | "coil-on"
+  | "coil-hold"
+  | "coil-off"
+  | "path-on"
+  | "path-walk"
+  | "path-sit"
+  | "path-off"
+  | "field-on"
+  | "field-hold"
+  | "field-off"
+  | "crackle-on"
+  | "crackle-hop"
+  | "crackle-off"
+  | "charge-on"
+  | "charge-bolt"
+  | "charge-hold"
+  | "charge-off"
+  | "orbit-on"
+  | "orbit-loop"
+  | "orbit-hold"
+  | "orbit-off"
+  | "click-on"
+  | "click-a"
+  | "click-hop"
+  | "click-b"
+  | "click-off"
+  | "hold-on"
+  | "hold-sit"
+  | "hold-off"
+  | "earth-on"
+  | "earth-sit"
+  | "earth
+
+===== ts export const WAGGLE already idx=24500 LINE 165 =====
+export const WAGGLE = "waggle";
+export const SILL = "sill";
+export const IGNORE = "ignore";
+export const WALK_PX = 98;
+export const DUR = {
+  leap: 0.48,
+  cling: 0.55,
+  hang: 1.35,
+  drop: 0.42,
+  dive: 0.72,
+  ridgeLeap: 0.5,
+  ridgeHold: 1.4,
+  ridgeOff: 0.58,
+  coilOn: 0.68,
+  coilHold: 1.45,
+  coilOff: 0.72,
+  pathOn: 0.52,
+  pathWalk: 2.2,
+  pathSit: 0.7,
+  pathOff: 0.55,
+  fieldOn: 0.76,
+  fieldHold: 1.55,
+  fieldOff: 0.82,
+  crackleOn: 0.32,
+  crackleHop: 0.26,
+  crackleOff: 0.4,
+  chargeOn: 0.88,
+  chargeBolt: 0.36,
+  chargeHold: 0.78,
+  chargeOff: 0.5,
+  orbitOn: 0.58,
+  orbitLoop: 2.6,
+  orbitHold: 0.72,
+  orbitOff: 0.52,
+  clickOn: 0.4,
+  clickHold: 0.36,
+  clickHop: 0.62,
+  clickOff: 0.5,
+  holdOn: 0.52,
+  holdSit: 2.4,
+  holdOff: 0.55,
+  earthOn: 0.46,
+  earthSit: 1.55,
+  ea
+
+===== js last 2500 of file =====
+    huntPoint,
+    huntFace,
+    huntOnPath,
+    huntPath,
+    huntHoldPath,
+    huntOffPath,
+    oilPoint,
+    oilFace,
+    oilOnPath,
+    oilPath,
+    oilHoldPath,
+    oilOffPath,
+    rollPoint,
+    rollFace,
+    rollOnPath,
+    rollPath,
+    rollHoldPath,
+    rollOffPath,
+    bandPoint,
+    bandFace,
+    bandOnPath,
+    bandPath,
+    bandHoldPath,
+    bandOffPath,
+    velvetPoint,
+    velvetFace,
+    velvetOnPath,
+    velvetPath,
+    velvetHoldPath,
+    velvetOffPath,
+    springPoint,
+    springFace,
+    springOnPath,
+    springPath,
+    springHoldPath,
+    springOffPath,
+    dryPoint,
+    dryFace,
+    dryOnPath,
+    dryPath,
+    dryHoldPath,
+    dryOffPath,
+    splitPoint,
+    splitFace,
+    splitOnPath,
+    splitPath,
+    splitHoldPath,
+    splitOffPath,
+    thrashPoint,
+    thrashFace,
+    thrashOnPath,
+    thrashPath,
+    thrashHoldPath,
+    thrashOffPath,
+    sidePoint,
+    sideFace,
+    sideOnPath,
+    sidePath,
+    sideHoldPath,
+    sideOffPath,
+    signalPoint,
+    signalFace,
+    signalOnPath,
+    signalPath,
+    signalHoldPath,
+    signalOffPath,
+    sandPoint,
+    sandFace,
+    sandOnPath,
+    sandPath,
+    sandHoldPath,
+    sandOffPath,
+    clampPoint,
+    clampFace,
+    clampOnPath,
+    clampPath,
+    clampHoldPath,
+    clampOffPath,
+    cirriPoint,
+    cirriFace,
+    cirriOnPath,
+    cirriPath,
+    cirriHoldPath,
+    cirriOffPath,
+    eightPoint,
+    eightFace,
+    eightOnPath,
+    eightPath,
+    eightHoldPath,
+    eightOffPath,
+    rockPoint,
+    rockFace,
+    rockOnPath,
+    rockPath,
+    rockHoldPath,
+    rockOffPath,
+    flatPoint,
+    flatFace,
+    flatOnPath,
+    flatPath,
+    flatHoldPath,
+    flatOffPath,
+    spinesPoint,
+    spinesFace,
+    spinesOnPath,
+    spinesPath,
+    spinesHoldPath,
+    spinesOffPath,
+    knobsPoint,
+    knobsFace,
+    knobsOnPath,
+    knobsPath,
+    knobsHoldPath,
+    knobsOffPath,
+    castingsPoint,
+    castingsFace,
+    castingsOnPath,
+    castingsPath,
+    castingsHoldPath,
+    castingsOffPath,
+    wagglePoint,
+    waggleFace,
+    waggleOnPath,
+    wagglePath,
+    waggleHoldPath,
+    waggleOffPath,
+    pickTarget,
+    refitTarget,
+    divePath,
+    leapPath,
+    dropPath,
+    slideOffPath,
+    coilOnPath,
+    coilOffPath,
+    fieldOnPath,
+    driftOffPath,
+    chargeBoltPath,
+    orbitOnPath,
+    beginPlay,
+    abortToFloor,
+    stepPlay,
+  };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  root.PetWindowPlay = api;
+})(typeof window !== "undefined" ? window : globalThis);
+
+
+===== ts around WAGGLE export and end exports =====
+
+===== ts wagglePoint export idx=593919 LINE 17132 =====
+export function wagglePoint(win: DeskWindow, sprite: number | undefined, work: WorkSpace) {
+  const size = sprite == null ? SPRITE : sprite;
+  const pad = 48;
+  const span = Math.max(0, win.width - size - pad * 2);
+  const x = win.x + pad + span * 0.58;
+  const pan = Math.max(68, size * 0.38);
+  const gripY = win.y + win.height - pan;
+  const lift = gripLift(gripY, work);
+  const maxLift = (work && work.height ? work.height : 800) - 48;
+  return { x, lift: clamp(lift, 28, maxLift) };
+}
+
+export function waggleFace(target: PlayTarget) {
+  return target.approachX >= target.holdX ? -1 : 1;
+}
+
+export function waggleOnPath(u: number, from: PlayPoint, to: PlayPoint) {
+  const t = Math.max(0, Math.min(1, u));
+  const fromX = from && from.x != null ? from.x : 0;
+  const toX = to && to.x != null ? t
+
+===== js function waggleOffPath end then next idx=579101 LINE 16486 =====
+function waggleOffPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.71) * 2.08;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (from && from.rot != null ? from.rot : 15.2) * (1 - ease),
+    };
+  }
+
+  function beginPlay(target, petX) {
+    if (!target) return null;
+    const x = petX == null ? target.approachX : petX;
+    return {
+      phase: "approach",
+      t: 0,
+      targe
+
+===== mjs Comb test idx=921660 LINE 17987 =====
+Comb waggle the same way", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.match(demoSrc, /demoWindow/);
+  assert.match(livingSrc, /playFor/);
+  assert.match(readFileSync(join(root, "src/lib/pets/insects.ts"), "utf8"), /key: "honeybee"[\s\S]{0,80}slug: "comb"/);
+  assert.equal(P.playFor("honeybee"), "waggle");
+  const target = P.pickTarget([WIN], 80, "honeybee", WORK, 176);
+  assert.ok(target);
+  assert.equal(target.kind, "waggle");
+  assert.equal(target.side, "waxdish");
+  assert.equal(target.leave, "waggled");
+  assert.equal(Overlay.playFor("honeybee"), "waggle");
+  assert.equal(P.WAGGLE, "waggle");
+  assert.equal(Overlay.WAGGLE, "waggle");
+  assert.notEqual(P.playFor("honeybee"), "comb");
+  assert.notEqual(P.playFor("honeybee"), "drone");
+  assert
+
+===== mjs last 80 lines =====
+18007|  assert.equal(Overlay.playFor("honey_drone"), "drone");
+18008|  assert.equal(P.playFor("honey_queen"), "lay");
+18009|  assert.equal(Overlay.playFor("honey_queen"), "lay");
+18010|  assert.equal(P.playFor("honeycomb"), "draw");
+18011|  assert.equal(Overlay.playFor("honeycomb"), "draw");
+18012|  assert.equal(P.playFor("hummingbird"), "sip");
+18013|  assert.equal(Overlay.playFor("hummingbird"), "sip");
+18014|  assert.equal(P.playFor("lugworm"), "castings");
+18015|  assert.equal(Overlay.playFor("lugworm"), "castings");
+18016|  assert.equal(P.playFor("fiddler_crab"), "signal");
+18017|  assert.equal(Overlay.playFor("fiddler_crab"), "signal");
+18018|  assert.equal(P.playFor("sand_dollar"), "flat");
+18019|  assert.equal(Overlay.playFor("sand_dollar"), "flat");
+18020|  assert.equal(P.playFor("monarch"), "sill");
+18021|  assert.equal(P.DUR.waggleOn, Overlay.DUR.waggleOn);
+18022|  assert.equal(P.DUR.waggle, Overlay.DUR.waggle);
+18023|  assert.equal(P.DUR.waggleHold, Overlay.DUR.waggleHold);
+18024|  assert.equal(P.DUR.waggleOff, Overlay.DUR.waggleOff);
+18025|  assert.ok(P.DUR.waggleOn !== Overlay.DUR.castingsOn);
+18026|  assert.ok(P.DUR.waggleOn !== Overlay.DUR.droneOn);
+18027|  assert.ok(P.DUR.waggleOn !== Overlay.DUR.signalOn);
+18028|  assert.ok(P.DUR.waggleOn !== Overlay.DUR.flatOn);
+18029|  const dish = P.wagglePoint(WIN, 176, WORK);
+18030|  const deskDish = Overlay.wagglePoint(WIN, Overlay.SPRITE, WORK);
+18031|  const marsh = P.signalPoint(WIN, 176, WORK);
+18032|  const plate = P.flatPoint(WIN, 176, WORK);
+18033|  const sandFoot = P.castingsPoint(WIN, 176, WORK);
+18034|  assert.ok(Math.abs(dish.x - deskDish.x) < 1);
+18035|  assert.ok(Math.abs(dish.lift - deskDish.lift) < 1);
+18036|  assert.ok(dish.lift > 20, "wax dish, the pan");
+18037|  assert.ok(Math.abs(dish.x - marsh.x) > 8, "not Wave signal");
+18038|  assert.ok(Math.abs(dish.x - plate.x) > 8, "not Token flat");
+18039|  assert.ok(Math.abs(dish.lift - sandFoot.lift) > 8, "not Heap castings");
+18040|  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 160, height: 70 }], 80, "honeybee", WORK, 176);
+18041|  assert.equal(tiny, null, "a real sill pan");
+18042|  const okPan = P.pickTarget([{ id: "pan", x: 200, y: 80, width: 190, height: 184 }], 80, "honeybee", WORK, 176);
+18043|  assert.ok(okPan, "a real sill pan as a wax dish");
+18044|  const walkOn = P.waggleOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+18045|  const deskWalk = Overlay.waggleOnPath(0.25, { x: 40, lift: 0 }, { x: dish.x, lift: dish.lift });
+18046|  assert.equal(walkOn.x, deskWalk.x);
+18047|  assert.equal(walkOn.lift, deskWalk.lift);
+18048|  const pulse = P.wagglePath(0.5);
+18049|  const deskPulse = Overlay.wagglePath(0.5);
+18050|  assert.equal(pulse.x, deskPulse.x);
+18051|  assert.ok(pulse.lift > 1, "a waggle dance, the play");
+18052|  assert.ok(pulse.rot !== P.signalPath(0.5).rot, "waggle, not a signal");
+18053|  assert.ok(pulse.rot !== P.flatPath(0.5).rot, "waggle, not a flat");
+18054|  assert.ok(pulse.rot !== P.castingsPath(0.5).rot, "waggle, not castings");
+18055|  assert.ok(pulse.rot !== P.dronePath(0.5).rot, "waggle, not a drone");
+18056|  assert.ok(pulse.rot !== P.layPath(0.5).rot, "waggle, not a lay");
+18057|  assert.ok(pulse.rot !== P.drawPath(0.5).rot, "waggle, not a draw");
+18058|  const hold = P.waggleHoldPath(0.5);
+18059|  const deskHold = Overlay.waggleHoldPath(0.5);
+18060|  assert.equal(hold.x, deskHold.x);
+18061|  assert.equal(hold.lift, deskHold.lift);
+18062|  let play = P.beginPlay(target, target.approachX);
+18063|  const seen = new Set();
+18064|  const windowIds = new Set();
+18065|  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+18066|    seen.add(play.phase);
+18067|    if (play.target && play.target.id) windowIds.add(play.target.id);
+18068|    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, 176, { cmd: "idle" });
+18069|    if (play.phase === "waggle") {
+18070|      assert.equal(play.anim, "play");
+18071|    }
+18072|    if (play.phase === "waggle-on") {
+18073|      assert.equal(play.anim, "walk");
+18074|    }
+18075|    if (play.phase === "waggle-hold" && play.t > 0) {
+18076|      assert.equal(play.anim, "sit");
+18077|      assert.ok(Math.abs(play.lift - (play.target.holdLift + 3.3)) < 3, "she holds the waggle after the dance on the pan");
+18078|    }
+18079|  }
+18080|  assert.ok(seen.has("waggle-on"));
+18081|  assert.ok(seen.has("waggle"));
+18082|  assert.ok(seen.has("waggle-hold"));
+18083|  assert.ok(seen.has("waggle-off"));
+18084|  assert.equal(windowIds.size, 1, "one window");
+18085|  assert.equal(play.phase, "done");
+18086|});
+
+===== insects 'monarch' =====
+  L36:  dimmed.", |       loveTalk: "I will dance that next.", |     }, |   }, |   { |     key: "monarch", |     slug: "milk", |     name: "Milk", |     speciesLabel: "Monarch", |     blurb: "Orange she earned. Drag, tap, or send a word.", |     tagline: "Milkweed fi
+  L39:  |   { |     key: "monarch", |     slug: "milk", |     name: "Milk", |     speciesLabel: "Monarch", |     blurb: "Orange she earned. Drag, tap, or send a word.", |     tagline: "Milkweed first. The orange is a warning she earned.", |     voice: "ara", |     
+  L45: "milkweed cup", |     temperament: "steadfast", |     systemPrompt: prompt("Milk", "monarch butterfly", "milkweed cup", "steadfast, orange, and honest about the warning", "milkweed, the lamp, and whether the south is still a rumor"), |     lines:
+
+===== insects 'luna' =====
+  L63: rairie.", |       loveTalk: "I will carry that south.", |     }, |   }, |   { |     key: "luna", |     slug: "ghost", |     name: "Ghost", |     speciesLabel: "Luna Moth", |     blurb: "No mouth. One week. Drag, tap, or send a word.", |     tagline: "The adult
+  L66: , |   { |     key: "luna", |     slug: "ghost", |     name: "Ghost", |     speciesLabel: "Luna Moth", |     blurb: "No mouth. One week. Drag, tap, or send a word.", |     tagline: "The adult has no mouth. One week. She does not eat.", |     voice: "leo", |  
+  L72: itat: "lamp dusk", |     temperament: "brief", |     systemPrompt: prompt("Ghost", "luna moth", "lamp dusk", "brief, pale, and honest about having no mouth", "the lamp, still air, and whether a week is enough"), |     lines: { |       greet: ["I ar
+
+===== insects 'ghost' =====
+  L64: veTalk: "I will carry that south.", |     }, |   }, |   { |     key: "luna", |     slug: "ghost", |     name: "Ghost", |     speciesLabel: "Luna Moth", |     blurb: "No mouth. One week. Drag, tap, or send a word.", |     tagline: "The adult has no mouth. One
+  L65: ry that south.", |     }, |   }, |   { |     key: "luna", |     slug: "ghost", |     name: "Ghost", |     speciesLabel: "Luna Moth", |     blurb: "No mouth. One week. Drag, tap, or send a word.", |     tagline: "The adult has no mouth. One week. She does not
+  L72: , |     habitat: "lamp dusk", |     temperament: "brief", |     systemPrompt: prompt("Ghost", "luna moth", "lamp dusk", "brief, pale, and honest about having no mouth", "the lamp, still air, and whether a week is enough"), |     lines: { |       gree
+  L77: ], |       play: ["A drift. That was athletic for a week.", "I win by remaining a ghost.", "Again. Bring a longer dusk."], |       rest: ["I will hold this lamp.", "Wake me if the week ends.", "The dusk is the correct chair."], |       hungry: ["
+  L83: "], |       neglected: "I drifted anyway. The lamp kept the week.", |       named: "Ghost. I am the week that does not eat.", |       foodTalk: "Nothing. The adult has no mouth.", |       sleepTalk: "The lamp already dimmed.", |       loveTalk: "I wi
+
+===== insects 'milk' =====
+  L37: Talk: "I will dance that next.", |     }, |   }, |   { |     key: "monarch", |     slug: "milk", |     name: "Milk", |     speciesLabel: "Monarch", |     blurb: "Orange she earned. Drag, tap, or send a word.", |     tagline: "Milkweed first. The orange is a 
+  L38: e that next.", |     }, |   }, |   { |     key: "monarch", |     slug: "milk", |     name: "Milk", |     speciesLabel: "Monarch", |     blurb: "Orange she earned. Drag, tap, or send a word.", |     tagline: "Milkweed first. The orange is a warning she earned
+  L41: rch", |     blurb: "Orange she earned. Drag, tap, or send a word.", |     tagline: "Milkweed first. The orange is a warning she earned.", |     voice: "ara", |     habitat: "milkweed cup", |     temperament: "steadfast", |     systemPrompt: prompt("Mil
+  L43: ed first. The orange is a warning she earned.", |     voice: "ara", |     habitat: "milkweed cup", |     temperament: "steadfast", |     systemPrompt: prompt("Milk", "monarch butterfly", "milkweed cup", "steadfast, orange, and honest about the warn
+  L45: abitat: "milkweed cup", |     temperament: "steadfast", |     systemPrompt: prompt("Milk", "monarch butterfly", "milkweed cup", "steadfast, orange, and honest about the warning", "milkweed, the lamp, and whether the south is still a rumor"), |   
+  L45: emperament: "steadfast", |     systemPrompt: prompt("Milk", "monarch butterfly", "milkweed cup", "steadfast, orange, and honest about the warning", "milkweed, the lamp, and whether the south is still a rumor"), |     lines: { |       greet: ["I k
+  L45: butterfly", "milkweed cup", "steadfast, orange, and honest about the warning", "milkweed, the lamp, and whether the south is still a rumor"), |     lines: { |       greet: ["I kept the orange. Hello.", "The cup kept my milkweed.", "You may look
+  L47: mor"), |     lines: { |       greet: ["I kept the orange. Hello.", "The cup kept my milkweed.", "You may look. The warning is earned."], |       ambient: ["Milkweed first. Then the color.", "I do not pretend to be safe.", "Your papers are a prair
+  L48: p kept my milkweed.", "You may look. The warning is earned."], |       ambient: ["Milkweed first. Then the color.", "I do not pretend to be safe.", "Your papers are a prairie I decline to rush.", "A migrate is a sentence I have not finished."
+  truncated
+
+===== insects 'honeybee' =====
+  L9: otice ${notice}.`; | } |  | export const INSECT_ROSTER: RosterDef[] = [ |   { |     key: "honeybee", |     slug: "comb", |     name: "Comb", |     speciesLabel: "Western Honey Bee", |     blurb: "A dance that is a map. Drag, tap, or send a word.", |     taglin
+
+===== catalog length hint =====
+catalog exists=True len=42691
+catalog 220 count=0
+catalog monarch count=2
+catalog luna_moth count=0
+catalog luna count=1
+catalog ghost count=1
+
+===== ROADMAP last updated =====
+**Last Updated:** 2026-09-01 (Phase 6 leftover: Comb waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; catalog stays 220; waggle is the tell; Hum still owns drone; Keep still owns lay; Wax still owns draw; Sip still owns sip; Heap still owns castings; Wave still owns signal; Token still owns flat)
+
+This roadmap is a living document. It will be updated as priorities, constraints, and learnings evolve.
+
+===== ROADMAP Comb entry start =====
+- [x] Comb (`honeybee` / `comb`) waggles a real window sill pan as a wax dish: walk onto the pan (the dish — the same furniture family Wave signals as a marsh dish, Token flats as a sand plate, Spoon paddles as a current dish, Wash rinses as a wash bowl, Jaw shows as a brackish dish, and Well fills as a bog cup, not Wave's signal, not Token's flat, not Spoon's paddle, not Wash's rinse, not Jaw's show, not Well's fill, not Hum's pane drone, not Keep's pane lay, not Wax's pane draw, not Sip's window-box sip, not Heap's window-foot castings), dance the waggle (the tell — the dance is a map, not a
+
+===== ROADMAP Next leftover Milk =====
+over done. Knurl is done. Ninth shore leftover done. Heap is done. Tenth shore leftover done. Shore ten is closed. Comb is done. First leftover of the remaining hive den done. Shore ten stays closed. Next leftover is Milk. Do not start Milk.
+- [x] Link (`millipede` / `link`) oils a real window stool as a damp log: walk onto the stool (the log — the same furniture family Cache buries as an oak dish, Gum chews as a gum perch, and Levee banks as a bank dish, not Cache's bury, not Gum's chew, not Levee's bank, not Coal's window-well browse, not Haste's sash-jamb hunt), oil the rings (the tell — tw
+
+===== README Comb =====
+Comb waggles a sill pan as a wax dish: walk onto the pan, dance the waggle, then leave. Hum still owns drone. Keep still owns lay. Wax still owns draw. Heap still owns castings. This is the first leftover of the remaining hive den. Shore ten is closed. Other guests walk a sill. The overlay reads window bounds, not pixels. Mac and Linux window play is a later door. When Rui sleeps, Sip and the American robin land on him and chill. After a feed, Rui does a happy dance. Call a den and the guests walk in without blinking. Walk wakes a sleeping Rui.
+
+### Mac
+
+Same helpers. Then in Terminal, inside the `computerpets` folder:
+
+```bash
+sh desktop.sh
+```
+
+The extra control sits in the menu bar.
+
+### 
+
+===== desktop README Comb =====
+Comb waggles a sill pan as a wax dish: walk onto the pan, dance the waggle, then leave. Hum still owns drone. Keep still owns lay. Wax still owns draw. Heap still owns castings. This is the first leftover of the remaining hive den. Shore ten is closed. Other guests walk a sill. When Rui sleeps, Sip and the American robin land on him and chill. The robin sings. After a feed, Rui does a happy dance. Call a den and the guests keep their img nodes. Walk wakes a sleeping Rui. Radio station Find looks up a typed city or call sign. Mac and Linux window play is a later door (`mac-linux-window-play`). Click the animal to open the keeper card. The card and the left choice ribbon scroll so Feed and the
+
+===== ARCH Comb =====
+Comb waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; catalog stays 220; waggle is the tell; Hum still owns drone; Keep still owns lay; Wax still owns draw; Sip still owns sip; Heap still owns castings; Wave still owns signal; Token still owns flat) |
+| **Version**      | 1.3                                        |
+| **Status**       | Active — Maintained                        |
+| **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
+
+---
+
+## Document Maintenance
+
+Contributors making significant architectural changes (new major componen
+
+===== ARCH last updated =====
+Last Updated** | 2026-09-01 (Comb waggles a sill pan as a wax dish; first leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; catalog stays 220; waggle is the tell; Hum still owns drone; Keep still owns lay; Wax still owns draw; Sip still owns sip; Heap still owns castings; Wave still owns signal; Token still owns flat) |
+| **Version**      | 1.3                                        |
+| **Status**       | Active — Maintained                        |
+| **Related**      | [docs/README.md](README.md) (documentation index), [docs/adr/](adr/README.md) (decisions already true on `main`) |
+
+---
+
+## Document Maintenance
+
+Contributors making significant architectura
+
+===== js billPoint (lance) idx=515363 LINE 14740 =====
+function billPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 40;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.30;
+    const reed = Math.max(18, size * 0.11);
+    const gripY = win.y + win.height + reed;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 12, maxLift) };
+  }
+
+  function billFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function billOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+
+===== js mouthPoint (lunge) idx=502494 LINE 14393 =====
+function mouthPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 40;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.72;
+    const weed = Math.max(18, size * 0.11);
+    const gripY = win.y + win.height + weed;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 12, maxLift) };
+  }
+
+  function mouthFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function mouthOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift :
+
+===== js size BILL idx=58505 LINE 1299 =====
+if (kind === BILL) return w.width >= 193 && w.height >= 169;
+    if (kind === DUSK) return w.width >= 204 && w.height >= 224;
+    if (kind === PADDLE) return w.width >= 190 && w.height >= 184;
+    if (kind === DISK) return w.width >= 160 && w.height >= 140;
+    if (kind === GO) return w.width >= 178 && w.height >= 162;
+    if (kind === HUNT) return w.width >= 172 && w.height >= 212;
+    if (kind === OIL) return w.width >= 194 && w.height >= 162;
+    if (kind === ROLL) return w.width >= 194 && w.height >= 162;
+    if (kind === BAND) return w.width >= 194 && w.height >= 162;
+    if (kind === VELVET) return w.width >= 191 && w.height >= 216;
+    if (kind === SPRING) return w.width >= 160 && w.height >= 70;
+    if (kind === DRY) return w.width >= 196 && w.height >= 188;
+    if (kind === SPLIT)
+
+===== js size MOUTH idx=58174 LINE 1294 =====
+if (kind === MOUTH) return w.width >= 193 && w.height >= 169;
+    if (kind === MARK) return w.width >= 190 && w.height >= 188;
+    if (kind === BARBEL) return w.width >= 178 && w.height >= 162;
+    if (kind === FLARE) return w.width >= 204 && w.height >= 224;
+    if (kind === BARRED) return w.width >= 192 && w.height >= 190;
+    if (kind === BILL) return w.width >= 193 && w.height >= 169;
+    if (kind === DUSK) return w.width >= 204 && w.height >= 224;
+    if (kind === PADDLE) return w.width >= 190 && w.height >= 184;
+    if (kind === DISK) return w.width >= 160 && w.height >= 140;
+    if (kind === GO) return w.width >= 178 && w.height >= 162;
+    if (kind === HUNT) return w.width >= 172 && w.height >= 212;
+    if (kind === OIL) return w.width >= 194 && w.height >= 162;
+    if (kind === RO

@@ -1,0 +1,10 @@
+key: choir
+guest: Choir (Chord Body)
+source: Wikimedia Commons "CMajor Chord in Different Instruments.ogg" by 1RadicalOne (Grand Piano segment)
+URL: https://commons.wikimedia.org/wiki/File:CMajor_Chord_in_Different_Instruments.ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/c/c7/CMajor_Chord_in_Different_Instruments.ogg
+author: 1RadicalOne
+license: Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0)
+note: Quiet alien sit — Chord Body has no words. One dry held C-major (CEG) Grand Piano chord from Commons multi-instrument MIDI field recording (first instrument segment). Not a music bed. No narrator. No cartoon beep. House cut ~3.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

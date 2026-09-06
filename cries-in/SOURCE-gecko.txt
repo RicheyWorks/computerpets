@@ -1,0 +1,7 @@
+Source: Wikimedia Commons File:HouseGeckoChirp.ogg
+Author: Glueball
+License: CC BY-SA 3.0
+URL: https://commons.wikimedia.org/wiki/File:HouseGeckoChirp.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/b/b5/HouseGeckoChirp.ogg
+Notes: Chirping call of a common house gecko / cicak (~3.7s source). House cut ~3.5s mono 44.1kHz. High squeak-chirp for Pad (Hemidactylus). Not a frog. No words. No music. No narrator.
+House path: build our own from field tape — not Grok Imagine

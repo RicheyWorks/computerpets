@@ -1,0 +1,141 @@
+const assert = require("node:assert/strict");
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
+const { test } = require("node:test");
+const C = require("./card.js");
+const Life = require("./life.js");
+
+const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
+const petSrc = readFileSync(join(__dirname, "pet.js"), "utf8");
+const lifeSrc = readFileSync(join(__dirname, "life.js"), "utf8");
+const styleSrc = readFileSync(join(__dirname, "styles.css"), "utf8");
+const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
+const preloadSrc = readFileSync(join(__dirname, "..", "preload.cjs"), "utf8");
+const webCard = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "card.ts"), "utf8");
+const webKeeper = readFileSync(join(__dirname, "..", "..", "web", "src", "lib", "pets", "keeper.ts"), "utf8");
+const cardSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "keeper-card.tsx"), "utf8");
+const livingSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "living-pet.tsx"), "utf8");
+const roomSrc = readFileSync(join(__dirname, "..", "..", "web", "src", "components", "desk", "companion-room.tsx"), "utf8");
+
+test("the card law is the same house on overlay and desk", () => {
+  assert.deepEqual(C.COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
+  assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
+  assert.deepEqual(C.MUTE_BUSES, ["talk", "special", "weather", "treats", "steps", "music"]);
+  assert.equal(C.VOICE_TRUTH, "The door is still the system speech voices.");
+  assert.match(C.QUIT_TRUTH, /desktop\.ps1/);
+  assert.equal(C.voiceStyleOf("hearth").rate, 0.86);
+  assert.equal(C.speakOpts("hearth", 80).volume, 0.8);
+  assert.equal(C.busOf("chirp"), "talk");
+  assert.equal(C.busOf("hop"), "special");
+  assert.equal(C.busOf("munch"), "treats");
+  assert.equal(C.busOf("rain"), "weather");
+  assert.equal(C.isMuted({ talk: true }, "chirp"), true);
+  assert.equal(C.isMuted({ talk: true }, "hop"), false);
+  assert.match(webCard, /VOICE_TRUTH/);
+  assert.match(webCard, /hearth/);
+  assert.match(webKeeper, /VOICE_TRUTH/);
+  assert.match(cardSrc, /data-card="collapse"/);
+  assert.match(cardSrc, /Mute \$\{bus\}/);
+  assert.match(htmlSrc, /data-card="collapse"/);
+  assert.match(htmlSrc, /card\.js/);
+  assert.doesNotMatch(htmlSrc, /id="hud"[^>]*data-hit/);
+});
+
+test("saved lines, alarm, and timer persist honestly", () => {
+  let card = C.addLine(C.blankCard(), "red_panda", "A ribbon I was keeping.", "say");
+  const guest = C.guestOf(card, "red_panda");
+  assert.equal(guest.lines.length, 1);
+  assert.equal(guest.lines[0].text, "A ribbon I was keeping.");
+  assert.equal(guest.lines[0].kind, "say");
+  card = C.addLine(card, "red_panda", "sit", "do");
+  assert.equal(C.guestOf(card, "red_panda").lines.length, 2);
+  const noon = new Date(2026, 7, 27, 7, 0, 5).getTime();
+  assert.equal(C.alarmDue({ on: true, hour: 7, minute: 0, lastRingDay: "" }, noon), true);
+  const rang = C.markAlarmRang({ on: true, hour: 7, minute: 0, lastRingDay: "" }, noon);
+  assert.equal(C.alarmDue(rang, noon), false);
+  const started = C.startTimer(C.blankTimer(), 5000, 1_000);
+  assert.equal(started.running, true);
+  assert.equal(started.endsAt, 6_000);
+  assert.equal(C.timerTick(started, 3_000).rang, false);
+  assert.equal(C.timerTick(started, 6_000).rang, true);
+  assert.equal(C.formatRemain(90_000), "1:30");
+  assert.match(mainSrc, /card\.json/);
+  assert.match(mainSrc, /card-get/);
+  assert.match(mainSrc, /quit-desk/);
+  assert.match(preloadSrc, /cardGet/);
+  assert.match(preloadSrc, /quit:/);
+});
+
+test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", () => {
+  const life = { ...Life.blank(), asleep: true, sleepHeld: true, hunger: 70 };
+  assert.equal(Life.sleepHolds(life, "wander"), false);
+  assert.equal(Life.sleepHolds(life, "sit"), true);
+  assert.equal(Life.sleepHolds(life, "idle"), true);
+  assert.equal(Life.sleepHolds(life, "sleep"), true);
+  assert.equal(Life.sleepHolds(life, "talk"), false);
+  assert.equal(Life.sleepHolds(life, "call"), false);
+  assert.deepEqual(Life.wanderWhileAsleep(life), { cmd: "sleep", pose: "sleep" });
+  assert.equal(C.sleepHolds(true, "wander"), false);
+  assert.deepEqual(C.wanderWhileAsleep(true), { cmd: "sleep", pose: "sleep" });
+  assert.equal(C.wanderWhileAsleep(false), null);
+
+  const trait = { extra: {}, hungerH: 6, energyH: 9, hygieneH: 14, hardy: 0.8, social: 1, messy: 0.4, sleepStart: 22, sleepEnd: 6 };
+  const day = new Date(2023, 10, 14, 14, 0, 0).getTime();
+  const rested = Life.act({ ...Life.blank(day), energy: 40, lastTick: day }, trait, "rest", day, "red_panda");
+  assert.equal(rested.life.asleep, true);
+  assert.equal(rested.life.sleepHeld, true);
+  assert.equal(rested.cmd, "sleep");
+  const later = Life.decay(rested.life, trait, day + 20_000, "red_panda");
+  assert.equal(later.life.asleep, true);
+  assert.deepEqual(Life.wanderWhileAsleep(later.life), { cmd: "sleep", pose: "sleep" });
+  const hungry = Life.decay({ ...later.life, hunger: 8, lastTick: day }, trait, day + 40_000, "red_panda");
+  assert.equal(hungry.life.asleep, false);
+
+  assert.match(petSrc, /wanderWhileAsleep/);
+  assert.match(petSrc, /sleepHolds/);
+  assert.match(petSrc, /sim\.cmd === "sleep"/);
+  assert.match(petSrc, /sim\.anim = "sleep"/);
+  assert.match(petSrc, /desk\.quit/);
+  assert.match(lifeSrc, /sleepHeld/);
+  assert.match(livingSrc, /asleepRef\.current/);
+  assert.match(livingSrc, /s\.anim = "sleep"/);
+  assert.match(roomSrc, /wanderWhileAsleep/);
+  assert.doesNotMatch(petSrc, /if \(sim\.cmd === "sit" \|\| sim\.cmd === "sleep"\)/);
+  assert.match(styleSrc, /data-collapsed/);
+  assert.match(styleSrc, /#hud\[data-collapsed="1"\][\s\S]*display:\s*none/);
+  assert.match(styleSrc, /#hud[\s\S]*overflow-y:\s*auto/);
+  assert.match(styleSrc, /#choice[\s\S]*overflow-y:\s*auto/);
+  assert.match(petSrc, /openKeeperCard/);
+  assert.match(petSrc, /cardOpen\(\)/);
+  assert.match(petSrc, /desk\.radioSearch/);
+  assert.match(petSrc, /desk\.newsTopic/);
+  assert.match(petSrc, /desk\.marketQuote/);
+  assert.match(livingSrc, /cardOpen/);
+  assert.match(mainSrc, /radio-search/);
+  assert.match(mainSrc, /news-topic/);
+  assert.match(mainSrc, /market-quote/);
+  assert.match(mainSrc, /RADIO_UA/);
+  assert.match(mainSrc, /sandbox:\s*true/);
+  assert.match(preloadSrc, /radioSearch/);
+  assert.match(preloadSrc, /newsTopic/);
+  assert.match(preloadSrc, /marketQuote/);
+  assert.equal(C.blankCard().collapsed, true);
+});
+
+test("voice styles pick a human system voice and skip cartoon robots", () => {
+  const voices = [
+    { name: "Zarvox" },
+    { name: "Microsoft Aria Online (Natural)" },
+    { name: "Bad News" },
+  ];
+  const picked = C.pickSystemVoice(voices, "hearth");
+  assert.equal(picked.name, "Microsoft Aria Online (Natural)");
+  assert.equal(C.pickSystemVoice([], "hearth"), null);
+  const hearth = C.speakOpts("hearth", 50);
+  assert.ok(hearth.rate < 0.94);
+  assert.ok(hearth.pitch < 1.05);
+  assert.equal(hearth.volume, 0.5);
+  assert.match(petSrc, /pickSystemVoice/);
+  assert.match(petSrc, /speakOpts/);
+  assert.doesNotMatch(petSrc, /u\.rate = trait\?\.rate \?\? 0\.94/);
+});

@@ -1,0 +1,109 @@
+test("Jewel blacks a glass rim as a stream jewel: walk onto the rim, sit, jewel once, sit the jewel, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("jewelwing"), "black");
+  assert.equal(P.BLACK, "black");
+  assert.notEqual(P.playFor("jewelwing"), "jewel");
+  assert.notEqual(P.playFor("jewelwing"), "hawk");
+  assert.notEqual(P.playFor("jewelwing"), "fold");
+  assert.notEqual(P.playFor("jewelwing"), "cling");
+  assert.notEqual(P.playFor("jewelwing"), "flash");
+  assert.notEqual(P.playFor("jewelwing"), "tails");
+  assert.notEqual(P.playFor("jewelwing"), "jump");
+  assert.notEqual(P.playFor("jewelwing"), "leaf");
+  assert.notEqual(P.playFor("jewelwing"), "song");
+  assert.notEqual(P.playFor("jewelwing"), "dart");
+  assert.notEqual(P.playFor("jewelwing"), "sheen");
+  assert.notEqual(P.playFor("jewelwing"), "damsel");
+  assert.notEqual(P.playFor("jewelwing"), "sill");
+  assert.equal(P.playFor("swallowtail"), "tails");
+  assert.equal(P.TAILS, "tails");
+  assert.equal(P.playFor("darner"), "hawk");
+  assert.equal(P.playFor("bat"), "fold");
+  assert.equal(P.playFor("grasshopper"), "jump");
+  assert.equal(P.playFor("katydid"), "leaf");
+  assert.equal(P.playFor("field_cricket"), "song");
+  assert.equal(P.playFor("lacewing"), "sill");
+  assert.equal(Overlay.playFor("jewelwing"), "black");
+  const target = P.pickTarget([WIN], 80, "jewelwing", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "black");
+  assert.equal(target.side, "streamjewel");
+  assert.equal(target.leave, "jewelled");
+  assert.ok(target.holdLift > 20);
+  assert.ok(P.DUR.blackHold > P.DUR.black * 1.2);
+  assert.ok(P.DUR.blackOn !== P.DUR.tailsOn);
+  assert.ok(P.DUR.blackOn !== P.DUR.hawkOn);
+  assert.ok(P.DUR.blackOn !== P.DUR.jumpOn);
+  assert.ok(P.DUR.black !== P.DUR.tails);
+  assert.ok(P.DUR.black !== P.DUR.hawk);
+  const jewel = P.blackPoint(WIN, P.SPRITE, WORK);
+  const blossom = P.tailsPoint(WIN, P.SPRITE, WORK);
+  const prey = P.hawkPoint(WIN, P.SPRITE, WORK);
+  const plate = P.jumpPoint(WIN, P.SPRITE, WORK);
+  const rimLeaf = P.leafPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(jewel.x - blossom.x) > 12 || Math.abs(jewel.lift - blossom.lift) > 4);
+  assert.ok(Math.abs(jewel.x - prey.x) > 12 || Math.abs(jewel.lift - prey.lift) > 4);
+  assert.ok(Math.abs(jewel.x - plate.x) > 12 || Math.abs(jewel.lift - plate.lift) > 4);
+  assert.ok(Math.abs(jewel.x - rimLeaf.x) > 12 || Math.abs(jewel.lift - rimLeaf.lift) > 4);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "jewelwing", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okBlack = P.pickTarget([{ id: "black", x: 200, y: 80, width: 184, height: 156 }], 80, "jewelwing", WORK, P.SPRITE);
+  assert.ok(okBlack);
+  const blackPose = P.blackPath(0.4);
+  assert.ok(blackPose.lift > 1);
+  const hold = P.blackHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 2.7) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "tails");
+    assert.notEqual(play.phase, "hawk");
+    assert.notEqual(play.phase, "jump");
+    assert.notEqual(play.phase, "leaf");
+    assert.notEqual(play.phase, "song");
+  }
+  assert.ok(seen.has("black-on"));
+  assert.ok(seen.has("black"));
+  assert.ok(seen.has("black-hold"));
+  assert.ok(seen.has("black-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Jewel's stream-jewel black; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "jewelwing", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "black"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "black");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "black");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "black-off");
+  play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 400 && play.phase !== "black-hold"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "card" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "black-off" || play.abort === true);
+  play = P.beginPlay(target, target.approachX);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "hide" });
+  assert.equal(play.abort, true);
+});
+
+test("the demo window plate walks Jewel black the same way", () => {
+  const target = P.pickTarget([WIN], 80, "jewelwing", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "black");
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "done");
+});

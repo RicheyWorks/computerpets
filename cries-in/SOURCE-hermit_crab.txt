@@ -1,0 +1,11 @@
+key: hermit_crab
+guest: Tenant (Common Hermit)
+source: BigSoundBank Shells sculpture (sound 38)
+URL: https://bigsoundbank.com/shells-sculpture-s0038.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0038.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Common hermit crab (Paguroidea; house guest Tenant) — silent voice. Soft attenuated small-shell scrape / click as shell scrape and claw tick. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.8s mono 44.1kHz volume=-6dB + dynaudnorm + afade from full ~6.1s source. Quiet guest. Distinct from Pinch crayfish clicks and Ochre tube-foot drops.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

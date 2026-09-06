@@ -1,0 +1,65 @@
+
+test("Flame drips a sash stile as warm wood: walk onto the stile, sit the bright bracket, drip once, sit the warm wood, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(P.playFor("chicken_of_woods"), "drip");
+  assert.equal(P.DRIP, "drip");
+  assert.notEqual(P.playFor("chicken_of_woods"), "shelf");
+  assert.notEqual(P.playFor("chicken_of_woods"), "cloud");
+  assert.notEqual(P.playFor("chicken_of_woods"), "warts");
+  assert.notEqual(P.playFor("chicken_of_woods"), "sill");
+  assert.equal(P.playFor("puffball"), "cloud");
+  assert.equal(P.playFor("oyster"), "shelf");
+  assert.equal(P.playFor("yeast"), "sill");
+  assert.equal(Overlay.playFor("chicken_of_woods"), "drip");
+  const target = P.pickTarget([WIN], 80, "chicken_of_woods", WORK, P.SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "drip");
+  assert.equal(target.side, "warmwood");
+  assert.equal(target.leave, "dripped");
+  assert.ok(target.holdLift >= 0);
+  assert.ok(P.DUR.dripHold > P.DUR.drip * 1.2);
+  assert.ok(P.DUR.dripOn !== P.DUR.shelfOn);
+  assert.ok(P.DUR.drip !== P.DUR.cloud);
+  const wood = P.dripPoint(WIN, P.SPRITE, WORK);
+  const timber = P.shelfPoint(WIN, P.SPRITE, WORK);
+  assert.ok(Math.abs(wood.x - timber.x) > 12 || Math.abs(wood.lift - timber.lift) > 1);
+  const tiny = P.pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "chicken_of_woods", WORK, P.SPRITE);
+  assert.equal(tiny, null);
+  const okDrip = P.pickTarget([{ id: "drip", x: 200, y: 80, width: 192, height: 210 }], 80, "chicken_of_woods", WORK, P.SPRITE);
+  assert.ok(okDrip);
+  const dripPose = P.dripPath(0.3);
+  assert.ok(Math.abs(dripPose.lift) > 0.4 || Math.abs(dripPose.rot) > 1);
+  const hold = P.dripHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 3.8) < 0.2);
+  let play = P.beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, P.SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "shelf");
+    assert.notEqual(play.phase, "cloud");
+  }
+  assert.ok(seen.has("drip-on"));
+  assert.ok(seen.has("drip"));
+  assert.ok(seen.has("drip-hold"));
+  assert.ok(seen.has("drip-off"));
+  assert.equal(play.phase, "done");
+});
+
+test("a moved window refits Flame's warm-wood drip; sleep, card, and hide abort", () => {
+  assert.equal(P.canStart({ asleep: true, cmd: "idle" }), false);
+  const target = P.pickTarget([WIN], 200, "chicken_of_woods", WORK, P.SPRITE);
+  let play = P.beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "drip"; i++) {
+    play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, P.SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "drip");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "drip");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = P.stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, P.SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "drip-off");
+  assert.equal(play.abort, true);
+});

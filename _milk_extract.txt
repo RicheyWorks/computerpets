@@ -1,0 +1,1266 @@
+js WEED count=0  weed string count=1
+js WAGGLE count=7
+js monarch count=0
+js honeybee count=1
+ts WEED count=0  weed string count=2
+ts WAGGLE count=7
+ts monarch count=0
+ts honeybee count=1
+
+===== js playFor honeybee needle='if (key === "honeybee") return WAGGLE;' idx=42546 =====
+LINE 973
+SIGNAL;
+    if (key === "ghost_crab") return SAND;
+    if (key === "limpet") return CLAMP;
+    if (key === "barnacle") return CIRRI;
+    if (key === "chiton") return EIGHT;
+    if (key === "periwinkle") return ROCK;
+    if (key === "sand_dollar") return FLAT;
+    if (key === "sea_urchin") return SPINES;
+    if (key === "knobbed_whelk") return KNOBS;
+    if (key === "lugworm") return CASTINGS;
+    if (key === "honeybee") return WAGGLE;
+    return SILL;
+  }
+
+  function canStart(state) {
+    if (!state) return false;
+    if (state.asleep || state.hidden || state.leaving || state.card) return false;
+    const cmd = String(state.cmd || "");
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    return true;
+  }
+
+  function shouldAbort(state) {
+    if (!state) return true;
+    if (state.asleep || state.hidden || state.leaving || state.card) return true;
+    const cmd = String(state.cmd || "");
+    return (
+      cmd === "sleep" ||
+      cmd === "leave" ||
+      cmd === "hide" ||
+      cmd === "rest" ||
+      cmd === "seek" ||
+      cmd === "eat" ||
+      cmd === "play" ||
+      cmd === "talk" ||
+      cmd === "enter"
+    );
+  }
+
+  function nextPlayWait(justFinished, rand) {
+    const roll = rand == null ? Math.random() : rand;
+    return justFinished ? 18 + roll * 10 : 7 + roll * 8;
+  }
+
+  function gripLift(gripY, work) {
+    const floor = work && work.floorLift ? work.floorLift : 0;
+    const h = work && work.height ? work.heigh
+
+===== ts playFor honeybee needle='if (key === "honeybee") return WAGGLE;' idx=58315 =====
+LINE 1699
+ddler_crab") return SIGNAL;
+  if (key === "ghost_crab") return SAND;
+  if (key === "limpet") return CLAMP;
+  if (key === "barnacle") return CIRRI;
+  if (key === "chiton") return EIGHT;
+  if (key === "periwinkle") return ROCK;
+  if (key === "sand_dollar") return FLAT;
+  if (key === "sea_urchin") return SPINES;
+  if (key === "knobbed_whelk") return KNOBS;
+  if (key === "lugworm") return CASTINGS;
+  if (key === "honeybee") return WAGGLE;
+  return SILL;
+}
+
+export function canStart(state: PlayFlags | undefined) {
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving || state.card) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
+export function shouldAbort(state: PlayFlags | undefined) {
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving || state.card) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "eat" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
+export function nextPlayWait(justFinished: boolean, rand?: number) {
+  const roll = rand == null ? Math.random() : rand;
+  return justFinished ? 18 + roll * 10 : 7 + roll * 8;
+}
+
+function gripLift(gripY: number, work: WorkSpace) {
+  const floor = work.floorLift || 0;
+  return work.height - floor -
+
+===== js WAGGLE const needle='const WAGGLE = "waggle";' idx=23623 =====
+LINE 164
+t VELVET = "velvet";
+  const SPRING = "spring";
+  const DRY = "dry";
+  const SPLIT = "split";
+  const THRASH = "thrash";
+  const SIDE = "side";
+  const SIGNAL = "signal";
+  const SAND = "sand";
+  const CLAMP = "clamp";
+  const CIRRI = "cirri";
+  const EIGHT = "eight";
+  const ROCK = "rock";
+  const FLAT = "flat";
+  const SPINES = "spines";
+  const KNOBS = "knobs";
+  const CASTINGS = "castings";
+  const WAGGLE = "waggle";
+  const SILL = "sill";
+  const IGNORE = "ignore";
+  const WALK_PX = 98;
+  const DUR = {
+    leap: 0.48,
+    cling: 0.55,
+    hang: 1.35,
+    drop: 0.42,
+    dive: 0.72,
+    ridgeLeap: 0.5,
+    ridgeHold: 1.4,
+    ridgeOff: 0.58,
+    coilOn: 0.68,
+    coilHold: 1.45,
+    coilOff: 0.72,
+    pathOn: 0.52,
+    pathWalk: 2.2,
+    pathSit: 0.7,
+    pathOff: 0.55,
+    fieldOn: 0.76,
+    fieldHold: 1.55,
+    fieldOff: 0.82,
+    crackleOn: 0.32,
+    crackleHop: 0.26,
+    crackleOff: 0.4,
+    chargeOn: 0.88,
+    chargeBolt: 0.36,
+    chargeHold: 0.78,
+    chargeOff: 0.5,
+    orbitOn: 0.58,
+    orbitLoop: 2.6,
+    orbitHold: 0.72,
+    orbitOff: 0.52,
+    clickOn: 0.4,
+    clickHold: 0.36,
+    clickHop: 0.62,
+    clickOff: 0.5,
+    holdOn: 0.52,
+    holdSit: 2.4,
+    holdOff: 0.55,
+    earthOn: 0.46,
+    earthSit: 1.55,
+    earthOff: 0.5,
+    ledgeOn: 0.48,
+    ledgeSit: 2.35,
+    ledgeOff: 0.52,
+    watchOn: 0.74,
+    watchHold: 1.85,
+    watchOff: 0.66,
+    thumpOn: 0.34,
+    thump: 0.3,
+    thumpOff: 0.3,
+    stashOn: 0.42,
+    stashCheek: 0.88,
+    stashOff: 0.4,
+    wheekOn: 0.7,
+    wheekLoaf: 0.72,
+    wheek: 0.46,
+    wheekPop: 0.4,
+    wheekOff: 0.68,
+    bask
+
+===== ts WAGGLE const needle='const WAGGLE = "waggle";' idx=24507 =====
+LINE 165
+xport const SPLIT = "split";
+export const THRASH = "thrash";
+export const SIDE = "side";
+export const SIGNAL = "signal";
+export const SAND = "sand";
+export const CLAMP = "clamp";
+export const CIRRI = "cirri";
+export const EIGHT = "eight";
+export const ROCK = "rock";
+export const FLAT = "flat";
+export const SPINES = "spines";
+export const KNOBS = "knobs";
+export const CASTINGS = "castings";
+export const WAGGLE = "waggle";
+export const SILL = "sill";
+export const IGNORE = "ignore";
+export const WALK_PX = 98;
+export const DUR = {
+  leap: 0.48,
+  cling: 0.55,
+  hang: 1.35,
+  drop: 0.42,
+  dive: 0.72,
+  ridgeLeap: 0.5,
+  ridgeHold: 1.4,
+  ridgeOff: 0.58,
+  coilOn: 0.68,
+  coilHold: 1.45,
+  coilOff: 0.72,
+  pathOn: 0.52,
+  pathWalk: 2.2,
+  pathSit: 0.7,
+  pathOff: 0.55,
+  fieldOn: 0.76,
+  fieldHold: 1.55,
+  fieldOff: 0.82,
+  crackleOn: 0.32,
+  crackleHop: 0.26,
+  crackleOff: 0.4,
+  chargeOn: 0.88,
+  chargeBolt: 0.36,
+  chargeHold: 0.78,
+  chargeOff: 0.5,
+  orbitOn: 0.58,
+  orbitLoop: 2.6,
+  orbitHold: 0.72,
+  orbitOff: 0.52,
+  clickOn: 0.4,
+  clickHold: 0.36,
+  clickHop: 0.62,
+  clickOff: 0.5,
+  holdOn: 0.52,
+  holdSit: 2.4,
+  holdOff: 0.55,
+  earthOn: 0.46,
+  earthSit: 1.55,
+  earthOff: 0.5,
+  ledgeOn: 0.48,
+  ledgeSit: 2.35,
+  ledgeOff: 0.52,
+  watchOn: 0.74,
+  watchHold: 1.85,
+  watchOff: 0.66,
+  thumpOn: 0.34,
+  thump: 0.3,
+  thumpOff: 0.3,
+  stashOn: 0.42,
+  stashCheek: 0.88,
+  stashOff: 0.4,
+  wheekOn: 0.7,
+  wheekLoaf: 0.72,
+  wheek: 0.46,
+  wheekPop: 0.4,
+  wheekOff: 0.68,
+  baskOn: 1.12,
+  bask: 0.88,
+  baskWithdraw: 1.72,
+  baskOff: 1.08,
+  circleOn: 0.92,
+  circle: 2.8
+
+===== js DUR waggle needle='waggleOn:' idx=35493 =====
+LINE 793
+3,
+    rockOn: 2.80,
+    rock: 1.66,
+    rockHold: 3.14,
+    rockOff: 2.00,
+    flatOn: 2.87,
+    flat: 1.73,
+    flatHold: 3.22,
+    flatOff: 2.07,
+    spinesOn: 2.94,
+    spines: 1.80,
+    spinesHold: 3.30,
+    spinesOff: 2.14,
+    knobsOn: 3.01,
+    knobs: 1.87,
+    knobsHold: 3.38,
+    knobsOff: 2.21,
+    castingsOn: 3.08,
+    castings: 1.94,
+    castingsHold: 3.46,
+    castingsOff: 2.28,
+    waggleOn: 3.15,
+    waggle: 2.01,
+    waggleHold: 3.54,
+    waggleOff: 2.35,
+    sillHop: 0.38,
+    sillWalk: 1.55,
+    sillDown: 0.36,
+    land: 0.18,
+  };
+
+  function clamp(n, a, b) {
+    return Math.max(a, Math.min(b, n));
+  }
+
+  function smoothstep(t) {
+    const x = Math.max(0, Math.min(1, t));
+    return x * x * (3 - 2 * x);
+  }
+
+  function playFor(key) {
+    if (key === "red_panda") return CLING;
+    if (key === "cyber_dragon") return RIDGE;
+    if (key === "volt_dragon") return COIL;
+    if (key === "trace_dragon") return PATH;
+    if (key === "flux_dragon") return FIELD;
+    if (key === "spark_dragon") return CRACKLE;
+    if (key === "ion_dragon") return CHARGE;
+    if (key === "gauss_dragon") return ORBIT;
+    if (key === "relay_dragon") return CLICK;
+    if (key === "fuse_dragon") return HOLD;
+    if (key === "ground_dragon") return EARTH;
+    if (key === "cat") return LEDGE;
+    if (key === "dog") return WATCH;
+    if (key === "rabbit") return THUMP;
+    if (key === "hamster") return STASH;
+    if (key === "guinea_pig") return WHEEK;
+    if (key === "turtle") return BASK;
+    if (key === "goldfish") return CIRCLE;
+    if (key === "budgie") return PERCH;
+    if (key === 
+
+===== ts DUR waggle needle='waggleOn:' idx=35147 =====
+LINE 794
+: 1.59,
+  eightHold: 3.06,
+  eightOff: 1.93,
+  rockOn: 2.80,
+  rock: 1.66,
+  rockHold: 3.14,
+  rockOff: 2.00,
+  flatOn: 2.87,
+  flat: 1.73,
+  flatHold: 3.22,
+  flatOff: 2.07,
+  spinesOn: 2.94,
+  spines: 1.80,
+  spinesHold: 3.30,
+  spinesOff: 2.14,
+  knobsOn: 3.01,
+  knobs: 1.87,
+  knobsHold: 3.38,
+  knobsOff: 2.21,
+  castingsOn: 3.08,
+  castings: 1.94,
+  castingsHold: 3.46,
+  castingsOff: 2.28,
+  waggleOn: 3.15,
+  waggle: 2.01,
+  waggleHold: 3.54,
+  waggleOff: 2.35,
+  sillHop: 0.38,
+  sillWalk: 1.55,
+  sillDown: 0.36,
+  land: 0.18,
+};
+
+export type WindowPlayKind = typeof CLING | typeof RIDGE | typeof COIL | typeof PATH | typeof FIELD | typeof CRACKLE | typeof CHARGE | typeof ORBIT | typeof CLICK | typeof HOLD | typeof EARTH | typeof LEDGE | typeof WATCH | typeof THUMP | typeof STASH | typeof WHEEK | typeof BASK | typeof CIRCLE | typeof PERCH | typeof SCENT | typeof BOW | typeof HOOK | typeof THREAD | typeof BALL | typeof DUST | typeof WALL | typeof TOSS | typeof FLATTEN | typeof DRAPE | typeof KINDLE | typeof BUN | typeof WRITE | typeof INSPECT | typeof SADDLE | typeof FLIP | typeof PATROL | typeof LOOP | typeof MOSAIC | typeof STONE | typeof CHART | typeof LID | typeof FLUSH | typeof RISE | typeof CHIME | typeof REEF | typeof KNOB | typeof PLOW | typeof HITCH | typeof BARREL | typeof GAPE | typeof LEAN | typeof UNFURL | typeof GOLD | typeof SEED | typeof OPEN | typeof MOUNT | typeof STORE | typeof COUNT | typeof FILL | typeof CURL | typeof FORAGE | typeof BORE | typeof DAUB | typeof SNIP | typeof TEND | typeof LICK | typeof DIG | typeof DRONE | typeof LAY | typeof DRAW | t
+
+===== js size WAGGLE needle='if (kind === WAGGLE)' idx=60145 =====
+LINE 1324
+   if (kind === EIGHT) return w.width >= 195 && w.height >= 193;
+    if (kind === ROCK) return w.width >= 182 && w.height >= 216;
+    if (kind === FLAT) return w.width >= 190 && w.height >= 184;
+    if (kind === SPINES) return w.width >= 178 && w.height >= 162;
+    if (kind === KNOBS) return w.width >= 193 && w.height >= 160;
+    if (kind === CASTINGS) return w.width >= 160 && w.height >= 70;
+    if (kind === WAGGLE) return w.width >= 190 && w.height >= 184;
+    return w.width >= 180 && w.height >= 70;
+    });
+    if (!usable.length) return null;
+    let best = usable[0];
+    let bestDist = Infinity;
+    for (const w of usable) {
+      const mid = w.x + w.width / 2;
+      const d = Math.abs(mid - (petX + size / 2));
+      if (d < bestDist) {
+        best = w;
+        bestDist = d;
+      }
+    }
+    const roll = opts && opts.rand != null ? opts.rand : Math.random();
+    if (kind === CLING) {
+      const side = (opts && opts.side) || pickSide(best, petX, size, workW);
+      const hold = sideHold(best, side, size, work);
+      const approachX = clamp(hold.x, 8, Math.max(8, workW - size - 8));
+      const away = side === "left" ? -86 : 86;
+      return {
+        id: best.id,
+        kind,
+        side,
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        diveFrom: opts && opts.diveFrom ? opts.diveFrom : roll < 0.42 ? "top" : "side",
+        spin: opts && opts.spin ? opts.spin : roll < 0.5 ? "backflip" : "spin",
+      };
+    }
+    if (kind === RIDGE) {
+      const hold = ridgePoint(b
+
+===== js size SIP needle='if (kind === SIP)' idx=55493 =====
+LINE 1253
+= 228;
+    if (kind === HISS) return w.width >= 196 && w.height >= 216;
+    if (kind === SOAR) return w.width >= 202 && w.height >= 232;
+    if (kind === PULL) return w.width >= 186 && w.height >= 158;
+    if (kind === TIP) return w.width >= 188 && w.height >= 172;
+    if (kind === HONK) return w.width >= 196 && w.height >= 176;
+    if (kind === DRUM) return w.width >= 192 && w.height >= 220;
+    if (kind === SIP) return w.width >= 193 && w.height >= 169;
+    if (kind === WEB) return w.width >= 200 && w.height >= 200;
+    if (kind === POUNCE) return w.width >= 187 && w.height >= 199;
+    if (kind === CARRY) return w.width >= 160 && w.height >= 70;
+    if (kind === KICK) return w.width >= 180 && w.height >= 200;
+    if (kind === HANG) return w.width >= 188 && w.height >= 196;
+    if (kind === STILT) return w.width >= 168 && w.height >= 208;
+    if (kind === RAISE) return w.width >= 188 && w.height >= 160;
+    if (kind === SPRAY) return w.width >= 188 && w.height >= 172;
+    if (kind === GRIP) return w.width >= 198 && w.height >= 178;
+    if (kind === RUN) return w.width >= 190 && w.height >= 174;
+    if (kind === FLAG) return w.width >= 208 && w.height >= 168;
+    if (kind === FOLD) return w.width >= 208 && w.height >= 228;
+    if (kind === BURY) return w.width >= 194 && w.height >= 162;
+    if (kind === SLIDE) return w.width >= 196 && w.height >= 204;
+    if (kind === RINSE) return w.width >= 190 && w.height >= 184;
+    if (kind === STAMP) return w.width >= 160 && w.height >= 70;
+    if (kind === STILL) return w.width >= 208 && w.height >= 228;
+    if (kind === GNAW) return
+
+===== js size WRAP needle='if (kind === WRAP)' idx=57064 =====
+LINE 1277
+    if (kind === GNAW) return w.width >= 191 && w.height >= 216;
+    if (kind === BRISTLE) return w.width >= 182 && w.height >= 216;
+    if (kind === BROWSE) return w.width >= 178 && w.height >= 162;
+    if (kind === REACH) return w.width >= 208 && w.height >= 228;
+    if (kind === WARM) return w.width >= 196 && w.height >= 198;
+    if (kind === SING) return w.width >= 204 && w.height >= 224;
+    if (kind === WRAP) return w.width >= 193 && w.height >= 169;
+    if (kind === SKIN) return w.width >= 182 && w.height >= 216;
+    if (kind === PLANE) return w.width >= 194 && w.height >= 162;
+    if (kind === HOWL) return w.width >= 208 && w.height >= 228;
+    if (kind === LOOK) return w.width >= 186 && w.height >= 214;
+    if (kind === CREEP) return w.width >= 168 && w.height >= 208;
+    if (kind === CHEW) return w.width >= 194 && w.height >= 162;
+    if (kind === CHIRP) return w.width >= 182 && w.height >= 216;
+    if (kind === FLASH) return w.width >= 191 && w.height >= 216;
+    if (kind === SCOOT) return w.width >= 172 && w.height >= 212;
+    if (kind === AIM) return w.width >= 168 && w.height >= 208;
+    if (kind === CROWN) return w.width >= 178 && w.height >= 162;
+    if (kind === BANK) return w.width >= 194 && w.height >= 162;
+    if (kind === SHOW) return w.width >= 190 && w.height >= 184;
+    if (kind === SNAP) return w.width >= 178 && w.height >= 162;
+    if (kind === SHUT) return w.width >= 160 && w.height >= 70;
+    if (kind === CREST) return w.width >= 186 && w.height >= 214;
+    if (kind === MOUTH) return w.width >= 193 && w.height >= 169;
+    if (kind === MARK) retur
+
+===== js size SNIP needle='if (kind === SNIP)' idx=53837 =====
+LINE 1228
+ind === COUNT) return w.width >= 188 && w.height >= 202;
+      if (kind === FILL) return w.width >= 190 && w.height >= 184;
+      if (kind === CURL) return w.width >= 192 && w.height >= 198;
+      if (kind === FORAGE) return w.width >= 196 && w.height >= 174;
+      if (kind === BORE) return w.width >= 188 && w.height >= 208;
+      if (kind === DAUB) return w.width >= 184 && w.height >= 194;
+      if (kind === SNIP) return w.width >= 190 && w.height >= 166;
+      if (kind === TEND) return w.width >= 186 && w.height >= 214;
+      if (kind === LICK) return w.width >= 192 && w.height >= 188;
+      if (kind === DIG) return w.width >= 198 && w.height >= 164;
+      if (kind === DRONE) return w.width >= 204 && w.height >= 218;
+      if (kind === LAY) return w.width >= 200 && w.height >= 206;
+      if (kind === DRAW) return w.width >= 208 && w.height >= 212;
+      if (kind === PLOP) return w.width >= 176 && w.height >= 148;
+      if (kind === PUFF) return w.width >= 172 && w.height >= 156;
+      if (kind === TRAIL) return w.width >= 182 && w.height >= 168;
+      if (kind === COVER) return w.width >= 178 && w.height >= 162;
+      if (kind === RING) return w.width >= 186 && w.height >= 166;
+      if (kind === CLAW) return w.width >= 188 && w.height >= 172;
+      if (kind === RASP) return w.width >= 184 && w.height >= 178;
+      if (kind === FILTER) return w.width >= 196 && w.height >= 170;
+    if (kind === DRINK) return w.width >= 194 && w.height >= 176;
+    if (kind === GLUE) return w.width >= 192 && w.height >= 182;
+    if (kind === CAW) return w.width >= 190 && w.height >= 204;
+   
+
+===== js size FORAGE needle='if (kind === FORAGE)' idx=53634 =====
+LINE 1225
+ind === OPEN) return w.width >= 194 && w.height >= 188;
+      if (kind === MOUNT) return w.width >= 182 && w.height >= 216;
+      if (kind === STORE) return w.width >= 186 && w.height >= 176;
+      if (kind === COUNT) return w.width >= 188 && w.height >= 202;
+      if (kind === FILL) return w.width >= 190 && w.height >= 184;
+      if (kind === CURL) return w.width >= 192 && w.height >= 198;
+      if (kind === FORAGE) return w.width >= 196 && w.height >= 174;
+      if (kind === BORE) return w.width >= 188 && w.height >= 208;
+      if (kind === DAUB) return w.width >= 184 && w.height >= 194;
+      if (kind === SNIP) return w.width >= 190 && w.height >= 166;
+      if (kind === TEND) return w.width >= 186 && w.height >= 214;
+      if (kind === LICK) return w.width >= 192 && w.height >= 188;
+      if (kind === DIG) return w.width >= 198 && w.height >= 164;
+      if (kind === DRONE) return w.width >= 204 && w.height >= 218;
+      if (kind === LAY) return w.width >= 200 && w.height >= 206;
+      if (kind === DRAW) return w.width >= 208 && w.height >= 212;
+      if (kind === PLOP) return w.width >= 176 && w.height >= 148;
+      if (kind === PUFF) return w.width >= 172 && w.height >= 156;
+      if (kind === TRAIL) return w.width >= 182 && w.height >= 168;
+      if (kind === COVER) return w.width >= 178 && w.height >= 162;
+      if (kind === RING) return w.width >= 186 && w.height >= 166;
+      if (kind === CLAW) return w.width >= 188 && w.height >= 172;
+      if (kind === RASP) return w.width >= 184 && w.height >= 178;
+      if (kind === FILTER) return w.width >= 196 && w.height >= 
+
+===== js sipPoint needle='function sipPoint' idx=401008 =====
+LINE 11551
+nst fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const hop = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 16.2;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + hop,
+      rot: (toX >= fromX ? 1 : -1) * 6.2 * (1 - ease),
+    };
+  }
+
+
+  function sipPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 40;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.46;
+    const bloom = Math.max(18, size * 0.11);
+    const hover = Math.max(44, size * 0.26);
+    const gripY = win.y + win.height + bloom - hover;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 22, maxLift) };
+  }
+
+  function sipFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function sipOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const dart = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 9.4 * (1 - t * 0.22);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + dart,
+      rot: (toX >= fromX ? 1 : -1) * 4.2 * (1 - ease),
+  
+
+===== js wrapPoint needle='function wrapPoint' idx=459717 =====
+LINE 13225
+ 0;
+    const ease = t * t * (3 - 2 * t);
+    const unhook = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI) * 8.8;
+    const pend = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.7) * 4.6 * (1 - t);
+    return {
+      x: fromX + (toX - fromX) * ease + pend,
+      lift: fromLift + (toLift - fromLift) * ease + unhook,
+      rot: (from && from.rot != null ? from.rot : -7) * (1 - ease),
+    };
+  }
+
+
+  function wrapPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 40;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.46;
+    const bloom = Math.max(18, size * 0.11);
+    const gripY = win.y + win.height + bloom;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 14, maxLift) };
+  }
+
+  function wrapFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function wrapOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const step = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.9);
+    const bob = t <= 0 || t >= 1 ? 0 : Math.abs(Math.sin(t * Math.PI * 1.9)) * 4.3;
+    return {
+      x: fromX + (toX - fromX) * ease + step * 3.4 * (1 - t * 0.15),
+      lift: fromLift + (toLift - fromLift) * ease + bob,
+      rot: 
+
+===== js snipPoint needle='function snipPoint' idx=329749 =====
+LINE 9286
+     return {
+        x: fromX,
+        lift: fromLift + ease * 12,
+        rot: 1.2 * (1 - ease),
+      };
+    }
+    const s = (t - 0.26) / 0.74;
+    const ease = s * s * (3 - 2 * s);
+    const hover = Math.sin(s * Math.PI * 1.4) * 2.2 * (1 - s);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + 12 + (toLift - (fromLift + 12)) * ease + hover,
+      rot: 0,
+    };
+  }
+
+
+  function snipPoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 34;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.78;
+    const leaf = Math.max(6, size * 0.035);
+    const gripY = win.y + win.height - leaf;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 18, maxLift) };
+  }
+
+  function snipFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function snipOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * t * (t * (t * 6 - 15) + 10);
+    const hover = Math.sin(t * Math.PI * 1.4) * 2.1 * (1 - t * 0.46);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + hover,
+      rot: (1 - ease) * 1.3 * (toX >= fromX ? 1 : -1),
+    };
+  }
+
+  function snipPath(u) {
+    const t = Ma
+
+===== js foragePoint needle='function foragePoint' idx=321893 =====
+LINE 9034
+.38) {
+      const s = t / 0.38;
+      const ease = s * s * (3 - 2 * s);
+      return {
+        x: fromX,
+        lift: fromLift + ease * 7,
+        rot: 9.2 * (1 - ease),
+      };
+    }
+    const s = (t - 0.38) / 0.62;
+    const ease = s * s * (3 - 2 * s);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + 7 + (toLift - (fromLift + 7)) * ease,
+      rot: 0,
+    };
+  }
+
+
+  function foragePoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 46;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.16;
+    const box = Math.max(18, size * 0.11);
+    const gripY = win.y + win.height + box;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 10, maxLift) };
+  }
+
+  function forageFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function forageOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * t * (t * (t * 6 - 15) + 10);
+    const bob = Math.sin(t * Math.PI * 3.5) * 8.2 * (1 - t * 0.38);
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + bob,
+      rot: (1 - ease) * 2.2 * (toX >= fromX ? 1 : -1),
+    };
+  }
+
+  function foragePath(u) {
+    const t = 
+
+===== js wagglePoint needle='function wagglePoint' idx=577194 =====
+LINE 16433
+lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 1.63) * 1.72;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (from && from.rot != null ? from.rot : 5.4) * (1 - ease),
+    };
+  }
+
+
+
+  function wagglePoint(win, sprite, work) {
+    const size = sprite == null ? SPRITE : sprite;
+    const pad = 48;
+    const span = Math.max(0, win.width - size - pad * 2);
+    const x = win.x + pad + span * 0.58;
+    const pan = Math.max(68, size * 0.38);
+    const gripY = win.y + win.height - pan;
+    const lift = gripLift(gripY, work);
+    const maxLift = (work && work.height ? work.height : 800) - 48;
+    return { x, lift: clamp(lift, 28, maxLift) };
+  }
+
+  function waggleFace(target) {
+    return target.approachX >= target.holdX ? -1 : 1;
+  }
+
+  function waggleOnPath(u, from, to) {
+    const t = Math.max(0, Math.min(1, u));
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const ease = t * t * (3 - 2 * t);
+    const stride = t <= 0 || t >= 1 ? 0 : Math.sin(t * Math.PI * 2.14) * 2.62;
+    return {
+      x: fromX + (toX - fromX) * ease,
+      lift: fromLift + (toLift - fromLift) * ease + stride,
+      rot: (toX >= fromX ? 1 : -1) * 4.35 * (1 - ease) + stride * 0.19,
+    };
+  }
+
+  function wagglePath(u) {
+
+===== js pick WAGGLE needle='if (kind === WAGGLE) {' idx=154920 =====
+LINE 4236
+pproachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 60 : -60;
+      return {
+        id: best.id,
+        kind,
+        side: "wetsand",
+        holdX: hold.x,
+        holdLift: 0,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "heaped",
+        spin: "none",
+      };
+    }
+
+    if (kind === WAGGLE) {
+      const hold = wagglePoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -70 : 70;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 64 : -64;
+      return {
+        id: best.id,
+        kind,
+        side: "waxdish",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "waggled",
+        spin: "none",
+      };
+    }
+
+        if (kind === WRAP) {
+      const hold = wrapPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -64 : 64;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 58 : -58;
+      return {
+        id: best.id,
+        kind,
+        side: "nectarcup",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "unhook",
+        spin: "none",
+      };
+    }
+    if (kind === SING) {
+      c
+
+===== js pick SIP needle='if (kind === SIP) {' idx=115549 =====
+LINE 3003
+achX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 46 : -46;
+      return {
+        id: best.id,
+        kind,
+        side: "snag",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "crest",
+        spin: "none",
+      };
+    }
+
+    if (kind === SIP) {
+      const hold = sipPoint(best, size, work);
+      const approachOff = hold.x < workW / 2 ? -56 : 56;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 54 : -54;
+      return {
+        id: best.id,
+        kind,
+        side: "nectar",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "dart",
+        spin: "none",
+      };
+    }
+
+    if (kind === WEB) {
+      const hold = webPoint(best, size, work);
+      const approachOff = hold.x < workW / 2 ? -58 : 58;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 48 : -48;
+      return {
+        id: best.id,
+        kind,
+        side: "lamp",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "silk",
+        spin: "none",
+      };
+    }
+
+    if (kind === POUNCE) {
+      const hold = pouncePoint(best, size, work);
+      const approachOff = hold.x < workW / 2 
+
+===== js pick WRAP needle='if (kind === WRAP) {' idx=155510 =====
+LINE 4255
+amp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 64 : -64;
+      return {
+        id: best.id,
+        kind,
+        side: "waxdish",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "waggled",
+        spin: "none",
+      };
+    }
+
+        if (kind === WRAP) {
+      const hold = wrapPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -64 : 64;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 58 : -58;
+      return {
+        id: best.id,
+        kind,
+        side: "nectarcup",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "unhook",
+        spin: "none",
+      };
+    }
+    if (kind === SING) {
+      const hold = singPoint(best, size, work);
+      const fromLeft = hold.x >= workW / 2;
+      const approachOff = fromLeft ? -68 : 68;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 61 : -61;
+      return {
+        id: best.id,
+        kind,
+        side: "lamparm",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "unhook",
+        spin: "none",
+      };
+    }
+    if (kind === BURY) {
+      const hold 
+
+===== js pick SNIP needle='if (kind === SNIP) {' idx=101400 =====
+LINE 2540
+oachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 44 : -44;
+      return {
+        id: best.id,
+        kind,
+        side: "cell",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "stone",
+        spin: "none",
+      };
+    }
+    if (kind === SNIP) {
+      const hold = snipPoint(best, size, work);
+      const approachOff = hold.x < workW / 2 ? -52 : 52;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 42 : -42;
+      return {
+        id: best.id,
+        kind,
+        side: "foliage",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "tube",
+        spin: "none",
+      };
+    }
+    if (kind === TEND) {
+      const hold = tendPoint(best, size, work);
+      const approachOff = hold.x < workW / 2 ? -56 : 56;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 46 : -46;
+      return {
+        id: best.id,
+        kind,
+        side: "hollow",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "nest",
+        spin: "none",
+      };
+    }
+    if (kind === LICK) {
+      const hold = lickPoint(best, size, work);
+      const approachOff = hold.x < workW / 2
+
+===== js pick FORAGE needle='if (kind === FORAGE) {' idx=99771 =====
+LINE 2489
+proachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 54 : -54;
+      return {
+        id: best.id,
+        kind,
+        side: "pan",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "rain",
+        spin: "none",
+      };
+    }
+    if (kind === FORAGE) {
+      const hold = foragePoint(best, size, work);
+      const approachOff = hold.x < workW / 2 ? -58 : 58;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 48 : -48;
+      return {
+        id: best.id,
+        kind,
+        side: "box",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "home",
+        spin: "none",
+      };
+    }
+    if (kind === BORE) {
+      const hold = borePoint(best, size, work);
+      const approachOff = hold.x < workW / 2 ? -54 : 54;
+      const approachX = clamp(hold.x + approachOff, 8, Math.max(8, workW - size - 8));
+      const away = hold.x < workW / 2 ? 46 : -46;
+      return {
+        id: best.id,
+        kind,
+        side: "timber",
+        holdX: hold.x,
+        holdLift: hold.lift,
+        approachX,
+        landX: clamp(hold.x + away, 8, Math.max(8, workW - size - 8)),
+        leave: "hole",
+        spin: "none",
+      };
+    }
+    if (kind === DAUB) {
+      const hold = daubPoint(best, size, work);
+      const approachOff = hold.x < workW / 2
+
+===== js retarget WAGGLE needle='if (target.kind === WAGGLE)' idx=186517 =====
+LINE 5019
+prite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === KNOBS) {
+      const hold = knobsPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === CASTINGS) {
+      const hold = castingsPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === WAGGLE) {
+      const hold = wagglePoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === BURY) {
+      const hold = buryPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    const start = sillPoint(win, 0.12, sprite, work);
+    const end = sillPoint(win, 0.88, sprite, work);
+    return { ...target, holdX: start.x, holdLift: start.lift, sillEndX: end.x };
+  }
+
+  function divePath(u, from, to, spin) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = smoothstep(t);
+    const out = from && from.side === "left" ? -1 : 1;
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const arc = 34 + Math.abs(fromLift - toLift) * 0.1;
+    const turns = spin === "backflip" ? -360 : spin === "none" ? 0 : 360;
+    return {
+      x: fromX + (toX - fromX) * ease + out * 64 * Math.sin(t * Math.PI),
+      lift: fromLift * (1 - ease) + toLift * ease + Math.sin(t * Math.PI) * arc,
+      rot: 
+
+===== js beginPlay CASTINGS/WAGGLE needle='if (target.kind === WAGGLE)' idx=186517 =====
+LINE 5019
+prite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === KNOBS) {
+      const hold = knobsPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === CASTINGS) {
+      const hold = castingsPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === WAGGLE) {
+      const hold = wagglePoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    if (target.kind === BURY) {
+      const hold = buryPoint(win, sprite, work);
+      return { ...target, holdX: hold.x, holdLift: hold.lift };
+    }
+    const start = sillPoint(win, 0.12, sprite, work);
+    const end = sillPoint(win, 0.88, sprite, work);
+    return { ...target, holdX: start.x, holdLift: start.lift, sillEndX: end.x };
+  }
+
+  function divePath(u, from, to, spin) {
+    const t = Math.max(0, Math.min(1, u));
+    const ease = smoothstep(t);
+    const out = from && from.side === "left" ? -1 : 1;
+    const fromX = from && from.x != null ? from.x : 0;
+    const toX = to && to.x != null ? to.x : fromX;
+    const fromLift = from && from.lift != null ? from.lift : 0;
+    const toLift = to && to.lift != null ? to.lift : 0;
+    const arc = 34 + Math.abs(fromLift - toLift) * 0.1;
+    const turns = spin === "backflip" ? -360 : spin === "none" ? 0 : 360;
+    return {
+      x: fromX + (toX - fromX) * ease + out * 64 * Math.sin(t * Math.PI),
+      lift: fromLift * (1 - ease) + toLift * ease + Math.sin(t * Math.PI) * arc,
+      rot: 
+
+===== js exports WAGGLE needle='root.WAGGLE' idx=-1 =====
+
+===== ts exports WAGGLE needle='export {' idx=-1 =====
+
+===== HOUSE mentions of 'monarch' =====
+  L1234: ; |   assert.equal(WP.playFor("sand_dollar"), "flat"); |   assert.equal(WP.playFor("monarch"), "sill"); | }); |  | test("overlay leftover sits weather, news, Sip, ribbon, and the card buses", () => { |   assert.m
+  total 1
+
+===== HOUSE mentions of 'Milk' =====
+  L19:  leftover of the remaining hive den done; shore ten is closed; next leftover is Milk; Heap leftover still castings a window foot as wet sand; tenth shore leftover done; Knurl leftover still knobs a wi
+  total 1
+
+===== HOUSE mentions of 'luna' =====
+  total 0
+
+===== HOUSE mentions of 'ghost' =====
+  L1116: ob"); |   assert.equal(WP.playFor("solifuge"), "run"); |   assert.equal(WP.playFor("ghost_crab"), "sand"); |   assert.notEqual(WP.playFor("ghost_crab"), "pale"); |   assert.notEqual(WP.playFor("ghost_crab"), 
+  L1117:   assert.equal(WP.playFor("ghost_crab"), "sand"); |   assert.notEqual(WP.playFor("ghost_crab"), "pale"); |   assert.notEqual(WP.playFor("ghost_crab"), "run"); |   assert.notEqual(WP.playFor("ghost_crab"), "
+  L1118: ssert.notEqual(WP.playFor("ghost_crab"), "pale"); |   assert.notEqual(WP.playFor("ghost_crab"), "run"); |   assert.notEqual(WP.playFor("ghost_crab"), "signal"); |   assert.notEqual(WP.playFor("ghost_crab"),
+  L1119: assert.notEqual(WP.playFor("ghost_crab"), "run"); |   assert.notEqual(WP.playFor("ghost_crab"), "signal"); |   assert.notEqual(WP.playFor("ghost_crab"), "sill"); |   assert.equal(WP.playFor("fiddler_crab"),
+  L1120: ert.notEqual(WP.playFor("ghost_crab"), "signal"); |   assert.notEqual(WP.playFor("ghost_crab"), "sill"); |   assert.equal(WP.playFor("fiddler_crab"), "signal"); |   assert.equal(WP.playFor("amphipod"), "sid
+  L1133: "); |   assert.notEqual(WP.playFor("limpet"), "sill"); |   assert.equal(WP.playFor("ghost_crab"), "sand"); |   assert.equal(WP.playFor("fiddler_crab"), "signal"); |   assert.equal(WP.playFor("box_turtle"), "s
+  L1143: nd"); |   assert.equal(WP.playFor("limpet"), "clamp"); |   assert.equal(WP.playFor("ghost_crab"), "sand"); |   assert.equal(WP.playFor("fiddler_crab"), "signal"); |   assert.equal(WP.playFor("chiton"), "eight
+  L1153: ri"); |   assert.equal(WP.playFor("limpet"), "clamp"); |   assert.equal(WP.playFor("ghost_crab"), "sand"); |   assert.equal(WP.playFor("fiddler_crab"), "signal"); |   assert.equal(WP.playFor("periwinkle"), "r
+  L1174: ck"); |   assert.equal(WP.playFor("chiton"), "eight"); |   assert.equal(WP.playFor("ghost_crab"), "sand"); |   assert.equal(WP.playFor("squirrel"), "bury"); |   assert.equal(WP.playFor("barnacle"), "cirri"); | 
+  total 9
+
+===== HOUSE mentions of 'honeybee' =====
+  L185:   assert.notEqual(WP.playFor("leafcutter"), "sill"); |   assert.equal(WP.playFor("honeybee"), "waggle"); |   assert.equal(WP.playFor("stingless"), "tend"); |   assert.notEqual(WP.playFor("stingless"), "pot"
+  L237:  assert.notEqual(WP.playFor("honey_queen"), "sill"); |   assert.equal(WP.playFor("honeybee"), "waggle"); |   assert.equal(WP.playFor("honeycomb"), "draw"); |   assert.notEqual(WP.playFor("honeycomb"), "wax"
+  L664: lag"); |   assert.notEqual(WP.playFor("bat"), "sill"); |   assert.equal(WP.playFor("honeybee"), "waggle"); |   assert.notEqual(WP.playFor("honeybee"), "web"); |   assert.equal(WP.playFor("squirrel"), "bury");
+  L665:   assert.equal(WP.playFor("honeybee"), "waggle"); |   assert.notEqual(WP.playFor("honeybee"), "web"); |   assert.equal(WP.playFor("squirrel"), "bury"); |   assert.notEqual(WP.playFor("squirrel"), "cache"); | 
+  L1219: and"); |   assert.equal(WP.playFor("leech"), "drink"); |   assert.equal(WP.playFor("honeybee"), "waggle"); |   assert.equal(WP.WAGGLE, "waggle"); |   assert.notEqual(WP.playFor("honeybee"), "comb"); |   assert.
+  L1221: , "waggle"); |   assert.equal(WP.WAGGLE, "waggle"); |   assert.notEqual(WP.playFor("honeybee"), "comb"); |   assert.notEqual(WP.playFor("honeybee"), "drone"); |   assert.notEqual(WP.playFor("honeybee"), "lay"
+  L1222:  assert.notEqual(WP.playFor("honeybee"), "comb"); |   assert.notEqual(WP.playFor("honeybee"), "drone"); |   assert.notEqual(WP.playFor("honeybee"), "lay"); |   assert.notEqual(WP.playFor("honeybee"), "draw"
+  L1223: assert.notEqual(WP.playFor("honeybee"), "drone"); |   assert.notEqual(WP.playFor("honeybee"), "lay"); |   assert.notEqual(WP.playFor("honeybee"), "draw"); |   assert.notEqual(WP.playFor("honeybee"), "sip");
+  L1224:   assert.notEqual(WP.playFor("honeybee"), "lay"); |   assert.notEqual(WP.playFor("honeybee"), "draw"); |   assert.notEqual(WP.playFor("honeybee"), "sip"); |   assert.notEqual(WP.playFor("honeybee"), "sill")
+  L1225:  assert.notEqual(WP.playFor("honeybee"), "draw"); |   assert.notEqual(WP.playFor("honeybee"), "sip"); |   assert.notEqual(WP.playFor("honeybee"), "sill"); |   assert.equal(WP.playFor("lugworm"), "castings")
+  L1226:   assert.notEqual(WP.playFor("honeybee"), "sip"); |   assert.notEqual(WP.playFor("honeybee"), "sill"); |   assert.equal(WP.playFor("lugworm"), "castings"); |   assert.equal(WP.playFor("honey_drone"), "drone
+  total 11
+
+===== HOUSE mentions of 'generic' =====
+  total 0
+
+===== HOUSE mentions of 'sill-hop' =====
+  total 0
+
+===== CJS mentions of '"monarch"' =====
+  L1116: hop down", () => { |   const target = P.pickTarget([WIN], 80, "monarch", WORK, P.SPRITE); |   let play = P.beginPlay(target, target.approachX); |   const seen = new Set(); |   for (let i = 0; i < 400 && play.
+  L30061: ual(P.playFor("pitcher"), "fill"); |   assert.equal(P.playFor("monarch"), "sill"); |   assert.equal(P.DUR.castingsOn, 3.08, "Heap castings durations stay"); |   assert.equal(P.DUR.knobsOn, 3.01, "Knurl knob
+  total 2
+
+===== CJS mentions of '"honeybee"' =====
+  L11424: playFor("carpenter_bee"), "bore"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("mason_bee"), "daub"); |   assert.equal(P.playFor("leafcutter"), "snip"); |   const target = P.
+  L11593: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("mason_bee"), "daub"); |   assert.equal(P.playFor("leafcutter"), "snip"); |   const target = P.
+  L11774: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("leafcutter"), "snip"); |   const target = P.pickTarget([WIN], 80, "mason_bee", WORK, P.SPRIT
+  L11971: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("stingless"), "tend"); |   const target = P.pickTarget([WIN], 80, "leafcutter", WORK, P.SPRIT
+  L12184: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("sweat_bee"), "lick"); |   assert.equal(P.playFor("mining_bee"), "dig"); |   const target = P.p
+  L12406: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("mining_bee"), "dig"); |   assert.equal(P.playFor("honey_drone"), "drone"); |   assert.equal(P.
+  L12626: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("honey_drone"), "drone"); |   assert.equal(P.playFor("hummingbird"), "sip"); |   const target =
+  L12826: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("honey_queen"), "lay"); |   assert.equal(P.playFor("manta"), "barrel"); |   assert.equal(P.play
+  L13041: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.playFor("honeycomb"), "draw"); |   const target = P.pickTarget([WIN], 80, "honey_queen", WORK, P.SPRI
+  L13252: qual(P.playFor("gecko"), "chirp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   const target = P.pickTarget([WIN], 80, "honeycomb", WORK, P.SPRITE); |   assert.ok(target); |   assert.equal(target.ki
+  L17408: P.playFor("harvestman"), "stilt"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   const target = P.pickTarget([WIN], 80, "orb_weaver", WORK, P.SPRITE); |   assert.ok(target); |   assert.equal(target.k
+  L29402: ); |   assert.equal(P.SNAP, "snap"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.DUR.flatOn, 2.87, "Token flat durations stay"); |   assert.equal(P.DUR.rockOn, 2.80, "Spire rock dura
+  L29627: al(P.playFor("squirrel"), "bury"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.DUR.spinesOn, 2.94, "Thorn spines durations stay"); |   assert.equal(P.DUR.flatOn, 2.87, "Token flat 
+  L29853: qual(P.playFor("skunk"), "stamp"); |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.DUR.knobsOn, 3.01, "Knurl knobs durations stay"); |   assert.equal(P.DUR.spinesOn, 2.94, "Thorn spine
+  L30033:  y: 90, width: 300, height: 360 }; |   assert.equal(P.playFor("honeybee"), "waggle"); |   assert.equal(P.WAGGLE, "waggle"); |   assert.notEqual(P.playFor("honeybee"), "comb"); |   assert.notEqual(P.playFor("h
+  L30035: sert.equal(P.WAGGLE, "waggle"); |   assert.notEqual(P.playFor("honeybee"), "comb"); |   assert.notEqual(P.playFor("honeybee"), "drone"); |   assert.notEqual(P.playFor("honeybee"), "lay"); |   assert.notEqual(
+  L30036: P.playFor("honeybee"), "comb"); |   assert.notEqual(P.playFor("honeybee"), "drone"); |   assert.notEqual(P.playFor("honeybee"), "lay"); |   assert.notEqual(P.playFor("honeybee"), "draw"); |   assert.notEqual(
+  L30037: .playFor("honeybee"), "drone"); |   assert.notEqual(P.playFor("honeybee"), "lay"); |   assert.notEqual(P.playFor("honeybee"), "draw"); |   assert.notEqual(P.playFor("honeybee"), "sip"); |   assert.notEqual(P.
+  L30038: (P.playFor("honeybee"), "lay"); |   assert.notEqual(P.playFor("honeybee"), "draw"); |   assert.notEqual(P.playFor("honeybee"), "sip"); |   assert.notEqual(P.playFor("honeybee"), "castings"); |   assert.notEqu
+  L30039: P.playFor("honeybee"), "draw"); |   assert.notEqual(P.playFor("honeybee"), "sip"); |   assert.notEqual(P.playFor("honeybee"), "castings"); |   assert.notEqual(P.playFor("honeybee"), "signal"); |   assert.notE
+  L30040: (P.playFor("honeybee"), "sip"); |   assert.notEqual(P.playFor("honeybee"), "castings"); |   assert.notEqual(P.playFor("honeybee"), "signal"); |   assert.notEqual(P.playFor("honeybee"), "flat"); |   assert.not
+  ...truncated
+  total 21
+
+===== CJS mentions of 'Comb waggle' =====
+  L30031: astings-off"); |   assert.equal(play.abort, true); | }); |  | test("Comb waggles a sill pan as a wax dish: walk onto the pan, dance the waggle, then leave", () => { |   const WIN_B = { id: "hw2", x: 980, y: 90,
+  total 1
+
+===== CJS mentions of 'sill-hop' =====
+  L1133: tEqual(play.phase, "dust-fluff"); |   } |   assert.ok(seen.has("sill-hop")); |   assert.ok(seen.has("sill-walk")); |   assert.ok(seen.has("sill-down")); |   assert.equal(play.phase, "done"); | }); |  | test("Arc jump
+  L2357: y.phase, "bask-withdraw"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "watch-hold") { |       sitMs += 0.05; |       sitLift = play.l
+  L2508: y.phase, "bask-withdraw"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "thump") { |       stampMs += 0.05; |       stampLift = Math.ma
+  L2666: y.phase, "bask-withdraw"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "stash-cheek") { |       cheekMs += 0.05; |       cheekLift = p
+  L2837: y.phase, "bask-withdraw"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "wheek-loaf") { |       loafMs += 0.05; |       loafLift = play
+  L3018: play.phase, "wheek-loaf"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     assert.notEqual(play.phase, "circle"); |     assert.notEqual(play.phase, "circle
+  L3176: play.phase, "perch-talk"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "circle") { |       circleMs += 0.05; |       circleXMin = Math
+  L3324: qual(play.phase, "scent"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "perch-talk") { |       talkMs += 0.05; |       talkXMin = Math
+  L3474: l(play.phase, "perch-on"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "scent") { |       scentMs += 0.05; |       scentXMin = Math.mi
+  L3638: qual(play.phase, "scent"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "bow-stand") { |       standMs += 0.05; |       assert.equal(pl
+  L3821: (play.phase, "bow-stand"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "hook-climb") { |       climbLiftMin = Math.min(climbLiftMin,
+  L3995: play.phase, "hook-climb"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "thread") { |       threadXMin = Math.min(threadXMin, play.x)
+  L4203: ual(play.phase, "thread"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "ball-snuffle") { |       snuffle = Math.max(snuffle, Math.ab
+  L4371: ay.phase, "ball-snuffle"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "dust") { |       dustXMin = Math.min(dustXMin, play.x); |     
+  L4549: play.phase, "dust-fluff"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "wall") { |       wallXMin = Math.min(wallXMin, play.x); |     
+  L4721: Equal(play.phase, "wall"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "toss-sit") { |       sitXMin = Math.min(sitXMin, play.x); |   
+  L4907: l(play.phase, "toss-sit"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "flatten") { |       sitXMin = Math.min(sitXMin, play.x); |    
+  L5107: lay.phase, "flatten-bob"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "drape") { |       sitXMin = Math.min(sitXMin, play.x); |      
+  L5322: l(play.phase, "bun-tuck"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "kindle-coal") { |       coalXMin = Math.min(coalXMin, play.x
+  L5553: qual(play.phase, "write"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "bun-tuck") { |       tuckXMin = Math.min(tuckXMin, play.x); | 
+  L5775: l(play.phase, "bun-tuck"); |     assert.notEqual(play.phase, "sill-hop"); |     assert.notEqual(play.phase, "sill-walk"); |     if (play.phase === "write") { |       writeXMin = Math.min(writeXMin, play.x); |  
+  ...truncated
+  total 21
+
+===== CJS mentions of 'generic' =====
+  L1933: ); |   assert.ok(Math.abs(hold.lift - sill.lift) > 40, "not a generic sill"); |   const seat0 = P.holdOnPath(0, { x: 40, lift: 0 }, { x: hold.x, lift: hold.lift }); |   const seatMid = P.holdOnPath(0.5, { x
+  L2073: ; |   assert.ok(Math.abs(earth.lift - sill.lift) > 40, "not a generic top sill"); |   const seat0 = P.earthOnPath(0, { x: 40, lift: 0 }, { x: earth.x, lift: earth.lift }); |   const seatMid = P.earthOnPath(
+  L2203: the title-bar"); |   assert.ok(ledge.lift > sill.lift, "not a generic inner sill walk"); |   assert.ok(Math.abs(ledge.lift - earth.lift) > 40, "not Ground's bottom lug"); |   assert.ok(Math.abs(ledge.x - cl
+  L2311:  ledge is off the floor"); |   assert.ok(sill.lift > 20, "the generic sill is off the floor"); |   assert.ok(ridge.lift > 40, "Arc's ridge is off the floor"); |   assert.ok(Math.abs(watch.x - cling.x) > 40,
+  L2449:  ledge is off the floor"); |   assert.ok(sill.lift > 20, "the generic sill is off the floor"); |   assert.ok(ridge.lift > 40, "Arc's ridge is off the floor"); |   assert.ok(Math.abs(thump.x - cling.x) > 20 
+  L2606: he floor"); |   assert.ok(sill.lift > stash.lift + 40, "not a generic top sill"); |   assert.ok(ridge.lift > stash.lift + 40, "not Arc's ridge"); |   assert.ok(Math.abs(stash.x - cling.x) > 20 || Math.abs(s
+  L2762: "not Miso's top ledge"); |   assert.ok(sill.lift > 40, "not a generic top sill"); |   assert.ok(ridge.lift > 40, "not Arc's ridge"); |   assert.ok(earth.lift !== 0 || Math.abs(wheek.x - earth.x) > 20, "not 
+  L2960: ); |   assert.ok(Math.abs(bask.lift - sill.lift) > 40, "not a generic top sill"); |   const on0 = P.baskOnPath(0, { x: 40, lift: 0 }, { x: bask.x, lift: bask.lift }); |   const onMid = P.baskOnPath(1 / 6, {
+  L3049:  Whee's voice"); |   assert.ok(!seen.has("sill-walk"), "not a generic sill"); |   assert.equal(windowIds.size, 1, "one window"); |   assert.ok(sitLift > earth.lift, "Ink holds the rail as a pond stone"); |   
+  L3127: ; |   assert.ok(Math.abs(start.lift - sill.lift) > 40, "not a generic top sill"); |   assert.ok(Math.abs(mid.x - start.x) > 40, "one thought crosses the bowl"); |   assert.ok(Math.abs(top.lift - start.lift)
+  L3200: k"), "not Ink"); |   assert.ok(!seen.has("sill-walk"), "not a generic sill"); |   assert.equal(windowIds.size, 1, "one window"); |   assert.ok(inside, "the circle stays on the pane"); |   assert.ok(circleXMax
+  L3275: ; |   assert.ok(Math.abs(perch.lift - sill.lift) > 40, "not a generic top sill"); |   const on0 = P.perchOnPath(0, { x: 40, lift: 0 }, { x: perch.x, lift: perch.lift }); |   const on1 = P.perchOnPath(1, { x
+  L3341: "), "not Coin"); |   assert.ok(!seen.has("sill-walk"), "not a generic sill"); |   assert.equal(windowIds.size, 1, "one window"); |   assert.ok(talkXMax - talkXMin < 2, "one perch — not a walk across"); |   as
+  L3414: ; |   assert.ok(Math.abs(scent.lift - sill.lift) > 16, "not a generic top sill"); |   const on0 = P.scentOnPath(0, { x: 40, lift: 0 }, { x: scent.x, lift: 0 }); |   const on1 = P.scentOnPath(1, { x: 40, lif
+  L3497: "), "not Miso"); |   assert.ok(!seen.has("sill-walk"), "not a generic sill"); |   assert.equal(windowIds.size, 1, "one window"); |   assert.ok(scentXMax - scentXMin > 2, "the nose works the crack"); |   asser
+  L3578: "); |   assert.ok(Math.abs(bow.lift - sill.lift) > 40, "not a generic top sill"); |   const on0 = P.bowOnPath(0, { x: 40, lift: 0 }, { x: bow.x, lift: bow.lift }); |   const on1 = P.bowOnPath(1, { x: 40, li
+  L3670: k"), "not Ink"); |   assert.ok(!seen.has("sill-walk"), "not a generic sill"); |   assert.equal(windowIds.size, 1, "one window"); |   assert.ok(bowXMax - bowXMin < 2, "one rock — not a walk across"); |   asser
+  L3754: ); |   assert.ok(Math.abs(hang.lift - sill.lift) > 40, "not a generic top sill"); |   assert.ok(Math.abs(hang.x - bow.x) > 20 || Math.abs(hang.lift - bow.lift) > 20, "not Peck's landing rock"); |   const on
+  L3851: k"), "not Ink"); |   assert.ok(!seen.has("sill-walk"), "not a generic sill"); |   assert.equal(windowIds.size, 1, "one window"); |   assert.ok(climbLiftMax - climbLiftMin > 40, "the climb travels the jamb")
+  L3937: ; |   assert.ok(Math.abs(start.lift - sill.lift) > 40, "not a generic top sill"); |   assert.ok(Math.abs(start.x - bow.x) > 20 || Math.abs(start.lift - bow.lift) > 20, "not Peck's landing rock"); |   const 
+  L4020: "), "not Miso"); |   assert.ok(!seen.has("sill-walk"), "not a generic sill"); |   assert.equal(windowIds.size, 1, "one window"); |   assert.ok(threadXMax - threadXMin > 80, "he threads the gap, not a sit");
+  ...truncated
+  total 21

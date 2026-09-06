@@ -1,0 +1,10 @@
+﻿const fs = require("fs");
+const cjs = fs.readFileSync("desktop/renderer/window-play.test.cjs", "utf8");
+const start = cjs.indexOf('test("other guests do not clone Rui');
+const end = cjs.indexOf("\n});\n", start) + 4;
+console.log(cjs.slice(start, end+10));
+console.log("--- mjs ---");
+const mjs = fs.readFileSync("web/scripts/window-play.test.mjs", "utf8");
+const s2 = mjs.indexOf('test("other guests do not clone Rui');
+const e2 = mjs.indexOf("\n});\n", s2) + 4;
+console.log(mjs.slice(s2, e2+10));

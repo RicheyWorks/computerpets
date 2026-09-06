@@ -1,0 +1,11 @@
+key: ball_python
+guest: Nori (Ball Python)
+source: BigSoundBank Great Page that Turns #1 (sound 362)
+URL: https://bigsoundbank.com/great-page-that-turns-1-s0362.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0362.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Python regius — nearly silent. Soft dry page-turn as faint scale rustle / body settle. No hiss roar. No music. No narrator.
+Notes: House cut ~2.2s mono 44.1kHz silenceremove+volume=-8dB+dynaudnorm from ~2s source. Quiet snake sit.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

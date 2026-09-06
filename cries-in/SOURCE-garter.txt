@@ -1,0 +1,11 @@
+key: garter
+guest: Sash (Common Garter)
+source: BigSoundBank Wind in Tall Grass (sound 908)
+URL: https://bigsoundbank.com/wind-in-tall-grass-s0908.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0908.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Thamnophis sirtalis — nearly silent. Soft attenuated tall-grass wind rustle as body through grass. No hiss roar. No music. No narrator.
+Notes: House cut ~4.0s mono 44.1kHz from ~8–12s of source, volume=-10dB + dynaudnorm + afade. Quiet snake sit.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

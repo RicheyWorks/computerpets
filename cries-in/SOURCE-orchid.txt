@@ -1,0 +1,11 @@
+key: orchid
+guest: Moth (Moth Orchid)
+source: BigSoundBank Miscanthus sinensis #5 (sound 1815)
+URL: https://bigsoundbank.com/miscanthus-sinensis-5-s1815.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/1815.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: CC0 (public domain equivalent)
+Species: Phalaenopsis (moth orchid; house guest Moth) — silent. Soft attenuated Miscanthus #5 as soft petal/leaf rustle stand-in. Almost nothing. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from salamander #1811, maidenhair #1812, ginkgo #1813, oak #1814. House cut ~3.2s mono 44.1kHz highpass/lowpass + volume=-16dB mild dynaudnorm + afade + volume=-5dB. Quiet plant.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine

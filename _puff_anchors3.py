@@ -1,0 +1,11 @@
+﻿from pathlib import Path
+ts=Path("web/src/lib/pets/window-play.ts").read_text(encoding="utf-8")
+idx=ts.find('next.phase === "teeth-off"')
+print("idx", idx)
+print(repr(ts[idx:idx+550]))
+idx2=ts.find('"woodwound"')
+print("woodwound context", repr(ts[idx2-80:idx2+80]))
+idx3=ts.find('"bearded"')
+print("bearded context", repr(ts[idx3-80:idx3+80]))
+idx4=ts.find('| "teeth-off"')
+print("phase context", repr(ts[idx4-40:idx4+80]))

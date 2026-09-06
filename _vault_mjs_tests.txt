@@ -1,0 +1,74 @@
+test("Vault jumps a window apron as a grass plate: walk onto the apron, sit, vault once, sit the plate, then leave", () => {
+  const WIN_B = { id: "hw2", x: 980, y: 90, width: 300, height: 360 };
+  assert.equal(playFor("grasshopper"), "jump");
+  assert.equal(JUMP, "jump");
+  assert.notEqual(playFor("grasshopper"), "vault");
+  assert.notEqual(playFor("grasshopper"), "hop");
+  assert.notEqual(playFor("grasshopper"), "leap");
+  assert.notEqual(playFor("grasshopper"), "spring");
+  assert.notEqual(playFor("grasshopper"), "pounce");
+  assert.notEqual(playFor("grasshopper"), "soar");
+  assert.notEqual(playFor("grasshopper"), "leaf");
+  assert.notEqual(playFor("grasshopper"), "song");
+  assert.notEqual(playFor("grasshopper"), "sill");
+  assert.equal(playFor("katydid"), "leaf");
+  assert.equal(LEAF, "leaf");
+  assert.equal(playFor("field_cricket"), "song");
+  assert.equal(playFor("springtail"), "spring");
+  assert.equal(playFor("jumping_spider"), "pounce");
+  assert.equal(playFor("swallowtail"), "sill");
+  const target = pickTarget([WIN], 80, "grasshopper", WORK, SPRITE);
+  assert.ok(target);
+  assert.equal(target.kind, "jump");
+  assert.equal(target.side, "grassplate");
+  assert.equal(target.leave, "vaulted");
+  assert.ok(target.holdLift > 8);
+  assert.ok(DUR.jumpHold > DUR.jump * 1.2);
+  assert.ok(DUR.jumpOn !== DUR.leafOn);
+  assert.ok(DUR.jumpOn !== DUR.songOn);
+  assert.ok(DUR.jump !== DUR.spring);
+  const plate = jumpPoint(WIN, SPRITE, WORK);
+  const rim = leafPoint(WIN, SPRITE, WORK);
+  const dish = songPoint(WIN, SPRITE, WORK);
+  assert.ok(Math.abs(plate.x - rim.x) > 12 || Math.abs(plate.lift - rim.lift) > 4);
+  assert.ok(Math.abs(plate.x - dish.x) > 12 || Math.abs(plate.lift - dish.lift) > 2);
+  const tiny = pickTarget([{ id: "tiny", x: 200, y: 80, width: 120, height: 50 }], 80, "grasshopper", WORK, SPRITE);
+  assert.equal(tiny, null);
+  const okJump = pickTarget([{ id: "jump", x: 200, y: 80, width: 188, height: 152 }], 80, "grasshopper", WORK, SPRITE);
+  assert.ok(okJump);
+  const jumpPose = jumpPath(0.4);
+  assert.ok(jumpPose.lift > 6);
+  const hold = jumpHoldPath(0.5);
+  assert.ok(Math.abs(hold.rot + 4.4) < 0.2);
+  let play = beginPlay(target, target.approachX);
+  const seen = new Set();
+  for (let i = 0; i < 2400 && play.phase !== "done"; i++) {
+    seen.add(play.phase);
+    play = stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN, WIN_B], WORK, SPRITE, { cmd: "idle" });
+    assert.notEqual(play.phase, "leaf");
+    assert.notEqual(play.phase, "song");
+    assert.notEqual(play.phase, "spring");
+  }
+  assert.ok(seen.has("jump-on"));
+  assert.ok(seen.has("jump"));
+  assert.ok(seen.has("jump-hold"));
+  assert.ok(seen.has("jump-off"));
+  assert.equal(play.phase, "done");
+});
+test("a moved window refits Vault's grass-plate jump; sleep, card, and hide abort", () => {
+  assert.equal(canStart({ asleep: true, cmd: "idle" }), false);
+  const target = pickTarget([WIN], 200, "grasshopper", WORK, SPRITE);
+  let play = beginPlay(target, target.approachX);
+  for (let i = 0; i < 900 && play.phase !== "jump"; i++) {
+    play = stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [WIN], WORK, SPRITE, { cmd: "idle" });
+  }
+  assert.equal(play.phase, "jump");
+  const beforeX = play.target.holdX;
+  const moved = { ...WIN, x: WIN.x + 140 };
+  play = stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, SPRITE, { cmd: "idle" });
+  assert.equal(play.phase, "jump");
+  assert.ok(Math.abs(play.target.holdX - beforeX) > 40);
+  play = stepPlay(play, 0.05, { x: play.x, lift: play.lift }, [moved], WORK, SPRITE, { asleep: true, cmd: "sleep" });
+  assert.ok(play.phase === "drop" || play.phase === "done" || play.phase === "jump-off");
+  assert.equal(play.abort, true);
+});

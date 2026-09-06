@@ -1,0 +1,1 @@
+'ET = "facet";\nexport const RIM = "rim";\nexport const MANY = "many";\nexport const SILL = "sill";\nexport const IGNORE = "ignore";\nexport const'

@@ -1,0 +1,1 @@
+' ...target, holdX: hold.x, holdLift: hold.lift };\n  }\n  if (target.kind === MANY) {\n    const hold = manyPoint(win, sprite, work);\n    return { ...target, holdX: hold.x, holdLift: hold.lift };\n  }\n  if (target.kind === BURY) {\n    const hol'

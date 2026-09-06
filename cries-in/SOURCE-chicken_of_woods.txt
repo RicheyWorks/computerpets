@@ -1,0 +1,10 @@
+key: chicken_of_woods
+guest: Flame (Chicken of the Woods)
+source: Wikimedia Commons Forest_ambience_2_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Forest_ambience_2_(Gravity_Sound).wav
+direct: https://commons.wikimedia.org/wiki/Special:FilePath/Forest_ambience_2_(Gravity_Sound).wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+note: Quiet fungus sit — Laetiporus has no voice. Soft forest ambience cut as dry shelf hush (filtered + attenuated). Distinct from Ring/Puff leaf-crunch sits and Mane blade tooth hush. Source kept as short ogg of Commons wav. No music. No narrator. No cartoon beep. House cut ~2.5s mono 44.1kHz.
+sat: 2026-09-03 Buffffff
+House path: build our own from field tape — not Grok Imagine
