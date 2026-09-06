@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, and Coin today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, and Echo today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -11,8 +11,9 @@ import * as Hamster from "./hamster-tricks";
 import * as GuineaPig from "./guinea-pig-tricks";
 import * as Turtle from "./turtle-tricks";
 import * as Goldfish from "./goldfish-tricks";
+import * as Budgie from "./budgie-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -27,6 +28,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === GuineaPig.TRICK_KEY || key === "whee") return GuineaPig;
   if (key === Turtle.TRICK_KEY || key === "ink") return Turtle;
   if (key === Goldfish.TRICK_KEY || key === "coin") return Goldfish;
+  if (key === Budgie.TRICK_KEY || key === "echo") return Budgie;
   return null;
 }
 
