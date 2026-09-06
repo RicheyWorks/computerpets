@@ -1,4 +1,4 @@
-﻿# Drop Grok cries here
+# Drop Grok cries here
 
 Folder: `C:\Users\730ri\projects\ComputerPets\cries-in`
 
@@ -165,7 +165,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 121. [x] `orb_weaver.wav` — **Loom** — European Garden Spider — An orb-weaver is silent. Silk tick on the web. No voice. — sat 2026-09-05 Freesound CC0 nylon fishing line friction (kyles #450849)
 122. [x] `jumping_spider.wav` — **Leap** — Bold Jumper — A jumping spider is nearly silent. Tiny chitin tick. No voice. — sat 2026-09-05 Freesound CC0 bug legs tapping (c64cosmin #828623)
 123. [x] `wolf_spider.wav` — **Prowl** — Wetland Wolf Spider — A wolf spider is nearly silent. Maybe a faint leg-drum on dry leaf. No voice. — sat 2026-09-05 Freesound CC0 Crumple Dry Leaf 1 (elliotlp #235755)
-124. [ ] `tarantula.mp4` — **Velvet** — Desert Blonde — A desert blonde tarantula is nearly silent. Faint hair-rasp if threatened. No roar. (zip synth — replace with Grok)
+124. [x] `tarantula.wav` — **Velvet** — Desert Blonde — A desert blonde tarantula is nearly silent. Faint hair-rasp if threatened. No roar. — sat 2026-09-05 BigSoundBank CC0 Synthetic Coat Rubbed (Joseph SARDIN #1104)
 125. [ ] `widow.mp4` — **Hour** — Southern Black Widow — A black widow is silent. Silk tick. No voice. (zip synth — replace with Grok)
 126. [ ] `harvestman.mp4` — **Stem** — Common Harvestman — A harvestman is silent. Leg rustle on wood. No voice. (zip synth — replace with Grok)
 127. [ ] `scorpion.mp4` — **Barb** — Striped Bark Scorpion — A striped bark scorpion is nearly silent. A pincer click. No voice. (zip synth — replace with Grok)

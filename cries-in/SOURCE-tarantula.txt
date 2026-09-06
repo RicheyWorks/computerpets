@@ -1,0 +1,10 @@
+key: tarantula
+guest: Velvet (Desert Blonde)
+source: BigSoundBank Synthetic Coat Rubbed (#1104)
+URL: https://bigsoundbank.com/synthetic-coat-rubbed-s1104.html
+author: Joseph SARDIN
+license: CC0 (Creative Commons 0 / public domain)
+Species: desert blonde tarantula (Theraphosidae; house guest Velvet) — nearly silent. Soft attenuated synthetic-coat rub as faint urticating-hair rasp stand-in. No roar. No music. No English narrator. No cartoon beep.
+Notes: Distinct from Prowl dry-leaf leg-drum (#235755), Leap bug-legs tap (#828623), Loom fishing-line silk (#450849). House cut ~3.2s mono 44.1kHz; dynaudnorm + silenceremove + atrim. Quiet theraphosid — hair rasp only.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
