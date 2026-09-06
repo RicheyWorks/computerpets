@@ -194,7 +194,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 150. [x] `tuatara.wav` — **Peak** — Tuatara — A tuatara is nearly silent. Primitive ears; a low croak if any. No roar. — sat 2026-09-05 BigSoundBank CC0 Feet in Leaves #1 (Joseph SARDIN #0137) as soft forest-floor leaf rustle. No Sphenodon remixable tape.
 151. [x] `bass.wav` — **Lunge** — Largemouth Bass — A largemouth bass is silent. A water thrash at the surface. No voice. — sat 2026-09-05 BigSoundBank CC0 Splash Big #1 (Joseph SARDIN #1519)
 152. [x] `brook_trout.wav` — **Speck** — Brook Trout — A brook trout is silent. Riffle water only. No voice. — sat 2026-09-05 BigSoundBank CC0 Small Stream (Joseph SARDIN #0823)
-153. [ ] `catfish.mp4` — **Whisk** — Channel Catfish — A channel catfish stridulates: a dry pectoral-spine click or grind. Some drum the swim bladder. (zip synth — replace with Grok)
+153. [x] `catfish.wav` — **Whisk** — Channel Catfish — A channel catfish stridulates: a dry pectoral-spine click or grind. Some drum the swim bladder. — sat 2026-09-05 Commons CC BY-SA 4.0 Platydoras armatulus creaking (Kacper Aleksander; Siluriformes spine-stridulation proxy — exact Ictalurus punctatus remixable empty)
 154. [ ] `bluegill.mp4` — **Penny** — Bluegill — A bluegill is silent. A small water tick. No voice. (zip synth — replace with Grok)
 155. [ ] `perch.mp4` — **Bar** — Yellow Perch — A yellow perch is silent. Water tick only. No voice. (zip synth — replace with Grok)
 156. [ ] `pike.mp4` — **Lance** — Northern Pike — A northern pike is silent. A sudden water surge. No voice. (zip synth — replace with Grok)

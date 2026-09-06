@@ -1,0 +1,6 @@
+﻿URL: https://commons.wikimedia.org/wiki/File:Platydoras_armatulus.ogg
+Direct: https://upload.wikimedia.org/wikipedia/commons/c/c3/Platydoras_armatulus.ogg
+Title: Platydoras armatulus (striped Raphael catfish creaking)
+Author: Kacper Aleksander (-serwacy01-)
+License: CC BY-SA 4.0 — https://creativecommons.org/licenses/by-sa/4.0/
+Notes: Exact Ictalurus punctatus remixable field tape not found (Commons spoken-word only; iNat obs 279596811 BY-NC; Freesound/Archive empty). Siluriformes pectoral-spine stridulation proxy — Doradidae creak. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim 0:4. Dry click/grind, no music, no English.
