@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/electric-meter-s1091.html
+Direct: https://bigsoundbank.com/UPLOAD/ogg/1091.ogg
+Author: Joseph SARDIN
+License: CC0 (public domain)
+Title: Electric meter (#1091)
+Notes: Transformer noise in an EDF electricity meter as low grounded earth-dragon hum. Cut mono 44.1kHz ~4s. Dry. No roar. No music. Distinct from Beacon Electric transformer #3 (#467), Gauss #0064, Fuse #0086, Volt #2118.
