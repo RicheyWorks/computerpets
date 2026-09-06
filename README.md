@@ -12,7 +12,7 @@ That page is a teacher. Click it. It has numbered steps. You do not need to know
 
 ## Half the house already talks for real
 
-**166 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
+**167 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
 
 ## Meet some of them
 
@@ -96,7 +96,7 @@ More in [desktop/README.md](desktop/README.md).
 
 ## They make real noise
 
-**166 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**167 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
 
 These voices are in the house:
 
@@ -261,6 +261,7 @@ These voices are in the house:
 - **Ridge** (Boulder Brain Coral) — soft filter-bubble water over ridges from [Commons Filtro interno de pecera](https://commons.wikimedia.org/wiki/File:Filtro_interno_de_pecera.ogg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Hippocampuz](https://commons.wikimedia.org/wiki/User:Hippocampuz). Silent — no voice. No music. No beep.
 - **Wreath** (Magnificent Sea Anemone) — soft waterfall-filter / tentacle water hush from [Commons Filtro externo de un acuario](https://commons.wikimedia.org/wiki/File:Filtro_externo_de_un_acuario.ogg), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Hippocampuz](https://commons.wikimedia.org/wiki/User:Hippocampuz). Silent — no voice. No music. No beep.
 - **Paint** (Ocellaris Clownfish) — tiny water ticks from [BigSoundBank Drops, metal pan](https://bigsoundbank.com/drops-metal-pan-s1382.html) (#1382), [CC0](https://bigsoundbank.com/licenses.html), recorded by [Joseph SARDIN](https://josephsardin.fr/). Silent — no cartoon voice. No music. No beep.
+- **Scrape** (Stoplight Parrotfish) — exact beak/coral grazing rasp from [Dryad Sparisoma_viride.zip / FEC-00084](https://doi.org/10.5061/dryad.mcvdnckcp), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), FishEye Collaborative (Dantzker et al.; also [species page](https://www.fisheyecollaborative.org/fish-sounds/sparisoma-viride)). Exact *Sparisoma viride*. Silent — no voice. No music. No beep.
 
 - **Blade** (northern true katydid) — pulsed katy-did song from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [peterwchen](https://commons.wikimedia.org/wiki/File:Pterophylla_camellifolia_singing.wav) (`Pterophylla_camellifolia_singing.wav`, also [iNat 90278754](https://www.inaturalist.org/observations/90278754)). Exact Pterophylla camellifolia. No music. No words.
 **Vault** (differential grasshopper) — dry wing-leg creak from Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Baudewijn Odé](https://commons.wikimedia.org/wiki/File:Chorthippus_parallelus_-_sound.oga) (`Chorthippus_parallelus_-_sound.oga`, KNNV Veldgids Sprinkhanen). Exact Melanoplus differentialis tape unavailable — Acrididae meadow-grasshopper proxy. No music. No words.
