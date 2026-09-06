@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, and Cling today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, and Tenant today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -40,6 +40,7 @@
     const Nautilus = root.PetNautilusTricks;
     const MoonJelly = root.PetMoonJellyTricks;
     const SeaStar = root.PetSeaStarTricks;
+    const HermitCrab = root.PetHermitCrabTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -78,6 +79,7 @@
     if (Nautilus && (key === Nautilus.TRICK_KEY || key === "chamber")) return Nautilus;
     if (MoonJelly && (key === MoonJelly.TRICK_KEY || key === "pulse")) return MoonJelly;
     if (SeaStar && (key === SeaStar.TRICK_KEY || key === "cling")) return SeaStar;
+    if (HermitCrab && (key === HermitCrab.TRICK_KEY || key === "tenant")) return HermitCrab;
     return null;
   }
 
