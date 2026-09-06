@@ -221,7 +221,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 177. [x] `sand_dollar.wav` — **Token** — Common Sand Dollar — A sand dollar is silent. Sand tick. No voice. — sat 2026-09-05 BigSoundBank CC0 Footsteps on gravels #1 (Joseph SARDIN #0510)
 178. [x] `sea_urchin.wav` — **Thorn** — Purple Sea Urchin — A sea urchin ticks spines and rasps its lantern. No voice. — sat 2026-09-05 BigSoundBank CC0 Vinyl Scratch #4 (Joseph SARDIN #2861)
 179. [x] `knobbed_whelk.wav` — **Knurl** — Knobbed Whelk — A knobbed whelk is silent. Radula rasp. No voice. — sat 2026-09-05 BigSoundBank CC0 Vinyl Scratch #5 (Joseph SARDIN #2862)
-180. [ ] `lugworm.mp4` — **Heap** — Lugworm — A lugworm is silent. Wet-sand heave. No voice. (zip synth — replace with Grok)
+180. [x] `lugworm.wav` — **Heap** — Lugworm — A lugworm is silent. Wet-sand heave. No voice. — sat 2026-09-05 BigSoundBank CC0 Watering #1 (Joseph SARDIN #1302)
 181. [x] `field_cricket.wav` — **Chirp** — Fall Field Cricket — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
 182. [x] `katydid.wav` — **Blade** — Northern True Katydid — A northern true katydid rasps a loud pulsed song, often heard as katy-did. No words. — sat 2026-09-05 Commons CC BY 4.0 Pterophylla camellifolia singing (peterwchen / iNat 90278754)
 183. [x] `grasshopper.wav` — **Vault** — Differential Grasshopper — A differential grasshopper stridulates a dry creak. Wing-leg rasp. — sat 2026-09-05 Commons CC BY-SA 4.0 Chorthippus parallelus - sound.oga (Baudewijn Odé); Melanoplus differentialis tape unavailable — Acrididae proxy
