@@ -1,4 +1,4 @@
-﻿/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, and Door today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, and Felt today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -45,6 +45,7 @@
     const Seahorse = root.PetSeahorseTricks;
     const Manta = root.PetMantaTricks;
     const Moray = root.PetMorayTricks;
+    const Moss = root.PetMossTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -88,6 +89,7 @@
     if (Seahorse && (key === Seahorse.TRICK_KEY || key === "anchor")) return Seahorse;
     if (Manta && (key === Manta.TRICK_KEY || key === "kite")) return Manta;
     if (Moray && (key === Moray.TRICK_KEY || key === "door")) return Moray;
+    if (Moss && (key === Moss.TRICK_KEY || key === "felt")) return Moss;
     return null;
   }
 
@@ -112,4 +114,6 @@
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetGroundTricks = api;
 })(typeof window !== "undefined" ? window : globalThis);
+
+
 
