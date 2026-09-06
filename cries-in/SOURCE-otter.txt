@@ -1,0 +1,11 @@
+﻿key: otter
+guest: Slick (North American River Otter)
+source: iNaturalist observation 334674995 sound 1740890
+URL: https://www.inaturalist.org/observations/334674995
+direct: https://static.inaturalist.org/sounds/1740890.wav
+author: Konshau Duman
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+Species: Lontra canadensis (North American river otter; house guest Slick) — field squeak/chirp calls from creek bank, then snorts from others. Whistle-chuckle. No words. No music. No English narrator. No cartoon beep.
+Notes: House cut ~4.0s mono 44.1kHz from call window ~25s; highpass/lowpass + dynaudnorm + afade. Exact species field tape. Prefer over quiet CC0 canal glimpse (jilldevito 346867530).
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
