@@ -202,7 +202,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 158. [x] `paddlefish.wav` — **Spoon** — American Paddlefish — A paddlefish is silent. Filter-water hush. No voice. — sat 2026-09-05 BigSoundBank CC0 Brita jug flow (Joseph SARDIN #0592)
 159. [x] `lamprey.wav` — **Round** — Sea Lamprey — A sea lamprey is silent. A wet sucker rasp. No voice. — sat 2026-09-05 BigSoundBank CC0 Straw, suction #3 (Joseph SARDIN #1246)
 160. [x] `american_eel.wav` — **Silver** — American Eel — An American eel is silent. A water slip. No voice. — sat 2026-09-05 BigSoundBank CC0 Water Blop #1 (Joseph SARDIN & Axeline T. #3427)
-161. [ ] `house_centipede.mp4` — **Haste** — House Centipede — A house centipede is silent. Fast dry scuttle. No voice. (zip synth — replace with Grok)
+161. [x] `house_centipede.wav` — **Haste** — House Centipede — A house centipede is silent. Fast dry scuttle. No voice. — sat 2026-09-05 BigSoundBank CC0 Brush on wood (Joseph SARDIN #1106)
 162. [ ] `millipede.mp4` — **Link** — American Giant Millipede — A millipede is silent. Oiled ring rustle. No voice. (zip synth — replace with Grok)
 163. [ ] `pillbug.mp4` — **Armor** — Common Pillbug — A pillbug is silent. A tiny armor tick. No voice. (zip synth — replace with Grok)
 164. [ ] `earthworm.mp4` — **Cast** — Common Earthworm — An earthworm is silent. Soil tick. No voice. (zip synth — replace with Grok)
