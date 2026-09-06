@@ -1,0 +1,11 @@
+key: solifuge
+guest: Gale (Windscorpion)
+source: Freesound insect running on the table (#824443)
+URL: https://freesound.org/people/paulmegens/sounds/824443/
+direct: https://cdn.freesound.org/previews/824/824443_15434263-hq.mp3
+author: paulmegens
+license: Creative Commons Zero (CC0 1.0)
+Species: Eremobates spp. (windscorpion / camel spider / solifuge; house guest Gale) — silent. Fast dry scuttle. Soft attenuated table-insect run as dry leg-scuttle stand-in. No voice. No music. No English narrator. No cartoon beep.
+Notes: Distinct from Leap bug-leg tap (#828623), Stem wood scratch (#477680), Twig steps (#1301), Clasp fabric brush (#850704). House cut ~3.1s mono 44.1kHz from mid run; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit near Prowl/Stem loudness. Quiet solifuge — scuttle only.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
