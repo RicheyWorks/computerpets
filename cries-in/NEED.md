@@ -1,4 +1,4 @@
-﻿# Drop Grok cries here
+# Drop Grok cries here
 
 Folder: `C:\Users\730ri\projects\ComputerPets\cries-in`
 
@@ -252,7 +252,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 208. [x] `giant_clam.wav` — **Gate** — Giant Clam — shell tick in water — sat 2026-09-05 BigSoundBank CC0 Sparkling water (#230, Joseph SARDIN).
 209. [x] `eagle_ray.wav` — **Soar** — Spotted Eagle Ray — slow water whoosh — sat 2026-09-05 BigSoundBank CC0 Beach Small Waves (#265, Joseph SARDIN).
 210. [x] `grouper.wav` — **Hide** — Nassau Grouper — water hush — sat 2026-09-05 BigSoundBank CC0 Water flow #2 (#205, Joseph SARDIN).
-211. [ ] `cyber_dragon.mp4` — **Arc** — Grid Dragon — A grid dragon crackles a short electric arc. No roar. No words. (zip synth — replace with Grok)
+211. [x] `cyber_dragon.wav` — **Arc** — Grid Dragon — A grid dragon crackles a short electric arc. No roar. No words. — sat 2026-09-05 BigSoundBank CC0 Short welds (Joseph SARDIN #952)
 212. [ ] `volt_dragon.mp4` — **Volt** — Coil Dragon — A coil dragon hums a live-coil hum. Dry. No music. (zip synth — replace with Grok)
 213. [ ] `trace_dragon.mp4` — **Trace** — Path Dragon — A path dragon ticks a thin circuit-trace. No roar. (zip synth — replace with Grok)
 214. [ ] `flux_dragon.mp4` — **Flux** — Field Dragon — A field dragon hums a low heat-field. No music. No words. (zip synth — replace with Grok)

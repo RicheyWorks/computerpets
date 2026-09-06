@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/short-welds-s0952.html
+Direct: https://bigsoundbank.com/UPLOAD/ogg/0952.ogg
+Author: Joseph SARDIN
+License: CC0 (public domain)
+Title: Short welds (#0952)
+Notes: Mig Mag short welds / electric arc crackle. Cut to mono 44.1kHz ~4s (dynaudnorm, silenceremove, atrim 0:4). No roar, no words. Distinct from Beacon magneton Electric transformer #467 and Gleam photovore fluorescent buzz.
