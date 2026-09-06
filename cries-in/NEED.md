@@ -218,7 +218,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 174. [x] `barnacle.wav` — **Cement** — Acorn Barnacle — A barnacle is silent. Cirri tick in water. No voice. — sat 2026-09-05 BigSoundBank CC0 Fermentation airlock #3 (Joseph SARDIN #3562)
 175. [x] `chiton.wav` — **Mail** — Lined Chiton — A chiton is silent. Radula rasp on rock. No voice. — sat 2026-09-05 BigSoundBank CC0 Defrost #1 (Joseph SARDIN #2219)
 176. [x] `periwinkle.wav` — **Spire** — Common Periwinkle — A periwinkle rasps its radula on rock. No voice. — sat 2026-09-05 BigSoundBank CC0 Vinyl Scratch #3 (Joseph SARDIN #2860)
-177. [ ] `sand_dollar.mp4` — **Token** — Common Sand Dollar — A sand dollar is silent. Sand tick. No voice. (zip synth — replace with Grok)
+177. [x] `sand_dollar.wav` — **Token** — Common Sand Dollar — A sand dollar is silent. Sand tick. No voice. — sat 2026-09-05 BigSoundBank CC0 Footsteps on gravels #1 (Joseph SARDIN #0510)
 178. [ ] `sea_urchin.mp4` — **Thorn** — Purple Sea Urchin — A sea urchin ticks spines and rasps its lantern. No voice. (zip synth — replace with Grok)
 179. [ ] `knobbed_whelk.mp4` — **Knurl** — Knobbed Whelk — A knobbed whelk is silent. Radula rasp. No voice. (zip synth — replace with Grok)
 180. [ ] `lugworm.mp4` — **Heap** — Lugworm — A lugworm is silent. Wet-sand heave. No voice. (zip synth — replace with Grok)
