@@ -244,7 +244,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 200. [x] `koala.wav` — **Gum** — Koala — sat 2026-09-03 Commons/PLOS CC BY bellowing male Andy (Charlton et al.)
 201. [x] `brain_coral.wav` — **Ridge** — Boulder Brain Coral — water over ridges / filter bubbles — sat 2026-09-05 Commons CC BY-SA 4.0 Filtro interno de pecera (Hippocampuz).
 202. [x] `anemone.wav` — **Wreath** — Magnificent Sea Anemone — tentacle water hush / waterfall filter — sat 2026-09-05 Commons CC BY-SA 4.0 Filtro externo de un acuario (Hippocampuz).
-203. [ ] `clownfish.mp4` — **Paint** — Ocellaris Clownfish — An ocellaris clownfish is silent. Tiny water ticks. No cartoon voice. (zip synth — replace with Grok)
+203. [x] `clownfish.wav` — **Paint** — Ocellaris Clownfish — tiny water ticks — sat 2026-09-05 BigSoundBank CC0 Drops, metal pan (#1382, Joseph SARDIN).
 204. [ ] `parrotfish.mp4` — **Scrape** — Stoplight Parrotfish — A parrotfish rasps coral with its beak. No voice. (zip synth — replace with Grok)
 205. [ ] `cleaner_shrimp.mp4` — **Scrub** — Pacific Cleaner Shrimp — A cleaner shrimp is silent. Tiny antenna tick. No voice. (zip synth — replace with Grok)
 206. [ ] `sea_cucumber.mp4` — **Tube** — Pineapple Sea Cucumber — A sea cucumber is silent. Sand-well hush. No voice. (zip synth — replace with Grok)
