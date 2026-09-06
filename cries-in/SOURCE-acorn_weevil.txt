@@ -1,0 +1,11 @@
+﻿key: acorn_weevil
+guest: Snout (Acorn Weevil)
+source: Wikimedia Commons Leaf_crunch_5_(Gravity_Sound).wav
+URL: https://commons.wikimedia.org/wiki/File:Leaf_crunch_5_(Gravity_Sound).wav
+direct: https://upload.wikimedia.org/wikipedia/commons/0/05/Leaf_crunch_5_%28Gravity_Sound%29.wav
+author: Gravity Sound
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+Species: Curculio (acorn weevil; house guest Snout) — silent. Soft attenuated Leaf crunch 5 as tiny snout tick / dry acorn-leaf stand-in. No Curculio remixable field tape (Commons none; iNat Curculio sounds BY-NC/ARR only). Distinct from Dash Leaf crunch 4, Felt Leaf crunch 2, Ring/Puff Leaf crunch 1/3. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~2.5s mono 44.1kHz from full ~1.5s source + soft pad; highpass/lowpass + volume + mild dynaudnorm + afade. Quiet weevil — snout tick only.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
