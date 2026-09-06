@@ -235,7 +235,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 191. [x] `sloth.wav` — **Hang** — Linnaeus's Two-toed Sloth — nearly silent claw/rail hush — sat 2026-09-05 Commons CC BY 3.0 Two-toed sloth rail walking (Peter Chen 2.0; Taipei Zoo; exact Choloepus didactylus). No remixable vocal whistle/hiss (iNat BY-NC/ARR).
 192. [x] `lemur.wav` — **Sun** — Ring-tailed Lemur — mew then short howl — sat 2026-09-05 Commons CC BY-SA 3.0 Lemur catta--chirps1.ogg + howl1.ogg (Joseph M. Macedonia; exact Lemur catta).
 193. [x] `gibbon.wav` — **Swing** — Lar Gibbon — sat 2026-09-03 Commons CC BY-SA 3.0 Lar_Gibbon_hoots.ogg (FunkMonk)
-194. [ ] `kinkajou.mp4` — **Wrist** — Kinkajou — A kinkajou barks a short squeak-bark. No words. (zip synth — replace with Grok)
+194. [x] `kinkajou.wav` — **Wrist** — Kinkajou — short squeak-bark — sat 2026-09-05 iNat CC BY obs 289928039 (Raquel Mondino; exact Potos flavus).
 195. [ ] `colugo.mp4` — **Sail** — Sunda Colugo — A Sunda colugo is nearly silent. Glide-skin rustle, a faint squeak. (zip synth — replace with Grok)
 196. [ ] `flying_squirrel.mp4` — **Glide** — Southern Flying Squirrel — A southern flying squirrel chirps, high and thin. Not a bird. (zip synth — replace with Grok)
 197. [x] `howler.wav` — **Boom** — Mantled Howler — A mantled howler howls a deep roar-howl. No English. — sat 2026-09-03 Commons CC BY 4.0 Mantled Howler Monkey (Richard Ranft / BL)
