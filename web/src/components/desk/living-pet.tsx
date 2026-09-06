@@ -4,12 +4,13 @@ import type { SpritePack } from "@/lib/pets/living";
 import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
 import type { RuiHappy, RuiHappyKind, RuiTrick, RuiTrickKind } from "@/lib/pets/rui-tricks";
 import type { RelayHappy, RelayHappyKind, RelayTrick, RelayTrickKind } from "@/lib/pets/relay-tricks";
+import type { FuseHappy, FuseHappyKind, FuseTrick, FuseTrickKind } from "@/lib/pets/fuse-tricks";
 import { sleepHoldFrame, startThankYou, tricksFor } from "@/lib/pets/ground-tricks";
 
-type GroundTrick = RuiTrick | RelayTrick;
-type GroundHappy = RuiHappy | RelayHappy;
-type GroundTrickKind = RuiTrickKind | RelayTrickKind;
-type GroundHappyKind = RuiHappyKind | RelayHappyKind;
+type GroundTrick = RuiTrick | RelayTrick | FuseTrick;
+type GroundHappy = RuiHappy | RelayHappy | FuseHappy;
+type GroundTrickKind = RuiTrickKind | RelayTrickKind | FuseTrickKind;
+type GroundHappyKind = RuiHappyKind | RelayHappyKind | FuseHappyKind;
 import {
   actPose,
   afterSettleWait,
