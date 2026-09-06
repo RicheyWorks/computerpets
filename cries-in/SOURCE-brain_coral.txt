@@ -1,0 +1,11 @@
+﻿key: brain_coral
+guest: Ridge (Boulder Brain Coral)
+source: Wikimedia Commons Filtro interno de pecera.ogg
+URL: https://commons.wikimedia.org/wiki/File:Filtro_interno_de_pecera.ogg
+direct: https://upload.wikimedia.org/wikipedia/commons/1/15/Filtro_interno_de_pecera.ogg
+author: Hippocampuz
+license: Creative Commons Attribution-ShareAlike 4.0 (CC BY-SA 4.0)
+Species: Diploria labyrinthiformis / boulder brain coral (house guest Ridge) — silent. Soft aquarium filter / power-head bubble wash as water-over-ridges stand-in. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.5s mono 44.1kHz from 16s stereo source; highpass/lowpass + mild dynaudnorm + silenceremove + afade.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
