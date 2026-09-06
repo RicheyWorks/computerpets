@@ -32,6 +32,7 @@ const OverlayGuineaPig = createRequire(import.meta.url)(join(root, "../desktop/r
 const OverlayTurtle = createRequire(import.meta.url)(join(root, "../desktop/renderer/turtle-tricks.js"));
 const OverlayGoldfish = createRequire(import.meta.url)(join(root, "../desktop/renderer/goldfish-tricks.js"));
 const OverlayBudgie = createRequire(import.meta.url)(join(root, "../desktop/renderer/budgie-tricks.js"));
+const OverlayPenguin = createRequire(import.meta.url)(join(root, "../desktop/renderer/penguin-tricks.js"));
 
 test("Rue tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
@@ -186,7 +187,7 @@ test("Rue feed-happy is its own sit: yip/chuff/nuzzle, and two feeds are not the
   assert.ok(thanksMid.lift !== 0 || Math.abs(thanksMid.rot) > 0.5, "a thank-you yips or chuffs");
   const blocked = T.startThankYou("fox", "chuff", 80, 1, { asleep: true, cmd: "idle" });
   assert.equal(blocked, null);
-  const other = T.startThankYou("penguin", null, 80, 1, { cmd: "idle" });
+  const other = T.startThankYou("parrot", null, 80, 1, { cmd: "idle" });
   assert.equal(other, null);
   const second = T.startThankYou("fox", thanks.kind, 80, 1, { cmd: "idle", card: true });
   assert.ok(second);
@@ -254,6 +255,7 @@ test("ground registry keeps prior guests gated; Rue selectable; no scent/sniff/p
   globalThis.PetGoldfishTricks = OverlayGoldfish;
   globalThis.PetBudgieTricks = OverlayBudgie;
   globalThis.PetFoxTricks = Overlay;
+  globalThis.PetPenguinTricks = OverlayPenguin;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("relay_dragon"), OverlayRelay);
@@ -278,7 +280,9 @@ test("ground registry keeps prior guests gated; Rue selectable; no scent/sniff/p
   assert.equal(OverlayGround.tricksFor("echo"), OverlayBudgie);
   assert.equal(OverlayGround.tricksFor("fox"), Overlay);
   assert.equal(OverlayGround.tricksFor("rue"), Overlay);
-  assert.equal(OverlayGround.tricksFor("penguin"), null);
+  assert.equal(OverlayGround.tricksFor("penguin"), OverlayPenguin);
+  assert.equal(OverlayGround.tricksFor("peck"), OverlayPenguin);
+  assert.equal(OverlayGround.tricksFor("parrot"), null);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
@@ -301,7 +305,9 @@ test("ground registry keeps prior guests gated; Rue selectable; no scent/sniff/p
   assert.equal(OverlayGround.wantsThankYou("echo"), true);
   assert.equal(OverlayGround.wantsThankYou("fox"), true);
   assert.equal(OverlayGround.wantsThankYou("rue"), true);
-  assert.equal(OverlayGround.wantsThankYou("penguin"), false);
+  assert.equal(OverlayGround.wantsThankYou("penguin"), true);
+  assert.equal(OverlayGround.wantsThankYou("peck"), true);
+  assert.equal(OverlayGround.wantsThankYou("parrot"), false);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("dog", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
@@ -312,4 +318,5 @@ test("ground registry keeps prior guests gated; Rue selectable; no scent/sniff/p
   assert.equal(OverlayGround.sleepHoldFrame("goldfish", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("budgie", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("fox", 4), null);
+  assert.equal(OverlayGround.sleepHoldFrame("penguin", 4), null);
 });
