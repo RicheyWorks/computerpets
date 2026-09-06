@@ -1,0 +1,11 @@
+Stripe (skunk) cry — field tape
+
+URL: https://www.inaturalist.org/observations/304384700
+Title: Two skunks fighting (audio)
+Author: kristinpiston
+License: Creative Commons 0 (CC0 1.0) — no rights reserved
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Notes: Exact Mephitis mephitis fight tape (hiss/stamp warning, not spray). No music, no narrator.
+House cut: mono 44.1kHz wav ~3.5s from fight vocal region (dynaudnorm, silenceremove, atrim).
+Sat by Buffffff 2026-09-05.

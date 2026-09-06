@@ -177,7 +177,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 133. [x] `squirrel.mp4` — **Cache** — Eastern Gray Squirrel — An eastern gray squirrel chatters, then a raspy mehr-mehr-mehr. Or a mouse-like squeak. (zip synth — replace with Grok)
 134. [x] `otter.mp4` — **Slick** — North American River Otter — A river otter chirps a short whistle-chuckle. No words. (zip synth — replace with Grok)
 135. [x] `raccoon.mp4` — **Wash** — Raccoon — A raccoon chitters, fast and dry. No meow. (zip synth — replace with Grok)
-136. [ ] `skunk.mp4` — **Stripe** — Striped Skunk — A striped skunk stamps, then a short hiss. No spray as voice. (zip synth — replace with Grok)
+136. [x] `skunk.mp4` — **Stripe** — Striped Skunk — A striped skunk stamps, then a short hiss. No spray as voice. (zip synth — replace with Grok)
 137. [ ] `opossum.mp4` — **Grin** — Virginia Opossum — A Virginia opossum hisses and clicks. No meow. (zip synth — replace with Grok)
 138. [ ] `beaver.mp4` — **Dam** — North American Beaver — A beaver slaps its tail on water, one wet smack. (zip synth — replace with Grok)
 139. [ ] `porcupine.mp4` — **Spine** — North American Porcupine — A porcupine tooth-chatters, then a quill rattle. No roar. (zip synth — replace with Grok)
