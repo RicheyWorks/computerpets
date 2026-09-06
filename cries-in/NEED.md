@@ -226,7 +226,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 182. [x] `katydid.wav` — **Blade** — Northern True Katydid — A northern true katydid rasps a loud pulsed song, often heard as katy-did. No words. — sat 2026-09-05 Commons CC BY 4.0 Pterophylla camellifolia singing (peterwchen / iNat 90278754)
 183. [x] `grasshopper.wav` — **Vault** — Differential Grasshopper — A differential grasshopper stridulates a dry creak. Wing-leg rasp. — sat 2026-09-05 Commons CC BY-SA 4.0 Chorthippus parallelus - sound.oga (Baudewijn Odé); Melanoplus differentialis tape unavailable — Acrididae proxy
 184. [x] `swallowtail.wav` — **Banner** — Eastern Tiger Swallowtail — A tiger swallowtail is nearly silent. Soft wing flutter. No voice. — sat 2026-09-05 Freesound CC0 Butterfly Wings Fluttering 2 (FunWithSound #479233; painted-lady soft wing stand-in)
-185. [ ] `jewelwing.mp4` — **Jewel** — Ebony Jewelwing — A jewelwing damselfly whirrs wings, faint. No cicada song. (zip synth — replace with Grok)
+185. [x] `jewelwing.wav` — **Jewel** — Ebony Jewelwing — A jewelwing damselfly whirrs wings, faint. No cicada song. — sat 2026-09-05 Freesound CC0 butterfly wings (Yuval #198818; peacock fluttery stand-in for Calopteryx)
 186. [ ] `lacewing.mp4` — **Lace** — Green Lacewing — A green lacewing is nearly silent. Soft wing. A tiny rasp. (zip synth — replace with Grok)
 187. [ ] `earwig.mp4` — **Forceps** — European Earwig — An earwig is silent. Cerci rustle on bark. No voice. (zip synth — replace with Grok)
 188. [ ] `acorn_weevil.mp4` — **Snout** — Acorn Weevil — An acorn weevil is silent. A tiny snout tick. No voice. (zip synth — replace with Grok)
