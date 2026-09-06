@@ -5,12 +5,13 @@ import { playDeskSound, playStep } from "@/lib/pets/desk-audio";
 import type { RuiHappy, RuiHappyKind, RuiTrick, RuiTrickKind } from "@/lib/pets/rui-tricks";
 import type { RelayHappy, RelayHappyKind, RelayTrick, RelayTrickKind } from "@/lib/pets/relay-tricks";
 import type { FuseHappy, FuseHappyKind, FuseTrick, FuseTrickKind } from "@/lib/pets/fuse-tricks";
+import type { EarthHappy, EarthHappyKind, EarthTrick, EarthTrickKind } from "@/lib/pets/earth-tricks";
 import { sleepHoldFrame, startThankYou, tricksFor } from "@/lib/pets/ground-tricks";
 
-type GroundTrick = RuiTrick | RelayTrick | FuseTrick;
-type GroundHappy = RuiHappy | RelayHappy | FuseHappy;
-type GroundTrickKind = RuiTrickKind | RelayTrickKind | FuseTrickKind;
-type GroundHappyKind = RuiHappyKind | RelayHappyKind | FuseHappyKind;
+type GroundTrick = RuiTrick | RelayTrick | FuseTrick | EarthTrick;
+type GroundHappy = RuiHappy | RelayHappy | FuseHappy | EarthHappy;
+type GroundTrickKind = RuiTrickKind | RelayTrickKind | FuseTrickKind | EarthTrickKind;
+type GroundHappyKind = RuiHappyKind | RelayHappyKind | FuseHappyKind | EarthHappyKind;
 import {
   actPose,
   afterSettleWait,

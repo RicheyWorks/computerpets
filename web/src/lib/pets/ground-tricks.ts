@@ -1,16 +1,18 @@
-/** Species ground-trick registry. Rui, Relay, and Fuse today; Ground later. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, and Ground today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
 import * as Fuse from "./fuse-tricks";
+import * as Earth from "./earth-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
   if (key === Rui.TRICK_KEY || key === "rui") return Rui;
   if (key === Relay.TRICK_KEY || key === "relay") return Relay;
   if (key === Fuse.TRICK_KEY || key === "fuse") return Fuse;
+  if (key === Earth.TRICK_KEY || key === "ground") return Earth;
   return null;
 }
 
