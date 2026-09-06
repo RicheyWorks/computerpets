@@ -1,0 +1,11 @@
+Dam (beaver) cry — field tape
+
+URL: https://www.inaturalist.org/observations/72399972
+Title: North American Beaver tail splashing (audio)
+Author: leahmfulton (Leah Fulton)
+License: Creative Commons 0 (CC0 1.0) — no rights reserved
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Notes: Exact Castor canadensis field tape (Edinboro PA). Observer note: tail splashing; first splash ~12s. House cut keeps one wet tail smack. No music, no narrator.
+House cut: mono 44.1kHz wav ~3.2s from first splash (dynaudnorm, atrim).
+Sat by Buffffff 2026-09-05.
