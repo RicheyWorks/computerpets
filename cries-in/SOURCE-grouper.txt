@@ -1,0 +1,11 @@
+key: grouper
+guest: Hide (Nassau Grouper)
+source: BigSoundBank Water flow #2 (sound 205)
+URL: https://bigsoundbank.com/water-flow-2-s0205.html
+direct: https://bigsoundbank.com/UPLOAD/ogg/0205.ogg
+author: Joseph SARDIN / BigSoundBank.com
+license: Creative Commons Zero (CC0 1.0)
+Species: Epinephelus striatus (Nassau grouper; house guest Hide) — silent. Soft attenuated water-flow hush as reef water stand-in. No Epinephelus remixable field tape (Commons/iNat empty for grouper grunt under remixable license). Quiet guest — never a cartoon beep. Distinct from Veil Underwater (#3430), Soar beach waves (#265), Gate sparkling (#230), manta swirls (#245).
+Notes: House cut ~3.5s mono 44.1kHz from ~1–4.5s of source: volume=-12dB, highpass/lowpass, dynaudnorm, afade. No music. No English narrator. No cartoon beep.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
