@@ -212,7 +212,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 168. [x] `planarian.wav` — **Half** — Tiger Planarian — A planarian is silent. Film-water hush. No voice. — sat 2026-09-05 BigSoundBank CC0 Water flow #1 (Joseph SARDIN #0204)
 169. [x] `nematode.wav` — **Thread** — C. elegans — A nematode is silent. Almost nothing. No voice. — sat 2026-09-05 BigSoundBank CC0 Faucet (Joseph SARDIN #0042)
 170. [x] `amphipod.wav` — **Scud** — Gammarus Scud — A scud is silent. A side-swim tick in water. No voice. — sat 2026-09-05 BigSoundBank CC0 Water Blop #3 (Joseph SARDIN & Axeline T. #3429)
-171. [ ] `fiddler_crab.mp4` — **Wave** — Atlantic Fiddler Crab — A fiddler crab taps its big claw on sand. No voice. (zip synth — replace with Grok)
+171. [x] `fiddler_crab.wav` — **Wave** — Atlantic Fiddler Crab — A fiddler crab taps its big claw on sand. No voice. — sat 2026-09-05 BigSoundBank CC0 Brush on concrete (Joseph SARDIN #1107)
 172. [ ] `ghost_crab.mp4` — **Pale** — Atlantic Ghost Crab — A ghost crab stridulates a dry rasp, then scuttles. (zip synth — replace with Grok)
 173. [ ] `limpet.mp4` — **Cone** — Common Limpet — A limpet is silent. Radula rasp on rock. No voice. (zip synth — replace with Grok)
 174. [ ] `barnacle.mp4` — **Cement** — Acorn Barnacle — A barnacle is silent. Cirri tick in water. No voice. (zip synth — replace with Grok)
