@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, and Coral today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, and Blush today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -33,6 +33,7 @@
     const Garter = root.PetGarterTricks;
     const Boa = root.PetBoaTricks;
     const MilkSnake = root.PetMilkSnakeTricks;
+    const RosyBoa = root.PetRosyBoaTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -64,6 +65,7 @@
     if (Garter && (key === Garter.TRICK_KEY || key === "sash")) return Garter;
     if (Boa && (key === Boa.TRICK_KEY || key === "lula")) return Boa;
     if (MilkSnake && (key === MilkSnake.TRICK_KEY || key === "coral")) return MilkSnake;
+    if (RosyBoa && (key === RosyBoa.TRICK_KEY || key === "blush")) return RosyBoa;
     return null;
   }
 
