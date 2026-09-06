@@ -1,0 +1,8 @@
+Wrist (kinkajou) — Kinkajou (Potos flavus)
+Source: iNaturalist observation 289928039
+URL: https://www.inaturalist.org/observations/289928039
+Direct: https://static.inaturalist.org/sounds/1525669.m4a
+Author: Raquel Mondino (raquel_mondino)
+License: CC BY 4.0
+Place: Nicolas Suarez, Bolivia
+Cut: mono 44.1 kHz ~3.3s squeak-bark from ~8.2–11.5s of field tape. Exact Potos flavus. No English. No music.
