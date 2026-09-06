@@ -1,11 +1,13 @@
-/** Species ground-trick registry. Rui and Relay today; Fuse / Ground later. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, and Fuse today; Ground later. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
     const Rui = root.PetRuiTricks;
     const Relay = root.PetRelayTricks;
+    const Fuse = root.PetFuseTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
+    if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
     return null;
   }
 
