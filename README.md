@@ -1,4 +1,4 @@
-# ComputerPets
+﻿# ComputerPets
 
 Virtual pets that live on your computer — walk your windows, eat from the keeper card, and **caw** when you Call.
 
@@ -12,7 +12,7 @@ That page is a teacher. Click it. It has numbered steps. You do not need to know
 
 ## Half the house already talks for real
 
-**162 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
+**163 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
 
 ## Meet some of them
 
@@ -96,7 +96,7 @@ More in [desktop/README.md](desktop/README.md).
 
 ## They make real noise
 
-**162 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**163 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
 
 These voices are in the house:
 
@@ -257,6 +257,7 @@ These voices are in the house:
 - **Sail** (Sunda colugo) — soft glide-skin / nylon-membrane rustle from [BigSoundBank Flag #3](https://bigsoundbank.com/flag-3-s1789.html) (#1789), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/). Nearly silent — no *Galeopterus* remixable field tape. No voice. No music. No beep.
 - **Glide** (Southern flying squirrel) — high thin chirps from [iNaturalist obs 331870521](https://www.inaturalist.org/observations/331870521), [CC BY](https://creativecommons.org/licenses/by/4.0/), recorded by [ncb1221](https://www.inaturalist.org/people/ncb1221). Exact *Glaucomys volans*. No English. No music.
 - **Gaze** (Philippine tarsier) — piercing call from [iNaturalist obs 323492684](https://www.inaturalist.org/observations/323492684), [CC BY](https://creativecommons.org/licenses/by/4.0/), recorded by [Wich’yanan (Jay) Limparungpatthanakij](https://www.inaturalist.org/people/plains-wanderer). Exact *Carlito syrichta* remixable tape not found — *Tarsius fuscus* genus proxy. No English. No music.
+- **Still** (Potto) — soft canopy branch grind from [BigSoundBank Wind and tree squeaks](https://bigsoundbank.com/wind-and-tree-squeaks-s1051.html) (#1051), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [Joseph SARDIN](https://josephsardin.fr/). Nearly silent — no *Perodicticus* remixable field tape. No voice. No music. No beep.
 
 - **Blade** (northern true katydid) — pulsed katy-did song from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [peterwchen](https://commons.wikimedia.org/wiki/File:Pterophylla_camellifolia_singing.wav) (`Pterophylla_camellifolia_singing.wav`, also [iNat 90278754](https://www.inaturalist.org/observations/90278754)). Exact Pterophylla camellifolia. No music. No words.
 **Vault** (differential grasshopper) — dry wing-leg creak from Wikimedia Commons, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), recorded by [Baudewijn Odé](https://commons.wikimedia.org/wiki/File:Chorthippus_parallelus_-_sound.oga) (`Chorthippus_parallelus_-_sound.oga`, KNNV Veldgids Sprinkhanen). Exact Melanoplus differentialis tape unavailable — Acrididae meadow-grasshopper proxy. No music. No words.
