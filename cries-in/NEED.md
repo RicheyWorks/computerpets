@@ -257,7 +257,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 213. [x] `trace_dragon.wav` — **Trace** — Path Dragon — A path dragon ticks a thin circuit-trace. No roar. — sat 2026-09-05 BigSoundBank CC0 Electronic switch (Joseph SARDIN #25)
 214. [x] `flux_dragon.wav` — **Flux** — Field Dragon — A field dragon hums a low heat-field. No music. No words. — sat 2026-09-05 BigSoundBank CC0 Air/water heat pump, back (Joseph SARDIN #1233)
 215. [x] `spark_dragon.wav` — **Spark** — Crack Dragon — A crack dragon pops small spark-cracks at snout and claws. — sat 2026-09-05 BigSoundBank CC0 Exploding bang-snaps (Joseph SARDIN #0550)
-216. [ ] `ion_dragon.mp4` — **Ion** — Haze Dragon — A haze dragon hisses a pale ion hiss. No roar. (zip synth — replace with Grok)
+216. [x] `ion_dragon.wav` — **Ion** — Haze Dragon — A haze dragon hisses a pale ion hiss. No roar. — sat 2026-09-05 BigSoundBank CC0 Deodorant bomb (Joseph SARDIN #0162)
 217. [ ] `gauss_dragon.mp4` — **Gauss** — Filing Dragon — A filing dragon hums magnetic field-lines. Dry tick. No words. (zip synth — replace with Grok)
 218. [ ] `relay_dragon.mp4` — **Relay** — Click Dragon — A click dragon clicks one relay at the nape. Dry. No roar. (zip synth — replace with Grok)
 219. [ ] `fuse_dragon.mp4` — **Fuse** — Cartridge Dragon — A cartridge dragon ticks a glass-fuse tick. Thin hum. No words. (zip synth — replace with Grok)
