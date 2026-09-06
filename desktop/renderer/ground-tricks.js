@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, and Atlas today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, and Cup today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -35,6 +35,7 @@
     const MilkSnake = root.PetMilkSnakeTricks;
     const RosyBoa = root.PetRosyBoaTricks;
     const CarpetPython = root.PetCarpetPythonTricks;
+    const Octopus = root.PetOctopusTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -68,6 +69,7 @@
     if (MilkSnake && (key === MilkSnake.TRICK_KEY || key === "coral")) return MilkSnake;
     if (RosyBoa && (key === RosyBoa.TRICK_KEY || key === "blush")) return RosyBoa;
     if (CarpetPython && (key === CarpetPython.TRICK_KEY || key === "atlas")) return CarpetPython;
+    if (Octopus && (key === Octopus.TRICK_KEY || key === "cup")) return Octopus;
     return null;
   }
 
