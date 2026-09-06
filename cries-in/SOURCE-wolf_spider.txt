@@ -1,0 +1,10 @@
+key: wolf_spider
+guest: Prowl (Wetland Wolf Spider)
+source: Freesound Crumple Dry Leaf 1 (#235755)
+URL: https://freesound.org/people/elliotlp/sounds/235755/
+author: elliotlp
+license: CC0 (Creative Commons 0 / public domain)
+Species: wetland wolf spider (Lycosidae; house guest Prowl) — nearly silent. Soft attenuated dry-leaf crumple as faint leg-drum on dry leaf stand-in. No voice. No music. No English narrator. No cartoon beep.
+Notes: Distinct from Leap bug-legs tap (#828623), Loom fishing-line silk (#450849), Fold pistachio chitin (#846441). House cut ~2.5s mono 44.1kHz; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit near Leap/Loom loudness. Quiet lycosid — leaf drum only.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
