@@ -1,0 +1,11 @@
+key: click_beetle
+guest: Click (Eyed Click Beetle)
+source: iNaturalist observation 333256714 Elateridae canopy clicks
+URL: https://www.inaturalist.org/observations/333256714
+direct: https://static.inaturalist.org/sounds/1731233.m4a
+author: Dr Pamela Muggeridge
+license: Creative Commons Attribution (CC BY)
+Species: Elateridae (click beetles; house guest Click / Alaus oculatus eyed click beetle) — exact family field tape. Dry prosternum canopy clicks. No voice. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.2s mono 44.1kHz from ~5.45–8.65s of 16s source (two strong snaps); highpass/lowpass + volume + mild dynaudnorm + afade. Distinct from Nexus tongue clicks (#1038) and Barb crab-pincer (#770030).
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
