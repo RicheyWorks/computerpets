@@ -1,0 +1,11 @@
+﻿key: orb_weaver
+guest: Loom (European Garden Spider)
+source: Freesound sound 450849 "nylon rope string fishing line handling tying tie tense friction (works at low level).wav" by kyles
+URL: https://freesound.org/people/kyles/sounds/450849/
+direct: https://cdn.freesound.org/previews/450/450849_612689-hq.mp3
+author: kyles
+license: Creative Commons Zero (CC0 1.0)
+Species: Araneus diadematus (European garden spider; house guest Loom) — silent. Soft attenuated nylon fishing-line friction as silk tick on the web stand-in. No voice. No music. No narrator. No cartoon beep.
+Notes: Distinct from Twig Steps on Twigs and Fold pistachio shell. House cut ~2.5s mono 44.1kHz full clip + soft pad; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit near moss loudness. Quiet orb-weaver.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
