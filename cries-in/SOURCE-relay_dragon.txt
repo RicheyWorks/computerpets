@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/electric-switch-s0026.html
+Direct: https://bigsoundbank.com/UPLOAD/ogg/0026.ogg
+Author: Joseph SARDIN
+License: CC0 (public domain)
+Title: Electric switch (#0026)
+Notes: Home switch ON/OFF clicks as one nape relay click. Cut mono 44.1kHz ~3.2s. Dry. No roar. Distinct from Trace Electronic switch (#25).
