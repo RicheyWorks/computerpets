@@ -1,0 +1,10 @@
+key: flying_squirrel
+guest: Glide (Southern Flying Squirrel / Glaucomys volans)
+source: iNaturalist observation 331870521
+url: https://www.inaturalist.org/observations/331870521
+file: https://static.inaturalist.org/sounds/1723077.mp3
+author: ncb1221
+license: CC BY (Creative Commons Attribution)
+attribution: (c) ncb1221, some rights reserved (CC BY)
+notes: Research-grade Glaucomys volans. House cut ~3.5s mono 44.1kHz high thin chirps; no English; no music.
+sat: 2026-09-05 Buffffff
