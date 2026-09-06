@@ -1,0 +1,11 @@
+key: lionfish
+guest: Veil (Red Lionfish)
+source: BigSoundBank Underwater (sound 3430)
+URL: https://bigsoundbank.com/underwater-s3430.html
+direct: https://bigsoundbank.com/UPLOAD/mp3/3430.mp3
+author: Joseph SARDIN & Axeline T. / BigSoundBank.com
+license: Creative Commons Zero (CC0 1.0)
+Species: Pterois volitans (Red lionfish; house guest Veil) — silent. Soft attenuated underwater hydrophone flow as fin-water hush stand-in. No Pterois remixable field tape (Commons/iNat empty for lionfish fin audio). Quiet guest — never a cartoon beep. Distinct from manta water swirls (#245), moon_jelly splash (#1533), sea_cucumber dig (#1305).
+Notes: House cut ~3.2s mono 44.1kHz from ~12–15.2s of ~61s source: volume=-16dB, highpass/lowpass, mild dynaudnorm, afade. No music. No English narrator. No cartoon beep.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
