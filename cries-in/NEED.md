@@ -169,7 +169,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 125. [x] `widow.wav` — **Hour** — Southern Black Widow — A black widow is silent. Silk tick. No voice. — sat 2026-09-05 Freesound CC0 Stick though thick spiderweb 1 (Sadiquecat #689317)
 126. [x] `harvestman.wav` — **Stem** — Common Harvestman — A harvestman is silent. Leg rustle on wood. No voice. — sat 2026-09-05 Freesound CC0 Hard Wood Surface Light Scratching 1_2 (Joao_Janz #477680)
 127. [x] `scorpion.wav` — **Barb** — Striped Bark Scorpion — A striped bark scorpion is nearly silent. A pincer click. No voice. — sat 2026-09-05 Freesound CC0 Crab - Pincers, scissors (Vrymaa #770030)
-128. [ ] `vinegaroon.mp4` — **Whip** — Giant Vinegaroon — A vinegaroon rustles pedipalps. A dry hiss of spray-air. No roar. (zip synth — replace with Grok)
+128. [x] `vinegaroon.wav` — **Whip** — Giant Vinegaroon — A vinegaroon rustles pedipalps. A dry hiss of spray-air. No roar. — sat 2026-09-05 Freesound CC0 aerosol.wav (temawas #133040)
 129. [ ] `tick.mp4` — **Clasp** — Black-legged Tick — A tick is silent. Almost nothing. No voice. (zip synth — replace with Grok)
 130. [ ] `solifuge.mp4` — **Gale** — Windscorpion — A windscorpion is silent. Fast dry scuttle. No voice. (zip synth — replace with Grok)
 131. [x] `deer.wav` — **Rack** — White-tailed Deer — A white-tailed deer blows, a heavy alarm breath. Then a hoof stamp. No words. — sat 2026-09-03 iNaturalist CC BY (Thomas J Nolan, obs 376669369)
