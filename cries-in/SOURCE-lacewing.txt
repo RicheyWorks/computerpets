@@ -1,0 +1,11 @@
+key: lacewing
+guest: Lace (Green Lacewing)
+source: iNaturalist observation 67716720 sound 157490 by victorengel
+URL: https://www.inaturalist.org/observations/67716720
+direct: https://static.inaturalist.org/sounds/157490.mp3
+author: victorengel
+license: Creative Commons Zero (CC0 1.0) — no rights reserved
+Species: Chrysoperla rufilabris (red-lipped green lacewing; house guest Lace) — nearly silent. Exact species field tape of substrate courtship song (soft tick / tiny rasp), not airborne roar. No voice words. No music. No narrator. No cartoon beep.
+Notes: House cut ~3.2s mono 44.1kHz from ~9.9s mark; highpass/lowpass + volume attenuate + mild dynaudnorm + afade for quiet sit. Quiet lacewing — soft wing / tiny rasp.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
