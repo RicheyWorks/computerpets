@@ -218,7 +218,8 @@ function cardOpen() {
 }
 
 function applyThankYou() {
-  const T = window.PetRuiTricks;
+  const G = window.PetGroundTricks;
+  const T = G && G.tricksFor ? G.tricksFor(kind && kind.key) : window.PetRuiTricks;
   if (!T?.startThankYou || !kind) return false;
   if (life?.asleep && window.PetLife?.wake) window.PetLife.wake(life);
   const thanks = T.startThankYou(kind.key, sim.lastHappy, sim.x, sim.facing, {
@@ -1890,7 +1891,7 @@ function applyCommand() {
     sim.acc = 0;
     if (sim.cmd === "sleep") {
       sim.anim = "sleep";
-      const hold = window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length);
+      const hold = (window.PetGroundTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length) ?? window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length));
       if (hold != null) sim.frame = hold;
     } else if (sim.cmd === "sit") {
       sim.poseHold = window.PetGait.POSE_HOLD_S;
@@ -2164,7 +2165,7 @@ function applyArrive(via) {
     const title = window.PetLife.crossedBond(prevBond, life.bond);
     if (title) window.setTimeout(() => say(window.PetLife.BOND_LINE[title]), 900);
     if (hop.issueEat) {
-      sim.thankYou = !!(window.PetRuiTricks && window.PetRuiTricks.wantsThankYou && window.PetRuiTricks.wantsThankYou(kind.key));
+      sim.thankYou = !!(window.PetGroundTricks && window.PetGroundTricks.wantsThankYou ? window.PetGroundTricks.wantsThankYou(kind.key) : (window.PetRuiTricks && window.PetRuiTricks.wantsThankYou && window.PetRuiTricks.wantsThankYou(kind.key)));
       issue("eat");
     }
     paintHud();
@@ -2407,7 +2408,9 @@ function tick(now) {
       card: false,
     };
     const wins = playWindows();
-    const T = window.PetRuiTricks;
+    const T = (window.PetGroundTricks && window.PetGroundTricks.tricksFor)
+      ? window.PetGroundTricks.tricksFor(kind && kind.key)
+      : (kind && kind.key === (window.PetRuiTricks && window.PetRuiTricks.TRICK_KEY) ? window.PetRuiTricks : null);
     const trickFlags = {
       asleep: !!life?.asleep,
       hidden: !!life?.hidden,
@@ -2492,7 +2495,6 @@ function tick(now) {
       }
     } else if (
       T &&
-      kind.key === T.TRICK_KEY &&
       !sim.act &&
       !sim.happy &&
       !leaving &&
@@ -2624,7 +2626,7 @@ function tick(now) {
 
     if (life?.asleep && !sim.happy && window.PetLife?.sleepHolds(life, sim.cmd)) {
       sim.anim = "sleep";
-      const hold = window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length);
+      const hold = (window.PetGroundTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length) ?? window.PetRuiTricks?.sleepHoldFrame?.(kind.key, kind.sprites.sleep.length));
       if (hold != null) sim.frame = hold;
     }
     const fps = FPS[sim.anim] * (life.sick ? 0.75 : 1);
