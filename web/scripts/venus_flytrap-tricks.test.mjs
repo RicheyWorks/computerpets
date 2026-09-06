@@ -664,7 +664,7 @@ try { globalThis.PetPitcherTricks = createRequire(import.meta.url)(join(root, ".
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Snap idle-life done; Drown / pitcher now has tricks; next house-order guest still lacking tricks is Dew / sundew", () => {
+test("notes: Snap idle-life done; Drown / pitcher and Dew / sundew now have tricks; next house-order guest still lacking tricks is Comb / honeybee", () => {
   assert.equal(T.TRICK_KEY, "venus_flytrap");
   assert.equal(T.wantsThankYou("snap"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
