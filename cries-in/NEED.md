@@ -185,8 +185,8 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 141. [x] `gecko.wav` — **Pad** — Mediterranean House Gecko — A Mediterranean house gecko calls a high bird-like squeak-chirp. — sat 2026-09-03 Commons CC BY-SA 3.0 HouseGeckoChirp.ogg (Glueball)
 142. [x] `anole.wav` — **Wink** — Green Anole — A green anole is nearly silent. Dewlap, not a voice. A tiny squeak if pressed. — sat 2026-09-05 Freesound CC0 ThằngLằng (SieuAmThanh #400573) night lizard tick
 143. [x] `skink.wav` — **Dash** — Five-lined Skink — A five-lined skink is silent. Dry leaf rustle as it runs. No voice. — sat 2026-09-05 Commons CC BY 4.0 Leaf crunch 4 (Gravity Sound)
-144. [ ] `chameleon.mp4` — **Shift** — Veiled Chameleon — A veiled chameleon hisses, dry and small. No roar. (zip synth — replace with Grok)
-145. [ ] `horned_lizard.mp4` — **Spike** — Texas Horned Lizard — A Texas horned lizard hisses. No roar. (zip synth — replace with Grok)
+144. [ ] `chameleon.mp4` — **Shift** — Veiled Chameleon — A veiled chameleon hisses, dry and small. No roar. — SKIP 2026-09-05 Buffffff: no legal PD/CC0/CC BY veiled-chameleon field hiss (Commons none; iNat Chamaeleonidae sounds=0; Freesound/Archive no species tape). Leave for later hunt.
+145. [ ] `horned_lizard.mp4` — **Spike** — Texas Horned Lizard — A Texas horned lizard hisses. No roar. — SKIP 2026-09-05 Buffffff: no legal PD/CC0/CC BY Phrynosoma field hiss (Commons none; iNat sounds=0). Leave for later hunt.
 146. [x] `alligator.wav` — **Levee** — American Alligator — An American alligator bellows a low rumble. Hiss if threatened. No movie roar. — sat 2026-09-03 Commons PD Alligatorbellow1.ogg (USFWS)
 147. [ ] `crocodile.mp4` — **Jaw** — American Crocodile — An American crocodile hisses, then a short bellow. No movie roar. — SKIP 2026-09-03 Buffffff: no legal PD/CC0/CC BY American crocodile field tape (Commons images only; iNat BY-NC/none; Freesound monster/synth only; Archive film unlicensed). Leave for later hunt.
 148. [ ] `snapper.mp4` — **Beak** — Common Snapping Turtle — A snapping turtle hisses air. No roar. (zip synth — replace with Grok)
@@ -223,7 +223,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 179. [ ] `knobbed_whelk.mp4` — **Knurl** — Knobbed Whelk — A knobbed whelk is silent. Radula rasp. No voice. (zip synth — replace with Grok)
 180. [ ] `lugworm.mp4` — **Heap** — Lugworm — A lugworm is silent. Wet-sand heave. No voice. (zip synth — replace with Grok)
 181. [x] `field_cricket.wav` — **Chirp** — Fall Field Cricket — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
-182. [ ] `katydid.mp4` — **Blade** — Northern True Katydid — A northern true katydid rasps a loud pulsed song, often heard as katy-did. No words. (zip synth — replace with Grok)
+182. [x] `katydid.wav` — **Blade** — Northern True Katydid — A northern true katydid rasps a loud pulsed song, often heard as katy-did. No words. — sat 2026-09-05 Commons CC BY 4.0 Pterophylla camellifolia singing (peterwchen / iNat 90278754)
 183. [ ] `grasshopper.mp4` — **Vault** — Differential Grasshopper — A differential grasshopper stridulates a dry creak. Wing-leg rasp. (zip synth — replace with Grok)
 184. [ ] `swallowtail.mp4` — **Banner** — Eastern Tiger Swallowtail — A tiger swallowtail is nearly silent. Soft wing flutter. No voice. (zip synth — replace with Grok)
 185. [ ] `jewelwing.mp4` — **Jewel** — Ebony Jewelwing — A jewelwing damselfly whirrs wings, faint. No cicada song. (zip synth — replace with Grok)
