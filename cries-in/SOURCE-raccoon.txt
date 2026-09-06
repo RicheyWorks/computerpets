@@ -1,0 +1,11 @@
+Wash (raccoon) cry — field tape
+
+URL: https://freesound.org/people/h_sylvan/sounds/637445/
+Title: racoon gecker.wav
+Author: h_sylvan
+License: Creative Commons 0 (CC0 1.0)
+https://creativecommons.org/publicdomain/zero/1.0/
+
+Notes: Exact Procyon lotor gecker (fast dry chitter). No music, no narrator.
+House cut: mono 44.1kHz wav ~3.5s (dynaudnorm, silenceremove, atrim).
+Sat by Buffffff 2026-09-05.
