@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, and Bloom today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, and Keel today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -19,8 +19,9 @@ import * as Ferret from "./ferret-tricks";
 import * as Hedgehog from "./hedgehog-tricks";
 import * as Chinchilla from "./chinchilla-tricks";
 import * as Axolotl from "./axolotl-tricks";
+import * as Toucan from "./toucan-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -43,6 +44,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === Hedgehog.TRICK_KEY || key === "burr") return Hedgehog;
   if (key === Chinchilla.TRICK_KEY || key === "floss") return Chinchilla;
   if (key === Axolotl.TRICK_KEY || key === "bloom") return Axolotl;
+  if (key === Toucan.TRICK_KEY || key === "keel") return Toucan;
   return null;
 }
 
