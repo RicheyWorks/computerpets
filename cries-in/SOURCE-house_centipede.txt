@@ -1,0 +1,6 @@
+﻿URL: https://bigsoundbank.com/brush-on-wood-s1106.html
+Direct: https://bigsoundbank.com/UPLOAD/mp3/1106.mp3
+Title: Brush on wood (sound 1106)
+Author: Joseph SARDIN
+License: CC0 1.0 (public domain) — https://creativecommons.org/publicdomain/zero/1.0/
+Notes: Fast dry many-leg scuttle for silent house centipede. No voice. Cut mono 44.1kHz wav, dynaudnorm + silenceremove + atrim. Distinct from Scrub Cleaning #0109 and Gale insect-running Freesound.
