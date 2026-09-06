@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, and Felt today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, and Vein today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -46,6 +46,7 @@
     const Manta = root.PetMantaTricks;
     const Moray = root.PetMorayTricks;
     const Moss = root.PetMossTricks;
+    const Maidenhair = root.PetMaidenhairTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -90,6 +91,7 @@
     if (Manta && (key === Manta.TRICK_KEY || key === "kite")) return Manta;
     if (Moray && (key === Moray.TRICK_KEY || key === "door")) return Moray;
     if (Moss && (key === Moss.TRICK_KEY || key === "felt")) return Moss;
+    if (Maidenhair && (key === Maidenhair.TRICK_KEY || key === "vein")) return Maidenhair;
     return null;
   }
 
