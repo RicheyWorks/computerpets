@@ -1,0 +1,11 @@
+key: harvestman
+guest: Stem (Common Harvestman)
+source: Freesound Hard Wood Surface Light Scratching 1_2 (#477680)
+URL: https://freesound.org/people/Joao_Janz/sounds/477680/
+direct: https://cdn.freesound.org/previews/477/477680_9961300-hq.mp3
+author: Joao_Janz
+license: Creative Commons Zero (CC0 1.0)
+Species: Phalangium opilio / common harvestman (Opiliones; house guest Stem) — silent. Soft attenuated finger-scratch on hard wood as leg rustle on wood stand-in. No voice. No music. No English narrator. No cartoon beep.
+Notes: Distinct from Leap bug-legs tap (#828623), Loom fishing-line silk (#450849), Hour spiderweb stick (#689317). House cut ~2.5s mono 44.1kHz; highpass/lowpass + volume + mild dynaudnorm + afade; soft sit near Hour/Loom loudness. Quiet opilionid — wood rustle only.
+sat: 2026-09-05 Buffffff
+House path: build our own from field tape — not Grok Imagine
