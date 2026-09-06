@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, and Whee today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, and Ink today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -9,8 +9,9 @@ import * as Dog from "./dog-tricks";
 import * as Rabbit from "./rabbit-tricks";
 import * as Hamster from "./hamster-tricks";
 import * as GuineaPig from "./guinea-pig-tricks";
+import * as Turtle from "./turtle-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -23,6 +24,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === Rabbit.TRICK_KEY || key === "thimble") return Rabbit;
   if (key === Hamster.TRICK_KEY || key === "clip") return Hamster;
   if (key === GuineaPig.TRICK_KEY || key === "whee") return GuineaPig;
+  if (key === Turtle.TRICK_KEY || key === "ink") return Turtle;
   return null;
 }
 
@@ -48,3 +50,4 @@ export function sleepHoldFrame(key: string | undefined | null, frameCount?: numb
   if (!T) return null;
   return T.sleepHoldFrame(key ?? undefined, frameCount);
 }
+
