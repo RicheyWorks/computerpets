@@ -48,6 +48,7 @@ const OverlayHedgehog = createRequire(import.meta.url)(join(root, "../desktop/re
 const OverlayChinchilla = createRequire(import.meta.url)(join(root, "../desktop/renderer/chinchilla-tricks.js"));
 const OverlayAxolotl = createRequire(import.meta.url)(join(root, "../desktop/renderer/axolotl-tricks.js"));
 const OverlayToucan = createRequire(import.meta.url)(join(root, "../desktop/renderer/toucan-tricks.js"));
+const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Sol tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["sun", "dewlap", "nod", "press", "flick"]);
@@ -400,7 +401,8 @@ test("ground registry keeps prior guests gated; Sol selectable; no flatten/bask 
   assert.equal(OverlayGround.tricksFor("keel"), OverlayToucan);
   assert.equal(OverlayGround.tricksFor("iguana"), Overlay);
   assert.equal(OverlayGround.tricksFor("sol"), Overlay);
-  assert.equal(OverlayGround.tricksFor("dragon"), null);
+  assert.equal(OverlayGround.tricksFor("dragon"), OverlayDragon);
+  assert.equal(OverlayGround.tricksFor("vesper"), OverlayDragon);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
@@ -439,7 +441,8 @@ test("ground registry keeps prior guests gated; Sol selectable; no flatten/bask 
   assert.equal(OverlayGround.wantsThankYou("keel"), true);
   assert.equal(OverlayGround.wantsThankYou("iguana"), true);
   assert.equal(OverlayGround.wantsThankYou("sol"), true);
-  assert.equal(OverlayGround.wantsThankYou("dragon"), false);
+  assert.equal(OverlayGround.wantsThankYou("dragon"), true);
+  assert.equal(OverlayGround.wantsThankYou("vesper"), true);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("dog", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
@@ -457,11 +460,12 @@ test("ground registry keeps prior guests gated; Sol selectable; no flatten/bask 
   assert.equal(OverlayGround.sleepHoldFrame("axolotl", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
+  assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
 });
 
-test("notes: Sol idle-life done; next house-order guest still lacking tricks is Vesper / dragon", () => {
+test("notes: Sol idle-life done; Vesper / dragon now has tricks; next lacking is Ember / phoenix", () => {
   assert.equal(T.TRICK_KEY, "iguana");
   assert.equal(T.wantsThankYou("sol"), true);
-  assert.equal(OverlayGround.tricksFor("dragon"), null);
-  assert.equal(OverlayGround.wantsThankYou("dragon"), false);
+  assert.equal(OverlayGround.tricksFor("dragon"), OverlayDragon);
+  assert.equal(OverlayGround.wantsThankYou("dragon"), true);
 });
