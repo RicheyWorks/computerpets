@@ -1,0 +1,6 @@
+URL: https://bigsoundbank.com/electronic-switch-s0025.html
+Direct: https://bigsoundbank.com/UPLOAD/ogg/0025.ogg
+Author: Joseph SARDIN
+License: CC0 (public domain)
+Title: Electronic switch (#25)
+Notes: Three thin electronic-switch ticks as path-dragon circuit-trace ticks. Cut mono 44.1kHz ~4s. Dry. No roar. No music. Distinct from Arc Short welds (#952), Volt Neon/transformer (#2118), and Beacon Electric transformer #3 (#467).
