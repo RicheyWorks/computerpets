@@ -1,4 +1,4 @@
-# Drop Grok cries here
+﻿# Drop Grok cries here
 
 Folder: `C:\Users\730ri\projects\ComputerPets\cries-in`
 
@@ -224,7 +224,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 180. [ ] `lugworm.mp4` — **Heap** — Lugworm — A lugworm is silent. Wet-sand heave. No voice. (zip synth — replace with Grok)
 181. [x] `field_cricket.wav` — **Chirp** — Fall Field Cricket — sat 2026-09-03 Commons CC BY-SA 3.0 Field_cricket_Gryllus_pennsylvanicus.ogg (Thatcher)
 182. [x] `katydid.wav` — **Blade** — Northern True Katydid — A northern true katydid rasps a loud pulsed song, often heard as katy-did. No words. — sat 2026-09-05 Commons CC BY 4.0 Pterophylla camellifolia singing (peterwchen / iNat 90278754)
-183. [ ] `grasshopper.mp4` — **Vault** — Differential Grasshopper — A differential grasshopper stridulates a dry creak. Wing-leg rasp. (zip synth — replace with Grok)
+183. [x] `grasshopper.wav` — **Vault** — Differential Grasshopper — A differential grasshopper stridulates a dry creak. Wing-leg rasp. — sat 2026-09-05 Commons CC BY-SA 4.0 Chorthippus parallelus - sound.oga (Baudewijn Odé); Melanoplus differentialis tape unavailable — Acrididae proxy
 184. [ ] `swallowtail.mp4` — **Banner** — Eastern Tiger Swallowtail — A tiger swallowtail is nearly silent. Soft wing flutter. No voice. (zip synth — replace with Grok)
 185. [ ] `jewelwing.mp4` — **Jewel** — Ebony Jewelwing — A jewelwing damselfly whirrs wings, faint. No cicada song. (zip synth — replace with Grok)
 186. [ ] `lacewing.mp4` — **Lace** — Green Lacewing — A green lacewing is nearly silent. Soft wing. A tiny rasp. (zip synth — replace with Grok)
