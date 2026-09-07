@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, and Whip today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, Whip, and Clasp today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -123,6 +123,7 @@ const Morel = root.PetMorelTricks;
   const Harvestman = root.PetHarvestmanTricks;
   const Scorpion = root.PetScorpionTricks;
   const Vinegaroon = root.PetVinegaroonTricks;
+  const Tick = root.PetTickTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -244,6 +245,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Harvestman && (key === Harvestman.TRICK_KEY || key === "harvestman" || key === "stem")) return Harvestman;
     if (Scorpion && (key === Scorpion.TRICK_KEY || key === "scorpion" || key === "barb")) return Scorpion;
     if (Vinegaroon && (key === Vinegaroon.TRICK_KEY || key === "vinegaroon" || key === "whip")) return Vinegaroon;
+    if (Tick && (key === Tick.TRICK_KEY || key === "tick" || key === "clasp")) return Tick;
   }
 
   function wantsThankYou(key) {
