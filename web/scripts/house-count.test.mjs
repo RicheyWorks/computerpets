@@ -66,9 +66,9 @@ const REEF = [
   "grouper",
 ];
 
-test("the catalog is two hundred twenty, once each", () => {
-  assert.equal(KEYS.length, 220);
-  assert.equal(new Set(KEYS).size, 220);
+test("the catalog is two hundred twenty-one, once each", () => {
+  assert.equal(KEYS.length, 221);
+  assert.equal(new Set(KEYS).size, 221);
   for (const key of SHORE) assert.ok(KEYS.includes(key), key);
   for (const key of MEADOW) assert.ok(KEYS.includes(key), key);
   for (const key of CANOPY) assert.ok(KEYS.includes(key), key);
@@ -85,9 +85,9 @@ test("the catalog is two hundred twenty, once each", () => {
   assert.ok(KEYS.includes("ground_dragon"), "ground_dragon");
 });
 
-test("the house copy says two hundred twenty, not a leftover count", () => {
-  assert.match(readmeSrc, /There are \*\*220\*\* animals/);
-  assert.match(readmeSrc, /Two hundred twenty living kinds/);
+test("the house copy says two hundred twenty-one, not a leftover count", () => {
+  assert.match(readmeSrc, /There are \*\*221\*\* animals/);
+  assert.match(readmeSrc, /Two hundred twenty-one living kinds/);
   assert.doesNotMatch(readmeSrc, /One hundred thirty living kinds/);
   assert.doesNotMatch(readmeSrc, /One hundred seventy/);
   assert.doesNotMatch(readmeSrc, /One hundred sixty/);
@@ -98,11 +98,12 @@ test("the house copy says two hundred twenty, not a leftover count", () => {
   assert.doesNotMatch(readmeSrc, /\*\*217\*\* animals/);
   assert.doesNotMatch(readmeSrc, /\*\*218\*\* animals/);
   assert.doesNotMatch(readmeSrc, /\*\*219\*\* animals/);
-  assert.match(meetSrc, /Two hundred twenty guests walk the blotter/);
-  assert.match(meetSrc, /Two hundred twenty, on their shelves/);
+  assert.doesNotMatch(readmeSrc, /\*\*220\*\* animals/);
+  assert.match(meetSrc, /Two hundred twenty-one guests walk the blotter/);
+  assert.match(meetSrc, /Two hundred twenty-one, on their shelves/);
   assert.doesNotMatch(meetSrc, /One hundred seventy/);
   assert.doesNotMatch(meetSrc, /One hundred ninety/);
-  assert.match(rootSrc, /Two hundred twenty living desk companions/);
+  assert.match(rootSrc, /Two hundred twenty-one living desk companions/);
   assert.match(rootSrc, /a shore of ten strand guests/);
   assert.match(rootSrc, /a reef of ten living-rock guests/);
   assert.match(rootSrc, /a meadow of ten grass-and-night insects/);
@@ -110,10 +111,10 @@ test("the house copy says two hundred twenty, not a leftover count", () => {
   assert.match(rootSrc, /a grid of ten cyber dragons/);
   assert.doesNotMatch(rootSrc, /One hundred seventy/);
   assert.doesNotMatch(rootSrc, /One hundred ninety/);
-  assert.match(ogSrc, /Two hundred twenty living demos/);
+  assert.match(ogSrc, /Two hundred twenty-one living demos/);
   assert.doesNotMatch(ogSrc, /One hundred twenty/);
   assert.doesNotMatch(ogSrc, /One hundred ninety/);
-  assert.match(webReadmeSrc, /\*\*220\*\* living kinds/);
+  assert.match(webReadmeSrc, /\*\*221\*\* living kinds/);
 });
 
 test("shore, meadow, canopy, reef, and grid walk the same den door as the other rooms", () => {

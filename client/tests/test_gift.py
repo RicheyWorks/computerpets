@@ -8,7 +8,7 @@ from computerpets_client.species import CATALOG_KEYS, RUI, species_by_key
 
 
 def test_gift_lines_are_the_house_copy():
-    assert len(GIFT_LINE) == 220
+    assert len(GIFT_LINE) == 221
     assert set(GIFT_LINE) == set(CATALOG_KEYS)
     assert gift_line("red_panda") == "A ribbon I was not using. For the desk."
     assert gift_line("grouper") == "A fish I was finished hiding for."

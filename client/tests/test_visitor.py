@@ -18,13 +18,13 @@ from computerpets_client.weather import civil_day_number
 
 
 def test_visitor_identity_matches_house_formula():
-    # Civil day plus host length, walked through two hundred twenty minus the host.
+    # Civil day plus host length, walked through two hundred twenty-one minus the host.
     # These pins move when a den lands. Update them with the web visitor test.
     now = datetime(2026, 8, 17)
-    assert todays_visitor("red_panda", now).key == "chlamydomonas"
-    assert todays_visitor("ball_python", now).key == "coli"
-    assert todays_visitor("red_panda", datetime(2026, 1, 1)).key == "mussel"
-    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "swallowtail"
+    assert todays_visitor("red_panda", now).key == "ferret"
+    assert todays_visitor("ball_python", now).key == "hedgehog"
+    assert todays_visitor("red_panda", datetime(2026, 1, 1)).key == "hamster"
+    assert todays_visitor("red_panda", datetime(2024, 6, 9)).key == "salamander"
 
 
 def test_visitor_is_never_the_host():

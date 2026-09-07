@@ -22,7 +22,7 @@ Overlay and `/demo` stay one house.
 
 For each guest, in order:
 
-1. Open the house portrait. All 220 exist:
+1. Open the house portrait. All 221 exist:
    `web/public/pets/{key}.jpg`
    GitHub: `https://github.com/RicheyWorks/computerpets/blob/main/web/public/pets/{key}.jpg`
    Public gallery: `docs/GUESTS.md`
@@ -95,7 +95,7 @@ Image-to-video from web/public/pets/{key}.jpg. Keep the animal. Camera locked. O
 11. `guinea_pig`
 12. `howler`
 
-**Then the rest of catalog 220 in list order.** No new pets.
+**Then the rest of catalog 221 in list order.** No new pets.
 
 ---
 

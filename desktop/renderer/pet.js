@@ -1622,6 +1622,7 @@ const TREAT_SHAPE = {
   skunk: "crumb",
   opossum: "crumb",
   beaver: "leaf",
+  capybara: "leaf",
   porcupine: "leaf",
   black_bear: "leaf",
   gecko: "crumb",

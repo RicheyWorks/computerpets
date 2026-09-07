@@ -8,7 +8,7 @@ Checklist: `cries-in/NEED.md`.
 
 ## Next
 
-Catalog 220 field-tape pass closed for sit-able guests.
+Catalog 221 field-tape pass closed for sit-able guests.
 
 Only permanent SKIPs remain (no legal PD/CC0/CC BY tape): **Sol** iguana, **Shift** chameleon, **Spike** horned_lizard, **Jaw** crocodile, **Beak** snapper, **Lid** box_turtle. Do not invent beeps.
 

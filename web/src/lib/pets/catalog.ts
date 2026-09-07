@@ -231,6 +231,7 @@ export const SPECIES: Species[] = [
   { key: "relay_dragon", displayName: "Click Dragon", rarity: "LEGENDARY", temperament: "Clicked", habitat: "Machine-night", blurb: "A single live click-node at the nape. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Vesper." },
   { key: "fuse_dragon", displayName: "Cartridge Dragon", rarity: "LEGENDARY", temperament: "Fused", habitat: "Machine-night", blurb: "A single glass cartridge fuse across the sternum. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Vesper." },
   { key: "ground_dragon", displayName: "Earth Dragon", rarity: "LEGENDARY", temperament: "Earthed", habitat: "Machine-night", blurb: "A braided copper ground-strap from chest to claw. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Fuse. Not Vesper." },
+  { key: "capybara", displayName: "Capybara", rarity: "UNCOMMON", temperament: "Calm", habitat: "River bank", blurb: "A calm soak. The largest living rodent. Not Whee. Not Bloom. Not a muskrat rumor." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

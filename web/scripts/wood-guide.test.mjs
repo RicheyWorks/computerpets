@@ -32,18 +32,19 @@ const EXPECTED = [
   ["beaver", "dam", "Castor canadensis"],
   ["porcupine", "spine", "Erethizon dorsatum"],
   ["black_bear", "coal", "Ursus americanus"],
+  ["capybara", "soak", "Hydrochoerus hydrochaeris"],
 ];
 
 function quotedKeys(src) {
   return [...src.matchAll(/key:\s*"([a-z_]+)"/g)].map((m) => m[1]);
 }
 
-test("the wood lists the same ten guests as the roster", () => {
+test("the wood lists the same eleven guests as the roster", () => {
   const rosterKeys = quotedKeys(woodSrc);
   const guideKeys = [...guideSrc.matchAll(/entry\(\s*"([a-z_]+)"/g)].map((m) => m[1]);
   assert.deepEqual(rosterKeys, EXPECTED.map(([key]) => key));
   assert.deepEqual(guideKeys, rosterKeys);
-  assert.equal(guideKeys.length, 10);
+  assert.equal(guideKeys.length, 11);
 });
 
 test("each guide entry has a tell, a mix-up, a lesson, and the latin name", () => {
@@ -53,7 +54,7 @@ test("each guide entry has a tell, a mix-up, a lesson, and the latin name", () =
     assert.match(guideSrc, new RegExp(latin.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
   const entries = [...guideSrc.matchAll(/entry\(\s*"[a-z_]+"/g)];
-  assert.equal(entries.length, 10);
+  assert.equal(entries.length, 11);
   assert.match(guideSrc, /tell,/);
   assert.match(guideSrc, /mixup,/);
   assert.match(guideSrc, /lesson,/);
@@ -70,7 +71,8 @@ test("the important mix-ups are actually taught", () => {
   const opossum = guideSrc.slice(guideSrc.indexOf('"opossum"'), guideSrc.indexOf('"beaver"'));
   const beaver = guideSrc.slice(guideSrc.indexOf('"beaver"'), guideSrc.indexOf('"porcupine"'));
   const porcupine = guideSrc.slice(guideSrc.indexOf('"porcupine"'), guideSrc.indexOf('"black_bear"'));
-  const bear = guideSrc.slice(guideSrc.indexOf('"black_bear"'));
+  const bear = guideSrc.slice(guideSrc.indexOf('"black_bear"'), guideSrc.indexOf('"capybara"'));
+  const capybara = guideSrc.slice(guideSrc.indexOf('"capybara"'));
   assert.match(deer, /not a moose/i);
   assert.match(deer, /flag/i);
   assert.match(bat, /not a bird/i);
@@ -94,6 +96,9 @@ test("the important mix-ups are actually taught", () => {
   assert.match(bear, /not a red panda/i);
   assert.match(bear, /not Rui/i);
   assert.match(bear, /She is a bear/);
+  assert.match(capybara, /not Whee/i);
+  assert.match(capybara, /not Bloom/i);
+  assert.match(capybara, /soak/i);
 });
 
 test("the wood page is a field guide, not a costume party", () => {
@@ -109,7 +114,7 @@ test("the wood page is a field guide, not a costume party", () => {
   assert.doesNotMatch(denSrc, /NFT/i);
 });
 
-test("the catalog and living roster include the ten wood keys", () => {
+test("the catalog and living roster include the eleven wood keys", () => {
   for (const [key] of EXPECTED) {
     assert.match(catalogSrc, new RegExp(`key:\\s*"${key}"`));
   }
@@ -130,7 +135,7 @@ test("rooms.ts only adds a wood room", () => {
   assert.match(roomsSrc, /id:\s*"wood"/);
   assert.match(roomsSrc, /watchSlug:\s*"rack"/);
   assert.match(roomsSrc, /watchName:\s*"Rack"/);
-  assert.match(roomsSrc, /Ten of the wood\. A bat is not a bird\. A porcupine is not Burr\./);
+  assert.match(roomsSrc, /Eleven of the wood\. A bat is not a bird\. A porcupine is not Burr\./);
   assert.match(roomsSrc, /isWood/);
   assert.match(roomsSrc, /id:\s*"corner"/);
   assert.match(roomsSrc, /id:\s*"roost"/);

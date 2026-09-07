@@ -126,7 +126,7 @@ export const ROOMS: readonly Room[] = [
     watchSlug: "rack",
     watchName: "Rack",
     keys: WOOD_KEYS,
-    line: "Ten of the wood. A bat is not a bird. A porcupine is not Burr.",
+    line: "Eleven of the wood. A bat is not a bird. A porcupine is not Burr.",
   },
   {
     id: "canopy",

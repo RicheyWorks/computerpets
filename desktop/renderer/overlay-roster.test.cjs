@@ -92,13 +92,13 @@ function objectKeys(src, marker) {
   return [...slice.matchAll(/^\s{2}([a-z0-9_]+):\s/gm)].map((m) => m[1]);
 }
 
-test("the overlay roster is the same two hundred twenty as the catalog", () => {
+test("the overlay roster is the same two hundred twenty-one as the catalog", () => {
   const keys = roster.map((r) => r.key);
-  assert.equal(keys.length, 220);
+  assert.equal(keys.length, 221);
   assert.deepEqual(keys.sort(), [...CATALOG].sort());
   const R = require("./roster-load.js");
   const door = R.readRoster(join(__dirname, "roster.json"), require("node:fs"));
-  assert.equal(door.length, 220);
+  assert.equal(door.length, 221);
   assert.equal(door[0].key, "red_panda");
 });
 
@@ -117,7 +117,7 @@ test("the tray pins Rui, Sip, and the grid ten so they are not buried", () => {
   assert.equal(byKey.spark_dragon.slug, "crackle");
   assert.match(mainSrc, /On the desk/);
   assert.match(mainSrc, /deskPickMenu/);
-  assert.equal(roster.length, 220);
+  assert.equal(roster.length, 221);
 });
 
 test("the overlay can pick the grid ten, and Spark keeps slug crackle", () => {
@@ -213,8 +213,8 @@ test("the overlay drops the same treat the desk already drops, including the egg
   const overlayShapes = Object.fromEntries(
     [...overlaySlice.matchAll(/^\s{2}([a-z0-9_]+): "([a-z]+)"/gm)].map((m) => [m[1], m[2]]),
   );
-  assert.equal(Object.keys(overlayShapes).length, 220);
-  assert.equal(Object.keys(webShapes).length, 220);
+  assert.equal(Object.keys(overlayShapes).length, 221);
+  assert.equal(Object.keys(webShapes).length, 221);
   for (const key of CATALOG) {
     assert.equal(overlayShapes[key], webShapes[key], key);
   }

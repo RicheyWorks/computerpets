@@ -174,6 +174,7 @@ export const TRAITS: Record<string, SpeciesTrait> = {
   skunk: T(64, 8, 0.78, 0.22, { nocturnal: true }, "warn", "Warn", "I stamped. Hello."),
   opossum: T(72, 10, 0.84, 0.28, { nocturnal: true }, "playdead", "Play dead", "I went still. Hello."),
   beaver: T(42, 4, 0.96, 0.16, { aquatic: true }, "lodge", "Lodge", "I gnawed. Hello."),
+  capybara: T(48, 4, 1.05, 0.2, { aquatic: true }, "soak", "Soak", "I soaked. Hello."),
   porcupine: T(36, 4, 0.86, 0.1, { nocturnal: true }, "bristle", "Bristle", "I bristled. Hello."),
   black_bear: T(58, 8, 1.22, 0.18, {}, "forage", "Forage", "I foraged. Hello."),
   gecko: T(88, 8, 0.48, 0.32, { nocturnal: true, clingy: true }, "climb", "Climb", "I climbed. Hello."),

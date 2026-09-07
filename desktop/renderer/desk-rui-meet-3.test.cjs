@@ -165,7 +165,7 @@ test("hide/click/robin and first two meet leftovers still hold", () => {
   let soot = stepUntil(Call.beginCalled("crow", 800, 0, 1), perchFlags, "meet", 40);
   assert.equal(soot.phase, "meet");
   assert.notEqual(soot.phase, "perch");
-  assert.equal(require("./roster.json").length, 220);
+  assert.equal(require("./roster.json").length, 221);
   assert.match(petSrc, /firstTransomBound/);
   assert.match(calledSrc, /firstTransomBound/);
 });

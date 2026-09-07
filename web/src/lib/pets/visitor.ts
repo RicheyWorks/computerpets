@@ -172,6 +172,7 @@ const LINES: Record<string, string> = {
   skunk: "I stamped. Then I left the duff.",
   opossum: "I went still. Then I left the hem.",
   beaver: "I gnawed. Then I left the lodge.",
+  capybara: "I soaked. Then I left the bank.",
   porcupine: "I bristled. Then I left the post.",
   black_bear: "I foraged. Then I left the denside.",
   gecko: "I climbed. Then I left the plaster.",

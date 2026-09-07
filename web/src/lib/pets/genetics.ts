@@ -253,6 +253,7 @@ const WOOD = new Set([
   "beaver",
   "porcupine",
   "black_bear",
+  "capybara",
 ]);
 const CANOPY = new Set([
   "sloth",

@@ -431,6 +431,7 @@ WEB_WOOD = (
     "beaver",
     "porcupine",
     "black_bear",
+    "capybara",
 )
 
 WEB_STONE = (
@@ -542,7 +543,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(WELL_KEYS) == 10
     assert len(ROOST_KEYS) == 10
     assert len(CORNER_KEYS) == 10
-    assert len(WOOD_KEYS) == 10
+    assert len(WOOD_KEYS) == 11
     assert len(STONE_KEYS) == 10
     assert len(CREEK_KEYS) == 10
     assert len(LOG_KEYS) == 10

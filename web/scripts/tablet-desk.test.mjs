@@ -198,5 +198,5 @@ test("the living guest learns the tablet sit; the desks stay", () => {
   assert.match(liveSrc, /tablet=\{pad\}/);
   assert.match(liveSrc, /phone=\{!pad\}/);
   assert.doesNotMatch(deskJs, /TAP_PX_TABLET|isTablet|HOLD_MS/);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 220);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 221);
 });
