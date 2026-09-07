@@ -16,6 +16,7 @@ const Luna = await import(pathToFileURL(join(root, "src/lib/pets/luna-tricks.ts"
 const Firefly = await import(pathToFileURL(join(root, "src/lib/pets/firefly-tricks.ts")).href);
 const Darner = await import(pathToFileURL(join(root, "src/lib/pets/darner-tricks.ts")).href);
 const T = await import(pathToFileURL(join(root, "src/lib/pets/stick-tricks.ts")).href);
+const CarpenterAnt = await import(pathToFileURL(join(root, "src/lib/pets/carpenter_ant-tricks.ts")).href);
 const Oak = await import(pathToFileURL(join(root, "src/lib/pets/oak-tricks.ts")).href);
 const WaterLily = await import(pathToFileURL(join(root, "src/lib/pets/water_lily-tricks.ts")).href);
 const Ginkgo = await import(pathToFileURL(join(root, "src/lib/pets/ginkgo-tricks.ts")).href);
@@ -75,6 +76,7 @@ const OverlayLuna = createRequire(import.meta.url)(join(root, "../desktop/render
 const OverlayFirefly = createRequire(import.meta.url)(join(root, "../desktop/renderer/firefly-tricks.js"));
 const OverlayDarner = createRequire(import.meta.url)(join(root, "../desktop/renderer/darner-tricks.js"));
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/stick-tricks.js"));
+const OverlayCarpenterAnt = createRequire(import.meta.url)(join(root, "../desktop/renderer/carpenter_ant-tricks.js"));
 const OverlayOak = createRequire(import.meta.url)(join(root, "../desktop/renderer/oak-tricks.js"));
 const OverlayWaterLily = createRequire(import.meta.url)(join(root, "../desktop/renderer/water_lily-tricks.js"));
 const OverlayGinkgo = createRequire(import.meta.url)(join(root, "../desktop/renderer/ginkgo-tricks.js"));
@@ -304,7 +306,7 @@ test("rocking/catalepsy/browse/tread/diapheromera are house-stick-true, not copi
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
-  for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Octopus, Cuttlefish, Nautilus, MoonJelly, SeaStar, HermitCrab, HorseshoeCrab, Seahorse, Manta, Moray, Moss, Maidenhair, Ginkgo, Oak, WaterLily, Orchid, Saguaro, VenusFlytrap, Pitcher, Sundew, Honeybee, Monarch, Luna, Firefly, Darner, Relay, Fuse, Earth]) {
+  for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Octopus, Cuttlefish, Nautilus, MoonJelly, SeaStar, HermitCrab, HorseshoeCrab, Seahorse, Manta, Moray, Moss, Maidenhair, Ginkgo, Oak, WaterLily, Orchid, Saguaro, VenusFlytrap, Pitcher, Sundew, Honeybee, Monarch, Luna, Firefly, Darner, CarpenterAnt, Relay, Fuse, Earth]) {
     assert.equal(mod.TRICKS.includes("rocking"), false);
     assert.equal(mod.TRICKS.includes("catalepsy"), false);
     assert.equal(mod.TRICKS.includes("browse"), false);
@@ -569,6 +571,7 @@ globalThis.PetLunaTricks = OverlayLuna;
 globalThis.PetFireflyTricks = OverlayFirefly;
 globalThis.PetDarnerTricks = OverlayDarner;
 globalThis.PetStickTricks = Overlay;
+  globalThis.PetCarpenterAntTricks = OverlayCarpenterAnt;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("turtle"), OverlayTurtle);
@@ -731,7 +734,7 @@ globalThis.PetStickTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Twig idle-life done; next house-order guest still lacking tricks is Column / carpenter_ant", () => {
+test("notes: Twig idle-life done; Column idle-life done; next house-order guest still lacking tricks is Seven / ladybird", () => {
   assert.equal(T.TRICK_KEY, "stick");
   assert.equal(T.wantsThankYou("twig"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -882,10 +885,16 @@ test("notes: Twig idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("stick"), true);
   assert.equal(OverlayGround.tricksFor("twig"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("twig"), true);
-  assert.equal(OverlayGround.tricksFor("carpenter_ant"), null);
-  assert.equal(OverlayGround.wantsThankYou("carpenter_ant"), false);
-  assert.equal(OverlayGround.tricksFor("column"), null);
-  assert.equal(OverlayGround.wantsThankYou("column"), false);
+  assert.equal(OverlayGround.tricksFor("carpenter_ant"), OverlayCarpenterAnt);
+  assert.equal(OverlayGround.wantsThankYou("carpenter_ant"), true);
+  assert.equal(OverlayGround.tricksFor("column"), OverlayCarpenterAnt);
+  assert.equal(OverlayGround.wantsThankYou("column"), true);
+  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.equal(OverlayGround.tricksFor("ladybird"), null);
+  assert.equal(OverlayGround.wantsThankYou("ladybird"), false);
+  assert.equal(OverlayGround.tricksFor("seven"), null);
+  assert.equal(OverlayGround.wantsThankYou("seven"), false);
   assert.equal(OverlayGround.tricksFor("darner"), OverlayDarner);
   assert.equal(OverlayGround.wantsThankYou("darner"), true);
   assert.equal(OverlayGround.tricksFor("dart"), OverlayDarner);
