@@ -18,7 +18,7 @@ const music = await import(pathToFileURL(join(root, "src/lib/pets/house-music.ts
 const OverlayMusic = createRequire(import.meta.url)(join(root, "../desktop/renderer/house-music.js"));
 
 test("Call lockstep uses the existing dens, not invented groups", () => {
-  assert.equal(roster.length, 220);
+  assert.equal(roster.length, 221);
   assert.match(roomsSrc, /id: "garden"/);
   assert.match(roomsSrc, /id: "roost"/);
   assert.equal(Overlay.CALL_GROUPS.length, G.CALL_GROUPS.length);

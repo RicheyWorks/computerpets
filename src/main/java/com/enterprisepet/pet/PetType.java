@@ -151,6 +151,8 @@ public enum PetType {
     BEAVER           ("beaver",            "North American Beaver",  Rarity.UNCOMMON),
     PORCUPINE        ("porcupine",         "North American Porcupine", Rarity.UNCOMMON),
     BLACK_BEAR       ("black_bear",        "American Black Bear",    Rarity.RARE),
+
+    CAPYBARA         ("capybara",          "Capybara",             Rarity.UNCOMMON),
     GECKO            ("gecko",             "Mediterranean House Gecko", Rarity.COMMON),
     ANOLE            ("anole",             "Green Anole",            Rarity.COMMON),
     SKINK            ("skink",             "Five-lined Skink",       Rarity.COMMON),
@@ -231,7 +233,6 @@ public enum PetType {
     RELAY_DRAGON     ("relay_dragon",      "Click Dragon",           Rarity.LEGENDARY),
     FUSE_DRAGON      ("fuse_dragon",       "Cartridge Dragon",       Rarity.LEGENDARY),
     GROUND_DRAGON    ("ground_dragon",     "Earth Dragon",           Rarity.LEGENDARY);
-
     public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
 
     private static final Map<String, PetType> BY_KEY = Arrays.stream(values())

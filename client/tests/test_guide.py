@@ -254,6 +254,7 @@ WOOD_EXPECTED = [
     ("beaver", "dam", "Castor canadensis"),
     ("porcupine", "spine", "Erethizon dorsatum"),
     ("black_bear", "coal", "Ursus americanus"),
+    ("capybara", "soak", "Hydrochoerus hydrochaeris"),
 ]
 
 STONE_EXPECTED = [

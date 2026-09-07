@@ -25,7 +25,7 @@ function stepUntil(mod, guest, flags, want, n) {
 }
 
 test("/demo Pip notices Rui on the floor", () => {
-  assert.equal(roster.length, 220);
+  assert.equal(roster.length, 221);
   assert.equal(G.MEET_DOG_KEY, Overlay.MEET_DOG_KEY);
   assert.equal(G.PIP_RUI_LINE, Overlay.PIP_RUI_LINE);
   assert.deepEqual(G.matchCall("Pip", roster), ["dog"]);
@@ -97,5 +97,5 @@ test("/demo hide, robin, and first meets from 470/471 still hold", () => {
   const perchFlags = { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 };
   let robin = stepUntil(G, G.beginCalled("robin", 800, 0, 1), perchFlags, "perch", 40);
   assert.equal(robin.phase, "perch");
-  assert.equal(roster.length, 220);
+  assert.equal(roster.length, 221);
 });

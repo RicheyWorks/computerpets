@@ -3,7 +3,7 @@
 Virtual pets that live on your computer — walk your windows, eat from the keeper card, and **caw** when you Call.
 
 <p align="center">
-  <img src="docs/readme-hero.jpg" alt="Rui the red panda, Paint the clownfish, Scrape the parrotfish, Wreath the anemone, and Reed the frog — five of two hundred twenty ComputerPets" width="920">
+  <img src="docs/readme-hero.jpg" alt="Rui the red panda, Paint the clownfish, Scrape the parrotfish, Wreath the anemone, and Reed the frog — five of two hundred twenty-one ComputerPets" width="920">
 </p>
 
 **Start here: [How to get your first pet](docs/START-HERE.md)**
@@ -12,11 +12,11 @@ That page is a teacher. Click it. It has numbered steps. You do not need to know
 
 ## Half the house already talks for real
 
-**168 of 220** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
+**168 of 221** guests already have a real Call cry. Not a cartoon beep. Real field tape — a microphone outside, cut short for the desk. Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. Press **Call** and you hear the animal.
 
 ## Meet some of them
 
-There are **220** animals in this house. These are some of them.
+There are **221** animals in this house. These are some of them.
 
 <p align="center">
   <img src="docs/readme-friends.jpg" alt="Rui the red panda, Lunge the bass, Speck the brook trout, Whisk the catfish, Bar the perch, Night the walleye, Lance the pike, Silver the eel, Spoon the paddlefish, Penny the bluegill, Coin the goldfish, Reed the frog, Whorl the pond snail, Eft the newt, and Dapple the salamander" width="920">
@@ -28,11 +28,11 @@ There are **220** animals in this house. These are some of them.
 
 House names. The ones you say out loud.
 
-**[See all 220](docs/GUESTS.md)** — every guest’s real picture, not just these groups.
+**[See all 221](docs/GUESTS.md)** — every guest’s real picture, not just these groups.
 
 ## Put a pet on your real desktop
 
-This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. Click the name to collapse it. Voice, color, saved lines, alarm, timer, mute, and Turn off sit on the expanded card. The tray by the clock has **On the desk** — Rui, Sip, and the grid ten, no scrolling two hundred twenty names.
+This is the first teaching point. A pet walks on top of your windows. Like a living sticker. **Rui the red panda** comes first. A keeper card sits with them: name, stage, bond, Hunger / Rest / Bond, Feed / Play / Rest. Click the name to collapse it. Voice, color, saved lines, alarm, timer, mute, and Turn off sit on the expanded card. The tray by the clock has **On the desk** — Rui, Sip, and the grid ten, no scrolling two hundred twenty-one names.
 
 You do not need an account. You do not need a license. You do not need Java.
 
@@ -96,7 +96,7 @@ More in [desktop/README.md](desktop/README.md).
 
 ## They make real noise
 
-**168 of 220** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**168 of 221** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
 
 These voices are in the house:
 
@@ -322,7 +322,7 @@ Feed them when they look hungry. Play so they stay happy. Let them rest when the
 
 The keeper card is the daily care. Open the expanded card for **Call** and the rest of care in one place. The tray **On the desk** picks Rui, Sip, and the grid ten. If you ignore them, they get hungry. They can get unwell. They can walk away until you call them back.
 
-There are **220** animals. Rui is the first one you meet.
+There are **221** animals. Rui is the first one you meet.
 
 ## Another way to visit them (browser)
 
@@ -352,5 +352,5 @@ Copyright (c) 2026 RicheyWorks. All rights reserved. This is a private house. Se
 
 ---
 
-*Two hundred twenty living kinds. Keep them so a line does not go cool.*
+*Two hundred twenty-one living kinds. Keep them so a line does not go cool.*
 

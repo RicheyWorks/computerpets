@@ -13,7 +13,7 @@ export const Route = createFileRoute("/wood")({
       { title: "The wood — ComputerPets" },
       {
         name: "description",
-        content: "Ten of the wood on the blotter. A bat is not a bird. A porcupine is not Burr.",
+        content: "Eleven of the wood on the blotter. A bat is not a bird. A porcupine is not Burr.",
       },
     ],
   }),
@@ -56,7 +56,7 @@ export function WoodPage() {
       <section className="border-t border-border">
         <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8">
           <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">Field notes</p>
-          <h2 className="mt-2 font-display text-3xl sm:text-4xl">All ten, told apart.</h2>
+          <h2 className="mt-2 font-display text-3xl sm:text-4xl">All eleven, told apart.</h2>
           <p className="mt-3 max-w-xl text-sm text-muted">
             A short tell, one mix-up, and the corner of the house they already keep. Open a demo if
             you want them to stay on your screen.

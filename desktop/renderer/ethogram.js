@@ -146,6 +146,7 @@
     skunk: [A("stamp", "nod", 0.8, 4, "sit"), A("raise", "pulse", 1.0, 3), A("still", "freeze", 1.8, 2)],
     opossum: [A("playdead", "sit_hold", 2.2, 5, "sit"), A("grin", "gape", 1.0, 2), A("walk", "wiggle", 1.0, 2)],
     beaver: [A("gnaw", "eat", 1.4, 5, "eat"), A("slap", "snap", 0.7, 2, "play"), A("sit", "sit_hold", 2.0, 3, "sit")],
+  capybara: [A("soak", "sit_hold", 2.2, 4, "sit"), A("graze", "eat", 1.6, 5, "eat"), A("nuzzle", "nuzzle", 1.0, 3, "play")],
     porcupine: [A("bristle", "puff", 1.4, 5, "sit"), A("climb", "wiggle", 1.0, 2), A("still", "freeze", 2.0, 3)],
     black_bear: [A("forage", "eat", 1.4, 4, "eat"), A("sit", "sit_hold", 2.2, 4, "sit"), A("huff", "pulse", 0.8, 2)],
     gecko: [A("climb", "wiggle", 1.0, 5), A("chirp", "talk", 0.7, 3, "talk"), A("cling", "sit_hold", 2.0, 2, "sit")],

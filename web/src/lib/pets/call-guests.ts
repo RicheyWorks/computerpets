@@ -1,4 +1,4 @@
-/** Call any of the 220. Groups are the existing dens. Same map as desktop `call-guests.js`. */
+/** Call any of the 221. Groups are the existing dens. Same map as desktop `call-guests.js`. */
 
 export type CallGroup = {
   id: string;
@@ -37,7 +37,7 @@ const BEE_KEYS = ["bumblebee", "carpenter_bee", "mason_bee", "leafcutter", "stin
 const POND_KEYS = ["frog", "toad", "newt", "salamander", "caecilian", "crayfish", "pond_snail", "mussel", "leech", "stickleback"] as const;
 const ROOST_KEYS = ["crow", "raven", "barn_owl", "red_tail", "chickadee", "robin", "mallard", "canada_goose", "pileated", "hummingbird"] as const;
 const CORNER_KEYS = ["orb_weaver", "jumping_spider", "wolf_spider", "tarantula", "widow", "harvestman", "scorpion", "vinegaroon", "tick", "solifuge"] as const;
-const WOOD_KEYS = ["deer", "bat", "squirrel", "otter", "raccoon", "skunk", "opossum", "beaver", "porcupine", "black_bear"] as const;
+const WOOD_KEYS = ["deer", "bat", "squirrel", "otter", "raccoon", "skunk", "opossum", "beaver", "porcupine", "black_bear", "capybara"] as const;
 const CANOPY_KEYS = ["sloth", "lemur", "gibbon", "kinkajou", "colugo", "flying_squirrel", "howler", "tarsier", "potto", "koala"] as const;
 const STONE_KEYS = ["gecko", "anole", "skink", "chameleon", "horned_lizard", "alligator", "crocodile", "snapper", "box_turtle", "tuatara"] as const;
 const CREEK_KEYS = ["bass", "brook_trout", "catfish", "bluegill", "perch", "pike", "walleye", "paddlefish", "lamprey", "american_eel"] as const;

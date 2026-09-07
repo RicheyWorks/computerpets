@@ -149,7 +149,7 @@ test("hide/click/robin and first meets from 470/471 still hold", () => {
   const perchFlags = { hostKey: "red_panda", hostSleeping: true, hostX: 200, hostFacing: 1, hostLift: 0 };
   let robin = stepUntil(Call.beginCalled("robin", 800, 0, 1), perchFlags, "perch", 40);
   assert.equal(robin.phase, "perch");
-  assert.equal(require("./roster.json").length, 220);
+  assert.equal(require("./roster.json").length, 221);
   assert.match(petSrc, /firstCapBound/);
   assert.match(calledSrc, /firstCapBound/);
 });

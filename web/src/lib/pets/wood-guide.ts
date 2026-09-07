@@ -30,7 +30,7 @@ function entry(key: string, latin: string, tell: string, mixup: string, lesson: 
   };
 }
 
-/** Field notes for the ten wood guests. Literary, short, and meant to be learned on the blotter. */
+/** Field notes for the eleven wood guests. Literary, short, and meant to be learned on the blotter. */
 export const WOOD_GUIDE: WoodGuide[] = [
   entry(
     "deer",
@@ -101,6 +101,13 @@ export const WOOD_GUIDE: WoodGuide[] = [
     "Dark, a plantigrade walk, a denside she keeps. American black bear. She walks. Then she sits. The oak is a den she agreed to.",
     "Not a red panda. Not Rui. Rui is Ailurus fulgens, a scarf of a tail, ribbon-minded. Coal is Ursus americanus, and the size is the tell. She is a bear. A red panda is not a bear. The denside is the species.",
     "American black bear. Not a red panda. Not Rui. She is a bear.",
+  ),
+  entry(
+    "capybara",
+    "Hydrochoerus hydrochaeris",
+    "A barrel body, a blunt snout, a calm that sits in water. Capybara. She sits. Then she soaks. The bank is a river she agreed to.",
+    "Not Whee — Whee is a guinea pig who wheeks for salad. Not Bloom — Bloom is an axolotl in a glass cistern. Not Dam — Dam is a beaver with a paddle tail and a lodge. Soak is Hydrochoerus hydrochaeris, and the soak is the tell. A capybara is not a guinea pig. A capybara is not an axolotl. The calm is the species.",
+    "Capybara. A calm soak. Not Whee. Not Bloom.",
   ),
 ];
 

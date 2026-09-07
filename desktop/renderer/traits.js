@@ -2366,6 +2366,23 @@ window.PET_TRAITS = {
       special: ["I gnawed. Hello."],
     },
   },
+  capybara: {
+    size: 1.05, walk: 48, hop: 4, pitch: 0.55, rate: 0.2,
+    nocturnal: false, sleepStart: 9, sleepEnd: 18,
+    hungerH: 5, energyH: 8, hygieneH: 6, hardy: 0.85, social: 0.7, messy: 0.2,
+    clingy: false, perch: false, aquatic: true, wander: 0.22,
+    special: "soak", diet: "leaf",
+    extra: {
+      sick: ["The bank is thin."],
+      clean: ["The bank is an honest soak."],
+      bath: ["Water. Then the soak."],
+      medicine: ["A grass of a cure."],
+      praise: ["I will keep that in a soak."],
+      hide: ["On the bank."],
+      call: ["I soaked. Hello."],
+      special: ["I soaked. Hello."],
+    },
+  },
   porcupine: {
     size: 0.86, walk: 36, hop: 4, pitch: 0.58, rate: 0.1,
     nocturnal: true, sleepStart: 8, sleepEnd: 18,

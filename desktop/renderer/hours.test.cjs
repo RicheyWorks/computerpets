@@ -14,7 +14,7 @@ const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const CATALOG = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m[1]);
 
 test("every overlay guest keeps their own snack line, not a small treaty", () => {
-  assert.equal(Object.keys(H.SNACK_LINE).length, 220);
+  assert.equal(Object.keys(H.SNACK_LINE).length, 221);
   assert.deepEqual(Object.keys(H.SNACK_LINE).sort(), [...CATALOG].sort());
   assert.equal(H.snackLine("dog"), "For me? I have prepared a sit.");
   assert.equal(H.snackLine("red_panda"), "A small treaty. Bamboo-adjacent.");
@@ -27,7 +27,7 @@ test("every overlay guest keeps their own snack line, not a small treaty", () =>
 });
 
 test("the overlay keeps the same night as the desk for every guest", () => {
-  assert.equal(Object.keys(H.REST).length, 220);
+  assert.equal(Object.keys(H.REST).length, 221);
   assert.deepEqual(Object.keys(H.REST).sort(), [...CATALOG].sort());
   assert.equal(H.isRestingHour("dog", 22), true);
   assert.equal(H.isRestingHour("dog", 14), false);
@@ -77,13 +77,13 @@ test("illness and mess tick the house way, and save keeps the clock", () => {
   const stored = JSON.parse(mem.get("computerpets.desktop.life.v2.dog"));
   assert.equal(stored.lastTick, then);
   assert.equal(stored.hunger, 78);
-  assert.match(lifeSrc, /JSON\.stringify\(life\)/);
+  assert.match(lifeSrc, /JSON\.stringify\(\{ \.\.\.life, hidden: false \}\)/);
   assert.doesNotMatch(lifeSrc, /lastTick: Date\.now\(\)/);
   assert.match(petSrc, /if \(document\.hidden\) return;/);
 });
 
 test("every overlay guest keeps their own call-back, not Pip's tail", () => {
-  assert.equal(Object.keys(H.CALL_LINE).length, 220);
+  assert.equal(Object.keys(H.CALL_LINE).length, 221);
   assert.deepEqual(Object.keys(H.CALL_LINE).sort(), [...CATALOG].sort());
   assert.equal(H.callLine("dog"), "You called. I was already coming.");
   assert.equal(H.callLine("field_cricket"), "I sang. Hello.");
@@ -103,7 +103,7 @@ test("every overlay guest keeps their own call-back, not Pip's tail", () => {
 });
 
 test("every overlay guest keeps their own gift line, not a leftover this", () => {
-  assert.equal(Object.keys(H.GIFT_LINE).length, 220);
+  assert.equal(Object.keys(H.GIFT_LINE).length, 221);
   assert.deepEqual(Object.keys(H.GIFT_LINE).sort(), [...CATALOG].sort());
   assert.equal(H.giftLine("red_panda"), "A ribbon I was not using. For the desk.");
   assert.equal(H.giftLine("grouper"), "A fish I was finished hiding for.");
@@ -161,7 +161,7 @@ test("a kind change keeps the leaving overlay guest and sits the arriving one", 
 
   const keptRui = JSON.parse(mem.get("computerpets.desktop.life.v2.red_panda"));
   assert.equal(keptRui.hunger, 11);
-  assert.equal(keptRui.hidden, true);
+  assert.equal(keptRui.hidden, false);
   assert.equal(keptRui.mess.length, 1);
 
   const keptChirp = JSON.parse(mem.get("computerpets.desktop.life.v2.field_cricket"));

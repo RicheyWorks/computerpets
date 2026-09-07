@@ -179,6 +179,7 @@
     skunk: "Warn",
     opossum: "Play dead",
     beaver: "Lodge",
+    capybara: "Soak",
     porcupine: "Bristle",
     black_bear: "Forage",
     gecko: "Climb",

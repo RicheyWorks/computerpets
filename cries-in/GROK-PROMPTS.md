@@ -1,4 +1,4 @@
-# ComputerPets — Grok cry list (220)
+# ComputerPets — Grok cry list (221)
 
 Wikipedia-checked natural sounds. Grok Imagine is still the generator (image-to-video from that guest's house still if they have one). Then extract audio to desktop/renderer/sounds/{key}.wav and web/public/sounds/{key}.wav.
 
@@ -8,7 +8,7 @@ If Wikipedia describes a vocalization, the prompt uses that. If Wikipedia is sil
 
 Paste into Grok Imagine Video. Close-up. AUDIO: only that sound. No music. No narrator. No English words. Dry, 2 to 4 seconds, loop-safe.
 
-House names from the roster. Catalog 220.
+House names from the roster. Catalog 221.
 
 ## House
 

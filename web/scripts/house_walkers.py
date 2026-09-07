@@ -13589,6 +13589,7 @@ S("raccoon", "mammal", (120, 116, 108), (220, 216, 208), (32, 28, 24), (48, 44, 
 S("skunk", "mammal", (28, 28, 30), (236, 232, 224), (16, 16, 18), (236, 232, 224), "stripe", "Mephitis mephitis")
 S("opossum", "mammal", (168, 160, 148), (212, 204, 192), (40, 36, 32), (220, 168, 160), "pink", "Didelphis virginiana")
 S("beaver", "mammal", (112, 80, 52), (168, 132, 88), (28, 20, 16), (72, 52, 36), "paddle", "Castor canadensis")
+S("capybara", "mammal", (120, 92, 64), (176, 148, 112), (28, 22, 18), (88, 68, 48), "barrel", "Hydrochoerus hydrochaeris")
 S("porcupine", "mammal", (88, 68, 48), (196, 180, 152), (24, 18, 14), (48, 40, 32), "quill", "Erethizon dorsatum")
 S("black_bear", "mammal", (36, 32, 30), (72, 60, 52), (16, 14, 12), (56, 48, 40), "bear", "Ursus americanus")
 # Canopy
@@ -13787,6 +13788,9 @@ def mammal(b: Brush, s: Spec, pose: dict):
         b.poly([(40, -16), (118, -30), (122, -8), (44, 0)], belly, 230)
     if s.tell == "paddle":
         b.poly([(70, 10), (124, 6), (126, 34), (76, 30)], acc, 230)
+    if s.tell == "barrel":
+        b.ell(110, 24, 18, 12, mix(fur, ink, 0.2), 230)
+        b.ell(-92, 4, 18, 12, fur, 230)
     b.shade(8, 8, 78, 48, fur, 240)
     b.ell(10, 22, 48, 22, belly, 200)
     b.fur(8, 6, 78, 48, fur, 130)

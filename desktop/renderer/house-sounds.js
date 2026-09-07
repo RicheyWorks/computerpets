@@ -21,7 +21,7 @@
   "red_tail", "chickadee", "robin", "mallard", "canada_goose", "pileated", "hummingbird",
   "orb_weaver", "jumping_spider", "wolf_spider", "tarantula", "widow", "harvestman",
   "scorpion", "vinegaroon", "tick", "solifuge", "deer", "bat", "squirrel", "otter",
-  "raccoon", "skunk", "opossum", "beaver", "porcupine", "black_bear", "gecko", "anole",
+  "raccoon", "skunk", "opossum", "beaver", "porcupine", "black_bear", "capybara", "gecko", "anole",
   "skink", "chameleon", "horned_lizard", "alligator", "crocodile", "snapper",
   "box_turtle", "tuatara", "bass", "brook_trout", "catfish", "bluegill", "perch", "pike",
   "walleye", "paddlefish", "lamprey", "american_eel", "house_centipede", "millipede",

@@ -29,8 +29,8 @@ const CATALOG = [...catalogSrc.matchAll(/\{ key: "([a-z0-9_]+)"/g)].map((m) => m
 const PIP = "You called. I brought the whole tail.";
 
 test("call lines cover the house, and Chirp is not Pip", () => {
-  assert.equal(CATALOG.length, 220);
-  assert.equal(Object.keys(Hours.CALL_LINE).length, 220);
+  assert.equal(CATALOG.length, 221);
+  assert.equal(Object.keys(Hours.CALL_LINE).length, 221);
   assert.deepEqual(Object.keys(Hours.CALL_LINE).sort(), [...CATALOG].sort());
   assert.equal(Hours.callLine("dog"), "You called. I was already coming.");
   assert.equal(Hours.callLine("field_cricket"), "I sang. Hello.");
@@ -72,7 +72,7 @@ test("the desk walks off and walks in the house way, and call-back is not Pip fo
 });
 
 test("overlay and blotter keep the same call and the same walk", () => {
-  assert.equal(Object.keys(OverlayHours.CALL_LINE).length, 220);
+  assert.equal(Object.keys(OverlayHours.CALL_LINE).length, 221);
   assert.equal(OverlayHours.callLine("field_cricket"), Hours.callLine("field_cricket"));
   assert.equal(OverlayHours.callLine("grouper"), Hours.callLine("grouper"));
   assert.match(blotterHours, /CALL_LINE/);

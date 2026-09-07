@@ -192,6 +192,7 @@ WEB_CATALOG = (
     "beaver",
     "porcupine",
     "black_bear",
+    "capybara",
     "gecko",
     "anole",
     "skink",
@@ -431,6 +432,7 @@ WEB_WOOD = (
     "beaver",
     "porcupine",
     "black_bear",
+    "capybara",
 )
 
 WEB_STONE = (
@@ -542,7 +544,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(WELL_KEYS) == 10
     assert len(ROOST_KEYS) == 10
     assert len(CORNER_KEYS) == 10
-    assert len(WOOD_KEYS) == 10
+    assert len(WOOD_KEYS) == 11
     assert len(STONE_KEYS) == 10
     assert len(CREEK_KEYS) == 10
     assert len(LOG_KEYS) == 10
@@ -550,7 +552,7 @@ def test_roster_has_catalog_keys_including_the_tide_and_garden():
     assert len(MEADOW_KEYS) == 10
     assert len(CANOPY_KEYS) == 10
     assert len(REEF_KEYS) == 10
-    assert len(GRID_KEYS) == 9
+    assert len(GRID_KEYS) == 10
     assert CATALOG_KEYS == WEB_CATALOG
     assert set(SPECIES) == set(WEB_CATALOG)
     assert set(SEA_KEYS) == set(WEB_SEA)
@@ -1397,7 +1399,8 @@ def test_cycle_wraps_the_full_house():
     assert prev_species_key("crow") == "haloarchaea"
     assert next_species_key("hummingbird") == "orb_weaver"
     assert next_species_key("solifuge") == "deer"
-    assert next_species_key("black_bear") == "gecko"
+    assert next_species_key("black_bear") == "capybara"
+    assert next_species_key("capybara") == "gecko"
     assert next_species_key("tuatara") == "bass"
     assert next_species_key("american_eel") == "house_centipede"
     assert next_species_key("amphipod") == "fiddler_crab"
@@ -1422,7 +1425,8 @@ def test_cycle_wraps_the_full_house():
     assert prev_species_key("house_centipede") == "american_eel"
     assert prev_species_key("fiddler_crab") == "amphipod"
     assert prev_species_key("bass") == "tuatara"
-    assert prev_species_key("gecko") == "black_bear"
+    assert prev_species_key("gecko") == "capybara"
+    assert prev_species_key("capybara") == "black_bear"
     assert prev_species_key("deer") == "solifuge"
     assert prev_species_key("paramecium") == "stickleback"
     assert prev_species_key("honeybee") == "sundew"

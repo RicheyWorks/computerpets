@@ -1,7 +1,7 @@
 """House clock the living desk already uses.
 
 Port of ``web/src/lib/pets/hours.ts``. Same dawn / day / dusk / night, same
-two hundred twenty REST windows, same return lines. Do not invent rest hours or copy.
+two hundred twenty-one REST windows, same return lines. Do not invent rest hours or copy.
 """
 
 from __future__ import annotations
@@ -156,6 +156,7 @@ REST: dict[str, tuple[int, int]] = {
     "skunk": (8, 18),
     "opossum": (8, 18),
     "beaver": (8, 17),
+    "capybara": (9, 18),
     "porcupine": (8, 18),
     "black_bear": (22, 7),
     "gecko": (7, 19),
@@ -383,6 +384,7 @@ HIDE_LINE: dict[str, str] = {
     "skunk": "Under the duff.",
     "opossum": "On the hem.",
     "beaver": "Inside the lodge.",
+    "capybara": "On the bank.",
     "porcupine": "On the post.",
     "black_bear": "Inside the denside.",
     "gecko": "On the plaster.",
@@ -606,6 +608,7 @@ CALL_LINE: dict[str, str] = {
     "skunk": "I stamped. Hello.",
     "opossum": "I went still. Hello.",
     "beaver": "I gnawed. Hello.",
+    "capybara": "I soaked. Hello.",
     "porcupine": "I bristled. Hello.",
     "black_bear": "I foraged. Hello.",
     "gecko": "I climbed. Hello.",
@@ -829,6 +832,7 @@ SNACK_LINE: dict[str, str] = {
     "skunk": "Grub of a treaty.",
     "opossum": "Scrap of a treaty.",
     "beaver": "Bark of a treaty.",
+    "capybara": "Grass of a treaty.",
     "porcupine": "Bark of a treaty.",
     "black_bear": "Berry of a treaty.",
     "gecko": "Moth of a treaty.",
