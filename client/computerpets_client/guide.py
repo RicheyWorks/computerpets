@@ -1344,15 +1344,6 @@ WOOD_GUIDE: tuple[FieldGuide, ...] = (
         "building",
     ),
     _entry(
-        "capybara",
-        "Hydrochoerus hydrochaeris",
-        "A barrel body, a blunt snout, a calm that sits in water. Capybara. She sits. Then she soaks. The bank is a river she agreed to.",
-        "Not Whee — Whee is a guinea pig who wheeks for salad. Not Bloom — Bloom is an axolotl in a glass cistern. Not Dam — Dam is a beaver with a paddle tail and a lodge. Soak is Hydrochoerus hydrochaeris, and the soak is the tell. A capybara is not a guinea pig. A capybara is not an axolotl. The calm is the species.",
-        "Capybara. A calm soak. Not Whee. Not Bloom.",
-        "river bank",
-        "calm",
-    ),
-    _entry(
         "porcupine",
         "Erethizon dorsatum",
         "Quills that can leave if you press them. She does not throw. North American porcupine. She walks. Then she bristles. The post is a pine she agreed to.",
@@ -1369,6 +1360,15 @@ WOOD_GUIDE: tuple[FieldGuide, ...] = (
         "American black bear. Not a red panda. Not Rui. She is a bear.",
         "oak denside",
         "sure",
+    ),
+    _entry(
+        "capybara",
+        "Hydrochoerus hydrochaeris",
+        "A barrel body, a blunt snout, a calm that sits in water. Capybara. She sits. Then she soaks. The bank is a river she agreed to.",
+        "Not Whee — Whee is a guinea pig who wheeks for salad. Not Bloom — Bloom is an axolotl in a glass cistern. Not Dam — Dam is a beaver with a paddle tail and a lodge. Soak is Hydrochoerus hydrochaeris, and the soak is the tell. A capybara is not a guinea pig. A capybara is not an axolotl. The calm is the species.",
+        "Capybara. A calm soak. Not Whee. Not Bloom.",
+        "river bank",
+        "calm",
     ),
 )
 

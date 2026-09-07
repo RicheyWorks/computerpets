@@ -146,6 +146,7 @@ HOUSE_TRAITS = {
     "beaver": ("lodge", "Lodge", "I gnawed. Hello."),
     "porcupine": ("bristle", "Bristle", "I bristled. Hello."),
     "black_bear": ("forage", "Forage", "I foraged. Hello."),
+    "capybara": ("soak", "Soak", "I soaked. Hello."),
     "gecko": ("climb", "Climb", "I climbed. Hello."),
     "anole": ("dewlap", "Flash", "I flashed. Hello."),
     "skink": ("dash", "Dash", "I dashed. Hello."),
