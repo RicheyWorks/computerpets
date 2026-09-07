@@ -44,7 +44,7 @@ test("the house pins match the blotter after the grid", () => {
   assert.equal(todaysVisitor("red_panda", 2024, 6, 9), "salamander");
   assert.match(pySrc, /todays_visitor\("red_panda", now\)\.key == "ferret"/);
   assert.match(pySrc, /todays_visitor\("ball_python", now\)\.key == "hedgehog"/);
-  assert.match(pySrc, /Spin may call/);
+  assert.match(pySrc, /Wick may call/);
   assert.doesNotMatch(pySrc, /Ridge may call/);
   assert.doesNotMatch(pySrc, /Cone may call/);
   assert.doesNotMatch(pySrc, /Sepia may call/);

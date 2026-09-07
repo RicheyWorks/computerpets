@@ -77,7 +77,7 @@ test("illness and mess tick the house way, and save keeps the clock", () => {
   const stored = JSON.parse(mem.get("computerpets.desktop.life.v2.dog"));
   assert.equal(stored.lastTick, then);
   assert.equal(stored.hunger, 78);
-  assert.match(lifeSrc, /JSON\.stringify\(life\)/);
+  assert.match(lifeSrc, /JSON\.stringify\(\{ \.\.\.life, hidden: false \}\)/);
   assert.doesNotMatch(lifeSrc, /lastTick: Date\.now\(\)/);
   assert.match(petSrc, /if \(document\.hidden\) return;/);
 });
@@ -161,7 +161,7 @@ test("a kind change keeps the leaving overlay guest and sits the arriving one", 
 
   const keptRui = JSON.parse(mem.get("computerpets.desktop.life.v2.red_panda"));
   assert.equal(keptRui.hunger, 11);
-  assert.equal(keptRui.hidden, true);
+  assert.equal(keptRui.hidden, false);
   assert.equal(keptRui.mess.length, 1);
 
   const keptChirp = JSON.parse(mem.get("computerpets.desktop.life.v2.field_cricket"));

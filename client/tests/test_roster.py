@@ -192,6 +192,7 @@ WEB_CATALOG = (
     "beaver",
     "porcupine",
     "black_bear",
+    "capybara",
     "gecko",
     "anole",
     "skink",
@@ -1398,7 +1399,8 @@ def test_cycle_wraps_the_full_house():
     assert prev_species_key("crow") == "haloarchaea"
     assert next_species_key("hummingbird") == "orb_weaver"
     assert next_species_key("solifuge") == "deer"
-    assert next_species_key("black_bear") == "gecko"
+    assert next_species_key("black_bear") == "capybara"
+    assert next_species_key("capybara") == "gecko"
     assert next_species_key("tuatara") == "bass"
     assert next_species_key("american_eel") == "house_centipede"
     assert next_species_key("amphipod") == "fiddler_crab"
@@ -1423,7 +1425,8 @@ def test_cycle_wraps_the_full_house():
     assert prev_species_key("house_centipede") == "american_eel"
     assert prev_species_key("fiddler_crab") == "amphipod"
     assert prev_species_key("bass") == "tuatara"
-    assert prev_species_key("gecko") == "black_bear"
+    assert prev_species_key("gecko") == "capybara"
+    assert prev_species_key("capybara") == "black_bear"
     assert prev_species_key("deer") == "solifuge"
     assert prev_species_key("paramecium") == "stickleback"
     assert prev_species_key("honeybee") == "sundew"

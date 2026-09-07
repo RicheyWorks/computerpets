@@ -47,7 +47,7 @@ def test_visitor_uses_catalog_order_minus_host():
 def test_visit_line_is_the_house_copy():
     assert visit_line("axolotl") == "I grew a little more present. Then less."
     assert visit_line("ball_python") == "I came as a bun. I will leave as a bun."
-    assert visit_caption("red_panda", datetime(2026, 8, 17)) == "Spin may call"
+    assert visit_caption("red_panda", datetime(2026, 8, 17)) == "Wick may call"
     assert visit_line("horseshoe_crab") == "I walked the sand. I am not a crab."
     assert visit_line("sloth") == "I hung. Then I left the bough."
     assert visit_line("koala") == "I chewed. Then I left the gum."

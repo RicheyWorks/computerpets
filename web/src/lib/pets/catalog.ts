@@ -151,6 +151,7 @@ export const SPECIES: Species[] = [
   { key: "beaver", displayName: "North American Beaver", rarity: "UNCOMMON", temperament: "Building", habitat: "Lodge cup", blurb: "Teeth that fell. A lodge. Not a muskrat rumor." },
   { key: "porcupine", displayName: "North American Porcupine", rarity: "UNCOMMON", temperament: "Bristled", habitat: "Pine post", blurb: "Quills that can leave. Not Burr. Not Quill." },
   { key: "black_bear", displayName: "American Black Bear", rarity: "RARE", temperament: "Sure", habitat: "Oak denside", blurb: "Not a red panda. Not Rui. She is a bear." },
+  { key: "capybara", displayName: "Capybara", rarity: "UNCOMMON", temperament: "Calm", habitat: "River bank", blurb: "A calm soak. The largest living rodent. Not Whee. Not Bloom. Not a muskrat rumor." },
   { key: "gecko", displayName: "Mediterranean House Gecko", rarity: "COMMON", temperament: "Climbing", habitat: "Lamp plaster", blurb: "Toe pads. A night voice. Not a salamander. Not Dapple." },
   { key: "anole", displayName: "Green Anole", rarity: "COMMON", temperament: "Flashing", habitat: "Vine post", blurb: "A dewlap. She can go brown. Not a chameleon. Not Shift." },
   { key: "skink", displayName: "Five-lined Skink", rarity: "COMMON", temperament: "Quick", habitat: "Stone crack", blurb: "A blue tail when young. Not a snake. Not Sash." },
@@ -231,7 +232,6 @@ export const SPECIES: Species[] = [
   { key: "relay_dragon", displayName: "Click Dragon", rarity: "LEGENDARY", temperament: "Clicked", habitat: "Machine-night", blurb: "A single live click-node at the nape. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Vesper." },
   { key: "fuse_dragon", displayName: "Cartridge Dragon", rarity: "LEGENDARY", temperament: "Fused", habitat: "Machine-night", blurb: "A single glass cartridge fuse across the sternum. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Vesper." },
   { key: "ground_dragon", displayName: "Earth Dragon", rarity: "LEGENDARY", temperament: "Earthed", habitat: "Machine-night", blurb: "A braided copper ground-strap from chest to claw. Not Arc. Not Volt. Not Trace. Not Flux. Not Spark. Not Ion. Not Gauss. Not Relay. Not Fuse. Not Vesper." },
-  { key: "capybara", displayName: "Capybara", rarity: "UNCOMMON", temperament: "Calm", habitat: "River bank", blurb: "A calm soak. The largest living rodent. Not Whee. Not Bloom. Not a muskrat rumor." },
 ];
 
 export const SPECIES_BY_KEY: Record<string, Species> = Object.fromEntries(

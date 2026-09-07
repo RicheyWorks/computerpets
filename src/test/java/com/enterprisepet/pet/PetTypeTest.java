@@ -158,6 +158,7 @@ class PetTypeTest {
             new ExpectedSpecies("beaver", "North American Beaver", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("porcupine", "North American Porcupine", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("black_bear", "American Black Bear", PetType.Rarity.RARE),
+            new ExpectedSpecies("capybara", "Capybara", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("gecko", "Mediterranean House Gecko", PetType.Rarity.COMMON),
             new ExpectedSpecies("anole", "Green Anole", PetType.Rarity.COMMON),
             new ExpectedSpecies("skink", "Five-lined Skink", PetType.Rarity.COMMON),
@@ -237,8 +238,7 @@ class PetTypeTest {
             new ExpectedSpecies("gauss_dragon", "Filing Dragon", PetType.Rarity.LEGENDARY),
             new ExpectedSpecies("relay_dragon", "Click Dragon", PetType.Rarity.LEGENDARY),
             new ExpectedSpecies("fuse_dragon", "Cartridge Dragon", PetType.Rarity.LEGENDARY),
-            new ExpectedSpecies("ground_dragon", "Earth Dragon", PetType.Rarity.LEGENDARY),
-            new ExpectedSpecies("capybara", "Capybara", PetType.Rarity.UNCOMMON)
+            new ExpectedSpecies("ground_dragon", "Earth Dragon", PetType.Rarity.LEGENDARY)
     );
 
     private static final List<String> SNAKE_KEYS = List.of(
@@ -345,10 +345,10 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(82L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(82L);
-        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(33L);
-        assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(3L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(85L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(88L);
+        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(35L);
+        assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(13L);
     }
 
     @Test
