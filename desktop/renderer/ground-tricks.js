@@ -98,6 +98,7 @@ const Morel = root.PetMorelTricks;
   const Frog = root.PetFrogTricks;
   const Toad = root.PetToadTricks;
   const Newt = root.PetNewtTricks;
+  const Salamander = root.PetSalamanderTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -194,6 +195,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Frog && (key === Frog.TRICK_KEY || key === "frog" || key === "reed")) return Frog;
     if (Toad && (key === Toad.TRICK_KEY || key === "toad" || key === "pebble")) return Toad;
     if (Newt && (key === Newt.TRICK_KEY || key === "newt" || key === "eft")) return Newt;
+    if (Salamander && (key === Salamander.TRICK_KEY || key === "salamander" || key === "dapple")) return Salamander;
   }
 
   function wantsThankYou(key) {
