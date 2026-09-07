@@ -572,6 +572,7 @@ globalThis.PetFireflyTricks = OverlayFirefly;
 globalThis.PetDarnerTricks = OverlayDarner;
 globalThis.PetStickTricks = Overlay;
   globalThis.PetCarpenterAntTricks = OverlayCarpenterAnt;
+  globalThis.PetLadybirdTricks = createRequire(import.meta.url)(join(root, "../desktop/renderer/ladybird-tricks.js"));
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("turtle"), OverlayTurtle);
@@ -734,7 +735,7 @@ globalThis.PetStickTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Twig idle-life done; Column idle-life done; next house-order guest still lacking tricks is Seven / ladybird", () => {
+test("notes: Twig idle-life done; Column idle-life done; Seven idle-life done; next house-order guest still lacking tricks is Fold / mantis", () => {
   assert.equal(T.TRICK_KEY, "stick");
   assert.equal(T.wantsThankYou("twig"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -891,10 +892,14 @@ test("notes: Twig idle-life done; Column idle-life done; next house-order guest 
   assert.equal(OverlayGround.wantsThankYou("column"), true);
   assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
   assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
-  assert.equal(OverlayGround.tricksFor("ladybird"), null);
-  assert.equal(OverlayGround.wantsThankYou("ladybird"), false);
-  assert.equal(OverlayGround.tricksFor("seven"), null);
-  assert.equal(OverlayGround.wantsThankYou("seven"), false);
+  assert.ok(OverlayGround.tricksFor("ladybird"));
+  assert.equal(OverlayGround.wantsThankYou("ladybird"), true);
+  assert.ok(OverlayGround.tricksFor("seven"));
+  assert.equal(OverlayGround.wantsThankYou("seven"), true);
+  assert.equal(OverlayGround.tricksFor("mantis"), null);
+  assert.equal(OverlayGround.wantsThankYou("mantis"), false);
+  assert.equal(OverlayGround.tricksFor("fold"), null);
+  assert.equal(OverlayGround.wantsThankYou("fold"), false);
   assert.equal(OverlayGround.tricksFor("darner"), OverlayDarner);
   assert.equal(OverlayGround.wantsThankYou("darner"), true);
   assert.equal(OverlayGround.tricksFor("dart"), OverlayDarner);
