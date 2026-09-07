@@ -1,0 +1,465 @@
+/** Horn ground tricks while idle. House neighborly golden-chanterelle FORK life — apricot / funnel / decurrent / flute / cantharellus personality (apricot fragrance tip settle as Cantharellus scent — not Wax tessera/hex honeycomb, not window FORK as a trick kind; never named fork (window-play FORK owns that word; never a trick kind) / ridge (Lattice idle + Horn trait talk Ridge — keep namespaces clean) / horn as a trick kind / lean (ethogram) / flush (ethogram) / still (ethogram) / dig (Thimble) / nest (Clip + Column window) / bank (Lula + Bank guest) / buzz (Relay) / dance (Rui) / hover (Sepia) / festoon (Wax) / capped (Wax) / midrib (Wax) / stores (Wax) / tessera (Wax) / lamella (Frill) / imbricate (Frill) / lasso (Frill) / margin (Frill) / pleurotus (Frill) / annulus (Cap) / volva (Cap) / veil (Cap) / symbiont (Cap) / amanita (Cap) / alveolus (Lattice) / ephemeral (Lattice) / sclerotium (Lattice) / morchella (Lattice), funnel vase/funnel form settle on the moss rim — never named shelf (Frill window) / tuft (Felt/moss) / frond (Vein/fern) / curl (Burr/hedgehog) / brood as a trick kind (also Brood cicada guest) / hold as a trick kind / cell (mason ethogram) / cerumen (Pot) / batumen (Pot) / circle (Disc) / liner (Disc) / warts (Cap window), decurrent false-gill run down the stipe (true Cantharellus folds — not Frill lamella, not window FORK) — never named vernal (Bank) / pipe (Keep) / retinue (Keep) / duel (Keep) / royal (Keep) / hex (Comb) / partition (Auger) / plug (Mortar) / fossor (Thrum) / shaft (Bank) / gill as a trick kind, flute fluted margin settle — never named frill as a trick kind / fan (Fan guest) / sheen (Sheen guest + Disk trick) / glint (Coin) / gleam (Ground happy) / shine (Ember) / wax as a trick kind (guest Wax) / honey (Comb happy) / mead (Comb happy) / nectar (Disk) / pollen (Moth happy) / vessel (Pot) / spout (Pot) / mass (Bank) / tuft (Felt) / cap as a trick kind / lattice as a trick kind, cantharellus long hold desk life as golden chanterelle (not jack-o’-lantern / Omphalotus) with cibarius / formosus / cascadensis cousins in the thank-yous — never named mellifera (Hum) / regina (Keep) / andrena (Bank) / langstroth (Wax) / topbar (Wax) / warre (Wax) / ostreatus (Frill) / pulmonarius (Frill) / eryngii (Frill) / muscaria (Cap) / regalis (Cap) / frostiana (Cap) / esculenta (Lattice) / americana (Lattice) / elata (Lattice) / hive (Comb) / hex (Comb); guest slug Horn only for isKey matching — accept "horn" and chanterelle; do NOT name a trick "horn"). Feed-happy thank-yous sit after eat. Card-open freeze and window-play FORK do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop chanterelle-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/fly_agaric/Cap/morel/Lattice/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/carpenter_bee/Auger/mason_bee/Mortar/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen/mining_bee/Bank or *Dragon electrical clone. Window-play FORK unchanged — never names fork. Ethogram lean/flush/still unchanged — never names lean or flush as trick kinds. Comb owns figure/corbicula/hex/proboscis/hive and happy honey/mead/propolis; Hum owns holoptic/congregation/sortie/ocellus/mellifera and happy ligustica/carnica/apisini; Keep owns pipe/retinue/duel/royal/regina and happy caucasica/iberiensis/apini; Wax owns festoon/capped/midrib/stores/tessera and happy langstroth/topbar/warre; Frill owns lamella/imbricate/lasso/margin/pleurotus and happy ostreatus/pulmonarius/eryngii; Cap owns annulus/volva/veil/symbiont/amanita and happy muscaria/regalis/frostiana; Lattice owns alveolus/ridge/ephemeral/sclerotium/morchella and happy esculenta/americana/elata; Thrum owns sonicate/scopa/fossor/lumber/bombus and happy impatiens/bimaculatus/bombini; Auger owns rasp/glabrous/partition/picket/xylocopa and happy virginica/micans/xylocopini; Mortar owns trowel/beebread/orchard/plug/osmia and happy lignaria/cornifrons/osmiini; Disc owns circle/liner/cavity/parcel/megachile and happy rotundata/relativa/megachilini; Pot owns cerumen/spout/vessel/batumen/melipona and happy beecheii/yucatanica/meliponini; Sheen owns lustre/tumulus/salt/commune/agapostemon and happy virescens/texanus/halictini; Bank owns shaft/mass/vernal/fovea/andrena and happy vicina/carlini/andrenini; Lula owns bank; Disk owns pad/corolla/rhizome/calyx/sheen and happy silt/nectar/dew; Column owns gallery/pheromone/crumb/bustle/camponotus; Sepia owns hover; Vesper owns guard/thrum; Arm owns sentinel; Clip owns nest; Thimble owns dig; Ring owns the next turkey_tail seat; Felt is moss; Vein is fern; Fan is ginkgo; Burr is hedgehog guest; Reed owns plop; Tube owns papillae; Relay owns buzz; Rui owns dance; Ground happy owns gleam; Coin owns glint; Ember owns shine. True Cantharellus golden-chanterelle desk life only — false gills that fork, apricot scent, moss-rim vase, not a jack-o’-lantern / Omphalotus, not a bee, not a plant, not Wax honeycomb place, not Frill oyster shelf, not Cap Amanita, not Lattice morel. No cry inventing — thank-yous are silent desk motion only. */
+
+
+export const TRICK_KEY = "chanterelle";
+export const TRICKS = ["apricot", "funnel", "decurrent", "flute", "cantharellus"] as const;
+export const HAPPY = ["cibarius", "formosus", "cascadensis"] as const;
+export type ChanterelleTrickKind = (typeof TRICKS)[number];
+export type ChanterelleHappyKind = (typeof HAPPY)[number];
+export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
+export type TrickPhase = "go" | "hold" | "release" | "done";
+export type HappyPhase = "go" | "done";
+
+export type TrickFlags = {
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+  windowPlay?: boolean;
+  card?: boolean;
+};
+
+export type ChanterelleTrick = {
+  kind: ChanterelleTrickKind;
+  phase: TrickPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
+};
+
+export type ChanterelleHappy = {
+  kind: ChanterelleHappyKind;
+  happy: true;
+  phase: HappyPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
+};
+
+export const HAPPY_DUR = { cibarius: 1.38, formosus: 1.44, cascadensis: 1.49 } as const;
+export const CANTHARELLUS_HOLD = 15.61;
+export const RELEASE_S = 0.81;
+export const DUR = { cantharellus: CANTHARELLUS_HOLD + RELEASE_S, apricot: 1.84, funnel: 1.98, decurrent: 1.72, flute: 1.59 } as const;
+export function canStart(state: TrickFlags | undefined) {
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
+export function shouldAbort(state: TrickFlags | undefined) {
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "eat" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
+export function nextTrickWait(justFinished: boolean, rand?: number, kind?: ChanterelleTrickKind | string) {
+  const roll = rand == null ? Math.random() : rand;
+    if (kind === "cantharellus") return 55 + roll * 33;
+  if (kind === "apricot") return 15.1 + roll * 10.9;
+  if (kind === "funnel") return 19.1 + roll * 11.9;
+  if (kind === "flute") return 16.1 + roll * 12.9;
+  return justFinished ? 11.2 + roll * 8.6 : 5.9 + roll * 7.2;
+}
+
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: ChanterelleTrickKind | string | null) {
+  if (musicOn) return "cantharellus";
+  const roll = rand == null ? Math.random() : rand;
+  if (lastKind === "cantharellus") {
+    if (roll < 0.26) return "apricot";
+    if (roll < 0.5) return "funnel";
+    if (roll < 0.74) return "decurrent";
+    return "flute";
+  }
+  if (lastKind === "apricot") {
+    if (roll < 0.26) return "cantharellus";
+    if (roll < 0.5) return "funnel";
+    if (roll < 0.74) return "decurrent";
+    return "flute";
+  }
+  if (lastkind === "funnel") {
+    if (roll < 0.22) return "cantharellus";
+    if (roll < 0.44) return "apricot";
+    if (roll < 0.68) return "decurrent";
+    return "flute";
+  }
+  if (roll < 0.2) return "cantharellus";
+  if (roll < 0.4) return "apricot";
+  if (roll < 0.6) return "funnel";
+  if (roll < 0.8) return "decurrent";
+  return "flute";
+}
+
+export function happyCanStart(state: TrickFlags | undefined) {
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
+export function happyShouldAbort(state: TrickFlags | undefined) {
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
+export function wantsThankYou(key: string | undefined | null) {
+  return key === TRICK_KEY || key === "horn";
+}
+
+export function startThankYou(
+  key: string | undefined | null,
+  lastKind: ChanterelleHappyKind | string | null | undefined,
+  x: number,
+  facing: 1 | -1,
+  flags?: TrickFlags,
+) {
+  if (!wantsThankYou(key)) return null;
+  if (!happyCanStart(flags || { cmd: "idle" })) return null;
+  const pick = pickHappy(lastKind as ChanterelleHappyKind | null | undefined);
+  return { happy: beginHappy(pick, x, facing), kind: pick };
+}
+
+export function pickHappy(lastKind?: ChanterelleHappyKind | null, rand?: number) {
+  const pool = HAPPY.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...HAPPY];
+  const roll = rand == null ? Math.random() : rand;
+  return list[Math.floor(roll * list.length)] || list[0];
+}
+
+export function beginHappy(kind: ChanterelleHappyKind | string, x: number, facing: 1 | -1): ChanterelleHappy {
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as ChanterelleHappyKind) : "cibarius";
+  return {
+    kind: name,
+    happy: true,
+    phase: "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: name === "cibarius" ? "talk" : name === "formosus" ? "play" : "sit",
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
+export function cibariusPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cibarius));
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 0.054, rot: s * 3.4, dx: 0, anim: "talk" as TrickAnim };
+    }
+    if (u < 0.76) {
+      const tick = Math.sin(t * 13.3) + 0.29 * Math.sin(t * 26.7);
+      return {
+        lift: 0.054 + Math.abs(tick) * 0.022,
+        rot: 3.4 + tick * 2.35,
+        dx: tick * 0.0024,
+        anim: "talk" as TrickAnim,
+      };
+    }
+    const s = (u - 0.76) / 0.24;
+    return { lift: 0.022 * (1 - s), rot: 1.1 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  }
+export function formosusPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.formosus));
+    if (u < 0.15) {
+      const s = u / 0.15;
+      return { lift: s * 0.07, rot: s * -4.2, dx: s * 0.003, anim: "play" as TrickAnim };
+    }
+    if (u < 0.8) {
+      const flash = Math.sin(t * 6.4) + 0.27 * Math.sin(t * 12.5);
+      return {
+        lift: 0.07 + Math.abs(flash) * 0.03,
+        rot: -4.2 + flash * 5.0,
+        dx: flash * 0.0048,
+        anim: "play" as TrickAnim,
+      };
+    }
+    const s = (u - 0.8) / 0.2;
+    return { lift: 0.024 * (1 - s), rot: -1.4 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  }
+export function cascadensisPose(t) {
+    return {
+      lift: 0.014 + Math.abs(Math.sin(t * 0.43)) * 0.012,
+      rot: Math.sin(t * 0.51) * 1.18,
+      dx: Math.sin(t * 0.31) * 0.0022,
+      anim: "sit" as TrickAnim,
+    };
+  }
+export function stepHappy(happy: ChanterelleHappy, dt: number, flags: TrickFlags): ChanterelleHappy {
+  if (!happy || happy.phase === "done") return happy;
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: ChanterelleHappy = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "cibarius") {
+    const pose = cibariusPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "formosus") {
+    const pose = formosusPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = cascadensisPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: ChanterelleTrickKind, x: number, facing: 1 | -1): ChanterelleTrick {
+  const anim: TrickAnim =
+    kind === "cantharellus"
+    ? "sit"
+    : kind === "apricot"
+      ? "play"
+      : kind === "funnel"
+        ? "talk"
+        : kind === "decurrent"
+          ? "talk"
+          : kind === "flute"
+            ? "sit"
+              : "sit";
+  return {
+    kind: kind,
+    phase: kind === "cantharellus" ? "hold" : "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
+function smoothstep(t: number) {
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
+}
+
+
+  export function cantharellusPose(t) {
+    const breath = Math.sin(t * 0.13) + 0.051 * Math.sin(t * 0.44);
+    const grit = Math.abs(Math.sin(t * 0.24));
+    return {
+      lift: 0.015 + grit * 0.013,
+      rot: -0.44 + breath * 0.54,
+    };
+  }
+
+  export function releasePose(t) {
+    const u = Math.max(0, Math.min(1, t / RELEASE_S));
+    return { lift: 0.015 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.44 * (1 - u) };
+  }
+
+  export function apricotPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.apricot));
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * -0.028, rot: s * 1.8 * facing, anim: "sit" as TrickAnim };
+    }
+    if (u < 0.72) {
+      const s = (u - 0.12) / 0.6;
+      const bite = Math.sin(s * Math.PI * 4.8);
+      const deepen = smoothstep(s);
+      return {
+        x: fromX + facing * deepen * 0.014,
+        lift: -0.04 - Math.abs(bite) * 0.028 - deepen * 0.02,
+        rot: facing * (2.2 + bite * 3.6),
+        anim: "talk" as TrickAnim,
+      };
+    }
+    const s = smoothstep((u - 0.72) / 0.28);
+    return {
+      x: fromX + facing * 0.01 * (1 - s),
+      lift: -0.018 * (1 - s),
+      rot: facing * (0.8 * (1 - s)),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  export function funnelPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.funnel));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 0.048, rot: s * -3.2 * facing, anim: "talk" as TrickAnim };
+    }
+    if (u < 0.58) {
+      const s = (u - 0.14) / 0.44;
+      const pack = Math.sin(s * Math.PI * 4.4);
+      return {
+        x: fromX + facing * (0.02 + Math.abs(pack) * 0.012),
+        lift: 0.055 + Math.abs(pack) * 0.045,
+        rot: facing * (-3.4 + pack * 5.5),
+        anim: "play" as TrickAnim,
+      };
+    }
+    if (u < 0.88) {
+      const s = (u - 0.58) / 0.3;
+      const press = smoothstep(s);
+      return {
+        x: fromX + facing * 0.028,
+        lift: 0.035 - press * 0.04,
+        rot: facing * (2.2 - press * 4.0),
+        anim: "talk" as TrickAnim,
+      };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return {
+      x: fromX + facing * 0.016 * (1 - s),
+      lift: -0.008 * (1 - s),
+      rot: facing * (0.6 * (1 - s)),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  export function decurrentPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.decurrent));
+    if (u < 0.22) {
+      const s = smoothstep(u / 0.22);
+      return { x: fromX, lift: -0.05 + s * 0.02, rot: s * 1.2 * facing, anim: "sit" as TrickAnim };
+    }
+    if (u < 0.7) {
+      const s = (u - 0.22) / 0.48;
+      const rise = smoothstep(s);
+      const shake = Math.sin(s * Math.PI * 3.2);
+      return {
+        x: fromX + facing * shake * 0.006,
+        lift: -0.03 + rise * 0.12,
+        rot: facing * (1.0 + shake * 2.8 + rise * 2.0),
+        anim: "play" as TrickAnim,
+      };
+    }
+    const s = smoothstep((u - 0.7) / 0.3);
+    return {
+      x: fromX,
+      lift: 0.08 * (1 - s),
+      rot: facing * (1.4 * (1 - s)),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  export function flutePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.flute));
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: s * 0.02, rot: s * -3.4 * facing, anim: "talk" as TrickAnim };
+    }
+    if (u < 0.84) {
+      const s = (u - 0.16) / 0.68;
+      const glance = Math.sin(s * Math.PI * 2.4);
+      const velour = Math.sin(s * Math.PI * 5.6) * 0.3;
+      return {
+        x: fromX + facing * glance * 0.004,
+        lift: 0.018 + Math.abs(velour) * 0.01,
+        rot: facing * (-2.8 + glance * 4.6 + velour),
+        anim: "talk" as TrickAnim,
+      };
+    }
+    const s = smoothstep((u - 0.84) / 0.16);
+    return {
+      x: fromX,
+      lift: 0.01 * (1 - s),
+      rot: facing * (-0.8 * (1 - s)),
+      anim: "sit" as TrickAnim,
+    };
+  }
+export function stepTrick(trick: ChanterelleTrick, dt: number, flags: TrickFlags): ChanterelleTrick {
+  if (!trick || trick.phase === "done") return trick;
+  if (shouldAbort(flags) && trick.kind !== "apricot" && trick.kind !== "funnel" && trick.kind !== "decurrent" && trick.kind !== "flute") {
+    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: ChanterelleTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  if (next.kind === "cantharellus") {
+    if (next.t < CANTHARELLUS_HOLD) {
+      const pose = cantharellusPose(next.t);
+      next.phase = "hold";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    if (next.t < CANTHARELLUS_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - CANTHARELLUS_HOLD);
+      next.phase = "release";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  }
+  const hold = DUR[next.kind];
+  const u = next.t / hold;
+  if (next.kind === "apricot") {
+    const pose = apricotPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "funnel") {
+    const pose = funnelPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "decurrent") {
+    const pose = decurrentPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = flutePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
