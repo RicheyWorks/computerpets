@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, and Column today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, and Seven today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -62,6 +62,7 @@
     const Darner = root.PetDarnerTricks;
     const Stick = root.PetStickTricks;
     const CarpenterAnt = root.PetCarpenterAntTricks;
+    const Ladybird = root.PetLadybirdTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -122,6 +123,7 @@
     if (Darner && (key === Darner.TRICK_KEY || key === "dart")) return Darner;
     if (Stick && (key === Stick.TRICK_KEY || key === "twig")) return Stick;
     if (CarpenterAnt && (key === CarpenterAnt.TRICK_KEY || key === "column")) return CarpenterAnt;
+    if (Ladybird && (key === Ladybird.TRICK_KEY || key === "seven")) return Ladybird;
     return null;
   }
 
