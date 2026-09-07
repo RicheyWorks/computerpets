@@ -61,8 +61,9 @@ import * as Darner from "./darner-tricks";
 import * as Stick from "./stick-tricks";
 import * as CarpenterAnt from "./carpenter_ant-tricks";
 import * as Ladybird from "./ladybird-tricks";
+import * as Mantis from "./mantis-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish | typeof Nautilus | typeof MoonJelly | typeof SeaStar | typeof HermitCrab | typeof HorseshoeCrab | typeof Seahorse | typeof Manta | typeof Moray | typeof Moss | typeof Maidenhair | typeof Ginkgo | typeof Oak | typeof WaterLily | typeof Orchid | typeof Saguaro | typeof VenusFlytrap | typeof Pitcher | typeof Sundew | typeof Honeybee | typeof Monarch | typeof Luna | typeof Firefly | typeof Darner | typeof Stick | typeof CarpenterAnt | typeof Ladybird;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish | typeof Nautilus | typeof MoonJelly | typeof SeaStar | typeof HermitCrab | typeof HorseshoeCrab | typeof Seahorse | typeof Manta | typeof Moray | typeof Moss | typeof Maidenhair | typeof Ginkgo | typeof Oak | typeof WaterLily | typeof Orchid | typeof Saguaro | typeof VenusFlytrap | typeof Pitcher | typeof Sundew | typeof Honeybee | typeof Monarch | typeof Luna | typeof Firefly | typeof Darner | typeof Stick | typeof CarpenterAnt | typeof Ladybird | typeof Mantis;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -127,6 +128,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === Stick.TRICK_KEY || key === "twig") return Stick;
   if (key === CarpenterAnt.TRICK_KEY || key === "column") return CarpenterAnt;
   if (key === Ladybird.TRICK_KEY || key === "seven") return Ladybird;
+  if (key === Mantis.TRICK_KEY || key === "fold") return Mantis;
   return null;
 }
 
