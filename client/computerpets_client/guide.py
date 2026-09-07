@@ -1,7 +1,7 @@
 """Field-guide plaques for the PyQt blotter.
 
 Copy is ported from ``web/src/lib/pets/house-guide.ts`` and ``snake-guide.ts``.
-This is not a new bestiary — the same two hundred twenty, taught here. Snakes keep the den
+This is not a new bestiary — the same two hundred twenty-one, taught here. Snakes keep the den
 facts; the tide keeps the sea facts; the garden keeps the plant facts; the
 hive keeps the insect facts; the pond keeps the Animalia facts; the roost keeps the bird facts; the corner keeps
 the arachnid facts; the wood keeps the wild mammal facts; the canopy keeps the tree mammal facts; the stone keeps the reptile facts; the creek keeps the freshwater-fish facts; the log keeps the litter facts; the shore keeps the strand facts; the reef keeps the living-rock facts; the meadow keeps the grass-and-night insect facts; the cellar keeps
@@ -1360,6 +1360,15 @@ WOOD_GUIDE: tuple[FieldGuide, ...] = (
         "American black bear. Not a red panda. Not Rui. She is a bear.",
         "oak denside",
         "sure",
+    ),
+    _entry(
+        "capybara",
+        "Hydrochoerus hydrochaeris",
+        "A barrel body, a blunt snout, a calm that sits in water. Capybara. She sits. Then she soaks. The bank is a river she agreed to.",
+        "Not Whee — Whee is a guinea pig who wheeks for salad. Not Bloom — Bloom is an axolotl in a glass cistern. Not Dam — Dam is a beaver with a paddle tail and a lodge. Soak is Hydrochoerus hydrochaeris, and the soak is the tell. A capybara is not a guinea pig. A capybara is not an axolotl. The calm is the species.",
+        "Capybara. A calm soak. Not Whee. Not Bloom.",
+        "river bank",
+        "calm",
     ),
 )
 

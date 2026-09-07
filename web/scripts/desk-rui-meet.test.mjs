@@ -29,7 +29,7 @@ function stepUntil(mod, guest, flags, want, n) {
 }
 
 test("/demo Dee notices Rui, hop-steps, and does not vanish as an empty box", () => {
-  assert.equal(roster.length, 220);
+  assert.equal(roster.length, 221);
   assert.equal(G.MEET_DEE_KEY, Overlay.MEET_DEE_KEY);
   assert.equal(G.DEE_RUI_LINE, Overlay.DEE_RUI_LINE);
   assert.deepEqual(G.matchCall("Dee", roster), ["chickadee"]);

@@ -38,7 +38,7 @@ After you drop a batch, tell me. I will sit them into the desk.
 - [x] `bat.wav` — **Cape** (Big Brown Bat) — sat 2026-09-03 Commons CC0 Bat_feeding_buzz.wav (Kaldari)
 - [x] `deer.wav` — **Rack** (White-tailed Deer) — sat 2026-09-03 iNaturalist CC BY (Thomas J Nolan, obs 376669369)
 
-## All 220
+## All 221
 
 Check a box in your head when the Grok file is in this folder. Zip field tape is a stand-in, not done.
 
@@ -269,7 +269,9 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - Synth stand-ins (201): do not treat as done.
 - Grok Imagine mp4s: **0**. That is what I still need.
 
-Catalog 220. No new pets.
+221. [ ] `capybara.wav` — **Soak** — Capybara — A calm low capybara chatter by water. No cartoon. No music. — follow-up field tape
+
+Catalog 221. No new pets.
 
 
 

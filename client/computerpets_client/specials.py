@@ -1,7 +1,7 @@
 """Species specials the living desk already knows.
 
 Port of ``web/src/lib/pets/specials.ts`` plus the special / verb / line
-from ``traits.ts``. Same two hundred twenty keys, same house copy. Do not invent a
+from ``traits.ts``. Same two hundred twenty-one keys, same house copy. Do not invent a
 new trick.
 """
 
@@ -161,6 +161,7 @@ TRAITS: dict[str, SpeciesTrait] = {
     "skunk": SpeciesTrait("warn", "Warn", "I stamped. Hello."),
     "opossum": SpeciesTrait("playdead", "Play dead", "I went still. Hello."),
     "beaver": SpeciesTrait("lodge", "Lodge", "I gnawed. Hello."),
+    "capybara": SpeciesTrait("soak", "Soak", "I soaked. Hello."),
     "porcupine": SpeciesTrait("bristle", "Bristle", "I bristled. Hello."),
     "black_bear": SpeciesTrait("forage", "Forage", "I foraged. Hello."),
     "gecko": SpeciesTrait("climb", "Climb", "I climbed. Hello."),

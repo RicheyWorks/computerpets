@@ -169,6 +169,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "skunk": (_a("stamp", "nod", 0.8, 4, "sit"), _a("raise", "pulse", 1.0, 3), _a("still", "freeze", 1.8, 2)),
     "opossum": (_a("playdead", "sit_hold", 2.2, 5, "sit"), _a("grin", "gape", 1.0, 2), _a("walk", "wiggle", 1.0, 2)),
     "beaver": (_a("gnaw", "eat", 1.4, 5, "eat"), _a("slap", "snap", 0.7, 2, "play"), _a("sit", "sit_hold", 2.0, 3, "sit")),
+    "capybara": (_a("soak", "sit_hold", 2.2, 4, "sit"), _a("graze", "eat", 1.6, 5, "eat"), _a("nuzzle", "nuzzle", 1.0, 3, "play")),
     "porcupine": (_a("bristle", "puff", 1.4, 5, "sit"), _a("climb", "wiggle", 1.0, 2), _a("still", "freeze", 2.0, 3)),
     "black_bear": (_a("forage", "eat", 1.4, 4, "eat"), _a("sit", "sit_hold", 2.2, 4, "sit"), _a("huff", "pulse", 0.8, 2)),
     "gecko": (_a("climb", "wiggle", 1.0, 5), _a("chirp", "talk", 0.7, 3, "talk"), _a("cling", "sit_hold", 2.0, 2, "sit")),

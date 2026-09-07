@@ -94,7 +94,7 @@ test("desk, /demo, and /live share the choice; a tap does not talk by itself", (
   assert.match(liveSrc, /CompanionRoom/);
   assert.match(demoSrc, /persistLocal=\{false\}/);
   assert.doesNotMatch(liveSrc, /persistLocal=\{false\}/);
-  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 220);
+  assert.equal([...speciesSrc.matchAll(/\{ key: "/g)].length, 221);
 });
 
 test("overlay and blotter keep the same choice on those woods", () => {

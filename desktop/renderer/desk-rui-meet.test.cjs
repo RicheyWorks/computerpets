@@ -145,5 +145,5 @@ test("overlay Call still paints one real frame and keeps guests when Rui hides",
   assert.match(petSrc, /firstWindowBound/);
   assert.match(calledSrc, /shouldTell/);
   assert.match(calledSrc, /firstWindowBound/);
-  assert.equal(require("./roster.json").length, 220);
+  assert.equal(require("./roster.json").length, 221);
 });

@@ -12,7 +12,7 @@ const mainSrc = readFileSync(join(__dirname, "..", "main.cjs"), "utf8");
 const preloadSrc = readFileSync(join(__dirname, "..", "preload.cjs"), "utf8");
 
 test("Call matches a name, a group string, and a den picker", () => {
-  assert.equal(roster.length, 220);
+  assert.equal(roster.length, 221);
   assert.deepEqual(G.matchCall("Rui", roster), ["red_panda"]);
   assert.deepEqual(G.matchCall("Sip", roster), ["hummingbird"]);
   assert.deepEqual(G.matchCall("Miso", roster), ["cat"]);

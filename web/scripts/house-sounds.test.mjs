@@ -31,7 +31,7 @@ test("five species voices and honest footstep defaults", () => {
 });
 
 test("any catalog species cry path; unknown keys stay silent", () => {
-  assert.equal(SPECIES.length, 220);
+  assert.equal(SPECIES.length, 221);
   assert.equal(S.voiceSrc("crow"), "/sounds/crow.wav");
   assert.equal(S.voiceSrc("red_panda"), "/sounds/red_panda.wav");
   assert.equal(S.voiceSrc(""), "");
@@ -58,8 +58,8 @@ test("any catalog species cry path; unknown keys stay silent", () => {
   assert.equal(S.isVoiceKey("toString"), false);
   assert.equal(Overlay.isVoiceKey("crow"), true);
   assert.equal(Overlay.isVoiceKey("not_a_pet"), false);
-  assert.equal(existsSync(join(root, "public/sounds", "crow.wav")), false);
-  assert.equal(existsSync(join(root, "../desktop/renderer/sounds", "crow.wav")), false);
+  assert.equal(existsSync(join(root, "public/sounds", "capybara.wav")), false);
+  assert.equal(existsSync(join(root, "../desktop/renderer/sounds", "capybara.wav")), false);
   for (const row of SPECIES) {
     assert.equal(S.isVoiceKey(row.key), true, row.key);
     assert.equal(Overlay.isVoiceKey(row.key), true, row.key);
@@ -69,5 +69,5 @@ test("any catalog species cry path; unknown keys stay silent", () => {
   assert.match(S.SOUND_LICENSE, /Grok Imagine/);
   assert.match(Overlay.SOUND_LICENSE, /Grok Imagine/);
   assert.match(S.SOUND_LICENSE, /Not CC0 zoo tapes/);
-  assert.equal(Overlay.SPECIES_KEYS.length, 220);
+  assert.equal(Overlay.SPECIES_KEYS.length, 221);
 });

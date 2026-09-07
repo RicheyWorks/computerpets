@@ -17,7 +17,7 @@ export const Route = createFileRoute("/meet")({
       {
         name: "description",
         content:
-          "Two hundred twenty living companions walk the blotter. The nest is a square; neglect can close a line.",
+          "Two hundred twenty-one living companions walk the blotter. The nest is a square; neglect can close a line.",
       },
     ],
   }),
@@ -43,7 +43,7 @@ export function MeetPage() {
             They live on the desk.
           </h1>
           <p className="mt-5 max-w-md text-base text-muted sm:text-lg">
-            Two hundred twenty guests walk the blotter. On Windows they walk on the real desktop. This page is the same house in a browser. The nest is a square; neglect can close a line.
+            Two hundred twenty-one guests walk the blotter. On Windows they walk on the real desktop. This page is the same house in a browser. The nest is a square; neglect can close a line.
           </p>
           <MeetKeeperCard className="mt-6" />
           <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -62,7 +62,7 @@ export function MeetPage() {
 
       <section className="mx-auto max-w-5xl px-5 py-16 sm:px-8 sm:py-20">
         <p className="text-[11px] uppercase tracking-[0.2em] text-subtle">The catalog</p>
-        <h2 className="mt-2 font-display text-3xl sm:text-4xl">Two hundred twenty, on their shelves.</h2>
+        <h2 className="mt-2 font-display text-3xl sm:text-4xl">Two hundred twenty-one, on their shelves.</h2>
         <p className="mt-2 max-w-md text-sm text-muted">
           Open a room. Or pick a name. They will be walking when the page opens.
         </p>
@@ -120,7 +120,7 @@ export function MeetPage() {
               <p className="text-[11px] uppercase tracking-[0.16em] text-subtle">Windows and Mac</p>
               <h3 className="mt-2 font-display text-2xl">On the desktop</h3>
               <p className="mt-2 text-sm text-muted">
-                Transparent overlay. Treat, chase, hide. They walk the real screen. All two hundred twenty.
+                Transparent overlay. Treat, chase, hide. They walk the real screen. All two hundred twenty-one.
               </p>
               <p className="mt-3 font-mono text-xs text-subtle">desktop/ — npm start</p>
             </article>
@@ -129,7 +129,7 @@ export function MeetPage() {
               <h3 className="mt-2 font-display text-2xl">On the home screen</h3>
               <p className="mt-2 text-sm text-muted">
                 On a tablet a tap is a choice. A drag is a carry. A long-press tends. On a phone they sit the
-                tall blotter the same way. Open Live, then Add to Home Screen. All two hundred twenty.
+                tall blotter the same way. Open Live, then Add to Home Screen. All two hundred twenty-one.
               </p>
               <p className="mt-3">
                 <Link to="/live" className="text-sm text-fg">

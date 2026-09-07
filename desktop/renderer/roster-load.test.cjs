@@ -12,9 +12,9 @@ const petSrc = readFileSync(join(__dirname, "pet.js"), "utf8");
 const htmlSrc = readFileSync(join(__dirname, "index.html"), "utf8");
 const settingsSrc = readFileSync(join(__dirname, "settings.html"), "utf8");
 
-test("the house roster door reads the two hundred twenty from disk", () => {
+test("the house roster door reads the two hundred twenty-one from disk", () => {
   const rows = R.readRoster(rosterPath, fs);
-  assert.equal(rows.length, 220);
+  assert.equal(rows.length, 221);
   assert.equal(rows[0].key, "red_panda");
   assert.equal(R.foundRoster(rows), true);
   const opened = R.openRoster(rows);
@@ -61,7 +61,7 @@ test("the overlay asks the desk for the roster it already has", async () => {
     roster: async () => disk,
   });
   assert.equal(opened.ok, true);
-  assert.equal(opened.roster.length, 220);
+  assert.equal(opened.roster.length, 221);
   assert.equal(opened.roster[0].key, "red_panda");
 
   const gone = await R.loadHouseRoster({

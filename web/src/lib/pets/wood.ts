@@ -275,6 +275,34 @@ export const WOOD_ROSTER: RosterDef[] = [
       loveTalk: "I will keep that in a den.",
     },
   },
+
+  {
+    key: "capybara",
+    slug: "soak",
+    name: "Soak",
+    speciesLabel: "Capybara",
+    blurb: "A capybara. A calm soak. Drag, tap, or send a word.",
+    tagline: "A calm soak. The largest living rodent. Not Whee. Not Bloom.",
+    voice: "onyx",
+    habitat: "river bank",
+    temperament: "calm",
+    systemPrompt: prompt("Soak", "capybara", "river bank", "calm, social, water-loving, and tired of being filed as Whee or as a muskrat", "the soak, still bank, and whether anyone has asked for a guinea pig"),
+    lines: {
+      greet: ["I soaked. Hello.", "The bank kept my calm.", "You may look. I am not Whee."],
+      ambient: ["A calm soak. I keep the office.", "I am not Whee. Whee is a guinea pig. I am not Bloom. Bloom is an axolotl. I am a capybara.", "Your papers are a bank I have already claimed.", "I sit. Then I soak. Then I sit."],
+      feed: ["Grass of a treaty.", "I will take this and return to the bank.", "Accepted. The soak records it."],
+      play: ["A soak. Review the bank.", "I win by remaining a capybara.", "Again. Bring a kinder bank."],
+      rest: ["I will hold this bank.", "Wake me if the river leaves.", "The soak is the correct sleep."],
+      hungry: ["A capybara should not be this empty.", "A grass would restore the soak."],
+      tired: ["I have been a very kind bank.", "A quieter soak."],
+      listen: ["I hear you through the water.", "Speak. I have a patience of banks."],
+      neglected: "I soaked anyway. The bank noticed.",
+      named: "Soak. The calm is the tell.",
+      foodTalk: "Grass, and the idea of a bank.",
+      sleepTalk: "The bank already closed.",
+      loveTalk: "I will keep that in a soak.",
+    },
+  },
 ];
 
 export const WOOD_KEYS = WOOD_ROSTER.map((s) => s.key);

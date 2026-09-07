@@ -1,4 +1,4 @@
-# Meet all 220
+# Meet all 221
 
 Every animal in this house. House names. These are the real pictures they walk with.
 
@@ -204,6 +204,14 @@ Imagine / cries: image-to-video from `web/public/pets/{key}.jpg`. Do not invent 
 <td align="center" valign="top" width="20%"><img src="../web/public/pets/black_bear.jpg" alt="Coal the American Black Bear" width="160"><br><strong>Coal</strong><br><sub>American Black Bear</sub><br><code>black_bear</code></td>
 </tr>
 <tr>
+<td align="center" valign="top" width="20%"><img src="../web/public/pets/capybara.jpg" alt="Soak the Capybara" width="160"><br><strong>Soak</strong><br><sub>Capybara</sub><br><code>capybara</code></td>
+<td align="center" valign="top" width="20%"></td>
+<td align="center" valign="top" width="20%"></td>
+<td align="center" valign="top" width="20%"></td>
+<td align="center" valign="top" width="20%"></td>
+</tr>
+
+<tr>
 <td align="center" valign="top" width="20%"><img src="../web/public/pets/gecko.jpg" alt="Pad the Mediterranean House Gecko" width="160"><br><strong>Pad</strong><br><sub>Mediterranean House Gecko</sub><br><code>gecko</code></td>
 <td align="center" valign="top" width="20%"><img src="../web/public/pets/anole.jpg" alt="Wink the Green Anole" width="160"><br><strong>Wink</strong><br><sub>Green Anole</sub><br><code>anole</code></td>
 <td align="center" valign="top" width="20%"><img src="../web/public/pets/skink.jpg" alt="Dash the Five-lined Skink" width="160"><br><strong>Dash</strong><br><sub>Five-lined Skink</sub><br><code>skink</code></td>
@@ -317,4 +325,4 @@ Imagine / cries: image-to-video from `web/public/pets/{key}.jpg`. Do not invent 
 </tr>
 </table>
 
-Catalog stays 220. No new pets.
+Catalog stays 221. No new pets.

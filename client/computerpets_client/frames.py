@@ -13,7 +13,7 @@ salamander, caecilian, crayfish, snail, mussel, leech, stickleback. The roost st
 crow, raven, barn owl, hawk, chickadee, robin, mallard, goose, pileated, hummingbird.
 The corner stays — orb weaver, jumper, wolf spider, tarantula, widow, harvestman,
 scorpion, vinegaroon, tick, solifuge. The wood stays — deer, bat, squirrel,
-otter, raccoon, skunk, opossum, beaver, porcupine, black bear. The canopy stays —
+otter, raccoon, skunk, opossum, beaver, porcupine, black bear, capybara. The canopy stays —
 sloth, lemur, gibbon, kinkajou, colugo, flying squirrel, howler, tarsier, potto, koala. The stone stays —
 gecko, anole, skink, chameleon, horned lizard, alligator, crocodile, snapper,
 box turtle, tuatara. The creek stays — bass, brook trout, catfish, bluegill,
@@ -307,6 +307,7 @@ def _draw_pet(p: QPainter, species: Species, anim: str, i: int, n: int) -> None:
         "skunk",
         "opossum",
         "beaver",
+        "capybara",
         "porcupine",
         "bear",
     ):
@@ -3051,6 +3052,28 @@ def _draw_wood(
         p.drawEllipse(QRectF(-26, -20, 6, 6))
         p.drawEllipse(QRectF(-16, -20, 6, 6))
         _draw_face(p, -22, -14, nose, sleep, anim, i, False)
+        return
+
+
+    if sil == "capybara":
+        p.setBrush(QBrush(body))
+        p.setPen(QPen(accent, 1.1))
+        p.drawRoundedRect(QRectF(-20, -6, 42, 24 - sit * 0.1), 16, 14)
+        p.setPen(Qt.PenStyle.NoPen)
+        p.setBrush(QBrush(belly))
+        p.drawEllipse(QRectF(-6, 2, 24, 14))
+        p.setBrush(QBrush(accent))
+        p.drawEllipse(QRectF(18, 2, 12, 10))
+        p.setBrush(QBrush(body))
+        p.drawEllipse(QRectF(-34, -14 + eat * 0.2, 22, 18))
+        p.setBrush(QBrush(ring))
+        p.drawRoundedRect(QRectF(-36, -4, 12, 8), 3, 3)
+        p.setBrush(QBrush(nose))
+        p.drawEllipse(QRectF(-38, -2, 6, 5))
+        p.setBrush(QBrush(ear))
+        p.drawEllipse(QRectF(-28, -20, 5, 6))
+        p.drawEllipse(QRectF(-18, -20, 5, 6))
+        _draw_face(p, -24, -12, nose, sleep, anim, i, False)
         return
 
     if sil == "porcupine":

@@ -158,6 +158,7 @@ class PetTypeTest {
             new ExpectedSpecies("beaver", "North American Beaver", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("porcupine", "North American Porcupine", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("black_bear", "American Black Bear", PetType.Rarity.RARE),
+            new ExpectedSpecies("capybara", "Capybara", PetType.Rarity.UNCOMMON),
             new ExpectedSpecies("gecko", "Mediterranean House Gecko", PetType.Rarity.COMMON),
             new ExpectedSpecies("anole", "Green Anole", PetType.Rarity.COMMON),
             new ExpectedSpecies("skink", "Five-lined Skink", PetType.Rarity.COMMON),
@@ -299,7 +300,7 @@ class PetTypeTest {
     @DisplayName("catalog matches the living-desk web catalog, including the tide")
     void catalog_matchesWebHouse() {
         assertThat(PetType.values()).hasSize(WEB_CATALOG.size());
-        assertThat(WEB_CATALOG).hasSize(220);
+        assertThat(WEB_CATALOG).hasSize(221);
 
         Set<String> backendKeys = Arrays.stream(PetType.values())
                 .map(PetType::key)
@@ -344,10 +345,10 @@ class PetTypeTest {
         Map<PetType.Rarity, Long> counts = Arrays.stream(PetType.values())
                 .collect(Collectors.groupingBy(PetType::rarity, Collectors.counting()));
 
-        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(82L);
-        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(82L);
-        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(33L);
-        assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(3L);
+        assertThat(counts.get(PetType.Rarity.COMMON)).isEqualTo(85L);
+        assertThat(counts.get(PetType.Rarity.UNCOMMON)).isEqualTo(88L);
+        assertThat(counts.get(PetType.Rarity.RARE)).isEqualTo(35L);
+        assertThat(counts.get(PetType.Rarity.LEGENDARY)).isEqualTo(13L);
     }
 
     @Test

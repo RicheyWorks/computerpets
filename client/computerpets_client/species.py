@@ -2,7 +2,7 @@
 
 Keys, names, treats, and house voice match the backend ``PetType`` catalog
 and the web / Electron roster. Snakes crawl; the tide swims; the garden grows;
-the others walk. This is not a new bestiary — it is the same two hundred twenty, painted here.
+the others walk. This is not a new bestiary — it is the same two hundred twenty-one, painted here.
 """
 
 from __future__ import annotations
@@ -188,6 +188,7 @@ WOOD_KEYS: tuple[str, ...] = (
     "beaver",
     "porcupine",
     "black_bear",
+    "capybara",
 )
 
 STONE_KEYS: tuple[str, ...] = (
@@ -4204,6 +4205,35 @@ DAM = _kind(
     hungry=("A beaver should not be this empty.", "A bark would restore the gnaw."),
 )
 
+
+SOAK = _kind(
+    key="capybara",
+    slug="soak",
+    name="Soak",
+    label="Capybara",
+    treat="Grass",
+    treat_shape="leaf",
+    silhouette="capybara",
+    walk=48,
+    aquatic=True,
+    palette=Palette(
+        body=(120, 92, 64),
+        belly=(176, 148, 112),
+        ear=(96, 72, 52),
+        ear_inner=(156, 128, 96),
+        nose=(36, 28, 24),
+        ring=(48, 36, 28),
+        accent=(88, 68, 48),
+    ),
+    greet=("I soaked. Hello.", "The bank kept my calm.", "You may look. I am not Whee."),
+    ambient=("A calm soak. I keep the office.", "I am not Whee. Whee is a guinea pig. I am not Bloom. Bloom is an axolotl. I am a capybara.", "Your papers are a bank I have already claimed.", "I sit. Then I soak. Then I sit."),
+    feed=("Grass of a treaty.", "I will take this and return to the bank.", "Accepted. The soak records it."),
+    treat_lines=("Grass of a treaty.",),
+    hide=("On the bank.",),
+    call=("I soaked. Hello.",),
+    hungry=("A capybara should not be this empty.", "A grass would restore the soak."),
+)
+
 SPINE = _kind(
     key="porcupine",
     slug="spine",
@@ -6606,6 +6636,7 @@ _ALL: tuple[Species, ...] = (
     DAM,
     SPINE,
     COAL,
+    SOAK,
     GECKO,
     WINK,
     DASH,
