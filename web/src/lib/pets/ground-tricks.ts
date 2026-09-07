@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, and Hum today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, and Keep today. Overlay + /demo lockstep. */
 
 import * as Rui from "./rui-tricks";
 import * as Relay from "./relay-tricks";
@@ -71,8 +71,9 @@ import * as Stingless from "./stingless-tricks";
 import * as SweatBee from "./sweat_bee-tricks";
 import * as MiningBee from "./mining_bee-tricks";
 import * as HoneyDrone from "./honey_drone-tricks";
+import * as HoneyQueen from "./honey_queen-tricks";
 
-export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish | typeof Nautilus | typeof MoonJelly | typeof SeaStar | typeof HermitCrab | typeof HorseshoeCrab | typeof Seahorse | typeof Manta | typeof Moray | typeof Moss | typeof Maidenhair | typeof Ginkgo | typeof Oak | typeof WaterLily | typeof Orchid | typeof Saguaro | typeof VenusFlytrap | typeof Pitcher | typeof Sundew | typeof Honeybee | typeof Monarch | typeof Luna | typeof Firefly | typeof Darner | typeof Stick | typeof CarpenterAnt | typeof Ladybird | typeof Mantis | typeof Cicada | typeof Bumblebee | typeof CarpenterBee | typeof MasonBee | typeof Leafcutter | typeof Stingless | typeof SweatBee | typeof MiningBee | typeof HoneyDrone;
+export type GroundTricks = typeof Rui | typeof Relay | typeof Fuse | typeof Earth | typeof Cat | typeof Dog | typeof Rabbit | typeof Hamster | typeof GuineaPig | typeof Turtle | typeof Goldfish | typeof Budgie | typeof Fox | typeof Penguin | typeof Parrot | typeof Ferret | typeof Hedgehog | typeof Chinchilla | typeof Axolotl | typeof Toucan | typeof Iguana | typeof Dragon | typeof Phoenix | typeof BallPython | typeof CornSnake | typeof Kingsnake | typeof GreenTreePython | typeof Hognose | typeof Garter | typeof Boa | typeof MilkSnake | typeof RosyBoa | typeof CarpetPython | typeof Octopus | typeof Cuttlefish | typeof Nautilus | typeof MoonJelly | typeof SeaStar | typeof HermitCrab | typeof HorseshoeCrab | typeof Seahorse | typeof Manta | typeof Moray | typeof Moss | typeof Maidenhair | typeof Ginkgo | typeof Oak | typeof WaterLily | typeof Orchid | typeof Saguaro | typeof VenusFlytrap | typeof Pitcher | typeof Sundew | typeof Honeybee | typeof Monarch | typeof Luna | typeof Firefly | typeof Darner | typeof Stick | typeof CarpenterAnt | typeof Ladybird | typeof Mantis | typeof Cicada | typeof Bumblebee | typeof CarpenterBee | typeof MasonBee | typeof Leafcutter | typeof Stingless | typeof SweatBee | typeof MiningBee | typeof HoneyDrone | typeof HoneyQueen;
 
 export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (!key) return null;
@@ -147,6 +148,7 @@ export function tricksFor(key: string | undefined | null): GroundTricks | null {
   if (key === SweatBee.TRICK_KEY || key === "sheen") return SweatBee;
   if (key === MiningBee.TRICK_KEY || key === "bank") return MiningBee;
   if (key === HoneyDrone.TRICK_KEY || key === "hum") return HoneyDrone;
+  if (key === HoneyQueen.TRICK_KEY || key === "keep") return HoneyQueen;
 }
 
 export function wantsThankYou(key: string | undefined | null) {
