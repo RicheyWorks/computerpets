@@ -12,6 +12,7 @@ const Pitcher = await import(pathToFileURL(join(root, "src/lib/pets/pitcher-tric
 const Sundew = await import(pathToFileURL(join(root, "src/lib/pets/sundew-tricks.ts")).href);
 const Honeybee = await import(pathToFileURL(join(root, "src/lib/pets/honeybee-tricks.ts")).href);
 const T = await import(pathToFileURL(join(root, "src/lib/pets/monarch-tricks.ts")).href);
+const Luna = await import(pathToFileURL(join(root, "src/lib/pets/luna-tricks.ts")).href);
 const Oak = await import(pathToFileURL(join(root, "src/lib/pets/oak-tricks.ts")).href);
 const WaterLily = await import(pathToFileURL(join(root, "src/lib/pets/water_lily-tricks.ts")).href);
 const Ginkgo = await import(pathToFileURL(join(root, "src/lib/pets/ginkgo-tricks.ts")).href);
@@ -67,6 +68,7 @@ const OverlayPitcher = createRequire(import.meta.url)(join(root, "../desktop/ren
 const OverlaySundew = createRequire(import.meta.url)(join(root, "../desktop/renderer/sundew-tricks.js"));
 const OverlayHoneybee = createRequire(import.meta.url)(join(root, "../desktop/renderer/honeybee-tricks.js"));
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/monarch-tricks.js"));
+const OverlayLuna = createRequire(import.meta.url)(join(root, "../desktop/renderer/luna-tricks.js"));
 const OverlayOak = createRequire(import.meta.url)(join(root, "../desktop/renderer/oak-tricks.js"));
 const OverlayWaterLily = createRequire(import.meta.url)(join(root, "../desktop/renderer/water_lily-tricks.js"));
 const OverlayGinkgo = createRequire(import.meta.url)(join(root, "../desktop/renderer/ginkgo-tricks.js"));
@@ -276,7 +278,7 @@ test("asclepias/oyamel/warning/chrysalis/danaus are house-monarch-true, not copi
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
-  for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Octopus, Cuttlefish, Nautilus, MoonJelly, SeaStar, HermitCrab, HorseshoeCrab, Seahorse, Manta, Moray, Moss, Maidenhair, Ginkgo, Oak, WaterLily, Orchid, Saguaro, VenusFlytrap, Pitcher, Sundew, Honeybee, Relay, Fuse, Earth]) {
+  for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Octopus, Cuttlefish, Nautilus, MoonJelly, SeaStar, HermitCrab, HorseshoeCrab, Seahorse, Manta, Moray, Moss, Maidenhair, Ginkgo, Oak, WaterLily, Orchid, Saguaro, VenusFlytrap, Pitcher, Sundew, Luna, Relay, Fuse, Earth]) {
     assert.equal(mod.TRICKS.includes("asclepias"), false);
     assert.equal(mod.TRICKS.includes("oyamel"), false);
     assert.equal(mod.TRICKS.includes("warning"), false);
@@ -537,6 +539,7 @@ globalThis.PetPitcherTricks = OverlayPitcher;
 globalThis.PetSundewTricks = OverlaySundew;
 globalThis.PetHoneybeeTricks = OverlayHoneybee;
 globalThis.PetMonarchTricks = Overlay;
+globalThis.PetLunaTricks = OverlayLuna;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("turtle"), OverlayTurtle);
@@ -699,7 +702,7 @@ globalThis.PetMonarchTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Milk idle-life done; next house-order guest still lacking tricks is Ghost / luna", () => {
+test("notes: Milk idle-life done; Ghost idle-life done; next house-order guest still lacking tricks is Spark / firefly", () => {
   assert.equal(T.TRICK_KEY, "monarch");
   assert.equal(T.wantsThankYou("milk"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -846,10 +849,16 @@ test("notes: Milk idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
   assert.deepEqual([...T.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus"]);
   assert.deepEqual([...Overlay.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus"]);
-  assert.equal(OverlayGround.tricksFor("luna"), null);
-  assert.equal(OverlayGround.wantsThankYou("luna"), false);
-  assert.equal(OverlayGround.tricksFor("ghost"), null);
-  assert.equal(OverlayGround.wantsThankYou("ghost"), false);
+  assert.equal(OverlayGround.tricksFor("luna"), OverlayLuna);
+  assert.equal(OverlayGround.wantsThankYou("luna"), true);
+  assert.equal(OverlayGround.tricksFor("ghost"), OverlayLuna);
+  assert.equal(OverlayGround.wantsThankYou("ghost"), true);
+  assert.deepEqual([...Luna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
+  assert.deepEqual([...OverlayLuna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
+  assert.equal(OverlayGround.tricksFor("firefly"), null);
+  assert.equal(OverlayGround.wantsThankYou("firefly"), false);
+  assert.equal(OverlayGround.tricksFor("spark"), null);
+  assert.equal(OverlayGround.wantsThankYou("spark"), false);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
   assert.equal(OverlayGround.wantsThankYou("pitcher"), true);
   assert.equal(OverlayGround.tricksFor("drown"), OverlayPitcher);
