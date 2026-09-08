@@ -1,12 +1,12 @@
-/** Cast ground tricks while idle. House neighborly Annelida / Lumbricus terrestris Common Earthworm soil life — surfacecast / nightcrawl / soilswallow / retractdive / terrestris personality (surfacecast castings push without naming cast or heap or pile or dirt or soil or dung or fertilizer or mulch or compost or feed or eat, nightcrawl nocturnal surface crawl without naming night or crawl or wriggle or slither or undulate or coil or curl or ball or roll or spiral, soilswallow soil ingest without naming swallow or eat or feed or dirt or soil or gulp or chew or forage, retractdive quick pull into burrow without naming burrow or dig or dive or hide or tuck or sleep or sit or coil or curl or ball, long terrestris Lumbricus terrestris Annelida common earthworm nightcrawler hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass or peristalse or castheap or surfacerise or soilanchor or densclit; window-play STRIKE and Call Cast leave earthworm alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor own their tricks; guest slug Cast / key earthworm — accept "earthworm" and "cast" (roster slug cast; campaign Cast); do NOT confuse with Armor the Common Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT confuse slug cast with trick surfacecast or Cicada trick cast or Octopus trick jet; do NOT name a trick earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste or american_eel or silver. Thank-yous denscast / inkcast / denscastings. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web earthworm-tricks.ts. Window-play STRIKE unchanged. True Common Earthworm Lumbricus terrestris Annelida desk life — soft peristaltic crawler that pushes castings, night-crawls, swallows soil, and retracts into a burrow; not Armadillidium pillbug/Isopoda clones (conglobate/volvation/antennafeel/detritusnip), not Narceus millipede/Diplopoda clones, not Scutigera house centipede/Chilopoda clones, not Anguilla american eel — true soft worm peristalsis distinct from isopod ball-roll. Next house-order guest after Cast still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Cast ground tricks while idle. House neighborly Annelida / Lumbricus terrestris Common Earthworm soil life — peristalse / castheap / surfacerise / soilanchor / terrestris personality (peristalse peristaltic body-wave crawl without naming wave or crawl or wriggle or slither or undulate or coil or curl or ball or roll or spiral, castheap castings heap push without naming cast or heap or pile or dirt or soil or dung or fertilizer or mulch or compost or feed or eat, surfacerise night surface rise without naming night or surface or rise or emerge or crawl or climb or dawn or dusk or moon, soilanchor setae soil-anchor brace without naming setae or anchor or brace or cling or grip or hold or dirt or soil or burrow or dig, long terrestris Lumbricus terrestris Annelida common earthworm nightcrawler hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass; window-play STRIKE and Call Cast leave earthworm alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor own their tricks; guest slug Cast / key earthworm — accept "earthworm" and "cast" (roster slug cast; campaign Cast); do NOT confuse with Armor the Common Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT confuse slug cast with trick castheap or Cicada trick cast or Octopus trick jet; do NOT name a trick earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste or american_eel or silver. Thank-yous denscast / inkcast / densclit. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web earthworm-tricks.ts. Window-play STRIKE unchanged. True Common Earthworm Lumbricus terrestris Annelida desk life — soft peristaltic crawler that pushes castings, rises at night, and braces with setae; not Armadillidium pillbug/Isopoda clones (conglobate/volvation/antennafeel/detritusnip), not Narceus millipede/Diplopoda clones, not Scutigera house centipede/Chilopoda clones, not Anguilla american eel — true soft worm peristalsis distinct from isopod ball-roll. Next house-order guest after Cast still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "earthworm";
-  const TRICKS = ["surfacecast", "nightcrawl", "soilswallow", "retractdive", "terrestris"];
-  const HAPPY = ["denscast", "inkcast", "denscastings"];
-  const HAPPY_DUR = { denscast: 2.48, inkcast: 2.62, denscastings: 2.38 };
+  const TRICKS = ["peristalse", "castheap", "surfacerise", "soilanchor", "terrestris"];
+  const HAPPY = ["denscast", "inkcast", "densclit"];
+  const HAPPY_DUR = { denscast: 2.48, inkcast: 2.62, densclit: 2.38 };
   const TERRESTRIS_HOLD = 23.60;
   const RELEASE_S = 2.02;
-  const DUR = { terrestris: TERRESTRIS_HOLD + RELEASE_S, surfacecast: 4.15, nightcrawl: 4.65, soilswallow: 4.05, retractdive: 4.35 };
+  const DUR = { terrestris: TERRESTRIS_HOLD + RELEASE_S, peristalse: 4.65, castheap: 4.15, surfacerise: 4.05, soilanchor: 4.35 };
 
   function canStart(state) {
     if (!state) return false;
@@ -37,10 +37,10 @@
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
       if (kind === "terrestris") return 152 + roll * 14;
-  if (kind === "nightcrawl") return 26.2 + roll * 4.4;
-  if (kind === "surfacecast") return 25.6 + roll * 3.9;
-  if (kind === "soilswallow") return 24.2 + roll * 3.8;
-  if (kind === "retractdive") return 25.8 + roll * 4.0;
+  if (kind === "peristalse") return 26.2 + roll * 4.4;
+  if (kind === "castheap") return 25.6 + roll * 3.9;
+  if (kind === "surfacerise") return 24.2 + roll * 3.8;
+  if (kind === "soilanchor") return 25.8 + roll * 4.0;
   return justFinished ? 18.8 + roll * 2.7 : 13.9 + roll * 2.3;
   }
 
@@ -48,28 +48,28 @@
     if (musicOn) return "terrestris";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "terrestris") {
-      if (roll < 0.26) return "nightcrawl";
-      if (roll < 0.5) return "surfacecast";
-      if (roll < 0.74) return "soilswallow";
-      return "retractdive";
+      if (roll < 0.26) return "peristalse";
+      if (roll < 0.5) return "castheap";
+      if (roll < 0.74) return "surfacerise";
+      return "soilanchor";
     }
-    if (lastKind === "nightcrawl") {
+    if (lastKind === "peristalse") {
       if (roll < 0.26) return "terrestris";
-      if (roll < 0.5) return "surfacecast";
-      if (roll < 0.74) return "soilswallow";
-      return "retractdive";
+      if (roll < 0.5) return "castheap";
+      if (roll < 0.74) return "surfacerise";
+      return "soilanchor";
     }
-    if (lastKind === "surfacecast") {
+    if (lastKind === "castheap") {
       if (roll < 0.22) return "terrestris";
-      if (roll < 0.44) return "nightcrawl";
-      if (roll < 0.68) return "soilswallow";
-      return "retractdive";
+      if (roll < 0.44) return "peristalse";
+      if (roll < 0.68) return "surfacerise";
+      return "soilanchor";
     }
     if (roll < 0.2) return "terrestris";
-    if (roll < 0.4) return "nightcrawl";
-    if (roll < 0.6) return "surfacecast";
-    if (roll < 0.8) return "soilswallow";
-    return "retractdive";
+    if (roll < 0.4) return "peristalse";
+    if (roll < 0.6) return "castheap";
+    if (roll < 0.8) return "surfacerise";
+    return "soilanchor";
   }
 
   function happyCanStart(state) {
@@ -135,40 +135,30 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denscast));
     if (u < 0.14) {
       const s = u / 0.14;
-      return { lift: s * 0.0048, rot: s * -0.12 };
+      return { lift: s * 0.0048, rot: s * 0.85, dx: 0, anim: "sit" };
     }
-    if (u < 0.82) {
-      const wiggle = Math.sin((u - 0.14) / 0.68 * Math.PI * 2.2);
-      return { lift: 0.0048 + Math.abs(wiggle) * 0.0016, rot: -0.12 + wiggle * 0.22 };
+    if (u < 0.88) {
+      const hold = Math.sin(t * 0.82) + 0.032 * Math.sin(t * 1.64);
+      return { lift: 0.0048 + Math.abs(hold) * 0.0016, rot: 0.85 + hold * 0.16, dx: hold * 0.00009, anim: "sit" };
     }
-    const s = (u - 0.82) / 0.18;
-    return { lift: 0.0048 * (1 - s), rot: -0.12 * (1 - s) };
+    const s = (u - 0.88) / 0.12;
+    return { lift: 0.00065 * (1 - s), rot: 0.024 * (1 - s), dx: 0, anim: "idle" };
   }
   function inkcastPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkcast));
-    if (u < 0.16) {
-      const s = u / 0.16;
-      return { lift: s * 0.0055, rot: s * 0.18 };
-    }
-    if (u < 0.80) {
-      const coil = Math.sin((u - 0.16) / 0.64 * Math.PI * 2.8);
-      return { lift: 0.0055 + Math.abs(coil) * 0.0018, rot: 0.18 + coil * 0.28 };
-    }
-    const s = (u - 0.80) / 0.20;
-    return { lift: 0.0055 * (1 - s), rot: 0.18 * (1 - s) };
-  }
-  function denscastingsPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denscastings));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.0038, rot: s * -0.08 };
+    if (u < 0.10) {
+      const s = u / 0.10;
+      return { lift: s * 0.018, rot: s * 0.95, dx: s * 0.00055, anim: "play" };
     }
     if (u < 0.86) {
-      const heap = Math.sin((u - 0.12) / 0.74 * Math.PI * 1.8);
-      return { lift: 0.0038 + Math.abs(heap) * 0.0022, rot: -0.08 + heap * 0.20 };
+      const wave = Math.sin(t * 1.28) + 0.055 * Math.sin(t * 2.56);
+      return { lift: 0.018 + Math.abs(wave) * 0.0055, rot: 0.95 + wave * 0.62, dx: wave * 0.00062, anim: "play" };
     }
     const s = (u - 0.86) / 0.14;
-    return { lift: 0.0038 * (1 - s), rot: -0.08 * (1 - s) };
+    return { lift: 0.0012 * (1 - s), rot: 0.048 * (1 - s), dx: 0, anim: "sit" };
+  }
+  function densclitPose(t) {
+    return { lift: 0.00095 + Math.abs(Math.sin(t * 0.034)) * 0.0018, rot: Math.sin(t * 0.034) * 0.72, dx: Math.sin(t * 0.026) * 0.00010, anim: "sit" };
   }
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
@@ -188,7 +178,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = denscastingsPose(next.t);
+      const pose = densclitPose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -205,14 +195,14 @@
     const anim =
       kind === "terrestris"
         ? "sit"
-        : kind === "nightcrawl"
-          ? "play"
-          : kind === "surfacecast"
+        : kind === "peristalse"
+          ? "sit"
+          : kind === "castheap"
             ? "play"
-            : kind === "soilswallow"
+            : kind === "surfacerise"
               ? "talk"
-              : kind === "retractdive"
-                ? "sit"
+              : kind === "soilanchor"
+                ? "play"
                 : "sit";
     return {
       kind: kind,
@@ -244,8 +234,8 @@
     return { lift: 0.00042 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.010 * (1 - u) };
   }
 
-  function nightcrawlPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.nightcrawl));
+  function peristalsePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.peristalse));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
@@ -259,8 +249,8 @@
     const s = smoothstep((u - 0.88) / 0.12);
     return { x: fromX + face * 0.0068 * (1 - s), lift: 0.00065 * (1 - s), rot: 0.025 * (1 - s) * face, anim: "idle" };
   }
-  function surfacecastPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.surfacecast));
+  function castheapPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.castheap));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
@@ -274,43 +264,43 @@
     const s = smoothstep((u - 0.86) / 0.14);
     return { x: fromX + face * 0.0035 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.03 * (1 - s) * face, anim: "idle" };
   }
-  function soilswallowPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.soilswallow));
+  function surfacerisePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.surfacerise));
     const face = facing == null ? 1 : facing;
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00028, lift: s * 0.0042, rot: s * -0.22 * face, anim: "talk" };
+    if (u < 0.18) {
+      const s = smoothstep(u / 0.18);
+      return { x: fromX + face * s * 0.00025, lift: s * 0.0065, rot: s * -0.16 * face, anim: "talk" };
     }
-    if (u < 0.84) {
-      const gulp = Math.sin((u - 0.14) / 0.70 * Math.PI * 3.4);
-      const soil = Math.sin(t * 0.96) + 0.045 * Math.sin(t * 1.92);
-      return { x: fromX + face * (0.00028 + gulp * 0.00095 + soil * 0.00009), lift: 0.0042 + Math.abs(gulp) * 0.0026 + Math.abs(soil) * 0.0011, rot: (-0.22 + gulp * 0.36 + soil * 0.12) * face, anim: "talk" };
+    if (u < 0.82) {
+      const rise = Math.sin((u - 0.18) / 0.64 * Math.PI * 1.6);
+      const night = Math.sin(t * 0.82) + 0.04 * Math.sin(t * 1.64);
+      return { x: fromX + face * (0.00025 + rise * 0.00085 + night * 0.00008), lift: 0.0065 + Math.abs(rise) * 0.0028 + Math.abs(night) * 0.0010, rot: (-0.16 + rise * 0.32 + night * 0.11) * face, anim: "talk" };
     }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.00028 * (1 - s), lift: 0.0042 * (1 - s) + s * 0.0005, rot: -0.02 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.82) / 0.18);
+    return { x: fromX + face * 0.00025 * (1 - s), lift: 0.0065 * (1 - s) + s * 0.0005, rot: -0.02 * (1 - s) * face, anim: "idle" };
   }
-  function retractdivePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.retractdive));
+  function soilanchorPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.soilanchor));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00022, lift: s * 0.0018, rot: s * 0.14 * face, anim: "sit" };
+      return { x: fromX + face * s * 0.00038, lift: s * 0.0035, rot: s * 0.28 * face, anim: "play" };
     }
     if (u < 0.36) {
       const brace = smoothstep((u - 0.10) / 0.26);
-      return { x: fromX + face * (0.00022 + brace * 0.00035), lift: 0.0018 + brace * 0.0038, rot: (0.14 + brace * -0.48) * face, anim: "sit" };
+      return { x: fromX + face * (0.00038 + brace * 0.00065), lift: 0.0035 + brace * 0.0062, rot: (0.28 + brace * -0.82) * face, anim: "play" };
     }
     if (u < 0.86) {
-      const hold = Math.sin((u - 0.36) / 0.50 * Math.PI * 1.5);
-      const setae = Math.sin(t * 0.88) + 0.04 * Math.sin(t * 1.76);
-      return { x: fromX + face * (0.00057 + hold * 0.00072 + setae * 0.00006), lift: 0.0055 + Math.abs(hold) * 0.0018 + Math.abs(setae) * 0.0009, rot: (-0.34 + hold * 0.28 + setae * 0.10) * face, anim: "sit" };
+      const hold = Math.sin((u - 0.36) / 0.50 * Math.PI * 1.8);
+      const setae = Math.sin(t * 0.92) + 0.045 * Math.sin(t * 1.84);
+      return { x: fromX + face * (0.00103 + hold * 0.00115 + setae * 0.00009), lift: 0.0092 + Math.abs(hold) * 0.0026 + Math.abs(setae) * 0.0012, rot: (-0.54 + hold * 0.42 + setae * 0.14) * face, anim: "sit" };
     }
     const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.00057 * (1 - s), lift: 0.0007 * (1 - s), rot: -0.025 * (1 - s) * face, anim: "idle" };
+    return { x: fromX + face * 0.00103 * (1 - s), lift: 0.00085 * (1 - s), rot: -0.03 * (1 - s) * face, anim: "idle" };
   }
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "nightcrawl" && trick.kind !== "surfacecast" && trick.kind !== "soilswallow" && trick.kind !== "retractdive") {
+    if (shouldAbort(flags) && trick.kind !== "peristalse" && trick.kind !== "castheap" && trick.kind !== "surfacerise" && trick.kind !== "soilanchor") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -335,26 +325,26 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "nightcrawl") {
-      const pose = nightcrawlPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    if (next.kind === "peristalse") {
+      const pose = peristalsePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "surfacecast") {
-      const pose = surfacecastPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "castheap") {
+      const pose = castheapPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "soilswallow") {
-      const pose = soilswallowPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "surfacerise") {
+      const pose = surfacerisePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = retractdivePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = soilanchorPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -380,10 +370,10 @@
     beginTrick,
     terrestrisPose,
     releasePose,
-    nightcrawlPose,
-    surfacecastPose,
-    soilswallowPose,
-    retractdivePose,
+    peristalsePose,
+    castheapPose,
+    surfacerisePose,
+    soilanchorPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -393,7 +383,7 @@
     beginHappy,
     denscastPose,
     inkcastPose,
-    denscastingsPose,
+    densclitPose,
     stepHappy,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
