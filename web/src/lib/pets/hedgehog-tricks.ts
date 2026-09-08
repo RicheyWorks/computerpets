@@ -1,7 +1,7 @@
-/** Burr ground tricks while idle. House hedgehog — curl / snuffle / anoint / bristle / root personality. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `hedgehog-tricks.js`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, or dragon move clone. Window-play BALL is unchanged — this module never names a trick `ball`. Ferret already owns tube/romp/steal/puff/noodle and dook/kiss/chuckle. Turtle already owns huff as thank-you. Rui already owns shuffle as thank-you. Guinea pig already owns nibble as thank-you. Avoids soak/tuck/crane/plod/paddle/potato/loaf/nest/bow/dig/flop/zoom/popcorn/hay/rumble/zig/scurry/drift/gulp/flare/glint/dart/circle/loop/preen/bobble/mimic/sidle/dangle/perch/den/mouser/stalk/trot/prance/huddle/toboggan/waddle/porpoise/trumpet/quote/strut/fan/crack/flash/tube/romp/steal/puff/noodle/thread/ball name collisions with prior guests. */
+/** Burr ground tricks while idle — ultra-polish pass. House hedgehog — curl / snuffle / anoint / bristle / root / trundle / wheel personality (soft Atelerix desk life). Curl guarded pin-cushion hold without naming ball (window-play) or tuck (turtle) or loaf/nest; snuffle nose-down forage without naming dig or sniff-clone; anoint foam-and-spread without naming wash/preen; bristle quill lift without naming flare/puff; root litter shove without naming dig/steal; trundle slow rolling gait without naming waddle (penguin) or plod (turtle); wheel pet-hedgehog night-run without naming zoom/scurry/reel. Window-play BALL unchanged — never names a trick `ball`. Guest slug Burr / key hedgehog — accept "hedgehog" and "burr". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`hedgehog.wav`). Thank-yous snort / soft / grunt. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `hedgehog-tricks.js`. True house-hedgehog desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/chinchilla/axolotl/toucan/iguana/dragon/Vesper clones. Bird ultra (Soot→Ember) + Miso/Pip/Thimble/Clip/Whee/Ink/Coin/Rue/Wick done; Echo/budgie + Peck/penguin + Quill/parrot skip birds; Keel/toucan skip if bird. Next guest ultra is Floss / chinchilla. No cry inventing — thank-yous silent desk motion only. Never retouch Rui sprites. */
 
 export const TRICK_KEY = "hedgehog";
-export const TRICKS = ["curl", "snuffle", "anoint", "bristle", "root"] as const;
+export const TRICKS = ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"] as const;
 export const HAPPY = ["snort", "soft", "grunt"] as const;
 export type HedgehogTrickKind = (typeof TRICKS)[number];
 export type HedgehogHappyKind = (typeof HAPPY)[number];
@@ -46,21 +46,23 @@ export type HedgehogHappy = {
 };
 
 export const HAPPY_DUR: Record<HedgehogHappyKind, number> = {
-  snort: 1.16,
-  soft: 1.28,
-  grunt: 1.2,
+  snort: 1.62,
+  soft: 1.7,
+  grunt: 1.66,
 };
 
 /** Curl hold — Burr becomes a guarded pin-cushion ball on the desk. Not window-play ball. Not a turtle tuck. Not a cat loaf. Not a hamster nest. */
-export const CURL_HOLD = 9.5;
-export const RELEASE_S = 0.62;
+export const CURL_HOLD = 13.6;
+export const RELEASE_S = 0.95;
 
 export const DUR: Record<HedgehogTrickKind, number> = {
   curl: CURL_HOLD + RELEASE_S,
-  snuffle: 1.34,
-  anoint: 1.42,
-  bristle: 1.18,
-  root: 1.3,
+  snuffle: 1.88,
+  anoint: 1.96,
+  bristle: 1.78,
+  root: 1.92,
+  trundle: 2.08,
+  wheel: 2.15,
 };
 
 export function canStart(state: TrickFlags | undefined) {
@@ -91,38 +93,30 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: HedgehogTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "curl") return 38 + roll * 22;
-  if (kind === "snuffle") return 13 + roll * 10;
-  if (kind === "anoint") return 15 + roll * 11;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "curl") return 40 + roll * 26;
+  if (kind === "snuffle") return 11 + roll * 8;
+  if (kind === "anoint" || kind === "bristle") return 11 + roll * 8;
+  if (kind === "root" || kind === "trundle") return 10 + roll * 8;
+  if (kind === "wheel") return 12 + roll * 9;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: HedgehogTrickKind | null): HedgehogTrickKind {
   if (musicOn) return "curl";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "curl") {
-    if (roll < 0.28) return "snuffle";
-    if (roll < 0.5) return "anoint";
-    if (roll < 0.72) return "bristle";
-    return "root";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : TRICKS.slice();
+  const weights = list.map((k) =>
+    k === "curl" ? 0.55 : k === "snuffle" || k === "trundle" || k === "wheel" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i];
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return list[i];
   }
-  if (lastKind === "snuffle") {
-    if (roll < 0.3) return "curl";
-    if (roll < 0.52) return "anoint";
-    if (roll < 0.74) return "bristle";
-    return "root";
-  }
-  if (lastKind === "anoint") {
-    if (roll < 0.24) return "curl";
-    if (roll < 0.46) return "snuffle";
-    if (roll < 0.68) return "bristle";
-    return "root";
-  }
-  if (roll < 0.22) return "curl";
-  if (roll < 0.4) return "snuffle";
-  if (roll < 0.6) return "anoint";
-  if (roll < 0.8) return "bristle";
-  return "root";
+  return list[list.length - 1] || "curl";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -194,38 +188,38 @@ export function snortPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.snort));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 2.4, rot: -s * 7, dx: 0, anim: "talk" as const };
+    return { lift: s * 4.2, rot: -s * 12, dx: 0, anim: "talk" as const };
   }
   if (u < 0.8) {
     return {
-      lift: 2.4 + Math.abs(Math.sin(t * 10)) * 1.8,
-      rot: -7 + Math.sin(t * 12) * 6,
-      dx: Math.sin(t * 8) * 0.8,
+      lift: 4.2 + Math.abs(Math.sin(t * 10)) * 3.2,
+      rot: -12 + Math.sin(t * 12) * 10,
+      dx: Math.sin(t * 8) * 1.6,
       anim: "talk" as const,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 2.4 * (1 - s), rot: -7 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 4.2 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function softPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.soft));
   if (u < 0.88) {
     return {
-      lift: Math.sin(u * Math.PI) * 1.8,
-      rot: 14 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI * 2) * 4,
-      dx: Math.sin(u * Math.PI) * 1.2,
+      lift: Math.sin(u * Math.PI) * 3.4,
+      rot: 22 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI * 2) * 7,
+      dx: Math.sin(u * Math.PI) * 2.2,
       anim: "sit" as const,
     };
   }
-  return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 2, dx: 0, anim: "idle" as const };
+  return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 3, dx: 0, anim: "idle" as const };
 }
 
 export function gruntPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 9)) * 2.8,
-    rot: Math.sin(t * 11) * 9,
-    dx: Math.sin(t * 7) * 1.1,
+    lift: Math.abs(Math.sin(t * 9)) * 5.2,
+    rot: Math.sin(t * 11) * 16,
+    dx: Math.sin(t * 7) * 2.0,
     anim: "play" as const,
   };
 }
@@ -274,7 +268,11 @@ export function beginTrick(kind: HedgehogTrickKind, x: number, facing: 1 | -1 = 
             ? "sit"
             : kind === "root"
               ? "play"
-              : "sit";
+              : kind === "trundle"
+                ? "walk"
+                : kind === "wheel"
+                  ? "play"
+                  : "sit";
   return {
     kind,
     phase: kind === "curl" ? "hold" : "go",
@@ -296,15 +294,15 @@ function smoothstep(t: number) {
 /** Curl — guarded pin-cushion ball. Not window-play ball. Not a turtle tuck. Not a cat loaf. */
 export function curlPose(t: number) {
   return {
-    lift: 0.4 + Math.sin(t * 1.3) * 0.35,
-    rot: 22 + Math.sin(t * 1.6) * 2.5 + Math.sin(t * 2.8) * 1.5,
+    lift: 0.8 + Math.sin(t * 1.3) * 0.7 + Math.abs(Math.sin(t * 2.4)) * 0.5,
+    rot: 28 + Math.sin(t * 1.6) * 5 + Math.sin(t * 2.8) * 3,
   };
 }
 
 /** Soft uncurl — nose peeks; quills ease. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 22 * (1 - u) };
+  return { lift: 0.8 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 28 * (1 - u) };
 }
 
 /** Snuffle — nose-down forage along the wood. Not a dog sniff. Not a rabbit dig. Not a ferret steal. Ethogram hedgehog true. */
@@ -312,22 +310,22 @@ export function snufflePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.snuffle));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: -s * 2.2, rot: s * 8 * facing, anim: "sit" as const };
+    return { x: fromX, lift: -s * 4.2, rot: s * 14 * facing, anim: "sit" as const };
   }
   if (u < 0.86) {
     const s = (u - 0.12) / 0.74;
     return {
-      x: fromX + facing * (12 * smoothstep(s) + Math.sin(s * Math.PI * 4) * 2.5),
-      lift: -2.2 + Math.abs(Math.sin(s * Math.PI * 5)) * 1.4,
-      rot: facing * (8 + Math.sin(s * Math.PI * 6) * 6),
+      x: fromX + facing * (18 * smoothstep(s) + Math.sin(s * Math.PI * 4) * 4.5),
+      lift: -4.2 + Math.abs(Math.sin(s * Math.PI * 5)) * 3.2,
+      rot: facing * (14 + Math.sin(s * Math.PI * 6) * 11),
       anim: "walk" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
-    x: fromX + facing * 12,
-    lift: -2.2 * (1 - s),
-    rot: facing * 4 * (1 - s),
+    x: fromX + facing * 18,
+    lift: -4.2 * (1 - s),
+    rot: facing * 7 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -337,14 +335,14 @@ export function anointPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.anoint));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 1.6, rot: -s * 18 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 3.2, rot: -s * 28 * facing, anim: "sit" as const };
   }
   if (u < 0.45) {
     const s = (u - 0.14) / 0.31;
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.2,
-      lift: 1.6 + Math.sin(s * Math.PI * 2) * 1.1,
-      rot: facing * (-18 + Math.sin(s * Math.PI * 3) * 8),
+      x: fromX + facing * Math.sin(s * Math.PI) * 2.4,
+      lift: 3.2 + Math.sin(s * Math.PI * 2) * 2.2,
+      rot: facing * (-28 + Math.sin(s * Math.PI * 3) * 14),
       anim: "sit" as const,
     };
   }
@@ -352,16 +350,16 @@ export function anointPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.45) / 0.41;
     return {
       x: fromX,
-      lift: 1.2 + Math.abs(Math.sin(s * Math.PI * 4)) * 2.4,
-      rot: facing * (12 + Math.sin(s * Math.PI * 5) * 16),
+      lift: 2.4 + Math.abs(Math.sin(s * Math.PI * 4)) * 4.6,
+      rot: facing * (18 + Math.sin(s * Math.PI * 5) * 26),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 1.2 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    lift: 2.4 * (1 - s),
+    rot: facing * 9 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -371,22 +369,22 @@ export function bristlePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.bristle));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
-    return { x: fromX, lift: s * 3.2, rot: -s * 10, anim: "sit" as const };
+    return { x: fromX, lift: s * 5.8, rot: -s * 16, anim: "sit" as const };
   }
   if (u < 0.78) {
     const s = (u - 0.18) / 0.6;
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 0.8,
-      lift: 3.2 + Math.sin(s * Math.PI * 2) * 0.9,
-      rot: -10 + Math.sin(s * Math.PI * 3) * 5,
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.6,
+      lift: 5.8 + Math.sin(s * Math.PI * 2) * 1.8,
+      rot: -16 + Math.sin(s * Math.PI * 3) * 9,
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 3.2 * (1 - s),
-    rot: -5 * (1 - s),
+    lift: 5.8 * (1 - s),
+    rot: -8 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -398,8 +396,8 @@ export function rootPose(t: number, fromX: number, facing: 1 | -1) {
     const s = smoothstep(u / 0.1);
     return {
       x: fromX,
-      lift: -s * 1.8,
-      rot: s * 12 * facing,
+      lift: -s * 3.6,
+      rot: s * 18 * facing,
       anim: "sit" as const,
     };
   }
@@ -407,24 +405,78 @@ export function rootPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.1) / 0.78;
     const shove = Math.sin(s * Math.PI * 4.5);
     return {
-      x: fromX + facing * (8 * smoothstep(s) + shove * 3),
-      lift: -1.8 + Math.abs(shove) * 2.6,
-      rot: facing * (12 + shove * 14),
+      x: fromX + facing * (14 * smoothstep(s) + shove * 5.5),
+      lift: -3.6 + Math.abs(shove) * 5.0,
+      rot: facing * (18 + shove * 22),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
-    x: fromX + facing * 8,
-    lift: -1.8 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    x: fromX + facing * 14,
+    lift: -3.6 * (1 - s),
+    rot: facing * 9 * (1 - s),
+    anim: "sit" as const,
+  };
+}
+
+/** Trundle — slow rolling Atelerix gait with quill sway. Not a penguin waddle. Not a turtle plod. Not a fox trot. */
+export function trundlePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.trundle));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.2, rot: -s * 10 * facing, anim: "sit" as const };
+  }
+  if (u < 0.88) {
+    const s = (u - 0.12) / 0.76;
+    const bob = Math.sin(s * Math.PI * 5);
+    const sway = Math.sin(s * Math.PI * 3);
+    return {
+      x: fromX + facing * (20 * smoothstep(s)),
+      lift: 2.2 + Math.abs(bob) * 3.8,
+      rot: facing * (-10 + sway * 16 + bob * 8),
+      anim: "walk" as const,
+    };
+  }
+  const s = smoothstep((u - 0.88) / 0.12);
+  return {
+    x: fromX + facing * 20,
+    lift: 2.2 * (1 - s),
+    rot: facing * -5 * (1 - s),
+    anim: "sit" as const,
+  };
+}
+
+/** Wheel — night-run on an imaginary exercise wheel. Not hamster reel. Not guinea zig. Not ferret romp. House-hedgehog true. */
+export function wheelPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.wheel));
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX, lift: s * 5.5, rot: -s * 18, anim: "sit" as const };
+  }
+  if (u < 0.88) {
+    const s = (u - 0.1) / 0.78;
+    const spin = Math.sin(s * Math.PI * 7);
+    const hop = Math.abs(Math.sin(s * Math.PI * 5));
+    return {
+      x: fromX + facing * (Math.sin(s * Math.PI * 2) * 6),
+      lift: 5.5 + hop * 12,
+      rot: -18 + spin * 32 + facing * hop * 8,
+      anim: "play" as const,
+    };
+  }
+  const s = smoothstep((u - 0.88) / 0.12);
+  return {
+    x: fromX,
+    lift: 5.5 * (1 - s),
+    rot: -9 * (1 - s),
     anim: "sit" as const,
   };
 }
 
 export function stepTrick(trick: HedgehogTrick, dt: number, flags?: TrickFlags): HedgehogTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "snuffle" && trick.kind !== "root") {
+  if (shouldAbort(flags) && trick.kind !== "snuffle" && trick.kind !== "root" && trick.kind !== "trundle") {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: HedgehogTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -449,26 +501,39 @@ export function stepTrick(trick: HedgehogTrick, dt: number, flags?: TrickFlags):
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "snuffle") {
-    const pose = snufflePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = snufflePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "anoint") {
-    const pose = anointPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = anointPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "bristle") {
-    const pose = bristlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = bristlePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "root") {
+    const pose = rootPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "trundle") {
+    const pose = trundlePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = rootPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = wheelPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
