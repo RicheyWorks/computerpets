@@ -49,7 +49,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "parrot": _PREEN,
     "toucan": _PREEN,
     "phoenix": _PREEN,
-    "penguin": (_a("preen", "groom", 1.4, 3, "sit"), _a("nod", "nod", 0.7, 2, "sit"), _a("huddle", "sit_hold", 2.0, 2, "sit")),
+    "penguin": (_a("huddle", "sit_hold", 2.0, 4, "sit"), _a("toboggan_soft", "pulse", 1.0, 3, "play"), _a("waddle_soft", "wiggle", 1.0, 3, "play"), _a("porpoise_soft", "pulse", 0.9, 2, "play"), _a("trumpet_soft", "talk", 0.9, 3, "talk"), _a("rockhop_soft", "hop", 0.8, 2, "play"), _a("alert", "freeze", 1.6, 2, "sit"), _a("loaf", "sit_hold", 2.4, 2, "sit")),
     "goldfish": (_a("gulp", "gulp", 0.6, 2), _a("flare", "pulse", 0.7, 2)),
     "ball_python": (_a("tongue", "tongue", 0.7, 4), _a("coil", "sit_hold", 2.8, 3, "sit"), _a("hide_head", "sit_hold", 1.6, 2, "sit"), _a("gape", "gape", 1.2, 1)),
     "corn_snake": (_a("tongue", "tongue", 0.7, 4), _a("explore", "freeze", 1.2, 2), _a("slither", "dart", 1.0, 2)),

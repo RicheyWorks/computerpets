@@ -44,7 +44,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Peck tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet"]);
+  assert.deepEqual([...T.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -77,7 +77,7 @@ test("Peck tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("trot"), false);
 });
 
-test("huddle/toboggan/waddle/porpoise/trumpet are house-penguin-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox or dragon clones", () => {
+test("huddle/toboggan/waddle/porpoise/trumpet/rockhop/ecstatic are house-penguin-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const huddle = T.beginTrick("huddle", 80, 1);
   assert.equal(huddle.anim, "sit");
@@ -108,8 +108,18 @@ test("huddle/toboggan/waddle/porpoise/trumpet are house-penguin-true, not Rui ca
   assert.equal(trumpet.anim, "talk");
   const trumpetMid = T.stepTrick(trumpet, 0.4, ground);
   assert.ok(trumpetMid.lift > 1 || Math.abs(trumpetMid.rot) > 2);
-  const trumpetDone = T.stepTrick(trumpet, 1.4, ground);
+  const trumpetDone = T.stepTrick(trumpet, T.DUR.trumpet + 0.1, ground);
   assert.equal(trumpetDone.phase, "done");
+  const rockhop = T.beginTrick("rockhop", 80, 1);
+  assert.equal(rockhop.anim, "play");
+  const rockMid = T.stepTrick(rockhop, T.DUR.rockhop * 0.4, ground);
+  assert.ok(rockMid.lift > 2 || Math.abs(rockMid.rot) > 1);
+  const ecstatic = T.beginTrick("ecstatic", 80, 1);
+  assert.equal(ecstatic.anim, "sit");
+  const ecsMid = T.stepTrick(ecstatic, T.DUR.ecstatic * 0.4, ground);
+  assert.ok(ecsMid.lift > 3 || Math.abs(ecsMid.rot) > 2);
+  assert.equal(Overlay.TRICKS.includes("rockhop"), true);
+  assert.equal(Overlay.TRICKS.includes("ecstatic"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("huddle"), false);
@@ -384,4 +394,41 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
+});
+
+test("ultra-polish: Peck huddle/toboggan/trumpet/rockhop/ecstatic lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("huddle", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `huddle mid rot ${mid.rot}`);
+  assert.ok(mid.lift > 2, `huddle mid lift ${mid.lift}`);
+  const kk = T.beginTrick("toboggan", 80, 1);
+  const k2 = T.stepTrick(kk, T.DUR.toboggan * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(k2.rot) > 6, `toboggan mid rot ${k2.rot}`);
+  assert.ok(k2.lift < -2 || Math.abs(k2.x - 80) > 4, `toboggan mid lift/x ${k2.lift}/${k2.x}`);
+  const tp = T.beginTrick("trumpet", 80, 1);
+  const t2 = T.stepTrick(tp, T.DUR.trumpet * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(t2.rot) > 6, `trumpet mid rot ${t2.rot}`);
+  assert.ok(t2.lift > 5, `trumpet mid lift ${t2.lift}`);
+  const rh = T.beginTrick("rockhop", 80, 1);
+  const r2 = T.stepTrick(rh, T.DUR.rockhop * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift > 5, `rockhop mid lift ${r2.lift}`);
+  const ec = T.beginTrick("ecstatic", 80, 1);
+  const e2 = T.stepTrick(ec, T.DUR.ecstatic * 0.4, { cmd: "idle" });
+  assert.ok(e2.lift > 5, `ecstatic mid lift ${e2.lift}`);
+  assert.ok(Overlay.rockhopPose && Overlay.ecstaticPose);
+  assert.ok(T.nextTrickWait(true, 0, "huddle") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "huddle") > T.nextTrickWait(true, 0, "waddle"));
+});
+
+test("notes: Peck idle-life ultra done; next bird ultra is Quill / parrot (Loom still next for base idle-ground)", () => {
+  assert.deepEqual([...T.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
+  assert.equal(T.TRICKS.includes("bow"), false);
+  assert.equal(T.TRICKS.includes("preen"), false);
+  assert.equal(T.TRICKS.includes("beakgrind"), false);
+  assert.equal(T.TRICKS.includes("shellout"), false);
+  assert.equal(T.TRICKS.includes("quote"), false);
+  assert.equal(T.TRICKS.includes("crack"), false);
+  assert.equal(T.TRICKS.includes("strut"), false);
+  assert.equal(T.TRICKS.includes("fan"), false);
+  assert.equal(T.TRICKS.includes("flash"), false);
 });
