@@ -524,6 +524,13 @@ ipcMain.handle("market-quote", async (_e, ticker) => {
   const row = PetMarket.parseTicker(ticker);
   if (!row) return { ok: false, error: "unread", live: null };
   try {
+    if (row.kind === "crypto" && row.address) {
+      const url = PetMarket.terminalTokenUrl(row.platform || "solana", row.address);
+      const res = await fetch(url);
+      if (!res.ok) return { ok: false, error: "unread", live: null };
+      const live = PetMarket.parseTerminalToken(await res.json());
+      return live ? { ok: true, live } : { ok: false, error: "unread", live: null };
+    }
     if (row.kind === "crypto") {
       const url = PetMarket.geckoUrl(row.geckoId);
       const res = await fetch(url);
@@ -535,6 +542,59 @@ ipcMain.handle("market-quote", async (_e, ticker) => {
     const res = await fetch(url);
     if (!res.ok) return { ok: false, error: "unread", live: null };
     const live = PetMarket.parseYahoo(await res.json());
+    return live ? { ok: true, live } : { ok: false, error: "unread", live: null };
+  } catch {
+    return { ok: false, error: "unread", live: null };
+  }
+});
+
+ipcMain.handle("market-quotes", async (_e, ids) => {
+  try {
+    const url = PetMarket.geckoManyUrl(Array.isArray(ids) ? ids : []);
+    if (!url) return { ok: true, lives: {} };
+    const res = await fetch(url);
+    if (!res.ok) return { ok: false, error: "unread", lives: {} };
+    return { ok: true, lives: PetMarket.parseGeckoMany(await res.json()) };
+  } catch {
+    return { ok: false, error: "unread", lives: {} };
+  }
+});
+
+ipcMain.handle("market-terminal", async (_e, ticker) => {
+  const row = PetMarket.parseTicker(ticker);
+  if (!row || !row.address) return { ok: false, error: "unread", live: null };
+  try {
+    const url = PetMarket.terminalTokenUrl(row.platform || "solana", row.address);
+    const res = await fetch(url);
+    if (!res.ok) return { ok: false, error: "unread", live: null };
+    const live = PetMarket.parseTerminalToken(await res.json());
+    return live ? { ok: true, live } : { ok: false, error: "unread", live: null };
+  } catch {
+    return { ok: false, error: "unread", live: null };
+  }
+});
+
+ipcMain.handle("market-search", async (_e, query) => {
+  try {
+    const url = PetMarket.searchUrl(query);
+    if (!url) return { ok: true, coins: [], nfts: [] };
+    const res = await fetch(url);
+    if (!res.ok) return { ok: false, error: "unread", coins: [], nfts: [] };
+    const json = await res.json();
+    return { ok: true, coins: PetMarket.parseSearchCoins(json), nfts: PetMarket.parseSearchNfts(json) };
+  } catch {
+    return { ok: false, error: "unread", coins: [], nfts: [] };
+  }
+});
+
+ipcMain.handle("nft-quote", async (_e, nft) => {
+  const row = PetMarket.parseNftRow(nft);
+  if (!row) return { ok: false, error: "unread", live: null };
+  try {
+    const url = PetMarket.nftUrl(row.geckoId);
+    const res = await fetch(url);
+    if (!res.ok) return { ok: false, error: "unread", live: null };
+    const live = PetMarket.parseNftLive(await res.json());
     return live ? { ok: true, live } : { ok: false, error: "unread", live: null };
   } catch {
     return { ok: false, error: "unread", live: null };

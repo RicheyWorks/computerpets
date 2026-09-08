@@ -47,3 +47,19 @@ test("plateLine helpers still work on the web house", () => {
   assert.equal(typeof News.newsLine([], false), "string");
   assert.equal(typeof Market.plateLine({ tickers: [], currentId: null }, null, false), "string");
 });
+
+test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
+  const house = Market.parseMarket({});
+  assert.deepEqual(house.tickers.slice(0, 3).map((t) => t.symbol), ["ETH", "DOGE", "XLM"]);
+  assert.ok(Market.detectContract("So11111111111111111111111111111111111111112"));
+  assert.ok(house.marketplaces.some((m) => m.id === "blur"));
+  assert.ok(house.marketplaces.some((m) => m.id === "robinhood-nft"));
+  assert.match(deskSrc, /Add a coin/);
+  assert.match(deskSrc, /Marketplaces/);
+  assert.match(deskSrc, /pump mint|contract/);
+  const OverlayMarket = createRequire(import.meta.url)(join(root, "../desktop/renderer/market.js"));
+  assert.deepEqual(
+    Market.DEFAULT_MARKETPLACES.slice().sort(),
+    OverlayMarket.DEFAULT_MARKETPLACES.slice().sort(),
+  );
+});

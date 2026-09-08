@@ -73,8 +73,14 @@ export type CardPrefs = {
   currentAreaId: string | null;
   newsPrefs: Array<{ id: string; name: string; query: string }>;
   currentNewsId: string;
-  marketTickers: Array<{ id: string; symbol: string; kind: "stock" | "crypto"; geckoId: string; name: string }>;
+  marketTickers: Array<{ id: string; symbol: string; kind: "stock" | "crypto"; geckoId: string; name: string; platform?: string; address?: string }>;
   currentTickerId: string | null;
+  nftCollections: Array<{ id: string; geckoId: string; name: string; symbol: string }>;
+  currentNftId: string | null;
+  nftMarketplaces: Array<{ id: string; name: string; url: string; note: string }>;
+  marketCustomized: boolean;
+  nftCustomized: boolean;
+  marketplaceCustomized: boolean;
   stepKind: string;
   music: { plugin: string; stationId: string; stationName: string; stationUrl: string; playing: boolean };
   sleepAid: { plugin: string; playing: boolean };
@@ -110,6 +116,12 @@ export function blankCard(): CardPrefs {
     currentNewsId: "world",
     marketTickers: [],
     currentTickerId: null,
+    nftCollections: [],
+    currentNftId: null,
+    nftMarketplaces: [],
+    marketCustomized: false,
+    nftCustomized: false,
+    marketplaceCustomized: false,
     stepKind: "species",
     music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
     sleepAid: { plugin: "off", playing: false },
@@ -219,6 +231,12 @@ export function parseCard(raw: unknown): CardPrefs {
   const market = parseMarket(o);
   next.marketTickers = market.tickers;
   next.currentTickerId = market.currentId;
+  next.nftCollections = market.nfts || [];
+  next.currentNftId = market.currentNftId || null;
+  next.nftMarketplaces = market.marketplaces || [];
+  next.marketCustomized = !!o.marketCustomized || !!o.tickersCustomized;
+  next.nftCustomized = !!o.nftCustomized || !!o.nftsCustomized;
+  next.marketplaceCustomized = !!o.marketplaceCustomized || !!o.nftMarketplaceCustomized;
   next.stepKind = parseStep(o.stepKind);
   next.music = parseMusic(o.music);
   next.sleepAid = parseSleepAid(o.sleepAid);

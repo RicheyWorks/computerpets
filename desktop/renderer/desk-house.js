@@ -137,38 +137,163 @@
     }
   }
 
-  function paintMarket(card, live, unread) {
+  function paintMarket(card, live, unread, extras) {
     const M = root.PetMarket;
     const line = $("market-line");
     if (!M || !line) return;
     const house = M.parseMarket(card || {});
+    const coinLives = (extras && extras.coinLives) || {};
+    const nftLive = extras && extras.nftLive;
+    const nftUnread = !!(extras && extras.nftUnread);
     line.textContent = M.plateLine(house, live, unread);
     const liveBox = $("market-live");
     const list = $("market-tickers");
     const ticker = M.currentTicker(house);
     if (liveBox) {
-      if (!ticker) liveBox.innerHTML = `<p>${M.NO_QUOTE}</p>`;
-      else if (unread && !live) liveBox.innerHTML = `<p>${ticker.symbol} · ${M.CANT_REACH}</p>`;
-      else if (!live) liveBox.innerHTML = `<p>${ticker.symbol} · looking up</p>`;
-      else liveBox.innerHTML = `<p>${ticker.symbol}. ${live.name}. ${live.price} ${live.currency}. ${live.source === "coingecko" ? "CoinGecko" : "Yahoo"}.</p>`;
+      if (!house.tickers.length) liveBox.innerHTML = `<p>${M.NO_QUOTE}</p>`;
+      else {
+        const rows = house.tickers
+          .map((row) => {
+            const keyed = row.geckoId ? coinLives[row.geckoId] : null;
+            const addrKey = row.address ? coinLives[row.platform + ":" + row.address] || coinLives[row.address] : null;
+            const rowLive = keyed || addrKey || (ticker && row.id === ticker.id ? live : null);
+            const price = rowLive ? M.formatPrice(rowLive.price) : unread && ticker && row.id === ticker.id ? M.CANT_REACH : "…";
+            const kind = row.address ? (row.platform === "solana" ? "mint" : "contract") : row.kind;
+            return `<li data-on="${row.id === house.currentId ? "1" : "0"}"><strong>${row.symbol}</strong> · ${price} <span class="market-kind">${kind}</span></li>`;
+          })
+          .join("");
+        liveBox.innerHTML = `<ul class="market-live-list">${rows}</ul>`;
+      }
     }
     if (list) {
       list.replaceChildren();
-      for (const row of house.tickers) {
+      house.tickers.forEach((row, idx) => {
         const li = document.createElement("li");
         const pick = document.createElement("button");
         pick.type = "button";
         pick.dataset.hit = "1";
         pick.dataset.tickerPick = row.id;
         pick.dataset.on = row.id === house.currentId ? "1" : "0";
-        pick.textContent = row.symbol;
+        pick.textContent = row.symbol + (row.name && row.name !== row.symbol ? " · " + row.name : "");
+        const up = document.createElement("button");
+        up.type = "button";
+        up.dataset.hit = "1";
+        up.dataset.tickerMove = row.id;
+        up.dataset.dir = "-1";
+        up.textContent = "Up";
+        up.disabled = idx === 0;
+        const down = document.createElement("button");
+        down.type = "button";
+        down.dataset.hit = "1";
+        down.dataset.tickerMove = row.id;
+        down.dataset.dir = "1";
+        down.textContent = "Down";
+        down.disabled = idx === house.tickers.length - 1;
         const del = document.createElement("button");
         del.type = "button";
         del.dataset.hit = "1";
         del.dataset.tickerDel = row.id;
         del.textContent = "Remove";
-        li.append(pick, del);
+        li.append(pick, up, down, del);
         list.appendChild(li);
+      });
+    }
+    const nftBox = $("nft-live");
+    if (nftBox) {
+      const nft = M.currentNft(house);
+      if (!nft) nftBox.innerHTML = `<p>${M.NO_NFT}</p>`;
+      else if (nftUnread && !nftLive) nftBox.innerHTML = `<p>${nft.symbol || nft.name} · ${M.CANT_REACH}</p>`;
+      else if (!nftLive) nftBox.innerHTML = `<p>${nft.symbol || nft.name} · looking up</p>`;
+      else {
+        const floor =
+          nftLive.floorUsd != null
+            ? "$" + M.formatPrice(nftLive.floorUsd)
+            : nftLive.floorNative != null
+              ? M.formatPrice(nftLive.floorNative) + " " + (nftLive.nativeSymbol || "")
+              : "—";
+        nftBox.innerHTML = `<p>${nft.name}. Floor ${floor}. CoinGecko.</p>`;
+      }
+    }
+    const nfts = $("nft-collections");
+    if (nfts) {
+      nfts.replaceChildren();
+      house.nfts.forEach((row, idx) => {
+        const li = document.createElement("li");
+        const pick = document.createElement("button");
+        pick.type = "button";
+        pick.dataset.hit = "1";
+        pick.dataset.nftPick = row.id;
+        pick.dataset.on = row.id === house.currentNftId ? "1" : "0";
+        pick.textContent = (row.symbol || row.name) + " · " + row.name;
+        const up = document.createElement("button");
+        up.type = "button";
+        up.dataset.hit = "1";
+        up.dataset.nftMove = row.id;
+        up.dataset.dir = "-1";
+        up.textContent = "Up";
+        up.disabled = idx === 0;
+        const down = document.createElement("button");
+        down.type = "button";
+        down.dataset.hit = "1";
+        down.dataset.nftMove = row.id;
+        down.dataset.dir = "1";
+        down.textContent = "Down";
+        down.disabled = idx === house.nfts.length - 1;
+        const del = document.createElement("button");
+        del.type = "button";
+        del.dataset.hit = "1";
+        del.dataset.nftDel = row.id;
+        del.textContent = "Remove";
+        li.append(pick, up, down, del);
+        nfts.appendChild(li);
+      });
+    }
+    const markets = $("nft-marketplaces");
+    if (markets) {
+      markets.replaceChildren();
+      house.marketplaces.forEach((row, idx) => {
+        const li = document.createElement("li");
+        li.className = "nft-marketplace-row";
+        const label = document.createElement("span");
+        label.textContent = row.name;
+        const note = document.createElement("span");
+        note.className = "market-kind";
+        note.textContent = row.note || "offline";
+        const up = document.createElement("button");
+        up.type = "button";
+        up.dataset.hit = "1";
+        up.dataset.mpMove = row.id;
+        up.dataset.dir = "-1";
+        up.textContent = "Up";
+        up.disabled = idx === 0;
+        const down = document.createElement("button");
+        down.type = "button";
+        down.dataset.hit = "1";
+        down.dataset.mpMove = row.id;
+        down.dataset.dir = "1";
+        down.textContent = "Down";
+        down.disabled = idx === house.marketplaces.length - 1;
+        const del = document.createElement("button");
+        del.type = "button";
+        del.dataset.hit = "1";
+        del.dataset.mpDel = row.id;
+        del.textContent = "Remove";
+        li.append(label, note, up, down, del);
+        markets.appendChild(li);
+      });
+    }
+    const catalog = $("nft-marketplace-catalog");
+    if (catalog && M.NFT_MARKETPLACES) {
+      catalog.replaceChildren();
+      const have = new Set(house.marketplaces.map((m) => m.id));
+      for (const row of M.NFT_MARKETPLACES) {
+        if (have.has(row.id)) continue;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.dataset.hit = "1";
+        btn.dataset.mpAdd = row.id;
+        btn.textContent = "Add " + row.name;
+        catalog.appendChild(btn);
       }
     }
   }
