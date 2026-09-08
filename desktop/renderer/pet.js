@@ -1408,7 +1408,9 @@ function paintMess() {
     el.type = "button";
     el.className = "mess-dot";
     el.dataset.hit = "1";
-    el.style.transform = `translate3d(${m.x * (width - 40)}px, 0, 0)`;
+    el.title = "Clean mess";
+    el.setAttribute("aria-label", "Clean mess");
+    el.style.transform = `translate3d(${m.x * (width - 40)}px, 0, 0) rotate(-8deg)`;
     el.addEventListener("click", (e) => {
       e.stopPropagation();
       life.mess = life.mess.filter((x) => x.id !== m.id);
@@ -1429,9 +1431,12 @@ function paintGifts() {
   for (const g of life.gifts || []) {
     const el = document.createElement("button");
     el.type = "button";
-    el.className = g.kind === "shed" ? "shed-dot" : "gift-dot";
+    const shed = g.kind === "shed";
+    el.className = shed ? "shed-dot" : "gift-dot";
     el.dataset.hit = "1";
-    el.style.transform = `translate3d(${g.x * (width - 40)}px, 0, 0)`;
+    el.title = shed ? "Pick up shed" : "Pick up gift";
+    el.setAttribute("aria-label", shed ? "Pick up shed" : "Pick up gift");
+    el.style.transform = `translate3d(${g.x * (width - 40)}px, 0, 0) rotate(${shed ? 8 : -12}deg)`;
     el.addEventListener("click", (e) => {
       e.stopPropagation();
       window.PetLife.pickGift(life, g.id);
@@ -3172,7 +3177,11 @@ if (weatherPlate) {
         return;
       }
       const body = document.getElementById("weather-body");
-      if (body) body.hidden = !body.hidden;
+      if (body) {
+        body.hidden = !body.hidden;
+        const open = !body.hidden;
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      }
       return;
     }
     const pick = e.target && e.target.closest && e.target.closest("[data-area-pick]");
@@ -3306,7 +3315,11 @@ if (newsPlate) {
         return;
       }
       const body = document.getElementById("news-body");
-      if (body) body.hidden = !body.hidden;
+      if (body) {
+        body.hidden = !body.hidden;
+        const open = !body.hidden;
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      }
       return;
     }
     const pick = e.target && e.target.closest && e.target.closest("[data-news-pick]");
@@ -3354,7 +3367,11 @@ if (marketPlate) {
         return;
       }
       const body = document.getElementById("market-body");
-      if (body) body.hidden = !body.hidden;
+      if (body) {
+        body.hidden = !body.hidden;
+        const open = !body.hidden;
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      }
       return;
     }
     const pick = e.target && e.target.closest && e.target.closest("[data-ticker-pick]");
