@@ -54,7 +54,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Ember tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -100,7 +100,7 @@ test("Ember tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("groom"), false);
 });
 
-test("cinder/blaze/shed/lift/return are house-phoenix-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl toucan iguana dragon/Vesper or electrical-dragon clones", () => {
+test("cinder/blaze/shed/lift/return/reignite/hearth are house-phoenix-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl toucan iguana dragon/Vesper or electrical-dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const cinder = T.beginTrick("cinder", 80, 1);
   assert.equal(cinder.anim, "sit");
@@ -131,8 +131,18 @@ test("cinder/blaze/shed/lift/return are house-phoenix-true, not Rui cat dog rabb
   assert.equal(ret.anim, "sit");
   const retMid = T.stepTrick(ret, 0.5, ground);
   assert.ok(Math.abs(retMid.lift) > 0.3 || Math.abs(retMid.rot) > 1);
-  const retDone = T.stepTrick(ret, 1.4, ground);
+  const retDone = T.stepTrick(ret, T.DUR.return + 0.1, ground);
   assert.equal(retDone.phase, "done");
+  const reignite = T.beginTrick("reignite", 80, 1);
+  assert.equal(reignite.anim, "play");
+  const reignMid = T.stepTrick(reignite, T.DUR.reignite * 0.65, ground);
+  assert.ok(reignMid.lift > 2 || Math.abs(reignMid.rot) > 1);
+  const hearth = T.beginTrick("hearth", 80, 1);
+  assert.equal(hearth.anim, "sit");
+  const hearthMid = T.stepTrick(hearth, T.DUR.hearth * 0.4, ground);
+  assert.ok(Math.abs(hearthMid.lift) > 1 || Math.abs(hearthMid.rot) > 1);
+  assert.equal(Overlay.TRICKS.includes("reignite"), true);
+  assert.equal(Overlay.TRICKS.includes("hearth"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("cinder"), false);
@@ -348,15 +358,15 @@ test("ground registry keeps prior guests gated; Ember selectable; no kindle/ash/
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
   assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
   assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
-  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet"]);
-  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash"]);
+  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
+  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.deepEqual([...Ferret.TRICKS], ["tube", "romp", "steal", "puff", "noodle"]);
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
   assert.deepEqual([...Chinchilla.TRICKS], ["ash", "bound", "fluff", "chin", "sift"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
-  assert.deepEqual([...Toucan.TRICKS], ["roost", "berry", "juggle", "peer", "skip"]);
+  assert.deepEqual([...Toucan.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.deepEqual([...Iguana.TRICKS], ["sun", "dewlap", "nod", "press", "flick"]);
-  assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("flatten"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
   assert.equal(T.TRICKS.includes("bask"), false);
@@ -496,7 +506,7 @@ test("ground registry keeps prior guests gated; Ember selectable; no kindle/ash/
   assert.equal(OverlayGround.sleepHoldFrame("phoenix", 4), null);
 });
 
-test("notes: Ember idle-life done; next house-order guest still lacking tricks is Nori / ball_python", () => {
+test("notes: Ember base idle-life done; next house-order guest still lacking tricks is Nori / ball_python", () => {
   assert.equal(T.TRICK_KEY, "phoenix");
   assert.equal(T.wantsThankYou("ember"), true);
   assert.equal(OverlayGround.tricksFor("phoenix"), Overlay);
@@ -507,7 +517,44 @@ test("notes: Ember idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("vesper"), OverlayDragon);
   assert.equal(OverlayGround.wantsThankYou("dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("vesper"), true);
-  assert.equal(OverlayGround.tricksFor("ball_python"), null);
+  assert.equal(OverlayGround.tricksFor("ball_python") == null, true);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), false);
-  assert.equal(OverlayGround.tricksFor("nori"), null);
+  assert.equal(OverlayGround.tricksFor("nori") == null, true);
+});
+
+test("ultra-polish: Ember cinder/blaze/shed/reignite/hearth lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("cinder", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `cinder mid rot ${mid.rot}`);
+  assert.ok(mid.lift > 2, `cinder mid lift ${mid.lift}`);
+  const blaze = T.beginTrick("blaze", 80, 1);
+  const b2 = T.stepTrick(blaze, T.DUR.blaze * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(b2.rot) > 6, `blaze mid rot ${b2.rot}`);
+  assert.ok(Math.abs(b2.lift) > 2, `blaze mid lift ${b2.lift}`);
+  const shed = T.beginTrick("shed", 80, 1);
+  const s2 = T.stepTrick(shed, T.DUR.shed * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift > 5, `shed mid lift ${s2.lift}`);
+  const rg = T.beginTrick("reignite", 80, 1);
+  const r2 = T.stepTrick(rg, T.DUR.reignite * 0.65, { cmd: "idle" });
+  assert.ok(r2.lift > 4, `reignite mid lift ${r2.lift}`);
+  const ht = T.beginTrick("hearth", 80, 1);
+  const h2 = T.stepTrick(ht, T.DUR.hearth * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(h2.lift) > 2 || Math.abs(h2.rot) > 6, `hearth mid lift/rot ${h2.lift}/${h2.rot}`);
+  assert.ok(Overlay.reignitePose && Overlay.hearthPose);
+  assert.ok(T.nextTrickWait(true, 0, "cinder") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "cinder") > T.nextTrickWait(true, 0, "blaze"));
+});
+
+test("notes: Ember idle-life ultra done; bird ultra-polish line complete (Soot→Ember); Loom still next for base idle-ground; Nori still lacking", () => {
+  assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
+  assert.equal(T.TRICKS.includes("kindle"), false);
+  assert.equal(T.TRICKS.includes("ash"), false);
+  assert.equal(T.TRICKS.includes("plume"), false);
+  assert.equal(T.TRICKS.includes("sprawl"), false);
+  assert.equal(T.TRICKS.includes("smolder"), false);
+  assert.equal(T.TRICKS.includes("glow"), false);
+  assert.equal(T.TRICKS.includes("sun"), false);
+  assert.equal(T.TRICKS.includes("fan"), false);
+  assert.equal(T.TRICKS.includes("flash"), false);
+  assert.equal(T.TRICKS.includes("bask"), false);
 });
