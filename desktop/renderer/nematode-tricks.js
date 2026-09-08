@@ -1,12 +1,12 @@
-/** Thread ground tricks while idle. House neighborly Nematoda / Rhabditida C. elegans life — thrashwave / foragesine / dauersettle / pharynpump / elegans personality (thrashwave thrashing wave locomotion without naming thrash or wave or swim or crawl or undulate alone as wait, foragesine foraging sinusoid without naming forage or sine or sinusoid or crawl or seek or chemotaxis alone as wait, dauersettle dauer-like settle without naming dauer or settle or rest or coil or wait or crouch alone as wait, pharynpump pharyngeal pump cue without naming pump or pharynx or feed or sip or suck or beat alone as wait, long elegans Caenorhabditis elegans hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or ciliaryglide or lightflee or preywrap or regensplit or dugesia or denshalf or inkhalf or denscilia or cryptotun or clawamble or mosssip or waterbearroll or eutardigrada or denstun or inktun or densclaw or furculaflick or antennawalk or moistclingsoil or foldtuck or orchesella or denshop or inkhop or densfurcula or slimejet or lobopod or antennawhip or preyharpoon or peripatus or densjet or inkjet or denslobo or peristalse or castheap or surfacerise or soilanchor or terrestris or denscast or inkcast or densclit or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass or tunstate or clawgrip or mossfilm or styletprobe or hypsibius or thrashwave or foragesine or dauersettle or pharynpump or elegans; window-play and Call Thread leave nematode alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet/Hop/Tun/Half own their tricks; guest slug Thread / key nematode — accept "nematode" and "thread" (roster slug thread; campaign Thread); do NOT confuse with Half the Planarian (key planarian / slug half) or denshalf thank-you; do NOT confuse with Tun the Tardigrade (key tardigrade / slug tun) or denstun thank-you; do NOT confuse with Hop the Springtail (key springtail / slug hop) or denshop thank-you; do NOT confuse with Jet the Velvet Worm (key velvet_worm / slug jet) or densjet thank-you; do NOT confuse with Cast the Earthworm (key earthworm / slug cast) or denscast thank-you; do NOT confuse with Armor the Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT name a trick nematode or thread or planarian or half or tardigrade or tun or springtail or hop or velvet_worm or jet or earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste or amphipod or scud. Thank-yous densthread / inkthread / denswave. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web nematode-tricks.ts. Window-play unchanged. True Caenorhabditis elegans desk life — thrashing wave locomotion, foraging sinusoid, dauer-like settle, and pharyngeal pump cue; not Dugesia planarian/Platyhelminthes clones (ciliaryglide/lightflee/preywrap/regensplit), not Eutardigrada tardigrade/Tardigrada clones (cryptotun/clawamble/mosssip/waterbearroll), not Orchesella springtail/Collembola clones, not Peripatus velvet worm/Onychophora clones, not Lumbricus earthworm/Annelida clones (peristalse) — true nematode thrash/sinusoid distinct from flatworm ciliary glide and worm peristalsis. Next house-order guest after Thread still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Thread ground tricks while idle. House neighborly Nematoda / Rhabditida Caenorhabditis elegans life — sinusoid / dauerrest / pharynxpump / thrashturn / elegans personality (sinusoid sinusoidal undulation crawl without naming crawl or undulate or wave or swim or glide or sinus or worm alone as wait, dauerrest dauer resting tuck without naming rest or dauer or tuck or sleep or wait or freeze or crouch alone as wait, pharynxpump pharynx pump feed without naming pump or pharynx or feed or sip or suck or gulp or eat alone as wait, thrashturn thrash omega turn without naming thrash or omega or turn or flip or coil or reverse alone as wait, long elegans Caenorhabditis elegans nematode hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or ciliaryglide or lightflee or preywrap or regensplit or dugesia or denshalf or inkhalf or denscilia or cryptotun or clawamble or mosssip or waterbearroll or eutardigrada or denstun or inktun or densclaw or furculaflick or antennawalk or moistclingsoil or foldtuck or orchesella or denshop or inkhop or densfurcula or slimejet or lobopod or antennawhip or preyharpoon or peripatus or densjet or inkjet or denslobo or peristalse or castheap or surfacerise or soilanchor or terrestris or denscast or inkcast or densclit or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass or tunstate or clawgrip or mossfilm or styletprobe or hypsibius or sinusoid or dauerrest or pharynxpump or thrashturn or elegans; window-play and Call Thread leave nematode alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet/Hop/Tun/Half own their tricks; guest slug Thread / key nematode — accept "nematode" and "thread" (roster slug thread; campaign Thread); do NOT confuse with Half the Planarian (key planarian / slug half) or denshalf thank-you; do NOT confuse with Tun the Tardigrade (key tardigrade / slug tun) or denstun thank-you; do NOT confuse with Hop the Springtail (key springtail / slug hop) or denshop thank-you; do NOT confuse with Jet the Velvet Worm (key velvet_worm / slug jet) or densjet thank-you; do NOT confuse with Cast the Earthworm (key earthworm / slug cast) or denscast thank-you; do NOT confuse with Armor the Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT name a trick nematode or thread or planarian or half or tardigrade or tun or springtail or hop or velvet_worm or jet or earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste or amphipod or scud. Thank-yous densthread / inkthread / densdauer. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web nematode-tricks.ts. Window-play unchanged. True Caenorhabditis elegans nematode desk life — sinusoidal undulation, dauer resting tuck, pharynx pump, and thrash/omega turn; not Dugesia planarian/Platyhelminthes clones (ciliaryglide/lightflee/preywrap/regensplit), not Eutardigrada tardigrade/Tardigrada clones (cryptotun/clawamble/mosssip/waterbearroll), not Orchesella springtail/Collembola clones, not Peripatus velvet worm/Onychophora clones, not Lumbricus earthworm/Annelida clones (peristalse) — true thin nematode undulation distinct from flatworm ciliary glide and worm peristalsis. Next house-order guest after Thread still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "nematode";
-  const TRICKS = ["thrashwave", "foragesine", "dauersettle", "pharynpump", "elegans"];
-  const HAPPY = ["densthread", "inkthread", "denswave"];
-  const HAPPY_DUR = { densthread: 2.58, inkthread: 2.74, denswave: 2.48 };
-  const ELEGANS_HOLD = 24.50;
-  const RELEASE_S = 2.18;
-  const DUR = { elegans: ELEGANS_HOLD + RELEASE_S, thrashwave: 4.72, foragesine: 4.50, dauersettle: 4.64, pharynpump: 4.40 };
+  const TRICKS = ["sinusoid", "dauerrest", "pharynxpump", "thrashturn", "elegans"];
+  const HAPPY = ["densthread", "inkthread", "densdauer"];
+  const HAPPY_DUR = { densthread: 2.58, inkthread: 2.74, densdauer: 2.48 };
+  const ELEGANS_HOLD = 24.40;
+  const RELEASE_S = 2.16;
+  const DUR = { elegans: ELEGANS_HOLD + RELEASE_S, sinusoid: 4.72, dauerrest: 4.50, pharynxpump: 4.60, thrashturn: 4.40 };
 
   function canStart(state) {
     if (!state) return false;
@@ -37,10 +37,10 @@
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
       if (kind === "elegans") return 162 + roll * 14;
-  if (kind === "thrashwave") return 26.8 + roll * 4.4;
-  if (kind === "foragesine") return 25.8 + roll * 4.1;
-  if (kind === "dauersettle") return 26.2 + roll * 4.2;
-  if (kind === "pharynpump") return 25.2 + roll * 3.9;
+  if (kind === "sinusoid") return 26.6 + roll * 4.4;
+  if (kind === "dauerrest") return 25.8 + roll * 4.1;
+  if (kind === "pharynxpump") return 26.2 + roll * 4.2;
+  if (kind === "thrashturn") return 25.2 + roll * 3.9;
   return justFinished ? 19.0 + roll * 2.8 : 14.2 + roll * 2.4;
   }
 
@@ -48,28 +48,28 @@
     if (musicOn) return "elegans";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "elegans") {
-      if (roll < 0.26) return "thrashwave";
-      if (roll < 0.5) return "foragesine";
-      if (roll < 0.74) return "dauersettle";
-      return "pharynpump";
+      if (roll < 0.26) return "sinusoid";
+      if (roll < 0.5) return "dauerrest";
+      if (roll < 0.74) return "pharynxpump";
+      return "thrashturn";
     }
-    if (lastKind === "thrashwave") {
+    if (lastKind === "sinusoid") {
       if (roll < 0.26) return "elegans";
-      if (roll < 0.5) return "foragesine";
-      if (roll < 0.74) return "dauersettle";
-      return "pharynpump";
+      if (roll < 0.5) return "dauerrest";
+      if (roll < 0.74) return "pharynxpump";
+      return "thrashturn";
     }
-    if (lastKind === "foragesine") {
+    if (lastKind === "dauerrest") {
       if (roll < 0.22) return "elegans";
-      if (roll < 0.44) return "thrashwave";
-      if (roll < 0.68) return "dauersettle";
-      return "pharynpump";
+      if (roll < 0.44) return "sinusoid";
+      if (roll < 0.68) return "pharynxpump";
+      return "thrashturn";
     }
     if (roll < 0.2) return "elegans";
-    if (roll < 0.4) return "thrashwave";
-    if (roll < 0.6) return "foragesine";
-    if (roll < 0.8) return "dauersettle";
-    return "pharynpump";
+    if (roll < 0.4) return "sinusoid";
+    if (roll < 0.6) return "dauerrest";
+    if (roll < 0.8) return "pharynxpump";
+    return "thrashturn";
   }
 
   function happyCanStart(state) {
@@ -125,7 +125,7 @@
       x: x,
       lift: 0,
       rot: 0,
-      anim: name === "densthread" ? "sit" : name === "inkthread" ? "play" : "sit",
+      anim: name === "densthread" ? "sit" : name === "inkthread" ? "play" : "play",
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -138,7 +138,7 @@
       return { lift: s * 0.0032, rot: s * 0.24, anim: "sit" };
     }
     if (u < 0.72) {
-      const bob = Math.sin((u - 0.14) / 0.58 * Math.PI * 1.8);
+      const bob = Math.sin((u - 0.14) / 0.58 * Math.PI * 2.1);
       return { lift: 0.0032 + bob * 0.0014, rot: 0.24 + bob * 0.18, anim: "sit" };
     }
     const s = (u - 0.72) / 0.28;
@@ -151,24 +151,24 @@
       return { lift: s * 0.0038, rot: s * -0.32, anim: "talk" };
     }
     if (u < 0.70) {
-      const pulse = Math.sin((u - 0.16) / 0.54 * Math.PI * 2.2);
+      const pulse = Math.sin((u - 0.16) / 0.54 * Math.PI * 2.4);
       return { lift: 0.0038 + Math.abs(pulse) * 0.0014, rot: -0.32 + pulse * 0.26, anim: "talk" };
     }
     const s = (u - 0.70) / 0.30;
     return { lift: 0.0038 * (1 - s), rot: -0.32 * (1 - s), anim: "idle" };
   }
-  function denswavePose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denswave));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.0028, rot: s * 0.16, anim: "sit" };
+  function densdauerPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densdauer));
+    if (u < 0.12) {
+      const s = u / 0.12;
+      return { lift: s * 0.0028, rot: s * 0.20, anim: "play" };
     }
     if (u < 0.78) {
-      const wave = Math.sin((u - 0.15) / 0.63 * Math.PI * 3.2);
-      return { lift: 0.0028 + Math.abs(wave) * 0.0012, rot: 0.16 + wave * 0.20, anim: "sit" };
+      const wave = Math.sin((u - 0.12) / 0.66 * Math.PI * 2.8);
+      return { lift: 0.0028 + Math.abs(wave) * 0.0012, rot: 0.20 + wave * 0.16, anim: "play" };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 0.0028 * (1 - s), rot: 0.16 * (1 - s), anim: "idle" };
+    return { lift: 0.0028 * (1 - s), rot: 0.20 * (1 - s), anim: "idle" };
   }
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
@@ -188,7 +188,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = denswavePose(next.t);
+      const pose = densdauerPose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -205,14 +205,14 @@
     const anim =
       kind === "elegans"
         ? "sit"
-        : kind === "thrashwave"
+        : kind === "sinusoid"
           ? "play"
-          : kind === "foragesine"
-            ? "play"
-            : kind === "dauersettle"
+          : kind === "dauerrest"
+            ? "sit"
+            : kind === "pharynxpump"
               ? "sit"
-              : kind === "pharynpump"
-                ? "sit"
+              : kind === "thrashturn"
+                ? "play"
                 : "sit";
     return {
       kind: kind,
@@ -236,7 +236,7 @@
                       function elegansPose(t) {
     const breath = Math.sin(t * 0.0034) + 0.0014 * Math.sin(t * 0.0098);
     const hush = Math.abs(Math.sin(t * 0.0020));
-    return { lift: 0.00018 + hush * 0.00036, rot: -0.004 + breath * 0.011 };
+    return { lift: 0.00018 + hush * 0.00034, rot: -0.004 + breath * 0.010 };
   }
 
   function releasePose(t) {
@@ -244,69 +244,73 @@
     return { lift: 0.00018 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.004 * (1 - u) };
   }
 
-  function thrashwavePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.thrashwave));
+  function sinusoidPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.sinusoid));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00040, lift: s * 0.0010, rot: s * 0.22 * face, anim: "play" };
+      return { x: fromX + face * s * 0.00028, lift: s * 0.00055, rot: s * 0.09 * face, anim: "play" };
     }
     if (u < 0.88) {
-      const thrash = Math.sin((u - 0.10) / 0.78 * Math.PI * 7.2);
-      const wave = Math.sin(t * 1.10) + 0.034 * Math.sin(t * 2.20);
-      return { x: fromX + face * (0.00040 + (u - 0.10) / 0.78 * 0.0064 + thrash * 0.00042 + wave * 0.00006), lift: 0.0009 + Math.abs(thrash) * 0.0014 + Math.abs(wave) * 0.00040, rot: (0.22 + thrash * 0.38 + wave * 0.08) * face, anim: "play" };
+      const wave = Math.sin((u - 0.10) / 0.78 * Math.PI * 6.2);
+      const und = Math.sin(t * 0.88) + 0.030 * Math.sin(t * 1.76);
+      return { x: fromX + face * (0.00028 + (u - 0.10) / 0.78 * 0.0062 + wave * 0.00042 + und * 0.00006), lift: 0.0005 + Math.abs(wave) * 0.00055 + Math.abs(und) * 0.00028, rot: (0.09 + wave * 0.22 + und * 0.05) * face, anim: "play" };
     }
     const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0064 * (1 - s), lift: 0.00040 * (1 - s), rot: 0.010 * (1 - s) * face, anim: "idle" };
+    return { x: fromX + face * 0.0062 * (1 - s), lift: 0.00030 * (1 - s), rot: 0.010 * (1 - s) * face, anim: "idle" };
   }
-  function foragesinePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.foragesine));
+  function dauerrestPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.dauerrest));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.00022, lift: s * 0.0016, rot: s * 0.14 * face, anim: "sit" };
+    }
+    if (u < 0.84) {
+      const tuck = Math.sin((u - 0.14) / 0.70 * Math.PI * 2.0);
+      const hush = Math.sin(t * 0.48) + 0.028 * Math.sin(t * 0.96);
+      return { x: fromX + face * (0.00022 + tuck * 0.00028 + hush * 0.00005), lift: 0.0016 + Math.abs(tuck) * 0.0010 + Math.abs(hush) * 0.00035, rot: (0.14 + tuck * 0.18 + hush * 0.05) * face, anim: "sit" };
+    }
+    const s = smoothstep((u - 0.84) / 0.16);
+    return { x: fromX + face * 0.00022 * (1 - s), lift: 0.0016 * (1 - s) + s * 0.00020, rot: 0.010 * (1 - s) * face, anim: "idle" };
+  }
+  function pharynxpumpPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.pharynxpump));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00022, lift: s * 0.0008, rot: s * 0.10 * face, anim: "play" };
-    }
-    if (u < 0.86) {
-      const sine = Math.sin((u - 0.12) / 0.74 * Math.PI * 4.2);
-      const forage = Math.sin(t * 0.58) + 0.028 * Math.sin(t * 1.16);
-      return { x: fromX + face * (0.00022 + (u - 0.12) / 0.74 * 0.0050 + sine * 0.00036 + forage * 0.00005), lift: 0.0007 + Math.abs(sine) * 0.0009 + Math.abs(forage) * 0.00038, rot: (0.10 + sine * 0.18 + forage * 0.05) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0050 * (1 - s), lift: 0.00032 * (1 - s), rot: 0.008 * (1 - s) * face, anim: "idle" };
-  }
-  function dauersettlePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.dauersettle));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX + face * s * 0.00010, lift: s * 0.0004, rot: s * 0.28 * face, anim: "sit" };
-    }
-    if (u < 0.82) {
-      const settle = Math.sin((u - 0.16) / 0.66 * Math.PI * 1.6);
-      const dauer = Math.sin(t * 0.22) + 0.012 * Math.sin(t * 0.44);
-      return { x: fromX + face * (0.00010 + settle * 0.00008 + dauer * 0.00002), lift: 0.00035 + Math.abs(settle) * 0.00025 + Math.abs(dauer) * 0.00012, rot: (0.28 + settle * 0.06 + dauer * 0.03) * face, anim: "sit" };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
-    return { x: fromX + face * 0.00010 * (1 - s), lift: 0.00020 * (1 - s), rot: 0.06 * (1 - s) * face, anim: "idle" };
-  }
-  function pharynpumpPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.pharynpump));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00028, lift: s * 0.0024, rot: s * -0.22 * face, anim: "sit" };
+      return { x: fromX + face * s * 0.00020, lift: s * 0.0018, rot: s * 0.12 * face, anim: "sit" };
     }
     if (u < 0.86) {
       const pump = Math.sin((u - 0.12) / 0.74 * Math.PI * 5.6);
-      const beat = Math.sin(t * 0.88) + 0.030 * Math.sin(t * 1.76);
-      return { x: fromX + face * (0.00028 + pump * 0.00040 + beat * 0.00008), lift: 0.0024 + Math.abs(pump) * 0.0016 + Math.abs(beat) * 0.00055, rot: (-0.22 + pump * 0.34 + beat * 0.08) * face, anim: "sit" };
+      const gulp = Math.sin(t * 0.96) + 0.034 * Math.sin(t * 1.92);
+      return { x: fromX + face * (0.00020 + pump * 0.00018 + gulp * 0.00004), lift: 0.0018 + Math.abs(pump) * 0.0011 + Math.abs(gulp) * 0.0004, rot: (0.12 + pump * 0.10 + gulp * 0.04) * face, anim: "sit" };
     }
     const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.00028 * (1 - s), lift: 0.0024 * (1 - s), rot: -0.012 * (1 - s) * face, anim: "idle" };
+    return { x: fromX + face * 0.00016 * (1 - s), lift: 0.0008 * (1 - s) + s * 0.00022, rot: 0.010 * (1 - s) * face, anim: "idle" };
+  }
+  function thrashturnPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.thrashturn));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX + face * s * 0.00018, lift: s * 0.0014, rot: s * -0.22 * face, anim: "play" };
+    }
+    if (u < 0.50) {
+      const omega = Math.sin((u - 0.12) / 0.38 * Math.PI * 2.4);
+      return { x: fromX + face * (0.00018 + omega * 0.00050), lift: 0.0014 + Math.abs(omega) * 0.0012, rot: (-0.22 + omega * 0.48) * face, anim: "play" };
+    }
+    if (u < 0.84) {
+      const thrash = Math.sin((u - 0.50) / 0.34 * Math.PI * 3.8);
+      const flick = Math.sin(t * 1.08) + 0.036 * Math.sin(t * 2.16);
+      return { x: fromX + face * (0.00018 - (u - 0.50) / 0.34 * 0.0036 + thrash * 0.00036 + flick * 0.00005), lift: 0.0016 + Math.abs(thrash) * 0.0010 + Math.abs(flick) * 0.0004, rot: (0.26 + thrash * 0.24 + flick * 0.06) * face, anim: "play" };
+    }
+    const s = smoothstep((u - 0.84) / 0.16);
+    return { x: fromX + face * (-0.0036) * (1 - s), lift: 0.0010 * (1 - s) + s * 0.00022, rot: 0.012 * (1 - s) * face, anim: "idle" };
   }
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "thrashwave" && trick.kind !== "foragesine" && trick.kind !== "dauersettle" && trick.kind !== "pharynpump") {
+    if (shouldAbort(flags) && trick.kind !== "sinusoid" && trick.kind !== "dauerrest" && trick.kind !== "pharynxpump" && trick.kind !== "thrashturn") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -331,26 +335,26 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "thrashwave") {
-      const pose = thrashwavePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    if (next.kind === "sinusoid") {
+      const pose = sinusoidPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "foragesine") {
-      const pose = foragesinePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "dauerrest") {
+      const pose = dauerrestPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "dauersettle") {
-      const pose = dauersettlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "pharynxpump") {
+      const pose = pharynxpumpPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = pharynpumpPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = thrashturnPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -376,10 +380,10 @@
     beginTrick,
     elegansPose,
     releasePose,
-    thrashwavePose,
-    foragesinePose,
-    dauersettlePose,
-    pharynpumpPose,
+    sinusoidPose,
+    dauerrestPose,
+    pharynxpumpPose,
+    thrashturnPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -389,7 +393,7 @@
     beginHappy,
     densthreadPose,
     inkthreadPose,
-    denswavePose,
+    densdauerPose,
     stepHappy,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
