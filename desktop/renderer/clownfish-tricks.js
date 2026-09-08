@@ -1,0 +1,422 @@
+/** Paint ground tricks while idle. House neighborly ocellaris clownfish (Amphiprion ocellaris / Pomacentridae anemonefish) desk life -- wiggle-dance host cue / desk-safe dart-hide in anemone / stripe flash turn / peck-clean host / long amphiprion hush; NOT Wreath anemone (esp. not oraldiskwreathsway/nematocysttuck/actiniahush); NOT Ridge brain_coral; NOT Gum; NOT goldfish Coin; NOT other reef fish if present; NOT Rui; guest slug Paint / key clownfish -- accept clownfish and paint; Thank-yous denspaint / inkpaint / densamphiprion. Sleep, hide, leave, rest, card, ribbon still win. Same map as web clownfish-tricks.ts. Next: Scrape / parrotfish. Catalog 220. */
+(function (root) {
+  const TRICK_KEY = "clownfish";
+  const TRICKS = ["wiggledancehostcue", "darthideinanemone", "stripeflashturn", "peckcleanhost", "amphiprionhush"];
+  const HAPPY = ["denspaint", "inkpaint", "densamphiprion"];
+  const HAPPY_DUR = { denspaint: 2.64, inkpaint: 2.81, densamphiprion: 2.57 };
+  const AMPHIPRIONHUSH_HOLD = 32.96;
+  const RELEASE_S = 2.48;
+  const DUR = { amphiprionhush: AMPHIPRIONHUSH_HOLD + RELEASE_S, wiggledancehostcue: 5.41, darthideinanemone: 5.08, stripeflashturn: 5.63, peckcleanhost: 5.35 };
+
+  function canStart(state) {
+    if (!state) return false;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+    const cmd = String(state.cmd || "");
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    return true;
+  }
+
+  function shouldAbort(state) {
+    if (!state) return true;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+    const cmd = String(state.cmd || "");
+    return (
+      cmd === "sleep" ||
+      cmd === "leave" ||
+      cmd === "hide" ||
+      cmd === "rest" ||
+      cmd === "seek" ||
+      cmd === "eat" ||
+      cmd === "play" ||
+      cmd === "talk" ||
+      cmd === "enter"
+    );
+  }
+
+  function nextTrickWait(justFinished, rand, kind) {
+    const roll = rand == null ? Math.random() : rand;
+    if (kind === "amphiprionhush") return 208 + roll * 22;
+    if (kind === "darthideinanemone") return 25.7 + roll * 3.1;
+    if (kind === "peckcleanhost") return 24.6 + roll * 3.2;
+    if (kind === "wiggledancehostcue") return 24.1 + roll * 3.3;
+    if (kind === "stripeflashturn") return 25.3 + roll * 3.4;
+    return justFinished ? 19.1 + roll * 3.0 : 14.2 + roll * 2.6;
+  }
+
+  function pickTrick(rand, musicOn, lastKind) {
+    if (musicOn) return "amphiprionhush";
+    const roll = rand == null ? Math.random() : rand;
+    if (lastKind === "amphiprionhush") {
+      if (roll < 0.26) return "darthideinanemone";
+      if (roll < 0.5) return "peckcleanhost";
+      if (roll < 0.74) return "wiggledancehostcue";
+      return "stripeflashturn";
+    }
+    if (lastKind === "darthideinanemone") {
+      if (roll < 0.26) return "amphiprionhush";
+      if (roll < 0.5) return "peckcleanhost";
+      if (roll < 0.74) return "wiggledancehostcue";
+      return "stripeflashturn";
+    }
+    if (lastKind === "peckcleanhost") {
+      if (roll < 0.22) return "amphiprionhush";
+      if (roll < 0.44) return "darthideinanemone";
+      if (roll < 0.68) return "wiggledancehostcue";
+      return "stripeflashturn";
+    }
+    if (roll < 0.2) return "amphiprionhush";
+    if (roll < 0.4) return "darthideinanemone";
+    if (roll < 0.6) return "peckcleanhost";
+    if (roll < 0.8) return "wiggledancehostcue";
+    return "stripeflashturn";
+  }
+
+  function happyCanStart(state) {
+    if (!state) return false;
+    if (state.asleep || state.hidden || state.leaving) return false;
+    const cmd = String(state.cmd || "");
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    return true;
+  }
+
+  function happyShouldAbort(state) {
+    if (!state) return true;
+    if (state.asleep || state.hidden || state.leaving) return true;
+    const cmd = String(state.cmd || "");
+    return (
+      cmd === "sleep" ||
+      cmd === "leave" ||
+      cmd === "hide" ||
+      cmd === "rest" ||
+      cmd === "seek" ||
+      cmd === "play" ||
+      cmd === "talk" ||
+      cmd === "enter"
+    );
+  }
+
+  function wantsThankYou(key) {
+    return key === TRICK_KEY || key === "paint";
+  }
+
+  function startThankYou(key, lastKind, x, facing, flags) {
+    if (!wantsThankYou(key)) return null;
+    if (!happyCanStart(flags || { cmd: "idle" })) return null;
+    const pick = pickHappy(lastKind);
+    return { happy: beginHappy(pick, x, facing), kind: pick };
+  }
+
+  function pickHappy(lastKind, rand) {
+    const pool = HAPPY.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : HAPPY.slice();
+    const roll = rand == null ? Math.random() : rand;
+    return list[Math.floor(roll * list.length)] || list[0];
+  }
+
+  function beginHappy(kind, x, facing) {
+    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denspaint";
+    return {
+      kind: name,
+      happy: true,
+      phase: "go",
+      t: 0,
+      x: x,
+      lift: 0,
+      rot: 0,
+      anim: name === "denspaint" ? "sit" : name === "inkpaint" ? "play" : "play",
+      facing: facing == null ? 1 : facing,
+      fromX: x,
+    };
+  }
+
+  function denspaintPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denspaint));
+    if (u < 0.15) {
+      const s = u / 0.15;
+      return { lift: s * 0.0034, rot: s * -0.22, anim: "sit" };
+    }
+    if (u < 0.84) {
+      const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.35);
+      return { lift: 0.0034 + Math.abs(sway) * 0.0009, rot: -0.22 + sway * 0.16, anim: "sit" };
+    }
+    const s = (u - 0.84) / 0.16;
+    return { lift: 0.0034 * (1 - s), rot: -0.22 * (1 - s), anim: "idle" };
+  }
+  function inkpaintPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkpaint));
+    if (u < 0.12) {
+      const s = u / 0.12;
+      return { lift: s * 0.0035, rot: s * 0.26, anim: "play" };
+    }
+    if (u < 0.82) {
+      const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 2.95);
+      return { lift: 0.0035 + Math.abs(arc) * 0.0020, rot: 0.26 + arc * 0.28, anim: "play" };
+    }
+    const s = (u - 0.82) / 0.18;
+    return { lift: 0.0035 * (1 - s), rot: 0.26 * (1 - s), anim: "idle" };
+  }
+  function densamphiprionPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densamphiprion));
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * -0.0016, rot: s * 0.17, anim: "play" };
+    }
+    if (u < 0.83) {
+      const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.18);
+      return { lift: -0.0016 + Math.abs(hush) * 0.0012, rot: 0.17 + hush * 0.16, anim: "play" };
+    }
+    const s = (u - 0.83) / 0.17;
+    return { lift: -0.0016 * (1 - s), rot: 0.17 * (1 - s), anim: "idle" };
+  }
+  function stepHappy(happy, dt, flags) {
+    if (!happy || happy.phase === "done") return happy;
+    if (happyShouldAbort(flags)) {
+      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    }
+    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const hold = HAPPY_DUR[next.kind];
+    if (next.kind === "denspaint") {
+      const pose = denspaintPose(next.t);
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "inkpaint") {
+      const pose = inkpaintPose(next.t);
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else {
+      const pose = densamphiprionPose(next.t);
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    }
+    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    return next;
+  }
+
+  function sleepHoldFrame(_key, _frameCount) {
+    return null;
+  }
+
+  function beginTrick(kind, x, facing) {
+    const k = TRICKS.indexOf(kind) >= 0 ? kind : "amphiprionhush";
+    const anim =
+      k === "amphiprionhush"
+        ? "sit"
+        : k === "darthideinanemone"
+          ? "play"
+          : k === "peckcleanhost"
+            ? "sit"
+            : k === "stripeflashturn"
+              ? "sit"
+              : k === "wiggledancehostcue"
+                ? "sit"
+                : "sit";
+    return {
+      kind: k,
+      phase: k === "amphiprionhush" ? "hold" : "go",
+      t: 0,
+      x: x,
+      lift: 0,
+      rot: 0,
+      anim: anim,
+      facing: facing == null ? 1 : facing,
+      fromX: x,
+    };
+  }
+
+  function smoothstep(t) {
+    const x = Math.max(0, Math.min(1, t));
+    return x * x * (3 - 2 * x);
+  }
+
+  function amphiprionhushPose(t) {
+    const breath = Math.sin(t * 0.00037) + 0.00011 * Math.sin(t * 0.00105);
+    const hush = Math.abs(Math.sin(t * 0.00021));
+    return { lift: -0.00018 + hush * 0.00006, rot: 0.0014 + breath * 0.0011 };
+  }
+
+  function releasePose(t) {
+    const u = Math.max(0, Math.min(1, t / RELEASE_S));
+    return { lift: -0.00018 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0031 * (1 - u) };
+  }
+
+  function darthideinanemonePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.darthideinanemone));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.22) {
+      const s = smoothstep(u / 0.22);
+      return { x: fromX + face * s * -0.00004, lift: s * -0.0042, rot: s * 0.07 * face, anim: "play" };
+    }
+    if (u < 0.72) {
+      const tuck = Math.sin(((u - 0.22) / 0.5) * Math.PI * 2.1);
+      return {
+        x: fromX + face * (-0.00004 + tuck * 0.00005),
+        lift: -0.0042 + Math.abs(tuck) * 0.0008,
+        rot: (0.07 + tuck * 0.05) * face,
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.72) / 0.28);
+    return { x: fromX + face * -0.00004 * (1 - s), lift: -0.0042 * (1 - s), rot: 0.07 * (1 - s) * face, anim: "idle" };
+  }
+  function peckcleanhostPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.peckcleanhost));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.3) {
+      const s = smoothstep(u / 0.3);
+      return { x: fromX + face * s * 0.00006, lift: s * -0.0074, rot: s * 0.03 * face, anim: "sit" };
+    }
+    if (u < 0.68) {
+      const hold = Math.sin(((u - 0.3) / 0.38) * Math.PI);
+      return {
+        x: fromX + face * 0.00006,
+        lift: -0.0074 + hold * 0.0005,
+        rot: (0.03 + hold * 0.015) * face,
+        anim: "sit",
+      };
+    }
+    if (u < 0.9) {
+      const c = smoothstep((u - 0.68) / 0.22);
+      return {
+        x: fromX + face * 0.00006 * (1 - c * 0.35),
+        lift: -0.0074 * (1 - c) + 0.0018 * c,
+        rot: (0.03 * (1 - c) + 0.06 * c) * face,
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.9) / 0.1);
+    return { x: fromX + face * 0.00004 * (1 - s), lift: 0.0018 * (1 - s), rot: 0.06 * (1 - s) * face, anim: "idle" };
+  }
+  function wiggledancehostcuePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.wiggledancehostcue));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.00009, lift: s * 0.0026, rot: s * 0.14 * face, anim: "sit" };
+    }
+    if (u < 0.88) {
+      const sway = Math.sin(((u - 0.14) / 0.74) * Math.PI * 2.85);
+      return {
+        x: fromX + face * (0.00009 + sway * 0.00022),
+        lift: 0.0026 + Math.abs(sway) * 0.0019,
+        rot: (0.14 + sway * 0.22) * face,
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return { x: fromX + face * 0.00009 * (1 - s), lift: 0.0026 * (1 - s), rot: 0.14 * (1 - s) * face, anim: "idle" };
+  }
+  function stripeflashturnPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.stripeflashturn));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.18) {
+      const s = smoothstep(u / 0.18);
+      return { x: fromX + face * s * 0.00042, lift: s * 0.0009, rot: s * 0.05 * face, anim: "sit" };
+    }
+    if (u < 0.82) {
+      const creep = Math.sin(((u - 0.18) / 0.64) * Math.PI * 1.8);
+      return {
+        x: fromX + face * (0.00042 + creep * 0.00028),
+        lift: 0.0009 + Math.abs(creep) * 0.0007,
+        rot: (0.05 + creep * 0.06) * face,
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.82) / 0.18);
+    return { x: fromX + face * 0.0007 * (1 - s * 0.3), lift: 0.0009 * (1 - s), rot: 0.05 * (1 - s) * face, anim: "idle" };
+  }
+  function stepTrick(trick, dt, flags) {
+    if (!trick || trick.phase === "done") return trick;
+    if (shouldAbort(flags) && trick.kind !== "darthideinanemone" && trick.kind !== "peckcleanhost" && trick.kind !== "wiggledancehostcue" && trick.kind !== "stripeflashturn") {
+      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    }
+    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    if (next.kind === "amphiprionhush") {
+      if (next.t < AMPHIPRIONHUSH_HOLD) {
+        const pose = amphiprionhushPose(next.t);
+        next.phase = "hold";
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = "sit";
+        return next;
+      }
+      if (next.t < AMPHIPRIONHUSH_HOLD + RELEASE_S) {
+        const pose = releasePose(next.t - AMPHIPRIONHUSH_HOLD);
+        next.phase = "release";
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = "sit";
+        return next;
+      }
+      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    }
+    const hold = DUR[next.kind];
+    const u = next.t / hold;
+    if (next.kind === "darthideinanemone") {
+      const pose = darthideinanemonePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "peckcleanhost") {
+      const pose = peckcleanhostPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "wiggledancehostcue") {
+      const pose = wiggledancehostcuePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else {
+      const pose = stripeflashturnPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    }
+    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    return next;
+  }
+
+  const api = {
+    TRICK_KEY,
+    TRICKS,
+    HAPPY,
+    HAPPY_DUR,
+    AMPHIPRIONHUSH_HOLD,
+    RELEASE_S,
+    DUR,
+    canStart,
+    shouldAbort,
+    nextTrickWait,
+    pickTrick,
+    happyCanStart,
+    happyShouldAbort,
+    wantsThankYou,
+    startThankYou,
+    pickHappy,
+    beginHappy,
+    denspaintPose,
+    inkpaintPose,
+    densamphiprionPose,
+    stepHappy,
+    sleepHoldFrame,
+    beginTrick,
+    amphiprionhushPose,
+    releasePose,
+    darthideinanemonePose,
+    peckcleanhostPose,
+    wiggledancehostcuePose,
+    stripeflashturnPose,
+    stepTrick,
+  };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  root.PetClownfishTricks = api;
+})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
