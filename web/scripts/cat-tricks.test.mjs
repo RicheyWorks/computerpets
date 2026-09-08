@@ -22,7 +22,7 @@ const OverlayHamster = createRequire(import.meta.url)(join(root, "../desktop/ren
 const OverlayGuineaPig = createRequire(import.meta.url)(join(root, "../desktop/renderer/guinea-pig-tricks.js"));
 
 test("Miso tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce"]);
+  assert.deepEqual([...T.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -44,7 +44,7 @@ test("Miso tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("click"), false);
 });
 
-test("loaf/knead/stretch/wash/pounce are house-cat-true, not Rui or dragon clones", () => {
+test("loaf/knead/stretch/wash/pounce/bunting/mlem are house-cat-true, not Rui or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const loaf = T.beginTrick("loaf", 80, 1);
   assert.equal(loaf.anim, "sit");
@@ -52,7 +52,7 @@ test("loaf/knead/stretch/wash/pounce are house-cat-true, not Rui or dragon clone
   const held = T.stepTrick(loaf, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.equal(held.rot, 0);
+  assert.ok(Math.abs(held.rot) > 6);
   assert.ok(held.lift < 0);
   const release = T.stepTrick(loaf, T.LOAF_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
@@ -74,11 +74,21 @@ test("loaf/knead/stretch/wash/pounce are house-cat-true, not Rui or dragon clone
   assert.ok(Math.abs(washMid.rot) > 1);
   const pounce = T.beginTrick("pounce", 80, 1);
   assert.equal(pounce.anim, "play");
-  const pounceMid = T.stepTrick(pounce, 0.45, ground);
+  const pounceMid = T.stepTrick(pounce, T.DUR.pounce * 0.45, ground);
   assert.ok(pounceMid.lift > 2);
   assert.ok(Math.abs(pounceMid.x - 80) > 2);
-  const pounceDone = T.stepTrick(pounce, 1.2, ground);
+  const pounceDone = T.stepTrick(pounce, T.DUR.pounce + 0.1, ground);
   assert.equal(pounceDone.phase, "done");
+  const bunting = T.beginTrick("bunting", 80, 1);
+  assert.equal(bunting.anim, "sit");
+  const buntMid = T.stepTrick(bunting, T.DUR.bunting * 0.4, ground);
+  assert.ok(buntMid.lift > 2 || Math.abs(buntMid.rot) > 6);
+  const mlem = T.beginTrick("mlem", 80, 1);
+  assert.equal(mlem.anim, "sit");
+  const mlemMid = T.stepTrick(mlem, T.DUR.mlem * 0.4, ground);
+  assert.ok(mlemMid.lift > 2 || Math.abs(mlemMid.rot) > 4);
+  assert.equal(Overlay.TRICKS.includes("bunting"), true);
+  assert.equal(Overlay.TRICKS.includes("mlem"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("loaf"), false);
@@ -184,7 +194,7 @@ test("ground registry keeps prior guests gated; Miso selectable; no scratch-name
   assert.equal(OverlayGround.tricksFor("clip"), OverlayHamster);
   assert.equal(OverlayGround.tricksFor("guinea_pig"), OverlayGuineaPig);
   assert.equal(OverlayGround.tricksFor("whee"), OverlayGuineaPig);
-  assert.equal(OverlayGround.tricksFor("turtle"), null);
+  assert.equal(OverlayGround.tricksFor("turtle") == null, true);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);
@@ -204,3 +214,41 @@ test("ground registry keeps prior guests gated; Miso selectable; no scratch-name
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("hamster", 4), null);
 });
+
+
+test("ultra-polish: Miso loaf/knead/stretch/bunting/mlem lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("loaf", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `loaf mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `loaf mid lift ${mid.lift}`);
+  const kn = T.beginTrick("knead", 80, 1);
+  const k2 = T.stepTrick(kn, T.DUR.knead * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(k2.rot) > 6, `knead mid rot ${k2.rot}`);
+  assert.ok(Math.abs(k2.lift) > 2 || k2.lift > 2, `knead mid lift ${k2.lift}`);
+  const st = T.beginTrick("stretch", 80, 1);
+  const s2 = T.stepTrick(st, T.DUR.stretch * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(s2.rot) > 6, `stretch mid rot ${s2.rot}`);
+  const bt = T.beginTrick("bunting", 80, 1);
+  const b2 = T.stepTrick(bt, T.DUR.bunting * 0.4, { cmd: "idle" });
+  assert.ok(b2.lift > 4, `bunting mid lift ${b2.lift}`);
+  const ml = T.beginTrick("mlem", 80, 1);
+  const m2 = T.stepTrick(ml, T.DUR.mlem * 0.4, { cmd: "idle" });
+  assert.ok(m2.lift > 3 || Math.abs(m2.rot) > 6, `mlem mid lift/rot ${m2.lift}/${m2.rot}`);
+  assert.ok(Overlay.buntingPose && Overlay.mlemPose);
+  assert.ok(T.nextTrickWait(true, 0, "loaf") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "loaf") > T.nextTrickWait(true, 0, "knead"));
+});
+
+
+test("notes: Miso idle-life ultra done; next house-order ultra guest is Pip / dog (birds Soot→Ember already ultra)", () => {
+  assert.deepEqual([...T.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
+  assert.equal(T.TRICKS.includes("scratch"), false);
+  assert.equal(T.TRICKS.includes("nuzzle"), false);
+  assert.equal(T.TRICKS.includes("flop"), false);
+  assert.equal(T.TRICKS.includes("zoom"), false);
+  assert.equal(T.TRICKS.includes("somersault"), false);
+  assert.equal(T.TRICKS.includes("lug"), false);
+  assert.equal(T.TRICKS.includes("cinder"), false);
+  assert.equal(T.TRICKS.includes("reignite"), false);
+});
+
