@@ -2,25 +2,33 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerE
 import {
   addArea,
   currentArea,
+  favoriteAreas,
   forecastUrl,
   geocodeUrl,
   AREA_LABEL,
   AREA_PLACEHOLDER,
   AREA_TRUTH,
   CANT_REACH as WEATHER_CANT_REACH,
+  FAVORITES_EMPTY as WEATHER_FAVORITES_EMPTY,
   HERE_FAIL,
   ipPlaceUrl,
+  isFavorite,
   NO_AREA,
+  parseAreas,
   parseForecast,
   parseGeocode,
   parseIpPlace,
   parseReverse,
   pickArea,
+  pickTab,
   plateLine,
   removeArea,
   renameArea,
   reverseUrl,
+  toCardPatch,
+  toggleFavorite,
   TYPE_A_CITY,
+  WEATHER_TABS,
   type LiveSky,
   type WeatherArea,
 } from "@/lib/pets/weather-areas";
@@ -243,10 +251,6 @@ function writeCard(patch: Partial<CardPrefs>) {
   return saveCard({ ...loadCard(), ...patch });
 }
 
-function areasOf(card: CardPrefs) {
-  return { areas: card.weatherAreas || [], currentId: card.currentAreaId ?? null };
-}
-
 export function DeskWeatherPlate({
   onBounds,
   onSky,
@@ -264,9 +268,14 @@ export function DeskWeatherPlate({
   const [looking, setLooking] = useState(false);
   const [hereLine, setHereLine] = useState("");
   const [lookLine, setLookLine] = useState("");
-  const areas = useMemo(() => areasOf(card), [card]);
+  const areas = useMemo(() => parseAreas(card), [card]);
   const area = currentArea(areas);
+  const tab = areas.tab;
   const chrome = usePlateChrome("weather");
+
+  function keepAreas(house: ReturnType<typeof parseAreas>) {
+    setCard(writeCard(toCardPatch(house)));
+  }
 
   useEffect(() => {
     const el = ref.current;
@@ -392,16 +401,13 @@ export function DeskWeatherPlate({
     );
   }
 
-  function keep(next: CardPrefs) {
-    setCard(next);
-  }
-
   function add(hit: WeatherArea) {
-    const house = addArea(areas, hit);
-    keep(writeCard({ weatherAreas: house.areas, currentAreaId: house.currentId }));
+    keepAreas(addArea(areas, hit));
     setHits([]);
     setQuery("");
   }
+
+  const favs = favoriteAreas(areas);
 
   return (
     <article
@@ -431,89 +437,121 @@ export function DeskWeatherPlate({
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
-          {!area ? <p className="text-subtle">{NO_AREA}</p> : null}
-          {area && live ? (
-            <p>
-              {area.name}. {live.label}
-              {live.windKmh != null ? ` · wind ${Math.round(live.windKmh)}` : ""}. Open-Meteo.
-            </p>
-          ) : null}
-          {area && unread ? <p className="text-subtle">Unread. The look-up did not land.</p> : null}
-          {live?.daily?.length ? (
-            <ul className="mt-2 space-y-1 text-subtle">
-              {live.daily.map((d) => (
-                <li key={d.day}>
-                  {d.day} · {d.sky}
-                  {d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          <ul className="mt-3 space-y-1">
-            {areas.areas.map((row) => (
-              <li key={row.id} className="flex items-center gap-2">
-                <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} onClick={() => keep(writeCard({ currentAreaId: pickArea(areas, row.id).currentId }))}>
-                  {row.name}
-                </button>
-                <input
-                  aria-label={`Name ${row.name}`}
-                  defaultValue={row.name}
-                  onBlur={(e) => {
-                    const house = renameArea(areas, row.id, e.target.value);
-                    keep(writeCard({ weatherAreas: house.areas, currentAreaId: house.currentId }));
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const house = removeArea(areas, row.id);
-                    keep(writeCard({ weatherAreas: house.areas, currentAreaId: house.currentId }));
-                  }}
-                >
-                  Remove
-                </button>
-              </li>
+          <div className="mb-2 flex flex-wrap gap-1" role="tablist" aria-label="Weather sections">
+            {WEATHER_TABS.map((id) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={tab === id}
+                data-on={tab === id ? "1" : "0"}
+                className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
+                onClick={() => keepAreas(pickTab(areas, id))}
+              >
+                {id === "current" ? "Current" : "Favorites"}
+              </button>
             ))}
-          </ul>
-          <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{AREA_TRUTH}</p>
-          <form
-            className="mt-2 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              void search();
-            }}
-          >
-            <label className="flex min-w-0 flex-1 flex-col gap-1">
-              {AREA_LABEL}
-              <input
-                type="text"
-                autoComplete="off"
-                spellCheck={false}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={AREA_PLACEHOLDER}
-                aria-label={AREA_LABEL}
-              />
-            </label>
-            <button type="submit">{looking ? "…" : "Look up"}</button>
-          </form>
-          {hits.length ? (
-            <ul className="mt-2 space-y-1">
-              {hits.map((hit) => (
-                <li key={hit.id}>
-                  <button type="button" onClick={() => add(hit)}>
-                    Add {hit.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          ) : lookLine ? (
-            <p className="mt-2 text-subtle">{lookLine}</p>
-          ) : null}
-          <button type="button" className="mt-2" onClick={() => void useHere()}>
-            Use this computer's location
-          </button>
-          {hereLine ? <p className="mt-1 text-subtle">{hereLine}</p> : null}
+          </div>
+          {tab === "favorites" ? (
+            !favs.length ? (
+              <p className="text-subtle">{WEATHER_FAVORITES_EMPTY}</p>
+            ) : (
+              <ul className="space-y-1">
+                {favs.map((row) => (
+                  <li key={row.id} className="flex items-center gap-2">
+                    <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} onClick={() => keepAreas(pickArea(areas, row.id))}>
+                      {row.name}
+                    </button>
+                    <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavorite(areas, row.id))}>
+                      ★
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )
+          ) : (
+            <>
+              {!area ? <p className="text-subtle">{NO_AREA}</p> : null}
+              {area && live ? (
+                <p>
+                  {area.name}. {live.label}
+                  {live.windKmh != null ? ` · wind ${Math.round(live.windKmh)}` : ""}. Open-Meteo.
+                </p>
+              ) : null}
+              {area && unread ? <p className="text-subtle">Unread. The look-up did not land.</p> : null}
+              {live?.daily?.length ? (
+                <ul className="mt-2 space-y-1 text-subtle">
+                  {live.daily.map((d) => (
+                    <li key={d.day}>
+                      {d.day} · {d.sky}
+                      {d.maxC != null ? ` · ${Math.round(d.maxC)}°` : ""}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+              <ul className="mt-3 space-y-1">
+                {areas.areas.map((row) => (
+                  <li key={row.id} className="flex items-center gap-2">
+                    <button type="button" data-on={row.id === areas.currentId ? "1" : "0"} onClick={() => keepAreas(pickArea(areas, row.id))}>
+                      {row.name}
+                    </button>
+                    <button type="button" className="weather-star" title="Favorite place" onClick={() => keepAreas(toggleFavorite(areas, row.id))}>
+                      {isFavorite(areas, row.id) ? "★" : "☆"}
+                    </button>
+                    <input
+                      aria-label={`Name ${row.name}`}
+                      defaultValue={row.name}
+                      onBlur={(e) => {
+                        keepAreas(renameArea(areas, row.id, e.target.value));
+                      }}
+                    />
+                    <button type="button" onClick={() => keepAreas(removeArea(areas, row.id))}>
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{AREA_TRUTH}</p>
+              <form
+                className="mt-2 flex gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void search();
+                }}
+              >
+                <label className="flex min-w-0 flex-1 flex-col gap-1">
+                  {AREA_LABEL}
+                  <input
+                    type="text"
+                    autoComplete="off"
+                    spellCheck={false}
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={AREA_PLACEHOLDER}
+                    aria-label={AREA_LABEL}
+                  />
+                </label>
+                <button type="submit">{looking ? "…" : "Look up"}</button>
+              </form>
+              {hits.length ? (
+                <ul className="mt-2 space-y-1">
+                  {hits.map((hit) => (
+                    <li key={hit.id}>
+                      <button type="button" onClick={() => add(hit)}>
+                        Add {hit.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : lookLine ? (
+                <p className="mt-2 text-subtle">{lookLine}</p>
+              ) : null}
+              <button type="button" className="mt-2" onClick={() => void useHere()}>
+                Use this computer&apos;s location
+              </button>
+              {hereLine ? <p className="mt-1 text-subtle">{hereLine}</p> : null}
+            </>
+          )}
           {chrome.colorUi}
         </div>
       ) : null}

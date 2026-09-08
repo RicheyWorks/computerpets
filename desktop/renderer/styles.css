@@ -1268,7 +1268,8 @@ select {
 }
 
 .news-star,
-.market-star {
+.market-star,
+.weather-star {
   font-size: 12px;
   line-height: 1;
   padding: 2px 6px;

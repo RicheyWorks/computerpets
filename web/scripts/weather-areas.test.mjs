@@ -54,3 +54,37 @@ test("Open-Meteo maps are honest and lockstep", () => {
   assert.equal(Overlay.mapLiveSky(61, 12, 4), "rain");
   assert.equal(Overlay.plateLine(Overlay.blankAreas(), null), "no area set");
 });
+
+test("favorites star places and persist", () => {
+  let house = A.addArea(A.blankAreas(), { name: "Portland", query: "Portland", lat: 45.5, lon: -122.6 });
+  house = A.addArea(house, { name: "Oslo", query: "Oslo", lat: 59.9, lon: 10.7 });
+  assert.equal(house.tab, "current");
+  assert.deepEqual(house.favoriteIds, []);
+  const portland = house.areas[0].id;
+  const oslo = house.areas[1].id;
+  house = A.toggleFavorite(house, portland);
+  assert.deepEqual(house.favoriteIds, [portland]);
+  assert.equal(A.isFavorite(house, portland), true);
+  assert.equal(A.isFavorite(house, oslo), false);
+  house = A.pickTab(house, "favorites");
+  assert.equal(house.tab, "favorites");
+  assert.equal(A.favoriteAreas(house).map((a) => a.name).join(","), "Portland");
+  assert.equal(A.FAVORITES_EMPTY, "No favorites yet — star a place.");
+  assert.deepEqual(A.WEATHER_TABS, ["current", "favorites"]);
+  const patch = A.toCardPatch(house);
+  assert.equal(patch.weatherTab, "favorites");
+  assert.deepEqual(patch.favoriteAreaIds, [portland]);
+  const round = A.parseAreas(patch);
+  assert.equal(round.tab, "favorites");
+  assert.deepEqual(round.favoriteIds, [portland]);
+  house = A.pickArea(house, oslo);
+  assert.equal(house.tab, "current");
+  assert.equal(A.currentArea(house)?.name, "Oslo");
+  house = A.toggleFavorite(house, portland);
+  assert.deepEqual(house.favoriteIds, []);
+  house = A.toggleFavorite(house, oslo);
+  house = A.removeArea(house, oslo);
+  assert.deepEqual(house.favoriteIds, []);
+  assert.equal(Overlay.FAVORITES_EMPTY, A.FAVORITES_EMPTY);
+  assert.equal(Overlay.toggleFavorite(Overlay.blankAreas(), "x").favoriteIds.length, 0);
+});

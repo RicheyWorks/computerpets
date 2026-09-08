@@ -70,8 +70,38 @@
     const body = $("weather-body");
     if (!A || !line) return;
     const areas = A.parseAreas(card);
+    const tab = areas.tab || "current";
     line.textContent = A.plateLine(areas, live, unread);
     if (!body) return;
+    const tabs = $("weather-tabs");
+    if (tabs) {
+      tabs.querySelectorAll("[data-weather-tab]").forEach((btn) => {
+        const on = btn.getAttribute("data-weather-tab") === tab;
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+        btn.dataset.on = on ? "1" : "0";
+      });
+    }
+    const currentPanel = $("weather-current-panel");
+    if (currentPanel) currentPanel.hidden = tab !== "current";
+    const liveBox = $("weather-live");
+    if (!liveBox) return;
+    if (tab === "favorites") {
+      const favs = A.favoriteAreas ? A.favoriteAreas(areas) : [];
+      if (!favs.length) {
+        liveBox.innerHTML = `<p>${A.FAVORITES_EMPTY || "No favorites yet — star a place."}</p>`;
+      } else {
+        liveBox.innerHTML =
+          "<ul>" +
+          favs
+            .map(
+              (row) =>
+                `<li><button type="button" data-hit data-area-pick="${row.id}" data-on="${row.id === areas.currentId ? "1" : "0"}">${row.name}</button> <button type="button" class="weather-star" data-hit data-area-fav="${row.id}">★</button></li>`,
+            )
+            .join("") +
+          "</ul>";
+      }
+      return;
+    }
     const area = A.currentArea(areas);
     const liveBits = [];
     if (!area) liveBits.push(`<p>${A.NO_AREA}</p>`);
@@ -86,13 +116,13 @@
     }
     liveBits.push("<ul>");
     for (const row of areas.areas) {
+      const starred = A.isFavorite ? A.isFavorite(areas, row.id) : false;
       liveBits.push(
-        `<li><button type="button" data-hit data-area-pick="${row.id}" data-on="${row.id === areas.currentId ? "1" : "0"}">${row.name}</button> <button type="button" data-hit data-area-del="${row.id}">Remove</button></li>`,
+        `<li><button type="button" data-hit data-area-pick="${row.id}" data-on="${row.id === areas.currentId ? "1" : "0"}">${row.name}</button> <button type="button" class="weather-star" data-hit data-area-fav="${row.id}" title="Favorite place">${starred ? "★" : "☆"}</button> <button type="button" data-hit data-area-del="${row.id}">Remove</button></li>`,
       );
     }
     liveBits.push("</ul>");
-    const liveBox = $("weather-live");
-    if (liveBox) liveBox.innerHTML = liveBits.join("");
+    liveBox.innerHTML = liveBits.join("");
   }
 
   function paintNews(items, unread, card) {
