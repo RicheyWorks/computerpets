@@ -45,7 +45,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Quill tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["quote", "strut", "fan", "crack", "flash"]);
+  assert.deepEqual([...T.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -80,7 +80,7 @@ test("Quill tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("trot"), false);
 });
 
-test("quote/strut/fan/crack/flash are house-macaw-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin or dragon clones", () => {
+test("quote/strut/fan/crack/flash/pineye/invert are house-macaw-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const quote = T.beginTrick("quote", 80, 1);
   assert.equal(quote.anim, "talk");
@@ -111,8 +111,18 @@ test("quote/strut/fan/crack/flash are house-macaw-true, not Rui cat dog rabbit h
   assert.equal(flash.anim, "play");
   const flashMid = T.stepTrick(flash, 0.4, ground);
   assert.ok(flashMid.lift > 1 || Math.abs(flashMid.rot) > 2);
-  const flashDone = T.stepTrick(flash, 1.4, ground);
+  const flashDone = T.stepTrick(flash, T.DUR.flash + 0.1, ground);
   assert.equal(flashDone.phase, "done");
+  const pineye = T.beginTrick("pineye", 80, 1);
+  assert.equal(pineye.anim, "sit");
+  const pineMid = T.stepTrick(pineye, T.DUR.pineye * 0.4, ground);
+  assert.ok(pineMid.lift > 2 || Math.abs(pineMid.rot) > 1);
+  const invert = T.beginTrick("invert", 80, 1);
+  assert.equal(invert.anim, "play");
+  const invMid = T.stepTrick(invert, T.DUR.invert * 0.4, ground);
+  assert.ok(invMid.lift > 3 || Math.abs(invMid.rot) > 20);
+  assert.equal(Overlay.TRICKS.includes("pineye"), true);
+  assert.equal(Overlay.TRICKS.includes("invert"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("quote"), false);
@@ -248,7 +258,7 @@ test("ground registry keeps prior guests gated; Quill selectable; no hook/preen/
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
   assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
   assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
-  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet"]);
+  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
   assert.equal(T.TRICKS.includes("hook"), false);
   assert.equal(T.TRICKS.includes("preen"), false);
   assert.equal(T.TRICKS.includes("mimic"), false);
@@ -396,4 +406,42 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
+});
+
+test("ultra-polish: Quill quote/strut/fan/pineye/invert lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("quote", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `quote mid rot ${mid.rot}`);
+  assert.ok(mid.lift > 2, `quote mid lift ${mid.lift}`);
+  const st = T.beginTrick("strut", 80, 1);
+  const s2 = T.stepTrick(st, T.DUR.strut * 0.55, { cmd: "idle" });
+  assert.ok(s2.lift > 4, `strut mid lift ${s2.lift}`);
+  assert.ok(Math.abs(s2.x - 80) > 4 || Math.abs(s2.rot) > 6, `strut mid x/rot ${s2.x}/${s2.rot}`);
+  const fn = T.beginTrick("fan", 80, 1);
+  const f2 = T.stepTrick(fn, T.DUR.fan * 0.5, { cmd: "idle" });
+  assert.ok(f2.lift > 5, `fan mid lift ${f2.lift}`);
+  assert.ok(Math.abs(f2.rot) > 6 || f2.lift > 8, `fan mid rot/lift ${f2.rot}/${f2.lift}`);
+  const py = T.beginTrick("pineye", 80, 1);
+  const p2 = T.stepTrick(py, T.DUR.pineye * 0.4, { cmd: "idle" });
+  assert.ok(p2.lift > 4, `pineye mid lift ${p2.lift}`);
+  const iv = T.beginTrick("invert", 80, 1);
+  const i2 = T.stepTrick(iv, T.DUR.invert * 0.4, { cmd: "idle" });
+  assert.ok(i2.lift > 5, `invert mid lift ${i2.lift}`);
+  assert.ok(Math.abs(i2.rot) > 40, `invert mid rot ${i2.rot}`);
+  assert.ok(Overlay.pineyePose && Overlay.invertPose);
+  assert.ok(T.nextTrickWait(true, 0, "quote") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "quote") > T.nextTrickWait(true, 0, "strut"));
+});
+
+test("notes: Quill idle-life ultra done; next bird ultra is Keel / toucan (Loom still next for base idle-ground)", () => {
+  assert.deepEqual([...T.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
+  assert.equal(T.TRICKS.includes("hook"), false);
+  assert.equal(T.TRICKS.includes("preen"), false);
+  assert.equal(T.TRICKS.includes("mimic"), false);
+  assert.equal(T.TRICKS.includes("beakgrind"), false);
+  assert.equal(T.TRICKS.includes("shellout"), false);
+  assert.equal(T.TRICKS.includes("huddle"), false);
+  assert.equal(T.TRICKS.includes("rockhop"), false);
+  assert.equal(T.TRICKS.includes("roost"), false);
+  assert.equal(T.TRICKS.includes("berry"), false);
 });
