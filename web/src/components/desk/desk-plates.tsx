@@ -28,22 +28,34 @@ import {
   addTopic,
   CANT_REACH,
   currentTopic,
-  NEWS_SOURCE,
+  FAVORITES_EMPTY,
+  isFavorite,
+  moveTopic,
+  NEWS_TABS,
   newsLine,
   newsUrl,
   NO_HEADLINES,
   parseNews,
   parseNewsPrefs,
   parseRss,
+  pickTab,
   pickTopic,
+  popularRssUrl,
+  removeFavorite,
   removeTopic,
   sourceLine,
+  SUGGESTION_TOPICS,
   TOPIC_LABEL,
   TOPIC_PLACEHOLDER,
   TOPIC_TRUTH,
+  toCardPatch as newsToCardPatch,
+  toggleFavorite,
   topicRssUrl,
   WORLD_ID,
+  xSearchUrl,
+  xTopicRssUrl,
   type NewsItem,
+  type NewsTab,
 } from "@/lib/pets/news";
 import {
   addMarketplace,
@@ -53,7 +65,11 @@ import {
   currentTicker,
   DEFAULT_MARKETPLACES,
   detectContract,
+  favoriteRows,
+  FAVORITES_EMPTY as MARKET_FAVORITES_EMPTY,
   formatPrice,
+  isFavoriteNft,
+  isFavoriteTicker,
   geckoManyUrl,
   MARKET_LABEL,
   MARKET_PLACEHOLDER,
@@ -86,6 +102,8 @@ import {
   searchUrl,
   terminalTokenUrl,
   toCardPatch,
+  toggleFavoriteNft,
+  toggleFavoriteTicker,
   yahooUrl,
   nftUrl,
   type MarketLive,
@@ -511,12 +529,37 @@ export function DeskNewsPlate() {
   const [query, setQuery] = useState("");
   const prefs = useMemo(() => parseNewsPrefs(card), [card]);
   const topic = currentTopic(prefs);
+  const tab = prefs.tab as NewsTab;
   const chrome = usePlateChrome("news");
+
+  function keepNews(house: ReturnType<typeof parseNewsPrefs>) {
+    setCard(writeCard(newsToCardPatch(house)));
+  }
 
   useEffect(() => {
     let cancelled = false;
     async function load() {
       try {
+        if (tab === "favorites") {
+          if (!cancelled) setUnread(false);
+          return;
+        }
+        if (tab === "popular") {
+          const xml = await (await fetch(popularRssUrl())).text();
+          if (cancelled) return;
+          const next = parseRss(xml);
+          if (next.length) setItems(next);
+          setUnread(!next.length);
+          return;
+        }
+        if (tab === "x") {
+          const xml = await (await fetch(xTopicRssUrl(topic.query || "news"))).text();
+          if (cancelled) return;
+          const next = parseRss(xml);
+          if (next.length) setItems(next);
+          setUnread(!next.length);
+          return;
+        }
         if (topic.id !== WORLD_ID && topic.query) {
           const xml = await (await fetch(topicRssUrl(topic.query))).text();
           if (cancelled) return;
@@ -540,7 +583,7 @@ export function DeskNewsPlate() {
       cancelled = true;
       window.clearInterval(id);
     };
-  }, [topic.id, topic.query]);
+  }, [topic.id, topic.query, tab]);
 
   return (
     <article
@@ -548,7 +591,7 @@ export function DeskNewsPlate() {
       data-desk-plate="news"
       className={cn(
         "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,40%)] rounded-sm border border-border/50 shadow-lg",
-        open && "w-[min(22rem,48%)]",
+        open && "w-[min(24rem,52%)]",
       )}
       style={{
         ...chrome.style,
@@ -558,60 +601,140 @@ export function DeskNewsPlate() {
     >
       <button type="button" className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left" onPointerDown={chrome.onTogglePointerDown} onPointerMove={chrome.onTogglePointerMove} onPointerUp={chrome.onTogglePointerUp} onClick={() => chrome.toggleOpen(setOpen)}>
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">News</span>
-        <span className="truncate text-sm text-ink">{newsLine(items, unread)}</span>
+        <span className="truncate text-sm text-ink">{newsLine(tab === "favorites" ? prefs.favorites.map((f) => ({ title: f.title, url: f.url, summary: f.summary })) : items, unread)}</span>
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
-          <p className="text-[10px] uppercase tracking-[0.16em] text-subtle">{sourceLine(topic)}</p>
-          {unread && !items.length ? <p className="text-subtle">{CANT_REACH}</p> : null}
-          {!unread && !items.length ? <p className="text-subtle">{NO_HEADLINES}</p> : null}
-          <ul className="mt-2 space-y-2">
-            {items.map((item) => (
-              <li key={item.url || item.title}>
-                <a href={item.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-                  {item.title}
-                </a>
-                {item.summary ? <p className="text-subtle">{item.summary}</p> : null}
-              </li>
+          <div className="mb-2 flex flex-wrap gap-1" role="tablist" aria-label="News sections">
+            {NEWS_TABS.map((id) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={tab === id}
+                data-on={tab === id ? "1" : "0"}
+                className="rounded-full border border-border/50 px-2 py-1 text-[10px] uppercase tracking-[0.12em]"
+                onClick={() => keepNews(pickTab(prefs, id))}
+              >
+                {id === "x" ? "X" : id[0]!.toUpperCase() + id.slice(1)}
+              </button>
             ))}
-          </ul>
-          <ul className="mt-3 space-y-1">
-            {prefs.topics.map((row) => (
-              <li key={row.id} className="flex items-center gap-2">
-                <button type="button" data-on={row.id === prefs.currentId ? "1" : "0"} onClick={() => setCard(writeCard({ newsPrefs: pickTopic(prefs, row.id).topics, currentNewsId: pickTopic(prefs, row.id).currentId }))}>
-                  {row.name}
-                </button>
-                {row.id !== WORLD_ID ? (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const house = removeTopic(prefs, row.id);
-                      setCard(writeCard({ newsPrefs: house.topics, currentNewsId: house.currentId }));
-                    }}
-                  >
-                    Remove
+          </div>
+          <p className="text-[10px] uppercase tracking-[0.16em] text-subtle">{sourceLine(topic, tab)}</p>
+          {tab === "favorites" ? (
+            prefs.favorites.length ? (
+              <ul className="mt-2 space-y-2">
+                {prefs.favorites.map((fav) => (
+                  <li key={fav.id} className="flex items-start gap-2">
+                    {fav.kind === "topic" ? (
+                      <button type="button" onClick={() => keepNews(pickTopic(prefs, fav.topicId))}>
+                        {fav.title}
+                      </button>
+                    ) : fav.url ? (
+                      <a href={fav.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+                        {fav.title}
+                      </a>
+                    ) : (
+                      <span>{fav.title}</span>
+                    )}
+                    <button type="button" aria-label="Remove favorite" onClick={() => keepNews(removeFavorite(prefs, fav.id))}>
+                      ★
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2 text-subtle">{FAVORITES_EMPTY}</p>
+            )
+          ) : (
+            <>
+              {unread && !items.length ? <p className="text-subtle">{CANT_REACH}</p> : null}
+              {!unread && !items.length ? <p className="text-subtle">{NO_HEADLINES}</p> : null}
+              {tab === "x" && !items.length ? (
+                <p className="mt-1">
+                  <a href={xSearchUrl(topic.query || "news")} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+                    Open on X
+                  </a>
+                </p>
+              ) : null}
+              <ul className="mt-2 space-y-2">
+                {items.map((item) => (
+                  <li key={item.url || item.title} className="flex items-start gap-2">
+                    <a href={item.url} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+                      {item.title}
+                    </a>
+                    {item.summary ? <p className="text-subtle">{item.summary}</p> : null}
+                    <button
+                      type="button"
+                      aria-label="Favorite headline"
+                      onClick={() => keepNews(toggleFavorite(prefs, { kind: "headline", title: item.title, url: item.url, summary: item.summary }))}
+                    >
+                      {isFavorite(prefs, { kind: "headline", title: item.title, url: item.url }) ? "★" : "☆"}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          {tab === "topics" ? (
+            <>
+              <ul className="mt-3 space-y-1">
+                {prefs.topics.map((row, idx) => (
+                  <li key={row.id} className="flex flex-wrap items-center gap-2">
+                    <button type="button" data-on={row.id === prefs.currentId ? "1" : "0"} onClick={() => keepNews(pickTopic(prefs, row.id))}>
+                      {row.name}
+                    </button>
+                    {row.id !== WORLD_ID ? (
+                      <>
+                        <button type="button" onClick={() => keepNews(toggleFavorite(prefs, { kind: "topic", id: row.id, name: row.name, query: row.query }))}>
+                          {isFavorite(prefs, { kind: "topic", id: row.id, name: row.name, query: row.query }) ? "★" : "☆"}
+                        </button>
+                        <button type="button" disabled={idx <= 1} onClick={() => keepNews(moveTopic(prefs, row.id, -1))}>
+                          Up
+                        </button>
+                        <button type="button" disabled={idx === prefs.topics.length - 1} onClick={() => keepNews(moveTopic(prefs, row.id, 1))}>
+                          Down
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            keepNews(removeTopic(prefs, row.id));
+                          }}
+                        >
+                          Remove
+                        </button>
+                      </>
+                    ) : null}
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-2 flex flex-wrap gap-1">
+                {SUGGESTION_TOPICS.map((name) => (
+                  <button key={name} type="button" className="rounded-full border border-border/40 px-2 py-0.5 text-[11px]" onClick={() => keepNews(addTopic(prefs, { name, query: name }))}>
+                    {name}
                   </button>
-                ) : null}
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{TOPIC_TRUTH}</p>
-          <form
-            className="mt-2 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              if (!query.trim()) return;
-              const house = addTopic(prefs, { name: query, query });
-              setCard(writeCard({ newsPrefs: house.topics, currentNewsId: house.currentId }));
-              setQuery("");
-            }}
-          >
-            <label className="flex min-w-0 flex-1 flex-col gap-1">
-              {TOPIC_LABEL}
-              <input type="text" autoComplete="off" spellCheck={false} value={query} onChange={(e) => setQuery(e.target.value)} placeholder={TOPIC_PLACEHOLDER} aria-label={TOPIC_LABEL} />
-            </label>
-            <button type="submit">Look up</button>
-          </form>
+                ))}
+              </div>
+              <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{TOPIC_TRUTH}</p>
+              <form
+                className="mt-2 flex gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (!query.trim()) return;
+                  keepNews(addTopic(prefs, { name: query, query }));
+                  setQuery("");
+                }}
+              >
+                <label className="flex min-w-0 flex-1 flex-col gap-1">
+                  {TOPIC_LABEL}
+                  <input type="text" autoComplete="off" spellCheck={false} value={query} onChange={(e) => setQuery(e.target.value)} placeholder={TOPIC_PLACEHOLDER} aria-label={TOPIC_LABEL} />
+                </label>
+                <button type="submit">Add</button>
+              </form>
+            </>
+          ) : (
+            <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{TOPIC_TRUTH}</p>
+          )}
           {chrome.colorUi}
         </div>
       ) : null}
@@ -851,7 +974,7 @@ export function DeskMarketPlate() {
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             <section className="rounded-sm border border-border/40 p-2" aria-label="Coins" style={{ background: "color-mix(in srgb, var(--plate-bg, #161412) 70%, transparent)" }}>
               <h3 className="text-[10px] uppercase tracking-[0.16em] text-subtle">Coins</h3>
               {!house.tickers.length ? <p className="text-subtle">{NO_QUOTE}</p> : null}
@@ -868,6 +991,9 @@ export function DeskMarketPlate() {
                         {row.symbol} · {price}
                       </button>
                       <span className="text-[10px] text-subtle">{kind}</span>
+                      <button type="button" aria-label="Favorite coin" onClick={() => keepHouse(toggleFavoriteTicker(house, row.id))}>
+                        {isFavoriteTicker(house, row.id) ? "★" : "☆"}
+                      </button>
                       <button type="button" onClick={() => keepHouse(moveTicker(house, row.id, -1))}>Up</button>
                       <button type="button" onClick={() => keepHouse(moveTicker(house, row.id, 1))}>Down</button>
                       <button type="button" onClick={() => keepHouse(removeTicker(house, row.id))}>Remove</button>
@@ -939,6 +1065,9 @@ export function DeskMarketPlate() {
                     <button type="button" data-on={row.id === house.currentNftId ? "1" : "0"} onClick={() => keepHouse(pickNft(house, row.id))}>
                       {row.symbol || row.name}
                     </button>
+                    <button type="button" aria-label="Favorite NFT" onClick={() => keepHouse(toggleFavoriteNft(house, row.id))}>
+                      {isFavoriteNft(house, row.id) ? "★" : "☆"}
+                    </button>
                     <button type="button" onClick={() => keepHouse(moveNft(house, row.id, -1))}>Up</button>
                     <button type="button" onClick={() => keepHouse(moveNft(house, row.id, 1))}>Down</button>
                     <button type="button" onClick={() => keepHouse(removeNft(house, row.id))}>Remove</button>
@@ -978,6 +1107,52 @@ export function DeskMarketPlate() {
                   ))}
                 </ul>
               ) : null}
+            </section>
+
+            <section className="rounded-sm border border-border/40 p-2" aria-label="Favorites" style={{ background: "color-mix(in srgb, var(--plate-bg, #161412) 70%, transparent)" }}>
+              <h3 className="text-[10px] uppercase tracking-[0.16em] text-subtle">Favorites</h3>
+              {(() => {
+                const fav = favoriteRows(house);
+                if (!fav.tickers.length && !fav.nfts.length) return <p className="mt-2 text-subtle">{MARKET_FAVORITES_EMPTY}</p>;
+                return (
+                  <>
+                    {fav.tickers.length ? (
+                      <>
+                        <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">Coins</p>
+                        <ul className="mt-1 space-y-1">
+                          {fav.tickers.map((row) => (
+                            <li key={row.id} className="flex flex-wrap items-center gap-2">
+                              <button type="button" onClick={() => keepHouse(pickTicker(house, row.id))}>
+                                {row.symbol}
+                              </button>
+                              <button type="button" onClick={() => keepHouse(toggleFavoriteTicker(house, row.id))}>
+                                ★
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : null}
+                    {fav.nfts.length ? (
+                      <>
+                        <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">NFTs</p>
+                        <ul className="mt-1 space-y-1">
+                          {fav.nfts.map((row) => (
+                            <li key={row.id} className="flex flex-wrap items-center gap-2">
+                              <button type="button" onClick={() => keepHouse(pickNft(house, row.id))}>
+                                {row.symbol || row.name}
+                              </button>
+                              <button type="button" onClick={() => keepHouse(toggleFavoriteNft(house, row.id))}>
+                                ★
+                              </button>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    ) : null}
+                  </>
+                );
+              })()}
             </section>
           </div>
           {chrome.colorUi}

@@ -1,17 +1,27 @@
-/** Honest headlines. Wikipedia In the news — no key, no invented copy. Named topics use Google News RSS. Same map as desktop `news.js`. */
+/** Honest headlines. Popular = Google News top. World = Wikipedia In the news. Topics = Google News RSS. X = Google News site:x.com when reachable — else Open on X. Same map as desktop `news.js`. */
 
 export const NEWS_SOURCE = "Wikipedia In the news";
 export const TOPIC_SOURCE = "Google News";
+export const POPULAR_SOURCE = "Google News · Popular";
+export const X_SOURCE = "Google News · X";
 export const NEWS_HOST = "en.wikipedia.org";
 export const TOPIC_HOST = "news.google.com";
+export const X_HOST = "x.com";
 export const CANT_REACH = "can't reach";
 export const NO_HEADLINES = "no headlines yet";
+export const FAVORITES_EMPTY = "No favorites yet — star a headline or topic.";
 export const TOPIC_LABEL = "News topic";
-export const TOPIC_PLACEHOLDER = "A topic — Tacoma crime, marijuana news";
-export const TOPIC_TRUTH = "World is Wikipedia In the news. A named topic is Google News RSS.";
+export const TOPIC_PLACEHOLDER = "A topic — esports, Halo, baseball, football";
+export const TOPIC_TRUTH =
+  "Popular is Google News top stories. World is Wikipedia In the news. A named topic is Google News RSS. X uses Google News with site:x.com when reachable — else Open on X. No invented headlines.";
 export const WORLD_ID = "world";
-export const MAX_TOPICS = 8;
+export const MAX_TOPICS = 20;
+export const MAX_FAVORITES = 24;
 export const TOPIC_CHARS = 48;
+export const NEWS_TABS = ["popular", "topics", "x", "favorites"] as const;
+export const SUGGESTION_TOPICS = ["Esports", "Halo", "Baseball", "Football", "Basketball", "Soccer", "NFL", "MLB"] as const;
+
+export type NewsTab = (typeof NEWS_TABS)[number];
 
 export type NewsItem = {
   title: string;
@@ -25,9 +35,21 @@ export type NewsTopic = {
   query: string;
 };
 
+export type NewsFavorite = {
+  id: string;
+  kind: "headline" | "topic";
+  title: string;
+  url: string;
+  summary: string;
+  topicId: string;
+  query: string;
+};
+
 export type NewsPrefs = {
   topics: NewsTopic[];
   currentId: string;
+  tab: NewsTab;
+  favorites: NewsFavorite[];
 };
 
 function clip(text: unknown, n = 180) {
@@ -48,7 +70,12 @@ export function worldTopic(): NewsTopic {
 }
 
 export function blankNewsPrefs(): NewsPrefs {
-  return { topics: [worldTopic()], currentId: WORLD_ID };
+  return { topics: [worldTopic()], currentId: WORLD_ID, tab: "popular", favorites: [] };
+}
+
+export function parseTab(raw: unknown): NewsTab {
+  const t = typeof raw === "string" ? raw.toLowerCase() : "";
+  return (NEWS_TABS as readonly string[]).includes(t) ? (t as NewsTab) : "popular";
 }
 
 export function parseTopic(raw: unknown): NewsTopic | null {
@@ -62,6 +89,38 @@ export function parseTopic(raw: unknown): NewsTopic | null {
   return { id, name, query: query || name };
 }
 
+export function parseFavorite(raw: unknown): NewsFavorite | null {
+  if (!raw || typeof raw !== "object") return null;
+  const o = raw as Record<string, unknown>;
+  const kind = o.kind === "topic" ? "topic" : "headline";
+  if (kind === "topic") {
+    const topic = parseTopic(o.topic || o);
+    if (!topic || topic.id === WORLD_ID) return null;
+    return {
+      id: typeof o.id === "string" && o.id ? o.id : `fav-topic-${topic.id}`,
+      kind: "topic",
+      title: topic.name,
+      url: "",
+      summary: topic.query,
+      topicId: topic.id,
+      query: topic.query,
+    };
+  }
+  const title = clip(o.title, 90);
+  const url = clip(o.url, 240);
+  if (!title) return null;
+  const id = typeof o.id === "string" && o.id ? o.id : `fav-${hash(title + "|" + url)}`;
+  return {
+    id,
+    kind: "headline",
+    title,
+    url,
+    summary: clip(o.summary, 80),
+    topicId: typeof o.topicId === "string" ? o.topicId : "",
+    query: clip(o.query, TOPIC_CHARS),
+  };
+}
+
 export function parseNewsPrefs(raw: unknown): NewsPrefs {
   const next = blankNewsPrefs();
   if (!raw || typeof raw !== "object") return next;
@@ -72,7 +131,20 @@ export function parseNewsPrefs(raw: unknown): NewsPrefs {
   next.topics = (hasWorld ? topics : [worldTopic(), ...topics]).slice(0, MAX_TOPICS);
   const want = typeof o.currentNewsId === "string" ? o.currentNewsId : typeof o.currentId === "string" ? o.currentId : WORLD_ID;
   next.currentId = next.topics.some((t) => t.id === want) ? want : WORLD_ID;
+  next.tab = parseTab(o.newsTab != null ? o.newsTab : o.tab);
+  const favRaw = Array.isArray(o.newsFavorites) ? o.newsFavorites : Array.isArray(o.favorites) ? o.favorites : [];
+  next.favorites = favRaw.map(parseFavorite).filter((f): f is NewsFavorite => !!f).slice(0, MAX_FAVORITES);
   return next;
+}
+
+export function toCardPatch(prefs: NewsPrefs | unknown) {
+  const house = prefs && typeof prefs === "object" && Array.isArray((prefs as NewsPrefs).topics) ? (prefs as NewsPrefs) : parseNewsPrefs(prefs);
+  return {
+    newsPrefs: house.topics,
+    currentNewsId: house.currentId,
+    newsTab: house.tab,
+    newsFavorites: house.favorites,
+  };
 }
 
 export function currentTopic(prefs: NewsPrefs | undefined | null): NewsTopic {
@@ -88,6 +160,7 @@ export function addTopic(prefs: unknown, topic: unknown): NewsPrefs {
   if (exists >= 0) house.topics[exists] = { ...house.topics[exists]!, ...next };
   else house.topics = [...house.topics, next].slice(0, MAX_TOPICS);
   house.currentId = next.id;
+  house.tab = "topics";
   return house;
 }
 
@@ -102,8 +175,69 @@ export function removeTopic(prefs: unknown, id: string): NewsPrefs {
 
 export function pickTopic(prefs: unknown, id: string): NewsPrefs {
   const house = parseNewsPrefs(prefs);
-  if (house.topics.some((t) => t.id === id)) house.currentId = id;
+  if (house.topics.some((t) => t.id === id)) {
+    house.currentId = id;
+    if (house.tab === "popular" || house.tab === "favorites") house.tab = "topics";
+  }
   return house;
+}
+
+export function moveTopic(prefs: unknown, id: string, dir: number): NewsPrefs {
+  const house = parseNewsPrefs(prefs);
+  const i = house.topics.findIndex((t) => t.id === id);
+  if (i < 0 || id === WORLD_ID) return house;
+  const j = i + (Number(dir) < 0 ? -1 : 1);
+  if (j <= 0 || j >= house.topics.length) return house;
+  const copy = house.topics.slice();
+  const tmp = copy[i]!;
+  copy[i] = copy[j]!;
+  copy[j] = tmp;
+  house.topics = copy;
+  return house;
+}
+
+export function pickTab(prefs: unknown, tab: unknown): NewsPrefs {
+  const house = parseNewsPrefs(prefs);
+  house.tab = parseTab(tab);
+  return house;
+}
+
+export function addFavorite(prefs: unknown, raw: unknown): NewsPrefs {
+  const house = parseNewsPrefs(prefs);
+  const next = parseFavorite(raw);
+  if (!next) return house;
+  const exists = house.favorites.findIndex(
+    (f) => f.id === next.id || (f.kind === next.kind && f.title === next.title && f.url === next.url && f.topicId === next.topicId),
+  );
+  if (exists >= 0) house.favorites[exists] = next;
+  else house.favorites = [...house.favorites, next].slice(0, MAX_FAVORITES);
+  return house;
+}
+
+export function removeFavorite(prefs: unknown, id: string): NewsPrefs {
+  const house = parseNewsPrefs(prefs);
+  house.favorites = house.favorites.filter((f) => f.id !== id);
+  return house;
+}
+
+export function toggleFavorite(prefs: unknown, raw: unknown): NewsPrefs {
+  const house = parseNewsPrefs(prefs);
+  const next = parseFavorite(raw);
+  if (!next) return house;
+  const exists = house.favorites.find(
+    (f) => f.id === next.id || (f.kind === next.kind && f.title === next.title && f.url === next.url && f.topicId === next.topicId),
+  );
+  if (exists) return removeFavorite(house, exists.id);
+  return addFavorite(house, next);
+}
+
+export function isFavorite(prefs: unknown, raw: unknown) {
+  const house = parseNewsPrefs(prefs);
+  const next = parseFavorite(raw);
+  if (!next) return false;
+  return house.favorites.some(
+    (f) => f.id === next.id || (f.kind === next.kind && f.title === next.title && f.url === next.url && f.topicId === next.topicId),
+  );
 }
 
 export function newsUrl(now = new Date()) {
@@ -117,6 +251,21 @@ export function topicRssUrl(query: string) {
   const q = clip(query, TOPIC_CHARS);
   if (!q) return "";
   return `https://${TOPIC_HOST}/rss/search?q=${encodeURIComponent(q)}&hl=en-US&gl=US&ceid=US:en`;
+}
+
+export function popularRssUrl() {
+  return `https://${TOPIC_HOST}/rss?hl=en-US&gl=US&ceid=US:en`;
+}
+
+export function xTopicRssUrl(query: string) {
+  const q = clip(query, TOPIC_CHARS) || "news";
+  const search = `${q} (site:x.com OR site:twitter.com)`;
+  return `https://${TOPIC_HOST}/rss/search?q=${encodeURIComponent(search)}&hl=en-US&gl=US&ceid=US:en`;
+}
+
+export function xSearchUrl(query: string) {
+  const q = clip(query, TOPIC_CHARS) || "news";
+  return `https://${X_HOST}/search?q=${encodeURIComponent(q)}&src=typed_query`;
 }
 
 function decodeXml(text: unknown) {
@@ -176,6 +325,12 @@ export function newsLine(items: NewsItem[] | undefined, unread = false) {
   return items[0]!.title;
 }
 
-export function sourceLine(topic?: NewsTopic | null) {
+export function sourceLine(topic?: NewsTopic | null, tab?: unknown) {
+  const mode = tab == null || tab === "" ? "topics" : parseTab(tab);
+  if (mode === "popular") return POPULAR_SOURCE;
+  if (mode === "x") {
+    return topic && topic.id !== WORLD_ID && topic.query ? `${X_SOURCE} · ${topic.name}` : `${X_SOURCE} · news`;
+  }
+  if (mode === "favorites") return "Favorites";
   return topic && topic.id !== WORLD_ID && topic.query ? `${TOPIC_SOURCE} · ${topic.name}` : NEWS_SOURCE;
 }

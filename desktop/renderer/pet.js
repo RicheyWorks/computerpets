@@ -389,40 +389,70 @@ function fetchNews() {
   if (!N) return;
   const prefs = N.parseNewsPrefs(card);
   const topic = N.currentTopic(prefs);
-  if (topic && topic.id !== N.WORLD_ID && topic.query) {
-    const door = window.desk && window.desk.newsTopic;
-    const url = N.topicRssUrl(topic.query);
-    if (!url) return;
+  const tab = prefs.tab || "popular";
+  if (tab === "favorites") {
+    newsUnread = false;
+    paintHousePlates();
+    return;
+  }
+  const door = window.desk && window.desk.newsFeed;
+  const legacyDoor = window.desk && window.desk.newsTopic;
+  function applyItems(items) {
+    if (items && items.length) newsItems = items;
+    newsUnread = !items || !items.length;
+    paintHousePlates();
+  }
+  function fail() {
+    newsUnread = !newsItems.length;
+    paintHousePlates();
+  }
+  if (tab === "popular") {
+    const url = N.popularRssUrl();
     const work = door
-      ? door(topic.query).then((res) => {
+      ? door({ kind: "popular" }).then((res) => {
           if (!res || res.ok === false) throw new Error("unread");
           return Array.isArray(res.items) ? res.items : [];
         })
       : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
-    work
-      .then((items) => {
-        if (items && items.length) newsItems = items;
-        newsUnread = !items || !items.length;
-        paintHousePlates();
-      })
-      .catch(() => {
-        newsUnread = !newsItems.length;
-        paintHousePlates();
-      });
+    work.then(applyItems).catch(fail);
+    return;
+  }
+  if (tab === "x") {
+    const q = topic && topic.query ? topic.query : "news";
+    const url = N.xTopicRssUrl(q);
+    const work = door
+      ? door({ kind: "x", query: q }).then((res) => {
+          if (!res || res.ok === false) throw new Error("unread");
+          return Array.isArray(res.items) ? res.items : [];
+        })
+      : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
+    work.then(applyItems).catch(fail);
+    return;
+  }
+  if (topic && topic.id !== N.WORLD_ID && topic.query) {
+    const url = N.topicRssUrl(topic.query);
+    if (!url) return;
+    const work = door
+      ? door({ kind: "topic", query: topic.query }).then((res) => {
+          if (!res || res.ok === false) throw new Error("unread");
+          return Array.isArray(res.items) ? res.items : [];
+        })
+      : legacyDoor
+        ? legacyDoor(topic.query).then((res) => {
+            if (!res || res.ok === false) throw new Error("unread");
+            return Array.isArray(res.items) ? res.items : [];
+          })
+        : fetch(url).then((r) => r.text()).then((xml) => N.parseRss(xml));
+    work.then(applyItems).catch(fail);
     return;
   }
   fetch(N.newsUrl())
     .then((r) => r.json())
     .then((json) => {
       const next = N.parseNews(json);
-      if (next.length) newsItems = next;
-      newsUnread = !next.length;
-      paintHousePlates();
+      applyItems(next);
     })
-    .catch(() => {
-      newsUnread = !newsItems.length;
-      paintHousePlates();
-    });
+    .catch(fail);
 }
 
 function fetchMarket() {
@@ -3401,6 +3431,11 @@ if (weatherPlate) {
   }
 }
 if (newsPlate) {
+  function applyNewsHouse(house) {
+    Object.assign(card, window.PetNews.toCardPatch(house));
+    persistCard();
+    fetchNews();
+  }
   newsPlate.addEventListener("click", (e) => {
     const toggle = e.target && e.target.closest && e.target.closest("#news-toggle");
     if (toggle) {
@@ -3414,27 +3449,68 @@ if (newsPlate) {
         body.hidden = !body.hidden;
         const open = !body.hidden;
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) fetchNews();
       }
       return;
     }
-    const pick = e.target && e.target.closest && e.target.closest("[data-news-pick]");
-    if (pick && window.PetNews) {
+    if (!window.PetNews) return;
+    const tabBtn = e.target && e.target.closest && e.target.closest("[data-news-tab]");
+    if (tabBtn) {
       e.stopPropagation();
-      const house = window.PetNews.pickTopic(card, pick.getAttribute("data-news-pick"));
-      card.newsPrefs = house.topics;
-      card.currentNewsId = house.currentId;
-      persistCard();
-      fetchNews();
+      applyNewsHouse(window.PetNews.pickTab(card, tabBtn.getAttribute("data-news-tab")));
+      return;
+    }
+    const chip = e.target && e.target.closest && e.target.closest("[data-news-chip]");
+    if (chip) {
+      e.stopPropagation();
+      const name = chip.getAttribute("data-news-chip");
+      applyNewsHouse(window.PetNews.addTopic(card, { name, query: name }));
+      return;
+    }
+    const pick = e.target && e.target.closest && e.target.closest("[data-news-pick]");
+    if (pick) {
+      e.stopPropagation();
+      applyNewsHouse(window.PetNews.pickTopic(card, pick.getAttribute("data-news-pick")));
       return;
     }
     const del = e.target && e.target.closest && e.target.closest("[data-news-del]");
-    if (del && window.PetNews) {
+    if (del) {
       e.stopPropagation();
-      const house = window.PetNews.removeTopic(card, del.getAttribute("data-news-del"));
-      card.newsPrefs = house.topics;
-      card.currentNewsId = house.currentId;
-      persistCard();
-      fetchNews();
+      applyNewsHouse(window.PetNews.removeTopic(card, del.getAttribute("data-news-del")));
+      return;
+    }
+    const move = e.target && e.target.closest && e.target.closest("[data-news-move]");
+    if (move) {
+      e.stopPropagation();
+      applyNewsHouse(window.PetNews.moveTopic(card, move.getAttribute("data-news-move"), Number(move.getAttribute("data-dir") || 1)));
+      return;
+    }
+    const favTopic = e.target && e.target.closest && e.target.closest("[data-news-fav-topic]");
+    if (favTopic) {
+      e.stopPropagation();
+      const id = favTopic.getAttribute("data-news-fav-topic");
+      const prefs = window.PetNews.parseNewsPrefs(card);
+      const row = prefs.topics.find((t) => t.id === id);
+      if (row) applyNewsHouse(window.PetNews.toggleFavorite(card, { kind: "topic", id: row.id, name: row.name, query: row.query }));
+      return;
+    }
+    const favHeadline = e.target && e.target.closest && e.target.closest("[data-news-fav-headline]");
+    if (favHeadline) {
+      e.stopPropagation();
+      applyNewsHouse(
+        window.PetNews.toggleFavorite(card, {
+          kind: "headline",
+          title: decodeURIComponent(favHeadline.getAttribute("data-news-fav-headline") || ""),
+          url: decodeURIComponent(favHeadline.getAttribute("data-url") || ""),
+          summary: decodeURIComponent(favHeadline.getAttribute("data-summary") || ""),
+        }),
+      );
+      return;
+    }
+    const unfav = e.target && e.target.closest && e.target.closest("[data-news-unfav]");
+    if (unfav) {
+      e.stopPropagation();
+      applyNewsHouse(window.PetNews.removeFavorite(card, unfav.getAttribute("data-news-unfav")));
     }
   });
   newsPlate.addEventListener("submit", (e) => {
@@ -3444,12 +3520,8 @@ if (newsPlate) {
     const q = document.getElementById("news-q");
     const text = q && q.value;
     if (!String(text || "").trim()) return;
-    const house = window.PetNews.addTopic(card, { name: text, query: text });
-    card.newsPrefs = house.topics;
-    card.currentNewsId = house.currentId;
-    persistCard();
+    applyNewsHouse(window.PetNews.addTopic(card, { name: text, query: text }));
     if (q) q.value = "";
-    fetchNews();
   });
 }
 if (marketPlate) {
@@ -3480,6 +3552,18 @@ if (marketPlate) {
     if (pick) {
       e.stopPropagation();
       applyMarketHouse(window.PetMarket.pickTicker(card, pick.getAttribute("data-ticker-pick")));
+      return;
+    }
+    const tickerFav = e.target && e.target.closest && e.target.closest("[data-ticker-fav]");
+    if (tickerFav) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.toggleFavoriteTicker(card, tickerFav.getAttribute("data-ticker-fav")));
+      return;
+    }
+    const nftFav = e.target && e.target.closest && e.target.closest("[data-nft-fav]");
+    if (nftFav) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.toggleFavoriteNft(card, nftFav.getAttribute("data-nft-fav")));
       return;
     }
     const del = e.target && e.target.closest && e.target.closest("[data-ticker-del]");
