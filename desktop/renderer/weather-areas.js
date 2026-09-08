@@ -7,14 +7,17 @@
   const TYPE_A_CITY = "type a city";
   const HERE_FAIL = "this computer did not share a place";
   const CANT_REACH = "can't reach";
+  const FAVORITES_EMPTY = "No favorites yet — star a place.";
   const GEOCODE_HOST = "geocoding-api.open-meteo.com";
   const FORECAST_HOST = "api.open-meteo.com";
   const IP_PLACE_HOST = "ipwho.is";
   const MAX_AREAS = 8;
+  const MAX_FAVORITES = 24;
   const AREA_NAME_CHARS = 48;
+  const WEATHER_TABS = ["current", "favorites"];
 
   function blankAreas() {
-    return { areas: [], currentId: null };
+    return { areas: [], currentId: null, tab: "current", favoriteIds: [] };
   }
 
   function clipName(text) {
@@ -33,6 +36,10 @@
     let n = 0;
     for (let i = 0; i < text.length; i++) n = (n * 31 + text.charCodeAt(i)) | 0;
     return Math.abs(n).toString(36);
+  }
+
+  function parseTab(raw) {
+    return raw === "favorites" ? "favorites" : "current";
   }
 
   function parseArea(raw) {
@@ -55,7 +62,21 @@
     next.areas = list.map(parseArea).filter(Boolean).slice(0, MAX_AREAS);
     const want = typeof raw.currentAreaId === "string" ? raw.currentAreaId : typeof raw.currentId === "string" ? raw.currentId : null;
     next.currentId = want && next.areas.some((a) => a.id === want) ? want : next.areas[0] ? next.areas[0].id : null;
+    next.tab = parseTab(raw.weatherTab != null ? raw.weatherTab : raw.tab);
+    const favRaw = Array.isArray(raw.favoriteAreaIds) ? raw.favoriteAreaIds : Array.isArray(raw.favoriteIds) ? raw.favoriteIds : [];
+    const known = new Set(next.areas.map((a) => a.id));
+    next.favoriteIds = favRaw.filter((x) => typeof x === "string" && x && known.has(x)).slice(0, MAX_FAVORITES);
     return next;
+  }
+
+  function toCardPatch(areas) {
+    const house = areas && typeof areas === "object" && Array.isArray(areas.areas) ? areas : parseAreas(areas);
+    return {
+      weatherAreas: house.areas,
+      currentAreaId: house.currentId,
+      weatherTab: house.tab,
+      favoriteAreaIds: house.favoriteIds,
+    };
   }
 
   function currentArea(areas) {
@@ -71,19 +92,24 @@
     if (exists >= 0) house.areas[exists] = { ...house.areas[exists], ...next };
     else house.areas = house.areas.concat(next).slice(0, MAX_AREAS);
     if (!house.currentId) house.currentId = next.id;
+    house.tab = "current";
     return house;
   }
 
   function removeArea(areas, id) {
     const house = parseAreas(areas);
     house.areas = house.areas.filter((a) => a.id !== id);
+    house.favoriteIds = house.favoriteIds.filter((x) => x !== id);
     if (house.currentId === id) house.currentId = house.areas[0] ? house.areas[0].id : null;
     return house;
   }
 
   function pickArea(areas, id) {
     const house = parseAreas(areas);
-    if (house.areas.some((a) => a.id === id)) house.currentId = id;
+    if (house.areas.some((a) => a.id === id)) {
+      house.currentId = id;
+      if (house.tab === "favorites") house.tab = "current";
+    }
     return house;
   }
 
@@ -92,6 +118,33 @@
     const label = clipName(name);
     house.areas = house.areas.map((a) => (a.id === id && label ? { ...a, name: label } : a));
     return house;
+  }
+
+  function pickTab(areas, tab) {
+    const house = parseAreas(areas);
+    house.tab = parseTab(tab);
+    return house;
+  }
+
+  function toggleFavorite(areas, id) {
+    const house = parseAreas(areas);
+    if (!house.areas.some((a) => a.id === id)) return house;
+    if (house.favoriteIds.includes(id)) house.favoriteIds = house.favoriteIds.filter((x) => x !== id);
+    else house.favoriteIds = house.favoriteIds.concat(id).slice(0, MAX_FAVORITES);
+    return house;
+  }
+
+  function isFavorite(areas, id) {
+    return parseAreas(areas).favoriteIds.includes(id);
+  }
+
+  function favoriteAreas(areas) {
+    const house = parseAreas(areas);
+    return house.favoriteIds.map((id) => house.areas.find((a) => a.id === id)).filter(Boolean);
+  }
+
+  function tabLabel(tab) {
+    return parseTab(tab) === "favorites" ? "Favorites" : "Current";
   }
 
   function geocodeUrl(query) {
@@ -212,18 +265,27 @@
     TYPE_A_CITY,
     HERE_FAIL,
     CANT_REACH,
+    FAVORITES_EMPTY,
     GEOCODE_HOST,
     IP_PLACE_HOST,
     FORECAST_HOST,
     MAX_AREAS,
+    MAX_FAVORITES,
+    WEATHER_TABS,
     blankAreas,
     parseArea,
     parseAreas,
+    toCardPatch,
     currentArea,
     addArea,
     removeArea,
     pickArea,
     renameArea,
+    pickTab,
+    toggleFavorite,
+    isFavorite,
+    favoriteAreas,
+    tabLabel,
     geocodeUrl,
     reverseUrl,
     ipPlaceUrl,

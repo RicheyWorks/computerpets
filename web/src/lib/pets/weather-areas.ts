@@ -8,11 +8,16 @@ export const AREA_TRUTH = "Weather area. Named places you add. Not the radio sta
 export const TYPE_A_CITY = "type a city";
 export const HERE_FAIL = "this computer did not share a place";
 export const CANT_REACH = "can't reach";
+export const FAVORITES_EMPTY = "No favorites yet — star a place.";
 export const GEOCODE_HOST = "geocoding-api.open-meteo.com";
 export const FORECAST_HOST = "api.open-meteo.com";
 export const IP_PLACE_HOST = "ipwho.is";
 export const MAX_AREAS = 8;
+export const MAX_FAVORITES = 24;
 export const AREA_NAME_CHARS = 48;
+export const WEATHER_TABS = ["current", "favorites"] as const;
+
+export type WeatherTab = (typeof WEATHER_TABS)[number];
 
 export type WeatherArea = {
   id: string;
@@ -25,6 +30,8 @@ export type WeatherArea = {
 export type WeatherAreas = {
   areas: WeatherArea[];
   currentId: string | null;
+  tab: WeatherTab;
+  favoriteIds: string[];
 };
 
 export type LiveSky = {
@@ -37,7 +44,7 @@ export type LiveSky = {
 };
 
 export function blankAreas(): WeatherAreas {
-  return { areas: [], currentId: null };
+  return { areas: [], currentId: null, tab: "current", favoriteIds: [] };
 }
 
 function clipName(text: unknown) {
@@ -56,6 +63,10 @@ function hash(text: string) {
   let n = 0;
   for (let i = 0; i < text.length; i++) n = (n * 31 + text.charCodeAt(i)) | 0;
   return Math.abs(n).toString(36);
+}
+
+function parseTab(raw: unknown): WeatherTab {
+  return raw === "favorites" ? "favorites" : "current";
 }
 
 export function parseArea(raw: unknown): WeatherArea | null {
@@ -80,7 +91,21 @@ export function parseAreas(raw: unknown): WeatherAreas {
   next.areas = list.map(parseArea).filter((a): a is WeatherArea => !!a).slice(0, MAX_AREAS);
   const want = typeof o.currentAreaId === "string" ? o.currentAreaId : typeof o.currentId === "string" ? o.currentId : null;
   next.currentId = want && next.areas.some((a) => a.id === want) ? want : next.areas[0]?.id ?? null;
+  next.tab = parseTab(o.weatherTab != null ? o.weatherTab : o.tab);
+  const favRaw = Array.isArray(o.favoriteAreaIds) ? o.favoriteAreaIds : Array.isArray(o.favoriteIds) ? o.favoriteIds : [];
+  const known = new Set(next.areas.map((a) => a.id));
+  next.favoriteIds = favRaw.filter((x): x is string => typeof x === "string" && !!x && known.has(x)).slice(0, MAX_FAVORITES);
   return next;
+}
+
+export function toCardPatch(areas: WeatherAreas | unknown) {
+  const house = areas && typeof areas === "object" && Array.isArray((areas as WeatherAreas).areas) ? (areas as WeatherAreas) : parseAreas(areas);
+  return {
+    weatherAreas: house.areas,
+    currentAreaId: house.currentId,
+    weatherTab: house.tab,
+    favoriteAreaIds: house.favoriteIds,
+  };
 }
 
 export function currentArea(areas: WeatherAreas | undefined | null): WeatherArea | null {
@@ -96,19 +121,24 @@ export function addArea(areas: unknown, area: unknown): WeatherAreas {
   if (exists >= 0) house.areas[exists] = { ...house.areas[exists]!, ...next };
   else house.areas = [...house.areas, next].slice(0, MAX_AREAS);
   if (!house.currentId) house.currentId = next.id;
+  house.tab = "current";
   return house;
 }
 
 export function removeArea(areas: unknown, id: string): WeatherAreas {
   const house = parseAreas(areas);
   house.areas = house.areas.filter((a) => a.id !== id);
+  house.favoriteIds = house.favoriteIds.filter((x) => x !== id);
   if (house.currentId === id) house.currentId = house.areas[0]?.id ?? null;
   return house;
 }
 
 export function pickArea(areas: unknown, id: string): WeatherAreas {
   const house = parseAreas(areas);
-  if (house.areas.some((a) => a.id === id)) house.currentId = id;
+  if (house.areas.some((a) => a.id === id)) {
+    house.currentId = id;
+    if (house.tab === "favorites") house.tab = "current";
+  }
   return house;
 }
 
@@ -117,6 +147,33 @@ export function renameArea(areas: unknown, id: string, name: unknown): WeatherAr
   const label = clipName(name);
   house.areas = house.areas.map((a) => (a.id === id && label ? { ...a, name: label } : a));
   return house;
+}
+
+export function pickTab(areas: unknown, tab: unknown): WeatherAreas {
+  const house = parseAreas(areas);
+  house.tab = parseTab(tab);
+  return house;
+}
+
+export function toggleFavorite(areas: unknown, id: string): WeatherAreas {
+  const house = parseAreas(areas);
+  if (!house.areas.some((a) => a.id === id)) return house;
+  if (house.favoriteIds.includes(id)) house.favoriteIds = house.favoriteIds.filter((x) => x !== id);
+  else house.favoriteIds = [...house.favoriteIds, id].slice(0, MAX_FAVORITES);
+  return house;
+}
+
+export function isFavorite(areas: unknown, id: string) {
+  return parseAreas(areas).favoriteIds.includes(id);
+}
+
+export function favoriteAreas(areas: unknown): WeatherArea[] {
+  const house = parseAreas(areas);
+  return house.favoriteIds.map((id) => house.areas.find((a) => a.id === id)).filter((a): a is WeatherArea => !!a);
+}
+
+export function tabLabel(tab: unknown) {
+  return parseTab(tab) === "favorites" ? "Favorites" : "Current";
 }
 
 export function geocodeUrl(query: string) {

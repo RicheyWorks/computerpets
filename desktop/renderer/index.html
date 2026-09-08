@@ -19,16 +19,23 @@
           <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="weather-body" hidden>
+          <div class="desk-plate-tabs" id="weather-tabs" role="tablist" aria-label="Weather sections">
+            <button type="button" data-hit data-weather-tab="current" role="tab" aria-selected="true">Current</button>
+            <button type="button" data-hit data-weather-tab="favorites" role="tab" aria-selected="false">Favorites</button>
+          </div>
           <div id="weather-live"></div>
-          <p class="keeper-truth">Weather area. Named places you add. Not the radio station.</p>
-          <form id="weather-add" data-hit>
-            <label>Weather area
-              <input data-hit id="weather-q" type="text" autocomplete="off" spellcheck="false" placeholder="A city or place — weather, not radio" aria-label="Weather area" />
-            </label>
-            <button data-hit type="submit" id="weather-lookup">Look up</button>
-          </form>
-          <button type="button" data-hit id="weather-here">Use this computer's location</button>
-          <p id="weather-here-truth" class="keeper-truth"></p>
+          <div id="weather-current-panel">
+            <p class="keeper-truth">Weather area. Named places you add. Not the radio station.</p>
+            <form id="weather-add" data-hit>
+              <label>Weather area
+                <input data-hit id="weather-q" type="text" autocomplete="off" spellcheck="false" placeholder="A city or place — weather, not radio" aria-label="Weather area" />
+              </label>
+              <button data-hit type="submit" id="weather-lookup">Look up</button>
+            </form>
+            <button type="button" data-hit id="weather-here">Use this computer's location</button>
+            <p id="weather-here-truth" class="keeper-truth"></p>
+            <ul id="weather-hits"></ul>
+          </div>
           <div class="desk-plate-colors" data-plate-colors="weather">
             <label>Plate color
               <input data-hit type="color" data-plate-color="bg" data-plate-key="weather" aria-label="Plate color" />
@@ -41,7 +48,6 @@
             </label>
             <div class="desk-plate-swatches" data-plate-swatches="weather"></div>
           </div>
-          <ul id="weather-hits"></ul>
         </div>
       </article>
       <article id="news-plate" class="desk-plate" data-hit data-desk-plate="news">
