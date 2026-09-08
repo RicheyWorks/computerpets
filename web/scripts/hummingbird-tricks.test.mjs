@@ -2163,7 +2163,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Sip idle-life ultra done; next bird ultra is Echo / budgie (Loom still next for base idle-ground)", () => {
+test("notes: Sip idle-life ultra done; Echo / budgie ultra follows; next after Echo is Peck / penguin (Loom still next for base idle-ground)", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
