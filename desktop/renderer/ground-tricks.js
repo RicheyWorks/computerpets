@@ -219,6 +219,7 @@ const Morel = root.PetMorelTricks;
     const Volvox = root.PetVolvoxTricks;
     const Diatom = root.PetDiatomTricks;
     const Kelp = root.PetKelpTricks;
+    const Chlamydomonas = root.PetChlamydomonasTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -436,6 +437,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Volvox && (key === Volvox.TRICK_KEY || key === "volvox" || key === "orb")) return Volvox;
     if (Diatom && (key === Diatom.TRICK_KEY || key === "diatom" || key === "pane")) return Diatom;
     if (Kelp && (key === Kelp.TRICK_KEY || key === "kelp" || key === "hold")) return Kelp;
+    if (Chlamydomonas && (key === Chlamydomonas.TRICK_KEY || key === "chlamydomonas" || key === "spin")) return Chlamydomonas;
   }
 
   function wantsThankYou(key) {
