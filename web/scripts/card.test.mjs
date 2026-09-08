@@ -90,7 +90,10 @@ test("saved lines, alarm, and timer are machine-local", () => {
   assert.equal(C.prefersHouseCry("cat"), false);
   assert.ok(C.speakOpts("hearth", 50).volume < 0.5);
   assert.match(roomSrc, /prefersHouseCry/);
+  assert.match(roomSrc, /const cried = await playAnimalVoice/);
+  assert.match(roomSrc, /house cry missing or blocked/);
   assert.match(overlayPet, /prefersHouseCry/);
+  assert.match(overlayPet, /if \(!played\) speakText\(text\)/);
   assert.equal(C.CARD_STORE, "computerpets.card.v1");
   assert.equal(C.blankCard().collapsed, true);
   assert.equal(C.blankCard().sleepAid.plugin, "off");

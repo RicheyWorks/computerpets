@@ -14,6 +14,7 @@ const PetMarket = require("./renderer/market.js");
 app.setAppUserModelId("works.richey.computerpets.desk");
 app.commandLine.appendSwitch("enable-transparent-visuals");
 app.commandLine.appendSwitch("disable-renderer-backgrounding");
+app.commandLine.appendSwitch("autoplay-policy", "no-user-gesture-required");
 
 /** @type {ReturnType<typeof createLicenseSession> | null} */
 let licenseSession = null;
