@@ -116,7 +116,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   axolotl: [A("gill", "bob", 1.4, 3), A("still", "freeze", 2.0, 2), A("gulp", "gulp", 0.7, 1)],
   budgie: [A("preen", "groom", 1.4, 4, "sit"), A("bobble_soft", "bob", 0.9, 3, "sit"), A("mimic_soft", "talk", 0.8, 3, "talk"), A("sidle_soft", "hop", 0.6, 2, "play"), A("dangle_soft", "pulse", 0.7, 2, "play"), A("beakgrind_soft", "sit_hold", 1.2, 2, "sit"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
   parrot: [A("quote", "talk", 2.0, 4, "talk"), A("strut_soft", "wiggle", 1.0, 3, "play"), A("fan_soft", "pulse", 0.9, 3, "play"), A("crack_soft", "nod", 0.9, 2, "sit"), A("flash_soft", "hop", 0.8, 2, "play"), A("pineye_soft", "bob", 0.8, 2, "sit"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
-  toucan: PREEN,
+  toucan: [A("roost", "sit_hold", 2.0, 4, "sit"), A("berry_soft", "nod", 1.0, 3, "sit"), A("juggle_soft", "pulse", 0.9, 3, "play"), A("peer_soft", "bob", 0.9, 2, "sit"), A("skip_soft", "hop", 0.8, 2, "play"), A("rattle_soft", "talk", 0.8, 2, "talk"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
   phoenix: PREEN,
   penguin: [A("huddle", "sit_hold", 2.0, 4, "sit"), A("toboggan_soft", "pulse", 1.0, 3, "play"), A("waddle_soft", "wiggle", 1.0, 3, "play"), A("porpoise_soft", "pulse", 0.9, 2, "play"), A("trumpet_soft", "talk", 0.9, 3, "talk"), A("rockhop_soft", "hop", 0.8, 2, "play"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
   goldfish: [A("gulp", "gulp", 0.6, 2), A("flare", "pulse", 0.7, 2)],
