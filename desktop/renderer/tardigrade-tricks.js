@@ -1,12 +1,12 @@
-/** Tun ground tricks while idle. House neighborly Tardigrada / Eutardigrada Water Bear cryptobiosis life — tunstate / clawgrip / mossfilm / styletprobe / hypsibius personality (tunstate tun-ball cryptobiosis settle without naming tun or barrel or dry or curl or ball or roll or crypt or sleep alone as wait, clawgrip stub claw walk on moss film without naming claw or walk or moss or amble or march or grip or cling or latch, mossfilm stylet moss suck without naming sip or suck or stylet or moss or pierce or feed or drink or probe, styletprobe plump roll amble without naming roll or plump or amble or tumble or ball or barrel or curl alone as wait, long hypsibius Eutardigrada Tardigrada water bear hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or furculaflick or antennawalk or moistclingsoil or foldtuck or orchesella or denshop or inkhop or densfurcula or slimejet or lobopod or antennawhip or preyharpoon or peripatus or densjet or inkjet or denslobo or peristalse or castheap or surfacerise or soilanchor or terrestris or denscast or inkcast or densclit or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass or tunstate or clawgrip or mossfilm or styletprobe or hypsibius; window-play and Call Tun leave tardigrade alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet/Hop own their tricks; guest slug Tun / key tardigrade — accept "tardigrade" and "tun" (roster slug tun; campaign Tun); do NOT confuse with Hop the Springtail (key springtail / slug hop) or denshop thank-you; do NOT confuse with Jet the Velvet Worm (key velvet_worm / slug jet) or densjet thank-you; do NOT confuse with Cast the Earthworm (key earthworm / slug cast) or denscast thank-you; do NOT confuse with Armor the Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT name a trick tardigrade or tun or springtail or hop or velvet_worm or jet or earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste. Thank-yous denstun / inktun / densclaw. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web tardigrade-tricks.ts. Window-play unchanged. True Water Bear Eutardigrada Tardigrada desk life — tun cryptobiosis barrel, stub claw walk, stylet moss suck, and plump roll amble; not Orchesella springtail/Collembola clones (furculaflick/antennawalk/moistclingsoil/foldtuck), not Peripatus velvet worm/Onychophora clones (slimejet/lobopod/antennawhip/preyharpoon), not Lumbricus earthworm/Annelida clones (peristalse/castheap/surfacerise/soilanchor), not Armadillidium pillbug/Isopoda clones — true tardigrade cryptobiosis distinct from springtail furcula leap and worm peristalsis. Next house-order guest after Tun still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Tun ground tricks while idle. House neighborly Tardigrada / Eutardigrada Water Bear cryptobiosis life — cryptotun / clawamble / mosssip / waterbearroll / eutardigrada personality (cryptotun tun-ball cryptobiosis settle without naming tun or barrel or dry or curl or ball or roll or crypt or sleep alone as wait, clawamble stub claw walk on moss film without naming claw or walk or moss or amble or march or grip or cling or latch, mosssip stylet moss suck without naming sip or suck or stylet or moss or pierce or feed or drink or probe, waterbearroll plump roll amble without naming roll or plump or amble or tumble or ball or barrel or curl alone as wait, long eutardigrada Eutardigrada Tardigrada water bear hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or furculaflick or antennawalk or moistclingsoil or foldtuck or orchesella or denshop or inkhop or densfurcula or slimejet or lobopod or antennawhip or preyharpoon or peripatus or densjet or inkjet or denslobo or peristalse or castheap or surfacerise or soilanchor or terrestris or denscast or inkcast or densclit or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass or tunstate or clawgrip or mossfilm or styletprobe or hypsibius; window-play and Call Tun leave tardigrade alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet/Hop own their tricks; guest slug Tun / key tardigrade — accept "tardigrade" and "tun" (roster slug tun; campaign Tun); do NOT confuse with Hop the Springtail (key springtail / slug hop) or denshop thank-you; do NOT confuse with Jet the Velvet Worm (key velvet_worm / slug jet) or densjet thank-you; do NOT confuse with Cast the Earthworm (key earthworm / slug cast) or denscast thank-you; do NOT confuse with Armor the Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT name a trick tardigrade or tun or springtail or hop or velvet_worm or jet or earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste. Thank-yous denstun / inktun / densclaw. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web tardigrade-tricks.ts. Window-play unchanged. True Water Bear Eutardigrada Tardigrada desk life — tun cryptobiosis barrel, stub claw walk, stylet moss suck, and plump roll amble; not Orchesella springtail/Collembola clones (furculaflick/antennawalk/moistclingsoil/foldtuck), not Peripatus velvet worm/Onychophora clones (slimejet/lobopod/antennawhip/preyharpoon), not Lumbricus earthworm/Annelida clones (peristalse/castheap/surfacerise/soilanchor), not Armadillidium pillbug/Isopoda clones — true tardigrade cryptobiosis distinct from springtail furcula leap and worm peristalsis. Next house-order guest after Tun still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "tardigrade";
-  const TRICKS = ["tunstate", "clawgrip", "mossfilm", "styletprobe", "hypsibius"];
+  const TRICKS = ["cryptotun", "clawamble", "mosssip", "waterbearroll", "eutardigrada"];
   const HAPPY = ["denstun", "inktun", "densclaw"];
   const HAPPY_DUR = { denstun: 2.52, inktun: 2.68, densclaw: 2.42 };
-  const HYPSIBIUS_HOLD = 24.10;
+  const EUTARDIGRADA_HOLD = 24.10;
   const RELEASE_S = 2.10;
-  const DUR = { hypsibius: HYPSIBIUS_HOLD + RELEASE_S, tunstate: 4.62, clawgrip: 4.40, mossfilm: 4.55, styletprobe: 4.32 };
+  const DUR = { eutardigrada: EUTARDIGRADA_HOLD + RELEASE_S, cryptotun: 4.62, clawamble: 4.40, mosssip: 4.55, waterbearroll: 4.32 };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +36,40 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "hypsibius") return 158 + roll * 14;
-  if (kind === "tunstate") return 26.2 + roll * 4.2;
-  if (kind === "clawgrip") return 25.4 + roll * 3.9;
-  if (kind === "mossfilm") return 25.8 + roll * 4.0;
-  if (kind === "styletprobe") return 25.2 + roll * 3.7;
+      if (kind === "eutardigrada") return 158 + roll * 14;
+  if (kind === "cryptotun") return 26.2 + roll * 4.2;
+  if (kind === "clawamble") return 25.4 + roll * 3.9;
+  if (kind === "mosssip") return 25.8 + roll * 4.0;
+  if (kind === "waterbearroll") return 25.2 + roll * 3.7;
   return justFinished ? 18.6 + roll * 2.6 : 13.8 + roll * 2.2;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "hypsibius";
+    if (musicOn) return "eutardigrada";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "hypsibius") {
-      if (roll < 0.26) return "tunstate";
-      if (roll < 0.5) return "clawgrip";
-      if (roll < 0.74) return "mossfilm";
-      return "styletprobe";
+    if (lastKind === "eutardigrada") {
+      if (roll < 0.26) return "cryptotun";
+      if (roll < 0.5) return "clawamble";
+      if (roll < 0.74) return "mosssip";
+      return "waterbearroll";
     }
-    if (lastKind === "tunstate") {
-      if (roll < 0.26) return "hypsibius";
-      if (roll < 0.5) return "clawgrip";
-      if (roll < 0.74) return "mossfilm";
-      return "styletprobe";
+    if (lastKind === "cryptotun") {
+      if (roll < 0.26) return "eutardigrada";
+      if (roll < 0.5) return "clawamble";
+      if (roll < 0.74) return "mosssip";
+      return "waterbearroll";
     }
-    if (lastKind === "clawgrip") {
-      if (roll < 0.22) return "hypsibius";
-      if (roll < 0.44) return "tunstate";
-      if (roll < 0.68) return "mossfilm";
-      return "styletprobe";
+    if (lastKind === "clawamble") {
+      if (roll < 0.22) return "eutardigrada";
+      if (roll < 0.44) return "cryptotun";
+      if (roll < 0.68) return "mosssip";
+      return "waterbearroll";
     }
-    if (roll < 0.2) return "hypsibius";
-    if (roll < 0.4) return "tunstate";
-    if (roll < 0.6) return "clawgrip";
-    if (roll < 0.8) return "mossfilm";
-    return "styletprobe";
+    if (roll < 0.2) return "eutardigrada";
+    if (roll < 0.4) return "cryptotun";
+    if (roll < 0.6) return "clawamble";
+    if (roll < 0.8) return "mosssip";
+    return "waterbearroll";
   }
 
   function happyCanStart(state) {
@@ -203,20 +203,20 @@
 
   function beginTrick(kind, x, facing) {
     const anim =
-      kind === "hypsibius"
+      kind === "eutardigrada"
         ? "sit"
-        : kind === "tunstate"
+        : kind === "cryptotun"
           ? "sit"
-          : kind === "clawgrip"
+          : kind === "clawamble"
             ? "play"
-            : kind === "mossfilm"
+            : kind === "mosssip"
               ? "play"
-              : kind === "styletprobe"
+              : kind === "waterbearroll"
                 ? "sit"
                 : "sit";
     return {
       kind: kind,
-      phase: kind === "hypsibius" ? "hold" : "go",
+      phase: kind === "eutardigrada" ? "hold" : "go",
       t: 0,
       x: x,
       lift: 0,
@@ -233,7 +233,7 @@
   }
 
 
-                      function hypsibiusPose(t) {
+                      function eutardigradaPose(t) {
     const breath = Math.sin(t * 0.0042) + 0.0018 * Math.sin(t * 0.0116);
     const hush = Math.abs(Math.sin(t * 0.0026));
     return { lift: 0.00028 + hush * 0.00052, rot: -0.008 + breath * 0.018 };
@@ -244,8 +244,8 @@
     return { lift: 0.00028 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.008 * (1 - u) };
   }
 
-  function tunstatePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.tunstate));
+  function cryptotunPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.cryptotun));
     const face = facing == null ? 1 : facing;
     if (u < 0.16) {
       const s = smoothstep(u / 0.16);
@@ -263,8 +263,8 @@
     const s = smoothstep((u - 0.82) / 0.18);
     return { x: fromX + face * 0.00073 * (1 - s), lift: 0.0070 * (1 - s) + s * 0.0003, rot: 0.70 * (1 - s) * face, anim: "idle" };
   }
-  function clawgripPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.clawgrip));
+  function clawamblePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.clawamble));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
@@ -278,8 +278,8 @@
     const s = smoothstep((u - 0.86) / 0.14);
     return { x: fromX + face * 0.00022 * (1 - s), lift: 0.0016 * (1 - s) + s * 0.00035, rot: -0.014 * (1 - s) * face, anim: "idle" };
   }
-  function mossfilmPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.mossfilm));
+  function mosssipPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.mosssip));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
@@ -293,8 +293,8 @@
     const s = smoothstep((u - 0.88) / 0.12);
     return { x: fromX + face * 0.0046 * (1 - s), lift: 0.0005 * (1 - s), rot: 0.012 * (1 - s) * face, anim: "idle" };
   }
-  function styletprobePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.styletprobe));
+  function waterbearrollPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.waterbearroll));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
@@ -310,21 +310,21 @@
   }
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "tunstate" && trick.kind !== "clawgrip" && trick.kind !== "mossfilm" && trick.kind !== "styletprobe") {
+    if (shouldAbort(flags) && trick.kind !== "cryptotun" && trick.kind !== "clawamble" && trick.kind !== "mosssip" && trick.kind !== "waterbearroll") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "hypsibius") {
-      if (next.t < HYPSIBIUS_HOLD) {
-        const pose = hypsibiusPose(next.t);
+    if (next.kind === "eutardigrada") {
+      if (next.t < EUTARDIGRADA_HOLD) {
+        const pose = eutardigradaPose(next.t);
         next.phase = "hold";
         next.lift = pose.lift;
         next.rot = pose.rot;
         next.anim = "sit";
         return next;
       }
-      if (next.t < HYPSIBIUS_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - HYPSIBIUS_HOLD);
+      if (next.t < EUTARDIGRADA_HOLD + RELEASE_S) {
+        const pose = releasePose(next.t - EUTARDIGRADA_HOLD);
         next.phase = "release";
         next.lift = pose.lift;
         next.rot = pose.rot;
@@ -335,26 +335,26 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "tunstate") {
-      const pose = tunstatePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    if (next.kind === "cryptotun") {
+      const pose = cryptotunPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "clawgrip") {
-      const pose = clawgripPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "clawamble") {
+      const pose = clawamblePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "mossfilm") {
-      const pose = mossfilmPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "mosssip") {
+      const pose = mosssipPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = styletprobePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = waterbearrollPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -369,7 +369,7 @@
     TRICKS,
     HAPPY,
     HAPPY_DUR,
-    HYPSIBIUS_HOLD,
+    EUTARDIGRADA_HOLD,
     RELEASE_S,
     DUR,
     canStart,
@@ -378,12 +378,12 @@
     pickTrick,
     sleepHoldFrame,
     beginTrick,
-    hypsibiusPose,
+    eutardigradaPose,
     releasePose,
-    tunstatePose,
-    clawgripPose,
-    mossfilmPose,
-    styletprobePose,
+    cryptotunPose,
+    clawamblePose,
+    mosssipPose,
+    waterbearrollPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
