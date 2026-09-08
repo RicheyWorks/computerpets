@@ -203,6 +203,7 @@ const Morel = root.PetMorelTricks;
     const CleanerShrimp = root.PetCleanerShrimpTricks;
     const SeaCucumber = root.PetSeaCucumberTricks;
     const Lionfish = root.PetLionfishTricks;
+    const GiantClam = root.PetGiantClamTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -404,6 +405,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (CleanerShrimp && (key === CleanerShrimp.TRICK_KEY || key === "cleaner_shrimp" || key === "scrub")) return CleanerShrimp;
     if (SeaCucumber && (key === SeaCucumber.TRICK_KEY || key === "sea_cucumber" || key === "tube")) return SeaCucumber;
     if (Lionfish && (key === Lionfish.TRICK_KEY || key === "lionfish" || key === "veil")) return Lionfish;
+    if (GiantClam && (key === GiantClam.TRICK_KEY || key === "giant_clam" || key === "gate")) return GiantClam;
   }
 
   function wantsThankYou(key) {
