@@ -375,6 +375,9 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.ok(names("robin").includes("breast_puff"));
   assert.ok(names("robin").includes("perch"));
   assert.ok(names("mallard").includes("dabble"));
+  assert.ok(names("mallard").includes("quack_soft"));
+  assert.ok(names("mallard").includes("upend_soft"));
+  assert.ok(names("mallard").includes("loaf"));
   assert.ok(names("canada_goose").includes("honk"));
   assert.ok(names("pileated").includes("drum"));
   assert.ok(names("hummingbird").includes("hover"));

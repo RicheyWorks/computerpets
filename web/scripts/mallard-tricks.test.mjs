@@ -235,7 +235,7 @@ test("Drake tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "anas"]);
+  assert.deepEqual([...T.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "speculum", "nodswim", "anas"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1131,7 +1131,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "anas"]);
+  assert.deepEqual([...Overlay.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "speculum", "nodswim", "anas"]);
   assert.deepEqual([...Overlay.HAPPY], ["platyrhynchos", "conboschas", "diazi"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
@@ -1203,7 +1203,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("dabble/upend/headshake/gruntwhistle/anas are Anas-platyrhynchos-true, not copies of prior guests", () => {
+test("dabble/upend/headshake/gruntwhistle/speculum/nodswim/anas are Anas-platyrhynchos-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("anas", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1244,6 +1244,8 @@ test("dabble/upend/headshake/gruntwhistle/anas are Anas-platyrhynchos-true, not 
     assert.equal(mod.TRICKS.includes("headshake"), false);
     assert.equal(mod.TRICKS.includes("gruntwhistle"), false);
     assert.equal(mod.TRICKS.includes("anas"), false);
+    assert.equal(mod.TRICKS.includes("speculum"), false);
+    assert.equal(mod.TRICKS.includes("nodswim"), false);
     assert.equal(mod.HAPPY.includes("platyrhynchos"), false);
     assert.equal(mod.HAPPY.includes("conboschas"), false);
     assert.equal(mod.HAPPY.includes("diazi"), false);
@@ -1578,7 +1580,7 @@ test("ground registry keeps prior guests gated; Drake selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "anas"]);
+  assert.deepEqual([...T.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "speculum", "nodswim", "anas"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2094,7 +2096,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "anas"]);
+  assert.deepEqual([...Overlay.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "speculum", "nodswim", "anas"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2154,25 +2156,47 @@ globalThis.PetMorelTricks = OverlayMorel;
 
 test("notes: Drake idle-life done; next house-order guest still lacking tricks is Vee / canada_goose", () => {
 
-  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
   assert.equal(Crow.TRICKS.includes("dabble"), false);
   assert.equal(Crow.TRICKS.includes("anas"), false);
-  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.equal(Crow.TRICKS.includes("speculum"), false);
+  assert.equal(Crow.TRICKS.includes("nodswim"), false);
+  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.deepEqual([...Raven.HAPPY], ["principalis", "sinuatus", "cryptoleucus"]);
   assert.equal(Raven.TRICKS.includes("dabble"), false);
   assert.equal(Raven.TRICKS.includes("anas"), false);
-  assert.deepEqual([...BarnOwl.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.equal(Raven.TRICKS.includes("speculum"), false);
+  assert.equal(Raven.TRICKS.includes("nodswim"), false);
+  assert.deepEqual([...BarnOwl.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.deepEqual([...BarnOwl.HAPPY], ["furcata", "javanica", "guttata"]);
   assert.equal(BarnOwl.TRICKS.includes("dabble"), false);
   assert.equal(BarnOwl.TRICKS.includes("anas"), false);
-  assert.deepEqual([...RedTail.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.equal(BarnOwl.TRICKS.includes("speculum"), false);
+  assert.equal(BarnOwl.TRICKS.includes("nodswim"), false);
+  assert.deepEqual([...RedTail.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.deepEqual([...RedTail.HAPPY], ["borealis", "calurus", "harlani"]);
   assert.equal(RedTail.TRICKS.includes("dabble"), false);
   assert.equal(RedTail.TRICKS.includes("anas"), false);
+  assert.equal(RedTail.TRICKS.includes("speculum"), false);
+  assert.equal(RedTail.TRICKS.includes("nodswim"), false);
   assert.equal(OverlayRedTail.TRICK_KEY, "red_tail");
   assert.equal(T.TRICKS.includes("kettle"), false);
   assert.equal(T.TRICKS.includes("buteo"), false);
+  assert.equal(T.TRICKS.includes("patagial"), false);
+  assert.equal(T.TRICKS.includes("tower"), false);
+  assert.equal(T.TRICKS.includes("twist"), false);
+  assert.equal(T.TRICKS.includes("pellet"), false);
+  assert.equal(T.TRICKS.includes("invite"), false);
+  assert.equal(T.TRICKS.includes("toeing"), false);
+  assert.equal(T.TRICKS.includes("scrutinize"), false);
+  assert.equal(T.TRICKS.includes("glean"), false);
+  assert.equal(T.TRICKS.includes("capflash"), false);
+  assert.equal(T.TRICKS.includes("seedhammer"), false);
+  assert.equal(T.TRICKS.includes("rufous"), false);
+  assert.equal(T.TRICKS.includes("tailcock"), false);
+  assert.equal(T.TRICKS.includes("runstop"), false);
+  assert.equal(T.TRICKS.includes("turdus"), false);
   assert.equal(T.HAPPY.includes("borealis"), false);
   assert.equal(T.TRICKS.includes("diskturn"), false);
   assert.equal(T.TRICKS.includes("tytonid"), false);
@@ -2186,7 +2210,7 @@ test("notes: Drake idle-life done; next house-order guest still lacking tricks i
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "mallard");
-  assert.deepEqual([...T.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "anas"]);
+  assert.deepEqual([...T.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "speculum", "nodswim", "anas"]);
   assert.deepEqual([...T.HAPPY], ["platyrhynchos", "conboschas", "diazi"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
@@ -2354,10 +2378,12 @@ test("notes: Drake idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("dee"), OverlayChickadee);
   assert.equal(OverlayGround.wantsThankYou("chickadee"), true);
   assert.equal(OverlayGround.wantsThankYou("dee"), true);
-  assert.deepEqual([...Chickadee.TRICKS], ["feebee", "gargle", "hangup", "cache", "poecile"]);
+  assert.deepEqual([...Chickadee.TRICKS], ["feebee", "gargle", "hangup", "cache", "capflash", "seedhammer", "poecile"]);
   assert.deepEqual([...Chickadee.HAPPY], ["atricapillus", "practicus", "turneri"]);
   assert.equal(Chickadee.TRICKS.includes("dabble"), false);
   assert.equal(Chickadee.TRICKS.includes("anas"), false);
+  assert.equal(Chickadee.TRICKS.includes("speculum"), false);
+  assert.equal(Chickadee.TRICKS.includes("nodswim"), false);
   assert.equal(OverlayChickadee.TRICK_KEY, "chickadee");
   assert.equal(OverlayGround.wantsThankYou("mallard"), true);
   assert.equal(OverlayGround.wantsThankYou("drake"), true);
@@ -2383,10 +2409,12 @@ test("notes: Drake idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("brick"), OverlayRobin);
   assert.equal(OverlayGround.wantsThankYou("robin"), true);
   assert.equal(OverlayGround.wantsThankYou("brick"), true);
-  assert.deepEqual([...Robin.TRICKS], ["runstop", "listen", "carol", "tug", "turdus"]);
+  assert.deepEqual([...Robin.TRICKS], ["runstop", "listen", "carol", "tug", "rufous", "tailcock", "turdus"]);
   assert.deepEqual([...Robin.HAPPY], ["migratorius", "achrusterus", "caurinus"]);
   assert.equal(Robin.TRICKS.includes("dabble"), false);
   assert.equal(Robin.TRICKS.includes("anas"), false);
+  assert.equal(Robin.TRICKS.includes("speculum"), false);
+  assert.equal(Robin.TRICKS.includes("nodswim"), false);
   assert.equal(OverlayRobin.TRICK_KEY, "robin");
   assert.equal(T.TRICKS.includes("runstop"), false);
   assert.equal(T.TRICKS.includes("turdus"), false);
@@ -2408,3 +2436,22 @@ test("notes: Drake idle-life done; next house-order guest still lacking tricks i
 
 
 
+
+
+test("ultra-polish: Drake dabble/gruntwhistle/speculum/nodswim lifts are Rui-visible (not micro idle-gen)", () => {
+  const db = T.beginTrick("dabble", 80, 1);
+  const mid = T.stepTrick(db, T.DUR.dabble * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 8, `dabble mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `dabble mid lift ${mid.lift}`);
+  const gw = T.beginTrick("gruntwhistle", 80, 1);
+  const g2 = T.stepTrick(gw, T.DUR.gruntwhistle * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(g2.rot) > 8, `gruntwhistle mid rot ${g2.rot}`);
+  const sp = T.beginTrick("speculum", 80, 1);
+  const s2 = T.stepTrick(sp, T.DUR.speculum * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(s2.rot) > 6, `speculum mid rot ${s2.rot}`);
+  const ns = T.beginTrick("nodswim", 80, 1);
+  const n2 = T.stepTrick(ns, T.DUR.nodswim * 0.4, { cmd: "idle" });
+  assert.ok(n2.lift > 3, `nodswim mid lift ${n2.lift}`);
+  assert.ok(Overlay.speculumPose && Overlay.nodswimPose);
+  assert.ok(T.nextTrickWait(true, 0, "anas") < 80);
+});

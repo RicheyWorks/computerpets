@@ -1,12 +1,20 @@
-/** Drake ground tricks while idle. House neighborly Anatidae / Anas mallard desk life — dabble / upend / headshake / gruntwhistle / anas personality (dabble surface-bill tip-feed without naming tip or tipup or window-play tip or hop or soar, upend full tip-up tail-high forage without naming plunge or dive or hangup or softcrouch, headshake comfort head-shake without naming shake-cry or snore or cronk or keeyer, gruntwhistle grunt-whistle courtship nod without naming sing or song or cry or call or feebee or carol or whistle-cry, long anas Anas platyrhynchos green-head desk perch — never named wait or soar or hop or preen or fan or strut or roost or hopwalk or monocle or fossick or anting or corvid or dihedral or billtap or tumble or cronk or hackles or diskturn or softcrouch or parallax or snore or tytonid or kettle or stoop or bind or keeyer or buteo or feebee or gargle or hangup or cache or poecile or runstop or listen or carol or tug or turdus or oil or dab; window-play leaves mallard tip alone; Soot/Wedge/Heart/Hook/Dee/Brick own their tricks; guest slug Drake / key mallard — accept "mallard" and "drake"; do NOT name a trick mallard or drake or tip or hop or soar or mantle or dabble-cry). Thank-yous platyrhynchos / conboschas / diazi. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web mallard-tricks.ts. Window-play unchanged (TIP / tip). True mallard desk life — not robin/chickadee/hawk/owl/crow/raven clones. Vee owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Drake ground tricks while idle — ultra-polish pass. House neighborly Anatidae / Anas mallard desk life — dabble / upend / headshake / gruntwhistle / speculum / nodswim / anas personality (dabble surface-bill tip-feed without naming tip or tipup or window-play tip or hop or soar, upend full tip-up tail-high forage without naming plunge or dive or hangup or softcrouch, headshake comfort head-shake without naming shake-cry or snore or cronk or keeyer, gruntwhistle grunt-whistle courtship nod without naming sing or song or cry or call or feebee or carol or whistle-cry, speculum blue wing-bar flash without naming fan or strut or capflash or flash-of-hawk, nodswim nod-swim courtship glide without naming paddle or soar or hopwalk or tumble, long anas Anas platyrhynchos green-head desk perch — never named wait or soar or hop or preen or fan or strut or roost or hopwalk or monocle or fossick or anting or scrutinize or glean or corvid or dihedral or billtap or tumble or cronk or invite or toeing or hackles or diskturn or softcrouch or parallax or snore or twist or pellet or tytonid or kettle or stoop or bind or keeyer or patagial or tower or buteo or feebee or gargle or hangup or cache or capflash or seedhammer or poecile or runstop or listen or carol or tug or rufous or tailcock or turdus or oil or dab; window-play leaves mallard tip alone; Soot/Wedge/Heart/Hook/Dee/Brick own their tricks; guest slug Drake / key mallard — accept "mallard" and "drake"; do NOT name a trick mallard or drake or tip or hop or soar or mantle or dabble-cry). Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. Thank-yous platyrhynchos / conboschas / diazi. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web mallard-tricks.ts. Window-play unchanged (TIP / tip). True mallard desk life — not robin/chickadee/hawk/owl/crow/raven clones. Vee owns the next seat. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "mallard";
-  const TRICKS = ["dabble", "upend", "headshake", "gruntwhistle", "anas"];
+  const TRICKS = ["dabble", "upend", "headshake", "gruntwhistle", "speculum", "nodswim", "anas"];
   const HAPPY = ["platyrhynchos", "conboschas", "diazi"];
   const HAPPY_DUR = { platyrhynchos: 1.66, conboschas: 1.81, diazi: 1.72 };
-  const ANAS_HOLD = 19.36;
-  const RELEASE_S = 1.16;
-  const DUR = { anas: ANAS_HOLD + RELEASE_S, dabble: 2.54, upend: 2.70, headshake: 2.34, gruntwhistle: 2.60 };
+  const ANAS_HOLD = 14.8;
+  const RELEASE_S = 1.08;
+  const DUR = {
+    anas: ANAS_HOLD + RELEASE_S,
+    dabble: 2.54,
+    upend: 2.70,
+    headshake: 2.34,
+    gruntwhistle: 2.60,
+    speculum: 2.38,
+    nodswim: 2.52,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,39 +44,27 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "anas") return 88 + roll * 40;
-  if (kind === "dabble") return 15.4 + roll * 13.4;
-  if (kind === "upend") return 18.2 + roll * 12.2;
-  if (kind === "gruntwhistle") return 20.6 + roll * 12.8;
-  return justFinished ? 14.6 + roll * 10.9 : 8.4 + roll * 9.7;
+    if (kind === "anas") return 44 + roll * 30;
+    if (kind === "dabble" || kind === "speculum") return 13 + roll * 9;
+    if (kind === "upend" || kind === "nodswim") return 12 + roll * 9;
+    if (kind === "gruntwhistle" || kind === "headshake") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "anas";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "anas") {
-      if (roll < 0.26) return "dabble";
-      if (roll < 0.5) return "upend";
-      if (roll < 0.74) return "headshake";
-      return "gruntwhistle";
+    const pool = TRICKS.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : TRICKS.slice();
+    const weights = list.map((k) => (k === "anas" ? 0.55 : k === "dabble" || k === "gruntwhistle" ? 1.15 : 1));
+    let total = 0;
+    for (let i = 0; i < weights.length; i++) total += weights[i];
+    let r = roll * total;
+    for (let i = 0; i < list.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return list[i];
     }
-    if (lastKind === "dabble") {
-      if (roll < 0.26) return "anas";
-      if (roll < 0.5) return "upend";
-      if (roll < 0.74) return "headshake";
-      return "gruntwhistle";
-    }
-    if (lastKind === "upend") {
-      if (roll < 0.22) return "anas";
-      if (roll < 0.44) return "dabble";
-      if (roll < 0.68) return "headshake";
-      return "gruntwhistle";
-    }
-    if (roll < 0.2) return "anas";
-    if (roll < 0.4) return "dabble";
-    if (roll < 0.6) return "upend";
-    if (roll < 0.8) return "headshake";
-    return "gruntwhistle";
+    return list[list.length - 1] || "dabble";
   }
 
   function happyCanStart(state) {
@@ -124,56 +120,49 @@
       x: x,
       lift: 0,
       rot: 0,
-      anim: name === "platyrhynchos" ? "sit" : name === "conboschas" ? "play" : "sit",
+      anim: name === "conboschas" ? "play" : "sit",
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
   }
 
-                      function platyrhynchosPose(t) {
+  function platyrhynchosPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.platyrhynchos));
     if (u < 0.16) {
       const s = u / 0.16;
-      return { lift: s * 0.018, rot: s * 2.25, dx: 0, anim: "sit" };
+      return { lift: s * 6, rot: s * 12, dx: 0, anim: "sit" };
     }
     if (u < 0.82) {
       const flash = Math.sin(t * 5.5) + 0.26 * Math.sin(t * 11.2);
-      return {
-        lift: 0.018 + Math.abs(flash) * 0.015,
-        rot: 2.25 + flash * 1.65,
-        dx: flash * 0.0011,
-        anim: "sit",
-      };
+      return { lift: 6 + Math.abs(flash) * 5, rot: 12 + flash * 8, dx: flash * 2.2, anim: "sit" };
     }
     const s = (u - 0.82) / 0.18;
-    return { lift: 0.008 * (1 - s), rot: 0.58 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 4 * (1 - s), rot: 4 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function conboschasPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.conboschas));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.030, rot: s * -2.15, dx: s * 0.0015, anim: "play" };
+      return { lift: s * 14, rot: s * -12, dx: s * 3, anim: "play" };
     }
     if (u < 0.85) {
       const wriggle = Math.sin(t * 4.2) + 0.25 * Math.sin(t * 7.6);
-      return {
-        lift: 0.030 + Math.abs(wriggle) * 0.021,
-        rot: -2.15 + wriggle * 2.65,
-        dx: wriggle * 0.0023,
-        anim: "play",
-      };
+      return { lift: 12 + Math.abs(wriggle) * 10, rot: -10 + wriggle * 14, dx: wriggle * 4, anim: "play" };
     }
     const s = (u - 0.85) / 0.15;
-    return { lift: 0.011 * (1 - s), rot: -0.40 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 5 * (1 - s), rot: -4 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function diaziPose(t) {
     return {
-      lift: 0.007 + Math.abs(Math.sin(t * 0.28)) * 0.016,
-      rot: Math.sin(t * 0.28) * 1.30,
-      dx: Math.sin(t * 0.23) * 0.0012,
+      lift: 3 + Math.abs(Math.sin(t * 4.0)) * 7,
+      rot: Math.sin(t * 3.4) * 9,
+      dx: Math.sin(t * 2.6) * 3,
       anim: "sit",
     };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
@@ -181,22 +170,15 @@
     }
     const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
     const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "platyrhynchos") {
-      const pose = platyrhynchosPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "conboschas") {
-      const pose = conboschasPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = diaziPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
+    const pose =
+      next.kind === "platyrhynchos"
+        ? platyrhynchosPose(next.t)
+        : next.kind === "conboschas"
+          ? conboschasPose(next.t)
+          : diaziPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
     if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     return next;
   }
@@ -207,17 +189,13 @@
 
   function beginTrick(kind, x, facing) {
     const anim =
-      kind === "anas"
+      kind === "anas" || kind === "headshake" || kind === "speculum"
         ? "sit"
-        : kind === "dabble"
+        : kind === "dabble" || kind === "upend" || kind === "nodswim"
           ? "play"
-          : kind === "upend"
-            ? "play"
-            : kind === "headshake"
-              ? "sit"
-              : kind === "gruntwhistle"
-                ? "talk"
-                : "sit";
+          : kind === "gruntwhistle"
+            ? "talk"
+            : "sit";
     return {
       kind: kind,
       phase: kind === "anas" ? "hold" : "go",
@@ -236,19 +214,15 @@
     return x * x * (3 - 2 * x);
   }
 
-
-                      function anasPose(t) {
-    const breath = Math.sin(t * 0.088) + 0.07 * Math.sin(t * 0.24);
-    const soft = Math.abs(Math.sin(t * 0.115));
-    return {
-      lift: 0.006 + soft * 0.014,
-      rot: 0.58 + breath * 0.74,
-    };
+  function anasPose(t) {
+    const breath = Math.sin(t * 0.55) + 0.18 * Math.sin(t * 1.4);
+    const soft = Math.abs(Math.sin(t * 0.9));
+    return { lift: 2 + soft * 4 + Math.abs(breath) * 1.5, rot: -2 + breath * 4 };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.004 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.22 * (1 - u) };
+    return { lift: 3 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3 * (1 - u) };
   }
 
   function dabblePose(t, fromX, facing) {
@@ -256,106 +230,135 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      // dabble tips the bill into the ink dish without naming tip
-      return { x: fromX, lift: s * -0.018, rot: s * 18.5 * face, anim: "play" };
+      return { x: fromX, lift: s * -8, rot: s * 18 * face, anim: "play" };
     }
     if (u < 0.86) {
       const sift = Math.sin(t * 3.4) + 0.22 * Math.sin(t * 6.8);
       return {
-        x: fromX + face * sift * 0.0018,
-        lift: -0.018 + Math.abs(sift) * 0.010,
-        rot: (18.5 + sift * 3.2) * face,
+        x: fromX + face * sift * 3,
+        lift: -8 + Math.abs(sift) * 6,
+        rot: (18 + sift * 5) * face,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.86) / 0.14);
-    return {
-      x: fromX,
-      lift: -0.006 * (1 - s),
-      rot: 2.4 * (1 - s) * face,
-      anim: "idle",
-    };
+    return { x: fromX, lift: -3 * (1 - s), rot: 4 * (1 - s) * face, anim: "idle" };
   }
+
   function upendPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.upend));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      // upend rolls the sternum high for a deep tip-up
-      return { x: fromX, lift: s * -0.036, rot: s * 42 * face, anim: "play" };
+      return { x: fromX, lift: s * -12, rot: s * 38 * face, anim: "play" };
     }
     if (u < 0.84) {
       const kick = Math.sin(t * 2.6) + 0.2 * Math.sin(t * 5.1);
       return {
-        x: fromX + face * kick * 0.0014,
-        lift: -0.036 + Math.abs(kick) * 0.012,
-        rot: (42 + kick * 4.5) * face,
+        x: fromX + face * kick * 2.5,
+        lift: -12 + Math.abs(kick) * 5,
+        rot: (38 + kick * 6) * face,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.84) / 0.16);
-    return {
-      x: fromX,
-      lift: -0.010 * (1 - s),
-      rot: 6.0 * (1 - s) * face,
-      anim: "idle",
-    };
+    return { x: fromX, lift: -4 * (1 - s), rot: 6 * (1 - s) * face, anim: "idle" };
   }
+
   function headshakePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.headshake));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      // headshake lifts into a comfort shake
-      return { x: fromX, lift: s * 0.014, rot: s * 4.2 * face, anim: "sit" };
+      return { x: fromX, lift: s * 6, rot: s * 8 * face, anim: "sit" };
     }
     if (u < 0.88) {
       const shake = Math.sin(t * 14.5) + 0.35 * Math.sin(t * 29.0);
       return {
-        x: fromX + face * shake * 0.0020,
-        lift: 0.014 + Math.abs(shake) * 0.008,
-        rot: (4.2 + shake * 12.5) * face,
+        x: fromX + face * shake * 3,
+        lift: 6 + Math.abs(shake) * 4,
+        rot: (8 + shake * 14) * face,
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
-    return {
-      x: fromX,
-      lift: 0.005 * (1 - s),
-      rot: 0.8 * (1 - s) * face,
-      anim: "idle",
-    };
+    return { x: fromX, lift: 3 * (1 - s), rot: 2 * (1 - s) * face, anim: "idle" };
   }
+
   function gruntwhistlePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.gruntwhistle));
     const face = facing == null ? 1 : facing;
     if (u < 0.11) {
       const s = smoothstep(u / 0.11);
-      // gruntwhistle lifts into a courtship nod without naming sing
-      return { x: fromX, lift: s * 0.028, rot: s * 8.2 * face, anim: "talk" };
+      return { x: fromX, lift: s * 6, rot: s * 14 * face, anim: "talk" };
     }
     if (u < 0.86) {
       const s = (u - 0.11) / 0.75;
       const phrase = Math.sin(s * Math.PI * 2.6);
       const settle = Math.abs(Math.sin(s * Math.PI * 5.2));
       return {
-        x: fromX + face * (0.005 * s + phrase * 0.0028),
-        lift: 0.024 + settle * 0.016,
-        rot: (8.2 + phrase * 6.0) * face,
+        x: fromX + face * (4 * s + phrase * 2.8),
+        lift: 5 + settle * 4,
+        rot: (14 + phrase * 6) * face,
         anim: "talk",
       };
     }
     const s = smoothstep((u - 0.86) / 0.14);
-    return {
-      x: fromX + face * 0.005 * (1 - s),
-      lift: 0.010 * (1 - s),
-      rot: 1.6 * (1 - s) * face,
-      anim: "idle",
-    };
+    return { x: fromX + face * 4 * (1 - s), lift: 3 * (1 - s), rot: 4 * (1 - s) * face, anim: "idle" };
   }
+
+  function speculumPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.speculum));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 8, rot: s * -12 * face, anim: "sit" };
+    }
+    if (u < 0.86) {
+      const flash = Math.sin(t * 5.4) + 0.28 * Math.sin(t * 10.8);
+      return {
+        x: fromX + face * flash * 3,
+        lift: 7 + Math.abs(flash) * 6,
+        rot: (-12 + flash * 10) * face,
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.86) / 0.14);
+    return { x: fromX, lift: 3 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" };
+  }
+
+  function nodswimPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.nodswim));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.10) {
+      const s = smoothstep(u / 0.10);
+      return { x: fromX, lift: s * 5, rot: s * -8 * face, anim: "play" };
+    }
+    if (u < 0.88) {
+      const s = (u - 0.10) / 0.78;
+      const nod = Math.sin(s * Math.PI * 3.6);
+      const glide = Math.abs(Math.sin(s * Math.PI * 1.8));
+      return {
+        x: fromX + face * (12 * s + nod * 4),
+        lift: 4 + glide * 8 + Math.abs(nod) * 3,
+        rot: (-8 + nod * 10) * face,
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return { x: fromX + face * 12 * (1 - s), lift: 3 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" };
+  }
+
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "dabble" && trick.kind !== "upend" && trick.kind !== "headshake" && trick.kind !== "gruntwhistle") {
+    const short =
+      trick.kind === "dabble" ||
+      trick.kind === "upend" ||
+      trick.kind === "headshake" ||
+      trick.kind === "gruntwhistle" ||
+      trick.kind === "speculum" ||
+      trick.kind === "nodswim";
+    if (shouldAbort(flags) && !short) {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -380,31 +383,21 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "dabble") {
-      const pose = dabblePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "upend") {
-      const pose = upendPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "headshake") {
-      const pose = headshakePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = gruntwhistlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
+    const from = trick.fromX != null ? trick.fromX : trick.x;
+    const poseFn = {
+      dabble: dabblePose,
+      upend: upendPose,
+      headshake: headshakePose,
+      gruntwhistle: gruntwhistlePose,
+      speculum: speculumPose,
+      nodswim: nodswimPose,
+    };
+    const fn = poseFn[next.kind] || dabblePose;
+    const pose = fn(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
     if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     return next;
   }
@@ -429,6 +422,8 @@
     upendPose,
     headshakePose,
     gruntwhistlePose,
+    speculumPose,
+    nodswimPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
