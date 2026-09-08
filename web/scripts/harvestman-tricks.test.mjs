@@ -1454,7 +1454,7 @@ test("legwave/oscillate/autotomy/gregarious/phalangium are Phalangium-opilio-tru
   assert.equal(T.HAPPY.includes("tide"), false);
   assert.equal(T.HAPPY.includes("tap"), false);
   assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
-  assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
+  assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
   assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
@@ -2141,7 +2141,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("trade"), false);
   assert.deepEqual([...OverlayHamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
-  assert.deepEqual([...OverlayHedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
+  assert.deepEqual([...OverlayHedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
 
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);

@@ -293,7 +293,7 @@ test("ground registry keeps prior guests gated; Floss selectable; no dust/curl/b
   assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
   assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.deepEqual([...Ferret.TRICKS], ["tube", "romp", "steal", "puff", "noodle", "corkscrew", "slink"]);
-  assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
+  assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift"]);
   assert.equal(T.TRICKS.includes("dust"), false);
   assert.equal(T.TRICKS.includes("ball"), false);
