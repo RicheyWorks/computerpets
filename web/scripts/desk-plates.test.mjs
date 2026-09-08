@@ -62,4 +62,11 @@ test("Quotes crypto + NFT panes lockstep with overlay market helpers", () => {
     Market.DEFAULT_MARKETPLACES.slice().sort(),
     OverlayMarket.DEFAULT_MARKETPLACES.slice().sort(),
   );
+  assert.equal(Market.MAX_TICKERS, OverlayMarket.MAX_TICKERS);
+  assert.equal(typeof Market.pickBestSearchCoin, "function");
+  assert.equal(typeof OverlayMarket.pickBestSearchCoin, "function");
+  const pepe = Market.classify("PEPE");
+  assert.equal(pepe.kind, "crypto");
+  assert.equal(OverlayMarket.classify("WIF").kind, "crypto");
+
 });
