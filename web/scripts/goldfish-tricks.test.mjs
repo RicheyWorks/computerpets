@@ -41,7 +41,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Coin tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
+  assert.deepEqual([...T.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -69,9 +69,14 @@ test("Coin tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("popcorn"), false);
   assert.equal(T.TRICKS.includes("scurry"), false);
   assert.equal(T.TRICKS.includes("zoom"), false);
+  assert.equal(T.TRICKS.includes("yawn"), true);
+  assert.equal(T.TRICKS.includes("forage"), true);
+  assert.equal(T.TRICKS.includes("dig"), false);
+  assert.equal(T.TRICKS.includes("nosh"), false);
+  assert.equal(T.TRICKS.includes("gape"), false);
 });
 
-test("drift/gulp/flare/glint/dart are house-goldfish-true, not Rui cat dog rabbit hamster guinea-pig turtle or dragon clones", () => {
+test("drift/gulp/flare/glint/dart/yawn/forage are house-goldfish-true, not Rui cat dog rabbit hamster guinea-pig turtle or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const drift = T.beginTrick("drift", 80, 1);
   assert.equal(drift.anim, "sit");
@@ -102,8 +107,16 @@ test("drift/gulp/flare/glint/dart are house-goldfish-true, not Rui cat dog rabbi
   assert.equal(dart.anim, "walk");
   const dartMid = T.stepTrick(dart, 0.5, ground);
   assert.ok(dartMid.lift > 0 || Math.abs(dartMid.x - 80) > 1 || Math.abs(dartMid.rot) > 1);
-  const dartDone = T.stepTrick(dart, 1.2, ground);
+  const dartDone = T.stepTrick(dart, T.DUR.dart + 0.1, ground);
   assert.equal(dartDone.phase, "done");
+  const yawn = T.beginTrick("yawn", 80, 1);
+  assert.equal(yawn.anim, "sit");
+  const yawnMid = T.stepTrick(yawn, T.DUR.yawn * 0.4, ground);
+  assert.ok(yawnMid.lift > 2 || Math.abs(yawnMid.rot) > 2);
+  const forage = T.beginTrick("forage", 80, 1);
+  assert.equal(forage.anim, "sit");
+  const forageMid = T.stepTrick(forage, T.DUR.forage * 0.4, ground);
+  assert.ok(forageMid.lift < 0 || Math.abs(forageMid.rot) > 2);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("drift"), false);
@@ -113,6 +126,9 @@ test("drift/gulp/flare/glint/dart are house-goldfish-true, not Rui cat dog rabbi
   assert.equal(Hamster.TRICKS.includes("dart"), false);
   assert.equal(GuineaPig.TRICKS.includes("drift"), false);
   assert.equal(Turtle.TRICKS.includes("dart"), false);
+  assert.equal(Turtle.TRICKS.includes("yawn"), false);
+  assert.equal(Rabbit.TRICKS.includes("forage"), false);
+  assert.equal(Hamster.TRICKS.includes("forage"), false);
   assert.equal(Relay.TRICKS.includes("glint"), false);
   assert.equal(Fuse.TRICKS.includes("gulp"), false);
   assert.equal(Earth.TRICKS.includes("flare"), false);
@@ -349,4 +365,32 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
+});
+
+test("ultra-polish: Coin drift/gulp/yawn/forage lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("drift", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 4, `drift mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 4, `drift mid lift ${mid.lift}`);
+  const gu = T.beginTrick("gulp", 80, 1);
+  const g2 = T.stepTrick(gu, T.DUR.gulp * 0.4, { cmd: "idle" });
+  assert.ok(g2.lift > 6 || Math.abs(g2.rot) > 4, `gulp mid lift/rot ${g2.lift}/${g2.rot}`);
+  const ya = T.beginTrick("yawn", 80, 1);
+  const y2 = T.stepTrick(ya, T.DUR.yawn * 0.4, { cmd: "idle" });
+  assert.ok(y2.lift > 3 || Math.abs(y2.rot) > 3, `yawn mid lift/rot ${y2.lift}/${y2.rot}`);
+  const fo = T.beginTrick("forage", 80, 1);
+  const f2 = T.stepTrick(fo, T.DUR.forage * 0.4, { cmd: "idle" });
+  assert.ok(f2.lift < 0 || Math.abs(f2.rot) > 6, `forage mid lift/rot ${f2.lift}/${f2.rot}`);
+  assert.ok(Overlay.yawnPose && Overlay.foragePose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.yawn, Overlay.DUR.yawn);
+  assert.equal(T.DUR.forage, Overlay.DUR.forage);
+  assert.equal(T.DRIFT_HOLD, Overlay.DRIFT_HOLD);
+});
+
+test("notes: Coin idle-life ultra done; next house-order ultra guest is Rue / fox (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
+  assert.equal(T.TRICKS.includes("circle"), false);
+  assert.equal(Overlay.TRICKS.includes("yawn"), true);
+  assert.equal(Overlay.TRICKS.includes("forage"), true);
 });

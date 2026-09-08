@@ -309,7 +309,7 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 
 test("Lance tricks start only on idle ground", () => {
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
-  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
+  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
@@ -1459,7 +1459,7 @@ test("weedambush/scurve/toothclamp/torpedoglide/lucius are Esox-lucius-true, not
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
   assert.deepEqual([...WaterLily.HAPPY], ["silt", "nectar", "dew"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
-  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
+  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
@@ -1650,7 +1650,7 @@ test("ground registry keeps prior guests gated; Lance selectable; prior guests s
   assert.deepEqual([...Cicada.TRICKS], ["tymbal", "cast", "egress", "harden", "magicicada"]);
   assert.deepEqual([...OverlayCicada.TRICKS], ["tymbal", "cast", "egress", "harden", "magicicada"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
-  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
+  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
@@ -2199,7 +2199,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("moon_jelly", 4), null);
   assert.deepEqual([...OverlayTurtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
-  assert.deepEqual([...OverlayGoldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
+  assert.deepEqual([...OverlayGoldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...OverlayAxolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...OverlayOctopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);

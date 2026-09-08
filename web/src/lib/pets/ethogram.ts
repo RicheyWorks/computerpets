@@ -93,7 +93,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   toucan: [A("roost", "sit_hold", 2.0, 4, "sit"), A("berry_soft", "nod", 1.0, 3, "sit"), A("juggle_soft", "pulse", 0.9, 3, "play"), A("peer_soft", "bob", 0.9, 2, "sit"), A("skip_soft", "hop", 0.8, 2, "play"), A("rattle_soft", "talk", 0.8, 2, "talk"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
   phoenix: [A("cinder", "sit_hold", 2.0, 4, "sit"), A("blaze_soft", "pulse", 1.0, 3, "play"), A("shed_soft", "wiggle", 0.9, 3, "play"), A("lift_soft", "pulse", 0.9, 2, "play"), A("return_soft", "bob", 0.9, 2, "sit"), A("reignite_soft", "talk", 0.8, 2, "talk"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
   penguin: [A("huddle", "sit_hold", 2.0, 4, "sit"), A("toboggan_soft", "pulse", 1.0, 3, "play"), A("waddle_soft", "wiggle", 1.0, 3, "play"), A("porpoise_soft", "pulse", 0.9, 2, "play"), A("trumpet_soft", "talk", 0.9, 3, "talk"), A("rockhop_soft", "hop", 0.8, 2, "play"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
-  goldfish: [A("gulp", "gulp", 0.6, 2), A("flare", "pulse", 0.7, 2)],
+  goldfish: [A("drift", "sit_hold", 2.0, 4, "sit"), A("gulp_soft", "gulp", 1.0, 3, "talk"), A("flare_soft", "pulse", 0.9, 2, "play"), A("glint_soft", "lean", 0.8, 2, "sit"), A("dart_soft", "dart", 0.8, 2, "play"), A("yawn_soft", "yawn", 0.9, 2, "sit"), A("forage_soft", "eat", 0.8, 2, "eat"), A("freeze", "freeze", 1.4, 2)],
   ball_python: [
     A("tongue", "tongue", 0.7, 4),
     A("coil", "sit_hold", 2.8, 3, "sit"),
