@@ -123,6 +123,8 @@ def test_only_scratching_mammals_scratch():
         assert "scratch" not in names, key
         assert "tongue" not in names, key
     assert "caw" in [a["name"] for a in acts_for("crow")]
+    assert "cock_look" in [a["name"] for a in acts_for("crow")]
+    assert "perch" in [a["name"] for a in acts_for("crow")]
     assert "kronk" in [a["name"] for a in acts_for("raven")]
     assert "hiss" in [a["name"] for a in acts_for("barn_owl")]
     assert "soar" in [a["name"] for a in acts_for("red_tail")]
