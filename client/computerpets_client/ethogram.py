@@ -46,7 +46,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "dragon": (_a("watch", "sit_hold", 2.4, 3, "sit"), _a("huff", "pulse", 0.8, 2), _a("bask", "sit_hold", 2.8, 2, "sit")),
     "axolotl": (_a("gill", "bob", 1.4, 3), _a("still", "freeze", 2.0, 2), _a("gulp", "gulp", 0.7, 1)),
     "budgie": (_a("preen", "groom", 1.4, 4, "sit"), _a("bobble_soft", "bob", 0.9, 3, "sit"), _a("mimic_soft", "talk", 0.8, 3, "talk"), _a("sidle_soft", "hop", 0.6, 2, "play"), _a("dangle_soft", "pulse", 0.7, 2, "play"), _a("beakgrind_soft", "sit_hold", 1.2, 2, "sit"), _a("alert", "freeze", 1.6, 2, "sit"), _a("loaf", "sit_hold", 2.4, 2, "sit")),
-    "parrot": _PREEN,
+    "parrot": (_a("quote", "talk", 2.0, 4, "talk"), _a("strut_soft", "wiggle", 1.0, 3, "play"), _a("fan_soft", "pulse", 0.9, 3, "play"), _a("crack_soft", "nod", 0.9, 2, "sit"), _a("flash_soft", "hop", 0.8, 2, "play"), _a("pineye_soft", "bob", 0.8, 2, "sit"), _a("alert", "freeze", 1.6, 2, "sit"), _a("loaf", "sit_hold", 2.4, 2, "sit")),
     "toucan": _PREEN,
     "phoenix": _PREEN,
     "penguin": (_a("huddle", "sit_hold", 2.0, 4, "sit"), _a("toboggan_soft", "pulse", 1.0, 3, "play"), _a("waddle_soft", "wiggle", 1.0, 3, "play"), _a("porpoise_soft", "pulse", 0.9, 2, "play"), _a("trumpet_soft", "talk", 0.9, 3, "talk"), _a("rockhop_soft", "hop", 0.8, 2, "play"), _a("alert", "freeze", 1.6, 2, "sit"), _a("loaf", "sit_hold", 2.4, 2, "sit")),

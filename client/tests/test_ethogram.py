@@ -156,6 +156,9 @@ def test_only_scratching_mammals_scratch():
     assert "huddle" in [a["name"] for a in acts_for("penguin")]
     assert "rockhop_soft" in [a["name"] for a in acts_for("penguin")]
     assert "loaf" in [a["name"] for a in acts_for("penguin")]
+    assert "quote" in [a["name"] for a in acts_for("parrot")]
+    assert "pineye_soft" in [a["name"] for a in acts_for("parrot")]
+    assert "loaf" in [a["name"] for a in acts_for("parrot")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
