@@ -71,6 +71,8 @@ export type CardPrefs = {
   pets: Record<string, CardGuest>;
   weatherAreas: Array<{ id: string; name: string; query: string; lat: number; lon: number }>;
   currentAreaId: string | null;
+  weatherTab: string;
+  favoriteAreaIds: string[];
   newsPrefs: Array<{ id: string; name: string; query: string }>;
   currentNewsId: string;
   newsTab: string;
@@ -116,6 +118,8 @@ export function blankCard(): CardPrefs {
     pets: {},
     weatherAreas: [],
     currentAreaId: null,
+    weatherTab: "current",
+    favoriteAreaIds: [],
     newsPrefs: [{ id: "world", name: "World", query: "" }],
     currentNewsId: "world",
     newsTab: "popular",
@@ -233,6 +237,8 @@ export function parseCard(raw: unknown): CardPrefs {
   const areas = parseAreas(o);
   next.weatherAreas = areas.areas;
   next.currentAreaId = areas.currentId;
+  next.weatherTab = areas.tab || "current";
+  next.favoriteAreaIds = areas.favoriteIds || [];
   const news = parseNewsPrefs(o);
   next.newsPrefs = news.topics;
   next.currentNewsId = news.currentId;

@@ -3293,6 +3293,11 @@ if (hudRadioLocal) {
   });
 }
 if (weatherPlate) {
+  function applyWeatherHouse(house) {
+    Object.assign(card, window.PetWeatherAreas.toCardPatch(house));
+    persistCard();
+    fetchWeather();
+  }
   weatherPlate.addEventListener("click", (e) => {
     const toggle = e.target && e.target.closest && e.target.closest("#weather-toggle");
     if (toggle) {
@@ -3309,24 +3314,30 @@ if (weatherPlate) {
       }
       return;
     }
-    const pick = e.target && e.target.closest && e.target.closest("[data-area-pick]");
-    if (pick && window.PetWeatherAreas) {
+    if (!window.PetWeatherAreas) return;
+    const tabBtn = e.target && e.target.closest && e.target.closest("[data-weather-tab]");
+    if (tabBtn) {
       e.stopPropagation();
-      const house = window.PetWeatherAreas.pickArea(card, pick.getAttribute("data-area-pick"));
-      card.weatherAreas = house.areas;
-      card.currentAreaId = house.currentId;
-      persistCard();
-      fetchWeather();
+      applyWeatherHouse(window.PetWeatherAreas.pickTab(card, tabBtn.getAttribute("data-weather-tab")));
+      return;
+    }
+    const pick = e.target && e.target.closest && e.target.closest("[data-area-pick]");
+    if (pick) {
+      e.stopPropagation();
+      applyWeatherHouse(window.PetWeatherAreas.pickArea(card, pick.getAttribute("data-area-pick")));
+      return;
+    }
+    const fav = e.target && e.target.closest && e.target.closest("[data-area-fav]");
+    if (fav) {
+      e.stopPropagation();
+      applyWeatherHouse(window.PetWeatherAreas.toggleFavorite(card, fav.getAttribute("data-area-fav")));
       return;
     }
     const del = e.target && e.target.closest && e.target.closest("[data-area-del]");
-    if (del && window.PetWeatherAreas) {
+    if (del) {
       e.stopPropagation();
-      const house = window.PetWeatherAreas.removeArea(card, del.getAttribute("data-area-del"));
-      card.weatherAreas = house.areas;
-      card.currentAreaId = house.currentId;
-      persistCard();
-      fetchWeather();
+      applyWeatherHouse(window.PetWeatherAreas.removeArea(card, del.getAttribute("data-area-del")));
+      return;
     }
   });
   weatherPlate.addEventListener("submit", (e) => {
@@ -3359,12 +3370,8 @@ if (weatherPlate) {
           btn.textContent = `Add ${hit.name}`;
           btn.addEventListener("click", (ev) => {
             ev.stopPropagation();
-            const house = A.addArea(card, hit);
-            card.weatherAreas = house.areas;
-            card.currentAreaId = house.currentId;
-            persistCard();
+            applyWeatherHouse(A.addArea(card, hit));
             hits.replaceChildren();
-            fetchWeather();
           });
           li.appendChild(btn);
           hits.appendChild(li);
@@ -3382,12 +3389,8 @@ if (weatherPlate) {
       const truth = document.getElementById("weather-here-truth");
       if (!A) return;
       function keepHere(area) {
-        const house = A.addArea(card, area);
-        card.weatherAreas = house.areas;
-        card.currentAreaId = house.currentId;
-        persistCard();
+        applyWeatherHouse(A.addArea(card, area));
         if (truth) truth.textContent = "";
-        fetchWeather();
       }
       function failHere(line) {
         if (truth) truth.textContent = line;
