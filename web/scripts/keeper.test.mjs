@@ -28,7 +28,7 @@ test("Java is 8081, the desk is 8080, and /pet/feed is not a door", () => {
   assert.equal(K.DESK_PORT, 8080);
   assert.equal(K.HUD_WIDTH, 280);
   assert.equal(K.HUD_WIDTH_COLLAPSED, 168);
-  assert.equal(K.VOICE_TRUTH, "Rui, Soot, Wedge, Heart, Hook, Dee, and Brick talk with house cry first; system speech is the backup.");
+  assert.equal(K.VOICE_TRUTH, "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, and Drake talk with house cry first; system speech is the backup.");
   assert.equal(K.HEARTBEAT_URL, "http://127.0.0.1:8081/api/public/heartbeat");
   assert.equal(K.ADVERTISED_CARE.feed, "/pet/feed");
   assert.equal(K.careTruth(), "Care is local. /pet/feed is not a door.");
