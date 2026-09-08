@@ -1,6 +1,6 @@
-/** Armor ground tricks while idle. House neighborly Isopoda / Armadillidium vulgare Common Pillbug terrestrial crustacean life — conglobate / littergraze / antenntap / dampseek / vulgare personality (conglobate volvation ball roll without naming ball or roll or spiral or coil or curl or armor or armorup or hide or tuck or sleep or sit, littergraze leaf litter detritus graze without naming litter or graze or leaf or feed or eat or chew or forage or nibble or mulch or compost or dirt or soil, antenntap antennal sense tap without naming antenna or tap or flick or sense or feeler or sweep or probe or touch or sniff or whisker or wave, dampseek humidity moisture hunt seek without naming damp or seek or humidity or damp or wet or water or drink or sniff or hunt or search or probe, long vulgare Armadillidium vulgare Isopoda common pillbug woodlouse hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or denscoil or coilcurl or detritusgrub or slowmarch or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass; window-play STRIKE and Call Armor leave pillbug alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link own their tricks; guest slug Armor / key pillbug — accept "pillbug" and "armor" (roster slug armor; campaign Armor); do NOT confuse with Link the American Giant Millipede (key millipede / slug link) or denslink thank-you; do NOT name a trick pillbug or armor or millipede or link or house_centipede or haste or american_eel or silver. Thank-yous densarmor / inkarmor / densball. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop pillbug-tricks.js. Window-play STRIKE unchanged. True Common Pillbug Armadillidium vulgare Isopoda desk life — terrestrial crustacean that conglobates into a tight ball, grazes leaf litter, taps with antennae, and seeks moisture; not Narceus millipede/Diplopoda clones (coilcurl/detritusgrub/slowmarch/moistseek), not Scutigera house centipede/Chilopoda clones, not Anguilla american eel — true isopod volvation ball distinct from millipede spiral coil. Next house-order guest after Armor still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Armor ground tricks while idle. House neighborly Isopoda / Armadillidium vulgare Common Pillbug terrestrial crustacean life — conglobate / volvation / antennafeel / detritusnip / vulgare personality (conglobate roll-into-ball conglobation without naming ball or roll or spiral or coil or curl or armor or armorup or hide or tuck or sleep or sit, volvation volvation tuck armor-ball settle without naming ball or roll or spiral or coil or curl or armor or hide or tuck or sleep or sit, antennafeel antenna sense feel without naming antenna or tap or flick or sense or feeler or sweep or probe or touch or sniff or whisker or wave, detritusnip detritus nip graze without naming litter or graze or leaf or feed or eat or chew or forage or nibble or mulch or compost or dirt or soil, long vulgare Armadillidium vulgare Isopoda common pillbug woodlouse hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass; window-play STRIKE and Call Armor leave pillbug alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link own their tricks; guest slug Armor / key pillbug — accept "pillbug" and "armor" (roster slug armor; campaign Armor); do NOT confuse with Link the American Giant Millipede (key millipede / slug link) or denslink thank-you; do NOT name a trick pillbug or armor or millipede or link or house_centipede or haste or american_eel or silver. Thank-yous densarmor / inkarmor / densball. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop pillbug-tricks.js. Window-play STRIKE unchanged. True Common Pillbug Armadillidium vulgare Isopoda desk life — terrestrial crustacean that conglobates into a tight ball, grazes leaf litter, taps with antennae, and settles in volvation; not Narceus millipede/Diplopoda clones (coilcurl/detritusgrub/slowmarch/moistseek), not Scutigera house centipede/Chilopoda clones, not Anguilla american eel — true isopod volvation ball distinct from millipede spiral coil. Next house-order guest after Armor still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
 export const TRICK_KEY = "pillbug";
-export const TRICKS = ["littergraze", "antenntap", "conglobate", "dampseek", "vulgare"] as const;
+export const TRICKS = ["conglobate", "volvation", "antennafeel", "detritusnip", "vulgare"] as const;
 export const HAPPY = ["densarmor", "inkarmor", "densball"] as const;
 export type PillbugTrickKind = (typeof TRICKS)[number];
 export type PillbugHappyKind = (typeof HAPPY)[number];
@@ -47,7 +47,7 @@ export type PillbugHappy = {
 export const HAPPY_DUR = { densarmor: 2.48, inkarmor: 2.72, densball: 2.52 } as const;
 export const VULGARE_HOLD = 22.80;
 export const RELEASE_S = 1.95;
-export const DUR = { vulgare: VULGARE_HOLD + RELEASE_S, littergraze: 4.25, antenntap: 3.95, conglobate: 4.45, dampseek: 4.55 } as const;
+export const DUR = { vulgare: VULGARE_HOLD + RELEASE_S, conglobate: 4.15, detritusnip: 4.55, antennafeel: 4.85, volvation: 4.35 } as const;
 
 export function canStart(state: TrickFlags | undefined) {
     if (!state) return false;
@@ -75,39 +75,39 @@ export function shouldAbort(state: TrickFlags | undefined) {
   }
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: PillbugTrickKind | string) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "vulgare") return 158 + roll * 14;
-  if (kind === "littergraze") return 26.8 + roll * 4.6;
-  if (kind === "antenntap") return 28.4 + roll * 4.2;
-  if (kind === "conglobate") return 24.6 + roll * 3.8;
-  if (kind === "dampseek") return 27.2 + roll * 4.0;
-  return justFinished ? 20.5 + roll * 3.2 : 15.4 + roll * 2.6;
+      if (kind === "vulgare") return 148 + roll * 13;
+  if (kind === "conglobate") return 25.4 + roll * 4.2;
+  if (kind === "detritusnip") return 26.6 + roll * 3.8;
+  if (kind === "antennafeel") return 22.8 + roll * 3.6;
+  if (kind === "volvation") return 27.8 + roll * 4.4;
+  return justFinished ? 19.2 + roll * 2.8 : 14.2 + roll * 2.4;
   }
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: PillbugTrickKind | string | null) {
     if (musicOn) return "vulgare";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "vulgare") {
-      if (roll < 0.26) return "littergraze";
-      if (roll < 0.5) return "antenntap";
-      if (roll < 0.74) return "conglobate";
-      return "dampseek";
+      if (roll < 0.26) return "conglobate";
+      if (roll < 0.5) return "detritusnip";
+      if (roll < 0.74) return "antennafeel";
+      return "volvation";
     }
-    if (lastKind === "littergraze") {
+    if (lastKind === "conglobate") {
       if (roll < 0.26) return "vulgare";
-      if (roll < 0.5) return "antenntap";
-      if (roll < 0.74) return "conglobate";
-      return "dampseek";
+      if (roll < 0.5) return "detritusnip";
+      if (roll < 0.74) return "antennafeel";
+      return "volvation";
     }
-    if (lastKind === "antenntap") {
+    if (lastKind === "detritusnip") {
       if (roll < 0.22) return "vulgare";
-      if (roll < 0.44) return "littergraze";
-      if (roll < 0.68) return "conglobate";
-      return "dampseek";
+      if (roll < 0.44) return "conglobate";
+      if (roll < 0.68) return "antennafeel";
+      return "volvation";
     }
     if (roll < 0.2) return "vulgare";
-    if (roll < 0.4) return "littergraze";
-    if (roll < 0.6) return "antenntap";
-    if (roll < 0.8) return "conglobate";
-    return "dampseek";
+    if (roll < 0.4) return "conglobate";
+    if (roll < 0.6) return "detritusnip";
+    if (roll < 0.8) return "antennafeel";
+    return "volvation";
   }
 export function happyCanStart(state: TrickFlags | undefined) {
     if (!state) return false;
@@ -168,34 +168,34 @@ export function beginHappy(kind: PillbugHappyKind | string, x: number, facing: 1
       fromX: x,
     };
   }
-export function densarmorPose(t) {
+export function densarmorPose(t: number) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densarmor));
     if (u < 0.14) {
       const s = u / 0.14;
-      return { lift: s * 0.0055, rot: s * 1.15, dx: 0, anim: "sit" };
+      return { lift: s * 0.0055, rot: s * 1.15, dx: 0, anim: "sit" as TrickAnim };
     }
     if (u < 0.88) {
       const hold = Math.sin(t * 0.88) + 0.035 * Math.sin(t * 1.76);
-      return { lift: 0.0055 + Math.abs(hold) * 0.0018, rot: 1.15 + hold * 0.18, dx: hold * 0.00010, anim: "sit" };
+      return { lift: 0.0055 + Math.abs(hold) * 0.0018, rot: 1.15 + hold * 0.18, dx: hold * 0.00010, anim: "sit" as TrickAnim };
     }
     const s = (u - 0.88) / 0.12;
-    return { lift: 0.0007 * (1 - s), rot: 0.028 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 0.0007 * (1 - s), rot: 0.028 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
   }
-export function inkarmorPose(t) {
+export function inkarmorPose(t: number) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkarmor));
     if (u < 0.10) {
       const s = u / 0.10;
-      return { lift: s * 0.024, rot: s * 1.35, dx: s * 0.00065, anim: "play" };
+      return { lift: s * 0.024, rot: s * 1.35, dx: s * 0.00065, anim: "play" as TrickAnim };
     }
     if (u < 0.86) {
       const roll = Math.sin(t * 1.45) + 0.060 * Math.sin(t * 2.90);
-      return { lift: 0.024 + Math.abs(roll) * 0.0065, rot: 1.35 + roll * 0.85, dx: roll * 0.00075, anim: "play" };
+      return { lift: 0.024 + Math.abs(roll) * 0.0065, rot: 1.35 + roll * 0.85, dx: roll * 0.00075, anim: "play" as TrickAnim };
     }
     const s = (u - 0.86) / 0.14;
-    return { lift: 0.0014 * (1 - s), rot: 0.055 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 0.0014 * (1 - s), rot: 0.055 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
   }
-export function densballPose(t) {
-    return { lift: 0.0011 + Math.abs(Math.sin(t * 0.038)) * 0.0022, rot: Math.sin(t * 0.038) * 0.95, dx: Math.sin(t * 0.028) * 0.00012, anim: "sit" };
+export function densballPose(t: number) {
+    return { lift: 0.0011 + Math.abs(Math.sin(t * 0.038)) * 0.0022, rot: Math.sin(t * 0.038) * 0.95, dx: Math.sin(t * 0.028) * 0.00012, anim: "sit" as TrickAnim };
   }
 export function stepHappy(happy: PillbugHappy | null | undefined, dt: number, flags?: TrickFlags) {
     if (!happy || happy.phase === "done") return happy;
@@ -230,13 +230,13 @@ export function beginTrick(kind: PillbugTrickKind, x: number, facing: 1 | -1): P
     const anim: TrickAnim =
       kind === "vulgare"
         ? "sit"
-        : kind === "littergraze"
+        : kind === "conglobate"
           ? "sit"
-          : kind === "antenntap"
+          : kind === "detritusnip"
             ? "play"
-            : kind === "conglobate"
+            : kind === "antennafeel"
               ? "talk"
-              : kind === "dampseek"
+              : kind === "volvation"
                 ? "play"
                 : "sit";
     return {
@@ -255,90 +255,90 @@ function smoothstep(t: number) {
     const x = Math.max(0, Math.min(1, t));
     return x * x * (3 - 2 * x);
   }
-export function vulgarePose(t) {
+export function vulgarePose(t: number) {
     const breath = Math.sin(t * 0.0074) + 0.0032 * Math.sin(t * 0.019);
     const sway = Math.abs(Math.sin(t * 0.0036));
     return { lift: 0.00048 + sway * 0.00095, rot: -0.014 + breath * 0.042 };
   }
-export function releasePose(t) {
+export function releasePose(t: number) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
     return { lift: 0.00048 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.012 * (1 - u) };
   }
-export function littergrazePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.littergraze));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX + face * s * 0.00038, lift: s * 0.0038, rot: s * 0.32 * face, anim: "play" };
-    }
-    if (u < 0.88) {
-      const graze = Math.sin((u - 0.11) / 0.77 * Math.PI * 3.1);
-      const nibble = Math.sin(t * 1.22) + 0.06 * Math.sin(t * 2.44);
-      return { x: fromX + face * (0.00038 + (u - 0.11) / 0.77 * 0.0036 + graze * 0.00085 + nibble * 0.00010), lift: 0.0028 + Math.abs(graze) * 0.0026 + Math.abs(nibble) * 0.0011, rot: (0.32 + graze * 0.42 + nibble * 0.16) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.00398 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.03 * (1 - s) * face, anim: "idle" };
-  }
-export function antenntapPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.antenntap));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00042, lift: s * 0.0048, rot: s * -0.22 * face, anim: "talk" };
-    }
-    if (u < 0.90) {
-      const tap = Math.sin((u - 0.10) / 0.80 * Math.PI * 6.4);
-      const probe = Math.sin(t * 1.72) + 0.07 * Math.sin(t * 3.44);
-      return { x: fromX + face * (0.00042 + (u - 0.10) / 0.80 * 0.0042 + tap * 0.00055 + probe * 0.00009), lift: 0.0038 + Math.abs(tap) * 0.0022 + Math.abs(probe) * 0.0012, rot: (-0.22 + tap * 0.38 + probe * 0.14) * face, anim: "talk" };
-    }
-    const s = smoothstep((u - 0.90) / 0.10);
-    return { x: fromX + face * 0.00462 * (1 - s), lift: 0.00075 * (1 - s), rot: -0.028 * (1 - s) * face, anim: "idle" };
-  }
-export function conglobatePose(t, fromX, facing) {
+export function conglobatePose(t: number, fromX: number, facing: 1 | -1) {
     const u = Math.max(0, Math.min(1, t / DUR.conglobate));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * -0.00022, lift: s * 0.0042, rot: s * 0.55 * face, anim: "sit" };
+      return { x: fromX + face * s * -0.00022, lift: s * 0.0042, rot: s * 0.55 * face, anim: "sit" as TrickAnim };
     }
     if (u < 0.32) {
       const ball = smoothstep((u - 0.12) / 0.20);
-      return { x: fromX + face * (-0.00022 + ball * 0.00018), lift: 0.0042 + ball * 0.0088, rot: (0.55 + ball * 2.35) * face, anim: "sit" };
+      return { x: fromX + face * (-0.00022 + ball * 0.00018), lift: 0.0042 + ball * 0.0088, rot: (0.55 + ball * 2.35) * face, anim: "sit" as TrickAnim };
     }
     if (u < 0.78) {
       const roll = Math.sin((u - 0.32) / 0.46 * Math.PI * 2.2);
       const hush = Math.sin(t * 0.78) + 0.04 * Math.sin(t * 1.56);
-      return { x: fromX + face * (0.00008 + roll * 0.0028 + hush * 0.00006), lift: 0.0125 + Math.abs(roll) * 0.0016 + Math.abs(hush) * 0.0009, rot: (2.90 + roll * 0.55 + hush * 0.12) * face, anim: "sit" };
+      return { x: fromX + face * (0.00008 + roll * 0.0028 + hush * 0.00006), lift: 0.0125 + Math.abs(roll) * 0.0016 + Math.abs(hush) * 0.0009, rot: (2.90 + roll * 0.55 + hush * 0.12) * face, anim: "sit" as TrickAnim };
     }
     if (u < 0.90) {
       const open = smoothstep((u - 0.78) / 0.12);
-      return { x: fromX + face * 0.00008 * (1 - open * 0.4), lift: 0.0125 * (1 - open) + open * 0.0035, rot: (2.90 * (1 - open) + open * 0.35) * face, anim: "sit" };
+      return { x: fromX + face * 0.00008 * (1 - open * 0.4), lift: 0.0125 * (1 - open) + open * 0.0035, rot: (2.90 * (1 - open) + open * 0.35) * face, anim: "sit" as TrickAnim };
     }
     const s = smoothstep((u - 0.90) / 0.10);
-    return { x: fromX + face * 0.00005 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" };
+    return { x: fromX + face * 0.00005 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" as TrickAnim };
   }
-export function dampseekPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.dampseek));
+export function detritusnipPose(t: number, fromX: number, facing: 1 | -1) {
+    const u = Math.max(0, Math.min(1, t / DUR.detritusnip));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.11) {
+      const s = smoothstep(u / 0.11);
+      return { x: fromX + face * s * 0.00038, lift: s * 0.0038, rot: s * 0.32 * face, anim: "play" as TrickAnim };
+    }
+    if (u < 0.88) {
+      const husk = Math.sin((u - 0.11) / 0.77 * Math.PI * 3.1);
+      const nibble = Math.sin(t * 1.22) + 0.06 * Math.sin(t * 2.44);
+      return { x: fromX + face * (0.00038 + (u - 0.11) / 0.77 * 0.0036 + husk * 0.00085 + nibble * 0.00010), lift: 0.0028 + Math.abs(husk) * 0.0026 + Math.abs(nibble) * 0.0011, rot: (0.32 + husk * 0.42 + nibble * 0.16) * face, anim: "play" as TrickAnim };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return { x: fromX + face * 0.00398 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.03 * (1 - s) * face, anim: "idle" as TrickAnim };
+  }
+export function antennafeelPose(t: number, fromX: number, facing: 1 | -1) {
+    const u = Math.max(0, Math.min(1, t / DUR.antennafeel));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00032, lift: s * 0.0062, rot: s * -0.55 * face, anim: "play" };
+      return { x: fromX + face * s * 0.00042, lift: s * 0.0048, rot: s * -0.22 * face, anim: "talk" as TrickAnim };
     }
-    if (u < 0.38) {
-      const rise = smoothstep((u - 0.10) / 0.28);
-      return { x: fromX + face * (0.00032 + rise * 0.00095), lift: 0.0062 + rise * 0.0028, rot: (-0.55 + rise * 0.22) * face, anim: "play" };
+    if (u < 0.90) {
+      const wave = Math.sin((u - 0.10) / 0.80 * Math.PI * 6.4);
+      const probe = Math.sin(t * 1.72) + 0.07 * Math.sin(t * 3.44);
+      return { x: fromX + face * (0.00042 + (u - 0.10) / 0.80 * 0.0042 + wave * 0.00055 + probe * 0.00009), lift: 0.0038 + Math.abs(wave) * 0.0022 + Math.abs(probe) * 0.0012, rot: (-0.22 + wave * 0.38 + probe * 0.14) * face, anim: "talk" as TrickAnim };
     }
-    if (u < 0.88) {
-      const seek = Math.sin((u - 0.38) / 0.50 * Math.PI * 2.4);
-      const humid = Math.sin(t * 1.05) + 0.05 * Math.sin(t * 2.10);
-      return { x: fromX + face * (0.00127 + seek * 0.0015 + humid * 0.00012), lift: 0.0088 + Math.abs(seek) * 0.0035 + Math.abs(humid) * 0.0015, rot: (-0.33 + seek * 0.72 + humid * 0.22) * face, anim: "play" };
+    const s = smoothstep((u - 0.90) / 0.10);
+    return { x: fromX + face * 0.00462 * (1 - s), lift: 0.00075 * (1 - s), rot: -0.028 * (1 - s) * face, anim: "idle" as TrickAnim };
+  }
+export function volvationPose(t: number, fromX: number, facing: 1 | -1) {
+    const u = Math.max(0, Math.min(1, t / DUR.volvation));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.10) {
+      const s = smoothstep(u / 0.10);
+      return { x: fromX + face * s * 0.00028, lift: s * 0.0022, rot: s * 0.18 * face, anim: "play" as TrickAnim };
     }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.00127 * (1 - s), lift: 0.0008 * (1 - s), rot: -0.035 * (1 - s) * face, anim: "idle" };
+    if (u < 0.36) {
+      const tuck = smoothstep((u - 0.10) / 0.26);
+      return { x: fromX + face * (0.00028 + tuck * 0.00055), lift: 0.0022 + tuck * 0.0055, rot: (0.18 + tuck * -0.72) * face, anim: "play" as TrickAnim };
+    }
+    if (u < 0.86) {
+      const cling = Math.sin((u - 0.36) / 0.50 * Math.PI * 1.8);
+      const damp = Math.sin(t * 0.92) + 0.045 * Math.sin(t * 1.84);
+      return { x: fromX + face * (0.00083 + cling * 0.00095 + damp * 0.00008), lift: 0.0075 + Math.abs(cling) * 0.0024 + Math.abs(damp) * 0.0011, rot: (-0.54 + cling * 0.38 + damp * 0.14) * face, anim: "sit" as TrickAnim };
+    }
+    const s = smoothstep((u - 0.86) / 0.14);
+    return { x: fromX + face * 0.00083 * (1 - s), lift: 0.0008 * (1 - s), rot: -0.03 * (1 - s) * face, anim: "idle" as TrickAnim };
   }
 export function stepTrick(trick: PillbugTrick | null | undefined, dt: number, flags?: TrickFlags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "littergraze" && trick.kind !== "antenntap" && trick.kind !== "conglobate" && trick.kind !== "dampseek") {
+    if (shouldAbort(flags) && trick.kind !== "conglobate" && trick.kind !== "detritusnip" && trick.kind !== "antennafeel" && trick.kind !== "volvation") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -363,26 +363,26 @@ export function stepTrick(trick: PillbugTrick | null | undefined, dt: number, fl
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "littergraze") {
-      const pose = littergrazePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "antenntap") {
-      const pose = antenntapPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "conglobate") {
+    if (next.kind === "conglobate") {
       const pose = conglobatePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
+    } else if (next.kind === "detritusnip") {
+      const pose = detritusnipPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "antennafeel") {
+      const pose = antennafeelPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
     } else {
-      const pose = dampseekPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = volvationPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
