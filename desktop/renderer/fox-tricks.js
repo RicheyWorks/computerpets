@@ -1,12 +1,20 @@
-/** Rue ground tricks while idle. House fox — den / mouser / stalk / trot / prance personality. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web `fox-tricks.ts`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, or dragon move clone. Window-play SCENT is unchanged — this module never names a trick `scent`. Dog already owns sniff/bow/zoom/wag/wait — Rue is Vulpes, not a corgi. Cat already owns pounce — mouser is the vertical hunting leap. Rabbit already owns dig — no dig here. Avoids soak/tuck/crane/plod/paddle/potato/loaf/nest/bow/dig/flop/zoom/popcorn/hay/rumble/zig/scurry/drift/gulp/flare/glint/dart/circle/loop/preen/bobble/mimic/sidle/dangle/perch name collisions with prior guests. */
+/** Rue ground tricks while idle — ultra-polish pass. House fox — den / mouser / stalk / trot / prance / cock / stash personality (soft Vulpes desk life). Den curl-hold without naming loaf or nest or potato or soak or wait; mouser hunting leap without naming pounce (cat) or zoom; stalk low creep without naming sniff or sneak-clone of dog; trot desk gait without naming walk-cmd; prance high-step play without naming binky or popcorn; cock ear/head listen without naming tilt (dog thank-you) or listen (robin ethogram) or head_cock (bird); stash soft paw-cover food cache without naming dig (rabbit) or cache (chickadee) or bury. Window-play SCENT unchanged — never names a trick `scent`. Guest slug Rue / key fox — accept "fox" and "rue". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`fox.wav`). Thank-yous yip / chuff / nuzzle. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web `fox-tricks.ts`. True house-fox desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble / Clip / Whee / Ink / Coin already done; Echo/budgie skip (bird-ultra); Peck/penguin skip (bird). Rue continues house-order ultra-polish. Next guest ultra is Wick / ferret. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`. */
 (function (root) {
   const TRICK_KEY = "fox";
-  const TRICKS = ["den", "mouser", "stalk", "trot", "prance"];
+  const TRICKS = ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"];
   const HAPPY = ["yip", "chuff", "nuzzle"];
-  const HAPPY_DUR = { yip: 1.18, chuff: 1.15, nuzzle: 1.28 };
-  const DEN_HOLD = 10;
-  const RELEASE_S = 0.55;
-  const DUR = { den: DEN_HOLD + RELEASE_S, mouser: 1.28, stalk: 1.45, trot: 1.22, prance: 1.12 };
+  const HAPPY_DUR = { yip: 1.72, chuff: 1.66, nuzzle: 1.58 };
+  const DEN_HOLD = 14.4;
+  const RELEASE_S = 1.02;
+  const DUR = {
+    den: DEN_HOLD + RELEASE_S,
+    mouser: 1.85,
+    stalk: 2.12,
+    trot: 1.95,
+    prance: 1.88,
+    cock: 2.05,
+    stash: 2.10,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,38 +44,30 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "den") return 40 + roll * 20;
-    if (kind === "mouser") return 15 + roll * 10;
-    if (kind === "prance") return 12 + roll * 9;
-    return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+    if (kind === "den") return 42 + roll * 28;
+    if (kind === "mouser") return 12 + roll * 9;
+    if (kind === "cock" || kind === "stash") return 11 + roll * 8;
+    if (kind === "prance" || kind === "trot") return 11 + roll * 8;
+    if (kind === "stalk") return 10 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "den";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "den") {
-      if (roll < 0.26) return "mouser";
-      if (roll < 0.48) return "stalk";
-      if (roll < 0.72) return "trot";
-      return "prance";
+    const pool = TRICKS.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : TRICKS.slice();
+    const weights = list.map((k) =>
+      k === "den" ? 0.55 : k === "mouser" || k === "cock" || k === "stash" ? 1.15 : 1
+    );
+    let total = 0;
+    for (let i = 0; i < weights.length; i++) total += weights[i];
+    let r = roll * total;
+    for (let i = 0; i < list.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return list[i];
     }
-    if (lastKind === "mouser") {
-      if (roll < 0.34) return "den";
-      if (roll < 0.54) return "stalk";
-      if (roll < 0.76) return "trot";
-      return "prance";
-    }
-    if (lastKind === "prance") {
-      if (roll < 0.22) return "den";
-      if (roll < 0.42) return "mouser";
-      if (roll < 0.66) return "stalk";
-      return "trot";
-    }
-    if (roll < 0.22) return "den";
-    if (roll < 0.4) return "mouser";
-    if (roll < 0.6) return "stalk";
-    if (roll < 0.8) return "trot";
-    return "prance";
+    return list[list.length - 1] || "den";
   }
 
   function happyCanStart(state) {
@@ -133,39 +133,39 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.yip));
     if (u < 0.16) {
       const s = u / 0.16;
-      return { lift: s * 4, rot: -s * 6, dx: 0, anim: "talk" };
+      return { lift: s * 8.5, rot: -s * 10, dx: 0, anim: "talk" };
     }
     if (u < 0.78) {
       return {
-        lift: 4 + Math.abs(Math.sin(t * 11)) * 2.2,
-        rot: -6 + Math.sin(t * 14) * 5,
+        lift: 8.5 + Math.abs(Math.sin(t * 11)) * 3.8,
+        rot: -10 + Math.sin(t * 14) * 8,
         dx: 0,
         anim: "talk",
       };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 4 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 8.5 * (1 - s), rot: -10 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function chuffPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.chuff));
     if (u < 0.88) {
       return {
-        lift: Math.abs(Math.sin(t * 8)) * 1.8,
-        rot: Math.sin(t * 7) * 6,
-        dx: Math.sin(t * 5) * 1.1,
+        lift: Math.abs(Math.sin(t * 8)) * 4.2,
+        rot: Math.sin(t * 7) * 12,
+        dx: Math.sin(t * 5) * 2.2,
         anim: "talk",
       };
     }
-    return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 2.5, dx: 0, anim: "idle" };
+    return { lift: 0, rot: Math.sin(((u - 0.88) / 0.12) * Math.PI) * 4, dx: 0, anim: "idle" };
   }
 
   function nuzzlePose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.nuzzle));
     return {
-      lift: Math.sin(u * Math.PI) * 2.2,
-      rot: Math.sin(u * Math.PI * 2) * 10,
-      dx: Math.sin(u * Math.PI) * 3.5,
+      lift: Math.sin(u * Math.PI) * 5.5,
+      rot: Math.sin(u * Math.PI * 2) * 16,
+      dx: Math.sin(u * Math.PI) * 5.5,
       anim: "sit",
     };
   }
@@ -203,15 +203,13 @@
 
   function beginTrick(kind, x, facing) {
     const anim =
-      kind === "den" || kind === "stalk"
+      kind === "den" || kind === "stalk" || kind === "cock" || kind === "stash"
         ? "sit"
-        : kind === "mouser"
+        : kind === "mouser" || kind === "prance"
           ? "play"
           : kind === "trot"
             ? "walk"
-            : kind === "prance"
-              ? "play"
-              : "sit";
+            : "sit";
     return {
       kind,
       phase: kind === "den" ? "hold" : "go",
@@ -231,46 +229,51 @@
   }
 
   function denPose(t) {
+    const soft = Math.sin(t * 1.7);
+    const breath = Math.sin(t * 2.8);
     return {
-      lift: 0.8 + Math.sin(t * 1.6) * 0.45,
-      rot: 12 + Math.sin(t * 1.4) * 4 + Math.sin(t * 2.8) * 2,
+      lift: -4.4 + soft * 1.6 + Math.abs(breath) * 1.1,
+      rot: 14 + breath * 6 + Math.sin(t * 5.1) * 4,
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.8 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 12 * (1 - u) };
+    return {
+      lift: -4.4 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI) * 6,
+      rot: 14 * (1 - u),
+    };
   }
 
   function mouserPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.mouser));
     if (u < 0.18) {
       const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * 2, rot: -s * 8, anim: "sit" };
+      return { x: fromX, lift: s * 4, rot: -s * 12, anim: "sit" };
     }
     if (u < 0.42) {
       const s = smoothstep((u - 0.18) / 0.24);
       return {
-        x: fromX + facing * 4 * s,
-        lift: 2 + s * 16,
-        rot: -8 + s * 18,
+        x: fromX + facing * 5 * s,
+        lift: 4 + s * 22,
+        rot: -12 + s * 24,
         anim: "play",
       };
     }
     if (u < 0.72) {
       const s = smoothstep((u - 0.42) / 0.3);
       return {
-        x: fromX + facing * (4 + 6 * s),
-        lift: 18 * (1 - s) + 1.5,
-        rot: 10 - s * 14,
+        x: fromX + facing * (5 + 8 * s),
+        lift: 26 * (1 - s) + 2,
+        rot: 12 - s * 18,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-      x: fromX + facing * 10,
-      lift: 1.5 * (1 - s),
-      rot: -4 * (1 - s),
+      x: fromX + facing * 13,
+      lift: 2 * (1 - s),
+      rot: -5 * (1 - s),
       anim: "sit",
     };
   }
@@ -279,23 +282,23 @@
     const u = Math.max(0, Math.min(1, t / DUR.stalk));
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: -s * 1.2, rot: s * 3 * facing, anim: "sit" };
+      return { x: fromX, lift: -s * 3.5, rot: s * 8 * facing, anim: "sit" };
     }
     if (u < 0.85) {
       const s = (u - 0.12) / 0.73;
       const step = Math.sin(s * Math.PI * 4);
       return {
-        x: fromX + facing * 18 * smoothstep(s),
-        lift: -1.2 + Math.abs(step) * 1.4,
-        rot: facing * (3 + step * 5),
+        x: fromX + facing * 20 * smoothstep(s),
+        lift: -3.5 + Math.abs(step) * 3.2,
+        rot: facing * (8 + step * 9),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.85) / 0.15);
     return {
-      x: fromX + facing * 18,
-      lift: -1.2 * (1 - s),
-      rot: facing * 2 * (1 - s),
+      x: fromX + facing * 20,
+      lift: -3.5 * (1 - s),
+      rot: facing * 4 * (1 - s),
       anim: "sit",
     };
   }
@@ -304,23 +307,23 @@
     const u = Math.max(0, Math.min(1, t / DUR.trot));
     if (u < 0.1) {
       const s = smoothstep(u / 0.1);
-      return { x: fromX, lift: s * 2.2, rot: s * 5 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 5, rot: s * 10 * facing, anim: "sit" };
     }
     if (u < 0.88) {
       const s = (u - 0.1) / 0.78;
       const step = Math.sin(s * Math.PI * 5);
       return {
-        x: fromX + facing * 22 * smoothstep(s),
-        lift: 2.2 + Math.abs(step) * 3.5,
-        rot: facing * (5 + step * 7),
+        x: fromX + facing * 24 * smoothstep(s),
+        lift: 5 + Math.abs(step) * 6.5,
+        rot: facing * (10 + step * 11),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return {
-      x: fromX + facing * 22,
-      lift: 2.2 * (1 - s),
-      rot: facing * 3 * (1 - s),
+      x: fromX + facing * 24,
+      lift: 5 * (1 - s),
+      rot: facing * 5 * (1 - s),
       anim: "sit",
     };
   }
@@ -329,9 +332,9 @@
     const u = Math.max(0, Math.min(1, t / DUR.prance));
     if (u < 0.9) {
       return {
-        x: fromX + facing * Math.sin(t * 9) * 3,
-        lift: Math.abs(Math.sin(t * 12)) * 7,
-        rot: Math.sin(t * 10) * 14,
+        x: fromX + facing * Math.sin(t * 9) * 5,
+        lift: Math.abs(Math.sin(t * 12)) * 14,
+        rot: Math.sin(t * 10) * 20,
         anim: "play",
       };
     }
@@ -339,7 +342,57 @@
     return {
       x: fromX,
       lift: 0,
-      rot: 8 * (1 - s),
+      rot: 10 * (1 - s),
+      anim: "sit",
+    };
+  }
+
+  function cockPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.cock));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 3.5, rot: s * 18 * facing, anim: "sit" };
+    }
+    if (u < 0.86) {
+      const s = (u - 0.14) / 0.72;
+      const tick = Math.sin(s * Math.PI * 3);
+      return {
+        x: fromX + facing * Math.sin(s * Math.PI) * 2.5,
+        lift: 3.5 + Math.abs(tick) * 2.8,
+        rot: facing * (18 + tick * 10),
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.86) / 0.14);
+    return {
+      x: fromX,
+      lift: 3.5 * (1 - s),
+      rot: facing * 18 * (1 - s),
+      anim: "sit",
+    };
+  }
+
+  function stashPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.stash));
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: -s * 5.5, rot: s * 12 * facing, anim: "sit" };
+    }
+    if (u < 0.82) {
+      const s = (u - 0.16) / 0.66;
+      const scrape = Math.sin(s * Math.PI * 5);
+      return {
+        x: fromX + facing * scrape * 3.5,
+        lift: -5.5 + Math.abs(scrape) * 3.2,
+        rot: facing * (12 + scrape * 9),
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.82) / 0.18);
+    return {
+      x: fromX,
+      lift: -5.5 * (1 - s),
+      rot: facing * 8 * (1 - s),
       anim: "sit",
     };
   }
@@ -371,26 +424,39 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "mouser") {
-      const pose = mouserPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = mouserPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "stalk") {
-      const pose = stalkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = stalkPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "trot") {
-      const pose = trotPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = trotPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "prance") {
+      const pose = prancePose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "cock") {
+      const pose = cockPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = prancePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = stashPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -420,6 +486,8 @@
     stalkPose,
     trotPose,
     prancePose,
+    cockPose,
+    stashPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,

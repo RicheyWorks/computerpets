@@ -43,7 +43,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Rue tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
+  assert.deepEqual([...T.TRICKS], ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -73,9 +73,15 @@ test("Rue tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("scurry"), false);
   assert.equal(T.TRICKS.includes("binky"), false);
   assert.equal(T.TRICKS.includes("popcorn"), false);
+  assert.equal(T.TRICKS.includes("cache"), false);
+  assert.equal(T.TRICKS.includes("dig"), false);
+  assert.equal(T.TRICKS.includes("tilt"), false);
+  assert.equal(T.TRICKS.includes("listen"), false);
+  assert.equal(T.TRICKS.includes("cock"), true);
+  assert.equal(T.TRICKS.includes("stash"), true);
 });
 
-test("den/mouser/stalk/trot/prance are house-fox-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie or dragon clones", () => {
+test("den/mouser/stalk/trot/prance/cock/stash are house-fox-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const den = T.beginTrick("den", 80, 1);
   assert.equal(den.anim, "sit");
@@ -106,8 +112,16 @@ test("den/mouser/stalk/trot/prance are house-fox-true, not Rui cat dog rabbit ha
   assert.equal(prance.anim, "play");
   const pranceMid = T.stepTrick(prance, 0.4, ground);
   assert.ok(pranceMid.lift > 1 || Math.abs(pranceMid.rot) > 2);
-  const pranceDone = T.stepTrick(prance, 1.3, ground);
+  const pranceDone = T.stepTrick(prance, T.DUR.prance + 0.05, ground);
   assert.equal(pranceDone.phase, "done");
+  const cock = T.beginTrick("cock", 80, 1);
+  assert.equal(cock.anim, "sit");
+  const cockMid = T.stepTrick(cock, T.DUR.cock * 0.4, ground);
+  assert.ok(Math.abs(cockMid.rot) > 4 || cockMid.lift > 1, `cock mid ${cockMid.lift}/${cockMid.rot}`);
+  const stash = T.beginTrick("stash", 80, 1);
+  assert.equal(stash.anim, "sit");
+  const stashMid = T.stepTrick(stash, T.DUR.stash * 0.4, ground);
+  assert.ok(stashMid.lift < -1 || Math.abs(stashMid.rot) > 4, `stash mid ${stashMid.lift}/${stashMid.rot}`);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("den"), false);
@@ -202,7 +216,7 @@ test("Rue feed-happy is its own sit: yip/chuff/nuzzle, and two feeds are not the
   assert.notEqual(second.kind, thanks.kind);
 });
 
-test("ground registry keeps prior guests gated; Rue selectable; no scent/sniff/pounce-name collision", () => {
+test("ground registry keeps prior guests gated; Rue selectable; no scent/sniff/pounce/cache-name collision", () => {
   assert.equal(Rui.TRICK_KEY, "red_panda");
   assert.equal(Relay.TRICK_KEY, "relay_dragon");
   assert.equal(Fuse.TRICK_KEY, "fuse_dragon");
@@ -373,4 +387,36 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
+});
+
+test("ultra-polish: Rue den/mouser/cock/stash lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("den", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 4, `den mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `den mid lift ${mid.lift}`);
+  const mo = T.beginTrick("mouser", 80, 1);
+  const m2 = T.stepTrick(mo, T.DUR.mouser * 0.35, { cmd: "idle" });
+  assert.ok(m2.lift > 6 || Math.abs(m2.rot) > 4, `mouser mid lift/rot ${m2.lift}/${m2.rot}`);
+  const ck = T.beginTrick("cock", 80, 1);
+  const c2 = T.stepTrick(ck, T.DUR.cock * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(c2.rot) > 6 || c2.lift > 2, `cock mid lift/rot ${c2.lift}/${c2.rot}`);
+  const st = T.beginTrick("stash", 80, 1);
+  const s2 = T.stepTrick(st, T.DUR.stash * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift < -2 || Math.abs(s2.rot) > 6, `stash mid lift/rot ${s2.lift}/${s2.rot}`);
+  assert.ok(Overlay.cockPose && Overlay.stashPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.cock, Overlay.DUR.cock);
+  assert.equal(T.DUR.stash, Overlay.DUR.stash);
+  assert.equal(T.DEN_HOLD, Overlay.DEN_HOLD);
+  assert.equal(T.DEN_HOLD, 14.4);
+  assert.ok(T.nextTrickWait(true, 0, "den") > 40);
+});
+
+test("notes: Rue idle-life ultra done; next house-order ultra guest is Wick / ferret (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"]);
+  assert.equal(T.TRICKS.includes("scent"), false);
+  assert.equal(Overlay.TRICKS.includes("cock"), true);
+  assert.equal(Overlay.TRICKS.includes("stash"), true);
+  assert.equal(T.TRICKS.includes("cache"), false);
+  assert.equal(T.TRICKS.includes("dig"), false);
 });

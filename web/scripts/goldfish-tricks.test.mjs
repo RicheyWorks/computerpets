@@ -388,7 +388,7 @@ test("ultra-polish: Coin drift/gulp/yawn/forage lifts are Rui-visible (not micro
   assert.equal(T.DRIFT_HOLD, Overlay.DRIFT_HOLD);
 });
 
-test("notes: Coin idle-life ultra done; next house-order ultra guest is Rue / fox (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
+test("notes: Coin idle-life ultra done; Rue / fox ultra next-or-done; following house-order ultra guest is Wick / ferret (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.equal(T.TRICKS.includes("circle"), false);
   assert.equal(Overlay.TRICKS.includes("yawn"), true);
