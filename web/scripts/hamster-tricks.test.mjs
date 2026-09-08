@@ -278,7 +278,7 @@ test("ultra-polish: Clip nest/cheek/pocket/scrub/seed lifts are Rui-visible (not
   assert.ok(T.NEST_HOLD >= 14);
 });
 
-test("notes: Clip idle-life ultra done; next house-order ultra guest is Whee / guinea_pig (birds Soot→Ember + Miso + Pip + Thimble already ultra)", () => {
+test("notes: Clip idle-life ultra done; Whee / guinea_pig ultra next-or-done; following house-order ultra guest is Ink / turtle (birds Soot→Ember + Miso + Pip + Thimble already ultra)", () => {
   assert.deepEqual([...T.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.equal(T.TRICK_KEY, "hamster");
   assert.equal(T.wantsThankYou("clip"), true);

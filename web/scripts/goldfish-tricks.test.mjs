@@ -204,7 +204,7 @@ test("ground registry keeps prior guests gated; Coin selectable; no circle/loop/
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
   assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
-  assert.deepEqual([...GuineaPig.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig"]);
+  assert.deepEqual([...GuineaPig.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig", "lookout", "teeth"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle"]);
   assert.equal(T.TRICKS.includes("circle"), false);
   assert.equal(T.TRICKS.includes("loop"), false);
