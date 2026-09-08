@@ -383,6 +383,9 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.ok(names("canada_goose").includes("hiss_soft"));
   assert.ok(names("canada_goose").includes("loaf"));
   assert.ok(names("pileated").includes("drum"));
+  assert.ok(names("pileated").includes("excavate_soft"));
+  assert.ok(names("pileated").includes("kuk_soft"));
+  assert.ok(names("pileated").includes("loaf"));
   assert.ok(names("hummingbird").includes("hover"));
   for (const key of CORNER) {
     const acts = names(key);

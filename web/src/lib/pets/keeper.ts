@@ -35,7 +35,7 @@ export const HUD_WIDTH = 280;
 export const HUD_WIDTH_COLLAPSED = 168;
 
 export const KEEPER_KICKER = "Keeper card";
-export const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, and Vee talk with house cry first; system speech is the backup.";
+export const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, and Drum talk with house cry first; system speech is the backup.";
 export const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
 
 export type HeartbeatStatus = "UP" | "DOWN";

@@ -239,7 +239,7 @@ test("Drum tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "dryocopus"]);
+  assert.deepEqual([...T.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "tongueprobe", "chipcast", "dryocopus"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1135,7 +1135,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "dryocopus"]);
+  assert.deepEqual([...Overlay.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "tongueprobe", "chipcast", "dryocopus"]);
   assert.deepEqual([...Overlay.HAPPY], ["pileatus", "abieticola", "floridanus"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
@@ -1207,7 +1207,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("excavate/hitch/crestflare/kuk/dryocopus are Dryocopus-pileatus-true, not copies of prior guests", () => {
+test("excavate/hitch/crestflare/kuk/tongueprobe/chipcast/dryocopus are Dryocopus-pileatus-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("dryocopus", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1248,6 +1248,8 @@ test("excavate/hitch/crestflare/kuk/dryocopus are Dryocopus-pileatus-true, not c
     assert.equal(mod.TRICKS.includes("crestflare"), false);
     assert.equal(mod.TRICKS.includes("kuk"), false);
     assert.equal(mod.TRICKS.includes("dryocopus"), false);
+    assert.equal(mod.TRICKS.includes("tongueprobe"), false);
+    assert.equal(mod.TRICKS.includes("chipcast"), false);
     assert.equal(mod.HAPPY.includes("pileatus"), false);
     assert.equal(mod.HAPPY.includes("abieticola"), false);
     assert.equal(mod.HAPPY.includes("floridanus"), false);
@@ -1582,7 +1584,7 @@ test("ground registry keeps prior guests gated; Drum selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "dryocopus"]);
+  assert.deepEqual([...T.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "tongueprobe", "chipcast", "dryocopus"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2100,7 +2102,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "dryocopus"]);
+  assert.deepEqual([...Overlay.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "tongueprobe", "chipcast", "dryocopus"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2160,22 +2162,30 @@ globalThis.PetMorelTricks = OverlayMorel;
 
 test("notes: Drum idle-life done; next house-order guest still lacking tricks is Sip / hummingbird", () => {
 
-  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
   assert.equal(Crow.TRICKS.includes("excavate"), false);
   assert.equal(Crow.TRICKS.includes("dryocopus"), false);
-  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.equal(Crow.TRICKS.includes("tongueprobe"), false);
+  assert.equal(Crow.TRICKS.includes("chipcast"), false);
+  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.deepEqual([...Raven.HAPPY], ["principalis", "sinuatus", "cryptoleucus"]);
   assert.equal(Raven.TRICKS.includes("excavate"), false);
   assert.equal(Raven.TRICKS.includes("dryocopus"), false);
-  assert.deepEqual([...BarnOwl.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.equal(Raven.TRICKS.includes("tongueprobe"), false);
+  assert.equal(Raven.TRICKS.includes("chipcast"), false);
+  assert.deepEqual([...BarnOwl.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.deepEqual([...BarnOwl.HAPPY], ["furcata", "javanica", "guttata"]);
   assert.equal(BarnOwl.TRICKS.includes("excavate"), false);
   assert.equal(BarnOwl.TRICKS.includes("dryocopus"), false);
-  assert.deepEqual([...RedTail.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.equal(BarnOwl.TRICKS.includes("tongueprobe"), false);
+  assert.equal(BarnOwl.TRICKS.includes("chipcast"), false);
+  assert.deepEqual([...RedTail.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.deepEqual([...RedTail.HAPPY], ["borealis", "calurus", "harlani"]);
   assert.equal(RedTail.TRICKS.includes("excavate"), false);
   assert.equal(RedTail.TRICKS.includes("dryocopus"), false);
+  assert.equal(RedTail.TRICKS.includes("tongueprobe"), false);
+  assert.equal(RedTail.TRICKS.includes("chipcast"), false);
   assert.equal(OverlayRedTail.TRICK_KEY, "red_tail");
   assert.equal(T.TRICKS.includes("kettle"), false);
   assert.equal(T.TRICKS.includes("buteo"), false);
@@ -2192,7 +2202,7 @@ test("notes: Drum idle-life done; next house-order guest still lacking tricks is
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "pileated");
-  assert.deepEqual([...T.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "dryocopus"]);
+  assert.deepEqual([...T.TRICKS], ["excavate", "hitch", "crestflare", "kuk", "tongueprobe", "chipcast", "dryocopus"]);
   assert.deepEqual([...T.HAPPY], ["pileatus", "abieticola", "floridanus"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
@@ -2360,10 +2370,12 @@ test("notes: Drum idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.tricksFor("dee"), OverlayChickadee);
   assert.equal(OverlayGround.wantsThankYou("chickadee"), true);
   assert.equal(OverlayGround.wantsThankYou("dee"), true);
-  assert.deepEqual([...Chickadee.TRICKS], ["feebee", "gargle", "hangup", "cache", "poecile"]);
+  assert.deepEqual([...Chickadee.TRICKS], ["feebee", "gargle", "hangup", "cache", "capflash", "seedhammer", "poecile"]);
   assert.deepEqual([...Chickadee.HAPPY], ["atricapillus", "practicus", "turneri"]);
   assert.equal(Chickadee.TRICKS.includes("excavate"), false);
   assert.equal(Chickadee.TRICKS.includes("dryocopus"), false);
+  assert.equal(Chickadee.TRICKS.includes("tongueprobe"), false);
+  assert.equal(Chickadee.TRICKS.includes("chipcast"), false);
   assert.equal(OverlayChickadee.TRICK_KEY, "chickadee");
   assert.equal(OverlayGround.wantsThankYou("pileated"), true);
   assert.equal(OverlayGround.wantsThankYou("drum"), true);
@@ -2389,10 +2401,12 @@ test("notes: Drum idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.tricksFor("brick"), OverlayRobin);
   assert.equal(OverlayGround.wantsThankYou("robin"), true);
   assert.equal(OverlayGround.wantsThankYou("brick"), true);
-  assert.deepEqual([...Robin.TRICKS], ["runstop", "listen", "carol", "tug", "turdus"]);
+  assert.deepEqual([...Robin.TRICKS], ["runstop", "listen", "carol", "tug", "rufous", "tailcock", "turdus"]);
   assert.deepEqual([...Robin.HAPPY], ["migratorius", "achrusterus", "caurinus"]);
   assert.equal(Robin.TRICKS.includes("excavate"), false);
   assert.equal(Robin.TRICKS.includes("dryocopus"), false);
+  assert.equal(Robin.TRICKS.includes("tongueprobe"), false);
+  assert.equal(Robin.TRICKS.includes("chipcast"), false);
   assert.equal(OverlayRobin.TRICK_KEY, "robin");
   assert.equal(T.TRICKS.includes("runstop"), false);
   assert.equal(T.TRICKS.includes("turdus"), false);
@@ -2403,10 +2417,12 @@ test("notes: Drum idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.tricksFor("drake"), OverlayMallard);
   assert.equal(OverlayGround.wantsThankYou("mallard"), true);
   assert.equal(OverlayGround.wantsThankYou("drake"), true);
-  assert.deepEqual([...Mallard.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "anas"]);
+  assert.deepEqual([...Mallard.TRICKS], ["dabble", "upend", "headshake", "gruntwhistle", "speculum", "nodswim", "anas"]);
   assert.deepEqual([...Mallard.HAPPY], ["platyrhynchos", "conboschas", "diazi"]);
   assert.equal(Mallard.TRICKS.includes("excavate"), false);
   assert.equal(Mallard.TRICKS.includes("dryocopus"), false);
+  assert.equal(Mallard.TRICKS.includes("tongueprobe"), false);
+  assert.equal(Mallard.TRICKS.includes("chipcast"), false);
   assert.equal(OverlayMallard.TRICK_KEY, "mallard");
   assert.equal(T.TRICKS.includes("dabble"), false);
   assert.equal(T.TRICKS.includes("anas"), false);
@@ -2417,13 +2433,31 @@ test("notes: Drum idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.tricksFor("vee"), OverlayCanadaGoose);
   assert.equal(OverlayGround.wantsThankYou("canada_goose"), true);
   assert.equal(OverlayGround.wantsThankYou("vee"), true);
-  assert.deepEqual([...CanadaGoose.TRICKS], ["graze", "hiss", "nestguard", "honk", "branta"]);
+  assert.deepEqual([...CanadaGoose.TRICKS], ["graze", "hiss", "nestguard", "honk", "triumph", "chinstrap", "branta"]);
   assert.deepEqual([...CanadaGoose.HAPPY], ["canadensis", "maxima", "interior"]);
   assert.equal(CanadaGoose.TRICKS.includes("excavate"), false);
   assert.equal(CanadaGoose.TRICKS.includes("dryocopus"), false);
+  assert.equal(CanadaGoose.TRICKS.includes("tongueprobe"), false);
+  assert.equal(CanadaGoose.TRICKS.includes("chipcast"), false);
   assert.equal(OverlayCanadaGoose.TRICK_KEY, "canada_goose");
   assert.equal(T.TRICKS.includes("graze"), false);
   assert.equal(T.TRICKS.includes("branta"), false);
+  assert.equal(T.TRICKS.includes("triumph"), false);
+  assert.equal(T.TRICKS.includes("chinstrap"), false);
+  assert.equal(T.TRICKS.includes("speculum"), false);
+  assert.equal(T.TRICKS.includes("nodswim"), false);
+  assert.equal(T.TRICKS.includes("patagial"), false);
+  assert.equal(T.TRICKS.includes("tower"), false);
+  assert.equal(T.TRICKS.includes("twist"), false);
+  assert.equal(T.TRICKS.includes("pellet"), false);
+  assert.equal(T.TRICKS.includes("invite"), false);
+  assert.equal(T.TRICKS.includes("toeing"), false);
+  assert.equal(T.TRICKS.includes("scrutinize"), false);
+  assert.equal(T.TRICKS.includes("glean"), false);
+  assert.equal(T.TRICKS.includes("capflash"), false);
+  assert.equal(T.TRICKS.includes("seedhammer"), false);
+  assert.equal(T.TRICKS.includes("rufous"), false);
+  assert.equal(T.TRICKS.includes("tailcock"), false);
   assert.equal(T.TRICKS.includes("dabble"), false);
   assert.equal(T.TRICKS.includes("anas"), false);
   // Recommend next house-order guest still lacking idle tricks (do not implement): Sip / hummingbird.
@@ -2442,3 +2476,23 @@ test("notes: Drum idle-life done; next house-order guest still lacking tricks is
 
 
 
+
+
+test("ultra-polish: Drum excavate/kuk/tongueprobe/chipcast lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("excavate", 80, 1);
+  const mid = T.stepTrick(ex, T.DUR.excavate * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 8, `excavate mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `excavate mid lift ${mid.lift}`);
+  const kk = T.beginTrick("kuk", 80, 1);
+  const k2 = T.stepTrick(kk, T.DUR.kuk * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(k2.rot) > 6, `kuk mid rot ${k2.rot}`);
+  assert.ok(k2.lift > 3, `kuk mid lift ${k2.lift}`);
+  const tp = T.beginTrick("tongueprobe", 80, 1);
+  const t2 = T.stepTrick(tp, T.DUR.tongueprobe * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(t2.rot) > 6, `tongueprobe mid rot ${t2.rot}`);
+  const cc = T.beginTrick("chipcast", 80, 1);
+  const c2 = T.stepTrick(cc, T.DUR.chipcast * 0.4, { cmd: "idle" });
+  assert.ok(c2.lift > 5, `chipcast mid lift ${c2.lift}`);
+  assert.ok(Overlay.tongueprobePose && Overlay.chipcastPose);
+  assert.ok(T.nextTrickWait(true, 0, "dryocopus") < 80);
+});
