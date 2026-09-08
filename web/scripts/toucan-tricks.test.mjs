@@ -501,7 +501,7 @@ test("ultra-polish: Keel roost/berry/juggle/rattle/clatter lifts are Rui-visible
   assert.ok(T.nextTrickWait(true, 0, "roost") > T.nextTrickWait(true, 0, "berry"));
 });
 
-test("notes: Keel idle-life ultra done; next bird ultra is Ember / phoenix (Loom still next for base idle-ground)", () => {
+test("notes: Keel idle-life ultra done; Ember / phoenix ultra follows and closes bird ultra-polish (Loom still next for base idle-ground)", () => {
   assert.deepEqual([...T.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.equal(T.TRICKS.includes("toss"), false);
   assert.equal(T.TRICKS.includes("bill"), false);
