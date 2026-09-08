@@ -21,10 +21,12 @@ test("the card law is the same house on overlay and desk", () => {
   assert.deepEqual(C.COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
   assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
   assert.deepEqual(C.MUTE_BUSES, ["talk", "special", "weather", "treats", "steps", "music"]);
-  assert.equal(C.VOICE_TRUTH, "The door is still the system speech voices.");
+  assert.equal(C.VOICE_TRUTH, "Rui talks with his house cry; system speech is the backup.");
   assert.match(C.QUIT_TRUTH, /desktop\.ps1/);
-  assert.equal(C.voiceStyleOf("hearth").rate, 0.86);
-  assert.equal(C.speakOpts("hearth", 80).volume, 0.8);
+  assert.equal(C.voiceStyleOf("hearth").rate, 0.82);
+  assert.ok(C.speakOpts("hearth", 80).volume < 0.8);
+  assert.ok(C.speakOpts("hearth", 80).volume > 0.7);
+  assert.equal(C.speakOpts("even", 80).volume, 0.8);
   assert.equal(C.busOf("chirp"), "talk");
   assert.equal(C.busOf("hop"), "special");
   assert.equal(C.busOf("munch"), "treats");
@@ -129,17 +131,23 @@ test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", (
 test("voice styles pick a human system voice and skip cartoon robots", () => {
   const voices = [
     { name: "Zarvox" },
+    { name: "Microsoft David Desktop" },
     { name: "Microsoft Aria Online (Natural)" },
+    { name: "Microsoft Zira Compact" },
     { name: "Bad News" },
   ];
   const picked = C.pickSystemVoice(voices, "hearth");
   assert.equal(picked.name, "Microsoft Aria Online (Natural)");
   assert.equal(C.pickSystemVoice([], "hearth"), null);
+  assert.equal(C.prefersHouseCry("red_panda"), true);
+  assert.equal(C.prefersHouseCry("cat"), false);
   const hearth = C.speakOpts("hearth", 50);
-  assert.ok(hearth.rate < 0.94);
-  assert.ok(hearth.pitch < 1.05);
-  assert.equal(hearth.volume, 0.5);
+  assert.ok(hearth.rate < 0.86);
+  assert.ok(hearth.pitch < 0.95);
+  assert.ok(hearth.volume < 0.5);
   assert.match(petSrc, /pickSystemVoice/);
   assert.match(petSrc, /speakOpts/);
+  assert.match(petSrc, /prefersHouseCry/);
+  assert.match(petSrc, /PetDeskHouse\.playVoice/);
   assert.doesNotMatch(petSrc, /u\.rate = trait\?\.rate \?\? 0\.94/);
 });

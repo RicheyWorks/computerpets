@@ -13,9 +13,9 @@
     { id: "frost", name: "Frost" },
   ];
 
-  /** House-voice names. The door is still speechSynthesis. */
+  /** House-voice names. Rui prefers his cry; system speech is backup. */
   const VOICE_STYLES = [
-    { id: "hearth", name: "Hearth", rate: 0.86, pitch: 0.9 },
+    { id: "hearth", name: "Hearth", rate: 0.82, pitch: 0.88 },
     { id: "hush", name: "Hush", rate: 0.8, pitch: 1.02 },
     { id: "even", name: "Even", rate: 0.92, pitch: 1 },
     { id: "low", name: "Low", rate: 0.84, pitch: 0.76 },
@@ -37,10 +37,11 @@
     sleep: "music",
   };
 
-  const HUMAN_VOICE = /aria|jenny|guy|davis|natural|samantha|daniel|karen|moira|zira|david|mark|hazel|susan|google us english|microsoft/i;
-  const ROBOT_VOICE = /compact|bad news|good news|hysterical|zarvox|trinoids|boing|bubbles|albert|whisper|princess|junior|cellos|organ|bells|pipe/i;
+  const HUMAN_VOICE = /aria|jenny|guy|davis|natural|neural|online|samantha|daniel|karen|moira|zira|david|mark|hazel|susan|google us english|microsoft/i;
+  const PREFER_VOICE = /neural|natural|online/i;
+  const ROBOT_VOICE = /compact|bad news|good news|hysterical|zarvox|trinoids|boing|bubbles|albert|whisper|princess|junior|cellos|organ|bells|pipe|robot|novelty|eddy|reed|shelley|grandpa|grandma|superstar|bahh|deranged|wobble|kathy|fred|ralph|bruce|agnes|espeak|festival/i;
 
-  const VOICE_TRUTH = "The door is still the system speech voices.";
+  const VOICE_TRUTH = "Rui talks with his house cry; system speech is the backup.";
   const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
   const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"];
 
@@ -279,21 +280,40 @@
     return VOICE_STYLES.find((s) => s.id === id) || VOICE_STYLES[0];
   }
 
+  function voiceScore(voice) {
+    const name = (voice && voice.name) || "";
+    if (ROBOT_VOICE.test(name)) return -100;
+    let score = 0;
+    if (PREFER_VOICE.test(name)) score += 50;
+    if (HUMAN_VOICE.test(name)) score += 20;
+    const lang = (voice && voice.lang) || "";
+    if (/en[-_]?US|English \(United States\)|Google US English/i.test(name + " " + lang)) score += 10;
+    return score;
+  }
+
   function pickSystemVoice(voices, styleId) {
     const list = Array.isArray(voices) ? voices.filter((v) => v && (v.name || v.voiceURI)) : [];
     if (!list.length) return null;
-    const human = list.filter((v) => HUMAN_VOICE.test(v.name || "") && !ROBOT_VOICE.test(v.name || ""));
-    const pool = human.length ? human : list.filter((v) => !ROBOT_VOICE.test(v.name || ""));
-    const pick = pool[0] || list[0];
-    return pick || null;
+    const ranked = list
+      .map((v) => ({ v, score: voiceScore(v) }))
+      .filter((row) => row.score > -100)
+      .sort((a, b) => b.score - a.score);
+    if (ranked.length) return ranked[0].v;
+    const pool = list.filter((v) => !ROBOT_VOICE.test(v.name || ""));
+    return pool[0] || list[0] || null;
+  }
+
+  function prefersHouseCry(key) {
+    return key === "red_panda";
   }
 
   function speakOpts(styleId, volume) {
     const style = voiceStyleOf(styleId);
+    const soft = style.id === "hearth" ? 0.92 : 1;
     return {
       rate: style.rate,
       pitch: style.pitch,
-      volume: clamp(volume, 0, 100) / 100,
+      volume: (clamp(volume, 0, 100) / 100) * soft,
     };
   }
 
@@ -376,6 +396,7 @@
     formatRemain,
     voiceStyleOf,
     pickSystemVoice,
+    prefersHouseCry,
     speakOpts,
     busOf,
     isMuted,

@@ -1074,7 +1074,12 @@ function say(text, hold = 4200) {
   bubbleText.textContent = text;
   bubble.classList.add("open");
   speechUntil = performance.now() + hold;
-  speakText(text);
+  const C = window.PetCard;
+  if (kind && C && C.prefersHouseCry && C.prefersHouseCry(kind.key) && window.PetDeskHouse) {
+    window.PetDeskHouse.playVoice(kind.key, card);
+  } else {
+    speakText(text);
+  }
   hudUntil = performance.now() + hold;
 }
 
