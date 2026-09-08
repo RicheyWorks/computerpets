@@ -231,7 +231,7 @@ test("Dee tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["feebee", "gargle", "hangup", "cache", "poecile"]);
+  assert.deepEqual([...T.TRICKS], ["feebee", "gargle", "hangup", "cache", "capflash", "seedhammer", "poecile"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1127,7 +1127,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["feebee", "gargle", "hangup", "cache", "poecile"]);
+  assert.deepEqual([...Overlay.TRICKS], ["feebee", "gargle", "hangup", "cache", "capflash", "seedhammer", "poecile"]);
   assert.deepEqual([...Overlay.HAPPY], ["atricapillus", "practicus", "turneri"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
@@ -1199,7 +1199,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("feebee/gargle/hangup/cache/poecile are Poecile-atricapillus-true, not copies of prior guests", () => {
+test("feebee/gargle/hangup/cache/capflash/seedhammer/poecile are Poecile-atricapillus-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("poecile", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1240,6 +1240,8 @@ test("feebee/gargle/hangup/cache/poecile are Poecile-atricapillus-true, not copi
     assert.equal(mod.TRICKS.includes("hangup"), false);
     assert.equal(mod.TRICKS.includes("cache"), false);
     assert.equal(mod.TRICKS.includes("poecile"), false);
+    assert.equal(mod.TRICKS.includes("capflash"), false);
+    assert.equal(mod.TRICKS.includes("seedhammer"), false);
     assert.equal(mod.HAPPY.includes("atricapillus"), false);
     assert.equal(mod.HAPPY.includes("practicus"), false);
     assert.equal(mod.HAPPY.includes("turneri"), false);
@@ -1574,7 +1576,7 @@ test("ground registry keeps prior guests gated; Dee selectable; prior guests sti
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["feebee", "gargle", "hangup", "cache", "poecile"]);
+  assert.deepEqual([...T.TRICKS], ["feebee", "gargle", "hangup", "cache", "capflash", "seedhammer", "poecile"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2088,7 +2090,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["feebee", "gargle", "hangup", "cache", "poecile"]);
+  assert.deepEqual([...Overlay.TRICKS], ["feebee", "gargle", "hangup", "cache", "capflash", "seedhammer", "poecile"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2148,25 +2150,41 @@ globalThis.PetMorelTricks = OverlayMorel;
 
 test("notes: Dee idle-life done; next house-order guest still lacking tricks is Brick / robin", () => {
 
-  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
   assert.equal(Crow.TRICKS.includes("feebee"), false);
   assert.equal(Crow.TRICKS.includes("poecile"), false);
-  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.equal(Crow.TRICKS.includes("capflash"), false);
+  assert.equal(Crow.TRICKS.includes("seedhammer"), false);
+  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.deepEqual([...Raven.HAPPY], ["principalis", "sinuatus", "cryptoleucus"]);
   assert.equal(Raven.TRICKS.includes("feebee"), false);
   assert.equal(Raven.TRICKS.includes("poecile"), false);
-  assert.deepEqual([...BarnOwl.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.equal(Raven.TRICKS.includes("capflash"), false);
+  assert.equal(Raven.TRICKS.includes("seedhammer"), false);
+  assert.deepEqual([...BarnOwl.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.deepEqual([...BarnOwl.HAPPY], ["furcata", "javanica", "guttata"]);
   assert.equal(BarnOwl.TRICKS.includes("feebee"), false);
   assert.equal(BarnOwl.TRICKS.includes("poecile"), false);
-  assert.deepEqual([...RedTail.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.equal(BarnOwl.TRICKS.includes("capflash"), false);
+  assert.equal(BarnOwl.TRICKS.includes("seedhammer"), false);
+  assert.deepEqual([...RedTail.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.deepEqual([...RedTail.HAPPY], ["borealis", "calurus", "harlani"]);
   assert.equal(RedTail.TRICKS.includes("feebee"), false);
   assert.equal(RedTail.TRICKS.includes("poecile"), false);
+  assert.equal(RedTail.TRICKS.includes("capflash"), false);
+  assert.equal(RedTail.TRICKS.includes("seedhammer"), false);
   assert.equal(OverlayRedTail.TRICK_KEY, "red_tail");
   assert.equal(T.TRICKS.includes("kettle"), false);
   assert.equal(T.TRICKS.includes("buteo"), false);
+  assert.equal(T.TRICKS.includes("patagial"), false);
+  assert.equal(T.TRICKS.includes("tower"), false);
+  assert.equal(T.TRICKS.includes("twist"), false);
+  assert.equal(T.TRICKS.includes("pellet"), false);
+  assert.equal(T.TRICKS.includes("invite"), false);
+  assert.equal(T.TRICKS.includes("toeing"), false);
+  assert.equal(T.TRICKS.includes("scrutinize"), false);
+  assert.equal(T.TRICKS.includes("glean"), false);
   assert.equal(T.HAPPY.includes("borealis"), false);
   assert.equal(T.TRICKS.includes("diskturn"), false);
   assert.equal(T.TRICKS.includes("tytonid"), false);
@@ -2180,7 +2198,7 @@ test("notes: Dee idle-life done; next house-order guest still lacking tricks is 
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "chickadee");
-  assert.deepEqual([...T.TRICKS], ["feebee", "gargle", "hangup", "cache", "poecile"]);
+  assert.deepEqual([...T.TRICKS], ["feebee", "gargle", "hangup", "cache", "capflash", "seedhammer", "poecile"]);
   assert.deepEqual([...T.HAPPY], ["atricapillus", "practicus", "turneri"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
@@ -2379,3 +2397,22 @@ test("notes: Dee idle-life done; next house-order guest still lacking tricks is 
 
 
 
+
+
+test("ultra-polish: Dee feebee/hangup/capflash/seedhammer lifts are Rui-visible (not micro idle-gen)", () => {
+  const fe = T.beginTrick("feebee", 80, 1);
+  const mid = T.stepTrick(fe, T.DUR.feebee * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 8, `feebee mid rot ${mid.rot}`);
+  const hu = T.beginTrick("hangup", 80, 1);
+  const h2 = T.stepTrick(hu, T.DUR.hangup * 0.4, { cmd: "idle" });
+  assert.ok(h2.lift > 4, `hangup mid lift ${h2.lift}`);
+  assert.ok(Math.abs(h2.rot) > 90, `hangup mid rot ${h2.rot}`);
+  const ca = T.beginTrick("capflash", 80, 1);
+  const c2 = T.stepTrick(ca, T.DUR.capflash * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(c2.rot) > 6, `capflash mid rot ${c2.rot}`);
+  const sh = T.beginTrick("seedhammer", 80, 1);
+  const s2 = T.stepTrick(sh, T.DUR.seedhammer * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift > 4, `seedhammer mid lift ${s2.lift}`);
+  assert.ok(Overlay.capflashPose && Overlay.seedhammerPose);
+  assert.ok(T.nextTrickWait(true, 0, "poecile") < 80);
+});
