@@ -1,12 +1,12 @@
-/** Armor ground tricks while idle. House neighborly Isopoda / Armadillidium vulgare Common Pillbug — conglobate / moistcling / detritushusk / antennawave / vulgare personality; densarmor / inkarmor / densball thank-yous. Window-play STRIKE and Call Armor leave pillbug alone. Sleep/hide/leave/rest/card/ribbon still win. Same map as web pillbug-tricks.ts. True isopod volvation ball distinct from millipede coilcurl. Next: Cast / earthworm. */
+/** Armor ground tricks while idle. House neighborly Isopoda / Armadillidium vulgare Common Pillbug terrestrial crustacean life — conglobate / volvation / antennafeel / detritusnip / vulgare personality (conglobate roll-into-ball conglobation without naming ball or roll or spiral or coil or curl or armor or armorup or hide or tuck or sleep or sit, volvation volvation tuck armor-ball settle without naming ball or roll or spiral or coil or curl or armor or hide or tuck or sleep or sit, antennafeel antenna sense feel without naming antenna or tap or flick or sense or feeler or sweep or probe or touch or sniff or whisker or wave, detritusnip detritus nip graze without naming litter or graze or leaf or feed or eat or chew or forage or nibble or mulch or compost or dirt or soil, long vulgare Armadillidium vulgare Isopoda common pillbug woodlouse hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass; window-play STRIKE and Call Armor leave pillbug alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link own their tricks; guest slug Armor / key pillbug — accept "pillbug" and "armor" (roster slug armor; campaign Armor); do NOT confuse with Link the American Giant Millipede (key millipede / slug link) or denslink thank-you; do NOT name a trick pillbug or armor or millipede or link or house_centipede or haste or american_eel or silver. Thank-yous densarmor / inkarmor / densball. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web pillbug-tricks.ts. Window-play STRIKE unchanged. True Common Pillbug Armadillidium vulgare Isopoda desk life — terrestrial crustacean that conglobates into a tight ball, grazes leaf litter, taps with antennae, and settles in volvation; not Narceus millipede/Diplopoda clones (coilcurl/detritusgrub/slowmarch/moistseek), not Scutigera house centipede/Chilopoda clones, not Anguilla american eel — true isopod volvation ball distinct from millipede spiral coil. Next house-order guest after Armor still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "pillbug";
-  const TRICKS = ["conglobate", "moistcling", "detritushusk", "antennawave", "vulgare"];
+  const TRICKS = ["conglobate", "volvation", "antennafeel", "detritusnip", "vulgare"];
   const HAPPY = ["densarmor", "inkarmor", "densball"];
   const HAPPY_DUR = { densarmor: 2.55, inkarmor: 2.68, densball: 2.42 };
   const VULGARE_HOLD = 22.80;
   const RELEASE_S = 1.95;
-  const DUR = { vulgare: VULGARE_HOLD + RELEASE_S, conglobate: 4.45, moistcling: 4.55, detritushusk: 4.25, antennawave: 3.95 };
+  const DUR = { vulgare: VULGARE_HOLD + RELEASE_S, conglobate: 4.45, detritusnip: 4.25, antennafeel: 3.95, volvation: 4.55 };
 
   function canStart(state) {
     if (!state) return false;
@@ -38,9 +38,9 @@
     const roll = rand == null ? Math.random() : rand;
       if (kind === "vulgare") return 148 + roll * 13;
   if (kind === "conglobate") return 25.4 + roll * 4.2;
-  if (kind === "detritushusk") return 26.6 + roll * 3.8;
-  if (kind === "antennawave") return 22.8 + roll * 3.6;
-  if (kind === "moistcling") return 27.8 + roll * 4.4;
+  if (kind === "detritusnip") return 26.6 + roll * 3.8;
+  if (kind === "antennafeel") return 22.8 + roll * 3.6;
+  if (kind === "volvation") return 27.8 + roll * 4.4;
   return justFinished ? 19.2 + roll * 2.8 : 14.2 + roll * 2.4;
   }
 
@@ -49,27 +49,27 @@
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "vulgare") {
       if (roll < 0.26) return "conglobate";
-      if (roll < 0.5) return "detritushusk";
-      if (roll < 0.74) return "antennawave";
-      return "moistcling";
+      if (roll < 0.5) return "detritusnip";
+      if (roll < 0.74) return "antennafeel";
+      return "volvation";
     }
     if (lastKind === "conglobate") {
       if (roll < 0.26) return "vulgare";
-      if (roll < 0.5) return "detritushusk";
-      if (roll < 0.74) return "antennawave";
-      return "moistcling";
+      if (roll < 0.5) return "detritusnip";
+      if (roll < 0.74) return "antennafeel";
+      return "volvation";
     }
-    if (lastKind === "detritushusk") {
+    if (lastKind === "detritusnip") {
       if (roll < 0.22) return "vulgare";
       if (roll < 0.44) return "conglobate";
-      if (roll < 0.68) return "antennawave";
-      return "moistcling";
+      if (roll < 0.68) return "antennafeel";
+      return "volvation";
     }
     if (roll < 0.2) return "vulgare";
     if (roll < 0.4) return "conglobate";
-    if (roll < 0.6) return "detritushusk";
-    if (roll < 0.8) return "antennawave";
-    return "moistcling";
+    if (roll < 0.6) return "detritusnip";
+    if (roll < 0.8) return "antennafeel";
+    return "volvation";
   }
 
   function happyCanStart(state) {
@@ -197,11 +197,11 @@
         ? "sit"
         : kind === "conglobate"
           ? "sit"
-          : kind === "detritushusk"
+          : kind === "detritusnip"
             ? "play"
-            : kind === "antennawave"
+            : kind === "antennafeel"
               ? "talk"
-              : kind === "moistcling"
+              : kind === "volvation"
                 ? "play"
                 : "sit";
     return {
@@ -257,8 +257,8 @@
     const s = smoothstep((u - 0.90) / 0.10);
     return { x: fromX + face * 0.00005 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" };
   }
-  function detritushuskPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.detritushusk));
+  function detritusnipPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.detritusnip));
     const face = facing == null ? 1 : facing;
     if (u < 0.11) {
       const s = smoothstep(u / 0.11);
@@ -267,13 +267,13 @@
     if (u < 0.88) {
       const husk = Math.sin((u - 0.11) / 0.77 * Math.PI * 3.1);
       const nibble = Math.sin(t * 1.22) + 0.06 * Math.sin(t * 2.44);
-      return { x: fromX + face * (0.00055 + (u - 0.11) / 0.77 * 0.0042 + husk * 0.00115 + nibble * 0.00014), lift: 0.0036 + Math.abs(husk) * 0.0032 + Math.abs(nibble) * 0.0014, rot: (0.38 + husk * 0.48 + nibble * 0.18) * face, anim: "play" };
+      return { x: fromX + face * (0.00038 + (u - 0.11) / 0.77 * 0.0036 + husk * 0.00085 + nibble * 0.00010), lift: 0.0028 + Math.abs(husk) * 0.0026 + Math.abs(nibble) * 0.0011, rot: (0.32 + husk * 0.42 + nibble * 0.16) * face, anim: "play" };
     }
     const s = smoothstep((u - 0.88) / 0.12);
     return { x: fromX + face * 0.00398 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.03 * (1 - s) * face, anim: "idle" };
   }
-  function antennawavePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.antennawave));
+  function antennafeelPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.antennafeel));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
@@ -287,8 +287,8 @@
     const s = smoothstep((u - 0.90) / 0.10);
     return { x: fromX + face * 0.00462 * (1 - s), lift: 0.00075 * (1 - s), rot: -0.028 * (1 - s) * face, anim: "idle" };
   }
-  function moistclingPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.moistcling));
+  function volvationPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.volvation));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
@@ -308,7 +308,7 @@
   }
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "conglobate" && trick.kind !== "detritushusk" && trick.kind !== "antennawave" && trick.kind !== "moistcling") {
+    if (shouldAbort(flags) && trick.kind !== "conglobate" && trick.kind !== "detritusnip" && trick.kind !== "antennafeel" && trick.kind !== "volvation") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -339,20 +339,20 @@
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "detritushusk") {
-      const pose = detritushuskPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "detritusnip") {
+      const pose = detritusnipPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "antennawave") {
-      const pose = antennawavePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "antennafeel") {
+      const pose = antennafeelPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = moistclingPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = volvationPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -379,9 +379,9 @@
     vulgarePose,
     releasePose,
     conglobatePose,
-    detritushuskPose,
-    antennawavePose,
-    moistclingPose,
+    detritusnipPose,
+    antennafeelPose,
+    volvationPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
