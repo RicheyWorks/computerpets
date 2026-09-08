@@ -56,7 +56,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Nori tricks start only on idle ground", () => {
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
@@ -183,7 +183,7 @@ test("orb/nook/taste/inch/unroll are house-ball-python-true, not Rui cat dog rab
   assert.equal(Phoenix.TRICKS.includes("taste"), false);
   assert.equal(Phoenix.TRICKS.includes("inch"), false);
   assert.equal(Phoenix.TRICKS.includes("unroll"), false);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("bun"), false);
   assert.equal(T.TRICKS.includes("ball"), false);
   assert.equal(T.TRICKS.includes("coil"), false);
@@ -358,16 +358,16 @@ test("ground registry keeps prior guests gated; Nori selectable; no bun/ball/coi
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
-  assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
-  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet"]);
-  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash"]);
+  assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"]);
+  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
+  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.deepEqual([...Ferret.TRICKS], ["tube", "romp", "steal", "puff", "noodle"]);
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
   assert.deepEqual([...Chinchilla.TRICKS], ["ash", "bound", "fluff", "chin", "sift"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
-  assert.deepEqual([...Toucan.TRICKS], ["roost", "berry", "juggle", "peer", "skip"]);
+  assert.deepEqual([...Toucan.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.deepEqual([...Iguana.TRICKS], ["sun", "dewlap", "nod", "press", "flick"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
   assert.equal(T.TRICKS.includes("flatten"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
