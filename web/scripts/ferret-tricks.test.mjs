@@ -46,7 +46,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Wick tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["tube", "romp", "steal", "puff", "noodle"]);
+  assert.deepEqual([...T.TRICKS], ["tube", "romp", "steal", "puff", "noodle", "corkscrew", "slink"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -78,7 +78,7 @@ test("Wick tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("nest"), false);
 });
 
-test("tube/romp/steal/puff/noodle are house-ferret-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot or dragon clones", () => {
+test("tube/romp/steal/puff/noodle/corkscrew/slink are house-ferret-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const tube = T.beginTrick("tube", 80, 1);
   assert.equal(tube.anim, "sit");
@@ -86,7 +86,7 @@ test("tube/romp/steal/puff/noodle are house-ferret-true, not Rui cat dog rabbit 
   const held = T.stepTrick(tube, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 1);
   const release = T.stepTrick(tube, T.TUBE_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -109,8 +109,22 @@ test("tube/romp/steal/puff/noodle are house-ferret-true, not Rui cat dog rabbit 
   assert.equal(noodle.anim, "play");
   const noodleMid = T.stepTrick(noodle, 0.4, ground);
   assert.ok(noodleMid.lift > 0.5 || Math.abs(noodleMid.rot) > 2);
-  const noodleDone = T.stepTrick(noodle, 1.4, ground);
+  const noodleDone = T.stepTrick(noodle, T.DUR.noodle + 0.1, ground);
   assert.equal(noodleDone.phase, "done");
+  const cork = T.beginTrick("corkscrew", 80, 1);
+  assert.equal(cork.anim, "play");
+  const corkMid = T.stepTrick(cork, T.DUR.corkscrew * 0.4, ground);
+  assert.ok(corkMid.lift > 4 || Math.abs(corkMid.rot) > 6);
+  const slink = T.beginTrick("slink", 80, 1);
+  assert.equal(slink.anim, "walk");
+  const slinkMid = T.stepTrick(slink, T.DUR.slink * 0.4, ground);
+  assert.ok(slinkMid.lift < -2 || Math.abs(slinkMid.rot) > 4);
+  assert.equal(T.TRICKS.includes("dance"), false);
+  assert.equal(T.TRICKS.includes("twist"), false);
+  assert.equal(T.TRICKS.includes("spiral"), false);
+  assert.equal(T.TRICKS.includes("tumble"), false);
+  assert.equal(T.TRICKS.includes("sneak"), false);
+  assert.equal(T.TRICKS.includes("stalk"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("tube"), false);
@@ -405,4 +419,36 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
+});
+
+test("ultra-polish: Wick tube/romp/corkscrew/slink lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("tube", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 4, `tube mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `tube mid lift ${mid.lift}`);
+  const ro = T.beginTrick("romp", 80, 1);
+  const r2 = T.stepTrick(ro, T.DUR.romp * 0.35, { cmd: "idle" });
+  assert.ok(r2.lift > 6 || Math.abs(r2.rot) > 4, `romp mid lift/rot ${r2.lift}/${r2.rot}`);
+  const ck = T.beginTrick("corkscrew", 80, 1);
+  const c2 = T.stepTrick(ck, T.DUR.corkscrew * 0.4, { cmd: "idle" });
+  assert.ok(c2.lift > 6 || Math.abs(c2.rot) > 6, `corkscrew mid lift/rot ${c2.lift}/${c2.rot}`);
+  const sl = T.beginTrick("slink", 80, 1);
+  const s2 = T.stepTrick(sl, T.DUR.slink * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift < -2 || Math.abs(s2.rot) > 6, `slink mid lift/rot ${s2.lift}/${s2.rot}`);
+  assert.ok(Overlay.corkscrewPose && Overlay.slinkPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.corkscrew, Overlay.DUR.corkscrew);
+  assert.equal(T.DUR.slink, Overlay.DUR.slink);
+  assert.equal(T.TUBE_HOLD, Overlay.TUBE_HOLD);
+  assert.equal(T.TUBE_HOLD, 14.4);
+  assert.ok(T.nextTrickWait(true, 0, "tube") > 40);
+});
+
+test("notes: Wick idle-life ultra done; next house-order ultra guest is Burr / hedgehog (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue already ultra; Echo/budgie + Peck/penguin + Quill/parrot skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["tube", "romp", "steal", "puff", "noodle", "corkscrew", "slink"]);
+  assert.equal(T.TRICKS.includes("thread"), false);
+  assert.equal(Overlay.TRICKS.includes("corkscrew"), true);
+  assert.equal(Overlay.TRICKS.includes("slink"), true);
+  assert.equal(T.TRICKS.includes("dance"), false);
+  assert.equal(T.TRICKS.includes("stash"), false);
 });
