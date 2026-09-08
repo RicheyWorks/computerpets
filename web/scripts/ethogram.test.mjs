@@ -387,6 +387,8 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.ok(names("pileated").includes("kuk_soft"));
   assert.ok(names("pileated").includes("loaf"));
   assert.ok(names("hummingbird").includes("hover"));
+  assert.ok(names("hummingbird").includes("chip_soft"));
+  assert.ok(names("hummingbird").includes("perch"));
   for (const key of CORNER) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);

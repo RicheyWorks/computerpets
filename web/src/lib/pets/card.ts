@@ -47,7 +47,7 @@ const HUMAN_VOICE = /aria|jenny|guy|davis|natural|neural|online|samantha|daniel|
 const PREFER_VOICE = /neural|natural|online/i;
 const ROBOT_VOICE = /compact|bad news|good news|hysterical|zarvox|trinoids|boing|bubbles|albert|whisper|princess|junior|cellos|organ|bells|pipe|robot|novelty|eddy|reed|shelley|grandpa|grandma|superstar|bahh|deranged|wobble|kathy|fred|ralph|bruce|agnes|espeak|festival/i;
 
-export const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, and Drum talk with house cry first; system speech is the backup.";
+export const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, and Sip talk with house cry first; system speech is the backup.";
 export const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
 export const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"] as const;
 
@@ -345,7 +345,7 @@ export function pickSystemVoice(voices: Array<{ name?: string; voiceURI?: string
 }
 
 export function prefersHouseCry(key: string | undefined | null) {
-  return key === "red_panda" || key === "crow" || key === "raven" || key === "barn_owl" || key === "red_tail" || key === "chickadee" || key === "robin" || key === "mallard" || key === "canada_goose" || key === "pileated";
+  return key === "red_panda" || key === "crow" || key === "raven" || key === "barn_owl" || key === "red_tail" || key === "chickadee" || key === "robin" || key === "mallard" || key === "canada_goose" || key === "pileated" || key === "hummingbird";
 }
 
 export function speakOpts(styleId: unknown, volume: number) {
