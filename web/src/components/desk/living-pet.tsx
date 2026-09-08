@@ -575,7 +575,7 @@ export function LivingPet({
           hidden: hiddenRef.current,
           leaving: s.leaving,
           cmd: cmdRef.current,
-          card: false,
+          card: !!cardRef.current,
         };
         const GT = tricksFor(kindRef.current);
         if (s.happy && GT) {
@@ -612,7 +612,7 @@ export function LivingPet({
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: false,
-            card: false,
+            card: !!cardRef.current,
           }) as GroundTrick;
           s.x = s.trick.x;
           if (!asleepRef.current) s.anim = s.trick.anim;
@@ -655,7 +655,7 @@ export function LivingPet({
             leaving: s.leaving,
             cmd: cmdRef.current,
             windowPlay: !!s.play,
-            card: false,
+            card: !!cardRef.current,
           })
         ) {
           s.trickWait -= dt;
