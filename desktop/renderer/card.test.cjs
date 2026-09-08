@@ -106,7 +106,11 @@ test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", (
   assert.match(styleSrc, /#hud[\s\S]*overflow-y:\s*auto/);
   assert.match(styleSrc, /#choice[\s\S]*overflow-y:\s*auto/);
   assert.match(petSrc, /openKeeperCard/);
+  assert.match(petSrc, /collapseKeeperCard/);
   assert.match(petSrc, /cardOpen\(\)/);
+  assert.match(petSrc, /card:\s*cardOpen\(\)/);
+  assert.match(petSrc, /cardOpen\(\) && sim\.anim === "walk"/);
+  assert.match(petSrc, /clingy && !cardOpen\(\)/);
   assert.match(petSrc, /desk\.radioSearch/);
   assert.match(petSrc, /desk\.newsTopic/);
   assert.match(petSrc, /desk\.marketQuote/);
