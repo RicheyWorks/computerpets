@@ -71,6 +71,7 @@ import {
   parseMarket,
   parseNftLive,
   parseSearchCoins,
+  pickBestSearchCoin,
   parseSearchNfts,
   parseTerminalToken,
   parseTicker,
@@ -757,7 +758,10 @@ export function DeskMarketPlate() {
   async function lookupCoins() {
     const typed = query;
     const contract = detectContract(typed);
-    const next = parseTicker(typed);
+    // Coins pane forces crypto resolve even if classify once guessed stock.
+    const next = contract
+      ? parseTicker(typed)
+      : parseTicker({ symbol: typed, kind: "crypto", query: typed });
     if (contract && next) {
       keepHouse(addTicker(house, next));
       setQuery("");
@@ -765,13 +769,15 @@ export function DeskMarketPlate() {
       setCoinHits([]);
       return;
     }
-    if (next && (next.kind === "stock" || next.geckoId)) {
+    // Known majors already carry geckoId — add immediately.
+    if (next && next.geckoId) {
       keepHouse(addTicker(house, next));
       setQuery("");
       setTruth("");
       setCoinHits([]);
       return;
     }
+    // Free-typed new tickers: CoinGecko search → best match → crypto watch list.
     const url = searchUrl(typed);
     if (!url) {
       setTruth("type a coin, ticker, or contract");
@@ -781,8 +787,16 @@ export function DeskMarketPlate() {
     try {
       const json = await (await fetch(url)).json();
       const coins = parseSearchCoins(json);
+      const best = pickBestSearchCoin(coins, typed);
+      if (!best) {
+        setCoinHits([]);
+        setTruth("no coin from that look-up — try a mint or contract");
+        return;
+      }
+      keepHouse(addTicker(house, { ...best, kind: "crypto" }));
+      setQuery("");
+      setTruth("");
       setCoinHits(coins);
-      setTruth(coins.length ? "" : "no coin from that look-up — try a mint or contract");
     } catch {
       setCoinHits([]);
       setTruth(MARKET_CANT_REACH);
