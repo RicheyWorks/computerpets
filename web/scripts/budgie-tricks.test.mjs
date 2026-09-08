@@ -399,7 +399,7 @@ test("ultra-polish: Echo bobble/mimic/beakgrind/shellout lifts are Rui-visible (
   assert.ok(T.nextTrickWait(true, 0, "preen") > T.nextTrickWait(true, 0, "bobble"));
 });
 
-test("notes: Echo idle-life ultra done; next bird ultra is Peck / penguin (Loom still next for base idle-ground)", () => {
+test("notes: Echo idle-life ultra done; Peck / penguin ultra follows; next after Peck is Quill / parrot (Loom still next for base idle-ground)", () => {
   assert.deepEqual([...T.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
   assert.equal(T.TRICKS.includes("perch"), false);
   assert.equal(T.TRICKS.includes("nectary"), false);

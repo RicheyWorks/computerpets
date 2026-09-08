@@ -118,7 +118,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   parrot: PREEN,
   toucan: PREEN,
   phoenix: PREEN,
-  penguin: [A("preen", "groom", 1.4, 3, "sit"), A("nod", "nod", 0.7, 2, "sit"), A("huddle", "sit_hold", 2.0, 2, "sit")],
+  penguin: [A("huddle", "sit_hold", 2.0, 4, "sit"), A("toboggan_soft", "pulse", 1.0, 3, "play"), A("waddle_soft", "wiggle", 1.0, 3, "play"), A("porpoise_soft", "pulse", 0.9, 2, "play"), A("trumpet_soft", "talk", 0.9, 3, "talk"), A("rockhop_soft", "hop", 0.8, 2, "play"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
   goldfish: [A("gulp", "gulp", 0.6, 2), A("flare", "pulse", 0.7, 2)],
   ball_python: [
     A("tongue", "tongue", 0.7, 4),
