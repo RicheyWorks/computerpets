@@ -177,6 +177,10 @@ def test_only_scratching_mammals_scratch():
     assert "rub_soft" in [a["name"] for a in acts_for("rabbit")]
     assert "nosh_soft" in [a["name"] for a in acts_for("rabbit")]
     assert "freeze" in [a["name"] for a in acts_for("rabbit")]
+    assert "nest" in [a["name"] for a in acts_for("hamster")]
+    assert "scrub_soft" in [a["name"] for a in acts_for("hamster")]
+    assert "seed_soft" in [a["name"] for a in acts_for("hamster")]
+    assert "freeze" in [a["name"] for a in acts_for("hamster")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key

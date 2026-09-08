@@ -13,7 +13,7 @@
     fox: [A("stretch", "stretch", 1.3, 2, "sit"), A("yawn", "yawn", 1.1, 2), A("pounce", "hop", 0.7, 2, "play")],
     red_panda: [A("groom", "groom", 1.5, 3, "sit"), A("scratch", "scratch", 1.1, 2, "sit"), A("steal_dart", "dart", 1.2, 2), A("wash", "groom", 1.3, 2, "sit")],
     rabbit: [A("flop", "sit_hold", 2.0, 4, "sit"), A("groom_soft", "groom", 1.0, 3, "sit"), A("peri_soft", "rise", 0.9, 2, "sit"), A("dig_soft", "wiggle", 0.9, 2, "sit"), A("binky_soft", "hop", 0.8, 2, "play"), A("rub_soft", "lean", 0.8, 2, "sit"), A("nosh_soft", "eat", 0.8, 2, "eat"), A("freeze", "freeze", 1.4, 2)],
-    hamster: [A("nibble", "eat", 1.1, 3, "eat"), A("groom", "groom", 1.2, 2, "sit"), A("freeze", "freeze", 1.0, 2), A("burst", "dart", 0.9, 2)],
+    hamster: [A("nest", "sit_hold", 2.0, 4, "sit"), A("cheek_soft", "wiggle", 1.0, 3, "sit"), A("scurry_soft", "dart", 0.8, 2, "play"), A("pocket_soft", "lean", 0.9, 2, "sit"), A("reel_soft", "hop", 0.8, 2, "play"), A("scrub_soft", "groom", 0.9, 2, "sit"), A("seed_soft", "eat", 0.8, 2, "eat"), A("freeze", "freeze", 1.4, 2)],
     guinea_pig: [A("wheek", "talk", 0.8, 1, "talk"), A("popcorn", "hop", 0.45, 2, "play"), A("freeze", "freeze", 1.2, 2), A("groom", "groom", 1.3, 3, "sit")],
     ferret: [A("warble", "hop", 0.7, 3, "play"), A("tunnel", "sit_hold", 1.4, 2, "sit"), A("dook", "talk", 0.7, 1, "talk")],
     hedgehog: [A("snuffle", "wiggle", 1.0, 3), A("curl", "sit_hold", 1.8, 2, "sit"), A("unroll", "stretch", 1.2, 2)],

@@ -25,7 +25,7 @@ const OverlayRabbit = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayGuineaPig = createRequire(import.meta.url)(join(root, "../desktop/renderer/guinea-pig-tricks.js"));
 
 test("Clip tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel"]);
+  assert.deepEqual([...T.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -53,7 +53,7 @@ test("Clip tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("zoom"), false);
 });
 
-test("nest/cheek/scurry/pocket/reel are house-hamster-true, not Rui cat dog rabbit or dragon clones", () => {
+test("nest/cheek/scurry/pocket/reel/scrub/seed are house-hamster-true, not Rui cat dog rabbit or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const nest = T.beginTrick("nest", 80, 1);
   assert.equal(nest.anim, "sit");
@@ -80,11 +80,21 @@ test("nest/cheek/scurry/pocket/reel are house-hamster-true, not Rui cat dog rabb
   assert.equal(reel.anim, "play");
   const reelMid = T.stepTrick(reel, 0.5, ground);
   assert.ok(Math.abs(reelMid.rot) > 2 || reelMid.lift > 0);
+  const scrub = T.beginTrick("scrub", 80, 1);
+  assert.equal(scrub.anim, "sit");
+  const scrubMid = T.stepTrick(scrub, T.DUR.scrub * 0.4, ground);
+  assert.ok(scrubMid.lift < -1 || Math.abs(scrubMid.rot) > 6);
+  const seed = T.beginTrick("seed", 80, 1);
+  assert.equal(seed.anim, "sit");
+  const seedMid = T.stepTrick(seed, T.DUR.seed * 0.4, ground);
+  assert.ok(seedMid.lift < 0 || Math.abs(seedMid.rot) > 4);
+  assert.equal(Overlay.TRICKS.includes("scrub"), true);
+  assert.equal(Overlay.TRICKS.includes("seed"), true);
   const scurry = T.beginTrick("scurry", 80, 1);
   assert.equal(scurry.anim, "play");
   const scurryMid = T.stepTrick(scurry, 0.5, ground);
   assert.ok(scurryMid.lift > 0 || Math.abs(scurryMid.x - 80) > 2 || Math.abs(scurryMid.rot) > 2);
-  const scurryDone = T.stepTrick(scurry, 1.2, ground);
+  const scurryDone = T.stepTrick(scurry, T.DUR.scurry + 0.1, ground);
   assert.equal(scurryDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -96,9 +106,17 @@ test("nest/cheek/scurry/pocket/reel are house-hamster-true, not Rui cat dog rabb
   assert.equal(Fuse.TRICKS.includes("nest"), false);
   assert.equal(Earth.TRICKS.includes("cheek"), false);
   assert.equal(Rabbit.TRICKS.includes("nest"), false);
+  assert.equal(Cat.TRICKS.includes("scrub"), false);
+  assert.equal(Cat.TRICKS.includes("seed"), false);
+  assert.equal(Rabbit.TRICKS.includes("scrub"), false);
+  assert.equal(Rabbit.TRICKS.includes("seed"), false);
   assert.equal(T.TRICKS.includes("bow"), false);
   assert.equal(T.TRICKS.includes("stash"), false);
   assert.equal(T.TRICKS.includes("dig"), false);
+  assert.equal(T.TRICKS.includes("wash"), false);
+  assert.equal(T.TRICKS.includes("groom"), false);
+  assert.equal(T.TRICKS.includes("nibble"), false);
+  assert.equal(T.TRICKS.includes("nosh"), false);
 });
 
 test("Clip feed-happy is its own sit: stuff/chitter/sprint, and two feeds are not the same", () => {
@@ -235,4 +253,33 @@ test("ground registry keeps prior guests gated; Clip selectable; no stash/dig/bo
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("rabbit", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("hamster", 4), null);
+});
+
+test("ultra-polish: Clip nest/cheek/pocket/scrub/seed lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("nest", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `nest mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `nest mid lift ${mid.lift}`);
+  const ch = T.beginTrick("cheek", 80, 1);
+  const c2 = T.stepTrick(ch, T.DUR.cheek * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(c2.rot) > 6, `cheek mid rot ${c2.rot}`);
+  assert.ok(Math.abs(c2.lift) > 2 || c2.lift > 2, `cheek mid lift ${c2.lift}`);
+  const pk = T.beginTrick("pocket", 80, 1);
+  const p2 = T.stepTrick(pk, T.DUR.pocket * 0.4, { cmd: "idle" });
+  assert.ok(p2.lift < -2 || Math.abs(p2.rot) > 6, `pocket mid lift/rot ${p2.lift}/${p2.rot}`);
+  const sb = T.beginTrick("scrub", 80, 1);
+  const s2 = T.stepTrick(sb, T.DUR.scrub * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift < -1 || Math.abs(s2.rot) > 6, `scrub mid lift/rot ${s2.lift}/${s2.rot}`);
+  const sd = T.beginTrick("seed", 80, 1);
+  const n2 = T.stepTrick(sd, T.DUR.seed * 0.4, { cmd: "idle" });
+  assert.ok(n2.lift < 0 || Math.abs(n2.rot) > 6, `seed mid lift/rot ${n2.lift}/${n2.rot}`);
+  assert.ok(Overlay.scrubPose && Overlay.seedPose);
+  assert.equal(T.NEST_HOLD, Overlay.NEST_HOLD);
+  assert.ok(T.NEST_HOLD >= 14);
+});
+
+test("notes: Clip idle-life ultra done; next house-order ultra guest is Whee / guinea_pig (birds Soot→Ember + Miso + Pip + Thimble already ultra)", () => {
+  assert.deepEqual([...T.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
+  assert.equal(T.TRICK_KEY, "hamster");
+  assert.equal(T.wantsThankYou("clip"), true);
 });

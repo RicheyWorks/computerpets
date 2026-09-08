@@ -21,7 +21,7 @@ test("the card law is the same house on overlay and desk", () => {
   assert.deepEqual(C.COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
   assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
   assert.deepEqual(C.MUTE_BUSES, ["talk", "special", "weather", "treats", "steps", "music"]);
-  assert.equal(C.VOICE_TRUTH, "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, and Thimble talk with house cry first; system speech is the backup.");
+  assert.equal(C.VOICE_TRUTH, "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, and Clip talk with house cry first; system speech is the backup.");
   assert.match(C.QUIT_TRUTH, /desktop\.ps1/);
   assert.equal(C.voiceStyleOf("hearth").rate, 0.82);
   assert.ok(C.speakOpts("hearth", 80).volume < 0.8);
@@ -158,6 +158,7 @@ test("voice styles pick a human system voice and skip cartoon robots", () => {
   assert.equal(C.prefersHouseCry("cat"), true);
   assert.equal(C.prefersHouseCry("dog"), true);
   assert.equal(C.prefersHouseCry("rabbit"), true);
+  assert.equal(C.prefersHouseCry("hamster"), true);
   const hearth = C.speakOpts("hearth", 50);
   assert.ok(hearth.rate < 0.86);
   assert.ok(hearth.pitch < 0.95);
