@@ -99,3 +99,22 @@ test("floor mess and gifts name themselves for a stranger", () => {
   assert.match(cssSrc, /\.mess-dot::after/);
   assert.match(cssSrc, /border-radius:\s*65% 40% 55% 45%/);
 });
+
+
+test("Quotes expansion carries crypto list customize and shared plate styles", () => {
+  const house = Market.parseMarket({});
+  assert.ok(house.tickers.some((t) => t.symbol === "ETH"));
+  assert.ok(house.marketplaces.some((m) => m.id === "opensea"));
+  assert.match(htmlSrc, /data-market-pane="coins"/);
+  assert.match(htmlSrc, /data-market-pane="nfts"/);
+  assert.match(htmlSrc, /nft-marketplaces/);
+  assert.match(htmlSrc, /pump mint/);
+  assert.match(cssSrc, /\.market-pane/);
+  assert.match(cssSrc, /--plate-bg/);
+  const mem = store();
+  let plates = P.loadPlates(800, 480, mem);
+  plates[2] = P.applySwatch(plates[2], "dusk");
+  P.savePlates(plates, mem);
+  const again = P.loadPlates(800, 480, mem);
+  assert.equal(again[2].bg, "#1a1828");
+});

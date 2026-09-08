@@ -46,22 +46,50 @@ import {
   type NewsItem,
 } from "@/lib/pets/news";
 import {
+  addMarketplace,
+  addNft,
   addTicker,
+  currentNft,
   currentTicker,
-  geckoUrl,
+  DEFAULT_MARKETPLACES,
+  detectContract,
+  formatPrice,
+  geckoManyUrl,
   MARKET_LABEL,
   MARKET_PLACEHOLDER,
   MARKET_TRUTH,
+  moveMarketplace,
+  moveNft,
+  moveTicker,
+  NFT_LABEL,
+  NFT_MARKETPLACES,
+  NFT_PLACEHOLDER,
+  NFT_TRUTH,
+  NO_NFT,
   NO_QUOTE,
-  parseGecko,
+  parseGeckoMany,
   parseMarket,
+  parseNftLive,
+  parseSearchCoins,
+  parseSearchNfts,
+  parseTerminalToken,
   parseTicker,
   parseYahoo,
+  pickNft,
   pickTicker,
   plateLine as marketLine,
+  nftLine,
+  removeMarketplace,
+  removeNft,
   removeTicker,
+  searchUrl,
+  terminalTokenUrl,
+  toCardPatch,
   yahooUrl,
+  nftUrl,
   type MarketLive,
+  type NftLive,
+  CANT_REACH as MARKET_CANT_REACH,
 } from "@/lib/pets/market";
 import { loadCard, saveCard, type CardPrefs } from "@/lib/pets/card";
 import type { DeskWindow } from "@/lib/pets/windows";
@@ -594,48 +622,193 @@ export function DeskMarketPlate() {
   const [card, setCard] = useState(() => loadCard());
   const [open, setOpen] = useState(false);
   const [live, setLive] = useState<MarketLive | null>(null);
+  const [coinLives, setCoinLives] = useState<Record<string, MarketLive>>({});
   const [unread, setUnread] = useState(false);
+  const [nftLive, setNftLive] = useState<NftLive | null>(null);
+  const [nftUnread, setNftUnread] = useState(false);
   const [query, setQuery] = useState("");
+  const [nftQuery, setNftQuery] = useState("");
   const [truth, setTruth] = useState("");
+  const [nftTruth, setNftTruth] = useState("");
+  const [coinHits, setCoinHits] = useState<ReturnType<typeof parseSearchCoins>>([]);
+  const [nftHits, setNftHits] = useState<ReturnType<typeof parseSearchNfts>>([]);
   const house = useMemo(() => parseMarket(card), [card]);
   const ticker = currentTicker(house);
+  const nft = currentNft(house);
   const chrome = usePlateChrome("market");
 
+  function keep(patch: Partial<CardPrefs>) {
+    setCard(writeCard(patch));
+  }
+
+  function keepHouse(next: ReturnType<typeof parseMarket>) {
+    keep(toCardPatch(next));
+  }
+
   useEffect(() => {
-    if (!ticker) {
+    // Seed defaults into card when empty so customize persists.
+    if ((!card.marketTickers || !card.marketTickers.length) && house.tickers.length) {
+      keep(toCardPatch(house));
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    const geckoIds = house.tickers.filter((r) => r.kind === "crypto" && r.geckoId && !r.address).map((r) => r.geckoId);
+    const contracts = house.tickers.filter((r) => r.kind === "crypto" && r.address);
+    const jobs: Promise<void>[] = [];
+
+    if (geckoIds.length) {
+      const url = geckoManyUrl(geckoIds);
+      if (url) {
+        jobs.push(
+          fetch(url)
+            .then((r) => r.json())
+            .then((json) => {
+              if (cancelled) return;
+              const lives = parseGeckoMany(json);
+              setCoinLives((prev) => ({ ...prev, ...lives }));
+              if (ticker?.geckoId && lives[ticker.geckoId]) {
+                setLive(lives[ticker.geckoId]!);
+                setUnread(false);
+              }
+            })
+            .catch(() => {
+              if (!cancelled) setUnread(true);
+            }),
+        );
+      }
+    }
+
+    for (const row of contracts) {
+      const url = terminalTokenUrl(row.platform || "solana", row.address);
+      if (!url) continue;
+      jobs.push(
+        fetch(url)
+          .then((r) => r.json())
+          .then((json) => {
+            if (cancelled) return;
+            const next = parseTerminalToken(json);
+            if (!next) return;
+            setCoinLives((prev) => ({ ...prev, [row.platform + ":" + row.address]: next, [row.address]: next }));
+            if (ticker?.id === row.id) {
+              setLive(next);
+              setUnread(false);
+            }
+          })
+          .catch(() => {
+            if (!cancelled && ticker?.id === row.id) setUnread(true);
+          }),
+      );
+    }
+
+    if (ticker?.kind === "stock") {
+      const url = yahooUrl(ticker.symbol);
+      if (url) {
+        jobs.push(
+          fetch(url)
+            .then((r) => r.json())
+            .then((json) => {
+              if (cancelled) return;
+              const next = parseYahoo(json);
+              if (next) setLive(next);
+              setUnread(!next);
+            })
+            .catch(() => {
+              if (!cancelled) setUnread(true);
+            }),
+        );
+      }
+    }
+
+    if (nft) {
+      const url = nftUrl(nft.geckoId);
+      if (url) {
+        jobs.push(
+          fetch(url)
+            .then((r) => r.json())
+            .then((json) => {
+              if (cancelled) return;
+              const next = parseNftLive(json);
+              if (next) setNftLive(next);
+              setNftUnread(!next);
+            })
+            .catch(() => {
+              if (!cancelled) setNftUnread(true);
+            }),
+        );
+      }
+    }
+
+    if (!house.tickers.length) {
       setLive(null);
       setUnread(false);
-      return;
     }
-    let cancelled = false;
-    const url = ticker.kind === "crypto" ? geckoUrl(ticker.geckoId) : yahooUrl(ticker.symbol);
-    if (!url) return;
-    void fetch(url)
-      .then((r) => r.json())
-      .then((json) => {
-        if (cancelled) return;
-        const next = ticker.kind === "crypto" ? parseGecko(json, ticker.geckoId) : parseYahoo(json);
-        if (next) setLive(next);
-        setUnread(!next);
-      })
-      .catch(() => {
-        if (!cancelled) setUnread(true);
-      });
-    const id = window.setInterval(() => {
-      void fetch(url)
-        .then((r) => r.json())
-        .then((json) => {
-          const next = ticker.kind === "crypto" ? parseGecko(json, ticker.geckoId) : parseYahoo(json);
-          if (next) setLive(next);
-          setUnread(!next);
-        })
-        .catch(() => setUnread(true));
-    }, 20 * 60 * 1000);
+    if (!nft) {
+      setNftLive(null);
+      setNftUnread(false);
+    }
+
     return () => {
       cancelled = true;
-      window.clearInterval(id);
     };
-  }, [ticker?.id, ticker?.kind, ticker?.symbol, ticker?.geckoId]);
+  }, [house.tickers, house.nfts, ticker?.id, nft?.id]);
+
+  async function lookupCoins() {
+    const typed = query;
+    const contract = detectContract(typed);
+    const next = parseTicker(typed);
+    if (contract && next) {
+      keepHouse(addTicker(house, next));
+      setQuery("");
+      setTruth("");
+      setCoinHits([]);
+      return;
+    }
+    if (next && (next.kind === "stock" || next.geckoId)) {
+      keepHouse(addTicker(house, next));
+      setQuery("");
+      setTruth("");
+      setCoinHits([]);
+      return;
+    }
+    const url = searchUrl(typed);
+    if (!url) {
+      setTruth("type a coin, ticker, or contract");
+      return;
+    }
+    setTruth("looking up…");
+    try {
+      const json = await (await fetch(url)).json();
+      const coins = parseSearchCoins(json);
+      setCoinHits(coins);
+      setTruth(coins.length ? "" : "no coin from that look-up — try a mint or contract");
+    } catch {
+      setCoinHits([]);
+      setTruth(MARKET_CANT_REACH);
+    }
+  }
+
+  async function lookupNfts() {
+    const typed = nftQuery;
+    const url = searchUrl(typed);
+    if (!url) {
+      setNftTruth("type a collection name");
+      return;
+    }
+    setNftTruth("looking up…");
+    try {
+      const json = await (await fetch(url)).json();
+      const found = parseSearchNfts(json);
+      setNftHits(found);
+      setNftTruth(found.length ? "" : "no collection from that look-up");
+    } catch {
+      setNftHits([]);
+      setNftTruth(MARKET_CANT_REACH);
+    }
+  }
+
+  const haveMp = new Set(house.marketplaces.map((m) => m.id));
 
   return (
     <article
@@ -643,7 +816,7 @@ export function DeskMarketPlate() {
       data-desk-plate="market"
       className={cn(
         "desk-plate pointer-events-auto absolute z-[4] w-[min(18rem,42%)] rounded-sm border border-border/50 shadow-lg",
-        open && "w-[min(22rem,52%)]",
+        open && "w-[min(36rem,92%)]",
       )}
       style={{
         ...chrome.style,
@@ -651,60 +824,148 @@ export function DeskMarketPlate() {
         color: "var(--plate-fg, #f2ece3)",
       }}
     >
-      <button type="button" className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left" onPointerDown={chrome.onTogglePointerDown} onPointerMove={chrome.onTogglePointerMove} onPointerUp={chrome.onTogglePointerUp} onClick={() => chrome.toggleOpen(setOpen)}>
+      <button
+        type="button"
+        className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left"
+        onPointerDown={chrome.onTogglePointerDown}
+        onPointerMove={chrome.onTogglePointerMove}
+        onPointerUp={chrome.onTogglePointerUp}
+        onClick={() => chrome.toggleOpen(setOpen)}
+      >
         <span className="text-[10px] uppercase tracking-[0.16em] text-subtle">{MARKET_LABEL}</span>
         <span className="truncate text-sm text-ink">{marketLine(house, live, unread)}</span>
       </button>
       {open ? (
         <div className="border-t border-border/40 px-3 py-2 text-sm">
-          {!ticker ? <p className="text-subtle">{NO_QUOTE}</p> : null}
-          {ticker && live ? (
-            <p>
-              {ticker.symbol}. {live.name}. {live.price} {live.currency}. {live.source === "coingecko" ? "CoinGecko" : "Yahoo"}.
-            </p>
-          ) : null}
-          {ticker && unread && !live ? <p className="text-subtle">{CANT_REACH}</p> : null}
-          <ul className="mt-3 space-y-1">
-            {house.tickers.map((row) => (
-              <li key={row.id} className="flex items-center gap-2">
-                <button type="button" data-on={row.id === house.currentId ? "1" : "0"} onClick={() => setCard(writeCard({ marketTickers: pickTicker(house, row.id).tickers, currentTickerId: pickTicker(house, row.id).currentId }))}>
-                  {row.symbol}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const next = removeTicker(house, row.id);
-                    setCard(writeCard({ marketTickers: next.tickers, currentTickerId: next.currentId }));
-                  }}
-                >
-                  Remove
-                </button>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{MARKET_TRUTH}</p>
-          <form
-            className="mt-2 flex gap-2"
-            onSubmit={(e) => {
-              e.preventDefault();
-              const next = parseTicker(query);
-              if (!next) {
-                setTruth("type a ticker");
-                return;
-              }
-              const kept = addTicker(house, next);
-              setCard(writeCard({ marketTickers: kept.tickers, currentTickerId: kept.currentId }));
-              setQuery("");
-              setTruth("");
-            }}
-          >
-            <label className="flex min-w-0 flex-1 flex-col gap-1">
-              {MARKET_LABEL}
-              <input type="text" autoComplete="off" spellCheck={false} value={query} onChange={(e) => setQuery(e.target.value)} placeholder={MARKET_PLACEHOLDER} aria-label={MARKET_LABEL} />
-            </label>
-            <button type="submit">Look up</button>
-          </form>
-          {truth ? <p className="mt-1 text-subtle">{truth}</p> : null}
+          <div className="grid gap-3 md:grid-cols-2">
+            <section className="rounded-sm border border-border/40 p-2" aria-label="Coins" style={{ background: "color-mix(in srgb, var(--plate-bg, #161412) 70%, transparent)" }}>
+              <h3 className="text-[10px] uppercase tracking-[0.16em] text-subtle">Coins</h3>
+              {!house.tickers.length ? <p className="text-subtle">{NO_QUOTE}</p> : null}
+              <ul className="mt-2 space-y-1">
+                {house.tickers.map((row) => {
+                  const keyed = row.geckoId ? coinLives[row.geckoId] : undefined;
+                  const addr = row.address ? coinLives[`${row.platform}:${row.address}`] || coinLives[row.address] : undefined;
+                  const rowLive = keyed || addr || (ticker?.id === row.id ? live : null);
+                  const price = rowLive ? formatPrice(rowLive.price) : unread && ticker?.id === row.id ? MARKET_CANT_REACH : "…";
+                  const kind = row.address ? (row.platform === "solana" ? "mint" : "contract") : row.kind;
+                  return (
+                    <li key={row.id} className="flex flex-wrap items-center gap-2">
+                      <button type="button" data-on={row.id === house.currentId ? "1" : "0"} onClick={() => keepHouse(pickTicker(house, row.id))}>
+                        {row.symbol} · {price}
+                      </button>
+                      <span className="text-[10px] text-subtle">{kind}</span>
+                      <button type="button" onClick={() => keepHouse(moveTicker(house, row.id, -1))}>Up</button>
+                      <button type="button" onClick={() => keepHouse(moveTicker(house, row.id, 1))}>Down</button>
+                      <button type="button" onClick={() => keepHouse(removeTicker(house, row.id))}>Remove</button>
+                    </li>
+                  );
+                })}
+              </ul>
+              <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{MARKET_TRUTH}</p>
+              <form
+                className="mt-2 flex gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void lookupCoins();
+                }}
+              >
+                <label className="flex min-w-0 flex-1 flex-col gap-1">
+                  Add a coin
+                  <input type="text" autoComplete="off" spellCheck={false} value={query} onChange={(e) => setQuery(e.target.value)} placeholder={MARKET_PLACEHOLDER} aria-label="Add a coin" />
+                </label>
+                <button type="submit">Look up</button>
+              </form>
+              {truth ? <p className="mt-1 text-subtle">{truth}</p> : null}
+              {coinHits.length ? (
+                <ul className="mt-2 space-y-1">
+                  {coinHits.map((hit) => (
+                    <li key={hit.id}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          keepHouse(addTicker(house, hit));
+                          setCoinHits([]);
+                          setQuery("");
+                        }}
+                      >
+                        Add {hit.symbol} · {hit.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </section>
+
+            <section className="rounded-sm border border-border/40 p-2" aria-label="NFTs" style={{ background: "color-mix(in srgb, var(--plate-bg, #161412) 70%, transparent)" }}>
+              <h3 className="text-[10px] uppercase tracking-[0.16em] text-subtle">{NFT_LABEL}</h3>
+              <p className="text-subtle">{nft ? nftLine(house, nftLive, nftUnread) : NO_NFT}</p>
+              <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">Marketplaces</p>
+              <ul className="mt-1 space-y-1">
+                {house.marketplaces.map((row) => (
+                  <li key={row.id} className="flex flex-wrap items-center gap-2">
+                    <span>{row.name}</span>
+                    <span className="text-[10px] text-subtle">{row.note}</span>
+                    <button type="button" onClick={() => keepHouse(moveMarketplace(house, row.id, -1))}>Up</button>
+                    <button type="button" onClick={() => keepHouse(moveMarketplace(house, row.id, 1))}>Down</button>
+                    <button type="button" onClick={() => keepHouse(removeMarketplace(house, row.id))}>Remove</button>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {NFT_MARKETPLACES.filter((m) => !haveMp.has(m.id)).map((m) => (
+                  <button key={m.id} type="button" onClick={() => keepHouse(addMarketplace(house, m.id))}>
+                    Add {m.name}
+                  </button>
+                ))}
+              </div>
+              <p className="mt-3 text-[10px] uppercase tracking-[0.16em] text-subtle">Collections</p>
+              <ul className="mt-1 space-y-1">
+                {house.nfts.map((row) => (
+                  <li key={row.id} className="flex flex-wrap items-center gap-2">
+                    <button type="button" data-on={row.id === house.currentNftId ? "1" : "0"} onClick={() => keepHouse(pickNft(house, row.id))}>
+                      {row.symbol || row.name}
+                    </button>
+                    <button type="button" onClick={() => keepHouse(moveNft(house, row.id, -1))}>Up</button>
+                    <button type="button" onClick={() => keepHouse(moveNft(house, row.id, 1))}>Down</button>
+                    <button type="button" onClick={() => keepHouse(removeNft(house, row.id))}>Remove</button>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-subtle">{NFT_TRUTH}</p>
+              <form
+                className="mt-2 flex gap-2"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  void lookupNfts();
+                }}
+              >
+                <label className="flex min-w-0 flex-1 flex-col gap-1">
+                  Add a collection
+                  <input type="text" autoComplete="off" spellCheck={false} value={nftQuery} onChange={(e) => setNftQuery(e.target.value)} placeholder={NFT_PLACEHOLDER} aria-label="Add a collection" />
+                </label>
+                <button type="submit">Look up</button>
+              </form>
+              {nftTruth ? <p className="mt-1 text-subtle">{nftTruth}</p> : null}
+              {nftHits.length ? (
+                <ul className="mt-2 space-y-1">
+                  {nftHits.map((hit) => (
+                    <li key={hit.id}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          keepHouse(addNft(house, hit));
+                          setNftHits([]);
+                          setNftQuery("");
+                        }}
+                      >
+                        Add {hit.symbol || hit.name} · {hit.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </section>
+          </div>
           {chrome.colorUi}
         </div>
       ) : null}
