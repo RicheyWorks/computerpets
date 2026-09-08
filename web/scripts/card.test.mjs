@@ -22,7 +22,7 @@ test("the desk card law matches the overlay card", () => {
   assert.deepEqual(C.CARD_COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
   assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
   assert.deepEqual([...C.MUTE_BUSES], ["talk", "special", "weather", "treats", "steps", "music"]);
-  assert.equal(C.VOICE_TRUTH, "Rui, Soot, and Wedge talk with house cry first; system speech is the backup.");
+  assert.equal(C.VOICE_TRUTH, "Rui, Soot, Wedge, and Heart talk with house cry first; system speech is the backup.");
   assert.equal(K.VOICE_TRUTH, C.VOICE_TRUTH);
   assert.match(K.QUIT_TRUTH, /desktop\.ps1/);
   assert.equal(C.busOf("chirp"), "talk");
@@ -74,6 +74,7 @@ test("saved lines, alarm, and timer are machine-local", () => {
   assert.equal(C.prefersHouseCry("red_panda"), true);
   assert.equal(C.prefersHouseCry("crow"), true);
   assert.equal(C.prefersHouseCry("raven"), true);
+  assert.equal(C.prefersHouseCry("barn_owl"), true);
   assert.equal(C.prefersHouseCry("cat"), false);
   assert.ok(C.speakOpts("hearth", 50).volume < 0.5);
   assert.match(roomSrc, /prefersHouseCry/);

@@ -227,7 +227,7 @@ test("Heart tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.deepEqual([...T.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1123,7 +1123,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.deepEqual([...Overlay.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.deepEqual([...Overlay.HAPPY], ["furcata", "javanica", "guttata"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
@@ -1195,7 +1195,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("diskturn/softcrouch/parallax/snore/tytonid are Tyto-alba-true, not copies of prior guests", () => {
+test("diskturn/softcrouch/parallax/snore/twist/pellet/tytonid are Tyto-alba-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("tytonid", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1236,6 +1236,8 @@ test("diskturn/softcrouch/parallax/snore/tytonid are Tyto-alba-true, not copies 
     assert.equal(mod.TRICKS.includes("parallax"), false);
     assert.equal(mod.TRICKS.includes("snore"), false);
     assert.equal(mod.TRICKS.includes("tytonid"), false);
+    assert.equal(mod.TRICKS.includes("twist"), false);
+    assert.equal(mod.TRICKS.includes("pellet"), false);
     assert.equal(mod.HAPPY.includes("furcata"), false);
     assert.equal(mod.HAPPY.includes("javanica"), false);
     assert.equal(mod.HAPPY.includes("guttata"), false);
@@ -1566,7 +1568,7 @@ test("ground registry keeps prior guests gated; Heart selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.deepEqual([...T.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2078,7 +2080,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.deepEqual([...Overlay.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2138,24 +2140,32 @@ globalThis.PetMorelTricks = OverlayMorel;
 
 test("notes: Heart idle-life done; next house-order guest still lacking tricks is Hook / red_tail", () => {
 
-  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
   assert.equal(Crow.TRICKS.includes("diskturn"), false);
   assert.equal(Crow.TRICKS.includes("tytonid"), false);
-  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.equal(Crow.TRICKS.includes("twist"), false);
+  assert.equal(Crow.TRICKS.includes("pellet"), false);
+  assert.deepEqual([...Raven.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.deepEqual([...Raven.HAPPY], ["principalis", "sinuatus", "cryptoleucus"]);
   assert.equal(Raven.TRICKS.includes("diskturn"), false);
   assert.equal(Raven.TRICKS.includes("tytonid"), false);
+  assert.equal(Raven.TRICKS.includes("twist"), false);
+  assert.equal(Raven.TRICKS.includes("pellet"), false);
   assert.equal(T.TRICKS.includes("hopwalk"), false);
   assert.equal(T.TRICKS.includes("corvid"), false);
   assert.equal(T.TRICKS.includes("dihedral"), false);
   assert.equal(T.TRICKS.includes("hackles"), false);
+  assert.equal(T.TRICKS.includes("invite"), false);
+  assert.equal(T.TRICKS.includes("toeing"), false);
+  assert.equal(T.TRICKS.includes("scrutinize"), false);
+  assert.equal(T.TRICKS.includes("glean"), false);
   assert.equal(T.HAPPY.includes("brachyrhynchos"), false);
   assert.equal(T.HAPPY.includes("principalis"), false);
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "barn_owl");
-  assert.deepEqual([...T.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "tytonid"]);
+  assert.deepEqual([...T.TRICKS], ["diskturn", "softcrouch", "parallax", "snore", "twist", "pellet", "tytonid"]);
   assert.deepEqual([...T.HAPPY], ["furcata", "javanica", "guttata"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
@@ -2346,3 +2356,21 @@ test("notes: Heart idle-life done; next house-order guest still lacking tricks i
 
 
 
+
+
+test("ultra-polish: Heart diskturn/twist/pellet/parallax lifts are Rui-visible (not micro idle-gen)", () => {
+  const di = T.beginTrick("diskturn", 80, 1);
+  const mid = T.stepTrick(di, T.DUR.diskturn * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 8, `diskturn mid rot ${mid.rot}`);
+  const tw = T.beginTrick("twist", 80, 1);
+  const t2 = T.stepTrick(tw, T.DUR.twist * 0.35, { cmd: "idle" });
+  assert.ok(Math.abs(t2.rot) > 14, `twist mid rot ${t2.rot}`);
+  const pe = T.beginTrick("pellet", 80, 1);
+  const p2 = T.stepTrick(pe, T.DUR.pellet * 0.35, { cmd: "idle" });
+  assert.ok(p2.lift > 4, `pellet mid lift ${p2.lift}`);
+  const pa = T.beginTrick("parallax", 80, 1);
+  const a2 = T.stepTrick(pa, T.DUR.parallax * 0.4, { cmd: "idle" });
+  assert.ok(a2.lift > 4, `parallax mid lift ${a2.lift}`);
+  assert.ok(Overlay.twistPose && Overlay.pelletPose);
+  assert.ok(T.nextTrickWait(true, 0, "tytonid") < 80);
+});
