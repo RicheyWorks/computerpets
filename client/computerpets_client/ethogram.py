@@ -142,7 +142,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "coli": (_a("tumble", "dart", 0.7, 5), _a("run", "wiggle", 0.9, 3), _a("still", "freeze", 1.2, 2)),
     "haloarchaea": (_a("blush", "frost", 1.8, 5, "sit"), _a("still", "freeze", 2.2, 3), _a("pink", "flush", 1.4, 1)),
     "crow": (_a("caw", "talk", 0.8, 4, "talk"), _a("hop_step", "hop", 0.5, 3, "play"), _a("preen", "groom", 1.5, 3, "sit"), _a("cock_look", "nod", 1.2, 3, "sit"), _a("bill_wipe", "wiggle", 0.9, 2, "sit"), _a("alert", "freeze", 1.8, 2), _a("wing_settle", "pulse", 0.9, 2, "play"), _a("perch", "sit_hold", 2.2, 2, "sit")),
-    "raven": (_a("kronk", "talk", 0.9, 4, "talk"), _a("hop_step", "hop", 0.55, 3, "play"), _a("preen", "groom", 1.4, 2, "sit")),
+    "raven": (_a("kronk", "talk", 0.9, 4, "talk"), _a("hop_step", "hop", 0.55, 3, "play"), _a("preen", "groom", 1.5, 3, "sit"), _a("ruff_flare", "pulse", 1.1, 3, "sit"), _a("head_cock", "nod", 1.2, 3, "sit"), _a("bill_wipe", "wiggle", 0.9, 2, "sit"), _a("alert", "freeze", 1.8, 2), _a("perch", "sit_hold", 2.4, 2, "sit")),
     "barn_owl": (_a("hiss", "talk", 0.8, 3, "talk"), _a("swivel", "nod", 1.2, 3, "sit"), _a("preen", "groom", 1.6, 2, "sit")),
     "red_tail": (_a("soar", "pulse", 1.4, 4), _a("stoop", "dart", 0.8, 3), _a("still", "freeze", 1.6, 2)),
     "chickadee": (_a("dee", "talk", 0.7, 4, "talk"), _a("hop_step", "hop", 0.45, 3, "play"), _a("preen", "groom", 1.2, 2, "sit")),
