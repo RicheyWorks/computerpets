@@ -444,7 +444,7 @@ test("ultra-polish: Wick tube/romp/corkscrew/slink lifts are Rui-visible (not mi
   assert.ok(T.nextTrickWait(true, 0, "tube") > 40);
 });
 
-test("notes: Wick idle-life ultra done; next house-order ultra guest is Burr / hedgehog (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue already ultra; Echo/budgie + Peck/penguin + Quill/parrot skip bird)", () => {
+test("notes: Wick idle-life ultra done; Burr / hedgehog ultra next-or-done; following house-order ultra guest is Floss / chinchilla (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["tube", "romp", "steal", "puff", "noodle", "corkscrew", "slink"]);
   assert.equal(T.TRICKS.includes("thread"), false);
   assert.equal(Overlay.TRICKS.includes("corkscrew"), true);

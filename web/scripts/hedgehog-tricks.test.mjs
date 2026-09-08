@@ -47,7 +47,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Burr tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
+  assert.deepEqual([...T.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -80,7 +80,7 @@ test("Burr tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("steal"), false);
 });
 
-test("curl/snuffle/anoint/bristle/root are house-hedgehog-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret or dragon clones", () => {
+test("curl/snuffle/anoint/bristle/root/trundle/wheel are house-hedgehog-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const curl = T.beginTrick("curl", 80, 1);
   assert.equal(curl.anim, "sit");
@@ -88,7 +88,7 @@ test("curl/snuffle/anoint/bristle/root are house-hedgehog-true, not Rui cat dog 
   const held = T.stepTrick(curl, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(curl, T.CURL_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -111,8 +111,22 @@ test("curl/snuffle/anoint/bristle/root are house-hedgehog-true, not Rui cat dog 
   assert.equal(root.anim, "play");
   const rootMid = T.stepTrick(root, 0.45, ground);
   assert.ok(Math.abs(rootMid.x - 80) > 0.5 || Math.abs(rootMid.lift) > 0.3 || Math.abs(rootMid.rot) > 1);
-  const rootDone = T.stepTrick(root, 1.4, ground);
+  const rootDone = T.stepTrick(root, T.DUR.root + 0.1, ground);
   assert.equal(rootDone.phase, "done");
+  const trundle = T.beginTrick("trundle", 80, 1);
+  assert.equal(trundle.anim, "walk");
+  const trundleMid = T.stepTrick(trundle, T.DUR.trundle * 0.4, ground);
+  assert.ok(trundleMid.lift > 2 || Math.abs(trundleMid.rot) > 4);
+  const wheel = T.beginTrick("wheel", 80, 1);
+  assert.equal(wheel.anim, "play");
+  const wheelMid = T.stepTrick(wheel, T.DUR.wheel * 0.4, ground);
+  assert.ok(wheelMid.lift > 6 || Math.abs(wheelMid.rot) > 6);
+  assert.equal(T.TRICKS.includes("ball"), false);
+  assert.equal(T.TRICKS.includes("waddle"), false);
+  assert.equal(T.TRICKS.includes("plod"), false);
+  assert.equal(T.TRICKS.includes("scuttle"), false);
+  assert.equal(T.TRICKS.includes("reel"), false);
+  assert.equal(T.TRICKS.includes("zoom"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("curl"), false);
@@ -420,3 +434,34 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
 });
+
+test("ultra-polish: Burr curl/snuffle/trundle/wheel lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("curl", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 8, `curl mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `curl mid lift ${mid.lift}`);
+  const sn = T.beginTrick("snuffle", 80, 1);
+  const s2 = T.stepTrick(sn, T.DUR.snuffle * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(s2.lift) > 2 || Math.abs(s2.rot) > 4, `snuffle mid lift/rot ${s2.lift}/${s2.rot}`);
+  const tr = T.beginTrick("trundle", 80, 1);
+  const t2 = T.stepTrick(tr, T.DUR.trundle * 0.4, { cmd: "idle" });
+  assert.ok(t2.lift > 2 || Math.abs(t2.rot) > 6, `trundle mid lift/rot ${t2.lift}/${t2.rot}`);
+  const wh = T.beginTrick("wheel", 80, 1);
+  const w2 = T.stepTrick(wh, T.DUR.wheel * 0.4, { cmd: "idle" });
+  assert.ok(w2.lift > 6 || Math.abs(w2.rot) > 6, `wheel mid lift/rot ${w2.lift}/${w2.rot}`);
+  assert.ok(Overlay.trundlePose && Overlay.wheelPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.trundle, Overlay.DUR.trundle);
+  assert.equal(T.DUR.wheel, Overlay.DUR.wheel);
+  assert.equal(T.CURL_HOLD, Overlay.CURL_HOLD);
+  assert.equal(T.CURL_HOLD, 13.6);
+  assert.ok(T.nextTrickWait(true, 0, "curl") > 38);
+});
+
+test("notes: Burr idle-life ultra done; next house-order ultra guest is Floss / chinchilla (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
+  assert.equal(T.TRICK_KEY, "hedgehog");
+  assert.equal(T.wantsThankYou("burr"), true);
+  assert.equal(T.TRICKS.includes("ball"), false);
+});
+
