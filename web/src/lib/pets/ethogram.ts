@@ -225,7 +225,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   barn_owl: [A("hiss", "talk", 0.8, 4, "talk"), A("swivel", "nod", 1.2, 3, "sit"), A("preen", "groom", 1.5, 3, "sit"), A("disk_listen", "freeze", 1.4, 3, "sit"), A("soft_settle", "lean", 1.1, 2, "sit"), A("alert", "freeze", 1.8, 2), A("wing_fold", "fold", 0.9, 2, "sit"), A("perch", "sit_hold", 2.4, 2, "sit")],
   red_tail: [A("soar", "pulse", 1.4, 4), A("stoop", "dart", 0.8, 3, "play"), A("still", "freeze", 1.6, 2), A("preen", "groom", 1.5, 3, "sit"), A("keeyer", "talk", 0.9, 3, "talk"), A("alert", "freeze", 1.8, 2), A("wing_settle", "pulse", 0.9, 2, "play"), A("perch", "sit_hold", 2.4, 2, "sit")],
   chickadee: [A("dee", "talk", 0.7, 4, "talk"), A("hop_step", "hop", 0.45, 3, "play"), A("preen", "groom", 1.5, 3, "sit"), A("fee_bee", "talk", 0.9, 3, "talk"), A("alert", "freeze", 1.8, 2), A("wing_flick", "pulse", 0.9, 2, "play"), A("cache_peek", "dart", 0.8, 2, "sit"), A("perch", "sit_hold", 2.4, 2, "sit")],
-  robin: [A("hop", "hop", 0.5, 4, "play"), A("pull", "nod", 1.0, 3, "sit"), A("preen", "groom", 1.3, 2, "sit")],
+  robin: [A("hop", "hop", 0.5, 4, "play"), A("pull", "nod", 1.0, 3, "sit"), A("preen", "groom", 1.5, 3, "sit"), A("carol_soft", "talk", 0.9, 3, "talk"), A("alert", "freeze", 1.8, 2), A("wing_flick", "pulse", 0.9, 2, "play"), A("breast_puff", "pulse", 1.0, 2, "sit"), A("perch", "sit_hold", 2.4, 2, "sit")],
   mallard: [A("dabble", "eat", 1.2, 4, "eat"), A("waddle", "wiggle", 1.0, 3), A("still", "freeze", 1.6, 2)],
   canada_goose: [A("honk", "talk", 0.8, 4, "talk"), A("walk", "wiggle", 1.0, 3), A("still", "freeze", 1.8, 2)],
   pileated: [A("drum", "snap", 0.7, 4, "play"), A("hop_step", "hop", 0.5, 3, "play"), A("preen", "groom", 1.4, 2, "sit")],

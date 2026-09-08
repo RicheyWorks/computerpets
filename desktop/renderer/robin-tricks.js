@@ -1,12 +1,20 @@
-/** Brick ground tricks while idle. House neighborly Turdidae / Turdus American robin desk life — runstop / listen / carol / tug / turdus personality (runstop run-stop-run lawn forage without naming hop or hopwalk or soar, listen head-cock worm-listen without naming monocle or parallax or softcrouch, carol dawn-carol stance without naming sing or song or cry or call or feebee or keeyer or cronk or snore, tug turf-tug worm-pull without naming fossick or mantle or cache, long turdus Turdus migratorius brick-breast desk perch — never named wait or soar or hop or preen or fan or strut or roost or hopwalk or monocle or fossick or anting or corvid or dihedral or billtap or tumble or cronk or hackles or diskturn or softcrouch or parallax or snore or tytonid or kettle or stoop or bind or keeyer or buteo or feebee or gargle or hangup or cache or poecile; window-play leaves robin fly alone; Soot/Wedge/Heart/Hook/Dee own their tricks; guest slug Brick / key robin — accept "robin" and "brick"; do NOT name a trick robin or brick or hop or soar or mantle). Thank-yous migratorius / achrusterus / caurinus. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web robin-tricks.ts. Window-play unchanged. True American robin desk life — not chickadee/hawk/owl/crow/raven clones. Drake owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Brick ground tricks while idle — ultra-polish pass. House neighborly Turdidae / Turdus American robin desk life — runstop / listen / carol / tug / rufous / tailcock / turdus personality (runstop run-stop-run lawn forage without naming hop or hopwalk or soar, listen head-cock worm-listen without naming monocle or parallax or softcrouch, carol dawn-carol stance without naming sing or song or cry or call or feebee or keeyer or cronk or snore, tug turf-tug worm-pull without naming fossick or mantle or cache or seedhammer, rufous brick-breast puff without naming strut or fan or capflash or flash-of-hawk, tailcock tail-cock flick without naming tumble or dihedral or softcrouch or plunge, long turdus Turdus migratorius brick-breast desk perch — never named wait or soar or hop or preen or fan or strut or roost or hopwalk or monocle or fossick or anting or scrutinize or glean or corvid or dihedral or billtap or tumble or cronk or invite or toeing or hackles or diskturn or softcrouch or parallax or snore or twist or pellet or tytonid or kettle or stoop or bind or keeyer or patagial or tower or buteo or feebee or gargle or hangup or cache or capflash or seedhammer or poecile; window-play leaves robin fly alone; Soot/Wedge/Heart/Hook/Dee own their tricks; guest slug Brick / key robin — accept "robin" and "brick"; do NOT name a trick robin or brick or hop or soar or mantle or breast or flick). Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. Thank-yous migratorius / achrusterus / caurinus. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop robin-tricks.js. Window-play unchanged. True American robin desk life — not chickadee/hawk/owl/crow/raven clones. Drake owns the next seat. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "robin";
-  const TRICKS = ["runstop", "listen", "carol", "tug", "turdus"];
+  const TRICKS = ["runstop", "listen", "carol", "tug", "rufous", "tailcock", "turdus"];
   const HAPPY = ["migratorius", "achrusterus", "caurinus"];
-  const HAPPY_DUR = { migratorius: 1.63, achrusterus: 1.78, caurinus: 1.70 };
-  const TURDUS_HOLD = 19.08;
-  const RELEASE_S = 1.14;
-  const DUR = { turdus: TURDUS_HOLD + RELEASE_S, runstop: 2.48, listen: 2.40, carol: 2.62, tug: 2.52 };
+  const HAPPY_DUR = { migratorius: 1.58, achrusterus: 1.72, caurinus: 1.65 };
+  const TURDUS_HOLD = 14.8;
+  const RELEASE_S = 1.08;
+  const DUR = {
+    turdus: TURDUS_HOLD + RELEASE_S,
+    runstop: 2.48,
+    listen: 2.36,
+    carol: 2.52,
+    tug: 2.42,
+    rufous: 2.34,
+    tailcock: 2.46,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,39 +44,27 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "turdus") return 86 + roll * 42;
-  if (kind === "runstop") return 15.8 + roll * 13.0;
-  if (kind === "listen") return 17.8 + roll * 12.0;
-  if (kind === "tug") return 20.2 + roll * 12.6;
-  return justFinished ? 14.6 + roll * 10.9 : 8.4 + roll * 9.7;
+    if (kind === "turdus") return 44 + roll * 30;
+    if (kind === "runstop" || kind === "rufous") return 13 + roll * 9;
+    if (kind === "listen" || kind === "tailcock") return 12 + roll * 9;
+    if (kind === "carol" || kind === "tug") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "turdus";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "turdus") {
-      if (roll < 0.26) return "runstop";
-      if (roll < 0.5) return "listen";
-      if (roll < 0.74) return "carol";
-      return "tug";
+    const pool = TRICKS.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : TRICKS.slice();
+    const weights = list.map((k) => (k === "turdus" ? 0.55 : k === "runstop" || k === "carol" ? 1.15 : 1));
+    let total = 0;
+    for (let i = 0; i < weights.length; i++) total += weights[i];
+    let r = roll * total;
+    for (let i = 0; i < list.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return list[i];
     }
-    if (lastKind === "runstop") {
-      if (roll < 0.26) return "turdus";
-      if (roll < 0.5) return "listen";
-      if (roll < 0.74) return "carol";
-      return "tug";
-    }
-    if (lastKind === "listen") {
-      if (roll < 0.22) return "turdus";
-      if (roll < 0.44) return "runstop";
-      if (roll < 0.68) return "carol";
-      return "tug";
-    }
-    if (roll < 0.2) return "turdus";
-    if (roll < 0.4) return "runstop";
-    if (roll < 0.6) return "listen";
-    if (roll < 0.8) return "carol";
-    return "tug";
+    return list[list.length - 1] || "runstop";
   }
 
   function happyCanStart(state) {
@@ -124,56 +120,49 @@
       x: x,
       lift: 0,
       rot: 0,
-      anim: name === "migratorius" ? "sit" : name === "achrusterus" ? "play" : "sit",
+      anim: name === "achrusterus" ? "play" : "sit",
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
   }
 
-                      function migratoriusPose(t) {
+  function migratoriusPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.migratorius));
     if (u < 0.16) {
       const s = u / 0.16;
-      return { lift: s * 0.019, rot: s * 2.15, dx: 0, anim: "sit" };
+      return { lift: s * 6, rot: s * 12, dx: 0, anim: "sit" };
     }
     if (u < 0.82) {
       const flash = Math.sin(t * 5.8) + 0.28 * Math.sin(t * 11.6);
-      return {
-        lift: 0.019 + Math.abs(flash) * 0.014,
-        rot: 2.15 + flash * 1.55,
-        dx: flash * 0.0010,
-        anim: "sit",
-      };
+      return { lift: 6 + Math.abs(flash) * 5, rot: 12 + flash * 8, dx: flash * 2.2, anim: "sit" };
     }
     const s = (u - 0.82) / 0.18;
-    return { lift: 0.008 * (1 - s), rot: 0.55 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 4 * (1 - s), rot: 4 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function achrusterusPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.achrusterus));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.028, rot: s * -2.05, dx: s * 0.0014, anim: "play" };
+      return { lift: s * 14, rot: s * -12, dx: s * 3, anim: "play" };
     }
     if (u < 0.85) {
       const wriggle = Math.sin(t * 4.4) + 0.24 * Math.sin(t * 7.9);
-      return {
-        lift: 0.028 + Math.abs(wriggle) * 0.020,
-        rot: -2.05 + wriggle * 2.55,
-        dx: wriggle * 0.0022,
-        anim: "play",
-      };
+      return { lift: 12 + Math.abs(wriggle) * 10, rot: -10 + wriggle * 14, dx: wriggle * 4, anim: "play" };
     }
     const s = (u - 0.85) / 0.15;
-    return { lift: 0.010 * (1 - s), rot: -0.38 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 5 * (1 - s), rot: -4 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function caurinusPose(t) {
     return {
-      lift: 0.007 + Math.abs(Math.sin(t * 0.29)) * 0.015,
-      rot: Math.sin(t * 0.29) * 1.25,
-      dx: Math.sin(t * 0.24) * 0.0011,
+      lift: 3 + Math.abs(Math.sin(t * 4.0)) * 7,
+      rot: Math.sin(t * 3.4) * 9,
+      dx: Math.sin(t * 2.6) * 3,
       anim: "sit",
     };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
@@ -181,22 +170,15 @@
     }
     const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
     const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "migratorius") {
-      const pose = migratoriusPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "achrusterus") {
-      const pose = achrusterusPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = caurinusPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
+    const pose =
+      next.kind === "migratorius"
+        ? migratoriusPose(next.t)
+        : next.kind === "achrusterus"
+          ? achrusterusPose(next.t)
+          : caurinusPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
     if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     return next;
   }
@@ -207,17 +189,13 @@
 
   function beginTrick(kind, x, facing) {
     const anim =
-      kind === "turdus"
+      kind === "turdus" || kind === "listen" || kind === "rufous"
         ? "sit"
-        : kind === "runstop"
+        : kind === "runstop" || kind === "tug" || kind === "tailcock"
           ? "play"
-          : kind === "listen"
-            ? "sit"
-            : kind === "carol"
-              ? "talk"
-              : kind === "tug"
-                ? "play"
-                : "sit";
+          : kind === "carol"
+            ? "talk"
+            : "sit";
     return {
       kind: kind,
       phase: kind === "turdus" ? "hold" : "go",
@@ -236,19 +214,15 @@
     return x * x * (3 - 2 * x);
   }
 
-
-                      function turdusPose(t) {
-    const breath = Math.sin(t * 0.09) + 0.07 * Math.sin(t * 0.25);
-    const soft = Math.abs(Math.sin(t * 0.12));
-    return {
-      lift: 0.006 + soft * 0.013,
-      rot: 0.62 + breath * 0.72,
-    };
+  function turdusPose(t) {
+    const breath = Math.sin(t * 0.55) + 0.18 * Math.sin(t * 1.4);
+    const soft = Math.abs(Math.sin(t * 0.9));
+    return { lift: 2 + soft * 4 + Math.abs(breath) * 1.5, rot: -2 + breath * 4 };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.004 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.22 * (1 - u) };
+    return { lift: 3 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3 * (1 - u) };
   }
 
   function runstopPose(t, fromX, facing) {
@@ -256,104 +230,136 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
-      // runstop lawn-run lifts into a short dash
-      return { x: fromX, lift: s * 0.016, rot: s * -3.2 * face, anim: "play" };
+      return { x: fromX, lift: s * 8, rot: s * -10 * face, anim: "play" };
     }
     if (u < 0.88) {
       const s = (u - 0.10) / 0.78;
-      // stop-run pulses: dash, plant, dash again without naming hop
       const dash = Math.sin(s * Math.PI * 3.2);
       const plant = Math.abs(Math.sin(s * Math.PI * 6.4));
       return {
-        x: fromX + face * (0.028 * s + dash * 0.010),
-        lift: 0.012 + plant * 0.018,
-        rot: (-3.2 + dash * 5.4) * face,
+        x: fromX + face * (10 * s + dash * 6),
+        lift: 4 + plant * 10 + Math.abs(dash) * 3,
+        rot: (-10 + dash * 8) * face,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
-    return {
-      x: fromX + face * 0.028 * (1 - s),
-      lift: 0.008 * (1 - s),
-      rot: -0.8 * (1 - s) * face,
-      anim: "idle",
-    };
+    return { x: fromX + face * 10 * (1 - s), lift: 4 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" };
   }
+
   function listenPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.listen));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      // listen head-cock tips toward the blotter turf
-      return { x: fromX, lift: s * 0.010, rot: s * 14.5 * face, anim: "sit" };
+      return { x: fromX, lift: s * -6, rot: s * 16 * face, anim: "sit" };
     }
     if (u < 0.84) {
       const hush = Math.sin(t * 1.6) + 0.22 * Math.sin(t * 3.3);
       return {
-        x: fromX + face * hush * 0.0012,
-        lift: 0.010 + Math.abs(hush) * 0.005,
-        rot: (14.5 + hush * 2.8) * face,
+        x: fromX + face * hush * 2.2,
+        lift: -6 + Math.abs(hush) * 3,
+        rot: (16 + hush * 5) * face,
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.84) / 0.16);
-    return {
-      x: fromX,
-      lift: 0.004 * (1 - s),
-      rot: 2.2 * (1 - s) * face,
-      anim: "idle",
-    };
+    return { x: fromX, lift: -3 * (1 - s), rot: 4 * (1 - s) * face, anim: "idle" };
   }
+
   function carolPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.carol));
     const face = facing == null ? 1 : facing;
     if (u < 0.11) {
       const s = smoothstep(u / 0.11);
-      // carol lifts into a brick-breast song lean without naming sing
-      return { x: fromX, lift: s * 0.026, rot: s * 6.8 * face, anim: "talk" };
+      return { x: fromX, lift: s * 6, rot: s * 14 * face, anim: "talk" };
     }
     if (u < 0.86) {
       const s = (u - 0.11) / 0.75;
       const phrase = Math.sin(s * Math.PI * 2.4);
       const settle = Math.abs(Math.sin(s * Math.PI * 4.8));
       return {
-        x: fromX + face * (0.004 * s + phrase * 0.0025),
-        lift: 0.022 + settle * 0.014,
-        rot: (6.8 + phrase * 5.2) * face,
+        x: fromX + face * (4 * s + phrase * 2.4),
+        lift: 5 + settle * 4,
+        rot: (14 + phrase * 6) * face,
         anim: "talk",
       };
     }
     const s = smoothstep((u - 0.86) / 0.14);
-    return {
-      x: fromX + face * 0.004 * (1 - s),
-      lift: 0.010 * (1 - s),
-      rot: 1.4 * (1 - s) * face,
-      anim: "idle",
-    };
+    return { x: fromX + face * 4 * (1 - s), lift: 3 * (1 - s), rot: 4 * (1 - s) * face, anim: "idle" };
   }
+
   function tugPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.tug));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      // tug tips into the turf for a worm pull
-      return { x: fromX, lift: s * -0.012, rot: s * 4.4 * face, anim: "play" };
+      return { x: fromX, lift: s * -8, rot: s * 12 * face, anim: "play" };
     }
     if (u < 0.88) {
       const yank = Math.sin(t * 3.1) + 0.26 * Math.sin(t * 6.2);
       return {
-        x: fromX + face * (-0.008 + yank * 0.004),
-        lift: -0.012 + Math.abs(yank) * 0.016,
-        rot: (4.4 + yank * 6.5) * face,
+        x: fromX + face * (-4 + yank * 5),
+        lift: -8 + Math.abs(yank) * 10,
+        rot: (12 + yank * 10) * face,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX, lift: -0.004 * (1 - s), rot: 0.6 * (1 - s) * face, anim: "idle" };
+    return { x: fromX, lift: -4 * (1 - s), rot: 3 * (1 - s) * face, anim: "idle" };
   }
+
+  function rufousPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.rufous));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 7, rot: s * -14 * face, anim: "sit" };
+    }
+    if (u < 0.86) {
+      const flash = Math.sin(t * 5.1) + 0.3 * Math.sin(t * 10.2);
+      return {
+        x: fromX + face * flash * 3,
+        lift: 6 + Math.abs(flash) * 6,
+        rot: (-14 + flash * 10) * face,
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.86) / 0.14);
+    return { x: fromX, lift: 3 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" };
+  }
+
+  function tailcockPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.tailcock));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 12, rot: s * -10 * face, anim: "play" };
+    }
+    if (u < 0.88) {
+      const cock = Math.sin(t * 6.2) + 0.22 * Math.sin(t * 12.4);
+      const dip = Math.abs(Math.sin(t * 3.1));
+      return {
+        x: fromX + face * cock * 2.5,
+        lift: 4 + dip * 12 + Math.abs(cock) * 3,
+        rot: (-10 + cock * 8) * face,
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return { x: fromX, lift: 4 * (1 - s), rot: -3 * (1 - s) * face, anim: "idle" };
+  }
+
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "runstop" && trick.kind !== "listen" && trick.kind !== "carol" && trick.kind !== "tug") {
+    const short =
+      trick.kind === "runstop" ||
+      trick.kind === "listen" ||
+      trick.kind === "carol" ||
+      trick.kind === "tug" ||
+      trick.kind === "rufous" ||
+      trick.kind === "tailcock";
+    if (shouldAbort(flags) && !short) {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -378,31 +384,20 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "runstop") {
-      const pose = runstopPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "listen") {
-      const pose = listenPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "carol") {
-      const pose = carolPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = tugPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
+    const from = trick.fromX != null ? trick.fromX : trick.x;
+    const poseFn = {
+      runstop: runstopPose,
+      listen: listenPose,
+      carol: carolPose,
+      tug: tugPose,
+      rufous: rufousPose,
+      tailcock: tailcockPose,
+    }[next.kind];
+    const pose = poseFn(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
     if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     return next;
   }
@@ -427,6 +422,8 @@
     listenPose,
     carolPose,
     tugPose,
+    rufousPose,
+    tailcockPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
