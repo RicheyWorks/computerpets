@@ -17,6 +17,7 @@ contextBridge.exposeInMainWorld("desk", {
   roster: () => ipcRenderer.invoke("roster-get"),
   radioSearch: (query, area) => ipcRenderer.invoke("radio-search", query, area),
   newsTopic: (query) => ipcRenderer.invoke("news-topic", query),
+  newsFeed: (opts) => ipcRenderer.invoke("news-feed", opts),
   marketQuote: (ticker) => ipcRenderer.invoke("market-quote", ticker),
   marketQuotes: (ids) => ipcRenderer.invoke("market-quotes", ids),
   marketTerminal: (ticker) => ipcRenderer.invoke("market-terminal", ticker),

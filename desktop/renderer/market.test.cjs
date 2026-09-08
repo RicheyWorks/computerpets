@@ -146,3 +146,20 @@ test("Coins pane kind crypto override beats classify stock guess on object add",
   assert.ok(house.tickers.some((t) => t.symbol === "BONK" && t.kind === "crypto"));
 });
 
+test("market favorites star coins and nfts", () => {
+  const M = require("./market.js");
+  let house = M.blankMarket();
+  const coin = house.tickers[0];
+  const nft = house.nfts[0];
+  assert.ok(coin);
+  assert.ok(nft);
+  house = M.toggleFavoriteTicker(house, coin.id);
+  house = M.toggleFavoriteNft(house, nft.id);
+  assert.deepEqual(M.favoriteRows(house).tickers.map((t) => t.id), [coin.id]);
+  assert.deepEqual(M.favoriteRows(house).nfts.map((t) => t.id), [nft.id]);
+  const patch = M.toCardPatch(house);
+  assert.deepEqual(patch.favoriteTickerIds, [coin.id]);
+  const again = M.parseMarket(patch);
+  assert.equal(M.isFavoriteTicker(again, coin.id), true);
+  assert.match(M.FAVORITES_EMPTY, /No favorites yet/);
+});
