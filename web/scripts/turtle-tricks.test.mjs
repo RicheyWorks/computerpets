@@ -40,7 +40,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Ink tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["soak", "tuck", "crane", "plod", "paddle"]);
+  assert.deepEqual([...T.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -69,7 +69,7 @@ test("Ink tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("zoom"), false);
 });
 
-test("soak/tuck/crane/plod/paddle are house-turtle-true, not Rui cat dog rabbit hamster guinea-pig or dragon clones", () => {
+test("soak/tuck/crane/plod/paddle/snorkel/wipe are house-turtle-true, not Rui cat dog rabbit hamster guinea-pig or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const soak = T.beginTrick("soak", 80, 1);
   assert.equal(soak.anim, "sit");
@@ -96,7 +96,7 @@ test("soak/tuck/crane/plod/paddle are house-turtle-true, not Rui cat dog rabbit 
   assert.equal(plod.anim, "walk");
   const plodMid = T.stepTrick(plod, 0.6, ground);
   assert.ok(plodMid.lift > 0 || Math.abs(plodMid.x - 80) > 1 || Math.abs(plodMid.rot) > 1);
-  const plodDone = T.stepTrick(plod, 1.5, ground);
+  const plodDone = T.stepTrick(plod, T.DUR.plod + 0.1, ground);
   assert.equal(plodDone.phase, "done");
   const paddle = T.beginTrick("paddle", 80, 1);
   assert.equal(paddle.anim, "walk");
@@ -109,6 +109,16 @@ test("soak/tuck/crane/plod/paddle are house-turtle-true, not Rui cat dog rabbit 
   assert.equal(Dog.TRICKS.includes("crane"), false);
   assert.equal(Rabbit.TRICKS.includes("plod"), false);
   assert.equal(Hamster.TRICKS.includes("paddle"), false);
+  const snorkel = T.beginTrick("snorkel", 80, 1);
+  assert.equal(snorkel.anim, "sit");
+  const snorkelMid = T.stepTrick(snorkel, T.DUR.snorkel * 0.4, ground);
+  assert.ok(snorkelMid.lift > 6 || Math.abs(snorkelMid.rot) > 2);
+  const wipe = T.beginTrick("wipe", 80, 1);
+  assert.equal(wipe.anim, "sit");
+  const wipeMid = T.stepTrick(wipe, T.DUR.wipe * 0.4, ground);
+  assert.ok(wipeMid.lift < 0 || Math.abs(wipeMid.rot) > 4);
+  assert.equal(Overlay.TRICKS.includes("snorkel"), true);
+  assert.equal(Overlay.TRICKS.includes("wipe"), true);
   assert.equal(GuineaPig.TRICKS.includes("soak"), false);
   assert.equal(Relay.TRICKS.includes("crane"), false);
   assert.equal(Fuse.TRICKS.includes("tuck"), false);
@@ -341,4 +351,32 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
+});
+
+test("ultra-polish: Ink soak/crane/snorkel/wipe lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("soak", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `soak mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `soak mid lift ${mid.lift}`);
+  const cr = T.beginTrick("crane", 80, 1);
+  const c2 = T.stepTrick(cr, T.DUR.crane * 0.4, { cmd: "idle" });
+  assert.ok(c2.lift > 6 || Math.abs(c2.rot) > 4, `crane mid lift/rot ${c2.lift}/${c2.rot}`);
+  const sn = T.beginTrick("snorkel", 80, 1);
+  const s2 = T.stepTrick(sn, T.DUR.snorkel * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift > 6 || Math.abs(s2.rot) > 4, `snorkel mid lift/rot ${s2.lift}/${s2.rot}`);
+  const wi = T.beginTrick("wipe", 80, 1);
+  const w2 = T.stepTrick(wi, T.DUR.wipe * 0.4, { cmd: "idle" });
+  assert.ok(w2.lift < 0 || Math.abs(w2.rot) > 6, `wipe mid lift/rot ${w2.lift}/${w2.rot}`);
+  assert.ok(Overlay.snorkelPose && Overlay.wipePose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.snorkel, Overlay.DUR.snorkel);
+  assert.equal(T.DUR.wipe, Overlay.DUR.wipe);
+  assert.equal(T.SOAK_HOLD, Overlay.SOAK_HOLD);
+});
+
+test("notes: Ink idle-life ultra done; next house-order ultra guest is Coin / goldfish (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee already ultra; Echo/budgie skip)", () => {
+  assert.deepEqual([...T.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
+  assert.equal(T.TRICKS.includes("bask"), false);
+  assert.equal(Overlay.TRICKS.includes("snorkel"), true);
+  assert.equal(Overlay.TRICKS.includes("wipe"), true);
 });
