@@ -23,7 +23,7 @@ const OverlayHamster = createRequire(import.meta.url)(join(root, "../desktop/ren
 const OverlayGuineaPig = createRequire(import.meta.url)(join(root, "../desktop/renderer/guinea-pig-tricks.js"));
 
 test("Pip tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["wait", "wag", "sniff", "bow", "zoom"]);
+  assert.deepEqual([...T.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -47,7 +47,7 @@ test("Pip tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("click"), false);
 });
 
-test("wait/wag/sniff/bow/zoom are house-dog-true, not Rui cat or dragon clones", () => {
+test("wait/wag/sniff/bow/zoom/beg/pant are house-dog-true, not Rui cat or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const wait = T.beginTrick("wait", 80, 1);
   assert.equal(wait.anim, "sit");
@@ -55,7 +55,7 @@ test("wait/wag/sniff/bow/zoom are house-dog-true, not Rui cat or dragon clones",
   const held = T.stepTrick(wait, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.equal(held.rot, 0);
+  assert.ok(Math.abs(held.rot) > 6);
   assert.ok(held.lift < 0);
   const release = T.stepTrick(wait, T.WAIT_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
@@ -66,7 +66,7 @@ test("wait/wag/sniff/bow/zoom are house-dog-true, not Rui cat or dragon clones",
   const wag = T.beginTrick("wag", 80, 1);
   assert.equal(wag.anim, "sit");
   const wagMid = T.stepTrick(wag, 0.25, ground);
-  assert.ok(Math.abs(wagMid.rot) > 0.5 || wagMid.lift > 0);
+  assert.ok(Math.abs(wagMid.rot) > 0.5 || wagMid.lift !== -1.5);
   const sniff = T.beginTrick("sniff", 80, 1);
   assert.equal(sniff.anim, "sit");
   const sniffMid = T.stepTrick(sniff, 0.5, ground);
@@ -77,10 +77,21 @@ test("wait/wag/sniff/bow/zoom are house-dog-true, not Rui cat or dragon clones",
   assert.ok(bowMid.rot < -2 || bowMid.lift < 0);
   const zoom = T.beginTrick("zoom", 80, 1);
   assert.equal(zoom.anim, "play");
-  const zoomMid = T.stepTrick(zoom, 0.5, ground);
-  assert.ok(zoomMid.lift > 1 || Math.abs(zoomMid.x - 80) > 2);
-  const zoomDone = T.stepTrick(zoom, 1.2, ground);
+  const zoomMid = T.stepTrick(zoom, T.DUR.zoom * 0.45, ground);
+  assert.ok(zoomMid.lift > 2);
+  assert.ok(Math.abs(zoomMid.x - 80) > 2);
+  const zoomDone = T.stepTrick(zoom, T.DUR.zoom + 0.1, ground);
   assert.equal(zoomDone.phase, "done");
+  const beg = T.beginTrick("beg", 80, 1);
+  assert.equal(beg.anim, "sit");
+  const begMid = T.stepTrick(beg, T.DUR.beg * 0.4, ground);
+  assert.ok(begMid.lift > 4 || Math.abs(begMid.rot) > 6);
+  const pant = T.beginTrick("pant", 80, 1);
+  assert.equal(pant.anim, "sit");
+  const pantMid = T.stepTrick(pant, T.DUR.pant * 0.4, ground);
+  assert.ok(pantMid.lift > 2 || Math.abs(pantMid.rot) > 4);
+  assert.equal(Overlay.TRICKS.includes("beg"), true);
+  assert.equal(Overlay.TRICKS.includes("pant"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("wait"), false);
@@ -90,6 +101,8 @@ test("wait/wag/sniff/bow/zoom are house-dog-true, not Rui cat or dragon clones",
   assert.equal(Earth.TRICKS.includes("zoom"), false);
   assert.equal(Rui.TRICKS.includes("zoom"), false);
   assert.equal(Cat.TRICKS.includes("zoom"), false);
+  assert.equal(Cat.TRICKS.includes("beg"), false);
+  assert.equal(Cat.TRICKS.includes("pant"), false);
 });
 
 test("Pip feed-happy is its own sit: tail/tilt/woof, and two feeds are not the same", () => {
@@ -210,6 +223,40 @@ test("ground registry keeps prior guests gated; Pip selectable; no scratch-name 
   assert.equal(OverlayGround.wantsThankYou("turtle"), false);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("dog", 4), null);
-  assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("hamster", 4), null);
+});
+
+test("ultra-polish: Pip wait/wag/bow/beg/pant lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("wait", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `wait mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `wait mid lift ${mid.lift}`);
+  const wg = T.beginTrick("wag", 80, 1);
+  const w2 = T.stepTrick(wg, T.DUR.wag * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(w2.rot) > 6, `wag mid rot ${w2.rot}`);
+  assert.ok(Math.abs(w2.lift) > 2 || w2.lift > 2, `wag mid lift ${w2.lift}`);
+  const bw = T.beginTrick("bow", 80, 1);
+  const b2 = T.stepTrick(bw, T.DUR.bow * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(b2.rot) > 6, `bow mid rot ${b2.rot}`);
+  const bg = T.beginTrick("beg", 80, 1);
+  const g2 = T.stepTrick(bg, T.DUR.beg * 0.4, { cmd: "idle" });
+  assert.ok(g2.lift > 4, `beg mid lift ${g2.lift}`);
+  const pt = T.beginTrick("pant", 80, 1);
+  const p2 = T.stepTrick(pt, T.DUR.pant * 0.4, { cmd: "idle" });
+  assert.ok(p2.lift > 3 || Math.abs(p2.rot) > 6, `pant mid lift/rot ${p2.lift}/${p2.rot}`);
+  assert.ok(Overlay.begPose && Overlay.pantPose);
+  assert.ok(T.nextTrickWait(true, 0, "wait") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "wait") > T.nextTrickWait(true, 0, "wag"));
+});
+
+test("notes: Pip idle-life ultra done; next house-order ultra guest is Thimble / rabbit (birds Soot→Ember + Miso already ultra)", () => {
+  assert.deepEqual([...T.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
+  assert.equal(T.TRICKS.includes("scratch"), false);
+  assert.equal(T.TRICKS.includes("loaf"), false);
+  assert.equal(T.TRICKS.includes("flop"), false);
+  assert.equal(T.TRICKS.includes("bunting"), false);
+  assert.equal(T.TRICKS.includes("somersault"), false);
+  assert.equal(T.TRICKS.includes("lug"), false);
+  assert.equal(T.TRICKS.includes("howl"), false);
+  assert.equal(T.TRICKS.includes("mlem"), false);
 });

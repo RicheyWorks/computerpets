@@ -247,7 +247,7 @@ test("ground registry keeps prior guests gated; Wick selectable; no thread/scurr
   assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
   assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
-  assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom"]);
+  assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky"]);
   assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel"]);
   assert.deepEqual([...GuineaPig.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig"]);

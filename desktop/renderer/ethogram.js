@@ -8,7 +8,7 @@
     A("wings", "pulse", 0.7, 1, "play"),
   ];
   const ETHOGRAM = {
-    dog: [A("scratch", "scratch", 1.2, 3, "sit"), A("shake", "shake", 0.7, 2), A("yawn", "yawn", 1.1, 2), A("circle_sit", "circle", 1.6, 2, "sit")],
+    dog: [A("wait", "sit_hold", 2.0, 4, "sit"), A("wag_soft", "wiggle", 1.0, 3, "play"), A("sniff_soft", "bob", 0.9, 2, "sit"), A("bow_soft", "stretch", 1.0, 2, "sit"), A("zoom_soft", "hop", 0.8, 2, "play"), A("beg_soft", "rise", 0.8, 2, "sit"), A("pant_soft", "nod", 0.8, 2, "sit"), A("scratch", "scratch", 1.1, 2, "sit")],
     cat: [A("loaf", "sit_hold", 2.0, 4, "sit"), A("knead_soft", "wiggle", 1.0, 3, "play"), A("wash_soft", "groom", 0.9, 2, "sit"), A("pounce_soft", "hop", 0.8, 2, "play"), A("bunting_soft", "bob", 0.8, 2, "sit"), A("mlem_soft", "nod", 0.8, 2, "sit"), A("scratch", "scratch", 1.1, 2, "sit"), A("alert", "freeze", 1.6, 2, "sit")],
     fox: [A("stretch", "stretch", 1.3, 2, "sit"), A("yawn", "yawn", 1.1, 2), A("pounce", "hop", 0.7, 2, "play")],
     red_panda: [A("groom", "groom", 1.5, 3, "sit"), A("scratch", "scratch", 1.1, 2, "sit"), A("steal_dart", "dart", 1.2, 2), A("wash", "groom", 1.3, 2, "sit")],

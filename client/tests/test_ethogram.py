@@ -169,6 +169,10 @@ def test_only_scratching_mammals_scratch():
     assert "bunting_soft" in [a["name"] for a in acts_for("cat")]
     assert "mlem_soft" in [a["name"] for a in acts_for("cat")]
     assert "alert" in [a["name"] for a in acts_for("cat")]
+    assert "wait" in [a["name"] for a in acts_for("dog")]
+    assert "beg_soft" in [a["name"] for a in acts_for("dog")]
+    assert "pant_soft" in [a["name"] for a in acts_for("dog")]
+    assert "scratch" in [a["name"] for a in acts_for("dog")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
