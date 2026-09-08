@@ -161,7 +161,7 @@ test("ground registry keeps prior guests gated; Thimble selectable; no scratch/t
   assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
   assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
-  assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom"]);
+  assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.equal(T.TRICKS.includes("scratch"), false);
   assert.equal(T.TRICKS.includes("thump"), false);
   assert.equal(T.TRICKS.includes("bow"), false);
