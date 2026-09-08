@@ -38,7 +38,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "rabbit": (_a("flop", "sit_hold", 2.0, 4, "sit"), _a("groom_soft", "groom", 1.0, 3, "sit"), _a("peri_soft", "rise", 0.9, 2, "sit"), _a("dig_soft", "wiggle", 0.9, 2, "sit"), _a("binky_soft", "hop", 0.8, 2, "play"), _a("rub_soft", "lean", 0.8, 2, "sit"), _a("nosh_soft", "eat", 0.8, 2, "eat"), _a("freeze", "freeze", 1.4, 2)),
     "hamster": (_a("nest", "sit_hold", 2.0, 4, "sit"), _a("cheek_soft", "wiggle", 1.0, 3, "sit"), _a("scurry_soft", "dart", 0.8, 2, "play"), _a("pocket_soft", "lean", 0.9, 2, "sit"), _a("reel_soft", "hop", 0.8, 2, "play"), _a("scrub_soft", "groom", 0.9, 2, "sit"), _a("seed_soft", "eat", 0.8, 2, "eat"), _a("freeze", "freeze", 1.4, 2)),
 
-    "guinea_pig": (_a("wheek", "talk", 0.8, 1, "talk"), _a("popcorn", "hop", 0.45, 2, "play"), _a("freeze", "freeze", 1.2, 2), _a("groom", "groom", 1.3, 3, "sit")),
+    "guinea_pig": (_a("potato", "sit_hold", 2.0, 4, "sit"), _a("hay_soft", "eat", 1.0, 3, "eat"), _a("rumble_soft", "wiggle", 0.9, 2, "sit"), _a("popcorn_soft", "hop", 0.8, 2, "play"), _a("zig_soft", "dart", 0.8, 2, "play"), _a("lookout_soft", "rise", 0.9, 2, "sit"), _a("teeth_soft", "talk", 0.8, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
     "ferret": (_a("warble", "hop", 0.7, 3, "play"), _a("tunnel", "sit_hold", 1.4, 2, "sit"), _a("dook", "talk", 0.7, 1, "talk")),
     "hedgehog": (_a("snuffle", "wiggle", 1.0, 3), _a("curl", "sit_hold", 1.8, 2, "sit"), _a("unroll", "stretch", 1.2, 2)),
     "chinchilla": (_a("dust_shake", "shake", 0.9, 3, "sit"), _a("hop", "hop", 0.55, 2, "play"), _a("groom", "groom", 1.2, 2, "sit")),

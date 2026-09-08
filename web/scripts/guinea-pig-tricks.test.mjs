@@ -27,7 +27,7 @@ const OverlayHamster = createRequire(import.meta.url)(join(root, "../desktop/ren
 const OverlayTurtle = createRequire(import.meta.url)(join(root, "../desktop/renderer/turtle-tricks.js"));
 
 test("Whee tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig"]);
+  assert.deepEqual([...T.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig", "lookout", "teeth"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -54,9 +54,12 @@ test("Whee tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("scurry"), false);
   assert.equal(T.TRICKS.includes("groom"), false);
   assert.equal(T.TRICKS.includes("zoom"), false);
+  assert.equal(T.TRICKS.includes("periscope"), false);
+  assert.equal(T.TRICKS.includes("chatter"), false);
+  assert.equal(T.TRICKS.includes("beg"), false);
 });
 
-test("popcorn/rumble/hay/potato/zig are house-guinea-pig-true, not Rui cat dog rabbit hamster or dragon clones", () => {
+test("popcorn/rumble/hay/potato/zig/lookout/teeth are house-guinea-pig-true, not Rui cat dog rabbit hamster or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const potato = T.beginTrick("potato", 80, 1);
   assert.equal(potato.anim, "sit");
@@ -79,6 +82,16 @@ test("popcorn/rumble/hay/potato/zig are house-guinea-pig-true, not Rui cat dog r
   assert.equal(hay.anim, "sit");
   const hayMid = T.stepTrick(hay, 0.5, ground);
   assert.ok(hayMid.lift < 0 || Math.abs(hayMid.rot) > 0.5);
+  const lookout = T.beginTrick("lookout", 80, 1);
+  assert.equal(lookout.anim, "sit");
+  const lookMid = T.stepTrick(lookout, T.DUR.lookout * 0.4, ground);
+  assert.ok(lookMid.lift > 6 || Math.abs(lookMid.rot) > 4);
+  const teeth = T.beginTrick("teeth", 80, 1);
+  assert.equal(teeth.anim, "sit");
+  const teethMid = T.stepTrick(teeth, T.DUR.teeth * 0.4, ground);
+  assert.ok(teethMid.lift < 0 || Math.abs(teethMid.rot) > 4);
+  assert.equal(Overlay.TRICKS.includes("lookout"), true);
+  assert.equal(Overlay.TRICKS.includes("teeth"), true);
   const popcorn = T.beginTrick("popcorn", 80, 1);
   assert.equal(popcorn.anim, "play");
   const popcornMid = T.stepTrick(popcorn, 0.5, ground);
@@ -87,7 +100,7 @@ test("popcorn/rumble/hay/potato/zig are house-guinea-pig-true, not Rui cat dog r
   assert.equal(zig.anim, "play");
   const zigMid = T.stepTrick(zig, 0.5, ground);
   assert.ok(zigMid.lift > 0 || Math.abs(zigMid.x - 80) > 2 || Math.abs(zigMid.rot) > 2);
-  const zigDone = T.stepTrick(zig, 1.2, ground);
+  const zigDone = T.stepTrick(zig, T.DUR.zig + 0.1, ground);
   assert.equal(zigDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -100,10 +113,16 @@ test("popcorn/rumble/hay/potato/zig are house-guinea-pig-true, not Rui cat dog r
   assert.equal(Fuse.TRICKS.includes("potato"), false);
   assert.equal(Earth.TRICKS.includes("hay"), false);
   assert.equal(Cat.TRICKS.includes("potato"), false);
+  assert.equal(Rabbit.TRICKS.includes("lookout"), false);
+  assert.equal(Rabbit.TRICKS.includes("teeth"), false);
+  assert.equal(Hamster.TRICKS.includes("lookout"), false);
+  assert.equal(Hamster.TRICKS.includes("teeth"), false);
   assert.equal(T.TRICKS.includes("loaf"), false);
   assert.equal(T.TRICKS.includes("wheek"), false);
   assert.equal(T.TRICKS.includes("nest"), false);
   assert.equal(T.TRICKS.includes("scurry"), false);
+  assert.equal(T.TRICKS.includes("periscope"), false);
+  assert.equal(T.TRICKS.includes("chatter"), false);
 });
 
 test("Whee feed-happy is its own sit: peep/nibble/toot, and two feeds are not the same", () => {
@@ -254,3 +273,32 @@ test("ground registry keeps prior guests gated; Whee selectable; no wheek/loaf/n
   assert.equal(OverlayGround.sleepHoldFrame("turtle", 4), null);
 });
 
+test("ultra-polish: Whee potato/hay/rumble/lookout/teeth lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("potato", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `potato mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `potato mid lift ${mid.lift}`);
+  const hy = T.beginTrick("hay", 80, 1);
+  const h2 = T.stepTrick(hy, T.DUR.hay * 0.4, { cmd: "idle" });
+  assert.ok(h2.lift < -2 || Math.abs(h2.rot) > 6, `hay mid lift/rot ${h2.lift}/${h2.rot}`);
+  const rb = T.beginTrick("rumble", 80, 1);
+  const r2 = T.stepTrick(rb, T.DUR.rumble * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(r2.rot) > 6 || r2.lift < -1, `rumble mid rot/lift ${r2.rot}/${r2.lift}`);
+  const lo = T.beginTrick("lookout", 80, 1);
+  const l2 = T.stepTrick(lo, T.DUR.lookout * 0.4, { cmd: "idle" });
+  assert.ok(l2.lift > 6 || Math.abs(l2.rot) > 4, `lookout mid lift/rot ${l2.lift}/${l2.rot}`);
+  const th = T.beginTrick("teeth", 80, 1);
+  const t2 = T.stepTrick(th, T.DUR.teeth * 0.4, { cmd: "idle" });
+  assert.ok(t2.lift < 0 || Math.abs(t2.rot) > 6, `teeth mid lift/rot ${t2.lift}/${t2.rot}`);
+  assert.ok(Overlay.lookoutPose && Overlay.teethPose);
+  assert.equal(T.POTATO_HOLD, Overlay.POTATO_HOLD);
+  assert.ok(T.POTATO_HOLD >= 14);
+  assert.equal(T.DUR.lookout, Overlay.DUR.lookout);
+  assert.equal(T.DUR.teeth, Overlay.DUR.teeth);
+});
+
+test("notes: Whee idle-life ultra done; next house-order ultra guest is Ink / turtle (birds Soot→Ember + Miso + Pip + Thimble + Clip already ultra)", () => {
+  assert.deepEqual([...T.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig", "lookout", "teeth"]);
+  assert.equal(T.TRICK_KEY, "guinea_pig");
+  assert.equal(T.wantsThankYou("whee"), true);
+});
