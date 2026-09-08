@@ -433,7 +433,7 @@ test("ultra-polish: Quill quote/strut/fan/pineye/invert lifts are Rui-visible (n
   assert.ok(T.nextTrickWait(true, 0, "quote") > T.nextTrickWait(true, 0, "strut"));
 });
 
-test("notes: Quill idle-life ultra done; next bird ultra is Keel / toucan (Loom still next for base idle-ground)", () => {
+test("notes: Quill idle-life ultra done; Keel / toucan ultra follows; next after Keel is Ember / phoenix (Loom still next for base idle-ground)", () => {
   assert.deepEqual([...T.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.equal(T.TRICKS.includes("hook"), false);
   assert.equal(T.TRICKS.includes("preen"), false);
