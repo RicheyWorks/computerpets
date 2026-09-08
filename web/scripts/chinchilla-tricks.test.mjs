@@ -49,7 +49,7 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayPhoenix = createRequire(import.meta.url)(join(root, "../desktop/renderer/phoenix-tricks.js"));
 
 test("Floss tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift"]);
+  assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift", "ricochet", "gnaw"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -90,7 +90,7 @@ test("Floss tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("groom"), false);
 });
 
-test("ash/bound/fluff/chin/sift are house-chinchilla-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog or dragon clones", () => {
+test("ash/bound/fluff/chin/sift/ricochet/gnaw are house-chinchilla-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const ash = T.beginTrick("ash", 80, 1);
   assert.equal(ash.anim, "sit");
@@ -98,7 +98,7 @@ test("ash/bound/fluff/chin/sift are house-chinchilla-true, not Rui cat dog rabbi
   const held = T.stepTrick(ash, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(ash, T.ASH_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -121,8 +121,22 @@ test("ash/bound/fluff/chin/sift are house-chinchilla-true, not Rui cat dog rabbi
   assert.equal(sift.anim, "play");
   const siftMid = T.stepTrick(sift, 0.45, ground);
   assert.ok(Math.abs(siftMid.x - 80) > 0.5 || Math.abs(siftMid.lift) > 0.3 || Math.abs(siftMid.rot) > 1);
-  const siftDone = T.stepTrick(sift, 1.4, ground);
+  const siftDone = T.stepTrick(sift, T.DUR.sift + 0.1, ground);
   assert.equal(siftDone.phase, "done");
+  const ricochet = T.beginTrick("ricochet", 80, 1);
+  assert.equal(ricochet.anim, "play");
+  const ricochetMid = T.stepTrick(ricochet, T.DUR.ricochet * 0.4, ground);
+  assert.ok(ricochetMid.lift > 6 || Math.abs(ricochetMid.rot) > 6);
+  const gnaw = T.beginTrick("gnaw", 80, 1);
+  assert.equal(gnaw.anim, "sit");
+  const gnawMid = T.stepTrick(gnaw, T.DUR.gnaw * 0.4, ground);
+  assert.ok(Math.abs(gnawMid.lift) > 2 || Math.abs(gnawMid.rot) > 4);
+  assert.equal(T.TRICKS.includes("dust"), false);
+  assert.equal(T.TRICKS.includes("cascade"), false);
+  assert.equal(T.TRICKS.includes("zoom"), false);
+  assert.equal(T.TRICKS.includes("popcorn"), false);
+  assert.equal(T.TRICKS.includes("crack"), false);
+  assert.equal(T.TRICKS.includes("nosh"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("ash"), false);
@@ -294,7 +308,7 @@ test("ground registry keeps prior guests gated; Floss selectable; no dust/curl/b
   assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.deepEqual([...Ferret.TRICKS], ["tube", "romp", "steal", "puff", "noodle", "corkscrew", "slink"]);
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
-  assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift"]);
+  assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift", "ricochet", "gnaw"]);
   assert.equal(T.TRICKS.includes("dust"), false);
   assert.equal(T.TRICKS.includes("ball"), false);
   assert.equal(T.TRICKS.includes("tube"), false);
@@ -451,7 +465,31 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
 });
 
-test("notes: Floss idle-life done; Bloom and Keel now have tricks; Sol / iguana now has tricks; Vesper / dragon now has tricks; Ember / phoenix now has tricks; next lacking is Nori / ball_python", () => {
+
+test("ultra-polish: Floss ash/bound/ricochet/gnaw lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("ash", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 20, `ash mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `ash mid lift ${mid.lift}`);
+  const bn = T.beginTrick("bound", 80, 1);
+  const b2 = T.stepTrick(bn, T.DUR.bound * 0.4, { cmd: "idle" });
+  assert.ok(b2.lift > 4 || Math.abs(b2.rot) > 4, `bound mid lift/rot ${b2.lift}/${b2.rot}`);
+  const ri = T.beginTrick("ricochet", 80, 1);
+  const r2 = T.stepTrick(ri, T.DUR.ricochet * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift > 6 || Math.abs(r2.rot) > 6, `ricochet mid lift/rot ${r2.lift}/${r2.rot}`);
+  const gn = T.beginTrick("gnaw", 80, 1);
+  const g2 = T.stepTrick(gn, T.DUR.gnaw * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(g2.lift) > 2 || Math.abs(g2.rot) > 4, `gnaw mid lift/rot ${g2.lift}/${g2.rot}`);
+  assert.ok(Overlay.ricochetPose && Overlay.gnawPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.ricochet, Overlay.DUR.ricochet);
+  assert.equal(T.DUR.gnaw, Overlay.DUR.gnaw);
+  assert.equal(T.ASH_HOLD, Overlay.ASH_HOLD);
+  assert.equal(T.HAPPY_DUR.eep, Overlay.HAPPY_DUR.eep);
+});
+
+test("notes: Floss idle-life ultra done; next house-order ultra guest is Bloom / axolotl (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift", "ricochet", "gnaw"]);
   assert.equal(T.TRICK_KEY, "chinchilla");
   assert.equal(T.wantsThankYou("floss"), true);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
