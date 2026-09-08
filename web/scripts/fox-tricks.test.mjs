@@ -412,7 +412,7 @@ test("ultra-polish: Rue den/mouser/cock/stash lifts are Rui-visible (not micro i
   assert.ok(T.nextTrickWait(true, 0, "den") > 40);
 });
 
-test("notes: Rue idle-life ultra done; next house-order ultra guest is Wick / ferret (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
+test("notes: Rue idle-life ultra done; Wick / ferret ultra next-or-done; following house-order ultra guest is Burr / hedgehog (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin already ultra; Echo/budgie + Peck/penguin + Quill/parrot skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"]);
   assert.equal(T.TRICKS.includes("scent"), false);
   assert.equal(Overlay.TRICKS.includes("cock"), true);
