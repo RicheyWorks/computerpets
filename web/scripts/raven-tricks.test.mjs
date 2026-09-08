@@ -225,7 +225,7 @@ test("Wedge tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.deepEqual([...T.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1121,7 +1121,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.deepEqual([...Overlay.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.deepEqual([...Overlay.HAPPY], ["principalis", "sinuatus", "cryptoleucus"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
@@ -1193,7 +1193,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("dihedral/billtap/tumble/cronk/hackles are Corvus-corax-true, not copies of prior guests", () => {
+test("dihedral/billtap/tumble/cronk/invite/toeing/hackles are Corvus-corax-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("hackles", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1234,6 +1234,8 @@ test("dihedral/billtap/tumble/cronk/hackles are Corvus-corax-true, not copies of
     assert.equal(mod.TRICKS.includes("tumble"), false);
     assert.equal(mod.TRICKS.includes("cronk"), false);
     assert.equal(mod.TRICKS.includes("hackles"), false);
+  assert.equal(mod.TRICKS.includes("invite"), false);
+  assert.equal(mod.TRICKS.includes("toeing"), false);
     assert.equal(mod.HAPPY.includes("principalis"), false);
     assert.equal(mod.HAPPY.includes("sinuatus"), false);
     assert.equal(mod.HAPPY.includes("cryptoleucus"), false);
@@ -1562,7 +1564,7 @@ test("ground registry keeps prior guests gated; Wedge selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.deepEqual([...T.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2071,7 +2073,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.deepEqual([...Overlay.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2131,17 +2133,21 @@ globalThis.PetMorelTricks = OverlayMorel;
 
 test("notes: Wedge idle-life done; next house-order guest still lacking tricks is Heart / barn_owl", () => {
 
-  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
   assert.equal(Crow.TRICKS.includes("dihedral"), false);
   assert.equal(Crow.TRICKS.includes("hackles"), false);
+  assert.equal(Crow.TRICKS.includes("invite"), false);
+  assert.equal(Crow.TRICKS.includes("toeing"), false);
   assert.equal(T.TRICKS.includes("hopwalk"), false);
   assert.equal(T.TRICKS.includes("corvid"), false);
+  assert.equal(T.TRICKS.includes("scrutinize"), false);
+  assert.equal(T.TRICKS.includes("glean"), false);
   assert.equal(T.HAPPY.includes("brachyrhynchos"), false);
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "raven");
-  assert.deepEqual([...T.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "hackles"]);
+  assert.deepEqual([...T.TRICKS], ["dihedral", "billtap", "tumble", "cronk", "invite", "toeing", "hackles"]);
   assert.deepEqual([...T.HAPPY], ["principalis", "sinuatus", "cryptoleucus"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
@@ -2328,3 +2334,21 @@ test("notes: Wedge idle-life done; next house-order guest still lacking tricks i
 
 
 
+
+
+test("ultra-polish: Wedge dihedral/cronk/invite/toeing lifts are Rui-visible (not micro idle-gen)", () => {
+  const di = T.beginTrick("dihedral", 80, 1);
+  const mid = T.stepTrick(di, T.DUR.dihedral * 0.4, { cmd: "idle" });
+  assert.ok(mid.lift > 4, `dihedral mid lift ${mid.lift}`);
+  const cr = T.beginTrick("cronk", 80, 1);
+  const c2 = T.stepTrick(cr, T.DUR.cronk * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(c2.rot) > 8, `cronk mid rot ${c2.rot}`);
+  const bw = T.beginTrick("invite", 80, 1);
+  const b2 = T.stepTrick(bw, T.DUR.invite * 0.35, { cmd: "idle" });
+  assert.ok(Math.abs(b2.rot) > 10, `invite mid rot ${b2.rot}`);
+  const toe = T.beginTrick("toeing", 80, 1);
+  const t2 = T.stepTrick(toe, T.DUR.toeing * 0.4, { cmd: "idle" });
+  assert.ok(t2.lift > 4, `toeing mid lift ${t2.lift}`);
+  assert.ok(Overlay.invitePose && Overlay.toeingPose);
+  assert.ok(T.nextTrickWait(true, 0, "hackles") < 80);
+});
