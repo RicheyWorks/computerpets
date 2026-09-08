@@ -42,7 +42,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "ferret": (_a("warble", "hop", 0.7, 3, "play"), _a("tunnel", "sit_hold", 1.4, 2, "sit"), _a("dook", "talk", 0.7, 1, "talk")),
     "hedgehog": (_a("snuffle", "wiggle", 1.0, 3), _a("curl", "sit_hold", 1.8, 2, "sit"), _a("unroll", "stretch", 1.2, 2)),
     "chinchilla": (_a("dust_shake", "shake", 0.9, 3, "sit"), _a("hop", "hop", 0.55, 2, "play"), _a("groom", "groom", 1.2, 2, "sit")),
-    "turtle": (_a("bask", "sit_hold", 3.2, 3, "sit"), _a("blink", "freeze", 1.6, 2)),
+    "turtle": (_a("soak", "sit_hold", 2.0, 4, "sit"), _a("tuck_soft", "curl", 1.0, 3, "sit"), _a("crane_soft", "rise", 0.9, 2, "sit"), _a("plod_soft", "dart", 0.8, 2, "play"), _a("paddle_soft", "wiggle", 0.8, 2, "play"), _a("snorkel_soft", "rise", 0.9, 2, "sit"), _a("wipe_soft", "groom", 0.8, 2, "sit"), _a("freeze", "freeze", 1.4, 2)),
     "iguana": (_a("bask", "sit_hold", 3.0, 3, "sit"), _a("head_bob", "bob", 1.4, 2), _a("still", "freeze", 2.0, 2)),
     "dragon": (_a("watch", "sit_hold", 2.4, 3, "sit"), _a("huff", "pulse", 0.8, 2), _a("bask", "sit_hold", 2.8, 2, "sit")),
     "axolotl": (_a("gill", "bob", 1.4, 3), _a("still", "freeze", 2.0, 2), _a("gulp", "gulp", 0.7, 1)),

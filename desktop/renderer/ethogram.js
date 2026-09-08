@@ -18,7 +18,7 @@
     ferret: [A("warble", "hop", 0.7, 3, "play"), A("tunnel", "sit_hold", 1.4, 2, "sit"), A("dook", "talk", 0.7, 1, "talk")],
     hedgehog: [A("snuffle", "wiggle", 1.0, 3), A("curl", "sit_hold", 1.8, 2, "sit"), A("unroll", "stretch", 1.2, 2)],
     chinchilla: [A("dust_shake", "shake", 0.9, 3, "sit"), A("hop", "hop", 0.55, 2, "play"), A("groom", "groom", 1.2, 2, "sit")],
-    turtle: [A("bask", "sit_hold", 3.2, 3, "sit"), A("blink", "freeze", 1.6, 2)],
+    turtle: [A("soak", "sit_hold", 2.0, 4, "sit"), A("tuck_soft", "curl", 1.0, 3, "sit"), A("crane_soft", "rise", 0.9, 2, "sit"), A("plod_soft", "dart", 0.8, 2, "play"), A("paddle_soft", "wiggle", 0.8, 2, "play"), A("snorkel_soft", "rise", 0.9, 2, "sit"), A("wipe_soft", "groom", 0.8, 2, "sit"), A("freeze", "freeze", 1.4, 2)],
     iguana: [A("bask", "sit_hold", 3.0, 3, "sit"), A("head_bob", "bob", 1.4, 2), A("still", "freeze", 2.0, 2)],
     dragon: [A("watch", "sit_hold", 2.4, 3, "sit"), A("huff", "pulse", 0.8, 2), A("bask", "sit_hold", 2.8, 2, "sit")],
     axolotl: [A("gill", "bob", 1.4, 3), A("still", "freeze", 2.0, 2), A("gulp", "gulp", 0.7, 1)],
