@@ -186,6 +186,7 @@ const Morel = root.PetMorelTricks;
   const AcornWeevil = root.PetAcornWeevilTricks;
   const ClickBeetle = root.PetClickBeetleTricks;
   const RobberFly = root.PetRobberFlyTricks;
+  const Sloth = root.PetSlothTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -370,6 +371,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (AcornWeevil && (key === AcornWeevil.TRICK_KEY || key === "acorn_weevil" || key === "snout")) return AcornWeevil;
     if (ClickBeetle && (key === ClickBeetle.TRICK_KEY || key === "click_beetle" || key === "click")) return ClickBeetle;
     if (RobberFly && (key === RobberFly.TRICK_KEY || key === "robber_fly" || key === "rob")) return RobberFly;
+    if (Sloth && (key === Sloth.TRICK_KEY || key === "sloth" || key === "hang")) return Sloth;
   }
 
   function wantsThankYou(key) {
