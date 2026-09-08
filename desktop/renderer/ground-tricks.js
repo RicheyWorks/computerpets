@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, Whip, Clasp, Gale, Flag, Cape, Cache, Slick, Wash, Stripe, Grin, Dam, Spine, Coal, Soak, Pad, Wink, Dash, Shift, Spike, Levee, Jaw, Beak, Lid, Peak, Lunge, Speck, Whisk, Penny, Bar, Lance, Night, and Spoon today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, Whip, Clasp, Gale, Flag, Cape, Cache, Slick, Wash, Stripe, Grin, Dam, Spine, Coal, Soak, Pad, Wink, Dash, Shift, Spike, Levee, Jaw, Beak, Lid, Peak, Lunge, Speck, Whisk, Penny, Bar, Lance, Night, Spoon, and Round today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -154,6 +154,7 @@ const Morel = root.PetMorelTricks;
   const Pike = root.PetPikeTricks;
   const Walleye = root.PetWalleyeTricks;
   const Paddlefish = root.PetPaddlefishTricks;
+  const Lamprey = root.PetLampreyTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -306,6 +307,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Pike && (key === Pike.TRICK_KEY || key === "pike" || key === "lance")) return Pike;
     if (Walleye && (key === Walleye.TRICK_KEY || key === "walleye" || key === "night")) return Walleye;
     if (Paddlefish && (key === Paddlefish.TRICK_KEY || key === "paddlefish" || key === "spoon")) return Paddlefish;
+    if (Lamprey && (key === Lamprey.TRICK_KEY || key === "lamprey" || key === "round")) return Lamprey;
   }
 
   function wantsThankYou(key) {
