@@ -139,6 +139,8 @@ def test_only_scratching_mammals_scratch():
     assert "carol_soft" in [a["name"] for a in acts_for("robin")]
     assert "perch" in [a["name"] for a in acts_for("robin")]
     assert "dabble" in [a["name"] for a in acts_for("mallard")]
+    assert "quack_soft" in [a["name"] for a in acts_for("mallard")]
+    assert "loaf" in [a["name"] for a in acts_for("mallard")]
     assert "honk" in [a["name"] for a in acts_for("canada_goose")]
     assert "drum" in [a["name"] for a in acts_for("pileated")]
     assert "hover" in [a["name"] for a in acts_for("hummingbird")]
