@@ -229,7 +229,7 @@ test("Hook tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.deepEqual([...T.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1125,7 +1125,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.deepEqual([...Overlay.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.deepEqual([...Overlay.HAPPY], ["borealis", "calurus", "harlani"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
@@ -1197,7 +1197,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("kettle/stoop/bind/keeyer/buteo are Buteo-jamaicensis-true, not copies of prior guests", () => {
+test("kettle/stoop/bind/keeyer/patagial/tower/buteo are Buteo-jamaicensis-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("buteo", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1238,6 +1238,8 @@ test("kettle/stoop/bind/keeyer/buteo are Buteo-jamaicensis-true, not copies of p
     assert.equal(mod.TRICKS.includes("bind"), false);
     assert.equal(mod.TRICKS.includes("keeyer"), false);
     assert.equal(mod.TRICKS.includes("buteo"), false);
+    assert.equal(mod.TRICKS.includes("patagial"), false);
+    assert.equal(mod.TRICKS.includes("tower"), false);
     assert.equal(mod.HAPPY.includes("borealis"), false);
     assert.equal(mod.HAPPY.includes("calurus"), false);
     assert.equal(mod.HAPPY.includes("harlani"), false);
@@ -1568,7 +1570,7 @@ test("ground registry keeps prior guests gated; Hook selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.deepEqual([...T.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2081,7 +2083,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.deepEqual([...Overlay.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2165,7 +2167,7 @@ test("notes: Hook idle-life done; next house-order guest still lacking tricks is
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "red_tail");
-  assert.deepEqual([...T.TRICKS], ["kettle", "stoop", "bind", "keeyer", "buteo"]);
+  assert.deepEqual([...T.TRICKS], ["kettle", "stoop", "bind", "keeyer", "patagial", "tower", "buteo"]);
   assert.deepEqual([...T.HAPPY], ["borealis", "calurus", "harlani"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
@@ -2360,3 +2362,21 @@ test("notes: Hook idle-life done; next house-order guest still lacking tricks is
 
 
 
+
+
+test("ultra-polish: Hook kettle/stoop/patagial/tower lifts are Rui-visible (not micro idle-gen)", () => {
+  const k = T.beginTrick("kettle", 80, 1);
+  const mid = T.stepTrick(k, T.DUR.kettle * 0.4, { cmd: "idle" });
+  assert.ok(mid.lift > 4, `kettle mid lift ${mid.lift}`);
+  const st = T.beginTrick("stoop", 80, 1);
+  const s2 = T.stepTrick(st, T.DUR.stoop * 0.25, { cmd: "idle" });
+  assert.ok(s2.lift > 4, `stoop mid lift ${s2.lift}`);
+  const pa = T.beginTrick("patagial", 80, 1);
+  const p2 = T.stepTrick(pa, T.DUR.patagial * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(p2.rot) > 6, `patagial mid rot ${p2.rot}`);
+  const tw = T.beginTrick("tower", 80, 1);
+  const t2s = T.stepTrick(tw, T.DUR.tower * 0.5, { cmd: "idle" });
+  assert.ok(t2s.lift > 6, `tower mid lift ${t2s.lift}`);
+  assert.ok(Overlay.patagialPose && Overlay.towerPose);
+  assert.ok(T.nextTrickWait(true, 0, "buteo") < 80);
+});
