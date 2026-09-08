@@ -163,7 +163,8 @@ select {
   pointer-events: auto;
 }
 
-.desk-plate > button {
+.desk-plate > button,
+.desk-plate-toggle {
   display: flex;
   width: 100%;
   align-items: center;
@@ -173,15 +174,57 @@ select {
   border: 0;
   background: transparent;
   color: inherit;
-  cursor: pointer;
+  cursor: grab;
   text-align: left;
 }
 
-.desk-plate > button span:first-child {
-  font-size: 10px;
-  letter-spacing: 0.16em;
+.desk-plate-toggle:active {
+  cursor: grabbing;
+}
+
+.desk-plate-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--plate-fg) 22%, #2a2621);
+  background: color-mix(in srgb, var(--plate-bg) 55%, #2a2621);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  color: var(--plate-fg);
+  white-space: nowrap;
+}
+
+.desk-plate-icon {
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.desk-plate-toggle #weather-line,
+.desk-plate-toggle #news-line,
+.desk-plate-toggle #market-line {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
   color: var(--plate-muted);
+}
+
+.desk-plate-grip {
+  flex: 0 0 auto;
+  font-size: 11px;
+  letter-spacing: -0.08em;
+  color: var(--plate-muted);
+  opacity: 0.85;
+  user-select: none;
 }
 
 .desk-plate > div {
@@ -518,28 +561,74 @@ select {
   position: absolute;
   left: 0;
   bottom: 16px;
-  width: 11px;
-  height: 11px;
+  width: 16px;
+  height: 14px;
   border: 0;
   padding: 0;
   border-radius: 2px;
-  background: #d8cfc0;
+  background: linear-gradient(180deg, #e8dcc8 0%, #d2c2a8 100%);
+  box-shadow:
+    0 1px 0 rgb(12 11 10 / 0.25),
+    inset 0 0 0 1px rgb(90 74 52 / 0.18);
   pointer-events: auto;
-  transform: rotate(12deg);
+  cursor: pointer;
+  transform: rotate(8deg);
+}
+
+.gift-dot::before,
+.gift-dot::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+/* vertical ribbon */
+.gift-dot::before {
+  left: 50%;
+  top: -1px;
+  bottom: -1px;
+  width: 4px;
+  transform: translateX(-50%);
+  background: #c45a5a;
+  box-shadow: 0 0 0 1px rgb(12 11 10 / 0.12);
+}
+
+/* horizontal ribbon + tiny bow bump */
+.gift-dot::after {
+  left: -1px;
+  right: -1px;
+  top: 50%;
+  height: 4px;
+  transform: translateY(-50%);
+  background: #c45a5a;
+  box-shadow:
+    0 -5px 0 -1px #c45a5a,
+    0 -7px 0 -2px rgb(196 90 90 / 0.55);
+}
+
+.gift-dot:hover {
+  filter: brightness(1.08);
 }
 
 .shed-dot {
   position: absolute;
   left: 0;
   bottom: 16px;
-  width: 26px;
-  height: 7px;
+  width: 28px;
+  height: 9px;
   border: 0;
   padding: 0;
-  border-radius: 40%;
-  background: rgb(216 207 192 / 0.75);
+  border-radius: 50% 40% 55% 45%;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgb(242 236 227 / 0.95) 0%, rgb(216 207 192 / 0.85) 55%, rgb(180 168 148 / 0.7) 100%);
+  box-shadow: 0 1px 0 rgb(12 11 10 / 0.2);
   pointer-events: auto;
+  cursor: pointer;
   transform: rotate(-14deg);
+}
+
+.shed-dot:hover {
+  filter: brightness(1.08);
 }
 
 #lure.show {
@@ -636,12 +725,40 @@ select {
 }
 
 .mess-dot {
-  width: 14px;
-  height: 10px;
-  background: rgb(90 74 52 / 0.72);
+  width: 16px;
+  height: 12px;
+  border: 0;
+  padding: 0;
+  border-radius: 65% 40% 55% 45%;
+  background:
+    radial-gradient(ellipse at 35% 30%, #8a7352 0%, #5a4a34 58%, #3f3426 100%);
   pointer-events: auto;
   cursor: pointer;
-  box-shadow: 0 1px 0 rgb(12 11 10 / 0.35);
+  box-shadow:
+    0 1px 0 rgb(12 11 10 / 0.4),
+    inset 0 1px 0 rgb(216 207 192 / 0.12);
+}
+
+.mess-dot::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgb(196 90 90 / 0.0);
+  box-shadow:
+    0 0 0 1px rgb(242 236 227 / 0.35),
+    2px -1px 0 rgb(242 236 227 / 0.28);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.mess-dot:hover {
+  filter: brightness(1.12);
+  outline: 1px solid rgb(242 236 227 / 0.35);
+  outline-offset: 2px;
 }
 
 #hud {

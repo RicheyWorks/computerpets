@@ -13,9 +13,10 @@
     <div id="stage">
       <div id="weather"></div>
       <article id="weather-plate" class="desk-plate" data-hit data-desk-plate="weather">
-        <button type="button" id="weather-toggle" data-hit>
-          <span>Weather area</span>
+        <button type="button" id="weather-toggle" class="desk-plate-toggle" data-hit title="Weather — click to open, drag to move" aria-label="Weather — click to open, drag to move" aria-expanded="false" aria-controls="weather-body">
+          <span class="desk-plate-chip"><span class="desk-plate-icon" aria-hidden="true">☁</span> Weather</span>
           <span id="weather-line">no area set</span>
+          <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="weather-body" hidden>
           <div id="weather-live"></div>
@@ -44,9 +45,10 @@
         </div>
       </article>
       <article id="news-plate" class="desk-plate" data-hit data-desk-plate="news">
-        <button type="button" id="news-toggle" data-hit>
-          <span>News</span>
+        <button type="button" id="news-toggle" class="desk-plate-toggle" data-hit title="News — click to open, drag to move" aria-label="News — click to open, drag to move" aria-expanded="false" aria-controls="news-body">
+          <span class="desk-plate-chip"><span class="desk-plate-icon" aria-hidden="true">📰</span> News</span>
           <span id="news-line">no headlines yet</span>
+          <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="news-body" hidden>
           <div id="news-live"></div>
@@ -73,9 +75,10 @@
         </div>
       </article>
       <article id="market-plate" class="desk-plate" data-hit data-desk-plate="market">
-        <button type="button" id="market-toggle" data-hit>
-          <span>Quotes</span>
+        <button type="button" id="market-toggle" class="desk-plate-toggle" data-hit title="Quotes — click to open, drag to move" aria-label="Quotes — click to open, drag to move" aria-expanded="false" aria-controls="market-body">
+          <span class="desk-plate-chip"><span class="desk-plate-icon" aria-hidden="true">📈</span> Quotes</span>
           <span id="market-line">no quote yet</span>
+          <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="market-body" hidden>
           <div id="market-live"></div>

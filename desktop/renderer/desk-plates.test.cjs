@@ -77,3 +77,25 @@ test("plateLine helpers still speak for weather, news, and quotes", () => {
   assert.equal(typeof marketLine, "string");
   assert.ok(marketLine.length);
 });
+
+test("collapsed plate headers read as Weather, News, Quotes — click to open, drag to move", () => {
+  assert.match(htmlSrc, /desk-plate-chip/);
+  assert.match(htmlSrc, /Weather — click to open, drag to move/);
+  assert.match(htmlSrc, /News — click to open, drag to move/);
+  assert.match(htmlSrc, /Quotes — click to open, drag to move/);
+  assert.match(htmlSrc, /aria-controls="weather-body"/);
+  assert.match(htmlSrc, /aria-controls="news-body"/);
+  assert.match(htmlSrc, /aria-controls="market-body"/);
+  assert.match(cssSrc, /\.desk-plate-chip/);
+  assert.match(cssSrc, /\.desk-plate-grip/);
+  assert.match(petSrc, /aria-expanded", open/);
+});
+
+test("floor mess and gifts name themselves for a stranger", () => {
+  assert.match(petSrc, /Clean mess/);
+  assert.match(petSrc, /Pick up gift/);
+  assert.match(petSrc, /Pick up shed/);
+  assert.match(cssSrc, /\.gift-dot::before/);
+  assert.match(cssSrc, /\.mess-dot::after/);
+  assert.match(cssSrc, /border-radius:\s*65% 40% 55% 45%/);
+});
