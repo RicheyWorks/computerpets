@@ -1,69 +1,66 @@
-/** Keel ground tricks while idle. House toucan — roost / berry / juggle / peer / skip personality. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `toucan-tricks.js`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl, or dragon move clone. Window-play TOSS is unchanged — this module never names a trick `toss`. Pike window-play BILL, raven CROAK, and mallard TIP stay untouched — never names `bill`, `croak`, or `tip`. Quill already owns flash/fan/quote/strut/crack and squawk/bravo/scissor. Echo already owns preen/bobble/mimic/sidle/dangle. Peck already owns beak. Pip already owns tilt as thank-you. Bloom already owns gill/amble/mend/smile/plume. Avoids soak/tuck/crane/plod/paddle/potato/loaf/nest/bow/dig/flop/zoom/popcorn/hay/rumble/zig/scurry/drift/gulp/flare/glint/dart/circle/loop/preen/bobble/mimic/sidle/dangle/perch/den/mouser/stalk/trot/prance/huddle/toboggan/waddle/porpoise/trumpet/quote/strut/fan/crack/flash/tube/romp/steal/puff/noodle/thread/ball/curl/snuffle/anoint/bristle/root/dust/ash/bound/fluff/chin/sift/gill/amble/mend/smile/plume/float/wall/bloom/toss/bill/hook name collisions with prior guests. */
-
+/** Keel ground tricks while idle — ultra-polish pass. House Ramphastos toucan desk-colony life — roost / berry / juggle / peer / skip / rattle / clatter personality (roost bill-keel wood rest without naming nest or loaf or perch or den or tuck, berry fruit tip-inspect without naming crack or gulp or seedhammer or nibble or chew, juggle fruit toss-catch on the blotter without naming toss or flash or porpoise or zoom, peer bill tip under the blotter edge without naming tilt or stalk or listen or glare, skip hop-skips across the grain without naming zoom or bound or waddle or hopwalk or rockhop, rattle rapid bill-rattle social without naming croak or chatter or trumpet or carol or squawk, clatter bill wood-clatter taps without naming bill or billtap or tap or drum or knock; window-play TOSS leaves toucan alone — never name a trick toss; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Echo/Peck/Quill own their tricks; guest slug Keel / key toucan — accept "toucan" and "keel"; do NOT name a trick toucan or keel or toss or bill or flash or fan or quote or strut or crack or preen or pineye or invert or rockhop or ecstatic). Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk. Thank-yous clack / yelp / tok. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop toucan-tricks.js. Window-play TOSS unchanged (already present — not thin). True toucan desk life — not parrot/penguin/budgie/hummingbird/woodpecker/goose/mallard/robin/chickadee/hawk/owl/crow/raven clones. Ember owns the next bird ultra seat. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. */
 export const TRICK_KEY = "toucan";
-export const TRICKS = ["roost", "berry", "juggle", "peer", "skip"] as const;
+export const TRICKS = ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"] as const;
 export const HAPPY = ["clack", "yelp", "tok"] as const;
 export type ToucanTrickKind = (typeof TRICKS)[number];
 export type ToucanHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
 export type TrickPhase = "go" | "hold" | "release" | "done";
 export type HappyPhase = "go" | "done";
-
 export type TrickFlags = {
   asleep?: boolean;
   hidden?: boolean;
   leaving?: boolean;
-  cmd?: string;
   windowPlay?: boolean;
   card?: boolean;
+  cmd?: string;
 };
-
+export type HappyFlags = {
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+};
 export type ToucanTrick = {
-  kind: ToucanTrickKind;
+  kind: string;
   phase: TrickPhase;
   t: number;
   x: number;
   lift: number;
   rot: number;
   anim: TrickAnim;
-  facing: 1 | -1;
-  fromX?: number;
+  facing: number;
+  fromX: number;
   abort?: boolean;
 };
-
 export type ToucanHappy = {
-  kind: ToucanHappyKind;
+  kind: string;
   happy: true;
   phase: HappyPhase;
   t: number;
   x: number;
   lift: number;
   rot: number;
+  dx?: number;
   anim: TrickAnim;
-  facing: 1 | -1;
-  fromX?: number;
+  facing: number;
+  fromX: number;
   abort?: boolean;
 };
-
-export const HAPPY_DUR: Record<ToucanHappyKind, number> = {
-  clack: 1.14,
-  yelp: 1.2,
-  tok: 1.28,
-};
-
-/** Roost hold — Keel rests the keel of the bill on the wood. Not window-play TOSS. Not a parrot quote. Not a budgie perch. */
-export const ROOST_HOLD = 10.2;
-export const RELEASE_S = 0.62;
-
+export const HAPPY_DUR: Record<ToucanHappyKind, number> = { clack: 1.58, yelp: 1.66, tok: 1.72 };
+export const ROOST_HOLD = 14.4;
+export const RELEASE_S = 1.02;
 export const DUR: Record<ToucanTrickKind, number> = {
   roost: ROOST_HOLD + RELEASE_S,
-  berry: 1.42,
-  juggle: 1.36,
-  peer: 1.26,
-  skip: 1.32,
+  berry: 2.36,
+  juggle: 2.44,
+  peer: 2.28,
+  skip: 2.40,
+  rattle: 2.32,
+  clatter: 2.38,
 };
 
-export function canStart(state: TrickFlags | undefined) {
+export function canStart(state: TrickFlags | null | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
   const cmd = String(state.cmd || "");
@@ -72,7 +69,7 @@ export function canStart(state: TrickFlags | undefined) {
   return true;
 }
 
-export function shouldAbort(state: TrickFlags | undefined) {
+export function shouldAbort(state: TrickFlags | null | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
   const cmd = String(state.cmd || "");
@@ -89,43 +86,34 @@ export function shouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function nextTrickWait(justFinished: boolean, rand?: number, kind?: ToucanTrickKind) {
+export function nextTrickWait(justFinished: boolean, rand?: number, kind?: string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "roost") return 40 + roll * 24;
-  if (kind === "berry") return 14 + roll * 10;
-  if (kind === "juggle") return 15 + roll * 11;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "roost") return 42 + roll * 28;
+  if (kind === "berry" || kind === "juggle") return 12 + roll * 9;
+  if (kind === "peer" || kind === "rattle") return 11 + roll * 8;
+  if (kind === "skip" || kind === "clatter") return 10 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
-export function pickTrick(rand?: number, musicOn = false, lastKind?: ToucanTrickKind | null): ToucanTrickKind {
+export function pickTrick(rand?: number, musicOn = false, lastKind?: string | null) {
   if (musicOn) return "roost";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "roost") {
-    if (roll < 0.28) return "berry";
-    if (roll < 0.5) return "juggle";
-    if (roll < 0.72) return "peer";
-    return "skip";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : TRICKS.slice();
+  const weights = list.map((k) =>
+    k === "roost" ? 0.55 : k === "berry" || k === "juggle" || k === "skip" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i];
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return list[i];
   }
-  if (lastKind === "berry") {
-    if (roll < 0.3) return "roost";
-    if (roll < 0.52) return "juggle";
-    if (roll < 0.74) return "peer";
-    return "skip";
-  }
-  if (lastKind === "juggle") {
-    if (roll < 0.24) return "roost";
-    if (roll < 0.46) return "berry";
-    if (roll < 0.68) return "peer";
-    return "skip";
-  }
-  if (roll < 0.22) return "roost";
-  if (roll < 0.4) return "berry";
-  if (roll < 0.6) return "juggle";
-  if (roll < 0.8) return "peer";
-  return "skip";
+  return list[list.length - 1] || "berry";
 }
 
-export function happyCanStart(state: TrickFlags | undefined) {
+export function happyCanStart(state: HappyFlags | null | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
   const cmd = String(state.cmd || "");
@@ -134,7 +122,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   return true;
 }
 
-export function happyShouldAbort(state: TrickFlags | undefined) {
+export function happyShouldAbort(state: HappyFlags | null | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
   const cmd = String(state.cmd || "");
@@ -150,276 +138,309 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function wantsThankYou(key: string | undefined) {
+export function wantsThankYou(key: string | null | undefined) {
   return key === TRICK_KEY || key === "keel";
 }
 
-export function startThankYou(
-  key: string | undefined,
-  lastKind: ToucanHappyKind | null | undefined,
-  x: number,
-  facing: 1 | -1,
-  flags?: TrickFlags,
-) {
+export function startThankYou(key: string | null | undefined, lastKind: string | null | undefined, x: number, facing: number, flags?: HappyFlags | null) {
   if (!wantsThankYou(key)) return null;
   if (!happyCanStart(flags || { cmd: "idle" })) return null;
   const pick = pickHappy(lastKind);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
 
-export function pickHappy(lastKind?: ToucanHappyKind | null, rand?: number): ToucanHappyKind {
+export function pickHappy(lastKind?: string | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
-  const list = pool.length ? pool : [...HAPPY];
+  const list = pool.length ? pool : HAPPY.slice();
   const roll = rand == null ? Math.random() : rand;
-  return list[Math.floor(roll * list.length)] ?? list[0]!;
+  return list[Math.floor(roll * list.length)] || list[0];
 }
 
-export function beginHappy(kind: ToucanHappyKind, x: number, facing: 1 | -1 = 1): ToucanHappy {
-  const name: ToucanHappyKind = HAPPY.includes(kind) ? kind : "clack";
+export function beginHappy(kind: string, x: number, facing?: number) {
+  const name = HAPPY.indexOf(kind as ToucanHappyKind) >= 0 ? kind : "clack";
   return {
     kind: name,
-    happy: true,
-    phase: "go",
+    happy: true as const,
+    phase: "go" as const,
     t: 0,
     x,
     lift: 0,
     rot: 0,
-    anim: name === "clack" ? "sit" : name === "yelp" ? "talk" : "play",
-    facing,
+    anim: (name === "clack" ? "sit" : name === "yelp" ? "talk" : "play") as TrickAnim,
+    facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
 
 export function clackPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.clack));
-  if (u < 0.16) {
-    const s = u / 0.16;
-    return { lift: s * 2.0, rot: s * 8, dx: 0, anim: "sit" as const };
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 5, rot: s * 14, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.8) {
+  if (u < 0.82) {
+    const snap = Math.sin(t * 16) + 0.24 * Math.sin(t * 28);
     return {
-      lift: 2.0 + Math.abs(Math.sin(t * 14)) * 1.2,
-      rot: 8 + Math.sin(t * 16) * 10,
-      dx: Math.sin(t * 10) * 0.5,
-      anim: "sit" as const,
+      lift: 5 + Math.abs(snap) * 3.5,
+      rot: 14 + snap * 12,
+      dx: snap * 1.4,
+      anim: "sit" as TrickAnim,
     };
   }
-  const s = (u - 0.8) / 0.2;
-  return { lift: 2.0 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "idle" as const };
+  const s = (u - 0.82) / 0.18;
+  return { lift: 3.5 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function yelpPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.yelp));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 3.0, rot: -s * 9, dx: 0, anim: "talk" as const };
+    return { lift: s * 6, rot: -s * 14, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.84) {
+    const cry = Math.sin(t * 10) + 0.26 * Math.sin(t * 18);
     return {
-      lift: 3.0 + Math.abs(Math.sin(t * 9)) * 1.6,
-      rot: -9 + Math.sin(t * 11) * 7,
-      dx: Math.sin(t * 7) * 0.9,
-      anim: "talk" as const,
+      lift: 6 + Math.abs(cry) * 4,
+      rot: -14 + cry * 9,
+      dx: cry * 1.8,
+      anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.84) / 0.16;
-  return { lift: 3.0 * (1 - s), rot: -9 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 4 * (1 - s), rot: -8 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function tokPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tok));
   return {
-    lift: Math.abs(Math.sin(t * 7)) * 2.8 + 0.8,
-    rot: Math.sin(t * 9) * 11,
-    dx: Math.sin(t * 6) * 1.1,
-    anim: "play" as const,
+    lift: 4 + Math.abs(Math.sin(t * 8)) * 5,
+    rot: Math.sin(t * 11) * 16,
+    dx: Math.sin(t * 7) * 2.4,
+    anim: "play" as TrickAnim,
   };
 }
 
-export function stepHappy(happy: ToucanHappy, dt: number, flags?: TrickFlags): ToucanHappy {
+export function stepHappy(happy: ToucanHappy | null | undefined, dt: number, flags?: HappyFlags | null) {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return Object.assign({}, happy, { phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true });
   }
-  const next: ToucanHappy = { ...happy, t: happy.t + Math.max(0, dt) };
-  const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "clack") {
-    const pose = clackPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "yelp") {
-    const pose = yelpPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = tokPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+  const hold = HAPPY_DUR[next.kind as ToucanHappyKind];
+  const pose =
+    next.kind === "clack" ? clackPose(next.t) : next.kind === "yelp" ? yelpPose(next.t) : tokPose(next.t);
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.dx = pose.dx;
+  next.anim = pose.anim;
+  if (next.t >= hold) return Object.assign({}, next, { phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim });
   return next;
 }
 
-/** Keel has no Rui-style sleep-frame hold. */
-export function sleepHoldFrame(_key: string | undefined, _frameCount?: number) {
+export function sleepHoldFrame(_key: string, _frameCount: number) {
   return null;
 }
 
-export function beginTrick(kind: ToucanTrickKind, x: number, facing: 1 | -1 = 1): ToucanTrick {
-  const anim: TrickAnim =
+export function beginTrick(kind: string, x: number, facing?: number) {
+  const anim =
     kind === "roost"
-      ? "sit"
-      : kind === "berry"
-        ? "sit"
-        : kind === "juggle"
-          ? "play"
-          : kind === "peer"
-            ? "sit"
-            : kind === "skip"
-              ? "walk"
-              : "sit";
+      ? ("sit" as TrickAnim)
+      : kind === "berry" || kind === "peer" || kind === "clatter"
+        ? ("sit" as TrickAnim)
+        : kind === "juggle" || kind === "rattle"
+          ? ("play" as TrickAnim)
+          : kind === "skip"
+            ? ("walk" as TrickAnim)
+            : ("sit" as TrickAnim);
   return {
     kind,
-    phase: kind === "roost" ? "hold" : "go",
+    phase: kind === "roost" ? ("hold" as const) : ("go" as const),
     t: 0,
     x,
     lift: 0,
     rot: 0,
     anim,
-    facing,
+    facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
 
-function smoothstep(t: number) {
+export function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
-/** Roost — oversized bill rests its keel on the blotter. Thermoregulation-true. Not window-play TOSS. Not a parrot quote. Ethogram Ramphastos true. */
 export function roostPose(t: number) {
-  return {
-    lift: 0.4 + Math.sin(t * 1.4) * 0.6,
-    rot: 18 + Math.sin(t * 1.7) * 4 + Math.sin(t * 3.2) * 2,
-  };
+  const soft = Math.sin(t * 1.6);
+  const breath = Math.sin(t * 2.6);
+  return { lift: 4.5 + soft * 3.2 + Math.abs(breath) * 1.6, rot: 26 + breath * 5 + Math.sin(t * 4.8) * 5 };
 }
 
-/** Soft lift — bill leaves the wood; Keel stays on the desk. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 18 * (1 - u) };
+  return { lift: 4.5 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 26 * (1 - u) };
 }
 
-/** Berry — fruit inspect with the bill tip on the grain. Not a parrot crack. Not a goldfish gulp. Not window-play TOSS. Ethogram fruit handling true. */
-export function berryPose(t: number, fromX: number, facing: 1 | -1) {
+export function berryPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.berry));
-  if (u < 0.14) {
-    const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: -s * 2.2, rot: s * 12 * facing, anim: "sit" as const };
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: -s * 4.5, rot: s * 18 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.86) {
-    const s = (u - 0.14) / 0.72;
+    const s = (u - 0.12) / 0.74;
+    const tip = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 1.4,
-      lift: -2.2 + Math.abs(Math.sin(s * Math.PI * 2.4)) * 2.6,
-      rot: facing * (12 + Math.sin(s * Math.PI * 3) * 8),
-      anim: "sit" as const,
+      x: fromX + face * Math.sin(s * Math.PI) * 2.4,
+      lift: -4.5 + Math.abs(tip) * 5.5,
+      rot: face * (18 + tip * 14),
+      anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: -2.2 * (1 - s) * 0.15,
-    rot: facing * 6 * (1 - s),
-    anim: "sit" as const,
+    lift: -3 * (1 - s) * 0.2,
+    rot: face * 8 * (1 - s),
+    anim: "sit" as TrickAnim,
   };
 }
 
-/** Juggle — toss-catch fruit with the bill on the desk. Not window-play TOSS (cornice). Not a parrot flash. Ethogram fruit toss true. */
-export function jugglePose(t: number, fromX: number, facing: 1 | -1) {
+export function jugglePose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.juggle));
+  const face = facing == null ? 1 : facing;
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 1.6, rot: -s * 8 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 4, rot: -s * 12 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.9) {
     const s = (u - 0.1) / 0.8;
-    const toss = Math.abs(Math.sin(s * Math.PI * 4));
+    const toss = Math.abs(Math.sin(s * Math.PI * 4.5));
     return {
-      x: fromX + facing * Math.sin(s * Math.PI * 2) * 1.8,
-      lift: 1.6 + toss * 5.5,
-      rot: facing * (-8 + toss * 18),
-      anim: "play" as const,
+      x: fromX + face * Math.sin(s * Math.PI * 2.2) * 2.8,
+      lift: 4 + toss * 9,
+      rot: face * (-12 + toss * 22),
+      anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.9) / 0.1);
   return {
     x: fromX,
-    lift: 1.6 * (1 - s),
-    rot: facing * -4 * (1 - s),
-    anim: "sit" as const,
+    lift: 3 * (1 - s),
+    rot: face * -6 * (1 - s),
+    anim: "sit" as TrickAnim,
   };
 }
 
-/** Peer — tip the colorful bill to look under the blotter edge. Not Pip tilt thank-you. Not a fox stalk. Ethogram bill peer true. */
-export function peerPose(t: number, fromX: number, facing: 1 | -1) {
+export function peerPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.peer));
-  if (u < 0.16) {
-    const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 1.4, rot: s * 22 * facing, anim: "sit" as const };
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 4, rot: s * 32 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.84) {
-    const s = (u - 0.16) / 0.68;
+    const s = (u - 0.14) / 0.7;
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 0.6,
-      lift: 1.4 + Math.sin(s * Math.PI * 1.6) * 0.8,
-      rot: facing * (22 + Math.sin(s * Math.PI * 2) * 6),
-      anim: "sit" as const,
+      x: fromX + face * Math.sin(s * Math.PI) * 1.4,
+      lift: 4 + Math.sin(s * Math.PI * 1.8) * 2.2,
+      rot: face * (32 + Math.sin(s * Math.PI * 2.2) * 10),
+      anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.84) / 0.16);
   return {
     x: fromX,
-    lift: 1.4 * (1 - s),
-    rot: facing * 11 * (1 - s),
-    anim: "sit" as const,
+    lift: 3 * (1 - s),
+    rot: face * 14 * (1 - s),
+    anim: "sit" as TrickAnim,
   };
 }
 
-/** Skip — short hops across the blotter. Toucans hop more than they walk. Not a dog zoom. Not a chinchilla bound. Not window-play hop leave. Ethogram hopping true. */
-export function skipPose(t: number, fromX: number, facing: 1 | -1) {
+export function skipPose(t: number, fromX: number, facing: number) {
   const u = Math.max(0, Math.min(1, t / DUR.skip));
+  const face = facing == null ? 1 : facing;
   if (u < 0.08) {
     const s = smoothstep(u / 0.08);
-    return { x: fromX, lift: s * 1.2, rot: -s * 5 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 3.5, rot: -s * 8 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.9) {
     const s = (u - 0.08) / 0.82;
-    const hop = Math.abs(Math.sin(s * Math.PI * 3));
+    const hop = Math.abs(Math.sin(s * Math.PI * 3.5));
     return {
-      x: fromX + facing * (20 * smoothstep(s) + Math.sin(s * Math.PI * 2) * 1.2),
-      lift: 1.2 + hop * 6.5,
-      rot: facing * (-5 + hop * 14),
-      anim: "walk" as const,
+      x: fromX + face * (28 * smoothstep(s) + Math.sin(s * Math.PI * 2) * 2.2),
+      lift: 3.5 + hop * 9,
+      rot: face * (-8 + hop * 18),
+      anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.9) / 0.1);
   return {
-    x: fromX + facing * 20,
-    lift: 1.2 * (1 - s),
-    rot: facing * -2 * (1 - s),
-    anim: "sit" as const,
+    x: fromX + face * 28,
+    lift: 2.5 * (1 - s),
+    rot: face * -3 * (1 - s),
+    anim: "sit" as TrickAnim,
   };
 }
 
-export function stepTrick(trick: ToucanTrick, dt: number, flags?: TrickFlags): ToucanTrick {
-  if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "skip" && trick.kind !== "juggle") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+export function rattlePose(t: number, fromX: number, facing: number) {
+  const u = Math.max(0, Math.min(1, t / DUR.rattle));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 5.5, rot: -s * 10 * face, anim: "talk" as TrickAnim };
   }
-  const next: ToucanTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  if (u < 0.88) {
+    const ratt = Math.sin(t * 22) + 0.3 * Math.sin(t * 38);
+    return {
+      x: fromX + face * Math.sin(t * 9) * 1.6,
+      lift: 5.5 + Math.abs(ratt) * 3.5,
+      rot: face * (-10 + ratt * 20),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.88) / 0.12);
+  return {
+    x: fromX,
+    lift: 3.5 * (1 - s),
+    rot: -5 * (1 - s) * face,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function clatterPose(t: number, fromX: number, facing: number) {
+  const u = Math.max(0, Math.min(1, t / DUR.clatter));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: -s * 3.5, rot: s * 14 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.86) {
+    const s = (u - 0.12) / 0.74;
+    const knock = Math.sin(s * Math.PI * 7);
+    return {
+      x: fromX + face * Math.abs(knock) * 2.2,
+      lift: -3.5 + Math.abs(knock) * 6.5,
+      rot: face * (14 + knock * 16),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.86) / 0.14);
+  return {
+    x: fromX,
+    lift: -2 * (1 - s),
+    rot: face * 6 * (1 - s),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: ToucanTrick | null | undefined, dt: number, flags?: TrickFlags | null) {
+  if (!trick || trick.phase === "done") return trick;
+  if (shouldAbort(flags) && trick.kind !== "skip" && trick.kind !== "juggle" && trick.kind !== "rattle") {
+    return Object.assign({}, trick, { phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true });
+  }
+  const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
   if (next.kind === "roost") {
     if (next.t < ROOST_HOLD) {
       const pose = roostPose(next.t);
@@ -437,37 +458,48 @@ export function stepTrick(trick: ToucanTrick, dt: number, flags?: TrickFlags): T
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return Object.assign({}, next, { phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim });
   }
-  const hold = DUR[next.kind];
+  const hold = DUR[next.kind as ToucanTrickKind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "berry") {
-    const pose = berryPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = berryPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "juggle") {
-    const pose = jugglePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = jugglePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "peer") {
-    const pose = peerPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = peerPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "skip") {
+    const pose = skipPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "rattle") {
+    const pose = rattlePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = skipPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = clatterPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) {
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
-  }
+  if (u >= 1) return Object.assign({}, next, { phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim });
   return next;
 }

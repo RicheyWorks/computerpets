@@ -51,7 +51,7 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayPhoenix = createRequire(import.meta.url)(join(root, "../desktop/renderer/phoenix-tricks.js"));
 
 test("Keel tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["roost", "berry", "juggle", "peer", "skip"]);
+  assert.deepEqual([...T.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -96,7 +96,7 @@ test("Keel tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("groom"), false);
 });
 
-test("roost/berry/juggle/peer/skip are house-toucan-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl or dragon clones", () => {
+test("roost/berry/juggle/peer/skip/rattle/clatter are house-toucan-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const roost = T.beginTrick("roost", 80, 1);
   assert.equal(roost.anim, "sit");
@@ -127,8 +127,18 @@ test("roost/berry/juggle/peer/skip are house-toucan-true, not Rui cat dog rabbit
   assert.equal(skip.anim, "walk");
   const skipMid = T.stepTrick(skip, 0.5, ground);
   assert.ok(Math.abs(skipMid.x - 80) > 1 || Math.abs(skipMid.lift) > 0.3 || Math.abs(skipMid.rot) > 1);
-  const skipDone = T.stepTrick(skip, 1.4, ground);
+  const skipDone = T.stepTrick(skip, T.DUR.skip + 0.1, ground);
   assert.equal(skipDone.phase, "done");
+  const rattle = T.beginTrick("rattle", 80, 1);
+  assert.equal(rattle.anim, "play");
+  const rattMid = T.stepTrick(rattle, T.DUR.rattle * 0.4, ground);
+  assert.ok(rattMid.lift > 2 || Math.abs(rattMid.rot) > 1);
+  const clatter = T.beginTrick("clatter", 80, 1);
+  assert.equal(clatter.anim, "sit");
+  const clatMid = T.stepTrick(clatter, T.DUR.clatter * 0.4, ground);
+  assert.ok(Math.abs(clatMid.lift) > 1 || Math.abs(clatMid.rot) > 1);
+  assert.equal(Overlay.TRICKS.includes("rattle"), true);
+  assert.equal(Overlay.TRICKS.includes("clatter"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("roost"), false);
@@ -313,13 +323,13 @@ test("ground registry keeps prior guests gated; Keel selectable; no toss/flash/b
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
   assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
   assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
-  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet"]);
-  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash"]);
+  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
+  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.deepEqual([...Ferret.TRICKS], ["tube", "romp", "steal", "puff", "noodle"]);
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
   assert.deepEqual([...Chinchilla.TRICKS], ["ash", "bound", "fluff", "chin", "sift"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
-  assert.deepEqual([...T.TRICKS], ["roost", "berry", "juggle", "peer", "skip"]);
+  assert.deepEqual([...T.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.equal(T.TRICKS.includes("toss"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
   assert.equal(T.TRICKS.includes("bill"), false);
@@ -455,7 +465,7 @@ test("ground registry keeps prior guests gated; Keel selectable; no toss/flash/b
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
 });
 
-test("notes: Keel idle-life done; Sol / iguana now has tricks; Vesper / dragon now has tricks; Ember / phoenix now has tricks; next lacking is Nori / ball_python", () => {
+test("notes: Keel base idle-life done; Sol / iguana now has tricks; Vesper / dragon now has tricks; Ember / phoenix now has tricks; next lacking is Nori / ball_python", () => {
   assert.equal(T.TRICK_KEY, "toucan");
   assert.equal(T.wantsThankYou("keel"), true);
   assert.equal(OverlayGround.tricksFor("iguana"), OverlayIguana);
@@ -466,4 +476,39 @@ test("notes: Keel idle-life done; Sol / iguana now has tricks; Vesper / dragon n
   assert.equal(OverlayGround.wantsThankYou("dragon"), true);
   assert.equal(OverlayGround.tricksFor("phoenix"), OverlayPhoenix);
   assert.equal(OverlayGround.wantsThankYou("phoenix"), true);
+});
+
+test("ultra-polish: Keel roost/berry/juggle/rattle/clatter lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("roost", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `roost mid rot ${mid.rot}`);
+  assert.ok(mid.lift > 2, `roost mid lift ${mid.lift}`);
+  const berry = T.beginTrick("berry", 80, 1);
+  const b2 = T.stepTrick(berry, T.DUR.berry * 0.22, { cmd: "idle" });
+  assert.ok(Math.abs(b2.rot) > 6, `berry mid rot ${b2.rot}`);
+  assert.ok(Math.abs(b2.lift) > 2 || Math.abs(b2.rot) > 10, `berry mid lift/rot ${b2.lift}/${b2.rot}`);
+  const jug = T.beginTrick("juggle", 80, 1);
+  const j2 = T.stepTrick(jug, T.DUR.juggle * 0.4, { cmd: "idle" });
+  assert.ok(j2.lift > 5, `juggle mid lift ${j2.lift}`);
+  const rt = T.beginTrick("rattle", 80, 1);
+  const r2 = T.stepTrick(rt, T.DUR.rattle * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift > 4, `rattle mid lift ${r2.lift}`);
+  const cl = T.beginTrick("clatter", 80, 1);
+  const c2 = T.stepTrick(cl, T.DUR.clatter * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(c2.lift) > 2 || Math.abs(c2.rot) > 6, `clatter mid lift/rot ${c2.lift}/${c2.rot}`);
+  assert.ok(Overlay.rattlePose && Overlay.clatterPose);
+  assert.ok(T.nextTrickWait(true, 0, "roost") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "roost") > T.nextTrickWait(true, 0, "berry"));
+});
+
+test("notes: Keel idle-life ultra done; next bird ultra is Ember / phoenix (Loom still next for base idle-ground)", () => {
+  assert.deepEqual([...T.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
+  assert.equal(T.TRICKS.includes("toss"), false);
+  assert.equal(T.TRICKS.includes("bill"), false);
+  assert.equal(T.TRICKS.includes("flash"), false);
+  assert.equal(T.TRICKS.includes("pineye"), false);
+  assert.equal(T.TRICKS.includes("invert"), false);
+  assert.equal(T.TRICKS.includes("rockhop"), false);
+  assert.equal(T.TRICKS.includes("quote"), false);
+  assert.equal(T.TRICKS.includes("preen"), false);
 });
