@@ -223,7 +223,7 @@ test("Soot tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...T.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1119,7 +1119,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...Overlay.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Overlay.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
@@ -1191,7 +1191,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("hopwalk/monocle/fossick/anting/corvid are Corvus-true, not copies of prior guests", () => {
+test("hopwalk/monocle/fossick/anting/scrutinize/glean/corvid are Corvus-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("corvid", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1231,6 +1231,8 @@ test("hopwalk/monocle/fossick/anting/corvid are Corvus-true, not copies of prior
     assert.equal(mod.TRICKS.includes("monocle"), false);
     assert.equal(mod.TRICKS.includes("fossick"), false);
     assert.equal(mod.TRICKS.includes("anting"), false);
+  assert.equal(mod.TRICKS.includes("glean"), false);
+  assert.equal(mod.TRICKS.includes("scrutinize"), false);
     assert.equal(mod.TRICKS.includes("corvid"), false);
     assert.equal(mod.HAPPY.includes("brachyrhynchos"), false);
     assert.equal(mod.HAPPY.includes("ossifragus"), false);
@@ -1558,7 +1560,7 @@ test("ground registry keeps prior guests gated; Soot selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...T.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2064,7 +2066,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...Overlay.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2124,7 +2126,7 @@ globalThis.PetMorelTricks = OverlayMorel;
 
 test("notes: Soot idle-life done; next house-order guest still lacking tricks is Wedge / raven", () => {
   assert.equal(T.TRICK_KEY, "crow");
-  assert.deepEqual([...T.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "corvid"]);
+  assert.deepEqual([...T.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...T.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
@@ -2307,3 +2309,20 @@ test("notes: Soot idle-life done; next house-order guest still lacking tricks is
 
 
 
+
+test("ultra-polish: Soot hopwalk/monocle lifts are Rui-visible (not micro idle-gen)", () => {
+  const hop = T.beginTrick("hopwalk", 80, 1);
+  const mid = T.stepTrick(hop, T.DUR.hopwalk * 0.4, { cmd: "idle" });
+  assert.ok(mid.lift > 4, `hopwalk mid lift ${mid.lift}`);
+  const mono = T.beginTrick("monocle", 80, 1);
+  const m2 = T.stepTrick(mono, T.DUR.monocle * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(m2.rot) > 8, `monocle mid rot ${m2.rot}`);
+  const sc = T.beginTrick("scrutinize", 80, 1);
+  const s2 = T.stepTrick(sc, T.DUR.scrutinize * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(s2.rot) > 10, `scrutinize mid rot ${s2.rot}`);
+  const gl = T.beginTrick("glean", 80, 1);
+  const g2 = T.stepTrick(gl, T.DUR.glean * 0.35, { cmd: "idle" });
+  assert.ok(g2.lift > 4, `glean mid lift ${g2.lift}`);
+  assert.ok(Overlay.scrutinizePose && Overlay.gleanPose);
+  assert.ok(T.nextTrickWait(true, 0, "corvid") < 80);
+});

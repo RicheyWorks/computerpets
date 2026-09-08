@@ -220,7 +220,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   stentor: [A("trumpet", "open", 1.6, 5, "sit"), A("contract", "sit_hold", 1.8, 3, "sit"), A("still", "freeze", 1.8, 2)],
   coli: [A("tumble", "dart", 0.7, 5), A("run", "wiggle", 0.9, 3), A("still", "freeze", 1.2, 2)],
   haloarchaea: [A("blush", "frost", 1.8, 5, "sit"), A("still", "freeze", 2.2, 3), A("pink", "flush", 1.4, 1)],
-  crow: [A("caw", "talk", 0.8, 4, "talk"), A("hop_step", "hop", 0.5, 3, "play"), A("preen", "groom", 1.4, 2, "sit")],
+  crow: [A("caw", "talk", 0.8, 4, "talk"), A("hop_step", "hop", 0.5, 3, "play"), A("preen", "groom", 1.5, 3, "sit"), A("cock_look", "nod", 1.2, 3, "sit"), A("bill_wipe", "wiggle", 0.9, 2, "sit"), A("alert", "freeze", 1.8, 2), A("wing_settle", "pulse", 0.9, 2, "play"), A("perch", "sit_hold", 2.2, 2, "sit")],
   raven: [A("kronk", "talk", 0.9, 4, "talk"), A("hop_step", "hop", 0.55, 3, "play"), A("preen", "groom", 1.4, 2, "sit")],
   barn_owl: [A("hiss", "talk", 0.8, 3, "talk"), A("swivel", "nod", 1.2, 3, "sit"), A("preen", "groom", 1.6, 2, "sit")],
   red_tail: [A("soar", "pulse", 1.4, 4), A("stoop", "dart", 0.8, 3), A("still", "freeze", 1.6, 2)],
