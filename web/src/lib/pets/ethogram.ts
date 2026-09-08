@@ -78,12 +78,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
     A("steal_dart", "dart", 1.2, 2),
     A("wash", "groom", 1.3, 2, "sit"),
   ],
-  rabbit: [
-    A("face_wash", "groom", 1.2, 3, "sit"),
-    A("freeze", "freeze", 1.4, 2),
-    A("flop", "sit_hold", 2.4, 2, "sit"),
-    A("binky", "hop", 0.6, 1, "play"),
-  ],
+  rabbit: [A("flop", "sit_hold", 2.0, 4, "sit"), A("groom_soft", "groom", 1.0, 3, "sit"), A("peri_soft", "rise", 0.9, 2, "sit"), A("dig_soft", "wiggle", 0.9, 2, "sit"), A("binky_soft", "hop", 0.8, 2, "play"), A("rub_soft", "lean", 0.8, 2, "sit"), A("nosh_soft", "eat", 0.8, 2, "eat"), A("freeze", "freeze", 1.4, 2)],
   hamster: [
     A("nibble", "eat", 1.1, 3, "eat"),
     A("groom", "groom", 1.2, 2, "sit"),

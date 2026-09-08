@@ -249,7 +249,7 @@ test("ultra-polish: Pip wait/wag/bow/beg/pant lifts are Rui-visible (not micro i
   assert.ok(T.nextTrickWait(true, 0, "wait") > T.nextTrickWait(true, 0, "wag"));
 });
 
-test("notes: Pip idle-life ultra done; next house-order ultra guest is Thimble / rabbit (birds Soot→Ember + Miso already ultra)", () => {
+test("notes: Pip idle-life ultra done; Thimble / rabbit ultra next-or-done; following house-order ultra guest is Clip / hamster (birds Soot→Ember + Miso already ultra)", () => {
   assert.deepEqual([...T.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.equal(T.TRICKS.includes("scratch"), false);
   assert.equal(T.TRICKS.includes("loaf"), false);
