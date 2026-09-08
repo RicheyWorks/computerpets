@@ -211,6 +211,7 @@ const Morel = root.PetMorelTricks;
     const TraceDragon = root.PetTraceDragonTricks;
     const FluxDragon = root.PetFluxDragonTricks;
     const SparkDragon = root.PetSparkDragonTricks;
+    const IonDragon = root.PetIonDragonTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -420,6 +421,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (TraceDragon && (key === TraceDragon.TRICK_KEY || key === "trace_dragon" || key === "trace")) return TraceDragon;
     if (FluxDragon && (key === FluxDragon.TRICK_KEY || key === "flux_dragon" || key === "flux")) return FluxDragon;
     if (SparkDragon && (key === SparkDragon.TRICK_KEY || key === "spark_dragon" || key === "crackle")) return SparkDragon;
+    if (IonDragon && (key === IonDragon.TRICK_KEY || key === "ion_dragon" || key === "ion")) return IonDragon;
   }
 
   function wantsThankYou(key) {
