@@ -1,12 +1,12 @@
-/** Hop ground tricks while idle. House neighborly Collembola / Orchesella Springtail furcula life — furcula / collophore / springleap / duffgraze / orchesella personality (furcula furcula jump launch without naming jump or leap or spring or hop or bounce or flick or launch or vault alone as wait, collophore feeler walk without naming walk or crawl or march or feel or antenna or tap or probe or scan or sniff, springleap damp litter soil cling without naming cling or moist or damp or soil or litter or grip or stick or hold or wet, duffgraze furcula tuck rest without naming tuck or fold or rest or crouch or curl or sit or hush or wait alone, long orchesella Orchesella Collembola springtail hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or slimejet or lobopod or antennawhip or preyharpoon or peripatus or densjet or inkjet or denslobo or peristalse or castheap or surfacerise or soilanchor or terrestris or denscast or inkcast or densclit or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass; window-play and Call Hop leave springtail alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet own their tricks; guest slug Hop / key springtail — accept "springtail" and "hop" (roster slug hop; campaign Hop); do NOT confuse with Jet the Velvet Worm (key velvet_worm / slug jet) or densjet thank-you; do NOT confuse with Cast the Earthworm (key earthworm / slug cast) or denscast thank-you; do NOT confuse with Armor the Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT name a trick springtail or hop or velvet_worm or jet or earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste. Thank-yous denshop / inkhop / densfurc. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web springtail-tricks.ts. Window-play unchanged. True Springtail Orchesella Collembola desk life — furcula jump launch with feeler walk, damp litter cling, and furcula tuck rest; not Peripatus velvet worm/Onychophora clones (slimejet/lobopod/antennawhip/preyharpoon), not Lumbricus earthworm/Annelida clones (peristalse/castheap/surfacerise/soilanchor), not Armadillidium pillbug/Isopoda clones (conglobate/volvation/antennafeel/detritusnip), not Narceus millipede/Diplopoda clones — true collembolan furcula distinct from worm peristalsis and pillbug ball-roll. Next house-order guest after Hop still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Hop ground tricks while idle. House neighborly Collembola / Orchesella Springtail furcula life — furculaflick / antennawalk / moistclingsoil / foldtuck / orchesella personality (furculaflick furcula jump launch without naming jump or leap or spring or hop or bounce or flick or launch or vault alone as wait, antennawalk feeler walk without naming walk or crawl or march or feel or antenna or tap or probe or scan or sniff, moistclingsoil damp litter soil cling without naming cling or moist or damp or soil or litter or grip or stick or hold or wet, foldtuck furcula tuck rest without naming tuck or fold or rest or crouch or curl or sit or hush or wait alone, long orchesella Orchesella Collembola springtail hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or slimejet or lobopod or antennawhip or preyharpoon or peripatus or densjet or inkjet or denslobo or peristalse or castheap or surfacerise or soilanchor or terrestris or denscast or inkcast or densclit or conglobate or volvation or antennafeel or detritusnip or vulgare or densarmor or inkarmor or densball or coilcurl or detritusgrub or slowmarch or moistseek or narceus or denslink or inklink or denscoil or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass; window-play and Call Hop leave springtail alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet own their tricks; guest slug Hop / key springtail — accept "springtail" and "hop" (roster slug hop; campaign Hop); do NOT confuse with Jet the Velvet Worm (key velvet_worm / slug jet) or densjet thank-you; do NOT confuse with Cast the Earthworm (key earthworm / slug cast) or denscast thank-you; do NOT confuse with Armor the Pillbug (key pillbug / slug armor) or densarmor thank-you; do NOT name a trick springtail or hop or velvet_worm or jet or earthworm or cast or pillbug or armor or millipede or link or house_centipede or haste. Thank-yous denshop / inkhop / densfurcula. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web springtail-tricks.ts. Window-play unchanged. True Springtail Orchesella Collembola desk life — furcula jump launch with feeler walk, damp litter cling, and furcula tuck rest; not Peripatus velvet worm/Onychophora clones (slimejet/lobopod/antennawhip/preyharpoon), not Lumbricus earthworm/Annelida clones (peristalse/castheap/surfacerise/soilanchor), not Armadillidium pillbug/Isopoda clones (conglobate/volvation/antennafeel/detritusnip), not Narceus millipede/Diplopoda clones — true collembolan furcula distinct from worm peristalsis and pillbug ball-roll. Next house-order guest after Hop still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "springtail";
-  const TRICKS = ["furcula", "collophore", "springleap", "duffgraze", "orchesella"];
-  const HAPPY = ["denshop", "inkhop", "densfurc"];
-  const HAPPY_DUR = { denshop: 2.48, inkhop: 2.64, densfurc: 2.38 };
+  const TRICKS = ["furculaflick", "antennawalk", "moistclingsoil", "foldtuck", "orchesella"];
+  const HAPPY = ["denshop", "inkhop", "densfurcula"];
+  const HAPPY_DUR = { denshop: 2.48, inkhop: 2.64, densfurcula: 2.38 };
   const ORCHESELLA_HOLD = 23.90;
   const RELEASE_S = 2.04;
-  const DUR = { orchesella: ORCHESELLA_HOLD + RELEASE_S, furcula: 4.48, collophore: 4.35, springleap: 4.05, duffgraze: 4.28 };
+  const DUR = { orchesella: ORCHESELLA_HOLD + RELEASE_S, furculaflick: 4.48, antennawalk: 4.35, moistclingsoil: 4.05, foldtuck: 4.28 };
 
   function canStart(state) {
     if (!state) return false;
@@ -37,10 +37,10 @@
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
       if (kind === "orchesella") return 154 + roll * 14;
-  if (kind === "furcula") return 25.0 + roll * 4.0;
-  if (kind === "collophore") return 25.6 + roll * 4.0;
-  if (kind === "springleap") return 24.0 + roll * 3.6;
-  if (kind === "duffgraze") return 24.8 + roll * 3.8;
+  if (kind === "furculaflick") return 25.0 + roll * 4.0;
+  if (kind === "antennawalk") return 25.6 + roll * 4.0;
+  if (kind === "moistclingsoil") return 24.0 + roll * 3.6;
+  if (kind === "foldtuck") return 24.8 + roll * 3.8;
   return justFinished ? 18.2 + roll * 2.5 : 13.4 + roll * 2.1;
   }
 
@@ -48,28 +48,28 @@
     if (musicOn) return "orchesella";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "orchesella") {
-      if (roll < 0.26) return "furcula";
-      if (roll < 0.5) return "collophore";
-      if (roll < 0.74) return "springleap";
-      return "duffgraze";
+      if (roll < 0.26) return "furculaflick";
+      if (roll < 0.5) return "antennawalk";
+      if (roll < 0.74) return "moistclingsoil";
+      return "foldtuck";
     }
-    if (lastKind === "furcula") {
+    if (lastKind === "furculaflick") {
       if (roll < 0.26) return "orchesella";
-      if (roll < 0.5) return "collophore";
-      if (roll < 0.74) return "springleap";
-      return "duffgraze";
+      if (roll < 0.5) return "antennawalk";
+      if (roll < 0.74) return "moistclingsoil";
+      return "foldtuck";
     }
-    if (lastKind === "collophore") {
+    if (lastKind === "antennawalk") {
       if (roll < 0.22) return "orchesella";
-      if (roll < 0.44) return "furcula";
-      if (roll < 0.68) return "springleap";
-      return "duffgraze";
+      if (roll < 0.44) return "furculaflick";
+      if (roll < 0.68) return "moistclingsoil";
+      return "foldtuck";
     }
     if (roll < 0.2) return "orchesella";
-    if (roll < 0.4) return "furcula";
-    if (roll < 0.6) return "collophore";
-    if (roll < 0.8) return "springleap";
-    return "duffgraze";
+    if (roll < 0.4) return "furculaflick";
+    if (roll < 0.6) return "antennawalk";
+    if (roll < 0.8) return "moistclingsoil";
+    return "foldtuck";
   }
 
   function happyCanStart(state) {
@@ -157,8 +157,8 @@
     const s = (u - 0.70) / 0.30;
     return { lift: 0.0060 * (1 - s), rot: -0.52 * (1 - s), anim: "idle" };
   }
-  function densfurcPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densfurc));
+  function densfurculaPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densfurcula));
     if (u < 0.12) {
       const s = u / 0.12;
       return { lift: s * 0.0042, rot: s * 0.36, anim: "play" };
@@ -188,7 +188,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = densfurcPose(next.t);
+      const pose = densfurculaPose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -205,14 +205,14 @@
     const anim =
       kind === "orchesella"
         ? "sit"
-        : kind === "furcula"
-          ? "sit"
-          : kind === "collophore"
-            ? "sit"
-            : kind === "springleap"
-              ? "play"
-              : kind === "duffgraze"
-                ? "play"
+        : kind === "furculaflick"
+          ? "play"
+          : kind === "antennawalk"
+            ? "play"
+            : kind === "moistclingsoil"
+              ? "sit"
+              : kind === "foldtuck"
+                ? "sit"
                 : "sit";
     return {
       kind: kind,
@@ -234,26 +234,26 @@
 
 
                       function orchesellaPose(t) {
-    const breath = Math.sin(t * 0.0058) + 0.0022 * Math.sin(t * 0.0148);
-    const hush = Math.abs(Math.sin(t * 0.0032));
-    return { lift: 0.00042 + hush * 0.00068, rot: -0.011 + breath * 0.028 };
+    const breath = Math.sin(t * 0.0055) + 0.0020 * Math.sin(t * 0.0142);
+    const hush = Math.abs(Math.sin(t * 0.0030));
+    return { lift: 0.00040 + hush * 0.00064, rot: -0.010 + breath * 0.026 };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.00042 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.011 * (1 - u) };
+    return { lift: 0.00040 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.010 * (1 - u) };
   }
 
-  function furculaPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.furcula));
+  function furculaflickPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.furculaflick));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00022, lift: s * 0.0028, rot: s * -0.32 * face, anim: "sit" };
+      return { x: fromX + face * s * 0.00035, lift: s * 0.0042, rot: s * -0.42 * face, anim: "play" };
     }
     if (u < 0.36) {
       const cock = smoothstep((u - 0.14) / 0.22);
-      return { x: fromX + face * (0.00022 + cock * 0.00018), lift: 0.0028 + cock * 0.0042, rot: (-0.32 + cock * -0.28) * face, anim: "sit" };
+      return { x: fromX + face * (0.00022 + cock * 0.00018), lift: 0.0028 + cock * 0.0042, rot: (-0.32 + cock * -0.28) * face, anim: "play" };
     }
     if (u < 0.52) {
       const snap = smoothstep((u - 0.36) / 0.16);
@@ -267,66 +267,54 @@
     const s = smoothstep((u - 0.84) / 0.16);
     return { x: fromX + face * 0.0024 * (1 - s), lift: 0.0007 * (1 - s), rot: 0.018 * (1 - s) * face, anim: "idle" };
   }
-  function collophorePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.collophore));
+  function antennawalkPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.antennawalk));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.10) {
+      const s = smoothstep(u / 0.10);
+      return { x: fromX + face * s * 0.00028, lift: s * 0.0014, rot: s * 0.14 * face, anim: "play" };
+    }
+    if (u < 0.88) {
+      const stride = Math.sin((u - 0.10) / 0.78 * Math.PI * 6.4);
+      const feel = Math.sin(t * 1.05) + 0.05 * Math.sin(t * 2.1);
+      return { x: fromX + face * (0.00028 + (u - 0.10) / 0.78 * 0.0064 + stride * 0.00055 + feel * 0.00008), lift: 0.0012 + Math.abs(stride) * 0.0016 + Math.abs(feel) * 0.0007, rot: (0.14 + stride * 0.22 + feel * 0.12) * face, anim: "play" };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return { x: fromX + face * 0.0064 * (1 - s), lift: 0.0006 * (1 - s), rot: 0.016 * (1 - s) * face, anim: "idle" };
+  }
+  function moistclingsoilPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.moistclingsoil));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00018, lift: s * 0.0016, rot: s * 0.12 * face, anim: "sit" };
+      return { x: fromX + face * s * 0.00016, lift: s * 0.0009, rot: s * -0.08 * face, anim: "sit" };
     }
     if (u < 0.86) {
-      const tap = Math.sin((u - 0.12) / 0.74 * Math.PI * 5.2);
-      const moisture = Math.sin(t * 0.88) + 0.045 * Math.sin(t * 1.76);
-      return { x: fromX + face * (0.00018 + tap * 0.00042 + moisture * 0.00006), lift: 0.0014 + Math.abs(tap) * 0.0018 + Math.abs(moisture) * 0.0009, rot: (0.12 + tap * 0.28 + moisture * 0.10) * face, anim: "sit" };
+      const cling = Math.sin((u - 0.12) / 0.74 * Math.PI * 4.6);
+      const damp = Math.sin(t * 0.82) + 0.04 * Math.sin(t * 1.64);
+      return { x: fromX + face * (0.00016 + cling * 0.00028 + damp * 0.00005), lift: 0.0015 + Math.abs(cling) * 0.0018 + Math.abs(damp) * 0.0008, rot: (-0.08 + cling * 0.18 + damp * 0.08) * face, anim: "sit" };
     }
     const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.00018 * (1 - s), lift: 0.0014 * (1 - s) + s * 0.0004, rot: 0.016 * (1 - s) * face, anim: "idle" };
+    return { x: fromX + face * 0.00016 * (1 - s), lift: 0.0008 * (1 - s) + s * 0.0003, rot: -0.012 * (1 - s) * face, anim: "idle" };
   }
-  function springleapPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.springleap));
+  function foldtuckPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.foldtuck));
     const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00028, lift: s * 0.0034, rot: s * -0.38 * face, anim: "play" };
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX + face * s * 0.00045, lift: s * 0.0032, rot: s * 0.34 * face, anim: "sit" };
     }
-    if (u < 0.22) {
-      const coil = smoothstep((u - 0.10) / 0.12);
-      return { x: fromX + face * (0.00028 + coil * 0.00022), lift: 0.0034 + coil * 0.0055, rot: (-0.38 + coil * -0.22) * face, anim: "play" };
+    if (u < 0.78) {
+      const tuck = Math.sin((u - 0.16) / 0.62 * Math.PI * 2.8);
+      const hush = Math.sin(t * 0.72) + 0.035 * Math.sin(t * 1.44);
+      return { x: fromX + face * (0.00045 + tuck * 0.00035 + hush * 0.00006), lift: 0.0028 + Math.abs(tuck) * 0.0016 + Math.abs(hush) * 0.0007, rot: (0.34 + tuck * 0.22 + hush * 0.08) * face, anim: "sit" };
     }
-    if (u < 0.42) {
-      const leap = smoothstep((u - 0.22) / 0.20);
-      return { x: fromX + face * (0.00050 + leap * 0.0115), lift: 0.0089 + leap * 0.0145, rot: (-0.60 + leap * 0.95) * face, anim: "play" };
-    }
-    if (u < 0.72) {
-      const arc = Math.sin((u - 0.42) / 0.30 * Math.PI);
-      const tumble = Math.sin(t * 1.55) + 0.06 * Math.sin(t * 3.1);
-      return { x: fromX + face * (0.0120 + arc * 0.0022 + tumble * 0.00014), lift: 0.0160 + Math.abs(arc) * 0.0065 + Math.abs(tumble) * 0.0012, rot: (0.35 + arc * 0.42 + tumble * 0.16) * face, anim: "talk" };
-    }
-    if (u < 0.88) {
-      const land = smoothstep((u - 0.72) / 0.16);
-      return { x: fromX + face * (0.0120 - land * 0.0038), lift: 0.0160 * (1 - land) + land * 0.0022, rot: (0.35 - land * 0.28) * face, anim: "sit" };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0082 * (1 - s), lift: 0.0022 * (1 - s), rot: 0.07 * (1 - s) * face, anim: "idle" };
-  }
-  function duffgrazePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.duffgraze));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00035, lift: s * 0.0012, rot: s * 0.10 * face, anim: "play" };
-    }
-    if (u < 0.88) {
-      const nibble = Math.sin((u - 0.10) / 0.78 * Math.PI * 7.2);
-      const litter = Math.sin(t * 0.96) + 0.04 * Math.sin(t * 1.92);
-      return { x: fromX + face * (0.00035 + (u - 0.10) / 0.78 * 0.0058 + nibble * 0.00072 + litter * 0.00008), lift: 0.0010 + Math.abs(nibble) * 0.0014 + Math.abs(litter) * 0.0006, rot: (0.10 + nibble * 0.24 + litter * 0.08) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0058 * (1 - s), lift: 0.0005 * (1 - s), rot: 0.014 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return { x: fromX + face * 0.00045 * (1 - s), lift: 0.0028 * (1 - s), rot: 0.34 * (1 - s) * face, anim: "idle" };
   }
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "furcula" && trick.kind !== "collophore" && trick.kind !== "springleap" && trick.kind !== "duffgraze") {
+    if (shouldAbort(flags) && trick.kind !== "furculaflick" && trick.kind !== "antennawalk" && trick.kind !== "moistclingsoil" && trick.kind !== "foldtuck") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -351,26 +339,26 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "furcula") {
-      const pose = furculaPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    if (next.kind === "furculaflick") {
+      const pose = furculaflickPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "collophore") {
-      const pose = collophorePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "antennawalk") {
+      const pose = antennawalkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "springleap") {
-      const pose = springleapPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "moistclingsoil") {
+      const pose = moistclingsoilPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = duffgrazePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = foldtuckPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -396,10 +384,10 @@
     beginTrick,
     orchesellaPose,
     releasePose,
-    furculaPose,
-    collophorePose,
-    springleapPose,
-    duffgrazePose,
+    furculaflickPose,
+    antennawalkPose,
+    moistclingsoilPose,
+    foldtuckPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -409,7 +397,7 @@
     beginHappy,
     denshopPose,
     inkhopPose,
-    densfurcPose,
+    densfurculaPose,
     stepHappy,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
