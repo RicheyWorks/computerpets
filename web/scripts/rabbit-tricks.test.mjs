@@ -24,7 +24,7 @@ const OverlayHamster = createRequire(import.meta.url)(join(root, "../desktop/ren
 const OverlayGuineaPig = createRequire(import.meta.url)(join(root, "../desktop/renderer/guinea-pig-tricks.js"));
 
 test("Thimble tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["flop", "groom", "periscope", "dig", "binky"]);
+  assert.deepEqual([...T.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -46,9 +46,10 @@ test("Thimble tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("bow"), false);
   assert.equal(T.TRICKS.includes("zoom"), false);
   assert.equal(T.TRICKS.includes("thump"), false);
+  assert.equal(T.TRICKS.includes("chin"), false);
 });
 
-test("flop/groom/periscope/dig/binky are house-rabbit-true, not Rui cat dog or dragon clones", () => {
+test("flop/groom/periscope/dig/binky/rub/nosh are house-rabbit-true, not Rui cat dog or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const flop = T.beginTrick("flop", 80, 1);
   assert.equal(flop.anim, "sit");
@@ -56,7 +57,8 @@ test("flop/groom/periscope/dig/binky are house-rabbit-true, not Rui cat dog or d
   const held = T.stepTrick(flop, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot < 0 || held.lift < 0);
+  assert.ok(Math.abs(held.rot) > 6);
+  assert.ok(held.lift < 0);
   const release = T.stepTrick(flop, T.FLOP_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -77,10 +79,20 @@ test("flop/groom/periscope/dig/binky are house-rabbit-true, not Rui cat dog or d
   assert.ok(Math.abs(digMid.rot) > 0.5 || digMid.lift < 0);
   const binky = T.beginTrick("binky", 80, 1);
   assert.equal(binky.anim, "play");
-  const binkyMid = T.stepTrick(binky, 0.5, ground);
+  const binkyMid = T.stepTrick(binky, T.DUR.binky * 0.45, ground);
   assert.ok(binkyMid.lift > 1 || Math.abs(binkyMid.x - 80) > 2 || Math.abs(binkyMid.rot) > 2);
-  const binkyDone = T.stepTrick(binky, 1.2, ground);
+  const binkyDone = T.stepTrick(binky, T.DUR.binky + 0.1, ground);
   assert.equal(binkyDone.phase, "done");
+  const rub = T.beginTrick("rub", 80, 1);
+  assert.equal(rub.anim, "sit");
+  const rubMid = T.stepTrick(rub, T.DUR.rub * 0.4, ground);
+  assert.ok(rubMid.lift < -1 || Math.abs(rubMid.rot) > 6);
+  const nosh = T.beginTrick("nosh", 80, 1);
+  assert.equal(nosh.anim, "sit");
+  const noshMid = T.stepTrick(nosh, T.DUR.nosh * 0.4, ground);
+  assert.ok(noshMid.lift < 0 || Math.abs(noshMid.rot) > 4);
+  assert.equal(Overlay.TRICKS.includes("rub"), true);
+  assert.equal(Overlay.TRICKS.includes("nosh"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("flop"), false);
@@ -91,6 +103,8 @@ test("flop/groom/periscope/dig/binky are house-rabbit-true, not Rui cat dog or d
   assert.equal(Earth.TRICKS.includes("binky"), false);
   assert.equal(Dog.TRICKS.includes("binky"), false);
   assert.equal(Cat.TRICKS.includes("binky"), false);
+  assert.equal(Cat.TRICKS.includes("rub"), false);
+  assert.equal(Cat.TRICKS.includes("nosh"), false);
   assert.equal(T.TRICKS.includes("bow"), false);
   assert.equal(T.TRICKS.includes("thump"), false);
 });
@@ -223,4 +237,40 @@ test("ground registry keeps prior guests gated; Thimble selectable; no scratch/t
   assert.equal(OverlayGround.sleepHoldFrame("cat", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("rabbit", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("hamster", 4), null);
+});
+
+test("ultra-polish: Thimble flop/groom/periscope/rub/nosh lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("flop", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `flop mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `flop mid lift ${mid.lift}`);
+  const gr = T.beginTrick("groom", 80, 1);
+  const g2 = T.stepTrick(gr, T.DUR.groom * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(g2.rot) > 6, `groom mid rot ${g2.rot}`);
+  assert.ok(Math.abs(g2.lift) > 2 || g2.lift > 2, `groom mid lift ${g2.lift}`);
+  const pe = T.beginTrick("periscope", 80, 1);
+  const p2 = T.stepTrick(pe, T.DUR.periscope * 0.4, { cmd: "idle" });
+  assert.ok(p2.lift > 6, `periscope mid lift ${p2.lift}`);
+  const rb = T.beginTrick("rub", 80, 1);
+  const r2 = T.stepTrick(rb, T.DUR.rub * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift < -1 || Math.abs(r2.rot) > 6, `rub mid lift/rot ${r2.lift}/${r2.rot}`);
+  const ns = T.beginTrick("nosh", 80, 1);
+  const n2 = T.stepTrick(ns, T.DUR.nosh * 0.4, { cmd: "idle" });
+  assert.ok(n2.lift < 0 || Math.abs(n2.rot) > 6, `nosh mid lift/rot ${n2.lift}/${n2.rot}`);
+  assert.ok(Overlay.rubPose && Overlay.noshPose);
+  assert.ok(T.nextTrickWait(true, 0, "flop") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "flop") > T.nextTrickWait(true, 0, "groom"));
+});
+
+test("notes: Thimble idle-life ultra done; next house-order ultra guest is Clip / hamster (birds Soot→Ember + Miso + Pip already ultra)", () => {
+  assert.deepEqual([...T.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
+  assert.equal(T.TRICKS.includes("scratch"), false);
+  assert.equal(T.TRICKS.includes("loaf"), false);
+  assert.equal(T.TRICKS.includes("wait"), false);
+  assert.equal(T.TRICKS.includes("bunting"), false);
+  assert.equal(T.TRICKS.includes("somersault"), false);
+  assert.equal(T.TRICKS.includes("lug"), false);
+  assert.equal(T.TRICKS.includes("thump"), false);
+  assert.equal(T.TRICKS.includes("mlem"), false);
+  assert.equal(T.TRICKS.includes("chin"), false);
 });
