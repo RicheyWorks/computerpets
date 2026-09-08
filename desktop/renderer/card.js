@@ -73,6 +73,8 @@
       currentAreaId: null,
       newsPrefs: [],
       currentNewsId: "world",
+      newsTab: "popular",
+      newsFavorites: [],
       marketTickers: [],
       currentTickerId: null,
       nftCollections: [],
@@ -81,6 +83,8 @@
       marketCustomized: false,
       nftCustomized: false,
       marketplaceCustomized: false,
+      favoriteTickerIds: [],
+      favoriteNftIds: [],
       stepKind: "species",
       music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
       sleepAid: { plugin: "off", playing: false },
@@ -165,9 +169,11 @@
     const areas = root.PetWeatherAreas ? root.PetWeatherAreas.parseAreas(raw) : { areas: [], currentId: null };
     next.weatherAreas = areas.areas;
     next.currentAreaId = areas.currentId;
-    const news = root.PetNews ? root.PetNews.parseNewsPrefs(raw) : { topics: [{ id: "world", name: "World", query: "" }], currentId: "world" };
+    const news = root.PetNews ? root.PetNews.parseNewsPrefs(raw) : { topics: [{ id: "world", name: "World", query: "" }], currentId: "world", tab: "popular", favorites: [] };
     next.newsPrefs = news.topics;
     next.currentNewsId = news.currentId;
+    next.newsTab = news.tab || "popular";
+    next.newsFavorites = news.favorites || [];
     const market = root.PetMarket
       ? root.PetMarket.parseMarket(raw)
       : { tickers: [], currentId: null, nfts: [], currentNftId: null, marketplaces: [] };
@@ -179,6 +185,8 @@
     next.marketCustomized = !!raw.marketCustomized || !!raw.tickersCustomized;
     next.nftCustomized = !!raw.nftCustomized || !!raw.nftsCustomized;
     next.marketplaceCustomized = !!raw.marketplaceCustomized || !!raw.nftMarketplaceCustomized;
+    next.favoriteTickerIds = Array.isArray(raw.favoriteTickerIds) ? raw.favoriteTickerIds.filter((x) => typeof x === "string" && x).slice(0, 24) : [];
+    next.favoriteNftIds = Array.isArray(raw.favoriteNftIds) ? raw.favoriteNftIds.filter((x) => typeof x === "string" && x).slice(0, 24) : [];
     next.stepKind = root.PetHouseSounds ? root.PetHouseSounds.parseStep(raw.stepKind) : "species";
     next.music = root.PetHouseMusic ? root.PetHouseMusic.parseMusic(raw.music) : { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
     next.sleepAid = root.PetHouseSleep ? root.PetHouseSleep.parseSleepAid(raw.sleepAid) : { plugin: "off", playing: false };

@@ -124,6 +124,8 @@ test("an asleep guest keeps the sleep pose until a real wake; Walk is a wake", (
   assert.match(mainSrc, /sandbox:\s*true/);
   assert.match(preloadSrc, /radioSearch/);
   assert.match(preloadSrc, /newsTopic/);
+  assert.match(preloadSrc, /newsFeed/);
+  assert.match(mainSrc, /news-feed/);
   assert.match(preloadSrc, /marketQuote/);
   assert.equal(C.blankCard().collapsed, true);
 });

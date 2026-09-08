@@ -73,6 +73,8 @@ export type CardPrefs = {
   currentAreaId: string | null;
   newsPrefs: Array<{ id: string; name: string; query: string }>;
   currentNewsId: string;
+  newsTab: string;
+  newsFavorites: Array<{ id: string; kind: string; title: string; url: string; summary: string; topicId: string; query: string }>;
   marketTickers: Array<{ id: string; symbol: string; kind: "stock" | "crypto"; geckoId: string; name: string; platform?: string; address?: string }>;
   currentTickerId: string | null;
   nftCollections: Array<{ id: string; geckoId: string; name: string; symbol: string }>;
@@ -81,6 +83,8 @@ export type CardPrefs = {
   marketCustomized: boolean;
   nftCustomized: boolean;
   marketplaceCustomized: boolean;
+  favoriteTickerIds: string[];
+  favoriteNftIds: string[];
   stepKind: string;
   music: { plugin: string; stationId: string; stationName: string; stationUrl: string; playing: boolean };
   sleepAid: { plugin: string; playing: boolean };
@@ -114,6 +118,8 @@ export function blankCard(): CardPrefs {
     currentAreaId: null,
     newsPrefs: [{ id: "world", name: "World", query: "" }],
     currentNewsId: "world",
+    newsTab: "popular",
+    newsFavorites: [],
     marketTickers: [],
     currentTickerId: null,
     nftCollections: [],
@@ -122,6 +128,8 @@ export function blankCard(): CardPrefs {
     marketCustomized: false,
     nftCustomized: false,
     marketplaceCustomized: false,
+    favoriteTickerIds: [],
+    favoriteNftIds: [],
     stepKind: "species",
     music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
     sleepAid: { plugin: "off", playing: false },
@@ -228,6 +236,8 @@ export function parseCard(raw: unknown): CardPrefs {
   const news = parseNewsPrefs(o);
   next.newsPrefs = news.topics;
   next.currentNewsId = news.currentId;
+  next.newsTab = news.tab || "popular";
+  next.newsFavorites = news.favorites || [];
   const market = parseMarket(o);
   next.marketTickers = market.tickers;
   next.currentTickerId = market.currentId;
@@ -237,6 +247,8 @@ export function parseCard(raw: unknown): CardPrefs {
   next.marketCustomized = !!o.marketCustomized || !!o.tickersCustomized;
   next.nftCustomized = !!o.nftCustomized || !!o.nftsCustomized;
   next.marketplaceCustomized = !!o.marketplaceCustomized || !!o.nftMarketplaceCustomized;
+  next.favoriteTickerIds = Array.isArray(o.favoriteTickerIds) ? o.favoriteTickerIds.filter((x): x is string => typeof x === "string" && !!x).slice(0, 24) : [];
+  next.favoriteNftIds = Array.isArray(o.favoriteNftIds) ? o.favoriteNftIds.filter((x): x is string => typeof x === "string" && !!x).slice(0, 24) : [];
   next.stepKind = parseStep(o.stepKind);
   next.music = parseMusic(o.music);
   next.sleepAid = parseSleepAid(o.sleepAid);

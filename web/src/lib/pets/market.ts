@@ -16,6 +16,8 @@ export const NO_NFT = "no NFT yet";
 export const MAX_TICKERS = 24;
 export const MAX_NFTS = 8;
 export const MAX_MARKETS = 8;
+export const MAX_FAVORITES = 24;
+export const FAVORITES_EMPTY = "No favorites yet — star a coin or NFT.";
 
 export const CRYPTO: Record<string, string> = {
   BTC: "bitcoin", ETH: "ethereum", DOGE: "dogecoin", XLM: "stellar", SOL: "solana",
@@ -53,7 +55,7 @@ export type MarketKind = "stock" | "crypto";
 export type MarketTicker = { id: string; symbol: string; kind: MarketKind; geckoId: string; name: string; platform: string; address: string };
 export type NftCollection = { id: string; geckoId: string; name: string; symbol: string };
 export type NftMarketplace = { id: string; name: string; url: string; note: string };
-export type MarketPrefs = { tickers: MarketTicker[]; currentId: string | null; nfts: NftCollection[]; currentNftId: string | null; marketplaces: NftMarketplace[] };
+export type MarketPrefs = { tickers: MarketTicker[]; currentId: string | null; nfts: NftCollection[]; currentNftId: string | null; marketplaces: NftMarketplace[]; favoriteTickerIds: string[]; favoriteNftIds: string[] };
 export type MarketLive = { price: number; name: string; currency: string; source: "yahoo" | "coingecko" | "geckoterminal"; change24h: number | null; symbol?: string; address?: string };
 export type NftLive = { geckoId: string; name: string; symbol: string; floorUsd: number | null; floorNative: number | null; nativeSymbol: string; source: "coingecko" };
 
@@ -76,7 +78,7 @@ export function defaultMarketplaces(): NftMarketplace[] {
   return DEFAULT_MARKETPLACES.map(marketplaceOf).filter((t): t is NftMarketplace => !!t);
 }
 export function blankMarket(): MarketPrefs {
-  return { tickers: defaultTickers(), currentId: null, nfts: defaultNfts(), currentNftId: null, marketplaces: defaultMarketplaces() };
+  return { tickers: defaultTickers(), currentId: null, nfts: defaultNfts(), currentNftId: null, marketplaces: defaultMarketplaces(), favoriteTickerIds: [], favoriteNftIds: [] };
 }
 export function marketplaceOf(idOrRow: unknown): NftMarketplace | null {
   if (!idOrRow) return null;
@@ -192,7 +194,7 @@ export function parseNftRow(raw: unknown): NftCollection | null {
 }
 
 export function parseMarket(raw: unknown): MarketPrefs {
-  const next: MarketPrefs = { tickers: [], currentId: null, nfts: [], currentNftId: null, marketplaces: [] };
+  const next: MarketPrefs = { tickers: [], currentId: null, nfts: [], currentNftId: null, marketplaces: [], favoriteTickerIds: [], favoriteNftIds: [] };
   if (!raw || typeof raw !== "object") {
     next.tickers = defaultTickers();
     next.currentId = next.tickers[0]?.id ?? null;
@@ -216,6 +218,10 @@ export function parseMarket(raw: unknown): MarketPrefs {
   next.currentNftId = wantNft && next.nfts.some((n) => n.id === wantNft) ? wantNft : next.nfts[0]?.id ?? null;
   const mList = Array.isArray(o.nftMarketplaces) ? o.nftMarketplaces : Array.isArray(o.marketplaces) ? o.marketplaces : null;
   if (mList && mList.length) next.marketplaces = mList.map(marketplaceOf).filter((t): t is NftMarketplace => !!t).slice(0, MAX_MARKETS);
+  const favT = Array.isArray((raw as { favoriteTickerIds?: unknown }).favoriteTickerIds) ? (raw as { favoriteTickerIds: unknown[] }).favoriteTickerIds : [];
+  const favN = Array.isArray((raw as { favoriteNftIds?: unknown }).favoriteNftIds) ? (raw as { favoriteNftIds: unknown[] }).favoriteNftIds : [];
+  next.favoriteTickerIds = favT.filter((x): x is string => typeof x === "string" && !!x).slice(0, MAX_FAVORITES);
+  next.favoriteNftIds = favN.filter((x): x is string => typeof x === "string" && !!x).slice(0, MAX_FAVORITES);
   else if (mList && mList.length === 0 && (o.marketplaceCustomized || o.nftMarketplaceCustomized)) next.marketplaces = [];
   else next.marketplaces = defaultMarketplaces();
   return next;
@@ -518,6 +524,39 @@ export function nftLine(market: MarketPrefs | undefined, live: NftLive | null | 
   if (live.floorNative != null) return `${nft.symbol || nft.name} · ${formatPrice(live.floorNative)} ${live.nativeSymbol || ""}`;
   return nft.symbol || nft.name;
 }
+
+export function toggleFavoriteTicker(market: unknown, id: string): MarketPrefs {
+  const house = parseMarket(market);
+  if (!id || !house.tickers.some((row) => row.id === id)) return house;
+  if (house.favoriteTickerIds.includes(id)) house.favoriteTickerIds = house.favoriteTickerIds.filter((x) => x !== id);
+  else house.favoriteTickerIds = [...house.favoriteTickerIds, id].slice(0, MAX_FAVORITES);
+  return house;
+}
+
+export function toggleFavoriteNft(market: unknown, id: string): MarketPrefs {
+  const house = parseMarket(market);
+  if (!id || !house.nfts.some((row) => row.id === id)) return house;
+  if (house.favoriteNftIds.includes(id)) house.favoriteNftIds = house.favoriteNftIds.filter((x) => x !== id);
+  else house.favoriteNftIds = [...house.favoriteNftIds, id].slice(0, MAX_FAVORITES);
+  return house;
+}
+
+export function isFavoriteTicker(market: unknown, id: string) {
+  return parseMarket(market).favoriteTickerIds.includes(id);
+}
+
+export function isFavoriteNft(market: unknown, id: string) {
+  return parseMarket(market).favoriteNftIds.includes(id);
+}
+
+export function favoriteRows(market: unknown) {
+  const house = parseMarket(market);
+  return {
+    tickers: house.favoriteTickerIds.map((id) => house.tickers.find((row) => row.id === id)).filter((x): x is MarketTicker => !!x),
+    nfts: house.favoriteNftIds.map((id) => house.nfts.find((row) => row.id === id)).filter((x): x is NftCollection => !!x),
+  };
+}
+
 export function toCardPatch(house: MarketPrefs | unknown) {
   const parsed = house && typeof house === "object" && Array.isArray((house as MarketPrefs).tickers) ? (house as MarketPrefs) : parseMarket(house);
   return {
@@ -526,6 +565,8 @@ export function toCardPatch(house: MarketPrefs | unknown) {
     nftCollections: parsed.nfts,
     currentNftId: parsed.currentNftId,
     nftMarketplaces: parsed.marketplaces,
+    favoriteTickerIds: parsed.favoriteTickerIds || [],
+    favoriteNftIds: parsed.favoriteNftIds || [],
     marketCustomized: true,
     nftCustomized: true,
     marketplaceCustomized: true,
