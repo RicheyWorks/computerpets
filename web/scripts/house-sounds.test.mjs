@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -70,4 +70,11 @@ test("any catalog species cry path; unknown keys stay silent", () => {
   assert.match(Overlay.SOUND_LICENSE, /Grok Imagine/);
   assert.match(S.SOUND_LICENSE, /Not CC0 zoo tapes/);
   assert.equal(Overlay.SPECIES_KEYS.length, 221);
+});
+
+test("desk audio playVoice reports play outcome for TTS backup", () => {
+  const src = readFileSync(join(root, "src/lib/pets/desk-audio.ts"), "utf8");
+  assert.match(src, /Promise<boolean>/);
+  assert.match(src, /audio\.play\(\)\.then/);
+  assert.match(src, /export function playVoice\(key: string, guestKey = key\): Promise<boolean>/);
 });
