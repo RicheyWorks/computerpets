@@ -42,7 +42,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Echo tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle"]);
+  assert.deepEqual([...T.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -77,7 +77,7 @@ test("Echo tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("chirp"), false);
 });
 
-test("preen/bobble/mimic/sidle/dangle are house-budgie-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish or dragon clones", () => {
+test("preen/bobble/mimic/sidle/dangle/beakgrind/shellout are house-budgie-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish or dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const preen = T.beginTrick("preen", 80, 1);
   assert.equal(preen.anim, "sit");
@@ -109,8 +109,18 @@ test("preen/bobble/mimic/sidle/dangle are house-budgie-true, not Rui cat dog rab
   assert.equal(dangle.anim, "play");
   const dangleMid = T.stepTrick(dangle, 0.5, ground);
   assert.ok(dangleMid.lift > 2 || Math.abs(dangleMid.rot) > 20);
-  const dangleDone = T.stepTrick(dangle, 1.3, ground);
+  const dangleDone = T.stepTrick(dangle, T.DUR.dangle + 0.1, ground);
   assert.equal(dangleDone.phase, "done");
+  const beakgrind = T.beginTrick("beakgrind", 80, 1);
+  assert.equal(beakgrind.anim, "sit");
+  const beakMid = T.stepTrick(beakgrind, T.DUR.beakgrind * 0.4, ground);
+  assert.ok(beakMid.lift > 2 || Math.abs(beakMid.rot) > 1);
+  const shellout = T.beginTrick("shellout", 80, 1);
+  assert.equal(shellout.anim, "play");
+  const shellMid = T.stepTrick(shellout, T.DUR.shellout * 0.4, ground);
+  assert.ok(shellMid.lift > 3 || Math.abs(shellMid.rot) > 2);
+  assert.equal(Overlay.TRICKS.includes("beakgrind"), true);
+  assert.equal(Overlay.TRICKS.includes("shellout"), true);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("preen"), false);
@@ -366,4 +376,38 @@ globalThis.PetIguanaTricks = OverlayIguana;
   assert.equal(OverlayGround.sleepHoldFrame("toucan", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("dragon", 4), null);
+});
+
+test("ultra-polish: Echo bobble/mimic/beakgrind/shellout lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("bobble", 80, 1);
+  const mid = T.stepTrick(ex, T.DUR.bobble * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 6, `bobble mid rot ${mid.rot}`);
+  assert.ok(mid.lift > 4, `bobble mid lift ${mid.lift}`);
+  const kk = T.beginTrick("mimic", 80, 1);
+  const k2 = T.stepTrick(kk, T.DUR.mimic * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(k2.rot) > 6, `mimic mid rot ${k2.rot}`);
+  assert.ok(k2.lift > 5, `mimic mid lift ${k2.lift}`);
+  const tp = T.beginTrick("beakgrind", 80, 1);
+  const t2 = T.stepTrick(tp, T.DUR.beakgrind * 0.4, { cmd: "idle" });
+  assert.ok(Math.abs(t2.rot) > 0.2 || t2.lift > 4, `beakgrind mid rot/lift ${t2.rot}/${t2.lift}`);
+  assert.ok(t2.lift > 4, `beakgrind mid lift ${t2.lift}`);
+  const cc = T.beginTrick("shellout", 80, 1);
+  const c2 = T.stepTrick(cc, T.DUR.shellout * 0.4, { cmd: "idle" });
+  assert.ok(c2.lift > 5, `shellout mid lift ${c2.lift}`);
+  assert.ok(Overlay.beakgrindPose && Overlay.shelloutPose);
+  assert.ok(T.nextTrickWait(true, 0, "preen") < 80);
+  assert.ok(T.nextTrickWait(true, 0, "preen") > T.nextTrickWait(true, 0, "bobble"));
+});
+
+test("notes: Echo idle-life ultra done; next bird ultra is Peck / penguin (Loom still next for base idle-ground)", () => {
+  assert.deepEqual([...T.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
+  assert.equal(T.TRICKS.includes("perch"), false);
+  assert.equal(T.TRICKS.includes("nectary"), false);
+  assert.equal(T.TRICKS.includes("archilochus"), false);
+  assert.equal(T.TRICKS.includes("trapline"), false);
+  assert.equal(T.TRICKS.includes("gnatsnap"), false);
+  assert.equal(T.TRICKS.includes("huddle"), false);
+  assert.equal(T.TRICKS.includes("toboggan"), false);
+  assert.equal(T.TRICKS.includes("quote"), false);
+  assert.equal(T.TRICKS.includes("crack"), false);
 });

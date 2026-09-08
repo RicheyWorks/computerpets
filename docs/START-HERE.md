@@ -281,7 +281,7 @@ The pet is on your desk. Now you can care for it.
 
 - **First click** on the pet is a sit. They pause.
 - **Drag** the pet. That is a carry. Put them somewhere else on the screen.
-- **Talk** from Rui plays his warm house cry (`red_panda.wav`); Soot prefers `crow.wav`, Wedge prefers `raven.wav`, Heart prefers `barn_owl.wav`, Hook prefers `red_tail.wav`, Dee prefers `chickadee.wav`, Brick prefers `robin.wav`, Drake prefers `mallard.wav`, Vee prefers `canada_goose.wav`, Drum prefers `pileated.wav`, and Sip prefers `hummingbird.wav` the same way. Words still show in the bubble. System speech stays the backup for other guests.
+- **Talk** from Rui plays his warm house cry (`red_panda.wav`); Soot prefers `crow.wav`, Wedge prefers `raven.wav`, Heart prefers `barn_owl.wav`, Hook prefers `red_tail.wav`, Dee prefers `chickadee.wav`, Brick prefers `robin.wav`, Drake prefers `mallard.wav`, Vee prefers `canada_goose.wav`, Drum prefers `pileated.wav`, Sip prefers `hummingbird.wav`, and Echo prefers `budgie.wav` the same way. Words still show in the bubble. System speech stays the backup for other guests.
 - **Click the animal** to open the keeper card. **Feed / Play / Rest** are the daily care. Scroll the card if it runs long. Collapse hides the card completely — their spoken words stay readable. **Turn off** quits the overlay.
 - **Right-click** the pet for the longer care list.
 - Or **right-click the tray icon** by the clock.
