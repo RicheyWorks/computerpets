@@ -22,7 +22,7 @@
     iguana: [A("bask", "sit_hold", 3.0, 3, "sit"), A("head_bob", "bob", 1.4, 2), A("still", "freeze", 2.0, 2)],
     dragon: [A("watch", "sit_hold", 2.4, 3, "sit"), A("huff", "pulse", 0.8, 2), A("bask", "sit_hold", 2.8, 2, "sit")],
     axolotl: [A("gill", "bob", 1.4, 3), A("still", "freeze", 2.0, 2), A("gulp", "gulp", 0.7, 1)],
-    budgie: PREEN,
+    budgie: [A("preen", "groom", 1.4, 4, "sit"), A("bobble_soft", "bob", 0.9, 3, "sit"), A("mimic_soft", "talk", 0.8, 3, "talk"), A("sidle_soft", "hop", 0.6, 2, "play"), A("dangle_soft", "pulse", 0.7, 2, "play"), A("beakgrind_soft", "sit_hold", 1.2, 2, "sit"), A("alert", "freeze", 1.6, 2, "sit"), A("loaf", "sit_hold", 2.4, 2, "sit")],
     parrot: PREEN,
     toucan: PREEN,
     phoenix: PREEN,

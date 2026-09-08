@@ -236,7 +236,7 @@ test("ground registry keeps prior guests gated; Peck selectable; no bow/preen/pa
   assert.deepEqual([...GuineaPig.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
-  assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle"]);
+  assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
   assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
   assert.equal(T.TRICKS.includes("bow"), false);
   assert.equal(T.TRICKS.includes("preen"), false);
