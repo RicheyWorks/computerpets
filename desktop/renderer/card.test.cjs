@@ -164,5 +164,12 @@ test("voice styles pick a human system voice and skip cartoon robots", () => {
   assert.match(petSrc, /speakOpts/);
   assert.match(petSrc, /prefersHouseCry/);
   assert.match(petSrc, /PetDeskHouse\.playVoice/);
+  assert.match(petSrc, /speakText\(text\)/);
+  assert.match(petSrc, /if \(!played\) speakText\(text\)/);
+  assert.match(petSrc, /prefers && kindName === "chirp"/);
   assert.doesNotMatch(petSrc, /u\.rate = trait\?\.rate \?\? 0\.94/);
+  const houseSrc = readFileSync(join(__dirname, "desk-house.js"), "utf8");
+  assert.match(houseSrc, /function playVoice\(key, card, onFail\)/);
+  assert.match(houseSrc, /started\.catch/);
+  assert.match(mainSrc, /autoplay-policy/);
 });

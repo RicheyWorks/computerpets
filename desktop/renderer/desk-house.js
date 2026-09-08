@@ -4,12 +4,17 @@
     return document.getElementById(id);
   }
 
-  function clipEl(src, volume) {
+  function clipEl(src, volume, onFail) {
     if (!src) return null;
     try {
       const audio = new Audio(src);
       audio.volume = Math.max(0, Math.min(1, volume == null ? 0.8 : volume));
-      void audio.play();
+      const started = audio.play();
+      if (started && typeof started.then === "function") {
+        started.catch(function () {
+          if (typeof onFail === "function") onFail();
+        });
+      }
       return audio;
     } catch {
       return null;
@@ -18,18 +23,33 @@
 
   let lastVoiceAt = 0;
 
-  function playVoice(key, card) {
+  /** Play species cry. Returns true if playback was started (or recently started). onFail runs if play() rejects. */
+  function playVoice(key, card, onFail) {
     const S = root.PetHouseSounds;
     const C = root.PetCard;
-    if (!S || !S.isVoiceKey(key)) return;
-    if (C && C.isMuted(card && card.mutes, "voice")) return;
+    if (!S || !S.isVoiceKey(key)) {
+      if (typeof onFail === "function") onFail();
+      return false;
+    }
+    if (C && C.isMuted(card && card.mutes, "voice")) {
+      if (typeof onFail === "function") onFail();
+      return false;
+    }
     const now = Date.now();
-    if (now - lastVoiceAt < 450) return;
-    lastVoiceAt = now;
+    if (now - lastVoiceAt < 450) return true;
     const guest = C ? C.guestOf(card, key) : { volume: 80 };
     const src = S.overlayVoiceSrc(key);
-    if (!src) return;
-    clipEl(src, guest.volume / 100);
+    if (!src) {
+      if (typeof onFail === "function") onFail();
+      return false;
+    }
+    const audio = clipEl(src, guest.volume / 100, onFail);
+    if (!audio) {
+      if (typeof onFail === "function") onFail();
+      return false;
+    }
+    lastVoiceAt = now;
+    return true;
   }
 
   function playStep(key, card) {
