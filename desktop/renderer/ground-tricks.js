@@ -173,6 +173,7 @@ const Morel = root.PetMorelTricks;
   const Chiton = root.PetChitonTricks;
   const Periwinkle = root.PetPeriwinkleTricks;
   const SandDollar = root.PetSandDollarTricks;
+  const SeaUrchin = root.PetSeaUrchinTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -344,6 +345,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
   if (Chiton && (key === Chiton.TRICK_KEY || key === "chiton" || key === "mail")) return Chiton;
     if (Periwinkle && (key === Periwinkle.TRICK_KEY || key === "periwinkle" || key === "spire")) return Periwinkle;
     if (SandDollar && (key === SandDollar.TRICK_KEY || key === "sand_dollar" || key === "token")) return SandDollar;
+    if (SeaUrchin && (key === SeaUrchin.TRICK_KEY || key === "sea_urchin" || key === "thorn")) return SeaUrchin;
   }
 
   function wantsThankYou(key) {
