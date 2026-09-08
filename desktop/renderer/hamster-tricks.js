@@ -1,12 +1,20 @@
-/** Clip ground tricks while idle. House hamster — nest / cheek / scurry / pocket / reel personality. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web `hamster-tricks.ts`. Not a Rui, cat, dog, rabbit, or dragon move clone. Window-play drawer stash is unchanged — this module never names a trick `stash`. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`. Avoids dig/bow/groom/flop name collisions with prior guests. */
+/** Clip ground tricks while idle — ultra-polish pass. House hamster — nest / cheek / scurry / pocket / reel / scrub / seed personality (soft night-shift desk hamster life). Nest drawer-settle without naming loaf or wait or flop or den or sprawl or curl; cheek pouch-fill without naming wash or face_wash eth alone; scurry night-dart without naming zoom or binky or popcorn; pocket paperclip-hoard without naming stash (window-play) or dig; reel wheel-spin-in-place without naming dance or spin alone; scrub face-paw wipe without naming wash or groom or mlem; seed soft forage pick without naming nibble (eth / guinea happy) or nosh or eat-cmd. Window-play STASH drawer unchanged — never names stash. Guest slug Clip / key hamster — accept "hamster" and "clip". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`hamster.wav`). Thank-yous stuff / chitter / sprint. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web hamster-tricks.ts. True house-hamster desk life — not Rui/cat/dog/rabbit/guinea-pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble already done; Clip continues mammal ultra-polish. Next guest ultra is Whee / guinea_pig. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`. */
 (function (root) {
   const TRICK_KEY = "hamster";
-  const TRICKS = ["nest", "cheek", "scurry", "pocket", "reel"];
+  const TRICKS = ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"];
   const HAPPY = ["stuff", "chitter", "sprint"];
-  const HAPPY_DUR = { stuff: 1.3, chitter: 1.18, sprint: 1.05 };
-  const NEST_HOLD = 10;
-  const RELEASE_S = 0.55;
-  const DUR = { nest: NEST_HOLD + RELEASE_S, cheek: 1.45, scurry: 1.0, pocket: 1.4, reel: 1.35 };
+  const HAPPY_DUR = { stuff: 1.58, chitter: 1.66, sprint: 1.72 };
+  const NEST_HOLD = 14.4;
+  const RELEASE_S = 1.02;
+  const DUR = {
+    nest: NEST_HOLD + RELEASE_S,
+    cheek: 2.1,
+    scurry: 1.85,
+    pocket: 2.12,
+    reel: 2.08,
+    scrub: 2.1,
+    seed: 1.95,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,31 +44,30 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "nest") return 40 + roll * 20;
-    if (kind === "scurry") return 14 + roll * 10;
-    return justFinished ? 9 + roll * 8 : 4 + roll * 6;
+    if (kind === "nest") return 42 + roll * 28;
+    if (kind === "scurry") return 12 + roll * 9;
+    if (kind === "scrub" || kind === "seed") return 11 + roll * 8;
+    if (kind === "cheek" || kind === "pocket") return 11 + roll * 8;
+    if (kind === "reel") return 10 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "nest";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "nest") {
-      if (roll < 0.3) return "cheek";
-      if (roll < 0.52) return "pocket";
-      if (roll < 0.74) return "reel";
-      return "scurry";
+    const pool = TRICKS.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : TRICKS.slice();
+    const weights = list.map((k) =>
+      k === "nest" ? 0.55 : k === "cheek" || k === "pocket" || k === "scrub" ? 1.15 : 1
+    );
+    let total = 0;
+    for (let i = 0; i < weights.length; i++) total += weights[i];
+    let r = roll * total;
+    for (let i = 0; i < list.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return list[i];
     }
-    if (lastKind === "scurry") {
-      if (roll < 0.4) return "nest";
-      if (roll < 0.65) return "cheek";
-      if (roll < 0.85) return "pocket";
-      return "reel";
-    }
-    if (roll < 0.24) return "nest";
-    if (roll < 0.42) return "cheek";
-    if (roll < 0.6) return "pocket";
-    if (roll < 0.8) return "reel";
-    return "scurry";
+    return list[list.length - 1] || "cheek";
   }
 
   function happyCanStart(state) {
@@ -107,7 +114,7 @@
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.includes(kind) ? kind : "stuff";
+    const name = HAPPY.indexOf(kind) >= 0 ? kind : "stuff";
     return {
       kind: name,
       happy: true,
@@ -124,41 +131,43 @@
 
   function stuffPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.stuff));
-    if (u < 0.35) {
-      const s = u / 0.35;
-      return { lift: -s * 1.5, rot: s * 6, dx: 0, anim: "sit" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: -s * 4.5, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.8) {
+    if (u < 0.85) {
+      const buzz = Math.sin(t * 14) + 0.2 * Math.sin(t * 22);
       return {
-        lift: -1.5 + Math.abs(Math.sin(t * 14)) * 2.2,
-        rot: 6 + Math.sin(t * 12) * 4,
-        dx: 0,
+        lift: -4.5 + Math.abs(buzz) * 3.2,
+        rot: 10 + buzz * 9,
+        dx: buzz * 0.8,
         anim: "sit",
       };
     }
-    const s = (u - 0.8) / 0.2;
-    return { lift: -1.5 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" };
+    const s = (u - 0.85) / 0.15;
+    return { lift: -4.5 * (1 - s), rot: Math.sin(s * Math.PI) * 4, dx: 0, anim: "sit" };
   }
 
   function chitterPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.chitter));
-    if (u < 0.85) {
-      return {
-        lift: Math.abs(Math.sin(t * 24)) * 2,
-        rot: Math.sin(t * 22) * 5,
-        dx: 0,
-        anim: "talk",
-      };
+    if (u < 0.28) {
+      const s = u / 0.28;
+      return { lift: s * 5.5, rot: s * 14, dx: 0, anim: "talk" };
     }
-    return { lift: 0, rot: Math.sin(((u - 0.85) / 0.15) * Math.PI) * 2, dx: 0, anim: "sit" };
+    if (u < 0.72) {
+      const soft = Math.sin(t * 18);
+      return { lift: 5.5 + Math.abs(soft) * 2.2, rot: 14 + soft * 8, dx: 0, anim: "talk" };
+    }
+    const s = (u - 0.72) / 0.28;
+    return { lift: 5.5 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function sprintPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.sprint));
     return {
-      lift: Math.sin(u * Math.PI) * 5,
-      rot: Math.sin(u * Math.PI * 3) * 6,
-      dx: Math.sin(u * Math.PI) * 4,
+      lift: Math.sin(u * Math.PI) * 12,
+      rot: Math.sin(u * Math.PI * 2) * 14,
+      dx: Math.sin(u * Math.PI) * 8,
       anim: "play",
     };
   }
@@ -166,9 +175,9 @@
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
-    const next = { ...happy, t: happy.t + Math.max(0, dt) };
+    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "stuff") {
       const pose = stuffPose(next.t);
@@ -186,24 +195,25 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     return next;
   }
 
-  function sleepHoldFrame(_key, _frameCount) {
+  function sleepHoldFrame() {
     return null;
   }
 
   function beginTrick(kind, x, facing) {
+    const name = TRICKS.indexOf(kind) >= 0 ? kind : "nest";
     const anim =
-      kind === "nest" || kind === "cheek" || kind === "pocket"
+      name === "nest" || name === "cheek" || name === "pocket" || name === "scrub" || name === "seed"
         ? "sit"
-        : kind === "scurry" || kind === "reel"
+        : name === "scurry" || name === "reel"
           ? "play"
           : "sit";
     return {
-      kind,
-      phase: kind === "nest" ? "hold" : "go",
+      kind: name,
+      phase: name === "nest" ? "hold" : "go",
       t: 0,
       x,
       lift: 0,
@@ -219,19 +229,28 @@
     return x * x * (3 - 2 * x);
   }
 
-  function nestPose() {
-    return { lift: -4, rot: -6 };
+  function nestPose(t) {
+    const soft = Math.sin(t * 1.7);
+    const breath = Math.sin(t * 2.8);
+    return {
+      lift: -4.2 + soft * 1.5 + Math.abs(breath) * 1.0,
+      rot: -14 + breath * 4 + Math.sin(t * 5.1) * 3,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -4 + Math.sin(u * Math.PI) * 5, rot: -6 + Math.sin(u * Math.PI) * 7 };
+    return {
+      lift: -4.2 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI) * 6,
+      rot: -14 * (1 - u) + Math.sin(u * Math.PI) * 8,
+    };
   }
 
   function cheekPose(t) {
+    const press = Math.abs(Math.sin(t * 12));
     return {
-      lift: -0.8 + Math.abs(Math.sin(t * 8)) * 2.4,
-      rot: Math.sin(t * 9) * 8,
+      lift: -1.0 + press * 10.5,
+      rot: Math.sin(t * 14) * 16,
       dx: 0,
       anim: "sit",
     };
@@ -241,71 +260,114 @@
     const u = Math.max(0, Math.min(1, t / DUR.pocket));
     if (u < 0.25) {
       const s = smoothstep(u / 0.25);
-      return { lift: -s * 3, rot: s * 5, dx: s * 2, anim: "sit" };
+      return { lift: -s * 6, rot: s * 12, dx: s * 4, anim: "sit" };
     }
-    if (u < 0.7) {
+    if (u < 0.75) {
       return {
-        lift: -3 + Math.abs(Math.sin(t * 11)) * 2,
-        rot: 5 + Math.sin(t * 10) * 4,
-        dx: 2 + Math.sin(t * 8) * 1.5,
+        lift: -6 + Math.sin(t * 14) * 3.5,
+        rot: 12 + Math.sin(t * 12) * 8,
+        dx: 4 + Math.sin(t * 10) * 2,
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.7) / 0.3);
-    return { lift: -3 * (1 - s), rot: 5 * (1 - s), dx: 2 * (1 - s), anim: "sit" };
+    const s = smoothstep((u - 0.75) / 0.25);
+    return { lift: -6 * (1 - s), rot: 12 * (1 - s), dx: 4 * (1 - s), anim: "sit" };
   }
 
   function reelPose(t) {
     const u = Math.max(0, Math.min(1, t / DUR.reel));
     if (u < 0.15) {
       const s = smoothstep(u / 0.15);
-      return { lift: s * 2, rot: s * 10, dx: 0, anim: "play" };
+      return { lift: s * 4, rot: s * 16, dx: 0, anim: "play" };
     }
     if (u < 0.85) {
       return {
-        lift: 2 + Math.abs(Math.sin(t * 16)) * 3,
-        rot: Math.sin(t * 14) * 22,
-        dx: Math.sin(t * 12) * 2,
+        lift: 4 + Math.abs(Math.sin(t * 16)) * 6,
+        rot: Math.sin(t * 14) * 28,
+        dx: Math.sin(t * 12) * 4,
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.85) / 0.15);
-    return { lift: 2 * (1 - s), rot: 10 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 4 * (1 - s), rot: 16 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function scurryPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.scurry));
+    const face = facing == null ? 1 : facing;
     if (u < 0.2) {
       const s = smoothstep(u / 0.2);
-      return { x: fromX, lift: -s * 2, rot: s * 4, anim: "sit" };
+      return { x: fromX, lift: -s * 6, rot: s * 12, anim: "sit" };
     }
-    if (u < 0.8) {
-      const s = (u - 0.2) / 0.6;
+    if (u < 0.75) {
+      const s = (u - 0.2) / 0.55;
       return {
-        x: fromX + facing * 22 * smoothstep(s),
-        lift: Math.abs(Math.sin(s * Math.PI * 3)) * 5,
-        rot: Math.sin(s * Math.PI * 4) * 10,
+        x: fromX + face * 28 * smoothstep(s),
+        lift: Math.abs(Math.sin(s * Math.PI * 3)) * 10,
+        rot: Math.sin(s * Math.PI * 4) * 16,
         anim: "play",
       };
     }
-    const s = smoothstep((u - 0.8) / 0.2);
+    const s = smoothstep((u - 0.75) / 0.25);
     return {
-      x: fromX + facing * 22,
-      lift: 2 * (1 - s),
-      rot: 3 * (1 - s),
+      x: fromX + face * 28,
+      lift: 3 * (1 - s),
+      rot: 4 * (1 - s),
       anim: "sit",
     };
+  }
+
+  function scrubPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.scrub));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: -s * 5, rot: s * 14 * face, anim: "sit" };
+    }
+    if (u < 0.84) {
+      const s = (u - 0.16) / 0.68;
+      const wipe = Math.sin(s * Math.PI * 3.2);
+      return {
+        x: fromX + face * (2 + wipe * 2),
+        lift: -5 + Math.abs(wipe) * 8,
+        rot: 14 * face + wipe * 10,
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.84) / 0.16);
+    return { x: fromX, lift: -5 * (1 - s), rot: 14 * face * (1 - s), anim: "sit" };
+  }
+
+  function seedPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.seed));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: -s * 4, rot: s * 8 * face, anim: "sit" };
+    }
+    if (u < 0.88) {
+      const s = (u - 0.12) / 0.76;
+      const pick = Math.sin(s * Math.PI * 6);
+      return {
+        x: fromX + face * pick * 1.2,
+        lift: -4 + Math.abs(pick) * 5.5,
+        rot: 8 * face + pick * 7,
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return { x: fromX, lift: -4 * (1 - s), rot: 8 * face * (1 - s), anim: "sit" };
   }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
     if (shouldAbort(flags) && trick.kind !== "scurry") {
-      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
-    const next = { ...trick, t: trick.t + Math.max(0, dt) };
+    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
     if (next.kind === "nest") {
       if (next.t < NEST_HOLD) {
-        const pose = nestPose();
+        const pose = nestPose(next.t);
         next.phase = "hold";
         next.lift = pose.lift;
         next.rot = pose.rot;
@@ -320,10 +382,12 @@
         next.anim = "sit";
         return next;
       }
-      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
+    const face = trick.facing;
     if (next.kind === "cheek") {
       const pose = cheekPose(next.t);
       next.lift = pose.lift;
@@ -339,14 +403,26 @@
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
+    } else if (next.kind === "scrub") {
+      const pose = scrubPose(next.t, fromX, face);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "seed") {
+      const pose = seedPose(next.t, fromX, face);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
     } else {
-      const pose = scurryPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = scurryPose(next.t, fromX, face);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     return next;
   }
 
@@ -370,6 +446,8 @@
     pocketPose,
     reelPose,
     scurryPose,
+    scrubPose,
+    seedPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,

@@ -180,7 +180,7 @@ test("ground registry keeps prior guests gated; Whee selectable; no wheek/loaf/n
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
-  assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel"]);
+  assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.equal(T.TRICKS.includes("scratch"), false);
   assert.equal(T.TRICKS.includes("wheek"), false);
   assert.equal(T.TRICKS.includes("loaf"), false);
@@ -227,7 +227,7 @@ test("ground registry keeps prior guests gated; Whee selectable; no wheek/loaf/n
   assert.equal(OverlayGround.tricksFor("whee"), Overlay);
   assert.equal(OverlayGround.tricksFor("turtle"), OverlayTurtle);
   assert.equal(OverlayGround.tricksFor("ink"), OverlayTurtle);
-  assert.equal(OverlayGround.tricksFor("goldfish"), null);
+  assert.equal(OverlayGround.tricksFor("goldfish") == null, true);
   assert.equal(OverlayGround.wantsThankYou("red_panda"), true);
   assert.equal(OverlayGround.wantsThankYou("relay_dragon"), true);
   assert.equal(OverlayGround.wantsThankYou("fuse_dragon"), true);

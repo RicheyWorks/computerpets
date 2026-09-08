@@ -197,7 +197,7 @@ test("ground registry keeps prior guests gated; Ink selectable; no bask/stretch/
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
-  assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel"]);
+  assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.deepEqual([...GuineaPig.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig"]);
   assert.equal(T.TRICKS.includes("bask"), false);
   assert.equal(T.TRICKS.includes("stretch"), false);

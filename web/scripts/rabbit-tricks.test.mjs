@@ -262,7 +262,7 @@ test("ultra-polish: Thimble flop/groom/periscope/rub/nosh lifts are Rui-visible 
   assert.ok(T.nextTrickWait(true, 0, "flop") > T.nextTrickWait(true, 0, "groom"));
 });
 
-test("notes: Thimble idle-life ultra done; next house-order ultra guest is Clip / hamster (birds Soot→Ember + Miso + Pip already ultra)", () => {
+test("notes: Thimble idle-life ultra done; Clip / hamster ultra next-or-done; following house-order ultra guest is Whee / guinea_pig (birds Soot→Ember + Miso + Pip already ultra)", () => {
   assert.deepEqual([...T.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
   assert.equal(T.TRICKS.includes("scratch"), false);
   assert.equal(T.TRICKS.includes("loaf"), false);

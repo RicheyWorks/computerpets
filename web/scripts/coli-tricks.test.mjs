@@ -2087,7 +2087,7 @@ test("runandtumble/binaryfission/pilusreachout/chemotaxrun/longrodhush are coli/
   assert.equal(T.HAPPY.includes("press"), false);
   assert.equal(T.HAPPY.includes("tide"), false);
   assert.equal(T.HAPPY.includes("tap"), false);
-  assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel"]);
+  assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
@@ -2912,7 +2912,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(Overlay.TRICKS.includes("curl"), false);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("trade"), false);
-  assert.deepEqual([...OverlayHamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel"]);
+  assert.deepEqual([...OverlayHamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.deepEqual([...OverlayHedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
 
