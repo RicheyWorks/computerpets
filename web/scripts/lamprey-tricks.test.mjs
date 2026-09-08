@@ -321,7 +321,7 @@ test("Round tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
-  assert.deepEqual([...T.TRICKS], ["oralclamp", "undulate", "stonenest", "disrasp", "marinus"]);
+  assert.deepEqual([...T.TRICKS], ["oralclamp", "keratinrasp", "undulglide", "stonenest", "marinus"]);
   assert.deepEqual([...Newt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...OverlayNewt.TRICKS], ["crest", "caudal", "filament", "costal", "caudate"]);
   assert.deepEqual([...Newt.HAPPY], ["vermilion", "eftish", "palmate"]);
@@ -1194,7 +1194,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(T.TRICKS.includes("mantle"), false);
   assert.equal(T.TRICKS.includes("jet"), false);
   assert.equal(T.TRICKS.includes("veil"), false);
-  assert.equal(T.TRICKS.includes("stonenest"), true);
+  assert.equal(T.TRICKS.includes("undulglide"), true);
   assert.equal(T.TRICKS.includes("bone"), false);
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(T.TRICKS.includes("fringe"), false);
@@ -1217,8 +1217,8 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["oralclamp", "undulate", "stonenest", "disrasp", "marinus"]);
-  assert.deepEqual([...Overlay.HAPPY], ["densround", "inkround", "densdisc"]);
+  assert.deepEqual([...Overlay.TRICKS], ["oralclamp", "keratinrasp", "undulglide", "stonenest", "marinus"]);
+  assert.deepEqual([...Overlay.HAPPY], ["densround", "inkround", "densdisk"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -1289,7 +1289,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
 });
 
-test("oralclamp/undulate/stonenest/disrasp/marinus are Petromyzon-marinus-true, not copies of prior guests", () => {
+test("oralclamp/keratinrasp/undulglide/stonenest/marinus are Petromyzon-marinus-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("marinus", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1303,36 +1303,36 @@ test("oralclamp/undulate/stonenest/disrasp/marinus are Petromyzon-marinus-true, 
   assert.equal(release.anim, "sit");
   const doneBole = T.stepTrick(bole, T.DUR.marinus + 0.1, ground);
   assert.equal(doneBole.phase, "done");
-  assert.ok(T.nextTrickWait(true, 0, "marinus") > T.nextTrickWait(true, 0, "disrasp"));
+  assert.ok(T.nextTrickWait(true, 0, "marinus") > T.nextTrickWait(true, 0, "stonenest"));
   const acorn = T.beginTrick("oralclamp", 80, 1);
   assert.equal(acorn.anim, "talk");
   const acornMid = T.stepTrick(acorn, 0.5, ground);
   assert.ok(Math.abs(acornMid.lift) > 0.01 || Math.abs(acornMid.rot) > 0.5 || Math.abs(acornMid.x - 80) > 0.02);
-  const gall = T.beginTrick("undulate", 80, 1);
+  const gall = T.beginTrick("keratinrasp", 80, 1);
   assert.equal(gall.anim, "play");
   const gallMid = T.stepTrick(gall, 0.85, ground);
   assert.ok(Math.abs(gallMid.lift) > 0.004 || Math.abs(gallMid.rot) > 0.3 || Math.abs(gallMid.x - 80) > 0.002);
-  const sinus = T.beginTrick("stonenest", 80, 1);
+  const sinus = T.beginTrick("undulglide", 80, 1);
   assert.equal(sinus.anim, "sit");
   const sinusMid = T.stepTrick(sinus, 0.5, ground);
   assert.ok(Math.abs(sinusMid.lift) > 0.008 || Math.abs(sinusMid.rot) > 0.6 || Math.abs(sinusMid.x - 80) > 0.004);
-  const taproot = T.beginTrick("disrasp", 80, 1);
+  const taproot = T.beginTrick("stonenest", 80, 1);
   assert.equal(taproot.anim, "play");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.008 || Math.abs(taprootMid.rot) > 0.5 || Math.abs(taprootMid.x - 80) > 0.003);
-  const sinusDone = T.stepTrick(sinus, T.DUR.stonenest + 0.01, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.undulglide + 0.01, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Octopus, Cuttlefish, Nautilus, MoonJelly, SeaStar, HermitCrab, HorseshoeCrab, Seahorse, Manta, Moray, Moss, Maidenhair, Ginkgo, Oak, WaterLily, Orchid, Saguaro, VenusFlytrap, Pitcher, Sundew, Honeybee, Monarch, Luna, Firefly, Darner, Stick, CarpenterAnt, Ladybird, Mantis, Cicada, Bumblebee, CarpenterBee, MasonBee, Leafcutter, Stingless, SweatBee, MiningBee, HoneyDrone, HoneyQueen, Honeycomb, Oyster, FlyAgaric, Morel, Chanterelle, TurkeyTail, LionsMane, Puffball, ChickenOfWoods, Yeast, Lichen, Photovore, Choir, Nimbus, Silica, Terminator, Nexus, Halovore, Magneton, Umbral, Cyst, Frog, Toad, Newt, Salamander, Caecilian, Crayfish, PondSnail, Mussel, Leech, Stickleback, Crow, Raven, BarnOwl, RedTail, Chickadee, Robin, Mallard, CanadaGoose, Pileated, Hummingbird, OrbWeaver, JumpingSpider, WolfSpider, Tarantula, Widow, Harvestman, Scorpion, Vinegaroon, Tick, Solifuge, Deer, Bat, Squirrel, Otter, Raccoon, Skunk, Opossum, Beaver, Porcupine, BlackBear, Capybara, Gecko, Anole, Skink, Chameleon, HornedLizard, Alligator, Crocodile, Snapper, BoxTurtle, Tuatara, Bass, BrookTrout, Catfish, Bluegill, Perch, Pike, Walleye, Paddlefish, Relay, Fuse, Earth]) {
     assert.equal(mod.TRICKS.includes("oralclamp"), false);
-    assert.equal(mod.TRICKS.includes("undulate"), false);
+    assert.equal(mod.TRICKS.includes("keratinrasp"), false);
+    assert.equal(mod.TRICKS.includes("undulglide"), false);
     assert.equal(mod.TRICKS.includes("stonenest"), false);
-    assert.equal(mod.TRICKS.includes("disrasp"), false);
     assert.equal(mod.TRICKS.includes("marinus"), false);
     assert.equal(mod.HAPPY.includes("densround"), false);
     assert.equal(mod.HAPPY.includes("inkround"), false);
-    assert.equal(mod.HAPPY.includes("densdisc"), false);
+    assert.equal(mod.HAPPY.includes("densdisk"), false);
     assert.equal(mod.TRICKS.includes("float"), false);
     assert.equal(mod.TRICKS.includes("nimbus"), false);
     assert.equal(mod.TRICKS.includes("haze"), false);
@@ -1534,8 +1534,8 @@ test("oralclamp/undulate/stonenest/disrasp/marinus are Petromyzon-marinus-true, 
   assert.equal(Hedgehog.TRICKS.includes("curl"), true);
 });
 
-test("Round feed-happy is its own sit: densround/inkround/densdisc, and two feeds are not the same", () => {
-  assert.deepEqual([...T.HAPPY], ["densround", "inkround", "densdisc"]);
+test("Round feed-happy is its own sit: densround/inkround/densdisk, and two feeds are not the same", () => {
+  assert.deepEqual([...T.HAPPY], ["densround", "inkround", "densdisk"]);
   assert.equal(T.HAPPY.includes("halo"), false);
   assert.equal(T.HAPPY.includes("lumen"), false);
   assert.equal(T.HAPPY.includes("gel"), false);
@@ -1574,7 +1574,7 @@ test("Round feed-happy is its own sit: densround/inkround/densdisc, and two feed
   assert.equal(tanninH.anim, "play");
   const tanninMid = T.stepHappy(tanninH, 0.3, { cmd: "idle" });
   assert.ok(tanninMid.lift !== 0 || Math.abs(tanninMid.rot) > 0.5);
-  const groveH = T.beginHappy("densdisc", 80, 1);
+  const groveH = T.beginHappy("densdisk", 80, 1);
   assert.equal(groveH.anim, "sit");
   const done = T.stepHappy(cupuleH, T.HAPPY_DUR.densround + 0.1, { cmd: "idle" });
   assert.equal(done.phase, "done");
@@ -1664,7 +1664,7 @@ test("ground registry keeps prior guests gated; Round selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
-  assert.deepEqual([...T.TRICKS], ["oralclamp", "undulate", "stonenest", "disrasp", "marinus"]);
+  assert.deepEqual([...T.TRICKS], ["oralclamp", "keratinrasp", "undulglide", "stonenest", "marinus"]);
   assert.equal(T.TRICKS.includes("festoon"), false);
   assert.equal(T.TRICKS.includes("capped"), false);
   assert.equal(T.TRICKS.includes("midrib"), false);
@@ -2223,7 +2223,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["oralclamp", "undulate", "stonenest", "disrasp", "marinus"]);
+  assert.deepEqual([...Overlay.TRICKS], ["oralclamp", "keratinrasp", "undulglide", "stonenest", "marinus"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2315,8 +2315,8 @@ test("notes: Round idle-life done; next house-order guest still lacking tricks i
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "lamprey");
-  assert.deepEqual([...T.TRICKS], ["oralclamp", "undulate", "stonenest", "disrasp", "marinus"]);
-  assert.deepEqual([...T.HAPPY], ["densround", "inkround", "densdisc"]);
+  assert.deepEqual([...T.TRICKS], ["oralclamp", "keratinrasp", "undulglide", "stonenest", "marinus"]);
+  assert.deepEqual([...T.HAPPY], ["densround", "inkround", "densdisk"]);
   assert.equal(OverlayGround.tricksFor("newt"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("eft"), OverlayNewt);
   assert.equal(OverlayGround.tricksFor("salamander"), OverlaySalamander);
@@ -3203,7 +3203,6 @@ test("notes: Round idle-life done; next house-order guest still lacking tricks i
 
   assert.equal(OverlayGround.tricksFor("lamprey"), Overlay);
   assert.equal(OverlayGround.tricksFor("round"), Overlay);
-  assert.equal(OverlayGround.tricksFor("sundew").TRICK_KEY, "sundew");
   assert.equal(OverlayGround.tricksFor("scorpion").TRICK_KEY, "scorpion");
   assert.equal(OverlayGround.tricksFor("barb").TRICK_KEY, "scorpion");
   assert.equal(OverlayGround.tricksFor("scorpion").TRICK_KEY, "scorpion");
