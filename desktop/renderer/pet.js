@@ -1076,7 +1076,8 @@ function say(text, hold = 4200) {
   speechUntil = performance.now() + hold;
   const C = window.PetCard;
   if (kind && C && C.prefersHouseCry && C.prefersHouseCry(kind.key) && window.PetDeskHouse) {
-    window.PetDeskHouse.playVoice(kind.key, card);
+    const played = window.PetDeskHouse.playVoice(kind.key, card, () => speakText(text));
+    if (!played) speakText(text);
   } else {
     speakText(text);
   }
@@ -1485,6 +1486,9 @@ function playSound(kindName) {
       return;
     }
     if ((kindName === "chirp" || kindName === "voice" || kindName === "call") && kind && window.PetHouseSounds && window.PetHouseSounds.isVoiceKey(kind.key)) {
+      const prefers = C && C.prefersHouseCry && C.prefersHouseCry(kind.key);
+      // House-cry guests: say() owns cry + TTS backup. Skip anim chirp so debounce cannot eat the talk line.
+      if (prefers && kindName === "chirp") return;
       if (window.PetDeskHouse) window.PetDeskHouse.playVoice(kind.key, card);
       return;
     }

@@ -17,20 +17,24 @@ export function unlockDeskAudio() {
   context();
 }
 
-export function playClip(src: string, guestKey = "red_panda", kind: Kind = "chirp") {
+export function playClip(src: string, guestKey = "red_panda", kind: Kind = "chirp"): Promise<boolean> {
   const card = loadCard();
-  if (!src || isMuted(card.mutes, kind)) return;
+  if (!src || isMuted(card.mutes, kind)) return Promise.resolve(false);
   try {
     const audio = new Audio(src);
     audio.volume = Math.max(0, Math.min(1, guestOf(card, guestKey).volume / 100));
-    void audio.play();
+    return audio.play().then(
+      () => true,
+      () => false,
+    );
   } catch {
     /* never break the pet loop */
+    return Promise.resolve(false);
   }
 }
 
-export function playVoice(key: string, guestKey = key) {
-  playClip(voiceSrc(key), guestKey, "voice");
+export function playVoice(key: string, guestKey = key): Promise<boolean> {
+  return playClip(voiceSrc(key), guestKey, "voice");
 }
 
 export function playStep(guestKey = "red_panda") {

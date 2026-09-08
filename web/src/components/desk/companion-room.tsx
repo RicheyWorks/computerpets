@@ -407,10 +407,10 @@ export function CompanionRoom({
 
   async function playVoice(src?: string, text?: string) {
     if (!src && prefersHouseCry(kind.key)) {
-      playAnimalVoice(kind.key);
-      return;
-    }
-    if (src) {
+      const cried = await playAnimalVoice(kind.key);
+      if (cried) return;
+      /* house cry missing or blocked — fall through to system speech */
+    } else if (src) {
       audioRef.current?.pause();
       const audio = new Audio(src);
       audioRef.current = audio;
