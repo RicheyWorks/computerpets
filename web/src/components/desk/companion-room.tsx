@@ -34,7 +34,7 @@ import {
 import { saveActiveKindKey, type LivingKind } from "@/lib/pets/living";
 import { converseWithPet } from "@/lib/pets/talk";
 import { playDeskSound, unlockDeskAudio } from "@/lib/pets/desk-audio";
-import { loadCard, saveCard, wanderWhileAsleep, isMuted, pickSystemVoice, speakOpts, guestOf } from "@/lib/pets/card";
+import { loadCard, saveCard, wanderWhileAsleep, isMuted, pickSystemVoice, speakOpts, guestOf, prefersHouseCry } from "@/lib/pets/card";
 import { useMindBinding, useMindSettings } from "@/lib/ai/use-mind";
 import { traitFor } from "@/lib/pets/traits";
 import { SNACK_LINE, callLine, dayPartLabel, dayPart, hideLine, isRestingHour, rememberVisit, returnLine } from "@/lib/pets/hours";
@@ -406,6 +406,10 @@ export function CompanionRoom({
   }, [deskOff, kind.key]);
 
   async function playVoice(src?: string, text?: string) {
+    if (!src && prefersHouseCry(kind.key)) {
+      playAnimalVoice(kind.key);
+      return;
+    }
     if (src) {
       audioRef.current?.pause();
       const audio = new Audio(src);
