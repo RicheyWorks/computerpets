@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, Whip, Clasp, Gale, Flag, Cape, Cache, Slick, Wash, Stripe, Grin, Dam, Spine, Coal, Soak, Pad, Wink, Dash, Shift, Spike, Levee, Jaw, Beak, Lid, Peak, Lunge, Speck, Whisk, Penny, Bar, Lance, Night, Spoon, Round, Silver, Haste, Link, Armor, Cast, and Jet today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, Whip, Clasp, Gale, Flag, Cape, Cache, Slick, Wash, Stripe, Grin, Dam, Spine, Coal, Soak, Pad, Wink, Dash, Shift, Spike, Levee, Jaw, Beak, Lid, Peak, Lunge, Speck, Whisk, Penny, Bar, Lance, Night, Spoon, Round, Silver, Haste, Link, Armor, Cast, Jet, and Hop today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -161,6 +161,7 @@ const Morel = root.PetMorelTricks;
   const Pillbug = root.PetPillbugTricks;
   const Earthworm = root.PetEarthwormTricks;
   const VelvetWorm = root.PetVelvetWormTricks;
+  const Springtail = root.PetSpringtailTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -320,6 +321,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Pillbug && (key === Pillbug.TRICK_KEY || key === "pillbug" || key === "armor")) return Pillbug;
     if (Earthworm && (key === Earthworm.TRICK_KEY || key === "earthworm" || key === "cast")) return Earthworm;
     if (VelvetWorm && (key === VelvetWorm.TRICK_KEY || key === "velvet_worm" || key === "jet")) return VelvetWorm;
+    if (Springtail && (key === Springtail.TRICK_KEY || key === "springtail" || key === "hop")) return Springtail;
   }
 
   function wantsThankYou(key) {
