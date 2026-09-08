@@ -231,7 +231,7 @@ test("ground registry keeps prior guests gated; Echo selectable; no perch/groom/
   assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.deepEqual([...GuineaPig.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig", "lookout", "teeth"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
-  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
+  assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.equal(T.TRICKS.includes("perch"), false);
   assert.equal(T.TRICKS.includes("groom"), false);
   assert.equal(T.TRICKS.includes("drift"), false);

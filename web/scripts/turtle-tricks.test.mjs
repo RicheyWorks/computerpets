@@ -374,7 +374,7 @@ test("ultra-polish: Ink soak/crane/snorkel/wipe lifts are Rui-visible (not micro
   assert.equal(T.SOAK_HOLD, Overlay.SOAK_HOLD);
 });
 
-test("notes: Ink idle-life ultra done; next house-order ultra guest is Coin / goldfish (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee already ultra; Echo/budgie skip)", () => {
+test("notes: Ink idle-life ultra done; Coin / goldfish ultra next-or-done; following house-order ultra guest is Rue / fox (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.equal(T.TRICKS.includes("bask"), false);
   assert.equal(Overlay.TRICKS.includes("snorkel"), true);
