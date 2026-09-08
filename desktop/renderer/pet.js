@@ -3562,7 +3562,10 @@ if (marketPlate) {
       const hits = document.getElementById("market-hits");
       const typed = q && q.value;
       const contract = window.PetMarket.detectContract(typed);
-      const next = window.PetMarket.parseTicker(typed);
+      // Coins pane forces crypto resolve even if classify once guessed stock.
+      const next = contract
+        ? window.PetMarket.parseTicker(typed)
+        : window.PetMarket.parseTicker({ symbol: typed, kind: "crypto", query: typed });
       if (contract && next) {
         applyMarketHouse(window.PetMarket.addTicker(card, next));
         if (q) q.value = "";
@@ -3570,13 +3573,15 @@ if (marketPlate) {
         if (hits) { hits.hidden = true; hits.replaceChildren(); }
         return;
       }
-      if (next && (next.kind === "stock" || next.geckoId)) {
+      // Known majors (CRYPTO map) already carry geckoId — add immediately.
+      if (next && next.geckoId) {
         applyMarketHouse(window.PetMarket.addTicker(card, next));
         if (q) q.value = "";
         if (truth) truth.textContent = "";
         if (hits) { hits.hidden = true; hits.replaceChildren(); }
         return;
       }
+      // Free-typed new tickers (PEPE / WIF / …): CoinGecko search → best match → crypto watch list.
       const url = window.PetMarket.searchUrl(typed);
       if (!url) {
         if (truth) truth.textContent = "type a coin, ticker, or contract";
@@ -3596,24 +3601,30 @@ if (marketPlate) {
       work
         .then((res) => {
           const coins = res.coins || [];
-          if (!coins.length) {
+          const best = window.PetMarket.pickBestSearchCoin
+            ? window.PetMarket.pickBestSearchCoin(coins, typed)
+            : coins[0] || null;
+          if (!best) {
             if (truth) truth.textContent = "no coin from that look-up — try a mint or contract";
             if (hits) { hits.hidden = true; hits.replaceChildren(); }
             return;
           }
+          applyMarketHouse(window.PetMarket.addTicker(card, { ...best, kind: "crypto" }));
+          if (q) q.value = "";
           if (truth) truth.textContent = "";
-          if (!hits) return;
-          hits.hidden = false;
-          hits.replaceChildren();
-          for (const row of coins) {
-            const li = document.createElement("li");
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.dataset.hit = "1";
-            btn.dataset.coinHit = JSON.stringify(row);
-            btn.textContent = "Add " + row.symbol + " · " + row.name;
-            li.appendChild(btn);
-            hits.appendChild(li);
+          if (hits) {
+            hits.hidden = false;
+            hits.replaceChildren();
+            for (const row of coins) {
+              const li = document.createElement("li");
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.dataset.hit = "1";
+              btn.dataset.coinHit = JSON.stringify(row);
+              btn.textContent = (row.id === best.id ? "Added " : "Add ") + row.symbol + " · " + row.name;
+              li.appendChild(btn);
+              hits.appendChild(li);
+            }
           }
         })
         .catch(() => {

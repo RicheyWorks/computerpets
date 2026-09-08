@@ -13,7 +13,7 @@ export const GECKO_TERMINAL_HOST = "api.geckoterminal.com";
 export const CANT_REACH = "can't reach";
 export const NO_QUOTE = "no quote yet";
 export const NO_NFT = "no NFT yet";
-export const MAX_TICKERS = 16;
+export const MAX_TICKERS = 24;
 export const MAX_NFTS = 8;
 export const MAX_MARKETS = 8;
 
@@ -125,7 +125,7 @@ export function classify(raw: unknown): Omit<MarketTicker, "id"> | null {
   if (CRYPTO[upper]) return { symbol: upper, kind: "crypto", geckoId: CRYPTO[upper]!, name: upper, platform: "", address: "" };
   const gecko = Object.keys(CRYPTO).find((k) => CRYPTO[k] === lower);
   if (gecko) return { symbol: gecko, kind: "crypto", geckoId: lower, name: gecko, platform: "", address: "" };
-  if (/^[A-Za-z][A-Za-z0-9.-]{0,11}$/.test(typed)) return { symbol: upper, kind: "stock", geckoId: "", name: upper, platform: "", address: "" };
+  if (/^[A-Za-z][A-Za-z0-9.-]{0,11}$/.test(typed)) return { symbol: upper, kind: "crypto", geckoId: "", name: upper, platform: "", address: "" };
   return null;
 }
 export function parseTicker(raw: unknown): MarketTicker | null {
@@ -159,7 +159,7 @@ export function parseTicker(raw: unknown): MarketTicker | null {
   const classified = classify(o.symbol || o.name || o.query);
   if (!classified) return null;
   const id = typeof o.id === "string" && o.id ? o.id : "m-" + hash(classified.symbol + ":" + (classified.geckoId || classified.address || ""));
-  const kind: MarketKind = o.kind === "crypto" || wantCrypto ? "crypto" : classified.kind;
+  const kind: MarketKind = o.kind === "stock" || o.kind === "crypto" ? o.kind : wantCrypto ? "crypto" : classified.kind;
   return {
     id,
     symbol: classified.symbol,
@@ -425,6 +425,23 @@ export function parseTerminalPrice(json: unknown, address: string): MarketLive |
   if (!Number.isFinite(price)) return null;
   return { price, name: key.slice(0, 8), currency: "USD", source: "geckoterminal", change24h: null, address: key };
 }
+
+/** Prefer exact symbol/geckoId match from CoinGecko search hits for free-typed add. */
+export function pickBestSearchCoin(coins: MarketTicker[] | null | undefined, query: unknown): MarketTicker | null {
+  const list = (Array.isArray(coins) ? coins : []).filter(Boolean);
+  if (!list.length) return null;
+  const typed = clip(query, 48);
+  const upper = typed.toUpperCase();
+  const lower = typed.toLowerCase();
+  const exactSym = list.find((c) => c.symbol && String(c.symbol).toUpperCase() === upper);
+  if (exactSym) return exactSym;
+  const exactId = list.find((c) => c.geckoId && String(c.geckoId).toLowerCase() === lower);
+  if (exactId) return exactId;
+  const starts = list.find((c) => c.symbol && String(c.symbol).toUpperCase().indexOf(upper) === 0);
+  if (starts) return starts;
+  return list[0] || null;
+}
+
 export function parseSearchCoins(json: unknown): MarketTicker[] {
   if (!json || typeof json !== "object") return [];
   const coins = Array.isArray((json as { coins?: unknown }).coins) ? ((json as { coins: unknown[] }).coins) : [];

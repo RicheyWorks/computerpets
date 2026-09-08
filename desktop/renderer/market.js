@@ -13,7 +13,7 @@
   const CANT_REACH = "can't reach";
   const NO_QUOTE = "no quote yet";
   const NO_NFT = "no NFT yet";
-  const MAX_TICKERS = 16;
+  const MAX_TICKERS = 24;
   const MAX_NFTS = 8;
   const MAX_MARKETS = 8;
 
@@ -142,7 +142,7 @@
     if (CRYPTO[upper]) return { symbol: upper, kind: "crypto", geckoId: CRYPTO[upper], name: upper, platform: "", address: "" };
     const gecko = Object.keys(CRYPTO).find((k) => CRYPTO[k] === lower);
     if (gecko) return { symbol: gecko, kind: "crypto", geckoId: lower, name: gecko, platform: "", address: "" };
-    if (/^[A-Za-z][A-Za-z0-9.-]{0,11}$/.test(typed)) return { symbol: upper, kind: "stock", geckoId: "", name: upper, platform: "", address: "" };
+    if (/^[A-Za-z][A-Za-z0-9.-]{0,11}$/.test(typed)) return { symbol: upper, kind: "crypto", geckoId: "", name: upper, platform: "", address: "" };
     return null;
   }
 
@@ -182,7 +182,7 @@
     const classified = classify(raw.symbol || raw.name || raw.query);
     if (!classified) return null;
     const id = typeof raw.id === "string" && raw.id ? raw.id : "m-" + hash(classified.symbol + ":" + (classified.geckoId || classified.address || ""));
-    const kind = raw.kind === "crypto" || wantCrypto ? "crypto" : classified.kind;
+    const kind = raw.kind === "stock" || raw.kind === "crypto" ? raw.kind : wantCrypto ? "crypto" : classified.kind;
     return {
       id,
       symbol: classified.symbol,
@@ -480,6 +480,23 @@
     return { price, name: key.slice(0, 8), currency: "USD", source: "geckoterminal", change24h: null, address: key };
   }
 
+
+  /** Prefer exact symbol/geckoId match from CoinGecko search hits for free-typed add. */
+  function pickBestSearchCoin(coins, query) {
+    const list = (Array.isArray(coins) ? coins : []).filter(Boolean);
+    if (!list.length) return null;
+    const typed = clip(query, 48);
+    const upper = typed.toUpperCase();
+    const lower = typed.toLowerCase();
+    const exactSym = list.find((c) => c.symbol && String(c.symbol).toUpperCase() === upper);
+    if (exactSym) return exactSym;
+    const exactId = list.find((c) => c.geckoId && String(c.geckoId).toLowerCase() === lower);
+    if (exactId) return exactId;
+    const starts = list.find((c) => c.symbol && String(c.symbol).toUpperCase().indexOf(upper) === 0);
+    if (starts) return starts;
+    return list[0];
+  }
+
   function parseSearchCoins(json) {
     if (!json || typeof json !== "object") return [];
     const coins = Array.isArray(json.coins) ? json.coins : [];
@@ -630,6 +647,7 @@
     parseGeckoMany,
     parseTerminalToken,
     parseTerminalPrice,
+    pickBestSearchCoin,
     parseSearchCoins,
     parseSearchNfts,
     parseNftLive,
