@@ -16,11 +16,16 @@
     }
   }
 
+  let lastVoiceAt = 0;
+
   function playVoice(key, card) {
     const S = root.PetHouseSounds;
     const C = root.PetCard;
     if (!S || !S.isVoiceKey(key)) return;
     if (C && C.isMuted(card && card.mutes, "voice")) return;
+    const now = Date.now();
+    if (now - lastVoiceAt < 450) return;
+    lastVoiceAt = now;
     const guest = C ? C.guestOf(card, key) : { volume: 80 };
     const src = S.overlayVoiceSrc(key);
     if (!src) return;

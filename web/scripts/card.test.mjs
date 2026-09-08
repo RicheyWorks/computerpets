@@ -22,7 +22,7 @@ test("the desk card law matches the overlay card", () => {
   assert.deepEqual(C.CARD_COLORS.map((c) => c.id), ["ink", "blotter", "moss", "ember", "dusk", "frost"]);
   assert.deepEqual(C.VOICE_STYLES.map((s) => s.id), ["hearth", "hush", "even", "low", "bright"]);
   assert.deepEqual([...C.MUTE_BUSES], ["talk", "special", "weather", "treats", "steps", "music"]);
-  assert.equal(C.VOICE_TRUTH, "The door is still the system speech voices.");
+  assert.equal(C.VOICE_TRUTH, "Rui talks with his house cry; system speech is the backup.");
   assert.equal(K.VOICE_TRUTH, C.VOICE_TRUTH);
   assert.match(K.QUIT_TRUTH, /desktop\.ps1/);
   assert.equal(C.busOf("chirp"), "talk");
@@ -64,8 +64,18 @@ test("saved lines, alarm, and timer are machine-local", () => {
   assert.equal(C.alarmDue({ on: true, hour: 7, minute: 0, lastRingDay: "" }, noon), true);
   const started = C.startTimer(C.blankTimer(), 4000, 1000);
   assert.equal(C.timerTick(started, 5000).rang, true);
-  const voices = [{ name: "Zarvox" }, { name: "Microsoft Aria Online (Natural)" }];
+  const voices = [
+    { name: "Zarvox" },
+    { name: "Microsoft David Desktop" },
+    { name: "Microsoft Aria Online (Natural)" },
+    { name: "Microsoft Zira Compact" },
+  ];
   assert.equal(C.pickSystemVoice(voices, "hearth")?.name, "Microsoft Aria Online (Natural)");
+  assert.equal(C.prefersHouseCry("red_panda"), true);
+  assert.equal(C.prefersHouseCry("cat"), false);
+  assert.ok(C.speakOpts("hearth", 50).volume < 0.5);
+  assert.match(roomSrc, /prefersHouseCry/);
+  assert.match(overlayPet, /prefersHouseCry/);
   assert.equal(C.CARD_STORE, "computerpets.card.v1");
   assert.equal(C.blankCard().collapsed, true);
   assert.equal(C.blankCard().sleepAid.plugin, "off");
