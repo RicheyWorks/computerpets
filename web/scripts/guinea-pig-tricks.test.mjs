@@ -297,7 +297,7 @@ test("ultra-polish: Whee potato/hay/rumble/lookout/teeth lifts are Rui-visible (
   assert.equal(T.DUR.teeth, Overlay.DUR.teeth);
 });
 
-test("notes: Whee idle-life ultra done; next house-order ultra guest is Ink / turtle (birds Soot→Ember + Miso + Pip + Thimble + Clip already ultra)", () => {
+test("notes: Whee idle-life ultra done; Ink / turtle ultra next-or-done; following house-order ultra guest is Coin / goldfish (birds Soot→Ember + Miso + Pip + Thimble + Clip already ultra; Echo skip)", () => {
   assert.deepEqual([...T.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig", "lookout", "teeth"]);
   assert.equal(T.TRICK_KEY, "guinea_pig");
   assert.equal(T.wantsThankYou("whee"), true);

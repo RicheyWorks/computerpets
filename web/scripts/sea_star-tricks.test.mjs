@@ -84,7 +84,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
 
 test("Cling tricks start only on idle ground", () => {
-  assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle"]);
+  assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
@@ -186,7 +186,7 @@ test("podia/righting/crawl/evert/penta are house-sea-star-true, not copies of pr
     assert.equal(mod.TRICKS.includes("trail"), false);
     assert.equal(mod.TRICKS.includes("medusa"), false);
   }
-  assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle"]);
+  assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
@@ -296,7 +296,7 @@ test("ground registry keeps prior guests gated; Cling selectable; prior guests s
   assert.equal(Nautilus.TRICK_KEY, "nautilus");
   assert.equal(CarpetPython.TRICK_KEY, "carpet_python");
   assert.equal(T.TRICK_KEY, "sea_star");
-  assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle"]);
+  assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
@@ -390,7 +390,7 @@ test("ground registry keeps prior guests gated; Cling selectable; prior guests s
   assert.equal(OverlayGround.wantsThankYou("pulse"), true);
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("moon_jelly", 4), null);
-  assert.deepEqual([...OverlayTurtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle"]);
+  assert.deepEqual([...OverlayTurtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...OverlayGoldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart"]);
   assert.deepEqual([...OverlayAxolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume"]);
   assert.deepEqual([...OverlayOctopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
