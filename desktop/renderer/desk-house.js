@@ -104,11 +104,36 @@
     if (!liveBox) return;
     const prefs = N.parseNewsPrefs(card || {});
     const topic = N.currentTopic(prefs);
-    const source = N.sourceLine(topic);
+    const tab = prefs.tab || "popular";
+    const source = N.sourceLine(topic, tab);
+    const tabs = $("news-tabs");
+    if (tabs) {
+      tabs.querySelectorAll("[data-news-tab]").forEach((btn) => {
+        const on = btn.getAttribute("data-news-tab") === tab;
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+        btn.dataset.on = on ? "1" : "0";
+      });
+    }
+    const topicsPanel = $("news-topics-panel");
+    if (topicsPanel) topicsPanel.hidden = tab !== "topics";
+    const truth = $("news-truth");
+    if (truth) truth.textContent = N.TOPIC_TRUTH;
+    const chips = $("news-chips");
+    if (chips) {
+      chips.replaceChildren();
+      for (const name of N.SUGGESTION_TOPICS || []) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.dataset.hit = "1";
+        btn.dataset.newsChip = name;
+        btn.textContent = name;
+        chips.appendChild(btn);
+      }
+    }
     const topics = $("news-topics");
     if (topics) {
       topics.replaceChildren();
-      for (const row of prefs.topics) {
+      prefs.topics.forEach((row, idx) => {
         const li = document.createElement("li");
         const pick = document.createElement("button");
         pick.type = "button";
@@ -117,24 +142,84 @@
         pick.dataset.on = row.id === prefs.currentId ? "1" : "0";
         pick.textContent = row.name;
         li.appendChild(pick);
+        const star = document.createElement("button");
+        star.type = "button";
+        star.className = "news-star";
+        star.dataset.hit = "1";
+        star.dataset.newsFavTopic = row.id;
+        star.textContent = N.isFavorite(prefs, { kind: "topic", id: row.id, name: row.name, query: row.query }) ? "★" : "☆";
+        star.title = "Favorite topic";
+        if (row.id !== N.WORLD_ID) li.appendChild(star);
         if (row.id !== N.WORLD_ID) {
+          const up = document.createElement("button");
+          up.type = "button";
+          up.dataset.hit = "1";
+          up.dataset.newsMove = row.id;
+          up.dataset.dir = "-1";
+          up.textContent = "Up";
+          up.disabled = idx <= 1;
+          const down = document.createElement("button");
+          down.type = "button";
+          down.dataset.hit = "1";
+          down.dataset.newsMove = row.id;
+          down.dataset.dir = "1";
+          down.textContent = "Down";
+          down.disabled = idx === prefs.topics.length - 1;
           const del = document.createElement("button");
           del.type = "button";
           del.dataset.hit = "1";
           del.dataset.newsDel = row.id;
           del.textContent = "Remove";
-          li.appendChild(del);
+          li.append(up, down, del);
         }
         topics.appendChild(li);
+      });
+    }
+
+    if (tab === "favorites") {
+      if (!prefs.favorites.length) {
+        liveBox.innerHTML = `<p>${source}</p><p>${N.FAVORITES_EMPTY}</p>`;
+      } else {
+        const bits = prefs.favorites
+          .map((fav) => {
+            if (fav.kind === "topic") {
+              return `<li><button type="button" data-hit data-news-pick="${fav.topicId}">${fav.title}</button> <button type="button" class="news-star" data-hit data-news-unfav="${fav.id}">★</button></li>`;
+            }
+            const link = fav.url
+              ? `<a data-hit href="${fav.url}" target="_blank" rel="noreferrer">${fav.title}</a>`
+              : fav.title;
+            return `<li>${link}${fav.summary ? `<p>${fav.summary}</p>` : ""} <button type="button" class="news-star" data-hit data-news-unfav="${fav.id}">★</button></li>`;
+          })
+          .join("");
+        liveBox.innerHTML = `<p>${source}</p><ul>${bits}</ul>`;
       }
+      return;
     }
-    if (unread && (!items || !items.length)) liveBox.innerHTML = `<p>${source}</p><p>${N.CANT_REACH}</p>`;
-    else if (!items || !items.length) liveBox.innerHTML = `<p>${source}</p><p>${N.NO_HEADLINES}</p>`;
-    else {
-      liveBox.innerHTML = `<p>${source}</p><ul>${items
-        .map((it) => `<li><a data-hit href="${it.url}" target="_blank" rel="noreferrer">${it.title}</a>${it.summary ? `<p>${it.summary}</p>` : ""}</li>`)
-        .join("")}</ul>`;
+
+    if (tab === "x" && unread && (!items || !items.length)) {
+      const open = N.xSearchUrl(topic.query || "news");
+      liveBox.innerHTML = `<p>${source}</p><p>${N.CANT_REACH}</p><p><a data-hit href="${open}" target="_blank" rel="noreferrer">Open on X</a></p>`;
+      return;
     }
+    if (tab === "x" && (!items || !items.length)) {
+      const open = N.xSearchUrl(topic.query || "news");
+      liveBox.innerHTML = `<p>${source}</p><p>${N.NO_HEADLINES}</p><p><a data-hit href="${open}" target="_blank" rel="noreferrer">Open on X</a></p>`;
+      return;
+    }
+    if (unread && (!items || !items.length)) {
+      liveBox.innerHTML = `<p>${source}</p><p>${N.CANT_REACH}</p>`;
+      return;
+    }
+    if (!items || !items.length) {
+      liveBox.innerHTML = `<p>${source}</p><p>${N.NO_HEADLINES}</p>`;
+      return;
+    }
+    liveBox.innerHTML = `<p>${source}</p><ul>${items
+      .map((it) => {
+        const starred = N.isFavorite(prefs, { kind: "headline", title: it.title, url: it.url, summary: it.summary });
+        return `<li><a data-hit href="${it.url}" target="_blank" rel="noreferrer">${it.title}</a>${it.summary ? `<p>${it.summary}</p>` : ""} <button type="button" class="news-star" data-hit data-news-fav-headline="${encodeURIComponent(it.title)}" data-url="${encodeURIComponent(it.url || "")}" data-summary="${encodeURIComponent(it.summary || "")}">${starred ? "★" : "☆"}</button></li>`;
+      })
+      .join("")}</ul>`;
   }
 
   function paintMarket(card, live, unread, extras) {
@@ -194,7 +279,14 @@
         del.dataset.hit = "1";
         del.dataset.tickerDel = row.id;
         del.textContent = "Remove";
-        li.append(pick, up, down, del);
+        const star = document.createElement("button");
+        star.type = "button";
+        star.className = "market-star";
+        star.dataset.hit = "1";
+        star.dataset.tickerFav = row.id;
+        star.textContent = M.isFavoriteTicker && M.isFavoriteTicker(house, row.id) ? "★" : "☆";
+        star.title = "Favorite coin";
+        li.append(pick, star, up, down, del);
         list.appendChild(li);
       });
     }
@@ -244,7 +336,14 @@
         del.dataset.hit = "1";
         del.dataset.nftDel = row.id;
         del.textContent = "Remove";
-        li.append(pick, up, down, del);
+        const star = document.createElement("button");
+        star.type = "button";
+        star.className = "market-star";
+        star.dataset.hit = "1";
+        star.dataset.nftFav = row.id;
+        star.textContent = M.isFavoriteNft && M.isFavoriteNft(house, row.id) ? "★" : "☆";
+        star.title = "Favorite NFT";
+        li.append(pick, star, up, down, del);
         nfts.appendChild(li);
       });
     }
@@ -296,6 +395,22 @@
         catalog.appendChild(btn);
       }
     }
+    const favBox = $("market-favorites");
+    if (favBox && M.favoriteRows) {
+      const fav = M.favoriteRows(house);
+      if (!fav.tickers.length && !fav.nfts.length) {
+        favBox.innerHTML = `<p>${M.FAVORITES_EMPTY || "No favorites yet — star a coin or NFT."}</p>`;
+      } else {
+        const coinBits = fav.tickers
+          .map((row) => `<li><button type="button" data-hit data-ticker-pick="${row.id}">${row.symbol}</button> <button type="button" class="market-star" data-hit data-ticker-fav="${row.id}">★</button></li>`)
+          .join("");
+        const nftBits = fav.nfts
+          .map((row) => `<li><button type="button" data-hit data-nft-pick="${row.id}">${row.symbol || row.name}</button> <button type="button" class="market-star" data-hit data-nft-fav="${row.id}">★</button></li>`)
+          .join("");
+        favBox.innerHTML = `${coinBits ? `<h4 class="market-subhead">Coins</h4><ul>${coinBits}</ul>` : ""}${nftBits ? `<h4 class="market-subhead">NFTs</h4><ul>${nftBits}</ul>` : ""}`;
+      }
+    }
+
   }
 
   function weatherRect() {

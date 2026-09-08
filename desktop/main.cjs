@@ -507,8 +507,7 @@ ipcMain.handle("radio-search", async (_e, query, area) => {
   return { ok: true, stations: HouseMusic.rankStations(merged, query, area).slice(0, 16) };
 });
 
-ipcMain.handle("news-topic", async (_e, query) => {
-  const url = PetNews.topicRssUrl(query);
+async function fetchNewsRss(url) {
   if (!url) return { ok: true, items: [] };
   try {
     const res = await fetch(url, { headers: { Accept: "application/rss+xml, application/xml, text/xml" } });
@@ -518,6 +517,16 @@ ipcMain.handle("news-topic", async (_e, query) => {
   } catch {
     return { ok: false, error: "unread", items: [] };
   }
+}
+
+ipcMain.handle("news-topic", async (_e, query) => fetchNewsRss(PetNews.topicRssUrl(query)));
+
+ipcMain.handle("news-feed", async (_e, opts) => {
+  const kind = opts && typeof opts.kind === "string" ? opts.kind : "topic";
+  const query = opts && typeof opts.query === "string" ? opts.query : "";
+  if (kind === "popular") return fetchNewsRss(PetNews.popularRssUrl());
+  if (kind === "x") return fetchNewsRss(PetNews.xTopicRssUrl(query || "news"));
+  return fetchNewsRss(PetNews.topicRssUrl(query));
 });
 
 ipcMain.handle("market-quote", async (_e, ticker) => {

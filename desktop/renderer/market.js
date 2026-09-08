@@ -73,6 +73,9 @@
     return Math.abs(n).toString(36);
   }
 
+  const FAVORITES_EMPTY = "No favorites yet — star a coin or NFT.";
+  const MAX_FAVORITES = 24;
+
   function blankMarket() {
     return {
       tickers: defaultTickers(),
@@ -80,6 +83,8 @@
       nfts: defaultNfts(),
       currentNftId: null,
       marketplaces: defaultMarketplaces(),
+      favoriteTickerIds: [],
+      favoriteNftIds: [],
     };
   }
 
@@ -215,7 +220,7 @@
   }
 
   function parseMarket(raw) {
-    const next = { tickers: [], currentId: null, nfts: [], currentNftId: null, marketplaces: [] };
+    const next = { tickers: [], currentId: null, nfts: [], currentNftId: null, marketplaces: [], favoriteTickerIds: [], favoriteNftIds: [] };
     if (!raw || typeof raw !== "object") {
       next.tickers = defaultTickers();
       next.currentId = next.tickers[0] ? next.tickers[0].id : null;
@@ -242,6 +247,10 @@
     if (mList && mList.length) next.marketplaces = mList.map(marketplaceOf).filter(Boolean).slice(0, MAX_MARKETS);
     else if (mList && mList.length === 0 && (raw.marketplaceCustomized || raw.nftMarketplaceCustomized)) next.marketplaces = [];
     else next.marketplaces = defaultMarketplaces();
+    const favT = Array.isArray(raw.favoriteTickerIds) ? raw.favoriteTickerIds : Array.isArray(raw.favTickers) ? raw.favTickers : [];
+    const favN = Array.isArray(raw.favoriteNftIds) ? raw.favoriteNftIds : Array.isArray(raw.favNfts) ? raw.favNfts : [];
+    next.favoriteTickerIds = favT.filter((x) => typeof x === "string" && x).slice(0, MAX_FAVORITES);
+    next.favoriteNftIds = favN.filter((x) => typeof x === "string" && x).slice(0, MAX_FAVORITES);
     return next;
   }
 
@@ -576,6 +585,39 @@
     return nft.symbol || nft.name;
   }
 
+
+  function toggleFavoriteTicker(market, id) {
+    const house = parseMarket(market);
+    if (!id || !house.tickers.some((row) => row.id === id)) return house;
+    if (house.favoriteTickerIds.includes(id)) house.favoriteTickerIds = house.favoriteTickerIds.filter((x) => x !== id);
+    else house.favoriteTickerIds = house.favoriteTickerIds.concat(id).slice(0, MAX_FAVORITES);
+    return house;
+  }
+
+  function toggleFavoriteNft(market, id) {
+    const house = parseMarket(market);
+    if (!id || !house.nfts.some((row) => row.id === id)) return house;
+    if (house.favoriteNftIds.includes(id)) house.favoriteNftIds = house.favoriteNftIds.filter((x) => x !== id);
+    else house.favoriteNftIds = house.favoriteNftIds.concat(id).slice(0, MAX_FAVORITES);
+    return house;
+  }
+
+  function isFavoriteTicker(market, id) {
+    return parseMarket(market).favoriteTickerIds.includes(id);
+  }
+
+  function isFavoriteNft(market, id) {
+    return parseMarket(market).favoriteNftIds.includes(id);
+  }
+
+  function favoriteRows(market) {
+    const house = parseMarket(market);
+    return {
+      tickers: house.favoriteTickerIds.map((id) => house.tickers.find((row) => row.id === id)).filter(Boolean),
+      nfts: house.favoriteNftIds.map((id) => house.nfts.find((row) => row.id === id)).filter(Boolean),
+    };
+  }
+
   function toCardPatch(house) {
     const parsed = house && house.tickers ? house : parseMarket(house);
     return {
@@ -584,6 +626,8 @@
       nftCollections: parsed.nfts,
       currentNftId: parsed.currentNftId,
       nftMarketplaces: parsed.marketplaces,
+      favoriteTickerIds: parsed.favoriteTickerIds || [],
+      favoriteNftIds: parsed.favoriteNftIds || [],
       marketCustomized: true,
       nftCustomized: true,
       marketplaceCustomized: true,
@@ -654,6 +698,13 @@
     formatPrice,
     plateLine,
     nftLine,
+    FAVORITES_EMPTY,
+    MAX_FAVORITES,
+    toggleFavoriteTicker,
+    toggleFavoriteNft,
+    isFavoriteTicker,
+    isFavoriteNft,
+    favoriteRows,
     toCardPatch,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;

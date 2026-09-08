@@ -51,14 +51,24 @@
           <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="news-body" hidden>
+          <div class="desk-plate-tabs" id="news-tabs" role="tablist" aria-label="News sections">
+            <button type="button" data-hit data-news-tab="popular" role="tab" aria-selected="true">Popular</button>
+            <button type="button" data-hit data-news-tab="topics" role="tab" aria-selected="false">Topics</button>
+            <button type="button" data-hit data-news-tab="x" role="tab" aria-selected="false">X</button>
+            <button type="button" data-hit data-news-tab="favorites" role="tab" aria-selected="false">Favorites</button>
+          </div>
           <div id="news-live"></div>
-          <p class="keeper-truth">World is Wikipedia In the news. A named topic is Google News RSS.</p>
-          <form id="news-add" data-hit>
-            <label>News topic
-              <input data-hit id="news-q" type="text" autocomplete="off" spellcheck="false" placeholder="A topic — Tacoma crime, marijuana news" aria-label="News topic" />
-            </label>
-            <button data-hit type="submit" id="news-lookup">Look up</button>
-          </form>
+          <p class="keeper-truth" id="news-truth">Popular is Google News top stories. World is Wikipedia In the news. A named topic is Google News RSS. X uses Google News with site:x.com when reachable — else Open on X. No invented headlines.</p>
+          <div id="news-topics-panel">
+            <form id="news-add" data-hit>
+              <label>News topic
+                <input data-hit id="news-q" type="text" autocomplete="off" spellcheck="false" placeholder="A topic — esports, Halo, baseball, football" aria-label="News topic" />
+              </label>
+              <button data-hit type="submit" id="news-lookup">Add</button>
+            </form>
+            <div id="news-chips" class="desk-plate-chips" aria-label="Suggested topics"></div>
+            <ul id="news-topics"></ul>
+          </div>
           <div class="desk-plate-colors" data-plate-colors="news">
             <label>Plate color
               <input data-hit type="color" data-plate-color="bg" data-plate-key="news" aria-label="Plate color" />
@@ -71,7 +81,6 @@
             </label>
             <div class="desk-plate-swatches" data-plate-swatches="news"></div>
           </div>
-          <ul id="news-topics"></ul>
         </div>
       </article>
       <article id="market-plate" class="desk-plate" data-hit data-desk-plate="market">
@@ -113,6 +122,11 @@
               <p id="nft-truth" class="keeper-truth"></p>
               <ul id="nft-hits" class="market-hits" hidden></ul>
               <ul id="nft-collections"></ul>
+            </section>
+            <section class="market-pane" data-market-pane="favorites" aria-label="Favorites">
+              <h3 class="market-pane-title">Favorites</h3>
+              <p class="keeper-truth" id="market-fav-truth">Star a coin or NFT on its pane — Favorites keeps the short list here.</p>
+              <div id="market-favorites"></div>
             </section>
           </div>
           <div class="desk-plate-colors" data-plate-colors="market">
