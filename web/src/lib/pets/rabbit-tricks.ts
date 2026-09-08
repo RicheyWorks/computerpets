@@ -1,7 +1,6 @@
-/** Thimble ground tricks while idle. House rabbit — flop / groom / periscope / dig / binky personality. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `rabbit-tricks.js`. Not a Rui, cat, dog, or dragon move clone. Window-play floor thump is unchanged — this module never names a trick `thump` or `bow`. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`. */
-
+/** Thimble ground tricks while idle — ultra-polish pass. House rabbit — flop / groom / periscope / dig / binky / rub / nosh personality (soft hearth-rug desk rabbit life). Flop side-tipple without naming loaf or wait or nest or den or sprawl or curl; groom face-and-shoulder without naming wash or face_wash eth alone; periscope haunch-scan without naming beg or rise alone; dig carpet scrape without naming scratch (ethogram) or knead; binky twist-leap without naming zoom or somersault or pounce or popcorn; rub chin-scent mark without naming chin (chinchilla) or bunting; nosh soft forage chew without naming nibble (hamster eth / guinea happy) or mlem or eat-cmd. Window-play FLOOR thump unchanged — never names thump or bow. Guest slug Thimble / key rabbit — accept "rabbit" and "thimble". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`rabbit.wav`). Thank-yous twitch / ears / nudge. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop rabbit-tricks.js. True house-rabbit desk life — not Rui/cat/dog/hamster/guinea-pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip already done; Thimble continues mammal ultra-polish. Next guest ultra is Clip / hamster. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`. */
 export const TRICK_KEY = "rabbit";
-export const TRICKS = ["flop", "groom", "periscope", "dig", "binky"] as const;
+export const TRICKS = ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"] as const;
 export const HAPPY = ["twitch", "ears", "nudge"] as const;
 export type RabbitTrickKind = (typeof TRICKS)[number];
 export type RabbitHappyKind = (typeof HAPPY)[number];
@@ -18,52 +17,62 @@ export type TrickFlags = {
   card?: boolean;
 };
 
+export type HappyFlags = {
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+};
+
 export type RabbitTrick = {
-  kind: RabbitTrickKind;
+  kind: string;
   phase: TrickPhase;
   t: number;
   x: number;
   lift: number;
   rot: number;
   anim: TrickAnim;
-  facing: 1 | -1;
-  fromX?: number;
+  facing: number;
+  fromX: number;
   abort?: boolean;
 };
 
 export type RabbitHappy = {
-  kind: RabbitHappyKind;
+  kind: string;
   happy: true;
   phase: HappyPhase;
   t: number;
   x: number;
   lift: number;
   rot: number;
+  dx?: number;
   anim: TrickAnim;
-  facing: 1 | -1;
-  fromX?: number;
+  facing: number;
+  fromX: number;
   abort?: boolean;
 };
 
 export const HAPPY_DUR: Record<RabbitHappyKind, number> = {
-  twitch: 1.28,
-  ears: 1.2,
-  nudge: 1.1,
+  twitch: 1.58,
+  ears: 1.66,
+  nudge: 1.72,
 };
 
-/** Side flop hold — Thimble tipples onto a hip and stays soft, then rolls up. Not a cat loaf. Not a dog wait. */
-export const FLOP_HOLD = 10;
-export const RELEASE_S = 0.55;
+/** Soft side flop hold — Thimble tipples onto a hip and stays soft, then rolls up. Rui-visible breath. Not a cat loaf. Not a dog wait. */
+export const FLOP_HOLD = 14.4;
+export const RELEASE_S = 1.02;
 
 export const DUR: Record<RabbitTrickKind, number> = {
   flop: FLOP_HOLD + RELEASE_S,
-  groom: 1.5,
-  periscope: 1.45,
-  dig: 1.4,
-  binky: 1.05,
+  groom: 2.10,
+  periscope: 2.18,
+  dig: 2.12,
+  binky: 1.85,
+  rub: 2.08,
+  nosh: 1.95,
 };
 
-export function canStart(state: TrickFlags | undefined) {
+export function canStart(state: TrickFlags | null | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
   const cmd = String(state.cmd || "");
@@ -72,7 +81,7 @@ export function canStart(state: TrickFlags | undefined) {
   return true;
 }
 
-export function shouldAbort(state: TrickFlags | undefined) {
+export function shouldAbort(state: TrickFlags | null | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
   const cmd = String(state.cmd || "");
@@ -89,36 +98,35 @@ export function shouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function nextTrickWait(justFinished: boolean, rand?: number, kind?: RabbitTrickKind) {
+export function nextTrickWait(justFinished: boolean, rand?: number, kind?: string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "flop") return 40 + roll * 20;
-  if (kind === "binky") return 14 + roll * 10;
-  return justFinished ? 9 + roll * 8 : 4 + roll * 6;
+  if (kind === "flop") return 42 + roll * 28;
+  if (kind === "binky") return 12 + roll * 9;
+  if (kind === "rub" || kind === "nosh") return 11 + roll * 8;
+  if (kind === "groom" || kind === "periscope") return 11 + roll * 8;
+  if (kind === "dig") return 10 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
-export function pickTrick(rand?: number, musicOn = false, lastKind?: RabbitTrickKind | null): RabbitTrickKind {
+export function pickTrick(rand?: number, musicOn = false, lastKind?: string | null) {
   if (musicOn) return "flop";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "flop") {
-    if (roll < 0.3) return "groom";
-    if (roll < 0.52) return "periscope";
-    if (roll < 0.74) return "dig";
-    return "binky";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : TRICKS.slice();
+  const weights = list.map((k) =>
+    k === "flop" ? 0.55 : k === "groom" || k === "periscope" || k === "rub" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i];
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return list[i];
   }
-  if (lastKind === "binky") {
-    if (roll < 0.4) return "flop";
-    if (roll < 0.65) return "groom";
-    if (roll < 0.85) return "periscope";
-    return "dig";
-  }
-  if (roll < 0.24) return "flop";
-  if (roll < 0.42) return "groom";
-  if (roll < 0.6) return "periscope";
-  if (roll < 0.8) return "dig";
-  return "binky";
+  return list[list.length - 1] || "groom";
 }
 
-export function happyCanStart(state: TrickFlags | undefined) {
+export function happyCanStart(state: HappyFlags | null | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
   const cmd = String(state.cmd || "");
@@ -127,7 +135,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   return true;
 }
 
-export function happyShouldAbort(state: TrickFlags | undefined) {
+export function happyShouldAbort(state: HappyFlags | null | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
   const cmd = String(state.cmd || "");
@@ -143,16 +151,16 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function wantsThankYou(key: string | undefined) {
+export function wantsThankYou(key: string | null | undefined) {
   return key === TRICK_KEY || key === "thimble";
 }
 
 export function startThankYou(
-  key: string | undefined,
-  lastKind: RabbitHappyKind | null | undefined,
+  key: string | null | undefined,
+  lastKind: string | null | undefined,
   x: number,
-  facing: 1 | -1,
-  flags?: TrickFlags,
+  facing: number,
+  flags?: HappyFlags | null,
 ) {
   if (!wantsThankYou(key)) return null;
   if (!happyCanStart(flags || { cmd: "idle" })) return null;
@@ -160,72 +168,79 @@ export function startThankYou(
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
 
-export function pickHappy(lastKind?: RabbitHappyKind | null, rand?: number): RabbitHappyKind {
+export function pickHappy(lastKind?: string | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
-  const list = pool.length ? pool : [...HAPPY];
+  const list = pool.length ? pool : HAPPY.slice();
   const roll = rand == null ? Math.random() : rand;
-  return list[Math.floor(roll * list.length)] ?? list[0]!;
+  return list[Math.floor(roll * list.length)] || list[0];
 }
 
-export function beginHappy(kind: RabbitHappyKind, x: number, facing: 1 | -1 = 1): RabbitHappy {
-  const name: RabbitHappyKind = HAPPY.includes(kind) ? kind : "twitch";
+export function beginHappy(kind: string, x: number, facing?: number) {
+  const name = HAPPY.indexOf(kind as RabbitHappyKind) >= 0 ? kind : "twitch";
   return {
     kind: name,
-    happy: true,
-    phase: "go",
+    happy: true as const,
+    phase: "go" as const,
     t: 0,
     x,
     lift: 0,
     rot: 0,
-    anim: name === "ears" ? "sit" : name === "twitch" ? "talk" : "play",
-    facing,
+    anim: (name === "ears" ? "sit" : name === "twitch" ? "talk" : "play") as TrickAnim,
+    facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
 
 export function twitchPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.twitch));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 4.5, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+  }
   if (u < 0.85) {
+    const buzz = Math.sin(t * 16) + 0.2 * Math.sin(t * 26);
     return {
-      lift: Math.abs(Math.sin(t * 22)) * 1.8,
-      rot: Math.sin(t * 20) * 4,
-      dx: 0,
-      anim: "talk" as const,
+      lift: 4.5 + Math.abs(buzz) * 3.2,
+      rot: 10 + buzz * 9,
+      dx: buzz * 0.8,
+      anim: "talk" as TrickAnim,
     };
   }
-  return { lift: 0, rot: Math.sin(((u - 0.85) / 0.15) * Math.PI) * 1.5, dx: 0, anim: "sit" as const };
+  const s = (u - 0.85) / 0.15;
+  return { lift: 4.5 * (1 - s), rot: Math.sin(s * Math.PI) * 4, dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function earsPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ears));
-  if (u < 0.3) {
-    const s = u / 0.3;
-    return { lift: -s * 1.2, rot: s * 10, dx: 0, anim: "sit" as const };
+  if (u < 0.28) {
+    const s = u / 0.28;
+    return { lift: -s * 5.5, rot: s * 14, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.7) {
-    return { lift: -1.2, rot: 10 + Math.sin(t * 6) * 2, dx: 0, anim: "sit" as const };
+  if (u < 0.72) {
+    const soft = Math.sin(t * 6);
+    return { lift: -5.5 + soft * 1.2, rot: 14 + soft * 4, dx: 0, anim: "sit" as TrickAnim };
   }
-  const s = (u - 0.7) / 0.3;
-  return { lift: -1.2 * (1 - s), rot: 10 * (1 - s), dx: 0, anim: "sit" as const };
+  const s = (u - 0.72) / 0.28;
+  return { lift: -5.5 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function nudgePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.nudge));
   return {
-    lift: Math.sin(u * Math.PI) * 6,
-    rot: Math.sin(u * Math.PI * 2) * 4,
-    dx: Math.sin(u * Math.PI) * 3,
-    anim: "play" as const,
+    lift: Math.sin(u * Math.PI) * 12,
+    rot: Math.sin(u * Math.PI * 2) * 14,
+    dx: Math.sin(u * Math.PI) * 3.5,
+    anim: "play" as TrickAnim,
   };
 }
 
-export function stepHappy(happy: RabbitHappy, dt: number, flags?: TrickFlags): RabbitHappy {
+export function stepHappy(happy: RabbitHappy, dt: number, flags?: HappyFlags | null): RabbitHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return Object.assign({}, happy, { phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true });
   }
-  const next: RabbitHappy = { ...happy, t: happy.t + Math.max(0, dt) };
-  const hold = HAPPY_DUR[next.kind];
+  const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+  const hold = HAPPY_DUR[next.kind as RabbitHappyKind];
   if (next.kind === "twitch") {
     const pose = twitchPose(next.t);
     next.lift = pose.lift;
@@ -242,7 +257,7 @@ export function stepHappy(happy: RabbitHappy, dt: number, flags?: TrickFlags): R
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return Object.assign({}, next, { phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim });
   return next;
 }
 
@@ -251,22 +266,23 @@ export function sleepHoldFrame(_key: string | undefined, _frameCount?: number) {
   return null;
 }
 
-export function beginTrick(kind: RabbitTrickKind, x: number, facing: 1 | -1 = 1): RabbitTrick {
+export function beginTrick(kind: string, x: number, facing?: number): RabbitTrick {
+  const name = TRICKS.indexOf(kind as RabbitTrickKind) >= 0 ? kind : "flop";
   const anim: TrickAnim =
-    kind === "flop" || kind === "groom" || kind === "periscope" || kind === "dig"
+    name === "flop" || name === "groom" || name === "periscope" || name === "dig" || name === "rub" || name === "nosh"
       ? "sit"
-      : kind === "binky"
+      : name === "binky"
         ? "play"
         : "sit";
   return {
-    kind,
-    phase: kind === "flop" ? "hold" : "go",
+    kind: name,
+    phase: name === "flop" ? ("hold" as const) : ("go" as const),
     t: 0,
     x,
     lift: 0,
     rot: 0,
     anim,
-    facing,
+    facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
@@ -276,90 +292,153 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
-/** Soft side flop — hip down, ears easy. Not a cat loaf. Not a dog wait. */
-export function flopPose() {
-  return { lift: -3, rot: -8 };
-}
-
-/** Soft roll-up from the flop — no hop. */
-export function releasePose(t: number) {
-  const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -3 + Math.sin(u * Math.PI) * 4, rot: -8 + Math.sin(u * Math.PI) * 8 };
-}
-
-/** Quiet face-and-shoulder groom. Not a cat wash. Not Rui scratch. */
-export function groomPose(t: number) {
+/** Soft side flop with visible breath — hip down, ears easy. Rui-visible sway. Not a cat loaf. Not a dog wait. */
+export function flopPose(t: number) {
+  const soft = Math.sin(t * 1.7);
+  const breath = Math.sin(t * 2.8);
   return {
-    lift: -1.2 + Math.abs(Math.sin(t * 9)) * 1.8,
-    rot: Math.sin(t * 10) * 7,
-    dx: 0,
-    anim: "sit" as const,
+    lift: -4.2 + soft * 1.5 + Math.abs(breath) * 1.0,
+    rot: -14 + breath * 4 + Math.sin(t * 5.1) * 3,
   };
 }
 
-/** Stand tall on the haunches — scan the room. Not a dog sniff. */
+/** Soft roll-up from the flop — ready for the next hop with a visible lift. */
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return {
+    lift: -4.2 * (1 - Math.sin(u * Math.PI * 0.5)) + Math.sin(u * Math.PI) * 6,
+    rot: -14 * (1 - u) + Math.sin(u * Math.PI) * 8,
+  };
+}
+
+/** Quiet face-and-shoulder groom. Rui-visible. Not a cat wash. Not Rui scratch. */
+export function groomPose(t: number) {
+  const press = Math.abs(Math.sin(t * 12));
+  return {
+    lift: -1.0 + press * 10.5,
+    rot: Math.sin(t * 14) * 16,
+    dx: 0,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Stand tall on the haunches — scan the room. Rui-visible. Not a dog beg. Not ethogram rise alone. */
 export function periscopePose(t: number) {
   const u = Math.max(0, Math.min(1, t / DUR.periscope));
   if (u < 0.25) {
     const s = smoothstep(u / 0.25);
-    return { lift: s * 8, rot: s * 3, dx: 0, anim: "sit" as const };
+    return { lift: s * 12, rot: s * 6, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.75) {
     return {
-      lift: 8 + Math.sin(t * 4) * 1.2,
-      rot: 3 + Math.sin(t * 5) * 4,
-      dx: Math.sin(t * 3) * 1.5,
-      anim: "sit" as const,
+      lift: 12 + Math.sin(t * 4) * 2.2,
+      rot: 6 + Math.sin(t * 5) * 6,
+      dx: Math.sin(t * 3) * 2,
+      anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.75) / 0.25);
-  return { lift: 8 * (1 - s), rot: 3 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 12 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
-/** Carpet dig — forepaws scrape the rug. Not ethogram scratch. Not a cat knead. */
+/** Carpet dig — forepaws scrape the rug. Rui-visible. Not ethogram scratch. Not a cat knead. */
 export function digPose(t: number) {
-  return {
-    lift: -2 + Math.abs(Math.sin(t * 14)) * 3.5,
-    rot: Math.sin(t * 12) * 6,
-    dx: Math.sin(t * 10) * 2,
-    anim: "sit" as const,
-  };
-}
-
-/** Binky — twist-leap of joy. Not Rui somersault. Not a dog zoom. Not a cat pounce. */
-export function binkyPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.binky));
-  if (u < 0.22) {
-    const s = smoothstep(u / 0.22);
-    return { x: fromX, lift: -s * 3, rot: s * 5, anim: "sit" as const };
+  const u = Math.max(0, Math.min(1, t / DUR.dig));
+  if (u < 0.25) {
+    const s = smoothstep(u / 0.25);
+    return { lift: -s * 6, rot: s * 12, dx: s * 4, anim: "sit" as TrickAnim };
   }
-  if (u < 0.72) {
-    const s = (u - 0.22) / 0.5;
+  if (u < 0.75) {
     return {
-      x: fromX + facing * 18 * smoothstep(s),
-      lift: Math.sin(s * Math.PI) * 16,
-      rot: Math.sin(s * Math.PI * 2) * 18,
-      anim: "play" as const,
+      lift: -6 + Math.sin(t * 14) * 3.5,
+      rot: 12 + Math.sin(t * 12) * 8,
+      dx: 4 + Math.sin(t * 10) * 2.5,
+      anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.72) / 0.28);
+  const s = smoothstep((u - 0.75) / 0.25);
+  return { lift: -6 * (1 - s), rot: 12 * (1 - s), dx: 4 * (1 - s), anim: "sit" as TrickAnim };
+}
+
+/** Binky — twist-leap of joy. Rui-visible. Not Rui somersault. Not a dog zoom. Not a cat pounce. */
+export function binkyPose(t: number, fromX: number, facing: number) {
+  const u = Math.max(0, Math.min(1, t / DUR.binky));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.24) {
+    const s = smoothstep(u / 0.24);
+    return { x: fromX, lift: -s * 6, rot: s * 12, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.7) {
+    const s = (u - 0.24) / 0.46;
+    return {
+      x: fromX + face * 28 * smoothstep(s),
+      lift: Math.sin(s * Math.PI) * 18,
+      rot: Math.sin(s * Math.PI * 2) * 20,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.7) / 0.3);
   return {
-    x: fromX + facing * 18,
-    lift: 2 * (1 - s),
-    rot: 4 * (1 - s),
-    anim: "sit" as const,
+    x: fromX + face * 28,
+    lift: 3 * (1 - s),
+    rot: 5 * (1 - s),
+    anim: "sit" as TrickAnim,
   };
 }
 
-export function stepTrick(trick: RabbitTrick, dt: number, flags?: TrickFlags): RabbitTrick {
+/** Rub — chin scent-mark on the desk edge. Rui-visible. Not chinchilla chin. Not cat bunting. */
+export function rubPose(t: number, fromX: number, facing: number) {
+  const u = Math.max(0, Math.min(1, t / DUR.rub));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: -s * 5, rot: s * 14 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const s = (u - 0.16) / 0.68;
+    const sway = Math.sin(s * Math.PI * 2.4);
+    return {
+      x: fromX + face * (3 + sway * 2.5),
+      lift: -5 + Math.abs(sway) * 4,
+      rot: (12 + sway * 8) * face,
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return { x: fromX, lift: -5 * (1 - s), rot: 12 * face * (1 - s), anim: "sit" as TrickAnim };
+}
+
+/** Nosh — soft forage chew. Rui-visible. Not hamster nibble eth. Not guinea happy nibble. Not mlem. */
+export function noshPose(t: number, fromX: number, facing: number) {
+  const u = Math.max(0, Math.min(1, t / DUR.nosh));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: -s * 4, rot: s * 8 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.88) {
+    const s = (u - 0.12) / 0.76;
+    const chew = Math.sin(s * Math.PI * 6);
+    return {
+      x: fromX + face * chew * 1.2,
+      lift: -4 + Math.abs(chew) * 5.5,
+      rot: (6 + chew * 12) * face,
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.88) / 0.12);
+  return { x: fromX, lift: -4 * (1 - s), rot: 6 * face * (1 - s), anim: "sit" as TrickAnim };
+}
+
+export function stepTrick(trick: RabbitTrick, dt: number, flags?: TrickFlags | null): RabbitTrick {
   if (!trick || trick.phase === "done") return trick;
   if (shouldAbort(flags) && trick.kind !== "binky") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return Object.assign({}, trick, { phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true });
   }
-  const next: RabbitTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
   if (next.kind === "flop") {
     if (next.t < FLOP_HOLD) {
-      const pose = flopPose();
+      const pose = flopPose(next.t);
       next.phase = "hold";
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -374,10 +453,12 @@ export function stepTrick(trick: RabbitTrick, dt: number, flags?: TrickFlags): R
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return Object.assign({}, next, { phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim });
   }
-  const hold = DUR[next.kind];
+  const hold = DUR[next.kind as RabbitTrickKind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  const face = trick.facing;
   if (next.kind === "groom") {
     const pose = groomPose(next.t);
     next.lift = pose.lift;
@@ -393,15 +474,27 @@ export function stepTrick(trick: RabbitTrick, dt: number, flags?: TrickFlags): R
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
+  } else if (next.kind === "rub") {
+    const pose = rubPose(next.t, fromX, face);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "nosh") {
+    const pose = noshPose(next.t, fromX, face);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
   } else {
-    const pose = binkyPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = binkyPose(next.t, fromX, face);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
   if (u >= 1) {
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return Object.assign({}, next, { phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim });
   }
   return next;
 }
