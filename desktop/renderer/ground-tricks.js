@@ -214,6 +214,7 @@ const Morel = root.PetMorelTricks;
     const IonDragon = root.PetIonDragonTricks;
     const GaussDragon = root.PetGaussDragonTricks;
     const Paramecium = root.PetParameciumTricks;
+    const Amoeba = root.PetAmoebaTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -426,6 +427,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (IonDragon && (key === IonDragon.TRICK_KEY || key === "ion_dragon" || key === "ion")) return IonDragon;
     if (GaussDragon && (key === GaussDragon.TRICK_KEY || key === "gauss_dragon" || key === "gauss")) return GaussDragon;
     if (Paramecium && (key === Paramecium.TRICK_KEY || key === "paramecium" || key === "boot")) return Paramecium;
+    if (Amoeba && (key === Amoeba.TRICK_KEY || key === "amoeba" || key === "reach")) return Amoeba;
   }
 
   function wantsThankYou(key) {
