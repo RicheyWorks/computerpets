@@ -178,6 +178,7 @@ const Morel = root.PetMorelTricks;
   const Lugworm = root.PetLugwormTricks;
   const FieldCricket = root.PetFieldCricketTricks;
   const Katydid = root.PetKatydidTricks;
+  const Grasshopper = root.PetGrasshopperTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -354,6 +355,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Lugworm && (key === Lugworm.TRICK_KEY || key === "lugworm" || key === "heap")) return Lugworm;
     if (FieldCricket && (key === FieldCricket.TRICK_KEY || key === "field_cricket" || key === "chirp")) return FieldCricket;
     if (Katydid && (key === Katydid.TRICK_KEY || key === "katydid" || key === "blade")) return Katydid;
+    if (Grasshopper && (key === Grasshopper.TRICK_KEY || key === "grasshopper" || key === "vault")) return Grasshopper;
   }
 
   function wantsThankYou(key) {
