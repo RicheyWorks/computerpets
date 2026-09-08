@@ -166,6 +166,7 @@ const Morel = root.PetMorelTricks;
   const Planarian = root.PetPlanarianTricks;
   const Nematode = root.PetNematodeTricks;
   const Amphipod = root.PetAmphipodTricks;
+  const FiddlerCrab = root.PetFiddlerCrabTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -330,6 +331,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Planarian && (key === Planarian.TRICK_KEY || key === "planarian" || key === "half")) return Planarian;
     if (Nematode && (key === Nematode.TRICK_KEY || key === "nematode" || key === "thread")) return Nematode;
     if (Amphipod && (key === Amphipod.TRICK_KEY || key === "amphipod" || key === "scud")) return Amphipod;
+  if (FiddlerCrab && (key === FiddlerCrab.TRICK_KEY || key === "fiddler_crab" || key === "wave")) return FiddlerCrab;
   }
 
   function wantsThankYou(key) {
