@@ -206,6 +206,7 @@ const Morel = root.PetMorelTricks;
     const GiantClam = root.PetGiantClamTricks;
     const EagleRay = root.PetEagleRayTricks;
     const Grouper = root.PetGrouperTricks;
+    const CyberDragon = root.PetCyberDragonTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -410,6 +411,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (GiantClam && (key === GiantClam.TRICK_KEY || key === "giant_clam" || key === "gate")) return GiantClam;
     if (EagleRay && (key === EagleRay.TRICK_KEY || key === "eagle_ray" || key === "soar")) return EagleRay;
     if (Grouper && (key === Grouper.TRICK_KEY || key === "grouper" || key === "hide")) return Grouper;
+    if (CyberDragon && (key === CyberDragon.TRICK_KEY || key === "cyber_dragon" || key === "arc")) return CyberDragon;
   }
 
   function wantsThankYou(key) {
