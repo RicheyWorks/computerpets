@@ -704,12 +704,52 @@ function callSip() {
   birdFly = F.markCalled(birdFly);
 }
 
+function collapseKeeperCard() {
+  if (card.collapsed) return;
+  card.collapsed = true;
+  persistCard();
+  paintHud();
+}
+
 function openKeeperCard() {
   if (!card.collapsed) return;
   card.collapsed = false;
   persistCard();
+  paintHud();
   sim.target = null;
   sim.waypoints = [];
+  sim.pause = 0;
+  sim.turnHold = 0;
+  sim.pendingFacing = null;
+  if (sim.play && window.PetWindowPlay) {
+    const work = { width: window.innerWidth, height: window.innerHeight, floorLift: 0 };
+    sim.play = window.PetWindowPlay.stepPlay(
+      sim.play,
+      0,
+      { x: sim.x, lift: sim.play.lift },
+      playWindows(),
+      work,
+      BASE,
+      { asleep: !!life?.asleep, hidden: !!life?.hidden, leaving, cmd: sim.cmd, card: true },
+    );
+    if (!sim.play || sim.play.phase === "done") sim.play = null;
+  }
+  if (sim.trick) {
+    const T = (window.PetGroundTricks && window.PetGroundTricks.tricksFor)
+      ? window.PetGroundTricks.tricksFor(kind && kind.key)
+      : (kind && kind.key === (window.PetRuiTricks && window.PetRuiTricks.TRICK_KEY) ? window.PetRuiTricks : null);
+    if (T && T.stepTrick) {
+      sim.trick = T.stepTrick(sim.trick, 0, {
+        asleep: !!life?.asleep,
+        hidden: !!life?.hidden,
+        leaving,
+        cmd: sim.cmd,
+        windowPlay: false,
+        card: true,
+      });
+    }
+    if (!sim.trick || sim.trick.phase === "done") sim.trick = null;
+  }
   if (sim.anim === "walk" && !life?.asleep) sim.anim = "idle";
 }
 
@@ -2406,7 +2446,7 @@ function tick(now) {
       hidden: !!life?.hidden,
       leaving,
       cmd: sim.cmd,
-      card: false,
+      card: cardOpen(),
     };
     const wins = playWindows();
     const T = (window.PetGroundTricks && window.PetGroundTricks.tricksFor)
@@ -2418,7 +2458,7 @@ function tick(now) {
       leaving,
       cmd: sim.cmd,
       windowPlay: !!sim.play,
-      card: false,
+      card: cardOpen(),
     };
     if (sim.happy && T && T.happyShouldAbort && T.happyShouldAbort({
       asleep: false,
@@ -2505,7 +2545,7 @@ function tick(now) {
         leaving,
         cmd: sim.cmd,
         windowPlay: !!sim.play,
-        card: false,
+        card: cardOpen(),
       })
     ) {
       sim.trickWait -= dt;
@@ -2578,7 +2618,7 @@ function tick(now) {
     } else if (!sim.act && (sim.anim === "idle" || sim.anim === "sit") && sim.cursorX != null && Math.abs(sim.cursorX - (sim.x + BASE / 2)) > 36) {
       sim.facing = sim.cursorX >= sim.x + BASE / 2 ? 1 : -1;
     }
-    if (trait.clingy && sim.cursorX != null && !life.hidden && !life.asleep && Math.random() < dt * 0.35) {
+    if (trait.clingy && !cardOpen() && sim.cursorX != null && !life.hidden && !life.asleep && Math.random() < dt * 0.35) {
       const follow = clamp(sim.cursorX - BASE / 2, PAD, maxX);
       if (Math.abs(follow - sim.x) > 80) {
         sim.waypoints = [];
@@ -2701,6 +2741,9 @@ function tick(now) {
   const lift = hopPx + walkBob + water + perch + pose.dy + climbLift;
   pet.style.transformOrigin = sim.play && (sim.play.phase === "dive" || sim.play.phase === "leap" || sim.play.phase === "ridge-leap" || sim.play.phase === "ridge-off" || sim.play.phase === "coil-on" || sim.play.phase === "coil-off" || sim.play.phase === "path-on" || sim.play.phase === "path-off" || sim.play.phase === "field-on" || sim.play.phase === "field-off" || sim.play.phase === "crackle-on" || sim.play.phase === "crackle-hop" || sim.play.phase === "crackle-off" || sim.play.phase === "charge-on" || sim.play.phase === "charge-bolt" || sim.play.phase === "charge-off" || sim.play.phase === "orbit-on" || sim.play.phase === "orbit-off" || sim.play.phase === "click-on" || sim.play.phase === "click-hop" || sim.play.phase === "click-off" || sim.play.phase === "hold-on" || sim.play.phase === "hold-off" || sim.play.phase === "earth-on" || sim.play.phase === "earth-off" || sim.play.phase === "ledge-on" || sim.play.phase === "ledge-off" || sim.play.phase === "circle-on" || sim.play.phase === "circle-off") ? "center center" : "center bottom";
   pet.style.transform = `translate3d(${drawX}px, ${-lift}px, 0) rotate(${pose.rot + climbRot}deg) scale(${sim.facing * squat * scale}, ${stretch * scale})`;
+  if (cardOpen() && sim.anim === "walk" && !sim.dragging) {
+    collapseKeeperCard();
+  }
   const shrink = 1 - hopPx / 90;
   shadow.style.transform = `translate3d(${drawX + 40}px, 0, 0) scale(${shrink * scale}, ${shrink})`;
   shadow.style.opacity = String((0.28 - hopPx / 90) * (life.hidden ? 0.2 : 1));

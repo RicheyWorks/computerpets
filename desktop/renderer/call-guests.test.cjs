@@ -80,6 +80,13 @@ test("a den of walkers keeps the same img nodes across ticks", () => {
   assert.doesNotMatch(petSrc, /calledRoot\.replaceChildren\(\)/);
 });
 
+test("called guests do not float their name as img alt while moving", () => {
+  const src = readFileSync(join(__dirname, "call-guests.js"), "utf8");
+  assert.match(src, /img\.alt = ""/);
+  assert.match(src, /aria-label/);
+  assert.doesNotMatch(src, /img\.alt = g\.name/);
+});
+
 test("the robin lands on sleeping Rui, stays, and sings — MIN_STAY does not vanish a perch", () => {
   assert.equal(G.PERCH_BIRD_KEY, "robin");
   assert.equal(G.ROBIN_SONG.length > 4, true);

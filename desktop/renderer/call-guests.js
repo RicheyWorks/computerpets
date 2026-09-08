@@ -785,7 +785,9 @@
       if (!img) {
         img = make();
         img.className = "called-guest";
-        img.alt = g.name || g.key;
+        img.alt = "";
+        if (img.setAttribute) img.setAttribute("aria-label", g.name || g.key);
+        else img.ariaLabel = g.name || g.key;
         if (!img.dataset) img.dataset = {};
         img.dataset.hit = "1";
         img.dataset.callKey = g.key;
