@@ -195,6 +195,7 @@ const Morel = root.PetMorelTricks;
     const Howler = root.PetHowlerTricks;
     const Tarsier = root.PetTarsierTricks;
     const Potto = root.PetPottoTricks;
+    const Koala = root.PetKoalaTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -388,6 +389,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Howler && (key === Howler.TRICK_KEY || key === "howler" || key === "boom")) return Howler;
     if (Tarsier && (key === Tarsier.TRICK_KEY || key === "tarsier" || key === "gaze")) return Tarsier;
     if (Potto && (key === Potto.TRICK_KEY || key === "potto" || key === "still")) return Potto;
+    if (Koala && (key === Koala.TRICK_KEY || key === "koala" || key === "gum")) return Koala;
   }
 
   function wantsThankYou(key) {
