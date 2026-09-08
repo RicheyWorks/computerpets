@@ -1,7 +1,7 @@
-/** Wave ground tricks while idle. House neighborly Ocypodidae / Uca (Leptuca/Minuca) Atlantic fiddler crab life — clawwave / burrowcue / lateralscuttle / sandsift / ucahush personality (clawwave major-claw wave display without naming wave or claw or display or brandish or signal or raise alone as wait, burrowcue burrow dig cue without naming burrow or dig or cue or scoop or tunnel or plug alone as wait, lateralscuttle lateral side-scuttle run without naming scuttle or run or dash or crawl or side or flee alone as wait, sandsift feed-sand sift without naming sift or sand or feed or scoop or chew or eat alone as wait, long ucahush Uca fiddler hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or clawwave or sandsift or burrowcue or lateralscuttle or ucahush or densfiddle or inkwave or densuca or sidescull or detfossick or amplexcue or startleflex or sinusoid or dauerrest or pharynxpump or thrashturn or elegans or densthread or inkthread or densdauer or denswave or ciliaryglide or lightflee or preywrap or regensplit or dugesia or denshalf or inkhalf or denscilia or cryptotun or clawamble or mosssip or waterbearroll or eutardigrada or denstun or inktun or densclaw or swap or antenna or scuttle or withdraw or vacancy or scrap or fit or lease or carapace or bookgill or telson or furrow or fossil or blue or page or tray or chelate or caridoid or chimney or antennule or astacid or clasp or marl or chitin or clawwave or burrowcue or lateralscuttle or sandsift or ucahush; window-play and Call Wave leave fiddler_crab alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet/Hop/Tun/Half/Thread/Scud own their tricks; guest slug Wave / key fiddler_crab — accept "fiddler_crab" and "wave" (roster slug wave; campaign Wave); do NOT confuse with Scud the FiddlerCrab (key amphipod / slug scud) or densfiddle thank-you; do NOT confuse with Pale the Ghost Crab (key ghost_crab / slug pale) — do not start Pale in parallel; do NOT confuse with hermit_crab scrap/swap/scuttle or horseshoe_crab carapace/telson or crayfish chelate/caridoid; do NOT name a trick fiddler_crab or wave or ghost_crab or pale or amphipod or scud or hermit_crab or horseshoe_crab or denswave or densclaw. Thank-yous densfiddle / inkwave / densuca. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop fiddler_crab-tricks.js. Window-play unchanged. True Atlantic fiddler crab desk life — major-claw wave display, burrow dig cue, lateral scuttle, and feed-sand sift; not Gammarus amphipod/Amphipoda clones (clawwave/sandsift/burrowcue/lateralscuttle), not hermit crab Paguroidea clones (swap/scuttle/withdraw), not horseshoe Limulus clones (carapace/telson/furrow), not Astacus crayfish clones (chelate/caridoid) — true Uca fiddler life distinct from amphipod side-swim and hermit shell-swap. Next house-order guest after Wave still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Wave ground tricks while idle. House neighborly Ocypodidae / Uca pugilator Atlantic fiddler crab life — clawwave / burrowdig / sandfeed / lateralsidestep / pugilator personality (clawwave major-claw wave display without naming wave or claw or display or brandish or signal or raise alone as wait, burrowdig burrow dig scrape without naming burrow or dig or scrape or scoop or tunnel or plug alone as wait, sandfeed sand-scoop mouth feed without naming sand or scoop or feed or sift or chew or eat alone as wait, lateralsidestep lateral sidestep scuttle without naming sidestep or scuttle or run or dash or crawl or side alone as wait, long pugilator Uca pugilator hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or sideswim or gnathopod or detritusclutch or pairguard or gammarus or densscud or inkscud or densgnath or densclaw or sinusoid or dauerrest or pharynxpump or thrashturn or elegans or densthread or inkthread or densdauer or ciliaryglide or lightflee or preywrap or regensplit or dugesia or denshalf or inkhalf or denscilia or cryptotun or clawamble or mosssip or waterbearroll or eutardigrada or denstun or inktun or swap or antenna or scuttle or withdraw or vacancy or scrap or fit or lease or carapace or bookgill or telson or furrow or fossil or blue or page or tray or chelate or caridoid or chimney or antennule or astacid or clasp or marl or chitin or clawwave or burrowdig or sandfeed or lateralsidestep or pugilator; window-play and Call Wave leave fiddler_crab alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste/Link/Armor/Cast/Jet/Hop/Tun/Half/Thread/Scud own their tricks; guest slug Wave / key fiddler_crab — accept "fiddler_crab" and "wave" (roster slug wave; campaign Wave); do NOT confuse with Scud the Amphipod (key amphipod / slug scud) or densscud thank-you; do NOT confuse with Pale the Ghost Crab (key ghost_crab / slug pale) — do not start Pale in parallel; do NOT confuse with hermit_crab scrap/swap/scuttle or horseshoe_crab carapace/telson or crayfish chelate/caridoid or Tun densclaw thank-you; do NOT name a trick fiddler_crab or wave or ghost_crab or pale or amphipod or scud or hermit_crab or horseshoe_crab or densclaw. Thank-yous denswave / inkwave / densmajor. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop fiddler_crab-tricks.js. Window-play unchanged. True Atlantic fiddler crab desk life — major-claw wave display, burrow dig scrape, sand-scoop mouth feed, and lateral sidestep scuttle; not Gammarus amphipod/Amphipoda clones (sideswim/gnathopod/detritusclutch/pairguard), not hermit crab Paguroidea clones (swap/scuttle/withdraw), not horseshoe Limulus clones (carapace/telson/furrow), not Astacus crayfish clones (chelate/caridoid) — true Uca pugilator fiddler life distinct from amphipod side-swim and hermit shell-swap. Next house-order guest after Wave still lacking tricks owns the next seat (Pale / ghost_crab). No cry inventing — thank-yous are silent desk motion only. */
 export const TRICK_KEY = "fiddler_crab";
-export const TRICKS = ["clawwave", "sandsift", "burrowcue", "lateralscuttle", "ucahush"] as const;
-export const HAPPY = ["densfiddle", "inkwave", "densuca"] as const;
+export const TRICKS = ["clawwave", "burrowdig", "sandfeed", "lateralsidestep", "pugilator"] as const;
+export const HAPPY = ["denswave", "inkwave", "densmajor"] as const;
 export type FiddlerCrabTrickKind = (typeof TRICKS)[number];
 export type FiddlerCrabHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
@@ -44,10 +44,10 @@ export type FiddlerCrabHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { densfiddle: 2.62, inkwave: 2.78, densuca: 2.52 } as const;
-export const UCAHUSH_HOLD = 24.60;
+export const HAPPY_DUR = { denswave: 2.62, inkwave: 2.78, densmajor: 2.52 } as const;
+export const PUGILATOR_HOLD = 24.60;
 export const RELEASE_S = 2.18;
-export const DUR = { ucahush: UCAHUSH_HOLD + RELEASE_S, clawwave: 4.84, burrowcue: 4.62, lateralscuttle: 4.72, sandsift: 4.52 } as const;
+export const DUR = { pugilator: PUGILATOR_HOLD + RELEASE_S, clawwave: 4.84, burrowdig: 4.62, sandfeed: 4.52, lateralsidestep: 4.72 } as const;
 
 export function canStart(state: TrickFlags | undefined) {
     if (!state) return false;
@@ -75,39 +75,39 @@ export function shouldAbort(state: TrickFlags | undefined) {
   }
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: FiddlerCrabTrickKind | string) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "ucahush") return 166 + roll * 14;
+      if (kind === "pugilator") return 166 + roll * 14;
   if (kind === "clawwave") return 27.0 + roll * 4.6;
-  if (kind === "burrowcue") return 26.2 + roll * 4.3;
-  if (kind === "lateralscuttle") return 26.6 + roll * 4.4;
-  if (kind === "sandsift") return 25.6 + roll * 4.1;
+  if (kind === "burrowdig") return 26.2 + roll * 4.3;
+  if (kind === "lateralsidestep") return 26.6 + roll * 4.4;
+  if (kind === "sandfeed") return 25.6 + roll * 4.1;
   return justFinished ? 19.2 + roll * 2.9 : 14.4 + roll * 2.5;
   }
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: FiddlerCrabTrickKind | string | null) {
-  if (musicOn) return "ucahush";
+  if (musicOn) return "pugilator";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "ucahush") {
+  if (lastKind === "pugilator") {
     if (roll < 0.26) return "clawwave";
-    if (roll < 0.5) return "burrowcue";
-    if (roll < 0.74) return "lateralscuttle";
-    return "sandsift";
+    if (roll < 0.5) return "burrowdig";
+    if (roll < 0.74) return "lateralsidestep";
+    return "sandfeed";
   }
   if (lastKind === "clawwave") {
-    if (roll < 0.26) return "ucahush";
-    if (roll < 0.5) return "burrowcue";
-    if (roll < 0.74) return "lateralscuttle";
-    return "sandsift";
+    if (roll < 0.26) return "pugilator";
+    if (roll < 0.5) return "burrowdig";
+    if (roll < 0.74) return "lateralsidestep";
+    return "sandfeed";
   }
-  if (lastKind === "burrowcue") {
-    if (roll < 0.22) return "ucahush";
+  if (lastKind === "burrowdig") {
+    if (roll < 0.22) return "pugilator";
     if (roll < 0.44) return "clawwave";
-    if (roll < 0.68) return "lateralscuttle";
-    return "sandsift";
+    if (roll < 0.68) return "lateralsidestep";
+    return "sandfeed";
   }
-  if (roll < 0.2) return "ucahush";
+  if (roll < 0.2) return "pugilator";
   if (roll < 0.4) return "clawwave";
-  if (roll < 0.6) return "burrowcue";
-  if (roll < 0.8) return "lateralscuttle";
-  return "sandsift";
+  if (roll < 0.6) return "burrowdig";
+  if (roll < 0.8) return "lateralsidestep";
+  return "sandfeed";
 }
 export function happyCanStart(state: TrickFlags | undefined) {
     if (!state) return false;
@@ -154,7 +154,7 @@ export function pickHappy(lastKind?: FiddlerCrabHappyKind | null, rand?: number)
     return list[Math.floor(roll * list.length)] || list[0];
   }
 export function beginHappy(kind: FiddlerCrabHappyKind | string, x: number, facing: 1 | -1): FiddlerCrabHappy {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "densfiddle";
+    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denswave";
     return {
       kind: name,
       happy: true,
@@ -163,13 +163,13 @@ export function beginHappy(kind: FiddlerCrabHappyKind | string, x: number, facin
       x: x,
       lift: 0,
       rot: 0,
-      anim: (name === "densfiddle" ? "sit" : name === "inkwave" ? "play" : "play") as TrickAnim,
+      anim: (name === "denswave" ? "sit" : name === "inkwave" ? "play" : "play") as TrickAnim,
       facing: (facing == null ? 1 : facing) as 1 | -1,
       fromX: x,
     };
   }
-export function densfiddlePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densfiddle));
+export function denswavePose(t: number) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denswave));
     if (u < 0.14) {
       const s = u / 0.14;
       return { lift: s * 0.0036, rot: s * -0.30, anim: "sit" };
@@ -194,8 +194,8 @@ export function inkwavePose(t: number) {
     const s = (u - 0.70) / 0.30;
     return { lift: 0.0042 * (1 - s), rot: 0.36 * (1 - s), anim: "idle" };
 }
-export function densucaPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densuca));
+export function densmajorPose(t: number) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densmajor));
     if (u < 0.12) {
       const s = u / 0.12;
       return { lift: s * 0.0032, rot: s * -0.24, anim: "play" };
@@ -214,8 +214,8 @@ export function stepHappy(happy: FiddlerCrabHappy | null | undefined, dt: number
     }
     const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
     const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "densfiddle") {
-      const pose = densfiddlePose(next.t);
+    if (next.kind === "denswave") {
+      const pose = denswavePose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -225,7 +225,7 @@ export function stepHappy(happy: FiddlerCrabHappy | null | undefined, dt: number
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = densucaPose(next.t);
+      const pose = densmajorPose(next.t);
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
@@ -238,20 +238,20 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   }
 export function beginTrick(kind: FiddlerCrabTrickKind | string, x: number, facing: 1 | -1): FiddlerCrabTrick {
   const anim: TrickAnim =
-    kind === "ucahush"
+    kind === "pugilator"
       ? "sit"
       : kind === "clawwave"
         ? "play"
-        : kind === "sandsift"
+        : kind === "sandfeed"
           ? "play"
-          : kind === "burrowcue"
+          : kind === "burrowdig"
             ? "sit"
-            : kind === "lateralscuttle"
+            : kind === "lateralsidestep"
               ? "sit"
               : "sit";
   return {
     kind: (TRICKS as readonly string[]).includes(kind) ? (kind as FiddlerCrabTrickKind) : "clawwave",
-    phase: kind === "ucahush" ? "hold" : "go",
+    phase: kind === "pugilator" ? "hold" : "go",
     t: 0,
     x: x,
     lift: 0,
@@ -265,7 +265,7 @@ function smoothstep(t: number) {
     const x = Math.max(0, Math.min(1, t));
     return x * x * (3 - 2 * x);
   }
-export function ucahushPose(t: number) {
+export function pugilatorPose(t: number) {
     const breath = Math.sin(t * 0.0028) + 0.0014 * Math.sin(t * 0.0086);
     const hush = Math.abs(Math.sin(t * 0.0017));
     return { lift: 0.00018 + hush * 0.00032, rot: -0.016 + breath * 0.010 };
@@ -289,8 +289,8 @@ export function clawwavePose(t: number, fromX: number, facing: 1 | -1) {
     const s = smoothstep((u - 0.88) / 0.12);
     return { x: fromX + face * 0.00010 * (1 - s), lift: 0.0010 * (1 - s), rot: -0.016 * (1 - s) * face, anim: "idle" };
 }
-export function burrowcuePose(t: number, fromX: number, facing: 1 | -1)  {
-    const u = Math.max(0, Math.min(1, t / DUR.burrowcue));
+export function burrowdigPose(t: number, fromX: number, facing: 1 | -1)  {
+    const u = Math.max(0, Math.min(1, t / DUR.burrowdig));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
@@ -304,8 +304,8 @@ export function burrowcuePose(t: number, fromX: number, facing: 1 | -1)  {
     const s = smoothstep((u - 0.84) / 0.16);
     return { x: fromX + face * 0.00028 * (1 - s), lift: 0.00085 * (1 - s) + s * 0.00020, rot: 0.012 * (1 - s) * face, anim: "idle" };
 }
-export function lateralscuttlePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.lateralscuttle));
+export function lateralsidestepPose(t: number, fromX: number, facing: 1 | -1) {
+    const u = Math.max(0, Math.min(1, t / DUR.lateralsidestep));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
@@ -319,8 +319,8 @@ export function lateralscuttlePose(t: number, fromX: number, facing: 1 | -1) {
     const s = smoothstep((u - 0.86) / 0.14);
     return { x: fromX + face * 0.0115 * (1 - s), lift: 0.0006 * (1 - s), rot: 0.012 * (1 - s) * face, anim: "idle" };
 }
-export function sandsiftPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.sandsift));
+export function sandfeedPose(t: number, fromX: number, facing: 1 | -1) {
+    const u = Math.max(0, Math.min(1, t / DUR.sandfeed));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
@@ -336,21 +336,21 @@ export function sandsiftPose(t: number, fromX: number, facing: 1 | -1) {
 }
 export function stepTrick(trick: FiddlerCrabTrick | null | undefined, dt: number, flags?: TrickFlags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "clawwave" && trick.kind !== "burrowcue" && trick.kind !== "lateralscuttle" && trick.kind !== "sandsift") {
+    if (shouldAbort(flags) && trick.kind !== "clawwave" && trick.kind !== "burrowdig" && trick.kind !== "lateralsidestep" && trick.kind !== "sandfeed") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "ucahush") {
-      if (next.t < UCAHUSH_HOLD) {
-        const pose = ucahushPose(next.t);
+    if (next.kind === "pugilator") {
+      if (next.t < PUGILATOR_HOLD) {
+        const pose = pugilatorPose(next.t);
         next.phase = "hold";
         next.lift = pose.lift;
         next.rot = pose.rot;
         next.anim = "sit";
         return next;
       }
-      if (next.t < UCAHUSH_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - UCAHUSH_HOLD);
+      if (next.t < PUGILATOR_HOLD + RELEASE_S) {
+        const pose = releasePose(next.t - PUGILATOR_HOLD);
         next.phase = "release";
         next.lift = pose.lift;
         next.rot = pose.rot;
@@ -367,20 +367,20 @@ export function stepTrick(trick: FiddlerCrabTrick | null | undefined, dt: number
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "burrowcue") {
-      const pose = burrowcuePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "burrowdig") {
+      const pose = burrowdigPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "lateralscuttle") {
-      const pose = lateralscuttlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "lateralsidestep") {
+      const pose = lateralsidestepPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = sandsiftPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = sandfeedPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
