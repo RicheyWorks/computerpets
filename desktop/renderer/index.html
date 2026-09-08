@@ -81,15 +81,40 @@
           <span class="desk-plate-grip" aria-hidden="true" title="Drag to move">⋮⋮</span>
         </button>
         <div id="market-body" hidden>
-          <div id="market-live"></div>
-          <p class="keeper-truth">Stocks are Yahoo chart. Crypto is CoinGecko. No paid key.</p>
-          <form id="market-add" data-hit>
-            <label>Quotes
-              <input data-hit id="market-q" type="text" autocomplete="off" spellcheck="false" placeholder="A ticker — AAPL, BTC" aria-label="Quotes" />
-            </label>
-            <button data-hit type="submit" id="market-lookup">Look up</button>
-          </form>
-          <p id="market-truth" class="keeper-truth"></p>
+          <div class="market-panes">
+            <section class="market-pane" data-market-pane="coins" aria-label="Coins">
+              <h3 class="market-pane-title">Coins</h3>
+              <div id="market-live"></div>
+              <p class="keeper-truth">Majors and search use CoinGecko. Small or meme coins (pump.fun and kin) use a mint or contract paste via GeckoTerminal. Stocks still Yahoo. No paid key.</p>
+              <form id="market-add" data-hit>
+                <label>Add a coin
+                  <input data-hit id="market-q" type="text" autocomplete="off" spellcheck="false" placeholder="Coin, ticker, or contract — ETH, BTC, pump mint" aria-label="Add a coin" />
+                </label>
+                <button data-hit type="submit" id="market-lookup">Look up</button>
+              </form>
+              <p id="market-truth" class="keeper-truth"></p>
+              <ul id="market-hits" class="market-hits" hidden></ul>
+              <ul id="market-tickers"></ul>
+            </section>
+            <section class="market-pane" data-market-pane="nfts" aria-label="NFTs">
+              <h3 class="market-pane-title">NFTs</h3>
+              <div id="nft-live"></div>
+              <p class="keeper-truth">Collections use CoinGecko floors when reachable. Marketplaces stay on your list with an honest offline note when a venue needs a key.</p>
+              <h4 class="market-subhead">Marketplaces</h4>
+              <ul id="nft-marketplaces"></ul>
+              <div id="nft-marketplace-catalog" class="nft-marketplace-catalog"></div>
+              <h4 class="market-subhead">Collections</h4>
+              <form id="nft-add" data-hit>
+                <label>Add a collection
+                  <input data-hit id="nft-q" type="text" autocomplete="off" spellcheck="false" placeholder="NFT collection — pudgy, punks" aria-label="Add a collection" />
+                </label>
+                <button data-hit type="submit" id="nft-lookup">Look up</button>
+              </form>
+              <p id="nft-truth" class="keeper-truth"></p>
+              <ul id="nft-hits" class="market-hits" hidden></ul>
+              <ul id="nft-collections"></ul>
+            </section>
+          </div>
           <div class="desk-plate-colors" data-plate-colors="market">
             <label>Plate color
               <input data-hit type="color" data-plate-color="bg" data-plate-key="market" aria-label="Plate color" />
@@ -102,7 +127,6 @@
             </label>
             <div class="desk-plate-swatches" data-plate-swatches="market"></div>
           </div>
-          <ul id="market-tickers"></ul>
         </div>
       </article>
       <div id="mess"></div>

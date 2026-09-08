@@ -75,6 +75,12 @@
       currentNewsId: "world",
       marketTickers: [],
       currentTickerId: null,
+      nftCollections: [],
+      currentNftId: null,
+      nftMarketplaces: [],
+      marketCustomized: false,
+      nftCustomized: false,
+      marketplaceCustomized: false,
       stepKind: "species",
       music: { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false },
       sleepAid: { plugin: "off", playing: false },
@@ -162,9 +168,17 @@
     const news = root.PetNews ? root.PetNews.parseNewsPrefs(raw) : { topics: [{ id: "world", name: "World", query: "" }], currentId: "world" };
     next.newsPrefs = news.topics;
     next.currentNewsId = news.currentId;
-    const market = root.PetMarket ? root.PetMarket.parseMarket(raw) : { tickers: [], currentId: null };
+    const market = root.PetMarket
+      ? root.PetMarket.parseMarket(raw)
+      : { tickers: [], currentId: null, nfts: [], currentNftId: null, marketplaces: [] };
     next.marketTickers = market.tickers;
     next.currentTickerId = market.currentId;
+    next.nftCollections = market.nfts || [];
+    next.currentNftId = market.currentNftId || null;
+    next.nftMarketplaces = market.marketplaces || [];
+    next.marketCustomized = !!raw.marketCustomized || !!raw.tickersCustomized;
+    next.nftCustomized = !!raw.nftCustomized || !!raw.nftsCustomized;
+    next.marketplaceCustomized = !!raw.marketplaceCustomized || !!raw.nftMarketplaceCustomized;
     next.stepKind = root.PetHouseSounds ? root.PetHouseSounds.parseStep(raw.stepKind) : "species";
     next.music = root.PetHouseMusic ? root.PetHouseMusic.parseMusic(raw.music) : { plugin: "off", stationId: "", stationName: "", stationUrl: "", playing: false };
     next.sleepAid = root.PetHouseSleep ? root.PetHouseSleep.parseSleepAid(raw.sleepAid) : { plugin: "off", playing: false };

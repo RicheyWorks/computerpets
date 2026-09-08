@@ -163,6 +163,9 @@ let newsItems = [];
 let newsUnread = false;
 let marketLive = null;
 let marketUnread = false;
+let marketCoinLives = {};
+let nftLive = null;
+let nftUnread = false;
 let birdFly = null;
 let birdAcc = 0;
 let birdFrame = 0;
@@ -349,7 +352,7 @@ function paintHousePlates() {
   if (!H) return;
   H.paintWeather(card, liveSky, weatherUnread);
   H.paintNews(newsItems, newsUnread, card);
-  if (H.paintMarket) H.paintMarket(card, marketLive, marketUnread);
+  if (H.paintMarket) H.paintMarket(card, marketLive, marketUnread, { coinLives: marketCoinLives, nftLive, nftUnread });
 }
 
 function fetchWeather() {
@@ -426,33 +429,116 @@ function fetchMarket() {
   const M = window.PetMarket;
   if (!M) return;
   const house = M.parseMarket(card);
+  // Persist seeded defaults once so customize sticks.
+  if ((!card.marketTickers || !card.marketTickers.length) && house.tickers.length) {
+    Object.assign(card, M.toCardPatch(house));
+    persistCard();
+  }
   const ticker = M.currentTicker(house);
-  if (!ticker) {
+  const nft = M.currentNft(house);
+  if (!ticker && !nft) {
     marketLive = null;
     marketUnread = false;
+    marketCoinLives = {};
+    nftLive = null;
+    nftUnread = false;
     paintHousePlates();
     return;
   }
   const door = window.desk && window.desk.marketQuote;
-  const work = door
-    ? door(ticker).then((res) => {
-        if (!res || res.ok === false) throw new Error("unread");
-        return res.live || null;
-      })
-    : ticker.kind === "crypto"
-      ? fetch(M.geckoUrl(ticker.geckoId)).then((r) => r.json()).then((json) => M.parseGecko(json, ticker.geckoId))
+  const searchDoor = window.desk && window.desk.marketSearch;
+  const nftDoor = window.desk && window.desk.nftQuote;
+
+  const geckoIds = house.tickers.filter((r) => r.kind === "crypto" && r.geckoId && !r.address).map((r) => r.geckoId);
+  const contracts = house.tickers.filter((r) => r.kind === "crypto" && r.address);
+
+  function applyTickerLive(live) {
+    if (live) marketLive = live;
+    marketUnread = !live;
+  }
+
+  const jobs = [];
+
+  if (geckoIds.length) {
+    const url = M.geckoManyUrl(geckoIds);
+    const work = door && window.desk.marketQuotes
+      ? window.desk.marketQuotes(geckoIds).then((res) => {
+          if (!res || res.ok === false) throw new Error("unread");
+          return res.lives || {};
+        })
+      : fetch(url).then((r) => r.json()).then((json) => M.parseGeckoMany(json));
+    jobs.push(
+      work
+        .then((lives) => {
+          marketCoinLives = { ...marketCoinLives, ...lives };
+          if (ticker && ticker.geckoId && lives[ticker.geckoId]) applyTickerLive(lives[ticker.geckoId]);
+          else if (ticker && ticker.kind === "crypto" && !ticker.address) marketUnread = true;
+        })
+        .catch(() => {
+          if (ticker && ticker.geckoId) marketUnread = !marketLive;
+        }),
+    );
+  }
+
+  for (const row of contracts) {
+    const url = M.terminalTokenUrl(row.platform || "solana", row.address);
+    const work = door && window.desk.marketTerminal
+      ? window.desk.marketTerminal(row).then((res) => {
+          if (!res || res.ok === false) throw new Error("unread");
+          return res.live || null;
+        })
+      : fetch(url).then((r) => r.json()).then((json) => M.parseTerminalToken(json));
+    jobs.push(
+      work
+        .then((live) => {
+          if (!live) return;
+          const key = row.platform + ":" + row.address;
+          marketCoinLives[key] = live;
+          marketCoinLives[row.address] = live;
+          if (ticker && ticker.id === row.id) applyTickerLive(live);
+        })
+        .catch(() => {
+          if (ticker && ticker.id === row.id) marketUnread = !marketLive;
+        }),
+    );
+  }
+
+  if (ticker && ticker.kind === "stock") {
+    const work = door
+      ? door(ticker).then((res) => {
+          if (!res || res.ok === false) throw new Error("unread");
+          return res.live || null;
+        })
       : fetch(M.yahooUrl(ticker.symbol)).then((r) => r.json()).then((json) => M.parseYahoo(json));
-  work
-    .then((live) => {
-      if (live) marketLive = live;
-      marketUnread = !live;
-      paintHousePlates();
-    })
-    .catch(() => {
-      marketUnread = !marketLive;
-      paintHousePlates();
-    });
+    jobs.push(
+      work.then(applyTickerLive).catch(() => {
+        marketUnread = !marketLive;
+      }),
+    );
+  }
+
+  if (nft) {
+    const work = nftDoor
+      ? nftDoor(nft).then((res) => {
+          if (!res || res.ok === false) throw new Error("unread");
+          return res.live || null;
+        })
+      : fetch(M.nftUrl(nft.geckoId)).then((r) => r.json()).then((json) => M.parseNftLive(json));
+    jobs.push(
+      work
+        .then((live) => {
+          if (live) nftLive = live;
+          nftUnread = !live;
+        })
+        .catch(() => {
+          nftUnread = !nftLive;
+        }),
+    );
+  }
+
+  Promise.allSettled(jobs).then(() => paintHousePlates());
 }
+
 
 function sitSleepAid() {
   const S = window.PetHouseSleep;
@@ -3367,6 +3453,11 @@ if (newsPlate) {
   });
 }
 if (marketPlate) {
+  function applyMarketHouse(house) {
+    Object.assign(card, window.PetMarket.toCardPatch(house));
+    persistCard();
+    fetchMarket();
+  }
   marketPlate.addEventListener("click", (e) => {
     const toggle = e.target && e.target.closest && e.target.closest("#market-toggle");
     if (toggle) {
@@ -3380,47 +3471,214 @@ if (marketPlate) {
         body.hidden = !body.hidden;
         const open = !body.hidden;
         toggle.setAttribute("aria-expanded", open ? "true" : "false");
+        if (open) fetchMarket();
       }
       return;
     }
+    if (!window.PetMarket) return;
     const pick = e.target && e.target.closest && e.target.closest("[data-ticker-pick]");
-    if (pick && window.PetMarket) {
+    if (pick) {
       e.stopPropagation();
-      const house = window.PetMarket.pickTicker(card, pick.getAttribute("data-ticker-pick"));
-      card.marketTickers = house.tickers;
-      card.currentTickerId = house.currentId;
-      persistCard();
-      fetchMarket();
+      applyMarketHouse(window.PetMarket.pickTicker(card, pick.getAttribute("data-ticker-pick")));
       return;
     }
     const del = e.target && e.target.closest && e.target.closest("[data-ticker-del]");
-    if (del && window.PetMarket) {
+    if (del) {
       e.stopPropagation();
-      const house = window.PetMarket.removeTicker(card, del.getAttribute("data-ticker-del"));
-      card.marketTickers = house.tickers;
-      card.currentTickerId = house.currentId;
-      persistCard();
-      fetchMarket();
+      applyMarketHouse(window.PetMarket.removeTicker(card, del.getAttribute("data-ticker-del")));
+      return;
+    }
+    const move = e.target && e.target.closest && e.target.closest("[data-ticker-move]");
+    if (move) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.moveTicker(card, move.getAttribute("data-ticker-move"), Number(move.getAttribute("data-dir") || 1)));
+      return;
+    }
+    const nftPick = e.target && e.target.closest && e.target.closest("[data-nft-pick]");
+    if (nftPick) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.pickNft(card, nftPick.getAttribute("data-nft-pick")));
+      return;
+    }
+    const nftDel = e.target && e.target.closest && e.target.closest("[data-nft-del]");
+    if (nftDel) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.removeNft(card, nftDel.getAttribute("data-nft-del")));
+      return;
+    }
+    const nftMove = e.target && e.target.closest && e.target.closest("[data-nft-move]");
+    if (nftMove) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.moveNft(card, nftMove.getAttribute("data-nft-move"), Number(nftMove.getAttribute("data-dir") || 1)));
+      return;
+    }
+    const mpDel = e.target && e.target.closest && e.target.closest("[data-mp-del]");
+    if (mpDel) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.removeMarketplace(card, mpDel.getAttribute("data-mp-del")));
+      return;
+    }
+    const mpMove = e.target && e.target.closest && e.target.closest("[data-mp-move]");
+    if (mpMove) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.moveMarketplace(card, mpMove.getAttribute("data-mp-move"), Number(mpMove.getAttribute("data-dir") || 1)));
+      return;
+    }
+    const mpAdd = e.target && e.target.closest && e.target.closest("[data-mp-add]");
+    if (mpAdd) {
+      e.stopPropagation();
+      applyMarketHouse(window.PetMarket.addMarketplace(card, mpAdd.getAttribute("data-mp-add")));
+      return;
+    }
+    const hit = e.target && e.target.closest && e.target.closest("[data-coin-hit]");
+    if (hit) {
+      e.stopPropagation();
+      try {
+        const raw = JSON.parse(hit.getAttribute("data-coin-hit") || "null");
+        applyMarketHouse(window.PetMarket.addTicker(card, raw));
+        const hits = document.getElementById("market-hits");
+        if (hits) { hits.hidden = true; hits.replaceChildren(); }
+      } catch {}
+      return;
+    }
+    const nftHit = e.target && e.target.closest && e.target.closest("[data-nft-hit]");
+    if (nftHit) {
+      e.stopPropagation();
+      try {
+        const raw = JSON.parse(nftHit.getAttribute("data-nft-hit") || "null");
+        applyMarketHouse(window.PetMarket.addNft(card, raw));
+        const hits = document.getElementById("nft-hits");
+        if (hits) { hits.hidden = true; hits.replaceChildren(); }
+      } catch {}
     }
   });
   marketPlate.addEventListener("submit", (e) => {
-    if (!e.target || e.target.id !== "market-add" || !window.PetMarket) return;
-    e.preventDefault();
-    e.stopPropagation();
-    const q = document.getElementById("market-q");
-    const truth = document.getElementById("market-truth");
-    const next = window.PetMarket.parseTicker(q && q.value);
-    if (!next) {
-      if (truth) truth.textContent = "type a ticker";
+    if (!window.PetMarket) return;
+    if (e.target && e.target.id === "market-add") {
+      e.preventDefault();
+      e.stopPropagation();
+      const q = document.getElementById("market-q");
+      const truth = document.getElementById("market-truth");
+      const hits = document.getElementById("market-hits");
+      const typed = q && q.value;
+      const contract = window.PetMarket.detectContract(typed);
+      const next = window.PetMarket.parseTicker(typed);
+      if (contract && next) {
+        applyMarketHouse(window.PetMarket.addTicker(card, next));
+        if (q) q.value = "";
+        if (truth) truth.textContent = "";
+        if (hits) { hits.hidden = true; hits.replaceChildren(); }
+        return;
+      }
+      if (next && (next.kind === "stock" || next.geckoId)) {
+        applyMarketHouse(window.PetMarket.addTicker(card, next));
+        if (q) q.value = "";
+        if (truth) truth.textContent = "";
+        if (hits) { hits.hidden = true; hits.replaceChildren(); }
+        return;
+      }
+      const url = window.PetMarket.searchUrl(typed);
+      if (!url) {
+        if (truth) truth.textContent = "type a coin, ticker, or contract";
+        return;
+      }
+      if (truth) truth.textContent = "looking up…";
+      const door = window.desk && window.desk.marketSearch;
+      const work = door
+        ? door(String(typed || "")).then((res) => {
+            if (!res || res.ok === false) throw new Error("unread");
+            return res;
+          })
+        : fetch(url).then((r) => r.json()).then((json) => ({
+            coins: window.PetMarket.parseSearchCoins(json),
+            nfts: window.PetMarket.parseSearchNfts(json),
+          }));
+      work
+        .then((res) => {
+          const coins = res.coins || [];
+          if (!coins.length) {
+            if (truth) truth.textContent = "no coin from that look-up — try a mint or contract";
+            if (hits) { hits.hidden = true; hits.replaceChildren(); }
+            return;
+          }
+          if (truth) truth.textContent = "";
+          if (!hits) return;
+          hits.hidden = false;
+          hits.replaceChildren();
+          for (const row of coins) {
+            const li = document.createElement("li");
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.dataset.hit = "1";
+            btn.dataset.coinHit = JSON.stringify(row);
+            btn.textContent = "Add " + row.symbol + " · " + row.name;
+            li.appendChild(btn);
+            hits.appendChild(li);
+          }
+        })
+        .catch(() => {
+          if (truth) truth.textContent = window.PetMarket.CANT_REACH;
+        });
       return;
     }
-    const house = window.PetMarket.addTicker(card, next);
-    card.marketTickers = house.tickers;
-    card.currentTickerId = house.currentId;
-    persistCard();
-    if (q) q.value = "";
-    if (truth) truth.textContent = "";
-    fetchMarket();
+    if (e.target && e.target.id === "nft-add") {
+      e.preventDefault();
+      e.stopPropagation();
+      const q = document.getElementById("nft-q");
+      const truth = document.getElementById("nft-truth");
+      const hits = document.getElementById("nft-hits");
+      const typed = q && q.value;
+      const url = window.PetMarket.searchUrl(typed);
+      if (!url) {
+        if (truth) truth.textContent = "type a collection name";
+        return;
+      }
+      if (truth) truth.textContent = "looking up…";
+      const door = window.desk && window.desk.marketSearch;
+      const work = door
+        ? door(String(typed || "")).then((res) => {
+            if (!res || res.ok === false) throw new Error("unread");
+            return res;
+          })
+        : fetch(url).then((r) => r.json()).then((json) => ({
+            coins: window.PetMarket.parseSearchCoins(json),
+            nfts: window.PetMarket.parseSearchNfts(json),
+          }));
+      work
+        .then((res) => {
+          const nfts = res.nfts || [];
+          if (!nfts.length) {
+            // fall back: treat typed text as gecko id
+            const direct = window.PetMarket.parseNftRow(typed);
+            if (direct) {
+              applyMarketHouse(window.PetMarket.addNft(card, direct));
+              if (q) q.value = "";
+              if (truth) truth.textContent = "";
+              return;
+            }
+            if (truth) truth.textContent = "no collection from that look-up";
+            if (hits) { hits.hidden = true; hits.replaceChildren(); }
+            return;
+          }
+          if (truth) truth.textContent = "";
+          if (!hits) return;
+          hits.hidden = false;
+          hits.replaceChildren();
+          for (const row of nfts) {
+            const li = document.createElement("li");
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.dataset.hit = "1";
+            btn.dataset.nftHit = JSON.stringify(row);
+            btn.textContent = "Add " + (row.symbol || row.name) + " · " + row.name;
+            li.appendChild(btn);
+            hits.appendChild(li);
+          }
+        })
+        .catch(() => {
+          if (truth) truth.textContent = window.PetMarket.CANT_REACH;
+        });
+    }
   });
 }
 function bindPlateToggleDrag(toggleId, key) {

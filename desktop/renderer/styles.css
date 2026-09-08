@@ -1138,3 +1138,81 @@ select {
     transition: none;
   }
 }
+
+
+#market-plate[aria-busy],
+#market-plate:has(#market-body:not([hidden])) {
+  width: min(36rem, 92%);
+}
+
+.market-panes {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 720px) {
+  .market-panes {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.market-pane {
+  border: 1px solid color-mix(in srgb, var(--plate-fg) 16%, #2a2621);
+  border-radius: 8px;
+  padding: 8px;
+  background: color-mix(in srgb, var(--plate-bg) 70%, transparent);
+  color: var(--plate-fg);
+}
+
+.market-pane-title,
+.market-subhead {
+  margin: 0 0 6px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--plate-muted);
+}
+
+.market-live-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.market-live-list li,
+.nft-marketplace-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.market-kind {
+  font-size: 10px;
+  color: var(--plate-muted);
+}
+
+.market-hits {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+}
+
+.nft-marketplace-catalog {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 10px;
+}
+
+#market-tickers li,
+#nft-collections li,
+#nft-marketplaces li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 4px 0;
+}
