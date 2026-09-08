@@ -180,6 +180,7 @@ const Morel = root.PetMorelTricks;
   const Katydid = root.PetKatydidTricks;
   const Grasshopper = root.PetGrasshopperTricks;
   const Swallowtail = root.PetSwallowtailTricks;
+  const Jewelwing = root.PetJewelwingTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -358,6 +359,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Katydid && (key === Katydid.TRICK_KEY || key === "katydid" || key === "blade")) return Katydid;
     if (Grasshopper && (key === Grasshopper.TRICK_KEY || key === "grasshopper" || key === "vault")) return Grasshopper;
     if (Swallowtail && (key === Swallowtail.TRICK_KEY || key === "swallowtail" || key === "banner")) return Swallowtail;
+    if (Jewelwing && (key === Jewelwing.TRICK_KEY || key === "jewelwing" || key === "jewel")) return Jewelwing;
   }
 
   function wantsThankYou(key) {
