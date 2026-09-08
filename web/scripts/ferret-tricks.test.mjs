@@ -254,9 +254,9 @@ test("ground registry keeps prior guests gated; Wick selectable; no thread/scurr
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
-  assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
-  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet"]);
-  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash"]);
+  assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"]);
+  assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
+  assert.deepEqual([...Parrot.TRICKS], ["quote", "strut", "fan", "crack", "flash", "pineye", "invert"]);
   assert.equal(T.TRICKS.includes("thread"), false);
   assert.equal(T.TRICKS.includes("scurry"), false);
   assert.equal(T.TRICKS.includes("den"), false);

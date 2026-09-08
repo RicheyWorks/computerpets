@@ -257,7 +257,7 @@ test("ground registry keeps prior guests gated; Quill selectable; no hook/preen/
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Budgie.TRICKS], ["preen", "bobble", "mimic", "sidle", "dangle", "beakgrind", "shellout"]);
-  assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance"]);
+  assert.deepEqual([...Fox.TRICKS], ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"]);
   assert.deepEqual([...Penguin.TRICKS], ["huddle", "toboggan", "waddle", "porpoise", "trumpet", "rockhop", "ecstatic"]);
   assert.equal(T.TRICKS.includes("hook"), false);
   assert.equal(T.TRICKS.includes("preen"), false);
