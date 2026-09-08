@@ -71,6 +71,8 @@
       pets: {},
       weatherAreas: [],
       currentAreaId: null,
+      weatherTab: "current",
+      favoriteAreaIds: [],
       newsPrefs: [],
       currentNewsId: "world",
       newsTab: "popular",
@@ -166,9 +168,11 @@
         if (typeof key === "string" && key) next.pets[key] = parseGuest(value);
       }
     }
-    const areas = root.PetWeatherAreas ? root.PetWeatherAreas.parseAreas(raw) : { areas: [], currentId: null };
+    const areas = root.PetWeatherAreas ? root.PetWeatherAreas.parseAreas(raw) : { areas: [], currentId: null, tab: "current", favoriteIds: [] };
     next.weatherAreas = areas.areas;
     next.currentAreaId = areas.currentId;
+    next.weatherTab = areas.tab || "current";
+    next.favoriteAreaIds = areas.favoriteIds || [];
     const news = root.PetNews ? root.PetNews.parseNewsPrefs(raw) : { topics: [{ id: "world", name: "World", query: "" }], currentId: "world", tab: "popular", favorites: [] };
     next.newsPrefs = news.topics;
     next.currentNewsId = news.currentId;
