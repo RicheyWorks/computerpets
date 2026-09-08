@@ -126,6 +126,8 @@ def test_only_scratching_mammals_scratch():
     assert "cock_look" in [a["name"] for a in acts_for("crow")]
     assert "perch" in [a["name"] for a in acts_for("crow")]
     assert "kronk" in [a["name"] for a in acts_for("raven")]
+    assert "ruff_flare" in [a["name"] for a in acts_for("raven")]
+    assert "perch" in [a["name"] for a in acts_for("raven")]
     assert "hiss" in [a["name"] for a in acts_for("barn_owl")]
     assert "soar" in [a["name"] for a in acts_for("red_tail")]
     assert "dee" in [a["name"] for a in acts_for("chickadee")]
