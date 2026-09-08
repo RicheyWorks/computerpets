@@ -1,4 +1,4 @@
-/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, Whip, Clasp, Gale, Flag, Cape, Cache, Slick, Wash, Stripe, Grin, Dam, Spine, Coal, Soak, Pad, Wink, Dash, Shift, Spike, Levee, Jaw, Beak, Lid, Peak, Lunge, Speck, Whisk, Penny, Bar, Lance, Night, Spoon, Round, Silver, Haste, Link, Armor, Cast, Jet, Hop, Tun, Thread, Scud, Wave, Pale, Cone, Cement, Mail, Spire,, Forceps, Snout, Click, Hang, Sun, Swing, Wrist, and Sail today. Overlay + /demo lockstep. */
+/** Species ground-trick registry. Rui, Relay, Fuse, Ground, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Echo, Rue, Peck, Quill, Wick, Burr, Floss, Bloom, Keel, Sol, Vesper, Ember, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, Chamber, Pulse, Cling, Tenant, Ledger, Anchor, Kite, Door, Felt, Vein, Fan, Mast, Disk, Moth, Arm, Snap, Drown, Dew, Comb, Milk, Ghost, Spark, Dart, Twig, Column, Seven, Fold, Brood, Thrum, Auger, Mortar, Disc, Pot, Sheen, Bank, Hum, Keep, Wax, Frill, Cap, Lattice, Horn, Ring, Mane, Puff, Flame, Starter, Pact, Gleam, Choir, Drift, Shard, Dusk, Knot, Brine, Beacon, Hush, Arca, Reed, Pebble, Eft, Dapple, Slip, Pinch, Whorl, Hinge, Latch, Prickle, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Loom, Leap, Prowl, Velvet, Hour, Stem, Barb, Whip, Clasp, Gale, Flag, Cape, Cache, Slick, Wash, Stripe, Grin, Dam, Spine, Coal, Soak, Pad, Wink, Dash, Shift, Spike, Levee, Jaw, Beak, Lid, Peak, Lunge, Speck, Whisk, Penny, Bar, Lance, Night, Spoon, Round, Silver, Haste, Link, Armor, Cast, Jet, Hop, Tun, Thread, Scud, Wave, Pale, Cone, Cement, Mail, Spire,, Forceps, Snout, Click, Hang, Sun, Swing, Sail, and Glide today. Overlay + /demo lockstep. */
 (function (root) {
   function tricksFor(key) {
     if (!key) return null;
@@ -191,6 +191,7 @@ const Morel = root.PetMorelTricks;
   const Gibbon = root.PetGibbonTricks;
   const Kinkajou = root.PetKinkajouTricks;
     const Colugo = root.PetColugoTricks;
+    const FlyingSquirrel = root.PetFlyingSquirrelTricks;
     if (Rui && (key === Rui.TRICK_KEY || key === "rui")) return Rui;
     if (Relay && (key === Relay.TRICK_KEY || key === "relay")) return Relay;
     if (Fuse && (key === Fuse.TRICK_KEY || key === "fuse")) return Fuse;
@@ -380,6 +381,7 @@ if (Morel && (key === Morel.TRICK_KEY || key === "lattice")) return Morel;
     if (Gibbon && (key === Gibbon.TRICK_KEY || key === "gibbon" || key === "swing")) return Gibbon;
     if (Kinkajou && (key === Kinkajou.TRICK_KEY || key === "kinkajou" || key === "wrist")) return Kinkajou;
     if (Colugo && (key === Colugo.TRICK_KEY || key === "colugo" || key === "sail")) return Colugo;
+    if (FlyingSquirrel && (key === FlyingSquirrel.TRICK_KEY || key === "flying_squirrel" || key === "glide")) return FlyingSquirrel;
   }
 
   function wantsThankYou(key) {
