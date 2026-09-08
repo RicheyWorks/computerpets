@@ -1,12 +1,12 @@
-/** Link ground tricks while idle. House neighborly Diplopoda / Narceus americanus American Giant Millipede detritivore life — leafmunch / diploseg / spiralroll / detritussift / narceus personality (spiralroll defensive spiral curl without naming coil or curl or spiral or defense or roll or ball or armor or armorup or hide or tuck or sleep or sit, leafmunch leaf litter detritus feed grub without naming detritus or grub or litter or leaf or feed or eat or chew or forage or nibble or mulch or compost or dirt or soil, diploseg many-leg metachronal walk march without naming march or walk or crawl or scuttle or run or dash or sprint or blur or race or fleet or centipede or myriapod, detritussift humidity moisture hunt seek without naming moist or seek or humidity or damp or wet or water or drink or sniff or hunt or search or probe or antenna, long narceus Narceus americanus Diplopoda American giant millipede hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or densantenna or ultrarun or antennaprobe or wallcling or preyseize or coleoptrata or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass or oralclamp or keratinrasp or undulglide or stonenest or marinus or densround or inkround or densdisk or densdisc or legwave or rostrumscan or filterram or rivercruise or eggcast or spathula or densspoon or inkspoon or densrostrum or tapetumglow or duskcruise or gravelspawn or softfinhover or vitreus or densnight or inknight or densglow or weedambush or scurve or toothclamp or torpedoglide or lucius or denslance or inklance or denstorpedo or tigerbar or schoolhover or duskrise or ribbonspawn or flavescens or densbar or inkbar or denstiger or platehover or colonyfan or insectpeck or gillflare or macrochirus or denspenny or inkpenny or densplate or barbelprobe or cavitynest or mudcloud or caudalthrash or ictalurus or denswhisk or inkwhisk or densbarbel or driftfeed or insectrise or reddscrape or vermicflash or fontinalis or densspeck or inkspeck or densredd or coverstrike or bedfan or surboil or latline or salmoides or denslunge or inklunge or densgape or parietalgaze or nuchalrise or burrowsit or eggseize or punctatus or denspeak or inkpeak or densisle or hingeshut or berryforage or shellsoak or nestscrape or carolinae or denslid or inklid or densdome or ambushgape or mudbury or necklunge or banksnap or serpentina or densbeak or inkbeak or densplastron or toothlock or highwalk or salttear or nestpit or acutus or densjaw or inkjaw or denskeel or bellowbank or deathcoil or snoutspy or baskgape or mississippi or denslevee or inklevee or densscute or bloodsquirt or antfeast or freezeflat or rainharvest or phrynosoma or denspike or inkspike or denscorona or veilflush or turretgaze or tongueshot or branchrock or calyptratus or denshift or inkshift or denscasque or tailbluff or litterdash or tongueflick or sunbask or plestiodon or dewlapflash or pushupshow or hueshift or preyinch or anolis or toepadcling or vocalclick or lickeye or mothstalk or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash; window-play STRIKE and Call Link leave millipede alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste own their tricks; guest slug Link / key millipede — accept "millipede" and "link" (roster slug link; campaign Link); do NOT confuse with Haste the House Centipede (key house_centipede / slug haste) or denshaste thank-you; do NOT name a trick millipede or link or house_centipede or haste or american_eel or silver or lamprey or round or paddlefish or spoon or walleye or night or pike or lance or perch or bar or bluegill or penny or catfish or whisk or brook_trout or speck or bass or lunge or tuatara or peak or box_turtle or lid or snapper or beak or crocodile or jaw or alligator or levee or turtle or ink or horned_lizard or spike or phrynosoma or chameleon or calyptratus or veiled or skink or plestiodon or fasciatus or anole or anolis or carolinensis or gecko or hemidactylus or turcicus or salamander or dapple or iguana or sol or newt or eft or caecilian or slip or frog or reed or toad or pebble or dash or densdash or inkdash or densbluff or wink or denswink or inkwink or densdewlap or shift or denshift or inkshift or denscasque or denspike or inkspike or denscorona or denslevee or inklevee or densscute or densjaw or inkjaw or denskeel or densbeak or inkbeak or densplastron or denslid or inklid or densdome or denspeak or inkpeak or densisle or denslunge or inklunge or densgape or densspeck or inkspeck or densredd or denswhisk or inkwhisk or densbarbel or denspenny or inkpenny or densplate or densbar or inkbar or denstiger or denslance or inklance or denstorpedo or densnight or inknight or densglow or densspoon or inkspoon or densrostrum or densround or inkround or densdisk or densdisc or denssilver or inksilver or densglass or denshaste or inkhaste or densforcep or Horn or Bank or mining or lizard or reef or coral or salt or agnathan or oral or disc or disk or pillbug or armor or centipede or chilopod). Thank-yous denslink / inklink / denscoil. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web millipede-tricks.ts. Window-play STRIKE unchanged. True American Giant Millipede Narceus americanus Diplopoda desk life — slow many-segmented detritivore that coils in defense, grubs leaf litter, marches on many legs, and seeks moisture; not Scutigera house centipede/Chilopoda clones (forcipule/wallrace/antennaflick/fleetlegs), not Anguilla american eel/Anguilliformes clones, not Petromyzon sea lamprey, not Polyodon paddlefish, not Sander walleye, not Esox northern pike, not Perca yellow perch, not Lepomis bluegill, not Ictalurus channel catfish, not Salvelinus brook trout, not Micropterus bass — true diplopod detritivore not chilopod predator; not Centruroides scorpion/Barb, not Phrynosoma horned lizard/Spike denspike, not tuatara/Rhynchocephalia, not reef fish clones, not pillbug/Armor, not harvestman/legwave. Next house-order guest after Link still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Link ground tricks while idle. House neighborly Diplopoda / Narceus americanus American Giant Millipede detritivore life — coilcurl / detritusgrub / slowmarch / moistseek / narceus personality (coilcurl defensive spiral curl without naming coil or curl or spiral or defense or roll or ball or armor or armorup or hide or tuck or sleep or sit, detritusgrub leaf litter detritus feed grub without naming detritus or grub or litter or leaf or feed or eat or chew or forage or nibble or mulch or compost or dirt or soil, slowmarch many-leg metachronal walk march without naming march or walk or crawl or scuttle or run or dash or sprint or blur or race or fleet or centipede or myriapod, moistseek humidity moisture hunt seek without naming moist or seek or humidity or damp or wet or water or drink or sniff or hunt or search or probe or antenna, long narceus Narceus americanus Diplopoda American giant millipede hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or forcipule or wallrace or antennaflick or fleetlegs or scutigera or denshaste or inkhaste or densforcep or densantenna or ultrarun or antennaprobe or wallcling or preyseize or coleoptrata or glasscrawl or mucuscoat or nightmigrate or gravelhide or rostrata or denssilver or inksilver or densglass or oralclamp or keratinrasp or undulglide or stonenest or marinus or densround or inkround or densdisk or densdisc or legwave or rostrumscan or filterram or rivercruise or eggcast or spathula or densspoon or inkspoon or densrostrum or tapetumglow or duskcruise or gravelspawn or softfinhover or vitreus or densnight or inknight or densglow or weedambush or scurve or toothclamp or torpedoglide or lucius or denslance or inklance or denstorpedo or tigerbar or schoolhover or duskrise or ribbonspawn or flavescens or densbar or inkbar or denstiger or platehover or colonyfan or insectpeck or gillflare or macrochirus or denspenny or inkpenny or densplate or barbelprobe or cavitynest or mudcloud or caudalthrash or ictalurus or denswhisk or inkwhisk or densbarbel or driftfeed or insectrise or reddscrape or vermicflash or fontinalis or densspeck or inkspeck or densredd or coverstrike or bedfan or surboil or latline or salmoides or denslunge or inklunge or densgape or parietalgaze or nuchalrise or burrowsit or eggseize or punctatus or denspeak or inkpeak or densisle or hingeshut or berryforage or shellsoak or nestscrape or carolinae or denslid or inklid or densdome or ambushgape or mudbury or necklunge or banksnap or serpentina or densbeak or inkbeak or densplastron or toothlock or highwalk or salttear or nestpit or acutus or densjaw or inkjaw or denskeel or bellowbank or deathcoil or snoutspy or baskgape or mississippi or denslevee or inklevee or densscute or bloodsquirt or antfeast or freezeflat or rainharvest or phrynosoma or denspike or inkspike or denscorona or veilflush or turretgaze or tongueshot or branchrock or calyptratus or denshift or inkshift or denscasque or tailbluff or litterdash or tongueflick or sunbask or plestiodon or dewlapflash or pushupshow or hueshift or preyinch or anolis or toepadcling or vocalclick or lickeye or mothstalk or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash; window-play STRIKE and Call Link leave millipede alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak/Lid/Peak/Lunge/Speck/Whisk/Penny/Bar/Lance/Night/Spoon/Round/Silver/Haste own their tricks; guest slug Link / key millipede — accept "millipede" and "link" (roster slug link; campaign Link); do NOT confuse with Haste the House Centipede (key house_centipede / slug haste) or denshaste thank-you; do NOT name a trick millipede or link or house_centipede or haste or american_eel or silver or lamprey or round or paddlefish or spoon or walleye or night or pike or lance or perch or bar or bluegill or penny or catfish or whisk or brook_trout or speck or bass or lunge or tuatara or peak or box_turtle or lid or snapper or beak or crocodile or jaw or alligator or levee or turtle or ink or horned_lizard or spike or phrynosoma or chameleon or calyptratus or veiled or skink or plestiodon or fasciatus or anole or anolis or carolinensis or gecko or hemidactylus or turcicus or salamander or dapple or iguana or sol or newt or eft or caecilian or slip or frog or reed or toad or pebble or dash or densdash or inkdash or densbluff or wink or denswink or inkwink or densdewlap or shift or denshift or inkshift or denscasque or denspike or inkspike or denscorona or denslevee or inklevee or densscute or densjaw or inkjaw or denskeel or densbeak or inkbeak or densplastron or denslid or inklid or densdome or denspeak or inkpeak or densisle or denslunge or inklunge or densgape or densspeck or inkspeck or densredd or denswhisk or inkwhisk or densbarbel or denspenny or inkpenny or densplate or densbar or inkbar or denstiger or denslance or inklance or denstorpedo or densnight or inknight or densglow or densspoon or inkspoon or densrostrum or densround or inkround or densdisk or densdisc or denssilver or inksilver or densglass or denshaste or inkhaste or densforcep or Horn or Bank or mining or lizard or reef or coral or salt or agnathan or oral or disc or disk or pillbug or armor or centipede or chilopod). Thank-yous denslink / inklink / denscoil. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web millipede-tricks.ts. Window-play STRIKE unchanged. True American Giant Millipede Narceus americanus Diplopoda desk life — slow many-segmented detritivore that coils in defense, grubs leaf litter, marches on many legs, and seeks moisture; not Scutigera house centipede/Chilopoda clones (forcipule/wallrace/antennaflick/fleetlegs), not Anguilla american eel/Anguilliformes clones, not Petromyzon sea lamprey, not Polyodon paddlefish, not Sander walleye, not Esox northern pike, not Perca yellow perch, not Lepomis bluegill, not Ictalurus channel catfish, not Salvelinus brook trout, not Micropterus bass — true diplopod detritivore not chilopod predator; not Centruroides scorpion/Barb, not Phrynosoma horned lizard/Spike denspike, not tuatara/Rhynchocephalia, not reef fish clones, not pillbug/Armor, not harvestman/legwave. Next house-order guest after Link still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "millipede";
-  const TRICKS = ["leafmunch", "diploseg", "spiralroll", "detritussift", "narceus"];
+  const TRICKS = ["coilcurl", "detritusgrub", "slowmarch", "moistseek", "narceus"];
   const HAPPY = ["denslink", "inklink", "denscoil"];
   const HAPPY_DUR = { denslink: 2.48, inklink: 2.72, denscoil: 2.52 };
   const NARCEUS_HOLD = 24.40;
   const RELEASE_S = 2.05;
-  const DUR = { narceus: NARCEUS_HOLD + RELEASE_S, spiralroll: 4.15, leafmunch: 4.55, diploseg: 4.85, detritussift: 4.35 };
+  const DUR = { narceus: NARCEUS_HOLD + RELEASE_S, coilcurl: 4.15, detritusgrub: 4.55, slowmarch: 4.85, moistseek: 4.35 };
 
   function canStart(state) {
     if (!state) return false;
@@ -37,10 +37,10 @@
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
       if (kind === "narceus") return 158 + roll * 14;
-  if (kind === "spiralroll") return 26.8 + roll * 4.6;
-  if (kind === "leafmunch") return 28.4 + roll * 4.2;
-  if (kind === "diploseg") return 24.6 + roll * 3.8;
-  if (kind === "detritussift") return 27.2 + roll * 4.0;
+  if (kind === "coilcurl") return 26.8 + roll * 4.6;
+  if (kind === "detritusgrub") return 28.4 + roll * 4.2;
+  if (kind === "slowmarch") return 24.6 + roll * 3.8;
+  if (kind === "moistseek") return 27.2 + roll * 4.0;
   return justFinished ? 20.5 + roll * 3.2 : 15.4 + roll * 2.6;
   }
 
@@ -48,28 +48,28 @@
     if (musicOn) return "narceus";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "narceus") {
-      if (roll < 0.26) return "spiralroll";
-      if (roll < 0.5) return "leafmunch";
-      if (roll < 0.74) return "diploseg";
-      return "detritussift";
+      if (roll < 0.26) return "coilcurl";
+      if (roll < 0.5) return "detritusgrub";
+      if (roll < 0.74) return "slowmarch";
+      return "moistseek";
     }
-    if (lastKind === "spiralroll") {
+    if (lastKind === "coilcurl") {
       if (roll < 0.26) return "narceus";
-      if (roll < 0.5) return "leafmunch";
-      if (roll < 0.74) return "diploseg";
-      return "detritussift";
+      if (roll < 0.5) return "detritusgrub";
+      if (roll < 0.74) return "slowmarch";
+      return "moistseek";
     }
-    if (lastKind === "leafmunch") {
+    if (lastKind === "detritusgrub") {
       if (roll < 0.22) return "narceus";
-      if (roll < 0.44) return "spiralroll";
-      if (roll < 0.68) return "diploseg";
-      return "detritussift";
+      if (roll < 0.44) return "coilcurl";
+      if (roll < 0.68) return "slowmarch";
+      return "moistseek";
     }
     if (roll < 0.2) return "narceus";
-    if (roll < 0.4) return "spiralroll";
-    if (roll < 0.6) return "leafmunch";
-    if (roll < 0.8) return "diploseg";
-    return "detritussift";
+    if (roll < 0.4) return "coilcurl";
+    if (roll < 0.6) return "detritusgrub";
+    if (roll < 0.8) return "slowmarch";
+    return "moistseek";
   }
 
   function happyCanStart(state) {
@@ -195,13 +195,13 @@
     const anim =
       kind === "narceus"
         ? "sit"
-        : kind === "leafmunch"
-          ? "play"
-          : kind === "diploseg"
-            ? "talk"
-            : kind === "spiralroll"
-              ? "sit"
-              : kind === "detritussift"
+        : kind === "coilcurl"
+          ? "sit"
+          : kind === "detritusgrub"
+            ? "play"
+            : kind === "slowmarch"
+              ? "talk"
+              : kind === "moistseek"
                 ? "play"
                 : "sit";
     return {
@@ -234,8 +234,8 @@
     return { lift: 0.00055 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.016 * (1 - u) };
   }
 
-  function spiralrollPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.spiralroll));
+  function coilcurlPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.coilcurl));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
@@ -253,8 +253,8 @@
     const s = smoothstep((u - 0.88) / 0.12);
     return { x: fromX + face * 0.00020 * (1 - s), lift: 0.0009 * (1 - s), rot: 0.06 * (1 - s) * face, anim: "idle" };
   }
-  function leafmunchPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.leafmunch));
+  function detritusgrubPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.detritusgrub));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
@@ -268,8 +268,8 @@
     const s = smoothstep((u - 0.88) / 0.12);
     return { x: fromX + face * 0.00525 * (1 - s), lift: 0.00085 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" };
   }
-  function diplosegPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.diploseg));
+  function slowmarchPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.slowmarch));
     const face = facing == null ? 1 : facing;
     if (u < 0.10) {
       const s = smoothstep(u / 0.10);
@@ -283,8 +283,8 @@
     const s = smoothstep((u - 0.90) / 0.10);
     return { x: fromX + face * 0.01005 * (1 - s), lift: 0.0009 * (1 - s), rot: -0.035 * (1 - s) * face, anim: "idle" };
   }
-  function detritussiftPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.detritussift));
+  function moistseekPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.moistseek));
     const face = facing == null ? 1 : facing;
     if (u < 0.11) {
       const s = smoothstep(u / 0.11);
@@ -304,7 +304,7 @@
   }
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "spiralroll" && trick.kind !== "leafmunch" && trick.kind !== "diploseg" && trick.kind !== "detritussift") {
+    if (shouldAbort(flags) && trick.kind !== "coilcurl" && trick.kind !== "detritusgrub" && trick.kind !== "slowmarch" && trick.kind !== "moistseek") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -329,26 +329,26 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "spiralroll") {
-      const pose = spiralrollPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    if (next.kind === "coilcurl") {
+      const pose = coilcurlPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "leafmunch") {
-      const pose = leafmunchPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "detritusgrub") {
+      const pose = detritusgrubPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else if (next.kind === "diploseg") {
-      const pose = diplosegPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    } else if (next.kind === "slowmarch") {
+      const pose = slowmarchPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = detritussiftPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = moistseekPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
@@ -374,10 +374,10 @@
     beginTrick,
     narceusPose,
     releasePose,
-    spiralrollPose,
-    leafmunchPose,
-    diplosegPose,
-    detritussiftPose,
+    coilcurlPose,
+    detritusgrubPose,
+    slowmarchPose,
+    moistseekPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
