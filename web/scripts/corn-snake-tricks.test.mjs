@@ -337,7 +337,7 @@ test("ultra-polish: Saffron scribble/gap/comma/blotter/pencil lifts are Rui-visi
   assert.equal(T.HAPPY_DUR.clause, Overlay.HAPPY_DUR.clause);
 });
 
-test("notes: Saffron idle-life ultra done; Bandit / kingsnake + Jade / green_tree_python ultra next-or-done; following house-order ultra guest is Bluff / hognose (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Saffron idle-life ultra done; Bandit / kingsnake + Jade / green_tree_python + Bluff / hognose ultra next-or-done; following house-order ultra guest is Sash / garter (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.equal(T.TRICK_KEY, "corn_snake");
   assert.equal(T.wantsThankYou("saffron"), true);

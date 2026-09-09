@@ -98,12 +98,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   corn_snake: [A("tongue", "tongue", 0.7, 4), A("comma", "sit_hold", 2.4, 4, "sit"), A("gap_soft", "sit", 1.0, 3, "sit"), A("probe_soft", "tongue", 1.0, 2, "talk"), A("scribble_soft", "play", 1.0, 2, "play"), A("canyon_soft", "play", 0.9, 2, "play"), A("blotter_soft", "sit", 0.9, 2, "talk"), A("pencil_soft", "play", 1.0, 2, "play"), A("freeze", "freeze", 1.4, 2)],
   kingsnake: [A("tongue", "tongue", 0.7, 4), A("verdict", "sit_hold", 2.4, 4, "sit"), A("audit_soft", "sit", 1.0, 3, "sit"), A("stripe_soft", "play", 1.0, 2, "play"), A("plumb_soft", "sit", 0.9, 2, "talk"), A("raid_soft", "play", 1.0, 2, "play"), A("band_soft", "play", 1.0, 2, "play"), A("drawer_soft", "sit", 0.9, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
   green_tree_python: [A("tongue", "tongue", 0.7, 4), A("bracelet", "sit_hold", 2.6, 4, "sit"), A("sway_soft", "play", 1.0, 3, "play"), A("jewel_soft", "sit", 1.0, 2, "sit"), A("heat_soft", "sit", 0.9, 2, "talk"), A("bough_soft", "play", 1.0, 2, "play"), A("liana_soft", "play", 1.0, 2, "play"), A("arbor_soft", "sit", 0.9, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
-  hognose: [
-    A("tongue", "tongue", 0.7, 4),
-    A("flatten", "sit_hold", 1.4, 2, "sit"),
-    A("playdead", "sit_hold", 1.8, 1, "sit"),
-    A("gape", "gape", 1.1, 1),
-  ],
+  hognose: [A("tongue", "tongue", 0.7, 4), A("flatten", "sit_hold", 2.4, 4, "sit"), A("playdead", "sit_hold", 2.2, 3, "sit"), A("gape", "gape", 1.2, 2, "talk"), A("shovel_soft", "sit", 1.0, 2, "talk"), A("encore_soft", "play", 1.0, 2, "play"), A("quiver_soft", "play", 1.0, 2, "play"), A("upright_soft", "sit", 0.9, 2, "sit"), A("freeze", "freeze", 1.4, 2)],
   garter: [A("tongue", "tongue", 0.7, 4), A("patrol", "wiggle", 0.8, 2), A("dart", "dart", 0.9, 2)],
   boa: [A("tongue", "tongue", 0.7, 3), A("hold", "sit_hold", 3.0, 3, "sit")],
   milk_snake: [A("tongue", "tongue", 0.7, 4), A("mimic", "freeze", 1.6, 2)],
