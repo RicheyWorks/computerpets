@@ -243,6 +243,12 @@ def test_only_scratching_mammals_scratch():
     assert "arbor_soft" in [a["name"] for a in acts_for("green_tree_python")]
     assert "freeze" in [a["name"] for a in acts_for("green_tree_python")]
     assert "drape" not in [a["name"] for a in acts_for("green_tree_python")]
+    assert "tongue" in [a["name"] for a in acts_for("hognose")]
+    assert "flatten" in [a["name"] for a in acts_for("hognose")]
+    assert "quiver_soft" in [a["name"] for a in acts_for("hognose")]
+    assert "upright_soft" in [a["name"] for a in acts_for("hognose")]
+    assert "freeze" in [a["name"] for a in acts_for("hognose")]
+    assert "flip" not in [a["name"] for a in acts_for("hognose")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
