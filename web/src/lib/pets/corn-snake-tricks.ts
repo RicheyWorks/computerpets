@@ -1,7 +1,7 @@
-/** Saffron ground tricks while idle. House corn snake — scribble / gap / comma / probe / canyon personality (mid-sentence blotter life; curious pencil-tray explorer). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `corn-snake-tricks.js`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play WRITE unchanged — never names `write`. Nori owns orb/nook/taste/inch/unroll and savor/nestle/center; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun. Avoids write/orb/nook/taste/inch/unroll/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center name collisions with prior guests and corn_snake window-play. No cry inventing — thank-yous are silent desk motion only. */
+/** Saffron ground tricks while idle — ultra-polish pass. House corn snake — scribble / gap / comma / probe / canyon / blotter / pencil personality (mid-sentence blotter life; curious pencil-tray explorer). Scribble S-curve writing without naming write (window-play WRITE owns that); gap curious desk-gap dip without naming hide/nook; comma loose question-mark loaf without naming orb/bun/coil; probe bright tongue chemosense without naming taste/flick/sniff; canyon pencil-tray rim roam without naming inch/strike; blotter mid-sentence blotter pause/blot without naming bask/loaf/settle; pencil pencil-tray climb/peek without naming periscope/loom. Window-play WRITE unchanged — never names `write`. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press. Guest slug Saffron / key corn_snake — accept "corn_snake" and "saffron". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via corn_snake.wav. Thank-yous clause / spice / cord. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `corn-snake-tricks.js`. True house-corn-snake desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori or *Dragon electrical (Relay/Fuse/Ground) clones. Bird ultra (Soot→Ember) + Miso→Nori done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Bandit / kingsnake. No cry inventing beyond house corn_snake.wav prefer. Never retouch Rui sprites. */
 
 export const TRICK_KEY = "corn_snake";
-export const TRICKS = ["scribble", "gap", "comma", "probe", "canyon"] as const;
+export const TRICKS = ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"] as const;
 export const HAPPY = ["clause", "spice", "cord"] as const;
 export type CornSnakeTrickKind = (typeof TRICKS)[number];
 export type CornSnakeHappyKind = (typeof HAPPY)[number];
@@ -46,21 +46,23 @@ export type CornSnakeHappy = {
 };
 
 export const HAPPY_DUR: Record<CornSnakeHappyKind, number> = {
-  clause: 1.14,
-  spice: 1.22,
-  cord: 1.26,
+  clause: 1.55,
+  spice: 1.62,
+  cord: 1.58,
 };
 
 /** Comma hold — Saffron loafs a loose question mark on the blotter. Not Nori orb. Not window-play WRITE. */
-export const COMMA_HOLD = 9.8;
-export const RELEASE_S = 0.62;
+export const COMMA_HOLD = 12.8;
+export const RELEASE_S = 0.88;
 
 export const DUR: Record<CornSnakeTrickKind, number> = {
-  scribble: 1.44,
-  gap: 1.32,
+  scribble: 1.88,
+  gap: 1.82,
   comma: COMMA_HOLD + RELEASE_S,
-  probe: 1.26,
-  canyon: 1.48,
+  probe: 1.76,
+  canyon: 1.92,
+  blotter: 2.02,
+  pencil: 2.1,
 };
 
 export function canStart(state: TrickFlags | undefined) {
@@ -91,38 +93,29 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: CornSnakeTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "comma") return 40 + roll * 24;
-  if (kind === "gap") return 15 + roll * 10;
-  if (kind === "probe") return 14 + roll * 10;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "comma") return 38 + roll * 24;
+  if (kind === "gap" || kind === "probe") return 11 + roll * 8;
+  if (kind === "scribble" || kind === "canyon" || kind === "pencil") return 10 + roll * 8;
+  if (kind === "blotter") return 12 + roll * 9;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: CornSnakeTrickKind | null): CornSnakeTrickKind {
   if (musicOn) return "comma";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "comma") {
-    if (roll < 0.28) return "scribble";
-    if (roll < 0.5) return "gap";
-    if (roll < 0.72) return "probe";
-    return "canyon";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "comma" ? 0.55 : k === "gap" || k === "blotter" || k === "probe" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "gap") {
-    if (roll < 0.3) return "comma";
-    if (roll < 0.52) return "scribble";
-    if (roll < 0.74) return "probe";
-    return "canyon";
-  }
-  if (lastKind === "probe") {
-    if (roll < 0.24) return "comma";
-    if (roll < 0.46) return "scribble";
-    if (roll < 0.68) return "gap";
-    return "canyon";
-  }
-  if (roll < 0.22) return "comma";
-  if (roll < 0.42) return "scribble";
-  if (roll < 0.6) return "gap";
-  if (roll < 0.8) return "probe";
-  return "canyon";
+  return list[list.length - 1] || "comma";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -192,46 +185,46 @@ export function beginHappy(kind: CornSnakeHappyKind, x: number, facing: 1 | -1 =
 
 export function clausePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.clause));
-  if (u < 0.14) {
-    const s = u / 0.14;
-    return { lift: s * 1.4, rot: s * 8, dx: 0, anim: "sit" as const };
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 4.4, rot: s * 14, dx: 0, anim: "sit" as const };
   }
-  if (u < 0.8) {
+  if (u < 0.78) {
     return {
-      lift: 1.4 + Math.abs(Math.sin(t * 5.1)) * 1.1,
-      rot: 8 + Math.sin(t * 3.8) * 5,
-      dx: Math.sin(t * 2.4) * 0.35,
+      lift: 4.4 + Math.abs(Math.sin(t * 5.2)) * 2.6,
+      rot: 14 + Math.sin(t * 4.4) * 10,
+      dx: Math.sin(t * 2.4) * 0.8,
       anim: "sit" as const,
     };
   }
-  const s = (u - 0.8) / 0.2;
-  return { lift: 1.4 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "idle" as const };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 4.4 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "idle" as const };
 }
 
 export function spicePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.spice));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 1.8, rot: s * -7, dx: 0, anim: "talk" as const };
+    return { lift: s * 5.6, rot: -s * 16, dx: 0, anim: "talk" as const };
   }
-  if (u < 0.78) {
-    const flick = Math.sin(t * 7.2);
+  if (u < 0.86) {
+    const flick = Math.sin(t * 10);
     return {
-      lift: 1.8 + Math.abs(flick) * 0.7,
-      rot: -7 + flick * 9,
-      dx: flick * 0.4,
+      lift: 5.6 + Math.abs(flick) * 3.2,
+      rot: -16 + flick * 18,
+      dx: Math.sin(t * 6) * 1.2,
       anim: "talk" as const,
     };
   }
-  const s = (u - 0.78) / 0.22;
-  return { lift: 1.8 * (1 - s), rot: -7 * (1 - s), dx: 0, anim: "sit" as const };
+  const s = (u - 0.86) / 0.14;
+  return { lift: 5.6 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function cordPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 2.4)) * 1.1 + 0.35,
-    rot: -6 + Math.sin(t * 2.1) * 6,
-    dx: Math.sin(t * 1.7) * 0.45,
+    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 1.2,
+    rot: -14 + Math.sin(t * 3.0) * 12,
+    dx: Math.sin(t * 2.4) * 1.4,
     anim: "sit" as const,
   };
 }
@@ -280,7 +273,11 @@ export function beginTrick(kind: CornSnakeTrickKind, x: number, facing: 1 | -1 =
             ? "play"
             : kind === "canyon"
               ? "play"
-              : "sit";
+              : kind === "blotter"
+                ? "talk"
+                : kind === "pencil"
+                  ? "play"
+                  : "sit";
   return {
     kind,
     phase: kind === "comma" ? "hold" : "go",
@@ -302,15 +299,15 @@ function smoothstep(t: number) {
 /** Comma — loose question-mark loaf. Soft rock. Not Nori orb. Not window-play WRITE. */
 export function commaPose(t: number) {
   return {
-    lift: 0.15 + Math.sin(t * 1.15) * 0.28,
-    rot: -8 + Math.sin(t * 0.95) * 2.2 + Math.sin(t * 2.4) * 1.1,
+    lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+    rot: -18 + Math.sin(t * 2.4) * 22 + Math.sin(t * 4.6) * 12,
   };
 }
 
 /** Soft uncoil out of the comma; stays on the desk. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.22 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -8 * (1 - u) };
+  return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -18 * (1 - u) };
 }
 
 /** Scribble — S-curve body writing across the blotter. Mid-sentence. Not window-play WRITE. */
@@ -318,23 +315,23 @@ export function scribblePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.scribble));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.3, rot: s * 10 * facing, anim: "play" as const };
+    return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "play" as const };
   }
   if (u < 0.88) {
     const s = (u - 0.12) / 0.76;
-    const wave = Math.sin(s * Math.PI * 3.4);
+    const wave = Math.sin(s * Math.PI * 3.6);
     return {
-      x: fromX + facing * (s * 6.4 + wave * 1.6),
-      lift: 1.3 + Math.abs(wave) * 1.0,
-      rot: facing * (10 + wave * 14),
+      x: fromX + facing * (Math.abs(wave) * 8.5 + s * 2.2),
+      lift: 2.8 + Math.abs(wave) * 7.2,
+      rot: facing * (16 + wave * 32),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.88) / 0.12);
   return {
-    x: fromX + facing * (6.4 * (1 - s)),
-    lift: 1.3 * (1 - s),
-    rot: facing * 4 * (1 - s),
+    x: fromX + facing * 6.0,
+    lift: 2.8 * (1 - s),
+    rot: facing * 8 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -344,23 +341,23 @@ export function gapPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.gap));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + facing * s * 1.2, lift: s * 0.5, rot: s * 14 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 4.6, rot: s * -18 * facing, anim: "sit" as const };
   }
-  if (u < 0.78) {
-    const s = (u - 0.14) / 0.64;
-    const dip = Math.abs(Math.sin(s * Math.PI * 1.8));
+  if (u < 0.86) {
+    const s = (u - 0.14) / 0.72;
+    const tuck = Math.abs(Math.sin(s * Math.PI * 1.6));
     return {
-      x: fromX + facing * (1.2 + Math.sin(s * Math.PI) * 0.4),
-      lift: 0.5 - dip * 0.35,
-      rot: facing * (14 + dip * 6),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.6,
+      lift: 4.6 + tuck * 4.2,
+      rot: facing * (-18 - tuck * 16),
       anim: "sit" as const,
     };
   }
-  const s = smoothstep((u - 0.78) / 0.22);
+  const s = smoothstep((u - 0.86) / 0.14);
   return {
-    x: fromX + facing * (1.2 * (1 - s)),
-    lift: 0.5 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    x: fromX,
+    lift: 4.6 * (1 - s),
+    rot: facing * -9 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -370,23 +367,23 @@ export function probePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.probe));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 1.5, rot: s * -5 * facing, anim: "talk" as const };
+    return { x: fromX, lift: s * 3.8, rot: s * 12 * facing, anim: "talk" as const };
   }
-  if (u < 0.86) {
-    const s = (u - 0.1) / 0.76;
-    const flick = Math.sin(s * Math.PI * 7.2);
+  if (u < 0.88) {
+    const s = (u - 0.1) / 0.78;
+    const flick = Math.sin(s * Math.PI * 6.5);
     return {
-      x: fromX + facing * flick * 0.45,
-      lift: 1.5 + Math.abs(flick) * 1.0,
-      rot: facing * (-5 + flick * 12),
+      x: fromX + facing * flick * 1.8,
+      lift: 3.8 + Math.abs(flick) * 5.5,
+      rot: facing * (12 + flick * 22),
       anim: "talk" as const,
     };
   }
-  const s = smoothstep((u - 0.86) / 0.14);
+  const s = smoothstep((u - 0.88) / 0.12);
   return {
     x: fromX,
-    lift: 1.5 * (1 - s),
-    rot: facing * -2 * (1 - s),
+    lift: 3.8 * (1 - s),
+    rot: facing * 6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -394,41 +391,93 @@ export function probePose(t: number, fromX: number, facing: 1 | -1) {
 /** Canyon — pencil-tray rim roam then home. Athletic explorer, not shy inch. */
 export function canyonPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.canyon));
-  if (u < 0.12) {
-    const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.8, rot: -s * 10 * facing, anim: "play" as const };
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 5.0, rot: -s * 14 * facing, anim: "play" as const };
   }
-  if (u < 0.48) {
-    const s = (u - 0.12) / 0.36;
+  if (u < 0.5) {
+    const s = (u - 0.14) / 0.36;
     return {
-      x: fromX + facing * smoothstep(s) * 5.6,
-      lift: 1.8 + Math.sin(s * Math.PI) * 1.0,
-      rot: facing * (-10 + s * 18),
+      x: fromX + facing * smoothstep(s) * 8.5,
+      lift: 5.0 + Math.sin(s * Math.PI) * 4.8,
+      rot: facing * (-14 + s * 28),
       anim: "play" as const,
     };
   }
   if (u < 0.82) {
-    const s = (u - 0.48) / 0.34;
+    const s = (u - 0.5) / 0.32;
     const home = smoothstep(s);
     return {
-      x: fromX + facing * (5.6 * (1 - home)),
-      lift: 1.8 * (1 - home * 0.45) + Math.sin(s * Math.PI) * 0.5,
-      rot: facing * (8 - home * 12),
+      x: fromX + facing * (8.5 * (1 - home)),
+      lift: 5.0 * (1 - home * 0.45) + Math.sin(s * Math.PI) * 2.2,
+      rot: facing * (14 - home * 20),
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX,
-    lift: 1.8 * 0.55 * (1 - s),
-    rot: facing * -3 * (1 - s),
+    lift: 5.0 * 0.55 * (1 - s),
+    rot: facing * -4 * (1 - s),
+    anim: "sit" as const,
+  };
+}
+
+/** Blotter — mid-sentence blotter pause / blot. Press body to the blotter, soft rock. Ethogram blotter_soft. */
+export function blotterPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.blotter));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 4.8, rot: s * 20 * facing, anim: "talk" as const };
+  }
+  if (u < 0.86) {
+    const s = (u - 0.14) / 0.72;
+    const blot = Math.abs(Math.sin(s * Math.PI * 2.8));
+    return {
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.4,
+      lift: 4.8 + blot * 5.2,
+      rot: facing * (20 + blot * 18),
+      anim: "talk" as const,
+    };
+  }
+  const s = smoothstep((u - 0.86) / 0.14);
+  return {
+    x: fromX,
+    lift: 4.8 * (1 - s),
+    rot: facing * 10 * (1 - s),
+    anim: "sit" as const,
+  };
+}
+
+/** Pencil — pencil-tray climb / peek over the rim. Not rabbit periscope. Not Nori loom. Ethogram pencil_soft. */
+export function pencilPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.pencil));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "sit" as const };
+  }
+  if (u < 0.88) {
+    const s = (u - 0.12) / 0.76;
+    const sway = Math.sin(s * Math.PI * 3.6);
+    return {
+      x: fromX + facing * (Math.abs(sway) * 8.5 + s * 2.2),
+      lift: 2.8 + Math.abs(sway) * 7.2,
+      rot: facing * (16 + sway * 32),
+      anim: "play" as const,
+    };
+  }
+  const s = smoothstep((u - 0.88) / 0.12);
+  return {
+    x: fromX + facing * 6.0,
+    lift: 2.8 * (1 - s),
+    rot: facing * 8 * (1 - s),
     anim: "sit" as const,
   };
 }
 
 export function stepTrick(trick: CornSnakeTrick, dt: number, flags?: TrickFlags): CornSnakeTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "scribble" && trick.kind !== "canyon") {
+  if (shouldAbort(flags) && trick.kind !== "scribble" && trick.kind !== "canyon" && trick.kind !== "pencil") {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: CornSnakeTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -453,26 +502,39 @@ export function stepTrick(trick: CornSnakeTrick, dt: number, flags?: TrickFlags)
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const from = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "scribble") {
-    const pose = scribblePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = scribblePose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "gap") {
-    const pose = gapPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = gapPose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "probe") {
-    const pose = probePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = probePose(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "canyon") {
+    const pose = canyonPose(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "blotter") {
+    const pose = blotterPose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = canyonPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = pencilPose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
