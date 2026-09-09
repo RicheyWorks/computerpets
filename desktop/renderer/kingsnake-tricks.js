@@ -1,12 +1,20 @@
-/** Bandit ground tricks while idle. House California kingsnake — stripe / audit / verdict / plumb / raid personality (banded ruler-drawer law; bold desk inspector). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web `kingsnake-tricks.ts`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play INSPECT unchanged — never names `inspect`. Nori owns orb/taste/unroll; Sol owns flick; Ember owns settle; Saffron owns scribble/comma. No cry inventing — thank-yous are silent desk motion only. */
+/** Bandit ground tricks while idle — ultra-polish pass. House California kingsnake — stripe / audit / verdict / plumb / raid / band / drawer personality (banded ruler-drawer law; bold desk inspector). Stripe band-ripple across the body; audit deliberate desk survey; verdict stacked ruling hold; plumb straighten like a measuring stick; raid bold theatrical sweep; band show the bold black-and-white band pattern stretch; drawer ruler-drawer peek. Window-play INSPECT unchanged — never names `inspect`. Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; hedgehog owns curl/ball; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun/press. Guest slug Bandit / key kingsnake — accept "kingsnake" and "bandit". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via kingsnake.wav. Thank-yous tribute / docket / seal. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `kingsnake-tricks.ts`. True house-kingsnake desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids inspect/write/orb/nook/taste/inch/unroll/bun/ball/coil/curl/bask/loaf/potato/tuck/hide/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/blotter/pencil/periscope/strike/pounce/sniff name collisions. Bird ultra (Soot→Ember) + Miso→Saffron done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Jade / green_tree_python. No cry inventing beyond house kingsnake.wav prefer. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "kingsnake";
-  const TRICKS = ["stripe", "audit", "verdict", "plumb", "raid"];
+  const TRICKS = ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"];
   const HAPPY = ["tribute", "docket", "seal"];
-  const HAPPY_DUR = { tribute: 1.16, docket: 1.2, seal: 1.28 };
-  const VERDICT_HOLD = 10.2;
-  const RELEASE_S = 0.58;
-  const DUR = { stripe: 1.38, audit: 1.34, verdict: VERDICT_HOLD + RELEASE_S, plumb: 1.42, raid: 1.52 };
+  const HAPPY_DUR = { tribute: 1.55, docket: 1.62, seal: 1.58 };
+  const VERDICT_HOLD = 12.8;
+  const RELEASE_S = 0.88;
+  const DUR = {
+    stripe: 1.88,
+    audit: 1.82,
+    verdict: VERDICT_HOLD + RELEASE_S,
+    plumb: 1.76,
+    raid: 1.92,
+    band: 2.02,
+    drawer: 2.1,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,38 +44,29 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "verdict") return 42 + roll * 24;
-    if (kind === "audit") return 15 + roll * 10;
-    if (kind === "plumb") return 14 + roll * 10;
-    return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+    if (kind === "verdict") return 38 + roll * 24;
+    if (kind === "audit" || kind === "drawer") return 11 + roll * 8;
+    if (kind === "stripe" || kind === "raid" || kind === "band") return 10 + roll * 8;
+    if (kind === "plumb") return 12 + roll * 9;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "verdict";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "verdict") {
-      if (roll < 0.28) return "stripe";
-      if (roll < 0.5) return "audit";
-      if (roll < 0.72) return "plumb";
-      return "raid";
+    const pool = TRICKS.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : TRICKS.slice();
+    const weights = list.map((k) =>
+      k === "verdict" ? 0.55 : k === "audit" || k === "drawer" || k === "plumb" ? 1.15 : 1
+    );
+    let total = 0;
+    for (let i = 0; i < weights.length; i++) total += weights[i];
+    let r = roll * total;
+    for (let i = 0; i < list.length; i++) {
+      r -= weights[i];
+      if (r <= 0) return list[i];
     }
-    if (lastKind === "audit") {
-      if (roll < 0.3) return "verdict";
-      if (roll < 0.52) return "stripe";
-      if (roll < 0.74) return "plumb";
-      return "raid";
-    }
-    if (lastKind === "plumb") {
-      if (roll < 0.24) return "verdict";
-      if (roll < 0.46) return "stripe";
-      if (roll < 0.68) return "audit";
-      return "raid";
-    }
-    if (roll < 0.22) return "verdict";
-    if (roll < 0.42) return "stripe";
-    if (roll < 0.6) return "audit";
-    if (roll < 0.8) return "plumb";
-    return "raid";
+    return list[list.length - 1] || "verdict";
   }
 
   function happyCanStart(state) {
@@ -130,50 +129,50 @@
   }
 
   function tributePose(t) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tribute));
-  if (u < 0.14) {
-    const s = u / 0.14;
-    return { lift: s * 1.5, rot: s * 7, dx: 0, anim: "sit" };
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tribute));
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 4.2, rot: s * 16, dx: 0, anim: "sit" };
+    }
+    if (u < 0.8) {
+      return {
+        lift: 4.2 + Math.abs(Math.sin(t * 4.6)) * 3.4,
+        rot: 16 + Math.sin(t * 3.4) * 14,
+        dx: Math.sin(t * 2.1) * 1.1,
+        anim: "sit",
+      };
+    }
+    const s = (u - 0.8) / 0.2;
+    return { lift: 4.2 * (1 - s), rot: 16 * (1 - s), dx: 0, anim: "idle" };
   }
-  if (u < 0.8) {
+
+  function docketPose(t) {
+    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.docket));
+    if (u < 0.12) {
+      const s = u / 0.12;
+      return { lift: s * 4.6, rot: s * -18, dx: 0, anim: "talk" };
+    }
+    if (u < 0.78) {
+      const tick = Math.sin(t * 6.4);
+      return {
+        lift: 4.6 + Math.abs(tick) * 3.2,
+        rot: -18 + tick * 22,
+        dx: tick * 1.2,
+        anim: "talk",
+      };
+    }
+    const s = (u - 0.78) / 0.22;
+    return { lift: 4.6 * (1 - s), rot: -18 * (1 - s), dx: 0, anim: "sit" };
+  }
+
+  function sealPose(t) {
     return {
-      lift: 1.5 + Math.abs(Math.sin(t * 4.6)) * 0.9,
-      rot: 7 + Math.sin(t * 3.4) * 4.5,
-      dx: Math.sin(t * 2.1) * 0.3,
+      lift: Math.abs(Math.sin(t * 2.2)) * 3.6 + 2.0,
+      rot: -12 + Math.sin(t * 1.9) * 16,
+      dx: Math.sin(t * 1.55) * 1.3,
       anim: "sit",
     };
   }
-  const s = (u - 0.8) / 0.2;
-  return { lift: 1.5 * (1 - s), rot: 7 * (1 - s), dx: 0, anim: "idle" };
-}
-
-  function docketPose(t) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.docket));
-  if (u < 0.12) {
-    const s = u / 0.12;
-    return { lift: s * 1.7, rot: s * -8, dx: 0, anim: "talk" };
-  }
-  if (u < 0.78) {
-    const tick = Math.sin(t * 6.4);
-    return {
-      lift: 1.7 + Math.abs(tick) * 0.65,
-      rot: -8 + tick * 10,
-      dx: tick * 0.35,
-      anim: "talk",
-    };
-  }
-  const s = (u - 0.78) / 0.22;
-  return { lift: 1.7 * (1 - s), rot: -8 * (1 - s), dx: 0, anim: "sit" };
-}
-
-  function sealPose(t) {
-  return {
-    lift: Math.abs(Math.sin(t * 2.2)) * 1.05 + 0.4,
-    rot: -5 + Math.sin(t * 1.9) * 5.5,
-    dx: Math.sin(t * 1.55) * 0.4,
-    anim: "sit",
-  };
-}
 
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
@@ -202,7 +201,7 @@
     return next;
   }
 
-  function sleepHoldFrame(_key, _frameCount) {
+  function sleepHoldFrame() {
     return null;
   }
 
@@ -210,15 +209,13 @@
     const anim =
       kind === "verdict"
         ? "sit"
-        : kind === "audit"
+        : kind === "audit" || kind === "drawer"
           ? "talk"
           : kind === "plumb"
             ? "sit"
-            : kind === "stripe"
+            : kind === "stripe" || kind === "raid" || kind === "band"
               ? "play"
-              : kind === "raid"
-                ? "play"
-                : "sit";
+              : "sit";
     return {
       kind: kind,
       phase: kind === "verdict" ? "hold" : "go",
@@ -238,128 +235,178 @@
   }
 
   function verdictPose(t) {
-  return {
-    lift: 0.18 + Math.sin(t * 1.05) * 0.26,
-    rot: -10 + Math.sin(t * 0.88) * 2.0 + Math.sin(t * 2.2) * 1.0,
-  };
-}
+    return {
+      lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+      rot: -18 + Math.sin(t * 2.4) * 22 + Math.sin(t * 4.6) * 12,
+    };
+  }
 
   function releasePose(t) {
-  const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.24 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -10 * (1 - u) };
-}
+    const u = Math.max(0, Math.min(1, t / RELEASE_S));
+    return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: -18 * (1 - u) };
+  }
 
   function stripePose(t, fromX, facing) {
-  const u = Math.max(0, Math.min(1, t / DUR.stripe));
-  if (u < 0.12) {
-    const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.2, rot: s * 8 * facing, anim: "play" };
-  }
-  if (u < 0.88) {
-    const s = (u - 0.12) / 0.76;
-    const band = Math.sin(s * Math.PI * 4.2);
+    const u = Math.max(0, Math.min(1, t / DUR.stripe));
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "play" };
+    }
+    if (u < 0.88) {
+      const s = (u - 0.12) / 0.76;
+      const band = Math.sin(s * Math.PI * 4.2);
+      return {
+        x: fromX + facing * (s * 6.5 + band * 2.8),
+        lift: 2.8 + Math.abs(band) * 7.2,
+        rot: facing * (16 + band * 32),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
     return {
-      x: fromX + facing * (s * 3.2 + band * 1.1),
-      lift: 1.2 + Math.abs(band) * 1.15,
-      rot: facing * (8 + band * 16),
-      anim: "play",
-    };
-  }
-  const s = smoothstep((u - 0.88) / 0.12);
-  return {
-    x: fromX + facing * (3.2 * (1 - s)),
-    lift: 1.2 * (1 - s),
-    rot: facing * 3 * (1 - s),
-    anim: "sit",
-  };
-}
-
-  function auditPose(t, fromX, facing) {
-  const u = Math.max(0, Math.min(1, t / DUR.audit));
-  if (u < 0.12) {
-    const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 0.8, lift: s * 1.6, rot: s * -6 * facing, anim: "talk" };
-  }
-  if (u < 0.84) {
-    const s = (u - 0.12) / 0.72;
-    const sweep = Math.sin(s * Math.PI * 2.6);
-    return {
-      x: fromX + facing * (0.8 + sweep * 1.4),
-      lift: 1.6 + Math.abs(Math.sin(s * Math.PI * 3.2)) * 0.55,
-      rot: facing * (-6 + sweep * 18),
-      anim: "talk",
-    };
-  }
-  const s = smoothstep((u - 0.84) / 0.16);
-  return {
-    x: fromX + facing * (0.8 * (1 - s)),
-    lift: 1.6 * (1 - s),
-    rot: facing * -2 * (1 - s),
-    anim: "sit",
-  };
-}
-
-  function plumbPose(t, fromX, facing) {
-  const u = Math.max(0, Math.min(1, t / DUR.plumb));
-  if (u < 0.14) {
-    const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 0.6, rot: s * 12 * facing, anim: "sit" };
-  }
-  if (u < 0.72) {
-    const s = (u - 0.14) / 0.58;
-    return {
-      x: fromX + facing * smoothstep(s) * 7.2,
-      lift: 0.6 - s * 0.25,
-      rot: facing * (12 - s * 20),
+      x: fromX + facing * (6.5 * (1 - s)),
+      lift: 2.8 * (1 - s),
+      rot: facing * 8 * (1 - s),
       anim: "sit",
     };
   }
-  const s = smoothstep((u - 0.72) / 0.28);
-  return {
-    x: fromX + facing * (7.2 * (1 - s)),
-    lift: 0.35 * (1 - s),
-    rot: facing * (-8 * (1 - s)),
-    anim: "sit",
-  };
-}
+
+  function auditPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.audit));
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX + facing * s * 1.4, lift: s * 4.6, rot: s * -18 * facing, anim: "talk" };
+    }
+    if (u < 0.84) {
+      const s = (u - 0.12) / 0.72;
+      const sweep = Math.sin(s * Math.PI * 2.6);
+      return {
+        x: fromX + facing * (1.4 + sweep * 3.2),
+        lift: 4.6 + Math.abs(Math.sin(s * Math.PI * 3.2)) * 4.2,
+        rot: facing * (-18 + sweep * 28),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.84) / 0.16);
+    return {
+      x: fromX + facing * (1.4 * (1 - s)),
+      lift: 4.6 * (1 - s),
+      rot: facing * -9 * (1 - s),
+      anim: "sit",
+    };
+  }
+
+  function plumbPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.plumb));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 3.8, rot: s * 22 * facing, anim: "sit" };
+    }
+    if (u < 0.72) {
+      const s = (u - 0.14) / 0.58;
+      return {
+        x: fromX + facing * smoothstep(s) * 10.5,
+        lift: 3.8 - s * 1.2 + Math.abs(Math.sin(s * Math.PI)) * 2.4,
+        rot: facing * (22 - s * 34),
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.72) / 0.28);
+    return {
+      x: fromX + facing * (10.5 * (1 - s)),
+      lift: 2.6 * (1 - s),
+      rot: facing * (-12 * (1 - s)),
+      anim: "sit",
+    };
+  }
 
   function raidPose(t, fromX, facing) {
-  const u = Math.max(0, Math.min(1, t / DUR.raid));
-  if (u < 0.1) {
-    const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 2.0, rot: -s * 12 * facing, anim: "play" };
-  }
-  if (u < 0.46) {
-    const s = (u - 0.1) / 0.36;
+    const u = Math.max(0, Math.min(1, t / DUR.raid));
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX, lift: s * 5.0, rot: -s * 18 * facing, anim: "play" };
+    }
+    if (u < 0.46) {
+      const s = (u - 0.1) / 0.36;
+      return {
+        x: fromX + facing * smoothstep(s) * 9.5,
+        lift: 5.0 + Math.sin(s * Math.PI) * 4.8,
+        rot: facing * (-18 + s * 32),
+        anim: "play",
+      };
+    }
+    if (u < 0.8) {
+      const s = (u - 0.46) / 0.34;
+      const home = smoothstep(s);
+      return {
+        x: fromX + facing * (9.5 * (1 - home)),
+        lift: 5.0 * (1 - home * 0.45) + Math.sin(s * Math.PI) * 2.2,
+        rot: facing * (14 - home * 22),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
     return {
-      x: fromX + facing * smoothstep(s) * 7.0,
-      lift: 2.0 + Math.sin(s * Math.PI) * 0.9,
-      rot: facing * (-12 + s * 22),
-      anim: "play",
+      x: fromX,
+      lift: 5.0 * 0.55 * (1 - s),
+      rot: facing * -6 * (1 - s),
+      anim: "sit",
     };
   }
-  if (u < 0.8) {
-    const s = (u - 0.46) / 0.34;
-    const home = smoothstep(s);
+
+  function bandPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.band));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 4.8, rot: s * 20 * facing, anim: "play" };
+    }
+    if (u < 0.86) {
+      const s = (u - 0.14) / 0.72;
+      const band = Math.abs(Math.sin(s * Math.PI * 3.4));
+      return {
+        x: fromX + facing * Math.sin(s * Math.PI) * 2.4,
+        lift: 4.8 + band * 5.6,
+        rot: facing * (20 + band * 22),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.86) / 0.14);
     return {
-      x: fromX + facing * (7.0 * (1 - home)),
-      lift: 2.0 * (1 - home * 0.5) + Math.sin(s * Math.PI) * 0.45,
-      rot: facing * (10 - home * 14),
-      anim: "play",
+      x: fromX,
+      lift: 4.8 * (1 - s),
+      rot: facing * 10 * (1 - s),
+      anim: "sit",
     };
   }
-  const s = smoothstep((u - 0.8) / 0.2);
-  return {
-    x: fromX,
-    lift: 2.0 * 0.5 * (1 - s),
-    rot: facing * -4 * (1 - s),
-    anim: "sit",
-  };
-}
+
+  function drawerPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.drawer));
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "talk" };
+    }
+    if (u < 0.88) {
+      const s = (u - 0.12) / 0.76;
+      const sway = Math.sin(s * Math.PI * 3.6);
+      return {
+        x: fromX + facing * (Math.abs(sway) * 8.5 + s * 2.2),
+        lift: 2.8 + Math.abs(sway) * 7.2,
+        rot: facing * (16 + sway * 32),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.88) / 0.12);
+    return {
+      x: fromX + facing * 6.0,
+      lift: 2.8 * (1 - s),
+      rot: facing * 8 * (1 - s),
+      anim: "sit",
+    };
+  }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "stripe" && trick.kind !== "raid") {
+    if (shouldAbort(flags) && trick.kind !== "stripe" && trick.kind !== "raid" && trick.kind !== "band") {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
@@ -384,31 +431,18 @@
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "stripe") {
-      const pose = stripePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "audit") {
-      const pose = auditPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "plumb") {
-      const pose = plumbPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = raidPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
+    const from = trick.fromX != null ? trick.fromX : trick.x;
+    let pose;
+    if (next.kind === "stripe") pose = stripePose(next.t, from, trick.facing);
+    else if (next.kind === "audit") pose = auditPose(next.t, from, trick.facing);
+    else if (next.kind === "plumb") pose = plumbPose(next.t, from, trick.facing);
+    else if (next.kind === "raid") pose = raidPose(next.t, from, trick.facing);
+    else if (next.kind === "band") pose = bandPose(next.t, from, trick.facing);
+    else pose = drawerPose(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
     if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     return next;
   }
@@ -433,6 +467,8 @@
     auditPose,
     plumbPose,
     raidPose,
+    bandPose,
+    drawerPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -447,4 +483,4 @@
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetKingsnakeTricks = api;
-})(typeof window !== "undefined" ? window : globalThis);
+})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
