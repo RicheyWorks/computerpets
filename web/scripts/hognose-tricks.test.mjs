@@ -66,7 +66,7 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 
 test("Bluff tricks start only on idle ground", () => {
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
-  assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
+  assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
   assert.deepEqual([...T.TRICKS], ["hood", "feign", "shovel", "gape", "encore"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -152,7 +152,7 @@ test("hood/feign/shovel/gape/encore are house-hognose-true, not copies of prior 
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
-  assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
+  assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
   assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
@@ -227,7 +227,7 @@ test("ground registry keeps prior guests gated; Bluff selectable; prior guests s
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
-  assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
+  assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.deepEqual([...T.TRICKS], ["hood", "feign", "shovel", "gape", "encore"]);
   assert.equal(T.wantsThankYou("hognose"), true);
@@ -338,7 +338,7 @@ test("ground registry keeps prior guests gated; Bluff selectable; prior guests s
   assert.equal(OverlayGround.sleepHoldFrame("hognose", 4), null);
   assert.deepEqual([...OverlayBallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...OverlayCornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
-  assert.deepEqual([...OverlayKingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
+  assert.deepEqual([...OverlayKingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...OverlayGreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
   assert.deepEqual([...Overlay.TRICKS], ["hood", "feign", "shovel", "gape", "encore"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
