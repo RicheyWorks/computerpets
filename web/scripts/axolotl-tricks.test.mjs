@@ -506,7 +506,7 @@ test("ultra-polish: Bloom gill/amble/sprout/glop lifts are Rui-visible (not micr
   assert.equal(T.HAPPY_DUR.wink, Overlay.HAPPY_DUR.wink);
 });
 
-test("notes: Bloom idle-life ultra done; Sol / iguana ultra next-or-done; following house-order ultra guest is Vesper / dragon (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
+test("notes: Bloom idle-life ultra done; Sol / iguana + Vesper / dragon ultra next-or-done; following house-order ultra guest is Nori / ball_python (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.equal(T.TRICK_KEY, "axolotl");
   assert.equal(T.wantsThankYou("bloom"), true);
