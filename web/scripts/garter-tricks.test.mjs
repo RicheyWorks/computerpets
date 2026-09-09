@@ -71,7 +71,7 @@ test("Sash tricks start only on idle ground", () => {
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
-  assert.deepEqual([...T.TRICKS], ["seam", "rounds", "moss", "fork", "lap"]);
+  assert.deepEqual([...T.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -116,7 +116,7 @@ test("Sash tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("encore"), false);
 });
 
-test("seam/rounds/moss/fork/lap are house-garter-true, not copies of prior guests", () => {
+test("seam/rounds/moss/fork/lap/ribbon/creek are house-garter-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const seam = T.beginTrick("seam", 80, 1);
   assert.equal(seam.anim, "sit");
@@ -124,7 +124,7 @@ test("seam/rounds/moss/fork/lap are house-garter-true, not copies of prior guest
   const held = T.stepTrick(seam, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(seam, T.SEAM_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -147,8 +147,23 @@ test("seam/rounds/moss/fork/lap are house-garter-true, not copies of prior guest
   assert.equal(lap.anim, "play");
   const lapMid = T.stepTrick(lap, 0.5, ground);
   assert.ok(Math.abs(lapMid.lift) > 0.3 || Math.abs(lapMid.rot) > 1 || Math.abs(lapMid.x - 80) > 0.5);
-  const lapDone = T.stepTrick(lap, 1.6, ground);
+  const lapDone = T.stepTrick(lap, T.DUR.lap + 0.1, ground);
   assert.equal(lapDone.phase, "done");
+  const ribbon = T.beginTrick("ribbon", 80, 1);
+  assert.equal(ribbon.anim, "play");
+  const ribbonMid = T.stepTrick(ribbon, T.DUR.ribbon * 0.45, ground);
+  assert.ok(Math.abs(ribbonMid.lift) > 2 || Math.abs(ribbonMid.rot) > 10 || Math.abs(ribbonMid.x - 80) > 1);
+  const creek = T.beginTrick("creek", 80, 1);
+  assert.equal(creek.anim, "play");
+  const creekMid = T.stepTrick(creek, T.DUR.creek * 0.4, ground);
+  assert.ok(creekMid.lift > 2 || Math.abs(creekMid.rot) > 4 || Math.abs(creekMid.x - 80) > 1);
+  assert.equal(T.TRICKS.includes("patrol"), false);
+  assert.equal(T.TRICKS.includes("dart"), false);
+  assert.equal(T.TRICKS.includes("stripe"), false);
+  assert.equal(T.TRICKS.includes("flash"), false);
+  assert.equal(T.TRICKS.includes("dew"), false);
+  assert.equal(T.TRICKS.includes("quiver"), false);
+  assert.equal(T.TRICKS.includes("upright"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Relay, Fuse, Earth]) {
@@ -157,6 +172,8 @@ test("seam/rounds/moss/fork/lap are house-garter-true, not copies of prior guest
     assert.equal(mod.TRICKS.includes("moss"), false);
     assert.equal(mod.TRICKS.includes("fork"), false);
     assert.equal(mod.TRICKS.includes("lap"), false);
+    assert.equal(mod.TRICKS.includes("ribbon"), false);
+    assert.equal(mod.TRICKS.includes("creek"), false);
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
@@ -164,7 +181,7 @@ test("seam/rounds/moss/fork/lap are house-garter-true, not copies of prior guest
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("patrol"), false);
   assert.equal(T.TRICKS.includes("flip"), false);
   assert.equal(T.TRICKS.includes("write"), false);
@@ -245,8 +262,8 @@ test("ground registry keeps prior guests gated; Sash selectable; prior guests st
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
-  assert.deepEqual([...T.TRICKS], ["seam", "rounds", "moss", "fork", "lap"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
+  assert.deepEqual([...T.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.equal(T.wantsThankYou("garter"), true);
   assert.equal(T.wantsThankYou("sash"), true);
   assert.equal(BallPython.wantsThankYou("nori"), true);
@@ -365,7 +382,7 @@ test("ground registry keeps prior guests gated; Sash selectable; prior guests st
   assert.deepEqual([...OverlayKingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...OverlayGreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...OverlayHognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
-  assert.deepEqual([...Overlay.TRICKS], ["seam", "rounds", "moss", "fork", "lap"]);
+  assert.deepEqual([...Overlay.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
   assert.equal(Overlay.TRICKS.includes("write"), false);
   assert.equal(Overlay.TRICKS.includes("flip"), false);
@@ -376,7 +393,29 @@ test("ground registry keeps prior guests gated; Sash selectable; prior guests st
   assert.equal(Overlay.TRICKS.includes("hood"), false);
 });
 
-test("notes: Sash idle-life done; next house-order guest still lacking tricks is Lula / boa", () => {
+test("ultra-polish: Sash seam/rounds/ribbon/creek lifts are Rui-visible (not micro idle-gen)", () => {
+  const sm = T.beginTrick("seam", 80, 1);
+  const mid = T.stepTrick(sm, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `seam mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `seam mid lift ${mid.lift}`);
+  const rd = T.beginTrick("rounds", 80, 1);
+  const r2 = T.stepTrick(rd, T.DUR.rounds * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift > 0.5 || Math.abs(r2.rot) > 4 || Math.abs(r2.x - 80) > 1, `rounds mid ${r2.lift}/${r2.rot}/${r2.x}`);
+  const rb = T.beginTrick("ribbon", 80, 1);
+  const rb2 = T.stepTrick(rb, T.DUR.ribbon * 0.45, { cmd: "idle" });
+  assert.ok(Math.abs(rb2.lift) > 2 || Math.abs(rb2.rot) > 10 || Math.abs(rb2.x - 80) > 1, `ribbon mid ${rb2.lift}/${rb2.rot}/${rb2.x}`);
+  const ck = T.beginTrick("creek", 80, 1);
+  const ck2 = T.stepTrick(ck, T.DUR.creek * 0.4, { cmd: "idle" });
+  assert.ok(ck2.lift > 2 || Math.abs(ck2.rot) > 4 || Math.abs(ck2.x - 80) > 1, `creek mid ${ck2.lift}/${ck2.rot}/${ck2.x}`);
+  assert.ok(Overlay.ribbonPose && Overlay.creekPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.ribbon, Overlay.DUR.ribbon);
+  assert.equal(T.DUR.creek, Overlay.DUR.creek);
+  assert.equal(T.SEAM_HOLD, Overlay.SEAM_HOLD);
+  assert.ok(T.nextTrickWait(true, 0, "seam") > T.nextTrickWait(true, 0, "rounds"));
+});
+
+test("notes: Sash idle-life ultra done; next house-order ultra guest is Lula / boa (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "garter");
   assert.equal(T.wantsThankYou("sash"), true);
   assert.equal(OverlayGround.tricksFor("hognose"), OverlayHognose);
@@ -401,7 +440,7 @@ test("notes: Sash idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.tricksFor("nori"), OverlayBallPython);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), true);
   assert.equal(OverlayGround.wantsThankYou("nori"), true);
-  assert.equal(OverlayGround.tricksFor("boa"), null);
+  assert.equal(OverlayGround.tricksFor("boa") == null, true);
   assert.equal(OverlayGround.wantsThankYou("boa"), false);
-  assert.equal(OverlayGround.tricksFor("lula"), null);
+  assert.equal(OverlayGround.tricksFor("lula") == null, true);
 });
