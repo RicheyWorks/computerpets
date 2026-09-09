@@ -149,7 +149,7 @@ test("bracelet/sway/jewel/heat/bough are house-green-tree-python-true, not copie
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
-  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.equal(T.TRICKS.includes("saddle"), false);
   assert.equal(T.TRICKS.includes("write"), false);

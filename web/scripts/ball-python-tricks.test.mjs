@@ -177,7 +177,7 @@ test("orb/nook/taste/inch/unroll are house-ball-python-true, not Rui cat dog rab
   assert.equal(Dragon.TRICKS.includes("taste"), false);
   assert.equal(Dragon.TRICKS.includes("inch"), false);
   assert.equal(Dragon.TRICKS.includes("unroll"), false);
-  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.equal(Phoenix.TRICKS.includes("orb"), false);
   assert.equal(Phoenix.TRICKS.includes("nook"), false);
   assert.equal(Phoenix.TRICKS.includes("taste"), false);

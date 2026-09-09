@@ -500,7 +500,7 @@ test("ultra-polish: Sol sun/dewlap/sneeze/lash lifts are Rui-visible (not micro 
   assert.equal(T.HAPPY_DUR.swell, Overlay.HAPPY_DUR.swell);
 });
 
-test("notes: Sol idle-life ultra done; next house-order ultra guest is Vesper / dragon (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
+test("notes: Sol idle-life ultra done; Vesper / dragon ultra next-or-done; following house-order ultra guest is Nori / ball_python (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["sun", "dewlap", "nod", "press", "flick", "sneeze", "lash"]);
   assert.equal(T.TRICK_KEY, "iguana");
   assert.equal(T.wantsThankYou("sol"), true);
