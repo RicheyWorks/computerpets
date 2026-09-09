@@ -57,7 +57,7 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 
 test("Nori tricks start only on idle ground", () => {
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
-  assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
+  assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -103,7 +103,7 @@ test("Nori tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("groom"), false);
 });
 
-test("orb/nook/taste/inch/unroll are house-ball-python-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl toucan iguana dragon/Vesper phoenix/Ember or electrical-dragon clones", () => {
+test("orb/nook/taste/inch/unroll/loom/weave are house-ball-python-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl toucan iguana dragon/Vesper phoenix/Ember or electrical-dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const orb = T.beginTrick("orb", 80, 1);
   assert.equal(orb.anim, "sit");
@@ -111,7 +111,7 @@ test("orb/nook/taste/inch/unroll are house-ball-python-true, not Rui cat dog rab
   const held = T.stepTrick(orb, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(orb, T.ORB_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -134,8 +134,21 @@ test("orb/nook/taste/inch/unroll are house-ball-python-true, not Rui cat dog rab
   assert.equal(unroll.anim, "play");
   const unrollMid = T.stepTrick(unroll, 0.5, ground);
   assert.ok(Math.abs(unrollMid.lift) > 0.3 || Math.abs(unrollMid.rot) > 1);
-  const unrollDone = T.stepTrick(unroll, 1.4, ground);
+  const unrollDone = T.stepTrick(unroll, T.DUR.unroll + 0.1, ground);
   assert.equal(unrollDone.phase, "done");
+  const loom = T.beginTrick("loom", 80, 1);
+  assert.equal(loom.anim, "talk");
+  const loomMid = T.stepTrick(loom, T.DUR.loom * 0.4, ground);
+  assert.ok(loomMid.lift > 4 || Math.abs(loomMid.rot) > 6);
+  const weave = T.beginTrick("weave", 80, 1);
+  assert.equal(weave.anim, "play");
+  const weaveMid = T.stepTrick(weave, T.DUR.weave * 0.45, ground);
+  assert.ok(Math.abs(weaveMid.lift) > 2 || Math.abs(weaveMid.rot) > 4 || Math.abs(weaveMid.x - 80) > 2);
+  assert.equal(T.TRICKS.includes("bun"), false);
+  assert.equal(T.TRICKS.includes("ball"), false);
+  assert.equal(T.TRICKS.includes("coil"), false);
+  assert.equal(T.TRICKS.includes("curl"), false);
+  assert.equal(T.TRICKS.includes("periscope"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("orb"), false);
@@ -368,7 +381,7 @@ test("ground registry keeps prior guests gated; Nori selectable; no bun/ball/coi
   assert.deepEqual([...Toucan.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.deepEqual([...Iguana.TRICKS], ["sun", "dewlap", "nod", "press", "flick", "sneeze", "lash"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
-  assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
+  assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.equal(T.TRICKS.includes("flatten"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
   assert.equal(T.TRICKS.includes("bask"), false);
@@ -509,7 +522,31 @@ test("ground registry keeps prior guests gated; Nori selectable; no bun/ball/coi
   assert.equal(OverlayGround.sleepHoldFrame("ball_python", 4), null);
 });
 
-test("notes: Nori idle-life done; next house-order guest still lacking tricks is Saffron / corn_snake", () => {
+
+test("ultra-polish: Nori orb/nook/loom/weave lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("orb", 80, 1);
+  const mid = T.stepTrick(ex, 0.55, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `orb mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 2, `orb mid lift ${mid.lift}`);
+  const nk = T.beginTrick("nook", 80, 1);
+  const n2 = T.stepTrick(nk, T.DUR.nook * 0.4, { cmd: "idle" });
+  assert.ok(n2.lift > 4 || Math.abs(n2.rot) > 4, `nook mid lift/rot ${n2.lift}/${n2.rot}`);
+  const lm = T.beginTrick("loom", 80, 1);
+  const l2 = T.stepTrick(lm, T.DUR.loom * 0.4, { cmd: "idle" });
+  assert.ok(l2.lift > 4 || Math.abs(l2.rot) > 6, `loom mid lift/rot ${l2.lift}/${l2.rot}`);
+  const wv = T.beginTrick("weave", 80, 1);
+  const w2 = T.stepTrick(wv, T.DUR.weave * 0.45, { cmd: "idle" });
+  assert.ok(Math.abs(w2.lift) > 2 || Math.abs(w2.rot) > 4 || Math.abs(w2.x - 80) > 2, `weave mid ${w2.lift}/${w2.rot}/${w2.x}`);
+  assert.ok(Overlay.loomPose && Overlay.weavePose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.loom, Overlay.DUR.loom);
+  assert.equal(T.DUR.weave, Overlay.DUR.weave);
+  assert.equal(T.ORB_HOLD, Overlay.ORB_HOLD);
+  assert.equal(T.HAPPY_DUR.savor, Overlay.HAPPY_DUR.savor);
+});
+
+test("notes: Nori idle-life ultra done; next house-order ultra guest is Saffron / corn_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.equal(T.TRICK_KEY, "ball_python");
   assert.equal(T.wantsThankYou("nori"), true);
   assert.equal(OverlayGround.tricksFor("ball_python"), Overlay);
@@ -520,7 +557,7 @@ test("notes: Nori idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.tricksFor("ember"), OverlayPhoenix);
   assert.equal(OverlayGround.wantsThankYou("phoenix"), true);
   assert.equal(OverlayGround.wantsThankYou("ember"), true);
-  assert.equal(OverlayGround.tricksFor("corn_snake"), null);
+  assert.equal(OverlayGround.tricksFor("corn_snake") == null, true);
   assert.equal(OverlayGround.wantsThankYou("corn_snake"), false);
-  assert.equal(OverlayGround.tricksFor("saffron"), null);
+  assert.equal(OverlayGround.tricksFor("saffron") == null, true);
 });

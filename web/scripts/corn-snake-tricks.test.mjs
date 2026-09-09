@@ -59,7 +59,7 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 
 
 test("Saffron tricks start only on idle ground", () => {
-  assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
+  assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -134,7 +134,7 @@ test("scribble/gap/comma/probe/canyon are house-corn-snake-true, not copies of p
     assert.equal(mod.TRICKS.includes("probe"), false);
     assert.equal(mod.TRICKS.includes("canyon"), false);
   }
-  assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
+  assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.equal(T.TRICKS.includes("write"), false);
@@ -201,7 +201,7 @@ test("ground registry keeps prior guests gated; Saffron selectable; prior guests
   assert.equal(BallPython.TRICK_KEY, "ball_python");
   assert.equal(T.TRICK_KEY, "corn_snake");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
+  assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
   assert.equal(T.wantsThankYou("corn_snake"), true);
@@ -295,7 +295,7 @@ test("ground registry keeps prior guests gated; Saffron selectable; prior guests
   assert.equal(OverlayGround.sleepHoldFrame("red_panda", 4), 1);
   assert.equal(OverlayGround.sleepHoldFrame("ball_python", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("corn_snake", 4), null);
-  assert.deepEqual([...OverlayBallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
+  assert.deepEqual([...OverlayBallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...Overlay.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
   assert.equal(Overlay.TRICKS.includes("write"), false);
