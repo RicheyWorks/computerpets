@@ -60,8 +60,8 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 
 test("Saffron tricks start only on idle ground", () => {
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
-  assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
+  assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -92,7 +92,7 @@ test("Saffron tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("ball"), false);
 });
 
-test("scribble/gap/comma/probe/canyon are house-corn-snake-true, not copies of prior guests", () => {
+test("scribble/gap/comma/probe/canyon/blotter/pencil are house-corn-snake-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const comma = T.beginTrick("comma", 80, 1);
   assert.equal(comma.anim, "sit");
@@ -100,7 +100,7 @@ test("scribble/gap/comma/probe/canyon are house-corn-snake-true, not copies of p
   const held = T.stepTrick(comma, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(comma, T.COMMA_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -123,8 +123,21 @@ test("scribble/gap/comma/probe/canyon are house-corn-snake-true, not copies of p
   assert.equal(canyon.anim, "play");
   const canyonMid = T.stepTrick(canyon, 0.4, ground);
   assert.ok(Math.abs(canyonMid.lift) > 0.2 || Math.abs(canyonMid.rot) > 1);
-  const canyonDone = T.stepTrick(canyon, 1.6, ground);
+  const canyonDone = T.stepTrick(canyon, T.DUR.canyon + 0.1, ground);
   assert.equal(canyonDone.phase, "done");
+  const blotter = T.beginTrick("blotter", 80, 1);
+  assert.equal(blotter.anim, "talk");
+  const blotterMid = T.stepTrick(blotter, T.DUR.blotter * 0.4, ground);
+  assert.ok(blotterMid.lift > 4 || Math.abs(blotterMid.rot) > 6);
+  const pencil = T.beginTrick("pencil", 80, 1);
+  assert.equal(pencil.anim, "play");
+  const pencilMid = T.stepTrick(pencil, T.DUR.pencil * 0.45, ground);
+  assert.ok(Math.abs(pencilMid.lift) > 2 || Math.abs(pencilMid.rot) > 4 || Math.abs(pencilMid.x - 80) > 2);
+  assert.equal(T.TRICKS.includes("write"), false);
+  assert.equal(T.TRICKS.includes("orb"), false);
+  assert.equal(T.TRICKS.includes("loom"), false);
+  assert.equal(T.TRICKS.includes("weave"), false);
+  assert.equal(T.TRICKS.includes("periscope"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, Relay, Fuse, Earth]) {
@@ -136,7 +149,7 @@ test("scribble/gap/comma/probe/canyon are house-corn-snake-true, not copies of p
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("write"), false);
   assert.equal(Parrot.TRICKS.includes("flash"), true);
 });
@@ -202,8 +215,8 @@ test("ground registry keeps prior guests gated; Saffron selectable; prior guests
   assert.equal(T.TRICK_KEY, "corn_snake");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
-  assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
+  assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.equal(T.wantsThankYou("corn_snake"), true);
   assert.equal(T.wantsThankYou("saffron"), true);
   assert.equal(BallPython.wantsThankYou("nori"), true);
@@ -296,12 +309,36 @@ test("ground registry keeps prior guests gated; Saffron selectable; prior guests
   assert.equal(OverlayGround.sleepHoldFrame("ball_python", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("corn_snake", 4), null);
   assert.deepEqual([...OverlayBallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
-  assert.deepEqual([...Overlay.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
+  assert.deepEqual([...Overlay.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
   assert.equal(Overlay.TRICKS.includes("write"), false);
 });
 
-test("notes: Saffron idle-life done; next house-order guest still lacking tricks is Bandit / kingsnake", () => {
+
+test("ultra-polish: Saffron scribble/gap/comma/blotter/pencil lifts are Rui-visible (not micro idle-gen)", () => {
+  const cm = T.beginTrick("comma", 80, 1);
+  const mid = T.stepTrick(cm, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `comma mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `comma mid lift ${mid.lift}`);
+  const gp = T.beginTrick("gap", 80, 1);
+  const g2 = T.stepTrick(gp, T.DUR.gap * 0.4, { cmd: "idle" });
+  assert.ok(g2.lift > 4 || Math.abs(g2.rot) > 4, `gap mid lift/rot ${g2.lift}/${g2.rot}`);
+  const bl = T.beginTrick("blotter", 80, 1);
+  const b2 = T.stepTrick(bl, T.DUR.blotter * 0.4, { cmd: "idle" });
+  assert.ok(b2.lift > 4 || Math.abs(b2.rot) > 6, `blotter mid lift/rot ${b2.lift}/${b2.rot}`);
+  const pn = T.beginTrick("pencil", 80, 1);
+  const p2 = T.stepTrick(pn, T.DUR.pencil * 0.45, { cmd: "idle" });
+  assert.ok(Math.abs(p2.lift) > 2 || Math.abs(p2.rot) > 4 || Math.abs(p2.x - 80) > 2, `pencil mid ${p2.lift}/${p2.rot}/${p2.x}`);
+  assert.ok(Overlay.blotterPose && Overlay.pencilPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.blotter, Overlay.DUR.blotter);
+  assert.equal(T.DUR.pencil, Overlay.DUR.pencil);
+  assert.equal(T.COMMA_HOLD, Overlay.COMMA_HOLD);
+  assert.equal(T.HAPPY_DUR.clause, Overlay.HAPPY_DUR.clause);
+});
+
+test("notes: Saffron idle-life ultra done; next house-order ultra guest is Bandit / kingsnake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.equal(T.TRICK_KEY, "corn_snake");
   assert.equal(T.wantsThankYou("saffron"), true);
   assert.equal(OverlayGround.tricksFor("corn_snake"), Overlay);
@@ -312,7 +349,7 @@ test("notes: Saffron idle-life done; next house-order guest still lacking tricks
   assert.equal(OverlayGround.tricksFor("nori"), OverlayBallPython);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), true);
   assert.equal(OverlayGround.wantsThankYou("nori"), true);
-  assert.equal(OverlayGround.tricksFor("kingsnake"), null);
+  assert.equal(OverlayGround.tricksFor("kingsnake") == null, true);
   assert.equal(OverlayGround.wantsThankYou("kingsnake"), false);
-  assert.equal(OverlayGround.tricksFor("bandit"), null);
+  assert.equal(OverlayGround.tricksFor("bandit") == null, true);
 });
