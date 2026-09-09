@@ -379,7 +379,7 @@ test("ultra-polish: Jade bracelet/sway/jewel/liana/arbor lifts are Rui-visible (
   assert.equal(T.HAPPY_DUR.pendant, Overlay.HAPPY_DUR.pendant);
 });
 
-test("notes: Jade idle-life ultra done; Bluff / hognose ultra next-or-done; following house-order ultra guest is Sash / garter (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Jade idle-life ultra done; Bluff / hognose + Sash / garter ultra next-or-done; following house-order ultra guest is Lula / boa (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.equal(T.TRICK_KEY, "green_tree_python");
   assert.equal(T.wantsThankYou("jade"), true);
