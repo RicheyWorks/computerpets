@@ -307,7 +307,7 @@ test("ground registry keeps prior guests gated; Bandit selectable; prior guests 
   assert.equal(Overlay.TRICKS.includes("write"), false);
   assert.equal(Overlay.TRICKS.includes("inspect"), false);
   assert.equal(Overlay.TRICKS.includes("scribble"), false);
-  assert.deepEqual([...OverlayCornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
+  assert.deepEqual([...OverlayCornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
 });
 
 test("notes: Bandit idle-life done; next house-order guest still lacking tricks is Jade / green_tree_python", () => {

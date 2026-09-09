@@ -226,6 +226,11 @@ def test_only_scratching_mammals_scratch():
     assert "loom_soft" in [a["name"] for a in acts_for("ball_python")]
     assert "weave_soft" in [a["name"] for a in acts_for("ball_python")]
     assert "freeze" in [a["name"] for a in acts_for("ball_python")]
+    assert "tongue" in [a["name"] for a in acts_for("corn_snake")]
+    assert "comma" in [a["name"] for a in acts_for("corn_snake")]
+    assert "blotter_soft" in [a["name"] for a in acts_for("corn_snake")]
+    assert "pencil_soft" in [a["name"] for a in acts_for("corn_snake")]
+    assert "freeze" in [a["name"] for a in acts_for("corn_snake")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key

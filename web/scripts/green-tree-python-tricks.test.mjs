@@ -147,7 +147,7 @@ test("bracelet/sway/jewel/heat/bough are house-green-tree-python-true, not copie
     assert.equal(mod.TRICKS.includes("bough"), false);
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
-  assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
+  assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
   assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
@@ -221,7 +221,7 @@ test("ground registry keeps prior guests gated; Jade selectable; prior guests st
   assert.equal(T.TRICK_KEY, "green_tree_python");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
-  assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
+  assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
@@ -329,7 +329,7 @@ test("ground registry keeps prior guests gated; Jade selectable; prior guests st
   assert.equal(OverlayGround.sleepHoldFrame("kingsnake", 4), null);
   assert.equal(OverlayGround.sleepHoldFrame("green_tree_python", 4), null);
   assert.deepEqual([...OverlayBallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
-  assert.deepEqual([...OverlayCornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
+  assert.deepEqual([...OverlayCornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.deepEqual([...OverlayKingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
   assert.deepEqual([...Overlay.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
