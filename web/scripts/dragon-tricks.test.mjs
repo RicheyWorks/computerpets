@@ -517,7 +517,7 @@ test("ultra-polish: Vesper sprawl/guard/ruff/scrape lifts are Rui-visible (not m
   assert.equal(T.HAPPY_DUR.thrum, Overlay.HAPPY_DUR.thrum);
 });
 
-test("notes: Vesper idle-life ultra done; Nori / ball_python ultra next-or-done; following house-order ultra guest is Saffron / corn_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Vesper idle-life ultra done; Nori / ball_python + Saffron / corn_snake ultra next-or-done; following house-order ultra guest is Bandit / kingsnake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.equal(T.TRICK_KEY, "dragon");
   assert.equal(T.wantsThankYou("vesper"), true);
