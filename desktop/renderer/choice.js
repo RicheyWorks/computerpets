@@ -12,6 +12,7 @@
     "hide",
     "call",
     "pick",
+    "send",
   ];
 
   function guestTap() {
@@ -24,6 +25,15 @@
 
   function guestMarks(sit) {
     sit = sit || {};
+    if (sit.role === "called" || sit.role === "visit") {
+      return [
+        { id: "talk", label: "Talk" },
+        { id: "treat", label: sit.treatVerb || "Treat" },
+        { id: "play", label: "Play" },
+        poseFlip(!!sit.walking),
+        { id: "send", label: sit.role === "called" ? "Send home" : "Bye" },
+      ];
+    }
     const hidden = !!sit.hidden;
     const leaving = !!sit.leaving;
     const busy = hidden || leaving;

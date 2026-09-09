@@ -432,6 +432,14 @@ ipcMain.on("notify", (_e, payload) => {
     silent: true,
     icon: iconImage(),
   });
+  const careKey = payload?.key ? String(payload.key) : currentKey;
+  const careNeed = payload?.need ? String(payload.need) : "";
+  note.on("click", () => {
+    if (!win) return;
+    win.showInactive();
+    win.setAlwaysOnTop(true, "screen-saver");
+    win.webContents.send("command", { type: "open-care", key: careKey, need: careNeed });
+  });
   note.show();
 });
 

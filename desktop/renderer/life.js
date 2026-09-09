@@ -477,12 +477,29 @@
     return `${word} · ${bondTitle(life.bond)}`;
   }
 
+  const NEED_CARE = {
+    sick: "medicine",
+    hunger: "feed",
+    hygiene: "bath",
+    mess: "clean",
+    bond: "praise",
+    mood: "talk",
+    hidden: "call",
+    energy: "rest",
+  };
+
+  function careForNeed(need) {
+    if (!need) return null;
+    return NEED_CARE[String(need)] || null;
+  }
+
   function alerts(life, name, now = Date.now()) {
     if (now - (life.lastNotify || 0) < 20 * 60 * 1000) return null;
-    if (life.hidden) return { title: name, body: `${name} went to hide.` };
-    if (life.sick) return { title: name, body: `${name} is unwell.` };
-    if (life.hunger < 16) return { title: name, body: `${name} is hungry.` };
-    if (life.mess.length >= 2) return { title: name, body: `${name} left a mess.` };
+    if (life.hidden) return { title: name, body: `${name} went to hide.`, need: "hidden" };
+    if (life.sick) return { title: name, body: `${name} is unwell.`, need: "sick" };
+    if (life.hunger < 16) return { title: name, body: `${name} is hungry.`, need: "hunger" };
+    if (life.hygiene < 18) return { title: name, body: `${name} needs a bath.`, need: "hygiene" };
+    if (life.mess.length >= 2) return { title: name, body: `${name} left a mess.`, need: "mess" };
     return null;
   }
 
@@ -501,6 +518,8 @@
     SLEEP_WAKES,
     vitals,
     alerts,
+    careForNeed,
+    NEED_CARE,
     ageDays,
     sizeScale,
     night,

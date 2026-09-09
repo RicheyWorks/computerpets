@@ -176,6 +176,11 @@ let robinFrame = 0;
 let deskPlants = [];
 let plantAge = 0;
 let plantDrag = null;
+let calledPress = null;
+let calledDrag = null;
+let visitPress = null;
+let visitDrag = null;
+let choiceTarget = null;
 let plantPress = null;
 let plantChoiceKey = null;
 let deskPlates = [];
@@ -931,8 +936,15 @@ function paintCalled() {
       const sprites = g.sprites || pack(g.key);
       return (G.poseFrames && G.poseFrames(g, sprites)) || (g.phase === "perch" || g.phase === "approach-perch" ? (sprites.sit && sprites.sit.length ? sprites.sit : sprites.idle) : sprites.walk || sprites.idle);
     },
-    onDismiss: (g) => {
-      Object.assign(g, G.dismissCalled(g));
+    onPress: (g, e, img) => {
+      if (e && e.button === 2) return;
+      if (img && img.setPointerCapture && e && e.pointerId != null) {
+        try { img.setPointerCapture(e.pointerId); } catch (_) { /* ignore */ }
+      }
+      calledPress = { key: g.key, x: e.clientX, y: e.clientY, startX: g.x };
+      calledDrag = null;
+      closeChoice();
+      setClickable(true);
     },
   });
 }
@@ -1577,7 +1589,12 @@ function maybeNotify() {
   if (!alert) return;
   life.lastNotify = Date.now();
   persist();
-  window.desk?.notify(alert.title, alert.body);
+  window.desk?.notify({
+    title: alert.title,
+    body: alert.body,
+    key: kind.key,
+    need: alert.need || "",
+  });
 }
 
 function tickLife() {
@@ -2078,6 +2095,7 @@ function applyCommand() {
 
 function closeChoice() {
   choiceOpen = false;
+  choiceTarget = null;
   if (!choiceEl) return;
   choiceEl.classList.remove("show");
   choiceEl.replaceChildren();
@@ -2117,16 +2135,36 @@ function openPlantChoice(key) {
   setClickable(true);
 }
 
-function openChoice() {
+﻿function choiceAnchorX(target) {
+  if (!target || target.role === "host") return sim.x;
+  if (target.role === "visit" && visit) return visit.x;
+  if (target.role === "called" && target.key) {
+    const g = called.find((c) => c.key === target.key);
+    if (g) return g.x;
+  }
+  return sim.x;
+}
+
+function openChoice(target) {
   if (!choiceEl || !window.PetChoice || !kind) return;
-  if (choiceOpen) {
+  const next = target || { role: "host" };
+  if (choiceOpen && choiceTarget && choiceTarget.role === next.role && choiceTarget.key === next.key) {
     closeChoice();
     return;
   }
+  choiceTarget = next;
+  const guest = next.role === "called" ? called.find((c) => c.key === next.key) : null;
+  const walking =
+    next.role === "host"
+      ? sim.cmd === "wander" || sim.cmd === "seek" || sim.cmd === "play" || sim.cmd === "enter"
+      : next.role === "visit"
+        ? !!(visit && !visit.placed && visit.phase !== "talk")
+        : !!(guest && (guest.phase === "wander" || guest.phase === "in") && !guest.placed);
   const marks = window.PetChoice.guestMarks({
+    role: next.role === "host" ? undefined : next.role,
     hidden: !!(life && life.hidden),
     leaving,
-    walking: sim.cmd === "wander" || sim.cmd === "seek" || sim.cmd === "play" || sim.cmd === "enter",
+    walking,
     gifts: (life && life.gifts && life.gifts.length) || 0,
     treatVerb: "Treat",
     specialVerb: window.PetSpecial?.verbFor(kind.key) || "Special",
@@ -2143,13 +2181,86 @@ function openChoice() {
     });
     choiceEl.appendChild(btn);
   }
-  choiceEl.style.transform = `translate3d(${sim.x}px, 0, 0)`;
+  choiceEl.style.transform = `translate3d(${choiceAnchorX(next)}px, 0, 0)`;
   choiceEl.classList.add("show");
   choiceOpen = true;
   setClickable(true);
 }
 
+function pickGuestChoice(id) {
+  const role = choiceTarget && choiceTarget.role;
+  const key = choiceTarget && choiceTarget.key;
+  closeChoice();
+  if (role === "visit") {
+    if (!visit) return;
+    if (id === "talk") {
+      const law = visitLaw();
+      if (law) say(law.visitLine(visit.key));
+      visit.said = true;
+      visit.tapped = true;
+      return;
+    }
+    if (id === "treat" || id === "play") {
+      say(id === "play" ? "A quick game. Then the desk again." : "A treat for the road.");
+      visit.tapped = true;
+      return;
+    }
+    if (id === "walk") {
+      visit.placed = false;
+      visit.tapped = false;
+      visit.target = Math.max(80, window.innerWidth * (visit.x < window.innerWidth * 0.5 ? 0.72 : 0.28));
+      return;
+    }
+    if (id === "sit") {
+      visit.placed = true;
+      visit.tapped = true;
+      visit.target = visit.x;
+      return;
+    }
+    if (id === "send") {
+      endVisit();
+      return;
+    }
+    return;
+  }
+  if (role === "called") {
+    const G = window.PetCallGuests;
+    const g = called.find((c) => c.key === key);
+    if (!g || !G) return;
+    if (id === "talk") {
+      const line = (G.tellLine && G.tellLine(g)) || (g.name ? `${g.name} nods.` : "A nod.");
+      say(line);
+      return;
+    }
+    if (id === "treat" || id === "play") {
+      say(id === "play" ? "A quick chase across the wood." : "Shared crumbs. Fair.");
+      return;
+    }
+    if (id === "walk") {
+      const w = window.innerWidth;
+      const dest = 48 + Math.random() * Math.max(80, w - 200);
+      Object.assign(g, { placed: false, phase: "wander", t: 0, target: dest, facing: dest >= g.x ? 1 : -1, lift: 0 });
+      paintCalled();
+      return;
+    }
+    if (id === "sit") {
+      Object.assign(g, G.placeCalled(g, g.x, window.innerWidth));
+      paintCalled();
+      return;
+    }
+    if (id === "send") {
+      Object.assign(g, G.dismissCalled(g));
+      paintCalled();
+      return;
+    }
+  }
+}
+
 function pickChoice(id) {
+  if (choiceTarget && (choiceTarget.role === "called" || choiceTarget.role === "visit")) {
+    pickGuestChoice(id);
+    return;
+  }
   const picked = window.PetChoice?.guestPick(id);
   closeChoice();
   if (!picked) return;
@@ -2175,6 +2286,30 @@ function pickChoice(id) {
     paintGifts();
     paintHud();
   }
+}
+
+﻿function openCareFromNotify(payload) {
+  const key = payload && payload.key ? String(payload.key) : "";
+  const need = payload && payload.need ? String(payload.need) : "";
+  if (key && kind && key !== kind.key && roster.some((r) => r.key === key)) {
+    switchTo(key);
+  }
+  openKeeperCard();
+  paintHud();
+  const careId = window.PetLife && window.PetLife.careForNeed ? window.PetLife.careForNeed(need) : null;
+  if (hudCare) {
+    hudCare.querySelectorAll("[data-need-focus]").forEach((el) => el.removeAttribute("data-need-focus"));
+    if (careId) {
+      const btn = hudCare.querySelector(`[data-care="${careId}"]`);
+      if (btn) {
+        btn.setAttribute("data-need-focus", "1");
+        if (btn.focus) btn.focus();
+        try { btn.scrollIntoView({ block: "nearest", inline: "nearest" }); } catch (_) { /* ignore */ }
+      }
+      try { hudCare.scrollIntoView({ block: "nearest" }); } catch (_) { /* ignore */ }
+    }
+  }
+  if (careId) handle(careId);
 }
 
 function handle(cmd) {
@@ -2948,7 +3083,7 @@ function endVisit() {
 function tapVisitor() {
   const law = visitLaw();
   if (!visit || !law) return false;
-  say(law.visitLine(visit.key));
+  openChoice({ role: "visit" });
   visit.said = true;
   visit.tapped = true;
   if (visit.sprites.talk) guestEl.src = visit.sprites.talk[0];
@@ -2979,6 +3114,7 @@ function startVisit() {
     said: false,
     tapped: false,
     wandered: false,
+    placed: false,
     phase: "in",
   };
   guestEl.classList.add("show");
@@ -3005,6 +3141,9 @@ function tickVisit(dt, now, width) {
   if (phase === "leave") {
     visit.target = -140;
     visit.tapped = false;
+    visit.placed = false;
+  } else if (visit.placed && phase !== "leave") {
+    visit.target = visit.x;
   } else if (phase === "wander" && !visit.wandered) {
     visit.wandered = true;
     visit.target = Math.max(80, width * (visit.x < width * 0.5 ? 0.72 : 0.28));
@@ -3014,7 +3153,7 @@ function tickVisit(dt, now, width) {
     say(law.visitLine(visit.key));
   }
   visit.phase = phase;
-  const sitting = visit.tapped && phase !== "leave";
+  const sitting = (visit.tapped || visit.placed) && phase !== "leave";
   const walking = !sitting && (phase === "in" || phase === "wander" || phase === "leave");
   const remaining = Math.abs(visit.target - visit.x);
   if (walking && remaining > 2) {
@@ -3040,7 +3179,10 @@ if (guestEl) {
     if (e.button === 2) return;
     if (!visit || !guestEl.classList.contains("show")) return;
     e.stopPropagation();
-    tapVisitor();
+    try { guestEl.setPointerCapture(e.pointerId); } catch (_) { /* ignore */ }
+    visitPress = { x: e.clientX, y: e.clientY, startX: visit.x };
+    visitDrag = null;
+    closeChoice();
     setClickable(true);
   });
 }
@@ -3057,7 +3199,7 @@ pet.addEventListener("pointerdown", (e) => {
 window.addEventListener("pointermove", (e) => {
   sim.cursorX = e.clientX;
   const over = e.target && e.target.closest && e.target.closest("[data-hit]");
-  setClickable(!!over || sim.dragging || !!plantDrag || !!plantPress || !!plantChoiceKey || !!plateDrag || !!platePress);
+  setClickable(!!over || sim.dragging || !!plantDrag || !!plantPress || !!plantChoiceKey || !!plateDrag || !!platePress || !!calledPress || !!calledDrag || !!visitPress || !!visitDrag);
   if (plantPress && window.PetDeskPlants) {
     const P = window.PetDeskPlants;
     if (!plantDrag && P.clickMoved(e.clientX - plantPress.x, e.clientY - plantPress.y)) {
@@ -3088,6 +3230,44 @@ window.addEventListener("pointermove", (e) => {
       paintPlates();
     }
   }
+  if (calledPress && window.PetCallGuests) {
+    const G = window.PetCallGuests;
+    const moved = G.clickMoved
+      ? G.clickMoved(e.clientX - calledPress.x, e.clientY - calledPress.y)
+      : Math.abs(e.clientX - calledPress.x) > 8 || Math.abs(e.clientY - calledPress.y) > 8;
+    if (!calledDrag && moved) {
+      calledDrag = calledPress.key;
+      closeChoice();
+    }
+    if (calledDrag) {
+      const g = called.find((c) => c.key === calledDrag);
+      if (g) {
+        const maxX = Math.max(PAD, window.innerWidth - BASE - PAD);
+        const dx = e.clientX - calledPress.x;
+        g.x = clamp(calledPress.startX + dx, PAD, maxX);
+        g.target = g.x;
+        g.lift = 0;
+        paintCalled();
+      }
+    }
+  }
+  if (visitPress && visit) {
+    const P = window.PetDeskPlants;
+    const moved = P && P.clickMoved
+      ? P.clickMoved(e.clientX - visitPress.x, e.clientY - visitPress.y)
+      : Math.abs(e.clientX - visitPress.x) > 8 || Math.abs(e.clientY - visitPress.y) > 8;
+    if (!visitDrag && moved) {
+      visitDrag = true;
+      closeChoice();
+    }
+    if (visitDrag) {
+      const maxX = Math.max(PAD, window.innerWidth - BASE - PAD);
+      const dx = e.clientX - visitPress.x;
+      visit.x = clamp(visitPress.startX + dx, PAD, maxX);
+      visit.target = visit.x;
+      if (guestEl) guestEl.style.transform = `translate3d(${visit.x}px, 0, 0) scale(${visit.facing}, 1)`;
+    }
+  }
   if (!sim.dragging) return;
   const maxX = Math.max(PAD, window.innerWidth - BASE - PAD);
   sim.x = clamp(e.clientX - sim.dragDx, PAD, maxX);
@@ -3116,6 +3296,30 @@ window.addEventListener("pointerup", (e) => {
     platePress = null;
     plateDrag = null;
   }
+  if (calledPress && window.PetCallGuests) {
+    const G = window.PetCallGuests;
+    const key = calledPress.key;
+    if (calledDrag) {
+      const g = called.find((c) => c.key === key);
+      if (g && G.placeCalled) Object.assign(g, G.placeCalled(g, g.x, window.innerWidth));
+      paintCalled();
+    } else {
+      openChoice({ role: "called", key });
+    }
+    calledPress = null;
+    calledDrag = null;
+  }
+  if (visitPress) {
+    if (visitDrag && visit) {
+      visit.placed = true;
+      visit.tapped = true;
+      visit.target = visit.x;
+    } else if (visit) {
+      tapVisitor();
+    }
+    visitPress = null;
+    visitDrag = null;
+  }
   if (!sim.dragging) return;
   const start = sim.pointerStart;
   sim.dragging = false;
@@ -3125,7 +3329,7 @@ window.addEventListener("pointerup", (e) => {
   const lift = window.PetArrive.pointerUp(dx, dy, liftTapPx());
   if (lift.kind === "tap") {
     openKeeperCard();
-    if (window.PetChoice?.guestTap() === "choice") openChoice();
+    if (window.PetChoice?.guestTap() === "choice") openChoice({ role: "host" });
     return;
   }
   sim.land = 0.55;
@@ -3150,6 +3354,14 @@ window.addEventListener("pointercancel", () => {
     platePress = null;
     plateDrag = null;
     paintPlates();
+  }
+  if (calledPress || calledDrag) {
+    calledPress = null;
+    calledDrag = null;
+  }
+  if (visitPress || visitDrag) {
+    visitPress = null;
+    visitDrag = null;
   }
   sim.dragging = false;
   sim.pointerStart = null;
@@ -3824,7 +4036,13 @@ document.addEventListener("visibilitychange", () => {
   tickLife();
 });
 
-window.desk?.onCommand((cmd) => handle(cmd));
+window.desk?.onCommand((cmd) => {
+  if (cmd && typeof cmd === "object" && cmd.type === "open-care") {
+    openCareFromNotify(cmd);
+    return;
+  }
+  handle(cmd);
+});
 window.desk?.onSwitch((key) => switchTo(key));
 window.desk?.onWindows((list) => {
   deskWindows = Array.isArray(list) ? list : [];
