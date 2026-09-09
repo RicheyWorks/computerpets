@@ -65,7 +65,7 @@ const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/rend
 test("Jade tricks start only on idle ground", () => {
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
-  assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
+  assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -104,7 +104,7 @@ test("Jade tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("verdict"), false);
 });
 
-test("bracelet/sway/jewel/heat/bough are house-green-tree-python-true, not copies of prior guests", () => {
+test("bracelet/sway/jewel/heat/bough/liana/arbor are house-green-tree-python-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bracelet = T.beginTrick("bracelet", 80, 1);
   assert.equal(bracelet.anim, "sit");
@@ -112,7 +112,7 @@ test("bracelet/sway/jewel/heat/bough are house-green-tree-python-true, not copie
   const held = T.stepTrick(bracelet, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(bracelet, T.BRACELET_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -135,8 +135,22 @@ test("bracelet/sway/jewel/heat/bough are house-green-tree-python-true, not copie
   assert.equal(bough.anim, "play");
   const boughMid = T.stepTrick(bough, 0.4, ground);
   assert.ok(Math.abs(boughMid.lift) > 0.2 || Math.abs(boughMid.rot) > 1);
-  const boughDone = T.stepTrick(bough, 1.6, ground);
+  const boughDone = T.stepTrick(bough, T.DUR.bough + 0.1, ground);
   assert.equal(boughDone.phase, "done");
+  const liana = T.beginTrick("liana", 80, 1);
+  assert.equal(liana.anim, "play");
+  const lianaMid = T.stepTrick(liana, T.DUR.liana * 0.45, ground);
+  assert.ok(Math.abs(lianaMid.lift) > 2 || Math.abs(lianaMid.rot) > 4 || Math.abs(lianaMid.x - 80) > 1);
+  const arbor = T.beginTrick("arbor", 80, 1);
+  assert.equal(arbor.anim, "sit");
+  const arborMid = T.stepTrick(arbor, T.DUR.arbor * 0.4, ground);
+  assert.ok(arborMid.lift > 4 || Math.abs(arborMid.rot) > 6);
+  assert.equal(T.TRICKS.includes("saddle"), false);
+  assert.equal(T.TRICKS.includes("drape"), false);
+  assert.equal(T.TRICKS.includes("moss"), false);
+  assert.equal(T.TRICKS.includes("gleam"), false);
+  assert.equal(T.TRICKS.includes("band"), false);
+  assert.equal(T.TRICKS.includes("drawer"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, Relay, Fuse, Earth]) {
@@ -145,12 +159,14 @@ test("bracelet/sway/jewel/heat/bough are house-green-tree-python-true, not copie
     assert.equal(mod.TRICKS.includes("jewel"), false);
     assert.equal(mod.TRICKS.includes("heat"), false);
     assert.equal(mod.TRICKS.includes("bough"), false);
+    assert.equal(mod.TRICKS.includes("liana"), false);
+    assert.equal(mod.TRICKS.includes("arbor"), false);
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
   assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("saddle"), false);
   assert.equal(T.TRICKS.includes("write"), false);
   assert.equal(Parrot.TRICKS.includes("flash"), true);
@@ -223,8 +239,8 @@ test("ground registry keeps prior guests gated; Jade selectable; prior guests st
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
-  assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
+  assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.equal(T.wantsThankYou("green_tree_python"), true);
   assert.equal(T.wantsThankYou("jade"), true);
   assert.equal(BallPython.wantsThankYou("nori"), true);
@@ -331,7 +347,7 @@ test("ground registry keeps prior guests gated; Jade selectable; prior guests st
   assert.deepEqual([...OverlayBallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...OverlayCornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
   assert.deepEqual([...OverlayKingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid", "band", "drawer"]);
-  assert.deepEqual([...Overlay.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
+  assert.deepEqual([...Overlay.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
   assert.equal(Overlay.TRICKS.includes("write"), false);
   assert.equal(Overlay.TRICKS.includes("saddle"), false);
@@ -340,7 +356,31 @@ test("ground registry keeps prior guests gated; Jade selectable; prior guests st
   assert.equal(Overlay.TRICKS.includes("stripe"), false);
 });
 
-test("notes: Jade idle-life done; next house-order guest still lacking tricks is Bluff / hognose", () => {
+
+test("ultra-polish: Jade bracelet/sway/jewel/liana/arbor lifts are Rui-visible (not micro idle-gen)", () => {
+  const br = T.beginTrick("bracelet", 80, 1);
+  const mid = T.stepTrick(br, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `bracelet mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `bracelet mid lift ${mid.lift}`);
+  const sw = T.beginTrick("sway", 80, 1);
+  const s2 = T.stepTrick(sw, T.DUR.sway * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift > 4 || Math.abs(s2.rot) > 4, `sway mid lift/rot ${s2.lift}/${s2.rot}`);
+  const li = T.beginTrick("liana", 80, 1);
+  const l2 = T.stepTrick(li, T.DUR.liana * 0.45, { cmd: "idle" });
+  assert.ok(Math.abs(l2.lift) > 2 || Math.abs(l2.rot) > 4 || Math.abs(l2.x - 80) > 1, `liana mid ${l2.lift}/${l2.rot}/${l2.x}`);
+  const ar = T.beginTrick("arbor", 80, 1);
+  const a2 = T.stepTrick(ar, T.DUR.arbor * 0.4, { cmd: "idle" });
+  assert.ok(a2.lift > 4 || Math.abs(a2.rot) > 6, `arbor mid lift/rot ${a2.lift}/${a2.rot}`);
+  assert.ok(Overlay.lianaPose && Overlay.arborPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.liana, Overlay.DUR.liana);
+  assert.equal(T.DUR.arbor, Overlay.DUR.arbor);
+  assert.equal(T.BRACELET_HOLD, Overlay.BRACELET_HOLD);
+  assert.equal(T.HAPPY_DUR.pendant, Overlay.HAPPY_DUR.pendant);
+});
+
+test("notes: Jade idle-life ultra done; next house-order ultra guest is Bluff / hognose (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.equal(T.TRICK_KEY, "green_tree_python");
   assert.equal(T.wantsThankYou("jade"), true);
   assert.equal(OverlayGround.tricksFor("green_tree_python"), Overlay);
@@ -359,7 +399,7 @@ test("notes: Jade idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.tricksFor("nori"), OverlayBallPython);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), true);
   assert.equal(OverlayGround.wantsThankYou("nori"), true);
-  assert.equal(OverlayGround.tricksFor("hognose"), null);
+  assert.equal(OverlayGround.tricksFor("hognose") == null, true);
   assert.equal(OverlayGround.wantsThankYou("hognose"), false);
-  assert.equal(OverlayGround.tricksFor("bluff"), null);
+  assert.equal(OverlayGround.tricksFor("bluff") == null, true);
 });
