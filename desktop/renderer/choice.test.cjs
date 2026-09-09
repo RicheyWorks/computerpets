@@ -43,3 +43,9 @@ test("a tap on the overlay guest is a choice, not a talk", () => {
   assert.match(lift, /openChoice/);
   assert.doesNotMatch(lift, /handle\("talk"\)/);
 });
+
+test("called and visit marks offer talk care and send, not host feed strip", () => {
+  assert.deepEqual(ids(C.guestMarks({ role: "called" })), ["talk", "treat", "play", "walk", "send"]);
+  assert.deepEqual(ids(C.guestMarks({ role: "visit", walking: true })), ["talk", "treat", "play", "sit", "send"]);
+  assert.equal(C.guestPick("send"), "send");
+});

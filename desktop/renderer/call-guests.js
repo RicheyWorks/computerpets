@@ -258,7 +258,33 @@
 
   function dismissCalled(guest) {
     if (!guest) return guest;
-    return { ...guest, phase: "leave", target: -160, dismissed: true, lift: guest.lift || 0 };
+    return { ...guest, phase: "leave", target: -160, dismissed: true, placed: false, lift: guest.lift || 0 };
+  }
+
+  const CLICK_PX = 8;
+
+  function clickMoved(dx, dy, threshold) {
+    const lim = threshold == null ? CLICK_PX : threshold;
+    return Math.abs(dx || 0) > lim || Math.abs(dy || 0) > lim;
+  }
+
+  function placeCalled(guest, x, width) {
+    if (!guest) return guest;
+    const w = Math.max(320, width || 800);
+    const dest = Math.max(8, Math.min(w - 80, x == null ? guest.x || 0 : x));
+    return {
+      ...guest,
+      x: dest,
+      target: dest,
+      lift: 0,
+      phase: "stay",
+      t: 0,
+      placed: true,
+      fromX: undefined,
+      fromLift: undefined,
+      toX: undefined,
+      toLift: undefined,
+    };
   }
 
   function shouldPerchCalled(key, flags) {
@@ -584,6 +610,9 @@
     const meetPeer = shouldMeetPeer(next.key, flags);
     const meetRui = shouldMeetRui(next.key, flags);
     const sitBound = shouldSitBound(next.key, flags);
+    if (next.placed && next.phase === "stay") {
+      return next;
+    }
     if (!meetBusy(next.phase)) {
       if (meetPeer) return goCalledMeet(next, flags, "peer");
       if (meetRui) return goCalledMeet(next, flags, "rui");
@@ -695,6 +724,7 @@
       return { ...next, phase: "stay", t: 0 };
     }
     if (next.phase === "stay") {
+      if (next.placed) return next;
       if (next.t >= 3.2) {
         const w = Math.max(320, width || 800);
         const dest = 48 + Math.random() * Math.max(80, w - 200);
@@ -779,6 +809,7 @@
     let reused = 0;
     let added = 0;
     const frameOf = opts && opts.frameOf;
+    const onPress = opts && opts.onPress;
     const onDismiss = opts && opts.onDismiss;
     for (const g of visible) {
       let img = calledKids(root).find((el) => el.dataset && el.dataset.callKey === g.key);
@@ -792,10 +823,11 @@
         img.dataset.hit = "1";
         img.dataset.callKey = g.key;
         img.draggable = false;
-        if (onDismiss && img.addEventListener) {
+        if ((onPress || onDismiss) && img.addEventListener) {
           img.addEventListener("pointerdown", (e) => {
             e.stopPropagation();
-            onDismiss(g);
+            if (onPress) onPress(g, e, img);
+            else onDismiss(g);
           });
         }
         if (root.appendChild) root.appendChild(img);
@@ -866,6 +898,9 @@
     destFit,
     beginCalled,
     dismissCalled,
+    CLICK_PX,
+    clickMoved,
+    placeCalled,
     shouldPerchCalled,
     perchPoint,
     shouldSing,

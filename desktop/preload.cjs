@@ -7,7 +7,13 @@ contextBridge.exposeInMainWorld("desk", {
   setFocusable: (focusable) => ipcRenderer.send("set-focusable", !!focusable),
   openMenu: (x, y) => ipcRenderer.send("pet-menu", { x, y }),
   switchPet: (key) => ipcRenderer.send("switch-pet", key),
-  notify: (title, body) => ipcRenderer.send("notify", { title, body }),
+  notify: (title, body, meta) => {
+    const payload =
+      title && typeof title === "object"
+        ? title
+        : { title, body, ...(meta && typeof meta === "object" ? meta : {}) };
+    ipcRenderer.send("notify", payload);
+  },
   vitals: (payload) => ipcRenderer.send("vitals", payload),
   mindGet: () => ipcRenderer.sendSync("mind-get"),
   mindSet: (data) => ipcRenderer.send("mind-set", data),
