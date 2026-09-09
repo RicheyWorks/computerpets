@@ -488,7 +488,7 @@ test("ultra-polish: Floss ash/bound/ricochet/gnaw lifts are Rui-visible (not mic
   assert.equal(T.HAPPY_DUR.eep, Overlay.HAPPY_DUR.eep);
 });
 
-test("notes: Floss idle-life ultra done; Bloom / axolotl ultra next-or-done; following house-order ultra guest is Sol / iguana (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
+test("notes: Floss idle-life ultra done; Bloom / axolotl + Sol / iguana ultra next-or-done; following house-order ultra guest is Vesper / dragon (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
   assert.deepEqual([...T.TRICKS], ["ash", "bound", "fluff", "chin", "sift", "ricochet", "gnaw"]);
   assert.equal(T.TRICK_KEY, "chinchilla");
   assert.equal(T.wantsThankYou("floss"), true);
