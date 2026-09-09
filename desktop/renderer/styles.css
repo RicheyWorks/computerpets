@@ -1004,6 +1004,12 @@ select {
 }
 
 #hud-care button:hover,
+.keeper-care button[data-need-focus="1"] {
+  outline: 2px solid #c9a227;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.35);
+}
+
 .keeper-care button:hover {
   border-color: #d8cfc0;
   color: #fffaf3;
