@@ -171,7 +171,7 @@ test("pour/heft/oxbow/slack/bank are house-boa-true, not copies of prior guests"
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore"]);
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap"]);
-  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.equal(T.TRICKS.includes("loop"), false);
   assert.equal(T.TRICKS.includes("flip"), false);

@@ -154,7 +154,7 @@ test("hood/feign/shovel/gape/encore are house-hognose-true, not copies of prior 
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon"]);
   assert.deepEqual([...Kingsnake.TRICKS], ["stripe", "audit", "verdict", "plumb", "raid"]);
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough"]);
-  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.equal(T.TRICKS.includes("flip"), false);
   assert.equal(T.TRICKS.includes("write"), false);

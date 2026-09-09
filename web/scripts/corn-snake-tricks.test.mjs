@@ -135,7 +135,7 @@ test("scribble/gap/comma/probe/canyon are house-corn-snake-true, not copies of p
     assert.equal(mod.TRICKS.includes("canyon"), false);
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
-  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.equal(T.TRICKS.includes("write"), false);
   assert.equal(Parrot.TRICKS.includes("flash"), true);
