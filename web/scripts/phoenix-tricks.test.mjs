@@ -184,7 +184,7 @@ test("cinder/blaze/shed/lift/return/reignite/hearth are house-phoenix-true, not 
   assert.equal(Dragon.TRICKS.includes("shed"), false);
   assert.equal(Dragon.TRICKS.includes("lift"), false);
   assert.equal(Dragon.TRICKS.includes("return"), false);
-  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.equal(T.TRICKS.includes("kindle"), false);
   assert.equal(T.TRICKS.includes("coil"), false);
   assert.equal(T.TRICKS.includes("hoard"), false);

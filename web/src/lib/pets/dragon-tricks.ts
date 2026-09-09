@@ -1,8 +1,7 @@
-/** Vesper ground tricks while idle. House dragon — sprawl / guard / smolder / claim / fold personality (wyrm on the mantel; sleeping-dragon desk life). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `dragon-tricks.js`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl, toucan, iguana, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play DRAPE is unchanged — this module never names a trick `drape`. Turtle window-play BASK and Volt COIL stay untouched — never names `bask` or `coil`. Sol already owns sun/dewlap/nod/press/flick and swell/tap/ease. Ground already owns lug/earth/heave/bed. Fuse already owns seat/current/blow/reseat and warm/snap/pulse. Relay already owns click/latch/arc/buzz/switch. Special `hoard` stays the special — never names a trick `hoard`. Avoids drape/bask/coil/hoard/sun/dewlap/nod/press/flick/click/latch/arc/buzz/switch/seat/current/blow/reseat/lug/earth/heave/bed/flatten/soak/tuck/crane/plod/paddle/potato/loaf/nest/bow/dig/flop/zoom/popcorn/hay/rumble/zig/scurry/drift/gulp/flare/glint/dart/circle/loop/preen/bobble/mimic/sidle/dangle/perch/den/mouser/stalk/trot/prance/huddle/toboggan/waddle/porpoise/trumpet/quote/strut/fan/crack/flash/tube/romp/steal/puff/noodle/thread/ball/curl/snuffle/anoint/bristle/root/dust/ash/bound/fluff/chin/sift/gill/amble/mend/smile/plume/float/wall/bloom/toss/bill/hook/roost/berry/juggle/peer/skip/bob/warm/huff name collisions with prior guests. No cry inventing — field-tape skip stays; thank-yous are silent desk motion only. */
-
+/** Vesper ground tricks while idle — ultra-polish pass. House dragon — sprawl / guard / smolder / claim / fold / ruff / scrape personality (wyrm on the mantel; sleeping-dragon desk life). Sprawl heat-hold without naming bask/flatten/drape (window-play owns those); guard watchful rise without naming alert/loaf; smolder breath-glow without naming huff/steam thank-you collision; claim blotter plant without naming hoard special; fold wing-tuck settle without naming curl/coil; ruff neck-ruff flare without naming dewlap/fan/frill/mantle; scrape claw-scrape mark without naming scratch/dig. Window-play DRAPE unchanged — never names a trick `drape`. Window-play BASK/COIL untouched — never names `bask` or `coil`. Special `hoard` stays the special. Guest slug Vesper / key dragon — accept "dragon" and "vesper". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via dragon.wav. Thank-yous thrum / glow / incline. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `dragon-tricks.js`. True house-dragon desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol or *Dragon electrical (Relay/Fuse/Ground) clones. Bird ultra (Soot→Ember) + Miso→Sol done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Nori / ball_python (skip Ember). No cry inventing beyond house dragon.wav prefer. Never retouch Rui sprites. */
 
 export const TRICK_KEY = "dragon";
-export const TRICKS = ["sprawl", "guard", "smolder", "claim", "fold"] as const;
+export const TRICKS = ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"] as const;
 export const HAPPY = ["thrum", "glow", "incline"] as const;
 export type DragonTrickKind = (typeof TRICKS)[number];
 export type DragonHappyKind = (typeof HAPPY)[number];
@@ -47,21 +46,23 @@ export type DragonHappy = {
 };
 
 export const HAPPY_DUR: Record<DragonHappyKind, number> = {
-  thrum: 1.18,
-  glow: 1.22,
-  incline: 1.3,
+  thrum: 1.55,
+  glow: 1.62,
+  incline: 1.58,
 };
 
 /** Sprawl hold — Vesper sprawls on the mantel blotter. Not window-play BASK or FLATTEN. Sleeping-dragon heat-holding. */
-export const SPRAWL_HOLD = 10.4;
-export const RELEASE_S = 0.64;
+export const SPRAWL_HOLD = 12.8;
+export const RELEASE_S = 0.88;
 
 export const DUR: Record<DragonTrickKind, number> = {
   sprawl: SPRAWL_HOLD + RELEASE_S,
-  guard: 1.38,
-  smolder: 1.34,
-  claim: 1.4,
-  fold: 1.24,
+  guard: 1.82,
+  smolder: 1.76,
+  claim: 1.88,
+  fold: 1.72,
+  ruff: 2.02,
+  scrape: 2.1,
 };
 
 export function canStart(state: TrickFlags | undefined) {
@@ -92,38 +93,29 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: DragonTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "sprawl") return 42 + roll * 26;
-  if (kind === "guard") return 15 + roll * 10;
-  if (kind === "smolder") return 14 + roll * 10;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "sprawl") return 38 + roll * 24;
+  if (kind === "guard" || kind === "smolder") return 11 + roll * 8;
+  if (kind === "claim" || kind === "fold" || kind === "scrape") return 10 + roll * 8;
+  if (kind === "ruff") return 12 + roll * 9;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: DragonTrickKind | null): DragonTrickKind {
   if (musicOn) return "sprawl";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "sprawl") {
-    if (roll < 0.28) return "guard";
-    if (roll < 0.5) return "smolder";
-    if (roll < 0.72) return "claim";
-    return "fold";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "sprawl" ? 0.55 : k === "guard" || k === "ruff" || k === "smolder" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "guard") {
-    if (roll < 0.3) return "sprawl";
-    if (roll < 0.52) return "smolder";
-    if (roll < 0.74) return "claim";
-    return "fold";
-  }
-  if (lastKind === "smolder") {
-    if (roll < 0.24) return "sprawl";
-    if (roll < 0.46) return "guard";
-    if (roll < 0.68) return "claim";
-    return "fold";
-  }
-  if (roll < 0.22) return "sprawl";
-  if (roll < 0.4) return "guard";
-  if (roll < 0.6) return "smolder";
-  if (roll < 0.8) return "claim";
-  return "fold";
+  return list[list.length - 1] || "sprawl";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -193,45 +185,45 @@ export function beginHappy(kind: DragonHappyKind, x: number, facing: 1 | -1 = 1)
 
 export function thrumPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.thrum));
-  if (u < 0.16) {
-    const s = u / 0.16;
-    return { lift: s * 1.4, rot: s * 5, dx: 0, anim: "sit" as const };
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 4.4, rot: s * 14, dx: 0, anim: "sit" as const };
   }
-  if (u < 0.8) {
+  if (u < 0.78) {
     return {
-      lift: 1.4 + Math.abs(Math.sin(t * 4.2)) * 1.1,
-      rot: 5 + Math.sin(t * 3.6) * 3.5,
+      lift: 4.4 + Math.abs(Math.sin(t * 5.2)) * 2.6,
+      rot: 14 + Math.sin(t * 4.4) * 10,
       dx: 0,
       anim: "sit" as const,
     };
   }
-  const s = (u - 0.8) / 0.2;
-  return { lift: 1.4 * (1 - s), rot: 5 * (1 - s), dx: 0, anim: "idle" as const };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 4.4 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "idle" as const };
 }
 
 export function glowPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.glow));
-  if (u < 0.14) {
-    const s = u / 0.14;
-    return { lift: s * 1.8, rot: s * 8, dx: 0, anim: "sit" as const };
+  if (u < 0.12) {
+    const s = u / 0.12;
+    return { lift: s * 5.6, rot: -s * 16, dx: 0, anim: "sit" as const };
   }
-  if (u < 0.84) {
+  if (u < 0.86) {
     return {
-      lift: 1.8 + Math.abs(Math.sin(t * 3.8)) * 1.2,
-      rot: 8 + Math.sin(t * 3.2) * 6,
-      dx: Math.sin(t * 2.4) * 0.3,
+      lift: 5.6 + Math.abs(Math.sin(t * 10)) * 3.2,
+      rot: -16 + Math.sin(t * 12) * 18,
+      dx: Math.sin(t * 6) * 1.2,
       anim: "sit" as const,
     };
   }
-  const s = (u - 0.84) / 0.16;
-  return { lift: 1.8 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "sit" as const };
+  const s = (u - 0.86) / 0.14;
+  return { lift: 5.6 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function inclinePose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 2.6)) * 1.2 + 0.5,
-    rot: -8 + Math.sin(t * 2.2) * 6,
-    dx: Math.sin(t * 1.8) * 0.35,
+    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 1.2,
+    rot: -14 + Math.sin(t * 3.0) * 12,
+    dx: Math.sin(t * 2.4) * 1.4,
     anim: "talk" as const,
   };
 }
@@ -280,7 +272,11 @@ export function beginTrick(kind: DragonTrickKind, x: number, facing: 1 | -1 = 1)
             ? "play"
             : kind === "fold"
               ? "play"
-              : "sit";
+              : kind === "ruff"
+                ? "talk"
+                : kind === "scrape"
+                  ? "play"
+                  : "sit";
   return {
     kind,
     phase: kind === "sprawl" ? "hold" : "go",
@@ -302,39 +298,39 @@ function smoothstep(t: number) {
 /** Sprawl — sleeping-dragon desk sprawl on the blotter. Heat-holding. Not window-play DRAPE or BASK. Ethogram sit_hold true. */
 export function sprawlPose(t: number) {
   return {
-    lift: 0.1 + Math.sin(t * 0.9) * 0.35,
-    rot: 12 + Math.sin(t * 1.05) * 2.2 + Math.sin(t * 2.1) * 1.4,
+    lift: 2.2 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+    rot: 30 + Math.sin(t * 2.4) * 12 + Math.sin(t * 4.6) * 6,
   };
 }
 
 /** Soft lift — Vesper leaves the mantel sprawl; stays on the desk. Not window-play leave. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.2 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 8 * (1 - u) };
+  return { lift: (2.2 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)), rot: 30 * (1 - u) };
 }
 
 /** Guard — watchful province turn on the mantel. Not earth bed. Not window-play DRAPE. Ethogram watch true. */
 export function guardPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.guard));
-  if (u < 0.12) {
-    const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.2, rot: s * 14 * facing, anim: "sit" as const };
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 4.6, rot: s * 18 * facing, anim: "sit" as const };
   }
-  if (u < 0.88) {
-    const s = (u - 0.12) / 0.76;
-    const sweep = Math.sin(s * Math.PI * 2);
+  if (u < 0.86) {
+    const s = (u - 0.14) / 0.72;
+    const sweep = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 0.6,
-      lift: 1.2 + Math.abs(sweep) * 0.8,
-      rot: facing * (14 + sweep * 10),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.6,
+      lift: 4.6 + Math.abs(sweep) * 4.2,
+      rot: facing * (18 + sweep * 16),
       anim: "talk" as const,
     };
   }
-  const s = smoothstep((u - 0.88) / 0.12);
+  const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 1.2 * (1 - s) * 0.2,
-    rot: facing * 6 * (1 - s),
+    lift: 4.6 * (1 - s),
+    rot: facing * 9 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -344,23 +340,23 @@ export function smolderPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.smolder));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 0.8, rot: s * 4 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 3.8, rot: s * 12 * facing, anim: "sit" as const };
   }
-  if (u < 0.88) {
-    const s = (u - 0.12) / 0.76;
-    const breath = Math.abs(Math.sin(s * Math.PI * 3));
+  if (u < 0.86) {
+    const s = (u - 0.12) / 0.74;
+    const breath = Math.abs(Math.sin(s * Math.PI * 3.2));
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 0.3,
-      lift: 0.8 + breath * 1.6,
-      rot: facing * (4 + breath * 5),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.2,
+      lift: 3.8 + breath * 4.6,
+      rot: facing * (12 + breath * 14),
       anim: "sit" as const,
     };
   }
-  const s = smoothstep((u - 0.88) / 0.12);
+  const s = smoothstep((u - 0.86) / 0.14);
   return {
     x: fromX,
-    lift: 0.8 * (1 - s),
-    rot: facing * 2 * (1 - s),
+    lift: 3.8 * (1 - s),
+    rot: facing * 6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -370,23 +366,23 @@ export function claimPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.claim));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.6, rot: -s * 8 * facing, anim: "sit" as const };
+    return { x: fromX, lift: s * 5.2, rot: -s * 14 * facing, anim: "sit" as const };
   }
-  if (u < 0.88) {
-    const s = (u - 0.12) / 0.76;
-    const plant = Math.abs(Math.sin(s * Math.PI * 2.2));
+  if (u < 0.86) {
+    const s = (u - 0.12) / 0.74;
+    const plant = Math.abs(Math.sin(s * Math.PI * 2.4));
     return {
-      x: fromX + facing * (2.4 * smoothstep(s) + plant * 0.4),
-      lift: 1.6 + plant * 2.2,
-      rot: facing * (-8 + plant * 10),
+      x: fromX + facing * (5.5 * smoothstep(s) + plant * 1.4),
+      lift: 5.2 + plant * 4.8,
+      rot: facing * (-14 + plant * 18),
       anim: "play" as const,
     };
   }
-  const s = smoothstep((u - 0.88) / 0.12);
+  const s = smoothstep((u - 0.86) / 0.14);
   return {
-    x: fromX + facing * 2.4,
-    lift: 1.6 * (1 - s),
-    rot: facing * -3 * (1 - s),
+    x: fromX + facing * 5.5,
+    lift: 5.2 * (1 - s),
+    rot: facing * -7 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -394,32 +390,85 @@ export function claimPose(t: number, fromX: number, facing: 1 | -1) {
 /** Fold — wings fold like a letter on the blotter. House voice true. Not window-play DRAPE or COIL. */
 export function foldPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.fold));
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX, lift: s * 2.0, rot: -s * 16 * facing, anim: "play" as const };
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 5.0, rot: -s * 22 * facing, anim: "play" as const };
   }
-  if (u < 0.72) {
-    const s = (u - 0.18) / 0.54;
+  if (u < 0.78) {
+    const s = (u - 0.16) / 0.62;
     const tuck = smoothstep(s);
     return {
-      x: fromX + facing * Math.sin(s * Math.PI) * 0.5,
-      lift: 2.0 * (1 - tuck * 0.55),
-      rot: facing * (-16 + tuck * 22),
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.8,
+      lift: 5.0 * (1 - tuck * 0.45),
+      rot: facing * (-22 + tuck * 28),
       anim: "sit" as const,
     };
   }
-  const s = smoothstep((u - 0.72) / 0.28);
+  const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 2.0 * 0.45 * (1 - s),
-    rot: facing * 6 * (1 - s),
+    lift: 5.0 * 0.55 * (1 - s),
+    rot: facing * 8 * (1 - s),
+    anim: "sit" as const,
+  };
+}
+
+
+/** Ruff — neck-ruff flare on the mantel. Not iguana dewlap. Not parrot fan. Not mantle. Ethogram ruff_soft. */
+export function ruffPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.ruff));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 4.8, rot: s * 20 * facing, anim: "talk" as const };
+  }
+  if (u < 0.86) {
+    const s = (u - 0.14) / 0.72;
+    const flare = Math.abs(Math.sin(s * Math.PI * 2.8));
+    return {
+      x: fromX + facing * Math.sin(s * Math.PI) * 1.4,
+      lift: 4.8 + flare * 5.2,
+      rot: facing * (20 + flare * 18),
+      anim: "talk" as const,
+    };
+  }
+  const s = smoothstep((u - 0.86) / 0.14);
+  return {
+    x: fromX,
+    lift: 4.8 * (1 - s),
+    rot: facing * 10 * (1 - s),
+    anim: "sit" as const,
+  };
+}
+
+/** Scrape — claw-scrape territorial mark across the grain. Not cat scratch. Not rabbit dig. Ethogram scrape_soft. */
+export function scrapePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.scrape));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.8, rot: s * 16 * facing, anim: "sit" as const };
+  }
+  if (u < 0.88) {
+    const s = (u - 0.12) / 0.76;
+    const drag = Math.sin(s * Math.PI * 3.6);
+    return {
+      x: fromX + facing * (Math.abs(drag) * 8.5 + s * 2.2),
+      lift: 2.8 + Math.abs(drag) * 7.2,
+      rot: facing * (16 + drag * 32),
+      anim: "play" as const,
+    };
+  }
+  const s = smoothstep((u - 0.88) / 0.12);
+  return {
+    x: fromX + facing * 6.0,
+    lift: 2.8 * (1 - s),
+    rot: facing * 8 * (1 - s),
     anim: "sit" as const,
   };
 }
 
 export function stepTrick(trick: DragonTrick, dt: number, flags?: TrickFlags): DragonTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "claim" && trick.kind !== "fold") {
+  if (shouldAbort(flags) && trick.kind !== "claim" && trick.kind !== "fold" && trick.kind !== "scrape") {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: DragonTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -444,26 +493,39 @@ export function stepTrick(trick: DragonTrick, dt: number, flags?: TrickFlags): D
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "guard") {
-    const pose = guardPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = guardPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "smolder") {
-    const pose = smolderPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = smolderPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "claim") {
-    const pose = claimPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = claimPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "fold") {
+    const pose = foldPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "ruff") {
+    const pose = ruffPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = foldPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = scrapePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;

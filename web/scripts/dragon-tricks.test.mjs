@@ -53,7 +53,7 @@ const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/rend
 const OverlayPhoenix = createRequire(import.meta.url)(join(root, "../desktop/renderer/phoenix-tricks.js"));
 
 test("Vesper tricks start only on idle ground", () => {
-  assert.deepEqual([...T.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...T.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -99,7 +99,7 @@ test("Vesper tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("groom"), false);
 });
 
-test("sprawl/guard/smolder/claim/fold are house-dragon-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl toucan iguana or electrical-dragon clones", () => {
+test("sprawl/guard/smolder/claim/fold/ruff/scrape are house-dragon-true, not Rui cat dog rabbit hamster guinea-pig turtle goldfish budgie fox penguin parrot ferret hedgehog chinchilla axolotl toucan iguana or electrical-dragon clones", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const sprawl = T.beginTrick("sprawl", 80, 1);
   assert.equal(sprawl.anim, "sit");
@@ -107,7 +107,7 @@ test("sprawl/guard/smolder/claim/fold are house-dragon-true, not Rui cat dog rab
   const held = T.stepTrick(sprawl, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(sprawl, T.SPRAWL_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -130,8 +130,21 @@ test("sprawl/guard/smolder/claim/fold are house-dragon-true, not Rui cat dog rab
   assert.equal(fold.anim, "play");
   const foldMid = T.stepTrick(fold, 0.5, ground);
   assert.ok(Math.abs(foldMid.lift) > 0.3 || Math.abs(foldMid.rot) > 1);
-  const foldDone = T.stepTrick(fold, 1.4, ground);
+  const foldDone = T.stepTrick(fold, T.DUR.fold + 0.1, ground);
   assert.equal(foldDone.phase, "done");
+  const ruff = T.beginTrick("ruff", 80, 1);
+  assert.equal(ruff.anim, "talk");
+  const ruffMid = T.stepTrick(ruff, T.DUR.ruff * 0.4, ground);
+  assert.ok(ruffMid.lift > 4 || Math.abs(ruffMid.rot) > 6);
+  const scrape = T.beginTrick("scrape", 80, 1);
+  assert.equal(scrape.anim, "play");
+  const scrapeMid = T.stepTrick(scrape, T.DUR.scrape * 0.45, ground);
+  assert.ok(Math.abs(scrapeMid.lift) > 2 || Math.abs(scrapeMid.rot) > 4 || Math.abs(scrapeMid.x - 80) > 2);
+  assert.equal(T.TRICKS.includes("drape"), false);
+  assert.equal(T.TRICKS.includes("bask"), false);
+  assert.equal(T.TRICKS.includes("coil"), false);
+  assert.equal(T.TRICKS.includes("hoard"), false);
+  assert.equal(T.TRICKS.includes("huff"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   assert.equal(Rui.TRICKS.includes("sprawl"), false);
@@ -345,7 +358,7 @@ test("ground registry keeps prior guests gated; Vesper selectable; no drape/bask
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...Toucan.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
   assert.deepEqual([...Iguana.TRICKS], ["sun", "dewlap", "nod", "press", "flick", "sneeze", "lash"]);
-  assert.deepEqual([...T.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...T.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.equal(T.TRICKS.includes("flatten"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
   assert.equal(T.TRICKS.includes("bask"), false);
@@ -481,7 +494,31 @@ test("ground registry keeps prior guests gated; Vesper selectable; no drape/bask
   assert.equal(OverlayGround.sleepHoldFrame("iguana", 4), null);
 });
 
-test("notes: Vesper idle-life done; Ember / phoenix now has tricks; next lacking is Nori / ball_python", () => {
+
+test("ultra-polish: Vesper sprawl/guard/ruff/scrape lifts are Rui-visible (not micro idle-gen)", () => {
+  const ex = T.beginTrick("sprawl", 80, 1);
+  const mid = T.stepTrick(ex, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `sprawl mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `sprawl mid lift ${mid.lift}`);
+  const gd = T.beginTrick("guard", 80, 1);
+  const g2 = T.stepTrick(gd, T.DUR.guard * 0.4, { cmd: "idle" });
+  assert.ok(g2.lift > 4 || Math.abs(g2.rot) > 4, `guard mid lift/rot ${g2.lift}/${g2.rot}`);
+  const rf = T.beginTrick("ruff", 80, 1);
+  const r2 = T.stepTrick(rf, T.DUR.ruff * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift > 4 || Math.abs(r2.rot) > 6, `ruff mid lift/rot ${r2.lift}/${r2.rot}`);
+  const sc = T.beginTrick("scrape", 80, 1);
+  const s2 = T.stepTrick(sc, T.DUR.scrape * 0.45, { cmd: "idle" });
+  assert.ok(Math.abs(s2.lift) > 2 || Math.abs(s2.rot) > 4 || Math.abs(s2.x - 80) > 2, `scrape mid ${s2.lift}/${s2.rot}/${s2.x}`);
+  assert.ok(Overlay.ruffPose && Overlay.scrapePose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+  assert.equal(T.DUR.ruff, Overlay.DUR.ruff);
+  assert.equal(T.DUR.scrape, Overlay.DUR.scrape);
+  assert.equal(T.SPRAWL_HOLD, Overlay.SPRAWL_HOLD);
+  assert.equal(T.HAPPY_DUR.thrum, Overlay.HAPPY_DUR.thrum);
+});
+
+test("notes: Vesper idle-life ultra done; next house-order ultra guest is Nori / ball_python (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+  assert.deepEqual([...T.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.equal(T.TRICK_KEY, "dragon");
   assert.equal(T.wantsThankYou("vesper"), true);
   assert.equal(OverlayGround.tricksFor("dragon"), Overlay);
@@ -492,5 +529,5 @@ test("notes: Vesper idle-life done; Ember / phoenix now has tricks; next lacking
   assert.equal(OverlayGround.tricksFor("ember"), OverlayPhoenix);
   assert.equal(OverlayGround.wantsThankYou("phoenix"), true);
   assert.equal(OverlayGround.wantsThankYou("ember"), true);
-  assert.equal(OverlayGround.tricksFor("ball_python"), null);
+  assert.equal(OverlayGround.tricksFor("ball_python") == null, true);
 });

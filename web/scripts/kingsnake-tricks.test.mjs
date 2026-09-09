@@ -138,7 +138,7 @@ test("stripe/audit/verdict/plumb/raid are house-kingsnake-true, not copies of pr
     assert.equal(mod.TRICKS.includes("raid"), false);
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll"]);
-  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold"]);
+  assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
   assert.equal(T.TRICKS.includes("write"), false);
   assert.equal(Parrot.TRICKS.includes("flash"), true);
