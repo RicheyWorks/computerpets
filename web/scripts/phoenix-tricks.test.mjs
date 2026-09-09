@@ -365,7 +365,7 @@ test("ground registry keeps prior guests gated; Ember selectable; no kindle/ash/
   assert.deepEqual([...Chinchilla.TRICKS], ["ash", "bound", "fluff", "chin", "sift", "ricochet", "gnaw"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...Toucan.TRICKS], ["roost", "berry", "juggle", "peer", "skip", "rattle", "clatter"]);
-  assert.deepEqual([...Iguana.TRICKS], ["sun", "dewlap", "nod", "press", "flick"]);
+  assert.deepEqual([...Iguana.TRICKS], ["sun", "dewlap", "nod", "press", "flick", "sneeze", "lash"]);
   assert.deepEqual([...T.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("flatten"), false);
   assert.equal(T.TRICKS.includes("flash"), false);
