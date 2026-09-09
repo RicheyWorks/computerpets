@@ -545,7 +545,7 @@ test("ultra-polish: Nori orb/nook/loom/weave lifts are Rui-visible (not micro id
   assert.equal(T.HAPPY_DUR.savor, Overlay.HAPPY_DUR.savor);
 });
 
-test("notes: Nori idle-life ultra done; Saffron / corn_snake ultra next-or-done; following house-order ultra guest is Bandit / kingsnake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Nori idle-life ultra done; Saffron / corn_snake + Bandit / kingsnake ultra next-or-done; following house-order ultra guest is Jade / green_tree_python (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.deepEqual([...T.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.equal(T.TRICK_KEY, "ball_python");
   assert.equal(T.wantsThankYou("nori"), true);

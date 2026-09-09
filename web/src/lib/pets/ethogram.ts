@@ -96,7 +96,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   goldfish: [A("drift", "sit_hold", 2.0, 4, "sit"), A("gulp_soft", "gulp", 1.0, 3, "talk"), A("flare_soft", "pulse", 0.9, 2, "play"), A("glint_soft", "lean", 0.8, 2, "sit"), A("dart_soft", "dart", 0.8, 2, "play"), A("yawn_soft", "yawn", 0.9, 2, "sit"), A("forage_soft", "eat", 0.8, 2, "eat"), A("freeze", "freeze", 1.4, 2)],
   ball_python: [A("tongue", "tongue", 0.7, 4), A("orb", "sit_hold", 2.4, 4, "sit"), A("nook_soft", "sit", 1.0, 3, "sit"), A("inch_soft", "play", 1.0, 2, "play"), A("loom_soft", "sit", 0.9, 2, "talk"), A("weave_soft", "play", 1.0, 2, "play"), A("gape_soft", "gape", 1.0, 1, "sit"), A("freeze", "freeze", 1.4, 2)],
   corn_snake: [A("tongue", "tongue", 0.7, 4), A("comma", "sit_hold", 2.4, 4, "sit"), A("gap_soft", "sit", 1.0, 3, "sit"), A("probe_soft", "tongue", 1.0, 2, "talk"), A("scribble_soft", "play", 1.0, 2, "play"), A("canyon_soft", "play", 0.9, 2, "play"), A("blotter_soft", "sit", 0.9, 2, "talk"), A("pencil_soft", "play", 1.0, 2, "play"), A("freeze", "freeze", 1.4, 2)],
-  kingsnake: [A("tongue", "tongue", 0.7, 4), A("inspect", "freeze", 1.4, 3), A("still", "sit_hold", 1.8, 2, "sit")],
+  kingsnake: [A("tongue", "tongue", 0.7, 4), A("verdict", "sit_hold", 2.4, 4, "sit"), A("audit_soft", "sit", 1.0, 3, "sit"), A("stripe_soft", "play", 1.0, 2, "play"), A("plumb_soft", "sit", 0.9, 2, "talk"), A("raid_soft", "play", 1.0, 2, "play"), A("band_soft", "play", 1.0, 2, "play"), A("drawer_soft", "sit", 0.9, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
   green_tree_python: [A("tongue", "tongue", 0.7, 4), A("drape", "sit_hold", 2.6, 3, "sit")],
   hognose: [
     A("tongue", "tongue", 0.7, 4),
