@@ -458,7 +458,7 @@ test("ultra-polish: Burr curl/snuffle/trundle/wheel lifts are Rui-visible (not m
   assert.ok(T.nextTrickWait(true, 0, "curl") > 38);
 });
 
-test("notes: Burr idle-life ultra done; Floss / chinchilla ultra next-or-done; following house-order ultra guest is Bloom / axolotl (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
+test("notes: Burr idle-life ultra done; Floss / chinchilla + Bloom / axolotl ultra next-or-done; following house-order ultra guest is Sol / iguana (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan skip bird; skip Ember if bird)", () => {
   assert.deepEqual([...T.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.equal(T.TRICK_KEY, "hedgehog");
   assert.equal(T.wantsThankYou("burr"), true);
