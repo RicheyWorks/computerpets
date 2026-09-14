@@ -3949,7 +3949,7 @@ test("notes: Rose ultra idle-life done; next house-order ultra is Loom / orb_wea
   assert.equal(OverlayGround.tricksFor("haste"), OverlayHouseCentipede);
   assert.equal(OverlayGround.wantsThankYou("house_centipede"), true);
   assert.equal(OverlayGround.wantsThankYou("haste"), true);
-  assert.deepEqual([...HouseCentipede.TRICKS], ["forcipule", "wallrace", "antennaflick", "fleetlegs", "scutigera"]);
+  assert.deepEqual([...HouseCentipede.TRICKS], ["forcipule", "wallrace", "antennaflick", "fleetlegs", "compound", "fifteenpair", "scutigera"]);
   assert.deepEqual([...HouseCentipede.HAPPY], ["denshaste", "inkhaste", "densforcep"]);
   assert.equal(HouseCentipede.TRICKS.includes("spiralcrawl"), false);
   assert.equal(HouseCentipede.TRICKS.includes("littorinahush"), false);

@@ -3271,7 +3271,7 @@ test("notes: Thread idle-life done; next house-order guest still lacking tricks 
   assert.equal(OverlayGround.tricksFor("haste"), OverlayHouseCentipede);
   assert.equal(OverlayGround.wantsThankYou("house_centipede"), true);
   assert.equal(OverlayGround.wantsThankYou("haste"), true);
-  assert.deepEqual([...HouseCentipede.TRICKS], ["forcipule", "wallrace", "antennaflick", "fleetlegs", "scutigera"]);
+  assert.deepEqual([...HouseCentipede.TRICKS], ["forcipule", "wallrace", "antennaflick", "fleetlegs", "compound", "fifteenpair", "scutigera"]);
   assert.deepEqual([...HouseCentipede.HAPPY], ["denshaste", "inkhaste", "densforcep"]);
   assert.equal(HouseCentipede.TRICKS.includes("sinusoid"), false);
   assert.equal(HouseCentipede.TRICKS.includes("elegans"), false);
