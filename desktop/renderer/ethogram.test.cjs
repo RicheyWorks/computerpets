@@ -490,6 +490,21 @@ test("photovore ethogram is Gleam ultra (photovore + softs + freeze, not drink-l
   assert.equal(names.includes("still"), false);
 });
 
+test("choir ethogram is Choir ultra (harmonia + softs + freeze, not chord-pulse/overtone/still)", () => {
+  const names = E.actsFor("choir").map((a) => a.name);
+  assert.ok(names.includes("harmonia"));
+  assert.ok(names.includes("polyphony_soft"));
+  assert.ok(names.includes("partial_soft"));
+  assert.ok(names.includes("timbre_soft"));
+  assert.ok(names.includes("resonance_soft"));
+  assert.ok(names.includes("formant_soft"));
+  assert.ok(names.includes("dyad_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("chord-pulse"), false);
+  assert.equal(names.includes("overtone"), false);
+  assert.equal(names.includes("still"), false);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
@@ -564,7 +579,9 @@ test("far keys never schedule scratch or tongue", () => {
     assert.equal(names.includes("tongue"), false, key);
   }
   assert.ok(E.actsFor("photovore").some((a) => a.name === "photovore"));
-  assert.ok(E.actsFor("choir").some((a) => a.name === "chord-pulse"));
+  assert.ok(E.actsFor("choir").some((a) => a.name === "harmonia"));
+  assert.ok(E.actsFor("choir").some((a) => a.name === "formant_soft"));
+  assert.ok(E.actsFor("choir").some((a) => a.name === "dyad_soft"));
   assert.ok(E.actsFor("nimbus").some((a) => a.name === "float"));
   assert.ok(E.actsFor("silica").some((a) => a.name === "facet"));
   assert.ok(E.actsFor("terminator").some((a) => a.name === "edge-walk"));
