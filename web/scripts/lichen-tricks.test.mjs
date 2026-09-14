@@ -1044,7 +1044,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.wantsThankYou("saguaro"), true);
   assert.equal(OverlayGround.tricksFor("arm"), OverlaySaguaro);
   assert.equal(OverlayGround.wantsThankYou("arm"), true);
-  assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel"]);
+  assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("water_lily"), OverlayWaterLily);
   assert.equal(OverlayGround.wantsThankYou("water_lily"), true);
   assert.equal(OverlayGround.tricksFor("disk"), OverlayWaterLily);
@@ -1308,10 +1308,10 @@ test("notes: Pact idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
-  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
-  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
-  assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel"]);
-  assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel"]);
+  assert.deepEqual([...Orchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...OverlayOrchid.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Saguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
+  assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("saguaro"), OverlaySaguaro);
   assert.equal(OverlayGround.wantsThankYou("saguaro"), true);
   assert.equal(OverlayGround.tricksFor("arm"), OverlaySaguaro);
@@ -1691,8 +1691,8 @@ test("notes: Pact idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("dew"), true);
-  assert.deepEqual([...Sundew.TRICKS], ["mucilage", "tentacle", "digest", "gland", "rosette"]);
-  assert.deepEqual([...OverlaySundew.TRICKS], ["mucilage", "tentacle", "digest", "gland", "rosette"]);
+  assert.deepEqual([...Sundew.TRICKS], ["mucilage", "tentacle", "digest", "gland", "rosette", "lamina", "circinate"]);
+  assert.deepEqual([...OverlaySundew.TRICKS], ["mucilage", "tentacle", "digest", "gland", "rosette", "lamina", "circinate"]);
   assert.equal(OverlayGround.tricksFor("honeybee"), OverlayHoneybee);
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), OverlayHoneybee);
@@ -1725,8 +1725,8 @@ test("notes: Pact idle-life done; next house-order guest still lacking tricks is
   assert.equal(T.HAPPY.includes("gnat"), false);
   assert.equal(T.HAPPY.includes("peat"), false);
   assert.equal(T.HAPPY.includes("crimson"), false);
-  assert.deepEqual([...VenusFlytrap.TRICKS], ["clamp", "trichome", "stew", "unseal", "poise"]);
-  assert.deepEqual([...OverlayVenusFlytrap.TRICKS], ["clamp", "trichome", "stew", "unseal", "poise"]);
+  assert.deepEqual([...VenusFlytrap.TRICKS], ["clamp", "trichome", "stew", "unseal", "poise", "cage", "scape"]);
+  assert.deepEqual([...OverlayVenusFlytrap.TRICKS], ["clamp", "trichome", "stew", "unseal", "poise", "cage", "scape"]);
 
   assert.equal(T.TRICKS.includes("rib"), false);
   assert.equal(T.TRICKS.includes("branch"), false);
