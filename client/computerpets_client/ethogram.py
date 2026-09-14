@@ -173,7 +173,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "beaver": (_a("castor", "sit_hold", 2.4, 4, "sit"), _a("woodfell_soft", "play", 1.2, 2, "play"), _a("paddleclap_soft", "play", 1.2, 2, "play"), _a("lodgehaul_soft", "talk", 1.2, 2, "talk"), _a("mudpack_soft", "talk", 1.2, 2, "talk"), _a("aspen_soft", "play", 1.2, 2, "play"), _a("divehush_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "capybara": (_a("soak", "sit_hold", 2.2, 4, "sit"), _a("graze", "eat", 1.6, 5, "eat"), _a("nuzzle", "nuzzle", 1.0, 3, "play")),
     "porcupine": (_a("erethizon", "sit_hold", 2.4, 4, "sit"), _a("toothclack_soft", "talk", 1.2, 2, "talk"), _a("boleclimb_soft", "play", 1.2, 2, "play"), _a("cambiumchew_soft", "play", 1.2, 2, "play"), _a("dorsoflare_soft", "talk", 1.2, 2, "talk"), _a("guardhair_soft", "talk", 1.2, 2, "talk"), _a("pinehush_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
-    "black_bear": (_a("forage", "eat", 1.4, 4, "eat"), _a("sit", "sit_hold", 2.2, 4, "sit"), _a("huff", "pulse", 0.8, 2)),
+    "black_bear": (_a("ursus", "sit_hold", 2.4, 4, "sit"), _a("bipedrise_soft", "talk", 1.2, 2, "talk"), _a("clawscar_soft", "play", 1.2, 2, "play"), _a("berrypluck_soft", "play", 1.2, 2, "play"), _a("denscrape_soft", "talk", 1.2, 2, "talk"), _a("bluffhuff_soft", "talk", 1.2, 2, "talk"), _a("mastforage_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "gecko": (_a("climb", "wiggle", 1.0, 5), _a("chirp", "talk", 0.7, 3, "talk"), _a("cling", "sit_hold", 2.0, 2, "sit")),
     "anole": (_a("flash", "pulse", 0.8, 5), _a("brown", "nod", 1.2, 2, "sit"), _a("still", "freeze", 1.6, 2)),
     "skink": (_a("dash", "dart", 0.5, 5), _a("tail", "pulse", 0.8, 3), _a("still", "freeze", 1.4, 2)),
