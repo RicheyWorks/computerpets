@@ -364,6 +364,22 @@ test("morel ethogram is Lattice ultra (morchella + softs + freeze, not lean/stil
   assert.equal(names.length, 8);
 });
 
+test("chanterelle ethogram is Horn ultra (cantharellus + softs + freeze, not lean/flush/still)", () => {
+  const names = E.actsFor("chanterelle").map((a) => a.name);
+  assert.ok(names.includes("cantharellus"));
+  assert.ok(names.includes("apricot_soft"));
+  assert.ok(names.includes("funnel_soft"));
+  assert.ok(names.includes("decurrent_soft"));
+  assert.ok(names.includes("flute_soft"));
+  assert.ok(names.includes("vase_soft"));
+  assert.ok(names.includes("plica_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("flush"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));

@@ -256,8 +256,8 @@ test("Pact tricks start only on idle ground", () => {
   assert.equal(T.HAPPY.includes("cibarius"), false);
   assert.equal(T.HAPPY.includes("formosus"), false);
   assert.equal(T.HAPPY.includes("cascadensis"), false);
-  assert.deepEqual([...Chanterelle.TRICKS], ["apricot", "funnel", "decurrent", "flute", "cantharellus"]);
-  assert.deepEqual([...OverlayChanterelle.TRICKS], ["apricot", "funnel", "decurrent", "flute", "cantharellus"]);
+  assert.deepEqual([...Chanterelle.TRICKS], ["apricot", "funnel", "decurrent", "flute", "cantharellus", "vase", "plica"]);
+  assert.deepEqual([...OverlayChanterelle.TRICKS], ["apricot", "funnel", "decurrent", "flute", "cantharellus", "vase", "plica"]);
   assert.deepEqual([...Chanterelle.HAPPY], ["cibarius", "formosus", "cascadensis"]);
   assert.equal(T.TRICKS.includes("pore"), false);
   assert.equal(T.TRICKS.includes("bracket"), false);
