@@ -1,7 +1,7 @@
-/** Chamber ground tricks while idle. House nautilus — spiral / siphuncle / nacre / pinhole / fringe personality (chambered shell spiral, gas-tube buoyancy, pearly nacre calm, pinhole-eye regard, suckerless tentacle fringe; not Cup mantle dens, Sepia cuttlebone chromatophores, or Coin bowl-drift). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `nautilus-tricks.js`. Window-play RISE unchanged — never names `rise`. Cup owns jet; Sepia owns bone/pupil/chroma/hover/blot; Bluff owns hood; Bandit owns tribute; Phoenix owns lift. Not Ink/Coin/Bloom/Cup/Sepia clones. No cry inventing — thank-yous are silent desk motion only. */
+/** Chamber ground tricks while idle — ultra-polish pass. House nautilus — spiral / siphuncle / nacre / pinhole / fringe / hyponome / aperture personality (chambered shell spiral, gas-tube buoyancy, pearly nacre calm, pinhole-eye regard, suckerless tentacle fringe, hyponome funnel jet, soft-body aperture emerge; not Cup mantle dens, Sepia cuttlebone chromatophores, or Coin bowl-drift). Spiral rides the coiled chambers; siphuncle gas-tubes buoyancy; nacre pearly-calms; pinhole regards the blotter; fringe waves suckerless cirri; hyponome funnel-jets (species-true Nautilus pompilius locomotion — not Cup mantle jet, not window-play RISE); aperture soft-body emerges/retracts at the shell mouth (species-true protective/foraging posture — not Cup dens, not Sepia blot). Window-play RISE unchanged — never names `rise`. Ethogram keeps hide sit_hold; adds siphuncle/nacre/pinhole/fringe/hyponome/aperture softs + freeze (replaces thin rise/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via nautilus.wav. Thank-yous chamber / pearl / quiet. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `nautilus-tricks.js`. True house-nautilus desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids rise/flush/lid/mantle/sucker/jet/veil/tinker/papilla/ooze/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/fan/flash/latch/puff/unfurl/chart/climb/probe/canyon/crawl/siphon/pulse/slink/den/cork/nest/savor/settle/survey/snatch/band/funnel/tentacle/loom/wave/buoy/bone/pupil/chroma/hover/blot/strike/zebra name collisions with prior guests and nautilus window-play. Bird ultra (Soot→Ember) + Miso→Sepia done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Pulse / moon_jelly. No cry inventing beyond house nautilus.wav prefer. Never retouch Rui sprites. */
 
 export const TRICK_KEY = "nautilus";
-export const TRICKS = ["spiral", "siphuncle", "nacre", "pinhole", "fringe"] as const;
+export const TRICKS = ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"] as const;
 export const HAPPY = ["chamber", "pearl", "quiet"] as const;
 export type NautilusTrickKind = (typeof TRICKS)[number];
 export type NautilusHappyKind = (typeof HAPPY)[number];
@@ -46,21 +46,23 @@ export type NautilusHappy = {
 };
 
 export const HAPPY_DUR: Record<NautilusHappyKind, number> = {
-  chamber: 1.28,
-  pearl: 1.2,
-  quiet: 1.16,
+  chamber: 1.55,
+  pearl: 1.5,
+  quiet: 1.42,
 };
 
 /** Spiral hold — Chamber rests in the coiled chambers. Not window-play RISE. Not Cup mantle plate. Not Sepia bone. */
-export const SPIRAL_HOLD = 11.2;
-export const RELEASE_S = 0.65;
+export const SPIRAL_HOLD = 10.6;
+export const RELEASE_S = 0.6;
 
 export const DUR: Record<NautilusTrickKind, number> = {
   spiral: SPIRAL_HOLD + RELEASE_S,
-  siphuncle: 1.44,
-  nacre: 1.38,
-  pinhole: 1.34,
-  fringe: 1.5,
+  siphuncle: 1.78,
+  nacre: 1.85,
+  pinhole: 1.78,
+  fringe: 1.92,
+  hyponome: 2.05,
+  aperture: 2.12,
 };
 
 export function canStart(state: TrickFlags | undefined) {
@@ -91,38 +93,28 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: NautilusTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "spiral") return 48 + roll * 28;
-  if (kind === "siphuncle") return 15 + roll * 10;
-  if (kind === "fringe") return 16 + roll * 11;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "spiral") return 38 + roll * 24;
+  if (kind === "hyponome" || kind === "aperture" || kind === "fringe") return 12 + roll * 9;
+  if (kind === "siphuncle" || kind === "nacre" || kind === "pinhole") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: NautilusTrickKind | null) {
+export function pickTrick(rand?: number, musicOn = false, lastKind?: NautilusTrickKind | null): NautilusTrickKind {
   if (musicOn) return "spiral";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "spiral") {
-    if (roll < 0.26) return "siphuncle";
-    if (roll < 0.48) return "nacre";
-    if (roll < 0.72) return "pinhole";
-    return "fringe";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "spiral" ? 0.55 : k === "hyponome" || k === "aperture" || k === "fringe" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "siphuncle") {
-    if (roll < 0.28) return "spiral";
-    if (roll < 0.5) return "nacre";
-    if (roll < 0.72) return "pinhole";
-    return "fringe";
-  }
-  if (lastKind === "nacre") {
-    if (roll < 0.22) return "spiral";
-    if (roll < 0.44) return "siphuncle";
-    if (roll < 0.66) return "pinhole";
-    return "fringe";
-  }
-  if (roll < 0.2) return "spiral";
-  if (roll < 0.4) return "siphuncle";
-  if (roll < 0.6) return "nacre";
-  if (roll < 0.8) return "pinhole";
-  return "fringe";
+  return list[list.length - 1] || "spiral";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -194,45 +186,45 @@ export function chamberPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.chamber));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 1.05, rot: s * 3.2, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 3.2, rot: s * 14, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const coil = Math.sin(t * 2.4);
     return {
-      lift: 1.05 + Math.abs(coil) * 0.22,
-      rot: 3.2 + coil * 3.8,
-      dx: coil * 0.1,
+      lift: 3.2 + Math.abs(coil) * 1.8,
+      rot: 14 + coil * 12,
+      dx: coil * 0.45,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 0.85 * (1 - s), rot: 2.0 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function pearlPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.pearl));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.75, rot: s * -7.5, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 2.6, rot: s * -18, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.8) {
-    const w = Math.sin(t * 2.2);
+    const w = Math.sin(t * 2.6);
     return {
-      lift: 0.75 + Math.abs(w) * 0.18,
-      rot: -7.5 + w * 9,
-      dx: w * 0.1,
+      lift: 2.6 + Math.abs(w) * 1.4,
+      rot: -18 + w * 22,
+      dx: w * 0.35,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 0.75 * (1 - s), rot: -7.5 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.0 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function quietPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 1.6)) * 0.35 + 0.7,
-    rot: 1.5 + Math.sin(t * 1.9) * 3.2,
-    dx: Math.sin(t * 1.2) * 0.08,
+    lift: Math.abs(Math.sin(t * 2.1)) * 2.2 + 2.4,
+    rot: 8 + Math.sin(t * 2.8) * 14,
+    dx: Math.sin(t * 1.6) * 0.4,
     anim: "sit" as TrickAnim,
   };
 }
@@ -280,7 +272,11 @@ export function beginTrick(kind: NautilusTrickKind, x: number, facing: 1 | -1): 
             ? "talk"
             : kind === "fringe"
               ? "play"
-              : "sit";
+              : kind === "hyponome"
+                ? "walk"
+                : kind === "aperture"
+                  ? "play"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "spiral" ? "hold" : "go",
@@ -300,40 +296,43 @@ function smoothstep(t: number) {
 }
 
 export function spiralPose(t: number) {
-  const beat = Math.sin(t * 0.72) + 0.18 * Math.sin(t * 2.1);
+  const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
   return {
-    lift: 0.95 + Math.abs(Math.sin(t * 0.55)) * 0.18,
-    rot: 2.4 + beat * 2.8,
+    lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+    rot: -18 + Math.sin(t * 2.4) * 16 + beat * 8,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.95 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 2.4 * (1 - u) };
+  return {
+    lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
+    rot: -18 * (1 - u),
+  };
 }
 
 export function siphunclePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.siphuncle));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.65, rot: s * 2.5 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.6, rot: s * 10 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.12) / 0.6;
     const gas = Math.sin(s * Math.PI * 2.6);
     const tube = Math.sin(s * Math.PI * 1.4);
     return {
-      x: fromX + facing * tube * 0.2,
-      lift: 1.65 + gas * 0.55,
-      rot: facing * (2.5 + gas * 4 + tube * 2),
+      x: fromX + facing * tube * 0.55,
+      lift: 3.6 + gas * 2.0,
+      rot: facing * (10 + gas * 14 + tube * 6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
     x: fromX,
-    lift: 1.65 * (1 - s),
-    rot: facing * (2 * (1 - s)),
+    lift: 3.2 * (1 - s),
+    rot: facing * (6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -342,23 +341,23 @@ export function nacrePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.nacre));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 0.85, rot: s * 5 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 2.8, rot: s * 14 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.7) {
     const s = (u - 0.14) / 0.56;
     const sheen = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * sheen * 0.16,
-      lift: 0.85 + Math.abs(sheen) * 0.22,
-      rot: facing * (5 + sheen * 7),
+      x: fromX + facing * sheen * 0.55,
+      lift: 2.8 + Math.abs(sheen) * 1.8,
+      rot: facing * (14 + sheen * 16),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.7) / 0.3);
   return {
     x: fromX,
-    lift: 0.85 * (1 - s),
-    rot: facing * (3 * (1 - s)),
+    lift: 2.2 * (1 - s),
+    rot: facing * (8 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -367,15 +366,15 @@ export function pinholePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.pinhole));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 0.55, rot: s * -10 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 2.6, rot: s * -20 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.14) / 0.41;
-    const w = Math.sin(s * Math.PI * 1.8);
+    const w = Math.sin(s * Math.PI * 2.2);
     return {
-      x: fromX + facing * w * 0.14,
-      lift: 0.55 + Math.abs(w) * 0.12,
-      rot: facing * (-10 + w * 12),
+      x: fromX + facing * w * 0.55,
+      lift: 2.6 + Math.abs(w) * 1.6,
+      rot: facing * (-20 + w * 24),
       anim: "talk" as TrickAnim,
     };
   }
@@ -383,16 +382,16 @@ export function pinholePose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.23;
     return {
       x: fromX,
-      lift: 0.55 - s * 0.1,
-      rot: facing * (-3 + s * 1.5),
+      lift: 2.6 - s * 0.5,
+      rot: facing * (-8 + s * 4),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 0.45 * (1 - s),
-    rot: facing * (-1.5 * (1 - s)),
+    lift: 1.8 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -401,31 +400,108 @@ export function fringePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.fringe));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 1.2, rot: s * -3 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.4, rot: s * -12 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.1) / 0.62;
     const wave = Math.sin(s * Math.PI * 4.8);
     const soft = Math.sin(s * Math.PI * 2.2);
     return {
-      x: fromX + facing * soft * 0.35,
-      lift: 1.2 + Math.abs(wave) * 0.4,
-      rot: facing * (-3 + wave * 8 + soft * 3),
+      x: fromX + facing * soft * 0.9,
+      lift: 3.4 + Math.abs(wave) * 2.2,
+      rot: facing * (-12 + wave * 18 + soft * 8),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
     x: fromX,
-    lift: 1.2 * (1 - s),
-    rot: facing * (-1.5 * (1 - s)),
+    lift: 2.8 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function hyponomePose(t: number, fromX: number, facing: 1 | -1) {
+  // Hyponome funnel jet — species-true Nautilus pompilius locomotion. Not Cup mantle jet. Not window-play RISE.
+  const u = Math.max(0, Math.min(1, t / DUR.hyponome));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX + facing * s * 0.6, lift: s * 2.4, rot: s * 8 * facing, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.38) {
+    const s = smoothstep((u - 0.12) / 0.26);
+    return {
+      x: fromX + facing * (0.6 + s * 5.2),
+      lift: 2.4 + s * 1.6,
+      rot: facing * (8 - s * 4),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.38) / 0.34;
+    const pulse = Math.sin(s * Math.PI * 2.8);
+    return {
+      x: fromX + facing * (5.8 - s * 2.4 + pulse * 0.45),
+      lift: 4.0 + Math.abs(pulse) * 1.8,
+      rot: facing * (4 + pulse * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + facing * (3.4 * (1 - s)),
+    lift: 2.8 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function aperturePose(t: number, fromX: number, facing: 1 | -1) {
+  // Soft-body aperture emerge/retract — species-true shell-mouth posture. Not Cup dens. Not Sepia blot.
+  const u = Math.max(0, Math.min(1, t / DUR.aperture));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.2, rot: s * -14 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.45) {
+    const s = smoothstep((u - 0.12) / 0.33);
+    return {
+      x: fromX + facing * s * 1.2,
+      lift: 3.2 + s * 1.4,
+      rot: facing * (-14 + s * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.45) / 0.27;
+    const quiver = Math.sin(s * Math.PI * 3.6);
+    return {
+      x: fromX + facing * (1.2 - s * 0.6 + quiver * 0.35),
+      lift: 4.6 + Math.abs(quiver) * 1.6,
+      rot: facing * (-4 + quiver * 16),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + facing * (0.6 * (1 - s)),
+    lift: 3.0 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
 
 export function stepTrick(trick: NautilusTrick, dt: number, flags?: TrickFlags): NautilusTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "siphuncle" && trick.kind !== "nacre" && trick.kind !== "fringe") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "siphuncle" &&
+    trick.kind !== "nacre" &&
+    trick.kind !== "fringe" &&
+    trick.kind !== "hyponome" &&
+    trick.kind !== "aperture"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: NautilusTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -450,26 +526,39 @@ export function stepTrick(trick: NautilusTrick, dt: number, flags?: TrickFlags):
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "siphuncle") {
-    const pose = siphunclePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = siphunclePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "nacre") {
-    const pose = nacrePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = nacrePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "pinhole") {
-    const pose = pinholePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = pinholePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "fringe") {
+    const pose = fringePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "hyponome") {
+    const pose = hyponomePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = fringePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = aperturePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
