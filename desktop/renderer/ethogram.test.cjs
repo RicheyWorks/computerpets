@@ -84,6 +84,17 @@ test("moss ethogram is Felt ultra (thatch + softs + freeze, not lean/nod/still)"
   assert.equal(names.includes("still"), false);
 });
 
+test("maidenhair ethogram is Vein ultra (saucer + softs + freeze, not lean/nod/unfurl)", () => {
+  const names = E.actsFor("maidenhair").map((a) => a.name);
+  assert.ok(names.includes("saucer"));
+  assert.ok(names.includes("sori_soft"));
+  assert.ok(names.includes("stipe_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("unfurl"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",
