@@ -714,7 +714,11 @@ assert.ok(names("toad").includes("freeze"));
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
   }
-  assert.ok(names("gecko").includes("climb"));
+  assert.ok(names("gecko").includes("hemidactylus"));
+  assert.ok(names("gecko").includes("toepadcling_soft"));
+  assert.ok(names("gecko").includes("setae_soft"));
+  assert.ok(names("gecko").includes("lamphush_soft"));
+  assert.ok(names("gecko").includes("freeze"));
   assert.ok(names("anole").includes("flash"));
   assert.ok(names("skink").includes("dash"));
   assert.ok(names("chameleon").includes("aim"));
