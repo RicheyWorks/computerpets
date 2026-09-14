@@ -1,7 +1,6 @@
-/** Kite ground tricks while idle. House reef manta — wing / lobe / gyre / vault / span personality (pectoral wing glide, cephalic-lobe plankton scoop, barrel-roll curiosity as a gyre (never named barrel — window-play owns BARREL), forward somersault vault (never named somersault — Rui owns that), gentle-giant wingspan desk life; not Coin drift/gulp/flare/glint/dart, Pulse bell/oral/lucent/trail/medusa, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Sepia hover/pupil, Chamber spiral, Cup mantle/jet, Ink soak/tuck, or Clip nest). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop manta-tricks.js. Not a Rui, cat, dog, rabbit, hamster/Clip, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog/Burr, chinchilla, axolotl/Bloom, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, octopus/Cup, cuttlefish/Sepia, nautilus/Chamber, moon-jelly/Pulse, sea-star/Cling, hermit-crab/Tenant, horseshoe-crab/Ledger, seahorse/Anchor, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play BARREL unchanged — never names barrel. Special Soar (eagle_ray) unchanged — never names soar/spots as tricks. Anchor owns coil/buoy/siphon/swivel/pouch and coronet/pipe/moor; Rui owns somersault; Ledger owns carapace/bookgill/telson/furrow/fossil and blue/page/tray; Tenant owns swap/antenna/scuttle/withdraw/vacancy and scrap/fit/lease; Cling owns podia/righting/crawl/evert/penta and damp/press/tide; Pulse owns bell/oral/lucent/trail/medusa and halo/lumen/gel; Cup owns jet/mantle/sucker/veil/tinker and keep/tint/squeeze; Sepia owns bone/pupil/chroma/hover/blot and ripple/glance/dab; Chamber owns spiral/siphuncle/nacre/pinhole/fringe and chamber/pearl/quiet; Coin owns drift/gulp/flare/glint/dart and bubble/lip/swish; Ink owns soak/tuck/crane/plod/paddle and munch/bob/huff; Bloom owns gill/amble/mend/smile/plume and wink/blip/grin; Clip owns nest/cheek/scurry/pocket/reel and stuff/chitter/sprint; Burr owns curl; Fuse owns pulse as thank-you; ferret owns tube; Bluff owns hood; Bandit owns tribute; Phoenix owns lift; Sol owns press as a trick and tap as thank-you; rabbit owns dig; boa owns cradle as thank-you. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Kite ground tricks while idle — ultra-polish pass. House reef manta — wing / lobe / gyre / vault / span / breach / ram personality (pectoral wingbeat glide, cephalic-lobe plankton scoop, barrel-roll curiosity as a gyre (never named barrel — window-play owns BARREL), forward somersault vault (never named somersault — Rui owns that), gentle-giant wingspan desk hold, surface breach leap, ram-filter mouth-open feed glide; not Coin drift/gulp/flare/glint/dart/yawn/forage, Pulse bell/oral/lucent/trail/medusa, Anchor coil/buoy/siphon/swivel/pouch/dorsal/pectoral, Ledger carapace/bookgill/telson/furrow/fossil/pusher/ocular, Tenant swap/antenna/scuttle/withdraw/vacancy/chela/bailer, Ochre podia/righting/crawl/evert/penta/madre/papula, Sepia hover/pupil, Chamber spiral, Cup mantle/jet, Ink soak/tuck, Clip nest, or Soar eagle_ray spots). Breach is the species-true surface leap (not vault flip alone, not Rui somersault, not window-play BARREL); ram is Mobula/Manta filter-feeding with cephalic lobes funneling (not lobe scoop alone, not Coin gulp, not Cup jet). Window-play BARREL unchanged — never names `barrel`. Special Soar (eagle_ray) unchanged — never names soar. Ethogram keeps span sit_hold; adds wing/lobe/gyre/vault/breach/ram softs + freeze (replaces thin soar/glide). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via manta.wav. Thank-yous ceil / scoop / breadth. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `manta-tricks.js`. True house-manta desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids barrel/soar/spots/hitch/hover/coil/buoy/siphon/swivel/pouch/dorsal/pectoral/carapace/bookgill/swap/withdraw/podia/bell/oral/mantle/jet/drift/gulp/flare/somersault name collisions with prior guests and manta window-play. Bird ultra (Soot→Ember) + Miso→Anchor done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Door / moray. No cry inventing beyond house manta.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "manta";
-export const TRICKS = ["wing", "lobe", "gyre", "vault", "span"] as const;
+export const TRICKS = ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"] as const;
 export const HAPPY = ["ceil", "scoop", "breadth"] as const;
 export type MantaTrickKind = (typeof TRICKS)[number];
 export type MantaHappyKind = (typeof HAPPY)[number];
@@ -27,7 +26,7 @@ export type MantaTrick = {
   rot: number;
   anim: TrickAnim;
   facing: 1 | -1;
-  fromX: number;
+  fromX?: number;
   abort?: boolean;
 };
 
@@ -41,14 +40,29 @@ export type MantaHappy = {
   rot: number;
   anim: TrickAnim;
   facing: 1 | -1;
-  fromX: number;
+  fromX?: number;
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { ceil: 1.24, scoop: 1.16, breadth: 1.22 } as const;
-export const SPAN_HOLD = 11.6;
-export const RELEASE_S = 0.72;
-export const DUR = { span: SPAN_HOLD + RELEASE_S, wing: 1.48, lobe: 1.36, gyre: 1.4, vault: 1.32 } as const;
+export const HAPPY_DUR: Record<MantaHappyKind, number> = {
+  ceil: 1.28,
+  scoop: 1.18,
+  breadth: 1.24,
+};
+
+/** Span hold — Kite opens the full pectoral wingspan on the desk. Not window-play BARREL. Not Anchor coil. */
+export const SPAN_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+
+export const DUR: Record<MantaTrickKind, number> = {
+  span: SPAN_HOLD + RELEASE_S,
+  wing: 1.58,
+  lobe: 1.52,
+  gyre: 1.68,
+  vault: 1.48,
+  breach: 1.72,
+  ram: 1.64,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,38 +92,30 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: MantaTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "span") return 48 + roll * 28;
-  if (kind === "wing") return 16 + roll * 12;
-  if (kind === "vault") return 14 + roll * 10;
-  return justFinished ? 10.5 + roll * 8 : 5.2 + roll * 6;
+  if (kind === "span") return 38 + roll * 24;
+  if (kind === "breach" || kind === "gyre" || kind === "vault") return 12 + roll * 9;
+  if (kind === "wing" || kind === "lobe" || kind === "ram") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: MantaTrickKind | string | null) {
-  if (musicOn) return "span" as const;
+
+export function pickTrick(rand?: number, musicOn = false, lastKind?: MantaTrickKind | string | null): MantaTrickKind {
+  if (musicOn) return "span";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "span") {
-    if (roll < 0.26) return "wing" as const;
-    if (roll < 0.48) return "lobe" as const;
-    if (roll < 0.72) return "gyre" as const;
-    return "vault" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "span" ? 0.55 : k === "breach" || k === "gyre" || k === "vault" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "wing") {
-    if (roll < 0.28) return "span" as const;
-    if (roll < 0.5) return "lobe" as const;
-    if (roll < 0.72) return "gyre" as const;
-    return "vault" as const;
-  }
-  if (lastKind === "lobe") {
-    if (roll < 0.22) return "span" as const;
-    if (roll < 0.44) return "wing" as const;
-    if (roll < 0.66) return "gyre" as const;
-    return "vault" as const;
-  }
-  if (roll < 0.2) return "span" as const;
-  if (roll < 0.4) return "wing" as const;
-  if (roll < 0.6) return "lobe" as const;
-  if (roll < 0.8) return "gyre" as const;
-  return "vault" as const;
+  return list[list.length - 1] || "wing";
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -176,73 +182,78 @@ export function beginHappy(kind: MantaHappyKind | string, x: number, facing: 1 |
 }
 
 export function ceilPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ceil));
-    if (u < 0.18) {
-      const s = u / 0.18;
-      return { lift: s * 0.42, rot: s * -2.4, dx: 0, anim: "play" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const tip = Math.sin(t * 1.85);
-      return {
-        lift: 0.42 + Math.abs(tip) * 0.08,
-        rot: -2.4 + tip * 3.6,
-        dx: tip * 0.04,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.8) / 0.2;
-    return { lift: 0.32 * (1 - s), rot: -1.6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ceil));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 2.8, rot: s * -12, dx: 0, anim: "play" as TrickAnim };
   }
-export function scoopPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.scoop));
-    if (u < 0.2) {
-      const s = u / 0.2;
-      return { lift: s * 0.18, rot: s * 6.5, dx: 0, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const draw = Math.sin(t * 2.35);
-      return {
-        lift: 0.18 + Math.abs(draw) * 0.09,
-        rot: 6.5 + draw * 5.5,
-        dx: draw * 0.08,
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = (u - 0.78) / 0.22;
-    return { lift: 0.14 * (1 - s), rot: 3.8 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function breadthPose(t: number) {
+  if (u < 0.8) {
+    const tip = Math.sin(t * 1.85);
     return {
-      lift: 0.12 + Math.abs(Math.sin(t * 0.78)) * 0.1,
-      rot: Math.sin(t * 0.92) * 1.8,
-      dx: Math.sin(t * 0.55) * 0.05,
+      lift: 2.8 + Math.abs(tip) * 1.4,
+      rot: -12 + tip * 16,
+      dx: tip * 0.35,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.0 * (1 - s), rot: -8 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function scoopPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.scoop));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 2.4, rot: s * 18, dx: 0, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const draw = Math.sin(t * 2.2);
+    return {
+      lift: 2.4 + Math.abs(draw) * 1.3,
+      rot: 18 + draw * 14,
+      dx: draw * 0.28,
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 1.6 * (1 - s), rot: 10 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function breadthPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.breadth));
+  if (u < 0.22) {
+    const s = u / 0.22;
+    return { lift: s * 2.2, rot: s * 6, dx: 0, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const breath = Math.sin(t * 1.1);
+    return {
+      lift: 2.2 + Math.abs(breath) * 1.1,
+      rot: 6 + breath * 8,
+      dx: breath * 0.2,
       anim: "sit" as TrickAnim,
     };
   }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 1.5 * (1 - s), rot: 4 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
 export function stepHappy(happy: MantaHappy, dt: number, flags: TrickFlags): MantaHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
     return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: MantaHappy = { ...happy, t: happy.t + Math.max(0, dt) };
-  const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "ceil") {
-    const pose = ceilPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "scoop") {
-    const pose = scoopPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = breadthPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  const dur = HAPPY_DUR[next.kind] || HAPPY_DUR.ceil;
+  let pose;
+  if (next.kind === "ceil") pose = ceilPose(next.t);
+  else if (next.kind === "scoop") pose = scoopPose(next.t);
+  else pose = breadthPose(next.t);
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.x = (happy.fromX != null ? happy.fromX : happy.x) + (pose.dx || 0) * happy.facing;
+  next.anim = pose.anim;
+  if (next.t >= dur) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
 
@@ -250,27 +261,17 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
 
-export function beginTrick(kind: MantaTrickKind, x: number, facing: 1 | -1): MantaTrick {
-  const anim: TrickAnim =
-    kind === "span"
-      ? "sit"
-      : kind === "wing"
-        ? "play"
-        : kind === "lobe"
-          ? "talk"
-          : kind === "gyre"
-        ? "play"
-        : kind === "vault"
-          ? "play"
-              : "sit";
+export function beginTrick(kind: MantaTrickKind | string, x: number, facing: 1 | -1): MantaTrick {
+  const name = (TRICKS as readonly string[]).indexOf(kind) >= 0 ? (kind as MantaTrickKind) : "wing";
+  const hold = name === "span";
   return {
-    kind: kind,
-    phase: kind === "span" ? "hold" : "go",
+    kind: name,
+    phase: hold ? "hold" : "go",
     t: 0,
     x: x,
     lift: 0,
     rot: 0,
-    anim: anim,
+    anim: hold ? "sit" : name === "lobe" || name === "ram" ? "talk" : name === "wing" ? "walk" : "play",
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
@@ -282,115 +283,195 @@ function smoothstep(t: number) {
 }
 
 export function spanPose(t: number) {
-    const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
-    return {
-      lift: 0.12 + Math.abs(Math.sin(t * 0.42)) * 0.06,
-      rot: breath * 1.05,
-    };
-  }
+  const breath = Math.sin(t * 0.42);
+  return {
+    lift: 2.4 + Math.abs(breath) * 1.2,
+    rot: breath * 6,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.12 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.75 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  const s = smoothstep(u);
+  return {
+    lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)),
+    rot: 4 * (1 - s),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Pectoral wingbeat — reef-manta flight through the bowl. Not Coin dart. Not Cup jet. */
 export function wingPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.wing));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.38, rot: s * -3.5 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const s = (u - 0.12) / 0.68;
-      const beat = Math.sin(s * Math.PI * 3.2);
-      return {
-        x: fromX + facing * (0.22 * s + beat * 0.06),
-        lift: 0.38 + beat * 0.1,
-        rot: facing * (-3.5 + beat * 5.5),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
+  const u = Math.max(0, Math.min(1, t / DUR.wing));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.0, rot: s * -14 * facing, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.14) / 0.58;
+    const beat = Math.sin(s * Math.PI * 4.6);
+    const surge = Math.sin(s * Math.PI * 1.3);
     return {
-      x: fromX + facing * 0.22 * (1 - s),
-      lift: 0.3 * (1 - s),
-      rot: facing * (-2 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * (surge * 1.4 + beat * 0.4),
+      lift: 3.0 + Math.abs(beat) * 1.7,
+      rot: facing * (-14 + beat * 18 + surge * 8),
+      anim: "walk" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + facing * 1.1 * (1 - s),
+    lift: 2.2 * (1 - s),
+    rot: facing * (-8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Cephalic-lobe scoop — plankton funnel. Not Coin gulp. Not scoop thank-you alone. */
 export function lobePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.lobe));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.16, rot: s * 7 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.14) / 0.64;
-      const scoop = Math.sin(s * Math.PI * 4.2);
-      return {
-        x: fromX + facing * (0.14 + Math.abs(scoop) * 0.07),
-        lift: 0.16 + Math.abs(scoop) * 0.07,
-        rot: facing * (7 + scoop * 4.8),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const u = Math.max(0, Math.min(1, t / DUR.lobe));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.6, rot: s * 18 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.74) {
+    const s = (u - 0.16) / 0.58;
+    const scoop = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * 0.1 * (1 - s),
-      lift: 0.12 * (1 - s),
-      rot: facing * (4 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * scoop * 0.55,
+      lift: 2.6 + Math.abs(scoop) * 1.4,
+      rot: facing * (18 + scoop * 16),
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.74) / 0.26);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: facing * (10 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Gyre curiosity roll — never named barrel (window-play BARREL). */
 export function gyrePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.gyre));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.48, rot: s * -12 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.12) / 0.66;
-      const roll = Math.sin(s * Math.PI);
-      return {
-        x: fromX + facing * roll * 0.1,
-        lift: 0.48 + Math.abs(Math.sin(s * Math.PI * 2)) * 0.12,
-        rot: facing * (-12 + s * 30 + roll * 18),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const u = Math.max(0, Math.min(1, t / DUR.gyre));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.4, rot: s * -16 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.12) / 0.66;
+    const roll = Math.sin(s * Math.PI * 2);
     return {
-      x: fromX,
-      lift: 0.36 * (1 - s),
-      rot: facing * (8 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * Math.sin(s * Math.PI) * 2.2,
+      lift: 3.4 + Math.abs(Math.sin(s * Math.PI * 2)) * 1.8,
+      rot: facing * (-16 + s * 42 + roll * 22),
+      anim: "play" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 1.2 * (1 - s),
+    lift: 2.4 * (1 - s),
+    rot: facing * (10 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Vault forward flip — never named somersault (Rui). Not breach leap. */
 export function vaultPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.vault));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.62, rot: s * -8 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.16) / 0.56;
-      const flip = Math.sin(s * Math.PI);
-      return {
-        x: fromX + facing * flip * 0.08,
-        lift: 0.62 + flip * 0.18,
-        rot: facing * (-8 + s * 28),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+  const u = Math.max(0, Math.min(1, t / DUR.vault));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.6, rot: s * -12 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.14) / 0.58;
+    const flip = Math.sin(s * Math.PI);
     return {
-      x: fromX,
-      lift: 0.5 * (1 - s),
-      rot: facing * (6 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * s * 2.8,
+      lift: 3.6 + flip * 2.2,
+      rot: facing * (-12 + s * 36),
+      anim: "play" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + facing * 2.4 * (1 - s),
+    lift: 2.4 * (1 - s),
+    rot: facing * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Breach — species-true surface leap clear of the bowl-sky. Not vault. Not Rui somersault. Not BARREL. */
+export function breachPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.breach));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.2, rot: s * -8 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.45) {
+    const s = (u - 0.12) / 0.33;
+    const rise = smoothstep(s);
+    return {
+      x: fromX + facing * rise * 1.6,
+      lift: 2.2 + rise * 4.2,
+      rot: facing * (-8 + rise * -18),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.45) / 0.33;
+    const arc = Math.sin(s * Math.PI);
+    return {
+      x: fromX + facing * (1.6 + s * 2.4),
+      lift: 6.4 - s * 3.2 + arc * 0.8,
+      rot: facing * (-26 + s * 40),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 3.6 * (1 - s * 0.35),
+    lift: 2.8 * (1 - s),
+    rot: facing * (10 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Ram — filter-feed glide, cephalic lobes funneling plankton. Not lobe scoop alone. Not Coin gulp. */
+export function ramPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.ram));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * 14 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.74) {
+    const s = (u - 0.14) / 0.6;
+    const surge = Math.sin(s * Math.PI * 1.6);
+    const filter = Math.sin(s * Math.PI * 4.2);
+    return {
+      x: fromX + facing * (s * 2.6 + filter * 0.25),
+      lift: 2.8 + Math.abs(surge) * 1.5 + Math.abs(filter) * 0.6,
+      rot: facing * (14 + surge * 10 + filter * 6),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.74) / 0.26);
+  return {
+    x: fromX + facing * 2.2 * (1 - s),
+    lift: 2.0 * (1 - s),
+    rot: facing * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: MantaTrick, dt: number, flags: TrickFlags): MantaTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "lobe" && trick.kind !== "gyre" && trick.kind !== "vault") {
+  if (shouldAbort(flags) && trick.kind !== "lobe" && trick.kind !== "gyre" && trick.kind !== "vault" && trick.kind !== "breach" && trick.kind !== "ram") {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: MantaTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -415,31 +496,18 @@ export function stepTrick(trick: MantaTrick, dt: number, flags: TrickFlags): Man
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "wing") {
-    const pose = wingPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "lobe") {
-    const pose = lobePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "gyre") {
-    const pose = gyrePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = vaultPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "wing") pose = wingPose(next.t, fromX, trick.facing);
+  else if (next.kind === "lobe") pose = lobePose(next.t, fromX, trick.facing);
+  else if (next.kind === "gyre") pose = gyrePose(next.t, fromX, trick.facing);
+  else if (next.kind === "vault") pose = vaultPose(next.t, fromX, trick.facing);
+  else if (next.kind === "breach") pose = breachPose(next.t, fromX, trick.facing);
+  else pose = ramPose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
   if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }

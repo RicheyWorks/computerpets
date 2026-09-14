@@ -415,7 +415,7 @@ test("tymbal/cast/egress/harden/magicicada are house-cicada-true, not copies of 
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...Seahorse.TRICKS], ["coil", "buoy", "siphon", "swivel", "pouch", "dorsal", "pectoral"]);
-  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
+  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.equal(SeaStar.TRICKS.includes("podia"), true);
   assert.equal(HermitCrab.TRICKS.includes("swap"), true);
   assert.equal(Hamster.TRICKS.includes("scurry"), true);
@@ -737,8 +737,8 @@ globalThis.PetStickTricks = OverlayStick;
   assert.deepEqual([...OverlayHedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
 
-  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
-  assert.deepEqual([...OverlayManta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
+  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
+  assert.deepEqual([...OverlayManta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.equal(Manta.wantsThankYou("kite"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
   assert.equal(OverlayGround.tricksFor("kite"), OverlayManta);
@@ -824,7 +824,7 @@ test("notes: Brood idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
   assert.equal(OverlayGround.wantsThankYou("fan"), true);
   assert.deepEqual([...Moray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
-  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
+  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
   assert.deepEqual([...Maidenhair.TRICKS], ["frond", "rachis", "fiddle", "pinna", "saucer"]);
   assert.equal(T.TRICKS.includes("moss"), false);
