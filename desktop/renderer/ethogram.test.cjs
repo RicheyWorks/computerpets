@@ -62,6 +62,17 @@ test("manta ethogram is Kite ultra (span + softs + freeze, not soar/glide)", () 
   assert.equal(names.includes("barrel"), false);
 });
 
+test("moray ethogram is Door ultra (jamb + softs + freeze, not gape/hide/dart)", () => {
+  const names = E.actsFor("moray").map((a) => a.name);
+  assert.ok(names.includes("jamb"));
+  assert.ok(names.includes("mucus_soft"));
+  assert.ok(names.includes("sentry_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("gape"), false);
+  assert.equal(names.includes("hide"), false);
+  assert.equal(names.includes("dart"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",

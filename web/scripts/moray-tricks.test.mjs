@@ -101,7 +101,7 @@ test("Door tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
+  assert.deepEqual([...T.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -127,6 +127,9 @@ test("Door tricks start only on idle ground", () => {
   assert.equal(Overlay.TRICK_KEY, "moray");
   assert.equal(T.sleepHoldFrame("moray", 4), null);
   assert.equal(T.TRICKS.includes("barrel"), false);
+  assert.equal(T.TRICKS.includes("mucuscoat"), false);
+  assert.equal(T.TRICKS.includes("gape"), false);
+  assert.equal(T.TRICKS.includes("guard"), false);
   assert.equal(T.TRICKS.includes("coil"), false);
   assert.equal(T.TRICKS.includes("buoy"), false);
   assert.equal(T.TRICKS.includes("siphon"), false);
@@ -175,7 +178,7 @@ test("Door tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
   assert.deepEqual([...Overlay.HAPPY], ["breath", "vigil", "recess"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -193,7 +196,7 @@ test("Door tricks start only on idle ground", () => {
   assert.equal(T.HAPPY.includes("coronet"), false);
 });
 
-test("hinge/pharynx/knot/lurk/jamb are house-moray-true, not copies of prior guests", () => {
+test("hinge/pharynx/knot/lurk/jamb/mucus/sentry are house-moray-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const jamb = T.beginTrick("jamb", 80, 1);
   assert.equal(jamb.anim, "sit");
@@ -211,20 +214,28 @@ test("hinge/pharynx/knot/lurk/jamb are house-moray-true, not copies of prior gue
   const hinge = T.beginTrick("hinge", 80, 1);
   assert.equal(hinge.anim, "talk");
   const hingeMid = T.stepTrick(hinge, 0.5, ground);
-  assert.ok(Math.abs(hingeMid.lift) > 0.05 || Math.abs(wingMid.rot) > 1 || Math.abs(wingMid.x - 80) > 0.05);
+  assert.ok(Math.abs(hingeMid.lift) > 0.05 || Math.abs(hingeMid.rot) > 1 || Math.abs(hingeMid.x - 80) > 0.05);
   const pharynx = T.beginTrick("pharynx", 80, 1);
   assert.equal(pharynx.anim, "play");
   const pharynxMid = T.stepTrick(pharynx, 0.5, ground);
-  assert.ok(Math.abs(pharynxMid.lift) > 0.05 || Math.abs(lobeMid.rot) > 1 || Math.abs(lobeMid.x - 80) > 0.05);
+  assert.ok(Math.abs(pharynxMid.lift) > 0.05 || Math.abs(pharynxMid.rot) > 1 || Math.abs(pharynxMid.x - 80) > 0.05);
   const knot = T.beginTrick("knot", 80, 1);
   assert.equal(knot.anim, "play");
   const knotMid = T.stepTrick(knot, 0.5, ground);
-  assert.ok(Math.abs(knotMid.lift) > 0.05 || Math.abs(gyreMid.rot) > 1 || Math.abs(gyreMid.x - 80) > 0.05);
+  assert.ok(Math.abs(knotMid.lift) > 0.05 || Math.abs(knotMid.rot) > 1 || Math.abs(knotMid.x - 80) > 0.05);
   const lurk = T.beginTrick("lurk", 80, 1);
   assert.equal(lurk.anim, "talk");
   const lurkMid = T.stepTrick(lurk, 0.5, ground);
-  assert.ok(Math.abs(lurkMid.lift) > 0.05 || Math.abs(vaultMid.rot) > 1 || Math.abs(vaultMid.x - 80) > 0.05);
-  const knotDone = T.stepTrick(knot, 1.5, ground);
+  assert.ok(Math.abs(lurkMid.lift) > 0.05 || Math.abs(lurkMid.rot) > 1 || Math.abs(lurkMid.x - 80) > 0.05);
+  const mucus = T.beginTrick("mucus", 80, 1);
+  assert.equal(mucus.anim, "sit");
+  const mucusMid = T.stepTrick(mucus, T.DUR.mucus * 0.4, ground);
+  assert.ok(Math.abs(mucusMid.lift) > 0.05 || Math.abs(mucusMid.rot) > 1 || Math.abs(mucusMid.x - 80) > 0.05);
+  const sentry = T.beginTrick("sentry", 80, 1);
+  assert.equal(sentry.anim, "talk");
+  const sentryMid = T.stepTrick(sentry, T.DUR.sentry * 0.35, ground);
+  assert.ok(Math.abs(sentryMid.lift) > 0.05 || Math.abs(sentryMid.rot) > 1 || Math.abs(sentryMid.x - 80) > 0.05);
+  const knotDone = T.stepTrick(knot, T.DUR.knot + 0.1, ground);
   assert.equal(knotDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -234,6 +245,8 @@ test("hinge/pharynx/knot/lurk/jamb are house-moray-true, not copies of prior gue
     assert.equal(mod.TRICKS.includes("knot"), false);
     assert.equal(mod.TRICKS.includes("lurk"), false);
     assert.equal(mod.TRICKS.includes("jamb"), false);
+    assert.equal(mod.TRICKS.includes("mucus"), false);
+    assert.equal(mod.TRICKS.includes("sentry"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -403,7 +416,7 @@ test("ground registry keeps prior guests gated; Door selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
+  assert.deepEqual([...T.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
   assert.equal(T.wantsThankYou("moray"), true);
   assert.equal(T.wantsThankYou("door"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -523,7 +536,7 @@ test("ground registry keeps prior guests gated; Door selectable; prior guests st
   assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...OverlayHorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...Overlay.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
+  assert.deepEqual([...Overlay.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -553,7 +566,25 @@ test("ground registry keeps prior guests gated; Door selectable; prior guests st
   assert.equal(OverlayGround.tricksFor("kite"), OverlayManta);
 });
 
-test("notes: Door idle-life done; next house-order guest still lacking tricks is Felt / moss", () => {
+
+test("ultra-polish: Door jamb/hinge/mucus/sentry lifts are Rui-visible (not micro idle-gen)", () => {
+  const jamb = T.beginTrick("jamb", 80, 1);
+  const mid = T.stepTrick(jamb, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.lift) > 0.5 || Math.abs(mid.rot) > 2, `jamb mid ${mid.lift}/${mid.rot}`);
+  const hi = T.beginTrick("hinge", 80, 1);
+  const h2 = T.stepTrick(hi, T.DUR.hinge * 0.4, { cmd: "idle" });
+  assert.ok(h2.lift > 2 || Math.abs(h2.rot) > 4 || Math.abs(h2.x - 80) > 0.5, `hinge mid ${h2.lift}/${h2.rot}/${h2.x}`);
+  const mu = T.beginTrick("mucus", 80, 1);
+  const m2 = T.stepTrick(mu, T.DUR.mucus * 0.4, { cmd: "idle" });
+  assert.ok(m2.lift > 0.5 || Math.abs(m2.rot) > 4 || Math.abs(m2.x - 80) > 0.5, `mucus mid ${m2.lift}/${m2.rot}/${m2.x}`);
+  const se = T.beginTrick("sentry", 80, 1);
+  const s2 = T.stepTrick(se, T.DUR.sentry * 0.35, { cmd: "idle" });
+  assert.ok(s2.lift > 2 || Math.abs(s2.rot) > 4 || Math.abs(s2.x - 80) > 0.5, `sentry mid ${s2.lift}/${s2.rot}/${s2.x}`);
+  assert.ok(Overlay.mucusPose && Overlay.sentryPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+});
+
+test("notes: Door idle-life ultra done; next house-order ultra guest is Felt / moss", () => {
   assert.equal(T.TRICK_KEY, "moray");
   assert.equal(T.wantsThankYou("door"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -596,8 +627,8 @@ test("notes: Door idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("moray"), true);
   assert.equal(OverlayGround.tricksFor("door"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("door"), true);
-  assert.equal(OverlayGround.tricksFor("moss"), null);
+  assert.equal(OverlayGround.tricksFor("moss") == null, true);
   assert.equal(OverlayGround.wantsThankYou("moss"), false);
-  assert.equal(OverlayGround.tricksFor("felt"), null);
+  assert.equal(OverlayGround.tricksFor("felt") == null, true);
   assert.equal(OverlayGround.wantsThankYou("felt"), false);
 });
