@@ -930,7 +930,7 @@ globalThis.PetHoneycombTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Wax ultra done; next house-order ultra is Cap / fly_agaric", () => {
+test("notes: Wax ultra done; next house-order ultra is Lattice / morel", () => {
   assert.equal(T.TRICK_KEY, "honeycomb");
   assert.equal(T.wantsThankYou("wax"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

@@ -149,7 +149,13 @@ def test_only_scratching_mammals_scratch():
     assert "lean" not in [a["name"] for a in acts_for("oyster")]
     assert "flush" not in [a["name"] for a in acts_for("oyster")]
     assert "still" not in [a["name"] for a in acts_for("oyster")]
-    assert "flush" in [a["name"] for a in acts_for("fly_agaric")]
+    assert "amanita" in [a["name"] for a in acts_for("fly_agaric")]
+    assert "pileus_soft" in [a["name"] for a in acts_for("fly_agaric")]
+    assert "bulb_soft" in [a["name"] for a in acts_for("fly_agaric")]
+    assert "freeze" in [a["name"] for a in acts_for("fly_agaric")]
+    assert "lean" not in [a["name"] for a in acts_for("fly_agaric")]
+    assert "flush" not in [a["name"] for a in acts_for("fly_agaric")]
+    assert "still" not in [a["name"] for a in acts_for("fly_agaric")]
     for key in FAR_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
@@ -427,7 +433,7 @@ def test_only_scratching_mammals_scratch():
     assert "freeze" in [a["name"] for a in acts_for("moss")]
     assert "saucer" in [a["name"] for a in acts_for("maidenhair")]
     assert "sori_soft" in [a["name"] for a in acts_for("maidenhair")]
-    assert "stipe_soft" in [a["name"] for a in acts_for("maidenhair")]
+    assert "bulb_soft" in [a["name"] for a in acts_for("maidenhair")]
     assert "freeze" in [a["name"] for a in acts_for("maidenhair")]
     assert "amber" in [a["name"] for a in acts_for("ginkgo")]
     assert "dichotomy_soft" in [a["name"] for a in acts_for("ginkgo")]

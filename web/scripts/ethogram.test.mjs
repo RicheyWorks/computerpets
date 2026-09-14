@@ -327,7 +327,13 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.equal(names("oyster").includes("lean"), false);
   assert.equal(names("oyster").includes("flush"), false);
   assert.equal(names("oyster").includes("still"), false);
-  assert.ok(names("fly_agaric").includes("flush"));
+  assert.ok(names("fly_agaric").includes("amanita"));
+  assert.ok(names("fly_agaric").includes("pileus_soft"));
+  assert.ok(names("fly_agaric").includes("bulb_soft"));
+  assert.ok(names("fly_agaric").includes("freeze"));
+  assert.equal(names("fly_agaric").includes("lean"), false);
+  assert.equal(names("fly_agaric").includes("flush"), false);
+  assert.equal(names("fly_agaric").includes("still"), false);
   for (const key of FAR) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
@@ -737,7 +743,7 @@ test("moss ethogram is Felt ultra (thatch + softs + freeze, not lean/nod/still)"
 test("maidenhair ethogram is Vein ultra (saucer + softs + freeze, not lean/nod/unfurl)", () => {
   assert.ok(names("maidenhair").includes("saucer"));
   assert.ok(names("maidenhair").includes("sori_soft"));
-  assert.ok(names("maidenhair").includes("stipe_soft"));
+  assert.ok(names("maidenhair").includes("bulb_soft"));
   assert.ok(names("maidenhair").includes("freeze"));
   assert.equal(names("maidenhair").includes("lean"), false);
   assert.equal(names("maidenhair").includes("nod"), false);

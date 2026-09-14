@@ -1303,8 +1303,8 @@ test("notes: Lattice idle-life done; next house-order guest still lacking tricks
   assert.equal(OverlayGround.wantsThankYou("fly_agaric"), true);
   assert.equal(OverlayGround.tricksFor("cap"), OverlayFlyAgaric);
   assert.equal(OverlayGround.wantsThankYou("cap"), true);
-  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita"]);
-  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita"]);
+  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("morel"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("morel"), true);
   assert.equal(OverlayGround.tricksFor("lattice"), Overlay);
@@ -1352,8 +1352,8 @@ test("notes: Lattice idle-life done; next house-order guest still lacking tricks
   assert.equal(OverlayGround.wantsThankYou("fly_agaric"), true);
   assert.equal(OverlayGround.tricksFor("cap"), OverlayFlyAgaric);
   assert.equal(OverlayGround.wantsThankYou("cap"), true);
-  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita"]);
-  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita"]);
+  assert.deepEqual([...FlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
+  assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("morel"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("morel"), true);
   assert.equal(OverlayGround.tricksFor("lattice"), Overlay);

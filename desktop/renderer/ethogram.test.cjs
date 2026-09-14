@@ -88,7 +88,7 @@ test("maidenhair ethogram is Vein ultra (saucer + softs + freeze, not lean/nod/u
   const names = E.actsFor("maidenhair").map((a) => a.name);
   assert.ok(names.includes("saucer"));
   assert.ok(names.includes("sori_soft"));
-  assert.ok(names.includes("stipe_soft"));
+  assert.ok(names.includes("bulb_soft"));
   assert.ok(names.includes("freeze"));
   assert.equal(names.includes("lean"), false);
   assert.equal(names.includes("nod"), false);
@@ -324,6 +324,23 @@ test("oyster ethogram is Frill ultra (pleurotus + softs + freeze, not lean/flush
   assert.ok(names.includes("margin_soft"));
   assert.ok(names.includes("sporulate_soft"));
   assert.ok(names.includes("hypha_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("flush"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.length, 8);
+});
+
+
+test("fly_agaric ethogram is Cap ultra (amanita + softs + freeze, not lean/flush/still)", () => {
+  const names = E.actsFor("fly_agaric").map((a) => a.name);
+  assert.ok(names.includes("amanita"));
+  assert.ok(names.includes("annulus_soft"));
+  assert.ok(names.includes("volva_soft"));
+  assert.ok(names.includes("veil_soft"));
+  assert.ok(names.includes("symbiont_soft"));
+  assert.ok(names.includes("pileus_soft"));
+  assert.ok(names.includes("bulb_soft"));
   assert.ok(names.includes("freeze"));
   assert.equal(names.includes("lean"), false);
   assert.equal(names.includes("flush"), false);
