@@ -843,7 +843,15 @@ def test_only_scratching_mammals_scratch():
     assert "still" not in [a["name"] for a in acts_for("lamprey")]
     assert "round" not in [a["name"] for a in acts_for("lamprey")]
     assert "sit" not in [a["name"] for a in acts_for("lamprey")]
-    assert "swim" in [a["name"] for a in acts_for("american_eel")]
+    assert "rostrata" in [a["name"] for a in acts_for("american_eel")]
+    assert "glasscrawl_soft" in [a["name"] for a in acts_for("american_eel")]
+    assert "sargasso_soft" in [a["name"] for a in acts_for("american_eel")]
+    assert "yellowphase_soft" in [a["name"] for a in acts_for("american_eel")]
+    assert "freeze" in [a["name"] for a in acts_for("american_eel")]
+    assert "swim" not in [a["name"] for a in acts_for("american_eel")]
+    assert "silver" not in [a["name"] for a in acts_for("american_eel")]
+    assert "still" not in [a["name"] for a in acts_for("american_eel")]
+    assert "sit" not in [a["name"] for a in acts_for("american_eel")]
     for key in LOG_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
