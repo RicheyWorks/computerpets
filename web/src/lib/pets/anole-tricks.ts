@@ -1,6 +1,6 @@
-/** Wink ground tricks while idle. House neighborly Dactyloidae / Anolis carolinensis Green Anole vine-post desk life — dewlapflash / pushupshow / hueshift / preyinch / anolis personality (dewlapflash dewlap gular flash without naming dewlap or flash or gular or throat or pink or flare or wave or bob or signal or warn or bark or cry, pushupshow push-up bob display without naming push or up or bob or display or rise or hold or wave or pump or bounce or jump or hop or climb, hueshift hue color wash without naming hue or color or brown or green or shift or change or fade or wash or chrom or pigment or camouflage or blend, preyinch prey inch stalk without naming prey or inch or stalk or freeze or cricket or insect or hunt or lunge or creep or wait or look or aim, long anolis Anolis carolinensis surface-calm vine hush flash — never named wait or crouch or roost or look or stalk or monocle or fossick or anting or corvid or toepadcling or vocalclick or lickeye or mothstalk or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash; window-play FLASH and Call Wink leave anole alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad own their tricks; guest slug Wink / key anole — accept "anole" and "wink" (roster slug wink; campaign Wink); do NOT name a trick anole or wink or gecko or hemidactylus or turcicus or salamander or dapple or iguana or sol or newt or eft or caecilian or slip or frog or reed or toad or pebble or pad or denspad or inkpad or denscling or Bank or mining). Thank-yous denswink / inkwink / densdewlap. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop anole-tricks.js. Window-play FLASH unchanged. True Green Anole Dactyloidae desk life — not gecko/salamander/iguana/newt/frog/rui clones. Skink owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Wink ground tricks while idle — ultra-polish pass. House neighborly Dactyloidae / Anolis carolinensis Green Anole vine-post desk life (anole / Wink) — dewlapflash / pushupshow / hueshift / preyinch / nuchal / vinehush / anolis personality (dewlapflash dewlap gular flash without naming dewlap or flash or gular or throat or pink or flare or wave or bob or signal or warn or bark or cry alone, pushupshow push-up bob display without naming push or up or bob or display or rise or hold or wave or pump or bounce or jump or hop or climb alone, hueshift hue color wash without naming hue or color or brown or green or shift or change or fade or wash or chrom or pigment or camouflage or blend alone, preyinch prey inch stalk without naming prey or inch or stalk or freeze or cricket or insect or hunt or lunge or creep or wait or look or aim alone, nuchal nuchal crest raise without naming nuchal or crest or raise or neck or ridge or spike or crown alone, vinehush vine-side hush settle without naming vine or hush or perch or sit or rest or lounge or nap alone, long anolis Anolis carolinensis surface-calm vine hush hold (THE anolis sit_hold tell) — never named wait or crouch or roost or look or stalk or monocle or fossick or anting or corvid or toepadcling or vocalclick or lickeye or mothstalk or setae or lamphush or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or scentgland or socialpile or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or bluffhuff or mastforage or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or guardhair or pinehush or erethizon or woodfell or paddleclap or lodgehaul or mudpack or aspen or divehush or castor or stillfeign or scrapnose or gapegrin or raftergrip or pouchcarry or prehensile or didelphis or footstomp or duffgrub or handwarn or plumeaim or scentraise or plantigrade or mephitis or pawdouse or litterdig or rearstand or maskpeer or dexterous or ringtail or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or denslide or spraint or lontra or nutbury or tailflick or cheekpouch or branchleap or barkscramble or scold or sciurus or wingwrap or traguscup or thumbcrawl or duskhang or eptesicus or flagtail or edgebrowse or earswivel or forestamp or odocoileus or curl or snuffle or anoint or bristle or root or trundle or wheel or tube or romp or steal or puff or noodle or corkscrew or slink or hang or flutter or still or stamp or raise or spray or skunk or stripe or playdead or grin or opossum or ferret or weasel or mink or otter or red_panda or wash or beaver or dam or porcupine or spine or quill or popcorn or rumble or hay or potato or zig or lookout or teeth or soak or graze or nuzzle or capybara or bankhush or climb or chirp or cling or gecko or pad or dewlap or sun or nod or press or flick or sneeze or lash or maculate or litter or cutaneous or nasolabial or ambystomid or mental or granular or crest or caudal or filament or costal or caudate or lamella or imbricate or lasso or margin or pleurotus or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or flash or brown as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play FLASH unchanged if already fine; Sol/iguana owns sun/dewlap/nod/press/flick/sneeze/lash — compound dewlapflash and densdewlap stay Wink's; Reed/frog owns gular — do NOT collide with bare gular; Pad owns toepadcling/vocalclick/lickeye/mothstalk/setae/lamphush/hemidactylus; guest slug Wink / key anole only for isKey matching — accept "anole" and "wink"; do NOT name a trick "anole" or "wink" or "flash" or "brown" or "still" or "gecko" or "pad" or "climb" or "chirp" or "cling" or "lamella" or "dewlap" or "salamander" or "dapple" or "iguana" or "sol" or "newt" or "eft" or "caecilian" or "slip" or "frog" or "reed" or "toad" or "pebble" or "gular" or "skink" or "dash") — not Pad gecko life, not Sol iguana life, not Dash skink life, not Reed frog life, not Dapple salamander life, not Rui red_panda life. Dewlapflash dewlap flash without naming flash alone, pushupshow push-up without naming push alone, hueshift hue wash without naming hue alone, preyinch prey-inch without naming inch alone, nuchal nuchal crest without naming crest alone, vinehush vine-hush without naming hush alone, anolis long sit_hold on the vine post (THE anolis sit_hold tell); denswink / inkwink / densdewlap thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop anole-tricks.js. Window-play FLASH unchanged. Ethogram softs + freeze — never names flash/brown/still/anole as bare ethogram-only trick kinds. True Anolis carolinensis Dactyloidae Green Anole desk life only — distinct from Pad, Sol, Dash, Reed, Dapple, Eft, Slip, Soak, Coal, Dam, Whee, Slick, Spine, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Dash / skink. No cry inventing — thank-yous are silent desk motion only; prefersHouseCry anole (anole.wav on disk). Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "anole";
-export const TRICKS = ["dewlapflash", "pushupshow", "hueshift", "preyinch", "anolis"] as const;
+export const TRICKS = ["dewlapflash", "pushupshow", "hueshift", "preyinch", "nuchal", "vinehush", "anolis"] as const;
 export const HAPPY = ["denswink", "inkwink", "densdewlap"] as const;
 export type AnoleTrickKind = (typeof TRICKS)[number];
 export type AnoleHappyKind = (typeof HAPPY)[number];
@@ -44,337 +44,521 @@ export type AnoleHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { denswink: 2.06, inkwink: 2.20, densdewlap: 2.12 } as const;
-export const ANOLIS_HOLD = 20.44;
-export const RELEASE_S = 1.56;
-export const DUR = { anolis: ANOLIS_HOLD + RELEASE_S, dewlapflash: 3.00, pushupshow: 2.94, hueshift: 3.16, preyinch: 3.08 } as const;
+export const HAPPY_DUR = { denswink: 1.70, inkwink: 1.84, densdewlap: 1.76 } as const;
+export const ANOLIS_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  anolis: ANOLIS_HOLD + RELEASE_S,
+  dewlapflash: 2.48,
+  pushupshow: 2.42,
+  hueshift: 2.56,
+  preyinch: 2.44,
+  nuchal: 2.40,
+  vinehush: 2.38,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
 export function shouldAbort(state: TrickFlags | undefined) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "eat" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: AnoleTrickKind | string) {
-    const roll = rand == null ? Math.random() : rand;
-      if (kind === "anolis") return 124 + roll * 12;
-  if (kind === "dewlapflash") return 19.8 + roll * 6.4;
-  if (kind === "pushupshow") return 21.0 + roll * 7.0;
-  if (kind === "preyinch") return 22.4 + roll * 7.6;
-  return justFinished ? 18.4 + roll * 6.0 : 12.4 + roll * 5.2;
-  }
+  const roll = rand == null ? Math.random() : rand;
+  if (kind === "anolis") return 40 + roll * 26;
+  if (kind === "nuchal" || kind === "vinehush" || kind === "dewlapflash") return 12.8 + roll * 9.4;
+  if (kind === "pushupshow" || kind === "hueshift" || kind === "preyinch") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
+}
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: AnoleTrickKind | string | null) {
-    if (musicOn) return "anolis";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "anolis") {
-      if (roll < 0.26) return "dewlapflash";
-      if (roll < 0.5) return "pushupshow";
-      if (roll < 0.74) return "hueshift";
-      return "preyinch";
-    }
-    if (lastKind === "dewlapflash") {
-      if (roll < 0.26) return "anolis";
-      if (roll < 0.5) return "pushupshow";
-      if (roll < 0.74) return "hueshift";
-      return "preyinch";
-    }
-    if (lastKind === "pushupshow") {
-      if (roll < 0.22) return "anolis";
-      if (roll < 0.44) return "dewlapflash";
-      if (roll < 0.68) return "hueshift";
-      return "preyinch";
-    }
-    if (roll < 0.2) return "anolis";
-    if (roll < 0.4) return "dewlapflash";
-    if (roll < 0.6) return "pushupshow";
-    if (roll < 0.8) return "hueshift";
-    return "preyinch";
+  if (musicOn) return "anolis" as const;
+  const roll = rand == null ? Math.random() : rand;
+  if (lastKind === "anolis") {
+    if (roll < 0.17) return "dewlapflash" as const;
+    if (roll < 0.33) return "pushupshow" as const;
+    if (roll < 0.49) return "hueshift" as const;
+    if (roll < 0.65) return "preyinch" as const;
+    if (roll < 0.83) return "nuchal" as const;
+    return "vinehush" as const;
   }
+  if (lastKind === "dewlapflash") {
+    if (roll < 0.16) return "anolis" as const;
+    if (roll < 0.32) return "pushupshow" as const;
+    if (roll < 0.48) return "hueshift" as const;
+    if (roll < 0.64) return "preyinch" as const;
+    if (roll < 0.82) return "nuchal" as const;
+    return "vinehush" as const;
+  }
+  if (lastKind === "pushupshow") {
+    if (roll < 0.14) return "anolis" as const;
+    if (roll < 0.3) return "dewlapflash" as const;
+    if (roll < 0.46) return "hueshift" as const;
+    if (roll < 0.62) return "preyinch" as const;
+    if (roll < 0.8) return "nuchal" as const;
+    return "vinehush" as const;
+  }
+  if (lastKind === "nuchal" || lastKind === "vinehush") {
+    if (roll < 0.14) return "anolis" as const;
+    if (roll < 0.3) return "dewlapflash" as const;
+    if (roll < 0.46) return "pushupshow" as const;
+    if (roll < 0.62) return "hueshift" as const;
+    if (roll < 0.78) return "preyinch" as const;
+    return lastKind === "nuchal" ? ("vinehush" as const) : ("nuchal" as const);
+  }
+  if (roll < 0.14) return "anolis" as const;
+  if (roll < 0.28) return "dewlapflash" as const;
+  if (roll < 0.42) return "pushupshow" as const;
+  if (roll < 0.56) return "hueshift" as const;
+  if (roll < 0.7) return "preyinch" as const;
+  if (roll < 0.85) return "nuchal" as const;
+  return "vinehush" as const;
+}
+
 export function happyCanStart(state: TrickFlags | undefined) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
 export function wantsThankYou(key: string | undefined | null) {
-    return key === TRICK_KEY || key === "wink";
-  }
+  return key === TRICK_KEY || key === "wink";
+}
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: AnoleHappyKind | null | undefined,
+  lastKind: AnoleHappyKind | string | null | undefined,
   x: number,
   facing: 1 | -1,
-  flags?: TrickFlags
+  flags?: TrickFlags,
 ) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
-  }
+  if (!wantsThankYou(key)) return null;
+  if (!happyCanStart(flags || { cmd: "idle" })) return null;
+  const pick = pickHappy(lastKind as AnoleHappyKind | null | undefined);
+  return { happy: beginHappy(pick, x, facing), kind: pick };
+}
+
 export function pickHappy(lastKind?: AnoleHappyKind | null, rand?: number) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
-  }
+  const pool = HAPPY.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...HAPPY];
+  const roll = rand == null ? Math.random() : rand;
+  return list[Math.floor(roll * list.length)] || list[0];
+}
+
 export function beginHappy(kind: AnoleHappyKind | string, x: number, facing: 1 | -1): AnoleHappy {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denswink";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: (name === "denswink" ? "sit" : name === "inkwink" ? "play" : "sit") as TrickAnim,
-      facing: (facing == null ? 1 : facing) as 1 | -1,
-      fromX: x,
-    };
-  }
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as AnoleHappyKind) : "denswink";
+  return {
+    kind: name,
+    happy: true,
+    phase: "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: name === "denswink" ? "sit" : name === "inkwink" ? "play" : "sit",
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
 export function denswinkPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denswink));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.020, rot: s * 2.15, dx: 0, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const flash = Math.sin(t * 3.2) + 0.12 * Math.sin(t * 6.4);
-      return { lift: 0.020 + Math.abs(flash) * 0.010, rot: 2.15 + flash * 1.20, dx: flash * 0.00060, anim: "sit" as TrickAnim };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.003 * (1 - s), rot: 0.28 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denswink));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-export function inkwinkPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkwink));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.044, rot: s * -2.65, dx: s * 0.00132, anim: "play" as TrickAnim };
-    }
-    if (u < 0.85) {
-      const spring = Math.sin(t * 2.8) + 0.13 * Math.sin(t * 5.6);
-      return { lift: 0.044 + Math.abs(spring) * 0.015, rot: -2.65 + spring * 2.20, dx: spring * 0.00158, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.85) / 0.15;
-    return { lift: 0.006 * (1 - s), rot: -0.36 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function densdewlapPose(t: number) {
-    return { lift: 0.0078 + Math.abs(Math.sin(t * 0.128)) * 0.0114, rot: Math.sin(t * 0.128) * 1.05, dx: Math.sin(t * 0.096) * 0.00064, anim: "sit" as TrickAnim };
-  }
-export function stepHappy(happy: AnoleHappy | null | undefined, dt: number, flags?: TrickFlags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "denswink") {
-      const pose = denswinkPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "inkwink") {
-      const pose = inkwinkPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = densdewlapPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
-  }
-export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
-    return null;
-  }
-export function beginTrick(kind: AnoleTrickKind, x: number, facing: 1 | -1): AnoleTrick {
-    const anim: TrickAnim =
-      kind === "anolis"
-        ? "sit"
-        : kind === "dewlapflash"
-          ? "sit"
-          : kind === "pushupshow"
-            ? "play"
-            : kind === "hueshift"
-              ? "talk"
-              : kind === "preyinch"
-                ? "talk"
-                : "sit";
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
     return {
-      kind: kind,
-      phase: kind === "anolis" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: (facing == null ? 1 : facing) as 1 | -1,
-      fromX: x,
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
     };
   }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function inkwinkPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkwink));
+  if (u < 0.12) {
+    const s = u / 0.12;
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function densdewlapPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepHappy(happy: AnoleHappy | null | undefined, dt: number, flags?: TrickFlags) {
+  if (!happy || happy.phase === "done") return happy;
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
+  }
+  const next = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "denswink") {
+    const pose = denswinkPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "inkwink") {
+    const pose = inkwinkPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = densdewlapPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: AnoleTrickKind, x: number, facing: 1 | -1): AnoleTrick {
+  const anim: TrickAnim =
+    kind === "anolis"
+      ? "sit"
+      : kind === "dewlapflash"
+        ? "sit"
+        : kind === "pushupshow"
+          ? "play"
+          : kind === "hueshift"
+            ? "talk"
+            : kind === "preyinch"
+              ? "talk"
+              : kind === "nuchal"
+                ? "talk"
+                : kind === "vinehush"
+                  ? "play"
+                  : "sit";
+  return {
+    kind,
+    phase: kind === "anolis" ? "hold" : "go",
+    t: 0,
+    x,
+    lift: 0,
+    rot: 0,
+    anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
 function smoothstep(t: number) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
-  }
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
+}
+
 export function anolisPose(t: number) {
-    const breath = Math.sin(t * 0.034) + 0.028 * Math.sin(t * 0.102);
-    const perch = Math.abs(Math.sin(t * 0.040));
-    return { lift: 0.005 + perch * 0.011, rot: 0.16 + breath * 0.48 };
-  }
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.0034 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.12 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+}
+
 export function dewlapflashPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.dewlapflash));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX + face * s * 0.0008, lift: s * 0.032, rot: s * 4.2 * face, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.85) {
-      const flash = Math.sin((u - 0.11) / 0.74 * Math.PI * 4.6);
-      const gular = Math.sin(t * 5.8) + 0.15 * Math.sin(t * 11.6);
-      return { x: fromX + face * (0.0008 + flash * 0.0009 + gular * 0.00022), lift: 0.028 + Math.abs(flash) * 0.014 + Math.abs(gular) * 0.006, rot: (4.2 + flash * 2.6 + gular * 1.4) * face, anim: "talk" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.85) / 0.15);
-    return { x: fromX + face * 0.0008 * (1 - s), lift: 0.005 * (1 - s), rot: 0.40 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.dewlapflash));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.5, rot: s * 16 * face, anim: "sit" as TrickAnim };
   }
+  if (u < 0.78) {
+    const tip = Math.sin(t * 2.4);
+    return {
+      x: fromX + face * (0.8 + tip * 0.12),
+      lift: 3.5 + Math.abs(tip) * 1.5,
+      rot: face * (16 + tip * 10),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function pushupshowPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.pushupshow));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0012, lift: s * 0.048, rot: s * -3.4 * face, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const push = Math.sin((u - 0.10) / 0.76 * Math.PI * 5.2);
-      const bob = Math.sin(t * 6.8) + 0.14 * Math.sin(t * 13.6);
-      return { x: fromX + face * (0.0012 + push * 0.0010 + bob * 0.00024), lift: 0.036 + Math.abs(push) * 0.022 + Math.abs(bob) * 0.008, rot: (-3.4 + push * 2.4 + bob * 1.5) * face, anim: "play" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0012 * (1 - s), lift: 0.006 * (1 - s), rot: -0.42 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.pushupshow));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * face, anim: "play" as TrickAnim };
   }
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * bob * 0.5,
+      lift: 2.6 + Math.abs(bob) * 1.4,
+      rot: face * (-10 + bob * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (-3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function hueshiftPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.hueshift));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0005, lift: s * 0.018, rot: s * 2.2 * face, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const hue = Math.sin((u - 0.12) / 0.72 * Math.PI * 2.2);
-      const wash = Math.sin(t * 2.8) + 0.12 * Math.sin(t * 5.6);
-      return { x: fromX + face * (0.0005 + hue * 0.0006 + wash * 0.00018), lift: 0.016 + Math.abs(hue) * 0.010 + Math.abs(wash) * 0.004, rot: (2.2 + hue * 1.4 + wash * 1.0) * face, anim: "sit" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.0005 * (1 - s), lift: 0.003 * (1 - s), rot: 0.28 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.hueshift));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.8, rot: s * 14 * face, anim: "talk" as TrickAnim };
   }
+  if (u < 0.78) {
+    const cast = Math.sin(t * 2.6);
+    return {
+      x: fromX - face * cast * 0.16,
+      lift: 3.6 + Math.abs(cast) * 1.6,
+      rot: face * (14 + cast * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function preyinchPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.preyinch));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX + face * s * 0.0024, lift: s * 0.012, rot: s * -4.6 * face, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const inch = Math.sin((u - 0.11) / 0.75 * Math.PI * 3.2);
-      const freeze = Math.sin(t * 4.4) + 0.14 * Math.sin(t * 8.8);
-      return { x: fromX + face * (0.0024 + inch * 0.0018 + freeze * 0.00026), lift: 0.010 + Math.abs(inch) * 0.011 + Math.abs(freeze) * 0.005, rot: (-4.6 + inch * 2.2 + freeze * 1.3) * face, anim: "talk" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0024 * (1 - s), lift: 0.002 * (1 - s), rot: -0.50 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.preyinch));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 2.8, rot: s * 12 * face, anim: "talk" as TrickAnim };
   }
+  if (u < 0.78) {
+    const nestle = Math.sin(t * 2.2);
+    return {
+      x: fromX + face * (0.6 + nestle * 0.1),
+      lift: 2.4 + Math.abs(nestle) * 1.8,
+      rot: face * (12 + nestle * 8),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function nuchalPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.nuchal));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * -12 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const tip = Math.sin(t * 2.0);
+    return {
+      x: fromX + face * tip * 0.08,
+      lift: 2.8 + tip * 1.6,
+      rot: face * (-12 + tip * 10),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const hush = Math.sin(t * 0.9);
+    return {
+      x: fromX,
+      lift: 4.0 + Math.abs(hush) * 0.6,
+      rot: face * (-4 + hush * 3),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (-2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function vinehushPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.vinehush));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * 12 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const stretch = Math.sin(t * 2.3);
+    return {
+      x: fromX + face * stretch * 0.1,
+      lift: 3.4 + stretch * 1.4,
+      rot: face * (12 + stretch * 9),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const hush = Math.sin(t * 0.85);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(hush) * 0.7,
+      rot: face * (5 + hush * 3),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: AnoleTrick | null | undefined, dt: number, flags?: TrickFlags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "dewlapflash" && trick.kind !== "pushupshow" && trick.kind !== "hueshift" && trick.kind !== "preyinch") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "anolis") {
-      if (next.t < ANOLIS_HOLD) {
-        const pose = anolisPose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      if (next.t < ANOLIS_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - ANOLIS_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "dewlapflash") {
-      const pose = dewlapflashPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "pushupshow") {
-      const pose = pushupshowPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "hueshift") {
-      const pose = hueshiftPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = preyinchPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+  if (!trick || trick.phase === "done") return trick;
+  if (shouldAbort(flags) && trick.kind !== "dewlapflash" && trick.kind !== "pushupshow" && trick.kind !== "hueshift" && trick.kind !== "preyinch" && trick.kind !== "nuchal" && trick.kind !== "vinehush") {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
+  const next = { ...trick, t: trick.t + Math.max(0, dt) };
+  if (next.kind === "anolis") {
+    if (next.t < ANOLIS_HOLD) {
+      const pose = anolisPose(next.t);
+      next.phase = "hold";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    if (next.t < ANOLIS_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - ANOLIS_HOLD);
+      next.phase = "release";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  }
+  const hold = DUR[next.kind];
+  const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "dewlapflash") {
+    const pose = dewlapflashPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "pushupshow") {
+    const pose = pushupshowPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "hueshift") {
+    const pose = hueshiftPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "preyinch") {
+    const pose = preyinchPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "nuchal") {
+    const pose = nuchalPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = vinehushPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  return next;
+}
+
