@@ -214,7 +214,13 @@ def test_only_scratching_mammals_scratch():
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
         assert "tongue" not in names, key
-    assert "drink-light" in [a["name"] for a in acts_for("photovore")]
+    assert "photovore" in [a["name"] for a in acts_for("photovore")]
+    assert "opsin_soft" in [a["name"] for a in acts_for("photovore")]
+    assert "iridophore_soft" in [a["name"] for a in acts_for("photovore")]
+    assert "freeze" in [a["name"] for a in acts_for("photovore")]
+    assert "drink-light" not in [a["name"] for a in acts_for("photovore")]
+    assert "hover" not in [a["name"] for a in acts_for("photovore")]
+    assert "still" not in [a["name"] for a in acts_for("photovore")]
     assert "chord-pulse" in [a["name"] for a in acts_for("choir")]
     assert "float" in [a["name"] for a in acts_for("nimbus")]
     assert "facet" in [a["name"] for a in acts_for("silica")]
