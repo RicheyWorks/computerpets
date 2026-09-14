@@ -90,7 +90,7 @@ test("Cling tricks start only on idle ground", () => {
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
-  assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
+  assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
@@ -192,7 +192,7 @@ test("podia/righting/crawl/evert/penta are house-sea-star-true, not copies of pr
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
-  assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
+  assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.equal(T.TRICKS.includes("chime"), false);
   assert.equal(T.TRICKS.includes("pulse"), false);
   assert.equal(T.TRICKS.includes("drift"), false);
@@ -302,7 +302,7 @@ test("ground registry keeps prior guests gated; Cling selectable; prior guests s
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
-  assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
+  assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.equal(T.wantsThankYou("sea_star"), true);
   assert.equal(T.wantsThankYou("cling"), true);
@@ -396,7 +396,7 @@ test("ground registry keeps prior guests gated; Cling selectable; prior guests s
   assert.deepEqual([...OverlayOctopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
   assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
-  assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
+  assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...Overlay.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
   assert.equal(Overlay.TRICKS.includes("reef"), false);
   assert.equal(Overlay.TRICKS.includes("cling"), false);

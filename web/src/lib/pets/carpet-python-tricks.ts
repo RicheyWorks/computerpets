@@ -1,7 +1,6 @@
-/** Atlas ground tricks while idle. House carpet python — legend / rung / contour / runner / bearing personality (map/carpet climb desk life; chart-shelf cartographer, not Nori ball-bun or Jade lamp-arm jewelry or Blush desert pebble). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `carpet-python-tricks.js`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play CHART unchanged — never names `chart`. Nori owns orb/nook/taste/inch/unroll and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank and harbor/cradle/stay; Coral owns rhyme/rumor/costume/frank/tile and postmark/cachet/courtesy; Blush owns pebble/crevice/rosy/mesa/arroyo and climate/manners/corner; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; turtle owns tuck; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone; carpet_python window-play owns chart; hamster owns nest. Avoids chart/climb/unroll/drape/tongue/pebble/crevice/rosy/mesa/arroyo/climate/manners/corner/mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/flip/saddle/inspect/write/orb/nook/taste/inch/bun/ball/coil/curl/bask/loaf/potato/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/mimic/flash/root/flare/dig/perch/hang/clasp/scent/heave/lug/earth/bed/nest/pour/heft/oxbow/slack/bank/harbor/cradle/stay/rhyme/rumor/costume/frank/tile/postmark/cachet/courtesy/tuck/hide name collisions with prior guests and carpet_python window-play. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Atlas ground tricks while idle — ultra-polish pass. House carpet python — legend / rung / contour / runner / bearing / canopy / inset personality (map/carpet climb desk life; chart-shelf cartographer + jungle Morelia canopy, not Nori ball-bun or Jade lamp-arm jewelry or Blush desert pebble). Legend rests a desk map-legend carpet plate; rung climbs a blotter rung; contour traces a map contour S-curve; runner lays a carpet runner; bearing compass-orients true; canopy weaves a jungle canopy branch climb (species-true Morelia arboreal — not Jade bough/liana/arbor, not Echo perch, not rung desk-rung); inset settles a map inset plate (cartographer Atlas — not legend hold, not window-play CHART). Window-play CHART unchanged — never names `chart`. Ethogram keeps tongue + legend sit_hold; adds rung/contour/runner/canopy/inset softs + freeze (replaces thin drape-only). Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank/anchor/meander and harbor/cradle/stay; Coral owns rhyme/rumor/costume/frank/tile/cipher/verse and postmark/cachet/courtesy; Blush owns pebble/crevice/rosy/mesa/arroyo/dune/talus and climate/manners/corner; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; turtle owns tuck; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone; carpet_python window-play owns chart; hamster owns nest. Guest slug Atlas / key carpet_python — accept "carpet_python" and "atlas". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via carpet_python.wav. Thank-yous survey / gazette / shelf. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `carpet-python-tricks.js`. True house-carpet-python desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids chart/climb/unroll/drape/tongue/pebble/crevice/rosy/mesa/arroyo/dune/talus/climate/manners/corner/mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/flip/saddle/inspect/write/orb/nook/taste/inch/bun/ball/coil/curl/bask/loaf/potato/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/mimic/flash/root/flare/dig/perch/hang/clasp/scent/heave/lug/earth/bed/nest/pour/heft/oxbow/slack/bank/harbor/cradle/stay/rhyme/rumor/costume/frank/tile/postmark/cachet/courtesy/tuck/hide/liana/arbor/loom/weave/azimuth/margin/rosette/wrap/branch/parcel/ridge/pit/diamond name collisions with prior guests and carpet_python window-play. Bird ultra (Soot→Ember) + Miso→Blush done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Cup / octopus. No cry inventing beyond house carpet_python.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "carpet_python";
-export const TRICKS = ["legend", "rung", "contour", "runner", "bearing"] as const;
+export const TRICKS = ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"] as const;
 export const HAPPY = ["survey", "gazette", "shelf"] as const;
 export type CarpetPythonTrickKind = (typeof TRICKS)[number];
 export type CarpetPythonHappyKind = (typeof HAPPY)[number];
@@ -46,21 +45,23 @@ export type CarpetPythonHappy = {
 };
 
 export const HAPPY_DUR: Record<CarpetPythonHappyKind, number> = {
-  survey: 1.22,
-  gazette: 1.28,
-  shelf: 1.34,
+  survey: 1.55,
+  gazette: 1.6,
+  shelf: 1.58,
 };
 
 /** Legend hold — Atlas rests as a desk map-legend carpet plate. Not window-play CHART. Not Nori orb. */
-export const LEGEND_HOLD = 10.4;
-export const RELEASE_S = 0.6;
+export const LEGEND_HOLD = 12.2;
+export const RELEASE_S = 0.82;
 
 export const DUR: Record<CarpetPythonTrickKind, number> = {
   legend: LEGEND_HOLD + RELEASE_S,
-  rung: 1.44,
-  contour: 1.48,
-  runner: 1.56,
-  bearing: 1.3,
+  rung: 1.78,
+  contour: 1.92,
+  runner: 1.98,
+  bearing: 1.72,
+  canopy: 2.05,
+  inset: 2.12,
 };
 
 export function canStart(state: TrickFlags | undefined) {
@@ -91,38 +92,29 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: CarpetPythonTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "legend") return 48 + roll * 28;
-  if (kind === "rung") return 16 + roll * 11;
-  if (kind === "contour") return 15 + roll * 10;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "legend") return 38 + roll * 24;
+  if (kind === "canopy" || kind === "inset" || kind === "contour") return 12 + roll * 9;
+  if (kind === "rung" || kind === "runner") return 11 + roll * 8;
+  if (kind === "bearing") return 10 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: CarpetPythonTrickKind | null) {
-  if (musicOn) return "legend" as const;
+export function pickTrick(rand?: number, musicOn = false, lastKind?: CarpetPythonTrickKind | null): CarpetPythonTrickKind {
+  if (musicOn) return "legend";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "legend") {
-    if (roll < 0.28) return "rung" as const;
-    if (roll < 0.5) return "contour" as const;
-    if (roll < 0.72) return "runner" as const;
-    return "bearing" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "legend" ? 0.55 : k === "canopy" || k === "inset" || k === "contour" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "rung") {
-    if (roll < 0.3) return "legend" as const;
-    if (roll < 0.52) return "contour" as const;
-    if (roll < 0.74) return "runner" as const;
-    return "bearing" as const;
-  }
-  if (lastKind === "contour") {
-    if (roll < 0.24) return "legend" as const;
-    if (roll < 0.46) return "rung" as const;
-    if (roll < 0.68) return "runner" as const;
-    return "bearing" as const;
-  }
-  if (roll < 0.22) return "legend" as const;
-  if (roll < 0.42) return "rung" as const;
-  if (roll < 0.6) return "contour" as const;
-  if (roll < 0.8) return "runner" as const;
-  return "bearing" as const;
+  return list[list.length - 1] || "legend";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -194,45 +186,45 @@ export function surveyPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.survey));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 1.2, rot: s * -4.5, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
-    const scan = Math.abs(Math.sin(t * 2.6));
+    const scan = Math.abs(Math.sin(t * 4.6));
     return {
-      lift: 1.2 - scan * 0.35,
-      rot: -4.5 + scan * 4,
-      dx: Math.sin(t * 1.15) * 0.16,
+      lift: 4.2 + scan * 3.4,
+      rot: -16 + Math.sin(t * 3.4) * 14,
+      dx: Math.sin(t * 1.8) * 0.55,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 0.9 * (1 - s), rot: -2.5 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function gazettePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gazette));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 1.45, rot: s * 6.5, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.8) {
-    const nod = Math.sin(t * 2.35);
+    const nod = Math.sin(t * 2.8);
     return {
-      lift: 1.45 + Math.abs(nod) * 0.3,
-      rot: 6.5 + nod * 5,
-      dx: nod * 0.2,
+      lift: 4.6 + Math.abs(nod) * 3.2,
+      rot: 18 + nod * 16,
+      dx: nod * 0.7,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 1.45 * (1 - s), rot: 6.5 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function shelfPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 1.65)) * 0.85 + 1.0,
-    rot: -3.5 + Math.sin(t * 2.05) * 5.4,
-    dx: Math.sin(t * 1.25) * 0.26,
+    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
+    rot: -16 + Math.sin(t * 2.8) * 14,
+    dx: Math.sin(t * 1.9) * 0.7,
     anim: "talk" as TrickAnim,
   };
 }
@@ -280,7 +272,11 @@ export function beginTrick(kind: CarpetPythonTrickKind, x: number, facing: 1 | -
             ? "walk"
             : kind === "bearing"
               ? "sit"
-              : "sit";
+              : kind === "canopy"
+                ? "walk"
+                : kind === "inset"
+                  ? "sit"
+                  : "sit";
   return {
     kind,
     phase: kind === "legend" ? "hold" : "go",
@@ -301,49 +297,52 @@ function smoothstep(t: number) {
 
 export function legendPose(t: number) {
   // Map-legend carpet breath — patterned plate on the blotter, not window chart.
-  const beat = Math.sin(t * 0.92) + 0.32 * Math.sin(t * 2.55);
+  const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
   return {
-    lift: 0.52 + Math.abs(Math.sin(t * 0.68)) * 0.15,
-    rot: -2.8 + beat * 3.0,
+    lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+    rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.52 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -2.8 * (1 - u) };
+  return {
+    lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
+    rot: -22 * (1 - u),
+  };
 }
 
 export function rungPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.rung));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 0.6, lift: s * 0.7, rot: s * 8 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 1.6, lift: s * 3.6, rot: s * 18 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.42) {
     const s = (u - 0.12) / 0.3;
     // Climb a desk rung — vertical lift, not Jade bracelet coil jewelry.
     return {
-      x: fromX + facing * (0.6 + smoothstep(s) * 0.4),
-      lift: 0.7 + smoothstep(s) * 2.4,
-      rot: facing * (8 - s * 6),
+      x: fromX + facing * (1.6 + smoothstep(s) * 1.2),
+      lift: 3.6 + smoothstep(s) * 4.8,
+      rot: facing * (18 - s * 10),
       anim: "play" as TrickAnim,
     };
   }
   if (u < 0.72) {
     const s = (u - 0.42) / 0.3;
-    const sway = Math.sin(s * Math.PI * 2.2);
+    const sway = Math.sin(s * Math.PI * 2.6);
     return {
-      x: fromX + facing * (1.0 + sway * 0.18),
-      lift: 3.1 + Math.abs(sway) * 0.2,
-      rot: facing * (2 + sway * 5),
+      x: fromX + facing * (2.8 + sway * 0.55),
+      lift: 8.4 + Math.abs(sway) * 1.6,
+      rot: facing * (6 + sway * 14),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
-    x: fromX + facing * (1.0 * (1 - s)),
-    lift: 3.1 * (1 - s),
-    rot: facing * (2 * (1 - s)),
+    x: fromX + facing * (2.8 * (1 - s)),
+    lift: 8.4 * (1 - s),
+    rot: facing * (4 * (1 - s)),
     anim: "walk" as TrickAnim,
   };
 }
@@ -352,24 +351,24 @@ export function contourPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.contour));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 0.8, lift: s * 0.55, rot: s * 7 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 16 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.7) {
     const s = (u - 0.12) / 0.58;
     // Trace a map contour — soft S-curve, not Saffron pencil scribble.
-    const wave = Math.sin(s * Math.PI * 2.6);
+    const wave = Math.sin(s * Math.PI * 2.8);
     return {
-      x: fromX + facing * (0.8 + s * 3.6),
-      lift: 0.55 + Math.abs(wave) * 0.55,
-      rot: facing * (7 + wave * 11),
+      x: fromX + facing * (1.8 + s * 5.4),
+      lift: 3.2 + Math.abs(wave) * 2.8,
+      rot: facing * (16 + wave * 22),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.7) / 0.3);
   return {
-    x: fromX + facing * (4.4 * (1 - s) + s * 0),
-    lift: 0.7 * (1 - s),
-    rot: facing * (4 * (1 - s)),
+    x: fromX + facing * (7.2 * (1 - s)),
+    lift: 3.6 * (1 - s),
+    rot: facing * (8 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -378,7 +377,7 @@ export function runnerPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.runner));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 1.1, lift: s * 0.5, rot: s * 5 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 1.8, lift: s * 3.0, rot: s * 14 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.48) {
     const s = (u - 0.12) / 0.36;
@@ -386,27 +385,27 @@ export function runnerPose(t: number, fromX: number, facing: 1 | -1) {
     const step = Math.floor(s * 3);
     const local = (s * 3) % 1;
     return {
-      x: fromX + facing * (1.1 + step * 1.35 + smoothstep(local) * 1.35),
-      lift: 0.5 + Math.sin(local * Math.PI) * 0.35,
-      rot: facing * (5 + Math.sin(local * Math.PI) * 7),
+      x: fromX + facing * (1.8 + step * 2.0 + smoothstep(local) * 2.0),
+      lift: 3.0 + Math.sin(local * Math.PI) * 2.4,
+      rot: facing * (14 + Math.sin(local * Math.PI) * 20),
       anim: "walk" as TrickAnim,
     };
   }
   if (u < 0.78) {
     const s = (u - 0.48) / 0.3;
-    const nap = Math.abs(Math.sin(s * Math.PI * 1.8));
+    const nap = Math.abs(Math.sin(s * Math.PI * 2.0));
     return {
-      x: fromX + facing * 5.15,
-      lift: 0.22 + nap * 0.12,
-      rot: facing * (-3 + nap * 2.5),
+      x: fromX + facing * 7.8,
+      lift: 1.4 + nap * 1.8,
+      rot: facing * (-12 + nap * 10),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (5.15 * (1 - s)),
-    lift: 0.3 * (1 - s),
-    rot: facing * (-1.5 * (1 - s)),
+    x: fromX + facing * (7.8 * (1 - s)),
+    lift: 1.6 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -415,31 +414,108 @@ export function bearingPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.bearing));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 1.4, rot: s * 12 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 5.0, rot: s * 26 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.14) / 0.58;
     // Compass-bearing orient — head points true, not Bandit stripe audit.
-    const tick = Math.sin(s * Math.PI * 3.2);
+    const tick = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * tick * 0.22,
-      lift: 1.4 - s * 0.35 + Math.abs(tick) * 0.18,
-      rot: facing * (12 - s * 16 + tick * 3.5),
+      x: fromX + facing * tick * 0.65,
+      lift: 5.0 - s * 1.2 + Math.abs(tick) * 2.0,
+      rot: facing * (26 - s * 34 + tick * 12),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
     x: fromX,
-    lift: 1.1 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    lift: 3.6 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function canopyPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.canopy));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX + facing * s * 1.4, lift: s * 4.2, rot: s * 20 * facing, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.45) {
+    const s = (u - 0.12) / 0.33;
+    // Jungle canopy branch weave — Morelia arboreal, not Jade liana jewelry, not Echo perch.
+    const weave = Math.sin(s * Math.PI * 3.0);
+    return {
+      x: fromX + facing * (1.4 + smoothstep(s) * 2.4 + weave * 0.45),
+      lift: 4.2 + smoothstep(s) * 4.6 + Math.abs(weave) * 1.4,
+      rot: facing * (20 - s * 8 + weave * 16),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.45) / 0.33;
+    const hang = Math.abs(Math.sin(s * Math.PI * 2.2));
+    return {
+      x: fromX + facing * (3.8 + hang * 0.35),
+      lift: 8.8 - s * 1.6 + hang * 1.8,
+      rot: facing * (8 + hang * 12),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * (3.8 * (1 - s)),
+    lift: 7.2 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "walk" as TrickAnim,
+  };
+}
+
+export function insetPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.inset));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 4.8, rot: s * -14 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.42) {
+    const s = (u - 0.12) / 0.3;
+    // Settle into a map inset plate — cartographer Atlas, not legend breath, not CHART.
+    return {
+      x: fromX + facing * smoothstep(s) * -1.6,
+      lift: 4.8 - smoothstep(s) * 2.8,
+      rot: facing * (-14 + s * 22),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.42) / 0.36;
+    const press = Math.abs(Math.sin(s * Math.PI * 2.4));
+    return {
+      x: fromX + facing * -1.6,
+      lift: 1.8 + press * 2.2,
+      rot: facing * (10 + press * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * (-1.6 * (1 - s)),
+    lift: 2.2 * (1 - s),
+    rot: facing * (4 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
 
 export function stepTrick(trick: CarpetPythonTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "runner" && trick.kind !== "rung" && trick.kind !== "contour") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "runner" &&
+    trick.kind !== "rung" &&
+    trick.kind !== "contour" &&
+    trick.kind !== "canopy"
+  ) {
     return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next: CarpetPythonTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -464,26 +540,39 @@ export function stepTrick(trick: CarpetPythonTrick | null | undefined, dt: numbe
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "rung") {
-    const pose = rungPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = rungPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "contour") {
-    const pose = contourPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = contourPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "runner") {
-    const pose = runnerPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = runnerPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "canopy") {
+    const pose = canopyPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "inset") {
+    const pose = insetPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = bearingPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = bearingPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
