@@ -40,6 +40,17 @@ test("horseshoe_crab ethogram is Ledger ultra (carapace + softs + freeze, not pl
   assert.equal(names.includes("molt"), false);
 });
 
+test("seahorse ethogram is Anchor ultra (coil + softs + freeze, not hitch/hover)", () => {
+  const names = E.actsFor("seahorse").map((a) => a.name);
+  assert.ok(names.includes("coil"));
+  assert.ok(names.includes("dorsal_soft"));
+  assert.ok(names.includes("pectoral_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("hitch"), false);
+  assert.equal(names.includes("hover"), false);
+  assert.equal(names.includes("anchor"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",
