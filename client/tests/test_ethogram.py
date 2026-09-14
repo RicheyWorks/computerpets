@@ -366,7 +366,10 @@ def test_only_scratching_mammals_scratch():
     assert "fimbria_soft" in [a["name"] for a in acts_for("coli")]
     assert "flagmotor_soft" in [a["name"] for a in acts_for("coli")]
     assert "freeze" in [a["name"] for a in acts_for("coli")]
-    assert "blush" in [a["name"] for a in acts_for("haloarchaea")]
+    assert "retinal" in [a["name"] for a in acts_for("haloarchaea")]
+    assert "archaellum_soft" in [a["name"] for a in acts_for("haloarchaea")]
+    assert "brinedrift_soft" in [a["name"] for a in acts_for("haloarchaea")]
+    assert "freeze" in [a["name"] for a in acts_for("haloarchaea")]
     for key in ROOST_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
