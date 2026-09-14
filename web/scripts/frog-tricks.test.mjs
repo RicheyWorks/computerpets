@@ -1929,7 +1929,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Reed ultra idle-life done; next house-order ultra is Slip / caecilian", () => {
+test("notes: Reed ultra idle-life done; next house-order ultra is Pinch / crayfish", () => {
   assert.equal(T.TRICK_KEY, "frog");
   assert.deepEqual([...T.TRICKS], ["gular", "nictitate", "tympanum", "iliac", "lentic", "toepad", "webbing"]);
   assert.deepEqual([...T.HAPPY], ["chorus", "rivulet", "spring"]);
@@ -1991,9 +1991,9 @@ test("notes: Reed ultra idle-life done; next house-order ultra is Slip / caecili
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next house-order ultra (do not implement): Slip / caecilian.
-  assert.equal("caecilian", "caecilian");
-  assert.equal("Slip", "Slip");
+  // Recommend next house-order ultra (do not implement): Pinch / crayfish.
+  assert.equal("crayfish", "crayfish");
+  assert.equal("Pinch", "Pinch");
 });
 
 

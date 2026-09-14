@@ -717,6 +717,11 @@ assert.ok(E.actsFor("salamander").some((a) => a.name === "ambystomid"));
 assert.ok(E.actsFor("salamander").some((a) => a.name === "mental_soft"));
 assert.ok(E.actsFor("salamander").some((a) => a.name === "granular_soft"));
 assert.ok(E.actsFor("salamander").some((a) => a.name === "freeze"));
+assert.ok(E.actsFor("caecilian").some((a) => a.name === "gymnophion"));
+assert.ok(E.actsFor("caecilian").some((a) => a.name === "stegos_soft"));
+assert.ok(E.actsFor("caecilian").some((a) => a.name === "dualjaw_soft"));
+assert.ok(E.actsFor("caecilian").some((a) => a.name === "freeze"));
+
 
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wake"), false);
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wait"), false);
