@@ -475,6 +475,21 @@ test("lichen ethogram is Pact ultra (cladonia + softs + freeze, not share-still/
   assert.equal(names.includes("still"), false);
 });
 
+test("photovore ethogram is Gleam ultra (photovore + softs + freeze, not drink-light/hover/still)", () => {
+  const names = E.actsFor("photovore").map((a) => a.name);
+  assert.ok(names.includes("photovore"));
+  assert.ok(names.includes("photon_soft"));
+  assert.ok(names.includes("wavelength_soft"));
+  assert.ok(names.includes("lumen_soft"));
+  assert.ok(names.includes("glass_soft"));
+  assert.ok(names.includes("opsin_soft"));
+  assert.ok(names.includes("iridophore_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("drink-light"), false);
+  assert.equal(names.includes("hover"), false);
+  assert.equal(names.includes("still"), false);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
@@ -548,7 +563,7 @@ test("far keys never schedule scratch or tongue", () => {
     assert.equal(names.includes("scratch"), false, key);
     assert.equal(names.includes("tongue"), false, key);
   }
-  assert.ok(E.actsFor("photovore").some((a) => a.name === "drink-light"));
+  assert.ok(E.actsFor("photovore").some((a) => a.name === "photovore"));
   assert.ok(E.actsFor("choir").some((a) => a.name === "chord-pulse"));
   assert.ok(E.actsFor("nimbus").some((a) => a.name === "float"));
   assert.ok(E.actsFor("silica").some((a) => a.name === "facet"));
