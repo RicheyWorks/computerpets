@@ -1,12 +1,20 @@
-/** Prickle ground tricks while idle. House neighborly Gasterosteidae three-spined stickleback desk life — spiggin / zigzag / spinous / fanning / gasterosteid personality (spiggin nest-glue dab without naming glue or nest or flare or dart or still, zigzag courtship-threat dance without naming zig or flare or dart or swim or still, spinous dorsal-spine raise without naming flare or spine or prickle or dart, fanning parental pectoral beat without naming fan or paddle or swim or still or gulp, long gasterosteid Gasterosteus desk hold under the weed bowl — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or spiral or siphuncle or nacre or pinhole or fringe or swap or antenna or scuttle or withdraw or vacancy or chelate or caridoid or chimney or antennule or astacid or mantle or jet or claw or snap or pinch or annulate or fossorial or tentacular or hydrostatic or gymnophion or filter or siphon or gape or click or arc or buzz or switch; ethogram flare/dart/still own those words; window-play GLUE owns glue; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Door owns hinge; Anchor owns siphon; guest slug Prickle / key stickleback only for isKey matching — accept "stickleback" and "prickle"; do NOT name a trick "stickleback" or "prickle" or "glue" or "flare" or "dart" or "still" or "nest" or "swim" or "gulp") — not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta. spiggin nest-glue dab on the weed dish without naming glue or nest, zigzag courtship zig without naming flare, spinous dorsal raise without naming flare or spine, fanning parental beat without naming fan or swim, gasterosteid long Gasterosteus metabolic hold under the scrap weed with aculeatus / pungitius / spinachia cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play GLUE do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop stickleback-tricks.js. Ethogram flare/dart/still unchanged — never names flare or dart or still as trick kinds. Window-play GLUE unchanged — never names glue. True Gasterosteidae three-spined stickleback desk life only — distinct from Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, and Kite manta. Soot owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Prickle ground tricks while idle — ultra-polish pass. House neighborly Gasterosteidae three-spined stickleback desk life — spiggin / zigzag / spinous / fanning / gasterosteid / nuptial / pelvic personality (spiggin nest-glue dab without naming glue or nest or flare or dart or still, zigzag courtship-threat dance without naming zig or flare or dart or swim or still, spinous dorsal-spine raise without naming flare or spine or prickle or dart, fanning parental pectoral beat without naming fan or paddle or swim or still or gulp, long gasterosteid Gasterosteus desk hold under the weed bowl, nuptial breeding-dress pulse without naming red or color or flare or dart (THE male stickleback courtship-color tell), pelvic ventral-spine threaten without naming spine or flare or prickle or dart (THE gasterosteid armor-spine tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiral or siphuncle or nacre or pinhole or fringe or swap or antenna or scuttle or withdraw or vacancy or chelate or caridoid or chimney or antennule or astacid or mantle or jet or claw or snap or pinch or annulate or fossorial or tentacular or hydrostatic or gymnophion or filter or siphon or gape or click or arc or buzz or switch or scute as trick kinds; ethogram softs + freeze own those words; window-play GLUE owns glue; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Door owns hinge; Anchor owns siphon; guest slug Prickle / key stickleback only for isKey matching — accept "stickleback" and "prickle"; do NOT name a trick "stickleback" or "prickle" or "glue" or "flare" or "dart" or "still" or "nest" or "swim" or "gulp" or "scute") — not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta. spiggin nest-glue dab on the weed dish without naming glue or nest, zigzag courtship zig without naming flare, spinous dorsal raise without naming flare or spine, fanning parental beat without naming fan or swim, gasterosteid long Gasterosteus metabolic hold under the scrap weed, nuptial breeding-dress pulse (THE stickleback courtship-color tell), pelvic ventral-spine threaten (THE gasterosteid armor-spine tell); aculeatus / pungitius / spinachia thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play GLUE do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web stickleback-tricks.ts. Window-play GLUE unchanged. Ethogram softs + freeze — never names flare/dart/still as trick kinds. True Gasterosteidae three-spined stickleback desk life only — distinct from Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, and Kite manta. Boot owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via stickleback.wav. */
 (function (root) {
   const TRICK_KEY = "stickleback";
-  const TRICKS = ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid"];
+  const TRICKS = ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid", "nuptial", "pelvic"];
   const HAPPY = ["aculeatus", "pungitius", "spinachia"];
-  const HAPPY_DUR = { aculeatus: 1.61, pungitius: 1.74, spinachia: 1.68 };
-  const GASTEROSTEID_HOLD = 18.42;
-  const RELEASE_S = 1.12;
-  const DUR = { gasterosteid: GASTEROSTEID_HOLD + RELEASE_S, spiggin: 2.34, zigzag: 2.48, spinous: 2.22, fanning: 2.56 };
+  const HAPPY_DUR = { aculeatus: 1.64, pungitius: 1.76, spinachia: 1.71 };
+  const GASTEROSTEID_HOLD = 10.8;
+  const RELEASE_S = 1.14;
+  const DUR = {
+    gasterosteid: GASTEROSTEID_HOLD + RELEASE_S,
+    spiggin: 2.28,
+    zigzag: 2.42,
+    spinous: 2.48,
+    fanning: 2.34,
+    nuptial: 2.36,
+    pelvic: 2.31,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,39 +44,54 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "gasterosteid") return 76 + roll * 46;
-  if (kind === "spiggin") return 16.4 + roll * 12.8;
-  if (kind === "zigzag") return 18.6 + roll * 13.2;
-  if (kind === "fanning") return 21.8 + roll * 14.6;
-  return justFinished ? 14.6 + roll * 10.9 : 8.4 + roll * 9.7;
+    if (kind === "gasterosteid") return 38 + roll * 24;
+    if (kind === "nuptial" || kind === "pelvic" || kind === "spiggin") return 12 + roll * 9;
+    if (kind === "zigzag" || kind === "spinous" || kind === "fanning") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "gasterosteid";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "gasterosteid") {
-      if (roll < 0.26) return "spiggin";
-      if (roll < 0.5) return "zigzag";
-      if (roll < 0.74) return "spinous";
-      return "fanning";
+      if (roll < 0.16) return "spiggin";
+      if (roll < 0.32) return "zigzag";
+      if (roll < 0.48) return "spinous";
+      if (roll < 0.64) return "fanning";
+      if (roll < 0.82) return "nuptial";
+      return "pelvic";
     }
     if (lastKind === "spiggin") {
-      if (roll < 0.26) return "gasterosteid";
-      if (roll < 0.5) return "zigzag";
-      if (roll < 0.74) return "spinous";
-      return "fanning";
+      if (roll < 0.16) return "gasterosteid";
+      if (roll < 0.32) return "zigzag";
+      if (roll < 0.48) return "spinous";
+      if (roll < 0.64) return "fanning";
+      if (roll < 0.82) return "nuptial";
+      return "pelvic";
     }
     if (lastKind === "zigzag") {
-      if (roll < 0.22) return "gasterosteid";
-      if (roll < 0.44) return "spiggin";
-      if (roll < 0.68) return "spinous";
-      return "fanning";
+      if (roll < 0.14) return "gasterosteid";
+      if (roll < 0.3) return "spiggin";
+      if (roll < 0.46) return "spinous";
+      if (roll < 0.62) return "fanning";
+      if (roll < 0.8) return "nuptial";
+      return "pelvic";
     }
-    if (roll < 0.2) return "gasterosteid";
-    if (roll < 0.4) return "spiggin";
-    if (roll < 0.6) return "zigzag";
-    if (roll < 0.8) return "spinous";
-    return "fanning";
+    if (lastKind === "nuptial" || lastKind === "pelvic") {
+      if (roll < 0.14) return "gasterosteid";
+      if (roll < 0.3) return "spiggin";
+      if (roll < 0.46) return "zigzag";
+      if (roll < 0.62) return "spinous";
+      if (roll < 0.78) return "fanning";
+      return lastKind === "nuptial" ? "pelvic" : "nuptial";
+    }
+    if (roll < 0.14) return "gasterosteid";
+    if (roll < 0.28) return "spiggin";
+    if (roll < 0.42) return "zigzag";
+    if (roll < 0.56) return "spinous";
+    if (roll < 0.7) return "fanning";
+    if (roll < 0.85) return "nuptial";
+    return "pelvic";
   }
 
   function happyCanStart(state) {
@@ -130,52 +153,54 @@
     };
   }
 
-                      function aculeatusPose(t) {
+  function aculeatusPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.aculeatus));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.022, rot: s * 1.40, dx: 0, anim: "sit" };
+    if (u < 0.16) {
+      const s = u / 0.16;
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" };
     }
-    if (u < 0.80) {
-      const flash = Math.sin(t * 6.9) + 0.30 * Math.sin(t * 13.8);
+    if (u < 0.82) {
+      const flash = Math.sin(t * 1.72);
       return {
-        lift: 0.022 + Math.abs(flash) * 0.016,
-        rot: 1.40 + flash * 1.35,
-        dx: flash * 0.0012,
-        anim: "sit",
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: 0,
+        anim: "talk",
       };
     }
-    const s = (u - 0.80) / 0.20;
-    return { lift: 0.009 * (1 - s), rot: 0.42 * (1 - s), dx: 0, anim: "idle" };
+    const s = (u - 0.82) / 0.18;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function pungitiusPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.pungitius));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.036, rot: s * -1.70, dx: s * 0.0016, anim: "play" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
     if (u < 0.84) {
-      const wriggle = Math.sin(t * 4.9) + 0.22 * Math.sin(t * 8.7);
+      const wriggle = Math.sin(t * 2.1);
       return {
-        lift: 0.036 + Math.abs(wriggle) * 0.022,
-        rot: -1.70 + wriggle * 2.85,
-        dx: wriggle * 0.0026,
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: 0.08,
         anim: "play",
       };
     }
     const s = (u - 0.84) / 0.16;
-    return { lift: 0.011 * (1 - s), rot: -0.42 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function spinachiaPose(t) {
     return {
-      lift: 0.008 + Math.abs(Math.sin(t * 0.33)) * 0.017,
-      rot: Math.sin(t * 0.33) * 1.05,
-      dx: Math.sin(t * 0.27) * 0.0013,
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.52) * 6,
+      dx: 0,
       anim: "sit",
     };
   }
+
   function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
       return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
@@ -217,9 +242,13 @@
               ? "play"
               : kind === "fanning"
                 ? "play"
-                : "sit";
+                : kind === "nuptial"
+                  ? "play"
+                  : kind === "pelvic"
+                    ? "walk"
+                    : "sit";
     return {
-      kind: kind,
+      kind: TRICKS.indexOf(kind) >= 0 ? kind : "spiggin",
       phase: kind === "gasterosteid" ? "hold" : "go",
       t: 0,
       x: x,
@@ -236,19 +265,17 @@
     return x * x * (3 - 2 * x);
   }
 
-
-                      function gasterosteidPose(t) {
-    const breath = Math.sin(t * 0.12) + 0.07 * Math.sin(t * 0.33);
-    const soft = Math.abs(Math.sin(t * 0.17));
+  function gasterosteidPose(t) {
     return {
-      lift: 0.004 + soft * 0.013,
-      rot: -0.28 + breath * 0.55,
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.14) * 4,
+      anim: "sit",
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.005 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.20 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function spigginPose(t, fromX, facing) {
@@ -256,108 +283,192 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      // nest-glue dab settles onto the weed dish
-      return { x: fromX, lift: s * 0.006, rot: s * -1.35 * face, anim: "sit" };
+      return { x: fromX, lift: s * 3.2, rot: s * 14 * face, anim: "sit" };
     }
-    if (u < 0.80) {
-      // spiggin glue pulses — nest dab without naming glue
-      const grip = Math.sin(t * 6.4) + 0.26 * Math.sin(t * 12.8);
-      const bite = grip > 0.4 ? 0.85 : grip < -0.4 ? -0.45 : grip * 0.35;
+    if (u < 0.78) {
+      const snap = Math.sin(t * 2.4);
       return {
-        x: fromX + face * bite * 0.0035,
-        lift: 0.006 + Math.abs(grip) * 0.010,
-        rot: (-1.35 + bite * 1.9) * face,
+        x: fromX + face * snap * 0.12,
+        lift: 3.2 + Math.abs(snap) * 1.4,
+        rot: face * (14 + snap * 10),
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.80) / 0.20);
-    return { x: fromX, lift: 0.004 * (1 - s), rot: -0.30 * (1 - s) * face, anim: "idle" };
-  }
-  function zigzagPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.zigzag));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX, lift: s * 0.028, rot: s * -0.85 * face, anim: "walk" };
-    }
-    if (u < 0.88) {
-      const s = (u - 0.10) / 0.78;
-      // Tinbergen zigzag courtship/threat dance
-      const zig = Math.sin(s * Math.PI * 5.0);
-      const zag = Math.sin(s * Math.PI * 10.0);
-      return {
-        x: fromX + face * (zig * 0.085 + zag * 0.018),
-        lift: 0.018 + Math.abs(zag) * 0.024,
-        rot: (-0.85 + zig * 2.4) * face,
-        anim: "walk",
-      };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
+    const s = smoothstep((u - 0.78) / 0.22);
     return {
-      x: fromX + face * 0.02 * (1 - s),
-      lift: 0.010 * (1 - s),
-      rot: -0.22 * (1 - s) * face,
+      x: fromX,
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
       anim: "idle",
     };
   }
+
+  function zigzagPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.zigzag));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 3.6, rot: s * -16 * face, anim: "walk" };
+    }
+    if (u < 0.48) {
+      const s = smoothstep((u - 0.12) / 0.36);
+      return {
+        x: fromX - face * (2.2 + s * 4.5),
+        lift: 3.6 + Math.sin(s * Math.PI) * 2.2,
+        rot: face * (-16 + s * 22),
+        anim: "walk",
+      };
+    }
+    if (u < 0.78) {
+      const s = (u - 0.48) / 0.3;
+      const settle = Math.sin(s * Math.PI * 2.1);
+      return {
+        x: fromX - face * (6.7 * (1 - s)),
+        lift: 2.4 + Math.abs(settle) * 1.1,
+        rot: face * (6 + settle * 8),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.4 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
   function spinousPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.spinous));
     const face = facing == null ? 1 : facing;
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX + face * s * 0.8, lift: s * 2.2, rot: s * 8 * face, anim: "play" };
+    }
+    if (u < 0.72) {
+      const mud = Math.sin(t * 1.6);
+      return {
+        x: fromX + face * (0.8 + mud * 0.4),
+        lift: 2.2 + Math.abs(mud) * 1.0,
+        rot: face * (8 + mud * 10),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.72) / 0.28);
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: s > 0.6 ? "idle" : "play",
+    };
+  }
+
+  function fanningPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.fanning));
+    const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      // dorsal spines raise without naming flare
-      return { x: fromX, lift: s * 0.048, rot: s * -2.15 * face, anim: "play" };
+      return { x: fromX, lift: s * 2.4, rot: s * 10 * face, anim: "play" };
+    }
+    if (u < 0.84) {
+      const tap = Math.sin(t * 2.8);
+      return {
+        x: fromX + face * tap * 0.2,
+        lift: 2.4 + Math.abs(tap) * 1.1,
+        rot: face * (10 + tap * 12),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.84) / 0.16);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function nuptialPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.nuptial));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 2.8, rot: s * 12 * face, anim: "play" };
+    }
+    if (u < 0.55) {
+      const pulse = Math.sin(t * 3.2);
+      return {
+        x: fromX,
+        lift: 2.8 + pulse * 1.6,
+        rot: face * (12 + pulse * 14),
+        anim: "play",
+      };
     }
     if (u < 0.78) {
-      const pulse = Math.sin(t * 6.2) + 0.20 * Math.sin(t * 12.4);
+      const scent = Math.sin(t * 1.1);
       return {
-        x: fromX + face * pulse * 0.004,
-        lift: 0.048 + Math.abs(pulse) * 0.014,
-        rot: (-2.15 + pulse * 0.55) * face,
+        x: fromX + face * scent * 0.15,
+        lift: 4.0 + Math.abs(scent) * 0.6,
+        rot: face * (22 + scent * 4),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 0.016 * (1 - s),
-      rot: -0.45 * (1 - s) * face,
+      lift: 2.0 * (1 - s),
+      rot: face * (8 * (1 - s)),
       anim: "idle",
     };
   }
-  function fanningPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.fanning));
+
+  function pelvicPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.pelvic));
     const face = facing == null ? 1 : facing;
-    if (u < 0.08) {
-      const s = smoothstep(u / 0.08);
-      return { x: fromX, lift: s * 0.012, rot: s * 0.45 * face, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 3.4, rot: s * -12 * face, anim: "walk" };
     }
-    if (u < 0.90) {
-      // parental pectoral fanning over the nest
-      const beat = Math.sin(t * 8.4) + 0.18 * Math.sin(t * 16.8);
+    if (u < 0.55) {
+      const flash = Math.abs(Math.sin(t * 2.6));
       return {
-        x: fromX + face * beat * 0.006,
-        lift: 0.012 + Math.abs(beat) * 0.010,
-        rot: (0.45 + beat * 1.25) * face,
-        anim: "play",
+        x: fromX + face * flash * 0.2,
+        lift: 3.4 + flash * 1.4,
+        rot: face * (-12 - flash * 10),
+        anim: "walk",
       };
     }
-    const s = smoothstep((u - 0.90) / 0.10);
-    return { x: fromX, lift: 0.005 * (1 - s), rot: 0.16 * (1 - s) * face, anim: "idle" };
+    if (u < 0.78) {
+      const warn = Math.sin(t * 1.4);
+      return {
+        x: fromX,
+        lift: 4.4 + Math.abs(warn) * 0.7,
+        rot: face * (-18 + warn * 6),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.8 * (1 - s),
+      rot: face * (-5 * (1 - s)),
+      anim: "idle",
+    };
   }
+
   function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "spiggin" && trick.kind !== "zigzag" && trick.kind !== "spinous" && trick.kind !== "fanning") {
+    if (shouldAbort(flags)) {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "gasterosteid") {
       if (next.t < GASTEROSTEID_HOLD) {
         const pose = gasterosteidPose(next.t);
         next.phase = "hold";
         next.lift = pose.lift;
         next.rot = pose.rot;
-        next.anim = "sit";
+        next.anim = pose.anim;
         return next;
       }
       if (next.t < GASTEROSTEID_HOLD + RELEASE_S) {
@@ -371,33 +482,44 @@
       return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     }
     const hold = DUR[next.kind];
-    const u = next.t / hold;
     if (next.kind === "spiggin") {
-      const pose = spigginPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = spigginPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "zigzag") {
-      const pose = zigzagPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = zigzagPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "spinous") {
-      const pose = spinousPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = spinousPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "fanning") {
+      const pose = fanningPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "nuptial") {
+      const pose = nuptialPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = fanningPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = pelvicPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle", x: fromX });
     return next;
   }
 
@@ -421,6 +543,8 @@
     zigzagPose,
     spinousPose,
     fanningPose,
+    nuptialPose,
+    pelvicPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
