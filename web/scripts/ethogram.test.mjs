@@ -664,6 +664,13 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.equal(names("moon_jelly").includes("chime"), false);
   assert.equal(names("moon_jelly").includes("pulse"), false);
   assert.equal(names("moon_jelly").includes("drift"), false);
+  assert.ok(names("sea_star").includes("cling"));
+  assert.ok(names("sea_star").includes("madre_soft"));
+  assert.ok(names("sea_star").includes("papula_soft"));
+  assert.ok(names("sea_star").includes("freeze"));
+  assert.equal(names("sea_star").includes("reef"), false);
+  assert.equal(names("sea_star").includes("still"), false);
+  assert.equal(names("sea_star").includes("bell"), false);
 });
 
 test("pickAct can schedule tongue on a snake and never scratch", () => {

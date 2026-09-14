@@ -408,7 +408,7 @@ test("ultra-polish: Chamber spiral/hyponome/aperture lifts are Rui-visible (not 
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Chamber idle-life ultra done; Pulse / moon_jelly ultra done; next house-order ultra guest is Ochre / sea_star (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Chamber idle-life ultra done; Pulse / moon_jelly ultra done; Ochre / sea_star ultra done; next house-order ultra guest is Tenant / hermit_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
   assert.equal(T.TRICK_KEY, "nautilus");
   assert.equal(T.wantsThankYou("chamber"), true);
   assert.equal(OverlayGround.tricksFor("nautilus"), Overlay);
