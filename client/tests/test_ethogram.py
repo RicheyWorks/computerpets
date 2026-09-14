@@ -358,7 +358,10 @@ def test_only_scratching_mammals_scratch():
     assert "cellwall_soft" in [a["name"] for a in acts_for("chlamydomonas")]
     assert "wetplate_soft" in [a["name"] for a in acts_for("chlamydomonas")]
     assert "freeze" in [a["name"] for a in acts_for("chlamydomonas")]
-    assert "trumpet" in [a["name"] for a in acts_for("stentor")]
+    assert "introversus" in [a["name"] for a in acts_for("stentor")]
+    assert "vortex_soft" in [a["name"] for a in acts_for("stentor")]
+    assert "beadedmac_soft" in [a["name"] for a in acts_for("stentor")]
+    assert "freeze" in [a["name"] for a in acts_for("stentor")]
     assert "tumble" in [a["name"] for a in acts_for("coli")]
     assert "blush" in [a["name"] for a in acts_for("haloarchaea")]
     for key in ROOST_KEYS:

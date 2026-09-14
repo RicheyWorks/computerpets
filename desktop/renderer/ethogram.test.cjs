@@ -769,6 +769,10 @@ assert.ok(E.actsFor("pond_snail").some((a) => a.name === "freeze"));
   assert.ok(E.actsFor("chlamydomonas").some((a) => a.name === "cellwall_soft"));
   assert.ok(E.actsFor("chlamydomonas").some((a) => a.name === "wetplate_soft"));
   assert.ok(E.actsFor("chlamydomonas").some((a) => a.name === "freeze"));
+  assert.ok(E.actsFor("stentor").some((a) => a.name === "introversus"));
+  assert.ok(E.actsFor("stentor").some((a) => a.name === "vortex_soft"));
+  assert.ok(E.actsFor("stentor").some((a) => a.name === "beadedmac_soft"));
+  assert.ok(E.actsFor("stentor").some((a) => a.name === "freeze"));
 
 
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wake"), false);
