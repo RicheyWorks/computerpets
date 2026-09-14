@@ -965,7 +965,7 @@ globalThis.PetOysterTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Frill ultra done; next house-order ultra is Cap / fly_agaric", () => {
+test("notes: Frill ultra done; next house-order ultra is Lattice / morel", () => {
   assert.equal(T.TRICK_KEY, "oyster");
   assert.equal(T.wantsThankYou("frill"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
