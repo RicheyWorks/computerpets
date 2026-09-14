@@ -144,7 +144,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   honey_drone: [A("hum", "pulse", 1.4, 4), A("hover", "bob", 1.6, 2), A("still", "freeze", 2.0, 3)],
   honey_queen: [A("lay", "sit_hold", 2.2, 5, "sit"), A("walk", "wiggle", 1.0, 1), A("still", "freeze", 2.0, 2)],
   honeycomb: [A("tessera", "sit_hold", 2.4, 4, "sit"), A("festoon_soft", "play", 1.2, 2, "play"), A("capped_soft", "talk", 1.15, 2, "talk"), A("midrib_soft", "talk", 1.2, 2, "talk"), A("stores_soft", "sit", 1.2, 2, "sit"), A("alveoli_soft", "sit", 1.2, 2, "sit"), A("foundation_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
-  oyster: [A("lean", "lean", 1.8, 4), A("flush", "flush", 1.2, 2), A("still", "freeze", 2.2, 2)],
+  oyster: [A("pleurotus", "sit_hold", 2.4, 4, "sit"), A("lamella_soft", "play", 1.2, 2, "play"), A("imbricate_soft", "talk", 1.15, 2, "talk"), A("lasso_soft", "talk", 1.2, 2, "talk"), A("margin_soft", "sit", 1.2, 2, "sit"), A("sporulate_soft", "sit", 1.2, 2, "sit"), A("hypha_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
   fly_agaric: [A("lean", "lean", 1.6, 3), A("flush", "flush", 1.4, 3), A("still", "freeze", 2.0, 2)],
   morel: [A("lean", "lean", 1.6, 3), A("still", "sit_hold", 2.4, 3, "sit"), A("still_hold", "freeze", 2.0, 2)],
   chanterelle: [A("lean", "lean", 1.6, 3), A("flush", "flush", 1.2, 2), A("still", "freeze", 2.0, 2)],

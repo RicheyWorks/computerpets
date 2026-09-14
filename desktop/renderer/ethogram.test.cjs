@@ -314,6 +314,23 @@ test("honeycomb ethogram is Wax ultra (tessera + softs + freeze, not hold/brood/
   assert.equal(names.includes("still"), false);
 });
 
+
+test("oyster ethogram is Frill ultra (pleurotus + softs + freeze, not lean/flush/still)", () => {
+  const names = E.actsFor("oyster").map((a) => a.name);
+  assert.ok(names.includes("pleurotus"));
+  assert.ok(names.includes("lamella_soft"));
+  assert.ok(names.includes("imbricate_soft"));
+  assert.ok(names.includes("lasso_soft"));
+  assert.ok(names.includes("margin_soft"));
+  assert.ok(names.includes("sporulate_soft"));
+  assert.ok(names.includes("hypha_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("flush"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
