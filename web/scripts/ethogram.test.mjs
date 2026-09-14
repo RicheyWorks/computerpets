@@ -654,7 +654,11 @@ assert.ok(names("toad").includes("freeze"));
     const acts = names(key);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
-  assert.ok(names("deer").includes("flag"));
+  assert.ok(names("deer").includes("odocoileus"));
+  assert.ok(names("deer").includes("flagtail_soft"));
+  assert.ok(names("deer").includes("stotbound_soft"));
+  assert.ok(names("deer").includes("snortblow_soft"));
+  assert.ok(names("deer").includes("freeze"));
   assert.ok(names("bat").includes("hang"));
   assert.ok(names("squirrel").includes("bury"));
   assert.ok(names("otter").includes("slide"));
