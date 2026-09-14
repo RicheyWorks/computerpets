@@ -139,6 +139,18 @@ test("orchid ethogram is Moth ultra (bark + softs + freeze, not unfurl/nod/lean)
   assert.equal(names.includes("lean"), false);
 });
 
+
+test("saguaro ethogram is Arm ultra (sentinel + softs + freeze, not still/nod/lean)", () => {
+  const names = E.actsFor("saguaro").map((a) => a.name);
+  assert.ok(names.includes("sentinel"));
+  assert.ok(names.includes("pleat_soft"));
+  assert.ok(names.includes("boot_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("lean"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",
