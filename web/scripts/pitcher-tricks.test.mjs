@@ -690,7 +690,7 @@ globalThis.PetLunaTricks = OverlayLuna;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Well ultra-polish done; Dew + Comb ultra also done; next house-order ultra is Milk / monarch", () => {
+test("notes: Well ultra-polish done; Dew + Comb + Milk ultra also done; next house-order ultra is Ghost / luna", () => {
   assert.equal(T.TRICK_KEY, "pitcher");
   assert.equal(T.wantsThankYou("drown"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -833,8 +833,8 @@ test("notes: Well ultra-polish done; Dew + Comb ultra also done; next house-orde
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus"]);
-  assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus"]);
+  assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
+  assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("luna"), OverlayLuna);
   assert.equal(OverlayGround.wantsThankYou("luna"), true);
   assert.equal(OverlayGround.tricksFor("ghost"), OverlayLuna);
