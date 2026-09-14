@@ -1,7 +1,6 @@
-/** Sepia ground tricks while idle. House cuttlefish — bone / pupil / chroma / hover / blot personality (cuttlebone buoyancy, W-pupil regard, chromatophore rewrite, water-column hover, sepia ink blot; not Cup mantle dens, Coin bowl-drift, or Bloom gill-amble). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `cuttlefish-tricks.js`. Window-play FLUSH unchanged — never names `flush`. Parrot owns flash — chroma is the chromatophore rewrite, not a flash copy. Not Ink/Coin/Bloom/Cup clones. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Sepia ground tricks while idle — ultra-polish pass. House cuttlefish — bone / pupil / chroma / hover / blot / strike / zebra personality (cuttlebone buoyancy, W-pupil regard, chromatophore rewrite, water-column hover, sepia ink blot, feeding-tentacle strike, zebra agonistic banding; not Cup mantle dens, Coin bowl-drift, Bloom gill-amble, or Ink soak-tuck). Bone rides the cuttlebone mid-column; pupil W-slits regard the blotter; chroma rewrites skin color bands; hover fin-rows the water column; blot sepia-clouds then settles; strike shoots the two long feeding tentacles (species-true Sepia officinalis prey capture — not Cup sucker taste, not jet dart, not window-play FLUSH); zebra flashes high-contrast agonistic bars (species-true male display — not chroma rewrite, not Cup papilla texture, not parrot flash). Window-play FLUSH unchanged — never names `flush`. Ethogram keeps hide sit_hold; adds pupil/chroma/hover/blot/strike/zebra softs + freeze (replaces thin flush/hover). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via cuttlefish.wav. Thank-yous ripple / glance / dab. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `cuttlefish-tricks.js`. True house-cuttlefish desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids flush/lid/mantle/sucker/jet/veil/tinker/papilla/ooze/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/fan/flash/latch/puff/unfurl/chart/climb/probe/canyon/crawl/siphon/pulse/slink/den/cork/nest/savor/settle/survey/snatch/band/funnel/tentacle/loom/wave/buoy/chamber name collisions with prior guests and cuttlefish window-play. Bird ultra (Soot→Ember) + Miso→Cup done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Chamber / nautilus. No cry inventing beyond house cuttlefish.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "cuttlefish";
-export const TRICKS = ["bone", "pupil", "chroma", "hover", "blot"] as const;
+export const TRICKS = ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"] as const;
 export const HAPPY = ["ripple", "glance", "dab"] as const;
 export type CuttlefishTrickKind = (typeof TRICKS)[number];
 export type CuttlefishHappyKind = (typeof HAPPY)[number];
@@ -46,9 +45,9 @@ export type CuttlefishHappy = {
 };
 
 export const HAPPY_DUR: Record<CuttlefishHappyKind, number> = {
-  ripple: 1.26,
-  glance: 1.22,
-  dab: 1.14,
+  ripple: 1.55,
+  glance: 1.5,
+  dab: 1.42,
 };
 
 /** Bone hold — Sepia rides the cuttlebone mid-column. Not window-play FLUSH. Not Cup mantle plate. Not Coin drift. */
@@ -57,10 +56,12 @@ export const RELEASE_S = 0.6;
 
 export const DUR: Record<CuttlefishTrickKind, number> = {
   bone: BONE_HOLD + RELEASE_S,
-  pupil: 1.36,
-  chroma: 1.48,
-  hover: 1.52,
-  blot: 1.4,
+  pupil: 1.78,
+  chroma: 1.92,
+  hover: 1.85,
+  blot: 1.88,
+  strike: 2.05,
+  zebra: 2.12,
 };
 
 export function canStart(state: TrickFlags | undefined) {
@@ -91,38 +92,28 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: CuttlefishTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "bone") return 46 + roll * 26;
-  if (kind === "chroma") return 14 + roll * 10;
-  if (kind === "blot") return 16 + roll * 11;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "bone") return 38 + roll * 24;
+  if (kind === "strike" || kind === "zebra" || kind === "chroma") return 12 + roll * 9;
+  if (kind === "blot" || kind === "hover" || kind === "pupil") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: CuttlefishTrickKind | null) {
+export function pickTrick(rand?: number, musicOn = false, lastKind?: CuttlefishTrickKind | null): CuttlefishTrickKind {
   if (musicOn) return "bone";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "bone") {
-    if (roll < 0.26) return "pupil";
-    if (roll < 0.48) return "chroma";
-    if (roll < 0.72) return "hover";
-    return "blot";
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "bone" ? 0.55 : k === "strike" || k === "zebra" || k === "chroma" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "pupil") {
-    if (roll < 0.28) return "bone";
-    if (roll < 0.5) return "chroma";
-    if (roll < 0.72) return "hover";
-    return "blot";
-  }
-  if (lastKind === "chroma") {
-    if (roll < 0.22) return "bone";
-    if (roll < 0.44) return "pupil";
-    if (roll < 0.66) return "hover";
-    return "blot";
-  }
-  if (roll < 0.2) return "bone";
-  if (roll < 0.4) return "pupil";
-  if (roll < 0.6) return "chroma";
-  if (roll < 0.8) return "hover";
-  return "blot";
+  return list[list.length - 1] || "bone";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -168,9 +159,9 @@ export function startThankYou(
 }
 
 export function pickHappy(lastKind?: CuttlefishHappyKind | null, rand?: number) {
+  const roll = rand == null ? Math.random() : rand;
   const pool = HAPPY.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...HAPPY];
-  const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
 
@@ -190,49 +181,49 @@ export function beginHappy(kind: CuttlefishHappyKind | string, x: number, facing
   };
 }
 
-export function ripplePose(t: number) {
+function ripplePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ripple));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 1.35, rot: s * 4.5, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 3.2, rot: s * 14, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const fin = Math.sin(t * 3.4);
     return {
-      lift: 1.35 + Math.abs(fin) * 0.28,
-      rot: 4.5 + fin * 5.2,
-      dx: fin * 0.18,
+      lift: 3.2 + Math.abs(fin) * 1.8,
+      rot: 14 + fin * 12,
+      dx: fin * 0.45,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 1.0 * (1 - s), rot: 2.5 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.4 * (1 - s), rot: 8 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function glancePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.glance));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.85, rot: s * -9, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 2.6, rot: s * -18, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.8) {
     const w = Math.sin(t * 2.6);
     return {
-      lift: 0.85 + Math.abs(w) * 0.2,
-      rot: -9 + w * 11,
-      dx: w * 0.12,
+      lift: 2.6 + Math.abs(w) * 1.4,
+      rot: -18 + w * 22,
+      dx: w * 0.35,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 0.85 * (1 - s), rot: -9 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.0 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function dabPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 2.1)) * 0.55 + 1.05,
-    rot: 3 + Math.sin(t * 2.8) * 5.5,
-    dx: Math.sin(t * 1.6) * 0.16,
+    lift: Math.abs(Math.sin(t * 2.1)) * 2.2 + 2.4,
+    rot: 8 + Math.sin(t * 2.8) * 14,
+    dx: Math.sin(t * 1.6) * 0.4,
     anim: "sit" as TrickAnim,
   };
 }
@@ -279,16 +270,20 @@ export function beginTrick(kind: CuttlefishTrickKind, x: number, facing: 1 | -1)
           : kind === "hover"
             ? "walk"
             : kind === "blot"
-              ? "play"
-              : "sit";
+              ? "sit"
+              : kind === "strike"
+                ? "walk"
+                : kind === "zebra"
+                  ? "play"
+                  : "sit";
   return {
-    kind: kind,
+    kind,
     phase: kind === "bone" ? "hold" : "go",
     t: 0,
-    x: x,
+    x,
     lift: 0,
     rot: 0,
-    anim: anim,
+    anim,
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
@@ -300,31 +295,34 @@ function smoothstep(t: number) {
 }
 
 export function bonePose(t: number) {
-  const beat = Math.sin(t * 0.95) + 0.22 * Math.sin(t * 2.7);
+  const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
   return {
-    lift: 1.15 + Math.abs(Math.sin(t * 0.68)) * 0.22,
-    rot: 1.8 + beat * 2.4,
+    lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+    rot: -18 + Math.sin(t * 2.4) * 16 + beat * 8,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 1.15 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 1.8 * (1 - u) };
+  return {
+    lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
+    rot: -18 * (1 - u),
+  };
 }
 
 export function pupilPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.pupil));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 0.7, rot: s * -12 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 2.8, rot: s * -20 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.14) / 0.41;
     const w = Math.sin(s * Math.PI * 2.2);
     return {
-      x: fromX + facing * w * 0.22,
-      lift: 0.7 + Math.abs(w) * 0.18,
-      rot: facing * (-12 + w * 16),
+      x: fromX + facing * w * 0.55,
+      lift: 2.8 + Math.abs(w) * 1.8,
+      rot: facing * (-20 + w * 24),
       anim: "talk" as TrickAnim,
     };
   }
@@ -332,16 +330,16 @@ export function pupilPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.23;
     return {
       x: fromX,
-      lift: 0.7 - s * 0.15,
-      rot: facing * (-4 + s * 2),
+      lift: 2.8 - s * 0.6,
+      rot: facing * (-8 + s * 4),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 0.55 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    lift: 1.8 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -350,24 +348,24 @@ export function chromaPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.chroma));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 1.4, rot: s * 6 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.8, rot: s * 14 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.1) / 0.62;
     const flash = Math.sin(s * Math.PI * 5.6);
     const band = Math.sin(s * Math.PI * 2.1);
     return {
-      x: fromX + facing * band * 0.3,
-      lift: 1.4 + Math.abs(flash) * 0.55,
-      rot: facing * (6 + flash * 12 + band * 4),
+      x: fromX + facing * band * 0.7,
+      lift: 3.8 + Math.abs(flash) * 2.4,
+      rot: facing * (14 + flash * 18 + band * 8),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
     x: fromX,
-    lift: 1.4 * (1 - s),
-    rot: facing * (4 * (1 - s)),
+    lift: 3.2 * (1 - s),
+    rot: facing * (8 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -376,24 +374,24 @@ export function hoverPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.hover));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 0.4, lift: s * 1.8, rot: s * 3 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 1.0, lift: s * 3.6, rot: s * 10 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.75) {
     const s = (u - 0.12) / 0.63;
     const bob = Math.sin(s * Math.PI * 3.2);
     const fin = Math.sin(s * Math.PI * 6.4);
     return {
-      x: fromX + facing * (0.4 + s * 1.6 + fin * 0.25),
-      lift: 1.8 + bob * 0.35,
-      rot: facing * (3 + fin * 5 + bob * 2),
+      x: fromX + facing * (1.0 + s * 3.2 + fin * 0.55),
+      lift: 3.6 + bob * 2.0,
+      rot: facing * (10 + fin * 12 + bob * 6),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.75) / 0.25);
   return {
-    x: fromX + facing * (2.0 * (1 - s)),
-    lift: 1.8 * (1 - s),
-    rot: facing * (2 * (1 - s)),
+    x: fromX + facing * (4.2 * (1 - s)),
+    lift: 3.2 * (1 - s),
+    rot: facing * (6 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -402,39 +400,108 @@ export function blotPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.blot));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.55, rot: s * -5 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 4.2, rot: s * -12 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.42) {
     const s = (u - 0.12) / 0.3;
     const cloud = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * cloud * 0.45,
-      lift: 1.55 + Math.abs(cloud) * 0.5,
-      rot: facing * (-5 + cloud * 9),
+      x: fromX + facing * cloud * 0.9,
+      lift: 4.2 + Math.abs(cloud) * 2.4,
+      rot: facing * (-12 + cloud * 16),
       anim: "play" as TrickAnim,
     };
   }
   if (u < 0.72) {
     const s = (u - 0.42) / 0.3;
     return {
-      x: fromX - facing * s * 0.8,
-      lift: 1.55 * (1 - s * 0.45),
-      rot: facing * (2 - s * 4),
+      x: fromX - facing * s * 1.6,
+      lift: 4.2 * (1 - s * 0.45),
+      rot: facing * (4 - s * 8),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
-    x: fromX - facing * (0.8 * (1 - s)),
-    lift: 0.85 * (1 - s),
-    rot: facing * (-1.5 * (1 - s)),
+    x: fromX - facing * (1.6 * (1 - s)),
+    lift: 2.0 * (1 - s),
+    rot: facing * (-3 * (1 - s)),
     anim: "idle" as TrickAnim,
+  };
+}
+
+export function strikePose(t: number, fromX: number, facing: 1 | -1) {
+  // Feeding-tentacle strike — two long tentacles shoot, then reel. Not Cup sucker/jet.
+  const u = Math.max(0, Math.min(1, t / DUR.strike));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX + facing * s * 0.6, lift: s * 2.2, rot: s * 8 * facing, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.38) {
+    const s = smoothstep((u - 0.12) / 0.26);
+    return {
+      x: fromX + facing * (0.6 + s * 5.5),
+      lift: 2.2 + s * 1.4,
+      rot: facing * (8 - s * 6),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.38) / 0.34;
+    const tug = Math.sin(s * Math.PI * 2.6);
+    return {
+      x: fromX + facing * (6.1 - s * 2.8 + tug * 0.4),
+      lift: 3.6 + Math.abs(tug) * 1.6,
+      rot: facing * (2 + tug * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + facing * (3.3 * (1 - s)),
+    lift: 2.8 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function zebraPose(t: number, fromX: number, facing: 1 | -1) {
+  // Zebra agonistic banding — high-contrast bars flash. Not chroma rewrite, not parrot flash.
+  const u = Math.max(0, Math.min(1, t / DUR.zebra));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.4, rot: s * -16 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.7) {
+    const s = (u - 0.12) / 0.58;
+    const bars = Math.sin(s * Math.PI * 7.2);
+    const sway = Math.sin(s * Math.PI * 2.4);
+    return {
+      x: fromX + facing * sway * 0.8,
+      lift: 3.4 + Math.abs(bars) * 2.6,
+      rot: facing * (-16 + bars * 22 + sway * 8),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.7) / 0.3);
+  return {
+    x: fromX,
+    lift: 3.0 * (1 - s),
+    rot: facing * (-8 * (1 - s)),
+    anim: "sit" as TrickAnim,
   };
 }
 
 export function stepTrick(trick: CuttlefishTrick, dt: number, flags?: TrickFlags): CuttlefishTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "chroma" && trick.kind !== "hover" && trick.kind !== "blot") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "chroma" &&
+    trick.kind !== "hover" &&
+    trick.kind !== "blot" &&
+    trick.kind !== "strike" &&
+    trick.kind !== "zebra"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: CuttlefishTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -459,26 +526,39 @@ export function stepTrick(trick: CuttlefishTrick, dt: number, flags?: TrickFlags
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "pupil") {
-    const pose = pupilPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = pupilPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "chroma") {
-    const pose = chromaPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = chromaPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "hover") {
-    const pose = hoverPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = hoverPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "blot") {
+    const pose = blotPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "strike") {
+    const pose = strikePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = blotPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = zebraPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
