@@ -521,8 +521,8 @@ test("ground registry keeps prior guests gated; Brood selectable; prior guests s
   assert.equal(HermitCrab.TRICK_KEY, "hermit_crab");
   assert.equal(HorseshoeCrab.TRICK_KEY, "horseshoe_crab");
   assert.equal(T.TRICK_KEY, "cicada");
-  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
-  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
+  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
@@ -935,8 +935,8 @@ test("notes: Brood idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.wantsThankYou("brood"), true);
   assert.equal(OverlayGround.tricksFor("carpenter_ant"), OverlayCarpenterAnt);
   assert.equal(OverlayGround.wantsThankYou("carpenter_ant"), true);
-  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
-  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
+  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
   assert.equal(OverlayGround.tricksFor("cicada"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("cicada"), true);

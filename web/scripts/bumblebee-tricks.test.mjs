@@ -525,8 +525,8 @@ test("ground registry keeps prior guests gated; Thrum selectable; prior guests s
   assert.equal(HermitCrab.TRICK_KEY, "hermit_crab");
   assert.equal(HorseshoeCrab.TRICK_KEY, "horseshoe_crab");
   assert.equal(T.TRICK_KEY, "bumblebee");
-  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
-  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
+  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Cicada.TRICKS], ["tymbal", "cast", "egress", "harden", "magicicada"]);
@@ -949,8 +949,8 @@ test("notes: Thrum idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.wantsThankYou("thrum"), true);
   assert.equal(OverlayGround.tricksFor("carpenter_ant"), OverlayCarpenterAnt);
   assert.equal(OverlayGround.wantsThankYou("carpenter_ant"), true);
-  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
-  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
+  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
   assert.equal(OverlayGround.tricksFor("bumblebee"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("bumblebee"), true);

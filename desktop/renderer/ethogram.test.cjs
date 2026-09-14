@@ -238,6 +238,22 @@ test("stick ethogram is Twig ultra (diapheromera + softs + freeze, not still/wal
   assert.equal(names.length, 8);
 });
 
+test("carpenter_ant ethogram is Column ultra (camponotus + softs + freeze, not trail/dart/still)", () => {
+  const names = E.actsFor("carpenter_ant").map((a) => a.name);
+  assert.ok(names.includes("camponotus"));
+  assert.ok(names.includes("gallery_soft"));
+  assert.ok(names.includes("pheromone_soft"));
+  assert.ok(names.includes("crumb_soft"));
+  assert.ok(names.includes("bustle_soft"));
+  assert.ok(names.includes("trophallaxis_soft"));
+  assert.ok(names.includes("frass_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("trail"), false);
+  assert.equal(names.includes("dart"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
