@@ -962,6 +962,15 @@ assert.ok(E.actsFor("pond_snail").some((a) => a.name === "freeze"));
   assert.equal(E.actsFor("box_turtle").some((a) => a.name === "walk"), false);
   assert.equal(E.actsFor("box_turtle").some((a) => a.name === "still"), false);
 
+  assert.ok(E.actsFor("tuatara").some((a) => a.name === "punctatus"));
+  assert.ok(E.actsFor("tuatara").some((a) => a.name === "parietalgaze_soft"));
+  assert.ok(E.actsFor("tuatara").some((a) => a.name === "acrodont_soft"));
+  assert.ok(E.actsFor("tuatara").some((a) => a.name === "diapsid_soft"));
+  assert.ok(E.actsFor("tuatara").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("tuatara").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("tuatara").some((a) => a.name === "crest"), false);
+  assert.equal(E.actsFor("tuatara").some((a) => a.name === "watch"), false);
+
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wake"), false);
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wait"), false);
   assert.equal(E.actsFor("cyst").some((a) => a.name === "still"), false);
