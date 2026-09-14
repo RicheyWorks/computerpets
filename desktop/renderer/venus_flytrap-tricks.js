@@ -1,12 +1,28 @@
-/** Snap ground tricks while idle. House venus_flytrap — clamp / trichome / stew / unseal / poise personality (lobe clamp snap on the blotter — never named snap (special / Fuse thank-you / ethogram / snapper window) / lobe (Kite owns lobe) / shut (window phase) / count (Snap window owns COUNT) / rib (Arm owns rib) / branch (Arm owns branch), trigger-hair trichome tingle — never named trigger as vague verb-only / hair / bristle (Burr owns bristle) / tickle / probe (Saffron owns probe) / nod (ethogram / Sol owns nod), digestive stew hush on the closed trap — never named hush as shared verb-only / digest / enzyme / nectar (Disk owns nectar) / dew (Disk owns dew) / soak (Ink owns soak), unseal open-reset after the meal — never named open (Disk window owns open) / reset / gape (Door window / Bluff) / flare (Coin owns flare) / nocturne (Arm owns nocturne) / spike (Moth owns spike) / corolla (Disk owns corolla), carnivorous poise desk life under the lamp; not Arm rib/branch/nocturne/areole/sentinel, Moth labellum/velamen/column/spike/bark, Disk pad/corolla/rhizome/calyx/sheen, Mast acorn/sinus/gall/taproot/bole, Fan biloba/notch/flutter/drop/amber, Vein frond/rachis/fiddle/pinna/saucer, Felt tuft/bead/spore/cushion/thatch, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, parrot fan/flash, Blush mesa/arroyo, Sol sun/dewlap/nod/press/flick, or snake guests Sash seam/moss/lap copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web venus_flytrap-tricks.ts. Not a Rui, cat, dog, rabbit, hamster/Clip, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog/Burr, chinchilla, axolotl/Bloom, toucan, iguana/Sol, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, octopus/Cup, cuttlefish/Sepia, nautilus/Chamber, moon-jelly/Pulse, sea-star/Cling, hermit-crab/Tenant, horseshoe-crab/Ledger, seahorse/Anchor, manta/Kite, moray/Door, sheet-moss/Felt, maidenhair/Vein, ginkgo/Fan, oak/Mast, water-lily/Disk, moth-orchid/Moth, saguaro/Arm, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play COUNT unchanged — never names count. Special snap / ethogram snap/lean/nod unchanged — never names snap/lean/nod as tricks. Sash owns moss; Felt owns tuft/bead/spore/cushion/thatch and humid/velvet/meadow; Vein owns frond/rachis/fiddle/pinna/saucer and mist/filigree/shade; Fan owns biloba/notch/flutter/drop/amber and ochre/gilt/linger; Mast owns acorn/sinus/gall/taproot/bole and cupule/tannin/grove; Disk owns pad/corolla/rhizome/calyx/sheen and silt/nectar/dew; Moth owns labellum/velamen/column/spike/bark and pollen/perfume/pearl; Arm owns rib/branch/nocturne/areole/sentinel and monsoon/creosote/agave; Sol owns swell as thank-you, press/nod as tricks; Ember owns lift; Cling owns crawl/damp/press/tide; Still/Felt window owns lean/creep; Burr owns root/bristle; Coin owns flare; Phoenix owns lift; Fuse owns snap/pulse as thank-yous; Chamber owns quiet as thank-you and pearl as thank-you; Ledger owns page as thank-you and fossil as trick; Jade owns treaty as thank-you and sway/heat as tricks; Parrot owns fan; Kite owns lobe; Bloom owns gill; Blush owns mesa/arroyo. Carnivorous bog desk life only — not a saguaro Arm copy, moth-orchid Moth copy, water-lily Disk copy, oak Mast copy, ginkgo Fan copy, fern Vein copy, bryophyte Felt copy, iguana Sol copy, or rosy-boa Blush mesa copy. No cry inventing — thank-yous are silent desk motion only. */
+/** Snap ground tricks while idle — ultra-polish pass. House venus_flytrap — clamp / trichome / stew / unseal / poise / cage / scape personality (lobe clamp snap on the blotter — never named snap (special / Fuse thank-you / ethogram-old / snapper window) / lobe (Kite owns lobe) / shut (window phase) / count (Snap window owns COUNT) / rib (Arm owns rib) / branch (Arm owns branch), trigger-hair trichome tingle — never named trigger as vague verb-only / hair / bristle (Burr owns bristle) / tickle / probe (Saffron owns probe) / nod (ethogram-old / Sol owns nod), digestive stew hush on the closed trap — never named hush as shared verb-only / digest (sundew owns digest) / enzyme (pitcher owns enzyme) / nectar (Disk owns nectar) / dew (Disk owns dew) / soak (Ink owns soak), unseal open-reset after the meal — never named open (Disk window owns open) / reset / gape (Door window / Bluff) / flare (Coin owns flare) / nocturne (Arm owns nocturne) / spike (Moth owns spike) / corolla (Disk owns corolla), carnivorous poise desk life under the lamp, cage interlocking marginal-cilia fringe after the clamp (species-true Dionaea muscipula cilia cage — never named cilia (paramecium owns cilia) / teeth (beaver) / tooth (alligator) / fringe (amoeba / nautilus) / latch (barn_owl) / lure (snapper) / margin (barnacle)), scape tall flower-stalk rise above the traps (species-true Dionaea flower scape — never named spike (Moth owns spike) / column (Moth owns column) / bloom as axolotl-guest collision / sprout (Bloom owns sprout) / nectary (bat owns nectary)); not Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, Blush mesa/arroyo, Sol sun/dewlap/nod/press/flick, Drown/Well peristome/cistern/brine/operculum/urn, Dew mucilage/tentacle/digest/gland/rosette, or snake guests Sash seam/moss/lap copies). Cage is the iconic interlocking cilia fringe (not teeth/fringe/latch). Scape is the iconic tall flower stalk above the traps (not Moth spike/column). Window-play COUNT unchanged — never names count as a trick. Ethogram keeps poise sit_hold; adds clamp/trichome/stew/unseal/cage/scape softs + freeze (replaces thin snap/lean/nod). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via venus_flytrap.wav. Thank-yous gnat / peat / crimson. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web venus_flytrap-tricks.ts. True house-venus-flytrap desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/moth-orchid/Moth/saguaro/Arm or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/store/drift/float/bloom/cup/siphon/soak/sprout/nectary/nest/den/nook/column/bole/press/swell/snap/count/cilia/teeth/fringe/latch/lure/margin/enzyme/digest/mucilage/tentacle/gland/rosette/peristome/cistern/brine/operculum/urn/pleat/boot name collisions. Bird ultra (Soot→Ember) + Miso→Arm done; skip Rui + birds. Next guest ultra is Well / pitcher. No cry inventing beyond house venus_flytrap.wav prefer. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "venus_flytrap";
-  const TRICKS = ["clamp", "trichome", "stew", "unseal", "poise"];
+  const TRICKS = ["clamp", "trichome", "stew", "unseal", "poise", "cage", "scape"];
   const HAPPY = ["gnat", "peat", "crimson"];
-  const HAPPY_DUR = { gnat: 1.18, peat: 1.3, crimson: 1.36 };
-  const POISE_HOLD = 12.6;
-  const RELEASE_S = 0.78;
-  const DUR = { poise: POISE_HOLD + RELEASE_S, clamp: 1.12, trichome: 1.28, stew: 1.58, unseal: 1.72 };
+
+  const HAPPY_DUR = {
+    gnat: 1.22,
+    peat: 1.34,
+    crimson: 1.4,
+  };
+
+  /** Poise hold — Snap parks carnivorous calm on the blotter. Not window-play COUNT. */
+  const POISE_HOLD = 10.8;
+  const RELEASE_S = 0.62;
+
+  const DUR = {
+    poise: POISE_HOLD + RELEASE_S,
+    clamp: 1.48,
+    trichome: 1.55,
+    stew: 1.68,
+    unseal: 1.72,
+    cage: 1.62,
+    scape: 1.7,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,38 +52,54 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "poise") return 50 + roll * 28;
-    if (kind === "clamp") return 14 + roll * 9;
-    if (kind === "stew") return 17 + roll * 11;
-    return justFinished ? 10.8 + roll * 8 : 5.5 + roll * 6;
+    if (kind === "poise") return 38 + roll * 24;
+    if (kind === "cage" || kind === "scape" || kind === "unseal") return 12 + roll * 9;
+    if (kind === "clamp" || kind === "trichome" || kind === "stew") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "poise";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "poise") {
-      if (roll < 0.26) return "clamp";
-      if (roll < 0.48) return "stew";
-      if (roll < 0.72) return "trichome";
-      return "unseal";
+      if (roll < 0.18) return "clamp";
+      if (roll < 0.34) return "trichome";
+      if (roll < 0.5) return "stew";
+      if (roll < 0.66) return "unseal";
+      if (roll < 0.83) return "cage";
+      return "scape";
     }
     if (lastKind === "clamp") {
-      if (roll < 0.28) return "poise";
-      if (roll < 0.5) return "stew";
-      if (roll < 0.72) return "trichome";
-      return "unseal";
+      if (roll < 0.2) return "poise";
+      if (roll < 0.36) return "trichome";
+      if (roll < 0.52) return "stew";
+      if (roll < 0.68) return "unseal";
+      if (roll < 0.84) return "cage";
+      return "scape";
     }
     if (lastKind === "stew") {
-      if (roll < 0.22) return "poise";
-      if (roll < 0.44) return "clamp";
-      if (roll < 0.66) return "trichome";
-      return "unseal";
+      if (roll < 0.18) return "poise";
+      if (roll < 0.34) return "clamp";
+      if (roll < 0.5) return "trichome";
+      if (roll < 0.66) return "unseal";
+      if (roll < 0.83) return "cage";
+      return "scape";
     }
-    if (roll < 0.2) return "poise";
-    if (roll < 0.4) return "clamp";
-    if (roll < 0.6) return "stew";
-    if (roll < 0.8) return "trichome";
-    return "unseal";
+    if (lastKind === "cage" || lastKind === "scape") {
+      if (roll < 0.16) return "poise";
+      if (roll < 0.32) return "clamp";
+      if (roll < 0.48) return "trichome";
+      if (roll < 0.64) return "stew";
+      if (roll < 0.8) return "unseal";
+      return lastKind === "cage" ? ("scape") : ("cage");
+    }
+    if (roll < 0.14) return "poise";
+    if (roll < 0.28) return "clamp";
+    if (roll < 0.42) return "trichome";
+    if (roll < 0.56) return "stew";
+    if (roll < 0.7) return "unseal";
+    if (roll < 0.85) return "cage";
+    return "scape";
   }
 
   function happyCanStart(state) {
@@ -102,19 +134,19 @@
   function startThankYou(key, lastKind, x, facing, flags) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
+    const pick = pickHappy(lastKind | null | undefined);
     return { happy: beginHappy(pick, x, facing), kind: pick };
   }
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "gnat";
+    const name = HAPPY.indexOf(kind) >= 0 ? (kind) : "gnat";
     return {
       kind: name,
       happy: true,
@@ -133,52 +165,55 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gnat));
     if (u < 0.18) {
       const s = u / 0.18;
-      return { lift: s * 0.12, rot: s * 3.2, dx: 0, anim: "play" };
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "play" };
     }
     if (u < 0.62) {
       const buzz = Math.sin(t * 9.2);
       return {
-        lift: 0.12 + Math.abs(buzz) * 0.05,
-        rot: 3.2 + buzz * 4.8,
-        dx: buzz * 0.012,
+        lift: 2.8 + Math.abs(buzz) * 1.4,
+        rot: 12 + buzz * 10,
+        dx: buzz * 0.8,
         anim: "play",
       };
     }
     const s = (u - 0.62) / 0.38;
-    return { lift: 0.08 * (1 - s), rot: 1.6 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function peatPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.peat));
     if (u < 0.24) {
       const s = u / 0.24;
-      return { lift: s * -0.02, rot: s * -1.4, dx: 0, anim: "sit" };
+      return { lift: s * 2.4, rot: s * -8, dx: 0, anim: "sit" };
     }
     if (u < 0.78) {
       const bog = Math.sin(t * 0.72);
       return {
-        lift: -0.02 + Math.abs(bog) * 0.018,
-        rot: -1.4 + bog * 0.9,
-        dx: bog * 0.006,
+        lift: 2.4 + Math.abs(bog) * 1.1,
+        rot: -8 + bog * 6,
+        dx: bog * 0.7,
         anim: "sit",
       };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: -0.014 * (1 - s), rot: -0.8 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 1.6 * (1 - s), rot: -4 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function crimsonPose(t) {
     return {
-      lift: 0.04 + Math.abs(Math.sin(t * 0.9)) * 0.05,
-      rot: Math.sin(t * 1.05) * 2.4,
-      dx: Math.sin(t * 0.55) * 0.016,
+      lift: 2.2 + Math.abs(Math.sin(t * 0.9)) * 1.1,
+      rot: Math.sin(t * 1.05) * 9,
+      dx: Math.sin(t * 0.55) * 0.85,
       anim: "talk",
     };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "gnat") {
       const pose = gnatPose(next.t);
@@ -196,7 +231,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -216,7 +251,11 @@
               ? "sit"
               : kind === "unseal"
                 ? "talk"
-                : "sit";
+                : kind === "cage"
+                  ? "play"
+                  : kind === "scape"
+                    ? "talk"
+                    : "sit";
     return {
       kind: kind,
       phase: kind === "poise" ? "hold" : "go",
@@ -238,28 +277,28 @@
   function poisePose(t) {
     const breath = Math.sin(t * 0.2) + 0.025 * Math.sin(t * 1.1);
     return {
-      lift: 0.028 + Math.abs(Math.sin(t * 0.31)) * 0.014,
-      rot: 0.55 + breath * 0.7,
+      lift: 2.4 + Math.abs(Math.sin(t * 0.31)) * 1.2,
+      rot: 4 + breath * 3.2,
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.028 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.55 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - u) };
   }
 
   function clampPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.clamp));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.05, rot: s * 2.2 * facing, anim: "play" };
+      return { x: fromX, lift: s * 3.2, rot: s * 8 * facing, anim: "play" };
     }
     if (u < 0.38) {
       const s = smoothstep((u - 0.14) / 0.24);
       return {
-        x: fromX + facing * s * 0.01,
-        lift: 0.05 - s * 0.09,
-        rot: facing * (2.2 - s * 11.5),
+        x: fromX + facing * s * 1.2,
+        lift: 3.2 - s * 1.4,
+        rot: facing * (8 - s * 18),
         anim: "play",
       };
     }
@@ -267,79 +306,82 @@
       const s = (u - 0.38) / 0.34;
       const hold = Math.sin(s * Math.PI * 1.8);
       return {
-        x: fromX + facing * (0.01 + hold * 0.004),
-        lift: -0.04 + Math.abs(hold) * 0.012,
-        rot: facing * (-9.3 + hold * 1.2),
+        x: fromX + facing * (1.2 + hold * 0.35),
+        lift: 1.6 + Math.abs(hold) * 0.9,
+        rot: facing * (-10 + hold * 3),
         anim: "play",
       };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
       x: fromX,
-      lift: -0.04 * (1 - s),
-      rot: facing * (-5.0 * (1 - s)),
+      lift: 1.6 * (1 - s),
+      rot: facing * (-6 * (1 - s)),
       anim: "sit",
     };
   }
+
   function trichomePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.trichome));
     if (u < 0.16) {
       const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.035, rot: s * 1.2 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 2.6, rot: s * 6 * facing, anim: "sit" };
     }
     if (u < 0.78) {
       const tick = Math.sin(t * 14.5) + 0.35 * Math.sin(t * 23);
       return {
-        x: fromX + facing * tick * 0.004,
-        lift: 0.035 + Math.abs(tick) * 0.02,
-        rot: facing * (1.2 + tick * 2.8),
+        x: fromX + facing * tick * 0.55,
+        lift: 2.6 + Math.abs(tick) * 1.2,
+        rot: facing * (6 + tick * 8),
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 0.035 * (1 - s),
-      rot: facing * (0.8 * (1 - s)),
+      lift: 2.6 * (1 - s),
+      rot: facing * (3 * (1 - s)),
       anim: "sit",
     };
   }
+
   function stewPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.stew));
     if (u < 0.22) {
       const s = smoothstep(u / 0.22);
-      return { x: fromX, lift: s * -0.03, rot: s * -3.6 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 2.2, rot: s * -10 * facing, anim: "sit" };
     }
     if (u < 0.7) {
       const s = (u - 0.22) / 0.48;
       const hush = Math.sin(s * Math.PI * 1.4);
       return {
-        x: fromX - facing * 0.012 * s,
-        lift: -0.03 + hush * 0.01,
-        rot: facing * (-3.6 - s * 2.2 + hush * 0.8),
+        x: fromX - facing * 1.4 * s,
+        lift: 2.2 + hush * 0.8,
+        rot: facing * (-10 - s * 6 + hush * 2),
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.7) / 0.3);
     return {
-      x: fromX - facing * 0.012 * (1 - s),
-      lift: -0.03 * (1 - s),
-      rot: facing * (-4.4 * (1 - s)),
+      x: fromX - facing * 1.4 * (1 - s),
+      lift: 2.2 * (1 - s),
+      rot: facing * (-8 * (1 - s)),
       anim: "sit",
     };
   }
+
   function unsealPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.unseal));
     if (u < 0.2) {
       const s = smoothstep(u / 0.2);
-      return { x: fromX, lift: s * -0.025, rot: s * -5.5 * facing, anim: "talk" };
+      return { x: fromX, lift: s * 2.4, rot: s * -8 * facing, anim: "talk" };
     }
     if (u < 0.55) {
       const s = smoothstep((u - 0.2) / 0.35);
       return {
-        x: fromX + facing * s * 0.018,
-        lift: -0.025 + s * 0.22,
-        rot: facing * (-5.5 + s * 12.8),
+        x: fromX + facing * s * 1.6,
+        lift: 2.4 + s * 2.0,
+        rot: facing * (-8 + s * 18),
         anim: "talk",
       };
     }
@@ -347,26 +389,104 @@
       const s = (u - 0.55) / 0.29;
       const open = Math.sin(s * Math.PI * 1.5);
       return {
-        x: fromX + facing * (0.018 + open * 0.008),
-        lift: 0.195 + Math.abs(open) * 0.03,
-        rot: facing * (7.3 + open * 2.2),
+        x: fromX + facing * (1.6 + open * 0.5),
+        lift: 4.2 + Math.abs(open) * 0.8,
+        rot: facing * (10 + open * 4),
         anim: "talk",
       };
     }
     const s = smoothstep((u - 0.84) / 0.16);
     return {
       x: fromX,
-      lift: 0.195 * (1 - s),
-      rot: facing * (4.2 * (1 - s)),
+      lift: 4.2 * (1 - s),
+      rot: facing * (6 * (1 - s)),
       anim: "sit",
     };
   }
+
+  function cagePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.cage));
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: s * 2.8, rot: s * 10 * facing, anim: "play" };
+    }
+    if (u < 0.52) {
+      const s = (u - 0.16) / 0.36;
+      const mesh = Math.sin(s * Math.PI * 2.4);
+      return {
+        x: fromX + facing * mesh * 1.1,
+        lift: 2.8 + Math.abs(mesh) * 1.5,
+        rot: facing * (10 + mesh * 12),
+        anim: "play",
+      };
+    }
+    if (u < 0.82) {
+      const s = (u - 0.52) / 0.3;
+      const lock = Math.sin(s * Math.PI * 1.7);
+      return {
+        x: fromX + facing * (0.8 + lock * 0.4),
+        lift: 3.4 - s * 0.5 + Math.abs(lock) * 0.7,
+        rot: facing * (14 - s * 4 + lock * 3),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.82) / 0.18);
+    return {
+      x: fromX,
+      lift: 2.6 * (1 - s),
+      rot: facing * (6 * (1 - s)),
+      anim: "sit",
+    };
+  }
+
+  function scapePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.scape));
+    if (u < 0.18) {
+      const s = smoothstep(u / 0.18);
+      return { x: fromX, lift: s * 2.6, rot: s * -6 * facing, anim: "talk" };
+    }
+    if (u < 0.55) {
+      const s = smoothstep((u - 0.18) / 0.37);
+      return {
+        x: fromX - facing * s * 0.8,
+        lift: 2.6 + s * 2.4,
+        rot: facing * (-6 + s * 4),
+        anim: "talk",
+      };
+    }
+    if (u < 0.84) {
+      const s = (u - 0.55) / 0.29;
+      const bloom = Math.sin(s * Math.PI * 1.6);
+      return {
+        x: fromX - facing * (0.8 + bloom * 0.3),
+        lift: 5.0 + Math.abs(bloom) * 0.7,
+        rot: facing * (-2 + bloom * 5),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.84) / 0.16);
+    return {
+      x: fromX,
+      lift: 5.0 * (1 - s),
+      rot: facing * (-2 * (1 - s)),
+      anim: "sit",
+    };
+  }
+
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "clamp" && trick.kind !== "trichome" && trick.kind !== "stew" && trick.kind !== "unseal") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "clamp" &&
+      trick.kind !== "trichome" &&
+      trick.kind !== "stew" &&
+      trick.kind !== "unseal" &&
+      trick.kind !== "cage" &&
+      trick.kind !== "scape"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "poise") {
       if (next.t < POISE_HOLD) {
         const pose = poisePose(next.t);
@@ -384,39 +504,51 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "clamp") {
-      const pose = clampPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = clampPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "trichome") {
-      const pose = trichomePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = trichomePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "stew") {
-      const pose = stewPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = stewPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "unseal") {
+      const pose = unsealPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "cage") {
+      const pose = cagePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = unsealPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = scapePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
-
   const api = {
     TRICK_KEY,
     TRICKS,
@@ -437,6 +569,8 @@
     trichomePose,
     stewPose,
     unsealPose,
+    cagePose,
+    scapePose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
