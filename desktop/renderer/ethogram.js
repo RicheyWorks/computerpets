@@ -46,7 +46,7 @@
     hermit_crab: [A("withdraw", "sit_hold", 2.4, 4, "sit"), A("swap_soft", "play", 1.15, 2, "play"), A("antenna_soft", "talk", 1.1, 2, "talk"), A("scuttle_soft", "walk", 1.1, 2), A("vacancy_soft", "walk", 1.15, 2), A("chela_soft", "play", 1.2, 2, "play"), A("bailer_soft", "talk", 1.1, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
     horseshoe_crab: [A("carapace", "sit_hold", 2.4, 4, "sit"), A("bookgill_soft", "talk", 1.15, 2, "talk"), A("telson_soft", "play", 1.2, 2, "play"), A("furrow_soft", "walk", 1.15, 2), A("fossil_soft", "sit", 1.2, 2, "sit"), A("pusher_soft", "walk", 1.2, 2), A("ocular_soft", "talk", 1.15, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
     seahorse: [A("coil", "sit_hold", 2.4, 4, "sit"), A("buoy_soft", "play", 1.15, 2, "play"), A("siphon_soft", "talk", 1.2, 2, "talk"), A("swivel_soft", "talk", 1.15, 2, "talk"), A("pouch_soft", "sit", 1.2, 2, "sit"), A("dorsal_soft", "walk", 1.2, 2), A("pectoral_soft", "talk", 1.15, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
-    manta: [A("soar", "pulse", 1.4, 3), A("glide", "bob", 1.8, 2)],
+    manta: [A("span", "sit_hold", 2.4, 4, "sit"), A("wing_soft", "walk", 1.15, 2), A("lobe_soft", "talk", 1.2, 2, "talk"), A("gyre_soft", "play", 1.2, 2, "play"), A("vault_soft", "play", 1.15, 2, "play"), A("breach_soft", "play", 1.25, 2, "play"), A("ram_soft", "talk", 1.2, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
     moray: [A("gape", "gape", 1.2, 3), A("hide", "sit_hold", 2.2, 3, "sit"), A("dart", "dart", 0.8, 2)],
     moss: [A("lean", "lean", 1.8, 3), A("nod", "nod", 1.0, 2, "sit"), A("still", "freeze", 2.4, 2)],
     maidenhair: [A("unfurl", "unfurl", 1.8, 4, "sit"), A("lean", "lean", 1.4, 2), A("nod", "nod", 0.9, 1, "sit")],
