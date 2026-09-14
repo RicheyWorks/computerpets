@@ -1,12 +1,7 @@
-/** Hold ground tricks while idle. House neighborly Giant Kelp (kelp / Hold) desk life -- holdfast grip / blade sway / pneumatocyst bob / canopy lean / long hold hush; NOT Pane diatom; NOT Orb; NOT Spot; NOT Reach; NOT Boot; NOT Gauss; NOT Ion; NOT Spark; NOT Flux; NOT Chlamydomonas; NOT Relay; NOT Fuse; NOT Rui; guest slug Hold / key kelp -- accept kelp and hold; Thank-yous denshold / inkhold / denskelp. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop kelp-tricks.js. Next: Spin / chlamydomonas. Catalog 210. */
+/** Hold ground tricks while idle — ultra-polish pass. House neighborly Giant Kelp / Macrocystis (kelp / Hold) desk life — holdfast / haptera / blade / pneumatocyst / sorus / sporophyll / meristem personality (holdfast rock grip without naming still or dart or glue, haptera branchlet reach without naming root or still or dart or crawl, blade lamina sway without naming leaf or still or dart or flap, pneumatocyst gas-float bob without naming bubble or still or dart or float, sorus spore-patch tip without naming spore or still or dart or speck, sporophyll reproductive-blade lean without naming fruit or still or dart or fold, long meristem intercalary sit_hold under the lamp drop (THE meristem sit_hold tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or eyespot or flagellum or chloroplast or phototaxis or euglenid or metaboly or paramylon or colony or inversion or phialopore or somatic or coenobium or daughter or gonidia or frustule or raphe or girdle or oilstore or pennate or epitheca or navicula or stipe or frond or canopy or holdfastgrip or bladesway or pneumatocystbob or canopylean or longholdhush as trick kinds; ethogram softs + freeze own those words; window-play RED unchanged if already fine; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Spot owns eyespot/flagellum/chloroplast/phototaxis/euglenid/metaboly/paramylon; Orb owns colony/inversion/phialopore/somatic/coenobium/daughter/gonidia; Pane owns frustule/raphe/girdle/oilstore/pennate/epitheca/navicula; Spin will own chlamydomonas life; Door owns hinge; Anchor owns siphon; guest slug Hold / key kelp only for isKey matching — accept "kelp" and "hold"; do NOT name a trick "kelp" or "hold" or "glue" or "flare" or "dart" or "still" or "roll" or "spin" or "swim" or "beat" or "glide" or "stipe" or "frond" or "canopy") — not Pane diatom life, not Orb volvox life, not Spot euglena life, not Reach amoeba life, not Boot paramecium life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Spin chlamydomonas. Holdfast rock grip on the drop without naming glue, haptera branchlet reach without naming root, blade lamina sway without naming leaf, pneumatocyst gas-float bob without naming bubble, sorus spore-patch tip without naming speck, sporophyll reproductive-blade lean without naming fold, meristem long intercalary sit_hold under the scrap lamp (THE meristem sit_hold tell); pyrifera / integrifolia / angustifolia thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop kelp-tricks.js. Window-play RED unchanged. Ethogram softs + freeze — never names hold/sway/still as bare ethogram-only trick kinds. True Giant Kelp / Macrocystis desk life only — distinct from Pane diatom, Orb volvox, Spot euglena, Reach amoeba, Boot paramecium, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Spin chlamydomonas. Spin owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via kelp.wav. Catalog 221. */
 export const TRICK_KEY = "kelp";
-export const TRICKS = ["holdfastgrip", "bladesway", "pneumatocystbob", "canopylean", "longholdhush"] as const;
-export const HAPPY = ["denshold", "inkhold", "denskelp"] as const;
-export const HAPPY_DUR = { denshold: 3.53, inkhold: 3.21, denskelp: 3.38 } as const;
-export const LONGHOLDHUSH_HOLD = 38.84;
-export const RELEASE_S = 2.8;
-export const DUR = { longholdhush: LONGHOLDHUSH_HOLD + RELEASE_S, holdfastgrip: 7.09, bladesway: 6.51, pneumatocystbob: 6.26, canopylean: 6.39 } as const;
-
+export const TRICKS = ["holdfast", "haptera", "blade", "pneumatocyst", "meristem", "sorus", "sporophyll"] as const;
+export const HAPPY = ["pyrifera", "integrifolia", "angustifolia"] as const;
 export type KelpTrickKind = (typeof TRICKS)[number];
 export type KelpHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
@@ -14,41 +9,53 @@ export type TrickPhase = "go" | "hold" | "release" | "done";
 export type HappyPhase = "go" | "done";
 
 export type TrickFlags = {
-asleep?: boolean;
-hidden?: boolean;
-leaving?: boolean;
-cmd?: string;
-windowPlay?: boolean;
-card?: boolean;
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+  windowPlay?: boolean;
+  card?: boolean;
 };
 
 export type KelpTrick = {
-kind: KelpTrickKind;
-phase: TrickPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: KelpTrickKind;
+  phase: TrickPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
 export type KelpHappy = {
-kind: KelpHappyKind;
-happy: true;
-phase: HappyPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: KelpHappyKind;
+  happy: true;
+  phase: HappyPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
+export const HAPPY_DUR = { pyrifera: 1.70, integrifolia: 1.82, angustifolia: 1.71 } as const;
+export const MERISTEM_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  meristem: MERISTEM_HOLD + RELEASE_S,
+  holdfast: 2.36,
+  haptera: 2.50,
+  blade: 2.56,
+  pneumatocyst: 2.42,
+  sorus: 2.44,
+  sporophyll: 2.39,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,40 +85,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: KelpTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "longholdhush") return 245 + roll * 46;
-  if (kind === "bladesway") return 31.5 + roll * 4.2;
-  if (kind === "canopylean") return 29.4 + roll * 3.9;
-  if (kind === "holdfastgrip") return 30.3 + roll * 4.1;
-  if (kind === "pneumatocystbob") return 28.6 + roll * 4.0;
-  return justFinished ? 22.8 + roll * 4.1 : 17.9 + roll * 3.6;
+  if (kind === "meristem") return 40 + roll * 26;
+  if (kind === "sorus" || kind === "sporophyll" || kind === "holdfast") return 12.8 + roll * 9.4;
+  if (kind === "haptera" || kind === "blade" || kind === "pneumatocyst") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: KelpTrickKind | string | null) {
-  if (musicOn) return "longholdhush";
+  if (musicOn) return "meristem" as const;
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "longholdhush") {
-    if (roll < 0.26) return "bladesway";
-    if (roll < 0.62) return "canopylean";
-    if (roll < 0.79) return "holdfastgrip";
-    return "pneumatocystbob";
+  if (lastKind === "meristem") {
+    if (roll < 0.17) return "holdfast" as const;
+    if (roll < 0.33) return "haptera" as const;
+    if (roll < 0.49) return "blade" as const;
+    if (roll < 0.65) return "pneumatocyst" as const;
+    if (roll < 0.83) return "sorus" as const;
+    return "sporophyll" as const;
   }
-  if (lastKind === "bladesway") {
-    if (roll < 0.26) return "longholdhush";
-    if (roll < 0.5) return "canopylean";
-    if (roll < 0.74) return "holdfastgrip";
-    return "pneumatocystbob";
+  if (lastKind === "holdfast") {
+    if (roll < 0.16) return "meristem" as const;
+    if (roll < 0.32) return "haptera" as const;
+    if (roll < 0.48) return "blade" as const;
+    if (roll < 0.64) return "pneumatocyst" as const;
+    if (roll < 0.82) return "sorus" as const;
+    return "sporophyll" as const;
   }
-  if (lastKind === "canopylean") {
-    if (roll < 0.22) return "longholdhush";
-    if (roll < 0.44) return "bladesway";
-    if (roll < 0.74) return "holdfastgrip";
-    return "pneumatocystbob";
+  if (lastKind === "haptera") {
+    if (roll < 0.14) return "meristem" as const;
+    if (roll < 0.3) return "holdfast" as const;
+    if (roll < 0.46) return "blade" as const;
+    if (roll < 0.62) return "pneumatocyst" as const;
+    if (roll < 0.8) return "sorus" as const;
+    return "sporophyll" as const;
   }
-  if (roll < 0.2) return "longholdhush";
-  if (roll < 0.4) return "bladesway";
-  if (roll < 0.6) return "canopylean";
-  if (roll < 0.8) return "holdfastgrip";
-  return "pneumatocystbob";
+  if (lastKind === "sorus" || lastKind === "sporophyll") {
+    if (roll < 0.14) return "meristem" as const;
+    if (roll < 0.3) return "holdfast" as const;
+    if (roll < 0.46) return "haptera" as const;
+    if (roll < 0.62) return "blade" as const;
+    if (roll < 0.78) return "pneumatocyst" as const;
+    return lastKind === "sorus" ? ("sporophyll" as const) : ("sorus" as const);
+  }
+  if (roll < 0.14) return "meristem" as const;
+  if (roll < 0.28) return "holdfast" as const;
+  if (roll < 0.42) return "haptera" as const;
+  if (roll < 0.56) return "blade" as const;
+  if (roll < 0.7) return "pneumatocyst" as const;
+  if (roll < 0.85) return "sorus" as const;
+  return "sporophyll" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -139,26 +160,32 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function wantsThankYou(key: string | undefined) {
+export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "hold";
 }
 
-export function startThankYou(key: string | undefined, lastKind: KelpHappyKind | string | null | undefined, x: number, facing?: 1 | -1, flags?: TrickFlags) {
+export function startThankYou(
+  key: string | undefined | null,
+  lastKind: KelpHappyKind | string | null | undefined,
+  x: number,
+  facing: 1 | -1,
+  flags?: TrickFlags,
+) {
   if (!wantsThankYou(key)) return null;
   if (!happyCanStart(flags || { cmd: "idle" })) return null;
-  const pick = pickHappy(lastKind);
+  const pick = pickHappy(lastKind as KelpHappyKind | null | undefined);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
 
-export function pickHappy(lastKind?: KelpHappyKind | string | null, rand?: number) {
+export function pickHappy(lastKind?: KelpHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
-  const list = pool.length ? pool : HAPPY.slice();
+  const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
 
-export function beginHappy(kind: KelpHappyKind | string, x: number, facing?: 1 | -1): KelpHappy {
-  const name = (HAPPY.indexOf(kind as KelpHappyKind) >= 0 ? kind : "denshold") as KelpHappyKind;
+export function beginHappy(kind: KelpHappyKind | string, x: number, facing: 1 | -1): KelpHappy {
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as KelpHappyKind) : "pyrifera";
   return {
     kind: name,
     happy: true,
@@ -167,278 +194,378 @@ export function beginHappy(kind: KelpHappyKind | string, x: number, facing?: 1 |
     x: x,
     lift: 0,
     rot: 0,
-    anim: name === "denshold" ? "sit" : name === "inkhold" ? "play" : "play",
-    facing: (facing == null ? 1 : facing) as 1 | -1,
-    fromX: x,
-  };
-}
-
-export function densholdPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denshold));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.005, rot: s * -0.38, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.5) {
-      const sway = Math.sin(((u - 0.11) / 0.39) * Math.PI * 3.25);
-      const haze = Math.sin(((u - 0.11) / 0.39) * Math.PI * 6.1);
-      return { lift: 0.005 + Math.abs(sway) * 0.0016 + Math.abs(haze) * 0.00055, rot: -0.32 + sway * 0.23 + haze * 0.055, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const sway = Math.sin(((u - 0.5) / 0.36) * Math.PI * 2.5);
-      return { lift: 0.005 + Math.abs(sway) * 0.0013, rot: -0.27 + sway * 0.17, anim: "sit" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.005 * (1 - s), rot: -0.27 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function inkholdPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkhold));
-    if (u < 0.1) {
-      const s = u / 0.1;
-      return { lift: s * 0.0063, rot: s * 0.47, anim: "play" as TrickAnim };
-    }
-    if (u < 0.49) {
-      const bob = Math.sin(((u - 0.1) / 0.39) * Math.PI * 3.45);
-      const ion = Math.sin(((u - 0.1) / 0.39) * Math.PI * 6.6);
-      return { lift: 0.0059 + Math.abs(bob) * 0.002 + Math.abs(ion) * 0.00065, rot: 0.4 + bob * 0.22 + ion * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const bob = Math.sin(((u - 0.49) / 0.37) * Math.PI * 2.55);
-      return { lift: 0.0059 + Math.abs(bob) * 0.0015, rot: 0.35 + bob * 0.16, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0059 * (1 - s), rot: 0.35 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function denskelpPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denskelp));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.0043, rot: s * -0.285, anim: "play" as TrickAnim };
-    }
-    if (u < 0.53) {
-      const hush = Math.sin(((u - 0.12) / 0.41) * Math.PI * 2.55);
-      const haze = Math.sin(((u - 0.12) / 0.41) * Math.PI * 5.2);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0014 + Math.abs(haze) * 0.0005, rot: -0.24 + hush * 0.17 + haze * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const hush = Math.sin(((u - 0.53) / 0.33) * Math.PI * 1.85);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0011, rot: -0.2 + hush * 0.13, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0043 * (1 - s), rot: -0.2 * (1 - s), anim: "idle" as TrickAnim };
-  }
-
-export function stepHappy(happy: KelpHappy | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!happy || happy.phase === "done") return happy;
-  if (happyShouldAbort(flags)) {
-    return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-  }
-  const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-  const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "denshold") {
-    const pose = densholdPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "inkhold") {
-    const pose = inkholdPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = denskelpPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
-  if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-  return next;
-}
-
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
-  return null;
-}
-
-export function beginTrick(kind: KelpTrickKind | string, x: number, facing?: 1 | -1): KelpTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as KelpTrickKind) : "longholdhush";
-  const anim: TrickAnim =
-    k === "longholdhush"
-      ? "sit"
-      : k === "bladesway"
-        ? "sit"
-        : k === "canopylean"
-          ? "sit"
-          : k === "pneumatocystbob"
-            ? "play"
-            : k === "holdfastgrip"
-              ? "walk"
-              : "sit";
-  return {
-    kind: k,
-    phase: k === "longholdhush" ? "hold" : "go",
-    t: 0,
-    x,
-    lift: 0,
-    rot: 0,
-    anim,
+    anim: name === "pyrifera" ? "sit" : name === "integrifolia" ? "play" : "sit",
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
 
-export function smoothstep(t: number) {
+export function pyriferaPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.pyrifera));
+  if (u < 0.16) {
+    const s = u / 0.16;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.82) {
+    const flash = Math.sin(t * 1.72);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: 0,
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function integrifoliaPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.integrifolia));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const wriggle = Math.sin(t * 2.1);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: 0.08,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.84) / 0.16;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function angustifoliaPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.52) * 6,
+    dx: 0,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepHappy(happy: KelpHappy, dt: number, flags: TrickFlags): KelpHappy {
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: KelpHappy = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "pyrifera") {
+    const pose = pyriferaPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "integrifolia") {
+    const pose = integrifoliaPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = angustifoliaPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: KelpTrickKind | string, x: number, facing: 1 | -1): KelpTrick {
+  const anim: TrickAnim =
+    kind === "meristem"
+      ? "sit"
+      : kind === "holdfast"
+        ? "sit"
+        : kind === "haptera"
+          ? "walk"
+          : kind === "blade"
+            ? "play"
+            : kind === "pneumatocyst"
+              ? "play"
+              : kind === "sorus"
+                ? "play"
+                : kind === "sporophyll"
+                  ? "walk"
+                  : "sit";
+  return {
+    kind: (TRICKS as readonly string[]).indexOf(kind) >= 0 ? (kind as KelpTrickKind) : "holdfast",
+    phase: kind === "meristem" ? "hold" : "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
+function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
-export function longholdhushPose(t: number) {
-  const breath = Math.sin(t * 0.00028) + 0.00020 * Math.sin(t * 0.00097);
-  const charge = Math.abs(Math.sin(t * 0.00017));
-  return { lift: -0.00013 + charge * 0.00015, rot: 0.0011 + breath * 0.0030 };
+export function meristemPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.14) * 4,
+    anim: "sit" as TrickAnim,
+  };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00013 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0031 * (1 - u) };
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
 }
 
-export function bladeswayPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.bladesway));
+export function holdfastPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.holdfast));
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + face * s * 0.00055, lift: s * 0.0030, rot: s * 0.09 * face, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.5, rot: s * 14 * face, anim: "sit" as TrickAnim };
   }
-  if (u < 0.8) {
-    const wire = Math.sin(((u - 0.14) / 0.66) * Math.PI * 4.1);
-    const skim = Math.sin(((u - 0.14) / 0.66) * Math.PI * 2.3);
+  if (u < 0.78) {
+    const snap = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (0.00055 + (u - 0.14) / 0.66 * 0.0014 + wire * 0.00008),
-      lift: 0.0027 + Math.abs(skim) * 0.0021 + Math.abs(wire) * 0.0007,
-      rot: (0.09 + skim * 0.13 + wire * 0.05) * face,
-      anim: "walk" as TrickAnim,
+      x: fromX + face * snap * 0.14,
+      lift: 3.5 + Math.abs(snap) * 1.5,
+      rot: face * (15 + snap * 11),
+      anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.8) / 0.2);
-  return { x: fromX + face * (0.00195 * (1 - s) + 0.00055 * s), lift: 0.0026 * (1 - s), rot: 0.09 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function canopyleanPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.canopylean));
+
+export function hapteraPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.haptera));
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + face * s * -0.00004, lift: s * 0.0018, rot: s * -0.13 * face, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.9, rot: s * -16 * face, anim: "walk" as TrickAnim };
   }
-  if (u < 0.42) {
-    const s = smoothstep((u - 0.12) / 0.3);
-    return { x: fromX + face * (-0.00004 + s * 0.00020), lift: 0.0018 + s * 0.0115, rot: (-0.13 + s * 0.34) * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.79) {
-    const crack = Math.sin(((u - 0.42) / 0.36) * Math.PI * 5.6);
+  if (u < 0.48) {
+    const s = smoothstep((u - 0.12) / 0.36);
     return {
-      x: fromX + face * (0.00014 + crack * 0.00005),
-      lift: 0.0133 - ((u - 0.42) / 0.36) * 0.0084 + Math.abs(crack) * 0.0016,
-      rot: (0.22 + crack * 0.19) * face,
-      anim: "play" as TrickAnim,
+      x: fromX - face * (2.2 + s * 4.5),
+      lift: 3.6 + Math.sin(s * Math.PI) * 2.2,
+      rot: face * (-16 + s * 22),
+      anim: "walk" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.79) / 0.22);
-  return { x: fromX + face * 0.00014 * (1 - s), lift: 0.0049 * (1 - s), rot: 0.22 * (1 - s) * face, anim: "idle" as TrickAnim };
+  if (u < 0.78) {
+    const s = (u - 0.48) / 0.3;
+    const settle = Math.sin(s * Math.PI * 2.1);
+    return {
+      x: fromX - face * (6.7 * (1 - s)),
+      lift: 2.4 + Math.abs(settle) * 1.1,
+      rot: face * (6 + settle * 8),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function holdfastgripPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.holdfastgrip));
+
+export function bladePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.blade));
   const face = facing == null ? 1 : facing;
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX + face * s * -0.00011, lift: s * -0.0056, rot: s * 0.36 * face, anim: "play" as TrickAnim };
+    return { x: fromX + face * s * 0.8, lift: s * 2.2, rot: s * 8 * face, anim: "play" as TrickAnim };
   }
-  if (u < 0.79) {
-    const coil = Math.sin(((u - 0.16) / 0.62) * Math.PI * 3.3);
-    const charge = Math.sin(((u - 0.16) / 0.62) * Math.PI * 6.9);
+  if (u < 0.72) {
+    const mud = Math.sin(t * 1.6);
     return {
-      x: fromX + face * (-0.00011 + coil * 0.00007),
-      lift: -0.0056 + Math.abs(coil) * 0.0030 + Math.abs(charge) * 0.0019,
-      rot: (0.36 + coil * 0.41 + charge * 0.14) * face,
+      x: fromX + face * (0.8 + mud * 0.4),
+      lift: 2.2 + Math.abs(mud) * 1.0,
+      rot: face * (8 + mud * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: s > 0.6 ? ("idle" as TrickAnim) : ("play" as TrickAnim),
+  };
+}
+
+export function pneumatocystPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.pneumatocyst));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * 10 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const tap = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * tap * 0.2,
+      lift: 2.4 + Math.abs(tap) * 1.1,
+      rot: face * (10 + tap * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function sorusPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.sorus));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * 12 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const pulse = Math.sin(t * 3.2);
+    return {
+      x: fromX,
+      lift: 2.8 + pulse * 1.6,
+      rot: face * (12 + pulse * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const scent = Math.sin(t * 1.1);
+    return {
+      x: fromX + face * scent * 0.15,
+      lift: 4.0 + Math.abs(scent) * 0.6,
+      rot: face * (22 + scent * 4),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX + face * -0.00011 * (1 - s), lift: -0.0056 * (1 - s), rot: 0.36 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function pneumatocystbobPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.pneumatocystbob));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.00003, lift: s * 0.0042, rot: s * 0.11 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.84) {
-    const fringe = Math.sin(((u - 0.18) / 0.66) * Math.PI * 9.0);
-    const crackle = Math.sin(((u - 0.18) / 0.66) * Math.PI * 4.0);
-    return {
-      x: fromX + face * (0.00003 + fringe * 0.00004),
-      lift: 0.0041 + Math.abs(crackle) * 0.0022 + Math.abs(fringe) * 0.0011,
-      rot: (0.11 + fringe * 0.22 + crackle * 0.09) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.84) / 0.16);
-  return { x: fromX + face * 0.00003 * (1 - s), lift: 0.0037 * (1 - s), rot: 0.11 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
 
-export function stepTrick(trick: KelpTrick | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "bladesway" && trick.kind !== "canopylean" && trick.kind !== "holdfastgrip" && trick.kind !== "pneumatocystbob") {
-    return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+export function sporophyllPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.sporophyll));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * -12 * face, anim: "walk" as TrickAnim };
   }
-  const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-  if (next.kind === "longholdhush") {
-    if (next.t < LONGHOLDHUSH_HOLD) {
-      const pose = longholdhushPose(next.t);
+  if (u < 0.55) {
+    const flash = Math.abs(Math.sin(t * 2.6));
+    return {
+      x: fromX + face * flash * 0.2,
+      lift: 3.4 + flash * 1.4,
+      rot: face * (-12 - flash * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const warn = Math.sin(t * 1.4);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(warn) * 0.7,
+      rot: face * (-18 + warn * 6),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (-5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: KelpTrick, dt: number, flags: TrickFlags): KelpTrick {
+  if (shouldAbort(flags)) {
+    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: KelpTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "meristem") {
+    if (next.t < MERISTEM_HOLD) {
+      const pose = meristemPose(next.t);
       next.phase = "hold";
       next.lift = pose.lift;
       next.rot = pose.rot;
-      next.anim = "sit";
+      next.anim = pose.anim;
       return next;
     }
-    if (next.t < LONGHOLDHUSH_HOLD + RELEASE_S) {
-      const pose = releasePose(next.t - LONGHOLDHUSH_HOLD);
+    if (next.t < MERISTEM_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - MERISTEM_HOLD);
       next.phase = "release";
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = "sit";
       return next;
     }
-    return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   }
   const hold = DUR[next.kind];
-  const u = next.t / hold;
-  if (next.kind === "bladesway") {
-    const pose = bladeswayPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  if (next.kind === "holdfast") {
+    const pose = holdfastPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "canopylean") {
-    const pose = canopyleanPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "haptera") {
+    const pose = hapteraPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "holdfastgrip") {
-    const pose = holdfastgripPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "blade") {
+    const pose = bladePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "pneumatocyst") {
+    const pose = pneumatocystPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "sorus") {
+    const pose = sorusPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = pneumatocystbobPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = sporophyllPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle", x: fromX };
   return next;
 }
-
