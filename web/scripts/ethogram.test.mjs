@@ -468,8 +468,10 @@ assert.equal(names("silica").includes("shed"), false);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
-  assert.ok(names("frog").includes("hop"));
-  assert.ok(names("frog").includes("croak"));
+  assert.ok(names("frog").includes("lentic"));
+  assert.ok(names("frog").includes("toepad_soft"));
+  assert.ok(names("frog").includes("webbing_soft"));
+  assert.ok(names("frog").includes("freeze"));
   assert.ok(names("toad").includes("puff"));
   assert.ok(names("salamander").includes("hide"));
   assert.ok(names("caecilian").includes("slip"));
