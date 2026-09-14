@@ -29,6 +29,17 @@ test("only the scratching mammals list scratch", () => {
   }
 });
 
+test("horseshoe_crab ethogram is Ledger ultra (carapace + softs + freeze, not plow/still)", () => {
+  const names = E.actsFor("horseshoe_crab").map((a) => a.name);
+  assert.ok(names.includes("carapace"));
+  assert.ok(names.includes("pusher_soft"));
+  assert.ok(names.includes("ocular_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("plow"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("molt"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",

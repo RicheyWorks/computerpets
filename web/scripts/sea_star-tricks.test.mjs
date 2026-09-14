@@ -444,7 +444,7 @@ test("ultra-polish: Ochre podia/madre/papula lifts are Rui-visible (not micro id
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Ochre idle-life ultra done; Tenant / hermit_crab ultra done; next house-order ultra guest is Ledger / horseshoe_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Ochre idle-life ultra done; Ledger / horseshoe_crab ultra done; next house-order ultra guest is Anchor / seahorse (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "sea_star");
   assert.equal(T.wantsThankYou("cling"), true);
   assert.equal(OverlayGround.tricksFor("sea_star"), Overlay);
@@ -467,8 +467,8 @@ test("notes: Ochre idle-life ultra done; Tenant / hermit_crab ultra done; next h
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  assert.equal(OverlayGround.tricksFor("horseshoe_crab") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("horseshoe_crab"), false);
-  assert.equal(OverlayGround.tricksFor("ledger") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("ledger"), false);
+  assert.equal(OverlayGround.tricksFor("seahorse") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("seahorse"), false);
+  assert.equal(OverlayGround.tricksFor("anchor") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("anchor"), false);
 });

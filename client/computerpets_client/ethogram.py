@@ -68,7 +68,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "moon_jelly": (_a("hide", "sit_hold", 2.4, 4, "sit"), _a("oral_soft", "talk", 1.1, 2, "talk"), _a("lucent_soft", "sit", 1.15, 2, "sit"), _a("trail_soft", "play", 1.15, 2, "play"), _a("medusa_soft", "walk", 1.1, 2), _a("rhopalium_soft", "talk", 1.1, 2, "talk"), _a("horseshoe_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "sea_star": (_a("cling", "sit_hold", 2.4, 4, "sit"), _a("righting_soft", "play", 1.15, 2, "play"), _a("crawl_soft", "walk", 1.1, 2), _a("evert_soft", "talk", 1.1, 2, "talk"), _a("penta_soft", "sit", 1.15, 2, "sit"), _a("madre_soft", "talk", 1.1, 2, "talk"), _a("papula_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "hermit_crab": (_a("withdraw", "sit_hold", 2.4, 4, "sit"), _a("swap_soft", "play", 1.15, 2, "play"), _a("antenna_soft", "talk", 1.1, 2, "talk"), _a("scuttle_soft", "walk", 1.1, 2), _a("vacancy_soft", "walk", 1.15, 2), _a("chela_soft", "play", 1.2, 2, "play"), _a("bailer_soft", "talk", 1.1, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
-    "horseshoe_crab": (_a("plow", "wiggle", 1.0, 2), _a("still", "freeze", 2.0, 3)),
+    "horseshoe_crab": (_a("carapace", "sit_hold", 2.4, 4, "sit"), _a("bookgill_soft", "talk", 1.15, 2, "talk"), _a("telson_soft", "play", 1.2, 2, "play"), _a("furrow_soft", "walk", 1.15, 2), _a("fossil_soft", "sit", 1.2, 2, "sit"), _a("pusher_soft", "walk", 1.2, 2), _a("ocular_soft", "talk", 1.15, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
     "seahorse": (_a("hitch", "sit_hold", 2.4, 3, "sit"), _a("hover", "bob", 1.4, 2)),
     "manta": (_a("soar", "pulse", 1.4, 3), _a("glide", "bob", 1.8, 2)),
     "moray": (_a("gape", "gape", 1.2, 3), _a("hide", "sit_hold", 2.2, 3, "sit"), _a("dart", "dart", 0.8, 2)),
