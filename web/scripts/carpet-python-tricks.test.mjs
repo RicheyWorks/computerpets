@@ -82,7 +82,7 @@ test("Atlas tricks start only on idle ground", () => {
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
   assert.deepEqual([...MilkSnake.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile", "cipher", "verse"]);
-  assert.deepEqual([...RosyBoa.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo"]);
+  assert.deepEqual([...RosyBoa.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo", "dune", "talus"]);
   assert.deepEqual([...T.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
