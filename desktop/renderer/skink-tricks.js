@@ -1,352 +1,542 @@
-/** Dash ground tricks while idle. House neighborly Scincidae / Plestiodon fasciatus Five-lined Skink stone-crack desk life — tailbluff / litterdash / tongueflick / sunbask / plestiodon personality (tailbluff tail autotomy bluff without naming tail or auto or bluff or drop or thrash or wiggle or break or lose or blue or threat or warn or signal, litterdash litter leaf dash without naming litter or leaf or dash or zip or bolt or run or sprint or hide or crack or rush or flee or dart, tongueflick tongue chem flick without naming tongue or flick or chem or taste or scent or smell or sense or tip or lick or sample or probe, sunbask sun bask warm without naming sun or bask or warm or heat or flat or stone or soak or rest or nap or loaf or idle or settle, long plestiodon Plestiodon fasciatus surface-calm stripe hush — never named wait or crouch or roost or look or stalk or monocle or fossick or anting or corvid or dewlapflash or pushupshow or hueshift or preyinch or anolis or toepadcling or vocalclick or lickeye or mothstalk or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash; window-play FLASH and Call Dash leave skink alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink own their tricks; guest slug Dash / key skink — accept "skink" and "dash" (roster slug dash; campaign Dash); do NOT name a trick skink or dash or anole or anolis or carolinensis or gecko or hemidactylus or turcicus or salamander or dapple or iguana or sol or newt or eft or caecilian or slip or frog or reed or toad or pebble or wink or denswink or inkwink or densdewlap or Bank or mining). Thank-yous densdash / inkdash / densbluff. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web skink-tricks.ts. Window-play FLASH unchanged. True Five-lined Skink Scincidae desk life — not anole/gecko/salamander/iguana/newt/frog/rui clones. Shift owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Dash ground tricks while idle — ultra-polish pass. House neighborly Scincidae / Plestiodon fasciatus Five-lined Skink stone-crack desk life (skink / Dash) — tailbluff / litterdash / tongueflick / sunbask / bluetail / stonehush / plestiodon personality (tailbluff tail autotomy bluff without naming tail or auto or bluff or drop or thrash or wiggle or break or lose or blue or threat or warn or signal alone, litterdash litter leaf dash without naming litter or leaf or dash or zip or bolt or run or sprint or hide or crack or rush or flee or dart alone, tongueflick tongue chem flick without naming tongue or flick or chem or taste or scent or smell or sense or tip or lick or sample or probe alone, sunbask sun bask warm without naming sun or bask or warm or heat or flat or stone or soak or rest or nap or loaf or idle or settle alone, bluetail blue-tail juvenile flash without naming blue or tail or flash or warn or signal or bright or stripe alone, stonehush stone-crack hush settle without naming stone or hush or crack or sit or rest or lounge or nap alone, long plestiodon Plestiodon fasciatus surface-calm stripe hush hold (THE plestiodon sit_hold tell) — never named wait or crouch or roost or look or stalk or monocle or fossick or anting or corvid or dewlapflash or pushupshow or hueshift or preyinch or nuchal or vinehush or anolis or toepadcling or vocalclick or lickeye or mothstalk or setae or lamphush or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or scentgland or socialpile or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or bluffhuff or mastforage or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or guardhair or pinehush or erethizon or woodfell or paddleclap or lodgehaul or mudpack or aspen or divehush or castor or stillfeign or scrapnose or gapegrin or raftergrip or pouchcarry or prehensile or didelphis or footstomp or duffgrub or handwarn or plumeaim or scentraise or plantigrade or mephitis or pawdouse or litterdig or rearstand or maskpeer or dexterous or ringtail or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or denslide or spraint or lontra or nutbury or tailflick or cheekpouch or branchleap or barkscramble or scold or sciurus or wingwrap or traguscup or thumbcrawl or duskhang or eptesicus or flagtail or edgebrowse or earswivel or forestamp or odocoileus or curl or snuffle or anoint or bristle or root or trundle or wheel or tube or romp or steal or puff or noodle or corkscrew or slink or hang or flutter or still or stamp or raise or spray or skunk or stripe or playdead or grin or opossum or ferret or weasel or mink or otter or red_panda or wash or beaver or dam or porcupine or spine or quill or popcorn or rumble or hay or potato or zig or lookout or teeth or soak or graze or nuzzle or capybara or bankhush or climb or chirp or cling or gecko or pad or dewlap or sun or nod or press or flick or sneeze or lash or maculate or litter or cutaneous or nasolabial or ambystomid or mental or granular or crest or caudal or filament or costal or caudate or lamella or imbricate or lasso or margin or pleurotus or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or flash or brown or hue or shift or chameleon or aim or catch or dash or skink or tail as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play FLASH unchanged if already fine; Wink/anole owns dewlapflash/pushupshow/hueshift/preyinch/nuchal/vinehush/anolis; Pad owns toepadcling/vocalclick/lickeye/mothstalk/setae/lamphush/hemidactylus; Grin owns stillfeign; Wash owns litterdig; Shift/chameleon owns hueshift-adjacent aim/catch — leave chameleon words free; guest slug Dash / key skink only for isKey matching — accept "skink" and "dash"; do NOT name a trick "skink" or "dash" or "tail" or "still" or "flash" or "anole" or "wink" or "gecko" or "pad" or "climb" or "chirp" or "cling" or "lamella" or "dewlap" or "salamander" or "dapple" or "iguana" or "sol" or "newt" or "eft" or "caecilian" or "slip" or "frog" or "reed" or "toad" or "pebble" or "gular" or "chameleon" or "shift" or "hue") — not Wink anole life, not Pad gecko life, not Sol iguana life, not Shift chameleon life, not Reed frog life, not Dapple salamander life, not Rui red_panda life. Tailbluff tail bluff without naming tail alone, litterdash litter-dash without naming dash alone, tongueflick tongue-flick without naming flick alone, sunbask sun-bask without naming bask alone, bluetail blue-tail without naming blue alone, stonehush stone-hush without naming hush alone, plestiodon long sit_hold on the stone crack (THE plestiodon sit_hold tell); densdash / inkdash / densbluff thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web skink-tricks.ts. Window-play FLASH unchanged. Ethogram softs + freeze — never names dash/tail/still/skink as bare ethogram-only trick kinds. True Plestiodon fasciatus Scincidae Five-lined Skink desk life only — distinct from Wink, Pad, Sol, Shift, Reed, Dapple, Eft, Slip, Soak, Coal, Dam, Whee, Slick, Spine, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Shift / chameleon. No cry inventing — thank-yous are silent desk motion only; prefersHouseCry skink (skink.wav on disk). Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
   const TRICK_KEY = "skink";
-  const TRICKS = ["tailbluff", "litterdash", "tongueflick", "sunbask", "plestiodon"];
+  const TRICKS = ["tailbluff", "litterdash", "tongueflick", "sunbask", "bluetail", "stonehush", "plestiodon"];
   const HAPPY = ["densdash", "inkdash", "densbluff"];
-  const HAPPY_DUR = { densdash: 2.08, inkdash: 2.22, densbluff: 2.14 };
-  const PLESTIODON_HOLD = 20.48;
-  const RELEASE_S = 1.58;
-  const DUR = { plestiodon: PLESTIODON_HOLD + RELEASE_S, tailbluff: 3.02, litterdash: 2.96, tongueflick: 3.18, sunbask: 3.10 };
-
+  const HAPPY_DUR = { densdash: 1.70, inkdash: 1.84, densbluff: 1.76 };
+  const PLESTIODON_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+      plestiodon: PLESTIODON_HOLD + RELEASE_S,
+      tailbluff: 2.48,
+      litterdash: 2.42,
+      tongueflick: 2.56,
+      sunbask: 2.44,
+      bluetail: 2.40,
+      stonehush: 2.38,
+  };
   function canStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function shouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "eat" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function nextTrickWait(justFinished, rand, kind) {
-    const roll = rand == null ? Math.random() : rand;
-      if (kind === "plestiodon") return 126 + roll * 12;
-  if (kind === "tailbluff") return 20.0 + roll * 6.2;
-  if (kind === "litterdash") return 21.2 + roll * 6.8;
-  if (kind === "sunbask") return 22.6 + roll * 7.4;
-  return justFinished ? 18.6 + roll * 5.8 : 12.6 + roll * 5.0;
+      const roll = rand == null ? Math.random() : rand;
+      if (kind === "plestiodon")
+          return 40 + roll * 26;
+      if (kind === "bluetail" || kind === "stonehush" || kind === "tailbluff")
+          return 12.8 + roll * 9.4;
+      if (kind === "litterdash" || kind === "tongueflick" || kind === "sunbask")
+          return 11.6 + roll * 8.5;
+      return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
-
   function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "plestiodon";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "plestiodon") {
-      if (roll < 0.26) return "tailbluff";
-      if (roll < 0.5) return "litterdash";
-      if (roll < 0.74) return "tongueflick";
-      return "sunbask";
-    }
-    if (lastKind === "tailbluff") {
-      if (roll < 0.26) return "plestiodon";
-      if (roll < 0.5) return "litterdash";
-      if (roll < 0.74) return "tongueflick";
-      return "sunbask";
-    }
-    if (lastKind === "litterdash") {
-      if (roll < 0.22) return "plestiodon";
-      if (roll < 0.44) return "tailbluff";
-      if (roll < 0.68) return "tongueflick";
-      return "sunbask";
-    }
-    if (roll < 0.2) return "plestiodon";
-    if (roll < 0.4) return "tailbluff";
-    if (roll < 0.6) return "litterdash";
-    if (roll < 0.8) return "tongueflick";
-    return "sunbask";
+      if (musicOn)
+          return "plestiodon";
+      const roll = rand == null ? Math.random() : rand;
+      if (lastKind === "plestiodon") {
+          if (roll < 0.17)
+              return "tailbluff";
+          if (roll < 0.33)
+              return "litterdash";
+          if (roll < 0.49)
+              return "tongueflick";
+          if (roll < 0.65)
+              return "sunbask";
+          if (roll < 0.83)
+              return "bluetail";
+          return "stonehush";
+      }
+      if (lastKind === "tailbluff") {
+          if (roll < 0.16)
+              return "plestiodon";
+          if (roll < 0.32)
+              return "litterdash";
+          if (roll < 0.48)
+              return "tongueflick";
+          if (roll < 0.64)
+              return "sunbask";
+          if (roll < 0.82)
+              return "bluetail";
+          return "stonehush";
+      }
+      if (lastKind === "litterdash") {
+          if (roll < 0.14)
+              return "plestiodon";
+          if (roll < 0.3)
+              return "tailbluff";
+          if (roll < 0.46)
+              return "tongueflick";
+          if (roll < 0.62)
+              return "sunbask";
+          if (roll < 0.8)
+              return "bluetail";
+          return "stonehush";
+      }
+      if (lastKind === "bluetail" || lastKind === "stonehush") {
+          if (roll < 0.14)
+              return "plestiodon";
+          if (roll < 0.3)
+              return "tailbluff";
+          if (roll < 0.46)
+              return "litterdash";
+          if (roll < 0.62)
+              return "tongueflick";
+          if (roll < 0.78)
+              return "sunbask";
+          return lastKind === "bluetail" ? "stonehush" : "bluetail";
+      }
+      if (roll < 0.14)
+          return "plestiodon";
+      if (roll < 0.28)
+          return "tailbluff";
+      if (roll < 0.42)
+          return "litterdash";
+      if (roll < 0.56)
+          return "tongueflick";
+      if (roll < 0.7)
+          return "sunbask";
+      if (roll < 0.85)
+          return "bluetail";
+      return "stonehush";
   }
-
   function happyCanStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function happyShouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function wantsThankYou(key) {
-    return key === TRICK_KEY || key === "dash";
+      return key === TRICK_KEY || key === "dash";
   }
-
   function startThankYou(key, lastKind, x, facing, flags) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
+      if (!wantsThankYou(key))
+          return null;
+      if (!happyCanStart(flags || { cmd: "idle" }))
+          return null;
+      const pick = pickHappy(lastKind);
+      return { happy: beginHappy(pick, x, facing), kind: pick };
   }
-
   function pickHappy(lastKind, rand) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
+      const pool = HAPPY.filter((k) => k !== lastKind);
+      const list = pool.length ? pool : [...HAPPY];
+      const roll = rand == null ? Math.random() : rand;
+      return list[Math.floor(roll * list.length)] || list[0];
   }
-
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "densdash";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: name === "densdash" ? "sit" : name === "inkdash" ? "play" : "sit",
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
+      const name = HAPPY.indexOf(kind) >= 0 ? kind : "densdash";
+      return {
+          kind: name,
+          happy: true,
+          phase: "go",
+          t: 0,
+          x: x,
+          lift: 0,
+          rot: 0,
+          anim: name === "densdash" ? "sit" : name === "inkdash" ? "play" : "sit",
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
   }
-
-                      function densdashPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densdash));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.018, rot: s * 2.05, dx: 0, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const stripe = Math.sin(t * 3.0) + 0.12 * Math.sin(t * 6.0);
-      return { lift: 0.018 + Math.abs(stripe) * 0.009, rot: 2.05 + stripe * 1.15, dx: stripe * 0.00058, anim: "sit" };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.003 * (1 - s), rot: 0.26 * (1 - s), dx: 0, anim: "idle" };
+  function densdashPose(t) {
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densdash));
+      if (u < 0.14) {
+          const s = u / 0.14;
+          return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
+      }
+      if (u < 0.78) {
+          const flash = Math.sin(t * 2.2);
+          return {
+              lift: 2.8 + Math.abs(flash) * 1.4,
+              rot: 12 + flash * 8,
+              dx: flash * 0.08,
+              anim: "sit",
+          };
+      }
+      const s = (u - 0.78) / 0.22;
+      return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
   function inkdashPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkdash));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.046, rot: s * -2.85, dx: s * 0.00140, anim: "play" };
-    }
-    if (u < 0.85) {
-      const bolt = Math.sin(t * 3.0) + 0.14 * Math.sin(t * 6.0);
-      return { lift: 0.046 + Math.abs(bolt) * 0.016, rot: -2.85 + bolt * 2.30, dx: bolt * 0.00166, anim: "play" };
-    }
-    const s = (u - 0.85) / 0.15;
-    return { lift: 0.006 * (1 - s), rot: -0.38 * (1 - s), dx: 0, anim: "sit" };
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkdash));
+      if (u < 0.12) {
+          const s = u / 0.12;
+          return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
+      }
+      if (u < 0.8) {
+          const wriggle = Math.sin(t * 2.6);
+          return {
+              lift: 3.4 + Math.abs(wriggle) * 1.6,
+              rot: -14 + wriggle * 10,
+              dx: wriggle * 0.12,
+              anim: "play",
+          };
+      }
+      const s = (u - 0.8) / 0.2;
+      return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
   function densbluffPose(t) {
-    return { lift: 0.0074 + Math.abs(Math.sin(t * 0.132)) * 0.0110, rot: Math.sin(t * 0.132) * 1.02, dx: Math.sin(t * 0.100) * 0.00062, anim: "sit" };
+      return {
+          lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+          rot: Math.sin(t * 0.58) * 8,
+          dx: Math.sin(t * 0.4) * 0.06,
+          anim: "sit",
+      };
   }
   function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "densdash") {
-      const pose = densdashPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "inkdash") {
-      const pose = inkdashPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = densbluffPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      if (!happy || happy.phase === "done")
+          return happy;
+      if (happyShouldAbort(flags)) {
+          return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+      }
+      const next = { ...happy, t: happy.t + Math.max(0, dt) };
+      const hold = HAPPY_DUR[next.kind];
+      if (next.kind === "densdash") {
+          const pose = densdashPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "inkdash") {
+          const pose = inkdashPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = densbluffPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (next.t >= hold)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
-
   function sleepHoldFrame(_key, _frameCount) {
-    return null;
+      return null;
   }
-
   function beginTrick(kind, x, facing) {
-    const anim =
-      kind === "plestiodon"
-        ? "sit"
-        : kind === "tailbluff"
+      const anim = kind === "plestiodon"
           ? "sit"
-          : kind === "litterdash"
-            ? "play"
-            : kind === "tongueflick"
-              ? "talk"
-              : kind === "sunbask"
-                ? "talk"
-                : "sit";
-    return {
-      kind: kind,
-      phase: kind === "plestiodon" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
+          : kind === "tailbluff"
+              ? "sit"
+              : kind === "litterdash"
+                  ? "play"
+                  : kind === "tongueflick"
+                      ? "talk"
+                      : kind === "sunbask"
+                          ? "talk"
+                          : kind === "bluetail"
+                              ? "talk"
+                              : kind === "stonehush"
+                                  ? "play"
+                                  : "sit";
+      return {
+          kind,
+          phase: kind === "plestiodon" ? "hold" : "go",
+          t: 0,
+          x,
+          lift: 0,
+          rot: 0,
+          anim,
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
   }
-
   function smoothstep(t) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
+      const x = Math.max(0, Math.min(1, t));
+      return x * x * (3 - 2 * x);
   }
-
-
-                      function plestiodonPose(t) {
-    const breath = Math.sin(t * 0.036) + 0.026 * Math.sin(t * 0.108);
-    const settle = Math.abs(Math.sin(t * 0.038));
-    return { lift: 0.004 + settle * 0.010, rot: 0.14 + breath * 0.46 };
+  function plestiodonPose(t) {
+      return {
+          lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+          rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+      };
   }
-
   function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.0032 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.11 * (1 - u) };
+      const u = Math.max(0, Math.min(1, t / RELEASE_S));
+      return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
-
   function tailbluffPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.tailbluff));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0010, lift: s * 0.040, rot: s * -5.2 * face, anim: "play" };
-    }
-    if (u < 0.86) {
-      const thrash = Math.sin((u - 0.10) / 0.76 * Math.PI * 6.4);
-      const bluff = Math.sin(t * 7.4) + 0.16 * Math.sin(t * 14.8);
-      return { x: fromX + face * (0.0010 + thrash * 0.0014 + bluff * 0.00028), lift: 0.032 + Math.abs(thrash) * 0.018 + Math.abs(bluff) * 0.008, rot: (-5.2 + thrash * 3.2 + bluff * 1.8) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0010 * (1 - s), lift: 0.005 * (1 - s), rot: -0.48 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.tailbluff));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX + face * s * 0.8, lift: s * 3.5, rot: s * 16 * face, anim: "sit" };
+      }
+      if (u < 0.78) {
+          const tip = Math.sin(t * 2.4);
+          return {
+              x: fromX + face * (0.8 + tip * 0.12),
+              lift: 3.5 + Math.abs(tip) * 1.5,
+              rot: face * (16 + tip * 10),
+              anim: "sit",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX + face * 0.8 * (1 - s),
+          lift: 1.4 * (1 - s),
+          rot: face * (4 * (1 - s)),
+          anim: "idle",
+      };
   }
   function litterdashPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.litterdash));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.09) {
-      const s = smoothstep(u / 0.09);
-      return { x: fromX + face * s * 0.0036, lift: s * 0.022, rot: s * 3.8 * face, anim: "play" };
-    }
-    if (u < 0.88) {
-      const zip = Math.sin((u - 0.09) / 0.79 * Math.PI * 5.6);
-      const leaf = Math.sin(t * 8.2) + 0.14 * Math.sin(t * 16.4);
-      return { x: fromX + face * (0.0036 + zip * 0.0028 + leaf * 0.00032), lift: 0.018 + Math.abs(zip) * 0.016 + Math.abs(leaf) * 0.006, rot: (3.8 + zip * 2.6 + leaf * 1.4) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0036 * (1 - s), lift: 0.004 * (1 - s), rot: 0.36 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.litterdash));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.12) {
+          const s = smoothstep(u / 0.12);
+          return { x: fromX, lift: s * 2.6, rot: s * -10 * face, anim: "play" };
+      }
+      if (u < 0.78) {
+          const bob = Math.sin(t * 2.8);
+          return {
+              x: fromX + face * bob * 0.5,
+              lift: 2.6 + Math.abs(bob) * 1.4,
+              rot: face * (-10 + bob * 12),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.2 * (1 - s),
+          rot: face * (-3 * (1 - s)),
+          anim: "idle",
+      };
   }
   function tongueflickPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.tongueflick));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX + face * s * 0.0006, lift: s * 0.016, rot: s * 2.8 * face, anim: "talk" };
-    }
-    if (u < 0.85) {
-      const flick = Math.sin((u - 0.11) / 0.74 * Math.PI * 7.2);
-      const chem = Math.sin(t * 9.6) + 0.12 * Math.sin(t * 19.2);
-      return { x: fromX + face * (0.0006 + flick * 0.0008 + chem * 0.00020), lift: 0.014 + Math.abs(flick) * 0.010 + Math.abs(chem) * 0.004, rot: (2.8 + flick * 1.8 + chem * 1.1) * face, anim: "talk" };
-    }
-    const s = smoothstep((u - 0.85) / 0.15);
-    return { x: fromX + face * 0.0006 * (1 - s), lift: 0.003 * (1 - s), rot: 0.30 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.tongueflick));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 3.8, rot: s * 14 * face, anim: "talk" };
+      }
+      if (u < 0.78) {
+          const cast = Math.sin(t * 2.6);
+          return {
+              x: fromX - face * cast * 0.16,
+              lift: 3.6 + Math.abs(cast) * 1.6,
+              rot: face * (14 + cast * 12),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.4 * (1 - s),
+          rot: face * (4 * (1 - s)),
+          anim: "idle",
+      };
   }
   function sunbaskPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.sunbask));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0004, lift: s * 0.010, rot: s * -1.8 * face, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const warm = Math.sin((u - 0.12) / 0.72 * Math.PI * 1.8);
-      const hush = Math.sin(t * 2.2) + 0.10 * Math.sin(t * 4.4);
-      return { x: fromX + face * (0.0004 + warm * 0.0005 + hush * 0.00016), lift: 0.008 + Math.abs(warm) * 0.008 + Math.abs(hush) * 0.003, rot: (-1.8 + warm * 1.2 + hush * 0.8) * face, anim: "sit" };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.0004 * (1 - s), lift: 0.002 * (1 - s), rot: -0.22 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.sunbask));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX + face * s * 0.6, lift: s * 2.8, rot: s * 12 * face, anim: "talk" };
+      }
+      if (u < 0.78) {
+          const nestle = Math.sin(t * 2.2);
+          return {
+              x: fromX + face * (0.6 + nestle * 0.1),
+              lift: 2.4 + Math.abs(nestle) * 1.8,
+              rot: face * (12 + nestle * 8),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX + face * 0.6 * (1 - s),
+          lift: 1.2 * (1 - s),
+          rot: face * (3 * (1 - s)),
+          anim: "idle",
+      };
+  }
+  function bluetailPose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.bluetail));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 2.8, rot: s * -12 * face, anim: "talk" };
+      }
+      if (u < 0.55) {
+          const tip = Math.sin(t * 2.0);
+          return {
+              x: fromX + face * tip * 0.08,
+              lift: 2.8 + tip * 1.6,
+              rot: face * (-12 + tip * 10),
+              anim: "talk",
+          };
+      }
+      if (u < 0.78) {
+          const hush = Math.sin(t * 0.9);
+          return {
+              x: fromX,
+              lift: 4.0 + Math.abs(hush) * 0.6,
+              rot: face * (-4 + hush * 3),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 2.0 * (1 - s),
+          rot: face * (-2 * (1 - s)),
+          anim: "idle",
+      };
+  }
+  function stonehushPose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.stonehush));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 3.4, rot: s * 12 * face, anim: "play" };
+      }
+      if (u < 0.55) {
+          const stretch = Math.sin(t * 2.3);
+          return {
+              x: fromX + face * stretch * 0.1,
+              lift: 3.4 + stretch * 1.4,
+              rot: face * (12 + stretch * 9),
+              anim: "play",
+          };
+      }
+      if (u < 0.78) {
+          const hush = Math.sin(t * 0.85);
+          return {
+              x: fromX,
+              lift: 4.4 + Math.abs(hush) * 0.7,
+              rot: face * (5 + hush * 3),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.8 * (1 - s),
+          rot: face * (2 * (1 - s)),
+          anim: "idle",
+      };
   }
   function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "tailbluff" && trick.kind !== "litterdash" && trick.kind !== "tongueflick" && trick.kind !== "sunbask") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "plestiodon") {
-      if (next.t < PLESTIODON_HOLD) {
-        const pose = plestiodonPose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      if (!trick || trick.phase === "done")
+          return trick;
+      if (shouldAbort(flags) && trick.kind !== "tailbluff" && trick.kind !== "litterdash" && trick.kind !== "tongueflick" && trick.kind !== "sunbask" && trick.kind !== "bluetail" && trick.kind !== "stonehush") {
+          return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
       }
-      if (next.t < PLESTIODON_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - PLESTIODON_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      const next = { ...trick, t: trick.t + Math.max(0, dt) };
+      if (next.kind === "plestiodon") {
+          if (next.t < PLESTIODON_HOLD) {
+              const pose = plestiodonPose(next.t);
+              next.phase = "hold";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          if (next.t < PLESTIODON_HOLD + RELEASE_S) {
+              const pose = releasePose(next.t - PLESTIODON_HOLD);
+              next.phase = "release";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "tailbluff") {
-      const pose = tailbluffPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "litterdash") {
-      const pose = litterdashPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "tongueflick") {
-      const pose = tongueflickPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = sunbaskPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      const hold = DUR[next.kind];
+      const u = next.t / hold;
+      const fromX = trick.fromX != null ? trick.fromX : trick.x;
+      if (next.kind === "tailbluff") {
+          const pose = tailbluffPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "litterdash") {
+          const pose = litterdashPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "tongueflick") {
+          const pose = tongueflickPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "sunbask") {
+          const pose = sunbaskPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "bluetail") {
+          const pose = bluetailPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = stonehushPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (u >= 1)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
 
   const api = {
@@ -369,6 +559,8 @@
     litterdashPose,
     tongueflickPose,
     sunbaskPose,
+    bluetailPose,
+    stonehushPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -379,7 +571,7 @@
     densdashPose,
     inkdashPose,
     densbluffPose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetSkinkTricks = api;
