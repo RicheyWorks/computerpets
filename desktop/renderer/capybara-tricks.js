@@ -1,352 +1,542 @@
-/** Soak ground tricks while idle. House neighborly Hydrochoerinae / Hydrochoerus hydrochaeris capybara river-bank desk life — mudwallow / sedgecrop / alarmwhistle / pilelean / hydrochoerus personality (mudwallow silt-bank wallow without naming soak or wallow or mud or silt or bank or bath or dip or sit or rest or lounge or nap, sedgecrop sedge graze crop without naming graze or crop or sedge or reed or chew or nibble or browse or eat or hay or grass or forage or mouth, alarmwhistle whistle alert peep without naming whistle or alarm or alert or peep or chirp or call or warn or bark or cry or yell or talk, pilelean social pile lean nudge without naming pile or lean or nudge or nose or social or huddle or press or rest or flank or shoulder, long hydrochoerus Hydrochoerus hydrochaeris surface-calm bank hush hold — never named wait or crouch or roost or look or stalk or monocle or fossick or anting or corvid or bipedrise or clawscar or berrypluck or denscrape or bluffhuff or mastforage or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash; window-play RUN and Call Soak leave capybara alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal own their tricks; guest slug Soak / key capybara — accept "capybara" and "soak" (roster slug soak; campaign Soak); do NOT name a trick capybara or soak or capybara or hydrochoerus or hydrochaeris or guinea_pig or whee or beaver or dam or otter or slick or bear or coal or porcupine or hedgehog or raccoon or skunk or opossum or ferret or weasel or turtle or ink or Bank or mining). Thank-yous denssoak / inksoak / denswallow. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web capybara-tricks.ts. Window-play RUN unchanged. True capybara Hydrochoerinae desk life — not beaver/guinea_pig/otter/turtle/bear/porcupine/rui clones. Gecko owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Soak ground tricks while idle — ultra-polish pass. House neighborly Hydrochoerinae / Hydrochoerus hydrochaeris capybara river-bank desk life (capybara / Soak) — mudwallow / sedgecrop / alarmwhistle / pilelean / scentgland / socialpile / hydrochoerus personality (mudwallow silt-bank wallow without naming soak or wallow or mud or silt or bank or bath or dip or sit or rest or lounge or nap alone, sedgecrop sedge graze crop without naming graze or crop or sedge or reed or chew or nibble or browse or eat or hay or grass or forage or mouth alone, alarmwhistle whistle alert peep without naming whistle or alarm or alert or peep or chirp or call or warn or bark or cry or yell or talk alone, pilelean social pile lean nudge without naming pile or lean or nudge or nose or social or huddle or press or rest or flank or shoulder alone, scentgland anal-scent gland mark without naming scent or gland or mark or rub or anal or musk or spray or sniff or nose alone, socialpile social pile huddle without naming social or pile or huddle or cluster or crowd or lean or rest or nap or group alone, long hydrochoerus Hydrochoerus hydrochaeris surface-calm bank hush hold (THE hydrochoerus sit_hold tell) — never named wait or crouch or roost or look or stalk or monocle or fossick or anting or corvid or bipedrise or clawscar or berrypluck or denscrape or bluffhuff or mastforage or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or guardhair or pinehush or erethizon or woodfell or paddleclap or lodgehaul or mudpack or aspen or divehush or castor or stillfeign or scrapnose or gapegrin or raftergrip or pouchcarry or prehensile or didelphis or footstomp or duffgrub or handwarn or plumeaim or scentraise or plantigrade or mephitis or pawdouse or litterdig or rearstand or maskpeer or dexterous or ringtail or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or denslide or spraint or lontra or nutbury or tailflick or cheekpouch or branchleap or barkscramble or scold or sciurus or wingwrap or traguscup or thumbcrawl or duskhang or eptesicus or flagtail or edgebrowse or earswivel or forestamp or odocoileus or curl or snuffle or anoint or bristle or root or trundle or wheel or tube or romp or steal or puff or noodle or corkscrew or slink or hang or flutter or still or stamp or raise or spray or skunk or stripe or playdead or grin or opossum or ferret or weasel or mink or otter or red_panda or wash or beaver or dam or porcupine or spine or quill or popcorn or rumble or hay or potato or zig or lookout or teeth or soak or graze or nuzzle or capybara or bankhush as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play RUN unchanged if already fine; Coal owns bipedrise/clawscar/berrypluck/denscrape/bluffhuff/mastforage/ursus; Spine owns toothclack/boleclimb/cambiumchew/dorsoflare/guardhair/pinehush/erethizon; Dam owns woodfell/paddleclap/lodgehaul/mudpack/aspen/divehush/castor; Grin owns stillfeign/scrapnose/gapegrin/raftergrip/pouchcarry/prehensile/didelphis; Stripe owns footstomp/duffgrub/handwarn/plumeaim/scentraise/plantigrade/mephitis; Wash owns pawdouse/litterdig/rearstand/maskpeer/dexterous/ringtail/procyon; Slick owns bellyglide/corkroll/shellcrunch/whiskernudge/denslide/spraint/lontra; Cache owns nutbury/tailflick/cheekpouch/branchleap/barkscramble/scold/sciurus; Cape owns wingwrap/traguscup/thumbcrawl/duskhang/echolocate/calcar/eptesicus; Flag owns flagtail/edgebrowse/earswivel/forestamp/stotbound/snortblow/odocoileus; Burr/hedgehog owns curl/snuffle/anoint/bristle/root/trundle/wheel; Whee/guinea_pig owns popcorn/rumble/hay/potato/zig/lookout/teeth — keep Hydrochoerinae-true not guinea_pig clone; Prickle/stickleback owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Quill/parrot owns quote/strut/fan/crack/flash/pineye/invert; Rui is red_panda — never name a trick red_panda or panda or rui or wash or raccoon or skunk or stripe or opossum or grin or beaver or dam or porcupine or spine; ferret owns tube/romp/steal/puff/noodle/corkscrew/slink; mining bee owns shaft/mass/vernal/fovea/andrena — do NOT collide with mining; Rue fox / Pip dog / Miso cat / Thimble rabbit stay distinct mammal peers; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum own bird tricks; guest slug Soak / key capybara only for isKey matching — accept "capybara" and "soak"; do NOT name a trick "capybara" or "soak" or "graze" or "nuzzle" or "bankhush" or "wallow" or "guinea_pig" or "whee" or "beaver" or "dam" or "otter" or "slick" or "bear" or "coal" or "porcupine" or "spine" or "muskrat" or "mink" or "coypu" or "nutria" or "raccoon" or "skunk" or "opossum" or "ferret" or "weasel" or "Bank" or "mining" or "hedgehog" or "burr" or "stickleback" or "parrot" or "black_bear") — not Coal black-bear life, not Dam beaver life, not Whee guinea_pig life, not Slick otter life, not Spine porcupine life, not Grin opossum life, not Stripe skunk life, not Wash raccoon life, not Cache squirrel life, not Cape bat life, not Flag deer life, not Rui red_panda life, not ferret clone, not bird life. Mudwallow silt-bank wallow without naming wallow alone, sedgecrop sedge-crop without naming crop alone, alarmwhistle alarm-whistle without naming whistle alone, pilelean pile-lean without naming lean alone, scentgland scent-gland without naming scent alone, socialpile social-pile without naming pile alone, hydrochoerus long sit_hold on the river bank (THE hydrochoerus sit_hold tell); denssoak / inksoak / denswallow thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web capybara-tricks.ts. Window-play RUN unchanged. Ethogram softs + freeze — never names soak/graze/nuzzle/capybara as bare ethogram-only trick kinds. True Hydrochoerus hydrochaeris Hydrochoerinae desk life only — distinct from Coal, Dam, Whee, Slick, Spine, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Pad / gecko. No cry inventing — thank-yous are silent desk motion only; no prefersHouseCry (no capybara.wav on disk). Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
   const TRICK_KEY = "capybara";
-  const TRICKS = ["mudwallow", "sedgecrop", "alarmwhistle", "pilelean", "hydrochoerus"];
+  const TRICKS = ["mudwallow", "sedgecrop", "alarmwhistle", "pilelean", "scentgland", "socialpile", "hydrochoerus"];
   const HAPPY = ["denssoak", "inksoak", "denswallow"];
-  const HAPPY_DUR = { denssoak: 2.02, inksoak: 2.16, denswallow: 2.08 };
-  const HYDROCHOERUS_HOLD = 20.36;
-  const RELEASE_S = 1.52;
-  const DUR = { hydrochoerus: HYDROCHOERUS_HOLD + RELEASE_S, mudwallow: 2.96, sedgecrop: 2.90, alarmwhistle: 3.12, pilelean: 3.04 };
-
+  const HAPPY_DUR = { denssoak: 1.70, inksoak: 1.84, denswallow: 1.76 };
+  const HYDROCHOERUS_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+      hydrochoerus: HYDROCHOERUS_HOLD + RELEASE_S,
+      mudwallow: 2.48,
+      sedgecrop: 2.42,
+      alarmwhistle: 2.56,
+      pilelean: 2.44,
+      scentgland: 2.40,
+      socialpile: 2.38,
+  };
   function canStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function shouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "eat" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function nextTrickWait(justFinished, rand, kind) {
-    const roll = rand == null ? Math.random() : rand;
-      if (kind === "hydrochoerus") return 120 + roll * 12;
-  if (kind === "mudwallow") return 19.4 + roll * 6.8;
-  if (kind === "sedgecrop") return 20.6 + roll * 7.4;
-  if (kind === "pilelean") return 22.0 + roll * 8.0;
-  return justFinished ? 18.0 + roll * 6.4 : 12.0 + roll * 5.6;
+      const roll = rand == null ? Math.random() : rand;
+      if (kind === "hydrochoerus")
+          return 40 + roll * 26;
+      if (kind === "scentgland" || kind === "socialpile" || kind === "mudwallow")
+          return 12.8 + roll * 9.4;
+      if (kind === "sedgecrop" || kind === "alarmwhistle" || kind === "pilelean")
+          return 11.6 + roll * 8.5;
+      return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
-
   function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "hydrochoerus";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "hydrochoerus") {
-      if (roll < 0.26) return "mudwallow";
-      if (roll < 0.5) return "sedgecrop";
-      if (roll < 0.74) return "alarmwhistle";
-      return "pilelean";
-    }
-    if (lastKind === "mudwallow") {
-      if (roll < 0.26) return "hydrochoerus";
-      if (roll < 0.5) return "sedgecrop";
-      if (roll < 0.74) return "alarmwhistle";
-      return "pilelean";
-    }
-    if (lastKind === "sedgecrop") {
-      if (roll < 0.22) return "hydrochoerus";
-      if (roll < 0.44) return "mudwallow";
-      if (roll < 0.68) return "alarmwhistle";
-      return "pilelean";
-    }
-    if (roll < 0.2) return "hydrochoerus";
-    if (roll < 0.4) return "mudwallow";
-    if (roll < 0.6) return "sedgecrop";
-    if (roll < 0.8) return "alarmwhistle";
-    return "pilelean";
+      if (musicOn)
+          return "hydrochoerus";
+      const roll = rand == null ? Math.random() : rand;
+      if (lastKind === "hydrochoerus") {
+          if (roll < 0.17)
+              return "mudwallow";
+          if (roll < 0.33)
+              return "sedgecrop";
+          if (roll < 0.49)
+              return "alarmwhistle";
+          if (roll < 0.65)
+              return "pilelean";
+          if (roll < 0.83)
+              return "scentgland";
+          return "socialpile";
+      }
+      if (lastKind === "mudwallow") {
+          if (roll < 0.16)
+              return "hydrochoerus";
+          if (roll < 0.32)
+              return "sedgecrop";
+          if (roll < 0.48)
+              return "alarmwhistle";
+          if (roll < 0.64)
+              return "pilelean";
+          if (roll < 0.82)
+              return "scentgland";
+          return "socialpile";
+      }
+      if (lastKind === "sedgecrop") {
+          if (roll < 0.14)
+              return "hydrochoerus";
+          if (roll < 0.3)
+              return "mudwallow";
+          if (roll < 0.46)
+              return "alarmwhistle";
+          if (roll < 0.62)
+              return "pilelean";
+          if (roll < 0.8)
+              return "scentgland";
+          return "socialpile";
+      }
+      if (lastKind === "scentgland" || lastKind === "socialpile") {
+          if (roll < 0.14)
+              return "hydrochoerus";
+          if (roll < 0.3)
+              return "mudwallow";
+          if (roll < 0.46)
+              return "sedgecrop";
+          if (roll < 0.62)
+              return "alarmwhistle";
+          if (roll < 0.78)
+              return "pilelean";
+          return lastKind === "scentgland" ? "socialpile" : "scentgland";
+      }
+      if (roll < 0.14)
+          return "hydrochoerus";
+      if (roll < 0.28)
+          return "mudwallow";
+      if (roll < 0.42)
+          return "sedgecrop";
+      if (roll < 0.56)
+          return "alarmwhistle";
+      if (roll < 0.7)
+          return "pilelean";
+      if (roll < 0.85)
+          return "scentgland";
+      return "socialpile";
   }
-
   function happyCanStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function happyShouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function wantsThankYou(key) {
-    return key === TRICK_KEY || key === "soak";
+      return key === TRICK_KEY || key === "soak";
   }
-
   function startThankYou(key, lastKind, x, facing, flags) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
+      if (!wantsThankYou(key))
+          return null;
+      if (!happyCanStart(flags || { cmd: "idle" }))
+          return null;
+      const pick = pickHappy(lastKind);
+      return { happy: beginHappy(pick, x, facing), kind: pick };
   }
-
   function pickHappy(lastKind, rand) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
+      const pool = HAPPY.filter((k) => k !== lastKind);
+      const list = pool.length ? pool : [...HAPPY];
+      const roll = rand == null ? Math.random() : rand;
+      return list[Math.floor(roll * list.length)] || list[0];
   }
-
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denssoak";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: name === "denssoak" ? "sit" : name === "inksoak" ? "play" : "sit",
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
+      const name = HAPPY.indexOf(kind) >= 0 ? kind : "denssoak";
+      return {
+          kind: name,
+          happy: true,
+          phase: "go",
+          t: 0,
+          x: x,
+          lift: 0,
+          rot: 0,
+          anim: name === "denssoak" ? "sit" : name === "inksoak" ? "play" : "sit",
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
   }
-
-                      function denssoakPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denssoak));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.016, rot: s * 1.95, dx: 0, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const flash = Math.sin(t * 2.9) + 0.12 * Math.sin(t * 5.8);
-      return { lift: 0.016 + Math.abs(flash) * 0.008, rot: 1.95 + flash * 1.10, dx: flash * 0.00056, anim: "sit" };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.003 * (1 - s), rot: 0.24 * (1 - s), dx: 0, anim: "idle" };
+  function denssoakPose(t) {
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denssoak));
+      if (u < 0.14) {
+          const s = u / 0.14;
+          return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
+      }
+      if (u < 0.78) {
+          const flash = Math.sin(t * 2.2);
+          return {
+              lift: 2.8 + Math.abs(flash) * 1.4,
+              rot: 12 + flash * 8,
+              dx: flash * 0.08,
+              anim: "sit",
+          };
+      }
+      const s = (u - 0.78) / 0.22;
+      return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
   function inksoakPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inksoak));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.040, rot: s * -2.45, dx: s * 0.00122, anim: "play" };
-    }
-    if (u < 0.85) {
-      const spring = Math.sin(t * 2.5) + 0.13 * Math.sin(t * 5.0);
-      return { lift: 0.040 + Math.abs(spring) * 0.013, rot: -2.45 + spring * 2.00, dx: spring * 0.00150, anim: "play" };
-    }
-    const s = (u - 0.85) / 0.15;
-    return { lift: 0.006 * (1 - s), rot: -0.32 * (1 - s), dx: 0, anim: "sit" };
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inksoak));
+      if (u < 0.12) {
+          const s = u / 0.12;
+          return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
+      }
+      if (u < 0.8) {
+          const wriggle = Math.sin(t * 2.6);
+          return {
+              lift: 3.4 + Math.abs(wriggle) * 1.6,
+              rot: -14 + wriggle * 10,
+              dx: wriggle * 0.12,
+              anim: "play",
+          };
+      }
+      const s = (u - 0.8) / 0.2;
+      return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
   function denswallowPose(t) {
-    return { lift: 0.0072 + Math.abs(Math.sin(t * 0.122)) * 0.0108, rot: Math.sin(t * 0.122) * 0.96, dx: Math.sin(t * 0.090) * 0.00060, anim: "sit" };
+      return {
+          lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+          rot: Math.sin(t * 0.58) * 8,
+          dx: Math.sin(t * 0.4) * 0.06,
+          anim: "sit",
+      };
   }
   function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "denssoak") {
-      const pose = denssoakPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "inksoak") {
-      const pose = inksoakPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = denswallowPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      if (!happy || happy.phase === "done")
+          return happy;
+      if (happyShouldAbort(flags)) {
+          return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+      }
+      const next = { ...happy, t: happy.t + Math.max(0, dt) };
+      const hold = HAPPY_DUR[next.kind];
+      if (next.kind === "denssoak") {
+          const pose = denssoakPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "inksoak") {
+          const pose = inksoakPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = denswallowPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (next.t >= hold)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
-
   function sleepHoldFrame(_key, _frameCount) {
-    return null;
+      return null;
   }
-
   function beginTrick(kind, x, facing) {
-    const anim =
-      kind === "hydrochoerus"
-        ? "sit"
-        : kind === "mudwallow"
+      const anim = kind === "hydrochoerus"
           ? "sit"
-          : kind === "sedgecrop"
-            ? "play"
-            : kind === "alarmwhistle"
-              ? "talk"
-              : kind === "pilelean"
-                ? "talk"
-                : "sit";
-    return {
-      kind: kind,
-      phase: kind === "hydrochoerus" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
+          : kind === "mudwallow"
+              ? "sit"
+              : kind === "sedgecrop"
+                  ? "play"
+                  : kind === "alarmwhistle"
+                      ? "talk"
+                      : kind === "pilelean"
+                          ? "talk"
+                          : kind === "scentgland"
+                              ? "talk"
+                              : kind === "socialpile"
+                                  ? "play"
+                                  : "sit";
+      return {
+          kind,
+          phase: kind === "hydrochoerus" ? "hold" : "go",
+          t: 0,
+          x,
+          lift: 0,
+          rot: 0,
+          anim,
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
   }
-
   function smoothstep(t) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
+      const x = Math.max(0, Math.min(1, t));
+      return x * x * (3 - 2 * x);
   }
-
-
-                      function hydrochoerusPose(t) {
-    const breath = Math.sin(t * 0.034) + 0.028 * Math.sin(t * 0.102);
-    const hush = Math.abs(Math.sin(t * 0.040));
-    return { lift: 0.005 + hush * 0.011, rot: 0.16 + breath * 0.48 };
+  function hydrochoerusPose(t) {
+      return {
+          lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+          rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+      };
   }
-
   function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.0034 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.13 * (1 - u) };
+      const u = Math.max(0, Math.min(1, t / RELEASE_S));
+      return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
-
   function mudwallowPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.mudwallow));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0008, lift: s * -0.028, rot: s * 3.2 * face, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const wallow = Math.sin((u - 0.12) / 0.72 * Math.PI * 2.2);
-      const silt = Math.sin(t * 3.4) + 0.15 * Math.sin(t * 6.8);
-      return { x: fromX + face * (0.0008 + wallow * 0.0008 + silt * 0.00022), lift: -0.024 + Math.abs(wallow) * 0.010 + Math.abs(silt) * 0.004, rot: (3.2 + wallow * 1.8 + silt * 1.1) * face, anim: "sit" };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.0008 * (1 - s), lift: -0.006 * (1 - s), rot: 0.38 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.mudwallow));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX + face * s * 0.8, lift: s * 3.5, rot: s * 16 * face, anim: "sit" };
+      }
+      if (u < 0.78) {
+          const tip = Math.sin(t * 2.4);
+          return {
+              x: fromX + face * (0.8 + tip * 0.12),
+              lift: 3.5 + Math.abs(tip) * 1.5,
+              rot: face * (16 + tip * 10),
+              anim: "sit",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX + face * 0.8 * (1 - s),
+          lift: 1.4 * (1 - s),
+          rot: face * (4 * (1 - s)),
+          anim: "idle",
+      };
   }
   function sedgecropPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.sedgecrop));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0018, lift: s * -0.016, rot: s * 4.6 * face, anim: "play" };
-    }
-    if (u < 0.86) {
-      const crop = Math.sin((u - 0.10) / 0.76 * Math.PI * 4.6);
-      const chew = Math.sin(t * 6.8) + 0.14 * Math.sin(t * 13.6);
-      return { x: fromX + face * (0.0018 + crop * 0.0010 + chew * 0.00022), lift: -0.012 + Math.abs(crop) * 0.014 + Math.abs(chew) * 0.005, rot: (4.6 + crop * 2.6 + chew * 1.4) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0018 * (1 - s), lift: -0.003 * (1 - s), rot: 0.46 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.sedgecrop));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.12) {
+          const s = smoothstep(u / 0.12);
+          return { x: fromX, lift: s * 2.6, rot: s * -10 * face, anim: "play" };
+      }
+      if (u < 0.78) {
+          const bob = Math.sin(t * 2.8);
+          return {
+              x: fromX + face * bob * 0.5,
+              lift: 2.6 + Math.abs(bob) * 1.4,
+              rot: face * (-10 + bob * 12),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.2 * (1 - s),
+          rot: face * (-3 * (1 - s)),
+          anim: "idle",
+      };
   }
   function alarmwhistlePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.alarmwhistle));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0012, lift: s * 0.036, rot: s * -3.4 * face, anim: "talk" };
-    }
-    if (u < 0.86) {
-      const peep = Math.sin((u - 0.10) / 0.76 * Math.PI * 5.4);
-      const alert = Math.sin(t * 7.0) + 0.16 * Math.sin(t * 14.0);
-      return { x: fromX + face * (0.0012 + peep * 0.0012 + alert * 0.00028), lift: 0.032 + Math.abs(peep) * 0.014 + Math.abs(alert) * 0.006, rot: (-3.4 + peep * 3.0 + alert * 1.6) * face, anim: "talk" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0012 * (1 - s), lift: 0.006 * (1 - s), rot: -0.42 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.alarmwhistle));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 3.8, rot: s * 14 * face, anim: "talk" };
+      }
+      if (u < 0.78) {
+          const cast = Math.sin(t * 2.6);
+          return {
+              x: fromX - face * cast * 0.16,
+              lift: 3.6 + Math.abs(cast) * 1.6,
+              rot: face * (14 + cast * 12),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.4 * (1 - s),
+          rot: face * (4 * (1 - s)),
+          anim: "idle",
+      };
   }
   function pileleanPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.pilelean));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX + face * s * -0.0014, lift: s * 0.014, rot: s * 5.8 * face, anim: "talk" };
-    }
-    if (u < 0.86) {
-      const lean = Math.sin((u - 0.11) / 0.75 * Math.PI * 3.4);
-      const nudge = Math.sin(t * 5.2) + 0.15 * Math.sin(t * 10.4);
-      return { x: fromX + face * (-0.0014 + lean * 0.0014 + nudge * 0.00026), lift: 0.012 + Math.abs(lean) * 0.011 + Math.abs(nudge) * 0.005, rot: (5.8 + lean * 2.2 + nudge * 1.5) * face, anim: "talk" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * -0.0014 * (1 - s), lift: 0.003 * (1 - s), rot: 0.54 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.pilelean));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX + face * s * 0.6, lift: s * 2.8, rot: s * 12 * face, anim: "talk" };
+      }
+      if (u < 0.78) {
+          const nestle = Math.sin(t * 2.2);
+          return {
+              x: fromX + face * (0.6 + nestle * 0.1),
+              lift: 2.4 + Math.abs(nestle) * 1.8,
+              rot: face * (12 + nestle * 8),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX + face * 0.6 * (1 - s),
+          lift: 1.2 * (1 - s),
+          rot: face * (3 * (1 - s)),
+          anim: "idle",
+      };
+  }
+  function scentglandPose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.scentgland));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 2.8, rot: s * -12 * face, anim: "talk" };
+      }
+      if (u < 0.55) {
+          const tip = Math.sin(t * 2.0);
+          return {
+              x: fromX + face * tip * 0.08,
+              lift: 2.8 + tip * 1.6,
+              rot: face * (-12 + tip * 10),
+              anim: "talk",
+          };
+      }
+      if (u < 0.78) {
+          const hush = Math.sin(t * 0.9);
+          return {
+              x: fromX,
+              lift: 4.0 + Math.abs(hush) * 0.6,
+              rot: face * (-4 + hush * 3),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 2.0 * (1 - s),
+          rot: face * (-2 * (1 - s)),
+          anim: "idle",
+      };
+  }
+  function socialpilePose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.socialpile));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 3.4, rot: s * 12 * face, anim: "play" };
+      }
+      if (u < 0.55) {
+          const stretch = Math.sin(t * 2.3);
+          return {
+              x: fromX + face * stretch * 0.1,
+              lift: 3.4 + stretch * 1.4,
+              rot: face * (12 + stretch * 9),
+              anim: "play",
+          };
+      }
+      if (u < 0.78) {
+          const hush = Math.sin(t * 0.85);
+          return {
+              x: fromX,
+              lift: 4.4 + Math.abs(hush) * 0.7,
+              rot: face * (5 + hush * 3),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.8 * (1 - s),
+          rot: face * (2 * (1 - s)),
+          anim: "idle",
+      };
   }
   function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "mudwallow" && trick.kind !== "sedgecrop" && trick.kind !== "alarmwhistle" && trick.kind !== "pilelean") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "hydrochoerus") {
-      if (next.t < HYDROCHOERUS_HOLD) {
-        const pose = hydrochoerusPose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      if (!trick || trick.phase === "done")
+          return trick;
+      if (shouldAbort(flags) && trick.kind !== "mudwallow" && trick.kind !== "sedgecrop" && trick.kind !== "alarmwhistle" && trick.kind !== "pilelean" && trick.kind !== "scentgland" && trick.kind !== "socialpile") {
+          return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
       }
-      if (next.t < HYDROCHOERUS_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - HYDROCHOERUS_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      const next = { ...trick, t: trick.t + Math.max(0, dt) };
+      if (next.kind === "hydrochoerus") {
+          if (next.t < HYDROCHOERUS_HOLD) {
+              const pose = hydrochoerusPose(next.t);
+              next.phase = "hold";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          if (next.t < HYDROCHOERUS_HOLD + RELEASE_S) {
+              const pose = releasePose(next.t - HYDROCHOERUS_HOLD);
+              next.phase = "release";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "mudwallow") {
-      const pose = mudwallowPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "sedgecrop") {
-      const pose = sedgecropPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "alarmwhistle") {
-      const pose = alarmwhistlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = pileleanPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      const hold = DUR[next.kind];
+      const u = next.t / hold;
+      const fromX = trick.fromX != null ? trick.fromX : trick.x;
+      if (next.kind === "mudwallow") {
+          const pose = mudwallowPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "sedgecrop") {
+          const pose = sedgecropPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "alarmwhistle") {
+          const pose = alarmwhistlePose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "pilelean") {
+          const pose = pileleanPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "scentgland") {
+          const pose = scentglandPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = socialpilePose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (u >= 1)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
 
   const api = {
@@ -369,6 +559,8 @@
     sedgecropPose,
     alarmwhistlePose,
     pileleanPose,
+    scentglandPose,
+    socialpilePose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -379,7 +571,7 @@
     denssoakPose,
     inksoakPose,
     denswallowPose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetCapybaraTricks = api;
