@@ -1012,7 +1012,7 @@ globalThis.PetFlyAgaricTricks = OverlayFlyAgaric;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Lattice idle-life done; next house-order guest still lacking tricks is Mane / lions_mane", () => {
+test("notes: Lattice idle-life done; next house-order guest still lacking tricks is Puff / puffball", () => {
   assert.equal(T.TRICK_KEY, "morel");
   assert.equal(T.wantsThankYou("lattice"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

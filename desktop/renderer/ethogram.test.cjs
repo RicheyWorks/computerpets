@@ -396,6 +396,22 @@ test("turkey_tail ethogram is Ring ultra (trametes + softs + freeze, not lean/zo
   assert.equal(names.length, 8);
 });
 
+test("lions_mane ethogram is Mane ultra (hericium + softs + freeze, not lean/beard/still)", () => {
+  const names = E.actsFor("lions_mane").map((a) => a.name);
+  assert.ok(names.includes("hericium"));
+  assert.ok(names.includes("spine_soft"));
+  assert.ok(names.includes("icicle_soft"));
+  assert.ok(names.includes("cascade_soft"));
+  assert.ok(names.includes("wound_soft"));
+  assert.ok(names.includes("pompon_soft"));
+  assert.ok(names.includes("hydnoid_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("beard"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));

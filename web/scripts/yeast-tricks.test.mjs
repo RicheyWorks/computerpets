@@ -261,8 +261,8 @@ test("Starter tricks start only on idle ground", () => {
   assert.deepEqual([...TurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
   assert.deepEqual([...OverlayTurkeyTail.TRICKS], ["pore", "bracket", "band", "leathery", "trametes", "concentric", "tomentum"]);
   assert.deepEqual([...TurkeyTail.HAPPY], ["versicolor", "ochracea", "pubescens"]);
-  assert.deepEqual([...LionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium"]);
-  assert.deepEqual([...OverlayLionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium"]);
+  assert.deepEqual([...LionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
+  assert.deepEqual([...OverlayLionsMane.TRICKS], ["spine", "icicle", "cascade", "wound", "hericium", "pompon", "hydnoid"]);
   assert.deepEqual([...LionsMane.HAPPY], ["erinaceus", "coralloides", "americanum"]);
   assert.equal(T.TRICKS.includes("spine"), false);
   assert.equal(T.TRICKS.includes("icicle"), false);
