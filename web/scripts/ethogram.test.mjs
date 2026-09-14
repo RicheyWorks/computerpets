@@ -320,7 +320,13 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.ok(names("puffball").includes("puff"));
   assert.ok(names("yeast").includes("rise"));
   assert.ok(names("lichen").includes("share-still"));
-  assert.ok(names("oyster").includes("lean"));
+  assert.ok(names("oyster").includes("pleurotus"));
+  assert.ok(names("oyster").includes("sporulate_soft"));
+  assert.ok(names("oyster").includes("hypha_soft"));
+  assert.ok(names("oyster").includes("freeze"));
+  assert.equal(names("oyster").includes("lean"), false);
+  assert.equal(names("oyster").includes("flush"), false);
+  assert.equal(names("oyster").includes("still"), false);
   assert.ok(names("fly_agaric").includes("flush"));
   for (const key of FAR) {
     const acts = names(key);
