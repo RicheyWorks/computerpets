@@ -377,7 +377,7 @@ test("ultra-polish: Sepia bone/strike/zebra lifts are Rui-visible (not micro idl
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Sepia idle-life ultra done; Chamber / nautilus ultra done; next house-order ultra guest is Pulse / moon_jelly (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Sepia idle-life ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; next house-order ultra guest is Ochre / sea_star (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
   assert.equal(T.TRICK_KEY, "cuttlefish");
   assert.equal(T.wantsThankYou("sepia"), true);
   assert.equal(OverlayGround.tricksFor("cuttlefish"), Overlay);
