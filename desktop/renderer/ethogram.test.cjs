@@ -348,6 +348,22 @@ test("fly_agaric ethogram is Cap ultra (amanita + softs + freeze, not lean/flush
   assert.equal(names.length, 8);
 });
 
+test("morel ethogram is Lattice ultra (morchella + softs + freeze, not lean/still/still_hold)", () => {
+  const names = E.actsFor("morel").map((a) => a.name);
+  assert.ok(names.includes("morchella"));
+  assert.ok(names.includes("alveolus_soft"));
+  assert.ok(names.includes("ridge_soft"));
+  assert.ok(names.includes("ephemeral_soft"));
+  assert.ok(names.includes("sclerotium_soft"));
+  assert.ok(names.includes("costa_soft"));
+  assert.ok(names.includes("hymenium_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("still_hold"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
