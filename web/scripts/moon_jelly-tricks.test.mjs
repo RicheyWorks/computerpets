@@ -89,7 +89,7 @@ test("Pulse tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["bell", "oral", "lucent", "trail", "medusa"]);
+  assert.deepEqual([...T.TRICKS], ["bell", "oral", "lucent", "trail", "medusa", "rhopalium", "horseshoe"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -136,11 +136,11 @@ test("Pulse tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["bell", "oral", "lucent", "trail", "medusa"]);
+  assert.deepEqual([...Overlay.TRICKS], ["bell", "oral", "lucent", "trail", "medusa", "rhopalium", "horseshoe"]);
   assert.deepEqual([...Overlay.HAPPY], ["halo", "lumen", "gel"]);
 });
 
-test("bell/oral/lucent/trail/medusa are house-moon-jelly-true, not copies of prior guests", () => {
+test("bell/oral/lucent/trail/medusa/rhopalium/horseshoe are house-moon-jelly-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bell = T.beginTrick("bell", 80, 1);
   assert.equal(bell.anim, "sit");
@@ -171,7 +171,19 @@ test("bell/oral/lucent/trail/medusa are house-moon-jelly-true, not copies of pri
   assert.equal(medusa.anim, "walk");
   const medusaMid = T.stepTrick(medusa, 0.5, ground);
   assert.ok(Math.abs(medusaMid.lift) > 0.05 || Math.abs(medusaMid.rot) > 1 || Math.abs(medusaMid.x - 80) > 0.05);
-  const trailDone = T.stepTrick(trail, 1.6, ground);
+  const rhopalium = T.beginTrick("rhopalium", 80, 1);
+  assert.equal(rhopalium.anim, "talk");
+  const rhopaliumMid = T.stepTrick(rhopalium, 0.5, ground);
+  assert.ok(Math.abs(rhopaliumMid.lift) > 0.3 || Math.abs(rhopaliumMid.rot) > 1 || Math.abs(rhopaliumMid.x - 80) > 0.05);
+  const rhopaliumDone = T.stepTrick(rhopalium, T.DUR.rhopalium + 0.1, ground);
+  assert.equal(rhopaliumDone.phase, "done");
+  const horseshoe = T.beginTrick("horseshoe", 80, 1);
+  assert.equal(horseshoe.anim, "play");
+  const horseshoeMid = T.stepTrick(horseshoe, 0.5, ground);
+  assert.ok(Math.abs(horseshoeMid.lift) > 0.3 || Math.abs(horseshoeMid.rot) > 1 || Math.abs(horseshoeMid.x - 80) > 0.05);
+  const horseshoeDone = T.stepTrick(horseshoe, T.DUR.horseshoe + 0.1, ground);
+  assert.equal(horseshoeDone.phase, "done");
+  const trailDone = T.stepTrick(trail, T.DUR.trail + 0.1, ground);
   assert.equal(trailDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -181,6 +193,8 @@ test("bell/oral/lucent/trail/medusa are house-moon-jelly-true, not copies of pri
     assert.equal(mod.TRICKS.includes("lucent"), false);
     assert.equal(mod.TRICKS.includes("trail"), false);
     assert.equal(mod.TRICKS.includes("medusa"), false);
+    assert.equal(mod.TRICKS.includes("rhopalium"), false);
+    assert.equal(mod.TRICKS.includes("horseshoe"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -294,7 +308,7 @@ test("ground registry keeps prior guests gated; Pulse selectable; prior guests s
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["bell", "oral", "lucent", "trail", "medusa"]);
+  assert.deepEqual([...T.TRICKS], ["bell", "oral", "lucent", "trail", "medusa", "rhopalium", "horseshoe"]);
   assert.equal(T.wantsThankYou("moon_jelly"), true);
   assert.equal(T.wantsThankYou("pulse"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -385,7 +399,7 @@ test("ground registry keeps prior guests gated; Pulse selectable; prior guests s
   assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...Overlay.TRICKS], ["bell", "oral", "lucent", "trail", "medusa"]);
+  assert.deepEqual([...Overlay.TRICKS], ["bell", "oral", "lucent", "trail", "medusa", "rhopalium", "horseshoe"]);
   assert.equal(Overlay.TRICKS.includes("chime"), false);
   assert.equal(Overlay.TRICKS.includes("pulse"), false);
   assert.equal(Overlay.TRICKS.includes("drift"), false);
@@ -398,7 +412,25 @@ test("ground registry keeps prior guests gated; Pulse selectable; prior guests s
   assert.equal(Overlay.TRICKS.includes("legend"), false);
 });
 
-test("notes: Pulse idle-life done; next house-order guest still lacking tricks is Cling / sea_star", () => {
+test("ultra-polish: Pulse bell/rhopalium/horseshoe lifts are Rui-visible (not micro idle-gen)", () => {
+  const bel = T.beginTrick("bell", 80, 1);
+  const mid = T.stepTrick(bel, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `bell mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `bell mid lift ${mid.lift}`);
+  const rh = T.beginTrick("rhopalium", 80, 1);
+  const r2 = T.stepTrick(rh, T.DUR.rhopalium * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift > 2 || Math.abs(r2.rot) > 4 || Math.abs(r2.x - 80) > 1, `rhopalium mid ${r2.lift}/${r2.rot}/${r2.x}`);
+  const hs = T.beginTrick("horseshoe", 80, 1);
+  const h2 = T.stepTrick(hs, T.DUR.horseshoe * 0.4, { cmd: "idle" });
+  assert.ok(h2.lift > 2 || Math.abs(h2.rot) > 8 || Math.abs(h2.x - 80) > 0.3, `horseshoe mid ${h2.lift}/${h2.rot}/${h2.x}`);
+  const tr = T.beginTrick("trail", 80, 1);
+  const t2 = T.stepTrick(tr, T.DUR.trail * 0.4, { cmd: "idle" });
+  assert.ok(t2.lift > 0.5 || Math.abs(t2.rot) > 4 || Math.abs(t2.x - 80) > 0.5, `trail mid ${t2.lift}/${t2.rot}/${t2.x}`);
+  assert.ok(Overlay.rhopaliumPose && Overlay.horseshoePose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+});
+
+test("notes: Pulse idle-life ultra done; next house-order ultra guest is Ochre / sea_star (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
   assert.equal(T.TRICK_KEY, "moon_jelly");
   assert.equal(T.wantsThankYou("pulse"), true);
   assert.equal(OverlayGround.tricksFor("moon_jelly"), Overlay);
@@ -419,8 +451,8 @@ test("notes: Pulse idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  assert.equal(OverlayGround.tricksFor("sea_star"), null);
+  assert.equal(OverlayGround.tricksFor("sea_star") == null, true);
   assert.equal(OverlayGround.wantsThankYou("sea_star"), false);
-  assert.equal(OverlayGround.tricksFor("cling"), null);
+  assert.equal(OverlayGround.tricksFor("cling") == null, true);
   assert.equal(OverlayGround.wantsThankYou("cling"), false);
 });

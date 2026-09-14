@@ -65,7 +65,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "octopus": (_a("hide", "sit_hold", 2.4, 4, "sit"), _a("sucker_soft", "walk", 1.1, 2), _a("jet_soft", "dart", 1.0, 2), _a("veil_soft", "play", 1.15, 2, "play"), _a("tinker_soft", "play", 1.1, 2, "play"), _a("papilla_soft", "sit", 1.2, 2, "sit"), _a("ooze_soft", "walk", 1.15, 2), _a("freeze", "freeze", 1.4, 2)),
     "cuttlefish": (_a("hide", "sit_hold", 2.4, 4, "sit"), _a("pupil_soft", "talk", 1.1, 2, "talk"), _a("chroma_soft", "play", 1.15, 2, "play"), _a("hover_soft", "walk", 1.1, 2), _a("blot_soft", "play", 1.15, 2, "play"), _a("strike_soft", "walk", 1.0, 2), _a("zebra_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "nautilus": (_a("hide", "sit_hold", 2.4, 4, "sit"), _a("siphuncle_soft", "walk", 1.1, 2), _a("nacre_soft", "sit", 1.15, 2, "sit"), _a("pinhole_soft", "talk", 1.1, 2, "talk"), _a("fringe_soft", "play", 1.15, 2, "play"), _a("hyponome_soft", "walk", 1.0, 2), _a("aperture_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
-    "moon_jelly": (_a("pulse", "pulse", 1.2, 4), _a("drift", "bob", 1.6, 2)),
+    "moon_jelly": (_a("hide", "sit_hold", 2.4, 4, "sit"), _a("oral_soft", "talk", 1.1, 2, "talk"), _a("lucent_soft", "sit", 1.15, 2, "sit"), _a("trail_soft", "play", 1.15, 2, "play"), _a("medusa_soft", "walk", 1.1, 2), _a("rhopalium_soft", "talk", 1.1, 2, "talk"), _a("horseshoe_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "sea_star": (_a("cling", "sit_hold", 2.8, 4, "sit"), _a("still", "freeze", 2.2, 2)),
     "hermit_crab": (_a("inspect", "freeze", 1.2, 3), _a("shuffle", "wiggle", 0.9, 2)),
     "horseshoe_crab": (_a("plow", "wiggle", 1.0, 2), _a("still", "freeze", 2.0, 3)),
