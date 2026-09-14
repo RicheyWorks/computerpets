@@ -946,8 +946,8 @@ test("notes: Brood idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.wantsThankYou("mantis"), true);
   assert.equal(OverlayGround.tricksFor("fold"), OverlayMantis);
   assert.equal(OverlayGround.wantsThankYou("fold"), true);
-  assert.deepEqual([...Mantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea"]);
-  assert.deepEqual([...OverlayMantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea"]);
+  assert.deepEqual([...Mantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea", "ootheca", "deimatic"]);
+  assert.deepEqual([...OverlayMantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea", "ootheca", "deimatic"]);
   assert.equal(OverlayGround.tricksFor("bumblebee"), null);
   assert.equal(OverlayGround.wantsThankYou("bumblebee"), false);
   assert.equal(OverlayGround.tricksFor("thrum"), null);
