@@ -184,6 +184,18 @@ test("sundew ethogram is Dew ultra (rosette + softs + freeze, not curl/nod/lean)
   assert.equal(names.includes("lean"), false);
 });
 
+
+test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
+  const names = E.actsFor("monarch").map((a) => a.name);
+  assert.ok(names.includes("danaus"));
+  assert.ok(names.includes("cremaster_soft"));
+  assert.ok(names.includes("tarsus_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("flutter"), false);
+  assert.equal(names.includes("migrate"), false);
+  assert.equal(names.includes("still"), false);
+});
+
 test("honeybee ethogram is Comb ultra (hive + softs + freeze, not waggle/dart/still)", () => {
   const names = E.actsFor("honeybee").map((a) => a.name);
   assert.ok(names.includes("hive"));
@@ -212,6 +224,7 @@ test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
     assert.equal(names.includes("eat"), false, key);
   }
   assert.ok(E.actsFor("honeybee").some((a) => a.name === "hive"));
+  assert.ok(E.actsFor("monarch").some((a) => a.name === "danaus"));
   assert.ok(E.actsFor("firefly").some((a) => a.name === "flash"));
   assert.ok(E.actsFor("luna").some((a) => a.name === "still"));
   assert.ok(E.actsFor("cicada").some((a) => a.name === "emerge"));
