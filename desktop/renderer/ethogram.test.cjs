@@ -701,6 +701,10 @@ test("far keys never schedule scratch or tongue", () => {
   assert.ok(E.actsFor("cyst").some((a) => a.name === "sporocyst_soft"));
   assert.ok(E.actsFor("cyst").some((a) => a.name === "tachyzoite_soft"));
   assert.ok(E.actsFor("cyst").some((a) => a.name === "freeze"));
+  assert.ok(E.actsFor("frog").some((a) => a.name === "lentic"));
+  assert.ok(E.actsFor("frog").some((a) => a.name === "toepad_soft"));
+  assert.ok(E.actsFor("frog").some((a) => a.name === "webbing_soft"));
+  assert.ok(E.actsFor("frog").some((a) => a.name === "freeze"));
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wake"), false);
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wait"), false);
   assert.equal(E.actsFor("cyst").some((a) => a.name === "still"), false);
