@@ -1,6 +1,7 @@
-/** Dart ground tricks while idle. House darner — hawking / tandem / nymph / whir / anax personality (hawking Anax lamp-air prey patrol on the blotter — never named hawk (ethogram+window Hawk) / dart (Coin+ethogram) / hover (Sepia+ethogram) / bob / still / soar / jstroke (Spark) / stream (Ghost) / wing (Kite) / flutter (Fan), tandem oviposition-pair clasp perch — never named silk (Ghost) / chrysalis (Milk) / coil / tuck / curl / nest (Clip), nymph aquatic-larva memory with labium-strike recall — never named larva / crawl (Cling) / paddle (Ink) / soak / mucilage (Dew) / digest, whir rapid wing-engine warm-up — never named buzz (Relay) / click (Relay) / wing / flutter / semaphore (Spark) / elytra (Spark) / flash / glow, anax desk life as an Anax junius Aeshnidae green darner week; not Spark / Ghost / Milk / Comb / Echo / Ember / Quill / Kite / Fan / Dew / Pulse / Relay / *Dragon copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop darner-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark or *Dragon electrical clone. Window-play Hawk unchanged — never names hawk. Ethogram hawk/dart/hover/bob/still/freeze unchanged. Spark owns lantern/jstroke/semaphore/elytra/photinus; Ghost owns plumose/lunule/silk/stream/actias; Milk owns asclepias/oyamel/warning/chrysalis/danaus; Comb owns figure/corbicula/hex/proboscis/hive; Quill owns fan/flash; Kite owns wing; Fan owns flutter; Echo owns preen/bobble; Ember owns cinder/blaze/shed/lift/return; Sepia owns hover; Relay owns buzz/click and happy spark; Rui owns dance; Pulse guest owns moon-jelly; Dragon happy owns glow. Aeshnidae Anax desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Dart ground tricks while idle — ultra-polish pass. House darner — hawking / tandem / nymph / whir / anax / obelisk / ommatidia personality (hawking Anax lamp-air prey patrol on the blotter — never named hawk (ethogram-old+window Hawk) / dart (Coin+ethogram) / hover (Sepia+ethogram) / bob / still / soar / jstroke (Spark) / stream (Ghost) / wing (Kite) / flutter (Fan) / photocyte (Spark), tandem oviposition-pair clasp perch — never named silk (Ghost) / chrysalis (Milk) / coil / tuck / curl / nest (Clip) / sternite (Spark), nymph aquatic-larva memory with labium-strike recall — never named larva / crawl (Cling) / paddle (Ink) / soak / mucilage (Dew) / digest, whir rapid wing-engine warm-up — never named buzz (Relay) / click (Relay) / wing / flutter / semaphore (Spark) / elytra (Spark) / flash / glow, anax desk life as an Anax junius Aeshnidae green darner week, obelisk sun-point thermoregulation handstand (species-true odonate obelisk — never named freeze / still / catalepsy (Twig) / bask / perch / soar), ommatidia compound-eye scan (species-true Aeshnidae ommatidia — never named ocelli (Comb) / facet / watch / stare / eye); not Spark lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite, Ghost plumose/lunule/silk/stream/actias/aphagy/cauda, Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Echo preen/bobble, Ember cinder/blaze, Quill fan/flash, Relay buzz/click, Rui dance, Sepia hover, Pulse medusa, Dragon glow, or Twig rocking/catalepsy copies). Obelisk is the iconic sun-point abdomen raise (not window Hawk, not ethogram-old hawk/hover/still). Ommatidia is the iconic compound-eye scan (not Comb ocelli). Window-play Hawk unchanged — never names hawk. Ethogram keeps anax sit_hold; adds hawking/tandem/nymph/whir/obelisk/ommatidia softs + freeze (replaces thin hawk/hover/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via darner.wav. Thank-yous junius / labium / exuvia. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `darner-tricks.js`. True house-darner desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark or *Dragon electrical clone. Next guest ultra is Twig / stick. Aeshnidae Anax desk life only. No cry inventing — thank-yous are silent desk motion only. */
+
 export const TRICK_KEY = "darner";
-export const TRICKS = ["hawking", "tandem", "nymph", "whir", "anax"] as const;
+export const TRICKS = ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"] as const;
 export const HAPPY = ["junius", "labium", "exuvia"] as const;
 export type DarnerTrickKind = (typeof TRICKS)[number];
 export type DarnerHappyKind = (typeof HAPPY)[number];
@@ -44,10 +45,22 @@ export type DarnerHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { junius: 1.22, labium: 1.34, exuvia: 1.26 } as const;
-export const ANAX_HOLD = 12.6;
-export const RELEASE_S = 0.74;
-export const DUR = { anax: ANAX_HOLD + RELEASE_S, hawking: 1.48, tandem: 1.42, nymph: 1.54, whir: 1.36 } as const;
+export const HAPPY_DUR: Record<DarnerHappyKind, number> = {
+  junius: 1.24,
+  labium: 1.34,
+  exuvia: 1.22,
+};
+export const ANAX_HOLD = 11.4;
+export const RELEASE_S = 0.66;
+export const DUR: Record<DarnerTrickKind, number> = {
+  anax: ANAX_HOLD + RELEASE_S,
+  hawking: 1.48,
+  tandem: 1.42,
+  nymph: 1.54,
+  whir: 1.36,
+  obelisk: 1.64,
+  ommatidia: 1.68,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -77,38 +90,56 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: DarnerTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "anax") return 48 + roll * 32;
-  if (kind === "hawking") return 14 + roll * 11;
-  if (kind === "whir") return 15 + roll * 10;
-  return justFinished ? 10.2 + roll * 8 : 5.2 + roll * 6.8;
+  if (kind === "anax") return 40 + roll * 24;
+  if (kind === "obelisk" || kind === "ommatidia" || kind === "whir") return 12 + roll * 9;
+  if (kind === "hawking" || kind === "tandem" || kind === "nymph") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: DarnerTrickKind | string | null) {
   if (musicOn) return "anax" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "anax") {
-    if (roll < 0.26) return "hawking" as const;
-    if (roll < 0.48) return "tandem" as const;
-    if (roll < 0.72) return "nymph" as const;
-    return "whir" as const;
+    if (roll < 0.16) return "hawking" as const;
+    if (roll < 0.32) return "tandem" as const;
+    if (roll < 0.48) return "nymph" as const;
+    if (roll < 0.64) return "whir" as const;
+    if (roll < 0.82) return "obelisk" as const;
+    return "ommatidia" as const;
   }
   if (lastKind === "hawking") {
-    if (roll < 0.28) return "anax" as const;
-    if (roll < 0.5) return "tandem" as const;
-    if (roll < 0.72) return "nymph" as const;
-    return "whir" as const;
+    if (roll < 0.18) return "anax" as const;
+    if (roll < 0.34) return "tandem" as const;
+    if (roll < 0.5) return "nymph" as const;
+    if (roll < 0.66) return "whir" as const;
+    if (roll < 0.83) return "obelisk" as const;
+    return "ommatidia" as const;
   }
   if (lastKind === "tandem") {
-    if (roll < 0.22) return "anax" as const;
-    if (roll < 0.44) return "hawking" as const;
-    if (roll < 0.66) return "nymph" as const;
-    return "whir" as const;
+    if (roll < 0.16) return "anax" as const;
+    if (roll < 0.32) return "hawking" as const;
+    if (roll < 0.48) return "nymph" as const;
+    if (roll < 0.64) return "whir" as const;
+    if (roll < 0.82) return "obelisk" as const;
+    return "ommatidia" as const;
   }
-  if (roll < 0.2) return "anax" as const;
-  if (roll < 0.4) return "hawking" as const;
-  if (roll < 0.6) return "tandem" as const;
-  if (roll < 0.8) return "nymph" as const;
-  return "whir" as const;
+  if (lastKind === "obelisk" || lastKind === "ommatidia") {
+    if (roll < 0.16) return "anax" as const;
+    if (roll < 0.32) return "hawking" as const;
+    if (roll < 0.48) return "tandem" as const;
+    if (roll < 0.64) return "nymph" as const;
+    if (roll < 0.8) return "whir" as const;
+    return lastKind === "obelisk" ? ("ommatidia" as const) : ("obelisk" as const);
+  }
+  if (roll < 0.14) return "anax" as const;
+  if (roll < 0.28) return "hawking" as const;
+  if (roll < 0.42) return "tandem" as const;
+  if (roll < 0.56) return "nymph" as const;
+  if (roll < 0.7) return "whir" as const;
+  if (roll < 0.85) return "obelisk" as const;
+  return "ommatidia" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -175,59 +206,62 @@ export function beginHappy(kind: DarnerHappyKind | string, x: number, facing: 1 
 }
 
 export function juniusPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.junius));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 0.13, rot: s * 3.2, dx: 0, anim: "play" as TrickAnim };
-    }
-    if (u < 0.7) {
-      const patrol = Math.sin(t * 11.2) + 0.28 * Math.sin(t * 18.4);
-      return {
-        lift: 0.13 + Math.abs(patrol) * 0.048,
-        rot: 3.2 + patrol * 3.6,
-        dx: patrol * 0.01,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.7) / 0.3;
-    return { lift: 0.07 * (1 - s), rot: 1.4 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.junius));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.9, rot: s * 12, dx: 0, anim: "play" as TrickAnim };
   }
-export function labiumPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.labium));
-    if (u < 0.18) {
-      const s = u / 0.18;
-      return { lift: s * -0.015, rot: s * -2.1, dx: s * 0.012, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.18) / 0.37;
-      const jab = Math.sin(s * Math.PI);
-      return {
-        lift: -0.015 + jab * 0.04,
-        rot: -2.1 + jab * 4.2,
-        dx: 0.012 + jab * 0.018,
-        anim: "sit" as TrickAnim,
-      };
-    }
-    if (u < 0.84) {
-      const warm = Math.sin(t * 0.72);
-      return {
-        lift: -0.01 + Math.abs(warm) * 0.022,
-        rot: -0.8 + warm * 1.4,
-        dx: warm * 0.004,
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: -0.008 * (1 - s), rot: -0.5 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function exuviaPose(t: number) {
+  if (u < 0.7) {
+    const patrol = Math.sin(t * 11.2) + 0.28 * Math.sin(t * 18.4);
     return {
-      lift: 0.032 + Math.abs(Math.sin(t * 0.88)) * 0.045,
-      rot: Math.sin(t * 1.05) * 2.8,
-      dx: Math.sin(t * 0.52) * 0.011,
-      anim: "talk" as TrickAnim,
+      lift: 2.9 + Math.abs(patrol) * 1.35,
+      rot: 12 + patrol * 10,
+      dx: patrol * 0.22,
+      anim: "play" as TrickAnim,
     };
   }
+  const s = (u - 0.7) / 0.3;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function labiumPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.labium));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * -1.15, rot: s * -6.8, dx: s * 0.18, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.18) / 0.37;
+    const jab = Math.sin(s * Math.PI);
+    return {
+      lift: -1.15 + jab * 1.4,
+      rot: -6.8 + jab * 12,
+      dx: 0.18 + jab * 0.35,
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.84) {
+    const warm = Math.sin(t * 0.72);
+    return {
+      lift: -0.75 + Math.abs(warm) * 0.9,
+      rot: -2.4 + warm * 5.6,
+      dx: warm * 0.18,
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = (u - 0.84) / 0.16;
+  return { lift: -0.55 * (1 - s), rot: -2.0 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function exuviaPose(t: number) {
+  return {
+    lift: 2.25 + Math.abs(Math.sin(t * 0.88)) * 1.15,
+    rot: Math.sin(t * 1.05) * 9.5,
+    dx: Math.sin(t * 0.52) * 0.22,
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: DarnerHappy, dt: number, flags: TrickFlags): DarnerHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -271,7 +305,11 @@ export function beginTrick(kind: DarnerTrickKind, x: number, facing: 1 | -1): Da
             ? "sit"
             : kind === "whir"
               ? "talk"
-              : "sit";
+              : kind === "obelisk"
+                ? "sit"
+                : kind === "ommatidia"
+                  ? "talk"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "anax" ? "hold" : "go",
@@ -291,126 +329,197 @@ function smoothstep(t: number) {
 }
 
 export function anaxPose(t: number) {
-    const breath = Math.sin(t * 0.2) + 0.035 * Math.sin(t * 1.05);
-    const engine = Math.abs(Math.sin(t * 0.62));
-    return {
-      lift: 0.026 + engine * 0.016,
-      rot: 0.32 + breath * 0.58,
-    };
-  }
+  const breath = Math.sin(t * 0.2) + 0.035 * Math.sin(t * 1.05);
+  const engine = Math.abs(Math.sin(t * 0.62));
+  return {
+    lift: 2.45 + engine * 1.15,
+    rot: 4.2 + breath * 3.4,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.03 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.34 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.25 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.8 * (1 - u) };
+}
+
 export function hawkingPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.hawking));
-    if (u < 0.1) {
-      const s = smoothstep(u / 0.1);
-      return { x: fromX, lift: s * 0.16, rot: s * 4.2 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.1) / 0.68;
-      const zag = Math.sin(s * Math.PI * 5.4) + 0.3 * Math.sin(s * Math.PI * 9.2);
-      return {
-        x: fromX + facing * (0.04 * s + zag * 0.018),
-        lift: 0.16 + Math.abs(zag) * 0.055,
-        rot: facing * (4.2 + zag * 5.8),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const u = Math.max(0, Math.min(1, t / DUR.hawking));
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX, lift: s * 3.1, rot: s * 11 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.1) / 0.68;
+    const zag = Math.sin(s * Math.PI * 5.4) + 0.3 * Math.sin(s * Math.PI * 9.2);
     return {
-      x: fromX + facing * 0.02 * (1 - s),
-      lift: 0.16 * (1 - s),
-      rot: facing * (2.0 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * (0.55 * s + zag * 0.28),
+      lift: 3.1 + Math.abs(zag) * 1.25,
+      rot: facing * (11 + zag * 9),
+      anim: "play" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.35 * (1 - s),
+    lift: 3.1 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function tandemPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.tandem));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX + facing * 0.015 * s, lift: s * 0.05, rot: s * -2.8 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.16) / 0.56;
-      const clasp = Math.sin(s * Math.PI * 2.4);
-      return {
-        x: fromX + facing * (0.015 + 0.008 * s) + facing * clasp * 0.006,
-        lift: 0.05 + Math.abs(clasp) * 0.028,
-        rot: facing * (-2.8 + clasp * 2.2),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+  const u = Math.max(0, Math.min(1, t / DUR.tandem));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX + facing * 0.22 * s, lift: s * 2.2, rot: s * -8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.16) / 0.56;
+    const clasp = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * 0.01 * (1 - s),
-      lift: 0.04 * (1 - s),
-      rot: facing * (-1.4 * (1 - s)),
+      x: fromX + facing * (0.22 + 0.18 * s) + facing * clasp * 0.12,
+      lift: 2.2 + Math.abs(clasp) * 1.1,
+      rot: facing * (-8 + clasp * 6.5),
       anim: "sit" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + facing * 0.18 * (1 - s),
+    lift: 1.8 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function nymphPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.nymph));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * -0.05, rot: s * 1.6 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.42) {
-      const s = (u - 0.14) / 0.28;
-      const strike = Math.sin(s * Math.PI);
-      return {
-        x: fromX + facing * strike * 0.028,
-        lift: -0.05 + strike * 0.06,
-        rot: facing * (1.6 + strike * 4.5),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.42) / 0.4;
-      const silt = Math.sin(s * Math.PI * 1.8);
-      return {
-        x: fromX + facing * 0.01 * (1 - s) + facing * silt * 0.005,
-        lift: -0.02 + silt * 0.03,
-        rot: facing * (2.4 + silt * 2.0),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  const u = Math.max(0, Math.min(1, t / DUR.nymph));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * -1.25, rot: s * 6.5 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.42) {
+    const s = (u - 0.14) / 0.28;
+    const strike = Math.sin(s * Math.PI);
     return {
-      x: fromX,
-      lift: -0.012 * (1 - s),
-      rot: facing * (1.0 * (1 - s)),
+      x: fromX + facing * strike * 0.45,
+      lift: -1.25 + strike * 1.8,
+      rot: facing * (6.5 + strike * 10),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.82) {
+    const s = (u - 0.42) / 0.4;
+    const silt = Math.sin(s * Math.PI * 1.8);
+    return {
+      x: fromX + facing * 0.18 * (1 - s) + facing * silt * 0.1,
+      lift: -0.55 + silt * 0.95,
+      rot: facing * (4.5 + silt * 5),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX,
+    lift: -0.35 * (1 - s),
+    rot: facing * (2.5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function whirPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.whir));
-    if (u < 0.1) {
-      const s = smoothstep(u / 0.1);
-      return { x: fromX, lift: s * 0.08, rot: s * 2.4 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const s = (u - 0.1) / 0.7;
-      const engine = Math.sin(s * Math.PI * 14) + 0.4 * Math.sin(s * Math.PI * 22);
-      return {
-        x: fromX + facing * engine * 0.008,
-        lift: 0.08 + Math.abs(engine) * 0.05,
-        rot: facing * (2.4 + engine * 6.2),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
+  const u = Math.max(0, Math.min(1, t / DUR.whir));
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX, lift: s * 2.8, rot: s * 9 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const s = (u - 0.1) / 0.7;
+    const engine = Math.sin(s * Math.PI * 14) + 0.4 * Math.sin(s * Math.PI * 22);
     return {
-      x: fromX,
-      lift: 0.08 * (1 - s),
-      rot: facing * (1.2 * (1 - s)),
+      x: fromX + facing * engine * 0.14,
+      lift: 2.8 + Math.abs(engine) * 1.35,
+      rot: facing * (9 + engine * 11),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX,
+    lift: 2.8 * (1 - s),
+    rot: facing * (4.5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function obeliskPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.obelisk));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.55, rot: s * -8.5 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.45) {
+    const s = (u - 0.14) / 0.31;
+    return {
+      x: fromX - facing * 0.12 * s,
+      lift: 2.55 + s * 2.4,
+      rot: facing * (-8.5 + s * 4),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.82) {
+    const sun = Math.sin(t * 3.2);
+    return {
+      x: fromX - facing * 0.12,
+      lift: 4.9 + Math.abs(sun) * 0.7,
+      rot: facing * (-4.5 + sun * 3.5),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return {
+    x: fromX - facing * 0.12 * (1 - s),
+    lift: 4.9 * (1 - s),
+    rot: facing * (-3.5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function ommatidiaPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.ommatidia));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.3, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const scan = Math.sin(t * 12.4) + 0.35 * Math.sin(t * 19.1);
+    return {
+      x: fromX + facing * scan * 0.14,
+      lift: 3.3 + Math.abs(scan) * 1.45,
+      rot: facing * (10 + scan * 9),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return {
+    x: fromX,
+    lift: 3.3 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: DarnerTrick, dt: number, flags: TrickFlags): DarnerTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "hawking" && trick.kind !== "tandem" && trick.kind !== "nymph" && trick.kind !== "whir") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "hawking" &&
+    trick.kind !== "tandem" &&
+    trick.kind !== "nymph" &&
+    trick.kind !== "whir" &&
+    trick.kind !== "obelisk" &&
+    trick.kind !== "ommatidia"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: DarnerTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -435,26 +544,39 @@ export function stepTrick(trick: DarnerTrick, dt: number, flags: TrickFlags): Da
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "hawking") {
-    const pose = hawkingPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = hawkingPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "tandem") {
-    const pose = tandemPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = tandemPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "nymph") {
-    const pose = nymphPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = nymphPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "whir") {
+    const pose = whirPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "obelisk") {
+    const pose = obeliskPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = whirPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = ommatidiaPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
