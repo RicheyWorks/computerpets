@@ -783,7 +783,14 @@ assert.ok(names("toad").includes("freeze"));
   assert.equal(names("box_turtle").includes("shut"), false);
   assert.equal(names("box_turtle").includes("walk"), false);
   assert.equal(names("box_turtle").includes("still"), false);
-  assert.ok(names("tuatara").includes("still"));
+  assert.ok(names("tuatara").includes("punctatus"));
+  assert.ok(names("tuatara").includes("parietalgaze_soft"));
+  assert.ok(names("tuatara").includes("acrodont_soft"));
+  assert.ok(names("tuatara").includes("diapsid_soft"));
+  assert.ok(names("tuatara").includes("freeze"));
+  assert.equal(names("tuatara").includes("still"), false);
+  assert.equal(names("tuatara").includes("crest"), false);
+  assert.equal(names("tuatara").includes("watch"), false);
   for (const key of CREEK) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
