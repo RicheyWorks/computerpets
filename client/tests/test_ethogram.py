@@ -634,7 +634,10 @@ def test_only_scratching_mammals_scratch():
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
         assert "tongue" not in names, key
-    assert "sit_web" in [a["name"] for a in acts_for("orb_weaver")]
+    assert "araneus" in [a["name"] for a in acts_for("orb_weaver")]
+    assert "dragline_soft" in [a["name"] for a in acts_for("orb_weaver")]
+    assert "viscid_soft" in [a["name"] for a in acts_for("orb_weaver")]
+    assert "freeze" in [a["name"] for a in acts_for("orb_weaver")]
     assert "leap" in [a["name"] for a in acts_for("jumping_spider")]
     assert "prowl" in [a["name"] for a in acts_for("wolf_spider")]
     assert "flick" in [a["name"] for a in acts_for("tarantula")]
