@@ -79,7 +79,7 @@ test("Blush tricks start only on idle ground", () => {
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
-  assert.deepEqual([...MilkSnake.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile"]);
+  assert.deepEqual([...MilkSnake.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile", "cipher", "verse"]);
   assert.deepEqual([...T.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
