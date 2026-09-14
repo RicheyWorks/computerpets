@@ -148,7 +148,7 @@
     beaver: [A("castor", "sit_hold", 2.4, 4, "sit"), A("woodfell_soft", "play", 1.2, 2, "play"), A("paddleclap_soft", "play", 1.2, 2, "play"), A("lodgehaul_soft", "talk", 1.2, 2, "talk"), A("mudpack_soft", "talk", 1.2, 2, "talk"), A("aspen_soft", "play", 1.2, 2, "play"), A("divehush_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
   capybara: [A("soak", "sit_hold", 2.2, 4, "sit"), A("graze", "eat", 1.6, 5, "eat"), A("nuzzle", "nuzzle", 1.0, 3, "play")],
     porcupine: [A("erethizon", "sit_hold", 2.4, 4, "sit"), A("toothclack_soft", "talk", 1.2, 2, "talk"), A("boleclimb_soft", "play", 1.2, 2, "play"), A("cambiumchew_soft", "play", 1.2, 2, "play"), A("dorsoflare_soft", "talk", 1.2, 2, "talk"), A("guardhair_soft", "talk", 1.2, 2, "talk"), A("pinehush_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
-    black_bear: [A("forage", "eat", 1.4, 4, "eat"), A("sit", "sit_hold", 2.2, 4, "sit"), A("huff", "pulse", 0.8, 2)],
+    black_bear: [A("ursus", "sit_hold", 2.4, 4, "sit"), A("bipedrise_soft", "talk", 1.2, 2, "talk"), A("clawscar_soft", "play", 1.2, 2, "play"), A("berrypluck_soft", "play", 1.2, 2, "play"), A("denscrape_soft", "talk", 1.2, 2, "talk"), A("bluffhuff_soft", "talk", 1.2, 2, "talk"), A("mastforage_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
     gecko: [A("climb", "wiggle", 1.0, 5), A("chirp", "talk", 0.7, 3, "talk"), A("cling", "sit_hold", 2.0, 2, "sit")],
     anole: [A("flash", "pulse", 0.8, 5), A("brown", "nod", 1.2, 2, "sit"), A("still", "freeze", 1.6, 2)],
     skink: [A("dash", "dart", 0.5, 5), A("tail", "pulse", 0.8, 3), A("still", "freeze", 1.4, 2)],
