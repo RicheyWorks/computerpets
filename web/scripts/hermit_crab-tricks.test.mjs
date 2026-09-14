@@ -93,7 +93,7 @@ test("Tenant tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...T.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -146,11 +146,11 @@ test("Tenant tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...Overlay.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...Overlay.HAPPY], ["scrap", "fit", "lease"]);
 });
 
-test("swap/antenna/scuttle/withdraw/vacancy are house-hermit-true, not copies of prior guests", () => {
+test("swap/antenna/scuttle/withdraw/vacancy/chela/bailer are house-hermit-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const withdraw = T.beginTrick("withdraw", 80, 1);
   assert.equal(withdraw.anim, "sit");
@@ -181,7 +181,15 @@ test("swap/antenna/scuttle/withdraw/vacancy are house-hermit-true, not copies of
   assert.equal(vacancy.anim, "walk");
   const vacancyMid = T.stepTrick(vacancy, 0.5, ground);
   assert.ok(Math.abs(vacancyMid.lift) > 0.05 || Math.abs(vacancyMid.rot) > 1 || Math.abs(vacancyMid.x - 80) > 0.05);
-  const antennaDone = T.stepTrick(antenna, 1.5, ground);
+  const chela = T.beginTrick("chela", 80, 1);
+  assert.equal(chela.anim, "play");
+  const chelaMid = T.stepTrick(chela, T.DUR.chela * 0.4, ground);
+  assert.ok(Math.abs(chelaMid.lift) > 0.05 || Math.abs(chelaMid.rot) > 1 || Math.abs(chelaMid.x - 80) > 0.05);
+  const bailer = T.beginTrick("bailer", 80, 1);
+  assert.equal(bailer.anim, "talk");
+  const bailerMid = T.stepTrick(bailer, T.DUR.bailer * 0.4, ground);
+  assert.ok(Math.abs(bailerMid.lift) > 0.05 || Math.abs(bailerMid.rot) > 1 || Math.abs(bailerMid.x - 80) > 0.05);
+  const antennaDone = T.stepTrick(antenna, T.DUR.antenna + 0.1, ground);
   assert.equal(antennaDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -191,6 +199,8 @@ test("swap/antenna/scuttle/withdraw/vacancy are house-hermit-true, not copies of
     assert.equal(mod.TRICKS.includes("scuttle"), false);
     assert.equal(mod.TRICKS.includes("withdraw"), false);
     assert.equal(mod.TRICKS.includes("vacancy"), false);
+    assert.equal(mod.TRICKS.includes("chela"), false);
+    assert.equal(mod.TRICKS.includes("bailer"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -202,6 +212,12 @@ test("swap/antenna/scuttle/withdraw/vacancy are house-hermit-true, not copies of
   assert.equal(T.TRICKS.includes("chime"), false);
   assert.equal(T.TRICKS.includes("pulse"), false);
   assert.equal(T.TRICKS.includes("drift"), false);
+  assert.equal(SeaStar.TRICKS.includes("chela"), false);
+  assert.equal(SeaStar.TRICKS.includes("bailer"), false);
+  assert.equal(MoonJelly.TRICKS.includes("chela"), false);
+  assert.equal(Nautilus.TRICKS.includes("chela"), false);
+  assert.equal(Octopus.TRICKS.includes("chela"), false);
+  assert.equal(Axolotl.TRICKS.includes("bailer"), false);
   assert.equal(T.TRICKS.includes("jet"), false);
   assert.equal(T.TRICKS.includes("mantle"), false);
   assert.equal(T.TRICKS.includes("bone"), false);
@@ -219,6 +235,8 @@ test("swap/antenna/scuttle/withdraw/vacancy are house-hermit-true, not copies of
   assert.equal(T.TRICKS.includes("crawl"), false);
   assert.equal(T.TRICKS.includes("evert"), false);
   assert.equal(T.TRICKS.includes("penta"), false);
+  assert.equal(T.TRICKS.includes("madre"), false);
+  assert.equal(T.TRICKS.includes("papula"), false);
   assert.equal(T.TRICKS.includes("scurry"), false);
   assert.equal(T.TRICKS.includes("nest"), false);
   assert.equal(T.TRICKS.includes("cheek"), false);
@@ -339,7 +357,7 @@ test("ground registry keeps prior guests gated; Tenant selectable; prior guests 
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...T.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...T.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.equal(T.wantsThankYou("hermit_crab"), true);
   assert.equal(T.wantsThankYou("tenant"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -445,7 +463,7 @@ test("ground registry keeps prior guests gated; Tenant selectable; prior guests 
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...Overlay.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...Overlay.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.equal(Overlay.TRICKS.includes("knob"), false);
   assert.equal(Overlay.TRICKS.includes("tenant"), false);
   assert.equal(Overlay.TRICKS.includes("bell"), false);
@@ -467,7 +485,26 @@ test("ground registry keeps prior guests gated; Tenant selectable; prior guests 
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
 });
 
-test("notes: Tenant idle-life done; next house-order guest still lacking tricks is Ledger / horseshoe_crab", () => {
+
+test("ultra-polish: Tenant withdraw/chela/bailer lifts are Rui-visible (not micro idle-gen)", () => {
+  const wd = T.beginTrick("withdraw", 80, 1);
+  const mid = T.stepTrick(wd, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `withdraw mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `withdraw mid lift ${mid.lift}`);
+  const ch = T.beginTrick("chela", 80, 1);
+  const c2 = T.stepTrick(ch, T.DUR.chela * 0.4, { cmd: "idle" });
+  assert.ok(c2.lift > 2 || Math.abs(c2.rot) > 4 || Math.abs(c2.x - 80) > 1, `chela mid ${c2.lift}/${c2.rot}/${c2.x}`);
+  const bl = T.beginTrick("bailer", 80, 1);
+  const b2 = T.stepTrick(bl, T.DUR.bailer * 0.4, { cmd: "idle" });
+  assert.ok(b2.lift > 2 || Math.abs(b2.rot) > 8 || Math.abs(b2.x - 80) > 0.3, `bailer mid ${b2.lift}/${b2.rot}/${b2.x}`);
+  const sc = T.beginTrick("scuttle", 80, 1);
+  const s2 = T.stepTrick(sc, T.DUR.scuttle * 0.4, { cmd: "idle" });
+  assert.ok(s2.lift > 0.5 || Math.abs(s2.rot) > 4 || Math.abs(s2.x - 80) > 0.5, `scuttle mid ${s2.lift}/${s2.rot}/${s2.x}`);
+  assert.ok(Overlay.chelaPose && Overlay.bailerPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+});
+
+test("notes: Tenant idle-life ultra done; next house-order ultra guest is Ledger / horseshoe_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "hermit_crab");
   assert.equal(T.wantsThankYou("tenant"), true);
   assert.equal(OverlayGround.tricksFor("hermit_crab"), Overlay);
@@ -496,8 +533,8 @@ test("notes: Tenant idle-life done; next house-order guest still lacking tricks 
   assert.equal(OverlayGround.tricksFor("clip"), OverlayHamster);
   assert.equal(OverlayGround.tricksFor("hedgehog"), OverlayHedgehog);
   assert.equal(OverlayGround.tricksFor("burr"), OverlayHedgehog);
-  assert.equal(OverlayGround.tricksFor("horseshoe_crab"), null);
+  assert.equal(OverlayGround.tricksFor("horseshoe_crab") == null, true);
   assert.equal(OverlayGround.wantsThankYou("horseshoe_crab"), false);
-  assert.equal(OverlayGround.tricksFor("ledger"), null);
+  assert.equal(OverlayGround.tricksFor("ledger") == null, true);
   assert.equal(OverlayGround.wantsThankYou("ledger"), false);
 });

@@ -1601,7 +1601,7 @@ test("wingbanner/puddlesip/flutterhop/tailglidesettle/papiliohush are Papilio-sw
   assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
   assert.deepEqual([...Seahorse.TRICKS], ["coil", "buoy", "siphon", "swivel", "pouch"]);
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
@@ -1740,7 +1740,7 @@ test("ground registry keeps prior guests gated; Banner selectable; prior guests 
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...T.TRICKS], ["wingbanner", "puddlesip", "flutterhop", "tailglidesettle", "papiliohush"]);
   assert.deepEqual([...Periwinkle.TRICKS], ["spiralcrawl", "filmgraze", "opercshut", "tidehuddle", "littorinahush"]);
   assert.deepEqual([...Periwinkle.HAPPY], ["densspire", "inkspire", "denslittorina"]);
@@ -2323,7 +2323,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...OverlayHorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...OverlayMoss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
@@ -2527,7 +2527,7 @@ test("notes: Banner idle-life done; next house-order guest still lacking tricks 
   assert.equal(Caecilian.TRICKS.includes("chelate"), false);
   assert.equal(Caecilian.TRICKS.includes("spiralcrawl"), false);
   assert.equal(T.TRICKS.includes("annulate"), false);
-  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
   assert.equal(T.TRICKS.includes("antenna"), false);
   assert.equal(T.TRICKS.includes("telson"), false);

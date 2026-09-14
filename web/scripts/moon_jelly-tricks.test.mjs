@@ -430,7 +430,7 @@ test("ultra-polish: Pulse bell/rhopalium/horseshoe lifts are Rui-visible (not mi
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Pulse idle-life ultra done; Ochre / sea_star ultra done; next house-order ultra guest is Tenant / hermit_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Pulse idle-life ultra done; Tenant / hermit_crab ultra done; next house-order ultra guest is Ledger / horseshoe_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
   assert.equal(T.TRICK_KEY, "moon_jelly");
   assert.equal(T.wantsThankYou("pulse"), true);
   assert.equal(OverlayGround.tricksFor("moon_jelly"), Overlay);
