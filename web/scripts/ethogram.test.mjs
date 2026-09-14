@@ -558,6 +558,11 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("jumping_spider").includes("ame_soft"));
   assert.ok(names("jumping_spider").includes("scopula_soft"));
   assert.ok(names("jumping_spider").includes("freeze"));
+  assert.ok(names("wolf_spider").includes("tigrosa"));
+  assert.ok(names("wolf_spider").includes("spur_soft"));
+  assert.ok(names("wolf_spider").includes("apron_soft"));
+  assert.ok(names("wolf_spider").includes("cursor_soft"));
+  assert.ok(names("wolf_spider").includes("freeze"));
   for (const key of ROOST) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
@@ -608,7 +613,7 @@ assert.ok(names("toad").includes("freeze"));
   }
   assert.ok(names("orb_weaver").includes("araneus"));
   assert.ok(names("jumping_spider").includes("phidippus"));
-  assert.ok(names("wolf_spider").includes("prowl"));
+  assert.ok(names("wolf_spider").includes("tigrosa"));
   assert.ok(names("tarantula").includes("flick"));
   assert.ok(names("widow").includes("hang"));
   assert.ok(names("harvestman").includes("walk"));

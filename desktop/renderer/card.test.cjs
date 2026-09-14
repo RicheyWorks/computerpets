@@ -243,6 +243,7 @@ assert.equal(C.prefersHouseCry("pond_snail"), true);
   assert.equal(C.prefersHouseCry("haloarchaea"), true);
   assert.equal(C.prefersHouseCry("orb_weaver"), true);
   assert.equal(C.prefersHouseCry("jumping_spider"), true);
+  assert.equal(C.prefersHouseCry("wolf_spider"), true);
   assert.equal(C.prefersHouseCry("chlamydomonas"), true);
   const hearth = C.speakOpts("hearth", 50);
   assert.ok(hearth.rate < 0.86);
