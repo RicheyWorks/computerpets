@@ -456,7 +456,13 @@ assert.equal(names("silica").includes("shed"), false);
   assert.equal(names("umbral").includes("dim"), false);
   assert.equal(names("umbral").includes("still"), false);
   assert.equal(names("umbral").includes("cool"), false);
-  assert.ok(names("cyst").includes("wake"));
+  assert.ok(names("cyst").includes("cryptobiosis"));
+  assert.ok(names("cyst").includes("sporocyst_soft"));
+  assert.ok(names("cyst").includes("tachyzoite_soft"));
+  assert.ok(names("cyst").includes("freeze"));
+  assert.equal(names("cyst").includes("wake"), false);
+  assert.equal(names("cyst").includes("wait"), false);
+  assert.equal(names("cyst").includes("still"), false);
   for (const key of POND) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);

@@ -1112,7 +1112,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Flame ultra idle-life done; next house-order ultra is Arca / cyst", () => {
+test("notes: Flame ultra idle-life done; next house-order ultra is Reed / frog", () => {
   assert.equal(T.TRICK_KEY, "chicken_of_woods");
   assert.equal(T.wantsThankYou("flame"), true);
   assert.equal(T.wantsThankYou("chicken_of_woods"), true);
