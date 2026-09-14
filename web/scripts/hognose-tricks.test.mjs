@@ -388,7 +388,7 @@ test("ultra-polish: Bluff hood/feign/quiver/upright lifts are Rui-visible (not m
   assert.ok(T.nextTrickWait(true, 0, "hood") > T.nextTrickWait(true, 0, "feign"));
 });
 
-test("notes: Bluff idle-life ultra done; Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Cup / octopus (Atlas / carpet_python ultra done; Blush / rosy_boa ultra done; Coral / milk_snake ultra done) (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Bluff idle-life ultra done; Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Sepia / cuttlefish (Cup / octopus ultra done; Atlas / carpet_python ultra done; Blush / rosy_boa ultra done; Coral / milk_snake ultra done) (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "hognose");
   assert.equal(T.wantsThankYou("bluff"), true);
   globalThis.PetHognoseTricks = Overlay;

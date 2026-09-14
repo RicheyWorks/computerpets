@@ -1,457 +1,546 @@
-/** Cup ground tricks while idle. House octopus — mantle / sucker / jet / veil / tinker personality (cephalopod desk life; suckers, siphon jet, ink veil, problem-solving curiosity; teacup dens, not Coin bowl-drift or Bloom gill-amble or Ink soak-tuck). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web `octopus-tricks.ts`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl/Bloom, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play LID unchanged — never names `lid`. Coin owns drift/gulp/flare/glint/dart and bubble/lip/swish; Ink owns soak/tuck/crane/plod/paddle and munch/bob/huff; Bloom owns gill/amble/mend/smile/plume and wink/blip/grin; maidenhair window owns unfurl; cuttlefish window owns flush; parrot owns fan; Relay owns latch; ferret owns puff; Nori owns taste; Saffron owns probe. No cry inventing — thank-yous are silent desk motion only. */
+/** Cup ground tricks while idle — ultra-polish pass. House octopus — mantle / sucker / jet / veil / tinker / papilla / ooze personality (cephalopod desk life; suckers, siphon jet, ink veil, problem-solving curiosity, dermal papillae texture-camouflage, boneless crack-ooze; teacup dens, not Coin bowl-drift or Bloom gill-amble or Ink soak-tuck or Sepia flush-hover). Mantle dens as a teacup-shaped cephalopod plate; sucker arm-tastes the blotter; jet siphon-darts; veil ink-clouds then settles; tinker puzzle-handles a desk gadget; papilla raises skin papillae for 3D camouflage (species-true Octopus vulgaris — not veil ink, not window-play LID, not Sepia chroma); ooze boneless-squeezes through a narrow gap (species-true escape — not mantle dens-hold, not jet dart). Window-play LID unchanged — never names `lid`. Ethogram keeps hide sit_hold; adds sucker/jet/veil/tinker/papilla/ooze softs + freeze (replaces thin hide/jet/taste). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via octopus.wav. Thank-yous keep / tint / squeeze. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `octopus-tricks.ts`. True house-octopus desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids lid/drift/gulp/flare/dart/soak/tuck/paddle/gill/amble/plume/legend/flush/fan/latch/puff/unfurl/chart/climb/probe/canyon/ripple/chroma/hover/blot/bone/pupil/crawl/siphon/pulse/slink/den/cork/nest/savor/settle/survey name collisions with prior guests and octopus window-play. Bird ultra (Soot→Ember) + Miso→Atlas done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Sepia / cuttlefish. No cry inventing beyond house octopus.wav prefer. Never retouch Rui sprites. */
+
 (function (root) {
-  const TRICK_KEY = "octopus";
-  const TRICKS = ["mantle", "sucker", "jet", "veil", "tinker"];
-  const HAPPY = ["keep", "tint", "squeeze"];
-  const HAPPY_DUR = { keep: 1.24, tint: 1.3, squeeze: 1.18 };
-  const MANTLE_HOLD = 10.2;
-  const RELEASE_S = 0.6;
-  const DUR = { mantle: MANTLE_HOLD + RELEASE_S, sucker: 1.42, jet: 1.18, veil: 1.5, tinker: 1.56 };
-
-  function canStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+const TRICK_KEY = "octopus";
+const TRICKS = ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"];
+const HAPPY = ["keep", "tint", "squeeze"];
+const HAPPY_DUR = {
+    keep: 1.55,
+    tint: 1.62,
+    squeeze: 1.5,
+};
+/** Mantle hold — Cup dens as a teacup-shaped cephalopod plate. Not window-play LID. Not Coin drift. */
+const MANTLE_HOLD = 12.2;
+const RELEASE_S = 0.82;
+const DUR = {
+    mantle: MANTLE_HOLD + RELEASE_S,
+    sucker: 1.78,
+    jet: 1.72,
+    veil: 1.92,
+    tinker: 1.98,
+    papilla: 2.05,
+    ooze: 2.12,
+};
+function canStart(state) {
+    if (!state)
+        return false;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+        return false;
     const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+        return false;
+    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter")
+        return false;
     return true;
-  }
-
-  function shouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+}
+function shouldAbort(state) {
+    if (!state)
+        return true;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+        return true;
     const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
-
-  function nextTrickWait(justFinished, rand, kind) {
+    return (cmd === "sleep" ||
+        cmd === "leave" ||
+        cmd === "hide" ||
+        cmd === "rest" ||
+        cmd === "seek" ||
+        cmd === "eat" ||
+        cmd === "play" ||
+        cmd === "talk" ||
+        cmd === "enter");
+}
+function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "mantle") return 48 + roll * 28;
-    if (kind === "sucker") return 15 + roll * 11;
-    if (kind === "veil") return 16 + roll * 10;
-    return justFinished ? 10 + roll * 8 : 5 + roll * 6;
-  }
-
-  function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "mantle";
+    if (kind === "mantle")
+        return 38 + roll * 24;
+    if (kind === "papilla" || kind === "ooze" || kind === "veil")
+        return 12 + roll * 9;
+    if (kind === "sucker" || kind === "tinker")
+        return 11 + roll * 8;
+    if (kind === "jet")
+        return 10 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+}
+function pickTrick(rand, musicOn = false, lastKind) {
+    if (musicOn)
+        return "mantle";
     const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "mantle") {
-      if (roll < 0.28) return "sucker";
-      if (roll < 0.5) return "jet";
-      if (roll < 0.72) return "veil";
-      return "tinker";
+    const pool = TRICKS.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : [...TRICKS];
+    const weights = list.map((k) => k === "mantle" ? 0.55 : k === "papilla" || k === "ooze" || k === "veil" ? 1.15 : 1);
+    let total = 0;
+    for (let i = 0; i < weights.length; i++)
+        total += weights[i];
+    let r = roll * total;
+    for (let i = 0; i < list.length; i++) {
+        r -= weights[i];
+        if (r <= 0)
+            return list[i];
     }
-    if (lastKind === "sucker") {
-      if (roll < 0.3) return "mantle";
-      if (roll < 0.52) return "jet";
-      if (roll < 0.74) return "veil";
-      return "tinker";
-    }
-    if (lastKind === "veil") {
-      if (roll < 0.24) return "mantle";
-      if (roll < 0.46) return "sucker";
-      if (roll < 0.68) return "jet";
-      return "tinker";
-    }
-    if (roll < 0.22) return "mantle";
-    if (roll < 0.42) return "sucker";
-    if (roll < 0.6) return "jet";
-    if (roll < 0.8) return "veil";
-    return "tinker";
-  }
-
-  function happyCanStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
+    return list[list.length - 1] || "mantle";
+}
+function happyCanStart(state) {
+    if (!state)
+        return false;
+    if (state.asleep || state.hidden || state.leaving)
+        return false;
     const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+        return false;
+    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter")
+        return false;
     return true;
-  }
-
-  function happyShouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
+}
+function happyShouldAbort(state) {
+    if (!state)
+        return true;
+    if (state.asleep || state.hidden || state.leaving)
+        return true;
     const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
-
-  function wantsThankYou(key) {
+    return (cmd === "sleep" ||
+        cmd === "leave" ||
+        cmd === "hide" ||
+        cmd === "rest" ||
+        cmd === "seek" ||
+        cmd === "play" ||
+        cmd === "talk" ||
+        cmd === "enter");
+}
+function wantsThankYou(key) {
     return key === TRICK_KEY || key === "cup";
-  }
-
-  function pickHappy(lastKind, rand) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
-  }
-
-  function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "keep";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: name === "keep" ? "sit" : name === "tint" ? "talk" : "sit",
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
-  }
-
-  function startThankYou(key, lastKind, x, facing, flags) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
+}
+function startThankYou(key, lastKind, x, facing, flags) {
+    if (!wantsThankYou(key))
+        return null;
+    if (!happyCanStart(flags || { cmd: "idle" }))
+        return null;
     const pick = pickHappy(lastKind);
     return { happy: beginHappy(pick, x, facing), kind: pick };
-  }
-
-  function keepPose(t) {
+}
+function pickHappy(lastKind, rand) {
+    const pool = HAPPY.filter((k) => k !== lastKind);
+    const list = pool.length ? pool : [...HAPPY];
+    const roll = rand == null ? Math.random() : rand;
+    return list[Math.floor(roll * list.length)] || list[0];
+}
+function beginHappy(kind, x, facing) {
+    const name = HAPPY.indexOf(kind) >= 0 ? kind : "keep";
+    return {
+        kind: name,
+        happy: true,
+        phase: "go",
+        t: 0,
+        x,
+        lift: 0,
+        rot: 0,
+        anim: name === "keep" ? "sit" : name === "tint" ? "talk" : "sit",
+        facing: facing == null ? 1 : facing,
+        fromX: x,
+    };
+}
+function keepPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.keep));
     if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 1.15, rot: s * -5, dx: 0, anim: "sit" };
+        const s = u / 0.14;
+        return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" };
     }
     if (u < 0.78) {
-      const wrap = Math.abs(Math.sin(t * 2.4));
-      return {
-        lift: 1.15 - wrap * 0.28,
-        rot: -5 + wrap * 3.8,
-        dx: Math.sin(t * 1.1) * 0.14,
-        anim: "sit",
-      };
+        const wrap = Math.abs(Math.sin(t * 4.6));
+        return {
+            lift: 4.2 + wrap * 3.4,
+            rot: -16 + Math.sin(t * 3.4) * 14,
+            dx: Math.sin(t * 1.8) * 0.55,
+            anim: "sit",
+        };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 0.85 * (1 - s), rot: -2.2 * (1 - s), dx: 0, anim: "idle" };
-  }
-
-  function tintPose(t) {
+    return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" };
+}
+function tintPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.tint));
     if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 1.5, rot: s * 7, dx: 0, anim: "talk" };
+        const s = u / 0.12;
+        return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "talk" };
     }
     if (u < 0.8) {
-      const shimmer = Math.sin(t * 3.1);
-      return {
-        lift: 1.5 + Math.abs(shimmer) * 0.32,
-        rot: 7 + shimmer * 6.2,
-        dx: shimmer * 0.22,
-        anim: "talk",
-      };
+        const shimmer = Math.sin(t * 3.1);
+        return {
+            lift: 4.6 + Math.abs(shimmer) * 3.2,
+            rot: 18 + shimmer * 16,
+            dx: shimmer * 0.7,
+            anim: "talk",
+        };
     }
     const s = (u - 0.8) / 0.2;
-    return { lift: 1.5 * (1 - s), rot: 7 * (1 - s), dx: 0, anim: "sit" };
-  }
-
-  function squeezePose(t) {
+    return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" };
+}
+function squeezePose(t) {
     return {
-      lift: Math.abs(Math.sin(t * 1.85)) * 0.7 + 0.95,
-      rot: -4 + Math.sin(t * 2.2) * 4.8,
-      dx: Math.sin(t * 1.35) * 0.2,
-      anim: "sit",
+        lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
+        rot: -16 + Math.sin(t * 2.8) * 14,
+        dx: Math.sin(t * 1.9) * 0.7,
+        anim: "sit",
     };
-  }
-
-  function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
+}
+function stepHappy(happy, dt, flags) {
+    if (!happy || happy.phase === "done")
+        return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+        return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "keep") {
-      const pose = keepPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "tint") {
-      const pose = tintPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = squeezePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
+        const pose = keepPose(next.t);
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    else if (next.kind === "tint") {
+        const pose = tintPose(next.t);
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    else {
+        const pose = squeezePose(next.t);
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    if (next.t >= hold)
+        return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
-  }
-
-  function sleepHoldFrame() {
+}
+function sleepHoldFrame(_key, _frameCount) {
     return null;
-  }
-
-  function beginTrick(kind, x, facing) {
-    const anim =
-      kind === "mantle"
+}
+function beginTrick(kind, x, facing) {
+    const anim = kind === "mantle"
         ? "sit"
         : kind === "sucker"
-          ? "walk"
-          : kind === "jet"
             ? "walk"
-            : kind === "veil"
-              ? "sit"
-              : kind === "tinker"
-                ? "play"
-                : "sit";
+            : kind === "jet"
+                ? "walk"
+                : kind === "veil"
+                    ? "sit"
+                    : kind === "tinker"
+                        ? "play"
+                        : kind === "papilla"
+                            ? "sit"
+                            : kind === "ooze"
+                                ? "walk"
+                                : "sit";
     return {
-      kind: kind,
-      phase: kind === "mantle" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: facing == null ? 1 : facing,
-      fromX: x,
+        kind,
+        phase: kind === "mantle" ? "hold" : "go",
+        t: 0,
+        x,
+        lift: 0,
+        rot: 0,
+        anim,
+        facing: facing == null ? 1 : facing,
+        fromX: x,
     };
-  }
-
-  function smoothstep(t) {
+}
+function smoothstep(t) {
     const x = Math.max(0, Math.min(1, t));
     return x * x * (3 - 2 * x);
-  }
-
-  function mantlePose(t) {
-    const beat = Math.sin(t * 0.88) + 0.28 * Math.sin(t * 2.4);
+}
+function mantlePose(t) {
+    const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
     return {
-      lift: 0.48 + Math.abs(Math.sin(t * 0.72)) * 0.14,
-      rot: -2.4 + beat * 2.6,
+        lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+        rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
     };
-  }
-
-  function releasePose(t) {
+}
+function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.48 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -2.4 * (1 - u) };
-  }
-
-  function suckerPose(t, fromX, facing) {
+    return {
+        lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
+        rot: -22 * (1 - u),
+    };
+}
+function suckerPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.sucker));
     if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + facing * s * 0.5, lift: s * 0.55, rot: s * 9 * facing, anim: "walk" };
+        const s = smoothstep(u / 0.12);
+        return { x: fromX + facing * s * 1.2, lift: s * 2.8, rot: s * 16 * facing, anim: "walk" };
     }
     if (u < 0.55) {
-      const s = (u - 0.12) / 0.43;
-      const taste = Math.sin(s * Math.PI * 3.4);
-      return {
-        x: fromX + facing * (0.5 + s * 2.4 + taste * 0.28),
-        lift: 0.55 + Math.abs(taste) * 0.45,
-        rot: facing * (9 + taste * 10),
-        anim: "play",
-      };
+        const s = (u - 0.12) / 0.43;
+        const taste = Math.sin(s * Math.PI * 3.4);
+        return {
+            x: fromX + facing * (1.2 + s * 3.6 + taste * 0.55),
+            lift: 2.8 + Math.abs(taste) * 2.4,
+            rot: facing * (16 + taste * 14),
+            anim: "play",
+        };
     }
     if (u < 0.78) {
-      const s = (u - 0.55) / 0.23;
-      return {
-        x: fromX + facing * (2.9 - s * 0.4),
-        lift: 0.7 + Math.sin(s * Math.PI) * 0.25,
-        rot: facing * (4 - s * 2),
-        anim: "sit",
-      };
+        const s = (u - 0.55) / 0.23;
+        return {
+            x: fromX + facing * (4.8 - s * 0.6),
+            lift: 3.2 + Math.sin(s * Math.PI) * 1.4,
+            rot: facing * (8 - s * 4),
+            anim: "sit",
+        };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-      x: fromX + facing * (2.5 * (1 - s)),
-      lift: 0.7 * (1 - s),
-      rot: facing * (2 * (1 - s)),
-      anim: "walk",
+        x: fromX + facing * (4.2 * (1 - s)),
+        lift: 3.2 * (1 - s),
+        rot: facing * (4 * (1 - s)),
+        anim: "walk",
     };
-  }
-
-  function jetPose(t, fromX, facing) {
+}
+function jetPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.jet));
     if (u < 0.1) {
-      const s = smoothstep(u / 0.1);
-      return { x: fromX - facing * s * 0.55, lift: s * 0.35, rot: s * -6 * facing, anim: "sit" };
+        const s = smoothstep(u / 0.1);
+        return { x: fromX - facing * s * 1.1, lift: s * 2.2, rot: s * -14 * facing, anim: "sit" };
     }
     if (u < 0.45) {
-      const s = smoothstep((u - 0.1) / 0.35);
-      return {
-        x: fromX - facing * 0.55 + facing * s * 5.2,
-        lift: 0.35 + Math.sin(s * Math.PI) * 1.1,
-        rot: facing * (-6 + s * 14),
-        anim: "walk",
-      };
+        const s = smoothstep((u - 0.1) / 0.35);
+        return {
+            x: fromX - facing * 1.1 + facing * s * 7.2,
+            lift: 2.2 + Math.sin(s * Math.PI) * 3.6,
+            rot: facing * (-14 + s * 28),
+            anim: "walk",
+        };
     }
     if (u < 0.72) {
-      const s = (u - 0.45) / 0.27;
-      const coast = Math.abs(Math.sin(s * Math.PI * 1.6));
-      return {
-        x: fromX + facing * (4.65 + coast * 0.15),
-        lift: 0.4 + coast * 0.2,
-        rot: facing * (4 - s * 5),
-        anim: "sit",
-      };
+        const s = (u - 0.45) / 0.27;
+        const coast = Math.abs(Math.sin(s * Math.PI * 1.6));
+        return {
+            x: fromX + facing * (6.1 + coast * 0.35),
+            lift: 2.0 + coast * 1.2,
+            rot: facing * (8 - s * 10),
+            anim: "sit",
+        };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-      x: fromX + facing * (4.8 * (1 - s)),
-      lift: 0.45 * (1 - s),
-      rot: facing * (-1 * (1 - s)),
-      anim: "idle",
+        x: fromX + facing * (6.4 * (1 - s)),
+        lift: 2.2 * (1 - s),
+        rot: facing * (-2 * (1 - s)),
+        anim: "idle",
     };
-  }
-
-  function veilPose(t, fromX, facing) {
+}
+function veilPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.veil));
     if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 1.65, rot: s * 8 * facing, anim: "sit" };
+        const s = smoothstep(u / 0.14);
+        return { x: fromX, lift: s * 4.4, rot: s * 18 * facing, anim: "sit" };
     }
     if (u < 0.48) {
-      const s = (u - 0.14) / 0.34;
-      const cloud = Math.sin(s * Math.PI * 2.8);
-      return {
-        x: fromX + facing * cloud * 0.35,
-        lift: 1.65 + Math.abs(cloud) * 0.4,
-        rot: facing * (8 + cloud * 7),
-        anim: "play",
-      };
+        const s = (u - 0.14) / 0.34;
+        const cloud = Math.sin(s * Math.PI * 2.8);
+        return {
+            x: fromX + facing * cloud * 0.7,
+            lift: 4.4 + Math.abs(cloud) * 2.6,
+            rot: facing * (18 + cloud * 14),
+            anim: "play",
+        };
     }
     if (u < 0.78) {
-      const s = (u - 0.48) / 0.3;
-      return {
-        x: fromX + facing * Math.sin(s * Math.PI) * 0.2,
-        lift: 1.65 * (1 - s * 0.55),
-        rot: facing * (4 - s * 6),
-        anim: "sit",
-      };
+        const s = (u - 0.48) / 0.3;
+        return {
+            x: fromX + facing * Math.sin(s * Math.PI) * 0.4,
+            lift: 4.4 * (1 - s * 0.55),
+            rot: facing * (8 - s * 12),
+            anim: "sit",
+        };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-      x: fromX,
-      lift: 0.75 * (1 - s),
-      rot: facing * (-1.5 * (1 - s)),
-      anim: "sit",
+        x: fromX,
+        lift: 2.0 * (1 - s),
+        rot: facing * (-3 * (1 - s)),
+        anim: "sit",
     };
-  }
-
-  function tinkerPose(t, fromX, facing) {
+}
+function tinkerPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.tinker));
     if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + facing * s * 0.7, lift: s * 0.8, rot: s * 11 * facing, anim: "play" };
+        const s = smoothstep(u / 0.12);
+        return { x: fromX + facing * s * 1.4, lift: s * 3.2, rot: s * 18 * facing, anim: "play" };
     }
     if (u < 0.55) {
-      const s = (u - 0.12) / 0.43;
-      const puzzle = Math.sin(s * Math.PI * 4.2);
-      return {
-        x: fromX + facing * (0.7 + puzzle * 0.55),
-        lift: 0.8 + Math.abs(puzzle) * 0.65,
-        rot: facing * (11 + puzzle * 9),
-        anim: "play",
-      };
+        const s = (u - 0.12) / 0.43;
+        const puzzle = Math.sin(s * Math.PI * 4.2);
+        return {
+            x: fromX + facing * (1.4 + puzzle * 1.1),
+            lift: 3.2 + Math.abs(puzzle) * 2.8,
+            rot: facing * (18 + puzzle * 16),
+            anim: "play",
+        };
     }
     if (u < 0.78) {
-      const s = (u - 0.55) / 0.23;
-      const check = Math.abs(Math.sin(s * Math.PI * 2));
-      return {
-        x: fromX + facing * (0.7 - s * 0.2),
-        lift: 0.9 + check * 0.25,
-        rot: facing * (5 - s * 3 + check * 2),
-        anim: "sit",
-      };
+        const s = (u - 0.55) / 0.23;
+        const check = Math.abs(Math.sin(s * Math.PI * 2));
+        return {
+            x: fromX + facing * (1.4 - s * 0.4),
+            lift: 3.4 + check * 1.4,
+            rot: facing * (10 - s * 6 + check * 4),
+            anim: "sit",
+        };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-      x: fromX + facing * (0.5 * (1 - s)),
-      lift: 0.9 * (1 - s),
-      rot: facing * (2 * (1 - s)),
-      anim: "idle",
+        x: fromX + facing * (1.0 * (1 - s)),
+        lift: 3.4 * (1 - s),
+        rot: facing * (4 * (1 - s)),
+        anim: "idle",
     };
-  }
-
-  function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "jet" && trick.kind !== "sucker" && trick.kind !== "tinker") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+}
+function papillaPose(t, fromX, facing) {
+    // Dermal papillae raise — 3D skin camouflage texture, not ink veil.
+    const u = Math.max(0, Math.min(1, t / DUR.papilla));
+    if (u < 0.14) {
+        const s = smoothstep(u / 0.14);
+        return { x: fromX, lift: s * 3.6, rot: s * -14 * facing, anim: "sit" };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    if (u < 0.72) {
+        const s = (u - 0.14) / 0.58;
+        const bumps = Math.sin(s * Math.PI * 5.2) + 0.35 * Math.sin(s * Math.PI * 9);
+        return {
+            x: fromX + facing * bumps * 0.35,
+            lift: 3.6 + Math.abs(bumps) * 2.8,
+            rot: facing * (-14 + bumps * 16),
+            anim: "sit",
+        };
+    }
+    const s = smoothstep((u - 0.72) / 0.28);
+    return {
+        x: fromX,
+        lift: 3.6 * (1 - s),
+        rot: facing * (-14 * (1 - s)),
+        anim: "sit",
+    };
+}
+function oozePose(t, fromX, facing) {
+    // Boneless squeeze through a narrow gap — species-true escape, not mantle dens.
+    const u = Math.max(0, Math.min(1, t / DUR.ooze));
+    if (u < 0.12) {
+        const s = smoothstep(u / 0.12);
+        return { x: fromX + facing * s * 0.8, lift: s * 1.8, rot: s * 12 * facing, anim: "walk" };
+    }
+    if (u < 0.45) {
+        const s = smoothstep((u - 0.12) / 0.33);
+        return {
+            x: fromX + facing * (0.8 + s * 2.2),
+            lift: 1.8 - s * 1.2,
+            rot: facing * (12 - s * 22),
+            anim: "walk",
+        };
+    }
+    if (u < 0.78) {
+        const s = (u - 0.45) / 0.33;
+        const flow = Math.sin(s * Math.PI * 2.4);
+        return {
+            x: fromX + facing * (3.0 + s * 3.4 + flow * 0.4),
+            lift: 0.6 + Math.abs(flow) * 2.4 + s * 2.0,
+            rot: facing * (-10 + flow * 18),
+            anim: "play",
+        };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+        x: fromX + facing * (6.4 * (1 - s) + s * 0),
+        lift: 2.6 * (1 - s),
+        rot: facing * (4 * (1 - s)),
+        anim: "idle",
+    };
+}
+function stepTrick(trick, dt, flags) {
+    if (!trick || trick.phase === "done")
+        return trick;
+    if (shouldAbort(flags) &&
+        trick.kind !== "jet" &&
+        trick.kind !== "sucker" &&
+        trick.kind !== "tinker" &&
+        trick.kind !== "ooze") {
+        return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    }
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "mantle") {
-      if (next.t < MANTLE_HOLD) {
-        const pose = mantlePose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      if (next.t < MANTLE_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - MANTLE_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+        if (next.t < MANTLE_HOLD) {
+            const pose = mantlePose(next.t);
+            next.phase = "hold";
+            next.lift = pose.lift;
+            next.rot = pose.rot;
+            next.anim = "sit";
+            return next;
+        }
+        if (next.t < MANTLE_HOLD + RELEASE_S) {
+            const pose = releasePose(next.t - MANTLE_HOLD);
+            next.phase = "release";
+            next.lift = pose.lift;
+            next.rot = pose.rot;
+            next.anim = "sit";
+            return next;
+        }
+        return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "sucker") {
-      const pose = suckerPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "jet") {
-      const pose = jetPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "veil") {
-      const pose = veilPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = tinkerPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
+        const pose = suckerPose(next.t, fromX, trick.facing);
+        next.x = pose.x;
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    else if (next.kind === "jet") {
+        const pose = jetPose(next.t, fromX, trick.facing);
+        next.x = pose.x;
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    else if (next.kind === "veil") {
+        const pose = veilPose(next.t, fromX, trick.facing);
+        next.x = pose.x;
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    else if (next.kind === "papilla") {
+        const pose = papillaPose(next.t, fromX, trick.facing);
+        next.x = pose.x;
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    else if (next.kind === "ooze") {
+        const pose = oozePose(next.t, fromX, trick.facing);
+        next.x = pose.x;
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    else {
+        const pose = tinkerPose(next.t, fromX, trick.facing);
+        next.x = pose.x;
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    if (u >= 1)
+        return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
-  }
+}
 
   const api = {
     TRICK_KEY,
     TRICKS,
     HAPPY,
     HAPPY_DUR,
+    DUR,
     MANTLE_HOLD,
     RELEASE_S,
-    DUR,
     canStart,
     shouldAbort,
     nextTrickWait,
@@ -464,6 +553,8 @@
     jetPose,
     veilPose,
     tinkerPose,
+    papillaPose,
+    oozePose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -474,7 +565,7 @@
     keepPose,
     tintPose,
     squeezePose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetOctopusTricks = api;
