@@ -1,7 +1,6 @@
-/** Door ground tricks while idle. House green moray — hinge / pharynx / knot / lurk / jamb personality (crevice-jaw hinge gape that is breath not a yawn — never named gape (window-play owns GAPE; Bluff owns gape), pharyngeal-jaw flash as pharynx (never named flash — Quill owns that), knot retreat into the dens, ambush peek as lurk (never named peek/peer — Keel owns peer), reef-door jamb desk life in the book crevice; not Coin drift/gulp/flare/glint/dart, Pulse bell/oral/lucent/trail/medusa, Anchor coil/buoy/siphon/swivel/pouch, Kite wing/lobe/gyre/vault/span, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Sepia hover/pupil, Chamber spiral, Cup mantle/jet, Ink soak/tuck, Clip nest, or snake guests Nori/Saffron/Bandit/Jade/Bluff/Sash/Lula/Coral/Blush/Atlas coil/bun/stripe/bracelet/hood/seam/pour/rhyme/pebble/legend copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop moray-tricks.js. Not a Rui, cat, dog, rabbit, hamster/Clip, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog/Burr, chinchilla, axolotl/Bloom, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, octopus/Cup, cuttlefish/Sepia, nautilus/Chamber, moon-jelly/Pulse, sea-star/Cling, hermit-crab/Tenant, horseshoe-crab/Ledger, seahorse/Anchor, manta/Kite, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play GAPE unchanged — never names gape. Special hide/gape/dart ethogram unchanged — never names gape/hide/dart as tricks. Blush owns crevice; Bluff owns gape; Quill owns flash; Coin owns dart; Keel owns peer; Anchor owns coil/buoy/siphon/swivel/pouch and coronet/pipe/moor; Kite owns wing/lobe/gyre/vault/span and ceil/scoop/breadth; Rui owns somersault; Ledger owns carapace/bookgill/telson/furrow/fossil and blue/page/tray; Tenant owns swap/antenna/scuttle/withdraw/vacancy and scrap/fit/lease; Cling owns podia/righting/crawl/evert/penta and damp/press/tide; Pulse owns bell/oral/lucent/trail/medusa and halo/lumen/gel; Cup owns jet/mantle/sucker/veil/tinker and keep/tint/squeeze; Sepia owns bone/pupil/chroma/hover/blot and ripple/glance/dab; Chamber owns spiral/siphuncle/nacre/pinhole/fringe and chamber/pearl/quiet; Coin owns drift/gulp/flare/glint/dart and bubble/lip/swish; Ink owns soak/tuck/crane/plod/paddle and munch/bob/huff; Bloom owns gill/amble/mend/smile/plume and wink/blip/grin; Clip owns nest/cheek/scurry/pocket/reel and stuff/chitter/sprint; Burr owns curl; Fuse owns pulse as thank-you; ferret owns tube; Bandit owns tribute; Phoenix owns lift; Sol owns press as a trick and tap as thank-you; rabbit owns dig; boa owns cradle as thank-you; Nori owns nook. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Door ground tricks while idle — ultra-polish pass. House green moray — hinge / pharynx / knot / lurk / jamb / mucus / sentry personality (crevice-jaw hinge gape that is breath not a yawn — never named gape (window-play owns GAPE; Bluff owns gape), pharyngeal-jaw flash as pharynx (never named flash — Quill owns that), knot retreat into dens, ambush peek as lurk (never named peek/peer — Keel owns peer), reef-door jamb desk life in the book crevice, thick Gymnothorax mucus coat shimmer (never named slime/mucuscoat — Silver american_eel owns mucuscoat), head-out crevice sentry watch (never named guard/probe/periscope — prior guests own those); not Coin drift/gulp/flare/glint/dart, Pulse bell/oral/lucent/trail/medusa, Anchor coil/buoy/siphon/swivel/pouch, Kite wing/lobe/gyre/vault/span/breach/ram, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Ochre podia/righting/crawl/evert/penta, Sepia hover/pupil, Chamber spiral, Cup mantle/jet, Ink soak/tuck, Clip nest, or snake guests Nori/Saffron/Bandit/Jade/Bluff/Sash/Lula/Coral/Blush/Atlas coil/bun/stripe/bracelet/hood/seam/pour/rhyme/pebble/legend copies). Mucus is the species-true green-moray slime-coat polish (not Silver mucuscoat compound, not Coin flare, not Kite lobe). Sentry is the iconic head-out den watch (not lurk ambush peek alone, not Keel peer, not window-play GAPE). Window-play GAPE unchanged — never names gape. Ethogram keeps jamb sit_hold; adds hinge/pharynx/knot/lurk/mucus/sentry softs + freeze (replaces thin gape/hide/dart). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via moray.wav. Thank-yous breath / vigil / recess. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `moray-tricks.js`. True house-moray desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids gape/flash/peer/dart/coil/buoy/siphon/swivel/pouch/wing/lobe/gyre/vault/span/breach/ram/carapace/swap/withdraw/podia/bell/oral/mantle/jet/drift/gulp/flare/mucuscoat/guard/probe/somersault name collisions with prior guests and moray window-play. Bird ultra (Soot→Ember) + Miso→Kite done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Felt / moss. No cry inventing beyond house moray.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "moray";
-export const TRICKS = ["hinge", "pharynx", "knot", "lurk", "jamb"] as const;
+export const TRICKS = ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"] as const;
 export const HAPPY = ["breath", "vigil", "recess"] as const;
 export type MorayTrickKind = (typeof TRICKS)[number];
 export type MorayHappyKind = (typeof HAPPY)[number];
@@ -27,7 +26,7 @@ export type MorayTrick = {
   rot: number;
   anim: TrickAnim;
   facing: 1 | -1;
-  fromX: number;
+  fromX?: number;
   abort?: boolean;
 };
 
@@ -41,14 +40,29 @@ export type MorayHappy = {
   rot: number;
   anim: TrickAnim;
   facing: 1 | -1;
-  fromX: number;
+  fromX?: number;
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { breath: 1.26, vigil: 1.14, recess: 1.2 } as const;
-export const JAMB_HOLD = 11.8;
-export const RELEASE_S = 0.7;
-export const DUR = { jamb: JAMB_HOLD + RELEASE_S, hinge: 1.44, pharynx: 1.18, knot: 1.5, lurk: 1.36 } as const;
+export const HAPPY_DUR: Record<MorayHappyKind, number> = {
+  breath: 1.28,
+  vigil: 1.18,
+  recess: 1.24,
+};
+
+/** Jamb hold — Door parks the reef-door body in the desk crevice. Not window-play GAPE. Not Anchor coil. */
+export const JAMB_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+
+export const DUR: Record<MorayTrickKind, number> = {
+  jamb: JAMB_HOLD + RELEASE_S,
+  hinge: 1.58,
+  pharynx: 1.52,
+  knot: 1.68,
+  lurk: 1.48,
+  mucus: 1.64,
+  sentry: 1.72,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,38 +92,30 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: MorayTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "jamb") return 48 + roll * 28;
-  if (kind === "hinge") return 15 + roll * 11;
-  if (kind === "knot") return 16 + roll * 12;
-  return justFinished ? 10.5 + roll * 8 : 5.2 + roll * 6;
+  if (kind === "jamb") return 38 + roll * 24;
+  if (kind === "knot" || kind === "pharynx" || kind === "sentry") return 12 + roll * 9;
+  if (kind === "hinge" || kind === "lurk" || kind === "mucus") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: MorayTrickKind | string | null) {
-  if (musicOn) return "jamb" as const;
+
+export function pickTrick(rand?: number, musicOn = false, lastKind?: MorayTrickKind | string | null): MorayTrickKind {
+  if (musicOn) return "jamb";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "jamb") {
-    if (roll < 0.26) return "hinge" as const;
-    if (roll < 0.48) return "pharynx" as const;
-    if (roll < 0.72) return "knot" as const;
-    return "lurk" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "jamb" ? 0.55 : k === "knot" || k === "pharynx" || k === "sentry" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "hinge") {
-    if (roll < 0.28) return "jamb" as const;
-    if (roll < 0.5) return "pharynx" as const;
-    if (roll < 0.72) return "knot" as const;
-    return "lurk" as const;
-  }
-  if (lastKind === "pharynx") {
-    if (roll < 0.22) return "jamb" as const;
-    if (roll < 0.44) return "hinge" as const;
-    if (roll < 0.66) return "knot" as const;
-    return "lurk" as const;
-  }
-  if (roll < 0.2) return "jamb" as const;
-  if (roll < 0.4) return "hinge" as const;
-  if (roll < 0.6) return "pharynx" as const;
-  if (roll < 0.8) return "knot" as const;
-  return "lurk" as const;
+  return list[list.length - 1] || "hinge";
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -176,73 +182,78 @@ export function beginHappy(kind: MorayHappyKind | string, x: number, facing: 1 |
 }
 
 export function breathPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.breath));
-    if (u < 0.2) {
-      const s = u / 0.2;
-      return { lift: s * 0.1, rot: s * 8.5, dx: 0, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const open = Math.sin(t * 1.95);
-      return {
-        lift: 0.1 + Math.abs(open) * 0.05,
-        rot: 8.5 + open * 4.2,
-        dx: open * 0.03,
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = (u - 0.78) / 0.22;
-    return { lift: 0.08 * (1 - s), rot: 4.5 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.breath));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
   }
-export function vigilPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.vigil));
-    if (u < 0.18) {
-      const s = u / 0.18;
-      return { lift: s * 0.28, rot: s * -3.2, dx: 0, anim: "play" as TrickAnim };
-    }
-    if (u < 0.76) {
-      const tip = Math.sin(t * 2.1);
-      return {
-        lift: 0.28 + Math.abs(tip) * 0.06,
-        rot: -3.2 + tip * 2.8,
-        dx: tip * 0.05,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.76) / 0.24;
-    return { lift: 0.2 * (1 - s), rot: -1.8 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
-  }
-export function recessPose(t: number) {
+  if (u < 0.8) {
+    const open = Math.sin(t * 1.95);
     return {
-      lift: 0.04 + Math.abs(Math.sin(t * 0.68)) * 0.05,
-      rot: Math.sin(t * 0.85) * 1.4,
-      dx: Math.sin(t * 0.48) * -0.06,
+      lift: 2.8 + Math.abs(open) * 1.4,
+      rot: 12 + open * 10,
+      dx: open * 0.28,
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function vigilPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.vigil));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const tip = Math.sin(t * 2.1);
+    return {
+      lift: 3.0 + Math.abs(tip) * 1.5,
+      rot: -10 + tip * 14,
+      dx: tip * 0.32,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function recessPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.recess));
+  if (u < 0.22) {
+    const s = u / 0.22;
+    return { lift: s * 2.2, rot: s * 6, dx: 0, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const breath = Math.sin(t * 1.1);
+    return {
+      lift: 2.2 + Math.abs(breath) * 1.1,
+      rot: 6 + breath * 8,
+      dx: breath * 0.2,
       anim: "sit" as TrickAnim,
     };
   }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 1.5 * (1 - s), rot: 4 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
 export function stepHappy(happy: MorayHappy, dt: number, flags: TrickFlags): MorayHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
     return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: MorayHappy = { ...happy, t: happy.t + Math.max(0, dt) };
-  const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "breath") {
-    const pose = breathPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "vigil") {
-    const pose = vigilPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = recessPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  const dur = HAPPY_DUR[next.kind] || HAPPY_DUR.breath;
+  let pose;
+  if (next.kind === "breath") pose = breathPose(next.t);
+  else if (next.kind === "vigil") pose = vigilPose(next.t);
+  else pose = recessPose(next.t);
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.x = (happy.fromX != null ? happy.fromX : happy.x) + (pose.dx || 0) * happy.facing;
+  next.anim = pose.anim;
+  if (next.t >= dur) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
 
@@ -250,27 +261,25 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
 
-export function beginTrick(kind: MorayTrickKind, x: number, facing: 1 | -1): MorayTrick {
-  const anim: TrickAnim =
-    kind === "jamb"
-      ? "sit"
-      : kind === "hinge"
-        ? "talk"
-        : kind === "pharynx"
-          ? "play"
-          : kind === "knot"
-        ? "play"
-        : kind === "lurk"
-          ? "talk"
-              : "sit";
+export function beginTrick(kind: MorayTrickKind | string, x: number, facing: 1 | -1): MorayTrick {
+  const name = (TRICKS as readonly string[]).indexOf(kind) >= 0 ? (kind as MorayTrickKind) : "hinge";
+  const hold = name === "jamb";
   return {
-    kind: kind,
-    phase: kind === "jamb" ? "hold" : "go",
+    kind: name,
+    phase: hold ? "hold" : "go",
     t: 0,
     x: x,
     lift: 0,
     rot: 0,
-    anim: anim,
+    anim: hold
+      ? "sit"
+      : name === "hinge" || name === "lurk" || name === "sentry"
+        ? "talk"
+        : name === "mucus"
+          ? "sit"
+          : name === "pharynx" || name === "knot"
+            ? "play"
+            : "play",
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
@@ -282,142 +291,228 @@ function smoothstep(t: number) {
 }
 
 export function jambPose(t: number) {
-    const breath = Math.sin(t * 0.55) + 0.08 * Math.sin(t * 1.4);
-    return {
-      lift: 0.06 + Math.abs(Math.sin(t * 0.55)) * 0.04,
-      rot: 3.2 + breath * 2.4,
-    };
-  }
+  const breath = Math.sin(t * 0.42);
+  return {
+    lift: 2.4 + Math.abs(breath) * 1.2,
+    rot: 4 + breath * 6,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.06 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 2.4 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  const s = smoothstep(u);
+  return {
+    lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)),
+    rot: 4 * (1 - s),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Hinge — buccal pump / respiratory jaw rock. Not window-play GAPE. Not Bluff gape. */
 export function hingePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.hinge));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.12, rot: s * 10 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const s = (u - 0.14) / 0.66;
-      const open = Math.sin(s * Math.PI * 3.6);
-      return {
-        x: fromX + facing * Math.abs(open) * 0.04,
-        lift: 0.12 + Math.abs(open) * 0.06,
-        rot: facing * (10 + open * 6.5),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
+  const u = Math.max(0, Math.min(1, t / DUR.hinge));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * 14 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.14) / 0.64;
+    const open = Math.sin(s * Math.PI * 3.6);
     return {
-      x: fromX,
-      lift: 0.1 * (1 - s),
-      rot: facing * (5 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * Math.abs(open) * 0.35,
+      lift: 2.8 + Math.abs(open) * 1.5,
+      rot: facing * (14 + open * 12),
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: facing * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Pharynx — pharyngeal-jaw flash / prey-grab. Not Quill flash. Not Coin dart. */
 export function pharynxPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.pharynx));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.08, rot: s * 4 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.42) {
-      const s = (u - 0.16) / 0.26;
-      const snap = smoothstep(s);
-      return {
-        x: fromX + facing * snap * 0.18,
-        lift: 0.08 + snap * 0.22,
-        rot: facing * (4 + snap * 14),
-        anim: "play" as TrickAnim,
-      };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.42) / 0.3;
-      const recoil = Math.sin(s * Math.PI);
-      return {
-        x: fromX + facing * (0.18 - s * 0.12),
-        lift: 0.3 - s * 0.14 + recoil * 0.04,
-        rot: facing * (18 - s * 12),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+  const u = Math.max(0, Math.min(1, t / DUR.pharynx));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * 8 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.42) {
+    const s = (u - 0.14) / 0.28;
+    const snap = smoothstep(s);
     return {
-      x: fromX + facing * 0.06 * (1 - s),
-      lift: 0.14 * (1 - s),
-      rot: facing * (5 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * snap * 1.8,
+      lift: 2.4 + snap * 2.6,
+      rot: facing * (8 + snap * 18),
+      anim: "play" as TrickAnim,
     };
   }
+  if (u < 0.74) {
+    const s = (u - 0.42) / 0.32;
+    const recoil = Math.sin(s * Math.PI);
+    return {
+      x: fromX + facing * (1.8 - s * 1.0),
+      lift: 5.0 - s * 2.0 + recoil * 0.6,
+      rot: facing * (26 - s * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.74) / 0.26);
+  return {
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 2.2 * (1 - s),
+    rot: facing * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Knot — body cinch / retreat into dens. Not Anchor coil. Not Nori nook. */
 export function knotPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.knot));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.2, rot: s * -14 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.14) / 0.41;
-      const cinch = Math.sin(s * Math.PI * 2.2);
-      return {
-        x: fromX - facing * (0.12 * s + Math.abs(cinch) * 0.05),
-        lift: 0.2 + Math.abs(cinch) * 0.1,
-        rot: facing * (-14 + s * 40 + cinch * 12),
-        anim: "play" as TrickAnim,
-      };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.55) / 0.23;
-      return {
-        x: fromX - facing * (0.12 + s * 0.1),
-        lift: 0.16 * (1 - s * 0.4),
-        rot: facing * (12 - s * 8),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const u = Math.max(0, Math.min(1, t / DUR.knot));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -16 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.14) / 0.41;
+    const cinch = Math.sin(s * Math.PI * 2.2);
     return {
-      x: fromX - facing * 0.22 * (1 - s),
-      lift: 0.1 * (1 - s),
-      rot: facing * (4 * (1 - s)),
+      x: fromX - facing * (1.2 * s + Math.abs(cinch) * 0.35),
+      lift: 2.6 + Math.abs(cinch) * 1.6,
+      rot: facing * (-16 + s * 42 + cinch * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    return {
+      x: fromX - facing * (1.2 + s * 0.8),
+      lift: 2.8 * (1 - s * 0.35),
+      rot: facing * (14 - s * 10),
       anim: "sit" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX - facing * 1.8 * (1 - s),
+    lift: 1.8 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Lurk — ambush peek from the dens. Not Keel peer. Not window-play GAPE. */
 export function lurkPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.lurk));
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * 0.14, rot: s * -2 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.48) {
-      const s = (u - 0.18) / 0.3;
-      return {
-        x: fromX + facing * s * 0.2,
-        lift: 0.14 + s * 0.08,
-        rot: facing * (-2 + s * 5),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    if (u < 0.72) {
-      const hold = Math.sin((u - 0.48) * 18);
-      return {
-        x: fromX + facing * 0.2,
-        lift: 0.22 + hold * 0.03,
-        rot: facing * (3 + hold * 1.5),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+  const u = Math.max(0, Math.min(1, t / DUR.lurk));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.4, rot: s * -6 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.48) {
+    const s = (u - 0.16) / 0.32;
     return {
-      x: fromX + facing * 0.2 * (1 - s),
-      lift: 0.18 * (1 - s),
-      rot: facing * (2.5 * (1 - s)),
+      x: fromX + facing * s * 1.6,
+      lift: 2.4 + s * 1.2,
+      rot: facing * (-6 + s * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.74) {
+    const hold = Math.sin((u - 0.48) * 16);
+    return {
+      x: fromX + facing * 1.6,
+      lift: 3.4 + hold * 0.5,
+      rot: facing * (6 + hold * 4),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.74) / 0.26);
+  return {
+    x: fromX + facing * 1.6 * (1 - s),
+    lift: 2.4 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Mucus — thick Gymnothorax slime-coat shimmer. Not Silver mucuscoat. Not Coin flare. */
+export function mucusPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.mucus));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.2, rot: s * 8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.76) {
+    const s = (u - 0.16) / 0.6;
+    const shim = Math.sin(s * Math.PI * 4.2);
+    const roll = Math.sin(s * Math.PI * 1.4);
+    return {
+      x: fromX + facing * (shim * 0.45 + roll * 0.25),
+      lift: 2.2 + Math.abs(shim) * 1.4 + Math.abs(roll) * 0.6,
+      rot: facing * (8 + shim * 12 + roll * 6),
       anim: "sit" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.76) / 0.24);
+  return {
+    x: fromX + facing * 0.4 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Sentry — head-out crevice watch. Not lurk peek alone. Not Keel peer. Not guard. */
+export function sentryPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.sentry));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -8 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const rise = smoothstep(s);
+    return {
+      x: fromX + facing * rise * 1.4,
+      lift: 2.6 + rise * 1.8,
+      rot: facing * (-8 + rise * 10),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const scan = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * (1.4 + scan * 0.35),
+      lift: 4.2 + Math.abs(scan) * 0.8,
+      rot: facing * (4 + scan * 14),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 1.4 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: MorayTrick, dt: number, flags: TrickFlags): MorayTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "pharynx" && trick.kind !== "knot" && trick.kind !== "lurk") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "pharynx" &&
+    trick.kind !== "knot" &&
+    trick.kind !== "lurk" &&
+    trick.kind !== "mucus" &&
+    trick.kind !== "sentry"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: MorayTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -442,31 +537,18 @@ export function stepTrick(trick: MorayTrick, dt: number, flags: TrickFlags): Mor
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "hinge") {
-    const pose = hingePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "pharynx") {
-    const pose = pharynxPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "knot") {
-    const pose = knotPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = lurkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "hinge") pose = hingePose(next.t, fromX, trick.facing);
+  else if (next.kind === "pharynx") pose = pharynxPose(next.t, fromX, trick.facing);
+  else if (next.kind === "knot") pose = knotPose(next.t, fromX, trick.facing);
+  else if (next.kind === "lurk") pose = lurkPose(next.t, fromX, trick.facing);
+  else if (next.kind === "mucus") pose = mucusPose(next.t, fromX, trick.facing);
+  else pose = sentryPose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
   if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }

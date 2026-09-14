@@ -546,7 +546,7 @@ test("ultra-polish: Anchor coil/dorsal/pectoral lifts are Rui-visible (not micro
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Anchor idle-life ultra done; Kite / manta ultra follows; next after Kite is Door / moray — retained check that Anchor still wires (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra (Kite done in sibling PR); Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Anchor idle-life ultra done; Kite / manta ultra follows; Door / moray ultra done; next is Felt / moss — retained check that Anchor still wires (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra (Kite done in sibling PR); Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "seahorse");
   assert.equal(T.wantsThankYou("anchor"), true);
   assert.equal(OverlayGround.tricksFor("seahorse"), Overlay);
