@@ -449,7 +449,13 @@ assert.equal(names("silica").includes("shed"), false);
   assert.equal(names("magneton").includes("align"), false);
   assert.equal(names("magneton").includes("still"), false);
   assert.equal(names("magneton").includes("north"), false);
-  assert.ok(names("umbral").includes("dim"));
+  assert.ok(names("umbral").includes("caligo"));
+  assert.ok(names("umbral").includes("sfumato_soft"));
+  assert.ok(names("umbral").includes("tenebrae_soft"));
+  assert.ok(names("umbral").includes("freeze"));
+  assert.equal(names("umbral").includes("dim"), false);
+  assert.equal(names("umbral").includes("still"), false);
+  assert.equal(names("umbral").includes("cool"), false);
   assert.ok(names("cyst").includes("wake"));
   for (const key of POND) {
     const acts = names(key);

@@ -690,7 +690,13 @@ test("far keys never schedule scratch or tongue", () => {
   assert.ok(E.actsFor("magneton").some((a) => a.name === "remanence"));
   assert.ok(E.actsFor("magneton").some((a) => a.name === "barkhausen_soft"));
   assert.ok(E.actsFor("magneton").some((a) => a.name === "hysteresis_soft"));
-  assert.ok(E.actsFor("umbral").some((a) => a.name === "dim"));
+  assert.ok(E.actsFor("umbral").some((a) => a.name === "caligo"));
+  assert.ok(E.actsFor("umbral").some((a) => a.name === "sfumato_soft"));
+  assert.ok(E.actsFor("umbral").some((a) => a.name === "tenebrae_soft"));
+  assert.ok(E.actsFor("umbral").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("umbral").some((a) => a.name === "dim"), false);
+  assert.equal(E.actsFor("umbral").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("umbral").some((a) => a.name === "cool"), false);
   assert.ok(E.actsFor("cyst").some((a) => a.name === "wake"));
 });
 
