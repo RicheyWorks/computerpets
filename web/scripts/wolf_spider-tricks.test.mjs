@@ -2507,7 +2507,7 @@ test("notes: Prowl ultra idle-life done; next house-order ultra is Velvet / tara
   assert.equal(T.TRICKS.includes("look"), false);
 
   assert.equal(OverlayGround.tricksFor("jumping_spider"), OverlayJumpingSpider);   assert.equal(OverlayGround.tricksFor("leap"), OverlayJumpingSpider);   assert.equal(OverlayGround.wantsThankYou("jumping_spider"), true);   assert.equal(OverlayGround.wantsThankYou("leap"), true);   assert.deepEqual([...JumpingSpider.TRICKS], ["orient", "saccade", "palp", "safetyline", "ame", "scopula", "phidippus"]);   assert.deepEqual([...JumpingSpider.HAPPY], ["audax", "johnsoni", "regius"]);   assert.equal(JumpingSpider.TRICKS.includes("cursor"), false);   assert.equal(JumpingSpider.TRICKS.includes("tigrosa"), false);   assert.equal(OverlayJumpingSpider.TRICK_KEY, "jumping_spider");   assert.equal(T.TRICKS.includes("orient"), false);   assert.equal(T.TRICKS.includes("phidippus"), false);   assert.equal(T.TRICKS.includes("radiate"), false);   assert.equal(T.TRICKS.includes("araneus"), false);   assert.equal(T.TRICKS.includes("prowl"), false);   assert.equal(T.TRICKS.includes("hunt"), false);   assert.equal(T.TRICKS.includes("patrol"), false);   assert.equal(T.TRICKS.includes("carry"), false); 
-  // Recommend next house-order ultra (do not implement): Velvet / tarantula.
+  // Recommend next house-order ultra (do not implement): Hour / widow.
   assert.equal("wolf_spider", "wolf_spider");
   assert.equal("Prowl", "Prowl");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);
