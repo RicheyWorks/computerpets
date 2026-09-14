@@ -870,7 +870,16 @@ assert.ok(names("toad").includes("freeze"));
   assert.equal(names("paddlefish").includes("sit"), false);
 
 
-  assert.ok(names("lamprey").includes("disk"));
+  assert.ok(names("lamprey").includes("marinus"));
+  assert.ok(names("lamprey").includes("oralclamp_soft"));
+  assert.ok(names("lamprey").includes("anadromous_soft"));
+  assert.ok(names("lamprey").includes("sevengill_soft"));
+  assert.ok(names("lamprey").includes("freeze"));
+  assert.equal(names("lamprey").includes("disk"), false);
+  assert.equal(names("lamprey").includes("cling"), false);
+  assert.equal(names("lamprey").includes("still"), false);
+  assert.equal(names("lamprey").includes("round"), false);
+  assert.equal(names("lamprey").includes("sit"), false);
   for (const key of LOG) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
