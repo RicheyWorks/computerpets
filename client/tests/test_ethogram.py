@@ -687,7 +687,7 @@ def test_only_scratching_mammals_scratch():
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
         assert "tongue" not in names, key
-    assert "flag" in [a["name"] for a in acts_for("deer")]
+    assert "odocoileus" in [a["name"] for a in acts_for("deer")]
     assert "eptesicus" in [a["name"] for a in acts_for("bat")]
     assert "sciurus" in [a["name"] for a in acts_for("squirrel")]
     assert "nutbury_soft" in [a["name"] for a in acts_for("squirrel")]
@@ -699,7 +699,11 @@ def test_only_scratching_mammals_scratch():
     assert "denslide_soft" in [a["name"] for a in acts_for("otter")]
     assert "spraint_soft" in [a["name"] for a in acts_for("otter")]
     assert "freeze" in [a["name"] for a in acts_for("otter")]
-    assert "rinse" in [a["name"] for a in acts_for("raccoon")]
+    assert "procyon" in [a["name"] for a in acts_for("raccoon")]
+    assert "pawdouse_soft" in [a["name"] for a in acts_for("raccoon")]
+    assert "dexterous_soft" in [a["name"] for a in acts_for("raccoon")]
+    assert "ringtail_soft" in [a["name"] for a in acts_for("raccoon")]
+    assert "freeze" in [a["name"] for a in acts_for("raccoon")]
     assert "stamp" in [a["name"] for a in acts_for("skunk")]
     assert "playdead" in [a["name"] for a in acts_for("opossum")]
     assert "gnaw" in [a["name"] for a in acts_for("beaver")]
