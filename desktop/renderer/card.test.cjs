@@ -224,6 +224,7 @@ test("voice styles pick a human system voice and skip cartoon robots", () => {
 assert.equal(C.prefersHouseCry("umbral"), true);
   assert.equal(C.prefersHouseCry("cyst"), true);
   assert.equal(C.prefersHouseCry("frog"), true);
+assert.equal(C.prefersHouseCry("toad"), true);
   const hearth = C.speakOpts("hearth", 50);
   assert.ok(hearth.rate < 0.86);
   assert.ok(hearth.pitch < 0.95);
