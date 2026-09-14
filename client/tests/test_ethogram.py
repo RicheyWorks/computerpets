@@ -70,7 +70,10 @@ def test_only_scratching_mammals_scratch():
     assert "ala_soft" in [a["name"] for a in acts_for("pitcher")]
     assert "baffle_soft" in [a["name"] for a in acts_for("pitcher")]
     assert "freeze" in [a["name"] for a in acts_for("pitcher")]
-    assert "curl" in [a["name"] for a in acts_for("sundew")]
+    assert "rosette" in [a["name"] for a in acts_for("sundew")]
+    assert "lamina_soft" in [a["name"] for a in acts_for("sundew")]
+    assert "circinate_soft" in [a["name"] for a in acts_for("sundew")]
+    assert "freeze" in [a["name"] for a in acts_for("sundew")]
     for key in FUNGI_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
