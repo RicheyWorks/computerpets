@@ -151,6 +151,18 @@ test("saguaro ethogram is Arm ultra (sentinel + softs + freeze, not still/nod/le
   assert.equal(names.includes("lean"), false);
 });
 
+test("venus_flytrap ethogram is Snap ultra (poise + softs + freeze, not snap/nod/lean)", () => {
+  const names = E.actsFor("venus_flytrap").map((a) => a.name);
+  assert.ok(names.includes("poise"));
+  assert.ok(names.includes("cage_soft"));
+  assert.ok(names.includes("scape_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("snap"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("lean"), false);
+});
+
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",
