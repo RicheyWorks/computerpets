@@ -76,7 +76,7 @@ test("Coral tricks start only on idle ground", () => {
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
-  assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank"]);
+  assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
   assert.deepEqual([...T.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
@@ -176,9 +176,9 @@ test("rhyme/rumor/costume/frank/tile are house-milk-snake-true, not copies of pr
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
-  assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank"]);
+  assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
   assert.deepEqual([...Dragon.TRICKS], ["sprawl", "guard", "smolder", "claim", "fold", "ruff", "scrape"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.equal(T.TRICKS.includes("mosaic"), false);
   assert.equal(T.TRICKS.includes("loop"), false);
   assert.equal(T.TRICKS.includes("pour"), false);
@@ -272,8 +272,8 @@ test("ground registry keeps prior guests gated; Coral selectable; prior guests s
   assert.deepEqual([...GreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
-  assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank"]);
-  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return"]);
+  assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
+  assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
   assert.deepEqual([...T.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile"]);
   assert.equal(T.wantsThankYou("milk_snake"), true);
   assert.equal(T.wantsThankYou("coral"), true);
@@ -407,7 +407,7 @@ test("ground registry keeps prior guests gated; Coral selectable; prior guests s
   assert.deepEqual([...OverlayGreenTreePython.TRICKS], ["bracelet", "sway", "jewel", "heat", "bough", "liana", "arbor"]);
   assert.deepEqual([...OverlayHognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...OverlayGarter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
-  assert.deepEqual([...OverlayBoa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank"]);
+  assert.deepEqual([...OverlayBoa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
   assert.deepEqual([...Overlay.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
   assert.equal(Overlay.TRICKS.includes("write"), false);
@@ -457,7 +457,7 @@ test("notes: Coral idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("nori"), OverlayBallPython);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), true);
   assert.equal(OverlayGround.wantsThankYou("nori"), true);
-  assert.equal(OverlayGround.tricksFor("rosy_boa"), null);
+  assert.equal(OverlayGround.tricksFor("rosy_boa") == null, true);
   assert.equal(OverlayGround.wantsThankYou("rosy_boa"), false);
-  assert.equal(OverlayGround.tricksFor("blush"), null);
+  assert.equal(OverlayGround.tricksFor("blush") == null, true);
 });

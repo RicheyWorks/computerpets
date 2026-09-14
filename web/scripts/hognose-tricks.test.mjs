@@ -62,6 +62,7 @@ const OverlayAxolotl = createRequire(import.meta.url)(join(root, "../desktop/ren
 const OverlayToucan = createRequire(import.meta.url)(join(root, "../desktop/renderer/toucan-tricks.js"));
 const OverlayIguana = createRequire(import.meta.url)(join(root, "../desktop/renderer/iguana-tricks.js"));
 const OverlayDragon = createRequire(import.meta.url)(join(root, "../desktop/renderer/dragon-tricks.js"));
+const OverlayBoa = createRequire(import.meta.url)(join(root, "../desktop/renderer/boa-tricks.js"));
 
 
 test("Bluff tricks start only on idle ground", () => {
@@ -387,9 +388,15 @@ test("ultra-polish: Bluff hood/feign/quiver/upright lifts are Rui-visible (not m
   assert.ok(T.nextTrickWait(true, 0, "hood") > T.nextTrickWait(true, 0, "feign"));
 });
 
-test("notes: Bluff idle-life ultra done; Sash / garter ultra next-or-done; following house-order ultra guest is Lula / boa (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Bluff idle-life ultra done; Sash / garter ultra next-or-done; Lula / boa ultra next-or-done; following house-order ultra guest is Coral / milk_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "hognose");
   assert.equal(T.wantsThankYou("bluff"), true);
+  globalThis.PetHognoseTricks = Overlay;
+  globalThis.PetGreenTreePythonTricks = OverlayGreenTreePython;
+  globalThis.PetBallPythonTricks = OverlayBallPython;
+  globalThis.PetCornSnakeTricks = OverlayCornSnake;
+  globalThis.PetKingsnakeTricks = OverlayKingsnake;
+  globalThis.PetBoaTricks = OverlayBoa;
   assert.equal(OverlayGround.tricksFor("green_tree_python"), OverlayGreenTreePython);
   assert.equal(OverlayGround.tricksFor("jade"), OverlayGreenTreePython);
   assert.equal(OverlayGround.tricksFor("hognose"), Overlay);
@@ -408,7 +415,9 @@ test("notes: Bluff idle-life ultra done; Sash / garter ultra next-or-done; follo
   assert.equal(OverlayGround.tricksFor("nori"), OverlayBallPython);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), true);
   assert.equal(OverlayGround.wantsThankYou("nori"), true);
-  assert.equal(OverlayGround.tricksFor("boa") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("boa"), false);
-  assert.equal(OverlayGround.tricksFor("lula") == null, true);
+  assert.equal(OverlayGround.tricksFor("boa") != null, true);
+  assert.equal(OverlayGround.wantsThankYou("boa"), true);
+  assert.equal(OverlayGround.tricksFor("lula") != null, true);
+  assert.equal(OverlayGround.tricksFor("milk_snake") == null, true);
+  assert.equal(OverlayGround.tricksFor("coral") == null, true);
 });
