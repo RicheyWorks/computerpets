@@ -721,6 +721,10 @@ assert.ok(E.actsFor("caecilian").some((a) => a.name === "gymnophion"));
 assert.ok(E.actsFor("caecilian").some((a) => a.name === "stegos_soft"));
 assert.ok(E.actsFor("caecilian").some((a) => a.name === "dualjaw_soft"));
 assert.ok(E.actsFor("caecilian").some((a) => a.name === "freeze"));
+assert.ok(E.actsFor("crayfish").some((a) => a.name === "astacid"));
+assert.ok(E.actsFor("crayfish").some((a) => a.name === "scaph_soft"));
+assert.ok(E.actsFor("crayfish").some((a) => a.name === "meral_soft"));
+assert.ok(E.actsFor("crayfish").some((a) => a.name === "freeze"));
 
 
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wake"), false);
