@@ -290,6 +290,12 @@ def test_only_scratching_mammals_scratch():
     assert "freeze" in [a["name"] for a in acts_for("octopus")]
     assert "lid" not in [a["name"] for a in acts_for("octopus")]
     assert "flush" not in [a["name"] for a in acts_for("octopus")]
+    assert "hide" in [a["name"] for a in acts_for("cuttlefish")]
+    assert "strike_soft" in [a["name"] for a in acts_for("cuttlefish")]
+    assert "zebra_soft" in [a["name"] for a in acts_for("cuttlefish")]
+    assert "freeze" in [a["name"] for a in acts_for("cuttlefish")]
+    assert "flush" not in [a["name"] for a in acts_for("cuttlefish")]
+    assert "lid" not in [a["name"] for a in acts_for("cuttlefish")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
