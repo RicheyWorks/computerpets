@@ -131,7 +131,7 @@ test("Spark tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -215,7 +215,7 @@ test("Spark tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...Overlay.HAPPY], ["luciferin", "candela", "pyralis"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -252,6 +252,8 @@ test("Spark tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("silk"), false);
   assert.equal(T.TRICKS.includes("stream"), false);
   assert.equal(T.TRICKS.includes("actias"), false);
+  assert.equal(T.TRICKS.includes("aphagy"), false);
+  assert.equal(T.TRICKS.includes("cauda"), false);
   assert.equal(T.HAPPY.includes("lime"), false);
   assert.equal(T.HAPPY.includes("moon"), false);
   assert.equal(T.HAPPY.includes("satin"), false);
@@ -262,7 +264,7 @@ test("Spark tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("figure"), false);
 });
 
-test("lantern/jstroke/semaphore/elytra/photinus are house-firefly-true, not copies of prior guests", () => {
+test("lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite are house-firefly-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("photinus", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -293,6 +295,18 @@ test("lantern/jstroke/semaphore/elytra/photinus are house-firefly-true, not copi
   assert.equal(taproot.anim, "sit");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.05 || Math.abs(taprootMid.rot) > 1 || Math.abs(taprootMid.x - 80) > 0.05);
+
+  const photocyte = T.beginTrick("photocyte", 80, 1);
+  assert.equal(photocyte.anim, "play");
+  const photocyteMid = T.stepTrick(photocyte, 0.5, ground);
+  assert.ok(Math.abs(photocyteMid.lift) > 0.05 || Math.abs(photocyteMid.rot) > 1 || Math.abs(photocyteMid.x - 80) > 0.05);
+  const sternite = T.beginTrick("sternite", 80, 1);
+  assert.equal(sternite.anim, "talk");
+  const sterniteMid = T.stepTrick(sternite, 0.5, ground);
+  assert.ok(Math.abs(sterniteMid.lift) > 0.05 || Math.abs(sterniteMid.rot) > 1 || Math.abs(sterniteMid.x - 80) > 0.05);
+  assert.equal(T.TRICKS.includes("photocyte"), true);
+  assert.equal(T.TRICKS.includes("sternite"), true);
+
   const sinusDone = T.stepTrick(sinus, 1.7, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
@@ -303,6 +317,8 @@ test("lantern/jstroke/semaphore/elytra/photinus are house-firefly-true, not copi
     assert.equal(mod.TRICKS.includes("semaphore"), false);
     assert.equal(mod.TRICKS.includes("elytra"), false);
     assert.equal(mod.TRICKS.includes("photinus"), false);
+    assert.equal(mod.TRICKS.includes("photocyte"), false);
+    assert.equal(mod.TRICKS.includes("sternite"), false);
   }
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("corolla"), false);
@@ -492,7 +508,7 @@ test("ground registry keeps prior guests gated; Spark selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.equal(T.wantsThankYou("firefly"), true);
   assert.equal(T.wantsThankYou("spark"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -667,7 +683,7 @@ globalThis.PetDarnerTricks = OverlayDarner;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -723,7 +739,7 @@ globalThis.PetDarnerTricks = OverlayDarner;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Spark idle-life done; next house-order guest still lacking tricks was Dart / darner (now done)", () => {
+test("notes: Spark ultra-polish done; next house-order ultra is Dart / darner", () => {
   assert.equal(T.TRICK_KEY, "firefly");
   assert.equal(T.wantsThankYou("spark"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -821,8 +837,8 @@ test("notes: Spark idle-life done; next house-order guest still lacking tricks w
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
-  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
+  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...T.HAPPY], ["luciferin", "candela", "pyralis"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
@@ -868,8 +884,8 @@ test("notes: Spark idle-life done; next house-order guest still lacking tricks w
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
-  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
+  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.equal(OverlayGround.tricksFor("darner"), OverlayDarner);
   assert.equal(OverlayGround.wantsThankYou("darner"), true);
   assert.equal(OverlayGround.tricksFor("dart"), OverlayDarner);
@@ -880,8 +896,8 @@ test("notes: Spark idle-life done; next house-order guest still lacking tricks w
   assert.equal(OverlayGround.wantsThankYou("firefly"), true);
   assert.equal(OverlayGround.tricksFor("spark"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("spark"), true);
-  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
-  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
+  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
@@ -900,8 +916,8 @@ test("notes: Spark idle-life done; next house-order guest still lacking tricks w
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
-  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
+  assert.deepEqual([...T.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
+  assert.deepEqual([...Overlay.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
   assert.equal(OverlayGround.tricksFor("sundew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);

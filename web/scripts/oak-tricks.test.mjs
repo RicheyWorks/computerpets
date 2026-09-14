@@ -636,7 +636,7 @@ globalThis.PetOakTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Mast ultra-polish done; Disk + Moth + Arm + Snap + Well + Dew + Comb ultra also done; Milk + Ghost ultra also done; next house-order ultra is Spark / firefly", () => {
+test("notes: Mast ultra-polish done; Disk + Moth + Arm + Snap + Well + Dew + Comb ultra also done; Milk + Ghost ultra also done; Spark ultra also done; next house-order ultra is Dart / darner", () => {
   assert.equal(T.TRICK_KEY, "oak");
   assert.equal(T.wantsThankYou("mast"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
