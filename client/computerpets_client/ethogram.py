@@ -60,7 +60,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "garter": (_a("tongue", "tongue", 0.7, 4), _a("seam", "sit_hold", 2.4, 4, "sit"), _a("rounds_soft", "wiggle", 1.0, 2), _a("moss_soft", "sit", 1.0, 2, "sit"), _a("fork_soft", "talk", 0.9, 2, "talk"), _a("ribbon_soft", "play", 1.0, 2, "play"), _a("creek_soft", "wiggle", 1.1, 2), _a("freeze", "freeze", 1.4, 2)),
     "boa": (_a("tongue", "tongue", 0.7, 4), _a("hold", "sit_hold", 2.8, 4, "sit"), _a("pour_soft", "sit", 1.1, 2, "sit"), _a("heft_soft", "sit", 1.0, 2, "sit"), _a("oxbow_soft", "wiggle", 1.1, 2), _a("anchor_soft", "sit", 1.2, 2, "sit"), _a("meander_soft", "wiggle", 1.15, 2), _a("freeze", "freeze", 1.5, 2)),
     "milk_snake": (_a("tongue", "tongue", 0.7, 4), _a("rhyme", "sit_hold", 2.4, 4, "sit"), _a("rumor_soft", "talk", 1.0, 2, "talk"), _a("costume_soft", "sit", 1.0, 2, "sit"), _a("cipher_soft", "sit", 1.1, 2, "sit"), _a("verse_soft", "talk", 1.05, 2, "talk"), _a("tile_soft", "play", 1.0, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
-    "rosy_boa": (_a("tongue", "tongue", 0.7, 3), _a("nest", "sit_hold", 2.6, 3, "sit")),
+    "rosy_boa": (_a("tongue", "tongue", 0.7, 4), _a("pebble", "sit_hold", 2.4, 4, "sit"), _a("crevice_soft", "wiggle", 1.0, 2), _a("rosy_soft", "play", 1.0, 2, "play"), _a("mesa_soft", "sit", 1.0, 2, "sit"), _a("dune_soft", "walk", 1.1, 2), _a("talus_soft", "sit", 1.05, 2, "sit"), _a("freeze", "freeze", 1.4, 2)),
     "carpet_python": (_a("tongue", "tongue", 0.7, 4), _a("drape", "sit_hold", 2.2, 3, "sit")),
     "octopus": (_a("hide", "sit_hold", 2.0, 3, "sit"), _a("jet", "dart", 0.8, 2), _a("taste", "wiggle", 1.0, 2)),
     "cuttlefish": (_a("flush", "pulse", 0.9, 3), _a("hover", "bob", 1.4, 2)),

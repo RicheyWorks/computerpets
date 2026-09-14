@@ -80,7 +80,7 @@ test("Blush tricks start only on idle ground", () => {
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
   assert.deepEqual([...MilkSnake.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile", "cipher", "verse"]);
-  assert.deepEqual([...T.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo"]);
+  assert.deepEqual([...T.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo", "dune", "talus"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -131,7 +131,7 @@ test("Blush tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("encore"), false);
 });
 
-test("pebble/crevice/rosy/mesa/arroyo are house-rosy-boa-true, not copies of prior guests", () => {
+test("pebble/crevice/rosy/mesa/arroyo/dune/talus are house-rosy-boa-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const rhyme = T.beginTrick("pebble", 80, 1);
   assert.equal(rhyme.anim, "sit");
@@ -139,7 +139,7 @@ test("pebble/crevice/rosy/mesa/arroyo are house-rosy-boa-true, not copies of pri
   const held = T.stepTrick(rhyme, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(rhyme, T.PEBBLE_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -162,8 +162,24 @@ test("pebble/crevice/rosy/mesa/arroyo are house-rosy-boa-true, not copies of pri
   assert.equal(costume.anim, "sit");
   const costumeMid = T.stepTrick(costume, 0.5, ground);
   assert.ok(Math.abs(costumeMid.lift) > 0.05 || Math.abs(costumeMid.rot) > 1 || Math.abs(costumeMid.x - 80) > 0.1);
-  const costumeDone = T.stepTrick(costume, 1.6, ground);
+  const costumeDone = T.stepTrick(costume, T.DUR.rosy + 0.1, ground);
   assert.equal(costumeDone.phase, "done");
+  const dune = T.beginTrick("dune", 80, 1);
+  assert.equal(dune.anim, "walk");
+  const duneMid = T.stepTrick(dune, T.DUR.dune * 0.4, ground);
+  assert.ok(duneMid.lift > 2 || Math.abs(duneMid.rot) > 8 || Math.abs(duneMid.x - 80) > 1);
+  const talus = T.beginTrick("talus", 80, 1);
+  assert.equal(talus.anim, "sit");
+  const talusMid = T.stepTrick(talus, T.DUR.talus * 0.45, ground);
+  assert.ok(Math.abs(talusMid.lift) > 0.8 || Math.abs(talusMid.rot) > 4 || Math.abs(talusMid.x - 80) > 0.3);
+  assert.equal(T.TRICKS.includes("stone"), false);
+  assert.equal(T.TRICKS.includes("nest"), false);
+  assert.equal(T.TRICKS.includes("hide"), false);
+  assert.equal(T.TRICKS.includes("tuck"), false);
+  assert.equal(T.TRICKS.includes("nook"), false);
+  assert.equal(T.TRICKS.includes("pour"), false);
+  assert.equal(T.TRICKS.includes("rhyme"), false);
+  assert.equal(T.TRICKS.includes("creek"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, Relay, Fuse, Earth]) {
@@ -172,6 +188,8 @@ test("pebble/crevice/rosy/mesa/arroyo are house-rosy-boa-true, not copies of pri
     assert.equal(mod.TRICKS.includes("rosy"), false);
     assert.equal(mod.TRICKS.includes("mesa"), false);
     assert.equal(mod.TRICKS.includes("arroyo"), false);
+    assert.equal(mod.TRICKS.includes("dune"), false);
+    assert.equal(mod.TRICKS.includes("talus"), false);
   }
   assert.deepEqual([...BallPython.TRICKS], ["orb", "nook", "taste", "inch", "unroll", "loom", "weave"]);
   assert.deepEqual([...CornSnake.TRICKS], ["scribble", "gap", "comma", "probe", "canyon", "blotter", "pencil"]);
@@ -285,7 +303,7 @@ test("ground registry keeps prior guests gated; Blush selectable; prior guests s
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
   assert.deepEqual([...Phoenix.TRICKS], ["cinder", "blaze", "shed", "lift", "return", "reignite", "hearth"]);
-  assert.deepEqual([...T.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo"]);
+  assert.deepEqual([...T.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo", "dune", "talus"]);
   assert.equal(T.wantsThankYou("rosy_boa"), true);
   assert.equal(T.wantsThankYou("blush"), true);
   assert.equal(BallPython.wantsThankYou("nori"), true);
@@ -420,7 +438,7 @@ test("ground registry keeps prior guests gated; Blush selectable; prior guests s
   assert.deepEqual([...OverlayHognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...OverlayGarter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.deepEqual([...OverlayBoa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
-  assert.deepEqual([...Overlay.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo"]);
+  assert.deepEqual([...Overlay.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo", "dune", "talus"]);
   assert.equal(Overlay.TRICKS.includes("orb"), false);
   assert.equal(Overlay.TRICKS.includes("write"), false);
   assert.equal(Overlay.TRICKS.includes("flip"), false);
@@ -436,7 +454,25 @@ test("ground registry keeps prior guests gated; Blush selectable; prior guests s
   assert.equal(Overlay.TRICKS.includes("mimic"), false);
 });
 
-test("notes: Blush idle-life done; next house-order guest still lacking tricks is Atlas / carpet_python", () => {
+test("ultra-polish: Blush pebble/dune/talus lifts are Rui-visible (not micro idle-gen)", () => {
+  const pb = T.beginTrick("pebble", 80, 1);
+  const mid = T.stepTrick(pb, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `pebble mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `pebble mid lift ${mid.lift}`);
+  const du = T.beginTrick("dune", 80, 1);
+  const d2 = T.stepTrick(du, T.DUR.dune * 0.4, { cmd: "idle" });
+  assert.ok(d2.lift > 2 || Math.abs(d2.rot) > 8 || Math.abs(d2.x - 80) > 1, `dune mid ${d2.lift}/${d2.rot}/${d2.x}`);
+  const ta = T.beginTrick("talus", 80, 1);
+  const t2 = T.stepTrick(ta, T.DUR.talus * 0.45, { cmd: "idle" });
+  assert.ok(Math.abs(t2.lift) > 0.8 || Math.abs(t2.rot) > 4 || Math.abs(t2.x - 80) > 0.3, `talus mid ${t2.lift}/${t2.rot}/${t2.x}`);
+  const ro = T.beginTrick("rosy", 80, 1);
+  const r2 = T.stepTrick(ro, T.DUR.rosy * 0.4, { cmd: "idle" });
+  assert.ok(r2.lift > 0.5 || Math.abs(r2.rot) > 4 || Math.abs(r2.x - 80) > 0.5, `rosy mid ${r2.lift}/${r2.rot}/${r2.x}`);
+  assert.ok(Overlay.dunePose && Overlay.talusPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+});
+
+test("notes: Blush idle-life ultra done; next house-order ultra guest is Atlas / carpet_python (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "rosy_boa");
   assert.equal(T.wantsThankYou("blush"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);
