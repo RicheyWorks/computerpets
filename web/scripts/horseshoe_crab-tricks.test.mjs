@@ -95,7 +95,7 @@ test("Ledger tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
+  assert.deepEqual([...T.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -161,11 +161,11 @@ test("Ledger tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
+  assert.deepEqual([...Overlay.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...Overlay.HAPPY], ["blue", "page", "tray"]);
 });
 
-test("carapace/bookgill/telson/furrow/fossil are house-horseshoe-true, not copies of prior guests", () => {
+test("carapace/bookgill/telson/furrow/fossil/pusher/ocular are house-horseshoe-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const carapace = T.beginTrick("carapace", 80, 1);
   assert.equal(carapace.anim, "sit");
@@ -196,7 +196,15 @@ test("carapace/bookgill/telson/furrow/fossil are house-horseshoe-true, not copie
   assert.equal(fossil.anim, "sit");
   const fossilMid = T.stepTrick(fossil, 0.5, ground);
   assert.ok(Math.abs(fossilMid.lift) > 0.05 || Math.abs(fossilMid.rot) > 1 || Math.abs(fossilMid.x - 80) > 0.05);
-  const telsonDone = T.stepTrick(telson, 1.5, ground);
+  const pusher = T.beginTrick("pusher", 80, 1);
+  assert.equal(pusher.anim, "walk");
+  const pusherMid = T.stepTrick(pusher, T.DUR.pusher * 0.4, ground);
+  assert.ok(Math.abs(pusherMid.lift) > 0.05 || Math.abs(pusherMid.rot) > 1 || Math.abs(pusherMid.x - 80) > 0.05);
+  const ocular = T.beginTrick("ocular", 80, 1);
+  assert.equal(ocular.anim, "talk");
+  const ocularMid = T.stepTrick(ocular, T.DUR.ocular * 0.4, ground);
+  assert.ok(Math.abs(ocularMid.lift) > 0.05 || Math.abs(ocularMid.rot) > 1 || Math.abs(ocularMid.x - 80) > 0.05);
+  const telsonDone = T.stepTrick(telson, T.DUR.telson + 0.1, ground);
   assert.equal(telsonDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -206,6 +214,8 @@ test("carapace/bookgill/telson/furrow/fossil are house-horseshoe-true, not copie
     assert.equal(mod.TRICKS.includes("telson"), false);
     assert.equal(mod.TRICKS.includes("furrow"), false);
     assert.equal(mod.TRICKS.includes("fossil"), false);
+    assert.equal(mod.TRICKS.includes("pusher"), false);
+    assert.equal(mod.TRICKS.includes("ocular"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -371,7 +381,7 @@ test("ground registry keeps prior guests gated; Ledger selectable; prior guests 
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
+  assert.deepEqual([...T.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.equal(T.wantsThankYou("horseshoe_crab"), true);
   assert.equal(T.wantsThankYou("ledger"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -483,7 +493,7 @@ test("ground registry keeps prior guests gated; Ledger selectable; prior guests 
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...Overlay.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
+  assert.deepEqual([...Overlay.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.equal(Overlay.TRICKS.includes("knob"), false);
   assert.equal(Overlay.TRICKS.includes("ledger"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -507,7 +517,26 @@ test("ground registry keeps prior guests gated; Ledger selectable; prior guests 
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
 });
 
-test("notes: Ledger idle-life done; next house-order guest still lacking tricks is Anchor / seahorse", () => {
+
+test("ultra-polish: Ledger carapace/pusher/ocular lifts are Rui-visible (not micro idle-gen)", () => {
+  const cap = T.beginTrick("carapace", 80, 1);
+  const mid = T.stepTrick(cap, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `carapace mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `carapace mid lift ${mid.lift}`);
+  const pu = T.beginTrick("pusher", 80, 1);
+  const p2 = T.stepTrick(pu, T.DUR.pusher * 0.4, { cmd: "idle" });
+  assert.ok(p2.lift > 2 || Math.abs(p2.rot) > 4 || Math.abs(p2.x - 80) > 1, `pusher mid ${p2.lift}/${p2.rot}/${p2.x}`);
+  const oc = T.beginTrick("ocular", 80, 1);
+  const o2 = T.stepTrick(oc, T.DUR.ocular * 0.4, { cmd: "idle" });
+  assert.ok(o2.lift > 2 || Math.abs(o2.rot) > 8 || Math.abs(o2.x - 80) > 0.3, `ocular mid ${o2.lift}/${o2.rot}/${o2.x}`);
+  const fu = T.beginTrick("furrow", 80, 1);
+  const f2 = T.stepTrick(fu, T.DUR.furrow * 0.4, { cmd: "idle" });
+  assert.ok(f2.lift > 0.5 || Math.abs(f2.rot) > 4 || Math.abs(f2.x - 80) > 0.5, `furrow mid ${f2.lift}/${f2.rot}/${f2.x}`);
+  assert.ok(Overlay.pusherPose && Overlay.ocularPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+});
+
+test("notes: Ledger idle-life ultra done; next house-order ultra guest is Anchor / seahorse (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "horseshoe_crab");
   assert.equal(T.wantsThankYou("ledger"), true);
   assert.equal(OverlayGround.tricksFor("horseshoe_crab"), Overlay);
@@ -540,8 +569,8 @@ test("notes: Ledger idle-life done; next house-order guest still lacking tricks 
   assert.equal(OverlayGround.tricksFor("clip"), OverlayHamster);
   assert.equal(OverlayGround.tricksFor("hedgehog"), OverlayHedgehog);
   assert.equal(OverlayGround.tricksFor("burr"), OverlayHedgehog);
-  assert.equal(OverlayGround.tricksFor("seahorse"), null);
+  assert.equal(OverlayGround.tricksFor("seahorse") == null, true);
   assert.equal(OverlayGround.wantsThankYou("seahorse"), false);
-  assert.equal(OverlayGround.tricksFor("anchor"), null);
+  assert.equal(OverlayGround.tricksFor("anchor") == null, true);
   assert.equal(OverlayGround.wantsThankYou("anchor"), false);
 });
