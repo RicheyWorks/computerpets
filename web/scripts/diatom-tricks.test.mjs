@@ -2160,7 +2160,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Pane ultra idle-life done; next house-order ultra is Spin / chlamydomonas", () => {
+test("notes: Pane ultra idle-life done; next house-order ultra is Bell / stentor", () => {
   assert.equal(T.TRICK_KEY, "diatom");
   assert.deepEqual([...T.TRICKS], ["frustule", "raphe", "girdle", "oilstore", "navicula", "pennate", "epitheca"]);
   assert.deepEqual([...T.HAPPY], ["bacillaris", "cryptocephala", "tripunctata"]);
