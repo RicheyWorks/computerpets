@@ -1,6 +1,6 @@
-/** Lid ground tricks while idle. House neighborly Emydidae / Terrapene carolina Eastern Box Turtle hinge-dome desk life — hingeshut / berryforage / shellsoak / nestscrape / carolinae personality (hingeshut hinged plastron shut without naming hinge or shut or close or box or clamp or seal or fold or clasp or vault or dome or lid or shell or hide or tuck or retreat or withdraw, berryforage woodland berry browse without naming berry or forage or browse or pluck or peck or nibble or hunt or seek or grub or sniff or root or graze or feed or snack, shellsoak shallow shell soak without naming shell or soak or bath or wallow or wet or puddle or pool or mud or dive or swim or float or settle or rest or lounge, nestscrape nest cup scrape without naming nest or scrape or dig or clutch or tunnel or cup or bowl or groove or pit or bury or cover or lay or excavate or shovel, long carolinae Terrapene carolina dome-calm hinge hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or ambushgape or mudbury or necklunge or banksnap or serpentina or densbeak or inkbeak or densplastron or toothlock or highwalk or salttear or nestpit or acutus or densjaw or inkjaw or denskeel or bellowbank or deathcoil or snoutspy or baskgape or mississippi or denslevee or inklevee or densscute or bloodsquirt or antfeast or freezeflat or rainharvest or phrynosoma or denspike or inkspike or denscorona or veilflush or turretgaze or tongueshot or branchrock or calyptratus or denshift or inkshift or denscasque or tailbluff or litterdash or tongueflick or sunbask or plestiodon or dewlapflash or pushupshow or hueshift or preyinch or anolis or toepadcling or vocalclick or lickeye or mothstalk or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash; window-play FLASH and Call Lid leave box_turtle alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift/Spike/Levee/Jaw/Beak own their tricks; guest slug Lid / key box_turtle — accept "box_turtle" and "lid" (roster slug lid; campaign Lid); do NOT name a trick box_turtle or lid or snapper or beak or crocodile or jaw or alligator or levee or turtle or ink or horned_lizard or spike or phrynosoma or chameleon or calyptratus or veiled or skink or plestiodon or fasciatus or anole or anolis or carolinensis or gecko or hemidactylus or turcicus or salamander or dapple or iguana or sol or newt or eft or caecilian or slip or frog or reed or toad or pebble or dash or densdash or inkdash or densbluff or wink or denswink or inkwink or densdewlap or shift or denshift or inkshift or denscasque or denspike or inkspike or denscorona or denslevee or inklevee or densscute or densjaw or inkjaw or denskeel or densbeak or inkbeak or densplastron or Horn or Bank or mining or tuatara). Thank-yous denslid / inklid / densdome. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop box_turtle-tricks.js. Window-play FLASH unchanged. True Eastern Box Turtle Emydidae Terrapene desk life — not snapper/Chelydra, not croc/alligator/rui clones. Next house-order guest after Lid still lacking tricks owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Lid ground tricks while idle — ultra-polish pass. House neighborly Emydidae / Terrapene carolina Eastern Box Turtle hinge-dome desk life (box_turtle / Lid) — hingeshut / berryforage / shellsoak / nestscrape / dome / leafhush / carolinae personality (hingeshut hinged plastron shut without naming hinge or shut or close or box or clamp or seal or fold or clasp or vault or lid or shell or hide or tuck or retreat or withdraw or sit or freeze or still alone, berryforage woodland berry browse without naming berry or forage or browse or pluck or peck or nibble or hunt or seek or grub or sniff or root or graze or feed or snack alone, shellsoak shallow shell soak without naming shell or soak or bath or wallow or wet or puddle or pool or mud or dive or swim or float or settle or rest or lounge alone, nestscrape nest cup scrape without naming nest or scrape or dig or clutch or tunnel or cup or bowl or groove or pit or bury or cover or lay or excavate or shovel alone, dome high-domed carapace rise without naming dome or carapace or vault or keel or scute or ridge or hump or arch alone, leafhush leaf-litter hush without naming leaf or litter or hush or cover or duff or mulch or hide or cloak or settle alone, long carolinae Terrapene carolina dome-calm hinge hush hold (THE carolinae sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or ambushgape or mudbury or necklunge or banksnap or serrated or plastron or serpentina or densbeak or inkbeak or densplastron or toothlock or highwalk or salttear or nestpit or vsnout or keelridge or acutus or densjaw or inkjaw or denskeel or bellowbank or deathcoil or snoutspy or baskgape or osteoderm or scutehush or mississippi or denslevee or inklevee or densscute or bloodsquirt or antfeast or freezeflat or rainharvest or coronal or sandhush or phrynosoma or denspike or inkspike or denscorona or veilflush or turretgaze or tongueshot or branchrock or casque or zygodactyl or calyptratus or denshift or inkshift or denscasque or tailbluff or litterdash or tongueflick or sunbask or bluetail or stonehush or plestiodon or dewlapflash or pushupshow or hueshift or preyinch or nuchal or vinehush or anolis or toepadcling or vocalclick or lickeye or mothstalk or setae or lamphush or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash or nictitate or gular or tympanum or frog or reed or snap or shut or hide or show or sit or still as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play FLASH unchanged if already fine; Beak owns ambushgape/mudbury/necklunge/banksnap/serrated/plastron/serpentina — do NOT reuse plastron as a trick kind; Jaw owns toothlock/highwalk/salttear/nestpit/vsnout/keelridge/acutus; Coal owns berrypluck — berryforage ok if distinct; Jaw owns nestpit — nestscrape ok; Ink turtle already ultra — keep Terrapene-true not Chelydra/Ink; Peak/tuatara next — leave tuatara words free; guest slug Lid / key box_turtle only for isKey matching — accept "box_turtle" and "lid"; do NOT name a trick "box_turtle" or "lid" or "hinge" or "shut" or "snapper" or "beak" or "snap" or "crocodile" or "jaw" or "alligator" or "levee" or "turtle" or "ink" or "plastron" or "still" or "flash" or "show" or "sit" or "tuatara" or "peak") — not Beak snapper life, not Jaw crocodile life, not Levee alligator life, not Ink painted-turtle life, not Peak tuatara life, not Rui red_panda life. Hingeshut hinged shut without naming hinge alone, berryforage woodland browse without naming berry alone, shellsoak shallow soak without naming shell alone, nestscrape nest scrape without naming nest alone, dome high carapace without naming dome alone, leafhush leaf litter without naming leaf alone, carolinae long sit_hold on the hinge dome (THE carolinae sit_hold tell); denslid / inklid / densdome thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop box_turtle-tricks.js. Window-play FLASH unchanged. Ethogram softs + freeze — never names shut/walk/still/box_turtle as bare ethogram-only trick kinds. True Eastern Box Turtle Emydidae Terrapene carolina desk life only — distinct from Beak, Jaw, Levee, Ink, Peak, Spike, Shift, Dash, Wink, Pad, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Dam, Whee, Slick, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Peak / tuatara. No cry inventing — thank-yous are silent desk motion only; no box_turtle.wav on disk so prefersHouseCry skipped (turtle.wav belongs to Ink). Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "box_turtle";
-export const TRICKS = ["hingeshut", "berryforage", "shellsoak", "nestscrape", "carolinae"] as const;
+export const TRICKS = ["hingeshut", "berryforage", "shellsoak", "nestscrape", "dome", "leafhush", "carolinae"] as const;
 export const HAPPY = ["denslid", "inklid", "densdome"] as const;
 export type BoxTurtleTrickKind = (typeof TRICKS)[number];
 export type BoxTurtleHappyKind = (typeof HAPPY)[number];
@@ -44,338 +44,521 @@ export type BoxTurtleHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { denslid: 2.20, inklid: 2.34, densdome: 2.26 } as const;
-export const CAROLINAE_HOLD = 20.72;
-export const RELEASE_S = 1.70;
-export const DUR = { carolinae: CAROLINAE_HOLD + RELEASE_S, hingeshut: 3.14, berryforage: 3.08, shellsoak: 3.30, nestscrape: 3.22 } as const;
+export const HAPPY_DUR = { denslid: 1.70, inklid: 1.84, densdome: 1.76 } as const;
+export const CAROLINAE_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  carolinae: CAROLINAE_HOLD + RELEASE_S,
+  hingeshut: 2.48,
+  berryforage: 2.42,
+  shellsoak: 2.56,
+  nestscrape: 2.44,
+  dome: 2.40,
+  leafhush: 2.38,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
 export function shouldAbort(state: TrickFlags | undefined) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "eat" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: BoxTurtleTrickKind | string) {
-    const roll = rand == null ? Math.random() : rand;
-      if (kind === "carolinae") return 138 + roll * 12;
-  if (kind === "hingeshut") return 21.2 + roll * 5.0;
-  if (kind === "berryforage") return 22.4 + roll * 5.6;
-  if (kind === "shellsoak") return 22.6 + roll * 6.4;
-  if (kind === "nestscrape") return 23.8 + roll * 6.2;
-  return justFinished ? 19.8 + roll * 4.6 : 13.8 + roll * 3.8;
-  }
+  const roll = rand == null ? Math.random() : rand;
+  if (kind === "carolinae") return 40 + roll * 26;
+  if (kind === "dome" || kind === "leafhush" || kind === "hingeshut") return 12.8 + roll * 9.4;
+  if (kind === "berryforage" || kind === "shellsoak" || kind === "nestscrape") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
+}
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: BoxTurtleTrickKind | string | null) {
-    if (musicOn) return "carolinae";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "carolinae") {
-      if (roll < 0.26) return "hingeshut";
-      if (roll < 0.5) return "berryforage";
-      if (roll < 0.74) return "shellsoak";
-      return "nestscrape";
-    }
-    if (lastKind === "hingeshut") {
-      if (roll < 0.26) return "carolinae";
-      if (roll < 0.5) return "berryforage";
-      if (roll < 0.74) return "shellsoak";
-      return "nestscrape";
-    }
-    if (lastKind === "berryforage") {
-      if (roll < 0.22) return "carolinae";
-      if (roll < 0.44) return "hingeshut";
-      if (roll < 0.68) return "shellsoak";
-      return "nestscrape";
-    }
-    if (roll < 0.2) return "carolinae";
-    if (roll < 0.4) return "hingeshut";
-    if (roll < 0.6) return "berryforage";
-    if (roll < 0.8) return "shellsoak";
-    return "nestscrape";
+  if (musicOn) return "carolinae" as const;
+  const roll = rand == null ? Math.random() : rand;
+  if (lastKind === "carolinae") {
+    if (roll < 0.17) return "hingeshut" as const;
+    if (roll < 0.33) return "berryforage" as const;
+    if (roll < 0.49) return "shellsoak" as const;
+    if (roll < 0.65) return "nestscrape" as const;
+    if (roll < 0.83) return "dome" as const;
+    return "leafhush" as const;
   }
+  if (lastKind === "hingeshut") {
+    if (roll < 0.16) return "carolinae" as const;
+    if (roll < 0.32) return "berryforage" as const;
+    if (roll < 0.48) return "shellsoak" as const;
+    if (roll < 0.64) return "nestscrape" as const;
+    if (roll < 0.82) return "dome" as const;
+    return "leafhush" as const;
+  }
+  if (lastKind === "berryforage") {
+    if (roll < 0.14) return "carolinae" as const;
+    if (roll < 0.3) return "hingeshut" as const;
+    if (roll < 0.46) return "shellsoak" as const;
+    if (roll < 0.62) return "nestscrape" as const;
+    if (roll < 0.8) return "dome" as const;
+    return "leafhush" as const;
+  }
+  if (lastKind === "dome" || lastKind === "leafhush") {
+    if (roll < 0.14) return "carolinae" as const;
+    if (roll < 0.3) return "hingeshut" as const;
+    if (roll < 0.46) return "berryforage" as const;
+    if (roll < 0.62) return "shellsoak" as const;
+    if (roll < 0.78) return "nestscrape" as const;
+    return lastKind === "dome" ? ("leafhush" as const) : ("dome" as const);
+  }
+  if (roll < 0.14) return "carolinae" as const;
+  if (roll < 0.28) return "hingeshut" as const;
+  if (roll < 0.42) return "berryforage" as const;
+  if (roll < 0.56) return "shellsoak" as const;
+  if (roll < 0.7) return "nestscrape" as const;
+  if (roll < 0.85) return "dome" as const;
+  return "leafhush" as const;
+}
+
 export function happyCanStart(state: TrickFlags | undefined) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
 export function wantsThankYou(key: string | undefined | null) {
-    return key === TRICK_KEY || key === "lid";
-  }
+  return key === TRICK_KEY || key === "lid";
+}
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: BoxTurtleHappyKind | null | undefined,
+  lastKind: BoxTurtleHappyKind | string | null | undefined,
   x: number,
   facing: 1 | -1,
-  flags?: TrickFlags
+  flags?: TrickFlags,
 ) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
-  }
+  if (!wantsThankYou(key)) return null;
+  if (!happyCanStart(flags || { cmd: "idle" })) return null;
+  const pick = pickHappy(lastKind as BoxTurtleHappyKind | null | undefined);
+  return { happy: beginHappy(pick, x, facing), kind: pick };
+}
+
 export function pickHappy(lastKind?: BoxTurtleHappyKind | null, rand?: number) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
-  }
+  const pool = HAPPY.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...HAPPY];
+  const roll = rand == null ? Math.random() : rand;
+  return list[Math.floor(roll * list.length)] || list[0];
+}
+
 export function beginHappy(kind: BoxTurtleHappyKind | string, x: number, facing: 1 | -1): BoxTurtleHappy {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denslid";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: (name === "denslid" ? "sit" : name === "inklid" ? "play" : "sit") as TrickAnim,
-      facing: (facing == null ? 1 : facing) as 1 | -1,
-      fromX: x,
-    };
-  }
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as BoxTurtleHappyKind) : "denslid";
+  return {
+    kind: name,
+    happy: true,
+    phase: "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: name === "denslid" ? "sit" : name === "inklid" ? "play" : "sit",
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
 export function denslidPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denslid));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.014, rot: s * 1.55, dx: 0, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const dome = Math.sin(t * 2.4) + 0.10 * Math.sin(t * 4.8);
-      return { lift: 0.014 + Math.abs(dome) * 0.0070, rot: 1.55 + dome * 0.92, dx: dome * 0.00044, anim: "sit" as TrickAnim };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.003 * (1 - s), rot: 0.18 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denslid));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-export function inklidPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inklid));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.040, rot: s * -2.50, dx: s * 0.00120, anim: "play" as TrickAnim };
-    }
-    if (u < 0.85) {
-      const roll = Math.sin(t * 2.7) + 0.12 * Math.sin(t * 5.4);
-      return { lift: 0.040 + Math.abs(roll) * 0.014, rot: -2.50 + roll * 2.05, dx: roll * 0.00140, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.85) / 0.15;
-    return { lift: 0.005 * (1 - s), rot: -0.32 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function densdomePose(t: number) {
-    return { lift: 0.0058 + Math.abs(Math.sin(t * 0.110)) * 0.0088, rot: Math.sin(t * 0.110) * 0.82, dx: Math.sin(t * 0.078) * 0.00048, anim: "sit" as TrickAnim };
-  }
-export function stepHappy(happy: BoxTurtleHappy | null | undefined, dt: number, flags?: TrickFlags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "denslid") {
-      const pose = denslidPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "inklid") {
-      const pose = inklidPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = densdomePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
-  }
-export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
-    return null;
-  }
-export function beginTrick(kind: BoxTurtleTrickKind, x: number, facing: 1 | -1): BoxTurtleTrick {
-    const anim: TrickAnim =
-      kind === "carolinae"
-        ? "sit"
-        : kind === "hingeshut"
-          ? "sit"
-          : kind === "berryforage"
-            ? "play"
-            : kind === "shellsoak"
-              ? "sit"
-              : kind === "nestscrape"
-                ? "play"
-                : "sit";
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
     return {
-      kind: kind,
-      phase: kind === "carolinae" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: (facing == null ? 1 : facing) as 1 | -1,
-      fromX: x,
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
     };
   }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function inklidPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inklid));
+  if (u < 0.12) {
+    const s = u / 0.12;
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function densdomePose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepHappy(happy: BoxTurtleHappy | null | undefined, dt: number, flags?: TrickFlags) {
+  if (!happy || happy.phase === "done") return happy;
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
+  }
+  const next = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "denslid") {
+    const pose = denslidPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "inklid") {
+    const pose = inklidPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = densdomePose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: BoxTurtleTrickKind, x: number, facing: 1 | -1): BoxTurtleTrick {
+  const anim: TrickAnim =
+    kind === "carolinae"
+      ? "sit"
+      : kind === "hingeshut"
+        ? "sit"
+        : kind === "berryforage"
+          ? "play"
+          : kind === "shellsoak"
+            ? "sit"
+            : kind === "nestscrape"
+              ? "play"
+              : kind === "dome"
+                ? "sit"
+                : kind === "leafhush"
+                  ? "sit"
+                  : "sit";
+  return {
+    kind,
+    phase: kind === "carolinae" ? "hold" : "go",
+    t: 0,
+    x,
+    lift: 0,
+    rot: 0,
+    anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
 function smoothstep(t: number) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
-  }
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
+}
+
 export function carolinaePose(t: number) {
-    const breath = Math.sin(t * 0.024) + 0.014 * Math.sin(t * 0.078);
-    const settle = Math.abs(Math.sin(t * 0.026));
-    return { lift: 0.0028 + settle * 0.0076, rot: 0.07 + breath * 0.32 };
-  }
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.0022 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.06 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+}
+
 export function hingeshutPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.hingeshut));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.13) {
-      const s = smoothstep(u / 0.13);
-      return { x: fromX + face * s * 0.0004, lift: s * 0.012, rot: s * -1.8 * face, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.87) {
-      const hinge = Math.sin((u - 0.13) / 0.74 * Math.PI * 2.0);
-      const box = Math.sin(t * 1.6) + 0.09 * Math.sin(t * 3.2);
-      return { x: fromX + face * (0.0004 + hinge * 0.0005 + box * 0.00014), lift: 0.010 + Math.abs(hinge) * 0.008 + Math.abs(box) * 0.002, rot: (-1.8 + hinge * 1.1 + box * 0.55) * face, anim: "sit" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.87) / 0.13);
-    return { x: fromX + face * 0.0004 * (1 - s), lift: 0.002 * (1 - s), rot: -0.20 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.hingeshut));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.5, rot: s * 16 * face, anim: "sit" as TrickAnim };
   }
+  if (u < 0.78) {
+    const tip = Math.sin(t * 2.4);
+    return {
+      x: fromX + face * (0.8 + tip * 0.12),
+      lift: 3.5 + Math.abs(tip) * 1.5,
+      rot: face * (16 + tip * 10),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function berryforagePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.berryforage));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX + face * s * 0.0016, lift: s * 0.028, rot: s * 2.2 * face, anim: "play" as TrickAnim };
-    }
-    if (u < 0.85) {
-      const forage = Math.sin((u - 0.11) / 0.74 * Math.PI * 4.2);
-      const berry = Math.sin(t * 4.4) + 0.12 * Math.sin(t * 8.8);
-      return { x: fromX + face * (0.0016 + forage * 0.0020 + berry * 0.00028), lift: 0.022 + Math.abs(forage) * 0.014 + Math.abs(berry) * 0.005, rot: (2.2 + forage * 2.4 + berry * 1.2) * face, anim: "play" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.85) / 0.15);
-    return { x: fromX + face * 0.0016 * (1 - s), lift: 0.004 * (1 - s), rot: 0.22 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.berryforage));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * face, anim: "play" as TrickAnim };
   }
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * bob * 0.5,
+      lift: 2.6 + Math.abs(bob) * 1.4,
+      rot: face * (-10 + bob * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (-3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function shellsoakPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.shellsoak));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0008, lift: s * 0.008, rot: s * 1.2 * face, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const soak = Math.sin((u - 0.12) / 0.74 * Math.PI * 2.6);
-      const shell = Math.sin(t * 2.2) + 0.10 * Math.sin(t * 4.4);
-      return { x: fromX + face * (0.0008 + soak * 0.0010 + shell * 0.00020), lift: 0.006 + Math.abs(soak) * 0.010 + Math.abs(shell) * 0.003, rot: (1.2 + soak * 1.6 + shell * 0.90) * face, anim: "sit" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0008 * (1 - s), lift: 0.002 * (1 - s), rot: 0.14 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.shellsoak));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.8, rot: s * 14 * face, anim: "sit" as TrickAnim };
   }
+  if (u < 0.78) {
+    const cast = Math.sin(t * 2.6);
+    return {
+      x: fromX - face * cast * 0.16,
+      lift: 3.6 + Math.abs(cast) * 1.6,
+      rot: face * (14 + cast * 12),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function nestscrapePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.nestscrape));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0020, lift: s * 0.038, rot: s * -2.8 * face, anim: "play" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const scrape = Math.sin((u - 0.10) / 0.74 * Math.PI * 5.2);
-      const nest = Math.sin(t * 5.8) + 0.13 * Math.sin(t * 11.6);
-      return { x: fromX + face * (0.0020 + scrape * 0.0028 + nest * 0.00034), lift: 0.032 + Math.abs(scrape) * 0.016 + Math.abs(nest) * 0.006, rot: (-2.8 + scrape * 2.8 + nest * 1.5) * face, anim: "play" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.0020 * (1 - s), lift: 0.005 * (1 - s), rot: -0.30 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.nestscrape));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 2.8, rot: s * 12 * face, anim: "play" as TrickAnim };
   }
+  if (u < 0.78) {
+    const nestle = Math.sin(t * 2.2);
+    return {
+      x: fromX + face * (0.6 + nestle * 0.1),
+      lift: 2.4 + Math.abs(nestle) * 1.8,
+      rot: face * (12 + nestle * 8),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function domePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.dome));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * -12 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const tip = Math.sin(t * 2.0);
+    return {
+      x: fromX + face * tip * 0.08,
+      lift: 2.8 + tip * 1.6,
+      rot: face * (-12 + tip * 10),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const hush = Math.sin(t * 0.9);
+    return {
+      x: fromX,
+      lift: 4.0 + Math.abs(hush) * 0.6,
+      rot: face * (-4 + hush * 3),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (-2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function leafhushPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.leafhush));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * 12 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const stretch = Math.sin(t * 2.3);
+    return {
+      x: fromX + face * stretch * 0.1,
+      lift: 3.4 + stretch * 1.4,
+      rot: face * (12 + stretch * 9),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const hush = Math.sin(t * 0.85);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(hush) * 0.7,
+      rot: face * (5 + hush * 3),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: BoxTurtleTrick | null | undefined, dt: number, flags?: TrickFlags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "hingeshut" && trick.kind !== "berryforage" && trick.kind !== "shellsoak" && trick.kind !== "nestscrape") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "carolinae") {
-      if (next.t < CAROLINAE_HOLD) {
-        const pose = carolinaePose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      if (next.t < CAROLINAE_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - CAROLINAE_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "hingeshut") {
-      const pose = hingeshutPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "berryforage") {
-      const pose = berryforagePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "shellsoak") {
-      const pose = shellsoakPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = nestscrapePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+  if (!trick || trick.phase === "done") return trick;
+  if (shouldAbort(flags) && trick.kind !== "hingeshut" && trick.kind !== "berryforage" && trick.kind !== "shellsoak" && trick.kind !== "nestscrape" && trick.kind !== "dome" && trick.kind !== "leafhush") {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
+  const next = { ...trick, t: trick.t + Math.max(0, dt) };
+  if (next.kind === "carolinae") {
+    if (next.t < CAROLINAE_HOLD) {
+      const pose = carolinaePose(next.t);
+      next.phase = "hold";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    if (next.t < CAROLINAE_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - CAROLINAE_HOLD);
+      next.phase = "release";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  }
+  const hold = DUR[next.kind];
+  const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "hingeshut") {
+    const pose = hingeshutPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "berryforage") {
+    const pose = berryforagePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "shellsoak") {
+    const pose = shellsoakPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "nestscrape") {
+    const pose = nestscrapePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "dome") {
+    const pose = domePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = leafhushPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  return next;
+}
+

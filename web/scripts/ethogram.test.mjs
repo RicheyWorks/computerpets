@@ -775,7 +775,14 @@ assert.ok(names("toad").includes("freeze"));
   assert.equal(names("snapper").includes("snap"), false);
   assert.equal(names("snapper").includes("sit"), false);
   assert.equal(names("snapper").includes("still"), false);
-  assert.ok(names("box_turtle").includes("shut"));
+  assert.ok(names("box_turtle").includes("carolinae"));
+  assert.ok(names("box_turtle").includes("hingeshut_soft"));
+  assert.ok(names("box_turtle").includes("dome_soft"));
+  assert.ok(names("box_turtle").includes("leafhush_soft"));
+  assert.ok(names("box_turtle").includes("freeze"));
+  assert.equal(names("box_turtle").includes("shut"), false);
+  assert.equal(names("box_turtle").includes("walk"), false);
+  assert.equal(names("box_turtle").includes("still"), false);
   assert.ok(names("tuatara").includes("still"));
   for (const key of CREEK) {
     const acts = names(key);
