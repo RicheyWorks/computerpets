@@ -1,6 +1,6 @@
-/** Twig ground tricks while idle. House stick insect — rocking / catalepsy / browse / tread / diapheromera personality (rocking camouflage breeze-sway on the blotter — never named sway (Jade) / lean / nod (Sol) / flutter (Fan+ginkgo) / still (ethogram) / freeze (ethogram+window FREEZE) / bob / hover, catalepsy tonic-immobility freeze pose as furniture — never named freeze / still / tuck / curl / coil / nest (Clip) / feign (Bluff), browse leaf-nibble mandible work — never named nibble (Whee happy) / hay / berry / crack / digest / mucilage (Dew) / munch, tread slow Phasmatodea step — never named walk (ethogram) / amble (Bloom) / inch (Nori) / crawl (Cling) / scurry (Clip) / plod, diapheromera desk life as a Diapheromera femorata Common Walkingstick week; not Dart / Spark / Ghost / Milk / Comb / Felt / Mast / Jade / Sol / Clip / *Dragon copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play FREEZE do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop stick-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart or *Dragon electrical clone. Window-play FREEZE unchanged — never names freeze. Ethogram freeze/still/walk unchanged. Dart owns hawking/tandem/nymph/whir/anax and happy junius/labium/exuvia; Spark owns lantern/jstroke/semaphore/elytra/photinus; Ghost owns plumose/lunule/silk/stream/actias; Milk owns asclepias/oyamel/warning/chrysalis/danaus; Comb owns figure/corbicula/hex/proboscis/hive; Jade owns sway; Sol owns nod; Fan owns flutter; Felt owns tuft/bead/spore/cushion/thatch; Mast owns acorn/sinus/gall/taproot/bole; Rui owns dance; Pulse guest owns moon-jelly; Dragon happy owns glow. Phasmatodea Diapheromera desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Twig ground tricks while idle — ultra-polish pass. House stick insect — rocking / catalepsy / browse / tread / diapheromera / oviposit / filiform personality (rocking camouflage breeze-sway on the blotter — never named sway (Jade) / lean / nod (Sol) / flutter (Fan+ginkgo) / still (ethogram-old) / freeze (ethogram-old+window FREEZE) / bob / hover / jstroke (Spark) / stream (Ghost), catalepsy tonic-immobility freeze pose as furniture — never named freeze / still / tuck / curl / coil / nest (Clip) / feign (Bluff) / obelisk (Dart), browse leaf-nibble mandible work — never named nibble (Whee happy) / hay / berry / crack / digest / mucilage (Dew) / munch / crumb (Column), tread slow Phasmatodea step — never named walk (ethogram-old) / amble (Bloom) / inch (Nori) / crawl (Cling) / scurry (Clip) / plod / bustle (Column), diapheromera desk life as a Diapheromera femorata Common Walkingstick week, oviposit free egg-capsule drop (species-true Diapheromera oviposition — never named egg / lay / nest (Clip) / seed (Clip) / capsule-as-trick / drop (Fan) / chrysalis (Milk)), filiform antenna-sweep probe (species-true Phasmatodea filiform antennae — never named antenna (Tenant) / ocelli (Comb) / ommatidia (Dart) / palp / feel / whisker); not Dart hawking/tandem/nymph/whir/anax/obelisk/ommatidia, Spark lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite, Ghost plumose/lunule/silk/stream/actias/aphagy/cauda, Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Column gallery/pheromone/crumb/bustle/camponotus, Echo preen/bobble, Ember cinder/blaze, Quill fan/flash, Relay buzz/click, Rui dance, Sepia hover, Pulse medusa, Dragon glow, or Jade sway/Sol nod copies). Oviposit is the iconic free egg-capsule drop (not window FREEZE, not ethogram-old freeze/still/walk). Filiform is the iconic antenna-sweep probe (not Tenant antenna). Window-play FREEZE unchanged — never names freeze. Ethogram keeps diapheromera sit_hold; adds rocking/catalepsy/browse/tread/oviposit/filiform softs + freeze (replaces thin freeze/still/walk). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via stick.wav. Thank-yous femorata / instar / crypsis. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `stick-tricks.js`. True house-stick desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart or *Dragon electrical clone. Next guest ultra is Column / carpenter_ant. Phasmatodea Diapheromera desk life only. No cry inventing — thank-yous are silent desk motion only. */
 export const TRICK_KEY = "stick";
-export const TRICKS = ["rocking", "catalepsy", "browse", "tread", "diapheromera"] as const;
+export const TRICKS = ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"] as const;
 export const HAPPY = ["femorata", "instar", "crypsis"] as const;
 export type StickTrickKind = (typeof TRICKS)[number];
 export type StickHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,22 @@ export type StickHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { femorata: 1.24, instar: 1.32, crypsis: 1.28 } as const;
-export const DIAPHEROMERA_HOLD = 14.2;
-export const RELEASE_S = 0.78;
-export const DUR = { diapheromera: DIAPHEROMERA_HOLD + RELEASE_S, rocking: 1.56, catalepsy: 1.68, browse: 1.52, tread: 1.64 } as const;
+export const HAPPY_DUR: Record<StickHappyKind, number> = {
+  femorata: 1.24,
+  instar: 1.32,
+  crypsis: 1.28,
+};
+export const DIAPHEROMERA_HOLD = 11.4;
+export const RELEASE_S = 0.66;
+export const DUR: Record<StickTrickKind, number> = {
+  diapheromera: DIAPHEROMERA_HOLD + RELEASE_S,
+  rocking: 1.56,
+  catalepsy: 1.68,
+  browse: 1.52,
+  tread: 1.64,
+  oviposit: 1.62,
+  filiform: 1.66,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -76,39 +88,57 @@ export function shouldAbort(state: TrickFlags | undefined) {
 }
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: StickTrickKind | string) {
-    const roll = rand == null ? Math.random() : rand;
-    if (kind === "diapheromera") return 52 + roll * 34;
-    if (kind === "catalepsy") return 16 + roll * 12;
-    if (kind === "rocking") return 14 + roll * 11;
-    return justFinished ? 10.8 + roll * 8.2 : 5.6 + roll * 7;
-  }
+  const roll = rand == null ? Math.random() : rand;
+  if (kind === "diapheromera") return 40 + roll * 24;
+  if (kind === "oviposit" || kind === "filiform" || kind === "catalepsy") return 12 + roll * 9;
+  if (kind === "rocking" || kind === "browse" || kind === "tread") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+}
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: StickTrickKind | string | null) {
-    if (musicOn) return "diapheromera";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "diapheromera") {
-      if (roll < 0.26) return "rocking";
-      if (roll < 0.5) return "catalepsy";
-      if (roll < 0.74) return "browse";
-      return "tread";
-    }
-    if (lastKind === "rocking") {
-      if (roll < 0.26) return "diapheromera";
-      if (roll < 0.5) return "catalepsy";
-      if (roll < 0.74) return "browse";
-      return "tread";
-    }
-    if (lastKind === "catalepsy") {
-      if (roll < 0.22) return "diapheromera";
-      if (roll < 0.44) return "rocking";
-      if (roll < 0.68) return "browse";
-      return "tread";
-    }
-    if (roll < 0.2) return "diapheromera";
-    if (roll < 0.4) return "rocking";
-    if (roll < 0.6) return "catalepsy";
-    if (roll < 0.8) return "browse";
-    return "tread";
+  if (musicOn) return "diapheromera" as const;
+  const roll = rand == null ? Math.random() : rand;
+  if (lastKind === "diapheromera") {
+    if (roll < 0.16) return "rocking" as const;
+    if (roll < 0.32) return "catalepsy" as const;
+    if (roll < 0.48) return "browse" as const;
+    if (roll < 0.64) return "tread" as const;
+    if (roll < 0.82) return "oviposit" as const;
+    return "filiform" as const;
   }
+  if (lastKind === "rocking") {
+    if (roll < 0.18) return "diapheromera" as const;
+    if (roll < 0.34) return "catalepsy" as const;
+    if (roll < 0.5) return "browse" as const;
+    if (roll < 0.66) return "tread" as const;
+    if (roll < 0.83) return "oviposit" as const;
+    return "filiform" as const;
+  }
+  if (lastKind === "catalepsy") {
+    if (roll < 0.16) return "diapheromera" as const;
+    if (roll < 0.32) return "rocking" as const;
+    if (roll < 0.48) return "browse" as const;
+    if (roll < 0.64) return "tread" as const;
+    if (roll < 0.82) return "oviposit" as const;
+    return "filiform" as const;
+  }
+  if (lastKind === "oviposit" || lastKind === "filiform") {
+    if (roll < 0.16) return "diapheromera" as const;
+    if (roll < 0.32) return "rocking" as const;
+    if (roll < 0.48) return "catalepsy" as const;
+    if (roll < 0.64) return "browse" as const;
+    if (roll < 0.8) return "tread" as const;
+    return lastKind === "oviposit" ? ("filiform" as const) : ("oviposit" as const);
+  }
+  if (roll < 0.14) return "diapheromera" as const;
+  if (roll < 0.28) return "rocking" as const;
+  if (roll < 0.42) return "catalepsy" as const;
+  if (roll < 0.56) return "browse" as const;
+  if (roll < 0.7) return "tread" as const;
+  if (roll < 0.85) return "oviposit" as const;
+  return "filiform" as const;
+}
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -175,49 +205,52 @@ export function beginHappy(kind: StickHappyKind | string, x: number, facing: 1 |
 }
 
 export function femorataPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.femorata));
-    if (u < 0.16) {
-      const s = u / 0.16;
-      return { lift: s * 0.04, rot: s * 2.4, dx: 0, anim: "play" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const rock = Math.sin(t * 3.4) + 0.22 * Math.sin(t * 6.8);
-      return {
-        lift: 0.04 + Math.abs(rock) * 0.018,
-        rot: 2.4 + rock * 2.6,
-        dx: rock * 0.004,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.72) / 0.28;
-    return { lift: 0.02 * (1 - s), rot: 1.0 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.femorata));
+  if (u < 0.16) {
+    const s = u / 0.16;
+    return { lift: s * 2.9, rot: s * 12, dx: 0, anim: "play" as TrickAnim };
   }
-export function instarPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.instar));
-    if (u < 0.2) {
-      const s = u / 0.2;
-      return { lift: s * 0.055, rot: s * -1.8, dx: s * 0.006, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const shed = Math.sin(t * 4.2) + 0.3 * Math.sin(t * 9.1);
-      return {
-        lift: 0.055 + Math.abs(shed) * 0.035,
-        rot: -1.8 + shed * 3.4,
-        dx: shed * 0.007,
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = (u - 0.78) / 0.22;
-    return { lift: 0.03 * (1 - s), rot: -0.7 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function crypsisPose(t: number) {
+  if (u < 0.72) {
+    const rock = Math.sin(t * 3.4) + 0.22 * Math.sin(t * 6.8);
     return {
-      lift: 0.008 + Math.abs(Math.sin(t * 0.42)) * 0.012,
-      rot: Math.sin(t * 0.55) * 0.9,
-      dx: Math.sin(t * 0.28) * 0.002,
-      anim: "sit" as TrickAnim,
+      lift: 2.9 + Math.abs(rock) * 1.35,
+      rot: 12 + rock * 10,
+      dx: rock * 0.22,
+      anim: "play" as TrickAnim,
     };
   }
+  const s = (u - 0.72) / 0.28;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function instarPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.instar));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 3.2, rot: s * -9.5, dx: s * 0.18, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const shed = Math.sin(t * 4.2) + 0.3 * Math.sin(t * 9.1);
+    return {
+      lift: 3.2 + Math.abs(shed) * 1.4,
+      rot: -9.5 + shed * 9,
+      dx: shed * 0.2,
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.1 * (1 - s), rot: -4.5 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function crypsisPose(t: number) {
+  return {
+    lift: 2.1 + Math.abs(Math.sin(t * 0.42)) * 0.85,
+    rot: Math.sin(t * 0.55) * 6.5,
+    dx: Math.sin(t * 0.28) * 0.12,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: StickHappy, dt: number, flags: TrickFlags): StickHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -261,7 +294,11 @@ export function beginTrick(kind: StickTrickKind, x: number, facing: 1 | -1): Sti
             ? "sit"
             : kind === "tread"
               ? "walk"
-              : "sit";
+              : kind === "oviposit"
+                ? "sit"
+                : kind === "filiform"
+                  ? "talk"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "diapheromera" ? "hold" : "go",
@@ -281,116 +318,187 @@ function smoothstep(t: number) {
 }
 
 export function diapheromeraPose(t: number) {
-    const breath = Math.sin(t * 0.16) + 0.03 * Math.sin(t * 0.72);
-    const twig = Math.abs(Math.sin(t * 0.28));
-    return {
-      lift: 0.012 + twig * 0.008,
-      rot: 0.18 + breath * 0.42,
-    };
-  }
+  const breath = Math.sin(t * 0.2) + 0.035 * Math.sin(t * 1.05);
+  const twig = Math.abs(Math.sin(t * 0.62));
+  return {
+    lift: 2.45 + twig * 1.15,
+    rot: 4.2 + breath * 3.4,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.016 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.22 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.45 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.2 * (1 - u) };
+}
+
 export function rockingPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.rocking));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.02, rot: s * 3.6 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const s = (u - 0.12) / 0.72;
-      const breeze = Math.sin(s * Math.PI * 3.2) + 0.35 * Math.sin(s * Math.PI * 5.6);
-      return {
-        x: fromX + facing * breeze * 0.006,
-        lift: 0.02 + Math.abs(breeze) * 0.014,
-        rot: facing * (3.6 + breeze * 4.8),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
+  const u = Math.max(0, Math.min(1, t / DUR.rocking));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.8, rot: s * 11 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const s = (u - 0.12) / 0.72;
+    const breeze = Math.sin(s * Math.PI * 3.2) + 0.35 * Math.sin(s * Math.PI * 5.6);
     return {
-      x: fromX,
-      lift: 0.02 * (1 - s),
-      rot: facing * (1.6 * (1 - s)),
+      x: fromX + facing * breeze * 0.22,
+      lift: 2.8 + Math.abs(breeze) * 1.3,
+      rot: facing * (11 + breeze * 9),
       anim: "sit" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX,
+    lift: 2.8 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function catalepsyPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.catalepsy));
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * -0.008, rot: s * 1.8 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.82) {
-      const hold = Math.sin(t * 0.18) * 0.35;
-      return {
-        x: fromX,
-        lift: -0.008 + Math.abs(hold) * 0.006,
-        rot: facing * (1.8 + hold * 0.55),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  const u = Math.max(0, Math.min(1, t / DUR.catalepsy));
+  if (u < 0.18) {
+    const s = smoothstep(u / 0.18);
+    return { x: fromX, lift: s * 2.2, rot: s * 8.5 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.82) {
+    const hold = Math.sin(t * 0.18) * 0.35;
     return {
       x: fromX,
-      lift: -0.006 * (1 - s),
-      rot: facing * (0.9 * (1 - s)),
+      lift: 2.2 + Math.abs(hold) * 0.55,
+      rot: facing * (8.5 + hold * 2.2),
       anim: "sit" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function browsePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.browse));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX + facing * 0.01 * s, lift: s * -0.02, rot: s * -2.2 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.14) / 0.64;
-      const chew = Math.sin(s * Math.PI * 6.4) + 0.25 * Math.sin(s * Math.PI * 11);
-      return {
-        x: fromX + facing * (0.01 + 0.012 * s) + facing * chew * 0.004,
-        lift: -0.02 + Math.abs(chew) * 0.022,
-        rot: facing * (-2.2 + chew * 2.8),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const u = Math.max(0, Math.min(1, t / DUR.browse));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + facing * 0.18 * s, lift: s * 2.55, rot: s * -9 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.14) / 0.64;
+    const chew = Math.sin(s * Math.PI * 6.4) + 0.25 * Math.sin(s * Math.PI * 11);
     return {
-      x: fromX + facing * 0.008 * (1 - s),
-      lift: -0.012 * (1 - s),
-      rot: facing * (-1.0 * (1 - s)),
+      x: fromX + facing * (0.18 + 0.22 * s) + facing * chew * 0.12,
+      lift: 2.55 + Math.abs(chew) * 1.2,
+      rot: facing * (-9 + chew * 8),
       anim: "sit" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.14 * (1 - s),
+    lift: 2.0 * (1 - s),
+    rot: facing * (-4.5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function treadPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.tread));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.03, rot: s * 1.4 * facing, anim: "walk" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.12) / 0.66;
-      const step = Math.sin(s * Math.PI * 2.2);
-      const pause = Math.max(0, Math.sin(s * Math.PI * 1.1));
-      return {
-        x: fromX + facing * (0.055 * s + step * 0.012),
-        lift: 0.03 + Math.abs(step) * 0.028 * pause,
-        rot: facing * (1.4 + step * 2.6),
-        anim: "walk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const u = Math.max(0, Math.min(1, t / DUR.tread));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.0, rot: s * 8 * facing, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.12) / 0.66;
+    const step = Math.sin(s * Math.PI * 2.2);
+    const pause = Math.max(0, Math.sin(s * Math.PI * 1.1));
     return {
-      x: fromX + facing * 0.04 * (1 - s * 0.35),
-      lift: 0.02 * (1 - s),
-      rot: facing * (0.8 * (1 - s)),
+      x: fromX + facing * (0.55 * s + step * 0.22),
+      lift: 3.0 + Math.abs(step) * 1.25 * pause,
+      rot: facing * (8 + step * 8),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.4 * (1 - s * 0.35),
+    lift: 2.2 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function ovipositPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.oviposit));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * -7.5 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.42) {
+    const s = (u - 0.14) / 0.28;
+    return {
+      x: fromX + facing * 0.1 * s,
+      lift: 2.4 + s * 1.8,
+      rot: facing * (-7.5 + s * 3.5),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.78) {
+    const drop = Math.sin(t * 4.6);
+    return {
+      x: fromX + facing * 0.1,
+      lift: 4.2 + Math.abs(drop) * 0.65,
+      rot: facing * (-4 + drop * 4.5),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return {
+    x: fromX + facing * 0.1 * (1 - s),
+    lift: 4.2 * (1 - s),
+    rot: facing * (-3 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function filiformPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.filiform));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.1, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const sweep = Math.sin(t * 11.8) + 0.32 * Math.sin(t * 18.4);
+    return {
+      x: fromX + facing * sweep * 0.16,
+      lift: 3.1 + Math.abs(sweep) * 1.4,
+      rot: facing * (10 + sweep * 9),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return {
+    x: fromX,
+    lift: 3.1 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: StickTrick, dt: number, flags: TrickFlags): StickTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "rocking" && trick.kind !== "catalepsy" && trick.kind !== "browse" && trick.kind !== "tread") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "rocking" &&
+    trick.kind !== "catalepsy" &&
+    trick.kind !== "browse" &&
+    trick.kind !== "tread" &&
+    trick.kind !== "oviposit" &&
+    trick.kind !== "filiform"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: StickTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -415,26 +523,39 @@ export function stepTrick(trick: StickTrick, dt: number, flags: TrickFlags): Sti
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "rocking") {
-    const pose = rockingPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = rockingPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "catalepsy") {
-    const pose = catalepsyPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = catalepsyPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "browse") {
-    const pose = browsePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = browsePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "oviposit") {
+    const pose = ovipositPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "filiform") {
+    const pose = filiformPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = treadPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = treadPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
