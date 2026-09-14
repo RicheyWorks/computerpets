@@ -714,7 +714,11 @@ def test_only_scratching_mammals_scratch():
     assert "pouchcarry_soft" in [a["name"] for a in acts_for("opossum")]
     assert "prehensile_soft" in [a["name"] for a in acts_for("opossum")]
     assert "freeze" in [a["name"] for a in acts_for("opossum")]
-    assert "gnaw" in [a["name"] for a in acts_for("beaver")]
+    assert "castor" in [a["name"] for a in acts_for("beaver")]
+    assert "woodfell_soft" in [a["name"] for a in acts_for("beaver")]
+    assert "aspen_soft" in [a["name"] for a in acts_for("beaver")]
+    assert "divehush_soft" in [a["name"] for a in acts_for("beaver")]
+    assert "freeze" in [a["name"] for a in acts_for("beaver")]
     assert "bristle" in [a["name"] for a in acts_for("porcupine")]
     assert "forage" in [a["name"] for a in acts_for("black_bear")]
     for key in STONE_KEYS:

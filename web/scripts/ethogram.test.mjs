@@ -689,7 +689,11 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("opossum").includes("pouchcarry_soft"));
   assert.ok(names("opossum").includes("prehensile_soft"));
   assert.ok(names("opossum").includes("freeze"));
-  assert.ok(names("beaver").includes("gnaw"));
+  assert.ok(names("beaver").includes("castor"));
+  assert.ok(names("beaver").includes("woodfell_soft"));
+  assert.ok(names("beaver").includes("aspen_soft"));
+  assert.ok(names("beaver").includes("divehush_soft"));
+  assert.ok(names("beaver").includes("freeze"));
   assert.ok(names("porcupine").includes("bristle"));
   assert.ok(names("black_bear").includes("forage"));
   for (const key of STONE) {
