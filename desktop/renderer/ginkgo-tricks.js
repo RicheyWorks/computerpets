@@ -1,434 +1,569 @@
-/** Fan ground tricks while idle. House ginkgo — biloba / notch / flutter / drop / amber personality (two-lobed biloba fan leaf open — never named fan (Parrot owns fan) / lobe (Kite owns lobe) / frond (Vein owns frond), apical notch tip settle, flutter fall as flutter — never named lean (Felt window owns lean) / unfurl (Vein window owns unfurl) / nod (Sol owns nod) / gold (Fan window owns gold), soft golden drop to blotter, living-fossil amber calm desk life under the lamp; not Vein frond/rachis/fiddle/pinna/saucer, Felt tuft/bead/spore/cushion/thatch, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web ginkgo-tricks.ts. Not a Rui, cat, dog, rabbit, hamster/Clip, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog/Burr, chinchilla, axolotl/Bloom, toucan, iguana/Sol, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, octopus/Cup, cuttlefish/Sepia, nautilus/Chamber, moon-jelly/Pulse, sea-star/Cling, hermit-crab/Tenant, horseshoe-crab/Ledger, seahorse/Anchor, manta/Kite, moray/Door, sheet-moss/Felt, maidenhair/Vein, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play GOLD unchanged — never names gold. Special lean/nod/still ethogram unchanged — never names lean/nod/still as tricks. Sash owns moss; Felt owns tuft/bead/spore/cushion/thatch and humid/velvet/meadow; Vein owns frond/rachis/fiddle/pinna/saucer and mist/filigree/shade; Sol owns swell as thank-you, press/nod as tricks; Ember owns lift; Cling owns crawl/damp/press/tide; Still/Felt window owns lean/creep; Burr owns root; Coin owns flare; Phoenix owns lift; Fuse owns pulse as thank-you; Chamber owns quiet as thank-you; Ledger owns page as thank-you and fossil as trick; Jade owns treaty as thank-you; Parrot owns fan. Plant/ginkgo desk life only — not a fern maidenhair copy, bryophyte moss copy, or animal/moray copy. No cry inventing — thank-yous are silent desk motion only. */
+/** Fan ground tricks while idle — ultra-polish pass. House ginkgo — biloba / notch / flutter / drop / amber / dichotomy / petiole personality (two-lobed biloba fan leaf open — never named fan (Parrot owns fan) / lobe (Kite owns lobe) / frond (Vein owns frond), apical notch tip settle, flutter fall as flutter — never named lean (Felt window owns lean) / unfurl (Vein window owns unfurl) / nod (Sol owns nod) / gold (Fan window owns gold), soft golden drop to blotter, living-fossil amber calm desk life under the lamp, dichotomous vein-fork shimmer as dichotomy — never named fork (taken) / venation collision with Vein name / midrib (taken), slender leaf-stalk petiole flex (species-true ginkgo petiole — never named stipe (Vein owns stipe) / rachis (Vein) / root (Burr) / rhizoid (Felt)); not Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Dichotomy is the species-true forking leaf-vein polish (not Vein name, not fork token). Petiole is the iconic long slender stalk flex (not Vein stipe, not Burr root). Window-play GOLD unchanged — never names gold as a trick. Ethogram keeps amber sit_hold; adds biloba/notch/flutter/drop/dichotomy/petiole softs + freeze (replaces thin lean/nod/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ginkgo.wav. Thank-yous ochre / gilt / linger. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `ginkgo-tricks.ts`. True house-ginkgo desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids fan/gold/lean/unfurl/nod/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/fork/midrib/fossil/root name collisions. Bird ultra (Soot→Ember) + Miso→Vein done; skip Rui + birds. Next guest ultra is Mast / oak. No cry inventing beyond house ginkgo.wav prefer. Never retouch Rui sprites. */
 (function (root) {
-  const TRICK_KEY = "ginkgo";
-  const TRICKS = ["biloba", "notch", "flutter", "drop", "amber"];
-  const HAPPY = ["ochre", "gilt", "linger"];
-  const HAPPY_DUR = { ochre: 1.24, gilt: 1.14, linger: 1.28 };
-  const AMBER_HOLD = 12.2;
-  const RELEASE_S = 0.76;
-  const DUR = { amber: AMBER_HOLD + RELEASE_S, biloba: 1.48, notch: 1.16, flutter: 1.56, drop: 1.34 };
-
-  function canStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+const TRICK_KEY = "ginkgo";
+const TRICKS = ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"];
+const HAPPY = ["ochre", "gilt", "linger"];
+const HAPPY_DUR = {
+    ochre: 1.28,
+    gilt: 1.16,
+    linger: 1.22,
+};
+/** Amber hold — Fan parks living-fossil calm on the blotter. Not window-play GOLD. */
+const AMBER_HOLD = 10.8;
+const RELEASE_S = 0.62;
+const DUR = {
+    amber: AMBER_HOLD + RELEASE_S,
+    biloba: 1.58,
+    notch: 1.48,
+    flutter: 1.64,
+    drop: 1.56,
+    dichotomy: 1.68,
+    petiole: 1.72,
+};
+function canStart(state) {
+    if (!state)
+        return false;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+        return false;
     const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+        return false;
+    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter")
+        return false;
     return true;
-  }
-
-  function shouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+}
+function shouldAbort(state) {
+    if (!state)
+        return true;
+    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+        return true;
     const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
-
-  function nextTrickWait(justFinished, rand, kind) {
+    return (cmd === "sleep" ||
+        cmd === "leave" ||
+        cmd === "hide" ||
+        cmd === "rest" ||
+        cmd === "seek" ||
+        cmd === "eat" ||
+        cmd === "play" ||
+        cmd === "talk" ||
+        cmd === "enter");
+}
+function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "amber") return 49 + roll * 29;
-    if (kind === "biloba") return 14 + roll * 10;
-    if (kind === "flutter") return 16 + roll * 11;
-    return justFinished ? 10.6 + roll * 8 : 5.3 + roll * 6;
-  }
-
-  function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "amber";
+    if (kind === "amber")
+        return 38 + roll * 24;
+    if (kind === "flutter" || kind === "dichotomy" || kind === "petiole")
+        return 12 + roll * 9;
+    if (kind === "biloba" || kind === "notch" || kind === "drop")
+        return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+}
+function pickTrick(rand, musicOn, lastKind) {
+    if (musicOn)
+        return "amber";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "amber") {
-      if (roll < 0.26) return "biloba";
-      if (roll < 0.48) return "notch";
-      if (roll < 0.72) return "flutter";
-      return "drop";
+        if (roll < 0.18)
+            return "biloba";
+        if (roll < 0.34)
+            return "notch";
+        if (roll < 0.5)
+            return "flutter";
+        if (roll < 0.66)
+            return "drop";
+        if (roll < 0.83)
+            return "dichotomy";
+        return "petiole";
     }
     if (lastKind === "biloba") {
-      if (roll < 0.28) return "amber";
-      if (roll < 0.5) return "notch";
-      if (roll < 0.72) return "flutter";
-      return "drop";
+        if (roll < 0.2)
+            return "amber";
+        if (roll < 0.36)
+            return "notch";
+        if (roll < 0.52)
+            return "flutter";
+        if (roll < 0.68)
+            return "drop";
+        if (roll < 0.84)
+            return "dichotomy";
+        return "petiole";
     }
     if (lastKind === "notch") {
-      if (roll < 0.22) return "amber";
-      if (roll < 0.44) return "biloba";
-      if (roll < 0.66) return "flutter";
-      return "drop";
+        if (roll < 0.18)
+            return "amber";
+        if (roll < 0.34)
+            return "biloba";
+        if (roll < 0.5)
+            return "flutter";
+        if (roll < 0.66)
+            return "drop";
+        if (roll < 0.83)
+            return "dichotomy";
+        return "petiole";
     }
-    if (roll < 0.2) return "amber";
-    if (roll < 0.4) return "biloba";
-    if (roll < 0.6) return "notch";
-    if (roll < 0.8) return "flutter";
-    return "drop";
-  }
-
-  function happyCanStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
+    if (lastKind === "dichotomy" || lastKind === "petiole") {
+        if (roll < 0.16)
+            return "amber";
+        if (roll < 0.32)
+            return "biloba";
+        if (roll < 0.48)
+            return "notch";
+        if (roll < 0.64)
+            return "flutter";
+        if (roll < 0.8)
+            return "drop";
+        return lastKind === "dichotomy" ? "petiole" : "dichotomy";
+    }
+    if (roll < 0.14)
+        return "amber";
+    if (roll < 0.28)
+        return "biloba";
+    if (roll < 0.42)
+        return "notch";
+    if (roll < 0.56)
+        return "flutter";
+    if (roll < 0.7)
+        return "drop";
+    if (roll < 0.85)
+        return "dichotomy";
+    return "petiole";
+}
+function happyCanStart(state) {
+    if (!state)
+        return false;
+    if (state.asleep || state.hidden || state.leaving)
+        return false;
     const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+        return false;
+    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter")
+        return false;
     return true;
-  }
-
-  function happyShouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
+}
+function happyShouldAbort(state) {
+    if (!state)
+        return true;
+    if (state.asleep || state.hidden || state.leaving)
+        return true;
     const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
-
-  function wantsThankYou(key) {
+    return (cmd === "sleep" ||
+        cmd === "leave" ||
+        cmd === "hide" ||
+        cmd === "rest" ||
+        cmd === "seek" ||
+        cmd === "play" ||
+        cmd === "talk" ||
+        cmd === "enter");
+}
+function wantsThankYou(key) {
     return key === TRICK_KEY || key === "fan";
-  }
-
-  function startThankYou(key, lastKind, x, facing, flags) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
+}
+function startThankYou(key, lastKind, x, facing, flags) {
+    if (!wantsThankYou(key))
+        return null;
+    if (!happyCanStart(flags || { cmd: "idle" }))
+        return null;
     const pick = pickHappy(lastKind);
     return { happy: beginHappy(pick, x, facing), kind: pick };
-  }
-
-  function pickHappy(lastKind, rand) {
+}
+function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
-  }
-
-  function beginHappy(kind, x, facing) {
+}
+function beginHappy(kind, x, facing) {
     const name = HAPPY.indexOf(kind) >= 0 ? kind : "ochre";
     return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: name === "ochre" ? "talk" : name === "gilt" ? "play" : "sit",
-      facing: facing == null ? 1 : facing,
-      fromX: x,
+        kind: name,
+        happy: true,
+        phase: "go",
+        t: 0,
+        x: x,
+        lift: 0,
+        rot: 0,
+        anim: name === "ochre" ? "talk" : name === "gilt" ? "play" : "sit",
+        facing: facing == null ? 1 : facing,
+        fromX: x,
     };
-  }
-
-  function ochrePose(t) {
+}
+function ochrePose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ochre));
-    if (u < 0.21) {
-      const s = u / 0.21;
-      return { lift: s * 0.075, rot: s * 2.9, dx: 0, anim: "talk" };
+    if (u < 0.2) {
+        const s = u / 0.2;
+        return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" };
     }
-    if (u < 0.77) {
-      const warm = Math.sin(t * 1.48);
-      return {
-        lift: 0.075 + Math.abs(warm) * 0.038,
-        rot: 2.9 + warm * 1.9,
-        dx: warm * 0.018,
-        anim: "talk",
-      };
+    if (u < 0.76) {
+        const warm = Math.sin(t * 1.72);
+        return {
+            lift: 2.8 + Math.abs(warm) * 1.4,
+            rot: 12 + warm * 10,
+            dx: warm * 0.12,
+            anim: "talk",
+        };
     }
-    const s = (u - 0.77) / 0.23;
-    return { lift: 0.055 * (1 - s), rot: 1.9 * (1 - s), dx: 0, anim: "sit" };
-  }
-  function giltPose(t) {
+    const s = (u - 0.76) / 0.24;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" };
+}
+function giltPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gilt));
-    if (u < 0.17) {
-      const s = u / 0.17;
-      return { lift: s * 0.16, rot: s * -2.8, dx: 0, anim: "play" };
+    if (u < 0.18) {
+        const s = u / 0.18;
+        return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" };
     }
-    if (u < 0.74) {
-      const flash = Math.sin(t * 2.2);
-      return {
-        lift: 0.16 + Math.abs(flash) * 0.055,
-        rot: -2.8 + flash * 3.1,
-        dx: flash * 0.028,
-        anim: "play",
-      };
+    if (u < 0.78) {
+        const flash = Math.sin(t * 2.05);
+        return {
+            lift: 3.0 + Math.abs(flash) * 1.5,
+            rot: -10 + flash * 14,
+            dx: flash * 0.14,
+            anim: "play",
+        };
     }
-    const s = (u - 0.74) / 0.26;
-    return { lift: 0.11 * (1 - s), rot: -1.6 * (1 - s), dx: 0, anim: "idle" };
-  }
-  function lingerPose(t) {
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" };
+}
+function lingerPose(t) {
     return {
-      lift: 0.02 + Math.abs(Math.sin(t * 0.44)) * 0.032,
-      rot: Math.sin(t * 0.58) * 1.25,
-      dx: Math.sin(t * 0.33) * -0.035,
-      anim: "sit",
+        lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+        rot: Math.sin(t * 0.72) * 8,
+        dx: Math.sin(t * 0.4) * -0.12,
+        anim: "sit",
     };
-  }
-  function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
+}
+function stepHappy(happy, dt, flags) {
+    if (!happy || happy.phase === "done")
+        return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+        return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "ochre") {
-      const pose = ochrePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "gilt") {
-      const pose = giltPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = lingerPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
+        const pose = ochrePose(next.t);
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    else if (next.kind === "gilt") {
+        const pose = giltPose(next.t);
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    else {
+        const pose = lingerPose(next.t);
+        next.lift = pose.lift;
+        next.rot = pose.rot;
+        next.anim = pose.anim;
+    }
+    if (next.t >= hold)
+        return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
-  }
-
-  function sleepHoldFrame(_key, _frameCount) {
+}
+function sleepHoldFrame(_key, _frameCount) {
     return null;
-  }
-
-  function beginTrick(kind, x, facing) {
-    const anim =
-      kind === "amber"
+}
+function beginTrick(kind, x, facing) {
+    const anim = kind === "amber"
         ? "sit"
         : kind === "biloba"
-          ? "sit"
-          : kind === "notch"
-            ? "talk"
-            : kind === "flutter"
-              ? "play"
-              : kind === "drop"
+            ? "sit"
+            : kind === "notch"
                 ? "talk"
-                : "sit";
+                : kind === "flutter"
+                    ? "play"
+                    : kind === "drop"
+                        ? "talk"
+                        : kind === "dichotomy"
+                            ? "play"
+                            : kind === "petiole"
+                                ? "talk"
+                                : "sit";
     return {
-      kind: kind,
-      phase: kind === "amber" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: facing == null ? 1 : facing,
-      fromX: x,
+        kind: kind,
+        phase: kind === "amber" ? "hold" : "go",
+        t: 0,
+        x: x,
+        lift: 0,
+        rot: 0,
+        anim: anim,
+        facing: facing == null ? 1 : facing,
+        fromX: x,
     };
-  }
-
-  function smoothstep(t) {
+}
+function smoothstep(t) {
     const x = Math.max(0, Math.min(1, t));
     return x * x * (3 - 2 * x);
-  }
-
-  function amberPose(t) {
-    const breath = Math.sin(t * 0.34) + 0.04 * Math.sin(t * 1.15);
+}
+function amberPose(t) {
+    const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
     return {
-      lift: 0.03 + Math.abs(Math.sin(t * 0.34)) * 0.028,
-      rot: -0.9 + breath * 1.15,
+        lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+        rot: 4 + breath * 6,
     };
-  }
-
-  function releasePose(t) {
+}
+function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.03 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.85 * (1 - u) };
-  }
-
-  function bilobaPose(t, fromX, facing) {
+    const s = smoothstep(u);
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+}
+/** Biloba — two-lobed leaf open. Not parrot fan. Not Vein frond. */
+function bilobaPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.biloba));
     if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.07, rot: s * -5.5 * facing, anim: "sit" };
+        const s = smoothstep(u / 0.16);
+        return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "sit" };
     }
-    if (u < 0.74) {
-      const s = (u - 0.16) / 0.58;
-      const split = Math.sin(s * Math.PI * 1.35);
-      return {
-        x: fromX + facing * split * 0.04,
-        lift: 0.07 + Math.abs(split) * 0.1,
-        rot: facing * (-5.5 + split * 9.2),
+    if (u < 0.78) {
+        const s = (u - 0.16) / 0.62;
+        const split = Math.sin(s * Math.PI * 1.6);
+        return {
+            x: fromX + facing * Math.abs(split) * 0.35,
+            lift: 2.6 + Math.abs(split) * 1.6,
+            rot: facing * (-10 + split * 14),
+            anim: "sit",
+        };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+        x: fromX,
+        lift: 1.8 * (1 - s),
+        rot: facing * (-6 * (1 - s)),
         anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.74) / 0.26);
-    return {
-      x: fromX,
-      lift: 0.07 * (1 - s),
-      rot: facing * (-2.8 * (1 - s)),
-      anim: "sit",
     };
-  }
-  function notchPose(t, fromX, facing) {
+}
+/** Notch — apical notch tip settle. Not Sol nod. */
+function notchPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.notch));
-    if (u < 0.15) {
-      const s = smoothstep(u / 0.15);
-      return { x: fromX, lift: s * 0.035, rot: s * 6.2 * facing, anim: "talk" };
+    if (u < 0.18) {
+        const s = smoothstep(u / 0.18);
+        return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "talk" };
     }
-    if (u < 0.6) {
-      const s = (u - 0.15) / 0.45;
-      const tip = Math.sin(s * Math.PI * 4.2);
-      return {
-        x: fromX + facing * tip * 0.015,
-        lift: 0.035 + Math.abs(tip) * 0.028,
-        rot: facing * (6.2 + tip * 3.8),
-        anim: "talk",
-      };
+    if (u < 0.55) {
+        const s = (u - 0.18) / 0.37;
+        const tip = Math.sin(s * Math.PI * 3.4);
+        return {
+            x: fromX + facing * tip * 0.4,
+            lift: 2.4 + Math.abs(tip) * 1.4,
+            rot: facing * (14 + tip * 12),
+            anim: "talk",
+        };
     }
-    if (u < 0.82) {
-      const s = (u - 0.6) / 0.22;
-      const settle = smoothstep(s);
-      return {
-        x: fromX + facing * (1 - settle) * 0.02,
-        lift: 0.04 * (1 - settle * 0.35),
-        rot: facing * (6.2 - settle * 7.5),
-        anim: "talk",
-      };
+    if (u < 0.78) {
+        const s = (u - 0.55) / 0.23;
+        const settle = smoothstep(s);
+        return {
+            x: fromX + facing * (1 - settle) * 0.5,
+            lift: 3.2 - settle * 1.2,
+            rot: facing * (14 - settle * 16),
+            anim: "talk",
+        };
     }
-    const s = smoothstep((u - 0.82) / 0.18);
+    const s = smoothstep((u - 0.78) / 0.22);
     return {
-      x: fromX,
-      lift: 0.022 * (1 - s),
-      rot: facing * (-0.9 * (1 - s)),
-      anim: "sit",
+        x: fromX,
+        lift: 2.0 * (1 - s),
+        rot: facing * (-3 * (1 - s)),
+        anim: "sit",
     };
-  }
-  function flutterPose(t, fromX, facing) {
+}
+/** Flutter — soft flutter fall. Never named lean/unfurl/gold. */
+function flutterPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.flutter));
     if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.28, rot: s * 4.5 * facing, anim: "play" };
+        const s = smoothstep(u / 0.14);
+        return { x: fromX, lift: s * 4.2, rot: s * 8 * facing, anim: "play" };
     }
     if (u < 0.72) {
-      const s = (u - 0.14) / 0.58;
-      const fall = Math.sin(s * Math.PI * 6.4);
-      const descend = s * 0.22;
-      return {
-        x: fromX + facing * fall * 0.045,
-        lift: 0.28 - descend + Math.abs(fall) * 0.04,
-        rot: facing * (4.5 + fall * 8.5 - s * 6),
-        anim: "play",
-      };
+        const s = (u - 0.14) / 0.58;
+        const fall = Math.sin(s * Math.PI * 6.4);
+        const descend = s * 2.4;
+        return {
+            x: fromX + facing * fall * 0.45,
+            lift: 4.2 - descend + Math.abs(fall) * 0.8,
+            rot: facing * (8 + fall * 12 - s * 10),
+            anim: "play",
+        };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
-      x: fromX + facing * 0.02 * (1 - s),
-      lift: 0.08 * (1 - s),
-      rot: facing * (-1.5 * (1 - s)),
-      anim: "sit",
+        x: fromX + facing * 0.2 * (1 - s),
+        lift: 1.6 * (1 - s),
+        rot: facing * (-4 * (1 - s)),
+        anim: "sit",
     };
-  }
-  function dropPose(t, fromX, facing) {
+}
+/** Drop — soft golden leaf drop to blotter. Never named gold. */
+function dropPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.drop));
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * 0.2, rot: s * -3.4 * facing, anim: "talk" };
+    if (u < 0.16) {
+        const s = smoothstep(u / 0.16);
+        return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "talk" };
     }
     if (u < 0.55) {
-      const s = (u - 0.18) / 0.37;
-      const hang = Math.sin(s * Math.PI * 1.8);
-      return {
-        x: fromX + facing * hang * 0.025,
-        lift: 0.2 - s * 0.04 + Math.abs(hang) * 0.03,
-        rot: facing * (-3.4 + hang * 5),
-        anim: "talk",
-      };
+        const s = (u - 0.16) / 0.39;
+        const hang = Math.sin(s * Math.PI * 1.8);
+        return {
+            x: fromX + facing * hang * 0.35,
+            lift: 3.2 - s * 0.8 + Math.abs(hang) * 0.6,
+            rot: facing * (-8 + hang * 12),
+            anim: "talk",
+        };
     }
     if (u < 0.82) {
-      const s = (u - 0.55) / 0.27;
-      const land = smoothstep(s);
-      return {
-        x: fromX + facing * (1 - land) * 0.03,
-        lift: 0.16 * (1 - land * 0.85),
-        rot: facing * (-2.2 + land * 3.5),
-        anim: "talk",
-      };
+        const s = (u - 0.55) / 0.27;
+        const land = smoothstep(s);
+        return {
+            x: fromX + facing * (1 - land) * 0.4,
+            lift: 2.4 * (1 - land * 0.85),
+            rot: facing * (-4 + land * 8),
+            anim: "talk",
+        };
     }
     const s = smoothstep((u - 0.82) / 0.18);
     return {
-      x: fromX,
-      lift: 0.03 * (1 - s),
-      rot: facing * (1.1 * (1 - s)),
-      anim: "sit",
+        x: fromX,
+        lift: 0.8 * (1 - s),
+        rot: facing * (3 * (1 - s)),
+        anim: "sit",
     };
-  }
-  function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "notch" && trick.kind !== "flutter" && trick.kind !== "drop") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+}
+/** Dichotomy — dichotomous vein-fork shimmer through the lamina. Not Vein name. Not fork token. */
+function dichotomyPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.dichotomy));
+    if (u < 0.16) {
+        const s = smoothstep(u / 0.16);
+        return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "play" };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    if (u < 0.55) {
+        const s = (u - 0.16) / 0.39;
+        const shimmer = Math.sin(s * Math.PI * 4.2);
+        return {
+            x: fromX + facing * (s * 0.6 + shimmer * 0.2),
+            lift: 1.8 + Math.abs(shimmer) * 1.6,
+            rot: facing * (-8 + shimmer * 14),
+            anim: "play",
+        };
+    }
+    if (u < 0.78) {
+        const s = (u - 0.55) / 0.23;
+        const hold = Math.sin(s * Math.PI * 3.4);
+        return {
+            x: fromX + facing * 0.6,
+            lift: 2.8 + Math.abs(hold) * 0.8,
+            rot: facing * (4 + hold * 10),
+            anim: "play",
+        };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+        x: fromX + facing * 0.6 * (1 - s),
+        lift: 1.8 * (1 - s) + s * 0.2,
+        rot: facing * (4 * (1 - s)),
+        anim: "idle",
+    };
+}
+/** Petiole — long slender leaf-stalk flex. Not Vein stipe. Not Burr root. Not Felt rhizoid. */
+function petiolePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.petiole));
+    if (u < 0.14) {
+        const s = smoothstep(u / 0.14);
+        return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" };
+    }
+    if (u < 0.4) {
+        const s = (u - 0.14) / 0.26;
+        const flex = smoothstep(s);
+        return {
+            x: fromX + facing * flex * 0.5,
+            lift: 2.6 + flex * 2.4,
+            rot: facing * (10 + flex * 8),
+            anim: "talk",
+        };
+    }
+    if (u < 0.78) {
+        const s = (u - 0.4) / 0.38;
+        const sway = Math.sin(s * Math.PI * 3.2);
+        return {
+            x: fromX + facing * (0.5 + sway * 0.3),
+            lift: 4.8 + Math.abs(sway) * 0.8,
+            rot: facing * (6 + sway * 14),
+            anim: "talk",
+        };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+        x: fromX + facing * 0.5 * (1 - s),
+        lift: 2.6 * (1 - s),
+        rot: facing * (6 * (1 - s)),
+        anim: "idle",
+    };
+}
+function stepTrick(trick, dt, flags) {
+    if (!trick || trick.phase === "done")
+        return trick;
+    if (shouldAbort(flags) &&
+        trick.kind !== "biloba" &&
+        trick.kind !== "notch" &&
+        trick.kind !== "flutter" &&
+        trick.kind !== "drop" &&
+        trick.kind !== "dichotomy" &&
+        trick.kind !== "petiole") {
+        return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    }
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "amber") {
-      if (next.t < AMBER_HOLD) {
-        const pose = amberPose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      if (next.t < AMBER_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - AMBER_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+        if (next.t < AMBER_HOLD) {
+            const pose = amberPose(next.t);
+            next.phase = "hold";
+            next.lift = pose.lift;
+            next.rot = pose.rot;
+            next.anim = "sit";
+            return next;
+        }
+        if (next.t < AMBER_HOLD + RELEASE_S) {
+            const pose = releasePose(next.t - AMBER_HOLD);
+            next.phase = "release";
+            next.lift = pose.lift;
+            next.rot = pose.rot;
+            next.anim = "sit";
+            return next;
+        }
+        return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
-    if (next.kind === "biloba") {
-      const pose = bilobaPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "notch") {
-      const pose = notchPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "flutter") {
-      const pose = flutterPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = dropPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
+    let pose;
+    if (next.kind === "biloba")
+        pose = bilobaPose(next.t, fromX, trick.facing);
+    else if (next.kind === "notch")
+        pose = notchPose(next.t, fromX, trick.facing);
+    else if (next.kind === "flutter")
+        pose = flutterPose(next.t, fromX, trick.facing);
+    else if (next.kind === "drop")
+        pose = dropPose(next.t, fromX, trick.facing);
+    else if (next.kind === "dichotomy")
+        pose = dichotomyPose(next.t, fromX, trick.facing);
+    else
+        pose = petiolePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+    if (u >= 1)
+        return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
-  }
+}
 
   const api = {
     TRICK_KEY,
     TRICKS,
     HAPPY,
     HAPPY_DUR,
+    DUR,
     AMBER_HOLD,
     RELEASE_S,
-    DUR,
     canStart,
     shouldAbort,
     nextTrickWait,
@@ -441,6 +576,8 @@
     notchPose,
     flutterPose,
     dropPose,
+    dichotomyPose,
+    petiolePose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -451,7 +588,7 @@
     ochrePose,
     giltPose,
     lingerPose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetGinkgoTricks = api;
