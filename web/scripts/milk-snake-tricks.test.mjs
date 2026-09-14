@@ -460,7 +460,7 @@ test("ultra-polish: Coral rhyme/cipher/verse lifts are Rui-visible (not micro id
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Coral idle-life ultra done; Blush / rosy_boa ultra done; Atlas / carpet_python ultra done; next house-order ultra guest is Cup / octopus (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Coral idle-life ultra done; Blush / rosy_boa ultra done; Atlas / carpet_python ultra done; Cup / octopus ultra done; next house-order ultra guest is Sepia / cuttlefish (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "milk_snake");
   assert.equal(T.wantsThankYou("coral"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);
