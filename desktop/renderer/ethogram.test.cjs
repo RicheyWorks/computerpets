@@ -303,6 +303,17 @@ test("cicada ethogram is Brood ultra (magicicada + softs + freeze, not still/eme
   assert.equal(names.length, 8);
 });
 
+test("honeycomb ethogram is Wax ultra (tessera + softs + freeze, not hold/brood/still)", () => {
+  const names = E.actsFor("honeycomb").map((a) => a.name);
+  assert.ok(names.includes("tessera"));
+  assert.ok(names.includes("alveoli_soft"));
+  assert.ok(names.includes("foundation_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("hold"), false);
+  assert.equal(names.includes("brood"), false);
+  assert.equal(names.includes("still"), false);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));

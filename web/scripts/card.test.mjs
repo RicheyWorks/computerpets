@@ -140,6 +140,7 @@ test("saved lines, alarm, and timer are machine-local", () => {
   assert.equal(C.prefersHouseCry("ladybird"), true);
   assert.equal(C.prefersHouseCry("mantis"), true);
   assert.equal(C.prefersHouseCry("cicada"), true);
+  assert.equal(C.prefersHouseCry("honeycomb"), true);
   assert.ok(C.speakOpts("hearth", 50).volume < 0.5);
   assert.match(roomSrc, /prefersHouseCry/);
   assert.match(roomSrc, /const cried = await playAnimalVoice/);
