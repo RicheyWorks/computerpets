@@ -704,6 +704,11 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("black_bear").includes("bluffhuff_soft"));
   assert.ok(names("black_bear").includes("mastforage_soft"));
   assert.ok(names("black_bear").includes("freeze"));
+  assert.ok(names("capybara").includes("hydrochoerus"));
+  assert.ok(names("capybara").includes("mudwallow_soft"));
+  assert.ok(names("capybara").includes("scentgland_soft"));
+  assert.ok(names("capybara").includes("socialpile_soft"));
+  assert.ok(names("capybara").includes("freeze"));
   for (const key of STONE) {
     const acts = names(key);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
