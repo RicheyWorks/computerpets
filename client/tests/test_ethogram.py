@@ -62,7 +62,10 @@ def test_only_scratching_mammals_scratch():
     assert "fold" in [a["name"] for a in acts_for("mantis")]
     assert "emerge" in [a["name"] for a in acts_for("cicada")]
     assert "still" in [a["name"] for a in acts_for("luna")]
-    assert "snap" in [a["name"] for a in acts_for("venus_flytrap")]
+    assert "poise" in [a["name"] for a in acts_for("venus_flytrap")]
+    assert "cage_soft" in [a["name"] for a in acts_for("venus_flytrap")]
+    assert "scape_soft" in [a["name"] for a in acts_for("venus_flytrap")]
+    assert "freeze" in [a["name"] for a in acts_for("venus_flytrap")]
     assert "still" in [a["name"] for a in acts_for("pitcher")]
     assert "curl" in [a["name"] for a in acts_for("sundew")]
     for key in FUNGI_KEYS:
