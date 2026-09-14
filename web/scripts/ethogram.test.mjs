@@ -645,7 +645,11 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("tick").includes("capitulum_soft"));
   assert.ok(names("tick").includes("quest_soft"));
   assert.ok(names("tick").includes("freeze"));
-  assert.ok(names("solifuge").includes("run"));
+  assert.ok(names("solifuge").includes("eremobates"));
+  assert.ok(names("solifuge").includes("propeltidium_soft"));
+  assert.ok(names("solifuge").includes("tracheate_soft"));
+  assert.ok(names("solifuge").includes("malleoli_soft"));
+  assert.ok(names("solifuge").includes("freeze"));
   for (const key of WOOD) {
     const acts = names(key);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
