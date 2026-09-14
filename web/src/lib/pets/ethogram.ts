@@ -107,7 +107,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   octopus: [A("hide", "sit_hold", 2.4, 4, "sit"), A("sucker_soft", "walk", 1.1, 2), A("jet_soft", "dart", 1.0, 2), A("veil_soft", "play", 1.15, 2, "play"), A("tinker_soft", "play", 1.1, 2, "play"), A("papilla_soft", "sit", 1.2, 2, "sit"), A("ooze_soft", "walk", 1.15, 2), A("freeze", "freeze", 1.4, 2)],
   cuttlefish: [A("hide", "sit_hold", 2.4, 4, "sit"), A("pupil_soft", "talk", 1.1, 2, "talk"), A("chroma_soft", "play", 1.15, 2, "play"), A("hover_soft", "walk", 1.1, 2), A("blot_soft", "play", 1.15, 2, "play"), A("strike_soft", "walk", 1.0, 2), A("zebra_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
   nautilus: [A("hide", "sit_hold", 2.4, 4, "sit"), A("siphuncle_soft", "walk", 1.1, 2), A("nacre_soft", "sit", 1.15, 2, "sit"), A("pinhole_soft", "talk", 1.1, 2, "talk"), A("fringe_soft", "play", 1.15, 2, "play"), A("hyponome_soft", "walk", 1.0, 2), A("aperture_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
-  moon_jelly: [A("pulse", "pulse", 1.2, 4), A("drift", "bob", 1.6, 2)],
+  moon_jelly: [A("hide", "sit_hold", 2.4, 4, "sit"), A("oral_soft", "talk", 1.1, 2, "talk"), A("lucent_soft", "sit", 1.15, 2, "sit"), A("trail_soft", "play", 1.15, 2, "play"), A("medusa_soft", "walk", 1.1, 2), A("rhopalium_soft", "talk", 1.1, 2, "talk"), A("horseshoe_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
   sea_star: [A("cling", "sit_hold", 2.8, 4, "sit"), A("still", "freeze", 2.2, 2)],
   hermit_crab: [A("inspect", "freeze", 1.2, 3), A("shuffle", "wiggle", 0.9, 2)],
   horseshoe_crab: [A("plow", "wiggle", 1.0, 2), A("still", "freeze", 2.0, 3)],
