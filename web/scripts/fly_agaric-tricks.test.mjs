@@ -966,7 +966,7 @@ globalThis.PetFlyAgaricTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Cap ultra idle-life done; next house-order ultra is Horn / chanterelle", () => {
+test("notes: Cap ultra idle-life done; next house-order ultra is Ring / turkey_tail", () => {
   assert.equal(T.TRICK_KEY, "fly_agaric");
   assert.equal(T.wantsThankYou("cap"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
