@@ -259,7 +259,7 @@ test("carapace/bookgill/telson/furrow/fossil are house-horseshoe-true, not copie
   assert.deepEqual([...Hamster.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.equal(SeaStar.TRICKS.includes("podia"), true);
   assert.equal(HermitCrab.TRICKS.includes("swap"), true);
   assert.equal(Hamster.TRICKS.includes("scurry"), true);
@@ -370,7 +370,7 @@ test("ground registry keeps prior guests gated; Ledger selectable; prior guests 
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...T.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
   assert.equal(T.wantsThankYou("horseshoe_crab"), true);
   assert.equal(T.wantsThankYou("ledger"), true);
@@ -481,7 +481,7 @@ test("ground registry keeps prior guests gated; Ledger selectable; prior guests 
   assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
-  assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy"]);
+  assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...Overlay.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
   assert.equal(Overlay.TRICKS.includes("knob"), false);
