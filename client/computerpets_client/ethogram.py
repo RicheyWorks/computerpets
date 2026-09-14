@@ -101,7 +101,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "mining_bee": (_a("dig", "sit_hold", 1.8, 4, "sit"), _a("hover", "bob", 1.2, 2), _a("still", "freeze", 1.6, 2)),
     "honey_drone": (_a("hum", "pulse", 1.4, 4), _a("hover", "bob", 1.6, 2), _a("still", "freeze", 2.0, 3)),
     "honey_queen": (_a("lay", "sit_hold", 2.2, 5, "sit"), _a("walk", "wiggle", 1.0, 1), _a("still", "freeze", 2.0, 2)),
-    "honeycomb": (_a("hold", "sit_hold", 2.8, 5, "sit"), _a("brood", "freeze", 2.4, 3, "sit"), _a("still", "freeze", 2.6, 3)),
+    "honeycomb": (_a("tessera", "sit_hold", 2.4, 4, "sit"), _a("festoon_soft", "play", 1.2, 2, "play"), _a("capped_soft", "talk", 1.15, 2, "talk"), _a("midrib_soft", "talk", 1.2, 2, "talk"), _a("stores_soft", "sit", 1.2, 2, "sit"), _a("alveoli_soft", "sit", 1.2, 2, "sit"), _a("foundation_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "oyster": (_a("lean", "lean", 1.8, 4), _a("flush", "flush", 1.2, 2), _a("still", "freeze", 2.2, 2)),
     "fly_agaric": (_a("lean", "lean", 1.6, 3), _a("flush", "flush", 1.4, 3), _a("still", "freeze", 2.0, 2)),
     "morel": (_a("lean", "lean", 1.6, 3), _a("still", "sit_hold", 2.4, 3, "sit"), _a("still_hold", "freeze", 2.0, 2)),
