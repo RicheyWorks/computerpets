@@ -1,12 +1,26 @@
-/** Ghost ground tricks while idle. House luna — plumose / lunule / silk / stream / actias personality (plumose feathered-antenna dusk sense on the blotter — never named antenna (Tenant) / nest (Clip) / scurry / week (Ghost window WEEK) / refuse (ethogram) / still / drift (ethogram+Coin), lunule eyespot crescent open — never named flash (Quill) / wing (Kite) / flutter (Fan ethogram+ginkgo) / fan / blaze (Ember) / glow / warning (Milk), silk cocoon-memory — never named chrysalis (Milk) / coil / tuck / curl / unroll (Nori) / return (Ember) / jade (guest), stream long hindwing-tail soft night flight — never named soar / hover (Sepia) / wing (Kite) / flutter / nocturne (Arm) / drift, actias desk life as an Actias pale-green tailed week; not Milk / Comb / Echo / Ember / Quill / Kite / Fan / Dew / Moth orchid / Coral copies). Feed-happy thank-yous sit after eat (hatchling may; adult declines the bite — thank-yous still silent desk motion). Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web luna-tricks.ts. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk or *Dragon electrical clone. Window-play WEEK unchanged — never names week. Ethogram still/drift/refuse unchanged. Milk owns asclepias/oyamel/warning/chrysalis/danaus; Comb owns figure/corbicula/hex/proboscis/hive; Quill owns fan/flash; Kite owns wing; Fan owns flutter; Echo owns preen/bobble; Ember owns cinder/blaze/shed/lift/return; Arm owns nocturne; Tenant owns antenna; Relay owns buzz; Rui owns dance. Actias pale-green desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Ghost ground tricks while idle — ultra-polish pass. House luna — plumose / lunule / silk / stream / actias / aphagy / cauda personality (plumose feathered-antenna dusk sense on the blotter — never named antenna (Tenant) / nest (Clip) / scurry / week (Ghost window WEEK) / refuse (ethogram-old) / still / drift (ethogram-old+Coin), lunule eyespot crescent open — never named flash (Quill) / wing (Kite) / flutter (Fan ethogram+ginkgo) / fan / blaze (Ember) / glow / warning (Milk), silk cocoon-memory — never named chrysalis (Milk) / coil / tuck / curl / unroll (Nori) / return (Ember) / jade (guest), stream long hindwing-tail soft night flight — never named soar / hover (Sepia) / wing (Kite) / flutter / nocturne (Arm) / drift, actias desk life as an Actias pale-green tailed week, aphagy adult mouthless decline-of-the-bite (species-true Actias adult aphagy — never named refuse as ethogram-old / still / mute / hush / week / eat-cmd / nest), cauda forked hindwing-tail bat-deflection twirl (species-true Actias cauda — never named stream as flight / wing (Kite) / flutter / flash (Quill) / fan / soar / tail as vague); not Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, Blush mesa/arroyo, Sol sun/dewlap/nod/press/flick, Echo preen/bobble, Quill fan/flash, Relay buzz, Rui dance, Banner puddlesip, Spark lantern/jstroke, or snake guests Sash seam/moss/lap copies). Aphagy is the iconic adult no-mouth week (not Milk cremaster, not ethogram refuse). Cauda is the iconic forked hindwing-tail (not stream flight, not Kite wing). Window-play WEEK unchanged — never names week as a trick. Ethogram keeps actias sit_hold; adds plumose/lunule/silk/stream/aphagy/cauda softs + freeze (replaces thin still/drift/refuse). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via luna.wav. Thank-yous lime / moon / satin. Feed-happy after eat (hatchling may; adult declines the bite — thank-yous still silent desk motion). Sleep, hide, leave, rest, card still win. Same map as web `luna-tricks.ts`. True house-luna desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/moth-orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Well/sundew/Dew/honeybee/Comb/monarch/Milk or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/store/drift/float/bloom/cup/siphon/soak/sprout/nectary/nest/den/nook/column/bole/press/swell/snap/count/cilia/teeth/fringe/latch/lure/margin/enzyme/clamp/trichome/stew/unseal/poise/cage/scape/pleat/boot/keiki/pollinia/wing/hood/bristle/peristome/cistern/brine/operculum/urn/ala/baffle/mucilage/tentacle/digest/gland/rosette/lamina/circinate/curl/glue/fiddle/waggle/dance/buzz/pollen/nectar/figure/corbicula/hex/proboscis/hive/ocelli/nasonov/asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus/lantern/jstroke/semaphore/elytra/photinus/puddlesip/refuse/still/drift name collisions. Bird ultra (Soot→Ember) + Miso→Ghost done; skip Rui + birds. Next guest ultra is Spark / firefly. No cry inventing beyond house luna.wav prefer. Never retouch Rui sprites. */
+
 (function (root) {
   const TRICK_KEY = "luna";
-  const TRICKS = ["plumose", "lunule", "silk", "stream", "actias"];
+  const TRICKS = ["plumose", "lunule", "silk", "stream", "actias", "aphagy", "cauda"];
   const HAPPY = ["lime", "moon", "satin"];
-  const HAPPY_DUR = { lime: 1.22, moon: 1.34, satin: 1.18 };
-  const ACTIAS_HOLD = 12.8;
-  const RELEASE_S = 0.78;
-  const DUR = { actias: ACTIAS_HOLD + RELEASE_S, plumose: 1.34, lunule: 1.3, silk: 1.5, stream: 1.56 };
+
+  const HAPPY_DUR = {
+    lime: 1.26,
+    moon: 1.32,
+    satin: 1.2,
+  };
+  const ACTIAS_HOLD = 11.2;
+  const RELEASE_S = 0.64;
+  const DUR = {
+    actias: ACTIAS_HOLD + RELEASE_S,
+    plumose: 1.48,
+    lunule: 1.42,
+    silk: 1.68,
+    stream: 1.58,
+    aphagy: 1.62,
+    cauda: 1.7,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +50,54 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "actias") return 50 + roll * 30;
-    if (kind === "lunule") return 17 + roll * 12;
-    if (kind === "stream") return 15 + roll * 11;
-    return justFinished ? 10.5 + roll * 8 : 5.4 + roll * 6.5;
+    if (kind === "actias") return 40 + roll * 24;
+    if (kind === "aphagy" || kind === "cauda" || kind === "silk") return 12 + roll * 9;
+    if (kind === "plumose" || kind === "lunule" || kind === "stream") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
-
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "actias";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "actias") {
-      if (roll < 0.26) return "plumose";
-      if (roll < 0.48) return "lunule";
-      if (roll < 0.72) return "silk";
-      return "stream";
+      if (roll < 0.16) return "plumose";
+      if (roll < 0.32) return "lunule";
+      if (roll < 0.48) return "silk";
+      if (roll < 0.64) return "stream";
+      if (roll < 0.82) return "aphagy";
+      return "cauda";
     }
     if (lastKind === "plumose") {
-      if (roll < 0.28) return "actias";
-      if (roll < 0.5) return "lunule";
-      if (roll < 0.72) return "silk";
-      return "stream";
+      if (roll < 0.18) return "actias";
+      if (roll < 0.34) return "lunule";
+      if (roll < 0.5) return "silk";
+      if (roll < 0.66) return "stream";
+      if (roll < 0.83) return "aphagy";
+      return "cauda";
     }
     if (lastKind === "lunule") {
-      if (roll < 0.22) return "actias";
-      if (roll < 0.44) return "plumose";
-      if (roll < 0.66) return "silk";
-      return "stream";
+      if (roll < 0.16) return "actias";
+      if (roll < 0.32) return "plumose";
+      if (roll < 0.48) return "silk";
+      if (roll < 0.64) return "stream";
+      if (roll < 0.82) return "aphagy";
+      return "cauda";
     }
-    if (roll < 0.2) return "actias";
-    if (roll < 0.4) return "plumose";
-    if (roll < 0.6) return "lunule";
-    if (roll < 0.8) return "silk";
-    return "stream";
+    if (lastKind === "aphagy" || lastKind === "cauda") {
+      if (roll < 0.16) return "actias";
+      if (roll < 0.32) return "plumose";
+      if (roll < 0.48) return "lunule";
+      if (roll < 0.64) return "silk";
+      if (roll < 0.8) return "stream";
+      return lastKind === "aphagy" ? ("cauda") : ("aphagy");
+    }
+    if (roll < 0.14) return "actias";
+    if (roll < 0.28) return "plumose";
+    if (roll < 0.42) return "lunule";
+    if (roll < 0.56) return "silk";
+    if (roll < 0.7) return "stream";
+    if (roll < 0.85) return "aphagy";
+    return "cauda";
   }
-
   function happyCanStart(state) {
     if (!state) return false;
     if (state.asleep || state.hidden || state.leaving) return false;
@@ -99,16 +127,22 @@
     return key === TRICK_KEY || key === "ghost";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key,
+    lastKind,
+    x,
+    facing,
+    flags,
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
+    const pick = pickHappy(lastKind | null | undefined);
     return { happy: beginHappy(pick, x, facing), kind: pick };
   }
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
@@ -133,52 +167,55 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.lime));
     if (u < 0.16) {
       const s = u / 0.16;
-      return { lift: s * 0.09, rot: s * 3.1, dx: 0, anim: "play" };
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "play" };
     }
     if (u < 0.72) {
       const spark = Math.sin(t * 9.8) + 0.28 * Math.sin(t * 15.2);
       return {
-        lift: 0.09 + Math.abs(spark) * 0.038,
-        rot: 3.1 + spark * 3.2,
-        dx: spark * 0.009,
+        lift: 2.8 + Math.abs(spark) * 1.4,
+        rot: 12 + spark * 10,
+        dx: spark * 0.22,
         anim: "play",
       };
     }
     const s = (u - 0.72) / 0.28;
-    return { lift: 0.055 * (1 - s), rot: 1.4 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function moonPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.moon));
     if (u < 0.18) {
       const s = u / 0.18;
-      return { lift: s * -0.024, rot: s * -1.6, dx: 0, anim: "sit" };
+      return { lift: s * -1.1, rot: s * -6.5, dx: 0, anim: "sit" };
     }
     if (u < 0.8) {
       const warm = Math.sin(t * 0.74);
       return {
-        lift: -0.024 + Math.abs(warm) * 0.022,
-        rot: -1.6 + warm * 1.7,
-        dx: warm * 0.006,
+        lift: -1.1 + Math.abs(warm) * 0.85,
+        rot: -6.5 + warm * 5.5,
+        dx: warm * 0.18,
         anim: "sit",
       };
     }
     const s = (u - 0.8) / 0.2;
-    return { lift: -0.014 * (1 - s), rot: -0.9 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: -0.7 * (1 - s), rot: -3.2 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function satinPose(t) {
     return {
-      lift: 0.03 + Math.abs(Math.sin(t * 0.86)) * 0.044,
-      rot: Math.sin(t * 1.05) * 2.8,
-      dx: Math.sin(t * 0.52) * 0.011,
+      lift: 2.2 + Math.abs(Math.sin(t * 0.86)) * 1.1,
+      rot: Math.sin(t * 1.05) * 9,
+      dx: Math.sin(t * 0.52) * 0.28,
       anim: "talk",
     };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "lime") {
       const pose = limePose(next.t);
@@ -196,7 +233,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -207,16 +244,20 @@
   function beginTrick(kind, x, facing) {
     const anim =
       kind === "actias"
-      ? "sit"
-      : kind === "plumose"
-        ? "talk"
-        : kind === "lunule"
-          ? "play"
-          : kind === "silk"
-            ? "sit"
-            : kind === "stream"
+        ? "sit"
+        : kind === "plumose"
+          ? "talk"
+          : kind === "lunule"
+            ? "play"
+            : kind === "silk"
               ? "sit"
-                : "sit";
+              : kind === "stream"
+                ? "sit"
+                : kind === "aphagy"
+                  ? "talk"
+                  : kind === "cauda"
+                    ? "play"
+                    : "sit";
     return {
       kind: kind,
       phase: kind === "actias" ? "hold" : "go",
@@ -238,137 +279,185 @@
   function actiasPose(t) {
     const breath = Math.sin(t * 0.16) + 0.02 * Math.sin(t * 0.88);
     return {
-      lift: 0.018 + Math.abs(Math.sin(t * 0.24)) * 0.01,
-      rot: 0.35 + breath * 0.48,
+      lift: 2.4 + Math.abs(Math.sin(t * 0.24)) * 1.2,
+      rot: 4 + breath * 3.2,
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.022 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.28 * (1 - u) };
+    return { lift: 2.2 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.2 * (1 - u) };
   }
 
   function plumosePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.plumose));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * -0.045, rot: s * 2.4 * facing, anim: "talk" };
+      return { x: fromX, lift: s * 2.6, rot: s * -8 * facing, anim: "talk" };
     }
     if (u < 0.76) {
       const s = (u - 0.14) / 0.62;
       const leaf = Math.sin(s * Math.PI * 2.2);
       return {
-        x: fromX + facing * 0.014 * s + facing * leaf * 0.005,
-        lift: -0.045 + Math.abs(leaf) * 0.028,
-        rot: facing * (2.4 + s * 3.6 + leaf * 2.1),
+        x: fromX + facing * 0.35 * s + facing * leaf * 0.12,
+        lift: 2.6 + Math.abs(leaf) * 1.1,
+        rot: facing * (-8 + leaf * 7),
         anim: "talk",
       };
     }
-    const s = smoothstep((u - 0.76) / 0.24);
+    const s = (u - 0.76) / 0.24;
     return {
-      x: fromX + facing * 0.014 * (1 - s),
-      lift: -0.045 * (1 - s),
-      rot: facing * (2.0 * (1 - s)),
-      anim: "sit",
+      x: fromX + facing * 0.35 * (1 - s),
+      lift: 2.6 * (1 - s),
+      rot: facing * (-4 * (1 - s)),
+      anim: "talk",
     };
   }
-  function streamPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.stream));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.055, rot: s * -3.2 * facing, anim: "sit" };
-    }
-    if (u < 0.8) {
-      const s = (u - 0.16) / 0.64;
-      const cluster = Math.sin(s * Math.PI * 2.1);
-      return {
-        x: fromX - facing * 0.018 * s + facing * cluster * 0.01,
-        lift: 0.055 + Math.abs(cluster) * 0.04,
-        rot: facing * (-3.2 + s * 4.4 + cluster * 2.6),
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
-    return {
-      x: fromX - facing * 0.018 * (1 - s),
-      lift: 0.055 * (1 - s),
-      rot: facing * (-1.6 * (1 - s)),
-      anim: "sit",
-    };
-  }
+
   function lunulePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.lunule));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.1, rot: s * 4.5 * facing, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 3.4, rot: s * 10 * facing, anim: "play" };
     }
-    if (u < 0.55) {
-      const s = (u - 0.12) / 0.43;
-      const open = Math.sin(s * Math.PI * 3);
+    if (u < 0.5) {
+      const open = Math.sin(((u - 0.14) / 0.36) * Math.PI);
       return {
-        x: fromX + facing * open * 0.012,
-        lift: 0.1 + Math.abs(open) * 0.055,
-        rot: facing * (4.5 + open * 6.2),
+        x: fromX + facing * 0.2 * open,
+        lift: 3.4 + Math.abs(open) * 1.3,
+        rot: facing * (10 + open * 9),
         anim: "play",
-      };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.55) / 0.23;
-      const hold = Math.sin(s * Math.PI * 2);
-      return {
-        x: fromX + facing * hold * 0.006,
-        lift: 0.12 + Math.abs(hold) * 0.02,
-        rot: facing * (5.8 + hold * 2.4),
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
-    return {
-      x: fromX,
-      lift: 0.12 * (1 - s),
-      rot: facing * (2.2 * (1 - s)),
-      anim: "sit",
-    };
-  }
-  function silkPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.silk));
-    if (u < 0.2) {
-      const s = smoothstep(u / 0.2);
-      return { x: fromX, lift: s * -0.055, rot: s * 1.6 * facing, anim: "sit" };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.2) / 0.35;
-      return {
-        x: fromX + facing * 0.004 * s,
-        lift: -0.055 + s * 0.01,
-        rot: facing * (1.6 + s * 0.8),
-        anim: "sit",
       };
     }
     if (u < 0.82) {
-      const s = (u - 0.55) / 0.27;
-      const soft = Math.sin(s * Math.PI * 1.8);
+      const hold = Math.sin(t * 6.2);
       return {
-        x: fromX + facing * (0.004 + soft * 0.008),
-        lift: -0.045 + soft * 0.06,
-        rot: facing * (2.4 + soft * 3.5),
+        x: fromX + facing * 0.18,
+        lift: 4.2 + Math.abs(hold) * 0.7,
+        rot: facing * (14 + hold * 3.5),
+        anim: "play",
+      };
+    }
+    const s = (u - 0.82) / 0.18;
+    return {
+      x: fromX + facing * 0.18 * (1 - s),
+      lift: 4.2 * (1 - s),
+      rot: facing * (8 * (1 - s)),
+      anim: "play",
+    };
+  }
+
+  function silkPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.silk));
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: s * -1.4, rot: s * 6 * facing, anim: "sit" };
+    }
+    if (u < 0.78) {
+      const wrap = Math.sin(((u - 0.16) / 0.62) * Math.PI * 1.6);
+      return {
+        x: fromX + facing * wrap * 0.15,
+        lift: -1.4 + Math.abs(wrap) * 0.9,
+        rot: facing * (6 + wrap * 5),
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.82) / 0.18);
+    const s = (u - 0.78) / 0.22;
     return {
       x: fromX,
-      lift: -0.02 * (1 - s),
-      rot: facing * (1.5 * (1 - s)),
+      lift: -1.4 * (1 - s),
+      rot: facing * (3.5 * (1 - s)),
       anim: "sit",
     };
   }
+
+  function streamPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.stream));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 2.8, rot: s * -7 * facing, anim: "sit" };
+    }
+    if (u < 0.8) {
+      const glide = Math.sin(((u - 0.14) / 0.66) * Math.PI * 2);
+      return {
+        x: fromX + facing * (0.55 * ((u - 0.14) / 0.66) + glide * 0.12),
+        lift: 2.8 + Math.abs(glide) * 1.2,
+        rot: facing * (-7 + glide * 8),
+        anim: "sit",
+      };
+    }
+    const s = (u - 0.8) / 0.2;
+    return {
+      x: fromX + facing * 0.55 * (1 - s),
+      lift: 2.8 * (1 - s),
+      rot: facing * (-4 * (1 - s)),
+      anim: "sit",
+    };
+  }
+
+  function aphagyPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.aphagy));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 2.5, rot: s * -8 * facing, anim: "talk" };
+    }
+    if (u < 0.45) {
+      const s = (u - 0.14) / 0.31;
+      return {
+        x: fromX - facing * 0.25 * s,
+        lift: 2.5 + s * 2.6,
+        rot: facing * (-8 + s * 14),
+        anim: "talk",
+      };
+    }
+    if (u < 0.82) {
+      const decline = Math.sin(t * 5.4);
+      return {
+        x: fromX - facing * 0.25,
+        lift: 5.0 + Math.abs(decline) * 0.85,
+        rot: facing * (5 + decline * 4.5),
+        anim: "talk",
+      };
+    }
+    const s = (u - 0.82) / 0.18;
+    return {
+      x: fromX - facing * 0.25 * (1 - s),
+      lift: 5.0 * (1 - s),
+      rot: facing * (4 * (1 - s)),
+      anim: "talk",
+    };
+  }
+
+  function caudaPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.cauda));
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 3.2, rot: s * 9 * facing, anim: "play" };
+    }
+    if (u < 0.78) {
+      const twirl = Math.sin(((u - 0.12) / 0.66) * Math.PI * 3.2);
+      return {
+        x: fromX + facing * twirl * 0.28,
+        lift: 3.2 + Math.abs(twirl) * 1.5,
+        rot: facing * (9 + twirl * 11),
+        anim: "play",
+      };
+    }
+    const s = (u - 0.78) / 0.22;
+    return {
+      x: fromX,
+      lift: 3.2 * (1 - s),
+      rot: facing * (5 * (1 - s)),
+      anim: "play",
+    };
+  }
+
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "plumose" && trick.kind !== "lunule" && trick.kind !== "silk" && trick.kind !== "stream") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (shouldAbort(flags) && trick.kind !== "plumose" && trick.kind !== "lunule" && trick.kind !== "silk" && trick.kind !== "stream" && trick.kind !== "aphagy" && trick.kind !== "cauda") {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "actias") {
       if (next.t < ACTIAS_HOLD) {
         const pose = actiasPose(next.t);
@@ -386,36 +475,49 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const from = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "plumose") {
-      const pose = plumosePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = plumosePose(next.t, from, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "lunule") {
-      const pose = lunulePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = lunulePose(next.t, from, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "silk") {
-      const pose = silkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = silkPose(next.t, from, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "stream") {
+      const pose = streamPose(next.t, from, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "aphagy") {
+      const pose = aphagyPose(next.t, from, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = streamPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = caudaPose(next.t, from, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -439,6 +541,8 @@
     lunulePose,
     silkPose,
     streamPose,
+    aphagyPose,
+    caudaPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -449,7 +553,7 @@
     limePose,
     moonPose,
     satinPose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetLunaTricks = api;
