@@ -318,7 +318,10 @@ def test_only_scratching_mammals_scratch():
     assert "ligament_soft" in [a["name"] for a in acts_for("mussel")]
     assert "glochid_soft" in [a["name"] for a in acts_for("mussel")]
     assert "freeze" in [a["name"] for a in acts_for("mussel")]
-    assert "latch" in [a["name"] for a in acts_for("leech")]
+    assert "hirudinean" in [a["name"] for a in acts_for("leech")]
+    assert "botryoidal_soft" in [a["name"] for a in acts_for("leech")]
+    assert "auricle_soft" in [a["name"] for a in acts_for("leech")]
+    assert "freeze" in [a["name"] for a in acts_for("leech")]
     assert "flare" in [a["name"] for a in acts_for("stickleback")]
     for key in WELL_KEYS:
         names = [a["name"] for a in acts_for(key)]
