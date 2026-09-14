@@ -213,7 +213,7 @@ test("Comb tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("glow"), false);
   assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
   assert.deepEqual([...Overlay.HAPPY], ["honey", "mead", "propolis"]);
-  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
   assert.equal(T.TRICKS.includes("crevice"), false);
@@ -293,7 +293,7 @@ test("figure/corbicula/hex/proboscis/hive are house-honeybee-true, not copies of
   assert.equal(T.HAPPY.includes("silt"), false);
   assert.equal(T.HAPPY.includes("nectar"), false);
   assert.equal(T.HAPPY.includes("dew"), false);
-  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.deepEqual([...WaterLily.HAPPY], ["silt", "nectar", "dew"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -617,7 +617,7 @@ globalThis.PetLunaTricks = OverlayLuna;
   assert.equal(OverlayGround.wantsThankYou("water_lily"), true);
   assert.equal(OverlayGround.tricksFor("disk"), OverlayWaterLily);
   assert.equal(OverlayGround.wantsThankYou("disk"), true);
-  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.equal(OverlayGround.wantsThankYou("hamster"), true);
   assert.equal(OverlayGround.wantsThankYou("clip"), true);
   assert.equal(OverlayGround.wantsThankYou("hedgehog"), true);
@@ -776,8 +776,8 @@ test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; nex
   assert.equal(OverlayGround.wantsThankYou("water_lily"), true);
   assert.equal(OverlayGround.tricksFor("disk"), OverlayWaterLily);
   assert.equal(OverlayGround.wantsThankYou("disk"), true);
-  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
-  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
+  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.equal(OverlayGround.tricksFor("orchid"), OverlayOrchid);
   assert.equal(OverlayGround.wantsThankYou("orchid"), true);
   assert.equal(OverlayGround.tricksFor("moth"), OverlayOrchid);

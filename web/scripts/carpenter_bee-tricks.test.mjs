@@ -233,7 +233,7 @@ test("Auger tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("glow"), false);
   assert.deepEqual([...Overlay.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
   assert.deepEqual([...Overlay.HAPPY], ["virginica", "micans", "xylocopini"]);
-  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
   assert.equal(T.TRICKS.includes("crevice"), false);
@@ -356,7 +356,7 @@ test("rasp/glabrous/partition/picket/xylocopa are house-carpenter-bee-true, not 
   assert.equal(T.HAPPY.includes("silt"), false);
   assert.equal(T.HAPPY.includes("nectar"), false);
   assert.equal(T.HAPPY.includes("dew"), false);
-  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.deepEqual([...WaterLily.HAPPY], ["silt", "nectar", "dew"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -702,7 +702,7 @@ globalThis.PetMasonBeeTricks = OverlayMasonBee;
   assert.equal(OverlayGround.wantsThankYou("water_lily"), true);
   assert.equal(OverlayGround.tricksFor("disk"), OverlayWaterLily);
   assert.equal(OverlayGround.wantsThankYou("disk"), true);
-  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.equal(OverlayGround.wantsThankYou("hamster"), true);
   assert.equal(OverlayGround.wantsThankYou("clip"), true);
   assert.equal(OverlayGround.wantsThankYou("hedgehog"), true);
@@ -861,8 +861,8 @@ test("notes: Auger idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.wantsThankYou("water_lily"), true);
   assert.equal(OverlayGround.tricksFor("disk"), OverlayWaterLily);
   assert.equal(OverlayGround.wantsThankYou("disk"), true);
-  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
-  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
+  assert.deepEqual([...OverlayWaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.equal(OverlayGround.tricksFor("orchid"), OverlayOrchid);
   assert.equal(OverlayGround.wantsThankYou("orchid"), true);
   assert.equal(OverlayGround.tricksFor("moth"), OverlayOrchid);
