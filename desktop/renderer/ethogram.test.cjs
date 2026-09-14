@@ -128,6 +128,17 @@ test("water_lily ethogram is Disk ultra (sheen + softs + freeze, not open/nod/le
   assert.equal(names.includes("lean"), false);
 });
 
+test("orchid ethogram is Moth ultra (bark + softs + freeze, not unfurl/nod/lean)", () => {
+  const names = E.actsFor("orchid").map((a) => a.name);
+  assert.ok(names.includes("bark"));
+  assert.ok(names.includes("keiki_soft"));
+  assert.ok(names.includes("pollinia_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("unfurl"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("lean"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",
