@@ -719,8 +719,12 @@ def test_only_scratching_mammals_scratch():
     assert "aspen_soft" in [a["name"] for a in acts_for("beaver")]
     assert "divehush_soft" in [a["name"] for a in acts_for("beaver")]
     assert "freeze" in [a["name"] for a in acts_for("beaver")]
-    assert "bristle" in [a["name"] for a in acts_for("porcupine")]
-    assert "forage" in [a["name"] for a in acts_for("black_bear")]
+    assert "erethizon" in [a["name"] for a in acts_for("porcupine")]
+    assert "ursus" in [a["name"] for a in acts_for("black_bear")]
+    assert "bipedrise_soft" in [a["name"] for a in acts_for("black_bear")]
+    assert "bluffhuff_soft" in [a["name"] for a in acts_for("black_bear")]
+    assert "mastforage_soft" in [a["name"] for a in acts_for("black_bear")]
+    assert "freeze" in [a["name"] for a in acts_for("black_bear")]
     for key in STONE_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key

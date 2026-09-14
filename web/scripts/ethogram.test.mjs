@@ -699,7 +699,11 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("porcupine").includes("guardhair_soft"));
   assert.ok(names("porcupine").includes("pinehush_soft"));
   assert.ok(names("porcupine").includes("freeze"));
-  assert.ok(names("black_bear").includes("forage"));
+  assert.ok(names("black_bear").includes("ursus"));
+  assert.ok(names("black_bear").includes("bipedrise_soft"));
+  assert.ok(names("black_bear").includes("bluffhuff_soft"));
+  assert.ok(names("black_bear").includes("mastforage_soft"));
+  assert.ok(names("black_bear").includes("freeze"));
   for (const key of STONE) {
     const acts = names(key);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
