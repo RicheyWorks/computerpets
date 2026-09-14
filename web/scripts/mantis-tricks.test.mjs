@@ -519,8 +519,8 @@ test("ground registry keeps prior guests gated; Fold selectable; prior guests st
   assert.equal(HermitCrab.TRICK_KEY, "hermit_crab");
   assert.equal(HorseshoeCrab.TRICK_KEY, "horseshoe_crab");
   assert.equal(T.TRICK_KEY, "mantis");
-  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
-  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
+  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
@@ -932,8 +932,8 @@ test("notes: Fold idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("fold"), true);
   assert.equal(OverlayGround.tricksFor("carpenter_ant"), OverlayCarpenterAnt);
   assert.equal(OverlayGround.wantsThankYou("carpenter_ant"), true);
-  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
-  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
+  assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
+  assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus", "trophallaxis", "frass"]);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
   assert.equal(OverlayGround.tricksFor("cicada"), null);
   assert.equal(OverlayGround.wantsThankYou("cicada"), false);
