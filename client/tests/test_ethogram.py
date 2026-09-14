@@ -156,6 +156,13 @@ def test_only_scratching_mammals_scratch():
     assert "lean" not in [a["name"] for a in acts_for("fly_agaric")]
     assert "flush" not in [a["name"] for a in acts_for("fly_agaric")]
     assert "still" not in [a["name"] for a in acts_for("fly_agaric")]
+    assert "morchella" in [a["name"] for a in acts_for("morel")]
+    assert "costa_soft" in [a["name"] for a in acts_for("morel")]
+    assert "hymenium_soft" in [a["name"] for a in acts_for("morel")]
+    assert "freeze" in [a["name"] for a in acts_for("morel")]
+    assert "lean" not in [a["name"] for a in acts_for("morel")]
+    assert "still_hold" not in [a["name"] for a in acts_for("morel")]
+    assert "still" not in [a["name"] for a in acts_for("morel")]
     for key in FAR_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
