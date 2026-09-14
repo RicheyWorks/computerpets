@@ -565,6 +565,21 @@ test("nexus ethogram is Knot ultra (mesh + softs + freeze, not count-ripple/stil
   assert.equal(names.includes("name"), false);
 });
 
+test("halovore ethogram is Brine ultra (deliquesce + softs + freeze, not frost/still/waste)", () => {
+  const names = E.actsFor("halovore").map((a) => a.name);
+  assert.ok(names.includes("deliquesce"));
+  assert.ok(names.includes("halite_soft"));
+  assert.ok(names.includes("salina_soft"));
+  assert.ok(names.includes("rime_soft"));
+  assert.ok(names.includes("bittern_soft"));
+  assert.ok(names.includes("ectoine_soft"));
+  assert.ok(names.includes("sabkha_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("frost"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("waste"), false);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
@@ -654,7 +669,9 @@ test("far keys never schedule scratch or tongue", () => {
   assert.ok(E.actsFor("nexus").some((a) => a.name === "mesh"));
   assert.ok(E.actsFor("nexus").some((a) => a.name === "fascicle_soft"));
   assert.ok(E.actsFor("nexus").some((a) => a.name === "sennit_soft"));
-  assert.ok(E.actsFor("halovore").some((a) => a.name === "frost"));
+  assert.ok(E.actsFor("halovore").some((a) => a.name === "deliquesce"));
+  assert.ok(E.actsFor("halovore").some((a) => a.name === "ectoine_soft"));
+  assert.ok(E.actsFor("halovore").some((a) => a.name === "sabkha_soft"));
   assert.ok(E.actsFor("magneton").some((a) => a.name === "align"));
   assert.ok(E.actsFor("umbral").some((a) => a.name === "dim"));
   assert.ok(E.actsFor("cyst").some((a) => a.name === "wake"));

@@ -1140,7 +1140,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Shard ultra idle-life done; next house-order ultra is Brine / halovore", () => {
+test("notes: Shard ultra idle-life done; next house-order ultra is Beacon / magneton", () => {
   assert.equal(T.TRICK_KEY, "silica");
   assert.equal(T.wantsThankYou("silica"), true);
   assert.equal(T.wantsThankYou("shard"), true);
