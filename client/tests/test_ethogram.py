@@ -362,7 +362,10 @@ def test_only_scratching_mammals_scratch():
     assert "vortex_soft" in [a["name"] for a in acts_for("stentor")]
     assert "beadedmac_soft" in [a["name"] for a in acts_for("stentor")]
     assert "freeze" in [a["name"] for a in acts_for("stentor")]
-    assert "tumble" in [a["name"] for a in acts_for("coli")]
+    assert "nucleoid" in [a["name"] for a in acts_for("coli")]
+    assert "fimbria_soft" in [a["name"] for a in acts_for("coli")]
+    assert "flagmotor_soft" in [a["name"] for a in acts_for("coli")]
+    assert "freeze" in [a["name"] for a in acts_for("coli")]
     assert "blush" in [a["name"] for a in acts_for("haloarchaea")]
     for key in ROOST_KEYS:
         names = [a["name"] for a in acts_for(key)]
