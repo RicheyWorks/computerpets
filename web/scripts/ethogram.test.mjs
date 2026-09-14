@@ -748,6 +748,16 @@ test("oak ethogram is Mast ultra (bole + softs + freeze, not lean/nod/still)", (
   assert.equal(names("oak").includes("still"), false);
 });
 
+test("water_lily ethogram is Disk ultra (sheen + softs + freeze, not open/nod/lean)", () => {
+  assert.ok(names("water_lily").includes("sheen"));
+  assert.ok(names("water_lily").includes("peltate_soft"));
+  assert.ok(names("water_lily").includes("hydropote_soft"));
+  assert.ok(names("water_lily").includes("freeze"));
+  assert.equal(names("water_lily").includes("open"), false);
+  assert.equal(names("water_lily").includes("nod"), false);
+  assert.equal(names("water_lily").includes("lean"), false);
+});
+
 test("pickAct can schedule tongue on a snake and never scratch", () => {
   let tongue = 0;
   for (let i = 0; i < 80; i++) {

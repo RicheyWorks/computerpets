@@ -117,6 +117,17 @@ test("oak ethogram is Mast ultra (bole + softs + freeze, not lean/nod/still)", (
   assert.equal(names.includes("still"), false);
 });
 
+test("water_lily ethogram is Disk ultra (sheen + softs + freeze, not open/nod/lean)", () => {
+  const names = E.actsFor("water_lily").map((a) => a.name);
+  assert.ok(names.includes("sheen"));
+  assert.ok(names.includes("peltate_soft"));
+  assert.ok(names.includes("hydropote_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("open"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("lean"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",

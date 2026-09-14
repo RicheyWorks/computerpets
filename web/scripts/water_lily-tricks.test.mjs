@@ -111,7 +111,7 @@ test("Disk tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...T.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -187,7 +187,7 @@ test("Disk tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...Overlay.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.deepEqual([...Overlay.HAPPY], ["silt", "nectar", "dew"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -218,7 +218,7 @@ test("Disk tricks start only on idle ground", () => {
   assert.equal(Parrot.TRICKS.includes("fan"), true);
 });
 
-test("pad/corolla/rhizome/calyx/sheen are house-water_lily-true, not copies of prior guests", () => {
+test("pad/corolla/rhizome/calyx/sheen/peltate/hydropote are house-water_lily-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("sheen", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -249,7 +249,15 @@ test("pad/corolla/rhizome/calyx/sheen are house-water_lily-true, not copies of p
   assert.equal(taproot.anim, "talk");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.05 || Math.abs(taprootMid.rot) > 1 || Math.abs(taprootMid.x - 80) > 0.05);
-  const sinusDone = T.stepTrick(sinus, 1.7, ground);
+  const peltate = T.beginTrick("peltate", 80, 1);
+  assert.equal(peltate.anim, "play");
+  const peltateMid = T.stepTrick(peltate, T.DUR.peltate * 0.4, ground);
+  assert.ok(Math.abs(peltateMid.lift) > 0.05 || Math.abs(peltateMid.rot) > 1 || Math.abs(peltateMid.x - 80) > 0.05);
+  const hydropote = T.beginTrick("hydropote", 80, 1);
+  assert.equal(hydropote.anim, "talk");
+  const hydropoteMid = T.stepTrick(hydropote, T.DUR.hydropote * 0.35, ground);
+  assert.ok(Math.abs(hydropoteMid.lift) > 0.05 || Math.abs(hydropoteMid.rot) > 1 || Math.abs(hydropoteMid.x - 80) > 0.05);
+  const sinusDone = T.stepTrick(sinus, T.DUR.corolla + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -259,6 +267,8 @@ test("pad/corolla/rhizome/calyx/sheen are house-water_lily-true, not copies of p
     assert.equal(mod.TRICKS.includes("rhizome"), false);
     assert.equal(mod.TRICKS.includes("calyx"), false);
     assert.equal(mod.TRICKS.includes("sheen"), false);
+    assert.equal(mod.TRICKS.includes("peltate"), false);
+    assert.equal(mod.TRICKS.includes("hydropote"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -428,7 +438,7 @@ test("ground registry keeps prior guests gated; Disk selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...T.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.equal(T.wantsThankYou("water_lily"), true);
   assert.equal(T.wantsThankYou("disk"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -571,7 +581,7 @@ globalThis.PetWaterLilyTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen"]);
+  assert.deepEqual([...Overlay.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -627,7 +637,7 @@ globalThis.PetWaterLilyTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Disk idle-life done; next house-order guest still lacking tricks is Moth / orchid", () => {
+test("notes: Disk ultra-polish done; next house-order ultra is Moth / orchid", () => {
   assert.equal(T.TRICK_KEY, "water_lily");
   assert.equal(T.wantsThankYou("disk"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -697,6 +707,11 @@ test("notes: Disk idle-life done; next house-order guest still lacking tricks is
   assert.equal(T.TRICKS.includes("fan"), false);
   assert.equal(T.TRICKS.includes("fossil"), false);
   assert.equal(T.TRICKS.includes("lobe"), false);
+  assert.equal(T.TRICKS.includes("open"), false);
+  assert.equal(T.TRICKS.includes("labellum"), false);
+  assert.equal(T.TRICKS.includes("velamen"), false);
+  assert.equal(T.TRICKS.includes("peltate"), true);
+  assert.equal(T.TRICKS.includes("hydropote"), true);
   assert.equal(T.HAPPY.includes("mist"), false);
   assert.equal(T.HAPPY.includes("humid"), false);
   assert.equal(OverlayGround.tricksFor("oak"), OverlayOak);
@@ -713,8 +728,8 @@ test("notes: Disk idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("mast"), true);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.equal(OverlayGround.tricksFor("orchid"), null);
+  assert.ok(OverlayGround.tricksFor("orchid") == null);
   assert.equal(OverlayGround.wantsThankYou("orchid"), false);
-  assert.equal(OverlayGround.tricksFor("moth"), null);
+  assert.ok(OverlayGround.tricksFor("moth") == null);
   assert.equal(OverlayGround.wantsThankYou("moth"), false);
 });
