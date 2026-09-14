@@ -1,54 +1,61 @@
-/** Bell ground tricks while idle. House neighborly Blue Stentor (stentor / Bell) desk life -- trumpet flare / myoneme contract / ciliary vortex / blue settle / long bell hush; NOT Spin chlamydomonas; NOT Hold; NOT Pane; NOT Orb; NOT Spot; NOT Reach; NOT Boot; NOT Gauss; NOT Ion; NOT Coli; NOT Relay; NOT Fuse; NOT Rui; guest slug Bell / key stentor -- accept stentor and bell; Thank-yous densbell / inkbell / densstentor. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop stentor-tricks.js. Next: Rod / coli. Catalog 208. */
+/** Bell ground tricks while idle — ultra-polish pass. House neighborly Blue Stentor (stentor / Bell) desk life — adoral / myoneme / membranelle / holdfoot / introversus / vortex / beadedmac personality (adoral oral flare without naming flare or still or dart or bell, myoneme contractile tuck without naming contract or still or dart or shrink, membranelle adoral zone tip without naming cilia or still or dart or row, holdfoot holdfast-foot tip without naming holdfast or still or dart or latch, vortex ciliary vortex skim without naming cilia or still or dart or swirl, beadedmac beaded-macronucleus tip without naming nucleus or still or dart or bead, long introversus sit_hold under the lamp drop (THE introversus sit_hold tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or eyespot or flagellum or chloroplast or phototaxis or euglenid or metaboly or paramylon or colony or inversion or phialopore or somatic or coenobium or daughter or gonidia or frustule or raphe or girdle or oilstore or pennate or epitheca or navicula or holdfast or haptera or blade or pneumatocyst or meristem or sorus or sporophyll or biflagellate or cupplast or stigma or pyrenoid or palmella or cellwall or wetplate or trumpetflare or myonemecontract or ciliaryvortex or bluesettle or longbellhush as trick kinds; ethogram softs + freeze own those words; window-play RED unchanged if already fine; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Spot owns eyespot/flagellum/chloroplast/phototaxis/euglenid/metaboly/paramylon; Orb owns colony/inversion/phialopore/somatic/coenobium/daughter/gonidia; Pane owns frustule/raphe/girdle/oilstore/pennate/epitheca/navicula; Hold owns holdfast/haptera/blade/pneumatocyst/meristem/sorus/sporophyll; Spin owns biflagellate/cupplast/stigma/pyrenoid/palmella/cellwall/wetplate; Rod will own coli life; Door owns hinge; Anchor owns siphon; guest slug Bell / key stentor only for isKey matching — accept "stentor" and "bell"; do NOT name a trick "stentor" or "bell" or "glue" or "flare" or "dart" or "still" or "roll" or "swim" or "beat" or "glide" or "cilia" or "pellicle" or "cytostome" or "vacuole") — not Spin chlamydomonas life, not Hold kelp life, not Pane diatom life, not Orb volvox life, not Spot euglena life, not Reach amoeba life, not Boot paramecium life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Rod coli. Peristome oral flare on the drop without naming flare, myoneme contractile tuck without naming contract, membranelle adoral zone tip without naming cilia, holdfoot holdfast-foot tip without naming holdfast, vortex ciliary vortex skim without naming swirl, beadedmac beaded-macronucleus tip without naming bead, introversus long sit_hold under the scrap lamp (THE introversus sit_hold tell); coeruleus / polymorphus / muelleri thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop stentor-tricks.js. Window-play RED unchanged. Ethogram softs + freeze — never names bell/adoral/still as bare ethogram-only trick kinds. True Blue Stentor desk life only — distinct from Spin chlamydomonas, Hold kelp, Pane diatom, Orb volvox, Spot euglena, Reach amoeba, Boot paramecium, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Rod coli. Rod owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via stentor.wav. Catalog 221. */
 export const TRICK_KEY = "stentor";
-export const TRICKS = ["trumpetflare", "myonemecontract", "ciliaryvortex", "bluesettle", "longbellhush"] as const;
-export const HAPPY = ["densbell", "inkbell", "densstentor"] as const;
-export const HAPPY_DUR = { densbell: 3.59, inkbell: 3.27, densstentor: 3.44 } as const;
-export const LONGBELLHUSH_HOLD = 39.21;
-export const RELEASE_S = 2.8;
-export const DUR = { longbellhush: LONGBELLHUSH_HOLD + RELEASE_S, trumpetflare: 7.21, myonemecontract: 6.63, ciliaryvortex: 6.38, bluesettle: 6.51 } as const;
-
-export type ChlamydomonasTrickKind = (typeof TRICKS)[number];
-export type ChlamydomonasHappyKind = (typeof HAPPY)[number];
+export const TRICKS = ["adoral", "myoneme", "membranelle", "holdfoot", "introversus", "vortex", "beadedmac"] as const;
+export const HAPPY = ["coeruleus", "polymorphus", "muelleri"] as const;
+export type StentorTrickKind = (typeof TRICKS)[number];
+export type StentorHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
 export type TrickPhase = "go" | "hold" | "release" | "done";
 export type HappyPhase = "go" | "done";
 
 export type TrickFlags = {
-asleep?: boolean;
-hidden?: boolean;
-leaving?: boolean;
-cmd?: string;
-windowPlay?: boolean;
-card?: boolean;
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+  windowPlay?: boolean;
+  card?: boolean;
 };
 
 export type StentorTrick = {
-kind: ChlamydomonasTrickKind;
-phase: TrickPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: StentorTrickKind;
+  phase: TrickPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
 export type StentorHappy = {
-kind: ChlamydomonasHappyKind;
-happy: true;
-phase: HappyPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: StentorHappyKind;
+  happy: true;
+  phase: HappyPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
+export const HAPPY_DUR = { coeruleus: 1.70, polymorphus: 1.82, muelleri: 1.71 } as const;
+export const INTROVERSUS_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  introversus: INTROVERSUS_HOLD + RELEASE_S,
+  trumpet: 2.36,
+  myoneme: 2.50,
+  membranelle: 2.56,
+  holdfoot: 2.42,
+  vortex: 2.44,
+  beadedmac: 2.39,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -76,42 +83,56 @@ export function shouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function nextTrickWait(justFinished: boolean, rand?: number, kind?: ChlamydomonasTrickKind | string) {
+export function nextTrickWait(justFinished: boolean, rand?: number, kind?: StentorTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "longbellhush") return 249 + roll * 48;
-  if (kind === "myonemecontract") return 32.1 + roll * 4.4;
-  if (kind === "bluesettle") return 30.0 + roll * 4.1;
-  if (kind === "trumpetflare") return 30.9 + roll * 4.3;
-  if (kind === "ciliaryvortex") return 29.2 + roll * 4.2;
-  return justFinished ? 23.4 + roll * 4.3 : 18.5 + roll * 3.8;
+  if (kind === "introversus") return 40 + roll * 26;
+  if (kind === "vortex" || kind === "beadedmac" || kind === "adoral") return 12.8 + roll * 9.4;
+  if (kind === "myoneme" || kind === "membranelle" || kind === "holdfoot") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: ChlamydomonasTrickKind | string | null) {
-  if (musicOn) return "longbellhush";
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: StentorTrickKind | string | null) {
+  if (musicOn) return "introversus" as const;
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "longbellhush") {
-    if (roll < 0.26) return "myonemecontract";
-    if (roll < 0.62) return "bluesettle";
-    if (roll < 0.79) return "trumpetflare";
-    return "ciliaryvortex";
+  if (lastKind === "introversus") {
+    if (roll < 0.17) return "adoral" as const;
+    if (roll < 0.33) return "myoneme" as const;
+    if (roll < 0.49) return "membranelle" as const;
+    if (roll < 0.65) return "holdfoot" as const;
+    if (roll < 0.83) return "vortex" as const;
+    return "beadedmac" as const;
   }
-  if (lastKind === "myonemecontract") {
-    if (roll < 0.26) return "longbellhush";
-    if (roll < 0.5) return "bluesettle";
-    if (roll < 0.74) return "trumpetflare";
-    return "ciliaryvortex";
+  if (lastKind === "adoral") {
+    if (roll < 0.16) return "introversus" as const;
+    if (roll < 0.32) return "myoneme" as const;
+    if (roll < 0.48) return "membranelle" as const;
+    if (roll < 0.64) return "holdfoot" as const;
+    if (roll < 0.82) return "vortex" as const;
+    return "beadedmac" as const;
   }
-  if (lastKind === "bluesettle") {
-    if (roll < 0.22) return "longbellhush";
-    if (roll < 0.44) return "myonemecontract";
-    if (roll < 0.74) return "trumpetflare";
-    return "ciliaryvortex";
+  if (lastKind === "myoneme") {
+    if (roll < 0.14) return "introversus" as const;
+    if (roll < 0.3) return "adoral" as const;
+    if (roll < 0.46) return "membranelle" as const;
+    if (roll < 0.62) return "holdfoot" as const;
+    if (roll < 0.8) return "vortex" as const;
+    return "beadedmac" as const;
   }
-  if (roll < 0.2) return "longbellhush";
-  if (roll < 0.4) return "myonemecontract";
-  if (roll < 0.6) return "bluesettle";
-  if (roll < 0.8) return "trumpetflare";
-  return "ciliaryvortex";
+  if (lastKind === "vortex" || lastKind === "beadedmac") {
+    if (roll < 0.14) return "introversus" as const;
+    if (roll < 0.3) return "adoral" as const;
+    if (roll < 0.46) return "myoneme" as const;
+    if (roll < 0.62) return "membranelle" as const;
+    if (roll < 0.78) return "holdfoot" as const;
+    return lastKind === "vortex" ? ("beadedmac" as const) : ("vortex" as const);
+  }
+  if (roll < 0.14) return "introversus" as const;
+  if (roll < 0.28) return "adoral" as const;
+  if (roll < 0.42) return "myoneme" as const;
+  if (roll < 0.56) return "membranelle" as const;
+  if (roll < 0.7) return "holdfoot" as const;
+  if (roll < 0.85) return "vortex" as const;
+  return "beadedmac" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -139,26 +160,32 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function wantsThankYou(key: string | undefined) {
+export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "bell";
 }
 
-export function startThankYou(key: string | undefined, lastKind: ChlamydomonasHappyKind | string | null | undefined, x: number, facing?: 1 | -1, flags?: TrickFlags) {
+export function startThankYou(
+  key: string | undefined | null,
+  lastKind: StentorHappyKind | string | null | undefined,
+  x: number,
+  facing: 1 | -1,
+  flags?: TrickFlags,
+) {
   if (!wantsThankYou(key)) return null;
   if (!happyCanStart(flags || { cmd: "idle" })) return null;
-  const pick = pickHappy(lastKind);
+  const pick = pickHappy(lastKind as StentorHappyKind | null | undefined);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
 
-export function pickHappy(lastKind?: ChlamydomonasHappyKind | string | null, rand?: number) {
+export function pickHappy(lastKind?: StentorHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
-  const list = pool.length ? pool : HAPPY.slice();
+  const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
 
-export function beginHappy(kind: ChlamydomonasHappyKind | string, x: number, facing?: 1 | -1): StentorHappy {
-  const name = (HAPPY.indexOf(kind as ChlamydomonasHappyKind) >= 0 ? kind : "densbell") as ChlamydomonasHappyKind;
+export function beginHappy(kind: StentorHappyKind | string, x: number, facing: 1 | -1): StentorHappy {
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as StentorHappyKind) : "coeruleus";
   return {
     kind: name,
     happy: true,
@@ -167,278 +194,378 @@ export function beginHappy(kind: ChlamydomonasHappyKind | string, x: number, fac
     x: x,
     lift: 0,
     rot: 0,
-    anim: name === "densbell" ? "sit" : name === "inkbell" ? "play" : "play",
-    facing: (facing == null ? 1 : facing) as 1 | -1,
-    fromX: x,
-  };
-}
-
-export function densspinPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densbell));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.005, rot: s * -0.38, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.5) {
-      const sway = Math.sin(((u - 0.11) / 0.39) * Math.PI * 3.25);
-      const haze = Math.sin(((u - 0.11) / 0.39) * Math.PI * 6.1);
-      return { lift: 0.005 + Math.abs(sway) * 0.0016 + Math.abs(haze) * 0.00055, rot: -0.32 + sway * 0.23 + haze * 0.055, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const sway = Math.sin(((u - 0.5) / 0.36) * Math.PI * 2.5);
-      return { lift: 0.005 + Math.abs(sway) * 0.0013, rot: -0.27 + sway * 0.17, anim: "sit" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.005 * (1 - s), rot: -0.27 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function inkspinPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkbell));
-    if (u < 0.1) {
-      const s = u / 0.1;
-      return { lift: s * 0.0063, rot: s * 0.47, anim: "play" as TrickAnim };
-    }
-    if (u < 0.49) {
-      const bob = Math.sin(((u - 0.1) / 0.39) * Math.PI * 3.45);
-      const ion = Math.sin(((u - 0.1) / 0.39) * Math.PI * 6.6);
-      return { lift: 0.0059 + Math.abs(bob) * 0.002 + Math.abs(ion) * 0.00065, rot: 0.4 + bob * 0.22 + ion * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const bob = Math.sin(((u - 0.49) / 0.37) * Math.PI * 2.55);
-      return { lift: 0.0059 + Math.abs(bob) * 0.0015, rot: 0.35 + bob * 0.16, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0059 * (1 - s), rot: 0.35 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function denschlamydomonasPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densstentor));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.0043, rot: s * -0.285, anim: "play" as TrickAnim };
-    }
-    if (u < 0.53) {
-      const hush = Math.sin(((u - 0.12) / 0.41) * Math.PI * 2.55);
-      const haze = Math.sin(((u - 0.12) / 0.41) * Math.PI * 5.2);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0014 + Math.abs(haze) * 0.0005, rot: -0.24 + hush * 0.17 + haze * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const hush = Math.sin(((u - 0.53) / 0.33) * Math.PI * 1.85);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0011, rot: -0.2 + hush * 0.13, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0043 * (1 - s), rot: -0.2 * (1 - s), anim: "idle" as TrickAnim };
-  }
-
-export function stepHappy(happy: StentorHappy | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!happy || happy.phase === "done") return happy;
-  if (happyShouldAbort(flags)) {
-    return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-  }
-  const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-  const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "densbell") {
-    const pose = densspinPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "inkbell") {
-    const pose = inkspinPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = denschlamydomonasPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
-  if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-  return next;
-}
-
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
-  return null;
-}
-
-export function beginTrick(kind: ChlamydomonasTrickKind | string, x: number, facing?: 1 | -1): StentorTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as ChlamydomonasTrickKind) : "longbellhush";
-  const anim: TrickAnim =
-    k === "longbellhush"
-      ? "sit"
-      : k === "myonemecontract"
-        ? "sit"
-        : k === "bluesettle"
-          ? "sit"
-          : k === "ciliaryvortex"
-            ? "play"
-            : k === "trumpetflare"
-              ? "walk"
-              : "sit";
-  return {
-    kind: k,
-    phase: k === "longbellhush" ? "hold" : "go",
-    t: 0,
-    x,
-    lift: 0,
-    rot: 0,
-    anim,
+    anim: name === "coeruleus" ? "sit" : name === "polymorphus" ? "play" : "sit",
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
 
-export function smoothstep(t: number) {
+export function coeruleusPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.coeruleus));
+  if (u < 0.16) {
+    const s = u / 0.16;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.82) {
+    const flash = Math.sin(t * 1.72);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: 0,
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function polymorphusPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.polymorphus));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const wriggle = Math.sin(t * 2.1);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: 0.08,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.84) / 0.16;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function muelleriPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.52) * 6,
+    dx: 0,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepHappy(happy: StentorHappy, dt: number, flags: TrickFlags): StentorHappy {
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: StentorHappy = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "coeruleus") {
+    const pose = coeruleusPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "polymorphus") {
+    const pose = polymorphusPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = muelleriPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: StentorTrickKind | string, x: number, facing: 1 | -1): StentorTrick {
+  const anim: TrickAnim =
+    kind === "introversus"
+      ? "sit"
+      : kind === "adoral"
+        ? "sit"
+        : kind === "myoneme"
+          ? "walk"
+          : kind === "membranelle"
+            ? "play"
+            : kind === "holdfoot"
+              ? "play"
+              : kind === "vortex"
+                ? "play"
+                : kind === "beadedmac"
+                  ? "walk"
+                  : "sit";
+  return {
+    kind: (TRICKS as readonly string[]).indexOf(kind) >= 0 ? (kind as StentorTrickKind) : "adoral",
+    phase: kind === "introversus" ? "hold" : "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
+function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
-export function longspinhushPose(t: number) {
-  const breath = Math.sin(t * 0.00028) + 0.00020 * Math.sin(t * 0.00097);
-  const charge = Math.abs(Math.sin(t * 0.00017));
-  return { lift: -0.00013 + charge * 0.00015, rot: 0.0011 + breath * 0.0030 };
+export function introversusPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.14) * 4,
+    anim: "sit" as TrickAnim,
+  };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00013 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0031 * (1 - u) };
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
 }
 
-export function cupchloroplastPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.myonemecontract));
+export function adoralPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.trumpet));
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + face * s * 0.00055, lift: s * 0.0030, rot: s * 0.09 * face, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.5, rot: s * 14 * face, anim: "sit" as TrickAnim };
   }
-  if (u < 0.8) {
-    const wire = Math.sin(((u - 0.14) / 0.66) * Math.PI * 4.1);
-    const skim = Math.sin(((u - 0.14) / 0.66) * Math.PI * 2.3);
+  if (u < 0.78) {
+    const snap = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (0.00055 + (u - 0.14) / 0.66 * 0.0014 + wire * 0.00008),
-      lift: 0.0027 + Math.abs(skim) * 0.0021 + Math.abs(wire) * 0.0007,
-      rot: (0.09 + skim * 0.13 + wire * 0.05) * face,
-      anim: "walk" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.8) / 0.2);
-  return { x: fromX + face * (0.00195 * (1 - s) + 0.00055 * s), lift: 0.0026 * (1 - s), rot: 0.09 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function wetplateswimPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.bluesettle));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.12) {
-    const s = smoothstep(u / 0.12);
-    return { x: fromX + face * s * -0.00004, lift: s * 0.0018, rot: s * -0.13 * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.42) {
-    const s = smoothstep((u - 0.12) / 0.3);
-    return { x: fromX + face * (-0.00004 + s * 0.00020), lift: 0.0018 + s * 0.0115, rot: (-0.13 + s * 0.34) * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.79) {
-    const crack = Math.sin(((u - 0.42) / 0.36) * Math.PI * 5.6);
-    return {
-      x: fromX + face * (0.00014 + crack * 0.00005),
-      lift: 0.0133 - ((u - 0.42) / 0.36) * 0.0084 + Math.abs(crack) * 0.0016,
-      rot: (0.22 + crack * 0.19) * face,
-      anim: "play" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.79) / 0.22);
-  return { x: fromX + face * 0.00014 * (1 - s), lift: 0.0049 * (1 - s), rot: 0.22 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function flagellaspinPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.trumpetflare));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.16) {
-    const s = smoothstep(u / 0.16);
-    return { x: fromX + face * s * -0.00011, lift: s * -0.0056, rot: s * 0.36 * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.79) {
-    const coil = Math.sin(((u - 0.16) / 0.62) * Math.PI * 3.3);
-    const charge = Math.sin(((u - 0.16) / 0.62) * Math.PI * 6.9);
-    return {
-      x: fromX + face * (-0.00011 + coil * 0.00007),
-      lift: -0.0056 + Math.abs(coil) * 0.0030 + Math.abs(charge) * 0.0019,
-      rot: (0.36 + coil * 0.41 + charge * 0.14) * face,
-      anim: "play" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.79) / 0.22);
-  return { x: fromX + face * -0.00011 * (1 - s), lift: -0.0056 * (1 - s), rot: 0.36 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function eyespotglancePose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.ciliaryvortex));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.00003, lift: s * 0.0042, rot: s * 0.11 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.84) {
-    const fringe = Math.sin(((u - 0.18) / 0.66) * Math.PI * 9.0);
-    const crackle = Math.sin(((u - 0.18) / 0.66) * Math.PI * 4.0);
-    return {
-      x: fromX + face * (0.00003 + fringe * 0.00004),
-      lift: 0.0041 + Math.abs(crackle) * 0.0022 + Math.abs(fringe) * 0.0011,
-      rot: (0.11 + fringe * 0.22 + crackle * 0.09) * face,
+      x: fromX + face * snap * 0.14,
+      lift: 3.5 + Math.abs(snap) * 1.5,
+      rot: face * (15 + snap * 11),
       anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.84) / 0.16);
-  return { x: fromX + face * 0.00003 * (1 - s), lift: 0.0037 * (1 - s), rot: 0.11 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
 
-export function stepTrick(trick: StentorTrick | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "myonemecontract" && trick.kind !== "bluesettle" && trick.kind !== "trumpetflare" && trick.kind !== "ciliaryvortex") {
-    return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+export function myonemePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.myoneme));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.9, rot: s * -16 * face, anim: "walk" as TrickAnim };
   }
-  const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-  if (next.kind === "longbellhush") {
-    if (next.t < LONGBELLHUSH_HOLD) {
-      const pose = longspinhushPose(next.t);
+  if (u < 0.48) {
+    const s = smoothstep((u - 0.12) / 0.36);
+    return {
+      x: fromX - face * (2.2 + s * 4.5),
+      lift: 3.6 + Math.sin(s * Math.PI) * 2.2,
+      rot: face * (-16 + s * 22),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.48) / 0.3;
+    const settle = Math.sin(s * Math.PI * 2.1);
+    return {
+      x: fromX - face * (6.7 * (1 - s)),
+      lift: 2.4 + Math.abs(settle) * 1.1,
+      rot: face * (6 + settle * 8),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function membranellePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.membranelle));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX + face * s * 0.8, lift: s * 2.2, rot: s * 8 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const mud = Math.sin(t * 1.6);
+    return {
+      x: fromX + face * (0.8 + mud * 0.4),
+      lift: 2.2 + Math.abs(mud) * 1.0,
+      rot: face * (8 + mud * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: s > 0.6 ? ("idle" as TrickAnim) : ("play" as TrickAnim),
+  };
+}
+
+export function holdfootPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.holdfoot));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * 10 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const tap = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * tap * 0.2,
+      lift: 2.4 + Math.abs(tap) * 1.1,
+      rot: face * (10 + tap * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function vortexPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.vortex));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * 12 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const pulse = Math.sin(t * 3.2);
+    return {
+      x: fromX,
+      lift: 2.8 + pulse * 1.6,
+      rot: face * (12 + pulse * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const scent = Math.sin(t * 1.1);
+    return {
+      x: fromX + face * scent * 0.15,
+      lift: 4.0 + Math.abs(scent) * 0.6,
+      rot: face * (22 + scent * 4),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function beadedmacPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.beadedmac));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * -12 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const flash = Math.abs(Math.sin(t * 2.6));
+    return {
+      x: fromX + face * flash * 0.2,
+      lift: 3.4 + flash * 1.4,
+      rot: face * (-12 - flash * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const warn = Math.sin(t * 1.4);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(warn) * 0.7,
+      rot: face * (-18 + warn * 6),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (-5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: StentorTrick, dt: number, flags: TrickFlags): StentorTrick {
+  if (shouldAbort(flags)) {
+    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: StentorTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "introversus") {
+    if (next.t < INTROVERSUS_HOLD) {
+      const pose = introversusPose(next.t);
       next.phase = "hold";
       next.lift = pose.lift;
       next.rot = pose.rot;
-      next.anim = "sit";
+      next.anim = pose.anim;
       return next;
     }
-    if (next.t < LONGBELLHUSH_HOLD + RELEASE_S) {
-      const pose = releasePose(next.t - LONGBELLHUSH_HOLD);
+    if (next.t < INTROVERSUS_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - INTROVERSUS_HOLD);
       next.phase = "release";
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = "sit";
       return next;
     }
-    return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   }
   const hold = DUR[next.kind];
-  const u = next.t / hold;
-  if (next.kind === "myonemecontract") {
-    const pose = cupchloroplastPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  if (next.kind === "adoral") {
+    const pose = adoralPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "bluesettle") {
-    const pose = wetplateswimPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "myoneme") {
+    const pose = myonemePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "trumpetflare") {
-    const pose = flagellaspinPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "membranelle") {
+    const pose = membranellePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "holdfoot") {
+    const pose = holdfootPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "vortex") {
+    const pose = vortexPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = eyespotglancePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = beadedmacPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle", x: fromX };
   return next;
 }
-

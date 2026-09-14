@@ -459,6 +459,7 @@ test("Rod tricks start only on idle ground", () => {
   assert.deepEqual([...T.TRICKS], ["runandtumble", "binaryfission", "pilusreachout", "chemotaxrun", "longrodhush"]);
   assert.equal(T.TRICKS.includes("trumpetflare"), false);
   assert.equal(T.HAPPY.includes("densbell"), false);
+  assert.equal(T.HAPPY.includes("coeruleus"), false);
   assert.equal(Stentor.TRICKS.includes("runandtumble"), false);
   assert.equal(Stentor.HAPPY.includes("densrod"), false);
 

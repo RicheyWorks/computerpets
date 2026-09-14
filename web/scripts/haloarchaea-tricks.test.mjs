@@ -466,6 +466,7 @@ test("Rose tricks start only on idle ground", () => {
 
   assert.equal(T.TRICKS.includes("trumpetflare"), false);
   assert.equal(T.HAPPY.includes("densbell"), false);
+  assert.equal(T.HAPPY.includes("coeruleus"), false);
   assert.equal(Stentor.TRICKS.includes("pinksaltblush"), false);
   assert.equal(Stentor.HAPPY.includes("densrose"), false);
 
