@@ -505,6 +505,21 @@ test("choir ethogram is Choir ultra (harmonia + softs + freeze, not chord-pulse/
   assert.equal(names.includes("still"), false);
 });
 
+test("nimbus ethogram is Drift ultra (stratus + softs + freeze, not float/still/hover)", () => {
+  const names = E.actsFor("nimbus").map((a) => a.name);
+  assert.ok(names.includes("stratus"));
+  assert.ok(names.includes("waft_soft"));
+  assert.ok(names.includes("billow_soft"));
+  assert.ok(names.includes("cirrus_soft"));
+  assert.ok(names.includes("virga_soft"));
+  assert.ok(names.includes("tholin_soft"));
+  assert.ok(names.includes("nucleate_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("float"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("hover"), false);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
@@ -582,7 +597,9 @@ test("far keys never schedule scratch or tongue", () => {
   assert.ok(E.actsFor("choir").some((a) => a.name === "harmonia"));
   assert.ok(E.actsFor("choir").some((a) => a.name === "formant_soft"));
   assert.ok(E.actsFor("choir").some((a) => a.name === "dyad_soft"));
-  assert.ok(E.actsFor("nimbus").some((a) => a.name === "float"));
+  assert.ok(E.actsFor("nimbus").some((a) => a.name === "stratus"));
+  assert.ok(E.actsFor("nimbus").some((a) => a.name === "tholin_soft"));
+  assert.ok(E.actsFor("nimbus").some((a) => a.name === "nucleate_soft"));
   assert.ok(E.actsFor("silica").some((a) => a.name === "facet"));
   assert.ok(E.actsFor("terminator").some((a) => a.name === "edge-walk"));
   assert.ok(E.actsFor("nexus").some((a) => a.name === "count-ripple"));

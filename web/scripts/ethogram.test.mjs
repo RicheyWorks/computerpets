@@ -407,7 +407,13 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.equal(names("choir").includes("chord-pulse"), false)
   assert.equal(names("choir").includes("overtone"), false)
   assert.equal(names("choir").includes("still"), false);
-  assert.ok(names("nimbus").includes("float"));
+  assert.ok(names("nimbus").includes("stratus"))
+  assert.ok(names("nimbus").includes("tholin_soft"))
+  assert.ok(names("nimbus").includes("nucleate_soft"))
+  assert.ok(names("nimbus").includes("freeze"))
+  assert.equal(names("nimbus").includes("float"), false)
+  assert.equal(names("nimbus").includes("still"), false)
+  assert.equal(names("nimbus").includes("hover"), false);
   assert.ok(names("silica").includes("facet"));
   assert.ok(names("terminator").includes("edge-walk"));
   assert.ok(names("nexus").includes("count-ripple"));
