@@ -1,12 +1,28 @@
-/** Seven ground tricks while idle. House seven-spot ladybird — spots / aphid / reflex / climb / coccinella personality (spots elytra-spot polish and count-display on the blotter — never named elytra (Spark firefly owns elytra) / count (ethogram + window SPOT) / stripe (Bandit) / flash (Quill) / warning (Milk) / semaphore (Spark), aphid aphid-hunt stalk and bead-pounce — never named hunt (ethogram) / forage (bumblebee window) / mouser (Rue) / stalk (Rue) / pounce (Miso) / clamp (Snap) / seize (robber fly window), reflex reflex-bleed hush (thanatosis bead) — never named feign (Bluff) / curl (Burr) / tuck (Ink) / freeze (Twig window FREEZE) / hush / bleed / hemolymph / still (ethogram), climb leaf-dish ascent — never named lift (Ember) / tread (Twig) / crawl (Cling) / scurry (Clip) / scuttle (Tenant) / amble (Bloom) / vault (Kite) / rise, coccinella desk life as a Coccinella septempunctata Seven-spot Ladybird week; not Column / Twig / Dart / Spark / Ghost / Milk / Comb / Clip / Tenant / Burr / *Dragon copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play SPOT do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web ladybird-tricks.ts. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column or *Dragon electrical clone. Window-play SPOT unchanged — never names count. Ethogram count/hunt/still unchanged. Spark owns lantern/jstroke/semaphore/elytra/photinus and happy luciferin/candela/pyralis; Column owns gallery/pheromone/crumb/bustle/camponotus and happy pennsylvanicus/honeydew/formicine; Twig owns rocking/catalepsy/browse/tread/diapheromera; Dart owns hawking/tandem/nymph/whir/anax; Comb owns figure/corbicula/hex/proboscis/hive; Milk owns asclepias/oyamel/warning/chrysalis/danaus; Ghost owns plumose/lunule/silk/stream/actias; Bluff owns feign; Burr owns curl; Clip owns scurry; Tenant owns scuttle; Cling owns crawl. Coccinellidae Coccinella desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Seven ground tricks while idle — ultra-polish pass. House seven-spot ladybird — spots / aphid / reflex / climb / coccinella / pronotum / alar personality (spots elytra-spot polish and count-display on the blotter — never named elytra (Spark firefly owns elytra) / count (ethogram-old + window SPOT) / stripe (Bandit) / flash (Quill) / warning (Milk) / semaphore (Spark), aphid aphid-hunt stalk and bead-pounce — never named hunt (ethogram-old + Haste window) / forage (bumblebee window) / mouser (Rue) / stalk (Rue) / pounce (Miso) / clamp (Snap) / seize (robber fly window), reflex reflex-bleed hush (thanatosis bead) — never named feign (Bluff) / curl (Burr) / tuck (Ink) / freeze (Twig window FREEZE) / hush / bleed / hemolymph / still (ethogram-old), climb leaf-dish ascent — never named lift (Ember) / tread (Twig) / crawl (Cling) / scurry (Clip) / scuttle (Tenant) / amble (Bloom) / vault (Kite) / rise / soar, coccinella desk life as a Coccinella septempunctata Seven-spot Ladybird week, pronotum white pronotal-disc rock (species-true Coccinella white pronotum spectacles — never named stripe / flash / warning / semaphore / elytra / count / spot-as-window / spots-as-duplicate), alar under-elytra wing whir settle (species-true brief ladybird flight — never named elytra (Spark) / soar / rise / hover (Sepia) / buzz (Relay) / flash (Quill) / lantern (Spark) / jstroke (Spark) / wing (Kite) / breach (Kite)); not Column gallery/pheromone/crumb/bustle/camponotus/trophallaxis/frass, Twig rocking/catalepsy/browse/tread/diapheromera/oviposit/filiform, Dart hawking/tandem/nymph/whir/anax/obelisk/ommatidia, Spark lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite, Ghost plumose/lunule/silk/stream/actias/aphagy/cauda, Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Echo preen/bobble, Ember cinder/blaze, Quill fan/flash, Relay buzz/click, Rui dance, Sepia hover, Pulse medusa/trail, Clip nest/scurry, Tenant antenna/scuttle, Dragon glow, or Jade sway/Sol nod copies). Pronotum is the iconic Coccinella white-disc rock (not window SPOT, not ethogram-old count). Alar is the iconic under-elytra whir settle (not Spark elytra, not Quill flash). Window-play SPOT unchanged — never names count. Ethogram keeps coccinella sit_hold; adds spots/aphid/reflex/climb/pronotum/alar softs + freeze (replaces thin count/hunt/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ladybird.wav. Thank-yous septempunctata / bead / coccinellid. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web ladybird-tricks.ts. True house-ladybird desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column or *Dragon electrical clone. Next guest ultra is Fold / mantis. Coccinellidae Coccinella desk life only. No cry inventing — thank-yous are silent desk motion only. */
 (function (root) {
   const TRICK_KEY = "ladybird";
-  const TRICKS = ["spots", "aphid", "reflex", "climb", "coccinella"];
+  const TRICKS = ["spots", "aphid", "reflex", "climb", "coccinella", "pronotum", "alar"];
   const HAPPY = ["septempunctata", "bead", "coccinellid"];
-  const HAPPY_DUR = { septempunctata: 1.24, bead: 1.36, coccinellid: 1.3 };
-  const COCCINELLA_HOLD = 13.6;
-  const RELEASE_S = 0.76;
-  const DUR = { coccinella: COCCINELLA_HOLD + RELEASE_S, spots: 1.54, aphid: 1.62, reflex: 1.48, climb: 1.56 };
+
+
+
+
+  const HAPPY_DUR = {
+    septempunctata: 1.22,
+    bead: 1.34,
+    coccinellid: 1.28,
+  };
+  const COCCINELLA_HOLD = 11.2;
+  const RELEASE_S = 0.64;
+  const DUR = {
+    coccinella: COCCINELLA_HOLD + RELEASE_S,
+    spots: 1.58,
+    aphid: 1.64,
+    reflex: 1.52,
+    climb: 1.56,
+    pronotum: 1.6,
+    alar: 1.54,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,38 +52,54 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "coccinella") return 52 + roll * 32;
-    if (kind === "spots") return 16 + roll * 12;
-    if (kind === "aphid") return 15 + roll * 11;
-    return justFinished ? 10.6 + roll * 8 : 5.5 + roll * 6.8;
+    if (kind === "coccinella") return 40 + roll * 24;
+    if (kind === "pronotum" || kind === "alar" || kind === "spots") return 12 + roll * 9;
+    if (kind === "aphid" || kind === "reflex" || kind === "climb") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "coccinella";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "coccinella") {
-      if (roll < 0.26) return "spots";
-      if (roll < 0.5) return "aphid";
-      if (roll < 0.74) return "reflex";
-      return "climb";
+      if (roll < 0.16) return "spots";
+      if (roll < 0.32) return "aphid";
+      if (roll < 0.48) return "reflex";
+      if (roll < 0.64) return "climb";
+      if (roll < 0.82) return "pronotum";
+      return "alar";
     }
     if (lastKind === "spots") {
-      if (roll < 0.26) return "coccinella";
-      if (roll < 0.5) return "aphid";
-      if (roll < 0.74) return "reflex";
-      return "climb";
+      if (roll < 0.18) return "coccinella";
+      if (roll < 0.34) return "aphid";
+      if (roll < 0.5) return "reflex";
+      if (roll < 0.66) return "climb";
+      if (roll < 0.83) return "pronotum";
+      return "alar";
     }
     if (lastKind === "aphid") {
-      if (roll < 0.22) return "coccinella";
-      if (roll < 0.44) return "spots";
-      if (roll < 0.68) return "reflex";
-      return "climb";
+      if (roll < 0.16) return "coccinella";
+      if (roll < 0.32) return "spots";
+      if (roll < 0.48) return "reflex";
+      if (roll < 0.64) return "climb";
+      if (roll < 0.82) return "pronotum";
+      return "alar";
     }
-    if (roll < 0.2) return "coccinella";
-    if (roll < 0.4) return "spots";
-    if (roll < 0.6) return "aphid";
-    if (roll < 0.8) return "reflex";
-    return "climb";
+    if (lastKind === "pronotum" || lastKind === "alar") {
+      if (roll < 0.16) return "coccinella";
+      if (roll < 0.32) return "spots";
+      if (roll < 0.48) return "aphid";
+      if (roll < 0.64) return "reflex";
+      if (roll < 0.8) return "climb";
+      return lastKind === "pronotum" ? ("alar") : ("pronotum");
+    }
+    if (roll < 0.14) return "coccinella";
+    if (roll < 0.28) return "spots";
+    if (roll < 0.42) return "aphid";
+    if (roll < 0.56) return "reflex";
+    if (roll < 0.7) return "climb";
+    if (roll < 0.85) return "pronotum";
+    return "alar";
   }
 
   function happyCanStart(state) {
@@ -108,13 +140,13 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "septempunctata";
+    const name = HAPPY.indexOf(kind) >= 0 ? (kind) : "septempunctata";
     return {
       kind: name,
       happy: true,
@@ -133,52 +165,52 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.septempunctata));
     if (u < 0.16) {
       const s = u / 0.16;
-      return { lift: s * 0.045, rot: s * 2.6, dx: 0, anim: "play" };
+      return { lift: s * 2.9, rot: s * 12, dx: 0, anim: "play" };
     }
     if (u < 0.72) {
       const rock = Math.sin(t * 3.6) + 0.24 * Math.sin(t * 7.1);
       return {
-        lift: 0.045 + Math.abs(rock) * 0.02,
-        rot: 2.6 + rock * 2.8,
-        dx: rock * 0.004,
+        lift: 2.9 + Math.abs(rock) * 1.35,
+        rot: 12 + rock * 10,
+        dx: rock * 0.18,
         anim: "play",
       };
     }
     const s = (u - 0.72) / 0.28;
-    return { lift: 0.022 * (1 - s), rot: 1.1 * (1 - s), dx: 0, anim: "idle" };
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
   function beadPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.bead));
     if (u < 0.2) {
       const s = u / 0.2;
-      return { lift: s * 0.06, rot: s * -2.0, dx: s * 0.005, anim: "talk" };
+      return { lift: s * 3.2, rot: s * -9.5, dx: s * 0.2, anim: "talk" };
     }
     if (u < 0.78) {
       const shed = Math.sin(t * 4.4) + 0.28 * Math.sin(t * 8.8);
       return {
-        lift: 0.06 + Math.abs(shed) * 0.032,
-        rot: -2.0 + shed * 3.2,
-        dx: shed * 0.006,
+        lift: 3.2 + Math.abs(shed) * 1.4,
+        rot: -9.5 + shed * 9,
+        dx: shed * 0.22,
         anim: "talk",
       };
     }
     const s = (u - 0.78) / 0.22;
-    return { lift: 0.028 * (1 - s), rot: -0.8 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 2.1 * (1 - s), rot: -4.5 * (1 - s), dx: 0, anim: "sit" };
   }
   function coccinellidPose(t) {
     return {
-      lift: 0.01 + Math.abs(Math.sin(t * 0.44)) * 0.014,
-      rot: Math.sin(t * 0.58) * 1.0,
-      dx: Math.sin(t * 0.3) * 0.002,
+      lift: 2.1 + Math.abs(Math.sin(t * 0.42)) * 0.85,
+      rot: Math.sin(t * 0.55) * 6.5,
+      dx: Math.sin(t * 0.3) * 0.08,
       anim: "sit",
     };
   }
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "septempunctata") {
       const pose = septempunctataPose(next.t);
@@ -196,7 +228,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -207,16 +239,20 @@
   function beginTrick(kind, x, facing) {
     const anim =
       kind === "coccinella"
-      ? "sit"
-      : kind === "spots"
         ? "sit"
-        : kind === "aphid"
-          ? "walk"
-          : kind === "reflex"
-            ? "sit"
-            : kind === "climb"
-              ? "walk"
-                : "sit";
+        : kind === "spots"
+          ? "sit"
+          : kind === "aphid"
+            ? "walk"
+            : kind === "reflex"
+              ? "sit"
+              : kind === "climb"
+                ? "walk"
+                : kind === "pronotum"
+                  ? "sit"
+                  : kind === "alar"
+                    ? "play"
+                    : "sit";
     return {
       kind: kind,
       phase: kind === "coccinella" ? "hold" : "go",
@@ -239,37 +275,37 @@
     const breath = Math.sin(t * 0.18) + 0.03 * Math.sin(t * 0.78);
     const grain = Math.abs(Math.sin(t * 0.36));
     return {
-      lift: 0.016 + grain * 0.012,
-      rot: 0.28 + breath * 0.6,
+      lift: 2.4 + grain * 1.1,
+      rot: 3.8 + breath * 3.2,
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.018 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.28 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.0 * (1 - u) };
   }
 
   function spotsPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.spots));
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.04, rot: s * 4.8 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 2.8, rot: s * 10 * facing, anim: "sit" };
     }
     if (u < 0.8) {
       const s = (u - 0.14) / 0.66;
       const polish = Math.sin(s * Math.PI * 6.4) + 0.3 * Math.sin(s * Math.PI * 11.2);
       return {
-        x: fromX + facing * polish * 0.004,
-        lift: 0.055 + Math.abs(polish) * 0.028,
-        rot: facing * (4.8 + polish * 2.2),
+        x: fromX + facing * polish * 0.18,
+        lift: 2.8 + Math.abs(polish) * 1.3,
+        rot: facing * (10 + polish * 8),
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.8) / 0.2);
     return {
       x: fromX,
-      lift: 0.014 * (1 - s),
-      rot: facing * (1.4 * (1 - s)),
+      lift: 2.0 * (1 - s),
+      rot: facing * (4.5 * (1 - s)),
       anim: "sit",
     };
   }
@@ -277,15 +313,15 @@
     const u = Math.max(0, Math.min(1, t / DUR.aphid));
     if (u < 0.18) {
       const s = smoothstep(u / 0.18);
-      return { x: fromX + facing * 0.02 * s, lift: s * 0.02, rot: s * 1.4 * facing, anim: "walk" };
+      return { x: fromX + facing * 0.35 * s, lift: s * 2.6, rot: s * 8 * facing, anim: "walk" };
     }
     if (u < 0.52) {
       const s = (u - 0.18) / 0.34;
       const stalk = Math.sin(s * Math.PI * 2.2);
       return {
-        x: fromX + facing * (0.05 * s + stalk * 0.008),
-        lift: 0.02 + Math.abs(stalk) * 0.015,
-        rot: facing * (1.4 + stalk * 1.8),
+        x: fromX + facing * (0.7 * s + stalk * 0.2),
+        lift: 2.6 + Math.abs(stalk) * 1.1,
+        rot: facing * (8 + stalk * 7),
         anim: "walk",
       };
     }
@@ -293,17 +329,17 @@
       const s = (u - 0.52) / 0.26;
       const peck = Math.sin(s * Math.PI);
       return {
-        x: fromX + facing * (0.08 + peck * 0.02),
-        lift: 0.02 - peck * 0.04 + Math.abs(Math.sin(s * Math.PI * 3)) * 0.02,
-        rot: facing * (1.4 - peck * 4.2),
+        x: fromX + facing * (0.85 + peck * 0.25),
+        lift: 2.6 - peck * 1.4 + Math.abs(Math.sin(s * Math.PI * 3)) * 0.9,
+        rot: facing * (8 - peck * 10),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
-      x: fromX + facing * 0.06 * (1 - s * 0.35),
-      lift: 0.018 * (1 - s),
-      rot: facing * (0.6 * (1 - s)),
+      x: fromX + facing * 0.55 * (1 - s * 0.35),
+      lift: 2.0 * (1 - s),
+      rot: facing * (3.5 * (1 - s)),
       anim: "sit",
     };
   }
@@ -311,23 +347,23 @@
     const u = Math.max(0, Math.min(1, t / DUR.reflex));
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * -0.025, rot: s * -4.2 * facing, anim: "sit" };
+      return { x: fromX, lift: s * -1.8, rot: s * -10 * facing, anim: "sit" };
     }
     if (u < 0.72) {
       const s = (u - 0.12) / 0.6;
-      const hush = Math.sin(s * Math.PI * 1.6) * 0.15;
+      const hush = Math.sin(s * Math.PI * 1.6) * 0.35;
       return {
-        x: fromX + facing * hush * 0.003,
-        lift: -0.025 + Math.abs(hush) * 0.008,
-        rot: facing * (-4.2 + hush * 0.8),
+        x: fromX + facing * hush * 0.12,
+        lift: -1.8 + Math.abs(hush) * 0.55,
+        rot: facing * (-10 + hush * 3),
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.72) / 0.28);
     return {
       x: fromX,
-      lift: -0.014 * (1 - s),
-      rot: facing * (-1.8 * (1 - s)),
+      lift: -1.0 * (1 - s),
+      rot: facing * (-4.5 * (1 - s)),
       anim: "sit",
     };
   }
@@ -335,32 +371,98 @@
     const u = Math.max(0, Math.min(1, t / DUR.climb));
     if (u < 0.1) {
       const s = smoothstep(u / 0.1);
-      return { x: fromX, lift: s * 0.04, rot: s * 2.8 * facing, anim: "walk" };
+      return { x: fromX, lift: s * 2.7, rot: s * 9 * facing, anim: "walk" };
     }
     if (u < 0.82) {
       const s = (u - 0.1) / 0.72;
       const step = Math.sin(s * Math.PI * 5.0) + 0.32 * Math.sin(s * Math.PI * 8.6);
       return {
-        x: fromX + facing * (0.03 * Math.sin(s * Math.PI) + step * 0.012),
-        lift: 0.04 + s * 0.085 + Math.abs(step) * 0.02,
-        rot: facing * (2.8 + step * 3.2),
+        x: fromX + facing * (0.4 * Math.sin(s * Math.PI) + step * 0.2),
+        lift: 2.7 + s * 2.4 + Math.abs(step) * 1.1,
+        rot: facing * (9 + step * 8),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.82) / 0.18);
     return {
-      x: fromX + facing * 0.01 * (1 - s),
-      lift: 0.1 * (1 - s),
-      rot: facing * (1.0 * (1 - s)),
+      x: fromX + facing * 0.15 * (1 - s),
+      lift: 4.6 * (1 - s),
+      rot: facing * (4 * (1 - s)),
+      anim: "sit",
+    };
+  }
+  function pronotumPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.pronotum));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 2.65, rot: s * -9.5 * facing, anim: "sit" };
+    }
+    if (u < 0.78) {
+      const s = (u - 0.14) / 0.64;
+      const disc = Math.sin(s * Math.PI * 5.2) + 0.3 * Math.sin(s * Math.PI * 9.6);
+      return {
+        x: fromX + facing * disc * 0.16,
+        lift: 2.65 + Math.abs(disc) * 1.25,
+        rot: facing * (-9.5 + disc * 9),
+        anim: "sit",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 2.0 * (1 - s),
+      rot: facing * (-4.2 * (1 - s)),
+      anim: "sit",
+    };
+  }
+  function alarPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.alar));
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 3.1, rot: s * 8 * facing, anim: "play" };
+    }
+    if (u < 0.55) {
+      const s = (u - 0.12) / 0.43;
+      const whir = Math.sin(s * Math.PI * 8.4) + 0.35 * Math.sin(s * Math.PI * 14.2);
+      return {
+        x: fromX + facing * (0.45 * s + whir * 0.2),
+        lift: 3.1 + s * 1.8 + Math.abs(whir) * 0.9,
+        rot: facing * (8 + whir * 9),
+        anim: "play",
+      };
+    }
+    if (u < 0.82) {
+      const s = (u - 0.55) / 0.27;
+      const settle = Math.sin(s * Math.PI);
+      return {
+        x: fromX + facing * (0.55 + settle * 0.12),
+        lift: 4.9 - s * 2.2 + Math.abs(settle) * 0.6,
+        rot: facing * (6 - settle * 4),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.82) / 0.18);
+    return {
+      x: fromX + facing * 0.35 * (1 - s),
+      lift: 2.4 * (1 - s),
+      rot: facing * (3 * (1 - s)),
       anim: "sit",
     };
   }
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "spots" && trick.kind !== "aphid" && trick.kind !== "reflex" && trick.kind !== "climb") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "spots" &&
+      trick.kind !== "aphid" &&
+      trick.kind !== "reflex" &&
+      trick.kind !== "climb" &&
+      trick.kind !== "pronotum" &&
+      trick.kind !== "alar"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "coccinella") {
       if (next.t < COCCINELLA_HOLD) {
         const pose = coccinellaPose(next.t);
@@ -378,7 +480,7 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
@@ -400,14 +502,26 @@
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
-    } else {
+    } else if (next.kind === "climb") {
       const pose = climbPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
+    } else if (next.kind === "pronotum") {
+      const pose = pronotumPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else {
+      const pose = alarPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -423,15 +537,6 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
-    sleepHoldFrame,
-    beginTrick,
-    coccinellaPose,
-    releasePose,
-    spotsPose,
-    aphidPose,
-    reflexPose,
-    climbPose,
-    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -442,6 +547,17 @@
     beadPose,
     coccinellidPose,
     stepHappy,
+    sleepHoldFrame,
+    beginTrick,
+    coccinellaPose,
+    releasePose,
+    spotsPose,
+    aphidPose,
+    reflexPose,
+    climbPose,
+    pronotumPose,
+    alarPose,
+    stepTrick,
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetLadybirdTricks = api;
