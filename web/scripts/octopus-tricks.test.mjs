@@ -80,7 +80,7 @@ test("Cup tricks start only on idle ground", () => {
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
+  assert.deepEqual([...T.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -118,7 +118,7 @@ test("Cup tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("puff"), false);
 });
 
-test("mantle/sucker/jet/veil/tinker are house-octopus-true, not copies of prior guests", () => {
+test("mantle/sucker/jet/veil/tinker/papilla/ooze are house-octopus-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const mantle = T.beginTrick("mantle", 80, 1);
   assert.equal(mantle.anim, "sit");
@@ -126,7 +126,7 @@ test("mantle/sucker/jet/veil/tinker are house-octopus-true, not copies of prior 
   const held = T.stepTrick(mantle, 5, ground);
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
-  assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.ok(held.rot !== 0 || Math.abs(held.lift) > 0.5);
   const release = T.stepTrick(mantle, T.MANTLE_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -149,8 +149,23 @@ test("mantle/sucker/jet/veil/tinker are house-octopus-true, not copies of prior 
   assert.equal(jet.anim, "walk");
   const jetMid = T.stepTrick(jet, 0.5, ground);
   assert.ok(Math.abs(jetMid.lift) > 0.05 || Math.abs(jetMid.rot) > 1 || Math.abs(jetMid.x - 80) > 0.1);
-  const jetDone = T.stepTrick(jet, 1.3, ground);
+  const jetDone = T.stepTrick(jet, T.DUR.jet + 0.1, ground);
   assert.equal(jetDone.phase, "done");
+  const papilla = T.beginTrick("papilla", 80, 1);
+  assert.equal(papilla.anim, "sit");
+  const papillaMid = T.stepTrick(papilla, T.DUR.papilla * 0.4, ground);
+  assert.ok(papillaMid.lift > 2 || Math.abs(papillaMid.rot) > 8 || Math.abs(papillaMid.x - 80) > 0.3);
+  const ooze = T.beginTrick("ooze", 80, 1);
+  assert.equal(ooze.anim, "walk");
+  const oozeMid = T.stepTrick(ooze, T.DUR.ooze * 0.45, ground);
+  assert.ok(oozeMid.lift > 0.5 || Math.abs(oozeMid.rot) > 4 || Math.abs(oozeMid.x - 80) > 1);
+  assert.equal(T.TRICKS.includes("lid"), false);
+  assert.equal(T.TRICKS.includes("flush"), false);
+  assert.equal(T.TRICKS.includes("unfurl"), false);
+  assert.equal(T.TRICKS.includes("drift"), false);
+  assert.equal(T.TRICKS.includes("legend"), false);
+  assert.equal(T.TRICKS.includes("ripple"), false);
+  assert.equal(T.TRICKS.includes("probe"), false);
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
   for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Relay, Fuse, Earth]) {
@@ -159,6 +174,8 @@ test("mantle/sucker/jet/veil/tinker are house-octopus-true, not copies of prior 
     assert.equal(mod.TRICKS.includes("jet"), false);
     assert.equal(mod.TRICKS.includes("veil"), false);
     assert.equal(mod.TRICKS.includes("tinker"), false);
+    assert.equal(mod.TRICKS.includes("papilla"), false);
+    assert.equal(mod.TRICKS.includes("ooze"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -238,7 +255,7 @@ test("ground registry keeps prior guests gated; Cup selectable; prior guests sti
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
+  assert.deepEqual([...T.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
   assert.equal(T.wantsThankYou("octopus"), true);
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -308,7 +325,7 @@ test("ground registry keeps prior guests gated; Cup selectable; prior guests sti
   assert.deepEqual([...OverlayGoldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...OverlayAxolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...Overlay.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
+  assert.deepEqual([...Overlay.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
   assert.equal(Overlay.TRICKS.includes("lid"), false);
   assert.equal(Overlay.TRICKS.includes("drift"), false);
   assert.equal(Overlay.TRICKS.includes("tuck"), false);
@@ -316,7 +333,25 @@ test("ground registry keeps prior guests gated; Cup selectable; prior guests sti
   assert.equal(Overlay.TRICKS.includes("legend"), false);
 });
 
-test("notes: Cup idle-life done; next house-order guest still lacking tricks is Sepia / cuttlefish", () => {
+test("ultra-polish: Cup mantle/papilla/ooze lifts are Rui-visible (not micro idle-gen)", () => {
+  const mt = T.beginTrick("mantle", 80, 1);
+  const mid = T.stepTrick(mt, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `mantle mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `mantle mid lift ${mid.lift}`);
+  const pa = T.beginTrick("papilla", 80, 1);
+  const p2 = T.stepTrick(pa, T.DUR.papilla * 0.4, { cmd: "idle" });
+  assert.ok(p2.lift > 2 || Math.abs(p2.rot) > 8 || Math.abs(p2.x - 80) > 0.3, `papilla mid ${p2.lift}/${p2.rot}/${p2.x}`);
+  const oz = T.beginTrick("ooze", 80, 1);
+  const o2 = T.stepTrick(oz, T.DUR.ooze * 0.45, { cmd: "idle" });
+  assert.ok(o2.lift > 0.5 || Math.abs(o2.rot) > 4 || Math.abs(o2.x - 80) > 1, `ooze mid ${o2.lift}/${o2.rot}/${o2.x}`);
+  const ve = T.beginTrick("veil", 80, 1);
+  const v2 = T.stepTrick(ve, T.DUR.veil * 0.4, { cmd: "idle" });
+  assert.ok(v2.lift > 0.5 || Math.abs(v2.rot) > 4 || Math.abs(v2.x - 80) > 0.5, `veil mid ${v2.lift}/${v2.rot}/${v2.x}`);
+  assert.ok(Overlay.papillaPose && Overlay.oozePose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+});
+
+test("notes: Cup idle-life ultra done; next house-order ultra guest is Sepia / cuttlefish (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "octopus");
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(OverlayGround.tricksFor("octopus"), Overlay);
@@ -331,7 +366,8 @@ test("notes: Cup idle-life done; next house-order guest still lacking tricks is 
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  assert.equal(OverlayGround.tricksFor("cuttlefish"), null);
+  // Sepia already has base idle tricks (not ultra); registry returns undefined until PetCuttlefishTricks is loaded.
+  assert.equal(OverlayGround.tricksFor("cuttlefish") == null, true);
   assert.equal(OverlayGround.wantsThankYou("cuttlefish"), false);
-  assert.equal(OverlayGround.tricksFor("sepia"), null);
+  assert.equal(OverlayGround.tricksFor("sepia") == null, true);
 });

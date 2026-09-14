@@ -209,7 +209,7 @@ test("Pinch tricks start only on idle ground", () => {
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
-  assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
+  assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
@@ -1359,7 +1359,7 @@ test("chelate/caridoid/chimney/antennule/astacid are Astacoidea-true, not copies
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
-  assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
+  assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
@@ -1540,7 +1540,7 @@ test("ground registry keeps prior guests gated; Pinch selectable; prior guests s
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
-  assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
+  assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
@@ -2003,7 +2003,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.deepEqual([...OverlayTurtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...OverlayGoldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...OverlayAxolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
-  assert.deepEqual([...OverlayOctopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker"]);
+  assert.deepEqual([...OverlayOctopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
   assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
