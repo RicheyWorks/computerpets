@@ -1453,7 +1453,7 @@ test("urticate/threat/cork/ecdysis/aphonopelma are Aphonopelma-chalcodes-true, n
   assert.deepEqual([...Hedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
+  assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...Seahorse.TRICKS], ["coil", "buoy", "siphon", "swivel", "pouch"]);
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
   assert.equal(SeaStar.TRICKS.includes("podia"), true);
@@ -2107,7 +2107,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...OverlayHorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
+  assert.deepEqual([...OverlayHorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...OverlayMoss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
   assert.deepEqual([...OverlayMaidenhair.TRICKS], ["frond", "rachis", "fiddle", "pinna", "saucer"]);
@@ -2302,7 +2302,7 @@ test("notes: Velvet idle-life done; next house-order guest still lacking tricks 
   assert.equal(Caecilian.TRICKS.includes("urticate"), false);
   assert.equal(T.TRICKS.includes("annulate"), false);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil"]);
+  assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.equal(T.TRICKS.includes("antenna"), false);
   assert.equal(T.TRICKS.includes("telson"), false);
   assert.equal(T.TRICKS.includes("carapace"), false);
