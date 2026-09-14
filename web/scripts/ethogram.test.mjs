@@ -497,7 +497,10 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("pond_snail").includes("odontophore_soft"));
   assert.ok(names("pond_snail").includes("neuston_soft"));
   assert.ok(names("pond_snail").includes("freeze"));
-  assert.ok(names("mussel").includes("siphon"));
+  assert.ok(names("mussel").includes("unionid"));
+  assert.ok(names("mussel").includes("ligament_soft"));
+  assert.ok(names("mussel").includes("glochid_soft"));
+  assert.ok(names("mussel").includes("freeze"));
   assert.ok(names("leech").includes("latch"));
   assert.ok(names("stickleback").includes("flare"));
   for (const key of ROOST) {
