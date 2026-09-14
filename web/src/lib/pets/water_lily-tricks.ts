@@ -1,7 +1,6 @@
-/** Disk ground tricks while idle. House water_lily — pad / corolla / rhizome / calyx / sheen personality (pad float on the ink dish — never named drift (Coin owns drift) / float as coin-collision / flutter (Fan owns flutter) / biloba (Fan owns biloba), corolla bloom open on the lamp — never named open (Disk window owns open) / bloom as axolotl-guest collision / unfurl (Vein window owns unfurl) / flare (Coin owns flare), rhizome quiet settle under the pad — never named root (Burr owns root) / dig (Rabbit owns dig) / taproot (Mast owns taproot) / crawl (Cling owns crawl), petal calyx cup on the dish — never named cup (Cup guest / Octopus) / saucer (Vein owns saucer) / pouch (Anchor owns pouch), pond-surface sheen desk life under the lamp; not Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber, Vein frond/rachis/fiddle/pinna/saucer, Felt tuft/bead/spore/cushion/thatch, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop water_lily-tricks.js. Not a Rui, cat, dog, rabbit, hamster/Clip, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog/Burr, chinchilla, axolotl/Bloom, toucan, iguana/Sol, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, octopus/Cup, cuttlefish/Sepia, nautilus/Chamber, moon-jelly/Pulse, sea-star/Cling, hermit-crab/Tenant, horseshoe-crab/Ledger, seahorse/Anchor, manta/Kite, moray/Door, sheet-moss/Felt, maidenhair/Vein, ginkgo/Fan, oak/Mast, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play OPEN unchanged — never names open. Special open/nod/lean ethogram unchanged — never names open/nod/lean as tricks. Sash owns moss; Felt owns tuft/bead/spore/cushion/thatch and humid/velvet/meadow; Vein owns frond/rachis/fiddle/pinna/saucer and mist/filigree/shade; Fan owns biloba/notch/flutter/drop/amber and ochre/gilt/linger; Mast owns acorn/sinus/gall/taproot/bole and cupule/tannin/grove; Sol owns swell as thank-you, press/nod as tricks; Ember owns lift; Cling owns crawl/damp/press/tide; Still/Felt window owns lean/creep; Burr owns root; Coin owns flare; Phoenix owns lift; Fuse owns pulse as thank-you; Chamber owns quiet as thank-you; Ledger owns page as thank-you and fossil as trick; Jade owns treaty as thank-you and sway as trick; Parrot owns fan; Kite owns lobe; Bloom owns gill. Aquatic pad/bloom desk life only — not an oak copy, ginkgo copy, fern maidenhair copy, bryophyte moss copy, jelly Pulse copy, or goldfish Coin copy. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Disk ground tricks while idle — ultra-polish pass. House water_lily — pad / corolla / rhizome / calyx / sheen / peltate / hydropote personality (pad float on the ink dish — never named drift (Coin owns drift) / float as coin-collision / flutter (Fan owns flutter) / biloba (Fan owns biloba), corolla bloom open on the lamp — never named open (Disk window owns open) / bloom as axolotl-guest collision / unfurl (Vein window owns unfurl) / flare (Coin owns flare) / labellum (Moth owns labellum), rhizome quiet settle under the pad — never named root (Burr owns root) / dig (Rabbit owns dig) / taproot (Mast owns taproot) / crawl (Cling owns crawl) / velamen (Moth owns velamen), petal calyx cup on the dish — never named cup (Cup guest / Octopus) / saucer (Vein owns saucer) / pouch (Anchor owns pouch), pond-surface sheen desk life under the lamp, peltate pad rocking on its central stalk (species-true Nymphaea peltate lamina — never named petiole (Fan owns petiole) / stipe (Vein owns stipe) / disk as guest-name / pad as the float trick), hydropote epidermal sip of pond minerals (species-true Nymphaeaceae hydropote cells — never named siphon (Anchor owns siphon) / soak (Ink owns soak) / bead (Felt owns bead) / dew as thank-you / pollen (Moth owns pollen)); not Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Peltate is the species-true central-stalk pad rock (not Fan petiole, not Vein stipe, not the pad float trick). Hydropote is the iconic Nymphaeaceae mineral-sip cells (not Anchor siphon, not Ink soak, not Felt bead). Window-play OPEN unchanged — never names open as a trick. Ethogram keeps sheen sit_hold; adds pad/corolla/rhizome/calyx/peltate/hydropote softs + freeze (replaces thin open/nod/lean). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via water_lily.wav. Thank-yous silt / nectar / dew. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `water_lily-tricks.js`. True house-water-lily desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/labellum/velamen/column/spike/bark/pollen/mount/drift/float/bloom/cup/siphon/soak name collisions. Bird ultra (Soot→Ember) + Miso→Mast done; skip Rui + birds. Next guest ultra is Moth / orchid. No cry inventing beyond house water_lily.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "water_lily";
-export const TRICKS = ["pad", "corolla", "rhizome", "calyx", "sheen"] as const;
+export const TRICKS = ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"] as const;
 export const HAPPY = ["silt", "nectar", "dew"] as const;
 export type WaterLilyTrickKind = (typeof TRICKS)[number];
 export type WaterLilyHappyKind = (typeof HAPPY)[number];
@@ -45,10 +44,25 @@ export type WaterLilyHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { silt: 1.24, nectar: 1.18, dew: 1.28 } as const;
-export const SHEEN_HOLD = 12.5;
-export const RELEASE_S = 0.78;
-export const DUR = { sheen: SHEEN_HOLD + RELEASE_S, pad: 1.48, corolla: 1.56, rhizome: 1.34, calyx: 1.28 } as const;
+export const HAPPY_DUR: Record<WaterLilyHappyKind, number> = {
+  silt: 1.28,
+  nectar: 1.16,
+  dew: 1.22,
+};
+
+/** Sheen hold — Disk parks pond-surface calm on the blotter. Not window-play OPEN. */
+export const SHEEN_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+
+export const DUR: Record<WaterLilyTrickKind, number> = {
+  sheen: SHEEN_HOLD + RELEASE_S,
+  pad: 1.58,
+  corolla: 1.64,
+  rhizome: 1.48,
+  calyx: 1.56,
+  peltate: 1.68,
+  hydropote: 1.72,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,38 +92,56 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: WaterLilyTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "sheen") return 50 + roll * 30;
-  if (kind === "pad") return 15 + roll * 10;
-  if (kind === "corolla") return 16 + roll * 11;
-  return justFinished ? 10.8 + roll * 8 : 5.4 + roll * 6;
+  if (kind === "sheen") return 38 + roll * 24;
+  if (kind === "peltate" || kind === "hydropote" || kind === "corolla") return 12 + roll * 9;
+  if (kind === "pad" || kind === "rhizome" || kind === "calyx") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: WaterLilyTrickKind | string | null) {
   if (musicOn) return "sheen" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "sheen") {
-    if (roll < 0.26) return "pad" as const;
-    if (roll < 0.48) return "corolla" as const;
-    if (roll < 0.72) return "rhizome" as const;
-    return "calyx" as const;
+    if (roll < 0.18) return "pad" as const;
+    if (roll < 0.34) return "corolla" as const;
+    if (roll < 0.5) return "rhizome" as const;
+    if (roll < 0.66) return "calyx" as const;
+    if (roll < 0.83) return "peltate" as const;
+    return "hydropote" as const;
   }
   if (lastKind === "pad") {
-    if (roll < 0.28) return "sheen" as const;
-    if (roll < 0.5) return "corolla" as const;
-    if (roll < 0.72) return "rhizome" as const;
-    return "calyx" as const;
+    if (roll < 0.2) return "sheen" as const;
+    if (roll < 0.36) return "corolla" as const;
+    if (roll < 0.52) return "rhizome" as const;
+    if (roll < 0.68) return "calyx" as const;
+    if (roll < 0.84) return "peltate" as const;
+    return "hydropote" as const;
   }
   if (lastKind === "corolla") {
-    if (roll < 0.22) return "sheen" as const;
-    if (roll < 0.44) return "pad" as const;
-    if (roll < 0.66) return "rhizome" as const;
-    return "calyx" as const;
+    if (roll < 0.18) return "sheen" as const;
+    if (roll < 0.34) return "pad" as const;
+    if (roll < 0.5) return "rhizome" as const;
+    if (roll < 0.66) return "calyx" as const;
+    if (roll < 0.83) return "peltate" as const;
+    return "hydropote" as const;
   }
-  if (roll < 0.2) return "sheen" as const;
-  if (roll < 0.4) return "pad" as const;
-  if (roll < 0.6) return "corolla" as const;
-  if (roll < 0.8) return "rhizome" as const;
-  return "calyx" as const;
+  if (lastKind === "peltate" || lastKind === "hydropote") {
+    if (roll < 0.16) return "sheen" as const;
+    if (roll < 0.32) return "pad" as const;
+    if (roll < 0.48) return "corolla" as const;
+    if (roll < 0.64) return "rhizome" as const;
+    if (roll < 0.8) return "calyx" as const;
+    return lastKind === "peltate" ? ("hydropote" as const) : ("peltate" as const);
+  }
+  if (roll < 0.14) return "sheen" as const;
+  if (roll < 0.28) return "pad" as const;
+  if (roll < 0.42) return "corolla" as const;
+  if (roll < 0.56) return "rhizome" as const;
+  if (roll < 0.7) return "calyx" as const;
+  if (roll < 0.85) return "peltate" as const;
+  return "hydropote" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -176,49 +208,52 @@ export function beginHappy(kind: WaterLilyHappyKind | string, x: number, facing:
 }
 
 export function siltPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.silt));
-    if (u < 0.18) {
-      const s = u / 0.18;
-      return { lift: s * 0.04, rot: s * 1.6, dx: 0, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.76) {
-      const silt = Math.sin(t * 1.15);
-      return {
-        lift: 0.04 + Math.abs(silt) * 0.025,
-        rot: 1.6 + silt * 1.3,
-        dx: silt * 0.01,
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = (u - 0.76) / 0.24;
-    return { lift: 0.03 * (1 - s), rot: 1.1 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.silt));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-export function nectarPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.nectar));
-    if (u < 0.16) {
-      const s = u / 0.16;
-      return { lift: s * 0.16, rot: s * -2.2, dx: 0, anim: "play" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const sweet = Math.sin(t * 1.9);
-      return {
-        lift: 0.16 + Math.abs(sweet) * 0.045,
-        rot: -2.2 + sweet * 2.6,
-        dx: sweet * 0.02,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.72) / 0.28;
-    return { lift: 0.11 * (1 - s), rot: -1.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
-  }
-export function dewPose(t: number) {
+  if (u < 0.76) {
+    const silt = Math.sin(t * 1.72);
     return {
-      lift: 0.022 + Math.abs(Math.sin(t * 0.55)) * 0.032,
-      rot: Math.sin(t * 0.7) * 1.4,
-      dx: Math.sin(t * 0.4) * 0.02,
-      anim: "talk" as TrickAnim,
+      lift: 2.8 + Math.abs(silt) * 1.4,
+      rot: 12 + silt * 10,
+      dx: silt * 0.12,
+      anim: "sit" as TrickAnim,
     };
   }
+  const s = (u - 0.76) / 0.24;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function nectarPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.nectar));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const sweet = Math.sin(t * 2.05);
+    return {
+      lift: 3.0 + Math.abs(sweet) * 1.5,
+      rot: -10 + sweet * 14,
+      dx: sweet * 0.14,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function dewPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.72) * 8,
+    dx: Math.sin(t * 0.4) * -0.12,
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: WaterLilyHappy, dt: number, flags: TrickFlags): WaterLilyHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -262,7 +297,11 @@ export function beginTrick(kind: WaterLilyTrickKind, x: number, facing: 1 | -1):
             ? "play"
             : kind === "calyx"
               ? "talk"
-              : "sit";
+              : kind === "peltate"
+                ? "play"
+                : kind === "hydropote"
+                  ? "talk"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "sheen" ? "hold" : "go",
@@ -282,135 +321,236 @@ function smoothstep(t: number) {
 }
 
 export function sheenPose(t: number) {
-    const breath = Math.sin(t * 0.28) + 0.04 * Math.sin(t * 1.15);
-    return {
-      lift: 0.03 + Math.abs(Math.sin(t * 0.35)) * 0.024,
-      rot: -0.5 + breath * 0.85,
-    };
-  }
+  const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: 4 + breath * 6,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.03 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.5 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  const s = smoothstep(u);
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+}
+
+/** Pad — lily pad float on the dish. Never named drift/float/flutter. */
 export function padPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.pad));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.045, rot: s * -1.8 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.12) / 0.7;
-      const float = Math.sin(s * Math.PI * 1.8);
-      return {
-        x: fromX + facing * float * 0.045,
-        lift: 0.045 + Math.abs(float) * 0.035,
-        rot: facing * (-1.8 + float * 3.2),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  const u = Math.max(0, Math.min(1, t / DUR.pad));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.52) {
+    const s = (u - 0.16) / 0.36;
+    const bob = Math.sin(s * Math.PI * 1.8);
     return {
-      x: fromX,
-      lift: 0.045 * (1 - s),
-      rot: facing * (-1.0 * (1 - s)),
+      x: fromX + facing * bob * 0.35,
+      lift: 3.2 - s * 0.8 + Math.abs(bob) * 0.6,
+      rot: facing * (-8 + bob * 12),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.82) {
+    const s = (u - 0.52) / 0.3;
+    const settle = smoothstep(s);
+    return {
+      x: fromX + facing * (1 - settle) * 0.4,
+      lift: 2.4 * (1 - settle * 0.85),
+      rot: facing * (-4 + settle * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX,
+    lift: 0.8 * (1 - s),
+    rot: facing * (3 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Corolla — fragrant bloom open. Never named open/bloom/unfurl/flare. */
 export function corollaPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.corolla));
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * 0.08, rot: s * -6.5 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.18) / 0.37;
-      const open = smoothstep(s);
-      return {
-        x: fromX + facing * open * 0.012,
-        lift: 0.08 + open * 0.1,
-        rot: facing * (-6.5 + open * 12.5),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.55) / 0.27;
-      const hold = Math.sin(s * Math.PI * 2.2);
-      return {
-        x: fromX + facing * hold * 0.015,
-        lift: 0.18 + Math.abs(hold) * 0.03,
-        rot: facing * (6.0 + hold * 2.4),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  const u = Math.max(0, Math.min(1, t / DUR.corolla));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.14) / 0.64;
+    const open = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX,
-      lift: 0.18 * (1 - s),
-      rot: facing * (4.0 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * open * 0.4,
+      lift: 2.6 + Math.abs(open) * 1.6,
+      rot: facing * (-10 + open * 14),
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Rhizome — quiet settle under the pad. Never named root/dig/taproot. */
 export function rhizomePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.rhizome));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.09, rot: s * 3.2 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.14) / 0.41;
-      const settle = smoothstep(s);
-      return {
-        x: fromX + facing * settle * 0.055,
-        lift: 0.09 * (1 - settle * 0.55),
-        rot: facing * (3.2 - settle * 4.6),
-        anim: "play" as TrickAnim,
-      };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.55) / 0.27;
-      const quiet = Math.sin(s * Math.PI * 1.6);
-      return {
-        x: fromX + facing * (0.055 + quiet * 0.012),
-        lift: 0.04 + Math.abs(quiet) * 0.02,
-        rot: facing * (-1.4 + quiet * 1.8),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  const u = Math.max(0, Math.min(1, t / DUR.rhizome));
+  if (u < 0.18) {
+    const s = smoothstep(u / 0.18);
+    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.18) / 0.37;
+    const press = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * 0.055 * (1 - s),
-      lift: 0.03 * (1 - s),
-      rot: facing * (-0.8 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * press * 0.4,
+      lift: 2.4 + Math.abs(press) * 1.4,
+      rot: facing * (14 + press * 12),
+      anim: "play" as TrickAnim,
     };
   }
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const settle = smoothstep(s);
+    return {
+      x: fromX + facing * (1 - settle) * 0.5,
+      lift: 3.2 - settle * 1.2,
+      rot: facing * (14 - settle * 16),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: facing * (-3 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Calyx — sepal cup on the dish. Never named cup/saucer/pouch. */
 export function calyxPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.calyx));
-    if (u < 0.15) {
-      const s = smoothstep(u / 0.15);
-      return { x: fromX, lift: s * 0.1, rot: s * 3.8 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.7) {
-      const s = (u - 0.15) / 0.55;
-      const cup = Math.sin(s * Math.PI * 3.4);
-      return {
-        x: fromX + facing * cup * 0.016,
-        lift: 0.1 + Math.abs(cup) * 0.055,
-        rot: facing * (3.8 + cup * 5.5),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.7) / 0.3);
+  const u = Math.max(0, Math.min(1, t / DUR.calyx));
+  if (u < 0.15) {
+    const s = smoothstep(u / 0.15);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.15) / 0.4;
+    const cup = smoothstep(s);
     return {
-      x: fromX,
-      lift: 0.1 * (1 - s),
-      rot: facing * (2.2 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * Math.sin(s * Math.PI) * 0.25,
+      lift: 2.6 * (1 - cup * 0.7),
+      rot: facing * (10 - cup * 14),
+      anim: "talk" as TrickAnim,
     };
   }
+  if (u < 0.8) {
+    const s = (u - 0.55) / 0.25;
+    const hold = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * hold * 0.2,
+      lift: 0.8 + Math.abs(hold) * 0.6,
+      rot: facing * (-4 + hold * 10),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX,
+    lift: 0.6 * (1 - s),
+    rot: facing * (-2 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Peltate — central-stalk pad rock. Not Fan petiole, not Vein stipe. */
+export function peltatePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.peltate));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const rock = Math.sin(s * Math.PI * 4.2);
+    return {
+      x: fromX + facing * (s * 0.6 + rock * 0.2),
+      lift: 1.8 + Math.abs(rock) * 1.6,
+      rot: facing * (-8 + rock * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const spin = Math.sin(s * Math.PI * 3.4);
+    return {
+      x: fromX + facing * 0.6,
+      lift: 2.8 + Math.abs(spin) * 0.8,
+      rot: facing * (4 + spin * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 1.8 * (1 - s) + s * 0.2,
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Hydropote — Nymphaeaceae mineral-sip cells. Not Anchor siphon, not Ink soak. */
+export function hydropotePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.hydropote));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const sip = smoothstep(s);
+    return {
+      x: fromX + facing * sip * 0.5,
+      lift: 2.6 + sip * 2.4,
+      rot: facing * (10 + sip * 8),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const drink = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * (0.5 + drink * 0.3),
+      lift: 4.8 + Math.abs(drink) * 0.8,
+      rot: facing * (6 + drink * 14),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.5 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: WaterLilyTrick, dt: number, flags: TrickFlags): WaterLilyTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "pad" && trick.kind !== "corolla" && trick.kind !== "rhizome" && trick.kind !== "calyx") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "pad" &&
+    trick.kind !== "corolla" &&
+    trick.kind !== "rhizome" &&
+    trick.kind !== "calyx" &&
+    trick.kind !== "peltate" &&
+    trick.kind !== "hydropote"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: WaterLilyTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -435,31 +575,18 @@ export function stepTrick(trick: WaterLilyTrick, dt: number, flags: TrickFlags):
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "pad") {
-    const pose = padPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "corolla") {
-    const pose = corollaPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "rhizome") {
-    const pose = rhizomePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = calyxPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "pad") pose = padPose(next.t, fromX, trick.facing);
+  else if (next.kind === "corolla") pose = corollaPose(next.t, fromX, trick.facing);
+  else if (next.kind === "rhizome") pose = rhizomePose(next.t, fromX, trick.facing);
+  else if (next.kind === "calyx") pose = calyxPose(next.t, fromX, trick.facing);
+  else if (next.kind === "peltate") pose = peltatePose(next.t, fromX, trick.facing);
+  else pose = hydropotePose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
   if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
