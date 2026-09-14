@@ -277,6 +277,13 @@ def test_only_scratching_mammals_scratch():
     assert "freeze" in [a["name"] for a in acts_for("rosy_boa")]
     assert "stone" not in [a["name"] for a in acts_for("rosy_boa")]
     assert "nest" not in [a["name"] for a in acts_for("rosy_boa")]
+    assert "tongue" in [a["name"] for a in acts_for("carpet_python")]
+    assert "legend" in [a["name"] for a in acts_for("carpet_python")]
+    assert "canopy_soft" in [a["name"] for a in acts_for("carpet_python")]
+    assert "inset_soft" in [a["name"] for a in acts_for("carpet_python")]
+    assert "freeze" in [a["name"] for a in acts_for("carpet_python")]
+    assert "chart" not in [a["name"] for a in acts_for("carpet_python")]
+    assert "drape" not in [a["name"] for a in acts_for("carpet_python")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
