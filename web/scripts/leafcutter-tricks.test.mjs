@@ -1004,8 +1004,8 @@ test("notes: Disc idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("mantis"), true);
   assert.equal(OverlayGround.tricksFor("fold"), OverlayMantis);
   assert.equal(OverlayGround.wantsThankYou("fold"), true);
-  assert.deepEqual([...Mantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea"]);
-  assert.deepEqual([...OverlayMantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea"]);
+  assert.deepEqual([...Mantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea", "ootheca", "deimatic"]);
+  assert.deepEqual([...OverlayMantis.TRICKS], ["raptorial", "gimbal", "snatch", "pendulum", "mantodea", "ootheca", "deimatic"]);
   assert.equal(OverlayGround.tricksFor("carpenter_bee"), OverlayCarpenterBee);
   assert.equal(OverlayGround.wantsThankYou("carpenter_bee"), true);
   assert.equal(OverlayGround.tricksFor("auger"), OverlayCarpenterBee);

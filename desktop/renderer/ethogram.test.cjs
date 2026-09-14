@@ -270,6 +270,22 @@ test("ladybird ethogram is Seven ultra (coccinella + softs + freeze, not count/h
   assert.equal(names.length, 8);
 });
 
+test("mantis ethogram is Fold ultra (mantodea + softs + freeze, not fold/strike/still)", () => {
+  const names = E.actsFor("mantis").map((a) => a.name);
+  assert.ok(names.includes("mantodea"));
+  assert.ok(names.includes("raptorial_soft"));
+  assert.ok(names.includes("gimbal_soft"));
+  assert.ok(names.includes("snatch_soft"));
+  assert.ok(names.includes("pendulum_soft"));
+  assert.ok(names.includes("ootheca_soft"));
+  assert.ok(names.includes("deimatic_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("fold"), false);
+  assert.equal(names.includes("strike"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
