@@ -460,7 +460,7 @@ test("Rose tricks start only on idle ground", () => {
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["pinksaltblush", "bacteriorhodopsin", "saltpandrift", "gasvesiclebob", "longrosehush"]);
   assert.equal(T.TRICKS.includes("runandtumble"), false);
-  assert.equal(T.HAPPY.includes("densrod"), false);
+  assert.equal(T.HAPPY.includes("k12"), false);
   assert.equal(Coli.TRICKS.includes("pinksaltblush"), false);
   assert.equal(Coli.HAPPY.includes("densrose"), false);
 
