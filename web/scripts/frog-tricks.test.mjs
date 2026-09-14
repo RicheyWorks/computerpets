@@ -1929,7 +1929,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Reed ultra idle-life done; next house-order ultra is Pebble / toad", () => {
+test("notes: Reed ultra idle-life done; next house-order ultra is Eft / newt", () => {
   assert.equal(T.TRICK_KEY, "frog");
   assert.deepEqual([...T.TRICKS], ["gular", "nictitate", "tympanum", "iliac", "lentic", "toepad", "webbing"]);
   assert.deepEqual([...T.HAPPY], ["chorus", "rivulet", "spring"]);
@@ -1991,9 +1991,9 @@ test("notes: Reed ultra idle-life done; next house-order ultra is Pebble / toad"
   assert.equal(T.TRICKS.includes("spiral"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next house-order ultra (do not implement): Pebble / toad.
-  assert.equal("toad", "toad");
-  assert.equal("Pebble", "Pebble");
+  // Recommend next house-order ultra (do not implement): Eft / newt.
+  assert.equal("newt", "newt");
+  assert.equal("Eft", "Eft");
 });
 
 
