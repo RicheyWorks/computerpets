@@ -380,6 +380,22 @@ test("chanterelle ethogram is Horn ultra (cantharellus + softs + freeze, not lea
   assert.equal(names.length, 8);
 });
 
+test("turkey_tail ethogram is Ring ultra (trametes + softs + freeze, not lean/zone/still)", () => {
+  const names = E.actsFor("turkey_tail").map((a) => a.name);
+  assert.ok(names.includes("trametes"));
+  assert.ok(names.includes("pore_soft"));
+  assert.ok(names.includes("bracket_soft"));
+  assert.ok(names.includes("band_soft"));
+  assert.ok(names.includes("leathery_soft"));
+  assert.ok(names.includes("concentric_soft"));
+  assert.ok(names.includes("tomentum_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("zone"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
