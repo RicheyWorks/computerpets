@@ -517,6 +517,10 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("amoeba").includes("uroid_soft"));
   assert.ok(names("amoeba").includes("streaming_soft"));
   assert.ok(names("amoeba").includes("freeze"));
+  assert.ok(names("euglena").includes("euglenid"));
+  assert.ok(names("euglena").includes("metaboly_soft"));
+  assert.ok(names("euglena").includes("paramylon_soft"));
+  assert.ok(names("euglena").includes("freeze"));
   for (const key of ROOST) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);

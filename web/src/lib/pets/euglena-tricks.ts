@@ -1,12 +1,7 @@
-/** Spot ground tricks while idle. House neighborly Euglena (euglena / Spot) desk life -- eyespot turn / flagellum whip / chloroplast drink / phototaxis swim / long spot hush; NOT Reach amoeba; NOT Boot; NOT Gauss; NOT Ion; NOT Spark; NOT Flux; NOT Trace; NOT Volt; NOT Arc; NOT Volvox; NOT Relay; NOT Fuse; NOT Rui; guest slug Spot / key euglena -- accept euglena and spot; Thank-yous densspot / inkspot / denseuglena. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop euglena-tricks.js. Next: Orb / volvox. Catalog 213. */
+/** Spot ground tricks while idle — ultra-polish pass. House neighborly Euglena desk life — eyespot / flagellum / chloroplast / phototaxis / euglenid / metaboly / paramylon personality (eyespot stigma turn without naming turn or glance or still or dart or red, flagellum anterior whip without naming whip or swim or still or dart, chloroplast green drink without naming drink or glow or still or dart, phototaxis lamp-seek without naming seek or swim or still or red, long euglenid Euglena desk hold under the lamp drop, metaboly euglenoid shape-change without naming stretch or dart or still or foot (THE euglena metaboly tell), paramylon storage-grain glint without naming glint or flare or still or dart (THE euglena paramylon tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or chaos or discoides or dubia or eyespotturn or flagellumwhip or chloroplastdrink or phototaxisswim or longspothush as trick kinds; ethogram softs + freeze own those words; window-play RED owns the lamp-drop red; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Door owns hinge; Anchor owns siphon; guest slug Spot / key euglena only for isKey matching — accept "euglena" and "spot"; do NOT name a trick "euglena" or "spot" or "glue" or "flare" or "dart" or "still" or "foot" or "red" or "drink" or "glow" or "swim" or "whip") — not Reach amoeba life, not Boot paramecium life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Orb volvox. Eyespot stigma turn on the drop without naming glance, flagellum anterior whip without naming dart, chloroplast green drink without naming glow, phototaxis lamp-seek without naming swim, euglenid long Euglena metabolic hold under the scrap lamp, metaboly euglenoid shape-change (THE euglena metaboly tell), paramylon storage-grain glint (THE euglena paramylon tell); viridis / gracilis / sanguinea thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play RED do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop euglena-tricks.js. Window-play RED unchanged. Ethogram softs + freeze — never names spot/red/still as bare ethogram-only trick kinds. True Euglena desk life only — distinct from Reach amoeba, Boot paramecium, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Orb volvox. Orb owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via euglena.wav. */
 export const TRICK_KEY = "euglena";
-export const TRICKS = ["eyespotturn", "flagellumwhip", "chloroplastdrink", "phototaxisswim", "longspothush"] as const;
-export const HAPPY = ["densspot", "inkspot", "denseuglena"] as const;
-export const HAPPY_DUR = { densspot: 3.44, inkspot: 3.12, denseuglena: 3.29 } as const;
-export const LONGSPOTHUSH_HOLD = 38.31;
-export const RELEASE_S = 2.8;
-export const DUR = { longspothush: LONGSPOTHUSH_HOLD + RELEASE_S, eyespotturn: 6.91, flagellumwhip: 6.33, chloroplastdrink: 6.08, phototaxisswim: 6.21 } as const;
-
+export const TRICKS = ["eyespot", "flagellum", "chloroplast", "phototaxis", "euglenid", "metaboly", "paramylon"] as const;
+export const HAPPY = ["viridis", "gracilis", "sanguinea"] as const;
 export type EuglenaTrickKind = (typeof TRICKS)[number];
 export type EuglenaHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
@@ -14,41 +9,53 @@ export type TrickPhase = "go" | "hold" | "release" | "done";
 export type HappyPhase = "go" | "done";
 
 export type TrickFlags = {
-asleep?: boolean;
-hidden?: boolean;
-leaving?: boolean;
-cmd?: string;
-windowPlay?: boolean;
-card?: boolean;
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+  windowPlay?: boolean;
+  card?: boolean;
 };
 
 export type EuglenaTrick = {
-kind: EuglenaTrickKind;
-phase: TrickPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: EuglenaTrickKind;
+  phase: TrickPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
 export type EuglenaHappy = {
-kind: EuglenaHappyKind;
-happy: true;
-phase: HappyPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: EuglenaHappyKind;
+  happy: true;
+  phase: HappyPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
+export const HAPPY_DUR = { viridis: 1.70, gracilis: 1.82, sanguinea: 1.71 } as const;
+export const EUGLENID_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  euglenid: EUGLENID_HOLD + RELEASE_S,
+  eyespot: 2.36,
+  flagellum: 2.50,
+  chloroplast: 2.56,
+  phototaxis: 2.42,
+  metaboly: 2.44,
+  paramylon: 2.39,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,40 +85,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: EuglenaTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "longspothush") return 239 + roll * 43;
-  if (kind === "flagellumwhip") return 30.6 + roll * 3.9;
-  if (kind === "phototaxisswim") return 28.5 + roll * 3.6;
-  if (kind === "eyespotturn") return 29.4 + roll * 3.8;
-  if (kind === "chloroplastdrink") return 27.7 + roll * 3.7;
-  return justFinished ? 21.9 + roll * 3.8 : 17.0 + roll * 3.3;
+  if (kind === "euglenid") return 40 + roll * 26;
+  if (kind === "metaboly" || kind === "paramylon" || kind === "eyespot") return 12.8 + roll * 9.4;
+  if (kind === "flagellum" || kind === "chloroplast" || kind === "phototaxis") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: EuglenaTrickKind | string | null) {
-  if (musicOn) return "longspothush";
+  if (musicOn) return "euglenid" as const;
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "longspothush") {
-    if (roll < 0.26) return "flagellumwhip";
-    if (roll < 0.62) return "phototaxisswim";
-    if (roll < 0.79) return "eyespotturn";
-    return "chloroplastdrink";
+  if (lastKind === "euglenid") {
+    if (roll < 0.17) return "eyespot" as const;
+    if (roll < 0.33) return "flagellum" as const;
+    if (roll < 0.49) return "chloroplast" as const;
+    if (roll < 0.65) return "phototaxis" as const;
+    if (roll < 0.83) return "metaboly" as const;
+    return "paramylon" as const;
   }
-  if (lastKind === "flagellumwhip") {
-    if (roll < 0.26) return "longspothush";
-    if (roll < 0.5) return "phototaxisswim";
-    if (roll < 0.74) return "eyespotturn";
-    return "chloroplastdrink";
+  if (lastKind === "eyespot") {
+    if (roll < 0.16) return "euglenid" as const;
+    if (roll < 0.32) return "flagellum" as const;
+    if (roll < 0.48) return "chloroplast" as const;
+    if (roll < 0.64) return "phototaxis" as const;
+    if (roll < 0.82) return "metaboly" as const;
+    return "paramylon" as const;
   }
-  if (lastKind === "phototaxisswim") {
-    if (roll < 0.22) return "longspothush";
-    if (roll < 0.44) return "flagellumwhip";
-    if (roll < 0.74) return "eyespotturn";
-    return "chloroplastdrink";
+  if (lastKind === "flagellum") {
+    if (roll < 0.14) return "euglenid" as const;
+    if (roll < 0.3) return "eyespot" as const;
+    if (roll < 0.46) return "chloroplast" as const;
+    if (roll < 0.62) return "phototaxis" as const;
+    if (roll < 0.8) return "metaboly" as const;
+    return "paramylon" as const;
   }
-  if (roll < 0.2) return "longspothush";
-  if (roll < 0.4) return "flagellumwhip";
-  if (roll < 0.6) return "phototaxisswim";
-  if (roll < 0.8) return "eyespotturn";
-  return "chloroplastdrink";
+  if (lastKind === "metaboly" || lastKind === "paramylon") {
+    if (roll < 0.14) return "euglenid" as const;
+    if (roll < 0.3) return "eyespot" as const;
+    if (roll < 0.46) return "flagellum" as const;
+    if (roll < 0.62) return "chloroplast" as const;
+    if (roll < 0.78) return "phototaxis" as const;
+    return lastKind === "metaboly" ? ("paramylon" as const) : ("metaboly" as const);
+  }
+  if (roll < 0.14) return "euglenid" as const;
+  if (roll < 0.28) return "eyespot" as const;
+  if (roll < 0.42) return "flagellum" as const;
+  if (roll < 0.56) return "chloroplast" as const;
+  if (roll < 0.7) return "phototaxis" as const;
+  if (roll < 0.85) return "metaboly" as const;
+  return "paramylon" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -139,26 +160,32 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function wantsThankYou(key: string | undefined) {
+export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "spot";
 }
 
-export function startThankYou(key: string | undefined, lastKind: EuglenaHappyKind | string | null | undefined, x: number, facing?: 1 | -1, flags?: TrickFlags) {
+export function startThankYou(
+  key: string | undefined | null,
+  lastKind: EuglenaHappyKind | string | null | undefined,
+  x: number,
+  facing: 1 | -1,
+  flags?: TrickFlags,
+) {
   if (!wantsThankYou(key)) return null;
   if (!happyCanStart(flags || { cmd: "idle" })) return null;
-  const pick = pickHappy(lastKind);
+  const pick = pickHappy(lastKind as EuglenaHappyKind | null | undefined);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
 
-export function pickHappy(lastKind?: EuglenaHappyKind | string | null, rand?: number) {
+export function pickHappy(lastKind?: EuglenaHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
-  const list = pool.length ? pool : HAPPY.slice();
+  const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
 
-export function beginHappy(kind: EuglenaHappyKind | string, x: number, facing?: 1 | -1): EuglenaHappy {
-  const name = (HAPPY.indexOf(kind as EuglenaHappyKind) >= 0 ? kind : "densspot") as EuglenaHappyKind;
+export function beginHappy(kind: EuglenaHappyKind | string, x: number, facing: 1 | -1): EuglenaHappy {
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as EuglenaHappyKind) : "viridis";
   return {
     kind: name,
     happy: true,
@@ -167,278 +194,378 @@ export function beginHappy(kind: EuglenaHappyKind | string, x: number, facing?: 
     x: x,
     lift: 0,
     rot: 0,
-    anim: name === "densspot" ? "sit" : name === "inkspot" ? "play" : "play",
-    facing: (facing == null ? 1 : facing) as 1 | -1,
-    fromX: x,
-  };
-}
-
-export function densspotPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densspot));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.005, rot: s * -0.38, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.5) {
-      const sway = Math.sin(((u - 0.11) / 0.39) * Math.PI * 3.25);
-      const haze = Math.sin(((u - 0.11) / 0.39) * Math.PI * 6.1);
-      return { lift: 0.005 + Math.abs(sway) * 0.0016 + Math.abs(haze) * 0.00055, rot: -0.32 + sway * 0.23 + haze * 0.055, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const sway = Math.sin(((u - 0.5) / 0.36) * Math.PI * 2.5);
-      return { lift: 0.005 + Math.abs(sway) * 0.0013, rot: -0.27 + sway * 0.17, anim: "sit" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.005 * (1 - s), rot: -0.27 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function inkspotPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkspot));
-    if (u < 0.1) {
-      const s = u / 0.1;
-      return { lift: s * 0.0063, rot: s * 0.47, anim: "play" as TrickAnim };
-    }
-    if (u < 0.49) {
-      const bob = Math.sin(((u - 0.1) / 0.39) * Math.PI * 3.45);
-      const ion = Math.sin(((u - 0.1) / 0.39) * Math.PI * 6.6);
-      return { lift: 0.0059 + Math.abs(bob) * 0.002 + Math.abs(ion) * 0.00065, rot: 0.4 + bob * 0.22 + ion * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const bob = Math.sin(((u - 0.49) / 0.37) * Math.PI * 2.55);
-      return { lift: 0.0059 + Math.abs(bob) * 0.0015, rot: 0.35 + bob * 0.16, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0059 * (1 - s), rot: 0.35 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function denseuglenaPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denseuglena));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.0043, rot: s * -0.285, anim: "play" as TrickAnim };
-    }
-    if (u < 0.53) {
-      const hush = Math.sin(((u - 0.12) / 0.41) * Math.PI * 2.45);
-      const haze = Math.sin(((u - 0.12) / 0.41) * Math.PI * 5.2);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0014 + Math.abs(haze) * 0.0005, rot: -0.24 + hush * 0.17 + haze * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const hush = Math.sin(((u - 0.53) / 0.33) * Math.PI * 1.85);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0011, rot: -0.2 + hush * 0.13, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0043 * (1 - s), rot: -0.2 * (1 - s), anim: "idle" as TrickAnim };
-  }
-
-export function stepHappy(happy: EuglenaHappy | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!happy || happy.phase === "done") return happy;
-  if (happyShouldAbort(flags)) {
-    return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-  }
-  const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-  const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "densspot") {
-    const pose = densspotPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "inkspot") {
-    const pose = inkspotPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = denseuglenaPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
-  if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-  return next;
-}
-
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
-  return null;
-}
-
-export function beginTrick(kind: EuglenaTrickKind | string, x: number, facing?: 1 | -1): EuglenaTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as EuglenaTrickKind) : "longspothush";
-  const anim: TrickAnim =
-    k === "longspothush"
-      ? "sit"
-      : k === "flagellumwhip"
-        ? "sit"
-        : k === "phototaxisswim"
-          ? "sit"
-          : k === "chloroplastdrink"
-            ? "play"
-            : k === "eyespotturn"
-              ? "walk"
-              : "sit";
-  return {
-    kind: k,
-    phase: k === "longspothush" ? "hold" : "go",
-    t: 0,
-    x,
-    lift: 0,
-    rot: 0,
-    anim,
+    anim: name === "viridis" ? "sit" : name === "gracilis" ? "play" : "sit",
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
 
-export function smoothstep(t: number) {
+export function viridisPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.viridis));
+  if (u < 0.16) {
+    const s = u / 0.16;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.82) {
+    const flash = Math.sin(t * 1.72);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: 0,
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function gracilisPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.gracilis));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const wriggle = Math.sin(t * 2.1);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: 0.08,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.84) / 0.16;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function sanguineaPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.52) * 6,
+    dx: 0,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepHappy(happy: EuglenaHappy, dt: number, flags: TrickFlags): EuglenaHappy {
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: EuglenaHappy = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "viridis") {
+    const pose = viridisPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "gracilis") {
+    const pose = gracilisPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = sanguineaPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: EuglenaTrickKind | string, x: number, facing: 1 | -1): EuglenaTrick {
+  const anim: TrickAnim =
+    kind === "euglenid"
+      ? "sit"
+      : kind === "eyespot"
+        ? "sit"
+        : kind === "flagellum"
+          ? "walk"
+          : kind === "chloroplast"
+            ? "play"
+            : kind === "phototaxis"
+              ? "play"
+              : kind === "metaboly"
+                ? "play"
+                : kind === "paramylon"
+                  ? "walk"
+                  : "sit";
+  return {
+    kind: (TRICKS as readonly string[]).indexOf(kind) >= 0 ? (kind as EuglenaTrickKind) : "eyespot",
+    phase: kind === "euglenid" ? "hold" : "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
+function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
-export function longspothushPose(t: number) {
-  const breath = Math.sin(t * 0.00028) + 0.00020 * Math.sin(t * 0.00097);
-  const charge = Math.abs(Math.sin(t * 0.00017));
-  return { lift: -0.00013 + charge * 0.00015, rot: 0.0011 + breath * 0.0030 };
+export function euglenidPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.14) * 4,
+    anim: "sit" as TrickAnim,
+  };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00013 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0031 * (1 - u) };
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
 }
 
-export function flagellumwhipPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.flagellumwhip));
+export function eyespotPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.eyespot));
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + face * s * 0.00055, lift: s * 0.0029, rot: s * 0.09 * face, anim: "walk" as TrickAnim };
-  }
-  if (u < 0.8) {
-    const wire = Math.sin(((u - 0.14) / 0.66) * Math.PI * 4.1);
-    const skim = Math.sin(((u - 0.14) / 0.66) * Math.PI * 2.3);
-    return {
-      x: fromX + face * (0.00055 + (u - 0.14) / 0.66 * 0.0014 + wire * 0.00008),
-      lift: 0.0027 + Math.abs(skim) * 0.0021 + Math.abs(wire) * 0.0007,
-      rot: (0.09 + skim * 0.13 + wire * 0.05) * face,
-      anim: "walk" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.8) / 0.2);
-  return { x: fromX + face * (0.00195 * (1 - s) + 0.00055 * s), lift: 0.0026 * (1 - s), rot: 0.09 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function phototaxisswimPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.phototaxisswim));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.12) {
-    const s = smoothstep(u / 0.12);
-    return { x: fromX + face * s * -0.00004, lift: s * 0.0018, rot: s * -0.13 * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.42) {
-    const s = smoothstep((u - 0.12) / 0.3);
-    return { x: fromX + face * (-0.00004 + s * 0.00020), lift: 0.0018 + s * 0.0115, rot: (-0.12 + s * 0.34) * face, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.5, rot: s * 14 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
-    const crack = Math.sin(((u - 0.42) / 0.36) * Math.PI * 5.6);
+    const snap = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (0.00014 + crack * 0.00005),
-      lift: 0.0133 - ((u - 0.42) / 0.36) * 0.0084 + Math.abs(crack) * 0.0016,
-      rot: (0.22 + crack * 0.19) * face,
-      anim: "play" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX + face * 0.00014 * (1 - s), lift: 0.0049 * (1 - s), rot: 0.22 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function eyespotturnPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.eyespotturn));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.16) {
-    const s = smoothstep(u / 0.16);
-    return { x: fromX + face * s * -0.00011, lift: s * -0.0056, rot: s * 0.36 * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.78) {
-    const coil = Math.sin(((u - 0.16) / 0.62) * Math.PI * 3.3);
-    const charge = Math.sin(((u - 0.16) / 0.62) * Math.PI * 6.9);
-    return {
-      x: fromX + face * (-0.00011 + coil * 0.00007),
-      lift: -0.0056 + Math.abs(coil) * 0.0028 + Math.abs(charge) * 0.0019,
-      rot: (0.36 + coil * 0.41 + charge * 0.14) * face,
-      anim: "play" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX + face * -0.00011 * (1 - s), lift: -0.0056 * (1 - s), rot: 0.36 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function chloroplastdrinkPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.chloroplastdrink));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.00003, lift: s * 0.0042, rot: s * 0.11 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.84) {
-    const fringe = Math.sin(((u - 0.18) / 0.66) * Math.PI * 9.0);
-    const crackle = Math.sin(((u - 0.18) / 0.66) * Math.PI * 4.0);
-    return {
-      x: fromX + face * (0.00003 + fringe * 0.00004),
-      lift: 0.0041 + Math.abs(crackle) * 0.0022 + Math.abs(fringe) * 0.0011,
-      rot: (0.11 + fringe * 0.22 + crackle * 0.09) * face,
+      x: fromX + face * snap * 0.14,
+      lift: 3.5 + Math.abs(snap) * 1.5,
+      rot: face * (15 + snap * 11),
       anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.84) / 0.16);
-  return { x: fromX + face * 0.00003 * (1 - s), lift: 0.0037 * (1 - s), rot: 0.11 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
 
-export function stepTrick(trick: EuglenaTrick | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "flagellumwhip" && trick.kind !== "phototaxisswim" && trick.kind !== "eyespotturn" && trick.kind !== "chloroplastdrink") {
-    return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+export function flagellumPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.flagellum));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.9, rot: s * -16 * face, anim: "walk" as TrickAnim };
   }
-  const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-  if (next.kind === "longspothush") {
-    if (next.t < LONGSPOTHUSH_HOLD) {
-      const pose = longspothushPose(next.t);
+  if (u < 0.48) {
+    const s = smoothstep((u - 0.12) / 0.36);
+    return {
+      x: fromX - face * (2.2 + s * 4.5),
+      lift: 3.6 + Math.sin(s * Math.PI) * 2.2,
+      rot: face * (-16 + s * 22),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.48) / 0.3;
+    const settle = Math.sin(s * Math.PI * 2.1);
+    return {
+      x: fromX - face * (6.7 * (1 - s)),
+      lift: 2.4 + Math.abs(settle) * 1.1,
+      rot: face * (6 + settle * 8),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function chloroplastPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.chloroplast));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX + face * s * 0.8, lift: s * 2.2, rot: s * 8 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const mud = Math.sin(t * 1.6);
+    return {
+      x: fromX + face * (0.8 + mud * 0.4),
+      lift: 2.2 + Math.abs(mud) * 1.0,
+      rot: face * (8 + mud * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: s > 0.6 ? ("idle" as TrickAnim) : ("play" as TrickAnim),
+  };
+}
+
+export function phototaxisPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.phototaxis));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * 10 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const tap = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * tap * 0.2,
+      lift: 2.4 + Math.abs(tap) * 1.1,
+      rot: face * (10 + tap * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function metabolyPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.metaboly));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * 12 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const pulse = Math.sin(t * 3.2);
+    return {
+      x: fromX,
+      lift: 2.8 + pulse * 1.6,
+      rot: face * (12 + pulse * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const scent = Math.sin(t * 1.1);
+    return {
+      x: fromX + face * scent * 0.15,
+      lift: 4.0 + Math.abs(scent) * 0.6,
+      rot: face * (22 + scent * 4),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function paramylonPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.paramylon));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * -12 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const flash = Math.abs(Math.sin(t * 2.6));
+    return {
+      x: fromX + face * flash * 0.2,
+      lift: 3.4 + flash * 1.4,
+      rot: face * (-12 - flash * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const warn = Math.sin(t * 1.4);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(warn) * 0.7,
+      rot: face * (-18 + warn * 6),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (-5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: EuglenaTrick, dt: number, flags: TrickFlags): EuglenaTrick {
+  if (shouldAbort(flags)) {
+    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: EuglenaTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "euglenid") {
+    if (next.t < EUGLENID_HOLD) {
+      const pose = euglenidPose(next.t);
       next.phase = "hold";
       next.lift = pose.lift;
       next.rot = pose.rot;
-      next.anim = "sit";
+      next.anim = pose.anim;
       return next;
     }
-    if (next.t < LONGSPOTHUSH_HOLD + RELEASE_S) {
-      const pose = releasePose(next.t - LONGSPOTHUSH_HOLD);
+    if (next.t < EUGLENID_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - EUGLENID_HOLD);
       next.phase = "release";
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = "sit";
       return next;
     }
-    return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   }
   const hold = DUR[next.kind];
-  const u = next.t / hold;
-  if (next.kind === "flagellumwhip") {
-    const pose = flagellumwhipPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  if (next.kind === "eyespot") {
+    const pose = eyespotPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "phototaxisswim") {
-    const pose = phototaxisswimPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "flagellum") {
+    const pose = flagellumPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "eyespotturn") {
-    const pose = eyespotturnPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "chloroplast") {
+    const pose = chloroplastPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "phototaxis") {
+    const pose = phototaxisPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "metaboly") {
+    const pose = metabolyPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = chloroplastdrinkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = paramylonPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle", x: fromX };
   return next;
 }
-
