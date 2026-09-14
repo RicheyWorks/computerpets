@@ -788,7 +788,7 @@ globalThis.PetStickTricks = OverlayStick;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Fold ultra-polish done; next house-order ultra is Wax / honeycomb", () => {
+test("notes: Fold ultra-polish done; next house-order ultra is Frill / oyster", () => {
   assert.equal(T.TRICK_KEY, "mantis");
   assert.equal(T.wantsThankYou("fold"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -960,7 +960,7 @@ test("notes: Fold ultra-polish done; next house-order ultra is Wax / honeycomb",
   assert.equal(OverlayGround.wantsThankYou("cicada"), false);
   assert.ok(OverlayGround.tricksFor("brood") == null);
   assert.equal(OverlayGround.wantsThankYou("brood"), false);
-  // Next house-order ultra is Wax / honeycomb.
+  // Next house-order ultra is Frill / oyster.
   assert.equal(T.TRICKS.includes("column"), false);
   assert.equal(T.TRICKS.includes("nest"), false);
   assert.equal(T.TRICKS.includes("trail"), false);

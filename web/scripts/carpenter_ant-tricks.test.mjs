@@ -750,7 +750,7 @@ globalThis.PetStickTricks = OverlayStick;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Column ultra-polish done; Seven ultra-polish done; next house-order ultra is Wax / honeycomb", () => {
+test("notes: Column ultra-polish done; Seven ultra-polish done; next house-order ultra is Frill / oyster", () => {
   assert.equal(T.TRICK_KEY, "carpenter_ant");
   assert.equal(T.wantsThankYou("column"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

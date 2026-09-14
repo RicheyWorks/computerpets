@@ -52,7 +52,13 @@ def test_only_scratching_mammals_scratch():
         assert "tongue" not in names, key
         assert "eat" not in names, key
         assert "waggle" not in names, key
-    assert "hold" in [a["name"] for a in acts_for("honeycomb")]
+    assert "tessera" in [a["name"] for a in acts_for("honeycomb")]
+    assert "alveoli_soft" in [a["name"] for a in acts_for("honeycomb")]
+    assert "foundation_soft" in [a["name"] for a in acts_for("honeycomb")]
+    assert "freeze" in [a["name"] for a in acts_for("honeycomb")]
+    assert "hold" not in [a["name"] for a in acts_for("honeycomb")]
+    assert "brood" not in [a["name"] for a in acts_for("honeycomb")]
+    assert "still" not in [a["name"] for a in acts_for("honeycomb")]
     assert "hum" in [a["name"] for a in acts_for("honey_drone")]
     assert "lay" in [a["name"] for a in acts_for("honey_queen")]
     assert "thrum" in [a["name"] for a in acts_for("bumblebee")]
@@ -103,7 +109,6 @@ def test_only_scratching_mammals_scratch():
     assert "still" not in [a["name"] for a in acts_for("mantis")]
     assert "fold" not in [a["name"] for a in acts_for("mantis")]
     assert "strike" not in [a["name"] for a in acts_for("mantis")]
-    assert "fold" in [a["name"] for a in acts_for("mantis")]
     assert "magicicada" in [a["name"] for a in acts_for("cicada")]
     assert "xylem_soft" in [a["name"] for a in acts_for("cicada")]
     assert "pharaoh_soft" in [a["name"] for a in acts_for("cicada")]
