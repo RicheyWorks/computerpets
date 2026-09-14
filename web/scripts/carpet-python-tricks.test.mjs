@@ -81,7 +81,7 @@ test("Atlas tricks start only on idle ground", () => {
   assert.deepEqual([...Hognose.TRICKS], ["hood", "feign", "shovel", "gape", "encore", "quiver", "upright"]);
   assert.deepEqual([...Garter.TRICKS], ["seam", "rounds", "moss", "fork", "lap", "ribbon", "creek"]);
   assert.deepEqual([...Boa.TRICKS], ["pour", "heft", "oxbow", "slack", "bank", "anchor", "meander"]);
-  assert.deepEqual([...MilkSnake.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile"]);
+  assert.deepEqual([...MilkSnake.TRICKS], ["rhyme", "rumor", "costume", "frank", "tile", "cipher", "verse"]);
   assert.deepEqual([...RosyBoa.TRICKS], ["pebble", "crevice", "rosy", "mesa", "arroyo"]);
   assert.deepEqual([...T.TRICKS], ["legend", "rung", "contour", "runner", "bearing"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -506,9 +506,9 @@ test("notes: Atlas idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("nori"), OverlayBallPython);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), true);
   assert.equal(OverlayGround.wantsThankYou("nori"), true);
-  assert.equal(OverlayGround.tricksFor("octopus"), null);
+  assert.equal(OverlayGround.tricksFor("octopus") == null, true);
   assert.equal(OverlayGround.wantsThankYou("octopus"), false);
-  assert.equal(OverlayGround.tricksFor("cup"), null);
+  assert.equal(OverlayGround.tricksFor("cup") == null, true);
 });
 
 

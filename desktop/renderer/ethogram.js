@@ -35,7 +35,7 @@
     hognose: [A("tongue", "tongue", 0.7, 4), A("flatten", "sit_hold", 2.4, 4, "sit"), A("playdead", "sit_hold", 2.2, 3, "sit"), A("gape", "gape", 1.2, 2, "talk"), A("shovel_soft", "sit", 1.0, 2, "talk"), A("encore_soft", "play", 1.0, 2, "play"), A("quiver_soft", "play", 1.0, 2, "play"), A("upright_soft", "sit", 0.9, 2, "sit"), A("freeze", "freeze", 1.4, 2)],
     garter: [A("tongue", "tongue", 0.7, 4), A("seam", "sit_hold", 2.4, 4, "sit"), A("rounds_soft", "wiggle", 1.0, 2), A("moss_soft", "sit", 1.0, 2, "sit"), A("fork_soft", "talk", 0.9, 2, "talk"), A("ribbon_soft", "play", 1.0, 2, "play"), A("creek_soft", "wiggle", 1.1, 2), A("freeze", "freeze", 1.4, 2)],
     boa: [A("tongue", "tongue", 0.7, 4), A("hold", "sit_hold", 2.8, 4, "sit"), A("pour_soft", "sit", 1.1, 2, "sit"), A("heft_soft", "sit", 1.0, 2, "sit"), A("oxbow_soft", "wiggle", 1.1, 2), A("anchor_soft", "sit", 1.2, 2, "sit"), A("meander_soft", "wiggle", 1.15, 2), A("freeze", "freeze", 1.5, 2)],
-    milk_snake: [A("tongue", "tongue", 0.7, 4), A("mimic", "freeze", 1.6, 2)],
+    milk_snake: [A("tongue", "tongue", 0.7, 4), A("rhyme", "sit_hold", 2.4, 4, "sit"), A("rumor_soft", "talk", 1.0, 2, "talk"), A("costume_soft", "sit", 1.0, 2, "sit"), A("cipher_soft", "sit", 1.1, 2, "sit"), A("verse_soft", "talk", 1.05, 2, "talk"), A("tile_soft", "play", 1.0, 2, "play"), A("freeze", "freeze", 1.4, 2)],
     rosy_boa: [A("tongue", "tongue", 0.7, 3), A("nest", "sit_hold", 2.6, 3, "sit")],
     carpet_python: [A("tongue", "tongue", 0.7, 4), A("drape", "sit_hold", 2.2, 3, "sit")],
     octopus: [A("hide", "sit_hold", 2.0, 3, "sit"), A("jet", "dart", 0.8, 2), A("taste", "wiggle", 1.0, 2)],

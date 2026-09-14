@@ -263,6 +263,13 @@ def test_only_scratching_mammals_scratch():
     assert "freeze" in [a["name"] for a in acts_for("boa")]
     assert "loop" not in [a["name"] for a in acts_for("boa")]
     assert "coil" not in [a["name"] for a in acts_for("boa")]
+    assert "tongue" in [a["name"] for a in acts_for("milk_snake")]
+    assert "rhyme" in [a["name"] for a in acts_for("milk_snake")]
+    assert "cipher_soft" in [a["name"] for a in acts_for("milk_snake")]
+    assert "verse_soft" in [a["name"] for a in acts_for("milk_snake")]
+    assert "freeze" in [a["name"] for a in acts_for("milk_snake")]
+    assert "mosaic" not in [a["name"] for a in acts_for("milk_snake")]
+    assert "mimic" not in [a["name"] for a in acts_for("milk_snake")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
