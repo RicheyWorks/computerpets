@@ -1442,7 +1442,7 @@ test("dabble/upend/headshake/gruntwhistle/speculum/nodswim/anas are Anas-platyrh
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
-  assert.deepEqual([...Seahorse.TRICKS], ["coil", "buoy", "siphon", "swivel", "pouch"]);
+  assert.deepEqual([...Seahorse.TRICKS], ["coil", "buoy", "siphon", "swivel", "pouch", "dorsal", "pectoral"]);
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
   assert.equal(SeaStar.TRICKS.includes("podia"), true);
   assert.equal(HermitCrab.TRICKS.includes("swap"), true);
