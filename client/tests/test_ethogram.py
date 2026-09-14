@@ -337,6 +337,13 @@ def test_only_scratching_mammals_scratch():
     assert "hitch" not in [a["name"] for a in acts_for("seahorse")]
     assert "hover" not in [a["name"] for a in acts_for("seahorse")]
     assert "anchor" not in [a["name"] for a in acts_for("seahorse")]
+    assert "span" in [a["name"] for a in acts_for("manta")]
+    assert "breach_soft" in [a["name"] for a in acts_for("manta")]
+    assert "ram_soft" in [a["name"] for a in acts_for("manta")]
+    assert "freeze" in [a["name"] for a in acts_for("manta")]
+    assert "soar" not in [a["name"] for a in acts_for("manta")]
+    assert "glide" not in [a["name"] for a in acts_for("manta")]
+    assert "barrel" not in [a["name"] for a in acts_for("manta")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key

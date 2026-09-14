@@ -51,6 +51,17 @@ test("seahorse ethogram is Anchor ultra (coil + softs + freeze, not hitch/hover)
   assert.equal(names.includes("anchor"), false);
 });
 
+test("manta ethogram is Kite ultra (span + softs + freeze, not soar/glide)", () => {
+  const names = E.actsFor("manta").map((a) => a.name);
+  assert.ok(names.includes("span"));
+  assert.ok(names.includes("breach_soft"));
+  assert.ok(names.includes("ram_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("soar"), false);
+  assert.equal(names.includes("glide"), false);
+  assert.equal(names.includes("barrel"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",

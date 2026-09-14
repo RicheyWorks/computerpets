@@ -1687,7 +1687,7 @@ test("eucchewbrowse/forkbranchperch/sleepychintuck/climbhugtrunk/phascolarctoshu
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...HorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...Seahorse.TRICKS], ["coil", "buoy", "siphon", "swivel", "pouch", "dorsal", "pectoral"]);
-  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
+  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.equal(SeaStar.TRICKS.includes("podia"), true);
   assert.equal(HermitCrab.TRICKS.includes("swap"), true);
   assert.equal(Hamster.TRICKS.includes("scurry"), true);
@@ -2480,8 +2480,8 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.deepEqual([...OverlayHedgehog.TRICKS], ["curl", "snuffle", "anoint", "bristle", "root", "trundle", "wheel"]);
   assert.deepEqual([...OverlaySeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
 
-  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
-  assert.deepEqual([...OverlayManta.TRICKS], ["wing", "lobe", "gyre", "vault", "span"]);
+  assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
+  assert.deepEqual([...OverlayManta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.equal(Manta.wantsThankYou("kite"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
   assert.equal(OverlayGround.tricksFor("kite"), OverlayManta);
