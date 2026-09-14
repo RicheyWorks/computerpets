@@ -1,6 +1,6 @@
-/** Beacon ground tricks while idle. House neighborly alien field-swimmer magnet desk life — lodestone / flux / azimuth / dipole / remanence personality (magnetic pull, compass-bearing spin without naming compass or north or align, alien field desk life — never named align or still or north or field or orbit or beacon or magneton or current or frost or salt or brine as trick kinds; window-play ALIGN + ethogram align/still/north own those words; Fuse already owns trick name current; guest slug Beacon / key magneton only for isKey matching — accept "magneton" and "beacon"; do NOT name a trick "magneton" or "beacon" or "align" or "still" or "north" or "field" or "orbit" or "current") — not Brine halite/salina/rime/bittern/deliquesce salt-brine, not Knot plexus/splice/braid/weft/mesh junction-weave, not Dusk belt/penumbra/eclipse/limb/limitor twilight-belt, not Shard cleavage/twinning/inclusion/grit/crescit living-crystal, not Drift waft/billow/cirrus/virga/stratus methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia chord-body, not Gleam photon/wavelength/lumen/glass/photovore lamp-drinker, not Fuse seat/current/blow/reseat dragon, not Ground lug/earth/heave/bed dragon, not Drown peristome/cistern/brine/operculum/urn pitcher, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia plaque, not Starter bud/proof/levain/ferment/saccharomyces bloom, not Flame sulfur/rosette/oak/soft/laetiporus drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift, not Door hinge/pharynx/knot/lurk/jamb moray, not Sheen lustre/tumulus/salt/commune/agapostemon; never named align (window-play ALIGN + ethogram — never a trick kind) / still (ethogram) / north (ethogram) / field (window-play forbidden word — never a trick kind) / orbit (window-play forbidden) / beacon (guest slug — never a trick kind) / magneton (guest key — never a trick kind) / current (Fuse/fuse_dragon trick — never reuse) / halite / salina / rime / bittern / deliquesce / natron / trona / aureole / plexus / splice / braid / weft / mesh / accord / quorum / entente / belt / penumbra / eclipse / limb / limitor / crepuscule / gloaming / eventide / cleavage / twinning / inclusion / grit / crescit / euhedral / vitreous / adamantine / facet / silica / shard / glass / stone / float / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / photon / wavelength / lumen / actinic / lux / candela / polyphony / partial / timbre / resonance / harmonia / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf / hinge / pharynx / lurk / jamb / rim / edge / trail / terminator / dusk / treaty / peristome / cistern / operculum / urn / lustre / tumulus / commune / agapostemon / many / count / ripple / name / nexus / knot / brine / salt / frost / halo / seat / blow / reseat / lug / earth / heave / bed / warm / snap / hum / bow — Echo/Quill are birds with sound — do not copy their tricks. lodestone soft magnetic pull toward metal flecks across the blotter, flux swim along an invisible field line, azimuth compass-bearing spin without naming compass or north, dipole polarity-flip tumble, remanence long soft residual-field hold that keeps a quiet magnetism while the axis stays the blood (not Brine salt colony, not Gleam lamp-drinker, not Fuse dragon current, not Ground dragon bed, not Knot weave) with ferrite / oersted / gauss cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play ALIGN do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web magneton-tricks.ts. Window-play ALIGN unchanged — never names align. Ethogram align/still/north unchanged — never names align or still or north as trick kinds. True alien field-swimmer magnet desk life only — magnetic pull without naming pull; compass spin without naming compass or north. Hush owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Beacon ground tricks while idle — ultra-polish pass. House neighborly alien field-swimmer magnet desk ALIGN life — lodestone / flux / azimuth / dipole / remanence / barkhausen / hysteresis personality (magnetic pull, compass-bearing spin without naming compass or north or align, alien field desk life — never named align or still or north or field or orbit or beacon or magneton or current or frost or salt or brine as trick kinds; window-play ALIGN + ethogram-old align/still/north own those words; Fuse already owns trick name current; guest slug Beacon / key magneton only for isKey matching — accept "magneton" and "beacon"; do NOT name a trick "magneton" or "beacon" or "align" or "still" or "north" or "field" or "orbit" or "current") — not Brine halite/salina/rime/bittern/deliquesce/ectoine/sabkha salt-brine, not Knot plexus/splice/braid/weft/mesh/fascicle/sennit junction-weave, not Dusk belt/penumbra/eclipse/limb/limitor/umbra/syzygy twilight-belt, not Shard cleavage/twinning/inclusion/grit/crescit/hopper/phantom living-crystal, not Drift waft/billow/cirrus/virga/stratus/tholin/nucleate methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia/formant/dyad chord-body, not Gleam photon/wavelength/lumen/glass/photovore/opsin/iridophore lamp-drinker, not Fuse seat/current/blow/reseat dragon, not Ground lug/earth/heave/bed dragon, not Drown peristome/cistern/brine/operculum/urn pitcher, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi plaque, not Starter bud/proof/levain/ferment/saccharomyces/ascus/floc bloom, not Flame sulfur/rosette/oak/soft/laetiporus/poroid/cluster drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift, not Door hinge/pharynx/knot/lurk/jamb moray, not Sheen lustre/tumulus/salt/commune/agapostemon; never named align (window-play ALIGN + ethogram-old — never a trick kind) / still (ethogram-old) / north (ethogram-old) / field (window-play forbidden word — never a trick kind) / orbit (window-play forbidden) / beacon (guest slug — never a trick kind) / magneton (guest key — never a trick kind) / current (Fuse/fuse_dragon trick — never reuse) / halite / salina / rime / bittern / deliquesce / ectoine / sabkha / natron / trona / aureole / plexus / splice / braid / weft / mesh / fascicle / sennit / accord / quorum / entente / belt / penumbra / eclipse / limb / limitor / umbra / syzygy / crepuscule / gloaming / eventide / cleavage / twinning / inclusion / grit / crescit / hopper / phantom / euhedral / vitreous / adamantine / facet / silica / shard / glass / stone / float / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / tholin / nucleate / photon / wavelength / lumen / actinic / lux / candela / opsin / iridophore / polyphony / partial / timbre / resonance / harmonia / formant / dyad / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf / hinge / pharynx / lurk / jamb / rim / edge / trail / terminator / dusk / treaty / peristome / cistern / operculum / urn / lustre / tumulus / commune / agapostemon / many / count / ripple / name / nexus / knot / brine / salt / frost / halo / seat / blow / reseat / lug / earth / heave / bed / warm / snap / hum / bow — Echo/Quill are birds with sound — do not copy their tricks. lodestone soft magnetic pull toward metal flecks across the blotter, flux swim along an invisible field line, azimuth compass-bearing spin without naming compass or north, dipole polarity-flip tumble, remanence long soft residual-field hold that keeps a quiet magnetism while the axis stays the blood (not Brine salt colony, not Gleam lamp-drinker, not Fuse dragon current, not Ground dragon bed, not Knot weave) with ferrite / oersted / gauss cousins in the thank-yous — never named mellifera / regina / andrena / langstroth; barkhausen domain-wall snap jump (THE magnetic domain-jump tell — never named align / still / north / field / orbit / beacon / magneton / current as this new tell); hysteresis lag-loop settle (THE remanence-cousin lag tell — never named align / still / north / field / orbit / beacon / magneton / current as this new tell); guest slug Beacon / key magneton only for isKey matching — accept "magneton" and "beacon"; do NOT name a trick "magneton" or "beacon". Feed-happy thank-yous sit after eat. Card-open freeze and window-play ALIGN do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop magneton-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/fly_agaric/Cap/morel/Lattice/chanterelle/Horn/turkey_tail/Ring/lions_mane/Mane/puffball/Puff/chicken_of_woods/Flame/yeast/Starter/lichen/Pact/photovore/Gleam/choir/Choir/nimbus/Drift/silica/Shard/terminator/Dusk/nexus/Knot/halovore/Brine/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood or *Dragon electrical clone. Window-play ALIGN unchanged — never names align. Ethogram softs + freeze — never names align or still or north as trick kinds. Hush owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via magneton.wav. */
 export const TRICK_KEY = "magneton";
-export const TRICKS = ["lodestone", "flux", "azimuth", "dipole", "remanence"] as const;
+export const TRICKS = ["lodestone", "flux", "azimuth", "dipole", "remanence", "barkhausen", "hysteresis"] as const;
 export const HAPPY = ["ferrite", "oersted", "gauss"] as const;
 export type MagnetonTrickKind = (typeof TRICKS)[number];
 export type MagnetonHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,25 @@ export type MagnetonHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { ferrite: 1.52, oersted: 1.69, gauss: 1.64 } as const;
-export const REMANENCE_HOLD = 17.12;
-export const RELEASE_S = 1.07;
-export const DUR = { remanence: REMANENCE_HOLD + RELEASE_S, lodestone: 2.24, flux: 2.31, azimuth: 2.17, dipole: 2.26 } as const;
+export const HAPPY_DUR: Record<MagnetonHappyKind, number> = {
+  ferrite: 1.28,
+  oersted: 1.16,
+  gauss: 1.22,
+};
+
+/** Remanence hold — Beacon parks soft residual-field calm as field-swimmer desk life. Not window-play ALIGN. */
+export const REMANENCE_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+export const DUR: Record<MagnetonTrickKind, number> = {
+  remanence: REMANENCE_HOLD + RELEASE_S,
+  lodestone: 1.58,
+  flux: 1.64,
+  azimuth: 1.48,
+  dipole: 1.56,
+  barkhausen: 1.68,
+  hysteresis: 1.72,
+};
+
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
@@ -76,39 +91,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: MagnetonTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-    if (kind === "remanence") return 71 + roll * 39;
-  if (kind === "lodestone") return 16.1 + roll * 14.1;
-  if (kind === "flux") return 22.0 + roll * 13.2;
-  if (kind === "dipole") return 19.1 + roll * 14.6;
-  return justFinished ? 13.6 + roll * 9.9 : 7.3 + roll * 9.4;
+  if (kind === "remanence") return 38 + roll * 24;
+  if (kind === "barkhausen" || kind === "hysteresis" || kind === "flux") return 12 + roll * 9;
+  if (kind === "lodestone" || kind === "azimuth" || kind === "dipole") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: MagnetonTrickKind | string | null) {
-  if (musicOn) return "remanence";
+  if (musicOn) return "remanence" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "remanence") {
-    if (roll < 0.26) return "lodestone";
-    if (roll < 0.5) return "flux";
-    if (roll < 0.74) return "azimuth";
-    return "dipole";
+    if (roll < 0.18) return "lodestone" as const;
+    if (roll < 0.34) return "flux" as const;
+    if (roll < 0.5) return "azimuth" as const;
+    if (roll < 0.66) return "dipole" as const;
+    if (roll < 0.83) return "barkhausen" as const;
+    return "hysteresis" as const;
   }
   if (lastKind === "lodestone") {
-    if (roll < 0.26) return "remanence";
-    if (roll < 0.5) return "flux";
-    if (roll < 0.74) return "azimuth";
-    return "dipole";
+    if (roll < 0.2) return "remanence" as const;
+    if (roll < 0.36) return "flux" as const;
+    if (roll < 0.52) return "azimuth" as const;
+    if (roll < 0.68) return "dipole" as const;
+    if (roll < 0.84) return "barkhausen" as const;
+    return "hysteresis" as const;
   }
   if (lastKind === "flux") {
-    if (roll < 0.22) return "remanence";
-    if (roll < 0.44) return "lodestone";
-    if (roll < 0.68) return "azimuth";
-    return "dipole";
+    if (roll < 0.18) return "remanence" as const;
+    if (roll < 0.34) return "lodestone" as const;
+    if (roll < 0.5) return "azimuth" as const;
+    if (roll < 0.66) return "dipole" as const;
+    if (roll < 0.83) return "barkhausen" as const;
+    return "hysteresis" as const;
   }
-  if (roll < 0.2) return "remanence";
-  if (roll < 0.4) return "lodestone";
-  if (roll < 0.6) return "flux";
-  if (roll < 0.8) return "azimuth";
-  return "dipole";
+  if (lastKind === "barkhausen" || lastKind === "hysteresis") {
+    if (roll < 0.16) return "remanence" as const;
+    if (roll < 0.32) return "lodestone" as const;
+    if (roll < 0.48) return "flux" as const;
+    if (roll < 0.64) return "azimuth" as const;
+    if (roll < 0.8) return "dipole" as const;
+    return lastKind === "barkhausen" ? ("hysteresis" as const) : ("barkhausen" as const);
+  }
+  if (roll < 0.14) return "remanence" as const;
+  if (roll < 0.28) return "lodestone" as const;
+  if (roll < 0.42) return "flux" as const;
+  if (roll < 0.56) return "azimuth" as const;
+  if (roll < 0.7) return "dipole" as const;
+  if (roll < 0.85) return "barkhausen" as const;
+  return "hysteresis" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -176,50 +206,53 @@ export function beginHappy(kind: MagnetonHappyKind | string, x: number, facing: 
   };
 }
 
-          export function ferritePose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ferrite));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.039, rot: s * 2.55, dx: 0, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const tick = Math.sin(t * 12.1) + 0.21 * Math.sin(t * 22.4);
-      return {
-        lift: 0.039 + Math.abs(tick) * 0.018,
-        rot: 2.55 + tick * 1.85,
-        dx: tick * 0.0015,
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = (u - 0.8) / 0.2;
-    return { lift: 0.014 * (1 - s), rot: 0.72 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+export function ferritePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.ferrite));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
   }
-  export function oerstedPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.oersted));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 0.066, rot: s * -3.45, dx: s * 0.0022, anim: "play" as TrickAnim };
-    }
-    if (u < 0.83) {
-      const flash = Math.sin(t * 6.1) + 0.25 * Math.sin(t * 11.3);
-      return {
-        lift: 0.066 + Math.abs(flash) * 0.033,
-        rot: -3.45 + flash * 4.15,
-        dx: flash * 0.0036,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.83) / 0.17;
-    return { lift: 0.018 * (1 - s), rot: -1.05 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-  export function gaussPose(t) {
+  if (u < 0.76) {
+    const tick = Math.sin(t * 1.72);
     return {
-      lift: 0.012 + Math.abs(Math.sin(t * 0.44)) * 0.016,
-      rot: Math.sin(t * 0.51) * 1.35,
-      dx: Math.sin(t * 0.31) * 0.0016,
-      anim: "sit" as TrickAnim,
+      lift: 2.8 + Math.abs(tick) * 1.4,
+      rot: 12 + tick * 10,
+      dx: tick * 0.12,
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = (u - 0.76) / 0.24;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "talk" as TrickAnim };
+}
+
+export function oerstedPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.oersted));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.1);
+    return {
+      lift: 3.4 + Math.abs(flash) * 1.6,
+      rot: -14 + flash * 12,
+      dx: flash * 0.18,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function gaussPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.72) * 8,
+    dx: Math.sin(t * 0.41) * 0.1,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: MagnetonHappy, dt: number, flags: TrickFlags): MagnetonHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -263,7 +296,11 @@ export function beginTrick(kind: MagnetonTrickKind, x: number, facing: 1 | -1): 
             ? "sleep"
             : kind === "dipole"
               ? "play"
-              : "sit";
+              : kind === "barkhausen"
+                ? "sit"
+                : kind === "hysteresis"
+                  ? "play"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "remanence" ? "hold" : "go",
@@ -282,134 +319,236 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
+/** Remanence — long soft residual-field hold. Not window-play ALIGN. */
+export function remanencePose(t: number) {
+  const breath = Math.sin(t * 0.42) + 0.18 * Math.sin(t * 1.1);
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: 4 + breath * 6,
+  };
+}
 
-            export function remanencePose(t) {
-    const breath = Math.sin(t * 0.19) + 0.068 * Math.sin(t * 0.53);
-    const soft = Math.abs(Math.sin(t * 0.27));
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  const s = smoothstep(u);
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+}
+
+/** Lodestone — soft magnetic pull toward metal flecks across the blotter. */
+export function lodestonePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.lodestone));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.62) {
+    const s = (u - 0.16) / 0.46;
+    const bob = Math.sin(s * Math.PI * 3.4);
     return {
-      lift: 0.013 + soft * 0.021,
-      rot: -0.42 + breath * 1.05,
+      x: fromX + facing * (s * 0.8 + bob * 0.15),
+      lift: 3.2 - s * 0.8 + Math.abs(bob) * 0.6,
+      rot: facing * (-8 + bob * 12),
+      anim: "walk" as TrickAnim,
     };
   }
-
-  export function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.012 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.41 * (1 - u) };
-  }
-
-  export function lodestonePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.lodestone));
-    if (u < 0.13) {
-      const s = smoothstep(u / 0.13);
-      return { x: fromX, lift: s * -0.018, rot: s * 1.85 * facing, anim: "walk" as TrickAnim };
-    }
-    if (u < 0.7) {
-      const s = (u - 0.13) / 0.57;
-      const tug = Math.sin(s * Math.PI * 3.55);
-      const pull = smoothstep(s);
-      return {
-        x: fromX + facing * pull * 0.034,
-        lift: -0.024 - Math.abs(tug) * 0.019 - pull * 0.011,
-        rot: facing * (1.95 + tug * 2.15),
-        anim: "walk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.7) / 0.3);
+  if (u < 0.84) {
+    const settle = smoothstep((u - 0.62) / 0.22);
     return {
-      x: fromX + facing * 0.014 * (1 - s),
-      lift: -0.012 * (1 - s),
-      rot: facing * (0.62 * (1 - s)),
+      x: fromX + facing * 0.8 * (1 - settle * 0.4),
+      lift: 2.4 * (1 - settle * 0.85),
+      rot: facing * (-4 + settle * 8),
       anim: "sit" as TrickAnim,
     };
   }
-  export function fluxPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.flux));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.041, rot: s * -1.65 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.64) {
-      const s = (u - 0.12) / 0.52;
-      const line = Math.sin(s * Math.PI * 2.65);
-      const swim = smoothstep(s);
-      return {
-        x: fromX + facing * (0.022 + line * 0.028),
-        lift: 0.044 + Math.abs(line) * 0.024 - swim * 0.012,
-        rot: facing * (-1.95 + line * 3.85),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    if (u < 0.87) {
-      const s = (u - 0.64) / 0.23;
-      const settle = smoothstep(s);
-      return {
-        x: fromX + facing * 0.031 * (1 - settle * 0.4),
-        lift: 0.026 - settle * 0.031,
-        rot: facing * (1.55 - settle * 2.85),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.87) / 0.13);
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX + facing * 0.4 * (1 - s),
+    lift: 0.8 * (1 - s),
+    rot: facing * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Flux — swim along an invisible field line. */
+export function fluxPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.flux));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.7) {
+    const s = (u - 0.14) / 0.56;
+    const open = Math.sin(s * Math.PI * 2.8);
     return {
-      x: fromX + facing * 0.011 * (1 - s),
-      lift: -0.005 * (1 - s),
-      rot: facing * (0.42 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * (0.4 + open * 0.35),
+      lift: 2.6 + Math.abs(open) * 1.6,
+      rot: facing * (-10 + open * 14),
+      anim: "talk" as TrickAnim,
     };
   }
-  export function azimuthPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.azimuth));
-    if (u < 0.15) {
-      const s = smoothstep(u / 0.15);
-      return { x: fromX, lift: 0.018 + s * 0.012, rot: s * 2.85 * facing, anim: "sleep" as TrickAnim };
-    }
-    if (u < 0.76) {
-      const s = (u - 0.15) / 0.61;
-      const spin = Math.sin(s * Math.PI * 4.15);
-      const bearing = smoothstep(s);
-      return {
-        x: fromX + facing * spin * 0.0035,
-        lift: 0.028 + Math.abs(spin) * 0.016 + bearing * 0.008,
-        rot: facing * (spin * 8.5 + bearing * 1.25),
-        anim: "sleep" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.76) / 0.24);
+  const s = smoothstep((u - 0.7) / 0.3);
+  return {
+    x: fromX + facing * 0.4 * (1 - s),
+    lift: 1.8 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Azimuth — compass-bearing spin without naming compass or north. */
+export function azimuthPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.azimuth));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.58) {
+    const s = (u - 0.16) / 0.42;
+    const press = Math.sin(s * Math.PI * 3.1);
+    return {
+      x: fromX + facing * press * 0.25,
+      lift: 2.4 + Math.abs(press) * 1.4,
+      rot: facing * (14 + press * 12),
+      anim: "sleep" as TrickAnim,
+    };
+  }
+  if (u < 0.82) {
+    const settle = smoothstep((u - 0.58) / 0.24);
     return {
       x: fromX,
-      lift: 0.018 * (1 - s),
-      rot: facing * (0.85 * (1 - s)),
+      lift: 3.2 - settle * 1.2,
+      rot: facing * (14 - settle * 16),
       anim: "sit" as TrickAnim,
     };
   }
-  export function dipolePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.dipole));
-    if (u < 0.13) {
-      const s = smoothstep(u / 0.13);
-      return { x: fromX, lift: s * 0.052, rot: s * -2.65 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.13) / 0.65;
-      const flip = Math.sin(s * Math.PI * 2.15);
-      const pole = Math.sin(s * Math.PI * 5.15) * 0.32;
-      return {
-        x: fromX + facing * flip * -0.007,
-        lift: 0.055 + Math.abs(flip) * 0.038 + Math.abs(pole) * 0.016,
-        rot: facing * (-3.25 + flip * 6.85 + pole * 2.1),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: facing * (-3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Dipole — polarity-flip tumble. */
+export function dipolePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.dipole));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.14) / 0.41;
+    const cup = smoothstep(s);
     return {
-      x: fromX,
-      lift: 0.016 * (1 - s),
-      rot: facing * (-0.58 * (1 - s)),
+      x: fromX + facing * cup * 0.35,
+      lift: 2.6 * (1 - cup * 0.7),
+      rot: facing * (10 - cup * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.82) {
+    const s = (u - 0.55) / 0.27;
+    const hold = Math.sin(s * Math.PI * 2.6);
+    return {
+      x: fromX + facing * 0.35,
+      lift: 0.8 + Math.abs(hold) * 0.6,
+      rot: facing * (-4 + hold * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX + facing * 0.35 * (1 - s),
+    lift: 0.6 * (1 - s),
+    rot: facing * (-2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Barkhausen — domain-wall snap jump; THE magnetic domain-jump tell. Never named align/still/north/field/orbit/beacon/magneton/current. */
+export function barkhausenPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.barkhausen));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const rock = Math.sin(s * Math.PI * 4.2);
+    return {
+      x: fromX + facing * (s * 0.6 + rock * 0.2),
+      lift: 1.8 + Math.abs(rock) * 1.6,
+      rot: facing * (-8 + rock * 14),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const spin = Math.sin(s * Math.PI * 3.4);
+    return {
+      x: fromX + facing * 0.6,
+      lift: 2.8 + Math.abs(spin) * 0.8,
+      rot: facing * (4 + spin * 10),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 1.8 * (1 - s) + s * 0.2,
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Hysteresis — lag-loop settle; THE remanence-cousin lag tell. Never named align/still/north/field/orbit/beacon/magneton/current. */
+export function hysteresisPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.hysteresis));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const sip = smoothstep(s);
+    return {
+      x: fromX + facing * sip * 0.5,
+      lift: 2.6 + sip * 2.4,
+      rot: facing * (10 + sip * 8),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const drink = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * (0.5 + drink * 0.3),
+      lift: 4.8 + Math.abs(drink) * 0.8,
+      rot: facing * (6 + drink * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.5 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: MagnetonTrick, dt: number, flags: TrickFlags): MagnetonTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "lodestone" && trick.kind !== "flux" && trick.kind !== "azimuth" && trick.kind !== "dipole") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "lodestone" &&
+    trick.kind !== "flux" &&
+    trick.kind !== "azimuth" &&
+    trick.kind !== "dipole" &&
+    trick.kind !== "barkhausen" &&
+    trick.kind !== "hysteresis"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: MagnetonTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -434,31 +573,18 @@ export function stepTrick(trick: MagnetonTrick, dt: number, flags: TrickFlags): 
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "lodestone") {
-    const pose = lodestonePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "flux") {
-    const pose = fluxPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "azimuth") {
-    const pose = azimuthPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = dipolePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "lodestone") pose = lodestonePose(next.t, fromX, trick.facing);
+  else if (next.kind === "flux") pose = fluxPose(next.t, fromX, trick.facing);
+  else if (next.kind === "azimuth") pose = azimuthPose(next.t, fromX, trick.facing);
+  else if (next.kind === "dipole") pose = dipolePose(next.t, fromX, trick.facing);
+  else if (next.kind === "barkhausen") pose = barkhausenPose(next.t, fromX, trick.facing);
+  else pose = hysteresisPose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
   if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }

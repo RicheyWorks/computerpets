@@ -442,7 +442,13 @@ assert.equal(names("silica").includes("shed"), false);
   assert.equal(names("halovore").includes("frost"), false);
   assert.equal(names("halovore").includes("still"), false);
   assert.equal(names("halovore").includes("waste"), false);
-  assert.ok(names("magneton").includes("align"));
+  assert.ok(names("magneton").includes("remanence"));
+  assert.ok(names("magneton").includes("barkhausen_soft"));
+  assert.ok(names("magneton").includes("hysteresis_soft"));
+  assert.ok(names("magneton").includes("freeze"));
+  assert.equal(names("magneton").includes("align"), false);
+  assert.equal(names("magneton").includes("still"), false);
+  assert.equal(names("magneton").includes("north"), false);
   assert.ok(names("umbral").includes("dim"));
   assert.ok(names("cyst").includes("wake"));
   for (const key of POND) {
