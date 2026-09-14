@@ -84,7 +84,7 @@ test("Chamber tricks start only on idle ground", () => {
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
-  assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
+  assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -185,7 +185,7 @@ test("spiral/siphuncle/nacre/pinhole/fringe are house-nautilus-true, not copies 
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
-  assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
+  assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.equal(T.TRICKS.includes("rise"), false);
   assert.equal(T.TRICKS.includes("jet"), false);
@@ -279,7 +279,7 @@ test("ground registry keeps prior guests gated; Chamber selectable; prior guests
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...Axolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...Octopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
-  assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
+  assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.equal(T.wantsThankYou("nautilus"), true);
@@ -363,7 +363,7 @@ test("ground registry keeps prior guests gated; Chamber selectable; prior guests
   assert.deepEqual([...OverlayGoldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.deepEqual([...OverlayAxolotl.TRICKS], ["gill", "amble", "mend", "smile", "plume", "sprout", "glop"]);
   assert.deepEqual([...OverlayOctopus.TRICKS], ["mantle", "sucker", "jet", "veil", "tinker", "papilla", "ooze"]);
-  assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot"]);
+  assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...Overlay.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe"]);
   assert.equal(Overlay.TRICKS.includes("rise"), false);

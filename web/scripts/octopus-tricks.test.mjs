@@ -351,7 +351,7 @@ test("ultra-polish: Cup mantle/papilla/ooze lifts are Rui-visible (not micro idl
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Cup idle-life ultra done; next house-order ultra guest is Sepia / cuttlefish (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Cup idle-life ultra done; Sepia / cuttlefish ultra done; next house-order ultra guest is Chamber / nautilus (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "octopus");
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(OverlayGround.tricksFor("octopus"), Overlay);
