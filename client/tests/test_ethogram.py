@@ -309,6 +309,13 @@ def test_only_scratching_mammals_scratch():
     assert "chime" not in [a["name"] for a in acts_for("moon_jelly")]
     assert "pulse" not in [a["name"] for a in acts_for("moon_jelly")]
     assert "drift" not in [a["name"] for a in acts_for("moon_jelly")]
+    assert "cling" in [a["name"] for a in acts_for("sea_star")]
+    assert "madre_soft" in [a["name"] for a in acts_for("sea_star")]
+    assert "papula_soft" in [a["name"] for a in acts_for("sea_star")]
+    assert "freeze" in [a["name"] for a in acts_for("sea_star")]
+    assert "reef" not in [a["name"] for a in acts_for("sea_star")]
+    assert "still" not in [a["name"] for a in acts_for("sea_star")]
+    assert "bell" not in [a["name"] for a in acts_for("sea_star")]
     for key in CORNER_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key

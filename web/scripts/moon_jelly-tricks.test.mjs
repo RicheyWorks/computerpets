@@ -430,7 +430,7 @@ test("ultra-polish: Pulse bell/rhopalium/horseshoe lifts are Rui-visible (not mi
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Pulse idle-life ultra done; next house-order ultra guest is Ochre / sea_star (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Pulse idle-life ultra done; Ochre / sea_star ultra done; next house-order ultra guest is Tenant / hermit_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
   assert.equal(T.TRICK_KEY, "moon_jelly");
   assert.equal(T.wantsThankYou("pulse"), true);
   assert.equal(OverlayGround.tricksFor("moon_jelly"), Overlay);
@@ -451,8 +451,8 @@ test("notes: Pulse idle-life ultra done; next house-order ultra guest is Ochre /
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  assert.equal(OverlayGround.tricksFor("sea_star") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("sea_star"), false);
-  assert.equal(OverlayGround.tricksFor("cling") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("cling"), false);
+  assert.equal(OverlayGround.tricksFor("hermit_crab") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("hermit_crab"), false);
+  assert.equal(OverlayGround.tricksFor("tenant") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("tenant"), false);
 });
