@@ -1,7 +1,6 @@
-/** Felt ground tricks while idle. House sheet moss — tuft / bead / spore / cushion / thatch personality (soft carpet swell as tuft — never named swell (Sol owns swell as thank-you), dew bead, spore lift as spore — never named lift (Ember owns lift), cushion creep as cushion — never named creep (Still window owns creep) / crawl (Cling owns crawl) / moss (Sash owns moss), quiet green thatch desk life on the blotter felt; not Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, or snake guests Sash seam/moss/lap copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop moss-tricks.js. Not a Rui, cat, dog, rabbit, hamster/Clip, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog/Burr, chinchilla, axolotl/Bloom, toucan, iguana/Sol, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, octopus/Cup, cuttlefish/Sepia, nautilus/Chamber, moon-jelly/Pulse, sea-star/Cling, hermit-crab/Tenant, horseshoe-crab/Ledger, seahorse/Anchor, manta/Kite, moray/Door, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play LEAN unchanged — never names lean. Special carpet ethogram unchanged — never names carpet as a trick. Sash owns moss; Sol owns swell as thank-you and press as a trick; Ember owns lift; Cling owns crawl/damp/press/tide; Still window owns creep; Burr owns root; Coin owns flare; Phoenix owns lift; Fuse owns pulse as thank-you; Chamber owns quiet as thank-you; Ledger owns page as thank-you; Jade owns treaty as thank-you. Plant/bryophyte desk life only — not an animal or moray copy. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Felt ground tricks while idle — ultra-polish pass. House sheet moss — tuft / bead / spore / cushion / thatch / rhizoid / seta personality (soft carpet swell as tuft — never named swell (Sol owns swell as thank-you), dew bead, spore puff as spore — never named lift (Ember owns lift) / puff (Puff guest), cushion creep as cushion — never named creep (Still window owns creep) / crawl (Cling owns crawl) / moss (Sash owns moss), quiet green thatch desk life on the blotter felt, rhizoid grip anchoring into the blotter (bryophyte holdfast filaments — never named root (Burr) / holdfast (ethogram) / cling), seta sporophyte stalk stretch + capsule nod (never named peristome/operculum — other guests; never named lift); not Door hinge/pharynx/knot/lurk/jamb/mucus/sentry, Kite wing/lobe/gyre/vault/span/breach/ram, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Ochre/Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, or snake guests Sash seam/moss/lap copies). Rhizoid is the species-true sheet-moss anchor polish (not Burr root, not Cling crawl, not Door knot). Seta is the iconic sporophyte stalk stretch (not Ember lift, not spore puff alone, not window-play LEAN). Window-play LEAN unchanged — never names lean. Never names carpet as a trick. Ethogram keeps thatch sit_hold; adds tuft/bead/spore/cushion/rhizoid/seta softs + freeze (replaces thin lean/nod/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via moss.wav. Thank-yous humid / velvet / meadow. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `moss-tricks.js`. True house-moss desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids lean/swell/lift/creep/crawl/moss/root/holdfast/peristome/operculum/hinge/mucus/sentry/podia/bell/drift/gulp/flare name collisions. Bird ultra (Soot→Ember) + Miso→Door done; skip Rui + birds. Next guest ultra is Vein / maidenhair. No cry inventing beyond house moss.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "moss";
-export const TRICKS = ["tuft", "bead", "spore", "cushion", "thatch"] as const;
+export const TRICKS = ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"] as const;
 export const HAPPY = ["humid", "velvet", "meadow"] as const;
 export type MossTrickKind = (typeof TRICKS)[number];
 export type MossHappyKind = (typeof HAPPY)[number];
@@ -45,10 +44,25 @@ export type MossHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { humid: 1.28, velvet: 1.16, meadow: 1.22 } as const;
-export const THATCH_HOLD = 12.4;
-export const RELEASE_S = 0.72;
-export const DUR = { thatch: THATCH_HOLD + RELEASE_S, tuft: 1.46, bead: 1.22, spore: 1.38, cushion: 1.52 } as const;
+export const HAPPY_DUR: Record<MossHappyKind, number> = {
+  humid: 1.28,
+  velvet: 1.16,
+  meadow: 1.22,
+};
+
+/** Thatch hold — Felt parks the soft green carpet on the blotter. Not window-play LEAN. */
+export const THATCH_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+
+export const DUR: Record<MossTrickKind, number> = {
+  thatch: THATCH_HOLD + RELEASE_S,
+  tuft: 1.58,
+  bead: 1.48,
+  spore: 1.56,
+  cushion: 1.64,
+  rhizoid: 1.68,
+  seta: 1.72,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,37 +92,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: MossTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "thatch") return 50 + roll * 30;
-  if (kind === "tuft") return 15 + roll * 11;
-  if (kind === "cushion") return 16 + roll * 12;
-  return justFinished ? 10.8 + roll * 8 : 5.4 + roll * 6;
+  if (kind === "thatch") return 38 + roll * 24;
+  if (kind === "cushion" || kind === "rhizoid" || kind === "seta") return 12 + roll * 9;
+  if (kind === "tuft" || kind === "bead" || kind === "spore") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: MossTrickKind | string | null) {
   if (musicOn) return "thatch" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "thatch") {
-    if (roll < 0.26) return "tuft" as const;
-    if (roll < 0.48) return "bead" as const;
-    if (roll < 0.72) return "spore" as const;
-    return "cushion" as const;
+    if (roll < 0.18) return "tuft" as const;
+    if (roll < 0.34) return "bead" as const;
+    if (roll < 0.5) return "spore" as const;
+    if (roll < 0.66) return "cushion" as const;
+    if (roll < 0.83) return "rhizoid" as const;
+    return "seta" as const;
   }
   if (lastKind === "tuft") {
-    if (roll < 0.28) return "thatch" as const;
-    if (roll < 0.5) return "bead" as const;
-    if (roll < 0.72) return "spore" as const;
-    return "cushion" as const;
+    if (roll < 0.2) return "thatch" as const;
+    if (roll < 0.36) return "bead" as const;
+    if (roll < 0.52) return "spore" as const;
+    if (roll < 0.68) return "cushion" as const;
+    if (roll < 0.84) return "rhizoid" as const;
+    return "seta" as const;
   }
   if (lastKind === "bead") {
-    if (roll < 0.22) return "thatch" as const;
-    if (roll < 0.44) return "tuft" as const;
-    if (roll < 0.66) return "spore" as const;
-    return "cushion" as const;
+    if (roll < 0.18) return "thatch" as const;
+    if (roll < 0.34) return "tuft" as const;
+    if (roll < 0.5) return "spore" as const;
+    if (roll < 0.66) return "cushion" as const;
+    if (roll < 0.83) return "rhizoid" as const;
+    return "seta" as const;
   }
-  if (roll < 0.2) return "thatch" as const;
-  if (roll < 0.4) return "tuft" as const;
-  if (roll < 0.6) return "bead" as const;
-  if (roll < 0.8) return "spore" as const;
-  return "cushion" as const;
+  if (lastKind === "rhizoid" || lastKind === "seta") {
+    if (roll < 0.16) return "thatch" as const;
+    if (roll < 0.32) return "tuft" as const;
+    if (roll < 0.48) return "bead" as const;
+    if (roll < 0.64) return "spore" as const;
+    if (roll < 0.8) return "cushion" as const;
+    return lastKind === "rhizoid" ? ("seta" as const) : ("rhizoid" as const);
+  }
+  if (roll < 0.14) return "thatch" as const;
+  if (roll < 0.28) return "tuft" as const;
+  if (roll < 0.42) return "bead" as const;
+  if (roll < 0.56) return "spore" as const;
+  if (roll < 0.7) return "cushion" as const;
+  if (roll < 0.85) return "rhizoid" as const;
+  return "seta" as const;
 }
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -179,46 +210,49 @@ export function humidPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.humid));
   if (u < 0.22) {
     const s = u / 0.22;
-    return { lift: s * 0.08, rot: s * 3.2, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
   }
   if (u < 0.78) {
     const bead = Math.sin(t * 1.55);
     return {
-      lift: 0.08 + Math.abs(bead) * 0.04,
-      rot: 3.2 + bead * 2.1,
-      dx: bead * 0.02,
+      lift: 2.8 + Math.abs(bead) * 1.4,
+      rot: 12 + bead * 10,
+      dx: bead * 0.08,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 0.06 * (1 - s), rot: 2.2 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
+
 export function velvetPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.velvet));
   if (u < 0.2) {
     const s = u / 0.2;
-    return { lift: s * 0.14, rot: s * -2.4, dx: 0, anim: "play" as TrickAnim };
+    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" as TrickAnim };
   }
   if (u < 0.76) {
     const nap = Math.sin(t * 1.7);
     return {
-      lift: 0.14 + Math.abs(nap) * 0.05,
-      rot: -2.4 + nap * 2.2,
-      dx: nap * 0.03,
+      lift: 3.0 + Math.abs(nap) * 1.5,
+      rot: -10 + nap * 14,
+      dx: nap * 0.1,
       anim: "play" as TrickAnim,
     };
   }
   const s = (u - 0.76) / 0.24;
-  return { lift: 0.1 * (1 - s), rot: -1.4 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
+
 export function meadowPose(t: number) {
   return {
-    lift: 0.03 + Math.abs(Math.sin(t * 0.58)) * 0.04,
-    rot: Math.sin(t * 0.72) * 1.1,
-    dx: Math.sin(t * 0.4) * -0.04,
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.72) * 8,
+    dx: Math.sin(t * 0.4) * -0.12,
     anim: "sit" as TrickAnim,
   };
 }
+
 export function stepHappy(happy: MossHappy, dt: number, flags: TrickFlags): MossHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -262,7 +296,11 @@ export function beginTrick(kind: MossTrickKind, x: number, facing: 1 | -1): Moss
             ? "play"
             : kind === "cushion"
               ? "sit"
-              : "sit";
+              : kind === "rhizoid"
+                ? "sit"
+                : kind === "seta"
+                  ? "play"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "thatch" ? "hold" : "go",
@@ -280,55 +318,60 @@ function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
-
 export function thatchPose(t: number) {
   const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
   return {
-    lift: 0.04 + Math.abs(Math.sin(t * 0.42)) * 0.035,
-    rot: 1.6 + breath * 1.5,
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: 4 + breath * 6,
   };
 }
+
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.04 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 1.4 * (1 - u) };
+  const s = smoothstep(u);
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
 }
+
+/** Tuft — soft carpet swell / gametophore tip rise. Not Sol swell thank-you. */
 export function tuftPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.tuft));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 0.1, rot: s * 2.5 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
     const s = (u - 0.16) / 0.62;
     const swell = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * Math.abs(swell) * 0.02,
-      lift: 0.1 + Math.abs(swell) * 0.14,
-      rot: facing * (2.5 + swell * 3.2),
+      x: fromX + facing * Math.abs(swell) * 0.35,
+      lift: 2.6 + Math.abs(swell) * 1.6,
+      rot: facing * (10 + swell * 12),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
     x: fromX,
-    lift: 0.1 * (1 - s),
-    rot: facing * (2 * (1 - s)),
+    lift: 1.8 * (1 - s),
+    rot: facing * (6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
+
+/** Bead — dew bead roll across the phyllid tip. Not Coin flare. */
 export function beadPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.bead));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
-    return { x: fromX, lift: s * 0.06, rot: s * 6 * facing, anim: "talk" as TrickAnim };
+    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "talk" as TrickAnim };
   }
   if (u < 0.55) {
     const s = (u - 0.18) / 0.37;
     const drop = smoothstep(s);
     return {
-      x: fromX + facing * drop * 0.1,
-      lift: 0.06 + drop * 0.08,
-      rot: facing * (6 - drop * 10),
+      x: fromX + facing * drop * 1.4,
+      lift: 2.4 + drop * 1.8,
+      rot: facing * (14 - drop * 18),
       anim: "talk" as TrickAnim,
     };
   }
@@ -336,33 +379,35 @@ export function beadPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.55) / 0.23;
     const roll = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * (0.1 + s * 0.06),
-      lift: 0.14 - s * 0.06 + roll * 0.03,
-      rot: facing * (-4 + roll * 3),
+      x: fromX + facing * (1.4 + s * 0.6),
+      lift: 4.0 - s * 1.4 + roll * 0.5,
+      rot: facing * (-4 + roll * 8),
       anim: "talk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.16 * (1 - s),
-    lift: 0.08 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    x: fromX + facing * 1.8 * (1 - s),
+    lift: 2.0 * (1 - s),
+    rot: facing * (-3 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
+
+/** Spore — capsule puff / spore release loft. Not Ember lift. Not Puff guest. */
 export function sporePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.spore));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 0.08, rot: s * -1.5 * facing, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 2.2, rot: s * -6 * facing, anim: "play" as TrickAnim };
   }
   if (u < 0.42) {
     const s = (u - 0.14) / 0.28;
     const loft = smoothstep(s);
     return {
-      x: fromX + facing * loft * 0.04,
-      lift: 0.08 + loft * 0.32,
-      rot: facing * (-1.5 + loft * 4),
+      x: fromX + facing * loft * 0.8,
+      lift: 2.2 + loft * 3.2,
+      rot: facing * (-6 + loft * 14),
       anim: "play" as TrickAnim,
     };
   }
@@ -370,47 +415,130 @@ export function sporePose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.42) / 0.3;
     const drift = Math.sin(s * Math.PI * 2.6);
     return {
-      x: fromX + facing * (0.04 + drift * 0.05),
-      lift: 0.4 - s * 0.18 + Math.abs(drift) * 0.04,
-      rot: facing * (2.5 + drift * 3.5),
+      x: fromX + facing * (0.8 + drift * 0.45),
+      lift: 5.2 - s * 1.8 + Math.abs(drift) * 0.6,
+      rot: facing * (8 + drift * 12),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
-    x: fromX + facing * 0.04 * (1 - s),
-    lift: 0.2 * (1 - s),
-    rot: facing * (2 * (1 - s)),
+    x: fromX + facing * 0.8 * (1 - s),
+    lift: 2.4 * (1 - s),
+    rot: facing * (6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
+
+/** Cushion — mat creep across the blotter. Not Still creep. Not Cling crawl. */
 export function cushionPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.cushion));
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX, lift: s * 0.05, rot: s * 1.2 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 2.2, rot: s * 6 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.7) {
     const s = (u - 0.16) / 0.54;
     const pulse = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX + facing * (s * 0.28 + pulse * 0.02),
-      lift: 0.05 + Math.abs(pulse) * 0.04,
-      rot: facing * (1.2 + pulse * 1.8),
+      x: fromX + facing * (s * 2.4 + pulse * 0.25),
+      lift: 2.2 + Math.abs(pulse) * 1.2,
+      rot: facing * (6 + pulse * 10),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.7) / 0.3);
   return {
-    x: fromX + facing * 0.28 * (1 - s * 0.15),
-    lift: 0.05 * (1 - s),
-    rot: facing * (1 * (1 - s)),
+    x: fromX + facing * 2.4 * (1 - s * 0.2),
+    lift: 1.6 * (1 - s),
+    rot: facing * (4 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
+
+/** Rhizoid — filament grip into the blotter. Not Burr root. Not Cling crawl. Not holdfast ethogram. */
+export function rhizoidPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.rhizoid));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 1.8, rot: s * 8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const dig = Math.sin(s * Math.PI * 2.8);
+    return {
+      x: fromX + facing * (s * 0.6 + dig * 0.2),
+      lift: 1.8 - s * 0.9 + Math.abs(dig) * 0.5,
+      rot: facing * (8 + dig * 14),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const hold = Math.sin(s * Math.PI * 3.4);
+    return {
+      x: fromX + facing * 0.6,
+      lift: 0.9 + Math.abs(hold) * 0.45,
+      rot: facing * (6 + hold * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 0.9 * (1 - s) + s * 0.2,
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Seta — sporophyte stalk stretch + capsule nod. Not Ember lift. Not spore puff alone. */
+export function setaPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.seta));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -8 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const rise = smoothstep(s);
+    return {
+      x: fromX + facing * rise * 0.5,
+      lift: 2.6 + rise * 2.8,
+      rot: facing * (-8 + rise * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const nod = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * (0.5 + nod * 0.3),
+      lift: 5.2 + Math.abs(nod) * 0.8,
+      rot: facing * (4 + nod * 16),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.5 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: MossTrick, dt: number, flags: TrickFlags): MossTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "bead" && trick.kind !== "spore" && trick.kind !== "cushion") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "tuft" &&
+    trick.kind !== "bead" &&
+    trick.kind !== "spore" &&
+    trick.kind !== "cushion" &&
+    trick.kind !== "rhizoid" &&
+    trick.kind !== "seta"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: MossTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -435,31 +563,18 @@ export function stepTrick(trick: MossTrick, dt: number, flags: TrickFlags): Moss
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "tuft") {
-    const pose = tuftPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "bead") {
-    const pose = beadPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "spore") {
-    const pose = sporePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = cushionPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "tuft") pose = tuftPose(next.t, fromX, trick.facing);
+  else if (next.kind === "bead") pose = beadPose(next.t, fromX, trick.facing);
+  else if (next.kind === "spore") pose = sporePose(next.t, fromX, trick.facing);
+  else if (next.kind === "cushion") pose = cushionPose(next.t, fromX, trick.facing);
+  else if (next.kind === "rhizoid") pose = rhizoidPose(next.t, fromX, trick.facing);
+  else pose = setaPose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
   if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
