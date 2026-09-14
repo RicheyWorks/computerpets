@@ -1,12 +1,20 @@
-/** Dapple ground tricks while idle. House neighborly Ambystomatidae/Plethodontidae spotted-salamander desk life — maculate / litter / cutaneous / nasolabial / ambystomid personality (yellow-coin maculate spot flash, damp leaf-litter hide settle, cutaneous lung/skin breath hush, Plethodon nasolabial groove tip-scent, long Ambystoma metabolic hold under mold — never named wait or wake or still or hide or cover or wiggle or dart or trail or paddle or salamander or dapple or newt or eft or frog or toad or reed or pebble or crest or caudal or filament or costal or caudate or gular or nictitate or tympanum or iliac or lentic or verruca or burrow or parotoid or tubercle or bufonid or gill or amble or mend or smile or plume or hop or puff or dig or soak or tuck or crane or plod as trick kinds; window-play COVER owns cover; ethogram hide/sit_hold + still/freeze + walk/wiggle own those words; Eft owns crest/caudal/filament/costal/caudate; Bloom owns gill/amble/mend/smile/plume; Reed owns gular/nictitate/tympanum/iliac/lentic; Pebble owns verruca/burrow/parotoid/tubercle/bufonid; guest slug Dapple / key salamander only for isKey matching — accept "salamander" and "dapple"; do NOT name a trick "salamander" or "dapple" or "wait" or "wake" or "still" or "hide" or "cover" or "wiggle" or "dart" or "trail" or "paddle" or "newt" or "eft" or "frog" or "toad" or "reed" or "pebble" or "maculate" or "litter" or "cutaneous" or "nasolabial" or "ambystomid" or "gular" or "lentic" or "verruca" or "bufonid" or "gill" or "hop" or "puff" or "dig") — not Eft crest/caudal/filament/costal/caudate Salamandridae Crested/smooth-newt, not Pebble verruca/burrow/parotoid/tubercle/bufonid Bufonidae American-toad, not Reed gular/nictitate/tympanum/iliac/lentic Anura green-frog, not Arca lorica/tegument/ampoule/bradyzoite/cryptobiosis sealed-vault, not Bloom gill/amble/mend/smile/plume axolotl, not Ink soak/tuck/crane/plod/paddle turtle, not Hush silhouette/adumbrate/occultation/antumbra/caligo shade-umbra, not Beacon lodestone/flux/azimuth/dipole/remanence field-magnet, not Brine halite/salina/rime/bittern/deliquesce salt-brine, not Knot plexus/splice/braid/weft/mesh junction-weave, not Dusk belt/penumbra/eclipse/limb/limitor twilight-belt, not Shard cleavage/twinning/inclusion/grit/crescit living-crystal, not Drift waft/billow/cirrus/virga/stratus methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia chord-body, not Gleam photon/wavelength/lumen/glass/photovore lamp-drinker, not Fuse seat/current/blow/reseat dragon, not Ground lug/earth/heave/bed dragon, not Drown peristome/cistern/brine/operculum/urn pitcher, not Pulse bell/oral/lucent/trail/medusa jelly, not Chamber spiral/siphuncle/nacre/pinhole/fringe chambered-shell, not Pact podetium/photobiont/fruticose/stone/cladonia plaque, not Starter bud/proof/levain/ferment/saccharomyces bloom, not Flame sulfur/rosette/oak/soft/laetiporus drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift, not Door hinge/pharynx/knot/lurk/jamb moray, not Sheen lustre/tumulus/salt/commune/agapostemon, not Blush pebble/crevice/rosy/mesa/arroyo rosy-boa; never named wait (window-play WAIT + ethogram — never a trick kind) / wake (ethogram) / still (ethogram — never a trick kind) / hide (ethogram + cmd — never a trick kind) / cover (window-play COVER — never a trick kind) / wiggle (ethogram — never a trick kind) / dart (ethogram + Coin — never a trick kind) / trail (window-play TRAIL + Pulse lucent/trail — never a trick kind) / paddle (Ink — never a trick kind) / salamander (guest key — never a trick kind) / dapple (guest slug — never a trick kind) / newt / eft / frog / toad / reed / pebble / crest / caudal / filament / costal / caudate / vermilion / eftish / palmate / gular / nictitate / tympanum / iliac / lentic / verruca / burrow / parotoid / tubercle / bufonid / loam / knurl / plump / chorus / rivulet / spring / lorica / tegument / ampoule / bradyzoite / cryptobiosis / excyst / turgor / trehalose / gill / amble / mend / smile / plume / wink / blip / grin / soak / tuck / crane / plod / paddle / munch / bob / huff / silhouette / adumbrate / occultation / antumbra / caligo / skotos / umbriel / softfall / penumbra / eclipse / limb / limitor / belt / crepuscule / gloaming / eventide / lodestone / flux / azimuth / dipole / remanence / ferrite / oersted / gauss / halite / salina / rime / bittern / deliquesce / natron / trona / aureole / plexus / splice / braid / weft / mesh / accord / quorum / entente / cleavage / twinning / inclusion / grit / crescit / euhedral / vitreous / adamantine / facet / silica / shard / glass / stone / float / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / photon / wavelength / lumen / actinic / lux / candela / polyphony / partial / timbre / resonance / harmonia / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / buzz / dance / plaque / share / bloom / loaf / hinge / pharynx / lurk / jamb / rim / edge / trail / terminator / dusk / treaty / peristome / cistern / operculum / urn / lustre / tumulus / commune / agapostemon / many / count / ripple / name / nexus / knot / brine / salt / frost / halo / seat / blow / reseat / lug / earth / heave / bed / warm / snap / hum / bow / field / orbit / beacon / magneton / current / north / align / spiral / siphuncle / nacre / pinhole / fringe / cool / dim / shade / cast / veil / soft / umbra / shadow / hush / umbral / cyst / arca / crevice / rosy / mesa / arroyo / climate / manners / corner / hop / puff / freeze / humid — Echo/Quill are birds with sound — do not copy their tricks. maculate yellow-coin Ambystoma maculatum spot flash on the mold grain without naming cover or dapple, litter damp leaf-litter hide settle without naming hide or cover or burrow, cutaneous cutaneous lung/skin breath hush without naming gill or puff, nasolabial Plethodon nasolabial-groove tip-scent without naming trail or crest, ambystomid long Ambystoma metabolic hold under mold that keeps a quiet spotted sit while the still stays the blood (not Eft orange newt dish, not Pebble dry toad dish, not Reed damp perch, not Arca sealed vault, not Bloom axolotl gill, not Ink turtle soak, not Hush shade umbra, not Blush rosy-boa pebble, not Chamber nautilus shell, not Brine salt frost, not Beacon magnet field, not Dusk twilight belt) with mottled / speckled / blotched cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play COVER do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop salamander-tricks.js. Window-play COVER unchanged — never names cover. Ethogram hide/still/walk unchanged — never names hide or still or wiggle as trick kinds. True Ambystoma maculatum / Plethodon desk life only — spot flash without naming dapple; litter settle without naming hide; cutaneous hush without naming gill; nasolabial tip without naming crest; distinct from Eft newt, Reed frog, Pebble toad, Bloom axolotl. Slip owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Dapple ground tricks while idle — ultra-polish pass. House neighborly Ambystomatidae/Plethodontidae spotted-salamander desk life — maculate / litter / cutaneous / nasolabial / ambystomid / mental / granular personality (yellow-coin maculate spot flash, damp leaf-litter hide settle, cutaneous lung/skin breath hush, Plethodon nasolabial groove tip-scent, long Ambystoma metabolic hold under mold, mental-gland courtship press, granular-gland sticky secretion flash — never named wait or wake or still or hide or cover or wiggle or dart or trail or paddle or salamander or dapple or newt or eft or frog or toad or reed or pebble or crest or caudal or filament or costal or caudate or hedonic or aposematic or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or unken or cranial or gill or amble or mend or smile or plume or hop or puff or dig or soak or tuck or crane or plod or warning or cirrus or vernal as trick kinds; window-play COVER owns cover; ethogram softs + freeze own those words; Eft owns crest/caudal/filament/costal/caudate/hedonic/aposematic; Bloom owns gill/amble/mend/smile/plume; Reed owns gular/nictitate/tympanum/iliac/lentic/toepad/webbing; Pebble owns verruca/burrow/parotoid/tubercle/bufonid/unken/cranial; MiningBee owns vernal; Milk owns warning; Drift owns cirrus; guest slug Dapple / key salamander only for isKey matching — accept "salamander" and "dapple"; do NOT name a trick "salamander" or "dapple" or "wait" or "wake" or "still" or "hide" or "cover" or "wiggle" or "dart" or "trail" or "paddle" or "newt" or "eft" or "frog" or "toad" or "reed" or "pebble" or "gular" or "lentic" or "verruca" or "bufonid" or "gill" or "hop" or "puff" or "dig" or "warning" or "cirrus" or "vernal") — not Eft Salamandridae Crested/smooth-newt, not Pebble Bufonidae American-toad, not Reed Anura green-frog, not Arca sealed-vault, not Bloom axolotl, not Ink turtle, not Hush shade-umbra, not Beacon field-magnet, not Brine salt-brine, not Knot junction-weave, not Dusk twilight-belt, not Shard living-crystal, not Drift methane-cloud, not Choir chord-body, not Gleam lamp-drinker, not Blush rosy-boa; never named wait / wake / still / hide / cover / wiggle / dart / trail / paddle / salamander / dapple / newt / eft / frog / toad / reed / pebble / crest / caudal / filament / costal / caudate / hedonic / aposematic / gular / nictitate / tympanum / iliac / lentic / toepad / webbing / verruca / burrow / parotoid / tubercle / bufonid / unken / cranial / gill / amble / mend / smile / plume / warning / cirrus / vernal / hop / puff / dig / freeze — Echo/Quill birds — do not copy. maculate yellow-coin Ambystoma maculatum spot flash without naming cover or dapple, litter damp leaf-litter settle without naming hide or cover or burrow, cutaneous cutaneous lung/skin breath hush without naming gill or puff, nasolabial Plethodon nasolabial-groove tip-scent without naming trail or crest, ambystomid long Ambystoma metabolic hold, mental mental-gland courtship press (THE Plethodon courtship tell), granular granular-gland sticky secretion flash (THE Ambystoma defensive tell); mottled / speckled / blotched thank-yous. Feed-happy after eat. Card-open freeze and window-play COVER do not swallow a thank-you. Sleep, hide, leave win. Same map as desktop salamander-tricks.js. Window-play COVER unchanged. Ethogram softs + freeze — never names hide/still/wiggle as trick kinds. Slip owns the next seat. No cry inventing. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via salamander.wav. */
 (function (root) {
   const TRICK_KEY = "salamander";
-  const TRICKS = ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid"];
+  const TRICKS = ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"];
   const HAPPY = ["mottled", "speckled", "blotched"];
-  const HAPPY_DUR = { mottled: 1.61, speckled: 1.73, blotched: 1.68 };
-  const AMBYSTOMID_HOLD = 18.12;
-  const RELEASE_S = 1.12;
-  const DUR = { ambystomid: AMBYSTOMID_HOLD + RELEASE_S, maculate: 2.31, litter: 2.58, cutaneous: 2.36, nasolabial: 2.49 };
+  const HAPPY_DUR = { mottled: 1.64, speckled: 1.76, blotched: 1.71 };
+  const AMBYSTOMID_HOLD = 10.8;
+  const RELEASE_S = 1.14;
+  const DUR = {
+    ambystomid: AMBYSTOMID_HOLD + RELEASE_S,
+    maculate: 2.32,
+    litter: 2.48,
+    cutaneous: 2.36,
+    nasolabial: 2.42,
+    mental: 2.38,
+    granular: 2.34,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,39 +44,54 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "ambystomid") return 76 + roll * 46;
-  if (kind === "maculate") return 16.2 + roll * 12.9;
-  if (kind === "litter") return 24.4 + roll * 15.1;
-  if (kind === "nasolabial") return 18.6 + roll * 13.9;
-  return justFinished ? 14.4 + roll * 10.9 : 8.3 + roll * 9.7;
+    if (kind === "ambystomid") return 38 + roll * 24;
+    if (kind === "mental" || kind === "granular" || kind === "maculate") return 12 + roll * 9;
+    if (kind === "litter" || kind === "cutaneous" || kind === "nasolabial") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
 
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "ambystomid";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "ambystomid") {
-      if (roll < 0.26) return "maculate";
-      if (roll < 0.5) return "litter";
-      if (roll < 0.74) return "cutaneous";
-      return "nasolabial";
+      if (roll < 0.16) return "maculate";
+      if (roll < 0.32) return "litter";
+      if (roll < 0.48) return "cutaneous";
+      if (roll < 0.64) return "nasolabial";
+      if (roll < 0.82) return "mental";
+      return "granular";
     }
     if (lastKind === "maculate") {
-      if (roll < 0.26) return "ambystomid";
-      if (roll < 0.5) return "litter";
-      if (roll < 0.74) return "cutaneous";
-      return "nasolabial";
+      if (roll < 0.16) return "ambystomid";
+      if (roll < 0.32) return "litter";
+      if (roll < 0.48) return "cutaneous";
+      if (roll < 0.64) return "nasolabial";
+      if (roll < 0.82) return "mental";
+      return "granular";
     }
     if (lastKind === "litter") {
-      if (roll < 0.22) return "ambystomid";
-      if (roll < 0.44) return "maculate";
-      if (roll < 0.68) return "cutaneous";
-      return "nasolabial";
+      if (roll < 0.14) return "ambystomid";
+      if (roll < 0.3) return "maculate";
+      if (roll < 0.46) return "cutaneous";
+      if (roll < 0.62) return "nasolabial";
+      if (roll < 0.8) return "mental";
+      return "granular";
     }
-    if (roll < 0.2) return "ambystomid";
-    if (roll < 0.4) return "maculate";
-    if (roll < 0.6) return "litter";
-    if (roll < 0.8) return "cutaneous";
-    return "nasolabial";
+    if (lastKind === "mental" || lastKind === "granular") {
+      if (roll < 0.14) return "ambystomid";
+      if (roll < 0.3) return "maculate";
+      if (roll < 0.46) return "litter";
+      if (roll < 0.62) return "cutaneous";
+      if (roll < 0.78) return "nasolabial";
+      return lastKind === "mental" ? "granular" : "mental";
+    }
+    if (roll < 0.14) return "ambystomid";
+    if (roll < 0.28) return "maculate";
+    if (roll < 0.42) return "litter";
+    if (roll < 0.56) return "cutaneous";
+    if (roll < 0.7) return "nasolabial";
+    if (roll < 0.85) return "mental";
+    return "granular";
   }
 
   function happyCanStart(state) {
@@ -108,7 +131,7 @@
   }
 
   function pickHappy(lastKind, rand) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
+    const pool = HAPPY.filter(function (k) { return k !== lastKind; });
     const list = pool.length ? pool : HAPPY.slice();
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
@@ -130,52 +153,54 @@
     };
   }
 
-                      function mottledPose(t) {
+  function mottledPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.mottled));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.022, rot: s * 1.15, dx: 0, anim: "sit" };
+    if (u < 0.16) {
+      const s = u / 0.16;
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" };
     }
-    if (u < 0.80) {
-      const flash = Math.sin(t * 4.6) + 0.22 * Math.sin(t * 9.2);
+    if (u < 0.82) {
+      const flash = Math.sin(t * 1.72);
       return {
-        lift: 0.022 + Math.abs(flash) * 0.014,
-        rot: 1.15 + flash * 1.25,
-        dx: flash * 0.0010,
-        anim: "sit",
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: 0,
+        anim: "talk",
       };
     }
-    const s = (u - 0.80) / 0.20;
-    return { lift: 0.008 * (1 - s), rot: 0.40 * (1 - s), dx: 0, anim: "idle" };
+    const s = (u - 0.82) / 0.18;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function speckledPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.speckled));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.028, rot: s * -1.45, dx: s * 0.0014, anim: "play" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
     if (u < 0.84) {
-      const wriggle = Math.sin(t * 6.4) + 0.20 * Math.sin(t * 11.1);
+      const wriggle = Math.sin(t * 2.1);
       return {
-        lift: 0.028 + Math.abs(wriggle) * 0.020,
-        rot: -1.45 + wriggle * 2.65,
-        dx: wriggle * 0.0024,
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: 0.08,
         anim: "play",
       };
     }
     const s = (u - 0.84) / 0.16;
-    return { lift: 0.010 * (1 - s), rot: -0.40 * (1 - s), dx: 0, anim: "sit" };
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function blotchedPose(t) {
     return {
-      lift: 0.007 + Math.abs(Math.sin(t * 0.42)) * 0.015,
-      rot: Math.sin(t * 0.44) * 0.92,
-      dx: Math.sin(t * 0.34) * 0.0011,
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.52) * 6,
+      dx: 0,
       anim: "sit",
     };
   }
+
   function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
       return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
@@ -208,18 +233,22 @@
   function beginTrick(kind, x, facing) {
     const anim =
       kind === "ambystomid"
-    ? "sit"
-    : kind === "maculate"
-      ? "play"
-      : kind === "litter"
-        ? "walk"
-        : kind === "cutaneous"
-          ? "sit"
-          : kind === "nasolabial"
-            ? "sit"
-                : "sit";
+        ? "sit"
+        : kind === "maculate"
+          ? "play"
+          : kind === "litter"
+            ? "walk"
+            : kind === "cutaneous"
+              ? "sit"
+              : kind === "nasolabial"
+                ? "sit"
+                : kind === "mental"
+                  ? "sit"
+                  : kind === "granular"
+                    ? "play"
+                    : "sit";
     return {
-      kind: kind,
+      kind: TRICKS.indexOf(kind) >= 0 ? kind : "maculate",
       phase: kind === "ambystomid" ? "hold" : "go",
       t: 0,
       x: x,
@@ -236,142 +265,215 @@
     return x * x * (3 - 2 * x);
   }
 
-
-                      function ambystomidPose(t) {
-    const breath = Math.sin(t * 0.14) + 0.06 * Math.sin(t * 0.37);
-    const soft = Math.abs(Math.sin(t * 0.19));
+  function ambystomidPose(t) {
     return {
-      lift: 0.004 + soft * 0.009,
-      rot: -0.18 + breath * 0.52,
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.14) * 4,
+      anim: "sit",
     };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.004 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function maculatePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.maculate));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.042, rot: s * -0.72 * facing, anim: "play" };
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "play" };
     }
-    if (u < 0.55) {
-      const s = (u - 0.14) / 0.41;
-      const coin = Math.sin(s * Math.PI * 1.55) + 0.18 * Math.sin(s * Math.PI * 3.1);
+    if (u < 0.48) {
+      const s = (u - 0.16) / 0.32;
+      const coin = Math.sin(s * Math.PI);
       return {
-        x: fromX + facing * coin * 0.006,
-        lift: 0.042 + Math.abs(coin) * 0.024,
-        rot: facing * (-0.72 + coin * 1.28),
+        x: fromX + facing * coin * 0.12,
+        lift: 3.2 + Math.abs(coin) * 1.4,
+        rot: facing * (-8 + coin * 14),
         anim: "play",
       };
     }
-    if (u < 0.82) {
-      const s = (u - 0.55) / 0.27;
+    if (u < 0.78) {
+      const s = (u - 0.48) / 0.3;
       const sway = Math.sin(s * Math.PI * 2.4);
       return {
-        x: fromX + facing * sway * 0.004,
-        lift: 0.030 + Math.abs(sway) * 0.014,
-        rot: facing * (-0.28 + sway * 1.05),
-        anim: "sit",
+        x: fromX,
+        lift: 2.2 + Math.abs(sway) * 0.9,
+        rot: facing * (4 + sway * 8),
+        anim: "talk",
       };
     }
-    const s = smoothstep((u - 0.82) / 0.18);
+    const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 0.012 * (1 - s),
-      rot: facing * (-0.18 * (1 - s)),
-      anim: "sit",
+      lift: 1.4 * (1 - s),
+      rot: facing * (2 * (1 - s)),
+      anim: "idle",
     };
   }
+
   function litterPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.litter));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.010, rot: s * 0.85 * facing, anim: "walk" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "walk" };
     }
     if (u < 0.78) {
-      const s = (u - 0.12) / 0.66;
-      const wave = Math.sin(s * Math.PI * 2.4);
-      const glide = Math.sin(s * Math.PI * 0.9);
+      const s = (u - 0.14) / 0.64;
+      const wave = Math.sin(s * Math.PI * 3.4);
+      const glide = Math.sin(s * Math.PI * 1.2);
       return {
-        x: fromX + facing * wave * 0.022,
-        lift: 0.010 + Math.abs(glide) * 0.008 + Math.abs(wave) * 0.006,
-        rot: facing * (0.85 + wave * 1.65 + glide * 0.55),
+        x: fromX + facing * wave * 0.28,
+        lift: 2.6 + Math.abs(glide) * 1.3 + Math.abs(wave) * 0.7,
+        rot: facing * (10 + wave * 12 + glide * 8),
         anim: "walk",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 0.008 * (1 - s),
-      rot: facing * (0.28 * (1 - s)),
-      anim: "sit",
+      lift: 1.2 * (1 - s),
+      rot: facing * (3 * (1 - s)),
+      anim: "idle",
     };
   }
+
   function cutaneousPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.cutaneous));
-    if (u < 0.15) {
-      const s = smoothstep(u / 0.15);
-      return { x: fromX, lift: s * 0.014, rot: s * -0.55 * facing, anim: "sit" };
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: s * 2.4, rot: s * -6 * facing, anim: "sit" };
     }
-    if (u < 0.76) {
-      const s = (u - 0.15) / 0.61;
-      const tip = Math.sin(s * Math.PI * 2.2) + 0.16 * Math.sin(s * Math.PI * 4.4);
+    if (u < 0.74) {
+      const s = (u - 0.16) / 0.58;
+      const tip = Math.sin(s * Math.PI * 4.2) + 0.22 * Math.sin(s * Math.PI * 7.1);
+      const hush = smoothstep(Math.min(1, s * 1.2));
       return {
-        x: fromX + facing * tip * 0.004,
-        lift: 0.014 + Math.abs(tip) * 0.012,
-        rot: facing * (-0.55 + tip * 0.95),
-        anim: "sit",
+        x: fromX + facing * tip * 0.1,
+        lift: 2.4 + hush * 1.2 + Math.abs(tip) * 0.7,
+        rot: facing * (-6 + hush * 5 + tip * 4),
+        anim: "talk",
       };
     }
-    const s = smoothstep((u - 0.76) / 0.24);
+    const s = smoothstep((u - 0.74) / 0.26);
     return {
       x: fromX,
-      lift: 0.006 * (1 - s),
-      rot: facing * (-0.28 * (1 - s)),
-      anim: "sit",
+      lift: 1.4 * (1 - s),
+      rot: facing * (-2 * (1 - s)),
+      anim: "idle",
     };
   }
+
   function nasolabialPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.nasolabial));
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.012, rot: s * -1.15 * facing, anim: "sit" };
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "sit" };
     }
-    if (u < 0.80) {
-      const s = (u - 0.12) / 0.68;
-      const groove = Math.sin(s * Math.PI * 3.4);
-      const crawl = Math.sin(s * Math.PI * 1.1);
+    if (u < 0.78) {
+      const s = (u - 0.12) / 0.66;
+      const groove = Math.sin(s * Math.PI * 2.55);
+      const crawl = Math.sin(s * Math.PI * 1.15);
       return {
-        x: fromX + facing * crawl * 0.012,
-        lift: 0.012 + Math.abs(groove) * 0.010 + Math.abs(crawl) * 0.006,
-        rot: facing * (-1.15 + groove * 1.55 + crawl * 0.75),
+        x: fromX + facing * crawl * 0.22,
+        lift: 2.6 + Math.abs(crawl) * 1.3 + Math.abs(groove) * 0.7,
+        rot: facing * (10 + crawl * 12 + groove * 8),
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.80) / 0.20);
+    const s = smoothstep((u - 0.78) / 0.22);
     return {
       x: fromX,
-      lift: 0.008 * (1 - s),
-      rot: facing * (0.28 * (1 - s)),
-      anim: "sit",
+      lift: 1.2 * (1 - s),
+      rot: facing * (3 * (1 - s)),
+      anim: "idle",
     };
   }
+
+  function mentalPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.mental));
+    if (u < 0.16) {
+      const s = smoothstep(u / 0.16);
+      return { x: fromX, lift: s * 2.8, rot: s * 12 * facing, anim: "sit" };
+    }
+    if (u < 0.42) {
+      const s = (u - 0.16) / 0.26;
+      const press = smoothstep(s);
+      return {
+        x: fromX,
+        lift: 2.8 + press * 1.6,
+        rot: facing * (12 + press * 16),
+        anim: "sit",
+      };
+    }
+    if (u < 0.78) {
+      const s = (u - 0.42) / 0.36;
+      const scent = Math.sin(s * Math.PI * 2.2);
+      return {
+        x: fromX,
+        lift: 4.2 + Math.abs(scent) * 0.6,
+        rot: facing * (24 + scent * 4),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 2.0 * (1 - s),
+      rot: facing * (8 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function granularPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.granular));
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX, lift: s * 2.2, rot: s * -10 * facing, anim: "play" };
+    }
+    if (u < 0.4) {
+      const s = (u - 0.14) / 0.26;
+      const flash = smoothstep(s);
+      return {
+        x: fromX,
+        lift: 2.2 + flash * 1.2,
+        rot: facing * (-10 - flash * 8),
+        anim: "play",
+      };
+    }
+    if (u < 0.78) {
+      const s = (u - 0.4) / 0.38;
+      const warn = Math.sin(s * Math.PI * 3.1);
+      return {
+        x: fromX + facing * warn * 0.08,
+        lift: 3.2 + Math.abs(warn) * 0.7,
+        rot: facing * (-16 + warn * 6),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.5 * (1 - s),
+      rot: facing * (-4 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
   function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "maculate" && trick.kind !== "litter" && trick.kind !== "cutaneous" && trick.kind !== "nasolabial") {
+    if (shouldAbort(flags)) {
       return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
     }
     const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "ambystomid") {
       if (next.t < AMBYSTOMID_HOLD) {
         const pose = ambystomidPose(next.t);
         next.phase = "hold";
         next.lift = pose.lift;
         next.rot = pose.rot;
-        next.anim = "sit";
+        next.anim = pose.anim;
         return next;
       }
       if (next.t < AMBYSTOMID_HOLD + RELEASE_S) {
@@ -385,33 +487,18 @@
       return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
     }
     const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "maculate") {
-      const pose = maculatePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "litter") {
-      const pose = litterPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "cutaneous") {
-      const pose = cutaneousPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = nasolabialPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    let pose;
+    if (next.kind === "maculate") pose = maculatePose(next.t, fromX, trick.facing);
+    else if (next.kind === "litter") pose = litterPose(next.t, fromX, trick.facing);
+    else if (next.kind === "cutaneous") pose = cutaneousPose(next.t, fromX, trick.facing);
+    else if (next.kind === "nasolabial") pose = nasolabialPose(next.t, fromX, trick.facing);
+    else if (next.kind === "mental") pose = mentalPose(next.t, fromX, trick.facing);
+    else pose = granularPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle", x: fromX });
     return next;
   }
 
@@ -435,6 +522,8 @@
     litterPose,
     cutaneousPose,
     nasolabialPose,
+    mentalPose,
+    granularPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
