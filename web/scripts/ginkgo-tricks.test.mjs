@@ -108,7 +108,7 @@ test("Fan tricks start only on idle ground", () => {
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["biloba", "notch", "flutter", "drop", "amber"]);
-  assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
+  assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -550,8 +550,8 @@ test("ground registry keeps prior guests gated; Fan selectable; prior guests sti
   assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...OverlayHorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...OverlayMoss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
-  assert.deepEqual([...OverlayMaidenhair.TRICKS], ["frond", "rachis", "fiddle", "pinna", "saucer"]);
+  assert.deepEqual([...OverlayMoss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
+  assert.deepEqual([...OverlayMaidenhair.TRICKS], ["frond", "rachis", "fiddle", "pinna", "saucer", "sori", "stipe"]);
   assert.equal(OverlayGround.tricksFor("maidenhair"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), Overlay);
@@ -667,8 +667,8 @@ test("notes: Fan idle-life done; next house-order guest still lacking tricks is 
   assert.equal(OverlayGround.wantsThankYou("fan"), true);
   assert.deepEqual([...Moray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
-  assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
-  assert.deepEqual([...Maidenhair.TRICKS], ["frond", "rachis", "fiddle", "pinna", "saucer"]);
+  assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
+  assert.deepEqual([...Maidenhair.TRICKS], ["frond", "rachis", "fiddle", "pinna", "saucer", "sori", "stipe"]);
   assert.equal(T.TRICKS.includes("moss"), false);
   assert.equal(T.TRICKS.includes("tuft"), false);
   assert.equal(T.TRICKS.includes("frond"), false);
