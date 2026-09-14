@@ -1,438 +1,525 @@
-/** Blush ground tricks while idle. House rosy boa — pebble / crevice / rosy / mesa / arroyo personality (small desert rock / pink / tuck desk life; warm-corner hush, not Lula boa river-weight). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web `rosy-boa-tricks.ts`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play STONE unchanged — never names `stone`. Nori owns orb/taste/unroll; Sol owns flick; Ember owns settle; Saffron owns scribble/comma; Bandit owns stripe/verdict; Jade owns bracelet/jewel/bough; Bluff owns hood/gape/encore; Sash owns seam/moss/lap; Lula owns pour/oxbow/bank; Coral owns rhyme/tile; budgie owns mimic; parrot owns flash; Burr owns root; turtle owns tuck; Coin owns flare; Thimble owns dig; Fox window owns scent; rosy_boa window owns stone. No cry inventing — thank-yous are silent desk motion only. */
+/** Blush ground tricks while idle — ultra-polish pass. House rosy boa — pebble / crevice / rosy / mesa / arroyo / dune / talus personality (small desert rock / pink / warm-corner desk life; not Lula boa river-weight). Pebble rests a pink desk stone; crevice eases into a keyboard gap; rosy shimmers dusk-pink; mesa presses a flat warm plate; arroyo walks a desert-wash crawl; dune rolls a sandy scrub undulation (species-true Lichanura sand scrub — not arroyo wash, not Sash creek); talus weaves rocky hillside rubble (species-true talus-slope life — not crevice gap, not Nori nook, not hide/tuck). Window-play STONE unchanged — never names `stone`. Ethogram keeps tongue + pebble sit_hold; adds crevice/rosy/mesa/dune/talus softs + freeze (replaces thin nest-only). Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank/anchor/meander and harbor/cradle/stay; Coral owns rhyme/rumor/costume/frank/tile/cipher/verse and postmark/cachet/courtesy; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; turtle owns tuck; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone; hamster owns nest. Guest slug Blush / key rosy_boa — accept "rosy_boa" and "blush". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via rosy_boa.wav. Thank-yous climate / manners / corner. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as web `rosy-boa-tricks.ts`. True house-rosy-boa desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids stone/tuck/hide/pour/heft/oxbow/slack/bank/harbor/cradle/stay/rhyme/rumor/costume/frank/tile/cipher/verse/postmark/cachet/courtesy/mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/bun/ball/coil/curl/bask/loaf/potato/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/ribbon/creek/mimic/flash/root/flare/dig/perch/hang/clasp/scent/heave/lug/earth/bed/nest/grit/ledge/ochre/silt/drift/flush/shade/pocket/wash/scrub/burrow name collisions with prior guests and rosy_boa window-play. Bird ultra (Soot→Ember) + Miso→Coral done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Atlas / carpet_python. No cry inventing beyond house rosy_boa.wav prefer. Never retouch Rui sprites. */
 (function (root) {
   const TRICK_KEY = "rosy_boa";
-  const TRICKS = ["pebble", "crevice", "rosy", "mesa", "arroyo"];
+  const TRICKS = ["pebble", "crevice", "rosy", "mesa", "arroyo", "dune", "talus"];
   const HAPPY = ["climate", "manners", "corner"];
-  const HAPPY_DUR = { climate: 1.2, manners: 1.26, corner: 1.32 };
-  const PEBBLE_HOLD = 10.6;
-  const RELEASE_S = 0.6;
-  const DUR = { pebble: PEBBLE_HOLD + RELEASE_S, crevice: 1.38, rosy: 1.42, mesa: 1.28, arroyo: 1.5 };
-
+  const HAPPY_DUR = {
+      climate: 1.55,
+      manners: 1.6,
+      corner: 1.58,
+  };
+  /** Pebble hold — Blush becomes a pink desk pebble. Not window-play STONE. Not Lula pour. */
+  const PEBBLE_HOLD = 12.2;
+  const RELEASE_S = 0.82;
+  const DUR = {
+      pebble: PEBBLE_HOLD + RELEASE_S,
+      crevice: 1.78,
+      rosy: 1.92,
+      mesa: 1.72,
+      arroyo: 1.98,
+      dune: 2.05,
+      talus: 2.12,
+  };
   function canStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function shouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "eat" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function nextTrickWait(justFinished, rand, kind) {
-    const roll = rand == null ? Math.random() : rand;
-    if (kind === "pebble") return 48 + roll * 28;
-    if (kind === "crevice") return 16 + roll * 11;
-    if (kind === "rosy") return 15 + roll * 10;
-    return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+      const roll = rand == null ? Math.random() : rand;
+      if (kind === "pebble")
+          return 38 + roll * 24;
+      if (kind === "dune" || kind === "talus" || kind === "rosy")
+          return 12 + roll * 9;
+      if (kind === "crevice" || kind === "arroyo")
+          return 11 + roll * 8;
+      if (kind === "mesa")
+          return 10 + roll * 8;
+      return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
-
-  function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "pebble";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "pebble") {
-      if (roll < 0.28) return "crevice";
-      if (roll < 0.5) return "rosy";
-      if (roll < 0.72) return "mesa";
-      return "arroyo";
-    }
-    if (lastKind === "crevice") {
-      if (roll < 0.3) return "pebble";
-      if (roll < 0.52) return "rosy";
-      if (roll < 0.74) return "mesa";
-      return "arroyo";
-    }
-    if (lastKind === "rosy") {
-      if (roll < 0.24) return "pebble";
-      if (roll < 0.46) return "crevice";
-      if (roll < 0.68) return "mesa";
-      return "arroyo";
-    }
-    if (roll < 0.22) return "pebble";
-    if (roll < 0.42) return "crevice";
-    if (roll < 0.6) return "rosy";
-    if (roll < 0.8) return "mesa";
-    return "arroyo";
+  function pickTrick(rand, musicOn = false, lastKind) {
+      if (musicOn)
+          return "pebble";
+      const roll = rand == null ? Math.random() : rand;
+      const pool = TRICKS.filter((k) => k !== lastKind);
+      const list = pool.length ? pool : [...TRICKS];
+      const weights = list.map((k) => k === "pebble" ? 0.55 : k === "dune" || k === "talus" || k === "rosy" ? 1.15 : 1);
+      let total = 0;
+      for (let i = 0; i < weights.length; i++)
+          total += weights[i];
+      let r = roll * total;
+      for (let i = 0; i < list.length; i++) {
+          r -= weights[i];
+          if (r <= 0)
+              return list[i];
+      }
+      return list[list.length - 1] || "pebble";
   }
-
   function happyCanStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function happyShouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function wantsThankYou(key) {
-    return key === TRICK_KEY || key === "blush";
+      return key === TRICK_KEY || key === "blush";
   }
-
-  function pickHappy(lastKind, rand) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
-  }
-
-  function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "climate";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: name === "climate" ? "sit" : name === "manners" ? "sit" : "talk",
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
-  }
-
   function startThankYou(key, lastKind, x, facing, flags) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
+      if (!wantsThankYou(key))
+          return null;
+      if (!happyCanStart(flags || { cmd: "idle" }))
+          return null;
+      const pick = pickHappy(lastKind);
+      return { happy: beginHappy(pick, x, facing), kind: pick };
   }
-
+  function pickHappy(lastKind, rand) {
+      const pool = HAPPY.filter((k) => k !== lastKind);
+      const list = pool.length ? pool : [...HAPPY];
+      const roll = rand == null ? Math.random() : rand;
+      return list[Math.floor(roll * list.length)] || list[0];
+  }
+  function beginHappy(kind, x, facing) {
+      const name = HAPPY.includes(kind) ? kind : "climate";
+      return {
+          kind: name,
+          happy: true,
+          phase: "go",
+          t: 0,
+          x,
+          lift: 0,
+          rot: 0,
+          anim: name === "climate" ? "sit" : name === "manners" ? "sit" : "talk",
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
+  }
   function climatePose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.climate));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 1.15, rot: s * -5, dx: 0, anim: "sit" };
-    }
-    if (u < 0.78) {
-      const warm = Math.abs(Math.sin(t * 2.8));
-      return {
-        lift: 1.15 - warm * 0.4,
-        rot: -5 + warm * 3.5,
-        dx: Math.sin(t * 1.2) * 0.14,
-        anim: "sit",
-      };
-    }
-    const s = (u - 0.78) / 0.22;
-    return { lift: 0.85 * (1 - s), rot: -3 * (1 - s), dx: 0, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.climate));
+      if (u < 0.14) {
+          const s = u / 0.14;
+          return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" };
+      }
+      if (u < 0.78) {
+          const warm = Math.abs(Math.sin(t * 4.6));
+          return {
+              lift: 4.2 + warm * 3.4,
+              rot: -16 + Math.sin(t * 3.4) * 14,
+              dx: Math.sin(t * 1.8) * 0.55,
+              anim: "sit",
+          };
+      }
+      const s = (u - 0.78) / 0.22;
+      return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" };
   }
-
   function mannersPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.manners));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 1.4, rot: s * 7, dx: 0, anim: "sit" };
-    }
-    if (u < 0.8) {
-      const nod = Math.sin(t * 2.4);
-      return {
-        lift: 1.4 + Math.abs(nod) * 0.28,
-        rot: 7 + nod * 5.5,
-        dx: nod * 0.22,
-        anim: "sit",
-      };
-    }
-    const s = (u - 0.8) / 0.2;
-    return { lift: 1.4 * (1 - s), rot: 7 * (1 - s), dx: 0, anim: "sit" };
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.manners));
+      if (u < 0.12) {
+          const s = u / 0.12;
+          return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "sit" };
+      }
+      if (u < 0.8) {
+          const nod = Math.sin(t * 2.8);
+          return {
+              lift: 4.6 + Math.abs(nod) * 3.2,
+              rot: 18 + nod * 16,
+              dx: nod * 0.7,
+              anim: "sit",
+          };
+      }
+      const s = (u - 0.8) / 0.2;
+      return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" };
   }
-
   function cornerPose(t) {
-    return {
-      lift: Math.abs(Math.sin(t * 1.7)) * 0.8 + 0.95,
-      rot: -4 + Math.sin(t * 2.1) * 5.2,
-      dx: Math.sin(t * 1.3) * 0.24,
-      anim: "talk",
-    };
+      return {
+          lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
+          rot: -16 + Math.sin(t * 2.8) * 14,
+          dx: Math.sin(t * 1.9) * 0.7,
+          anim: "talk",
+      };
   }
-
   function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "climate") {
-      const pose = climatePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "manners") {
-      const pose = mannersPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = cornerPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      if (!happy || happy.phase === "done")
+          return happy;
+      if (happyShouldAbort(flags)) {
+          return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+      }
+      const next = { ...happy, t: happy.t + Math.max(0, dt) };
+      const hold = HAPPY_DUR[next.kind];
+      if (next.kind === "climate") {
+          const pose = climatePose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "manners") {
+          const pose = mannersPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = cornerPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (next.t >= hold)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
-
-  function sleepHoldFrame() {
-    return null;
+  function sleepHoldFrame(_key, _frameCount) {
+      return null;
   }
-
   function beginTrick(kind, x, facing) {
-    const anim =
-      kind === "pebble"
-        ? "sit"
-        : kind === "crevice"
-          ? "walk"
-          : kind === "rosy"
-            ? "sit"
-            : kind === "mesa"
-              ? "sit"
-              : kind === "arroyo"
-                ? "walk"
-                : "sit";
-    return {
-      kind: kind,
-      phase: kind === "pebble" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
+      const anim = kind === "pebble"
+          ? "sit"
+          : kind === "crevice"
+              ? "walk"
+              : kind === "rosy"
+                  ? "sit"
+                  : kind === "mesa"
+                      ? "sit"
+                      : kind === "arroyo"
+                          ? "walk"
+                          : kind === "dune"
+                              ? "walk"
+                              : kind === "talus"
+                                  ? "sit"
+                                  : "sit";
+      return {
+          kind,
+          phase: kind === "pebble" ? "hold" : "go",
+          t: 0,
+          x,
+          lift: 0,
+          rot: 0,
+          anim,
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
   }
-
   function smoothstep(t) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
+      const x = Math.max(0, Math.min(1, t));
+      return x * x * (3 - 2 * x);
   }
-
   function pebblePose(t) {
-    const beat = Math.sin(t * 0.95) + 0.35 * Math.sin(t * 2.7);
-    return {
-      lift: 0.48 + Math.abs(Math.sin(t * 0.7)) * 0.14,
-      rot: -3 + beat * 2.8,
-    };
+      // Pink-rock breath — desk pebble, not window sill stone tuck.
+      const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
+      return {
+          lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+          rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
+      };
   }
-
   function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.48 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3 * (1 - u) };
+      const u = Math.max(0, Math.min(1, t / RELEASE_S));
+      return {
+          lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
+          rot: -22 * (1 - u),
+      };
   }
-
   function crevicePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.crevice));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX + facing * s * 1.2, lift: s * 0.55, rot: s * 6 * facing, anim: "walk" };
-    }
-    if (u < 0.48) {
-      const s = (u - 0.14) / 0.34;
+      const u = Math.max(0, Math.min(1, t / DUR.crevice));
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 14 * facing, anim: "walk" };
+      }
+      if (u < 0.48) {
+          const s = (u - 0.14) / 0.34;
+          return {
+              x: fromX + facing * (1.8 + smoothstep(s) * 2.2),
+              lift: 3.2 - smoothstep(s) * 2.0,
+              rot: facing * (14 - s * 22),
+              anim: "sit",
+          };
+      }
+      if (u < 0.78) {
+          const s = (u - 0.48) / 0.3;
+          const hush = Math.abs(Math.sin(s * Math.PI * 1.8));
+          return {
+              x: fromX + facing * 4.0,
+              lift: 1.0 + hush * 1.6,
+              rot: facing * (-12 + hush * 14),
+              anim: "sit",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
       return {
-        x: fromX + facing * (1.2 + smoothstep(s) * 1.6),
-        lift: 0.55 - smoothstep(s) * 0.45,
-        rot: facing * (6 - s * 10),
-        anim: "sit",
+          x: fromX + facing * (4.0 * (1 - s)),
+          lift: 1.0 * (1 - s),
+          rot: facing * (-4 * (1 - s)),
+          anim: "idle",
       };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.48) / 0.3;
-      const hush = Math.abs(Math.sin(s * Math.PI * 1.8));
-      return {
-        x: fromX + facing * 2.8,
-        lift: 0.12 + hush * 0.1,
-        rot: facing * (-4 + hush * 2),
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
-    return {
-      x: fromX + facing * (2.8 * (1 - s)),
-      lift: 0.2 * (1 - s),
-      rot: facing * (-2 * (1 - s)),
-      anim: "idle",
-    };
   }
-
   function rosyPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.rosy));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 1.5, rot: s * 10 * facing, anim: "sit" };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.12) / 0.6;
-      const shimmer = Math.sin(s * Math.PI * 3.4);
+      const u = Math.max(0, Math.min(1, t / DUR.rosy));
+      if (u < 0.12) {
+          const s = smoothstep(u / 0.12);
+          return { x: fromX, lift: s * 5.2, rot: s * 28 * facing, anim: "sit" };
+      }
+      if (u < 0.72) {
+          const s = (u - 0.12) / 0.6;
+          const shimmer = Math.sin(s * Math.PI * 4.2);
+          return {
+              x: fromX + facing * shimmer * 0.7,
+              lift: 5.2 - s * 1.4 + Math.abs(shimmer) * 2.2,
+              rot: facing * (28 - s * 36 + shimmer * 14),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.72) / 0.28);
       return {
-        x: fromX + facing * shimmer * 0.28,
-        lift: 1.5 - s * 0.4 + Math.abs(shimmer) * 0.2,
-        rot: facing * (10 - s * 14 + shimmer * 4),
-        anim: "play",
+          x: fromX,
+          lift: 3.6 * (1 - s),
+          rot: facing * (-6 * (1 - s)),
+          anim: "sit",
       };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
-    return {
-      x: fromX,
-      lift: 1.15 * (1 - s),
-      rot: facing * (-2 * (1 - s)),
-      anim: "sit",
-    };
   }
-
   function mesaPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.mesa));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 1.35, rot: s * 4 * facing, anim: "sit" };
-    }
-    if (u < 0.5) {
-      const s = (u - 0.14) / 0.36;
+      const u = Math.max(0, Math.min(1, t / DUR.mesa));
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 4.8, rot: s * 16 * facing, anim: "sit" };
+      }
+      if (u < 0.5) {
+          const s = (u - 0.14) / 0.36;
+          return {
+              x: fromX + facing * s * 1.2,
+              lift: 4.8 - smoothstep(s) * 3.6,
+              rot: facing * (16 - s * 28),
+              anim: "sit",
+          };
+      }
+      if (u < 0.82) {
+          const s = (u - 0.5) / 0.32;
+          const press = Math.abs(Math.sin(s * Math.PI * 2.2));
+          return {
+              x: fromX + facing * 1.2,
+              lift: 1.0 + press * 1.4,
+              rot: facing * (-14 + press * 8),
+              anim: "sit",
+          };
+      }
+      const s = smoothstep((u - 0.82) / 0.18);
       return {
-        x: fromX + facing * s * 0.35,
-        lift: 1.35 - smoothstep(s) * 1.15,
-        rot: facing * (4 - s * 9),
-        anim: "sit",
+          x: fromX + facing * (1.2 * (1 - s)),
+          lift: 1.0 * (1 - s),
+          rot: facing * (-4 * (1 - s)),
+          anim: "idle",
       };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.5) / 0.32;
-      const press = Math.abs(Math.sin(s * Math.PI * 2.0));
-      return {
-        x: fromX + facing * 0.35,
-        lift: 0.16 + press * 0.1,
-        rot: facing * (-5 + press * 2),
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
-    return {
-      x: fromX + facing * (0.35 * (1 - s)),
-      lift: 0.16 * (1 - s),
-      rot: facing * (-2 * (1 - s)),
-      anim: "idle",
-    };
   }
-
   function arroyoPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.arroyo));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + facing * s * 1.0, lift: s * 0.65, rot: s * 7 * facing, anim: "walk" };
-    }
-    if (u < 0.45) {
-      const s = (u - 0.12) / 0.33;
-      const step = Math.floor(s * 3);
-      const local = (s * 3) % 1;
+      const u = Math.max(0, Math.min(1, t / DUR.arroyo));
+      if (u < 0.12) {
+          const s = smoothstep(u / 0.12);
+          return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 14 * facing, anim: "walk" };
+      }
+      if (u < 0.45) {
+          const s = (u - 0.12) / 0.33;
+          const step = Math.floor(s * 3);
+          const local = (s * 3) % 1;
+          return {
+              x: fromX + facing * (1.8 + step * 2.0 + smoothstep(local) * 2.0),
+              lift: 3.2 + Math.sin(local * Math.PI) * 2.6,
+              rot: facing * (14 + Math.sin(local * Math.PI) * 22),
+              anim: "walk",
+          };
+      }
+      if (u < 0.78) {
+          const s = (u - 0.45) / 0.33;
+          return {
+              x: fromX + facing * (7.8 - smoothstep(s) * 3.2),
+              lift: 3.4 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.0,
+              rot: facing * (22 - s * 28),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
       return {
-        x: fromX + facing * (1.0 + step * 1.2 + smoothstep(local) * 1.2),
-        lift: 0.65 + Math.sin(local * Math.PI) * 0.45,
-        rot: facing * (7 + Math.sin(local * Math.PI) * 8),
-        anim: "walk",
+          x: fromX + facing * (4.6 * (1 - s)),
+          lift: 3.2 * (1 - s),
+          rot: facing * (-4 * (1 - s)),
+          anim: "sit",
       };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.45) / 0.33;
-      return {
-        x: fromX + facing * (4.6 - smoothstep(s) * 2.0),
-        lift: 0.75 + Math.abs(Math.sin(s * Math.PI * 1.6)) * 0.26,
-        rot: facing * (12 - s * 16),
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
-    return {
-      x: fromX + facing * (2.6 * (1 - s)),
-      lift: 0.6 * (1 - s),
-      rot: facing * (-2 * (1 - s)),
-      anim: "sit",
-    };
   }
-
+  /** Dune — sandy scrub undulation across the blotter. Not arroyo wash. Not Sash creek. */
+  function dunePose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.dune));
+      if (u < 0.12) {
+          const s = smoothstep(u / 0.12);
+          return { x: fromX + facing * s * 1.6, lift: s * 3.6, rot: s * 18 * facing, anim: "walk" };
+      }
+      if (u < 0.78) {
+          const s = (u - 0.12) / 0.66;
+          const beat = Math.floor(s * 3);
+          const local = (s * 3) % 1;
+          const bob = Math.sin(local * Math.PI);
+          return {
+              x: fromX + facing * (1.6 + beat * 1.8 + bob * 0.7),
+              lift: 3.6 + Math.abs(bob) * 2.8,
+              rot: facing * (18 + beat * 6 + bob * 20),
+              anim: "walk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX + facing * ((1.6 + 3.6) * (1 - s)),
+          lift: 3.6 * (1 - s),
+          rot: facing * (8 * (1 - s)),
+          anim: "sit",
+      };
+  }
+  /** Talus — rocky hillside rubble weave. Not crevice keyboard-gap. Not Nori nook. Not hide/tuck. */
+  function talusPose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.talus));
+      if (u < 0.12) {
+          const s = smoothstep(u / 0.12);
+          return { x: fromX, lift: s * 3.4, rot: s * -12 * facing, anim: "sit" };
+      }
+      if (u < 0.42) {
+          const s = (u - 0.12) / 0.3;
+          return {
+              x: fromX + facing * smoothstep(s) * -1.4,
+              lift: 3.4 - smoothstep(s) * 2.0,
+              rot: facing * (-12 + s * 4),
+              anim: "sit",
+          };
+      }
+      if (u < 0.82) {
+          const s = (u - 0.42) / 0.4;
+          const hush = Math.abs(Math.sin(s * Math.PI * 1.8));
+          return {
+              x: fromX + facing * -1.4 + facing * Math.sin(s * Math.PI * 2.4) * 0.9,
+              lift: 1.2 + hush * 1.8,
+              rot: facing * (-10 + hush * 16),
+              anim: "sit",
+          };
+      }
+      const s = smoothstep((u - 0.82) / 0.18);
+      return {
+          x: fromX + facing * (-1.4 * (1 - s)),
+          lift: 1.2 * (1 - s),
+          rot: facing * (-4 * (1 - s)),
+          anim: "idle",
+      };
+  }
   function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "arroyo" && trick.kind !== "crevice") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "pebble") {
-      if (next.t < PEBBLE_HOLD) {
-        const pose = pebblePose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      if (!trick || trick.phase === "done")
+          return trick;
+      if (shouldAbort(flags) && trick.kind !== "arroyo" && trick.kind !== "crevice" && trick.kind !== "dune") {
+          return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
       }
-      if (next.t < PEBBLE_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - PEBBLE_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      const next = { ...trick, t: trick.t + Math.max(0, dt) };
+      if (next.kind === "pebble") {
+          if (next.t < PEBBLE_HOLD) {
+              const pose = pebblePose(next.t);
+              next.phase = "hold";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          if (next.t < PEBBLE_HOLD + RELEASE_S) {
+              const pose = releasePose(next.t - PEBBLE_HOLD);
+              next.phase = "release";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "crevice") {
-      const pose = crevicePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "rosy") {
-      const pose = rosyPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "mesa") {
-      const pose = mesaPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = arroyoPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      const hold = DUR[next.kind];
+      const u = next.t / hold;
+      const from = trick.fromX != null ? trick.fromX : trick.x;
+      if (next.kind === "crevice") {
+          const pose = crevicePose(next.t, from, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "rosy") {
+          const pose = rosyPose(next.t, from, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "mesa") {
+          const pose = mesaPose(next.t, from, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "arroyo") {
+          const pose = arroyoPose(next.t, from, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "dune") {
+          const pose = dunePose(next.t, from, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = talusPose(next.t, from, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (u >= 1)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
 
   const api = {
@@ -440,9 +527,9 @@
     TRICKS,
     HAPPY,
     HAPPY_DUR,
+    DUR,
     PEBBLE_HOLD,
     RELEASE_S,
-    DUR,
     canStart,
     shouldAbort,
     nextTrickWait,
@@ -455,6 +542,8 @@
     rosyPose,
     mesaPose,
     arroyoPose,
+    dunePose,
+    talusPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -465,8 +554,8 @@
     climatePose,
     mannersPose,
     cornerPose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetRosyBoaTricks = api;
-})(typeof window !== "undefined" ? window : globalThis);
+})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);

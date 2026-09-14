@@ -440,7 +440,7 @@ test("ultra-polish: Lula pour/anchor/meander lifts are Rui-visible (not micro id
   assert.ok(T.nextTrickWait(true, 0, "pour") > T.nextTrickWait(true, 0, "oxbow"));
 });
 
-test("notes: Lula idle-life ultra done; Coral / milk_snake ultra done; next house-order ultra guest is Blush / rosy_boa (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Lula idle-life ultra done; Coral / milk_snake ultra done; Blush / rosy_boa ultra done; next house-order ultra guest is Atlas / carpet_python (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "boa");
   assert.equal(T.wantsThankYou("lula"), true);
   assert.equal(OverlayGround.tricksFor("garter"), OverlayGarter);

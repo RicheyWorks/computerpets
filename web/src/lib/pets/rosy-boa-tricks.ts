@@ -1,7 +1,6 @@
-/** Blush ground tricks while idle. House rosy boa — pebble / crevice / rosy / mesa / arroyo personality (small desert rock / pink / tuck desk life; warm-corner hush, not Lula boa river-weight). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop `rosy-boa-tricks.js`. Not a Rui, cat, dog, rabbit, hamster, guinea pig, turtle, goldfish, budgie, fox, penguin, parrot, ferret, hedgehog, chinchilla, axolotl, toucan, iguana, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play STONE unchanged — never names `stone`. Nori owns orb/nook/taste/inch/unroll and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank and harbor/cradle/stay; Coral owns rhyme/rumor/costume/frank/tile and postmark/cachet/courtesy; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; turtle owns tuck; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone; hamster owns nest. Avoids stone/tuck/hide/pour/heft/oxbow/slack/bank/harbor/cradle/stay/rhyme/rumor/costume/frank/tile/postmark/cachet/courtesy/mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/bun/ball/coil/curl/bask/loaf/potato/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/mimic/flash/root/flare/dig/perch/hang/clasp/scent/heave/lug/earth/bed/nest name collisions with prior guests and rosy_boa window-play. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Blush ground tricks while idle — ultra-polish pass. House rosy boa — pebble / crevice / rosy / mesa / arroyo / dune / talus personality (small desert rock / pink / warm-corner desk life; not Lula boa river-weight). Pebble rests a pink desk stone; crevice eases into a keyboard gap; rosy shimmers dusk-pink; mesa presses a flat warm plate; arroyo walks a desert-wash crawl; dune rolls a sandy scrub undulation (species-true Lichanura sand scrub — not arroyo wash, not Sash creek); talus weaves rocky hillside rubble (species-true talus-slope life — not crevice gap, not Nori nook, not hide/tuck). Window-play STONE unchanged — never names `stone`. Ethogram keeps tongue + pebble sit_hold; adds crevice/rosy/mesa/dune/talus softs + freeze (replaces thin nest-only). Nori owns orb/nook/taste/inch/unroll/loom/weave and savor/nestle/center; Saffron owns scribble/gap/comma/probe/canyon/blotter/pencil and clause/spice/cord; Bandit owns stripe/audit/verdict/plumb/raid/band/drawer and tribute/docket/seal; Jade owns bracelet/sway/jewel/heat/bough/liana/arbor and pendant/treaty/emerald; Bluff owns hood/feign/shovel/gape/encore/quiver/upright and aside/cue/ovation; Sash owns seam/rounds/moss/fork/lap/ribbon/creek and copy/brief/visa; Lula owns pour/heft/oxbow/slack/bank/anchor/meander and harbor/cradle/stay; Coral owns rhyme/rumor/costume/frank/tile/cipher/verse and postmark/cachet/courtesy; budgie owns mimic; parrot owns flash; hedgehog owns curl/root; turtle owns tuck; volt window-play owns coil; ferret owns noodle; Ember owns settle/shine/dip; Vesper owns fold/thrum/glow; Sol owns flick/sun; Coin owns flare; Thimble owns dig; Lula window-play owns loop; Echo window-play owns perch; Fox window-play owns scent; rosy_boa window-play owns stone; hamster owns nest. Guest slug Blush / key rosy_boa — accept "rosy_boa" and "blush". Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via rosy_boa.wav. Thank-yous climate / manners / corner. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `rosy-boa-tricks.js`. True house-rosy-boa desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids stone/tuck/hide/pour/heft/oxbow/slack/bank/harbor/cradle/stay/rhyme/rumor/costume/frank/tile/cipher/verse/postmark/cachet/courtesy/mosaic/loop/patrol/stripe/hood/feign/shovel/gape/encore/flip/saddle/drape/inspect/write/orb/nook/taste/inch/unroll/bun/ball/coil/curl/bask/loaf/potato/settle/shine/dip/sprawl/guard/smolder/claim/fold/thrum/glow/incline/sun/dewlap/cinder/blaze/shed/lift/return/flick/warm/thread/dart/noodle/savor/nestle/center/scribble/gap/comma/probe/canyon/clause/spice/cord/audit/verdict/plumb/raid/tribute/docket/seal/bracelet/sway/jewel/heat/bough/pendant/treaty/emerald/aside/cue/ovation/seam/rounds/moss/fork/lap/copy/brief/visa/ribbon/creek/mimic/flash/root/flare/dig/perch/hang/clasp/scent/heave/lug/earth/bed/nest/grit/ledge/ochre/silt/drift/flush/shade/pocket/wash/scrub/burrow name collisions with prior guests and rosy_boa window-play. Bird ultra (Soot→Ember) + Miso→Coral done; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip birds. Next guest ultra is Atlas / carpet_python. No cry inventing beyond house rosy_boa.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "rosy_boa";
-export const TRICKS = ["pebble", "crevice", "rosy", "mesa", "arroyo"] as const;
+export const TRICKS = ["pebble", "crevice", "rosy", "mesa", "arroyo", "dune", "talus"] as const;
 export const HAPPY = ["climate", "manners", "corner"] as const;
 export type RosyBoaTrickKind = (typeof TRICKS)[number];
 export type RosyBoaHappyKind = (typeof HAPPY)[number];
@@ -46,21 +45,23 @@ export type RosyBoaHappy = {
 };
 
 export const HAPPY_DUR: Record<RosyBoaHappyKind, number> = {
-  climate: 1.2,
-  manners: 1.26,
-  corner: 1.32,
+  climate: 1.55,
+  manners: 1.6,
+  corner: 1.58,
 };
 
 /** Pebble hold — Blush becomes a pink desk pebble. Not window-play STONE. Not Lula pour. */
-export const PEBBLE_HOLD = 10.6;
-export const RELEASE_S = 0.6;
+export const PEBBLE_HOLD = 12.2;
+export const RELEASE_S = 0.82;
 
 export const DUR: Record<RosyBoaTrickKind, number> = {
   pebble: PEBBLE_HOLD + RELEASE_S,
-  crevice: 1.38,
-  rosy: 1.42,
-  mesa: 1.28,
-  arroyo: 1.5,
+  crevice: 1.78,
+  rosy: 1.92,
+  mesa: 1.72,
+  arroyo: 1.98,
+  dune: 2.05,
+  talus: 2.12,
 };
 
 export function canStart(state: TrickFlags | undefined) {
@@ -91,38 +92,29 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: RosyBoaTrickKind) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "pebble") return 48 + roll * 28;
-  if (kind === "crevice") return 16 + roll * 11;
-  if (kind === "rosy") return 15 + roll * 10;
-  return justFinished ? 10 + roll * 8 : 5 + roll * 6;
+  if (kind === "pebble") return 38 + roll * 24;
+  if (kind === "dune" || kind === "talus" || kind === "rosy") return 12 + roll * 9;
+  if (kind === "crevice" || kind === "arroyo") return 11 + roll * 8;
+  if (kind === "mesa") return 10 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: RosyBoaTrickKind | null) {
-  if (musicOn) return "pebble" as const;
+export function pickTrick(rand?: number, musicOn = false, lastKind?: RosyBoaTrickKind | null): RosyBoaTrickKind {
+  if (musicOn) return "pebble";
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "pebble") {
-    if (roll < 0.28) return "crevice" as const;
-    if (roll < 0.5) return "rosy" as const;
-    if (roll < 0.72) return "mesa" as const;
-    return "arroyo" as const;
+  const pool = TRICKS.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...TRICKS];
+  const weights = list.map((k) =>
+    k === "pebble" ? 0.55 : k === "dune" || k === "talus" || k === "rosy" ? 1.15 : 1
+  );
+  let total = 0;
+  for (let i = 0; i < weights.length; i++) total += weights[i]!;
+  let r = roll * total;
+  for (let i = 0; i < list.length; i++) {
+    r -= weights[i]!;
+    if (r <= 0) return list[i]!;
   }
-  if (lastKind === "crevice") {
-    if (roll < 0.3) return "pebble" as const;
-    if (roll < 0.52) return "rosy" as const;
-    if (roll < 0.74) return "mesa" as const;
-    return "arroyo" as const;
-  }
-  if (lastKind === "rosy") {
-    if (roll < 0.24) return "pebble" as const;
-    if (roll < 0.46) return "crevice" as const;
-    if (roll < 0.68) return "mesa" as const;
-    return "arroyo" as const;
-  }
-  if (roll < 0.22) return "pebble" as const;
-  if (roll < 0.42) return "crevice" as const;
-  if (roll < 0.6) return "rosy" as const;
-  if (roll < 0.8) return "mesa" as const;
-  return "arroyo" as const;
+  return list[list.length - 1] || "pebble";
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -194,45 +186,45 @@ export function climatePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.climate));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * 1.15, rot: s * -5, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 4.2, rot: s * -16, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
-    const warm = Math.abs(Math.sin(t * 2.8));
+    const warm = Math.abs(Math.sin(t * 4.6));
     return {
-      lift: 1.15 - warm * 0.4,
-      rot: -5 + warm * 3.5,
-      dx: Math.sin(t * 1.2) * 0.14,
+      lift: 4.2 + warm * 3.4,
+      rot: -16 + Math.sin(t * 3.4) * 14,
+      dx: Math.sin(t * 1.8) * 0.55,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 0.85 * (1 - s), rot: -3 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 4.2 * (1 - s), rot: -16 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 
 export function mannersPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.manners));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 1.4, rot: s * 7, dx: 0, anim: "sit" as TrickAnim };
+    return { lift: s * 4.6, rot: s * 18, dx: 0, anim: "sit" as TrickAnim };
   }
   if (u < 0.8) {
-    const nod = Math.sin(t * 2.4);
+    const nod = Math.sin(t * 2.8);
     return {
-      lift: 1.4 + Math.abs(nod) * 0.28,
-      rot: 7 + nod * 5.5,
-      dx: nod * 0.22,
+      lift: 4.6 + Math.abs(nod) * 3.2,
+      rot: 18 + nod * 16,
+      dx: nod * 0.7,
       anim: "sit" as TrickAnim,
     };
   }
   const s = (u - 0.8) / 0.2;
-  return { lift: 1.4 * (1 - s), rot: 7 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 4.6 * (1 - s), rot: 18 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 
 export function cornerPose(t: number) {
   return {
-    lift: Math.abs(Math.sin(t * 1.7)) * 0.8 + 0.95,
-    rot: -4 + Math.sin(t * 2.1) * 5.2,
-    dx: Math.sin(t * 1.3) * 0.24,
+    lift: Math.abs(Math.sin(t * 3.4)) * 3.8 + 2.4,
+    rot: -16 + Math.sin(t * 2.8) * 14,
+    dx: Math.sin(t * 1.9) * 0.7,
     anim: "talk" as TrickAnim,
   };
 }
@@ -280,7 +272,11 @@ export function beginTrick(kind: RosyBoaTrickKind, x: number, facing: 1 | -1): R
             ? "sit"
             : kind === "arroyo"
               ? "walk"
-              : "sit";
+              : kind === "dune"
+                ? "walk"
+                : kind === "talus"
+                  ? "sit"
+                  : "sit";
   return {
     kind,
     phase: kind === "pebble" ? "hold" : "go",
@@ -300,32 +296,34 @@ function smoothstep(t: number) {
 }
 
 export function pebblePose(t: number) {
-  // Small pink-rock breath — desk pebble, not window sill stone tuck.
-  const beat = Math.sin(t * 0.95) + 0.35 * Math.sin(t * 2.7);
+  // Pink-rock breath — desk pebble, not window sill stone tuck.
+  const beat = Math.sin(t * 1.7) + 0.45 * Math.sin(t * 3.4);
   return {
-    lift: 0.48 + Math.abs(Math.sin(t * 0.7)) * 0.14,
-    rot: -3 + beat * 2.8,
+    lift: 2.4 + Math.sin(t * 1.7) * 2.8 + Math.abs(Math.sin(t * 3.4)) * 1.6,
+    rot: -22 + Math.sin(t * 2.4) * 18 + Math.sin(t * 4.6) * 10,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.48 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -3 * (1 - u) };
+  return {
+    lift: (2.4 + 2.8) * (1 - Math.sin(u * Math.PI * 0.5)),
+    rot: -22 * (1 - u),
+  };
 }
 
 export function crevicePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.crevice));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + facing * s * 1.2, lift: s * 0.55, rot: s * 6 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 14 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.48) {
     const s = (u - 0.14) / 0.34;
-    // Ease into a keyboard gap — small desert crevice, not Lula oxbow.
     return {
-      x: fromX + facing * (1.2 + smoothstep(s) * 1.6),
-      lift: 0.55 - smoothstep(s) * 0.45,
-      rot: facing * (6 - s * 10),
+      x: fromX + facing * (1.8 + smoothstep(s) * 2.2),
+      lift: 3.2 - smoothstep(s) * 2.0,
+      rot: facing * (14 - s * 22),
       anim: "sit" as TrickAnim,
     };
   }
@@ -333,17 +331,17 @@ export function crevicePose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.48) / 0.3;
     const hush = Math.abs(Math.sin(s * Math.PI * 1.8));
     return {
-      x: fromX + facing * 2.8,
-      lift: 0.12 + hush * 0.1,
-      rot: facing * (-4 + hush * 2),
+      x: fromX + facing * 4.0,
+      lift: 1.0 + hush * 1.6,
+      rot: facing * (-12 + hush * 14),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (2.8 * (1 - s)),
-    lift: 0.2 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    x: fromX + facing * (4.0 * (1 - s)),
+    lift: 1.0 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -352,24 +350,23 @@ export function rosyPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.rosy));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 1.5, rot: s * 10 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 5.2, rot: s * 28 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.12) / 0.6;
-    // Soft pink dusk shimmer — not Coral costume band shiver.
-    const shimmer = Math.sin(s * Math.PI * 3.4);
+    const shimmer = Math.sin(s * Math.PI * 4.2);
     return {
-      x: fromX + facing * shimmer * 0.28,
-      lift: 1.5 - s * 0.4 + Math.abs(shimmer) * 0.2,
-      rot: facing * (10 - s * 14 + shimmer * 4),
+      x: fromX + facing * shimmer * 0.7,
+      lift: 5.2 - s * 1.4 + Math.abs(shimmer) * 2.2,
+      rot: facing * (28 - s * 36 + shimmer * 14),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
     x: fromX,
-    lift: 1.15 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    lift: 3.6 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -378,32 +375,32 @@ export function mesaPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.mesa));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 1.35, rot: s * 4 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 4.8, rot: s * 16 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.5) {
     const s = (u - 0.14) / 0.36;
     return {
-      x: fromX + facing * s * 0.35,
-      lift: 1.35 - smoothstep(s) * 1.15,
-      rot: facing * (4 - s * 9),
+      x: fromX + facing * s * 1.2,
+      lift: 4.8 - smoothstep(s) * 3.6,
+      rot: facing * (16 - s * 28),
       anim: "sit" as TrickAnim,
     };
   }
   if (u < 0.82) {
     const s = (u - 0.5) / 0.32;
-    const press = Math.abs(Math.sin(s * Math.PI * 2.0));
+    const press = Math.abs(Math.sin(s * Math.PI * 2.2));
     return {
-      x: fromX + facing * 0.35,
-      lift: 0.16 + press * 0.1,
-      rot: facing * (-5 + press * 2),
+      x: fromX + facing * 1.2,
+      lift: 1.0 + press * 1.4,
+      rot: facing * (-14 + press * 8),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * (0.35 * (1 - s)),
-    lift: 0.16 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    x: fromX + facing * (1.2 * (1 - s)),
+    lift: 1.0 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
     anim: "idle" as TrickAnim,
   };
 }
@@ -412,41 +409,103 @@ export function arroyoPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.arroyo));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + facing * s * 1.0, lift: s * 0.65, rot: s * 7 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * s * 1.8, lift: s * 3.2, rot: s * 14 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.45) {
     const s = (u - 0.12) / 0.33;
-    // Slow desert-wash crawl — three soft dunes, not Coral stamp tiles.
     const step = Math.floor(s * 3);
     const local = (s * 3) % 1;
     return {
-      x: fromX + facing * (1.0 + step * 1.2 + smoothstep(local) * 1.2),
-      lift: 0.65 + Math.sin(local * Math.PI) * 0.45,
-      rot: facing * (7 + Math.sin(local * Math.PI) * 8),
+      x: fromX + facing * (1.8 + step * 2.0 + smoothstep(local) * 2.0),
+      lift: 3.2 + Math.sin(local * Math.PI) * 2.6,
+      rot: facing * (14 + Math.sin(local * Math.PI) * 22),
       anim: "walk" as TrickAnim,
     };
   }
   if (u < 0.78) {
     const s = (u - 0.45) / 0.33;
     return {
-      x: fromX + facing * (4.6 - smoothstep(s) * 2.0),
-      lift: 0.75 + Math.abs(Math.sin(s * Math.PI * 1.6)) * 0.26,
-      rot: facing * (12 - s * 16),
+      x: fromX + facing * (7.8 - smoothstep(s) * 3.2),
+      lift: 3.4 + Math.abs(Math.sin(s * Math.PI * 1.8)) * 2.0,
+      rot: facing * (22 - s * 28),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * (2.6 * (1 - s)),
-    lift: 0.6 * (1 - s),
-    rot: facing * (-2 * (1 - s)),
+    x: fromX + facing * (4.6 * (1 - s)),
+    lift: 3.2 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
     anim: "sit" as TrickAnim,
+  };
+}
+
+/** Dune — sandy scrub undulation across the blotter. Not arroyo wash. Not Sash creek. */
+export function dunePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.dune));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX + facing * s * 1.6, lift: s * 3.6, rot: s * 18 * facing, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.12) / 0.66;
+    const beat = Math.floor(s * 3);
+    const local = (s * 3) % 1;
+    const bob = Math.sin(local * Math.PI);
+    return {
+      x: fromX + facing * (1.6 + beat * 1.8 + bob * 0.7),
+      lift: 3.6 + Math.abs(bob) * 2.8,
+      rot: facing * (18 + beat * 6 + bob * 20),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * ((1.6 + 3.6) * (1 - s)),
+    lift: 3.6 * (1 - s),
+    rot: facing * (8 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Talus — rocky hillside rubble weave. Not crevice keyboard-gap. Not Nori nook. Not hide/tuck. */
+export function talusPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.talus));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.4, rot: s * -12 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.42) {
+    const s = (u - 0.12) / 0.3;
+    return {
+      x: fromX + facing * smoothstep(s) * -1.4,
+      lift: 3.4 - smoothstep(s) * 2.0,
+      rot: facing * (-12 + s * 4),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.82) {
+    const s = (u - 0.42) / 0.4;
+    const hush = Math.abs(Math.sin(s * Math.PI * 1.8));
+    return {
+      x: fromX + facing * -1.4 + facing * Math.sin(s * Math.PI * 2.4) * 0.9,
+      lift: 1.2 + hush * 1.8,
+      rot: facing * (-10 + hush * 16),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX + facing * (-1.4 * (1 - s)),
+    lift: 1.2 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
   };
 }
 
 export function stepTrick(trick: RosyBoaTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "arroyo" && trick.kind !== "crevice") {
+  if (shouldAbort(flags) && trick.kind !== "arroyo" && trick.kind !== "crevice" && trick.kind !== "dune") {
     return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next: RosyBoaTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -471,26 +530,39 @@ export function stepTrick(trick: RosyBoaTrick | null | undefined, dt: number, fl
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const from = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "crevice") {
-    const pose = crevicePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = crevicePose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "rosy") {
-    const pose = rosyPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = rosyPose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "mesa") {
-    const pose = mesaPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = mesaPose(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "arroyo") {
+    const pose = arroyoPose(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "dune") {
+    const pose = dunePose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = arroyoPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = talusPose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
