@@ -428,6 +428,22 @@ test("puffball ethogram is Puff ultra (lycoperdon + softs + freeze, not puff/lea
   assert.equal(names.length, 8);
 });
 
+test("chicken_of_woods ethogram is Flame ultra (laetiporus + softs + freeze, not lean/flush/still)", () => {
+  const names = E.actsFor("chicken_of_woods").map((a) => a.name);
+  assert.ok(names.includes("laetiporus"));
+  assert.ok(names.includes("sulfur_soft"));
+  assert.ok(names.includes("rosette_soft"));
+  assert.ok(names.includes("oak_soft"));
+  assert.ok(names.includes("soft_soft"));
+  assert.ok(names.includes("poroid_soft"));
+  assert.ok(names.includes("cluster_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("flush"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
