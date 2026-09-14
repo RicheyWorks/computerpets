@@ -1597,7 +1597,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Beacon ultra idle-life done; next house-order ultra is Hush / umbral", () => {
+test("notes: Beacon ultra idle-life done; next house-order ultra is Arca / cyst", () => {
   assert.equal(T.TRICK_KEY, "magneton");
   assert.deepEqual([...T.TRICKS], ["lodestone", "flux", "azimuth", "dipole", "remanence", "barkhausen", "hysteresis"]);
   assert.deepEqual([...T.HAPPY], ["ferrite", "oersted", "gauss"]);
@@ -1633,7 +1633,7 @@ test("notes: Beacon ultra idle-life done; next house-order ultra is Hush / umbra
   assert.equal(T.TRICKS.includes("halite"), false);
   assert.equal(Photovore.TRICKS.includes("photon"), true);
   assert.equal(T.TRICKS.includes("photon"), false);
-  // Recommend next house-order ultra (do not implement): Hush / umbral.
+  // Recommend next house-order ultra (do not implement): Arca / cyst.
   assert.equal("umbral", "umbral");
   assert.equal("Hush", "Hush");
 });

@@ -1373,7 +1373,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Knot ultra idle-life done; next house-order ultra is Hush / umbral", () => {
+test("notes: Knot ultra idle-life done; next house-order ultra is Arca / cyst", () => {
   assert.equal(T.TRICK_KEY, "nexus");
   assert.deepEqual([...T.TRICKS], ["plexus", "splice", "braid", "weft", "mesh", "fascicle", "sennit"]);
   assert.deepEqual([...T.HAPPY], ["accord", "quorum", "entente"]);
@@ -1397,7 +1397,7 @@ test("notes: Knot ultra idle-life done; next house-order ultra is Hush / umbral"
   assert.equal(OverlayGround.tricksFor("pulse"), OverlayMoonJelly);
   assert.equal(Moray.TRICKS.includes("knot"), true);
   assert.equal(T.TRICKS.includes("knot"), false);
-  // Recommend next house-order ultra (do not implement): Hush / umbral.
+  // Recommend next house-order ultra (do not implement): Arca / cyst.
   assert.equal("umbral", "umbral");
   assert.equal("Hush", "Hush");
 });
