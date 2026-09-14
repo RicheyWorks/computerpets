@@ -559,7 +559,7 @@ test("ultra-polish: Kite span/wing/breach/ram lifts are Rui-visible (not micro i
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Kite idle-life ultra done; next house-order ultra guest is Door / moray", () => {
+test("notes: Kite idle-life ultra done; Door / moray ultra follows; next after Door is Felt / moss — retained check that Kite still wires", () => {
   assert.equal(T.TRICK_KEY, "manta");
   assert.equal(T.wantsThankYou("kite"), true);
   assert.equal(OverlayGround.tricksFor("seahorse"), OverlaySeahorse);

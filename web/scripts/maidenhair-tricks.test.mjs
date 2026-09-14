@@ -561,8 +561,8 @@ test("ground registry keeps prior guests gated; Vein selectable; prior guests st
   assert.equal(Manta.wantsThankYou("kite"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
   assert.equal(OverlayGround.tricksFor("kite"), OverlayManta);
-  assert.deepEqual([...Moray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
-  assert.deepEqual([...OverlayMoray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
+  assert.deepEqual([...Moray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
+  assert.deepEqual([...OverlayMoray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
   assert.equal(Moray.wantsThankYou("door"), true);
   assert.equal(OverlayGround.tricksFor("moray"), OverlayMoray);
   assert.equal(OverlayGround.tricksFor("door"), OverlayMoray);
@@ -638,7 +638,7 @@ test("notes: Vein idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("maidenhair"), true);
   assert.equal(OverlayGround.tricksFor("vein"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("vein"), true);
-  assert.deepEqual([...Moray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb"]);
+  assert.deepEqual([...Moray.TRICKS], ["hinge", "pharynx", "knot", "lurk", "jamb", "mucus", "sentry"]);
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
   assert.equal(T.TRICKS.includes("moss"), false);
