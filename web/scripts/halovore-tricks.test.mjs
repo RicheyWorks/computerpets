@@ -1470,7 +1470,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Brine ultra idle-life done; next house-order ultra is Arca / cyst", () => {
+test("notes: Brine ultra idle-life done; next house-order ultra is Reed / frog", () => {
   assert.equal(T.TRICK_KEY, "halovore");
   assert.deepEqual([...T.TRICKS], ["halite", "salina", "rime", "bittern", "deliquesce", "ectoine", "sabkha"]);
   assert.deepEqual([...T.HAPPY], ["natron", "trona", "aureole"]);
@@ -1502,7 +1502,7 @@ test("notes: Brine ultra idle-life done; next house-order ultra is Arca / cyst",
   assert.equal(T.TRICKS.includes("salt"), false);
   assert.equal(MoonJelly.HAPPY.includes("halo"), true);
   assert.equal(T.HAPPY.includes("halo"), false);
-  // Recommend next house-order ultra (do not implement): Arca / cyst.
+  // Recommend next house-order ultra (do not implement): Reed / frog.
   assert.equal("magneton", "magneton");
   assert.equal("Beacon", "Beacon");
 });

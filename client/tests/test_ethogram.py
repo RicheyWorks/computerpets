@@ -275,7 +275,13 @@ def test_only_scratching_mammals_scratch():
     assert "dim" not in [a["name"] for a in acts_for("umbral")]
     assert "still" not in [a["name"] for a in acts_for("umbral")]
     assert "cool" not in [a["name"] for a in acts_for("umbral")]
-    assert "wake" in [a["name"] for a in acts_for("cyst")]
+    assert "cryptobiosis" in [a["name"] for a in acts_for("cyst")]
+    assert "sporocyst_soft" in [a["name"] for a in acts_for("cyst")]
+    assert "tachyzoite_soft" in [a["name"] for a in acts_for("cyst")]
+    assert "freeze" in [a["name"] for a in acts_for("cyst")]
+    assert "wake" not in [a["name"] for a in acts_for("cyst")]
+    assert "wait" not in [a["name"] for a in acts_for("cyst")]
+    assert "still" not in [a["name"] for a in acts_for("cyst")]
     for key in POND_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
