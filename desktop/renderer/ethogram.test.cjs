@@ -210,6 +210,19 @@ test("firefly ethogram is Spark ultra (photinus + softs + freeze, not flash/lift
 });
 
 
+test("darner ethogram is Dart ultra (anax + softs + freeze, not hawk/hover/still)", () => {
+  const names = E.actsFor("darner").map((a) => a.name);
+  assert.ok(names.includes("anax"));
+  assert.ok(names.includes("obelisk_soft"));
+  assert.ok(names.includes("ommatidia_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("hawk"), false);
+  assert.equal(names.includes("hover"), false);
+  assert.equal(names.includes("still"), false);
+});
+
+
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
