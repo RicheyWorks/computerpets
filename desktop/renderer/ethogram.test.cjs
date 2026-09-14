@@ -73,6 +73,17 @@ test("moray ethogram is Door ultra (jamb + softs + freeze, not gape/hide/dart)",
   assert.equal(names.includes("dart"), false);
 });
 
+test("moss ethogram is Felt ultra (thatch + softs + freeze, not lean/nod/still)", () => {
+  const names = E.actsFor("moss").map((a) => a.name);
+  assert.ok(names.includes("thatch"));
+  assert.ok(names.includes("rhizoid_soft"));
+  assert.ok(names.includes("seta_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("still"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",

@@ -708,6 +708,16 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.equal(names("moray").includes("dart"), false);
 });
 
+test("moss ethogram is Felt ultra (thatch + softs + freeze, not lean/nod/still)", () => {
+  assert.ok(names("moss").includes("thatch"));
+  assert.ok(names("moss").includes("rhizoid_soft"));
+  assert.ok(names("moss").includes("seta_soft"));
+  assert.ok(names("moss").includes("freeze"));
+  assert.equal(names("moss").includes("lean"), false);
+  assert.equal(names("moss").includes("nod"), false);
+  assert.equal(names("moss").includes("still"), false);
+});
+
 test("pickAct can schedule tongue on a snake and never scratch", () => {
   let tongue = 0;
   for (let i = 0; i < 80; i++) {

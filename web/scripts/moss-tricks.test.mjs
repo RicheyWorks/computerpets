@@ -103,7 +103,7 @@ test("Felt tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
+  assert.deepEqual([...T.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -177,7 +177,7 @@ test("Felt tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
+  assert.deepEqual([...Overlay.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.deepEqual([...Overlay.HAPPY], ["humid", "velvet", "meadow"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -195,7 +195,7 @@ test("Felt tricks start only on idle ground", () => {
   assert.equal(T.HAPPY.includes("coronet"), false);
 });
 
-test("tuft/bead/spore/cushion/thatch are house-moss-true, not copies of prior guests", () => {
+test("tuft/bead/spore/cushion/thatch/rhizoid/seta are house-moss-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const thatch = T.beginTrick("thatch", 80, 1);
   assert.equal(thatch.anim, "sit");
@@ -226,7 +226,15 @@ test("tuft/bead/spore/cushion/thatch are house-moss-true, not copies of prior gu
   assert.equal(cushion.anim, "sit");
   const cushionMid = T.stepTrick(cushion, 0.5, ground);
   assert.ok(Math.abs(cushionMid.lift) > 0.05 || Math.abs(cushionMid.rot) > 1 || Math.abs(cushionMid.x - 80) > 0.05);
-  const knotDone = T.stepTrick(spore, 1.5, ground);
+  const rhizoid = T.beginTrick("rhizoid", 80, 1);
+  assert.equal(rhizoid.anim, "sit");
+  const rhizoidMid = T.stepTrick(rhizoid, T.DUR.rhizoid * 0.4, ground);
+  assert.ok(Math.abs(rhizoidMid.lift) > 0.05 || Math.abs(rhizoidMid.rot) > 1 || Math.abs(rhizoidMid.x - 80) > 0.05);
+  const seta = T.beginTrick("seta", 80, 1);
+  assert.equal(seta.anim, "play");
+  const setaMid = T.stepTrick(seta, T.DUR.seta * 0.35, ground);
+  assert.ok(Math.abs(setaMid.lift) > 0.05 || Math.abs(setaMid.rot) > 1 || Math.abs(setaMid.x - 80) > 0.05);
+  const knotDone = T.stepTrick(spore, T.DUR.spore + 0.1, ground);
   assert.equal(knotDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -236,6 +244,8 @@ test("tuft/bead/spore/cushion/thatch are house-moss-true, not copies of prior gu
     assert.equal(mod.TRICKS.includes("spore"), false);
     assert.equal(mod.TRICKS.includes("cushion"), false);
     assert.equal(mod.TRICKS.includes("thatch"), false);
+    assert.equal(mod.TRICKS.includes("rhizoid"), false);
+    assert.equal(mod.TRICKS.includes("seta"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -405,7 +415,7 @@ test("ground registry keeps prior guests gated; Felt selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
+  assert.deepEqual([...T.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.wantsThankYou("moss"), true);
   assert.equal(T.wantsThankYou("felt"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -526,7 +536,7 @@ test("ground registry keeps prior guests gated; Felt selectable; prior guests st
   assert.deepEqual([...OverlayHermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
   assert.deepEqual([...OverlayHorseshoeCrab.TRICKS], ["carapace", "bookgill", "telson", "furrow", "fossil", "pusher", "ocular"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...Overlay.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch"]);
+  assert.deepEqual([...Overlay.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -618,8 +628,8 @@ test("notes: Felt idle-life done; next house-order guest still lacking tricks is
   assert.deepEqual([...Manta.TRICKS], ["wing", "lobe", "gyre", "vault", "span", "breach", "ram"]);
   assert.equal(T.TRICKS.includes("moss"), false);
   assert.equal(T.TRICKS.includes("hinge"), false);
-  assert.equal(OverlayGround.tricksFor("maidenhair"), null);
+  assert.ok(OverlayGround.tricksFor("maidenhair") == null);
   assert.equal(OverlayGround.wantsThankYou("maidenhair"), false);
-  assert.equal(OverlayGround.tricksFor("vein"), null);
+  assert.ok(OverlayGround.tricksFor("vein") == null);
   assert.equal(OverlayGround.wantsThankYou("vein"), false);
 });
