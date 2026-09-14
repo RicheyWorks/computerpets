@@ -173,6 +173,18 @@ test("pitcher ethogram is Well ultra (urn + softs + freeze, not still/nod/lean)"
   assert.equal(names.includes("lean"), false);
 });
 
+test("sundew ethogram is Dew ultra (rosette + softs + freeze, not curl/nod/lean)", () => {
+  const names = E.actsFor("sundew").map((a) => a.name);
+  assert.ok(names.includes("rosette"));
+  assert.ok(names.includes("lamina_soft"));
+  assert.ok(names.includes("circinate_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("curl"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("lean"), false);
+});
+
+
 
 
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {

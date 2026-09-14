@@ -2712,7 +2712,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.wantsThankYou("saguaro"), true);
   assert.equal(OverlayGround.tricksFor("arm"), OverlaySaguaro);
   assert.equal(OverlayGround.wantsThankYou("arm"), true);
-  assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel"]);
+  assert.deepEqual([...OverlaySaguaro.TRICKS], ["rib", "branch", "nocturne", "areole", "sentinel", "pleat", "boot"]);
   assert.equal(OverlayGround.tricksFor("water_lily"), OverlayWaterLily);
   assert.equal(OverlayGround.wantsThankYou("water_lily"), true);
   assert.equal(OverlayGround.tricksFor("disk"), OverlayWaterLily);
