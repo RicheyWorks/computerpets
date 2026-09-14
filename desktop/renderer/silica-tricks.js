@@ -1,223 +1,252 @@
-/** Shard ground tricks while idle. House neighborly alien mineral desk life — cleavage / twinning / inclusion / grit / crescit personality (crystal facet, glass grit, Silica crescit inkstone life — never named facet or still or shed or silica or shard or glass or stone as trick kinds; window-play FACET + ethogram facet/still/shed own those words; guest slug Shard / key silica only for isKey matching — accept "silica" and "shard"; do NOT name a trick "silica" or "shard" or "facet") — not Drift waft/billow/cirrus/virga/stratus methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia chord-body, not Gleam photon/wavelength/lumen/glass/photovore lamp-drinker, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia plaque, not Starter bud/proof/levain/ferment/saccharomyces bloom, not Flame sulfur/rosette/oak/soft/laetiporus drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift; never named facet (window-play FACET + ethogram — never a trick kind) / still (ethogram) / shed (ethogram) / silica (guest key — never a trick kind) / shard (guest name — never a trick kind) / glass (Gleam trick) / stone (Pact trick) / float (Drift window) / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / photon / wavelength / lumen / actinic / lux / candela / polyphony / partial / timbre / resonance / harmonia / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf — Echo/Quill are birds with sound — do not copy their tricks. cleavage clean plane split across the blotter, twinning mirrored crystal flip, inclusion trapped grit swirl, grit glass-grit desk scrape, crescit long Silica-crescit hold desk life as living mineral (not Drift methane floater, not Choir chord-body, not Gleam lamp-drinker, not Pact plaque) with euhedral / vitreous / adamantine cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play FACET do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop silica-tricks.js. Window-play FACET unchanged — never names facet. Ethogram facet/still/shed unchanged — never names facet or still or shed as trick kinds. True alien mineral desk grit only — crystal life without naming facet. Dusk owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Shard ground tricks while idle — ultra-polish pass. House neighborly alien mineral desk FACET life — cleavage / twinning / inclusion / grit / crescit / hopper / phantom personality (crystal facet, glass grit, Silica crescit inkstone life — never named facet or still or shed or silica or shard or glass or stone as trick kinds; window-play FACET + ethogram-old facet/still/shed own those words; guest slug Shard / key silica only for isKey matching — accept "silica" and "shard"; do NOT name a trick "silica" or "shard" or "facet") — not Drift waft/billow/cirrus/virga/stratus/tholin/nucleate methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia/formant/dyad chord-body, not Gleam photon/wavelength/lumen/glass/photovore/opsin/iridophore lamp-drinker, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi plaque, not Starter bud/proof/levain/ferment/saccharomyces/ascus/floc bloom, not Flame sulfur/rosette/oak/soft/laetiporus/poroid/cluster drip, not Puff ostiole/gleba/peridium/duff/lycoperdon/gemmate/capillitium cloud, not Mane spine/icicle/cascade/wound/hericium/pompon/hydnoid teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift; never named facet (window-play FACET + ethogram-old — never a trick kind) / still (ethogram-old) / shed (ethogram-old) / silica (guest key — never a trick kind) / shard (guest name — never a trick kind) / glass (Gleam trick) / stone (Pact trick) / float (Drift window) / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / tholin / nucleate / photon / wavelength / lumen / actinic / lux / candela / polyphony / partial / timbre / resonance / harmonia / formant / dyad / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf — Echo/Quill are birds with sound — do not copy their tricks. cleavage clean plane split across the blotter, twinning mirrored crystal flip, inclusion trapped grit swirl, grit glass-grit desk scrape, crescit long Silica-crescit hold desk life as living mineral (not Drift methane floater, not Choir chord-body, not Gleam lamp-drinker, not Pact plaque) with euhedral / vitreous / adamantine cousins in the thank-yous; hopper stepped concave hopper-crystal growth (THE living-crystal morphology tell — never named facet / still / shed / silica / shard / glass / stone as this new tell); phantom ghost growth-zone outline inside the body (THE phantom-crystal tell — never named facet / still / shed / ghost / hover / float as this new tell); guest slug Shard / key silica only for isKey matching — accept "silica" and "shard"; do NOT name a trick "silica" or "shard" or "facet"). Feed-happy thank-yous sit after eat. Card-open freeze and window-play FACET do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web silica-tricks.ts. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/fly_agaric/Cap/morel/Lattice/chanterelle/Horn/turkey_tail/Ring/lions_mane/Mane/puffball/Puff/chicken_of_woods/Flame/yeast/Starter/lichen/Pact/photovore/Gleam/choir/Choir/nimbus/Drift/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/carpenter_bee/Auger/mason_bee/Mortar/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen/mining_bee/Bank or *Dragon electrical clone. Window-play FACET unchanged — never names facet. Ethogram softs + freeze — never names facet or still or shed as trick kinds. Comb owns figure/corbicula/hex/proboscis/hive and happy honey/mead/propolis; Hum owns holoptic/congregation/sortie/ocellus/mellifera and happy ligustica/carnica/apisini; Keep owns pipe/retinue/duel/royal/regina and happy caucasica/iberiensis/apini; Wax owns festoon/capped/midrib/stores/tessera/alveoli/foundation and happy langstroth/topbar/warre; Frill owns lamella/imbricate/lasso/margin/pleurotus/sporulate/hypha and happy ostreatus/pulmonarius/eryngii; Cap owns annulus/volva/veil/symbiont/amanita/pileus/bulb and happy muscaria/regalis/frostiana; Lattice owns alveolus/ridge/ephemeral/sclerotium/morchella/costa/hymenium and happy esculenta/americana/elata; Horn owns apricot/funnel/decurrent/flute/cantharellus/vase/plica and happy cibarius/formosus/cascadensis; Ring owns pore/bracket/band/leathery/trametes/concentric/tomentum and happy versicolor/ochracea/pubescens; Mane owns spine/icicle/cascade/wound/hericium/pompon/hydnoid and happy erinaceus/coralloides/americanum; Puff owns ostiole/gleba/peridium/duff/lycoperdon/gemmate/capillitium and happy perlatum/pyriforme/excipuliforme; Flame owns sulfur/rosette/oak/soft/laetiporus/poroid/cluster and happy sulphureus/cincinnatus/gilbertsonii; Starter owns bud/proof/levain/ferment/saccharomyces/ascus/floc and happy cerevisiae/boulardii/pastorianus; Pact owns podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi and happy rangiferina/stellaris/arbuscula; Gleam owns photon/wavelength/lumen/glass/photovore/opsin/iridophore and happy actinic/lux/candela; Choir owns polyphony/partial/timbre/resonance/harmonia/formant/dyad and happy diapason/motet/canticle; Drift owns waft/billow/cirrus/virga/stratus/tholin/nucleate and happy zephyr/fogbow/mizzle; Thrum owns sonicate/scopa/fossor/lumber/bombus and happy impatiens/bimaculatus/bombini; Auger owns rasp/glabrous/partition/picket/xylocopa and happy virginica/micans/xylocopini; Mortar owns trowel/beebread/orchard/plug/osmia and happy lignaria/cornifrons/osmiini; Disc owns circle/liner/cavity/parcel/megachile and happy rotundata/relativa/megachilini; Pot owns cerumen/spout/vessel/batumen/melipona and happy beecheii/yucatanica/meliponini; Sheen owns lustre/tumulus/salt/commune/agapostemon and happy virescens/texanus/halictini; Bank owns shaft/mass/vernal/fovea/andrena and happy vicina/carlini/andrenini; Lula owns bank; Disk owns pad/corolla/rhizome/calyx/sheen and happy silt/nectar/dew; Column owns gallery/pheromone/crumb/bustle/camponotus; Sepia owns hover; Vesper owns guard/thrum; Arm owns sentinel; Clip owns nest; Thimble owns dig; Spark owns firefly lantern territory — do not copy; Dusk owns the next seat; Felt is moss; Vein is fern; Fan is ginkgo; Burr is hedgehog guest; Reed owns plop; Tube owns papillae; Relay owns buzz; Rui owns dance; Ground happy owns gleam; Coin owns glint; Ember owns shine. True alien mineral desk grit only — crystal life without naming facet: cleavage plane split, twinning mirror flip, inclusion grit swirl, grit desk scrape, hopper stepped growth, phantom ghost outline, long hold as crescit living mineral — not Drift methane floater, not Choir chord-body, not Gleam lamp-drinker, not Pact lichen, not Starter yeast, not Flame shelves, not a puffball, not turkey-tail, not lion's mane, not oyster, not a bee, not a plant, not a firefly, not Pulse jelly, not Echo/Quill bird song, not Wax honeycomb place, not Coin goldfish drift. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via silica.wav. */
+
 (function (root) {
-  const TRICK_KEY = "silica";
-  const TRICKS = ["cleavage", "twinning", "inclusion", "grit", "crescit"];
-  const HAPPY = ["euhedral", "vitreous", "adamantine"];
-  const HAPPY_DUR = { euhedral: 1.58, vitreous: 1.71, adamantine: 1.69 };
-  const CRESCIT_HOLD = 17.12;
-  const RELEASE_S = 0.97;
-  const DUR = { crescit: CRESCIT_HOLD + RELEASE_S, cleavage: 2.11, twinning: 2.33, inclusion: 1.98, grit: 2.08 };
+const TRICK_KEY = "silica";
+const TRICKS = ["cleavage", "twinning", "inclusion", "grit", "crescit", "hopper", "phantom"];
+const HAPPY = ["euhedral", "vitreous", "adamantine"];
 
-  function canStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
 
-  function shouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
 
-  function nextTrickWait(justFinished, rand, kind) {
+
+const HAPPY_DUR = { euhedral: 1.28, vitreous: 1.16, adamantine: 1.22 };
+
+/** Stratus hold — Shard parks living-mineral calm as inkstone desk grit. Not window-play FACET. */
+const CRESCIT_HOLD = 10.8;
+const RELEASE_S = 0.62;
+
+const DUR = { crescit: CRESCIT_HOLD + RELEASE_S, cleavage: 1.58, twinning: 1.64, inclusion: 1.48, grit: 1.56, hopper: 1.68, phantom: 1.72 };
+
+function canStart(state) {
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
+function shouldAbort(state) {
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "eat" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
+function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-      if (kind === "crescit") return 67 + roll * 39;
-  if (kind === "cleavage") return 16.4 + roll * 13.1;
-  if (kind === "twinning") return 22.1 + roll * 12.9;
-  if (kind === "grit") return 19.0 + roll * 13.6;
-  return justFinished ? 13.1 + roll * 9.8 : 7.6 + roll * 8.4;
+    if (kind === "crescit") return 38 + roll * 24;
+    if (kind === "hopper" || kind === "phantom" || kind === "twinning") return 12 + roll * 9;
+    if (kind === "cleavage" || kind === "inclusion" || kind === "grit") return 11 + roll * 8;
+    return justFinished ? 8 + roll * 8 : 4 + roll * 7;
   }
-
   function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "crescit";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "crescit") {
-      if (roll < 0.26) return "cleavage";
-      if (roll < 0.5) return "twinning";
-      if (roll < 0.74) return "inclusion";
-      return "grit";
+      if (roll < 0.18) return "cleavage";
+      if (roll < 0.34) return "twinning";
+      if (roll < 0.5) return "inclusion";
+      if (roll < 0.66) return "grit";
+      if (roll < 0.83) return "hopper";
+      return "phantom";
     }
     if (lastKind === "cleavage") {
-      if (roll < 0.26) return "crescit";
-      if (roll < 0.5) return "twinning";
-      if (roll < 0.74) return "inclusion";
-      return "grit";
+      if (roll < 0.2) return "crescit";
+      if (roll < 0.36) return "twinning";
+      if (roll < 0.52) return "inclusion";
+      if (roll < 0.68) return "grit";
+      if (roll < 0.84) return "hopper";
+      return "phantom";
     }
     if (lastKind === "twinning") {
-      if (roll < 0.22) return "crescit";
-      if (roll < 0.44) return "cleavage";
-      if (roll < 0.68) return "inclusion";
-      return "grit";
+      if (roll < 0.18) return "crescit";
+      if (roll < 0.34) return "cleavage";
+      if (roll < 0.5) return "inclusion";
+      if (roll < 0.66) return "grit";
+      if (roll < 0.83) return "hopper";
+      return "phantom";
     }
-    if (roll < 0.2) return "crescit";
-    if (roll < 0.4) return "cleavage";
-    if (roll < 0.6) return "twinning";
-    if (roll < 0.8) return "inclusion";
-    return "grit";
+    if (lastKind === "hopper" || lastKind === "phantom") {
+      if (roll < 0.16) return "crescit";
+      if (roll < 0.32) return "cleavage";
+      if (roll < 0.48) return "twinning";
+      if (roll < 0.64) return "inclusion";
+      if (roll < 0.8) return "grit";
+      return lastKind === "hopper" ? "phantom" : "hopper";
+    }
+    if (roll < 0.14) return "crescit";
+    if (roll < 0.28) return "cleavage";
+    if (roll < 0.42) return "twinning";
+    if (roll < 0.56) return "inclusion";
+    if (roll < 0.7) return "grit";
+    if (roll < 0.85) return "hopper";
+    return "phantom";
   }
 
   function happyCanStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
 
-  function happyShouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
+function happyShouldAbort(state) {
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
 
-  function wantsThankYou(key) {
-    return key === TRICK_KEY || key === "shard";
-  }
+function wantsThankYou(key) {
+  return key === TRICK_KEY || key === "shard" || key === "shard";
+}
 
-  function startThankYou(key, lastKind, x, facing, flags) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
-  }
+function startThankYou(key, lastKind, x, facing, flags) {
+  if (!wantsThankYou(key)) return null;
+  if (!happyCanStart(flags || { cmd: "idle" })) return null;
+  const pick = pickHappy(lastKind | null | undefined);
+  return { happy: beginHappy(pick, x, facing), kind: pick };
+}
 
-  function pickHappy(lastKind, rand) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
-  }
+function pickHappy(lastKind, rand) {
+  const pool = HAPPY.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...HAPPY];
+  const roll = rand == null ? Math.random() : rand;
+  return list[Math.floor(roll * list.length)] || list[0];
+}
 
-  function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "euhedral";
+function beginHappy(kind, x, facing) {
+  const name = HAPPY.indexOf(kind) >= 0 ? (kind) : "euhedral";
+  return {
+    kind: name,
+    happy: true,
+    phase: "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: name === "euhedral" ? "talk" : name === "vitreous" ? "play" : "sit",
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
+function euhedralPose(t) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.euhedral));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" };
+  }
+  if (u < 0.76) {
+    const tick = Math.sin(t * 1.72);
     return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: name === "euhedral" ? "talk" : name === "vitreous" ? "play" : "sit",
-      facing: facing == null ? 1 : facing,
-      fromX: x,
+      lift: 2.8 + Math.abs(tick) * 1.4,
+      rot: 12 + tick * 10,
+      dx: tick * 0.12,
+      anim: "talk",
     };
   }
+  const s = (u - 0.76) / 0.24;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "talk" };
+}
 
-    function euhedralPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.euhedral));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.052, rot: s * 3.25, dx: 0, anim: "talk" };
-    }
-    if (u < 0.78) {
-      const tick = Math.sin(t * 14.2) + 0.29 * Math.sin(t * 26.4);
-      return {
-        lift: 0.052 + Math.abs(tick) * 0.025,
-        rot: 3.25 + tick * 2.48,
-        dx: tick * 0.0022,
-        anim: "talk",
-      };
-    }
-    const s = (u - 0.78) / 0.22;
-    return { lift: 0.02 * (1 - s), rot: 1.05 * (1 - s), dx: 0, anim: "idle" };
+function vitreousPose(t) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.vitreous));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" };
   }
-  function vitreousPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.vitreous));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 0.068, rot: s * -4.05, dx: s * 0.0028, anim: "play" };
-    }
-    if (u < 0.81) {
-      const flash = Math.sin(t * 7.1) + 0.28 * Math.sin(t * 12.6);
-      return {
-        lift: 0.068 + Math.abs(flash) * 0.033,
-        rot: -4.05 + flash * 4.85,
-        dx: flash * 0.0045,
-        anim: "play",
-      };
-    }
-    const s = (u - 0.81) / 0.19;
-    return { lift: 0.022 * (1 - s), rot: -1.25 * (1 - s), dx: 0, anim: "sit" };
-  }
-  function adamantinePose(t) {
+  if (u < 0.78) {
+    const sweet = Math.sin(t * 2.05);
     return {
-      lift: 0.012 + Math.abs(Math.sin(t * 0.51)) * 0.015,
-      rot: Math.sin(t * 0.58) * 1.35,
-      dx: Math.sin(t * 0.38) * 0.0021,
-      anim: "sit",
+      lift: 3.0 + Math.abs(sweet) * 1.5,
+      rot: -10 + sweet * 14,
+      dx: sweet * 0.14,
+      anim: "play",
     };
   }
-  function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "euhedral") {
-      const pose = euhedralPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "vitreous") {
-      const pose = vitreousPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = adamantinePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
-  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" };
+}
 
-  function sleepHoldFrame(_key, _frameCount) {
-    return null;
-  }
+function adamantinePose(t) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.72) * 8,
+    dx: Math.sin(t * 0.4) * -0.12,
+    anim: "sit",
+  };
+}
 
-  function beginTrick(kind, x, facing) {
+function stepHappy(happy, dt, flags) {
+  if (!happy || happy.phase === "done") return happy;
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "euhedral") {
+    const pose = euhedralPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "vitreous") {
+    const pose = vitreousPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = adamantinePose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
+
+function sleepHoldFrame(_key, _frameCount) {
+  return null;
+}
+
+function beginTrick(kind, x, facing) {
     const anim =
       kind === "crescit"
-    ? "sit"
-    : kind === "cleavage"
-      ? "play"
-      : kind === "twinning"
-        ? "talk"
-        : kind === "inclusion"
-          ? "talk"
-          : kind === "grit"
-            ? "sit"
-                : "sit";
+        ? "sit"
+        : kind === "cleavage"
+          ? "play"
+          : kind === "twinning"
+            ? "talk"
+            : kind === "inclusion"
+              ? "talk"
+              : kind === "grit"
+                ? "sit"
+                : kind === "hopper"
+                  ? "sit"
+                  : kind === "phantom"
+                    ? "play"
+                    : "sit";
     return {
       kind: kind,
       phase: kind === "crescit" ? "hold" : "go",
@@ -232,198 +261,290 @@
   }
 
   function smoothstep(t) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
+}
+
+/** Stratus — long layered hold as living mineral. Not window-play FACET. */
+  function crescitPose(t) {
+  const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: 4 + breath * 6,
+  };
+}
+
+function releasePose(t) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  const s = smoothstep(u);
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+}
+
+/** Waft — soft methane air slide across the blotter. Never named facet/drift/cloud/mist. */
+function cleavagePose(t, fromX, facing) {
+  const u = Math.max(0, Math.min(1, t / DUR.cleavage));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "sit" };
   }
-
-
-    function crescitPose(t) {
-    const breath = Math.sin(t * 0.19) + 0.064 * Math.sin(t * 0.53);
-    const grit = Math.abs(Math.sin(t * 0.27));
+  if (u < 0.52) {
+    const s = (u - 0.16) / 0.36;
+    const bob = Math.sin(s * Math.PI * 1.8);
     return {
-      lift: 0.022 + grit * 0.019,
-      rot: -0.55 + breath * 0.63,
-    };
-  }
-
-  function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.015 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.52 * (1 - u) };
-  }
-
-  function cleavagePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.cleavage));
-    if (u < 0.13) {
-      const s = smoothstep(u / 0.13);
-      return { x: fromX, lift: s * -0.022, rot: s * 1.55 * facing, anim: "sit" };
-    }
-    if (u < 0.7) {
-      const s = (u - 0.13) / 0.57;
-      const bite = Math.sin(s * Math.PI * 5.15);
-      const deepen = smoothstep(s);
-      return {
-        x: fromX + facing * deepen * 0.031,
-        lift: -0.036 - Math.abs(bite) * 0.019 - deepen * 0.016,
-        rot: facing * (1.85 + bite * 2.55),
-        anim: "talk",
-      };
-    }
-    const s = smoothstep((u - 0.7) / 0.3);
-    return {
-      x: fromX + facing * 0.012 * (1 - s),
-      lift: -0.02 * (1 - s),
-      rot: facing * (0.75 * (1 - s)),
+      x: fromX + facing * bob * 0.35,
+      lift: 3.2 - s * 0.8 + Math.abs(bob) * 0.6,
+      rot: facing * (-8 + bob * 12),
       anim: "sit",
     };
   }
-  function twinningPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.twinning));
-    if (u < 0.13) {
-      const s = smoothstep(u / 0.13);
-      return { x: fromX, lift: s * 0.058, rot: s * -2.85 * facing, anim: "talk" };
-    }
-    if (u < 0.56) {
-      const s = (u - 0.13) / 0.43;
-      const pack = Math.sin(s * Math.PI * 4.85);
-      return {
-        x: fromX + facing * (0.018 + Math.abs(pack) * 0.014),
-        lift: 0.068 + Math.abs(pack) * 0.041,
-        rot: facing * (-3.85 + pack * 5.95),
-        anim: "play",
-      };
-    }
-    if (u < 0.87) {
-      const s = (u - 0.56) / 0.31;
-      const press = smoothstep(s);
-      return {
-        x: fromX + facing * 0.026,
-        lift: 0.032 - press * 0.038,
-        rot: facing * (2.45 - press * 4.25),
-        anim: "talk",
-      };
-    }
-    const s = smoothstep((u - 0.87) / 0.13);
+  if (u < 0.82) {
+    const s = (u - 0.52) / 0.3;
+    const settle = smoothstep(s);
     return {
-      x: fromX + facing * 0.014 * (1 - s),
-      lift: -0.009 * (1 - s),
-      rot: facing * (0.55 * (1 - s)),
+      x: fromX + facing * (1 - settle) * 0.4,
+      lift: 2.4 * (1 - settle * 0.85),
+      rot: facing * (-4 + settle * 8),
       anim: "sit",
     };
   }
-  function inclusionPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.inclusion));
-    if (u < 0.2) {
-      const s = smoothstep(u / 0.2);
-      return { x: fromX, lift: 0.038 + s * -0.014, rot: s * 1.35 * facing, anim: "sit" };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.2) / 0.52;
-      const liftUp = smoothstep(s);
-      const shake = Math.sin(s * Math.PI * 3.55);
-      return {
-        x: fromX + facing * shake * 0.007,
-        lift: 0.035 - liftUp * 0.088,
-        rot: facing * (1.15 + shake * 2.65 + liftUp * 2.15),
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX,
+    lift: 0.8 * (1 - s),
+    rot: facing * (3 * (1 - s)),
+    anim: "sit",
+  };
+}
+
+/** Billow — soft swell lift. Never named facet/cloud/puff/haze. */
+function twinningPose(t, fromX, facing) {
+  const u = Math.max(0, Math.min(1, t / DUR.twinning));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "talk" };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.14) / 0.64;
+    const open = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX,
-      lift: 0.075 * (1 - s),
-      rot: facing * (1.25 * (1 - s)),
+      x: fromX + facing * open * 0.4,
+      lift: 2.6 + Math.abs(open) * 1.6,
+      rot: facing * (-10 + open * 14),
+      anim: "talk",
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
+    anim: "sit",
+  };
+}
+
+/** Cirrus — thin high filament tip. Never named facet/cloud/mist/fog. */
+function inclusionPose(t, fromX, facing) {
+  const u = Math.max(0, Math.min(1, t / DUR.inclusion));
+  if (u < 0.18) {
+    const s = smoothstep(u / 0.18);
+    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "play" };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.18) / 0.37;
+    const press = Math.sin(s * Math.PI * 3.4);
+    return {
+      x: fromX + facing * press * 0.4,
+      lift: 2.4 + Math.abs(press) * 1.4,
+      rot: facing * (14 + press * 12),
+      anim: "play",
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const settle = smoothstep(s);
+    return {
+      x: fromX + facing * (1 - settle) * 0.5,
+      lift: 3.2 - settle * 1.2,
+      rot: facing * (14 - settle * 16),
+      anim: "play",
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: facing * (-3 * (1 - s)),
+    anim: "sit",
+  };
+}
+
+/** Virga — rain-that-never-lands evaporate hush. Never named facet/rain/mist/cloud. */
+function gritPose(t, fromX, facing) {
+  const u = Math.max(0, Math.min(1, t / DUR.grit));
+  if (u < 0.15) {
+    const s = smoothstep(u / 0.15);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.15) / 0.4;
+    const cup = smoothstep(s);
+    return {
+      x: fromX + facing * Math.sin(s * Math.PI) * 0.25,
+      lift: 2.6 * (1 - cup * 0.7),
+      rot: facing * (10 - cup * 14),
+      anim: "talk",
+    };
+  }
+  if (u < 0.8) {
+    const s = (u - 0.55) / 0.25;
+    const hold = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * hold * 0.2,
+      lift: 0.8 + Math.abs(hold) * 0.6,
+      rot: facing * (-4 + hold * 10),
+      anim: "talk",
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX,
+    lift: 0.6 * (1 - s),
+    rot: facing * (-2 * (1 - s)),
+    anim: "sit",
+  };
+}
+
+/** Tholin — stepped concave hopper-crystal growth; THE titan faceter tell. Never named facet/drift/cloud/mist/fog/haze/puff/silica as this new tell. */
+function hopperPose(t, fromX, facing) {
+  const u = Math.max(0, Math.min(1, t / DUR.hopper));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "sit" };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const rock = Math.sin(s * Math.PI * 4.2);
+    return {
+      x: fromX + facing * (s * 0.6 + rock * 0.2),
+      lift: 1.8 + Math.abs(rock) * 1.6,
+      rot: facing * (-8 + rock * 14),
       anim: "sit",
     };
   }
-  function gritPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.grit));
-    if (u < 0.15) {
-      const s = smoothstep(u / 0.15);
-      return { x: fromX, lift: s * 0.029, rot: s * -1.95 * facing, anim: "talk" };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.15) / 0.67;
-      const glance = Math.sin(s * Math.PI * 2.75);
-      const velour = Math.sin(s * Math.PI * 6.1) * 0.34;
-      return {
-        x: fromX + facing * glance * 0.005,
-        lift: 0.028 + Math.abs(velour) * 0.011,
-        rot: facing * (-2.65 + glance * 4.45 + velour),
-        anim: "talk",
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const spin = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX,
-      lift: 0.009 * (1 - s),
-      rot: facing * (-0.7 * (1 - s)),
+      x: fromX + facing * 0.6,
+      lift: 2.8 + Math.abs(spin) * 0.8,
+      rot: facing * (4 + spin * 10),
       anim: "sit",
     };
   }
-  function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "cleavage" && trick.kind !== "twinning" && trick.kind !== "inclusion" && trick.kind !== "grit") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "crescit") {
-      if (next.t < CRESCIT_HOLD) {
-        const pose = crescitPose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      if (next.t < CRESCIT_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - CRESCIT_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "cleavage") {
-      const pose = cleavagePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "twinning") {
-      const pose = twinningPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "inclusion") {
-      const pose = inclusionPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = gritPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 1.8 * (1 - s) + s * 0.2,
+    rot: facing * (4 * (1 - s)),
+    anim: "idle",
+  };
+}
+
+/** Nucleate — ghost growth-zone outline inside the body; THE phantom-crystal tell. Never named facet/rain/mist/fog/cloud/drip as this new tell. */
+function phantomPose(t, fromX, facing) {
+  const u = Math.max(0, Math.min(1, t / DUR.phantom));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" };
   }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const sip = smoothstep(s);
+    return {
+      x: fromX + facing * sip * 0.5,
+      lift: 2.6 + sip * 2.4,
+      rot: facing * (10 + sip * 8),
+      anim: "talk",
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const drink = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * (0.5 + drink * 0.3),
+      lift: 4.8 + Math.abs(drink) * 0.8,
+      rot: facing * (6 + drink * 14),
+      anim: "talk",
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.5 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle",
+  };
+}
+
+function stepTrick(trick, dt, flags) {
+  if (!trick || trick.phase === "done") return trick;
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "cleavage" &&
+    trick.kind !== "twinning" &&
+    trick.kind !== "inclusion" &&
+    trick.kind !== "grit" &&
+    trick.kind !== "hopper" &&
+    trick.kind !== "phantom"
+  ) {
+    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next = { ...trick, t: trick.t + Math.max(0, dt) };
+  if (next.kind === "crescit") {
+    if (next.t < CRESCIT_HOLD) {
+      const pose = crescitPose(next.t);
+      next.phase = "hold";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    if (next.t < CRESCIT_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - CRESCIT_HOLD);
+      next.phase = "release";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  }
+  const hold = DUR[next.kind];
+  const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "cleavage") pose = cleavagePose(next.t, fromX, trick.facing);
+  else if (next.kind === "twinning") pose = twinningPose(next.t, fromX, trick.facing);
+  else if (next.kind === "inclusion") pose = inclusionPose(next.t, fromX, trick.facing);
+  else if (next.kind === "grit") pose = gritPose(next.t, fromX, trick.facing);
+  else if (next.kind === "hopper") pose = hopperPose(next.t, fromX, trick.facing);
+  else pose = phantomPose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
+  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
 
   const api = {
     TRICK_KEY,
     TRICKS,
     HAPPY,
     HAPPY_DUR,
+    DUR,
     CRESCIT_HOLD,
     RELEASE_S,
-    DUR,
     canStart,
     shouldAbort,
     nextTrickWait,
@@ -436,6 +557,8 @@
     twinningPose,
     inclusionPose,
     gritPose,
+    hopperPose,
+    phantomPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -446,7 +569,7 @@
     euhedralPose,
     vitreousPose,
     adamantinePose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetSilicaTricks = api;
