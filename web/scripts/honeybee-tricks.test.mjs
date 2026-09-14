@@ -827,8 +827,8 @@ test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; nex
   assert.equal(OverlayGround.wantsThankYou("pitcher"), true);
   assert.equal(OverlayGround.tricksFor("drown"), OverlayPitcher);
   assert.equal(OverlayGround.wantsThankYou("drown"), true);
-  assert.deepEqual([...Pitcher.TRICKS], ["peristome", "cistern", "brine", "operculum", "urn"]);
-  assert.deepEqual([...OverlayPitcher.TRICKS], ["peristome", "cistern", "brine", "operculum", "urn"]);
+  assert.deepEqual([...Pitcher.TRICKS], ["peristome", "cistern", "brine", "operculum", "urn", "ala", "baffle"]);
+  assert.deepEqual([...OverlayPitcher.TRICKS], ["peristome", "cistern", "brine", "operculum", "urn", "ala", "baffle"]);
   assert.equal(OverlayGround.tricksFor("honeybee"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), Overlay);

@@ -56,7 +56,7 @@
     orchid: [A("bark", "sit_hold", 2.4, 4, "sit"), A("labellum_soft", "sit", 1.2, 2, "sit"), A("velamen_soft", "play", 1.2, 2, "play"), A("column_soft", "talk", 1.15, 2, "talk"), A("spike_soft", "talk", 1.15, 2, "talk"), A("keiki_soft", "play", 1.2, 2, "play"), A("pollinia_soft", "talk", 1.15, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
     saguaro: [A("sentinel", "sit_hold", 2.4, 4, "sit"), A("rib_soft", "sit", 1.2, 2, "sit"), A("branch_soft", "play", 1.2, 2, "play"), A("nocturne_soft", "talk", 1.15, 2, "talk"), A("areole_soft", "sit", 1.2, 2, "sit"), A("pleat_soft", "play", 1.2, 2, "play"), A("boot_soft", "talk", 1.15, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
     venus_flytrap: [A("poise", "sit_hold", 2.4, 4, "sit"), A("clamp_soft", "play", 1.2, 2, "play"), A("trichome_soft", "sit", 1.2, 2, "sit"), A("stew_soft", "sit", 1.2, 2, "sit"), A("unseal_soft", "talk", 1.15, 2, "talk"), A("cage_soft", "play", 1.2, 2, "play"), A("scape_soft", "talk", 1.15, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
-    pitcher: [A("still", "freeze", 3.2, 5), A("lean", "lean", 1.6, 2), A("nod", "nod", 1.0, 1, "sit")],
+    pitcher: [A("urn", "sit_hold", 2.4, 4, "sit"), A("peristome_soft", "play", 1.2, 2, "play"), A("cistern_soft", "sit", 1.2, 2, "sit"), A("brine_soft", "sit", 1.2, 2, "sit"), A("operculum_soft", "talk", 1.15, 2, "talk"), A("ala_soft", "play", 1.2, 2, "play"), A("baffle_soft", "talk", 1.15, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
     sundew: [A("curl", "curl", 2.0, 4, "sit"), A("lean", "lean", 1.4, 2), A("nod", "nod", 0.9, 1, "sit")],
     honeybee: [A("waggle", "waggle", 1.2, 4), A("dart", "dart", 0.8, 2), A("still", "freeze", 1.4, 1)],
     monarch: [A("flutter", "pulse", 1.0, 3), A("migrate", "dart", 1.2, 2), A("still", "freeze", 1.8, 2)],
