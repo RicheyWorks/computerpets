@@ -1,352 +1,542 @@
-/** Spike ground tricks while idle. House neighborly Phrynosomatidae / Phrynosoma cornutum Texas Horned Lizard sand-tray desk life — bloodsquirt / antfeast / freezeflat / rainharvest / phrynosoma personality (bloodsquirt ocular blood-squirt bluff without naming blood or squirt or ocular or eye or spray or threat or warn or defense or stream or red or bleed or pressure, antfeast harvester ant feast without naming ant or feast or harvest or eat or nibble or prey or pogonomyrmex or crawl or bite or forage or crumb, freezeflat freeze flatten crypsis without naming freeze or flat or flatten or still or hide or camouflage or sand or crypt or press or loaf or nap, rainharvest dorsal rain-harvest without naming rain or harvest or drip or channel or water or dew or drink or dorsal or mouth or groove or scale, long phrynosoma Phrynosoma cornutum surface-calm crown hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or veilflush or turretgaze or tongueshot or branchrock or calyptratus or denshift or inkshift or denscasque or tailbluff or litterdash or tongueflick or sunbask or plestiodon or dewlapflash or pushupshow or hueshift or preyinch or anolis or toepadcling or vocalclick or lickeye or mothstalk or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or erethizon or woodfell or paddleclap or lodgehaul or mudpack or castor or stillfeign or scrapnose or gapegrin or raftergrip or didelphis or footstomp or duffgrub or handwarn or plumeaim or mephitis or pawdouse or litterdig or rearstand or maskpeer or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or lontra or nutbury or sciurus or popcorn or rumble or hay or potato or zig or soak or tuck or crane or plod or paddle or wingwrap or eptesicus or flagtail or odocoileus or promenade or oil or dab or tip or drum or sip or hover or curl or snuffle or anoint or bristle or root or quote or strut or fan or crack or flash; window-play FLASH and Call Spike leave horned_lizard alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale/Flag/Cape/Cache/Slick/Wash/Stripe/Grin/Dam/Spine/Coal/Soak/Pad/Wink/Dash/Shift own their tricks; guest slug Spike / key horned_lizard — accept "horned_lizard" and "spike" (roster slug spike; campaign Spike); do NOT name a trick horned_lizard or spike or chameleon or calyptratus or veiled or skink or plestiodon or fasciatus or anole or anolis or carolinensis or gecko or hemidactylus or turcicus or salamander or dapple or iguana or sol or newt or eft or caecilian or slip or frog or reed or toad or pebble or dash or densdash or inkdash or densbluff or wink or denswink or inkwink or densdewlap or shift or denshift or inkshift or denscasque or Horn or Bank or mining). Thank-yous denspike / inkspike / denscorona. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web horned_lizard-tricks.ts. Window-play FLASH unchanged. True Texas Horned Lizard Phrynosomatidae desk life — not chameleon/skink/anole/gecko/salamander/iguana/newt/frog/rui clones. Levee owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Spike ground tricks while idle — ultra-polish pass. House neighborly Phrynosomatidae / Phrynosoma cornutum Texas Horned Lizard sand-tray desk life (horned_lizard / Spike) — bloodsquirt / antfeast / freezeflat / rainharvest / coronal / sandhush / phrynosoma personality (bloodsquirt ocular blood-squirt bluff without naming blood or squirt or ocular or eye or spray or threat or warn or defense or stream or red or bleed or pressure alone, antfeast harvester ant feast without naming ant or feast or harvest or eat or nibble or prey or pogonomyrmex or crawl or bite or forage or crumb alone, freezeflat freeze flatten crypsis without naming freeze or flat or flatten or still or hide or camouflage or sand or crypt or press or loaf or nap alone, rainharvest dorsal rain-harvest without naming rain or harvest or drip or channel or water or dew or drink or dorsal or mouth or groove or scale alone, coronal coronal horn crown raise without naming coronal or crown or horn or crest or raise or helmet or ridge or spike or nuchal alone, sandhush sand-tray hush settle without naming sand or hush or tray or sit or rest or lounge or nap or loaf alone, long phrynosoma Phrynosoma cornutum surface-calm crown hush hold (THE phrynosoma sit_hold tell) — never named wait or crouch or roost or look or stalk or monocle or fossick or anting or corvid or veilflush or turretgaze or tongueshot or branchrock or casque or zygodactyl or calyptratus or denshift or inkshift or denscasque or tailbluff or litterdash or tongueflick or sunbask or bluetail or stonehush or plestiodon or dewlapflash or pushupshow or hueshift or preyinch or nuchal or vinehush or anolis or toepadcling or vocalclick or lickeye or mothstalk or setae or lamphush or hemidactylus or mudwallow or sedgecrop or alarmwhistle or pilelean or scentgland or socialpile or hydrochoerus or bipedrise or clawscar or berrypluck or denscrape or bluffhuff or mastforage or ursus or toothclack or boleclimb or cambiumchew or dorsoflare or guardhair or pinehush or erethizon or woodfell or paddleclap or lodgehaul or mudpack or aspen or divehush or castor or stillfeign or scrapnose or gapegrin or raftergrip or pouchcarry or prehensile or didelphis or footstomp or duffgrub or handwarn or plumeaim or scentraise or plantigrade or mephitis or pawdouse or litterdig or rearstand or maskpeer or dexterous or ringtail or procyon or bellyglide or corkroll or shellcrunch or whiskernudge or denslide or spraint or lontra or nutbury or tailflick or cheekpouch or branchleap or barkscramble or scold or sciurus or wingwrap or traguscup or thumbcrawl or duskhang or eptesicus or flagtail or edgebrowse or earswivel or forestamp or odocoileus or curl or snuffle or anoint or bristle or root or trundle or wheel or tube or romp or steal or puff or noodle or corkscrew or slink or hang or flutter or still or stamp or raise or spray or skunk or stripe or playdead or grin or opossum or ferret or weasel or mink or otter or red_panda or wash or beaver or dam or porcupine or spine or quill or popcorn or rumble or hay or potato or zig or lookout or teeth or soak or graze or nuzzle or capybara or bankhush or climb or chirp or cling or gecko or pad or dewlap or sun or nod or press or flick or sneeze or lash or maculate or litter or cutaneous or nasolabial or ambystomid or mental or granular or crest or caudal or filament or costal or caudate or lamella or imbricate or lasso or margin or pleurotus or gular or nictitate or tympanum or iliac or lentic or toepad or webbing or verruca or burrow or parotoid or tubercle or bufonid or flash or brown or hue or shift or chameleon or aim or catch or dash or skink or tail or crown or squirt or horned or spike as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play FLASH unchanged if already fine; Shift owns veilflush/turretgaze/tongueshot/branchrock/casque/zygodactyl/calyptratus; Wink owns dewlapflash/pushupshow/hueshift/preyinch/nuchal/vinehush/anolis — do NOT reuse nuchal; Pad owns toepadcling/vocalclick/lickeye/mothstalk/setae/lamphush/hemidactylus; Dash owns tailbluff/litterdash/tongueflick/sunbask/bluetail/stonehush/plestiodon; Spine porcupine / Burr hedgehog — keep Phrynosoma-true; Column carpenter_ant peer — antfeast ok if distinct from ant guest life; Grin owns stillfeign; Wash owns litterdig; guest slug Spike / key horned_lizard only for isKey matching — accept "horned_lizard" and "spike"; do NOT name a trick "horned_lizard" or "spike" or "crown" or "squirt" or "still" or "flash" or "nuchal" or "chameleon" or "shift" or "skink" or "dash" or "anole" or "wink" or "gecko" or "pad" or "iguana" or "sol" or "frog" or "reed" or "alligator" or "levee") — not Shift chameleon life, not Wink anole life, not Pad gecko life, not Dash skink life, not Sol iguana life, not Reed frog life, not Levee alligator life, not Rui red_panda life. Bloodsquirt blood squirt without naming squirt alone, antfeast ant feast without naming ant alone, freezeflat freeze flat without naming freeze alone, rainharvest rain harvest without naming rain alone, coronal coronal raise without naming crown alone, sandhush sand hush without naming sand alone, phrynosoma long sit_hold on the sand tray (THE phrynosoma sit_hold tell); denspike / inkspike / denscorona thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web horned_lizard-tricks.ts. Window-play FLASH unchanged. Ethogram softs + freeze — never names crown/squirt/still/horned_lizard as bare ethogram-only trick kinds. True Phrynosoma cornutum Phrynosomatidae Texas Horned Lizard desk life only — distinct from Shift, Wink, Pad, Dash, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Dam, Whee, Slick, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Levee, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Levee / alligator. No cry inventing — thank-yous are silent desk motion only; no horned_lizard.wav on disk so prefersHouseCry skipped. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
   const TRICK_KEY = "horned_lizard";
-  const TRICKS = ["bloodsquirt", "antfeast", "freezeflat", "rainharvest", "phrynosoma"];
+  const TRICKS = ["bloodsquirt", "antfeast", "freezeflat", "rainharvest", "coronal", "sandhush", "phrynosoma"];
   const HAPPY = ["denspike", "inkspike", "denscorona"];
-  const HAPPY_DUR = { denspike: 2.12, inkspike: 2.26, denscorona: 2.18 };
-  const PHRYNOSOMA_HOLD = 20.56;
-  const RELEASE_S = 1.62;
-  const DUR = { phrynosoma: PHRYNOSOMA_HOLD + RELEASE_S, bloodsquirt: 3.06, antfeast: 3.00, freezeflat: 3.22, rainharvest: 3.14 };
-
+  const HAPPY_DUR = { denspike: 1.70, inkspike: 1.84, denscorona: 1.76 };
+  const PHRYNOSOMA_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+      phrynosoma: PHRYNOSOMA_HOLD + RELEASE_S,
+      bloodsquirt: 2.48,
+      antfeast: 2.42,
+      freezeflat: 2.56,
+      rainharvest: 2.44,
+      coronal: 2.40,
+      sandhush: 2.38,
+  };
   function canStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function shouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "eat" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function nextTrickWait(justFinished, rand, kind) {
-    const roll = rand == null ? Math.random() : rand;
-      if (kind === "phrynosoma") return 130 + roll * 12;
-  if (kind === "bloodsquirt") return 20.4 + roll * 5.8;
-  if (kind === "antfeast") return 21.6 + roll * 6.4;
-  if (kind === "rainharvest") return 23.0 + roll * 7.0;
-  return justFinished ? 19.0 + roll * 5.4 : 13.0 + roll * 4.6;
+      const roll = rand == null ? Math.random() : rand;
+      if (kind === "phrynosoma")
+          return 40 + roll * 26;
+      if (kind === "coronal" || kind === "sandhush" || kind === "bloodsquirt")
+          return 12.8 + roll * 9.4;
+      if (kind === "antfeast" || kind === "freezeflat" || kind === "rainharvest")
+          return 11.6 + roll * 8.5;
+      return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
-
   function pickTrick(rand, musicOn, lastKind) {
-    if (musicOn) return "phrynosoma";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "phrynosoma") {
-      if (roll < 0.26) return "bloodsquirt";
-      if (roll < 0.5) return "antfeast";
-      if (roll < 0.74) return "freezeflat";
-      return "rainharvest";
-    }
-    if (lastKind === "bloodsquirt") {
-      if (roll < 0.26) return "phrynosoma";
-      if (roll < 0.5) return "antfeast";
-      if (roll < 0.74) return "freezeflat";
-      return "rainharvest";
-    }
-    if (lastKind === "antfeast") {
-      if (roll < 0.22) return "phrynosoma";
-      if (roll < 0.44) return "bloodsquirt";
-      if (roll < 0.68) return "freezeflat";
-      return "rainharvest";
-    }
-    if (roll < 0.2) return "phrynosoma";
-    if (roll < 0.4) return "bloodsquirt";
-    if (roll < 0.6) return "antfeast";
-    if (roll < 0.8) return "freezeflat";
-    return "rainharvest";
+      if (musicOn)
+          return "phrynosoma";
+      const roll = rand == null ? Math.random() : rand;
+      if (lastKind === "phrynosoma") {
+          if (roll < 0.17)
+              return "bloodsquirt";
+          if (roll < 0.33)
+              return "antfeast";
+          if (roll < 0.49)
+              return "freezeflat";
+          if (roll < 0.65)
+              return "rainharvest";
+          if (roll < 0.83)
+              return "coronal";
+          return "sandhush";
+      }
+      if (lastKind === "bloodsquirt") {
+          if (roll < 0.16)
+              return "phrynosoma";
+          if (roll < 0.32)
+              return "antfeast";
+          if (roll < 0.48)
+              return "freezeflat";
+          if (roll < 0.64)
+              return "rainharvest";
+          if (roll < 0.82)
+              return "coronal";
+          return "sandhush";
+      }
+      if (lastKind === "antfeast") {
+          if (roll < 0.14)
+              return "phrynosoma";
+          if (roll < 0.3)
+              return "bloodsquirt";
+          if (roll < 0.46)
+              return "freezeflat";
+          if (roll < 0.62)
+              return "rainharvest";
+          if (roll < 0.8)
+              return "coronal";
+          return "sandhush";
+      }
+      if (lastKind === "coronal" || lastKind === "sandhush") {
+          if (roll < 0.14)
+              return "phrynosoma";
+          if (roll < 0.3)
+              return "bloodsquirt";
+          if (roll < 0.46)
+              return "antfeast";
+          if (roll < 0.62)
+              return "freezeflat";
+          if (roll < 0.78)
+              return "rainharvest";
+          return lastKind === "coronal" ? "sandhush" : "coronal";
+      }
+      if (roll < 0.14)
+          return "phrynosoma";
+      if (roll < 0.28)
+          return "bloodsquirt";
+      if (roll < 0.42)
+          return "antfeast";
+      if (roll < 0.56)
+          return "freezeflat";
+      if (roll < 0.7)
+          return "rainharvest";
+      if (roll < 0.85)
+          return "coronal";
+      return "sandhush";
   }
-
   function happyCanStart(state) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
+      if (!state)
+          return false;
+      if (state.asleep || state.hidden || state.leaving)
+          return false;
+      const cmd = String(state.cmd || "");
+      if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest")
+          return false;
+      if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter")
+          return false;
+      return true;
   }
-
   function happyShouldAbort(state) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
+      if (!state)
+          return true;
+      if (state.asleep || state.hidden || state.leaving)
+          return true;
+      const cmd = String(state.cmd || "");
+      return (cmd === "sleep" ||
+          cmd === "leave" ||
+          cmd === "hide" ||
+          cmd === "rest" ||
+          cmd === "seek" ||
+          cmd === "play" ||
+          cmd === "talk" ||
+          cmd === "enter");
   }
-
   function wantsThankYou(key) {
-    return key === TRICK_KEY || key === "spike";
+      return key === TRICK_KEY || key === "spike";
   }
-
   function startThankYou(key, lastKind, x, facing, flags) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
+      if (!wantsThankYou(key))
+          return null;
+      if (!happyCanStart(flags || { cmd: "idle" }))
+          return null;
+      const pick = pickHappy(lastKind);
+      return { happy: beginHappy(pick, x, facing), kind: pick };
   }
-
   function pickHappy(lastKind, rand) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
+      const pool = HAPPY.filter((k) => k !== lastKind);
+      const list = pool.length ? pool : [...HAPPY];
+      const roll = rand == null ? Math.random() : rand;
+      return list[Math.floor(roll * list.length)] || list[0];
   }
-
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denspike";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: name === "denspike" ? "sit" : name === "inkspike" ? "play" : "sit",
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
+      const name = HAPPY.indexOf(kind) >= 0 ? kind : "denspike";
+      return {
+          kind: name,
+          happy: true,
+          phase: "go",
+          t: 0,
+          x: x,
+          lift: 0,
+          rot: 0,
+          anim: name === "denspike" ? "sit" : name === "inkspike" ? "play" : "sit",
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
   }
-
-                      function denspikePose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denspike));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.016, rot: s * 1.85, dx: 0, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const crown = Math.sin(t * 2.6) + 0.10 * Math.sin(t * 5.2);
-      return { lift: 0.016 + Math.abs(crown) * 0.0080, rot: 1.85 + crown * 1.05, dx: crown * 0.00050, anim: "sit" };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.003 * (1 - s), rot: 0.22 * (1 - s), dx: 0, anim: "idle" };
+  function denspikePose(t) {
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denspike));
+      if (u < 0.14) {
+          const s = u / 0.14;
+          return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
+      }
+      if (u < 0.78) {
+          const flash = Math.sin(t * 2.2);
+          return {
+              lift: 2.8 + Math.abs(flash) * 1.4,
+              rot: 12 + flash * 8,
+              dx: flash * 0.08,
+              anim: "sit",
+          };
+      }
+      const s = (u - 0.78) / 0.22;
+      return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
   function inkspikePose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkspike));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.042, rot: s * -2.55, dx: s * 0.00128, anim: "play" };
-    }
-    if (u < 0.85) {
-      const ant = Math.sin(t * 2.7) + 0.12 * Math.sin(t * 5.4);
-      return { lift: 0.042 + Math.abs(ant) * 0.014, rot: -2.55 + ant * 2.10, dx: ant * 0.00150, anim: "play" };
-    }
-    const s = (u - 0.85) / 0.15;
-    return { lift: 0.005 * (1 - s), rot: -0.34 * (1 - s), dx: 0, anim: "sit" };
+      const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkspike));
+      if (u < 0.12) {
+          const s = u / 0.12;
+          return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
+      }
+      if (u < 0.8) {
+          const wriggle = Math.sin(t * 2.6);
+          return {
+              lift: 3.4 + Math.abs(wriggle) * 1.6,
+              rot: -14 + wriggle * 10,
+              dx: wriggle * 0.12,
+              anim: "play",
+          };
+      }
+      const s = (u - 0.8) / 0.2;
+      return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
   function denscoronaPose(t) {
-    return { lift: 0.0066 + Math.abs(Math.sin(t * 0.124)) * 0.0100, rot: Math.sin(t * 0.124) * 0.94, dx: Math.sin(t * 0.092) * 0.00054, anim: "sit" };
+      return {
+          lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+          rot: Math.sin(t * 0.58) * 8,
+          dx: Math.sin(t * 0.4) * 0.06,
+          anim: "sit",
+      };
   }
   function stepHappy(happy, dt, flags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "denspike") {
-      const pose = denspikePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "inkspike") {
-      const pose = inkspikePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = denscoronaPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      if (!happy || happy.phase === "done")
+          return happy;
+      if (happyShouldAbort(flags)) {
+          return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+      }
+      const next = { ...happy, t: happy.t + Math.max(0, dt) };
+      const hold = HAPPY_DUR[next.kind];
+      if (next.kind === "denspike") {
+          const pose = denspikePose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "inkspike") {
+          const pose = inkspikePose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = denscoronaPose(next.t);
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (next.t >= hold)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
-
   function sleepHoldFrame(_key, _frameCount) {
-    return null;
+      return null;
   }
-
   function beginTrick(kind, x, facing) {
-    const anim =
-      kind === "phrynosoma"
-        ? "sit"
-        : kind === "bloodsquirt"
-          ? "play"
-          : kind === "antfeast"
-            ? "play"
-            : kind === "freezeflat"
-              ? "sit"
-              : kind === "rainharvest"
-                ? "talk"
-                : "sit";
-    return {
-      kind: kind,
-      phase: kind === "phrynosoma" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: facing == null ? 1 : facing,
-      fromX: x,
-    };
+      const anim = kind === "phrynosoma"
+          ? "sit"
+          : kind === "bloodsquirt"
+              ? "play"
+              : kind === "antfeast"
+                  ? "play"
+                  : kind === "freezeflat"
+                      ? "sit"
+                      : kind === "rainharvest"
+                          ? "talk"
+                          : kind === "coronal"
+                              ? "talk"
+                              : kind === "sandhush"
+                                  ? "sit"
+                                  : "sit";
+      return {
+          kind,
+          phase: kind === "phrynosoma" ? "hold" : "go",
+          t: 0,
+          x,
+          lift: 0,
+          rot: 0,
+          anim,
+          facing: facing == null ? 1 : facing,
+          fromX: x,
+      };
   }
-
   function smoothstep(t) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
+      const x = Math.max(0, Math.min(1, t));
+      return x * x * (3 - 2 * x);
   }
-
-
-                      function phrynosomaPose(t) {
-    const breath = Math.sin(t * 0.032) + 0.022 * Math.sin(t * 0.096);
-    const settle = Math.abs(Math.sin(t * 0.034));
-    return { lift: 0.0034 + settle * 0.0088, rot: 0.10 + breath * 0.38 };
+  function phrynosomaPose(t) {
+      return {
+          lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+          rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+      };
   }
-
   function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.0028 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.09 * (1 - u) };
+      const u = Math.max(0, Math.min(1, t / RELEASE_S));
+      return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
-
   function bloodsquirtPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.bloodsquirt));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.09) {
-      const s = smoothstep(u / 0.09);
-      return { x: fromX + face * s * 0.0004, lift: s * 0.026, rot: s * 3.6 * face, anim: "play" };
-    }
-    if (u < 0.86) {
-      const squirt = Math.sin((u - 0.09) / 0.77 * Math.PI * 5.2);
-      const ocular = Math.sin(t * 6.2) + 0.14 * Math.sin(t * 12.4);
-      return { x: fromX + face * (0.0004 + squirt * 0.0009 + ocular * 0.00020), lift: 0.022 + Math.abs(squirt) * 0.016 + Math.abs(ocular) * 0.006, rot: (3.6 + squirt * 2.6 + ocular * 1.4) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0004 * (1 - s), lift: 0.004 * (1 - s), rot: 0.34 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.bloodsquirt));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX + face * s * 0.8, lift: s * 3.5, rot: s * 16 * face, anim: "play" };
+      }
+      if (u < 0.78) {
+          const tip = Math.sin(t * 2.4);
+          return {
+              x: fromX + face * (0.8 + tip * 0.12),
+              lift: 3.5 + Math.abs(tip) * 1.5,
+              rot: face * (16 + tip * 10),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX + face * 0.8 * (1 - s),
+          lift: 1.4 * (1 - s),
+          rot: face * (4 * (1 - s)),
+          anim: "idle",
+      };
   }
   function antfeastPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.antfeast));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0018, lift: s * 0.016, rot: s * -2.4 * face, anim: "play" };
-    }
-    if (u < 0.88) {
-      const nibble = Math.sin((u - 0.10) / 0.78 * Math.PI * 6.8);
-      const harvest = Math.sin(t * 7.6) + 0.13 * Math.sin(t * 15.2);
-      return { x: fromX + face * (0.0018 + nibble * 0.0020 + harvest * 0.00028), lift: 0.014 + Math.abs(nibble) * 0.012 + Math.abs(harvest) * 0.005, rot: (-2.4 + nibble * 2.2 + harvest * 1.2) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0018 * (1 - s), lift: 0.003 * (1 - s), rot: -0.26 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.antfeast));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.12) {
+          const s = smoothstep(u / 0.12);
+          return { x: fromX, lift: s * 2.6, rot: s * -10 * face, anim: "play" };
+      }
+      if (u < 0.78) {
+          const bob = Math.sin(t * 2.8);
+          return {
+              x: fromX + face * bob * 0.5,
+              lift: 2.6 + Math.abs(bob) * 1.4,
+              rot: face * (-10 + bob * 12),
+              anim: "play",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.2 * (1 - s),
+          rot: face * (-3 * (1 - s)),
+          anim: "idle",
+      };
   }
   function freezeflatPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.freezeflat));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.0002, lift: s * 0.002, rot: s * 0.6 * face, anim: "sit" };
-    }
-    if (u < 0.86) {
-      const hush = Math.sin((u - 0.14) / 0.72 * Math.PI * 1.4);
-      const sand = Math.sin(t * 1.6) + 0.08 * Math.sin(t * 3.2);
-      return { x: fromX + face * (0.0002 + hush * 0.0003 + sand * 0.00010), lift: 0.001 + Math.abs(hush) * 0.004 + Math.abs(sand) * 0.002, rot: (0.6 + hush * 0.7 + sand * 0.4) * face, anim: "sit" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0002 * (1 - s), lift: 0.001 * (1 - s), rot: 0.12 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.freezeflat));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 3.8, rot: s * 14 * face, anim: "sit" };
+      }
+      if (u < 0.78) {
+          const cast = Math.sin(t * 2.6);
+          return {
+              x: fromX - face * cast * 0.16,
+              lift: 3.6 + Math.abs(cast) * 1.6,
+              rot: face * (14 + cast * 12),
+              anim: "sit",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.4 * (1 - s),
+          rot: face * (4 * (1 - s)),
+          anim: "idle",
+      };
   }
   function rainharvestPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.rainharvest));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0006, lift: s * 0.012, rot: s * -2.0 * face, anim: "talk" };
-    }
-    if (u < 0.84) {
-      const channel = Math.sin((u - 0.12) / 0.72 * Math.PI * 2.8);
-      const drip = Math.sin(t * 3.0) + 0.11 * Math.sin(t * 6.0);
-      return { x: fromX + face * (0.0006 + channel * 0.0008 + drip * 0.00018), lift: 0.010 + Math.abs(channel) * 0.010 + Math.abs(drip) * 0.004, rot: (-2.0 + channel * 1.6 + drip * 0.9) * face, anim: "talk" };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.0006 * (1 - s), lift: 0.002 * (1 - s), rot: -0.22 * (1 - s) * face, anim: "idle" };
+      const u = Math.max(0, Math.min(1, t / DUR.rainharvest));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX + face * s * 0.6, lift: s * 2.8, rot: s * 12 * face, anim: "talk" };
+      }
+      if (u < 0.78) {
+          const nestle = Math.sin(t * 2.2);
+          return {
+              x: fromX + face * (0.6 + nestle * 0.1),
+              lift: 2.4 + Math.abs(nestle) * 1.8,
+              rot: face * (12 + nestle * 8),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX + face * 0.6 * (1 - s),
+          lift: 1.2 * (1 - s),
+          rot: face * (3 * (1 - s)),
+          anim: "idle",
+      };
+  }
+  function coronalPose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.coronal));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 2.8, rot: s * -12 * face, anim: "talk" };
+      }
+      if (u < 0.55) {
+          const tip = Math.sin(t * 2.0);
+          return {
+              x: fromX + face * tip * 0.08,
+              lift: 2.8 + tip * 1.6,
+              rot: face * (-12 + tip * 10),
+              anim: "talk",
+          };
+      }
+      if (u < 0.78) {
+          const hush = Math.sin(t * 0.9);
+          return {
+              x: fromX,
+              lift: 4.0 + Math.abs(hush) * 0.6,
+              rot: face * (-4 + hush * 3),
+              anim: "talk",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 2.0 * (1 - s),
+          rot: face * (-2 * (1 - s)),
+          anim: "idle",
+      };
+  }
+  function sandhushPose(t, fromX, facing) {
+      const u = Math.max(0, Math.min(1, t / DUR.sandhush));
+      const face = facing == null ? 1 : facing;
+      if (u < 0.14) {
+          const s = smoothstep(u / 0.14);
+          return { x: fromX, lift: s * 3.4, rot: s * 12 * face, anim: "sit" };
+      }
+      if (u < 0.55) {
+          const stretch = Math.sin(t * 2.3);
+          return {
+              x: fromX + face * stretch * 0.1,
+              lift: 3.4 + stretch * 1.4,
+              rot: face * (12 + stretch * 9),
+              anim: "sit",
+          };
+      }
+      if (u < 0.78) {
+          const hush = Math.sin(t * 0.85);
+          return {
+              x: fromX,
+              lift: 4.4 + Math.abs(hush) * 0.7,
+              rot: face * (5 + hush * 3),
+              anim: "sit",
+          };
+      }
+      const s = smoothstep((u - 0.78) / 0.22);
+      return {
+          x: fromX,
+          lift: 1.8 * (1 - s),
+          rot: face * (2 * (1 - s)),
+          anim: "idle",
+      };
   }
   function stepTrick(trick, dt, flags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "bloodsquirt" && trick.kind !== "antfeast" && trick.kind !== "freezeflat" && trick.kind !== "rainharvest") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "phrynosoma") {
-      if (next.t < PHRYNOSOMA_HOLD) {
-        const pose = phrynosomaPose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      if (!trick || trick.phase === "done")
+          return trick;
+      if (shouldAbort(flags) && trick.kind !== "bloodsquirt" && trick.kind !== "antfeast" && trick.kind !== "freezeflat" && trick.kind !== "rainharvest" && trick.kind !== "coronal" && trick.kind !== "sandhush") {
+          return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
       }
-      if (next.t < PHRYNOSOMA_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - PHRYNOSOMA_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
+      const next = { ...trick, t: trick.t + Math.max(0, dt) };
+      if (next.kind === "phrynosoma") {
+          if (next.t < PHRYNOSOMA_HOLD) {
+              const pose = phrynosomaPose(next.t);
+              next.phase = "hold";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          if (next.t < PHRYNOSOMA_HOLD + RELEASE_S) {
+              const pose = releasePose(next.t - PHRYNOSOMA_HOLD);
+              next.phase = "release";
+              next.lift = pose.lift;
+              next.rot = pose.rot;
+              next.anim = "sit";
+              return next;
+          }
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "bloodsquirt") {
-      const pose = bloodsquirtPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "antfeast") {
-      const pose = antfeastPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "freezeflat") {
-      const pose = freezeflatPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = rainharvestPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+      const hold = DUR[next.kind];
+      const u = next.t / hold;
+      const fromX = trick.fromX != null ? trick.fromX : trick.x;
+      if (next.kind === "bloodsquirt") {
+          const pose = bloodsquirtPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "antfeast") {
+          const pose = antfeastPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "freezeflat") {
+          const pose = freezeflatPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "rainharvest") {
+          const pose = rainharvestPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else if (next.kind === "coronal") {
+          const pose = coronalPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      else {
+          const pose = sandhushPose(next.t, fromX, trick.facing);
+          next.x = pose.x;
+          next.lift = pose.lift;
+          next.rot = pose.rot;
+          next.anim = pose.anim;
+      }
+      if (u >= 1)
+          return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+      return next;
   }
 
   const api = {
@@ -369,6 +559,8 @@
     antfeastPose,
     freezeflatPose,
     rainharvestPose,
+    coronalPose,
+    sandhushPose,
     stepTrick,
     happyCanStart,
     happyShouldAbort,
@@ -379,7 +571,7 @@
     denspikePose,
     inkspikePose,
     denscoronaPose,
-    stepHappy,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetHornedLizardTricks = api;
