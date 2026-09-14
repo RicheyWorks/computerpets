@@ -472,7 +472,7 @@ test("ultra-polish: Blush pebble/dune/talus lifts are Rui-visible (not micro idl
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Blush idle-life ultra done; Atlas / carpet_python ultra done; Cup / octopus ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Ochre / sea_star ultra done; next house-order ultra guest is Tenant / hermit_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Blush idle-life ultra done; Atlas / carpet_python ultra done; Cup / octopus ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Tenant / hermit_crab ultra done; next house-order ultra guest is Ledger / horseshoe_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
   assert.equal(T.TRICK_KEY, "rosy_boa");
   assert.equal(T.wantsThankYou("blush"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);
