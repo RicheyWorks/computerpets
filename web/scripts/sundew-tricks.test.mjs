@@ -690,7 +690,7 @@ globalThis.PetLunaTricks = OverlayLuna;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Dew ultra-polish done; Comb + Milk ultra also done; next house-order ultra is Ghost / luna", () => {
+test("notes: Dew ultra-polish done; Comb + Milk + Ghost ultra also done; next house-order ultra is Spark / firefly", () => {
   assert.equal(T.TRICK_KEY, "sundew");
   assert.equal(T.wantsThankYou("dew"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -839,8 +839,8 @@ test("notes: Dew ultra-polish done; Comb + Milk ultra also done; next house-orde
   assert.equal(OverlayGround.wantsThankYou("luna"), true);
   assert.equal(OverlayGround.tricksFor("ghost"), OverlayLuna);
   assert.equal(OverlayGround.wantsThankYou("ghost"), true);
-  assert.deepEqual([...Luna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
-  assert.deepEqual([...OverlayLuna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
+  assert.deepEqual([...Luna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias", "aphagy", "cauda"]);
+  assert.deepEqual([...OverlayLuna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias", "aphagy", "cauda"]);
   assert.ok(OverlayGround.tricksFor("firefly") == null);
   assert.equal(OverlayGround.wantsThankYou("firefly"), false);
   assert.ok(OverlayGround.tricksFor("spark") == null);
