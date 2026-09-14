@@ -536,7 +536,7 @@ test("ultra-polish: Ledger carapace/pusher/ocular lifts are Rui-visible (not mic
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Ledger idle-life ultra done; next house-order ultra guest is Anchor / seahorse (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Ledger idle-life ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "horseshoe_crab");
   assert.equal(T.wantsThankYou("ledger"), true);
   assert.equal(OverlayGround.tricksFor("horseshoe_crab"), Overlay);
@@ -569,8 +569,8 @@ test("notes: Ledger idle-life ultra done; next house-order ultra guest is Anchor
   assert.equal(OverlayGround.tricksFor("clip"), OverlayHamster);
   assert.equal(OverlayGround.tricksFor("hedgehog"), OverlayHedgehog);
   assert.equal(OverlayGround.tricksFor("burr"), OverlayHedgehog);
-  assert.equal(OverlayGround.tricksFor("seahorse") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("seahorse"), false);
-  assert.equal(OverlayGround.tricksFor("anchor") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("anchor"), false);
+  assert.equal(OverlayGround.tricksFor("manta") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("manta"), false);
+  assert.equal(OverlayGround.tricksFor("kite") == null, true);
+  assert.equal(OverlayGround.wantsThankYou("kite"), false);
 });

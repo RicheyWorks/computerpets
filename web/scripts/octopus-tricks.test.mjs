@@ -351,7 +351,7 @@ test("ultra-polish: Cup mantle/papilla/ooze lifts are Rui-visible (not micro idl
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Cup idle-life ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Ledger / horseshoe_crab ultra done; next house-order ultra guest is Anchor / seahorse (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
+test("notes: Cup idle-life ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; Pulse / moon_jelly ultra done; Anchor / seahorse ultra done; next house-order ultra guest is Kite / manta (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre + Tenant + Ledger + Anchor already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird", () => {
   assert.equal(T.TRICK_KEY, "octopus");
   assert.equal(T.wantsThankYou("cup"), true);
   assert.equal(OverlayGround.tricksFor("octopus"), Overlay);
