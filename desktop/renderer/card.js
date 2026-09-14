@@ -41,7 +41,7 @@
   const PREFER_VOICE = /neural|natural|online/i;
   const ROBOT_VOICE = /compact|bad news|good news|hysterical|zarvox|trinoids|boing|bubbles|albert|whisper|princess|junior|cellos|organ|bells|pipe|robot|novelty|eddy|reed|shelley|grandpa|grandma|superstar|bahh|deranged|wobble|kathy|fred|ralph|bruce|agnes|espeak|festival/i;
 
-  const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, and Sepia talk with house cry first; system speech is the backup.";
+  const VOICE_TRUTH = "Rui, Soot, Wedge, Heart, Hook, Dee, Brick, Drake, Vee, Drum, Sip, Echo, Peck, Quill, Keel, Ember, Miso, Pip, Thimble, Clip, Whee, Ink, Coin, Rue, Wick, Burr, Floss, Bloom, Vesper, Nori, Saffron, Bandit, Jade, Bluff, Sash, Lula, Coral, Blush, Atlas, Cup, Sepia, and Chamber talk with house cry first; system speech is the backup.";
   const QUIT_TRUTH = "Turns the overlay off. Start again with .\\desktop.ps1.";
   const SLEEP_WAKES = ["talk", "play", "eat", "seek", "leave", "enter", "call", "feed", "snack", "hide", "wander"];
 
@@ -330,7 +330,7 @@
   }
 
   function prefersHouseCry(key) {
-    return key === "red_panda" || key === "crow" || key === "raven" || key === "barn_owl" || key === "red_tail" || key === "chickadee" || key === "robin" || key === "mallard" || key === "canada_goose" || key === "pileated" || key === "hummingbird" || key === "budgie" || key === "penguin" || key === "parrot" || key === "toucan" || key === "phoenix" || key === "cat" || key === "dog" || key === "rabbit" || key === "hamster" || key === "guinea_pig" || key === "turtle" || key === "goldfish" || key === "fox" || key === "ferret" || key === "hedgehog" || key === "chinchilla" || key === "axolotl" || key === "dragon" || key === "ball_python" || key === "corn_snake" || key === "kingsnake" || key === "green_tree_python" || key === "hognose" || key === "garter" || key === "boa" || key === "milk_snake" || key === "rosy_boa" || key === "carpet_python" || key === "octopus" || key === "cuttlefish";
+    return key === "red_panda" || key === "crow" || key === "raven" || key === "barn_owl" || key === "red_tail" || key === "chickadee" || key === "robin" || key === "mallard" || key === "canada_goose" || key === "pileated" || key === "hummingbird" || key === "budgie" || key === "penguin" || key === "parrot" || key === "toucan" || key === "phoenix" || key === "cat" || key === "dog" || key === "rabbit" || key === "hamster" || key === "guinea_pig" || key === "turtle" || key === "goldfish" || key === "fox" || key === "ferret" || key === "hedgehog" || key === "chinchilla" || key === "axolotl" || key === "dragon" || key === "ball_python" || key === "corn_snake" || key === "kingsnake" || key === "green_tree_python" || key === "hognose" || key === "garter" || key === "boa" || key === "milk_snake" || key === "rosy_boa" || key === "carpet_python" || key === "octopus" || key === "cuttlefish" || key === "nautilus";
   }
 
   function speakOpts(styleId, volume) {

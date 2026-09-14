@@ -500,7 +500,7 @@ test("ultra-polish: Atlas legend/canopy/inset lifts are Rui-visible (not micro i
   assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
 });
 
-test("notes: Atlas idle-life ultra done; Cup / octopus ultra done; Sepia / cuttlefish ultra done; next house-order ultra guest is Chamber / nautilus (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Atlas idle-life ultra done; Cup / octopus ultra done; Sepia / cuttlefish ultra done; Chamber / nautilus ultra done; next house-order ultra guest is Pulse / moon_jelly (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "carpet_python");
   assert.equal(T.wantsThankYou("atlas"), true);
   assert.equal(OverlayGround.tricksFor("boa"), OverlayBoa);
