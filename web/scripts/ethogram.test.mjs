@@ -767,7 +767,14 @@ assert.ok(names("toad").includes("freeze"));
   assert.equal(names("crocodile").includes("show"), false);
   assert.equal(names("crocodile").includes("sit"), false);
   assert.equal(names("crocodile").includes("still"), false);
-  assert.ok(names("snapper").includes("snap"));
+  assert.ok(names("snapper").includes("serpentina"));
+  assert.ok(names("snapper").includes("ambushgape_soft"));
+  assert.ok(names("snapper").includes("serrated_soft"));
+  assert.ok(names("snapper").includes("plastron_soft"));
+  assert.ok(names("snapper").includes("freeze"));
+  assert.equal(names("snapper").includes("snap"), false);
+  assert.equal(names("snapper").includes("sit"), false);
+  assert.equal(names("snapper").includes("still"), false);
   assert.ok(names("box_turtle").includes("shut"));
   assert.ok(names("tuatara").includes("still"));
   for (const key of CREEK) {
