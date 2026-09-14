@@ -2193,7 +2193,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Barb idle-life done; next house-order guest still lacking tricks is Cape / bat", () => {
+test("notes: Barb idle-life done; next house-order guest still lacking tricks is Cache / squirrel", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
