@@ -412,6 +412,22 @@ test("lions_mane ethogram is Mane ultra (hericium + softs + freeze, not lean/bea
   assert.equal(names.length, 8);
 });
 
+test("puffball ethogram is Puff ultra (lycoperdon + softs + freeze, not puff/lean/still)", () => {
+  const names = E.actsFor("puffball").map((a) => a.name);
+  assert.ok(names.includes("lycoperdon"));
+  assert.ok(names.includes("ostiole_soft"));
+  assert.ok(names.includes("gleba_soft"));
+  assert.ok(names.includes("peridium_soft"));
+  assert.ok(names.includes("duff_soft"));
+  assert.ok(names.includes("gemmate_soft"));
+  assert.ok(names.includes("capillitium_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("puff"), false);
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
@@ -469,7 +485,7 @@ test("fungi keys never schedule scratch or tongue", () => {
     assert.equal(names.includes("tongue"), false, key);
     assert.equal(names.includes("waggle"), false, key);
   }
-  assert.ok(E.actsFor("puffball").some((a) => a.name === "puff"));
+  assert.ok(E.actsFor("puffball").some((a) => a.name === "lycoperdon"));
   assert.ok(E.actsFor("yeast").some((a) => a.name === "rise"));
   assert.ok(E.actsFor("lichen").some((a) => a.name === "share-still"));
 });
