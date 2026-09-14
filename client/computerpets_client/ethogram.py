@@ -63,7 +63,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "rosy_boa": (_a("tongue", "tongue", 0.7, 4), _a("pebble", "sit_hold", 2.4, 4, "sit"), _a("crevice_soft", "wiggle", 1.0, 2), _a("rosy_soft", "play", 1.0, 2, "play"), _a("mesa_soft", "sit", 1.0, 2, "sit"), _a("dune_soft", "walk", 1.1, 2), _a("talus_soft", "sit", 1.05, 2, "sit"), _a("freeze", "freeze", 1.4, 2)),
     "carpet_python": (_a("tongue", "tongue", 0.7, 4), _a("legend", "sit_hold", 2.4, 4, "sit"), _a("rung_soft", "play", 1.0, 2, "play"), _a("contour_soft", "walk", 1.1, 2), _a("runner_soft", "walk", 1.0, 2), _a("canopy_soft", "play", 1.15, 2, "play"), _a("inset_soft", "sit", 1.05, 2, "sit"), _a("freeze", "freeze", 1.4, 2)),
     "octopus": (_a("hide", "sit_hold", 2.4, 4, "sit"), _a("sucker_soft", "walk", 1.1, 2), _a("jet_soft", "dart", 1.0, 2), _a("veil_soft", "play", 1.15, 2, "play"), _a("tinker_soft", "play", 1.1, 2, "play"), _a("papilla_soft", "sit", 1.2, 2, "sit"), _a("ooze_soft", "walk", 1.15, 2), _a("freeze", "freeze", 1.4, 2)),
-    "cuttlefish": (_a("flush", "pulse", 0.9, 3), _a("hover", "bob", 1.4, 2)),
+    "cuttlefish": (_a("hide", "sit_hold", 2.4, 4, "sit"), _a("pupil_soft", "talk", 1.1, 2, "talk"), _a("chroma_soft", "play", 1.15, 2, "play"), _a("hover_soft", "walk", 1.1, 2), _a("blot_soft", "play", 1.15, 2, "play"), _a("strike_soft", "walk", 1.0, 2), _a("zebra_soft", "play", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "nautilus": (_a("rise", "bob", 1.6, 3), _a("still", "freeze", 2.0, 2)),
     "moon_jelly": (_a("pulse", "pulse", 1.2, 4), _a("drift", "bob", 1.6, 2)),
     "sea_star": (_a("cling", "sit_hold", 2.8, 4, "sit"), _a("still", "freeze", 2.2, 2)),

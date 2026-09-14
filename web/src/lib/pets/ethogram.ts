@@ -105,7 +105,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   rosy_boa: [A("tongue", "tongue", 0.7, 4), A("pebble", "sit_hold", 2.4, 4, "sit"), A("crevice_soft", "wiggle", 1.0, 2), A("rosy_soft", "play", 1.0, 2, "play"), A("mesa_soft", "sit", 1.0, 2, "sit"), A("dune_soft", "walk", 1.1, 2), A("talus_soft", "sit", 1.05, 2, "sit"), A("freeze", "freeze", 1.4, 2)],
   carpet_python: [A("tongue", "tongue", 0.7, 4), A("legend", "sit_hold", 2.4, 4, "sit"), A("rung_soft", "play", 1.0, 2, "play"), A("contour_soft", "walk", 1.1, 2), A("runner_soft", "walk", 1.0, 2), A("canopy_soft", "play", 1.15, 2, "play"), A("inset_soft", "sit", 1.05, 2, "sit"), A("freeze", "freeze", 1.4, 2)],
   octopus: [A("hide", "sit_hold", 2.4, 4, "sit"), A("sucker_soft", "walk", 1.1, 2), A("jet_soft", "dart", 1.0, 2), A("veil_soft", "play", 1.15, 2, "play"), A("tinker_soft", "play", 1.1, 2, "play"), A("papilla_soft", "sit", 1.2, 2, "sit"), A("ooze_soft", "walk", 1.15, 2), A("freeze", "freeze", 1.4, 2)],
-  cuttlefish: [A("flush", "pulse", 0.9, 3), A("hover", "bob", 1.4, 2)],
+  cuttlefish: [A("hide", "sit_hold", 2.4, 4, "sit"), A("pupil_soft", "talk", 1.1, 2, "talk"), A("chroma_soft", "play", 1.15, 2, "play"), A("hover_soft", "walk", 1.1, 2), A("blot_soft", "play", 1.15, 2, "play"), A("strike_soft", "walk", 1.0, 2), A("zebra_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
   nautilus: [A("rise", "bob", 1.6, 3), A("still", "freeze", 2.0, 2)],
   moon_jelly: [A("pulse", "pulse", 1.2, 4), A("drift", "bob", 1.6, 2)],
   sea_star: [A("cling", "sit_hold", 2.8, 4, "sit"), A("still", "freeze", 2.2, 2)],
