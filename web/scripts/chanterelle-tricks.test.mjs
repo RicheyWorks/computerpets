@@ -1330,8 +1330,8 @@ test("notes: Horn idle-life done; next house-order guest still lacking tricks is
   assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("morel"), OverlayMorel);
   assert.equal(OverlayGround.tricksFor("lattice"), OverlayMorel);
-  assert.deepEqual([...Morel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella"]);
-  assert.deepEqual([...OverlayMorel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella"]);
+  assert.deepEqual([...Morel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella", "costa", "hymenium"]);
+  assert.deepEqual([...OverlayMorel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella", "costa", "hymenium"]);
   assert.equal(OverlayGround.tricksFor("chanterelle"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("chanterelle"), true);
   assert.equal(OverlayGround.tricksFor("horn"), Overlay);
@@ -1383,8 +1383,8 @@ test("notes: Horn idle-life done; next house-order guest still lacking tricks is
   assert.deepEqual([...OverlayFlyAgaric.TRICKS], ["annulus", "volva", "veil", "symbiont", "amanita", "pileus", "bulb"]);
   assert.equal(OverlayGround.tricksFor("morel"), OverlayMorel);
   assert.equal(OverlayGround.tricksFor("lattice"), OverlayMorel);
-  assert.deepEqual([...Morel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella"]);
-  assert.deepEqual([...OverlayMorel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella"]);
+  assert.deepEqual([...Morel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella", "costa", "hymenium"]);
+  assert.deepEqual([...OverlayMorel.TRICKS], ["alveolus", "ridge", "ephemeral", "sclerotium", "morchella", "costa", "hymenium"]);
   assert.equal(OverlayGround.tricksFor("chanterelle"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("chanterelle"), true);
   assert.equal(OverlayGround.tricksFor("horn"), Overlay);
