@@ -738,6 +738,16 @@ test("ginkgo ethogram is Fan ultra (amber + softs + freeze, not lean/nod/still)"
   assert.equal(names("ginkgo").includes("still"), false);
 });
 
+test("oak ethogram is Mast ultra (bole + softs + freeze, not lean/nod/still)", () => {
+  assert.ok(names("oak").includes("bole"));
+  assert.ok(names("oak").includes("catkin_soft"));
+  assert.ok(names("oak").includes("tyloses_soft"));
+  assert.ok(names("oak").includes("freeze"));
+  assert.equal(names("oak").includes("lean"), false);
+  assert.equal(names("oak").includes("nod"), false);
+  assert.equal(names("oak").includes("still"), false);
+});
+
 test("pickAct can schedule tongue on a snake and never scratch", () => {
   let tongue = 0;
   for (let i = 0; i < 80; i++) {

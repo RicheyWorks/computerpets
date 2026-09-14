@@ -106,6 +106,17 @@ test("ginkgo ethogram is Fan ultra (amber + softs + freeze, not lean/nod/still)"
   assert.equal(names.includes("still"), false);
 });
 
+test("oak ethogram is Mast ultra (bole + softs + freeze, not lean/nod/still)", () => {
+  const names = E.actsFor("oak").map((a) => a.name);
+  assert.ok(names.includes("bole"));
+  assert.ok(names.includes("catkin_soft"));
+  assert.ok(names.includes("tyloses_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("lean"), false);
+  assert.equal(names.includes("nod"), false);
+  assert.equal(names.includes("still"), false);
+});
+
 test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   const insects = [
     "honeybee", "monarch", "luna", "firefly", "darner",
