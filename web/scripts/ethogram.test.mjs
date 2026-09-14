@@ -804,6 +804,14 @@ assert.ok(names("toad").includes("freeze"));
   assert.equal(names("bass").includes("lunge"), false);
   assert.equal(names("bass").includes("sit"), false);
   assert.equal(names("bass").includes("gape"), false);
+  assert.ok(names("brook_trout").includes("fontinalis"));
+  assert.ok(names("brook_trout").includes("driftfeed_soft"));
+  assert.ok(names("brook_trout").includes("adipose_soft"));
+  assert.ok(names("brook_trout").includes("coldriffle_soft"));
+  assert.ok(names("brook_trout").includes("freeze"));
+  assert.equal(names("brook_trout").includes("dart"), false);
+  assert.equal(names("brook_trout").includes("rise"), false);
+  assert.equal(names("brook_trout").includes("still"), false);
   assert.ok(names("lamprey").includes("disk"));
   for (const key of LOG) {
     const acts = names(key);
