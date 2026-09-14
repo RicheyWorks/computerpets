@@ -1,6 +1,6 @@
-/** Pinch ground tricks while idle. House neighborly Astacoidea common-crayfish desk life — chelate / caridoid / chimney / antennule / astacid personality (chelate claw-snap without naming claw or snap or pinch, caridoid tail-flip escape burst without naming flip or dart or escape, chimney mud-bank burrow settle without naming burrow or dig or fossorial, antennule tip-tap probe without naming antenna or tap, long astacid Astacoidea desk hold under the tray grain — never named wait or wake or still or hide or cover or wiggle or claw or snap or pinch or antenna or burrow or dig or flip or telson or carapace or swap or scuttle or withdraw or vacancy or bookgill or furrow or fossil or annulate or fossorial or tentacular or hydrostatic or gymnophion; window-play CLAW owns claw; ethogram pinch/snap + walk/wiggle + still/freeze own those words; special Pinch owns pinch; Tenant owns swap/antenna/scuttle/withdraw/vacancy; Ledger owns carapace/bookgill/telson/furrow/fossil; Slip owns annulate/fossorial/tentacular/hydrostatic/gymnophion; Pebble owns burrow; guest slug Pinch / key crayfish only for isKey matching — accept "crayfish" and "pinch"; do NOT name a trick "crayfish" or "pinch" or "claw" or "snap" or "antenna" or "burrow" or "flip" or "telson" or "carapace" or "annulate" or "fossorial" or "tentacular" or "hydrostatic" or "gymnophion") — not Tenant hermit shell life, not Ledger horseshoe helmet life, not Slip caecilian silt life. chelate cheliped snap on the tray without naming claw or snap or pinch, caridoid uropod-tail flip retreat without naming flip or dart, chimney mud chimney settle without naming burrow or dig, antennule antennular tap without naming antenna, astacid long Astacoidea metabolic hold under the scrap grain with clasp / marl / chitin cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play CLAW do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web crayfish-tricks.ts. Window-play CLAW unchanged — never names claw. Ethogram pinch/still/walk unchanged — never names pinch or snap or still or wiggle as trick kinds. True Astacoidea common crayfish desk life only — distinct from Tenant hermit, Ledger horseshoe, and Slip caecilian. Whorl owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Pinch ground tricks while idle — ultra-polish pass. House neighborly Astacoidea common-crayfish desk life — chelate / caridoid / chimney / antennule / astacid / scaph / meral personality (chelate cheliped snap without naming claw or snap or pinch, caridoid tail-flip escape burst without naming flip or dart or escape, chimney mud-bank burrow settle without naming burrow or dig or fossorial, antennule tip-tap probe without naming antenna or tap, long astacid Astacoidea desk hold under the tray grain, scaph scaphognathite gill-bailer pulse without naming bailer or breath or gill, meral meral-spread threat raise without naming threat or brandish or claw — never named wait or wake or still or hide or cover or wiggle or claw or snap or pinch or antenna or burrow or dig or flip or telson or carapace or swap or scuttle or withdraw or vacancy or bookgill or furrow or fossil or annulate or fossorial or tentacular or hydrostatic or gymnophion or stegos or dualjaw or bailer or chela or radula or pedal or pneumostome or ommatophore or lymnaeid as trick kinds; window-play CLAW owns claw; ethogram softs + freeze own those words; special Pinch owns pinch; Tenant owns swap/antenna/scuttle/withdraw/vacancy/chela/bailer; Ledger owns carapace/bookgill/telson/furrow/fossil; Slip owns annulate/fossorial/tentacular/hydrostatic/gymnophion/stegos/dualjaw; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid; Pebble owns burrow; guest slug Pinch / key crayfish only for isKey matching — accept "crayfish" and "pinch"; do NOT name a trick "crayfish" or "pinch" or "claw" or "snap" or "antenna" or "burrow" or "flip" or "telson" or "carapace" or "annulate" or "fossorial" or "tentacular" or "hydrostatic" or "gymnophion" or "stegos" or "dualjaw" or "bailer" or "chela" or "radula" or "pedal" or "pneumostome" or "ommatophore" or "lymnaeid") — not Tenant hermit shell life, not Ledger horseshoe helmet life, not Slip caecilian silt life, not Whorl pond-snail life. chelate cheliped snap on the tray without naming claw or snap or pinch, caridoid uropod-tail flip retreat without naming flip or dart, chimney mud chimney settle without naming burrow or dig, antennule antennular tap without naming antenna, astacid long Astacoidea metabolic hold under the scrap grain, scaph scaphognathite gill-bailer pulse (THE decapod breathing tell), meral meral-spread threat raise (THE crayfish agonistic tell); clasp / marl / chitin thank-yous. Feed-happy after eat. Card-open freeze and window-play CLAW do not swallow a thank-you. Sleep, hide, leave win. Same map as desktop crayfish-tricks.js. Window-play CLAW unchanged. Ethogram softs + freeze — never names pinch/snap/still/wiggle as trick kinds. Whorl owns the next seat. No cry inventing. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via crayfish.wav. */
 export const TRICK_KEY = "crayfish";
-export const TRICKS = ["chelate", "caridoid", "chimney", "antennule", "astacid"] as const;
+export const TRICKS = ["chelate", "caridoid", "chimney", "antennule", "astacid", "scaph", "meral"] as const;
 export const HAPPY = ["clasp", "marl", "chitin"] as const;
 export type CrayfishTrickKind = (typeof TRICKS)[number];
 export type CrayfishHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,19 @@ export type CrayfishHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { clasp: 1.58, marl: 1.72, chitin: 1.64 } as const;
-export const ASTACID_HOLD = 18.42;
-export const RELEASE_S = 1.12;
-export const DUR = { astacid: ASTACID_HOLD + RELEASE_S, chelate: 2.28, caridoid: 2.36, chimney: 2.62, antennule: 2.18 } as const;
+export const HAPPY_DUR = { clasp: 1.64, marl: 1.76, chitin: 1.71 } as const;
+export const ASTACID_HOLD = 10.8;
+export const RELEASE_S = 1.14;
+export const DUR = {
+  astacid: ASTACID_HOLD + RELEASE_S,
+  chelate: 2.28,
+  caridoid: 2.42,
+  chimney: 2.48,
+  antennule: 2.34,
+  scaph: 2.36,
+  meral: 2.31,
+} as const;
+
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
@@ -76,39 +85,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: CrayfishTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-    if (kind === "astacid") return 76 + roll * 46;
-  if (kind === "chelate") return 16.4 + roll * 12.8;
-  if (kind === "caridoid") return 18.6 + roll * 13.2;
-  if (kind === "antennule") return 21.8 + roll * 14.6;
-  return justFinished ? 14.6 + roll * 10.9 : 8.4 + roll * 9.7;
+  if (kind === "astacid") return 38 + roll * 24;
+  if (kind === "scaph" || kind === "meral" || kind === "chelate") return 12 + roll * 9;
+  if (kind === "caridoid" || kind === "chimney" || kind === "antennule") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: CrayfishTrickKind | string | null) {
-  if (musicOn) return "astacid";
+  if (musicOn) return "astacid" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "astacid") {
-    if (roll < 0.26) return "chelate";
-    if (roll < 0.5) return "caridoid";
-    if (roll < 0.74) return "chimney";
-    return "antennule";
+    if (roll < 0.16) return "chelate" as const;
+    if (roll < 0.32) return "caridoid" as const;
+    if (roll < 0.48) return "chimney" as const;
+    if (roll < 0.64) return "antennule" as const;
+    if (roll < 0.82) return "scaph" as const;
+    return "meral" as const;
   }
   if (lastKind === "chelate") {
-    if (roll < 0.26) return "astacid";
-    if (roll < 0.5) return "caridoid";
-    if (roll < 0.74) return "chimney";
-    return "antennule";
+    if (roll < 0.16) return "astacid" as const;
+    if (roll < 0.32) return "caridoid" as const;
+    if (roll < 0.48) return "chimney" as const;
+    if (roll < 0.64) return "antennule" as const;
+    if (roll < 0.82) return "scaph" as const;
+    return "meral" as const;
   }
   if (lastKind === "caridoid") {
-    if (roll < 0.22) return "astacid";
-    if (roll < 0.44) return "chelate";
-    if (roll < 0.68) return "chimney";
-    return "antennule";
+    if (roll < 0.14) return "astacid" as const;
+    if (roll < 0.3) return "chelate" as const;
+    if (roll < 0.46) return "chimney" as const;
+    if (roll < 0.62) return "antennule" as const;
+    if (roll < 0.8) return "scaph" as const;
+    return "meral" as const;
   }
-  if (roll < 0.2) return "astacid";
-  if (roll < 0.4) return "chelate";
-  if (roll < 0.6) return "caridoid";
-  if (roll < 0.8) return "chimney";
-  return "antennule";
+  if (lastKind === "scaph" || lastKind === "meral") {
+    if (roll < 0.14) return "astacid" as const;
+    if (roll < 0.3) return "chelate" as const;
+    if (roll < 0.46) return "caridoid" as const;
+    if (roll < 0.62) return "chimney" as const;
+    if (roll < 0.78) return "antennule" as const;
+    return lastKind === "scaph" ? ("meral" as const) : ("scaph" as const);
+  }
+  if (roll < 0.14) return "astacid" as const;
+  if (roll < 0.28) return "chelate" as const;
+  if (roll < 0.42) return "caridoid" as const;
+  if (roll < 0.56) return "chimney" as const;
+  if (roll < 0.7) return "antennule" as const;
+  if (roll < 0.85) return "scaph" as const;
+  return "meral" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -176,52 +200,54 @@ export function beginHappy(kind: CrayfishHappyKind | string, x: number, facing: 
   };
 }
 
-                    export function claspPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.clasp));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.022, rot: s * 1.15, dx: 0, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.80) {
-      const flash = Math.sin(t * 7.4) + 0.28 * Math.sin(t * 14.8);
-      return {
-        lift: 0.022 + Math.abs(flash) * 0.014,
-        rot: 1.15 + flash * 1.25,
-        dx: flash * 0.0010,
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = (u - 0.80) / 0.20;
-    return { lift: 0.008 * (1 - s), rot: 0.40 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+export function claspPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.clasp));
+  if (u < 0.16) {
+    const s = u / 0.16;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
   }
-  export function marlPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.marl));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.028, rot: s * -1.45, dx: s * 0.0014, anim: "play" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const wriggle = Math.sin(t * 5.1) + 0.20 * Math.sin(t * 9.3);
-      return {
-        lift: 0.028 + Math.abs(wriggle) * 0.020,
-        rot: -1.45 + wriggle * 2.65,
-        dx: wriggle * 0.0024,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.010 * (1 - s), rot: -0.40 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-  export function chitinPose(t) {
+  if (u < 0.82) {
+    const flash = Math.sin(t * 1.72);
     return {
-      lift: 0.007 + Math.abs(Math.sin(t * 0.36)) * 0.015,
-      rot: Math.sin(t * 0.39) * 0.92,
-      dx: Math.sin(t * 0.28) * 0.0011,
-      anim: "sit" as TrickAnim,
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: 0,
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = (u - 0.82) / 0.18;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function marlPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.marl));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const wriggle = Math.sin(t * 2.1);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: 0.08,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.84) / 0.16;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function chitinPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.52) * 6,
+    dx: 0,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: CrayfishHappy, dt: number, flags: TrickFlags): CrayfishHappy {
-  if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
     return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
@@ -251,7 +277,7 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
 
-export function beginTrick(kind: CrayfishTrickKind, x: number, facing: 1 | -1): CrayfishTrick {
+export function beginTrick(kind: CrayfishTrickKind | string, x: number, facing: 1 | -1): CrayfishTrick {
   const anim: TrickAnim =
     kind === "astacid"
       ? "sit"
@@ -263,9 +289,13 @@ export function beginTrick(kind: CrayfishTrickKind, x: number, facing: 1 | -1): 
             ? "walk"
             : kind === "antennule"
               ? "sit"
-              : "sit";
+              : kind === "scaph"
+                ? "sit"
+                : kind === "meral"
+                  ? "play"
+                  : "sit";
   return {
-    kind: kind,
+    kind: (TRICKS as readonly string[]).indexOf(kind) >= 0 ? (kind as CrayfishTrickKind) : "chelate",
     phase: kind === "astacid" ? "hold" : "go",
     t: 0,
     x: x,
@@ -282,130 +312,210 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
+export function astacidPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.14) * 4,
+    anim: "sit" as TrickAnim,
+  };
+}
 
-                      export function astacidPose(t) {
-    const breath = Math.sin(t * 0.12) + 0.06 * Math.sin(t * 0.33);
-    const soft = Math.abs(Math.sin(t * 0.17));
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+}
+
+export function chelatePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.chelate));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.2, rot: s * 14 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const snap = Math.sin(t * 2.4);
     return {
-      lift: 0.003 + soft * 0.011,
-      rot: -0.22 + breath * 0.48,
+      x: fromX + face * snap * 0.12,
+      lift: 3.2 + Math.abs(snap) * 1.4,
+      rot: face * (14 + snap * 10),
+      anim: "play" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
 
-  export function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.004 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+export function caridoidPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.caridoid));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.6, rot: s * -16 * face, anim: "play" as TrickAnim };
   }
-
-  function chelatePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.chelate));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.022, rot: s * 1.8 * face, anim: "play" };
-    }
-    if (u < 0.78) {
-      // chelate claw-snap pulses
-      const snap = Math.sin(t * 8.2) + 0.30 * Math.sin(t * 16.4);
-      const bite = snap > 0.35 ? 1.0 : snap < -0.35 ? -0.55 : snap * 0.4;
-      return {
-        x: fromX + face * bite * 0.006,
-        lift: 0.022 + Math.abs(snap) * 0.016,
-        rot: (1.8 + bite * 2.4) * face,
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX, lift: 0.008 * (1 - s), rot: 0.35 * (1 - s) * face, anim: "idle" };
-  }
-  function caridoidPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.caridoid));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX, lift: s * 0.034, rot: s * -2.4 * face, anim: "play" };
-    }
-    if (u < 0.42) {
-      const s = smoothstep((u - 0.10) / 0.32);
-      // caridoid escape: sudden reverse tail-flip burst
-      return {
-        x: fromX - face * (0.055 + s * 0.095),
-        lift: 0.034 + Math.sin(s * Math.PI) * 0.045,
-        rot: (-2.4 + s * 3.1) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.42) / 0.36;
-      const settle = Math.sin(s * Math.PI * 2.1);
-      return {
-        x: fromX - face * (0.150 - s * 0.150),
-        lift: 0.018 + Math.abs(settle) * 0.012,
-        rot: (0.55 + settle * 1.1) * face,
-        anim: "walk",
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX, lift: 0.010 * (1 - s), rot: 0.25 * (1 - s) * face, anim: "idle" };
-  }
-  function chimneyPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.chimney));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      // sink into mud chimney
-      return { x: fromX + face * s * 0.012, lift: -s * 0.055, rot: s * 0.55 * face, anim: "walk" };
-    }
-    if (u < 0.70) {
-      const s = (u - 0.18) / 0.52;
-      const mud = Math.sin(s * Math.PI * 2.4) + 0.14 * Math.sin(s * Math.PI * 4.8);
-      return {
-        x: fromX + face * (0.012 + mud * 0.008),
-        lift: -0.055 + Math.abs(mud) * 0.010,
-        rot: (0.55 + mud * 0.85) * face,
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.70) / 0.30);
+  if (u < 0.48) {
+    const s = smoothstep((u - 0.12) / 0.36);
     return {
-      x: fromX + face * 0.012 * (1 - s),
-      lift: -0.055 * (1 - s),
-      rot: 0.20 * (1 - s) * face,
-      anim: s > 0.6 ? "idle" : "sit",
+      x: fromX - face * (2.2 + s * 4.5),
+      lift: 3.6 + Math.sin(s * Math.PI) * 2.2,
+      rot: face * (-16 + s * 22),
+      anim: "play" as TrickAnim,
     };
   }
-  function antennulePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.antennule));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.008, rot: s * 0.95 * face, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const tap = Math.sin(t * 6.8) + 0.22 * Math.sin(t * 13.6);
-      return {
-        x: fromX + face * tap * 0.0035,
-        lift: 0.008 + Math.abs(tap) * 0.006,
-        rot: (0.95 + tap * 1.55) * face,
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX, lift: 0.004 * (1 - s), rot: 0.25 * (1 - s) * face, anim: "idle" };
+  if (u < 0.78) {
+    const s = (u - 0.48) / 0.3;
+    const settle = Math.sin(s * Math.PI * 2.1);
+    return {
+      x: fromX - face * (6.7 * (1 - s)),
+      lift: 2.4 + Math.abs(settle) * 1.1,
+      rot: face * (6 + settle * 8),
+      anim: "walk" as TrickAnim,
+    };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function chimneyPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.chimney));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX + face * s * 0.8, lift: s * 2.2, rot: s * 8 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const mud = Math.sin(t * 1.6);
+    return {
+      x: fromX + face * (0.8 + mud * 0.4),
+      lift: 2.2 + Math.abs(mud) * 1.0,
+      rot: face * (8 + mud * 10),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: s > 0.6 ? ("idle" as TrickAnim) : ("sit" as TrickAnim),
+  };
+}
+
+export function antennulePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.antennule));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * 10 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const tap = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * tap * 0.2,
+      lift: 2.4 + Math.abs(tap) * 1.1,
+      rot: face * (10 + tap * 12),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function scaphPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.scaph));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * 12 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const pulse = Math.sin(t * 3.2);
+    return {
+      x: fromX,
+      lift: 2.8 + pulse * 1.6,
+      rot: face * (12 + pulse * 14),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const scent = Math.sin(t * 1.1);
+    return {
+      x: fromX + face * scent * 0.15,
+      lift: 4.0 + Math.abs(scent) * 0.6,
+      rot: face * (22 + scent * 4),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function meralPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.meral));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * -12 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const flash = Math.abs(Math.sin(t * 2.6));
+    return {
+      x: fromX + face * flash * 0.2,
+      lift: 3.4 + flash * 1.4,
+      rot: face * (-12 - flash * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const warn = Math.sin(t * 1.4);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(warn) * 0.7,
+      rot: face * (-18 + warn * 6),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (-5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: CrayfishTrick, dt: number, flags: TrickFlags): CrayfishTrick {
-  if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "chelate" && trick.kind !== "caridoid" && trick.kind !== "chimney" && trick.kind !== "antennule") {
+  if (shouldAbort(flags)) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: CrayfishTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "astacid") {
     if (next.t < ASTACID_HOLD) {
       const pose = astacidPose(next.t);
       next.phase = "hold";
       next.lift = pose.lift;
       next.rot = pose.rot;
-      next.anim = "sit";
+      next.anim = pose.anim;
       return next;
     }
     if (next.t < ASTACID_HOLD + RELEASE_S) {
@@ -419,32 +529,43 @@ export function stepTrick(trick: CrayfishTrick, dt: number, flags: TrickFlags): 
     return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   }
   const hold = DUR[next.kind];
-  const u = next.t / hold;
   if (next.kind === "chelate") {
-    const pose = chelatePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = chelatePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "caridoid") {
-    const pose = caridoidPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = caridoidPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "chimney") {
-    const pose = chimneyPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = chimneyPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "antennule") {
+    const pose = antennulePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "scaph") {
+    const pose = scaphPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = antennulePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = meralPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle", x: fromX };
   return next;
 }
