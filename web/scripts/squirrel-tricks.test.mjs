@@ -2213,7 +2213,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Cache idle-life done; next house-order guest still lacking tricks is Slick / otter", () => {
+test("notes: Cache idle-life done; Slick / otter ultra landed; next house-order guest still lacking tricks is Wash / raccoon", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -2728,7 +2728,7 @@ test("notes: Cache idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("squirrel"), Overlay);
   assert.equal(OverlayGround.tricksFor("cache"), Overlay);
 
-  // Recommend next house-order guest still lacking idle tricks (do not implement): Slick / otter.
+  // Recommend next house-order guest still lacking idle tricks (do not implement): Wash / raccoon.
   assert.equal("squirrel", "squirrel");
   assert.equal("Cache", "Cache");
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid", "mental", "granular"]);

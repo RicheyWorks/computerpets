@@ -186,6 +186,7 @@ assert.equal(C.prefersHouseCry("orb_weaver"), true);
   assert.equal(C.prefersHouseCry("deer"), true);
 assert.equal(C.prefersHouseCry("bat"), true);
 assert.equal(C.prefersHouseCry("squirrel"), true);
+assert.equal(C.prefersHouseCry("otter"), true);
   assert.ok(C.speakOpts("hearth", 50).volume < 0.5);
   assert.match(roomSrc, /prefersHouseCry/);
   assert.match(roomSrc, /const cried = await playAnimalVoice/);
