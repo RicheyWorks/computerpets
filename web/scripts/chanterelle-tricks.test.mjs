@@ -1025,7 +1025,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Horn idle-life done; next house-order guest still lacking tricks is Puff / puffball", () => {
+test("notes: Horn idle-life done; next house-order guest still lacking tricks is Flame / chicken_of_woods", () => {
   assert.equal(T.TRICK_KEY, "chanterelle");
   assert.equal(T.wantsThankYou("horn"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);

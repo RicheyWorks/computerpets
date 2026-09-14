@@ -139,7 +139,13 @@ def test_only_scratching_mammals_scratch():
         assert "tongue" not in names, key
         assert "waggle" not in names, key
         assert "yawn" not in names, key
-    assert "puff" in [a["name"] for a in acts_for("puffball")]
+    assert "lycoperdon" in [a["name"] for a in acts_for("puffball")]
+    assert "gemmate_soft" in [a["name"] for a in acts_for("puffball")]
+    assert "capillitium_soft" in [a["name"] for a in acts_for("puffball")]
+    assert "freeze" in [a["name"] for a in acts_for("puffball")]
+    assert "puff" not in [a["name"] for a in acts_for("puffball")]
+    assert "lean" not in [a["name"] for a in acts_for("puffball")]
+    assert "still" not in [a["name"] for a in acts_for("puffball")]
     assert "rise" in [a["name"] for a in acts_for("yeast")]
     assert "share-still" in [a["name"] for a in acts_for("lichen")]
     assert "pleurotus" in [a["name"] for a in acts_for("oyster")]
