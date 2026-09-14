@@ -1,6 +1,6 @@
-/** Flag ground tricks while idle. House neighborly Cervidae / Odocoileus virginianus white-tailed deer oak-edge desk life — flagtail / edgebrowse / earswivel / forestamp / odocoileus personality (flagtail white caudal flag flash without naming flag or caudal or scut or tail or wave or bob or tip or alarm or snort or stot or pronk or leap or hop, edgebrowse oak-edge browse nibble without naming browse or eat or feed or graze or forage or chew or bite or nip or graze or branta or dabble, earswivel pinna cup-and-swivel without naming ear or pinna or listen or hear or sense or feel or probe or haller or antennule or palp, forestamp forefoot stamp warn without naming stamp or stomp or kick or pound or thump or strike or run or dart or dash or sprint or chase or hunt, long odocoileus Odocoileus virginianus freeze-alert oak-edge hold — never named wait or crouch or roost or leap or hop or pounce or look or stalk or monocle or fossick or anting or corvid or dihedral or billtap or tumble or cronk or hackles or diskturn or softcrouch or parallax or snore or tytonid or kettle or stoop or bind or keeyer or buteo or feebee or gargle or hangup or cache or poecile or runstop or listen or carol or tug or turdus or dabble or upend or headshake or gruntwhistle or anas or graze or hiss or nestguard or honk or branta or excavate or hitch or crestflare or kuk or dryocopus or nectary or shuttle or gorget or chip or archilochus or radiate or stabilimentum or swathe or strum or araneus or orient or saccade or palp or dragline or phidippus or cursor or eggsac or spiderling or eyeshine or tigrosa or urticate or threat or cork or ecdysis or aphonopelma or hourglass or tangle or wrap or gumfoot or latrodectus or legwave or oscillate or autotomy or gregarious or phalangium or pedipalp or metasoma or fluoresce or sanddig or centruroides or flagellum or acetic or palpcrush or trayburrow or mastigoproctus or quest or haller or hypostome or engorge or ixodes or malleoli or suctorial or chelicrush or sprintburst or eremobates or promenade or oil or dab or tip or drum or sip or hover; window-play RUN and Call Flag leave deer alone; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip/Loom/Leap/Prowl/Velvet/Hour/Stem/Barb/Whip/Clasp/Gale own their tricks; guest slug Flag / key deer — accept "deer" and "rack" (roster slug rack; campaign Flag); do NOT name a trick deer or flag or rack or moose or cervid or ungulate or antler or velvet or scent or gaze). Thank-yous virginianus / couesi / oakedge. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop deer-tricks.js. Window-play RUN unchanged. True white-tailed deer Cervidae desk life — not solifuge/tick/vinegaroon/scorpion/harvestman/fox/rabbit/rui clones. Cape owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Flag ground tricks while idle — ultra-polish pass. House neighborly Cervidae / Odocoileus virginianus white-tailed deer oak-edge desk life (deer / Flag / Rack) — flagtail / edgebrowse / earswivel / forestamp / stotbound / snortblow / odocoileus personality (flagtail white caudal flag flash without naming flag or caudal or scut or tail or wave or bob or tip or alarm or snort or stot or pronk or leap or hop, edgebrowse oak-edge browse nibble without naming browse or eat or feed or graze or forage or chew or bite or nip or branta or dabble, earswivel pinna cup-and-swivel without naming ear or pinna or listen or hear or sense or feel or probe or haller or antennule or palp, forestamp forefoot stamp warn without naming stamp or stomp or kick or pound or thump or strike or run or dart or dash or sprint or chase or hunt, stotbound stiff-legged bound without naming stot or pronk or leap or hop or pounce or bounce or spring or jump or bound or run or dart, snortblow alarm snort-blow without naming snort or blow or wheeze or bark or call or cry or voice or alarm or warn or hiss or grunt, long odocoileus Odocoileus virginianus freeze-alert oak-edge hold (THE odocoileus sit_hold tell) — never named wait or crouch or roost or leap or hop or pounce or look or stalk or monocle or fossick or anting or corvid or dihedral or billtap or tumble or cronk or hackles or diskturn or softcrouch or parallax or snore or tytonid or kettle or stoop or bind or keeyer or buteo or feebee or gargle or hangup or cache or poecile or runstop or listen or carol or tug or turdus or dabble or upend or headshake or gruntwhistle or anas or graze or hiss or nestguard or honk or branta or excavate or hitch or crestflare or kuk or dryocopus or nectary or shuttle or gorget or chip or archilochus or radiate or stabilimentum or swathe or strum or araneus or dragline or viscid or orient or saccade or palp or safetyline or ame or scopula or phidippus or cursor or eggsac or spiderling or eyeshine or spur or apron or tigrosa or urticate or threat or cork or ecdysis or rastellum or apophysis or aphonopelma or hourglass or tangle or wrap or gumfoot or combfoot or theridiid or latrodectus or legwave or oscillate or autotomy or gregarious or ozopore or leiobunum or phalangium or pedipalp or metasoma or fluoresce or sanddig or pectines or booklung or centruroides or caudalwhip or acetic or palpcrush or trayburrow or pygidial or antenniform or mastigoproctus or quest or haller or hypostome or engorge or scutum or capitulum or ixodes or malleoli or suctorial or chelicrush or sprintburst or propeltidium or tracheate or eremobates or flagellum or oil or dab or tip or drum or sip or hover or stridulate or deer or flag or rack or velvet as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play RUN unchanged if already fine; Gale owns malleoli/suctorial/chelicrush/sprintburst/propeltidium/tracheate/eremobates; Clasp owns quest/haller/hypostome/engorge/scutum/capitulum/ixodes; Whip owns caudalwhip/acetic/palpcrush/trayburrow/pygidial/antenniform/mastigoproctus; Barb owns pedipalp/metasoma/fluoresce/sanddig/pectines/booklung/centruroides; Stem owns legwave/oscillate/autotomy/gregarious/ozopore/leiobunum/phalangium; Hour owns hourglass/tangle/wrap/gumfoot/combfoot/theridiid/latrodectus; Velvet owns urticate/threat/cork/ecdysis/rastellum/apophysis/aphonopelma; Prowl owns cursor/eggsac/spiderling/eyeshine/spur/apron/tigrosa; Leap owns orient/saccade/palp/safetyline/ame/scopula/phidippus; Loom owns radiate/stabilimentum/swathe/strum/araneus/dragline/viscid; Rue fox / Pip dog / Miso cat / Thimble rabbit stay distinct mammal peers; Soot/Wedge/Heart/Hook/Dee/Brick/Drake/Vee/Drum/Sip own bird tricks; guest slug Flag / key deer only for isKey matching — accept "deer" and "rack" and "flag"; do NOT name a trick "deer" or "flag" or "rack" or "velvet" or "moose" or "cervid" or "ungulate" or "antler" or "gaze" or "still" or "wait" or "run" or "snort" or "stot") — not Gale solifuge life, not Clasp tick life, not Velvet tarantula life, not Rue fox life, not Pip dog life, not Cape bat life, not bird life. Flagtail caudal-flash without naming flag, edgebrowse oak-nibble without naming graze, earswivel pinna-swivel without naming listen, forestamp forefoot-warn without naming stomp, stotbound stiff-bound without naming leap, snortblow alarm-blow without naming cry, odocoileus long sit_hold on the oak edge (THE odocoileus sit_hold tell); virginianus / couesi / oakedge thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop deer-tricks.js. Window-play RUN unchanged. Ethogram softs + freeze — never names flag/walk/still/deer as bare ethogram-only trick kinds. True white-tailed deer Cervidae desk life only — distinct from Gale, Clasp, Velvet, Rue, Pip, Cape, and birds. Next house-order ultra: Cape / bat. No cry inventing — thank-yous are silent desk motion only; prefersHouseCry via deer.wav. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "deer";
-export const TRICKS = ["flagtail", "edgebrowse", "earswivel", "forestamp", "odocoileus"] as const;
+export const TRICKS = ["flagtail", "edgebrowse", "earswivel", "forestamp", "stotbound", "snortblow", "odocoileus"] as const;
 export const HAPPY = ["virginianus", "couesi", "oakedge"] as const;
 export type DeerTrickKind = (typeof TRICKS)[number];
 export type DeerHappyKind = (typeof HAPPY)[number];
@@ -44,341 +44,520 @@ export type DeerHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { virginianus: 1.82, couesi: 1.96, oakedge: 1.88 } as const;
-export const ODOCOILEUS_HOLD = 19.96;
-export const RELEASE_S = 1.32;
-export const DUR = { odocoileus: ODOCOILEUS_HOLD + RELEASE_S, flagtail: 2.76, edgebrowse: 2.70, earswivel: 2.92, forestamp: 2.84 } as const;
+export const HAPPY_DUR = { virginianus: 1.70, couesi: 1.84, oakedge: 1.76 } as const;
+export const ODOCOILEUS_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  odocoileus: ODOCOILEUS_HOLD + RELEASE_S,
+  flagtail: 2.48,
+  edgebrowse: 2.42,
+  earswivel: 2.56,
+  forestamp: 2.44,
+  stotbound: 2.40,
+  snortblow: 2.38,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
 export function shouldAbort(state: TrickFlags | undefined) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "eat" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "eat" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: DeerTrickKind | string) {
-    const roll = rand == null ? Math.random() : rand;
-      if (kind === "odocoileus") return 100 + roll * 26;
-  if (kind === "flagtail") return 17.0 + roll * 9.2;
-  if (kind === "edgebrowse") return 18.2 + roll * 9.8;
-  if (kind === "forestamp") return 19.6 + roll * 10.4;
-  return justFinished ? 16.0 + roll * 8.4 : 10.0 + roll * 7.6;
-  }
+  const roll = rand == null ? Math.random() : rand;
+  if (kind === "odocoileus") return 40 + roll * 26;
+  if (kind === "stotbound" || kind === "snortblow" || kind === "flagtail") return 12.8 + roll * 9.4;
+  if (kind === "edgebrowse" || kind === "earswivel" || kind === "forestamp") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
+}
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: DeerTrickKind | string | null) {
-    if (musicOn) return "odocoileus";
-    const roll = rand == null ? Math.random() : rand;
-    if (lastKind === "odocoileus") {
-      if (roll < 0.26) return "flagtail";
-      if (roll < 0.5) return "edgebrowse";
-      if (roll < 0.74) return "earswivel";
-      return "forestamp";
-    }
-    if (lastKind === "flagtail") {
-      if (roll < 0.26) return "odocoileus";
-      if (roll < 0.5) return "edgebrowse";
-      if (roll < 0.74) return "earswivel";
-      return "forestamp";
-    }
-    if (lastKind === "edgebrowse") {
-      if (roll < 0.22) return "odocoileus";
-      if (roll < 0.44) return "flagtail";
-      if (roll < 0.68) return "earswivel";
-      return "forestamp";
-    }
-    if (roll < 0.2) return "odocoileus";
-    if (roll < 0.4) return "flagtail";
-    if (roll < 0.6) return "edgebrowse";
-    if (roll < 0.8) return "earswivel";
-    return "forestamp";
+  if (musicOn) return "odocoileus" as const;
+  const roll = rand == null ? Math.random() : rand;
+  if (lastKind === "odocoileus") {
+    if (roll < 0.17) return "flagtail" as const;
+    if (roll < 0.33) return "edgebrowse" as const;
+    if (roll < 0.49) return "earswivel" as const;
+    if (roll < 0.65) return "forestamp" as const;
+    if (roll < 0.83) return "stotbound" as const;
+    return "snortblow" as const;
   }
+  if (lastKind === "flagtail") {
+    if (roll < 0.16) return "odocoileus" as const;
+    if (roll < 0.32) return "edgebrowse" as const;
+    if (roll < 0.48) return "earswivel" as const;
+    if (roll < 0.64) return "forestamp" as const;
+    if (roll < 0.82) return "stotbound" as const;
+    return "snortblow" as const;
+  }
+  if (lastKind === "edgebrowse") {
+    if (roll < 0.14) return "odocoileus" as const;
+    if (roll < 0.3) return "flagtail" as const;
+    if (roll < 0.46) return "earswivel" as const;
+    if (roll < 0.62) return "forestamp" as const;
+    if (roll < 0.8) return "stotbound" as const;
+    return "snortblow" as const;
+  }
+  if (lastKind === "stotbound" || lastKind === "snortblow") {
+    if (roll < 0.14) return "odocoileus" as const;
+    if (roll < 0.3) return "flagtail" as const;
+    if (roll < 0.46) return "edgebrowse" as const;
+    if (roll < 0.62) return "earswivel" as const;
+    if (roll < 0.78) return "forestamp" as const;
+    return lastKind === "stotbound" ? ("snortblow" as const) : ("stotbound" as const);
+  }
+  if (roll < 0.14) return "odocoileus" as const;
+  if (roll < 0.28) return "flagtail" as const;
+  if (roll < 0.42) return "edgebrowse" as const;
+  if (roll < 0.56) return "earswivel" as const;
+  if (roll < 0.7) return "forestamp" as const;
+  if (roll < 0.85) return "stotbound" as const;
+  return "snortblow" as const;
+}
+
 export function happyCanStart(state: TrickFlags | undefined) {
-    if (!state) return false;
-    if (state.asleep || state.hidden || state.leaving) return false;
-    const cmd = String(state.cmd || "");
-    if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
-    if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
-    return true;
-  }
+  if (!state) return false;
+  if (state.asleep || state.hidden || state.leaving) return false;
+  const cmd = String(state.cmd || "");
+  if (cmd === "sleep" || cmd === "leave" || cmd === "hide" || cmd === "rest") return false;
+  if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
+  return true;
+}
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
-    if (!state) return true;
-    if (state.asleep || state.hidden || state.leaving) return true;
-    const cmd = String(state.cmd || "");
-    return (
-      cmd === "sleep" ||
-      cmd === "leave" ||
-      cmd === "hide" ||
-      cmd === "rest" ||
-      cmd === "seek" ||
-      cmd === "play" ||
-      cmd === "talk" ||
-      cmd === "enter"
-    );
-  }
+  if (!state) return true;
+  if (state.asleep || state.hidden || state.leaving) return true;
+  const cmd = String(state.cmd || "");
+  return (
+    cmd === "sleep" ||
+    cmd === "leave" ||
+    cmd === "hide" ||
+    cmd === "rest" ||
+    cmd === "seek" ||
+    cmd === "play" ||
+    cmd === "talk" ||
+    cmd === "enter"
+  );
+}
+
 export function wantsThankYou(key: string | undefined | null) {
-    return key === TRICK_KEY || key === "rack";
-  }
+  return key === TRICK_KEY || key === "rack" || key === "flag";
+}
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: DeerHappyKind | null | undefined,
+  lastKind: DeerHappyKind | string | null | undefined,
   x: number,
   facing: 1 | -1,
-  flags?: TrickFlags
+  flags?: TrickFlags,
 ) {
-    if (!wantsThankYou(key)) return null;
-    if (!happyCanStart(flags || { cmd: "idle" })) return null;
-    const pick = pickHappy(lastKind);
-    return { happy: beginHappy(pick, x, facing), kind: pick };
-  }
+  if (!wantsThankYou(key)) return null;
+  if (!happyCanStart(flags || { cmd: "idle" })) return null;
+  const pick = pickHappy(lastKind as DeerHappyKind | null | undefined);
+  return { happy: beginHappy(pick, x, facing), kind: pick };
+}
+
 export function pickHappy(lastKind?: DeerHappyKind | null, rand?: number) {
-    const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
-    const roll = rand == null ? Math.random() : rand;
-    return list[Math.floor(roll * list.length)] || list[0];
-  }
+  const pool = HAPPY.filter((k) => k !== lastKind);
+  const list = pool.length ? pool : [...HAPPY];
+  const roll = rand == null ? Math.random() : rand;
+  return list[Math.floor(roll * list.length)] || list[0];
+}
+
 export function beginHappy(kind: DeerHappyKind | string, x: number, facing: 1 | -1): DeerHappy {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "virginianus";
-    return {
-      kind: name,
-      happy: true,
-      phase: "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: (name === "virginianus" ? "sit" : name === "couesi" ? "play" : "sit") as TrickAnim,
-      facing: (facing == null ? 1 : facing) as 1 | -1,
-      fromX: x,
-    };
-  }
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as DeerHappyKind) : "virginianus";
+  return {
+    kind: name,
+    happy: true,
+    phase: "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: name === "virginianus" ? "sit" : name === "couesi" ? "play" : "sit",
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
 export function virginianusPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.virginianus));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.020, rot: s * 2.20, dx: 0, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const flash = Math.sin(t * 4.0) + 0.14 * Math.sin(t * 8.0);
-      return { lift: 0.020 + Math.abs(flash) * 0.013, rot: 2.20 + flash * 1.35, dx: flash * 0.00070, anim: "sit" };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.005 * (1 - s), rot: 0.28 * (1 - s), dx: 0, anim: "idle" };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.virginianus));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-export function couesiPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.couesi));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.038, rot: s * -2.80, dx: s * 0.0015, anim: "play" };
-    }
-    if (u < 0.85) {
-      const spring = Math.sin(t * 3.0) + 0.16 * Math.sin(t * 6.0);
-      return { lift: 0.038 + Math.abs(spring) * 0.017, rot: -2.80 + spring * 2.20, dx: spring * 0.0019, anim: "play" };
-    }
-    const s = (u - 0.85) / 0.15;
-    return { lift: 0.010 * (1 - s), rot: -0.36 * (1 - s), dx: 0, anim: "sit" };
-  }
-export function oakedgePose(t: number) {
-    return { lift: 0.008 + Math.abs(Math.sin(t * 0.17)) * 0.013, rot: Math.sin(t * 0.17) * 1.10, dx: Math.sin(t * 0.13) * 0.00075, anim: "sit" };
-  }
-export function stepHappy(happy: DeerHappy | null | undefined, dt: number, flags?: TrickFlags) {
-    if (!happy || happy.phase === "done") return happy;
-    if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-    const hold = HAPPY_DUR[next.kind];
-    if (next.kind === "virginianus") {
-      const pose = virginianusPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "couesi") {
-      const pose = couesiPose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = oakedgePose(next.t);
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
-  }
-export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
-    return null;
-  }
-export function beginTrick(kind: DeerTrickKind, x: number, facing: 1 | -1): DeerTrick {
-    const anim: TrickAnim =
-      kind === "odocoileus"
-        ? "sit"
-        : kind === "flagtail"
-          ? "play"
-          : kind === "edgebrowse"
-            ? "talk"
-            : kind === "earswivel"
-              ? "talk"
-              : kind === "forestamp"
-                ? "play"
-                : "sit";
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
     return {
-      kind: kind,
-      phase: kind === "odocoileus" ? "hold" : "go",
-      t: 0,
-      x: x,
-      lift: 0,
-      rot: 0,
-      anim: anim,
-      facing: (facing == null ? 1 : facing) as 1 | -1,
-      fromX: x,
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
     };
   }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function couesiPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.couesi));
+  if (u < 0.12) {
+    const s = u / 0.12;
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function oakedgePose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepHappy(happy: DeerHappy | null | undefined, dt: number, flags?: TrickFlags) {
+  if (!happy || happy.phase === "done") return happy;
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
+  }
+  const next = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "virginianus") {
+    const pose = virginianusPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "couesi") {
+    const pose = couesiPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = oakedgePose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: DeerTrickKind, x: number, facing: 1 | -1): DeerTrick {
+  const anim: TrickAnim =
+    kind === "odocoileus"
+      ? "sit"
+      : kind === "flagtail"
+        ? "play"
+        : kind === "edgebrowse"
+          ? "talk"
+          : kind === "earswivel"
+            ? "talk"
+            : kind === "forestamp"
+              ? "play"
+              : kind === "stotbound"
+                ? "play"
+                : kind === "snortblow"
+                  ? "talk"
+                  : "sit";
+  return {
+    kind,
+    phase: kind === "odocoileus" ? "hold" : "go",
+    t: 0,
+    x,
+    lift: 0,
+    rot: 0,
+    anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
 function smoothstep(t: number) {
-    const x = Math.max(0, Math.min(1, t));
-    return x * x * (3 - 2 * x);
-  }
+  const x = Math.max(0, Math.min(1, t));
+  return x * x * (3 - 2 * x);
+}
+
 export function odocoileusPose(t: number) {
-    const breath = Math.sin(t * 0.048) + 0.036 * Math.sin(t * 0.14);
-    const hush = Math.abs(Math.sin(t * 0.062));
-    return { lift: 0.006 + hush * 0.006, rot: 0.28 + breath * 0.38 };
-  }
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.0036 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.14 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+}
+
 export function flagtailPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.flagtail));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0012, lift: s * 0.042, rot: s * -4.8 * face, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const flag = Math.sin((u - 0.10) / 0.76 * Math.PI * 4.4);
-      const flash = Math.sin(t * 6.6) + 0.18 * Math.sin(t * 13.2);
-      return { x: fromX + face * (0.0012 + flag * 0.0010 + flash * 0.00032), lift: 0.038 + Math.abs(flag) * 0.016 + Math.abs(flash) * 0.007, rot: (-4.8 + flag * 3.2 + flash * 1.8) * face, anim: "play" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0012 * (1 - s), lift: 0.008 * (1 - s), rot: -0.8 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.flagtail));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.5, rot: s * 16 * face, anim: "play" as TrickAnim };
   }
+  if (u < 0.78) {
+    const tip = Math.sin(t * 2.4);
+    return {
+      x: fromX + face * (0.8 + tip * 0.12),
+      lift: 3.5 + Math.abs(tip) * 1.5,
+      rot: face * (16 + tip * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function edgebrowsePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.edgebrowse));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0018, lift: s * -0.022, rot: s * 6.2 * face, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const nip = Math.sin((u - 0.12) / 0.72 * Math.PI * 3.8);
-      const chew = Math.sin(t * 5.2) + 0.16 * Math.sin(t * 10.4);
-      return { x: fromX + face * (0.0018 + nip * 0.0011 + chew * 0.00028), lift: -0.018 + Math.abs(nip) * 0.012 + Math.abs(chew) * 0.005, rot: (6.2 + nip * 2.6 + chew * 1.5) * face, anim: "talk" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.0018 * (1 - s), lift: -0.004 * (1 - s), rot: 0.9 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.edgebrowse));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * face, anim: "talk" as TrickAnim };
   }
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * bob * 0.5,
+      lift: 2.6 + Math.abs(bob) * 1.4,
+      rot: face * (-10 + bob * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (-3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function earswivelPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.earswivel));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0006, lift: s * 0.012, rot: s * 3.6 * face, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.88) {
-      const swivel = Math.sin((u - 0.10) / 0.78 * Math.PI * 5.6);
-      const cup = Math.sin(t * 8.2) + 0.20 * Math.sin(t * 16.4);
-      return { x: fromX + face * (0.0006 + swivel * 0.0009 + cup * 0.00026), lift: 0.010 + Math.abs(swivel) * 0.010 + Math.abs(cup) * 0.004, rot: (3.6 + swivel * 4.2 + cup * 2.2) * face, anim: "talk" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0006 * (1 - s), lift: 0.003 * (1 - s), rot: 0.6 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.earswivel));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.8, rot: s * 14 * face, anim: "talk" as TrickAnim };
   }
+  if (u < 0.78) {
+    const cast = Math.sin(t * 2.6);
+    return {
+      x: fromX - face * cast * 0.16,
+      lift: 3.6 + Math.abs(cast) * 1.6,
+      rot: face * (14 + cast * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function forestampPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.forestamp));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.08) {
-      const s = smoothstep(u / 0.08);
-      return { x: fromX + face * s * 0.0014, lift: s * 0.028, rot: s * -3.4 * face, anim: "play" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const stamp = Math.sin((u - 0.08) / 0.47 * Math.PI * 4.0);
-      const thump = Math.sin(t * 11.0) + 0.14 * Math.sin(t * 22.0);
-      return { x: fromX + face * (0.0014 + Math.abs(stamp) * 0.0008 + thump * 0.00030), lift: 0.010 + Math.abs(stamp) * 0.024 + Math.abs(thump) * 0.008, rot: (-3.4 + stamp * 2.8 + thump * 1.6) * face, anim: "play" as TrickAnim };
-    }
-    if (u < 0.88) {
-      const settle = Math.sin((u - 0.55) / 0.33 * Math.PI);
-      return { x: fromX + face * (0.0020 - settle * 0.0006), lift: 0.014 + Math.abs(settle) * 0.010, rot: (-1.0 + settle * 1.8) * face, anim: "play" as TrickAnim };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0014 * (1 - s), lift: 0.004 * (1 - s), rot: -0.3 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / DUR.forestamp));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 2.8, rot: s * 12 * face, anim: "play" as TrickAnim };
   }
+  if (u < 0.78) {
+    const nestle = Math.sin(t * 2.2);
+    return {
+      x: fromX + face * (0.6 + nestle * 0.1),
+      lift: 2.4 + Math.abs(nestle) * 1.8,
+      rot: face * (12 + nestle * 8),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stotboundPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.stotbound));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * -12 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const tip = Math.sin(t * 2.0);
+    return {
+      x: fromX + face * tip * 0.08,
+      lift: 2.8 + tip * 1.6,
+      rot: face * (-12 + tip * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const hush = Math.sin(t * 0.9);
+    return {
+      x: fromX,
+      lift: 4.0 + Math.abs(hush) * 0.6,
+      rot: face * (-4 + hush * 3),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (-2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function snortblowPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.snortblow));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * 12 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const stretch = Math.sin(t * 2.3);
+    return {
+      x: fromX + face * stretch * 0.1,
+      lift: 3.4 + stretch * 1.4,
+      rot: face * (12 + stretch * 9),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const hush = Math.sin(t * 0.85);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(hush) * 0.7,
+      rot: face * (5 + hush * 3),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: DeerTrick | null | undefined, dt: number, flags?: TrickFlags) {
-    if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "flagtail" && trick.kind !== "edgebrowse" && trick.kind !== "earswivel" && trick.kind !== "forestamp") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-    }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-    if (next.kind === "odocoileus") {
-      if (next.t < ODOCOILEUS_HOLD) {
-        const pose = odocoileusPose(next.t);
-        next.phase = "hold";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      if (next.t < ODOCOILEUS_HOLD + RELEASE_S) {
-        const pose = releasePose(next.t - ODOCOILEUS_HOLD);
-        next.phase = "release";
-        next.lift = pose.lift;
-        next.rot = pose.rot;
-        next.anim = "sit";
-        return next;
-      }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    }
-    const hold = DUR[next.kind];
-    const u = next.t / hold;
-    if (next.kind === "flagtail") {
-      const pose = flagtailPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "edgebrowse") {
-      const pose = edgebrowsePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else if (next.kind === "earswivel") {
-      const pose = earswivelPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    } else {
-      const pose = forestampPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-      next.x = pose.x;
-      next.lift = pose.lift;
-      next.rot = pose.rot;
-      next.anim = pose.anim;
-    }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-    return next;
+  if (!trick || trick.phase === "done") return trick;
+  if (shouldAbort(flags) && trick.kind !== "flagtail" && trick.kind !== "edgebrowse" && trick.kind !== "earswivel" && trick.kind !== "forestamp" && trick.kind !== "stotbound" && trick.kind !== "snortblow") {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
+  const next = { ...trick, t: trick.t + Math.max(0, dt) };
+  if (next.kind === "odocoileus") {
+    if (next.t < ODOCOILEUS_HOLD) {
+      const pose = odocoileusPose(next.t);
+      next.phase = "hold";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    if (next.t < ODOCOILEUS_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - ODOCOILEUS_HOLD);
+      next.phase = "release";
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = "sit";
+      return next;
+    }
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  }
+  const hold = DUR[next.kind];
+  const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "flagtail") {
+    const pose = flagtailPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "edgebrowse") {
+    const pose = edgebrowsePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "earswivel") {
+    const pose = earswivelPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "forestamp") {
+    const pose = forestampPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "stotbound") {
+    const pose = stotboundPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = snortblowPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
+  return next;
+}
