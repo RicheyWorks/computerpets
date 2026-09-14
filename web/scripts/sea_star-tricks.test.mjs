@@ -91,7 +91,7 @@ test("Cling tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
+  assert.deepEqual([...T.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
   assert.equal(T.canStart({ asleep: false, hidden: true, leaving: false, cmd: "idle" }), false);
@@ -140,11 +140,11 @@ test("Cling tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
+  assert.deepEqual([...Overlay.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...Overlay.HAPPY], ["damp", "press", "tide"]);
 });
 
-test("podia/righting/crawl/evert/penta are house-sea-star-true, not copies of prior guests", () => {
+test("podia/righting/crawl/evert/penta/madre/papula are house-sea-star-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const podia = T.beginTrick("podia", 80, 1);
   assert.equal(podia.anim, "sit");
@@ -175,7 +175,15 @@ test("podia/righting/crawl/evert/penta are house-sea-star-true, not copies of pr
   assert.equal(penta.anim, "sit");
   const pentaMid = T.stepTrick(penta, 0.5, ground);
   assert.ok(Math.abs(pentaMid.lift) > 0.05 || Math.abs(pentaMid.rot) > 1 || Math.abs(pentaMid.x - 80) > 0.05);
-  const evertDone = T.stepTrick(evert, 1.6, ground);
+  const madre = T.beginTrick("madre", 80, 1);
+  assert.equal(madre.anim, "talk");
+  const madreMid = T.stepTrick(madre, T.DUR.madre * 0.4, ground);
+  assert.ok(Math.abs(madreMid.lift) > 0.05 || Math.abs(madreMid.rot) > 1 || Math.abs(madreMid.x - 80) > 0.05);
+  const papula = T.beginTrick("papula", 80, 1);
+  assert.equal(papula.anim, "play");
+  const papulaMid = T.stepTrick(papula, T.DUR.papula * 0.4, ground);
+  assert.ok(Math.abs(papulaMid.lift) > 0.05 || Math.abs(papulaMid.rot) > 1 || Math.abs(papulaMid.x - 80) > 0.05);
+  const evertDone = T.stepTrick(evert, T.DUR.evert + 0.1, ground);
   assert.equal(evertDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -196,6 +204,12 @@ test("podia/righting/crawl/evert/penta are house-sea-star-true, not copies of pr
   assert.equal(T.TRICKS.includes("chime"), false);
   assert.equal(T.TRICKS.includes("pulse"), false);
   assert.equal(T.TRICKS.includes("drift"), false);
+  assert.equal(MoonJelly.TRICKS.includes("madre"), false);
+  assert.equal(MoonJelly.TRICKS.includes("papula"), false);
+  assert.equal(Nautilus.TRICKS.includes("madre"), false);
+  assert.equal(Cuttlefish.TRICKS.includes("madre"), false);
+  assert.equal(Octopus.TRICKS.includes("madre"), false);
+  assert.equal(Axolotl.TRICKS.includes("papula"), false);
   assert.equal(T.TRICKS.includes("jet"), false);
   assert.equal(T.TRICKS.includes("mantle"), false);
   assert.equal(T.TRICKS.includes("bone"), false);
@@ -303,7 +317,7 @@ test("ground registry keeps prior guests gated; Cling selectable; prior guests s
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
+  assert.deepEqual([...T.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.equal(T.wantsThankYou("sea_star"), true);
   assert.equal(T.wantsThankYou("cling"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -397,7 +411,7 @@ test("ground registry keeps prior guests gated; Cling selectable; prior guests s
   assert.deepEqual([...OverlayCuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...OverlayNautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...OverlayCarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...Overlay.TRICKS], ["podia", "righting", "crawl", "evert", "penta"]);
+  assert.deepEqual([...Overlay.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.equal(Overlay.TRICKS.includes("reef"), false);
   assert.equal(Overlay.TRICKS.includes("cling"), false);
   assert.equal(Overlay.TRICKS.includes("bell"), false);
@@ -411,7 +425,26 @@ test("ground registry keeps prior guests gated; Cling selectable; prior guests s
   assert.equal(Overlay.TRICKS.includes("legend"), false);
 });
 
-test("notes: Cling idle-life done; next house-order guest still lacking tricks is Tenant / hermit_crab", () => {
+
+test("ultra-polish: Ochre podia/madre/papula lifts are Rui-visible (not micro idle-gen)", () => {
+  const pod = T.beginTrick("podia", 80, 1);
+  const mid = T.stepTrick(pod, 5, { cmd: "idle" });
+  assert.ok(Math.abs(mid.rot) > 10, `podia mid rot ${mid.rot}`);
+  assert.ok(Math.abs(mid.lift) > 0.5, `podia mid lift ${mid.lift}`);
+  const md = T.beginTrick("madre", 80, 1);
+  const m2 = T.stepTrick(md, T.DUR.madre * 0.4, { cmd: "idle" });
+  assert.ok(m2.lift > 2 || Math.abs(m2.rot) > 4 || Math.abs(m2.x - 80) > 1, `madre mid ${m2.lift}/${m2.rot}/${m2.x}`);
+  const pp = T.beginTrick("papula", 80, 1);
+  const p2 = T.stepTrick(pp, T.DUR.papula * 0.4, { cmd: "idle" });
+  assert.ok(p2.lift > 2 || Math.abs(p2.rot) > 8 || Math.abs(p2.x - 80) > 0.3, `papula mid ${p2.lift}/${p2.rot}/${p2.x}`);
+  const cr = T.beginTrick("crawl", 80, 1);
+  const c2 = T.stepTrick(cr, T.DUR.crawl * 0.4, { cmd: "idle" });
+  assert.ok(c2.lift > 0.5 || Math.abs(c2.rot) > 4 || Math.abs(c2.x - 80) > 0.5, `crawl mid ${c2.lift}/${c2.rot}/${c2.x}`);
+  assert.ok(Overlay.madrePose && Overlay.papulaPose);
+  assert.deepEqual([...T.TRICKS], [...Overlay.TRICKS]);
+});
+
+test("notes: Ochre idle-life ultra done; next house-order ultra guest is Tenant / hermit_crab (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff + Sash + Lula + Coral + Blush + Atlas + Cup + Sepia + Chamber + Pulse + Ochre already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "sea_star");
   assert.equal(T.wantsThankYou("cling"), true);
   assert.equal(OverlayGround.tricksFor("sea_star"), Overlay);
@@ -434,8 +467,8 @@ test("notes: Cling idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("coin"), OverlayGoldfish);
   assert.equal(OverlayGround.tricksFor("axolotl"), OverlayAxolotl);
   assert.equal(OverlayGround.tricksFor("bloom"), OverlayAxolotl);
-  assert.equal(OverlayGround.tricksFor("hermit_crab"), null);
+  assert.equal(OverlayGround.tricksFor("hermit_crab") == null, true);
   assert.equal(OverlayGround.wantsThankYou("hermit_crab"), false);
-  assert.equal(OverlayGround.tricksFor("tenant"), null);
+  assert.equal(OverlayGround.tricksFor("tenant") == null, true);
   assert.equal(OverlayGround.wantsThankYou("tenant"), false);
 });
