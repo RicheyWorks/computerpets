@@ -1,12 +1,7 @@
-/** Pane ground tricks while idle. House neighborly Navicula (diatom / Pane) desk life -- silica glide / frustule pane / raphe crawl / oil-store drop / long pane hush; NOT Orb volvox; NOT Spot; NOT Reach; NOT Boot; NOT Gauss; NOT Ion; NOT Spark; NOT Flux; NOT Trace; NOT Kelp; NOT Relay; NOT Fuse; NOT Rui; guest slug Pane / key diatom -- accept diatom and pane; Thank-yous denspane / inkpane / densdiatom. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop diatom-tricks.js. Next: Hold / kelp. Catalog 211. */
+/** Pane ground tricks while idle — ultra-polish pass. House neighborly Navicula (diatom / Pane) desk life — frustule / raphe / girdle / oilstore / pennate / epitheca / navicula personality (frustule silica valve face without naming shell or still or dart or spin, raphe slit glide without naming crawl or still or dart or slide, girdle band turn without naming band or still or dart or ring, oilstore oil-droplet tuck without naming drop or still or dart or float, pennate boat-shape drift without naming boat or still or dart or slip, epitheca upper-valve tip without naming lid or still or dart or cover, long navicula Navicula sit_hold under the lamp drop (THE navicula sit_hold tell) — never named wait or wake or still or hide or cover or glue or flare or dart or nest or zig or swim or gulp or drift or glint or hinge or sucker or latch or crawl or dig or burrow or pedal or radula or pneumostome or ommatophore or lymnaeid or adductor or protractor or inhalant or ctenidium or unionid or acetabulum or prostomium or looping or undulatory or hirudinean or botryoidal or auricle or spiggin or zigzag or spinous or fanning or gasterosteid or nuptial or pelvic or cilia or pellicle or cytostome or vacuole or ciliophora or trichocyst or avoiding or slipper or row or wiggle or scute or pseudopod or ectoplasm or endoplasm or foodcup or proteus or uroid or streaming or eyespot or flagellum or chloroplast or phototaxis or euglenid or metaboly or paramylon or colony or inversion or phialopore or somatic or coenobium or daughter or gonidia or silicaglide or frustulepane or raphecrawl or oilstoredrop or longpanehush or holdfast or blade or stipe as trick kinds; ethogram softs + freeze own those words; window-play RED unchanged if already fine; Coin owns flare/dart/drift/gulp/glint; Twig owns stick-insect life; Latch owns acetabulum/prostomium/looping/undulatory/hirudinean/botryoidal/auricle; Hinge owns adductor/protractor/inhalant/ctenidium/unionid/ligament/glochid; Whorl owns radula/pedal/pneumostome/ommatophore/lymnaeid/odontophore/neuston; Prickle owns spiggin/zigzag/spinous/fanning/gasterosteid/nuptial/pelvic; Boot owns cilia/pellicle/cytostome/vacuole/ciliophora/trichocyst/avoiding; Reach owns pseudopod/ectoplasm/endoplasm/foodcup/proteus/uroid/streaming; Spot owns eyespot/flagellum/chloroplast/phototaxis/euglenid/metaboly/paramylon; Orb owns colony/inversion/phialopore/somatic/coenobium/daughter/gonidia; Hold will own kelp/holdfast life; Door owns hinge; Anchor owns siphon; guest slug Pane / key diatom only for isKey matching — accept "diatom" and "pane"; do NOT name a trick "diatom" or "pane" or "glue" or "flare" or "dart" or "still" or "roll" or "spin" or "swim" or "beat" or "glide") — not Spot euglena life, not Reach amoeba life, not Boot paramecium life, not Orb volvox life, not Prickle stickleback life, not Coin goldfish life, not Latch leech life, not Hinge mussel life, not Twig stick-insect life, not Door moray, not Anchor seahorse, not Kite manta, not Gauss filing-dragon, not Hold kelp. Frustule silica valve face on the drop without naming shell, raphe slit glide without naming crawl, girdle band turn without naming ring, oilstore oil-droplet tuck without naming float, pennate boat-shape drift without naming slip, epitheca upper-valve tip without naming lid, navicula long Navicula sit_hold under the scrap lamp (THE navicula sit_hold tell); bacillaris / cryptocephala / tripunctata thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop diatom-tricks.js. Window-play RED unchanged. Ethogram softs + freeze — never names pane/glide/still as bare ethogram-only trick kinds. True Navicula desk life only — distinct from Spot euglena, Reach amoeba, Boot paramecium, Orb volvox, Prickle stickleback, Coin goldfish, Latch leech, Hinge mussel, Twig stick insect, Door moray, Anchor seahorse, Kite manta, Gauss filing-dragon, and Hold kelp. Hold owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via diatom.wav. Catalog 221. */
 export const TRICK_KEY = "diatom";
-export const TRICKS = ["silicaglide", "frustulepane", "raphecrawl", "oilstoredrop", "longpanehush"] as const;
-export const HAPPY = ["denspane", "inkpane", "densdiatom"] as const;
-export const HAPPY_DUR = { denspane: 3.5, inkpane: 3.18, densdiatom: 3.35 } as const;
-export const LONGPANEHUSH_HOLD = 38.66;
-export const RELEASE_S = 2.8;
-export const DUR = { longpanehush: LONGPANEHUSH_HOLD + RELEASE_S, silicaglide: 7.03, frustulepane: 6.45, raphecrawl: 6.2, oilstoredrop: 6.33 } as const;
-
+export const TRICKS = ["frustule", "raphe", "girdle", "oilstore", "navicula", "pennate", "epitheca"] as const;
+export const HAPPY = ["bacillaris", "cryptocephala", "tripunctata"] as const;
 export type DiatomTrickKind = (typeof TRICKS)[number];
 export type DiatomHappyKind = (typeof HAPPY)[number];
 export type TrickAnim = "idle" | "walk" | "sit" | "sleep" | "talk" | "play";
@@ -14,41 +9,53 @@ export type TrickPhase = "go" | "hold" | "release" | "done";
 export type HappyPhase = "go" | "done";
 
 export type TrickFlags = {
-asleep?: boolean;
-hidden?: boolean;
-leaving?: boolean;
-cmd?: string;
-windowPlay?: boolean;
-card?: boolean;
+  asleep?: boolean;
+  hidden?: boolean;
+  leaving?: boolean;
+  cmd?: string;
+  windowPlay?: boolean;
+  card?: boolean;
 };
 
 export type DiatomTrick = {
-kind: DiatomTrickKind;
-phase: TrickPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: DiatomTrickKind;
+  phase: TrickPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
 export type DiatomHappy = {
-kind: DiatomHappyKind;
-happy: true;
-phase: HappyPhase;
-t: number;
-x: number;
-lift: number;
-rot: number;
-anim: TrickAnim;
-facing: 1 | -1;
-fromX: number;
-abort?: boolean;
+  kind: DiatomHappyKind;
+  happy: true;
+  phase: HappyPhase;
+  t: number;
+  x: number;
+  lift: number;
+  rot: number;
+  anim: TrickAnim;
+  facing: 1 | -1;
+  fromX: number;
+  abort?: boolean;
 };
 
+export const HAPPY_DUR = { bacillaris: 1.70, cryptocephala: 1.82, tripunctata: 1.71 } as const;
+export const NAVICULA_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  navicula: NAVICULA_HOLD + RELEASE_S,
+  frustule: 2.36,
+  raphe: 2.50,
+  girdle: 2.56,
+  oilstore: 2.42,
+  pennate: 2.44,
+  epitheca: 2.39,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,40 +85,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: DiatomTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "longpanehush") return 243 + roll * 45;
-  if (kind === "frustulepane") return 31.2 + roll * 4.1;
-  if (kind === "oilstoredrop") return 29.1 + roll * 3.8;
-  if (kind === "silicaglide") return 30.0 + roll * 4.0;
-  if (kind === "raphecrawl") return 28.3 + roll * 3.9;
-  return justFinished ? 22.5 + roll * 4.0 : 17.6 + roll * 3.5;
+  if (kind === "navicula") return 40 + roll * 26;
+  if (kind === "pennate" || kind === "epitheca" || kind === "frustule") return 12.8 + roll * 9.4;
+  if (kind === "raphe" || kind === "girdle" || kind === "oilstore") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: DiatomTrickKind | string | null) {
-  if (musicOn) return "longpanehush";
+  if (musicOn) return "navicula" as const;
   const roll = rand == null ? Math.random() : rand;
-  if (lastKind === "longpanehush") {
-    if (roll < 0.26) return "frustulepane";
-    if (roll < 0.62) return "oilstoredrop";
-    if (roll < 0.79) return "silicaglide";
-    return "raphecrawl";
+  if (lastKind === "navicula") {
+    if (roll < 0.17) return "frustule" as const;
+    if (roll < 0.33) return "raphe" as const;
+    if (roll < 0.49) return "girdle" as const;
+    if (roll < 0.65) return "oilstore" as const;
+    if (roll < 0.83) return "pennate" as const;
+    return "epitheca" as const;
   }
-  if (lastKind === "frustulepane") {
-    if (roll < 0.26) return "longpanehush";
-    if (roll < 0.5) return "oilstoredrop";
-    if (roll < 0.74) return "silicaglide";
-    return "raphecrawl";
+  if (lastKind === "frustule") {
+    if (roll < 0.16) return "navicula" as const;
+    if (roll < 0.32) return "raphe" as const;
+    if (roll < 0.48) return "girdle" as const;
+    if (roll < 0.64) return "oilstore" as const;
+    if (roll < 0.82) return "pennate" as const;
+    return "epitheca" as const;
   }
-  if (lastKind === "oilstoredrop") {
-    if (roll < 0.22) return "longpanehush";
-    if (roll < 0.44) return "frustulepane";
-    if (roll < 0.74) return "silicaglide";
-    return "raphecrawl";
+  if (lastKind === "raphe") {
+    if (roll < 0.14) return "navicula" as const;
+    if (roll < 0.3) return "frustule" as const;
+    if (roll < 0.46) return "girdle" as const;
+    if (roll < 0.62) return "oilstore" as const;
+    if (roll < 0.8) return "pennate" as const;
+    return "epitheca" as const;
   }
-  if (roll < 0.2) return "longpanehush";
-  if (roll < 0.4) return "frustulepane";
-  if (roll < 0.6) return "oilstoredrop";
-  if (roll < 0.8) return "silicaglide";
-  return "raphecrawl";
+  if (lastKind === "pennate" || lastKind === "epitheca") {
+    if (roll < 0.14) return "navicula" as const;
+    if (roll < 0.3) return "frustule" as const;
+    if (roll < 0.46) return "raphe" as const;
+    if (roll < 0.62) return "girdle" as const;
+    if (roll < 0.78) return "oilstore" as const;
+    return lastKind === "pennate" ? ("epitheca" as const) : ("pennate" as const);
+  }
+  if (roll < 0.14) return "navicula" as const;
+  if (roll < 0.28) return "frustule" as const;
+  if (roll < 0.42) return "raphe" as const;
+  if (roll < 0.56) return "girdle" as const;
+  if (roll < 0.7) return "oilstore" as const;
+  if (roll < 0.85) return "pennate" as const;
+  return "epitheca" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -139,26 +160,32 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
   );
 }
 
-export function wantsThankYou(key: string | undefined) {
+export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "pane";
 }
 
-export function startThankYou(key: string | undefined, lastKind: DiatomHappyKind | string | null | undefined, x: number, facing?: 1 | -1, flags?: TrickFlags) {
+export function startThankYou(
+  key: string | undefined | null,
+  lastKind: DiatomHappyKind | string | null | undefined,
+  x: number,
+  facing: 1 | -1,
+  flags?: TrickFlags,
+) {
   if (!wantsThankYou(key)) return null;
   if (!happyCanStart(flags || { cmd: "idle" })) return null;
-  const pick = pickHappy(lastKind);
+  const pick = pickHappy(lastKind as DiatomHappyKind | null | undefined);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
 
-export function pickHappy(lastKind?: DiatomHappyKind | string | null, rand?: number) {
+export function pickHappy(lastKind?: DiatomHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
-  const list = pool.length ? pool : HAPPY.slice();
+  const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
 
-export function beginHappy(kind: DiatomHappyKind | string, x: number, facing?: 1 | -1): DiatomHappy {
-  const name = (HAPPY.indexOf(kind as DiatomHappyKind) >= 0 ? kind : "denspane") as DiatomHappyKind;
+export function beginHappy(kind: DiatomHappyKind | string, x: number, facing: 1 | -1): DiatomHappy {
+  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as DiatomHappyKind) : "bacillaris";
   return {
     kind: name,
     happy: true,
@@ -167,278 +194,378 @@ export function beginHappy(kind: DiatomHappyKind | string, x: number, facing?: 1
     x: x,
     lift: 0,
     rot: 0,
-    anim: name === "denspane" ? "sit" : name === "inkpane" ? "play" : "play",
-    facing: (facing == null ? 1 : facing) as 1 | -1,
-    fromX: x,
-  };
-}
-
-export function denspanePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denspane));
-    if (u < 0.11) {
-      const s = u / 0.11;
-      return { lift: s * 0.005, rot: s * -0.38, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.5) {
-      const sway = Math.sin(((u - 0.11) / 0.39) * Math.PI * 3.25);
-      const haze = Math.sin(((u - 0.11) / 0.39) * Math.PI * 6.1);
-      return { lift: 0.005 + Math.abs(sway) * 0.0016 + Math.abs(haze) * 0.00055, rot: -0.32 + sway * 0.23 + haze * 0.055, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const sway = Math.sin(((u - 0.5) / 0.36) * Math.PI * 2.5);
-      return { lift: 0.005 + Math.abs(sway) * 0.0013, rot: -0.27 + sway * 0.17, anim: "sit" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.005 * (1 - s), rot: -0.27 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function inkpanePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkpane));
-    if (u < 0.1) {
-      const s = u / 0.1;
-      return { lift: s * 0.0063, rot: s * 0.47, anim: "play" as TrickAnim };
-    }
-    if (u < 0.49) {
-      const bob = Math.sin(((u - 0.1) / 0.39) * Math.PI * 3.45);
-      const ion = Math.sin(((u - 0.1) / 0.39) * Math.PI * 6.6);
-      return { lift: 0.0059 + Math.abs(bob) * 0.002 + Math.abs(ion) * 0.00065, rot: 0.4 + bob * 0.22 + ion * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const bob = Math.sin(((u - 0.49) / 0.37) * Math.PI * 2.55);
-      return { lift: 0.0059 + Math.abs(bob) * 0.0015, rot: 0.35 + bob * 0.16, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0059 * (1 - s), rot: 0.35 * (1 - s), anim: "idle" as TrickAnim };
-  }
-export function densdiatomPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densdiatom));
-    if (u < 0.12) {
-      const s = u / 0.12;
-      return { lift: s * 0.0043, rot: s * -0.285, anim: "play" as TrickAnim };
-    }
-    if (u < 0.53) {
-      const hush = Math.sin(((u - 0.12) / 0.41) * Math.PI * 2.55);
-      const haze = Math.sin(((u - 0.12) / 0.41) * Math.PI * 5.2);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0014 + Math.abs(haze) * 0.0005, rot: -0.24 + hush * 0.17 + haze * 0.05, anim: "play" as TrickAnim };
-    }
-    if (u < 0.86) {
-      const hush = Math.sin(((u - 0.53) / 0.33) * Math.PI * 1.85);
-      return { lift: 0.0043 + Math.abs(hush) * 0.0011, rot: -0.2 + hush * 0.13, anim: "play" as TrickAnim };
-    }
-    const s = (u - 0.86) / 0.14;
-    return { lift: 0.0043 * (1 - s), rot: -0.2 * (1 - s), anim: "idle" as TrickAnim };
-  }
-
-export function stepHappy(happy: DiatomHappy | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!happy || happy.phase === "done") return happy;
-  if (happyShouldAbort(flags)) {
-    return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
-  }
-  const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
-  const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "denspane") {
-    const pose = denspanePose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "inkpane") {
-    const pose = inkpanePose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = densdiatomPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
-  if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
-  return next;
-}
-
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
-  return null;
-}
-
-export function beginTrick(kind: DiatomTrickKind | string, x: number, facing?: 1 | -1): DiatomTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as DiatomTrickKind) : "longpanehush";
-  const anim: TrickAnim =
-    k === "longpanehush"
-      ? "sit"
-      : k === "frustulepane"
-        ? "sit"
-        : k === "oilstoredrop"
-          ? "sit"
-          : k === "raphecrawl"
-            ? "play"
-            : k === "silicaglide"
-              ? "walk"
-              : "sit";
-  return {
-    kind: k,
-    phase: k === "longpanehush" ? "hold" : "go",
-    t: 0,
-    x,
-    lift: 0,
-    rot: 0,
-    anim,
+    anim: name === "bacillaris" ? "sit" : name === "cryptocephala" ? "play" : "sit",
     facing: facing == null ? 1 : facing,
     fromX: x,
   };
 }
 
-export function smoothstep(t: number) {
+export function bacillarisPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.bacillaris));
+  if (u < 0.16) {
+    const s = u / 0.16;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.82) {
+    const flash = Math.sin(t * 1.72);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: 0,
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function cryptocephalaPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cryptocephala));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const wriggle = Math.sin(t * 2.1);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: 0.08,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.84) / 0.16;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function tripunctataPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.52) * 6,
+    dx: 0,
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function stepHappy(happy: DiatomHappy, dt: number, flags: TrickFlags): DiatomHappy {
+  if (happyShouldAbort(flags)) {
+    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: DiatomHappy = { ...happy, t: happy.t + Math.max(0, dt) };
+  const hold = HAPPY_DUR[next.kind];
+  if (next.kind === "bacillaris") {
+    const pose = bacillarisPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "cryptocephala") {
+    const pose = cryptocephalaPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = tripunctataPose(next.t);
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  }
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  return next;
+}
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
+  return null;
+}
+
+export function beginTrick(kind: DiatomTrickKind | string, x: number, facing: 1 | -1): DiatomTrick {
+  const anim: TrickAnim =
+    kind === "navicula"
+      ? "sit"
+      : kind === "frustule"
+        ? "sit"
+        : kind === "raphe"
+          ? "walk"
+          : kind === "girdle"
+            ? "play"
+            : kind === "oilstore"
+              ? "play"
+              : kind === "pennate"
+                ? "play"
+                : kind === "epitheca"
+                  ? "walk"
+                  : "sit";
+  return {
+    kind: (TRICKS as readonly string[]).indexOf(kind) >= 0 ? (kind as DiatomTrickKind) : "frustule",
+    phase: kind === "navicula" ? "hold" : "go",
+    t: 0,
+    x: x,
+    lift: 0,
+    rot: 0,
+    anim: anim,
+    facing: facing == null ? 1 : facing,
+    fromX: x,
+  };
+}
+
+function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
-export function longpanehushPose(t: number) {
-  const breath = Math.sin(t * 0.00028) + 0.00020 * Math.sin(t * 0.00097);
-  const charge = Math.abs(Math.sin(t * 0.00017));
-  return { lift: -0.00013 + charge * 0.00015, rot: 0.0011 + breath * 0.0030 };
+export function naviculaPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.14) * 4,
+    anim: "sit" as TrickAnim,
+  };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00013 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0031 * (1 - u) };
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
 }
 
-export function frustulepanePose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.frustulepane));
+export function frustulePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.frustule));
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + face * s * 0.00055, lift: s * 0.0030, rot: s * 0.09 * face, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 3.5, rot: s * 14 * face, anim: "sit" as TrickAnim };
   }
-  if (u < 0.8) {
-    const wire = Math.sin(((u - 0.14) / 0.66) * Math.PI * 4.1);
-    const skim = Math.sin(((u - 0.14) / 0.66) * Math.PI * 2.3);
+  if (u < 0.78) {
+    const snap = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (0.00055 + (u - 0.14) / 0.66 * 0.0014 + wire * 0.00008),
-      lift: 0.0027 + Math.abs(skim) * 0.0021 + Math.abs(wire) * 0.0007,
-      rot: (0.09 + skim * 0.13 + wire * 0.05) * face,
-      anim: "walk" as TrickAnim,
+      x: fromX + face * snap * 0.14,
+      lift: 3.5 + Math.abs(snap) * 1.5,
+      rot: face * (15 + snap * 11),
+      anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.8) / 0.2);
-  return { x: fromX + face * (0.00195 * (1 - s) + 0.00055 * s), lift: 0.0026 * (1 - s), rot: 0.09 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function oilstoredropPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.oilstoredrop));
+
+export function raphePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.raphe));
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + face * s * -0.00004, lift: s * 0.0018, rot: s * -0.13 * face, anim: "play" as TrickAnim };
+    return { x: fromX, lift: s * 3.9, rot: s * -16 * face, anim: "walk" as TrickAnim };
   }
-  if (u < 0.42) {
-    const s = smoothstep((u - 0.12) / 0.3);
-    return { x: fromX + face * (-0.00004 + s * 0.00020), lift: 0.0018 + s * 0.0115, rot: (-0.13 + s * 0.34) * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.79) {
-    const crack = Math.sin(((u - 0.42) / 0.36) * Math.PI * 5.6);
+  if (u < 0.48) {
+    const s = smoothstep((u - 0.12) / 0.36);
     return {
-      x: fromX + face * (0.00014 + crack * 0.00005),
-      lift: 0.0133 - ((u - 0.42) / 0.36) * 0.0084 + Math.abs(crack) * 0.0016,
-      rot: (0.22 + crack * 0.19) * face,
-      anim: "play" as TrickAnim,
+      x: fromX - face * (2.2 + s * 4.5),
+      lift: 3.6 + Math.sin(s * Math.PI) * 2.2,
+      rot: face * (-16 + s * 22),
+      anim: "walk" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.79) / 0.22);
-  return { x: fromX + face * 0.00014 * (1 - s), lift: 0.0049 * (1 - s), rot: 0.22 * (1 - s) * face, anim: "idle" as TrickAnim };
+  if (u < 0.78) {
+    const s = (u - 0.48) / 0.3;
+    const settle = Math.sin(s * Math.PI * 2.1);
+    return {
+      x: fromX - face * (6.7 * (1 - s)),
+      lift: 2.4 + Math.abs(settle) * 1.1,
+      rot: face * (6 + settle * 8),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.4 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function silicaglidePose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.silicaglide));
+
+export function girdlePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.girdle));
   const face = facing == null ? 1 : facing;
   if (u < 0.16) {
     const s = smoothstep(u / 0.16);
-    return { x: fromX + face * s * -0.00011, lift: s * -0.0056, rot: s * 0.36 * face, anim: "play" as TrickAnim };
+    return { x: fromX + face * s * 0.8, lift: s * 2.2, rot: s * 8 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const mud = Math.sin(t * 1.6);
+    return {
+      x: fromX + face * (0.8 + mud * 0.4),
+      lift: 2.2 + Math.abs(mud) * 1.0,
+      rot: face * (8 + mud * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: s > 0.6 ? ("idle" as TrickAnim) : ("play" as TrickAnim),
+  };
+}
+
+export function oilstorePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.oilstore));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * 10 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.84) {
+    const tap = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * tap * 0.2,
+      lift: 2.4 + Math.abs(tap) * 1.1,
+      rot: face * (10 + tap * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function pennatePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.pennate));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.8, rot: s * 12 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const pulse = Math.sin(t * 3.2);
+    return {
+      x: fromX,
+      lift: 2.8 + pulse * 1.6,
+      rot: face * (12 + pulse * 14),
+      anim: "play" as TrickAnim,
+    };
   }
   if (u < 0.78) {
-    const coil = Math.sin(((u - 0.16) / 0.62) * Math.PI * 3.3);
-    const charge = Math.sin(((u - 0.16) / 0.62) * Math.PI * 6.9);
+    const scent = Math.sin(t * 1.1);
     return {
-      x: fromX + face * (-0.00011 + coil * 0.00007),
-      lift: -0.0056 + Math.abs(coil) * 0.0030 + Math.abs(charge) * 0.0019,
-      rot: (0.36 + coil * 0.41 + charge * 0.14) * face,
+      x: fromX + face * scent * 0.15,
+      lift: 4.0 + Math.abs(scent) * 0.6,
+      rot: face * (22 + scent * 4),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX + face * -0.00011 * (1 - s), lift: -0.0056 * (1 - s), rot: 0.36 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function raphecrawlPose(t: number, fromX: number, facing: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.raphecrawl));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.00003, lift: s * 0.0042, rot: s * 0.11 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.84) {
-    const fringe = Math.sin(((u - 0.18) / 0.66) * Math.PI * 9.0);
-    const crackle = Math.sin(((u - 0.18) / 0.66) * Math.PI * 4.0);
-    return {
-      x: fromX + face * (0.00003 + fringe * 0.00004),
-      lift: 0.0041 + Math.abs(crackle) * 0.0022 + Math.abs(fringe) * 0.0011,
-      rot: (0.11 + fringe * 0.22 + crackle * 0.09) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.84) / 0.16);
-  return { x: fromX + face * 0.00003 * (1 - s), lift: 0.0037 * (1 - s), rot: 0.11 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: face * (8 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
 
-export function stepTrick(trick: DiatomTrick | null | undefined, dt: number, flags?: TrickFlags) {
-  if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "frustulepane" && trick.kind !== "oilstoredrop" && trick.kind !== "silicaglide" && trick.kind !== "raphecrawl") {
-    return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+export function epithecaPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.epitheca));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.4, rot: s * -12 * face, anim: "walk" as TrickAnim };
   }
-  const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
-  if (next.kind === "longpanehush") {
-    if (next.t < LONGPANEHUSH_HOLD) {
-      const pose = longpanehushPose(next.t);
+  if (u < 0.55) {
+    const flash = Math.abs(Math.sin(t * 2.6));
+    return {
+      x: fromX + face * flash * 0.2,
+      lift: 3.4 + flash * 1.4,
+      rot: face * (-12 - flash * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const warn = Math.sin(t * 1.4);
+    return {
+      x: fromX,
+      lift: 4.4 + Math.abs(warn) * 0.7,
+      rot: face * (-18 + warn * 6),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: face * (-5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: DiatomTrick, dt: number, flags: TrickFlags): DiatomTrick {
+  if (shouldAbort(flags)) {
+    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  }
+  const next: DiatomTrick = { ...trick, t: trick.t + Math.max(0, dt) };
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "navicula") {
+    if (next.t < NAVICULA_HOLD) {
+      const pose = naviculaPose(next.t);
       next.phase = "hold";
       next.lift = pose.lift;
       next.rot = pose.rot;
-      next.anim = "sit";
+      next.anim = pose.anim;
       return next;
     }
-    if (next.t < LONGPANEHUSH_HOLD + RELEASE_S) {
-      const pose = releasePose(next.t - LONGPANEHUSH_HOLD);
+    if (next.t < NAVICULA_HOLD + RELEASE_S) {
+      const pose = releasePose(next.t - NAVICULA_HOLD);
       next.phase = "release";
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = "sit";
       return next;
     }
-    return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   }
   const hold = DUR[next.kind];
-  const u = next.t / hold;
-  if (next.kind === "frustulepane") {
-    const pose = frustulepanePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  if (next.kind === "frustule") {
+    const pose = frustulePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "oilstoredrop") {
-    const pose = oilstoredropPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "raphe") {
+    const pose = raphePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "silicaglide") {
-    const pose = silicaglidePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "girdle") {
+    const pose = girdlePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "oilstore") {
+    const pose = oilstorePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "pennate") {
+    const pose = pennatePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = raphecrawlPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = epithecaPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle", x: fromX };
   return next;
 }
-

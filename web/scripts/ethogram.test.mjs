@@ -525,6 +525,10 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("volvox").includes("daughter_soft"));
   assert.ok(names("volvox").includes("gonidia_soft"));
   assert.ok(names("volvox").includes("freeze"));
+  assert.ok(names("diatom").includes("navicula"));
+  assert.ok(names("diatom").includes("pennate_soft"));
+  assert.ok(names("diatom").includes("epitheca_soft"));
+  assert.ok(names("diatom").includes("freeze"));
   for (const key of ROOST) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
