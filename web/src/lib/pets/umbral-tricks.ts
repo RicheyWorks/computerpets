@@ -1,6 +1,6 @@
-/** Hush ground tricks while idle. House neighborly alien shade soft umbra quiet desk life — silhouette / adumbrate / occultation / antumbra / caligo personality (shadow soft, umbra quiet, alien shade desk life — never named cool or dim or still or hush or umbral or shade or cast or veil or soft or penumbra or eclipse or limb or limitor or belt or lodestone or flux or azimuth or dipole or remanence or waft or billow or cirrus as trick kinds; window-play COOL + ethogram dim/still/cool own those words; Dusk already owns penumbra/eclipse/limb/limitor/belt; Beacon owns lodestone/flux/azimuth/dipole/remanence; Drift owns waft/billow/cirrus/virga/stratus; guest slug Hush / key umbral only for isKey matching — accept "umbral" and "hush"; do NOT name a trick "umbral" or "hush" or "cool" or "dim" or "still" or "shade" or "cast" or "veil" or "soft" or "umbra" or "shadow" or "penumbra" or "eclipse") — not Beacon lodestone/flux/azimuth/dipole/remanence field-magnet, not Brine halite/salina/rime/bittern/deliquesce salt-brine, not Knot plexus/splice/braid/weft/mesh junction-weave, not Dusk belt/penumbra/eclipse/limb/limitor twilight-belt, not Shard cleavage/twinning/inclusion/grit/crescit living-crystal, not Drift waft/billow/cirrus/virga/stratus methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia chord-body, not Gleam photon/wavelength/lumen/glass/photovore lamp-drinker, not Fuse seat/current/blow/reseat dragon, not Ground lug/earth/heave/bed dragon, not Drown peristome/cistern/brine/operculum/urn pitcher, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia plaque, not Starter bud/proof/levain/ferment/saccharomyces bloom, not Flame sulfur/rosette/oak/soft/laetiporus drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift, not Door hinge/pharynx/knot/lurk/jamb moray, not Sheen lustre/tumulus/salt/commune/agapostemon; never named cool (window-play COOL + ethogram — never a trick kind) / dim (ethogram) / still (ethogram) / shade (taken elsewhere — never a trick kind) / cast (taken) / veil (Cap) / soft (Flame) / hush (guest slug — never a trick kind) / umbral (guest key — never a trick kind) / umbra (too close to key) / shadow (too close to species tell as trick kind) / penumbra / eclipse / limb / limitor / belt / crepuscule / gloaming / eventide / lodestone / flux / azimuth / dipole / remanence / ferrite / oersted / gauss / halite / salina / rime / bittern / deliquesce / natron / trona / aureole / plexus / splice / braid / weft / mesh / accord / quorum / entente / cleavage / twinning / inclusion / grit / crescit / euhedral / vitreous / adamantine / facet / silica / shard / glass / stone / float / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / photon / wavelength / lumen / actinic / lux / candela / polyphony / partial / timbre / resonance / harmonia / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf / hinge / pharynx / lurk / jamb / rim / edge / trail / terminator / dusk / treaty / peristome / cistern / operculum / urn / lustre / tumulus / commune / agapostemon / many / count / ripple / name / nexus / knot / brine / salt / frost / halo / seat / blow / reseat / lug / earth / heave / bed / warm / snap / hum / bow / field / orbit / beacon / magneton / current / north / align — Echo/Quill are birds with sound — do not copy their tricks. silhouette soft lamp-edge outline settle on the blotter, adumbrate quiet foreshadow sketch across desk grain, occultation soft cover of a fleck of lamp spill, antumbra annular shade stretch without naming penumbra, caligo long soft murky shade hold that keeps a quiet cool while the dim stays the blood (not Beacon magnet field, not Dusk twilight belt, not Drift methane cloud, not Gleam lamp-drinker, not Fuse dragon current) with skotos / umbriel / softfall cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play COOL do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web umbral-tricks.ts. Window-play COOL unchanged — never names cool. Ethogram dim/still/cool unchanged — never names dim or still or cool as trick kinds. True alien shade soft umbra quiet desk life only — shadow soft without naming shadow; umbra quiet without naming umbra. Arca owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Hush ground tricks while idle — ultra-polish pass. House neighborly alien shade soft umbra quiet desk COOL life — silhouette / adumbrate / occultation / antumbra / caligo / sfumato / tenebrae personality (shadow soft, umbra quiet, alien shade desk life — never named cool or dim or still or hush or umbral or shade or cast or veil or soft or penumbra or eclipse or limb or limitor or belt or lodestone or flux or azimuth or dipole or remanence or barkhausen or hysteresis or waft or billow or cirrus as trick kinds; window-play COOL + ethogram-old dim/still/cool own those words; Dusk already owns penumbra/eclipse/limb/limitor/belt/umbra/syzygy; Beacon owns lodestone/flux/azimuth/dipole/remanence/barkhausen/hysteresis; Drift owns waft/billow/cirrus/virga/stratus/tholin/nucleate; guest slug Hush / key umbral only for isKey matching — accept "umbral" and "hush"; do NOT name a trick "umbral" or "hush" or "cool" or "dim" or "still" or "shade" or "cast" or "veil" or "soft" or "umbra" or "shadow" or "penumbra" or "eclipse") — not Beacon lodestone/flux/azimuth/dipole/remanence/barkhausen/hysteresis field-magnet, not Brine halite/salina/rime/bittern/deliquesce/ectoine/sabkha salt-brine, not Knot plexus/splice/braid/weft/mesh/fascicle/sennit junction-weave, not Dusk belt/penumbra/eclipse/limb/limitor/umbra/syzygy twilight-belt, not Shard cleavage/twinning/inclusion/grit/crescit/hopper/phantom living-crystal, not Drift waft/billow/cirrus/virga/stratus/tholin/nucleate methane-cloud, not Choir polyphony/partial/timbre/resonance/harmonia/formant/dyad chord-body, not Gleam photon/wavelength/lumen/glass/photovore/opsin/iridophore lamp-drinker, not Fuse seat/current/blow/reseat dragon, not Ground lug/earth/heave/bed dragon, not Drown peristome/cistern/brine/operculum/urn pitcher, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi plaque, not Starter bud/proof/levain/ferment/saccharomyces/ascus/floc bloom, not Flame sulfur/rosette/oak/soft/laetiporus/poroid/cluster drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift, not Door hinge/pharynx/knot/lurk/jamb moray, not Sheen lustre/tumulus/salt/commune/agapostemon; never named cool (window-play COOL + ethogram-old — never a trick kind) / dim (ethogram-old) / still (ethogram-old) / shade (taken elsewhere — never a trick kind) / cast (taken) / veil (Cap) / soft (Flame) / hush (guest slug — never a trick kind) / umbral (guest key — never a trick kind) / umbra (Dusk trick — never reuse) / shadow (too close to species tell as trick kind) / penumbra / eclipse / limb / limitor / belt / crepuscule / gloaming / eventide / lodestone / flux / azimuth / dipole / remanence / barkhausen / hysteresis / ferrite / oersted / gauss / halite / salina / rime / bittern / deliquesce / ectoine / sabkha / natron / trona / aureole / plexus / splice / braid / weft / mesh / fascicle / sennit / accord / quorum / entente / cleavage / twinning / inclusion / grit / crescit / hopper / phantom / euhedral / vitreous / adamantine / facet / silica / shard / glass / stone / float / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / tholin / nucleate / photon / wavelength / lumen / actinic / lux / candela / opsin / iridophore / polyphony / partial / timbre / resonance / harmonia / formant / dyad / diapason / motet / canticle / cloud / mist / fog / haze / puff / dust / rain / chord / thirst / drink / drone / pulse / gleam / shine / glint / sheen / dig / nest / bank / buzz / dance / plaque / share / bloom / loaf / hinge / pharynx / lurk / jamb / rim / edge / trail / terminator / dusk / treaty / peristome / cistern / operculum / urn / lustre / tumulus / commune / agapostemon / many / count / ripple / name / nexus / knot / brine / salt / frost / halo / seat / blow / reseat / lug / earth / heave / bed / warm / snap / hum / bow / field / orbit / beacon / magneton / current / north / align — Echo/Quill are birds with sound — do not copy their tricks. silhouette soft lamp-edge outline settle on the blotter, adumbrate quiet foreshadow sketch across desk grain, occultation soft cover of a fleck of lamp spill, antumbra annular shade stretch without naming penumbra, caligo long soft murky shade hold that keeps a quiet cool while the dim stays the blood (not Beacon magnet field, not Dusk twilight belt, not Drift methane cloud, not Gleam lamp-drinker, not Fuse dragon current) with skotos / umbriel / softfall cousins in the thank-yous — never named mellifera / regina / andrena / langstroth; sfumato soft smoky shade-edge blend (THE heat-shadow edge-blend tell — never named cool / dim / still / shade / cast / veil / soft / umbra / shadow / hush / umbral / penumbra / eclipse as this new tell); tenebrae deep quiet shade settle (THE deep-shade settle tell — never named cool / dim / still / shade / cast / veil / soft / umbra / shadow / hush / umbral / penumbra / eclipse as this new tell); guest slug Hush / key umbral only for isKey matching — accept "umbral" and "hush"; do NOT name a trick "umbral" or "hush". Feed-happy thank-yous sit after eat. Card-open freeze and window-play COOL do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop umbral-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/fly_agaric/Cap/morel/Lattice/chanterelle/Horn/turkey_tail/Ring/lions_mane/Mane/puffball/Puff/chicken_of_woods/Flame/yeast/Starter/lichen/Pact/photovore/Gleam/choir/Choir/nimbus/Drift/silica/Shard/terminator/Dusk/nexus/Knot/halovore/Brine/magneton/Beacon/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood or *Dragon electrical clone. Window-play COOL unchanged — never names cool. Ethogram softs + freeze — never names dim or still or cool as trick kinds. Arca owns the next seat. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via umbral.wav. */
 export const TRICK_KEY = "umbral";
-export const TRICKS = ["silhouette", "adumbrate", "occultation", "antumbra", "caligo"] as const;
+export const TRICKS = ["silhouette", "adumbrate", "occultation", "antumbra", "caligo", "sfumato", "tenebrae"] as const;
 export const HAPPY = ["skotos", "umbriel", "softfall"] as const;
 export type UmbralTrickKind = (typeof TRICKS)[number];
 export type UmbralHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,25 @@ export type UmbralHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { skotos: 1.58, umbriel: 1.71, softfall: 1.66 } as const;
-export const CALIGO_HOLD = 18.04;
-export const RELEASE_S = 1.11;
-export const DUR = { caligo: CALIGO_HOLD + RELEASE_S, silhouette: 2.29, adumbrate: 2.36, occultation: 2.21, antumbra: 2.33 } as const;
+export const HAPPY_DUR: Record<UmbralHappyKind, number> = {
+  skotos: 1.28,
+  umbriel: 1.16,
+  softfall: 1.22,
+};
+
+/** Caligo hold — Hush parks soft murky shade calm as heat-shadow desk life. Not window-play COOL. */
+export const CALIGO_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+export const DUR: Record<UmbralTrickKind, number> = {
+  caligo: CALIGO_HOLD + RELEASE_S,
+  silhouette: 1.58,
+  adumbrate: 1.64,
+  occultation: 1.48,
+  antumbra: 1.56,
+  sfumato: 1.68,
+  tenebrae: 1.72,
+};
+
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
@@ -76,39 +91,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: UmbralTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-    if (kind === "caligo") return 74 + roll * 41;
-  if (kind === "silhouette") return 17.2 + roll * 13.8;
-  if (kind === "adumbrate") return 23.1 + roll * 12.9;
-  if (kind === "antumbra") return 20.0 + roll * 14.2;
-  return justFinished ? 14.1 + roll * 10.2 : 7.8 + roll * 9.1;
+  if (kind === "caligo") return 38 + roll * 24;
+  if (kind === "sfumato" || kind === "tenebrae" || kind === "adumbrate") return 12 + roll * 9;
+  if (kind === "silhouette" || kind === "occultation" || kind === "antumbra") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: UmbralTrickKind | string | null) {
-  if (musicOn) return "caligo";
+  if (musicOn) return "caligo" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "caligo") {
-    if (roll < 0.26) return "silhouette";
-    if (roll < 0.5) return "adumbrate";
-    if (roll < 0.74) return "occultation";
-    return "antumbra";
+    if (roll < 0.18) return "silhouette" as const;
+    if (roll < 0.34) return "adumbrate" as const;
+    if (roll < 0.5) return "occultation" as const;
+    if (roll < 0.66) return "antumbra" as const;
+    if (roll < 0.83) return "sfumato" as const;
+    return "tenebrae" as const;
   }
   if (lastKind === "silhouette") {
-    if (roll < 0.26) return "caligo";
-    if (roll < 0.5) return "adumbrate";
-    if (roll < 0.74) return "occultation";
-    return "antumbra";
+    if (roll < 0.2) return "caligo" as const;
+    if (roll < 0.36) return "adumbrate" as const;
+    if (roll < 0.52) return "occultation" as const;
+    if (roll < 0.68) return "antumbra" as const;
+    if (roll < 0.84) return "sfumato" as const;
+    return "tenebrae" as const;
   }
   if (lastKind === "adumbrate") {
-    if (roll < 0.22) return "caligo";
-    if (roll < 0.44) return "silhouette";
-    if (roll < 0.68) return "occultation";
-    return "antumbra";
+    if (roll < 0.18) return "caligo" as const;
+    if (roll < 0.34) return "silhouette" as const;
+    if (roll < 0.5) return "occultation" as const;
+    if (roll < 0.66) return "antumbra" as const;
+    if (roll < 0.83) return "sfumato" as const;
+    return "tenebrae" as const;
   }
-  if (roll < 0.2) return "caligo";
-  if (roll < 0.4) return "silhouette";
-  if (roll < 0.6) return "adumbrate";
-  if (roll < 0.8) return "occultation";
-  return "antumbra";
+  if (lastKind === "sfumato" || lastKind === "tenebrae") {
+    if (roll < 0.16) return "caligo" as const;
+    if (roll < 0.32) return "silhouette" as const;
+    if (roll < 0.48) return "adumbrate" as const;
+    if (roll < 0.64) return "occultation" as const;
+    if (roll < 0.8) return "antumbra" as const;
+    return lastKind === "sfumato" ? ("tenebrae" as const) : ("sfumato" as const);
+  }
+  if (roll < 0.14) return "caligo" as const;
+  if (roll < 0.28) return "silhouette" as const;
+  if (roll < 0.42) return "adumbrate" as const;
+  if (roll < 0.56) return "occultation" as const;
+  if (roll < 0.7) return "antumbra" as const;
+  if (roll < 0.85) return "sfumato" as const;
+  return "tenebrae" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -176,50 +206,53 @@ export function beginHappy(kind: UmbralHappyKind | string, x: number, facing: 1 
   };
 }
 
-            export function skotosPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.skotos));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.028, rot: s * 1.85, dx: 0, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.81) {
-      const tick = Math.sin(t * 9.4) + 0.18 * Math.sin(t * 17.2);
-      return {
-        lift: 0.028 + Math.abs(tick) * 0.014,
-        rot: 1.85 + tick * 1.35,
-        dx: tick * 0.0011,
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = (u - 0.81) / 0.19;
-    return { lift: 0.011 * (1 - s), rot: 0.55 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+export function skotosPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.skotos));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
   }
-  export function umbrielPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.umbriel));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.048, rot: s * -2.55, dx: s * 0.0016, anim: "play" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const flash = Math.sin(t * 4.8) + 0.22 * Math.sin(t * 9.1);
-      return {
-        lift: 0.048 + Math.abs(flash) * 0.024,
-        rot: -2.55 + flash * 3.05,
-        dx: flash * 0.0026,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.014 * (1 - s), rot: -0.75 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-  export function softfallPose(t) {
+  if (u < 0.76) {
+    const tick = Math.sin(t * 1.72);
     return {
-      lift: 0.008 + Math.abs(Math.sin(t * 0.38)) * 0.012,
-      rot: Math.sin(t * 0.44) * 0.95,
-      dx: Math.sin(t * 0.27) * 0.0012,
-      anim: "sit" as TrickAnim,
+      lift: 2.8 + Math.abs(tick) * 1.4,
+      rot: 12 + tick * 10,
+      dx: tick * 0.12,
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = (u - 0.76) / 0.24;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "talk" as TrickAnim };
+}
+
+export function umbrielPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.umbriel));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 3.4, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.1);
+    return {
+      lift: 3.4 + Math.abs(flash) * 1.6,
+      rot: -14 + flash * 12,
+      dx: flash * 0.18,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function softfallPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.9) * 8,
+    dx: Math.sin(t * 0.7) * 0.1,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: UmbralHappy, dt: number, flags: TrickFlags): UmbralHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -227,22 +260,14 @@ export function stepHappy(happy: UmbralHappy, dt: number, flags: TrickFlags): Um
   }
   const next: UmbralHappy = { ...happy, t: happy.t + Math.max(0, dt) };
   const hold = HAPPY_DUR[next.kind];
-  if (next.kind === "skotos") {
-    const pose = skotosPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "umbriel") {
-    const pose = umbrielPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = softfallPose(next.t);
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  let pose;
+  if (next.kind === "skotos") pose = skotosPose(next.t);
+  else if (next.kind === "umbriel") pose = umbrielPose(next.t);
+  else pose = softfallPose(next.t);
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
+  next.x = next.fromX + (pose.dx || 0) * next.facing;
   if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
@@ -263,7 +288,11 @@ export function beginTrick(kind: UmbralTrickKind, x: number, facing: 1 | -1): Um
             ? "sleep"
             : kind === "antumbra"
               ? "play"
-              : "sit";
+              : kind === "sfumato"
+                ? "sit"
+                : kind === "tenebrae"
+                  ? "play"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "caligo" ? "hold" : "go",
@@ -282,143 +311,229 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
+/** Caligo — long soft murky shade hold. Not window-play COOL. */
+export function caligoPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: Math.sin(t * 0.55) * 6,
+  };
+}
 
-              export function caligoPose(t) {
-    const breath = Math.sin(t * 0.16) + 0.055 * Math.sin(t * 0.47);
-    const soft = Math.abs(Math.sin(t * 0.22));
-    return {
-      lift: 0.009 + soft * 0.014,
-      rot: -0.28 + breath * 0.72,
-    };
-  }
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  const s = Math.sin(u * Math.PI * 0.5);
+  return { lift: 2.4 * (1 - s), rot: 4 * (1 - s) };
+}
 
-  export function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.008 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.26 * (1 - u) };
+export function silhouettePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.silhouette));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "sit" as TrickAnim };
   }
+  if (u < 0.62) {
+    const s = (u - 0.16) / 0.46;
+    const bob = Math.sin(s * Math.PI * 3.4);
+    return {
+      x: fromX + facing * (s * 0.8 + bob * 0.15),
+      lift: 3.2 - s * 0.8 + Math.abs(bob) * 0.6,
+      rot: facing * (-8 + bob * 12),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  if (u < 0.84) {
+    const settle = smoothstep((u - 0.62) / 0.22);
+    return {
+      x: fromX + facing * 0.8 * (1 - settle * 0.4),
+      lift: 2.4 * (1 - settle * 0.85),
+      rot: facing * (-4 + settle * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX + facing * 0.48 * (1 - s),
+    lift: 0.8 * (1 - s),
+    rot: facing * (2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
 
-  export function silhouettePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.silhouette));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.012, rot: s * -1.15 * facing, anim: "walk" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.14) / 0.58;
-      const edge = Math.sin(s * Math.PI * 2.35);
-      const outline = smoothstep(s);
-      return {
-        x: fromX + facing * outline * 0.018,
-        lift: 0.014 + Math.abs(edge) * 0.011 + outline * 0.006,
-        rot: facing * (-1.25 + edge * 1.55 + outline * 0.85),
-        anim: "walk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+export function adumbratePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.adumbrate));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.14) / 0.58;
+    const open = Math.sin(s * Math.PI * 3.6);
     return {
-      x: fromX + facing * 0.009 * (1 - s),
-      lift: 0.008 * (1 - s),
-      rot: facing * (-0.35 * (1 - s)),
+      x: fromX + facing * (s * 0.45 + open * 0.12),
+      lift: 2.6 + Math.abs(open) * 1.6,
+      rot: facing * (-10 + open * 16),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX + facing * 0.45 * (1 - s),
+    lift: 1.8 * (1 - s),
+    rot: facing * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function occultationPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.occultation));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const press = Math.sin(s * Math.PI * 2.8);
+    return {
+      x: fromX + facing * (s * 0.35),
+      lift: 2.4 + Math.abs(press) * 1.4,
+      rot: facing * (14 - press * 10),
+      anim: "sleep" as TrickAnim,
+    };
+  }
+  if (u < 0.82) {
+    const settle = smoothstep((u - 0.55) / 0.27);
+    return {
+      x: fromX + facing * 0.35,
+      lift: 3.2 - settle * 1.2,
+      rot: facing * (6 + settle * 4),
+      anim: "sleep" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX + facing * 0.35 * (1 - s),
+    lift: 2.0 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function antumbraPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.antumbra));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const cup = smoothstep(s);
+    return {
+      x: fromX + facing * cup * 0.55,
+      lift: 2.6 * (1 - cup * 0.7),
+      rot: facing * (10 - cup * 6),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const hold = Math.sin(s * Math.PI * 2.6);
+    return {
+      x: fromX + facing * 0.55,
+      lift: 0.8 + Math.abs(hold) * 0.6 + 2.0,
+      rot: facing * (-4 + hold * 10),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.55 * (1 - s),
+    lift: 0.6 * (1 - s) + 1.4 * (1 - s),
+    rot: facing * (2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function sfumatoPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.sfumato));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const rock = Math.sin(s * Math.PI * 4.2);
+    return {
+      x: fromX + facing * (s * 0.6 + rock * 0.2),
+      lift: 1.8 + Math.abs(rock) * 1.6,
+      rot: facing * (-8 + rock * 14),
       anim: "sit" as TrickAnim,
     };
   }
-  export function adumbratePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.adumbrate));
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX, lift: s * -0.011, rot: s * 1.05 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.68) {
-      const s = (u - 0.11) / 0.57;
-      const sketch = Math.sin(s * Math.PI * 3.05);
-      const foreshadow = smoothstep(s);
-      return {
-        x: fromX + facing * foreshadow * 0.062,
-        lift: -0.028 - Math.abs(sketch) * 0.034 - foreshadow * 0.016,
-        rot: facing * (1.85 + sketch * 2.85),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    if (u < 0.88) {
-      const s = (u - 0.68) / 0.2;
-      const settle = smoothstep(s);
-      return {
-        x: fromX + facing * 0.055 * (1 - settle * 0.35),
-        lift: -0.018 + settle * 0.014,
-        rot: facing * (0.95 - settle * 1.35),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const spin = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * 0.012 * (1 - s),
-      lift: -0.004 * (1 - s),
-      rot: facing * (0.28 * (1 - s)),
+      x: fromX + facing * 0.6,
+      lift: 2.8 + Math.abs(spin) * 0.8,
+      rot: facing * (4 + spin * 10),
       anim: "sit" as TrickAnim,
     };
   }
-  export function occultationPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.occultation));
-    if (u < 0.13) {
-      const s = smoothstep(u / 0.13);
-      return { x: fromX, lift: s * 0.028, rot: s * 1.45 * facing, anim: "sleep" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.13) / 0.42;
-      const cover = smoothstep(s);
-      return {
-        x: fromX + facing * cover * 0.008,
-        lift: 0.028 - cover * 0.036,
-        rot: facing * (1.45 - cover * 2.25),
-        anim: "sleep" as TrickAnim,
-      };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.55) / 0.27;
-      const hold = Math.sin(s * Math.PI * 1.65);
-      return {
-        x: fromX + facing * 0.006,
-        lift: -0.012 + Math.abs(hold) * 0.008,
-        rot: facing * (-0.85 + hold * 0.95),
-        anim: "sleep" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: facing * (2 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function tenebraePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.tenebrae));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const sip = smoothstep(s);
     return {
-      x: fromX + facing * 0.004 * (1 - s),
-      lift: -0.006 * (1 - s),
-      rot: facing * (-0.32 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * sip * 0.5,
+      lift: 2.6 + sip * 2.4,
+      rot: facing * (10 + sip * 8),
+      anim: "talk" as TrickAnim,
     };
   }
-  export function antumbraPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.antumbra));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.022, rot: s * -0.95 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.76) {
-      const s = (u - 0.12) / 0.64;
-      const ring = Math.sin(s * Math.PI * 2.45);
-      const annular = Math.sin(s * Math.PI * 1.15);
-      return {
-        x: fromX + facing * ring * 0.011,
-        lift: 0.024 + Math.abs(annular) * 0.018 + Math.abs(ring) * 0.009,
-        rot: facing * (-1.05 + annular * 3.15 + ring * 1.45),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.76) / 0.24);
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const drink = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX,
-      lift: 0.011 * (1 - s),
-      rot: facing * (-0.38 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * (0.5 + drink * 0.3),
+      lift: 4.8 + Math.abs(drink) * 0.8,
+      rot: facing * (6 + drink * 14),
+      anim: "play" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.5 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: UmbralTrick, dt: number, flags: TrickFlags): UmbralTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "silhouette" && trick.kind !== "adumbrate" && trick.kind !== "occultation" && trick.kind !== "antumbra") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "silhouette" &&
+    trick.kind !== "adumbrate" &&
+    trick.kind !== "occultation" &&
+    trick.kind !== "antumbra" &&
+    trick.kind !== "sfumato" &&
+    trick.kind !== "tenebrae"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: UmbralTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -443,31 +558,18 @@ export function stepTrick(trick: UmbralTrick, dt: number, flags: TrickFlags): Um
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "silhouette") {
-    const pose = silhouettePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "adumbrate") {
-    const pose = adumbratePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "occultation") {
-    const pose = occultationPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = antumbraPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "silhouette") pose = silhouettePose(next.t, fromX, trick.facing);
+  else if (next.kind === "adumbrate") pose = adumbratePose(next.t, fromX, trick.facing);
+  else if (next.kind === "occultation") pose = occultationPose(next.t, fromX, trick.facing);
+  else if (next.kind === "antumbra") pose = antumbraPose(next.t, fromX, trick.facing);
+  else if (next.kind === "sfumato") pose = sfumatoPose(next.t, fromX, trick.facing);
+  else pose = tenebraePose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
   if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
