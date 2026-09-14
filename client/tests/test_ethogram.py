@@ -170,6 +170,13 @@ def test_only_scratching_mammals_scratch():
     assert "lean" not in [a["name"] for a in acts_for("chanterelle")]
     assert "flush" not in [a["name"] for a in acts_for("chanterelle")]
     assert "still" not in [a["name"] for a in acts_for("chanterelle")]
+    assert "trametes" in [a["name"] for a in acts_for("turkey_tail")]
+    assert "concentric_soft" in [a["name"] for a in acts_for("turkey_tail")]
+    assert "tomentum_soft" in [a["name"] for a in acts_for("turkey_tail")]
+    assert "freeze" in [a["name"] for a in acts_for("turkey_tail")]
+    assert "lean" not in [a["name"] for a in acts_for("turkey_tail")]
+    assert "zone" not in [a["name"] for a in acts_for("turkey_tail")]
+    assert "still" not in [a["name"] for a in acts_for("turkey_tail")]
     for key in FAR_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
