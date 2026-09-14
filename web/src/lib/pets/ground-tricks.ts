@@ -349,7 +349,7 @@ if (key === ChickenOfWoods.TRICK_KEY || key === "flame") return ChickenOfWoods;
   if (key === Vinegaroon.TRICK_KEY || key === "vinegaroon" || key === "whip") return Vinegaroon;
   if (key === Tick.TRICK_KEY || key === "tick" || key === "clasp") return Tick;
   if (key === Solifuge.TRICK_KEY || key === "solifuge" || key === "gale") return Solifuge;
-  if (key === Deer.TRICK_KEY || key === "deer" || key === "rack") return Deer;
+  if (key === Deer.TRICK_KEY || key === "deer" || key === "rack" || key === "flag") return Deer;
   if (key === Bat.TRICK_KEY || key === "bat" || key === "cape") return Bat;
   if (key === Squirrel.TRICK_KEY || key === "squirrel" || key === "cache") return Squirrel;
   if (key === Otter.TRICK_KEY || key === "otter" || key === "slick") return Otter;
