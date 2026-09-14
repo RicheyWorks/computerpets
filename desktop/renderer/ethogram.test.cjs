@@ -223,6 +223,21 @@ test("darner ethogram is Dart ultra (anax + softs + freeze, not hawk/hover/still
 
 
 
+test("stick ethogram is Twig ultra (diapheromera + softs + freeze, not still/walk)", () => {
+  const names = E.actsFor("stick").map((a) => a.name);
+  assert.ok(names.includes("diapheromera"));
+  assert.ok(names.includes("rocking_soft"));
+  assert.ok(names.includes("catalepsy_soft"));
+  assert.ok(names.includes("browse_soft"));
+  assert.ok(names.includes("tread_soft"));
+  assert.ok(names.includes("oviposit_soft"));
+  assert.ok(names.includes("filiform_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("walk"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));

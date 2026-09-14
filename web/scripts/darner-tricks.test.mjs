@@ -746,7 +746,7 @@ globalThis.PetStickTricks = OverlayStick;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Dart ultra-polish done; next house-order ultra is Twig / stick", () => {
+test("notes: Dart ultra-polish done; next house-order ultra is Column / carpenter_ant", () => {
   assert.equal(T.TRICK_KEY, "darner");
   assert.equal(T.wantsThankYou("dart"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -907,8 +907,8 @@ test("notes: Dart ultra-polish done; next house-order ultra is Twig / stick", ()
   assert.equal(OverlayGround.wantsThankYou("ladybird"), false);
   assert.ok(OverlayGround.tricksFor("seven") == null);
   assert.equal(OverlayGround.wantsThankYou("seven"), false);
-  assert.deepEqual([...Stick.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
-  assert.deepEqual([...OverlayStick.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...Stick.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
+  assert.deepEqual([...OverlayStick.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.equal(OverlayGround.tricksFor("darner"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("darner"), true);
   assert.equal(OverlayGround.tricksFor("dart"), Overlay);

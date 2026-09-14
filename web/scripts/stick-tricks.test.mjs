@@ -135,7 +135,7 @@ test("Twig tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -219,7 +219,7 @@ test("Twig tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.deepEqual([...Overlay.HAPPY], ["femorata", "instar", "crypsis"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -256,6 +256,10 @@ test("Twig tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("semaphore"), false);
   assert.equal(T.TRICKS.includes("elytra"), false);
   assert.equal(T.TRICKS.includes("photinus"), false);
+  assert.equal(T.TRICKS.includes("photocyte"), false);
+  assert.equal(T.TRICKS.includes("sternite"), false);
+  assert.equal(T.TRICKS.includes("obelisk"), false);
+  assert.equal(T.TRICKS.includes("ommatidia"), false);
   assert.equal(T.TRICKS.includes("plumose"), false);
   assert.equal(T.TRICKS.includes("lunule"), false);
   assert.equal(T.TRICKS.includes("silk"), false);
@@ -271,7 +275,7 @@ test("Twig tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("figure"), false);
 });
 
-test("rocking/catalepsy/browse/tread/diapheromera are house-stick-true, not copies of prior guests", () => {
+test("rocking/catalepsy/browse/tread/diapheromera/oviposit/filiform are house-stick-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("diapheromera", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -302,6 +306,16 @@ test("rocking/catalepsy/browse/tread/diapheromera are house-stick-true, not copi
   assert.equal(taproot.anim, "walk");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.05 || Math.abs(taprootMid.rot) > 1 || Math.abs(taprootMid.x - 80) > 0.05);
+  const oviposit = T.beginTrick("oviposit", 80, 1);
+  assert.equal(oviposit.anim, "sit");
+  const ovipositMid = T.stepTrick(oviposit, 0.5, ground);
+  assert.ok(Math.abs(ovipositMid.lift) > 0.05 || Math.abs(ovipositMid.rot) > 1 || Math.abs(ovipositMid.x - 80) > 0.05);
+  const filiform = T.beginTrick("filiform", 80, 1);
+  assert.equal(filiform.anim, "talk");
+  const filiformMid = T.stepTrick(filiform, 0.5, ground);
+  assert.ok(Math.abs(filiformMid.lift) > 0.05 || Math.abs(filiformMid.rot) > 1 || Math.abs(filiformMid.x - 80) > 0.05);
+  assert.equal(T.TRICKS.includes("oviposit"), true);
+  assert.equal(T.TRICKS.includes("filiform"), true);
   const sinusDone = T.stepTrick(sinus, 1.7, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
@@ -501,7 +515,7 @@ test("ground registry keeps prior guests gated; Twig selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.equal(T.wantsThankYou("stick"), true);
   assert.equal(T.wantsThankYou("twig"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -679,7 +693,7 @@ globalThis.PetStickTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -735,7 +749,7 @@ globalThis.PetStickTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Twig idle-life done; Column idle-life done; Seven idle-life done; next house-order guest still lacking tricks is Fold / mantis", () => {
+test("notes: Twig ultra-polish done; next house-order ultra is Column / carpenter_ant", () => {
   assert.equal(T.TRICK_KEY, "stick");
   assert.equal(T.wantsThankYou("twig"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -833,8 +847,8 @@ test("notes: Twig idle-life done; Column idle-life done; Seven idle-life done; n
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
-  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
+  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.deepEqual([...T.HAPPY], ["femorata", "instar", "crypsis"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
@@ -880,8 +894,8 @@ test("notes: Twig idle-life done; Column idle-life done; Seven idle-life done; n
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
-  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
+  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.equal(OverlayGround.tricksFor("stick"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("stick"), true);
   assert.equal(OverlayGround.tricksFor("twig"), Overlay);
@@ -896,24 +910,24 @@ test("notes: Twig idle-life done; Column idle-life done; Seven idle-life done; n
   assert.equal(OverlayGround.wantsThankYou("ladybird"), true);
   assert.ok(OverlayGround.tricksFor("seven"));
   assert.equal(OverlayGround.wantsThankYou("seven"), true);
-  assert.equal(OverlayGround.tricksFor("mantis"), null);
+  assert.ok(OverlayGround.tricksFor("mantis") == null);
   assert.equal(OverlayGround.wantsThankYou("mantis"), false);
-  assert.equal(OverlayGround.tricksFor("fold"), null);
+  assert.ok(OverlayGround.tricksFor("fold") == null);
   assert.equal(OverlayGround.wantsThankYou("fold"), false);
   assert.equal(OverlayGround.tricksFor("darner"), OverlayDarner);
   assert.equal(OverlayGround.wantsThankYou("darner"), true);
   assert.equal(OverlayGround.tricksFor("dart"), OverlayDarner);
   assert.equal(OverlayGround.wantsThankYou("dart"), true);
-  assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
-  assert.deepEqual([...OverlayDarner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
+  assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
+  assert.deepEqual([...OverlayDarner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
   assert.equal(OverlayGround.tricksFor("firefly"), OverlayFirefly);
   assert.equal(OverlayGround.wantsThankYou("firefly"), true);
   assert.equal(OverlayGround.tricksFor("spark"), OverlayFirefly);
   assert.equal(OverlayGround.wantsThankYou("spark"), true);
-  assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
-  assert.deepEqual([...OverlayFirefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
-  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
-  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
+  assert.deepEqual([...OverlayFirefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"]);
+  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
+  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
@@ -932,8 +946,8 @@ test("notes: Twig idle-life done; Column idle-life done; Seven idle-life done; n
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("milk"), true);
-  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
-  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera"]);
+  assert.deepEqual([...T.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
+  assert.deepEqual([...Overlay.TRICKS], ["rocking", "catalepsy", "browse", "tread", "diapheromera", "oviposit", "filiform"]);
   assert.equal(OverlayGround.tricksFor("sundew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);
