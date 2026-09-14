@@ -1,6 +1,7 @@
-/** Drift ground tricks while idle. House neighborly alien methane-floater FLOAT life — waft / billow / cirrus / virga / stratus personality (soft methane-cloud desk weather — never named float or still or hover or drift or cloud or mist or fog or haze or puff or nimbus as trick kinds; window-play FLOAT + ethogram float/still/hover own those words; guest slug Drift / key nimbus only for isKey matching — accept "nimbus" and "drift"; do NOT name a trick "nimbus" or "drift") — not Choir waft/billow/cirrus/virga/stratus chord-body, not Gleam photon/wavelength/lumen/glass/photovore lamp-drinker, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia plaque, not Starter bud/proof/levain/ferment/saccharomyces bloom, not Flame sulfur/rosette/oak/soft/laetiporus drip, not Puff ostiole/gleba/peridium/duff/lycoperdon cloud, not Mane spine/icicle/cascade/wound/hericium teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift; never named float (window-play FLOAT — never a trick kind) / still (ethogram) / hover (ethogram + Sepia) / drift (guest name + Coin goldfish trick — never a trick kind) / cloud (Puff window) / mist (Vein happy) / fog / haze / puff (Ferret + Puff guest) / dust (Floss window) / rain (Drown happy) / chord (Choir window) / thirst (Gleam window) / drink (Gleam ethogram) / drone (Hum window) / pulse (ethogram + Pulse guest) / gleam (Ground happy + Gleam guest) / shine (Ember) / glint (Coin) / sheen (Sheen + Disk) / dig (Thimble) / nest (Clip) / bank (Lula + Bank) / buzz (Relay) / dance (Rui) / plaque (Pact) / share (Pact) / bloom (Starter) / loaf / photon / wavelength / lumen / glass / actinic / lux / candela / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle — Echo/Quill are birds with sound — do not copy their tricks. waft soft methane air slide across the blotter, billow soft swell lift, cirrus thin high filament tip, virga rain-that-never-lands evaporate hush, stratus long layered hold desk life as methane floater (not Choir chord-body, not Gleam lamp-drinker, not Pulse jelly, not Puff spore cloud) with zephyr / fogbow / mizzle cousins in the thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play FLOAT do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web nimbus-tricks.ts. Window-play FLOAT unchanged — never names float. Ethogram float/still/hover unchanged — never names float or hover as trick kinds. True alien methane-cloud desk weather only — soft haze life without naming haze. Shard owns the next seat. No cry inventing — thank-yous are silent desk motion only. */
+/** Drift ground tricks while idle — ultra-polish pass. House neighborly alien methane-floater FLOAT life — waft / billow / cirrus / virga / stratus / tholin / nucleate personality (soft methane-cloud desk weather — never named float or still or hover or drift or cloud or mist or fog or haze or puff or nimbus as trick kinds; window-play FLOAT + ethogram-old float/still/hover own those words; guest slug Drift / key nimbus only for isKey matching — accept "nimbus" and "drift"; do NOT name a trick "nimbus" or "drift") — not Choir polyphony/partial/timbre/resonance/harmonia/formant/dyad chord-body, not Gleam photon/wavelength/lumen/glass/photovore/opsin/iridophore lamp-drinker, not Pulse bell/oral/lucent/trail/medusa jelly, not Pact podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi plaque, not Starter bud/proof/levain/ferment/saccharomyces/ascus/floc bloom, not Flame sulfur/rosette/oak/soft/laetiporus/poroid/cluster drip, not Puff ostiole/gleba/peridium/duff/lycoperdon/gemmate/capillitium cloud, not Mane spine/icicle/cascade/wound/hericium/pompon/hydnoid teeth, not Ring pore/bracket/band/leathery/trametes underside, not Frill lamella/imbricate/lasso/margin/pleurotus oyster, not Cap annulus/volva/veil/symbiont/amanita, not Wax tessera/hex honeycomb, not Spark firefly lantern, not Coin goldfish drift; never named float (window-play FLOAT — never a trick kind) / still (ethogram-old) / hover (ethogram-old + Sepia) / drift (guest name + Coin goldfish trick — never a trick kind) / cloud (Puff window) / mist (Vein happy) / fog / haze / puff (Ferret + Puff guest) / dust (Floss window) / rain (Drown happy) / chord (Choir window) / thirst (Gleam window) / drink (Gleam ethogram) / drone (Hum window) / pulse (ethogram + Pulse guest) / gleam (Ground happy + Gleam guest) / shine (Ember) / glint (Coin) / sheen (Sheen + Disk) / dig (Thimble) / nest (Clip) / bank (Lula + Bank) / buzz (Relay) / dance (Rui) / plaque (Pact) / share (Pact) / bloom (Starter) / loaf / photon / wavelength / lumen / glass / actinic / lux / candela / polyphony / partial / timbre / resonance / harmonia / formant / dyad / diapason / motet / canticle / waft / billow / cirrus / virga / stratus / zephyr / fogbow / mizzle / tholin / nucleate — Echo/Quill are birds with sound — do not copy their tricks. waft soft methane air slide across the blotter, billow soft swell lift, cirrus thin high filament tip, virga rain-that-never-lands evaporate hush, stratus long layered hold desk life as methane floater (not Choir chord-body, not Gleam lamp-drinker, not Pulse jelly, not Puff spore cloud) with zephyr / fogbow / mizzle cousins in the thank-yous — never named mellifera / regina / andrena / langstroth / ostreatus / muscaria / esculenta / cibarius / versicolor / erinaceus / perlatum / sulphureus / cerevisiae / rangiferina / hive / hex; tholin organic methane-haze aerosol (THE titan floater tell — never named float / drift / cloud / mist / fog / haze / puff / nimbus as this new tell); nucleate droplet condensation seed (THE cloud-birth tell — never named float / rain / mist / fog / cloud / drip as this new tell); guest slug Drift / key nimbus only for isKey matching — accept "nimbus" and "drift"; do NOT name a trick "nimbus" or "drift"). Feed-happy thank-yous sit after eat. Card-open freeze and window-play FLOAT do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop nimbus-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/honey_drone/Hum/honey_queen/Keep/honeycomb/Wax/oyster/Frill/fly_agaric/Cap/morel/Lattice/chanterelle/Horn/turkey_tail/Ring/lions_mane/Mane/puffball/Puff/chicken_of_woods/Flame/yeast/Starter/lichen/Pact/photovore/Gleam/choir/Choir/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/carpenter_bee/Auger/mason_bee/Mortar/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen/mining_bee/Bank or *Dragon electrical clone. Window-play FLOAT unchanged — never names float. Ethogram softs + freeze — never names float or hover as trick kinds. Comb owns figure/corbicula/hex/proboscis/hive and happy honey/mead/propolis; Hum owns holoptic/congregation/sortie/ocellus/mellifera and happy ligustica/carnica/apisini; Keep owns pipe/retinue/duel/royal/regina and happy caucasica/iberiensis/apini; Wax owns festoon/capped/midrib/stores/tessera/alveoli/foundation and happy langstroth/topbar/warre; Frill owns lamella/imbricate/lasso/margin/pleurotus/sporulate/hypha and happy ostreatus/pulmonarius/eryngii; Cap owns annulus/volva/veil/symbiont/amanita/pileus/bulb and happy muscaria/regalis/frostiana; Lattice owns alveolus/ridge/ephemeral/sclerotium/morchella/costa/hymenium and happy esculenta/americana/elata; Horn owns apricot/funnel/decurrent/flute/cantharellus/vase/plica and happy cibarius/formosus/cascadensis; Ring owns pore/bracket/band/leathery/trametes/concentric/tomentum and happy versicolor/ochracea/pubescens; Mane owns spine/icicle/cascade/wound/hericium/pompon/hydnoid and happy erinaceus/coralloides/americanum; Puff owns ostiole/gleba/peridium/duff/lycoperdon/gemmate/capillitium and happy perlatum/pyriforme/excipuliforme; Flame owns sulfur/rosette/oak/soft/laetiporus/poroid/cluster and happy sulphureus/cincinnatus/gilbertsonii; Starter owns bud/proof/levain/ferment/saccharomyces/ascus/floc and happy cerevisiae/boulardii/pastorianus; Pact owns podetium/photobiont/fruticose/stone/cladonia/soredia/scyphi and happy rangiferina/stellaris/arbuscula; Gleam owns photon/wavelength/lumen/glass/photovore/opsin/iridophore and happy actinic/lux/candela; Choir owns polyphony/partial/timbre/resonance/harmonia/formant/dyad and happy diapason/motet/canticle; Thrum owns sonicate/scopa/fossor/lumber/bombus and happy impatiens/bimaculatus/bombini; Auger owns rasp/glabrous/partition/picket/xylocopa and happy virginica/micans/xylocopini; Mortar owns trowel/beebread/orchard/plug/osmia and happy lignaria/cornifrons/osmiini; Disc owns circle/liner/cavity/parcel/megachile and happy rotundata/relativa/megachilini; Pot owns cerumen/spout/vessel/batumen/melipona and happy beecheii/yucatanica/meliponini; Sheen owns lustre/tumulus/salt/commune/agapostemon and happy virescens/texanus/halictini; Bank owns shaft/mass/vernal/fovea/andrena and happy vicina/carlini/andrenini; Lula owns bank; Disk owns pad/corolla/rhizome/calyx/sheen and happy silt/nectar/dew; Column owns gallery/pheromone/crumb/bustle/camponotus; Sepia owns hover; Vesper owns guard/thrum; Arm owns sentinel; Clip owns nest; Thimble owns dig; Spark owns firefly lantern territory — do not copy; Shard owns the next seat; Felt is moss; Vein is fern; Fan is ginkgo; Burr is hedgehog guest; Reed owns plop; Tube owns papillae; Relay owns buzz; Rui owns dance; Ground happy owns gleam; Coin owns glint; Ember owns shine. True alien methane-cloud desk weather only — soft haze life without naming haze: waft slide, billow swell, cirrus filament, virga evaporate hush, tholin titan aerosol, nucleate cloud-birth seed, long hold as stratus methane floater — not Choir chord-body, not Gleam lamp-drinker, not Pact lichen, not Starter yeast, not Flame shelves, not a puffball, not turkey-tail, not lion's mane, not oyster, not a bee, not a plant, not a firefly, not Pulse jelly, not Echo/Quill bird song, not Wax honeycomb place, not Coin goldfish drift. No cry inventing — thank-yous are silent desk motion only. Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via nimbus.wav. */
+
 export const TRICK_KEY = "nimbus";
-export const TRICKS = ["waft", "billow", "cirrus", "virga", "stratus"] as const;
+export const TRICKS = ["waft", "billow", "cirrus", "virga", "stratus", "tholin", "nucleate"] as const;
 export const HAPPY = ["zephyr", "fogbow", "mizzle"] as const;
 export type NimbusTrickKind = (typeof TRICKS)[number];
 export type NimbusHappyKind = (typeof HAPPY)[number];
@@ -44,10 +45,26 @@ export type NimbusHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { zephyr: 1.61, fogbow: 1.67, mizzle: 1.74 } as const;
-export const STRATUS_HOLD = 16.84;
-export const RELEASE_S = 1.01;
-export const DUR = { stratus: STRATUS_HOLD + RELEASE_S, waft: 2.17, billow: 2.29, cirrus: 1.91, virga: 2.05 } as const;
+export const HAPPY_DUR: Record<NimbusHappyKind, number> = {
+  zephyr: 1.28,
+  fogbow: 1.16,
+  mizzle: 1.22,
+};
+
+/** Stratus hold — Drift parks methane-floater calm as layered desk weather. Not window-play FLOAT. */
+export const STRATUS_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+
+export const DUR: Record<NimbusTrickKind, number> = {
+  stratus: STRATUS_HOLD + RELEASE_S,
+  waft: 1.58,
+  billow: 1.64,
+  cirrus: 1.48,
+  virga: 1.56,
+  tholin: 1.68,
+  nucleate: 1.72,
+};
+
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
@@ -76,39 +93,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: NimbusTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-    if (kind === "stratus") return 65 + roll * 41;
-  if (kind === "waft") return 17.2 + roll * 12.8;
-  if (kind === "billow") return 21.3 + roll * 13.8;
-  if (kind === "cirrus") return 18.2 + roll * 14.9;
-  return justFinished ? 12.8 + roll * 10.1 : 7.3 + roll * 8.7;
+  if (kind === "stratus") return 38 + roll * 24;
+  if (kind === "tholin" || kind === "nucleate" || kind === "billow") return 12 + roll * 9;
+  if (kind === "waft" || kind === "cirrus" || kind === "virga") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: NimbusTrickKind | string | null) {
-  if (musicOn) return "stratus";
+  if (musicOn) return "stratus" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "stratus") {
-    if (roll < 0.26) return "waft";
-    if (roll < 0.5) return "billow";
-    if (roll < 0.74) return "virga";
-    return "cirrus";
+    if (roll < 0.18) return "waft" as const;
+    if (roll < 0.34) return "billow" as const;
+    if (roll < 0.5) return "cirrus" as const;
+    if (roll < 0.66) return "virga" as const;
+    if (roll < 0.83) return "tholin" as const;
+    return "nucleate" as const;
   }
   if (lastKind === "waft") {
-    if (roll < 0.26) return "stratus";
-    if (roll < 0.5) return "billow";
-    if (roll < 0.74) return "virga";
-    return "cirrus";
+    if (roll < 0.2) return "stratus" as const;
+    if (roll < 0.36) return "billow" as const;
+    if (roll < 0.52) return "cirrus" as const;
+    if (roll < 0.68) return "virga" as const;
+    if (roll < 0.84) return "tholin" as const;
+    return "nucleate" as const;
   }
   if (lastKind === "billow") {
-    if (roll < 0.22) return "stratus";
-    if (roll < 0.44) return "waft";
-    if (roll < 0.68) return "virga";
-    return "cirrus";
+    if (roll < 0.18) return "stratus" as const;
+    if (roll < 0.34) return "waft" as const;
+    if (roll < 0.5) return "cirrus" as const;
+    if (roll < 0.66) return "virga" as const;
+    if (roll < 0.83) return "tholin" as const;
+    return "nucleate" as const;
   }
-  if (roll < 0.2) return "stratus";
-  if (roll < 0.4) return "waft";
-  if (roll < 0.6) return "billow";
-  if (roll < 0.8) return "virga";
-  return "cirrus";
+  if (lastKind === "tholin" || lastKind === "nucleate") {
+    if (roll < 0.16) return "stratus" as const;
+    if (roll < 0.32) return "waft" as const;
+    if (roll < 0.48) return "billow" as const;
+    if (roll < 0.64) return "cirrus" as const;
+    if (roll < 0.8) return "virga" as const;
+    return lastKind === "tholin" ? ("nucleate" as const) : ("tholin" as const);
+  }
+  if (roll < 0.14) return "stratus" as const;
+  if (roll < 0.28) return "waft" as const;
+  if (roll < 0.42) return "billow" as const;
+  if (roll < 0.56) return "cirrus" as const;
+  if (roll < 0.7) return "virga" as const;
+  if (roll < 0.85) return "tholin" as const;
+  return "nucleate" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -137,7 +169,7 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
 }
 
 export function wantsThankYou(key: string | undefined | null) {
-  return key === TRICK_KEY || key === "drift";
+  return key === TRICK_KEY || key === "nimbus" || key === "drift";
 }
 
 export function startThankYou(
@@ -176,50 +208,53 @@ export function beginHappy(kind: NimbusHappyKind | string, x: number, facing: 1 
   };
 }
 
-export function zephyrPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.zephyr));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 0.055, rot: s * 3.45, dx: 0, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.76) {
-      const tick = Math.sin(t * 13.8) + 0.32 * Math.sin(t * 27.2);
-      return {
-        lift: 0.055 + Math.abs(tick) * 0.023,
-        rot: 3.45 + tick * 2.38,
-        dx: tick * 0.0024,
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = (u - 0.76) / 0.24;
-    return { lift: 0.022 * (1 - s), rot: 1.1 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+export function zephyrPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.zephyr));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "talk" as TrickAnim };
   }
-export function fogbowPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.fogbow));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.071, rot: s * -4.25, dx: s * 0.003, anim: "play" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const flash = Math.sin(t * 6.8) + 0.30 * Math.sin(t * 13.0);
-      return {
-        lift: 0.071 + Math.abs(flash) * 0.031,
-        rot: -4.25 + flash * 5.05,
-        dx: flash * 0.0048,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.8) / 0.2;
-    return { lift: 0.024 * (1 - s), rot: -1.4 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function mizzlePose(t) {
+  if (u < 0.76) {
+    const tick = Math.sin(t * 1.72);
     return {
-      lift: 0.014 + Math.abs(Math.sin(t * 0.46)) * 0.013,
-      rot: Math.sin(t * 0.54) * 1.20,
-      dx: Math.sin(t * 0.34) * 0.0023,
-      anim: "sit" as TrickAnim,
+      lift: 2.8 + Math.abs(tick) * 1.4,
+      rot: 12 + tick * 10,
+      dx: tick * 0.12,
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = (u - 0.76) / 0.24;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "talk" as TrickAnim };
+}
+
+export function fogbowPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.lux));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const sweet = Math.sin(t * 2.05);
+    return {
+      lift: 3.0 + Math.abs(sweet) * 1.5,
+      rot: -10 + sweet * 14,
+      dx: sweet * 0.14,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function mizzlePose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.72) * 8,
+    dx: Math.sin(t * 0.4) * -0.12,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: NimbusHappy, dt: number, flags: TrickFlags): NimbusHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -254,16 +289,20 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
 export function beginTrick(kind: NimbusTrickKind, x: number, facing: 1 | -1): NimbusTrick {
   const anim: TrickAnim =
     kind === "stratus"
-    ? "sit"
-    : kind === "waft"
-      ? "play"
-      : kind === "billow"
-        ? "talk"
-        : kind === "virga"
+      ? "sit"
+      : kind === "waft"
+        ? "play"
+        : kind === "billow"
           ? "talk"
           : kind === "cirrus"
-            ? "sit"
-              : "sit";
+            ? "talk"
+            : kind === "virga"
+              ? "sit"
+              : kind === "tholin"
+                ? "sit"
+                : kind === "nucleate"
+                  ? "play"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "stratus" ? "hold" : "go",
@@ -282,133 +321,238 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
+/** Stratus — long layered hold as methane floater. Not window-play FLOAT. */
+export function stratusPose(t: number) {
+  const breath = Math.sin(t * 0.42) + 0.06 * Math.sin(t * 1.15);
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: 4 + breath * 6,
+  };
+}
 
-  export function stratusPose(t) {
-    const breath = Math.sin(t * 0.17) + 0.071 * Math.sin(t * 0.49);
-    const grit = Math.abs(Math.sin(t * 0.23));
-    return {
-      lift: 0.028 + grit * 0.022,
-      rot: -0.41 + breath * 0.71,
-    };
-  }
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  const s = smoothstep(u);
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - s) };
+}
 
-  export function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.017 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.48 * (1 - u) };
+/** Waft — soft methane air slide across the blotter. Never named float/drift/cloud/mist. */
+export function waftPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.waft));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "sit" as TrickAnim };
   }
+  if (u < 0.52) {
+    const s = (u - 0.16) / 0.36;
+    const bob = Math.sin(s * Math.PI * 1.8);
+    return {
+      x: fromX + facing * bob * 0.35,
+      lift: 3.2 - s * 0.8 + Math.abs(bob) * 0.6,
+      rot: facing * (-8 + bob * 12),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  if (u < 0.82) {
+    const s = (u - 0.52) / 0.3;
+    const settle = smoothstep(s);
+    return {
+      x: fromX + facing * (1 - settle) * 0.4,
+      lift: 2.4 * (1 - settle * 0.85),
+      rot: facing * (-4 + settle * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX,
+    lift: 0.8 * (1 - s),
+    rot: facing * (3 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
 
-  export function waftPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.waft));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * -0.018, rot: s * 1.35 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.12) / 0.6;
-      const bite = Math.sin(s * Math.PI * 4.9);
-      const deepen = smoothstep(s);
-      return {
-        x: fromX + facing * deepen * 0.028,
-        lift: -0.031 - Math.abs(bite) * 0.022 - deepen * 0.014,
-        rot: facing * (1.65 + bite * 2.85),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+/** Billow — soft swell lift. Never named float/cloud/puff/haze. */
+export function billowPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.billow));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.14) / 0.64;
+    const open = Math.sin(s * Math.PI * 2.4);
     return {
-      x: fromX + facing * 0.01 * (1 - s),
-      lift: -0.018 * (1 - s),
-      rot: facing * (0.8 * (1 - s)),
+      x: fromX + facing * open * 0.4,
+      lift: 2.6 + Math.abs(open) * 1.6,
+      rot: facing * (-10 + open * 14),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: facing * (-6 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Cirrus — thin high filament tip. Never named float/cloud/mist/fog. */
+export function cirrusPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.cirrus));
+  if (u < 0.18) {
+    const s = smoothstep(u / 0.18);
+    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.18) / 0.37;
+    const press = Math.sin(s * Math.PI * 3.4);
+    return {
+      x: fromX + facing * press * 0.4,
+      lift: 2.4 + Math.abs(press) * 1.4,
+      rot: facing * (14 + press * 12),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const settle = smoothstep(s);
+    return {
+      x: fromX + facing * (1 - settle) * 0.5,
+      lift: 3.2 - settle * 1.2,
+      rot: facing * (14 - settle * 16),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: facing * (-3 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Virga — rain-that-never-lands evaporate hush. Never named float/rain/mist/cloud. */
+export function virgaPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.virga));
+  if (u < 0.15) {
+    const s = smoothstep(u / 0.15);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.15) / 0.4;
+    const cup = smoothstep(s);
+    return {
+      x: fromX + facing * Math.sin(s * Math.PI) * 0.25,
+      lift: 2.6 * (1 - cup * 0.7),
+      rot: facing * (10 - cup * 14),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.8) {
+    const s = (u - 0.55) / 0.25;
+    const hold = Math.sin(s * Math.PI * 3.2);
+    return {
+      x: fromX + facing * hold * 0.2,
+      lift: 0.8 + Math.abs(hold) * 0.6,
+      rot: facing * (-4 + hold * 10),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX,
+    lift: 0.6 * (1 - s),
+    rot: facing * (-2 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+/** Tholin — organic methane-haze aerosol; THE titan floater tell. Never named float/drift/cloud/mist/fog/haze/puff/nimbus as this new tell. */
+export function tholinPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.tholin));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const rock = Math.sin(s * Math.PI * 4.2);
+    return {
+      x: fromX + facing * (s * 0.6 + rock * 0.2),
+      lift: 1.8 + Math.abs(rock) * 1.6,
+      rot: facing * (-8 + rock * 14),
       anim: "sit" as TrickAnim,
     };
   }
-  export function billowPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.billow));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.062, rot: s * -2.55 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.58) {
-      const s = (u - 0.14) / 0.44;
-      const pack = Math.sin(s * Math.PI * 4.5);
-      return {
-        x: fromX + facing * (0.02 + Math.abs(pack) * 0.012),
-        lift: 0.072 + Math.abs(pack) * 0.038,
-        rot: facing * (-3.55 + pack * 5.65),
-        anim: "play" as TrickAnim,
-      };
-    }
-    if (u < 0.88) {
-      const s = (u - 0.58) / 0.3;
-      const press = smoothstep(s);
-      return {
-        x: fromX + facing * 0.028,
-        lift: 0.035 - press * 0.04,
-        rot: facing * (2.2 - press * 4.0),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
+  if (u < 0.78) {
+    const s = (u - 0.55) / 0.23;
+    const spin = Math.sin(s * Math.PI * 3.4);
     return {
-      x: fromX + facing * 0.016 * (1 - s),
-      lift: -0.008 * (1 - s),
-      rot: facing * (0.6 * (1 - s)),
+      x: fromX + facing * 0.6,
+      lift: 2.8 + Math.abs(spin) * 0.8,
+      rot: facing * (4 + spin * 10),
       anim: "sit" as TrickAnim,
     };
   }
-  export function virgaPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.virga));
-    if (u < 0.22) {
-      const s = smoothstep(u / 0.22);
-      return { x: fromX, lift: 0.041 + s * -0.012, rot: s * 1.22 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.7) {
-      const s = (u - 0.22) / 0.48;
-      const liftUp = smoothstep(s);
-      const shake = Math.sin(s * Math.PI * 3.25);
-      return {
-        x: fromX + facing * shake * 0.006,
-        lift: 0.038 - liftUp * 0.092,
-        rot: facing * (1.02 + shake * 2.85 + liftUp * 2.05),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.7) / 0.3);
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.6 * (1 - s),
+    lift: 1.8 * (1 - s) + s * 0.2,
+    rot: facing * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+/** Nucleate — droplet condensation seed; THE cloud-birth tell. Never named float/rain/mist/fog/cloud/drip as this new tell. */
+export function nucleatePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.nucleate));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.4) {
+    const s = (u - 0.14) / 0.26;
+    const sip = smoothstep(s);
     return {
-      x: fromX,
-      lift: 0.08 * (1 - s),
-      rot: facing * (1.4 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * sip * 0.5,
+      lift: 2.6 + sip * 2.4,
+      rot: facing * (10 + sip * 8),
+      anim: "talk" as TrickAnim,
     };
   }
-  export function cirrusPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.cirrus));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.033, rot: s * -2.15 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.84) {
-      const s = (u - 0.16) / 0.68;
-      const glance = Math.sin(s * Math.PI * 2.45);
-      const velour = Math.sin(s * Math.PI * 5.7) * 0.31;
-      return {
-        x: fromX + facing * glance * 0.004,
-        lift: 0.031 + Math.abs(velour) * 0.009,
-        rot: facing * (-2.95 + glance * 4.75 + velour),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
+  if (u < 0.78) {
+    const s = (u - 0.4) / 0.38;
+    const drink = Math.sin(s * Math.PI * 3.2);
     return {
-      x: fromX,
-      lift: 0.01 * (1 - s),
-      rot: facing * (-0.8 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * (0.5 + drink * 0.3),
+      lift: 4.8 + Math.abs(drink) * 0.8,
+      rot: facing * (6 + drink * 14),
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.5 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: NimbusTrick, dt: number, flags: TrickFlags): NimbusTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "waft" && trick.kind !== "billow" && trick.kind !== "virga" && trick.kind !== "cirrus") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "waft" &&
+    trick.kind !== "billow" &&
+    trick.kind !== "cirrus" &&
+    trick.kind !== "virga" &&
+    trick.kind !== "tholin" &&
+    trick.kind !== "nucleate"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: NimbusTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -433,31 +577,18 @@ export function stepTrick(trick: NimbusTrick, dt: number, flags: TrickFlags): Ni
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "waft") {
-    const pose = waftPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "billow") {
-    const pose = billowPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else if (next.kind === "virga") {
-    const pose = virgaPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  } else {
-    const pose = cirrusPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
-    next.x = pose.x;
-    next.lift = pose.lift;
-    next.rot = pose.rot;
-    next.anim = pose.anim;
-  }
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  let pose;
+  if (next.kind === "waft") pose = waftPose(next.t, fromX, trick.facing);
+  else if (next.kind === "billow") pose = billowPose(next.t, fromX, trick.facing);
+  else if (next.kind === "cirrus") pose = cirrusPose(next.t, fromX, trick.facing);
+  else if (next.kind === "virga") pose = virgaPose(next.t, fromX, trick.facing);
+  else if (next.kind === "tholin") pose = tholinPose(next.t, fromX, trick.facing);
+  else pose = nucleatePose(next.t, fromX, trick.facing);
+  next.x = pose.x;
+  next.lift = pose.lift;
+  next.rot = pose.rot;
+  next.anim = pose.anim;
   if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
   return next;
 }
