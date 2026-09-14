@@ -1294,7 +1294,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Dusk ultra idle-life done; next house-order ultra is Knot / nexus", () => {
+test("notes: Dusk ultra idle-life done; next house-order ultra is Brine / halovore", () => {
   assert.equal(T.TRICK_KEY, "terminator");
   assert.deepEqual([...T.TRICKS], ["belt", "penumbra", "eclipse", "limb", "limitor", "umbra", "syzygy"]);
   assert.deepEqual([...T.HAPPY], ["crepuscule", "gloaming", "eventide"]);
@@ -1312,9 +1312,9 @@ test("notes: Dusk ultra idle-life done; next house-order ultra is Knot / nexus",
   assert.equal(OverlayGround.wantsThankYou("choir"), true);
   assert.equal(OverlayGround.tricksFor("gleam"), OverlayPhotovore);
   assert.equal(OverlayGround.tricksFor("pulse"), OverlayMoonJelly);
-  // Recommend next house-order ultra (do not implement): Knot / nexus.
-  assert.equal("nexus", "nexus");
-  assert.equal("Knot", "Knot");
+  // Recommend next house-order ultra (do not implement): Brine / halovore.
+  assert.equal("halovore", "halovore");
+  assert.equal("Brine", "Brine");
   assert.equal(T.TRICKS.includes("umbra"), true);
   assert.equal(T.TRICKS.includes("syzygy"), true);
   assert.equal(T.wantsThankYou("terminator"), true);
