@@ -1,6 +1,6 @@
-/** Seven ground tricks while idle. House seven-spot ladybird — spots / aphid / reflex / climb / coccinella personality (spots elytra-spot polish and count-display on the blotter — never named elytra (Spark firefly owns elytra) / count (ethogram + window SPOT) / stripe (Bandit) / flash (Quill) / warning (Milk) / semaphore (Spark), aphid aphid-hunt stalk and bead-pounce — never named hunt (ethogram) / forage (bumblebee window) / mouser (Rue) / stalk (Rue) / pounce (Miso) / clamp (Snap) / seize (robber fly window), reflex reflex-bleed hush (thanatosis bead) — never named feign (Bluff) / curl (Burr) / tuck (Ink) / freeze (Twig window FREEZE) / hush / bleed / hemolymph / still (ethogram), climb leaf-dish ascent — never named lift (Ember) / tread (Twig) / crawl (Cling) / scurry (Clip) / scuttle (Tenant) / amble (Bloom) / vault (Kite) / rise, coccinella desk life as a Coccinella septempunctata Seven-spot Ladybird week; not Column / Twig / Dart / Spark / Ghost / Milk / Comb / Clip / Tenant / Burr / *Dragon copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play SPOT do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop ladybird-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column or *Dragon electrical clone. Window-play SPOT unchanged — never names count. Ethogram count/hunt/still unchanged. Spark owns lantern/jstroke/semaphore/elytra/photinus and happy luciferin/candela/pyralis; Column owns gallery/pheromone/crumb/bustle/camponotus and happy pennsylvanicus/honeydew/formicine; Twig owns rocking/catalepsy/browse/tread/diapheromera; Dart owns hawking/tandem/nymph/whir/anax; Comb owns figure/corbicula/hex/proboscis/hive; Milk owns asclepias/oyamel/warning/chrysalis/danaus; Ghost owns plumose/lunule/silk/stream/actias; Bluff owns feign; Burr owns curl; Clip owns scurry; Tenant owns scuttle; Cling owns crawl. Coccinellidae Coccinella desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Seven ground tricks while idle — ultra-polish pass. House seven-spot ladybird — spots / aphid / reflex / climb / coccinella / pronotum / alar personality (spots elytra-spot polish and count-display on the blotter — never named elytra (Spark firefly owns elytra) / count (ethogram-old + window SPOT) / stripe (Bandit) / flash (Quill) / warning (Milk) / semaphore (Spark), aphid aphid-hunt stalk and bead-pounce — never named hunt (ethogram-old + Haste window) / forage (bumblebee window) / mouser (Rue) / stalk (Rue) / pounce (Miso) / clamp (Snap) / seize (robber fly window), reflex reflex-bleed hush (thanatosis bead) — never named feign (Bluff) / curl (Burr) / tuck (Ink) / freeze (Twig window FREEZE) / hush / bleed / hemolymph / still (ethogram-old), climb leaf-dish ascent — never named lift (Ember) / tread (Twig) / crawl (Cling) / scurry (Clip) / scuttle (Tenant) / amble (Bloom) / vault (Kite) / rise / soar, coccinella desk life as a Coccinella septempunctata Seven-spot Ladybird week, pronotum white pronotal-disc rock (species-true Coccinella white pronotum spectacles — never named stripe / flash / warning / semaphore / elytra / count / spot-as-window / spots-as-duplicate), alar under-elytra wing whir settle (species-true brief ladybird flight — never named elytra (Spark) / soar / rise / hover (Sepia) / buzz (Relay) / flash (Quill) / lantern (Spark) / jstroke (Spark) / wing (Kite) / breach (Kite)); not Column gallery/pheromone/crumb/bustle/camponotus/trophallaxis/frass, Twig rocking/catalepsy/browse/tread/diapheromera/oviposit/filiform, Dart hawking/tandem/nymph/whir/anax/obelisk/ommatidia, Spark lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite, Ghost plumose/lunule/silk/stream/actias/aphagy/cauda, Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Echo preen/bobble, Ember cinder/blaze, Quill fan/flash, Relay buzz/click, Rui dance, Sepia hover, Pulse medusa/trail, Clip nest/scurry, Tenant antenna/scuttle, Dragon glow, or Jade sway/Sol nod copies). Pronotum is the iconic Coccinella white-disc rock (not window SPOT, not ethogram-old count). Alar is the iconic under-elytra whir settle (not Spark elytra, not Quill flash). Window-play SPOT unchanged — never names count. Ethogram keeps coccinella sit_hold; adds spots/aphid/reflex/climb/pronotum/alar softs + freeze (replaces thin count/hunt/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via ladybird.wav. Thank-yous septempunctata / bead / coccinellid. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `ladybird-tricks.js`. True house-ladybird desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column or *Dragon electrical clone. Next guest ultra is Fold / mantis. Coccinellidae Coccinella desk life only. No cry inventing — thank-yous are silent desk motion only. */
 export const TRICK_KEY = "ladybird";
-export const TRICKS = ["spots", "aphid", "reflex", "climb", "coccinella"] as const;
+export const TRICKS = ["spots", "aphid", "reflex", "climb", "coccinella", "pronotum", "alar"] as const;
 export const HAPPY = ["septempunctata", "bead", "coccinellid"] as const;
 export type LadybirdTrickKind = (typeof TRICKS)[number];
 export type LadybirdHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,22 @@ export type LadybirdHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { septempunctata: 1.24, bead: 1.36, coccinellid: 1.3 } as const;
-export const COCCINELLA_HOLD = 13.6;
-export const RELEASE_S = 0.76;
-export const DUR = { coccinella: COCCINELLA_HOLD + RELEASE_S, spots: 1.54, aphid: 1.62, reflex: 1.48, climb: 1.56 } as const;
+export const HAPPY_DUR: Record<LadybirdHappyKind, number> = {
+  septempunctata: 1.22,
+  bead: 1.34,
+  coccinellid: 1.28,
+};
+export const COCCINELLA_HOLD = 11.2;
+export const RELEASE_S = 0.64;
+export const DUR: Record<LadybirdTrickKind, number> = {
+  coccinella: COCCINELLA_HOLD + RELEASE_S,
+  spots: 1.58,
+  aphid: 1.64,
+  reflex: 1.52,
+  climb: 1.56,
+  pronotum: 1.6,
+  alar: 1.54,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -77,38 +89,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: LadybirdTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "coccinella") return 52 + roll * 32;
-  if (kind === "spots") return 16 + roll * 12;
-  if (kind === "aphid") return 15 + roll * 11;
-  return justFinished ? 10.6 + roll * 8 : 5.5 + roll * 6.8;
+  if (kind === "coccinella") return 40 + roll * 24;
+  if (kind === "pronotum" || kind === "alar" || kind === "spots") return 12 + roll * 9;
+  if (kind === "aphid" || kind === "reflex" || kind === "climb") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: LadybirdTrickKind | string | null) {
-  if (musicOn) return "coccinella";
+  if (musicOn) return "coccinella" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "coccinella") {
-    if (roll < 0.26) return "spots";
-    if (roll < 0.5) return "aphid";
-    if (roll < 0.74) return "reflex";
-    return "climb";
+    if (roll < 0.16) return "spots" as const;
+    if (roll < 0.32) return "aphid" as const;
+    if (roll < 0.48) return "reflex" as const;
+    if (roll < 0.64) return "climb" as const;
+    if (roll < 0.82) return "pronotum" as const;
+    return "alar" as const;
   }
   if (lastKind === "spots") {
-    if (roll < 0.26) return "coccinella";
-    if (roll < 0.5) return "aphid";
-    if (roll < 0.74) return "reflex";
-    return "climb";
+    if (roll < 0.18) return "coccinella" as const;
+    if (roll < 0.34) return "aphid" as const;
+    if (roll < 0.5) return "reflex" as const;
+    if (roll < 0.66) return "climb" as const;
+    if (roll < 0.83) return "pronotum" as const;
+    return "alar" as const;
   }
   if (lastKind === "aphid") {
-    if (roll < 0.22) return "coccinella";
-    if (roll < 0.44) return "spots";
-    if (roll < 0.68) return "reflex";
-    return "climb";
+    if (roll < 0.16) return "coccinella" as const;
+    if (roll < 0.32) return "spots" as const;
+    if (roll < 0.48) return "reflex" as const;
+    if (roll < 0.64) return "climb" as const;
+    if (roll < 0.82) return "pronotum" as const;
+    return "alar" as const;
   }
-  if (roll < 0.2) return "coccinella";
-  if (roll < 0.4) return "spots";
-  if (roll < 0.6) return "aphid";
-  if (roll < 0.8) return "reflex";
-  return "climb";
+  if (lastKind === "pronotum" || lastKind === "alar") {
+    if (roll < 0.16) return "coccinella" as const;
+    if (roll < 0.32) return "spots" as const;
+    if (roll < 0.48) return "aphid" as const;
+    if (roll < 0.64) return "reflex" as const;
+    if (roll < 0.8) return "climb" as const;
+    return lastKind === "pronotum" ? ("alar" as const) : ("pronotum" as const);
+  }
+  if (roll < 0.14) return "coccinella" as const;
+  if (roll < 0.28) return "spots" as const;
+  if (roll < 0.42) return "aphid" as const;
+  if (roll < 0.56) return "reflex" as const;
+  if (roll < 0.7) return "climb" as const;
+  if (roll < 0.85) return "pronotum" as const;
+  return "alar" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -180,43 +208,43 @@ export function septempunctataPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.septempunctata));
   if (u < 0.16) {
     const s = u / 0.16;
-    return { lift: s * 0.045, rot: s * 2.6, dx: 0, anim: "play" as TrickAnim };
+    return { lift: s * 2.9, rot: s * 12, dx: 0, anim: "play" as TrickAnim };
   }
   if (u < 0.72) {
     const rock = Math.sin(t * 3.6) + 0.24 * Math.sin(t * 7.1);
     return {
-      lift: 0.045 + Math.abs(rock) * 0.02,
-      rot: 2.6 + rock * 2.8,
-      dx: rock * 0.004,
+      lift: 2.9 + Math.abs(rock) * 1.35,
+      rot: 12 + rock * 10,
+      dx: rock * 0.18,
       anim: "play" as TrickAnim,
     };
   }
   const s = (u - 0.72) / 0.28;
-  return { lift: 0.022 * (1 - s), rot: 1.1 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
 export function beadPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.bead));
   if (u < 0.2) {
     const s = u / 0.2;
-    return { lift: s * 0.06, rot: s * -2.0, dx: s * 0.005, anim: "talk" as TrickAnim };
+    return { lift: s * 3.2, rot: s * -9.5, dx: s * 0.2, anim: "talk" as TrickAnim };
   }
   if (u < 0.78) {
     const shed = Math.sin(t * 4.4) + 0.28 * Math.sin(t * 8.8);
     return {
-      lift: 0.06 + Math.abs(shed) * 0.032,
-      rot: -2.0 + shed * 3.2,
-      dx: shed * 0.006,
+      lift: 3.2 + Math.abs(shed) * 1.4,
+      rot: -9.5 + shed * 9,
+      dx: shed * 0.22,
       anim: "talk" as TrickAnim,
     };
   }
   const s = (u - 0.78) / 0.22;
-  return { lift: 0.028 * (1 - s), rot: -0.8 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  return { lift: 2.1 * (1 - s), rot: -4.5 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
 export function coccinellidPose(t: number) {
   return {
-    lift: 0.01 + Math.abs(Math.sin(t * 0.44)) * 0.014,
-    rot: Math.sin(t * 0.58) * 1.0,
-    dx: Math.sin(t * 0.3) * 0.002,
+    lift: 2.1 + Math.abs(Math.sin(t * 0.42)) * 0.85,
+    rot: Math.sin(t * 0.55) * 6.5,
+    dx: Math.sin(t * 0.3) * 0.08,
     anim: "sit" as TrickAnim,
   };
 }
@@ -254,16 +282,20 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
 export function beginTrick(kind: LadybirdTrickKind, x: number, facing: 1 | -1): LadybirdTrick {
   const anim: TrickAnim =
     kind === "coccinella"
-    ? "sit"
-    : kind === "spots"
       ? "sit"
-      : kind === "aphid"
-        ? "walk"
-        : kind === "reflex"
-          ? "sit"
-          : kind === "climb"
-            ? "walk"
-              : "sit";
+      : kind === "spots"
+        ? "sit"
+        : kind === "aphid"
+          ? "walk"
+          : kind === "reflex"
+            ? "sit"
+            : kind === "climb"
+              ? "walk"
+              : kind === "pronotum"
+                ? "sit"
+                : kind === "alar"
+                  ? "play"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "coccinella" ? "hold" : "go",
@@ -286,37 +318,37 @@ export function coccinellaPose(t: number) {
   const breath = Math.sin(t * 0.18) + 0.03 * Math.sin(t * 0.78);
   const grain = Math.abs(Math.sin(t * 0.36));
   return {
-    lift: 0.016 + grain * 0.012,
-    rot: 0.28 + breath * 0.6,
+    lift: 2.4 + grain * 1.1,
+    rot: 3.8 + breath * 3.2,
   };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 0.018 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.28 * (1 - u) };
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.0 * (1 - u) };
 }
 
 export function spotsPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.spots));
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: s * 0.04, rot: s * 4.8 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * 2.8, rot: s * 10 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.8) {
     const s = (u - 0.14) / 0.66;
     const polish = Math.sin(s * Math.PI * 6.4) + 0.3 * Math.sin(s * Math.PI * 11.2);
     return {
-      x: fromX + facing * polish * 0.004,
-      lift: 0.055 + Math.abs(polish) * 0.028,
-      rot: facing * (4.8 + polish * 2.2),
+      x: fromX + facing * polish * 0.18,
+      lift: 2.8 + Math.abs(polish) * 1.3,
+      rot: facing * (10 + polish * 8),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.8) / 0.2);
   return {
     x: fromX,
-    lift: 0.014 * (1 - s),
-    rot: facing * (1.4 * (1 - s)),
+    lift: 2.0 * (1 - s),
+    rot: facing * (4.5 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -324,15 +356,15 @@ export function aphidPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.aphid));
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
-    return { x: fromX + facing * 0.02 * s, lift: s * 0.02, rot: s * 1.4 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX + facing * 0.35 * s, lift: s * 2.6, rot: s * 8 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.52) {
     const s = (u - 0.18) / 0.34;
     const stalk = Math.sin(s * Math.PI * 2.2);
     return {
-      x: fromX + facing * (0.05 * s + stalk * 0.008),
-      lift: 0.02 + Math.abs(stalk) * 0.015,
-      rot: facing * (1.4 + stalk * 1.8),
+      x: fromX + facing * (0.7 * s + stalk * 0.2),
+      lift: 2.6 + Math.abs(stalk) * 1.1,
+      rot: facing * (8 + stalk * 7),
       anim: "walk" as TrickAnim,
     };
   }
@@ -340,17 +372,17 @@ export function aphidPose(t: number, fromX: number, facing: 1 | -1) {
     const s = (u - 0.52) / 0.26;
     const peck = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * (0.08 + peck * 0.02),
-      lift: 0.02 - peck * 0.04 + Math.abs(Math.sin(s * Math.PI * 3)) * 0.02,
-      rot: facing * (1.4 - peck * 4.2),
+      x: fromX + facing * (0.85 + peck * 0.25),
+      lift: 2.6 - peck * 1.4 + Math.abs(Math.sin(s * Math.PI * 3)) * 0.9,
+      rot: facing * (8 - peck * 10),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
   return {
-    x: fromX + facing * 0.06 * (1 - s * 0.35),
-    lift: 0.018 * (1 - s),
-    rot: facing * (0.6 * (1 - s)),
+    x: fromX + facing * 0.55 * (1 - s * 0.35),
+    lift: 2.0 * (1 - s),
+    rot: facing * (3.5 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -358,23 +390,23 @@ export function reflexPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.reflex));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * -0.025, rot: s * -4.2 * facing, anim: "sit" as TrickAnim };
+    return { x: fromX, lift: s * -1.8, rot: s * -10 * facing, anim: "sit" as TrickAnim };
   }
   if (u < 0.72) {
     const s = (u - 0.12) / 0.6;
-    const hush = Math.sin(s * Math.PI * 1.6) * 0.15;
+    const hush = Math.sin(s * Math.PI * 1.6) * 0.35;
     return {
-      x: fromX + facing * hush * 0.003,
-      lift: -0.025 + Math.abs(hush) * 0.008,
-      rot: facing * (-4.2 + hush * 0.8),
+      x: fromX + facing * hush * 0.12,
+      lift: -1.8 + Math.abs(hush) * 0.55,
+      rot: facing * (-10 + hush * 3),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.72) / 0.28);
   return {
     x: fromX,
-    lift: -0.014 * (1 - s),
-    rot: facing * (-1.8 * (1 - s)),
+    lift: -1.0 * (1 - s),
+    rot: facing * (-4.5 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
@@ -382,29 +414,95 @@ export function climbPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.climb));
   if (u < 0.1) {
     const s = smoothstep(u / 0.1);
-    return { x: fromX, lift: s * 0.04, rot: s * 2.8 * facing, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 2.7, rot: s * 9 * facing, anim: "walk" as TrickAnim };
   }
   if (u < 0.82) {
     const s = (u - 0.1) / 0.72;
     const step = Math.sin(s * Math.PI * 5.0) + 0.32 * Math.sin(s * Math.PI * 8.6);
     return {
-      x: fromX + facing * (0.03 * Math.sin(s * Math.PI) + step * 0.012),
-      lift: 0.04 + s * 0.085 + Math.abs(step) * 0.02,
-      rot: facing * (2.8 + step * 3.2),
+      x: fromX + facing * (0.4 * Math.sin(s * Math.PI) + step * 0.2),
+      lift: 2.7 + s * 2.4 + Math.abs(step) * 1.1,
+      rot: facing * (9 + step * 8),
       anim: "walk" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
-    x: fromX + facing * 0.01 * (1 - s),
-    lift: 0.1 * (1 - s),
-    rot: facing * (1.0 * (1 - s)),
+    x: fromX + facing * 0.15 * (1 - s),
+    lift: 4.6 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+export function pronotumPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.pronotum));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.65, rot: s * -9.5 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.14) / 0.64;
+    const disc = Math.sin(s * Math.PI * 5.2) + 0.3 * Math.sin(s * Math.PI * 9.6);
+    return {
+      x: fromX + facing * disc * 0.16,
+      lift: 2.65 + Math.abs(disc) * 1.25,
+      rot: facing * (-9.5 + disc * 9),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 2.0 * (1 - s),
+    rot: facing * (-4.2 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+export function alarPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.alar));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.1, rot: s * 8 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.12) / 0.43;
+    const whir = Math.sin(s * Math.PI * 8.4) + 0.35 * Math.sin(s * Math.PI * 14.2);
+    return {
+      x: fromX + facing * (0.45 * s + whir * 0.2),
+      lift: 3.1 + s * 1.8 + Math.abs(whir) * 0.9,
+      rot: facing * (8 + whir * 9),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.82) {
+    const s = (u - 0.55) / 0.27;
+    const settle = Math.sin(s * Math.PI);
+    return {
+      x: fromX + facing * (0.55 + settle * 0.12),
+      lift: 4.9 - s * 2.2 + Math.abs(settle) * 0.6,
+      rot: facing * (6 - settle * 4),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.82) / 0.18);
+  return {
+    x: fromX + facing * 0.35 * (1 - s),
+    lift: 2.4 * (1 - s),
+    rot: facing * (3 * (1 - s)),
     anim: "sit" as TrickAnim,
   };
 }
 export function stepTrick(trick: LadybirdTrick, dt: number, flags: TrickFlags): LadybirdTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "spots" && trick.kind !== "aphid" && trick.kind !== "reflex" && trick.kind !== "climb") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "spots" &&
+    trick.kind !== "aphid" &&
+    trick.kind !== "reflex" &&
+    trick.kind !== "climb" &&
+    trick.kind !== "pronotum" &&
+    trick.kind !== "alar"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: LadybirdTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -447,8 +545,20 @@ export function stepTrick(trick: LadybirdTrick, dt: number, flags: TrickFlags): 
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else {
+  } else if (next.kind === "climb") {
     const pose = climbPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "pronotum") {
+    const pose = pronotumPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else {
+    const pose = alarPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
