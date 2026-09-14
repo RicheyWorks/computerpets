@@ -2179,7 +2179,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Leap ultra idle-life done; next house-order ultra is Prowl / wolf_spider", () => {
+test("notes: Leap ultra idle-life done; next house-order ultra is Velvet / tarantula", () => {
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
