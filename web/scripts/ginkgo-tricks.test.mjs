@@ -107,7 +107,7 @@ test("Fan tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["biloba", "notch", "flutter", "drop", "amber"]);
+  assert.deepEqual([...T.TRICKS], ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
   assert.equal(T.canStart({ asleep: true, hidden: false, leaving: false, cmd: "idle" }), false);
@@ -182,7 +182,7 @@ test("Fan tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["biloba", "notch", "flutter", "drop", "amber"]);
+  assert.deepEqual([...Overlay.TRICKS], ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"]);
   assert.deepEqual([...Overlay.HAPPY], ["ochre", "gilt", "linger"]);
 
   assert.equal(T.TRICKS.includes("gape"), false);
@@ -213,7 +213,7 @@ test("Fan tricks start only on idle ground", () => {
   assert.equal(Parrot.TRICKS.includes("fan"), true);
 });
 
-test("biloba/notch/flutter/drop/amber are house-ginkgo-true, not copies of prior guests", () => {
+test("biloba/notch/flutter/drop/amber/dichotomy/petiole are house-ginkgo-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const amber = T.beginTrick("amber", 80, 1);
   assert.equal(amber.anim, "sit");
@@ -244,7 +244,15 @@ test("biloba/notch/flutter/drop/amber are house-ginkgo-true, not copies of prior
   assert.equal(drop.anim, "talk");
   const dropMid = T.stepTrick(drop, 0.5, ground);
   assert.ok(Math.abs(dropMid.lift) > 0.05 || Math.abs(dropMid.rot) > 1 || Math.abs(dropMid.x - 80) > 0.05);
-  const flutterDone = T.stepTrick(flutter, 1.6, ground);
+  const dichotomy = T.beginTrick("dichotomy", 80, 1);
+  assert.equal(dichotomy.anim, "play");
+  const dichotomyMid = T.stepTrick(dichotomy, T.DUR.dichotomy * 0.4, ground);
+  assert.ok(Math.abs(dichotomyMid.lift) > 0.05 || Math.abs(dichotomyMid.rot) > 1 || Math.abs(dichotomyMid.x - 80) > 0.05);
+  const petiole = T.beginTrick("petiole", 80, 1);
+  assert.equal(petiole.anim, "talk");
+  const petioleMid = T.stepTrick(petiole, T.DUR.petiole * 0.35, ground);
+  assert.ok(Math.abs(petioleMid.lift) > 0.05 || Math.abs(petioleMid.rot) > 1 || Math.abs(petioleMid.x - 80) > 0.05);
+  const flutterDone = T.stepTrick(flutter, T.DUR.flutter + 0.1, ground);
   assert.equal(flutterDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -254,6 +262,8 @@ test("biloba/notch/flutter/drop/amber are house-ginkgo-true, not copies of prior
     assert.equal(mod.TRICKS.includes("flutter"), false);
     assert.equal(mod.TRICKS.includes("drop"), false);
     assert.equal(mod.TRICKS.includes("amber"), false);
+    assert.equal(mod.TRICKS.includes("dichotomy"), false);
+    assert.equal(mod.TRICKS.includes("petiole"), false);
   }
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.deepEqual([...Goldfish.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
@@ -423,7 +433,7 @@ test("ground registry keeps prior guests gated; Fan selectable; prior guests sti
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["biloba", "notch", "flutter", "drop", "amber"]);
+  assert.deepEqual([...T.TRICKS], ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"]);
   assert.equal(T.wantsThankYou("ginkgo"), true);
   assert.equal(T.wantsThankYou("fan"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -556,7 +566,7 @@ test("ground registry keeps prior guests gated; Fan selectable; prior guests sti
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), Overlay);
   assert.equal(OverlayGround.tricksFor("fan"), Overlay);
-  assert.deepEqual([...Overlay.TRICKS], ["biloba", "notch", "flutter", "drop", "amber"]);
+  assert.deepEqual([...Overlay.TRICKS], ["biloba", "notch", "flutter", "drop", "amber", "dichotomy", "petiole"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -612,7 +622,7 @@ test("ground registry keeps prior guests gated; Fan selectable; prior guests sti
   assert.equal(OverlayGround.tricksFor("fan"), Overlay);
 });
 
-test("notes: Fan idle-life done; next house-order guest still lacking tricks is Mast / oak", () => {
+test("notes: Fan ultra-polish done; next house-order ultra is Mast / oak", () => {
   assert.equal(T.TRICK_KEY, "ginkgo");
   assert.equal(T.wantsThankYou("fan"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -684,8 +694,12 @@ test("notes: Fan idle-life done; next house-order guest still lacking tricks is 
   assert.equal(T.TRICKS.includes("lobe"), false);
   assert.equal(T.HAPPY.includes("mist"), false);
   assert.equal(T.HAPPY.includes("humid"), false);
-  assert.equal(OverlayGround.tricksFor("oak"), null);
+  assert.equal(OverlayGround.tricksFor("ginkgo"), Overlay);
+  assert.equal(OverlayGround.tricksFor("fan"), Overlay);
+  assert.equal(OverlayGround.wantsThankYou("ginkgo"), true);
+  assert.equal(OverlayGround.wantsThankYou("fan"), true);
+  assert.ok(OverlayGround.tricksFor("oak") == null);
   assert.equal(OverlayGround.wantsThankYou("oak"), false);
-  assert.equal(OverlayGround.tricksFor("mast"), null);
+  assert.ok(OverlayGround.tricksFor("mast") == null);
   assert.equal(OverlayGround.wantsThankYou("mast"), false);
 });

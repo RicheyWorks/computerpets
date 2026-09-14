@@ -728,6 +728,16 @@ test("maidenhair ethogram is Vein ultra (saucer + softs + freeze, not lean/nod/u
   assert.equal(names("maidenhair").includes("unfurl"), false);
 });
 
+test("ginkgo ethogram is Fan ultra (amber + softs + freeze, not lean/nod/still)", () => {
+  assert.ok(names("ginkgo").includes("amber"));
+  assert.ok(names("ginkgo").includes("dichotomy_soft"));
+  assert.ok(names("ginkgo").includes("petiole_soft"));
+  assert.ok(names("ginkgo").includes("freeze"));
+  assert.equal(names("ginkgo").includes("lean"), false);
+  assert.equal(names("ginkgo").includes("nod"), false);
+  assert.equal(names("ginkgo").includes("still"), false);
+});
+
 test("pickAct can schedule tongue on a snake and never scratch", () => {
   let tongue = 0;
   for (let i = 0; i < 80; i++) {
