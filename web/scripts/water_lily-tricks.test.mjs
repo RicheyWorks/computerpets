@@ -637,7 +637,7 @@ globalThis.PetWaterLilyTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Disk ultra-polish done; next house-order ultra is Moth / orchid", () => {
+test("notes: Disk ultra-polish done; Moth ultra also done; next house-order ultra is Arm / saguaro", () => {
   assert.equal(T.TRICK_KEY, "water_lily");
   assert.equal(T.wantsThankYou("disk"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
