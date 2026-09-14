@@ -254,6 +254,22 @@ test("carpenter_ant ethogram is Column ultra (camponotus + softs + freeze, not t
   assert.equal(names.length, 8);
 });
 
+test("ladybird ethogram is Seven ultra (coccinella + softs + freeze, not count/hunt/still)", () => {
+  const names = E.actsFor("ladybird").map((a) => a.name);
+  assert.ok(names.includes("coccinella"));
+  assert.ok(names.includes("spots_soft"));
+  assert.ok(names.includes("aphid_soft"));
+  assert.ok(names.includes("reflex_soft"));
+  assert.ok(names.includes("climb_soft"));
+  assert.ok(names.includes("pronotum_soft"));
+  assert.ok(names.includes("alar_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("count"), false);
+  assert.equal(names.includes("hunt"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
