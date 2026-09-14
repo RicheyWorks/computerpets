@@ -488,16 +488,20 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
-  assert.ok(names("honeybee").includes("waggle"));
-  assert.ok(names("firefly").includes("flash"));
+  assert.ok(names("honeybee").includes("hive"));
+  assert.ok(names("firefly").includes("photinus"));
+  assert.ok(names("stick").includes("diapheromera"));
   assert.ok(names("stick").includes("freeze"));
-  assert.ok(names("mantis").includes("fold"));
-  assert.ok(names("cicada").includes("emerge"));
-  assert.ok(names("luna").includes("still"));
+  assert.ok(names("mantis").includes("mantodea"));
+  assert.equal(names("mantis").includes("fold"), false);
+  assert.ok(names("cicada").includes("magicicada"));
+  assert.equal(names("cicada").includes("still"), false);
+  assert.ok(names("luna").includes("actias"));
+  assert.equal(names("luna").includes("still"), false);
   assert.equal(names("luna").includes("eat"), false);
-  assert.ok(names("venus_flytrap").includes("snap"));
-  assert.ok(names("pitcher").includes("still"));
-  assert.ok(names("sundew").includes("curl"));
+  assert.ok(names("venus_flytrap").includes("poise"));
+  assert.ok(names("pitcher").includes("urn"));
+  assert.ok(names("sundew").includes("rosette"));
   for (const key of E.SCRATCH_KEYS) {
     assert.ok(names(key).includes("scratch"), `${key} scratches`);
   }
