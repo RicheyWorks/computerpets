@@ -635,7 +635,11 @@ assert.ok(names("toad").includes("freeze"));
   assert.ok(names("scorpion").includes("booklung_soft"));
   assert.ok(names("scorpion").includes("pedipalp_soft"));
   assert.ok(names("scorpion").includes("freeze"));
-  assert.ok(names("vinegaroon").includes("whip"));
+  assert.ok(names("vinegaroon").includes("mastigoproctus"));
+  assert.ok(names("vinegaroon").includes("pygidial_soft"));
+  assert.ok(names("vinegaroon").includes("antenniform_soft"));
+  assert.ok(names("vinegaroon").includes("caudalwhip_soft"));
+  assert.ok(names("vinegaroon").includes("freeze"));
   assert.ok(names("tick").includes("clasp"));
   assert.ok(names("solifuge").includes("run"));
   for (const key of WOOD) {
