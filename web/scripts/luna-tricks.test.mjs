@@ -863,8 +863,8 @@ test("notes: Ghost idle-life done; next house-order guest still lacking tricks w
   assert.equal(OverlayGround.wantsThankYou("ghost"), true);
   assert.deepEqual([...T.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
   assert.deepEqual([...Overlay.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
-  assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus"]);
-  assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus"]);
+  assert.deepEqual([...Monarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
+  assert.deepEqual([...OverlayMonarch.TRICKS], ["asclepias", "oyamel", "warning", "chrysalis", "danaus", "cremaster", "tarsus"]);
   assert.equal(OverlayGround.tricksFor("pitcher"), OverlayPitcher);
   assert.equal(OverlayGround.wantsThankYou("pitcher"), true);
   assert.equal(OverlayGround.tricksFor("drown"), OverlayPitcher);
