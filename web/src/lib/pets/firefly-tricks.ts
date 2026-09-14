@@ -1,6 +1,6 @@
-/** Spark ground tricks while idle. House firefly — lantern / jstroke / semaphore / elytra / photinus personality (lantern belly-organ soft pulse on the blotter — never named flash (Quill+ethogram+window Flash) / glow (Dragon happy+window GLOW) / blaze (Ember) / lift (Ember+ethogram) / warning (Milk) / lunule (Ghost), jstroke Photinus J-path courtship flight — never named soar / hover (Sepia) / wing (Kite) / flutter (Fan) / stream (Ghost) / dart (Coin+ethogram still uses still), semaphore mate answer-code timing — never named flash / code / signal / buzz (Relay) / click (Relay) / spark (Relay happy), elytra soft dusk cover-wing settle — never named silk (Ghost) / plumose (Ghost) / fan / wing / nocturne (Arm), photinus desk life as a Photinus pyralis Lampyridae beetle week; not Ghost / Milk / Comb / Echo / Ember / Quill / Kite / Fan / Dew / Pulse / Relay copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop firefly-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost or *Dragon electrical clone. Window-play Flash/GLOW unchanged — never names flash or glow. Ethogram flash/lift/still unchanged. Ghost owns plumose/lunule/silk/stream/actias; Milk owns asclepias/oyamel/warning/chrysalis/danaus; Comb owns figure/corbicula/hex/proboscis/hive; Quill owns fan/flash; Kite owns wing; Fan owns flutter; Echo owns preen/bobble; Ember owns cinder/blaze/shed/lift/return; Sepia owns hover; Relay owns buzz/click and happy spark; Rui owns dance; Pulse guest owns moon-jelly; Dragon happy owns glow. Lampyridae Photinus desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Spark ground tricks while idle — ultra-polish pass. House firefly — lantern / jstroke / semaphore / elytra / photinus / photocyte / sternite personality (lantern belly-organ soft pulse on the blotter — never named flash (Quill+ethogram-old+window Flash/GLOW) / glow (Dragon happy+window GLOW) / blaze (Ember) / lift (Ember+ethogram-old) / warning (Milk) / lunule (Ghost), jstroke Photinus J-path courtship flight — never named soar / hover (Sepia) / wing (Kite) / flutter (Fan) / stream (Ghost) / dart (Coin+ethogram still uses still), semaphore mate answer-code timing — never named flash / code / signal / buzz (Relay) / click (Relay) / spark (Relay happy), elytra soft dusk cover-wing settle — never named silk (Ghost) / plumose (Ghost) / fan / wing / nocturne (Arm), photinus desk life as a Photinus pyralis Lampyridae beetle week, photocyte lantern light-cell shimmer (species-true Photinus photocytes — never named flash / glow / blaze / luciferin-as-trick / pulse as Pulse guest / scintilla), sternite abdominal lantern-sternite flex (species-true Photinus lantern sternites — never named elytra as cover / silk / coil / tuck / seam); not Ghost plumose/lunule/silk/stream/actias/aphagy/cauda, Milk asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus, Comb figure/corbicula/hex/proboscis/hive/ocelli/nasonov, Dew mucilage/tentacle/digest/gland/rosette/lamina/circinate, Well peristome/cistern/brine/operculum/urn/ala/baffle, Snap clamp/trichome/stew/unseal/poise/cage/scape, Arm rib/branch/nocturne/areole/sentinel/pleat/boot, Moth labellum/velamen/column/spike/bark/keiki/pollinia, Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, Blush mesa/arroyo, Sol sun/dewlap/nod/press/flick, Echo preen/bobble, Quill fan/flash, Relay buzz, Rui dance, Banner puddlesip, or snake guests Sash seam/moss/lap copies). Photocyte is the iconic lantern light-cell shimmer (not window Flash/GLOW, not ethogram-old flash). Sternite is the iconic abdominal lantern-plate flex (not elytra cover-wing). Window-play Flash/GLOW unchanged — never names flash or glow as tricks. Ethogram keeps photinus sit_hold; adds lantern/jstroke/semaphore/elytra/photocyte/sternite softs + freeze (replaces thin flash/lift/still). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via firefly.wav. Thank-yous luciferin / candela / pyralis. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `firefly-tricks.js`. True house-firefly desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/moth-orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Well/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/store/drift/float/bloom/cup/siphon/soak/sprout/nectary/nest/den/nook/column/bole/press/swell/snap/count/cilia/teeth/fringe/latch/lure/margin/enzyme/clamp/trichome/stew/unseal/poise/cage/scape/pleat/boot/keiki/pollinia/wing/hood/bristle/peristome/cistern/brine/operculum/urn/ala/baffle/mucilage/tentacle/digest/gland/rosette/lamina/circinate/curl/glue/fiddle/waggle/dance/buzz/pollen/nectar/figure/corbicula/hex/proboscis/hive/ocelli/nasonov/asclepias/oyamel/warning/chrysalis/danaus/cremaster/tarsus/plumose/lunule/silk/stream/actias/aphagy/cauda/puddlesip/flash/glow/lift name collisions. Bird ultra (Soot→Ember) + Miso→Ghost done; skip Rui + birds. Next guest ultra is Dart / darner. No cry inventing beyond house firefly.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "firefly";
-export const TRICKS = ["lantern", "jstroke", "semaphore", "elytra", "photinus"] as const;
+export const TRICKS = ["lantern", "jstroke", "semaphore", "elytra", "photinus", "photocyte", "sternite"] as const;
 export const HAPPY = ["luciferin", "candela", "pyralis"] as const;
 export type FireflyTrickKind = (typeof TRICKS)[number];
 export type FireflyHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,22 @@ export type FireflyHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { luciferin: 1.2, candela: 1.36, pyralis: 1.24 } as const;
-export const PHOTINUS_HOLD = 12.4;
-export const RELEASE_S = 0.76;
-export const DUR = { photinus: PHOTINUS_HOLD + RELEASE_S, lantern: 1.32, jstroke: 1.58, semaphore: 1.44, elytra: 1.5 } as const;
+export const HAPPY_DUR: Record<FireflyHappyKind, number> = {
+  luciferin: 1.24,
+  candela: 1.34,
+  pyralis: 1.22,
+};
+export const PHOTINUS_HOLD = 11.4;
+export const RELEASE_S = 0.66;
+export const DUR: Record<FireflyTrickKind, number> = {
+  photinus: PHOTINUS_HOLD + RELEASE_S,
+  lantern: 1.46,
+  jstroke: 1.62,
+  semaphore: 1.5,
+  elytra: 1.56,
+  photocyte: 1.64,
+  sternite: 1.68,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -77,38 +89,56 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: FireflyTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "photinus") return 48 + roll * 32;
-  if (kind === "semaphore") return 16 + roll * 12;
-  if (kind === "jstroke") return 14 + roll * 11;
-  return justFinished ? 10.2 + roll * 8 : 5.2 + roll * 6.8;
+  if (kind === "photinus") return 40 + roll * 24;
+  if (kind === "photocyte" || kind === "sternite" || kind === "elytra") return 12 + roll * 9;
+  if (kind === "lantern" || kind === "jstroke" || kind === "semaphore") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: FireflyTrickKind | string | null) {
   if (musicOn) return "photinus" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "photinus") {
-    if (roll < 0.26) return "lantern" as const;
-    if (roll < 0.48) return "jstroke" as const;
-    if (roll < 0.72) return "semaphore" as const;
-    return "elytra" as const;
+    if (roll < 0.16) return "lantern" as const;
+    if (roll < 0.32) return "jstroke" as const;
+    if (roll < 0.48) return "semaphore" as const;
+    if (roll < 0.64) return "elytra" as const;
+    if (roll < 0.82) return "photocyte" as const;
+    return "sternite" as const;
   }
   if (lastKind === "lantern") {
-    if (roll < 0.28) return "photinus" as const;
-    if (roll < 0.5) return "jstroke" as const;
-    if (roll < 0.72) return "semaphore" as const;
-    return "elytra" as const;
+    if (roll < 0.18) return "photinus" as const;
+    if (roll < 0.34) return "jstroke" as const;
+    if (roll < 0.5) return "semaphore" as const;
+    if (roll < 0.66) return "elytra" as const;
+    if (roll < 0.83) return "photocyte" as const;
+    return "sternite" as const;
   }
   if (lastKind === "jstroke") {
-    if (roll < 0.22) return "photinus" as const;
-    if (roll < 0.44) return "lantern" as const;
-    if (roll < 0.66) return "semaphore" as const;
-    return "elytra" as const;
+    if (roll < 0.16) return "photinus" as const;
+    if (roll < 0.32) return "lantern" as const;
+    if (roll < 0.48) return "semaphore" as const;
+    if (roll < 0.64) return "elytra" as const;
+    if (roll < 0.82) return "photocyte" as const;
+    return "sternite" as const;
   }
-  if (roll < 0.2) return "photinus" as const;
-  if (roll < 0.4) return "lantern" as const;
-  if (roll < 0.6) return "jstroke" as const;
-  if (roll < 0.8) return "semaphore" as const;
-  return "elytra" as const;
+  if (lastKind === "photocyte" || lastKind === "sternite") {
+    if (roll < 0.16) return "photinus" as const;
+    if (roll < 0.32) return "lantern" as const;
+    if (roll < 0.48) return "jstroke" as const;
+    if (roll < 0.64) return "semaphore" as const;
+    if (roll < 0.8) return "elytra" as const;
+    return lastKind === "photocyte" ? ("sternite" as const) : ("photocyte" as const);
+  }
+  if (roll < 0.14) return "photinus" as const;
+  if (roll < 0.28) return "lantern" as const;
+  if (roll < 0.42) return "jstroke" as const;
+  if (roll < 0.56) return "semaphore" as const;
+  if (roll < 0.7) return "elytra" as const;
+  if (roll < 0.85) return "photocyte" as const;
+  return "sternite" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -175,49 +205,52 @@ export function beginHappy(kind: FireflyHappyKind | string, x: number, facing: 1
 }
 
 export function luciferinPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.luciferin));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 0.11, rot: s * 2.6, dx: 0, anim: "play" as TrickAnim };
-    }
-    if (u < 0.7) {
-      const blink = Math.sin(t * 14.5) + 0.22 * Math.sin(t * 22.1);
-      return {
-        lift: 0.11 + Math.abs(blink) * 0.042,
-        rot: 2.6 + blink * 2.8,
-        dx: blink * 0.007,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.7) / 0.3;
-    return { lift: 0.06 * (1 - s), rot: 1.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.luciferin));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.9, rot: s * 12, dx: 0, anim: "play" as TrickAnim };
   }
-export function candelaPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.candela));
-    if (u < 0.2) {
-      const s = u / 0.2;
-      return { lift: s * -0.02, rot: s * -1.4, dx: 0, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.82) {
-      const warm = Math.sin(t * 0.68);
-      return {
-        lift: -0.02 + Math.abs(warm) * 0.026,
-        rot: -1.4 + warm * 1.5,
-        dx: warm * 0.005,
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = (u - 0.82) / 0.18;
-    return { lift: -0.012 * (1 - s), rot: -0.8 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function pyralisPose(t: number) {
+  if (u < 0.7) {
+    const blink = Math.sin(t * 14.5) + 0.22 * Math.sin(t * 22.1);
     return {
-      lift: 0.028 + Math.abs(Math.sin(t * 0.92)) * 0.04,
-      rot: Math.sin(t * 1.12) * 2.5,
-      dx: Math.sin(t * 0.48) * 0.01,
-      anim: "talk" as TrickAnim,
+      lift: 2.9 + Math.abs(blink) * 1.35,
+      rot: 12 + blink * 10,
+      dx: blink * 0.22,
+      anim: "play" as TrickAnim,
     };
   }
+  const s = (u - 0.7) / 0.3;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function candelaPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.candela));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * -1.15, rot: s * -6.8, dx: 0, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.82) {
+    const warm = Math.sin(t * 0.68);
+    return {
+      lift: -1.15 + Math.abs(warm) * 0.9,
+      rot: -6.8 + warm * 5.6,
+      dx: warm * 0.18,
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return { lift: -0.75 * (1 - s), rot: -3.4 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function pyralisPose(t: number) {
+  return {
+    lift: 2.25 + Math.abs(Math.sin(t * 0.92)) * 1.15,
+    rot: Math.sin(t * 1.12) * 9.2,
+    dx: Math.sin(t * 0.48) * 0.28,
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: FireflyHappy, dt: number, flags: TrickFlags): FireflyHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -261,7 +294,11 @@ export function beginTrick(kind: FireflyTrickKind, x: number, facing: 1 | -1): F
             ? "talk"
             : kind === "elytra"
               ? "sit"
-              : "sit";
+              : kind === "photocyte"
+                ? "play"
+                : kind === "sternite"
+                  ? "talk"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "photinus" ? "hold" : "go",
@@ -281,135 +318,203 @@ function smoothstep(t: number) {
 }
 
 export function photinusPose(t: number) {
-    const breath = Math.sin(t * 0.18) + 0.03 * Math.sin(t * 1.1);
-    const lamp = Math.abs(Math.sin(t * 0.55));
-    return {
-      lift: 0.022 + lamp * 0.014,
-      rot: 0.28 + breath * 0.52,
-    };
-  }
+  const lamp = Math.abs(Math.sin(t * 0.55));
+  const breath = Math.sin(t * 0.18) + 0.02 * Math.sin(t * 0.9);
+  return {
+    lift: 2.45 + lamp * 1.15,
+    rot: 4.2 + breath * 3.4,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.028 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.3 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.25 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 3.1 * (1 - u) };
+}
+
 export function lanternPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.lantern));
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX, lift: s * 0.12, rot: s * 3.4 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.12) / 0.6;
-      const pulse = Math.sin(s * Math.PI * 4.2);
-      return {
-        x: fromX + facing * pulse * 0.006,
-        lift: 0.12 + Math.abs(pulse) * 0.05,
-        rot: facing * (3.4 + pulse * 4.8),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+  const u = Math.max(0, Math.min(1, t / DUR.lantern));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.1, rot: s * 11 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const pulse = Math.sin(t * 11.2) + 0.24 * Math.sin(t * 17.6);
     return {
-      x: fromX,
-      lift: 0.12 * (1 - s),
-      rot: facing * (1.8 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * pulse * 0.08,
+      lift: 3.1 + Math.abs(pulse) * 1.25,
+      rot: facing * (11 + pulse * 8),
+      anim: "play" as TrickAnim,
     };
   }
+  const s = (u - 0.78) / 0.22;
+  return {
+    x: fromX,
+    lift: 3.1 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "play" as TrickAnim,
+  };
+}
+
 export function jstrokePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.jstroke));
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX + facing * 0.02 * s, lift: s * 0.04, rot: s * -2.2 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.18) / 0.37;
-      const arc = Math.sin(s * Math.PI * 0.5);
-      return {
-        x: fromX + facing * (0.02 + 0.04 * s),
-        lift: 0.04 + arc * 0.1,
-        rot: facing * (-2.2 + s * 5.5),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    if (u < 0.82) {
-      const s = (u - 0.55) / 0.27;
-      const hook = Math.sin(s * Math.PI);
-      return {
-        x: fromX + facing * (0.06 - 0.05 * s) + facing * hook * 0.012,
-        lift: 0.14 - s * 0.06 + Math.abs(hook) * 0.03,
-        rot: facing * (3.3 + hook * 3.6),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
+  const u = Math.max(0, Math.min(1, t / DUR.jstroke));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX + facing * 0.15 * s, lift: s * 2.4, rot: s * -7 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.12) / 0.43;
+    const arc = Math.sin(s * Math.PI);
     return {
-      x: fromX + facing * 0.01 * (1 - s),
-      lift: 0.08 * (1 - s),
-      rot: facing * (1.4 * (1 - s)),
+      x: fromX + facing * (0.15 + 1.1 * s),
+      lift: 2.4 + arc * 2.6,
+      rot: facing * (-7 + s * 16),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.82) {
+    const s = (u - 0.55) / 0.27;
+    const hook = Math.sin(s * Math.PI);
+    return {
+      x: fromX + facing * (1.25 - 0.55 * s),
+      lift: 4.2 - s * 1.4 + Math.abs(hook) * 0.9,
+      rot: facing * (8 - s * 10 + hook * 4),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return {
+    x: fromX + facing * 0.7 * (1 - s),
+    lift: 2.6 * (1 - s),
+    rot: facing * (2 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function semaphorePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.semaphore));
-    if (u < 0.1) {
-      const s = smoothstep(u / 0.1);
-      return { x: fromX, lift: s * 0.06, rot: s * 2.2 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.1) / 0.68;
-      const code = Math.sin(s * Math.PI * 6.5) + 0.35 * Math.sin(s * Math.PI * 11);
-      return {
-        x: fromX + facing * code * 0.01,
-        lift: 0.06 + Math.abs(code) * 0.045,
-        rot: facing * (2.2 + code * 5.4),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  const u = Math.max(0, Math.min(1, t / DUR.semaphore));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.7, rot: s * 9 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const code = Math.sin(t * 8.6) + 0.3 * Math.sin(t * 13.4);
     return {
-      x: fromX,
-      lift: 0.06 * (1 - s),
-      rot: facing * (1.2 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * code * 0.12,
+      lift: 2.7 + Math.abs(code) * 1.2,
+      rot: facing * (9 + code * 7.5),
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = (u - 0.8) / 0.2;
+  return {
+    x: fromX,
+    lift: 2.7 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function elytraPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.elytra));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * -0.04, rot: s * 1.8 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.5) {
-      const s = (u - 0.16) / 0.34;
-      return {
-        x: fromX + facing * 0.006 * s,
-        lift: -0.04 + s * 0.02,
-        rot: facing * (1.8 + s * 1.2),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    if (u < 0.84) {
-      const s = (u - 0.5) / 0.34;
-      const soft = Math.sin(s * Math.PI * 2.2);
-      return {
-        x: fromX + facing * (0.006 + soft * 0.008),
-        lift: -0.02 + soft * 0.055,
-        rot: facing * (3.0 + soft * 3.2),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
+  const u = Math.max(0, Math.min(1, t / DUR.elytra));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * -1.25, rot: s * 6.5 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.45) {
+    const s = (u - 0.16) / 0.29;
     return {
-      x: fromX,
-      lift: -0.015 * (1 - s),
-      rot: facing * (1.3 * (1 - s)),
+      x: fromX + facing * 0.18 * s,
+      lift: -1.25 + s * 0.7,
+      rot: facing * (6.5 - s * 3),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.82) {
+    const soft = Math.sin(t * 3.8);
+    return {
+      x: fromX + facing * 0.18,
+      lift: -0.55 + soft * 0.95,
+      rot: facing * (3.5 + soft * 4.2),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return {
+    x: fromX + facing * 0.18 * (1 - s),
+    lift: -0.45 * (1 - s),
+    rot: facing * (2 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function photocytePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.photocyte));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.3, rot: s * 10 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const cell = Math.sin(t * 12.4) + 0.35 * Math.sin(t * 19.1);
+    return {
+      x: fromX + facing * cell * 0.14,
+      lift: 3.3 + Math.abs(cell) * 1.45,
+      rot: facing * (10 + cell * 9),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return {
+    x: fromX,
+    lift: 3.3 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "play" as TrickAnim,
+  };
+}
+
+export function sternitePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.sternite));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.55, rot: s * -8.5 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.45) {
+    const s = (u - 0.14) / 0.31;
+    return {
+      x: fromX - facing * 0.22 * s,
+      lift: 2.55 + s * 2.4,
+      rot: facing * (-8.5 + s * 13),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.82) {
+    const flex = Math.sin(t * 5.8);
+    return {
+      x: fromX - facing * 0.22,
+      lift: 4.9 + Math.abs(flex) * 0.9,
+      rot: facing * (4.5 + flex * 5),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = (u - 0.82) / 0.18;
+  return {
+    x: fromX - facing * 0.22 * (1 - s),
+    lift: 4.9 * (1 - s),
+    rot: facing * (3.5 * (1 - s)),
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: FireflyTrick, dt: number, flags: TrickFlags): FireflyTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "lantern" && trick.kind !== "jstroke" && trick.kind !== "semaphore" && trick.kind !== "elytra") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "lantern" &&
+    trick.kind !== "jstroke" &&
+    trick.kind !== "semaphore" &&
+    trick.kind !== "elytra" &&
+    trick.kind !== "photocyte" &&
+    trick.kind !== "sternite"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: FireflyTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -434,26 +539,39 @@ export function stepTrick(trick: FireflyTrick, dt: number, flags: TrickFlags): F
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const from = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "lantern") {
-    const pose = lanternPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = lanternPose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "jstroke") {
-    const pose = jstrokePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = jstrokePose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "semaphore") {
-    const pose = semaphorePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = semaphorePose(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "elytra") {
+    const pose = elytraPose(next.t, from, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "photocyte") {
+    const pose = photocytePose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = elytraPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = sternitePose(next.t, from, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;

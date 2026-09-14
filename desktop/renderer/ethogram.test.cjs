@@ -197,6 +197,19 @@ test("luna ethogram is Ghost ultra (actias + softs + freeze, not still/drift/ref
   assert.equal(names.includes("refuse"), false);
 });
 
+
+test("firefly ethogram is Spark ultra (photinus + softs + freeze, not flash/lift/still)", () => {
+  const names = E.actsFor("firefly").map((a) => a.name);
+  assert.ok(names.includes("photinus"));
+  assert.ok(names.includes("photocyte_soft"));
+  assert.ok(names.includes("sternite_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("flash"), false);
+  assert.equal(names.includes("lift"), false);
+  assert.equal(names.includes("still"), false);
+});
+
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
@@ -237,7 +250,7 @@ test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   }
   assert.ok(E.actsFor("honeybee").some((a) => a.name === "hive"));
   assert.ok(E.actsFor("monarch").some((a) => a.name === "danaus"));
-  assert.ok(E.actsFor("firefly").some((a) => a.name === "flash"));
+  assert.ok(E.actsFor("firefly").some((a) => a.name === "photinus"));
   assert.ok(E.actsFor("luna").some((a) => a.name === "actias"));
   assert.ok(E.actsFor("cicada").some((a) => a.name === "emerge"));
 });
