@@ -138,7 +138,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "volvox": (_a("coenobium", "sit_hold", 2.4, 4, "sit"), _a("colony_soft", "walk", 1.2, 2, "play"), _a("inversion_soft", "play", 1.2, 2, "play"), _a("phialopore_soft", "sit", 1.2, 2, "sit"), _a("somatic_soft", "play", 1.2, 2, "play"), _a("daughter_soft", "sit", 1.2, 2, "sit"), _a("gonidia_soft", "walk", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "diatom": (_a("navicula", "sit_hold", 2.4, 4, "sit"), _a("frustule_soft", "walk", 1.2, 2, "play"), _a("raphe_soft", "play", 1.2, 2, "play"), _a("girdle_soft", "sit", 1.2, 2, "sit"), _a("oilstore_soft", "play", 1.2, 2, "play"), _a("pennate_soft", "sit", 1.2, 2, "sit"), _a("epitheca_soft", "walk", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
 
-    "kelp": (_a("sway", "lean", 1.8, 5), _a("holdfast", "sit_hold", 2.6, 3, "sit"), _a("still", "freeze", 2.4, 2)),
+    "kelp": (_a("meristem", "sit_hold", 2.4, 4, "sit"), _a("holdfast_soft", "walk", 1.2, 2, "play"), _a("haptera_soft", "play", 1.2, 2, "play"), _a("blade_soft", "sit", 1.2, 2, "sit"), _a("pneumatocyst_soft", "play", 1.2, 2, "play"), _a("sorus_soft", "sit", 1.2, 2, "sit"), _a("sporophyll_soft", "walk", 1.2, 2, "play"), _a("freeze", "freeze", 1.4, 2)),
     "chlamydomonas": (_a("spin", "pulse", 1.0, 5), _a("oar", "dart", 0.8, 3), _a("still", "freeze", 1.4, 2)),
     "stentor": (_a("trumpet", "open", 1.6, 5, "sit"), _a("contract", "sit_hold", 1.8, 3, "sit"), _a("still", "freeze", 1.8, 2)),
     "coli": (_a("tumble", "dart", 0.7, 5), _a("run", "wiggle", 0.9, 3), _a("still", "freeze", 1.2, 2)),

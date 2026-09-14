@@ -761,6 +761,10 @@ assert.ok(E.actsFor("pond_snail").some((a) => a.name === "freeze"));
   assert.ok(E.actsFor("diatom").some((a) => a.name === "pennate_soft"));
   assert.ok(E.actsFor("diatom").some((a) => a.name === "epitheca_soft"));
   assert.ok(E.actsFor("diatom").some((a) => a.name === "freeze"));
+  assert.ok(E.actsFor("kelp").some((a) => a.name === "meristem"));
+  assert.ok(E.actsFor("kelp").some((a) => a.name === "sorus_soft"));
+  assert.ok(E.actsFor("kelp").some((a) => a.name === "sporophyll_soft"));
+  assert.ok(E.actsFor("kelp").some((a) => a.name === "freeze"));
 
 
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wake"), false);
