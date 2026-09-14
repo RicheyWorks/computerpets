@@ -163,6 +163,13 @@ def test_only_scratching_mammals_scratch():
     assert "lean" not in [a["name"] for a in acts_for("morel")]
     assert "still_hold" not in [a["name"] for a in acts_for("morel")]
     assert "still" not in [a["name"] for a in acts_for("morel")]
+    assert "cantharellus" in [a["name"] for a in acts_for("chanterelle")]
+    assert "vase_soft" in [a["name"] for a in acts_for("chanterelle")]
+    assert "plica_soft" in [a["name"] for a in acts_for("chanterelle")]
+    assert "freeze" in [a["name"] for a in acts_for("chanterelle")]
+    assert "lean" not in [a["name"] for a in acts_for("chanterelle")]
+    assert "flush" not in [a["name"] for a in acts_for("chanterelle")]
+    assert "still" not in [a["name"] for a in acts_for("chanterelle")]
     for key in FAR_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
