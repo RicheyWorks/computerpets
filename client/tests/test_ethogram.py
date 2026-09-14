@@ -330,7 +330,10 @@ def test_only_scratching_mammals_scratch():
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
         assert "tongue" not in names, key
-    assert "cilia" in [a["name"] for a in acts_for("paramecium")]
+    assert "ciliophora" in [a["name"] for a in acts_for("paramecium")]
+    assert "trichocyst_soft" in [a["name"] for a in acts_for("paramecium")]
+    assert "avoiding_soft" in [a["name"] for a in acts_for("paramecium")]
+    assert "freeze" in [a["name"] for a in acts_for("paramecium")]
     assert "reach" in [a["name"] for a in acts_for("amoeba")]
     assert "spot" in [a["name"] for a in acts_for("euglena")]
     assert "roll" in [a["name"] for a in acts_for("volvox")]
