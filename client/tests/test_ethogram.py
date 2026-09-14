@@ -668,7 +668,11 @@ def test_only_scratching_mammals_scratch():
     assert "booklung_soft" in [a["name"] for a in acts_for("scorpion")]
     assert "pedipalp_soft" in [a["name"] for a in acts_for("scorpion")]
     assert "freeze" in [a["name"] for a in acts_for("scorpion")]
-    assert "whip" in [a["name"] for a in acts_for("vinegaroon")]
+    assert "mastigoproctus" in [a["name"] for a in acts_for("vinegaroon")]
+    assert "pygidial_soft" in [a["name"] for a in acts_for("vinegaroon")]
+    assert "antenniform_soft" in [a["name"] for a in acts_for("vinegaroon")]
+    assert "caudalwhip_soft" in [a["name"] for a in acts_for("vinegaroon")]
+    assert "freeze" in [a["name"] for a in acts_for("vinegaroon")]
     assert "clasp" in [a["name"] for a in acts_for("tick")]
     assert "run" in [a["name"] for a in acts_for("solifuge")]
     for key in WOOD_KEYS:
