@@ -3235,7 +3235,7 @@ test("notes: Armor idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.tricksFor("silver"), OverlayAmericanEel);
   assert.equal(OverlayGround.wantsThankYou("american_eel"), true);
   assert.equal(OverlayGround.wantsThankYou("silver"), true);
-  assert.deepEqual([...AmericanEel.TRICKS], ["glasscrawl", "mucuscoat", "nightmigrate", "gravelhide", "rostrata"]);
+  assert.deepEqual([...AmericanEel.TRICKS], ["glasscrawl", "mucuscoat", "nightmigrate", "gravelhide", "sargasso", "yellowphase", "rostrata"]);
   assert.deepEqual([...AmericanEel.HAPPY], ["denssilver", "inksilver", "densglass"]);
   assert.equal(AmericanEel.TRICKS.includes("conglobate"), false);
   assert.equal(AmericanEel.TRICKS.includes("vulgare"), false);
