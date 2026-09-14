@@ -796,7 +796,14 @@ assert.ok(names("toad").includes("freeze"));
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
-  assert.ok(names("bass").includes("lunge"));
+  assert.ok(names("bass").includes("salmoides"));
+  assert.ok(names("bass").includes("coverstrike_soft"));
+  assert.ok(names("bass").includes("maxilla_soft"));
+  assert.ok(names("bass").includes("weedline_soft"));
+  assert.ok(names("bass").includes("freeze"));
+  assert.equal(names("bass").includes("lunge"), false);
+  assert.equal(names("bass").includes("sit"), false);
+  assert.equal(names("bass").includes("gape"), false);
   assert.ok(names("lamprey").includes("disk"));
   for (const key of LOG) {
     const acts = names(key);

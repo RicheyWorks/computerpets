@@ -762,7 +762,14 @@ def test_only_scratching_mammals_scratch():
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
         assert "tongue" not in names, key
-    assert "lunge" in [a["name"] for a in acts_for("bass")]
+    assert "salmoides" in [a["name"] for a in acts_for("bass")]
+    assert "coverstrike_soft" in [a["name"] for a in acts_for("bass")]
+    assert "maxilla_soft" in [a["name"] for a in acts_for("bass")]
+    assert "weedline_soft" in [a["name"] for a in acts_for("bass")]
+    assert "freeze" in [a["name"] for a in acts_for("bass")]
+    assert "lunge" not in [a["name"] for a in acts_for("bass")]
+    assert "sit" not in [a["name"] for a in acts_for("bass")]
+    assert "gape" not in [a["name"] for a in acts_for("bass")]
     assert "dart" in [a["name"] for a in acts_for("brook_trout")]
     assert "whisk" in [a["name"] for a in acts_for("catfish")]
     assert "flare" in [a["name"] for a in acts_for("bluegill")]
