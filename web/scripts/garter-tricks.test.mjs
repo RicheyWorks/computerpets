@@ -36,6 +36,7 @@ const Toucan = await import(pathToFileURL(join(root, "src/lib/pets/toucan-tricks
 const Iguana = await import(pathToFileURL(join(root, "src/lib/pets/iguana-tricks.ts")).href);
 const Overlay = createRequire(import.meta.url)(join(root, "../desktop/renderer/garter-tricks.js"));
 const OverlayHognose = createRequire(import.meta.url)(join(root, "../desktop/renderer/hognose-tricks.js"));
+const OverlayBoa = createRequire(import.meta.url)(join(root, "../desktop/renderer/boa-tricks.js"));
 const OverlayGreenTreePython = createRequire(import.meta.url)(join(root, "../desktop/renderer/green-tree-python-tricks.js"));
 const OverlayBallPython = createRequire(import.meta.url)(join(root, "../desktop/renderer/ball-python-tricks.js"));
 const OverlayCornSnake = createRequire(import.meta.url)(join(root, "../desktop/renderer/corn-snake-tricks.js"));
@@ -299,6 +300,7 @@ test("ground registry keeps prior guests gated; Sash selectable; prior guests st
   globalThis.PetKingsnakeTricks = OverlayKingsnake;
   globalThis.PetGreenTreePythonTricks = OverlayGreenTreePython;
   globalThis.PetHognoseTricks = OverlayHognose;
+  globalThis.PetBoaTricks = OverlayBoa;
   globalThis.PetGarterTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("red_panda"), OverlayRui);
   assert.equal(OverlayGround.tricksFor("rui"), OverlayRui);
@@ -415,9 +417,11 @@ test("ultra-polish: Sash seam/rounds/ribbon/creek lifts are Rui-visible (not mic
   assert.ok(T.nextTrickWait(true, 0, "seam") > T.nextTrickWait(true, 0, "rounds"));
 });
 
-test("notes: Sash idle-life ultra done; next house-order ultra guest is Lula / boa (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Sash idle-life ultra done; Lula / boa ultra next-or-done; following house-order ultra guest is Coral / milk_snake (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "garter");
   assert.equal(T.wantsThankYou("sash"), true);
+  globalThis.PetGarterTricks = Overlay;
+  globalThis.PetBoaTricks = OverlayBoa;
   assert.equal(OverlayGround.tricksFor("hognose"), OverlayHognose);
   assert.equal(OverlayGround.tricksFor("bluff"), OverlayHognose);
   assert.equal(OverlayGround.tricksFor("garter"), Overlay);
@@ -440,7 +444,9 @@ test("notes: Sash idle-life ultra done; next house-order ultra guest is Lula / b
   assert.equal(OverlayGround.tricksFor("nori"), OverlayBallPython);
   assert.equal(OverlayGround.wantsThankYou("ball_python"), true);
   assert.equal(OverlayGround.wantsThankYou("nori"), true);
-  assert.equal(OverlayGround.tricksFor("boa") == null, true);
-  assert.equal(OverlayGround.wantsThankYou("boa"), false);
-  assert.equal(OverlayGround.tricksFor("lula") == null, true);
+  assert.equal(OverlayGround.tricksFor("boa") != null, true);
+  assert.equal(OverlayGround.wantsThankYou("boa"), true);
+  assert.equal(OverlayGround.tricksFor("lula") != null, true);
+  assert.equal(OverlayGround.tricksFor("milk_snake") == null, true);
+  assert.equal(OverlayGround.tricksFor("coral") == null, true);
 });
