@@ -127,7 +127,7 @@ test("Comb tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -211,7 +211,7 @@ test("Comb tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Overlay.HAPPY], ["honey", "mead", "propolis"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -243,7 +243,7 @@ test("Comb tricks start only on idle ground", () => {
   assert.equal(Parrot.TRICKS.includes("fan"), true);
 });
 
-test("figure/corbicula/hex/proboscis/hive are house-honeybee-true, not copies of prior guests", () => {
+test("figure/corbicula/hex/proboscis/hive/ocelli/nasonov are house-honeybee-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("hive", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -274,6 +274,14 @@ test("figure/corbicula/hex/proboscis/hive are house-honeybee-true, not copies of
   assert.equal(taproot.anim, "talk");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.05 || Math.abs(taprootMid.rot) > 1 || Math.abs(taprootMid.x - 80) > 0.05);
+  const ocelli = T.beginTrick("ocelli", 80, 1);
+  assert.equal(ocelli.anim, "play");
+  const ocelliMid = T.stepTrick(ocelli, 0.5, ground);
+  assert.ok(Math.abs(ocelliMid.lift) > 0.05 || Math.abs(ocelliMid.rot) > 1 || Math.abs(ocelliMid.x - 80) > 0.05);
+  const nasonov = T.beginTrick("nasonov", 80, 1);
+  assert.equal(nasonov.anim, "talk");
+  const nasonovMid = T.stepTrick(nasonov, 0.5, ground);
+  assert.ok(Math.abs(nasonovMid.lift) > 0.05 || Math.abs(nasonovMid.rot) > 1 || Math.abs(nasonovMid.x - 80) > 0.05);
   const sinusDone = T.stepTrick(sinus, 1.7, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
@@ -284,6 +292,8 @@ test("figure/corbicula/hex/proboscis/hive are house-honeybee-true, not copies of
     assert.equal(mod.TRICKS.includes("hex"), false);
     assert.equal(mod.TRICKS.includes("proboscis"), false);
     assert.equal(mod.TRICKS.includes("hive"), false);
+    assert.equal(mod.TRICKS.includes("ocelli"), false);
+    assert.equal(mod.TRICKS.includes("nasonov"), false);
   }
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("corolla"), false);
@@ -399,7 +409,7 @@ test("Comb feed-happy is its own sit: honey/mead/propolis, and two feeds are not
   const cupuleH = T.beginHappy("honey", 80, 1);
   assert.equal(cupuleH.anim, "play");
   const cupuleMid = T.stepHappy(cupuleH, 0.4, { cmd: "idle" });
-  assert.ok(cupuleMid.lift !== 0 || Math.abs(cupuleMid.rot) > 0.5);
+  assert.ok(cupuleMid.lift > 1.5 || Math.abs(cupuleMid.rot) > 4, "Rui-visible honey thank-you");
   assert.notEqual(cupuleMid.phase, "done");
   const tanninH = T.beginHappy("mead", 80, 1);
   assert.equal(tanninH.anim, "sit");
@@ -434,7 +444,7 @@ test("Comb feed-happy is its own sit: honey/mead/propolis, and two feeds are not
   assert.equal(T.wantsThankYou("coin"), false);
   assert.equal(T.wantsThankYou("turtle"), false);
   assert.equal(T.wantsThankYou("axolotl"), false);
-  const thanks = T.startThankYou("honeybee", "glitter", 80, 1, { cmd: "idle", card: true, windowPlay: true });
+  const thanks = T.startThankYou("honeybee", "honey", 80, 1, { cmd: "idle", card: true, windowPlay: true });
   assert.ok(thanks);
   assert.notEqual(thanks.kind, "ceil");
   assert.ok(thanks.happy.lift === 0);
@@ -473,7 +483,7 @@ test("ground registry keeps prior guests gated; Comb selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(T.wantsThankYou("honeybee"), true);
   assert.equal(T.wantsThankYou("comb"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -640,7 +650,7 @@ globalThis.PetLunaTricks = OverlayLuna;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -696,7 +706,7 @@ globalThis.PetLunaTricks = OverlayLuna;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; next house-order guest still lacking tricks is Spark / firefly", () => {
+test("notes: Comb ultra-polish done; next house-order ultra is Milk / monarch", () => {
   assert.equal(T.TRICK_KEY, "honeybee");
   assert.equal(T.wantsThankYou("comb"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -788,8 +798,8 @@ test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; nex
   assert.equal(OverlayGround.wantsThankYou("snap"), true); // Snap still gated via VenusFlytrap
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...T.HAPPY], ["honey", "mead", "propolis"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
@@ -833,8 +843,8 @@ test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; nex
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("comb"), true);
-  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...T.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...Overlay.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(OverlayGround.tricksFor("sundew"), OverlaySundew);
   assert.equal(OverlayGround.wantsThankYou("sundew"), true);
   assert.equal(OverlayGround.tricksFor("dew"), OverlaySundew);
@@ -853,9 +863,9 @@ test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; nex
   assert.equal(OverlayGround.wantsThankYou("ghost"), true);
   assert.deepEqual([...Luna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
   assert.deepEqual([...OverlayLuna.TRICKS], ["plumose", "lunule", "silk", "stream", "actias"]);
-  assert.equal(OverlayGround.tricksFor("firefly"), null);
+  assert.ok(OverlayGround.tricksFor("firefly") == null);
   assert.equal(OverlayGround.wantsThankYou("firefly"), false);
-  assert.equal(OverlayGround.tricksFor("spark"), null);
+  assert.ok(OverlayGround.tricksFor("spark") == null);
   assert.equal(OverlayGround.wantsThankYou("spark"), false);
   
   
@@ -864,6 +874,10 @@ test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; nex
   assert.equal(T.TRICKS.includes("brine"), false);
   assert.equal(T.TRICKS.includes("operculum"), false);
   assert.equal(T.TRICKS.includes("urn"), false);
+  assert.equal(T.TRICKS.includes("ala"), false);
+  assert.equal(T.TRICKS.includes("baffle"), false);
+  assert.equal(T.TRICKS.includes("lamina"), false);
+  assert.equal(T.TRICKS.includes("circinate"), false);
   assert.equal(T.HAPPY.includes("midge"), false);
   assert.equal(T.HAPPY.includes("rain"), false);
   assert.equal(T.HAPPY.includes("maroon"), false);
@@ -876,6 +890,12 @@ test("notes: Comb idle-life done; Milk idle-life done; Ghost idle-life done; nex
   assert.equal(T.TRICKS.includes("stew"), false);
   assert.equal(T.TRICKS.includes("unseal"), false);
   assert.equal(T.TRICKS.includes("poise"), false);
+  assert.equal(T.TRICKS.includes("cage"), false);
+  assert.equal(T.TRICKS.includes("scape"), false);
+  assert.equal(T.TRICKS.includes("lamina"), false);
+  assert.equal(T.TRICKS.includes("circinate"), false);
+  assert.equal(T.TRICKS.includes("ocelli"), true);
+  assert.equal(T.TRICKS.includes("nasonov"), true);
   assert.equal(T.HAPPY.includes("gnat"), false);
   assert.equal(T.HAPPY.includes("peat"), false);
   assert.equal(T.HAPPY.includes("crimson"), false);
