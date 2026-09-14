@@ -417,7 +417,7 @@ test("ultra-polish: Sash seam/rounds/ribbon/creek lifts are Rui-visible (not mic
   assert.ok(T.nextTrickWait(true, 0, "seam") > T.nextTrickWait(true, 0, "rounds"));
 });
 
-test("notes: Sash idle-life ultra done; Lula / boa ultra next-or-done; following house-order ultra guest is Cup / octopus (Atlas / carpet_python ultra done; Blush / rosy_boa ultra done; Coral / milk_snake ultra done) (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
+test("notes: Sash idle-life ultra done; Lula / boa ultra next-or-done; following house-order ultra guest is Sepia / cuttlefish (Cup / octopus ultra done; Atlas / carpet_python ultra done; Blush / rosy_boa ultra done; Coral / milk_snake ultra done) (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin + Rue + Wick + Burr + Floss + Bloom + Sol + Vesper + Nori + Saffron + Bandit + Jade + Bluff already ultra; Echo/budgie + Peck/penguin + Quill/parrot + Keel/toucan + Ember skip bird)", () => {
   assert.equal(T.TRICK_KEY, "garter");
   assert.equal(T.wantsThankYou("sash"), true);
   globalThis.PetGarterTricks = Overlay;
