@@ -688,7 +688,7 @@ globalThis.PetLunaTricks = OverlayLuna;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Snap ultra-polish done; Well + Dew + Comb + Milk + Ghost ultra also done; Spark ultra also done; Dart ultra also done; next house-order ultra is Wax / honeycomb", () => {
+test("notes: Snap ultra-polish done; Well + Dew + Comb + Milk + Ghost ultra also done; Spark ultra also done; Dart ultra also done; next house-order ultra is Frill / oyster", () => {
   assert.equal(T.TRICK_KEY, "venus_flytrap");
   assert.equal(T.wantsThankYou("snap"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
