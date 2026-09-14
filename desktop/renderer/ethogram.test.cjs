@@ -865,6 +865,11 @@ assert.ok(E.actsFor("pond_snail").some((a) => a.name === "freeze"));
   assert.ok(E.actsFor("opossum").some((a) => a.name === "pouchcarry_soft"));
   assert.ok(E.actsFor("opossum").some((a) => a.name === "prehensile_soft"));
   assert.ok(E.actsFor("opossum").some((a) => a.name === "freeze"));
+  assert.ok(E.actsFor("beaver").some((a) => a.name === "castor"));
+  assert.ok(E.actsFor("beaver").some((a) => a.name === "woodfell_soft"));
+  assert.ok(E.actsFor("beaver").some((a) => a.name === "aspen_soft"));
+  assert.ok(E.actsFor("beaver").some((a) => a.name === "divehush_soft"));
+  assert.ok(E.actsFor("beaver").some((a) => a.name === "freeze"));
 
 
   assert.equal(E.actsFor("cyst").some((a) => a.name === "wake"), false);
