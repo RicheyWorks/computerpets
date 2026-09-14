@@ -1,7 +1,6 @@
-/** Moth ground tricks while idle. House orchid — labellum / velamen / column / spike / bark personality (labellum landing on the bark mount — never named pad (Disk owns pad) / corolla (Disk owns corolla) / flutter (Fan owns flutter) / drop (Fan owns drop), velamen aerial-root sip on the mist — never named root (Burr owns root) / rhizome (Disk owns rhizome) / taproot (Mast owns taproot) / siphon (Anchor owns siphon) / crawl (Cling owns crawl), column pose on the stem — never named rachis (Vein owns rachis) / bole (Mast owns bole) / hinge (Door owns hinge), spike slow bloom on the lamp — never named bloom as axolotl-guest collision / open (Disk window owns open) / unfurl (Vein window / ethogram owns unfurl) / corolla (Disk owns corolla) / flare (Coin owns flare) / nod (orchid ethogram owns nod), bark-mount desk life under the lamp; not Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole, Fan biloba/notch/flutter/drop/amber, Vein frond/rachis/fiddle/pinna/saucer, Felt tuft/bead/spore/cushion/thatch, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop orchid-tricks.js. Not a Rui, cat, dog, rabbit, hamster/Clip, guinea pig, turtle/Ink, goldfish/Coin, budgie, fox, penguin, parrot, ferret, hedgehog/Burr, chinchilla, axolotl/Bloom, toucan, iguana/Sol, dragon/Vesper, phoenix/Ember, ball-python/Nori, corn-snake/Saffron, kingsnake/Bandit, green-tree-python/Jade, hognose/Bluff, garter/Sash, boa/Lula, milk-snake/Coral, rosy-boa/Blush, carpet-python/Atlas, octopus/Cup, cuttlefish/Sepia, nautilus/Chamber, moon-jelly/Pulse, sea-star/Cling, hermit-crab/Tenant, horseshoe-crab/Ledger, seahorse/Anchor, manta/Kite, moray/Door, sheet-moss/Felt, maidenhair/Vein, ginkgo/Fan, oak/Mast, water-lily/Disk, or *Dragon electrical (Relay/Fuse/Ground) move clone. Window-play MOUNT unchanged — never names mount. Special bloom ethogram / unfurl/lean/nod ethogram unchanged — never names bloom/unfurl/lean/nod as tricks. Sash owns moss; Felt owns tuft/bead/spore/cushion/thatch and humid/velvet/meadow; Vein owns frond/rachis/fiddle/pinna/saucer and mist/filigree/shade; Fan owns biloba/notch/flutter/drop/amber and ochre/gilt/linger; Mast owns acorn/sinus/gall/taproot/bole and cupule/tannin/grove; Disk owns pad/corolla/rhizome/calyx/sheen/peltate/hydropote and silt/nectar/dew; Sol owns swell as thank-you, press/nod as tricks; Ember owns lift; Cling owns crawl/damp/press/tide; Still/Felt window owns lean/creep; Burr owns root; Coin owns flare; Phoenix owns lift; Fuse owns pulse as thank-you; Chamber owns quiet as thank-you; Ledger owns page as thank-you and fossil as trick; Jade owns treaty as thank-you and sway as trick; Parrot owns fan; Kite owns lobe; Bloom owns gill. Epiphyte moth-orchid desk life only — not a water-lily Disk copy, oak Mast copy, ginkgo Fan copy, fern Vein copy, bryophyte Felt copy, jelly Pulse copy, or goldfish Coin copy. No cry inventing — thank-yous are silent desk motion only. */
-
+/** Moth ground tricks while idle — ultra-polish pass. House orchid — labellum / velamen / column / spike / bark / keiki / pollinia personality (labellum landing on the bark mount — never named pad (Disk owns pad) / corolla (Disk owns corolla) / flutter (Fan owns flutter) / drop (Fan owns drop), velamen aerial-root sip on the mist — never named root (Burr owns root) / rhizome (Disk owns rhizome) / taproot (Mast owns taproot) / siphon (Anchor owns siphon) / crawl (Cling owns crawl), column pose on the stem — never named rachis (Vein owns rachis) / bole (Mast owns bole) / hinge (Door owns hinge), spike slow bloom on the lamp — never named bloom as axolotl-guest collision / open (Disk window owns open) / unfurl (Vein window owns unfurl) / corolla (Disk owns corolla) / flare (Coin owns flare) / nod as ethogram-old, bark-mount desk life under the lamp, keiki Phalaenopsis baby-plantlet sprout on the spike (species-true Phalaenopsis keiki — never named sprout (Bloom owns sprout) / seedling / pup / offset as copy), pollinia orchid pollen-packet dab (species-true Orchidaceae pollinia — never named pollen as the thank-you / nectary (Sip owns nectary) / flare (Coin owns flare) / dust); not Disk pad/corolla/rhizome/calyx/sheen/peltate/hydropote, Mast acorn/sinus/gall/taproot/bole/catkin/tyloses, Fan biloba/notch/flutter/drop/amber/dichotomy/petiole, Vein frond/rachis/fiddle/pinna/saucer/sori/stipe, Felt tuft/bead/spore/cushion/thatch/rhizoid/seta, Door hinge/pharynx/knot/lurk/jamb, Kite wing/lobe/gyre/vault/span, Anchor coil/buoy/siphon/swivel/pouch, Ledger carapace/bookgill/telson/furrow/fossil, Tenant swap/antenna/scuttle/withdraw/vacancy, Cling podia/righting/crawl/evert/penta, Pulse bell/oral/lucent/trail/medusa, Coin drift/gulp/flare/glint/dart, Ink soak/tuck, Clip nest/seed, Bloom gill, parrot fan/flash, or snake guests Sash seam/moss/lap copies). Keiki is the iconic Phalaenopsis plantlet on the spent spike (not Bloom sprout). Pollinia is the orchid pollen mass (not Moth thank-you pollen, not Sip nectary). Window-play MOUNT unchanged — never names mount as a trick. Ethogram keeps bark sit_hold; adds labellum/velamen/column/spike/keiki/pollinia softs + freeze (replaces thin unfurl/lean/nod). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via orchid.wav. Thank-yous pollen / perfume / pearl. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `orchid-tricks.js`. True house-moth-orchid desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/ball_python/Nori/corn_snake/Saffron/kingsnake/Bandit/green_tree_python/Jade/hognose/Bluff/garter/Sash/boa/Lula/milk_snake/Coral/rosy_boa/Blush/carpet_python/Atlas/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon_jelly/Pulse/sea_star/Ochre/hermit_crab/Tenant/horseshoe_crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/sheet-moss/Felt/maidenhair/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids open/gold/lean/nod/still/unfurl/fan/drop/dichotomy/petiole/biloba/flutter/frond/rachis/fiddle/pinna/saucer/sori/stipe/tuft/bead/spore/cushion/thatch/rhizoid/seta/lobe/sway/root/dig/fossil/cork/barrel/vessel/pad/corolla/rhizome/calyx/sheen/peltate/hydropote/mount/drift/float/bloom/cup/siphon/soak/sprout/nectary name collisions. Bird ultra (Soot→Ember) + Miso→Disk done; skip Rui + birds. Next guest ultra is Arm / saguaro. No cry inventing beyond house orchid.wav prefer. Never retouch Rui sprites. */
 export const TRICK_KEY = "orchid";
-export const TRICKS = ["labellum", "velamen", "column", "spike", "bark"] as const;
+export const TRICKS = ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"] as const;
 export const HAPPY = ["pollen", "perfume", "pearl"] as const;
 export type OrchidTrickKind = (typeof TRICKS)[number];
 export type OrchidHappyKind = (typeof HAPPY)[number];
@@ -45,10 +44,25 @@ export type OrchidHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { pollen: 1.26, perfume: 1.2, pearl: 1.3 } as const;
-export const BARK_HOLD = 12.8;
-export const RELEASE_S = 0.8;
-export const DUR = { bark: BARK_HOLD + RELEASE_S, labellum: 1.52, velamen: 1.4, column: 1.36, spike: 1.62 } as const;
+export const HAPPY_DUR: Record<OrchidHappyKind, number> = {
+  pollen: 1.28,
+  perfume: 1.16,
+  pearl: 1.22,
+};
+
+/** Bark hold — Moth parks epiphyte-mount calm on the blotter. Not window-play MOUNT. */
+export const BARK_HOLD = 10.8;
+export const RELEASE_S = 0.62;
+
+export const DUR: Record<OrchidTrickKind, number> = {
+  bark: BARK_HOLD + RELEASE_S,
+  labellum: 1.58,
+  velamen: 1.48,
+  column: 1.56,
+  spike: 1.64,
+  keiki: 1.68,
+  pollinia: 1.72,
+};
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -78,38 +92,56 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: OrchidTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "bark") return 52 + roll * 28;
-  if (kind === "labellum") return 15 + roll * 10;
-  if (kind === "spike") return 17 + roll * 11;
-  return justFinished ? 11 + roll * 8 : 5.6 + roll * 6;
+  if (kind === "bark") return 38 + roll * 24;
+  if (kind === "keiki" || kind === "pollinia" || kind === "spike") return 12 + roll * 9;
+  if (kind === "labellum" || kind === "velamen" || kind === "column") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
+
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: OrchidTrickKind | string | null) {
   if (musicOn) return "bark" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "bark") {
-    if (roll < 0.26) return "labellum" as const;
-    if (roll < 0.48) return "spike" as const;
-    if (roll < 0.72) return "velamen" as const;
-    return "column" as const;
+    if (roll < 0.18) return "labellum" as const;
+    if (roll < 0.34) return "velamen" as const;
+    if (roll < 0.5) return "column" as const;
+    if (roll < 0.66) return "spike" as const;
+    if (roll < 0.83) return "keiki" as const;
+    return "pollinia" as const;
   }
   if (lastKind === "labellum") {
-    if (roll < 0.28) return "bark" as const;
-    if (roll < 0.5) return "spike" as const;
-    if (roll < 0.72) return "velamen" as const;
-    return "column" as const;
+    if (roll < 0.2) return "bark" as const;
+    if (roll < 0.36) return "velamen" as const;
+    if (roll < 0.52) return "column" as const;
+    if (roll < 0.68) return "spike" as const;
+    if (roll < 0.84) return "keiki" as const;
+    return "pollinia" as const;
   }
   if (lastKind === "spike") {
-    if (roll < 0.22) return "bark" as const;
-    if (roll < 0.44) return "labellum" as const;
-    if (roll < 0.66) return "velamen" as const;
-    return "column" as const;
+    if (roll < 0.18) return "bark" as const;
+    if (roll < 0.34) return "labellum" as const;
+    if (roll < 0.5) return "velamen" as const;
+    if (roll < 0.66) return "column" as const;
+    if (roll < 0.83) return "keiki" as const;
+    return "pollinia" as const;
   }
-  if (roll < 0.2) return "bark" as const;
-  if (roll < 0.4) return "labellum" as const;
-  if (roll < 0.6) return "spike" as const;
-  if (roll < 0.8) return "velamen" as const;
-  return "column" as const;
+  if (lastKind === "keiki" || lastKind === "pollinia") {
+    if (roll < 0.16) return "bark" as const;
+    if (roll < 0.32) return "labellum" as const;
+    if (roll < 0.48) return "velamen" as const;
+    if (roll < 0.64) return "column" as const;
+    if (roll < 0.8) return "spike" as const;
+    return lastKind === "keiki" ? ("pollinia" as const) : ("keiki" as const);
+  }
+  if (roll < 0.14) return "bark" as const;
+  if (roll < 0.28) return "labellum" as const;
+  if (roll < 0.42) return "velamen" as const;
+  if (roll < 0.56) return "column" as const;
+  if (roll < 0.7) return "spike" as const;
+  if (roll < 0.85) return "keiki" as const;
+  return "pollinia" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -176,49 +208,52 @@ export function beginHappy(kind: OrchidHappyKind | string, x: number, facing: 1 
 }
 
 export function pollenPose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.pollen));
-    if (u < 0.2) {
-      const s = u / 0.2;
-      return { lift: s * 0.035, rot: s * -1.4, dx: 0, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const dust = Math.sin(t * 1.05);
-      return {
-        lift: 0.035 + Math.abs(dust) * 0.022,
-        rot: -1.4 + dust * 1.5,
-        dx: dust * 0.012,
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = (u - 0.78) / 0.22;
-    return { lift: 0.028 * (1 - s), rot: -0.9 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.pollen));
+  if (u < 0.2) {
+    const s = u / 0.2;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-export function perfumePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.perfume));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.18, rot: s * 2.4, dx: 0, anim: "play" as TrickAnim };
-    }
-    if (u < 0.7) {
-      const scent = Math.sin(t * 1.7);
-      return {
-        lift: 0.18 + Math.abs(scent) * 0.05,
-        rot: 2.4 + scent * 2.8,
-        dx: scent * 0.018,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.7) / 0.3;
-    return { lift: 0.12 * (1 - s), rot: 1.4 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
-  }
-export function pearlPose(t: number) {
+  if (u < 0.76) {
+    const dust = Math.sin(t * 1.72);
     return {
-      lift: 0.028 + Math.abs(Math.sin(t * 0.62)) * 0.03,
-      rot: Math.sin(t * 0.78) * 1.6,
-      dx: Math.sin(t * 0.45) * 0.018,
-      anim: "talk" as TrickAnim,
+      lift: 2.8 + Math.abs(dust) * 1.4,
+      rot: 12 + dust * 10,
+      dx: dust * 0.12,
+      anim: "sit" as TrickAnim,
     };
   }
+  const s = (u - 0.76) / 0.24;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function perfumePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.perfume));
+  if (u < 0.18) {
+    const s = u / 0.18;
+    return { lift: s * 3.0, rot: s * -10, dx: 0, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const scent = Math.sin(t * 2.05);
+    return {
+      lift: 3.0 + Math.abs(scent) * 1.5,
+      rot: -10 + scent * 14,
+      dx: scent * 0.14,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function pearlPose(t: number) {
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.72) * 8,
+    dx: Math.sin(t * 0.4) * -0.12,
+    anim: "talk" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: OrchidHappy, dt: number, flags: TrickFlags): OrchidHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -262,7 +297,11 @@ export function beginTrick(kind: OrchidTrickKind, x: number, facing: 1 | -1): Or
             ? "play"
             : kind === "column"
               ? "talk"
-              : "sit";
+              : kind === "keiki"
+                ? "play"
+                : kind === "pollinia"
+                  ? "talk"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "bark" ? "hold" : "go",
@@ -282,145 +321,235 @@ function smoothstep(t: number) {
 }
 
 export function barkPose(t: number) {
-    const breath = Math.sin(t * 0.26) + 0.035 * Math.sin(t * 1.05);
-    return {
-      lift: 0.028 + Math.abs(Math.sin(t * 0.32)) * 0.022,
-      rot: 0.6 + breath * 0.75,
-    };
-  }
+  const breath = Math.sin(t * 0.42) + 0.12 * Math.sin(t * 1.15);
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: 4 + breath * 3.2,
+  };
+}
+
 export function releasePose(t: number) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.028 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.6 * (1 - u) };
-  }
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 4 * (1 - u) };
+}
+
 export function labellumPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.labellum));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.11, rot: s * 4.2 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.55) {
-      const s = (u - 0.16) / 0.39;
-      const land = smoothstep(s);
-      return {
-        x: fromX + facing * land * 0.028,
-        lift: 0.11 * (1 - land * 0.72),
-        rot: facing * (4.2 - land * 7.5),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    if (u < 0.84) {
-      const s = (u - 0.55) / 0.29;
-      const lip = Math.sin(s * Math.PI * 1.8);
-      return {
-        x: fromX + facing * (0.028 + lip * 0.01),
-        lift: 0.03 + Math.abs(lip) * 0.018,
-        rot: facing * (-3.3 + lip * 2.2),
-        anim: "sit" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
+  const u = Math.max(0, Math.min(1, t / DUR.labellum));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 3.2, rot: s * -8 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const land = smoothstep(s);
+    const bob = Math.sin(s * Math.PI * 2.2);
     return {
-      x: fromX + facing * 0.028 * (1 - s),
-      lift: 0.028 * (1 - s),
-      rot: facing * (-2.0 * (1 - s)),
+      x: fromX + facing * land * 2.8,
+      lift: 3.2 - land * 0.8 + Math.abs(bob) * 0.6,
+      rot: facing * (-8 + land * 14),
       anim: "sit" as TrickAnim,
     };
   }
+  if (u < 0.84) {
+    const s = (u - 0.55) / 0.29;
+    const lip = Math.sin(s * Math.PI * 1.8);
+    return {
+      x: fromX + facing * (2.8 + lip * 0.8),
+      lift: 2.4 * (1 - s * 0.35) + Math.abs(lip) * 0.5,
+      rot: facing * (6 + lip * 4),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX + facing * 2.8 * (1 - s),
+    lift: 0.8 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function velamenPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.velamen));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.06, rot: s * -5.5 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.5) {
-      const s = (u - 0.14) / 0.36;
-      const sip = smoothstep(s);
-      return {
-        x: fromX + facing * sip * 0.07,
-        lift: 0.06 - sip * 0.04,
-        rot: facing * (-5.5 + sip * 2.2),
-        anim: "play" as TrickAnim,
-      };
-    }
-    if (u < 0.8) {
-      const s = (u - 0.5) / 0.3;
-      const drink = Math.sin(s * Math.PI * 2.4);
-      return {
-        x: fromX + facing * (0.07 + drink * 0.012),
-        lift: 0.02 + Math.abs(drink) * 0.025,
-        rot: facing * (-3.3 + drink * 2.6),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
+  const u = Math.max(0, Math.min(1, t / DUR.velamen));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 2.4, rot: s * 14 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.5) {
+    const s = (u - 0.14) / 0.36;
+    const sip = smoothstep(s);
+    const press = Math.sin(s * Math.PI * 2);
     return {
-      x: fromX + facing * 0.07 * (1 - s),
-      lift: 0.02 * (1 - s),
-      rot: facing * (-2.0 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * sip * 3.6,
+      lift: 2.4 + Math.abs(press) * 1.4,
+      rot: facing * (14 - sip * 8 + press * 4),
+      anim: "play" as TrickAnim,
     };
   }
+  if (u < 0.8) {
+    const s = (u - 0.5) / 0.3;
+    const drink = Math.sin(s * Math.PI * 2.4);
+    return {
+      x: fromX + facing * (3.6 + drink * 0.6),
+      lift: 3.2 - s * 1.2 + Math.abs(drink) * 0.8,
+      rot: facing * (6 + drink * 5),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + facing * 3.6 * (1 - s),
+    lift: 2.0 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function columnPose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.column));
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * 0.14, rot: s * -2.2 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.72) {
-      const s = (u - 0.18) / 0.54;
-      const stand = Math.sin(s * Math.PI * 1.4);
-      return {
-        x: fromX + facing * stand * 0.01,
-        lift: 0.14 + Math.abs(stand) * 0.02,
-        rot: facing * (-2.2 + stand * 1.6),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.72) / 0.28);
+  const u = Math.max(0, Math.min(1, t / DUR.column));
+  if (u < 0.18) {
+    const s = smoothstep(u / 0.18);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.18) / 0.54;
+    const stand = Math.sin(s * Math.PI * 1.4);
+    const cup = smoothstep(s);
     return {
-      x: fromX,
-      lift: 0.14 * (1 - s),
-      rot: facing * (-1.4 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * stand * 0.8,
+      lift: 2.6 * (1 - cup * 0.35) + Math.abs(stand) * 1.2,
+      rot: facing * (10 - cup * 4 + stand * 3),
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX,
+    lift: 0.8 + Math.abs(Math.sin(s * Math.PI)) * 0.4 * (1 - s) + 1.6 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function spikePose(t: number, fromX: number, facing: 1 | -1) {
-    const u = Math.max(0, Math.min(1, t / DUR.spike));
-    if (u < 0.22) {
-      const s = smoothstep(u / 0.22);
-      return { x: fromX, lift: s * 0.05, rot: s * 2.8 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.58) {
-      const s = (u - 0.22) / 0.36;
-      const bloom = smoothstep(s);
-      return {
-        x: fromX + facing * bloom * 0.014,
-        lift: 0.05 + bloom * 0.16,
-        rot: facing * (2.8 + bloom * 8.5),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    if (u < 0.84) {
-      const s = (u - 0.58) / 0.26;
-      const hold = Math.sin(s * Math.PI * 1.6);
-      return {
-        x: fromX + facing * (0.014 + hold * 0.012),
-        lift: 0.21 + Math.abs(hold) * 0.025,
-        rot: facing * (11.3 + hold * 1.8),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
+  const u = Math.max(0, Math.min(1, t / DUR.spike));
+  if (u < 0.22) {
+    const s = smoothstep(u / 0.22);
+    return { x: fromX, lift: s * 2.6, rot: s * -10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.58) {
+    const s = (u - 0.22) / 0.36;
+    const bloom = smoothstep(s);
+    const open = Math.sin(s * Math.PI);
     return {
-      x: fromX,
-      lift: 0.21 * (1 - s),
-      rot: facing * (6.5 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * bloom * 1.4,
+      lift: 2.6 + Math.abs(open) * 1.6,
+      rot: facing * (-10 + bloom * 18),
+      anim: "talk" as TrickAnim,
     };
   }
+  if (u < 0.84) {
+    const s = (u - 0.58) / 0.26;
+    const hold = Math.sin(s * Math.PI * 1.6);
+    return {
+      x: fromX + facing * (1.4 + hold * 0.6),
+      lift: 3.6 + Math.abs(hold) * 0.8,
+      rot: facing * (8 + hold * 4),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX,
+    lift: 1.8 * (1 - s),
+    rot: facing * (5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function keikiPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.keiki));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 1.8, rot: s * -8 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const sprout = smoothstep(s);
+    const rock = Math.sin(s * Math.PI * 2.4);
+    return {
+      x: fromX + facing * sprout * 1.2,
+      lift: 1.8 + sprout * 2.6 + Math.abs(rock) * 1.0,
+      rot: facing * (-8 + sprout * 12 + rock * 5),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.84) {
+    const s = (u - 0.55) / 0.29;
+    const spin = Math.sin(s * Math.PI * 2);
+    return {
+      x: fromX + facing * (1.2 + spin * 0.5),
+      lift: 4.0 + Math.abs(spin) * 0.8,
+      rot: facing * (4 + spin * 6),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX + facing * 1.2 * (1 - s),
+    lift: 1.8 * (1 - s) + s * 0.2,
+    rot: facing * (3 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function polliniaPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.pollinia));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const dab = smoothstep(s);
+    const sip = Math.sin(s * Math.PI * 2.2);
+    return {
+      x: fromX + facing * dab * 2.4,
+      lift: 2.6 + dab * 2.0 + Math.abs(sip) * 0.8,
+      rot: facing * (10 - dab * 6 + sip * 4),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  if (u < 0.84) {
+    const s = (u - 0.55) / 0.29;
+    const drink = Math.sin(s * Math.PI * 2.4);
+    return {
+      x: fromX + facing * (2.4 + drink * 0.5),
+      lift: 4.4 + Math.abs(drink) * 0.8,
+      rot: facing * (4 + drink * 5),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX + facing * 2.4 * (1 - s),
+    lift: 2.0 * (1 - s),
+    rot: facing * (3 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function stepTrick(trick: OrchidTrick, dt: number, flags: TrickFlags): OrchidTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "labellum" && trick.kind !== "velamen" && trick.kind !== "column" && trick.kind !== "spike") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "labellum" &&
+    trick.kind !== "velamen" &&
+    trick.kind !== "column" &&
+    trick.kind !== "spike" &&
+    trick.kind !== "keiki" &&
+    trick.kind !== "pollinia"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: OrchidTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -445,26 +574,39 @@ export function stepTrick(trick: OrchidTrick, dt: number, flags: TrickFlags): Or
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "labellum") {
-    const pose = labellumPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = labellumPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "velamen") {
-    const pose = velamenPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = velamenPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "column") {
-    const pose = columnPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = columnPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "spike") {
+    const pose = spikePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "keiki") {
+    const pose = keikiPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = spikePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = polliniaPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;

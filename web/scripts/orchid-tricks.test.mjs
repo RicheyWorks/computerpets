@@ -113,7 +113,7 @@ test("Moth tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
+  assert.deepEqual([...T.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...Moss.TRICKS], ["tuft", "bead", "spore", "cushion", "thatch", "rhizoid", "seta"]);
   assert.equal(T.canStart({ asleep: false, hidden: false, leaving: false, cmd: "idle" }), true);
@@ -189,7 +189,7 @@ test("Moth tricks start only on idle ground", () => {
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
+  assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
   assert.deepEqual([...Overlay.HAPPY], ["pollen", "perfume", "pearl"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -221,7 +221,7 @@ test("Moth tricks start only on idle ground", () => {
   assert.equal(Parrot.TRICKS.includes("fan"), true);
 });
 
-test("labellum/velamen/column/spike/bark are house-orchid-true, not copies of prior guests", () => {
+test("labellum/velamen/column/spike/bark/keiki/pollinia are house-orchid-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("bark", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -252,6 +252,14 @@ test("labellum/velamen/column/spike/bark are house-orchid-true, not copies of pr
   assert.equal(taproot.anim, "talk");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.05 || Math.abs(taprootMid.rot) > 1 || Math.abs(taprootMid.x - 80) > 0.05);
+  const keiki = T.beginTrick("keiki", 80, 1);
+  assert.equal(keiki.anim, "play");
+  const keikiMid = T.stepTrick(keiki, 0.5, ground);
+  assert.ok(Math.abs(keikiMid.lift) > 0.05 || Math.abs(keikiMid.rot) > 1 || Math.abs(keikiMid.x - 80) > 0.05);
+  const pollinia = T.beginTrick("pollinia", 80, 1);
+  assert.equal(pollinia.anim, "talk");
+  const polliniaMid = T.stepTrick(pollinia, 0.5, ground);
+  assert.ok(Math.abs(polliniaMid.lift) > 0.05 || Math.abs(polliniaMid.rot) > 1 || Math.abs(polliniaMid.x - 80) > 0.05);
   const sinusDone = T.stepTrick(sinus, 1.7, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
@@ -262,6 +270,8 @@ test("labellum/velamen/column/spike/bark are house-orchid-true, not copies of pr
     assert.equal(mod.TRICKS.includes("column"), false);
     assert.equal(mod.TRICKS.includes("spike"), false);
     assert.equal(mod.TRICKS.includes("bark"), false);
+    assert.equal(mod.TRICKS.includes("keiki"), false);
+    assert.equal(mod.TRICKS.includes("pollinia"), false);
   }
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("corolla"), false);
@@ -369,7 +379,7 @@ test("Moth feed-happy is its own sit: pollen/perfume/pearl, and two feeds are no
   const cupuleH = T.beginHappy("pollen", 80, 1);
   assert.equal(cupuleH.anim, "sit");
   const cupuleMid = T.stepHappy(cupuleH, 0.4, { cmd: "idle" });
-  assert.ok(cupuleMid.lift !== 0 || Math.abs(cupuleMid.rot) > 0.5);
+  assert.ok(cupuleMid.lift > 1.5 || Math.abs(cupuleMid.rot) > 4, "Rui-visible pollen thank-you");
   assert.notEqual(cupuleMid.phase, "done");
   const tanninH = T.beginHappy("perfume", 80, 1);
   assert.equal(tanninH.anim, "play");
@@ -443,7 +453,7 @@ test("ground registry keeps prior guests gated; Moth selectable; prior guests st
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
+  assert.deepEqual([...T.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
   assert.equal(T.wantsThankYou("orchid"), true);
   assert.equal(T.wantsThankYou("moth"), true);
   assert.equal(Turtle.wantsThankYou("ink"), true);
@@ -592,7 +602,7 @@ globalThis.PetOrchidTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
+  assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -648,7 +658,7 @@ globalThis.PetOrchidTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Moth idle-life done; next house-order guest still lacking tricks is Arm / saguaro", () => {
+test("notes: Moth ultra-polish done; next house-order ultra is Arm / saguaro", () => {
   assert.equal(T.TRICK_KEY, "orchid");
   assert.equal(T.wantsThankYou("moth"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
@@ -736,15 +746,17 @@ test("notes: Moth idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("moth"), true);
   assert.deepEqual([...Oak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
   assert.deepEqual([...OverlayOak.TRICKS], ["acorn", "sinus", "gall", "taproot", "bole", "catkin", "tyloses"]);
-  assert.deepEqual([...T.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
-  assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark"]);
+  assert.deepEqual([...T.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
+  assert.deepEqual([...Overlay.TRICKS], ["labellum", "velamen", "column", "spike", "bark", "keiki", "pollinia"]);
   assert.deepEqual([...T.HAPPY], ["pollen", "perfume", "pearl"]);
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("mount"), false);
+  assert.equal(T.TRICKS.includes("sprout"), false);
+  assert.equal(T.TRICKS.includes("nectary"), false);
   assert.equal(T.TRICKS.includes("unfurl"), false);
   assert.equal(T.TRICKS.includes("bloom"), false);
-  assert.equal(OverlayGround.tricksFor("saguaro"), null);
+  assert.ok(OverlayGround.tricksFor("saguaro") == null);
   assert.equal(OverlayGround.wantsThankYou("saguaro"), false);
-  assert.equal(OverlayGround.tricksFor("arm"), null);
+  assert.ok(OverlayGround.tricksFor("arm") == null);
   assert.equal(OverlayGround.wantsThankYou("arm"), false);
 });
