@@ -858,6 +858,18 @@ assert.ok(names("toad").includes("freeze"));
   assert.equal(names("walleye").includes("night"), false);
   assert.equal(names("walleye").includes("sit"), false);
 
+  assert.ok(names("paddlefish").includes("spathula"));
+  assert.ok(names("paddlefish").includes("rostrumscan_soft"));
+  assert.ok(names("paddlefish").includes("ampullae_soft"));
+  assert.ok(names("paddlefish").includes("cartilaginous_soft"));
+  assert.ok(names("paddlefish").includes("freeze"));
+  assert.equal(names("paddlefish").includes("filter"), false);
+  assert.equal(names("paddlefish").includes("paddle"), false);
+  assert.equal(names("paddlefish").includes("still"), false);
+  assert.equal(names("paddlefish").includes("spoon"), false);
+  assert.equal(names("paddlefish").includes("sit"), false);
+
+
   assert.ok(names("lamprey").includes("disk"));
   for (const key of LOG) {
     const acts = names(key);
