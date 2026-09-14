@@ -184,6 +184,18 @@ test("sundew ethogram is Dew ultra (rosette + softs + freeze, not curl/nod/lean)
   assert.equal(names.includes("lean"), false);
 });
 
+test("honeybee ethogram is Comb ultra (hive + softs + freeze, not waggle/dart/still)", () => {
+  const names = E.actsFor("honeybee").map((a) => a.name);
+  assert.ok(names.includes("hive"));
+  assert.ok(names.includes("ocelli_soft"));
+  assert.ok(names.includes("nasonov_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("waggle"), false);
+  assert.equal(names.includes("dart"), false);
+  assert.equal(names.includes("still"), false);
+});
+
+
 
 
 
@@ -199,7 +211,7 @@ test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
     assert.equal(names.includes("tongue"), false, key);
     assert.equal(names.includes("eat"), false, key);
   }
-  assert.ok(E.actsFor("honeybee").some((a) => a.name === "waggle"));
+  assert.ok(E.actsFor("honeybee").some((a) => a.name === "hive"));
   assert.ok(E.actsFor("firefly").some((a) => a.name === "flash"));
   assert.ok(E.actsFor("luna").some((a) => a.name === "still"));
   assert.ok(E.actsFor("cicada").some((a) => a.name === "emerge"));

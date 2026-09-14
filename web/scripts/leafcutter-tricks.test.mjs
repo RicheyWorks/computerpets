@@ -354,7 +354,7 @@ test("circle/liner/cavity/parcel/megachile are house-leafcutter-true, not copies
   assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
   assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus"]);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   
   assert.equal(T.TRICKS.includes("pad"), false);
   assert.equal(T.TRICKS.includes("corolla"), false);
@@ -570,7 +570,7 @@ test("ground registry keeps prior guests gated; Disc selectable; prior guests st
   assert.deepEqual([...CarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
   assert.deepEqual([...OverlayCarpenterAnt.TRICKS], ["gallery", "pheromone", "crumb", "bustle", "camponotus"]);
   assert.deepEqual([...Firefly.TRICKS], ["lantern", "jstroke", "semaphore", "elytra", "photinus"]);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Cicada.TRICKS], ["tymbal", "cast", "egress", "harden", "magicicada"]);
   assert.deepEqual([...OverlayCicada.TRICKS], ["tymbal", "cast", "egress", "harden", "magicicada"]);
   assert.deepEqual([...Turtle.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
@@ -728,8 +728,8 @@ globalThis.PetLeafcutterTricks = Overlay;
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), OverlayHoneybee);
   assert.equal(OverlayGround.wantsThankYou("comb"), true);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(OverlayGround.tricksFor("monarch"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
@@ -912,8 +912,8 @@ test("notes: Disc idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), OverlayHoneybee);
   assert.equal(OverlayGround.wantsThankYou("comb"), true);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(OverlayGround.tricksFor("cicada"), OverlayCicada);
   assert.equal(OverlayGround.wantsThankYou("cicada"), true);
   assert.equal(OverlayGround.tricksFor("brood"), OverlayCicada);
@@ -949,8 +949,8 @@ test("notes: Disc idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), OverlayHoneybee);
   assert.equal(OverlayGround.wantsThankYou("comb"), true);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(OverlayGround.tricksFor("monarch"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("snap"), OverlayVenusFlytrap);
@@ -967,8 +967,8 @@ test("notes: Disc idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), OverlayHoneybee);
   assert.equal(OverlayGround.wantsThankYou("comb"), true);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(OverlayGround.tricksFor("monarch"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
@@ -1067,8 +1067,8 @@ test("notes: Disc idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), OverlayHoneybee);
   assert.equal(OverlayGround.wantsThankYou("comb"), true);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(OverlayGround.tricksFor("monarch"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
@@ -1085,8 +1085,8 @@ test("notes: Disc idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("honeybee"), true);
   assert.equal(OverlayGround.tricksFor("comb"), OverlayHoneybee);
   assert.equal(OverlayGround.wantsThankYou("comb"), true);
-  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
-  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive"]);
+  assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
+  assert.deepEqual([...OverlayHoneybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(OverlayGround.tricksFor("monarch"), OverlayMonarch);
   assert.equal(OverlayGround.wantsThankYou("monarch"), true);
   assert.equal(OverlayGround.tricksFor("milk"), OverlayMonarch);
