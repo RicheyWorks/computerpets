@@ -678,7 +678,11 @@ def test_only_scratching_mammals_scratch():
     assert "capitulum_soft" in [a["name"] for a in acts_for("tick")]
     assert "quest_soft" in [a["name"] for a in acts_for("tick")]
     assert "freeze" in [a["name"] for a in acts_for("tick")]
-    assert "run" in [a["name"] for a in acts_for("solifuge")]
+    assert "eremobates" in [a["name"] for a in acts_for("solifuge")]
+    assert "propeltidium_soft" in [a["name"] for a in acts_for("solifuge")]
+    assert "tracheate_soft" in [a["name"] for a in acts_for("solifuge")]
+    assert "malleoli_soft" in [a["name"] for a in acts_for("solifuge")]
+    assert "freeze" in [a["name"] for a in acts_for("solifuge")]
     for key in WOOD_KEYS:
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
