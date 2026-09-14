@@ -286,6 +286,23 @@ test("mantis ethogram is Fold ultra (mantodea + softs + freeze, not fold/strike/
   assert.equal(names.length, 8);
 });
 
+
+test("cicada ethogram is Brood ultra (magicicada + softs + freeze, not still/emerge/burst)", () => {
+  const names = E.actsFor("cicada").map((a) => a.name);
+  assert.ok(names.includes("magicicada"));
+  assert.ok(names.includes("tymbal_soft"));
+  assert.ok(names.includes("cast_soft"));
+  assert.ok(names.includes("egress_soft"));
+  assert.ok(names.includes("harden_soft"));
+  assert.ok(names.includes("xylem_soft"));
+  assert.ok(names.includes("pharaoh_soft"));
+  assert.ok(names.includes("freeze"));
+  assert.equal(names.includes("still"), false);
+  assert.equal(names.includes("emerge"), false);
+  assert.equal(names.includes("burst"), false);
+  assert.equal(names.length, 8);
+});
+
 test("monarch ethogram is Milk ultra (danaus + softs + freeze, not flutter/migrate/still)", () => {
   const names = E.actsFor("monarch").map((a) => a.name);
   assert.ok(names.includes("danaus"));
@@ -328,7 +345,7 @@ test("insect keys never schedule scratch, tongue, or a mammal nibble", () => {
   assert.ok(E.actsFor("monarch").some((a) => a.name === "danaus"));
   assert.ok(E.actsFor("firefly").some((a) => a.name === "photinus"));
   assert.ok(E.actsFor("luna").some((a) => a.name === "actias"));
-  assert.ok(E.actsFor("cicada").some((a) => a.name === "emerge"));
+  assert.ok(E.actsFor("cicada").some((a) => a.name === "magicicada"));
 });
 
 test("fungi keys never schedule scratch or tongue", () => {
