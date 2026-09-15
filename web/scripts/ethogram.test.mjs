@@ -1402,6 +1402,22 @@ assert.equal(names("tarsier").includes("tarsier"), false);
 assert.equal(names("tarsier").includes("sit"), false);
 assert.equal(names("tarsier").includes("wait"), false);
 
+assert.ok(names("potto").includes("perodicticushush"));
+assert.ok(names("potto").includes("scapularshield_soft"));
+assert.ok(names("potto").includes("crypticcreep_soft"));
+assert.ok(names("potto").includes("gumscrape_soft"));
+assert.ok(names("potto").includes("gripclamp_soft"));
+assert.ok(names("potto").includes("neckspine_soft"));
+assert.ok(names("potto").includes("branchfreeze_soft"));
+assert.ok(names("potto").includes("freeze"));
+assert.equal(names("potto").includes("still"), false);
+assert.equal(names("potto").includes("cling"), false);
+assert.equal(names("potto").includes("walk"), false);
+assert.equal(names("potto").includes("potto"), false);
+assert.equal(names("potto").includes("sit"), false);
+assert.equal(names("potto").includes("wait"), false);
+
+
 
   assert.ok(names("koala").includes("chew"));
   for (const key of REEF) {
