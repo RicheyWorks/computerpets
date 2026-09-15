@@ -351,8 +351,8 @@ test("trowel/beebread/orchard/plug/osmia are house-mason-bee-true, not copies of
     assert.equal(mod.HAPPY.includes("osmiini"), false);
   }
 
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.equal(T.TRICKS.includes("rasp"), false);
@@ -1004,8 +1004,8 @@ test("notes: Mortar idle-life done; next house-order guest still lacking tricks 
   assert.equal(OverlayGround.wantsThankYou("thrum"), true);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...OverlayBumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.equal(OverlayGround.tricksFor("mason_bee"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("mason_bee"), true);
   assert.equal(OverlayGround.tricksFor("mortar"), Overlay);
