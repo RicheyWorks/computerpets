@@ -361,8 +361,8 @@ test("pipe/retinue/duel/royal/regina are house-queen-true, not copies of prior g
     assert.equal(mod.HAPPY.includes("apini"), false);
   }
 
-  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
-  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
+  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
+  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
   assert.deepEqual([...MiningBee.HAPPY], ["vicina", "carlini", "andrenini"]);
   assert.equal(T.TRICKS.includes("shaft"), false);
   assert.equal(T.TRICKS.includes("mass"), false);
@@ -1102,8 +1102,8 @@ test("notes: Keep idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("mining_bee"), true);
   assert.equal(OverlayGround.tricksFor("bank"), OverlayMiningBee);
   assert.equal(OverlayGround.wantsThankYou("bank"), true);
-  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
-  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
+  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
+  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
   assert.equal(OverlayGround.tricksFor("honey_drone"), OverlayHoneyDrone);
   assert.equal(OverlayGround.wantsThankYou("honey_drone"), true);
   assert.equal(OverlayGround.tricksFor("hum"), OverlayHoneyDrone);
@@ -1132,8 +1132,8 @@ test("notes: Keep idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("mining_bee"), true);
   assert.equal(OverlayGround.tricksFor("bank"), OverlayMiningBee);
   assert.equal(OverlayGround.wantsThankYou("bank"), true);
-  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
-  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
+  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
+  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
   assert.equal(OverlayGround.tricksFor("honey_drone"), OverlayHoneyDrone);
   assert.equal(OverlayGround.wantsThankYou("honey_drone"), true);
   assert.equal(OverlayGround.tricksFor("hum"), OverlayHoneyDrone);

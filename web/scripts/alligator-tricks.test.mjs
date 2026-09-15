@@ -1323,8 +1323,8 @@ test("bellowbank/deathcoil/snoutspy/baskgape/osteoderm/scutehush/mississippi are
     assert.equal(mod.TRICKS.includes("fog"), false);
   }
 
-  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
-  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "andrena"]);
+  assert.deepEqual([...MiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
+  assert.deepEqual([...OverlayMiningBee.TRICKS], ["shaft", "mass", "vernal", "fovea", "floccus", "dufourline", "andrena"]);
   assert.deepEqual([...MiningBee.HAPPY], ["vicina", "carlini", "andrenini"]);
   assert.equal(T.TRICKS.includes("shaft"), false);
   assert.equal(T.TRICKS.includes("mass"), false);

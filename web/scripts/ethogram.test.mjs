@@ -366,6 +366,19 @@ assert.equal(names("stingless").includes("pot"), false);
 assert.equal(names("stingless").includes("hover"), false);
 assert.equal(names("stingless").includes("still"), false);
 
+assert.ok(names("mining_bee").includes("andrena"));
+assert.ok(names("mining_bee").includes("shaft_soft"));
+assert.ok(names("mining_bee").includes("mass_soft"));
+assert.ok(names("mining_bee").includes("vernal_soft"));
+assert.ok(names("mining_bee").includes("fovea_soft"));
+assert.ok(names("mining_bee").includes("floccus_soft"));
+assert.ok(names("mining_bee").includes("dufourline_soft"));
+assert.ok(names("mining_bee").includes("freeze"));
+assert.equal(names("mining_bee").includes("dig"), false);
+assert.equal(names("mining_bee").includes("hover"), false);
+assert.equal(names("mining_bee").includes("still"), false);
+
+
 
 
   assert.ok(names("honey_queen").includes("lay"));
@@ -1912,6 +1925,19 @@ assert.ok(names("stingless").includes("freeze"));
 assert.equal(names("stingless").includes("pot"), false);
 assert.equal(names("stingless").includes("hover"), false);
 assert.equal(names("stingless").includes("still"), false);
+
+assert.ok(names("mining_bee").includes("andrena"));
+assert.ok(names("mining_bee").includes("shaft_soft"));
+assert.ok(names("mining_bee").includes("mass_soft"));
+assert.ok(names("mining_bee").includes("vernal_soft"));
+assert.ok(names("mining_bee").includes("fovea_soft"));
+assert.ok(names("mining_bee").includes("floccus_soft"));
+assert.ok(names("mining_bee").includes("dufourline_soft"));
+assert.ok(names("mining_bee").includes("freeze"));
+assert.equal(names("mining_bee").includes("dig"), false);
+assert.equal(names("mining_bee").includes("hover"), false);
+assert.equal(names("mining_bee").includes("still"), false);
+
 
 
 
