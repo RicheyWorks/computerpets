@@ -974,6 +974,19 @@ assert.equal(names("planarian").includes("glide"), false);
 assert.equal(names("planarian").includes("still"), false);
 assert.equal(names("planarian").includes("half"), false);
 assert.equal(names("planarian").includes("sit"), false);
+assert.ok(names("nematode").includes("elegans"));
+assert.ok(names("nematode").includes("sinusoid_soft"));
+assert.ok(names("nematode").includes("dauerrest_soft"));
+assert.ok(names("nematode").includes("pharynxpump_soft"));
+assert.ok(names("nematode").includes("thrashturn_soft"));
+assert.ok(names("nematode").includes("omegaturn_soft"));
+assert.ok(names("nematode").includes("vulvaseek_soft"));
+assert.ok(names("nematode").includes("freeze"));
+assert.equal(names("nematode").includes("thrash"), false);
+assert.equal(names("nematode").includes("still"), false);
+assert.equal(names("nematode").includes("sit"), false);
+assert.equal(names("nematode").includes("thread"), false);
+
 
 
 
