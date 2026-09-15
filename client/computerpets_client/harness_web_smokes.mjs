@@ -183,11 +183,102 @@ async function returnMemory() {
   ]);
 }
 
+
+async function speakOpts() {
+  const cardUrl = pathToFileURL(join(WEB, "src", "lib", "pets", "card.ts")).href;
+  const C = await import(cardUrl);
+  const styles = C.VOICE_STYLES || [];
+  const want = {
+    hearth: { rate: 0.82, pitch: 0.88 },
+    hush: { rate: 0.8, pitch: 1.02 },
+    even: { rate: 0.92, pitch: 1 },
+    low: { rate: 0.84, pitch: 0.76 },
+    bright: { rate: 0.98, pitch: 1.1 },
+  };
+  if (styles.length !== 5) return fail("VOICE_STYLES count drift", { styles });
+  for (const s of styles) {
+    const w = want[s.id];
+    if (!w) return fail("unexpected voice style " + s.id);
+    if (s.rate !== w.rate || s.pitch !== w.pitch) return fail("voice style drift " + s.id, { s, w });
+    const opts = C.speakOpts(s.id, 50);
+    if (opts.rate !== w.rate || opts.pitch !== w.pitch) return fail("speakOpts drift " + s.id, { opts });
+  }
+  const hearth50 = C.speakOpts("hearth", 50);
+  if (!(hearth50.volume < 0.5) || Math.abs(hearth50.volume - 0.46) > 1e-9) {
+    return fail("hearth soft volume drift", { hearth50 });
+  }
+  const even50 = C.speakOpts("even", 50);
+  if (Math.abs(even50.volume - 0.5) > 1e-9) return fail("even volume drift", { even50 });
+  const hi = C.speakOpts("hearth", 250);
+  if (Math.abs(hi.volume - 0.92) > 1e-9) return fail("clamp high drift", { hi });
+  const lo = C.speakOpts("bright", -40);
+  if (lo.volume !== 0) return fail("clamp low drift", { lo });
+  const roomSrc = readFileSync(join(WEB, "src", "components", "desk", "companion-room.tsx"), "utf8");
+  for (const needle of ["speakOpts(", "u.volume = opts.volume", "pickSystemVoice("]) {
+    if (!roomSrc.includes(needle)) return fail(`companion-room missing ${needle}`);
+  }
+  const keeperSrc = readFileSync(join(WEB, "src", "components", "desk", "keeper-card.tsx"), "utf8");
+  for (const needle of ["speakOpts(", "u.volume = opts.volume", "keeper-volume"]) {
+    if (!keeperSrc.includes(needle)) return fail(`keeper-card missing ${needle}`);
+  }
+  return ok("web speakOpts styles=5", { styles: styles.map((s) => s.id), hearth50: hearth50.volume }, [
+    "web.speakOpts.styles=5",
+    "web.speakOpts.hearth.soft=0.46",
+    "web.speakOpts.clamp",
+    "companion-room.speakOpts",
+    "keeper-card.speakOpts",
+  ]);
+}
+
+async function volumeMutes() {
+  const cardUrl = pathToFileURL(join(WEB, "src", "lib", "pets", "card.ts")).href;
+  const C = await import(cardUrl);
+  const buses = C.MUTE_BUSES || [];
+  if (buses.join(",") !== "talk,special,weather,treats,steps,music") {
+    return fail("MUTE_BUSES drift", { buses });
+  }
+  let card = C.blankCard();
+  if (C.guestOf(card, "red_panda").volume !== 80) return fail("blank guest volume");
+  card = C.setGuest(card, "red_panda", { volume: 150 });
+  if (C.guestOf(card, "red_panda").volume !== 100) return fail("volume clamp high");
+  card = C.setGuest(card, "red_panda", { volume: -5 });
+  if (C.guestOf(card, "red_panda").volume !== 0) return fail("volume clamp low");
+  card = C.setGuest(card, "red_panda", { volume: 40 });
+  card = { ...card, mutes: { ...C.blankMutes(), talk: true, weather: true }, voiceStyle: "bright" };
+  // Node has no localStorage — saveCard soft-persists in-memory parse only.
+  const saved = C.saveCard(card);
+  if (saved.pets.red_panda.volume !== 40) return fail("saveCard volume clamp/parse", { saved });
+  if (!saved.mutes.talk || saved.voiceStyle !== "bright") return fail("saveCard mutes/style", { saved });
+  if (!C.isMuted(saved.mutes, "chirp") || !C.isMuted(saved.mutes, "voice")) {
+    return fail("talk mute mapping", { mutes: saved.mutes });
+  }
+  if (!C.isMuted(saved.mutes, "rain")) return fail("weather mute mapping");
+  if (C.isMuted(saved.mutes, "hop")) return fail("special should be unmuted");
+  const roomSrc = readFileSync(join(WEB, "src", "components", "desk", "companion-room.tsx"), "utf8");
+  for (const needle of ["isMuted(", "guestOf(prefs, kind.key).volume", "speakOpts("]) {
+    if (!roomSrc.includes(needle)) return fail(`companion-room volume/mute wire missing ${needle}`);
+  }
+  const keeperSrc = readFileSync(join(WEB, "src", "components", "desk", "keeper-card.tsx"), "utf8");
+  for (const needle of ["MUTE_BUSES", "setGuest(card, guestKey, { volume:", "keeper-mutes", "guest.volume / 100"]) {
+    if (!keeperSrc.includes(needle)) return fail(`keeper-card volume/mute wire missing ${needle}`);
+  }
+  return ok("web volume/mutes clamp+wire", { volume: 40, buses }, [
+    "web.volume.clamp=0..100",
+    "web.mutes.buses=6",
+    "web.isMuted.talk/weather",
+    "companion-room.volume+mute",
+    "keeper-card.volume+mute",
+  ]);
+}
+
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
   classroom_lockstep: classroomLockstep,
   return_memory: returnMemory,
+  speak_opts: speakOpts,
+  volume_mutes: volumeMutes,
 };
 
 async function main(argv) {
