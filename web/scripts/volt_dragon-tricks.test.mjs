@@ -460,7 +460,7 @@ test("Volt tricks start only on idle ground", () => {
   assert.equal(T.HAPPY.includes("inkgrouper"), false);
   assert.equal(T.HAPPY.includes("densepinephelus"), false);
   assert.equal(T.TRICKS.includes("wingsoarflapglide"), false);
-  assert.equal(T.TRICKS.includes("longaetobatushush"), false);
+  assert.equal(T.TRICKS.includes("aetobatushush"), false);
   assert.equal(T.TRICKS.includes("sprawl"), false);
   assert.equal(T.TRICKS.includes("guard"), false);
   assert.equal(T.TRICKS.includes("click"), false);
@@ -480,7 +480,7 @@ test("Volt tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("cephaliclobesift"), false);
   assert.equal(T.TRICKS.includes("sanddigbury"), false);
   assert.equal(T.TRICKS.includes("leapbreachcue"), false);
-  assert.equal(T.TRICKS.includes("longaetobatushush"), false);
+  assert.equal(T.TRICKS.includes("aetobatushush"), false);
   assert.equal(T.HAPPY.includes("denssoar"), false);
   assert.equal(T.HAPPY.includes("inksoar"), false);
   assert.equal(T.HAPPY.includes("densaetobatus"), false);
