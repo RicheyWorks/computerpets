@@ -1,6 +1,6 @@
-/** Gum ground tricks while idle. House neighborly koala (Phascolarctos cinereus / Phascolarctidae) desk life -- eucchewbrowse / forkbranchperch / sleepychintuck / climbhugtrunk / phascolarctoshush personality; NOT Still/Gaze/Boom/Hang/Sun/Rui; guest slug Gum / key koala -- accept koala and gum; Thank-yous densgum / inkgum / densphascolarctos. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop koala-tricks.js. Next: Ridge / brain_coral. Catalog 220. */
+/** Gum ground tricks while idle — ultra-polish pass. House neighborly Koala Phascolarctos cinereus / Phascolarctidae desk life (koala / Gum) — eucchewbrowse / forkbranchperch / sleepychintuck / climbhugtrunk / pouchpress / eardroop / phascolarctoshush personality (eucchewbrowse eucalyptus leaf chew-browse without naming chew or browse or leaf alone as wait — distinct from Boom leafchew and Still gumscrape; forkbranchperch fork-branch perch without naming perch or branch or sit alone as wait — distinct from Hang hangsway and Sail clingclimb; sleepychintuck sleepy chin-tuck without naming sleep or chin or tuck alone as wait — distinct from Gaze stillstare; climbhugtrunk climb-hug trunk without naming climb or hug or trunk alone as wait — distinct from Hang clawhook and Sail clingclimb; pouchpress pouch press settle without naming pouch or press or cling alone as wait — koala marsupial tell; eardroop fuzzy ear droop without naming ear or droop or listen alone as wait — distinct from Gaze earfan; long phascolarctoshush Phascolarctos hush hold (THE phascolarctoshush sit_hold tell) — never named wait or crouch or sit or still or koala or gum or chew or cling as bare ethogram-only trick kinds; Still potto owns scapularshield/crypticcreep/gumscrape/gripclamp/neckspine/branchfreeze/perodicticushush — do NOT reuse gumscrape; Hang sloth owns headturnstare/hangsway/clawhook — do NOT reuse; Boom howler owns hyoidboom/leafchew/alouattahush — do NOT reuse; Gaze tarsier owns eyeswivel/earfan/tarsiushush — do NOT reuse; guest slug Gum / key koala only for wantsThankYou matching — accept "koala" and "gum"; do NOT name a trick "koala" or "gum" or "potto" or "still" or "sloth" or "hang" or "howler" or "boom"; not Still Perodicticus life, not Hang Bradypus life, not Boom Alouatta life, not Gaze Carlito life, not Rui. Eucchewbrowse / forkbranchperch / sleepychintuck / climbhugtrunk / pouchpress / eardroop / phascolarctoshush; densgum / inkgum / densphascolarctos thank-yous. Same map as desktop koala-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names chew/cling/still/walk/sit/wait/koala/gum as bare ethogram-only trick kinds. True Koala Phascolarctos cinereus desk life only — euc chew browse, fork branch perch, sleepy chin tuck, climb hug trunk, pouch press, ear droop, Phascolarctos hush. Next house-order ultra: Ridge / brain_coral. No cry inventing — koala.wav EXISTS so prefersHouseCry adds koala after potto. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "koala";
-export const TRICKS = ["eucchewbrowse", "forkbranchperch", "sleepychintuck", "climbhugtrunk", "phascolarctoshush"] as const;
+export const TRICKS = ["eucchewbrowse", "forkbranchperch", "sleepychintuck", "climbhugtrunk", "pouchpress", "eardroop", "phascolarctoshush"] as const;
 export const HAPPY = ["densgum", "inkgum", "densphascolarctos"] as const;
 export type KoalaTrickKind = (typeof TRICKS)[number];
 export type KoalaHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,18 @@ export type KoalaHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { densgum: 2.71, inkgum: 2.89, densphascolarctos: 2.56 } as const;
-export const PHASCOLARCTOSHUSH_HOLD = 33.14;
-export const RELEASE_S = 2.48;
-export const DUR = { phascolarctoshush: PHASCOLARCTOSHUSH_HOLD + RELEASE_S, eucchewbrowse: 5.36, forkbranchperch: 5.52, sleepychintuck: 5.22, climbhugtrunk: 5.78 } as const;
+export const HAPPY_DUR = { densgum: 1.70, inkgum: 1.84, densphascolarctos: 1.76 } as const;
+export const PHASCOLARCTOSHUSH_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  phascolarctoshush: PHASCOLARCTOSHUSH_HOLD + RELEASE_S,
+  eucchewbrowse: 2.48,
+  forkbranchperch: 2.42,
+  sleepychintuck: 2.40,
+  climbhugtrunk: 2.44,
+  pouchpress: 2.38,
+  eardroop: 2.56,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -57,6 +65,7 @@ export function canStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function shouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
@@ -73,42 +82,83 @@ export function shouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: KoalaTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "phascolarctoshush") return 212 + roll * 24;
-  if (kind === "forkbranchperch") return 26.4 + roll * 3.7;
-  if (kind === "climbhugtrunk") return 25.1 + roll * 3.8;
-  if (kind === "eucchewbrowse") return 23.6 + roll * 3.4;
-  if (kind === "sleepychintuck") return 24.9 + roll * 3.6;
-  return justFinished ? 19.1 + roll * 3.0 : 14.2 + roll * 2.6;
+  if (kind === "phascolarctoshush") return 40 + roll * 26;
+  if (kind === "pouchpress" || kind === "eardroop" || kind === "eucchewbrowse") return 12.8 + roll * 9.4;
+  if (kind === "sleepychintuck" || kind === "forkbranchperch" || kind === "climbhugtrunk") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: KoalaTrickKind | string) {
-  if (musicOn) return "phascolarctoshush";
+
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: KoalaTrickKind | string | null) {
+  if (musicOn) return "phascolarctoshush" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "phascolarctoshush") {
-    if (roll < 0.26) return "forkbranchperch";
-    if (roll < 0.5) return "climbhugtrunk";
-    if (roll < 0.74) return "eucchewbrowse";
-    return "sleepychintuck";
+    if (roll < 0.17) return "eucchewbrowse" as const;
+    if (roll < 0.33) return "forkbranchperch" as const;
+    if (roll < 0.49) return "sleepychintuck" as const;
+    if (roll < 0.65) return "climbhugtrunk" as const;
+    if (roll < 0.83) return "pouchpress" as const;
+    return "eardroop" as const;
+  }
+  if (lastKind === "eucchewbrowse") {
+    if (roll < 0.16) return "phascolarctoshush" as const;
+    if (roll < 0.32) return "forkbranchperch" as const;
+    if (roll < 0.48) return "sleepychintuck" as const;
+    if (roll < 0.64) return "climbhugtrunk" as const;
+    if (roll < 0.82) return "pouchpress" as const;
+    return "eardroop" as const;
   }
   if (lastKind === "forkbranchperch") {
-    if (roll < 0.26) return "phascolarctoshush";
-    if (roll < 0.5) return "climbhugtrunk";
-    if (roll < 0.74) return "eucchewbrowse";
-    return "sleepychintuck";
+    if (roll < 0.14) return "phascolarctoshush" as const;
+    if (roll < 0.3) return "eucchewbrowse" as const;
+    if (roll < 0.46) return "sleepychintuck" as const;
+    if (roll < 0.62) return "climbhugtrunk" as const;
+    if (roll < 0.8) return "pouchpress" as const;
+    return "eardroop" as const;
+  }
+  if (lastKind === "sleepychintuck") {
+    if (roll < 0.15) return "phascolarctoshush" as const;
+    if (roll < 0.31) return "eucchewbrowse" as const;
+    if (roll < 0.47) return "forkbranchperch" as const;
+    if (roll < 0.63) return "climbhugtrunk" as const;
+    if (roll < 0.81) return "pouchpress" as const;
+    return "eardroop" as const;
   }
   if (lastKind === "climbhugtrunk") {
-    if (roll < 0.22) return "phascolarctoshush";
-    if (roll < 0.44) return "forkbranchperch";
-    if (roll < 0.68) return "eucchewbrowse";
-    return "sleepychintuck";
+    if (roll < 0.16) return "phascolarctoshush" as const;
+    if (roll < 0.32) return "eucchewbrowse" as const;
+    if (roll < 0.48) return "forkbranchperch" as const;
+    if (roll < 0.64) return "sleepychintuck" as const;
+    if (roll < 0.82) return "pouchpress" as const;
+    return "eardroop" as const;
   }
-  if (roll < 0.2) return "phascolarctoshush";
-  if (roll < 0.4) return "forkbranchperch";
-  if (roll < 0.6) return "climbhugtrunk";
-  if (roll < 0.8) return "eucchewbrowse";
-  return "sleepychintuck";
+  if (lastKind === "pouchpress") {
+    if (roll < 0.15) return "phascolarctoshush" as const;
+    if (roll < 0.31) return "eucchewbrowse" as const;
+    if (roll < 0.47) return "forkbranchperch" as const;
+    if (roll < 0.63) return "sleepychintuck" as const;
+    if (roll < 0.81) return "climbhugtrunk" as const;
+    return "eardroop" as const;
+  }
+  if (lastKind === "eardroop") {
+    if (roll < 0.16) return "phascolarctoshush" as const;
+    if (roll < 0.32) return "eucchewbrowse" as const;
+    if (roll < 0.48) return "forkbranchperch" as const;
+    if (roll < 0.64) return "sleepychintuck" as const;
+    if (roll < 0.82) return "climbhugtrunk" as const;
+    return "pouchpress" as const;
+  }
+  if (roll < 0.14) return "phascolarctoshush" as const;
+  if (roll < 0.28) return "eucchewbrowse" as const;
+  if (roll < 0.42) return "forkbranchperch" as const;
+  if (roll < 0.56) return "sleepychintuck" as const;
+  if (roll < 0.7) return "climbhugtrunk" as const;
+  if (roll < 0.85) return "pouchpress" as const;
+  return "eardroop" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -117,6 +167,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
@@ -132,14 +183,16 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "gum";
 }
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: KoalaHappyKind | string | undefined,
+  lastKind: KoalaHappyKind | null | undefined,
   x: number,
-  facing?: 1 | -1,
+  facing: 1 | -1,
   flags?: TrickFlags
 ) {
   if (!wantsThankYou(key)) return null;
@@ -147,14 +200,16 @@ export function startThankYou(
   const pick = pickHappy(lastKind);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
-export function pickHappy(lastKind?: KoalaHappyKind | string, rand?: number) {
+
+export function pickHappy(lastKind?: KoalaHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
-export function beginHappy(kind: KoalaHappyKind | string, x: number, facing?: 1 | -1): KoalaHappy {
-  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as KoalaHappyKind) : "densgum";
+
+export function beginHappy(kind: KoalaHappyKind | string, x: number, facing: 1 | -1): KoalaHappy {
+  const name = (HAPPY as readonly string[]).includes(kind) ? (kind as KoalaHappyKind) : "densgum";
   return {
     kind: name,
     happy: true,
@@ -163,55 +218,63 @@ export function beginHappy(kind: KoalaHappyKind | string, x: number, facing?: 1 
     x,
     lift: 0,
     rot: 0,
-    anim: name === "densgum" ? "sit" : name === "inkgum" ? "play" : "play",
-    facing: facing == null ? 1 : facing,
+    anim: (name === "densgum" ? "sit" : name === "inkgum" ? "play" : "play") as TrickAnim,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
 
 export function densgumPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densgum));
-  if (u < 0.15) {
-    const s = u / 0.15;
-    return { lift: s * 0.0034, rot: s * -0.22, anim: "sit" as TrickAnim };
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.84) {
-    const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.22);
-    return { lift: 0.0034 + Math.abs(sway) * 0.0009, rot: -0.22 + sway * 0.16, anim: "sit" as TrickAnim };
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
+    };
   }
-  const s = (u - 0.84) / 0.16;
-  return { lift: 0.0034 * (1 - s), rot: -0.22 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
+
 export function inkgumPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkgum));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.0035, rot: s * 0.26, anim: "play" as TrickAnim };
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
   }
-  if (u < 0.82) {
-    const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 3.12);
-    return { lift: 0.0035 + Math.abs(arc) * 0.0020, rot: 0.26 + arc * 0.28, anim: "play" as TrickAnim };
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
   }
-  const s = (u - 0.82) / 0.18;
-  return { lift: 0.0035 * (1 - s), rot: 0.26 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
+
 export function densphascolarctosPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densphascolarctos));
-  if (u < 0.14) {
-    const s = u / 0.14;
-    return { lift: s * -0.0016, rot: s * 0.17, anim: "play" as TrickAnim };
-  }
-  if (u < 0.83) {
-    const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.05);
-    return { lift: -0.0016 + Math.abs(hush) * 0.0010, rot: 0.17 + hush * 0.16, anim: "play" as TrickAnim };
-  }
-  const s = (u - 0.83) / 0.17;
-  return { lift: -0.0016 * (1 - s), rot: 0.17 * (1 - s), anim: "idle" as TrickAnim };
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "play" as TrickAnim,
+  };
 }
-export function stepHappy(happy: KoalaHappy, dt: number, flags?: TrickFlags): KoalaHappy {
+
+export function stepHappy(happy: KoalaHappy | null | undefined, dt: number, flags?: TrickFlags) {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...happy, t: happy.t + Math.max(0, dt) };
   const hold = HAPPY_DUR[next.kind];
@@ -231,134 +294,223 @@ export function stepHappy(happy: KoalaHappy, dt: number, flags?: TrickFlags): Ko
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
-export function beginTrick(kind: KoalaTrickKind | string, x: number, facing?: 1 | -1): KoalaTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as KoalaTrickKind) : "phascolarctoshush";
+
+export function beginTrick(kind: KoalaTrickKind, x: number, facing: 1 | -1): KoalaTrick {
   const anim: TrickAnim =
-    k === "phascolarctoshush"
+    kind === "phascolarctoshush"
       ? "sit"
-      : k === "forkbranchperch"
+      : kind === "eucchewbrowse"
         ? "sit"
-        : k === "climbhugtrunk"
-            ? "walk"
-          : k === "sleepychintuck"
+        : kind === "eardroop"
+          ? "talk"
+          : kind === "forkbranchperch"
+            ? "sit"
+            : kind === "sleepychintuck"
               ? "sit"
-            : k === "eucchewbrowse"
-                ? "sit"
-              : "sit";
+              : kind === "climbhugtrunk"
+                ? "walk"
+                : kind === "pouchpress"
+                  ? "sit"
+                  : "sit";
   return {
-    kind: k,
-    phase: k === "phascolarctoshush" ? "hold" : "go",
+    kind,
+    phase: kind === "phascolarctoshush" ? "hold" : "go",
     t: 0,
     x,
     lift: 0,
     rot: 0,
     anim,
-    facing: facing == null ? 1 : facing,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
+
 function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
 export function phascolarctoshushPose(t: number) {
-  const breath = Math.sin(t * 0.00048) + 0.00016 * Math.sin(t * 0.00132);
-  const hush = Math.abs(Math.sin(t * 0.00022));
-  return { lift: -0.00028 + hush * 0.00004, rot: 0.0014 + breath * 0.0011 };
-}
-export function releasePose(t: number) {
-  const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00022 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0028 * (1 - u) };
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
 }
 
-export function forkbranchperchPose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.forkbranchperch));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.2) {
-    const s = smoothstep(u / 0.2);
-    return { x: fromX + face * s * 0.00015, lift: s * 0.0074, rot: s * -0.14 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.86) {
-    const micro = Math.sin(((u - 0.2) / 0.66) * Math.PI * 0.95);
-    return {
-      x: fromX + face * (-0.0001 + micro * 0.00003),
-      lift: -0.0018 + Math.abs(micro) * 0.00012,
-      rot: (0.32 + micro * 0.012) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.86) / 0.14);
-  return { x: fromX + face * 0.00015 * (1 - s), lift: 0.0074 * (1 - s), rot: -0.14 * (1 - s) * face, anim: "idle" as TrickAnim };
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
 }
-export function climbhugtrunkPose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.climbhugtrunk));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.12) {
-    const s = smoothstep(u / 0.12);
-    return { x: fromX + face * s * 0.0006, lift: s * 0.0008, rot: s * -0.06 * face, anim: "walk" as TrickAnim };
-  }
-  if (u < 0.88) {
-    const creep = (u - 0.12) / 0.76;
-    const bob = Math.sin(creep * Math.PI * 3.6);
-    return {
-      x: fromX + face * (0.0006 + creep * 0.0072),
-      lift: 0.0008 + Math.abs(bob) * 0.0014,
-      rot: (-0.06 + bob * 0.05) * face,
-      anim: "walk" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.88) / 0.12);
-  return { x: fromX + face * (0.0078 - 0.0012 * s), lift: 0.0008 * (1 - s), rot: -0.06 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function eucchewbrowsePose(t: number, fromX: number, facing?: 1 | -1) {
+
+export function eucchewbrowsePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.eucchewbrowse));
   const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.00035, lift: s * -0.0041, rot: s * 0.31 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.8) {
-    const scrape = Math.sin(((u - 0.18) / 0.62) * Math.PI * 4.2);
-    return {
-      x: fromX + face * (0.0003 + Math.abs(scrape) * 0.00025),
-      lift: -0.0041 + Math.abs(scrape) * 0.00135,
-      rot: (0.31 + scrape * 0.12) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.8) / 0.2);
-  return { x: fromX + face * 0.0004 * (1 - s), lift: -0.0041 * (1 - s), rot: 0.31 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function sleepychintuckPose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.sleepychintuck));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.22) {
-    const s = smoothstep(u / 0.22);
-    return { x: fromX + face * s * -0.0002, lift: s * -0.0048, rot: s * 0.18 * face, anim: "sit" as TrickAnim };
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "sit" as TrickAnim };
   }
   if (u < 0.78) {
-    const clamp = Math.sin(((u - 0.22) / 0.56) * Math.PI * 1.6);
+    const bar = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (-0.0003 + Math.abs(clamp) * 0.0002),
-      lift: -0.0048 + Math.abs(clamp) * 0.0009,
-      rot: (0.18 + clamp * 0.07) * face,
+      x: fromX + face * (0.8 + bar * 0.16),
+      lift: 2.8 + Math.abs(bar) * 1.5,
+      rot: face * (-12 + bar * 10),
       anim: "sit" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX + face * -0.0002 * (1 - s), lift: -0.0048 * (1 - s), rot: 0.18 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function stepTrick(trick: KoalaTrick, dt: number, flags?: TrickFlags): KoalaTrick {
+
+export function forkbranchperchPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.forkbranchperch));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.2);
+    return {
+      x: fromX + face * bob * 0.12,
+      lift: 2.6 + Math.abs(bob) * 1.3,
+      rot: face * (10 + bob * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function sleepychintuckPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.sleepychintuck));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const hang = Math.sin(t * 2.0);
+    return {
+      x: fromX + face * (0.5 + hang * 0.1),
+      lift: 2.8 + Math.abs(hang) * 1.2,
+      rot: face * (11 + hang * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.5 * (1 - s),
+    lift: 1.3 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function climbhugtrunkPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.climbhugtrunk));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const thrash = Math.sin(t * 3.6);
+    return {
+      x: fromX + face * (1.0 + thrash * 0.22),
+      lift: 3.6 + Math.abs(thrash) * 2.0,
+      rot: face * (18 + thrash * 14),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 1.0 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: face * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function pouchpressPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.pouchpress));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cast = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * (0.6 + cast * 0.16),
+      lift: 2.8 + Math.abs(cast) * 1.6,
+      rot: face * (12 + cast * 10),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function eardroopPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.eardroop));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cloud = Math.sin(t * 3.0);
+    return {
+      x: fromX + face * (0.6 + cloud * 0.18),
+      lift: 3.0 + Math.abs(cloud) * 1.8,
+      rot: face * (14 + cloud * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.5 * (1 - s),
+    rot: face * (5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: KoalaTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "forkbranchperch" && trick.kind !== "climbhugtrunk" && trick.kind !== "eucchewbrowse" && trick.kind !== "sleepychintuck") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "eucchewbrowse" &&
+    trick.kind !== "forkbranchperch" &&
+    trick.kind !== "sleepychintuck" &&
+    trick.kind !== "climbhugtrunk" &&
+    trick.kind !== "pouchpress" &&
+    trick.kind !== "eardroop"
+  ) {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...trick, t: trick.t + Math.max(0, dt) };
   if (next.kind === "phascolarctoshush") {
@@ -378,35 +530,48 @@ export function stepTrick(trick: KoalaTrick, dt: number, flags?: TrickFlags): Ko
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "forkbranchperch") {
-    const pose = forkbranchperchPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "eucchewbrowse") {
+    const pose = eucchewbrowsePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "climbhugtrunk") {
-    const pose = climbhugtrunkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "forkbranchperch") {
+    const pose = forkbranchperchPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "sleepychintuck") {
-    const pose = sleepychintuckPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = sleepychintuckPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "climbhugtrunk") {
+    const pose = climbhugtrunkPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "pouchpress") {
+    const pose = pouchpressPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = eucchewbrowsePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = eardroopPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }

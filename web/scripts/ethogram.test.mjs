@@ -1419,7 +1419,21 @@ assert.equal(names("potto").includes("wait"), false);
 
 
 
-  assert.ok(names("koala").includes("chew"));
+  assert.ok(names("koala").includes("phascolarctoshush"));
+assert.ok(names("koala").includes("eucchewbrowse_soft"));
+assert.ok(names("koala").includes("forkbranchperch_soft"));
+assert.ok(names("koala").includes("sleepychintuck_soft"));
+assert.ok(names("koala").includes("climbhugtrunk_soft"));
+assert.ok(names("koala").includes("pouchpress_soft"));
+assert.ok(names("koala").includes("eardroop_soft"));
+assert.ok(names("koala").includes("freeze"));
+assert.equal(names("koala").includes("chew"), false);
+assert.equal(names("koala").includes("cling"), false);
+assert.equal(names("koala").includes("still"), false);
+assert.equal(names("koala").includes("koala"), false);
+assert.equal(names("koala").includes("gum"), false);
+assert.equal(names("koala").includes("sit"), false);
+assert.equal(names("koala").includes("wait"), false);
   for (const key of REEF) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
