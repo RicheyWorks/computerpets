@@ -45,20 +45,20 @@ export type StickHappy = {
 };
 
 export const HAPPY_DUR: Record<StickHappyKind, number> = {
-  femorata: 1.24,
-  instar: 1.32,
-  crypsis: 1.28,
+  femorata: 1.70,
+  instar: 1.84,
+  crypsis: 1.76,
 };
-export const DIAPHEROMERA_HOLD = 11.4;
-export const RELEASE_S = 0.66;
+export const DIAPHEROMERA_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR: Record<StickTrickKind, number> = {
   diapheromera: DIAPHEROMERA_HOLD + RELEASE_S,
-  rocking: 1.56,
-  catalepsy: 1.68,
-  browse: 1.52,
-  tread: 1.64,
-  oviposit: 1.62,
-  filiform: 1.66,
+  rocking: 2.48,
+  catalepsy: 2.42,
+  browse: 2.44,
+  tread: 2.56,
+  oviposit: 2.40,
+  filiform: 2.38,
 };
 
 export function canStart(state: TrickFlags | undefined) {

@@ -5,20 +5,20 @@
   const HAPPY = ["femorata", "instar", "crypsis"];
 
   const HAPPY_DUR = {
-    femorata: 1.24,
-    instar: 1.32,
-    crypsis: 1.28,
+    femorata: 1.70,
+    instar: 1.84,
+    crypsis: 1.76,
   };
-  const DIAPHEROMERA_HOLD = 11.4;
-  const RELEASE_S = 0.66;
+  const DIAPHEROMERA_HOLD = 11.2;
+  const RELEASE_S = 1.18;
   const DUR = {
     diapheromera: DIAPHEROMERA_HOLD + RELEASE_S,
-    rocking: 1.56,
-    catalepsy: 1.68,
-    browse: 1.52,
-    tread: 1.64,
-    oviposit: 1.62,
-    filiform: 1.66,
+    rocking: 2.48,
+    catalepsy: 2.42,
+    browse: 2.44,
+    tread: 2.56,
+    oviposit: 2.40,
+    filiform: 2.38,
   };
 
   function canStart(state) {

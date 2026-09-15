@@ -115,7 +115,7 @@ def test_only_scratching_mammals_scratch():
     assert "flash" not in [a["name"] for a in acts_for("firefly")]
     assert "still" not in [a["name"] for a in acts_for("firefly")]
     assert "diapheromera" in [a["name"] for a in acts_for("stick")]
-    assert "tegminlift_soft" in [a["name"] for a in acts_for("stick")]
+    assert "oviposit_soft" in [a["name"] for a in acts_for("stick")]
     assert "filiform_soft" in [a["name"] for a in acts_for("stick")]
     assert "freeze" in [a["name"] for a in acts_for("stick")]
     assert "still" not in [a["name"] for a in acts_for("stick")]
