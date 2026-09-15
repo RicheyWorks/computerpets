@@ -314,6 +314,7 @@ assert.equal(C.prefersHouseCry("koala"), true);
   assert.equal(C.prefersHouseCry("eagle_ray"), true);
   assert.equal(C.prefersHouseCry("grouper"), true);
   assert.equal(C.prefersHouseCry("cyber_dragon"), true);
+  assert.equal(C.prefersHouseCry("volt_dragon"), true);
   assert.equal(C.prefersHouseCry("chlamydomonas"), true);
   const hearth = C.speakOpts("hearth", 50);
   assert.ok(hearth.rate < 0.86);
