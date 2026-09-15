@@ -86,22 +86,31 @@ test("offline parsers return null without inventing prices", () => {
   assert.equal(M.parseSearchCoins({ coins: [] }).length, 0);
 });
 
-test("free-typed unknown ticker prefers crypto, not Yahoo stock", () => {
+test("classify routes equities to Yahoo stock and majors to crypto", () => {
+  const aapl = M.classify("AAPL");
+  assert.equal(aapl.kind, "stock");
+  assert.equal(aapl.symbol, "AAPL");
+  assert.equal(aapl.geckoId, "");
+  const btc = M.classify("BTC");
+  assert.equal(btc.kind, "crypto");
+  assert.equal(btc.geckoId, "bitcoin");
+  // Bare unknown tickers guess Yahoo stock; Coins Add forces crypto via kind/search.
   const pepe = M.classify("PEPE");
-  assert.equal(pepe.kind, "crypto");
+  assert.equal(pepe.kind, "stock");
   assert.equal(pepe.symbol, "PEPE");
   assert.equal(pepe.geckoId, "");
   const wif = M.parseTicker("WIF");
-  assert.equal(wif.kind, "crypto");
+  assert.equal(wif.kind, "stock");
   // Already-saved equity stays stock through parseTicker / parseMarket.
-  const aapl = M.parseTicker({ symbol: "AAPL", kind: "stock", name: "Apple" });
-  assert.equal(aapl.kind, "stock");
-  assert.equal(aapl.geckoId, "");
+  const saved = M.parseTicker({ symbol: "AAPL", kind: "stock", name: "Apple" });
+  assert.equal(saved.kind, "stock");
+  assert.equal(saved.geckoId, "");
   const house = M.parseMarket({
-    marketTickers: [{ symbol: "AAPL", kind: "stock", name: "Apple" }],
+    marketTickers: [{ symbol: "AAPL", kind: "stock", name: "Apple" }, { symbol: "BTC" }],
     marketCustomized: true,
   });
   assert.equal(house.tickers[0].kind, "stock");
+  assert.equal(house.tickers.find((t) => t.symbol === "BTC").kind, "crypto");
 });
 
 test("add-by-unknown-ticker via CoinGecko search lands on crypto watch list", () => {

@@ -127,7 +127,7 @@ export function classify(raw: unknown): Omit<MarketTicker, "id"> | null {
   if (CRYPTO[upper]) return { symbol: upper, kind: "crypto", geckoId: CRYPTO[upper]!, name: upper, platform: "", address: "" };
   const gecko = Object.keys(CRYPTO).find((k) => CRYPTO[k] === lower);
   if (gecko) return { symbol: gecko, kind: "crypto", geckoId: lower, name: gecko, platform: "", address: "" };
-  if (/^[A-Za-z][A-Za-z0-9.-]{0,11}$/.test(typed)) return { symbol: upper, kind: "crypto", geckoId: "", name: upper, platform: "", address: "" };
+  if (/^[A-Za-z][A-Za-z0-9.-]{0,11}$/.test(typed)) return { symbol: upper, kind: "stock", geckoId: "", name: upper, platform: "", address: "" };
   return null;
 }
 export function parseTicker(raw: unknown): MarketTicker | null {
