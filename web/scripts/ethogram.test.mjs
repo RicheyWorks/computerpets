@@ -1023,7 +1023,19 @@ assert.equal(names("fiddler_crab").includes("walk"), false);
 assert.equal(names("fiddler_crab").includes("still"), false);
 assert.equal(names("fiddler_crab").includes("sit"), false);
 
-  assert.ok(names("ghost_crab").includes("run"));
+  assert.ok(names("ghost_crab").includes("ocypodehush"));
+assert.ok(names("ghost_crab").includes("sprintdash_soft"));
+assert.ok(names("ghost_crab").includes("stalkeyescan_soft"));
+assert.ok(names("ghost_crab").includes("burrowplunge_soft"));
+assert.ok(names("ghost_crab").includes("freezecamo_soft"));
+assert.ok(names("ghost_crab").includes("nightforage_soft"));
+assert.ok(names("ghost_crab").includes("sandghost_soft"));
+assert.ok(names("ghost_crab").includes("freeze"));
+assert.equal(names("ghost_crab").includes("run"), false);
+assert.equal(names("ghost_crab").includes("walk"), false);
+assert.equal(names("ghost_crab").includes("still"), false);
+assert.equal(names("ghost_crab").includes("sit"), false);
+
   assert.ok(names("lugworm").includes("heap"));
   for (const key of MEADOW) {
     const acts = names(key);
