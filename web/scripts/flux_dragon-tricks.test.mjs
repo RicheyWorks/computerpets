@@ -437,7 +437,7 @@ test("Flux tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("dashedlineflicker"), false);
   assert.equal(T.TRICKS.includes("cornersnapturn"), false);
   assert.equal(T.TRICKS.includes("breadcrumbperch"), false);
-  assert.equal(T.TRICKS.includes("longtracehush"), false);
+  assert.equal(T.TRICKS.includes("tracehush"), false);
   assert.equal(T.HAPPY.includes("denstrace"), false);
   assert.equal(T.HAPPY.includes("inktrace"), false);
   assert.equal(T.HAPPY.includes("denstracedragon"), false);
