@@ -4167,3 +4167,74 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
   if (!(kind && window.PetRobinFly && kind.key === window.PetRobinFly.ROBIN_KEY)) callRobin();
   requestAnimationFrame(tick);
 });
+
+/* Buffffff GUI harness — only when main loads index.html?gui_harness=1 */
+(function bindGuiHarness() {
+  try {
+    if (!/[?&]gui_harness=1(?:&|$)/.test(String(location.search || ""))) return;
+  } catch (_) {
+    return;
+  }
+  function snapshot() {
+    const dots = giftRoot ? giftRoot.querySelectorAll(".gift-dot, .shed-dot").length : 0;
+    const choiceIds = choiceEl
+      ? [...choiceEl.querySelectorAll("button")].map((b) => (b.textContent || "").trim().toLowerCase())
+      : [];
+    return {
+      kind: kind ? kind.key : null,
+      name: kind ? kind.name : null,
+      petSrc: !!(pet && pet.getAttribute("src")),
+      collapsed: !!(card && card.collapsed),
+      hudShow: !!(hud && hud.classList.contains("show")),
+      hudCollapsedAttr: hud ? hud.dataset.collapsed || "" : "",
+      hudName: hudName ? String(hudName.textContent || "") : "",
+      vital: hudVital ? String(hudVital.textContent || "") : "",
+      gifts: life && life.gifts ? life.gifts.length : 0,
+      giftDots: dots,
+      choiceOpen: !!choiceOpen,
+      choiceButtonCount: choiceEl ? choiceEl.querySelectorAll("button").length : 0,
+      choiceHasClose: choiceIds.some((id) => id === "close"),
+      choiceHasExit: choiceIds.some((id) => id === "exit"),
+    };
+  }
+  window.PetGuiHarness = {
+    snapshot,
+    openHostChoice() {
+      openKeeperCard();
+      paintHud();
+      openChoice({ role: "host" });
+      return snapshot();
+    },
+    pick(id) {
+      pickChoice(id);
+      paintHud();
+      return snapshot();
+    },
+    collapse() {
+      collapseKeeperCard();
+      paintHud();
+      return snapshot();
+    },
+    openCard() {
+      openKeeperCard();
+      paintHud();
+      return snapshot();
+    },
+    placeGift() {
+      if (!life || !window.PetLife || !window.PetLife.leaveGift) return snapshot();
+      if (life.bond < 25) life.bond = 40;
+      if (!life.gifts) life.gifts = [];
+      life = window.PetLife.leaveGift(life, Date.now());
+      persist();
+      paintGifts();
+      paintHud();
+      return snapshot();
+    },
+    clickGiftDot() {
+      const el = giftRoot && giftRoot.querySelector(".gift-dot, .shed-dot");
+      if (el) el.click();
+      paintHud();
+      return snapshot();
+    },
+  };
+})();
