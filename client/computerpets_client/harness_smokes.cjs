@@ -747,17 +747,48 @@ function windowsPerch() {
 
 function blotterHours() {
   const H = load("hours.js");
+  const fs = require("fs");
+  const path = require("path");
   const restN = Object.keys(H.REST || {}).length;
   if (restN < 221) return fail("hours.js REST thin", { restN });
   if (!H.isRestingHour("cat", 14)) return fail("cat should rest at 14");
   if (H.isRestingHour("red_panda", 14)) return fail("rui should not rest at 14");
-  // rui overnight window differs py(22,7) vs hours.js[1,6] — not asserted here
+  // House REST for Rui is [1, 6) — must match web hours.ts (Python lockstep is in blotter.hours).
+  if (H.isRestingHour("red_panda", 0) || !H.isRestingHour("red_panda", 2) || H.isRestingHour("red_panda", 6) || H.isRestingHour("red_panda", 23)) {
+    return fail("rui rest window drifted from [1,6)", { window: H.restWindow("red_panda") });
+  }
+  const webPath = path.join(__dirname, "..", "..", "web", "src", "lib", "pets", "hours.ts");
+  const webSrc = fs.readFileSync(webPath, "utf8");
+  const webBlock = webSrc.match(/const REST: Record<string, \[number, number\]> = \{([\s\S]*?)\n\};/);
+  if (!webBlock) return fail("web hours.ts REST block missing");
+  const webRest = {};
+  for (const m of webBlock[1].matchAll(/([A-Za-z0-9_]+):\s*\[(\d+),\s*(\d+)\]/g)) {
+    webRest[m[1]] = [Number(m[2]), Number(m[3])];
+  }
+  const drift = [];
+  for (const key of Object.keys(H.REST)) {
+    const a = H.REST[key];
+    const b = webRest[key];
+    if (!b || a[0] !== b[0] || a[1] !== b[1]) drift.push(key);
+  }
+  for (const key of Object.keys(webRest)) {
+    if (!H.REST[key]) drift.push(key);
+  }
+  if (drift.length) return fail("REST desk/web drift", { drift: drift.slice(0, 12) });
+  // dayPart lives in web hours.ts (+ Python); desktop hours.js has no peer — do not invent.
+  if (/\bdayPart\b/.test(webSrc) === false) return fail("web dayPart missing");
+  if (/\bdayPart\b/.test(fs.readFileSync(path.join(__dirname, "..", "..", "desktop", "renderer", "hours.js"), "utf8"))) {
+    return fail("unexpected desktop dayPart — document if added");
+  }
   const snack = H.snackLine("red_panda");
   if (!String(snack).includes("Bamboo")) return fail("snackLine drift", { snack });
-  return ok("rest=" + restN, { restN, snack }, [
+  return ok("rest=" + restN, { restN, snack, lockstep: restN }, [
     "REST=" + restN,
+    "REST_desk_web_lockstep=" + restN,
     "isRestingHour.cat.14=true",
     "isRestingHour.rui.14=false",
+    "rui.window=[1,6)",
+    "dayPart=web-only",
     "snack=" + snack,
   ]);
 }
