@@ -438,7 +438,7 @@ test("Ion tricks start only on idle ground", () => {
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...T.TRICKS], ["paleionhazecling", "outlinehazedrift", "chargehazeclaim", "mistperchsettle", "longionhush"]);
   assert.equal(T.TRICKS.includes("crackpointskitter"), false);
-  assert.equal(T.TRICKS.includes("longsparkhush"), false);
+  assert.equal(T.TRICKS.includes("sparkhush"), false);
   assert.equal(T.HAPPY.includes("densspark"), false);
   assert.equal(T.TRICKS.includes("heatfieldclaimwalk"), false);
   assert.equal(T.HAPPY.includes("densflux"), false);
