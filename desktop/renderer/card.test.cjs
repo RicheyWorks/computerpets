@@ -293,6 +293,7 @@ assert.equal(C.prefersHouseCry("lugworm"), true);
 assert.equal(C.prefersHouseCry("field_cricket"), true);
 assert.equal(C.prefersHouseCry("katydid"), true);
 assert.equal(C.prefersHouseCry("grasshopper"), true);
+assert.equal(C.prefersHouseCry("swallowtail"), true);
   assert.equal(C.prefersHouseCry("chlamydomonas"), true);
   const hearth = C.speakOpts("hearth", 50);
   assert.ok(hearth.rate < 0.86);
