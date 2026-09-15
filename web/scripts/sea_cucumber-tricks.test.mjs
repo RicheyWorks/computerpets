@@ -528,7 +528,7 @@ test("Tube tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("beakscrapegraze"), false);
   assert.equal(T.TRICKS.includes("peristalse"), false);
   assert.equal(T.TRICKS.includes("podia"), false);
-  assert.deepEqual([...CleanerShrimp.TRICKS], ["antennawaveadvertise", "dancescrubclientcue", "rockcreviceretreat", "bipedalwalktick", "longlysmatahush"]);
+  assert.deepEqual([...CleanerShrimp.TRICKS], ["antennawaveadvertise", "dancescrubclientcue", "rockcreviceretreat", "bipedalwalktick", "whitebandflash", "clientstation", "lysmatahush"]);
   assert.deepEqual([...CleanerShrimp.HAPPY], ["densscrub", "inkscrub", "denslysmata"]);
 
   assert.deepEqual([...Salamander.TRICKS], ["maculate", "litter", "cutaneous", "nasolabial", "ambystomid"]);
