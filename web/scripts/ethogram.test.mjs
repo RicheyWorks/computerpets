@@ -2103,6 +2103,20 @@ test("orchid ethogram is Moth ultra (bark sit_hold + softs + freeze, not unfurl/
   assert.equal(names("orchid").includes("nod"), false);
 });
 
+test("saguaro ethogram is Arm ultra (sentinel sit_hold + softs + freeze, not still/lean/nod)", () => {
+  assert.ok(names("saguaro").includes("sentinel"));
+  assert.ok(names("saguaro").includes("rib_soft"));
+  assert.ok(names("saguaro").includes("branch_soft"));
+  assert.ok(names("saguaro").includes("nocturne_soft"));
+  assert.ok(names("saguaro").includes("areole_soft"));
+  assert.ok(names("saguaro").includes("pleat_soft"));
+  assert.ok(names("saguaro").includes("boot_soft"));
+  assert.ok(names("saguaro").includes("freeze"));
+  assert.equal(names("saguaro").includes("still"), false);
+  assert.equal(names("saguaro").includes("lean"), false);
+  assert.equal(names("saguaro").includes("nod"), false);
+});
+
 test("pickAct can schedule tongue on a snake and never scratch", () => {
   let tongue = 0;
   for (let i = 0; i < 80; i++) {
