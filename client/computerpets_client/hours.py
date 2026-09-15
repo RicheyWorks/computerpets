@@ -18,7 +18,7 @@ DayPart = Literal["dawn", "day", "dusk", "night"]
 
 # Sleep windows: [startHour, endHour). Overnight if start > end.
 REST: dict[str, tuple[int, int]] = {
-    "red_panda": (22, 7),
+    "red_panda": (1, 6),
     "cat": (13, 16),
     "dog": (21, 6),
     "rabbit": (22, 6),
