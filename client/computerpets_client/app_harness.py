@@ -123,6 +123,7 @@ DOMAINS = (
     "gift",
     "desk",
     "card",
+    "web",
     "gui",
 )
 
@@ -1333,6 +1334,266 @@ def _assert_card(local_id: str, result: InvokeResult) -> list[str]:
 # ---------------------------------------------------------------------------
 
 
+
+# ---------------------------------------------------------------------------
+# Web companion-room lockstep (guest-choice.ts / ethogram+tricks TS / demo)
+# ---------------------------------------------------------------------------
+
+_TRICKS_LIST_RE = re.compile(
+    r"(?:export\s+)?const\s+TRICKS\s*=\s*\[([^\]]*)\]",
+    re.S,
+)
+_TRICK_NAME_RE = re.compile(r'["\']([a-z0-9_]+)["\']')
+_ETHOGRAM_KEY_RE = re.compile(r"^\s{2}([a-z0-9_]+):\s*\[", re.M)
+
+
+def _web_smoke_script() -> Path:
+    return Path(__file__).resolve().with_name("harness_web_smokes.mjs")
+
+
+def _run_web_smoke(command: str, *, domain: str, action_id: str) -> InvokeResult:
+    """Drive web/src TypeScript modules offline via harness_web_smokes.mjs."""
+    import json
+    import shutil
+    import subprocess
+
+    node = shutil.which("node")
+    script = _web_smoke_script()
+    if not node:
+        return InvokeResult(action_id, domain, False, error="node not on PATH")
+    if not script.is_file():
+        return InvokeResult(action_id, domain, False, error=f"missing {script.name}")
+    try:
+        proc = subprocess.run(
+            [node, "--experimental-strip-types", str(script), command],
+            capture_output=True,
+            text=True,
+            cwd=str(repo_root()),
+            timeout=45,
+            check=False,
+        )
+    except Exception as exc:  # oracle: surface, do not crash runner
+        return InvokeResult(action_id, domain, False, error=f"{type(exc).__name__}: {exc}")
+    raw = (proc.stdout or "").strip().splitlines()
+    line = raw[-1] if raw else ""
+    try:
+        payload = json.loads(line) if line else {}
+    except json.JSONDecodeError:
+        err = (proc.stderr or line)[:200]
+        return InvokeResult(
+            action_id, domain, False,
+            error=f"web smoke JSON parse failed: {err}",
+            detail=line[:200],
+        )
+    ok = bool(payload.get("ok")) and proc.returncode == 0
+    trace = [str(t) for t in (payload.get("trace") or [])]
+    extras = dict(payload.get("extras") or {})
+    extras["smoke"] = command
+    return InvokeResult(
+        action_id=action_id,
+        domain=domain,
+        ok=ok,
+        detail=str(payload.get("detail") or ""),
+        extras=extras,
+        trace=trace or ([f"smoke={command}"] if ok else []),
+        error=None if ok else str(
+            payload.get("error") or payload.get("detail") or f"web smoke {command} failed"
+        ),
+    )
+
+
+def _tricks_list_from_text(text: str) -> list[str] | None:
+    match = _TRICKS_LIST_RE.search(text)
+    if not match:
+        return None
+    return _TRICK_NAME_RE.findall(match.group(1))
+
+
+def _tricks_path_side(key: str, side: str) -> Path | None:
+    """Resolve desktop *-tricks.js or web *-tricks.ts for a catalog key (alias-aware)."""
+    if side == "desktop":
+        folder, suffix, pattern = (
+            repo_root() / "desktop" / "renderer",
+            ".js",
+            "*-tricks.js",
+        )
+    elif side == "web":
+        folder, suffix, pattern = (
+            repo_root() / "web" / "src" / "lib" / "pets",
+            ".ts",
+            "*-tricks.ts",
+        )
+    else:
+        raise ValueError(side)
+    for stem in _tricks_stem_candidates(key):
+        path = folder / f"{stem}-tricks{suffix}"
+        if not path.is_file() or path.name in _TRICKS_REGISTRY_NAMES:
+            continue
+        if _tricks_file_key(path) == key:
+            return path
+    if folder.is_dir():
+        for path in sorted(folder.glob(pattern)):
+            if path.name in _TRICKS_REGISTRY_NAMES:
+                continue
+            if _tricks_file_key(path) == key:
+                return path
+    return None
+
+
+def _ethogram_ts_keys() -> set[str]:
+    src = _read("web/src/lib/pets/ethogram.ts")
+    return set(_ETHOGRAM_KEY_RE.findall(src))
+
+
+def _web_rows() -> list[Affordance]:
+    return [
+        Affordance(
+            "web.guest_choice",
+            "web",
+            "Web guest-choice Exit/Close last",
+            "web/src/lib/pets/guest-choice.ts",
+            notes=(
+                "Drives guest-choice.ts (not only desktop choice.js / Python choice.py). "
+                "GUEST_CHOICE + guestMarks lockstep with choice.js; marks end close/exit; "
+                "CompanionRoom wires guestTap/guestMarks."
+            ),
+        ),
+        Affordance(
+            "web.ethogram_tricks",
+            "web",
+            "Web ethogram + tricks TS catalog lockstep",
+            "web/src/lib/pets/ethogram.ts + *-tricks.ts",
+            notes=(
+                "CSRBT-style house-wide invariant: every CATALOG_KEYS guest appears in "
+                "ethogram.ts; every non-Rui key has web+desktop tricks files with matching "
+                "TRICKS lists (alias-aware). Rui stays the only ethogram.tricks exclusion."
+            ),
+        ),
+        Affordance(
+            "web.demo_room",
+            "web",
+            "Demo stage CompanionRoom smoke",
+            "web/src/components/desk/demo-stage.tsx",
+            notes=(
+                "Pure offline check already present in demo-walk.test.mjs — CompanionRoom, "
+                "persistLocal=false, demo.$slug DemoStage. No invented static-export smoke "
+                "(TanStack/nitro has no pure offline export check)."
+            ),
+        ),
+    ]
+
+
+def _invoke_web(local_id: str, **opts: Any) -> InvokeResult:
+    aid = f"web.{local_id}"
+    if local_id == "guest_choice":
+        return _run_web_smoke("guest_choice", domain="web", action_id=aid)
+    if local_id == "demo_room":
+        return _run_web_smoke("demo_room", domain="web", action_id=aid)
+    if local_id == "ethogram_tricks":
+        eth_keys = _ethogram_ts_keys()
+        missing_eth: list[str] = []
+        missing_web: list[str] = []
+        missing_desk: list[str] = []
+        drift: list[str] = []
+        parse_fail: list[str] = []
+        matched = 0
+        for key in CATALOG_KEYS:
+            if key not in eth_keys:
+                missing_eth.append(key)
+            if key in NO_TRICKS_KEYS:
+                continue
+            desk = _tricks_path_side(key, "desktop")
+            web = _tricks_path_side(key, "web")
+            if desk is None:
+                missing_desk.append(key)
+            if web is None:
+                missing_web.append(key)
+            if desk is None or web is None:
+                continue
+            try:
+                desk_list = _tricks_list_from_text(desk.read_text(encoding="utf-8"))
+                web_list = _tricks_list_from_text(web.read_text(encoding="utf-8"))
+            except OSError as exc:
+                parse_fail.append(f"{key}:{exc}")
+                continue
+            if desk_list is None or web_list is None:
+                parse_fail.append(key)
+                continue
+            if desk_list != web_list:
+                drift.append(key)
+                continue
+            matched += 1
+        ok = not (missing_eth or missing_web or missing_desk or drift or parse_fail)
+        parts = [
+            f"keys={len(CATALOG_KEYS)}",
+            f"ethogram_ts={len(eth_keys)}",
+            f"tricks_lockstep={matched}",
+            f"tricks_excluded={len(NO_TRICKS_KEYS)}",
+        ]
+        if missing_eth:
+            parts.append(f"missing_eth={','.join(missing_eth[:12])}")
+        if missing_web:
+            parts.append(f"missing_web={','.join(missing_web[:12])}")
+        if missing_desk:
+            parts.append(f"missing_desk={','.join(missing_desk[:12])}")
+        if drift:
+            parts.append(f"drift={','.join(drift[:12])}")
+        if parse_fail:
+            parts.append(f"parse_fail={len(parse_fail)}")
+        err = None
+        if not ok:
+            bits = []
+            if missing_eth:
+                bits.append(f"ethogram.ts missing keys: {', '.join(missing_eth[:12])}")
+            if missing_web:
+                bits.append(f"missing web tricks: {', '.join(missing_web[:12])}")
+            if missing_desk:
+                bits.append(f"missing desktop tricks: {', '.join(missing_desk[:12])}")
+            if drift:
+                bits.append(f"TRICKS drift web/desktop: {', '.join(drift[:12])}")
+            if parse_fail:
+                bits.append(f"tricks parse fail: {', '.join(parse_fail[:6])}")
+            err = "; ".join(bits)
+        return InvokeResult(
+            aid, "web", ok, detail=f"lockstep={matched}",
+            extras={
+                "n": len(CATALOG_KEYS),
+                "ethogram_ts": len(eth_keys),
+                "matched": matched,
+                "missing_eth": missing_eth,
+                "missing_web": missing_web,
+                "missing_desk": missing_desk,
+                "drift": drift,
+                "parse_fail": parse_fail[:32],
+            },
+            trace=parts,
+            error=err,
+        )
+    return InvokeResult(aid, "web", False, error=f"unknown web id {local_id!r}")
+
+
+def _assert_web(local_id: str, result: InvokeResult) -> list[str]:
+    fails: list[str] = []
+    if local_id == "ethogram_tricks":
+        for key in result.extras.get("missing_eth") or []:
+            fails.append(f"FAIL ethogram.ts missing {key}")
+        for key in result.extras.get("missing_web") or []:
+            fails.append(f"FAIL missing web *-tricks.ts for {key}")
+        for key in result.extras.get("missing_desk") or []:
+            fails.append(f"FAIL missing desktop *-tricks.js for {key}")
+        for key in result.extras.get("drift") or []:
+            fails.append(f"FAIL TRICKS drift web/desktop for {key}")
+        for msg in result.extras.get("parse_fail") or []:
+            fails.append(f"FAIL tricks parse {msg}")
+        if not result.ok and not fails:
+            fails.append(result.error or "web.ethogram_tricks failed")
+        return fails
+    if not result.ok:
+        fails.append(result.error or "web invoke failed")
+    return fails
+
+
+
 def _gui_rows() -> list[Affordance]:
     return [
         Affordance(
@@ -1668,6 +1929,7 @@ _DOMAIN_BUILDERS: dict[str, Callable[[], list[Affordance]]] = {
     "gift": _gift_rows,
     "desk": _desk_rows,
     "card": _card_rows,
+    "web": _web_rows,
     "gui": _gui_rows,
 }
 
@@ -1681,6 +1943,7 @@ _INVOKERS: dict[str, Callable[..., InvokeResult]] = {
     "gift": _invoke_gift,
     "desk": _invoke_desk,
     "card": _invoke_card,
+    "web": _invoke_web,
     "gui": _invoke_gui,
 }
 
@@ -1694,6 +1957,7 @@ _ASSERTERS: dict[str, Callable[[str, InvokeResult], list[str]]] = {
     "gift": _assert_gift,
     "desk": _assert_desk,
     "card": _assert_card,
+    "web": _assert_web,
     "gui": _assert_gui,
 }
 

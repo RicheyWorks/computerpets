@@ -72,12 +72,15 @@ CROSS_DOMAIN = {
     "card.notify_open",
     "card.needs_persist",
     "gui.choice_close_exit",
+    "web.guest_choice",
+    "web.ethogram_tricks",
+    "web.demo_room",
 }
 
 
 def test_domains_are_the_real_house_surfaces():
     assert domains() == DOMAINS
-    assert set(domains()) == {"care", "guest", "visit", "species", "ethogram", "cry", "gift", "desk", "card", "gui"}
+    assert set(domains()) == {"care", "guest", "visit", "species", "ethogram", "cry", "gift", "desk", "card", "web", "gui"}
 
 
 def test_catalog_has_stable_ids_and_grows_without_a_frozen_total():
@@ -230,6 +233,9 @@ def test_offline_resolves_and_playback_leave_traces():
         "card.notify_open",
         "card.needs_persist",
         "gui.choice_close_exit",
+        "web.guest_choice",
+        "web.ethogram_tricks",
+        "web.demo_room",
     ):
         result = invoke(aid)
         assert result.ok, (aid, result.error, result.detail)
@@ -295,3 +301,26 @@ def test_catalog_wide_ethogram_cry_portraits():
     assert portraits.ok, (portraits.error, portraits.extras)
     assert not portraits.extras.get("missing")
     assert int(portraits.extras.get("n") or 0) >= 1
+
+
+def test_web_companion_lockstep():
+    """Web guest-choice.ts, ethogram/tricks TS catalog lockstep, demo room — not desktop-only."""
+    guest = invoke("web.guest_choice")
+    assert guest.ok, (guest.error, guest.detail)
+    assert guest.trace
+    marks = guest.extras.get("marks") or []
+    assert list(marks)[-2:] == ["close", "exit"]
+
+    eth = invoke("web.ethogram_tricks")
+    assert eth.ok, (eth.error, eth.extras)
+    assert int(eth.extras.get("n") or 0) >= 1
+    assert int(eth.extras.get("ethogram_ts") or 0) == int(eth.extras.get("n") or 0)
+    assert int(eth.extras.get("matched") or 0) >= 220
+    assert not eth.extras.get("missing_eth")
+    assert not eth.extras.get("missing_web")
+    assert not eth.extras.get("missing_desk")
+    assert not eth.extras.get("drift")
+
+    demo = invoke("web.demo_room")
+    assert demo.ok, (demo.error, demo.detail)
+    assert demo.trace
