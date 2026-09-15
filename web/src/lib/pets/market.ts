@@ -218,12 +218,12 @@ export function parseMarket(raw: unknown): MarketPrefs {
   next.currentNftId = wantNft && next.nfts.some((n) => n.id === wantNft) ? wantNft : next.nfts[0]?.id ?? null;
   const mList = Array.isArray(o.nftMarketplaces) ? o.nftMarketplaces : Array.isArray(o.marketplaces) ? o.marketplaces : null;
   if (mList && mList.length) next.marketplaces = mList.map(marketplaceOf).filter((t): t is NftMarketplace => !!t).slice(0, MAX_MARKETS);
+  else if (mList && mList.length === 0 && (o.marketplaceCustomized || o.nftMarketplaceCustomized)) next.marketplaces = [];
+  else next.marketplaces = defaultMarketplaces();
   const favT = Array.isArray((raw as { favoriteTickerIds?: unknown }).favoriteTickerIds) ? (raw as { favoriteTickerIds: unknown[] }).favoriteTickerIds : [];
   const favN = Array.isArray((raw as { favoriteNftIds?: unknown }).favoriteNftIds) ? (raw as { favoriteNftIds: unknown[] }).favoriteNftIds : [];
   next.favoriteTickerIds = favT.filter((x): x is string => typeof x === "string" && !!x).slice(0, MAX_FAVORITES);
   next.favoriteNftIds = favN.filter((x): x is string => typeof x === "string" && !!x).slice(0, MAX_FAVORITES);
-  else if (mList && mList.length === 0 && (o.marketplaceCustomized || o.nftMarketplaceCustomized)) next.marketplaces = [];
-  else next.marketplaces = defaultMarketplaces();
   return next;
 }
 export function currentTicker(market: MarketPrefs | undefined | null): MarketTicker | null {
