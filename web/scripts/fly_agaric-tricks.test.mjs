@@ -1228,8 +1228,8 @@ test("notes: Cap ultra idle-life done; next house-order ultra is Flame / chicken
   assert.equal(OverlayGround.wantsThankYou("sweat_bee"), true);
   assert.equal(OverlayGround.tricksFor("sheen"), OverlaySweatBee);
   assert.equal(OverlayGround.wantsThankYou("sheen"), true);
-  assert.deepEqual([...SweatBee.TRICKS], ["lustre", "tumulus", "salt", "commune", "agapostemon"]);
-  assert.deepEqual([...OverlaySweatBee.TRICKS], ["lustre", "tumulus", "salt", "commune", "agapostemon"]);
+  assert.deepEqual([...SweatBee.TRICKS], ["lustre", "tumulus", "salt", "commune", "agapostemon", "metallictilt", "nestmound"]);
+  assert.deepEqual([...OverlaySweatBee.TRICKS], ["lustre", "tumulus", "salt", "commune", "agapostemon", "metallictilt", "nestmound"]);
   assert.deepEqual([...SweatBee.HAPPY], ["virescens", "texanus", "halictini"]);
   assert.equal(T.TRICKS.includes("lustre"), false);
   assert.equal(T.TRICKS.includes("tumulus"), false);

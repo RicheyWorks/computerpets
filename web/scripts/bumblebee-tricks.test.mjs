@@ -800,7 +800,7 @@ globalThis.PetCarpenterBeeTricks = OverlayCarpenterBee;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Thrum ultra-polish done; ethogram dens claim true; next Sheen / sweat_bee", () => {
+test("notes: Thrum ultra-polish done; ethogram dens claim true; next Hum / honey_drone (Sheen done)", () => {
   assert.equal(T.BOMBUS_HOLD, 11.2);
   assert.equal(T.RELEASE_S, 1.18);
   assert.equal(T.TRICKS.length, 7);

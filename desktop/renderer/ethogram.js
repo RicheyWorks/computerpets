@@ -73,7 +73,7 @@
     mason_bee: [A("seal", "sit_hold", 1.8, 4, "sit"), A("hover", "bob", 1.2, 2), A("still", "freeze", 1.6, 2)],
     leafcutter: [A("cut", "nod", 1.2, 4, "sit"), A("hover", "bob", 1.2, 2), A("still", "freeze", 1.6, 2)],
     stingless: [A("pot", "sit_hold", 1.8, 4, "sit"), A("hover", "bob", 1.2, 2), A("still", "freeze", 1.4, 2)],
-    sweat_bee: [A("shine", "pulse", 1.0, 4), A("hover", "bob", 1.2, 2), A("still", "freeze", 1.4, 2)],
+    sweat_bee: [A("agapostemon", "sit_hold", 2.4, 4, "sit"), A("lustre_soft", "play", 1.2, 2, "play"), A("tumulus_soft", "talk", 1.2, 2, "talk"), A("salt_soft", "talk", 1.15, 2, "talk"), A("commune_soft", "sit", 1.2, 2, "sit"), A("metallictilt_soft", "play", 1.2, 2, "play"), A("nestmound_soft", "talk", 1.2, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
     mining_bee: [A("dig", "sit_hold", 1.8, 4, "sit"), A("hover", "bob", 1.2, 2), A("still", "freeze", 1.6, 2)],
     honey_drone: [A("hum", "pulse", 1.4, 4), A("hover", "bob", 1.6, 2), A("still", "freeze", 2.0, 3)],
     honey_queen: [A("lay", "sit_hold", 2.2, 5, "sit"), A("walk", "wiggle", 1.0, 1), A("still", "freeze", 2.0, 2)],

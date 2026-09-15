@@ -97,7 +97,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "mason_bee": (_a("seal", "sit_hold", 1.8, 4, "sit"), _a("hover", "bob", 1.2, 2), _a("still", "freeze", 1.6, 2)),
     "leafcutter": (_a("cut", "nod", 1.2, 4, "sit"), _a("hover", "bob", 1.2, 2), _a("still", "freeze", 1.6, 2)),
     "stingless": (_a("pot", "sit_hold", 1.8, 4, "sit"), _a("hover", "bob", 1.2, 2), _a("still", "freeze", 1.4, 2)),
-    "sweat_bee": (_a("shine", "pulse", 1.0, 4), _a("hover", "bob", 1.2, 2), _a("still", "freeze", 1.4, 2)),
+    "sweat_bee": (_a("agapostemon", "sit_hold", 2.4, 4, "sit"), _a("lustre_soft", "play", 1.2, 2, "play"), _a("tumulus_soft", "talk", 1.2, 2, "talk"), _a("salt_soft", "talk", 1.15, 2, "talk"), _a("commune_soft", "sit", 1.2, 2, "sit"), _a("metallictilt_soft", "play", 1.2, 2, "play"), _a("nestmound_soft", "talk", 1.2, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
     "mining_bee": (_a("dig", "sit_hold", 1.8, 4, "sit"), _a("hover", "bob", 1.2, 2), _a("still", "freeze", 1.6, 2)),
     "honey_drone": (_a("hum", "pulse", 1.4, 4), _a("hover", "bob", 1.6, 2), _a("still", "freeze", 2.0, 3)),
     "honey_queen": (_a("lay", "sit_hold", 2.2, 5, "sit"), _a("walk", "wiggle", 1.0, 1), _a("still", "freeze", 2.0, 2)),
