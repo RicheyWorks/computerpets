@@ -45,20 +45,20 @@ export type CarpenterAntHappy = {
 };
 
 export const HAPPY_DUR: Record<CarpenterAntHappyKind, number> = {
-  pennsylvanicus: 1.22,
-  honeydew: 1.34,
-  formicine: 1.28,
+  pennsylvanicus: 1.70,
+  honeydew: 1.84,
+  formicine: 1.76,
 };
 export const CAMPONOTUS_HOLD = 11.2;
-export const RELEASE_S = 0.64;
+export const RELEASE_S = 1.18;
 export const DUR: Record<CarpenterAntTrickKind, number> = {
   camponotus: CAMPONOTUS_HOLD + RELEASE_S,
-  gallery: 1.58,
-  pheromone: 1.64,
-  crumb: 1.52,
-  bustle: 1.46,
-  trophallaxis: 1.6,
-  frass: 1.54,
+  gallery: 2.48,
+  pheromone: 2.42,
+  crumb: 2.44,
+  bustle: 2.56,
+  trophallaxis: 2.40,
+  frass: 2.38,
 };
 
 export function canStart(state: TrickFlags | undefined) {
