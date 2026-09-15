@@ -986,6 +986,19 @@ assert.equal(names("nematode").includes("thrash"), false);
 assert.equal(names("nematode").includes("still"), false);
 assert.equal(names("nematode").includes("sit"), false);
 assert.equal(names("nematode").includes("thread"), false);
+assert.ok(names("amphipod").includes("gammarus"));
+assert.ok(names("amphipod").includes("sideswim_soft"));
+assert.ok(names("amphipod").includes("gnathopod_soft"));
+assert.ok(names("amphipod").includes("detritusclutch_soft"));
+assert.ok(names("amphipod").includes("pairguard_soft"));
+assert.ok(names("amphipod").includes("urosome_soft"));
+assert.ok(names("amphipod").includes("pleopod_soft"));
+assert.ok(names("amphipod").includes("freeze"));
+assert.equal(names("amphipod").includes("scud"), false);
+assert.equal(names("amphipod").includes("dart"), false);
+assert.equal(names("amphipod").includes("still"), false);
+assert.equal(names("amphipod").includes("sit"), false);
+
 
 
 
