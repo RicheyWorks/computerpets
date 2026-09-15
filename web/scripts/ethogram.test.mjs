@@ -921,6 +921,16 @@ assert.equal(names("pillbug").includes("roll"), false);
 assert.equal(names("pillbug").includes("walk"), false);
 assert.equal(names("pillbug").includes("still"), false);
 assert.equal(names("pillbug").includes("sit"), false);
+assert.ok(names("earthworm").includes("terrestris"));
+assert.ok(names("earthworm").includes("peristalse_soft"));
+assert.ok(names("earthworm").includes("clitellum_soft"));
+assert.ok(names("earthworm").includes("setaebrace_soft"));
+assert.ok(names("earthworm").includes("freeze"));
+assert.equal(names("earthworm").includes("cast"), false);
+assert.equal(names("earthworm").includes("crawl"), false);
+assert.equal(names("earthworm").includes("still"), false);
+assert.equal(names("earthworm").includes("sit"), false);
+
 
   for (const key of SHORE) {
     const acts = names(key);
