@@ -15,7 +15,7 @@ Stolen from Richey’s other repos (architecture, not domain):
 | Accounting identity | CSRBT `tools/harness.py` | `discovered == driven + dead + sequenced + hidden + failed + excluded`; `UNACCOUNTED` is a harness bug |
 | General oracle | CSRBT | Observable trace + no errors + no `NaN` / `undefined` / `[object Object]` junk — not frozen remembered counts |
 | One runner, exit non-zero on fail | CSRBT `tools/verify/run_all.py` | `py -m computerpets_client.app_harness` |
-| Dual-mode offline vs live | FlowersForever connectors | Default **offline/headless**. Live fetches are catalogued as `excluded` with a reason |
+| Dual-mode offline vs live/gui | FlowersForever connectors | Default **offline/headless**. Live + GUI/Electron/Qt are catalogued as `excluded`; opt-in `--live` / `--gui` |
 | ControllerIT-style smoke per surface | FlowersForever `*ControllerIT.java` | One `run_domain(domain)` per house surface |
 
 Risk ladder / MCP transports are optional later (CSRBT). CLI is the first transport.
@@ -33,6 +33,7 @@ py -m computerpets_client.app_harness --domain guest --only close exit marks
 py -m computerpets_client.app_harness --only care.feed gift.pick
 py -m computerpets_client.app_harness --gaps
 py -m computerpets_client.app_harness --live
+py -m computerpets_client.app_harness --gui
 py -m pytest tests/test_app_harness.py tests/test_care_harness.py -q
 ```
 
@@ -76,7 +77,7 @@ Ids are `domain.local`. Bare care ids (`feed`) still resolve for the original ha
 | `gift` | Line, leave, pick, **place coords** (`gift.place`) | `gift.py` + `life.js leaveGift` via `harness_smokes.cjs` |
 | `desk` | Weather clock; plate keys; URL builders; **offline resolve** paths (`desk.*.resolve` fixtures through real parsers) | `weather.py`; `desk-plates`; `news.js` / `market.js` / `weather-areas.js` parsers |
 | `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire** | `card.ts` / `pet.js` via hooks + `harness_smokes.cjs` |
-| `gui` | Overlay **choice Close/Exit** smoke (`gui.choice_close_exit`) | `choice.js` (same module as `choice.test.cjs`) |
+| `gui` | Overlay **choice Close/Exit** (`gui.choice_close_exit`); Electron/Qt rows excluded until `--gui` | `choice.js`; `desktop/gui-harness.cjs` + `app --check --offscreen` under `--gui` |
 
 No invented verbs. Guest choice does **not** include blotter tend (`feed` / `bath` / `clean`). Desk **Quotes** is the `market` plate (coins + NFT list). Offline desk resolves use fixture JSON / RSS — not live HTTP.
 
@@ -105,10 +106,10 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 
 | id | Why it is not driven here |
 |---|---|
-| `gui.overlay_paint` | Needs Electron compositor/display; choice/card/desk node smokes cover non-paint overlay logic |
-| `gui.blotter_qt` | Needs a display / Qt OpenGL context (offscreen would be a different path) |
-| `gui.card_hud_paint` | Full HUD paint/persist loop needs Electron DOM; **`card.paint_wire` + collapse/open hooks are driven** |
-| `gui.gift_drag_place` | Pointer gesture needs overlay hit-targets; **`gift.place` drives leaveGift x + Python `gift_x`** |
+| `gui.overlay_paint` | Needs Electron compositor/display; **pass `--gui`** on BLACKBEARD to boot overlay, paint pet/HUD, dismiss choice Close+Exit |
+| `gui.blotter_qt` | Needs Qt; **pass `--gui`** to run `app --check --offscreen` (honest software-raster path — not a GPU lie) |
+| `gui.card_hud_paint` | Needs Electron DOM; **pass `--gui`** for collapse/open + vital paint. Offline: **`card.paint_wire` + collapse/open hooks** |
+| `gui.gift_drag_place` | Needs overlay gift-dot hit-targets; **pass `--gui`** for leaveGift + click `gift-dot` (place/pick, not freehand drag). Offline: **`gift.place`** |
 | `live.cry_playback` | Real speakers/Electron session; **`cry.playback` drives stubbed `Audio` + `playVoice` + wav** |
 | `live.weather_forecast` | True live Open-Meteo HTTP; **`desk.weather.resolve` drives `parseForecast` fixtures** |
 | `live.news_rss` | True live RSS/HTTP; **`desk.news.resolve` drives `parseRss` fixtures** |
@@ -116,7 +117,7 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 | `live.nft_floor` | True live NFT floor HTTP; **`desk.nft.resolve` drives `parseNftLive` fixtures** |
 | `ethogram.tricks.red_panda` | No separate `*-tricks.js` for Rui by design (idle `acts_for` covers blotter ethogram) |
 
-Moved from gaps → driven (this pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
+Moved from gaps → driven (prior pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
 
 ### Dual-mode (`--live`)
 
@@ -127,7 +128,32 @@ py -m computerpets_client.app_harness --live
 py -m computerpets_client.app_harness --domain desk --live
 ```
 
-Node smokes live in `client/computerpets_client/harness_smokes.cjs` (offline fixtures / `Audio` stub against `desktop/renderer/*.js`).
+### GUI opt-in (`--gui`)
+
+Catalog `mode=gui` rows stay **excluded** in default `run_all` so GitHub/cloud stays offline-green (`UNACCOUNTED=0`). On BLACKBEARD (or any machine with Electron + Qt), Buffffff passes `--gui`:
+
+```powershell
+cd client
+py -m computerpets_client.app_harness --gui
+py -m computerpets_client.app_harness --domain gui --gui
+# Electron-only launcher (same smokes the harness uses):
+node ..\desktop\gui-harness.cjs
+# Qt blotter alone:
+py -m computerpets_client.app --check --offscreen
+```
+
+`--gui` drives:
+
+| id | What it observes |
+|---|---|
+| `gui.overlay_paint` | Electron boots; pet `src` + HUD name; choice opens with Close/Exit; Close dismisses; Exit collapses card |
+| `gui.card_hud_paint` | open → vital text; collapse → `data-collapsed=1`; reopen shows again |
+| `gui.gift_drag_place` | `leaveGift` paints a `gift-dot` `[data-hit]`; click clears it (honest hit-target place/pick) |
+| `gui.blotter_qt` | `app --check --offscreen` prints `ok:` lines (pet, plaque, weather, day-part) |
+
+Requires `desktop/` `npm install` (Electron) and client venv with PyQt6. `desktop.ps1` remains the human desk launch; harness uses a temp `userData` and skips the tray.
+
+Node offline smokes live in `client/computerpets_client/harness_smokes.cjs`. Electron GUI smokes: `desktop/gui-harness.cjs` + `PetGuiHarness` in `pet.js` when `?gui_harness=1`.
 
 ## Care-only doc
 

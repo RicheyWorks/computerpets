@@ -174,3 +174,20 @@ def test_offline_resolves_and_playback_leave_traces():
         result = invoke(aid)
         assert result.ok, (aid, result.error, result.detail)
         assert result.trace, aid
+
+
+def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
+    holes = {row.id: row for row in gaps()}
+    for aid in ("gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.blotter_qt"):
+        assert aid in holes
+        assert holes[aid].mode == "gui"
+        assert "--gui" in (holes[aid].exclude_reason or "")
+    results = run_all()
+    skipped = {r.action_id for r in results if r.fate == "excluded"}
+    assert {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.blotter_qt"} <= skipped
+    gui_skipped = [
+        r for r in results
+        if r.action_id.startswith("gui.") and r.action_id != "gui.choice_close_exit" and r.fate == "excluded"
+    ]
+    assert len(gui_skipped) >= 4
+
