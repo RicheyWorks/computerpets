@@ -1730,6 +1730,16 @@ assert.equal(names("koala").includes("wait"), false);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
   assert.ok(names("honeybee").includes("hive"));
+  assert.ok(names("honeybee").includes("figure_soft"));
+  assert.ok(names("honeybee").includes("corbicula_soft"));
+  assert.ok(names("honeybee").includes("hex_soft"));
+  assert.ok(names("honeybee").includes("proboscis_soft"));
+  assert.ok(names("honeybee").includes("ocelli_soft"));
+  assert.ok(names("honeybee").includes("nasonov_soft"));
+  assert.ok(names("honeybee").includes("freeze"));
+  assert.equal(names("honeybee").includes("waggle"), false);
+  assert.equal(names("honeybee").includes("dart"), false);
+  assert.equal(names("honeybee").includes("still"), false);
   assert.ok(names("firefly").includes("photinus"));
   assert.ok(names("stick").includes("diapheromera"));
   assert.ok(names("stick").includes("freeze"));
