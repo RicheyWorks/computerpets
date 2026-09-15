@@ -202,6 +202,249 @@ function cardPaintWire() {
   ]);
 }
 
+
+function memStore() {
+  const data = Object.create(null);
+  return {
+    getItem(k) {
+      return Object.prototype.hasOwnProperty.call(data, k) ? data[k] : null;
+    },
+    setItem(k, v) {
+      data[k] = String(v);
+    },
+  };
+}
+
+function newsFavorites() {
+  const N = load("news.js");
+  let prefs = N.blankNewsPrefs();
+  prefs = N.addTopic(prefs, { name: "Halo", query: "Halo" });
+  const halo = prefs.topics.find((t) => t.query === "Halo");
+  if (!halo) return fail("addTopic did not keep Halo");
+  prefs = N.toggleFavorite(prefs, { kind: "topic", topic: halo });
+  prefs = N.toggleFavorite(prefs, {
+    kind: "headline",
+    title: "Fixture headline",
+    url: "https://example.test/a",
+  });
+  if (prefs.favorites.length !== 2) return fail("expected 2 favorites", { prefs });
+  if (!N.isFavorite(prefs, { kind: "topic", topic: halo })) {
+    return fail("topic favorite not listed");
+  }
+  const patch = N.toCardPatch(prefs);
+  const round = N.parseNewsPrefs(patch);
+  if (round.favorites.length !== 2) {
+    return fail("favorites did not persist through toCardPatch/parseNewsPrefs", { round, patch });
+  }
+  const emptied = N.removeFavorite(round, round.favorites[0].id);
+  if (emptied.favorites.length !== 1) return fail("removeFavorite failed", { emptied });
+  return ok(`favorites=${round.favorites.length}`, { count: round.favorites.length, kinds: round.favorites.map((f) => f.kind) }, [
+    "news.favorites.load=blank",
+    "news.favorites.add=topic+headline",
+    "news.favorites.persist=toCardPatch",
+    `news.favorites.list=${round.favorites.length}`,
+  ]);
+}
+
+function marketFavorites() {
+  const M = load("market.js");
+  let house = M.parseMarket(null);
+  const eth = house.tickers.find((t) => t.geckoId === "ethereum") || house.tickers[0];
+  const nft = house.nfts[0];
+  if (!eth || !nft) return fail("default market missing eth/nft", { eth, nft });
+  house = M.toggleFavoriteTicker(house, eth.id);
+  house = M.toggleFavoriteNft(house, nft.id);
+  if (!M.isFavoriteTicker(house, eth.id) || !M.isFavoriteNft(house, nft.id)) {
+    return fail("favorite flags missing", { house });
+  }
+  const rows = M.favoriteRows(house);
+  if (rows.tickers.length !== 1 || rows.nfts.length !== 1) {
+    return fail("favoriteRows mismatch", { rows });
+  }
+  const round = M.parseMarket({
+    tickers: house.tickers,
+    nfts: house.nfts,
+    favoriteTickerIds: house.favoriteTickerIds,
+    favoriteNftIds: house.favoriteNftIds,
+    currentId: house.currentId,
+    currentNftId: house.currentNftId,
+    marketplaces: house.marketplaces,
+  });
+  if (round.favoriteTickerIds[0] !== eth.id || round.favoriteNftIds[0] !== nft.id) {
+    return fail("favorites did not round-trip parseMarket", { round });
+  }
+  return ok(`coins=1 nfts=1`, { tickerId: eth.id, nftId: nft.id }, [
+    "market.favorites.coins=1",
+    "market.favorites.nfts=1",
+    "market.favorites.persist=parseMarket",
+  ]);
+}
+
+function weatherFavorites() {
+  const W = load("weather-areas.js");
+  const area = { id: "sf", name: "San Francisco", lat: 37.77, lon: -122.42 };
+  let house = W.parseAreas({ areas: [area], currentId: "sf" });
+  house = W.toggleFavorite(house, "sf");
+  if (!W.isFavorite(house, "sf")) return fail("weather favorite flag missing", { house });
+  const listed = W.favoriteAreas(house);
+  if (listed.length !== 1 || listed[0].id !== "sf") return fail("favoriteAreas list wrong", { listed });
+  const round = W.parseAreas({
+    areas: house.areas,
+    currentId: house.currentId,
+    tab: "favorites",
+    favoriteAreaIds: house.favoriteIds,
+  });
+  if (round.favoriteIds[0] !== "sf" || round.tab !== "favorites") {
+    return fail("weather favorites did not persist", { round });
+  }
+  if (!Array.isArray(W.WEATHER_TABS) || W.WEATHER_TABS.indexOf("favorites") < 0) {
+    return fail("WEATHER_TABS missing favorites", { tabs: W.WEATHER_TABS });
+  }
+  return ok("sf", { id: "sf", tab: round.tab }, [
+    "weather.favorites.toggle=sf",
+    "weather.favorites.list=1",
+    "weather.favorites.tab=favorites",
+  ]);
+}
+
+function newsTopics() {
+  const N = load("news.js");
+  let prefs = N.blankNewsPrefs();
+  if (prefs.tab !== "popular") return fail("blank tab should be popular", { prefs });
+  const popular = N.popularRssUrl();
+  if (!String(popular).includes("news.google.com")) return fail("popularRssUrl host drifted", { popular });
+  const world = N.worldTopic ? N.worldTopic() : prefs.topics.find((t) => t.id === N.WORLD_ID);
+  if (!world || world.id !== N.WORLD_ID) return fail("world topic missing", { world });
+  prefs = N.addTopic(prefs, { name: "Esports", query: "Esports" });
+  prefs = N.addTopic(prefs, { name: "Halo", query: "Halo" });
+  const halo = prefs.topics.find((t) => t.query === "Halo");
+  prefs = N.pickTopic(prefs, halo.id);
+  if (prefs.currentId !== halo.id || prefs.tab !== "topics") {
+    return fail("pickTopic did not select Halo on topics tab", { prefs });
+  }
+  prefs = N.moveTopic(prefs, halo.id, -1);
+  const idx = prefs.topics.findIndex((t) => t.id === halo.id);
+  if (idx < 1) return fail("moveTopic left of world or missing", { idx, topics: prefs.topics });
+  prefs = N.pickTab(prefs, "popular");
+  if (prefs.tab !== "popular") return fail("pickTab popular failed", { prefs });
+  const sug = N.SUGGESTION_TOPICS || [];
+  if (sug.length < 4 || sug.indexOf("Halo") < 0) return fail("SUGGESTION_TOPICS drifted", { sug });
+  const tabs = N.NEWS_TABS || [];
+  if (tabs.join("/") !== "popular/topics/x/favorites") return fail("NEWS_TABS drifted", { tabs });
+  prefs = N.removeTopic(prefs, halo.id);
+  if (prefs.topics.some((t) => t.id === halo.id)) return fail("removeTopic failed", { prefs });
+  return ok(`topics=${prefs.topics.length}`, { tabs, suggestions: sug.length, popular }, [
+    "news.topics.popularRssUrl",
+    "news.topics.add/pick/move/remove",
+    "news.topics.tabs=popular/topics/x/favorites",
+    `news.topics.suggestions=${sug.length}`,
+  ]);
+}
+
+function platesStyle() {
+  const P = load("desk-plates.js");
+  const store = memStore();
+  const plates = P.loadPlates(800, 600, store);
+  if (!plates || plates.length !== 3) return fail("expected 3 plates", { plates });
+  const weather = plates.find((p) => p.key === "weather") || plates[0];
+  const moss = (P.SWATCHES || []).find((s) => s.id === "moss");
+  if (!moss) return fail("SWATCHES missing moss", { swatches: P.SWATCHES });
+  let next = P.applySwatch(weather, "moss");
+  if (next.bg !== moss.bg) return fail("applySwatch did not set moss bg", { next, moss });
+  const style = P.paintStyle(next);
+  if (style["--plate-bg"] !== moss.bg) return fail("paintStyle chrome mismatch", { style });
+  next = P.beginDrag(next, 40, 40);
+  next = P.moveDrag(next, 140, 100, 800, 600);
+  next = P.endDrag(next);
+  if (next.dragging) return fail("endDrag left dragging true", { next });
+  const saved = plates.map((p) => (p.key === next.key ? next : p));
+  P.savePlates(saved, store);
+  const again = P.loadPlates(800, 600, store);
+  const round = again.find((p) => p.key === "weather");
+  if (!round || round.bg !== moss.bg) return fail("plate chrome did not persist", { round });
+  if (!(round.x > 40)) return fail("plate drag place did not persist x", { round });
+  return ok(`bg=${round.bg}`, { bg: round.bg, x: round.x, swatches: P.SWATCHES.length }, [
+    "plates.style.swatches",
+    "plates.style.applySwatch=moss",
+    "plates.style.paintStyle",
+    "plates.style.drag-place+persist",
+  ]);
+}
+
+function plantsPlace() {
+  const Pl = load("desk-plants.js");
+  const store = memStore();
+  let plants = Pl.loadPlants(800, 600, store);
+  if (!plants || plants.length !== 2) return fail("expected Disk+Felt", { plants });
+  let plant = plants[0];
+  const before = { x: plant.x, y: plant.y };
+  plant = Pl.beginDrag(plant, before.x + 10, before.y + 10);
+  plant = Pl.moveDrag(plant, before.x + 80, before.y + 60, 800, 600);
+  plant = Pl.endDrag(plant);
+  if (plant.dragging) return fail("plant still dragging", { plant });
+  if (plant.x === before.x && plant.y === before.y) return fail("plant did not move", { before, plant });
+  plant = Pl.cycleMode(plant);
+  plants = plants.map((p) => (p.key === plant.key ? plant : p));
+  Pl.savePlants(plants, store);
+  const again = Pl.loadPlants(800, 600, store);
+  const round = again.find((p) => p.key === plant.key);
+  if (!round || round.x !== plant.x || round.y !== plant.y) {
+    return fail("plant place did not persist", { round, plant });
+  }
+  if (round.mode !== plant.mode) return fail("plant mode did not persist", { round, plant });
+  return ok(`x=${round.x},y=${round.y},mode=${round.mode}`, { x: round.x, y: round.y, mode: round.mode, keys: Pl.PLANT_KEYS }, [
+    "plants.place.begin/move/end",
+    "plants.place.persist",
+    `plants.place.mode=${round.mode}`,
+  ]);
+}
+
+function notifyOpen() {
+  const L = load("life.js");
+  const map = L.NEED_CARE || {};
+  const expect = {
+    sick: "medicine",
+    hunger: "feed",
+    hygiene: "bath",
+    mess: "clean",
+    bond: "praise",
+    mood: "talk",
+    hidden: "call",
+    energy: "rest",
+  };
+  for (const [need, care] of Object.entries(expect)) {
+    if (map[need] !== care || L.careForNeed(need) !== care) {
+      return fail(`NEED_CARE mismatch for ${need}`, { map, got: L.careForNeed(need), want: care });
+    }
+  }
+  if (L.careForNeed("") !== null || L.careForNeed("nope") !== null) {
+    return fail("careForNeed should null unknown/empty");
+  }
+  const hungry = L.alerts(
+    { hunger: 5, hygiene: 90, mess: [], sick: false, hidden: false, lastNotify: 0 },
+    "Rui",
+  );
+  if (!hungry || hungry.need !== "hunger" || L.careForNeed(hungry.need) !== "feed") {
+    return fail("alerts hunger path failed", { hungry });
+  }
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  const need = [
+    "function openCareFromNotify(payload)",
+    "openKeeperCard()",
+    "open-care",
+    "PetLife.careForNeed",
+    "data-need-focus",
+  ];
+  const missing = need.filter((n) => !petSrc.includes(n));
+  if (missing.length) return fail(`pet.js notify deep-link missing ${missing.join(",")}`, { missing });
+  return ok("need->care+openCareFromNotify", { need: hungry.need, care: "feed" }, [
+    "notify.NEED_CARE",
+    "notify.careForNeed=hunger->feed",
+    "notify.alerts=hunger",
+    "notify.openCareFromNotify.wire",
+  ]);
+}
+
 const COMMANDS = {
   weather_resolve: weatherResolve,
   news_resolve: newsResolve,
@@ -211,6 +454,13 @@ const COMMANDS = {
   gift_place: giftPlace,
   choice_close_exit: choiceCloseExit,
   card_paint_wire: cardPaintWire,
+  news_favorites: newsFavorites,
+  market_favorites: marketFavorites,
+  weather_favorites: weatherFavorites,
+  news_topics: newsTopics,
+  plates_style: platesStyle,
+  plants_place: plantsPlace,
+  notify_open: notifyOpen,
 };
 
 function main(argv) {
