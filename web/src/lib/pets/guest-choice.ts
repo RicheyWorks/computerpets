@@ -11,7 +11,10 @@ export type GuestChoiceId =
   | "special"
   | "hide"
   | "call"
-  | "pick";
+  | "pick"
+  | "send"
+  | "close"
+  | "exit";
 
 export type GuestChoiceMark = {
   id: GuestChoiceId;
@@ -25,6 +28,7 @@ export type GuestChoiceSit = {
   gifts?: number;
   treatVerb?: string;
   specialVerb?: string;
+  role?: "called" | "visit";
 };
 
 /** The sits a tap may offer. Rest is sleep. Walk and Sit change the pose. The rest are house verbs. */
@@ -40,6 +44,9 @@ export const GUEST_CHOICE = [
   "hide",
   "call",
   "pick",
+  "send",
+  "close",
+  "exit",
 ] as const;
 
 /** A tap opens the choice. It does not talk, sleep, or walk them. */
@@ -52,8 +59,26 @@ export function poseFlip(walking: boolean): GuestChoiceMark {
   return walking ? { id: "sit", label: "Sit" } : { id: "walk", label: "Walk" };
 }
 
+/** Close dismisses the menu; Exit leaves pet care (unfocus). Always last. */
+export function dismissMarks(): GuestChoiceMark[] {
+  return [
+    { id: "close", label: "Close" },
+    { id: "exit", label: "Exit" },
+  ];
+}
+
 /** The marks they may pick. Hidden keeps Call back. A gift on the wood keeps Pick. */
 export function guestMarks(sit: GuestChoiceSit = {}): GuestChoiceMark[] {
+  if (sit.role === "called" || sit.role === "visit") {
+    return [
+      { id: "talk", label: "Talk" },
+      { id: "treat", label: sit.treatVerb || "Treat" },
+      { id: "play", label: "Play" },
+      poseFlip(!!sit.walking),
+      { id: "send", label: sit.role === "called" ? "Send home" : "Bye" },
+      ...dismissMarks(),
+    ];
+  }
   const hidden = !!sit.hidden;
   const leaving = !!sit.leaving;
   const busy = hidden || leaving;
@@ -72,7 +97,7 @@ export function guestMarks(sit: GuestChoiceSit = {}): GuestChoiceMark[] {
   if (hidden) marks.push({ id: "call", label: "Call back" });
   else if (!leaving) marks.push({ id: "hide", label: "Hide" });
   if (!hidden && (sit.gifts ?? 0) > 0) marks.push({ id: "pick", label: "Pick" });
-  return marks;
+  return marks.concat(dismissMarks());
 }
 
 /** The sit they already know. A pick is not a new verb. */

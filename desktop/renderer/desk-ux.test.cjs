@@ -46,7 +46,7 @@ test("called guest tap opens choice marks, not dismiss-only", () => {
   assert.match(petSrc, /openChoice\(\{\s*role:\s*"called"/);
   assert.match(petSrc, /Send home|role === "called"/);
   const marks = Choice.guestMarks({ role: "called", walking: false }).map((m) => m.id);
-  assert.deepEqual(marks, ["talk", "treat", "play", "walk", "send"]);
+  assert.deepEqual(marks, ["talk", "treat", "play", "walk", "send", "close", "exit"]);
   assert.equal(Choice.guestPick("send"), "send");
 });
 
@@ -68,7 +68,7 @@ test("called guests drag-place and stay until walk", () => {
 
 test("visit tap opens guest marks and supports drag place", () => {
   const marks = Choice.guestMarks({ role: "visit" }).map((m) => m.id);
-  assert.deepEqual(marks, ["talk", "treat", "play", "walk", "send"]);
+  assert.deepEqual(marks, ["talk", "treat", "play", "walk", "send", "close", "exit"]);
   assert.match(petSrc, /visitPress/);
   assert.match(petSrc, /openChoice\(\{\s*role:\s*"visit"/);
   assert.match(petSrc, /visit\.placed = true/);

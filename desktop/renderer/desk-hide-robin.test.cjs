@@ -52,7 +52,7 @@ test("ribbon hide tucks on the floor and call still walks him back", () => {
   const back = Life.act(hidden, trait, "call", Date.now(), "red_panda");
   assert.equal(back.life.hidden, false);
   assert.equal(back.cmd, "enter");
-  assert.deepEqual(Choice.guestMarks({ hidden: true }).map((m) => m.id), ["talk", "special", "call"]);
+  assert.deepEqual(Choice.guestMarks({ hidden: true }).map((m) => m.id), ["talk", "special", "call", "close", "exit"]);
   assert.match(petSrc, /openKeeperCard/);
   assert.match(petSrc, /openChoice/);
 });

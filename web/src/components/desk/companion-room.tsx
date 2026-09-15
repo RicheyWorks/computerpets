@@ -648,8 +648,24 @@ export function CompanionRoom({
     if (bond) window.setTimeout(() => say(bond), 900);
   }
 
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      if (!choiceOpen) return;
+      setChoiceOpen(false);
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [choiceOpen]);
+
   function pickGuest(id: GuestChoiceId) {
     setChoiceOpen(false);
+    // Close: dismiss menu only. Exit: leave pet care (collapse keeper card).
+    if (id === "close") return;
+    if (id === "exit") {
+      setCardOpen(false);
+      return;
+    }
     if (id === "feed") void feed();
     else if (id === "rest") void tend("rest");
     else if (id === "walk") {
