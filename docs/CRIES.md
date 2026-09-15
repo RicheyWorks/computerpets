@@ -1,10 +1,10 @@
 # Cry credits
 
-**168 of 221** ComputerPets guests answer **Call** with real microphone field tape — not cartoon beeps. Sources include Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, and iNaturalist.
+**215 of 221** ComputerPets guests answer **Call** with real microphone field tape — not cartoon beeps. Sources include Wikimedia Commons, Xeno-canto, Freesound, BigSoundBank, and iNaturalist.
 
 This page keeps the full recordist credits. The front door stays short; see the root [README](../README.md).
 
-**168 of 221** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
+**215 of 221** guests already answer **Call** with real microphone field tape — not beeps. Commons, Xeno-canto, Freesound, BigSoundBank, iNaturalist. When a guest has a cry file, Call plays that short dry cut.
 
 These voices are in the house:
 
@@ -156,6 +156,7 @@ These voices are in the house:
 - **Dam** (North American beaver) — one wet tail smack from [iNaturalist](https://www.inaturalist.org/observations/72399972), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [leahmfulton](https://www.inaturalist.org/people/leahmfulton). Exact Castor canadensis field tape. No music. No beep.
 - **Spine** (North American porcupine) — puff, grunt, and quill rattle from [Internet Archive SSE Library: ANIMALS](https://archive.org/details/SSE_Library_ANIMALS) ([CC0](https://creativecommons.org/publicdomain/zero/1.0/)), digitized by [Craig Smith](https://freesound.org/people/craigsmith/) / USC Cinema (also [Freesound #675452](https://freesound.org/people/craigsmith/sounds/675452/)). No music. No roar.
 - **Coal** (American black bear) — nervous huff from [iNaturalist](https://www.inaturalist.org/observations/287411149), [CC BY](https://creativecommons.org/licenses/by/4.0/), recorded by [marykrieger](https://www.inaturalist.org/people/marykrieger). Exact Ursus americanus field tape. No music. No roar.
+- **Soak** (capybara) — pulsed contact/alarm bark-whistle from [iNaturalist](https://www.inaturalist.org/observations/90187694), [CC BY](https://creativecommons.org/licenses/by/4.0/), recorded by [Stan Rullman](https://www.inaturalist.org/people/srullman) (ExplorNapo Lodge). Exact *Hydrochoerus hydrochaeris* field tape. No music. No beep.
 - **Wink** (green anole) — short night-lizard tick from [Freesound](https://freesound.org/people/SieuAmThanh/sounds/400573/), [CC0](https://creativecommons.org/publicdomain/zero/1.0/), recorded by [SieuAmThanh](https://freesound.org/people/SieuAmThanh/). Nearly silent dewlap guest. No music. No roar.
 - **Dash** (five-lined skink) — dry leaf rustle from Wikimedia Commons, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), recorded by [Gravity Sound](https://commons.wikimedia.org/wiki/File:Leaf_crunch_4_(Gravity_Sound).wav) (`Leaf_crunch_4_(Gravity_Sound).wav`). Silent guest — leaf crunch only, never a voice or beep.
 - **Hang** (Linnaeus's two-toed sloth) — soft claw/rail tick and zoo hush from Wikimedia Commons, [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/), recorded by [Peter Chen 2.0](https://commons.wikimedia.org/wiki/File:Two-toed_sloth_rail_walking_%E4%BA%8C%E8%B6%BE%E6%A8%B9%E7%8D%BA%E7%88%AC%E8%A1%8C_(HD).webm) (Taipei Zoo; exact *Choloepus didactylus*). Nearly silent guest — no cartoon whistle. No music.
