@@ -6,20 +6,20 @@
   const HAPPY = ["lime", "moon", "satin"];
 
   const HAPPY_DUR = {
-    lime: 1.26,
-    moon: 1.32,
-    satin: 1.2,
+    lime: 1.70,
+    moon: 1.84,
+    satin: 1.76,
   };
   const ACTIAS_HOLD = 11.2;
-  const RELEASE_S = 0.64;
+  const RELEASE_S = 1.18;
   const DUR = {
     actias: ACTIAS_HOLD + RELEASE_S,
-    plumose: 1.48,
-    lunule: 1.42,
-    silk: 1.68,
-    stream: 1.58,
-    aphagy: 1.62,
-    cauda: 1.7,
+    plumose: 2.48,
+    lunule: 2.42,
+    silk: 2.44,
+    stream: 2.56,
+    aphagy: 2.40,
+    cauda: 2.38,
   };
 
   function canStart(state) {
