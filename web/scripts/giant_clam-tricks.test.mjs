@@ -538,13 +538,13 @@ test("Gate tricks start only on idle ground", () => {
   assert.equal(Lionfish.HAPPY.includes("densgate"), false);
   assert.equal(Lionfish.HAPPY.includes("inkgate"), false);
   assert.equal(Lionfish.HAPPY.includes("denstridacna"), false);
-  assert.deepEqual([...Lionfish.TRICKS], ["pectoralveilfanflare", "gulpinginhalecue", "spinewarnraise", "slowhoverstalk", "longpteroishush"]);
+  assert.deepEqual([...Lionfish.TRICKS], ["pectoralveilfanflare", "gulpinginhalecue", "spinewarnraise", "slowhoverstalk", "stripebar", "venomwarn", "pteroishush"]);
   assert.deepEqual([...Lionfish.HAPPY], ["densveil", "inkveil", "denspterois"]);
   assert.equal(T.TRICKS.includes("pectoralveilfanflare"), false);
   assert.equal(T.TRICKS.includes("gulpinginhalecue"), false);
   assert.equal(T.TRICKS.includes("spinewarnraise"), false);
   assert.equal(T.TRICKS.includes("slowhoverstalk"), false);
-  assert.equal(T.TRICKS.includes("longpteroishush"), false);
+  assert.equal(T.TRICKS.includes("pteroishush"), false);
   assert.equal(T.HAPPY.includes("densveil"), false);
   assert.equal(T.HAPPY.includes("inkveil"), false);
   assert.equal(T.HAPPY.includes("denspterois"), false);

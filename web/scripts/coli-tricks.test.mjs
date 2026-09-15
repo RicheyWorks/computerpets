@@ -709,7 +709,7 @@ test("Rod tricks start only on idle ground", () => {
   assert.equal(T.HAPPY.includes("inksoar"), false);
   assert.equal(T.HAPPY.includes("densaetobatus"), false);
   assert.equal(T.TRICKS.includes("pectoralveilfanflare"), false);
-  assert.equal(T.TRICKS.includes("longpteroishush"), false);
+  assert.equal(T.TRICKS.includes("pteroishush"), false);
   assert.equal(T.TRICKS.includes("coverstrike"), false);
   assert.equal(T.TRICKS.includes("salmoides"), false);
   assert.equal(T.TRICKS.includes("hide"), false);
@@ -851,13 +851,13 @@ test("Rod tricks start only on idle ground", () => {
   assert.equal(Lionfish.HAPPY.includes("k12"), false);
   assert.equal(Lionfish.HAPPY.includes("mg1655"), false);
   assert.equal(Lionfish.HAPPY.includes("bl21"), false);
-  assert.deepEqual([...Lionfish.TRICKS], ["pectoralveilfanflare", "gulpinginhalecue", "spinewarnraise", "slowhoverstalk", "longpteroishush"]);
+  assert.deepEqual([...Lionfish.TRICKS], ["pectoralveilfanflare", "gulpinginhalecue", "spinewarnraise", "slowhoverstalk", "stripebar", "venomwarn", "pteroishush"]);
   assert.deepEqual([...Lionfish.HAPPY], ["densveil", "inkveil", "denspterois"]);
   assert.equal(T.TRICKS.includes("pectoralveilfanflare"), false);
   assert.equal(T.TRICKS.includes("gulpinginhalecue"), false);
   assert.equal(T.TRICKS.includes("spinewarnraise"), false);
   assert.equal(T.TRICKS.includes("slowhoverstalk"), false);
-  assert.equal(T.TRICKS.includes("longpteroishush"), false);
+  assert.equal(T.TRICKS.includes("pteroishush"), false);
   assert.equal(T.HAPPY.includes("densveil"), false);
   assert.equal(T.HAPPY.includes("inkveil"), false);
   assert.equal(T.HAPPY.includes("denspterois"), false);
