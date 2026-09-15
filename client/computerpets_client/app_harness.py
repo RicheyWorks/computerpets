@@ -1697,7 +1697,8 @@ def _gui_rows() -> list[Affordance]:
             fate="excluded",
             exclude_reason=(
                 "Needs Qt (offscreen --check is honest software raster, not a GPU lie). "
-                "Default stays excluded. Pass --gui to run computerpets_client.app --check --offscreen."
+                "Default stays excluded. Pass --gui to run computerpets_client.app --check --offscreen; "
+                "same bundle splits blotter.plaque / frames_paint / scene."
             ),
         ),
         Affordance(
@@ -1742,13 +1743,21 @@ def _client_venv_python() -> Path | None:
     return None
 
 
-def _run_blotter_qt_check() -> InvokeResult:
-    """Honest Qt blotter boot via app --check --offscreen (software raster when offscreen)."""
+_blotter_qt_bundle: dict[str, Any] | None = None
+
+
+def _run_blotter_qt_bundle() -> dict[str, Any]:
+    """One app --check --offscreen covers gui.blotter_qt + blotter.{plaque,frames_paint,scene}.
+
+    Honest software-raster path when QT_QPA_PLATFORM=offscreen — not a GPU lie.
+    """
+    global _blotter_qt_bundle
+    if _blotter_qt_bundle is not None:
+        return _blotter_qt_bundle
     import os
     import subprocess
     import sys
 
-    aid = "gui.blotter_qt"
     env = dict(os.environ)
     env.setdefault("QT_QPA_PLATFORM", "offscreen")
     # Avoid a polluted PYTHONPATH from other worktrees.
@@ -1765,21 +1774,182 @@ def _run_blotter_qt_check() -> InvokeResult:
             env=env,
         )
     except Exception as exc:  # noqa: BLE001
-        return InvokeResult(aid, "gui", False, error=f"{type(exc).__name__}: {exc}", trace=["blotter_qt.check=error"])
+        _blotter_qt_bundle = {
+            "ok": False,
+            "error": f"{type(exc).__name__}: {exc}",
+            "oks": [],
+            "lines": [],
+            "renderer": "",
+            "returncode": -1,
+            "python": str(python),
+        }
+        return _blotter_qt_bundle
     out = (proc.stdout or "") + "\n" + (proc.stderr or "")
     lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
     oks = [ln for ln in lines if ln.startswith("ok:")]
-    renderer = next((ln for ln in lines if "Qt" in ln and ("viewport" in ln or "raster" in ln or "OpenGL" in ln)), "")
+    renderer = next(
+        (ln for ln in lines if "Qt" in ln and ("viewport" in ln or "raster" in ln or "OpenGL" in ln)),
+        "",
+    )
     ok = proc.returncode == 0 and len(oks) >= 3
+    _blotter_qt_bundle = {
+        "ok": ok,
+        "error": None if ok else (lines[-1] if lines else f"blotter --check failed exit={proc.returncode}"),
+        "oks": oks,
+        "lines": lines,
+        "renderer": renderer,
+        "returncode": proc.returncode,
+        "python": str(python),
+    }
+    return _blotter_qt_bundle
+
+
+def _ok_line(oks: list[str], *needles: str) -> str | None:
+    for ln in oks:
+        low = ln.lower()
+        if all(n.lower() in low for n in needles):
+            return ln
+    return None
+
+
+def _run_blotter_qt_check() -> InvokeResult:
+    """Parent Qt blotter smoke: full app --check --offscreen ok: ledger."""
+    aid = "gui.blotter_qt"
+    bundle = _run_blotter_qt_bundle()
+    oks = list(bundle.get("oks") or [])
+    renderer = str(bundle.get("renderer") or "")
+    ok = bool(bundle.get("ok"))
     return InvokeResult(
         aid,
         "gui",
         ok,
-        detail=oks[0] if oks else (lines[-1] if lines else f"exit={proc.returncode}"),
-        extras={"oks": oks, "renderer": renderer, "returncode": proc.returncode},
-        trace=oks[:8] + ([renderer] if renderer else []) + [f"returncode={proc.returncode}"],
-        error=None if ok else (lines[-1] if lines else f"blotter --check failed exit={proc.returncode}"),
+        detail=oks[0] if oks else str(bundle.get("error") or f"exit={bundle.get('returncode')}"),
+        extras={
+            "oks": oks,
+            "renderer": renderer,
+            "returncode": bundle.get("returncode"),
+            "python": bundle.get("python"),
+            "gui_optin": True,
+        },
+        trace=oks[:10] + ([renderer] if renderer else []) + [f"returncode={bundle.get('returncode')}"],
+        error=None if ok else str(bundle.get("error") or "blotter --check failed"),
     )
+
+
+def _invoke_blotter_gui_slice(local_id: str) -> InvokeResult:
+    """Split honest traces from the shared app --check bundle (opt-in --gui only)."""
+    aid = f"blotter.{local_id}"
+    bundle = _run_blotter_qt_bundle()
+    oks = list(bundle.get("oks") or [])
+    renderer = str(bundle.get("renderer") or "")
+    if not bundle.get("ok"):
+        return InvokeResult(
+            aid,
+            "blotter",
+            False,
+            error=str(bundle.get("error") or "blotter --check failed"),
+            detail=str(bundle.get("error") or ""),
+            extras={"gui_optin": True, "returncode": bundle.get("returncode")},
+            trace=[f"blotter_qt.check=error", f"returncode={bundle.get('returncode')}"],
+        )
+
+    if local_id == "plaque":
+        line = _ok_line(oks, "species plaque")
+        if not line:
+            return InvokeResult(
+                aid, "blotter", False, error="missing species plaque ok: line",
+                extras={"oks": oks, "gui_optin": True},
+                trace=oks[:6],
+            )
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=line,
+            extras={"plaque": line, "gui_optin": True},
+            trace=[line, "SpeciesPlaque.set_key=ok", "app --check --offscreen"],
+        )
+
+    if local_id == "frames_paint":
+        painted = _ok_line(oks, "pet frames painted")
+        pet_line = _ok_line(oks, "on the blotter", "living kinds") or _ok_line(oks, "on the blotter")
+        if not painted:
+            return InvokeResult(
+                aid, "blotter", False, error="missing pet frames painted ok: line",
+                extras={"oks": oks, "gui_optin": True},
+                trace=oks[:8],
+            )
+        if "pixmap" not in painted.lower():
+            return InvokeResult(
+                aid, "blotter", False, error=f"frames paint line missing pixmap proof: {painted}",
+                extras={"oks": oks, "gui_optin": True},
+                trace=[painted],
+            )
+        trace = [painted]
+        if pet_line and pet_line != painted:
+            trace.append(pet_line)
+        trace.append("frames.paint_frame/frames_for=ok")
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=painted,
+            extras={"frames_paint": painted, "pet": pet_line, "gui_optin": True},
+            trace=trace,
+        )
+
+    if local_id == "scene":
+        scene = _ok_line(oks, "graphics scene")
+        # Weather / day-part blotter lines (not the pet "living kinds" line).
+        blotter_sky = [
+            ln for ln in oks
+            if ln.startswith("ok:") and "on the blotter" in ln and "living kinds" not in ln
+        ]
+        if not scene:
+            return InvokeResult(
+                aid, "blotter", False, error="missing graphics scene ok: line",
+                extras={"oks": oks, "gui_optin": True},
+                trace=oks[:8],
+            )
+        if "weather=" not in scene.lower() or "day=" not in scene.lower():
+            return InvokeResult(
+                aid, "blotter", False, error=f"scene line missing weather/day: {scene}",
+                extras={"oks": oks, "gui_optin": True},
+                trace=[scene],
+            )
+        if not renderer or "QGraphicsView" not in renderer:
+            return InvokeResult(
+                aid, "blotter", False, error="missing Qt/QGraphicsView renderer label",
+                extras={"oks": oks, "renderer": renderer, "gui_optin": True},
+                trace=[scene, renderer] if renderer else [scene],
+            )
+        trace = [scene]
+        weather_ln = next((ln for ln in blotter_sky if "weather=" not in ln.lower()), None)
+        # Prefer an explicit day-part label line (Dawn/Day/Dusk/Night).
+        day_ln = next(
+            (
+                ln for ln in blotter_sky
+                if any(p in ln.lower() for p in ("dawn on the blotter", "day on the blotter",
+                                                   "dusk on the blotter", "night on the blotter"))
+            ),
+            None,
+        )
+        if weather_ln:
+            trace.append(weather_ln)
+        if day_ln and day_ln not in trace:
+            trace.append(day_ln)
+        trace.append(renderer)
+        trace.append("DeskBackground/DayWash/WeatherLayer=ok")
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=scene,
+            extras={
+                "scene": scene,
+                "weather": weather_ln,
+                "day": day_ln,
+                "renderer": renderer,
+                "gui_optin": True,
+            },
+            trace=trace,
+        )
+
+    return InvokeResult(aid, "blotter", False, error=f"unknown blotter gui slice {local_id!r}")
 
 
 def _run_electron_gui_bundle() -> dict[str, Any]:
@@ -2073,7 +2243,7 @@ def _blotter_rows() -> list[Affordance]:
             "guide.guide_complete / plaque_for / classroom_for",
             notes=(
                 "Every CATALOG_KEYS guest has a plaque; classroom rooms taught. "
-                "SpeciesPlaque QWidget stays gui (blotter.plaque excluded)."
+                "SpeciesPlaque QWidget stays mode=gui (blotter.plaque driven under --gui)."
             ),
         ),
         Affordance(
@@ -2128,7 +2298,8 @@ def _blotter_rows() -> list[Affordance]:
             fate="excluded",
             exclude_reason=(
                 "Needs PyQt6 QWidget. Plaque copy is driven offline as blotter.guide (plaque_for). "
-                "Pass --gui for gui.blotter_qt (app --check prints species plaque)."
+                "Pass --gui to drive this id via app --check --offscreen species-plaque ok: line "
+                "(shared bundle with gui.blotter_qt)."
             ),
             mode="gui",
         ),
@@ -2140,7 +2311,8 @@ def _blotter_rows() -> list[Affordance]:
             fate="excluded",
             exclude_reason=(
                 "Needs PyQt6 QPainter/QPixmap. ANIMS keys stay driven as blotter.frames. "
-                "Pass --gui for gui.blotter_qt (pet on blotter)."
+                "Pass --gui to drive this id via app --check --offscreen pet-frames-painted ok: line "
+                "(shared bundle with gui.blotter_qt)."
             ),
             mode="gui",
         ),
@@ -2151,8 +2323,9 @@ def _blotter_rows() -> list[Affordance]:
             "blotter.DeskBackground / DayWash / WeatherLayer / attach_gpu_viewport",
             fate="excluded",
             exclude_reason=(
-                "Needs PyQt6 QGraphicsView scene. Pass --gui for gui.blotter_qt "
-                "(app --check --offscreen weather + day-part)."
+                "Needs PyQt6 QGraphicsView scene. Pass --gui to drive this id via app --check "
+                "--offscreen graphics-scene + weather/day-part ok: lines "
+                "(shared bundle with gui.blotter_qt)."
             ),
             mode="gui",
         ),
@@ -2687,21 +2860,29 @@ def run_domain(
                     )
                 )
                 continue
-            if gui and row.mode == "gui" and row.id.startswith("gui."):
-                result = _invoke_gui_optin(row.id)
-                fails = assert_action(row.id, result)
-                if result.error and result.error not in fails:
-                    fails = fails + [result.error] if fails else [result.error]
-                if not result.ok and not fails:
-                    fails = [result.error or result.detail or "gui smoke failed"]
-                fate = "failed" if fails else "driven"
-                out.append(
-                    CaseResult(
-                        action_id=row.id, domain=row.domain, passed=not fails,
-                        failures=fails, detail=result.detail, fate=fate,
+            if gui and row.mode == "gui":
+                if row.id.startswith("gui."):
+                    result = _invoke_gui_optin(row.id)
+                elif row.domain == "blotter" and row.id in {
+                    "blotter.plaque", "blotter.frames_paint", "blotter.scene",
+                }:
+                    result = _invoke_blotter_gui_slice(row.id.split(".", 1)[1])
+                else:
+                    result = None
+                if result is not None:
+                    fails = assert_action(row.id, result)
+                    if result.error and result.error not in fails:
+                        fails = fails + [result.error] if fails else [result.error]
+                    if not result.ok and not fails:
+                        fails = [result.error or result.detail or "gui smoke failed"]
+                    fate = "failed" if fails else "driven"
+                    out.append(
+                        CaseResult(
+                            action_id=row.id, domain=row.domain, passed=not fails,
+                            failures=fails, detail=result.detail, fate=fate,
+                        )
                     )
-                )
-                continue
+                    continue
             out.append(
                 CaseResult(
                     action_id=row.id, domain=row.domain, passed=True,
