@@ -1071,6 +1071,18 @@ assert.equal(names("chiton").includes("graze"), false);
 assert.equal(names("chiton").includes("plate"), false);
 assert.equal(names("chiton").includes("still"), false);
 assert.equal(names("chiton").includes("sit"), false);
+assert.ok(names("periwinkle").includes("littorinahush"));
+assert.ok(names("periwinkle").includes("spiralcrawl_soft"));
+assert.ok(names("periwinkle").includes("filmgraze_soft"));
+assert.ok(names("periwinkle").includes("opercshut_soft"));
+assert.ok(names("periwinkle").includes("tidehuddle_soft"));
+assert.ok(names("periwinkle").includes("tipup_soft"));
+assert.ok(names("periwinkle").includes("littorine_soft"));
+assert.ok(names("periwinkle").includes("freeze"));
+assert.equal(names("periwinkle").includes("rasp"), false);
+assert.equal(names("periwinkle").includes("graze"), false);
+assert.equal(names("periwinkle").includes("still"), false);
+assert.equal(names("periwinkle").includes("sit"), false);
 
   assert.ok(names("lugworm").includes("heap"));
   for (const key of MEADOW) {
