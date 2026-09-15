@@ -1,12 +1,22 @@
-/** Chirp ground tricks while idle. House neighborly Gryllidae / Gryllus / Fall Field Cricket desk life — stridulate / antennasweep / hopskip / burrowmouth / gryllushush personality (stridulate tegmen wing-chirp cue without naming song or buzz or tymbal or cast or egress or harden or magicicada or cicada or brood or rasp or file or bow or music or call or cry, antennasweep long feeler sweep without naming antenna or feeler or sweep or scan or look or sense or touch or probe alone as wait, hopskip hop-skip bound without naming hop or skip or jump or vault or bound or leap or grasshopper or katydid or blade alone as wait, burrowmouth burrow-mouth fossick without naming fossick or dig or burrow or mouth or hole or nest or dens alone as wait, long gryllushush Gryllus field-cricket hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or uburrow or pumppulse or headdig or tailcast or arenicolahush or densheap or inkheap or densarenicola or tymbal or cast or egress or harden or magicicada or septendecim or cassini or cicadidae or raptorial or gimbal or snatch or pendulum or mantodea or spots or aphid or reflex or climb or coccinella or gallery or pheromone or crumb or bustle or camponotus or rocking or catalepsy or browse or tread or diapheromera or hawking or tandem or nymph or whir or anax or lantern or jstroke or semaphore or elytra or photinus or figure or corbicula or hex or proboscis or hive or buzz or sun or perch or shed or fold; window-play and Call Chirp leave field_cricket alone; Brood/Fold/Seven/Column/Twig/Dart/Spark/Comb/Relay/Heap/Knurl/Thorn/Token/Spire own their tricks; guest slug Chirp / key field_cricket — accept "field_cricket" and "chirp" (roster slug chirp; campaign Chirp); do NOT accept bare "chirp" as a trick id; do NOT confuse with Brood the Periodical Cicada (key cicada / slug brood); do NOT confuse with Blade the Northern True Katydid (key katydid — next seat); do NOT confuse with Vault the Differential Grasshopper; do NOT name a trick field_cricket or chirp or cicada or brood or katydid or blade or grasshopper or vault or honeybee or lugworm or heap. Thank-yous denschirp / inkchirp / densgryllus. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web field_cricket-tricks.ts. Window-play unchanged. True Gryllus Fall Field Cricket desk life — tegmen stridulation cue, antenna sweep, hop-skip bound, burrow-mouth fossick, and long Gryllus hush; not Magicicada cicada Brood clones (tymbal/cast/egress), not Mantodea Fold, not Orthoptera katydid/grasshopper (later), not honeybee Comb — true Gryllidae field-cricket life. Next house-order guest after Chirp still lacking tricks owns the next seat (Blade / katydid). No cry inventing — thank-yous are silent desk motion only. */
+/** Chirp ground tricks while idle — ultra-polish pass. House neighborly Gryllidae / Gryllus / Fall Field Cricket desk life (field_cricket / Chirp) — stridulate / antennasweep / hopskip / burrowmouth / cerciflick / tegmenraise / gryllushush personality (stridulate tegmen wing-chirp cue without naming song or buzz or tymbal or cast or egress or harden or magicicada or cicada or brood or rasp or file or bow or music or call or cry alone as wait, antennasweep long feeler sweep without naming antenna or feeler or sweep or scan or look or sense or touch or probe alone as wait, hopskip hop-skip bound without naming hop or skip or jump or vault or bound or leap or grasshopper or katydid or blade alone as wait, burrowmouth burrow-mouth fossick without naming fossick or dig or burrow or mouth or hole or nest or dens alone as wait, cerciflick cerci flick without naming cerci or flick or tail or rear or sense alone as wait, tegmenraise tegmen raise without naming tegmen or raise or wing or elytra or lift alone as wait, long gryllushush Gryllus field-cricket hush hold (THE gryllushush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or uburrow or sedgulp or gillflush or heapcast or tailcast or headdig or arenicolahush or densheap or inkheap or densarenicola or siphonprobe or footplow or opercdoor or knobbyrock or whelkhaul or canalprobe or busyconhush or densknurl or inkknurl or densbusycon or spinewalk or lanterngraze or gripcreep or spineflare or pedicellaria or aristotle or strongylhush or densurchin or inkthorn or densstrongyl or tymbal or cast or egress or harden or magicicada or septendecim or cassini or cicadidae or raptorial or gimbal or snatch or pendulum or mantodea or bury or flat or still or leafhush or cast or dart or roll or walk or sit or hop or spring or vault or thrash or peristalse or castheap or surfacerise or soilanchor or terrestris or denscast or inkcast or densclit or sinusoid or dauerrest or pharynxpump or thrashturn or elegans or densthread or inkthread or densdauer or pumppulse or limpet or cone or barnacle or cement or ghost_crab or pale or chiton or mail or periwinkle or spire or sand_dollar or token or sea_urchin or thorn or knurl or whelk or knobbed_whelk or lugworm or heap or field_cricket or chirp or katydid or blade or grasshopper or vault or righting or podia or penta or evert or graze or rasp as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Heap owns uburrow/sedgulp/gillflush/heapcast/tailcast/headdig/arenicolahush — do NOT reuse; Knurl owns siphonprobe/footplow/opercdoor/knobbyrock/whelkhaul/canalprobe/busyconhush — do NOT reuse; Thorn owns spinewalk/lanterngraze/gripcreep/spineflare/pedicellaria/aristotle/strongylhush — do NOT reuse; Cast owns peristalse/castheap/surfacerise/soilanchor/terrestris — do NOT reuse; Brood cicada owns tymbal/cast/egress/harden/magicicada — do NOT reuse; Blade katydid next — do NOT reuse bare field_cricket/chirp/katydid/blade as trick kinds; header forbids bare bury/flat/still/sit/wait and bare field_cricket/chirp/lugworm/heap/knurl/whelk/katydid/blade/grasshopper/vault; guest slug Chirp / key field_cricket only for wantsThankYou matching — accept "field_cricket" and "chirp"; do NOT accept bare "chirp" as a trick id; do NOT name a trick "field_cricket" or "chirp" or "lugworm" or "heap" or "knobbed_whelk" or "knurl" or "katydid" or "blade" or "grasshopper" or "vault" or "cicada" or "brood" or "castheap" or "peristalse" or "pumppulse" or "uburrow" or "arenicolahush" or "bury" or "flat" or "still" or "sit" or "densheap" or "densknurl" or "chamber") — not Heap Arenicola lugworm life, not Knurl Busycon knobbed-whelk life, not Thorn Strongylocentrotus sea-urchin life, not Brood Magicicada cicada life, not Fold Mantodea mantis life, not Blade Northern True Katydid life (next guest), not Vault Differential Grasshopper life, not Rui red_panda life. Stridulate without naming song alone, antennasweep without naming antenna alone, hopskip without naming hop alone, burrowmouth without naming burrow alone, cerciflick without naming cerci alone, tegmenraise without naming tegmen alone, gryllushush long sit_hold on the Gryllus field-cricket hush (THE gryllushush sit_hold tell); denschirp / inkchirp / densgryllus thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web field_cricket-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk as bare ethogram-only trick kinds. True Gryllus Fall Field Cricket desk life only — tegmen stridulation cue, antenna sweep, hop-skip bound, burrow-mouth fossick, cerci flick, tegmen raise, and Gryllus hush; distinct from Heap lugworm uburrow/sedgulp/gillflush/heapcast/tailcast/headdig/arenicolahush, Knurl knobbed-whelk, Thorn sea-urchin, Brood cicada tymbal/cast/egress, Cast earthworm, Thread nematode, Blade katydid next, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Blade / katydid. No cry inventing — thank-yous are silent desk motion only; field_cricket.wav EXISTS so prefersHouseCry adds field_cricket after lugworm. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "field_cricket";
-  const TRICKS = ["stridulate", "antennasweep", "hopskip", "burrowmouth", "gryllushush"];
+  const TRICKS = ["stridulate", "antennasweep", "hopskip", "burrowmouth", "cerciflick", "tegmenraise", "gryllushush"];
   const HAPPY = ["denschirp", "inkchirp", "densgryllus"];
-  const HAPPY_DUR = { denschirp: 2.42, inkchirp: 2.58, densgryllus: 2.36 };
-  const GRYLLUSHUSH_HOLD = 23.60;
-  const RELEASE_S = 2.05;
-  const DUR = { gryllushush: GRYLLUSHUSH_HOLD + RELEASE_S, stridulate: 3.85, antennasweep: 3.72, hopskip: 3.55, burrowmouth: 3.98 };
+
+  const HAPPY_DUR = { denschirp: 1.70, inkchirp: 1.84, densgryllus: 1.76 };
+  const GRYLLUSHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    gryllushush: GRYLLUSHUSH_HOLD + RELEASE_S,
+    stridulate: 2.48,
+    antennasweep: 2.42,
+    hopskip: 2.40,
+    burrowmouth: 2.44,
+    cerciflick: 2.38,
+    tegmenraise: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "gryllushush") return 152 + roll * 12;
-    if (kind === "stridulate") return 22.4 + roll * 3.8;
-    if (kind === "antennasweep") return 21.8 + roll * 3.6;
-    if (kind === "hopskip") return 20.6 + roll * 3.4;
-    if (kind === "burrowmouth") return 21.2 + roll * 3.5;
-    return justFinished ? 16.8 + roll * 2.6 : 12.6 + roll * 2.2;
+    if (kind === "gryllushush") return 40 + roll * 26;
+    if (kind === "cerciflick" || kind === "stridulate" || kind === "burrowmouth") return 12.8 + roll * 9.4;
+    if (kind === "hopskip" || kind === "antennasweep" || kind === "tegmenraise") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
+    function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "gryllushush";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "gryllushush") {
-      if (roll < 0.26) return "stridulate";
-      if (roll < 0.5) return "antennasweep";
-      if (roll < 0.74) return "hopskip";
-      return "burrowmouth";
+      if (roll < 0.17) return "stridulate";
+      if (roll < 0.33) return "antennasweep";
+      if (roll < 0.49) return "hopskip";
+      if (roll < 0.65) return "burrowmouth";
+      if (roll < 0.83) return "cerciflick";
+      return "tegmenraise";
     }
     if (lastKind === "stridulate") {
-      if (roll < 0.26) return "gryllushush";
-      if (roll < 0.5) return "antennasweep";
-      if (roll < 0.74) return "hopskip";
-      return "burrowmouth";
+      if (roll < 0.16) return "gryllushush";
+      if (roll < 0.32) return "antennasweep";
+      if (roll < 0.48) return "hopskip";
+      if (roll < 0.64) return "burrowmouth";
+      if (roll < 0.82) return "cerciflick";
+      return "tegmenraise";
     }
     if (lastKind === "antennasweep") {
-      if (roll < 0.22) return "gryllushush";
-      if (roll < 0.44) return "stridulate";
-      if (roll < 0.68) return "hopskip";
-      return "burrowmouth";
+      if (roll < 0.14) return "gryllushush";
+      if (roll < 0.3) return "stridulate";
+      if (roll < 0.46) return "hopskip";
+      if (roll < 0.62) return "burrowmouth";
+      if (roll < 0.8) return "cerciflick";
+      return "tegmenraise";
     }
-    if (roll < 0.2) return "gryllushush";
-    if (roll < 0.4) return "stridulate";
-    if (roll < 0.6) return "antennasweep";
-    if (roll < 0.8) return "hopskip";
-    return "burrowmouth";
+    if (lastKind === "hopskip") {
+      if (roll < 0.15) return "gryllushush";
+      if (roll < 0.31) return "stridulate";
+      if (roll < 0.47) return "antennasweep";
+      if (roll < 0.63) return "burrowmouth";
+      if (roll < 0.81) return "cerciflick";
+      return "tegmenraise";
+    }
+    if (lastKind === "burrowmouth") {
+      if (roll < 0.16) return "gryllushush";
+      if (roll < 0.32) return "stridulate";
+      if (roll < 0.48) return "antennasweep";
+      if (roll < 0.64) return "hopskip";
+      if (roll < 0.82) return "cerciflick";
+      return "tegmenraise";
+    }
+    if (lastKind === "cerciflick") {
+      if (roll < 0.15) return "gryllushush";
+      if (roll < 0.31) return "stridulate";
+      if (roll < 0.47) return "antennasweep";
+      if (roll < 0.63) return "hopskip";
+      if (roll < 0.81) return "burrowmouth";
+      return "tegmenraise";
+    }
+    if (lastKind === "tegmenraise") {
+      if (roll < 0.16) return "gryllushush";
+      if (roll < 0.32) return "stridulate";
+      if (roll < 0.48) return "antennasweep";
+      if (roll < 0.64) return "hopskip";
+      if (roll < 0.82) return "burrowmouth";
+      return "cerciflick";
+    }
+    if (roll < 0.14) return "gryllushush";
+    if (roll < 0.28) return "stridulate";
+    if (roll < 0.42) return "antennasweep";
+    if (roll < 0.56) return "hopskip";
+    if (roll < 0.7) return "burrowmouth";
+    if (roll < 0.85) return "cerciflick";
+    return "tegmenraise";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "chirp";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,23 +164,23 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denschirp";
+    const name = (HAPPY).includes(kind) ? (kind) : "denschirp";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "denschirp" ? "sit" : name === "inkchirp" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "denschirp" ? "sit" : name === "inkchirp" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
@@ -135,47 +189,55 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denschirp));
     if (u < 0.14) {
       const s = u / 0.14;
-      return { lift: s * -0.0038, rot: s * 0.14, anim: "sit" };
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.86) {
-      const chirp = Math.sin(((u - 0.14) / 0.72) * Math.PI * 2.35);
-      return { lift: -0.0038 + Math.abs(chirp) * 0.00125, rot: 0.14 + chirp * 0.11, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    const s = (u - 0.86) / 0.14;
-    return { lift: -0.0038 * (1 - s), rot: 0.14 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function inkchirpPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkchirp));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.0042, rot: s * -0.32, anim: "play" };
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.84) {
-      const pulse = Math.sin(((u - 0.12) / 0.72) * Math.PI * 3.6);
-      return { lift: 0.0042 + Math.abs(pulse) * 0.00155, rot: -0.32 + pulse * 0.24, anim: "play" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.0042 * (1 - s), rot: -0.32 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function densgryllusPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densgryllus));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.0026, rot: s * 0.20, anim: "play" };
-    }
-    if (u < 0.82) {
-      const wing = Math.sin(((u - 0.13) / 0.69) * Math.PI * 2.55);
-      return { lift: 0.0026 + Math.abs(wing) * 0.00105, rot: 0.20 + wing * 0.15, anim: "play" };
-    }
-    const s = (u - 0.82) / 0.18;
-    return { lift: 0.0026 * (1 - s), rot: 0.20 * (1 - s), anim: "idle" };
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "denschirp") {
       const pose = denschirpPose(next.t);
@@ -193,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -202,27 +264,30 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "gryllushush";
     const anim =
-      k === "gryllushush"
+      kind === "gryllushush"
         ? "sit"
-        : k === "stridulate"
+        : kind === "stridulate"
           ? "play"
-          : k === "antennasweep"
+          : kind === "tegmenraise"
             ? "talk"
-            : k === "hopskip"
-              ? "play"
-              : k === "burrowmouth"
+            : kind === "antennasweep"
+              ? "walk"
+              : kind === "hopskip"
                 ? "sit"
-                : "sit";
+                : kind === "burrowmouth"
+                  ? "play"
+                  : kind === "cerciflick"
+                    ? "walk"
+                    : "sit";
     return {
-      kind: k,
-      phase: k === "gryllushush" ? "hold" : "go",
+      kind,
+      phase: kind === "gryllushush" ? "hold" : "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: anim,
+      anim,
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -234,35 +299,40 @@
   }
 
   function gryllushushPose(t) {
-    const breath = Math.sin(t * 0.00195) + 0.00082 * Math.sin(t * 0.0059);
-    const hush = Math.abs(Math.sin(t * 0.00088));
-    return { lift: -0.00048 + hush * 0.00012, rot: 0.016 + breath * 0.0048 };
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.00044 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.016 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function stridulatePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.stridulate));
     const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00015, lift: s * 0.0028, rot: s * 0.18 * face, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" };
     }
-    if (u < 0.88) {
-      const rasp = Math.sin((u - 0.10) / 0.78 * Math.PI * 9.6);
-      const cue = Math.sin(t * 3.65) + 0.08 * Math.sin(t * 7.3);
+    if (u < 0.78) {
+      const bar = Math.sin(t * 2.4);
       return {
-        x: fromX + face * (0.00015 + rasp * 0.00032 + cue * 0.00006),
-        lift: 0.0028 + Math.abs(rasp) * 0.0018 + Math.abs(cue) * 0.00055,
-        rot: (0.18 + rasp * 0.42 + cue * 0.14) * face,
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
         anim: "play",
       };
     }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.00015 * (1 - s), lift: 0.0006 * (1 - s), rot: 0.025 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function antennasweepPose(t, fromX, facing) {
@@ -270,87 +340,140 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00022, lift: s * 0.0036, rot: s * 0.32 * face, anim: "talk" };
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
     }
-    if (u < 0.86) {
-      const sweep = Math.sin((u - 0.12) / 0.74 * Math.PI * 3.2);
-      const feel = Math.sin(t * 1.55) + 0.055 * Math.sin(t * 3.1);
+    if (u < 0.78) {
+      const bob = Math.sin(t * 2.2);
       return {
-        x: fromX + face * (0.00022 + sweep * 0.00095 + feel * 0.00014),
-        lift: 0.0036 + Math.abs(sweep) * 0.0016 + Math.abs(feel) * 0.0005,
-        rot: (0.32 + sweep * 0.38 + feel * 0.12) * face,
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function tegmenraisePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.tegmenraise));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
+    }
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
+      return {
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
         anim: "talk",
       };
     }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.00022 * (1 - s), lift: 0.0036 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" };
-  }
-
-  function hopskipPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.hopskip));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.08) {
-      const s = smoothstep(u / 0.08);
-      return { x: fromX + face * s * 0.0004, lift: s * 0.0012, rot: s * -0.12 * face, anim: "play" };
-    }
-    if (u < 0.42) {
-      const hop = Math.sin((u - 0.08) / 0.34 * Math.PI);
-      return {
-        x: fromX + face * (0.0004 + (u - 0.08) / 0.34 * 0.0068),
-        lift: 0.0012 + hop * 0.0115,
-        rot: (-0.12 + hop * 0.55) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.55) {
-      const land = smoothstep((u - 0.42) / 0.13);
-      return {
-        x: fromX + face * (0.0072 + land * 0.0008),
-        lift: 0.0012 * (1 - land),
-        rot: (0.18 - land * 0.28) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.88) {
-      const skip = Math.sin((u - 0.55) / 0.33 * Math.PI);
-      return {
-        x: fromX + face * (0.0080 + (u - 0.55) / 0.33 * 0.0045),
-        lift: skip * 0.0078,
-        rot: (-0.08 + skip * 0.42) * face,
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0125 * (1 - s * 0.08), lift: 0.0004 * (1 - s), rot: 0.02 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function burrowmouthPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.burrowmouth));
     const face = facing == null ? 1 : facing;
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" };
+    }
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
+      return {
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function hopskipPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.hopskip));
+    const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00028, lift: s * -0.0048, rot: s * 0.28 * face, anim: "sit" };
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
     }
-    if (u < 0.84) {
-      const fossick = Math.sin((u - 0.14) / 0.70 * Math.PI * 3.4);
-      const mouth = Math.sin(t * 1.18) + 0.05 * Math.sin(t * 2.36);
+    if (u < 0.78) {
+      const hang = Math.sin(t * 2.0);
       return {
-        x: fromX + face * (0.00028 + fossick * 0.00085 + mouth * 0.00012),
-        lift: -0.0048 + Math.abs(fossick) * 0.0022 + Math.abs(mouth) * 0.00055,
-        rot: (0.28 + fossick * 0.24 + mouth * 0.10) * face,
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.00028 * (1 - s), lift: -0.0048 * (1 - s), rot: 0.03 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function cerciflickPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.cerciflick));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" };
+    }
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
+      return {
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "stridulate" && trick.kind !== "antennasweep" && trick.kind !== "hopskip" && trick.kind !== "burrowmouth") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "stridulate" &&
+      trick.kind !== "antennasweep" &&
+      trick.kind !== "hopskip" &&
+      trick.kind !== "burrowmouth" &&
+      trick.kind !== "cerciflick" &&
+      trick.kind !== "tegmenraise"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "gryllushush") {
       if (next.t < GRYLLUSHUSH_HOLD) {
         const pose = gryllushushPose(next.t);
@@ -368,38 +491,53 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "stridulate") {
-      const pose = stridulatePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = stridulatePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "antennasweep") {
-      const pose = antennasweepPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = antennasweepPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "hopskip") {
-      const pose = hopskipPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = hopskipPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "burrowmouth") {
+      const pose = burrowmouthPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "cerciflick") {
+      const pose = cerciflickPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = burrowmouthPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = tegmenraisePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
@@ -413,6 +551,17 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    gryllushushPose,
+    releasePose,
+    stridulatePose,
+    antennasweepPose,
+    tegmenraisePose,
+    burrowmouthPose,
+    hopskipPose,
+    cerciflickPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -422,17 +571,8 @@
     denschirpPose,
     inkchirpPose,
     densgryllusPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    gryllushushPose,
-    releasePose,
-    stridulatePose,
-    antennasweepPose,
-    hopskipPose,
-    burrowmouthPose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetFieldCricketTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);

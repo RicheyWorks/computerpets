@@ -1131,13 +1131,26 @@ assert.equal(names("lugworm").includes("sit"), false);
 assert.equal(names("lugworm").includes("still"), false);
 assert.equal(names("lugworm").includes("heap"), false);
 assert.equal(names("lugworm").includes("cast"), false);
+assert.ok(names("field_cricket").includes("gryllushush"));
+assert.ok(names("field_cricket").includes("stridulate_soft"));
+assert.ok(names("field_cricket").includes("antennasweep_soft"));
+assert.ok(names("field_cricket").includes("hopskip_soft"));
+assert.ok(names("field_cricket").includes("burrowmouth_soft"));
+assert.ok(names("field_cricket").includes("cerciflick_soft"));
+assert.ok(names("field_cricket").includes("tegmenraise_soft"));
+assert.ok(names("field_cricket").includes("freeze"));
+assert.equal(names("field_cricket").includes("hunt"), false);
+assert.equal(names("field_cricket").includes("sit"), false);
+assert.equal(names("field_cricket").includes("still"), false);
+assert.equal(names("field_cricket").includes("chirp"), false);
+assert.equal(names("field_cricket").includes("walk"), false);
   for (const key of MEADOW) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
     assert.equal(acts.includes("waggle"), false, `${key} is not Comb`);
   }
-  assert.ok(names("field_cricket").includes("chirp"));
+  assert.ok(names("field_cricket").includes("gryllushush"));
   assert.ok(names("grasshopper").includes("vault"));
   assert.ok(names("click_beetle").includes("click"));
   for (const key of CANOPY) {
