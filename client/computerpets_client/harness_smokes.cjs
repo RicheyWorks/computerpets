@@ -685,6 +685,66 @@ function needsPersist() {
   ]);
 }
 
+
+function windowsPerch() {
+  const W = load("windows.js");
+  const P = load("window-play.js");
+  const work = { x: 0, y: 40, width: 1600, height: 900 };
+  const enumText = [
+    "9999\t0\t40\t1600\t940\t0\t0\t0\tChrome_WidgetWin_1",
+    "2\t200\t120\t900\t700\t1\t0\t0\tChrome_WidgetWin_1",
+    "3\t0\t940\t1600\t1080\t0\t0\t0\tShell_TrayWnd",
+    "4\t0\t0\t1600\t1080\t0\t0\t0\tProgman",
+    "5\t40\t80\t120\t160\t0\t1\t0\tToolTip",
+    "6\t240\t140\t880\t720\t0\t0\t1\tChrome_WidgetWin_1",
+    "8\t240\t140\t880\t720\t0\t0\t0\tNotepad",
+    "END",
+  ].join("\n");
+  const parsed = W.parseEnumText(enumText);
+  if (!parsed.length) return fail("parseEnumText empty", { parsed });
+  const taken = W.takeRects(parsed, { workArea: work, scaleFactor: 1, skipIds: ["9999"] });
+  if (taken.map((r) => r.id).join(",") !== "8") {
+    return fail("takeRects should keep only usable notepad", { taken });
+  }
+  const box = taken[0];
+  if (!(box.width >= W.MIN_W && box.height >= W.MIN_H)) {
+    return fail("usable rect below MIN", { box });
+  }
+  if (W.laterDoor("win32") !== null) return fail("win32 should enumerate", {});
+  if (W.laterDoor("darwin") !== W.LATER_DOOR) return fail("darwin later door drifted", {});
+
+  const fixture = [{ id: "8", x: 200, y: 80, width: 700, height: 580 }];
+  if (P.playFor("budgie") !== "perch") return fail("budgie playFor should be perch", { got: P.playFor("budgie") });
+  if (P.playFor("cat") !== "ledge") return fail("cat playFor should be ledge", { got: P.playFor("cat") });
+  const perch = P.pickTarget(fixture, 120, "budgie", work, 176, { rand: 0.2 });
+  if (!perch || perch.id !== "8" || perch.kind !== "perch") {
+    return fail("pickTarget budgie perch failed", { perch });
+  }
+  if (![perch.approachX, perch.holdX, perch.holdLift].every(Number.isFinite)) {
+    return fail("perch target missing bounds", { perch });
+  }
+  const ledge = P.pickTarget(fixture, 120, "cat", work, 176, { rand: 0.2 });
+  if (!ledge || ledge.id !== "8" || ledge.kind !== "ledge") {
+    return fail("pickTarget cat ledge failed", { ledge });
+  }
+  const play = P.beginPlay(perch, 120);
+  if (!play || play.phase !== "approach" || play.target.id !== "8") {
+    return fail("beginPlay did not approach perch", { play });
+  }
+  return ok(
+    "rects=1 perch=" + perch.kind + " approach=" + perch.approachX,
+    { rectIds: taken.map((r) => r.id), perchKind: perch.kind, approachX: perch.approachX, holdLift: perch.holdLift },
+    [
+      "windows.parseEnumText",
+      "windows.takeRects.filter=overlay+min+taskbar+tool+cloaked",
+      "windows.laterDoor=win32|darwin",
+      "window-play.playFor=budgie:perch,cat:ledge",
+      "window-play.pickTarget.perch+ledge",
+      "window-play.beginPlay.approach",
+    ],
+  );
+}
+
 const COMMANDS = {
   weather_resolve: weatherResolve,
   news_resolve: newsResolve,
@@ -700,6 +760,7 @@ const COMMANDS = {
   news_topics: newsTopics,
   plates_style: platesStyle,
   plants_place: plantsPlace,
+  windows_perch: windowsPerch,
   notify_open: notifyOpen,
   visit_todays: visitTodays,
   visit_phases: visitPhases,
