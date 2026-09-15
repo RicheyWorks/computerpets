@@ -269,7 +269,7 @@ Check a box in your head when the Grok file is in this folder. Zip field tape is
 - Synth stand-ins (201): do not treat as done.
 - Grok Imagine mp4s: **0**. That is what I still need.
 
-221. [ ] `capybara.wav` — **Soak** — Capybara — A calm low capybara chatter by water. No cartoon. No music. — follow-up field tape
+221. [x] `capybara.wav` — **Soak** — Capybara — A calm low capybara chatter by water. No cartoon. No music. — sat 2026-09-15 iNat CC BY obs 90187694 (Stan Rullman / srullman; exact Hydrochoerus hydrochaeris, ExplorNapo Lodge)
 
 Catalog 221. No new pets.
 

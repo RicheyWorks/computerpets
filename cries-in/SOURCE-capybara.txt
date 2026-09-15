@@ -1,0 +1,11 @@
+key: capybara
+guest: Soak (Capybara)
+source: iNaturalist observation 90187694 sound 288393
+URL: https://www.inaturalist.org/observations/90187694
+direct: https://static.inaturalist.org/sounds/288393.mp3
+author: Stan Rullman (srullman)
+license: Creative Commons Attribution 4.0 (CC BY 4.0)
+Species: Hydrochoerus hydrochaeris (Greater Capybara; house guest Soak) — pulsed contact/alarm calls at ExplorNapo Lodge, Maynas Province, Peru. Low harmonic bark-whistle pulses. No words. No music. No English narrator. No cartoon beep.
+Notes: House cut ~3.8s mono 44.1kHz from call window ~10.9s (longest pulse cluster); highpass/lowpass + dynaudnorm + alimiter + afade. Exact species field tape. Prefer over quiet iNat CC BY click (nicoolejnik 369492429) and low-rate CC BY-SA river tape (siddantas 39058843). XC Hydrochoerus tapes are BY-NC-SA — skipped.
+sat: 2026-09-15 Buffffff
+House path: build our own from field tape — not Grok Imagine
