@@ -354,6 +354,19 @@ assert.equal(names("leafcutter").includes("cut"), false);
 assert.equal(names("leafcutter").includes("hover"), false);
 assert.equal(names("leafcutter").includes("still"), false);
 
+assert.ok(names("stingless").includes("melipona"));
+assert.ok(names("stingless").includes("cerumen_soft"));
+assert.ok(names("stingless").includes("spout_soft"));
+assert.ok(names("stingless").includes("vessel_soft"));
+assert.ok(names("stingless").includes("batumen_soft"));
+assert.ok(names("stingless").includes("potpress_soft"));
+assert.ok(names("stingless").includes("involucrum_soft"));
+assert.ok(names("stingless").includes("freeze"));
+assert.equal(names("stingless").includes("pot"), false);
+assert.equal(names("stingless").includes("hover"), false);
+assert.equal(names("stingless").includes("still"), false);
+
+
 
   assert.ok(names("honey_queen").includes("lay"));
   assert.ok(names("bumblebee").includes("bombus"));
@@ -1887,6 +1900,19 @@ assert.ok(names("leafcutter").includes("freeze"));
 assert.equal(names("leafcutter").includes("cut"), false);
 assert.equal(names("leafcutter").includes("hover"), false);
 assert.equal(names("leafcutter").includes("still"), false);
+
+assert.ok(names("stingless").includes("melipona"));
+assert.ok(names("stingless").includes("cerumen_soft"));
+assert.ok(names("stingless").includes("spout_soft"));
+assert.ok(names("stingless").includes("vessel_soft"));
+assert.ok(names("stingless").includes("batumen_soft"));
+assert.ok(names("stingless").includes("potpress_soft"));
+assert.ok(names("stingless").includes("involucrum_soft"));
+assert.ok(names("stingless").includes("freeze"));
+assert.equal(names("stingless").includes("pot"), false);
+assert.equal(names("stingless").includes("hover"), false);
+assert.equal(names("stingless").includes("still"), false);
+
 
 
 
