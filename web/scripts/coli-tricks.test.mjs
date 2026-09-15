@@ -679,7 +679,7 @@ test("Rod tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("gulargulpinhale"), false);
   assert.equal(T.TRICKS.includes("colorpatternflush"), false);
   assert.equal(T.TRICKS.includes("slowcaudalhover"), false);
-  assert.equal(T.TRICKS.includes("longepinephelushush"), false);
+  assert.equal(T.TRICKS.includes("epinephelushush"), false);
   assert.equal(T.HAPPY.includes("densgrouper"), false);
   assert.equal(T.HAPPY.includes("inkgrouper"), false);
   assert.equal(T.HAPPY.includes("densepinephelus"), false);
