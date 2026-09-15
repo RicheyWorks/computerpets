@@ -230,7 +230,7 @@ test("stick ethogram is Twig ultra (diapheromera + softs + freeze, not still/wal
   assert.ok(names.includes("catalepsy_soft"));
   assert.ok(names.includes("browse_soft"));
   assert.ok(names.includes("tread_soft"));
-  assert.ok(names.includes("oviposit_soft"));
+  assert.ok(names.includes("tegminlift_soft"));
   assert.ok(names.includes("filiform_soft"));
   assert.ok(names.includes("freeze"));
   assert.equal(names.includes("still"), false);
@@ -1010,7 +1010,7 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
     assert.equal(names.includes("tongue"), false, key);
   }
   assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "pugilator"));
-  assert.ok(E.actsFor("field_cricket").some((a) => a.name === "chirp"));
+  assert.ok(E.actsFor("field_cricket").some((a) => a.name === "gryllushush"));
   assert.ok(E.actsFor("grasshopper").some((a) => a.name === "caeliferahush"));
   assert.ok(E.actsFor("grasshopper").some((a) => a.name === "hindleap_soft"));
   assert.ok(E.actsFor("grasshopper").some((a) => a.name === "deskbask_soft"));
@@ -1086,7 +1086,19 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   assert.equal(E.actsFor("acorn_weevil").some((a) => a.name === "walk"), false);
   assert.equal(E.actsFor("acorn_weevil").some((a) => a.name === "still"), false);
   assert.equal(E.actsFor("acorn_weevil").some((a) => a.name === "acorn_weevil"), false);
-  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "elaterhush"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "clickjack_soft"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "eyespotflash_soft"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "clickfreeze_soft"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "tickwalk_soft"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "feelertick_soft"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "rightingclick_soft"));
+  assert.ok(E.actsFor("click_beetle").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("click_beetle").some((a) => a.name === "raise"), false);
+  assert.equal(E.actsFor("click_beetle").some((a) => a.name === "walk"), false);
+  assert.equal(E.actsFor("click_beetle").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("click_beetle").some((a) => a.name === "click"), false);
+  assert.equal(E.actsFor("click_beetle").some((a) => a.name === "click_beetle"), false);
 });
 
 test("canopy keys never schedule scratch or a snake tongue", () => {
