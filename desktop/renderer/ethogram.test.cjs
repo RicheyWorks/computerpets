@@ -1074,6 +1074,18 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   assert.equal(E.actsFor("earwig").some((a) => a.name === "walk"), false);
   assert.equal(E.actsFor("earwig").some((a) => a.name === "still"), false);
   assert.equal(E.actsFor("earwig").some((a) => a.name === "earwig"), false);
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "curculiohush"));
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "rostrumdrill_soft"));
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "acornroll_soft"));
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "dropthanatosis_soft"));
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "snoutwalk_soft"));
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "elytraclamp_soft"));
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "cupprobe_soft"));
+  assert.ok(E.actsFor("acorn_weevil").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("acorn_weevil").some((a) => a.name === "drill"), false);
+  assert.equal(E.actsFor("acorn_weevil").some((a) => a.name === "walk"), false);
+  assert.equal(E.actsFor("acorn_weevil").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("acorn_weevil").some((a) => a.name === "acorn_weevil"), false);
   assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
 });
 
