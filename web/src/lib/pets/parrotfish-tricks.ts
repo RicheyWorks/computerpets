@@ -1,6 +1,6 @@
-/** Scrape ground tricks while idle. House neighborly stoplight parrotfish (Sparisoma viride / Scaridae parrotfish) desk life -- beak scrape graze on desk film / desk-safe sand-poop puff cue / mucus-cocoon night settle / pectoral hover / long scarus hush; NOT Paint clownfish (esp. not wiggledancehostcue/darthideinanemone/stripeflashturn/peckcleanhost/amphiprionhush); NOT Wreath anemone; NOT Ridge brain_coral; NOT wrasse if present; NOT goldfish Coin; NOT Rui; guest slug Scrape / key parrotfish -- accept parrotfish and scrape; Thank-yous densscrape / inkscrape / densscarus. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop parrotfish-tricks.js. Next: Scrub / cleaner_shrimp. Catalog 220. */
+/** Scrape ground tricks while idle — ultra-polish pass. House neighborly Stoplight Parrotfish Sparisoma viride / Scaridae parrotfish desk life (parrotfish / Scrape) — pectoralhover / mucuscocoonnightsettle / sandpooppuffcue / beakscrapegraze / pharyngealmill / greenphaseflash / scarushush personality (pectoralhover pectoral-fin hover without naming pectoral or hover or swim alone as wait; mucuscocoonnightsettle mucus-cocoon night settle without naming mucus or cocoon or night alone as wait — desk-safe night-shelter tell; sandpooppuffcue sand-poop reef-building puff cue without naming sand or poop or puff alone as wait — Scaridae bioerosion tell; beakscrapegraze beak scrape graze without naming beak or scrape or graze alone as wait — algal film graze; pharyngealmill pharyngeal-jaw beak grind without naming grind or jaw or chew alone as wait — Scaridae mill tell; greenphaseflash terminal-phase green flash without naming green or phase or flash alone as wait — Sparisoma viride color tell; long scarushush Scarus/Scaridae hush hold (THE scarushush sit_hold tell) — never named wait or crouch or sit or still or parrotfish or scrape or swim as bare ethogram-only trick kinds; Paint clownfish owns wiggledancehostcue/darthideinanemone/amphiprionhush — do NOT reuse; Wreath anemone owns oraldiskwreathsway/nematocysttuck/actiniahush — do NOT reuse; Ridge brain_coral owns meandroidridgepulse/polyptentaclewave/diploriahush — do NOT reuse; goldfish Coin owns drift/gulp/flare — do NOT reuse; bird Parrot guest is separate — do NOT reuse; Scrub cleaner_shrimp comes next — do NOT start; guest slug Scrape / key parrotfish only for wantsThankYou matching — accept "parrotfish" and "scrape"; do NOT name a trick "parrotfish" or "scrape" or "parrot" or "clownfish" or "paint" or "anemone" or "wreath" or "brain_coral" or "ridge" or "coral" or "goldfish" or "coin" or "cleaner_shrimp" or "scrub"; not Paint Amphiprion life, not Wreath Actiniaria life, not Ridge Diploria life, not Coin Carassius life, not Scrub cleaner-shrimp life, not Rui. Pectoralhover / mucuscocoonnightsettle / sandpooppuffcue / beakscrapegraze / pharyngealmill / greenphaseflash / scarushush; densscrape / inkscrape / densscarus thank-yous. Same map as desktop parrotfish-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names scrape/swim/still/walk/sit/wait/parrotfish as bare ethogram-only trick kinds. True Stoplight Parrotfish Sparisoma viride desk life only — pectoral hover, mucus cocoon night settle, sand-poop puff cue, beak scrape graze, beak grind, green-phase flash, Scarus hush. Next house-order ultra: Scrub / cleaner_shrimp. No cry inventing — parrotfish.wav EXISTS so prefersHouseCry adds parrotfish after clownfish. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "parrotfish";
-export const TRICKS = ["pectoralhover", "mucuscocoonnightsettle", "sandpooppuffcue", "beakscrapegraze", "scarushush"] as const;
+export const TRICKS = ["pectoralhover", "mucuscocoonnightsettle", "sandpooppuffcue", "beakscrapegraze", "pharyngealmill", "greenphaseflash", "scarushush"] as const;
 export const HAPPY = ["densscrape", "inkscrape", "densscarus"] as const;
 export type ParrotfishTrickKind = (typeof TRICKS)[number];
 export type ParrotfishHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,18 @@ export type ParrotfishHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { densscrape: 2.71, inkscrape: 2.88, densscarus: 2.69 } as const;
-export const SCARUSHUSH_HOLD = 34.12;
-export const RELEASE_S = 2.56;
-export const DUR = { scarushush: SCARUSHUSH_HOLD + RELEASE_S, pectoralhover: 5.56, mucuscocoonnightsettle: 5.22, sandpooppuffcue: 5.72, beakscrapegraze: 5.48 } as const;
+export const HAPPY_DUR = { densscrape: 1.70, inkscrape: 1.84, densscarus: 1.76 } as const;
+export const SCARUSHUSH_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  scarushush: SCARUSHUSH_HOLD + RELEASE_S,
+  pectoralhover: 2.48,
+  mucuscocoonnightsettle: 2.42,
+  sandpooppuffcue: 2.40,
+  beakscrapegraze: 2.44,
+  pharyngealmill: 2.38,
+  greenphaseflash: 2.56,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -57,6 +65,7 @@ export function canStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function shouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
@@ -73,42 +82,83 @@ export function shouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: ParrotfishTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "scarushush") return 214 + roll * 24;
-  if (kind === "mucuscocoonnightsettle") return 26.4 + roll * 3.2;
-  if (kind === "beakscrapegraze") return 25.1 + roll * 3.0;
-  if (kind === "pectoralhover") return 24.8 + roll * 3.1;
-  if (kind === "sandpooppuffcue") return 24.4 + roll * 3.3;
-  return justFinished ? 19.1 + roll * 3.0 : 14.2 + roll * 2.6;
+  if (kind === "scarushush") return 40 + roll * 26;
+  if (kind === "pharyngealmill" || kind === "greenphaseflash" || kind === "pectoralhover") return 12.8 + roll * 9.4;
+  if (kind === "sandpooppuffcue" || kind === "mucuscocoonnightsettle" || kind === "beakscrapegraze") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: ParrotfishTrickKind | string) {
-  if (musicOn) return "scarushush";
+
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: ParrotfishTrickKind | string | null) {
+  if (musicOn) return "scarushush" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "scarushush") {
-    if (roll < 0.26) return "mucuscocoonnightsettle";
-    if (roll < 0.5) return "beakscrapegraze";
-    if (roll < 0.74) return "pectoralhover";
-    return "sandpooppuffcue";
+    if (roll < 0.17) return "pectoralhover" as const;
+    if (roll < 0.33) return "mucuscocoonnightsettle" as const;
+    if (roll < 0.49) return "sandpooppuffcue" as const;
+    if (roll < 0.65) return "beakscrapegraze" as const;
+    if (roll < 0.83) return "pharyngealmill" as const;
+    return "greenphaseflash" as const;
+  }
+  if (lastKind === "pectoralhover") {
+    if (roll < 0.16) return "scarushush" as const;
+    if (roll < 0.32) return "mucuscocoonnightsettle" as const;
+    if (roll < 0.48) return "sandpooppuffcue" as const;
+    if (roll < 0.64) return "beakscrapegraze" as const;
+    if (roll < 0.82) return "pharyngealmill" as const;
+    return "greenphaseflash" as const;
   }
   if (lastKind === "mucuscocoonnightsettle") {
-    if (roll < 0.26) return "scarushush";
-    if (roll < 0.5) return "beakscrapegraze";
-    if (roll < 0.74) return "pectoralhover";
-    return "sandpooppuffcue";
+    if (roll < 0.14) return "scarushush" as const;
+    if (roll < 0.3) return "pectoralhover" as const;
+    if (roll < 0.46) return "sandpooppuffcue" as const;
+    if (roll < 0.62) return "beakscrapegraze" as const;
+    if (roll < 0.8) return "pharyngealmill" as const;
+    return "greenphaseflash" as const;
+  }
+  if (lastKind === "sandpooppuffcue") {
+    if (roll < 0.15) return "scarushush" as const;
+    if (roll < 0.31) return "pectoralhover" as const;
+    if (roll < 0.47) return "mucuscocoonnightsettle" as const;
+    if (roll < 0.63) return "beakscrapegraze" as const;
+    if (roll < 0.81) return "pharyngealmill" as const;
+    return "greenphaseflash" as const;
   }
   if (lastKind === "beakscrapegraze") {
-    if (roll < 0.22) return "scarushush";
-    if (roll < 0.44) return "mucuscocoonnightsettle";
-    if (roll < 0.68) return "pectoralhover";
-    return "sandpooppuffcue";
+    if (roll < 0.16) return "scarushush" as const;
+    if (roll < 0.32) return "pectoralhover" as const;
+    if (roll < 0.48) return "mucuscocoonnightsettle" as const;
+    if (roll < 0.64) return "sandpooppuffcue" as const;
+    if (roll < 0.82) return "pharyngealmill" as const;
+    return "greenphaseflash" as const;
   }
-  if (roll < 0.2) return "scarushush";
-  if (roll < 0.4) return "mucuscocoonnightsettle";
-  if (roll < 0.6) return "beakscrapegraze";
-  if (roll < 0.8) return "pectoralhover";
-  return "sandpooppuffcue";
+  if (lastKind === "pharyngealmill") {
+    if (roll < 0.15) return "scarushush" as const;
+    if (roll < 0.31) return "pectoralhover" as const;
+    if (roll < 0.47) return "mucuscocoonnightsettle" as const;
+    if (roll < 0.63) return "sandpooppuffcue" as const;
+    if (roll < 0.81) return "beakscrapegraze" as const;
+    return "greenphaseflash" as const;
+  }
+  if (lastKind === "greenphaseflash") {
+    if (roll < 0.16) return "scarushush" as const;
+    if (roll < 0.32) return "pectoralhover" as const;
+    if (roll < 0.48) return "mucuscocoonnightsettle" as const;
+    if (roll < 0.64) return "sandpooppuffcue" as const;
+    if (roll < 0.82) return "beakscrapegraze" as const;
+    return "pharyngealmill" as const;
+  }
+  if (roll < 0.14) return "scarushush" as const;
+  if (roll < 0.28) return "pectoralhover" as const;
+  if (roll < 0.42) return "mucuscocoonnightsettle" as const;
+  if (roll < 0.56) return "sandpooppuffcue" as const;
+  if (roll < 0.7) return "beakscrapegraze" as const;
+  if (roll < 0.85) return "pharyngealmill" as const;
+  return "greenphaseflash" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -117,6 +167,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
@@ -132,14 +183,16 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "scrape";
 }
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: ParrotfishHappyKind | string | undefined,
+  lastKind: ParrotfishHappyKind | null | undefined,
   x: number,
-  facing?: 1 | -1,
+  facing: 1 | -1,
   flags?: TrickFlags
 ) {
   if (!wantsThankYou(key)) return null;
@@ -147,14 +200,16 @@ export function startThankYou(
   const pick = pickHappy(lastKind);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
-export function pickHappy(lastKind?: ParrotfishHappyKind | string, rand?: number) {
+
+export function pickHappy(lastKind?: ParrotfishHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
-export function beginHappy(kind: ParrotfishHappyKind | string, x: number, facing?: 1 | -1): ParrotfishHappy {
-  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as ParrotfishHappyKind) : "densscrape";
+
+export function beginHappy(kind: ParrotfishHappyKind | string, x: number, facing: 1 | -1): ParrotfishHappy {
+  const name = (HAPPY as readonly string[]).includes(kind) ? (kind as ParrotfishHappyKind) : "densscrape";
   return {
     kind: name,
     happy: true,
@@ -163,55 +218,63 @@ export function beginHappy(kind: ParrotfishHappyKind | string, x: number, facing
     x,
     lift: 0,
     rot: 0,
-    anim: name === "densscrape" ? "sit" : name === "inkscrape" ? "play" : "play",
-    facing: facing == null ? 1 : facing,
+    anim: (name === "densscrape" ? "sit" : name === "inkscrape" ? "play" : "play") as TrickAnim,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
 
 export function densscrapePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densscrape));
-  if (u < 0.15) {
-    const s = u / 0.15;
-    return { lift: s * 0.0034, rot: s * -0.22, anim: "sit" as TrickAnim };
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.84) {
-    const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.35);
-    return { lift: 0.0034 + Math.abs(sway) * 0.0009, rot: -0.22 + sway * 0.16, anim: "sit" as TrickAnim };
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
+    };
   }
-  const s = (u - 0.84) / 0.16;
-  return { lift: 0.0034 * (1 - s), rot: -0.22 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
+
 export function inkscrapePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkscrape));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.0035, rot: s * 0.26, anim: "play" as TrickAnim };
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
   }
-  if (u < 0.82) {
-    const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 2.95);
-    return { lift: 0.0035 + Math.abs(arc) * 0.0020, rot: 0.26 + arc * 0.28, anim: "play" as TrickAnim };
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
   }
-  const s = (u - 0.82) / 0.18;
-  return { lift: 0.0035 * (1 - s), rot: 0.26 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
+
 export function densscarusPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densscarus));
-  if (u < 0.14) {
-    const s = u / 0.14;
-    return { lift: s * -0.0016, rot: s * 0.17, anim: "play" as TrickAnim };
-  }
-  if (u < 0.83) {
-    const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.18);
-    return { lift: -0.0016 + Math.abs(hush) * 0.0010, rot: 0.17 + hush * 0.16, anim: "play" as TrickAnim };
-  }
-  const s = (u - 0.83) / 0.17;
-  return { lift: -0.0016 * (1 - s), rot: 0.17 * (1 - s), anim: "idle" as TrickAnim };
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "play" as TrickAnim,
+  };
 }
-export function stepHappy(happy: ParrotfishHappy, dt: number, flags?: TrickFlags): ParrotfishHappy {
+
+export function stepHappy(happy: ParrotfishHappy | null | undefined, dt: number, flags?: TrickFlags) {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...happy, t: happy.t + Math.max(0, dt) };
   const hold = HAPPY_DUR[next.kind];
@@ -231,26 +294,32 @@ export function stepHappy(happy: ParrotfishHappy, dt: number, flags?: TrickFlags
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
-export function beginTrick(kind: ParrotfishTrickKind | string, x: number, facing?: 1 | -1): ParrotfishTrick {
+
+export function beginTrick(kind: ParrotfishTrickKind | string, x: number, facing: 1 | -1): ParrotfishTrick {
   const k = (TRICKS as readonly string[]).includes(kind) ? (kind as ParrotfishTrickKind) : "scarushush";
   const anim: TrickAnim =
     k === "scarushush"
       ? "sit"
-      : k === "mucuscocoonnightsettle"
-        ? "play"
-        : k === "beakscrapegraze"
-            ? "sit"
-          : k === "sandpooppuffcue"
+      : k === "pectoralhover"
+        ? "sit"
+        : k === "greenphaseflash"
+          ? "talk"
+          : k === "mucuscocoonnightsettle"
+            ? "play"
+            : k === "sandpooppuffcue"
               ? "sit"
-            : k === "pectoralhover"
+              : k === "beakscrapegraze"
                 ? "sit"
-              : "sit";
+                : k === "pharyngealmill"
+                  ? "walk"
+                  : "sit";
   return {
     kind: k,
     phase: k === "scarushush" ? "hold" : "go",
@@ -259,115 +328,190 @@ export function beginTrick(kind: ParrotfishTrickKind | string, x: number, facing
     lift: 0,
     rot: 0,
     anim,
-    facing: facing == null ? 1 : facing,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
+
 function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
 export function scarushushPose(t: number) {
-  const breath = Math.sin(t * 0.00037) + 0.00011 * Math.sin(t * 0.00105);
-  const hush = Math.abs(Math.sin(t * 0.00021));
-  return { lift: -0.00018 + hush * 0.00006, rot: 0.0014 + breath * 0.0011 };
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
 }
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00018 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0031 * (1 - u) };
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
 }
 
-export function mucuscocoonnightsettlePose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.mucuscocoonnightsettle));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.22) {
-    const s = smoothstep(u / 0.22);
-    return { x: fromX + face * s * -0.00004, lift: s * -0.0051, rot: s * 0.07 * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.72) {
-    const tuck = Math.sin(((u - 0.22) / 0.5) * Math.PI * 2.1);
-    return {
-      x: fromX + face * (-0.00004 + tuck * 0.00005),
-      lift: -0.0051 + Math.abs(tuck) * 0.0008,
-      rot: (0.07 + tuck * 0.05) * face,
-      anim: "play" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.72) / 0.28);
-  return { x: fromX + face * -0.00004 * (1 - s), lift: -0.0051 * (1 - s), rot: 0.07 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function beakscrapegrazePose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.beakscrapegraze));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.3) {
-    const s = smoothstep(u / 0.3);
-    return { x: fromX + face * s * 0.00006, lift: s * -0.0081, rot: s * 0.03 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.68) {
-    const hold = Math.sin(((u - 0.3) / 0.38) * Math.PI);
-    return {
-      x: fromX + face * 0.00006,
-      lift: -0.0081 + hold * 0.0005,
-      rot: (0.03 + hold * 0.015) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  if (u < 0.9) {
-    const c = smoothstep((u - 0.68) / 0.22);
-    return {
-      x: fromX + face * 0.00006 * (1 - c * 0.35),
-      lift: -0.0081 * (1 - c) + 0.0018 * c,
-      rot: (0.03 * (1 - c) + 0.06 * c) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.9) / 0.1);
-  return { x: fromX + face * 0.00004 * (1 - s), lift: 0.0018 * (1 - s), rot: 0.06 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function pectoralhoverPose(t: number, fromX: number, facing?: 1 | -1) {
+export function pectoralhoverPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.pectoralhover));
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX + face * s * 0.00009, lift: s * 0.0026, rot: s * 0.14 * face, anim: "sit" as TrickAnim };
+    return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "sit" as TrickAnim };
   }
-  if (u < 0.88) {
-    const sway = Math.sin(((u - 0.14) / 0.74) * Math.PI * 2.85);
+  if (u < 0.78) {
+    const bar = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (0.00009 + sway * 0.00018),
-      lift: 0.0026 + Math.abs(sway) * 0.0019,
-      rot: (0.14 + sway * 0.22) * face,
+      x: fromX + face * (0.8 + bar * 0.16),
+      lift: 2.8 + Math.abs(bar) * 1.5,
+      rot: face * (-12 + bar * 10),
       anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.88) / 0.12);
-  return { x: fromX + face * 0.00009 * (1 - s), lift: 0.0026 * (1 - s), rot: 0.14 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function sandpooppuffcuePose(t: number, fromX: number, facing?: 1 | -1) {
+
+export function mucuscocoonnightsettlePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.mucuscocoonnightsettle));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.2);
+    return {
+      x: fromX + face * bob * 0.12,
+      lift: 2.6 + Math.abs(bob) * 1.3,
+      rot: face * (10 + bob * 8),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function sandpooppuffcuePose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.sandpooppuffcue));
   const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.00028, lift: s * 0.0009, rot: s * 0.05 * face, anim: "sit" as TrickAnim };
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" as TrickAnim };
   }
-  if (u < 0.82) {
-    const creep = Math.sin(((u - 0.18) / 0.64) * Math.PI * 1.8);
+  if (u < 0.78) {
+    const hang = Math.sin(t * 2.0);
     return {
-      x: fromX + face * (0.00028 + creep * 0.00028),
-      lift: 0.0009 + Math.abs(creep) * 0.0007,
-      rot: (0.05 + creep * 0.06) * face,
+      x: fromX + face * (0.5 + hang * 0.1),
+      lift: 2.8 + Math.abs(hang) * 1.2,
+      rot: face * (11 + hang * 8),
       anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.82) / 0.18);
-  return { x: fromX + face * 0.0007 * (1 - s * 0.3), lift: 0.0009 * (1 - s), rot: 0.05 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.5 * (1 - s),
+    lift: 1.3 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function stepTrick(trick: ParrotfishTrick, dt: number, flags?: TrickFlags): ParrotfishTrick {
+
+export function beakscrapegrazePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.beakscrapegraze));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const thrash = Math.sin(t * 3.6);
+    return {
+      x: fromX + face * (1.0 + thrash * 0.22),
+      lift: 3.6 + Math.abs(thrash) * 2.0,
+      rot: face * (18 + thrash * 14),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 1.0 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: face * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function pharyngealmillPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.pharyngealmill));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cast = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * (0.6 + cast * 0.16),
+      lift: 2.8 + Math.abs(cast) * 1.6,
+      rot: face * (12 + cast * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function greenphaseflashPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.greenphaseflash));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cloud = Math.sin(t * 3.0);
+    return {
+      x: fromX + face * (0.6 + cloud * 0.18),
+      lift: 3.0 + Math.abs(cloud) * 1.8,
+      rot: face * (14 + cloud * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.5 * (1 - s),
+    rot: face * (5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: ParrotfishTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "mucuscocoonnightsettle" && trick.kind !== "beakscrapegraze" && trick.kind !== "pectoralhover" && trick.kind !== "sandpooppuffcue") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "pectoralhover" &&
+    trick.kind !== "mucuscocoonnightsettle" &&
+    trick.kind !== "sandpooppuffcue" &&
+    trick.kind !== "beakscrapegraze" &&
+    trick.kind !== "pharyngealmill" &&
+    trick.kind !== "greenphaseflash"
+  ) {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...trick, t: trick.t + Math.max(0, dt) };
   if (next.kind === "scarushush") {
@@ -387,35 +531,48 @@ export function stepTrick(trick: ParrotfishTrick, dt: number, flags?: TrickFlags
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
-  if (next.kind === "mucuscocoonnightsettle") {
-    const pose = mucuscocoonnightsettlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
+  if (next.kind === "pectoralhover") {
+    const pose = pectoralhoverPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "beakscrapegraze") {
-    const pose = beakscrapegrazePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "mucuscocoonnightsettle") {
+    const pose = mucuscocoonnightsettlePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "sandpooppuffcue") {
-    const pose = sandpooppuffcuePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = sandpooppuffcuePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "beakscrapegraze") {
+    const pose = beakscrapegrazePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "pharyngealmill") {
+    const pose = pharyngealmillPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = pectoralhoverPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = greenphaseflashPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
