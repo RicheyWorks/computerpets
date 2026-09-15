@@ -92,9 +92,102 @@ function demoRoom() {
   ]);
 }
 
+async function classroomLockstep(expectPath) {
+  if (!expectPath) return fail("classroom_lockstep needs expect JSON path argv");
+  let expect;
+  try {
+    expect = JSON.parse(readFileSync(expectPath, "utf8"));
+  } catch (err) {
+    return fail(`expect JSON read failed: ${err && err.message}`);
+  }
+  const plaquesUrl = pathToFileURL(join(WEB, "src", "lib", "pets", "plaques.ts")).href;
+  const P = await import(plaquesUrl);
+  const keys = Object.keys(expect);
+  let matched = 0;
+  const drift = [];
+  for (const key of keys) {
+    const want = expect[key];
+    const got = P.classroomFor(key);
+    if (!got) {
+      drift.push(key + ":missing");
+      continue;
+    }
+    if (got.label !== want.label || got.verb !== want.verb || got.to !== want.to) {
+      drift.push(key);
+      continue;
+    }
+    matched += 1;
+  }
+  if (drift.length) {
+    return fail(`classroomFor drift n=${drift.length}`, { drift: drift.slice(0, 12), matched });
+  }
+  const plaqueSrc = readFileSync(join(WEB, "src", "components", "desk", "species-plaque.tsx"), "utf8");
+  for (const needle of ["classroomFor", "classroom.verb", "classroom.label", "classroom.to"]) {
+    if (!plaqueSrc.includes(needle)) return fail(`species-plaque missing ${needle}`);
+  }
+  // Desktop has no classroom peer — not invented.
+  const deskHours = readFileSync(join(RENDERER, "hours.js"), "utf8");
+  if (deskHours.includes("classroomFor") || deskHours.includes("classroom_for")) {
+    return fail("unexpected desktop classroom API");
+  }
+  return ok(`classroom lockstep=${matched}`, { matched, n: keys.length }, [
+    `matched=${matched}`,
+    `keys=${keys.length}`,
+    "species-plaque.classroomFor",
+    "desktop_classroom=absent",
+  ]);
+}
+
+async function returnMemory() {
+  const hoursUrl = pathToFileURL(join(WEB, "src", "lib", "pets", "hours.ts")).href;
+  const H = await import(hoursUrl);
+  const cases = [
+    [0, 14, null],
+    [0.3 * 3_600_000, 14, null],
+    [0.5 * 3_600_000, 14, "Back. I noticed."],
+    [1 * 3_600_000, 14, "You were elsewhere. I practiced waiting."],
+    [6 * 3_600_000, 14, "Hours. I sat in most of them."],
+    [20 * 3_600_000, 8, "You were gone a night. I kept the blotter."],
+    [20 * 3_600_000, 14, "A long absence. I counted the dust."],
+  ];
+  let matched = 0;
+  for (const [away, hour, want] of cases) {
+    const got = H.returnLine(away, hour);
+    if (got !== want) {
+      return fail(`returnLine(${away},${hour}) got ${JSON.stringify(got)} want ${JSON.stringify(want)}`);
+    }
+    matched += 1;
+  }
+  if (typeof H.rememberVisit !== "function") {
+    return fail("web rememberVisit missing");
+  }
+  // localStorage is absent in plain node — rememberVisit should soft-fail to away=0.
+  const away = H.rememberVisit("red_panda");
+  if (away !== 0) {
+    return fail(`rememberVisit without localStorage away=${away}`);
+  }
+  const roomSrc = readFileSync(join(WEB, "src", "components", "desk", "companion-room.tsx"), "utf8");
+  for (const needle of ["rememberVisit", "returnLine", "persistLocal ? rememberVisit"]) {
+    if (!roomSrc.includes(needle)) return fail(`companion-room missing ${needle}`);
+  }
+  const deskHours = readFileSync(join(RENDERER, "hours.js"), "utf8");
+  if (deskHours.includes("returnLine") || deskHours.includes("rememberVisit")) {
+    return fail("unexpected desktop returnLine/rememberVisit");
+  }
+  if (!deskHours.includes("callLine")) return fail("desktop callLine missing");
+  return ok(`return_memory thresholds=${matched}`, { matched }, [
+    `thresholds=${matched}`,
+    "rememberVisit.soft=0",
+    "companion-room.rememberVisit+returnLine",
+    "desktop_return=absent",
+  ]);
+}
+
 const COMMANDS = {
   guest_choice: guestChoice,
   demo_room: demoRoom,
+  classroom_lockstep: classroomLockstep,
+  return_memory: returnMemory,
 };
 
 async function main(argv) {
@@ -109,7 +202,7 @@ async function main(argv) {
     return 1;
   }
   try {
-    const result = await fn();
+    const result = await fn(...argv.slice(3));
     process.stdout.write(JSON.stringify(result) + "\n");
     return result.ok ? 0 : 1;
   } catch (err) {
