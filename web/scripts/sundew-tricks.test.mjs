@@ -274,11 +274,11 @@ test("mucilage/tentacle/digest/gland/rosette/lamina/circinate are house-sundew-t
   assert.equal(circinate.anim, "talk");
   const circinateMid = T.stepTrick(circinate, 0.5, ground);
   assert.ok(Math.abs(circinateMid.lift) > 0.05 || Math.abs(circinateMid.rot) > 1 || Math.abs(circinateMid.x - 80) > 0.05);
-  const sinusDone = T.stepTrick(sinus, 1.7, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.digest + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
-  for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Octopus, Cuttlefish, Nautilus, MoonJelly, SeaStar, HermitCrab, HorseshoeCrab, Seahorse, Manta, Moray, Moss, Maidenhair, Ginkgo, Oak, WaterLily, Orchid, Saguaro, VenusFlytrap, Pitcher, Monarch, Luna, Relay, Fuse, Earth]) {
+  for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, Budgie, Fox, Penguin, Parrot, Ferret, Hedgehog, Chinchilla, Axolotl, Toucan, Iguana, Dragon, Phoenix, BallPython, CornSnake, Kingsnake, GreenTreePython, Hognose, Garter, Boa, MilkSnake, RosyBoa, CarpetPython, Octopus, Cuttlefish, Nautilus, MoonJelly, SeaStar, HermitCrab, HorseshoeCrab, Seahorse, Manta, Moray, Moss, Maidenhair, Ginkgo, Oak, WaterLily, Orchid, Saguaro, VenusFlytrap, Pitcher, Honeybee, Monarch, Luna, Relay, Fuse, Earth]) {
     assert.equal(mod.TRICKS.includes("mucilage"), false);
     assert.equal(mod.TRICKS.includes("tentacle"), false);
     assert.equal(mod.TRICKS.includes("digest"), false);
@@ -318,7 +318,7 @@ test("mucilage/tentacle/digest/gland/rosette/lamina/circinate are house-sundew-t
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
