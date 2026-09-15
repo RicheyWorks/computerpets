@@ -1,6 +1,6 @@
-/** Rob ground tricks while idle. House neighborly Asilidae / robber fly desk life -- sallyhawk / beardgroom / midsnatch / stiltsstance / asilushush personality (sallyhawk perch-and-sally hawk distinct from Darner hawking/creekpatrol and Jewel creekpatrol; beardgroom bristly mystax beard groom distinct from Snout rostrumtap and Mantis wipe; midsnatch midair snatch cue desk-safe distinct from Vault hindleap, Click clickjack, and Darner hawking; stiltsstance long-legged stilts stance distinct from Stick stickstill and Haste fleetlegs; long asilushush Asilidae hush -- never named wait; NOT Click eyed click beetle; NOT Snout acorn weevil; NOT Forceps earwig; NOT Honeybee; NOT Darner; NOT housefly; guest slug Rob / key robber_fly -- accept robber_fly and rob; Thank-yous densrob / inkrob / densasilus. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop robber_fly-tricks.js. Next: Hang / sloth. Catalog 220. */
+/** Rob ground tricks while idle — ultra-polish pass. House neighborly Asilidae / robber fly desk life (robber_fly / Rob) — sallyhawk / beardgroom / midsnatch / stiltsstance / mystaxwipe / perchsally / asilushush personality (sallyhawk perch-and-sally hawk without naming hawk or sally or perch or hunt alone as wait, beardgroom bristly mystax beard groom without naming beard or mystax or groom alone as wait, midsnatch midair snatch cue desk-safe without naming snatch or mid or grab alone as wait, stiltsstance long-legged stilts stance without naming stilts or stance or stand alone as wait, mystaxwipe mystax beard wipe without naming wipe or mystax alone as wait, perchsally perch-sally launch without naming perch or sally alone as wait, long asilushush Asilidae hush hold (THE asilushush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or asclepias or oyamel or plumose or lunule or densmilk or inkmilk or densdanaus or densghost or inkghost or densactias or hopskip or hindleap or deskbask or mandiblegraze or femurrasp or tympanal or saltatory or caeliferahush or densvault or inkvault or denscaelifera or leafstill or antennatick or tegminasong or leafwalk or tegminlift or greenmimic or tettigonihush or densblade or inkblade or denstettigonia or stridulate or antennasweep or burrowmouth or cerciflick or tegmenraise or gryllushush or denschirp or inkchirp or densgryllus or wingbanner or puddlesip or flutterhop or tailglidesettle or eyespot or tigerband or papiliohush or densbanner or inkbanner or denspapilio or jewelflick or creekpatrol or perchfan or ovipositdip or metallicwing or damselflick or calopteryxhush or densjewel or inkjewel or denscalopteryx or wingtremble or aphidstalk or eggraise or nightglint or pedicel or laceveil or chrysopahush or denslace or inklace or denschrysopa or cercithreat or fanwing or nightscuttle or broodguard or tegminacurl or cerciwhip or forficulahush or densforceps or inkforceps or densforficula or forcipule or wallrace or antennaflick or fleetlegs or densforcep or rostrumdrill or acornroll or dropthanatosis or snoutwalk or elytraclamp or cupprobe or curculiohush or denssnout or inksnout or denscurculio or clickjack or eyespotflash or clickfreeze or tickwalk or feelertick or rightingclick or elaterhush or densclick or inkclick or denselater or bury or flat or still or sit or walk or hop or spring or vault or hunt or perch or robber_fly or rob or click_beetle or click or earwig or forceps or acorn_weevil or snout as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Click click_beetle owns clickjack/eyespotflash/clickfreeze/tickwalk/feelertick/rightingclick/elaterhush — do NOT reuse; Snout acorn_weevil owns rostrumdrill/acornroll/dropthanatosis/snoutwalk/elytraclamp/cupprobe/curculiohush — do NOT reuse (Snout owns rostrumdrill not rostrumtap); Forceps earwig owns cercithreat/fanwing/nightscuttle/broodguard/tegminacurl/cerciwhip/forficulahush — do NOT reuse; Lace lacewing owns wingtremble/aphidstalk/eggraise/nightglint/pedicel/laceveil/chrysopahush — do NOT reuse; Jewel jewelwing owns jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush — do NOT reuse; Banner swallowtail owns wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush — do NOT reuse; Dart darner owns hawking/tandem — do NOT reuse; Vault owns hindleap — do NOT reuse; Stick owns stickstill — do NOT reuse; header forbids bare bury/flat/still/sit/wait/hunt/perch and bare robber_fly/rob as trick kinds; guest slug Rob / key robber_fly only for wantsThankYou matching — accept "robber_fly" and "rob"; do NOT accept bare "rob" as a trick id; do NOT name a trick "robber_fly" or "rob" or "click_beetle" or "click" or "acorn_weevil" or "snout" or "earwig" or "forceps" or "lacewing" or "lace" or "jewelwing" or "jewel" or "swallowtail" or "banner" or "sloth" or "hang" or "clickjack" or "elaterhush" or "rostrumdrill" or "curculiohush" or "hawking" or "creekpatrol" or "hindleap" or "stickstill" or "antennatick" or "hopskip" or "caeliferahush" or "densvault" or "densblade" or "denschirp" or "densbanner" or "densjewel" or "denslace" or "densforceps" or "denssnout" or "densclick") — not Click Elateridae eyed-click-beetle life, not Snout Curculio acorn-weevil life, not Forceps Forficula earwig life, not Lace Chrysopa lacewing life, not Jewel Calopteryx jewelwing life, not Banner Papilio swallowtail life, not Hang Bradypus sloth life (next guest), not Haste Scutigera house-centipede life, not Milk Danaus monarch life, not Ghost Actias luna life, not Comb Apis honeybee life, not Dart Aeshnidae darner life, not Spark Lampyridae firefly life, not Vault Melanoplus grasshopper life, not Blade Tettigoniidae katydid life, not Chirp Gryllus field-cricket life, not Stick Phasmatodea oviposit life, not Armor Armadillidium pillbug life, not Cache Sciurus squirrel life, not Auger Xylocopa carpenter-bee life, not Barb scorpion life, not Rui red_panda life. Sallyhawk without naming hawk alone, beardgroom without naming beard alone, midsnatch without naming snatch alone, stiltsstance without naming stilts alone, mystaxwipe without naming wipe alone, perchsally without naming perch alone, asilushush long sit_hold on the Asilidae hush (THE asilushush sit_hold tell); densrob / inkrob / densasilus thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop robber_fly-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk/perch/robber_fly/rob as bare ethogram-only trick kinds. True Robber Fly Asilidae desk life only — perch-and-sally hawk, bristly mystax beard groom, midair snatch cue, long-legged stilts stance, mystax wipe, perch-sally launch, and Asilidae hush; distinct from Click click_beetle clickjack/eyespotflash/clickfreeze/tickwalk/feelertick/rightingclick/elaterhush, Snout acorn_weevil rostrumdrill/acornroll/dropthanatosis/snoutwalk/elytraclamp/cupprobe/curculiohush, Forceps earwig cercithreat/fanwing/nightscuttle/broodguard/tegminacurl/cerciwhip/forficulahush, Lace lacewing wingtremble/aphidstalk/eggraise/nightglint/pedicel/laceveil/chrysopahush, Jewel jewelwing jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush, Banner swallowtail wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush, Hang sloth hang/reach (next), Haste house_centipede forcipule/wallrace/antennaflick/fleetlegs/densforcep, Milk monarch asclepias/oyamel, Ghost luna plumose/lunule, Comb honeybee, Dart darner hawking/tandem, Spark firefly lantern/jstroke, Vault grasshopper hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush, Blade katydid antennatick/tettigonihush, Chirp cricket hopskip, Stick oviposit, Armor pillbug, Cache nutbury, Auger rasp, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Hang / sloth. No cry inventing — thank-yous are silent desk motion only; robber_fly.wav EXISTS so prefersHouseCry adds robber_fly after click_beetle. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "robber_fly";
-export const TRICKS = ["sallyhawk", "beardgroom", "midsnatch", "stiltsstance", "asilushush"] as const;
+export const TRICKS = ["sallyhawk", "beardgroom", "midsnatch", "stiltsstance", "mystaxwipe", "perchsally", "asilushush"] as const;
 export const HAPPY = ["densrob", "inkrob", "densasilus"] as const;
 export type RobberFlyTrickKind = (typeof TRICKS)[number];
 export type RobberFlyHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,18 @@ export type RobberFlyHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { densrob: 2.58, inkrob: 2.72, densasilus: 2.46 } as const;
-export const ASILUSHUSH_HOLD = 30.20;
-export const RELEASE_S = 2.18;
-export const DUR = { asilushush: ASILUSHUSH_HOLD + RELEASE_S, sallyhawk: 4.42, beardgroom: 4.28, midsnatch: 4.08, stiltsstance: 4.64 } as const;
+export const HAPPY_DUR = { densrob: 1.70, inkrob: 1.84, densasilus: 1.76 } as const;
+export const ASILUSHUSH_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  asilushush: ASILUSHUSH_HOLD + RELEASE_S,
+  sallyhawk: 2.48,
+  beardgroom: 2.42,
+  midsnatch: 2.40,
+  stiltsstance: 2.44,
+  mystaxwipe: 2.38,
+  perchsally: 2.56,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -57,6 +65,7 @@ export function canStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function shouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
@@ -73,42 +82,83 @@ export function shouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: RobberFlyTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "asilushush") return 194 + roll * 18;
-  if (kind === "sallyhawk") return 20.8 + roll * 3.2;
-  if (kind === "beardgroom") return 24.0 + roll * 3.5;
-  if (kind === "midsnatch") return 25.6 + roll * 3.8;
-  if (kind === "stiltsstance") return 23.8 + roll * 3.4;
-  return justFinished ? 18.2 + roll * 2.8 : 13.6 + roll * 2.4;
+  if (kind === "asilushush") return 40 + roll * 26;
+  if (kind === "mystaxwipe" || kind === "sallyhawk" || kind === "stiltsstance") return 12.8 + roll * 9.4;
+  if (kind === "midsnatch" || kind === "beardgroom" || kind === "perchsally") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: RobberFlyTrickKind | string) {
-  if (musicOn) return "asilushush";
+
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: RobberFlyTrickKind | string | null) {
+  if (musicOn) return "asilushush" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "asilushush") {
-    if (roll < 0.26) return "sallyhawk";
-    if (roll < 0.5) return "beardgroom";
-    if (roll < 0.74) return "midsnatch";
-    return "stiltsstance";
+    if (roll < 0.17) return "sallyhawk" as const;
+    if (roll < 0.33) return "beardgroom" as const;
+    if (roll < 0.49) return "midsnatch" as const;
+    if (roll < 0.65) return "stiltsstance" as const;
+    if (roll < 0.83) return "mystaxwipe" as const;
+    return "perchsally" as const;
   }
   if (lastKind === "sallyhawk") {
-    if (roll < 0.26) return "asilushush";
-    if (roll < 0.5) return "beardgroom";
-    if (roll < 0.74) return "midsnatch";
-    return "stiltsstance";
+    if (roll < 0.16) return "asilushush" as const;
+    if (roll < 0.32) return "beardgroom" as const;
+    if (roll < 0.48) return "midsnatch" as const;
+    if (roll < 0.64) return "stiltsstance" as const;
+    if (roll < 0.82) return "mystaxwipe" as const;
+    return "perchsally" as const;
   }
   if (lastKind === "beardgroom") {
-    if (roll < 0.22) return "asilushush";
-    if (roll < 0.44) return "sallyhawk";
-    if (roll < 0.68) return "midsnatch";
-    return "stiltsstance";
+    if (roll < 0.14) return "asilushush" as const;
+    if (roll < 0.3) return "sallyhawk" as const;
+    if (roll < 0.46) return "midsnatch" as const;
+    if (roll < 0.62) return "stiltsstance" as const;
+    if (roll < 0.8) return "mystaxwipe" as const;
+    return "perchsally" as const;
   }
-  if (roll < 0.2) return "asilushush";
-  if (roll < 0.4) return "sallyhawk";
-  if (roll < 0.6) return "beardgroom";
-  if (roll < 0.8) return "midsnatch";
-  return "stiltsstance";
+  if (lastKind === "midsnatch") {
+    if (roll < 0.15) return "asilushush" as const;
+    if (roll < 0.31) return "sallyhawk" as const;
+    if (roll < 0.47) return "beardgroom" as const;
+    if (roll < 0.63) return "stiltsstance" as const;
+    if (roll < 0.81) return "mystaxwipe" as const;
+    return "perchsally" as const;
+  }
+  if (lastKind === "stiltsstance") {
+    if (roll < 0.16) return "asilushush" as const;
+    if (roll < 0.32) return "sallyhawk" as const;
+    if (roll < 0.48) return "beardgroom" as const;
+    if (roll < 0.64) return "midsnatch" as const;
+    if (roll < 0.82) return "mystaxwipe" as const;
+    return "perchsally" as const;
+  }
+  if (lastKind === "mystaxwipe") {
+    if (roll < 0.15) return "asilushush" as const;
+    if (roll < 0.31) return "sallyhawk" as const;
+    if (roll < 0.47) return "beardgroom" as const;
+    if (roll < 0.63) return "midsnatch" as const;
+    if (roll < 0.81) return "stiltsstance" as const;
+    return "perchsally" as const;
+  }
+  if (lastKind === "perchsally") {
+    if (roll < 0.16) return "asilushush" as const;
+    if (roll < 0.32) return "sallyhawk" as const;
+    if (roll < 0.48) return "beardgroom" as const;
+    if (roll < 0.64) return "midsnatch" as const;
+    if (roll < 0.82) return "stiltsstance" as const;
+    return "mystaxwipe" as const;
+  }
+  if (roll < 0.14) return "asilushush" as const;
+  if (roll < 0.28) return "sallyhawk" as const;
+  if (roll < 0.42) return "beardgroom" as const;
+  if (roll < 0.56) return "midsnatch" as const;
+  if (roll < 0.7) return "stiltsstance" as const;
+  if (roll < 0.85) return "mystaxwipe" as const;
+  return "perchsally" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -117,6 +167,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
@@ -132,14 +183,16 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "rob";
 }
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: RobberFlyHappyKind | string | undefined,
+  lastKind: RobberFlyHappyKind | null | undefined,
   x: number,
-  facing?: 1 | -1,
+  facing: 1 | -1,
   flags?: TrickFlags
 ) {
   if (!wantsThankYou(key)) return null;
@@ -147,14 +200,16 @@ export function startThankYou(
   const pick = pickHappy(lastKind);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
-export function pickHappy(lastKind?: RobberFlyHappyKind | string, rand?: number) {
+
+export function pickHappy(lastKind?: RobberFlyHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
-export function beginHappy(kind: RobberFlyHappyKind | string, x: number, facing?: 1 | -1): RobberFlyHappy {
-  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as RobberFlyHappyKind) : "densrob";
+
+export function beginHappy(kind: RobberFlyHappyKind | string, x: number, facing: 1 | -1): RobberFlyHappy {
+  const name = (HAPPY as readonly string[]).includes(kind) ? (kind as RobberFlyHappyKind) : "densrob";
   return {
     kind: name,
     happy: true,
@@ -163,8 +218,8 @@ export function beginHappy(kind: RobberFlyHappyKind | string, x: number, facing?
     x,
     lift: 0,
     rot: 0,
-    anim: name === "densrob" ? "sit" : name === "inkrob" ? "play" : "play",
-    facing: facing == null ? 1 : facing,
+    anim: (name === "densrob" ? "sit" : name === "inkrob" ? "play" : "play") as TrickAnim,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
@@ -173,45 +228,53 @@ export function densrobPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densrob));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * -0.0022, rot: s * 0.13, anim: "sit" as TrickAnim };
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.86) {
-    const beard = Math.sin(((u - 0.14) / 0.72) * Math.PI * 2.55);
-    return { lift: -0.0022 + Math.abs(beard) * 0.0014, rot: 0.13 + beard * 0.17, anim: "sit" as TrickAnim };
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
+    };
   }
-  const s = (u - 0.86) / 0.14;
-  return { lift: -0.0022 * (1 - s), rot: 0.13 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
+
 export function inkrobPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkrob));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.0041, rot: s * -0.24, anim: "play" as TrickAnim };
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
   }
-  if (u < 0.84) {
-    const pulse = Math.sin(((u - 0.12) / 0.72) * Math.PI * 3.35);
-    return { lift: 0.0041 + Math.abs(pulse) * 0.0019, rot: -0.24 + pulse * 0.28, anim: "play" as TrickAnim };
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
   }
-  const s = (u - 0.84) / 0.16;
-  return { lift: 0.0041 * (1 - s), rot: -0.24 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
+
 export function densasilusPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densasilus));
-  if (u < 0.13) {
-    const s = u / 0.13;
-    return { lift: s * 0.0018, rot: s * 0.15, anim: "play" as TrickAnim };
-  }
-  if (u < 0.82) {
-    const flash = Math.sin(((u - 0.13) / 0.69) * Math.PI * 2.4);
-    return { lift: 0.0018 + Math.abs(flash) * 0.0012, rot: 0.15 + flash * 0.16, anim: "play" as TrickAnim };
-  }
-  const s = (u - 0.82) / 0.18;
-  return { lift: 0.0018 * (1 - s), rot: 0.15 * (1 - s), anim: "idle" as TrickAnim };
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "play" as TrickAnim,
+  };
 }
-export function stepHappy(happy: RobberFlyHappy, dt: number, flags?: TrickFlags): RobberFlyHappy {
+
+export function stepHappy(happy: RobberFlyHappy | null | undefined, dt: number, flags?: TrickFlags) {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...happy, t: happy.t + Math.max(0, dt) };
   const hold = HAPPY_DUR[next.kind];
@@ -231,176 +294,223 @@ export function stepHappy(happy: RobberFlyHappy, dt: number, flags?: TrickFlags)
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
-export function beginTrick(kind: RobberFlyTrickKind | string, x: number, facing?: 1 | -1): RobberFlyTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as RobberFlyTrickKind) : "asilushush";
+
+export function beginTrick(kind: RobberFlyTrickKind, x: number, facing: 1 | -1): RobberFlyTrick {
   const anim: TrickAnim =
-    k === "asilushush"
+    kind === "asilushush"
       ? "sit"
-      : k === "sallyhawk"
+      : kind === "sallyhawk"
         ? "play"
-        : k === "beardgroom"
-          ? "play"
-          : k === "stiltsstance"
-            ? "sit"
-            : k === "midsnatch"
-              ? "play"
-              : "sit";
+        : kind === "perchsally"
+          ? "talk"
+          : kind === "beardgroom"
+            ? "walk"
+            : kind === "midsnatch"
+              ? "sit"
+              : kind === "stiltsstance"
+                ? "play"
+                : kind === "mystaxwipe"
+                  ? "walk"
+                  : "sit";
   return {
-    kind: k,
-    phase: k === "asilushush" ? "hold" : "go",
+    kind,
+    phase: kind === "asilushush" ? "hold" : "go",
     t: 0,
     x,
     lift: 0,
     rot: 0,
     anim,
-    facing: facing == null ? 1 : facing,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
+
 function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
-  export function asilushushPose(t) {
-    const breath = Math.sin(t * 0.00082) + 0.00028 * Math.sin(t * 0.0022);
-    const hush = Math.abs(Math.sin(t * 0.00031));
-    return { lift: -0.00018 + hush * 0.000045, rot: 0.004 + breath * 0.002 };
-  }
+export function asilushushPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
+}
 
-  export function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.0002 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0055 * (1 - u) };
-  }
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+}
 
-  export function sallyhawkPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.sallyhawk));
-    const face = facing == null ? 1 : facing;
-    // perch still → sudden sally dart → hover snatch line → return to perch
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX + face * s * 0.00008, lift: s * 0.0022, rot: s * -0.12 * face, anim: "play" };
-    }
-    if (u < 0.34) {
-      const s = smoothstep((u - 0.16) / 0.18);
-      return {
-        x: fromX + face * (0.00001 + s * 0.014),
-        lift: 0.0004 + s * 0.018,
-        rot: (-0.04 + s * 0.22) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.58) {
-      const air = (u - 0.34) / 0.24;
-      const hover = Math.sin(air * Math.PI * 3.2);
-      return {
-        x: fromX + face * (0.014 + air * 0.004 + hover * 0.00025),
-        lift: 0.0184 + Math.abs(hover) * 0.0022,
-        rot: (0.18 + hover * 0.12) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.84) {
-      const s = smoothstep((u - 0.58) / 0.26);
-      return {
-        x: fromX + face * (0.018 - s * 0.0175),
-        lift: 0.0184 * (1 - s) + s * 0.0005,
-        rot: (0.18 - s * 0.2) * face,
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.0005 * (1 - s), lift: 0.0005 * (1 - s), rot: (-0.02 * (1 - s)) * face, anim: "idle" };
+export function sallyhawkPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.sallyhawk));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" as TrickAnim };
   }
-
-  export function beardgroomPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.beardgroom));
-    const face = facing == null ? 1 : facing;
-    // dip head into bristly mystax, scrub, lift
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00002, lift: s * -0.0028, rot: s * 0.28 * face, anim: "sit" };
-    }
-    if (u < 0.78) {
-      const scrub = (u - 0.14) / 0.64;
-      const wipe = Math.sin(scrub * Math.PI * 5.4);
-      return {
-        x: fromX + face * (0.00002 + wipe * 0.00012),
-        lift: -0.0028 + Math.abs(wipe) * 0.0009,
-        rot: (0.28 + wipe * 0.18) * face,
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX + face * 0.00002 * (1 - s), lift: -0.0028 * (1 - s), rot: 0.28 * (1 - s) * face, anim: "idle" };
+  if (u < 0.78) {
+    const bar = Math.sin(t * 2.4);
+    return {
+      x: fromX + face * (0.8 + bar * 0.16),
+      lift: 2.8 + Math.abs(bar) * 1.5,
+      rot: face * (-12 + bar * 10),
+      anim: "play" as TrickAnim,
+    };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
 
-  export function midsnatchPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.midsnatch));
-    const face = facing == null ? 1 : facing;
-    // desk-safe midair snatch cue: rear → lunge up → clasp gesture → settle (not a clickjack flip)
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX - face * s * 0.0012, lift: s * 0.001, rot: s * -0.14 * face, anim: "play" };
-    }
-    if (u < 0.36) {
-      const s = smoothstep((u - 0.12) / 0.24);
-      return {
-        x: fromX + face * (-0.0012 + s * 0.008),
-        lift: 0.001 + s * 0.016,
-        rot: (-0.14 + s * 0.32) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.62) {
-      const clasp = Math.sin(((u - 0.36) / 0.26) * Math.PI * 2.6);
-      return {
-        x: fromX + face * (0.0068 + clasp * 0.0002),
-        lift: 0.017 + Math.abs(clasp) * 0.0014,
-        rot: (0.18 + clasp * 0.1) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.86) {
-      const s = smoothstep((u - 0.62) / 0.24);
-      return { x: fromX + face * (0.0068 - s * 0.005), lift: 0.017 * (1 - s), rot: (0.18 - s * 0.16) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.0018 * (1 - s), lift: 0.0012 * (1 - s), rot: 0.02 * (1 - s) * face, anim: "idle" };
+export function beardgroomPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.beardgroom));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" as TrickAnim };
   }
-
-  export function stiltsstancePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.stiltsstance));
-    const face = facing == null ? 1 : facing;
-    // rise onto long asilid stilts, sway, settle
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX + face * s * 0.00003, lift: s * 0.0042, rot: s * -0.08 * face, anim: "sit" };
-    }
-    if (u < 0.82) {
-      const sway = (u - 0.18) / 0.64;
-      const lean = Math.sin(sway * Math.PI * 2.1);
-      return {
-        x: fromX + face * (0.00003 + lean * 0.0004),
-        lift: 0.0042 + Math.abs(lean) * 0.00055,
-        rot: (-0.08 + lean * 0.11) * face,
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.82) / 0.18);
-    return { x: fromX + face * 0.00003 * (1 - s), lift: 0.0042 * (1 - s), rot: -0.08 * (1 - s) * face, anim: "idle" };
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.2);
+    return {
+      x: fromX + face * bob * 0.12,
+      lift: 2.6 + Math.abs(bob) * 1.3,
+      rot: face * (10 + bob * 8),
+      anim: "walk" as TrickAnim,
+    };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
 
-export function stepTrick(trick: RobberFlyTrick, dt: number, flags?: TrickFlags): RobberFlyTrick {
+export function midsnatchPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.midsnatch));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const hang = Math.sin(t * 2.0);
+    return {
+      x: fromX + face * (0.5 + hang * 0.1),
+      lift: 2.8 + Math.abs(hang) * 1.2,
+      rot: face * (11 + hang * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.5 * (1 - s),
+    lift: 1.3 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stiltsstancePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.stiltsstance));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const thrash = Math.sin(t * 3.6);
+    return {
+      x: fromX + face * (1.0 + thrash * 0.22),
+      lift: 3.6 + Math.abs(thrash) * 2.0,
+      rot: face * (18 + thrash * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 1.0 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: face * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function mystaxwipePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.mystaxwipe));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cast = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * (0.6 + cast * 0.16),
+      lift: 2.8 + Math.abs(cast) * 1.6,
+      rot: face * (12 + cast * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function perchsallyPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.perchsally));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cloud = Math.sin(t * 3.0);
+    return {
+      x: fromX + face * (0.6 + cloud * 0.18),
+      lift: 3.0 + Math.abs(cloud) * 1.8,
+      rot: face * (14 + cloud * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.5 * (1 - s),
+    rot: face * (5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: RobberFlyTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "sallyhawk" && trick.kind !== "beardgroom" && trick.kind !== "midsnatch" && trick.kind !== "stiltsstance") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "sallyhawk" &&
+    trick.kind !== "beardgroom" &&
+    trick.kind !== "midsnatch" &&
+    trick.kind !== "stiltsstance" &&
+    trick.kind !== "mystaxwipe" &&
+    trick.kind !== "perchsally"
+  ) {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...trick, t: trick.t + Math.max(0, dt) };
   if (next.kind === "asilushush") {
@@ -420,35 +530,48 @@ export function stepTrick(trick: RobberFlyTrick, dt: number, flags?: TrickFlags)
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "sallyhawk") {
-    const pose = sallyhawkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = sallyhawkPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "beardgroom") {
-    const pose = beardgroomPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = beardgroomPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "midsnatch") {
-    const pose = midsnatchPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = midsnatchPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "stiltsstance") {
+    const pose = stiltsstancePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "mystaxwipe") {
+    const pose = mystaxwipePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = stiltsstancePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = perchsallyPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
