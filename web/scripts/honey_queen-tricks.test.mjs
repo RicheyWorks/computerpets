@@ -394,7 +394,7 @@ test("pipe/retinue/duel/royal/regina are house-queen-true, not copies of prior g
   assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
-  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
+  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
   assert.deepEqual([...Stingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "melipona"]);
   assert.deepEqual([...OverlayStingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "melipona"]);
   assert.equal(T.TRICKS.includes("cerumen"), false);
@@ -411,7 +411,7 @@ test("pipe/retinue/duel/royal/regina are house-queen-true, not copies of prior g
   assert.equal(T.TRICKS.includes("fossor"), false);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
-  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
+  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
   assert.deepEqual([...MasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
   assert.equal(T.TRICKS.includes("circle"), false);
   assert.equal(T.TRICKS.includes("liner"), false);
@@ -1146,8 +1146,8 @@ test("notes: Keep idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("leafcutter"), true);
   assert.equal(OverlayGround.tricksFor("disc"), OverlayLeafcutter);
   assert.equal(OverlayGround.wantsThankYou("disc"), true);
-  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
-  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
+  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
+  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
   assert.equal(OverlayGround.tricksFor("mason_bee"), OverlayMasonBee);
   assert.equal(OverlayGround.wantsThankYou("mortar"), true);
   assert.equal(T.TRICKS.includes("column"), false);

@@ -1346,7 +1346,7 @@ test("wingwrap/traguscup/thumbcrawl/duskhang/echolocate/calcar/eptesicus are Ept
   assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
-  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
+  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
   assert.deepEqual([...Stingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "melipona"]);
   assert.deepEqual([...OverlayStingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "melipona"]);
   assert.equal(T.TRICKS.includes("cerumen"), false);
@@ -1363,7 +1363,7 @@ test("wingwrap/traguscup/thumbcrawl/duskhang/echolocate/calcar/eptesicus are Ept
   assert.equal(T.TRICKS.includes("fossor"), false);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
-  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
+  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
   assert.deepEqual([...MasonBee.TRICKS], ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"]);
   assert.equal(T.TRICKS.includes("circle"), false);
   assert.equal(T.TRICKS.includes("liner"), false);
