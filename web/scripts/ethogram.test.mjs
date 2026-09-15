@@ -949,6 +949,19 @@ assert.equal(names("springtail").includes("hop"), false);
 assert.equal(names("springtail").includes("walk"), false);
 assert.equal(names("springtail").includes("still"), false);
 assert.equal(names("springtail").includes("sit"), false);
+assert.ok(names("tardigrade").includes("eutardigrada"));
+assert.ok(names("tardigrade").includes("cryptotun_soft"));
+assert.ok(names("tardigrade").includes("clawamble_soft"));
+assert.ok(names("tardigrade").includes("mosssip_soft"));
+assert.ok(names("tardigrade").includes("waterbearroll_soft"));
+assert.ok(names("tardigrade").includes("styletpierce_soft"));
+assert.ok(names("tardigrade").includes("anhydro_soft"));
+assert.ok(names("tardigrade").includes("freeze"));
+assert.equal(names("tardigrade").includes("tun"), false);
+assert.equal(names("tardigrade").includes("walk"), false);
+assert.equal(names("tardigrade").includes("still"), false);
+assert.equal(names("tardigrade").includes("sit"), false);
+
 
 
 
