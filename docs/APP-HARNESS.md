@@ -11,7 +11,7 @@ Stolen from Richey’s other repos (architecture, not domain):
 | Pattern | From | Here |
 |---|---|---|
 | Registry of real operations; discover / invoke / assert | CSRBT `HarnessRegistry` + FlowersForever `ConnectorRegistry` | `catalog()` / `invoke()` / `assert_action()` |
-| Domains as plugins / suites | CSRBT `tools/verify/` + harness plugins | `care` `guest` `visit` `species` `ethogram` `cry` `gift` `desk` `card` `gui` |
+| Domains as plugins / suites | CSRBT `tools/verify/` + harness plugins | `care` `guest` `visit` `species` `ethogram` `cry` `gift` `desk` `card` `web` `gui` |
 | Accounting identity | CSRBT `tools/harness.py` | `discovered == driven + dead + sequenced + hidden + failed + excluded`; `UNACCOUNTED` is a harness bug |
 | General oracle | CSRBT | Observable trace + no errors + no `NaN` / `undefined` / `[object Object]` junk — not frozen remembered counts |
 | One runner, exit non-zero on fail | CSRBT `tools/verify/run_all.py` | `py -m computerpets_client.app_harness` |
@@ -78,6 +78,7 @@ Ids are `domain.local`. Bare care ids (`feed`) still resolve for the original ha
 | `gift` | Line, leave, pick, **place coords** (`gift.place`) | `gift.py` + `life.js leaveGift` via `harness_smokes.cjs` |
 | `desk` | Weather clock; plate keys; URL builders; **offline resolve**; **Favorites** (News/Coins/NFTs/Weather); **news topics/Popular/X**; **quotes add-ticker**; **plate chrome/style**; **plant drag-place**; **OS window perch** | `weather.py`; `desk-plates` / `desk-plants`; `windows.js` / `window-play.js`; `news.js` / `market.js` / `weather-areas.js` |
 | `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire**, **notif deep-link → open card on need**, **needs save/reload + alert clear after care** | `card.ts` / `pet.js` / `life.js` via hooks + `harness_smokes.cjs` |
+| `web` | Companion-room parity: **`web.guest_choice`** (guest-choice.ts Exit/Close last + choice.js lockstep + CompanionRoom wires); **`web.ethogram_tricks`** (every catalog key in ethogram.ts; web↔desktop `*-tricks` TRICKS lockstep, Rui-only exclude); **`web.demo_room`** (demo-stage CompanionRoom / persistLocal=false) | `guest-choice.ts` / `ethogram.ts` / `*-tricks.ts`; `harness_web_smokes.mjs`; demo-stage |
 | `gui` | Overlay **choice Close/Exit** (`gui.choice_close_exit`); Electron/Qt rows excluded until `--gui` (incl. **host place-at-coords**) | `choice.js`; `desktop/gui-harness.cjs` + `app --check --offscreen` under `--gui` |
 
 No invented verbs. Guest choice does **not** include blotter tend (`feed` / `bath` / `clean`). Desk **Quotes** is the `market` plate (coins + NFT list). Offline desk resolves use fixture JSON / RSS — not live HTTP.
@@ -100,6 +101,7 @@ Invariants that survive growth (not frozen house-wide counts):
 - Guest marks end with `close` then `exit`
 - `CATALOG_KEYS` and `SPECIES` stay the same set
 - Every catalog key has denser `acts_for` (`ethogram.catalog_all`); every `prefersHouseCry` key has a wav (`cry.catalog_wavs`); every key has `web/public/pets/{key}.jpg` (`species.portraits`)
+- Web companion-room lockstep: `guest-choice.ts` Exit/Close last (`web.guest_choice`); ethogram.ts keys + web↔desktop tricks TRICKS (`web.ethogram_tricks`); demo CompanionRoom (`web.demo_room`)
 - Every excluded row has a reason
 
 ## Gaps (honest)
@@ -122,7 +124,7 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 
 Moved from gaps → driven (prior pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
 
-This pass (still offline-driven, no invented verbs): **`ethogram.catalog_all`**, **`cry.catalog_wavs`**, **`species.portraits`** — CSRBT-style house-wide invariants over every catalog / prefersHouseCry key (not sample-only); thin/missing acts, missing wavs, missing `web/public/pets/{key}.jpg` fail naming the key. Tricks discovery is alias-aware (`{key}-tricks.js`, hyphen forms, strip `_dragon`, house slug/name, specials play stems such as `earth` for `ground_dragon`) so `relay_dragon` / `fuse_dragon` / `ground_dragon` parse under `ethogram.catalog_all` (files: `relay-tricks.js`, `fuse-tricks.js`, `earth-tricks.js`); Rui stays the only ethogram.tricks exclusion. Prior: **`desk.windows.perch`** — `windows.js` `parseEnumText`/`takeRects` work-area filter + `window-play.js` `playFor`/`pickTarget`/`beginPlay` (budgie perch / cat ledge) on fixture rects (no live HWND / multi-monitor); **`gui.host_place`** (mode=gui) — Electron `placeHostAt` coords + pet `data-hit` under `--gui`. Plate open/close/minimize APIs do **not** exist beyond style+drag persist already driven as `desk.plates.style` — skipped inventing minimize. Visit durable position store has **no** real API (`visitor.js` is todays/phases/line only; call `placed` is in-memory) — skipped. Prior: visit lifecycle, tickers, news X, needs persist, Favorites, plants, notify. License/unlock still skipped (network/secrets).
+This pass (still offline-driven, no invented verbs): **`web.guest_choice`**, **`web.ethogram_tricks`**, **`web.demo_room`** — companion-room parity with desktop where real APIs exist. `web.guest_choice` drives `guest-choice.ts` (Exit/Close last) via `harness_web_smokes.mjs` + lockstep with `choice.js` / CompanionRoom wires (not only desktop `gui.choice_close_exit` / Python `choice.py`). `web.ethogram_tricks` is catalog-wide: every `CATALOG_KEYS` guest is in `ethogram.ts`; every non-Rui key has matching web `*-tricks.ts` and desktop `*-tricks.js` TRICKS lists (alias-aware; Rui-only exclude). `web.demo_room` reuses the pure demo-stage check (CompanionRoom / `persistLocal=false` / `demo.$slug`) — no invented static-export smoke (TanStack/nitro has none offline). `--gui` stays Electron desktop. Prior: **`ethogram.catalog_all`**, **`cry.catalog_wavs`**, **`species.portraits`** — CSRBT-style house-wide invariants; tricks alias-aware (`relay`/`fuse`/`earth` for dragons); Rui stays the only ethogram.tricks exclusion. Prior: **`desk.windows.perch`** — `windows.js` `parseEnumText`/`takeRects` work-area filter + `window-play.js` `playFor`/`pickTarget`/`beginPlay` (budgie perch / cat ledge) on fixture rects (no live HWND / multi-monitor); **`gui.host_place`** (mode=gui) — Electron `placeHostAt` coords + pet `data-hit` under `--gui`. Plate open/close/minimize APIs do **not** exist beyond style+drag persist already driven as `desk.plates.style` — skipped inventing minimize. Visit durable position store has **no** real API (`visitor.js` is todays/phases/line only; call `placed` is in-memory) — skipped. Prior: visit lifecycle, tickers, news X, needs persist, Favorites, plants, notify. License/unlock still skipped (network/secrets).
 
 ### Dual-mode (`--live`)
 
@@ -173,7 +175,7 @@ $env:PIP_IGNORE_REQUIRES_PYTHON = "1"   # if default py is still 3.10; pyproject
 
 `desktop.ps1` remains the human desk launch; harness uses a temp `userData` and skips the tray.
 
-Node offline smokes live in `client/computerpets_client/harness_smokes.cjs`. Electron GUI smokes: `desktop/gui-harness.cjs` + `PetGuiHarness` in `pet.js` when `?gui_harness=1`.
+Node offline smokes live in `client/computerpets_client/harness_smokes.cjs`. Web companion-room smokes: `harness_web_smokes.mjs` (`node --experimental-strip-types`). Electron GUI smokes: `desktop/gui-harness.cjs` + `PetGuiHarness` in `pet.js` when `?gui_harness=1`.
 
 ## Care-only doc
 
