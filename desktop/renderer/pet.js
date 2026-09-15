@@ -4195,6 +4195,13 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
       choiceButtonCount: choiceEl ? choiceEl.querySelectorAll("button").length : 0,
       choiceHasClose: choiceIds.some((id) => id === "close"),
       choiceHasExit: choiceIds.some((id) => id === "exit"),
+      hostX: Number.isFinite(sim.x) ? sim.x : null,
+      hostHit: !!(pet && pet.hasAttribute("data-hit")),
+      hostRect: (() => {
+        if (!pet) return null;
+        const r = pet.getBoundingClientRect();
+        return { x: r.x, y: r.y, width: r.width, height: r.height };
+      })(),
     };
   }
   window.PetGuiHarness = {
@@ -4229,6 +4236,28 @@ window.PetRoster.loadHouseRoster(window.desk).then((opened) => {
       paintGifts();
       paintHud();
       return snapshot();
+    },
+    placeHostAt(x) {
+      const maxX = Math.max(PAD, window.innerWidth - BASE - PAD);
+      const next = clamp(Number(x), PAD, maxX);
+      sim.x = next;
+      sim.target = null;
+      sim.dragging = false;
+      sim.pointerStart = null;
+      sim.anim = "idle";
+      sim.land = 0;
+      sim.settle = 0;
+      pet.style.transform = "translate3d(" + sim.x + "px, 0, 0) scale(" + (sim.facing || 1) + ", 1)";
+      const snap = snapshot();
+      const r = snap.hostRect;
+      const hitOk = !!(snap.hostHit && r && r.width >= 2 && r.height >= 2);
+      const near = !!(r && Math.abs(r.x - sim.x) < 48);
+      return Object.assign(snap, {
+        hostX: sim.x,
+        hostHit: hitOk,
+        hostNear: near,
+        hostPlaced: hitOk && snap.hostX === next,
+      });
     },
     clickGiftDot() {
       const el = giftRoot && giftRoot.querySelector(".gift-dot, .shed-dot");

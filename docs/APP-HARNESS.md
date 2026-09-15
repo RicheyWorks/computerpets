@@ -76,9 +76,9 @@ Ids are `domain.local`. Bare care ids (`feed`) still resolve for the original ha
 | `ethogram` | Acts + tricks files for sample guests | `ethogram.acts_for` / `desktop/renderer/*-tricks.js` |
 | `cry` | `prefersHouseCry` parse, pet.js wiring, wav files, **stubbed `cry.playback`** (mock `Audio` + `PetDeskHouse.playVoice`) | `card.ts` / `pet.js` / `house-sounds.js` / `desk-house.js` / `harness_smokes.cjs` |
 | `gift` | Line, leave, pick, **place coords** (`gift.place`) | `gift.py` + `life.js leaveGift` via `harness_smokes.cjs` |
-| `desk` | Weather clock; plate keys; URL builders; **offline resolve**; **Favorites** (News/Coins/NFTs/Weather); **news topics/Popular/X**; **quotes add-ticker**; **plate chrome/style**; **plant drag-place** | `weather.py`; `desk-plates` / `desk-plants`; `news.js` / `market.js` / `weather-areas.js` |
+| `desk` | Weather clock; plate keys; URL builders; **offline resolve**; **Favorites** (News/Coins/NFTs/Weather); **news topics/Popular/X**; **quotes add-ticker**; **plate chrome/style**; **plant drag-place**; **OS window perch** | `weather.py`; `desk-plates` / `desk-plants`; `windows.js` / `window-play.js`; `news.js` / `market.js` / `weather-areas.js` |
 | `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire**, **notif deep-link → open card on need**, **needs save/reload + alert clear after care** | `card.ts` / `pet.js` / `life.js` via hooks + `harness_smokes.cjs` |
-| `gui` | Overlay **choice Close/Exit** (`gui.choice_close_exit`); Electron/Qt rows excluded until `--gui` | `choice.js`; `desktop/gui-harness.cjs` + `app --check --offscreen` under `--gui` |
+| `gui` | Overlay **choice Close/Exit** (`gui.choice_close_exit`); Electron/Qt rows excluded until `--gui` (incl. **host place-at-coords**) | `choice.js`; `desktop/gui-harness.cjs` + `app --check --offscreen` under `--gui` |
 
 No invented verbs. Guest choice does **not** include blotter tend (`feed` / `bath` / `clean`). Desk **Quotes** is the `market` plate (coins + NFT list). Offline desk resolves use fixture JSON / RSS — not live HTTP.
 
@@ -111,6 +111,7 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 | `gui.blotter_qt` | Needs Qt in **`client/.venv`**; **pass `--gui`** to run `app --check --offscreen` via that interpreter (honest software-raster path ? not a GPU lie) |
 | `gui.card_hud_paint` | Needs Electron DOM; **pass `--gui`** for collapse/open + vital paint. Offline: **`card.paint_wire` + collapse/open hooks** |
 | `gui.gift_drag_place` | Needs overlay gift-dot hit-targets; **pass `--gui`** for leaveGift + click `gift-dot` (place/pick, not freehand drag). Offline: **`gift.place`** |
+| `gui.host_place` | Needs Electron host pet overlay; **pass `--gui`** for `placeHostAt` + `data-hit`. Offline OS perch: **`desk.windows.perch`** |
 | `live.cry_playback` | Real speakers/Electron session; **`cry.playback` drives stubbed `Audio` + `playVoice` + wav** |
 | `live.weather_forecast` | True live Open-Meteo HTTP; **`desk.weather.resolve` drives `parseForecast` fixtures** |
 | `live.news_rss` | True live RSS/HTTP; **`desk.news.resolve` drives `parseRss` fixtures** |
@@ -120,7 +121,7 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 
 Moved from gaps → driven (prior pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
 
-This pass (still offline-driven, no invented verbs): **`visit` domain** (`visit.todays` / `visit.phases` / `visit.call` / `visit.arrive`) — today's visitor, phase clock + host-hidden abort, call begin/place/dismiss/leave, arrive vs tap/place; `desk.market.tickers` (add-any-ticker + watchlist persist); `desk.news.x` (X tab RSS/search/sourceLine); `card.needs_persist` (life save/load + hunger/hidden alert clear after feed/call). Prior: Favorites, news topics, plate chrome, plants, notify. Host freehand overlay drag and OS window perch remain GUI/live holes; license/unlock skipped (network/secrets).
+This pass (still offline-driven, no invented verbs): **`desk.windows.perch`** — `windows.js` `parseEnumText`/`takeRects` work-area filter + `window-play.js` `playFor`/`pickTarget`/`beginPlay` (budgie perch / cat ledge) on fixture rects (no live HWND / multi-monitor); **`gui.host_place`** (mode=gui) — Electron `placeHostAt` coords + pet `data-hit` under `--gui`. Plate open/close/minimize APIs do **not** exist beyond style+drag persist already driven as `desk.plates.style` — skipped inventing minimize. Visit durable position store has **no** real API (`visitor.js` is todays/phases/line only; call `placed` is in-memory) — skipped. Prior: visit lifecycle, tickers, news X, needs persist, Favorites, plants, notify. License/unlock still skipped (network/secrets).
 
 ### Dual-mode (`--live`)
 
@@ -155,6 +156,7 @@ node ..\desktop\gui-harness.cjs
 | `gui.overlay_paint` | Electron boots; pet `src` + HUD name; choice opens with Close/Exit; Close dismisses; Exit collapses card |
 | `gui.card_hud_paint` | open → vital text; collapse → `data-collapsed=1`; reopen shows again |
 | `gui.gift_drag_place` | `leaveGift` paints a `gift-dot` `[data-hit]`; click clears it (honest hit-target place/pick) |
+| `gui.host_place` | `PetGuiHarness.placeHostAt(x)` sets host `sim.x` and asserts pet `data-hit` bounds (place-at-coords, not drag physics) |
 | `gui.blotter_qt` | `app --check --offscreen` prints `ok:` lines (pet, plaque, weather, day-part) |
 
 Requires `desktop/` `npm install` (Electron) and **`client/.venv` with PyQt6**. `gui.blotter_qt` prefers `client/.venv/Scripts/python.exe` (or `bin/python`) when present ? do not assume bare `py` has Qt. Install once:
