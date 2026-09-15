@@ -1,4 +1,4 @@
-import assert from "node:assert/strict";
+﻿import assert from "node:assert/strict";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -2707,9 +2707,9 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Arc idle-life ultra done; next house-order guest still lacking tricks is Volt / volt_dragon", () => {
-  assert.equal("Volt", "Volt");
-  assert.equal("volt_dragon", "volt_dragon");
+test("notes: Arc idle-life ultra done; next house-order guest still lacking tricks is Trace / trace_dragon", () => {
+  assert.equal("Trace", "Trace");
+  assert.equal("trace_dragon", "trace_dragon");
 
   assert.deepEqual([...Crow.TRICKS], ["hopwalk", "monocle", "fossick", "anting", "scrutinize", "glean", "corvid"]);
   assert.deepEqual([...Crow.HAPPY], ["brachyrhynchos", "ossifragus", "corone"]);
@@ -4168,10 +4168,10 @@ assert.equal(OverlayGround.tricksFor("earwig"), OverlayEarwig);
   assert.equal(OverlayGround.tricksFor("flying_squirrel"), OverlayFlyingSquirrel);
   assert.equal(OverlayGround.tricksFor("glide"), OverlayFlyingSquirrel);
 
-// Recommend next house-order guest still lacking idle tricks (do not implement): Volt / volt_dragon. Catalog 221.
+// Recommend next house-order guest still lacking idle tricks (do not implement): Trace / trace_dragon. Catalog 221.
   assert.equal("lionfish", "lionfish");
-  assert.equal("Volt", "Volt");
-  assert.equal("volt_dragon", "volt_dragon");
+  assert.equal("Trace", "Trace");
+  assert.equal("trace_dragon", "trace_dragon");
   assert.equal("Veil", "Veil");
   assert.equal("cleaner_shrimp", "cleaner_shrimp");
   assert.equal("Scrub", "Scrub");

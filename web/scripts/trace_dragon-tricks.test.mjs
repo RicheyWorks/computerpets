@@ -435,7 +435,7 @@ test("Trace tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("windowwireskim"), false);
   assert.equal(T.TRICKS.includes("staticfringecrackle"), false);
   assert.equal(T.TRICKS.includes("sparkhop"), false);
-  assert.equal(T.TRICKS.includes("longvolthush"), false);
+  assert.equal(T.TRICKS.includes("volthush"), false);
   assert.equal(T.HAPPY.includes("densvolt"), false);
   assert.equal(T.HAPPY.includes("inkvolt"), false);
   assert.equal(T.HAPPY.includes("densvoltdragon"), false);
