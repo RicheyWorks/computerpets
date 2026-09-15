@@ -429,7 +429,7 @@ test("Hide tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("cephaliclobesift"), false);
   assert.equal(T.TRICKS.includes("sanddigbury"), false);
   assert.equal(T.TRICKS.includes("leapbreachcue"), false);
-  assert.equal(T.TRICKS.includes("longaetobatushush"), false);
+  assert.equal(T.TRICKS.includes("aetobatushush"), false);
   assert.equal(T.HAPPY.includes("denssoar"), false);
   assert.equal(T.HAPPY.includes("inksoar"), false);
   assert.equal(T.HAPPY.includes("densaetobatus"), false);
