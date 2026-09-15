@@ -1331,8 +1331,8 @@ test("hourglass/tangle/wrap/gumfoot/combfoot/theridiid/latrodectus are Latrodect
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
-  assert.deepEqual([...Stingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "melipona"]);
-  assert.deepEqual([...OverlayStingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "melipona"]);
+  assert.deepEqual([...Stingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "potpress", "involucrum", "melipona"]);
+  assert.deepEqual([...OverlayStingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "potpress", "involucrum", "melipona"]);
   assert.equal(T.TRICKS.includes("cerumen"), false);
   assert.equal(T.TRICKS.includes("spout"), false);
   assert.equal(T.TRICKS.includes("vessel"), false);
