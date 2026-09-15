@@ -856,7 +856,15 @@ def test_only_scratching_mammals_scratch():
         names = [a["name"] for a in acts_for(key)]
         assert "scratch" not in names, key
         assert "tongue" not in names, key
-    assert "hunt" in [a["name"] for a in acts_for("house_centipede")]
+    assert "scutigera" in [a["name"] for a in acts_for("house_centipede")]
+    assert "forcipule_soft" in [a["name"] for a in acts_for("house_centipede")]
+    assert "compound_soft" in [a["name"] for a in acts_for("house_centipede")]
+    assert "fifteenpair_soft" in [a["name"] for a in acts_for("house_centipede")]
+    assert "freeze" in [a["name"] for a in acts_for("house_centipede")]
+    assert "hunt" not in [a["name"] for a in acts_for("house_centipede")]
+    assert "walk" not in [a["name"] for a in acts_for("house_centipede")]
+    assert "still" not in [a["name"] for a in acts_for("house_centipede")]
+    assert "sit" not in [a["name"] for a in acts_for("house_centipede")]
     assert "oil" in [a["name"] for a in acts_for("millipede")]
     assert "roll" in [a["name"] for a in acts_for("pillbug")]
     assert "cast" in [a["name"] for a in acts_for("earthworm")]
