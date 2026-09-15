@@ -1860,6 +1860,17 @@ assert.equal(names("honey_drone").includes("still"), false);
   assert.equal(names("carpenter_ant").includes("trail"), false);
   assert.equal(names("carpenter_ant").includes("dart"), false);
   assert.equal(names("carpenter_ant").includes("still"), false);
+  assert.ok(names("ladybird").includes("coccinella"));
+  assert.ok(names("ladybird").includes("spots_soft"));
+  assert.ok(names("ladybird").includes("aphid_soft"));
+  assert.ok(names("ladybird").includes("reflex_soft"));
+  assert.ok(names("ladybird").includes("climb_soft"));
+  assert.ok(names("ladybird").includes("pronotum_soft"));
+  assert.ok(names("ladybird").includes("alar_soft"));
+  assert.ok(names("ladybird").includes("freeze"));
+  assert.equal(names("ladybird").includes("count"), false);
+  assert.equal(names("ladybird").includes("hunt"), false);
+  assert.equal(names("ladybird").includes("still"), false);
   assert.ok(names("mantis").includes("mantodea"));
   assert.equal(names("mantis").includes("fold"), false);
   assert.ok(names("cicada").includes("magicicada"));
@@ -2228,6 +2239,20 @@ test("darner ethogram is Dart ultra (anax sit_hold + softs + freeze, not hawk/ho
   assert.equal(names("darner").includes("hawk"), false);
   assert.equal(names("darner").includes("hover"), false);
   assert.equal(names("darner").includes("still"), false);
+});
+
+test("ladybird ethogram is Seven ultra (coccinella sit_hold + softs + freeze, not count/hunt/still)", () => {
+  assert.ok(names("ladybird").includes("coccinella"));
+  assert.ok(names("ladybird").includes("spots_soft"));
+  assert.ok(names("ladybird").includes("aphid_soft"));
+  assert.ok(names("ladybird").includes("reflex_soft"));
+  assert.ok(names("ladybird").includes("climb_soft"));
+  assert.ok(names("ladybird").includes("pronotum_soft"));
+  assert.ok(names("ladybird").includes("alar_soft"));
+  assert.ok(names("ladybird").includes("freeze"));
+  assert.equal(names("ladybird").includes("count"), false);
+  assert.equal(names("ladybird").includes("hunt"), false);
+  assert.equal(names("ladybird").includes("still"), false);
 });
 
 test("pickAct can schedule tongue on a snake and never scratch", () => {
