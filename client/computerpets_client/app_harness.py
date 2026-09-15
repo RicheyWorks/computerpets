@@ -1015,6 +1015,16 @@ def _gui_rows() -> list[Affordance]:
 _gui_electron_bundle: dict[str, Any] | None = None
 
 
+def _client_venv_python() -> Path | None:
+    """Prefer client/.venv over bare `py` / system Python (PyQt6 lives in the venv)."""
+    root = repo_root() / "client" / ".venv"
+    for rel in (("Scripts", "python.exe"), ("bin", "python")):
+        candidate = root.joinpath(*rel)
+        if candidate.is_file():
+            return candidate
+    return None
+
+
 def _run_blotter_qt_check() -> InvokeResult:
     """Honest Qt blotter boot via app --check --offscreen (software raster when offscreen)."""
     import os
@@ -1026,9 +1036,10 @@ def _run_blotter_qt_check() -> InvokeResult:
     env.setdefault("QT_QPA_PLATFORM", "offscreen")
     # Avoid a polluted PYTHONPATH from other worktrees.
     env.pop("PYTHONPATH", None)
+    python = _client_venv_python() or Path(sys.executable)
     try:
         proc = subprocess.run(
-            [sys.executable, "-m", "computerpets_client.app", "--check", "--offscreen"],
+            [str(python), "-m", "computerpets_client.app", "--check", "--offscreen"],
             capture_output=True,
             text=True,
             cwd=str(repo_root() / "client"),
