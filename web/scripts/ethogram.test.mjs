@@ -309,7 +309,17 @@ test("every living kind has an ethogram, and snakes never scratch", () => {
   assert.equal(names("honeycomb").includes("still"), false);
   assert.ok(names("honey_drone").includes("hum"));
   assert.ok(names("honey_queen").includes("lay"));
-  assert.ok(names("bumblebee").includes("thrum"));
+  assert.ok(names("bumblebee").includes("bombus"));
+assert.ok(names("bumblebee").includes("sonicate_soft"));
+assert.ok(names("bumblebee").includes("scopa_soft"));
+assert.ok(names("bumblebee").includes("fossor_soft"));
+assert.ok(names("bumblebee").includes("lumber_soft"));
+assert.ok(names("bumblebee").includes("thoraxload_soft"));
+assert.ok(names("bumblebee").includes("corbicularub_soft"));
+assert.ok(names("bumblebee").includes("freeze"));
+assert.equal(names("bumblebee").includes("thrum"), false);
+assert.equal(names("bumblebee").includes("hover"), false);
+assert.equal(names("bumblebee").includes("still"), false);
   for (const key of FUNGI) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
@@ -1751,6 +1761,18 @@ assert.equal(names("koala").includes("wait"), false);
   assert.equal(names("monarch").includes("flutter"), false);
   assert.equal(names("monarch").includes("migrate"), false);
   assert.equal(names("monarch").includes("still"), false);
+assert.ok(names("bumblebee").includes("bombus"));
+assert.ok(names("bumblebee").includes("sonicate_soft"));
+assert.ok(names("bumblebee").includes("scopa_soft"));
+assert.ok(names("bumblebee").includes("fossor_soft"));
+assert.ok(names("bumblebee").includes("lumber_soft"));
+assert.ok(names("bumblebee").includes("thoraxload_soft"));
+assert.ok(names("bumblebee").includes("corbicularub_soft"));
+assert.ok(names("bumblebee").includes("freeze"));
+assert.equal(names("bumblebee").includes("thrum"), false);
+assert.equal(names("bumblebee").includes("hover"), false);
+assert.equal(names("bumblebee").includes("still"), false);
+
   assert.ok(names("firefly").includes("photinus"));
   assert.ok(names("stick").includes("diapheromera"));
   assert.ok(names("stick").includes("freeze"));
