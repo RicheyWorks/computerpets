@@ -836,6 +836,13 @@ def _desk_rows() -> list[Affordance]:
             notes="Disk/Felt place+mode without Electron; guest freehand drag stays GUI.",
         ),
         Affordance(
+            "desk.windows.perch",
+            "desk",
+            "OS window work-area / perch pick",
+            "windows.js takeRects + window-play.js pickTarget/beginPlay",
+            notes="Fixture enum + work-area rects; budgie perch / cat ledge pick. No live HWND / multi-monitor.",
+        ),
+        Affordance(
             "desk.market.tickers",
             "desk",
             "Quotes add-any-ticker + watchlist persist",
@@ -993,6 +1000,8 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("plates_style", domain="desk", action_id=aid)
     if local_id == "plants.place":
         return _run_node_smoke("plants_place", domain="desk", action_id=aid)
+    if local_id == "windows.perch":
+        return _run_node_smoke("windows_perch", domain="desk", action_id=aid)
     if local_id == "market.tickers":
         return _run_node_smoke("market_tickers", domain="desk", action_id=aid)
     if local_id == "news.x":
@@ -1158,6 +1167,19 @@ def _gui_rows() -> list[Affordance]:
                 "Coords alone stay driven as gift.place."
             ),
         ),
+        Affordance(
+            "gui.host_place",
+            "gui",
+            "Host pet place-at-coords on overlay",
+            "pet.js PetGuiHarness.placeHostAt + pet data-hit",
+            mode="gui",
+            fate="excluded",
+            exclude_reason=(
+                "Needs Electron overlay host pet hit-target. Default stays excluded. "
+                "Pass --gui to placeHostAt coords and assert data-hit bounds (not freehand drag physics). "
+                "OS window perch stays driven offline as desk.windows.perch."
+            ),
+        ),
     ]
 
 
@@ -1292,7 +1314,7 @@ def _invoke_gui(local_id: str, **opts: Any) -> InvokeResult:
     if local_id in {"choice_close_exit", "gui.choice_close_exit"} or local_id == "choice_close_exit":
         return _run_node_smoke("choice_close_exit", domain="gui", action_id="gui.choice_close_exit")
     # Direct invoke of mode=gui rows (Buffffff --only under --gui, or programmatic).
-    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.blotter_qt"}:
+    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt"}:
         return _invoke_gui_optin(aid)
     return InvokeResult(aid, "gui", False, error=f"unknown gui id {local_id!r}")
 
@@ -1712,7 +1734,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--gui",
         action="store_true",
-        help="Opt-in: attempt mode=gui Electron/Qt smokes (overlay/card/gift/blotter). Still excluded from default catalog fate.",
+        help="Opt-in: attempt mode=gui Electron/Qt smokes (overlay/card/gift/host-place/blotter). Still excluded from default catalog fate.",
     )
     args = parser.parse_args(argv)
 

@@ -57,6 +57,7 @@ CROSS_DOMAIN = {
     "desk.news.topics",
     "desk.plates.style",
     "desk.plants.place",
+    "desk.windows.perch",
     "desk.market.tickers",
     "desk.news.x",
     "visit.todays",
@@ -150,6 +151,7 @@ def test_gaps_are_honest_and_accounted():
     assert "gui.overlay_paint" in hole_ids
     assert "gui.card_hud_paint" in hole_ids
     assert "gui.gift_drag_place" in hole_ids
+    assert "gui.host_place" in hole_ids
     assert "gui.blotter_qt" in hole_ids
     assert "ethogram.tricks.red_panda" in hole_ids
     # These moved from gaps to driven.
@@ -164,6 +166,7 @@ def test_gaps_are_honest_and_accounted():
     assert "desk.news.topics" in driven_ids
     assert "desk.plates.style" in driven_ids
     assert "desk.plants.place" in driven_ids
+    assert "desk.windows.perch" in driven_ids
     assert "card.notify_open" in driven_ids
     assert "card.needs_persist" in driven_ids
     assert "desk.market.tickers" in driven_ids
@@ -201,6 +204,7 @@ def test_offline_resolves_and_playback_leave_traces():
         "desk.news.topics",
         "desk.plates.style",
         "desk.plants.place",
+        "desk.windows.perch",
         "desk.market.tickers",
         "desk.news.x",
         "visit.todays",
@@ -220,16 +224,16 @@ def test_offline_resolves_and_playback_leave_traces():
 
 def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
     holes = {row.id: row for row in gaps()}
-    for aid in ("gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.blotter_qt"):
+    for aid in ("gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt"):
         assert aid in holes
         assert holes[aid].mode == "gui"
         assert "--gui" in (holes[aid].exclude_reason or "")
     results = run_all()
     skipped = {r.action_id for r in results if r.fate == "excluded"}
-    assert {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.blotter_qt"} <= skipped
+    assert {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt"} <= skipped
     gui_skipped = [
         r for r in results
         if r.action_id.startswith("gui.") and r.action_id != "gui.choice_close_exit" and r.fate == "excluded"
     ]
-    assert len(gui_skipped) >= 4
+    assert len(gui_skipped) >= 5
 
