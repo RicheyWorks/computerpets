@@ -41,19 +41,19 @@ test("the walking guest may sit; the still guest may walk; Rest is sleep", () =>
   assert.deepEqual(C.poseFlip(false), { id: "walk", label: "Walk" });
   assert.deepEqual(Overlay.poseFlip(true), { id: "sit", label: "Sit" });
   const open = ids(C.guestMarks({ walking: true }));
-  assert.deepEqual(open, ["feed", "rest", "sit", "talk", "treat", "play", "special", "hide"]);
+  assert.deepEqual(open, ["feed", "rest", "sit", "talk", "treat", "play", "special", "hide", "close", "exit"]);
   const still = ids(C.guestMarks({ walking: false, treatVerb: "Egg", specialVerb: "Ridge" }));
-  assert.deepEqual(still, ["feed", "rest", "walk", "talk", "treat", "play", "special", "hide"]);
+  assert.deepEqual(still, ["feed", "rest", "walk", "talk", "treat", "play", "special", "hide", "close", "exit"]);
   assert.equal(C.guestMarks({ treatVerb: "Egg" }).find((m) => m.id === "treat")?.label, "Egg");
   assert.equal(C.guestMarks({ specialVerb: "Ridge" }).find((m) => m.id === "special")?.label, "Ridge");
 });
 
 test("hidden keeps Call back; a gift on the wood keeps Pick; leaving is not a new treat", () => {
-  assert.deepEqual(ids(C.guestMarks({ hidden: true })), ["talk", "special", "call"]);
+  assert.deepEqual(ids(C.guestMarks({ hidden: true })), ["talk", "special", "call", "close", "exit"]);
   assert.ok(ids(C.guestMarks({ gifts: 1 })).includes("pick"));
   assert.ok(!ids(C.guestMarks({ hidden: true, gifts: 1 })).includes("pick"));
-  assert.deepEqual(ids(C.guestMarks({ leaving: true })), ["talk", "special"]);
-  assert.deepEqual(ids(Overlay.guestMarks({ hidden: true })), ["talk", "special", "call"]);
+  assert.deepEqual(ids(C.guestMarks({ leaving: true })), ["talk", "special", "close", "exit"]);
+  assert.deepEqual(ids(Overlay.guestMarks({ hidden: true })), ["talk", "special", "call", "close", "exit"]);
   assert.ok(ids(Overlay.guestMarks({ gifts: 2 })).includes("pick"));
 });
 
@@ -112,4 +112,21 @@ test("overlay and blotter keep the same choice on those woods", () => {
   assert.match(blotterApp, /_open_choice/);
   assert.match(blotterApp, /_pick_choice/);
   assert.doesNotMatch(blotterApp, /the plaque teaches, they say the lesson/);
+});
+
+test("Exit and Close dismiss the options overlay; Esc matches Close", () => {
+  assert.equal(C.guestPick("close"), "close");
+  assert.equal(C.guestPick("exit"), "exit");
+  assert.deepEqual(ids(C.guestMarks({})).slice(-2), ["close", "exit"]);
+  assert.deepEqual(ids(Overlay.guestMarks({})).slice(-2), ["close", "exit"]);
+  assert.match(roomSrc, /id === "close"/);
+  assert.match(roomSrc, /id === "exit"/);
+  assert.match(roomSrc, /setCardOpen\(false\)/);
+  assert.match(roomSrc, /Escape/);
+  assert.match(overlayPetSrc, /picked === "close"/);
+  assert.match(overlayPetSrc, /picked === "exit"/);
+  assert.match(overlayPetSrc, /collapseKeeperCard/);
+  assert.match(blotterApp, /"close"/);
+  assert.match(blotterApp, /"exit"/);
+  assert.match(blotterChoice, /dismiss_marks/);
 });

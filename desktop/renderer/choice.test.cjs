@@ -23,8 +23,10 @@ test("a tap on the overlay guest is a choice, not a talk", () => {
     "play",
     "special",
     "hide",
+    "close",
+    "exit",
   ]);
-  assert.deepEqual(ids(C.guestMarks({ hidden: true })), ["talk", "special", "call"]);
+  assert.deepEqual(ids(C.guestMarks({ hidden: true })), ["talk", "special", "call", "close", "exit"]);
   assert.ok(ids(C.guestMarks({ gifts: 1 })).includes("pick"));
   assert.equal(C.guestPick("play"), "play");
   assert.equal(C.guestPick("bath"), null);
@@ -45,7 +47,18 @@ test("a tap on the overlay guest is a choice, not a talk", () => {
 });
 
 test("called and visit marks offer talk care and send, not host feed strip", () => {
-  assert.deepEqual(ids(C.guestMarks({ role: "called" })), ["talk", "treat", "play", "walk", "send"]);
-  assert.deepEqual(ids(C.guestMarks({ role: "visit", walking: true })), ["talk", "treat", "play", "sit", "send"]);
+  assert.deepEqual(ids(C.guestMarks({ role: "called" })), ["talk", "treat", "play", "walk", "send", "close", "exit"]);
+  assert.deepEqual(ids(C.guestMarks({ role: "visit", walking: true })), ["talk", "treat", "play", "sit", "send", "close", "exit"]);
   assert.equal(C.guestPick("send"), "send");
+  assert.equal(C.guestPick("close"), "close");
+  assert.equal(C.guestPick("exit"), "exit");
+});
+
+test("Exit and Close dismiss marks are always last and wired in pet.js", () => {
+  const open = ids(C.guestMarks({}));
+  assert.deepEqual(open.slice(-2), ["close", "exit"]);
+  assert.match(petSrc, /picked === "close"/);
+  assert.match(petSrc, /picked === "exit"/);
+  assert.match(petSrc, /collapseKeeperCard\(\)/);
+  assert.match(petSrc, /e\.key !== "Escape"/);
 });

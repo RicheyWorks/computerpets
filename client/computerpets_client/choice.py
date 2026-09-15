@@ -18,6 +18,8 @@ GUEST_CHOICE = (
     "hide",
     "call",
     "pick",
+    "close",
+    "exit",
 )
 
 
@@ -31,6 +33,14 @@ def pose_flip(walking: bool) -> dict[str, str]:
     if walking:
         return {"id": "sit", "label": "Sit"}
     return {"id": "walk", "label": "Walk"}
+
+
+def dismiss_marks() -> list[dict[str, str]]:
+    """Close dismisses the menu; Exit leaves pet care (unfocus). Always last."""
+    return [
+        {"id": "close", "label": "Close"},
+        {"id": "exit", "label": "Exit"},
+    ]
 
 
 def guest_marks(
@@ -59,6 +69,7 @@ def guest_marks(
         marks.append({"id": "hide", "label": "Hide"})
     if not hidden and gifts > 0:
         marks.append({"id": "pick", "label": "Pick"})
+    marks.extend(dismiss_marks())
     return marks
 
 
