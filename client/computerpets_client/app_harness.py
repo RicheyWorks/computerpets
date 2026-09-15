@@ -1411,8 +1411,20 @@ def _web_smoke_script() -> Path:
     return Path(__file__).resolve().with_name("harness_web_smokes.mjs")
 
 
-def _run_web_smoke(command: str, *, domain: str, action_id: str) -> InvokeResult:
-    """Drive web/src TypeScript modules offline via harness_web_smokes.mjs."""
+def _run_web_smoke(
+    command: str,
+    *,
+    domain: str,
+    action_id: str,
+    extra_args: list[str] | None = None,
+    use_tsx: bool = False,
+) -> InvokeResult:
+    """Drive web/src TypeScript modules offline via harness_web_smokes.mjs.
+
+    Most commands use node --experimental-strip-types. Catalog-wide
+    plaques.classroomFor needs extensionless TS imports, so pass use_tsx=True
+    (npx tsx) for blotter.classroom only — not invented; real module load.
+    """
     import json
     import shutil
     import subprocess
@@ -1423,13 +1435,22 @@ def _run_web_smoke(command: str, *, domain: str, action_id: str) -> InvokeResult
         return InvokeResult(action_id, domain, False, error="node not on PATH")
     if not script.is_file():
         return InvokeResult(action_id, domain, False, error=f"missing {script.name}")
+    if use_tsx:
+        npx = shutil.which("npx")
+        if not npx:
+            return InvokeResult(action_id, domain, False, error="npx not on PATH (needed for tsx classroom lockstep)")
+        argv = [npx, "--yes", "tsx", str(script), command]
+    else:
+        argv = [node, "--experimental-strip-types", str(script), command]
+    if extra_args:
+        argv.extend(extra_args)
     try:
         proc = subprocess.run(
-            [node, "--experimental-strip-types", str(script), command],
+            argv,
             capture_output=True,
             text=True,
             cwd=str(repo_root()),
-            timeout=45,
+            timeout=90 if use_tsx else 45,
             check=False,
         )
     except Exception as exc:  # oracle: surface, do not crash runner
@@ -2240,10 +2261,34 @@ def _blotter_rows() -> list[Affordance]:
             "blotter.guide",
             "blotter",
             "Field-guide plaques catalog-complete",
-            "guide.guide_complete / plaque_for / classroom_for",
+            "guide.guide_complete / plaque_for",
             notes=(
-                "Every CATALOG_KEYS guest has a plaque; classroom rooms taught. "
+                "Every CATALOG_KEYS guest has a plaque; classroom sample den/house. "
+                "Catalog-wide classroom + web lockstep is blotter.classroom. "
                 "SpeciesPlaque QWidget stays mode=gui (blotter.plaque driven under --gui)."
+            ),
+        ),
+        Affordance(
+            "blotter.classroom",
+            "blotter",
+            "Catalog-wide classroom rooms + web lockstep",
+            "guide.classroom_for + web plaques.classroomFor",
+            notes=(
+                "Every CATALOG_KEYS guest maps to a known classroom room/label/verb; "
+                "lockstep with web classroomFor on label/verb/to (room->path). "
+                "Desktop has no classroom API - not invented. Qt plaque classroom label stays --gui."
+            ),
+        ),
+        Affordance(
+            "blotter.return_memory",
+            "blotter",
+            "return_line thresholds + remember_visit persist",
+            "hours.return_line / remember_visit + web returnLine/rememberVisit",
+            notes=(
+                "Deepens call-back/return lines beyond blotter.hours return_line(0). "
+                "Thresholds + seen.json away-ms round-trip; web returnLine lockstep + "
+                "companion-room rememberVisit wire. Desktop hours.js has no returnLine/"
+                "rememberVisit peer - not invented (callLine stays in blotter.hours)."
             ),
         ),
         Affordance(
@@ -2646,6 +2691,223 @@ def _invoke_blotter(local_id: str, **opts: Any) -> InvokeResult:
             detail=f"anims={','.join(keys)}",
             extras={"anims": keys},
             trace=[f"ANIMS={','.join(keys)}", "frames.py.source=ok"],
+        )
+
+    if local_id == "classroom":
+        from .guide import classroom_for
+
+        # Python room -> web plaques.classroomFor `to` path (lockstep identity).
+        room_to_path = {
+            "den": "/snakes",
+            "tide": "/sea",
+            "garden": "/garden",
+            "hive": "/hive",
+            "cellar": "/cellar",
+            "far": "/far",
+            "pond": "/pond",
+            "roost": "/roost",
+            "corner": "/corner",
+            "wood": "/wood",
+            "canopy": "/canopy",
+            "stone": "/stone",
+            "creek": "/creek",
+            "log": "/log",
+            "shore": "/shore",
+            "reef": "/reef",
+            "grid": "/grid",
+            "meadow": "/meadow",
+            "well": "/well",
+            "house": "/study",
+        }
+        expect: dict[str, dict[str, str]] = {}
+        rooms: dict[str, int] = {}
+        thin: list[str] = []
+        unknown_room: list[str] = []
+        for key in CATALOG_KEYS:
+            cls = classroom_for(key)
+            room = getattr(cls, "room", None) or ""
+            label = getattr(cls, "label", None) or ""
+            verb = getattr(cls, "verb", None) or ""
+            if not room or not label or not verb:
+                thin.append(key)
+                continue
+            if room not in room_to_path:
+                unknown_room.append(key)
+                continue
+            rooms[room] = rooms.get(room, 0) + 1
+            expect[key] = {
+                "room": room,
+                "label": label,
+                "verb": verb,
+                "to": room_to_path[room],
+            }
+        if thin or unknown_room:
+            return InvokeResult(
+                aid, "blotter", False,
+                error=(
+                    f"classroom thin={len(thin)} unknown_room={len(unknown_room)}"
+                ),
+                extras={"thin": thin[:12], "unknown_room": unknown_room[:12]},
+            )
+        if set(rooms) != set(room_to_path):
+            return InvokeResult(
+                aid, "blotter", False,
+                error=f"classroom rooms drift have={sorted(rooms)} want={sorted(room_to_path)}",
+                extras={"rooms": rooms},
+            )
+        if sum(rooms.values()) != len(CATALOG_KEYS):
+            return InvokeResult(
+                aid, "blotter", False,
+                error=f"classroom count {sum(rooms.values())} vs catalog {len(CATALOG_KEYS)}",
+            )
+        # Bee keys (not honeybee — that key is_insect first) vs insect hive label.
+        bee = classroom_for("honey_queen")
+        bug = classroom_for("monarch")
+        if bee.room != "hive" or bug.room != "hive":
+            return InvokeResult(aid, "blotter", False, error="hive room drift")
+        if "Bees and comb" not in bee.label or bug.label == bee.label:
+            return InvokeResult(
+                aid, "blotter", False,
+                error=f"hive label split drift bee={bee.label!r} bug={bug.label!r}",
+            )
+        import json
+        import tempfile
+
+        with tempfile.NamedTemporaryFile(
+            "w", encoding="utf-8", suffix=".json", delete=False
+        ) as tmp:
+            json.dump(expect, tmp)
+            expect_path = tmp.name
+        try:
+            smoked = _run_web_smoke(
+                "classroom_lockstep",
+                domain="blotter",
+                action_id=aid,
+                extra_args=[expect_path],
+                use_tsx=True,
+            )
+        finally:
+            Path(expect_path).unlink(missing_ok=True)
+        if not smoked.ok:
+            return smoked
+        # Desktop has no classroom peer — document, do not invent.
+        desk_hours = _read("desktop/renderer/hours.js")
+        if "classroomFor" in desk_hours or "classroom_for" in desk_hours:
+            return InvokeResult(
+                aid, "blotter", False,
+                error="unexpected desktop classroom API — document if added",
+            )
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"rooms={len(rooms)} keys={len(expect)} lockstep={smoked.extras.get('matched')}",
+            extras={
+                "rooms": rooms,
+                "n": len(expect),
+                "matched": smoked.extras.get("matched"),
+                "desktop_classroom": False,
+            },
+            trace=[
+                f"rooms={len(rooms)}",
+                f"keys={len(expect)}",
+                f"hive.bee={bee.label}",
+                f"lockstep={smoked.extras.get('matched')}",
+                "desktop_classroom=absent",
+                *list(smoked.trace),
+            ],
+        )
+
+    if local_id == "return_memory":
+        import json
+        import tempfile
+        from pathlib import Path as _Path
+
+        from .hours import remember_visit, return_line
+
+        # Threshold table (hour pinned so civil clock cannot flake).
+        cases = [
+            (0, 14, None),
+            (0.3 * 3_600_000, 14, None),
+            (0.5 * 3_600_000, 14, "Back. I noticed."),
+            (1 * 3_600_000, 14, "You were elsewhere. I practiced waiting."),
+            (6 * 3_600_000, 14, "Hours. I sat in most of them."),
+            (20 * 3_600_000, 8, "You were gone a night. I kept the blotter."),
+            (20 * 3_600_000, 14, "A long absence. I counted the dust."),
+        ]
+        for away_ms, hour, want in cases:
+            got = return_line(away_ms, hour=hour)
+            if got != want:
+                return InvokeResult(
+                    aid, "blotter", False,
+                    error=f"return_line({away_ms},{hour}) got {got!r} want {want!r}",
+                )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            udir = _Path(tmp)
+            t0 = 1_700_000_000_000
+            away0 = remember_visit("red_panda", user_data_dir=udir, now_ms=t0)
+            if away0 != 0:
+                return InvokeResult(
+                    aid, "blotter", False,
+                    error=f"first remember_visit away={away0} want 0",
+                )
+            seen = udir / "seen.json"
+            if not seen.is_file():
+                return InvokeResult(aid, "blotter", False, error="seen.json not written")
+            store = json.loads(seen.read_text(encoding="utf-8"))
+            if store.get("red_panda") != t0:
+                return InvokeResult(aid, "blotter", False, error=f"seen stamp drift {store}")
+            away = remember_visit(
+                "red_panda", user_data_dir=udir, now_ms=t0 + 2 * 3_600_000
+            )
+            if away != 2 * 3_600_000:
+                return InvokeResult(
+                    aid, "blotter", False,
+                    error=f"second remember_visit away={away}",
+                )
+            line = return_line(away, hour=14)
+            if line != "You were elsewhere. I practiced waiting.":
+                return InvokeResult(
+                    aid, "blotter", False,
+                    error=f"return after remember drift {line!r}",
+                )
+            # Corrupt store must not crash; away stays 0-ish default path.
+            seen.write_text("{not-json", encoding="utf-8")
+            away_bad = remember_visit("cat", user_data_dir=udir, now_ms=t0 + 1)
+            if away_bad != 0:
+                return InvokeResult(
+                    aid, "blotter", False,
+                    error=f"corrupt seen should yield away=0 got {away_bad}",
+                )
+
+        # Desktop hours.js: callLine yes, returnLine/rememberVisit no.
+        desk_src = _read("desktop/renderer/hours.js")
+        if "returnLine" in desk_src or "rememberVisit" in desk_src:
+            return InvokeResult(
+                aid, "blotter", False,
+                error="unexpected desktop returnLine/rememberVisit — document if added",
+            )
+        if "callLine" not in desk_src:
+            return InvokeResult(aid, "blotter", False, error="desktop callLine missing")
+
+        smoked = _run_web_smoke("return_memory", domain="blotter", action_id=aid)
+        if not smoked.ok:
+            return smoked
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"thresholds={len(cases)} persist=ok lockstep=web",
+            extras={
+                "thresholds": len(cases),
+                "desktop_return": False,
+                "web_matched": smoked.extras.get("matched"),
+            },
+            trace=[
+                f"thresholds={len(cases)}",
+                "remember_visit.seen.json=ok",
+                "return_line.after_away=ok",
+                "corrupt_seen=ok",
+                "desktop_return=absent",
+                *list(smoked.trace),
+            ],
         )
 
     return InvokeResult(aid, "blotter", False, error=f"unknown blotter id {local_id!r}")
