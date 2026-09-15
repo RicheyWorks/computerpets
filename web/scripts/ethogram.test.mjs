@@ -961,6 +961,20 @@ assert.equal(names("tardigrade").includes("tun"), false);
 assert.equal(names("tardigrade").includes("walk"), false);
 assert.equal(names("tardigrade").includes("still"), false);
 assert.equal(names("tardigrade").includes("sit"), false);
+assert.ok(names("planarian").includes("dugesia"));
+assert.ok(names("planarian").includes("ciliaryglide_soft"));
+assert.ok(names("planarian").includes("lightflee_soft"));
+assert.ok(names("planarian").includes("preywrap_soft"));
+assert.ok(names("planarian").includes("regensplit_soft"));
+assert.ok(names("planarian").includes("auriclesense_soft"));
+assert.ok(names("planarian").includes("pharynxprobe_soft"));
+assert.ok(names("planarian").includes("freeze"));
+assert.equal(names("planarian").includes("split"), false);
+assert.equal(names("planarian").includes("glide"), false);
+assert.equal(names("planarian").includes("still"), false);
+assert.equal(names("planarian").includes("half"), false);
+assert.equal(names("planarian").includes("sit"), false);
+
 
 
 
