@@ -903,7 +903,15 @@ assert.ok(names("toad").includes("freeze"));
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
-  assert.ok(names("millipede").includes("walk"));
+  assert.ok(names("millipede").includes("narceus"));
+  assert.ok(names("millipede").includes("coilcurl_soft"));
+  assert.ok(names("millipede").includes("benzoquinone_soft"));
+  assert.ok(names("millipede").includes("metachronal_soft"));
+  assert.ok(names("millipede").includes("freeze"));
+  assert.equal(names("millipede").includes("walk"), false);
+  assert.equal(names("millipede").includes("oil"), false);
+  assert.equal(names("millipede").includes("still"), false);
+  assert.equal(names("millipede").includes("sit"), false);
   assert.ok(names("pillbug").includes("roll"));
   for (const key of SHORE) {
     const acts = names(key);
