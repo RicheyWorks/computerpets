@@ -37,9 +37,11 @@ CROSS_DOMAIN = {
     "guest.exit",
     "species.catalog",
     "species.lookup",
-    "ethogram.acts.red_panda",
+    "ethogram.catalog_all",
     "cry.prefersHouseCry.parse",
+    "cry.catalog_wavs",
     "cry.playback",
+    "species.portraits",
     "gift.leave",
     "gift.pick",
     "gift.place",
@@ -154,6 +156,16 @@ def test_gaps_are_honest_and_accounted():
     assert "gui.host_place" in hole_ids
     assert "gui.blotter_qt" in hole_ids
     assert "ethogram.tricks.red_panda" in hole_ids
+    assert "ethogram.tricks.relay_dragon" in hole_ids
+    assert "ethogram.tricks.fuse_dragon" in hole_ids
+    assert "ethogram.tricks.ground_dragon" in hole_ids
+    # Sample-only acts/wav rows retired — catalog-wide invariants replace them.
+    driven_now = set(catalog_ids())
+    assert "ethogram.catalog_all" in driven_now
+    assert "cry.catalog_wavs" in driven_now
+    assert "species.portraits" in driven_now
+    assert "ethogram.acts.red_panda" not in driven_now
+    assert "cry.wav.red_panda" not in driven_now
     # These moved from gaps to driven.
     driven_ids = set(catalog_ids())
     assert "cry.playback" in driven_ids
@@ -237,3 +249,26 @@ def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
     ]
     assert len(gui_skipped) >= 5
 
+
+
+
+def test_catalog_wide_ethogram_cry_portraits():
+    """House-wide invariants — every catalog key / prefersHouseCry key, not samples."""
+    eth = invoke("ethogram.catalog_all")
+    assert eth.ok, (eth.error, eth.extras)
+    assert int(eth.extras.get("n") or 0) >= 1
+    assert not eth.extras.get("missing")
+    assert not eth.extras.get("thin")
+    assert not eth.extras.get("broken")
+    assert not eth.extras.get("unexpected_missing_tricks")
+    assert int(eth.extras.get("tricks_ok") or 0) >= 1
+
+    cry = invoke("cry.catalog_wavs")
+    assert cry.ok, (cry.error, cry.extras)
+    assert not cry.extras.get("missing")
+    assert int(cry.extras.get("n") or 0) >= 1
+
+    portraits = invoke("species.portraits")
+    assert portraits.ok, (portraits.error, portraits.extras)
+    assert not portraits.extras.get("missing")
+    assert int(portraits.extras.get("n") or 0) >= 1

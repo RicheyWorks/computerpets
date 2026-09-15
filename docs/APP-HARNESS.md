@@ -72,9 +72,9 @@ Ids are `domain.local`. Bare care ids (`feed`) still resolve for the original ha
 | `care` | Existing 18 (feed…exit) | `care_harness` → `life` / `specials` / `shed` |
 | `guest` | Tap, marks, every `GUEST_CHOICE` id including **close** / **exit** | `choice.guest_tap` / `guest_marks` / `guest_pick` |
 | `visit` | Today's visitor, phase clock, call begin/place/leave, arrive vs tap/place | `visitor.js` / `call-guests.js` / `arrive.js` |
-| `species` | Catalog load, lookup, GUESTS.md, sample guests | `species.CATALOG_KEYS` / `species_by_key` / `docs/GUESTS.md` |
-| `ethogram` | Acts + tricks files for sample guests | `ethogram.acts_for` / `desktop/renderer/*-tricks.js` |
-| `cry` | `prefersHouseCry` parse, pet.js wiring, wav files, **stubbed `cry.playback`** (mock `Audio` + `PetDeskHouse.playVoice`) | `card.ts` / `pet.js` / `house-sounds.js` / `desk-house.js` / `harness_smokes.cjs` |
+| `species` | Catalog load, lookup, GUESTS.md, sample guests, **portrait jpg for every key** (`species.portraits`) | `species.CATALOG_KEYS` / `species_by_key` / `docs/GUESTS.md` / `web/public/pets/{key}.jpg` |
+| `ethogram` | **Catalog-wide** `ethogram.catalog_all` (every key denser `acts_for` + tricks parse smoke); absent tricks (Rui / dragons) excluded | `ethogram.acts_for` / `desktop/renderer/*-tricks.js` |
+| `cry` | `prefersHouseCry` parse, pet.js wiring, **`cry.catalog_wavs`** (every prefersHouseCry key has a wav), **stubbed `cry.playback`** | `card.ts` / `pet.js` / `house-sounds.js` / `desk-house.js` / `harness_smokes.cjs` |
 | `gift` | Line, leave, pick, **place coords** (`gift.place`) | `gift.py` + `life.js leaveGift` via `harness_smokes.cjs` |
 | `desk` | Weather clock; plate keys; URL builders; **offline resolve**; **Favorites** (News/Coins/NFTs/Weather); **news topics/Popular/X**; **quotes add-ticker**; **plate chrome/style**; **plant drag-place**; **OS window perch** | `weather.py`; `desk-plates` / `desk-plants`; `windows.js` / `window-play.js`; `news.js` / `market.js` / `weather-areas.js` |
 | `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire**, **notif deep-link → open card on need**, **needs save/reload + alert clear after care** | `card.ts` / `pet.js` / `life.js` via hooks + `harness_smokes.cjs` |
@@ -99,6 +99,7 @@ Invariants that survive growth (not frozen house-wide counts):
 - Required ids stay in the catalog
 - Guest marks end with `close` then `exit`
 - `CATALOG_KEYS` and `SPECIES` stay the same set
+- Every catalog key has denser `acts_for` (`ethogram.catalog_all`); every `prefersHouseCry` key has a wav (`cry.catalog_wavs`); every key has `web/public/pets/{key}.jpg` (`species.portraits`)
 - Every excluded row has a reason
 
 ## Gaps (honest)
@@ -117,11 +118,12 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 | `live.news_rss` | True live RSS/HTTP; **`desk.news.resolve` drives `parseRss` fixtures** |
 | `live.market_quote` | True live CoinGecko/Yahoo HTTP; **`desk.market.resolve` drives parse fixtures** |
 | `live.nft_floor` | True live NFT floor HTTP; **`desk.nft.resolve` drives `parseNftLive` fixtures** |
-| `ethogram.tricks.red_panda` | No separate `*-tricks.js` for Rui by design (idle `acts_for` covers blotter ethogram) |
+| `ethogram.tricks.red_panda` | No separate `*-tricks.js` for Rui by design (idle `acts_for` covers blotter ethogram) — do not invent |
+| `ethogram.tricks.relay_dragon` / `fuse_dragon` / `ground_dragon` | No separate `*-tricks.js` for dragons by design (same as Rui); idle denser ethogram covers blotter |
 
 Moved from gaps → driven (prior pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
 
-This pass (still offline-driven, no invented verbs): **`desk.windows.perch`** — `windows.js` `parseEnumText`/`takeRects` work-area filter + `window-play.js` `playFor`/`pickTarget`/`beginPlay` (budgie perch / cat ledge) on fixture rects (no live HWND / multi-monitor); **`gui.host_place`** (mode=gui) — Electron `placeHostAt` coords + pet `data-hit` under `--gui`. Plate open/close/minimize APIs do **not** exist beyond style+drag persist already driven as `desk.plates.style` — skipped inventing minimize. Visit durable position store has **no** real API (`visitor.js` is todays/phases/line only; call `placed` is in-memory) — skipped. Prior: visit lifecycle, tickers, news X, needs persist, Favorites, plants, notify. License/unlock still skipped (network/secrets).
+This pass (still offline-driven, no invented verbs): **`ethogram.catalog_all`**, **`cry.catalog_wavs`**, **`species.portraits`** — CSRBT-style house-wide invariants over every catalog / prefersHouseCry key (not sample-only); thin/missing acts, missing wavs, missing `web/public/pets/{key}.jpg` fail naming the key; Rui/dragon tricks stay excluded. Prior: **`desk.windows.perch`** — `windows.js` `parseEnumText`/`takeRects` work-area filter + `window-play.js` `playFor`/`pickTarget`/`beginPlay` (budgie perch / cat ledge) on fixture rects (no live HWND / multi-monitor); **`gui.host_place`** (mode=gui) — Electron `placeHostAt` coords + pet `data-hit` under `--gui`. Plate open/close/minimize APIs do **not** exist beyond style+drag persist already driven as `desk.plates.style` — skipped inventing minimize. Visit durable position store has **no** real API (`visitor.js` is todays/phases/line only; call `placed` is in-memory) — skipped. Prior: visit lifecycle, tickers, news X, needs persist, Favorites, plants, notify. License/unlock still skipped (network/secrets).
 
 ### Dual-mode (`--live`)
 
