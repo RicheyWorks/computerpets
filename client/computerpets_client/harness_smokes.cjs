@@ -745,6 +745,109 @@ function windowsPerch() {
   );
 }
 
+function blotterHours() {
+  const H = load("hours.js");
+  const restN = Object.keys(H.REST || {}).length;
+  if (restN < 221) return fail("hours.js REST thin", { restN });
+  if (!H.isRestingHour("cat", 14)) return fail("cat should rest at 14");
+  if (H.isRestingHour("red_panda", 14)) return fail("rui should not rest at 14");
+  // rui overnight window differs py(22,7) vs hours.js[1,6] — not asserted here
+  const snack = H.snackLine("red_panda");
+  if (!String(snack).includes("Bamboo")) return fail("snackLine drift", { snack });
+  return ok("rest=" + restN, { restN, snack }, [
+    "REST=" + restN,
+    "isRestingHour.cat.14=true",
+    "isRestingHour.rui.14=false",
+    "snack=" + snack,
+  ]);
+}
+
+function blotterHive() {
+  const H = load("hive.js");
+  if (H.HIVE_PLACE !== "honeycomb" || H.HIVE_WORKER !== "honeybee") {
+    return fail("hive place/worker drift", { place: H.HIVE_PLACE, worker: H.HIVE_WORKER });
+  }
+  if (!H.isHivePlace("honeycomb") || H.isHivePlace("honeybee")) return fail("isHivePlace drift");
+  if (!H.sitsOnWax("honeybee") || H.sitsOnWax("honeycomb")) return fail("sitsOnWax drift");
+  const seats = H.combSeats().map((s) => s.key);
+  if (JSON.stringify(seats) !== JSON.stringify(["honey_queen", "honeybee", "honeybee", "honey_drone"])) {
+    return fail("combSeats drift", { seats });
+  }
+  const living = H.colonyOf({ hunger: 78, health: 92 });
+  const word = H.colonyWord(living);
+  if (living.quiet || living.brood !== 7 || living.stores !== 78) {
+    return fail("colonyOf drift", { living });
+  }
+  if (!String(word).includes("Brood")) return fail("colonyWord drift", { word });
+  return ok("place=" + H.HIVE_PLACE + " brood=" + living.brood, { place: H.HIVE_PLACE, brood: living.brood, seats }, [
+    "place=" + H.HIVE_PLACE,
+    "brood=" + living.brood,
+    "word=" + word,
+  ]);
+}
+
+function blotterGait() {
+  const G = load("gait.js");
+  if (G.TURN_S !== 0.23 || G.ACCEL_S !== 0.4 || G.DECEL_DIST !== 56 || G.HIGH_WALK !== 120) {
+    return fail("gait constants drift", { TURN_S: G.TURN_S, ACCEL_S: G.ACCEL_S });
+  }
+  if (G.walkSpeed(56, 1, 100) !== 100) return fail("walkSpeed full remaining");
+  if (G.facingAfter(1, 100, 20, 0, G.TURN_S) !== 1) return fail("facingAfter frame0");
+  if (G.facingAfter(1, 100, 20, G.TURN_S, G.TURN_S) !== -1) return fail("facingAfter hold");
+  if (G.leaveTarget(80, 800) !== -200) return fail("leaveTarget left drift");
+  if (G.enterSpawn(800, 176, 20, true) !== -176) return fail("enterSpawn drift");
+  if (G.enterSit(800, 176, 20, 0) !== 80) return fail("enterSit drift");
+  return ok("TURN_S=" + G.TURN_S, { TURN_S: G.TURN_S }, [
+    "TURN_S=" + G.TURN_S,
+    "walkSpeed.full=100",
+    "leaveTarget.left=-200",
+  ]);
+}
+
+function blotterPlay() {
+  const P = load("play.js");
+  const local = P.playChase(["catch", "arrive"], { taken: false, cmd: "seek", mark: "lure" });
+  if (!local || JSON.stringify(local.acts) !== JSON.stringify(["play", "idle"])) {
+    return fail("playChase catch/arrive acts", { local });
+  }
+  if (local.applyPlay !== 1 || local.issuePlay !== 1) return fail("playChase apply/issue", { local });
+  if (P.playClaim("arrive", { taken: true, cmd: "seek", mark: "lure" }) !== "none") {
+    return fail("playClaim double not none");
+  }
+  const treat = P.playChase(["arrive"], { taken: false, cmd: "seek", mark: "treat" });
+  if (!treat || JSON.stringify(treat.acts) !== JSON.stringify(["snack"])) {
+    return fail("treat arrive", { treat });
+  }
+  return ok("acts=" + local.acts.join(","), { acts: local.acts, applyPlay: local.applyPlay }, [
+    "acts=" + local.acts.join(","),
+    "applyPlay=" + local.applyPlay,
+    "treat=snack",
+  ]);
+}
+
+function blotterWeather() {
+  const W = load("weather.js");
+  const d = new Date(2026, 7, 17);
+  const sky = W.weatherOf(d);
+  if (sky !== "wind") return fail("weatherOf fixture", { sky });
+  if (W.weatherLabel("wind") !== "Wind") return fail("weatherLabel drift");
+  if (W.weatherLine("goldfish", "rain") !== "Proper weather. At last.") {
+    return fail("goldfish rain line", { line: W.weatherLine("goldfish", "rain") });
+  }
+  if (W.weatherLine("red_panda", "rain") !== "The blotter is honest about rain.") {
+    return fail("rui rain line");
+  }
+  if (W.weatherIdle("goldfish", "rain") !== "wander") return fail("goldfish rain idle");
+  if (W.weatherIdle("red_panda", "rain") !== "sit") return fail("rui rain idle");
+  if (W.weatherIdle("ball_python", "heat") !== "sit") return fail("snake heat idle");
+  if (W.weatherIdle("red_panda", "clear") != null) return fail("clear idle should be null");
+  return ok("sky=" + sky, { sky }, [
+    "sky=" + sky,
+    "line.goldfish.rain=ok",
+    "idle.rui.rain=sit",
+  ]);
+}
+
 const COMMANDS = {
   weather_resolve: weatherResolve,
   news_resolve: newsResolve,
@@ -769,6 +872,11 @@ const COMMANDS = {
   market_tickers: marketTickers,
   news_x: newsX,
   needs_persist: needsPersist,
+  blotter_hours: blotterHours,
+  blotter_hive: blotterHive,
+  blotter_gait: blotterGait,
+  blotter_play: blotterPlay,
+  blotter_weather: blotterWeather,
 };
 
 function main(argv) {

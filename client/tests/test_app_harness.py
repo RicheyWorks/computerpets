@@ -75,12 +75,20 @@ CROSS_DOMAIN = {
     "web.guest_choice",
     "web.ethogram_tricks",
     "web.demo_room",
+    "blotter.hours",
+    "blotter.hive",
+    "blotter.guide",
+    "blotter.gait",
+    "blotter.play",
+    "blotter.weather",
+    "blotter.rail",
+    "blotter.frames",
 }
 
 
 def test_domains_are_the_real_house_surfaces():
     assert domains() == DOMAINS
-    assert set(domains()) == {"care", "guest", "visit", "species", "ethogram", "cry", "gift", "desk", "card", "web", "gui"}
+    assert set(domains()) == {"care", "guest", "visit", "species", "ethogram", "cry", "gift", "desk", "card", "web", "blotter", "gui"}
 
 
 def test_catalog_has_stable_ids_and_grows_without_a_frozen_total():
@@ -159,6 +167,9 @@ def test_gaps_are_honest_and_accounted():
     assert "gui.host_place" in hole_ids
     assert "gui.blotter_qt" in hole_ids
     assert "ethogram.tricks.red_panda" in hole_ids
+    assert "blotter.plaque" in hole_ids
+    assert "blotter.frames_paint" in hole_ids
+    assert "blotter.scene" in hole_ids
     # Dragon tricks files exist under house/alias stems (relay-/fuse-/earth-tricks.js);
     # they are driven via ethogram.catalog_all alias resolution — not excluded holes.
     assert "ethogram.tricks.relay_dragon" not in hole_ids
@@ -236,6 +247,14 @@ def test_offline_resolves_and_playback_leave_traces():
         "web.guest_choice",
         "web.ethogram_tricks",
         "web.demo_room",
+        "blotter.hours",
+        "blotter.hive",
+        "blotter.guide",
+        "blotter.gait",
+        "blotter.play",
+        "blotter.weather",
+        "blotter.rail",
+        "blotter.frames",
     ):
         result = invoke(aid)
         assert result.ok, (aid, result.error, result.detail)
@@ -324,3 +343,44 @@ def test_web_companion_lockstep():
     demo = invoke("web.demo_room")
     assert demo.ok, (demo.error, demo.detail)
     assert demo.trace
+
+
+def test_blotter_pure_surfaces():
+    """Aggregated blotter domain: pure Python + desktop lockstep; Qt stays gaps."""
+    ids = set(catalog_ids(domain="blotter"))
+    driven = {
+        "blotter.hours",
+        "blotter.hive",
+        "blotter.guide",
+        "blotter.gait",
+        "blotter.play",
+        "blotter.weather",
+        "blotter.rail",
+        "blotter.frames",
+    }
+    assert driven <= ids
+    for aid in ("blotter.plaque", "blotter.frames_paint", "blotter.scene"):
+        assert aid in ids
+    holes = {row.id: row for row in gaps() if row.domain == "blotter"}
+    assert set(holes) == {"blotter.plaque", "blotter.frames_paint", "blotter.scene"}
+    for row in holes.values():
+        assert row.mode == "gui"
+        assert "--gui" in (row.exclude_reason or "")
+
+    results = run_domain("blotter")
+    failed = [r for r in results if not r.passed]
+    assert not failed, failed
+    driven_ok = [r for r in results if r.fate == "driven" and r.passed]
+    assert len(driven_ok) == 8
+    skipped = {r.action_id for r in results if r.fate == "excluded"}
+    assert skipped == {"blotter.plaque", "blotter.frames_paint", "blotter.scene"}
+
+    hours = invoke("blotter.hours")
+    assert hours.ok and hours.trace
+    assert int(hours.extras.get("rest") or 0) == 221
+    hive = invoke("blotter.hive")
+    assert hive.ok and hive.extras.get("place") == "honeycomb"
+    guide = invoke("blotter.guide")
+    assert guide.ok and int(guide.extras.get("n") or 0) == 221
+    frames = invoke("blotter.frames")
+    assert frames.extras.get("anims") == ["idle", "walk", "sit", "eat", "sleep", "play"]
