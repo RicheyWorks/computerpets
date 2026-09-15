@@ -37,11 +37,15 @@ def test_hidden_keeps_call_back_and_a_gift_keeps_pick():
         "play",
         "special",
         "hide",
+        "close",
+        "exit",
     )
-    assert mark_ids(guest_marks(hidden=True)) == ("talk", "special", "call")
+    assert mark_ids(guest_marks(hidden=True)) == ("talk", "special", "call", "close", "exit")
     assert "pick" in mark_ids(guest_marks(gifts=1))
     assert "pick" not in mark_ids(guest_marks(hidden=True, gifts=1))
-    assert mark_ids(guest_marks(leaving=True)) == ("talk", "special")
+    assert mark_ids(guest_marks(leaving=True)) == ("talk", "special", "close", "exit")
+    assert guest_pick("close") == "close"
+    assert guest_pick("exit") == "exit"
     assert walking_cmd("wander") is True
     assert walking_cmd("sit") is False
     assert guest_hit_pad(phone=True) == 12

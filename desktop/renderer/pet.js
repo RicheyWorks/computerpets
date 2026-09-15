@@ -2191,6 +2191,11 @@ function pickGuestChoice(id) {
   const role = choiceTarget && choiceTarget.role;
   const key = choiceTarget && choiceTarget.key;
   closeChoice();
+  if (id === "close") return;
+  if (id === "exit") {
+    collapseKeeperCard();
+    return;
+  }
   if (role === "visit") {
     if (!visit) return;
     if (id === "talk") {
@@ -2264,6 +2269,12 @@ function pickChoice(id) {
   const picked = window.PetChoice?.guestPick(id);
   closeChoice();
   if (!picked) return;
+  // Close: dismiss menu only. Exit: leave pet care (collapse keeper card).
+  if (picked === "close") return;
+  if (picked === "exit") {
+    collapseKeeperCard();
+    return;
+  }
   if (picked === "feed") handle("feed");
   else if (picked === "rest") handle("rest");
   else if (picked === "walk") {
@@ -3445,6 +3456,19 @@ if (hudCallQ) {
 function fieldOf(el) {
   return el && el.closest && el.closest("input, textarea, select");
 }
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  if (fieldOf(e.target)) return;
+  if (plantChoiceKey) {
+    closePlantChoice();
+    e.preventDefault();
+    return;
+  }
+  if (choiceOpen) {
+    closeChoice();
+    e.preventDefault();
+  }
+});
 document.addEventListener("pointerdown", (e) => {
   if (!fieldOf(e.target)) return;
   setClickable(true);

@@ -124,3 +124,16 @@ The living-desk PNGs are not in this repository. Frames are painted with `QPaint
 - A custom GLSL / compute renderer
 - An NFT minting UI or a Solana provider
 - A change to `/study` or `/snakes`
+
+## Care harness
+
+Inspect and verify real care actions (Feed, Rest, Talk, Treat, Play, Special / Steal ribbon, Hide, Clean, Bath, …):
+
+`powershell
+cd client
+py -m computerpets_client.care_harness
+py -m computerpets_client.care_harness --list
+`
+
+See [docs/CARE-HARNESS.md](../docs/CARE-HARNESS.md). Guest options always include **Close** (dismiss menu) and **Exit** (leave pet care / unfocus).
+

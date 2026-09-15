@@ -13,6 +13,8 @@
     "call",
     "pick",
     "send",
+    "close",
+    "exit",
   ];
 
   function guestTap() {
@@ -21,6 +23,14 @@
 
   function poseFlip(walking) {
     return walking ? { id: "sit", label: "Sit" } : { id: "walk", label: "Walk" };
+  }
+
+  function dismissMarks() {
+    // Always last: Close dismisses the menu; Exit leaves pet care (unfocus).
+    return [
+      { id: "close", label: "Close" },
+      { id: "exit", label: "Exit" },
+    ];
   }
 
   function guestMarks(sit) {
@@ -32,7 +42,7 @@
         { id: "play", label: "Play" },
         poseFlip(!!sit.walking),
         { id: "send", label: sit.role === "called" ? "Send home" : "Bye" },
-      ];
+      ].concat(dismissMarks());
     }
     const hidden = !!sit.hidden;
     const leaving = !!sit.leaving;
@@ -52,7 +62,7 @@
     if (hidden) marks.push({ id: "call", label: "Call back" });
     else if (!leaving) marks.push({ id: "hide", label: "Hide" });
     if (!hidden && (sit.gifts || 0) > 0) marks.push({ id: "pick", label: "Pick" });
-    return marks;
+    return marks.concat(dismissMarks());
   }
 
   function guestPick(id) {
@@ -66,7 +76,7 @@
     return 0;
   }
 
-  const api = { GUEST_CHOICE, guestTap, poseFlip, guestMarks, guestPick, guestHitPad };
+  const api = { GUEST_CHOICE, guestTap, poseFlip, guestMarks, guestPick, guestHitPad, dismissMarks };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetChoice = api;
 })(typeof window !== "undefined" ? window : globalThis);
