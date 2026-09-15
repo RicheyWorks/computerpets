@@ -2560,7 +2560,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Paint idle-life ultra done; next house-order guest still lacking tricks is Veil / lionfish", () => {
+test("notes: Paint idle-life ultra done; next house-order guest still lacking tricks is Gate / giant_clam", () => {
   assert.equal("Paint", "Paint");
   assert.equal("clownfish", "clownfish");
 
@@ -4007,7 +4007,7 @@ assert.equal(OverlayGround.tricksFor("earwig"), OverlayEarwig);
   assert.equal(OverlayGround.tricksFor("flying_squirrel"), OverlayFlyingSquirrel);
   assert.equal(OverlayGround.tricksFor("glide"), OverlayFlyingSquirrel);
 
-// Recommend next house-order guest still lacking idle tricks (do not implement): Veil / lionfish. Catalog 221.
+// Recommend next house-order guest still lacking idle tricks (do not implement): Gate / giant_clam. Catalog 221.
   assert.equal("clownfish", "clownfish");
   assert.equal("Paint", "Paint");
   assert.equal("clownfish", "clownfish");
