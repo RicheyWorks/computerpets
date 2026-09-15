@@ -1075,11 +1075,19 @@ def test_only_scratching_mammals_scratch():
     assert "still" not in [a["name"] for a in acts_for("knobbed_whelk")]
     assert "walk" not in [a["name"] for a in acts_for("knobbed_whelk")]
 
-    assert "heap" in [a["name"] for a in acts_for("lugworm")]
-    for key in MEADOW_KEYS:
-        names = [a["name"] for a in acts_for(key)]
-        assert "scratch" not in names, key
-        assert "tongue" not in names, key
+    assert "arenicolahush" in [a["name"] for a in acts_for("lugworm")]
+    assert "uburrow_soft" in [a["name"] for a in acts_for("lugworm")]
+    assert "sedgulp_soft" in [a["name"] for a in acts_for("lugworm")]
+    assert "gillflush_soft" in [a["name"] for a in acts_for("lugworm")]
+    assert "heapcast_soft" in [a["name"] for a in acts_for("lugworm")]
+    assert "tailcast_soft" in [a["name"] for a in acts_for("lugworm")]
+    assert "headdig_soft" in [a["name"] for a in acts_for("lugworm")]
+    assert "freeze" in [a["name"] for a in acts_for("lugworm")]
+    assert "hunt" not in [a["name"] for a in acts_for("lugworm")]
+    assert "sit" not in [a["name"] for a in acts_for("lugworm")]
+    assert "still" not in [a["name"] for a in acts_for("lugworm")]
+    assert "heap" not in [a["name"] for a in acts_for("lugworm")]
+    assert "cast" not in [a["name"] for a in acts_for("lugworm")]
     assert "chirp" in [a["name"] for a in acts_for("field_cricket")]
     assert "blade" in [a["name"] for a in acts_for("katydid")]
     assert "vault" in [a["name"] for a in acts_for("grasshopper")]
