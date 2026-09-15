@@ -930,6 +930,16 @@ assert.equal(names("earthworm").includes("cast"), false);
 assert.equal(names("earthworm").includes("crawl"), false);
 assert.equal(names("earthworm").includes("still"), false);
 assert.equal(names("earthworm").includes("sit"), false);
+assert.ok(names("velvet_worm").includes("peripatus"));
+assert.ok(names("velvet_worm").includes("slimejet_soft"));
+assert.ok(names("velvet_worm").includes("oralpapilla_soft"));
+assert.ok(names("velvet_worm").includes("onychophore_soft"));
+assert.ok(names("velvet_worm").includes("freeze"));
+assert.equal(names("velvet_worm").includes("jet"), false);
+assert.equal(names("velvet_worm").includes("walk"), false);
+assert.equal(names("velvet_worm").includes("still"), false);
+assert.equal(names("velvet_worm").includes("sit"), false);
+
 
 
   for (const key of SHORE) {
