@@ -735,6 +735,48 @@ def _desk_rows() -> list[Affordance]:
             notes="Fixture JSON through the real parser; no HTTP.",
         ),
         Affordance(
+            "desk.favorites.news",
+            "desk",
+            "News Favorites load/persist/list",
+            "news.js parseNewsPrefs / toggleFavorite / toCardPatch",
+            notes="Offline prefs round-trip; no HTTP.",
+        ),
+        Affordance(
+            "desk.favorites.market",
+            "desk",
+            "Coins/NFTs Favorites load/persist/list",
+            "market.js toggleFavoriteTicker / toggleFavoriteNft / favoriteRows",
+            notes="Offline market prefs; no HTTP.",
+        ),
+        Affordance(
+            "desk.favorites.weather",
+            "desk",
+            "Weather Favorites load/persist/list",
+            "weather-areas.js toggleFavorite / favoriteAreas / parseAreas",
+            notes="Offline area favorites; no HTTP.",
+        ),
+        Affordance(
+            "desk.news.topics",
+            "desk",
+            "News topics / Popular tab builders",
+            "news.js addTopic / pickTopic / popularRssUrl / NEWS_TABS",
+            notes="Topic list + Popular URL builders; no live RSS fetch.",
+        ),
+        Affordance(
+            "desk.plates.style",
+            "desk",
+            "Plate window style / chrome",
+            "desk-plates.js SWATCHES / applySwatch / paintStyle / loadPlates",
+            notes="Swatch chrome + drag-place persist via memory store.",
+        ),
+        Affordance(
+            "desk.plants.place",
+            "desk",
+            "Garden plant drag-place",
+            "desk-plants.js beginDrag / moveDrag / endDrag / savePlants",
+            notes="Disk/Felt place+mode without Electron; guest freehand drag stays GUI.",
+        ),
+        Affordance(
             "live.weather_forecast",
             "desk",
             "Open-Meteo forecast fetch",
@@ -866,6 +908,18 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("market_resolve", domain="desk", action_id=aid)
     if local_id == "nft.resolve":
         return _run_node_smoke("nft_resolve", domain="desk", action_id=aid)
+    if local_id == "favorites.news":
+        return _run_node_smoke("news_favorites", domain="desk", action_id=aid)
+    if local_id == "favorites.market":
+        return _run_node_smoke("market_favorites", domain="desk", action_id=aid)
+    if local_id == "favorites.weather":
+        return _run_node_smoke("weather_favorites", domain="desk", action_id=aid)
+    if local_id == "news.topics":
+        return _run_node_smoke("news_topics", domain="desk", action_id=aid)
+    if local_id == "plates.style":
+        return _run_node_smoke("plates_style", domain="desk", action_id=aid)
+    if local_id == "plants.place":
+        return _run_node_smoke("plants_place", domain="desk", action_id=aid)
     return InvokeResult(aid, "desk", False, error=f"unknown desk id {local_id!r}")
 
 
@@ -892,6 +946,13 @@ def _card_rows() -> list[Affordance]:
             "paintHud + persistCard + collapse/open wire",
             "pet.js paintHud / persistCard / collapseKeeperCard / openKeeperCard",
             notes="Source smoke via harness_smokes; full HUD paint stays gui.card_hud_paint.",
+        ),
+        Affordance(
+            "card.notify_open",
+            "card",
+            "Notif deep-link opens pet card on need",
+            "life.js careForNeed / alerts + pet.js openCareFromNotify",
+            notes="Pure NEED_CARE map + alerts; openCareFromNotify wire smoke (no Electron session).",
         ),
     ]
 
@@ -934,6 +995,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         )
     if local_id == "paint_wire":
         return _run_node_smoke("card_paint_wire", domain="card", action_id=aid)
+    if local_id == "notify_open":
+        return _run_node_smoke("notify_open", domain="card", action_id=aid)
     return InvokeResult(aid, "card", False, error=f"unknown card id {local_id!r}")
 
 
@@ -1154,8 +1217,13 @@ def _assert_gui(local_id: str, result: InvokeResult) -> list[str]:
     return [result.error or result.detail or "gui invoke failed"]
 
 
-def _http_get(url: str, *, timeout: float = 8.0) -> tuple[bool, str, str]:
-    """Optional live fetch. Returns (ok, body_or_empty, error_or_empty)."""
+def _http_get(url: str, *, timeout: float = 10.0, label: str = "live") -> tuple[bool, str, str]:
+    """Optional live fetch. Returns (ok, body_or_empty, clear_error).
+
+    Default run_all never calls this — only --live. Failures name the plate path,
+    timeout, and URL so Buffffff can tell network flake from parser drift.
+    """
+    import socket
     import urllib.error
     import urllib.request
 
@@ -1164,8 +1232,17 @@ def _http_get(url: str, *, timeout: float = 8.0) -> tuple[bool, str, str]:
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             body = resp.read(200_000).decode("utf-8", errors="replace")
             return True, body, ""
+    except socket.timeout:
+        return False, "", f"{label}: timed out after {timeout:.0f}s fetching {url}"
+    except TimeoutError:
+        return False, "", f"{label}: timed out after {timeout:.0f}s fetching {url}"
+    except urllib.error.HTTPError as exc:
+        return False, "", f"{label}: HTTP {exc.code} from {url}: {exc.reason}"
+    except urllib.error.URLError as exc:
+        reason = getattr(exc, "reason", exc)
+        return False, "", f"{label}: network error fetching {url}: {reason}"
     except Exception as exc:  # noqa: BLE001 — live mode surfaces network errors
-        return False, "", f"{type(exc).__name__}: {exc}"
+        return False, "", f"{label}: {type(exc).__name__} fetching {url}: {exc}"
 
 
 def _invoke_live_network(action_id: str) -> InvokeResult:
@@ -1175,47 +1252,63 @@ def _invoke_live_network(action_id: str) -> InvokeResult:
             "https://api.open-meteo.com/v1/forecast?latitude=37.77&longitude=-122.42"
             "&current=temperature_2m,weather_code,wind_speed_10m&forecast_days=1&timezone=auto"
         )
-        ok, body, err = _http_get(url)
+        ok, body, err = _http_get(url, timeout=10.0, label="live.weather_forecast")
         if not ok:
-            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
+            return InvokeResult(
+                action_id, "desk", False, error=err, detail=err,
+                trace=[f"GET {url}", "fail=network"],
+            )
         has = '"current"' in body
         return InvokeResult(
             action_id, "desk", has, detail=f"bytes={len(body)}",
-            extras={"bytes": len(body)}, trace=[f"GET {url}", f"bytes={len(body)}"],
-            error=None if has else "forecast JSON missing current",
+            extras={"bytes": len(body), "url": url},
+            trace=[f"GET {url}", f"bytes={len(body)}"],
+            error=None if has else f"live.weather_forecast: forecast JSON missing current from {url}",
         )
     if action_id == "live.news_rss":
         url = "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en"
-        ok, body, err = _http_get(url)
+        ok, body, err = _http_get(url, timeout=12.0, label="live.news_rss")
         if not ok:
-            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
+            return InvokeResult(
+                action_id, "desk", False, error=err, detail=err,
+                trace=[f"GET {url}", "fail=network"],
+            )
         has = "<item>" in body
         return InvokeResult(
             action_id, "desk", has, detail=f"bytes={len(body)}",
-            extras={"bytes": len(body)}, trace=[f"GET {url}", f"items={'yes' if has else 'no'}"],
-            error=None if has else "RSS missing item",
+            extras={"bytes": len(body), "url": url},
+            trace=[f"GET {url}", f"items={'yes' if has else 'no'}"],
+            error=None if has else f"live.news_rss: RSS missing <item> from {url}",
         )
     if action_id == "live.market_quote":
         url = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
-        ok, body, err = _http_get(url)
+        ok, body, err = _http_get(url, timeout=12.0, label="live.market_quote")
         if not ok:
-            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
+            return InvokeResult(
+                action_id, "desk", False, error=err, detail=err,
+                trace=[f"GET {url}", "fail=network"],
+            )
         has = "ethereum" in body and "usd" in body
         return InvokeResult(
             action_id, "desk", has, detail=f"bytes={len(body)}",
-            extras={"bytes": len(body)}, trace=[f"GET {url}", body[:80]],
-            error=None if has else "quote JSON missing ethereum",
+            extras={"bytes": len(body), "url": url},
+            trace=[f"GET {url}", body[:80]],
+            error=None if has else f"live.market_quote: quote JSON missing ethereum/usd from {url}",
         )
     if action_id == "live.nft_floor":
         url = "https://api.coingecko.com/api/v3/nfts/bored-ape-yacht-club"
-        ok, body, err = _http_get(url)
+        ok, body, err = _http_get(url, timeout=12.0, label="live.nft_floor")
         if not ok:
-            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
-        has = "floor_price" in body or "id" in body
+            return InvokeResult(
+                action_id, "desk", False, error=err, detail=err,
+                trace=[f"GET {url}", "fail=network"],
+            )
+        has = "floor_price" in body or '"id"' in body
         return InvokeResult(
             action_id, "desk", has, detail=f"bytes={len(body)}",
-            extras={"bytes": len(body)}, trace=[f"GET {url}", f"bytes={len(body)}"],
-            error=None if has else "nft JSON unexpected",
+            extras={"bytes": len(body), "url": url},
+            trace=[f"GET {url}", f"bytes={len(body)}"],
+            error=None if has else f"live.nft_floor: nft JSON unexpected from {url}",
         )
     if action_id == "live.cry_playback":
         return InvokeResult(
