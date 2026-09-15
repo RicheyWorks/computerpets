@@ -45,23 +45,23 @@ export type PitcherHappy = {
 };
 
 export const HAPPY_DUR: Record<PitcherHappyKind, number> = {
-  midge: 1.22,
-  rain: 1.34,
-  maroon: 1.4,
+  midge: 1.70,
+  rain: 1.84,
+  maroon: 1.76,
 };
 
 /** Urn hold — Well parks carnivorous calm on the blotter. Not window-play FILL. */
-export const URN_HOLD = 10.8;
-export const RELEASE_S = 0.62;
+export const URN_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<PitcherTrickKind, number> = {
   urn: URN_HOLD + RELEASE_S,
-  peristome: 1.48,
-  cistern: 1.55,
-  brine: 1.68,
-  operculum: 1.72,
-  ala: 1.62,
-  baffle: 1.7,
+  peristome: 2.48,
+  cistern: 2.42,
+  brine: 2.44,
+  operculum: 2.56,
+  ala: 2.40,
+  baffle: 2.38,
 };
 
 export function canStart(state: TrickFlags | undefined) {
