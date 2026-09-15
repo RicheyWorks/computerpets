@@ -9,7 +9,8 @@ Shape (CSRBT at house scale, FlowersForever registry dual-mode):
       UNACCOUNTED is a harness bug
     * general oracle: observable trace + no errors + no NaN/undefined junk
     * invariants that survive growth, not frozen counts
-    * offline/headless by default; live network fetches are catalogued as excluded
+    * offline/headless by default; live network + GUI/Electron/Qt are catalogued as excluded
+      (opt-in --live / --gui)
 
 No invented verbs — only real blotter / overlay / web surfaces.
 """
@@ -138,7 +139,7 @@ class Affordance:
     label: str
     handler: str
     notes: str = ""
-    mode: str = "offline"  # offline | live  (FlowersForever dual-mode)
+    mode: str = "offline"  # offline | live | gui  (FlowersForever dual-mode + BLACKBEARD --gui)
     fate: str = "driven"  # driven unless excluded/hidden/sequenced
     exclude_reason: str = ""
 
@@ -963,10 +964,12 @@ def _gui_rows() -> list[Affordance]:
             "gui",
             "Keeper HUD paint / persist loop",
             "pet.js paintHud / persistCard",
+            mode="gui",
             fate="excluded",
             exclude_reason=(
-                "Needs Electron overlay + DOM layout. Narrower paintHud/persistCard + collapse/open "
-                "wires are driven as card.paint_wire / card.collapse_hook / card.open_hook."
+                "Needs Electron overlay DOM. Default stays excluded (CI/offline green). "
+                "Pass --gui on BLACKBEARD to drive collapse/open + vital paint via desktop/gui-harness.cjs. "
+                "Narrower wires remain driven as card.paint_wire / collapse_hook / open_hook."
             ),
         ),
         Affordance(
@@ -974,41 +977,163 @@ def _gui_rows() -> list[Affordance]:
             "gui",
             "Overlay compositor / walk loop",
             "desktop/renderer/pet.js",
+            mode="gui",
             fate="excluded",
             exclude_reason=(
-                "Needs an Electron compositor/display. Headless Python cannot drive the paint loop; "
-                "choice/card/desk node smokes cover non-paint overlay logic instead."
+                "Needs Electron compositor/display. Default stays excluded. "
+                "Pass --gui to boot the overlay, assert pet/HUD paint, and dismiss choice Close+Exit."
             ),
         ),
         Affordance(
             "gui.blotter_qt",
             "gui",
             "PyQt blotter GPU viewport",
-            "blotter.attach_gpu_viewport",
+            "app --check / blotter.attach_gpu_viewport",
+            mode="gui",
             fate="excluded",
             exclude_reason=(
-                "Needs a display / Qt OpenGL context. Offscreen Qt is a different path and would "
-                "lie if marked driven here; blotter care/gift logic is covered under care + gift."
+                "Needs Qt (offscreen --check is honest software raster, not a GPU lie). "
+                "Default stays excluded. Pass --gui to run computerpets_client.app --check --offscreen."
             ),
         ),
         Affordance(
             "gui.gift_drag_place",
             "gui",
             "Pointer drag gift onto the wood",
-            "overlay / blotter pointer",
+            "overlay gift-dot data-hit",
+            mode="gui",
             fate="excluded",
             exclude_reason=(
-                "Pointer gesture needs the overlay hit-targets. Place/pick coords are driven as "
-                "gift.place (life.js leaveGift x + Python leave_gift gift_x)."
+                "Needs overlay gift-dot hit-targets. Default stays excluded. "
+                "Pass --gui to leaveGift + click gift-dot (honest place/pick; not freehand drag). "
+                "Coords alone stay driven as gift.place."
             ),
         ),
     ]
+
+
+_gui_electron_bundle: dict[str, Any] | None = None
+
+
+def _run_blotter_qt_check() -> InvokeResult:
+    """Honest Qt blotter boot via app --check --offscreen (software raster when offscreen)."""
+    import os
+    import subprocess
+    import sys
+
+    aid = "gui.blotter_qt"
+    env = dict(os.environ)
+    env.setdefault("QT_QPA_PLATFORM", "offscreen")
+    # Avoid a polluted PYTHONPATH from other worktrees.
+    env.pop("PYTHONPATH", None)
+    try:
+        proc = subprocess.run(
+            [sys.executable, "-m", "computerpets_client.app", "--check", "--offscreen"],
+            capture_output=True,
+            text=True,
+            cwd=str(repo_root() / "client"),
+            timeout=60,
+            check=False,
+            env=env,
+        )
+    except Exception as exc:  # noqa: BLE001
+        return InvokeResult(aid, "gui", False, error=f"{type(exc).__name__}: {exc}", trace=["blotter_qt.check=error"])
+    out = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
+    oks = [ln for ln in lines if ln.startswith("ok:")]
+    renderer = next((ln for ln in lines if "Qt" in ln and ("viewport" in ln or "raster" in ln or "OpenGL" in ln)), "")
+    ok = proc.returncode == 0 and len(oks) >= 3
+    return InvokeResult(
+        aid,
+        "gui",
+        ok,
+        detail=oks[0] if oks else (lines[-1] if lines else f"exit={proc.returncode}"),
+        extras={"oks": oks, "renderer": renderer, "returncode": proc.returncode},
+        trace=oks[:8] + ([renderer] if renderer else []) + [f"returncode={proc.returncode}"],
+        error=None if ok else (lines[-1] if lines else f"blotter --check failed exit={proc.returncode}"),
+    )
+
+
+def _run_electron_gui_bundle() -> dict[str, Any]:
+    """One Electron boot covers overlay / card HUD / gift hit-target smokes."""
+    global _gui_electron_bundle
+    if _gui_electron_bundle is not None:
+        return _gui_electron_bundle
+    import json
+    import os
+    import shutil
+    import subprocess
+
+    node = shutil.which("node")
+    script = repo_root() / "desktop" / "gui-harness.cjs"
+    if not node:
+        _gui_electron_bundle = {"ok": False, "error": "node not on PATH", "results": {}}
+        return _gui_electron_bundle
+    if not script.is_file():
+        _gui_electron_bundle = {"ok": False, "error": f"missing {script}", "results": {}}
+        return _gui_electron_bundle
+    env = dict(os.environ)
+    env.pop("PYTHONPATH", None)
+    try:
+        proc = subprocess.run(
+            [node, str(script)],
+            capture_output=True,
+            text=True,
+            cwd=str(repo_root()),
+            timeout=90,
+            check=False,
+            env=env,
+        )
+    except Exception as exc:  # noqa: BLE001
+        _gui_electron_bundle = {"ok": False, "error": f"{type(exc).__name__}: {exc}", "results": {}}
+        return _gui_electron_bundle
+    raw = (proc.stdout or "").strip().splitlines()
+    line = raw[-1] if raw else ""
+    try:
+        payload = json.loads(line) if line else {}
+    except json.JSONDecodeError:
+        payload = {
+            "ok": False,
+            "error": f"bad gui-harness JSON: {(line or proc.stderr or '')[:240]}",
+            "results": {},
+        }
+    if not isinstance(payload, dict):
+        payload = {"ok": False, "error": "gui-harness payload not an object", "results": {}}
+    payload.setdefault("results", {})
+    _gui_electron_bundle = payload
+    return _gui_electron_bundle
+
+
+def _invoke_gui_optin(action_id: str) -> InvokeResult:
+    """Opt-in --gui: real Electron/Qt smokes. Not part of default run_all."""
+    if action_id == "gui.blotter_qt":
+        return _run_blotter_qt_check()
+    bundle = _run_electron_gui_bundle()
+    row = (bundle.get("results") or {}).get(action_id)
+    if not isinstance(row, dict):
+        err = bundle.get("error") or f"missing {action_id} in electron harness bundle"
+        return InvokeResult(
+            action_id, "gui", False, error=str(err), detail=str(err),
+            trace=[f"gui.bundle.error={err}"],
+        )
+    ok = bool(row.get("ok"))
+    trace = list(row.get("trace") or [])
+    detail = str(row.get("detail") or ("ok" if ok else "failed"))
+    extras = dict(row.get("extras") or {})
+    extras["gui_optin"] = True
+    return InvokeResult(
+        action_id, "gui", ok, detail=detail, extras=extras, trace=trace or [detail],
+        error=None if ok else str(row.get("error") or detail),
+    )
 
 
 def _invoke_gui(local_id: str, **opts: Any) -> InvokeResult:
     aid = f"gui.{local_id}" if not local_id.startswith("gui.") else local_id
     if local_id in {"choice_close_exit", "gui.choice_close_exit"} or local_id == "choice_close_exit":
         return _run_node_smoke("choice_close_exit", domain="gui", action_id="gui.choice_close_exit")
+    # Direct invoke of mode=gui rows (Buffffff --only under --gui, or programmatic).
+    if aid in {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.blotter_qt"}:
+        return _invoke_gui_optin(aid)
     return InvokeResult(aid, "gui", False, error=f"unknown gui id {local_id!r}")
 
 
@@ -1250,11 +1375,18 @@ def _seed_care(local_id: str) -> dict[str, Any]:
     return {"state": seed, "species": "red_panda"}
 
 
-def run_domain(domain: str, *, only: Iterable[str] | None = None, live: bool = False) -> list[CaseResult]:
+def run_domain(
+    domain: str,
+    *,
+    only: Iterable[str] | None = None,
+    live: bool = False,
+    gui: bool = False,
+) -> list[CaseResult]:
     """Invoke every driven affordance in a domain and assert.
 
     live=True promotes mode=live catalog rows (still excluded from default run_all) into
     an opt-in HTTP attempt for that run only.
+    gui=True promotes mode=gui catalog rows into Electron/Qt smokes for that run only.
     """
     if domain not in DOMAINS:
         raise KeyError(f"unknown domain {domain!r}; known: {', '.join(DOMAINS)}")
@@ -1271,6 +1403,21 @@ def run_domain(domain: str, *, only: Iterable[str] | None = None, live: bool = F
                     fails = [result.error]
                 if not result.ok and result.error and result.error not in fails:
                     fails = [result.error]
+                fate = "failed" if fails else "driven"
+                out.append(
+                    CaseResult(
+                        action_id=row.id, domain=row.domain, passed=not fails,
+                        failures=fails, detail=result.detail, fate=fate,
+                    )
+                )
+                continue
+            if gui and row.mode == "gui" and row.id.startswith("gui."):
+                result = _invoke_gui_optin(row.id)
+                fails = assert_action(row.id, result)
+                if result.error and result.error not in fails:
+                    fails = fails + [result.error] if fails else [result.error]
+                if not result.ok and not fails:
+                    fails = [result.error or result.detail or "gui smoke failed"]
                 fate = "failed" if fails else "driven"
                 out.append(
                     CaseResult(
@@ -1303,17 +1450,24 @@ def run_domain(domain: str, *, only: Iterable[str] | None = None, live: bool = F
     return out
 
 
-def run_all(*, domain: str | None = None, only: Iterable[str] | None = None, live: bool = False) -> list[CaseResult]:
+def run_all(
+    *,
+    domain: str | None = None,
+    only: Iterable[str] | None = None,
+    live: bool = False,
+    gui: bool = False,
+) -> list[CaseResult]:
     """Invoke driven affordances across domains (or one domain). Excluded rows stay accounted.
 
     Default is offline/headless. Pass live=True (CLI --live) to attempt mode=live HTTP rows;
-    those rows remain fate=excluded in the catalog and in default run_all.
+    gui=True (CLI --gui) for Electron/Qt smokes on a machine with a display/Qt.
+    Those rows remain fate=excluded in the catalog and in default run_all.
     """
     if domain:
-        return run_domain(domain, only=only, live=live)
+        return run_domain(domain, only=only, live=live, gui=gui)
     out: list[CaseResult] = []
     for name in DOMAINS:
-        out.extend(run_domain(name, only=only, live=live))
+        out.extend(run_domain(name, only=only, live=live, gui=gui))
     return out
 
 
@@ -1362,6 +1516,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Opt-in: attempt mode=live HTTP rows (weather/news/market/nft). Still excluded from default catalog fate.",
     )
+    parser.add_argument(
+        "--gui",
+        action="store_true",
+        help="Opt-in: attempt mode=gui Electron/Qt smokes (overlay/card/gift/blotter). Still excluded from default catalog fate.",
+    )
     args = parser.parse_args(argv)
 
     if args.gaps:
@@ -1381,7 +1540,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\n{len(rows)} affordance(s)")
         return 0
 
-    results = run_all(domain=args.domain, only=args.only, live=bool(args.live))
+    results = run_all(domain=args.domain, only=args.only, live=bool(args.live), gui=bool(args.gui))
     failed = 0
     for row in results:
         if row.fate == "excluded":
