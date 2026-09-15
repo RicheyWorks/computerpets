@@ -1,6 +1,6 @@
-/** Gaze ground tricks while idle. House neighborly Philippine tarsier (Tarsius syrichta / Carlito syrichta / Tarsiidae) desk life -- eyeswivel / clingleap / insectpounce / stillstare / tarsiushush personality; NOT Boom/Sun/Hang/Owl/bushbaby/Rui; guest slug Gaze / key tarsier -- accept tarsier and gaze; Thank-yous densgaze / inkgaze / denstarsius. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop tarsier-tricks.js. Next: Still / potto. Catalog 220. */
+/** Gaze ground tricks while idle — ultra-polish pass. House neighborly Philippine Tarsier Carlito syrichta / Tarsius syrichta / Tarsiidae desk life (tarsier / Gaze) — eyeswivel / clingleap / insectpounce / stillstare / earfan / verticalcling / tarsiushush personality (eyeswivel huge-eye head swivel without naming swivel or gaze or stare alone as wait — distinct from Owl headturn and Hang headturnstare; clingleap vertical cling-leap without naming leap or cling or hop alone as wait — distinct from Sun hopgallop and Sail clingclimb; insectpounce insect-snatch pounce without naming pounce or snatch or strike alone as wait — distinct from Jumping spider pounce and Rob midsnatch; stillstare freeze-still stare without naming freeze or still or stare alone as wait — distinct from Deer freeze and Click clickfreeze; earfan membranous ear fan without naming ear or fan or listen alone as wait — distinct from Bat earchirp and Owl; verticalcling upright vertical cling without naming cling or vertical or perch alone as wait — distinct from Sail clingclimb and Hang hangsway; long tarsiushush Carlito/Tarsius hush hold (THE tarsiushush sit_hold tell) — never named wait or crouch or sit or gaze or still or tarsier or leap as bare ethogram-only trick kinds; Boom howler owns hyoidboom/tailbrace/canopylounge/leafchew/mantelstretch/throatpuff/alouattahush — do NOT reuse; Hang sloth owns headturnstare/hangsway — do NOT reuse; Owl barn_owl owns headturn — do NOT reuse; Jumping spider owns pounce — do NOT reuse; Deer owns freeze — do NOT reuse; guest slug Gaze / key tarsier only for wantsThankYou matching — accept "tarsier" and "gaze"; do NOT name a trick "tarsier" or "gaze" or "howler" or "boom" or "owl" or "sloth" or "hang" or "potto" or "still"; not Boom Alouatta life, not Hang Bradypus life, not Owl Tyto life, not Still Perodicticus life, not Rui. Eyeswivel / clingleap / insectpounce / stillstare / earfan / verticalcling / tarsiushush; densgaze / inkgaze / denstarsius thank-yous. Same map as desktop tarsier-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names gaze/leap/still/sit/wait/tarsier as bare ethogram-only trick kinds. True Philippine Tarsier Carlito/Tarsius syrichta desk life only — eye swivel, cling leap, insect pounce, still stare, ear fan, vertical cling, Tarsius hush. Next house-order ultra: Still / potto. No cry inventing — tarsier.wav EXISTS so prefersHouseCry adds tarsier after howler. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "tarsier";
-export const TRICKS = ["eyeswivel", "clingleap", "insectpounce", "stillstare", "tarsiushush"] as const;
+export const TRICKS = ["eyeswivel", "clingleap", "insectpounce", "stillstare", "earfan", "verticalcling", "tarsiushush"] as const;
 export const HAPPY = ["densgaze", "inkgaze", "denstarsius"] as const;
 export type TarsierTrickKind = (typeof TRICKS)[number];
 export type TarsierHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,18 @@ export type TarsierHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { densgaze: 2.64, inkgaze: 2.81, denstarsius: 2.49 } as const;
-export const TARSIUSHUSH_HOLD = 31.62;
-export const RELEASE_S = 2.36;
-export const DUR = { tarsiushush: TARSIUSHUSH_HOLD + RELEASE_S, eyeswivel: 5.52, clingleap: 5.22, insectpounce: 5.08, stillstare: 5.36 } as const;
+export const HAPPY_DUR = { densgaze: 1.70, inkgaze: 1.84, denstarsius: 1.76 } as const;
+export const TARSIUSHUSH_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  tarsiushush: TARSIUSHUSH_HOLD + RELEASE_S,
+  eyeswivel: 2.48,
+  clingleap: 2.42,
+  insectpounce: 2.40,
+  stillstare: 2.44,
+  earfan: 2.38,
+  verticalcling: 2.56,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -57,6 +65,7 @@ export function canStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function shouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
@@ -73,42 +82,83 @@ export function shouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: TarsierTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "tarsiushush") return 203 + roll * 22;
-  if (kind === "eyeswivel") return 24.2 + roll * 3.6;
-  if (kind === "clingleap") return 23.4 + roll * 3.5;
-  if (kind === "insectpounce") return 22.6 + roll * 3.4;
-  if (kind === "stillstare") return 25.8 + roll * 3.7;
-  return justFinished ? 18.6 + roll * 2.9 : 13.9 + roll * 2.5;
+  if (kind === "tarsiushush") return 40 + roll * 26;
+  if (kind === "earfan" || kind === "eyeswivel" || kind === "stillstare") return 12.8 + roll * 9.4;
+  if (kind === "insectpounce" || kind === "clingleap" || kind === "verticalcling") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: TarsierTrickKind | string) {
-  if (musicOn) return "tarsiushush";
+
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: TarsierTrickKind | string | null) {
+  if (musicOn) return "tarsiushush" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "tarsiushush") {
-    if (roll < 0.26) return "eyeswivel";
-    if (roll < 0.5) return "clingleap";
-    if (roll < 0.74) return "insectpounce";
-    return "stillstare";
+    if (roll < 0.17) return "eyeswivel" as const;
+    if (roll < 0.33) return "clingleap" as const;
+    if (roll < 0.49) return "insectpounce" as const;
+    if (roll < 0.65) return "stillstare" as const;
+    if (roll < 0.83) return "earfan" as const;
+    return "verticalcling" as const;
   }
   if (lastKind === "eyeswivel") {
-    if (roll < 0.26) return "tarsiushush";
-    if (roll < 0.5) return "clingleap";
-    if (roll < 0.74) return "insectpounce";
-    return "stillstare";
+    if (roll < 0.16) return "tarsiushush" as const;
+    if (roll < 0.32) return "clingleap" as const;
+    if (roll < 0.48) return "insectpounce" as const;
+    if (roll < 0.64) return "stillstare" as const;
+    if (roll < 0.82) return "earfan" as const;
+    return "verticalcling" as const;
   }
   if (lastKind === "clingleap") {
-    if (roll < 0.22) return "tarsiushush";
-    if (roll < 0.44) return "eyeswivel";
-    if (roll < 0.68) return "insectpounce";
-    return "stillstare";
+    if (roll < 0.14) return "tarsiushush" as const;
+    if (roll < 0.3) return "eyeswivel" as const;
+    if (roll < 0.46) return "insectpounce" as const;
+    if (roll < 0.62) return "stillstare" as const;
+    if (roll < 0.8) return "earfan" as const;
+    return "verticalcling" as const;
   }
-  if (roll < 0.2) return "tarsiushush";
-  if (roll < 0.4) return "eyeswivel";
-  if (roll < 0.6) return "clingleap";
-  if (roll < 0.8) return "insectpounce";
-  return "stillstare";
+  if (lastKind === "insectpounce") {
+    if (roll < 0.15) return "tarsiushush" as const;
+    if (roll < 0.31) return "eyeswivel" as const;
+    if (roll < 0.47) return "clingleap" as const;
+    if (roll < 0.63) return "stillstare" as const;
+    if (roll < 0.81) return "earfan" as const;
+    return "verticalcling" as const;
+  }
+  if (lastKind === "stillstare") {
+    if (roll < 0.16) return "tarsiushush" as const;
+    if (roll < 0.32) return "eyeswivel" as const;
+    if (roll < 0.48) return "clingleap" as const;
+    if (roll < 0.64) return "insectpounce" as const;
+    if (roll < 0.82) return "earfan" as const;
+    return "verticalcling" as const;
+  }
+  if (lastKind === "earfan") {
+    if (roll < 0.15) return "tarsiushush" as const;
+    if (roll < 0.31) return "eyeswivel" as const;
+    if (roll < 0.47) return "clingleap" as const;
+    if (roll < 0.63) return "insectpounce" as const;
+    if (roll < 0.81) return "stillstare" as const;
+    return "verticalcling" as const;
+  }
+  if (lastKind === "verticalcling") {
+    if (roll < 0.16) return "tarsiushush" as const;
+    if (roll < 0.32) return "eyeswivel" as const;
+    if (roll < 0.48) return "clingleap" as const;
+    if (roll < 0.64) return "insectpounce" as const;
+    if (roll < 0.82) return "stillstare" as const;
+    return "earfan" as const;
+  }
+  if (roll < 0.14) return "tarsiushush" as const;
+  if (roll < 0.28) return "eyeswivel" as const;
+  if (roll < 0.42) return "clingleap" as const;
+  if (roll < 0.56) return "insectpounce" as const;
+  if (roll < 0.7) return "stillstare" as const;
+  if (roll < 0.85) return "earfan" as const;
+  return "verticalcling" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -117,6 +167,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
@@ -132,14 +183,16 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "gaze";
 }
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: TarsierHappyKind | string | undefined,
+  lastKind: TarsierHappyKind | null | undefined,
   x: number,
-  facing?: 1 | -1,
+  facing: 1 | -1,
   flags?: TrickFlags
 ) {
   if (!wantsThankYou(key)) return null;
@@ -147,14 +200,16 @@ export function startThankYou(
   const pick = pickHappy(lastKind);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
-export function pickHappy(lastKind?: TarsierHappyKind | string, rand?: number) {
+
+export function pickHappy(lastKind?: TarsierHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
-export function beginHappy(kind: TarsierHappyKind | string, x: number, facing?: 1 | -1): TarsierHappy {
-  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as TarsierHappyKind) : "densgaze";
+
+export function beginHappy(kind: TarsierHappyKind | string, x: number, facing: 1 | -1): TarsierHappy {
+  const name = (HAPPY as readonly string[]).includes(kind) ? (kind as TarsierHappyKind) : "densgaze";
   return {
     kind: name,
     happy: true,
@@ -163,55 +218,63 @@ export function beginHappy(kind: TarsierHappyKind | string, x: number, facing?: 
     x,
     lift: 0,
     rot: 0,
-    anim: name === "densgaze" ? "sit" : name === "inkgaze" ? "play" : "play",
-    facing: facing == null ? 1 : facing,
+    anim: (name === "densgaze" ? "sit" : name === "inkgaze" ? "play" : "play") as TrickAnim,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
 
 export function densgazePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densgaze));
-  if (u < 0.15) {
-    const s = u / 0.15;
-    return { lift: s * 0.0038, rot: s * -0.18, anim: "sit" as TrickAnim };
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.84) {
-    const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.22);
-    return { lift: 0.0038 + Math.abs(sway) * 0.0011, rot: -0.18 + sway * 0.19, anim: "sit" as TrickAnim };
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
+    };
   }
-  const s = (u - 0.84) / 0.16;
-  return { lift: 0.0038 * (1 - s), rot: -0.18 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
+
 export function inkgazePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkgaze));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.0035, rot: s * 0.26, anim: "play" as TrickAnim };
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
   }
-  if (u < 0.82) {
-    const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 3.12);
-    return { lift: 0.0035 + Math.abs(arc) * 0.0020, rot: 0.26 + arc * 0.28, anim: "play" as TrickAnim };
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
   }
-  const s = (u - 0.82) / 0.18;
-  return { lift: 0.0035 * (1 - s), rot: 0.26 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
+
 export function denstarsiusPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denstarsius));
-  if (u < 0.14) {
-    const s = u / 0.14;
-    return { lift: s * -0.0016, rot: s * 0.17, anim: "play" as TrickAnim };
-  }
-  if (u < 0.83) {
-    const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.05);
-    return { lift: -0.0016 + Math.abs(hush) * 0.0010, rot: 0.17 + hush * 0.16, anim: "play" as TrickAnim };
-  }
-  const s = (u - 0.83) / 0.17;
-  return { lift: -0.0016 * (1 - s), rot: 0.17 * (1 - s), anim: "idle" as TrickAnim };
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "play" as TrickAnim,
+  };
 }
-export function stepHappy(happy: TarsierHappy, dt: number, flags?: TrickFlags): TarsierHappy {
+
+export function stepHappy(happy: TarsierHappy | null | undefined, dt: number, flags?: TrickFlags) {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...happy, t: happy.t + Math.max(0, dt) };
   const hold = HAPPY_DUR[next.kind];
@@ -231,141 +294,223 @@ export function stepHappy(happy: TarsierHappy, dt: number, flags?: TrickFlags): 
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
-export function beginTrick(kind: TarsierTrickKind | string, x: number, facing?: 1 | -1): TarsierTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as TarsierTrickKind) : "tarsiushush";
+
+export function beginTrick(kind: TarsierTrickKind, x: number, facing: 1 | -1): TarsierTrick {
   const anim: TrickAnim =
-    k === "tarsiushush"
+    kind === "tarsiushush"
       ? "sit"
-      : k === "eyeswivel"
-        ? "sit"
-        : k === "clingleap"
-          ? "play"
-          : k === "stillstare"
-            ? "sit"
-            : k === "insectpounce"
-              ? "play"
-              : "sit";
+      : kind === "eyeswivel"
+        ? "play"
+        : kind === "verticalcling"
+          ? "talk"
+          : kind === "clingleap"
+            ? "walk"
+            : kind === "insectpounce"
+              ? "sit"
+              : kind === "stillstare"
+                ? "play"
+                : kind === "earfan"
+                  ? "walk"
+                  : "sit";
   return {
-    kind: k,
-    phase: k === "tarsiushush" ? "hold" : "go",
+    kind,
+    phase: kind === "tarsiushush" ? "hold" : "go",
     t: 0,
     x,
     lift: 0,
     rot: 0,
     anim,
-    facing: facing == null ? 1 : facing,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
+
 function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
 export function tarsiushushPose(t: number) {
-  const breath = Math.sin(t * 0.00056) + 0.00019 * Math.sin(t * 0.00158);
-  const hush = Math.abs(Math.sin(t * 0.00027));
-  return { lift: -0.00024 + hush * 0.00005, rot: 0.0018 + breath * 0.0013 };
-}
-export function releasePose(t: number) {
-  const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.0002 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0034 * (1 - u) };
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
 }
 
-export function eyeswivelPose(t: number, fromX: number, facing?: 1 | -1) {
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+}
+
+export function eyeswivelPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.eyeswivel));
   const face = facing == null ? 1 : facing;
-  if (u < 0.16) {
-    const s = smoothstep(u / 0.16);
-    return { x: fromX + face * s * 0.0002, lift: s * 0.0012, rot: s * -0.42 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.84) {
-    const swivel = Math.sin(((u - 0.16) / 0.68) * Math.PI * 2.45);
-    return {
-      x: fromX + face * (0.0002 + Math.abs(swivel) * 0.00015),
-      lift: 0.0012 + Math.abs(swivel) * 0.00045,
-      rot: (-0.42 + swivel * 0.78) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.84) / 0.16);
-  return { x: fromX + face * 0.00025 * (1 - s), lift: 0.0012 * (1 - s), rot: -0.42 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function clingleapPose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.clingleap));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.22) {
-    const s = smoothstep(u / 0.22);
-    return { x: fromX + face * s * -0.0004, lift: s * 0.0115, rot: s * 0.14 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.48) {
-    const s = smoothstep((u - 0.22) / 0.26);
-    return { x: fromX + face * (-0.0004 + s * 0.0042), lift: 0.0115 + s * 0.0068, rot: (0.14 - s * 0.08) * face, anim: "play" as TrickAnim };
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" as TrickAnim };
   }
   if (u < 0.78) {
-    const land = Math.sin(((u - 0.48) / 0.3) * Math.PI);
+    const bar = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (0.0038 + land * 0.0006),
-      lift: 0.0183 - land * 0.012,
-      rot: (0.06 + land * 0.1) * face,
+      x: fromX + face * (0.8 + bar * 0.16),
+      lift: 2.8 + Math.abs(bar) * 1.5,
+      rot: face * (-12 + bar * 10),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX + face * 0.0042 * (1 - s), lift: 0.006 * (1 - s), rot: 0.08 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function insectpouncePose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.insectpounce));
+
+export function clingleapPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.clingleap));
   const face = facing == null ? 1 : facing;
-  if (u < 0.2) {
-    const s = smoothstep(u / 0.2);
-    return { x: fromX + face * s * -0.0008, lift: s * -0.0044, rot: s * -0.16 * face, anim: "sit" as TrickAnim };
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" as TrickAnim };
   }
-  if (u < 0.38) {
-    const s = smoothstep((u - 0.2) / 0.18);
-    return { x: fromX + face * (-0.0008 + s * 0.0055), lift: -0.0044 + s * 0.0135, rot: (-0.16 + s * 0.22) * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.72) {
-    const snap = Math.sin(((u - 0.38) / 0.34) * Math.PI * 2.4);
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.2);
     return {
-      x: fromX + face * (0.0047 + Math.abs(snap) * 0.0004),
-      lift: 0.0091 + Math.abs(snap) * 0.0015,
-      rot: (0.06 + snap * 0.12) * face,
-      anim: "play" as TrickAnim,
+      x: fromX + face * bob * 0.12,
+      lift: 2.6 + Math.abs(bob) * 1.3,
+      rot: face * (10 + bob * 8),
+      anim: "walk" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.72) / 0.28);
-  return { x: fromX + face * 0.0048 * (1 - s), lift: 0.0091 * (1 - s), rot: 0.06 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function stillstarePose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.stillstare));
+
+export function insectpouncePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.insectpounce));
   const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.00015, lift: s * 0.0006, rot: s * 0.08 * face, anim: "sit" as TrickAnim };
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" as TrickAnim };
   }
-  if (u < 0.86) {
-    const micro = Math.sin(((u - 0.18) / 0.68) * Math.PI * 1.15);
+  if (u < 0.78) {
+    const hang = Math.sin(t * 2.0);
     return {
-      x: fromX + face * (0.00015 + micro * 0.00005),
-      lift: 0.0006 + Math.abs(micro) * 0.00018,
-      rot: (0.08 + micro * 0.015) * face,
+      x: fromX + face * (0.5 + hang * 0.1),
+      lift: 2.8 + Math.abs(hang) * 1.2,
+      rot: face * (11 + hang * 8),
       anim: "sit" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.86) / 0.14);
-  return { x: fromX + face * 0.00015 * (1 - s), lift: 0.0006 * (1 - s), rot: 0.08 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.5 * (1 - s),
+    lift: 1.3 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function stepTrick(trick: TarsierTrick, dt: number, flags?: TrickFlags): TarsierTrick {
+
+export function stillstarePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.stillstare));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const thrash = Math.sin(t * 3.6);
+    return {
+      x: fromX + face * (1.0 + thrash * 0.22),
+      lift: 3.6 + Math.abs(thrash) * 2.0,
+      rot: face * (18 + thrash * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 1.0 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: face * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function earfanPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.earfan));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cast = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * (0.6 + cast * 0.16),
+      lift: 2.8 + Math.abs(cast) * 1.6,
+      rot: face * (12 + cast * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function verticalclingPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.verticalcling));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cloud = Math.sin(t * 3.0);
+    return {
+      x: fromX + face * (0.6 + cloud * 0.18),
+      lift: 3.0 + Math.abs(cloud) * 1.8,
+      rot: face * (14 + cloud * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.5 * (1 - s),
+    rot: face * (5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: TarsierTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "eyeswivel" && trick.kind !== "clingleap" && trick.kind !== "insectpounce" && trick.kind !== "stillstare") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "eyeswivel" &&
+    trick.kind !== "clingleap" &&
+    trick.kind !== "insectpounce" &&
+    trick.kind !== "stillstare" &&
+    trick.kind !== "earfan" &&
+    trick.kind !== "verticalcling"
+  ) {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...trick, t: trick.t + Math.max(0, dt) };
   if (next.kind === "tarsiushush") {
@@ -385,35 +530,48 @@ export function stepTrick(trick: TarsierTrick, dt: number, flags?: TrickFlags): 
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "eyeswivel") {
-    const pose = eyeswivelPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = eyeswivelPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "clingleap") {
-    const pose = clingleapPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = clingleapPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "insectpounce") {
+    const pose = insectpouncePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "stillstare") {
-    const pose = stillstarePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = stillstarePose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "earfan") {
+    const pose = earfanPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = insectpouncePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = verticalclingPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
