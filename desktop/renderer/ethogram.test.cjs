@@ -1022,6 +1022,18 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   assert.equal(E.actsFor("grasshopper").some((a) => a.name === "vault"), false);
   assert.equal(E.actsFor("grasshopper").some((a) => a.name === "walk"), false);
   assert.equal(E.actsFor("grasshopper").some((a) => a.name === "still"), false);
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "papiliohush"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "wingbanner_soft"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "puddlesip_soft"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "flutterhop_soft"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "tailglidesettle_soft"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "eyespot_soft"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "tigerband_soft"));
+  assert.ok(E.actsFor("swallowtail").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("swallowtail").some((a) => a.name === "banner"), false);
+  assert.equal(E.actsFor("swallowtail").some((a) => a.name === "flutter"), false);
+  assert.equal(E.actsFor("swallowtail").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("swallowtail").some((a) => a.name === "walk"), false);
   assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
 });
 
