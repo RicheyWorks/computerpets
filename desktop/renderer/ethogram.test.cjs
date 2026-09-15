@@ -1009,7 +1009,7 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
     assert.equal(names.includes("scratch"), false, key);
     assert.equal(names.includes("tongue"), false, key);
   }
-  assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "wave"));
+  assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "pugilator"));
   assert.ok(E.actsFor("field_cricket").some((a) => a.name === "chirp"));
   assert.ok(E.actsFor("grasshopper").some((a) => a.name === "caeliferahush"));
   assert.ok(E.actsFor("grasshopper").some((a) => a.name === "hindleap_soft"));
@@ -1046,6 +1046,22 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   assert.equal(E.actsFor("jewelwing").some((a) => a.name === "hover"), false);
   assert.equal(E.actsFor("jewelwing").some((a) => a.name === "still"), false);
   assert.equal(E.actsFor("jewelwing").some((a) => a.name === "walk"), false);
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "chrysopahush"));
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "wingtremble_soft"));
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "aphidstalk_soft"));
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "eggraise_soft"));
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "nightglint_soft"));
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "pedicel_soft"));
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "laceveil_soft"));
+  assert.ok(E.actsFor("lacewing").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "lace"), false);
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "hover"), false);
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "walk"), false);
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "lace"), false);
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "hover"), false);
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("lacewing").some((a) => a.name === "walk"), false);
   assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
 });
 
