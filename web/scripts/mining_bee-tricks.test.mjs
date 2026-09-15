@@ -357,8 +357,8 @@ test("shaft/mass/vernal/fovea/andrena are house-mining-bee-true, not copies of p
     assert.equal(mod.HAPPY.includes("andrenini"), false);
   }
 
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
@@ -1061,8 +1061,8 @@ test("notes: Bank idle-life done; next house-order guest still lacking tricks is
   assert.equal(OverlayGround.wantsThankYou("thrum"), true);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...OverlayBumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.equal(OverlayGround.tricksFor("mining_bee"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("mining_bee"), true);
   assert.equal(OverlayGround.tricksFor("bank"), Overlay);

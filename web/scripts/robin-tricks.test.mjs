@@ -1299,8 +1299,8 @@ test("runstop/listen/carol/tug/rufous/tailcock/turdus are Turdus-migratorius-tru
   assert.equal(T.TRICKS.includes("hex"), false);
   assert.equal(T.TRICKS.includes("cell"), false);
 
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);

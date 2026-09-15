@@ -563,8 +563,8 @@ test("bud/proof/levain/ferment/saccharomyces/ascus/floc are house-place-true, no
   assert.equal(T.TRICKS.includes("hex"), false);
   assert.equal(T.TRICKS.includes("cell"), false);
 
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
@@ -1406,8 +1406,8 @@ test("notes: Starter ultra idle-life done; next house-order ultra is Reed / frog
   assert.equal(OverlayGround.wantsThankYou("thrum"), true);
   assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...OverlayBumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
     assert.equal(OverlayGround.tricksFor("mining_bee"), OverlayMiningBee);
   assert.equal(OverlayGround.wantsThankYou("mining_bee"), true);
   assert.equal(OverlayGround.tricksFor("bank"), OverlayMiningBee);

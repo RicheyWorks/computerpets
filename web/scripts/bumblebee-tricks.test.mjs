@@ -995,8 +995,8 @@ test("notes: Thrum ultra-polish done; ethogram dens claim true; next Hum / honey
   assert.equal(OverlayGround.wantsThankYou("carpenter_bee"), true);
   assert.equal(OverlayGround.tricksFor("auger"), OverlayCarpenterBee);
   assert.equal(OverlayGround.wantsThankYou("auger"), true);
-  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
+  assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
+  assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "tunnelrasp", "baldflash", "xylocopa"]);
   assert.equal(T.TRICKS.includes("column"), false);
   assert.equal(T.TRICKS.includes("nest"), false);
   assert.equal(T.TRICKS.includes("trail"), false);
