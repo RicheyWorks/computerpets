@@ -189,13 +189,13 @@ test("ground registry keeps Rui gated and Fuse selectable", () => {
   assert.equal(OverlayGround.sleepHoldFrame("fuse_dragon", 4), null);
 });
 
-test("notes: Fuse idle-life ultra done; next house-order guest still lacking tricks is Ground / ground_dragon", () => {
-  assert.equal("Ground", "Ground");
-  assert.equal("ground_dragon", "ground_dragon");
+test("notes: Fuse idle-life ultra done; Ground cooking / landed — next remaining thin non-birds (monarch / bees)", () => {
+  assert.equal("monarch", "monarch");
+  assert.equal("bumblebee", "bumblebee");
   assert.equal(T.TRICK_KEY, "fuse_dragon");
   assert.equal(T.FUSEHUSH_HOLD, 11.2);
   assert.equal(T.RELEASE_S, 1.18);
   assert.equal(T.HAPPY.includes("spark"), false);
 });
 
-// Recommend next house-order guest still lacking idle tricks (do not implement): Ground / ground_dragon. Catalog 221.
+// Recommend next house-order guest still lacking idle tricks (do not implement): remaining thin non-birds (monarch / bees). Catalog 221.

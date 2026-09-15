@@ -294,7 +294,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   gauss_dragon: [A("gausshush", "sit_hold", 2.4, 4, "sit"), A("filinglinesbandwalk_soft", "eat", 1.2, 2, "eat"), A("ironfilingsstand_soft", "sit", 1.2, 2, "sit"), A("fieldlinealign_soft", "sit", 1.2, 2, "sit"), A("magneticperchsettle_soft", "walk", 1.2, 2, "walk"), A("filingsweep_soft", "play", 1.2, 2, "play"), A("bandclamp_soft", "talk", 1.2, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
   relay_dragon: [A("relayhush", "sit_hold", 2.4, 4, "sit"), A("contactclick_soft", "eat", 1.2, 2, "eat"), A("latchseat_soft", "sit", 1.2, 2, "sit"), A("arcflick_soft", "sit", 1.2, 2, "sit"), A("coilbuzz_soft", "walk", 1.2, 2, "walk"), A("poleswitch_soft", "play", 1.2, 2, "play"), A("armaturetap_soft", "talk", 1.2, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
   fuse_dragon: [A("fusehush", "sit_hold", 2.4, 4, "sit"), A("railseat_soft", "eat", 1.2, 2, "eat"), A("holdcurrent_soft", "sit", 1.2, 2, "sit"), A("blowclear_soft", "sit", 1.2, 2, "sit"), A("reseatsnap_soft", "walk", 1.2, 2, "walk"), A("cartridgerattle_soft", "play", 1.2, 2, "play"), A("bladeflash_soft", "talk", 1.2, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
-  ground_dragon: [A("earth", "pulse", 1.4, 5), A("still", "sit_hold", 2.2, 3, "sit"), A("watch", "freeze", 1.8, 2)],
+  ground_dragon: [A("groundhush", "sit_hold", 2.4, 4, "sit"), A("lugstrap_soft", "eat", 1.2, 2, "eat"), A("earthseat_soft", "sit", 1.2, 2, "sit"), A("heaveplate_soft", "sit", 1.2, 2, "sit"), A("bedsettle_soft", "walk", 1.2, 2, "walk"), A("soilgrip_soft", "play", 1.2, 2, "play"), A("plateclamp_soft", "talk", 1.2, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
 };
 
 export const TONGUE_KEYS = SNAKE_KEYS;
