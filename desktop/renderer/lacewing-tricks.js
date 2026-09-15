@@ -1,12 +1,22 @@
-/** Lace ground tricks while idle. House neighborly Chrysopidae / Chrysopa green lacewing desk life -- wingtremble / aphidstalk / eggraise / nightglint / chrysopahush personality (wingtremble lace-wing tremble flutter distinct from Jewel jewelflick, Banner wingbanner, Fan flutter, Darner whir; aphidstalk aphid-predator stalk crawl distinct from Jewel creekpatrol and Dart hawking; eggraise desk-safe stalked-egg pedicel raise cue distinct from Jewel ovipositdip and Milk chrysalis; nightglint night-glow eye glint distinct from Spark lantern/jstroke and Jewel perchfan; long chrysopahush Chrysopa lacewing hush -- never named wait; NOT Jewel jewelwing (jewelflick/creekpatrol/perchfan/ovipositdip/calopteryxhush); NOT Dart darner (hawking/tandem/nymph/whir/anax); NOT Banner swallowtail; NOT Spark firefly; NOT Milk monarch; NOT Ghost luna; NOT Comb honeybee; NOT Vault grasshopper; NOT Blade katydid; NOT Chirp cricket; window-play and Call Lace leave lacewing alone; guest slug Lace / key lacewing -- accept "lacewing" and "lace"; Thank-yous denslace / inklace / denschrysopa. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web lacewing-tricks.ts. Next: Forceps / earwig. Catalog 220. */
+/** Lace ground tricks while idle — ultra-polish pass. House neighborly Chrysopidae / Chrysopa Green Lacewing desk life (lacewing / Lace) — wingtremble / aphidstalk / eggraise / nightglint / pedicel / laceveil / chrysopahush personality (wingtremble lace-wing tremble flutter without naming flutter or wing or tremble alone as wait, aphidstalk aphid-predator stalk crawl without naming stalk or crawl or hunt alone as wait, eggraise desk-safe stalked-egg raise cue without naming egg or raise alone as wait, nightglint night-glow eye glint without naming glow or flash or lantern alone as wait, pedicel stalked-egg pedicel stand without naming stalk alone as wait, laceveil lace-wing veil open without naming veil or lace alone as wait, long chrysopahush Chrysopa lacewing hush hold (THE chrysopahush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or asclepias or oyamel or plumose or lunule or densmilk or inkmilk or densdanaus or densghost or inkghost or densactias or hopskip or hindleap or deskbask or mandiblegraze or femurrasp or tympanal or saltatory or caeliferahush or densvault or inkvault or denscaelifera or leafstill or antennatick or tegminasong or leafwalk or tegminlift or greenmimic or tettigonihush or densblade or inkblade or denstettigonia or stridulate or antennasweep or burrowmouth or cerciflick or tegmenraise or gryllushush or denschirp or inkchirp or densgryllus or wingbanner or puddlesip or flutterhop or tailglidesettle or eyespot or tigerband or papiliohush or densbanner or inkbanner or denspapilio or bury or flat or still or sit or walk or hop or spring or vault or lace or lacewing as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Jewel jewelwing owns jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush — do NOT reuse (Lace owns wingtremble/aphidstalk/eggraise/nightglint/pedicel/laceveil/chrysopahush, not Jewel); Banner swallowtail owns wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush — do NOT reuse; Milk monarch owns asclepias/oyamel — do NOT reuse; Ghost luna owns plumose/lunule — do NOT reuse; Comb honeybee owns proboscis/figure — do NOT reuse; Dart darner owns hawking/tandem — do NOT reuse; Spark firefly owns flash/glow/lantern/jstroke — do NOT reuse; Stick owns oviposit — do NOT reuse; Fan flutter / Quill fan — do NOT reuse bare fan/flutter; Chirp owns hopskip/stridulate/gryllushush — do NOT reuse; Vault owns hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush — do NOT reuse; Blade owns leafstill/tettigonihush — do NOT reuse; Forceps earwig next — do NOT reuse bare lace/lacewing; header forbids bare bury/flat/still/sit/wait and bare lacewing/lace as trick kinds; guest slug Lace / key lacewing only for wantsThankYou matching — accept "lacewing" and "lace"; do NOT accept bare "lace" as a trick id; do NOT name a trick "lacewing" or "lace" or "jewelwing" or "jewel" or "swallowtail" or "banner" or "monarch" or "milk" or "luna" or "ghost" or "honeybee" or "comb" or "darner" or "dart" or "firefly" or "spark" or "grasshopper" or "vault" or "katydid" or "blade" or "field_cricket" or "chirp" or "earwig" or "forceps" or "jewelflick" or "creekpatrol" or "perchfan" or "ovipositdip" or "metallicwing" or "damselflick" or "calopteryxhush" or "wingbanner" or "puddlesip" or "flutterhop" or "tailglidesettle" or "eyespot" or "tigerband" or "papiliohush" or "asclepias" or "oyamel" or "plumose" or "lunule" or "hopskip" or "hindleap" or "caeliferahush" or "densvault" or "densblade" or "denschirp" or "densbanner" or "densjewel") — not Jewel Calopteryx jewelwing life, not Banner Papilio swallowtail life, not Milk Danaus monarch life, not Ghost Actias luna life, not Comb Apis honeybee life, not Dart Aeshnidae darner life, not Spark Lampyridae firefly life, not Vault Melanoplus grasshopper life, not Blade Tettigoniidae katydid life, not Chirp Gryllus field-cricket life, not Forceps Dermaptera earwig life (next guest), not Rui red_panda life. Wingtremble without naming flutter alone, aphidstalk without naming stalk alone, eggraise without naming egg alone, nightglint without naming glow alone, pedicel without naming stalk alone, laceveil without naming lace alone, chrysopahush long sit_hold on the Chrysopa lacewing hush (THE chrysopahush sit_hold tell); denslace / inklace / denschrysopa thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web lacewing-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk/lace as bare ethogram-only trick kinds. True Green Lacewing Chrysopa Chrysopidae desk life only — wing tremble, aphid stalk, egg raise, night glint, pedicel, lace veil, and Chrysopa hush; distinct from Jewel jewelwing jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush, Banner swallowtail wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush, Milk monarch asclepias/oyamel, Ghost luna plumose/lunule, Comb honeybee, Dart darner hawking/tandem, Spark firefly lantern/jstroke, Vault grasshopper hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush, Blade katydid, Chirp cricket hopskip, Forceps earwig next, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Forceps / earwig. No cry inventing — thank-yous are silent desk motion only; lacewing.wav EXISTS so prefersHouseCry adds lacewing after jewelwing. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "lacewing";
-  const TRICKS = ["wingtremble", "aphidstalk", "eggraise", "nightglint", "chrysopahush"];
+  const TRICKS = ["wingtremble", "aphidstalk", "eggraise", "nightglint", "pedicel", "laceveil", "chrysopahush"];
   const HAPPY = ["denslace", "inklace", "denschrysopa"];
-  const HAPPY_DUR = { denslace: 2.52, inklace: 2.62, denschrysopa: 2.40 };
-  const CHRYSOPAHUSH_HOLD = 29.40;
-  const RELEASE_S = 2.12;
-  const DUR = { chrysopahush: CHRYSOPAHUSH_HOLD + RELEASE_S, wingtremble: 4.26, aphidstalk: 4.88, eggraise: 4.08, nightglint: 4.52 };
+
+  const HAPPY_DUR = { denslace: 1.70, inklace: 1.84, denschrysopa: 1.76 };
+  const CHRYSOPAHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    chrysopahush: CHRYSOPAHUSH_HOLD + RELEASE_S,
+    wingtremble: 2.48,
+    aphidstalk: 2.42,
+    eggraise: 2.40,
+    nightglint: 2.44,
+    pedicel: 2.38,
+    laceveil: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "chrysopahush") return 192 + roll * 18;
-    if (kind === "wingtremble") return 21.4 + roll * 3.4;
-    if (kind === "aphidstalk") return 27.0 + roll * 4.1;
-    if (kind === "eggraise") return 22.8 + roll * 3.5;
-    if (kind === "nightglint") return 23.6 + roll * 3.6;
-    return justFinished ? 18.6 + roll * 2.9 : 14.0 + roll * 2.5;
+    if (kind === "chrysopahush") return 40 + roll * 26;
+    if (kind === "pedicel" || kind === "wingtremble" || kind === "nightglint") return 12.8 + roll * 9.4;
+    if (kind === "eggraise" || kind === "aphidstalk" || kind === "laceveil") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
+    function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "chrysopahush";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "chrysopahush") {
-      if (roll < 0.26) return "wingtremble";
-      if (roll < 0.5) return "aphidstalk";
-      if (roll < 0.74) return "eggraise";
-      return "nightglint";
+      if (roll < 0.17) return "wingtremble";
+      if (roll < 0.33) return "aphidstalk";
+      if (roll < 0.49) return "eggraise";
+      if (roll < 0.65) return "nightglint";
+      if (roll < 0.83) return "pedicel";
+      return "laceveil";
     }
     if (lastKind === "wingtremble") {
-      if (roll < 0.26) return "chrysopahush";
-      if (roll < 0.5) return "aphidstalk";
-      if (roll < 0.74) return "eggraise";
-      return "nightglint";
+      if (roll < 0.16) return "chrysopahush";
+      if (roll < 0.32) return "aphidstalk";
+      if (roll < 0.48) return "eggraise";
+      if (roll < 0.64) return "nightglint";
+      if (roll < 0.82) return "pedicel";
+      return "laceveil";
     }
     if (lastKind === "aphidstalk") {
-      if (roll < 0.22) return "chrysopahush";
-      if (roll < 0.44) return "wingtremble";
-      if (roll < 0.68) return "eggraise";
-      return "nightglint";
+      if (roll < 0.14) return "chrysopahush";
+      if (roll < 0.3) return "wingtremble";
+      if (roll < 0.46) return "eggraise";
+      if (roll < 0.62) return "nightglint";
+      if (roll < 0.8) return "pedicel";
+      return "laceveil";
     }
-    if (roll < 0.2) return "chrysopahush";
-    if (roll < 0.4) return "wingtremble";
-    if (roll < 0.6) return "aphidstalk";
-    if (roll < 0.8) return "eggraise";
-    return "nightglint";
+    if (lastKind === "eggraise") {
+      if (roll < 0.15) return "chrysopahush";
+      if (roll < 0.31) return "wingtremble";
+      if (roll < 0.47) return "aphidstalk";
+      if (roll < 0.63) return "nightglint";
+      if (roll < 0.81) return "pedicel";
+      return "laceveil";
+    }
+    if (lastKind === "nightglint") {
+      if (roll < 0.16) return "chrysopahush";
+      if (roll < 0.32) return "wingtremble";
+      if (roll < 0.48) return "aphidstalk";
+      if (roll < 0.64) return "eggraise";
+      if (roll < 0.82) return "pedicel";
+      return "laceveil";
+    }
+    if (lastKind === "pedicel") {
+      if (roll < 0.15) return "chrysopahush";
+      if (roll < 0.31) return "wingtremble";
+      if (roll < 0.47) return "aphidstalk";
+      if (roll < 0.63) return "eggraise";
+      if (roll < 0.81) return "nightglint";
+      return "laceveil";
+    }
+    if (lastKind === "laceveil") {
+      if (roll < 0.16) return "chrysopahush";
+      if (roll < 0.32) return "wingtremble";
+      if (roll < 0.48) return "aphidstalk";
+      if (roll < 0.64) return "eggraise";
+      if (roll < 0.82) return "nightglint";
+      return "pedicel";
+    }
+    if (roll < 0.14) return "chrysopahush";
+    if (roll < 0.28) return "wingtremble";
+    if (roll < 0.42) return "aphidstalk";
+    if (roll < 0.56) return "eggraise";
+    if (roll < 0.7) return "nightglint";
+    if (roll < 0.85) return "pedicel";
+    return "laceveil";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "lace";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,23 +164,23 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denslace";
+    const name = (HAPPY).includes(kind) ? (kind) : "denslace";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "denslace" ? "sit" : name === "inklace" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "denslace" ? "sit" : name === "inklace" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
@@ -135,47 +189,55 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denslace));
     if (u < 0.14) {
       const s = u / 0.14;
-      return { lift: s * -0.0021, rot: s * -0.08, anim: "sit" };
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.86) {
-      const wing = Math.sin(((u - 0.14) / 0.72) * Math.PI * 2.55);
-      return { lift: -0.0021 + Math.abs(wing) * 0.00155, rot: -0.08 + wing * 0.13, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    const s = (u - 0.86) / 0.14;
-    return { lift: -0.0021 * (1 - s), rot: -0.08 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function inklacePose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inklace));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.0042, rot: s * 0.28, anim: "play" };
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.84) {
-      const pulse = Math.sin(((u - 0.12) / 0.72) * Math.PI * 3.2);
-      return { lift: 0.0042 + Math.abs(pulse) * 0.00195, rot: 0.28 + pulse * 0.24, anim: "play" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.0042 * (1 - s), rot: 0.28 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function denschrysopaPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denschrysopa));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.0014, rot: s * -0.12, anim: "play" };
-    }
-    if (u < 0.82) {
-      const flash = Math.sin(((u - 0.13) / 0.69) * Math.PI * 2.05);
-      return { lift: 0.0014 + Math.abs(flash) * 0.00105, rot: -0.12 + flash * 0.14, anim: "play" };
-    }
-    const s = (u - 0.82) / 0.18;
-    return { lift: 0.0014 * (1 - s), rot: -0.12 * (1 - s), anim: "idle" };
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "denslace") {
       const pose = denslacePose(next.t);
@@ -193,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -202,27 +264,30 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "chrysopahush";
     const anim =
-      k === "chrysopahush"
+      kind === "chrysopahush"
         ? "sit"
-        : k === "wingtremble"
+        : kind === "wingtremble"
           ? "play"
-          : k === "aphidstalk"
-            ? "play"
-            : k === "eggraise"
-              ? "talk"
-              : k === "nightglint"
+          : kind === "laceveil"
+            ? "talk"
+            : kind === "aphidstalk"
+              ? "walk"
+              : kind === "eggraise"
                 ? "sit"
-                : "sit";
+                : kind === "nightglint"
+                  ? "play"
+                  : kind === "pedicel"
+                    ? "walk"
+                    : "sit";
     return {
-      kind: k,
-      phase: k === "chrysopahush" ? "hold" : "go",
+      kind,
+      phase: kind === "chrysopahush" ? "hold" : "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: anim,
+      anim,
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -234,115 +299,181 @@
   }
 
   function chrysopahushPose(t) {
-    const breath = Math.sin(t * 0.00098) + 0.00038 * Math.sin(t * 0.0029);
-    const hush = Math.abs(Math.sin(t * 0.00040));
-    return { lift: -0.00018 + hush * 0.00007, rot: -0.008 + breath * 0.0026 };
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
-
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.00018 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.008 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function wingtremblePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.wingtremble));
     const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00006, lift: s * 0.0018, rot: s * -0.14 * face, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" };
     }
-    if (u < 0.90) {
-      const tremble = Math.sin((u - 0.10) / 0.80 * Math.PI * 11.5);
-      const lace = Math.sin(t * 6.8) * 0.018 + 0.006 * Math.sin(t * 13.2);
+    if (u < 0.78) {
+      const bar = Math.sin(t * 2.4);
       return {
-        x: fromX + face * (0.00006 + tremble * 0.00009 + lace * 0.00002),
-        lift: 0.0018 + Math.abs(tremble) * 0.00115 + Math.abs(lace) * 0.00022,
-        rot: (-0.14 + tremble * 0.22 + lace) * face,
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
         anim: "play",
       };
     }
-    const s = smoothstep((u - 0.90) / 0.10);
-    return { x: fromX + face * 0.00006 * (1 - s), lift: 0.0004 * (1 - s), rot: -0.018 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
-
 
   function aphidstalkPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.aphidstalk));
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00018, lift: s * 0.0009, rot: s * -0.06 * face, anim: "play" };
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
     }
-    if (u < 0.86) {
-      const stalk = (u - 0.12) / 0.74;
-      const pause = Math.sin(stalk * Math.PI * 3.1);
-      const creep = Math.max(0, Math.sin(stalk * Math.PI * 1.55));
+    if (u < 0.78) {
+      const bob = Math.sin(t * 2.2);
       return {
-        x: fromX + face * (0.00018 + stalk * 0.012 + pause * 0.00035),
-        lift: 0.0009 + creep * 0.00085 + Math.abs(pause) * 0.0004,
-        rot: (-0.06 + pause * 0.08) * face,
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function laceveilPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.laceveil));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
+    }
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
+      return {
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function nightglintPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.nightglint));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" };
+    }
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
+      return {
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
         anim: "play",
       };
     }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.01218 * (1 - s * 0.02), lift: 0.0009 * (1 - s), rot: -0.015 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
   }
-
 
   function eggraisePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.eggraise));
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00005, lift: s * 0.0022, rot: s * 0.16 * face, anim: "talk" };
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
     }
     if (u < 0.78) {
-      const raise = Math.sin((u - 0.14) / 0.64 * Math.PI);
+      const hang = Math.sin(t * 2.0);
       return {
-        x: fromX + face * (0.00005 + raise * 0.00008),
-        lift: 0.0022 + raise * 0.0036,
-        rot: (0.16 + raise * 0.28) * face,
-        anim: "talk",
-      };
-    }
-    if (u < 0.90) {
-      const s = smoothstep((u - 0.78) / 0.12);
-      return { x: fromX + face * 0.00013, lift: 0.0058 - s * 0.0024, rot: (0.44 - s * 0.22) * face, anim: "talk" };
-    }
-    const s = smoothstep((u - 0.90) / 0.10);
-    return { x: fromX + face * 0.00013 * (1 - s), lift: 0.0034 * (1 - s), rot: 0.05 * (1 - s) * face, anim: "idle" };
-  }
-
-
-  function nightglintPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.nightglint));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00022, lift: s * 0.0024, rot: s * -0.12 * face, anim: "sit" };
-    }
-    if (u < 0.86) {
-      const glint = Math.sin((u - 0.12) / 0.74 * Math.PI * 2.6);
-      const glow = Math.abs(Math.sin(t * 1.9));
-      return {
-        x: fromX + face * (0.00022 + glint * 0.00018),
-        lift: 0.0024 + glow * 0.00155 + Math.abs(glint) * 0.00085,
-        rot: (-0.12 + glint * 0.18) * face,
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.00022 * (1 - s), lift: 0.0024 * (1 - s), rot: -0.03 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
   }
 
+  function pedicelPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.pedicel));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" };
+    }
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
+      return {
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
+  }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "wingtremble" && trick.kind !== "aphidstalk" && trick.kind !== "eggraise" && trick.kind !== "nightglint") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "wingtremble" &&
+      trick.kind !== "aphidstalk" &&
+      trick.kind !== "eggraise" &&
+      trick.kind !== "nightglint" &&
+      trick.kind !== "pedicel" &&
+      trick.kind !== "laceveil"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "chrysopahush") {
       if (next.t < CHRYSOPAHUSH_HOLD) {
         const pose = chrysopahushPose(next.t);
@@ -360,38 +491,53 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "wingtremble") {
-      const pose = wingtremblePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = wingtremblePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "aphidstalk") {
-      const pose = aphidstalkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = aphidstalkPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "eggraise") {
-      const pose = eggraisePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = eggraisePose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "nightglint") {
+      const pose = nightglintPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "pedicel") {
+      const pose = pedicelPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = nightglintPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = laceveilPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
@@ -405,6 +551,17 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    chrysopahushPose,
+    releasePose,
+    wingtremblePose,
+    aphidstalkPose,
+    laceveilPose,
+    nightglintPose,
+    eggraisePose,
+    pedicelPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -414,17 +571,8 @@
     denslacePose,
     inklacePose,
     denschrysopaPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    chrysopahushPose,
-    releasePose,
-    wingtremblePose,
-    aphidstalkPose,
-    eggraisePose,
-    nightglintPose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetLacewingTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);
