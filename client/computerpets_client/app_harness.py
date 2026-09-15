@@ -48,6 +48,64 @@ def _read(rel: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
+
+_HOURS_REST_BLOCK_RE = re.compile(
+    r"(?:^|\n)\s*(?:export\s+)?const\s+REST(?:\s*:\s*Record<string,\s*\[number,\s*number\]>)?\s*=\s*\{([\s\S]*?)\n\};",
+    re.M,
+)
+_HOURS_REST_PAIR_RE = re.compile(r"([A-Za-z_][A-Za-z0-9_]*)\s*:\s*[\[\(](\d+)\s*,\s*(\d+)[\]\)]")
+
+
+def _hours_rest_map(rel: str) -> dict[str, tuple[int, int]]:
+    """Parse REST windows from desktop hours.js or web hours.ts."""
+    src = _read(rel)
+    if not src:
+        return {}
+    match = _HOURS_REST_BLOCK_RE.search(src)
+    body = match.group(1) if match else src
+    out: dict[str, tuple[int, int]] = {}
+    for key, start, end in _HOURS_REST_PAIR_RE.findall(body):
+        out[key] = (int(start), int(end))
+    return out
+
+
+def _hours_rest_lockstep(py_rest: dict[str, tuple[int, int]]) -> tuple[list[str], dict[str, Any]]:
+    """Fail on any REST drift across Python / desktop / web (house source: desktop+web when they agree)."""
+    desk = _hours_rest_map("desktop/renderer/hours.js")
+    web = _hours_rest_map("web/src/lib/pets/hours.ts")
+    keys = sorted(set(py_rest) | set(desk) | set(web))
+    drift: list[str] = []
+    missing: list[str] = []
+    triple: list[str] = []
+    for key in keys:
+        a, b, c = py_rest.get(key), desk.get(key), web.get(key)
+        if a is None or b is None or c is None:
+            missing.append(key)
+            continue
+        if b == c and a != b:
+            drift.append(f"{key}:py={list(a)} desk/web={list(b)}")
+        elif a == b == c:
+            continue
+        else:
+            triple.append(f"{key}:py={list(a)} desk={list(b)} web={list(c)}")
+    fails = []
+    if missing:
+        fails.append(f"REST key missing on a side: {', '.join(missing[:12])}")
+    if drift:
+        fails.append(f"REST drift (py vs desk/web): {'; '.join(drift[:12])}")
+    if triple:
+        fails.append(f"REST three-way disagree: {'; '.join(triple[:12])}")
+    extras = {
+        "rest_lockstep": len(keys) - len(missing) - len(drift) - len(triple),
+        "rest_drift": drift,
+        "rest_missing": missing,
+        "rest_triple": triple,
+        "rest_desk": len(desk),
+        "rest_web": len(web),
+    }
+    return fails, extras
+
+
 def _smoke_script() -> Path:
     return Path(__file__).resolve().with_name("harness_smokes.cjs")
 
@@ -1996,7 +2054,9 @@ def _blotter_rows() -> list[Affordance]:
             "hours.day_part / REST / is_resting_hour + hours.js",
             notes=(
                 "Python day_part/labels + REST==CATALOG_KEYS + fixture rests + lines; "
-                "desktop hours.js REST/isRestingHour/snackLine lockstep. No invented rest windows."
+                "three-way REST lockstep hours.py ↔ hours.js ↔ hours.ts (FAIL on any ACTIVE/REST drift). "
+                "day_part/dayPart is Python+web only — no desktop hours.js peer (not invented). "
+                "HIDE_LINE py+web; GIFT_LINE desktop-only. No invented rest windows."
             ),
         ),
         Affordance(
@@ -2130,8 +2190,22 @@ def _invoke_blotter(local_id: str, **opts: Any) -> InvokeResult:
             return InvokeResult(aid, "blotter", False, error="CHECK_HOUR fixture drifted")
         if not is_resting_hour("cat", 14) or is_resting_hour("red_panda", 14):
             return InvokeResult(aid, "blotter", False, error="fixture resting hours drifted")
-        if is_resting_hour("red_panda", 7) or not is_resting_hour("red_panda", 23):
-            return InvokeResult(aid, "blotter", False, error="rui overnight rest drifted")
+        # House REST for Rui is [1, 6) — desktop/web agree; blotter Python must match.
+        if (
+            is_resting_hour("red_panda", 0)
+            or not is_resting_hour("red_panda", 2)
+            or is_resting_hour("red_panda", 6)
+            or is_resting_hour("red_panda", 23)
+        ):
+            return InvokeResult(aid, "blotter", False, error="rui rest window drifted from desk/web [1,6)")
+        lock_fails, lock_extras = _hours_rest_lockstep(dict(REST))
+        if lock_fails:
+            return InvokeResult(
+                aid, "blotter", False,
+                error="; ".join(lock_fails),
+                extras=lock_extras,
+                detail="REST lockstep failed",
+            )
         hide = hide_line("red_panda")
         snack = snack_line("red_panda")
         call = call_line("red_panda")
@@ -2150,17 +2224,21 @@ def _invoke_blotter(local_id: str, **opts: Any) -> InvokeResult:
             return smoked
         return InvokeResult(
             aid, "blotter", True,
-            detail=f"rest={len(REST)} part={day_part(CHECK_HOUR)}",
+            detail=f"rest={len(REST)} lockstep={lock_extras.get('rest_lockstep')} part={day_part(CHECK_HOUR)}",
             extras={
                 "rest": len(REST),
                 "check_hour": CHECK_HOUR,
                 "day_part": day_part(CHECK_HOUR),
                 "hide": hide,
                 "snack": snack,
+                **lock_extras,
+                "day_part_peers": "python+web (no desktop hours.js dayPart)",
             },
             trace=[
                 f"REST={len(REST)}",
+                f"REST_lockstep={lock_extras.get('rest_lockstep')}",
                 f"day_part({CHECK_HOUR})={day_part(CHECK_HOUR)}",
+                "day_part_peers=python+web",
                 f"hide={hide}",
                 f"snack={snack}",
                 *list(smoked.trace),
