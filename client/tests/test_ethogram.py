@@ -894,7 +894,16 @@ def test_only_scratching_mammals_scratch():
     assert "still" not in [a["name"] for a in acts_for("earthworm")]
     assert "sit" not in [a["name"] for a in acts_for("earthworm")]
 
-    assert "jet" in [a["name"] for a in acts_for("velvet_worm")]
+    assert "peripatus" in [a["name"] for a in acts_for("velvet_worm")]
+assert "slimejet_soft" in [a["name"] for a in acts_for("velvet_worm")]
+assert "oralpapilla_soft" in [a["name"] for a in acts_for("velvet_worm")]
+assert "onychophore_soft" in [a["name"] for a in acts_for("velvet_worm")]
+assert "freeze" in [a["name"] for a in acts_for("velvet_worm")]
+assert "jet" not in [a["name"] for a in acts_for("velvet_worm")]
+assert "walk" not in [a["name"] for a in acts_for("velvet_worm")]
+assert "still" not in [a["name"] for a in acts_for("velvet_worm")]
+assert "sit" not in [a["name"] for a in acts_for("velvet_worm")]
+
     assert "hop" in [a["name"] for a in acts_for("springtail")]
     assert "tun" in [a["name"] for a in acts_for("tardigrade")]
     assert "split" in [a["name"] for a in acts_for("planarian")]
