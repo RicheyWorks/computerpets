@@ -469,7 +469,7 @@ test("Ion tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("longvolthush"), false);
   assert.equal(T.HAPPY.includes("densvolt"), false);
   assert.equal(T.TRICKS.includes("arcsparkcoil"), false);
-  assert.equal(T.TRICKS.includes("longcyberhush"), false);
+  assert.equal(T.TRICKS.includes("cyberhush"), false);
   assert.equal(T.HAPPY.includes("densarc"), false);
   assert.equal(T.TRICKS.includes("sprawl"), false);
   assert.equal(T.TRICKS.includes("guard"), false);
@@ -503,7 +503,7 @@ test("Ion tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("circuitridgewalk"), false);
   assert.equal(T.TRICKS.includes("databreathshimmer"), false);
   assert.equal(T.TRICKS.includes("perchscanblink"), false);
-  assert.equal(T.TRICKS.includes("longcyberhush"), false);
+  assert.equal(T.TRICKS.includes("cyberhush"), false);
   assert.equal(T.HAPPY.includes("densarc"), false);
   assert.equal(T.HAPPY.includes("inkarc"), false);
   assert.equal(T.HAPPY.includes("denscyber"), false);
@@ -539,7 +539,7 @@ test("Ion tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("circuitridgewalk"), false);
   assert.equal(T.TRICKS.includes("databreathshimmer"), false);
   assert.equal(T.TRICKS.includes("perchscanblink"), false);
-  assert.equal(T.TRICKS.includes("longcyberhush"), false);
+  assert.equal(T.TRICKS.includes("cyberhush"), false);
   assert.equal(T.HAPPY.includes("densarc"), false);
   assert.equal(T.HAPPY.includes("inkarc"), false);
   assert.equal(T.HAPPY.includes("denscyber"), false);
@@ -565,7 +565,7 @@ test("Ion tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("circuitridgewalk"), false);
   assert.equal(T.TRICKS.includes("databreathshimmer"), false);
   assert.equal(T.TRICKS.includes("perchscanblink"), false);
-  assert.equal(T.TRICKS.includes("longcyberhush"), false);
+  assert.equal(T.TRICKS.includes("cyberhush"), false);
   assert.equal(T.HAPPY.includes("densarc"), false);
   assert.equal(T.HAPPY.includes("inkarc"), false);
   assert.equal(T.HAPPY.includes("denscyber"), false);
