@@ -1047,6 +1047,18 @@ assert.equal(names("limpet").includes("clamp"), false);
 assert.equal(names("limpet").includes("rasp"), false);
 assert.equal(names("limpet").includes("still"), false);
 assert.equal(names("limpet").includes("sit"), false);
+assert.ok(names("barnacle").includes("balanushush"));
+assert.ok(names("barnacle").includes("cirrikick_soft"));
+assert.ok(names("barnacle").includes("opershut_soft"));
+assert.ok(names("barnacle").includes("cementhold_soft"));
+assert.ok(names("barnacle").includes("tidereopen_soft"));
+assert.ok(names("barnacle").includes("cirrisweep_soft"));
+assert.ok(names("barnacle").includes("plateshut_soft"));
+assert.ok(names("barnacle").includes("freeze"));
+assert.equal(names("barnacle").includes("kick"), false);
+assert.equal(names("barnacle").includes("still"), false);
+assert.equal(names("barnacle").includes("sit"), false);
+assert.equal(names("barnacle").includes("cirri"), false);
 
   assert.ok(names("lugworm").includes("heap"));
   for (const key of MEADOW) {
