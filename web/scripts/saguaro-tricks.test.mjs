@@ -262,7 +262,7 @@ test("rib/branch/nocturne/areole/sentinel/pleat/boot are house-saguaro-true, not
   assert.equal(boot.anim, "talk");
   const bootMid = T.stepTrick(boot, 0.5, ground);
   assert.ok(Math.abs(bootMid.lift) > 0.05 || Math.abs(bootMid.rot) > 1 || Math.abs(bootMid.x - 80) > 0.05);
-  const sinusDone = T.stepTrick(sinus, 1.7, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.nocturne + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -306,7 +306,7 @@ test("rib/branch/nocturne/areole/sentinel/pleat/boot are house-saguaro-true, not
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -667,7 +667,15 @@ globalThis.PetSaguaroTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Arm ultra-polish done; Snap + Well + Dew + Comb + Milk + Ghost ultra also done; Spark ultra also done; Dart ultra also done; next house-order ultra is Lattice / morel", () => {
+test("notes: Arm ultra-polish done; ethogram dens claim true (sentinel sit_hold + softs + freeze); SENTINEL_HOLD=11.2 RELEASE_S=1.18; next Snap / venus_flytrap", () => {
+  assert.equal(T.SENTINEL_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.TRICKS.length, 7);
+  assert.ok(T.HAPPY_DUR.monsoon >= 1.7 && T.HAPPY_DUR.monsoon <= 2.4);
+  assert.ok(T.HAPPY_DUR.creosote >= 1.7 && T.HAPPY_DUR.creosote <= 2.4);
+  assert.ok(T.HAPPY_DUR.agave >= 1.7 && T.HAPPY_DUR.agave <= 2.4);
+  assert.equal(Overlay.SENTINEL_HOLD, 11.2);
+  assert.equal(Overlay.RELEASE_S, 1.18);
   assert.equal(T.TRICK_KEY, "saguaro");
   assert.equal(T.wantsThankYou("arm"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
