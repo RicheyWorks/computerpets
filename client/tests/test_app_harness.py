@@ -378,6 +378,11 @@ def test_blotter_pure_surfaces():
     hours = invoke("blotter.hours")
     assert hours.ok and hours.trace
     assert int(hours.extras.get("rest") or 0) == 221
+    assert int(hours.extras.get("rest_lockstep") or 0) == 221
+    assert not hours.extras.get("rest_drift")
+    assert not hours.extras.get("rest_missing")
+    assert not hours.extras.get("rest_triple")
+    assert "python+web" in str(hours.extras.get("day_part_peers") or "")
     hive = invoke("blotter.hive")
     assert hive.ok and hive.extras.get("place") == "honeycomb"
     guide = invoke("blotter.guide")
