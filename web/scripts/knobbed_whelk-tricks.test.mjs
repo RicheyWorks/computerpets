@@ -360,9 +360,9 @@ test("Knurl tricks start only on idle ground", () => {
   assert.deepEqual([...Cuttlefish.TRICKS], ["bone", "pupil", "chroma", "hover", "blot", "strike", "zebra"]);
   assert.deepEqual([...Nautilus.TRICKS], ["spiral", "siphuncle", "nacre", "pinhole", "fringe", "hyponome", "aperture"]);
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
-  assert.deepEqual([...T.TRICKS], ["siphonprobe", "footplow", "opercdoor", "raduladrill", "knobbyrock", "eggstring", "busyconhush"]);
-  assert.equal(T.TRICKS.includes("raduladrill"), true);
-  assert.equal(T.TRICKS.includes("eggstring"), true);
+  assert.deepEqual([...T.TRICKS], ["siphonprobe", "footplow", "opercdoor", "knobbyrock", "whelkhaul", "canalprobe", "busyconhush"]);
+  assert.equal(T.TRICKS.includes("whelkhaul"), true);
+  assert.equal(T.TRICKS.includes("canalprobe"), true);
   assert.equal(T.TRICKS.includes("knobbed_whelk"), false);
   assert.equal(T.TRICKS.includes("knurl"), false);
   assert.equal(T.TRICKS.includes("whelk"), false);
@@ -1295,7 +1295,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.equal(Overlay.HAPPY.includes("pulse"), false);
   assert.equal(Overlay.HAPPY.includes("bubble"), false);
   assert.equal(Overlay.HAPPY.includes("glow"), false);
-  assert.deepEqual([...Overlay.TRICKS], ["siphonprobe", "footplow", "opercdoor", "raduladrill", "knobbyrock", "eggstring", "busyconhush"]);
+  assert.deepEqual([...Overlay.TRICKS], ["siphonprobe", "footplow", "opercdoor", "knobbyrock", "whelkhaul", "canalprobe", "busyconhush"]);
   assert.deepEqual([...Overlay.HAPPY], ["densknurl", "inkknurl", "densbusycon"]);
   assert.deepEqual([...WaterLily.TRICKS], ["pad", "corolla", "rhizome", "calyx", "sheen", "peltate", "hydropote"]);
 
@@ -1367,7 +1367,7 @@ assert.equal(T.TRICKS.includes("lantern"), false);
   assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
 });
 
-test("siphonprobe/footplow/opercdoor/raduladrill/knobbyrock/eggstring/busyconhush are Busycon-knobbed-whelk-true, not copies of prior guests", () => {
+test("siphonprobe/footplow/opercdoor/knobbyrock/whelkhaul/canalprobe/busyconhush are Busycon-knobbed-whelk-true, not copies of prior guests", () => {
   const ground = { asleep: false, hidden: false, leaving: false, cmd: "idle" };
   const bole = T.beginTrick("busyconhush", 80, 1);
   assert.equal(bole.anim, "sit");
@@ -1383,7 +1383,7 @@ test("siphonprobe/footplow/opercdoor/raduladrill/knobbyrock/eggstring/busyconhus
   assert.equal(doneBole.phase, "done");
   assert.ok(T.nextTrickWait(true, 0, "busyconhush") > T.nextTrickWait(true, 0, "footplow"));
   const acorn = T.beginTrick("siphonprobe", 80, 1);
-  assert.equal(acorn.anim, "talk");
+  assert.equal(acorn.anim, "play");
   const acornMid = T.stepTrick(acorn, 0.5, ground);
   assert.ok(Math.abs(acornMid.lift) > 0.002 || Math.abs(acornMid.rot) > 0.15 || Math.abs(acornMid.x - 80) > 0.0003);
   const gall = T.beginTrick("footplow", 80, 1);
@@ -1394,15 +1394,15 @@ test("siphonprobe/footplow/opercdoor/raduladrill/knobbyrock/eggstring/busyconhus
   assert.equal(sinus.anim, "sit");
   const sinusMid = T.stepTrick(sinus, 0.5, ground);
   assert.ok(Math.abs(sinusMid.lift) > 0.002 || Math.abs(sinusMid.rot) > 0.1 || Math.abs(sinusMid.x - 80) > 0.0002);
-  const taproot = T.beginTrick("raduladrill", 80, 1);
+  const taproot = T.beginTrick("knobbyrock", 80, 1);
   assert.equal(taproot.anim, "play");
   const taprootMid = T.stepTrick(taproot, 0.5, ground);
   assert.ok(Math.abs(taprootMid.lift) > 0.0015 || Math.abs(taprootMid.rot) > 0.15 || Math.abs(taprootMid.x - 80) > 0.0002);
-  const home = T.beginTrick("knobbyrock", 80, 1);
-  assert.equal(home.anim, "play");
+  const home = T.beginTrick("whelkhaul", 80, 1);
+  assert.equal(home.anim, "walk");
   const homeMid = T.stepTrick(home, 0.5, ground);
   assert.ok(Math.abs(homeMid.lift) > 0.002 || Math.abs(homeMid.rot) > 0.15 || Math.abs(homeMid.x - 80) > 0.0003);
-  const sweep = T.beginTrick("eggstring", 80, 1);
+  const sweep = T.beginTrick("canalprobe", 80, 1);
   assert.equal(sweep.anim, "talk");
   const sweepMid = T.stepTrick(sweep, 0.5, ground);
   assert.ok(Math.abs(sweepMid.lift) > 0.002 || Math.abs(sweepMid.rot) > 0.15 || Math.abs(sweepMid.x - 80) > 0.0003);
@@ -1411,8 +1411,8 @@ test("siphonprobe/footplow/opercdoor/raduladrill/knobbyrock/eggstring/busyconhus
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
 
-  assert.equal(T.TRICKS.includes("raduladrill"), true);
-  assert.equal(T.TRICKS.includes("eggstring"), true);
+  assert.equal(T.TRICKS.includes("whelkhaul"), true);
+  assert.equal(T.TRICKS.includes("canalprobe"), true);
   assert.equal(T.TRICKS.includes("knobbed_whelk"), false);
   assert.equal(T.TRICKS.includes("knurl"), false);
   assert.equal(T.TRICKS.includes("whelk"), false);
@@ -1427,9 +1427,9 @@ for (const mod of [Rui, Cat, Dog, Rabbit, Hamster, GuineaPig, Turtle, Goldfish, 
     assert.equal(mod.TRICKS.includes("siphonprobe"), false);
     assert.equal(mod.TRICKS.includes("footplow"), false);
     assert.equal(mod.TRICKS.includes("opercdoor"), false);
-    assert.equal(mod.TRICKS.includes("raduladrill"), false);
+    assert.equal(mod.TRICKS.includes("whelkhaul"), false);
     assert.equal(mod.TRICKS.includes("knobbyrock"), false);
-    assert.equal(mod.TRICKS.includes("eggstring"), false);
+    assert.equal(mod.TRICKS.includes("canalprobe"), false);
     assert.equal(mod.TRICKS.includes("busyconhush"), false);
     assert.equal(mod.HAPPY.includes("densknurl"), false);
     assert.equal(mod.HAPPY.includes("inkknurl"), false);
@@ -1765,7 +1765,7 @@ test("ground registry keeps prior guests gated; Knurl selectable; prior guests s
   assert.deepEqual([...CarpetPython.TRICKS], ["legend", "rung", "contour", "runner", "bearing", "canopy", "inset"]);
   assert.deepEqual([...SeaStar.TRICKS], ["podia", "righting", "crawl", "evert", "penta", "madre", "papula"]);
   assert.deepEqual([...HermitCrab.TRICKS], ["swap", "antenna", "scuttle", "withdraw", "vacancy", "chela", "bailer"]);
-  assert.deepEqual([...T.TRICKS], ["siphonprobe", "footplow", "opercdoor", "raduladrill", "knobbyrock", "eggstring", "busyconhush"]);
+  assert.deepEqual([...T.TRICKS], ["siphonprobe", "footplow", "opercdoor", "knobbyrock", "whelkhaul", "canalprobe", "busyconhush"]);
   assert.deepEqual([...Periwinkle.TRICKS], ["spiralcrawl", "filmgraze", "opercshut", "tidehuddle", "tipup", "littorine", "littorinahush"]);
   assert.deepEqual([...Periwinkle.HAPPY], ["densspire", "inkspire", "denslittorina"]);
   assert.equal(Periwinkle.TRICK_KEY, "periwinkle");
@@ -2351,7 +2351,7 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("vein"), OverlayMaidenhair);
   assert.equal(OverlayGround.tricksFor("ginkgo"), OverlayGinkgo);
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
-  assert.deepEqual([...Overlay.TRICKS], ["siphonprobe", "footplow", "opercdoor", "raduladrill", "knobbyrock", "eggstring", "busyconhush"]);
+  assert.deepEqual([...Overlay.TRICKS], ["siphonprobe", "footplow", "opercdoor", "knobbyrock", "whelkhaul", "canalprobe", "busyconhush"]);
   assert.equal(Overlay.TRICKS.includes("barrel"), false);
   assert.equal(Overlay.TRICKS.includes("soar"), false);
   assert.equal(Overlay.TRICKS.includes("plow"), false);
@@ -2443,7 +2443,7 @@ test("notes: Knurl idle-life done; next house-order guest still lacking tricks i
   assert.deepEqual([...Stickleback.TRICKS], ["spiggin", "zigzag", "spinous", "fanning", "gasterosteid", "nuptial", "pelvic"]);
   assert.equal(T.TRICKS.includes("spiggin"), false);
   assert.equal(T.TRICK_KEY, "knobbed_whelk");
-  assert.deepEqual([...T.TRICKS], ["siphonprobe", "footplow", "opercdoor", "raduladrill", "knobbyrock", "eggstring", "busyconhush"]);
+  assert.deepEqual([...T.TRICKS], ["siphonprobe", "footplow", "opercdoor", "knobbyrock", "whelkhaul", "canalprobe", "busyconhush"]);
   assert.deepEqual([...Periwinkle.TRICKS], ["spiralcrawl", "filmgraze", "opercshut", "tidehuddle", "tipup", "littorine", "littorinahush"]);
   assert.deepEqual([...Periwinkle.HAPPY], ["densspire", "inkspire", "denslittorina"]);
   assert.equal(Periwinkle.TRICK_KEY, "periwinkle");
