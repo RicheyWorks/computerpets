@@ -11,7 +11,7 @@ Stolen from Richey’s other repos (architecture, not domain):
 | Pattern | From | Here |
 |---|---|---|
 | Registry of real operations; discover / invoke / assert | CSRBT `HarnessRegistry` + FlowersForever `ConnectorRegistry` | `catalog()` / `invoke()` / `assert_action()` |
-| Domains as plugins / suites | CSRBT `tools/verify/` + harness plugins | `care` `guest` `species` `ethogram` `cry` `gift` `desk` `card` |
+| Domains as plugins / suites | CSRBT `tools/verify/` + harness plugins | `care` `guest` `species` `ethogram` `cry` `gift` `desk` `card` `gui` |
 | Accounting identity | CSRBT `tools/harness.py` | `discovered == driven + dead + sequenced + hidden + failed + excluded`; `UNACCOUNTED` is a harness bug |
 | General oracle | CSRBT | Observable trace + no errors + no `NaN` / `undefined` / `[object Object]` junk — not frozen remembered counts |
 | One runner, exit non-zero on fail | CSRBT `tools/verify/run_all.py` | `py -m computerpets_client.app_harness` |
@@ -32,6 +32,7 @@ py -m computerpets_client.app_harness --domain care
 py -m computerpets_client.app_harness --domain guest --only close exit marks
 py -m computerpets_client.app_harness --only care.feed gift.pick
 py -m computerpets_client.app_harness --gaps
+py -m computerpets_client.app_harness --live
 py -m pytest tests/test_app_harness.py tests/test_care_harness.py -q
 ```
 
@@ -71,12 +72,13 @@ Ids are `domain.local`. Bare care ids (`feed`) still resolve for the original ha
 | `guest` | Tap, marks, every `GUEST_CHOICE` id including **close** / **exit** | `choice.guest_tap` / `guest_marks` / `guest_pick` |
 | `species` | Catalog load, lookup, GUESTS.md, sample guests | `species.CATALOG_KEYS` / `species_by_key` / `docs/GUESTS.md` |
 | `ethogram` | Acts + tricks files for sample guests | `ethogram.acts_for` / `desktop/renderer/*-tricks.js` |
-| `cry` | `prefersHouseCry` parse, pet.js wiring, wav files where they exist | `card.ts prefersHouseCry` / `pet.js` / `desktop/renderer/sounds/*.wav` |
-| `gift` | Line, leave, pick | `gift.gift_line` / `leave_gift` / `pick_gift` |
-| `desk` | Weather clock; plate keys; news/market/NFT **URL builders** and address normalize — **not** live HTTP | `weather.py`; `desk-plates.ts`; `news.ts`; `market.ts`; `EthereumAddress.java`; `NftCatalog.java` |
-| `card` | `blankCard` collapsed, collapse/open hooks, colors | `card.ts` / `pet.js collapseKeeperCard` / `openKeeperCard` |
+| `cry` | `prefersHouseCry` parse, pet.js wiring, wav files, **stubbed `cry.playback`** (mock `Audio` + `PetDeskHouse.playVoice`) | `card.ts` / `pet.js` / `house-sounds.js` / `desk-house.js` / `harness_smokes.cjs` |
+| `gift` | Line, leave, pick, **place coords** (`gift.place`) | `gift.py` + `life.js leaveGift` via `harness_smokes.cjs` |
+| `desk` | Weather clock; plate keys; URL builders; **offline resolve** paths (`desk.*.resolve` fixtures through real parsers) | `weather.py`; `desk-plates`; `news.js` / `market.js` / `weather-areas.js` parsers |
+| `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire** | `card.ts` / `pet.js` via hooks + `harness_smokes.cjs` |
+| `gui` | Overlay **choice Close/Exit** smoke (`gui.choice_close_exit`) | `choice.js` (same module as `choice.test.cjs`) |
 
-No invented verbs. Guest choice does **not** include blotter tend (`feed` / `bath` / `clean`). Desk **Quotes** is the `market` plate (coins + NFT list).
+No invented verbs. Guest choice does **not** include blotter tend (`feed` / `bath` / `clean`). Desk **Quotes** is the `market` plate (coins + NFT list). Offline desk resolves use fixture JSON / RSS — not live HTTP.
 
 ## Accounting
 
@@ -103,17 +105,29 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 
 | id | Why it is not driven here |
 |---|---|
-| `gui.overlay_paint` | Overlay walk/paint loop needs Electron |
-| `gui.blotter_qt` | Qt OpenGL viewport needs a display |
-| `gui.card_hud_paint` | Keeper HUD paint/persist needs the overlay; collapse/open **hooks** are driven |
-| `gui.gift_drag_place` | Pointer drag on the wood; `leave_gift` / `pick_gift` cover the logic |
-| `live.cry_playback` | Speakers / `PetDeskHouse`; wav presence is driven |
-| `live.weather_forecast` | Open-Meteo HTTP |
-| `live.news_rss` | Wikipedia / Google News HTTP |
-| `live.market_quote` | CoinGecko / Yahoo HTTP |
-| `live.nft_floor` | CoinGecko NFT floor HTTP |
+| `gui.overlay_paint` | Needs Electron compositor/display; choice/card/desk node smokes cover non-paint overlay logic |
+| `gui.blotter_qt` | Needs a display / Qt OpenGL context (offscreen would be a different path) |
+| `gui.card_hud_paint` | Full HUD paint/persist loop needs Electron DOM; **`card.paint_wire` + collapse/open hooks are driven** |
+| `gui.gift_drag_place` | Pointer gesture needs overlay hit-targets; **`gift.place` drives leaveGift x + Python `gift_x`** |
+| `live.cry_playback` | Real speakers/Electron session; **`cry.playback` drives stubbed `Audio` + `playVoice` + wav** |
+| `live.weather_forecast` | True live Open-Meteo HTTP; **`desk.weather.resolve` drives `parseForecast` fixtures** |
+| `live.news_rss` | True live RSS/HTTP; **`desk.news.resolve` drives `parseRss` fixtures** |
+| `live.market_quote` | True live CoinGecko/Yahoo HTTP; **`desk.market.resolve` drives parse fixtures** |
+| `live.nft_floor` | True live NFT floor HTTP; **`desk.nft.resolve` drives `parseNftLive` fixtures** |
+| `ethogram.tricks.red_panda` | No separate `*-tricks.js` for Rui by design (idle `acts_for` covers blotter ethogram) |
 
-Pass `--live` is not wired yet. Dual-mode is the catalog `mode` field (`offline` vs `live`); live rows stay excluded until a later transport can hold a network policy.
+Moved from gaps → driven (this pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
+
+### Dual-mode (`--live`)
+
+Catalog `mode` is `offline` (default) or `live`. Default `run_all` **keeps** `mode=live` rows as `excluded` (UNACCOUNTED stays 0). Pass `--live` to opt into real HTTP for weather/news/market/nft on that run only:
+
+```powershell
+py -m computerpets_client.app_harness --live
+py -m computerpets_client.app_harness --domain desk --live
+```
+
+Node smokes live in `client/computerpets_client/harness_smokes.cjs` (offline fixtures / `Audio` stub against `desktop/renderer/*.js`).
 
 ## Care-only doc
 

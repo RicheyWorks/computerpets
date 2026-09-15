@@ -39,20 +39,28 @@ CROSS_DOMAIN = {
     "species.lookup",
     "ethogram.acts.red_panda",
     "cry.prefersHouseCry.parse",
+    "cry.playback",
     "gift.leave",
     "gift.pick",
+    "gift.place",
     "desk.weather",
     "desk.plates",
     "desk.news.urls",
     "desk.market.urls",
+    "desk.weather.resolve",
+    "desk.news.resolve",
+    "desk.market.resolve",
+    "desk.nft.resolve",
     "card.collapse_hook",
     "card.open_hook",
+    "card.paint_wire",
+    "gui.choice_close_exit",
 }
 
 
 def test_domains_are_the_real_house_surfaces():
     assert domains() == DOMAINS
-    assert set(domains()) == {"care", "guest", "species", "ethogram", "cry", "gift", "desk", "card"}
+    assert set(domains()) == {"care", "guest", "species", "ethogram", "cry", "gift", "desk", "card", "gui"}
 
 
 def test_catalog_has_stable_ids_and_grows_without_a_frozen_total():
@@ -119,16 +127,50 @@ def test_gaps_are_honest_and_accounted():
     for row in gaps():
         assert row.fate == "excluded"
         assert row.exclude_reason
-    # Live network and GUI paint are holes, not silent passes.
+    # Live network and full GUI paint stay holes; narrower smokes are driven instead.
     assert "live.market_quote" in hole_ids
+    assert "live.weather_forecast" in hole_ids
+    assert "live.news_rss" in hole_ids
+    assert "live.nft_floor" in hole_ids
+    assert "live.cry_playback" in hole_ids
     assert "gui.overlay_paint" in hole_ids
     assert "gui.card_hud_paint" in hole_ids
+    assert "gui.gift_drag_place" in hole_ids
+    assert "gui.blotter_qt" in hole_ids
+    assert "ethogram.tricks.red_panda" in hole_ids
+    # These moved from gaps to driven.
+    driven_ids = set(catalog_ids())
+    assert "cry.playback" in driven_ids
+    assert "desk.weather.resolve" in driven_ids
+    assert "gift.place" in driven_ids
+    assert "gui.choice_close_exit" in driven_ids
+    assert "cry.playback" not in hole_ids
+    assert "desk.weather.resolve" not in hole_ids
     results = run_all()
     skipped = {r.action_id for r in results if r.fate == "excluded"}
     assert hole_ids <= skipped
+    # Default run_all does not promote --live HTTP rows.
+    live_skipped = [r for r in results if r.action_id.startswith("live.") and r.fate == "excluded"]
+    assert len(live_skipped) >= 4
 
 
 def test_bare_care_id_still_resolves():
     fed = invoke("feed")
     assert fed.ok
     assert fed.action_id == "care.feed"
+
+
+def test_offline_resolves_and_playback_leave_traces():
+    for aid in (
+        "cry.playback",
+        "desk.weather.resolve",
+        "desk.news.resolve",
+        "desk.market.resolve",
+        "desk.nft.resolve",
+        "gift.place",
+        "card.paint_wire",
+        "gui.choice_close_exit",
+    ):
+        result = invoke(aid)
+        assert result.ok, (aid, result.error, result.detail)
+        assert result.trace, aid

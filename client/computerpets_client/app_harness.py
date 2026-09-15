@@ -46,6 +46,64 @@ def _read(rel: str) -> str:
     return path.read_text(encoding="utf-8")
 
 
+def _smoke_script() -> Path:
+    return Path(__file__).resolve().with_name("harness_smokes.cjs")
+
+
+def _run_node_smoke(command: str, *, domain: str, action_id: str) -> InvokeResult:
+    """Drive a real renderer module via harness_smokes.cjs (offline fixtures / Audio stub)."""
+    import json
+    import shutil
+    import subprocess
+
+    node = shutil.which("node")
+    script = _smoke_script()
+    if not node:
+        return InvokeResult(action_id, domain, False, error="node not on PATH")
+    if not script.is_file():
+        return InvokeResult(action_id, domain, False, error=f"missing {script.name}")
+    try:
+        proc = subprocess.run(
+            [node, str(script), command],
+            capture_output=True,
+            text=True,
+            cwd=str(repo_root()),
+            timeout=30,
+            check=False,
+        )
+    except Exception as exc:  # oracle: surface, do not crash runner
+        return InvokeResult(action_id, domain, False, error=f"{type(exc).__name__}: {exc}")
+    raw = (proc.stdout or "").strip().splitlines()
+    line = raw[-1] if raw else ""
+    try:
+        payload = json.loads(line) if line else {}
+    except json.JSONDecodeError:
+        err = (proc.stderr or line)[:200]
+        return InvokeResult(
+            action_id,
+            domain,
+            False,
+            error=f"smoke JSON parse failed: {err}",
+            detail=line[:200],
+        )
+    ok = bool(payload.get("ok")) and proc.returncode == 0
+    trace = [str(t) for t in (payload.get("trace") or [])]
+    extras = dict(payload.get("extras") or {})
+    extras["smoke"] = command
+    return InvokeResult(
+        action_id=action_id,
+        domain=domain,
+        ok=ok,
+        detail=str(payload.get("detail") or ""),
+        extras=extras,
+        trace=trace or ([f"smoke={command}"] if ok else []),
+        error=None if ok else str(
+            payload.get("error") or payload.get("detail") or f"smoke {command} failed"
+        ),
+    )
+
+
+
 # ---------------------------------------------------------------------------
 # Catalog rows
 # ---------------------------------------------------------------------------
@@ -63,6 +121,7 @@ DOMAINS = (
     "gift",
     "desk",
     "card",
+    "gui",
 )
 
 SAMPLE_GUESTS = ("red_panda", "cat", "honey_queen", "ball_python", "crow")
@@ -493,12 +552,25 @@ def _cry_rows() -> list[Affordance]:
         )
     rows.append(
         Affordance(
+            "cry.playback",
+            "cry",
+            "Stubbed house-cry playback",
+            "desk-house.js playVoice + Audio stub",
+            notes="Mock Audio + real overlayVoiceSrc/wav; live speakers stay out of default run_all.",
+        )
+    )
+    rows.append(
+        Affordance(
             "live.cry_playback",
             "cry",
-            "Play house cry through speakers",
+            "Play house cry through real speakers",
             "pet.js / PetDeskHouse",
+            mode="live",
             fate="excluded",
-            exclude_reason="Audio playback needs the overlay/Electron session; wav presence is driven instead.",
+            exclude_reason=(
+                "Real speakers/Electron session. Stubbed playVoice path is driven as cry.playback; "
+                "wav + pet.js wire remain driven offline."
+            ),
         )
     )
     return rows
@@ -537,6 +609,9 @@ def _invoke_cry(local_id: str, **opts: Any) -> InvokeResult:
             trace=[f"wav={wav.name if wav else 'none'}", f"prefers={prefers}"],
             error=None if ok else f"{key} prefersHouseCry but wav missing",
         )
+    if local_id == "playback":
+        smoked = _run_node_smoke("cry_playback", domain="cry", action_id=aid)
+        return smoked
     return InvokeResult(aid, "cry", False, error=f"unknown cry id {local_id!r}")
 
 
@@ -557,12 +632,11 @@ def _gift_rows() -> list[Affordance]:
         Affordance("gift.leave", "gift", "Leave gift", "gift.leave_gift", "Known guest, bond >= 25."),
         Affordance("gift.pick", "gift", "Pick gift", "gift.pick_gift"),
         Affordance(
-            "gui.gift_drag_place",
+            "gift.place",
             "gift",
-            "Drag gift on the wood",
-            "overlay / blotter pointer",
-            fate="excluded",
-            exclude_reason="Pointer drag-place is GUI-only; leave_gift / pick_gift cover the logic.",
+            "Place gift on the wood (coords)",
+            "life.js leaveGift / gift.leave_gift",
+            notes="Observable x on the wood via renderer leaveGift + Python leave_gift(gift_x).",
         ),
     ]
 
@@ -597,6 +671,18 @@ def _invoke_gift(local_id: str, **opts: Any) -> InvokeResult:
             trace=[result.line or "picked", f"gifts={len(result.state.gifts)}"],
             error=None if ok else "pick_gift did not remove the gift",
         )
+    if local_id == "place":
+        smoked = _run_node_smoke("gift_place", domain="gift", action_id=aid)
+        # Also drive Python leave_gift with an explicit wood x so both houses leave a trace.
+        placed = leave_gift(CareState(bond=40, mood=50), now=9, gift_x=33.5)
+        py_ok = bool(placed.gifts) and abs(placed.gifts[0].x - 33.5) < 0.01
+        if not smoked.ok:
+            return smoked
+        if not py_ok:
+            return InvokeResult(aid, "gift", False, error="python leave_gift gift_x not sticky")
+        smoked.trace = list(smoked.trace) + [f"py.gift_x={placed.gifts[0].x}"]
+        smoked.extras["py_x"] = placed.gifts[0].x
+        return smoked
     return InvokeResult(aid, "gift", False, error=f"unknown gift id {local_id!r}")
 
 
@@ -620,13 +706,41 @@ def _desk_rows() -> list[Affordance]:
         Affordance("desk.nft.address", "desk", "Ethereum address normalize", "nft/EthereumAddress.java"),
         Affordance("desk.nft.catalog", "desk", "NftCatalog class", "nft/NftCatalog.java"),
         Affordance(
+            "desk.weather.resolve",
+            "desk",
+            "Offline forecast resolve",
+            "weather-areas.js parseForecast + forecastUrl",
+            notes="Fixture JSON through the real parser; no HTTP.",
+        ),
+        Affordance(
+            "desk.news.resolve",
+            "desk",
+            "Offline news resolve",
+            "news.js parseRss + topicRssUrl",
+            notes="Fixture RSS through the real parser; no HTTP.",
+        ),
+        Affordance(
+            "desk.market.resolve",
+            "desk",
+            "Offline quotes resolve",
+            "market.js parseGecko / parseYahoo",
+            notes="Fixture JSON through the real parsers; no HTTP.",
+        ),
+        Affordance(
+            "desk.nft.resolve",
+            "desk",
+            "Offline NFT floor resolve",
+            "market.js parseNftLive + nftUrl",
+            notes="Fixture JSON through the real parser; no HTTP.",
+        ),
+        Affordance(
             "live.weather_forecast",
             "desk",
             "Open-Meteo forecast fetch",
             "weather-areas.ts forecastUrl",
             mode="live",
             fate="excluded",
-            exclude_reason="Live network; resolve APIs are driven offline instead.",
+            exclude_reason="True live network. Offline parseForecast path is driven as desk.weather.resolve; pass --live to attempt HTTP.",
         ),
         Affordance(
             "live.news_rss",
@@ -635,7 +749,7 @@ def _desk_rows() -> list[Affordance]:
             "news.ts",
             mode="live",
             fate="excluded",
-            exclude_reason="Live network flakiness; URL builders are driven offline.",
+            exclude_reason="True live network. Offline parseRss path is driven as desk.news.resolve; pass --live to attempt HTTP.",
         ),
         Affordance(
             "live.market_quote",
@@ -644,7 +758,7 @@ def _desk_rows() -> list[Affordance]:
             "market.ts",
             mode="live",
             fate="excluded",
-            exclude_reason="Live network flakiness; host + URL builders are driven offline.",
+            exclude_reason="True live network. Offline parseGecko/Yahoo path is driven as desk.market.resolve; pass --live to attempt HTTP.",
         ),
         Affordance(
             "live.nft_floor",
@@ -653,7 +767,7 @@ def _desk_rows() -> list[Affordance]:
             "market.ts nftUrl",
             mode="live",
             fate="excluded",
-            exclude_reason="Live network; marketplace list + address normalize are driven offline.",
+            exclude_reason="True live network. Offline parseNftLive path is driven as desk.nft.resolve; pass --live to attempt HTTP.",
         ),
     ]
 
@@ -743,6 +857,14 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
             trace=["nft.catalog=NftCatalog"],
             error=None if ok else "NftCatalog.java missing expected methods",
         )
+    if local_id == "weather.resolve":
+        return _run_node_smoke("weather_resolve", domain="desk", action_id=aid)
+    if local_id == "news.resolve":
+        return _run_node_smoke("news_resolve", domain="desk", action_id=aid)
+    if local_id == "market.resolve":
+        return _run_node_smoke("market_resolve", domain="desk", action_id=aid)
+    if local_id == "nft.resolve":
+        return _run_node_smoke("nft_resolve", domain="desk", action_id=aid)
     return InvokeResult(aid, "desk", False, error=f"unknown desk id {local_id!r}")
 
 
@@ -764,28 +886,11 @@ def _card_rows() -> list[Affordance]:
         Affordance("card.open_hook", "card", "openKeeperCard", "pet.js openKeeperCard"),
         Affordance("card.colors", "card", "CARD_COLORS", "card.ts CARD_COLORS"),
         Affordance(
-            "gui.card_hud_paint",
+            "card.paint_wire",
             "card",
-            "Keeper HUD paint / persist",
-            "pet.js paintHud / persistCard",
-            fate="excluded",
-            exclude_reason="Needs Electron overlay; collapse/open function hooks are driven as source smokes.",
-        ),
-        Affordance(
-            "gui.overlay_paint",
-            "card",
-            "Overlay compositor / walk loop",
-            "desktop/renderer/pet.js",
-            fate="excluded",
-            exclude_reason="Full GUI; headless Python cannot drive the overlay paint loop.",
-        ),
-        Affordance(
-            "gui.blotter_qt",
-            "card",
-            "PyQt blotter GPU viewport",
-            "blotter.attach_gpu_viewport",
-            fate="excluded",
-            exclude_reason="Needs a display / Qt OpenGL context; offscreen path is a different honest string.",
+            "paintHud + persistCard + collapse/open wire",
+            "pet.js paintHud / persistCard / collapseKeeperCard / openKeeperCard",
+            notes="Source smoke via harness_smokes; full HUD paint stays gui.card_hud_paint.",
         ),
     ]
 
@@ -826,6 +931,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
             trace=["colors=ink,blotter,moss,ember,dusk,frost"],
             error=None if ok else "CARD_COLORS drifted",
         )
+    if local_id == "paint_wire":
+        return _run_node_smoke("card_paint_wire", domain="card", action_id=aid)
     return InvokeResult(aid, "card", False, error=f"unknown card id {local_id!r}")
 
 
@@ -833,6 +940,156 @@ def _assert_card(local_id: str, result: InvokeResult) -> list[str]:
     if result.ok:
         return []
     return [result.error or result.detail or "card invoke failed"]
+
+
+
+
+# ---------------------------------------------------------------------------
+# GUI gaps + narrower driven smokes (desk/renderer harness, not a display)
+# ---------------------------------------------------------------------------
+
+
+def _gui_rows() -> list[Affordance]:
+    return [
+        Affordance(
+            "gui.choice_close_exit",
+            "gui",
+            "Overlay choice Close/Exit",
+            "choice.js guestMarks / guestPick",
+            notes="Driven via desktop/renderer choice.js (same module as choice.test.cjs).",
+        ),
+        Affordance(
+            "gui.card_hud_paint",
+            "gui",
+            "Keeper HUD paint / persist loop",
+            "pet.js paintHud / persistCard",
+            fate="excluded",
+            exclude_reason=(
+                "Needs Electron overlay + DOM layout. Narrower paintHud/persistCard + collapse/open "
+                "wires are driven as card.paint_wire / card.collapse_hook / card.open_hook."
+            ),
+        ),
+        Affordance(
+            "gui.overlay_paint",
+            "gui",
+            "Overlay compositor / walk loop",
+            "desktop/renderer/pet.js",
+            fate="excluded",
+            exclude_reason=(
+                "Needs an Electron compositor/display. Headless Python cannot drive the paint loop; "
+                "choice/card/desk node smokes cover non-paint overlay logic instead."
+            ),
+        ),
+        Affordance(
+            "gui.blotter_qt",
+            "gui",
+            "PyQt blotter GPU viewport",
+            "blotter.attach_gpu_viewport",
+            fate="excluded",
+            exclude_reason=(
+                "Needs a display / Qt OpenGL context. Offscreen Qt is a different path and would "
+                "lie if marked driven here; blotter care/gift logic is covered under care + gift."
+            ),
+        ),
+        Affordance(
+            "gui.gift_drag_place",
+            "gui",
+            "Pointer drag gift onto the wood",
+            "overlay / blotter pointer",
+            fate="excluded",
+            exclude_reason=(
+                "Pointer gesture needs the overlay hit-targets. Place/pick coords are driven as "
+                "gift.place (life.js leaveGift x + Python leave_gift gift_x)."
+            ),
+        ),
+    ]
+
+
+def _invoke_gui(local_id: str, **opts: Any) -> InvokeResult:
+    aid = f"gui.{local_id}" if not local_id.startswith("gui.") else local_id
+    if local_id in {"choice_close_exit", "gui.choice_close_exit"} or local_id == "choice_close_exit":
+        return _run_node_smoke("choice_close_exit", domain="gui", action_id="gui.choice_close_exit")
+    return InvokeResult(aid, "gui", False, error=f"unknown gui id {local_id!r}")
+
+
+def _assert_gui(local_id: str, result: InvokeResult) -> list[str]:
+    if result.ok:
+        return []
+    return [result.error or result.detail or "gui invoke failed"]
+
+
+def _http_get(url: str, *, timeout: float = 8.0) -> tuple[bool, str, str]:
+    """Optional live fetch. Returns (ok, body_or_empty, error_or_empty)."""
+    import urllib.error
+    import urllib.request
+
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "ComputerPets-app-harness/1.0"})
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = resp.read(200_000).decode("utf-8", errors="replace")
+            return True, body, ""
+    except Exception as exc:  # noqa: BLE001 — live mode surfaces network errors
+        return False, "", f"{type(exc).__name__}: {exc}"
+
+
+def _invoke_live_network(action_id: str) -> InvokeResult:
+    """Opt-in --live HTTP. Not part of default run_all."""
+    if action_id == "live.weather_forecast":
+        url = (
+            "https://api.open-meteo.com/v1/forecast?latitude=37.77&longitude=-122.42"
+            "&current=temperature_2m,weather_code,wind_speed_10m&forecast_days=1&timezone=auto"
+        )
+        ok, body, err = _http_get(url)
+        if not ok:
+            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
+        has = '"current"' in body
+        return InvokeResult(
+            action_id, "desk", has, detail=f"bytes={len(body)}",
+            extras={"bytes": len(body)}, trace=[f"GET {url}", f"bytes={len(body)}"],
+            error=None if has else "forecast JSON missing current",
+        )
+    if action_id == "live.news_rss":
+        url = "https://news.google.com/rss?hl=en-US&gl=US&ceid=US:en"
+        ok, body, err = _http_get(url)
+        if not ok:
+            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
+        has = "<item>" in body
+        return InvokeResult(
+            action_id, "desk", has, detail=f"bytes={len(body)}",
+            extras={"bytes": len(body)}, trace=[f"GET {url}", f"items={'yes' if has else 'no'}"],
+            error=None if has else "RSS missing item",
+        )
+    if action_id == "live.market_quote":
+        url = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+        ok, body, err = _http_get(url)
+        if not ok:
+            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
+        has = "ethereum" in body and "usd" in body
+        return InvokeResult(
+            action_id, "desk", has, detail=f"bytes={len(body)}",
+            extras={"bytes": len(body)}, trace=[f"GET {url}", body[:80]],
+            error=None if has else "quote JSON missing ethereum",
+        )
+    if action_id == "live.nft_floor":
+        url = "https://api.coingecko.com/api/v3/nfts/bored-ape-yacht-club"
+        ok, body, err = _http_get(url)
+        if not ok:
+            return InvokeResult(action_id, "desk", False, error=err, detail=err, trace=[f"GET {url}"])
+        has = "floor_price" in body or "id" in body
+        return InvokeResult(
+            action_id, "desk", has, detail=f"bytes={len(body)}",
+            extras={"bytes": len(body)}, trace=[f"GET {url}", f"bytes={len(body)}"],
+            error=None if has else "nft JSON unexpected",
+        )
+    if action_id == "live.cry_playback":
+        return InvokeResult(
+            action_id, "cry", False,
+            error="live.cry_playback still needs a real Electron/audio session; use cry.playback stub offline",
+            detail="not HTTP",
+            trace=["live.cry_playback=speakers-only"],
+        )
+    return InvokeResult(action_id, "?", False, error=f"no live invoker for {action_id}")
+
 
 
 # ---------------------------------------------------------------------------
@@ -848,6 +1105,7 @@ _DOMAIN_BUILDERS: dict[str, Callable[[], list[Affordance]]] = {
     "gift": _gift_rows,
     "desk": _desk_rows,
     "card": _card_rows,
+    "gui": _gui_rows,
 }
 
 _INVOKERS: dict[str, Callable[..., InvokeResult]] = {
@@ -859,6 +1117,7 @@ _INVOKERS: dict[str, Callable[..., InvokeResult]] = {
     "gift": _invoke_gift,
     "desk": _invoke_desk,
     "card": _invoke_card,
+    "gui": _invoke_gui,
 }
 
 _ASSERTERS: dict[str, Callable[[str, InvokeResult], list[str]]] = {
@@ -870,6 +1129,7 @@ _ASSERTERS: dict[str, Callable[[str, InvokeResult], list[str]]] = {
     "gift": _assert_gift,
     "desk": _assert_desk,
     "card": _assert_card,
+    "gui": _assert_gui,
 }
 
 
@@ -924,16 +1184,6 @@ def invoke(action_id: str, **opts: Any) -> InvokeResult:
         return InvokeResult(
             action_id=row.id,
             domain=row.domain,
-            ok=True,
-            detail=f"excluded: {reason}",
-            extras={"excluded": True, "reason": reason},
-            trace=[f"excluded:{reason}"],
-        )
-    if domain in {"live", "gui"}:
-        reason = "not a driven surface"
-        return InvokeResult(
-            action_id=action_id,
-            domain=domain,
             ok=True,
             detail=f"excluded: {reason}",
             extras={"excluded": True, "reason": reason},
@@ -1000,8 +1250,12 @@ def _seed_care(local_id: str) -> dict[str, Any]:
     return {"state": seed, "species": "red_panda"}
 
 
-def run_domain(domain: str, *, only: Iterable[str] | None = None) -> list[CaseResult]:
-    """Invoke every driven affordance in a domain and assert."""
+def run_domain(domain: str, *, only: Iterable[str] | None = None, live: bool = False) -> list[CaseResult]:
+    """Invoke every driven affordance in a domain and assert.
+
+    live=True promotes mode=live catalog rows (still excluded from default run_all) into
+    an opt-in HTTP attempt for that run only.
+    """
     if domain not in DOMAINS:
         raise KeyError(f"unknown domain {domain!r}; known: {', '.join(DOMAINS)}")
     want = set(only) if only is not None else None
@@ -1010,6 +1264,21 @@ def run_domain(domain: str, *, only: Iterable[str] | None = None) -> list[CaseRe
         if want is not None and row.id not in want and row.id.split(".", 1)[-1] not in want:
             continue
         if row.fate == "excluded":
+            if live and row.mode == "live" and row.id.startswith("live.") and row.id != "live.cry_playback":
+                result = _invoke_live_network(row.id)
+                fails = assert_action(row.id, result) if result.ok or result.error else [result.error or "live failed"]
+                if result.error and not fails:
+                    fails = [result.error]
+                if not result.ok and result.error and result.error not in fails:
+                    fails = [result.error]
+                fate = "failed" if fails else "driven"
+                out.append(
+                    CaseResult(
+                        action_id=row.id, domain=row.domain, passed=not fails,
+                        failures=fails, detail=result.detail, fate=fate,
+                    )
+                )
+                continue
             out.append(
                 CaseResult(
                     action_id=row.id, domain=row.domain, passed=True,
@@ -1034,13 +1303,17 @@ def run_domain(domain: str, *, only: Iterable[str] | None = None) -> list[CaseRe
     return out
 
 
-def run_all(*, domain: str | None = None, only: Iterable[str] | None = None) -> list[CaseResult]:
-    """Invoke driven affordances across domains (or one domain). Excluded rows stay accounted."""
+def run_all(*, domain: str | None = None, only: Iterable[str] | None = None, live: bool = False) -> list[CaseResult]:
+    """Invoke driven affordances across domains (or one domain). Excluded rows stay accounted.
+
+    Default is offline/headless. Pass live=True (CLI --live) to attempt mode=live HTTP rows;
+    those rows remain fate=excluded in the catalog and in default run_all.
+    """
     if domain:
-        return run_domain(domain, only=only)
+        return run_domain(domain, only=only, live=live)
     out: list[CaseResult] = []
     for name in DOMAINS:
-        out.extend(run_domain(name, only=only))
+        out.extend(run_domain(name, only=only, live=live))
     return out
 
 
@@ -1084,6 +1357,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--domain", choices=DOMAINS, help="Restrict to one domain")
     parser.add_argument("--only", nargs="*", help="Optional action ids (care.feed or feed)")
     parser.add_argument("--gaps", action="store_true", help="Print excluded/GUI-only/live holes and exit")
+    parser.add_argument(
+        "--live",
+        action="store_true",
+        help="Opt-in: attempt mode=live HTTP rows (weather/news/market/nft). Still excluded from default catalog fate.",
+    )
     args = parser.parse_args(argv)
 
     if args.gaps:
@@ -1103,7 +1381,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"\n{len(rows)} affordance(s)")
         return 0
 
-    results = run_all(domain=args.domain, only=args.only)
+    results = run_all(domain=args.domain, only=args.only, live=bool(args.live))
     failed = 0
     for row in results:
         if row.fate == "excluded":
