@@ -29,6 +29,7 @@ from .gift import gift_line, leave_gift, pick_gift
 from .life import CareState
 from .species import CATALOG_KEYS, SPECIES, species_by_key
 from .weather import weather_label, weather_of
+# blotter pure surfaces (hours/hive/guide/gait/play imported inside invokers)
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -124,6 +125,7 @@ DOMAINS = (
     "desk",
     "card",
     "web",
+    "blotter",
     "gui",
 )
 
@@ -1916,6 +1918,495 @@ def _invoke_live_network(action_id: str) -> InvokeResult:
 
 
 # ---------------------------------------------------------------------------
+# Blotter pure surfaces (PyQt study desk) — offline, no invented verbs
+# ---------------------------------------------------------------------------
+
+
+def _rail_keys() -> tuple[str, ...]:
+    from .species import (
+        BEE_KEYS,
+        CANOPY_KEYS,
+        CORNER_KEYS,
+        CREEK_KEYS,
+        FAR_KEYS,
+        FUNGI_KEYS,
+        GARDEN_KEYS,
+        GRID_KEYS,
+        HOUSE_KEYS,
+        INSECT_KEYS,
+        LOG_KEYS,
+        MEADOW_KEYS,
+        POND_KEYS,
+        REEF_KEYS,
+        ROOST_KEYS,
+        SEA_KEYS,
+        SHORE_KEYS,
+        SNAKE_KEYS,
+        STONE_KEYS,
+        WELL_KEYS,
+        WOOD_KEYS,
+    )
+
+    return (
+        HOUSE_KEYS
+        + SNAKE_KEYS
+        + SEA_KEYS
+        + GARDEN_KEYS
+        + INSECT_KEYS
+        + BEE_KEYS
+        + POND_KEYS
+        + ROOST_KEYS
+        + CORNER_KEYS
+        + WOOD_KEYS
+        + CANOPY_KEYS
+        + STONE_KEYS
+        + CREEK_KEYS
+        + LOG_KEYS
+        + SHORE_KEYS
+        + REEF_KEYS
+        + MEADOW_KEYS
+        + FUNGI_KEYS
+        + WELL_KEYS
+        + FAR_KEYS
+        + GRID_KEYS
+    )
+
+
+_FRAMES_ANIMS_RE = re.compile(
+    r"ANIMS\s*=\s*\{([^}]+)\}",
+    re.MULTILINE | re.DOTALL,
+)
+_FRAMES_ANIM_KEY_RE = re.compile(r'"([a-z_]+)"\s*:')
+
+
+def _frames_anim_keys() -> list[str]:
+    src = _read("client/computerpets_client/frames.py")
+    match = _FRAMES_ANIMS_RE.search(src)
+    if not match:
+        return []
+    return _FRAMES_ANIM_KEY_RE.findall(match.group(1))
+
+
+def _blotter_rows() -> list[Affordance]:
+    return [
+        Affordance(
+            "blotter.hours",
+            "blotter",
+            "House clock day parts + REST catalog",
+            "hours.day_part / REST / is_resting_hour + hours.js",
+            notes=(
+                "Python day_part/labels + REST==CATALOG_KEYS + fixture rests + lines; "
+                "desktop hours.js REST/isRestingHour/snackLine lockstep. No invented rest windows."
+            ),
+        ),
+        Affordance(
+            "blotter.hive",
+            "blotter",
+            "Wax place + colony reading",
+            "hive.is_hive_place / colony_of / comb_seats + hive.js",
+            notes="Honeycomb place, sitters, brood/stores stamp; desktop hive.js lockstep.",
+        ),
+        Affordance(
+            "blotter.guide",
+            "blotter",
+            "Field-guide plaques catalog-complete",
+            "guide.guide_complete / plaque_for / classroom_for",
+            notes=(
+                "Every CATALOG_KEYS guest has a plaque; classroom rooms taught. "
+                "SpeciesPlaque QWidget stays gui (blotter.plaque excluded)."
+            ),
+        ),
+        Affordance(
+            "blotter.gait",
+            "blotter",
+            "Shared living-desk gait numbers",
+            "gait.walk_speed / facing_after / leave_target + gait.js",
+            notes="Constants + walk/facing/leave/enter; desktop gait.js lockstep.",
+        ),
+        Affordance(
+            "blotter.play",
+            "blotter",
+            "Lure chase one-hop catch/arrive",
+            "play.play_chase / play_claim + play.js",
+            notes="Catch then arrive does not double-play; desktop play.js lockstep.",
+        ),
+        Affordance(
+            "blotter.weather",
+            "blotter",
+            "House sky lines + idle moods",
+            "weather.weather_line / weather_idle / civil_day_number + weather.js",
+            notes=(
+                "Beyond desk.weather (weather_of clock): lines/idle fixtures + civil day; "
+                "desktop weather.js lockstep. Live Open-Meteo stays live.weather_forecast."
+            ),
+        ),
+        Affordance(
+            "blotter.rail",
+            "blotter",
+            "Species rail group coverage",
+            "rail.SpeciesRail group walk via species.*_KEYS",
+            notes=(
+                "Offline: HOUSE…GRID group concatenation covers CATALOG_KEYS as a set "
+                "(rail order ≠ catalog order by design). SpeciesRail QWidget needs Qt."
+            ),
+        ),
+        Affordance(
+            "blotter.frames",
+            "blotter",
+            "Procedural frame ANIMS keys",
+            "frames.ANIMS (source wire; no QPainter)",
+            notes=(
+                "ANIMS idle/walk/sit/eat/sleep/play — real frames.py surface without importing Qt. "
+                "paint_frame / frames_for need Qt (see blotter.frames_paint)."
+            ),
+        ),
+        Affordance(
+            "blotter.plaque",
+            "blotter",
+            "SpeciesPlaque QWidget paint",
+            "plaque.SpeciesPlaque.set_key",
+            fate="excluded",
+            exclude_reason=(
+                "Needs PyQt6 QWidget. Plaque copy is driven offline as blotter.guide (plaque_for). "
+                "Pass --gui for gui.blotter_qt (app --check prints species plaque)."
+            ),
+            mode="gui",
+        ),
+        Affordance(
+            "blotter.frames_paint",
+            "blotter",
+            "QPainter paint_frame / frames_for",
+            "frames.paint_frame / frames_for",
+            fate="excluded",
+            exclude_reason=(
+                "Needs PyQt6 QPainter/QPixmap. ANIMS keys stay driven as blotter.frames. "
+                "Pass --gui for gui.blotter_qt (pet on blotter)."
+            ),
+            mode="gui",
+        ),
+        Affordance(
+            "blotter.scene",
+            "blotter",
+            "DeskBackground / DayWash / WeatherLayer",
+            "blotter.DeskBackground / DayWash / WeatherLayer / attach_gpu_viewport",
+            fate="excluded",
+            exclude_reason=(
+                "Needs PyQt6 QGraphicsView scene. Pass --gui for gui.blotter_qt "
+                "(app --check --offscreen weather + day-part)."
+            ),
+            mode="gui",
+        ),
+    ]
+
+
+def _invoke_blotter(local_id: str, **opts: Any) -> InvokeResult:
+    aid = f"blotter.{local_id}"
+    if local_id == "hours":
+        from .hours import (
+            CHECK_HOUR,
+            REST,
+            call_line,
+            day_part,
+            day_part_label,
+            hide_line,
+            is_resting_hour,
+            return_line,
+            snack_line,
+        )
+
+        parts = {h: day_part(h) for h in (4, 5, 8, 17, 21)}
+        expect = {4: "night", 5: "dawn", 8: "day", 17: "dusk", 21: "night"}
+        if parts != expect:
+            return InvokeResult(aid, "blotter", False, error=f"day_part drift {parts}")
+        labels = [day_part_label(p) for p in ("dawn", "day", "dusk", "night")]
+        if labels != ["Dawn", "Day", "Dusk", "Night"]:
+            return InvokeResult(aid, "blotter", False, error=f"day_part_label drift {labels}")
+        if set(REST) != set(CATALOG_KEYS) or len(REST) != len(CATALOG_KEYS):
+            return InvokeResult(
+                aid, "blotter", False,
+                error=f"REST size {len(REST)} vs catalog {len(CATALOG_KEYS)}",
+            )
+        if CHECK_HOUR != 14 or day_part(CHECK_HOUR) != "day":
+            return InvokeResult(aid, "blotter", False, error="CHECK_HOUR fixture drifted")
+        if not is_resting_hour("cat", 14) or is_resting_hour("red_panda", 14):
+            return InvokeResult(aid, "blotter", False, error="fixture resting hours drifted")
+        if is_resting_hour("red_panda", 7) or not is_resting_hour("red_panda", 23):
+            return InvokeResult(aid, "blotter", False, error="rui overnight rest drifted")
+        hide = hide_line("red_panda")
+        snack = snack_line("red_panda")
+        call = call_line("red_panda")
+        if "ribbon" not in hide.lower() and "ribbon" not in hide:
+            # house copy: "I went where the ribbon goes."
+            if "ribbon" not in hide:
+                return InvokeResult(aid, "blotter", False, error=f"hide_line drift {hide!r}")
+        if "Bamboo" not in snack:
+            return InvokeResult(aid, "blotter", False, error=f"snack_line drift {snack!r}")
+        if "called" not in call.lower():
+            return InvokeResult(aid, "blotter", False, error=f"call_line drift {call!r}")
+        if return_line(0) is not None:
+            return InvokeResult(aid, "blotter", False, error="return_line(0) should be None")
+        smoked = _run_node_smoke("blotter_hours", domain="blotter", action_id=aid)
+        if not smoked.ok:
+            return smoked
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"rest={len(REST)} part={day_part(CHECK_HOUR)}",
+            extras={
+                "rest": len(REST),
+                "check_hour": CHECK_HOUR,
+                "day_part": day_part(CHECK_HOUR),
+                "hide": hide,
+                "snack": snack,
+            },
+            trace=[
+                f"REST={len(REST)}",
+                f"day_part({CHECK_HOUR})={day_part(CHECK_HOUR)}",
+                f"hide={hide}",
+                f"snack={snack}",
+                *list(smoked.trace),
+            ],
+        )
+
+    if local_id == "hive":
+        from .hive import (
+            HIVE_BROOD_CELLS,
+            HIVE_PLACE,
+            HIVE_SITTERS,
+            HIVE_WORKER,
+            colony_of,
+            colony_word,
+            comb_seats,
+            hive_walkers,
+            is_hive_place,
+            sits_on_wax,
+            stamp_colony,
+        )
+
+        if HIVE_PLACE != "honeycomb" or HIVE_WORKER != "honeybee":
+            return InvokeResult(aid, "blotter", False, error="hive place/worker drifted")
+        if HIVE_SITTERS != ("honeybee", "honey_queen", "honey_drone"):
+            return InvokeResult(aid, "blotter", False, error=f"sitters drift {HIVE_SITTERS}")
+        if not is_hive_place("honeycomb") or is_hive_place("honeybee"):
+            return InvokeResult(aid, "blotter", False, error="is_hive_place drift")
+        if not sits_on_wax("honeybee") or sits_on_wax("honeycomb"):
+            return InvokeResult(aid, "blotter", False, error="sits_on_wax drift")
+        seats = [s.key for s in comb_seats()]
+        if seats != ["honey_queen", "honeybee", "honeybee", "honey_drone"]:
+            return InvokeResult(aid, "blotter", False, error=f"comb_seats drift {seats}")
+        living = colony_of(CareState(hunger=78, health=92))
+        word = colony_word(living)
+        stamped = stamp_colony(CareState(hunger=78, health=92, mood=74))
+        if living.quiet or stamped.get("brood") != 7 or stamped.get("stores") != 78:
+            return InvokeResult(aid, "blotter", False, error=f"colony stamp drift {stamped}")
+        if "Brood" not in word:
+            return InvokeResult(aid, "blotter", False, error=f"colony_word drift {word!r}")
+        walkers = hive_walkers(["honeybee", "monarch", "honeycomb", "mason_bee"])
+        if walkers != ["monarch", "mason_bee"]:
+            return InvokeResult(aid, "blotter", False, error=f"hive_walkers drift {walkers}")
+        smoked = _run_node_smoke("blotter_hive", domain="blotter", action_id=aid)
+        if not smoked.ok:
+            return smoked
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"place={HIVE_PLACE} brood={stamped['brood']}",
+            extras={"place": HIVE_PLACE, "brood": stamped["brood"], "stores": stamped["stores"],
+                    "cells": HIVE_BROOD_CELLS, "seats": seats},
+            trace=[f"place={HIVE_PLACE}", f"brood={stamped['brood']}", f"word={word}", *list(smoked.trace)],
+        )
+
+    if local_id == "guide":
+        from .guide import classroom_for, guide_complete, plaque_for
+
+        if not guide_complete():
+            return InvokeResult(aid, "blotter", False, error="guide_complete() is False")
+        rui = plaque_for("red_panda")
+        if rui is None or rui.name != "Rui" or "Ailurus" not in (rui.latin or ""):
+            return InvokeResult(aid, "blotter", False, error=f"rui plaque drift {rui}")
+        wax = plaque_for("honeycomb")
+        if wax is None or "Apis" not in (wax.latin or ""):
+            return InvokeResult(aid, "blotter", False, error=f"wax plaque drift {wax}")
+        missing = [k for k in CATALOG_KEYS if plaque_for(k) is None]
+        if missing:
+            return InvokeResult(
+                aid, "blotter", False,
+                error=f"plaque_for missing {len(missing)}",
+                extras={"missing": missing[:12]},
+            )
+        den = classroom_for("ball_python")
+        house = classroom_for("red_panda")
+        if getattr(den, "room", None) != "den" or getattr(house, "room", None) != "house":
+            return InvokeResult(
+                aid, "blotter", False,
+                error=f"classroom drift den={den} house={house}",
+            )
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"plaques={len(CATALOG_KEYS)} rui={rui.name}",
+            extras={"n": len(CATALOG_KEYS), "rui": rui.name, "latin": rui.latin,
+                    "den_room": den.room, "house_room": house.room},
+            trace=[
+                f"guide_complete=True",
+                f"plaques={len(CATALOG_KEYS)}",
+                f"rui={rui.name}/{rui.latin}",
+                f"classroom.den={den.room}",
+                f"classroom.house={house.room}",
+            ],
+        )
+
+    if local_id == "gait":
+        from .gait import (
+            ACCEL_S,
+            DECEL_DIST,
+            HIGH_WALK,
+            TURN_S,
+            TURN_SNAKE_S,
+            enter_sit,
+            enter_spawn,
+            facing_after,
+            leave_target,
+            overshoot_px,
+            turn_hold_s,
+            walk_speed,
+        )
+
+        if (ACCEL_S, DECEL_DIST, TURN_S, TURN_SNAKE_S, HIGH_WALK) != (0.4, 56.0, 0.23, 0.35, 120.0):
+            return InvokeResult(aid, "blotter", False, error="gait constants drifted")
+        if walk_speed(56, 1, 100.0) != 100.0:
+            return InvokeResult(aid, "blotter", False, error="walk_speed full remaining drift")
+        near = walk_speed(24, 1, 100.0)
+        if not (30 < near < (24 / 56) * 100.0 - 1):
+            return InvokeResult(aid, "blotter", False, error=f"walk_speed ease drift {near}")
+        if facing_after(1, 100, 20, 0, TURN_S) != 1:
+            return InvokeResult(aid, "blotter", False, error="facing_after frame0 flip")
+        if facing_after(1, 100, 20, TURN_S, TURN_S) != -1:
+            return InvokeResult(aid, "blotter", False, error="facing_after hold flip")
+        if leave_target(80, 800) != -200 or leave_target(600, 800) != 812:
+            return InvokeResult(aid, "blotter", False, error="leave_target drift")
+        if enter_spawn(800, 176, 20, True) != -176 or enter_sit(800, 176, 20, 0) != 80.0:
+            return InvokeResult(aid, "blotter", False, error="enter_spawn/sit drift")
+        if turn_hold_s(crawl=True, walk=36) != TURN_SNAKE_S:
+            return InvokeResult(aid, "blotter", False, error="turn_hold crawl drift")
+        if overshoot_px(crawl=True, walk=36) != 4.0:
+            return InvokeResult(aid, "blotter", False, error="overshoot crawl drift")
+        smoked = _run_node_smoke("blotter_gait", domain="blotter", action_id=aid)
+        if not smoked.ok:
+            return smoked
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"TURN_S={TURN_S} leave={leave_target(80, 800)}",
+            extras={"TURN_S": TURN_S, "ACCEL_S": ACCEL_S, "near": near},
+            trace=[f"TURN_S={TURN_S}", f"walk_speed.near={near}", f"leave={leave_target(80, 800)}",
+                    *list(smoked.trace)],
+        )
+
+    if local_id == "play":
+        from .play import PlayChase, play_chase, play_claim
+
+        local = play_chase(("catch", "arrive"), PlayChase(taken=False, cmd="seek", mark="lure"))
+        if local.acts != ("play", "idle") or local.apply_play != 1 or local.issue_play != 1:
+            return InvokeResult(aid, "blotter", False, error=f"catch/arrive drift {local}")
+        if play_claim("arrive", PlayChase(taken=True, cmd="seek", mark="lure")) != "none":
+            return InvokeResult(aid, "blotter", False, error="double-claim not none")
+        treat = play_chase(("arrive",), PlayChase(taken=False, cmd="seek", mark="treat"))
+        if treat.acts != ("snack",) or treat.apply_play != 0:
+            return InvokeResult(aid, "blotter", False, error=f"treat arrive drift {treat}")
+        smoked = _run_node_smoke("blotter_play", domain="blotter", action_id=aid)
+        if not smoked.ok:
+            return smoked
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"acts={list(local.acts)} apply={local.apply_play}",
+            extras={"acts": list(local.acts), "apply_play": local.apply_play,
+                    "treat": list(treat.acts)},
+            trace=[f"acts={list(local.acts)}", f"apply_play={local.apply_play}",
+                    f"treat={list(treat.acts)}", *list(smoked.trace)],
+        )
+
+    if local_id == "weather":
+        from datetime import datetime
+
+        from .weather import civil_day_number, weather_idle, weather_label, weather_line, weather_of
+
+        day = civil_day_number(datetime(2026, 8, 17))
+        if day != 20682:
+            return InvokeResult(aid, "blotter", False, error=f"civil_day drift {day}")
+        sky = weather_of(datetime(2026, 8, 17))
+        if sky != "wind":
+            return InvokeResult(aid, "blotter", False, error=f"weather_of fixture drift {sky}")
+        if weather_label("wind") != "Wind":
+            return InvokeResult(aid, "blotter", False, error="weather_label drift")
+        if weather_line("goldfish", "rain") != "Proper weather. At last.":
+            return InvokeResult(aid, "blotter", False, error="rain swimmer line drift")
+        if weather_line("red_panda", "rain") != "The blotter is honest about rain.":
+            return InvokeResult(aid, "blotter", False, error="rui rain line drift")
+        if weather_idle("goldfish", "rain") != "wander" or weather_idle("red_panda", "rain") != "sit":
+            return InvokeResult(aid, "blotter", False, error="weather_idle rain drift")
+        if weather_idle("ball_python", "heat") != "sit":
+            return InvokeResult(aid, "blotter", False, error="snake heat idle drift")
+        if weather_idle("red_panda", "clear") is not None:
+            return InvokeResult(aid, "blotter", False, error="clear idle should be None")
+        smoked = _run_node_smoke("blotter_weather", domain="blotter", action_id=aid)
+        if not smoked.ok:
+            return smoked
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"day={day} sky={sky}",
+            extras={"civil_day": day, "sky": sky},
+            trace=[f"civil_day={day}", f"sky={sky}", "line.goldfish.rain=ok",
+                    "idle.rui.rain=sit", *list(smoked.trace)],
+        )
+
+    if local_id == "rail":
+        rail = _rail_keys()
+        if set(rail) != set(CATALOG_KEYS):
+            missing = sorted(set(CATALOG_KEYS) - set(rail))
+            extra = sorted(set(rail) - set(CATALOG_KEYS))
+            return InvokeResult(
+                aid, "blotter", False,
+                error=f"rail set drift missing={missing[:8]} extra={extra[:8]}",
+                extras={"missing": missing, "extra": extra},
+            )
+        if len(rail) != len(CATALOG_KEYS):
+            return InvokeResult(aid, "blotter", False, error="rail length drift (dupes?)")
+        # rail.py must still walk those groups (source wire — no Qt import).
+        rail_src = _read("client/computerpets_client/rail.py")
+        for token in ("HOUSE_KEYS", "SNAKE_KEYS", "SEA_KEYS", "FUNGI_KEYS", "GRID_KEYS", "SpeciesRail"):
+            if token not in rail_src:
+                return InvokeResult(aid, "blotter", False, error=f"rail.py missing {token}")
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"rail_keys={len(rail)} catalog={len(CATALOG_KEYS)}",
+            extras={"n": len(rail), "same_order": list(rail) == list(CATALOG_KEYS)},
+            trace=[
+                f"rail_keys={len(rail)}",
+                f"catalog={len(CATALOG_KEYS)}",
+                f"same_order={list(rail) == list(CATALOG_KEYS)}",
+                "rail.py.SpeciesRail=wired",
+            ],
+        )
+
+    if local_id == "frames":
+        keys = _frames_anim_keys()
+        expect = ["idle", "walk", "sit", "eat", "sleep", "play"]
+        if keys != expect:
+            return InvokeResult(aid, "blotter", False, error=f"ANIMS drift {keys}")
+        return InvokeResult(
+            aid, "blotter", True,
+            detail=f"anims={','.join(keys)}",
+            extras={"anims": keys},
+            trace=[f"ANIMS={','.join(keys)}", "frames.py.source=ok"],
+        )
+
+    return InvokeResult(aid, "blotter", False, error=f"unknown blotter id {local_id!r}")
+
+
+def _assert_blotter(local_id: str, result: InvokeResult) -> list[str]:
+    if result.ok:
+        return []
+    return [result.error or result.detail or "blotter invoke failed"]
+
+
+# ---------------------------------------------------------------------------
 # Registry (FlowersForever ConnectorRegistry / CSRBT HarnessRegistry)
 # ---------------------------------------------------------------------------
 
@@ -1930,6 +2421,7 @@ _DOMAIN_BUILDERS: dict[str, Callable[[], list[Affordance]]] = {
     "desk": _desk_rows,
     "card": _card_rows,
     "web": _web_rows,
+    "blotter": _blotter_rows,
     "gui": _gui_rows,
 }
 
@@ -1944,6 +2436,7 @@ _INVOKERS: dict[str, Callable[..., InvokeResult]] = {
     "desk": _invoke_desk,
     "card": _invoke_card,
     "web": _invoke_web,
+    "blotter": _invoke_blotter,
     "gui": _invoke_gui,
 }
 
@@ -1958,6 +2451,7 @@ _ASSERTERS: dict[str, Callable[[str, InvokeResult], list[str]]] = {
     "desk": _assert_desk,
     "card": _assert_card,
     "web": _assert_web,
+    "blotter": _assert_blotter,
     "gui": _assert_gui,
 }
 
