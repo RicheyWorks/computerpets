@@ -1,12 +1,22 @@
-/** Knurl ground tricks while idle. House neighborly Busycon / knobbed whelk desk life — siphonprobe / footplow / opercdoor / knobbyrock / busyconhush personality (siphonprobe siphon probe without naming siphon or probe or taste or snorkel alone as wait, footplow foot plow crawl without naming foot or plow or crawl or haul or sand alone as wait, opercdoor operculum door shut without naming operculum or door or shut or plug or seal alone as wait, knobbyrock knobby shell tip-rock without naming knobby or tip or rock or shell or tilt alone as wait, long busyconhush Busycon knobbed-whelk hush — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or siphonprobe or footplow or opercdoor or knobbyrock or busyconhush or densknurl or inkknurl or densbusycon or spinewalk or lanterngraze or gripcreep or spineflare or strongylhush or densurchin or inkthorn or densstrongyl or lunulesift or dollarright or sandfilmburrow or spinefurcreep or mellitahush or denssand or inksand or densmellita or spiralcrawl or filmgraze or opercshut or tidehuddle or littorinahush or densspire or inkspire or denslittorina or plateflex or radularasp or girdlesettle or rockcreep or chitonhush or densmail or inkmail or denspolyplaco or cirrikick or opershut or cementhold or tidereopen or balanushush or denscement or inkcement or densbalanus or clampseal or radialgraze or circumhome or shelltilt or patellahush or denscone or inkcone or denspatella or radula or pedal or pneumostome or ommatophore or lymnaeid or denspale or denswave or densscud or densarmor; window-play and Call Knurl leave knobbed_whelk alone; Thorn/Token/Spire/Mail/Cement/Cone/Whorl/Pale/Wave/Scud own their tricks; guest slug Knurl / key knobbed_whelk — accept "knobbed_whelk" and "knurl" (roster slug knurl; campaign Knurl); do NOT accept bare "knurl" as a trick id; do NOT confuse with Thorn the Purple Sea Urchin (key sea_urchin / slug thorn); do NOT confuse with Token the Common Sand Dollar; do NOT confuse with Spire the Common Periwinkle (spiralcrawl/opercshut) or Cone the Limpet or Whorl the Pond Snail; do NOT confuse with Heap the Lugworm (key lugworm / slug heap) — do not start Heap in parallel; do NOT name a trick knobbed_whelk or knurl or sea_urchin or thorn or periwinkle or spire or limpet or cone or lugworm or heap. Thank-yous densknurl / inkknurl / densbusycon. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web knobbed_whelk-tricks.ts. Window-play unchanged. True knobbed whelk desk life — siphon probe, foot plow crawl, operculum door shut, knobby shell tip-rock, and long Busycon hush; not Strongylocentrotus urchin clones, not Mellita sand-dollar clones, not Littorina periwinkle clones, not Patella limpet clones, not Lymnaea pond-snail clones, not Arenicola lugworm Heap (next guest) — true Busycon / Busyconidae knobbed whelk life. Next house-order guest after Knurl still lacking tricks owns the next seat (Heap / lugworm). No cry inventing — thank-yous are silent desk motion only. */
+/** Knurl ground tricks while idle — ultra-polish pass. House neighborly Busycon / Busyconidae knobbed whelk desk life (knobbed_whelk / Knurl) — siphonprobe / footplow / opercdoor / raduladrill / knobbyrock / eggstring / busyconhush personality (siphonprobe siphon probe without naming siphon or probe or taste or snorkel alone as wait, footplow foot plow crawl without naming foot or plow or crawl or haul or sand alone as wait, opercdoor operculum door shut without naming operculum or door or shut or plug or seal alone as wait, raduladrill radula drill graze without naming radula or drill or graze or rasp or bore alone as wait, knobbyrock knobby shell tip-rock right without naming knobby or tip or rock or shell or tilt or right alone as wait, eggstring egg-string tell without naming egg or string or capsule or spawn or brood alone as wait, long busyconhush Busycon knobbed-whelk hush hold (THE busyconhush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or spinewalk or lanterngraze or gripcreep or spineflare or pedicellaria or aristotle or strongylhush or densurchin or inkthorn or densstrongyl or lunulesift or dollarright or sandfilmburrow or spinefurcreep or petaloid or ambulacra or mellitahush or denssand or inksand or densmellita or spiralcrawl or filmgraze or opercshut or tidehuddle or tipup or littorine or littorinahush or densspire or inkspire or denslittorina or plateflex or radularasp or girdlesettle or rockcreep or eightvalve or aesthete or chitonhush or densmail or inkmail or denspolyplaco or cirrikick or opershut or cementhold or tidereopen or cirrisweep or plateshut or balanushush or denscement or inkcement or densbalanus or clampseal or radialgraze or circumhome or shelltilt or homescar or radulasweep or patellahush or denscone or inkcone or denspatella or sprintdash or stalkeyescan or burrowplunge or freezecamo or nightforage or sandghost or ocypodehush or denspale or inkpale or densghost or clawwave or burrowdig or sandfeed or lateralsidestep or majorclaw or mudball or pugilator or denswave or inkwave or densmajor or sideswim or gnathopod or detritusclutch or pairguard or urosome or pleopod or gammarus or densscud or inkscud or densgnath or podia or righting or crawl or evert or penta or madre or papula or denscling or inkcling or densasterias or densarmor or bury or flat or still or leafhush or cast or dart or roll or walk or sit or hop or spring or vault or thrash or limpet or cone or barnacle or cement or ghost_crab or pale or chiton or mail or periwinkle or spire or sand_dollar or token or sea_urchin or thorn or knurl or whelk or knobbed_whelk or lugworm or heap or righting or podia or penta or evert or graze or rasp as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Thorn owns spinewalk/lanterngraze/gripcreep/spineflare/pedicellaria/aristotle/strongylhush — do NOT reuse; Token owns lunulesift/dollarright/sandfilmburrow/spinefurcreep/petaloid/ambulacra/mellitahush — do NOT reuse; Spire owns spiralcrawl/filmgraze/opercshut/tidehuddle/tipup/littorine/littorinahush — do NOT reuse; Mail owns plateflex/radularasp/girdlesettle/rockcreep/eightvalve/aesthete/chitonhush — do NOT reuse; Cement owns cirrikick/opershut/cementhold/tidereopen/cirrisweep/plateshut/balanushush — do NOT reuse; Cone owns clampseal/radialgraze/circumhome/shelltilt/homescar/radulasweep/patellahush — do NOT reuse; Pale owns sprintdash/stalkeyescan/burrowplunge/freezecamo/nightforage/sandghost/ocypodehush — do NOT reuse; Wave owns clawwave/burrowdig/sandfeed/lateralsidestep/majorclaw/mudball/pugilator — do NOT reuse; Scud owns sideswim/gnathopod/detritusclutch/pairguard/urosome/pleopod/gammarus — do NOT reuse; Cling sea_star owns podia/righting/crawl/evert/penta/madre/papula — do NOT reuse; Heap lugworm next — do NOT reuse bare knurl/whelk/knobbed_whelk/lugworm/heap as trick kinds; header forbids bare bury/flat/still/sit/wait and bare knurl/whelk/knobbed_whelk/sea_urchin/thorn/sand_dollar/token/periwinkle/spire/righting/podia/penta/evert/lugworm/heap; guest slug Knurl / key knobbed_whelk only for wantsThankYou matching — accept "knobbed_whelk" and "knurl"; do NOT accept bare "knurl" as a trick id; do NOT name a trick "knobbed_whelk" or "knurl" or "whelk" or "sea_urchin" or "thorn" or "sand_dollar" or "token" or "periwinkle" or "spire" or "righting" or "podia" or "penta" or "evert" or "lugworm" or "heap" or "bury" or "flat" or "still" or "sit" or "densurchin" or "denssand" or "denscling" or "densarmor" or "chamber") — not Thorn Strongylocentrotus sea-urchin life, not Token Mellita sand-dollar life, not Spire Littorina periwinkle life, not Mail Tonicella lined-chiton life, not Cement Balanus barnacle life, not Cone Patella limpet life, not Pale Ocypode ghost-crab life, not Wave Uca fiddler life, not Scud Gammarus amphipod life, not Cling Asterias sea-star life, not Heap Arenicola lugworm life (next guest), not Rui red_panda life. Siphonprobe without naming siphon alone, footplow without naming foot alone, opercdoor without naming operculum alone, raduladrill without naming radula alone, knobbyrock without naming knobby alone, eggstring without naming egg alone, busyconhush long sit_hold on the Busycon knobbed-whelk hush (THE busyconhush sit_hold tell); densknurl / inkknurl / densbusycon thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web knobbed_whelk-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk as bare ethogram-only trick kinds. True knobbed whelk desk life only — siphon probe, foot plow crawl, operculum door shut, radula drill graze, knobby shell tip-rock, egg-string tell, and Busycon hush; distinct from Thorn sea-urchin spinewalk/lanterngraze/gripcreep/spineflare/pedicellaria/aristotle/strongylhush, Token sand-dollar, Spire periwinkle, Mail lined-chiton, Cement barnacle, Cone limpet, Pale ghost-crab, Wave fiddler, Scud amphipod, Cling sea-star, Heap lugworm next, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Heap / lugworm. No cry inventing — thank-yous are silent desk motion only; knobbed_whelk.wav EXISTS so prefersHouseCry adds knobbed_whelk after sea_urchin. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "knobbed_whelk";
-  const TRICKS = ["siphonprobe", "footplow", "opercdoor", "knobbyrock", "busyconhush"];
+  const TRICKS = ["siphonprobe", "footplow", "opercdoor", "raduladrill", "knobbyrock", "eggstring", "busyconhush"];
   const HAPPY = ["densknurl", "inkknurl", "densbusycon"];
-  const HAPPY_DUR = { densknurl: 2.72, inkknurl: 2.88, densbusycon: 2.62 };
-  const BUSYCONHUSH_HOLD = 26.55;
-  const RELEASE_S = 2.34;
-  const DUR = { busyconhush: BUSYCONHUSH_HOLD + RELEASE_S, siphonprobe: 5.18, footplow: 5.42, opercdoor: 4.72, knobbyrock: 5.06 };
+
+  const HAPPY_DUR = { densknurl: 1.70, inkknurl: 1.84, densbusycon: 1.76 };
+  const BUSYCONHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    busyconhush: BUSYCONHUSH_HOLD + RELEASE_S,
+    siphonprobe: 2.48,
+    footplow: 2.42,
+    opercdoor: 2.40,
+    raduladrill: 2.44,
+    knobbyrock: 2.38,
+    eggstring: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "busyconhush") return 179 + roll * 14;
-    if (kind === "siphonprobe") return 27.2 + roll * 4.6;
-    if (kind === "footplow") return 28.6 + roll * 4.8;
-    if (kind === "opercdoor") return 26.0 + roll * 4.3;
-    if (kind === "knobbyrock") return 26.8 + roll * 4.5;
-    return justFinished ? 19.7 + roll * 3.0 : 14.9 + roll * 2.6;
+    if (kind === "busyconhush") return 40 + roll * 26;
+    if (kind === "knobbyrock" || kind === "siphonprobe" || kind === "raduladrill") return 12.8 + roll * 9.4;
+    if (kind === "opercdoor" || kind === "footplow" || kind === "eggstring") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
+    function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "busyconhush";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "busyconhush") {
-      if (roll < 0.26) return "siphonprobe";
-      if (roll < 0.5) return "footplow";
-      if (roll < 0.74) return "opercdoor";
-      return "knobbyrock";
+      if (roll < 0.17) return "siphonprobe";
+      if (roll < 0.33) return "footplow";
+      if (roll < 0.49) return "opercdoor";
+      if (roll < 0.65) return "raduladrill";
+      if (roll < 0.83) return "knobbyrock";
+      return "eggstring";
     }
     if (lastKind === "siphonprobe") {
-      if (roll < 0.26) return "busyconhush";
-      if (roll < 0.5) return "footplow";
-      if (roll < 0.74) return "opercdoor";
-      return "knobbyrock";
+      if (roll < 0.16) return "busyconhush";
+      if (roll < 0.32) return "footplow";
+      if (roll < 0.48) return "opercdoor";
+      if (roll < 0.64) return "raduladrill";
+      if (roll < 0.82) return "knobbyrock";
+      return "eggstring";
     }
     if (lastKind === "footplow") {
-      if (roll < 0.22) return "busyconhush";
-      if (roll < 0.44) return "siphonprobe";
-      if (roll < 0.68) return "opercdoor";
+      if (roll < 0.14) return "busyconhush";
+      if (roll < 0.3) return "siphonprobe";
+      if (roll < 0.46) return "opercdoor";
+      if (roll < 0.62) return "raduladrill";
+      if (roll < 0.8) return "knobbyrock";
+      return "eggstring";
+    }
+    if (lastKind === "opercdoor") {
+      if (roll < 0.15) return "busyconhush";
+      if (roll < 0.31) return "siphonprobe";
+      if (roll < 0.47) return "footplow";
+      if (roll < 0.63) return "raduladrill";
+      if (roll < 0.81) return "knobbyrock";
+      return "eggstring";
+    }
+    if (lastKind === "raduladrill") {
+      if (roll < 0.16) return "busyconhush";
+      if (roll < 0.32) return "siphonprobe";
+      if (roll < 0.48) return "footplow";
+      if (roll < 0.64) return "opercdoor";
+      if (roll < 0.82) return "knobbyrock";
+      return "eggstring";
+    }
+    if (lastKind === "knobbyrock") {
+      if (roll < 0.15) return "busyconhush";
+      if (roll < 0.31) return "siphonprobe";
+      if (roll < 0.47) return "footplow";
+      if (roll < 0.63) return "opercdoor";
+      if (roll < 0.81) return "raduladrill";
+      return "eggstring";
+    }
+    if (lastKind === "eggstring") {
+      if (roll < 0.16) return "busyconhush";
+      if (roll < 0.32) return "siphonprobe";
+      if (roll < 0.48) return "footplow";
+      if (roll < 0.64) return "opercdoor";
+      if (roll < 0.82) return "raduladrill";
       return "knobbyrock";
     }
-    if (roll < 0.2) return "busyconhush";
-    if (roll < 0.4) return "siphonprobe";
-    if (roll < 0.6) return "footplow";
-    if (roll < 0.8) return "opercdoor";
-    return "knobbyrock";
+    if (roll < 0.14) return "busyconhush";
+    if (roll < 0.28) return "siphonprobe";
+    if (roll < 0.42) return "footplow";
+    if (roll < 0.56) return "opercdoor";
+    if (roll < 0.7) return "raduladrill";
+    if (roll < 0.85) return "knobbyrock";
+    return "eggstring";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "knurl";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,75 +164,80 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "densknurl";
+    const name = (HAPPY).includes(kind) ? (kind) : "densknurl";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "densknurl" ? "sit" : name === "inkknurl" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "densknurl" ? "sit" : name === "inkknurl" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
 
   function densknurlPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densknurl));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * -0.0036, rot: s * -0.17, anim: "sit" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.74) {
-      const bob = Math.sin((u - 0.15) / 0.59 * Math.PI * 2.28);
-      return { lift: -0.0035 + bob * 0.00082, rot: -0.15 + bob * 0.10, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    const s = (u - 0.74) / 0.26;
-    return { lift: -0.0035 * (1 - s), rot: -0.15 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
 
   function inkknurlPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkknurl));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 0.0040, rot: s * 0.34, anim: "talk" };
+    if (u < 0.12) {
+      const s = u / 0.12;
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.72) {
-      const pulse = Math.sin((u - 0.14) / 0.58 * Math.PI * 3.18);
-      return { lift: 0.0040 + Math.abs(pulse) * 0.00155, rot: 0.34 + pulse * 0.25, anim: "talk" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    const s = (u - 0.72) / 0.28;
-    return { lift: 0.0040 * (1 - s), rot: 0.34 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
 
   function densbusyconPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densbusycon));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.0028, rot: s * -0.23, anim: "play" };
-    }
-    if (u < 0.80) {
-      const wave = Math.sin((u - 0.13) / 0.67 * Math.PI * 2.70);
-      return { lift: 0.0028 + Math.abs(wave) * 0.00125, rot: -0.23 + wave * 0.175, anim: "play" };
-    }
-    const s = (u - 0.80) / 0.20;
-    return { lift: 0.0028 * (1 - s), rot: -0.23 * (1 - s), anim: "idle" };
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
 
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "densknurl") {
       const pose = densknurlPose(next.t);
@@ -196,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -205,27 +264,30 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "busyconhush";
     const anim =
-      k === "busyconhush"
+      kind === "busyconhush"
         ? "sit"
-        : k === "siphonprobe"
-          ? "play"
-          : k === "footplow"
-            ? "walk"
-            : k === "opercdoor"
-              ? "sit"
-              : k === "knobbyrock"
-                ? "play"
-                : "sit";
+        : kind === "siphonprobe"
+          ? "talk"
+          : kind === "eggstring"
+            ? "talk"
+            : kind === "footplow"
+              ? "walk"
+              : kind === "opercdoor"
+                ? "sit"
+                : kind === "raduladrill"
+                  ? "play"
+                  : kind === "knobbyrock"
+                    ? "play"
+                    : "sit";
     return {
-      kind: k,
-      phase: k === "busyconhush" ? "hold" : "go",
+      kind,
+      phase: kind === "busyconhush" ? "hold" : "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: anim,
+      anim,
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -237,78 +299,140 @@
   }
 
   function busyconhushPose(t) {
-    const breath = Math.sin(t * 0.00170) + 0.00076 * Math.sin(t * 0.0057);
-    const hush = Math.abs(Math.sin(t * 0.00086));
-    return { lift: -0.00040 + hush * 0.00011, rot: -0.015 + breath * 0.0045 };
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.00036 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.015 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function siphonprobePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.siphonprobe));
     const face = facing == null ? 1 : facing;
-    if (u < 0.13) {
-      const s = smoothstep(u / 0.13);
-      return { x: fromX + face * s * 0.00022, lift: s * 0.0042, rot: s * 0.28 * face, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "talk" };
     }
-    if (u < 0.86) {
-      const probe = Math.sin((u - 0.13) / 0.73 * Math.PI * 3.4);
-      const siphon = Math.sin(t * 1.15) + 0.045 * Math.sin(t * 2.4);
+    if (u < 0.78) {
+      const bar = Math.sin(t * 2.4);
       return {
-        x: fromX + face * (0.00022 + probe * 0.0011 + siphon * 0.00014),
-        lift: 0.0042 + Math.abs(probe) * 0.00095 + Math.abs(siphon) * 0.00028,
-        rot: (0.28 + probe * 0.22 + siphon * 0.08) * face,
-        anim: "play",
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
+        anim: "talk",
       };
     }
-    const s = smoothstep((u - 0.86) / 0.14);
-    return { x: fromX + face * 0.00022 * (1 - s), lift: 0.0014 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function footplowPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.footplow));
     const face = facing == null ? 1 : facing;
-    if (u < 0.11) {
-      const s = smoothstep(u / 0.11);
-      return { x: fromX + face * s * 0.00042, lift: s * -0.0028, rot: s * 0.12 * face, anim: "walk" };
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
     }
-    if (u < 0.90) {
-      const plow = (u - 0.11) / 0.79;
-      const haul = Math.sin(plow * Math.PI * 3.2);
-      const foot = Math.sin(t * 0.88) + 0.04 * Math.sin(t * 1.95);
+    if (u < 0.78) {
+      const bob = Math.sin(t * 2.2);
       return {
-        x: fromX + face * (0.00042 + plow * 0.0088 + haul * 0.00024),
-        lift: -0.0028 + Math.abs(haul) * 0.00062 + Math.abs(foot) * 0.00018,
-        rot: (0.12 + haul * 0.10 + foot * 0.045) * face,
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
         anim: "walk",
       };
     }
-    const s = smoothstep((u - 0.90) / 0.10);
-    return { x: fromX + face * 0.00922 * (1 - s * 0.12), lift: -0.0008 * (1 - s), rot: 0.03 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function eggstringPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.eggstring));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
+    }
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
+      return {
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
+        anim: "talk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function raduladrillPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.raduladrill));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" };
+    }
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
+      return {
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function opercdoorPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.opercdoor));
     const face = facing == null ? 1 : facing;
-    if (u < 0.15) {
-      const s = smoothstep(u / 0.15);
-      return { x: fromX, lift: s * -0.0058, rot: s * -0.18 * face, anim: "sit" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
     }
-    if (u < 0.82) {
-      const door = Math.sin((u - 0.15) / 0.67 * Math.PI * 2.0);
-      const hinge = Math.sin(t * 0.42) * 0.00012;
+    if (u < 0.78) {
+      const hang = Math.sin(t * 2.0);
       return {
-        x: fromX + face * door * 0.00008,
-        lift: -0.0058 + hinge + Math.abs(door) * 0.00022,
-        rot: (-0.18 + door * 0.14) * face,
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.82) / 0.18);
-    return { x: fromX, lift: -0.0058 * (1 - s), rot: -0.03 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function knobbyrockPose(t, fromX, facing) {
@@ -316,28 +440,40 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00016, lift: s * 0.0052, rot: s * 0.52 * face, anim: "play" };
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "play" };
     }
-    if (u < 0.84) {
-      const rock = Math.sin((u - 0.14) / 0.70 * Math.PI * 2.6);
-      const knob = Math.sin(t * 1.05) + 0.05 * Math.sin(t * 2.2);
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
       return {
-        x: fromX + face * (0.00016 + rock * 0.00055),
-        lift: 0.0052 + Math.abs(rock) * 0.0014 + Math.abs(knob) * 0.00032,
-        rot: (0.52 + rock * 0.38 + knob * 0.10) * face,
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
         anim: "play",
       };
     }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.00016 * (1 - s), lift: 0.0052 * (1 - s), rot: 0.06 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "siphonprobe" && trick.kind !== "footplow" && trick.kind !== "opercdoor" && trick.kind !== "knobbyrock") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "siphonprobe" &&
+      trick.kind !== "footplow" &&
+      trick.kind !== "opercdoor" &&
+      trick.kind !== "raduladrill" &&
+      trick.kind !== "knobbyrock" &&
+      trick.kind !== "eggstring"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "busyconhush") {
       if (next.t < BUSYCONHUSH_HOLD) {
         const pose = busyconhushPose(next.t);
@@ -355,38 +491,53 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "siphonprobe") {
-      const pose = siphonprobePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = siphonprobePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "footplow") {
-      const pose = footplowPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = footplowPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "opercdoor") {
-      const pose = opercdoorPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = opercdoorPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "raduladrill") {
+      const pose = raduladrillPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "knobbyrock") {
+      const pose = knobbyrockPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = knobbyrockPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = eggstringPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
@@ -400,6 +551,17 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    busyconhushPose,
+    releasePose,
+    siphonprobePose,
+    footplowPose,
+    eggstringPose,
+    raduladrillPose,
+    opercdoorPose,
+    knobbyrockPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -409,17 +571,8 @@
     densknurlPose,
     inkknurlPose,
     densbusyconPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    busyconhushPose,
-    releasePose,
-    siphonprobePose,
-    footplowPose,
-    opercdoorPose,
-    knobbyrockPose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetKnobbedWhelkTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);
