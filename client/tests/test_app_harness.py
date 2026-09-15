@@ -78,6 +78,8 @@ CROSS_DOMAIN = {
     "blotter.hours",
     "blotter.hive",
     "blotter.guide",
+    "blotter.classroom",
+    "blotter.return_memory",
     "blotter.gait",
     "blotter.play",
     "blotter.weather",
@@ -250,6 +252,8 @@ def test_offline_resolves_and_playback_leave_traces():
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
+        "blotter.classroom",
+        "blotter.return_memory",
         "blotter.gait",
         "blotter.play",
         "blotter.weather",
@@ -362,6 +366,8 @@ def test_blotter_pure_surfaces():
         "blotter.hours",
         "blotter.hive",
         "blotter.guide",
+        "blotter.classroom",
+        "blotter.return_memory",
         "blotter.gait",
         "blotter.play",
         "blotter.weather",
@@ -381,7 +387,7 @@ def test_blotter_pure_surfaces():
     failed = [r for r in results if not r.passed]
     assert not failed, failed
     driven_ok = [r for r in results if r.fate == "driven" and r.passed]
-    assert len(driven_ok) == 8
+    assert len(driven_ok) == 10
     skipped = {r.action_id for r in results if r.fate == "excluded"}
     assert skipped == {"blotter.plaque", "blotter.frames_paint", "blotter.scene"}
 
@@ -397,6 +403,16 @@ def test_blotter_pure_surfaces():
     assert hive.ok and hive.extras.get("place") == "honeycomb"
     guide = invoke("blotter.guide")
     assert guide.ok and int(guide.extras.get("n") or 0) == 221
+    classroom = invoke("blotter.classroom")
+    assert classroom.ok and classroom.trace, (classroom.error, classroom.detail)
+    assert int(classroom.extras.get("n") or 0) == 221
+    assert int(classroom.extras.get("matched") or 0) == 221
+    assert classroom.extras.get("desktop_classroom") is False
+    assert len(classroom.extras.get("rooms") or {}) == 20
+    ret = invoke("blotter.return_memory")
+    assert ret.ok and ret.trace, (ret.error, ret.detail)
+    assert int(ret.extras.get("thresholds") or 0) == 7
+    assert ret.extras.get("desktop_return") is False
     frames = invoke("blotter.frames")
     assert frames.extras.get("anims") == ["idle", "walk", "sit", "eat", "sleep", "play"]
 
