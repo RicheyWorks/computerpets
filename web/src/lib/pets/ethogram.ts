@@ -124,7 +124,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   venus_flytrap: [A("snap", "snap", 0.7, 2, "play"), A("lean", "lean", 1.4, 3), A("nod", "nod", 1.0, 2, "sit")],
   pitcher: [A("still", "freeze", 3.2, 5), A("lean", "lean", 1.6, 2), A("nod", "nod", 1.0, 1, "sit")],
   sundew: [A("curl", "curl", 2.0, 4, "sit"), A("lean", "lean", 1.4, 2), A("nod", "nod", 0.9, 1, "sit")],
-  honeybee: [A("waggle", "waggle", 1.2, 4), A("dart", "dart", 0.8, 2), A("still", "freeze", 1.4, 1)],
+  honeybee: [A("hive", "sit_hold", 2.4, 4, "sit"), A("figure_soft", "play", 1.2, 2, "play"), A("corbicula_soft", "talk", 1.2, 2, "talk"), A("hex_soft", "sit", 1.2, 2, "sit"), A("proboscis_soft", "talk", 1.15, 2, "talk"), A("ocelli_soft", "play", 1.2, 2, "play"), A("nasonov_soft", "talk", 1.15, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
   monarch: [A("flutter", "pulse", 1.0, 3), A("migrate", "dart", 1.2, 2), A("still", "freeze", 1.8, 2)],
   luna: [A("still", "freeze", 2.6, 5), A("drift", "bob", 1.6, 2), A("refuse", "freeze", 1.8, 1)],
   firefly: [A("flash", "flash", 0.8, 4), A("lift", "hop", 0.55, 2, "play"), A("still", "freeze", 1.6, 2)],
