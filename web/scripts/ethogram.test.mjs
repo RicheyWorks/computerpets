@@ -940,6 +940,16 @@ assert.equal(names("velvet_worm").includes("walk"), false);
 assert.equal(names("velvet_worm").includes("still"), false);
 assert.equal(names("velvet_worm").includes("sit"), false);
 
+assert.ok(names("springtail").includes("orchesella"));
+assert.ok(names("springtail").includes("furculaflick_soft"));
+assert.ok(names("springtail").includes("collophore_soft"));
+assert.ok(names("springtail").includes("denspring_soft"));
+assert.ok(names("springtail").includes("freeze"));
+assert.equal(names("springtail").includes("hop"), false);
+assert.equal(names("springtail").includes("walk"), false);
+assert.equal(names("springtail").includes("still"), false);
+assert.equal(names("springtail").includes("sit"), false);
+
 
 
   for (const key of SHORE) {
