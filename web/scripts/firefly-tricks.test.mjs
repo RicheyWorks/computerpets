@@ -273,6 +273,11 @@ test("lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite are house-fir
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.equal(T.PHOTINUS_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.HAPPY_DUR.luciferin, 1.70);
+  assert.equal(T.HAPPY_DUR.candela, 1.84);
+  assert.equal(T.HAPPY_DUR.pyralis, 1.76);
   const release = T.stepTrick(bole, T.PHOTINUS_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -307,7 +312,7 @@ test("lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite are house-fir
   assert.equal(T.TRICKS.includes("photocyte"), true);
   assert.equal(T.TRICKS.includes("sternite"), true);
 
-  const sinusDone = T.stepTrick(sinus, 1.7, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.semaphore + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -359,7 +364,7 @@ test("lantern/jstroke/semaphore/elytra/photinus/photocyte/sternite are house-fir
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -890,8 +895,8 @@ test("notes: Spark ultra-polish done; Dart ultra also done; next house-order ult
   assert.equal(OverlayGround.wantsThankYou("darner"), true);
   assert.equal(OverlayGround.tricksFor("dart"), OverlayDarner);
   assert.equal(OverlayGround.wantsThankYou("dart"), true);
-  assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
-  assert.deepEqual([...OverlayDarner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax"]);
+  assert.deepEqual([...Darner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
+  assert.deepEqual([...OverlayDarner.TRICKS], ["hawking", "tandem", "nymph", "whir", "anax", "obelisk", "ommatidia"]);
   assert.equal(OverlayGround.tricksFor("firefly"), Overlay);
   assert.equal(OverlayGround.wantsThankYou("firefly"), true);
   assert.equal(OverlayGround.tricksFor("spark"), Overlay);

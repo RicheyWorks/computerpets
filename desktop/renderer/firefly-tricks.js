@@ -6,20 +6,20 @@
   const HAPPY = ["luciferin", "candela", "pyralis"];
 
   const HAPPY_DUR = {
-    luciferin: 1.24,
-    candela: 1.34,
-    pyralis: 1.22,
+    luciferin: 1.70,
+    candela: 1.84,
+    pyralis: 1.76,
   };
-  const PHOTINUS_HOLD = 11.4;
-  const RELEASE_S = 0.66;
+  const PHOTINUS_HOLD = 11.2;
+  const RELEASE_S = 1.18;
   const DUR = {
     photinus: PHOTINUS_HOLD + RELEASE_S,
-    lantern: 1.46,
-    jstroke: 1.62,
-    semaphore: 1.5,
-    elytra: 1.56,
-    photocyte: 1.64,
-    sternite: 1.68,
+    lantern: 2.48,
+    jstroke: 2.42,
+    semaphore: 2.44,
+    elytra: 2.56,
+    photocyte: 2.40,
+    sternite: 2.38,
   };
 
   function canStart(state) {

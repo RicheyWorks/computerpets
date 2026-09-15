@@ -1817,6 +1817,16 @@ assert.equal(names("honey_drone").includes("hover"), false);
 assert.equal(names("honey_drone").includes("still"), false);
 
   assert.ok(names("firefly").includes("photinus"));
+  assert.ok(names("firefly").includes("lantern_soft"));
+  assert.ok(names("firefly").includes("jstroke_soft"));
+  assert.ok(names("firefly").includes("semaphore_soft"));
+  assert.ok(names("firefly").includes("elytra_soft"));
+  assert.ok(names("firefly").includes("photocyte_soft"));
+  assert.ok(names("firefly").includes("sternite_soft"));
+  assert.ok(names("firefly").includes("freeze"));
+  assert.equal(names("firefly").includes("flash"), false);
+  assert.equal(names("firefly").includes("lift"), false);
+  assert.equal(names("firefly").includes("still"), false);
   assert.ok(names("stick").includes("diapheromera"));
   assert.ok(names("stick").includes("freeze"));
   assert.ok(names("mantis").includes("mantodea"));
@@ -2158,6 +2168,21 @@ test("sundew ethogram is Dew ultra (rosette sit_hold + mucilage_soft + softs + f
   assert.equal(names("sundew").includes("curl"), false);
   assert.equal(names("sundew").includes("lean"), false);
   assert.equal(names("sundew").includes("nod"), false);
+});
+
+
+test("firefly ethogram is Spark ultra (photinus sit_hold + softs + freeze, not flash/lift/still)", () => {
+  assert.ok(names("firefly").includes("photinus"));
+  assert.ok(names("firefly").includes("lantern_soft"));
+  assert.ok(names("firefly").includes("jstroke_soft"));
+  assert.ok(names("firefly").includes("semaphore_soft"));
+  assert.ok(names("firefly").includes("elytra_soft"));
+  assert.ok(names("firefly").includes("photocyte_soft"));
+  assert.ok(names("firefly").includes("sternite_soft"));
+  assert.ok(names("firefly").includes("freeze"));
+  assert.equal(names("firefly").includes("flash"), false);
+  assert.equal(names("firefly").includes("lift"), false);
+  assert.equal(names("firefly").includes("still"), false);
 });
 
 test("pickAct can schedule tongue on a snake and never scratch", () => {
