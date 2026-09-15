@@ -579,7 +579,7 @@ test("Flux tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("siphonjetpuff"), false);
   assert.equal(T.TRICKS.includes("shellgapeclosegate"), false);
   assert.equal(T.TRICKS.includes("zooxanthellaesunbask"), false);
-  assert.equal(T.TRICKS.includes("longtridacnahush"), false);
+  assert.equal(T.TRICKS.includes("tridacnahush"), false);
   assert.equal(T.HAPPY.includes("densgate"), false);
   assert.equal(T.HAPPY.includes("inkgate"), false);
   assert.equal(T.HAPPY.includes("denstridacna"), false);
