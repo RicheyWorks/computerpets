@@ -329,6 +329,19 @@ assert.ok(names("carpenter_bee").includes("freeze"));
 assert.equal(names("carpenter_bee").includes("hover"), false);
 assert.equal(names("carpenter_bee").includes("bore"), false);
 assert.equal(names("carpenter_bee").includes("still"), false);
+
+assert.ok(names("mason_bee").includes("osmia"));
+assert.ok(names("mason_bee").includes("trowel_soft"));
+assert.ok(names("mason_bee").includes("beebread_soft"));
+assert.ok(names("mason_bee").includes("orchard_soft"));
+assert.ok(names("mason_bee").includes("plug_soft"));
+assert.ok(names("mason_bee").includes("mudpack_soft"));
+assert.ok(names("mason_bee").includes("tubeprovision_soft"));
+assert.ok(names("mason_bee").includes("freeze"));
+assert.equal(names("mason_bee").includes("seal"), false);
+assert.equal(names("mason_bee").includes("hover"), false);
+assert.equal(names("mason_bee").includes("still"), false);
+
   assert.ok(names("honey_queen").includes("lay"));
   assert.ok(names("bumblebee").includes("bombus"));
 assert.ok(names("bumblebee").includes("sonicate_soft"));
@@ -1837,6 +1850,19 @@ assert.ok(names("carpenter_bee").includes("freeze"));
 assert.equal(names("carpenter_bee").includes("hover"), false);
 assert.equal(names("carpenter_bee").includes("bore"), false);
 assert.equal(names("carpenter_bee").includes("still"), false);
+
+assert.ok(names("mason_bee").includes("osmia"));
+assert.ok(names("mason_bee").includes("trowel_soft"));
+assert.ok(names("mason_bee").includes("beebread_soft"));
+assert.ok(names("mason_bee").includes("orchard_soft"));
+assert.ok(names("mason_bee").includes("plug_soft"));
+assert.ok(names("mason_bee").includes("mudpack_soft"));
+assert.ok(names("mason_bee").includes("tubeprovision_soft"));
+assert.ok(names("mason_bee").includes("freeze"));
+assert.equal(names("mason_bee").includes("seal"), false);
+assert.equal(names("mason_bee").includes("hover"), false);
+assert.equal(names("mason_bee").includes("still"), false);
+
 
   assert.ok(names("firefly").includes("photinus"));
   assert.ok(names("firefly").includes("lantern_soft"));
