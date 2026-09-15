@@ -11,7 +11,7 @@ Stolen from Richey’s other repos (architecture, not domain):
 | Pattern | From | Here |
 |---|---|---|
 | Registry of real operations; discover / invoke / assert | CSRBT `HarnessRegistry` + FlowersForever `ConnectorRegistry` | `catalog()` / `invoke()` / `assert_action()` |
-| Domains as plugins / suites | CSRBT `tools/verify/` + harness plugins | `care` `guest` `species` `ethogram` `cry` `gift` `desk` `card` `gui` |
+| Domains as plugins / suites | CSRBT `tools/verify/` + harness plugins | `care` `guest` `visit` `species` `ethogram` `cry` `gift` `desk` `card` `gui` |
 | Accounting identity | CSRBT `tools/harness.py` | `discovered == driven + dead + sequenced + hidden + failed + excluded`; `UNACCOUNTED` is a harness bug |
 | General oracle | CSRBT | Observable trace + no errors + no `NaN` / `undefined` / `[object Object]` junk — not frozen remembered counts |
 | One runner, exit non-zero on fail | CSRBT `tools/verify/run_all.py` | `py -m computerpets_client.app_harness` |
@@ -71,12 +71,13 @@ Ids are `domain.local`. Bare care ids (`feed`) still resolve for the original ha
 |---|---|---|
 | `care` | Existing 18 (feed…exit) | `care_harness` → `life` / `specials` / `shed` |
 | `guest` | Tap, marks, every `GUEST_CHOICE` id including **close** / **exit** | `choice.guest_tap` / `guest_marks` / `guest_pick` |
+| `visit` | Today's visitor, phase clock, call begin/place/leave, arrive vs tap/place | `visitor.js` / `call-guests.js` / `arrive.js` |
 | `species` | Catalog load, lookup, GUESTS.md, sample guests | `species.CATALOG_KEYS` / `species_by_key` / `docs/GUESTS.md` |
 | `ethogram` | Acts + tricks files for sample guests | `ethogram.acts_for` / `desktop/renderer/*-tricks.js` |
 | `cry` | `prefersHouseCry` parse, pet.js wiring, wav files, **stubbed `cry.playback`** (mock `Audio` + `PetDeskHouse.playVoice`) | `card.ts` / `pet.js` / `house-sounds.js` / `desk-house.js` / `harness_smokes.cjs` |
 | `gift` | Line, leave, pick, **place coords** (`gift.place`) | `gift.py` + `life.js leaveGift` via `harness_smokes.cjs` |
-| `desk` | Weather clock; plate keys; URL builders; **offline resolve**; **Favorites** (News/Coins/NFTs/Weather); **news topics/Popular**; **plate chrome/style**; **plant drag-place** | `weather.py`; `desk-plates` / `desk-plants`; `news.js` / `market.js` / `weather-areas.js` |
-| `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire**, **notif deep-link → open card on need** | `card.ts` / `pet.js` / `life.js` via hooks + `harness_smokes.cjs` |
+| `desk` | Weather clock; plate keys; URL builders; **offline resolve**; **Favorites** (News/Coins/NFTs/Weather); **news topics/Popular/X**; **quotes add-ticker**; **plate chrome/style**; **plant drag-place** | `weather.py`; `desk-plates` / `desk-plants`; `news.js` / `market.js` / `weather-areas.js` |
+| `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire**, **notif deep-link → open card on need**, **needs save/reload + alert clear after care** | `card.ts` / `pet.js` / `life.js` via hooks + `harness_smokes.cjs` |
 | `gui` | Overlay **choice Close/Exit** (`gui.choice_close_exit`); Electron/Qt rows excluded until `--gui` | `choice.js`; `desktop/gui-harness.cjs` + `app --check --offscreen` under `--gui` |
 
 No invented verbs. Guest choice does **not** include blotter tend (`feed` / `bath` / `clean`). Desk **Quotes** is the `market` plate (coins + NFT list). Offline desk resolves use fixture JSON / RSS — not live HTTP.
@@ -119,7 +120,7 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 
 Moved from gaps → driven (prior pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
 
-This pass (still offline-driven, no invented verbs): `desk.favorites.news` / `desk.favorites.market` / `desk.favorites.weather`, `desk.news.topics`, `desk.plates.style` (plate chrome + drag persist), `desk.plants.place` (Disk/Felt), `card.notify_open` (`NEED_CARE` / `careForNeed` / `alerts` + `openCareFromNotify` wire). Guest freehand overlay drag remains GUI-only (`gui.gift_drag_place` covers gift hit-targets under `--gui`).
+This pass (still offline-driven, no invented verbs): **`visit` domain** (`visit.todays` / `visit.phases` / `visit.call` / `visit.arrive`) — today's visitor, phase clock + host-hidden abort, call begin/place/dismiss/leave, arrive vs tap/place; `desk.market.tickers` (add-any-ticker + watchlist persist); `desk.news.x` (X tab RSS/search/sourceLine); `card.needs_persist` (life save/load + hunger/hidden alert clear after feed/call). Prior: Favorites, news topics, plate chrome, plants, notify. Host freehand overlay drag and OS window perch remain GUI/live holes; license/unlock skipped (network/secrets).
 
 ### Dual-mode (`--live`)
 
