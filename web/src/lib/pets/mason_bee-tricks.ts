@@ -1,6 +1,6 @@
-/** Mortar ground tricks while idle. House mason bee — trowel / beebread / orchard / plug / osmia personality (trowel mandibular mud-mortar pack into an inkstone cell wall — never named daub (window DAUB) / seal (ethogram + special) / partition (Auger) / rasp (Auger) / gallery (Column) / chew / dig (Thimble) / gnaw (beaver) / fossor (Thrum) / nest (Clip + Column window) / bank (window DIG) / cell (ethogram talk), beebread pollen-nectar provision loaf pack into a solitary tube cell — never named corbicula (Comb) / scopa (Thrum) / pollen (Moth happy) / hive (Comb) / hex (Comb) / crumb (Column) / loaf (Whee ethogram talk), orchard gentle spring bloom visit — never named forage (Thrum window) / figure (Comb) / sonicate (Thrum) / picket (Auger) / hover (Sepia + ethogram) / lumber (Thrum) / thrum (Vesper) / drone (Hum window), plug mud entrance finish — never named seal (ethogram) / daub (window) / partition (Auger) / cap (Cap guest) / nest (Clip) / hive (Comb), osmia desk life as an Osmia lignaria blue orchard mason with hornfaced cousins in the thank-yous; not Comb / Thrum / Auger / Column / Brood / Fold / Seven / Twig / Dart / Spark / Ghost / Milk / *Dragon copies). Feed-happy thank-yous sit after eat. Card-open freeze and window-play DAUB do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop mason_bee-tricks.js. Not a Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/carpenter_bee/Auger or *Dragon electrical clone. Window-play DAUB unchanged — never names daub. Ethogram seal/hover/still unchanged. Comb owns figure/corbicula/hex/proboscis/hive and happy honey/mead/propolis; Thrum owns sonicate/scopa/fossor/lumber/bombus and happy impatiens/bimaculatus/bombini; Auger owns rasp/glabrous/partition/picket/xylocopa and happy virginica/micans/xylocopini; Column owns gallery/pheromone/crumb/bustle/camponotus; Sepia owns hover; Vesper owns guard/thrum; Arm owns sentinel; Disk owns sheen; Clip owns nest; Thimble owns dig; Cap owns warts; Reed owns plop; Tube owns papillae; Relay owns buzz; Rui owns dance. Osmia solitary mud-tube desk life only. No cry inventing — thank-yous are silent desk motion only. */
+/** Mortar ground tricks while idle — ultra-polish pass. House blue orchard mason bee — trowel / beebread / orchard / plug / mudpack / tubeprovision / osmia personality (trowel mandibular mud-mortar pack into an inkstone cell wall — never named daub (window DAUB) / seal (retired ethogram + special) / partition (Auger) / rasp (Auger) / gallery (Column) / chew / dig (Thimble) / gnaw (beaver) / fossor (Thrum) / nest (Clip + Column window) / bank (window DIG) / cell (ethogram talk), beebread pollen-nectar provision loaf pack into a solitary tube cell — never named corbicula (Comb) / scopa (Thrum) / pollen (Moth happy) / hive (Comb) / hex (Comb) / crumb (Column) / loaf (Whee ethogram talk), orchard gentle spring bloom visit — never named forage (Thrum window) / figure (Comb) / sonicate (Thrum) / picket (Auger) / hover (Sepia + retired ethogram) / lumber (Thrum) / thrum (Vesper) / drone (Hum window), plug mud entrance finish — never named seal / daub (window) / partition (Auger) / cap (Cap guest) / nest (Clip) / hive (Comb), mudpack iconic Osmia mud-pack tamp into a reed-tube cell (not trowel shallow mortar / partition Auger / gallery Column / daub window), tubeprovision iconic Osmia solitary tube provision loaf shove (not beebread soft pack / corbicula Comb / scopa Thrum / hive Comb), osmia desk life as an Osmia lignaria blue orchard mason with hornfaced cousins in the thank-yous; not Comb / Thrum / Auger / Column / Brood / Fold / Seven / Twig / Dart / Spark / Ghost / Milk / Hum / Sheen / Cap / Disc / *Dragon copies). Mudpack is the iconic Osmia mud-pack tamp (not trowel). Tubeprovision is the iconic tube provision shove (not beebread). Window-play DAUB unchanged — never names daub as a trick. Ethogram keeps osmia sit_hold; adds trowel/beebread/orchard/plug/mudpack/tubeprovision softs + freeze (replaces thin seal/hover/still — Cap owns seal flavor; Sepia owns hover; window DAUB owns daub). Amplitudes raised toward Rui richness; denser waits/weights; prefersHouseCry via mason_bee.wav. Thank-yous lignaria / cornifrons / osmiini. Feed-happy after eat. Sleep, hide, leave, rest, card still win. Same map as desktop `mason_bee-tricks.js`. True house-mason desk life — not Rui/cat/dog/rabbit/hamster/Clip/guinea pig/turtle/Ink/goldfish/Coin/budgie/Echo/fox/penguin/parrot/ferret/hedgehog/Burr/chinchilla/axolotl/Bloom/toucan/iguana/Sol/dragon/Vesper/phoenix/Ember/snake/Coral/octopus/Cup/cuttlefish/Sepia/nautilus/Chamber/moon-jelly/Pulse/sea-star/Cling/hermit-crab/Tenant/horseshoe-crab/Ledger/seahorse/Anchor/manta/Kite/moray/Door/moss/Felt/fern/Vein/ginkgo/Fan/oak/Mast/water-lily/Disk/orchid/Moth/saguaro/Arm/venus-flytrap/Snap/pitcher/Drown/sundew/Dew/honeybee/Comb/monarch/Milk/luna/Ghost/firefly/Spark/darner/Dart/stick/Twig/carpenter_ant/Column/ladybird/Seven/mantis/Fold/cicada/Brood/bumblebee/Thrum/honey_drone/Hum/carpenter_bee/Auger/leafcutter/Disc/stingless/Pot/sweat_bee/Sheen or *Dragon electrical (Relay/Fuse/Ground) clones. Avoids daub/seal/hover/still/partition/rasp/gallery/camponotus/fossor/bombus/hive/guard/thrum/circle/liner/cavity/parcel/megachile name collisions. Bird ultra + denser guests done; skip Rui + birds. Auger now owns tunnelrasp/baldflash dens; Thrum owns thoraxload/corbicularub. OSMIA_HOLD=11.2 RELEASE_S=1.18 (house ultra norm). Next: Disc / leafcutter. Catalog 221. No cry inventing beyond house mason_bee.wav prefer. Never retouch Rui sprites. No gallery, not Column. No daub, not window DAUB. */
 export const TRICK_KEY = "mason_bee";
-export const TRICKS = ["trowel", "beebread", "orchard", "plug", "osmia"] as const;
+export const TRICKS = ["trowel", "beebread", "orchard", "plug", "mudpack", "tubeprovision", "osmia"] as const;
 export const HAPPY = ["lignaria", "cornifrons", "osmiini"] as const;
 export type MasonBeeTrickKind = (typeof TRICKS)[number];
 export type MasonBeeHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,26 @@ export type MasonBeeHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { lignaria: 1.24, cornifrons: 1.3, osmiini: 1.26 } as const;
-export const OSMIA_HOLD = 13.8;
-export const RELEASE_S = 0.7;
-export const DUR = { osmia: OSMIA_HOLD + RELEASE_S, trowel: 1.62, beebread: 1.68, orchard: 1.52, plug: 1.48 } as const;
+export const HAPPY_DUR: Record<MasonBeeHappyKind, number> = {
+  lignaria: 1.74,
+  cornifrons: 1.86,
+  osmiini: 1.78,
+};
+
+/** Osmia hold — Mortar parks Osmia lignaria calm on the blotter. Not window-play DAUB. */
+export const OSMIA_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+
+export const DUR: Record<MasonBeeTrickKind, number> = {
+  osmia: OSMIA_HOLD + RELEASE_S,
+  trowel: 2.46,
+  beebread: 2.48,
+  orchard: 2.42,
+  plug: 2.44,
+  mudpack: 2.52,
+  tubeprovision: 2.48,
+};
+
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return false;
@@ -76,39 +92,54 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: MasonBeeTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "osmia") return 50 + roll * 32;
-  if (kind === "trowel") return 15 + roll * 11;
-  if (kind === "beebread") return 17 + roll * 12;
-  if (kind === "plug") return 16 + roll * 11;
-  return justFinished ? 10.6 + roll * 8 : 5.4 + roll * 6.6;
+  if (kind === "osmia") return 38 + roll * 24;
+  if (kind === "mudpack" || kind === "tubeprovision" || kind === "beebread") return 12 + roll * 9;
+  if (kind === "trowel" || kind === "orchard" || kind === "plug") return 11 + roll * 8;
+  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
 }
 
 export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: MasonBeeTrickKind | string | null) {
-  if (musicOn) return "osmia";
+  if (musicOn) return "osmia" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "osmia") {
-    if (roll < 0.26) return "trowel";
-    if (roll < 0.5) return "beebread";
-    if (roll < 0.74) return "orchard";
-    return "plug";
+    if (roll < 0.18) return "trowel" as const;
+    if (roll < 0.34) return "beebread" as const;
+    if (roll < 0.5) return "orchard" as const;
+    if (roll < 0.66) return "plug" as const;
+    if (roll < 0.83) return "mudpack" as const;
+    return "tubeprovision" as const;
   }
   if (lastKind === "trowel") {
-    if (roll < 0.26) return "osmia";
-    if (roll < 0.5) return "beebread";
-    if (roll < 0.74) return "orchard";
-    return "plug";
+    if (roll < 0.2) return "osmia" as const;
+    if (roll < 0.36) return "beebread" as const;
+    if (roll < 0.52) return "orchard" as const;
+    if (roll < 0.68) return "plug" as const;
+    if (roll < 0.84) return "mudpack" as const;
+    return "tubeprovision" as const;
   }
   if (lastKind === "beebread") {
-    if (roll < 0.22) return "osmia";
-    if (roll < 0.44) return "trowel";
-    if (roll < 0.68) return "orchard";
-    return "plug";
+    if (roll < 0.18) return "osmia" as const;
+    if (roll < 0.34) return "trowel" as const;
+    if (roll < 0.5) return "orchard" as const;
+    if (roll < 0.66) return "plug" as const;
+    if (roll < 0.83) return "mudpack" as const;
+    return "tubeprovision" as const;
   }
-  if (roll < 0.2) return "osmia";
-  if (roll < 0.4) return "trowel";
-  if (roll < 0.6) return "beebread";
-  if (roll < 0.8) return "orchard";
-  return "plug";
+  if (lastKind === "mudpack") {
+    if (roll < 0.2) return "osmia" as const;
+    if (roll < 0.36) return "trowel" as const;
+    if (roll < 0.52) return "beebread" as const;
+    if (roll < 0.68) return "orchard" as const;
+    if (roll < 0.84) return "plug" as const;
+    return "tubeprovision" as const;
+  }
+  if (roll < 0.16) return "osmia" as const;
+  if (roll < 0.3) return "trowel" as const;
+  if (roll < 0.44) return "beebread" as const;
+  if (roll < 0.58) return "orchard" as const;
+  if (roll < 0.72) return "plug" as const;
+  if (roll < 0.86) return "mudpack" as const;
+  return "tubeprovision" as const;
 }
 
 export function happyCanStart(state: TrickFlags | undefined) {
@@ -176,50 +207,53 @@ export function beginHappy(kind: MasonBeeHappyKind | string, x: number, facing: 
   };
 }
 
-export function lignariaPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.lignaria));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * 0.048, rot: s * 2.6, dx: 0, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.76) {
-      const tick = Math.sin(t * 13.8) + 0.26 * Math.sin(t * 27.6);
-      return {
-        lift: 0.048 + Math.abs(tick) * 0.018,
-        rot: 2.6 + tick * 1.9,
-        dx: tick * 0.0022,
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = (u - 0.76) / 0.24;
-    return { lift: 0.02 * (1 - s), rot: 1.0 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+export function lignariaPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.lignaria));
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 8.5, dx: 0, anim: "talk" as TrickAnim };
   }
-export function cornifronsPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cornifrons));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.07, rot: s * -3.8, dx: s * 0.0028, anim: "play" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const flash = Math.sin(t * 5.0) + 0.2 * Math.sin(t * 10);
-      return {
-        lift: 0.07 + Math.abs(flash) * 0.026,
-        rot: -3.8 + flash * 4.6,
-        dx: flash * 0.0045,
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = (u - 0.8) / 0.2;
-    return { lift: 0.026 * (1 - s), rot: -1.3 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
-  }
-export function osmiiniPose(t) {
+  if (u < 0.76) {
+    const tick = Math.sin(t * 12.4) + 0.24 * Math.sin(t * 24.8);
     return {
-      lift: 0.015 + Math.abs(Math.sin(t * 0.36)) * 0.013,
-      rot: Math.sin(t * 0.46) * 1.15,
-      dx: Math.sin(t * 0.26) * 0.0022,
-      anim: "sit" as TrickAnim,
+      lift: 2.8 + Math.abs(tick) * 1.1,
+      rot: 8.5 + tick * 6.2,
+      dx: tick * 0.35,
+      anim: "talk" as TrickAnim,
     };
   }
+  const s = (u - 0.76) / 0.24;
+  return { lift: 1.2 * (1 - s), rot: 3.2 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
+}
+
+export function cornifronsPose(t: number) {
+  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.cornifrons));
+  if (u < 0.15) {
+    const s = u / 0.15;
+    return { lift: s * 3.2, rot: s * -9.5, dx: s * 0.4, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const flash = Math.sin(t * 5.4) + 0.22 * Math.sin(t * 10.8);
+    return {
+      lift: 3.2 + Math.abs(flash) * 1.35,
+      rot: -9.5 + flash * 11,
+      dx: flash * 0.55,
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = (u - 0.8) / 0.2;
+  return { lift: 1.4 * (1 - s), rot: -3.6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
+}
+
+export function osmiiniPose(t: number) {
+  return {
+    lift: 1.6 + Math.abs(Math.sin(t * 0.34)) * 0.9,
+    rot: Math.sin(t * 0.42) * 4.2,
+    dx: Math.sin(t * 0.24) * 0.28,
+    anim: "sit" as TrickAnim,
+  };
+}
+
 export function stepHappy(happy: MasonBeeHappy, dt: number, flags: TrickFlags): MasonBeeHappy {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
@@ -254,16 +288,20 @@ export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
 export function beginTrick(kind: MasonBeeTrickKind, x: number, facing: 1 | -1): MasonBeeTrick {
   const anim: TrickAnim =
     kind === "osmia"
-    ? "sit"
-    : kind === "trowel"
-      ? "play"
-      : kind === "beebread"
+      ? "sit"
+      : kind === "trowel"
         ? "play"
-        : kind === "orchard"
-          ? "talk"
-          : kind === "plug"
-            ? "play"
-              : "sit";
+        : kind === "beebread"
+          ? "play"
+          : kind === "orchard"
+            ? "talk"
+            : kind === "plug"
+              ? "play"
+              : kind === "mudpack"
+                ? "play"
+                : kind === "tubeprovision"
+                  ? "play"
+                  : "sit";
   return {
     kind: kind,
     phase: kind === "osmia" ? "hold" : "go",
@@ -282,130 +320,216 @@ function smoothstep(t: number) {
   return x * x * (3 - 2 * x);
 }
 
-export function osmiaPose(t) {
-    const breath = Math.sin(t * 0.13) + 0.05 * Math.sin(t * 0.62);
-    const metal = Math.abs(Math.sin(t * 0.28));
+export function osmiaPose(t: number) {
+  const breath = Math.sin(t * 0.13) + 0.05 * Math.sin(t * 0.48);
+  const metal = Math.abs(Math.sin(t * 0.19));
+  return {
+    lift: 1.8 + metal * 0.85,
+    rot: 2.4 + breath * 2.8,
+  };
+}
+
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 1.8 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 2.4 * (1 - u) };
+}
+
+export function trowelPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.trowel));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * 3.0, rot: s * 9 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const s = (u - 0.14) / 0.64;
+    const pack = Math.sin(s * Math.PI * 4.2);
+    const press = Math.sin(s * Math.PI * 8.4);
     return {
-      lift: 0.016 + metal * 0.011,
-      rot: 0.48 + breath * 0.58,
+      x: fromX + facing * (0.45 * s + pack * 0.35),
+      lift: 2.6 + Math.abs(press) * 1.3,
+      rot: facing * (8 + pack * 7 + press * 3.2),
+      anim: "play" as TrickAnim,
     };
   }
-export function releasePose(t) {
-    const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: 0.016 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.48 * (1 - u) };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + facing * 0.5 * (1 - s * 0.35),
+    lift: 1.3 * (1 - s),
+    rot: facing * (3.5 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function beebreadPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.beebread));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.4, rot: s * -7 * facing, anim: "sit" as TrickAnim };
   }
-export function trowelPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.trowel));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: -0.02 * s, rot: s * 2.2 * facing, anim: "play" as TrickAnim };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.14) / 0.64;
-      const pack = Math.sin(s * Math.PI * 4.2);
-      const press = Math.sin(s * Math.PI * 8.4);
-      return {
-        x: fromX + facing * (0.018 * s + pack * 0.01),
-        lift: -0.02 - s * 0.04 + Math.abs(press) * 0.01,
-        rot: facing * (2.2 + pack * 2.4 + press * 1.1),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const pack = smoothstep(s);
     return {
-      x: fromX + facing * 0.022 * (1 - s * 0.4),
-      lift: -0.03 * (1 - s),
-      rot: facing * (1.0 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * pack * 1.1,
+      lift: 2.4 - pack * 0.8,
+      rot: facing * (-7 + pack * 12),
+      anim: "play" as TrickAnim,
     };
   }
-export function beebreadPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.beebread));
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX, lift: s * 0.025, rot: s * -2.8 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.58) {
-      const s = (u - 0.16) / 0.42;
-      const pack = smoothstep(s);
-      return {
-        x: fromX + facing * pack * 0.04,
-        lift: 0.025 - pack * 0.055,
-        rot: facing * (-2.8 + pack * 6.0),
-        anim: "play" as TrickAnim,
-      };
-    }
-    if (u < 0.86) {
-      const s = (u - 0.58) / 0.28;
-      const tamp = Math.sin(s * Math.PI * 3.2);
-      return {
-        x: fromX + facing * (0.04 + tamp * 0.008),
-        lift: -0.03 + Math.abs(tamp) * 0.022,
-        rot: facing * (3.2 + tamp * 1.8),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.86) / 0.14);
+  if (u < 0.84) {
+    const s = (u - 0.55) / 0.29;
+    const tamp = Math.sin(s * Math.PI * 2.8);
     return {
-      x: fromX + facing * 0.032 * (1 - s * 0.35),
-      lift: -0.012 * (1 - s),
-      rot: facing * (1.0 * (1 - s)),
-      anim: "sit" as TrickAnim,
+      x: fromX + facing * (1.0 + tamp * 0.3),
+      lift: 1.6 + Math.abs(tamp) * 1.2,
+      rot: facing * (4 + tamp * 5),
+      anim: "play" as TrickAnim,
     };
   }
-export function orchardPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.orchard));
-    if (u < 0.14) {
-      const s = smoothstep(u / 0.14);
-      return { x: fromX, lift: s * 0.085, rot: s * 3.4 * facing, anim: "talk" as TrickAnim };
-    }
-    if (u < 0.8) {
-      const s = (u - 0.14) / 0.66;
-      const bloom = Math.sin(s * Math.PI * 2.2);
-      const soft = Math.sin(s * Math.PI * 4.4) * 0.35;
-      return {
-        x: fromX + facing * bloom * 0.014,
-        lift: 0.085 + Math.abs(soft) * 0.03,
-        rot: facing * (3.4 - s * 1.2 + bloom * 2.0 + soft),
-        anim: "talk" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.8) / 0.2);
+  const s = smoothstep((u - 0.84) / 0.16);
+  return {
+    x: fromX + facing * 0.7 * (1 - s * 0.4),
+    lift: 0.9 * (1 - s),
+    rot: facing * (2 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function orchardPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.orchard));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 2.8, rot: s * 11 * facing, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.72) {
+    const s = (u - 0.16) / 0.56;
+    const bloom = Math.sin(s * Math.PI * 2.4);
+    return {
+      x: fromX + facing * bloom * 0.4,
+      lift: 2.8 + Math.abs(bloom) * 1.25,
+      rot: facing * (10 - s * 2 + bloom * 5),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.72) / 0.28);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: facing * (4 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function plugPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.plug));
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 3.2, rot: s * -6 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.86) {
+    const s = (u - 0.12) / 0.74;
+    const station = Math.sin(s * Math.PI * 1.3);
+    const drift = Math.sin(s * Math.PI * 2.6) * 0.4;
+    return {
+      x: fromX + facing * station * 0.55,
+      lift: 3.0 + Math.abs(drift) * 1.2,
+      rot: facing * (-5 + station * 8 + drift * 3),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.86) / 0.14);
+  return {
+    x: fromX,
+    lift: 1.3 * (1 - s),
+    rot: facing * (-2 * (1 - s)),
+    anim: "sit" as TrickAnim,
+  };
+}
+
+export function mudpackPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.mudpack));
+  if (u < 0.16) {
+    const s = smoothstep(u / 0.16);
+    return { x: fromX, lift: s * 3.1, rot: s * 10 * facing, anim: "play" as TrickAnim };
+  }
+  if (u < 0.55) {
+    const s = (u - 0.16) / 0.39;
+    const pack = Math.sin(s * Math.PI * 2.4);
+    return {
+      x: fromX + facing * pack * 0.55,
+      lift: 3.0 + Math.abs(pack) * 1.5,
+      rot: facing * (10 + pack * 8),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.84) {
+    const s = (u - 0.55) / 0.29;
+    const tamp = Math.sin(s * Math.PI * 3.6);
+    return {
+      x: fromX + facing * (0.5 + tamp * 0.3),
+      lift: 3.5 + Math.abs(tamp) * 0.95,
+      rot: facing * (13 - s * 2 + tamp * 4),
+      anim: "play" as TrickAnim,
+    };
+  }
+  {
+    const s = (u - 0.84) / 0.16;
     return {
       x: fromX,
-      lift: 0.03 * (1 - s),
-      rot: facing * (1.2 * (1 - s)),
+      lift: 2.8 * (1 - s),
+      rot: facing * (5.5 * (1 - s)),
       anim: "sit" as TrickAnim,
     };
   }
-export function plugPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.plug));
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX, lift: s * 0.02, rot: s * -2.4 * facing, anim: "sit" as TrickAnim };
-    }
-    if (u < 0.7) {
-      const s = (u - 0.18) / 0.52;
-      const seal = smoothstep(s);
-      const tamp = Math.sin(s * Math.PI * 3.6);
-      return {
-        x: fromX + facing * seal * 0.03,
-        lift: 0.02 - seal * 0.045 + Math.abs(tamp) * 0.012,
-        rot: facing * (-2.4 + seal * 4.8 + tamp * 1.4),
-        anim: "play" as TrickAnim,
-      };
-    }
-    const s = smoothstep((u - 0.7) / 0.3);
+}
+
+export function tubeprovisionPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.tubeprovision));
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX, lift: s * -1.3, rot: s * -6 * facing, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.5) {
+    const s = smoothstep((u - 0.14) / 0.36);
     return {
-      x: fromX + facing * 0.024 * (1 - s * 0.45),
-      lift: -0.015 * (1 - s),
-      rot: facing * (1.1 * (1 - s)),
+      x: fromX + facing * s * 1.15,
+      lift: -0.9 + s * 3.5,
+      rot: facing * (-6 + s * 13),
+      anim: "play" as TrickAnim,
+    };
+  }
+  if (u < 0.84) {
+    const s = (u - 0.5) / 0.34;
+    const shove = Math.sin(s * Math.PI * 2.8);
+    return {
+      x: fromX + facing * (1.15 + shove * 0.4),
+      lift: 2.7 + Math.abs(shove) * 1.25,
+      rot: facing * (6.5 + shove * 5.5),
+      anim: "play" as TrickAnim,
+    };
+  }
+  {
+    const s = (u - 0.84) / 0.16;
+    return {
+      x: fromX + facing * (1.0 * (1 - s * 0.35)),
+      lift: 1.2 * (1 - s),
+      rot: facing * (2.5 * (1 - s)),
       anim: "sit" as TrickAnim,
     };
   }
+}
+
 export function stepTrick(trick: MasonBeeTrick, dt: number, flags: TrickFlags): MasonBeeTrick {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "trowel" && trick.kind !== "beebread" && trick.kind !== "orchard" && trick.kind !== "plug") {
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "trowel" &&
+    trick.kind !== "beebread" &&
+    trick.kind !== "orchard" &&
+    trick.kind !== "plug" &&
+    trick.kind !== "mudpack" &&
+    trick.kind !== "tubeprovision"
+  ) {
     return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
   }
   const next: MasonBeeTrick = { ...trick, t: trick.t + Math.max(0, dt) };
@@ -430,26 +554,39 @@ export function stepTrick(trick: MasonBeeTrick, dt: number, flags: TrickFlags): 
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "trowel") {
-    const pose = trowelPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = trowelPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "beebread") {
-    const pose = beebreadPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = beebreadPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "orchard") {
-    const pose = orchardPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = orchardPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "plug") {
+    const pose = plugPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "mudpack") {
+    const pose = mudpackPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = plugPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = tubeprovisionPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
