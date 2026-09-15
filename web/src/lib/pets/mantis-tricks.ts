@@ -45,20 +45,20 @@ export type MantisHappy = {
 };
 
 export const HAPPY_DUR: Record<MantisHappyKind, number> = {
-  sinensis: 1.26,
-  tenodera: 1.34,
-  mantidae: 1.3,
+  sinensis: 1.70,
+  tenodera: 1.84,
+  mantidae: 1.76,
 };
-export const MANTODEA_HOLD = 11.4;
-export const RELEASE_S = 0.64;
+export const MANTODEA_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR: Record<MantisTrickKind, number> = {
   mantodea: MANTODEA_HOLD + RELEASE_S,
-  raptorial: 1.58,
-  gimbal: 1.52,
-  snatch: 1.48,
-  pendulum: 1.62,
-  ootheca: 1.6,
-  deimatic: 1.54,
+  raptorial: 2.48,
+  gimbal: 2.42,
+  snatch: 2.44,
+  pendulum: 2.56,
+  ootheca: 2.40,
+  deimatic: 2.38,
 };
 
 export function canStart(state: TrickFlags | undefined) {
