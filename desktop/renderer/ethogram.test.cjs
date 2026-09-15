@@ -1145,8 +1145,12 @@ test("reef keys never schedule scratch or a snake tongue", () => {
     assert.equal(names.includes("scratch"), false, key);
     assert.equal(names.includes("tongue"), false, key);
   }
-  assert.ok(E.actsFor("brain_coral").some((a) => a.name === "ridge"));
-  assert.ok(E.actsFor("anemone").some((a) => a.name === "wreath"));
+  assert.ok(E.actsFor("brain_coral").some((a) => a.name === "diploriahush"));
+  assert.ok(E.actsFor("brain_coral").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("brain_coral").some((a) => a.name === "ridge"), false);
+  assert.ok(E.actsFor("anemone").some((a) => a.name === "actiniahush"));
+  assert.ok(E.actsFor("anemone").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("anemone").some((a) => a.name === "wreath"), false);
   assert.ok(E.actsFor("clownfish").some((a) => a.name === "dart"));
   assert.ok(E.actsFor("parrotfish").some((a) => a.name === "scrape"));
   assert.ok(E.actsFor("grouper").some((a) => a.name === "hide"));

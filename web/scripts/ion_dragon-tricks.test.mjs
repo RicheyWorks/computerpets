@@ -649,7 +649,7 @@ test("Ion tricks start only on idle ground", () => {
   assert.equal(T.HAPPY.includes("inkwreath"), false);
   assert.equal(Anemone.TRICKS.includes("paleionhazecling"), false);
   assert.equal(Anemone.HAPPY.includes("dension"), false);
-  assert.deepEqual([...Anemone.TRICKS], ["oraldiskwreathsway", "nematocysttuck", "pedaldiskwalkcreep", "retractintocolumn", "actiniahush"]);
+  assert.deepEqual([...Anemone.TRICKS], ["oraldiskwreathsway", "nematocysttuck", "pedaldiskwalkcreep", "retractintocolumn", "tentaclefan", "oralflare", "actiniahush"]);
   assert.deepEqual([...Anemone.HAPPY], ["denswreath", "inkwreath", "densactinia"]);
   assert.equal(T.TRICKS.includes("polyptentaclewave"), false);
   assert.equal(T.TRICKS.includes("meandroidridgepulse"), false);
