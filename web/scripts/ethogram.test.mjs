@@ -1035,6 +1035,18 @@ assert.equal(names("ghost_crab").includes("run"), false);
 assert.equal(names("ghost_crab").includes("walk"), false);
 assert.equal(names("ghost_crab").includes("still"), false);
 assert.equal(names("ghost_crab").includes("sit"), false);
+assert.ok(names("limpet").includes("patellahush"));
+assert.ok(names("limpet").includes("clampseal_soft"));
+assert.ok(names("limpet").includes("radialgraze_soft"));
+assert.ok(names("limpet").includes("circumhome_soft"));
+assert.ok(names("limpet").includes("shelltilt_soft"));
+assert.ok(names("limpet").includes("homescar_soft"));
+assert.ok(names("limpet").includes("radulasweep_soft"));
+assert.ok(names("limpet").includes("freeze"));
+assert.equal(names("limpet").includes("clamp"), false);
+assert.equal(names("limpet").includes("rasp"), false);
+assert.equal(names("limpet").includes("still"), false);
+assert.equal(names("limpet").includes("sit"), false);
 
   assert.ok(names("lugworm").includes("heap"));
   for (const key of MEADOW) {
