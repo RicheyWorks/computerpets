@@ -260,7 +260,7 @@ test("labellum/velamen/column/spike/bark/keiki/pollinia are house-orchid-true, n
   assert.equal(pollinia.anim, "talk");
   const polliniaMid = T.stepTrick(pollinia, 0.5, ground);
   assert.ok(Math.abs(polliniaMid.lift) > 0.05 || Math.abs(polliniaMid.rot) > 1 || Math.abs(polliniaMid.x - 80) > 0.05);
-  const sinusDone = T.stepTrick(sinus, 1.7, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.spike + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -304,7 +304,7 @@ test("labellum/velamen/column/spike/bark/keiki/pollinia are house-orchid-true, n
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
@@ -658,7 +658,15 @@ globalThis.PetOrchidTricks = Overlay;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Moth ultra-polish done; Arm + Snap + Well + Dew + Comb + Milk + Ghost ultra also done; Spark ultra also done; Dart ultra also done; next house-order ultra is Lattice / morel", () => {
+test("notes: Moth ultra-polish done; ethogram dens claim true (bark sit_hold + softs + freeze); BARK_HOLD=11.2 RELEASE_S=1.18; next Arm / saguaro", () => {
+  assert.equal(T.BARK_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.TRICKS.length, 7);
+  assert.ok(T.HAPPY_DUR.pollen >= 1.7 && T.HAPPY_DUR.pollen <= 2.4);
+  assert.ok(T.HAPPY_DUR.perfume >= 1.7 && T.HAPPY_DUR.perfume <= 2.4);
+  assert.ok(T.HAPPY_DUR.pearl >= 1.7 && T.HAPPY_DUR.pearl <= 2.4);
+  assert.equal(Overlay.BARK_HOLD, 11.2);
+  assert.equal(Overlay.RELEASE_S, 1.18);
   assert.equal(T.TRICK_KEY, "orchid");
   assert.equal(T.wantsThankYou("moth"), true);
   assert.equal(OverlayGround.tricksFor("manta"), OverlayManta);
