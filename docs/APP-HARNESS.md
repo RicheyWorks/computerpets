@@ -107,7 +107,7 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 | id | Why it is not driven here |
 |---|---|
 | `gui.overlay_paint` | Needs Electron compositor/display; **pass `--gui`** on BLACKBEARD to boot overlay, paint pet/HUD, dismiss choice Close+Exit |
-| `gui.blotter_qt` | Needs Qt; **pass `--gui`** to run `app --check --offscreen` (honest software-raster path — not a GPU lie) |
+| `gui.blotter_qt` | Needs Qt in **`client/.venv`**; **pass `--gui`** to run `app --check --offscreen` via that interpreter (honest software-raster path ? not a GPU lie) |
 | `gui.card_hud_paint` | Needs Electron DOM; **pass `--gui`** for collapse/open + vital paint. Offline: **`card.paint_wire` + collapse/open hooks** |
 | `gui.gift_drag_place` | Needs overlay gift-dot hit-targets; **pass `--gui`** for leaveGift + click `gift-dot` (place/pick, not freehand drag). Offline: **`gift.place`** |
 | `live.cry_playback` | Real speakers/Electron session; **`cry.playback` drives stubbed `Audio` + `playVoice` + wav** |
@@ -134,12 +134,15 @@ Catalog `mode=gui` rows stay **excluded** in default `run_all` so GitHub/cloud s
 
 ```powershell
 cd client
+# Prefer the client venv so gui.blotter_qt finds PyQt6 (bare `py` often has none):
+.\.venv\Scripts\python.exe -m computerpets_client.app_harness --gui
+.\.venv\Scripts\python.exe -m computerpets_client.app_harness --domain gui --gui
+# Bare `py` still works for offline domains; blotter_qt subprocess uses client/.venv when present:
 py -m computerpets_client.app_harness --gui
-py -m computerpets_client.app_harness --domain gui --gui
 # Electron-only launcher (same smokes the harness uses):
 node ..\desktop\gui-harness.cjs
-# Qt blotter alone:
-py -m computerpets_client.app --check --offscreen
+# Qt blotter alone (same interpreter the harness prefers):
+.\.venv\Scripts\python.exe -m computerpets_client.app --check --offscreen
 ```
 
 `--gui` drives:
@@ -151,7 +154,18 @@ py -m computerpets_client.app --check --offscreen
 | `gui.gift_drag_place` | `leaveGift` paints a `gift-dot` `[data-hit]`; click clears it (honest hit-target place/pick) |
 | `gui.blotter_qt` | `app --check --offscreen` prints `ok:` lines (pet, plaque, weather, day-part) |
 
-Requires `desktop/` `npm install` (Electron) and client venv with PyQt6. `desktop.ps1` remains the human desk launch; harness uses a temp `userData` and skips the tray.
+Requires `desktop/` `npm install` (Electron) and **`client/.venv` with PyQt6**. `gui.blotter_qt` prefers `client/.venv/Scripts/python.exe` (or `bin/python`) when present ? do not assume bare `py` has Qt. Install once:
+
+```powershell
+cd client
+py -m venv .venv
+$env:PIP_IGNORE_REQUIRES_PYTHON = "1"   # if default py is still 3.10; pyproject wants >=3.11
+.\.venv\Scripts\python.exe -m pip install -U pip
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe -m computerpets_client.app --check --offscreen
+```
+
+`desktop.ps1` remains the human desk launch; harness uses a temp `userData` and skips the tray.
 
 Node offline smokes live in `client/computerpets_client/harness_smokes.cjs`. Electron GUI smokes: `desktop/gui-harness.cjs` + `PetGuiHarness` in `pet.js` when `?gui_harness=1`.
 
