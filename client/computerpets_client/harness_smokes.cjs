@@ -445,6 +445,246 @@ function notifyOpen() {
   ]);
 }
 
+function visitTodays() {
+  const V = load("visitor.js");
+  const day = new Date(2026, 7, 17);
+  const rui = V.todaysVisitor("red_panda", null, day);
+  const python = V.todaysVisitor("ball_python", null, day);
+  if (!rui || rui === "red_panda") return fail("todaysVisitor should pick a non-host guest", { rui });
+  if (!python || python === "ball_python") return fail("todaysVisitor host filter failed", { python });
+  const line = V.visitLine(rui);
+  if (!line || line.length < 4) return fail("visitLine empty", { rui, line });
+  if (V.visitLine("not_a_pet") !== "I came. I saw the lamp. I left.") {
+    return fail("visitLine fallback drifted");
+  }
+  if (!Array.isArray(V.CATALOG_KEYS) || V.CATALOG_KEYS.length < 200) {
+    return fail("CATALOG_KEYS too small", { n: (V.CATALOG_KEYS || []).length });
+  }
+  return ok("guest=" + rui, { guest: rui, host: "red_panda", line }, [
+    "visit.todays=" + rui,
+    "visit.line.len=" + line.length,
+    "visit.catalog=" + V.CATALOG_KEYS.length,
+  ]);
+}
+
+function visitPhases() {
+  const V = load("visitor.js");
+  const steps = [
+    [0, "in"],
+    [V.VISIT_TALK_MS, "talk"],
+    [V.VISIT_WANDER_MS, "wander"],
+    [V.VISIT_LEAVE_MS, "leave"],
+    [V.VISIT_GONE_MS, "gone"],
+  ];
+  for (const [ms, want] of steps) {
+    const got = V.visitPhaseFromEnter(ms, false);
+    if (got !== want) return fail("enter " + ms + " => " + got + " want " + want, { ms, got, want });
+  }
+  if (V.visitPhaseFromWait(0, false) !== "wait") return fail("wait phase missing");
+  if (V.visitPhaseFromWait(V.VISIT_WAIT_MS, false) !== "in") return fail("wait->in failed");
+  if (V.visitPhaseFromEnter(800, true) !== "gone") return fail("hostHidden should force gone");
+  if (V.visitPhaseFromWait(100, true) !== "gone") return fail("hostHidden wait should force gone");
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  for (const needle of ["PetVisitor", "visitPhaseFromEnter", "tapVisitor", "startVisit", "endVisit"]) {
+    if (!petSrc.includes(needle)) return fail("pet.js missing " + needle);
+  }
+  return ok("in/talk/wander/leave/gone+hostHidden", { wait: V.VISIT_WAIT_MS, gone: V.VISIT_GONE_MS }, [
+    "visit.phases.enter=in/talk/wander/leave/gone",
+    "visit.phases.wait->in",
+    "visit.phases.hostHidden=gone",
+    "visit.phases.pet.js.wire",
+  ]);
+}
+
+function visitCallLifecycle() {
+  const G = load("call-guests.js");
+  const roster = load("roster.json");
+  const matched = G.matchCall("Miso", roster);
+  if (!matched.includes("cat")) return fail("matchCall Miso->cat failed", { matched });
+  const keys = G.callKeys("Miso", roster);
+  if (!keys.includes("cat")) return fail("callKeys failed", { keys });
+  let guest = G.beginCalled("cat", 800, 0, 1);
+  if (!guest || guest.phase !== "in" || guest.key !== "cat") {
+    return fail("beginCalled failed", { guest });
+  }
+  for (let i = 0; i < 40 && guest.phase === "in"; i++) {
+    guest = G.stepCalled(guest, 0.2, 800, { hidden: false, hostKey: "red_panda", hostX: 200, hostFacing: 1 });
+  }
+  guest = G.placeCalled(guest, 220, 800);
+  if (!guest.placed || guest.phase !== "stay") {
+    return fail("placeCalled did not stay/placed", { guest });
+  }
+  const held = G.stepCalled(guest, 1.0, 800, { hidden: false, hostKey: "red_panda", hostX: 200, hostFacing: 1 });
+  if (!held.placed || held.phase !== "stay") {
+    return fail("placed guest should hold stay", { held });
+  }
+  guest = G.dismissCalled(held);
+  if (guest.phase !== "leave" || !guest.dismissed) {
+    return fail("dismissCalled failed", { guest });
+  }
+  if (!G.stillVisible(guest)) return fail("leave should still be visible");
+  // leave walks toward target=-160; settle on target so stepCalled can flip leave->gone
+  // (large dt overshoots and oscillates around -160 before MIN_STAY*8 age).
+  guest = G.stepCalled(Object.assign({}, guest, { x: -160 }), 0.05, 800, { hidden: false });
+  if (guest.phase !== "gone") return fail("leave did not reach gone", { guest });
+  if (G.stillVisible(guest)) return fail("gone should not be visible");
+  const walkers = G.walkersOf(["cat", "dog", "hummingbird"], "red_panda");
+  if (!walkers.includes("cat") || walkers.includes("hummingbird")) {
+    return fail("walkersOf should drop fly bird", { walkers });
+  }
+  return ok("call->place->dismiss->gone", { key: "cat", phases: "in/stay/leave/gone" }, [
+    "visit.call.match=Miso->cat",
+    "visit.call.beginCalled",
+    "visit.call.placeCalled",
+    "visit.call.dismiss+leave->gone",
+    "visit.call.stillVisible",
+  ]);
+}
+
+function visitArrive() {
+  const A = load("arrive.js");
+  const tap = A.pointerUp(2, 2);
+  if (tap.kind !== "tap" || tap.arrive !== false) return fail("short lift should be tap not arrive", { tap });
+  const place = A.pointerUp(40, 0);
+  if (place.kind !== "place" || place.arrive !== false) return fail("drag should place not arrive", { place });
+  if (A.walkLand(false, 0) !== "arrive") return fail("finished walk should arrive");
+  if (A.walkLand(true, 0) !== "act") return fail("act walk should not arrive-as-land");
+  if (A.arriveFinish(true) !== "now" || A.arriveFinish(false) !== "settle") {
+    return fail("arriveFinish drifted");
+  }
+  if (A.afterPlace(true) !== "resume" || A.afterPlace(false) !== "idle") {
+    return fail("afterPlace drifted");
+  }
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  for (const needle of ["PetArrive", "arriveFinish", "finishArrive", "arrivedPending"]) {
+    if (!petSrc.includes(needle)) return fail("pet.js missing " + needle);
+  }
+  return ok("tap/place vs walk-arrive", { tap: tap.kind, place: place.kind }, [
+    "visit.arrive.pointerUp=tap|place",
+    "visit.arrive.walkLand",
+    "visit.arrive.arriveFinish",
+    "visit.arrive.pet.js.wire",
+  ]);
+}
+
+function marketTickers() {
+  const M = load("market.js");
+  let house = M.parseMarket(null);
+  const before = house.tickers.length;
+  house = M.addTicker(house, { symbol: "LINK", kind: "crypto", geckoId: "chainlink", name: "Chainlink" });
+  const link = house.tickers.find((t) => t.symbol === "LINK" || t.geckoId === "chainlink");
+  if (!link) return fail("addTicker LINK missing", { house });
+  if (house.currentId !== link.id) return fail("addTicker should select current", { currentId: house.currentId, link });
+  house = M.addTicker(house, { symbol: "AAPL", kind: "stock", name: "Apple" });
+  const aapl = house.tickers.find((t) => t.symbol === "AAPL");
+  if (!aapl || aapl.kind !== "stock") return fail("addTicker AAPL stock failed", { aapl });
+  const search = M.parseSearchCoins({
+    coins: [
+      { id: "dogwifcoin", name: "dogwifhat", symbol: "wif", market_cap_rank: 50 },
+      { id: "wrapped-something", name: "Wrapped", symbol: "wif", market_cap_rank: 999 },
+    ],
+  });
+  const best = M.pickBestSearchCoin(search, "WIF");
+  if (!best || best.geckoId !== "dogwifcoin") return fail("pickBestSearchCoin fixture failed", { best, search });
+  house = M.addTicker(house, Object.assign({}, best, { kind: "crypto" }));
+  if (!house.tickers.some((t) => t.geckoId === "dogwifcoin")) return fail("WIF not added", { house });
+  const patch = M.toCardPatch(house);
+  const round = M.parseMarket(patch);
+  if (!round.tickers.some((t) => t.geckoId === "chainlink")) return fail("watchlist did not persist LINK", { round });
+  if (!round.tickers.some((t) => t.geckoId === "dogwifcoin")) return fail("watchlist did not persist WIF", { round });
+  const removeId = round.tickers.find((t) => t.geckoId === "chainlink").id;
+  const trimmed = M.removeTicker(round, removeId);
+  if (trimmed.tickers.some((t) => t.id === removeId)) return fail("removeTicker failed");
+  const yahoo = M.yahooUrl("AAPL");
+  const searchUrl = M.searchUrl("pepe");
+  if (!String(yahoo).includes("yahoo")) return fail("yahooUrl drifted", { yahoo });
+  if (!String(searchUrl).includes("api.coingecko.com")) return fail("searchUrl drifted", { searchUrl });
+  return ok("tickers=" + round.tickers.length + " (was " + before + ")", { before, after: round.tickers.length, link: link.id }, [
+    "market.tickers.add=LINK+AAPL+WIF",
+    "market.tickers.resolve=parseSearchCoins",
+    "market.tickers.persist=toCardPatch",
+    "market.tickers.remove",
+  ]);
+}
+
+function newsX() {
+  const N = load("news.js");
+  let prefs = N.blankNewsPrefs();
+  prefs = N.addTopic(prefs, { name: "Halo", query: "Halo" });
+  const halo = prefs.topics.find((t) => t.query === "Halo");
+  if (!halo) return fail("need Halo topic for X tab");
+  prefs = N.pickTopic(prefs, halo.id);
+  prefs = N.pickTab(prefs, "x");
+  if (prefs.tab !== "x") return fail("pickTab x failed", { prefs });
+  const rss = N.xTopicRssUrl(halo.query);
+  const search = N.xSearchUrl(halo.query);
+  if (!String(rss).includes("news.google.com") || !String(rss).toLowerCase().includes("x.com")) {
+    return fail("xTopicRssUrl should be Google News X-site filter", { rss });
+  }
+  if (!String(search).includes("x.com/search")) return fail("xSearchUrl drifted", { search });
+  const srcLine = N.sourceLine(halo, "x");
+  if (!String(srcLine).includes("X") || !String(srcLine).includes("Halo")) {
+    return fail("sourceLine x drifted", { srcLine });
+  }
+  const worldSrc = N.sourceLine(null, "x");
+  if (!String(worldSrc).includes("X")) return fail("world x source drifted", { worldSrc });
+  if ((N.NEWS_TABS || []).indexOf("x") < 0) return fail("NEWS_TABS missing x", { tabs: N.NEWS_TABS });
+  if (N.X_SOURCE !== "Google News · X") return fail("X_SOURCE drifted", { got: N.X_SOURCE });
+  return ok("x tab + rss + search", { tab: prefs.tab, rss, search, src: srcLine }, [
+    "news.x.pickTab=x",
+    "news.x.xTopicRssUrl",
+    "news.x.xSearchUrl",
+    "news.x.sourceLine",
+  ]);
+}
+
+function needsPersist() {
+  const store = memStore();
+  global.localStorage = store;
+  delete require.cache[require.resolve(path.join(RENDERER, "life.js"))];
+  const L = load("life.js");
+  const key = "red_panda";
+  let life = L.blank();
+  life.key = key;
+  life.hunger = 5;
+  life.hygiene = 90;
+  life.mess = [];
+  life.sick = false;
+  life.hidden = false;
+  life.lastNotify = 0;
+  const hungry = L.alerts(life, "Rui", Date.now());
+  if (!hungry || hungry.need !== "hunger") return fail("expected hunger alert", { hungry });
+  L.save(key, life);
+  const loaded = L.load(key);
+  if (loaded.hunger !== 5) return fail("hunger did not persist", { loaded });
+  const trait = { diet: "omnivore", hardy: 0.5, startle: false, special: "", extra: {} };
+  const fed = L.act(loaded, trait, "feed", Date.now(), key);
+  if (!fed || !fed.life || fed.life.hunger < 16) return fail("feed did not raise hunger enough", { fed });
+  const afterFeed = L.alerts(fed.life, "Rui", Date.now());
+  if (afterFeed && afterFeed.need === "hunger") return fail("hunger alert should clear after feed", { afterFeed });
+  fed.life.hidden = true;
+  fed.life.lastNotify = 0;
+  const hid = L.alerts(fed.life, "Rui", Date.now());
+  if (!hid || hid.need !== "hidden") return fail("expected hidden alert", { hid });
+  const called = L.act(fed.life, trait, "call", Date.now(), key);
+  if (called.life.hidden) return fail("call should clear hidden", { called });
+  const afterCall = L.alerts(called.life, "Rui", Date.now());
+  if (afterCall && afterCall.need === "hidden") return fail("hidden alert should clear after call", { afterCall });
+  L.save(key, called.life);
+  const again = L.load(key);
+  if (again.hunger !== called.life.hunger) return fail("post-care hunger did not reload", { again, called });
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  if (!petSrc.includes("function persistCard()") || !petSrc.includes("PetLife.alerts")) {
+    return fail("pet.js persist/alerts wire missing");
+  }
+  return ok("save/load + clear hunger/hidden", { hunger: again.hunger, hidden: again.hidden }, [
+    "needs.persist.life.save/load",
+    "needs.alerts.hunger->feed.clear",
+    "needs.alerts.hidden->call.clear",
+    "needs.persist.load.clearsHidden",
+  ]);
+}
+
 const COMMANDS = {
   weather_resolve: weatherResolve,
   news_resolve: newsResolve,
@@ -461,6 +701,13 @@ const COMMANDS = {
   plates_style: platesStyle,
   plants_place: plantsPlace,
   notify_open: notifyOpen,
+  visit_todays: visitTodays,
+  visit_phases: visitPhases,
+  visit_call_lifecycle: visitCallLifecycle,
+  visit_arrive: visitArrive,
+  market_tickers: marketTickers,
+  news_x: newsX,
+  needs_persist: needsPersist,
 };
 
 function main(argv) {
