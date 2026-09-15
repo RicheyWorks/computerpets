@@ -1127,11 +1127,27 @@ test("canopy keys never schedule scratch or a snake tongue", () => {
     assert.equal(names.includes("scratch"), false, key);
     assert.equal(names.includes("tongue"), false, key);
   }
-  assert.ok(E.actsFor("sloth").some((a) => a.name === "hang"));
-  assert.ok(E.actsFor("lemur").some((a) => a.name === "sun"));
-  assert.ok(E.actsFor("gibbon").some((a) => a.name === "swing"));
-  assert.ok(E.actsFor("flying_squirrel").some((a) => a.name === "glide"));
-  assert.ok(E.actsFor("koala").some((a) => a.name === "chew"));
+  assert.ok(E.actsFor("sloth").some((a) => a.name === "bradypushush"));
+  assert.ok(E.actsFor("sloth").some((a) => a.name === "hangsway_soft"));
+  assert.ok(E.actsFor("sloth").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("sloth").some((a) => a.name === "hang"), false);
+  assert.equal(E.actsFor("sloth").some((a) => a.name === "still"), false);
+  assert.ok(E.actsFor("lemur").some((a) => a.name === "lemurhush"));
+  assert.ok(E.actsFor("lemur").some((a) => a.name === "sunworship_soft"));
+  assert.ok(E.actsFor("lemur").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("lemur").some((a) => a.name === "sun"), false);
+  assert.ok(E.actsFor("gibbon").some((a) => a.name === "hylobateshush"));
+  assert.ok(E.actsFor("gibbon").some((a) => a.name === "brachiate_soft"));
+  assert.ok(E.actsFor("gibbon").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("gibbon").some((a) => a.name === "swing"), false);
+  assert.ok(E.actsFor("flying_squirrel").some((a) => a.name === "glaucomyshush"));
+  assert.ok(E.actsFor("flying_squirrel").some((a) => a.name === "membranelaunch_soft"));
+  assert.ok(E.actsFor("flying_squirrel").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("flying_squirrel").some((a) => a.name === "glide"), false);
+  assert.ok(E.actsFor("koala").some((a) => a.name === "phascolarctoshush"));
+  assert.ok(E.actsFor("koala").some((a) => a.name === "eucchewbrowse_soft"));
+  assert.ok(E.actsFor("koala").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("koala").some((a) => a.name === "chew"), false);
 });
 
 test("reef keys never schedule scratch or a snake tongue", () => {
