@@ -156,9 +156,11 @@ def test_gaps_are_honest_and_accounted():
     assert "gui.host_place" in hole_ids
     assert "gui.blotter_qt" in hole_ids
     assert "ethogram.tricks.red_panda" in hole_ids
-    assert "ethogram.tricks.relay_dragon" in hole_ids
-    assert "ethogram.tricks.fuse_dragon" in hole_ids
-    assert "ethogram.tricks.ground_dragon" in hole_ids
+    # Dragon tricks files exist under house/alias stems (relay-/fuse-/earth-tricks.js);
+    # they are driven via ethogram.catalog_all alias resolution — not excluded holes.
+    assert "ethogram.tricks.relay_dragon" not in hole_ids
+    assert "ethogram.tricks.fuse_dragon" not in hole_ids
+    assert "ethogram.tricks.ground_dragon" not in hole_ids
     # Sample-only acts/wav rows retired — catalog-wide invariants replace them.
     driven_now = set(catalog_ids())
     assert "ethogram.catalog_all" in driven_now
@@ -252,6 +254,23 @@ def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
 
 
 
+def test_tricks_alias_resolution_dragons():
+    """relay/fuse/ground dragons resolve via house stems; Rui stays excluded-only."""
+    from computerpets_client.app_harness import NO_TRICKS_KEYS, _tricks_path
+
+    assert NO_TRICKS_KEYS == frozenset({"red_panda"})
+    relay = _tricks_path("relay_dragon")
+    fuse = _tricks_path("fuse_dragon")
+    ground = _tricks_path("ground_dragon")
+    assert relay is not None and relay.name == "relay-tricks.js"
+    assert fuse is not None and fuse.name == "fuse-tricks.js"
+    assert ground is not None and ground.name == "earth-tricks.js"
+    # Registry must never win for ground_dragon.
+    assert ground.name != "ground-tricks.js"
+    # Rui may resolve on disk (rui-tricks.js) but stays a gaps exclusion by design.
+    assert "red_panda" in NO_TRICKS_KEYS
+
+
 def test_catalog_wide_ethogram_cry_portraits():
     """House-wide invariants — every catalog key / prefersHouseCry key, not samples."""
     eth = invoke("ethogram.catalog_all")
@@ -261,7 +280,11 @@ def test_catalog_wide_ethogram_cry_portraits():
     assert not eth.extras.get("thin")
     assert not eth.extras.get("broken")
     assert not eth.extras.get("unexpected_missing_tricks")
-    assert int(eth.extras.get("tricks_ok") or 0) >= 1
+    # All catalog keys except Rui-excluded gap have a parseable tricks file.
+    assert int(eth.extras.get("tricks_ok") or 0) >= 220
+    for key in ("relay_dragon", "fuse_dragon", "ground_dragon"):
+        one = invoke(f"ethogram.tricks.{key}")
+        assert one.ok, (key, one.error, one.detail)
 
     cry = invoke("cry.catalog_wavs")
     assert cry.ok, (cry.error, cry.extras)
