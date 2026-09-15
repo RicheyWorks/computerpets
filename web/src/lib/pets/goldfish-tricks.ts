@@ -1,4 +1,4 @@
-/** Coin ground tricks while idle — ultra-polish pass. House goldfish — drift / gulp / flare / glint / dart / yawn / forage personality (soft bowl-goldfish life). Drift mid-bowl hang without naming circle (window-play) or soak or potato or loaf or nest; gulp surface-mouth without naming drink or eat-cmd; flare fin-pulse without naming flash or puff; glint lamp-catch tilt without naming gleam (Earth thank-you) or wash; dart short bowl dash without naming zoom or scurry or zig or paddle (turtle); yawn wide-mouth gape without naming gape-snake or stretch; forage gravel-mouth pick without naming dig or nosh or hay or seed or browse. Window-play CIRCLE unchanged — never names a trick `circle`. Special Loop unchanged — never names `loop`. Guest slug Coin / key goldfish — accept "goldfish" and "coin". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`goldfish.wav`). Thank-yous bubble / lip / swish. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `goldfish-tricks.js`. True house-goldfish desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble / Clip / Whee / Ink already done; Echo/budgie skip (bird-ultra); Peck/penguin skip (bird). Coin continues house-order ultra-polish. Next guest ultra is Rue / fox. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`. */
+/** Coin ground tricks while idle — ultra-polish pass. House goldfish — drift / gulp / flare / glint / dart / yawn / forage personality (soft bowl-goldfish life). Drift mid-bowl hang without naming circle (window-play) or soak or potato or loaf or nest; gulp surface-mouth without naming drink or eat-cmd; flare fin-pulse without naming flash or puff; glint lamp-catch tilt without naming gleam (Earth thank-you) or wash; dart short bowl dash without naming zoom or scurry or zig or paddle (turtle); yawn wide-mouth gape without naming gape-snake or stretch; forage gravel-mouth pick without naming dig or nosh or hay or seed or browse. Window-play CIRCLE unchanged — never names a trick `circle`. Special Loop unchanged — never names `loop`. Guest slug Coin / key goldfish — accept "goldfish" and "coin". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`goldfish.wav`). Thank-yous bubble / lip / swish. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop `goldfish-tricks.js`. True house-goldfish desk life — not Rui/cat/dog/rabbit/hamster/guinea_pig/turtle/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble / Clip / Whee / Ink already done; Echo/budgie skip (bird-ultra); Peck/penguin skip (bird). Coin continues house-order ultra-polish. Next guest ultra is Rue / fox. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`.  goldfish.wav EXISTS so prefersHouseCry adds goldfish. Amplitudes raised toward Rui richness; denser waits/weights (DRIFT_HOLD=11.2 RELEASE_S=1.18). Catalog 221. */
 
 export const TRICK_KEY = "goldfish";
 export const TRICKS = ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"] as const;
@@ -52,8 +52,8 @@ export const HAPPY_DUR: Record<GoldfishHappyKind, number> = {
 };
 
 /** Drift hold — Coin hangs mid-bowl on one honest thought. Not window-play circle. Not a turtle soak. Not a guinea-pig potato. */
-export const DRIFT_HOLD = 14.4;
-export const RELEASE_S = 1.0;
+export const DRIFT_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<GoldfishTrickKind, number> = {
   drift: DRIFT_HOLD + RELEASE_S,
@@ -93,11 +93,10 @@ export function shouldAbort(state: TrickFlags | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "drift") return 42 + roll * 28;
-  if (kind === "dart") return 12 + roll * 9;
-  if (kind === "yawn" || kind === "forage") return 11 + roll * 8;
-  if (kind === "gulp" || kind === "flare" || kind === "glint") return 11 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "drift") return 40 + roll * 26;
+  if (kind === "dart" || kind === "forage" || kind === "flare") return 12.8 + roll * 9.4;
+  if (kind === "gulp" || kind === "yawn" || kind === "glint") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: string | null) {
@@ -106,7 +105,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: string | nu
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : TRICKS.slice();
   const weights = list.map((k) =>
-    k === "drift" ? 0.55 : k === "yawn" || k === "gulp" || k === "flare" ? 1.15 : 1
+    k === "drift" ? 0.72 : k === "yawn" || k === "gulp" || k === "flare" ? 1.28 : k === "dart" || k === "forage" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i];
@@ -187,26 +186,26 @@ export function bubblePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.bubble));
   if (u < 0.2) {
     const s = u / 0.2;
-    return { lift: s * 5.5, rot: -s * 8, dx: 0, anim: "talk" as const };
+    return { lift: s * 6.6, rot: -s * 9.6, dx: 0, anim: "talk" as const };
   }
   if (u < 0.85) {
     return {
-      lift: 5.5 + Math.abs(Math.sin(t * 8)) * 3.8,
-      rot: -8 + Math.sin(t * 7) * 9,
+      lift: 6.6 + Math.abs(Math.sin(t * 8)) * 4.6,
+      rot: -9.6 + Math.sin(t * 7) * 10.8,
       dx: 0,
       anim: "talk" as const,
     };
   }
   const s = (u - 0.85) / 0.15;
-  return { lift: 5.5 * (1 - s), rot: -8 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 6.6 * (1 - s), rot: -9.6 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 export function lipPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.lip));
   if (u < 0.9) {
     return {
-      lift: Math.abs(Math.sin(t * 12)) * 4.5,
-      rot: Math.sin(t * 14) * 12,
+      lift: Math.abs(Math.sin(t * 12)) * 5.4,
+      rot: Math.sin(t * 14) * 14.4,
       dx: 0,
       anim: "sit" as const,
     };
@@ -217,9 +216,9 @@ export function lipPose(t: number) {
 export function swishPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.swish));
   return {
-    lift: Math.sin(u * Math.PI) * 6.5,
-    rot: Math.sin(u * Math.PI * 3) * 16,
-    dx: Math.sin(u * Math.PI * 2) * 5,
+    lift: Math.sin(u * Math.PI) * 7.8,
+    rot: Math.sin(u * Math.PI * 3) * 19.2,
+    dx: Math.sin(u * Math.PI * 2) * 6,
     anim: "play" as const,
   };
 }
@@ -285,15 +284,15 @@ function smoothstep(t: number) {
 /** Mid-bowl drift — soft hang, richer undulation. Not window-play circle. Not a turtle soak. Not a cat loaf. */
 export function driftPose(t: number) {
   return {
-    lift: 6.5 + Math.sin(t * 1.6) * 2.2,
-    rot: Math.sin(t * 1.1) * 8,
+    lift: 7.8 + Math.sin(t * 1.6) * 2.6,
+    rot: Math.sin(t * 1.1) * 9.6,
   };
 }
 
 /** Soft undrift — thought lets go, fins ease. */
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: 6.5 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 8 * (1 - u) };
+  return { lift: 7.8 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 9.6 * (1 - u) };
 }
 
 /** Surface gulp — mouth works the waterline. Ethogram gulp_soft, ground-side. */
@@ -301,18 +300,18 @@ export function gulpPose(t: number) {
   const u = Math.max(0, Math.min(1, t / DUR.gulp));
   if (u < 0.2) {
     const s = smoothstep(u / 0.2);
-    return { lift: s * 9.5, rot: -s * 12, dx: 0, anim: "sit" as const };
+    return { lift: s * 11.4, rot: -s * 14.4, dx: 0, anim: "sit" as const };
   }
   if (u < 0.8) {
     return {
-      lift: 9.5 + Math.abs(Math.sin(t * 10)) * 2.8,
-      rot: -12 + Math.sin(t * 9) * 7,
+      lift: 11.4 + Math.abs(Math.sin(t * 10)) * 3.4,
+      rot: -14.4 + Math.sin(t * 9) * 8.4,
       dx: 0,
       anim: "talk" as const,
     };
   }
   const s = smoothstep((u - 0.8) / 0.2);
-  return { lift: 9.5 * (1 - s), rot: -12 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 11.4 * (1 - s), rot: -14.4 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 /** Fin flare — pectorals and dorsal pulse open. Ethogram flare_soft, ground-side. */
@@ -320,18 +319,18 @@ export function flarePose(t: number) {
   const u = Math.max(0, Math.min(1, t / DUR.flare));
   if (u < 0.22) {
     const s = smoothstep(u / 0.22);
-    return { lift: s * 5.5, rot: s * 16, dx: 0, anim: "sit" as const };
+    return { lift: s * 6.6, rot: s * 19.2, dx: 0, anim: "sit" as const };
   }
   if (u < 0.78) {
     return {
-      lift: 5.5 + Math.abs(Math.sin(t * 5)) * 3.2,
-      rot: 16 + Math.sin(t * 6) * 12,
-      dx: Math.sin(t * 4) * 2.4,
+      lift: 6.6 + Math.abs(Math.sin(t * 5)) * 3.8,
+      rot: 19.2 + Math.sin(t * 6) * 14.4,
+      dx: Math.sin(t * 4) * 2.9,
       anim: "play" as const,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
-  return { lift: 5.5 * (1 - s), rot: 16 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 6.6 * (1 - s), rot: 19.2 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 /** Glint — metal body tilts to catch the lamp. Not Earth gleam thank-you. Not a cat wash. */
@@ -339,18 +338,18 @@ export function glintPose(t: number) {
   const u = Math.max(0, Math.min(1, t / DUR.glint));
   if (u < 0.25) {
     const s = smoothstep(u / 0.25);
-    return { lift: s * 3.5, rot: -s * 24, dx: 0, anim: "sit" as const };
+    return { lift: s * 4.2, rot: -s * 28.8, dx: 0, anim: "sit" as const };
   }
   if (u < 0.75) {
     return {
-      lift: 3.5 + Math.sin(t * 3) * 1.2,
-      rot: -24 + Math.sin(t * 2.2) * 7,
-      dx: Math.sin(t * 2) * 1.2,
+      lift: 4.2 + Math.sin(t * 3) * 1.4,
+      rot: -28.8 + Math.sin(t * 2.2) * 8.4,
+      dx: Math.sin(t * 2) * 1.4,
       anim: "sit" as const,
     };
   }
   const s = smoothstep((u - 0.75) / 0.25);
-  return { lift: 3.5 * (1 - s), rot: -24 * (1 - s), dx: 0, anim: "sit" as const };
+  return { lift: 4.2 * (1 - s), rot: -28.8 * (1 - s), dx: 0, anim: "sit" as const };
 }
 
 /** Dart — short bowl dash then settle. Not a dog zoom. Not a hamster scurry. Not a turtle paddle. Not window-play circle. */
@@ -358,23 +357,23 @@ export function dartPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.dart));
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX, lift: s * 2.2, rot: -s * 8, anim: "sit" as const };
+    return { x: fromX, lift: s * 2.6, rot: -s * 9.6, anim: "sit" as const };
   }
   if (u < 0.82) {
     const s = (u - 0.12) / 0.7;
     const kick = Math.sin(s * Math.PI);
     return {
       x: fromX + facing * 28 * smoothstep(s),
-      lift: 2.2 + kick * 7,
-      rot: -8 + Math.sin(s * Math.PI * 2) * 14,
+      lift: 2.6 + kick * 8.4,
+      rot: -9.6 + Math.sin(s * Math.PI * 2) * 16.8,
       anim: "walk" as const,
     };
   }
   const s = smoothstep((u - 0.82) / 0.18);
   return {
     x: fromX + facing * 28,
-    lift: 2.5 * (1 - s),
-    rot: 5 * (1 - s),
+    lift: 3.0 * (1 - s),
+    rot: 6 * (1 - s),
     anim: "sit" as const,
   };
 }
@@ -385,20 +384,20 @@ export function yawnPose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.18) {
     const s = smoothstep(u / 0.18);
-    return { x: fromX, lift: s * 4.5, rot: -s * 6 * face, anim: "sit" as const };
+    return { x: fromX, lift: s * 5.4, rot: -s * 7.2 * face, anim: "sit" as const };
   }
   if (u < 0.78) {
     const s = (u - 0.18) / 0.6;
     const gape = Math.sin(s * Math.PI);
     return {
       x: fromX,
-      lift: 4.5 + gape * 2.2,
-      rot: -6 * face + gape * 10 * face,
+      lift: 5.4 + gape * 2.6,
+      rot: -7.2 * face + gape * 12 * face,
       anim: "talk" as const,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX, lift: 4.5 * (1 - s), rot: -6 * face * (1 - s), anim: "sit" as const };
+  return { x: fromX, lift: 5.4 * (1 - s), rot: -7.2 * face * (1 - s), anim: "sit" as const };
 }
 
 /** Forage — gravel-mouth pick with soft dips and nudges. Not dig. Not nosh. Not hay. Not seed. Ethogram forage_soft. */
@@ -407,19 +406,19 @@ export function foragePose(t: number, fromX: number, facing: number) {
   const face = facing == null ? 1 : facing;
   if (u < 0.14) {
     const s = smoothstep(u / 0.14);
-    return { x: fromX, lift: -s * 5.5, rot: s * 10 * face, anim: "sit" as const };
+    return { x: fromX, lift: -s * 6.6, rot: s * 12 * face, anim: "sit" as const };
   }
   if (u < 0.86) {
     const peck = Math.sin(t * 11);
     return {
-      x: fromX + face * peck * 2.2,
-      lift: -5.5 + Math.abs(peck) * 2.8,
-      rot: 10 * face + peck * 8,
+      x: fromX + face * peck * 2.6,
+      lift: -6.6 + Math.abs(peck) * 3.4,
+      rot: 12 * face + peck * 9.6,
       anim: "eat" as const,
     };
   }
   const s = smoothstep((u - 0.86) / 0.14);
-  return { x: fromX, lift: -5.5 * (1 - s), rot: 10 * face * (1 - s), anim: "sit" as const };
+  return { x: fromX, lift: -6.6 * (1 - s), rot: 12 * face * (1 - s), anim: "sit" as const };
 }
 
 export function stepTrick(trick: GoldfishTrick, dt: number, flags?: TrickFlags): GoldfishTrick {
