@@ -464,6 +464,24 @@ async function runGuiHarnessSmokes(target) {
       extras: s,
     };
 
+    const beforeX = H.snapshot().hostX;
+    s = H.placeHostAt(240);
+    const hostA = !!(s.hostPlaced && s.hostHit && s.hostX === 240);
+    s = H.placeHostAt(420);
+    const hostB = !!(s.hostPlaced && s.hostHit && s.hostX === 420 && s.hostX !== beforeX);
+    results["gui.host_place"] = {
+      ok: !!(hostA && hostB),
+      detail: "placeHostAt 240->420 + data-hit",
+      trace: [
+        "place.240=" + hostA,
+        "place.420=" + hostB,
+        "hostHit=" + !!s.hostHit,
+        "hostX=" + s.hostX,
+        "hostNear=" + !!s.hostNear,
+      ],
+      extras: s,
+    };
+
     const ok = Object.values(results).every((r) => r && r.ok);
     return { ok, results, error: ok ? null : "one or more gui smokes failed" };
   })()`;
