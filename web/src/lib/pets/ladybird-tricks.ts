@@ -45,20 +45,20 @@ export type LadybirdHappy = {
 };
 
 export const HAPPY_DUR: Record<LadybirdHappyKind, number> = {
-  septempunctata: 1.22,
-  bead: 1.34,
-  coccinellid: 1.28,
+  septempunctata: 1.70,
+  bead: 1.84,
+  coccinellid: 1.76,
 };
 export const COCCINELLA_HOLD = 11.2;
-export const RELEASE_S = 0.64;
+export const RELEASE_S = 1.18;
 export const DUR: Record<LadybirdTrickKind, number> = {
   coccinella: COCCINELLA_HOLD + RELEASE_S,
-  spots: 1.58,
-  aphid: 1.64,
-  reflex: 1.52,
-  climb: 1.56,
-  pronotum: 1.6,
-  alar: 1.54,
+  spots: 2.48,
+  aphid: 2.42,
+  reflex: 2.44,
+  climb: 2.56,
+  pronotum: 2.40,
+  alar: 2.38,
 };
 
 export function canStart(state: TrickFlags | undefined) {
