@@ -261,6 +261,7 @@ assert.equal(C.prefersHouseCry("grouper"), true);
 assert.equal(C.prefersHouseCry("cyber_dragon"), true);
 assert.equal(C.prefersHouseCry("volt_dragon"), true);
 assert.equal(C.prefersHouseCry("trace_dragon"), true);
+assert.equal(C.prefersHouseCry("flux_dragon"), true);
   assert.ok(C.speakOpts("hearth", 50).volume < 0.5);
   assert.match(roomSrc, /prefersHouseCry/);
   assert.match(roomSrc, /const cried = await playAnimalVoice/);

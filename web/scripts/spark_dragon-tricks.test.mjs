@@ -439,7 +439,7 @@ test("Spark tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("fieldlineshimmer"), false);
   assert.equal(T.TRICKS.includes("hideheatbloom"), false);
   assert.equal(T.TRICKS.includes("treatyfieldsettle"), false);
-  assert.equal(T.TRICKS.includes("longfluxhush"), false);
+  assert.equal(T.TRICKS.includes("fluxhush"), false);
   assert.equal(T.HAPPY.includes("densflux"), false);
   assert.equal(T.HAPPY.includes("inkflux"), false);
   assert.equal(T.HAPPY.includes("densfluxdragon"), false);
