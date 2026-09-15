@@ -1,6 +1,6 @@
-/** Click ground tricks while idle. House neighborly Elateridae / Alaus oculatus eyed click beetle desk life -- clickjack / rightingclick / tickwalk / clickfreeze / elaterhush personality (clickjack prosternal-spine snap jack-jump distinct from Vault hindleap and Haste fleetlegs; rightingclick upside-down righting click distinct from Armor conglobate/volvation and Cling righting; tickwalk antenna-tick desk walk distinct from Forceps nightscuttle, Snout snoutwalk, and Haste fleetlegs; clickfreeze freeze-thanatosis distinct from Snout dropthanatosis and Armor conglobate; long elaterhush Elateridae hush -- never named wait; NOT Snout acorn weevil; NOT Forceps earwig; NOT Lace; NOT Seven ladybird; NOT Spark firefly; NOT Vault grasshopper; guest slug Click / key click_beetle -- accept click_beetle and click; Thank-yous densclick / inkclick / denselater. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop click_beetle-tricks.js. Next: Rob / robber_fly. Catalog 220. */
+/** Click ground tricks while idle — ultra-polish pass. House neighborly Elateridae / Alaus oculatus eyed click beetle desk life (click_beetle / Click) — clickjack / eyespotflash / clickfreeze / tickwalk / feelertick / rightingclick / elaterhush personality (clickjack prosternal-spine click flip / elater jack without naming click or flip or jack or jump alone as wait, eyespotflash pronotum false-eye flash without naming eye or spot or flash alone as wait, clickfreeze thanatosis settle freeze without naming thanatosis or freeze or settle or drop alone as wait, tickwalk slow Elateridae desk crawl without naming walk or crawl or tick alone as wait, feelertick antenna feeler tick without naming antenna or feeler or tick alone as wait, rightingclick upside-down righting click without naming righting or flip alone as wait, long elaterhush Elateridae eyed-click hush hold (THE elaterhush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or asclepias or oyamel or plumose or lunule or densmilk or inkmilk or densdanaus or densghost or inkghost or densactias or hopskip or hindleap or deskbask or mandiblegraze or femurrasp or tympanal or saltatory or caeliferahush or densvault or inkvault or denscaelifera or leafstill or antennatick or tegminasong or leafwalk or tegminlift or greenmimic or tettigonihush or densblade or inkblade or denstettigonia or stridulate or antennasweep or burrowmouth or cerciflick or tegmenraise or gryllushush or denschirp or inkchirp or densgryllus or wingbanner or puddlesip or flutterhop or tailglidesettle or eyespot or tigerband or papiliohush or densbanner or inkbanner or denspapilio or jewelflick or creekpatrol or perchfan or ovipositdip or metallicwing or damselflick or calopteryxhush or densjewel or inkjewel or denscalopteryx or wingtremble or aphidstalk or eggraise or nightglint or pedicel or laceveil or chrysopahush or denslace or inklace or denschrysopa or cercithreat or fanwing or nightscuttle or broodguard or tegminacurl or cerciwhip or forficulahush or densforceps or inkforceps or densforficula or forcipule or wallrace or antennaflick or fleetlegs or densforcep or rostrumdrill or acornroll or dropthanatosis or snoutwalk or elytraclamp or cupprobe or curculiohush or denssnout or inksnout or denscurculio or sallyhawk or beardgroom or midsnatch or stiltsstance or asilushush or densrob or bury or flat or still or sit or walk or hop or spring or vault or click_beetle or click or earwig or forceps or acorn_weevil or snout as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Snout acorn_weevil owns rostrumdrill/acornroll/dropthanatosis/snoutwalk/elytraclamp/cupprobe/curculiohush — do NOT reuse; Forceps earwig owns cercithreat/fanwing/nightscuttle/broodguard/tegminacurl/cerciwhip/forficulahush — do NOT reuse; Lace lacewing owns wingtremble/aphidstalk/eggraise/nightglint/pedicel/laceveil/chrysopahush — do NOT reuse; Jewel jewelwing owns jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush — do NOT reuse; Banner swallowtail owns wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush — do NOT reuse (eyespotflash is fine, distinct from bare eyespot); Blade owns antennatick — do NOT reuse bare antennatick (feelertick is fine, distinct); Vault owns hindleap — do NOT reuse; Armor pillbug owns conglobate/volvation — do NOT reuse; Spark firefly owns flash/glow/lantern/jstroke — do NOT reuse bare flash (eyespotflash is fine, distinct); Rob robber_fly next owns sallyhawk/beardgroom/midsnatch/stiltsstance/asilushush — do NOT reuse; header forbids bare bury/flat/still/sit/wait and bare click_beetle/click as trick kinds; guest slug Click / key click_beetle only for wantsThankYou matching — accept "click_beetle" and "click"; do NOT accept bare "click" as a trick id; do NOT name a trick "click_beetle" or "click" or "acorn_weevil" or "snout" or "earwig" or "forceps" or "lacewing" or "lace" or "jewelwing" or "jewel" or "swallowtail" or "banner" or "robber_fly" or "rob" or "rostrumdrill" or "acornroll" or "dropthanatosis" or "snoutwalk" or "elytraclamp" or "cupprobe" or "curculiohush" or "cercithreat" or "fanwing" or "forficulahush" or "wingtremble" or "chrysopahush" or "jewelflick" or "calopteryxhush" or "sallyhawk" or "asilushush" or "antennatick" or "hindleap" or "eyespot" or "hopskip" or "caeliferahush" or "densvault" or "densblade" or "denschirp" or "densbanner" or "densjewel" or "denslace" or "densforceps" or "denssnout") — not Snout Curculio acorn-weevil life, not Forceps Forficula earwig life, not Lace Chrysopa lacewing life, not Jewel Calopteryx jewelwing life, not Banner Papilio swallowtail life, not Rob Asilidae robber-fly life (next guest), not Haste Scutigera house-centipede life, not Milk Danaus monarch life, not Ghost Actias luna life, not Comb Apis honeybee life, not Dart Aeshnidae darner life, not Spark Lampyridae firefly life, not Vault Melanoplus grasshopper life, not Blade Tettigoniidae katydid life, not Chirp Gryllus field-cricket life, not Stick Phasmatodea oviposit life, not Armor Armadillidium pillbug life, not Cache Sciurus squirrel life, not Auger Xylocopa carpenter-bee life, not Barb scorpion life, not Rui red_panda life. Clickjack without naming click alone, eyespotflash without naming flash alone, clickfreeze without naming freeze alone, tickwalk without naming walk alone, feelertick without naming antenna alone, rightingclick without naming righting alone, elaterhush long sit_hold on the Elateridae eyed-click hush (THE elaterhush sit_hold tell); densclick / inkclick / denselater thank-yous. Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as desktop click_beetle-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk/click/click_beetle as bare ethogram-only trick kinds. True Eyed Click Beetle Alaus oculatus Elateridae desk life only — prosternal click flip, eye-spot flash, thanatosis settle, slow tick walk, antenna feeler tick, righting click, and Elateridae hush; distinct from Snout acorn_weevil rostrumdrill/acornroll/dropthanatosis/snoutwalk/elytraclamp/cupprobe/curculiohush, Forceps earwig cercithreat/fanwing/nightscuttle/broodguard/tegminacurl/cerciwhip/forficulahush, Lace lacewing wingtremble/aphidstalk/eggraise/nightglint/pedicel/laceveil/chrysopahush, Jewel jewelwing jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush, Banner swallowtail wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush, Rob robber_fly sallyhawk/beardgroom/midsnatch/stiltsstance/asilushush (next), Haste house_centipede forcipule/wallrace/antennaflick/fleetlegs/densforcep, Milk monarch asclepias/oyamel, Ghost luna plumose/lunule, Comb honeybee, Dart darner hawking/tandem, Spark firefly lantern/jstroke, Vault grasshopper hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush, Blade katydid antennatick/tettigonihush, Chirp cricket hopskip, Stick oviposit, Armor pillbug, Cache nutbury, Auger rasp, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Rob / robber_fly. No cry inventing — thank-yous are silent desk motion only; click_beetle.wav EXISTS so prefersHouseCry adds click_beetle after acorn_weevil. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "click_beetle";
-export const TRICKS = ["clickjack", "rightingclick", "tickwalk", "clickfreeze", "elaterhush"] as const;
+export const TRICKS = ["clickjack", "eyespotflash", "clickfreeze", "tickwalk", "feelertick", "rightingclick", "elaterhush"] as const;
 export const HAPPY = ["densclick", "inkclick", "denselater"] as const;
 export type ClickBeetleTrickKind = (typeof TRICKS)[number];
 export type ClickBeetleHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,18 @@ export type ClickBeetleHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { densclick: 2.54, inkclick: 2.66, denselater: 2.42 } as const;
-export const ELATERHUSH_HOLD = 29.40;
-export const RELEASE_S = 2.12;
-export const DUR = { elaterhush: ELATERHUSH_HOLD + RELEASE_S, clickjack: 4.18, rightingclick: 4.56, tickwalk: 4.68, clickfreeze: 4.08 } as const;
+export const HAPPY_DUR = { densclick: 1.70, inkclick: 1.84, denselater: 1.76 } as const;
+export const ELATERHUSH_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  elaterhush: ELATERHUSH_HOLD + RELEASE_S,
+  clickjack: 2.48,
+  eyespotflash: 2.42,
+  clickfreeze: 2.40,
+  tickwalk: 2.44,
+  feelertick: 2.38,
+  rightingclick: 2.56,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -57,6 +65,7 @@ export function canStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function shouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
@@ -73,42 +82,83 @@ export function shouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: ClickBeetleTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "elaterhush") return 194 + roll * 18;
-  if (kind === "clickjack") return 20.8 + roll * 3.2;
-  if (kind === "rightingclick") return 24.0 + roll * 3.5;
-  if (kind === "tickwalk") return 25.6 + roll * 3.8;
-  if (kind === "clickfreeze") return 23.8 + roll * 3.4;
-  return justFinished ? 18.2 + roll * 2.8 : 13.6 + roll * 2.4;
+  if (kind === "elaterhush") return 40 + roll * 26;
+  if (kind === "feelertick" || kind === "clickjack" || kind === "tickwalk") return 12.8 + roll * 9.4;
+  if (kind === "clickfreeze" || kind === "eyespotflash" || kind === "rightingclick") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: ClickBeetleTrickKind | string) {
-  if (musicOn) return "elaterhush";
+
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: ClickBeetleTrickKind | string | null) {
+  if (musicOn) return "elaterhush" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "elaterhush") {
-    if (roll < 0.26) return "clickjack";
-    if (roll < 0.5) return "rightingclick";
-    if (roll < 0.74) return "tickwalk";
-    return "clickfreeze";
+    if (roll < 0.17) return "clickjack" as const;
+    if (roll < 0.33) return "eyespotflash" as const;
+    if (roll < 0.49) return "clickfreeze" as const;
+    if (roll < 0.65) return "tickwalk" as const;
+    if (roll < 0.83) return "feelertick" as const;
+    return "rightingclick" as const;
   }
   if (lastKind === "clickjack") {
-    if (roll < 0.26) return "elaterhush";
-    if (roll < 0.5) return "rightingclick";
-    if (roll < 0.74) return "tickwalk";
-    return "clickfreeze";
+    if (roll < 0.16) return "elaterhush" as const;
+    if (roll < 0.32) return "eyespotflash" as const;
+    if (roll < 0.48) return "clickfreeze" as const;
+    if (roll < 0.64) return "tickwalk" as const;
+    if (roll < 0.82) return "feelertick" as const;
+    return "rightingclick" as const;
+  }
+  if (lastKind === "eyespotflash") {
+    if (roll < 0.14) return "elaterhush" as const;
+    if (roll < 0.3) return "clickjack" as const;
+    if (roll < 0.46) return "clickfreeze" as const;
+    if (roll < 0.62) return "tickwalk" as const;
+    if (roll < 0.8) return "feelertick" as const;
+    return "rightingclick" as const;
+  }
+  if (lastKind === "clickfreeze") {
+    if (roll < 0.15) return "elaterhush" as const;
+    if (roll < 0.31) return "clickjack" as const;
+    if (roll < 0.47) return "eyespotflash" as const;
+    if (roll < 0.63) return "tickwalk" as const;
+    if (roll < 0.81) return "feelertick" as const;
+    return "rightingclick" as const;
+  }
+  if (lastKind === "tickwalk") {
+    if (roll < 0.16) return "elaterhush" as const;
+    if (roll < 0.32) return "clickjack" as const;
+    if (roll < 0.48) return "eyespotflash" as const;
+    if (roll < 0.64) return "clickfreeze" as const;
+    if (roll < 0.82) return "feelertick" as const;
+    return "rightingclick" as const;
+  }
+  if (lastKind === "feelertick") {
+    if (roll < 0.15) return "elaterhush" as const;
+    if (roll < 0.31) return "clickjack" as const;
+    if (roll < 0.47) return "eyespotflash" as const;
+    if (roll < 0.63) return "clickfreeze" as const;
+    if (roll < 0.81) return "tickwalk" as const;
+    return "rightingclick" as const;
   }
   if (lastKind === "rightingclick") {
-    if (roll < 0.22) return "elaterhush";
-    if (roll < 0.44) return "clickjack";
-    if (roll < 0.68) return "tickwalk";
-    return "clickfreeze";
+    if (roll < 0.16) return "elaterhush" as const;
+    if (roll < 0.32) return "clickjack" as const;
+    if (roll < 0.48) return "eyespotflash" as const;
+    if (roll < 0.64) return "clickfreeze" as const;
+    if (roll < 0.82) return "tickwalk" as const;
+    return "feelertick" as const;
   }
-  if (roll < 0.2) return "elaterhush";
-  if (roll < 0.4) return "clickjack";
-  if (roll < 0.6) return "rightingclick";
-  if (roll < 0.8) return "tickwalk";
-  return "clickfreeze";
+  if (roll < 0.14) return "elaterhush" as const;
+  if (roll < 0.28) return "clickjack" as const;
+  if (roll < 0.42) return "eyespotflash" as const;
+  if (roll < 0.56) return "clickfreeze" as const;
+  if (roll < 0.7) return "tickwalk" as const;
+  if (roll < 0.85) return "feelertick" as const;
+  return "rightingclick" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -117,6 +167,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
@@ -132,14 +183,16 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "click";
 }
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: ClickBeetleHappyKind | string | undefined,
+  lastKind: ClickBeetleHappyKind | null | undefined,
   x: number,
-  facing?: 1 | -1,
+  facing: 1 | -1,
   flags?: TrickFlags
 ) {
   if (!wantsThankYou(key)) return null;
@@ -147,14 +200,16 @@ export function startThankYou(
   const pick = pickHappy(lastKind);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
-export function pickHappy(lastKind?: ClickBeetleHappyKind | string, rand?: number) {
+
+export function pickHappy(lastKind?: ClickBeetleHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
-export function beginHappy(kind: ClickBeetleHappyKind | string, x: number, facing?: 1 | -1): ClickBeetleHappy {
-  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as ClickBeetleHappyKind) : "densclick";
+
+export function beginHappy(kind: ClickBeetleHappyKind | string, x: number, facing: 1 | -1): ClickBeetleHappy {
+  const name = (HAPPY as readonly string[]).includes(kind) ? (kind as ClickBeetleHappyKind) : "densclick";
   return {
     kind: name,
     happy: true,
@@ -163,54 +218,63 @@ export function beginHappy(kind: ClickBeetleHappyKind | string, x: number, facin
     x,
     lift: 0,
     rot: 0,
-    anim: name === "densclick" ? "sit" : name === "inkclick" ? "play" : "play",
-    facing: facing == null ? 1 : facing,
+    anim: (name === "densclick" ? "sit" : name === "inkclick" ? "play" : "play") as TrickAnim,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
+
 export function densclickPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densclick));
   if (u < 0.14) {
     const s = u / 0.14;
-    return { lift: s * -0.0024, rot: s * 0.11, anim: "sit" as TrickAnim };
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.86) {
-    const cerci = Math.sin(((u - 0.14) / 0.72) * Math.PI * 2.42);
-    return { lift: -0.0024 + Math.abs(cerci) * 0.00135, rot: 0.11 + cerci * 0.16, anim: "sit" as TrickAnim };
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
+    };
   }
-  const s = (u - 0.86) / 0.14;
-  return { lift: -0.0024 * (1 - s), rot: 0.11 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
+
 export function inkclickPose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkclick));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.0038, rot: s * -0.22, anim: "play" as TrickAnim };
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
   }
-  if (u < 0.84) {
-    const pulse = Math.sin(((u - 0.12) / 0.72) * Math.PI * 3.18);
-    return { lift: 0.0038 + Math.abs(pulse) * 0.00185, rot: -0.22 + pulse * 0.26, anim: "play" as TrickAnim };
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
   }
-  const s = (u - 0.84) / 0.16;
-  return { lift: 0.0038 * (1 - s), rot: -0.22 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
+
 export function denselaterPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denselater));
-  if (u < 0.13) {
-    const s = u / 0.13;
-    return { lift: s * 0.0016, rot: s * 0.14, anim: "play" as TrickAnim };
-  }
-  if (u < 0.82) {
-    const flash = Math.sin(((u - 0.13) / 0.69) * Math.PI * 2.28);
-    return { lift: 0.0016 + Math.abs(flash) * 0.00112, rot: 0.14 + flash * 0.15, anim: "play" as TrickAnim };
-  }
-  const s = (u - 0.82) / 0.18;
-  return { lift: 0.0016 * (1 - s), rot: 0.14 * (1 - s), anim: "idle" as TrickAnim };
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "play" as TrickAnim,
+  };
 }
-export function stepHappy(happy: ClickBeetleHappy, dt: number, flags?: TrickFlags): ClickBeetleHappy {
+
+export function stepHappy(happy: ClickBeetleHappy | null | undefined, dt: number, flags?: TrickFlags) {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...happy, t: happy.t + Math.max(0, dt) };
   const hold = HAPPY_DUR[next.kind];
@@ -230,165 +294,223 @@ export function stepHappy(happy: ClickBeetleHappy, dt: number, flags?: TrickFlag
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
-export function beginTrick(kind: ClickBeetleTrickKind | string, x: number, facing?: 1 | -1): ClickBeetleTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as ClickBeetleTrickKind) : "elaterhush";
+
+export function beginTrick(kind: ClickBeetleTrickKind, x: number, facing: 1 | -1): ClickBeetleTrick {
   const anim: TrickAnim =
-    k === "elaterhush"
+    kind === "elaterhush"
       ? "sit"
-      : k === "clickjack"
+      : kind === "clickjack"
         ? "play"
-        : k === "rightingclick"
-          ? "play"
-          : k === "clickfreeze"
-            ? "sit"
-            : k === "tickwalk"
-              ? "walk"
-              : "sit";
+        : kind === "rightingclick"
+          ? "talk"
+          : kind === "eyespotflash"
+            ? "walk"
+            : kind === "clickfreeze"
+              ? "sit"
+              : kind === "tickwalk"
+                ? "play"
+                : kind === "feelertick"
+                  ? "walk"
+                  : "sit";
   return {
-    kind: k,
-    phase: k === "elaterhush" ? "hold" : "go",
+    kind,
+    phase: kind === "elaterhush" ? "hold" : "go",
     t: 0,
     x,
     lift: 0,
     rot: 0,
     anim,
-    facing: facing == null ? 1 : facing,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
+
 function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
-export function elaterhushPose(t) {
-    const breath = Math.sin(t * 0.00088) + 0.0003 * Math.sin(t * 0.0025);
-    const hush = Math.abs(Math.sin(t * 0.00034));
-    return { lift: -0.0002 + hush * 0.00005, rot: 0.005 + breath * 0.0022 };
-  }
+
+export function elaterhushPose(t: number) {
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
+}
 
 export function releasePose(t: number) {
   const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00022 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.006 * (1 - u) };
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
 }
-export function clickjackPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.clickjack));
-    const face = facing == null ? 1 : facing;
-    // prosternal spine cock → snap jack-jump → soft land
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX + face * s * 0.00002, lift: s * -0.0034, rot: s * 0.22 * face, anim: "play" };
-    }
-    if (u < 0.32) {
-      const s = smoothstep((u - 0.18) / 0.14);
-      return { x: fromX + face * (0.00002 + s * 0.0004), lift: -0.0034 + s * 0.028, rot: (0.22 - s * 0.48) * face, anim: "play" };
-    }
-    if (u < 0.72) {
-      const air = (u - 0.32) / 0.4;
-      const arc = Math.sin(air * Math.PI);
-      const tumble = Math.sin(air * Math.PI * 2.4);
-      return {
-        x: fromX + face * (0.00042 + air * 0.006 + tumble * 0.0002),
-        lift: 0.0246 * arc,
-        rot: (-0.26 + tumble * 0.55) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.88) {
-      const s = smoothstep((u - 0.72) / 0.16);
-      return { x: fromX + face * 0.00642, lift: 0.0042 * (1 - s), rot: (0.12 - s * 0.1) * face, anim: "play" };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.00642 * (1 - s * 0.02), lift: 0.0008 * (1 - s), rot: 0.02 * (1 - s) * face, anim: "idle" };
-  }
 
-export function rightingclickPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.rightingclick));
-    const face = facing == null ? 1 : facing;
-    // on back → click snap → roll upright
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX + face * s * 0.00003, lift: s * 0.0012, rot: (s * 2.85) * face, anim: "play" };
-    }
-    if (u < 0.38) {
-      const s = smoothstep((u - 0.16) / 0.22);
-      const snap = Math.sin(s * Math.PI);
-      return {
-        x: fromX + face * (0.00003 + snap * 0.00035),
-        lift: 0.0012 + snap * 0.014,
-        rot: (2.85 - s * 3.4) * face,
-        anim: "play",
-      };
-    }
-    if (u < 0.78) {
-      const s = (u - 0.38) / 0.4;
-      const settle = Math.sin(s * Math.PI * 1.6);
-      return {
-        x: fromX + face * (0.0002 + settle * 0.00015),
-        lift: 0.008 * (1 - s) + Math.abs(settle) * 0.001,
-        rot: (-0.55 + s * 0.48 + settle * 0.12) * face,
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX + face * 0.0002 * (1 - s), lift: 0.0012 * (1 - s), rot: (-0.07 * (1 - s)) * face, anim: "idle" };
+export function clickjackPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.clickjack));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" as TrickAnim };
   }
-
-export function tickwalkPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.tickwalk));
-    const face = facing == null ? 1 : facing;
-    // antenna tick + measured elater walk
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.00015, lift: s * 0.00055, rot: s * -0.06 * face, anim: "walk" };
-    }
-    if (u < 0.88) {
-      const dash = (u - 0.10) / 0.78;
-      const stride = Math.sin(dash * Math.PI * 5.6);
-      const tick = Math.sin(dash * Math.PI * 11.2);
-      const bob = Math.abs(Math.sin(dash * Math.PI * 4.8));
-      return {
-        x: fromX + face * (0.00015 + dash * 0.016 + stride * 0.00035),
-        lift: 0.00055 + bob * 0.00095,
-        rot: (-0.06 + stride * 0.09 + tick * 0.07) * face,
-        anim: "walk",
-      };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.026 * (1 - s * 0.012), lift: 0.00055 * (1 - s), rot: (-0.015 + 0.01 * s) * face, anim: "idle" };
+  if (u < 0.78) {
+    const bar = Math.sin(t * 2.4);
+    return {
+      x: fromX + face * (0.8 + bar * 0.16),
+      lift: 2.8 + Math.abs(bar) * 1.5,
+      rot: face * (-12 + bar * 10),
+      anim: "play" as TrickAnim,
+    };
   }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
 
-export function clickfreezePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.clickfreeze));
-    const face = facing == null ? 1 : facing;
-    // sudden freeze-thanatosis — drop into a locked still, hold, then thaw (distinct from Snout drop-curl)
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00002, lift: s * -0.0036, rot: s * 0.11 * face, anim: "sit" };
-    }
-    if (u < 0.84) {
-      const hold = (u - 0.12) / 0.72;
-      const breath = Math.sin(hold * Math.PI * 0.7) * 0.00008;
-      return {
-        x: fromX + face * (0.00002 + breath),
-        lift: -0.0036 + breath,
-        rot: (0.11 + breath * 12) * face,
-        anim: "sit",
-      };
-    }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.00002 * (1 - s), lift: -0.0036 * (1 - s), rot: 0.11 * (1 - s) * face, anim: "idle" };
+export function eyespotflashPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.eyespotflash));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.12) {
+    const s = smoothstep(u / 0.12);
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" as TrickAnim };
   }
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.2);
+    return {
+      x: fromX + face * bob * 0.12,
+      lift: 2.6 + Math.abs(bob) * 1.3,
+      rot: face * (10 + bob * 8),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
 
-export function stepTrick(trick: ClickBeetleTrick, dt: number, flags?: TrickFlags): ClickBeetleTrick {
+export function clickfreezePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.clickfreeze));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const hang = Math.sin(t * 2.0);
+    return {
+      x: fromX + face * (0.5 + hang * 0.1),
+      lift: 2.8 + Math.abs(hang) * 1.2,
+      rot: face * (11 + hang * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.5 * (1 - s),
+    lift: 1.3 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function tickwalkPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.tickwalk));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const thrash = Math.sin(t * 3.6);
+    return {
+      x: fromX + face * (1.0 + thrash * 0.22),
+      lift: 3.6 + Math.abs(thrash) * 2.0,
+      rot: face * (18 + thrash * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 1.0 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: face * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function feelertickPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.feelertick));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cast = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * (0.6 + cast * 0.16),
+      lift: 2.8 + Math.abs(cast) * 1.6,
+      rot: face * (12 + cast * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function rightingclickPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.rightingclick));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cloud = Math.sin(t * 3.0);
+    return {
+      x: fromX + face * (0.6 + cloud * 0.18),
+      lift: 3.0 + Math.abs(cloud) * 1.8,
+      rot: face * (14 + cloud * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.5 * (1 - s),
+    rot: face * (5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: ClickBeetleTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "clickjack" && trick.kind !== "rightingclick" && trick.kind !== "clickfreeze" && trick.kind !== "tickwalk") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "clickjack" &&
+    trick.kind !== "eyespotflash" &&
+    trick.kind !== "clickfreeze" &&
+    trick.kind !== "tickwalk" &&
+    trick.kind !== "feelertick" &&
+    trick.kind !== "rightingclick"
+  ) {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...trick, t: trick.t + Math.max(0, dt) };
   if (next.kind === "elaterhush") {
@@ -408,35 +530,48 @@ export function stepTrick(trick: ClickBeetleTrick, dt: number, flags?: TrickFlag
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "clickjack") {
-    const pose = clickjackPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = clickjackPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
-  } else if (next.kind === "rightingclick") {
-    const pose = rightingclickPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+  } else if (next.kind === "eyespotflash") {
+    const pose = eyespotflashPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "clickfreeze") {
+    const pose = clickfreezePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "tickwalk") {
-    const pose = tickwalkPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = tickwalkPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "feelertick") {
+    const pose = feelertickPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = clickfreezePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = rightingclickPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
