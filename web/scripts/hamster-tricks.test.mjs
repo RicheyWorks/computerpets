@@ -184,9 +184,9 @@ test("ground registry keeps prior guests gated; Clip selectable; no stash/dig/bo
   assert.equal(Rabbit.TRICK_KEY, "rabbit");
   assert.equal(T.TRICK_KEY, "hamster");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -275,10 +275,11 @@ test("ultra-polish: Clip nest/cheek/pocket/scrub/seed lifts are Rui-visible (not
   assert.ok(n2.lift < 0 || Math.abs(n2.rot) > 6, `seed mid lift/rot ${n2.lift}/${n2.rot}`);
   assert.ok(Overlay.scrubPose && Overlay.seedPose);
   assert.equal(T.NEST_HOLD, Overlay.NEST_HOLD);
-  assert.ok(T.NEST_HOLD >= 14);
+  assert.equal(T.NEST_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
 });
 
-test("notes: Clip idle-life ultra done; Whee / guinea_pig ultra next-or-done; following house-order ultra guest is Ink / turtle (birds Soot→Ember + Miso + Pip + Thimble already ultra)", () => {
+test("notes: Clip Rui-dense ultra (NEST_HOLD=11.2); next house-order densify leftover after early mammals: Whee / guinea_pig then Ink / turtle", () => {
   assert.deepEqual([...T.TRICKS], ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"]);
   assert.equal(T.TRICK_KEY, "hamster");
   assert.equal(T.wantsThankYou("clip"), true);

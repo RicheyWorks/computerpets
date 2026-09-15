@@ -1,4 +1,4 @@
-/** Clip ground tricks while idle — ultra-polish pass. House hamster — nest / cheek / scurry / pocket / reel / scrub / seed personality (soft night-shift desk hamster life). Nest drawer-settle without naming loaf or wait or flop or den or sprawl or curl; cheek pouch-fill without naming wash or face_wash eth alone; scurry night-dart without naming zoom or binky or popcorn; pocket paperclip-hoard without naming stash (window-play) or dig; reel wheel-spin-in-place without naming dance or spin alone; scrub face-paw wipe without naming wash or groom or mlem; seed soft forage pick without naming nibble (eth / guinea happy) or nosh or eat-cmd. Window-play STASH drawer unchanged — never names stash. Guest slug Clip / key hamster — accept "hamster" and "clip". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`hamster.wav`). Thank-yous stuff / chitter / sprint. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop hamster-tricks.js. True house-hamster desk life — not Rui/cat/dog/rabbit/guinea-pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble already done; Clip continues mammal ultra-polish. Next guest ultra is Whee / guinea_pig. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`. */
+/** Clip ground tricks while idle — ultra-polish pass. House hamster — nest / cheek / scurry / pocket / reel / scrub / seed personality (soft night-shift desk hamster life). Nest drawer-settle without naming loaf or wait or flop or den or sprawl or curl; cheek pouch-fill without naming wash or face_wash eth alone; scurry night-dart without naming zoom or binky or popcorn; pocket paperclip-hoard without naming stash (window-play) or dig; reel wheel-spin-in-place without naming dance or spin alone; scrub face-paw wipe without naming wash or groom or mlem; seed soft forage pick without naming nibble (eth / guinea happy) or nosh or eat-cmd. Window-play STASH drawer unchanged — never names stash. Guest slug Clip / key hamster — accept "hamster" and "clip". Amplitudes raised toward Rui richness; denser timing; house cry preferred for talk (`hamster.wav`). Thank-yous stuff / chitter / sprint. Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop hamster-tricks.js. True house-hamster desk life — not Rui/cat/dog/rabbit/guinea-pig/turtle/goldfish/budgie/fox/penguin/parrot/ferret/hedgehog/chinchilla/axolotl/toucan/iguana/dragon/Vesper or *Dragon electrical clones. Bird ultra line (Soot→Ember) and Miso / Pip / Thimble already done; Clip continues mammal ultra-polish. Next guest ultra is Whee / guinea_pig. No cry inventing — thank-yous are silent desk motion only. Never retouch Rui sprites. Ethogram SCRATCH_KEYS still owns paw-scratch motion — this module never names a trick `scratch`.  hamster.wav EXISTS so prefersHouseCry adds hamster. Amplitudes raised toward Rui richness; denser waits/weights (NEST_HOLD=11.2 RELEASE_S=1.18). Catalog 221. */
 export const TRICK_KEY = "hamster";
 export const TRICKS = ["nest", "cheek", "scurry", "pocket", "reel", "scrub", "seed"] as const;
 export const HAPPY = ["stuff", "chitter", "sprint"] as const;
@@ -59,8 +59,8 @@ export const HAPPY_DUR: Record<HamsterHappyKind, number> = {
 };
 
 /** Soft nest hold — Clip punches into the drawer nest and stays soft, then peeks up. Rui-visible breath. Not a cat loaf. Not a rabbit flop. */
-export const NEST_HOLD = 14.4;
-export const RELEASE_S = 1.02;
+export const NEST_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 
 export const DUR: Record<HamsterTrickKind, number> = {
   nest: NEST_HOLD + RELEASE_S,
@@ -100,12 +100,10 @@ export function shouldAbort(state: TrickFlags | null | undefined) {
 
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "nest") return 42 + roll * 28;
-  if (kind === "scurry") return 12 + roll * 9;
-  if (kind === "scrub" || kind === "seed") return 11 + roll * 8;
-  if (kind === "cheek" || kind === "pocket") return 11 + roll * 8;
-  if (kind === "reel") return 10 + roll * 8;
-  return justFinished ? 8 + roll * 8 : 4 + roll * 7;
+  if (kind === "nest") return 40 + roll * 26;
+  if (kind === "scurry" || kind === "reel" || kind === "pocket") return 12.8 + roll * 9.4;
+  if (kind === "cheek" || kind === "scrub" || kind === "seed") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
 
 export function pickTrick(rand?: number, musicOn = false, lastKind?: string | null) {
@@ -114,7 +112,7 @@ export function pickTrick(rand?: number, musicOn = false, lastKind?: string | nu
   const pool = TRICKS.filter((k) => k !== lastKind);
   const list = pool.length ? pool : TRICKS.slice();
   const weights = list.map((k) =>
-    k === "nest" ? 0.55 : k === "cheek" || k === "pocket" || k === "scrub" ? 1.15 : 1
+    k === "nest" ? 0.72 : k === "cheek" || k === "pocket" || k === "scrub" ? 1.28 : k === "scurry" || k === "reel" ? 1.18 : 1.08
   );
   let total = 0;
   for (let i = 0; i < weights.length; i++) total += weights[i];
@@ -200,8 +198,8 @@ export function stuffPose(t: number) {
   if (u < 0.85) {
     const buzz = Math.sin(t * 14) + 0.2 * Math.sin(t * 22);
     return {
-      lift: -4.5 + Math.abs(buzz) * 3.2,
-      rot: 10 + buzz * 9,
+      lift: -5.4 + Math.abs(buzz) * 3.8,
+      rot: 12 + buzz * 11,
       dx: buzz * 0.8,
       anim: "sit" as TrickAnim,
     };
@@ -218,7 +216,7 @@ export function chitterPose(t: number) {
   }
   if (u < 0.72) {
     const soft = Math.sin(t * 18);
-    return { lift: 5.5 + Math.abs(soft) * 2.2, rot: 14 + soft * 8, dx: 0, anim: "talk" as TrickAnim };
+    return { lift: 6.6 + Math.abs(soft) * 2.6, rot: 17 + soft * 10, dx: 0, anim: "talk" as TrickAnim };
   }
   const s = (u - 0.72) / 0.28;
   return { lift: 5.5 * (1 - s), rot: 14 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
@@ -297,8 +295,8 @@ export function nestPose(t: number) {
   const soft = Math.sin(t * 1.7);
   const breath = Math.sin(t * 2.8);
   return {
-    lift: -4.2 + soft * 1.5 + Math.abs(breath) * 1.0,
-    rot: -14 + breath * 4 + Math.sin(t * 5.1) * 3,
+    lift: -5.0 + soft * 1.8 + Math.abs(breath) * 1.2,
+    rot: -17 + breath * 5 + Math.sin(t * 5.1) * 3.6,
   };
 }
 
@@ -331,8 +329,8 @@ export function pocketPose(t: number) {
   }
   if (u < 0.75) {
     return {
-      lift: -6 + Math.sin(t * 14) * 3.5,
-      rot: 12 + Math.sin(t * 12) * 8,
+      lift: -7.2 + Math.sin(t * 14) * 4.2,
+      rot: 14 + Math.sin(t * 12) * 9.5,
       dx: 4 + Math.sin(t * 10) * 2,
       anim: "sit" as TrickAnim,
     };
@@ -350,7 +348,7 @@ export function reelPose(t: number) {
   }
   if (u < 0.85) {
     return {
-      lift: 4 + Math.abs(Math.sin(t * 16)) * 6,
+      lift: 4.8 + Math.abs(Math.sin(t * 16)) * 7.2,
       rot: Math.sin(t * 14) * 28,
       dx: Math.sin(t * 12) * 4,
       anim: "play" as TrickAnim,
@@ -399,8 +397,8 @@ export function scrubPose(t: number, fromX: number, facing: number) {
     const wipe = Math.sin(s * Math.PI * 3.2);
     return {
       x: fromX + face * (2 + wipe * 2),
-      lift: -5 + Math.abs(wipe) * 8,
-      rot: 14 * face + wipe * 10,
+      lift: -6 + Math.abs(wipe) * 9.5,
+      rot: 17 * face + wipe * 12,
       anim: "sit" as TrickAnim,
     };
   }
@@ -421,8 +419,8 @@ export function seedPose(t: number, fromX: number, facing: number) {
     const pick = Math.sin(s * Math.PI * 6);
     return {
       x: fromX + face * pick * 1.2,
-      lift: -4 + Math.abs(pick) * 5.5,
-      rot: 8 * face + pick * 7,
+      lift: -4.8 + Math.abs(pick) * 6.6,
+      rot: 10 * face + pick * 8.5,
       anim: "sit" as TrickAnim,
     };
   }
