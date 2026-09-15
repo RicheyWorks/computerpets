@@ -2117,6 +2117,20 @@ test("saguaro ethogram is Arm ultra (sentinel sit_hold + softs + freeze, not sti
   assert.equal(names("saguaro").includes("nod"), false);
 });
 
+test("venus_flytrap ethogram is Snap ultra (poise sit_hold + softs + freeze, not snap/lean/nod)", () => {
+  assert.ok(names("venus_flytrap").includes("poise"));
+  assert.ok(names("venus_flytrap").includes("clamp_soft"));
+  assert.ok(names("venus_flytrap").includes("trichome_soft"));
+  assert.ok(names("venus_flytrap").includes("stew_soft"));
+  assert.ok(names("venus_flytrap").includes("unseal_soft"));
+  assert.ok(names("venus_flytrap").includes("cage_soft"));
+  assert.ok(names("venus_flytrap").includes("scape_soft"));
+  assert.ok(names("venus_flytrap").includes("freeze"));
+  assert.equal(names("venus_flytrap").includes("snap"), false);
+  assert.equal(names("venus_flytrap").includes("lean"), false);
+  assert.equal(names("venus_flytrap").includes("nod"), false);
+});
+
 test("pickAct can schedule tongue on a snake and never scratch", () => {
   let tongue = 0;
   for (let i = 0; i < 80; i++) {
