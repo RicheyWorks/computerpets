@@ -574,5 +574,5 @@
     stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
-  root.PetAmericanEelTricks = api;
+  root.PetMillipedeTricks = api;
 })(typeof window !== "undefined" ? window : globalThis);
