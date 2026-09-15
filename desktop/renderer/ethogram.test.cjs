@@ -1011,7 +1011,17 @@ test("shore and meadow keys never schedule scratch or a snake tongue", () => {
   }
   assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "wave"));
   assert.ok(E.actsFor("field_cricket").some((a) => a.name === "chirp"));
-  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "vault"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "caeliferahush"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "hindleap_soft"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "deskbask_soft"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "mandiblegraze_soft"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "femurrasp_soft"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "tympanal_soft"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "saltatory_soft"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("grasshopper").some((a) => a.name === "vault"), false);
+  assert.equal(E.actsFor("grasshopper").some((a) => a.name === "walk"), false);
+  assert.equal(E.actsFor("grasshopper").some((a) => a.name === "still"), false);
   assert.ok(E.actsFor("click_beetle").some((a) => a.name === "click"));
 });
 
