@@ -193,9 +193,9 @@ test("ground registry keeps prior guests gated; Whee selectable; no wheek/loaf/n
   assert.equal(Hamster.TRICK_KEY, "hamster");
   assert.equal(T.TRICK_KEY, "guinea_pig");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -292,12 +292,13 @@ test("ultra-polish: Whee potato/hay/rumble/lookout/teeth lifts are Rui-visible (
   assert.ok(t2.lift < 0 || Math.abs(t2.rot) > 6, `teeth mid lift/rot ${t2.lift}/${t2.rot}`);
   assert.ok(Overlay.lookoutPose && Overlay.teethPose);
   assert.equal(T.POTATO_HOLD, Overlay.POTATO_HOLD);
-  assert.ok(T.POTATO_HOLD >= 14);
+  assert.equal(T.POTATO_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
   assert.equal(T.DUR.lookout, Overlay.DUR.lookout);
   assert.equal(T.DUR.teeth, Overlay.DUR.teeth);
 });
 
-test("notes: Whee idle-life ultra done; Ink / turtle + Coin / goldfish ultra next-or-done; following house-order ultra guest is Rue / fox (birds Soot→Ember + Miso + Pip + Thimble + Clip already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
+test("notes: Whee Rui-dense ultra (POTATO_HOLD=11.2); next house-order densify leftover after early mammals: Ink / turtle then Coin / goldfish", () => {
   assert.deepEqual([...T.TRICKS], ["popcorn", "rumble", "hay", "potato", "zig", "lookout", "teeth"]);
   assert.equal(T.TRICK_KEY, "guinea_pig");
   assert.equal(T.wantsThankYou("whee"), true);
