@@ -57,17 +57,24 @@ CROSS_DOMAIN = {
     "desk.news.topics",
     "desk.plates.style",
     "desk.plants.place",
+    "desk.market.tickers",
+    "desk.news.x",
+    "visit.todays",
+    "visit.phases",
+    "visit.call",
+    "visit.arrive",
     "card.collapse_hook",
     "card.open_hook",
     "card.paint_wire",
     "card.notify_open",
+    "card.needs_persist",
     "gui.choice_close_exit",
 }
 
 
 def test_domains_are_the_real_house_surfaces():
     assert domains() == DOMAINS
-    assert set(domains()) == {"care", "guest", "species", "ethogram", "cry", "gift", "desk", "card", "gui"}
+    assert set(domains()) == {"care", "guest", "visit", "species", "ethogram", "cry", "gift", "desk", "card", "gui"}
 
 
 def test_catalog_has_stable_ids_and_grows_without_a_frozen_total():
@@ -158,6 +165,11 @@ def test_gaps_are_honest_and_accounted():
     assert "desk.plates.style" in driven_ids
     assert "desk.plants.place" in driven_ids
     assert "card.notify_open" in driven_ids
+    assert "card.needs_persist" in driven_ids
+    assert "desk.market.tickers" in driven_ids
+    assert "desk.news.x" in driven_ids
+    assert "visit.todays" in driven_ids
+    assert "visit.call" in driven_ids
     assert "cry.playback" not in hole_ids
     assert "desk.weather.resolve" not in hole_ids
     assert "desk.favorites.news" not in hole_ids
@@ -189,9 +201,16 @@ def test_offline_resolves_and_playback_leave_traces():
         "desk.news.topics",
         "desk.plates.style",
         "desk.plants.place",
+        "desk.market.tickers",
+        "desk.news.x",
+        "visit.todays",
+        "visit.phases",
+        "visit.call",
+        "visit.arrive",
         "gift.place",
         "card.paint_wire",
         "card.notify_open",
+        "card.needs_persist",
         "gui.choice_close_exit",
     ):
         result = invoke(aid)

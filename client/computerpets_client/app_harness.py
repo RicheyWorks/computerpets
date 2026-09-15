@@ -116,6 +116,7 @@ FATES = ("driven", "dead", "sequenced", "hidden", "failed", "excluded")
 DOMAINS = (
     "care",
     "guest",
+    "visit",
     "species",
     "ethogram",
     "cry",
@@ -694,6 +695,64 @@ def _assert_gift(local_id: str, result: InvokeResult) -> list[str]:
 
 
 # ---------------------------------------------------------------------------
+# Visit / call guest lifecycle (PetVisitor + PetCallGuests + PetArrive)
+# ---------------------------------------------------------------------------
+
+
+def _visit_rows() -> list[Affordance]:
+    return [
+        Affordance(
+            "visit.todays",
+            "visit",
+            "Today's auto visitor pick + line",
+            "visitor.js todaysVisitor / visitLine",
+            notes="Civil-day guest pick excludes host; offline.",
+        ),
+        Affordance(
+            "visit.phases",
+            "visit",
+            "Visit phase clock + host-hidden abort",
+            "visitor.js visitPhaseFromEnter / visitPhaseFromWait",
+            notes="wait/in/talk/wander/leave/gone; host hide forces gone.",
+        ),
+        Affordance(
+            "visit.call",
+            "visit",
+            "Call guest match/begin/place/dismiss/leave",
+            "call-guests.js matchCall / beginCalled / placeCalled / dismissCalled / stepCalled",
+            notes="Called-guest place (not host freehand drag); offline.",
+        ),
+        Affordance(
+            "visit.arrive",
+            "visit",
+            "Arrive vs tap/place lift rules",
+            "arrive.js pointerUp / walkLand / arriveFinish",
+            notes="Tap/choice and drag-place are not walking in; finished walk arrives.",
+        ),
+    ]
+
+
+def _invoke_visit(local_id: str, **opts: Any) -> InvokeResult:
+    aid = f"visit.{local_id}"
+    smoke = {
+        "todays": "visit_todays",
+        "phases": "visit_phases",
+        "call": "visit_call_lifecycle",
+        "arrive": "visit_arrive",
+    }.get(local_id)
+    if smoke:
+        return _run_node_smoke(smoke, domain="visit", action_id=aid)
+    return InvokeResult(aid, "visit", False, error=f"unknown visit id {local_id!r}")
+
+
+def _assert_visit(local_id: str, result: InvokeResult) -> list[str]:
+    if result.ok:
+        return []
+    return [result.error or result.detail or "visit invoke failed"]
+
+
+
+# ---------------------------------------------------------------------------
 # Desk plates — weather / news / quotes(coins) / NFT  (no live network)
 # ---------------------------------------------------------------------------
 
@@ -775,6 +834,20 @@ def _desk_rows() -> list[Affordance]:
             "Garden plant drag-place",
             "desk-plants.js beginDrag / moveDrag / endDrag / savePlants",
             notes="Disk/Felt place+mode without Electron; guest freehand drag stays GUI.",
+        ),
+        Affordance(
+            "desk.market.tickers",
+            "desk",
+            "Quotes add-any-ticker + watchlist persist",
+            "market.js addTicker / removeTicker / parseSearchCoins / toCardPatch",
+            notes="Offline classify/search fixtures + watchlist round-trip; no HTTP.",
+        ),
+        Affordance(
+            "desk.news.x",
+            "desk",
+            "News X tab + site-filter RSS / search URLs",
+            "news.js pickTab(x) / xTopicRssUrl / xSearchUrl / sourceLine",
+            notes="X fallback builders offline; no live X/HTTP.",
         ),
         Affordance(
             "live.weather_forecast",
@@ -920,6 +993,10 @@ def _invoke_desk(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("plates_style", domain="desk", action_id=aid)
     if local_id == "plants.place":
         return _run_node_smoke("plants_place", domain="desk", action_id=aid)
+    if local_id == "market.tickers":
+        return _run_node_smoke("market_tickers", domain="desk", action_id=aid)
+    if local_id == "news.x":
+        return _run_node_smoke("news_x", domain="desk", action_id=aid)
     return InvokeResult(aid, "desk", False, error=f"unknown desk id {local_id!r}")
 
 
@@ -953,6 +1030,13 @@ def _card_rows() -> list[Affordance]:
             "Notif deep-link opens pet card on need",
             "life.js careForNeed / alerts + pet.js openCareFromNotify",
             notes="Pure NEED_CARE map + alerts; openCareFromNotify wire smoke (no Electron session).",
+        ),
+        Affordance(
+            "card.needs_persist",
+            "card",
+            "Needs save/reload + alert clear after care",
+            "life.js save / load / alerts / act(feed|call)",
+            notes="Vitals persist via life store; feed clears hunger alert; call clears hidden; load clears hidden by design.",
         ),
     ]
 
@@ -997,6 +1081,8 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("card_paint_wire", domain="card", action_id=aid)
     if local_id == "notify_open":
         return _run_node_smoke("notify_open", domain="card", action_id=aid)
+    if local_id == "needs_persist":
+        return _run_node_smoke("needs_persist", domain="card", action_id=aid)
     return InvokeResult(aid, "card", False, error=f"unknown card id {local_id!r}")
 
 
@@ -1328,6 +1414,7 @@ def _invoke_live_network(action_id: str) -> InvokeResult:
 _DOMAIN_BUILDERS: dict[str, Callable[[], list[Affordance]]] = {
     "care": _care_rows,
     "guest": _guest_rows,
+    "visit": _visit_rows,
     "species": _species_rows,
     "ethogram": _ethogram_rows,
     "cry": _cry_rows,
@@ -1340,6 +1427,7 @@ _DOMAIN_BUILDERS: dict[str, Callable[[], list[Affordance]]] = {
 _INVOKERS: dict[str, Callable[..., InvokeResult]] = {
     "care": _invoke_care,
     "guest": _invoke_guest,
+    "visit": _invoke_visit,
     "species": _invoke_species,
     "ethogram": _invoke_ethogram,
     "cry": _invoke_cry,
@@ -1352,6 +1440,7 @@ _INVOKERS: dict[str, Callable[..., InvokeResult]] = {
 _ASSERTERS: dict[str, Callable[[str, InvokeResult], list[str]]] = {
     "care": _assert_care,
     "guest": _assert_guest,
+    "visit": _assert_visit,
     "species": _assert_species,
     "ethogram": _assert_ethogram,
     "cry": _assert_cry,
