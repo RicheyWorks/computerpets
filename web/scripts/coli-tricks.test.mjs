@@ -1965,7 +1965,7 @@ test("runandtumble/binaryfission/pilus/chemotax/nucleoid/fimbria/flagmotor are c
 
   assert.deepEqual([...CarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
   assert.deepEqual([...OverlayCarpenterBee.TRICKS], ["rasp", "glabrous", "partition", "picket", "xylocopa"]);
-  assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus"]);
+  assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.deepEqual([...Honeybee.TRICKS], ["figure", "corbicula", "hex", "proboscis", "hive", "ocelli", "nasonov"]);
   assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
   assert.deepEqual([...Stingless.TRICKS], ["cerumen", "spout", "vessel", "batumen", "melipona"]);

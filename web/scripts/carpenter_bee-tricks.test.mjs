@@ -977,8 +977,8 @@ test("notes: Auger idle-life done; next house-order guest still lacking tricks i
   assert.equal(OverlayGround.wantsThankYou("bumblebee"), true);
   assert.equal(OverlayGround.tricksFor("thrum"), OverlayBumblebee);
   assert.equal(OverlayGround.wantsThankYou("thrum"), true);
-  assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus"]);
-  assert.deepEqual([...OverlayBumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus"]);
+  assert.deepEqual([...Bumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
+  assert.deepEqual([...OverlayBumblebee.TRICKS], ["sonicate", "scopa", "fossor", "lumber", "bombus", "thoraxload", "corbicularub"]);
   assert.equal(OverlayGround.tricksFor("mason_bee"), OverlayMasonBee);
   assert.equal(OverlayGround.wantsThankYou("mason_bee"), true);
   assert.equal(OverlayGround.tricksFor("mortar"), OverlayMasonBee);
