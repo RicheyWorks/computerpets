@@ -201,6 +201,7 @@ test("voice styles pick a human system voice and skip cartoon robots", () => {
   assert.equal(C.prefersHouseCry("pitcher"), true);
   assert.equal(C.prefersHouseCry("sundew"), true);
   assert.equal(C.prefersHouseCry("honeybee"), true);
+  assert.equal(C.prefersHouseCry("honey_drone"), true);
   assert.equal(C.prefersHouseCry("monarch"), true);
   assert.equal(C.prefersHouseCry("luna"), true);
   assert.equal(C.prefersHouseCry("firefly"), true);
