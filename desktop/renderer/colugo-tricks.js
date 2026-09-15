@@ -1,12 +1,22 @@
-/** Sail ground tricks while idle. House neighborly Sunda colugo (Galeopterus variegatus / Cynocephalidae) desk life -- patagiumglide / clingclimb / headdownhang / leaffoldsettle / galeopterushush personality (patagiumglide membrane sail-glide across desk distinct from Cape wingwrap and duskhang; clingclimb clawed trunk cling-climb distinct from Hang reachcrawl and Ladybird climb; headdownhang underslung head-down hang distinct from Hang hangsway and Wrist pretailhang and Swing hangreach and Cape duskhang; leaffoldsettle patagium leaf-fold settle distinct from Cape wingwrap; long galeopterushush Galeopterus variegatus hush -- never named wait; NOT Wrist kinkajou; NOT Swing gibbon; NOT Hang sloth; NOT Sun lemur; NOT Cape bat; NOT sugar glider; NOT Glide flying squirrel; guest slug Sail / key colugo -- accept colugo and sail; Thank-yous denssail / inksail / densgaleopterus. Sleep, hide, leave, rest, card, ribbon still win. Same map as web colugo-tricks.ts. Next: Glide / flying_squirrel. Catalog 220. */
+/** Sail ground tricks while idle — ultra-polish pass. House neighborly Galeopterus variegatus / Sunda Colugo desk life (colugo / Sail) — patagiumglide / clingclimb / headdownhang / leaffoldsettle / membranespread / barkclamp / galeopterushush personality (patagiumglide membrane glide without naming glide or sail or colugo alone as wait — distinct from Glide flying_squirrel and sugar glider; clingclimb bark cling-climb without naming cling or climb or walk alone as wait — distinct from Hang reachcrawl and Wrist pretailhang; headdownhang head-down hang without naming hang or head or down alone as wait — distinct from Hang hangsway and Swing brachiate; leaffoldsettle leaf-fold settle without naming fold or leaf or settle alone as wait — distinct from Hang clawhook and Wrist tailcoil; membranespread patagium membrane-spread without naming membrane or spread or wing alone as wait — distinct from Glide and Bat; barkclamp bark clamp cling without naming clamp or bark or grip alone as wait — distinct from Limpet clampseal and Hang clawhook; long galeopterushush Galeopterus variegatus hush hold (THE galeopterushush sit_hold tell) — never named wait or crouch or sit or sail or cling or still or colugo or sail as bare ethogram-only trick kinds; Wrist kinkajou owns pretailhang/nectarsip/wristrotate/nightscamper/honeylap/tailcoil/potoshush — do NOT reuse; Swing gibbon owns brachiate/whoopduet/bipedalstrut/hangreach/armhook/duetbow/hylobateshush — do NOT reuse; Hang sloth owns hangsway/reachcrawl/algaescratch/headturnstare/clawhook/slowdrip/bradypushush — do NOT reuse; guest slug Sail / key colugo only for wantsThankYou matching — accept "colugo" and "sail"; do NOT name a trick "colugo" or "sail" or "kinkajou" or "wrist" or "gibbon" or "swing" or "sloth" or "hang" or "glide"; not Wrist Potos life, not Swing Hylobates life, not Hang Choloepus life, not Glide flying_squirrel, not Rui. Patagiumglide / clingclimb / headdownhang / leaffoldsettle / membranespread / barkclamp / galeopterushush; denssail / inksail / densgaleopterus thank-yous. Same map as web colugo-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names sail/cling/still/sit/wait/colugo as bare ethogram-only trick kinds. True Sunda Colugo Galeopterus variegatus desk life only — patagium glide, cling climb, head-down hang, leaf-fold settle, membrane spread, bark clamp, Galeopterus hush. Next house-order ultra: Glide / flying_squirrel. No cry inventing — colugo.wav EXISTS so prefersHouseCry adds colugo after kinkajou. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "colugo";
-  const TRICKS = ["patagiumglide", "clingclimb", "headdownhang", "leaffoldsettle", "galeopterushush"];
+  const TRICKS = ["patagiumglide", "clingclimb", "headdownhang", "leaffoldsettle", "membranespread", "barkclamp", "galeopterushush"];
   const HAPPY = ["denssail", "inksail", "densgaleopterus"];
-  const HAPPY_DUR = { denssail: 2.62, inksail: 2.74, densgaleopterus: 2.48 };
-  const GALEOPTERUSHUSH_HOLD = 31.12;
-  const RELEASE_S = 2.31;
-  const DUR = { galeopterushush: GALEOPTERUSHUSH_HOLD + RELEASE_S, patagiumglide: 5.28, clingclimb: 5.14, headdownhang: 5.36, leaffoldsettle: 5.02 };
+
+  const HAPPY_DUR = { denssail: 1.70, inksail: 1.84, densgaleopterus: 1.76 };
+  const GALEOPTERUSHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    galeopterushush: GALEOPTERUSHUSH_HOLD + RELEASE_S,
+    patagiumglide: 2.48,
+    clingclimb: 2.42,
+    headdownhang: 2.40,
+    leaffoldsettle: 2.44,
+    membranespread: 2.38,
+    barkclamp: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "galeopterushush") return 196 + roll * 20;
-    if (kind === "patagiumglide") return 23.6 + roll * 3.5;
-    if (kind === "clingclimb") return 24.2 + roll * 3.4;
-    if (kind === "headdownhang") return 25.1 + roll * 3.6;
-    if (kind === "leaffoldsettle") return 22.8 + roll * 3.3;
-    return justFinished ? 18.6 + roll * 2.9 : 13.9 + roll * 2.5;
+    if (kind === "galeopterushush") return 40 + roll * 26;
+    if (kind === "membranespread" || kind === "patagiumglide" || kind === "leaffoldsettle") return 12.8 + roll * 9.4;
+    if (kind === "headdownhang" || kind === "clingclimb" || kind === "barkclamp") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
+    function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "galeopterushush";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "galeopterushush") {
-      if (roll < 0.26) return "patagiumglide";
-      if (roll < 0.5) return "clingclimb";
-      if (roll < 0.74) return "headdownhang";
-      return "leaffoldsettle";
+      if (roll < 0.17) return "patagiumglide";
+      if (roll < 0.33) return "clingclimb";
+      if (roll < 0.49) return "headdownhang";
+      if (roll < 0.65) return "leaffoldsettle";
+      if (roll < 0.83) return "membranespread";
+      return "barkclamp";
     }
     if (lastKind === "patagiumglide") {
-      if (roll < 0.26) return "galeopterushush";
-      if (roll < 0.5) return "clingclimb";
-      if (roll < 0.74) return "headdownhang";
-      return "leaffoldsettle";
+      if (roll < 0.16) return "galeopterushush";
+      if (roll < 0.32) return "clingclimb";
+      if (roll < 0.48) return "headdownhang";
+      if (roll < 0.64) return "leaffoldsettle";
+      if (roll < 0.82) return "membranespread";
+      return "barkclamp";
     }
     if (lastKind === "clingclimb") {
-      if (roll < 0.22) return "galeopterushush";
-      if (roll < 0.44) return "patagiumglide";
-      if (roll < 0.68) return "headdownhang";
-      return "leaffoldsettle";
+      if (roll < 0.14) return "galeopterushush";
+      if (roll < 0.3) return "patagiumglide";
+      if (roll < 0.46) return "headdownhang";
+      if (roll < 0.62) return "leaffoldsettle";
+      if (roll < 0.8) return "membranespread";
+      return "barkclamp";
     }
-    if (roll < 0.2) return "galeopterushush";
-    if (roll < 0.4) return "patagiumglide";
-    if (roll < 0.6) return "clingclimb";
-    if (roll < 0.8) return "headdownhang";
-    return "leaffoldsettle";
+    if (lastKind === "headdownhang") {
+      if (roll < 0.15) return "galeopterushush";
+      if (roll < 0.31) return "patagiumglide";
+      if (roll < 0.47) return "clingclimb";
+      if (roll < 0.63) return "leaffoldsettle";
+      if (roll < 0.81) return "membranespread";
+      return "barkclamp";
+    }
+    if (lastKind === "leaffoldsettle") {
+      if (roll < 0.16) return "galeopterushush";
+      if (roll < 0.32) return "patagiumglide";
+      if (roll < 0.48) return "clingclimb";
+      if (roll < 0.64) return "headdownhang";
+      if (roll < 0.82) return "membranespread";
+      return "barkclamp";
+    }
+    if (lastKind === "membranespread") {
+      if (roll < 0.15) return "galeopterushush";
+      if (roll < 0.31) return "patagiumglide";
+      if (roll < 0.47) return "clingclimb";
+      if (roll < 0.63) return "headdownhang";
+      if (roll < 0.81) return "leaffoldsettle";
+      return "barkclamp";
+    }
+    if (lastKind === "barkclamp") {
+      if (roll < 0.16) return "galeopterushush";
+      if (roll < 0.32) return "patagiumglide";
+      if (roll < 0.48) return "clingclimb";
+      if (roll < 0.64) return "headdownhang";
+      if (roll < 0.82) return "leaffoldsettle";
+      return "membranespread";
+    }
+    if (roll < 0.14) return "galeopterushush";
+    if (roll < 0.28) return "patagiumglide";
+    if (roll < 0.42) return "clingclimb";
+    if (roll < 0.56) return "headdownhang";
+    if (roll < 0.7) return "leaffoldsettle";
+    if (roll < 0.85) return "membranespread";
+    return "barkclamp";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "sail";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,72 +164,80 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "denssail";
+    const name = (HAPPY).includes(kind) ? (kind) : "denssail";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "denssail" ? "sit" : name === "inksail" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "denssail" ? "sit" : name === "inksail" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
 
   function denssailPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.denssail));
-    if (u < 0.15) {
-      const s = u / 0.15;
-      return { lift: s * 0.0044, rot: s * -0.16, anim: "sit" };
+    if (u < 0.14) {
+      const s = u / 0.14;
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.84) {
-      const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.22);
-      return { lift: 0.0044 + Math.abs(sway) * 0.0014, rot: -0.16 + sway * 0.17, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.0044 * (1 - s), rot: -0.16 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function inksailPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inksail));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.0033, rot: s * 0.24, anim: "play" };
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.82) {
-      const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 3.05);
-      return { lift: 0.0033 + Math.abs(arc) * 0.0019, rot: 0.24 + arc * 0.26, anim: "play" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    const s = (u - 0.82) / 0.18;
-    return { lift: 0.0033 * (1 - s), rot: 0.24 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function densgaleopterusPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densgaleopterus));
-    if (u < 0.14) {
-      const s = u / 0.14;
-      return { lift: s * -0.0015, rot: s * 0.16, anim: "play" };
-    }
-    if (u < 0.83) {
-      const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.08);
-      return { lift: -0.0015 + Math.abs(hush) * 0.0011, rot: 0.16 + hush * 0.15, anim: "play" };
-    }
-    const s = (u - 0.83) / 0.17;
-    return { lift: -0.0015 * (1 - s), rot: 0.16 * (1 - s), anim: "idle" };
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "denssail") {
       const pose = denssailPose(next.t);
@@ -193,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -202,27 +264,30 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "galeopterushush";
     const anim =
-      k === "galeopterushush"
+      kind === "galeopterushush"
         ? "sit"
-        : k === "patagiumglide"
+        : kind === "patagiumglide"
           ? "play"
-          : k === "clingclimb"
-            ? "walk"
-            : k === "headdownhang"
-              ? "play"
-              : k === "leaffoldsettle"
+          : kind === "barkclamp"
+            ? "talk"
+            : kind === "clingclimb"
+              ? "walk"
+              : kind === "headdownhang"
                 ? "sit"
-                : "sit";
+                : kind === "leaffoldsettle"
+                  ? "play"
+                  : kind === "membranespread"
+                    ? "walk"
+                    : "sit";
     return {
-      kind: k,
-      phase: k === "galeopterushush" ? "hold" : "go",
+      kind,
+      phase: kind === "galeopterushush" ? "hold" : "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: anim,
+      anim,
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -234,14 +299,15 @@
   }
 
   function galeopterushushPose(t) {
-    const breath = Math.sin(t * 0.00068) + 0.00021 * Math.sin(t * 0.00185);
-    const hush = Math.abs(Math.sin(t * 0.00027));
-    return { lift: -0.00015 + hush * 0.00004, rot: 0.0028 + breath * 0.0018 };
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.00017 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0038 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function patagiumglidePose(t, fromX, facing) {
@@ -249,20 +315,24 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.0006, lift: s * 0.0078, rot: s * -0.18 * face, anim: "play" };
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" };
     }
-    if (u < 0.72) {
-      const glide = (u - 0.14) / 0.58;
-      const sail = Math.sin(glide * Math.PI * 1.35);
+    if (u < 0.78) {
+      const bar = Math.sin(t * 2.4);
       return {
-        x: fromX + face * (0.0006 + glide * 0.028),
-        lift: 0.0078 - glide * 0.0035 + Math.abs(sail) * 0.0012,
-        rot: (-0.18 + sail * 0.1) * face,
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
         anim: "play",
       };
     }
-    const s = smoothstep((u - 0.72) / 0.28);
-    return { x: fromX + face * (0.0286 - s * 0.0004), lift: 0.0043 * (1 - s), rot: -0.12 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function clingclimbPose(t, fromX, facing) {
@@ -270,68 +340,140 @@
     const face = facing == null ? 1 : facing;
     if (u < 0.12) {
       const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.0003, lift: s * 0.0042, rot: s * -0.08 * face, anim: "walk" };
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
     }
-    if (u < 0.82) {
-      const climb = (u - 0.12) / 0.7;
-      const hitch = Math.sin(climb * Math.PI * 4.4);
+    if (u < 0.78) {
+      const bob = Math.sin(t * 2.2);
       return {
-        x: fromX + face * (0.0003 + Math.abs(hitch) * 0.00045),
-        lift: 0.0042 + climb * 0.011 + Math.abs(hitch) * 0.0016,
-        rot: (-0.08 + hitch * 0.11) * face,
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
         anim: "walk",
       };
     }
-    const s = smoothstep((u - 0.82) / 0.18);
-    return { x: fromX + face * 0.0005 * (1 - s), lift: 0.0152 * (1 - s), rot: -0.08 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
   }
 
-  function headdownhangPose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.headdownhang));
+  function barkclampPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.barkclamp));
     const face = facing == null ? 1 : facing;
-    if (u < 0.18) {
-      const s = smoothstep(u / 0.18);
-      return { x: fromX + face * s * 0.0004, lift: s * 0.0105, rot: s * 2.85 * face, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
     }
-    if (u < 0.72) {
-      const sway = Math.sin(((u - 0.18) / 0.54) * Math.PI * 2.05);
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
       return {
-        x: fromX + face * (0.0004 + sway * 0.0007),
-        lift: 0.0105 + Math.abs(sway) * 0.0015,
-        rot: (2.85 + sway * 0.14) * face,
-        anim: "play",
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
+        anim: "talk",
       };
     }
-    const s = smoothstep((u - 0.72) / 0.28);
-    return { x: fromX + face * 0.0006 * (1 - s), lift: 0.0105 * (1 - s), rot: 2.85 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function leaffoldsettlePose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.leaffoldsettle));
     const face = facing == null ? 1 : facing;
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX + face * s * 0.0005, lift: s * -0.0032, rot: s * 0.22 * face, anim: "sit" };
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" };
+    }
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
+      return {
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function headdownhangPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.headdownhang));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
     }
     if (u < 0.78) {
-      const fold = Math.sin(((u - 0.16) / 0.62) * Math.PI * 1.55);
+      const hang = Math.sin(t * 2.0);
       return {
-        x: fromX + face * (0.0005 + Math.abs(fold) * 0.00055),
-        lift: -0.0032 + Math.abs(fold) * 0.0016,
-        rot: (0.22 + fold * 0.18) * face,
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
         anim: "sit",
       };
     }
     const s = smoothstep((u - 0.78) / 0.22);
-    return { x: fromX + face * 0.0005 * (1 - s), lift: -0.0032 * (1 - s), rot: 0.22 * (1 - s) * face, anim: "idle" };
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function membranespreadPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.membranespread));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" };
+    }
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
+      return {
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "patagiumglide" && trick.kind !== "clingclimb" && trick.kind !== "headdownhang" && trick.kind !== "leaffoldsettle") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "patagiumglide" &&
+      trick.kind !== "clingclimb" &&
+      trick.kind !== "headdownhang" &&
+      trick.kind !== "leaffoldsettle" &&
+      trick.kind !== "membranespread" &&
+      trick.kind !== "barkclamp"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "galeopterushush") {
       if (next.t < GALEOPTERUSHUSH_HOLD) {
         const pose = galeopterushushPose(next.t);
@@ -349,38 +491,53 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "patagiumglide") {
-      const pose = patagiumglidePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = patagiumglidePose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "clingclimb") {
-      const pose = clingclimbPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = clingclimbPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "headdownhang") {
-      const pose = headdownhangPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = headdownhangPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "leaffoldsettle") {
+      const pose = leaffoldsettlePose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "membranespread") {
+      const pose = membranespreadPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = leaffoldsettlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = barkclampPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
@@ -394,6 +551,17 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    galeopterushushPose,
+    releasePose,
+    patagiumglidePose,
+    clingclimbPose,
+    barkclampPose,
+    leaffoldsettlePose,
+    headdownhangPose,
+    membranespreadPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -403,17 +571,8 @@
     denssailPose,
     inksailPose,
     densgaleopterusPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    galeopterushushPose,
-    releasePose,
-    patagiumglidePose,
-    clingclimbPose,
-    headdownhangPose,
-    leaffoldsettlePose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetColugoTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);
