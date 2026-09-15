@@ -912,7 +912,16 @@ assert.ok(names("toad").includes("freeze"));
   assert.equal(names("millipede").includes("oil"), false);
   assert.equal(names("millipede").includes("still"), false);
   assert.equal(names("millipede").includes("sit"), false);
-  assert.ok(names("pillbug").includes("roll"));
+  assert.ok(names("pillbug").includes("vulgare"));
+assert.ok(names("pillbug").includes("conglobate_soft"));
+assert.ok(names("pillbug").includes("pleopods_soft"));
+assert.ok(names("pillbug").includes("uropodtap_soft"));
+assert.ok(names("pillbug").includes("freeze"));
+assert.equal(names("pillbug").includes("roll"), false);
+assert.equal(names("pillbug").includes("walk"), false);
+assert.equal(names("pillbug").includes("still"), false);
+assert.equal(names("pillbug").includes("sit"), false);
+
   for (const key of SHORE) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
