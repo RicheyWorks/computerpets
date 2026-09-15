@@ -253,7 +253,7 @@ ETHOGRAM: dict[str, tuple[IdleAct, ...]] = {
     "gauss_dragon": (_a("gausshush", "sit_hold", 2.4, 4, "sit"), _a("filinglinesbandwalk_soft", "eat", 1.2, 2, "eat"), _a("ironfilingsstand_soft", "sit", 1.2, 2, "sit"), _a("fieldlinealign_soft", "sit", 1.2, 2, "sit"), _a("magneticperchsettle_soft", "walk", 1.2, 2, "walk"), _a("filingsweep_soft", "play", 1.2, 2, "play"), _a("bandclamp_soft", "talk", 1.2, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
     "relay_dragon": (_a("relayhush", "sit_hold", 2.4, 4, "sit"), _a("contactclick_soft", "eat", 1.2, 2, "eat"), _a("latchseat_soft", "sit", 1.2, 2, "sit"), _a("arcflick_soft", "sit", 1.2, 2, "sit"), _a("coilbuzz_soft", "walk", 1.2, 2, "walk"), _a("poleswitch_soft", "play", 1.2, 2, "play"), _a("armaturetap_soft", "talk", 1.2, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
     "fuse_dragon": (_a("fusehush", "sit_hold", 2.4, 4, "sit"), _a("railseat_soft", "eat", 1.2, 2, "eat"), _a("holdcurrent_soft", "sit", 1.2, 2, "sit"), _a("blowclear_soft", "sit", 1.2, 2, "sit"), _a("reseatsnap_soft", "walk", 1.2, 2, "walk"), _a("cartridgerattle_soft", "play", 1.2, 2, "play"), _a("bladeflash_soft", "talk", 1.2, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
-    "ground_dragon": (_a("earth", "pulse", 1.4, 5), _a("still", "sit_hold", 2.2, 3, "sit"), _a("watch", "freeze", 1.8, 2)),
+    "ground_dragon": (_a("groundhush", "sit_hold", 2.4, 4, "sit"), _a("lugstrap_soft", "eat", 1.2, 2, "eat"), _a("earthseat_soft", "sit", 1.2, 2, "sit"), _a("heaveplate_soft", "sit", 1.2, 2, "sit"), _a("bedsettle_soft", "walk", 1.2, 2, "walk"), _a("soilgrip_soft", "play", 1.2, 2, "play"), _a("plateclamp_soft", "talk", 1.2, 2, "talk"), _a("freeze", "freeze", 1.4, 2)),
 }
 
 TONGUE_KEYS = SNAKE_KEYS

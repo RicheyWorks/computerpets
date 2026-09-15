@@ -1707,6 +1707,21 @@ assert.equal(names("koala").includes("wait"), false);
   assert.equal(names("fuse_dragon").includes("wait"), false);
   assert.equal(names("fuse_dragon").includes("fuse_dragon"), false);
   assert.equal(names("fuse_dragon").includes("sit"), false);
+  assert.ok(names("ground_dragon").includes("groundhush"));
+  assert.ok(names("ground_dragon").includes("lugstrap_soft"));
+  assert.ok(names("ground_dragon").includes("earthseat_soft"));
+  assert.ok(names("ground_dragon").includes("heaveplate_soft"));
+  assert.ok(names("ground_dragon").includes("bedsettle_soft"));
+  assert.ok(names("ground_dragon").includes("soilgrip_soft"));
+  assert.ok(names("ground_dragon").includes("plateclamp_soft"));
+  assert.ok(names("ground_dragon").includes("freeze"));
+  assert.equal(names("ground_dragon").includes("earth"), false);
+  assert.equal(names("ground_dragon").includes("still"), false);
+  assert.equal(names("ground_dragon").includes("watch"), false);
+  assert.equal(names("ground_dragon").includes("wait"), false);
+  assert.equal(names("ground_dragon").includes("ground_dragon"), false);
+  assert.equal(names("ground_dragon").includes("sit"), false);
+
 
 
   for (const key of WELL) {
