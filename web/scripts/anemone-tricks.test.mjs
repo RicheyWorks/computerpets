@@ -414,7 +414,7 @@ test("Wreath tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("meandroidridgepulse"), false);
   assert.equal(T.TRICKS.includes("diploriahush"), false);
   assert.equal(T.HAPPY.includes("densridge"), false);
-  assert.deepEqual([...BrainCoral.TRICKS], ["meandroidridgepulse", "polyptentaclewave", "mucussheetsettle", "dayexpandnightcontract", "diploriahush"]);
+  assert.deepEqual([...BrainCoral.TRICKS], ["meandroidridgepulse", "polyptentaclewave", "mucussheetsettle", "dayexpandnightcontract", "labyrinthfold", "zooxflash", "diploriahush"]);
   assert.deepEqual([...BrainCoral.HAPPY], ["densridge", "inkridge", "densdiploria"]);
   assert.equal(BrainCoral.TRICKS.includes("oraldiskwreathsway"), false);
   assert.equal(BrainCoral.HAPPY.includes("denswreath"), false);
