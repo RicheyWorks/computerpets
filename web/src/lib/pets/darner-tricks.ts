@@ -46,20 +46,20 @@ export type DarnerHappy = {
 };
 
 export const HAPPY_DUR: Record<DarnerHappyKind, number> = {
-  junius: 1.24,
-  labium: 1.34,
-  exuvia: 1.22,
+  junius: 1.70,
+  labium: 1.84,
+  exuvia: 1.76,
 };
-export const ANAX_HOLD = 11.4;
-export const RELEASE_S = 0.66;
+export const ANAX_HOLD = 11.2;
+export const RELEASE_S = 1.18;
 export const DUR: Record<DarnerTrickKind, number> = {
   anax: ANAX_HOLD + RELEASE_S,
-  hawking: 1.48,
-  tandem: 1.42,
-  nymph: 1.54,
-  whir: 1.36,
-  obelisk: 1.64,
-  ommatidia: 1.68,
+  hawking: 2.48,
+  tandem: 2.42,
+  nymph: 2.44,
+  whir: 2.56,
+  obelisk: 2.40,
+  ommatidia: 2.38,
 };
 
 export function canStart(state: TrickFlags | undefined) {

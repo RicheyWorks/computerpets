@@ -1827,6 +1827,17 @@ assert.equal(names("honey_drone").includes("still"), false);
   assert.equal(names("firefly").includes("flash"), false);
   assert.equal(names("firefly").includes("lift"), false);
   assert.equal(names("firefly").includes("still"), false);
+  assert.ok(names("darner").includes("anax"));
+  assert.ok(names("darner").includes("hawking_soft"));
+  assert.ok(names("darner").includes("tandem_soft"));
+  assert.ok(names("darner").includes("nymph_soft"));
+  assert.ok(names("darner").includes("whir_soft"));
+  assert.ok(names("darner").includes("obelisk_soft"));
+  assert.ok(names("darner").includes("ommatidia_soft"));
+  assert.ok(names("darner").includes("freeze"));
+  assert.equal(names("darner").includes("hawk"), false);
+  assert.equal(names("darner").includes("hover"), false);
+  assert.equal(names("darner").includes("still"), false);
   assert.ok(names("stick").includes("diapheromera"));
   assert.ok(names("stick").includes("freeze"));
   assert.ok(names("mantis").includes("mantodea"));
@@ -2183,6 +2194,20 @@ test("firefly ethogram is Spark ultra (photinus sit_hold + softs + freeze, not f
   assert.equal(names("firefly").includes("flash"), false);
   assert.equal(names("firefly").includes("lift"), false);
   assert.equal(names("firefly").includes("still"), false);
+});
+
+test("darner ethogram is Dart ultra (anax sit_hold + softs + freeze, not hawk/hover/still)", () => {
+  assert.ok(names("darner").includes("anax"));
+  assert.ok(names("darner").includes("hawking_soft"));
+  assert.ok(names("darner").includes("tandem_soft"));
+  assert.ok(names("darner").includes("nymph_soft"));
+  assert.ok(names("darner").includes("whir_soft"));
+  assert.ok(names("darner").includes("obelisk_soft"));
+  assert.ok(names("darner").includes("ommatidia_soft"));
+  assert.ok(names("darner").includes("freeze"));
+  assert.equal(names("darner").includes("hawk"), false);
+  assert.equal(names("darner").includes("hover"), false);
+  assert.equal(names("darner").includes("still"), false);
 });
 
 test("pickAct can schedule tongue on a snake and never scratch", () => {
