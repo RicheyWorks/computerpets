@@ -282,6 +282,11 @@ test("hawking/tandem/nymph/whir/anax/obelisk/ommatidia are house-darner-true, no
   assert.equal(held.phase, "hold");
   assert.equal(held.anim, "sit");
   assert.ok(held.rot !== 0 || held.lift > 0);
+  assert.equal(T.ANAX_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.equal(T.HAPPY_DUR.junius, 1.70);
+  assert.equal(T.HAPPY_DUR.labium, 1.84);
+  assert.equal(T.HAPPY_DUR.exuvia, 1.76);
   const release = T.stepTrick(bole, T.ANAX_HOLD + 0.2, ground);
   assert.equal(release.phase, "release");
   assert.equal(release.anim, "sit");
@@ -314,7 +319,7 @@ test("hawking/tandem/nymph/whir/anax/obelisk/ommatidia are house-darner-true, no
   assert.ok(Math.abs(ommatidiaMid.lift) > 0.05 || Math.abs(ommatidiaMid.rot) > 1 || Math.abs(ommatidiaMid.x - 80) > 0.05);
   assert.equal(T.TRICKS.includes("obelisk"), true);
   assert.equal(T.TRICKS.includes("ommatidia"), true);
-  const sinusDone = T.stepTrick(sinus, 1.7, ground);
+  const sinusDone = T.stepTrick(sinus, T.DUR.nymph + 0.1, ground);
   assert.equal(sinusDone.phase, "done");
   const aborted = T.stepTrick(held, 0.1, { asleep: true, cmd: "sleep" });
   assert.equal(aborted.phase, "done");
@@ -364,7 +369,7 @@ test("hawking/tandem/nymph/whir/anax/obelisk/ommatidia are house-darner-true, no
   assert.equal(Octopus.TRICKS.includes("jet"), true);
   assert.equal(Nautilus.TRICKS.includes("spiral"), true);
   assert.equal(Goldfish.TRICKS.includes("drift"), true);
-  assert.equal(Fuse.HAPPY.includes("pulse"), true);
+  assert.equal(Fuse.HAPPY.includes("densfuse"), true);
   assert.equal(T.TRICKS.includes("podia"), false);
   assert.equal(T.TRICKS.includes("righting"), false);
   assert.equal(T.TRICKS.includes("crawl"), false);
