@@ -128,6 +128,13 @@ DOMAINS = (
 
 SAMPLE_GUESTS = ("red_panda", "cat", "honey_queen", "ball_python", "crow")
 
+# Guests without a separate *-tricks.js by design (idle acts_for covers blotter ethogram).
+# Do not invent Rui / dragon ultra-trick files — exclude with reason instead.
+NO_TRICKS_KEYS = frozenset({"red_panda", "relay_dragon", "fuse_dragon", "ground_dragon"})
+
+# House denser ethograms are non-empty; thin means below the living floor (Rui has 4).
+ETH_MIN_ACTS = 4
+
 ETH_ADDR_RE = re.compile(r"^0x[0-9a-fA-F]{40}$")
 
 
@@ -335,11 +342,24 @@ def _assert_guest(local_id: str, result: InvokeResult) -> list[str]:
 # ---------------------------------------------------------------------------
 
 
+def _portrait_path(key: str) -> Path | None:
+    """Guest portrait sprite under web/public/pets/{key}.jpg (documented house path)."""
+    path = repo_root() / "web" / "public" / "pets" / f"{key}.jpg"
+    return path if path.is_file() else None
+
+
 def _species_rows() -> list[Affordance]:
     rows = [
         Affordance("species.catalog", "species", "Load species catalog", "species.CATALOG_KEYS / SPECIES"),
         Affordance("species.lookup", "species", "species_by_key", "species.species_by_key"),
         Affordance("species.guests_doc", "species", "GUESTS.md roster", "docs/GUESTS.md"),
+        Affordance(
+            "species.portraits",
+            "species",
+            "Portrait jpg for every catalog key",
+            "web/public/pets/{key}.jpg",
+            notes="House-wide: missing portrait fails naming the key. CSRBT-style invariant, not a frozen count.",
+        ),
     ]
     for key in SAMPLE_GUESTS:
         rows.append(
@@ -378,6 +398,17 @@ def _invoke_species(local_id: str, **opts: Any) -> InvokeResult:
             extras={"chars": len(text)}, trace=[f"guests_doc:{len(text)}"],
             error=None if ok else "GUESTS.md missing sample keys",
         )
+    if local_id == "portraits":
+        missing = [key for key in CATALOG_KEYS if _portrait_path(key) is None]
+        ok = not missing
+        detail = f"{len(CATALOG_KEYS)} portraits" if ok else f"missing {len(missing)}"
+        return InvokeResult(
+            aid, "species", ok, detail=detail,
+            extras={"n": len(CATALOG_KEYS), "missing": missing[:32], "missing_n": len(missing)},
+            trace=[f"portraits={len(CATALOG_KEYS) - len(missing)}/{len(CATALOG_KEYS)}"]
+            + ([f"missing={','.join(missing[:12])}"] if missing else []),
+            error=None if ok else f"missing portrait jpg for: {', '.join(missing[:12])}",
+        )
     if local_id.startswith("sample."):
         key = local_id.split(".", 1)[1]
         sp = species_by_key(key)
@@ -398,6 +429,13 @@ def _assert_species(local_id: str, result: InvokeResult) -> list[str]:
             fails.append("catalog is empty")
         if set(CATALOG_KEYS) != set(SPECIES):
             fails.append("CATALOG_KEYS and SPECIES drifted")
+        return fails
+    if local_id == "portraits":
+        missing = result.extras.get("missing") or []
+        if missing:
+            fails.append(f"missing portrait jpg for: {', '.join(missing[:12])}")
+        if not result.ok and not fails:
+            fails.append(result.error or "portrait catalog failed")
         return fails
     if not result.ok:
         fails.append(result.error or result.detail or "species invoke failed")
@@ -425,46 +463,130 @@ def _tricks_path(key: str) -> Path | None:
     return None
 
 
+def _tricks_parse_smoke(key: str, path: Path) -> list[str]:
+    """Load/parse smoke for an on-disk *-tricks.js/ts — no invented verbs."""
+    fails: list[str] = []
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError as exc:
+        return [f"{key} tricks unreadable: {exc}"]
+    if not text.strip():
+        fails.append(f"{key} tricks file empty")
+        return fails
+    has_key = f'TRICK_KEY = "{key}"' in text or f"TRICK_KEY = '{key}'" in text
+    has_tricks = "const TRICKS" in text or "TRICKS =" in text or "export const TRICKS" in text
+    if not (has_key or has_tricks):
+        fails.append(f"{key} tricks missing TRICK_KEY/TRICKS parse markers")
+    return fails
+
+
 def _ethogram_rows() -> list[Affordance]:
-    rows = []
-    for key in SAMPLE_GUESTS:
+    rows = [
+        Affordance(
+            "ethogram.catalog_all",
+            "ethogram",
+            "Ethogram + tricks for every catalog key",
+            "ethogram.acts_for + desktop/renderer/*-tricks.js",
+            notes=(
+                "CSRBT-style house-wide invariant: every CATALOG_KEYS guest has a non-empty denser "
+                "acts_for set; present *-tricks.js files get a load/parse smoke. Absent tricks "
+                "(Rui / dragons) are excluded rows — do not invent."
+            ),
+        ),
+    ]
+    for key in sorted(NO_TRICKS_KEYS):
+        label = "Rui" if key == "red_panda" else key
         rows.append(
             Affordance(
-                id=f"ethogram.acts.{key}",
+                id=f"ethogram.tricks.{key}",
                 domain="ethogram",
-                label=f"Ethogram {key}",
-                handler="ethogram.acts_for",
+                label=f"Tricks file {key}",
+                handler="desktop/renderer/*-tricks.js",
+                fate="excluded",
+                exclude_reason=(
+                    f"No separate *-tricks.js for {label}; idle acts_for covers blotter ethogram. "
+                    "Do not invent ultra tricks for this guest."
+                ),
             )
         )
-        tricks = _tricks_path(key)
-        if tricks is None:
-            rows.append(
-                Affordance(
-                    id=f"ethogram.tricks.{key}",
-                    domain="ethogram",
-                    label=f"Tricks file {key}",
-                    handler="desktop/renderer/*-tricks.js",
-                    fate="excluded",
-                    exclude_reason=(
-                        f"No separate *-tricks.js for {key}; idle acts_for covers blotter ethogram. "
-                        "Overlay ultra tricks are optional per guest."
-                    ),
-                )
-            )
-        else:
-            rows.append(
-                Affordance(
-                    id=f"ethogram.tricks.{key}",
-                    domain="ethogram",
-                    label=f"Tricks file {key}",
-                    handler="desktop/renderer/*-tricks.js",
-                )
-            )
     return rows
 
 
 def _invoke_ethogram(local_id: str, **opts: Any) -> InvokeResult:
     aid = f"ethogram.{local_id}"
+    if local_id == "catalog_all":
+        missing: list[str] = []
+        thin: list[str] = []
+        broken: list[str] = []
+        tricks_ok = 0
+        tricks_fail: list[str] = []
+        unexpected_missing_tricks: list[str] = []
+        for key in CATALOG_KEYS:
+            acts = acts_for(key)
+            names = [a.get("name", "") for a in acts]
+            if not acts:
+                missing.append(key)
+                continue
+            if any(not (a.get("name") and a.get("motion")) for a in acts):
+                broken.append(key)
+            if len(acts) < ETH_MIN_ACTS:
+                thin.append(key)
+            if any(n in ("NaN", "undefined", "[object Object]") for n in names):
+                broken.append(key)
+            tricks = _tricks_path(key)
+            if tricks is None:
+                if key not in NO_TRICKS_KEYS:
+                    unexpected_missing_tricks.append(key)
+            else:
+                parse_fails = _tricks_parse_smoke(key, tricks)
+                if parse_fails:
+                    tricks_fail.extend(parse_fails)
+                else:
+                    tricks_ok += 1
+        ok = not (missing or thin or broken or tricks_fail or unexpected_missing_tricks)
+        parts = [
+            f"keys={len(CATALOG_KEYS)}",
+            f"tricks_parsed={tricks_ok}",
+            f"tricks_excluded={len(NO_TRICKS_KEYS)}",
+        ]
+        if missing:
+            parts.append(f"missing={','.join(missing[:12])}")
+        if thin:
+            parts.append(f"thin={','.join(thin[:12])}")
+        if broken:
+            parts.append(f"broken={','.join(broken[:12])}")
+        if unexpected_missing_tricks:
+            parts.append(f"no_tricks={','.join(unexpected_missing_tricks[:12])}")
+        if tricks_fail:
+            parts.append(f"tricks_fail={len(tricks_fail)}")
+        err = None
+        if not ok:
+            bits = []
+            if missing:
+                bits.append(f"missing acts: {', '.join(missing[:12])}")
+            if thin:
+                bits.append(f"thin acts (<{ETH_MIN_ACTS}): {', '.join(thin[:12])}")
+            if broken:
+                bits.append(f"broken acts: {', '.join(broken[:12])}")
+            if unexpected_missing_tricks:
+                bits.append(f"missing tricks file: {', '.join(unexpected_missing_tricks[:12])}")
+            if tricks_fail:
+                bits.append("; ".join(tricks_fail[:6]))
+            err = "; ".join(bits)
+        return InvokeResult(
+            aid, "ethogram", ok, detail=f"{len(CATALOG_KEYS)} guests",
+            extras={
+                "n": len(CATALOG_KEYS),
+                "missing": missing,
+                "thin": thin,
+                "broken": broken,
+                "tricks_ok": tricks_ok,
+                "tricks_fail": tricks_fail[:32],
+                "unexpected_missing_tricks": unexpected_missing_tricks,
+            },
+            trace=parts,
+            error=err,
+        )
     kind, _, key = local_id.partition(".")
     if kind == "acts":
         acts = acts_for(key)
@@ -493,6 +615,25 @@ def _invoke_ethogram(local_id: str, **opts: Any) -> InvokeResult:
 
 def _assert_ethogram(local_id: str, result: InvokeResult) -> list[str]:
     fails: list[str] = []
+    if local_id == "catalog_all":
+        missing = result.extras.get("missing") or []
+        thin = result.extras.get("thin") or []
+        broken = result.extras.get("broken") or []
+        unexpected = result.extras.get("unexpected_missing_tricks") or []
+        tricks_fail = result.extras.get("tricks_fail") or []
+        for key in missing:
+            fails.append(f"FAIL missing ethogram acts for {key}")
+        for key in thin:
+            fails.append(f"FAIL thin ethogram acts for {key}")
+        for key in broken:
+            fails.append(f"FAIL broken ethogram acts for {key}")
+        for key in unexpected:
+            fails.append(f"FAIL missing tricks file for {key}")
+        for msg in tricks_fail:
+            fails.append(f"FAIL {msg}")
+        if not result.ok and not fails:
+            fails.append(result.error or "ethogram.catalog_all failed")
+        return fails
     if not result.ok:
         fails.append(result.error or "ethogram invoke failed")
         return fails
@@ -541,27 +682,23 @@ def _cry_rows() -> list[Affordance]:
             "pet.js calls prefersHouseCry",
             "desktop/renderer/pet.js",
         ),
-    ]
-    for key in SAMPLE_GUESTS:
-        rows.append(
-            Affordance(
-                id=f"cry.wav.{key}",
-                domain="cry",
-                label=f"House cry wav {key}",
-                handler="desktop/renderer/sounds/{key}.wav",
-                notes="Smoke where the file exists; missing wav is a fail if prefersHouseCry.",
-            )
-        )
-    rows.append(
+        Affordance(
+            "cry.catalog_wavs",
+            "cry",
+            "Wav on disk for every prefersHouseCry key",
+            "desktop/renderer/sounds/{key}.wav",
+            notes=(
+                "House-wide: every prefersHouseCry key must have a wav (or honest exclude). "
+                "Missing wav fails naming the key. CSRBT-style invariant, not sample-only."
+            ),
+        ),
         Affordance(
             "cry.playback",
             "cry",
             "Stubbed house-cry playback",
             "desk-house.js playVoice + Audio stub",
             notes="Mock Audio + real overlayVoiceSrc/wav; live speakers stay out of default run_all.",
-        )
-    )
-    rows.append(
+        ),
         Affordance(
             "live.cry_playback",
             "cry",
@@ -573,8 +710,8 @@ def _cry_rows() -> list[Affordance]:
                 "Real speakers/Electron session. Stubbed playVoice path is driven as cry.playback; "
                 "wav + pet.js wire remain driven offline."
             ),
-        )
-    )
+        ),
+    ]
     return rows
 
 
@@ -597,6 +734,17 @@ def _invoke_cry(local_id: str, **opts: Any) -> InvokeResult:
             extras={"wired": ok}, trace=[f"pet_wire={ok}"],
             error=None if ok else "pet.js does not call prefersHouseCry",
         )
+    if local_id == "catalog_wavs":
+        prefers = sorted(_prefers_house_cry_keys())
+        missing = [key for key in prefers if _cry_wav(key) is None]
+        ok = bool(prefers) and not missing
+        return InvokeResult(
+            aid, "cry", ok, detail=f"{len(prefers) - len(missing)}/{len(prefers)} wavs",
+            extras={"n": len(prefers), "missing": missing, "missing_n": len(missing)},
+            trace=[f"prefersHouseCry={len(prefers)}", f"wavs={len(prefers) - len(missing)}"]
+            + ([f"missing={','.join(missing[:12])}"] if missing else []),
+            error=None if ok else f"missing cry wav for: {', '.join(missing[:12])}",
+        )
     if local_id.startswith("wav."):
         key = local_id.split(".", 1)[1]
         prefers = key in _prefers_house_cry_keys()
@@ -618,6 +766,13 @@ def _invoke_cry(local_id: str, **opts: Any) -> InvokeResult:
 
 
 def _assert_cry(local_id: str, result: InvokeResult) -> list[str]:
+    if local_id == "catalog_wavs":
+        missing = result.extras.get("missing") or []
+        if missing:
+            return [f"FAIL missing cry wav for {key}" for key in missing[:32]]
+        if not result.ok:
+            return [result.error or result.detail or "cry.catalog_wavs failed"]
+        return []
     if result.ok:
         return []
     return [result.error or result.detail or "cry invoke failed"]
