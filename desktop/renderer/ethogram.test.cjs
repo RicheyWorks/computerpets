@@ -1165,5 +1165,10 @@ test("reef keys never schedule scratch or a snake tongue", () => {
   assert.ok(E.actsFor("sea_cucumber").some((a) => a.name === "freeze"));
   assert.equal(E.actsFor("sea_cucumber").some((a) => a.name === "crawl"), false);
   assert.equal(E.actsFor("sea_cucumber").some((a) => a.name === "still"), false);
+  assert.ok(E.actsFor("lionfish").some((a) => a.name === "pteroishush"));
+  assert.ok(E.actsFor("lionfish").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("lionfish").some((a) => a.name === "veil"), false);
+  assert.equal(E.actsFor("lionfish").some((a) => a.name === "hover"), false);
+  assert.equal(E.actsFor("lionfish").some((a) => a.name === "still"), false);
   assert.ok(E.actsFor("grouper").some((a) => a.name === "hide"));
 });
