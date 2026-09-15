@@ -1,6 +1,6 @@
-/** Glide ground tricks while idle. House neighborly southern flying squirrel (Glaucomys volans / Sciuridae Pteromyini) desk life -- membranelaunch / softland / nestboxhuddle / nocturnalscurry / glaucomyshush personality; NOT Sail/Cache/Cape/Wrist/Swing/Hang; guest slug Glide / key flying_squirrel -- accept flying_squirrel and glide; Thank-yous densglide / inkglide / densglaucomys. Sleep, hide, leave, rest, card, ribbon still win. Same map as desktop flying_squirrel-tricks.js. Next: Boom / howler. Catalog 220. */
+/** Glide ground tricks while idle — ultra-polish pass. House neighborly Glaucomys volans / Southern Flying Squirrel desk life (flying_squirrel / Glide) — membranelaunch / softland / nestboxhuddle / nocturnalscurry / flapstretch / barksprint / glaucomyshush personality (membranelaunch membrane launch without naming glide or membrane or launch alone as wait — distinct from Sail patagiumglide and sugar glider; softland soft landing without naming land or soft or hop alone as wait — distinct from Sail clingclimb and Squirrel scurry; nestboxhuddle nest-box huddle without naming nest or box or huddle alone as wait — distinct from Cape and Wrist; nocturnalscurry nocturnal scurry without naming scurry or night or walk alone as wait — distinct from Squirrel scurry and Wrist nightscamper; flapstretch flap-membrane stretch without naming flap or stretch or wing alone as wait — distinct from Sail membranespread and Bat; barksprint bark sprint without naming bark or sprint or run alone as wait — distinct from Sail barkclamp and Squirrel; long glaucomyshush Glaucomys volans hush hold (THE glaucomyshush sit_hold tell) — never named wait or crouch or sit or glide or hop or still or flying_squirrel or glide as bare ethogram-only trick kinds; Sail colugo owns patagiumglide/clingclimb/headdownhang/leaffoldsettle/membranespread/barkclamp/galeopterushush — do NOT reuse; Wrist kinkajou owns pretailhang/nectarsip/wristrotate/nightscamper/honeylap/tailcoil/potoshush — do NOT reuse; Squirrel owns scurry and Cache dens — do NOT reuse bare scurry; guest slug Glide / key flying_squirrel only for wantsThankYou matching — accept "flying_squirrel" and "glide"; do NOT name a trick "flying_squirrel" or "glide" or "colugo" or "sail" or "squirrel" or "cache" or "howler" or "boom"; not Sail Galeopterus life, not Wrist Potos life, not Squirrel Sciurus life, not Boom Alouatta life, not Rui. Membranelaunch / softland / nestboxhuddle / nocturnalscurry / flapstretch / barksprint / glaucomyshush; densglide / inkglide / densglaucomys thank-yous. Same map as desktop flying_squirrel-tricks.js. Window-play unchanged. Ethogram softs + freeze — never names glide/hop/still/sit/wait/flying_squirrel as bare ethogram-only trick kinds. True Southern Flying Squirrel Glaucomys volans desk life only — membrane launch, soft land, nest-box huddle, nocturnal scurry, flap stretch, bark sprint, Glaucomys hush. Next house-order ultra: Boom / howler. No cry inventing — flying_squirrel.wav EXISTS so prefersHouseCry adds flying_squirrel after colugo. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 export const TRICK_KEY = "flying_squirrel";
-export const TRICKS = ["membranelaunch", "softland", "nestboxhuddle", "nocturnalscurry", "glaucomyshush"] as const;
+export const TRICKS = ["membranelaunch", "softland", "nestboxhuddle", "nocturnalscurry", "flapstretch", "barksprint", "glaucomyshush"] as const;
 export const HAPPY = ["densglide", "inkglide", "densglaucomys"] as const;
 export type FlyingSquirrelTrickKind = (typeof TRICKS)[number];
 export type FlyingSquirrelHappyKind = (typeof HAPPY)[number];
@@ -44,10 +44,18 @@ export type FlyingSquirrelHappy = {
   abort?: boolean;
 };
 
-export const HAPPY_DUR = { densglide: 2.58, inkglide: 2.71, densglaucomys: 2.44 } as const;
-export const GLAUCOMYSHUSH_HOLD = 31.12;
-export const RELEASE_S = 2.31;
-export const DUR = { glaucomyshush: GLAUCOMYSHUSH_HOLD + RELEASE_S, membranelaunch: 5.36, softland: 5.08, nestboxhuddle: 5.22, nocturnalscurry: 4.96 } as const;
+export const HAPPY_DUR = { densglide: 1.70, inkglide: 1.84, densglaucomys: 1.76 } as const;
+export const GLAUCOMYSHUSH_HOLD = 11.2;
+export const RELEASE_S = 1.18;
+export const DUR = {
+  glaucomyshush: GLAUCOMYSHUSH_HOLD + RELEASE_S,
+  membranelaunch: 2.48,
+  softland: 2.42,
+  nestboxhuddle: 2.40,
+  nocturnalscurry: 2.44,
+  flapstretch: 2.38,
+  barksprint: 2.56,
+} as const;
 
 export function canStart(state: TrickFlags | undefined) {
   if (!state) return false;
@@ -57,6 +65,7 @@ export function canStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "eat" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function shouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving || state.windowPlay || state.card) return true;
@@ -73,42 +82,83 @@ export function shouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function nextTrickWait(justFinished: boolean, rand?: number, kind?: FlyingSquirrelTrickKind | string) {
   const roll = rand == null ? Math.random() : rand;
-  if (kind === "glaucomyshush") return 198 + roll * 21;
-  if (kind === "membranelaunch") return 24.1 + roll * 3.6;
-  if (kind === "softland") return 23.4 + roll * 3.3;
-  if (kind === "nestboxhuddle") return 25.6 + roll * 3.5;
-  if (kind === "nocturnalscurry") return 22.2 + roll * 3.4;
-  return justFinished ? 18.6 + roll * 2.9 : 13.9 + roll * 2.5;
+  if (kind === "glaucomyshush") return 40 + roll * 26;
+  if (kind === "flapstretch" || kind === "membranelaunch" || kind === "nocturnalscurry") return 12.8 + roll * 9.4;
+  if (kind === "nestboxhuddle" || kind === "softland" || kind === "barksprint") return 11.6 + roll * 8.5;
+  return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
 }
-export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: FlyingSquirrelTrickKind | string) {
-  if (musicOn) return "glaucomyshush";
+
+export function pickTrick(rand?: number, musicOn?: boolean, lastKind?: FlyingSquirrelTrickKind | string | null) {
+  if (musicOn) return "glaucomyshush" as const;
   const roll = rand == null ? Math.random() : rand;
   if (lastKind === "glaucomyshush") {
-    if (roll < 0.26) return "membranelaunch";
-    if (roll < 0.5) return "softland";
-    if (roll < 0.74) return "nestboxhuddle";
-    return "nocturnalscurry";
+    if (roll < 0.17) return "membranelaunch" as const;
+    if (roll < 0.33) return "softland" as const;
+    if (roll < 0.49) return "nestboxhuddle" as const;
+    if (roll < 0.65) return "nocturnalscurry" as const;
+    if (roll < 0.83) return "flapstretch" as const;
+    return "barksprint" as const;
   }
   if (lastKind === "membranelaunch") {
-    if (roll < 0.26) return "glaucomyshush";
-    if (roll < 0.5) return "softland";
-    if (roll < 0.74) return "nestboxhuddle";
-    return "nocturnalscurry";
+    if (roll < 0.16) return "glaucomyshush" as const;
+    if (roll < 0.32) return "softland" as const;
+    if (roll < 0.48) return "nestboxhuddle" as const;
+    if (roll < 0.64) return "nocturnalscurry" as const;
+    if (roll < 0.82) return "flapstretch" as const;
+    return "barksprint" as const;
   }
   if (lastKind === "softland") {
-    if (roll < 0.22) return "glaucomyshush";
-    if (roll < 0.44) return "membranelaunch";
-    if (roll < 0.68) return "nestboxhuddle";
-    return "nocturnalscurry";
+    if (roll < 0.14) return "glaucomyshush" as const;
+    if (roll < 0.3) return "membranelaunch" as const;
+    if (roll < 0.46) return "nestboxhuddle" as const;
+    if (roll < 0.62) return "nocturnalscurry" as const;
+    if (roll < 0.8) return "flapstretch" as const;
+    return "barksprint" as const;
   }
-  if (roll < 0.2) return "glaucomyshush";
-  if (roll < 0.4) return "membranelaunch";
-  if (roll < 0.6) return "softland";
-  if (roll < 0.8) return "nestboxhuddle";
-  return "nocturnalscurry";
+  if (lastKind === "nestboxhuddle") {
+    if (roll < 0.15) return "glaucomyshush" as const;
+    if (roll < 0.31) return "membranelaunch" as const;
+    if (roll < 0.47) return "softland" as const;
+    if (roll < 0.63) return "nocturnalscurry" as const;
+    if (roll < 0.81) return "flapstretch" as const;
+    return "barksprint" as const;
+  }
+  if (lastKind === "nocturnalscurry") {
+    if (roll < 0.16) return "glaucomyshush" as const;
+    if (roll < 0.32) return "membranelaunch" as const;
+    if (roll < 0.48) return "softland" as const;
+    if (roll < 0.64) return "nestboxhuddle" as const;
+    if (roll < 0.82) return "flapstretch" as const;
+    return "barksprint" as const;
+  }
+  if (lastKind === "flapstretch") {
+    if (roll < 0.15) return "glaucomyshush" as const;
+    if (roll < 0.31) return "membranelaunch" as const;
+    if (roll < 0.47) return "softland" as const;
+    if (roll < 0.63) return "nestboxhuddle" as const;
+    if (roll < 0.81) return "nocturnalscurry" as const;
+    return "barksprint" as const;
+  }
+  if (lastKind === "barksprint") {
+    if (roll < 0.16) return "glaucomyshush" as const;
+    if (roll < 0.32) return "membranelaunch" as const;
+    if (roll < 0.48) return "softland" as const;
+    if (roll < 0.64) return "nestboxhuddle" as const;
+    if (roll < 0.82) return "nocturnalscurry" as const;
+    return "flapstretch" as const;
+  }
+  if (roll < 0.14) return "glaucomyshush" as const;
+  if (roll < 0.28) return "membranelaunch" as const;
+  if (roll < 0.42) return "softland" as const;
+  if (roll < 0.56) return "nestboxhuddle" as const;
+  if (roll < 0.7) return "nocturnalscurry" as const;
+  if (roll < 0.85) return "flapstretch" as const;
+  return "barksprint" as const;
 }
+
 export function happyCanStart(state: TrickFlags | undefined) {
   if (!state) return false;
   if (state.asleep || state.hidden || state.leaving) return false;
@@ -117,6 +167,7 @@ export function happyCanStart(state: TrickFlags | undefined) {
   if (cmd === "seek" || cmd === "play" || cmd === "talk" || cmd === "enter") return false;
   return true;
 }
+
 export function happyShouldAbort(state: TrickFlags | undefined) {
   if (!state) return true;
   if (state.asleep || state.hidden || state.leaving) return true;
@@ -132,14 +183,16 @@ export function happyShouldAbort(state: TrickFlags | undefined) {
     cmd === "enter"
   );
 }
+
 export function wantsThankYou(key: string | undefined | null) {
   return key === TRICK_KEY || key === "glide";
 }
+
 export function startThankYou(
   key: string | undefined | null,
-  lastKind: FlyingSquirrelHappyKind | string | undefined,
+  lastKind: FlyingSquirrelHappyKind | null | undefined,
   x: number,
-  facing?: 1 | -1,
+  facing: 1 | -1,
   flags?: TrickFlags
 ) {
   if (!wantsThankYou(key)) return null;
@@ -147,14 +200,16 @@ export function startThankYou(
   const pick = pickHappy(lastKind);
   return { happy: beginHappy(pick, x, facing), kind: pick };
 }
-export function pickHappy(lastKind?: FlyingSquirrelHappyKind | string, rand?: number) {
+
+export function pickHappy(lastKind?: FlyingSquirrelHappyKind | null, rand?: number) {
   const pool = HAPPY.filter((k) => k !== lastKind);
   const list = pool.length ? pool : [...HAPPY];
   const roll = rand == null ? Math.random() : rand;
   return list[Math.floor(roll * list.length)] || list[0];
 }
-export function beginHappy(kind: FlyingSquirrelHappyKind | string, x: number, facing?: 1 | -1): FlyingSquirrelHappy {
-  const name = (HAPPY as readonly string[]).indexOf(kind) >= 0 ? (kind as FlyingSquirrelHappyKind) : "densglide";
+
+export function beginHappy(kind: FlyingSquirrelHappyKind | string, x: number, facing: 1 | -1): FlyingSquirrelHappy {
+  const name = (HAPPY as readonly string[]).includes(kind) ? (kind as FlyingSquirrelHappyKind) : "densglide";
   return {
     kind: name,
     happy: true,
@@ -163,55 +218,63 @@ export function beginHappy(kind: FlyingSquirrelHappyKind | string, x: number, fa
     x,
     lift: 0,
     rot: 0,
-    anim: name === "densglide" ? "sit" : name === "inkglide" ? "play" : "play",
-    facing: facing == null ? 1 : facing,
+    anim: (name === "densglide" ? "sit" : name === "inkglide" ? "play" : "play") as TrickAnim,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
 
 export function densglidePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densglide));
-  if (u < 0.15) {
-    const s = u / 0.15;
-    return { lift: s * 0.0040, rot: s * -0.13, anim: "sit" as TrickAnim };
+  if (u < 0.14) {
+    const s = u / 0.14;
+    return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" as TrickAnim };
   }
-  if (u < 0.84) {
-    const sway = Math.sin(((u - 0.15) / 0.69) * Math.PI * 2.18);
-    return { lift: 0.0040 + Math.abs(sway) * 0.0012, rot: -0.13 + sway * 0.15, anim: "sit" as TrickAnim };
+  if (u < 0.78) {
+    const flash = Math.sin(t * 2.2);
+    return {
+      lift: 2.8 + Math.abs(flash) * 1.4,
+      rot: 12 + flash * 8,
+      dx: flash * 0.08,
+      anim: "sit" as TrickAnim,
+    };
   }
-  const s = (u - 0.84) / 0.16;
-  return { lift: 0.0040 * (1 - s), rot: -0.13 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.78) / 0.22;
+  return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" as TrickAnim };
 }
+
 export function inkglidePose(t: number) {
   const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkglide));
   if (u < 0.12) {
     const s = u / 0.12;
-    return { lift: s * 0.0031, rot: s * 0.22, anim: "play" as TrickAnim };
+    return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" as TrickAnim };
   }
-  if (u < 0.82) {
-    const arc = Math.sin(((u - 0.12) / 0.7) * Math.PI * 2.95);
-    return { lift: 0.0031 + Math.abs(arc) * 0.0018, rot: 0.22 + arc * 0.24, anim: "play" as TrickAnim };
+  if (u < 0.8) {
+    const wriggle = Math.sin(t * 2.6);
+    return {
+      lift: 3.4 + Math.abs(wriggle) * 1.6,
+      rot: -14 + wriggle * 10,
+      dx: wriggle * 0.12,
+      anim: "play" as TrickAnim,
+    };
   }
-  const s = (u - 0.82) / 0.18;
-  return { lift: 0.0031 * (1 - s), rot: 0.22 * (1 - s), anim: "idle" as TrickAnim };
+  const s = (u - 0.8) / 0.2;
+  return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" as TrickAnim };
 }
+
 export function densglaucomysPose(t: number) {
-  const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densglaucomys));
-  if (u < 0.14) {
-    const s = u / 0.14;
-    return { lift: s * -0.0014, rot: s * 0.15, anim: "play" as TrickAnim };
-  }
-  if (u < 0.83) {
-    const hush = Math.sin(((u - 0.14) / 0.69) * Math.PI * 2.12);
-    return { lift: -0.0014 + Math.abs(hush) * 0.0010, rot: 0.15 + hush * 0.14, anim: "play" as TrickAnim };
-  }
-  const s = (u - 0.83) / 0.17;
-  return { lift: -0.0014 * (1 - s), rot: 0.15 * (1 - s), anim: "idle" as TrickAnim };
+  return {
+    lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+    rot: Math.sin(t * 0.58) * 8,
+    dx: Math.sin(t * 0.4) * 0.06,
+    anim: "play" as TrickAnim,
+  };
 }
-export function stepHappy(happy: FlyingSquirrelHappy, dt: number, flags?: TrickFlags): FlyingSquirrelHappy {
+
+export function stepHappy(happy: FlyingSquirrelHappy | null | undefined, dt: number, flags?: TrickFlags) {
   if (!happy || happy.phase === "done") return happy;
   if (happyShouldAbort(flags)) {
-    return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+    return { ...happy, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...happy, t: happy.t + Math.max(0, dt) };
   const hold = HAPPY_DUR[next.kind];
@@ -231,149 +294,223 @@ export function stepHappy(happy: FlyingSquirrelHappy, dt: number, flags?: TrickF
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (next.t >= hold) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
-export function sleepHoldFrame(_key?: string, _frameCount?: number) {
+
+export function sleepHoldFrame(_key?: string | null, _frameCount?: number) {
   return null;
 }
-export function beginTrick(kind: FlyingSquirrelTrickKind | string, x: number, facing?: 1 | -1): FlyingSquirrelTrick {
-  const k = (TRICKS as readonly string[]).includes(kind) ? (kind as FlyingSquirrelTrickKind) : "glaucomyshush";
+
+export function beginTrick(kind: FlyingSquirrelTrickKind, x: number, facing: 1 | -1): FlyingSquirrelTrick {
   const anim: TrickAnim =
-    k === "glaucomyshush"
+    kind === "glaucomyshush"
       ? "sit"
-      : k === "membranelaunch"
+      : kind === "membranelaunch"
         ? "play"
-        : k === "softland"
-          ? "play"
-          : k === "nocturnalscurry"
+        : kind === "barksprint"
+          ? "talk"
+          : kind === "softland"
             ? "walk"
-            : k === "nestboxhuddle"
+            : kind === "nestboxhuddle"
               ? "sit"
-              : "sit";
+              : kind === "nocturnalscurry"
+                ? "play"
+                : kind === "flapstretch"
+                  ? "walk"
+                  : "sit";
   return {
-    kind: k,
-    phase: k === "glaucomyshush" ? "hold" : "go",
+    kind,
+    phase: kind === "glaucomyshush" ? "hold" : "go",
     t: 0,
     x,
     lift: 0,
     rot: 0,
     anim,
-    facing: facing == null ? 1 : facing,
+    facing: (facing == null ? 1 : facing) as 1 | -1,
     fromX: x,
   };
 }
+
 function smoothstep(t: number) {
   const x = Math.max(0, Math.min(1, t));
   return x * x * (3 - 2 * x);
 }
 
 export function glaucomyshushPose(t: number) {
-  const breath = Math.sin(t * 0.00061) + 0.00019 * Math.sin(t * 0.00172);
-  const hush = Math.abs(Math.sin(t * 0.00031));
-  return { lift: -0.00018 + hush * 0.00005, rot: 0.0024 + breath * 0.0016 };
-}
-export function releasePose(t: number) {
-  const u = Math.max(0, Math.min(1, t / RELEASE_S));
-  return { lift: -0.00017 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.0038 * (1 - u) };
+  return {
+    lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+    rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+  };
 }
 
-export function membranelaunchPose(t: number, fromX: number, facing?: 1 | -1) {
+export function releasePose(t: number) {
+  const u = Math.max(0, Math.min(1, t / RELEASE_S));
+  return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
+}
+
+export function membranelaunchPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.membranelaunch));
   const face = facing == null ? 1 : facing;
-  if (u < 0.16) {
-    const s = smoothstep(u / 0.16);
-    return { x: fromX + face * s * 0.0004, lift: s * -0.0024, rot: s * 0.12 * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.34) {
-    const s = smoothstep((u - 0.16) / 0.18);
-    return { x: fromX + face * (0.0004 + s * 0.0012), lift: -0.0024 + s * 0.0148, rot: (0.12 - s * 0.34) * face, anim: "play" as TrickAnim };
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" as TrickAnim };
   }
   if (u < 0.78) {
-    const glide = (u - 0.34) / 0.44;
-    const flap = Math.sin(glide * Math.PI * 1.85);
+    const bar = Math.sin(t * 2.4);
     return {
-      x: fromX + face * (0.0016 + glide * 0.034),
-      lift: 0.0124 - glide * 0.0055 + Math.abs(flap) * 0.0014,
-      rot: (-0.22 + flap * 0.09) * face,
+      x: fromX + face * (0.8 + bar * 0.16),
+      lift: 2.8 + Math.abs(bar) * 1.5,
+      rot: face * (-12 + bar * 10),
       anim: "play" as TrickAnim,
     };
   }
   const s = smoothstep((u - 0.78) / 0.22);
-  return { x: fromX + face * (0.0356 - s * 0.0005), lift: 0.0069 * (1 - s), rot: -0.14 * (1 - s) * face, anim: "idle" as TrickAnim };
+  return {
+    x: fromX + face * 0.8 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (-4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function softlandPose(t: number, fromX: number, facing?: 1 | -1) {
+
+export function softlandPose(t: number, fromX: number, facing: 1 | -1) {
   const u = Math.max(0, Math.min(1, t / DUR.softland));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.18) {
-    const s = smoothstep(u / 0.18);
-    return { x: fromX + face * s * 0.0011, lift: 0.0095 - s * 0.0068, rot: s * -0.16 * face, anim: "play" as TrickAnim };
-  }
-  if (u < 0.55) {
-    const settle = (u - 0.18) / 0.37;
-    const bounce = Math.sin(settle * Math.PI * 2.2) * (1 - settle);
-    return {
-      x: fromX + face * (0.0011 + settle * 0.0018),
-      lift: 0.0027 + bounce * 0.0024,
-      rot: (-0.16 + bounce * 0.12) * face,
-      anim: "play" as TrickAnim,
-    };
-  }
-  if (u < 0.82) {
-    const hush = Math.sin(((u - 0.55) / 0.27) * Math.PI * 1.4);
-    return {
-      x: fromX + face * (0.0029 + Math.abs(hush) * 0.00035),
-      lift: 0.0011 + Math.abs(hush) * 0.0007,
-      rot: (-0.06 + hush * 0.08) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.82) / 0.18);
-  return { x: fromX + face * 0.0031 * (1 - s), lift: 0.0011 * (1 - s), rot: -0.06 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function nestboxhuddlePose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.nestboxhuddle));
-  const face = facing == null ? 1 : facing;
-  if (u < 0.2) {
-    const s = smoothstep(u / 0.2);
-    return { x: fromX + face * s * 0.0007, lift: s * -0.0046, rot: s * 0.28 * face, anim: "sit" as TrickAnim };
-  }
-  if (u < 0.76) {
-    const huddle = Math.sin(((u - 0.2) / 0.56) * Math.PI * 1.65);
-    return {
-      x: fromX + face * (0.0007 + Math.abs(huddle) * 0.0004),
-      lift: -0.0046 + Math.abs(huddle) * 0.0012,
-      rot: (0.28 + huddle * 0.11) * face,
-      anim: "sit" as TrickAnim,
-    };
-  }
-  const s = smoothstep((u - 0.76) / 0.24);
-  return { x: fromX + face * 0.0008 * (1 - s), lift: -0.0046 * (1 - s), rot: 0.28 * (1 - s) * face, anim: "idle" as TrickAnim };
-}
-export function nocturnalscurryPose(t: number, fromX: number, facing?: 1 | -1) {
-  const u = Math.max(0, Math.min(1, t / DUR.nocturnalscurry));
   const face = facing == null ? 1 : facing;
   if (u < 0.12) {
     const s = smoothstep(u / 0.12);
-    return { x: fromX + face * s * 0.0014, lift: s * 0.0028, rot: s * -0.1 * face, anim: "walk" as TrickAnim };
+    return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" as TrickAnim };
   }
-  if (u < 0.84) {
-    const scurry = (u - 0.12) / 0.72;
-    const dart = Math.sin(scurry * Math.PI * 5.6);
+  if (u < 0.78) {
+    const bob = Math.sin(t * 2.2);
     return {
-      x: fromX + face * (0.0014 + scurry * 0.022 + dart * 0.0011),
-      lift: 0.0028 + Math.abs(dart) * 0.0022,
-      rot: (-0.1 + dart * 0.16) * face,
+      x: fromX + face * bob * 0.12,
+      lift: 2.6 + Math.abs(bob) * 1.3,
+      rot: face * (10 + bob * 8),
       anim: "walk" as TrickAnim,
     };
   }
-  const s = smoothstep((u - 0.84) / 0.16);
-  return { x: fromX + face * (0.0234 - s * 0.0006), lift: 0.0028 * (1 - s), rot: -0.08 * (1 - s) * face, anim: "idle" as TrickAnim };
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX,
+    lift: 1.2 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
 }
-export function stepTrick(trick: FlyingSquirrelTrick, dt: number, flags?: TrickFlags): FlyingSquirrelTrick {
+
+export function nestboxhuddlePose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.nestboxhuddle));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" as TrickAnim };
+  }
+  if (u < 0.78) {
+    const hang = Math.sin(t * 2.0);
+    return {
+      x: fromX + face * (0.5 + hang * 0.1),
+      lift: 2.8 + Math.abs(hang) * 1.2,
+      rot: face * (11 + hang * 8),
+      anim: "sit" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.78) / 0.22);
+  return {
+    x: fromX + face * 0.5 * (1 - s),
+    lift: 1.3 * (1 - s),
+    rot: face * (3 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function nocturnalscurryPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.nocturnalscurry));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.1) {
+    const s = smoothstep(u / 0.1);
+    return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const thrash = Math.sin(t * 3.6);
+    return {
+      x: fromX + face * (1.0 + thrash * 0.22),
+      lift: 3.6 + Math.abs(thrash) * 2.0,
+      rot: face * (18 + thrash * 14),
+      anim: "play" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 1.0 * (1 - s),
+    lift: 1.6 * (1 - s),
+    rot: face * (6 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function flapstretchPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.flapstretch));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cast = Math.sin(t * 2.8);
+    return {
+      x: fromX + face * (0.6 + cast * 0.16),
+      lift: 2.8 + Math.abs(cast) * 1.6,
+      rot: face * (12 + cast * 10),
+      anim: "walk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.4 * (1 - s),
+    rot: face * (4 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function barksprintPose(t: number, fromX: number, facing: 1 | -1) {
+  const u = Math.max(0, Math.min(1, t / DUR.barksprint));
+  const face = facing == null ? 1 : facing;
+  if (u < 0.14) {
+    const s = smoothstep(u / 0.14);
+    return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" as TrickAnim };
+  }
+  if (u < 0.8) {
+    const cloud = Math.sin(t * 3.0);
+    return {
+      x: fromX + face * (0.6 + cloud * 0.18),
+      lift: 3.0 + Math.abs(cloud) * 1.8,
+      rot: face * (14 + cloud * 12),
+      anim: "talk" as TrickAnim,
+    };
+  }
+  const s = smoothstep((u - 0.8) / 0.2);
+  return {
+    x: fromX + face * 0.6 * (1 - s),
+    lift: 1.5 * (1 - s),
+    rot: face * (5 * (1 - s)),
+    anim: "idle" as TrickAnim,
+  };
+}
+
+export function stepTrick(trick: FlyingSquirrelTrick | null | undefined, dt: number, flags?: TrickFlags) {
   if (!trick || trick.phase === "done") return trick;
-  if (shouldAbort(flags) && trick.kind !== "membranelaunch" && trick.kind !== "softland" && trick.kind !== "nestboxhuddle" && trick.kind !== "nocturnalscurry") {
-    return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
+  if (
+    shouldAbort(flags) &&
+    trick.kind !== "membranelaunch" &&
+    trick.kind !== "softland" &&
+    trick.kind !== "nestboxhuddle" &&
+    trick.kind !== "nocturnalscurry" &&
+    trick.kind !== "flapstretch" &&
+    trick.kind !== "barksprint"
+  ) {
+    return { ...trick, phase: "done" as const, t: 0, lift: 0, rot: 0, anim: "idle" as TrickAnim, abort: true };
   }
   const next = { ...trick, t: trick.t + Math.max(0, dt) };
   if (next.kind === "glaucomyshush") {
@@ -393,35 +530,48 @@ export function stepTrick(trick: FlyingSquirrelTrick, dt: number, flags?: TrickF
       next.anim = "sit";
       return next;
     }
-    return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+    return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   }
   const hold = DUR[next.kind];
   const u = next.t / hold;
+  const fromX = trick.fromX != null ? trick.fromX : trick.x;
   if (next.kind === "membranelaunch") {
-    const pose = membranelaunchPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = membranelaunchPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "softland") {
-    const pose = softlandPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = softlandPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "nestboxhuddle") {
+    const pose = nestboxhuddlePose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else if (next.kind === "nocturnalscurry") {
-    const pose = nocturnalscurryPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = nocturnalscurryPose(next.t, fromX, trick.facing);
+    next.x = pose.x;
+    next.lift = pose.lift;
+    next.rot = pose.rot;
+    next.anim = pose.anim;
+  } else if (next.kind === "flapstretch") {
+    const pose = flapstretchPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   } else {
-    const pose = nestboxhuddlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+    const pose = barksprintPose(next.t, fromX, trick.facing);
     next.x = pose.x;
     next.lift = pose.lift;
     next.rot = pose.rot;
     next.anim = pose.anim;
   }
-  if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
+  if (u >= 1) return { ...next, phase: "done" as const, lift: 0, rot: 0, anim: "idle" as TrickAnim };
   return next;
 }
