@@ -230,7 +230,7 @@ test("stick ethogram is Twig ultra (diapheromera + softs + freeze, not still/wal
   assert.ok(names.includes("catalepsy_soft"));
   assert.ok(names.includes("browse_soft"));
   assert.ok(names.includes("tread_soft"));
-  assert.ok(names.includes("tegminlift_soft"));
+  assert.ok(names.includes("oviposit_soft"));
   assert.ok(names.includes("filiform_soft"));
   assert.ok(names.includes("freeze"));
   assert.equal(names.includes("still"), false);
