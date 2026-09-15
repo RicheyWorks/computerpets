@@ -7,20 +7,20 @@
   const HAPPY = ["junius", "labium", "exuvia"];
 
   const HAPPY_DUR = {
-    junius: 1.24,
-    labium: 1.34,
-    exuvia: 1.22,
+    junius: 1.70,
+    labium: 1.84,
+    exuvia: 1.76,
   };
-  const ANAX_HOLD = 11.4;
-  const RELEASE_S = 0.66;
+  const ANAX_HOLD = 11.2;
+  const RELEASE_S = 1.18;
   const DUR = {
     anax: ANAX_HOLD + RELEASE_S,
-    hawking: 1.48,
-    tandem: 1.42,
-    nymph: 1.54,
-    whir: 1.36,
-    obelisk: 1.64,
-    ommatidia: 1.68,
+    hawking: 2.48,
+    tandem: 2.42,
+    nymph: 2.44,
+    whir: 2.56,
+    obelisk: 2.40,
+    ommatidia: 2.38,
   };
 
   function canStart(state) {
