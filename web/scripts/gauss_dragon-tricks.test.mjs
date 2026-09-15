@@ -797,7 +797,7 @@ test("Gauss tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("depositfeedsift"), false);
   assert.equal(T.TRICKS.includes("cucumberswellshrink"), false);
   assert.equal(T.TRICKS.includes("softretractcue"), false);
-  assert.equal(T.TRICKS.includes("longholothuriahush"), false);
+  assert.equal(T.TRICKS.includes("holothuriahush"), false);
   assert.equal(T.HAPPY.includes("denstube"), false);
   assert.equal(T.HAPPY.includes("inktube"), false);
   assert.equal(T.HAPPY.includes("densholothuria"), false);
