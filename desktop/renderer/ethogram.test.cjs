@@ -1190,4 +1190,9 @@ test("reef keys never schedule scratch or a snake tongue", () => {
   assert.equal(E.actsFor("cyber_dragon").some((a) => a.name === "arc"), false);
   assert.equal(E.actsFor("cyber_dragon").some((a) => a.name === "still"), false);
   assert.equal(E.actsFor("cyber_dragon").some((a) => a.name === "watch"), false);
+  assert.ok(E.actsFor("volt_dragon").some((a) => a.name === "volthush"));
+  assert.ok(E.actsFor("volt_dragon").some((a) => a.name === "freeze"));
+  assert.equal(E.actsFor("volt_dragon").some((a) => a.name === "current"), false);
+  assert.equal(E.actsFor("volt_dragon").some((a) => a.name === "still"), false);
+  assert.equal(E.actsFor("volt_dragon").some((a) => a.name === "watch"), false);
 });
