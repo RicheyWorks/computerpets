@@ -128,9 +128,11 @@ DOMAINS = (
 
 SAMPLE_GUESTS = ("red_panda", "cat", "honey_queen", "ball_python", "crow")
 
-# Guests without a separate *-tricks.js by design (idle acts_for covers blotter ethogram).
-# Do not invent Rui / dragon ultra-trick files — exclude with reason instead.
-NO_TRICKS_KEYS = frozenset({"red_panda", "relay_dragon", "fuse_dragon", "ground_dragon"})
+# Guests kept out of per-key ethogram.tricks.* driven rows by design.
+# Rui (red_panda) has rui-tricks.js for the overlay, but idle acts_for covers blotter
+# ethogram — do not invent a driven ethogram.tricks.red_panda ultra row.
+# Dragon guests (relay/fuse/ground) resolve via alias stems to real *-tricks.js files.
+NO_TRICKS_KEYS = frozenset({"red_panda"})
 
 # House denser ethograms are non-empty; thin means below the living floor (Rui has 4).
 ETH_MIN_ACTS = 4
@@ -447,19 +449,87 @@ def _assert_species(local_id: str, result: InvokeResult) -> list[str]:
 # ---------------------------------------------------------------------------
 
 
+_TRICK_KEY_RE = re.compile(r"""TRICK_KEY\s*=\s*['"]([^'"]+)['"]""")
+
+# Registry only — not a per-guest tricks module (see desktop/renderer/ground-tricks.js).
+_TRICKS_REGISTRY_NAMES = frozenset({"ground-tricks.js", "ground-tricks.ts"})
+
+
+def _tricks_file_key(path: Path) -> str | None:
+    """Return TRICK_KEY declared in a *-tricks.js/ts, or None for registries."""
+    try:
+        text = path.read_text(encoding="utf-8")
+    except OSError:
+        return None
+    match = _TRICK_KEY_RE.search(text)
+    return match.group(1) if match else None
+
+
+def _tricks_stem_candidates(key: str) -> list[str]:
+    """Filename stems desktop/web already use for guest tricks modules.
+
+    Order: catalog key, ball-python-style hyphens, strip `_dragon`, species slug /
+    house name, specials window-play form (ground_dragon → earth).
+    """
+    stems: list[str] = []
+
+    def add(stem: str | None) -> None:
+        if not stem:
+            return
+        raw = str(stem).strip()
+        if not raw:
+            return
+        for form in (raw, raw.replace("_", "-")):
+            if form and form not in stems:
+                stems.append(form)
+
+    add(key)
+    if key.endswith("_dragon"):
+        add(key[: -len("_dragon")])
+    try:
+        sp = species_by_key(key)
+    except Exception:
+        sp = None
+    if sp is not None:
+        add(getattr(sp, "slug", None))
+        name = getattr(sp, "name", None)
+        if name:
+            add(str(name).lower().replace(" ", "-").replace("'", ""))
+    try:
+        from .specials import trait_for
+
+        add(trait_for(key).special)
+    except Exception:
+        pass
+    return stems
+
+
 def _tricks_path(key: str) -> Path | None:
+    """Resolve on-disk tricks module for a catalog key (alias-aware).
+
+    Mirrors desktop/web loading: try `{key}-tricks.js`, hyphen forms, strip
+    `_dragon`, house slug/name, and specials play stems (e.g. earth for
+    ground_dragon). Only accept files whose TRICK_KEY matches `key` so the
+    ground-tricks registry is never mistaken for Ground / ground_dragon.
+    """
     renderer = repo_root() / "desktop" / "renderer"
     web = repo_root() / "web" / "src" / "lib" / "pets"
-    names = (f"{key}-tricks.js", f"{key.replace('_', '-')}-tricks.js")
-    ts_names = (f"{key}-tricks.ts", f"{key.replace('_', '-')}-tricks.ts")
-    for name in names:
-        path = renderer / name
-        if path.is_file():
-            return path
-    for name in ts_names:
-        path = web / name
-        if path.is_file():
-            return path
+    for stem in _tricks_stem_candidates(key):
+        for folder, suffix in ((renderer, ".js"), (web, ".ts")):
+            path = folder / f"{stem}-tricks{suffix}"
+            if not path.is_file() or path.name in _TRICKS_REGISTRY_NAMES:
+                continue
+            if _tricks_file_key(path) == key:
+                return path
+    # Fallback scan — catches any future alias stem not listed above.
+    for folder, pattern in ((renderer, "*-tricks.js"), (web, "*-tricks.ts")):
+        if not folder.is_dir():
+            continue
+        for path in sorted(folder.glob(pattern)):
+            if path.name in _TRICKS_REGISTRY_NAMES:
+                continue
+            if _tricks_file_key(path) == key:
+                return path
     return None
 
 
@@ -489,8 +559,8 @@ def _ethogram_rows() -> list[Affordance]:
             "ethogram.acts_for + desktop/renderer/*-tricks.js",
             notes=(
                 "CSRBT-style house-wide invariant: every CATALOG_KEYS guest has a non-empty denser "
-                "acts_for set; present *-tricks.js files get a load/parse smoke. Absent tricks "
-                "(Rui / dragons) are excluded rows — do not invent."
+                "acts_for set; present *-tricks.js files (alias-resolved) get a load/parse smoke. "
+                "Rui stays an excluded ethogram.tricks row — do not invent."
             ),
         ),
     ]
@@ -504,8 +574,8 @@ def _ethogram_rows() -> list[Affordance]:
                 handler="desktop/renderer/*-tricks.js",
                 fate="excluded",
                 exclude_reason=(
-                    f"No separate *-tricks.js for {label}; idle acts_for covers blotter ethogram. "
-                    "Do not invent ultra tricks for this guest."
+                    f"{label} stays excluded by design; idle acts_for covers blotter ethogram. "
+                    "Do not invent a driven ethogram.tricks ultra row for this guest."
                 ),
             )
         )
