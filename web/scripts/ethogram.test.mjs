@@ -342,6 +342,19 @@ assert.equal(names("mason_bee").includes("seal"), false);
 assert.equal(names("mason_bee").includes("hover"), false);
 assert.equal(names("mason_bee").includes("still"), false);
 
+assert.ok(names("leafcutter").includes("megachile"));
+assert.ok(names("leafcutter").includes("circle_soft"));
+assert.ok(names("leafcutter").includes("liner_soft"));
+assert.ok(names("leafcutter").includes("cavity_soft"));
+assert.ok(names("leafcutter").includes("parcel_soft"));
+assert.ok(names("leafcutter").includes("discpress_soft"));
+assert.ok(names("leafcutter").includes("cellcup_soft"));
+assert.ok(names("leafcutter").includes("freeze"));
+assert.equal(names("leafcutter").includes("cut"), false);
+assert.equal(names("leafcutter").includes("hover"), false);
+assert.equal(names("leafcutter").includes("still"), false);
+
+
   assert.ok(names("honey_queen").includes("lay"));
   assert.ok(names("bumblebee").includes("bombus"));
 assert.ok(names("bumblebee").includes("sonicate_soft"));
@@ -1862,6 +1875,19 @@ assert.ok(names("mason_bee").includes("freeze"));
 assert.equal(names("mason_bee").includes("seal"), false);
 assert.equal(names("mason_bee").includes("hover"), false);
 assert.equal(names("mason_bee").includes("still"), false);
+
+assert.ok(names("leafcutter").includes("megachile"));
+assert.ok(names("leafcutter").includes("circle_soft"));
+assert.ok(names("leafcutter").includes("liner_soft"));
+assert.ok(names("leafcutter").includes("cavity_soft"));
+assert.ok(names("leafcutter").includes("parcel_soft"));
+assert.ok(names("leafcutter").includes("discpress_soft"));
+assert.ok(names("leafcutter").includes("cellcup_soft"));
+assert.ok(names("leafcutter").includes("freeze"));
+assert.equal(names("leafcutter").includes("cut"), false);
+assert.equal(names("leafcutter").includes("hover"), false);
+assert.equal(names("leafcutter").includes("still"), false);
+
 
 
   assert.ok(names("firefly").includes("photinus"));

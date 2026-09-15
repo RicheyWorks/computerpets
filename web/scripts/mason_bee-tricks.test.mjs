@@ -1057,8 +1057,8 @@ test("notes: Mortar ultra-polish done; ethogram dens claim true; next Disc / lea
   assert.equal(OverlayGround.wantsThankYou("leafcutter"), true);
   assert.equal(OverlayGround.tricksFor("disc"), OverlayLeafcutter);
   assert.equal(OverlayGround.wantsThankYou("disc"), true);
-  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
-  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "megachile"]);
+  assert.deepEqual([...Leafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
+  assert.deepEqual([...OverlayLeafcutter.TRICKS], ["circle", "liner", "cavity", "parcel", "discpress", "cellcup", "megachile"]);
   assert.equal(T.TRICKS.includes("column"), false);
   assert.equal(T.TRICKS.includes("nest"), false);
   assert.equal(T.TRICKS.includes("trail"), false);
