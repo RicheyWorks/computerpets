@@ -263,13 +263,23 @@ def test_offline_resolves_and_playback_leave_traces():
 
 def test_gui_mode_rows_stay_excluded_by_default_and_document_gui_flag():
     holes = {row.id: row for row in gaps()}
-    for aid in ("gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt"):
+    gui_ids = (
+        "gui.overlay_paint",
+        "gui.card_hud_paint",
+        "gui.gift_drag_place",
+        "gui.host_place",
+        "gui.blotter_qt",
+        "blotter.plaque",
+        "blotter.frames_paint",
+        "blotter.scene",
+    )
+    for aid in gui_ids:
         assert aid in holes
         assert holes[aid].mode == "gui"
         assert "--gui" in (holes[aid].exclude_reason or "")
     results = run_all()
     skipped = {r.action_id for r in results if r.fate == "excluded"}
-    assert {"gui.overlay_paint", "gui.card_hud_paint", "gui.gift_drag_place", "gui.host_place", "gui.blotter_qt"} <= skipped
+    assert set(gui_ids) <= skipped
     gui_skipped = [
         r for r in results
         if r.action_id.startswith("gui.") and r.action_id != "gui.choice_close_exit" and r.fate == "excluded"
@@ -346,7 +356,7 @@ def test_web_companion_lockstep():
 
 
 def test_blotter_pure_surfaces():
-    """Aggregated blotter domain: pure Python + desktop lockstep; Qt stays gaps."""
+    """Aggregated blotter domain: pure Python + desktop lockstep; Qt stays gaps offline."""
     ids = set(catalog_ids(domain="blotter"))
     driven = {
         "blotter.hours",
@@ -389,3 +399,37 @@ def test_blotter_pure_surfaces():
     assert guide.ok and int(guide.extras.get("n") or 0) == 221
     frames = invoke("blotter.frames")
     assert frames.extras.get("anims") == ["idle", "walk", "sit", "eat", "sleep", "play"]
+
+
+def test_blotter_qt_slices_under_gui_optin():
+    """--gui promotes blotter.plaque / frames_paint / scene from shared app --check traces."""
+    from computerpets_client import app_harness as ah
+
+    # Reset cached bundle so this test owns one --check run.
+    ah._blotter_qt_bundle = None
+    results = ah.run_domain(
+        "blotter",
+        only=["blotter.plaque", "blotter.frames_paint", "blotter.scene"],
+        gui=True,
+    )
+    by_id = {r.action_id: r for r in results}
+    assert set(by_id) == {"blotter.plaque", "blotter.frames_paint", "blotter.scene"}
+    for aid, row in by_id.items():
+        assert row.fate == "driven", (aid, row.fate, row.failures, row.detail)
+        assert row.passed, (aid, row.failures, row.detail)
+
+    # Default offline still excludes them (catalog fate unchanged).
+    offline = ah.run_domain("blotter")
+    skipped = {r.action_id for r in offline if r.fate == "excluded"}
+    assert {"blotter.plaque", "blotter.frames_paint", "blotter.scene"} <= skipped
+
+    # Each id leaves a distinct observable assert from the shared bundle.
+    ah._blotter_qt_bundle = None
+    plaque = ah._invoke_blotter_gui_slice("plaque")
+    frames = ah._invoke_blotter_gui_slice("frames_paint")
+    scene = ah._invoke_blotter_gui_slice("scene")
+    assert plaque.ok and any("species plaque" in t.lower() for t in plaque.trace), plaque.trace
+    assert frames.ok and any("frames painted" in t.lower() and "pixmap" in t.lower() for t in frames.trace), frames.trace
+    assert scene.ok and any("graphics scene" in t.lower() for t in scene.trace), scene.trace
+    assert any("weather=" in t.lower() and "day=" in t.lower() for t in scene.trace), scene.trace
+    assert any("QGraphicsView" in t for t in scene.trace), scene.trace

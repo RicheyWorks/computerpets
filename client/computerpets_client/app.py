@@ -812,6 +812,22 @@ def main(argv: list[str] | None = None) -> int:
             print("check failed: no species plaque on the blotter", file=sys.stderr)
             return 1
         print(f"ok: species plaque for {guide.name} ({guide.latin})")
+        # Honest frames_paint surface: LivingPetItem holds QPixmap packs from frames_for.
+        frame_pack = getattr(window.pet, "frames", None) or {}
+        pixmaps = [pix for anim in frame_pack.values() for pix in anim]
+        if not pixmaps or any(pix is None or pix.isNull() for pix in pixmaps):
+            print("check failed: no pet frame pixmaps on the blotter", file=sys.stderr)
+            return 1
+        anims = ",".join(sorted(frame_pack.keys()))
+        print(f"ok: pet frames painted ({len(pixmaps)} pixmaps; {anims})")
+        n_items = len(window.scene.items())
+        if n_items < 3:
+            print(f"check failed: graphics scene too thin ({n_items} items)", file=sys.stderr)
+            return 1
+        print(
+            f"ok: graphics scene ({n_items} items; "
+            f"weather={weather_label(window.sky)}; day={day_part_label(day_part())})"
+        )
         print(f"ok: {weather_label(window.sky)} on the blotter")
         print(f"ok: {visit_caption(window.species.key)}")
         print(f"ok: {day_part_label(day_part())} on the blotter")
