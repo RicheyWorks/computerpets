@@ -1010,7 +1010,19 @@ assert.equal(names("amphipod").includes("sit"), false);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);
     assert.equal(acts.includes("tongue"), false, `${key} is not a snake`);
   }
-  assert.ok(names("fiddler_crab").includes("wave"));
+  assert.ok(names("fiddler_crab").includes("pugilator"));
+assert.ok(names("fiddler_crab").includes("clawwave_soft"));
+assert.ok(names("fiddler_crab").includes("burrowdig_soft"));
+assert.ok(names("fiddler_crab").includes("sandfeed_soft"));
+assert.ok(names("fiddler_crab").includes("lateralsidestep_soft"));
+assert.ok(names("fiddler_crab").includes("majorclaw_soft"));
+assert.ok(names("fiddler_crab").includes("mudball_soft"));
+assert.ok(names("fiddler_crab").includes("freeze"));
+assert.equal(names("fiddler_crab").includes("wave"), false);
+assert.equal(names("fiddler_crab").includes("walk"), false);
+assert.equal(names("fiddler_crab").includes("still"), false);
+assert.equal(names("fiddler_crab").includes("sit"), false);
+
   assert.ok(names("ghost_crab").includes("run"));
   assert.ok(names("lugworm").includes("heap"));
   for (const key of MEADOW) {
