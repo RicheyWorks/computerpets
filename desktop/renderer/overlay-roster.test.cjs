@@ -159,13 +159,17 @@ test("shore, meadow, canopy, reef, and grid keep their own idle acts on the over
     assert.ok(names.length > 0, key);
     assert.equal(names.includes("scratch"), false, key);
   }
-  assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "wave"));
-  assert.ok(E.actsFor("field_cricket").some((a) => a.name === "chirp"));
-  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "vault"));
-  assert.ok(E.actsFor("sloth").some((a) => a.name === "hang"));
-  assert.ok(E.actsFor("koala").some((a) => a.name === "chew"));
-  assert.ok(E.actsFor("brain_coral").some((a) => a.name === "ridge"));
-  assert.ok(E.actsFor("grouper").some((a) => a.name === "hide"));
+  assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "pugilator"));
+  assert.ok(E.actsFor("fiddler_crab").some((a) => a.name === "clawwave_soft"));
+  assert.ok(E.actsFor("field_cricket").some((a) => a.name === "gryllushush"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "caeliferahush"));
+  assert.ok(E.actsFor("grasshopper").some((a) => a.name === "hindleap_soft"));
+  assert.ok(E.actsFor("sloth").some((a) => a.name === "bradypushush"));
+  assert.ok(E.actsFor("sloth").some((a) => a.name === "hangsway_soft"));
+  assert.ok(E.actsFor("koala").some((a) => a.name === "phascolarctoshush"));
+  assert.ok(E.actsFor("koala").some((a) => a.name === "eucchewbrowse_soft"));
+  assert.ok(E.actsFor("brain_coral").some((a) => a.name === "diploriahush"));
+  assert.ok(E.actsFor("grouper").some((a) => a.name === "epinephelushush"));
 });
 
 test("shore, meadow, canopy, reef, and grid keep a living special on the overlay, not an idle", () => {
