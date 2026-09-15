@@ -1164,7 +1164,19 @@ assert.equal(names("katydid").includes("walk"), false);
     assert.equal(acts.includes("waggle"), false, `${key} is not Comb`);
   }
   assert.ok(names("field_cricket").includes("gryllushush"));
-  assert.ok(names("grasshopper").includes("vault"));
+  assert.ok(names("grasshopper").includes("melanoplushush"));
+  assert.ok(names("grasshopper").includes("vaultleap_soft"));
+  assert.ok(names("grasshopper").includes("feelersweep_soft"));
+  assert.ok(names("grasshopper").includes("crepitate_soft"));
+  assert.ok(names("grasshopper").includes("slowstalk_soft"));
+  assert.ok(names("grasshopper").includes("sunbask_soft"));
+  assert.ok(names("grasshopper").includes("mandnibble_soft"));
+  assert.ok(names("grasshopper").includes("freeze"));
+  assert.equal(names("grasshopper").includes("hunt"), false);
+  assert.equal(names("grasshopper").includes("sit"), false);
+  assert.equal(names("grasshopper").includes("still"), false);
+  assert.equal(names("grasshopper").includes("vault"), false);
+  assert.equal(names("grasshopper").includes("walk"), false);
   assert.ok(names("click_beetle").includes("click"));
   for (const key of CANOPY) {
     const acts = names(key);
