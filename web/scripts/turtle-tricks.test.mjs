@@ -201,9 +201,9 @@ test("ground registry keeps prior guests gated; Ink selectable; no bask/stretch/
   assert.equal(GuineaPig.TRICK_KEY, "guinea_pig");
   assert.equal(T.TRICK_KEY, "turtle");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -372,9 +372,11 @@ test("ultra-polish: Ink soak/crane/snorkel/wipe lifts are Rui-visible (not micro
   assert.equal(T.DUR.snorkel, Overlay.DUR.snorkel);
   assert.equal(T.DUR.wipe, Overlay.DUR.wipe);
   assert.equal(T.SOAK_HOLD, Overlay.SOAK_HOLD);
+  assert.equal(T.SOAK_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
 });
 
-test("notes: Ink idle-life ultra done; Coin / goldfish ultra next-or-done; following house-order ultra guest is Rue / fox (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
+test("notes: Ink Rui-dense ultra (SOAK_HOLD=11.2); next house-order densify leftover after early house guests: Coin / goldfish then Rue / fox", () => {
   assert.deepEqual([...T.TRICKS], ["soak", "tuck", "crane", "plod", "paddle", "snorkel", "wipe"]);
   assert.equal(T.TRICKS.includes("bask"), false);
   assert.equal(Overlay.TRICKS.includes("snorkel"), true);
