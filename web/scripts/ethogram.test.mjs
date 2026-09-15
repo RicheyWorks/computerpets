@@ -1095,6 +1095,18 @@ assert.equal(names("sand_dollar").includes("bury"), false);
 assert.equal(names("sand_dollar").includes("flat"), false);
 assert.equal(names("sand_dollar").includes("still"), false);
 assert.equal(names("sand_dollar").includes("sit"), false);
+assert.ok(names("sea_urchin").includes("strongylhush"));
+assert.ok(names("sea_urchin").includes("spinewalk_soft"));
+assert.ok(names("sea_urchin").includes("lanterngraze_soft"));
+assert.ok(names("sea_urchin").includes("gripcreep_soft"));
+assert.ok(names("sea_urchin").includes("spineflare_soft"));
+assert.ok(names("sea_urchin").includes("pedicellaria_soft"));
+assert.ok(names("sea_urchin").includes("aristotle_soft"));
+assert.ok(names("sea_urchin").includes("freeze"));
+assert.equal(names("sea_urchin").includes("walk"), false);
+assert.equal(names("sea_urchin").includes("spine"), false);
+assert.equal(names("sea_urchin").includes("still"), false);
+assert.equal(names("sea_urchin").includes("sit"), false);
 
   assert.ok(names("lugworm").includes("heap"));
   for (const key of MEADOW) {
