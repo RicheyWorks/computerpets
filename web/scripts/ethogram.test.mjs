@@ -1679,6 +1679,21 @@ assert.equal(names("koala").includes("wait"), false);
   assert.equal(names("gauss_dragon").includes("wait"), false);
   assert.equal(names("gauss_dragon").includes("gauss_dragon"), false);
   assert.equal(names("gauss_dragon").includes("sit"), false);
+  assert.ok(names("relay_dragon").includes("relayhush"));
+  assert.ok(names("relay_dragon").includes("contactclick_soft"));
+  assert.ok(names("relay_dragon").includes("latchseat_soft"));
+  assert.ok(names("relay_dragon").includes("arcflick_soft"));
+  assert.ok(names("relay_dragon").includes("coilbuzz_soft"));
+  assert.ok(names("relay_dragon").includes("poleswitch_soft"));
+  assert.ok(names("relay_dragon").includes("armaturetap_soft"));
+  assert.ok(names("relay_dragon").includes("freeze"));
+  assert.equal(names("relay_dragon").includes("relay"), false);
+  assert.equal(names("relay_dragon").includes("still"), false);
+  assert.equal(names("relay_dragon").includes("watch"), false);
+  assert.equal(names("relay_dragon").includes("wait"), false);
+  assert.equal(names("relay_dragon").includes("relay_dragon"), false);
+  assert.equal(names("relay_dragon").includes("sit"), false);
+
   for (const key of WELL) {
     const acts = names(key);
     assert.equal(acts.includes("scratch"), false, `${key} does not scratch`);

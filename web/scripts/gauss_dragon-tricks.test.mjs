@@ -2879,9 +2879,9 @@ globalThis.PetMorelTricks = OverlayMorel;
   assert.equal(OverlayGround.tricksFor("fan"), OverlayGinkgo);
 });
 
-test("notes: Gauss idle-life ultra done; next house-order guest still lacking tricks is Relay / relay_dragon", () => {
-  assert.equal("Relay", "Relay");
-  assert.equal("relay_dragon", "relay_dragon");
+test("notes: Gauss idle-life ultra done; next house-order guest still lacking tricks is Fuse / fuse_dragon", () => {
+  assert.equal("Fuse", "Fuse");
+  assert.equal("fuse_dragon", "fuse_dragon");
   assert.equal("Boot", "Boot");
   assert.equal("paramecium", "paramecium");
 
@@ -4362,7 +4362,7 @@ assert.equal(OverlayGround.tricksFor("earwig"), OverlayEarwig);
   assert.equal(OverlayGround.tricksFor("flying_squirrel"), OverlayFlyingSquirrel);
   assert.equal(OverlayGround.tricksFor("glide"), OverlayFlyingSquirrel);
 
-// Recommend next house-order guest still lacking idle tricks (do not implement): Relay / relay_dragon. Catalog 221.
+// Recommend next house-order guest still lacking idle tricks (do not implement): Fuse / fuse_dragon. Catalog 221.
   assert.equal("lionfish", "lionfish");
   assert.equal("Boot", "Boot");
   assert.equal("paramecium", "paramecium");
