@@ -75,8 +75,8 @@ Ids are `domain.local`. Bare care ids (`feed`) still resolve for the original ha
 | `ethogram` | Acts + tricks files for sample guests | `ethogram.acts_for` / `desktop/renderer/*-tricks.js` |
 | `cry` | `prefersHouseCry` parse, pet.js wiring, wav files, **stubbed `cry.playback`** (mock `Audio` + `PetDeskHouse.playVoice`) | `card.ts` / `pet.js` / `house-sounds.js` / `desk-house.js` / `harness_smokes.cjs` |
 | `gift` | Line, leave, pick, **place coords** (`gift.place`) | `gift.py` + `life.js leaveGift` via `harness_smokes.cjs` |
-| `desk` | Weather clock; plate keys; URL builders; **offline resolve** paths (`desk.*.resolve` fixtures through real parsers) | `weather.py`; `desk-plates`; `news.js` / `market.js` / `weather-areas.js` parsers |
-| `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire** | `card.ts` / `pet.js` via hooks + `harness_smokes.cjs` |
+| `desk` | Weather clock; plate keys; URL builders; **offline resolve**; **Favorites** (News/Coins/NFTs/Weather); **news topics/Popular**; **plate chrome/style**; **plant drag-place** | `weather.py`; `desk-plates` / `desk-plants`; `news.js` / `market.js` / `weather-areas.js` |
+| `card` | `blankCard`, collapse/open hooks, colors, **paintHud/persistCard wire**, **notif deep-link → open card on need** | `card.ts` / `pet.js` / `life.js` via hooks + `harness_smokes.cjs` |
 | `gui` | Overlay **choice Close/Exit** (`gui.choice_close_exit`); Electron/Qt rows excluded until `--gui` | `choice.js`; `desktop/gui-harness.cjs` + `app --check --offscreen` under `--gui` |
 
 No invented verbs. Guest choice does **not** include blotter tend (`feed` / `bath` / `clean`). Desk **Quotes** is the `market` plate (coins + NFT list). Offline desk resolves use fixture JSON / RSS — not live HTTP.
@@ -119,9 +119,11 @@ These are **in the catalog** so they cannot go green by omission. `--gaps` lists
 
 Moved from gaps → driven (prior pass): stubbed cry playback, desk offline resolves, gift place coords, card paint wire, gui choice Close/Exit.
 
+This pass (still offline-driven, no invented verbs): `desk.favorites.news` / `desk.favorites.market` / `desk.favorites.weather`, `desk.news.topics`, `desk.plates.style` (plate chrome + drag persist), `desk.plants.place` (Disk/Felt), `card.notify_open` (`NEED_CARE` / `careForNeed` / `alerts` + `openCareFromNotify` wire). Guest freehand overlay drag remains GUI-only (`gui.gift_drag_place` covers gift hit-targets under `--gui`).
+
 ### Dual-mode (`--live`)
 
-Catalog `mode` is `offline` (default) or `live`. Default `run_all` **keeps** `mode=live` rows as `excluded` (UNACCOUNTED stays 0). Pass `--live` to opt into real HTTP for weather/news/market/nft on that run only:
+Catalog `mode` is `offline` (default) or `live`. Default `run_all` **keeps** `mode=live` rows as `excluded` (UNACCOUNTED stays 0) and never opens a socket. Pass `--live` to opt into real HTTP for weather/news/market/nft on that run only. Live failures name the plate id, timeout, and URL (10–12s); they do not change offline scores:
 
 ```powershell
 py -m computerpets_client.app_harness --live

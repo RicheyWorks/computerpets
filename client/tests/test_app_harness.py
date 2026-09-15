@@ -51,9 +51,16 @@ CROSS_DOMAIN = {
     "desk.news.resolve",
     "desk.market.resolve",
     "desk.nft.resolve",
+    "desk.favorites.news",
+    "desk.favorites.market",
+    "desk.favorites.weather",
+    "desk.news.topics",
+    "desk.plates.style",
+    "desk.plants.place",
     "card.collapse_hook",
     "card.open_hook",
     "card.paint_wire",
+    "card.notify_open",
     "gui.choice_close_exit",
 }
 
@@ -144,8 +151,17 @@ def test_gaps_are_honest_and_accounted():
     assert "desk.weather.resolve" in driven_ids
     assert "gift.place" in driven_ids
     assert "gui.choice_close_exit" in driven_ids
+    assert "desk.favorites.news" in driven_ids
+    assert "desk.favorites.market" in driven_ids
+    assert "desk.favorites.weather" in driven_ids
+    assert "desk.news.topics" in driven_ids
+    assert "desk.plates.style" in driven_ids
+    assert "desk.plants.place" in driven_ids
+    assert "card.notify_open" in driven_ids
     assert "cry.playback" not in hole_ids
     assert "desk.weather.resolve" not in hole_ids
+    assert "desk.favorites.news" not in hole_ids
+    assert "card.notify_open" not in hole_ids
     results = run_all()
     skipped = {r.action_id for r in results if r.fate == "excluded"}
     assert hole_ids <= skipped
@@ -167,8 +183,15 @@ def test_offline_resolves_and_playback_leave_traces():
         "desk.news.resolve",
         "desk.market.resolve",
         "desk.nft.resolve",
+        "desk.favorites.news",
+        "desk.favorites.market",
+        "desk.favorites.weather",
+        "desk.news.topics",
+        "desk.plates.style",
+        "desk.plants.place",
         "gift.place",
         "card.paint_wire",
+        "card.notify_open",
         "gui.choice_close_exit",
     ):
         result = invoke(aid)
