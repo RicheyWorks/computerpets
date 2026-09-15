@@ -421,8 +421,8 @@ test("Wreath tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("gumscrape"), false);
   assert.equal(T.TRICKS.includes("scapularshield"), false);
   assert.equal(T.TRICKS.includes("perodicticushush"), false);
-  assert.deepEqual([...Potto.TRICKS], ["scapularshield", "crypticcreep", "gumscrape", "gripclamp", "perodicticushush"]);
-  assert.deepEqual([...Koala.TRICKS], ["eucchewbrowse", "forkbranchperch", "sleepychintuck", "climbhugtrunk", "phascolarctoshush"]);
+  assert.deepEqual([...Potto.TRICKS], ["scapularshield", "crypticcreep", "gumscrape", "gripclamp", "neckspine", "branchfreeze", "perodicticushush"]);
+  assert.deepEqual([...Koala.TRICKS], ["eucchewbrowse", "forkbranchperch", "sleepychintuck", "climbhugtrunk", "pouchpress", "eardroop", "phascolarctoshush"]);
   assert.deepEqual([...Koala.HAPPY], ["densgum", "inkgum", "densphascolarctos"]);
   assert.equal(Koala.TRICKS.includes("oraldiskwreathsway"), false);
   assert.equal(Koala.HAPPY.includes("denswreath"), false);
@@ -1857,7 +1857,7 @@ test("ground registry keeps prior guests gated; Wreath selectable; prior guests 
   assert.equal(T.TRICKS.includes("gumscrape"), false);
   assert.equal(T.TRICKS.includes("scapularshield"), false);
   assert.equal(T.TRICKS.includes("perodicticushush"), false);
-  assert.deepEqual([...Potto.TRICKS], ["scapularshield", "crypticcreep", "gumscrape", "gripclamp", "perodicticushush"]);
+  assert.deepEqual([...Potto.TRICKS], ["scapularshield", "crypticcreep", "gumscrape", "gripclamp", "neckspine", "branchfreeze", "perodicticushush"]);
   assert.deepEqual([...Periwinkle.TRICKS], ["spiralcrawl", "filmgraze", "opercshut", "tidehuddle", "littorinahush"]);
   assert.deepEqual([...Periwinkle.HAPPY], ["densspire", "inkspire", "denslittorina"]);
   assert.equal(Periwinkle.TRICK_KEY, "periwinkle");
@@ -2576,7 +2576,7 @@ test("notes: Wreath idle-life done; next house-order guest still lacking tricks 
   assert.equal(T.TRICKS.includes("gumscrape"), false);
   assert.equal(T.TRICKS.includes("scapularshield"), false);
   assert.equal(T.TRICKS.includes("perodicticushush"), false);
-  assert.deepEqual([...Potto.TRICKS], ["scapularshield", "crypticcreep", "gumscrape", "gripclamp", "perodicticushush"]);
+  assert.deepEqual([...Potto.TRICKS], ["scapularshield", "crypticcreep", "gumscrape", "gripclamp", "neckspine", "branchfreeze", "perodicticushush"]);
   assert.deepEqual([...Periwinkle.TRICKS], ["spiralcrawl", "filmgraze", "opercshut", "tidehuddle", "littorinahush"]);
   assert.deepEqual([...Periwinkle.HAPPY], ["densspire", "inkspire", "denslittorina"]);
   assert.equal(Periwinkle.TRICK_KEY, "periwinkle");
