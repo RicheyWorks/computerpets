@@ -213,9 +213,9 @@ test("ground registry keeps prior guests gated; Coin selectable; no circle/loop/
   assert.equal(Turtle.TRICK_KEY, "turtle");
   assert.equal(T.TRICK_KEY, "goldfish");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -386,9 +386,11 @@ test("ultra-polish: Coin drift/gulp/yawn/forage lifts are Rui-visible (not micro
   assert.equal(T.DUR.yawn, Overlay.DUR.yawn);
   assert.equal(T.DUR.forage, Overlay.DUR.forage);
   assert.equal(T.DRIFT_HOLD, Overlay.DRIFT_HOLD);
+  assert.equal(T.DRIFT_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
 });
 
-test("notes: Coin idle-life ultra done; Rue / fox ultra next-or-done; following house-order ultra guest is Wick / ferret (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink already ultra; Echo/budgie + Peck/penguin skip bird)", () => {
+test("notes: Coin Rui-dense ultra (DRIFT_HOLD=11.2); next house-order densify leftover after early house guests: Rue / fox then Wick / ferret", () => {
   assert.deepEqual([...T.TRICKS], ["drift", "gulp", "flare", "glint", "dart", "yawn", "forage"]);
   assert.equal(T.TRICKS.includes("circle"), false);
   assert.equal(Overlay.TRICKS.includes("yawn"), true);
