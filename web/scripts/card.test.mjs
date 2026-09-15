@@ -132,6 +132,7 @@ test("saved lines, alarm, and timer are machine-local", () => {
   assert.equal(C.prefersHouseCry("sundew"), true);
   assert.equal(C.prefersHouseCry("honeybee"), true);
   assert.equal(C.prefersHouseCry("monarch"), true);
+assert.equal(C.prefersHouseCry("bumblebee"), true);
   assert.equal(C.prefersHouseCry("luna"), true);
   assert.equal(C.prefersHouseCry("firefly"), true);
   assert.equal(C.prefersHouseCry("darner"), true);

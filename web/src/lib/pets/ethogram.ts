@@ -134,7 +134,7 @@ export const ETHOGRAM: Record<string, IdleAct[]> = {
   ladybird: [A("count", "nod", 1.0, 3, "sit"), A("hunt", "dart", 0.8, 2), A("still", "freeze", 1.6, 2)],
   mantis: [A("fold", "fold", 2.0, 4, "sit"), A("strike", "snap", 0.6, 1, "play"), A("still", "freeze", 2.0, 2)],
   cicada: [A("magicicada", "sit_hold", 2.4, 4, "sit"), A("tymbal_soft", "talk", 1.2, 2, "talk"), A("cast_soft", "sit", 1.15, 2, "sit"), A("egress_soft", "play", 1.2, 2, "play"), A("harden_soft", "sit", 1.2, 2, "sit"), A("xylem_soft", "sit", 1.2, 2, "sit"), A("pharaoh_soft", "play", 1.2, 2, "play"), A("freeze", "freeze", 1.4, 2)],
-  bumblebee: [A("thrum", "pulse", 1.2, 4), A("hover", "bob", 1.4, 2), A("still", "freeze", 1.6, 1)],
+  bumblebee: [A("bombus", "sit_hold", 2.4, 4, "sit"), A("sonicate_soft", "talk", 1.2, 2, "talk"), A("scopa_soft", "talk", 1.2, 2, "talk"), A("fossor_soft", "play", 1.2, 2, "play"), A("lumber_soft", "play", 1.2, 2, "play"), A("thoraxload_soft", "sit", 1.15, 2, "sit"), A("corbicularub_soft", "talk", 1.2, 2, "talk"), A("freeze", "freeze", 1.4, 2)],
   carpenter_bee: [A("hover", "bob", 1.4, 3), A("bore", "sit_hold", 2.0, 3, "sit"), A("still", "freeze", 1.6, 2)],
   mason_bee: [A("seal", "sit_hold", 1.8, 4, "sit"), A("hover", "bob", 1.2, 2), A("still", "freeze", 1.6, 2)],
   leafcutter: [A("cut", "nod", 1.2, 4, "sit"), A("hover", "bob", 1.2, 2), A("still", "freeze", 1.6, 2)],
