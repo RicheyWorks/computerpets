@@ -1,12 +1,22 @@
-/** Forceps ground tricks while idle. House neighborly Forficulidae / Forficula auricularia European earwig desk life -- cercithreat / fanwing / nightscuttle / broodguard / forficulahush personality (cercithreat forceps-cerci threaten then groom distinct from Haste forcipule and Barb pincer; fanwing hind-wing unfold flash under tegmina distinct from Lace wingtremble, Jewel jewelflick, Banner wingbanner, Fan flutter; nightscuttle nocturnal desk scuttle distinct from Haste fleetlegs/wallrace and Hermit scuttle; broodguard desk-safe brood-guard curl over clutch distinct from Lace eggraise and Milk chrysalis; long forficulahush Forficula earwig hush -- never named wait; NOT Haste house_centipede (forcipule/wallrace/antennaflick/fleetlegs/scutigera; densforcep taken); NOT Lace lacewing; NOT Jewel jewelwing; NOT Banner swallowtail; NOT Barb scorpion; NOT Link millipede; NOT Armor pillbug; window-play and Call Forceps leave earwig alone; guest slug Forceps / key earwig -- accept "earwig" and "forceps"; Thank-yous densforceps / inkforceps / densforficula (NOT densforcep — Haste owns densforcep). Feed-happy after eat. Sleep, hide, leave, rest, card, ribbon still win. Same map as web earwig-tricks.ts. Next: Snout / acorn_weevil. Catalog 220. */
+/** Forceps ground tricks while idle — ultra-polish pass. House neighborly Forficulidae / Forficula auricularia European earwig desk life (earwig / Forceps) — cercithreat / fanwing / nightscuttle / broodguard / tegminacurl / cerciwhip / forficulahush personality (cercithreat forceps-cerci threaten then groom without naming threaten or cerci alone as wait, fanwing hind-wing unfold flash under tegmina without naming fan or wing or flutter alone as wait, nightscuttle nocturnal desk scuttle without naming scuttle or night alone as wait, broodguard desk-safe brood-guard curl over clutch without naming brood or guard or egg alone as wait, tegminacurl tegmina curl tuck without naming curl or tegmina alone as wait, cerciwhip cerci whip arc without naming whip or pincer alone as wait, long forficulahush Forficula earwig hush hold (THE forficulahush sit_hold tell) — never named wait or crouch or roost or stalk or monocle or fossick or anting or corvid or asclepias or oyamel or plumose or lunule or densmilk or inkmilk or densdanaus or densghost or inkghost or densactias or hopskip or hindleap or deskbask or mandiblegraze or femurrasp or tympanal or saltatory or caeliferahush or densvault or inkvault or denscaelifera or leafstill or antennatick or tegminasong or leafwalk or tegminlift or greenmimic or tettigonihush or densblade or inkblade or denstettigonia or stridulate or antennasweep or burrowmouth or cerciflick or tegmenraise or gryllushush or denschirp or inkchirp or densgryllus or wingbanner or puddlesip or flutterhop or tailglidesettle or eyespot or tigerband or papiliohush or densbanner or inkbanner or denspapilio or jewelflick or creekpatrol or perchfan or ovipositdip or metallicwing or damselflick or calopteryxhush or densjewel or inkjewel or denscalopteryx or wingtremble or aphidstalk or eggraise or nightglint or pedicel or laceveil or chrysopahush or denslace or inklace or denschrysopa or forcipule or wallrace or antennaflick or fleetlegs or densforcep or bury or flat or still or sit or walk or hop or spring or vault or earwig or forceps as bare ethogram-only trick kinds; ethogram softs + freeze own those words; window-play unchanged if already fine; Haste house_centipede owns forcipule/wallrace/antennaflick/fleetlegs/scutigera/densforcep — do NOT reuse (Forceps thank-you densforceps keeps plural, not densforcep); Lace lacewing owns wingtremble/aphidstalk/eggraise/nightglint/pedicel/laceveil/chrysopahush — do NOT reuse; Jewel jewelwing owns jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush — do NOT reuse; Banner swallowtail owns wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush — do NOT reuse; Barb scorpion owns pincer — do NOT reuse bare pincer; Hermit scuttle — do NOT reuse bare scuttle; Fan flutter / Quill fan — do NOT reuse bare fan/flutter (fanwing is fine, distinct); Milk monarch owns asclepias/oyamel — do NOT reuse; Ghost luna owns plumose/lunule — do NOT reuse; Comb honeybee owns proboscis/figure — do NOT reuse; Dart darner owns hawking/tandem — do NOT reuse; Spark firefly owns flash/glow/lantern/jstroke — do NOT reuse; Stick owns oviposit — do NOT reuse; Chirp owns hopskip/stridulate/gryllushush — do NOT reuse; Vault owns hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush — do NOT reuse; Blade owns leafstill/tettigonihush — do NOT reuse; Snout acorn_weevil next — do NOT reuse bare earwig/forceps; header forbids bare bury/flat/still/sit/wait and bare earwig/forceps as trick kinds; guest slug Forceps / key earwig only for wantsThankYou matching — accept "earwig" and "forceps"; do NOT accept bare "forceps" as a trick id; do NOT name a trick "earwig" or "forceps" or "lacewing" or "lace" or "jewelwing" or "jewel" or "swallowtail" or "banner" or "monarch" or "milk" or "luna" or "ghost" or "honeybee" or "comb" or "darner" or "dart" or "firefly" or "spark" or "grasshopper" or "vault" or "katydid" or "blade" or "field_cricket" or "chirp" or "house_centipede" or "haste" or "acorn_weevil" or "snout" or "forcipule" or "densforcep" or "wingtremble" or "aphidstalk" or "eggraise" or "nightglint" or "pedicel" or "laceveil" or "chrysopahush" or "jewelflick" or "creekpatrol" or "perchfan" or "ovipositdip" or "metallicwing" or "damselflick" or "calopteryxhush" or "wingbanner" or "puddlesip" or "flutterhop" or "tailglidesettle" or "eyespot" or "tigerband" or "papiliohush" or "asclepias" or "oyamel" or "plumose" or "lunule" or "hopskip" or "hindleap" or "caeliferahush" or "densvault" or "densblade" or "denschirp" or "densbanner" or "densjewel" or "denslace") — not Lace Chrysopa lacewing life, not Jewel Calopteryx jewelwing life, not Banner Papilio swallowtail life, not Haste Scutigera house-centipede life, not Milk Danaus monarch life, not Ghost Actias luna life, not Comb Apis honeybee life, not Dart Aeshnidae darner life, not Spark Lampyridae firefly life, not Vault Melanoplus grasshopper life, not Blade Tettigoniidae katydid life, not Chirp Gryllus field-cricket life, not Snout Curculio acorn-weevil life (next guest), not Barb scorpion life, not Rui red_panda life. Cercithreat without naming threaten alone, fanwing without naming fan alone, nightscuttle without naming scuttle alone, broodguard without naming brood alone, tegminacurl without naming curl alone, cerciwhip without naming whip alone, forficulahush long sit_hold on the Forficula earwig hush (THE forficulahush sit_hold tell); densforceps / inkforceps / densforficula thank-yous (NOT densforcep — Haste owns densforcep). Feed-happy thank-yous sit after eat. Card-open freeze and window-play do not swallow a thank-you. Sleep, hide, and leave still win. Same map as web earwig-tricks.ts. Window-play unchanged. Ethogram softs + freeze — never names hunt/sit/still/wait/walk/earwig as bare ethogram-only trick kinds. True European Earwig Forficula auricularia Forficulidae desk life only — cerci threaten, hind-wing fan under tegmina, night scuttle, brood guard, tegmina curl, cerci whip, and Forficula hush; distinct from Lace lacewing wingtremble/aphidstalk/eggraise/nightglint/pedicel/laceveil/chrysopahush, Jewel jewelwing jewelflick/creekpatrol/perchfan/ovipositdip/metallicwing/damselflick/calopteryxhush, Banner swallowtail wingbanner/puddlesip/flutterhop/tailglidesettle/eyespot/tigerband/papiliohush, Haste house_centipede forcipule/wallrace/antennaflick/fleetlegs/densforcep, Milk monarch asclepias/oyamel, Ghost luna plumose/lunule, Comb honeybee, Dart darner hawking/tandem, Spark firefly lantern/jstroke, Vault grasshopper hindleap/deskbask/mandiblegraze/femurrasp/tympanal/saltatory/caeliferahush, Blade katydid, Chirp cricket hopskip, Snout acorn_weevil next, creek peers, Ink, Shift, Dash, Wink, Sol, Reed, Dapple, Eft, Slip, Soak, Coal, Whee, Spine, Burr, Grin, Stripe, Wash, Cache, Cape, Flag, Rui, ferret, Prickle, Quill, and birds. Next house-order ultra: Snout / acorn_weevil. No cry inventing — thank-yous are silent desk motion only; earwig.wav EXISTS so prefersHouseCry adds earwig after lacewing. Amplitudes raised toward Rui richness; denser waits/weights. Catalog 221. */
 (function (root) {
+
   const TRICK_KEY = "earwig";
-  const TRICKS = ["cercithreat", "fanwing", "nightscuttle", "broodguard", "forficulahush"];
+  const TRICKS = ["cercithreat", "fanwing", "nightscuttle", "broodguard", "tegminacurl", "cerciwhip", "forficulahush"];
   const HAPPY = ["densforceps", "inkforceps", "densforficula"];
-  const HAPPY_DUR = { densforceps: 2.48, inkforceps: 2.58, densforficula: 2.36 };
-  const FORFICULAHUSH_HOLD = 28.80;
-  const RELEASE_S = 2.08;
-  const DUR = { forficulahush: FORFICULAHUSH_HOLD + RELEASE_S, cercithreat: 4.18, fanwing: 4.02, nightscuttle: 4.64, broodguard: 4.34 };
+
+  const HAPPY_DUR = { densforceps: 1.70, inkforceps: 1.84, densforficula: 1.76 };
+  const FORFICULAHUSH_HOLD = 11.2;
+  const RELEASE_S = 1.18;
+  const DUR = {
+    forficulahush: FORFICULAHUSH_HOLD + RELEASE_S,
+    cercithreat: 2.48,
+    fanwing: 2.42,
+    nightscuttle: 2.40,
+    broodguard: 2.44,
+    tegminacurl: 2.38,
+    cerciwhip: 2.56,
+  };
 
   function canStart(state) {
     if (!state) return false;
@@ -36,40 +46,78 @@
 
   function nextTrickWait(justFinished, rand, kind) {
     const roll = rand == null ? Math.random() : rand;
-    if (kind === "forficulahush") return 188 + roll * 17;
-    if (kind === "cercithreat") return 20.8 + roll * 3.3;
-    if (kind === "fanwing") return 22.2 + roll * 3.4;
-    if (kind === "nightscuttle") return 25.4 + roll * 3.9;
-    if (kind === "broodguard") return 23.0 + roll * 3.5;
-    return justFinished ? 18.2 + roll * 2.8 : 13.6 + roll * 2.4;
+    if (kind === "forficulahush") return 40 + roll * 26;
+    if (kind === "tegminacurl" || kind === "cercithreat" || kind === "broodguard") return 12.8 + roll * 9.4;
+    if (kind === "nightscuttle" || kind === "fanwing" || kind === "cerciwhip") return 11.6 + roll * 8.5;
+    return justFinished ? 8.5 + roll * 8.4 : 4.4 + roll * 7.4;
   }
 
-  function pickTrick(rand, musicOn, lastKind) {
+    function pickTrick(rand, musicOn, lastKind) {
     if (musicOn) return "forficulahush";
     const roll = rand == null ? Math.random() : rand;
     if (lastKind === "forficulahush") {
-      if (roll < 0.26) return "cercithreat";
-      if (roll < 0.5) return "fanwing";
-      if (roll < 0.74) return "nightscuttle";
-      return "broodguard";
+      if (roll < 0.17) return "cercithreat";
+      if (roll < 0.33) return "fanwing";
+      if (roll < 0.49) return "nightscuttle";
+      if (roll < 0.65) return "broodguard";
+      if (roll < 0.83) return "tegminacurl";
+      return "cerciwhip";
     }
     if (lastKind === "cercithreat") {
-      if (roll < 0.26) return "forficulahush";
-      if (roll < 0.5) return "fanwing";
-      if (roll < 0.74) return "nightscuttle";
-      return "broodguard";
+      if (roll < 0.16) return "forficulahush";
+      if (roll < 0.32) return "fanwing";
+      if (roll < 0.48) return "nightscuttle";
+      if (roll < 0.64) return "broodguard";
+      if (roll < 0.82) return "tegminacurl";
+      return "cerciwhip";
     }
     if (lastKind === "fanwing") {
-      if (roll < 0.22) return "forficulahush";
-      if (roll < 0.44) return "cercithreat";
-      if (roll < 0.68) return "nightscuttle";
-      return "broodguard";
+      if (roll < 0.14) return "forficulahush";
+      if (roll < 0.3) return "cercithreat";
+      if (roll < 0.46) return "nightscuttle";
+      if (roll < 0.62) return "broodguard";
+      if (roll < 0.8) return "tegminacurl";
+      return "cerciwhip";
     }
-    if (roll < 0.2) return "forficulahush";
-    if (roll < 0.4) return "cercithreat";
-    if (roll < 0.6) return "fanwing";
-    if (roll < 0.8) return "nightscuttle";
-    return "broodguard";
+    if (lastKind === "nightscuttle") {
+      if (roll < 0.15) return "forficulahush";
+      if (roll < 0.31) return "cercithreat";
+      if (roll < 0.47) return "fanwing";
+      if (roll < 0.63) return "broodguard";
+      if (roll < 0.81) return "tegminacurl";
+      return "cerciwhip";
+    }
+    if (lastKind === "broodguard") {
+      if (roll < 0.16) return "forficulahush";
+      if (roll < 0.32) return "cercithreat";
+      if (roll < 0.48) return "fanwing";
+      if (roll < 0.64) return "nightscuttle";
+      if (roll < 0.82) return "tegminacurl";
+      return "cerciwhip";
+    }
+    if (lastKind === "tegminacurl") {
+      if (roll < 0.15) return "forficulahush";
+      if (roll < 0.31) return "cercithreat";
+      if (roll < 0.47) return "fanwing";
+      if (roll < 0.63) return "nightscuttle";
+      if (roll < 0.81) return "broodguard";
+      return "cerciwhip";
+    }
+    if (lastKind === "cerciwhip") {
+      if (roll < 0.16) return "forficulahush";
+      if (roll < 0.32) return "cercithreat";
+      if (roll < 0.48) return "fanwing";
+      if (roll < 0.64) return "nightscuttle";
+      if (roll < 0.82) return "broodguard";
+      return "tegminacurl";
+    }
+    if (roll < 0.14) return "forficulahush";
+    if (roll < 0.28) return "cercithreat";
+    if (roll < 0.42) return "fanwing";
+    if (roll < 0.56) return "nightscuttle";
+    if (roll < 0.7) return "broodguard";
+    if (roll < 0.85) return "tegminacurl";
+    return "cerciwhip";
   }
 
   function happyCanStart(state) {
@@ -97,11 +145,17 @@
     );
   }
 
-  function wantsThankYou(key) {
+  function wantsThankYou(key  ) {
     return key === TRICK_KEY || key === "forceps";
   }
 
-  function startThankYou(key, lastKind, x, facing, flags) {
+  function startThankYou(
+    key  ,
+    lastKind,
+    x,
+    facing,
+    flags
+  ) {
     if (!wantsThankYou(key)) return null;
     if (!happyCanStart(flags || { cmd: "idle" })) return null;
     const pick = pickHappy(lastKind);
@@ -110,23 +164,23 @@
 
   function pickHappy(lastKind, rand) {
     const pool = HAPPY.filter((k) => k !== lastKind);
-    const list = pool.length ? pool : HAPPY.slice();
+    const list = pool.length ? pool : [...HAPPY];
     const roll = rand == null ? Math.random() : rand;
     return list[Math.floor(roll * list.length)] || list[0];
   }
 
   function beginHappy(kind, x, facing) {
-    const name = HAPPY.indexOf(kind) >= 0 ? kind : "densforceps";
+    const name = (HAPPY).includes(kind) ? (kind) : "densforceps";
     return {
       kind: name,
       happy: true,
       phase: "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: name === "densforceps" ? "sit" : name === "inkforceps" ? "play" : "play",
-      facing: facing == null ? 1 : facing,
+      anim: (name === "densforceps" ? "sit" : name === "inkforceps" ? "play" : "play"),
+      facing: (facing == null ? 1 : facing),
       fromX: x,
     };
   }
@@ -135,47 +189,55 @@
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densforceps));
     if (u < 0.14) {
       const s = u / 0.14;
-      return { lift: s * -0.0024, rot: s * 0.11, anim: "sit" };
+      return { lift: s * 2.8, rot: s * 12, dx: 0, anim: "sit" };
     }
-    if (u < 0.86) {
-      const cerci = Math.sin(((u - 0.14) / 0.72) * Math.PI * 2.35);
-      return { lift: -0.0024 + Math.abs(cerci) * 0.00135, rot: 0.11 + cerci * 0.16, anim: "sit" };
+    if (u < 0.78) {
+      const flash = Math.sin(t * 2.2);
+      return {
+        lift: 2.8 + Math.abs(flash) * 1.4,
+        rot: 12 + flash * 8,
+        dx: flash * 0.08,
+        anim: "sit",
+      };
     }
-    const s = (u - 0.86) / 0.14;
-    return { lift: -0.0024 * (1 - s), rot: 0.11 * (1 - s), anim: "idle" };
+    const s = (u - 0.78) / 0.22;
+    return { lift: 2.0 * (1 - s), rot: 6 * (1 - s), dx: 0, anim: "idle" };
   }
+
   function inkforcepsPose(t) {
     const u = Math.max(0, Math.min(1, t / HAPPY_DUR.inkforceps));
     if (u < 0.12) {
       const s = u / 0.12;
-      return { lift: s * 0.0038, rot: s * -0.22, anim: "play" };
+      return { lift: s * 3.7, rot: s * -14, dx: s * 0.15, anim: "play" };
     }
-    if (u < 0.84) {
-      const pulse = Math.sin(((u - 0.12) / 0.72) * Math.PI * 3.05);
-      return { lift: 0.0038 + Math.abs(pulse) * 0.00185, rot: -0.22 + pulse * 0.26, anim: "play" };
+    if (u < 0.8) {
+      const wriggle = Math.sin(t * 2.6);
+      return {
+        lift: 3.4 + Math.abs(wriggle) * 1.6,
+        rot: -14 + wriggle * 10,
+        dx: wriggle * 0.12,
+        anim: "play",
+      };
     }
-    const s = (u - 0.84) / 0.16;
-    return { lift: 0.0038 * (1 - s), rot: -0.22 * (1 - s), anim: "idle" };
+    const s = (u - 0.8) / 0.2;
+    return { lift: 2.2 * (1 - s), rot: -6 * (1 - s), dx: 0, anim: "sit" };
   }
+
   function densforficulaPose(t) {
-    const u = Math.max(0, Math.min(1, t / HAPPY_DUR.densforficula));
-    if (u < 0.13) {
-      const s = u / 0.13;
-      return { lift: s * 0.0016, rot: s * 0.14, anim: "play" };
-    }
-    if (u < 0.82) {
-      const flash = Math.sin(((u - 0.13) / 0.69) * Math.PI * 2.15);
-      return { lift: 0.0016 + Math.abs(flash) * 0.00112, rot: 0.14 + flash * 0.15, anim: "play" };
-    }
-    const s = (u - 0.82) / 0.18;
-    return { lift: 0.0016 * (1 - s), rot: 0.14 * (1 - s), anim: "idle" };
+    return {
+      lift: 2.2 + Math.abs(Math.sin(t * 0.58)) * 1.1,
+      rot: Math.sin(t * 0.58) * 8,
+      dx: Math.sin(t * 0.4) * 0.06,
+      anim: "play",
+    };
   }
+
   function stepHappy(happy, dt, flags) {
     if (!happy || happy.phase === "done") return happy;
     if (happyShouldAbort(flags)) {
-      return Object.assign({}, happy, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+      return { ...happy, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort };
     }
-    const next = Object.assign({}, happy, { t: happy.t + Math.max(0, dt) });
+    const next = { ...happy, t: happy.t + Math.max(0, dt) };
     const hold = HAPPY_DUR[next.kind];
     if (next.kind === "densforceps") {
       const pose = densforcepsPose(next.t);
@@ -193,7 +255,7 @@
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (next.t >= hold) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (next.t >= hold) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
 
@@ -202,27 +264,30 @@
   }
 
   function beginTrick(kind, x, facing) {
-    const k = TRICKS.indexOf(kind) >= 0 ? kind : "forficulahush";
     const anim =
-      k === "forficulahush"
+      kind === "forficulahush"
         ? "sit"
-        : k === "cercithreat"
+        : kind === "cercithreat"
           ? "play"
-          : k === "fanwing"
+          : kind === "cerciwhip"
             ? "talk"
-            : k === "nightscuttle"
-              ? "play"
-              : k === "broodguard"
+            : kind === "fanwing"
+              ? "walk"
+              : kind === "nightscuttle"
                 ? "sit"
-                : "sit";
+                : kind === "broodguard"
+                  ? "play"
+                  : kind === "tegminacurl"
+                    ? "walk"
+                    : "sit";
     return {
-      kind: k,
-      phase: k === "forficulahush" ? "hold" : "go",
+      kind,
+      phase: kind === "forficulahush" ? "hold" : "go",
       t: 0,
-      x: x,
+      x,
       lift: 0,
       rot: 0,
-      anim: anim,
+      anim,
       facing: facing == null ? 1 : facing,
       fromX: x,
     };
@@ -234,119 +299,181 @@
   }
 
   function forficulahushPose(t) {
-    const breath = Math.sin(t * 0.00092) + 0.00034 * Math.sin(t * 0.0027);
-    const hush = Math.abs(Math.sin(t * 0.00036));
-    return { lift: -0.00022 + hush * 0.00006, rot: 0.006 + breath * 0.0024 };
+    return {
+      lift: 2.4 + Math.abs(Math.sin(t * 0.42)) * 1.2,
+      rot: -0.18 + Math.sin(t * 0.36) * 0.35,
+    };
   }
 
   function releasePose(t) {
     const u = Math.max(0, Math.min(1, t / RELEASE_S));
-    return { lift: -0.00022 * (1 - Math.sin(u * Math.PI * 0.5)), rot: 0.006 * (1 - u) };
+    return { lift: 2.4 * (1 - Math.sin(u * Math.PI * 0.5)), rot: -0.18 * (1 - u) };
   }
 
   function cercithreatPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.cercithreat));
     const face = facing == null ? 1 : facing;
-    if (u < 0.12) {
-      const s = smoothstep(u / 0.12);
-      return { x: fromX + face * s * 0.00004, lift: s * -0.0012, rot: s * 0.32 * face, anim: "play" };
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.8, lift: s * 3.0, rot: s * -12 * face, anim: "play" };
     }
-    if (u < 0.55) {
-      const threat = Math.sin((u - 0.12) / 0.43 * Math.PI * 3.4);
+    if (u < 0.78) {
+      const bar = Math.sin(t * 2.4);
       return {
-        x: fromX + face * (0.00004 + threat * 0.00012),
-        lift: -0.0012 + Math.abs(threat) * 0.00055,
-        rot: (0.32 + threat * 0.28) * face,
+        x: fromX + face * (0.8 + bar * 0.16),
+        lift: 2.8 + Math.abs(bar) * 1.5,
+        rot: face * (-12 + bar * 10),
         anim: "play",
       };
     }
-    if (u < 0.88) {
-      const groom = Math.sin((u - 0.55) / 0.33 * Math.PI * 4.2);
-      return {
-        x: fromX + face * (0.00004 + groom * 0.00006),
-        lift: -0.0006 + Math.abs(groom) * 0.0009,
-        rot: (0.12 + groom * 0.14) * face,
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.00004 * (1 - s), lift: -0.0003 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.8 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (-4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function fanwingPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.fanwing));
     const face = facing == null ? 1 : facing;
+    if (u < 0.12) {
+      const s = smoothstep(u / 0.12);
+      return { x: fromX, lift: s * 2.6, rot: s * 10 * face, anim: "walk" };
+    }
+    if (u < 0.78) {
+      const bob = Math.sin(t * 2.2);
+      return {
+        x: fromX + face * bob * 0.12,
+        lift: 2.6 + Math.abs(bob) * 1.3,
+        rot: face * (10 + bob * 8),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX,
+      lift: 1.2 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function cerciwhipPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.cerciwhip));
+    const face = facing == null ? 1 : facing;
     if (u < 0.14) {
       const s = smoothstep(u / 0.14);
-      return { x: fromX + face * s * 0.00005, lift: s * 0.0036, rot: s * -0.18 * face, anim: "talk" };
+      return { x: fromX + face * s * 0.6, lift: s * 3.2, rot: s * 14 * face, anim: "talk" };
     }
-    if (u < 0.72) {
-      const fan = Math.sin((u - 0.14) / 0.58 * Math.PI);
-      const shimmer = Math.sin(t * 8.4) * 0.012;
+    if (u < 0.8) {
+      const cloud = Math.sin(t * 3.0);
       return {
-        x: fromX + face * (0.00005 + fan * 0.0001),
-        lift: 0.0036 + fan * 0.0042 + Math.abs(shimmer) * 0.0004,
-        rot: (-0.18 + fan * 0.42 + shimmer) * face,
+        x: fromX + face * (0.6 + cloud * 0.18),
+        lift: 3.0 + Math.abs(cloud) * 1.8,
+        rot: face * (14 + cloud * 12),
         anim: "talk",
       };
     }
-    if (u < 0.88) {
-      const s = smoothstep((u - 0.72) / 0.16);
-      return { x: fromX + face * 0.00015, lift: 0.0078 - s * 0.0042, rot: (0.24 - s * 0.2) * face, anim: "talk" };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.00015 * (1 - s), lift: 0.0036 * (1 - s), rot: 0.04 * (1 - s) * face, anim: "idle" };
-  }
-
-  function nightscuttlePose(t, fromX, facing) {
-    const u = Math.max(0, Math.min(1, t / DUR.nightscuttle));
-    const face = facing == null ? 1 : facing;
-    if (u < 0.10) {
-      const s = smoothstep(u / 0.10);
-      return { x: fromX + face * s * 0.0002, lift: s * 0.0007, rot: s * -0.08 * face, anim: "play" };
-    }
-    if (u < 0.88) {
-      const dash = (u - 0.10) / 0.78;
-      const scuttle = Math.sin(dash * Math.PI * 9.5);
-      const bob = Math.abs(Math.sin(dash * Math.PI * 7.2));
-      return {
-        x: fromX + face * (0.0002 + dash * 0.028 + scuttle * 0.00045),
-        lift: 0.0007 + bob * 0.0011,
-        rot: (-0.08 + scuttle * 0.12) * face,
-        anim: "play",
-      };
-    }
-    const s = smoothstep((u - 0.88) / 0.12);
-    return { x: fromX + face * 0.0282 * (1 - s * 0.015), lift: 0.0007 * (1 - s), rot: -0.02 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.5 * (1 - s),
+      rot: face * (5 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function broodguardPose(t, fromX, facing) {
     const u = Math.max(0, Math.min(1, t / DUR.broodguard));
     const face = facing == null ? 1 : facing;
-    if (u < 0.16) {
-      const s = smoothstep(u / 0.16);
-      return { x: fromX + face * s * 0.00003, lift: s * -0.0032, rot: s * 0.22 * face, anim: "sit" };
+    if (u < 0.1) {
+      const s = smoothstep(u / 0.1);
+      return { x: fromX + face * s * 1.0, lift: s * 4.0, rot: s * 18 * face, anim: "play" };
     }
-    if (u < 0.84) {
-      const guard = Math.sin((u - 0.16) / 0.68 * Math.PI * 1.8);
-      const nest = Math.abs(Math.sin(t * 1.35));
+    if (u < 0.8) {
+      const thrash = Math.sin(t * 3.6);
       return {
-        x: fromX + face * (0.00003 + guard * 0.00008),
-        lift: -0.0032 - nest * 0.00055,
-        rot: (0.22 + guard * 0.1) * face,
+        x: fromX + face * (1.0 + thrash * 0.22),
+        lift: 3.6 + Math.abs(thrash) * 2.0,
+        rot: face * (18 + thrash * 14),
+        anim: "play",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 1.0 * (1 - s),
+      lift: 1.6 * (1 - s),
+      rot: face * (6 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function nightscuttlePose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.nightscuttle));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.5, lift: s * 2.8, rot: s * 11 * face, anim: "sit" };
+    }
+    if (u < 0.78) {
+      const hang = Math.sin(t * 2.0);
+      return {
+        x: fromX + face * (0.5 + hang * 0.1),
+        lift: 2.8 + Math.abs(hang) * 1.2,
+        rot: face * (11 + hang * 8),
         anim: "sit",
       };
     }
-    const s = smoothstep((u - 0.84) / 0.16);
-    return { x: fromX + face * 0.00003 * (1 - s), lift: -0.0032 * (1 - s), rot: 0.05 * (1 - s) * face, anim: "idle" };
+    const s = smoothstep((u - 0.78) / 0.22);
+    return {
+      x: fromX + face * 0.5 * (1 - s),
+      lift: 1.3 * (1 - s),
+      rot: face * (3 * (1 - s)),
+      anim: "idle",
+    };
+  }
+
+  function tegminacurlPose(t, fromX, facing) {
+    const u = Math.max(0, Math.min(1, t / DUR.tegminacurl));
+    const face = facing == null ? 1 : facing;
+    if (u < 0.14) {
+      const s = smoothstep(u / 0.14);
+      return { x: fromX + face * s * 0.6, lift: s * 3.0, rot: s * 12 * face, anim: "walk" };
+    }
+    if (u < 0.8) {
+      const cast = Math.sin(t * 2.8);
+      return {
+        x: fromX + face * (0.6 + cast * 0.16),
+        lift: 2.8 + Math.abs(cast) * 1.6,
+        rot: face * (12 + cast * 10),
+        anim: "walk",
+      };
+    }
+    const s = smoothstep((u - 0.8) / 0.2);
+    return {
+      x: fromX + face * 0.6 * (1 - s),
+      lift: 1.4 * (1 - s),
+      rot: face * (4 * (1 - s)),
+      anim: "idle",
+    };
   }
 
   function stepTrick(trick, dt, flags) {
     if (!trick || trick.phase === "done") return trick;
-    if (shouldAbort(flags) && trick.kind !== "cercithreat" && trick.kind !== "fanwing" && trick.kind !== "nightscuttle" && trick.kind !== "broodguard") {
-      return Object.assign({}, trick, { phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true });
+    if (
+      shouldAbort(flags) &&
+      trick.kind !== "cercithreat" &&
+      trick.kind !== "fanwing" &&
+      trick.kind !== "nightscuttle" &&
+      trick.kind !== "broodguard" &&
+      trick.kind !== "tegminacurl" &&
+      trick.kind !== "cerciwhip"
+    ) {
+      return { ...trick, phase: "done", t: 0, lift: 0, rot: 0, anim: "idle", abort: true };
     }
-    const next = Object.assign({}, trick, { t: trick.t + Math.max(0, dt) });
+    const next = { ...trick, t: trick.t + Math.max(0, dt) };
     if (next.kind === "forficulahush") {
       if (next.t < FORFICULAHUSH_HOLD) {
         const pose = forficulahushPose(next.t);
@@ -364,38 +491,53 @@
         next.anim = "sit";
         return next;
       }
-      return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+      return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     }
     const hold = DUR[next.kind];
     const u = next.t / hold;
+    const fromX = trick.fromX != null ? trick.fromX : trick.x;
     if (next.kind === "cercithreat") {
-      const pose = cercithreatPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = cercithreatPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "fanwing") {
-      const pose = fanwingPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = fanwingPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else if (next.kind === "nightscuttle") {
-      const pose = nightscuttlePose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = nightscuttlePose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "broodguard") {
+      const pose = broodguardPose(next.t, fromX, trick.facing);
+      next.x = pose.x;
+      next.lift = pose.lift;
+      next.rot = pose.rot;
+      next.anim = pose.anim;
+    } else if (next.kind === "tegminacurl") {
+      const pose = tegminacurlPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     } else {
-      const pose = broodguardPose(next.t, trick.fromX != null ? trick.fromX : trick.x, trick.facing);
+      const pose = cerciwhipPose(next.t, fromX, trick.facing);
       next.x = pose.x;
       next.lift = pose.lift;
       next.rot = pose.rot;
       next.anim = pose.anim;
     }
-    if (u >= 1) return Object.assign({}, next, { phase: "done", lift: 0, rot: 0, anim: "idle" });
+    if (u >= 1) return { ...next, phase: "done", lift: 0, rot: 0, anim: "idle" };
     return next;
   }
+
+
 
   const api = {
     TRICK_KEY,
@@ -409,6 +551,17 @@
     shouldAbort,
     nextTrickWait,
     pickTrick,
+    sleepHoldFrame,
+    beginTrick,
+    forficulahushPose,
+    releasePose,
+    cercithreatPose,
+    fanwingPose,
+    cerciwhipPose,
+    broodguardPose,
+    nightscuttlePose,
+    tegminacurlPose,
+    stepTrick,
     happyCanStart,
     happyShouldAbort,
     wantsThankYou,
@@ -418,17 +571,8 @@
     densforcepsPose,
     inkforcepsPose,
     densforficulaPose,
-    stepHappy,
-    sleepHoldFrame,
-    beginTrick,
-    forficulahushPose,
-    releasePose,
-    cercithreatPose,
-    fanwingPose,
-    nightscuttlePose,
-    broodguardPose,
-    stepTrick,
+    stepHappy
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api;
   root.PetEarwigTricks = api;
-})(typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : this);
+})(typeof window !== "undefined" ? window : globalThis);
