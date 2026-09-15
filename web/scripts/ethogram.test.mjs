@@ -1693,6 +1693,21 @@ assert.equal(names("koala").includes("wait"), false);
   assert.equal(names("relay_dragon").includes("wait"), false);
   assert.equal(names("relay_dragon").includes("relay_dragon"), false);
   assert.equal(names("relay_dragon").includes("sit"), false);
+  assert.ok(names("fuse_dragon").includes("fusehush"));
+  assert.ok(names("fuse_dragon").includes("railseat_soft"));
+  assert.ok(names("fuse_dragon").includes("holdcurrent_soft"));
+  assert.ok(names("fuse_dragon").includes("blowclear_soft"));
+  assert.ok(names("fuse_dragon").includes("reseatsnap_soft"));
+  assert.ok(names("fuse_dragon").includes("cartridgerattle_soft"));
+  assert.ok(names("fuse_dragon").includes("bladeflash_soft"));
+  assert.ok(names("fuse_dragon").includes("freeze"));
+  assert.equal(names("fuse_dragon").includes("fuse"), false);
+  assert.equal(names("fuse_dragon").includes("still"), false);
+  assert.equal(names("fuse_dragon").includes("watch"), false);
+  assert.equal(names("fuse_dragon").includes("wait"), false);
+  assert.equal(names("fuse_dragon").includes("fuse_dragon"), false);
+  assert.equal(names("fuse_dragon").includes("sit"), false);
+
 
   for (const key of WELL) {
     const acts = names(key);
