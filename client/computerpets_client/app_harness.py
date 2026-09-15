@@ -1333,6 +1333,29 @@ def _card_rows() -> list[Affordance]:
             "life.js save / load / alerts / act(feed|call)",
             notes="Vitals persist via life store; feed clears hunger alert; call clears hidden; load clears hidden by design.",
         ),
+        Affordance(
+            "card.speak_opts",
+            "card",
+            "TTS speakOpts rate/pitch/volume + voice styles",
+            "card.js/card.ts speakOpts / VOICE_STYLES",
+            notes=(
+                "Offline: every VOICE_STYLES rate/pitch, hearth soft 0.92, volume clamp 0..100, "
+                "unknown style falls back to hearth; pet.js + web companion-room/keeper-card speakOpts wires. "
+                "No invented settings UI."
+            ),
+        ),
+        Affordance(
+            "card.volume_mutes",
+            "card",
+            "Guest volume clamp/persist + mute buses + cry volume",
+            "card.js setGuest/load/save/isMuted + desk-house playVoice + pet.js hud-volume",
+            notes=(
+                "Offline: volume clamp 0..100 + load/save persist, MUTE_BUSES + isMuted bus map, "
+                "playVoice cry volume=guest/100 and talk-mute no-op (Audio stub); "
+                "hud-volume/hud-mutes + web keeper-card wires. Full HUD paint stays gui.card_hud_paint; "
+                "live speakers stay live.cry_playback."
+            ),
+        ),
     ]
 
 
@@ -1378,6 +1401,36 @@ def _invoke_card(local_id: str, **opts: Any) -> InvokeResult:
         return _run_node_smoke("notify_open", domain="card", action_id=aid)
     if local_id == "needs_persist":
         return _run_node_smoke("needs_persist", domain="card", action_id=aid)
+    if local_id == "speak_opts":
+        desk = _run_node_smoke("speak_opts", domain="card", action_id=aid)
+        if not desk.ok:
+            return desk
+        web = _run_web_smoke("speak_opts", domain="card", action_id=aid, use_tsx=True)
+        if not web.ok:
+            return web
+        return InvokeResult(
+            aid,
+            "card",
+            True,
+            detail=f"desk={desk.detail}; web={web.detail}",
+            extras={"desk": desk.extras, "web": web.extras},
+            trace=[*list(desk.trace), *list(web.trace)],
+        )
+    if local_id == "volume_mutes":
+        desk = _run_node_smoke("volume_mutes", domain="card", action_id=aid)
+        if not desk.ok:
+            return desk
+        web = _run_web_smoke("volume_mutes", domain="card", action_id=aid, use_tsx=True)
+        if not web.ok:
+            return web
+        return InvokeResult(
+            aid,
+            "card",
+            True,
+            detail=f"desk={desk.detail}; web={web.detail}",
+            extras={"desk": desk.extras, "web": web.extras},
+            trace=[*list(desk.trace), *list(web.trace)],
+        )
     return InvokeResult(aid, "card", False, error=f"unknown card id {local_id!r}")
 
 
@@ -1422,8 +1475,8 @@ def _run_web_smoke(
     """Drive web/src TypeScript modules offline via harness_web_smokes.mjs.
 
     Most commands use node --experimental-strip-types. Catalog-wide
-    plaques.classroomFor needs extensionless TS imports, so pass use_tsx=True
-    (npx tsx) for blotter.classroom only — not invented; real module load.
+    Extensionless TS imports (plaques.classroomFor, card.ts graph) need use_tsx=True
+    (npx tsx) — blotter.classroom + card.speak_opts/volume_mutes; not invented; real module load.
     """
     import json
     import shutil
