@@ -443,7 +443,7 @@ test("Trace tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("circuitridgewalk"), false);
   assert.equal(T.TRICKS.includes("databreathshimmer"), false);
   assert.equal(T.TRICKS.includes("perchscanblink"), false);
-  assert.equal(T.TRICKS.includes("longcyberhush"), false);
+  assert.equal(T.TRICKS.includes("cyberhush"), false);
   assert.equal(T.HAPPY.includes("densarc"), false);
   assert.equal(T.HAPPY.includes("inkarc"), false);
   assert.equal(T.HAPPY.includes("denscyber"), false);
@@ -467,7 +467,7 @@ test("Trace tricks start only on idle ground", () => {
   assert.equal(T.TRICKS.includes("circuitridgewalk"), false);
   assert.equal(T.TRICKS.includes("databreathshimmer"), false);
   assert.equal(T.TRICKS.includes("perchscanblink"), false);
-  assert.equal(T.TRICKS.includes("longcyberhush"), false);
+  assert.equal(T.TRICKS.includes("cyberhush"), false);
   assert.equal(T.HAPPY.includes("densarc"), false);
   assert.equal(T.HAPPY.includes("inkarc"), false);
   assert.equal(T.HAPPY.includes("denscyber"), false);
