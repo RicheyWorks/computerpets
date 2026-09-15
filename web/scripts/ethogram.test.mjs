@@ -1372,6 +1372,21 @@ assert.equal(names("flying_squirrel").includes("still"), false);
 assert.equal(names("flying_squirrel").includes("sit"), false);
 assert.equal(names("flying_squirrel").includes("flying_squirrel"), false);
 assert.equal(names("flying_squirrel").includes("wait"), false);
+
+assert.ok(names("howler").includes("alouattahush"));
+assert.ok(names("howler").includes("hyoidboom_soft"));
+assert.ok(names("howler").includes("tailbrace_soft"));
+assert.ok(names("howler").includes("canopylounge_soft"));
+assert.ok(names("howler").includes("leafchew_soft"));
+assert.ok(names("howler").includes("mantelstretch_soft"));
+assert.ok(names("howler").includes("throatpuff_soft"));
+assert.ok(names("howler").includes("freeze"));
+assert.equal(names("howler").includes("boom"), false);
+assert.equal(names("howler").includes("sit"), false);
+assert.equal(names("howler").includes("still"), false);
+assert.equal(names("howler").includes("howler"), false);
+assert.equal(names("howler").includes("wait"), false);
+
   assert.ok(names("koala").includes("chew"));
   for (const key of REEF) {
     const acts = names(key);
