@@ -546,8 +546,8 @@ test("bud/proof/levain/ferment/saccharomyces/ascus/floc are house-place-true, no
   assert.equal(T.TRICKS.includes("hover"), false);
   assert.equal(T.TRICKS.includes("drone"), false);
 
-  assert.deepEqual([...HoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "regina"]);
-  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "regina"]);
+  assert.deepEqual([...HoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
+  assert.deepEqual([...OverlayHoneyQueen.TRICKS], ["pipe", "retinue", "duel", "royal", "spermatheca", "queenmark", "regina"]);
   assert.deepEqual([...HoneyQueen.HAPPY], ["caucasica", "iberiensis", "apini"]);
   assert.equal(T.TRICKS.includes("pipe"), false);
   assert.equal(T.TRICKS.includes("retinue"), false);
