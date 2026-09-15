@@ -231,9 +231,9 @@ test("ground registry keeps prior guests gated; Rue selectable; no scent/sniff/p
   assert.equal(Budgie.TRICK_KEY, "budgie");
   assert.equal(T.TRICK_KEY, "fox");
   assert.deepEqual([...Rui.TRICKS], ["somersault", "lie", "scratch", "wave", "dance"]);
-  assert.deepEqual([...Relay.TRICKS], ["click", "latch", "arc", "buzz", "switch"]);
-  assert.deepEqual([...Fuse.TRICKS], ["seat", "current", "blow", "reseat"]);
-  assert.deepEqual([...Earth.TRICKS], ["lug", "earth", "heave", "bed"]);
+  assert.deepEqual([...Relay.TRICKS], ["contactclick", "latchseat", "arcflick", "coilbuzz", "poleswitch", "armaturetap", "relayhush"]);
+  assert.deepEqual([...Fuse.TRICKS], ["railseat", "holdcurrent", "blowclear", "reseatsnap", "cartridgerattle", "bladeflash", "fusehush"]);
+  assert.deepEqual([...Earth.TRICKS], ["lugstrap", "earthseat", "heaveplate", "bedsettle", "soilgrip", "plateclamp", "groundhush"]);
   assert.deepEqual([...Cat.TRICKS], ["loaf", "knead", "stretch", "wash", "pounce", "bunting", "mlem"]);
   assert.deepEqual([...Dog.TRICKS], ["wait", "wag", "sniff", "bow", "zoom", "beg", "pant"]);
   assert.deepEqual([...Rabbit.TRICKS], ["flop", "groom", "periscope", "dig", "binky", "rub", "nosh"]);
@@ -408,11 +408,12 @@ test("ultra-polish: Rue den/mouser/cock/stash lifts are Rui-visible (not micro i
   assert.equal(T.DUR.cock, Overlay.DUR.cock);
   assert.equal(T.DUR.stash, Overlay.DUR.stash);
   assert.equal(T.DEN_HOLD, Overlay.DEN_HOLD);
-  assert.equal(T.DEN_HOLD, 14.4);
-  assert.ok(T.nextTrickWait(true, 0, "den") > 40);
+  assert.equal(T.DEN_HOLD, 11.2);
+  assert.equal(T.RELEASE_S, 1.18);
+  assert.ok(T.nextTrickWait(true, 0, "den") > 39);
 });
 
-test("notes: Rue idle-life ultra done; Wick / ferret ultra next-or-done; following house-order ultra guest is Burr / hedgehog (birds Soot→Ember + Miso + Pip + Thimble + Clip + Whee + Ink + Coin already ultra; Echo/budgie + Peck/penguin + Quill/parrot skip bird)", () => {
+test("notes: Rue Rui-dense ultra (DEN_HOLD=11.2); next house-order densify leftover after early house guests: Wick / ferret then Burr / hedgehog", () => {
   assert.deepEqual([...T.TRICKS], ["den", "mouser", "stalk", "trot", "prance", "cock", "stash"]);
   assert.equal(T.TRICKS.includes("scent"), false);
   assert.equal(Overlay.TRICKS.includes("cock"), true);
