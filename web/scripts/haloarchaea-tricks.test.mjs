@@ -537,7 +537,7 @@ test("Rose tricks start only on idle ground", () => {
   assert.equal(Magneton.TRICKS.includes("carotenoid"), false);
 
   assert.equal(T.TRICKS.includes("crackpointskitter"), false);
-  assert.equal(T.TRICKS.includes("longsparkhush"), false);
+  assert.equal(T.TRICKS.includes("sparkhush"), false);
   assert.equal(T.HAPPY.includes("densspark"), false);
   assert.equal(T.TRICKS.includes("heatfieldclaimwalk"), false);
   assert.equal(T.HAPPY.includes("densflux"), false);
