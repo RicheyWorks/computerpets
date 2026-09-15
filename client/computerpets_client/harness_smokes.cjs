@@ -686,6 +686,150 @@ function needsPersist() {
 }
 
 
+function speakOptsSmoke() {
+  const store = memStore();
+  global.localStorage = store;
+  delete require.cache[require.resolve(path.join(RENDERER, "card.js"))];
+  const C = load("card.js");
+  const styles = C.VOICE_STYLES || [];
+  const want = {
+    hearth: { rate: 0.82, pitch: 0.88 },
+    hush: { rate: 0.8, pitch: 1.02 },
+    even: { rate: 0.92, pitch: 1 },
+    low: { rate: 0.84, pitch: 0.76 },
+    bright: { rate: 0.98, pitch: 1.1 },
+  };
+  if (styles.length !== 5) return fail("VOICE_STYLES count drift", { styles });
+  for (const s of styles) {
+    const w = want[s.id];
+    if (!w) return fail("unexpected voice style " + s.id, { styles });
+    if (s.rate !== w.rate || s.pitch !== w.pitch) {
+      return fail("voice style drift " + s.id, { s, w });
+    }
+    const opts = C.speakOpts(s.id, 50);
+    if (opts.rate !== w.rate || opts.pitch !== w.pitch) {
+      return fail("speakOpts rate/pitch drift " + s.id, { opts, w });
+    }
+  }
+  const hearth50 = C.speakOpts("hearth", 50);
+  if (!(hearth50.volume < 0.5) || Math.abs(hearth50.volume - 0.46) > 1e-9) {
+    return fail("hearth soft volume drift", { hearth50 });
+  }
+  const even50 = C.speakOpts("even", 50);
+  if (Math.abs(even50.volume - 0.5) > 1e-9) return fail("even volume drift", { even50 });
+  const clampedHi = C.speakOpts("hearth", 250);
+  if (Math.abs(clampedHi.volume - 0.92) > 1e-9) return fail("volume clamp high drift", { clampedHi });
+  const clampedLo = C.speakOpts("bright", -40);
+  if (clampedLo.volume !== 0) return fail("volume clamp low drift", { clampedLo });
+  const fallback = C.speakOpts("nope", 100);
+  if (Math.abs(fallback.volume - 0.92) > 1e-9 || fallback.rate !== 0.82) {
+    return fail("unknown style should fall back to hearth", { fallback });
+  }
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  for (const needle of ["speakOpts(card.voiceStyle", "u.volume = opts.volume", "u.rate = opts.rate", "u.pitch = opts.pitch"]) {
+    if (!petSrc.includes(needle)) return fail("pet.js TTS wire missing " + needle);
+  }
+  return ok("styles=5 hearthSoft=0.46", { styles: styles.map((s) => s.id), hearth50: hearth50.volume }, [
+    "speakOpts.styles=5",
+    "speakOpts.hearth.soft=0.46",
+    "speakOpts.clamp=0..100",
+    "speakOpts.fallback=hearth",
+    "pet.js.speakOpts.wire",
+  ]);
+}
+
+function volumeMutesSmoke() {
+  const store = memStore();
+  global.localStorage = store;
+  delete require.cache[require.resolve(path.join(RENDERER, "card.js"))];
+  delete require.cache[require.resolve(path.join(RENDERER, "house-sounds.js"))];
+  delete require.cache[require.resolve(path.join(RENDERER, "desk-house.js"))];
+  const C = load("card.js");
+  global.PetCard = C;
+  const S = load("house-sounds.js");
+  global.PetHouseSounds = S;
+  const H = load("desk-house.js");
+
+  const buses = C.MUTE_BUSES || [];
+  if (buses.join(",") !== "talk,special,weather,treats,steps,music") {
+    return fail("MUTE_BUSES drift", { buses });
+  }
+  let card = C.blankCard();
+  const guest0 = C.guestOf(card, "red_panda");
+  if (guest0.volume !== 80) return fail("blank guest volume", { guest0 });
+
+  card = C.setGuest(card, "red_panda", { volume: 150 });
+  if (C.guestOf(card, "red_panda").volume !== 100) return fail("volume clamp high", { card });
+  card = C.setGuest(card, "red_panda", { volume: -5 });
+  if (C.guestOf(card, "red_panda").volume !== 0) return fail("volume clamp low", { card });
+  card = C.setGuest(card, "red_panda", { volume: 40 });
+  card.mutes = { ...C.blankCard().mutes, talk: true, weather: true };
+  card.voiceStyle = "bright";
+  C.save(card);
+  const loaded = C.load();
+  if (loaded.pets.red_panda.volume !== 40) return fail("volume did not persist", { loaded });
+  if (!loaded.mutes.talk || !loaded.mutes.weather) return fail("mutes did not persist", { loaded });
+  if (loaded.voiceStyle !== "bright") return fail("voiceStyle did not persist", { loaded });
+  if (!C.isMuted(loaded.mutes, "chirp") || !C.isMuted(loaded.mutes, "voice") || !C.isMuted(loaded.mutes, "call")) {
+    return fail("talk mute should cover chirp/voice/call", { mutes: loaded.mutes });
+  }
+  if (!C.isMuted(loaded.mutes, "rain") || !C.isMuted(loaded.mutes, "wind")) {
+    return fail("weather mute should cover rain/wind", { mutes: loaded.mutes });
+  }
+  if (C.isMuted(loaded.mutes, "hop")) return fail("special should stay unmuted", { mutes: loaded.mutes });
+  if (C.isMuted(loaded.mutes, "unknown_kind")) return fail("unknown kind must not mute");
+
+  const volumes = [];
+  global.Audio = class {
+    constructor(src) {
+      this.src = src;
+      this.volume = 1;
+    }
+    play() {
+      volumes.push({ src: this.src, volume: this.volume });
+      return Promise.resolve();
+    }
+  };
+  const mutedPlay = H.playVoice("red_panda", loaded);
+  if (mutedPlay) return fail("playVoice should no-op when talk muted", { mutedPlay, volumes });
+  if (volumes.length) return fail("Audio.play fired while muted", { volumes });
+
+  loaded.mutes = C.blankCard().mutes;
+  C.save(loaded);
+  const unmuted = C.load();
+  const started = H.playVoice("red_panda", unmuted);
+  if (!started) return fail("playVoice returned false", { volumes });
+  if (!volumes.length || !String(volumes[0].src).includes("red_panda.wav")) {
+    return fail("cry Audio.play missing", { volumes });
+  }
+  if (Math.abs(volumes[0].volume - 0.4) > 1e-9) {
+    return fail("cry volume should be guest.volume/100", { volumes });
+  }
+
+  const petSrc = fs.readFileSync(path.join(RENDERER, "pet.js"), "utf8");
+  const hudNeedles = [
+    'getElementById("hud-volume")',
+    "hudVolume.value",
+    "setGuest(card, kind.key, { volume: Number(hudVolume.value) })",
+    'getElementById("hud-mutes")',
+    "MUTE_BUSES",
+  ];
+  for (const needle of hudNeedles) {
+    if (!petSrc.includes(needle)) return fail("pet.js volume/mute HUD wire missing " + needle);
+  }
+  return ok("volume=40 persist mute+cry", { volume: 40, cryVolume: volumes[0].volume, buses }, [
+    "volume.clamp=0..100",
+    "volume.persist=load/save",
+    "mutes.buses=6",
+    "isMuted.talk/weather",
+    "cry.playVoice.volume=0.4",
+    "cry.playVoice.mute.talk",
+    "pet.js.hud-volume+hud-mutes",
+  ]);
+}
+
+
+
 function windowsPerch() {
   const W = load("windows.js");
   const P = load("window-play.js");
@@ -903,6 +1047,8 @@ const COMMANDS = {
   market_tickers: marketTickers,
   news_x: newsX,
   needs_persist: needsPersist,
+  speak_opts: speakOptsSmoke,
+  volume_mutes: volumeMutesSmoke,
   blotter_hours: blotterHours,
   blotter_hive: blotterHive,
   blotter_gait: blotterGait,

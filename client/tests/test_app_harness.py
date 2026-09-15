@@ -71,6 +71,8 @@ CROSS_DOMAIN = {
     "card.paint_wire",
     "card.notify_open",
     "card.needs_persist",
+    "card.speak_opts",
+    "card.volume_mutes",
     "gui.choice_close_exit",
     "web.guest_choice",
     "web.ethogram_tricks",
@@ -199,6 +201,8 @@ def test_gaps_are_honest_and_accounted():
     assert "desk.windows.perch" in driven_ids
     assert "card.notify_open" in driven_ids
     assert "card.needs_persist" in driven_ids
+    assert "card.speak_opts" in driven_ids
+    assert "card.volume_mutes" in driven_ids
     assert "desk.market.tickers" in driven_ids
     assert "desk.news.x" in driven_ids
     assert "visit.todays" in driven_ids
@@ -245,6 +249,8 @@ def test_offline_resolves_and_playback_leave_traces():
         "card.paint_wire",
         "card.notify_open",
         "card.needs_persist",
+        "card.speak_opts",
+        "card.volume_mutes",
         "gui.choice_close_exit",
         "web.guest_choice",
         "web.ethogram_tricks",
